@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C878B588E2A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950AB588E33
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238451AbiHCOCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 10:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
+        id S238592AbiHCOER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 10:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238048AbiHCOCe (ORCPT
+        with ESMTP id S236494AbiHCOEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 10:02:34 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425DE2CE1C;
-        Wed,  3 Aug 2022 07:02:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659535352; x=1691071352;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=3kbiD6sIxSxAjVpFKmkjnzMfUr0hXQ3N3rtFHjcQbH4=;
-  b=hx32VLxKoA7yyXx+uPpqfWeyh1L5SxpNJCDxVR1v/8QoGsH20dP+s3Mh
-   J5uWD+xrZ4URuqYuj0ZQAf7lNeGHSRkElDAM3Uuakvwml+AL/el2o7VKQ
-   CuAY5DxWDi4ROqj6Qv9aqr8ff50B9UJELoZeEMdSCL0HXEP4CxgOXXqdf
-   Q4Vqqyf9cHkqDg7nt4MXwZt3JnegAxG3UEU5qd7hfAwk5GfQ+3GxaLPsC
-   vLOyaJcpxQebQ8lTWf3JeOqVu/e2jnd0CJ6IovXjt0ucUJxNAVTgFp6eN
-   GxbJeDuNd+El9dQtsgBKuYfmNrURhqNp1YvEx8yRbWINAN1XWyxGYzdts
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="375977435"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="375977435"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:02:31 -0700
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="631159385"
-Received: from buichris-mobl.amr.corp.intel.com (HELO [10.209.124.150]) ([10.209.124.150])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:02:30 -0700
-Message-ID: <073c5a97-272c-c5a0-19f2-c3f14f916c72@intel.com>
-Date:   Wed, 3 Aug 2022 07:02:31 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping
- into unaccepted memory
+        Wed, 3 Aug 2022 10:04:15 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0332F003;
+        Wed,  3 Aug 2022 07:04:13 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 116565FD2E;
+        Wed,  3 Aug 2022 17:04:12 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1659535452;
+        bh=6XZQtWxl9pDfCffcJW86vuM5/TgZ8YvSCAXMREbLKGk=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=HGsGwwldJ5JnGyr5nIzZMkNbnQvF6r2IxyQl45jcOp5iFbbHMoJBoDEYFxJ0YDM7Q
+         zMUEnauI5wEb98/DEFRuCmz1twxbIpOP6gkBbjPNNqbPGsMr2RkFv0ppQm2uZQqVKQ
+         US+VgwLAcUXj4vCkFYsTrkKNdMrbsas1yUCmE5P/tT30pR0pEO7wsZRDqYDMjhqCuo
+         JPLtZcPQvIxv5C6BXcKydlHnkdn+yzfss8q6KQU+j2NlgLd1y/f3zuCocDoV0nKoYu
+         z5TopP9mXas3/ONsLTExUGdUcOX7AIgzdiMPoYEhZPR9feTg4dbqLxRAS3MQf+clWB
+         t02DRwRFk77Kw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  3 Aug 2022 17:04:11 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "Arseniy Krasnov" <AVKrasnov@sberdevices.ru>
+CC:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: [RFC PATCH v3 7/9] virtio/vsock: check SO_RCVLOWAT before wake up
+ reader
+Thread-Topic: [RFC PATCH v3 7/9] virtio/vsock: check SO_RCVLOWAT before wake
+ up reader
+Thread-Index: AQHYp0Hf6rlyzBtLk0aQZEnBg4ReJg==
+Date:   Wed, 3 Aug 2022 14:03:58 +0000
+Message-ID: <e08064c5-fd4a-7595-3138-67aa2f46c955@sberdevices.ru>
+In-Reply-To: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
+Accept-Language: en-US, ru-RU
 Content-Language: en-US
-From:   Dave Hansen <dave.hansen@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
- <Yt/ANO5usdV+JSSW@zn.tnic> <80cc204b-a24f-684f-ec66-1361b69cae39@intel.com>
-In-Reply-To: <80cc204b-a24f-684f-ec66-1361b69cae39@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C63DE3F717DDC54096594E3577522BEB@sberdevices.ru>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/03 07:41:00 #20041172
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/2/22 16:46, Dave Hansen wrote:
-> To sum it all up, I'm not happy with the complexity of the page
-> acceptance code either but I'm not sure that it's bad tradeoff compared
-> to greater #VE complexity or fragility.
-> 
-> Does anyone think we should go back and really reconsider this?
-
-One other thing I remembered as I re-read my write up on this.
-
-In the "new" mode, guests never get #VE's for unaccepted memory.  They
-just exit to the host and can never be reentered.  They must be killed.
-
-In the "old" mode, I _believe_ that the guest always gets a #VE for
-non-EPT-present memory.  The #VE is basically the same no matter if the
-page is unaccepted or if the host goes out and makes a
-previously-accepted page non-present.
-
-One really nasty implication of this "old" mode is that the host can
-remove *accepted* pages that are used in the syscall gap.  That means
-that the #VE handler would need to be of the paranoid variety which
-opens up all kinds of other fun.
-
- * "Old" - #VE's can happen in the syscall gap
- * "New" - #VE's happen at better-defined times.  Unexpected ones are
-   fatal.
-
-There's a third option which I proposed but doesn't yet exist.  The TDX
-module _could_ separate the behavior of unaccepted memory #VE's and
-host-induced #VEs.  This way, we could use load_unaligned_zeropad() with
-impunity and handle it in the #VE handler.  At the same time, the host
-would not be allowed to remove accepted memory and cause problems in the
-syscall gap.  Kinda the best of both worlds.
-
-But, I'm not sure how valuable that would be now that we have the
-(admittedly squirrelly) code to avoid load_unaligned_zeropad() #VE's.
+VGhpcyBhZGRzIGV4dHJhIGNvbmRpdGlvbiB0byB3YWtlIHVwIGRhdGEgcmVhZGVyOiBkbyBpdCBv
+bmx5IHdoZW4gbnVtYmVyDQpvZiByZWFkYWJsZSBieXRlcyA+PSBTT19SQ1ZMT1dBVC4gT3RoZXJ3
+aXNlLCB0aGVyZSBpcyBubyBzZW5zZSB0byBraWNrDQp1c2VyLGJlY2F1c2UgaXQgd2lsbCB3YWl0
+IHVudGlsIFNPX1JDVkxPV0FUIGJ5dGVzIHdpbGwgYmUgZGVxdWV1ZWQuDQoNClNpZ25lZC1vZmYt
+Ynk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KLS0tDQogbmV0
+L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jIHwgMiArLQ0KIDEgZmlsZSBjaGFu
+Z2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEvbmV0L3Zt
+d192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jIGIvbmV0L3Ztd192c29jay92aXJ0aW9f
+dHJhbnNwb3J0X2NvbW1vbi5jDQppbmRleCA4ZjYzNTZlYmNkZDEuLjM1ODYzMTMyZjRmMSAxMDA2
+NDQNCi0tLSBhL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYw0KKysrIGIv
+bmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jDQpAQCAtMTA4MSw3ICsxMDgx
+LDcgQEAgdmlydGlvX3RyYW5zcG9ydF9yZWN2X2Nvbm5lY3RlZChzdHJ1Y3Qgc29jayAqc2ssDQog
+CXN3aXRjaCAobGUxNl90b19jcHUocGt0LT5oZHIub3ApKSB7DQogCWNhc2UgVklSVElPX1ZTT0NL
+X09QX1JXOg0KIAkJdmlydGlvX3RyYW5zcG9ydF9yZWN2X2VucXVldWUodnNrLCBwa3QpOw0KLQkJ
+c2stPnNrX2RhdGFfcmVhZHkoc2spOw0KKwkJdnNvY2tfZGF0YV9yZWFkeShzayk7DQogCQlyZXR1
+cm4gZXJyOw0KIAljYXNlIFZJUlRJT19WU09DS19PUF9DUkVESVRfUkVRVUVTVDoNCiAJCXZpcnRp
+b190cmFuc3BvcnRfc2VuZF9jcmVkaXRfdXBkYXRlKHZzayk7DQotLSANCjIuMjUuMQ0K

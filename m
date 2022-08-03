@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D275888DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7C05888E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiHCIu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
+        id S234709AbiHCIxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234300AbiHCIuZ (ORCPT
+        with ESMTP id S231709AbiHCIxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:50:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399C26453;
-        Wed,  3 Aug 2022 01:50:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00AE0B8218A;
-        Wed,  3 Aug 2022 08:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C428C433D6;
-        Wed,  3 Aug 2022 08:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659516620;
-        bh=lcBBGQP1cMln4snVW0FD2LaDsPlFtDJyczxrGwOfe/4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OrIYoUrDNQaIPpBy3vKM446Otlu8KmxoDb7pEMlvauKF7D1Xab/3fdFp1iRDL9kRC
-         IM1rVrmCLTUhG5FKX2RFndcSUocoe9fCExwYM0ebi5Hjqbw3DhF+nNrep+i0zz/DPj
-         FAIaudx1LT9qDJ1gRdke5kiieCNY3cE3llwzr8aiyNih2Bbw1ISDo0O7ws0RQ0y3Hu
-         a0asIBkOeA6fGE0bWLLp0smArL+b7RQ0ovxEqKC6yFwywVyi3AikPnKKQfxsLuI4Lc
-         osLerpkW0Mxk6ErF5Wc19cwB8OVlFdZ7VVTekDd+nIQjkw45PLTbTYBlEkx3pIbCfI
-         djPijGU1gqHtw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oJA5O-0007O7-Fj; Wed, 03 Aug 2022 10:50:38 +0200
-Date:   Wed, 3 Aug 2022 10:50:38 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Andy Gross <agross@kernel.org>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v16 0/3] eDP/DP Phy vdda realted function
-Message-ID: <Yuo23sdBe6tI7g5K@hovoldconsulting.com>
-References: <1657038556-2231-1-git-send-email-quic_khsieh@quicinc.com>
- <YtkrDcjTGhpaU1e0@hovoldconsulting.com>
- <CAA8EJprQnnWjDZJy9+zUBsVQCi3jtc0Ngtzzk9MXpwOvuAS68g@mail.gmail.com>
- <CAD=FV=W0m-x9JC=5hQ3urSNmUp8sY-u8YkNd66yrKfRNAH4rcg@mail.gmail.com>
- <YuPiJWQ1/wQbkvD8@hovoldconsulting.com>
- <YuPps+cvVAMugWmy@sirena.org.uk>
+        Wed, 3 Aug 2022 04:53:15 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F38012608;
+        Wed,  3 Aug 2022 01:53:14 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id z12so10598371wrs.9;
+        Wed, 03 Aug 2022 01:53:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TnGjUxB2/misRSyJhZn77B26GscZLCACUuOmD0mcAwE=;
+        b=Kc5iT1udjYwbqJInVGPOOilc6kzr3wxm2/3C84LRXY8+IW5c7yASKizquGk/zmuLzh
+         dfKHKVA8qmaTTIY6G2bC4jZ6PE7Ie41Vhn4djRs7Xzzk0wt1ufyG0Ynahmwxof4xpLq5
+         QIDv8GTOwTV2WqTxB929Nds8VicYuSvIAr89KX94qvad+iMVswZBwEfOIvWu7yZFS1Wk
+         msw5Nkq2mb+Gu19GOBDDv+Wv4y13R5vrGvxk9PsyZQQ1ryWZwpMY2Omgo01eTphssgRI
+         KLeMih5kg6ORYsBsIObP2MhF5cIUMGhXuoszJOPfQjtd49GL2G6nZLw0RayI84azFOK5
+         Sxww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=TnGjUxB2/misRSyJhZn77B26GscZLCACUuOmD0mcAwE=;
+        b=RyUO91oBnNGcOgvi2sxTCwmyxMuO5+Ag+ahGSQ3PJhoAllN9UlCKkpn1LyiGQUa4K6
+         5rVk2xtS+glXgYXaYF32Cn7fAo/S/W1rFtlVvgByLdX0mnwnb/dplYlk80I24eo6knNP
+         SiE3gre8Ky7BUfwzaGWcFYOHHl7T/QfilRewXNHzejAWGBBHKKa7C2WL3lE+//W4JTRR
+         fnAbAeYclOgnscKTZijKZ6dVB98mi1amcKqwWoW0oWJ5AUc8pSwdVxMLS/M8BWCfxXli
+         3KKfvUuh2zsAoz9PPQ4R2MzLeuTYn4bglMnQmJV413gz2TgErxDTf+wRqUEb2BJvocOs
+         c13w==
+X-Gm-Message-State: ACgBeo0s6nAwVAyx+cFT7fTBSPFQEfYArO/LfQ/67rPwLWHhUEsWW2mr
+        LOiqY9zi8Dsvz+0Q1vRxWig=
+X-Google-Smtp-Source: AA6agR7RJYXzYA2wklxcfIuJnmPyxf/S5akbNEH1Y0Zoy/SL8dmIdjmKlWGbIlAzWPXRCLN2WxWwLQ==
+X-Received: by 2002:adf:ce92:0:b0:220:5ef0:876d with SMTP id r18-20020adfce92000000b002205ef0876dmr10157915wrn.647.1659516792840;
+        Wed, 03 Aug 2022 01:53:12 -0700 (PDT)
+Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
+        by smtp.gmail.com with ESMTPSA id e10-20020adffd0a000000b0021d4aca9d1esm20512339wrr.99.2022.08.03.01.53.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 01:53:12 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 3 Aug 2022 10:53:10 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     tony.luck@intel.com, bp@alien8.de, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-edac@vger.kernel.org, dan.j.williams@intel.com,
+        linux-kernel@vger.kernel.org, hch@lst.de, nvdimm@lists.linux.dev
+Subject: Re: [PATCH v7] x86/mce: retrieve poison range from hardware
+Message-ID: <Yuo3dioqb9mDAOcT@gmail.com>
+References: <20220802195053.3882368-1-jane.chu@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YTsIOlOo8860ehFK"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuPps+cvVAMugWmy@sirena.org.uk>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220802195053.3882368-1-jane.chu@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,84 +74,67 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---YTsIOlOo8860ehFK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+* Jane Chu <jane.chu@oracle.com> wrote:
 
-On Fri, Jul 29, 2022 at 03:07:47PM +0100, Mark Brown wrote:
-> On Fri, Jul 29, 2022 at 03:35:33PM +0200, Johan Hovold wrote:
->=20
-> > I guess we just need to drop all those regulator-allow-set-load
-> > properties for now even if using DT for power-management configuration
-> > this way does seem to run against the whole DT-as-hardware-description
-> > idea (e.g. we may want to add them back when/if active- and idle loads
-> > are specified by the corresponding Linux drivers).
->=20
-> Well, there's also a question of if the hardware can usefully make use
-> of the facility - is there any non-suspend state where the regulator
-> needs to be on but is drawing so little current that it's worth trying
-> to select a lower power mode?
+> With Commit 7917f9cdb503 ("acpi/nfit: rely on mce->misc to determine
 
-Good point.
+s/Commit/commit
 
-> > But that doesn't address the problem that was trying to highlight here,
-> > and that you had noticed years ago, namely that using set_load only
-> > works reliably if *all* consumers use it.
->=20
-> > Shouldn't an enabled regulator from a consumer that didn't specify a
-> > load somehow result in HPM always being selected (e.g. count as INT_MAX
-> > load as Doug suggested some years ago)?
->=20
-> Possibly, but note that as well as the consumers with software drivers
-> you also have to consider any passive consumers on the board which may
-> not have any representation in DT so the actual numbers may well be off
-> even if every consumer is trying to keep things up to date.  You also
-> come back to the "let's just shove a random number in here" problem.
+> poison granularity") that changed nfit_handle_mce() callback to report
+> badrange according to 1ULL << MCI_MISC_ADDR_LSB(mce->misc), it's been
+> discovered that the mce->misc LSB field is 0x1000 bytes, hence injecting
+> 2 back-to-back poisons and the driver ends up logging 8 badblocks,
+> because 0x1000 bytes is 8 512-byte.
+> 
+> Dan Williams noticed that apei_mce_report_mem_error() hardcode
+> the LSB field to PAGE_SHIFT instead of consulting the input
+> struct cper_sec_mem_err record.  So change to rely on hardware whenever
+> support is available.
+> 
+> Link: https://lore.kernel.org/r/7ed50fd8-521e-cade-77b1-738b8bfb8502@oracle.com
+> 
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Reviewed-by: Ingo Molnar <mingo@kernel.org>
+> Signed-off-by: Jane Chu <jane.chu@oracle.com>
+> ---
+>  arch/x86/kernel/cpu/mce/apei.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
+> index 717192915f28..8ed341714686 100644
+> --- a/arch/x86/kernel/cpu/mce/apei.c
+> +++ b/arch/x86/kernel/cpu/mce/apei.c
+> @@ -29,15 +29,26 @@
+>  void apei_mce_report_mem_error(int severity, struct cper_sec_mem_err *mem_err)
+>  {
+>  	struct mce m;
+> +	int lsb;
+>  
+>  	if (!(mem_err->validation_bits & CPER_MEM_VALID_PA))
+>  		return;
+>  
+> +	/*
+> +	 * Even if the ->validation_bits are set for address mask,
+> +	 * to be extra safe, check and reject an error radius '0',
+> +	 * and fall back to the default page size.
+> +	 */
+> +	if (mem_err->validation_bits & CPER_MEM_VALID_PA_MASK)
+> +		lsb = find_first_bit((void *)&mem_err->physical_addr_mask, PAGE_SHIFT);
+> +	else
+> +		lsb = PAGE_SHIFT;
+> +
+>  	mce_setup(&m);
+>  	m.bank = -1;
+>  	/* Fake a memory read error with unknown channel */
+>  	m.status = MCI_STATUS_VAL | MCI_STATUS_EN | MCI_STATUS_ADDRV | MCI_STATUS_MISCV | 0x9f;
+> -	m.misc = (MCI_MISC_ADDR_PHYS << 6) | PAGE_SHIFT;
+> +	m.misc = (MCI_MISC_ADDR_PHYS << 6) | lsb;
 
-Right, but some of that could be captured in DT with
-'regulator-system-load'.
+LGTM.
 
-> For ultimate saftey we probably want a command line option to gate the
-> feature which people can set to say they've audited their full
-> software/hardware integration stack.
+I suppose this wants to go upstream via the tree the bug came from (NVDIMM 
+tree? ACPI tree?), or should we pick it up into the x86 tree?
 
-That sounds like it could be useful.
-=20
-> > At some point in the discussion I thought Mark suggested removing
-> > set_load from drivers that don't actually manage active and idle loads.
-> > That would also work, at least until the day one of the drivers adds
-> > support for idle loads.
->=20
-> Yes, if the driver isn't actively managing loads it's probably not doing
-> anything useful.
+Thanks,
 
-Ok, thanks for confirming. Perhaps we should drop the set_loads() added
-to the PHY driver by this series then.
-=20
-> The difficulties with this sort of system integration question is an
-> unfortunate consequence of DT, having to describe what's safe for an
-> unknown software stack is fundamentally hard.  I do question how much
-> effort it's worth putting into enabling this, especially in cases where
-> the regulator is shared - how much power is actually saved in the grand
-> scheme of things given that this is only taking effect when the system
-> is out of suspend and we tend to be talking about some percentage of the
-> power being drawn on something which is presumably already consuming
-> very little power for this to be at all relevant?
-
-I tend to agree. Thanks again for your input!
-
-Johan
-
---YTsIOlOo8860ehFK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCYuo22gAKCRALxc3C7H1l
-CArBAP4+W07nkP4v5zuEdV1LepVpAWJtpTTVnGwdfkVwnr5FAgD+I8xjWidPc2Kq
-nD+BAXuccWyyiOPlBuyM2GD/ZXjL1wQ=
-=ehiB
------END PGP SIGNATURE-----
-
---YTsIOlOo8860ehFK--
+	Ingo

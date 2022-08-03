@@ -2,148 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2542C588F53
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E74588F54
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237092AbiHCP1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
+        id S238071AbiHCP2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiHCP1Y (ORCPT
+        with ESMTP id S236287AbiHCP2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:27:24 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5211658B;
-        Wed,  3 Aug 2022 08:27:23 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id a89so21932188edf.5;
-        Wed, 03 Aug 2022 08:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=NstIhUvDndfhWQhjJY54RegUN1YZlKiUPmz8PG5jen0=;
-        b=kbUTCYf8W9wxbL8ZzhcpD7tffIrDNB7uTgsF2jrAZFtiH+/oSbwNJ/59q6xBEJMGW5
-         J3+Df/AJ1ckT1I2e92XqpTGaXS6Cd9em/LvZQCXHq6f7fhkMGIWbyPCI6oEzx9Hvu3Pv
-         wjv7zFVW5UrS4uZtf8ARoixOmHUNRriP/9I7fJ8GMQFZrYESpmtz2o93ThkCuW6iGey1
-         pAd+d48rHt6aNNq1H3yPQvdXUOyxSpCh4LKrA1wk1vok3txU+BKqUC0V92iqewwTQOtZ
-         t3sO+fNKrrLbURpfaz5bhhn4diPvgIRrI7dIn8C69gYPh0CGplwCVPPGRsLQaNa16pss
-         Q3xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=NstIhUvDndfhWQhjJY54RegUN1YZlKiUPmz8PG5jen0=;
-        b=HVbillenALsdSzjVlD3Vfy+i8MVLYbCt29sWITwvNO+H/QdKtTOBovHWnhIczvauWz
-         0XyqsyFDeCwF2mupe/hlGglalfTkqkAMPsRV6M6/9s54dumKDUFHiBhFr5RfO85Iu4YS
-         I2lcg7msl1rNQ3lX8dHdGNo9YokyOE/zoOYNlAg18g59jytAK9uhZR5xvWWpvFawoPS6
-         gA1nsH7D2OYo3oIharMmR6xBk7GC0PM4FBEU23SbBx67WN3++9QUamDQ3wOBKB1VJlS1
-         Dn4IjpM8NoxNvrqjsw9M/gKydCtkz1zM1rQLl/FQ9tHzSygga8hSau5IJMXr3YQemGvp
-         T9LQ==
-X-Gm-Message-State: ACgBeo0RH5l+2LeuhLNrlHB1MQF4CaIbfmnQDJDnUdp5BQ5gO8OrvkCU
-        Vhm/HewO6cu6vJ6dhWIHX8o=
-X-Google-Smtp-Source: AA6agR6UzGbLznDIzufozkxc3QxIbkRILg9KQkRnk76qQftIeadMR3af1KL/ug7WWsuNc+O45rYqbw==
-X-Received: by 2002:a05:6402:3583:b0:43d:6943:44a with SMTP id y3-20020a056402358300b0043d6943044amr18876184edc.409.1659540441529;
-        Wed, 03 Aug 2022 08:27:21 -0700 (PDT)
-Received: from krava ([83.240.61.12])
-        by smtp.gmail.com with ESMTPSA id s10-20020aa7c54a000000b0043d1eff72b3sm8280323edr.74.2022.08.03.08.27.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 08:27:21 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 3 Aug 2022 17:27:19 +0200
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] bpf: Drop unprotected find_vpid() in favour of
- find_get_pid()
-Message-ID: <YuqT17dTbHK521pC@krava>
-References: <20220803134821.425334-1-lee@kernel.org>
+        Wed, 3 Aug 2022 11:28:14 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43191658B
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:28:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 58297CE23C1
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:28:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48E75C433C1;
+        Wed,  3 Aug 2022 15:28:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659540490;
+        bh=bNPdkVFgo8y7TFHkpyCYZo3hf4s+EbbUgOaCuZ/XapU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CtDkPqDaAkMu0pAXBxk+rZWYGPOAXtyQYMWBUEBXhOKYx7nSmauQkHNwFmKLIs8Rf
+         I3M1x2arvdZcy3jKYFRCIX9CabezLBAjze3B0TtdteuLBiQLXKwVnkXut+OnfpuCo9
+         q0XwiDu1Hm430WYQVyL/ozhASmcAxVbxbSH5/t5Q=
+Date:   Wed, 3 Aug 2022 17:28:08 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     bchalios@amazon.es
+Cc:     linux-kernel@vger.kernel.org, tytso@mit.edu, Jason@zx2c4.com,
+        dwmw@amazon.co.uk, graf@amazon.de, xmarcalx@amazon.co.uk
+Subject: Re: [PATCH 2/2] virt: vmgenid: add support for generation counter
+Message-ID: <YuqUCPN11aSUmjDy@kroah.com>
+References: <20220803152127.48281-1-bchalios@amazon.es>
+ <20220803152127.48281-3-bchalios@amazon.es>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220803134821.425334-1-lee@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220803152127.48281-3-bchalios@amazon.es>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 02:48:21PM +0100, Lee Jones wrote:
-> The documentation for find_pid() clearly states:
-
-nit: typo find_vpid
-
+On Wed, Aug 03, 2022 at 05:21:27PM +0200, bchalios@amazon.es wrote:
+> From: Babis Chalios <bchalios@amazon.es>
 > 
->   "Must be called with the tasklist_lock or rcu_read_lock() held."
+> VM Generation ID provides a means of reseeding kernel's RNG using a
+> 128-bit UUID when a VM fork occurs, thus avoiding issues running
+> multiple VMs with the exact same RNG state. However, user-space
+> applications, such as user-space PRNGs and applications that maintain
+> world-unique data, need a mechanism to handle VM fork events as well.
 > 
-> Presently we do neither.
+> To handle the user-space use-case, this: <url> qemu patch extends
+> Microsoft's original vmgenid specification adding an extra page which
+> holds a single 32-bit generation counter, which increases every time a
+> VM gets restored from a snapshot.
 > 
-> Let's use find_get_pid() which searches for the vpid, then takes a
-> reference to it preventing early free, all within the safety of
-> rcu_read_lock().  Once we have our reference we can safely make use of
-> it up until the point it is put.
+> This patch exposes the generation counter through a character device
+> (`/dev/vmgenid`) that provides a `read` and `mmap` interface, for
+> user-space applications to consume. Userspace applications should read
+> this value before starting a transaction involving cached random bits
+> and ensure that it has not changed while committing the transaction.
 > 
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: bpf@vger.kernel.org
-> Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
-> Signed-off-by: Lee Jones <lee@kernel.org>
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-jirka
-
+> It can be used from qemu using the `-device vmgenid,guid=auto,genctr=42`
+> parameter to start a VM with a generation counter with value 42.
+> Reading 4 bytes from `/dev/vmgenid` will return the value 42. Next, use
+> `savevm my_snapshot` in the monitor to snapshot the VM. Now, start
+> another VM using `-device vmgenid,guid=auto,genctr=43 -loadvm
+> my_snapshot`. Reading now from `/dev/vmgenid` will return 43.
+> 
+> Signed-off-by: Babis Chalios <bchalios@amazon.es>
 > ---
+>  Documentation/virt/vmgenid.rst | 120 +++++++++++++++++++++++++++++++++
+>  drivers/virt/vmgenid.c         | 103 +++++++++++++++++++++++++++-
+>  2 files changed, 221 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/virt/vmgenid.rst
 > 
-> v1 => v2:
->   * Commit log update - no code differences
-> 
->  kernel/bpf/syscall.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 83c7136c5788d..c20cff30581c4 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
->  	const struct perf_event *event;
->  	struct task_struct *task;
->  	struct file *file;
-> +	struct pid *ppid;
->  	int err;
->  
->  	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
-> @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
->  	if (attr->task_fd_query.flags != 0)
->  		return -EINVAL;
->  
-> -	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
-> +	ppid = find_get_pid(pid);
-> +	task = get_pid_task(ppid, PIDTYPE_PID);
-> +	put_pid(ppid);
->  	if (!task)
->  		return -ENOENT;
->  
-> -- 
-> 2.37.1.455.g008518b4e5-goog
-> 
+> diff --git a/Documentation/virt/vmgenid.rst b/Documentation/virt/vmgenid.rst
+> new file mode 100644
+> index 000000000..61c29e4a7
+> --- /dev/null
+> +++ b/Documentation/virt/vmgenid.rst
+> @@ -0,0 +1,120 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=======
+> +VMGENID
+> +=======
+
+<snip>
+
+This file is now just floating in the directory, not tied to anything,
+so auto-generation of the documentation will not pick it up or link to
+it, right?
+
+So, why does this have to be a separate file at all?  Why not put this
+in the .c file and pull it straight from there so that it keeps in sync
+with the code easier?
+
+thanks,
+
+greg k-h

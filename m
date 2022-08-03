@@ -2,215 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3F1588F1C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48EB588F22
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237730AbiHCPIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
+        id S236204AbiHCPLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237143AbiHCPId (ORCPT
+        with ESMTP id S235868AbiHCPLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:08:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B29D32FFFB
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659539311;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TEJipl6ZEklwILT6wRjOyBYSkCe6bZ/w1fkrBbq5Vog=;
-        b=FaQ958NJAkKp3fZeGnNqr4RulEHN1jg2Q3AP3uywSQalfkglVEtHUZKQjhZKb073wvLKNi
-        4Wy0HN8R/AveFXBrbGyEm9tZjJb/mYKKArvq+D6tf1q1x4+j9xBqzFepIVq6jjqDK8mtsR
-        Goci1RRN9KRZE7LLb9X3aPKPQ5/vqnU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-222-mkuSyfzJOyiRyqCAwckIzg-1; Wed, 03 Aug 2022 11:08:30 -0400
-X-MC-Unique: mkuSyfzJOyiRyqCAwckIzg-1
-Received: by mail-wm1-f70.google.com with SMTP id 18-20020a05600c029200b003a500b612e2so279725wmk.9
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:08:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=TEJipl6ZEklwILT6wRjOyBYSkCe6bZ/w1fkrBbq5Vog=;
-        b=yNopLA8U3hktUmvaZToM5iCsHWj2p3nVpUxxnMd109mz+KCkVRRCV79VDlSlWwXPZ0
-         6BZtQE9uReNCu2NXcwByq9J1ANGEcMuGh82jJHu/oPwPOIdT4Yxi/iPNZ6pWdNp4soON
-         z4duVc+P/uzwUA3xmO8eDlNVab+Mde6uZz3yOwjye/ig7qB83dYshzZdBEwnF+SKV4hF
-         AQ8iS6Qdn421fi1ayYx8ldxGSg1drJTuM/DceL0H39WegxqD6+X7iL5fS9gz59+9w1qq
-         BLQdL/R9iOdlL79W38FoT8eCB/h/51R3dwkt4f5JFtSlX8Yt3BGneaAjcmE4nVPThNX2
-         oy+Q==
-X-Gm-Message-State: ACgBeo3TIZTDc6+G7/JU7VNM+eZEKZGPKUpWTha2cHK6lsop3SS9KC0q
-        k1clLj9hNNQT88N/qNQ6Waqge8IE1jticRQ+QWZTL6HzTinQxBHlsMyJLQqBsMcQFltliWHOgg8
-        n4hfCns3sSPHUNJEpg7tOXvEj
-X-Received: by 2002:a7b:ca48:0:b0:3a3:365d:1089 with SMTP id m8-20020a7bca48000000b003a3365d1089mr3303519wml.153.1659539308548;
-        Wed, 03 Aug 2022 08:08:28 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4Pkyj5/hjywoI7Ycq4AlxsyzIwqNZ/+qcPrRRcmJRiZ74M2UHFTtU5uW2z1EWbh2qJbbexAQ==
-X-Received: by 2002:a7b:ca48:0:b0:3a3:365d:1089 with SMTP id m8-20020a7bca48000000b003a3365d1089mr3303490wml.153.1659539308168;
-        Wed, 03 Aug 2022 08:08:28 -0700 (PDT)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id s1-20020adfea81000000b0021e74ef5ae8sm18333208wrm.21.2022.08.03.08.08.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 08:08:27 -0700 (PDT)
-Message-ID: <cedcced0-b92c-07bd-ef2b-272ae58fdf40@redhat.com>
-Date:   Wed, 3 Aug 2022 17:08:25 +0200
+        Wed, 3 Aug 2022 11:11:46 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F1E105;
+        Wed,  3 Aug 2022 08:11:44 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 273FBU04064031;
+        Wed, 3 Aug 2022 10:11:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1659539490;
+        bh=peLk7igHpDJqfv6EMWNdPZHTWycmcc3LsA19pplDeQE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=f0eDlCIB2spYCffXhw7qTXkkXpFUl1v2u2jtBUQBWQLwCJ59BchBhByJQe/XJBT4t
+         E7wNe7lypugCCXSjDoi7z/M/nP30FKv8nciQMcb1czYFc+DQPmMeGquRIwxer3BwZK
+         24P3taMPVx6EPbSUfgZ0d0ZR3QYxwAb4sxDmiJbg=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 273FBUAI079389
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 3 Aug 2022 10:11:30 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 3
+ Aug 2022 10:11:30 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 3 Aug 2022 10:11:29 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 273FBTMV002223;
+        Wed, 3 Aug 2022 10:11:29 -0500
+Date:   Wed, 3 Aug 2022 10:11:27 -0500
+From:   Jai Luthra <j-luthra@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: sound: tlv320aic3x: Convert to dtschema
+Message-ID: <20220803151127.23tmkvobrh5so46v@uda0497096>
+References: <20220802214811.29033-1-j-luthra@ti.com>
+ <7effc23b-b61a-9887-3875-d102b8fa270e@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] KVM: x86/mmu: Make page tables for eager page splitting
- NUMA aware
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     David Matlack <dmatlack@google.com>,
-        Vipin Sharma <vipinsh@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220801151928.270380-1-vipinsh@google.com>
- <YuhPT2drgqL+osLl@google.com> <YuhoJUoPBOu5eMz8@google.com>
- <YulRZ+uXFOE1y2dj@google.com> <YuldSf4T2j4rIrIo@google.com>
- <4ccbafb5-9157-ec73-c751-ec71164f8688@redhat.com>
- <Yul3A4CmaAHMui2Z@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yul3A4CmaAHMui2Z@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <7effc23b-b61a-9887-3875-d102b8fa270e@linaro.org>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/2/22 21:12, Sean Christopherson wrote:
-> Ah crud, I misread the patch.  I was thinking tdp_mmu_spte_to_nid() was getting
-> the node for the existing shadow page, but it's actually getting the node for the
-> underlying physical huge page.
-> 
-> That means this patch is broken now that KVM doesn't require a "struct page" to
-> create huge SPTEs (commit  a8ac499bb6ab ("KVM: x86/mmu: Don't require refcounted
-> "struct page" to create huge SPTEs").  I.e. this will explode as pfn_to_page()
-> may return garbage.
-> 
-> 	return page_to_nid(pfn_to_page(spte_to_pfn(spte)));
+Hi Krzysztof,
 
-I was about to say that yesterday.  However my knowledge of struct page 
-things has been proved to be spotty enough, that I wasn't 100% sure of 
-that.  But yeah, with a fresh mind it's quite obvious that anything that 
-goes through hva_to_pfn_remap and similar paths will fail.
+Thanks for the review.
 
-> That said, I still don't like this patch, at least not as a one-off thing.  I do
-> like the idea of having page table allocations follow the node requested for the
-> target pfn, what I don't like is having one-off behavior that silently overrides
-> userspace policy.
+On 08:29-20220803, Krzysztof Kozlowski wrote:
+> On 02/08/2022 23:48, Jai Luthra wrote:
+> > Convert bindings for TI's TLV320AIC3x audio codecs to dtschema.
+> > 
+> > Signed-off-by: Jai Luthra <j-luthra@ti.com>
+> > ---
+> 
+> 
+> Thank you for your patch. There is something to discuss/improve.
+> 
+> > diff --git a/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml b/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml
+> > new file mode 100644
+> > index 000000000000..6efb1d459543
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml
+> > @@ -0,0 +1,145 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/sound/tlv320aic3x.yaml#
+> 
+> Filename with vendor prefix, so ti,tlv320aic3x.yaml
+> 
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Texas Instruments TLV320AIC3x Codec Device Tree Bindings
+> 
+> s/Device Tree Bindings//
+> 
+> > +
+> > +maintainers:
+> > +  - Jai Luthra <j-luthra@ti.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - ti,tlv320aic3x
+> > +      - ti,tlv320aic33
+> > +      - ti,tlv320aic3007
+> > +      - ti,tlv320aic3106
+> > +      - ti,tlv320aic3104
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +    description: i2c slave address
+> 
+> Skip description.
+> 
+> > +
+> > +  reset-gpios:
+> > +    maxItems: 1
+> > +    description:
+> > +      GPIO specification for the active low RESET input.
+> > +
+> > +  ai3x-gpio-func:
+> > +    description: AIC3X_GPIO1 & AIC3X_GPIO2 Functionality
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    minItems: 3
+> 
+> uint32-array. Old bindings say about two items only. Mention any changes
+> to binding in cover letter.
 
-Yes, I totally agree with making it all or nothing.
+My bad, that should still be 2 items.
 
-> I would much rather we solve the problem for all page table allocations, maybe
-> with a KVM_CAP or module param?  Unfortunately, that's a very non-trivial change
-> because it will probably require having a per-node cache in each of the per-vCPU
-> caches.
-
-A module parameter is fine.  If you care about performance to this 
-level, your userspace is probably homogeneous enough.
-
-Paolo
-
-> Hmm, actually, a not-awful alternative would be to have the fault path fallback
-> to the current task's policy if allocation fails.  I.e. make it best effort.
 > 
-> E.g. as a rough sketch...
+> > +    maxItems: 3
+> > +
 > 
-> ---
->   arch/x86/kvm/mmu/tdp_mmu.c | 37 ++++++++++++++++++++++++++++++-------
->   1 file changed, 30 insertions(+), 7 deletions(-)
+> You lost gpio-reset property. Also not explained in commit msg.
 > 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index bf2ccf9debca..e475f5b55794 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -273,10 +273,11 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
+> > +  ai3x-micbias-vg:
+> > +    description: MicBias required voltage. If node is omitted then MicBias is powered down.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    oneOf:
+> > +      - const: 1
+> > +        description: MICBIAS output is powered to 2.0V.
+> > +      - const: 2
+> > +        description: MICBIAS output is powered to 2.5V.
+> > +      - const: 3
+> > +        description: MICBIAS output is connected to AVDD.
+> > +
+> > +  ai3x-ocmv:
+> > +    description: Output Common-Mode Voltage selection.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    oneOf:
+> > +      - const: 0
+> > +        description: 1.35V
+> > +      - const: 1
+> > +        description: 1.5V
+> > +      - const: 2
+> > +        description: 1.65V
+> > +      - const: 3
+> > +        description: 1.8V
+> > +
+> > +  AVDD-supply:
+> > +    description: Analog DAC voltage.
 > 
->   static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
->   {
-> +	struct kvm_mmu_memory_cache *cache = &vcpu->arch.mmu_shadow_page_cache;
->   	struct kvm_mmu_page *sp;
-> 
->   	sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
-> -	sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
-> +	sp->spt = kvm_mmu_alloc_shadow_page_table(cache, GFP_NOWAIT, pfn);
-> 
->   	return sp;
->   }
-> @@ -1190,7 +1191,7 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->   			if (is_removed_spte(iter.old_spte))
->   				break;
-> 
-> -			sp = tdp_mmu_alloc_sp(vcpu);
-> +			sp = tdp_mmu_alloc_sp(vcpu, fault->pfn);
->   			tdp_mmu_init_child_sp(sp, &iter);
-> 
->   			if (tdp_mmu_link_sp(vcpu->kvm, &iter, sp, account_nx, true)) {
-> @@ -1402,17 +1403,39 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
->   	return spte_set;
->   }
-> 
-> -static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
-> +void *kvm_mmu_alloc_shadow_page_table(struct kvm_mmu_memory_cache *cache,
-> +				      gfp_t gfp, kvm_pfn_t pfn)
-> +{
-> +	struct page *page = kvm_pfn_to_refcounted_page(pfn);
-> +	struct page *spt_page;
-> +	int node;
-> +
-> +	gfp |= __GFP_ZERO | __GFP_ACCOUNT;
-> +
-> +	if (page) {
-> +		spt_page = alloc_pages_node(page_to_nid(page), gfp, 0);
-> +		if (spt_page)
-> +			return page_address(spt_page);
-> +	} else if (!cache) {
-> +		return (void *)__get_free_page(gfp);
-> +	}
-> +
-> +	if (cache)
-> +		return kvm_mmu_memory_cache_alloc(cache);
-> +
-> +	return NULL;
-> +}
-> +
-> +static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp,
-> +							 kvm_pfn_t pfn)
->   {
->   	struct kvm_mmu_page *sp;
-> 
-> -	gfp |= __GFP_ZERO;
-> -
->   	sp = kmem_cache_alloc(mmu_page_header_cache, gfp);
->   	if (!sp)
->   		return NULL;
-> 
-> -	sp->spt = (void *)__get_free_page(gfp);
-> +	sp->spt = kvm_mmu_alloc_shadow_page_table(NULL, gfp, pfn);
->   	if (!sp->spt) {
->   		kmem_cache_free(mmu_page_header_cache, sp);
->   		return NULL;
-> @@ -1436,7 +1459,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
->   	 * If this allocation fails we drop the lock and retry with reclaim
->   	 * allowed.
->   	 */
-> -	sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
-> +	sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT);
->   	if (sp)
->   		return sp;
-> 
-> 
-> base-commit: f8990bfe1eab91c807ca8fc0d48705e8f986b951
-> --
+> New properties?
 > 
 
+These regulator properties were mentioned in the txt as well.
+
+> > +
+> > +  IOVDD-supply:
+> > +    description: I/O voltage.
+> > +
+> > +  DRVDD-supply:
+> > +    description: ADC analog and output driver voltage.
+> > +
+> > +  DVDD-supply:
+> > +    description: Digital core voltage.
+> > +
+> > +  '#sound-dai-cells':
+> > +    const: 0
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +#The pins can be used in referring sound node's audio-routing property.
+> > +
+> > +#CODEC output pins:
+> > +  # LLOUT
+> > +  # RLOUT
+> > +  # MONO_LOUT
+> > +  # HPLOUT
+> > +  # HPROUT
+> > +  # HPLCOM
+> > +  # HPRCOM
+> > +
+> > +#CODEC input pins for TLV320AIC3104:
+> > +  # MIC2L
+> > +  # MIC2R
+> > +  # LINE1L
+> > +  # LINE1R
+> > +
+> > +#CODEC input pins for other compatible codecs:
+> > +  # MIC3L
+> > +  # MIC3R
+> > +  # LINE1L
+> > +  # LINE2L
+> > +  # LINE1R
+> > +  # LINE2R
+> 
+> All this goes to top level description.
+> 
+> 
+> Best regards,
+> Krzysztof
+
+Fixed rest of the comments in v2.
+
+Thanks,
+Jai

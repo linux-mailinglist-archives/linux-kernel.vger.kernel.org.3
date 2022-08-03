@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28790588BC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65246588BCB
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237742AbiHCMHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 08:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S237802AbiHCMIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiHCMHG (ORCPT
+        with ESMTP id S237779AbiHCMIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:07:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3118C0C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 05:07:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E0D3B82253
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:07:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E63DDC433D6;
-        Wed,  3 Aug 2022 12:07:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659528423;
-        bh=TY8/cpj97CeuAGeyEdlSoi8KimpP3r7t3KkyLr201eM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=umW48keVamvnUxIT7cMIgzBqUOcaJvGErmpybh8Rdnt2aH0Ii3+8tqrj9v1Yt1KJn
-         T7PzcgEVQXmnWawlGK1jkfaaWtfiyP733VNPdAN3ZzMU3IK7D1c+ieJDzxFv0vaohH
-         RAMj8ZPvqZz8Wrs/XLCjSDZOsosg7mwU5B+4ytOI=
-Date:   Wed, 3 Aug 2022 14:07:00 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [v4.9 PATCH v2 6/6] random: move rand_initialize() earlier
-Message-ID: <Yupk5K1S7flR7yjD@kroah.com>
-References: <20220801164328.2205839-1-hegtvedt@cisco.com>
- <20220801164328.2205839-6-hegtvedt@cisco.com>
+        Wed, 3 Aug 2022 08:08:11 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC23C12;
+        Wed,  3 Aug 2022 05:08:10 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id w185so16271180pfb.4;
+        Wed, 03 Aug 2022 05:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=9fp5p2RRC2dpvoo1tDP5el5OXyBtfs5poTm6BdmStyc=;
+        b=om4Wa/1rhi7D4sw6Ye+RrMWITwxTd4qlemLacCr4YOgFwc0/3U43oZmPRLJm1Ile3Z
+         h7ZSybt7jX8ndMJZfj1+aCIywadbGRa+/joLlrknoQrD/iFltB3T/dd3FA6GbR62CibU
+         +935czWEOpe3BlNC6+d0wz3OuvWnBenz3C5ihl88PSDPaZk1GGyiSlTaBlpZ2u2k/pQT
+         5tc70Wj85WGkAcWq6rQUKCHCKa6DKO5KzAf65vf5LxmBAHeFN5Hmwp5PAISQMIFAHj8n
+         eL3XcfHVYwCp6BLz3rSs6W3OZqNOlxyShxrZyXStSbyEJ/1SgvwQCldOy+JRcmrjkEUC
+         B1UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=9fp5p2RRC2dpvoo1tDP5el5OXyBtfs5poTm6BdmStyc=;
+        b=0Y5nfzpPX7TfL4WEER8nDWTSlk3AI/gz2jjhaXw0AyJ7TAAon4z/jeMr43hHtfSjQb
+         8BaySGp8+nYmiPmdi4kcKBoAwYFpgZZYTYmNAe2z7s9SaDlkBRXQSwCmRlmklqrEwr9m
+         dizbTa6QgUfNfuMnkjgl8csm+BCB6dCjNld/bd61GM2c6Jx35OQ3f1vga4WbFmwabW8f
+         HoNiY1QMQG9DlXDY9XBEvRK+HM+Qx6MmEMAwS+SfjxLmgFT0XhTWeq3spMCU2jHhYGhZ
+         Uo6ykq0cz3/I4/xwiR/nh04UnN+7YU8FYbiWMvtTSZ1rkGyb0DnysvuAiO24TYryoUlX
+         QHfg==
+X-Gm-Message-State: ACgBeo3jnJHA9PmiSYRetpBPpDSmspqm6i/DJLAaUY0fxl3A68+8RRd1
+        fxnWRCLmQuuiL7HlFLTmw7l88kQEJ0ux6nyL/Zs=
+X-Google-Smtp-Source: AA6agR4lPLhPOgd0kvQdrsYG0lfbHAw6RTyZuly4XMp3nJOfTywsnqRg8kfDUQXPcALOkjKrdbjbag==
+X-Received: by 2002:a05:6a00:2484:b0:52e:34c1:7459 with SMTP id c4-20020a056a00248400b0052e34c17459mr1898976pfv.65.1659528489847;
+        Wed, 03 Aug 2022 05:08:09 -0700 (PDT)
+Received: from localhost ([223.104.103.89])
+        by smtp.gmail.com with ESMTPSA id d15-20020a634f0f000000b00415d873b7a2sm10724311pgb.11.2022.08.03.05.08.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 05:08:09 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     guwen@linux.alibaba.com
+Cc:     18801353760@163.com, andrii@kernel.org, ast@kernel.org,
+        borisp@nvidia.com, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, jakub@cloudflare.com,
+        john.fastabend@gmail.com, kafai@fb.com, kgraul@linux.ibm.com,
+        kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, paskripkin@gmail.com, skhan@linuxfoundation.org,
+        songliubraving@fb.com,
+        syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com, yin31149@gmail.com
+Subject: [PATCH v3] net/smc: fix refcount bug in sk_psock_get (2)
+Date:   Wed,  3 Aug 2022 20:07:12 +0800
+Message-Id: <20220803120711.172364-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ecf07c1b-a6f3-2537-aacd-a768c437fa7f@linux.alibaba.com>
+References: <ecf07c1b-a6f3-2537-aacd-a768c437fa7f@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801164328.2205839-6-hegtvedt@cisco.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 06:43:28PM +0200, Hans-Christian Noren Egtvedt wrote:
-> From: Kees Cook <keescook@chromium.org>
-> 
-> Right now rand_initialize() is run as an early_initcall(), but it only
-> depends on timekeeping_init() (for mixing ktime_get_real() into the
-> pools). However, the call to boot_init_stack_canary() for stack canary
-> initialization runs earlier, which triggers a warning at boot:
-> 
-> random: get_random_bytes called from start_kernel+0x357/0x548 with crng_init=0
-> 
-> Instead, this moves rand_initialize() to after timekeeping_init(), and moves
-> canary initialization here as well.
-> 
-> Note that this warning may still remain for machines that do not have
-> UEFI RNG support (which initializes the RNG pools during setup_arch()),
-> or for x86 machines without RDRAND (or booting without "random.trust=on"
-> or CONFIG_RANDOM_TRUST_CPU=y).
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-> (cherry picked from commit d55535232c3dbde9a523a9d10d68670f5fe5dec3)
-> Signed-off-by: Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
-> 
-> Adjusted to fit on top of linux-4.9.y branch, suspecting a wrongly
-> solved conflict when cherry picked earlier.
-> ---
->  init/main.c | 7 -------
->  1 file changed, 7 deletions(-)
-
-This is not commit d55535232c3dbde9a523a9d10d68670f5fe5dec3, as that is
-already in the 4.9.y tree.  I can see that you want to fix the previous
-merge up, so can you just send a real fix for that and don't try to say
-you really are a different commit?
-
-Other patches in this series now queued up.
-
-thanks,
-
-greg k-h
+On Wed, 3 Aug 2022 at 19:27, Wen Gu <guwen@linux.alibaba.com> wrote:
+> Hi Hawkins,
+>
+> Since the fix v3 doesn't involved smc codes any more, I wonder if it's still
+> appropriate to use 'net/smc:' in subject?
+>
+> Cheers,
+> Wen Gu
+Thank you for reminding me, I will send the v4 patch with new subject.

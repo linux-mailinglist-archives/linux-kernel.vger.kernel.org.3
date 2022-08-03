@@ -2,84 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F3A588FDB
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB5F588FE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237446AbiHCPzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
+        id S238259AbiHCP4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238154AbiHCPzS (ORCPT
+        with ESMTP id S238380AbiHCP4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:55:18 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B843481EE
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:53:30 -0700 (PDT)
-Received: from [192.168.1.101] (abxi232.neoplus.adsl.tpnet.pl [83.9.2.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 8BCDC3F759;
-        Wed,  3 Aug 2022 17:53:28 +0200 (CEST)
-Message-ID: <38d82563-12dd-3d74-efb7-7066c114f016@somainline.org>
-Date:   Wed, 3 Aug 2022 17:53:27 +0200
+        Wed, 3 Aug 2022 11:56:11 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8014BB7F2
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:56:02 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id i128-20020a1c3b86000000b003a3a22178beso1142203wma.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=mxMtG/Q251T7R62iX9Xk/wpEgTp311fOpnJ0ShthtKM=;
+        b=B4+uBSxdHMiSA/FZHsjqRDTozx+JSIc1seFJm34ExPeztEVDD07wRjHK6FzULPj52N
+         0EMMYg3C77CqUFN29Loe0BUvz9T7wymLNRWvAVD/cIeIv0TUhupDo7MN1Pz5qwUDAn+7
+         BN5c/JV8oa3KMpsf5W+JM2rqd/VNTOpME5Zc9FtJVWEJYzaIQktD0/XCDYoLzNhYvn5f
+         7ftKrnOMC/S5QQvtkDaDyjY63dAnPxsBSjdnN9I0z+Meib5U4r1inilkPVme/npe8a6u
+         JMfE2ZYEVFLITL4oLRmvF3dRRMEYgoAiwOlWNDjQDUXb8Q2Xk+rL21TfON4HgoYl27YA
+         0MOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=mxMtG/Q251T7R62iX9Xk/wpEgTp311fOpnJ0ShthtKM=;
+        b=RFqs54MJjehkLhiJbGEmyBOo1H4EbJhop35ZotHjJLMWqKwDKnluK50K9QfzbkTf8T
+         CWVZeWrtTy5lulWAfziGQRNt9+VsxvXNFRRJRJcVz5jDfrPUNOjxweLvsn5u2PoZHgIi
+         SMckaLN3GSDA6psI/yFiQWFH6dbESDcoMLH2DYEZQqh9ZDp5mp8K0f3uHYbLoIanjp+p
+         q9UYoLQHsqSTDSHC5ZV0fMVsx1t7Zt2bRvsG5Lv6dZP0Da2EdKGEYxFQsTnOmIOkwGi0
+         H4PGG7xjLaD0mP/J+5XEqHBd+cDBbhhMrb0o1UaTBfYStnBvFHDQmXYxEmuUewVSqJSo
+         /ueQ==
+X-Gm-Message-State: ACgBeo3Enp7qnTRU3Ps3pyvvFoWCeQ/Mzaw5uj2RiSULXOnTyPVc5DbT
+        tMJTEqJ7yKmIUAXrah35RfgRig==
+X-Google-Smtp-Source: AA6agR5BfqTfNvlJd1g6OG5xcTlUNOnmja0gCtgMu3jkzJTU+0HROXQ6ioslOvzyFPUGUa6hAhSIyA==
+X-Received: by 2002:a05:600c:19d2:b0:3a3:2cdb:cc02 with SMTP id u18-20020a05600c19d200b003a32cdbcc02mr3313498wmq.182.1659542160960;
+        Wed, 03 Aug 2022 08:56:00 -0700 (PDT)
+Received: from henark71.. ([93.107.66.220])
+        by smtp.gmail.com with ESMTPSA id w13-20020adfee4d000000b0021f0af83142sm18107277wro.91.2022.08.03.08.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 08:56:00 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Atul Khare <atulkhare@rivosinc.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v4] dt-bindings: gpio: sifive: add gpio-line-names
+Date:   Wed,  3 Aug 2022 16:55:40 +0100
+Message-Id: <20220803155539.800766-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1] pinctrl: qcom: sm8250: Fix PDC map
-Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220803015645.22388-1-lujianhua000@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220803015645.22388-1-lujianhua000@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Atul Khare <atulkhare@rivosinc.com>
 
+Fix device tree schema validation messages like 'gpio-line-names'
+does not match any of the regexes: 'pinctrl-[0-9]+' From schema: ...
+sifive,gpio.yaml'.
 
-On 3.08.2022 03:56, Jianhua Lu wrote:
-> Fix the PDC mapping for SM8250, gpio39 is mapped to irq73(not irq37).
-> 
-> Fixes: b41efeed507a("pinctrl: qcom: sm8250: Specify PDC map.")
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
-> 
-> Changes in v1:
-Acutally, it should be v2 as the first send is assumed to be a v1.
-> - fixes typo error(mapped target is irq, not gpio).
-> 
+The bindings were missing the gpio-line-names element, which was
+causing the dt-schema checker to trip-up.
 
-The change looks in line with msm-4.19 though.
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Atul Khare <atulkhare@rivosinc.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+Changes since v3[0]:
+- Dropped patch 1 & the now unneeded cover letter
+- Added Rob's Ack
+- Changed the patch title to include the subsystem
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+0 - https://lore.kernel.org/all/20220726170725.3245278-3-mail@conchuod.ie/
+---
+ Documentation/devicetree/bindings/gpio/sifive,gpio.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Konrad
->  drivers/pinctrl/qcom/pinctrl-sm8250.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pinctrl/qcom/pinctrl-sm8250.c b/drivers/pinctrl/qcom/pinctrl-sm8250.c
-> index af144e724bd9..3bd7f9fedcc3 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-sm8250.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-sm8250.c
-> @@ -1316,7 +1316,7 @@ static const struct msm_pingroup sm8250_groups[] = {
->  static const struct msm_gpio_wakeirq_map sm8250_pdc_map[] = {
->  	{ 0, 79 }, { 1, 84 }, { 2, 80 }, { 3, 82 }, { 4, 107 }, { 7, 43 },
->  	{ 11, 42 }, { 14, 44 }, { 15, 52 }, { 19, 67 }, { 23, 68 }, { 24, 105 },
-> -	{ 27, 92 }, { 28, 106 }, { 31, 69 }, { 35, 70 }, { 39, 37 },
-> +	{ 27, 92 }, { 28, 106 }, { 31, 69 }, { 35, 70 }, { 39, 73 },
->  	{ 40, 108 }, { 43, 71 }, { 45, 72 }, { 47, 83 }, { 51, 74 }, { 55, 77 },
->  	{ 59, 78 }, { 63, 75 }, { 64, 81 }, { 65, 87 }, { 66, 88 }, { 67, 89 },
->  	{ 68, 54 }, { 70, 85 }, { 77, 46 }, { 80, 90 }, { 81, 91 }, { 83, 97 },
+diff --git a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+index 939e31c48081..fc095646adea 100644
+--- a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
++++ b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+@@ -46,6 +46,10 @@ properties:
+     maximum: 32
+     default: 16
+ 
++  gpio-line-names:
++    minItems: 1
++    maxItems: 32
++
+   gpio-controller: true
+ 
+ required:
+-- 
+2.37.1
+

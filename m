@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39AD589111
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23071589113
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236677AbiHCROX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
+        id S236466AbiHCRPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237371AbiHCROU (ORCPT
+        with ESMTP id S231966AbiHCRO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:14:20 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0966552FE3
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:14:19 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id p10so18124908wru.8
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:14:18 -0700 (PDT)
+        Wed, 3 Aug 2022 13:14:57 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C0452DF1
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:14:56 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id i128-20020a1c3b86000000b003a3a22178beso1242844wma.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:14:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=GUtktyRkXIhS+Fz7PPmZmEHdzJqtBsKjE1UhF4HSDMo=;
-        b=hgURM5ANxcvq1WQMcHsEFrKc4g+wG97zSAqfnwBblL3ajda7Es9x+8sBzkuDU52XUm
-         EUqhtzZNWYFzJzAgxjM15fqdeIybTL0lvpKoWK9e2lTFNC/KfjYJY04zznzuuKdt66iD
-         ZRy1T+eqNlsZVTZQFUtLmK8GZAXV7qH5itA3HPzClVL+tGOhvWX7KzJj9rGlVYS/NqTR
-         WYfjkgjREasgWqrvTY/hVSMONzXDc6qUnlFFoe/IwD1HZgifZgXMhtBaPkz7VpG2jUav
-         eK4L+Ki4uqVT6GCPgitAAHVtDaUFtpFKMPGTows4TQTFLvXZE/XCVX67duIp15OuLV1Y
-         NEjA==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/3dZwuNcVuE6d4zZ4aeM7vczIq122Gxcmf/snpYWoTY=;
+        b=mPMYv2iq+jQ125BM8udKcXg+4UXDUxtCzILO4KDgG2s/BTserP7tB3r3NA5sSNeF8s
+         rk6+S5fx5uPlv3ra/ZnGdMNnTlQNdGFBpfJ41cJOOW2aMpTr/iYT39Xm3EX/TR7Bo4lL
+         KnmmITXsvrMEmT1q3pMchyeyttE7Mrr7bmPKq91MNTApqCV21DIfuCNmU5UBdhgyxmZc
+         yFrvKwYcu+g2e7uz9Cs3Or45aP1Wm7zvr+hFyDAGklIcXAgEIAJLUo9EnvpdtipC9+Fp
+         Ggg0A6FSa7vcTAQhiC3yU3PMjRmcyYxH7L0YP7+coxzPBaavyoCIz/n2eHitOO7QHOcO
+         1xoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=GUtktyRkXIhS+Fz7PPmZmEHdzJqtBsKjE1UhF4HSDMo=;
-        b=q7043pXWSLmQP8dUoc1x0TPEBDGSTfB3OH7CIsspVBZKgmIFB4rmZHNz6I0FDyq9Ck
-         CFd3wLm4Vg5S+qofgSmMvFQENLt2+kiyT9Vs+4M1/xnFhUd6AAIVu9rsRLMinOw+9n0D
-         YOlloI1Mzk+okR/NWooEOGMteBOdXKXd6JPM5nNMK/4Rt96mMuxDJwQa/opeI8iZkNXX
-         Li7YXeag0g7G3ulv5moyQM0lamBfpuM08InohlBF1AgkqPdMFqEihqiR/xmozz8kU/1/
-         v27xFjrFBtz2WEhA1i6R5OOtKO3NcFJJUb6unjGWFBHIBtpWJNJSXveutrpo97zZHu/4
-         LwVA==
-X-Gm-Message-State: ACgBeo19ZalcZsXP2mS1bCiEBNm8MDyAfr2v29t5TdUV4fgp5v2A3fM2
-        mRDWEc/7pAoufxLJIb0MaxRQzA==
-X-Google-Smtp-Source: AA6agR5wBU/h1VzY7Of86k5Vjs0Yjyf4+h43iAnWFK5iP7bOZIUoXZkeuCrQwsHl+8vX59zAdlFSXg==
-X-Received: by 2002:a5d:6b10:0:b0:21e:4bbd:e893 with SMTP id v16-20020a5d6b10000000b0021e4bbde893mr16903170wrw.613.1659546857496;
-        Wed, 03 Aug 2022 10:14:17 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:6e48:fbdd:280d:6dac? ([2a05:6e02:1041:c10:6e48:fbdd:280d:6dac])
-        by smtp.googlemail.com with ESMTPSA id r4-20020a05600c158400b0039c96b97359sm2780146wmf.37.2022.08.03.10.14.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 10:14:17 -0700 (PDT)
-Message-ID: <9110a859-9885-1dab-0412-e8f62cfff458@linaro.org>
-Date:   Wed, 3 Aug 2022 19:14:16 +0200
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=/3dZwuNcVuE6d4zZ4aeM7vczIq122Gxcmf/snpYWoTY=;
+        b=UvKMzxPWQmUcZ45qQ7kowTQPYpQpqIaa5kUGyUteRTeDCV1XRuxo5XAOXBkjO4puqY
+         LqpCpPHW0/4a2EwaXXgWiRS8YT0d9v5YQlKq3fxq0StYeguy8qM+a2YrEru97QPub2DA
+         BzFYNj/q2dfQmVv1+j7qyvZrJafaMVQUmBOzLzID/pko/KECqKocgBQ0rn4HjjBRn++C
+         NWDZq9L+5dA2jh0lVhQiVKi0MuIPeEchcZMB+g0drkSxN5GzJ3LTwtXtBVnNrpDEMt6x
+         yn2dvcZjhFmvjuA4YbvmWA74eK7rdzhE3TIX7SPQXI2EnAvFparWyPm/H4OtkDZlt57u
+         uiQg==
+X-Gm-Message-State: ACgBeo3nigL8r31H95cQuPOTb0FsNc6LknNNqS5xSs1V0PGrICfX4aF3
+        1w292KK0CtEkxIBwmZprfZE=
+X-Google-Smtp-Source: AA6agR5+RQSgYBJ0NnS/al6TqBCjjlkbnQCxVl7Uvy5WWLOldcxAvdFQeWzPgyNRhGVwpiqbpD8hTQ==
+X-Received: by 2002:a05:600c:1d1b:b0:3a3:e2:42d1 with SMTP id l27-20020a05600c1d1b00b003a300e242d1mr3547004wms.137.1659546895132;
+        Wed, 03 Aug 2022 10:14:55 -0700 (PDT)
+Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
+        by smtp.gmail.com with ESMTPSA id u11-20020a05600c19cb00b003a302fb9df7sm3438954wmq.21.2022.08.03.10.14.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 10:14:54 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 3 Aug 2022 19:14:52 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Liu Song <liusong@linux.alibaba.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/debug: avoid executing show_state and causing rcu
+ stall warning
+Message-ID: <YuqtDA4NY/8Z22aK@gmail.com>
+References: <1659489525-82994-1-git-send-email-liusong@linux.alibaba.com>
+ <20220803084235.5d56d1e4@gandalf.local.home>
+ <20220803140653.GD2125313@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] tools/thermal: Fix possible path truncations
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-References: <20220725173755.2993805-1-f.fainelli@gmail.com>
- <CAJZ5v0hL46vdr=f8YiAPnRmmehZs51n+tkgoY7PMTVyJD0cpEA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0hL46vdr=f8YiAPnRmmehZs51n+tkgoY7PMTVyJD0cpEA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803140653.GD2125313@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/08/2022 19:07, Rafael J. Wysocki wrote:
-> On Mon, Jul 25, 2022 at 7:38 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->>
->> A build with -D_FORTIFY_SOURCE=2 enabled will produce the following warnings:
->>
->> sysfs.c:63:30: warning: '%s' directive output may be truncated writing up to 255 bytes into a region of size between 0 and 255 [-Wformat-truncation=]
->>    snprintf(filepath, 256, "%s/%s", path, filename);
->>                                ^~
->> Bump up the buffer to PATH_MAX which is the limit and account for all of
->> the possible NUL and separators that could lead to exceeding the
->> allocated buffer sizes.
->>
->> Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal subsystem")
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+
+* Paul E. McKenney <paulmck@kernel.org> wrote:
+
+> There is an rcu_sysrq_start() and rcu_sysrq_end() to suppress this.  
+> These are invoked by __handle_sysrq().  The value of 
+> rcu_cpu_stall_suppress should be non-zero during the sysrq execution, and 
+> this should prevent RCU CPU stall warnings from being printed.
 > 
-> Daniel, are you going to pick up this one or should I?
+> That said, the code currently does not support overlapping calls to the 
+> various functions that suppress RCU CPU stall warnings.  Except that the 
+> only other use in current mainline is rcu_panic(), which never 
+> unsuppresses.
 > 
-> There is also a tmon patch from Florian that seems to be pending.
-> Should I take care of it?
+> So could you please check the value of rcu_cpu_stall_suppress? Just in 
+> case some other form of suppression was added somewhere that I missed?
 
-Mmh, let me check. I thought I picked them :/
+So instead of supressing the (justified!) RCU stall messages, I'd much 
+rather we apply only the minimal locking necessary for this debug printout.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+That should also solve the stall warnings as a side effect.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Thanks,
+
+	Ingo

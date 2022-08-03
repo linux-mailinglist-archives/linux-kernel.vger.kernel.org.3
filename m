@@ -2,75 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B4D58852A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 02:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB152588530
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 02:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbiHCAqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 20:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
+        id S235254AbiHCAyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 20:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiHCAqm (ORCPT
+        with ESMTP id S229863AbiHCAyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 20:46:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C373C8DF
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 17:46:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4DD5B810B0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:46:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68AD1C433C1;
-        Wed,  3 Aug 2022 00:46:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1659487598;
-        bh=IYPfZV8Mr5MahS8LdQC+lkEFagmnqzDuiBAPlmClaKo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SPb3Z3sfcbdOAZbQhAKbGIlSRYS1+7dZ5/2YF2m8v5qtQNT089kYHC9huOuSN/tCK
-         iM59/Nm+lZoWC15GA2Vuz771vuIwJBFssBhAzLTafBBeFaA7+4xvIpE8KCjXN0uKbK
-         09J2oXDiukZQIfc6LzzeIpiKPLPxLQtZyHkyhgFw=
-Date:   Tue, 2 Aug 2022 17:46:37 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Hugh Dickins <hughd@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] shmem: Update folio if shmem_replace_page() updates the
- page
-Message-Id: <20220802174637.3bd3478d137b52ef3b67c3b3@linux-foundation.org>
-In-Reply-To: <20220730042518.1264767-1-willy@infradead.org>
-References: <20220730042518.1264767-1-willy@infradead.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 2 Aug 2022 20:54:21 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14BA4C611;
+        Tue,  2 Aug 2022 17:54:20 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 12so13799441pga.1;
+        Tue, 02 Aug 2022 17:54:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zE3Wm1yzV7Ang77xNzXX9+GA41v2UvMCOejZS/f/X2A=;
+        b=L9iMaKB+nFcO8485ZEG5NWE/P8Tc6x1p+jSyrU2ckQVFLIUvCT7vA/dGyrSWHVq0EA
+         E1plZMEpUOK4IuXUOqpHTpCCmlDnmJashOVixbpPZ/QOFUD540nBYwgAmm/zX/3Svg5a
+         cxOuOPWQOIXKMXM69jjzRkx1ujFXIkn1Ms2C4h7kTXl18LhMc+MUKhjYWX657x6ePqLN
+         lf1MOfGRpIrhjlhgDLwZqMdVPjwQ3ydPpdDroIepsDZ0IfvU1XoUDIdsMMiPvWoiK2PE
+         uAynOXS11mQg35PwGCt4DtiuvlcSKy5dZTkV4Emwj3ipeI5DFr7DLX9oDkLV/PbR0L4+
+         WEWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zE3Wm1yzV7Ang77xNzXX9+GA41v2UvMCOejZS/f/X2A=;
+        b=GrdZEgurOvZBlmXKIsTWtNgyfpyT+kRrc+/5EB6tt2PNi5wGPLzjzY+Z8ebXZ4loXP
+         ZCHCRi50H/N7G3Iv9iwXASnGWSZSf1JI4awc2+uftYasEymEsQAASW9280ET21IJ/Omx
+         rm5P90j1/3l5O8wFcpWPQrWxbjILtvIbWPAKEFplEhNZGKIi7OSeRGohFUyavDYpy+Nh
+         wuFCOnTxvX/w9cONDT8xFviQk8Rdns+hthnM4eNvac6l5IF22sBYU8YHe2vuXVJ87QyK
+         vC3GYZHhJ9nXNhN5YdYDFH8qHbf5t7WiJBPcWc69c28kynkwDVfRc5LTGmkN5t1ThHIs
+         0Jyg==
+X-Gm-Message-State: AJIora/DlkmYVFGLquz/lI97b4gNWllIOtu2y7Af2P9FzVHtmJxNtoml
+        y5RO05E/SHr2uzP895VRxsY=
+X-Google-Smtp-Source: AGRyM1v/3BZM8/LgLQaADjBGs8SZC+QRNTrENmRzfpAyAnqr8vSjFwqyXTZ16ws5ss5DKC8kY2jS3Q==
+X-Received: by 2002:a63:214b:0:b0:40d:d4d2:2b5e with SMTP id s11-20020a63214b000000b0040dd4d22b5emr19281144pgm.531.1659488060189;
+        Tue, 02 Aug 2022 17:54:20 -0700 (PDT)
+Received: from localhost.localdomain ([170.178.188.167])
+        by smtp.gmail.com with ESMTPSA id h15-20020a056a00000f00b005255f5d8f9fsm4768596pfk.112.2022.08.02.17.54.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 17:54:19 -0700 (PDT)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianhua Lu <lujianhua000@gmail.com>
+Subject: [PATCH] pinctrl: qcom: sm8250: Fix PDC map
+Date:   Wed,  3 Aug 2022 08:53:33 +0800
+Message-Id: <20220803005333.14870-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 30 Jul 2022 05:25:18 +0100 "Matthew Wilcox (Oracle)" <willy@infradead.org> wrote:
+Fix the PDC mapping for SM8250, gpio39 is mapped to gpio73(not gpio37).
 
-> If we allocate a new page, we need to make sure that our folio matches
-> that new page.  This will be solved by changing shmem_replace_page()
-> to shmem_replace_folio(), but this is the minimal fix.
-> 
-> ...
->
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -1771,6 +1771,7 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
->  
->  	if (shmem_should_replace_folio(folio, gfp)) {
->  		error = shmem_replace_page(&page, gfp, info, index);
-> +		folio = page_folio(page);
->  		if (error)
->  			goto failed;
->  	}
+Fixes: b41efeed507a("pinctrl: qcom: sm8250: Specify PDC map.")
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+---
+ drivers/pinctrl/qcom/pinctrl-sm8250.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What are the user-visible runtime effects of the bug?
+diff --git a/drivers/pinctrl/qcom/pinctrl-sm8250.c b/drivers/pinctrl/qcom/pinctrl-sm8250.c
+index af144e724bd9..3bd7f9fedcc3 100644
+--- a/drivers/pinctrl/qcom/pinctrl-sm8250.c
++++ b/drivers/pinctrl/qcom/pinctrl-sm8250.c
+@@ -1316,7 +1316,7 @@ static const struct msm_pingroup sm8250_groups[] = {
+ static const struct msm_gpio_wakeirq_map sm8250_pdc_map[] = {
+ 	{ 0, 79 }, { 1, 84 }, { 2, 80 }, { 3, 82 }, { 4, 107 }, { 7, 43 },
+ 	{ 11, 42 }, { 14, 44 }, { 15, 52 }, { 19, 67 }, { 23, 68 }, { 24, 105 },
+-	{ 27, 92 }, { 28, 106 }, { 31, 69 }, { 35, 70 }, { 39, 37 },
++	{ 27, 92 }, { 28, 106 }, { 31, 69 }, { 35, 70 }, { 39, 73 },
+ 	{ 40, 108 }, { 43, 71 }, { 45, 72 }, { 47, 83 }, { 51, 74 }, { 55, 77 },
+ 	{ 59, 78 }, { 63, 75 }, { 64, 81 }, { 65, 87 }, { 66, 88 }, { 67, 89 },
+ 	{ 68, 54 }, { 70, 85 }, { 77, 46 }, { 80, 90 }, { 81, 91 }, { 83, 97 },
+-- 
+2.35.1
 
-Should we backport this into 5.19.X?

@@ -2,122 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8204058932A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5F758932C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238621AbiHCU1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 16:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
+        id S238655AbiHCU16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 16:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236138AbiHCU1F (ORCPT
+        with ESMTP id S238644AbiHCU1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:27:05 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8310519012;
-        Wed,  3 Aug 2022 13:27:03 -0700 (PDT)
-Received: from zn.tnic (p57969665.dip0.t-ipconnect.de [87.150.150.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 3 Aug 2022 16:27:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAB05A3EB
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 13:27:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 34EFF1EC00F8;
-        Wed,  3 Aug 2022 22:26:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1659558417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=NGAAgwsFZOFiyuIqVIHwUIdtAY8mEvoIbdgSbGrefj4=;
-        b=saUgyTZ9As3E+I3dXZj9mDddkTvaiqPubF7iHBiDAUHv1uqUQRvBQQaJmioU9Y/eeK0SV+
-        Fx8ZdZfliRxroJcFhwQbrI/BCmhC1w2JRF2SVcalW/Ebwhe6z9BvgQ/IUOs8cALByhrxpk
-        oAoh7W7eorRu7ffIUUqRappMfT1v+d8=
-Date:   Wed, 3 Aug 2022 22:26:51 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: Re: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for
- RMPUPDATE and PSMASH instruction
-Message-ID: <YuraC/P4k0FgHM17@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <e4643e9d37fcb025d0aec9080feefaae5e9245d5.1655761627.git.ashish.kalra@amd.com>
- <Yt6qit4al5/eM7YO@zn.tnic>
- <SN6PR12MB2767A5C613388594D7EAD3528E9A9@SN6PR12MB2767.namprd12.prod.outlook.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 93D36203BD;
+        Wed,  3 Aug 2022 20:27:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659558470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sJi/riKS48wXie/3JJxXDigk9Rt5HETijre2XnpC50U=;
+        b=gbR2JVnw/jy67GwtEK0/tSdUYNV1eXG57H4FKvDvgW9+ZBpCA7Ir6kFviitc/1f0NrYuLX
+        QHfmnt41a3ZaQJ09J5qlxYwno1Y9kLjKcmSBOV4PpEpdACoO9MUWqx67PiYbX0CIyskfgQ
+        KE3iLSkdRi1nMnyGMqJcx4s5/jx1mGs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659558470;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sJi/riKS48wXie/3JJxXDigk9Rt5HETijre2XnpC50U=;
+        b=nm9HEYtlie2Fr4o3q0voqR8WZET3jm3+hMzt0l6PJfO4l1GQQzdLuP2o4dYJTz4/PnCOnG
+        tTuhl9ZAKuUxywCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F07113A94;
+        Wed,  3 Aug 2022 20:27:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XTy4FEba6mKDLAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Wed, 03 Aug 2022 20:27:50 +0000
+Date:   Wed, 3 Aug 2022 22:27:49 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] clocksource/drivers/timer-microchip-pit64b: Drop obsolete
+ dependency on COMPILE_TEST
+Message-ID: <20220803222749.24d71d5c@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SN6PR12MB2767A5C613388594D7EAD3528E9A9@SN6PR12MB2767.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 10:31:26PM +0000, Kalra, Ashish wrote:
-> The struct rmpentry is the raw layout of the RMP table entry
-> while struct rmpupdate is the structure expected by the rmpupdate
-> instruction for programming the RMP table entries.
->
-> Arguably, we can program a struct rmpupdate internally from a struct
-> rmpentry.
->
-> But we will still need struct rmpupdate for issuing the rmpupdate
-> instruction, so it is probably cleaner to keep it this way, as it only
-> has two main callers - rmp_make_private() and rmp_make_shared().
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-Ok, but then call it struct rmp_state. The APM says in the RMPUPDATE
-blurb:
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-"The RCX register provides the effective address of a 16-byte data
-structure which contains the new RMP state."
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+---
+ drivers/clocksource/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-so the function signature should be:
+--- linux-5.18.orig/drivers/clocksource/Kconfig	2022-07-27 07:32:33.178926986 +0200
++++ linux-5.18/drivers/clocksource/Kconfig	2022-08-03 22:21:01.044733852 +0200
+@@ -703,7 +703,7 @@ config INGENIC_OST
+ 
+ config MICROCHIP_PIT64B
+ 	bool "Microchip PIT64B support"
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	select TIMER_OF
+ 	help
+ 	  This option enables Microchip PIT64B timer for Atmel
 
-static int rmpupdate(u64 pfn, struct rmp_state *new)
-
-and this is basically the description of that. It can't get any more
-user-friendly than this.
-
-Thx.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Jean Delvare
+SUSE L3 Support

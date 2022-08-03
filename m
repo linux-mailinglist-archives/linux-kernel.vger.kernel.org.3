@@ -2,206 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49735891B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F1E5891B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237928AbiHCRqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S238091AbiHCRsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236263AbiHCRqc (ORCPT
+        with ESMTP id S231966AbiHCRsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:46:32 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C7A65D8
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:46:31 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id y127so29466825yby.8
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=kVM/3uyhal6qaeACSB8divgbMh2p6Q9rmvW6JHSngAY=;
-        b=ECfvFXHNoWfUFidh9Eguf3fa6Bq7Cr+ZBwO3g+v5R26inMZJ+PprF07thBS/iAUDOv
-         KoHKoNk3p1CD7oA+XYhLMGnLx1UM64+m/oZTxYGBm1ui3mSKNDJXkbXHNHZNWwYMPM25
-         no6Xk74r5H+HlvFMAu7VhmjjTkqjGEorYK/E1NNrmLycAfwGb5T8CDwMPzi10MsKfcDt
-         CXm/wIg4qaq6nACUNqANSQ4Cc+ljRsHsBpUSMvB1FXN+xTv+VW9BrlbK48uMvV02e1hS
-         ZJi1UEudP/SKw5sBgAoFnA38ohuro2kf26ubLWtfiJ2mUlp6waOtZ04l1TvBymZ8hC+a
-         h9yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=kVM/3uyhal6qaeACSB8divgbMh2p6Q9rmvW6JHSngAY=;
-        b=b9CHpi0OPEug2fIZVVmeH9/AGnebIUQaHbwpFCMd41vE/J6qVZePcQj2PUj5ioIh2Q
-         W+9V+eQVg0gLyAImSUGq/oypNv5Y/EQVOzQJzxMHEtLIpTuXQd79n5zBA7X0fqYTKS9i
-         HwIxMmyF1Avg+SorMs1jbgWB5ryEfzd2X2TbVb3bKoq68eAYTBRNZqz5KW9PZbU6FNnF
-         2Uvl250Buw7chqsIZGgJkrJ9bkOICWEGSFfkxd6pcE+PWwP1YP5yx5uundrdSL3Tr1r0
-         Xx5vTX2FqcwD0V7DhRAd6cbxfKynqEay7mwEIG4uxmemaDK3Hdo1QMY7iX25VRS7Ml/t
-         Vinw==
-X-Gm-Message-State: ACgBeo1gchszXbsZHevZeum3PoWnoGIUW1CfgyvKmylMpJqlYDoQrCiV
-        3fTbmb9q5vRpClWNXrYQZhZ/4M02gNyGTH2FhUEKzQ==
-X-Google-Smtp-Source: AA6agR4g1FyYUH5thYLF9ivxcDKGh7mHOG7nULxadr/VqkcQq6xewq/huMh2sMi+U779TLv1Uc8ZMhJh1Xgb5KuhJ1U=
-X-Received: by 2002:a25:b9d1:0:b0:671:49f9:4e01 with SMTP id
- y17-20020a25b9d1000000b0067149f94e01mr22124946ybj.398.1659548790205; Wed, 03
- Aug 2022 10:46:30 -0700 (PDT)
+        Wed, 3 Aug 2022 13:48:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1BC13D1A
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659548899; x=1691084899;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rF3OY9Dsb4CCvexrUxd7GJarnmlUWzpt1tT0LjQD9tw=;
+  b=kJ+yJNhuNrjrSQ99I7u5aCXS5+0bT5RQOAtBBDVYRB4XOt0GyhHeYKrp
+   +szg6oDqsWAK1QO4/OB4sduGcStQ97UY5rRj3An8b5zGhKjb3wUf/zs9E
+   PoCqSePnerYy0GMMMwBh1D5zj1OOMzho7nnEjMJxt/G/jV1ubEK3ErXrR
+   EqpNtgpjLpLAw8hygZWvbawqwjn84sx6WR6fSyuFRqpU4goOFmFT/O1Yn
+   SLyNxW+qsgDgBOmxuy5hr831mKbN9wrieWPy6NG2JsUIgLyN/v7qpboiL
+   YsfOC4nsj72VKTGoJcaV8SKRvegWgwzrzU5ADqzFvi7rahwU6LAyhtaJJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="290956085"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="290956085"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 10:48:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="930474334"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 03 Aug 2022 10:48:16 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJITg-000HWC-0D;
+        Wed, 03 Aug 2022 17:48:16 +0000
+Date:   Thu, 4 Aug 2022 01:48:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     John Harrison <John.C.Harrison@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Jordan Justen <jordan.l.justen@intel.com>,
+        Michal Wajdeczko <michal.wajdeczko@intel.com>
+Subject: drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning:
+ expecting prototype for intel_guc_hwconfig_init(). Prototype was for
+ guc_hwconfig_init() instead
+Message-ID: <202208040157.aQqPWbKV-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-12-glider@google.com>
- <Ys6YvvARDX6pWmWv@elver.google.com>
-In-Reply-To: <Ys6YvvARDX6pWmWv@elver.google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 3 Aug 2022 19:45:53 +0200
-Message-ID: <CAG_fn=ViyCu8uGy5YQ_FdPmsMWzX5UpozfLXiotF_bDu5P70Lw@mail.gmail.com>
-Subject: Re: [PATCH v4 11/45] kmsan: add KMSAN runtime core
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 12:04 PM Marco Elver <elver@google.com> wrote:
->
-> On Fri, Jul 01, 2022 at 04:22PM +0200, 'Alexander Potapenko' via kasan-de=
-v wrote:
-> [...]
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 2e24db4bff192..59819e6fa5865 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -963,6 +963,7 @@ config DEBUG_STACKOVERFLOW
-> >
-> >  source "lib/Kconfig.kasan"
-> >  source "lib/Kconfig.kfence"
-> > +source "lib/Kconfig.kmsan"
-> >
-> >  endmenu # "Memory Debugging"
-> >
-> > diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
-> > new file mode 100644
-> > index 0000000000000..8f768d4034e3c
-> > --- /dev/null
-> > +++ b/lib/Kconfig.kmsan
-> > @@ -0,0 +1,50 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +config HAVE_ARCH_KMSAN
-> > +     bool
-> > +
-> > +config HAVE_KMSAN_COMPILER
-> > +     # Clang versions <14.0.0 also support -fsanitize=3Dkernel-memory,=
- but not
-> > +     # all the features necessary to build the kernel with KMSAN.
-> > +     depends on CC_IS_CLANG && CLANG_VERSION >=3D 140000
-> > +     def_bool $(cc-option,-fsanitize=3Dkernel-memory -mllvm -msan-disa=
-ble-checks=3D1)
-> > +
-> > +config HAVE_KMSAN_PARAM_RETVAL
-> > +     # Separate check for -fsanitize-memory-param-retval support.
->
-> This comment doesn't add much value, maybe instead say that "Supported
-> only by Clang >=3D 15."
-Fixed.
+Hi John,
 
-> > +     depends on CC_IS_CLANG && CLANG_VERSION >=3D 140000
->
-> Why not just "depends on HAVE_KMSAN_COMPILER"? (All
-> fsanitize-memory-param-retval supporting compilers must also be KMSAN
-> compilers.)
-Good idea, will do.
+FYI, the error/warning still remains.
 
-> > +     def_bool $(cc-option,-fsanitize=3Dkernel-memory -fsanitize-memory=
--param-retval)
-> > +
-> > +
->
-> HAVE_KMSAN_PARAM_RETVAL should be moved under "if KMSAN" so that this
-> isn't unnecessarily evaluated in every kernel build (saving 1 shelling
-> out to clang in most builds).
-Ack.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e2b542100719a93f8cdf6d90185410d38a57a4c1
+commit: 8781f0515247f441623a01f6e036a1d7898170e2 drm/i915/guc: Add fetch of hwconfig blob
+date:   5 months ago
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220804/202208040157.aQqPWbKV-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8781f0515247f441623a01f6e036a1d7898170e2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8781f0515247f441623a01f6e036a1d7898170e2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-> > +config KMSAN
-> > +     bool "KMSAN: detector of uninitialized values use"
-> > +     depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
-> > +     depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
-> > +     select STACKDEPOT
-> > +     select STACKDEPOT_ALWAYS_INIT
-> > +     help
-> > +       KernelMemorySanitizer (KMSAN) is a dynamic detector of uses of
-> > +       uninitialized values in the kernel. It is based on compiler
-> > +       instrumentation provided by Clang and thus requires Clang to bu=
-ild.
-> > +
-> > +       An important note is that KMSAN is not intended for production =
-use,
-> > +       because it drastically increases kernel memory footprint and sl=
-ows
-> > +       the whole system down.
-> > +
-> > +       See <file:Documentation/dev-tools/kmsan.rst> for more details.
-> > +
-> > +if KMSAN
-> > +
-> > +config KMSAN_CHECK_PARAM_RETVAL
-> > +     bool "Check for uninitialized values passed to and returned from =
-functions"
-> > +     default HAVE_KMSAN_PARAM_RETVAL
->
-> This can be enabled even if !HAVE_KMSAN_PARAM_RETVAL. Should this be:
->
->         default y
->         depends on HAVE_KMSAN_PARAM_RETVAL
->
-> instead?
->
-Ack
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
---=20
-Alexander Potapenko
-Software Engineer
+All warnings (new ones prefixed by >>):
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning: Function parameter or member 'gt' not described in 'guc_hwconfig_init'
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:110: warning: expecting prototype for intel_guc_hwconfig_init(). Prototype was for guc_hwconfig_init() instead
+   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:143: warning: Function parameter or member 'gt' not described in 'intel_gt_init_hwconfig'
+   drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:156: warning: Function parameter or member 'gt' not described in 'intel_gt_fini_hwconfig'
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+
+vim +110 drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c
+
+   102	
+   103	/**
+   104	 * intel_guc_hwconfig_init - Initialize the HWConfig
+   105	 *
+   106	 * Retrieve the HWConfig table from the GuC and save it locally.
+   107	 * It can then be queried on demand by other users later on.
+   108	 */
+   109	static int guc_hwconfig_init(struct intel_gt *gt)
+ > 110	{
+   111		struct intel_hwconfig *hwconfig = &gt->info.hwconfig;
+   112		struct intel_guc *guc = &gt->uc.guc;
+   113		int ret;
+   114	
+   115		if (!has_table(gt->i915))
+   116			return 0;
+   117	
+   118		ret = guc_hwconfig_discover_size(guc, hwconfig);
+   119		if (ret)
+   120			return ret;
+   121	
+   122		hwconfig->ptr = kmalloc(hwconfig->size, GFP_KERNEL);
+   123		if (!hwconfig->ptr) {
+   124			hwconfig->size = 0;
+   125			return -ENOMEM;
+   126		}
+   127	
+   128		ret = guc_hwconfig_fill_buffer(guc, hwconfig);
+   129		if (ret < 0) {
+   130			intel_gt_fini_hwconfig(gt);
+   131			return ret;
+   132		}
+   133	
+   134		return 0;
+   135	}
+   136	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

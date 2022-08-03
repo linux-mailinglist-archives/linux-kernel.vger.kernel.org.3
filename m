@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36655891F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45FE5891F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236839AbiHCR6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        id S236527AbiHCR7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238184AbiHCR6c (ORCPT
+        with ESMTP id S236188AbiHCR7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:58:32 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C2D5A178;
-        Wed,  3 Aug 2022 10:58:29 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id i71so10252837pge.9;
-        Wed, 03 Aug 2022 10:58:29 -0700 (PDT)
+        Wed, 3 Aug 2022 13:59:11 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0761F2C2
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=0F2KsgjThkMHJsCvW8q0mHWxfELmkopPA/c2rKsFWiQ=;
-        b=irnvtNDIhFfQ5STKu/5oLxnXV9W5JZmn1EV32OigTb/j1H7T4y30vulOjAKaAlbI5P
-         Cm8ZuZ0CLfsw55nypOyeR4PB2evi7h7MSyRZlw2hdAK/MSdj19G7f7D4dwdj5BHqiD6U
-         x6EU71FTrPaqJBTtm5+s7omP3SqaHD8Fpnd3cQtNbMfSN/TnOC96P4qwRn+GINwaSJB5
-         1usP0fEwBYFkR34DhK/fe6Yjff1IrmHA9CfJsgmjttZGEL1V+Ka/S6h/WISxaAyhpUwN
-         g7av/flBcnUgkS5cXSDC/nKHPXOaaKUPksJkwn9uYjVcMhLDXTI+ghaJNfe1Ajwb74hh
-         JXHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=0F2KsgjThkMHJsCvW8q0mHWxfELmkopPA/c2rKsFWiQ=;
-        b=tkIN4AGQdUUsGkRwuxZfZxxt8mM61kYs/8zS5QMfKnXbO+o+pT9Fo40CtEtaWK9VXV
-         uzFjWbFo2Axw1ZVhrpjDKk32LvW4yfkBv2pSks/edkOLy17WJSgN4v6lw6q6HEL6cdwL
-         y4IJneTj3aNGz9SgCR2CtCEVAkcLsUuxk90/YUtUNWRIynYtsiLbHbbEBVfPDGokZp3W
-         v2WUbO4C070PBTLtxeiWkjlnW0NeN7cvUB0Mmf5AIm/Ib8MxDtUpeUVdnCYnfyfg3j7V
-         WwCbfv12OeWFHUG63uCbF2yY7F4RbZakiJoDZzF0e9kuSG0RaPx/GEUrbYLrQFADcZ47
-         PX5g==
-X-Gm-Message-State: AJIora9I1MC7z4fKj8RJsDvIFiHAYxKIslGyyCoKccWdVk04BUYQhsmi
-        gJkV+LFr7E3xLWChXvzJe/Q=
-X-Google-Smtp-Source: AGRyM1tCpII40sPNaHdhKgqmNluFYhaR17/ZC6haTluSNFmmikP70DA5/RnueUxwV0Ye25rWMiBpLA==
-X-Received: by 2002:a65:5207:0:b0:3fb:c00f:f6e4 with SMTP id o7-20020a655207000000b003fbc00ff6e4mr22436056pgp.415.1659549509177;
-        Wed, 03 Aug 2022 10:58:29 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:83dc])
-        by smtp.gmail.com with ESMTPSA id s2-20020a625e02000000b005251c6fbd0csm13344644pfb.29.2022.08.03.10.58.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 10:58:28 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 3 Aug 2022 07:58:27 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>, surenb@google.com,
-        mingo@redhat.com, peterz@infradead.org, corbet@lwn.net,
-        akpm@linux-foundation.org, rdunlap@infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 8/9] sched/psi: add kernel cmdline parameter
- psi_inner_cgroup
-Message-ID: <Yuq3Q6Y9dRnjjcPt@slm.duckdns.org>
-References: <20220721040439.2651-1-zhouchengming@bytedance.com>
- <20220721040439.2651-9-zhouchengming@bytedance.com>
- <Yt7KQc0nnOypB2b2@cmpxchg.org>
- <YuAqWprKd6NsWs7C@slm.duckdns.org>
- <5a3410d6-428d-9ad1-3e5a-01ca805ceeeb@bytedance.com>
+  d=amazon.es; i=@amazon.es; q=dns/txt; s=amazon201209;
+  t=1659549551; x=1691085551;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=Fl55IXNEpv65yhvgCjI1WxHUFQY3iQz/yFm1z776DlM=;
+  b=oamgni7YoTkvx3eFYZ2RX0YHrKv1A7XCsYmo36Qak1vEd3rCsxRZAdPa
+   4F8oYPAs7D7g18NY3MgOONxUTEsUV/P1iR/9sHZXV0FQWYXh4OGdt4Ibq
+   w9zc/sWYzIGzXtcPhlPoD6AZ6seoLhrAe+lvWEMBuvw2D+6pyDRMoDev+
+   Y=;
+X-IronPort-AV: E=Sophos;i="5.93,214,1654560000"; 
+   d="scan'208";a="1040626427"
+Subject: Re: [PATCH 2/2] virt: vmgenid: add support for generation counter
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:59:10 +0000
+Received: from EX13D37EUA003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com (Postfix) with ESMTPS id 24C88200020;
+        Wed,  3 Aug 2022 17:59:07 +0000 (UTC)
+Received: from [192.168.18.61] (10.43.162.134) by EX13D37EUA003.ant.amazon.com
+ (10.43.165.7) with Microsoft SMTP Server (TLS) id 15.0.1497.36; Wed, 3 Aug
+ 2022 17:59:03 +0000
+Message-ID: <c342546f-457d-af9b-4db9-c9bd0e1269ac@amazon.es>
+Date:   Wed, 3 Aug 2022 19:58:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5a3410d6-428d-9ad1-3e5a-01ca805ceeeb@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.0
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <tytso@mit.edu>, <Jason@zx2c4.com>,
+        <dwmw@amazon.co.uk>, <graf@amazon.de>, <xmarcalx@amazon.co.uk>,
+        "Michael S. Tsirkin" <mst@redhat.com>, <ani@anisinha.ca>,
+        <imammedo@redhat.com>
+References: <20220803152127.48281-1-bchalios@amazon.es>
+ <20220803152127.48281-3-bchalios@amazon.es> <YuqU4wXNBt4pAK+C@kroah.com>
+From:   "Chalios, Babis" <bchalios@amazon.es>
+In-Reply-To: <YuqU4wXNBt4pAK+C@kroah.com>
+X-Originating-IP: [10.43.162.134]
+X-ClientProxiedBy: EX13D14UWB004.ant.amazon.com (10.43.161.137) To
+ EX13D37EUA003.ant.amazon.com (10.43.165.7)
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+CgpPbiAzLzgvMjIgMTc6MzEsIEdyZWcgS0ggd3JvdGU6Cj4gQ0FVVElPTjogVGhpcyBlbWFpbCBv
+cmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5pemF0aW9uLiBEbyBub3QgY2xpY2sg
+bGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGNhbiBjb25maXJtIHRoZSBzZW5k
+ZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4KPgo+Cj4KPiBPbiBXZWQsIEF1ZyAwMywg
+MjAyMiBhdCAwNToyMToyN1BNICswMjAwLCBiY2hhbGlvc0BhbWF6b24uZXMgd3JvdGU6Cj4+ICsg
+ICAgIC8qIEJhY2t3YXJkcyBjb21wYXRpYmlsaXR5LiBJZiBDVFJBIGlzIG5vdCB0aGVyZSB3ZSBq
+dXN0IGRvbid0IGV4cG9zZQo+PiArICAgICAgKiB0aGUgY2hhciBkZXZpY2UKPiBCYWNrd2FyZHMg
+Y29tcGF0aWJpbGl0eSB3aXRoIHdoYXQ/CldpdGggaHlwZXJ2aXNvciB2ZXJzaW9ucyB0aGF0IGRv
+IG5vdCBzdXBwb3J0IHRoZSBnZW5lcmF0aW9uIGNvdW50ZXIsIGJ1dCAKZG8gc3VwcG9ydAp0aGUg
+Vk0gZ2VuZXJhdGlvbiBJRC4gSW4gdGhpcyBjYXNlIHRoZSBoeXBlcnZpc29yIHdvdWxkIGV4cG9z
+ZSBBRERSIGJ1dCAKbm90IENUUkEuCj4KPj4gKyAgICAgICovCj4+ICsgICAgIHJldCA9IHBhcnNl
+X3ZtZ2VuaWRfYWRkcmVzcyhkZXZpY2UsICJDVFJBIiwgJnN0YXRlLT5nZW5fY250cl9hZGRyKTsK
+Pj4gKyAgICAgaWYgKHJldCkKPj4gKyAgICAgICAgICAgICByZXR1cm4gMDsKPj4gKwo+PiArICAg
+ICBzdGF0ZS0+bmV4dF9jb3VudGVyID0gZGV2bV9tZW1yZW1hcCgmZGV2aWNlLT5kZXYsIHN0YXRl
+LT5nZW5fY250cl9hZGRyLAo+PiArICAgICAgICAgICAgICAgICAgICAgc2l6ZW9mKHUzMiksIE1F
+TVJFTUFQX1dCKTsKPj4gKyAgICAgaWYgKElTX0VSUihzdGF0ZS0+bmV4dF9jb3VudGVyKSkKPj4g
+KyAgICAgICAgICAgICByZXR1cm4gMDsKPiBUaGlzIHRvbyBpcyBhbiBlcnJvciwgeW91IGNhbiBu
+b3QgcmV0dXJuIHdpdGggImFsbCBpcyBnb29kIiwgcmlnaHQ/Cj4gT25jZSB5b3UgdHJ5IHRvIGNy
+ZWF0ZSB0aGlzIGRldmljZSBiZWNhdXNlIHRoZSBhZGRyZXNzIGlzIHByZXNlbnQsIHlvdQo+IGNh
+bid0IGp1c3QgZ2l2ZSB1cCBhbmQgc3VjY2VlZCBubyBtYXR0ZXIgd2hhdCB3ZW50IHdyb25nLCB0
+aGF0IHNlZW1zCj4gaW5jb3JyZWN0LgpTYW1lIGludGVudGlvbiBhcyBpbiB0aGUgcmVzcG9uc2Ug
+aW4geW91ciBvdGhlciBjb21tZW50LiBJIHRob3VnaHQgdGhhdCAKaXQgZG9lc24ndCBtYWtlIHNl
+bnNlCnRvIGZhaWwgdGhlIHdob2xlIEFDUEkgZGV2aWNlIGlmIHJlZ2lzdGVyaW5nIHRoZSBtaXNj
+IGRldmljZSBmYWlscy4KCkhvd2V2ZXIsIHNlZWluZyB0aGF0IGFnYWluIChldmVuIGlmIG15IHRo
+aW5raW5nIGlzIHJpZ2h0KSBpZiB0aGlzIApkZXZtX21lbXJlbWFwIGZhaWxzIHdlIHNob3VsZApw
+cm9iYWJseSBmYWlsIGJlY2F1c2UgdGhlcmUgbWlnaHQgYmUgc29tZXRoaW5nIHdyb25nIHdpdGgg
+dGhlIGFkZHJlc3MgCnRoZSBkZXZpY2UgZ2F2ZSB1cy4KPgo+IHRoYW5rcywKPgo+IGdyZWcgay1o
+CgoKQ2hlZXJzLApCYWJpcwpBbWF6b24gU3BhaW4gU2VydmljZXMgc29jaWVkYWQgbGltaXRhZGEg
+dW5pcGVyc29uYWwsIENhbGxlIFJhbWlyZXogZGUgUHJhZG8gNSwgMjgwNDUgTWFkcmlkLiBSZWdp
+c3RybyBNZXJjYW50aWwgZGUgTWFkcmlkIC4gVG9tbyAyMjQ1OCAuIEZvbGlvIDEwMiAuIEhvamEg
+TS00MDEyMzQgLiBDSUYgQjg0NTcwOTM2Cg==
 
-On Wed, Aug 03, 2022 at 08:17:22PM +0800, Chengming Zhou wrote:
-> > Assuming the above isn't wrong, if we can figure out how we can re-enable
-> > it, which is more difficult as the counters need to be resynchronized with
-> > the current state, that'd be ideal. Then, we can just allow each cgroup to
-> > enable / disable PSI reporting dynamically as they see fit.
-> 
-> This method is more fine-grained but more difficult like you said above.
-> I think it may meet most needs to disable PSI stats in intermediate cgroups?
-
-So, I'm not necessarily against implementing something easier but we at
-least wanna get the interface right, so that if we decide to do the full
-thing later we can easily expand on the existing interface. ie. let's please
-not be too hacky. I don't think it'd be that difficult to implement
-per-cgroup disable-only operation that we can later expand to allow
-re-enabling, right?
-
-Thanks.
-
--- 
-tejun

@@ -2,193 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF9E588983
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA2B58898A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237046AbiHCJhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+        id S237253AbiHCJk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235108AbiHCJhF (ORCPT
+        with ESMTP id S231898AbiHCJk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:37:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57B8E15839
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:37:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659519423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GPXAddURibjR5gNG74JLG3Yxvxf3ub55xbLwHgxY1zI=;
-        b=hBjj1mtkTcOMbGynSMA54LjL++UvUM2W7Bp9HU5DXU8gXwO2X5F/zEEzi1gQ5vuaGNqxJ2
-        c/TEnTv0EOR6G9IBmPNiWR+KCgyqO1TUU59TKWkZPa8UbksqnZxK0Sgs5inY9DkM8dao5x
-        ireQU0mjr2iZep2uCGLeo1ECd+nBzHQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-70-E4qMBiBTNLunRNeqbJX5Zg-1; Wed, 03 Aug 2022 05:37:00 -0400
-X-MC-Unique: E4qMBiBTNLunRNeqbJX5Zg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB2FD85A584;
-        Wed,  3 Aug 2022 09:36:58 +0000 (UTC)
-Received: from localhost (ovpn-13-216.pek2.redhat.com [10.72.13.216])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 913C540CFD0A;
-        Wed,  3 Aug 2022 09:36:57 +0000 (UTC)
-Date:   Wed, 3 Aug 2022 17:36:54 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, pmladek@suse.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Subject: Re: [PATCH v2 08/13] tracing: Improve panic/die notifiers
-Message-ID: <YupBtiVkrmE7YQnr@MiWiFi-R3L-srv>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-9-gpiccoli@igalia.com>
+        Wed, 3 Aug 2022 05:40:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F24D95A0
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:40:55 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oJArv-0002el-Br; Wed, 03 Aug 2022 11:40:47 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oJArr-001SQ3-Ra; Wed, 03 Aug 2022 11:40:46 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oJArt-009GoG-6h; Wed, 03 Aug 2022 11:40:45 +0200
+Date:   Wed, 3 Aug 2022 11:40:41 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sherry Sun <sherry.sun@nxp.com>
+Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH] tty: serial: imx: initialize
+ peripheral_config/peripheral_size for sdma config
+Message-ID: <20220803094041.cmjublrg3nu4odlt@pengutronix.de>
+References: <20220803065737.14752-1-sherry.sun@nxp.com>
+ <d4838245-030c-39b4-df4b-17b3b4c73a5b@pengutronix.de>
+ <AS8PR04MB8404990740869737F326D302929C9@AS8PR04MB8404.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pczzzgzfmnqb6ml6"
 Content-Disposition: inline
-In-Reply-To: <20220719195325.402745-9-gpiccoli@igalia.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <AS8PR04MB8404990740869737F326D302929C9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/19/22 at 04:53pm, Guilherme G. Piccoli wrote:
-> Currently the tracing dump_on_oops feature is implemented
-> through separate notifiers, one for die/oops and the other
-> for panic - given they have the same functionality, let's
-> unify them.
-> 
-> Also improve the function comment and change the priority of
-> the notifier to make it execute earlier, avoiding showing useless
-> trace data (like the callback names for the other notifiers);
-> finally, we also removed an unnecessary header inclusion.
-> 
-> Cc: Petr Mladek <pmladek@suse.com>
-> Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> 
-> ---
-> 
-> V2:
-> - Different approach; instead of using IDs to distinguish die and
-> panic events, rely on address comparison like other notifiers do
-> and as per Petr's suggestion;
-> 
-> - Removed ACK from Steven since the code changed.
-> 
->  kernel/trace/trace.c | 55 ++++++++++++++++++++++----------------------
->  1 file changed, 27 insertions(+), 28 deletions(-)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index b8dd54627075..2a436b645c70 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -19,7 +19,6 @@
->  #include <linux/kallsyms.h>
->  #include <linux/security.h>
->  #include <linux/seq_file.h>
-> -#include <linux/notifier.h>
->  #include <linux/irqflags.h>
->  #include <linux/debugfs.h>
->  #include <linux/tracefs.h>
-> @@ -9777,40 +9776,40 @@ static __init int tracer_init_tracefs(void)
->  
->  fs_initcall(tracer_init_tracefs);
->  
-> -static int trace_panic_handler(struct notifier_block *this,
-> -			       unsigned long event, void *unused)
-> -{
-> -	if (ftrace_dump_on_oops)
-> -		ftrace_dump(ftrace_dump_on_oops);
-> -	return NOTIFY_OK;
-> -}
-> +static int trace_die_panic_handler(struct notifier_block *self,
-> +				unsigned long ev, void *unused);
->  
->  static struct notifier_block trace_panic_notifier = {
-> -	.notifier_call  = trace_panic_handler,
-> -	.next           = NULL,
-> -	.priority       = 150   /* priority: INT_MAX >= x >= 0 */
-> +	.notifier_call = trace_die_panic_handler,
-> +	.priority = INT_MAX - 1,
->  };
->  
-> -static int trace_die_handler(struct notifier_block *self,
-> -			     unsigned long val,
-> -			     void *data)
-> -{
-> -	switch (val) {
-> -	case DIE_OOPS:
-> -		if (ftrace_dump_on_oops)
-> -			ftrace_dump(ftrace_dump_on_oops);
-> -		break;
-> -	default:
-> -		break;
-> -	}
-> -	return NOTIFY_OK;
-> -}
-> -
->  static struct notifier_block trace_die_notifier = {
-> -	.notifier_call = trace_die_handler,
-> -	.priority = 200
-> +	.notifier_call = trace_die_panic_handler,
-> +	.priority = INT_MAX - 1,
->  };
->  
-> +/*
-> + * The idea is to execute the following die/panic callback early, in order
-> + * to avoid showing irrelevant information in the trace (like other panic
-> + * notifier functions); we are the 2nd to run, after hung_task/rcu_stall
-> + * warnings get disabled (to prevent potential log flooding).
-> + */
-> +static int trace_die_panic_handler(struct notifier_block *self,
-> +				unsigned long ev, void *unused)
-> +{
-> +	if (!ftrace_dump_on_oops)
-> +		goto out;
-> +
-> +	if (self == &trace_die_notifier && ev != DIE_OOPS)
-> +		goto out;
 
-Although the switch-case code of original trace_die_handler() is werid, 
-this unification is not much more comfortable. Just personal feeling
-from code style, not strong opinion. Leave it to trace reviewers.
+--pczzzgzfmnqb6ml6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +
-> +	ftrace_dump(ftrace_dump_on_oops);
-> +
-> +out:
-> +	return NOTIFY_DONE;
-> +}
-> +
->  /*
->   * printk is set to max of 1024, we really don't need it that big.
->   * Nothing should be printing 1000 characters anyway.
-> -- 
-> 2.37.1
-> 
+On Wed, Aug 03, 2022 at 09:15:58AM +0000, Sherry Sun wrote:
+> > On 03.08.22 08:57, Sherry Sun wrote:
+> > > Since commit 824a0a02cd74 ("dmaengine: imx-sdma: Add multi fifo
+> > > support") adds the use of
+> > > dma_slave_config->peripheral_config/peripheral_size to sdma driver,
+> > > the client drivers like uart need to initialize the
+> > > peripheral_config/peripheral_size for sdma, otherwise, the random
+> > > value of local variable slave_config may cause unexpected
+> > peripheral_config and make sdma mess up.
+> > >
+> >=20
+> > If this a fix, please add a Fixes: tag. I am not sure it is though, see=
+ below.
+>=20
+> Hi Ahmad, thanks for the comments.
+> I don't think this patch is a fix for a specific commit, so we don't need=
+ the Fixes tag.
+>=20
+> >=20
+> > > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+> > > ---
+> > >  drivers/tty/serial/imx.c | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > >
+> > > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c index
+> > > 522445a8f666..bb8c2a712e94 100644
+> > > --- a/drivers/tty/serial/imx.c
+> > > +++ b/drivers/tty/serial/imx.c
+> > > @@ -1320,6 +1320,8 @@ static int imx_uart_dma_init(struct imx_port
+> > > *sport)
+> >=20
+> > This function starts with
+> >=20
+> > struct dma_slave_config slave_config =3D {};
+> >=20
+> > >  	slave_config.src_addr_width =3D DMA_SLAVE_BUSWIDTH_1_BYTE;
+> > >  	/* one byte less than the watermark level to enable the aging timer
+> > */
+> > >  	slave_config.src_maxburst =3D RXTL_DMA - 1;
+> > > +	slave_config.peripheral_config =3D NULL;
+> > > +	slave_config.peripheral_size =3D 0;
+> >=20
+> > So these are already zero-initialized.
+>=20
+> I am not sure actually, I think initialize a struct with {} cannot
+> guarantee that all members are initialized to 0, it may depend on the
+> compiler.
 
+I'm sure and even reverified in my C book[1].
+
+	struct mystruct variable =3D {};
+
+results in all components being initialized to their default initial
+value (which is 0 for numbers and NULL for pointers). This works for
+automatic variables since "Standard C" which should cover everthing that
+is capable to compile today's kernel.
+
+Best regards
+Uwe
+
+[1] C - A Reference Manual, 978-0130895929
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--pczzzgzfmnqb6ml6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLqQpcACgkQwfwUeK3K
+7An8pgf/VzQqhI58KMP5SdQ95NCfJx3qJCjreDoSPsWih4UQPZsZG9nbmtcXLCFI
+C3+U1kqWTFNDPtpiRIQS9/0pNPSu/WoUqGCEoyoKb5x4ohcVHjzNAoxKDuDviD7u
+A5dx8whr78xqGiZfUDtWnf32AQ64eeFy293jFirq1SXAIyCM9CA6g7hBEBkZLalg
+89ri6dtY9LiQEEBQ7dKETJff3IisRkp21ntRtpIG1i9l8YhykOEmuTzL+Fb1K0Uc
+/Nxe3nm9Baq4qmSL49gI+32rAD4xU/ihDgy/d74wFitF5i25ofSp44L6nfNvGSHN
+eTu/qYF/Im3KcJvGdO40Pr8qMJ6lJg==
+=uK5I
+-----END PGP SIGNATURE-----
+
+--pczzzgzfmnqb6ml6--

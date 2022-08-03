@@ -2,150 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38935588B3B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8384588B40
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236355AbiHCLaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 07:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        id S233202AbiHCLa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 07:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbiHCLaM (ORCPT
+        with ESMTP id S236411AbiHCLav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 07:30:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9E5E42
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:30:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E070761073
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 11:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A78C433C1;
-        Wed,  3 Aug 2022 11:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659526210;
-        bh=gatN8ijDZVwF4fArqbchwbk0TWiuIZ1lb2Y6a4di8rU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ORM3M12TTZUk1D4DeCm0153pl+Tb2qLL5glZWRFYUkVeuqvRPzLhJ5pEEIpmwOXMC
-         LfjbAwheH/SHSdv17EE1LxCNHJOmjuA+7n8BUf/eU8mFH/PVkV2wZ0YWtFov9RLkDe
-         ddoS3wBZNRvp+mb/ykUMOiDlja2wPAdHzY4f6l8Pi++kyE8zec6c2H9WoY0oo6Xd8A
-         2Q2ElGtJzfZt2Zb2sVEM3EToCwXfWhK6bQO2fnLJDRfH9amKhz2tlRLLyaUxa1BEEo
-         XjKc6oiwrm9Vtklp1xMOA87mH9RXau2ghOmghoYaTkgapUXug3GDN6Ke6NJhw1F5jw
-         fPjPYgQ0L0Anw==
-Date:   Wed, 3 Aug 2022 17:00:04 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-Subject: Re: [PATCH 2/5] soundwire: sysfs: cleanup the logic for creating the
- dp0 sysfs attributes
-Message-ID: <YupcPEbc0xD5pDtt@matsya>
-References: <20220729135041.2285908-1-gregkh@linuxfoundation.org>
- <20220729135041.2285908-2-gregkh@linuxfoundation.org>
- <9365e038-2146-98f8-f989-02827f221c34@linux.intel.com>
- <YuP0Ffs3G7ZBR0AC@kroah.com>
- <cfacb124-a9ff-0a93-8f92-93d164b15966@linux.intel.com>
- <YuP2pjhyKTTfpXQq@kroah.com>
+        Wed, 3 Aug 2022 07:30:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AB222C106
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:30:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659526249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ACliQ9oJqgCoHX8Ef7C87bGSwzNCX201dby99j7oUC8=;
+        b=P1pXfb0p8rGSq/Zm/1FllzqVcQkOMkXuv/JBIxh4577DovpaC80Dw3FKLrAEsnI+B3SBPt
+        GJd3AeYQo5n++gZwiRiXRGNmYR1Pk0hqjwR85HnPQA8BDUp/ABH6ZMEp1v90N9KMOlp1yx
+        Wqy2Qb19xlwuAoS8Azm3sFurQ4gMMFk=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-271-f4BxLEAaN1SHKPklUP7KVA-1; Wed, 03 Aug 2022 07:30:48 -0400
+X-MC-Unique: f4BxLEAaN1SHKPklUP7KVA-1
+Received: by mail-qv1-f70.google.com with SMTP id q1-20020a056214018100b0047464a85fc4so9729322qvr.7
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 04:30:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ACliQ9oJqgCoHX8Ef7C87bGSwzNCX201dby99j7oUC8=;
+        b=oocCZlnWhDIgNn5/CALSDUN3U0lu7n4JGooU/itnAx3Fdgadw0b2kArBIPwCE9MlQa
+         e4zy7LBqytIWh6GlPHbY1XSwjE/pELh1kuZ1nllpJCNaK3l7sRnr4RZC3X/j1kKIppke
+         wqETQOe/Nqg9Rqh3N99ol0ifcGh++EwQR27N9vL9aKq52nkZk25xhcQDlHsnPC2JR7Bb
+         K7Nslj1F7eWvcgaHhvDjxEKwZDNz2JfT6UL1IZ7VT44/GPOopEwsEw1sgH8Ffj3kzPGH
+         bABehVpHQgS5tV1LMcMDwi6qEoJAlA1yoUTs4ycYpf2KwIsPgcm6ADVP4yYb/sSBKQb7
+         CHMw==
+X-Gm-Message-State: AJIora9Rc82S8K6Vqz8QLyhRMsqIuH9NjWnFuljjple/0RtI8ANygosL
+        Sxi8yqqLMFR219FK92QjF9CFUqHOcTQEL71uPVP0W3iqT/+o8etEqQO8yAr1k0g/oiHNURqRFz3
+        NinwkYqaTwx7UIKLKx3V8dyYC
+X-Received: by 2002:ac8:59d5:0:b0:31f:dde:fca8 with SMTP id f21-20020ac859d5000000b0031f0ddefca8mr22345824qtf.86.1659526247481;
+        Wed, 03 Aug 2022 04:30:47 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sN0PZbJQ7Njk6l2cfsYiD8YZMh9JnksyXTAlgE0zWDCVaHwC+6GHlYXN2nC/9NqFsBWxtlVQ==
+X-Received: by 2002:ac8:59d5:0:b0:31f:dde:fca8 with SMTP id f21-20020ac859d5000000b0031f0ddefca8mr22345807qtf.86.1659526247297;
+        Wed, 03 Aug 2022 04:30:47 -0700 (PDT)
+Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
+        by smtp.gmail.com with ESMTPSA id n15-20020a05620a294f00b006b5cc25535fsm12275757qkp.99.2022.08.03.04.30.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 04:30:46 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 13:30:41 +0200
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Matthias May <matthias.may@westermo.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, roopa@nvidia.com,
+        eng.alaamohamedsoliman.am@gmail.com, bigeasy@linutronix.de,
+        saeedm@nvidia.com, leon@kernel.org, roid@nvidia.com,
+        maord@nvidia.com, lariel@nvidia.com, vladbu@nvidia.com,
+        cmi@nvidia.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-rdma@vger.kernel.org, nicolas.dichtel@6wind.com,
+        eyal.birger@gmail.com, jesse@nicira.com, linville@tuxdriver.com,
+        daniel@iogearbox.net, hadarh@mellanox.com, ogerlitz@mellanox.com,
+        willemb@google.com, martin.varghese@nokia.com
+Subject: Re: [PATCH v2 net 1/4] geneve: do not use RT_TOS for IPv6 flowlabel
+Message-ID: <20220803113041.GC29408@pc-4.home>
+References: <20220802120935.1363001-1-matthias.may@westermo.com>
+ <20220802120935.1363001-2-matthias.may@westermo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuP2pjhyKTTfpXQq@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220802120935.1363001-2-matthias.may@westermo.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-07-22, 17:03, Greg Kroah-Hartman wrote:
-> On Fri, Jul 29, 2022 at 09:57:52AM -0500, Pierre-Louis Bossart wrote:
-> > 
-> > 
-> > On 7/29/22 09:52, Greg Kroah-Hartman wrote:
-> > > On Fri, Jul 29, 2022 at 09:46:26AM -0500, Pierre-Louis Bossart wrote:
-> > >>
-> > >>
-> > >> On 7/29/22 08:50, Greg Kroah-Hartman wrote:
-> > >>> There's no need to special-case the dp0 sysfs attributes, the
-> > >>> is_visible() callback in the attribute group can handle that for us, so
-> > >>> add that and add it to the attribute group list making the logic simpler
-> > >>> overall.
-> > >>>
-> > >>> This is a step on the way to moving all of the sysfs attribute handling
-> > >>> into the default driver core attribute group logic so that the soundwire
-> > >>> core does not have to do any of it manually.
-> > >>>
-> > >>> Cc: Vinod Koul <vkoul@kernel.org>
-> > >>> Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
-> > >>> Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> > >>> Cc: Sanyog Kale <sanyog.r.kale@intel.com>
-> > >>> Cc: alsa-devel@alsa-project.org
-> > >>> Cc: linux-kernel@vger.kernel.org
-> > >>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > >>> ---
-> > >>>  drivers/soundwire/sysfs_slave.c | 18 ++++++++++++------
-> > >>>  1 file changed, 12 insertions(+), 6 deletions(-)
-> > >>>
-> > >>> diff --git a/drivers/soundwire/sysfs_slave.c b/drivers/soundwire/sysfs_slave.c
-> > >>> index 83e3f6cc3250..3723333a5c2b 100644
-> > >>> --- a/drivers/soundwire/sysfs_slave.c
-> > >>> +++ b/drivers/soundwire/sysfs_slave.c
-> > >>> @@ -174,6 +174,16 @@ static ssize_t words_show(struct device *dev,
-> > >>>  }
-> > >>>  static DEVICE_ATTR_RO(words);
-> > >>>  
-> > >>> +static umode_t dp0_is_visible(struct kobject *kobj, struct attribute *attr,
-> > >>> +			      int n)
-> > >>> +{
-> > >>> +	struct sdw_slave *slave = dev_to_sdw_dev(kobj_to_dev(kobj));
-> > >>> +
-> > >>> +	if (slave->prop.dp0_prop)
-> > >>> +		return attr->mode;
-> > >>> +	return 0;
-> > >>> +}
-> > >>
-> > >> This changes the results slightly by creating an empty 'dp0' directory
-> > >> with no attributes inside.
-> > >>
-> > >> Before:
-> > >>
-> > >> [root@fedora ~]# cd /sys/bus/soundwire/devices/sdw:3:025d:0714:01
-> > >> [root@fedora sdw:3:025d:0714:01]# ls dp0
-> > >> ls: cannot access 'dp0': No such file or directory
-> > >>
-> > >> After:
-> > >> [root@fedora sdw:3:025d:0714:01]# ls dp0
-> > > 
-> > > That should be fine, tools should just be looking for the attributes,
-> > > not the existance of a directory, right?
-> > 
-> > The idea what that we would only expose ports that actually exist.
-> > That's helpful information anyone with a basic knowledge of the
-> > SoundWire specification would understand.
+On Tue, Aug 02, 2022 at 02:09:32PM +0200, Matthias May wrote:
+> According to Guillaume Nault RT_TOS should never be used for IPv6.
 > 
-> Is "dp0" a port?  If so, why isn't it a real device?
+> Fixes: 3a56f86f1be6a ("geneve: handle ipv6 priority like ipv4 tos")
 
-No they are not. It is a logical channel to send data to the device. The
-device can have one or many data ports...
+While I'm at it, the SHA1 is normally truncated to 12 charaters, not 13.
 
-So the device logic or usb-endpoint style maynot look good here...
-
-The change looks good though, dp0 maybe present and empty, we should
-looks for attributes...
-
-> > The attributes are really details that few people/applications would
-> > understand, and unfortunately the information reported in DSDT is more
-> > often than not complete garbage.
+> Signed-off-by: Matthias May <matthias.may@westermo.com>
+> ---
+> v1 -> v2:
+>  - Fix spacing of "Fixes" tag.
+>  - Add missing CCs
+> ---
+>  drivers/net/geneve.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> I don't understand what DSDT is, or how it is relevant here :(
+> diff --git a/drivers/net/geneve.c b/drivers/net/geneve.c
+> index 4c380c06f178..e1a4480e6f17 100644
+> --- a/drivers/net/geneve.c
+> +++ b/drivers/net/geneve.c
+> @@ -877,8 +877,7 @@ static struct dst_entry *geneve_get_v6_dst(struct sk_buff *skb,
+>  		use_cache = false;
+>  	}
+>  
+> -	fl6->flowlabel = ip6_make_flowinfo(RT_TOS(prio),
+> -					   info->key.label);
+> +	fl6->flowlabel = ip6_make_flowinfo(prio, info->key.label);
+>  	dst_cache = (struct dst_cache *)&info->dst_cache;
+>  	if (use_cache) {
+>  		dst = dst_cache_get_ip6(dst_cache, &fl6->saddr);
+> -- 
+> 2.35.1
 > 
-> thanks,
-> 
-> greg k-h
 
--- 
-~Vinod

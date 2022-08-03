@@ -2,95 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBD7589002
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E7758900A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237903AbiHCQGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 12:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S238020AbiHCQNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 12:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233632AbiHCQGe (ORCPT
+        with ESMTP id S236061AbiHCQNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 12:06:34 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068891A83F
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 09:06:34 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id w3so6409243edc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 09:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5szB0Yt8wfbiTaP8/uH11/lZ59NOlpGeFsdpgoLNvJ8=;
-        b=ic+vNPABuREX+PIjwaM+VOGEJw6oF2ebKuLtvGvb4/Hb7YaZRdZFas4fPAdzbAg7jx
-         aesjy+76DTWh4E6VOx93inA8iC/941RMQo8fsSmtWm07+lOlWWxdSUMOghm1jrWvVoR4
-         U/LivSCQiuMwcebAF9+j1uTdx7DTBfUBhs5nQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5szB0Yt8wfbiTaP8/uH11/lZ59NOlpGeFsdpgoLNvJ8=;
-        b=pexTTRVzRaMO7v8lZ7aq1/o/OsZKFkH0JUSzfvaPch+KJcY5rXXMZDCnlCXOq30j8F
-         I2PFpNtytYAgG3FCb0Ym2nCoPUhDuKzqUmaPBUZP4/5UwAWobhtCLMeyPOqMnYAr5ux4
-         tm2+T3E7DY45gjljdjkguVYdYI89RweFAl6VsScffvpWKxNpSDBjNIXQTwqwehRMj1BI
-         FC8A/DS+ATn2SS9t9L5bQ2NXGQHc013+2A5B7Dk545zazAXzwS0SYXEa9D/q3XXx0XmT
-         v9C5Mt/D0HNblgPGleaNMavh3Esif0u4qDsGfrh6ayk1MMipmXld+FgJiUSvWetjO7oU
-         WOGw==
-X-Gm-Message-State: AJIora/7sgaaLm9MsfKA7EmxhNOwZpqn1PLPVAgBSfvV4q034mYl+8oi
-        uiBLdxTegocI8KmRsoQ7suDjb5DKknms+BlR2wcfRQ==
-X-Google-Smtp-Source: AGRyM1tY9355tF5SR98IYTJw6jtydsojrQZtfOZY+tbbLicCH00rJyvlJeK55pfPj3vsy9eOthOXBZnjsNPgYb7wPm8=
-X-Received: by 2002:aa7:d813:0:b0:43c:dedd:b4e8 with SMTP id
- v19-20020aa7d813000000b0043cdeddb4e8mr26254900edq.231.1659542792573; Wed, 03
- Aug 2022 09:06:32 -0700 (PDT)
+        Wed, 3 Aug 2022 12:13:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B0532DAA
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 09:13:33 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9FBE93FB30;
+        Wed,  3 Aug 2022 16:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1659543209; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=JfQwF4E7OboR29C8Isxq3UTgiJebTWsqig0GU3KaiGI=;
+        b=Cw3HYPSYQIc1yFmx/vH7yzfG4Gr0wYT49nrb4jw0ehEcXHUsyO1TTElIdinWunD0Hn0a4W
+        X/K4JxdvBunhZ7LyyCP4Kh/7Pu50MpF0M/XjHimpQ9DvAdnj6fJO/TSvAkFfofvY87wXtS
+        uSI87KkF/6aV85kU5yEGm5JoDyGXYjY=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 928CC2C141;
+        Wed,  3 Aug 2022 16:13:29 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 5E50EDA85A; Wed,  3 Aug 2022 18:08:28 +0200 (CEST)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] AFFS fix for 5.20
+Date:   Wed,  3 Aug 2022 18:08:26 +0200
+Message-Id: <cover.1659542557.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <CAJ-EccPH46FGKQj8gYEg5HGpmmRiqzrZouTZauwpvX-+2j4GNA@mail.gmail.com>
- <CAHk-=wim4B671BOPfxoXDSz0xfOruqoKCMQrjAX0R95PH5Wy4g@mail.gmail.com>
-In-Reply-To: <CAHk-=wim4B671BOPfxoXDSz0xfOruqoKCMQrjAX0R95PH5Wy4g@mail.gmail.com>
-From:   Micah Morton <mortonm@chromium.org>
-Date:   Wed, 3 Aug 2022 09:08:22 -0700
-Message-ID: <CAJ-EccOP4Yq4RSBSkA_71kagqvA=a+tUV63UbHWZVM2uqJMDFQ@mail.gmail.com>
-Subject: Re: [GIT PULL] SafeSetID changes for v6.0
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 3:20 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Mon, Aug 1, 2022 at 7:40 PM Micah Morton <mortonm@chromium.org> wrote:
-> >
-> > This pull request contains one commit that touches common kernel code,
-> >
-> > one that adds functionality internal to the SafeSetID LSM code, and a
-> >
-> > few other commits that only modify the SafeSetID LSM selftest.
-> [...]
->
-> What odd MUA do you use that causes this double-spaced text email?
->
-> I can read it, but it really is a bit strange. It was all plain text,
-> and marked as utf-8, and otherwise looked normal except for that
-> double spacing.
->
-> I get flashbacks to my "writing papers at university" days.
+Hi,
 
-I know, it was ugly. I just switched laptops to a Mac and thought for
-sure the mail message preview I was seeing in gmail after copy+paste
-from a terminal window was just some weird scaling issue on my
-external monitor or something. Sure enough the message was sent off
-looking like a double spaced book report from 8th grade :)
+one update to AFFS, switching the kmap/kmap_atomic API. Please pull,
+thanks.
 
-I'll have to find what's going wrong with the copy+paste to gmail on
-this particular device.
+----------------------------------------------------------------
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
 
->
->              Linus
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git affs-5.20-tag
+
+for you to fetch changes up to 5abbb7b92820cf6ba9154a35cff6d64b62d7f273:
+
+  affs: use memcpy_to_page and remove replace kmap_atomic() (2022-08-01 19:53:31 +0200)
+
+----------------------------------------------------------------
+David Sterba (1):
+      affs: use memcpy_to_page and remove replace kmap_atomic()
+
+ fs/affs/file.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)

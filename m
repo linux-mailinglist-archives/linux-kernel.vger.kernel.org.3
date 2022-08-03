@@ -2,103 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48816588844
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBF7588849
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbiHCHuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 03:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        id S237188AbiHCHvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 03:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234663AbiHCHuW (ORCPT
+        with ESMTP id S237115AbiHCHvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 03:50:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4E89FDE;
-        Wed,  3 Aug 2022 00:50:20 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 09:50:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659513019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dlzjMvdxHZr3wJ0ux9kQ0Lvo6AT9nnrD4nXVK3eGOeo=;
-        b=rLKhQqgtu+QGgGq/PvU09fcWl3eYD5euXHH2NBkJPq4Sx20Xbf6JXJliBOzPDPUEpzoXlD
-        q8fWAkLhNI4eR/Pyf7+bWGHWrI5T3DqNVzInJBSFXRC18/3fhqZHEMGMsLtwAUl4pDCBQF
-        tFK4Uj4+l9MHMGzX7UGQMGJAymkACLEYHUPGZPCITvuNKK40kpgZG3qkClw5PKKSnC0Ytz
-        fX8oNFINxG/PS4Vg5IUQpHq5v1pt/umxXyaVwQLj41PULo+myYbXy7J/6p3/mlYGPCztj/
-        U3r3QAM3BBWQiZ0TvjRYSX6Ayl/g7M9c+HVG3OjgrR3DKSMMbcYf/RGR1nfo5w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659513019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dlzjMvdxHZr3wJ0ux9kQ0Lvo6AT9nnrD4nXVK3eGOeo=;
-        b=6YtScFnQEjbBynP9OgEGNh/qIPZ3U1P17gqzwAqNtmXM6AhHbTDTIGkKvxlQcToVjLbyaZ
-        uBddK5mFRwJX2dDQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Anand Je Saipureddy <s.anandje1@gmail.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Clark Williams <williams@redhat.com>
-Cc:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cminyard@mvista.com, psiddaiah@mvista.com
-Subject: Re: [PATCH] ftrace: Fix improper usage of __trace_stack() function.
-Message-ID: <YuooucgDVO0uDPS/@linutronix.de>
-References: <20220723064943.16532-1-s.anandje1@gmail.com>
+        Wed, 3 Aug 2022 03:51:08 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB0724965
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:51:05 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id f20so18027138lfc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 00:51:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+qiNOnMPVcTggFsBYHaEzoH71rIPx2WFWj8O2ocXAy4=;
+        b=uq+URaz+toowYbgnRcqZtbVNfoJLMcGt0+mCMN6c4utMJEJaeA5YVcCVJC49LdS9NL
+         d5+Xn4PJqdZqZkspXztypEG/BhOpaDb9Hd81lVM2j1UHQNaFd35LeeZe/SoZ+w7bEetC
+         HWNCGeB+WRsF/UvjU2VEaipfognobec/W32odphoRvTj9ST3tgbNK2cMFTmUFrobwzv7
+         q7ffRrFFHbw2Go1lxNzrS5Ls+C4mqXdGbwDbjnKCjy5AphKWp+ntdwYY8NiTkl3p7Pxx
+         uuN73NbhqgkYqDkQo1vMKSr2Ef29rx/a/oBH/WIgrRjF3ZGBGpzDecFxWGzQi2/Me4EE
+         x++Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+qiNOnMPVcTggFsBYHaEzoH71rIPx2WFWj8O2ocXAy4=;
+        b=kBTMzTwtB6zkhbaW7njtbVGRJmN1K8kO8CSpj13yNT936oNOuczS7n+iu/Spd4wjcq
+         mfpfnQZ0mYT9bxd77IWwWGTrEpQ7Hlik58AIPU2DFoy13avEAvnQIm8sbhoi414LITlC
+         v+2GNBki3dNX0kjTaA/RPxL5qEmd2LGRHZgcSGlx7LjH/zeRCjF+kkFxTYakL5qvf4J1
+         1EtD6goua62F86JA8FGxLEH6D5gR2L6W8/nyH1KyIRjUh7HKYCBKfxjAHlLbSjqY4QSi
+         uOFZQK4Q812J+Tzk79r69lcoErO6EnnVwfdzSzEpWp/0VMcUtRuAvroi7v74eUNZzN5y
+         VGoA==
+X-Gm-Message-State: AJIora/3DiR9C1tFKFLflYDJJTDtHNLZ27adEQmk10x6aHBLcWdLVDPD
+        YWFJvSpyvhjL1cTFFweRsx31lg==
+X-Google-Smtp-Source: AGRyM1siGEUEnyJJOowXE+Po+lvFcMlMH8ag+fSkZEu8Bp76hF8nWN1ylZYYQUMn2Mw72TmbBS0iFg==
+X-Received: by 2002:a05:6512:12d4:b0:48a:8d45:7208 with SMTP id p20-20020a05651212d400b0048a8d457208mr9125479lfg.192.1659513064031;
+        Wed, 03 Aug 2022 00:51:04 -0700 (PDT)
+Received: from [192.168.1.6] ([77.222.167.48])
+        by smtp.gmail.com with ESMTPSA id k6-20020ac257c6000000b0048b03012d0dsm793539lfo.254.2022.08.03.00.51.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 00:51:03 -0700 (PDT)
+Message-ID: <971ad767-68b7-bbb7-f147-c3cce24fbe4f@linaro.org>
+Date:   Wed, 3 Aug 2022 09:51:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220723064943.16532-1-s.anandje1@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 5/8] Revert "dt-bindings: usb: dwc3: Add wakeup-source
+ property support"
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220802151404.1797-1-johan+linaro@kernel.org>
+ <20220802151404.1797-6-johan+linaro@kernel.org>
+ <CAL_JsqL5ZCzfd06rxOdQodFjk4G3QpDCsxA5heM71x0q5d-hCw@mail.gmail.com>
+ <YuokOn0KHEqv/CR4@hovoldconsulting.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YuokOn0KHEqv/CR4@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-23 12:19:43 [+0530], Anand Je Saipureddy wrote:
-> In kernel/trace/trace_events_trigger.c --> stacktrace_trigger() -->
-> __trace_stack() is not defined as per the function definition.
+On 03/08/2022 09:31, Johan Hovold wrote:
+> On Tue, Aug 02, 2022 at 11:17:22AM -0600, Rob Herring wrote:
+>> On Tue, Aug 2, 2022 at 9:14 AM Johan Hovold <johan+linaro@kernel.org> wrote:
 > 
-> With commit edbaaa13a660
-> ("tracing: Merge irqflags + preemt counter, add RT bits")
-> the irqflags(flags) and preemption counter(preempt_count()) are
-> now should be evaluated early by tracing_gen_ctx().
+>>> It should also not be used to
+>>> work around Linux driver implementation issues such as how to coordinate
+>>> the glue and core dwc3 drivers.
+>>>
+>>> For the Qualcomm dwc3 controllers, it is the glue device that manages
+>>> the wakeup interrupts, which may or may not be able to wake the system
+>>> up from system suspend.
+>>
+>> While the reasoning to add this may have been for QCom, having this
+>> property for other users makes sense. On some platforms, 'snps,dwc3'
+>> is the only node (i.e. there's no wrapper node). So I don't think this
+>> should be reverted.
 > 
-> This patch replaces the irqflags and preemption counter
-> with tracing_gen_ctx().
+> Fair enough. Let's keep it in the core child node then where we can
+> still retrieve from the glue parent directly.
 > 
-> Fixes: 5e8446e3820c ("tracing: Dump stacktrace trigger to the corresponding instance")
-> Signed-off-by: Anand Je Saipureddy <s.anandje1@gmail.com>
-> Reviewed-by: Corey Minyard <cminyard@mvista.com>
+> (I assume you're not suggesting also adding 'wakeup-source' to the qcom
+> glue node, which is where the actual wakeup interrupts live.)
+> 
+> The glue and core parts needs to work in concert even if the current
+> implementation tends to make that harder than it should be.
 
-Please use [PATCH RT v5.10] in the future.
-Luis, could you please pick it up?
+I think it can still exist in the glue node (so your next patch),
+because as you said this is the place with wakeup interrupt, so it looks
+like correct hardware description. In the next patch you would need to
+disallow it for the DWC node.
 
-> ---
->  kernel/trace/trace_events_trigger.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
-> index 75fef9fcfd0f..3c6229f16e81 100644
-> --- a/kernel/trace/trace_events_trigger.c
-> +++ b/kernel/trace/trace_events_trigger.c
-> @@ -1220,12 +1220,10 @@ stacktrace_trigger(struct event_trigger_data *data, void *rec,
->  		   struct ring_buffer_event *event)
->  {
->  	struct trace_event_file *file = data->private_data;
-> -	unsigned long flags;
->  
-> -	if (file) {
-> -		local_save_flags(flags);
-> -		__trace_stack(file->tr, STACK_SKIP, preempt_count());
-> -	} else
-> +	if (file)
-> +		__trace_stack(file->tr, tracing_gen_ctx(), STACK_SKIP);
-> +	else
->  		trace_dump_stack(STACK_SKIP);
->  }
->  
-
-Sebastian
+Best regards,
+Krzysztof

@@ -2,67 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A59588A19
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F32588A18
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237727AbiHCKDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 06:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S235095AbiHCKDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 06:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237781AbiHCKDa (ORCPT
+        with ESMTP id S236405AbiHCKDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 06:03:30 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F2B1D0E4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 03:03:27 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id p8so15908131plq.13
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 03:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=cvAbQZ7UDpN6nHSUbSq141kAF5t3sXiSGCHIO0EWxys=;
-        b=CPjTb9GrTf6Xxic2TqGthS1qTHHqntDZ37mKAJIkBLY5FA0EA6qoBJLkjG0egHCN03
-         yH2gt43WBVDNRx0oeB6c2S3Ti2jHrFcB7YsYH1h1kAYYY/EqZw5cSh3+sT88hUS1EBLS
-         vmlzUPfijSJ6qVxuqSdRrsU1hW4kFrcJNcPiLiJ0PDk9rVkmQtdoWghG2mClVWjMOvNz
-         G58/rKkhMBx0D2aCNgqPDNnz7p/3poCQVKiA6HTDuYU3jik0cVfrmbQVuEMSJYl0isY6
-         rVmusnIKyfTJ7jaOMIaCpkoTx176xcW7OdDUUgm8WtVa1maSXz8PB3qo57wX4iRN6n7n
-         daFQ==
+        Wed, 3 Aug 2022 06:03:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D38D1838C
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 03:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659520994;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SHAatqq7WLX8aAM5p4x5ULy+iYVYaT/OkqKn6lCeb3U=;
+        b=d94ZPjRUde9GSHRt3EQhGfiGWnxSZf5+pVp/2Nezj5+oJsLQldFQTfCcKq/o/mOwxGQFMj
+        WGWX3UyZhAZxE7FrcRcXhztVzYxVkMYJrTv0+/e78O0ylFin2h2HCQb8jj+hiwuaQYXetl
+        ZFwkPreQeYiH7Zf+Pn8SF0PG91U9usw=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-672-wkUo5wziMbWs62sQIZhjZQ-1; Wed, 03 Aug 2022 06:03:13 -0400
+X-MC-Unique: wkUo5wziMbWs62sQIZhjZQ-1
+Received: by mail-qt1-f198.google.com with SMTP id k3-20020ac86043000000b0033cab47c483so1723922qtm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 03:03:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=cvAbQZ7UDpN6nHSUbSq141kAF5t3sXiSGCHIO0EWxys=;
-        b=p6d5WHHriYMO3Gc6aB2m/6DP1Nd+Wfm72iskPzryU+ZwIQ+HSLuJlH3KgdKuea6tYp
-         d+bDyjCSWuKTaTyAosJ4I8JKg4LCLNfxxV8xos8Jugs6DTNu03swZS6EG10Ob0lDrty0
-         gFdCDiW+0S+ibImmIpGYM73YUgBJkz5cmxgimrooQMr8Npcz/q4lsTnC4rpG8H4vRUyu
-         gcUnhVUaFKUZvoBsbK2M7vTWXTKUOkRWHC3wTtpq5kIFCj+OZi7LZIjCTj0f3dLHXAu0
-         tFtKA3XUXnUOWHjILUSXZXxdXCSq0rPDNYGs52PWHU3cDxN9nhoZD1ceUlukpLir+O02
-         BHtA==
-X-Gm-Message-State: ACgBeo12F121TR7A0ODtGlMY4BlG3BYnQ9kTwtMon8jEecHlJ2uv9Aur
-        KKoXdDUIQuBijc7ukxPbAOk=
-X-Google-Smtp-Source: AA6agR6tCK2KRyOG1o40zhBecpXlbVFufMUl6A0DK/XqhDiWPLOaX65ZJGjYrEobuILR+V+A6mwCzQ==
-X-Received: by 2002:a17:902:d50f:b0:16e:ecdd:98b8 with SMTP id b15-20020a170902d50f00b0016eecdd98b8mr13443805plg.22.1659521006830;
-        Wed, 03 Aug 2022 03:03:26 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902f7c700b0016f0939080asm1438111plw.249.2022.08.03.03.03.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 03:03:26 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.con.cn
-To:     akpm@linux-foundation.org
-Cc:     hughd@google.com, izik.eidus@ravellosystems.com,
-        willy@infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>
-Subject: [RFC PATCH 0/4] propose a auto-run mode for ksm
-Date:   Wed,  3 Aug 2022 10:03:06 +0000
-Message-Id: <20220803100306.1653382-1-xu.xin16@zte.con.cn>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=SHAatqq7WLX8aAM5p4x5ULy+iYVYaT/OkqKn6lCeb3U=;
+        b=r0zOuNbehYmBSMf0LJcu+FyT+3OkDMHJy3/o36/yzW4jl/B1ueID3AyyIxoYkCT6b+
+         UTBysRKA88ZR5jOqmxHItV9h0G1bC2cKgfKavfy3C96IPhz8OX1B9Pq86fkBmlaLVcyo
+         2I7ttoaIwuPw/RwTzekrUboROww5ioW9HwdD0bxKOAKDUYfVa1D6T4C4GjFvV++EvySF
+         JxelFwT3IMhLnGxQ/6gazwJA0Y5sN9PP0dy3bi0qJ9ZGYMTc4Suc8i2xCmXAbgFzfEu4
+         jozlDBTpHXPT7W7eGSJFo1zoGeHwZpAq3/SCEF9pezDAmqeyHmQFbqg+n76d0hBU+dFn
+         Gh4A==
+X-Gm-Message-State: AJIora9/V1kw6KL6goBAquuOilOm32/aWMQhL6Qu+u8+C/i/inAS3yT6
+        jxf/s4Llgo2PdlBLnEfSeOsTYdhlOifnf7JMinObNPsK+zyzakd4iImnSjDNb2eFnSXinCiaA6T
+        lf/630ivDn9jpt9AdZmLzk9mm
+X-Received: by 2002:ac8:5803:0:b0:31e:f49b:ed3a with SMTP id g3-20020ac85803000000b0031ef49bed3amr21430004qtg.46.1659520993059;
+        Wed, 03 Aug 2022 03:03:13 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vPTcMMZKqqwMRVSbno7QUDjIZ2Pu+sY7zLYFAUCeY3W3tdw5redRG5JkrQAtRAnIpbQqJwbg==
+X-Received: by 2002:ac8:5803:0:b0:31e:f49b:ed3a with SMTP id g3-20020ac85803000000b0031ef49bed3amr21429989qtg.46.1659520992829;
+        Wed, 03 Aug 2022 03:03:12 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id v2-20020a05620a440200b006b5e50057basm12487432qkp.95.2022.08.03.03.03.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 03:03:11 -0700 (PDT)
+Message-ID: <f2685007-0331-aaea-bfbe-074a3680fc29@redhat.com>
+Date:   Wed, 3 Aug 2022 12:03:08 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v1 1/1] ACPI: VIOT: Do not dereference fwnode in struct
+ device
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-acpi@vger.kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+References: <20220802193503.3092-1-andriy.shevchenko@linux.intel.com>
+From:   Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <20220802193503.3092-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,32 +87,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+Hi Andy,
 
-The following patch series bring a NEW running state "auto mode". In
-traditional KSM, whether ksmd works scanning and merging or not
-depends on the sysfs klob ksm_run.
+On 8/2/22 21:35, Andy Shevchenko wrote:
+> In order to make the underneath API easier to change in the future,
+> prevent users from dereferencing fwnode from struct device.
+> Instead, use the specific dev_fwnode() and device_match_fwnode()
+> APIs for that.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Eric Auger <eric.auger@redhat.com>
 
-Most of time, letting ksmd run is not very much needed, for example,
-when memory is sufficient, because it increases the delays of COW for
-user applications and also consume some cpu resource. 
+Thanks
 
-Besides, the fixed pages_to_scan is not always good. When there are a
-lot of same pages, the default pages_to_scan makes ksmd so slow to merge
-them.
-
-The four patches try to optimize the above two points with a auto mode.
-It's a lightweight optimization to KSM.
-
-xu xin (4):
-  ksm: propose a auto-run mode of ksm
-  ksm: implement scan-enhanced algorithm of auto mode
-  ksm: let ksmd work automatically with memory threshold
-  ksm: show ksmd status of auto mode
-
- mm/ksm.c | 212 +++++++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 206 insertions(+), 6 deletions(-)
-
--- 
-2.25.1
+Eric
+> ---
+>  drivers/acpi/viot.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/acpi/viot.c b/drivers/acpi/viot.c
+> index 647f11cf165d..6132092dab2a 100644
+> --- a/drivers/acpi/viot.c
+> +++ b/drivers/acpi/viot.c
+> @@ -88,7 +88,7 @@ static int __init viot_get_pci_iommu_fwnode(struct viot_iommu *viommu,
+>  		return -ENODEV;
+>  	}
+>  
+> -	fwnode = pdev->dev.fwnode;
+> +	fwnode = dev_fwnode(&pdev->dev);
+>  	if (!fwnode) {
+>  		/*
+>  		 * PCI devices aren't necessarily described by ACPI. Create a
+> @@ -101,7 +101,7 @@ static int __init viot_get_pci_iommu_fwnode(struct viot_iommu *viommu,
+>  		}
+>  		set_primary_fwnode(&pdev->dev, fwnode);
+>  	}
+> -	viommu->fwnode = pdev->dev.fwnode;
+> +	viommu->fwnode = dev_fwnode(&pdev->dev);
+>  	pci_dev_put(pdev);
+>  	return 0;
+>  }
+> @@ -314,7 +314,7 @@ static int viot_dev_iommu_init(struct device *dev, struct viot_iommu *viommu,
+>  		return -ENODEV;
+>  
+>  	/* We're not translating ourself */
+> -	if (viommu->fwnode == dev->fwnode)
+> +	if (device_match_fwnode(dev, viommu->fwnode))
+>  		return -EINVAL;
+>  
+>  	ops = iommu_ops_from_fwnode(viommu->fwnode);
 

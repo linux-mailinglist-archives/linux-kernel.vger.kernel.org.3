@@ -2,76 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DBB58914A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5097558915A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238043AbiHCRYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
+        id S238229AbiHCR0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238033AbiHCRYp (ORCPT
+        with ESMTP id S238136AbiHCR0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:24:45 -0400
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8581154657;
-        Wed,  3 Aug 2022 10:24:44 -0700 (PDT)
-Received: by mail-pj1-f48.google.com with SMTP id f11-20020a17090a4a8b00b001f2f7e32d03so4096225pjh.0;
-        Wed, 03 Aug 2022 10:24:44 -0700 (PDT)
+        Wed, 3 Aug 2022 13:26:07 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54B9564DF
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:26:04 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-32269d60830so178546987b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:26:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=GFxAw/jBxe5LyMOP+HmBMT2P1a4JnHFp13BCTBWGaAQ=;
+        b=S9GOm9JhkpXet5QE1g6qStdUS01m5oEGnSr+xoXFKylVXyDOjto9yj3KvBUKmkWYHQ
+         QtriN3zqO/SCTIN7N289ER4t7VIU4mbb7r7xAQ+IUUK3q2PufBwzCYUJ4q+YB+2hA46n
+         kDZYvRlVOT0GhCBLTrCZhbjWJogEtkf+Nh0e1uwp9xoqotk666gubA9i9DzFCCIxPJjZ
+         rIXcZy7zzvvRdhvN8upFK0Ld8TerAmcZpsBIt8yX18aeys0qTpXLo6wFf8cy/2rbM5VD
+         1DrlTtkPiROfJID3eSL+RZMaU7fVTKZeh6KukejUV8OKYfukA5RnU/D+ej7fz7b/wN+E
+         Esjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=PLueRrdRrDSAZCsSnEuO7ryjbF4cDa5AGSQHDpCb7Jo=;
-        b=cnNUQOAfgHOxq55giri+w07WCRA5RjedrBU0T9+zvtAEjQOfNLx08oJWRT8RMiVhnK
-         VQAb2SoPT+QptujtB72Zgd1mrDrrzfeyPw1PpSc1eLFieuJwSnFtP5MHo2QVYNix/oVV
-         QhV53uoso0ybRES4++IxoRmnkaxyn8OcWsRU8D8CQbPmGkKUtZmjgf3vRTp0uqn3rsbA
-         41q6yZG8L0CdJE0YG35RvEaWNyN9shKkwvvxv6FICBxPdC8TpNi3j0hKIA3v3Y80ze8q
-         rltH2It7bJzel8UvPp8rSGz5GVXN+CKtG/j3fIZkIxdS/qP+gO+YICEaK5VD/x50/Erk
-         r5jA==
-X-Gm-Message-State: ACgBeo27UTtImrnkmqhsSt8zWKspPb7CTX/T5tCCw56d7JHeLUqCx6oF
-        vkgJu9GVwHSaPPfHvTMusXkU6CFNX1bXLw==
-X-Google-Smtp-Source: AA6agR4+errzcNzMPWB0CtPUqoFfU+/HvKqxJd9O453x9LrGJfJ/jGLweL2ivP559rQbToAj4CcR+Q==
-X-Received: by 2002:a17:90a:d58e:b0:1f4:f9a5:22a8 with SMTP id v14-20020a17090ad58e00b001f4f9a522a8mr5883087pju.58.1659547483870;
-        Wed, 03 Aug 2022 10:24:43 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:db71:edb7:462a:44af? ([2620:15c:211:201:db71:edb7:462a:44af])
-        by smtp.gmail.com with ESMTPSA id i18-20020a170902c95200b0016c2cdea409sm2217726pla.280.2022.08.03.10.24.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 10:24:43 -0700 (PDT)
-Message-ID: <9de2428b-96b8-883c-bd96-01a7763758e8@acm.org>
-Date:   Wed, 3 Aug 2022 10:24:40 -0700
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=GFxAw/jBxe5LyMOP+HmBMT2P1a4JnHFp13BCTBWGaAQ=;
+        b=luEvIuRbnSiGTSAGcN67sCsXlr4C3GPBQm4p7Lyn8kbgRQ6dMsvwMNzm0eD1yMa19/
+         pbBvlAWr4WAxfYfSxjtYoW/EkmgaN63kqFxXukvkYKg9PyD50i4aWysBjYdPQ+ZRy8Ps
+         YRk7t0PZmvHdvaMfiPtI+PzQEbKSfobJsufTY/mJzXmkQxBvB43vR6+Wc19NGxtxbN9j
+         FCtxKHNVjKKmwTkT3linv9SvwzO1SPWVN2ebdgdOcCGp0MQ7bg0WdNAz+68wxDoIzw5a
+         H5kDL+ZdfKloCDqTyfKTEhO95WVbiHIncx8n5e9tAabbh0uXloMr8kZj58nDGS0kHWxw
+         ZO8A==
+X-Gm-Message-State: ACgBeo3NdKTxykidGBL+EZvqt3S9/+eGWDQC/7Xrg/KifI/gSeD2ox2q
+        nbqPmE3EgLt19867xfV97u/0AkFk0IAg0/TReKlems+QCjg=
+X-Google-Smtp-Source: AA6agR7Pj2xv/8h3UZoq7GMEfel/PV3Cx0fY7u6nPz19urddu/CnfjbVwmAi8z7209lpFtoa6svstVuCqHFOmXbo1IQ=
+X-Received: by 2002:a81:7586:0:b0:31f:658e:1ac7 with SMTP id
+ q128-20020a817586000000b0031f658e1ac7mr25234452ywc.295.1659547563352; Wed, 03
+ Aug 2022 10:26:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [dm-devel] [PATCH v9 10/13] dm-table: allow zoned devices with
- non power-of-2 zone sizes
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, Johannes.Thumshirn@wdc.com,
-        snitzer@kernel.org, axboe@kernel.dk,
-        damien.lemoal@opensource.wdc.com, agk@redhat.com, hch@lst.de
-Cc:     pankydev8@gmail.com, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        jaegeuk@kernel.org, matias.bjorling@wdc.com
-References: <20220803094801.177490-1-p.raghav@samsung.com>
- <CGME20220803094813eucas1p2eab78901e97417ad52be1f8023db3d82@eucas1p2.samsung.com>
- <20220803094801.177490-11-p.raghav@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220803094801.177490-11-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-12-glider@google.com>
+ <20220702001806.1379-1-hdanton@sina.com>
+In-Reply-To: <20220702001806.1379-1-hdanton@sina.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 3 Aug 2022 19:25:26 +0200
+Message-ID: <CAG_fn=VUOgfjzWEU+2dTs=gd0hdW9YEbT=sdW8wgx93c3cASTQ@mail.gmail.com>
+Subject: Re: [PATCH v4 11/45] kmsan: add KMSAN runtime core
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/3/22 02:47, Pankaj Raghav wrote:
-> Allow dm to support zoned devices with non power-of-2(po2) zone sizes as
-> the block layer now supports it.
+On Sat, Jul 2, 2022 at 2:18 AM Hillf Danton <hdanton@sina.com> wrote:
+>
+> On Fri,  1 Jul 2022 16:22:36 +0200 Alexander Potapenko wrote:
+> > +
+> > +bool kmsan_internal_is_module_addr(void *vaddr)
+> > +{
+> > +     return ((u64)vaddr >=3D3D MODULES_VADDR) && ((u64)vaddr < MODULES=
+_END);
+> > +}
+> > +
+> > +bool kmsan_internal_is_vmalloc_addr(void *addr)
+> > +{
+> > +     return ((u64)addr >=3D3D VMALLOC_START) && ((u64)addr < VMALLOC_E=
+ND);
+> > +}
+>
+> Given is_vmalloc_addr(), feel free to add a one-line comment showing the
+> reason for adding the kmsan internal version.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Ok, will do. I'm also going to move these two to mm/kmsan/kmsan.h, so
+that they can be inlined.
+Keeping internal versions allows us to not have these two functions
+instrumented by KMSAN, which gains us some performance and (more
+importantly) prevents potential recursion.
+
+In fact right now the original is_vmalloc_addr() doesn't contain
+instrumented memory accesses and is thus safe to be called from KMSAN
+runtime without causing recursion.
+I am not sure though whether we can rely on that remaining true, so I
+added it along with the internal version of is_module_address(), which
+actually has the problem.
+
+> Hillf
+
+
+
+
+--
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

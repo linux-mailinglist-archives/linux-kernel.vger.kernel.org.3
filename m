@@ -2,150 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339DA58856E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3CE588570
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235477AbiHCBaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 21:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
+        id S235595AbiHCBbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 21:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbiHCBaP (ORCPT
+        with ESMTP id S232077AbiHCBbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 21:30:15 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B4810A1;
-        Tue,  2 Aug 2022 18:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659490214; x=1691026214;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=l6tf+gFEwiZ1TzfGKtSasMdKi0NoDSHlgfiI31cXsXo=;
-  b=GMK82YgQo48DiiXpf/rVeSth50ldU5KGPeNwOVckW3XEWZ6BgMpFrUix
-   JnGDnFqw4xpQmzjWlWWf1KhNu1/8hRpmmoqcehiFtk0IsAvY10V2u45Fb
-   7LqLG3LYdQx/8YZtfqK0mUunQm6ZIBEkeJ5wS44CPCSIYfQ74Nt8Iehgg
-   XSPinD1DCgteXO6l6e708GDOhic3lslcJvkHurHBN2XE9RIiB+e+Ge5Xv
-   JdeiBmCybit6PzC+dHpL19K/g+6ADU4+tEAJZwl5IKV7S1FDjtpZ5uKB4
-   472l04RuX3zGBC+X22uLIRePzG9MwmtZVMRyQVH5rNvqY8fDZ9baEY/JQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269328390"
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="269328390"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:30:14 -0700
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="930195098"
-Received: from gvenka2-desk.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.85.17])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:30:11 -0700
-Message-ID: <d3236016c46da2cbdf314839255e8806ae23f228.camel@intel.com>
-Subject: Re: [PATCH v5 12/22] x86/virt/tdx: Convert all memory regions in
- memblock to TDX memory
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Wed, 03 Aug 2022 13:30:09 +1200
-In-Reply-To: <da423f82faec260150b158381a24300f3cd00ffa.camel@intel.com>
-References: <cover.1655894131.git.kai.huang@intel.com>
-         <8288396be7fedd10521a28531e138579594d757a.1655894131.git.kai.huang@intel.com>
-         <20d63398-928f-0c6f-47ec-8e225c049ad8@intel.com>
-         <76d7604ff21b26252733165478d5c54035d84d98.camel@intel.com>
-         <880f3991-09e5-2f96-d5ba-213cff05c458@intel.com>
-         <da423f82faec260150b158381a24300f3cd00ffa.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Tue, 2 Aug 2022 21:31:32 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB42F558F9;
+        Tue,  2 Aug 2022 18:31:31 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso496579pjo.1;
+        Tue, 02 Aug 2022 18:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=WhzCt7ZgW+LKbQwQvPVI6t++DQIekCJZ1n72lgrdeEc=;
+        b=UfMtI5F0A32q8jVuYnhDA27lKBMWQ/8qOiUvDdoMk8XTjT+AHwCj3UumiD5U9MMxOv
+         twpE3WsfikZnc9kUv3KbPA277def1HlItmhTT/aBAgvEG9aglUxpecD3TprBvxE0+zNN
+         ZQaR+epa7rC0VZG5uR645bscnWRAQKSrkINuC7wpAkw8XpzGr+4H6NXOYcZUPuOP4tAX
+         5G3W7jNS9EHcm0v4AE7tQXPoXF9244qIdi40twGjxb3Dr46RDYMqv8smNHsMhfX1dKmB
+         3/GaoEfOGdC4w2y58ksD+sG7fmgTWD/1bFOAR+bTZnvc+tlAq64GJtsTn+nyWlmlmkpA
+         CV1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=WhzCt7ZgW+LKbQwQvPVI6t++DQIekCJZ1n72lgrdeEc=;
+        b=vgudXcbzdt4pd4KfwOU86oc72/b+TWuz/HUpHnD3evIrcv4T2zQBO7koAauQdPRAT1
+         YOkGKcV+ZZSC1NPAvDOi9UDlxblS9OcMh2s68jo98K7Hamet4DvJXPBAGp+ju1k4kPXz
+         vmyHbHNnrH7BtlY12VIFtK7Dh0eqL0Z4owqTiyQeLYS0Au5LrYgq3TH5sXOngMSimMBY
+         fNmnE5OOn0xM4jshFkpTmGXxPr14rKg/T53AknWPuQ0k3PPQ7SPpoa/HnY4YExvFrGph
+         MXLXEIsRTztwtfKk/PK5e8H0NNasJJuKxHJkLsDCKpsqzuV1SSJcIwz+v4OGlKUnCeut
+         QJAA==
+X-Gm-Message-State: ACgBeo07w6EgTQYCNFDZ7XsFn4at3gURbrOQSJLMyqoenGQA6Dj1GPFM
+        PsadlrGJmJSZ2vr5vtee4ZdeOIkivYvn2sO9
+X-Google-Smtp-Source: AA6agR6XMDZHANAU7kA10nIDngUNjppbpRgEcfvum+qrO6pwYM9MdYrvKAGxNN2NIifQGCGyLZIi/A==
+X-Received: by 2002:a17:90a:a401:b0:1f2:19a0:2874 with SMTP id y1-20020a17090aa40100b001f219a02874mr2383446pjp.146.1659490291131;
+        Tue, 02 Aug 2022 18:31:31 -0700 (PDT)
+Received: from sebin-inspiron.bbrouter ([103.148.20.125])
+        by smtp.gmail.com with ESMTPSA id x3-20020a1709027c0300b0016edb59f670sm369240pll.6.2022.08.02.18.31.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 18:31:30 -0700 (PDT)
+From:   Sebin Sebastian <mailmesebin00@gmail.com>
+Cc:     mailmesebin00@gmail.com, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH -next] rtc: synqmp: uninitialized variable error
+Date:   Wed,  3 Aug 2022 07:01:17 +0530
+Message-Id: <20220803013117.318611-1-mailmesebin00@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-08 at 11:34 +1200, Kai Huang wrote:
-> > Why not just entirely remove the lower 1MB from the memblock structure
-> > on TDX systems?=C2=A0 Do something equivalent to adding this on the ker=
-nel
-> > command line:
-> >=20
-> > =C2=A0	memmap=3D1M$0x0
->=20
-> I will explore this option.=C2=A0 Thanks!
+fract_tick is uninitialized and can lead to uninitialized read which can
+result in any arbitrary value from previous computations. If the code
+flow doesnt execute the `if (fract_offset > (tick_mult /
+RTC_FR_MAX_TICKS)) { ` block, fract_tick is left uninitialized.
+Initializing with zero fixes the issue.
 
-Hi Dave,
+Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
+---
+ drivers/rtc/rtc-zynqmp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-After investigating and testing, we cannot simply remove first 1MB from e82=
-0
-table which is similar to what 'memmap=3D1M$0x0' does, as the kernel needs =
-low
-memory as trampoline to bring up all APs.
-
-Currently I am doing below:
-
---- a/arch/x86/realmode/init.c
-+++ b/arch/x86/realmode/init.c
-@@ -65,6 +65,17 @@ void __init reserve_real_mode(void)
-         * setup_arch().
-         */
-        memblock_reserve(0, SZ_1M);
-+
-+       /*
-+        * As one step of initializing the TDX module (on-demand), the
-+        * kernel will later verify all memory regions in memblock are
-+        * truly TDX-capable and convert all of them to TDX memory.
-+        * The first 1MB may not be enumerated as TDX-capable memory.
-+        * To avoid failure to verify, explicitly remove the first 1MB
-+        * from memblock for a TDX (BIOS) enabled system.
-+        */
-+       if (platform_tdx_enabled())
-+               memblock_remove(0, SZ_1M);
-
-I tested an it worked (I didn't observe any problem), but am I missing
-something?
-
-Also, regarding to whether we can remove platform_tdx_enabled() at all, I l=
-ooked
-into the spec again and there's no MSR or CPUID from which we can check TDX=
- is
-enabled by BIOS -- except checking the SEAMRR_MASK MSR, which is basically
-platform_tdx_enabled() also did.
-
-Checking MSR_MTRRcap.SEAMRR bit isn't enough as it will be true as long as =
-the
-hardware supports SEAMRR, but it doesn't tell whether SEAMRR(TDX) is enable=
-d by
-BIOS.
-
-So if above code is reasonable, I think we can still detect TDX during boot=
- and
-keep platform_tdx_enabled(). =C2=A0
-
-It also detects TDX KeyIDs, which isn't necessary for removing the first 1M=
-B
-here (nor for kexec() support), but detecting TDX KeyIDs must be done anywa=
-y
-either during kernel boot or during initializing TDX module.
-
-Detecting TDX KeyID at boot time also has an advantage that in the future w=
-e can
-expose KeyIDs via /sysfs and userspace can know how many TDs the machine ca=
-n
-support w/o having to initializing the  TDX module first (we received such
-requirement from customer but yes it is arguable).
-
-Any comments?
-
---=20
-Thanks,
--Kai
-
+diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
+index 1dd389b891fe..c9b85c838ebe 100644
+--- a/drivers/rtc/rtc-zynqmp.c
++++ b/drivers/rtc/rtc-zynqmp.c
+@@ -203,7 +203,7 @@ static int xlnx_rtc_set_offset(struct device *dev, long offset)
+ 	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
+ 	unsigned long long rtc_ppb = RTC_PPB;
+ 	unsigned int tick_mult = do_div(rtc_ppb, xrtcdev->freq);
+-	unsigned char fract_tick;
++	unsigned char fract_tick = 0;
+ 	unsigned int calibval;
+ 	short int  max_tick;
+ 	int fract_offset;
+-- 
+2.34.1
 

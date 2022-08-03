@@ -2,101 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1734C58878B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11A958878D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237248AbiHCGoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 02:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
+        id S234643AbiHCGqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 02:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiHCGoQ (ORCPT
+        with ESMTP id S230290AbiHCGp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 02:44:16 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2A239BB8
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 23:44:15 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id e11so17926689ljl.4
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 23:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6wCmqftL2YTJwRl3uJo2czdhPZEtp4fKlSDbfT0Ewd4=;
-        b=S8AR7bEDgG1TRfKJbCDVv5Q3tJj6UuB0l62JQgl61dfaQ2IfMXCzzbiYMIt3cQQgXc
-         wX0QRZXawZXgX4Z7IKoSjE0jCNzRplDDUEa4D5adMdvWwoGcgCGS7z4WBh8RqQouDP07
-         IEzzNAv6bD/VXMZZULSeI3KZ6zI++uWfpyR1iXqUgfTUw+gGCJlo1fhWIbEKlBXIS35z
-         v7DBBDohOCJ2VBhoMLNA5XwNYaSpYiTWrPkDfnNbOhqtSl0IDIwrimONgp4szk5qwK78
-         nZVSStgWoyI9flFyLbDjGMXrXkMihmAPHFGJNpOJsrdaTQVk8ah9mNYawe4FZsJVLTWv
-         Tu9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6wCmqftL2YTJwRl3uJo2czdhPZEtp4fKlSDbfT0Ewd4=;
-        b=eaX+iTHk3UqzAhrjpAu1o12RkRT9W6gfszItZR6nM3EfPpJz2F9abQTGCxCK4dED7k
-         Pu0/cLp4Kt/KnOGEoLiZgMcFjDBTZ99+Le8pDzQ4BrlqI274RL0OobEMJg1zWMj7Q8h9
-         EqSeZFUAH46aPgAENJ4eAQjTTAQikxUxGmrWDFWPpu1WK8nKUaKA0FR1+MH3nsHEj/vN
-         LLJYsqLM20qnZ9pQK9bUtatQo8xWo8sZs6UQWW6JqAkmDM5j8BRku7zyr9mkI7j3UhRE
-         07KKAxMJXefh8oIZHWlsCWb8PUU6r9P8bbHow7PNCcJ4P6bA+kELVSzYOk2frWZa7ixp
-         YPVg==
-X-Gm-Message-State: AJIora8h9EqPLUQf5bx5Id+ijIQvLnC7ZoXZ1bHh7Iz3IC53pG/+l5CM
-        34sGYJPNwknWTVpqucAL4AKj9w==
-X-Google-Smtp-Source: AGRyM1s44i0wbnt6DAfjwwwQh9ZAYD+9dDBin5vOqQvN7GRthJFgT71RyENzL2QFCogHHWjE748DUA==
-X-Received: by 2002:a2e:bf14:0:b0:255:b789:576b with SMTP id c20-20020a2ebf14000000b00255b789576bmr7850928ljr.47.1659509054089;
-        Tue, 02 Aug 2022 23:44:14 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id c14-20020a2e9d8e000000b0025e5b5474a4sm546137ljj.85.2022.08.02.23.44.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 23:44:13 -0700 (PDT)
-Message-ID: <5c14e959-10cc-5520-e88f-b47a195b99e9@linaro.org>
-Date:   Wed, 3 Aug 2022 08:44:11 +0200
+        Wed, 3 Aug 2022 02:45:59 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E947631D
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 23:45:57 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2736jLws025983;
+        Wed, 3 Aug 2022 01:45:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1659509121;
+        bh=sMxR/cYnNHSziJ4eordm1fdKL/wVbLQvEtLnAAMD3TM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ElcX/qb+qbCyyq7oxpgBJd2lUqwFf76O/q+JDjIjLiV1mTZQ9SGtOsNVz5EAokBOh
+         3mVOKFUbHPFwpEGX6gkRAcAvZu7MoZJElDm43o70rke16vV7y2Pnmggu4qDgLFWTsJ
+         sX8lnbxqKWcnS02MuTVfEdh1PXhHdM5Qy0LmAdhI=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2736jKH4019604
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 3 Aug 2022 01:45:20 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 3
+ Aug 2022 01:45:20 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 3 Aug 2022 01:45:20 -0500
+Received: from [172.24.157.172] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2736jC96087125;
+        Wed, 3 Aug 2022 01:45:13 -0500
+Message-ID: <a010d333-70b1-bc58-ddf8-d3fa911a6852@ti.com>
+Date:   Wed, 3 Aug 2022 12:15:12 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4] dt-bindings: PCI: mediatek-gen3: Add support for
- MT8188 and MT8195
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH v3 4/4] drm/panel: simple: add bus-format support for
+ panel-dpi
 Content-Language: en-US
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ryder Lee <ryder.lee@mediatek.com>, Rex-BC.Chen@mediatek.com,
-        TingHan.Shen@mediatek.com, Liju-clr.Chen@mediatek.com,
-        Jian.Yang@mediatek.com
-References: <20220802120624.19258-1-jianjun.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220802120624.19258-1-jianjun.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Max Krummenacher <max.oss.09@gmail.com>,
+        <max.krummenacher@toradex.com>
+CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh@kernel.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Marek Vasut <marex@denx.de>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20220628181838.2031-1-max.oss.09@gmail.com>
+ <20220628181838.2031-5-max.oss.09@gmail.com>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <20220628181838.2031-5-max.oss.09@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/08/2022 14:06, Jianjun Wang wrote:
-> MT8188 and MT8195 are ARM platform SoCs with the same PCIe IP as MT8192.
+
+
+On 28-Jun-22 23:48, Max Krummenacher wrote:
+> From: Max Krummenacher <max.krummenacher@toradex.com>
 > 
-> Also add new clock name "peri_mem" since the MT8188 and MT8195 use clock
-> "peri_mem" instead of "top_133m".
+> Evaluate the device tree bus-format property to set bus_format for
+> a 'panel-dpi' panel. Additionally infer the bpc value from the
+> given bus-format.
 > 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> Valid values for bus-format are found in:
+> <include/dt-bindings/display/dt-media-bus-format.h>
+> 
+> This completes the addition of panel-dpi to completely specify
+> a panel-simple panel from the device tree.
+> 
+> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+> 
 > ---
-> Changes in v4:
-> Remove "items" for "mediatek,mt8192-pcie" since it only have one item.
+> 
+> Changes in v3:
+> - Moved the bus-format property under the port/endpoint node as
+>    suggested by Rob Herring
+> 
+> Changes in v2:
+> - Fix errors found by dt_binding_check
+> 
+>   drivers/gpu/drm/panel/panel-simple.c | 49 ++++++++++++++++++++++++++++
+>   1 file changed, 49 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+> index 4a2e580a2f7b..f1a457f1069e 100644
+> --- a/drivers/gpu/drm/panel/panel-simple.c
+> +++ b/drivers/gpu/drm/panel/panel-simple.c
+> @@ -21,9 +21,11 @@
+>    * DEALINGS IN THE SOFTWARE.
+>    */
+>   
+> +#include <dt-bindings/display/dt-media-bus-format.h>
+>   #include <linux/delay.h>
+>   #include <linux/gpio/consumer.h>
+>   #include <linux/module.h>
+> +#include <linux/of_graph.h>
+>   #include <linux/of_platform.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/pm_runtime.h>
+> @@ -449,10 +451,12 @@ static int panel_dpi_probe(struct device *dev,
+>   			   struct panel_simple *panel)
+>   {
+>   	struct display_timing *timing;
+> +	struct device_node *endpoint;
+>   	const struct device_node *np;
+>   	struct panel_desc *desc;
+>   	unsigned int bus_flags;
+>   	struct videomode vm;
+> +	u32 bus_format;
+>   	int ret;
+>   
+>   	np = dev->of_node;
+> @@ -477,6 +481,51 @@ static int panel_dpi_probe(struct device *dev,
+>   	of_property_read_u32(np, "width-mm", &desc->size.width);
+>   	of_property_read_u32(np, "height-mm", &desc->size.height);
+>   
+> +	endpoint = of_graph_get_endpoint_by_regs(np, -1, -1);
+> +	if (endpoint &&
+> +	    !of_property_read_u32(endpoint, "bus-format", &bus_format)) {
+> +		/* infer bpc from bus-format */
+> +		switch (bus_format) {
+> +		case DT_MEDIA_BUS_FMT_RGB565_1X16:
+> +			desc->bus_format = MEDIA_BUS_FMT_RGB565_1X16;
+> +			desc->bpc = 6;
+> +			break;
+> +		case DT_MEDIA_BUS_FMT_RGB666_1X18:
+> +			desc->bus_format = MEDIA_BUS_FMT_RGB666_1X18;
+> +			desc->bpc = 6;
+> +			break;
+> +		case DT_MEDIA_BUS_FMT_RGB666_1X24_CPADHI:
+> +			desc->bus_format = MEDIA_BUS_FMT_RGB666_1X24_CPADHI;
+> +			desc->bpc = 6;
+> +			break;
+> +		case DT_MEDIA_BUS_FMT_BGR888_1X24:
+> +			desc->bus_format = MEDIA_BUS_FMT_BGR888_1X24;
+> +			desc->bpc = 8;
+> +			break;
+> +		case DT_MEDIA_BUS_FMT_GBR888_1X24:
+> +			desc->bus_format = MEDIA_BUS_FMT_GBR888_1X24;
+> +			desc->bpc = 8;
+> +			break;
+> +		case DT_MEDIA_BUS_FMT_RBG888_1X24:
+> +			desc->bus_format = MEDIA_BUS_FMT_RBG888_1X24;
+> +			desc->bpc = 8;
+> +			break;
+> +		case DT_MEDIA_BUS_FMT_RGB888_1X24:
+> +			desc->bus_format = MEDIA_BUS_FMT_RGB888_1X24;
+> +			desc->bpc = 8;
+> +			break;
+> +		case DT_MEDIA_BUS_FMT_RGB888_1X32_PADHI:
+> +			desc->bus_format = MEDIA_BUS_FMT_RGB888_1X32_PADHI;
+> +			desc->bpc = 8;
+> +			break;
+> +		default:
+> +			dev_err(dev, "%pOF: unknown bus-format property\n", np);
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	of_node_put(endpoint);
+> +
+>   	/* Extract bus_flags from display_timing */
+>   	bus_flags = 0;
+>   	vm.flags = timing->flags;
+
+I understand that it is important to add a bus-format property for dumb
+dpi-panels, and I agree with the implementation in the patch-set.
+
+However,
+I do not yet fully understand Rob's comments on the dt-bindings side of
+patch set (patch 1/4) and what consequences it may cause if that remains
+unresolved.
+
+Given that the bus-format property gets added, I do not see any concern
+with the panel-simple driver patch.
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Aradhya Bhatia <a-bhatia1@ti.com>
 
 
-Best regards,
-Krzysztof
+Regards
+Aradhya

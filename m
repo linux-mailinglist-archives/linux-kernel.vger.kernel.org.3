@@ -2,181 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56747588F45
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6EC588F4E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238042AbiHCPUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
+        id S238041AbiHCPZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238097AbiHCPUi (ORCPT
+        with ESMTP id S233041AbiHCPZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:20:38 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E76431231
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:20:35 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id x1-20020a056830278100b00636774b0e54so2448643otu.4
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:20:35 -0700 (PDT)
+        Wed, 3 Aug 2022 11:25:08 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D825FDB
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=RPqGFZtbNqgICpWV/6VvhSR6n3AOi6dZZb+5V7yogyQ=;
-        b=eKxcY/wUV1t5iGFQOTkC3uUqXsNlO3wJPUXpinu2/pZFiIuEZDbShMVl1SWFB8VMKG
-         dN33busgN2TumcApmrWbU9bmxspzUC3EobauqLvOHnBA8X1FgGKATmogtCPRFVJX7swX
-         jnEljBTuf+JFh+gnVMEfcFQpvfPapnczKgq9A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=RPqGFZtbNqgICpWV/6VvhSR6n3AOi6dZZb+5V7yogyQ=;
-        b=I5UBTZgdBufvX66Cl1EsEgdOdhQlXF+Pvrk3+WM9zb6n7K2CE8mi8FsGx4hgFkcJYV
-         hWWVgJN7HW3m1EEegt+ZjCsAnPknfcZ6+fliOFccHaKZXCMfNv9uarY2k5T/Q9hRIEFU
-         aNc8+epHDaeswwF2zQ7wDWdH1lAzYGXnHX1WEwc48Y9CG24Rga0/bHAUwFB4JdhxquHI
-         3XisqifcGwHpjBG3j06OgEolWQa3i/OEVjrkEkf8bGjTgVen5KGgtRKitJp0KzjMBuYv
-         qH0vLKixm2+EK1jk2oCJ1jC7UAIsrmo4XLPHcJfvWUDdMTqhqM+vHYoI2uFOQ4OiVpCW
-         SowQ==
-X-Gm-Message-State: AJIora+b3yfe3RRk/6u8J9g79ggh3LD60WIs1VPD/DgXtdfadcQqqO+D
-        poH1K/VtddEKH7W8jgw/QtUe1Q==
-X-Google-Smtp-Source: AGRyM1vhYxujzT2YaLXCnoBJSDqDHPUJMnPpsU0AX9VW0hT0pmIMq5BAvFR7alVbeYb7pUS4X0XAlA==
-X-Received: by 2002:a9d:6007:0:b0:61c:ecd2:ac55 with SMTP id h7-20020a9d6007000000b0061cecd2ac55mr8737434otj.32.1659540034249;
-        Wed, 03 Aug 2022 08:20:34 -0700 (PDT)
-Received: from [192.168.0.41] ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id fo22-20020a0568709a1600b0010eaeee89a1sm3056992oab.46.2022.08.03.08.20.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 08:20:33 -0700 (PDT)
-Message-ID: <aad6c2cb-abdd-b066-9d1d-d0f415256ae6@cloudflare.com>
-Date:   Wed, 3 Aug 2022 10:20:32 -0500
+  d=amazon.es; i=@amazon.es; q=dns/txt; s=amazon201209;
+  t=1659540307; x=1691076307;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Tbu2vI/tuQpJhdPLbiU7SzaNS+QVhrT4UaYznxDPAGo=;
+  b=PwiM9MseAso+d9qYizAKUqLkzNMJBd+ArBmzMTnX4w8r8lSzqCkyWzQe
+   AtETtTXtohYTHIK8sRTgO9P5A+pLYcAKgsERe/QeDGG4xQ6oJPdxjJ4Bl
+   EmV/bK/n0KbV9ldI6JC8B9eYNsIIyzLGCzDVFHI+DNJX2v0+5abJ1Raz/
+   M=;
+X-IronPort-AV: E=Sophos;i="5.93,214,1654560000"; 
+   d="scan'208";a="115297759"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 15:21:44 +0000
+Received: from EX13D37EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com (Postfix) with ESMTPS id C002143D01;
+        Wed,  3 Aug 2022 15:21:42 +0000 (UTC)
+Received: from f4d4887fdcfb.ant.amazon.com (10.43.162.134) by
+ EX13D37EUA003.ant.amazon.com (10.43.165.7) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Wed, 3 Aug 2022 15:21:37 +0000
+From:   <bchalios@amazon.es>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <bchalios@amazon.es>, <tytso@mit.edu>, <Jason@zx2c4.com>,
+        <dwmw@amazon.co.uk>, <graf@amazon.de>, <xmarcalx@amazon.co.uk>,
+        <gregkh@linuxfoundation.org>
+Subject: [PATCH 0/2] virt: vmgenid: add generation counter
+Date:   Wed, 3 Aug 2022 17:21:25 +0200
+Message-ID: <20220803152127.48281-1-bchalios@amazon.es>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     Martin KaFai Lau <kafai@fb.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, songliubraving@fb.com,
-        yhs@fb.com, john.fastabend@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
-        tixxdz@gmail.com
-References: <20220721172808.585539-1-fred@cloudflare.com>
- <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
- <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <87a68mcouk.fsf@email.froward.int.ebiederm.org>
-From:   Frederick Lawler <fred@cloudflare.com>
-In-Reply-To: <87a68mcouk.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Originating-IP: [10.43.162.134]
+X-ClientProxiedBy: EX13D07UWB003.ant.amazon.com (10.43.161.66) To
+ EX13D37EUA003.ant.amazon.com (10.43.165.7)
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/2/22 4:33 PM, Eric W. Biederman wrote:
-> Paul Moore <paul@paul-moore.com> writes:
-> 
->> On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
->>
->>> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
->>>> While creating a LSM BPF MAC policy to block user namespace creation, we
->>>> used the LSM cred_prepare hook because that is the closest hook to prevent
->>>> a call to create_user_ns().
->>>>
->>>> The calls look something like this:
->>>>
->>>> cred = prepare_creds()
->>>> security_prepare_creds()
->>>> call_int_hook(cred_prepare, ...
->>>> if (cred)
->>>> create_user_ns(cred)
->>>>
->>>> We noticed that error codes were not propagated from this hook and
->>>> introduced a patch [1] to propagate those errors.
->>>>
->>>> The discussion notes that security_prepare_creds()
->>>> is not appropriate for MAC policies, and instead the hook is
->>>> meant for LSM authors to prepare credentials for mutation. [2]
->>>>
->>>> Ultimately, we concluded that a better course of action is to introduce
->>>> a new security hook for LSM authors. [3]
->>>>
->>>> This patch set first introduces a new security_create_user_ns() function
->>>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
->>> Patch 1 and 4 still need review from the lsm/security side.
->>
->>
->> This patchset is in my review queue and assuming everything checks
->> out, I expect to merge it after the upcoming merge window closes.
-> 
-> It doesn't even address my issues with the last patchset.
+From: Babis Chalios <bchalios@amazon.es>
 
-Are you referring to [1], and with regards to [2], is the issue that the 
-wording could be improved for both the cover letter and patch 1/4?
+Linux recently added support for the VM Generation ID mechanism from
+Microsoft. The way this works currently is using the 128-bit blob
+provided by the vmgenid device to re-seed the RNG. While this works it
+has two main issues, (a) it is inherently racy due to the fact that it
+relies on a ACPI notification being delivered and handled and (b) the ID
+is unsuitable for exposing to user-space.
 
-Ultimately, the goal of CF is to leverage and use user namespaces and 
-block tasks whose meta information do not align with our allow list 
-criteria. Yes, there is a higher goal of restricting our attack surface. 
-Yes, people will find ways around security. The point is to have 
-multiple levels of security, and this patch series allows people to add 
-another level.
+This patch-set extends the vmgenid device to introduce a generation
+counter, a 32-bit counter which is different every time the unique ID
+changes. The addition to the original implementation in QEMU can be
+found here:
+https://lists.nongnu.org/archive/html/qemu-devel/2022-08/msg00524.html.
 
-Calling this hook a regression is not true since there's no actual 
-regression in the code. What would constitute a perceived regression is 
-an admin imposing such a SELinux or BPF restriction within their 
-company, but developers in that company ideally would try to work with 
-the admin to enable user namespaces for certain use cases, or 
-alternatively do what you don't want given current tooling: always run 
-code as root. That's where this hook comes in: let people observe and 
-enforce how they see fit. The average enthusiasts would see no impact.
+The first patch re-works slightly the current vmgenid driver to add a
+function that parses an object from the vmgenid device and returns the
+physical address of the vmgenid data. The second patch uses that
+function to parse additionally the address of the generation counter
+from the vmgenid namespace. The counter is then exposed to the
+user-space through a misc-device which provides `read` and `mmap`
+interfaces.
 
-I was requested to add _some_ test to BPF and to add a SELinux 
-implementation. The low hanging fruit for a test to prove that the hook 
-is capable of doing _something_ was to simply just block outright, and 
-provide _some example_ of use. It doesn't make sense for us to write a 
-test that outlines specifically what CF or others are doing because that 
-would put too much emphasis on an implementation detail that doesn't 
-matter to prove that the hook works.
+Babis Chalios (2):
+  virt: vmgenid: add helper function to parse ADDR
+  virt: vmgenid: add support for generation counter
 
-Without Djalal's comment, I can't defend an observability use case that 
-we're not currently leveraging. We have it now, so therefore I'll defend 
-it per KP's suggestion[3] in v5.
+ Documentation/virt/vmgenid.rst | 120 ++++++++++++++++++++++++++
+ drivers/virt/vmgenid.c         | 151 ++++++++++++++++++++++++++++-----
+ 2 files changed, 251 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/virt/vmgenid.rst
 
-By not responding to the email discussions, we can't accurately gauge 
-what should or should not be in the descriptions. No one here 
-necessarily disagrees with some of the points you made, and others have 
-appropriately responded. As others have also wrote, you're not proposing 
-alternatives. How do you expect us to work with that?
+-- 
+2.37.1
 
-Please, let us know which bits and pieces ought to be included in the 
-descriptions, and let us know what things we should call out caveats to 
-that would satisfy your concerns.
-
-Links:
-1. 
-https://lore.kernel.org/all/01368386-521f-230b-1d49-de19377c27d1@cloudflare.com/
-2. 
-https://lore.kernel.org/all/877d45kri4.fsf@email.froward.int.ebiederm.org/#t
-3. 
-https://lore.kernel.org/all/CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com/
-4. 
-https://lore.kernel.org/all/CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com/#t
-
-> 
-> So it has my NACK.
-> 
-> Eric
+Amazon Spain Services sociedad limitada unipersonal, Calle Ramirez de Prado 5, 28045 Madrid. Registro Mercantil de Madrid . Tomo 22458 . Folio 102 . Hoja M-401234 . CIF B84570936
 

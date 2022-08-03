@@ -2,118 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5097558915A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0208589150
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238229AbiHCR0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
+        id S238093AbiHCRZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238136AbiHCR0H (ORCPT
+        with ESMTP id S236279AbiHCRZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:26:07 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54B9564DF
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:26:04 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-32269d60830so178546987b3.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:26:04 -0700 (PDT)
+        Wed, 3 Aug 2022 13:25:45 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B2A17AA1;
+        Wed,  3 Aug 2022 10:25:42 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 8-20020a05600c024800b003a2fe343db1so1179884wmj.1;
+        Wed, 03 Aug 2022 10:25:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=GFxAw/jBxe5LyMOP+HmBMT2P1a4JnHFp13BCTBWGaAQ=;
-        b=S9GOm9JhkpXet5QE1g6qStdUS01m5oEGnSr+xoXFKylVXyDOjto9yj3KvBUKmkWYHQ
-         QtriN3zqO/SCTIN7N289ER4t7VIU4mbb7r7xAQ+IUUK3q2PufBwzCYUJ4q+YB+2hA46n
-         kDZYvRlVOT0GhCBLTrCZhbjWJogEtkf+Nh0e1uwp9xoqotk666gubA9i9DzFCCIxPJjZ
-         rIXcZy7zzvvRdhvN8upFK0Ld8TerAmcZpsBIt8yX18aeys0qTpXLo6wFf8cy/2rbM5VD
-         1DrlTtkPiROfJID3eSL+RZMaU7fVTKZeh6KukejUV8OKYfukA5RnU/D+ej7fz7b/wN+E
-         Esjg==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GXZ4xXNRwdNX246uTCDjp/6UfuNozlv9ogOaTndHxOo=;
+        b=BqcDSD4qn8OphNeXpd4d1tICbsWAbV05Cvz+aFGaHqgRoneYmfEIQI10k2dCySJ0oG
+         uD2WrHSD66whZkjrFUTtw0Cl9ZNMwWzlBvEPk/5HwAhrvRgfpvgWgst01K/6+4r6ckV8
+         3pDECBqxeMSC2SgqdcphAHHqEw0WbFd00j4k0yJebkVBonPd44SLNvBtqSxZQVF4tYii
+         cmnypkd1Tb990NlTdqggfgVNlTBH1xAlHz+xCO71uEyKLvwSV8DuYF+wapx/FCxeJ4ku
+         AgpkIaJpMEj2n9xtMl+b0i4bk1dewK6pXeZpClNTRJ+Am3qGIGHi5RzV7biuwysveun+
+         5KjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=GFxAw/jBxe5LyMOP+HmBMT2P1a4JnHFp13BCTBWGaAQ=;
-        b=luEvIuRbnSiGTSAGcN67sCsXlr4C3GPBQm4p7Lyn8kbgRQ6dMsvwMNzm0eD1yMa19/
-         pbBvlAWr4WAxfYfSxjtYoW/EkmgaN63kqFxXukvkYKg9PyD50i4aWysBjYdPQ+ZRy8Ps
-         YRk7t0PZmvHdvaMfiPtI+PzQEbKSfobJsufTY/mJzXmkQxBvB43vR6+Wc19NGxtxbN9j
-         FCtxKHNVjKKmwTkT3linv9SvwzO1SPWVN2ebdgdOcCGp0MQ7bg0WdNAz+68wxDoIzw5a
-         H5kDL+ZdfKloCDqTyfKTEhO95WVbiHIncx8n5e9tAabbh0uXloMr8kZj58nDGS0kHWxw
-         ZO8A==
-X-Gm-Message-State: ACgBeo3NdKTxykidGBL+EZvqt3S9/+eGWDQC/7Xrg/KifI/gSeD2ox2q
-        nbqPmE3EgLt19867xfV97u/0AkFk0IAg0/TReKlems+QCjg=
-X-Google-Smtp-Source: AA6agR7Pj2xv/8h3UZoq7GMEfel/PV3Cx0fY7u6nPz19urddu/CnfjbVwmAi8z7209lpFtoa6svstVuCqHFOmXbo1IQ=
-X-Received: by 2002:a81:7586:0:b0:31f:658e:1ac7 with SMTP id
- q128-20020a817586000000b0031f658e1ac7mr25234452ywc.295.1659547563352; Wed, 03
- Aug 2022 10:26:03 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=GXZ4xXNRwdNX246uTCDjp/6UfuNozlv9ogOaTndHxOo=;
+        b=rvP3lRA4s2rGq7xFZHGYIJ3mWjP3b+aDfEKAbLxgMvJaeiV2H7SlnyqmHsOKWVzlRm
+         fVZmfMRysrCbVohNjsNYJQ9aQLsQZ55V5Ixsjq48UFkc/tpVwiqsTKbPxcU5EWH/VKc5
+         ustAHOvj36iWt5FYLWPLdC6HipoiT4RK/f7XdhWlz8OC9G0cgOrXjZwWNvxo/hCBRa5E
+         79LwskcF+kdJ+HeHqf9ereOCzeopkkpUred3fOmvc9dXackUsAS9OX1gEWuA+uwTr008
+         GZhaUl9p+R2B0AkBB/AuLuIdHHpFrPfiPMkJfnVmfWU+EAENuBGMJZm3eBlD9+6yk42k
+         mOLA==
+X-Gm-Message-State: ACgBeo2oDqITane6Kux9IEqm7vF3kjIv4bTXaEFRwul3TMgiFfX10eOg
+        Az7hd/hGmambK9Qky24CDi0=
+X-Google-Smtp-Source: AA6agR7uecIPoAy4JexF43f01e/Ul4jeTMonddQbm0RbqwtLyfKDXjbJXnVTFT8AB1q0vYGU0QVTTg==
+X-Received: by 2002:a05:600c:2854:b0:3a3:1551:d7d with SMTP id r20-20020a05600c285400b003a315510d7dmr3400140wmb.174.1659547541214;
+        Wed, 03 Aug 2022 10:25:41 -0700 (PDT)
+Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
+        by smtp.gmail.com with ESMTPSA id s14-20020a5d424e000000b0021d7fa77710sm18608588wrr.92.2022.08.03.10.25.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 10:25:40 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 3 Aug 2022 19:25:38 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Kyle Huey <me@kylehuey.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        kvm@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] x86/fpu: Allow PKRU to be (once again) written by ptrace.
+Message-ID: <Yuqvkufu7Hu4drL6@gmail.com>
+References: <20220731050342.56513-1-khuey@kylehuey.com>
+ <Yuo59tV071/i6yhf@gmail.com>
+ <CAP045ArF0SX84tDr=iZoK=EnXK2LsXYut3-KMkCxQO2OOhn=0A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-12-glider@google.com>
- <20220702001806.1379-1-hdanton@sina.com>
-In-Reply-To: <20220702001806.1379-1-hdanton@sina.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 3 Aug 2022 19:25:26 +0200
-Message-ID: <CAG_fn=VUOgfjzWEU+2dTs=gd0hdW9YEbT=sdW8wgx93c3cASTQ@mail.gmail.com>
-Subject: Re: [PATCH v4 11/45] kmsan: add KMSAN runtime core
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP045ArF0SX84tDr=iZoK=EnXK2LsXYut3-KMkCxQO2OOhn=0A@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 2, 2022 at 2:18 AM Hillf Danton <hdanton@sina.com> wrote:
->
-> On Fri,  1 Jul 2022 16:22:36 +0200 Alexander Potapenko wrote:
-> > +
-> > +bool kmsan_internal_is_module_addr(void *vaddr)
-> > +{
-> > +     return ((u64)vaddr >=3D3D MODULES_VADDR) && ((u64)vaddr < MODULES=
-_END);
-> > +}
-> > +
-> > +bool kmsan_internal_is_vmalloc_addr(void *addr)
-> > +{
-> > +     return ((u64)addr >=3D3D VMALLOC_START) && ((u64)addr < VMALLOC_E=
-ND);
-> > +}
->
-> Given is_vmalloc_addr(), feel free to add a one-line comment showing the
-> reason for adding the kmsan internal version.
 
-Ok, will do. I'm also going to move these two to mm/kmsan/kmsan.h, so
-that they can be inlined.
-Keeping internal versions allows us to not have these two functions
-instrumented by KMSAN, which gains us some performance and (more
-importantly) prevents potential recursion.
+* Kyle Huey <me@kylehuey.com> wrote:
 
-In fact right now the original is_vmalloc_addr() doesn't contain
-instrumented memory accesses and is thus safe to be called from KMSAN
-runtime without causing recursion.
-I am not sure though whether we can rely on that remaining true, so I
-added it along with the internal version of is_module_address(), which
-actually has the problem.
+> > Also, what's the security model for this register, do we trust all 
+> > input values user-space provides for the PKRU field in the XSTATE? I 
+> > realize that WRPKRU already gives user-space write access to the 
+> > register - but does the CPU write it all into the XSTATE, with no 
+> > restrictions on content whatsoever?
+> 
+> There is no security model for this register. The CPU does write whatever 
+> is given to WRPKRU (or XRSTOR) into the PKRU register. The pkeys(7) man 
+> page notes:
+> 
+> Protection keys have the potential to add a layer of security and 
+> reliability to applications. But they have not been primarily designed as 
+> a security feature. For instance, WRPKRU is a completely unprivileged 
+> instruction, so pkeys are useless in any case that an attacker controls 
+> the PKRU register or can execute arbitrary instructions.
 
-> Hillf
+Ok - allowing ptrace to set the full 32 bits of the PKRU register seems OK 
+then, and is 100% equivalent to using WRPKRU, right? So there's no implicit 
+masking/clearing of bits depending on how many keys are available, or other 
+details where WRPKRU might differ from a pure 32-bit per thread write, 
+correct?
 
+Thanks,
 
-
-
---
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+	Ingo

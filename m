@@ -2,163 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E1958928F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50A2589291
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236565AbiHCTDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 15:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S237919AbiHCTEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 15:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiHCTD1 (ORCPT
+        with ESMTP id S229680AbiHCTEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 15:03:27 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0D8625A
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:03:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nEJoQCbd5uCbVn7WDPiG1raPjaO85yXeEBP5YjBavMg1ssoe5N2nIUTibcYNiYnldCuoYB+44iS0A6+qRhKZEzB6TDIw+b1B6IR6fjK9QV2zvtHx4A+CuJ04HkGH6Mg7OHNm5s5LQbO59WVljfSwdBfxrzQwU5sDgyZfv1ZbG8uKj2M4KpETx5AoXmvmbZQ8kkLPyAk082v+1y8CzV6HqjSU+5q/rbfkUi1+F8qYZP76F4LKtkpFKzmisv8okKUmsbyjlof0ixNMExrI6FiUHKDpo44QD75VxSIKYYnHVzY8a+QwzlkNsanCWTAMTKzBPdxfQk+fBXpp5hp5kjGQNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0BGCgLYxjcy8Z0DB6kJwVxzDvIfFfatik/juVWBCkd0=;
- b=G8CRDz/pmHetZhutquwd+yLCOT4RaceroaNmt4VPiAZ8oHHV1VAxRO6rX8MpDS6wkKomzOoMF3dOtUipdM+Wx5zXUUzKFk+MJG/olaofuGEZ7gJLlFCsCJmbT0fkFUEGyBwi086nwLMY8h45G9z+KHrrvVO41gzhuRPGlTI2vRBwCUjb4oVg34LGd4w0ASpw95MIB0gBc/NFmdpmYN5lxhiXRqnMedqWajfrlM24N1cgteS42faExtoZc4o0L2cnHEgm5OWdtnFrOvzURfWWl0m04y4muSBp4JZH0VK5pFChLTTz+IF7lPN46yq/l2VOjWWb0s+Lcb3PS3FYvbVzVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0BGCgLYxjcy8Z0DB6kJwVxzDvIfFfatik/juVWBCkd0=;
- b=TFyZi6MtN6Ab/bx5PvwyZBIVkqQMn5HrAUfqqS3/pZwVLP6bmkuJPCGhQGpTw321TCumYjDkH9VnRw00b4+FKv1UOWQHM9oKymYJzR29dvZZJinN9czBT/V4SrK5w+Jtv2uTnm1V4z4hjzbk58IqMChN7QkJMxbPJLZ9cS/fHbPVjLXX3CHAJtWX/y1lOCKfZuuQRkMEaebAHvJR0Dh7e1dBV4GvJWoXj8BBcDFQk/9/CpDNcxdFz+NkqeLimj1N8Neh6l25vFEl13NUeU+JvJupL7BwEKnwgpvLojtdv77JGrb5DRldATjaUje1vze2QvIAdjKlo2JJ7gy8Cq2mng==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SN6PR12MB2815.namprd12.prod.outlook.com (2603:10b6:805:78::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.16; Wed, 3 Aug
- 2022 19:03:24 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::1a7:7daa:9230:1372]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::1a7:7daa:9230:1372%7]) with mapi id 15.20.5504.014; Wed, 3 Aug 2022
- 19:03:24 +0000
-Date:   Wed, 3 Aug 2022 16:03:23 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v10 04/12] iommu: Add attach/detach_dev_pasid iommu
- interface
-Message-ID: <YurGexaP/Q+N02dT@nvidia.com>
-References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
- <20220705050710.2887204-5-baolu.lu@linux.intel.com>
- <20220723141118.GD79279@nvidia.com>
- <686b137f-232a-2a78-beb0-e4373bd20959@linux.intel.com>
- <20220725144005.GE3747@nvidia.com>
- <6da27a6b-b580-4ba4-24c8-ebdfb2d9345d@linux.intel.com>
- <20220726135722.GC4438@nvidia.com>
- <806b1437-441b-253b-7f52-ee7a7a9053e9@linux.intel.com>
- <Yukac8X81CP7gDsM@nvidia.com>
- <3eb62531-fa1c-4c78-c1d2-526a3758a033@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3eb62531-fa1c-4c78-c1d2-526a3758a033@linux.intel.com>
-X-ClientProxiedBy: BL0PR0102CA0028.prod.exchangelabs.com
- (2603:10b6:207:18::41) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 3 Aug 2022 15:04:38 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33202625A;
+        Wed,  3 Aug 2022 12:04:37 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id v3so21704420wrp.0;
+        Wed, 03 Aug 2022 12:04:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EZmFCP5kEPrv3Hm+gp8AsaEcC+Ii9IBa+hXoHMy9CTk=;
+        b=n77uky2dkW/DDgUZElKQ1ym5ncS3KR9Gi2OHLMypQODiLH4I2XkQ7HMkrDRsEfTzOI
+         EkM9d+g84LWHgWV6DpAU3mqs0CHg/fCt0NRjDzewWMYPj3j8QM96VyJceBoPexoN+uOb
+         Z2IUqemn60XCw8v8v+Fi3s7qCFnY6iZQ/z7lK9CPFvcYiJbaF9gXs05u2lkm85uDwI9E
+         jlnAc3aEpeDkp3OCrpzcEUYYATPK5CVCNu4UY8QSCFP+/KM8GpgHaHlC2E2AtVGwUTyY
+         toqGjv57au9i6ZJHDe2R/VzDoOJUocclscou/aLxQyVezoIwMK3EpCFWaYY3RyRsDB+9
+         cuuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EZmFCP5kEPrv3Hm+gp8AsaEcC+Ii9IBa+hXoHMy9CTk=;
+        b=rYKJxI6Pu30S74+NyC3A1D0OslydOeCEBJfX0RxCBQrXLEjMlbt1ngh6qV4hQ8g+Sz
+         fCdvIlAOaY/U5XE7DMlhP24y4+Nqp4SL1TwcwosqgTZX0w0g3Mdala9SjclhNK7u3toN
+         4DdK9qT4Eh4B6IMKu1A/O35wlG1nJU9YYVMDnXDPdyM1sXxfMKfQSdoNsqd3sIPQyP+M
+         8CGhGjOhjPZLXUHF+hXy7+e0guKxoLhuAJaZY+HPBF4Ys3fUWKcMehEiN/tBcYZqu9MF
+         iMF3JRUbcP24k3VcaftK3Y6QqejFxCpAQU1UQNRf/k4qXJmue0X/uexKnSpeMA9uveo4
+         LiWQ==
+X-Gm-Message-State: ACgBeo0qyN/pZ6y1BbkdGcTpf+LmYxNTDhLLUFvaU7ZmNTDeDnECDX9y
+        I5LnXM9sWpEiEOj+h++WILI=
+X-Google-Smtp-Source: AA6agR7+VhpNvm+P2HOcuwsa4FwFENjegKTGY9vY8pis3XSu8qVYETNJHTMdH+eumKhcytWgfL1HLA==
+X-Received: by 2002:a5d:52cb:0:b0:21a:3cc5:f5f4 with SMTP id r11-20020a5d52cb000000b0021a3cc5f5f4mr17430417wrv.367.1659553475656;
+        Wed, 03 Aug 2022 12:04:35 -0700 (PDT)
+Received: from opensuse.localnet (host-79-27-108-198.retail.telecomitalia.it. [79.27.108.198])
+        by smtp.gmail.com with ESMTPSA id c2-20020adffb42000000b0021e860f1bd4sm18978019wrs.100.2022.08.03.12.04.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 12:04:33 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Evgeniy Dushistov <dushistov@mail.ru>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Ira Weiny <ira.weiny@intel.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] fs/ufs: Replace kmap() with kmap_local_page()
+Date:   Wed, 03 Aug 2022 21:04:32 +0200
+Message-ID: <4784407.31r3eYUQgx@opensuse>
+In-Reply-To: <2589292.k3LOHGUjKi@opensuse>
+References: <20220516101925.15272-1-fmdefrancesco@gmail.com> <YoJl+lh0QELbv/TL@casper.infradead.org> <2589292.k3LOHGUjKi@opensuse>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ef6dbdd4-c6b6-4f8c-8eb7-08da7582d75a
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2815:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R4nG3Vew/mFcT6L/4GwJKQBHGcly9pi6nvdvRbuSstmbCPCvHKeJakS3/0v4jLSXfwciWAQZ3yN4MxJlYd7XzhgVN8wSYQuAJ5xR2m5O+hGWNz7dxSnFJivmeO1R5/JjYtl6eIj05bYKmGH1THPrzGiCkPUEtcEwT9ChBRIohR52CMCRH1lJv4GneOhJ/QUT2imMnzNimsG3WsyfAJjQ5PVJRbIKfI+uGheyY1U+qvzQ9EC3E6evdD2Ot3RyrerPmPW0lvgYfY7C9obH/18KjOU5OnPiRUZQ7NFfHkrRemsncVrFgwQbYRB51B5/vetldzGaH7+1xF1rN2D7apRYvZPzoI9lZNoHJoVGqbMzsQvKpUDOitJDi70/Zr9C2hkCh0tW8gW44GupVMtdvtkOltbwSv0/JA29drHLIE9ep1hvphB20jrKiLLoaTBSyF27Dz00YNhCZwDAoiqMjxEnztzS5FqlRgWDywkw00PfkWDH1ryYk4l5NenRZW+V9TNJ3qZNoIfWrCFE3dG7N2Xku6lpu9AvXJbLT4K2TEXWQL2lDsJAhLuOJyqaSPraT6IUdYbGPcO4HVPO90hmOJDDG+clXdGDb3EgZg3VDScXupytKd51GeFR7a1WIKFs83jdGttqc3LKtRaBc2k9CYoMxkSsA/Cw3TTYJSnqsWmtuiy1/lLToWVZCQkPItPpqibQWe8LQCMFXWlPrlWjpTA//LFG/3++F+cAJIWivLKIaWc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(346002)(39860400002)(376002)(136003)(8676002)(6506007)(66476007)(66946007)(41300700001)(6512007)(26005)(6486002)(2906002)(7416002)(4326008)(66556008)(36756003)(5660300002)(8936002)(6916009)(54906003)(316002)(86362001)(478600001)(186003)(38100700002)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sMb4Fh77un6R5LVNq/M6+StWq1I9oRKFSNWkQjR1hCA9bN++2RVLrxPZztMe?=
- =?us-ascii?Q?StmHoDkcbkid2XmbIA/3Fx2hD8btFRREHTQew0QaunRiZrOgL11oASom/7g/?=
- =?us-ascii?Q?n5KOzzd9SG+dFH2GBN6HbIRhIUOaYCRyNxaRPG9U33V2wTVT9kMJjzRR3W3G?=
- =?us-ascii?Q?EITeJkJ/LxAEcSfed5HiuTkBXBYiF1LMUaPkR66M1cRp1GY4lFSmUEkw82+o?=
- =?us-ascii?Q?gPRkER/KfrYlsKFXGIblml+oGpKfUOsQ9wpXMaSf9jSfBiasBpzI/+oxs12q?=
- =?us-ascii?Q?CyxMfmUqjPWrqqJvkOTTMqe5MGRctwFLxZKU9UTZNzYiw0/lDHvvvAilrtcT?=
- =?us-ascii?Q?CXpCBr/bUA4N2NsMS6Fw5Ta/EJhZHOYXWw+XhwMlO7hFO+0ImPEeugLIoZcZ?=
- =?us-ascii?Q?oE9LxfX4ArynFgieoZkUAdrKHEQOQ7PwlaXGldH1mtZQH1uVIzfWGO5o11l3?=
- =?us-ascii?Q?XcdhbLZRlSgOxfBNryVfyouiu1+m78MLfFiWGVX/KLai3thyBEv5nmPJAmtK?=
- =?us-ascii?Q?tf27cc6car5wt7znJS51e+v+TqS4P0heJdkOIRl/22/tLAbPDQtdIygx5NiT?=
- =?us-ascii?Q?gm4expOle/m5iw+/V/N4c9rEZI9yDsm/UbV8aU1s4jNYM8Bf8IGtihlIADDU?=
- =?us-ascii?Q?3vRhvN79RtrhXjAcnxYMN5uSlvLLfFPNXbBQP9BFyQllD/NaLJDMs6wMi10O?=
- =?us-ascii?Q?ulLUwPdOeS1Vatz2qC7FyP3bBy6aBnO3kmW/PaQLBj5Pda/Inp1afgLpaK+E?=
- =?us-ascii?Q?vXbSP4ryR3hxw0nx+C/SqsRCwRZvTsHCnpd8ub624AhMpxISFkjFWW3WPqNT?=
- =?us-ascii?Q?veFHTf8V+/3uxppIDBeONhGVXF/4bwFW4ygutk62XPCuhUjCkdIsmDlmqfhO?=
- =?us-ascii?Q?FB/JxMDtzJolXjTzoMAnm7akUth9oajKC6jqkvw8WrZXgYt3riNKE/A3uSp8?=
- =?us-ascii?Q?iv6xMJ38F5JqXOvnx1UGzZEIIQ+Lnz9JMeifzcc8hyXYyXvCplx2Fx3Q8m6S?=
- =?us-ascii?Q?xK7PmvsQHiJS25UoWhN7tgm+o7kHF+w4/mk3E67KM23fkJLgkPxZ+EdzH64R?=
- =?us-ascii?Q?ZO/8ECA6qnQuQdAT17xtPh7rxmdO5h1/gp0Tn+ZDk7WNvVeBnB1I3Dgs86+e?=
- =?us-ascii?Q?hsygYQ142arrZyxuAQHG4a5iXCvrl6EdPwQPXvZB6mvnBFgm2I35mmX0+zX8?=
- =?us-ascii?Q?3ooI9SZs7KC8LDkTSDOToeQ0FQzH+ILzy12sreWlt0frMHhNPMjCDa00PPNF?=
- =?us-ascii?Q?zj9KN6iX9J7qzC2FPx5bb6Yfv6pO5AbJgSskcdGlVZAjwgL3lgqdRgavT24b?=
- =?us-ascii?Q?Sq4cNaFRWRhWPIze13tUXiZ5JxSgwvDeXb+N7Aa1JMow1kyji9j5ymFWFEQv?=
- =?us-ascii?Q?ox2OiKtj3o+o6MaZG8jkK7SxB52aq9+9uZxnJjdUqBPvNiV2mo6WyxUwMgbI?=
- =?us-ascii?Q?lF7JdVKyDWejX5VyhZEeGnD6M1tCV0TX7IZcz0VvEotc1pblBXOFz+s2g8Xl?=
- =?us-ascii?Q?HwtNU9QKS4GihShaz1zgUFpuXe20JzFHg+5ZT4oxJL1xnu+fysTV1m7TCuXH?=
- =?us-ascii?Q?KwHzT5/vwvoyT85cHpY0yaYROVMinuP794t82mDp?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef6dbdd4-c6b6-4f8c-8eb7-08da7582d75a
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2022 19:03:24.7610
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xw7K5nkwWSuNHKuk8Huy30PchL35fPFJWnnR4JLgXNhRQCVTFxC76qb/OnMmdPZ1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2815
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 09:07:35PM +0800, Baolu Lu wrote:
-> +/**
-> + * iommu_device_claim_pasid_owner() - Set ownership of a pasid on device
-> + * @dev: the device.
-> + * @pasid: the pasid of the device.
-> + * @owner: caller specified pointer. Used for exclusive ownership.
-> + *
-> + * Return 0 if it is allowed, otherwise an error.
-> + */
-> +int iommu_device_claim_pasid_owner(struct device *dev, ioasid_t pasid, void
-> *owner)
+On marted=C3=AC 2 agosto 2022 09:06:26 CEST Fabio M. De Francesco wrote:
+> On luned=C3=AC 16 maggio 2022 16:55:54 CEST Matthew Wilcox wrote:
+> > On Mon, May 16, 2022 at 12:19:25PM +0200, Fabio M. De Francesco wrote:
+> > > The use of kmap() is being deprecated in favor of kmap_local_page().=
+=20
+> With
+> > > kmap_local_page(), the mapping is per thread, CPU local and not=20
+> globally
+> > > visible.
+> > >=20
+> > > The usage of kmap_local_page() in fs/ufs is pre-thread, therefore=20
+> replace
+> > > kmap() / kunmap() calls with kmap_local_page() / kunmap_local().
+> > >=20
+> > > kunmap_local() requires the mapping address, so return that address=20
+> from
+> > > ufs_get_page() to be used in ufs_put_page().
+> > >=20
+> > > These changes are essentially ported from fs/ext2 and are largely=20
+based=20
+> on
+> > > commit 782b76d7abdf ("fs/ext2: Replace kmap() with=20
+kmap_local_page()").
+> > >=20
+> > > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> >=20
+> > Have you done more than compile-tested this?  I'd like to know that=20
+it's
+> > been tested on a machine with HIGHMEM enabled (in a VM, presumably).
+> > UFS doesn't get a lot of testing, and it'd be annoying to put out a
+> > patch that breaks the kmap_local() rules.
+> >=20
+> As said in another message of this thread, these changes have only been=20
+> compile-tested. I can't see anything which may break the rules about=20
+using=20
+> local mappings properly.
+>=20
+> I'm working on converting all kmap() call sites I can do across the whole=
+=20
+> kernel to kmap_local_page(). Practically all of those conversions have=20
+> already been reviewed / acked, and many of them have already been taken=20
+by=20
+> their respective maintainers. Others are still too recent.
+>=20
+> Most of those patches have been properly tested on a QEMU/KVM x86_32 VM,=
+=20
+> 4GB to 6GB RAM, booting kernels with HIGHMEM64GB enabled.
+>=20
+> Instead, despite this submission is very old, I haven't yet been able to=
+=20
+> figure out how to test these changes. I really don't know how I can=20
+create=20
+> and test a UFS filesystem.
+>=20
+> Can you please help somewhat with hints about how to test this patch or=20
+> with testing it yourself? I'm thinking of this option because I suppose=20
+> that you may have access to a Solaris system (if I recall correctly, UFS=
+=20
+is=20
+> the default filesystem of that OS. Isn't it?).
+>=20
+> I'm sorry to bother you with this issue, however I'd appreciate any help=
+=20
+> you may provide. I'd hate to see all patches applied but one :-)=20
+>=20
+> Thanks,
+>=20
+> Fabio
+>=20
+=46or the sake of completeness I'd like to add something that I forgot to=20
+mention in the last email...
 
-I don't see a use case for a special "pasid owner"
+The only reference to creating a ufs file system I can find is many years=20
+old and shows using 'newfs' which seems to be a precursor to mkfs.[1] mkfs=
+=20
+does not seem to support ufs.[2][3].
 
-PASID is no different from normal DMA. If the calling driver already
-has the proper ownership of the device/group then it is fine for that
-driver to use any kind of IOMMU attachment, RID, PASID, whatever. It
-doesn't matter *how* the attachment is made.
+This is why I'm not sure how to begin testing a ufs file system.
 
-Remember the series that got dropped about converting all the drivers
-to the new ownership scheme? That is how it should work - owernship
-and domain attach are two different operations and do not get mixed
-confusingly together. (and are you going to repost that series? It
-would be great to get it done)
+[1] https://docs.oracle.com/cd/E19683-01/806-4073/6jd67r9it/index.html
+[2] https://linux.die.net/man/8/mkfs
+[3] https://linux.die.net/man/5/fs
 
-Jason
+Thanks,
+
+=46abio
+
+
+
+
+
+

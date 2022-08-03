@@ -2,73 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA26E588B16
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216C8588B20
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234083AbiHCLZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 07:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
+        id S234796AbiHCL1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 07:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiHCLZD (ORCPT
+        with ESMTP id S229784AbiHCL1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 07:25:03 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67E01D33E;
-        Wed,  3 Aug 2022 04:25:02 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b96so10729255edf.0;
-        Wed, 03 Aug 2022 04:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=rzsx5Tl32YZaKPBUKPIfYuRz4YmHmbjR35PJaDpZxi4=;
-        b=Q36U/PUyD1XC7xp8IKIluUgwPby2NF6JP6vHf2lnL8TNlpGFGQ74Gi+nYiYRKNTjWP
-         6ustjFUsVA7OJmAQLTFce8rpdiK50Wr5FnxIs42rv8cIl7pynUDS/yAv9sUYsDASzE8I
-         8CSFYm3feh5fiIICPAwyhEDuPg1ryHl+Cn/yfy9PSdSAGsV7gOe203Ic2iH67yHHRSrO
-         34un/sIC6WFPubFp+TLykcI8Wz90Kto3+qMdf2q43hRmnaWq8v5h2B4iRPsTI6WxhXz3
-         2EpwBgFs8fUa6M1xgEVS/vHOWCwvOv20tT344I9UfEeBhO07zqaom8l6Bd57SquV2nbE
-         7UBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=rzsx5Tl32YZaKPBUKPIfYuRz4YmHmbjR35PJaDpZxi4=;
-        b=uvBObA0DLzD6uo67S5Odg2VeyXbi8U1RB0sKb92jnHTcs09+fE0uV1Y7rb+41g4a9D
-         zFY4YBLKO6jLbtgHDmErq4vbcVWHSBgL/dDZkqEr7aNgNmNEZ6CaNFDtr/7hFKyuiVnJ
-         pM2U2b1WlJkemRK++1QgCPNXb7F0wx584UzyeVrVhqbzH4NWmACVKDqqu0MEkJi9htd5
-         5T+Zmb+waS7wCW8eEJ2WMgZ49PkFbuwuu/ga+urTQ+YOHnt0WiPsO4nC+QUKKkELbMGn
-         I+aOn/kEPXd2LOmIxFyr0yQBa0LGdfhpFsLRypD10vVJ23fOXJoa57En1yDfq6j2UcKq
-         qYlw==
-X-Gm-Message-State: AJIora8lkfvCRkLK5rO+VYwqhp2MSF1a4R35YGenubKCf7r87jwM2fSp
-        GdLiRwMP7QpRiUxgbBhwyOh5LegylK/dbEoN2R0=
-X-Google-Smtp-Source: AGRyM1sEMFX3FX4WRh9HyclH5SqElJJYGrwCbBNRHs8iaD2aY7oi6LLBuGXGMA2R2pI3JC13sUHbkid9/YWZAmDv6Ig=
-X-Received: by 2002:a05:6402:280b:b0:43b:5d75:fcfa with SMTP id
- h11-20020a056402280b00b0043b5d75fcfamr24651501ede.114.1659525901203; Wed, 03
- Aug 2022 04:25:01 -0700 (PDT)
+        Wed, 3 Aug 2022 07:27:13 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD53B275CF;
+        Wed,  3 Aug 2022 04:27:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=25;SR=0;TI=SMTPD_---0VLGi36p_1659526024;
+Received: from 30.227.65.209(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VLGi36p_1659526024)
+          by smtp.aliyun-inc.com;
+          Wed, 03 Aug 2022 19:27:06 +0800
+Message-ID: <ecf07c1b-a6f3-2537-aacd-a768c437fa7f@linux.alibaba.com>
+Date:   Wed, 3 Aug 2022 19:27:04 +0800
 MIME-Version: 1.0
-References: <20220802212144.6743-1-andriy.shevchenko@linux.intel.com> <87h72tga8y.fsf@kurt>
-In-Reply-To: <87h72tga8y.fsf@kurt>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 3 Aug 2022 13:24:24 +0200
-Message-ID: <CAHp75VcuFMwTn+EBYGJNPZYzMdFcKTrY2W-u7K79OZRHXyoGRA@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 1/1] net: dsa: hellcreek: Get rid of custom led_init_default_state_get()
-To:     Kurt Kanzenbach <kurt@linutronix.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v3] net/smc: fix refcount bug in sk_psock_get (2)
+To:     Hawkins Jiawei <yin31149@gmail.com>,
+        syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, borisp@nvidia.com,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        edumazet@google.com, john.fastabend@gmail.com, kafai@fb.com,
+        kgraul@linux.ibm.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com, 18801353760@163.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        jakub@cloudflare.com, paskripkin@gmail.com,
+        skhan@linuxfoundation.org
+References: <00000000000026328205e08cdbeb@google.com>
+ <20220803080338.166730-1-yin31149@gmail.com>
+From:   Wen Gu <guwen@linux.alibaba.com>
+In-Reply-To: <20220803080338.166730-1-yin31149@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,86 +53,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 7:39 AM Kurt Kanzenbach <kurt@linutronix.de> wrote:
->
-> On Wed Aug 03 2022, Andy Shevchenko wrote:
-> > LED core provides a helper to parse default state from firmware node.
-> > Use it instead of custom implementation.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  drivers/net/dsa/hirschmann/hellcreek_ptp.c | 45 ++++++++++++----------
-> >  1 file changed, 24 insertions(+), 21 deletions(-)
-> >
-> > diff --git a/drivers/net/dsa/hirschmann/hellcreek_ptp.c b/drivers/net/d=
-sa/hirschmann/hellcreek_ptp.c
-> > index b28baab6d56a..793b2c296314 100644
-> > --- a/drivers/net/dsa/hirschmann/hellcreek_ptp.c
-> > +++ b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
-> > @@ -297,7 +297,8 @@ static enum led_brightness hellcreek_led_is_gm_get(=
-struct led_classdev *ldev)
-> >  static int hellcreek_led_setup(struct hellcreek *hellcreek)
-> >  {
-> >       struct device_node *leds, *led =3D NULL;
-> > -     const char *label, *state;
-> > +     enum led_default_state state;
-> > +     const char *label;
-> >       int ret =3D -EINVAL;
-> >
-> >       of_node_get(hellcreek->dev->of_node);
-> > @@ -318,16 +319,17 @@ static int hellcreek_led_setup(struct hellcreek *=
-hellcreek)
-> >       ret =3D of_property_read_string(led, "label", &label);
-> >       hellcreek->led_sync_good.name =3D ret ? "sync_good" : label;
-> >
-> > -     ret =3D of_property_read_string(led, "default-state", &state);
-> > -     if (!ret) {
-> > -             if (!strcmp(state, "on"))
-> > -                     hellcreek->led_sync_good.brightness =3D 1;
-> > -             else if (!strcmp(state, "off"))
-> > -                     hellcreek->led_sync_good.brightness =3D 0;
-> > -             else if (!strcmp(state, "keep"))
-> > -                     hellcreek->led_sync_good.brightness =3D
-> > -                             hellcreek_get_brightness(hellcreek,
-> > -                                                      STATUS_OUT_SYNC_=
-GOOD);
-> > +     state =3D led_init_default_state_get(of_fwnode_handle(led));
->
-> Applied your patch to net-next/master and this yields:
->
-> |drivers/net/dsa/hirschmann/hellcreek_ptp.c: In function =E2=80=98hellcre=
-ek_led_setup=E2=80=99:
-> |drivers/net/dsa/hirschmann/hellcreek_ptp.c:430:10: error: implicit decla=
-ration of function =E2=80=98led_init_default_state_get=E2=80=99; did you me=
-an =E2=80=98led_get_default_pattern=E2=80=99? [-Werror=3Dimplicit-function-=
-declaration]
-> |  430 |  state =3D led_init_default_state_get(of_fwnode_handle(led));
-> |      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> |      |          led_get_default_pattern
->
-> The header is missing:
->
-> |diff --git a/drivers/net/dsa/hirschmann/hellcreek_ptp.c b/drivers/net/ds=
-a/hirschmann/hellcreek_ptp.c
-> |index df339f3e1803..430f39172d58 100644
-> |--- a/drivers/net/dsa/hirschmann/hellcreek_ptp.c
-> |+++ b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
-> |@@ -14,6 +14,8 @@
-> | #include "hellcreek_ptp.h"
-> | #include "hellcreek_hwtstamp.h"
-> |
-> |+#include "../../../leds/leds.h"
-> |+
-> | u16 hellcreek_ptp_read(struct hellcreek *hellcreek, unsigned int offset=
-)
-> | {
-> |        return readw(hellcreek->ptp_base + offset);
->
-> Maybe move led_init_default_state_get() to linux/leds.h?
-
-Yep, thanks! Missed patch and all of them should be sent as a series...
 
 
---=20
-With Best Regards,
-Andy Shevchenko
+On 2022/8/3 16:03, Hawkins Jiawei wrote:
+> Syzkaller reports refcount bug as follows:
+> ------------[ cut here ]------------
+> refcount_t: saturated; leaking memory.
+> WARNING: CPU: 1 PID: 3605 at lib/refcount.c:19 refcount_warn_saturate+0xf4/0x1e0 lib/refcount.c:19
+> Modules linked in:
+> CPU: 1 PID: 3605 Comm: syz-executor208 Not tainted 5.18.0-syzkaller-03023-g7e062cda7d90 #0
+>   <TASK>
+>   __refcount_add_not_zero include/linux/refcount.h:163 [inline]
+>   __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
+>   refcount_inc_not_zero include/linux/refcount.h:245 [inline]
+>   sk_psock_get+0x3bc/0x410 include/linux/skmsg.h:439
+>   tls_data_ready+0x6d/0x1b0 net/tls/tls_sw.c:2091
+>   tcp_data_ready+0x106/0x520 net/ipv4/tcp_input.c:4983
+>   tcp_data_queue+0x25f2/0x4c90 net/ipv4/tcp_input.c:5057
+>   tcp_rcv_state_process+0x1774/0x4e80 net/ipv4/tcp_input.c:6659
+>   tcp_v4_do_rcv+0x339/0x980 net/ipv4/tcp_ipv4.c:1682
+>   sk_backlog_rcv include/net/sock.h:1061 [inline]
+>   __release_sock+0x134/0x3b0 net/core/sock.c:2849
+>   release_sock+0x54/0x1b0 net/core/sock.c:3404
+>   inet_shutdown+0x1e0/0x430 net/ipv4/af_inet.c:909
+>   __sys_shutdown_sock net/socket.c:2331 [inline]
+>   __sys_shutdown_sock net/socket.c:2325 [inline]
+>   __sys_shutdown+0xf1/0x1b0 net/socket.c:2343
+>   __do_sys_shutdown net/socket.c:2351 [inline]
+>   __se_sys_shutdown net/socket.c:2349 [inline]
+>   __x64_sys_shutdown+0x50/0x70 net/socket.c:2349
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>   </TASK>
+> 
+> During SMC fallback process in connect syscall, kernel will
+> replaces TCP with SMC. In order to forward wakeup
+> smc socket waitqueue after fallback, kernel will sets
+> clcsk->sk_user_data to origin smc socket in
+> smc_fback_replace_callbacks().
+> 
+> Later, in shutdown syscall, kernel will calls
+> sk_psock_get(), which treats the clcsk->sk_user_data
+> as psock type, triggering the refcnt warning.
+> 
+> So, the root cause is that smc and psock, both will use
+> sk_user_data field. So they will mismatch this field
+> easily.
+> 
+> This patch solves it by using another bit(defined as
+> SK_USER_DATA_PSOCK) in PTRMASK, to mark whether
+> sk_user_data points to a psock object or not.
+> This patch depends on a PTRMASK introduced in commit f1ff5ce2cd5e
+> ("net, sk_msg: Clear sk_user_data pointer on clone if tagged").
+> 
+> Reported-and-tested-by: syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> Acked-by: Wen Gu <guwen@linux.alibaba.com>
+> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+> ---
+> v2 -> v3:
+>    - use SK_USER_DATA_PSOCK instead of SK_USER_DATA_NOTPSOCK
+> to patch the bug
+>    - refactor the code on assigning to sk_user_data field
+> in psock part
+>    - refactor the code on getting and setting the flag
+> with sk_user_data field
+> 
+> v1 -> v2:
+>    - add bit in PTRMASK to patch the bug
+> 
+>   include/linux/skmsg.h |  2 +-
+>   include/net/sock.h    | 58 +++++++++++++++++++++++++++++++------------
+>   net/core/skmsg.c      |  3 ++-
+>   3 files changed, 45 insertions(+), 18 deletions(-)
+> 
+
+Hi Hawkins,
+
+Since the fix v3 doesn't involved smc codes any more, I wonder if it's still
+appropriate to use 'net/smc:' in subject?
+
+Cheers,
+Wen Gu

@@ -2,97 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F524589467
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F06B589463
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238970AbiHCW3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 18:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
+        id S238918AbiHCW31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 18:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238929AbiHCW3Y (ORCPT
+        with ESMTP id S238883AbiHCW3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 18:29:24 -0400
-Received: from mx01.ayax.eu (mx01.ayax.eu [188.137.98.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA25D5D0CF
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:29:22 -0700 (PDT)
-Received: from [192.168.192.146] (port=37218 helo=nx64de-df6d00)
-        by mx01.ayax.eu with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <gszymaszek@short.pl>)
-        id 1oJMrY-0008TZ-5K; Thu, 04 Aug 2022 00:29:14 +0200
-Date:   Thu, 4 Aug 2022 00:29:10 +0200
-From:   Grzegorz Szymaszek <gszymaszek@short.pl>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Grzegorz Szymaszek <gszymaszek@short.pl>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 3/3] staging: r8188eu: make driver metadata macro names more
- consistent
-Message-ID: <7cc838a1e7f64c9aa88deffdb7986fbe55753be8.1659565180.git.gszymaszek@short.pl>
-Mail-Followup-To: Grzegorz Szymaszek <gszymaszek@short.pl>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-References: <6c83e05e5dbccff5630ccfed9e40bf84c889b647.1659565180.git.gszymaszek@short.pl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c83e05e5dbccff5630ccfed9e40bf84c889b647.1659565180.git.gszymaszek@short.pl>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 3 Aug 2022 18:29:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087F75C94B;
+        Wed,  3 Aug 2022 15:29:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AECE9B82404;
+        Wed,  3 Aug 2022 22:29:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 54D71C433C1;
+        Wed,  3 Aug 2022 22:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659565756;
+        bh=40j6OGIpymzlKOOTWxGEug6m13iD/+9fDMv61JhHBho=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=UP2xEKMe9dOFdW1+5+tWUYiu8Z1UDEz/rWLgWkh/PfvBaVHXhkA4DfBuOz6OAtDOG
+         Y4ApZcnWQXg0For7gVlRFh1MLxFIddK9sDdK4CeP90ZglhyhrNQHqyKXSFNWBTsyxM
+         zOBWqnNzetsaV9f1D31cPcKKZa0dDYuFegGuQgv1Q9fZTYsMSu71h9yCc4kVK9RAAL
+         xP3cy8z2rrLsoxNQ501a4CneSy/GnwKrZ+/i6qbv1nF1LzjzrqUXK2c9Y1SvzkexmK
+         FbIJZv3N931KfPOuhfSkc/R+kYoXRDOBtlydggBmhqrmfYh0R3AO0+/8b+S/2l+Xvl
+         yGEvX7dDe86Lw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4503CC43142;
+        Wed,  3 Aug 2022 22:29:16 +0000 (UTC)
+Subject: Re: [GIT PULL] iomap: new code for 5.20, part 1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YuqV6qB/p69HL3yR@magnolia>
+References: <YuqV6qB/p69HL3yR@magnolia>
+X-PR-Tracked-List-Id: <linux-xfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YuqV6qB/p69HL3yR@magnolia>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/iomap-5.20-merge-1
+X-PR-Tracked-Commit-Id: f8189d5d5fbf082786fb91c549f5127f23daec09
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f18d73096c0eca1275f586cb984e6e28330447a0
+Message-Id: <165956575627.24057.3467366999233352672.pr-tracker-bot@kernel.org>
+Date:   Wed, 03 Aug 2022 22:29:16 +0000
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename DRIVERVERSION to DRV_VERSION so that it looks more alike the
-other macros, DRV_NAME and FW_*, and matches the most popular (as it
-seems from a quick review) conventions in other drivers.
+The pull request you sent on Wed, 3 Aug 2022 08:36:10 -0700:
 
-Signed-off-by: Grzegorz Szymaszek <gszymaszek@short.pl>
----
- drivers/staging/r8188eu/include/drv_types.h | 5 ++---
- drivers/staging/r8188eu/os_dep/os_intfs.c   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+> git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/iomap-5.20-merge-1
 
-diff --git a/drivers/staging/r8188eu/include/drv_types.h b/drivers/staging/r8188eu/include/drv_types.h
-index f51b83515953..3328c66d1ef1 100644
---- a/drivers/staging/r8188eu/include/drv_types.h
-+++ b/drivers/staging/r8188eu/include/drv_types.h
-@@ -10,8 +10,6 @@
- #ifndef __DRV_TYPES_H__
- #define __DRV_TYPES_H__
- 
--#define DRV_NAME "r8188eu"
--
- #include "osdep_service.h"
- #include "wlan_bssdef.h"
- #include "rtw_ht.h"
-@@ -36,7 +34,8 @@
- #include "rtl8188e_hal.h"
- #include "rtw_fw.h"
- 
--#define DRIVERVERSION	"v4.1.4_6773.20130222"
-+#define DRV_NAME	"r8188eu"
-+#define DRV_VERSION	"v4.1.4_6773.20130222"
- #define FW_RTL8188EU	"rtlwifi/rtl8188eufw.bin"
- 
- struct registry_priv {
-diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
-index 5985054da935..d9abd2a98e1b 100644
---- a/drivers/staging/r8188eu/os_dep/os_intfs.c
-+++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
-@@ -17,7 +17,7 @@
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
- MODULE_AUTHOR("Realtek Semiconductor Corp.");
--MODULE_VERSION(DRIVERVERSION);
-+MODULE_VERSION(DRV_VERSION);
- MODULE_FIRMWARE(FW_RTL8188EU);
- 
- #define CONFIG_BR_EXT_BRNAME "br0"
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f18d73096c0eca1275f586cb984e6e28330447a0
+
+Thank you!
+
 -- 
-2.35.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

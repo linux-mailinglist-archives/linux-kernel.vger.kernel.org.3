@@ -2,158 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3763B588F12
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 975BA588F18
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237067AbiHCPFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S237192AbiHCPH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235941AbiHCPFU (ORCPT
+        with ESMTP id S236711AbiHCPHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:05:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A071165
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:05:18 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 86E26200DA;
-        Wed,  3 Aug 2022 15:05:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659539117; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 3 Aug 2022 11:07:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3373527B06
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659539241;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Q2uW+G4syRD8dM4BcZV6bxX9JWzQkhNoZFr1bZzGVlE=;
-        b=aW8NMVWo6KBt/UGogAR6L0vTRk01yBc1nh6XdOsUBFph2Iggyqty41YaUeFw4m3qx3DTfa
-        euQYTTpIgBKUW2e+f+7mYVbZYoJQjagOH5Y437pQqwZROxmrqab9xQ8Z3/WHtJUxPm+sSm
-        iNCQ0HgvwoH9t3ayH8Du1JPXjkGJp/w=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 66DA913AD8;
-        Wed,  3 Aug 2022 15:05:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3hlPFq2O6mLbKwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 03 Aug 2022 15:05:17 +0000
-Date:   Wed, 3 Aug 2022 17:05:16 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Donnelly <john.p.donnelly@oracle.com>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dma/pool: do not complain if DMA pool is not allocated
-Message-ID: <YuqOrJKcgfamdXkk@dhcp22.suse.cz>
-References: <20220325122559.14251-1-mhocko@kernel.org>
- <Yj28gjonUa9+0yae@dhcp22.suse.cz>
- <20220325164856.GA16800@lst.de>
- <Yj3zyLs4f+ba6UqF@dhcp22.suse.cz>
- <YupFSpXOrcfXJNya@dhcp22.suse.cz>
- <YuqNToCACD8kKBG+@MiWiFi-R3L-srv>
+        bh=7lNGhxjjGu08FSGFBXhTH69Oxbw+MkSJTjAc38J6fuE=;
+        b=OipM1y35AXJ7Z/UXwN5WuB53bUiSLZLwvhQoZAZoeq1bRZyNXyKMOw2COIPaLgx7s4ENoa
+        5AsoakBl7Ar4ImtRgj/oa2z3lMj2dlEWqxLHgIBZD9kfpbmkB41Pm7b5QegJaf6DSWX2QZ
+        /fCpuToLdFxPUg6rqOX5SfvdEWNoEB0=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-320-ONWekeOUNOaJ9bP-xrPySg-1; Wed, 03 Aug 2022 11:07:18 -0400
+X-MC-Unique: ONWekeOUNOaJ9bP-xrPySg-1
+Received: by mail-ed1-f69.google.com with SMTP id b13-20020a056402350d00b0043dfc84c533so3236484edd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:07:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7lNGhxjjGu08FSGFBXhTH69Oxbw+MkSJTjAc38J6fuE=;
+        b=wZjTZLtq871qc5mdisy1m3jmGEBCcJSrTo5o9n1nsXa4mCFKZkFiNDr9ZhN8Af9hiL
+         rvZpwW4E/72nYEkCmXglmInEaQSgtCjUIRgaNvEmR33BvKICLMhnoFDqBR/gIQzD51Hi
+         Yc2bcFhRJ3WktRux3mAmLqeaxW2KT8eP0WOgGP/gLImUHMAsJVx7YPDRddLZaTjvKb/6
+         dEOSpqVK5sdpxI59bzqLBsVDWHSLNagVOjI2H63VrpVyjSzut3bKxxHinI0qmeBDB3Wf
+         tTbGEGmfe3ohng6+s1Vmx5HWbcEpFVHwVJFV97bRTHPQSRBUKjL0VtCu3JaP5dH/JN8O
+         RTtQ==
+X-Gm-Message-State: ACgBeo1Y0iLyCrmdH9+KaOSSq2LHbM0pJ4aF0SnSL5WMEhbKomVP4KIX
+        Je16ymVSukq5YjKTGASjzNk4qd0BASA7tsu54fLPZov1XZouI5ooOzoCNfnmqZS8YZ/xRN1GtfQ
+        Iv8YVW3RpYljx6oZVGat5FMNp
+X-Received: by 2002:a17:907:2cf6:b0:730:6068:2ebb with SMTP id hz22-20020a1709072cf600b0073060682ebbmr14584705ejc.82.1659539237141;
+        Wed, 03 Aug 2022 08:07:17 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5/cp0xu71LITXglQORiwlvEXhNzF2RKntpmFpUmHGqrWzuSaYh6itFi0C/5awzknxs05iw2g==
+X-Received: by 2002:a17:907:2cf6:b0:730:6068:2ebb with SMTP id hz22-20020a1709072cf600b0073060682ebbmr14584691ejc.82.1659539236919;
+        Wed, 03 Aug 2022 08:07:16 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id kz25-20020a17090777d900b0073085243f3fsm3409392ejc.64.2022.08.03.08.07.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 08:07:16 -0700 (PDT)
+Message-ID: <efb83a0c-7617-894e-a34d-37280238d5aa@redhat.com>
+Date:   Wed, 3 Aug 2022 17:07:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuqNToCACD8kKBG+@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] gpiolib: acpi: Add support to ignore programming
+ an interrupt
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220803042501.515-1-mario.limonciello@amd.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220803042501.515-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 03-08-22 22:59:26, Baoquan He wrote:
-> On 08/03/22 at 11:52am, Michal Hocko wrote:
-> > On Fri 25-03-22 17:54:33, Michal Hocko wrote:
-> > > On Fri 25-03-22 17:48:56, Christoph Hellwig wrote:
-> > > > On Fri, Mar 25, 2022 at 01:58:42PM +0100, Michal Hocko wrote:
-> > > > > Dang, I have just realized that I have misread the boot log and it has
-> > > > > turned out that a674e48c5443 is covering my situation because the
-> > > > > allocation failure message says:
-> > > > >
-> > > > > Node 0 DMA free:0kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:636kB managed:0kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
-> > > > 
-> > > > As in your report is from a kernel that does not have a674e48c5443
-> > > > yet?
-> > > 
-> > > yes. I just mixed up the early boot messages and thought that DMA zone
-> > > ended up with a single page. That message was saying something else
-> > > though.
-> > 
-> > OK, so I have another machine spewing this warning. Still on an older
-> > kernel but I do not think the current upstream would be any different in
-> > that regards. This time the DMA zone is populated and consumed from
-> > large part and the pool size request is just too large for it:
-> > 
-> > [   14.017417][    T1] swapper/0: page allocation failure: order:10, mode:0xcc1(GFP_KERNEL|GFP_DMA), nodemask=(null),cpuset=/,mems_allowed=0-7
-> > [   14.017429][    T1] CPU: 4 PID: 1 Comm: swapper/0 Not tainted 5.14.21-150400.22-default #1 SLE15-SP4 0b6a6578ade2de5c4a0b916095dff44f76ef1704
-> > [   14.017434][    T1] Hardware name: XXXX
-> > [   14.017437][    T1] Call Trace:
-> > [   14.017444][    T1]  <TASK>
-> > [   14.017449][    T1]  dump_stack_lvl+0x45/0x57
-> > [   14.017469][    T1]  warn_alloc+0xfe/0x160
-> > [   14.017490][    T1]  __alloc_pages_slowpath.constprop.112+0xc27/0xc60
-> > [   14.017497][    T1]  ? rdinit_setup+0x2b/0x2b
-> > [   14.017509][    T1]  ? rdinit_setup+0x2b/0x2b
-> > [   14.017512][    T1]  __alloc_pages+0x2d5/0x320
-> > [   14.017517][    T1]  alloc_page_interleave+0xf/0x70
-> > [   14.017531][    T1]  atomic_pool_expand+0x4a/0x200
-> > [   14.017541][    T1]  ? rdinit_setup+0x2b/0x2b
-> > [   14.017544][    T1]  __dma_atomic_pool_init+0x44/0x90
-> > [   14.017556][    T1]  dma_atomic_pool_init+0xad/0x13f
-> > [   14.017560][    T1]  ? __dma_atomic_pool_init+0x90/0x90
-> > [   14.017562][    T1]  do_one_initcall+0x41/0x200
-> > [   14.017581][    T1]  kernel_init_freeable+0x236/0x298
-> > [   14.017589][    T1]  ? rest_init+0xd0/0xd0
-> > [   14.017596][    T1]  kernel_init+0x16/0x120
-> > [   14.017599][    T1]  ret_from_fork+0x22/0x30
-> > [   14.017604][    T1]  </TASK>
-> > [...]
-> > [   14.018026][    T1] Node 0 DMA free:160kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15996kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
-> > [   14.018035][    T1] lowmem_reserve[]: 0 0 0 0 0
-> > [   14.018339][    T1] Node 0 DMA: 0*4kB 0*8kB 0*16kB 1*32kB (U) 0*64kB 1*128kB (U) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 160kB
-> > 
-> > So the DMA zone has only 160kB free while the pool would like to use 4MB
-> > of it which obviously fails. I haven't tried to check who is consuming
-> > the DMA zone memory and why but this shouldn't be all that important
-> > because the pool clearly cannot allocate and there is not much the
-> > user/admin can do about that. Well, the pool could be explicitly
-> > requested smaller but is that really what we expect them to do?
-> >   
-> > > > > I thought there are only few pages in the managed by the DMA zone. This
-> > > > > is still theoretically possible so I think __GFP_NOWARN makes sense here
-> > > > > but it would require to change the patch description.
-> > > > > 
-> > > > > Is this really worth it?
-> > > > 
-> > > > In general I think for kernels where we need the pool and can't allocate
-> > > > it, a warning is very useful.  We just shouldn't spew it when there is
-> > > > no need for the pool to start with.
-> > > 
-> > > Well, do we have any way to find that out during early boot?
-> > 
-> > Thinking about it. We should get a warning when the actual allocation
-> > from the pool fails no? That would be more useful information than the
-> > pre-allocation failure when it is not really clear whether anybody is
-> > ever going to consume it.
+Hi,
+
+On 8/3/22 06:24, Mario Limonciello wrote:
+> gpiolib-acpi already had support for ignoring a pin for wakeup, but
+> if an OEM configures a floating pin as an interrupt source then
+> stopping it from being a wakeup won't do much good to stop the
+> interrupt storm.
 > 
-> Hi Michal,
+> Add support for a module parameter and quirk infrastructure to
+> ignore interrupts as well.
 > 
-> You haven't told on which ARCH you met this issue, is it x86_64?
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-yes x86_64, so a small 16MB DMA zone.
+Thanks, patch looks good to me:
 
-> If yes, I have one patch queued to fix it in another way which I have
-> been trying to take in mind.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-Any reference?
+Regards,
 
--- 
-Michal Hocko
-SUSE Labs
+Hans
+
+
+> ---
+> v1->v2:
+>  * Drop enum
+>  * Drop Tested-by tag
+> 
+>  drivers/gpio/gpiolib-acpi.c | 24 ++++++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> index c2523ac26fac..f993f6f728ad 100644
+> --- a/drivers/gpio/gpiolib-acpi.c
+> +++ b/drivers/gpio/gpiolib-acpi.c
+> @@ -32,9 +32,16 @@ MODULE_PARM_DESC(ignore_wake,
+>  		 "controller@pin combos on which to ignore the ACPI wake flag "
+>  		 "ignore_wake=controller@pin[,controller@pin[,...]]");
+>  
+> +static char *ignore_interrupt;
+> +module_param(ignore_interrupt, charp, 0444);
+> +MODULE_PARM_DESC(ignore_interrupt,
+> +		 "controller@pin combos on which to ignore interrupt "
+> +		 "ignore_interrupt=controller@pin[,controller@pin[,...]]");
+> +
+>  struct acpi_gpiolib_dmi_quirk {
+>  	bool no_edge_events_on_boot;
+>  	char *ignore_wake;
+> +	char *ignore_interrupt;
+>  };
+>  
+>  /**
+> @@ -317,14 +324,15 @@ static struct gpio_desc *acpi_request_own_gpiod(struct gpio_chip *chip,
+>  	return desc;
+>  }
+>  
+> -static bool acpi_gpio_in_ignore_list(const char *controller_in, unsigned int pin_in)
+> +static bool acpi_gpio_in_ignore_list(const char *ignore_list, const char *controller_in,
+> +				     unsigned int pin_in)
+>  {
+>  	const char *controller, *pin_str;
+>  	unsigned int pin;
+>  	char *endp;
+>  	int len;
+>  
+> -	controller = ignore_wake;
+> +	controller = ignore_list;
+>  	while (controller) {
+>  		pin_str = strchr(controller, '@');
+>  		if (!pin_str)
+> @@ -348,7 +356,7 @@ static bool acpi_gpio_in_ignore_list(const char *controller_in, unsigned int pin
+>  
+>  	return false;
+>  err:
+> -	pr_err_once("Error: Invalid value for gpiolib_acpi.ignore_wake: %s\n", ignore_wake);
+> +	pr_err_once("Error: Invalid value for gpiolib_acpi.ignore_...: %s\n", ignore_list);
+>  	return false;
+>  }
+>  
+> @@ -360,7 +368,7 @@ static bool acpi_gpio_irq_is_wake(struct device *parent,
+>  	if (agpio->wake_capable != ACPI_WAKE_CAPABLE)
+>  		return false;
+>  
+> -	if (acpi_gpio_in_ignore_list(dev_name(parent), pin)) {
+> +	if (acpi_gpio_in_ignore_list(ignore_wake, dev_name(parent), pin)) {
+>  		dev_info(parent, "Ignoring wakeup on pin %u\n", pin);
+>  		return false;
+>  	}
+> @@ -427,6 +435,11 @@ static acpi_status acpi_gpiochip_alloc_event(struct acpi_resource *ares,
+>  		goto fail_unlock_irq;
+>  	}
+>  
+> +	if (acpi_gpio_in_ignore_list(ignore_interrupt, dev_name(chip->parent), pin)) {
+> +		dev_info(chip->parent, "Ignoring interrupt on pin %u\n", pin);
+> +		return AE_OK;
+> +	}
+> +
+>  	event = kzalloc(sizeof(*event), GFP_KERNEL);
+>  	if (!event)
+>  		goto fail_unlock_irq;
+> @@ -1582,6 +1595,9 @@ static int __init acpi_gpio_setup_params(void)
+>  	if (ignore_wake == NULL && quirk && quirk->ignore_wake)
+>  		ignore_wake = quirk->ignore_wake;
+>  
+> +	if (ignore_interrupt == NULL && quirk && quirk->ignore_interrupt)
+> +		ignore_interrupt = quirk->ignore_interrupt;
+> +
+>  	return 0;
+>  }
+>  
+

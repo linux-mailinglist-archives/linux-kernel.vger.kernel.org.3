@@ -2,143 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09FF5894E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510E05894E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236900AbiHCXgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 19:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
+        id S238469AbiHCXht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 19:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237090AbiHCXgQ (ORCPT
+        with ESMTP id S233883AbiHCXhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 19:36:16 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAD656BA3
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 16:36:15 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id m4so12245309ejr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 16:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=XMwxz3mctao86/tOVJnX+lr9oNAxjmTmU2XKIuTJvTs=;
-        b=cuI7HYbj9DxO6OtTMlxZc/FNkNFPenx0NQFsrPDz8WENrSphM4LqOkZvt6DNnQZmap
-         CrWjdWQiJ+sciY3/mqTCW7cVJvpAkxqzWfkqeu8nhN0y0eb05OCoJWpo51F0INdKTU2q
-         olHiz1ntdc+EM33zSE/MFNaFmd+T6r3RV/tQ4=
+        Wed, 3 Aug 2022 19:37:47 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06C25C953;
+        Wed,  3 Aug 2022 16:37:46 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id x64so14081916iof.1;
+        Wed, 03 Aug 2022 16:37:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=XMwxz3mctao86/tOVJnX+lr9oNAxjmTmU2XKIuTJvTs=;
-        b=s89/9cSGi1wE2EhTUY4UyUjLldYjTmUvoho6fCyvS2ad8hcthw6Afiynmc9b801WZU
-         WoM1ODeCcf71u4TqbpGSnlyotOlwPUZjzVfAocIoNCLxPJ79gWO2GIzN5mA+ioWkH0l/
-         9i3CwZcvicyJY3XugDTMQcDVS5xf+o0C8ugCD5U/voGEdMmDUJXh/Rg9uYj48sYIX8YS
-         CBJTi3YKRVP5CB32s69JeysZDzQOYC72HVRcGEBB9S6A2Yefix1wxrQSwnCf/B0UEj5/
-         FutP/drxulz1+b2n9kpVRvOryjTaa+97EXldiXq+fmsMPFFXePE42gXq08KwNeMtbIX/
-         94og==
-X-Gm-Message-State: AJIora8Be+/IYsnvUhEcRw2sdf4J9myAWEn3Ozk2zBQgoG0FMKYi65JO
-        wzB8bDlIJrLG1HBAekj9r6FbnrIdq/5MYh64
-X-Google-Smtp-Source: AGRyM1vaY5U/W8EIU4Tu5shYU402t6cnHMgXx4ilC3FyYUxJCcBzfUVlESoo6RM40pasWuqv3KpkJw==
-X-Received: by 2002:a17:907:6890:b0:72e:e404:46d2 with SMTP id qy16-20020a170907689000b0072ee40446d2mr20536991ejc.578.1659569773671;
-        Wed, 03 Aug 2022 16:36:13 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id qc19-20020a170906d8b300b007305d408b3dsm4998582ejb.78.2022.08.03.16.36.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 16:36:12 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id j15so15220924wrr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 16:36:12 -0700 (PDT)
-X-Received: by 2002:adf:edcb:0:b0:21e:d043:d271 with SMTP id
- v11-20020adfedcb000000b0021ed043d271mr17545888wro.274.1659569772201; Wed, 03
- Aug 2022 16:36:12 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=fLmqeRMf4JDZKs/iHkdB/euWLnNPX6ANGv/0J6rLGMw=;
+        b=eEO10LWPNnCW2Agy9hgvLGqmA7WUBCMlVPnEP3pcfySppWgsrVTWk8m9iLEcllbNnN
+         C3SZNHOfdMaFZcXV+6rUe5Aw6I+/3d83WpC24TZEEt/pS1sJX2l7Rzm6LoH0xFZywZzC
+         KRLiNDy9YNYipsYMORVZIXO8W5IAS1nJ3Gr5T7s4Fcuy0wht94f5LY7+CY0FXsBsT37z
+         TQGLfiVA8/+ICkX45uAz4toddwv5rCMK+wWzi2G2fzePfQoI/j5GWCKdcXqrlgzuzkWX
+         uDGkgjkKLgUE0mELgw+gYkvprEGEx7WHF/WUwVJc1gcYvVCdZ+WUQp4Yr8BSxLOy8C2v
+         bXCA==
+X-Gm-Message-State: ACgBeo2eZ0mMapl0i+hO4RdOkuKXUJqD2oAQh6v694hUGOyDSH5qGNht
+        hAycrIMqNCfPFReljo1y8A==
+X-Google-Smtp-Source: AA6agR53WI0LJZ+DX8d8/XcrWJ10kzKH3mPTOxxzw9arA4anUD75QNQmKl+niGSJgwxKS/uZXonCFA==
+X-Received: by 2002:a05:6638:130d:b0:342:9b04:729b with SMTP id r13-20020a056638130d00b003429b04729bmr1074641jad.59.1659569865873;
+        Wed, 03 Aug 2022 16:37:45 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id a4-20020a021604000000b00339ceeec5edsm8396727jaa.12.2022.08.03.16.37.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 16:37:45 -0700 (PDT)
+Received: (nullmailer pid 2823499 invoked by uid 1000);
+        Wed, 03 Aug 2022 23:37:43 -0000
+Date:   Wed, 3 Aug 2022 17:37:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, saravanak@google.com,
+        gregkh@linuxfoundation.org, geert+renesas@glider.be,
+        krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH v2 3/3] dt-bindings: bus: Add Freescale i.MX8qxp pixel
+ link MSI bus binding
+Message-ID: <20220803233743.GA2813240-robh@kernel.org>
+References: <20220803012421.3410226-1-victor.liu@nxp.com>
+ <20220803012421.3410226-4-victor.liu@nxp.com>
 MIME-Version: 1.0
-References: <20220803101438.24327-1-pabeni@redhat.com>
-In-Reply-To: <20220803101438.24327-1-pabeni@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 3 Aug 2022 16:35:56 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiwRtpyMVn1F9KT14H64tajiWsPnd0FfL5-BFnPOuFa_w@mail.gmail.com>
-Message-ID: <CAHk-=wiwRtpyMVn1F9KT14H64tajiWsPnd0FfL5-BFnPOuFa_w@mail.gmail.com>
-Subject: Re: [GIT PULL] Networking for 6.0
-To:     Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Wojciech Drewek <wojciech.drewek@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803012421.3410226-4-victor.liu@nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 3:15 AM Paolo Abeni <pabeni@redhat.com> wrote:
->
-> At the time of writing we have two known conflicts, one with arm-soc:
+On Wed, Aug 03, 2022 at 09:24:21AM +0800, Liu Ying wrote:
+> Freescale i.MX8qxp pixel link MSI bus is a simple memory-mapped bus.
+> It is used to access peripherals in i.MX8qm/qxp imaging, LVDS, MIPI
+> DSI and HDMI TX subsystems, like I2C controller, PWM controller,
+> MIPI DSI controller and Control and Status Registers (CSR) module.
+> 
+> Reference simple-pm-bus bindings and add Freescale i.MX8qxp pixel
+> link MSI bus specific bindings.
+> 
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> ---
+> v1->v2:
+> Address Krzysztof's comments:
+> * Add a select to explicitly select the MSI bus dt-binding.
+> * List 'simple-pm-bus' explicitly as one item of compatible strings.
+> * Require compatible and reg properties.
+> * Put reg property just after compatible property in example.
+> 
+>  .../bus/fsl,imx8qxp-pixel-link-msi-bus.yaml   | 97 +++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml b/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
+> new file mode 100644
+> index 000000000000..358c032041e5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
+> @@ -0,0 +1,97 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale i.MX8qxp Pixel Link Medium Speed Interconnect (MSI) Bus
+> +
+> +maintainers:
+> +  - Liu Ying <victor.liu@nxp.com>
+> +
+> +description: |
+> +  i.MX8qxp pixel link MSI bus is used to control settings of PHYs, I/Os
+> +  sitting together with the PHYs.  It is not the same as the MSI bus coming
+> +  from i.MX8 System Controller Unit (SCU) which is used to control power,
+> +  clock and reset through the i.MX8 Distributed Slave System Controller (DSC).
+> +
+> +  i.MX8qxp pixel link MSI bus is a simple memory-mapped bus. Two input clocks,
+> +  that is, MSI clock and AHB clock, need to be enabled so that peripherals
+> +  connected to the bus can be accessed. Also, the bus is part of a power
+> +  domain. The power domain needs to be enabled before the peripherals can
+> +  be accessed.
+> +
+> +  Peripherals in i.MX8qm/qxp imaging, LVDS, MIPI DSI and HDMI TX subsystems,
+> +  like I2C controller, PWM controller, MIPI DSI controller and Control and
+> +  Status Registers (CSR) module, are accessed through the bus.
+> +
+> +  The i.MX System Controller Firmware (SCFW) owns and uses the i.MX8qm/qxp
+> +  pixel link MSI bus controller and does not allow SCFW user to control it.
+> +  So, the controller's registers cannot be accessed by SCFW user. Hence,
+> +  the interrupts generated by the controller don't make any sense from SCFW
+> +  user's point of view.
+> +
+> +allOf:
+> +  - $ref: simple-pm-bus.yaml#
+> +
+> +# We need a select here so we don't match all nodes with 'simple-pm-bus'.
+> +select:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - fsl,imx8qxp-display-pixel-link-msi-bus
+> +          - fsl,imx8qm-display-pixel-link-msi-bus
+> +  required:
+> +    - compatible
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - fsl,imx8qxp-display-pixel-link-msi-bus
+> +          - fsl,imx8qm-display-pixel-link-msi-bus
+> +      - const: simple-pm-bus
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: master gated clock from system
+> +      - description: AHB clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: msi
+> +      - const: ahb
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - power-domains
+> +
+> +unevaluatedProperties: false
 
-Hmm. There's actually a third one, this one semantic (but mostly
-harmless). I wonder how it was overlooked.
+No child nodes allowed?
 
-It causes an odd gcc "note" report:
-
-  net/core/flow_dissector.c: In function =E2=80=98is_pppoe_ses_hdr_valid=E2=
-=80=99:
-  net/core/flow_dissector.c:898:13: note: the ABI of passing struct
-with a flexible array member has changed in GCC 4.4
-  898 | static bool is_pppoe_ses_hdr_valid(struct pppoe_hdr hdr)
-      |             ^~~~~~~~~~~~~~~~~~~~~~
-
-and it looks like a semantic merge conflict between commits
-
-  94dfc73e7cf4 ("treewide: uapi: Replace zero-length arrays with
-flexible-array members")
-  46126db9c861 ("flow_dissector: Add PPPoE dissectors")
-
-where that first commit makes 'struct pppoe_hdr' have a flexible array
-member at the end, and the second second commit passes said pppoe_hdr
-by value as an argument.
-
-I don't think there is any reason to pass that 'struct pppoe_hdr' by
-value in the first place, and that is not a normal pattern for the
-kernel. Sure, we sometimes do use opaque types that may be structures
-(eg 'pte_t') by value as arguments, but that is not how that code is
-written.
-
-Any sane compiler will inline that thing anyway, so the end result
-ends up being the same, but passing a structure with an array at the
-end (whether zero-sized or flexible) by value is just cray-cray, to
-use the technical term.
-
-So I resolved this semantic conflict by simply making that function
-take a 'const struct pppoe_hdr *hdr' argument instead. That's the
-proper way.
-
-Why was this not noticed in linux-next? Is it because nobody actually
-*looks* at the output? Because it's a "note" and not a "warning", it
-ends up not aborting the build, but I do think the compiler is
-pointing out a very real issue.
-
-It would be perhaps worthwhile looking at code that passes structures
-by value as arguments (or as return values). It can generate truly
-horrendously bad code, and even when said structures are small, it's
-uisually not the right thing to do.
-
-And yes, as noted, we sometimes do have that pattern very much on
-purpose, sometimes because of abstraction reasons (pte_t) and
-sometimes because we explicitly want the magic "two words of result"
-('struct fd' and fdget()).
-
-So it's not a strict no-no, but it's not generally a good idea unless
-you have a very good reason for it (and it's particularly not a good
-idea when there's an array at the end).
-
-I've fixed this up in my tree, and it's all fine (and while I'm not
-*happy* with the fact that apparently nobody looks at linux-next
-output, I guess it is what it is).
-
-              Linus
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx8-lpcg.h>
+> +    #include <dt-bindings/firmware/imx/rsrc.h>
+> +    bus@56200000 {
+> +        compatible = "fsl,imx8qxp-display-pixel-link-msi-bus", "simple-pm-bus";
+> +        reg = <0x56200000 0x20000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        interrupt-parent = <&dc0_irqsteer>;
+> +        interrupts = <320>;
+> +        ranges;
+> +        clocks = <&dc0_disp_ctrl_link_mst0_lpcg IMX_LPCG_CLK_4>,
+> +                 <&dc0_disp_ctrl_link_mst0_lpcg IMX_LPCG_CLK_4>;
+> +        clock-names = "msi", "ahb";
+> +        power-domains = <&pd IMX_SC_R_DC_0>;
+> +    };
+> -- 
+> 2.25.1
+> 
+> 

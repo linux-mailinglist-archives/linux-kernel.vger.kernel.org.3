@@ -2,95 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC384588F26
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F137588F25
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237916AbiHCPMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
+        id S237848AbiHCPMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237915AbiHCPMq (ORCPT
+        with ESMTP id S235868AbiHCPMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:12:46 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0503A4AF
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:12:45 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s206so15385920pgs.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=dxKpudtpM9c04gsBALLT5GNJ4ez+VeuhMNxM61Y7Zys=;
-        b=TlUkKbkwpzJsUZQMWGVpPpZ+n5EKDY68Z5Q48koM0MZ/0s82onEnukdVx8O037K9O4
-         tPFkAD159kuoDvC0yngRjF0POp9zlUTXGgFOCHt8Gd7dvduyBaiyx2Hj7D0LWsVp0pkt
-         hApAo7lBEXQda8i1Ed4XJBy6d13ZneFaijFw7ZW15sp5UnsX+6Xwrr7EGxvEo7Bc/k3i
-         zvIn6tapOBjYzmqxjlj7XkQiqBaAqM55kMdtB3u9Hbvyh75X8Uxs4Fm9T4Be/QqfMrLk
-         1ex5bWBzzp+9iTi4NLuio/uUjE45ou1ye/hUEcXH9x3KvZiHnDBiBdwvDWIrc5RehhxU
-         MqSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=dxKpudtpM9c04gsBALLT5GNJ4ez+VeuhMNxM61Y7Zys=;
-        b=BJR6rSJ1C/6m09lzmVLlMzLSJggUjRfV3axVWHtS1vVP3WvdEzzUosj4nWwxPiO8nB
-         7NRuO8j6m3MKMqlHeN+H9du9x4KrtlidIHchbQLSPZuIQZRFWjtOdlPc2yjN0YcCo+Kc
-         tr+FHfHUA5TXezG0OZ1sAHZW+/1tCr6rTUCNXEoLn7UEhKrcBAPsQAhSMdtZJxGXEp4P
-         DdYSqp5ko9Xs1iylu5mPesTDGafkakLKbk3aN4ckqHQ8kCCo1LjneZm/AIyghUoU4ky6
-         aWpDjBQ2M2uYNtbt8FAg6gKA3PVCn4wD/nv3Ii8U6Ny26T7dt6h6unhBZMoogGoaqSLH
-         +fYg==
-X-Gm-Message-State: AJIora8aB7GhcEefKV+49VlYZJynLcfo5XKXmN70aQgMEm+Ac9qBg0w1
-        8KfFEv4n181cGLV1GP4M61o=
-X-Google-Smtp-Source: AGRyM1uUuXwBDm/bVaj3vqKbwti9dLWNE6+XW69yeoBDMEc2GahmO9mpjYWsUtcGHrUjpMDSy7aMDg==
-X-Received: by 2002:a63:d5:0:b0:41a:58f:929e with SMTP id 204-20020a6300d5000000b0041a058f929emr21171472pga.260.1659539564401;
-        Wed, 03 Aug 2022 08:12:44 -0700 (PDT)
-Received: from localhost.localdomain ([211.226.85.205])
-        by smtp.gmail.com with ESMTPSA id mn19-20020a17090b189300b001f4f40763b1sm1750325pjb.29.2022.08.03.08.12.42
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 03 Aug 2022 08:12:44 -0700 (PDT)
-From:   Levi Yun <ppbuk5246@gmail.com>
-To:     catalin.marinas@arm.com, will@kernel.org, chenzhou10@huawei.com,
-        nramas@linux.microsoft.com, thunder.leizhen@huawei.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Levi Yun <ppbuk5246@gmail.com>
-Subject: [PATCH] arm64/kexec: Fix missing extra range for crashkres_low.
-Date:   Thu,  4 Aug 2022 00:12:17 +0900
-Message-Id: <20220803151217.75962-1-ppbuk5246@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 3 Aug 2022 11:12:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD1B2AC64;
+        Wed,  3 Aug 2022 08:12:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D5D5616DA;
+        Wed,  3 Aug 2022 15:12:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35CA9C433D6;
+        Wed,  3 Aug 2022 15:12:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659539552;
+        bh=p8QyDDDw5i78K85n6ri69fueQGZCAVLQxha9fjbynak=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vEIYcNU92D1Fx6/jc/qFgiTqebXCPFev99O6evkXGK75fW2wj75NOjv4ZqGNmifGP
+         HyF0Ppg0U9ufEryHgO70XWGnocyjjkUNh0Awa/LaGMl6LwA3bTwVZSh6Ax3HZ4Mi7k
+         Xm3PPJT+3vAqH99ZBAGu4yKGiJLZexOe3raWclBxEOr1ZEPfoVhPoVEGE6f8b9qJam
+         D1VP8o3rh051irPkOqC7e8J4A5B2HlExNCE67zGTvAVjyH/7vVh4NU2aOIALLItbgt
+         Saj7tF8HtlcBJbH9IGB1GutE0FtV7yoJAw/ol2E/MPn23Dfsq8oZX6Fujuj3ycez/C
+         IaRHNHjE1qZYw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7341840736; Wed,  3 Aug 2022 12:12:29 -0300 (-03)
+Date:   Wed, 3 Aug 2022 12:12:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Song Liu <songliubraving@fb.com>,
+        Blake Jones <blakejones@google.com>
+Subject: Re: [PATCH v2 1/3] perf lock: Introduce struct lock_contention
+Message-ID: <YuqQXbCTCLPjTnH6@kernel.org>
+References: <20220802191004.347740-1-namhyung@kernel.org>
+ <YumRXcxc5XIUwlBO@kernel.org>
+ <CAM9d7choD8v8Bxu3w4V1Q3M1i7SwP2W+pY5ZWLqUqr89O2PLOQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM9d7choD8v8Bxu3w4V1Q3M1i7SwP2W+pY5ZWLqUqr89O2PLOQ@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like crashk_res, Calling crash_exclude_mem_range function with
-crashk_low_res area would need extra crash_mem range too.
-Add one extra crash_mem range when crashk_low_res is used.
+Em Tue, Aug 02, 2022 at 04:47:02PM -0700, Namhyung Kim escreveu:
+> On Tue, Aug 2, 2022 at 2:04 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> >
+> > Em Tue, Aug 02, 2022 at 12:10:02PM -0700, Namhyung Kim escreveu:
+> > > The lock_contention struct is to carry related fields together and to
+> > > minimize the change when we add new config options.
+> >
+> >
+> > Thanks, applied. Forgot the cover letter? :-)
+> 
+> Thank you!
+> 
+> I thought it's a small change that doesn't require a cover letter.
+> But if you prefer seeing it for small changes too, I'd write a
+> short letter next time.
 
-Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
----
- arch/arm64/kernel/machine_kexec_file.c | 3 +++
- 1 file changed, 3 insertions(+)
+Yeah, just felt unusual, but then, b4 with any of the message-ids works
+just fine, so up to you, I'm adjusting.
 
-diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
-index 889951291cc0..378aee04e7d4 100644
---- a/arch/arm64/kernel/machine_kexec_file.c
-+++ b/arch/arm64/kernel/machine_kexec_file.c
-@@ -51,6 +51,9 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
- 	for_each_mem_range(i, &start, &end)
- 		nr_ranges++;
-
-+	if (crashk_low_res.end)
-+		nr_ranges++; /**< for exclusion of crashkernel=size,low region */
-+
- 	cmem = kmalloc(struct_size(cmem, ranges, nr_ranges), GFP_KERNEL);
- 	if (!cmem)
- 		return -ENOMEM;
---
-2.35.1
+- Arnaldo

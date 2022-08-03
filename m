@@ -2,111 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF453588EE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F16F588EE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235971AbiHCOtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 10:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
+        id S236196AbiHCOtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 10:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbiHCOth (ORCPT
+        with ESMTP id S236088AbiHCOtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 10:49:37 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57AF5FAA;
-        Wed,  3 Aug 2022 07:49:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659538176; x=1691074176;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Faqqo9HzJfxgdrGCas4xFN7qzs/Hy63rrU1AKfXxIXk=;
-  b=AiBuY1cQJM94eFRkPaVPf4ilNH8w1IUeacqMax2nnrlcmTV+KQZgCGNq
-   Kymz/myNWFift8c0Ina36KPV3ll9cBy7Ez+3IHzZowwP4BoA0oWwnTGV4
-   j0jxINiJjL4TNMwWA6fmGEaH3DIEmhbwsbOb9sDmCCHS4rf1MR2nkEHFS
-   QKv2BXKmc9GoAQwrqESY88SzVPk/L5JrqERBVw8rP8Imj7eXsoGQ2sM3p
-   +t3UYIFBhzF4/bJzQSi2taew4mDtyKUdp70S+2nuyfwfFwQJYiPnGhKYv
-   3yaG4NGlNb0o1dK9dAnqzkZPkDNPJpioFMh+ZcUC0wU3NOVJmIA+nWTbb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="353690230"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="353690230"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:49:35 -0700
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="631175430"
-Received: from buichris-mobl.amr.corp.intel.com (HELO [10.209.124.150]) ([10.209.124.150])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:49:34 -0700
-Message-ID: <61ce1a14-7bac-fea8-b065-83a1c0704258@intel.com>
-Date:   Wed, 3 Aug 2022 07:49:34 -0700
+        Wed, 3 Aug 2022 10:49:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A811619C07
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 07:49:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B82EB822CC
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 14:49:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 493CCC433C1;
+        Wed,  3 Aug 2022 14:49:38 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 10:49:36 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andreas Schwab <schwab@suse.de>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        jianchunfu <jianchunfu@cmss.chinamobile.com>
+Subject: [GIT PULL] rtla: Updates for 5.20/6.0
+Message-ID: <20220803104936.7df810fd@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86,mm: print likely CPU at segfault time
-Content-Language: en-US
-To:     Rik van Riel <riel@surriel.com>, linux-kernel@vger.kernel.org
-Cc:     x86@vger.kernel.org, kernel-team@fb.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Dave Jones <dsj@fb.com>,
-        Andy Lutomirski <luto@kernel.org>
-References: <20220802160900.7a68909b@imladris.surriel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220802160900.7a68909b@imladris.surriel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/2/22 13:09, Rik van Riel wrote:
-> Add a printk to show_signal_msg() to print the CPU, core, and socket
 
-Nit:     ^ printk(), please
+Linus,
 
-> --- a/arch/x86/mm/fault.c
-> +++ b/arch/x86/mm/fault.c
-> @@ -782,6 +782,12 @@ show_signal_msg(struct pt_regs *regs, unsigned long error_code,
->  
->  	print_vma_addr(KERN_CONT " in ", regs->ip);
->  
-> +	printk(KERN_CONT " on CPU %d (core %d, socket %d)",
-> +	       raw_smp_processor_id(),
-> +	       topology_core_id(raw_smp_processor_id()),
-> +	       topology_physical_package_id(raw_smp_processor_id()));
+Real Time Analysis Tool updates for 5.20 / 6.0
 
-This seems totally sane to me.  I have found myself looking through
-customer-provided *oopses* more than once trying to figure out if the
-same CPU cores were at fault.  This extends that to userspace crashes
-too.  I've also found myself trying to map back from logical CPU numbers
-to core and package.
+Changes to RTLA:
 
-One nit: Preempt is enabled here, right?  I understand that this thing
-is fundamentally racy, but if we did:
+ - Fix a double free
 
-	int cpu = READ_ONCE(raw_smp_processor_id());
+ - Define syscall numbers for RISCV
 
-it would make it internally *consistent*.  Without that, we could
-theoretically get three different raw_smp_processor_id()'s.  It might
-even make the code look a wee bit nicer.
+ - Fix Makefile when called from -C tools
 
-The changelog here is great, but  couple of comments would also be nice:
+ - Use calloc() to check for memory allocation failures
 
-	/* This is a racy snapshot, but is better than nothing: */
-	int cpu = READ_ONCE(raw_smp_processor_id());
-...
-	/*
-	 * Dump the likely CPU where the fatal segfault happened.  This
-	 * can help help identify buggy pieces of hardware.
-	 */
-	printk(KERN_CONT " on CPU %d (core %d, socket %d)", cpu,
-	       topology_core_id(cpu),
-	       topology_physical_package_id(cpu));
 
-If you want to wait a bit and see if you get any other comments, this
-seems like something we can suck in after the merge window.
+Please pull the latest trace-rtla-v5.20 tree, which can be found at:
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+trace-rtla-v5.20
+
+Tag SHA1: ae546e8855f305db853d17a6509e267286dc5b2d
+Head SHA1: dd0b15bda48f59eb7dee17fab91eda8389f0e98d
+
+
+Andreas Schwab (2):
+      rtla: Fix double free
+      rtla: Define syscall numbers for riscv
+
+Daniel Bristot de Oliveira (1):
+      rtla: Fix Makefile when called from -C tools/
+
+jianchunfu (1):
+      rtla/utils: Use calloc and check the potential memory allocation failure
+
+----
+ tools/tracing/rtla/Makefile    | 2 +-
+ tools/tracing/rtla/src/trace.c | 9 +++++++--
+ tools/tracing/rtla/src/utils.c | 7 ++++---
+ 3 files changed, 12 insertions(+), 6 deletions(-)
+---------------------------
+diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+index 3822f4ea5f49..1bea2d16d4c1 100644
+--- a/tools/tracing/rtla/Makefile
++++ b/tools/tracing/rtla/Makefile
+@@ -1,6 +1,6 @@
+ NAME	:=	rtla
+ # Follow the kernel version
+-VERSION :=	$(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion)
++VERSION :=	$(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion | grep -v make)
+ 
+ # From libtracefs:
+ # Makefiles suck: This macro sets a default value of $(2) for the
+diff --git a/tools/tracing/rtla/src/trace.c b/tools/tracing/rtla/src/trace.c
+index 5784c9f9e570..e1ba6d9f4265 100644
+--- a/tools/tracing/rtla/src/trace.c
++++ b/tools/tracing/rtla/src/trace.c
+@@ -134,13 +134,18 @@ void trace_instance_destroy(struct trace_instance *trace)
+ 	if (trace->inst) {
+ 		disable_tracer(trace->inst);
+ 		destroy_instance(trace->inst);
++		trace->inst = NULL;
+ 	}
+ 
+-	if (trace->seq)
++	if (trace->seq) {
+ 		free(trace->seq);
++		trace->seq = NULL;
++	}
+ 
+-	if (trace->tep)
++	if (trace->tep) {
+ 		tep_free(trace->tep);
++		trace->tep = NULL;
++	}
+ }
+ 
+ /*
+diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
+index 5352167a1e75..663a047f794d 100644
+--- a/tools/tracing/rtla/src/utils.c
++++ b/tools/tracing/rtla/src/utils.c
+@@ -106,8 +106,9 @@ int parse_cpu_list(char *cpu_list, char **monitored_cpus)
+ 
+ 	nr_cpus = sysconf(_SC_NPROCESSORS_CONF);
+ 
+-	mon_cpus = malloc(nr_cpus * sizeof(char));
+-	memset(mon_cpus, 0, (nr_cpus * sizeof(char)));
++	mon_cpus = calloc(nr_cpus, sizeof(char));
++	if (!mon_cpus)
++		goto err;
+ 
+ 	for (p = cpu_list; *p; ) {
+ 		cpu = atoi(p);
+@@ -224,7 +225,7 @@ long parse_ns_duration(char *val)
+ #elif __arm__
+ # define __NR_sched_setattr	380
+ # define __NR_sched_getattr	381
+-#elif __aarch64__
++#elif __aarch64__ || __riscv
+ # define __NR_sched_setattr	274
+ # define __NR_sched_getattr	275
+ #elif __powerpc__

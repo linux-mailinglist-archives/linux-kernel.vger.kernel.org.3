@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C99588AE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F91D588AE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235790AbiHCLHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 07:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S235875AbiHCLIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 07:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiHCLHa (ORCPT
+        with ESMTP id S235819AbiHCLIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 07:07:30 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCF921A2;
-        Wed,  3 Aug 2022 04:07:28 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id uj29so17667891ejc.0;
-        Wed, 03 Aug 2022 04:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uJf2Rd5aYjBzLVvZyoKj8ZEt37zTrFyyOUBbDF7qQoQ=;
-        b=VRzqAzRkMg1iji03JVVS21GDJcFATk1vNkRcbyyoBTPNets1KqTdCZjrUQjX3dTQRX
-         zAEw1RwiUMOz46ZC6lWGu3Vtrnx72ru4RBbgclRXQV1N7JoPlPkEJ177+7tnBN68Bi94
-         BLPpcFo3QN55k9frE83NphXOHZo8joIU3RaZdSMxqWgijNrFZU3QkOljOSnbtOLde3sW
-         5/oMo410AZA+z/RNxKjqr9zFVjh3mqQlZ57Xcwz0DObTczNeoPhpRHu3xj8XzBaXgm34
-         pL1st712o6b7Sn2/wg6JDSd1JE8aVtZu1kr2WxacQ5RLN0mipTCr7c3T5AkHlVS9vovv
-         LUKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uJf2Rd5aYjBzLVvZyoKj8ZEt37zTrFyyOUBbDF7qQoQ=;
-        b=gGB3NTMIpCaUKtFIUTmZpV2rxal88vl3vD7tbrUJyKjIAgTBXiaioewo4P194IXBUP
-         P5Zdt33Y93eh3UpcM8fZTj2/2tXk274O4YYUMA4+vDqWnIfd4kZZ1s3rC9rcCePSddlQ
-         /t3Vrdpaivx/GyN1f2IU07uX1GoI61vKOGzAPT3syMmOYRLlIjC+/y/bx41fahxNzsMh
-         GiIx8SED1SC1IjD6bBlSNzdLfKUoQ5k89F8LrIBSYAsdEQuvb1/CvGMGtPN5jZntTj0L
-         /uAQGB4rQA3SgkQVYZMpnAEJbhRMMyRePPiHN7ogSL9Dk2T/PYFZCoimBHA1ryPjIis0
-         f+cg==
-X-Gm-Message-State: ACgBeo0/huTi/254oAaPFPhrzU4axI5GZY80WRyxa6W6zLL05kCdjaD1
-        vta8dG3B/O2TxUVLDGaLty0=
-X-Google-Smtp-Source: AA6agR4/sWa0cwLxrpCL0TrsfmDDwzNEIyzON8DHDlaYaUoVEmvRbU7nfHLLBkpGDLG2x2+Qdm0fQg==
-X-Received: by 2002:a17:907:d1f:b0:730:95c0:6cbc with SMTP id gn31-20020a1709070d1f00b0073095c06cbcmr8654385ejc.395.1659524846660;
-        Wed, 03 Aug 2022 04:07:26 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id g25-20020a170906539900b00730b933410csm292960ejo.145.2022.08.03.04.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 04:07:25 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 14:07:23 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun.Ramadoss@microchip.com
-Cc:     andrew@lunn.ch, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
-        linux@armlinux.org.uk, f.fainelli@gmail.com, kuba@kernel.org,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        Woojung.Huh@microchip.com, davem@davemloft.net
-Subject: Re: [Patch RFC net-next 2/4] net: dsa: microchip: lan937x: remove
- vlan_filtering_is_global flag
-Message-ID: <20220803110723.hym43imgsnnrgdnj@skbuf>
-References: <20220729151733.6032-1-arun.ramadoss@microchip.com>
- <20220729151733.6032-1-arun.ramadoss@microchip.com>
- <20220729151733.6032-3-arun.ramadoss@microchip.com>
- <20220729151733.6032-3-arun.ramadoss@microchip.com>
- <20220802104032.7g7jgn6t3xq6tcu5@skbuf>
- <1fe46b15172ff82125c46369d9ed235f67ed5afe.camel@microchip.com>
+        Wed, 3 Aug 2022 07:08:05 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FD11B79F
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:07:53 -0700 (PDT)
+X-UUID: d7481b9851dd428693477088b0959532-20220803
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=1SasbzoC2Ds5PFkGibtZDjGZyrgO09YD9RDB7LIzRHI=;
+        b=hR0Uoo4pOWDq66jiSzIPBVKOdOSmewq1YzY/ql6gKDG47wQHE4w8Pbwd2atO/jFsXf1DK0JDjBoLd+d4ZPR8QUjJp7CUDiciE4dSjmoi7YFyERt03QVh9s56OpI1YgYqKXZ3d2CaoU/UqNtlZjXdVBaqBl/guXSLERItf6ovhd4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:e8819d5b-b7ba-4299-8bf4-3e29a88b5c72,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.8,REQID:e8819d5b-b7ba-4299-8bf4-3e29a88b5c72,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:0f94e32,CLOUDID:975d2fd0-a6cf-4fb6-be1b-c60094821ca2,C
+        OID:4c28708342a1,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: d7481b9851dd428693477088b0959532-20220803
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <kuan-ying.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 821057793; Wed, 03 Aug 2022 19:07:49 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 3 Aug 2022 19:07:47 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Wed, 3 Aug 2022 19:07:47 +0800
+Message-ID: <238915dffb733adc5126a1605de0b2878be6ca6e.camel@mediatek.com>
+Subject: Re: [PATCH] arm64: Fix comment typo
+From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Chinwen Chang =?UTF-8?Q?=28=E5=BC=B5=E9=8C=A6=E6=96=87=29?= 
+        <chinwen.chang@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>
+Date:   Wed, 3 Aug 2022 19:07:47 +0800
+In-Reply-To: <20220721030531.21234-1-Kuan-Ying.Lee@mediatek.com>
+References: <20220721030531.21234-1-Kuan-Ying.Lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1fe46b15172ff82125c46369d9ed235f67ed5afe.camel@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 04:09:35PM +0000, Arun.Ramadoss@microchip.com wrote:
-> I have done some study on this SW_VLAN_ENABLE bit. By default the pvid
-> of the port is 1 and vlan port membership (0xNA04) is 0xff. So if the
-> bit is 0, then unknown dest addr packets are broadcasted which is the
-> default behaviour of switch.
-> Now consider when the bit is 1,
-> - If the invalid vlan packet is received, then based on drop invalid
-> vid or unknown vid forward bit, packets are discarded or forwarded.
-> - If the valid vlan packet is received, then broadcast to ports in vlan
-> port membership list.
-> The port membership register set using the ksz9477_cfg_port_member
-> function.
-> In summary, I infer that we can enable this bit in the port_setup and
-> based on the port membership packets can be forwarded. Is my
-> understanding correct?
-> Can I remove this patch from this series and submit as the separate
-> one?
+On Thu, 2022-07-21 at 11:05 +0800, Kuan-Ying Lee wrote:
 
-I'm not sure that the switch's capabilities are quite in line with the
-Linux kernel expectations if you always force the 802.1Q VLAN Enable bit
-to true.
+Kindly ping.
 
-I am looking at Table 4-8: VLAN forwarding from the KSZ9563 datasheet,
-and it says that when the "Unknown VID forward" bit is set and we are in
-VLAN enable mode, packets are forwarded to the Unknown VID packet
-forward list regardless of ALU match (which is "don't care" in this table).
-In essence this is because the switch failed to resolve the unknown VID
-to a FID. Other switches have a default FID for this case, but it
-doesn't appear to hold true for KSZ.
+> Replace wrong 'FIQ EL1h' comment with 'FIQ EL1t'.
+> 
+> Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+> ---
+>  arch/arm64/kernel/entry.S | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+> index 254fe31c03a0..2d73b3e793b2 100644
+> --- a/arch/arm64/kernel/entry.S
+> +++ b/arch/arm64/kernel/entry.S
+> @@ -502,7 +502,7 @@ tsk	.req	x28		// current
+> thread_info
+>  SYM_CODE_START(vectors)
+>  	kernel_ventry	1, t, 64, sync		// Synchronous EL1t
+>  	kernel_ventry	1, t, 64, irq		// IRQ EL1t
+> -	kernel_ventry	1, t, 64, fiq		// FIQ EL1h
+> +	kernel_ventry	1, t, 64, fiq		// FIQ EL1t
+>  	kernel_ventry	1, t, 64, error		// Error EL1t
+>  
+>  	kernel_ventry	1, h, 64, sync		// Synchronous EL1h
+> -- 
+> 2.18.0
+> 
 
-The last thing you want is for packets under a VLAN-unaware bridge to be
-always flooded to the ports in the Unknown VID packet forward list, and
-bypass ALU lookups.

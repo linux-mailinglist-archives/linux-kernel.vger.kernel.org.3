@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2B9588F29
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AED9C588F2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237984AbiHCPMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        id S237959AbiHCPOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237947AbiHCPMt (ORCPT
+        with ESMTP id S235842AbiHCPOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:12:49 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A620B3AE78
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:12:48 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id e127so28078301yba.12
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:12:48 -0700 (PDT)
+        Wed, 3 Aug 2022 11:14:17 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F47D2A948;
+        Wed,  3 Aug 2022 08:14:17 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id b12so7914122ils.9;
+        Wed, 03 Aug 2022 08:14:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=XZXEy3cvHjx2bX+d6U1ZgIae2UNxoQkQn7NuGYQFw2Y=;
-        b=eTkF0CuqpfS6zseV19j0r6CXBKG181mwXlnys1i2gnvTKj/TyMYrzZY9ZONUS6/YgB
-         pgXCgeuoJdwWFZ0Tp8cZaTfQ9boA7FfUSKFm3CnBonoiqSMQnrjQi9lnw2O9/p+WGbEl
-         ZoGY/gg4XypN8QWyIQ0GHnHTB9l1qerbVGW0PHOkkYoNLytYZb0s7cyAXUb/SgC8mrPH
-         56FxDPvQjt57Cc+sE0bOCZ51QyBmSONXoMWjp65PR6BoCTnpg1aVRF1IqrtzmSwxKkTi
-         8OX76ZsMiYmOH9NZSNaX1pT9mCzT1EaeWc8V001UKdGvDnCNrU+5T9YdzXrOp7lzbjwk
-         SUIg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=+eg48Gqjxnl7qAw9rfss7ig1UaZHXSb7kMN4rECN/MA=;
+        b=UeeDIRUKUlOmqhSfgPa0csQ1j/DmWP96LD08BcfaGtqsIiveCz55emN89+loAlaYsf
+         q8Kgq8TVBAtEMjBTed4D1z0eInYAxl1Ss0GCUBdoFwlXfONbHcLvBjqv2teSQV9mbQ3Y
+         GBc0TDc8gH+n+dorSzQODxdYOEkhn+pNu0jUoFWPsuOEn1IyBOl9IDtUj6hd6M18YMSq
+         ++p3WcTqYnUGSd/w43xR2yHqRhMzZ0qDRVKm9E19uopZuTYpXnaGjGftMCx5OTt8lpgj
+         pG8LbksnoSvxTNxFqcpUv6m2GxvUuyTDzUZsIKsBZRwfIM9RPf5VvNnq62EcbT/gPcP1
+         d5ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=XZXEy3cvHjx2bX+d6U1ZgIae2UNxoQkQn7NuGYQFw2Y=;
-        b=OIlty0v/GVUzsML9EzdxXvr1qeNHkKDGGUUhmQcMaqYaBTshSiFPFB7RQ6OvqMeTTH
-         92055LemUphyZdNEd2kPA4nbua1zh9fmFchwug2TvAfJMhDO5M21wF5ROh07N8srKEuY
-         gTQVNJILohPEGC89Q2MB1cWAJi3NSmunob1FIIl6a+4GoiCETKQIUqIcMdMUsEg0hSq3
-         DeOcuELIpMyXhic76xbXrp4Hx+qPvcyQ9UpGiWPpgrsR68hZ8fq1aVyQK7B8pX7o+CBv
-         VmNenNwVZttzg2n9Daay1bYPNulEr9GyARXGK/ZrkffdZIdtSIdpF0+0lV0KRolnUGbF
-         nOUw==
-X-Gm-Message-State: ACgBeo1jowtbIZjMdWx8gi74Q8vJb9j9QiwK8YZwoNjkFWYdBLpRKvJ/
-        mzF8KQU13hyFkUxsZSDzAOE87Dfe3zUlfwjvhUplzg==
-X-Google-Smtp-Source: AA6agR7v/HPFCTCefE30aAswl27LuEi01dCUtvdjZs8cqGMByB77wUzH4MdPg6auWGZLmUWuRbRJxX8tKh78xz8UH6o=
-X-Received: by 2002:a25:9d8d:0:b0:676:a71d:edad with SMTP id
- v13-20020a259d8d000000b00676a71dedadmr19251128ybp.94.1659539567685; Wed, 03
- Aug 2022 08:12:47 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=+eg48Gqjxnl7qAw9rfss7ig1UaZHXSb7kMN4rECN/MA=;
+        b=eKNmLgLen0BY24Qd6r9Sgnjr/7ynlcN96Uts1W72F4PCJOLrAp8VsgtK+WuQgraeJY
+         SdbBZLi4XNrWf5vXWHC4fJLVxOAJkGCTw5UIQA5DIE41BQ/SekYHe7aYWVKPjaW1YPKh
+         eTIwEqp/PGFjTA4Ltf7LehxShcpy9FOuOeSIa4Zy2sfQU6x2CR2XkjHMTQuhHiVWndLi
+         1et0mR9bdyZZu8GvQ504oSq8ZsienDuSCYS7BMHl/6UfdgO64mwY4i3hbOmD8MZpRcsC
+         cKpUkr6Tw8boK1gGb8KJACEXxoKO2JuMRiOh3QRZ2nwWSZwe+SOGGLshoeHatdSIMPXl
+         jA8Q==
+X-Gm-Message-State: ACgBeo21KbORxnW4esSol9riA1KpxyAQCXmdVPJkfEiHWaSk4A0wy1hz
+        OX1C6UTikQiBMnUYcTjXpi0LWgodINvVPg==
+X-Google-Smtp-Source: AA6agR4wVa18LniMwhjSzusYlgSfwRwyAlvXsA+sg3vu6a6iCWg7ZrPlP01eWxHAfqLn9nLjEmn6eg==
+X-Received: by 2002:a05:6e02:1410:b0:2de:6e34:e08e with SMTP id n16-20020a056e02141000b002de6e34e08emr7479929ilo.157.1659539655874;
+        Wed, 03 Aug 2022 08:14:15 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
+        by smtp.gmail.com with ESMTPSA id cx10-20020a056638490a00b0034142dad202sm619062jab.31.2022.08.03.08.14.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 08:14:15 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] libbpf: ensure functions with always_inline attribute are inline
+Date:   Wed,  3 Aug 2022 09:14:03 -0600
+Message-Id: <20220803151403.793024-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220731050342.56513-1-khuey@kylehuey.com> <Yuo59tV071/i6yhf@gmail.com>
-In-Reply-To: <Yuo59tV071/i6yhf@gmail.com>
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Wed, 3 Aug 2022 08:12:34 -0700
-Message-ID: <CAP045ArF0SX84tDr=iZoK=EnXK2LsXYut3-KMkCxQO2OOhn=0A@mail.gmail.com>
-Subject: Re: [PATCH] x86/fpu: Allow PKRU to be (once again) written by ptrace.
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        "Robert O'Callahan" <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        kvm@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,146 +78,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 2:03 AM Ingo Molnar <mingo@kernel.org> wrote:
->
->
-> * Kyle Huey <me@kylehuey.com> wrote:
->
-> > From: Kyle Huey <me@kylehuey.com>
-> >
-> > When management of the PKRU register was moved away from XSTATE, emulation
-> > of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
-> > for APIs that write XSTATE. This can be seen by running gdb and executing
-> > `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
-> > write to the PKRU register (which gdb performs through ptrace) is ignored.
-> >
-> > There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
-> > sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
-> > make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
-> > down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
-> > and sigreturn pass in pointers to the appropriate PKRU value.
-> >
-> > This also adds code to initialize the PKRU value to the hardware init value
-> > (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
-> > This is a change to the current KVM_SET_XSAVE behavior.
-> >
-> > Signed-off-by: Kyle Huey <me@kylehuey.com>
-> > Cc: kvm@vger.kernel.org # For edge case behavior of KVM_SET_XSAVE
-> > Cc: stable@vger.kernel.org # 5.14+
-> > Fixes: e84ba47e313dbc097bf859bb6e4f9219883d5f78
-> > ---
-> >  arch/x86/kernel/fpu/core.c   | 11 +----------
-> >  arch/x86/kernel/fpu/regset.c |  2 +-
-> >  arch/x86/kernel/fpu/signal.c |  2 +-
-> >  arch/x86/kernel/fpu/xstate.c | 26 +++++++++++++++++++++-----
-> >  arch/x86/kernel/fpu/xstate.h |  4 ++--
-> >  5 files changed, 26 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> > index 0531d6a06df5..dfb79e2ee81f 100644
-> > --- a/arch/x86/kernel/fpu/core.c
-> > +++ b/arch/x86/kernel/fpu/core.c
-> > @@ -406,16 +406,7 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
-> >       if (ustate->xsave.header.xfeatures & ~xcr0)
-> >               return -EINVAL;
-> >
-> > -     ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
-> > -     if (ret)
-> > -             return ret;
-> > -
-> > -     /* Retrieve PKRU if not in init state */
-> > -     if (kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU) {
-> > -             xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
-> > -             *vpkru = xpkru->pkru;
-> > -     }
-> > -     return 0;
-> > +     return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
-> >  }
-> >  EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);
-> >  #endif /* CONFIG_KVM */
-> > diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
-> > index 75ffaef8c299..6d056b68f4ed 100644
-> > --- a/arch/x86/kernel/fpu/regset.c
-> > +++ b/arch/x86/kernel/fpu/regset.c
-> > @@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
-> >       }
-> >
-> >       fpu_force_restore(fpu);
-> > -     ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
-> > +     ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
-> >
-> >  out:
-> >       vfree(tmpbuf);
-> > diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
-> > index 91d4b6de58ab..558076dbde5b 100644
-> > --- a/arch/x86/kernel/fpu/signal.c
-> > +++ b/arch/x86/kernel/fpu/signal.c
-> > @@ -396,7 +396,7 @@ static bool __fpu_restore_sig(void __user *buf, void __user *buf_fx,
-> >
-> >       fpregs = &fpu->fpstate->regs;
-> >       if (use_xsave() && !fx_only) {
-> > -             if (copy_sigframe_from_user_to_xstate(fpu->fpstate, buf_fx))
-> > +             if (copy_sigframe_from_user_to_xstate(tsk, buf_fx))
-> >                       return false;
-> >       } else {
-> >               if (__copy_from_user(&fpregs->fxsave, buf_fx,
-> > diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> > index c8340156bfd2..1eea7af4afd9 100644
-> > --- a/arch/x86/kernel/fpu/xstate.c
-> > +++ b/arch/x86/kernel/fpu/xstate.c
-> > @@ -1197,7 +1197,7 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
-> >
-> >
-> >  static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
-> > -                            const void __user *ubuf)
-> > +                            const void __user *ubuf, u32 *pkru)
-> >  {
-> >       struct xregs_state *xsave = &fpstate->regs.xsave;
-> >       unsigned int offset, size;
-> > @@ -1235,6 +1235,22 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
-> >       for (i = 0; i < XFEATURE_MAX; i++) {
-> >               mask = BIT_ULL(i);
-> >
-> > +             if (i == XFEATURE_PKRU) {
-> > +                     /*
-> > +                      * Retrieve PKRU if not in init state, otherwise
-> > +                      * initialize it.
-> > +                      */
-> > +                     if (hdr.xfeatures & mask) {
-> > +                             struct pkru_state xpkru = {0};
-> > +
-> > +                             copy_from_buffer(&xpkru, xstate_offsets[i],
-> > +                                              sizeof(xpkru), kbuf, ubuf);
->
-> Shouldn't the failure case of copy_from_buffer() be handled?
+GCC expects the always_inline attribute to only be set on inline
+functions, as such we should make all functions with this attribute
+use the __always_inline macro which makes the function inline and
+sets the attribute.
 
-Yes, it should be. The sigreturn case could hit it.
+Fixes errors like:
+/home/buildroot/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_tracing.h:439:1: error: ‘always_inline’ function might not be inlinable [-Werror=attributes]
+  439 | ____##name(unsigned long long *ctx, ##args)
+      | ^~~~
 
-> Also, what's the security model for this register, do we trust all input
-> values user-space provides for the PKRU field in the XSTATE? I realize that
-> WRPKRU already gives user-space write access to the register - but does the
-> CPU write it all into the XSTATE, with no restrictions on content
-> whatsoever?
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - use __always_inline macro
+---
+ tools/lib/bpf/bpf_tracing.h | 14 +++++++-------
+ tools/lib/bpf/usdt.bpf.h    |  4 ++--
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
-There is no security model for this register. The CPU does write
-whatever is given to WRPKRU (or XRSTOR) into the PKRU register. The
-pkeys(7) man page notes:
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index 43ca3aff2292..5fdb93da423b 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -426,7 +426,7 @@ struct pt_regs;
+  */
+ #define BPF_PROG(name, args...)						    \
+ name(unsigned long long *ctx);						    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __always_inline typeof(name(0))					    \
+ ____##name(unsigned long long *ctx, ##args);				    \
+ typeof(name(0)) name(unsigned long long *ctx)				    \
+ {									    \
+@@ -435,7 +435,7 @@ typeof(name(0)) name(unsigned long long *ctx)				    \
+ 	return ____##name(___bpf_ctx_cast(args));			    \
+ 	_Pragma("GCC diagnostic pop")					    \
+ }									    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __always_inline typeof(name(0))					    \
+ ____##name(unsigned long long *ctx, ##args)
+ 
+ struct pt_regs;
+@@ -460,7 +460,7 @@ struct pt_regs;
+  */
+ #define BPF_KPROBE(name, args...)					    \
+ name(struct pt_regs *ctx);						    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __always_inline typeof(name(0))					    \
+ ____##name(struct pt_regs *ctx, ##args);				    \
+ typeof(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+@@ -469,7 +469,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
+ 	return ____##name(___bpf_kprobe_args(args));			    \
+ 	_Pragma("GCC diagnostic pop")					    \
+ }									    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __always_inline typeof(name(0))					    \
+ ____##name(struct pt_regs *ctx, ##args)
+ 
+ #define ___bpf_kretprobe_args0()       ctx
+@@ -484,7 +484,7 @@ ____##name(struct pt_regs *ctx, ##args)
+  */
+ #define BPF_KRETPROBE(name, args...)					    \
+ name(struct pt_regs *ctx);						    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __always_inline typeof(name(0))					    \
+ ____##name(struct pt_regs *ctx, ##args);				    \
+ typeof(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+@@ -540,7 +540,7 @@ static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, ##args)
+ #define BPF_KSYSCALL(name, args...)					    \
+ name(struct pt_regs *ctx);						    \
+ extern _Bool LINUX_HAS_SYSCALL_WRAPPER __kconfig;			    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __always_inline typeof(name(0))					    \
+ ____##name(struct pt_regs *ctx, ##args);				    \
+ typeof(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+@@ -555,7 +555,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
+ 		return ____##name(___bpf_syscall_args(args));		    \
+ 	_Pragma("GCC diagnostic pop")					    \
+ }									    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __always_inline typeof(name(0))					    \
+ ____##name(struct pt_regs *ctx, ##args)
+ 
+ #define BPF_KPROBE_SYSCALL BPF_KSYSCALL
+diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
+index 4f2adc0bd6ca..fdfd235e52c4 100644
+--- a/tools/lib/bpf/usdt.bpf.h
++++ b/tools/lib/bpf/usdt.bpf.h
+@@ -232,7 +232,7 @@ long bpf_usdt_cookie(struct pt_regs *ctx)
+  */
+ #define BPF_USDT(name, args...)						    \
+ name(struct pt_regs *ctx);						    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __always_inline typeof(name(0))					    \
+ ____##name(struct pt_regs *ctx, ##args);				    \
+ typeof(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+@@ -241,7 +241,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
+         return ____##name(___bpf_usdt_args(args));			    \
+         _Pragma("GCC diagnostic pop")					    \
+ }									    \
+-static __attribute__((always_inline)) typeof(name(0))			    \
++static __always_inline typeof(name(0))					    \
+ ____##name(struct pt_regs *ctx, ##args)
+ 
+ #endif /* __USDT_BPF_H__ */
+-- 
+2.34.1
 
-Protection keys have the potential to add a layer of security and
-reliability to applications. But they have not been primarily designed
-as a security feature. For instance, WRPKRU is a completely
-unprivileged instruction, so pkeys are useless in any case that an
-attacker controls the PKRU register or can execute arbitrary
-instructions.
-
-And the ERIM paper
-(https://www.usenix.org/system/files/sec19-vahldiek-oberwagner_0.pdf)
-explicitly contemplates the need to protect against the less
-privileged code containing WRPKRU and XRSTOR instructions (though they
-do seem to have missed the implicit XRSTOR in sigreturn).
-
-> Thanks,
->
->         Ingo
-
-- Kyle

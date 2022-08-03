@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E7D588725
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEA7588729
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235602AbiHCGKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 02:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S235780AbiHCGLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 02:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbiHCGKK (ORCPT
+        with ESMTP id S235622AbiHCGLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 02:10:10 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147861AF04;
-        Tue,  2 Aug 2022 23:10:09 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 5E1AE3200903;
-        Wed,  3 Aug 2022 02:10:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 03 Aug 2022 02:10:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1659507006; x=1659593406; bh=zbcXK+Pq3r
-        2o6TfFjCadiK+q4efrY4aQSdlC3heWrjQ=; b=LbABIl7YmLmAUdN7XSujxI7fWI
-        eo4hWD2OZYBKEsyN0Sbb8E8YlnE4tYpUOiJhgtjKJG5pAtHuoIK5E0s0cPNCUNtU
-        6pVbmnF3mpVQOSMd/iuI+gFKBAwS1A5PCq5CJ+D/5f+CRoV/HTNe3atS41hYSbj6
-        8BLyz6D5FALFRIyBJyexud2Ug6XSg8ARfX2B5GDrtlYoIukOIV5yGIlFNPmHqvdJ
-        tiYAD/VSdV0SIr8ka06nxQFptzSTnolRs7AYNHqbNBFLOigfEl4qgLhUfP6WSM/G
-        Cr7YBm0WKyABn/Y7r/MUL7wTeu16Pn0GleW0CloXWVH4xJrEZ2BWpCZuTzEw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1659507006; x=1659593406; bh=zbcXK+Pq3r2o6TfFjCadiK+q4efr
-        Y4aQSdlC3heWrjQ=; b=p2eR64hzxzXCCMESuSSt58r6XMMgM/GVsBej//8+jDFc
-        Co6M1MnJkDvvk7u1OxCjIgqPfXghu9FFyO7b2UhShv2t744S1IQovq7flzXh0SEa
-        zRzqb4emypNcw0QZlY+7eZHeGRcLGy32DupuK50tXM4q247uaj8aoaUbrwuQmDE6
-        7tlBvexiel7UuvWIkV0S1S+N77vYTnUuwEIk4JBzkkU35AGjbFdrU/3j4KI9aV7D
-        qlfcrlWXP5G948i9jbqv2FRT0rafuQWnjedq2pNqa2PvgNQXesxtxI5atug86JsW
-        hGZ6+3k7Vx2JYUCaFo8dtfECDQ6zfA8L/i+uwpPhJA==
-X-ME-Sender: <xms:PhHqYrMzy90ol5kcGPFCL6ICcOOPN2o3nPFuyiq4uOHGZoPyhvm-Aw>
-    <xme:PhHqYl_x8SrePusKqi3YnlbK6oEV0C6sdErIYMyDGQTVcwiwWj9WB8PmCblt130UW
-    TiHquQRq_ojSw>
-X-ME-Received: <xmr:PhHqYqR304SybrlzGGapbr-0Q74YRHeTi_-J5alq_yTZfhR1fbBuT9UrCSnKMI7E4z-bhwHXCpvlqhCASFkwbu5tw1nxyLwQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddviedguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeghe
-    euhefgtdeluddtleekfeegjeetgeeikeehfeduieffvddufeefleevtddtvdenucffohhm
-    rghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:PhHqYvu0mlOLQiyq5Lq9Pcaa2KV-EEgEmOQsaSBFbctVCs5_kz-EZQ>
-    <xmx:PhHqYjdVIFW2orkBaEmTsq3Txtkj0t0PFhIHXi_OTMphxarBVomflw>
-    <xmx:PhHqYr1O7gws7dv1wheH-KKQzG0yqPI8ox8poqyhfxPAtAvO2PHnhg>
-    <xmx:PhHqYh1kzOr3H3dw5AOB8uTHG6VezfY9xJFk_HnrnhWoCATHqXs0BQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 3 Aug 2022 02:10:05 -0400 (EDT)
-Date:   Wed, 3 Aug 2022 08:10:03 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-serial@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tty tree
-Message-ID: <YuoRO0e4FM/vPn4w@kroah.com>
-References: <20220802200649.2122084-1-broonie@kernel.org>
- <CAD=FV=X2aPq8Zsv-GSfj8Kz_9+MFxmejchoF4LUUY3tOLx3Ntw@mail.gmail.com>
+        Wed, 3 Aug 2022 02:11:08 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49435201B7
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 23:11:07 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id m9so17833387ljp.9
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 23:11:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QoMJEDXqR4eIF4IASWXdOokQ+55n5mDMby1kRaG/HSM=;
+        b=OhJcdZq9zDydApto3QxFuxa9FqLO7pJWxzKfN2DV0yGhlBLC9EFrB9hSwYRUHyWfz7
+         OSsjTc8Hn9m5eZQzG8cI0MnIcVg9eyNhajmfcXpgfxDbwEB1T3rMFElhaIjQoHSo/WTJ
+         NFYOzHs0Z67TWBlUGJxOgpSHxplYLxJtOb0N8iU8iNsHMmtFgL2IWq+mZusa3hzU49K6
+         nlf/maCe1y6OHkSX/p9UFzB1TVrAbINL2Wr1sFL0ulmHLMDdBQvfYBft2p/frxLNw9zA
+         UHGyuZmaHaF39CAT4K+ZAyG9QsQCfeyHZH9CIGcvnG5N6fBAkhsv6KJt22GPRzoKXoBy
+         GS6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QoMJEDXqR4eIF4IASWXdOokQ+55n5mDMby1kRaG/HSM=;
+        b=t6m8KEa4kVv1GZmlCGKjG6ibWAqIFiod5HtoKZn9wjdQN1/eaLRIlhYe8cR7bHJYNP
+         dXZpdBK5Z0WLonNzRr+qbqpTr7rpNQWT3IUl1vGIcYtYDzTDunCaBJC2kztDEZbfu76p
+         gS9BmL37cceVlkzU1FwFifL8Us5odt0BIrWmsaSsUoJ0bOa6dCFAH0kQLSRbVgZ4Gtgy
+         wgbl03kGXMyzAYhhfAxYVtQSrozCzNE139dn39gNf/p1uH0ts+reamFxZrhgNvYemNda
+         Hokon9tXffmMcPYs1nNLNiEn5Eg5tJBaFP2DVuIsladAEMmJJXWdOegltQKqUKUfaAtO
+         YP3g==
+X-Gm-Message-State: AJIora/v6QFlsYXw/uo0S5beWofmUMaEG634eh0AfbF8i283E1FJgGAK
+        1k9nHeKHmkduWJeuXGeOJ5dk+g==
+X-Google-Smtp-Source: AGRyM1vW8N/9hORhsm1kN8Q9PDUfMzZ2mGXeJpVq9yj72rbi1OLc/w3tUsYZ84ZlhLAxUACT1oT/2g==
+X-Received: by 2002:a05:651c:1992:b0:25e:68d:e757 with SMTP id bx18-20020a05651c199200b0025e068de757mr7245754ljb.309.1659507065652;
+        Tue, 02 Aug 2022 23:11:05 -0700 (PDT)
+Received: from [192.168.1.6] ([213.161.169.44])
+        by smtp.gmail.com with ESMTPSA id o18-20020ac25e32000000b00489f0c8bddesm455144lfg.207.2022.08.02.23.11.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 23:11:04 -0700 (PDT)
+Message-ID: <dc7bca02-5eb3-3b33-8911-a950b630f197@linaro.org>
+Date:   Wed, 3 Aug 2022 08:11:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=X2aPq8Zsv-GSfj8Kz_9+MFxmejchoF4LUUY3tOLx3Ntw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/2] spi: dt-binding: add Microchip CoreQSPI compatible
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor.dooley@microchip.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
+ <20220801094255.664548-2-nagasuresh.relli@microchip.com>
+ <6d36b192-9e63-ec13-5583-22b81c99c18b@linaro.org>
+ <Yuki3jpCSJDdXcWA@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Yuki3jpCSJDdXcWA@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 01:27:25PM -0700, Doug Anderson wrote:
-> Hi,
+On 02/08/2022 15:13, Mark Brown wrote:
+> On Tue, Aug 02, 2022 at 10:52:25AM +0200, Krzysztof Kozlowski wrote:
+>> On 01/08/2022 11:42, Naga Sureshkumar Relli wrote:
 > 
-> On Tue, Aug 2, 2022 at 1:07 PM <broonie@kernel.org> wrote:
-> >
-> > Caused by commit
-> >
-> >   c474c775716edd46a5 ("tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which otherwise could return a sub-optimal clock rate.")
-> >
-> > I have used the tree from 20220727 instead.
+>>> -    enum:
+>>> -      - microchip,mpfs-spi
+>>> -      - microchip,mpfs-qspi
+>>> +    oneOf:
+>>> +      - description: Microchip's Polarfire SoC SPI controller.
+>>> +        const: microchip,mpfs-spi
+>>> +      - description: Microchip's Polarfire SoC QSPI controller.
 > 
-> Posted a fix: ("tty: serial: qcom-geni-serial: Fix %lu -> %u in print
-> statements") [1]
+>> Useless descriptions - they repeat compatible. Just keep it as enum and
+>> skip descriptions. What value do they bring?
 > 
-> [1] https://lore.kernel.org/r/20220802132250.1.Iea061e14157a17e114dbe2eca764568a02d6b889@changeid
+> Someone not familiar with the full Microchip product line might not be
+> aware of the expansion of mpfs, it's not blindingly obvious.
 
-Thanks, I'll pick it up now.
+Then it should be explained in title/description of the binding, not in
+compatible. This is the usual way of providing some text description,
+not for each compatible by repeating the compatible text.
 
-greg k-h
+Best regards,
+Krzysztof

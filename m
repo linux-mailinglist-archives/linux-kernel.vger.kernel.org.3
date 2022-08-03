@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE9E58924A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 20:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D34558924B
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 20:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238170AbiHCS37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 14:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S238195AbiHCSbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 14:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236751AbiHCS35 (ORCPT
+        with ESMTP id S229765AbiHCSbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 14:29:57 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7461F5A175
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 11:29:52 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m8so22494856edd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 11:29:52 -0700 (PDT)
+        Wed, 3 Aug 2022 14:31:13 -0400
+Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com (mailrelay1-1.pub.mailoutpod1-cph3.one.com [46.30.210.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCFF4E622
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 11:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oA6nNFqtAx3x5LsiqpTHLf6wHToLYzY4zhs6wkSQF94=;
-        b=IypyMFSvUUDb3PAPYmqoU3Wkk7X2fWIhSBfvG5jIvQinuZlmeTgRHeumtg7FRDIIoL
-         DhL8pY+9yVeOgAo9uQ5Fbx9B+LuX/1gh/dDUzwK2IQzmWOUq8b1nk8tn5KvZCLyZcWHh
-         zZG8quFv4NfTj94XDMzUtyGBCrOvuuvGBMeexMEBnBBYUMMg3XTGsOTFXYPaNCZnVOvh
-         1DDufM+r6yNCFoHJ4UGElPMfd1a8/5WBtn6njSuSoo41aF1YOPo8bCLZBWmScM+3kIBW
-         VL0lQL3hCFNXTObnWCvvyFM1Gs5TW2hJ5QYpIZVVhmu0EFYcoPnbQBlmHUQhbXv2Zo0n
-         1JoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oA6nNFqtAx3x5LsiqpTHLf6wHToLYzY4zhs6wkSQF94=;
-        b=qqeYa8SeFnHFkBIKE7Jz6bKPOkN/pXQKTBRjhi1BXkzqXJ3CbvubEY7nptt7uWNlnE
-         bcz3p9pyv02TwC7rYQ5Cw8wdSFOMehRfnS3C7XgVBr+5M9KtkYhpdidEQ89s5upcOQWf
-         hGW7dfLEcdYTlSeA3v2ztxjkXmRco58wfFFleDZLAmmiNl8JAaBLlPy11MWN21qAofs9
-         S/iuzU3EQZ+lCIi7Vnnmsy0vjc9yYbrfgbuVJmExUa8pcGWKA1N+bW1EGZsVwS/mrPet
-         cMq9zbbwQWtNohxpZe5FdK5bg6+QZrpDCIIz/53mm+q6VHWktzn9KjmLybrng7sfXNH6
-         qAXw==
-X-Gm-Message-State: ACgBeo1peQs9JTnEEd1tIRDoHu0L/CZeabl+gvvPWD9XcqVw9wq8yanp
-        J4DYgUNWe0SuMJ5oxk+elhcB0LO8djVB8Z5GVyHu+Q==
-X-Google-Smtp-Source: AA6agR4EcHyXPdpWatp4j51d3xayGtGdDP+Dg+Ts3yOBOxNea2vH1uz6+/hIXQUfrYTYAZ/AJMkjcIbnbAigRDbJbuQ=
-X-Received: by 2002:a05:6402:2691:b0:43d:ba10:854b with SMTP id
- w17-20020a056402269100b0043dba10854bmr13607335edd.158.1659551391085; Wed, 03
- Aug 2022 11:29:51 -0700 (PDT)
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=65y2wtoqQCBqVrsSrAIKNGOeVAKV8o3MY4b6Y1Eav/A=;
+        b=i90WrpF9CC81gCX+wdbGglJ0U/k3X3fJ4JXp9ptxLzvG5E7uiJLMypjAaaF4jB5KTiGWPCdKoajE8
+         ooz47gnkb6mSjKzlrOESUc0TQsqYKwqVO+1WmK0rsMOpboZYb1Qve+Iou/7UEsTGXtcjKJtJYbp+kJ
+         LnvY+2p6MJKW5QrALMEViFwVea1KuTxCLzoSeR7rtrIDFd7cRnTZjKK4t6WtfIvpXyGH8BmUc73C4i
+         jcQAploP6jVspv8kguDp6JyeBkamP1vtWvFrzIDgGZd9cvQn6t45ymW0jkZsHkGbIJdyl77xmwXPFj
+         6Qgw6kgK2ZhewB71IiW+CERPXI18J8A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=65y2wtoqQCBqVrsSrAIKNGOeVAKV8o3MY4b6Y1Eav/A=;
+        b=e/s5UO7hlZU1T+u4r+DFOChz3ljq+1Z3e+7Jq+MXTxZk2i4Az26l0euzk7rgnwXDpgkeE11zMwW39
+         Q6/ji2wDw==
+X-HalOne-Cookie: fcc8388dc46c66a467ca33f7355d09cec17be80e
+X-HalOne-ID: 7185b375-135a-11ed-a6ca-d0431ea8a283
+Received: from mailproxy2.cst.dirpod3-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 7185b375-135a-11ed-a6ca-d0431ea8a283;
+        Wed, 03 Aug 2022 18:31:09 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 20:31:07 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     airlied@linux.ie, daniel@ffwll.ch, kraxel@redhat.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/virtio: remove drm_plane_cleanup() destroy hook
+Message-ID: <Yuq+63QAyOYQvbvX@ravnborg.org>
+References: <20220803145520.1143208-1-dakr@redhat.com>
 MIME-Version: 1.0
-References: <20220727164251.385683-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220727164251.385683-1-krzysztof.kozlowski@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 3 Aug 2022 20:29:39 +0200
-Message-ID: <CACRpkdbNr1Ja23wj99NmExG=w8_C66cT1HcmtAuwVhAbrGrEnQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: gpio: fairchild,74hc595: use spi-peripheral-props.yaml
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803145520.1143208-1-dakr@redhat.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLACK autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,24 +60,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 6:43 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+Hi Danilo,
 
-> Instead of listing directly properties typical for SPI peripherals,
-> reference the spi-peripheral-props.yaml schema.  This allows using all
-> properties typical for SPI-connected devices, even these which device
-> bindings author did not tried yet.
->
-> Remove the spi-* properties which now come via spi-peripheral-props.yaml
-> schema, except for the cases when device schema adds some constraints
-> like maximum frequency.
->
-> While changing additionalProperties->unevaluatedProperties, put it in
-> typical place, just before example DTS.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+On Wed, Aug 03, 2022 at 04:55:20PM +0200, Danilo Krummrich wrote:
+> drmm_universal_plane_alloc() already registers drm_plane_cleanup() as
+> managed release action via drmm_add_action_or_reset(). Hence,
+> drm_plane_cleanup() should not be set as drm_plane_funcs.destroy hook.
+> 
+> Fixes: 7847628862a8 ("drm/virtio: plane: use drm managed resources")
+> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+> ---
+>  drivers/gpu/drm/virtio/virtgpu_plane.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_plane.c b/drivers/gpu/drm/virtio/virtgpu_plane.c
+> index c599c99f228e..4c09e313bebc 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_plane.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_plane.c
+> @@ -69,7 +69,6 @@ uint32_t virtio_gpu_translate_format(uint32_t drm_fourcc)
+>  static const struct drm_plane_funcs virtio_gpu_plane_funcs = {
+>  	.update_plane		= drm_atomic_helper_update_plane,
+>  	.disable_plane		= drm_atomic_helper_disable_plane,
+> -	.destroy		= drm_plane_cleanup,
+>  	.reset			= drm_atomic_helper_plane_reset,
+>  	.atomic_duplicate_state = drm_atomic_helper_plane_duplicate_state,
+>  	.atomic_destroy_state	= drm_atomic_helper_plane_destroy_state,
+> -- 
+> 2.37.1

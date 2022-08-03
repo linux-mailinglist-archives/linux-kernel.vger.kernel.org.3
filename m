@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950AB588E33
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF393588E34
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238592AbiHCOER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 10:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
+        id S238546AbiHCOFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 10:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236494AbiHCOEP (ORCPT
+        with ESMTP id S236494AbiHCOFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 10:04:15 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0332F003;
-        Wed,  3 Aug 2022 07:04:13 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 116565FD2E;
-        Wed,  3 Aug 2022 17:04:12 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1659535452;
-        bh=6XZQtWxl9pDfCffcJW86vuM5/TgZ8YvSCAXMREbLKGk=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=HGsGwwldJ5JnGyr5nIzZMkNbnQvF6r2IxyQl45jcOp5iFbbHMoJBoDEYFxJ0YDM7Q
-         zMUEnauI5wEb98/DEFRuCmz1twxbIpOP6gkBbjPNNqbPGsMr2RkFv0ppQm2uZQqVKQ
-         US+VgwLAcUXj4vCkFYsTrkKNdMrbsas1yUCmE5P/tT30pR0pEO7wsZRDqYDMjhqCuo
-         JPLtZcPQvIxv5C6BXcKydlHnkdn+yzfss8q6KQU+j2NlgLd1y/f3zuCocDoV0nKoYu
-         z5TopP9mXas3/ONsLTExUGdUcOX7AIgzdiMPoYEhZPR9feTg4dbqLxRAS3MQf+clWB
-         t02DRwRFk77Kw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Wed,  3 Aug 2022 17:04:11 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "Arseniy Krasnov" <AVKrasnov@sberdevices.ru>
-CC:     "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: [RFC PATCH v3 7/9] virtio/vsock: check SO_RCVLOWAT before wake up
- reader
-Thread-Topic: [RFC PATCH v3 7/9] virtio/vsock: check SO_RCVLOWAT before wake
- up reader
-Thread-Index: AQHYp0Hf6rlyzBtLk0aQZEnBg4ReJg==
-Date:   Wed, 3 Aug 2022 14:03:58 +0000
-Message-ID: <e08064c5-fd4a-7595-3138-67aa2f46c955@sberdevices.ru>
-In-Reply-To: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C63DE3F717DDC54096594E3577522BEB@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Wed, 3 Aug 2022 10:05:02 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B782530F57;
+        Wed,  3 Aug 2022 07:05:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659535501; x=1691071501;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yg5mD3Dj0CS+uFzrjjVlpHk1BBsTLHtsoJkssWr5R3w=;
+  b=Okch79AIhz+1CYySR46P70UuutIewSUIFebnvZhU3TUUABUNsVGEb4jg
+   /+naCNGvEzRbC4Knb75PAybOxXTbLoVniyqJksqWshri7zvqOwdOmeqLg
+   mk/dAirsQYRJq7PugdK6C7FQv8ACKvLBeF9ZA2U5X0U/1UIc61LqX6TfO
+   kqtN+qMdqxh/9V9sKcHndUM52/+wIjSj/tY9L1oJXvD4xjSgOkKNN0Ict
+   D17DV4YeLWMyQFyvSGOZV6hHuDZvP76Euqq/VXzQLLc5EeQ+iZ2g0e+Ea
+   5QYBlRPI4BcY9vFnEn1vAePasA0XlwfNgZX89EeUQWV9qIpnoTGWN8DxX
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="269450184"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="269450184"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:05:01 -0700
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="631160602"
+Received: from buichris-mobl.amr.corp.intel.com (HELO [10.209.124.150]) ([10.209.124.150])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:05:00 -0700
+Message-ID: <973736db-2480-bbaa-d2ce-6e1b6dd2ed0c@intel.com>
+Date:   Wed, 3 Aug 2022 07:05:00 -0700
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/03 07:41:00 #20041172
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 0/8] x86_64: Harden compressed kernel, part 1
+Content-Language: en-US
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        linux-hardening@vger.kernel.org
+References: <cover.1659369873.git.baskov@ispras.ru>
+ <e6e7fef1-0dff-ef72-8a17-8ecec89994ca@intel.com>
+ <893da11995f93a7ea8f7485d17bf356a@ispras.ru>
+ <e8342722-20f8-a566-59c5-8e8f7f271d98@intel.com>
+ <29312ea704885f1b8d3c229e1f22dad7@ispras.ru>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <29312ea704885f1b8d3c229e1f22dad7@ispras.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBhZGRzIGV4dHJhIGNvbmRpdGlvbiB0byB3YWtlIHVwIGRhdGEgcmVhZGVyOiBkbyBpdCBv
-bmx5IHdoZW4gbnVtYmVyDQpvZiByZWFkYWJsZSBieXRlcyA+PSBTT19SQ1ZMT1dBVC4gT3RoZXJ3
-aXNlLCB0aGVyZSBpcyBubyBzZW5zZSB0byBraWNrDQp1c2VyLGJlY2F1c2UgaXQgd2lsbCB3YWl0
-IHVudGlsIFNPX1JDVkxPV0FUIGJ5dGVzIHdpbGwgYmUgZGVxdWV1ZWQuDQoNClNpZ25lZC1vZmYt
-Ynk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KLS0tDQogbmV0
-L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jIHwgMiArLQ0KIDEgZmlsZSBjaGFu
-Z2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEvbmV0L3Zt
-d192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jIGIvbmV0L3Ztd192c29jay92aXJ0aW9f
-dHJhbnNwb3J0X2NvbW1vbi5jDQppbmRleCA4ZjYzNTZlYmNkZDEuLjM1ODYzMTMyZjRmMSAxMDA2
-NDQNCi0tLSBhL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYw0KKysrIGIv
-bmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jDQpAQCAtMTA4MSw3ICsxMDgx
-LDcgQEAgdmlydGlvX3RyYW5zcG9ydF9yZWN2X2Nvbm5lY3RlZChzdHJ1Y3Qgc29jayAqc2ssDQog
-CXN3aXRjaCAobGUxNl90b19jcHUocGt0LT5oZHIub3ApKSB7DQogCWNhc2UgVklSVElPX1ZTT0NL
-X09QX1JXOg0KIAkJdmlydGlvX3RyYW5zcG9ydF9yZWN2X2VucXVldWUodnNrLCBwa3QpOw0KLQkJ
-c2stPnNrX2RhdGFfcmVhZHkoc2spOw0KKwkJdnNvY2tfZGF0YV9yZWFkeShzayk7DQogCQlyZXR1
-cm4gZXJyOw0KIAljYXNlIFZJUlRJT19WU09DS19PUF9DUkVESVRfUkVRVUVTVDoNCiAJCXZpcnRp
-b190cmFuc3BvcnRfc2VuZF9jcmVkaXRfdXBkYXRlKHZzayk7DQotLSANCjIuMjUuMQ0K
+On 8/2/22 16:45, Evgeniy Baskov wrote:
+> Partially. We do have known issues because kernel PE image is not
+> compliant with the MS PE and COFF specification v8.3 referenced by
+> the UEFI specification. UEFI implementations with stricter PE loaders
+> (e.g. mentioned above) fail to boot Linux kernel.
+
+That shows me that it's _possible_ to build a more strict PE loader that
+wouldn't load Linux.  But, in practice is anyone using a more strict PE
+loader?  Does anyone actually want that in practice?  Or, again, is this
+more strict PE loader just an academic demonstration?
+
+The README starts:
+
+	This branch demonstrates...
+
+That doesn't seem like something that's _important_ to deal with.
+Sounds like a proof-of-concept.
+
+Don't get me wrong, I'm all for improving thing, even if the benefits
+are far off.  But, let's not fool ourselves.

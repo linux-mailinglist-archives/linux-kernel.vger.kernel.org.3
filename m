@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001445892A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276095892AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238059AbiHCTVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 15:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S238234AbiHCTWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 15:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236278AbiHCTVu (ORCPT
+        with ESMTP id S236278AbiHCTWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 15:21:50 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2FD3E750
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:21:48 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id s206so15984696pgs.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 12:21:48 -0700 (PDT)
+        Wed, 3 Aug 2022 15:22:20 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB72D4D149
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:22:18 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id q3so13641986qvp.5
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 12:22:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=L3BXoDAnjXKl7DF5MAL+W0kL9WnJVL0b1/HkhEfMB6o=;
-        b=TjQRomc0BncZKstd0VtuEoVthcM/oSbSEL77eNSNYn0WzPnp2Edcq9KcBb1Vq9iXMx
-         2FmV8jclNZmRNGHba1FWsdthmkJ3V4XXTaPSkSqHuDG+9xKpKQMzBZUI3PtLAXEjMSIz
-         Gsakob4IjBskgerDp8blcso3BMVVtiZZkx/Wh29jgydRdN9W2q6mqYzP6nrkyvIwEGKp
-         aA43mf6vjD++eHQcpNNLrIcszEocGgEAwKLJL4QV4ONcaqkiXH7d2l0r8KzwbTGlDJhS
-         vSQNrYdhUKAT6TmlwJoMLYxkENEXLhmJxpPs3aqiGDEtrp8sozaZxufTWJ3DaD6N/QRB
-         gDdQ==
+        bh=c0anUqpP2C7sKweDNx6tz5eeeYeeCajDunQoGL7Ybz0=;
+        b=nLaoCQbdkBOJTfuCR3nvXQ6rGDdylxjmz1jZ8Tm+nJhB6uRVEzkJe9J4YvGiaLZJIB
+         eWPFrU1LaDhgB2s2lw2eeu9wk/emPqRLAABUjCEPpahzxkyec1saBHzutYUk9LjwCn1W
+         NDD4glL0si9CYF94gTQapu1l/uknEiTgOX1JK7P0ZfPvWAntrY41DosPltyCmtNzocQd
+         u0y+VnjfLoLyPQNDeLJGLo35kTLX8U7m3Md4z4tb8wRmVQCEoDIBm+JIZRe1M2hFceis
+         Nk7XsPtsik05vCUxaU21b6nk/4AzADB2kCAMEgmcUghE3x5ypb3WJtPKnhrzaNTK6OU0
+         cJHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=L3BXoDAnjXKl7DF5MAL+W0kL9WnJVL0b1/HkhEfMB6o=;
-        b=z2nd/yI8iqc5kuTzYFfVEQHIOJ80v70Tcli4X1uDIbQqHq1iFgVr1Algqa0LJ2O3Zm
-         Qvs0P0Nc9tY6NcTtPacs5l8U3+lFoOSLozn2R/GC6RFvddFrYUeVskMvvxuKYqht2+TZ
-         ahRAn4C1Ul9oHuU5FwswDZUr1Onu8u/SC2ARjL99u8CMpsokYhMOVB79frbqYM+kKHhx
-         cxZ3gzV6OMnd0pejOyS13wfiU0zm9QS96K70E8jJI3W6VmhOCTKiZd3vOSx/TJA5tgYS
-         ptXEGeP1WhGIGulwQZrHNYVBZBWH9KDB/0O01LWKV52kjhLxUsHkTVJx9H+pp978DZxF
-         s4qQ==
-X-Gm-Message-State: AJIora+ZTNi7NoddM4sy3blKJVzjAprM88y6cMv6MJTvzN2n82TnZ09m
-        bLSG712Nuj5y4YROmAzD1w/iYQ==
-X-Google-Smtp-Source: AGRyM1sYEfRp+NhnfWgOD9pnywTRoeKibbqNbFltK9LYASso7bT1OFsTtRUBKZ37SNcDWD/PUDLZ6A==
-X-Received: by 2002:a05:6a00:234f:b0:525:1f7c:f2bf with SMTP id j15-20020a056a00234f00b005251f7cf2bfmr27173548pfj.14.1659554508054;
-        Wed, 03 Aug 2022 12:21:48 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id t124-20020a635f82000000b0040d75537824sm8339323pgb.86.2022.08.03.12.21.47
+        bh=c0anUqpP2C7sKweDNx6tz5eeeYeeCajDunQoGL7Ybz0=;
+        b=LnGjtH0RsSJZGwLFZ/rI1ay/O5T1ZGCSBdwfq4p9CiQ5uG6xn8HXHRCYs7RtVMNjCc
+         3rH9HxnEsuSOGxB5DQCcIq9AOFenarn506P0Lgo7eh1pHPfR1O+nOIYsqJoGex2o7oBk
+         /OdxwSeSrT2bR6QkCKYabR/Nj1ZnYl/i3X+sFD4HyAFN+sq09LwnzyDDSVrIWjfgyaIx
+         0LgQ4o3EpTUESu913VR+jc+G+J6uX6NOfbwQ24lzRauAHxAVgvDNpNQgb3inUvAlboHA
+         A8SoWw2ZmHotopid+Mb0BTg2IrdYny1Yz0TpgzGheUg5r4S/kk77IG6vIlUx8XUVuoSV
+         wuEg==
+X-Gm-Message-State: ACgBeo2aYduNGTQll922BpSFOImnVgatvPhwnzqGWdi7ZfKG8ePwJmOy
+        ITfWg+qa7C2bf10bzrla/q4M2A==
+X-Google-Smtp-Source: AA6agR4TkWrYPxjKmcUZ27Y4WmzwJ9slM6j/RDvOC1vEiV2I9GNQ5PtUVSvJJX3BnrPwhRyC6MYmEQ==
+X-Received: by 2002:ad4:5f0a:0:b0:474:8978:9a9f with SMTP id fo10-20020ad45f0a000000b0047489789a9fmr23754893qvb.71.1659554538002;
+        Wed, 03 Aug 2022 12:22:18 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::a0f2])
+        by smtp.gmail.com with ESMTPSA id bm7-20020a05620a198700b006b629f86244sm13216262qkb.50.2022.08.03.12.22.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 12:21:47 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 19:21:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Mingwei Zhang <mizhang@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] selftests: KVM/x86: Fix vcpu_{save,load}_state() by
- adding APIC state into kvm_x86_state
-Message-ID: <YurKx+gFAWPvj35L@google.com>
-References: <20220802230718.1891356-1-mizhang@google.com>
- <20220802230718.1891356-3-mizhang@google.com>
- <YurCI5PQu44UJ0a7@google.com>
+        Wed, 03 Aug 2022 12:22:17 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 15:22:16 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>, surenb@google.com,
+        mingo@redhat.com, peterz@infradead.org, corbet@lwn.net,
+        akpm@linux-foundation.org, rdunlap@infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH 8/9] sched/psi: add kernel cmdline parameter
+ psi_inner_cgroup
+Message-ID: <YurK6MXdJPrV2VYS@cmpxchg.org>
+References: <20220721040439.2651-1-zhouchengming@bytedance.com>
+ <20220721040439.2651-9-zhouchengming@bytedance.com>
+ <Yt7KQc0nnOypB2b2@cmpxchg.org>
+ <YuAqWprKd6NsWs7C@slm.duckdns.org>
+ <5a3410d6-428d-9ad1-3e5a-01ca805ceeeb@bytedance.com>
+ <Yuq3Q6Y9dRnjjcPt@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YurCI5PQu44UJ0a7@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <Yuq3Q6Y9dRnjjcPt@slm.duckdns.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,60 +78,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM: selftests: for the shortlog.
-
-On Wed, Aug 03, 2022, Oliver Upton wrote:
-> Hi Mingwei,
+On Wed, Aug 03, 2022 at 07:58:27AM -1000, Tejun Heo wrote:
+> Hello,
 > 
-> On Tue, Aug 02, 2022 at 11:07:15PM +0000, Mingwei Zhang wrote:
-> > Fix vcpu_{save,load}_state() by adding APIC state into kvm_x86_state and
-> > properly save/restore it in vcpu_{save,load}_state(). When vcpu resets,
-> > APIC state become software disabled in kernel and thus the corresponding
-> > vCPU is not able to receive posted interrupts [1].  So, add APIC
-> > save/restore in userspace in selftest library code.
+> On Wed, Aug 03, 2022 at 08:17:22PM +0800, Chengming Zhou wrote:
+> > > Assuming the above isn't wrong, if we can figure out how we can re-enable
+> > > it, which is more difficult as the counters need to be resynchronized with
+> > > the current state, that'd be ideal. Then, we can just allow each cgroup to
+> > > enable / disable PSI reporting dynamically as they see fit.
+> > 
+> > This method is more fine-grained but more difficult like you said above.
+> > I think it may meet most needs to disable PSI stats in intermediate cgroups?
 > 
-> Of course, there are no hard rules around it but IMO a changelog is
-> easier to grok if it first describes the what/why of the problem, then
-> afterwards how it is fixed by the commit.
+> So, I'm not necessarily against implementing something easier but we at
+> least wanna get the interface right, so that if we decide to do the full
+> thing later we can easily expand on the existing interface. ie. let's please
+> not be too hacky. I don't think it'd be that difficult to implement
+> per-cgroup disable-only operation that we can later expand to allow
+> re-enabling, right?
 
-I strongly disagree.  :-)  To some extent, it's a personal preference, e.g. I
-find it easier to understand the details (why something is a problem) if I have
-the extra context of how a problem is fixed (or: what code was broken).
+It should be relatively straight-forward to disable and re-enable
+state aggregation, time tracking, averaging on a per-cgroup level, if
+we can live with losing history from while it was disabled. I.e. the
+avgs will restart from 0, total= will have gaps - should be okay, IMO.
 
-But beyond personal preference, there are less subjective reasons for stating
-what a patch does before diving into details.  First and foremost, what code is
-actually being changed is the most important information, and so that information
-should be easy to find.  Changelogs that bury the "what's actually changing" in a
-one-liner after 3+ paragraphs of background make it very hard to find that information.
+Where it gets trickier is also stopping the tracking of task counts in
+a cgroup. For re-enabling afterwards, we'd have to freeze scheduler
+and cgroup state and find all tasks of interest across all CPUs for
+the given cgroup to recreate the counts. I'm not quite sure whether
+that's feasible, and if so, whether it's worth the savings.
 
-Maybe for initial review one could argue that "what's the bug" is more important,
-but for skimming logs and git archeology, the gory details matter less and less.
-E.g. when doing a series of "git blame", the details of each change along the way
-are useless, the details only matter for the culprit; I just want to quickly
-determine whether or not a commit might be of interest.
+It might be good to benchmark the two disabling steps independently.
+Maybe stopping aggregation while keeping task counts is good enough,
+and we can commit to a disable/re-enable interface from the start.
 
-Another argument for stating "what's changing" first is that it's almost always
-possible to state "what's changing" in a single sentence.  Conversely, all but the
-most simple bugs require multiple sentences or paragraphs to fully describe the
-problem.  If both the "what's changing" and "what's the bug" are super short then
-the order doesn't matter.  But if one is shorter (almost always the "what's changing),
-then covering the shorter one first is advantageous because it's less of an
-inconvenience for readers/reviewers that have a strict ordering preference.  E.g.
-having to skip one sentence to get to the stuff you care about is less painful than
-me having to skip three paragraphs to get to the stuff that I care about.
+Or maybe it's all in the cachelines and iteration, and stopping the
+aggregation while still writing task counts isn't saving much. In that
+case we'd have to look closer at reconstructing task counts, to see if
+later re-enabling is actually a practical option or whether a one-off
+kill switch is more realistic.
 
-I think the underlying problem with this changelog (and the shortlog) is that it's
-too literal about what is being fixed.  Shortlogs and changelogs shouldn't be
-play-by-play descriptions of the code changes, they should be abstractions of the
-problem and the fix.  E.g. 
-
-  KVM: selftests: Save/restore vAPIC state in "migration" tests
-  
-  Save/restore vAPIC state as part of vCPU save/load so that it's preserved
-  across VM "migration".  This will allow testing that posted interrupts
-  are properly handled across VM migration.
-
-With that, the first sentence covers both the "what's changing" and provides a
-high-level description of the "bug" it's fixing.  And the second sentence covers
-(a) "why do we want this patch", (b) "why wasn't this a problem before", and (c)
-"what's the urgency of this patch".
+Chengming, can you experiment with disabling: record_times(), the
+test_state() loop and state_mask construction, and the averaging
+worker - while keeping the groupc->tasks updates?

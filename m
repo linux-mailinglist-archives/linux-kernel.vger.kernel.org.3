@@ -2,59 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB48588F92
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09819588F94
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238147AbiHCPmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S238025AbiHCPnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236797AbiHCPmH (ORCPT
+        with ESMTP id S236130AbiHCPnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:42:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E54418B0A;
-        Wed,  3 Aug 2022 08:42:07 -0700 (PDT)
-Date:   Wed, 03 Aug 2022 15:42:04 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659541325;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 3 Aug 2022 11:43:20 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63319638D
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:43:19 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 361D31FA85;
+        Wed,  3 Aug 2022 15:43:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1659541396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=IPf7laHJr6gLAnl9xbzWj6hPnYO44QtIRkP/NzRqwj4=;
-        b=pU0TEY1bKY8E5lCFO2/AQbzx1Ysga19d931OoZKDrO/YVZOApm/OPRT64pmnR/mt+XijYL
-        tx5wu9zbDVrkFxhlvvm08Ye3EubF2Mbmp1wFfjEvtGTdxuMvvp9wasfCcRxX4EIjAm3T3r
-        02H+VMhVGUGg9vrlz7xNug2kWKGCRoCCmMcGb2GroyVMCr621G2oVMAZOkLRjDBLRHvXrX
-        yCIIZ3fw7PdM9OxgcAQ5CaBHTWmr3Wi+ev59a7EsSRyHb9sfIfuZUdIWvZQkw8Cwh6du5U
-        ieaM9fltb//ntRDGcylO8KmEWJhwZFDbBpvufTzT/Criw7AVSgFRd3lAMeMq1g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659541325;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IPf7laHJr6gLAnl9xbzWj6hPnYO44QtIRkP/NzRqwj4=;
-        b=0zNEGoKqhNL7DtOrQzrM4ORlKiIakvdg2Mr+2un7xd1I4s2zHCSVPJ6FDCJ17HOTXzbJq5
-        UT5vUBIaZ9P2PDAQ==
-From:   "tip-bot2 for Li kunyu" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/boot: Remove superfluous type casting from
- arch/x86/boot/bitops.h
-Cc:     Li kunyu <kunyu@nfschina.com>, Ingo Molnar <mingo@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220725042358.3377-1-kunyu@nfschina.com>
-References: <20220725042358.3377-1-kunyu@nfschina.com>
+        bh=UAStwIGdqe/A5SzN5E32d+euHKColmkL6Q4xDWBX7Z4=;
+        b=mux3gyoG+/sDUb//KthsMzndMmpXAnNTBz9WER5RBn5wsZJiyZ1XcO2beypdnwkuUDoUiw
+        L7BSDQgrPIfbGpvEuHddYOHoNdteXzeWEn8CISSNZ0xpYxOKnHrgG3HJEpa4FSOVjGoLV1
+        /c0RPYounzRGlZ4rx3P+koTqy8jVA20=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id BAF712C141;
+        Wed,  3 Aug 2022 15:43:15 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 17:43:12 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>, Jan Kara <jack@suse.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] printk for 5.20
+Message-ID: <YuqXkCZEfsSKoIX6@alley>
+References: <YufsTLpighCI7qSf@alley>
+ <CAHk-=wie+VC-R5=Hm=Vrg5PLrJxb1XiV67Efx-9Cr1fBKCWHTQ@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <165954132463.15455.4096087290275074737.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wie+VC-R5=Hm=Vrg5PLrJxb1XiV67Efx-9Cr1fBKCWHTQ@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,46 +60,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+On Tue 2022-08-02 20:19:34, Linus Torvalds wrote:
+> On Mon, Aug 1, 2022 at 8:08 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > - Completely disable printing on consoles with CONFIG_RT.
+> 
+> I don't think this is acceptable.
+> 
+> We don't suddenly change behavior just because some random developer
+> has decided "this is the RightThing(tm) to do".
+> 
+> Users matter.
 
-Commit-ID:     a50be38f617b11b451c0a432c574859419e69471
-Gitweb:        https://git.kernel.org/tip/a50be38f617b11b451c0a432c574859419e69471
-Author:        Li kunyu <kunyu@nfschina.com>
-AuthorDate:    Mon, 25 Jul 2022 12:23:58 +08:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Wed, 03 Aug 2022 11:32:29 +02:00
+I fully agree.
 
-x86/boot: Remove superfluous type casting from arch/x86/boot/bitops.h
 
-'const void *' will auto-type-convert to just about any other const pointer type,
-no need to force it.
+> For all we know, there may be random users who are playing around with
+> PREEMPT_RT. They don't *have* to, but they want to.
+>
+> Just saying "you get no console because you wanted to try it out" is
+> simply not acceptable.
 
-[ mingo: Rewrote the changelog. ]
+This is where I probably made a mistake. I know that PREEMPT_RT is not
+production ready in upstream. And I am not sure what people playing
+with it expect.
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20220725042358.3377-1-kunyu@nfschina.com
----
- arch/x86/boot/bitops.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+My first reaction was that the patch was a joke. I tried to
+formulate the concerns somehow, see
+https://lore.kernel.org/all/Yt6MzEEFfpyTBIIj@alley/
 
-diff --git a/arch/x86/boot/bitops.h b/arch/x86/boot/bitops.h
-index 02e1dea..8518ae2 100644
---- a/arch/x86/boot/bitops.h
-+++ b/arch/x86/boot/bitops.h
-@@ -19,13 +19,13 @@
- 
- static inline bool constant_test_bit(int nr, const void *addr)
- {
--	const u32 *p = (const u32 *)addr;
-+	const u32 *p = addr;
- 	return ((1UL << (nr & 31)) & (p[nr >> 5])) != 0;
- }
- static inline bool variable_test_bit(int nr, const void *addr)
- {
- 	bool v;
--	const u32 *p = (const u32 *)addr;
-+	const u32 *p = addr;
- 
- 	asm("btl %2,%1" CC_SET(c) : CC_OUT(c) (v) : "m" (*p), "Ir" (nr));
- 	return v;
+Hmm, I ignored my intuition and let people familiar with PREEMPT_RT
+decide. I knew that John was working on the proper solution so
+it was not supposed to be final one.
+
+
+> Seriously, even if you have strict RT requirements, you may also have
+> strict debugging requirements, and if something goes wrong, you want
+> to KNOW ABOUT IT. At that point, your RT rules may well fly out the
+> window, because you have more serious problems.
+>
+> End result: no way will I accept this kind of completely arbitrary and
+> frankly not very intelligent patch.
+> 
+> If people want to disable console printing, that's THEIR CHOICE. It
+> could be a new config variable where you ASK people about what they
+> want. Not this kind of idiotic tying together of things.
+> 
+> And guys, I want to make it really clear how disappointed I am with
+> the printk tree lately. There seems to be some kind of hardline
+> religious fervor having taken over to make these kinds of "this is how
+> it has to be done, screw any sanity or common sense".
+>
+> There is exactly one thing you should hold sacred: don't break
+> people's setups. All the rest is just engineering, and a HUGE part of
+> "engineering" is to realize that everything is a trade-off.
+>
+> Linux kernel development is a pragmatic thing where existing users and
+> existing code matters, and you don't get to just throw it all away
+> because you have some odd personal hangup.
+>
+> And printing messages to a console is not some "oh, we'll just stop
+> doing that because you asked for PREEMPT_RT".
+
+My thinking was that PREEMPT_RT was used only by some rather small
+community that was very well aware of the upstream status. I kind of
+though that this was their choice.
+
+I think that I underestimated political and human influences.
+
+
+> Put another way: not only am I not pulling this, I'm concerned that I
+> will not be pulling printk patches in the future either because of
+> where these pull requests seem to be trending.
+
+I admit that _I did a big mistake_ by this "disable consoles on RT"
+patch. It broke many principles and it was a real hack.
+
+On the positive side. My intuition told me that it was very controversial.
+This is why I clearly described the effect. And it was the very first
+sentence in the commit message. I think that I made it _very visible_.
+
+The previous merge window was different. We tried to get into mainline
+a feature that many people wanted for years (since 2012). We though
+that it was ready but it wasn't and we took it back in time.
+
+
+Otherwise, I think that I am quite demanding maintainer. I focus on
+that the change must make sense, must not break existing behavior,
+any user interface must be sane, the code must be readable and
+maintainable.
+
+I do mistakes. But I have learned big lessons last and this merge
+window. I am going to believe more into my intuition and be more
+strict.
+
+I am going to take a break and think twice before sending any
+further pull request.
+
+Best Regards,
+Petr

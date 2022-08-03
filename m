@@ -2,118 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BA0589314
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 965BE589315
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237702AbiHCUVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 16:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S238459AbiHCUV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 16:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbiHCUVT (ORCPT
+        with ESMTP id S238253AbiHCUVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:21:19 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58A0140DA
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 13:21:18 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id e127so29337968yba.12
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 13:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=LxBvWFWtv3mRccGDvPsHUc9LksL2ke7HhJ0WrGNL6Cs=;
-        b=a/3ypc6yT9CJPpSYrIktn7ij+Tk191UCCs7ohCepUbxr93LHERbK7aFXE02239ywjy
-         ppggofloFDTugPKqmt9knPyx8B3YS5zejac2E59ygzwp8VyFwUfMWEdlRtwESHbOv/vB
-         Qtes4cT4dlRoRW5sE5MeFztz9ZxPQ6SPV3wofXC/491C0NfhYGAUu7qFz/ten/X+7+Au
-         gs7BmyZaXQ43RU509zt9QT8fz4Pp/QuRaaM2ga0CiJu+i5bkVKQqNttg98MRJP+C77Gs
-         zIu4ptO2GKahteA7AP5CfrrZKaeFwLD0EXl2+TzCcO9PSejhPY32MfqVIm916YDPENSW
-         eOPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=LxBvWFWtv3mRccGDvPsHUc9LksL2ke7HhJ0WrGNL6Cs=;
-        b=GbEBjIaMAEY5p42wlcYvusu4cLFlrzzXh/SPQ/lh5d6qD8iytorU7QoyyGA0RGGoCz
-         0Pu0Y+0DxTBWnwPYDafAawaNxpCUt4VSN04FGbY0ZKSjgnOgoEVK3e4rDdmHCwLjR0lA
-         UmKnwSG3yCilnD2Rnhji3f9htZRhJH/cYOuHUk+l9LG2PX/RuXNzQXZlI1WmP/2NSKrs
-         +tiyJIhmQJxKNO24KRF+BU3dxUE25QNuxocVDf0yqsD+hiy6XdiNdxS+XQrOlb97rqFp
-         hp73ERkryoMU+KgeHgOas0QfUYldEyiP5j2s9IpLZW6KMBPQIGj+OKrKe/YimapEB2l5
-         EVRg==
-X-Gm-Message-State: ACgBeo0nU+hN3kfyenkSeyZ6pnQTDV44wqJ9cVgPIRkalb4ZNyicC/Q9
-        4cQ58mrZTtBHeMgqXm1dqxwo4ltYXOIUYwFse3Q=
-X-Google-Smtp-Source: AA6agR5SkVpjcoOEz/0WRXHKAdZbmHaUJ6zrB1svO9XhaGvxhYOK0YdhcsLsyTp2FruWNDGbOLURhM6hPCfAC12kBcs=
-X-Received: by 2002:a05:6902:4d:b0:664:dd89:9709 with SMTP id
- m13-20020a056902004d00b00664dd899709mr20968162ybh.57.1659558077901; Wed, 03
- Aug 2022 13:21:17 -0700 (PDT)
+        Wed, 3 Aug 2022 16:21:25 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C58E357CE
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 13:21:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659558084; x=1691094084;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PP/ggC1ZV8fH0+QoVHFFBlmpc2GNKQc+vOQqlJycVqk=;
+  b=aFtYo8TMytbW9VWqLfXWNZpylGuj7UnpUVObRPBrTyhaMWY6/7FR3Gdv
+   KnEr6f3effRNSEeQV/EvS1v5q4r8qWWLmgPNHMSGusuozCc8LeorhQX6L
+   G9+hT7YDIE5ITXbpasytvbRlpx0eAk81hdNZhFhFfTkrq2SsVT5HBwy2o
+   +EuiOnB1anDpMXbl9PivQRyRYdPplgrKSZlVHsDKZFxtOndEVSRphQaAh
+   UJzRub/vyynvJ7nPm2pDN5oox0o3Lc4LP4T8JByvrlkfxbWeJGM4jq4Ai
+   8vAfHq4vc13Se1SaBW69pPF4cBSNetz9yfKvSFuIB5oq8/WER1fUBUIhm
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="276686583"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="276686583"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 13:21:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="553455823"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 03 Aug 2022 13:21:22 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJKrp-000HdJ-2d;
+        Wed, 03 Aug 2022 20:21:21 +0000
+Date:   Thu, 4 Aug 2022 04:21:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within
+ 'struct htt_tx_fetch_ind' is less aligned than 'union
+ htt_tx_fetch_ind::(anonymous at
+ drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct
+ htt_tx_fetch_ind' being...
+Message-ID: <202208040445.VKxXkc0p-lkp@intel.com>
 MIME-Version: 1.0
-References: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
- <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
-In-Reply-To: <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
-From:   Oded Gabbay <oded.gabbay@gmail.com>
-Date:   Wed, 3 Aug 2022 23:20:51 +0300
-Message-ID: <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com>
-Subject: Re: New subsystem for acceleration devices
-To:     Dave Airlie <airlied@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 10:04 PM Dave Airlie <airlied@gmail.com> wrote:
->
-> On Sun, 31 Jul 2022 at 22:04, Oded Gabbay <oded.gabbay@gmail.com> wrote:
-> >
-> > Hi,
-> > Greg and I talked a couple of months ago about preparing a new accel
-> > subsystem for compute/acceleration devices that are not GPUs and I
-> > think your drivers that you are now trying to upstream fit it as well.
->
-> We've had some submissions for not-GPUs to the drm subsystem recently.
->
-> Intel GNA, Intel VPU, NVDLA, rpmsg AI processor unit.
->
-> why is creating a new subsystem at this time necessary?
->
-> Are we just creating a subsystem to avoid the open source userspace
-> consumer rules? Or do we have some concrete reasoning behind it?
->
-> Dave.
+Hi Kees,
 
-Hi Dave.
-The reason it happened now is because I saw two drivers, which are
-doing h/w acceleration for AI, trying to be accepted to the misc
-subsystem.
-Add to that the fact I talked with Greg a couple of months ago about
-doing a subsystem for any compute accelerators, which he was positive
-about, I thought it is a good opportunity to finally do it.
+FYI, the error/warning still remains.
 
-I also honestly think that I can contribute much to these drivers from
-my experience with the habana driver (which is now deployed in mass at
-AWS) and contribute code from the habana driver to a common framework
-for AI drivers.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f00654007fe1c154dafbdc1f5953c132e8c27c38
+commit: fa7845cfd53f3b1d3f60efa55db89805595bc045 treewide: Replace open-coded flex arrays in unions
+date:   10 months ago
+config: arm-randconfig-r014-20220801 (https://download.01.org/0day-ci/archive/20220804/202208040445.VKxXkc0p-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa7845cfd53f3b1d3f60efa55db89805595bc045
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fa7845cfd53f3b1d3f60efa55db89805595bc045
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/
 
-Regarding the open source userspace rules in drm - yes, I think your
-rules are too limiting for the relatively young AI scene, and I saw at
-the 2021 kernel summit that other people from the kernel community
-think that as well.
-But that's not the main reason, or even a reason at all for doing
-this. After all, at least for habana, we open-sourced our compiler and
-a runtime library. And Greg also asked those two drivers if they have
-matching open-sourced user-space code.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-And a final reason is that I thought this can also help in somewhat
-reducing the workload on Greg. I saw in the last kernel summit there
-was a concern about bringing more people to be kernel maintainers so I
-thought this is a step in the right direction.
+All warnings (new ones prefixed by >>):
 
-Oded
+   In file included from drivers/net/wireless/ath/ath10k/mac.c:8:
+   In file included from drivers/net/wireless/ath/ath10k/mac.h:11:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/mac.c:5942:22: warning: parameter 'changed_flags' set but not used [-Wunused-but-set-parameter]
+                                       unsigned int changed_flags,
+                                                    ^
+   5 warnings generated.
+--
+   In file included from drivers/net/wireless/ath/ath10k/debug.c:14:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   4 warnings generated.
+--
+   In file included from drivers/net/wireless/ath/ath10k/ce.c:8:
+   In file included from drivers/net/wireless/ath/ath10k/hif.h:11:
+   In file included from drivers/net/wireless/ath/ath10k/core.h:18:
+   drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+   drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           struct htt_rx_indication_prefix prefix;
+                                           ^
+>> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   drivers/net/wireless/ath/ath10k/ce.c:127:1: warning: unused function 'ath10k_get_ring_byte' [-Wunused-function]
+   ath10k_get_ring_byte(unsigned int offset,
+   ^
+   drivers/net/wireless/ath/ath10k/ce.c:212:1: warning: unused function 'ath10k_ce_shadow_dest_ring_write_index_set' [-Wunused-function]
+   ath10k_ce_shadow_dest_ring_write_index_set(struct ath10k *ar,
+   ^
+   drivers/net/wireless/ath/ath10k/ce.c:449:20: warning: unused function 'ath10k_ce_error_intr_enable' [-Wunused-function]
+   static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
+                      ^
+   7 warnings generated.
+
+
+vim +1677 drivers/net/wireless/ath/ath10k/htt.h
+
+  1670	
+  1671	struct htt_tx_fetch_ind {
+  1672		u8 pad0;
+  1673		__le16 fetch_seq_num;
+  1674		__le32 token;
+  1675		__le16 num_resp_ids;
+  1676		__le16 num_records;
+> 1677		union {
+  1678			/* ath10k_htt_get_tx_fetch_ind_resp_ids() */
+  1679			DECLARE_FLEX_ARRAY(__le32, resp_ids);
+  1680			DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
+  1681		};
+  1682	} __packed;
+  1683	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

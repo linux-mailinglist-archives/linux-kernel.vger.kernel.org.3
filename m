@@ -2,82 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B187A5887C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1C85887CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234664AbiHCHMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 03:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
+        id S233983AbiHCHQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 03:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbiHCHML (ORCPT
+        with ESMTP id S229789AbiHCHQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 03:12:11 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C3413E36
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:12:10 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id z20so10850259ljq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 00:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=0Fo2XHCIpIewEvDK99RTZIfzJY9zqyN0VWEsmGYej3Y=;
-        b=Xy7x+gaZtMuI1ao7NWqrDdUvTmM88Uk3ewEK7zXfGKbmoHBt9j+Et1Lc/wXGf6UmWw
-         OGz9/M/r1ahxJSkrz4Px8TsrtmxbVq3ggySM+DDAfYkA2nwX5ZlI1MhYjUH6dzJ9kl09
-         1ASgFjAho0iSQqjyzU+y5xqhrTwI9cuOsPRXLtFkkhBl4+D3feRNTHnNCU+cTTXci55D
-         3KA5JHW26DlDcU7tTG64OzIj6lWzIKpJC08CZqrLQLZBdd/dEPsfmTyWePcjsv3vK+oG
-         06RJxWV+0VNtbK3MX2wgnUcvGoie9dEYm79f5CttQyKVaIVhpFzPiX4sk44hguQRoWRT
-         ve3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=0Fo2XHCIpIewEvDK99RTZIfzJY9zqyN0VWEsmGYej3Y=;
-        b=wrgOg/qoLtrA8AsCmnQOLlWU9Dw8GZPANGN9ejjDqIg7b85hn1n94lhsIHAkniUeJC
-         dZFS5CveZSWYCGxksGQQprcpOW4yvYg4digAIVv22UcYrGWHaDH1EdwP8WRmmj1KS6HT
-         tbEKumvfu+MhoydGelH8PXYGFweaYCvjGru2oSt8gEFQ96HhV6TWingV7RhdIe7AIz9d
-         rmrbELo5APeAvIMj3wd1eZdBIf5OCn11uJthSamQIB0Jplmd5mL4bRgAFl9X2gpS1f6w
-         xs3lUtkL++SUqg+IvHnYD97i9uhkf4tQcl80H7OJ237MMw6km7YzM/bOw00kNhyGbUcF
-         zRFg==
-X-Gm-Message-State: AJIora+oVNQgRQ3EhVvWNtt7SVayonCxdECTmosK+gtNFaowzCegArsT
-        xcMLMQqKMqQfZQ7bfvO9apdI9A==
-X-Google-Smtp-Source: AGRyM1tjB2tDEdtAeSnQi3Avkc4q8rJ4woFi26RkXjkXb9lmDTz30A1703e5s4FE9svZAJ/hyvOahA==
-X-Received: by 2002:a05:651c:1250:b0:25e:954:97b8 with SMTP id h16-20020a05651c125000b0025e095497b8mr7777824ljh.215.1659510728914;
-        Wed, 03 Aug 2022 00:12:08 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k3-20020a2eb743000000b0025e346e03e3sm1993427ljo.7.2022.08.03.00.12.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 00:12:08 -0700 (PDT)
-Message-ID: <232f875a-4986-300a-f1e8-18f2da3a8fc6@linaro.org>
-Date:   Wed, 3 Aug 2022 10:12:07 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 4/6] drm/msm/dsi: Use the new regulator bulk feature to
- specify the load
-Content-Language: en-GB
-To:     Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, Mark Brown <broonie@kernel.org>,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org
-References: <20220802223738.898592-1-dianders@chromium.org>
- <20220802153434.v3.4.I7b3c72949883846badb073cfeae985c55239da1d@changeid>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220802153434.v3.4.I7b3c72949883846badb073cfeae985c55239da1d@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Wed, 3 Aug 2022 03:16:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD4117056
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:16:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B399B8215F
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 07:16:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82EDC433D6;
+        Wed,  3 Aug 2022 07:16:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659511013;
+        bh=vLpT1MZsnGvUn1qOPyxmvYNsx+EeXpW+oCqfx+YIEOk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=igb6ThVA09YsDkcAu+3znQhVKbO1rUMp/sufMERYOXf+RVo0OV6U3F2jzmjAluqNY
+         gTrviiaNKEUS7lnGqyZnrgKWD59RUgqCJcineeltRMv/OoJJW1D1ZPHtirCnx0i2iJ
+         zyLq4bFrP+kQNOCtj7vcKyan79IqXr2Nr00HViiFi35tk2Q5e+NAkAkiOvd8nXFswS
+         TZSRgezB6O1xVvBddSIpC2lpMZbikcuo3QWn/g9FmNWbCNtcSbJxRQ0cra4BfzWvgx
+         5FlitMQIxtk8fBnSrIUYWFoE3kotedD5M5maNZorDA8T8pHMAszf4pcsG8t6/PI+6I
+         3RpGDukOtigRQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oJ8cd-000gkI-IW;
+        Wed, 03 Aug 2022 08:16:51 +0100
+Date:   Wed, 03 Aug 2022 08:16:20 +0100
+Message-ID: <87sfmdbxvf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        George Cherian <george.cherian@marvell.com>,
+        sgoutham@marvell.com, "BOBBY Liu (bobbliu)" <bobbliu@cisco.com>,
+        xe-linux-external@cisco.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] genirq: allow selection of number of sparse irqs
+In-Reply-To: <20220802223747.GX821407@zorba>
+References: <20220728030420.2279713-1-danielwa@cisco.com>
+        <980a561ed87c5530aab2e2b067074862@kernel.org>
+        <20220729182156.GS821407@zorba>
+        <87wnbuc45y.wl-maz@kernel.org>
+        <20220802223747.GX821407@zorba>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: danielwa@cisco.com, tglx@linutronix.de, george.cherian@marvell.com, sgoutham@marvell.com, bobbliu@cisco.com, xe-linux-external@cisco.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,101 +71,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/08/2022 01:37, Douglas Anderson wrote:
-> As of commit 6eabfc018e8d ("regulator: core: Allow specifying an
-> initial load w/ the bulk API") we can now specify the initial load in
-> the bulk data rather than having to manually call regulator_set_load()
-> on each regulator. Let's use it.
+On Tue, 02 Aug 2022 23:37:47 +0100,
+Daniel Walker <danielwa@cisco.com> wrote:
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> On Sat, Jul 30, 2022 at 10:59:05AM +0100, Marc Zyngier wrote:
+> > > 
+> > > Marvell submitted a similar change, but non-selectable, about a
+> > > month ago.
+> > 
+> > Which wasn't really acceptable either.
+> > 
+> > > 
+> > > The limitation prevents Cisco and Marvell hardware from
+> > > functioning. I don't think we're well versed enough on the generic
+> > > irq system to implement what your suggesting, even if we did Thomas
+> > > would not likely accept it.
+> > 
+> > I don't think you can speak for Thomas here. In my experience of
+> > working with him, he's in general much more inclined to look at a
+> > scalable, long term solution than at a point hack. Specially given
+> > that we already use xarrays for MSIs.
+>  
+> Your welcome make the attempt yourself, if you believe in it.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The thing is, I don't need it, while you apparently do need a change
+in the kernel.
 
-It might have been better, if the previous patch had only removed the 
-load_setting on disable and inlined the dsi_host_regulator_disable(). 
-Then this patch would drop the regulator_set_load() from 
-dsi_host_regulator_enable() path and inline it. Then it would have been 
-more obvious that after these two changes the time when we set loads is 
-not changed.
+> 
+> > > Your suggestion is more of a long term solution vs. our short term
+> > > solution.
+> > 
+> > Exactly. Experience shows that short term hacks are almost always a
+> > bad idea and result in something that isn't maintainable.
+> 
+> Thomas introduced the "hack" in c1ee626 in 2011.
 
-> ---
-> 
-> Changes in v3:
-> - Update commit message to point at the git hash of the regulator change.
-> 
-> Changes in v2:
-> - ("Use the new regulator bulk feature to specify the load") new for v2.
-> 
->   drivers/gpu/drm/msm/dsi/dsi_host.c    | 13 +++----------
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c | 13 +++----------
->   2 files changed, 6 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 9df278d39559..a0a1b6d61d05 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -260,8 +260,10 @@ static int dsi_regulator_init(struct msm_dsi_host *msm_host)
->   	int num = msm_host->cfg_hnd->cfg->reg_cfg.num;
->   	int i, ret;
->   
-> -	for (i = 0; i < num; i++)
-> +	for (i = 0; i < num; i++) {
->   		s[i].supply = regs[i].name;
-> +		s[i].init_load_uA = regs[i].enable_load;
-> +	}
->   
->   	ret = devm_regulator_bulk_get(&msm_host->pdev->dev, num, s);
->   	if (ret < 0) {
-> @@ -270,15 +272,6 @@ static int dsi_regulator_init(struct msm_dsi_host *msm_host)
->   		return ret;
->   	}
->   
-> -	for (i = 0; i < num; i++) {
-> -		if (regs[i].enable_load >= 0) {
-> -			ret = regulator_set_load(s[i].consumer,
-> -						 regs[i].enable_load);
-> -			if (ret < 0)
-> -				return ret;
-> -		}
-> -	}
-> -
->   	return 0;
->   }
->   
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> index 7c105120d73e..efb6b1726cdb 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> @@ -515,8 +515,10 @@ static int dsi_phy_regulator_init(struct msm_dsi_phy *phy)
->   	int num = phy->cfg->reg_cfg.num;
->   	int i, ret;
->   
-> -	for (i = 0; i < num; i++)
-> +	for (i = 0; i < num; i++) {
->   		s[i].supply = regs[i].name;
-> +		s[i].init_load_uA = regs[i].enable_load;
-> +	}
->   
->   	ret = devm_regulator_bulk_get(dev, num, s);
->   	if (ret < 0) {
-> @@ -529,15 +531,6 @@ static int dsi_phy_regulator_init(struct msm_dsi_phy *phy)
->   		return ret;
->   	}
->   
-> -	for (i = 0; i < num; i++) {
-> -		if (regs[i].enable_load >= 0) {
-> -			ret = regulator_set_load(s[i].consumer,
-> -							regs[i].enable_load);
-> -			if (ret < 0)
-> -				return ret;
-> -		}
-> -	}
-> -
->   	return 0;
->   }
->   
+Yes. And it covers all the systems we care about so far. It is small,
+fixed in size, and doesn't impose extra requirements on everyone else.
+Your system changes the requirement, and it is the opportunity to
+revisit an 11 year old decision.
 
+> It's more of a question of if someone has the time an and/or
+> inclination to make the changes your requesting.
+
+No, it is about who has the need. You do, and nobody else does.
+
+> Marvell and Cisco only require to increase the size and keep the
+> status quo, and nothing is wrong with that.
+
+It is pretty wrong when it adds unneeded overhead on systems that
+don't require this, and doesn't scale in the face of existing
+architectures (let alone future ones). Distributions ship a single
+kernel image, and would obviously select the largest possible value,
+just to maximise perceived compatibility requirements. My ask is that
+you don't inflict this on systems that do not need it.
+
+> 
+> > > I'm not wedded to any solution, we just need to relieve
+> > > the limitation so our hardware starts working. I would imagine other
+> > > companies have this issue, but I don't know which ones currently.
+> > 
+> > This architecture has been in the wild for the best part of 10 years,
+> > in Linux for 8 years, and nobody so far screamed because of this
+> > perceived limitation. It would help if you described exactly what
+> > breaks in your system, because just saying "give me more" is not
+> > exactly helping (there are other limitations in the GICv3 ITS driver
+> > that may bite you anyway).
+> 
+> We need more irq lines because we have a lot of devices.. I suppose it's
+> possible there's some defect in the kernel which eats up or wastes irq lines,
+> but I don't think so. We have devices which use a lot of irq lines.
+> 
+> > > I would rather to use an upstream solution verses holding the
+> > > patches privately.  I would suggest if this limitation would not be
+> > > overcome for 3-4 releases the short term solution should be
+> > > acceptable over that time frame to be replaced by something else
+> > > after that.
+> > 
+> > If you want to have an impact on the features being merged in the
+> > upstream kernel, a good start would be to take feedback on board.
+> 
+> We did that.. I updated the patch from Marvell's original to allow it to be
+> selectable, this was requested by someone on this list.
+
+Well, I'm another "someone on the list" asking you to do better. You
+are perfectly entitled to ignore me, and I'm just as entitled to voice
+my opposition to your approach.
+
+	M.
 
 -- 
-With best wishes
-Dmitry
+Without deviation from the norm, progress is not possible.

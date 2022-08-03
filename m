@@ -2,119 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFB7588DE8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A507588DF4
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238112AbiHCNvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
+        id S238489AbiHCNys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238721AbiHCNvW (ORCPT
+        with ESMTP id S238326AbiHCNy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:51:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639B9459B8;
-        Wed,  3 Aug 2022 06:48:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6B20B822AF;
-        Wed,  3 Aug 2022 13:48:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF834C433D7;
-        Wed,  3 Aug 2022 13:48:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659534519;
-        bh=QofVbPFWlQ6HFFbhEFcRVeQJ036YZ+JLjvZNFuTDFtg=;
+        Wed, 3 Aug 2022 09:54:26 -0400
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8158343E6B;
+        Wed,  3 Aug 2022 06:52:02 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id 273DokZX018578;
+        Wed, 3 Aug 2022 22:50:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 273DokZX018578
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1659534646;
+        bh=4lNUVwZLKGFu7RDUkST96BO8Yb9Fnq+wtWdIdDRUbnQ=;
         h=From:To:Cc:Subject:Date:From;
-        b=ETuvR63hPfNyjnl8aA1zTfgeCrhaMDHj/D46IrW4izDOlIEB7pd84ceNLjR9ThUW9
-         Sa/qTouElugysbtT5O1rw5NfPBpYmvl5C/NJVkDeuJp8xAkTn0MPPqNktJBYviyC+v
-         nIoVV65WE6PWw/RqdA0YLqX/s5TLT6gV3cD9wp652TK/Tdp0mkEJ0qDIXpWB1XusSI
-         xfgjkFWY25hPpVKMfi+U7VTtn9bHZHRM7VwbjEzW8Xx6S9xiZ7hRF8SyygttIApiCN
-         7QjVd1/EmkwzeNFyooyt2ZcYWo8D6dtLr4zkv+oh1MTt6x+P0a4gObrs0DERzGUleJ
-         OwAQSHDnMlxcw==
-From:   Lee Jones <lee@kernel.org>
-To:     lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org
-Subject: [PATCH v2 1/1] bpf: Drop unprotected find_vpid() in favour of find_get_pid()
-Date:   Wed,  3 Aug 2022 14:48:21 +0100
-Message-Id: <20220803134821.425334-1-lee@kernel.org>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+        b=D67NGJDpiuW4RkHT362dOxIXziItoAApb9cP0KVmchF3oKAjGnCacLheNCXO42Lmw
+         OQNEcFXt21Bb/t6m1mnjLbDX4yrWMA9vGq0UdtIQGT9HCJ+jolTHz1396+sfS8Qgfw
+         +lUDpqYuAT+pX77MpDUtNfiaftRPYZlgD6cxeBdixkbowtEruIJ4PVt1M035Tq3uTo
+         KgNDtLF+Qpz2r37AOXQBZKia64LZzBDez9eDURgl+ZXmUr/D16bvfF2ZdN8LVE5lqb
+         +8I38UlK28pNCwvQifXOlLLYLGnbXHKAwa1iX+ZPtAGyyqiPxKo/Jj54YVJuNAGwuL
+         MFed38GPKUW6w==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] modpost: refactor get_secindex()
+Date:   Wed,  3 Aug 2022 22:50:13 +0900
+Message-Id: <20220803135013.1818199-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The documentation for find_pid() clearly states:
+SPECIAL() is only used in get_secindex(). Squash it.
 
-  "Must be called with the tasklist_lock or rcu_read_lock() held."
+Make the code more readable with more comments.
 
-Presently we do neither.
-
-Let's use find_get_pid() which searches for the vpid, then takes a
-reference to it preventing early free, all within the safety of
-rcu_read_lock().  Once we have our reference we can safely make use of
-it up until the point it is put.
-
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
-Signed-off-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
-v1 => v2:
-  * Commit log update - no code differences
+Changes in v2:
+  - Revive 'index <= SHN_HIRESERVE)' check
 
- kernel/bpf/syscall.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ scripts/mod/modpost.h | 30 ++++++++++++++++++------------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 83c7136c5788d..c20cff30581c4 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
- 	const struct perf_event *event;
- 	struct task_struct *task;
- 	struct file *file;
-+	struct pid *ppid;
- 	int err;
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index bd874f906781..1178f40a73f3 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -156,22 +156,28 @@ static inline int is_shndx_special(unsigned int i)
+ 	return i != SHN_XINDEX && i >= SHN_LORESERVE && i <= SHN_HIRESERVE;
+ }
  
- 	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
-@@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
- 	if (attr->task_fd_query.flags != 0)
- 		return -EINVAL;
+-/*
+- * Move reserved section indices SHN_LORESERVE..SHN_HIRESERVE out of
+- * the way to -256..-1, to avoid conflicting with real section
+- * indices.
+- */
+-#define SPECIAL(i) ((i) - (SHN_HIRESERVE + 1))
+-
+ /* Accessor for sym->st_shndx, hides ugliness of "64k sections" */
+ static inline unsigned int get_secindex(const struct elf_info *info,
+ 					const Elf_Sym *sym)
+ {
+-	if (is_shndx_special(sym->st_shndx))
+-		return SPECIAL(sym->st_shndx);
+-	if (sym->st_shndx != SHN_XINDEX)
+-		return sym->st_shndx;
+-	return info->symtab_shndx_start[sym - info->symtab_start];
++	unsigned int index = sym->st_shndx;
++
++	/*
++	 * Elf{32,64}_Sym::st_shndx is 2 byte. Big section numbers are available
++	 * in the .symtab_shndx section.
++	 */
++	if (index == SHN_XINDEX)
++		return info->symtab_shndx_start[sym - info->symtab_start];
++
++	/*
++	 * Move reserved section indices SHN_LORESERVE..SHN_HIRESERVE out of
++	 * the way to UINT_MAX-255..UINT_MAX, to avoid conflicting with real
++	 * section indices.
++	 */
++	if (index >= SHN_LORESERVE && index <= SHN_HIRESERVE)
++		return index - SHN_HIRESERVE - 1;
++
++	return index;
+ }
  
--	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
-+	ppid = find_get_pid(pid);
-+	task = get_pid_task(ppid, PIDTYPE_PID);
-+	put_pid(ppid);
- 	if (!task)
- 		return -ENOENT;
- 
+ /* file2alias.c */
 -- 
-2.37.1.455.g008518b4e5-goog
+2.34.1
 

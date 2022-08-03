@@ -2,125 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 577995886C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 07:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399275886C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 07:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234801AbiHCFdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 01:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
+        id S235352AbiHCFeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 01:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiHCFc5 (ORCPT
+        with ESMTP id S231741AbiHCFeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 01:32:57 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D7132DA7
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 22:32:56 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id i62so25009350yba.5
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 22:32:56 -0700 (PDT)
+        Wed, 3 Aug 2022 01:34:21 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CAF2CDE9;
+        Tue,  2 Aug 2022 22:34:19 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id w15so8686008ljw.1;
+        Tue, 02 Aug 2022 22:34:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=AxYxTW+mhbxHIf6UQf3IxPSko9k7acRAZPqZhSwcPbw=;
-        b=eTi6tN0/wIBuNr4PXwwtS8Eo4mlstxjw1Penif/+qcCkP51imD8kaQdQIpuHu/tUql
-         XiS04CWDdTNtaenqxDDSrL4zW4ksbrkqEl1GQYFlFA4P8cXwUfOv367V+U9GT6dJoML1
-         39eEk0VTKNh1AydnJbX5tmuo7W36+EE9lCf6paQEaPTO/rwZTZMmsXxeeHMEvkfE5CPE
-         wHKJKlLq1rMrezWn7bxm9lSSMcPJYD6EP0x7MWKA5XxvtqLuoAzfvW2REDAh/ay4WpTG
-         cg5EKlTdJvwNanEKVdRr+vUrJomNBjnpsiffS+9TXGUsqcdGoUoEUHm6QATFvDXtydAu
-         iJDQ==
+        bh=m/mpVF2yi0tEdHzO4TUHj1gXlq1RjxX5J9jK9yNPyWM=;
+        b=Hyx9KJx2zDiy9tLp2uInAaAHZvdobyDOFVUKfRBQsQT+Q/9H2+GsfP0PGsyKAhN7hF
+         /vXRLSVKFLu/1Oe7MURdfNvKVfEUCgY2aTPf+RxGiiTxAEsRrxZU3leJ8YEyvfU4O+cZ
+         HOOyMWUIk6R/4M8GytJmlEhrurbm24xfj4aXYRYu9dTvCM4HR+Wil7SIWe81vys3Vlxt
+         jy56jDHSg7O5r2cw/T9ZH2z/O5daPFEvXTnr5hmSiRtekvxlaMOAPJCzU36uQ6BCY7ef
+         phqekqOCJnibtfnFoJcWEIZ2RUm/CAnbacWX69orip0VU/erkMrTV0c1OnM5rNnsPK9G
+         Kj2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=AxYxTW+mhbxHIf6UQf3IxPSko9k7acRAZPqZhSwcPbw=;
-        b=LVKH2LdiuYcfvNa9jUOmVwk5S7Kx7L6bo1n6b0ZvGExcnvWpsRh6B3+h7vFsuFU054
-         XlZtlwtje8C/zt7kewFzs2orLr4h8nSqhlCTYM6n4sHFXH4gls6EqTV+r3fueTQiWxxJ
-         Vo7yPRzCEe+GZ6WZru7Vr99afbkMlOQ1XyTMjbr6Oz5PQfAXhWIJdbMFr1yHw7l/X0L0
-         FthmPnDQBmv/Opah3fVjjrhoDLPlmBh8Vs4xw1hPNIxGYRGK7YyNk0h0ZRWEzWrPn8IS
-         CX4QKYVii4kDTp8Nv8qc88SQnO5jxTOUTReBjYrt5vmC9okru0wiI8Z9TjPGpm0ztci+
-         BPgQ==
-X-Gm-Message-State: ACgBeo3YTo6FBfIeO+e5u7pJdV5GojMERjGPOmwdqw29w7Wc9iuPru32
-        J3hpGcFFgKNC6lkxpV9Tsli4FjlGoDsE4M/L7T2AtA==
-X-Google-Smtp-Source: AA6agR6NHDvBUXHePHA3eUfQS2EZ9G93onA6VcVGuMrpEx5CRj8UE2QfY4Qn6VJ1PhkjOXmKqMfdW3uuPTfToC8VpuE=
-X-Received: by 2002:a05:6902:245:b0:670:a73b:f87d with SMTP id
- k5-20020a056902024500b00670a73bf87dmr18690720ybs.643.1659504775285; Tue, 02
- Aug 2022 22:32:55 -0700 (PDT)
+        bh=m/mpVF2yi0tEdHzO4TUHj1gXlq1RjxX5J9jK9yNPyWM=;
+        b=dTdu58EdHNgifLniBouiES2FxptoJBPoooz7lxkzDqai3ThhIVddyfJBrjgkFBOhro
+         psz1giYNBmw5ZxK09n42uytToY6S8qgQyP+KALvsB9Q3r3BSFq+g78m84xc9FCicLAz5
+         HwYZL0HhsPg0M/E8jrGMLb1QZ0ffXjUwr6Ni8WjF36jCQj1DcTzTKVi3QmHf5TgMDImU
+         7qClj3gTtqsDadEjYd9BwQAO0ArqPvhIDp/vA/FN63I+sx1rOmWlaiveYZUxYG+AY9o1
+         LS4HQW8Re//QRF9VcMjZ/Pn9BBrfoYZvIKKTmO5Ugx333oAhpK1dkf1MLtMp6Dw2T9Up
+         O4xQ==
+X-Gm-Message-State: ACgBeo0HGwcKpJhrhcC89kQfa2s+GNVhCvZ1MSkpwTAfAGDLo4BsxO+h
+        ZCxr6bvd9BAVtX+EuUHNPjPHcCA2eYSdhClU4A==
+X-Google-Smtp-Source: AA6agR646p7FUT0NrQdMUfoV4D1TzismNFplFcOD7RivvPBOTxpiN3xQf1ZwkL+BAI3hpDd8UJUujM/YjGLIVlVm29I=
+X-Received: by 2002:a05:651c:1a26:b0:25e:5c81:efd7 with SMTP id
+ by38-20020a05651c1a2600b0025e5c81efd7mr1962677ljb.307.1659504857436; Tue, 02
+ Aug 2022 22:34:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220724122424.2509021-1-bhupesh.sharma@linaro.org>
- <20220724122424.2509021-6-bhupesh.sharma@linaro.org> <b5df1acd-d92d-782f-8fb7-41842611c788@somainline.org>
-In-Reply-To: <b5df1acd-d92d-782f-8fb7-41842611c788@somainline.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Wed, 3 Aug 2022 11:02:44 +0530
-Message-ID: <CAH=2NtztrMyPzvF9-9jsCnuM=40TmzXUvLBu_O5r_zRRtRwSiw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] thermal: qcom: tsens: Add reinit quirk support for
- sm6375 controller
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, daniel.lezcano@linaro.org,
-        robh+dt@kernel.org, rafael@kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
+References: <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2>
+ <20220802080927epcms2p1d0d89c32a9bd07c07f233801bb954807@epcms2p1>
+ <CGME20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p8>
+ <CAGaU9a_YZDxaeOCErnQwFF9mE7bARDf4sw3F3ai1DiWwNVMFcw@mail.gmail.com> <20220803041126epcms2p82bafb63e4f135d09017519ed3066f914@epcms2p8>
+In-Reply-To: <20220803041126epcms2p82bafb63e4f135d09017519ed3066f914@epcms2p8>
+From:   Stanley Chu <chu.stanley@gmail.com>
+Date:   Wed, 3 Aug 2022 13:34:05 +0800
+Message-ID: <CAGaU9a8Xxvtc0=Ci=ztwya=GqFZ0WB3p4wSo-QvLADdF3Fj+4Q@mail.gmail.com>
+Subject: Re: (2) [PATCH v6 5/6] scsi: ufs: wb: Modify messages
+To:     j-young.choi@samsung.com
+Cc:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konrad,
+hi Jinyoung,
 
-On Thu, 28 Jul 2022 at 19:42, Konrad Dybcio
-<konrad.dybcio@somainline.org> wrote:
+On Wed, Aug 3, 2022 at 12:11 PM Jinyoung CHOI <j-young.choi@samsung.com> wrote:
 >
+> Hi, Stanley,
 >
->
-> On 24.07.2022 14:24, Bhupesh Sharma wrote:
-> > tsens controller(s) on Qualcomm sm6375 SoC might start in
-> > an unknown state or start with TSENS_EN indicating
-> > a 'disabled' state when they enter linux world.
+> >Hi,
 > >
-> > In such cases, it is useful to try and reinit them via
-> > trustzone [via scm call(s)], at the very start.
+> >On Tue, Aug 2, 2022 at 4:29 PM Jinyoung CHOI <j-young.choi@samsung.com> wrote:
+> >>
+> >> Messages are modified to fit the format of others.
+> >>
+> >> Reviewed-by: Avri Altman <avri.altman@wdc.com>
+> >> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> >> Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+> >> ---
+> >>  drivers/ufs/core/ufs-sysfs.c |  2 +-
+> >>  drivers/ufs/core/ufshcd.c    | 23 +++++++++++------------
+> >>  2 files changed, 12 insertions(+), 13 deletions(-)
+> >>
+> >> diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
+> >> index 2c0b7f45de4b..117272cf7d61 100644
+> >> --- a/drivers/ufs/core/ufs-sysfs.c
+> >> +++ b/drivers/ufs/core/ufs-sysfs.c
+> >> @@ -230,7 +230,7 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
+> >>                  * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
+> >>                  * on/off will be done while clock scaling up/down.
+> >>                  */
+> >> -               dev_warn(dev, "To control WB through wb_on is not allowed!\n");
+> >> +               dev_warn(dev, "It is not allowed to configure WB!\n");
+> >>                 return -EOPNOTSUPP;
+> >>         }
+> >>
+> >> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> >> index 5099d161f115..dcd7f03db2a2 100644
+> >> --- a/drivers/ufs/core/ufshcd.c
+> >> +++ b/drivers/ufs/core/ufshcd.c
+> >> @@ -5737,13 +5737,13 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
+> >>
+> >>         ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
+> >>         if (ret) {
+> >> -               dev_err(hba->dev, "%s Write Booster %s failed %d\n",
+> >> -                       __func__, enable ? "enable" : "disable", ret);
+> >> +               dev_err(hba->dev, "%s: Write Booster %s failed %d\n",
+> >> +                       __func__, enable ? "enabling" : "disabling", ret);
+> >>                 return ret;
+> >>         }
+> >>
+> >>         hba->dev_info.wb_enabled = enable;
+> >> -       dev_info(hba->dev, "%s Write Booster %s\n",
+> >> +       dev_info(hba->dev, "%s: Write Booster %s\n",
+> >>                         __func__, enable ? "enabled" : "disabled");
 > >
-> > Add hooks for the same in the qcom tsens driver.
-> >
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Cc: Amit Kucheria <amitk@kernel.org>
-> > Cc: Thara Gopinath <thara.gopinath@gmail.com>
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linux-arm-msm@vger.kernel.org
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> This sadly doesn't work.. the issue on 6375 is that the controller
-> is in some weird state at boot and this bit that's higher up:
+> >You need to rebase this patch to follow the latest change as
+> >https://lore.kernel.org/all/20220709000027.3929970-1-bjorn.andersson@linaro.org/
 >
->         ret = regmap_field_read(priv->rf[TSENS_EN], &enabled);
->         if (ret)
->                 goto err_put_device;
->         if (!enabled) {
->                 dev_err(dev, "%s: device not enabled\n", __func__);
->                 ret = -ENODEV;
->                 goto err_put_device;
->         }
+> I am currently working on the latest 5.20/scsi-staging.
+> In this case, can I refer the commit of 5.19/scsi-fixes
+> and add commit to 5.20/scsi-staging?
+> Or can I reflect it in my change?
+> I have no experience, so please guide. :)
 >
-> does not succeed.
+> Thank you for checking.
+> Jinyoung.
 >
-> Moving the code added in the patch up or calling
-> qcom_scm_tsens_reinit() or qcom_scm_tsens_reinit() and
-> tsens_reenable_hw_after_scm(priv) directly before this enable
-> check also fails. In fact, the latter crashes the platform..
 >
-> I don't want to block this series, so I suggest the 6375 part can
-> be dropped for now.
 
-Many thanks for testing the patchset. I agree.. let me drop this patch
-from the v3 version and we can later target this sm6375 issue via a
-separate patch.
+I did not notice that the below patch is merged to 5.19/scsi-fixes, so
+I guess perhaps you could keep working on the latest
+5.20/scsi-staging, and then Martin would help resolve the conflict.
+https://lore.kernel.org/all/20220709000027.3929970-1-bjorn.andersson@linaro.org/
 
-Regards,
-Bhupesh
+Thanks,
+
+Stanley

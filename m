@@ -2,127 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BDA588581
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBFF588587
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234229AbiHCBtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 21:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
+        id S235487AbiHCBtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 21:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiHCBtD (ORCPT
+        with ESMTP id S234937AbiHCBtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 21:49:03 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DFB26108;
-        Tue,  2 Aug 2022 18:49:02 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso527916pjo.1;
-        Tue, 02 Aug 2022 18:49:02 -0700 (PDT)
+        Tue, 2 Aug 2022 21:49:20 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D921B29819
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 18:49:18 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-10ea7d8fbf7so14054656fac.7
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 18:49:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Eq2bNZKRTPBg/Erec8mPYF5Hp1Q9yAhnQPYCvx6UjBg=;
-        b=Pv2AGY0MFO0cMVcGdczfMNk6TbrOlpkS1uYKIJ2y8ZnWn0Ob6HJB/hO5eWzNRK+AXN
-         z/C/4WXNKKaBa9IyW2klipUwtwhfSAjcFHNRpkfOSCXrj4pOwUssCsyP+DFWm4VLz/Hm
-         OB8eVPL9L3QgMKFECyg/xvjE14mMHTGaHUWxG4HDHuft8nKx23RX/EVO8WjKF3FanHdQ
-         9eRkgFt+ZHART0w1blYCmvnvBAdKYyUZa0XzhYZB21Z6FaW2bbNAuF/m7FA4ggnPZP/t
-         C2cNACV46E1K2lConbYYv6L0YFfA8j6L1WccLk+LCSmIDsBTk8c7vASuRc05x8LFIbqB
-         rSnA==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=WU2kUjnstyWYEWgZ7QsgdfMzDYXtd6/0pNDP+bXUFL0=;
+        b=pIWX4GwdMT4s1CNUKjFxa/wUxQiqlI9U7FowMhYAeZa7umj+sPRJbIpi+Z21gUEYYE
+         433Nns+UPJlflf0DqSQA3yiK/+50l7xj4k6R4ReZguOx2Cc7/g2fiMg95y1GNIUeDPMd
+         V+Lh9P03ep6UhJYdGI8gJ0zY7ai0eAd28oK81+97R9w7l1upYIeN8vIpaEkwxwy8kZyf
+         zZF9FkcCJzYUnpJN9gShop3mA/ecb4sYCuRekLHMd0Db1+9A7jivy5e5+ApU4h/2WX+4
+         wZ2wbKDaLe7tCDrW3/uZmwaFwlh/rdLDYVY7kNr+hj2ws8TkzMpzrBJENITBpvMBXF4g
+         ToUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Eq2bNZKRTPBg/Erec8mPYF5Hp1Q9yAhnQPYCvx6UjBg=;
-        b=3TcTYRNFpvKAJplYCEwqu4UUmVSMh78cMkFLUjh3H6TYTJuzxmYgXx2LqZOg6bZEZt
-         lfgioNcknp6dpF6O2zqA/C6mTKJXczWr8J36iS8hemRGPsxb6iT5GHTKTFIpLgDy9RHM
-         yqxhBY1JHovpZ3PmWteb4wUv79nHcVTSyJygsPYxmnl+aU0XdHkelcrWsZ7mA4/Z2QE+
-         ZW4Uf6U0bZ68l/05gW83J4oQVrkzmqJp/Wcfd9yIqdgEtdXGMybUwTbMAlToDAwiBTiM
-         Z9BU4fNw8+D03fpKRJjJBqEjWD82RctFSVMI3dsOWZ7kqTaEcujnWKYjgHK9Ul6P/FO3
-         d3Lg==
-X-Gm-Message-State: ACgBeo09/3qDPQiBWfWxWpcxoP8/zeeH/Svpi1M7b0G7SErETB6fduv+
-        Tp7u2l+Sv84zgsn0KIMNvoOjlffCuyQ=
-X-Google-Smtp-Source: AA6agR5FbzZ+4i+MqGhdOutVudI24WXHqMCbg0DGun8EDKBuEmxFJwTq964y86XOTzQLRT7IU91hRQ==
-X-Received: by 2002:a17:90a:2b42:b0:1f4:fc9a:be32 with SMTP id y2-20020a17090a2b4200b001f4fc9abe32mr2329539pjc.221.1659491341961;
-        Tue, 02 Aug 2022 18:49:01 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-86.three.co.id. [180.214.232.86])
-        by smtp.gmail.com with ESMTPSA id g18-20020aa79dd2000000b0052d4ffac466sm4297165pfq.188.2022.08.02.18.49.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 18:49:01 -0700 (PDT)
-Message-ID: <d1f90d44-a1e9-7490-f789-f928b85a1d26@gmail.com>
-Date:   Wed, 3 Aug 2022 08:48:58 +0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=WU2kUjnstyWYEWgZ7QsgdfMzDYXtd6/0pNDP+bXUFL0=;
+        b=W0NI2sW0nXnI10m3pyiDi7nAhPPWkj+J2TClngs2KDRqrAuoRQ/9blUojT+CG5zXSm
+         P44Q3jkyBpsjpoyuk4GWQv57RpUtKofK8K1qKxfYbVFb8ii35VjAYoloO4uCHZjz9GZY
+         0XasU1aEb5B77d5c55QFHwSCeGuLuUEyS8dnQ4dc7XvT6COgWxzC4q6P3cLsUT0RPIlw
+         0y6B1Z17GeM+7Dh7W0W5eGqgC0Tp/9GZY8tYzgjMi4pE8fod7Ko/PEFL4M+vD/0WIpg4
+         BoikVtgSyktU7s/uB3o7mgheO5QoBSAIaGUAbkgp+WS069EVW8DfvqIKB7Tf2bQz+Nok
+         7kEQ==
+X-Gm-Message-State: ACgBeo0+BVsplaqAIOuw9bBru63LFDFmRyWFqMosZ5xNKptD9RNLj38z
+        dl6ILHpi03M0WhvJnBjJM/ahcG1q2gWsOR2sEJ5q
+X-Google-Smtp-Source: AA6agR7k//bqv1RaCR4etWugLTK8eSl7/U9by+A0YLPK6GBwFTC/Luh5uDHGjqJVOoDgmY2y6IrjX0JtPhXr4FRQHZA=
+X-Received: by 2002:a05:6870:9588:b0:101:c003:bfe6 with SMTP id
+ k8-20020a056870958800b00101c003bfe6mr993168oao.41.1659491357702; Tue, 02 Aug
+ 2022 18:49:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: linux-next: Tree for Aug 2
-Content-Language: en-US
-To:     broonie@kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220803010326.2814276-1-broonie@kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220803010326.2814276-1-broonie@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220721172808.585539-1-fred@cloudflare.com> <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+ <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+ <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com> <CAHC9VhQw8LR9yJ9UkA-9aPNETQavt25G-GGSs-_ztg6ZpxNzxA@mail.gmail.com>
+ <CACYkzJ7=Cvo9qncMX_5_Wp1zNNWDyh3DxdOLq_ysWxDCs8VC8g@mail.gmail.com>
+In-Reply-To: <CACYkzJ7=Cvo9qncMX_5_Wp1zNNWDyh3DxdOLq_ysWxDCs8VC8g@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 2 Aug 2022 21:49:06 -0400
+Message-ID: <CAHC9VhRMcouRoGn1SbhcMXpeOzS-S+z-fkK-t4-uvib0MACLow@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+To:     KP Singh <kpsingh@kernel.org>,
+        Frederick Lawler <fred@cloudflare.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, revest@chromium.org,
+        jackmanb@chromium.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/3/22 08:03, broonie@kernel.org wrote:
-> Hi all,
-> 
-> Changes since 20220728:
-> 
-> The hid tree gained a build failure which I fixed up.
-> 
-> The thermal tree gained a build failure, I used the version from 20220728
-> instead.
-> 
-> The net-next tree gained a conflict against the net tree.
-> 
-> The kvm tree gained a conflict with the kvms390-fixes tree.
-> 
-> The pinctrl tree gained a build failure for which I reverted a commit.
-> 
-> Non-merge commits (relative to Linus' tree): 12734
->  12594 files changed, 1319236 insertions(+), 278745 deletions(-)
-> 
-> ----------------------------------------------------------------------------
-> 
-> I have created today's linux-next tree at
-> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-> are tracking the linux-next tree using git, you should not use "git pull"
-> to do so as that will try to merge the new linux-next release with the
-> old one.  You should use "git fetch" and checkout or reset to the new
-> master.
-> 
-> You can see which trees have been included by looking in the Next/Trees
-> file in the source.  There are also quilt-import.log and merge.log
-> files in the Next directory.  Between each merge, the tree was built
-> with an arm64 defconfig, an allmodconfig build for x86_64, a
-> multi_v7_defconfig for arm and a native (arm64) build of tools/perf.
-> 
+On Tue, Aug 2, 2022 at 5:25 PM KP Singh <kpsingh@kernel.org> wrote:
+> On Mon, Aug 1, 2022 at 5:19 PM Paul Moore <paul@paul-moore.com> wrote:
+> > On Mon, Aug 1, 2022 at 9:13 AM Frederick Lawler <fred@cloudflare.com> wrote:
+> > > On 7/22/22 7:20 AM, Paul Moore wrote:
+> > > > On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
+> > > >
+> > > >> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
+> > > >>> While creating a LSM BPF MAC policy to block user namespace creation, we
+> > > >>> used the LSM cred_prepare hook because that is the closest hook to prevent
+> > > >>> a call to create_user_ns().
+> > > >>>
+> > > >>> The calls look something like this:
+> > > >>>
+> > > >>> cred = prepare_creds()
+> > > >>> security_prepare_creds()
+> > > >>> call_int_hook(cred_prepare, ...
+> > > >>> if (cred)
+> > > >>> create_user_ns(cred)
+> > > >>>
+> > > >>> We noticed that error codes were not propagated from this hook and
+> > > >>> introduced a patch [1] to propagate those errors.
+> > > >>>
+> > > >>> The discussion notes that security_prepare_creds()
+> > > >>> is not appropriate for MAC policies, and instead the hook is
+> > > >>> meant for LSM authors to prepare credentials for mutation. [2]
+> > > >>>
+> > > >>> Ultimately, we concluded that a better course of action is to introduce
+> > > >>> a new security hook for LSM authors. [3]
+> > > >>>
+> > > >>> This patch set first introduces a new security_create_user_ns() function
+> > > >>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+> > > >> Patch 1 and 4 still need review from the lsm/security side.
+> > > >
+> > > > This patchset is in my review queue and assuming everything checks out, I expect to merge it after the upcoming merge window closes.
+> > > >
+> > > > I would also need an ACK from the BPF LSM folks, but they're CC'd on this patchset.
+> > >
+> > > Based on last weeks comments, should I go ahead and put up v4 for
+> > > 5.20-rc1 when that drops, or do I need to wait for more feedback?
+> >
+> > In general it rarely hurts to make another revision, and I think
+> > you've gotten some decent feedback on this draft, especially around
+> > the BPF LSM tests; I think rebasing on Linus tree after the upcoming
+> > io_uring changes are merged would be a good idea.
 
-Hi broonie,
+As I was typing up my reply I realized I mistakenly mentioned the
+io_uring changes that Linus just merged today - oops!  If you haven't
+figured it out already, you can disregard that comment, that's a
+completely different problem and a completely different set of patches
+:)
 
-Thanks for keeping linux-next up while Stephen is on vacation.
+> > Although as a
+> > reminder to the BPF LSM folks - I'm looking at you KP Singh :) - I
+> > need an ACK from you guys before I merge the BPF related patches
+>
+> Apologies, I was on vacation. I am looking at the patches now.
+> Reviews and acks coming soon :)
 
-What is missing here is powerpc build (ppc64_defconfig), since the
-architecture is often used for cross-compile test.
-
-And I think since we're at merge window for 6.0, we need to say
-"Please do not add material for 6.1 until 6.0-rc1 have been
-released".
-
-Thanks.
+No worries, we've still got the two weeks of the merge window before I
+can do anything into linux-next - thanks KP!
 
 -- 
-An old man doll... just what I always wanted! - Clara
+paul-moore.com

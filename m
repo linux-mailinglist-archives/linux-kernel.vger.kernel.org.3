@@ -2,178 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EE15885C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 04:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178F55885D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 04:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235063AbiHCCas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 22:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
+        id S235320AbiHCCfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 22:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiHCCaq (ORCPT
+        with ESMTP id S230348AbiHCCfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 22:30:46 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E818A1CFDE
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 19:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659493845; x=1691029845;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=svzXtL8TTiYXT6mqM+2nXiVLdwwSFUZuQYT7SkfHC6E=;
-  b=EgYlklvGbZMPfqXaHOsJiIgr0I2YixTsMz0+EF3NQI8eSU28ATuidogG
-   EsgubqkmkIt93eN9tkcaboqKlELjGmEtHqwbQivlsWZyn3M3Lek3sJXxF
-   AhWLSi/mEP+uu5Uy1XhLAw+CQW48jcynjES0mEhfpPl8VIm2Afgv1K67f
-   XP09YYOfEEwa0yrqOktJXj8ckIcr5mB06JdUGyw0pByo5/5QBW7ImCqFa
-   +Z62mJzXUYGUlHPReiMS4aX2sAOhd4MpAnj+3gAbbgZFIgIrC4Ln1mfzP
-   ocjL53AX3zC7jpBcVHJSXoZHKjIrD0W1j6hmmKv82OJcCTIzItQJENbCG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="315421059"
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="315421059"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 19:30:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="553151453"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Aug 2022 19:30:43 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJ49j-000Ghd-0n;
-        Wed, 03 Aug 2022 02:30:43 +0000
-Date:   Wed, 3 Aug 2022 10:29:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Saleem Abdulrasool <abdulras@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: arch/riscv/kernel/signal.c:197:28: error: use of undeclared
- identifier '__vdso_rt_sigreturn_offset'
-Message-ID: <202208031019.E5mj21An-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 2 Aug 2022 22:35:01 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8781EAC0
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 19:34:57 -0700 (PDT)
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220803023451epoutp02adf635c87f9182558b0b62062327869a~HtRV_Go_D1758917589epoutp02S
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:34:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220803023451epoutp02adf635c87f9182558b0b62062327869a~HtRV_Go_D1758917589epoutp02S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1659494091;
+        bh=T5VoLQpBcRJo92C2lV7/m8DkQiN/Co1igRSrZP3ut6k=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=dQwFsqKZzAlLkGcTlBkKB1Q8oPSFKqxwpvUdceKqG1dW9EVXx6S1qB9uME7zjZX4Q
+         jmMp+6KEvJL1YyCPU+aYGx+gKDRFDTbh238nYrgD+Pin8ASPqw5ZIUKPStDHN1l1w6
+         segL42wjHhkgaO3Yh8nhKiyBV5GFUxNTIUdq9n+4=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20220803023451epcas1p4bef07360d1c599a2c2da0bc634829db1~HtRVgqxGR3091330913epcas1p4n;
+        Wed,  3 Aug 2022 02:34:51 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.38.247]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4LyGCt5Xx6z4x9Ps; Wed,  3 Aug
+        2022 02:34:50 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        79.DE.09633.ACED9E26; Wed,  3 Aug 2022 11:34:50 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220803023449epcas1p4a9b09cdc73878c8ee40ae10523279dc3~HtRT_BUNs2254422544epcas1p4c;
+        Wed,  3 Aug 2022 02:34:49 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220803023449epsmtrp174cf5728076bd9e7ce9959424629ea3d~HtRT9XqWP2673726737epsmtrp1s;
+        Wed,  3 Aug 2022 02:34:49 +0000 (GMT)
+X-AuditID: b6c32a36-075ff700000025a1-0e-62e9deca3170
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6E.1C.08802.9CED9E26; Wed,  3 Aug 2022 11:34:49 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.253.99.247]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220803023449epsmtip172e1d9b7dead092cb5252dd3e06a8c47~HtRT1ZRlc0481204812epsmtip1r;
+        Wed,  3 Aug 2022 02:34:49 +0000 (GMT)
+From:   Jaewook Kim <jw5454.kim@samsung.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
+        junbeom.yeom@samsung.com, youngjin.gil@samsung.com,
+        Jaewook Kim <jw5454.kim@samsung.com>
+Subject: [PATCH] f2fs: do not allow to decompress files have
+ FI_COMPRESS_RELEASED
+Date:   Wed,  3 Aug 2022 11:34:31 +0900
+Message-Id: <20220803023431.30214-1-jw5454.kim@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDKsWRmVeSWpSXmKPExsWy7bCmge6pey+TDK6u17Y4PfUsk8WT9bOY
+        LQ5eOcJosfLKbxaLS4vcLS7vmsNmseXfEVaLGfufsjtweGxa1cnmsXvBZyaPvi2rGD0+b5IL
+        YInKtslITUxJLVJIzUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBukJJ
+        oSwxpxQoFJBYXKykb2dTlF9akqqQkV9cYquUWpCSU2BWoFecmFtcmpeul5daYmVoYGBkClSY
+        kJ3x+t85toJt/BWvlz5nb2C8x9PFyMkhIWAicb75CmsXIxeHkMAORonJr0+zQDifGCWezZjB
+        DOF8ZpS4MWk5E0zLpu+PoFp2MUqs7P7BAld14stURpAqNgEtiTPtv8A6RATUJU5NWsoCYjML
+        7GOUePWzHsQWFgiWmL/lDFicRUBV4vT/g+xdjBwcvALWEkuO6EAsk5dYveEA2BUSApvYJQ58
+        bIO6wkVixrQbrBC2sMSr41vYIWwpiZf9bVB2tkT7q0ksEHaBxOYdd5lB5ksI2Eu8v2QBYjIL
+        aEqs36UPUaEosfP3XEaIK/kk3n3tYYWo5pXoaBOCKFGROH5nBQvMonUPtzJC2B4Sv7o2s4GU
+        CwnESnzYKzSBUXYWwvwFjIyrGMVSC4pz01OLDQuM4FGUnJ+7iRGcrLTMdjBOevtB7xAjEwfj
+        IUYJDmYlEd47Ls+ThHhTEiurUovy44tKc1KLDzGaAgNrIrOUaHI+MF3mlcQbmlgamJgZmVgY
+        WxqbKYnzrpp2OlFIID2xJDU7NbUgtQimj4mDU6qBKfQiw/bKF02C3kY/ns/cWLD2jM1WXrYN
+        V6XbJIxVD5mnn9Z+tvDYh9LrSV/KP8zuf9R0hGFjZuIuEVbfnsw7u5MOrFkSw3+sL6n+pm6u
+        m5S1hjz/O6tZf7P/OO/1jc5IN+RptNhszr7na+/hYNmJ57qz/licO7Rn+p/PEYK1L5M3pm+c
+        lro8snaHALOCW9fqfSc27/ouVWnyZmOTpvmlg6+v3eJUVz7xefNsaakvnILPHj+cXrbhYu6c
+        J290DzIv5b39QGLzDOsq7Q4P9+evp8T52O595rTwi6Dx5MZVrJc96xuLqs2DLxZ9kDartmqU
+        FH3+dEPppojcW0u+fzx0WC3BYdH20p2mZx/M2xiq26bEUpyRaKjFXFScCAAla9Cv3wMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLJMWRmVeSWpSXmKPExsWy7bCSnO7Jey+TDI4elbQ4PfUsk8WT9bOY
+        LQ5eOcJosfLKbxaLS4vcLS7vmsNmseXfEVaLGfufsjtweGxa1cnmsXvBZyaPvi2rGD0+b5IL
+        YInisklJzcksSy3St0vgynj97xxbwTb+itdLn7M3MN7j6WLk5JAQMJHY9P0RaxcjF4eQwA5G
+        ifYFK9ghElIS6zcsZ+pi5ACyhSUOHy6GqPnIKLH8RQsTSA2bgJbEmfZfYLaIgKbEkc6Z7CBF
+        zAJHGCVmPO5mBUkICwRKPD6zBWwoi4CqxOn/B9lBhvIKWEssOaIDsUteYvWGA8wTGHkWMDKs
+        YpRMLSjOTc8tNiwwykst1ytOzC0uzUvXS87P3cQIDiEtrR2Me1Z90DvEyMTBeIhRgoNZSYT3
+        jsvzJCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqYtFui
+        1q0UutKXPd1mrY1+zHXNcyXMDOwah+yX/0k+tO3XSwWGXdLaIu9meCQ8V3+vffdld0Fl57sl
+        73rPb9t4tPqBX7n830s5zXLGdpbihqsCkz8H82yueKGs+PvI76VKSa0sK6a0pzLa2zF1vb7d
+        JlRt/2HxPsddR/i7rOR7E6tSfMV0Knq2hm2825GR1GLXpO478cQ9bT3lJedqzyWfOtasPDXE
+        4qaMvbj23+iNapICK0498f68pU8qrSA4xS9skUfw8wido78zk/m+Fzzr+PXjxr7kM44fFkQL
+        8dZb3ZzZfdd069YDLMVs/L/X8BpMtJt8r2xFyxbdY37mz/ddKKsIrQnQtHixzjTj/HIlluKM
+        REMt5qLiRADyrdjqkAIAAA==
+X-CMS-MailID: 20220803023449epcas1p4a9b09cdc73878c8ee40ae10523279dc3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220803023449epcas1p4a9b09cdc73878c8ee40ae10523279dc3
+References: <CGME20220803023449epcas1p4a9b09cdc73878c8ee40ae10523279dc3@epcas1p4.samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saleem,
+If a file has FI_COMPRESS_RELEASED, all writes for it should not be
+allowed. However, as of now, in case of compress_mode=user, writes
+triggered by IOCTLs like F2FS_IOC_DE/COMPRESS_FILE are allowed unexpectly,
+which could crash that file.
+To fix it, let's do not allow F2FS_IOC_DE/COMPRESS_IOCTL if a file already
+has FI_COMPRESS_RELEASED flag.
 
-FYI, the error/warning still remains.
+This is the reproduction process:
+1. $ chattr +c ./file
+2. $ dd if=/dev/zero of=./file bs=4096 count=2000 oflag=append conv=notrunc
+3. $ sync
+4. $ do_compress ./file      ; call F2FS_IOC_COMPRESS_FILE
+5. $ get_compr_blocks ./file ; call F2FS_IOC_GET_COMPRESS_BLOCKS
+6. $ do_compress ./file      ; call F2FS_IOC_COMPRESS_FILE again
+7. $ get_compr_blocks ./file ; call F2FS_IOC_GET_COMPRESS_BLOCKS again
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c2a24a7a036b3bd3a2e6c66730dfc777cae6540a
-commit: fde9c59aebafb91caeed816cc510b56f14aa63ae riscv: explicitly use symbol offsets for VDSO
-date:   11 months ago
-config: riscv-randconfig-c006-20220802 (https://download.01.org/0day-ci/archive/20220803/202208031019.E5mj21An-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fde9c59aebafb91caeed816cc510b56f14aa63ae
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fde9c59aebafb91caeed816cc510b56f14aa63ae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+You can find compr_blocks has a negative value.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 5fdb322ff2c2b ("f2fs: add F2FS_IOC_DECOMPRESS_FILE and F2FS_IOC_COMPRESS_FILE")
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Junbeom Yeom <junbeom.yeom@samsung.com>
+Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
+Signed-off-by: Youngjin Gil <youngjin.gil@samsung.com>
+Signed-off-by: Jaewook Kim <jw5454.kim@samsung.com>
+---
+ fs/f2fs/file.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
->> arch/riscv/kernel/signal.c:197:28: error: use of undeclared identifier '__vdso_rt_sigreturn_offset'
-           regs->ra = (unsigned long)VDSO_SYMBOL(
-                                     ^
-   arch/riscv/include/asm/vdso.h:20:42: note: expanded from macro 'VDSO_SYMBOL'
-           (void __user *)((unsigned long)(base) + __vdso_##name##_offset)
-                                                   ^
-   <scratch space>:132:1: note: expanded from here
-   __vdso_rt_sigreturn_offset
-   ^
-   arch/riscv/kernel/signal.c:309:27: warning: no previous prototype for function 'do_notify_resume' [-Wmissing-prototypes]
-   asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
-                             ^
-   arch/riscv/kernel/signal.c:309:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
-                        ^
-                        static 
-   1 warning and 1 error generated.
---
-   ld.lld: error: section .text load address range overlaps with .eh_frame_hdr
-   >>> .text range is [0x800, 0x1733]
-   >>> .eh_frame_hdr range is [0x9C0, 0x9E3]
->> llvm-nm: error: arch/riscv/kernel/vdso/vdso.so.dbg: No such file or directory
-
-
-vim +/__vdso_rt_sigreturn_offset +197 arch/riscv/kernel/signal.c
-
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  173  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  174  static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  175  	struct pt_regs *regs)
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  176  {
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  177  	struct rt_sigframe __user *frame;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  178  	long err = 0;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  179  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  180  	frame = get_sigframe(ksig, regs, sizeof(*frame));
-96d4f267e40f95 Linus Torvalds    2019-01-03  181  	if (!access_ok(frame, sizeof(*frame)))
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  182  		return -EFAULT;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  183  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  184  	err |= copy_siginfo_to_user(&frame->info, &ksig->info);
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  185  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  186  	/* Create the ucontext. */
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  187  	err |= __put_user(0, &frame->uc.uc_flags);
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  188  	err |= __put_user(NULL, &frame->uc.uc_link);
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  189  	err |= __save_altstack(&frame->uc.uc_stack, regs->sp);
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  190  	err |= setup_sigcontext(frame, regs);
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  191  	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  192  	if (err)
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  193  		return -EFAULT;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  194  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  195  	/* Set up to return from userspace. */
-6bd33e1ece528f Christoph Hellwig 2019-10-28  196  #ifdef CONFIG_MMU
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10 @197  	regs->ra = (unsigned long)VDSO_SYMBOL(
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  198  		current->mm->context.vdso, rt_sigreturn);
-6bd33e1ece528f Christoph Hellwig 2019-10-28  199  #else
-6bd33e1ece528f Christoph Hellwig 2019-10-28  200  	/*
-6bd33e1ece528f Christoph Hellwig 2019-10-28  201  	 * For the nommu case we don't have a VDSO.  Instead we push two
-6bd33e1ece528f Christoph Hellwig 2019-10-28  202  	 * instructions to call the rt_sigreturn syscall onto the user stack.
-6bd33e1ece528f Christoph Hellwig 2019-10-28  203  	 */
-6bd33e1ece528f Christoph Hellwig 2019-10-28  204  	if (copy_to_user(&frame->sigreturn_code, __user_rt_sigreturn,
-6bd33e1ece528f Christoph Hellwig 2019-10-28  205  			 sizeof(frame->sigreturn_code)))
-6bd33e1ece528f Christoph Hellwig 2019-10-28  206  		return -EFAULT;
-6bd33e1ece528f Christoph Hellwig 2019-10-28  207  	regs->ra = (unsigned long)&frame->sigreturn_code;
-6bd33e1ece528f Christoph Hellwig 2019-10-28  208  #endif /* CONFIG_MMU */
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  209  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  210  	/*
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  211  	 * Set up registers for signal handler.
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  212  	 * Registers that we don't modify keep the value they had from
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  213  	 * user-space at the time we took the signal.
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  214  	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  215  	 * since some things rely on this (e.g. glibc's debug/segfault.c).
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  216  	 */
-a4c3733d32a72f Christoph Hellwig 2019-10-28  217  	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  218  	regs->sp = (unsigned long)frame;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  219  	regs->a0 = ksig->sig;                     /* a0: signal number */
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  220  	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  221  	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  222  
-
-:::::: The code at line 197 was first introduced by commit
-:::::: e2c0cdfba7f69925afc92b20cd9835d81e11a4f1 RISC-V: User-facing API
-
-:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
-:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
-
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 6b1b030830ca..a4713b7e12cb 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -3945,6 +3945,11 @@ static int f2fs_ioc_decompress_file(struct file *filp, unsigned long arg)
+ 		goto out;
+ 	}
+ 
++	if (is_inode_flag_set(inode, FI_COMPRESS_RELEASED)) {
++		ret = -EINVAL;
++		goto out;
++	}
++
+ 	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
+ 	if (ret)
+ 		goto out;
+@@ -4012,6 +4017,11 @@ static int f2fs_ioc_compress_file(struct file *filp, unsigned long arg)
+ 		goto out;
+ 	}
+ 
++	if (is_inode_flag_set(inode, FI_COMPRESS_RELEASED)) {
++		ret = -EINVAL;
++		goto out;
++	}
++
+ 	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
+ 	if (ret)
+ 		goto out;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

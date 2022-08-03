@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF27258931F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3843589322
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238526AbiHCUYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 16:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
+        id S238545AbiHCUY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 16:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236138AbiHCUYf (ORCPT
+        with ESMTP id S236138AbiHCUY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:24:35 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1E61839C;
-        Wed,  3 Aug 2022 13:24:34 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id ct13so10081126qvb.9;
-        Wed, 03 Aug 2022 13:24:34 -0700 (PDT)
+        Wed, 3 Aug 2022 16:24:57 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AA85018E
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 13:24:56 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f56f635a9so151496767b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 13:24:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B96Bdg0Onzy13s4UbCLzMdjvnIzLbs1ULEk+vwxhe6w=;
-        b=mFNpMDWYQmBz4RM0qPHCKdPz3JSdS9ucyx/cPWERWMYyZr+LnBr/HfoI9HgbxRh+MX
-         5HPqvCZgeyYMZhhyHiyauF/J+cHYBqm0D5LFuW70QqkCFkxgNVxPGmBONmVB0WKnKmmC
-         wOKNiKpS2z3BaZUK5chEGmeofqTxGL+tSh92WIPAuvx3Y1+Ni9tpihVS9a0fPwCG9Na1
-         W/AvTKR4oJaLR5pNH7TudPv9Hn7kpsU7pGLb7c7LFhQWb/HeaCvdnaLjYLko3FdBRSBS
-         x7mAv5coCAencpv+t+przbZsdu2ERsUajGftT/IENDfLo5h5DRaT6ZsEn4cPQD0EQqwR
-         jE2A==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=MG4NVz9yj2aFOgp1HtlyEgPmRnBQqcRnRDU4maqxDLs=;
+        b=ac+Kon2BynLX4PUenHyxIDUcn1exeZCxVb3lFiCKZxJGscBLaZVq1IS4i8FPji9GSs
+         bPhe0/gEK3wWy3S/IUzPCtZc15S/x/0Qa+tsyQpNdPyJeuQKn4bsns/qb5XNKJ0SE4cc
+         BqSQecGZRufHziIFY7/jtCvQjU4p8FDdabjc2X/Tkcli6ZEg7sntef9yedlmVpTseUiW
+         VcH5HDzJNK3+ZLdx7K7rgeHIE110gCCu5t24Rh+XwnfnDJCwx8q2pq7wHdO+2y961y2O
+         TvxmZg9cx00v9XHwi46QDtHpv6k8qfLYhpjvUB50CMpM0dWKv+mmxaYUMtWmiMbfixBv
+         G5Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B96Bdg0Onzy13s4UbCLzMdjvnIzLbs1ULEk+vwxhe6w=;
-        b=itk7aW3pD0qu1hZJi3VKNC74dUuIw+OXXElRPuzVWrSFK4SU3/5IEtP5vYyr/6v7P8
-         VD2DBXGvDBJJ07YtlCmlDLJSEo+6b8CfYwyKZqsWYlgjmEThx4yLYcccPetooizRVdHf
-         ls9dwUaHb6EPiLsmBQCDJgpS7YLqFj6y/Y/kFhu7rk08qrn9yZGPk3yfGUEJOqHybtEQ
-         Loveu3SuwfuwgirNnUj9qlUu9EETj6x7aa6pwjA0cC9Q8uTe61CmqbHT8a1ScUBRr1aw
-         IsmFOQuima/cDQp08T0XqSlVLefNd8yVfyLRv1xxVidTwYXHARvKLp0PwOevJPFvPbbS
-         avJw==
-X-Gm-Message-State: ACgBeo25RByOOirDVt4tVtxJ8BUS6eJunUf+M9U4dGfYiQKnUuGjaSAC
-        E37voGGH81aMhKZ+OlKyb/RrHJBw6w==
-X-Google-Smtp-Source: AA6agR4zPKE+bteQz7BICzyQdDD01B8OZ+skbS9NvxF6LTbmkCquatAxhuNVjhJ3ZBa7Pdm0mVzWfA==
-X-Received: by 2002:a0c:cb0c:0:b0:476:d5e7:e0ca with SMTP id o12-20020a0ccb0c000000b00476d5e7e0camr8783614qvk.57.1659558273197;
-        Wed, 03 Aug 2022 13:24:33 -0700 (PDT)
-Received: from bytedance ([74.199.177.246])
-        by smtp.gmail.com with ESMTPSA id dm40-20020a05620a1d6800b006a6ab259261sm3415250qkb.29.2022.08.03.13.24.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 13:24:31 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 13:24:26 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Eric Paris <eparis@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-audit@redhat.com
-Subject: Re: [PATCH] audit, io_uring, io-wq: Fix memory leak in
- io_sq_thread() and io_wqe_worker()
-Message-ID: <20220803202426.GA31375@bytedance>
-References: <20220803050230.30152-1-yepeilin.cs@gmail.com>
- <CAHC9VhRXypjNgDAwdARZz-md_DaSTs+9BpMik8AzWojG7ChexA@mail.gmail.com>
- <CAHC9VhRYGgCLiWx5LCoqgTj_RW_iQRLrzivWci7_UneN_=rwmw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhRYGgCLiWx5LCoqgTj_RW_iQRLrzivWci7_UneN_=rwmw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=MG4NVz9yj2aFOgp1HtlyEgPmRnBQqcRnRDU4maqxDLs=;
+        b=7g6KKr6+T+wfr8g6nOyTy4ctHlslLfpH6KXWSomVGZu6Rs87UdzVpFWnABWXGqrGTl
+         JdeUo/5Gca60UhhDBUwYNU/8S/CH3IYRCRnnErjOMu9uMyu8LF58CplVxCBU+MVPRYLH
+         1sV8x0izaQeYmuZjOo3x4PFYh2gETICHr8M1rlNCXHetHNi+bnd2sgeYihJkLZqiJMkD
+         Ke7k7hqnZfY+Jp59ZjvpO8yR+M5jPw/WLhOUEFjECSuMhQXgmIpXN5uvMwsCDDYNecDG
+         2snyfQqkx2BwEn4XeUWWxE2YsZHBy5yVEMnWHDvlbvOhRrn2kSVOAfTyOhLu0QOU+YXV
+         //zg==
+X-Gm-Message-State: ACgBeo07Sfbggp+7Z/8YxWVRNyG0fC9QErbWbmBrZS3h7N9bucwuyb+h
+        FeJ49/TpBxS+2GKpQygEuzT2+YqqH77/pg==
+X-Google-Smtp-Source: AA6agR6GOPUFJ2JZIHMbSya1BU/k700ZrXqbkMFCe1qQAwlRA+7nAqEtawU8/N9SY3T/bidZ3WK/nCw2KgfNhA==
+X-Received: from mmandlik.mtv.corp.google.com ([2620:15c:202:201:6eae:dfce:5d69:e05f])
+ (user=mmandlik job=sendgmr) by 2002:a0d:e8c1:0:b0:322:e31a:9c4a with SMTP id
+ r184-20020a0de8c1000000b00322e31a9c4amr24937744ywe.334.1659558295388; Wed, 03
+ Aug 2022 13:24:55 -0700 (PDT)
+Date:   Wed,  3 Aug 2022 13:24:50 -0700
+Message-Id: <20220803132319.1.I5acde3b5af78dbd2ea078d5eb4158d23b496ac87@changeid>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+Subject: [PATCH 1/2] Bluetooth: Disable AdvMonitor SamplingPeriod while active scan
+From:   Manish Mandlik <mmandlik@google.com>
+To:     marcel@holtmann.org, luiz.dentz@gmail.com
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        linux-bluetooth@vger.kernel.org,
+        Manish Mandlik <mmandlik@google.com>,
+        Miao-chen Chou <mcchou@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,48 +73,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Some controllers apply Sampling Period even while active scanning.
+So, to keep the behavior consistent across all controllers, don't
+use Sampling Period during active scanning to force the controller
+to report all advertisements even if it matches the monitor.
 
-On Wed, Aug 03, 2022 at 03:28:19PM -0400, Paul Moore wrote:
-> On Wed, Aug 3, 2022 at 9:16 AM Paul Moore <paul@paul-moore.com> wrote:
-> > On Wed, Aug 3, 2022 at 1:03 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
-> > > Hi all,
-> > >
-> > > A better way to fix this memleak would probably be checking
-> > > @args->io_thread in copy_process()?  Something like:
-> > >
-> > >     if (args->io_thread)
-> > >         retval = audit_alloc_kernel();
-> > >     else
-> > >         retval = audit_alloc();
-> > >
-> > > But I didn't want to add another if to copy_process() for this bugfix.
-> > > Please suggest, thanks!
-> >
-> > Thanks for the report and patch!  I'll take a closer look at this
-> > today and get back to you.
-> 
-> I think the best solution to this is simply to remove the calls to
-> audit_alloc_kernel() in the io_uring and io-wq code, as well as the
-> audit_alloc_kernel() function itself.  As long as create_io_thread()
-> ends up calling copy_process to create the new kernel thread the
-> audit_context should be allocated correctly.  Peilin Ye, are you able
-> to draft a patch to do that and give it a test?
+Signed-off-by: Manish Mandlik <mmandlik@google.com>
+Reviewed-by: Miao-chen Chou <mcchou@google.com>
+---
 
-Sure, I will write a v2 today.  Thanks for the suggestion!
+ net/bluetooth/hci_sync.c |  6 ++++++
+ net/bluetooth/msft.c     | 45 +++++++++++++++++++++++++++++++++++++---
+ net/bluetooth/msft.h     |  2 ++
+ 3 files changed, 50 insertions(+), 3 deletions(-)
 
-> For those that may be wondering how this happened (I definitely was!),
-> it looks like when I first started working on the LSM/audit support
-> for io_uring it was before the v5.12-rc1 release when
-> create_io_thread() was introduced.  Prior to create_io_thread() it
-> appears that io_uring/io-wq wasn't calling into copy_process() and
-> thus was not getting an audit_context allocated in the kernel thread's
-> task_struct; the solution for those original development drafts was to
-> add a call to a new audit_alloc_kernel() which would handle the
-> audit_context allocation.  Unfortunately, I didn't notice the move to
-> create_io_thread() during development and the redundant
-> audit_alloc_kernel() calls remained :/
-
-Thanks,
-Peilin Ye
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index e6d804b82b67..cb0c219ebe1c 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -4649,6 +4649,9 @@ int hci_stop_discovery_sync(struct hci_dev *hdev)
+ 	if (use_ll_privacy(hdev))
+ 		hci_resume_advertising_sync(hdev);
+ 
++	/* Sampling Period is disabled while active scanning, re-enable it */
++	msft_set_active_scan(hdev, false);
++
+ 	/* No further actions needed for LE-only discovery */
+ 	if (d->type == DISCOV_TYPE_LE)
+ 		return 0;
+@@ -5139,6 +5142,9 @@ int hci_start_discovery_sync(struct hci_dev *hdev)
+ 	if (err)
+ 		return err;
+ 
++	/* Disable Sampling Period while active scanning */
++	msft_set_active_scan(hdev, true);
++
+ 	bt_dev_dbg(hdev, "timeout %u ms", jiffies_to_msecs(timeout));
+ 
+ 	/* When service discovery is used and the controller has a
+diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
+index bee6a4c656be..f63c911b210c 100644
+--- a/net/bluetooth/msft.c
++++ b/net/bluetooth/msft.c
+@@ -101,6 +101,7 @@ struct msft_data {
+ 	struct list_head handle_map;
+ 	__u8 resuming;
+ 	__u8 suspending;
++	__u8 active_scan;
+ 	__u8 filter_enabled;
+ };
+ 
+@@ -333,14 +334,14 @@ static int msft_remove_monitor_sync(struct hci_dev *hdev,
+ }
+ 
+ /* This function requires the caller holds hci_req_sync_lock */
+-int msft_suspend_sync(struct hci_dev *hdev)
++static void remove_all_monitors(struct hci_dev *hdev)
+ {
+ 	struct msft_data *msft = hdev->msft_data;
+ 	struct adv_monitor *monitor;
+ 	int handle = 0;
+ 
+ 	if (!msft || !msft_monitor_supported(hdev))
+-		return 0;
++		return;
+ 
+ 	msft->suspending = true;
+ 
+@@ -356,6 +357,12 @@ int msft_suspend_sync(struct hci_dev *hdev)
+ 
+ 	/* All monitors have been removed */
+ 	msft->suspending = false;
++}
++
++/* This function requires the caller holds hci_req_sync_lock */
++int msft_suspend_sync(struct hci_dev *hdev)
++{
++	remove_all_monitors(hdev);
+ 
+ 	return 0;
+ }
+@@ -392,6 +399,7 @@ static bool msft_monitor_pattern_valid(struct adv_monitor *monitor)
+ static int msft_add_monitor_sync(struct hci_dev *hdev,
+ 				 struct adv_monitor *monitor)
+ {
++	struct msft_data *msft = hdev->msft_data;
+ 	struct msft_cp_le_monitor_advertisement *cp;
+ 	struct msft_le_monitor_advertisement_pattern_data *pattern_data;
+ 	struct msft_le_monitor_advertisement_pattern *pattern;
+@@ -417,7 +425,16 @@ static int msft_add_monitor_sync(struct hci_dev *hdev,
+ 	cp->rssi_high = monitor->rssi.high_threshold;
+ 	cp->rssi_low = monitor->rssi.low_threshold;
+ 	cp->rssi_low_interval = (u8)monitor->rssi.low_threshold_timeout;
+-	cp->rssi_sampling_period = monitor->rssi.sampling_period;
++
++	/* Some controllers apply Sampling Period even while active scanning.
++	 * So, to keep the behavior consistent across all controllers, don't
++	 * use Sampling Period during active scanning to force the controller
++	 * to report all advertisements even if it matches the monitor.
++	 */
++	if (msft->active_scan)
++		cp->rssi_sampling_period = 0;
++	else
++		cp->rssi_sampling_period = monitor->rssi.sampling_period;
+ 
+ 	cp->cond_type = MSFT_MONITOR_ADVERTISEMENT_TYPE_PATTERN;
+ 
+@@ -815,6 +832,28 @@ void msft_req_add_set_filter_enable(struct hci_request *req, bool enable)
+ 	hci_req_add(req, hdev->msft_opcode, sizeof(cp), &cp);
+ }
+ 
++/* This function requires the caller holds hci_req_sync_lock */
++void msft_set_active_scan(struct hci_dev *hdev, bool enable)
++{
++	struct msft_data *msft = hdev->msft_data;
++
++	if (!msft)
++		return;
++
++	/* Remove all monitors */
++	remove_all_monitors(hdev);
++
++	/* Clear all tracked devices */
++	hci_dev_lock(hdev);
++	hdev->advmon_pend_notify = false;
++	msft_monitor_device_del(hdev, 0, NULL, 0, true);
++	hci_dev_unlock(hdev);
++
++	/* Update active scan and reregister all monitors */
++	msft->active_scan = enable;
++	reregister_monitor(hdev);
++}
++
+ int msft_set_filter_enable(struct hci_dev *hdev, bool enable)
+ {
+ 	struct hci_request req;
+diff --git a/net/bluetooth/msft.h b/net/bluetooth/msft.h
+index 2a63205b377b..7dfd866dacc4 100644
+--- a/net/bluetooth/msft.h
++++ b/net/bluetooth/msft.h
+@@ -22,6 +22,7 @@ __u64 msft_get_features(struct hci_dev *hdev);
+ int msft_add_monitor_pattern(struct hci_dev *hdev, struct adv_monitor *monitor);
+ int msft_remove_monitor(struct hci_dev *hdev, struct adv_monitor *monitor);
+ void msft_req_add_set_filter_enable(struct hci_request *req, bool enable);
++void msft_set_active_scan(struct hci_dev *hdev, bool enable);
+ int msft_set_filter_enable(struct hci_dev *hdev, bool enable);
+ int msft_suspend_sync(struct hci_dev *hdev);
+ int msft_resume_sync(struct hci_dev *hdev);
+@@ -55,6 +56,7 @@ static inline int msft_remove_monitor(struct hci_dev *hdev,
+ 
+ static inline void msft_req_add_set_filter_enable(struct hci_request *req,
+ 						  bool enable) {}
++static inline void msft_set_active_scan(struct hci_dev *hdev, bool enable) {}
+ static inline int msft_set_filter_enable(struct hci_dev *hdev, bool enable)
+ {
+ 	return -EOPNOTSUPP;
+-- 
+2.37.1.455.g008518b4e5-goog
 

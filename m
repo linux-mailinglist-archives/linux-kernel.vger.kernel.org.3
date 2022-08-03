@@ -2,66 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C045891A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D49735891B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238425AbiHCRoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S237928AbiHCRqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236893AbiHCRog (ORCPT
+        with ESMTP id S236263AbiHCRqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:44:36 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D9A558EC;
-        Wed,  3 Aug 2022 10:44:34 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id ey23so3500080qtb.11;
-        Wed, 03 Aug 2022 10:44:34 -0700 (PDT)
+        Wed, 3 Aug 2022 13:46:32 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C7A65D8
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:46:31 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id y127so29466825yby.8
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:46:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=nKqR1/j9CCv0bYcQc50jHqzMbY2amMbbgZaTSlWN9A8=;
-        b=GGKa5CwpF4I2r+JNIjTsKqcqGN+l9IeJnEAJ8JyxCRUpEyT1DHqvxxX38MSP1lwQHx
-         O/aI2zVjC0Tbc5Ka64T5EUu7Y71PrrvAdoozF25naNV8mg4pDrMfHrasAxNzUBltkvR0
-         aQ0lhOS6A1nT1vzjJagRWPjFS7y8flkP0+VwB5KqCl4mT63srjGBKkTZJO/no5pgort4
-         6YeYBTJEGkRSyA4PF60sx7ADUFtNbWV24eGjTzbmL3jeEPyLuFf30eUl35XOkz5Bo5zZ
-         qGxLpk6Y2iWEUa6URiGtAplBAst/uIMs+UFt4NlE76HWSOLdaksKAdpTpjZp4CGA+n9R
-         Mdow==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=kVM/3uyhal6qaeACSB8divgbMh2p6Q9rmvW6JHSngAY=;
+        b=ECfvFXHNoWfUFidh9Eguf3fa6Bq7Cr+ZBwO3g+v5R26inMZJ+PprF07thBS/iAUDOv
+         KoHKoNk3p1CD7oA+XYhLMGnLx1UM64+m/oZTxYGBm1ui3mSKNDJXkbXHNHZNWwYMPM25
+         no6Xk74r5H+HlvFMAu7VhmjjTkqjGEorYK/E1NNrmLycAfwGb5T8CDwMPzi10MsKfcDt
+         CXm/wIg4qaq6nACUNqANSQ4Cc+ljRsHsBpUSMvB1FXN+xTv+VW9BrlbK48uMvV02e1hS
+         ZJi1UEudP/SKw5sBgAoFnA38ohuro2kf26ubLWtfiJ2mUlp6waOtZ04l1TvBymZ8hC+a
+         h9yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=nKqR1/j9CCv0bYcQc50jHqzMbY2amMbbgZaTSlWN9A8=;
-        b=0C8u/hJhrq9tcS8szG8ySKtoB21c6Zcs8AF62ffe77w7KOwXQeQdq3PtvNDHGi7vTE
-         1vkNtK5ElJuXq5EuHenS86rdYlP+ASCERMEVv/PMCRr28KmZsMOmS5H4v/fD+Gf0KGBm
-         4/XY8z0LEDDNKTf3Gj9000VV1lc+OkOFBMu7w0GGuVBb4vmXgORmyjAgU65PBnNE5FxK
-         sxlHuMnaOeZUnn2sv3qWKslQtabnSiWUUdpAFivY52Y48YkDZ9U3EGYaA6rS7VVYQ1J6
-         SYzQ0/8toX8Ax3XbyS1ISrAsR40IF4s7cyzjh8kgPYPnVI0xDNTVQcPyHMMYUYmd9gQk
-         o9aA==
-X-Gm-Message-State: AJIora+GcHYMyTeJUMP9nn1vtNdvGZJVDVkSm/TECXz+0a1TDTXg/vji
-        KPnbVJOG8lKRI1UuqptFJn8=
-X-Google-Smtp-Source: AGRyM1vgBk6dLZ/gUFqfI6KsExv3IAivV/v7sW7ltWgRMRzL76j7J0UT49xM/qVxbPd7bbi9Z4+8kQ==
-X-Received: by 2002:ac8:5887:0:b0:31f:389a:2dd5 with SMTP id t7-20020ac85887000000b0031f389a2dd5mr23034524qta.33.1659548673997;
-        Wed, 03 Aug 2022 10:44:33 -0700 (PDT)
-Received: from BETA-0968.ad.beta.team ([167.224.123.60])
-        by smtp.gmail.com with ESMTPSA id t2-20020ac865c2000000b0033c9a0d5375sm2454047qto.66.2022.08.03.10.44.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 10:44:33 -0700 (PDT)
-From:   Jack Champagne <jackchampagne.r@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>,
-        Jack Champagne <jackchampagne.r@gmail.com>
-Subject: [PATCH] hwmon: (ads7828) Rename regmap_config variable
-Date:   Wed,  3 Aug 2022 13:43:56 -0400
-Message-Id: <20220803174356.474969-1-jackchampagne.r@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=kVM/3uyhal6qaeACSB8divgbMh2p6Q9rmvW6JHSngAY=;
+        b=b9CHpi0OPEug2fIZVVmeH9/AGnebIUQaHbwpFCMd41vE/J6qVZePcQj2PUj5ioIh2Q
+         W+9V+eQVg0gLyAImSUGq/oypNv5Y/EQVOzQJzxMHEtLIpTuXQd79n5zBA7X0fqYTKS9i
+         HwIxMmyF1Avg+SorMs1jbgWB5ryEfzd2X2TbVb3bKoq68eAYTBRNZqz5KW9PZbU6FNnF
+         2Uvl250Buw7chqsIZGgJkrJ9bkOICWEGSFfkxd6pcE+PWwP1YP5yx5uundrdSL3Tr1r0
+         Xx5vTX2FqcwD0V7DhRAd6cbxfKynqEay7mwEIG4uxmemaDK3Hdo1QMY7iX25VRS7Ml/t
+         Vinw==
+X-Gm-Message-State: ACgBeo1gchszXbsZHevZeum3PoWnoGIUW1CfgyvKmylMpJqlYDoQrCiV
+        3fTbmb9q5vRpClWNXrYQZhZ/4M02gNyGTH2FhUEKzQ==
+X-Google-Smtp-Source: AA6agR4g1FyYUH5thYLF9ivxcDKGh7mHOG7nULxadr/VqkcQq6xewq/huMh2sMi+U779TLv1Uc8ZMhJh1Xgb5KuhJ1U=
+X-Received: by 2002:a25:b9d1:0:b0:671:49f9:4e01 with SMTP id
+ y17-20020a25b9d1000000b0067149f94e01mr22124946ybj.398.1659548790205; Wed, 03
+ Aug 2022 10:46:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-12-glider@google.com>
+ <Ys6YvvARDX6pWmWv@elver.google.com>
+In-Reply-To: <Ys6YvvARDX6pWmWv@elver.google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 3 Aug 2022 19:45:53 +0200
+Message-ID: <CAG_fn=ViyCu8uGy5YQ_FdPmsMWzX5UpozfLXiotF_bDu5P70Lw@mail.gmail.com>
+Subject: Re: [PATCH v4 11/45] kmsan: add KMSAN runtime core
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,52 +99,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The regmap_config variable for the ads7828 and the ads7830 are both
-misnamed to `ads2828_regmap_config` and `ads2830_regmap_config`
-respectively. These variables refer to regmap configs for the ads7828
-and the ads7830 and should be named accordingly.
+On Wed, Jul 13, 2022 at 12:04 PM Marco Elver <elver@google.com> wrote:
+>
+> On Fri, Jul 01, 2022 at 04:22PM +0200, 'Alexander Potapenko' via kasan-de=
+v wrote:
+> [...]
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index 2e24db4bff192..59819e6fa5865 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -963,6 +963,7 @@ config DEBUG_STACKOVERFLOW
+> >
+> >  source "lib/Kconfig.kasan"
+> >  source "lib/Kconfig.kfence"
+> > +source "lib/Kconfig.kmsan"
+> >
+> >  endmenu # "Memory Debugging"
+> >
+> > diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
+> > new file mode 100644
+> > index 0000000000000..8f768d4034e3c
+> > --- /dev/null
+> > +++ b/lib/Kconfig.kmsan
+> > @@ -0,0 +1,50 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +config HAVE_ARCH_KMSAN
+> > +     bool
+> > +
+> > +config HAVE_KMSAN_COMPILER
+> > +     # Clang versions <14.0.0 also support -fsanitize=3Dkernel-memory,=
+ but not
+> > +     # all the features necessary to build the kernel with KMSAN.
+> > +     depends on CC_IS_CLANG && CLANG_VERSION >=3D 140000
+> > +     def_bool $(cc-option,-fsanitize=3Dkernel-memory -mllvm -msan-disa=
+ble-checks=3D1)
+> > +
+> > +config HAVE_KMSAN_PARAM_RETVAL
+> > +     # Separate check for -fsanitize-memory-param-retval support.
+>
+> This comment doesn't add much value, maybe instead say that "Supported
+> only by Clang >=3D 15."
+Fixed.
 
-This patch does not introduce functional changes as the only two usages
-of these regmap_config variables are within the changed file.
+> > +     depends on CC_IS_CLANG && CLANG_VERSION >=3D 140000
+>
+> Why not just "depends on HAVE_KMSAN_COMPILER"? (All
+> fsanitize-memory-param-retval supporting compilers must also be KMSAN
+> compilers.)
+Good idea, will do.
 
-Signed-off-by: Jack Champagne <jackchampagne.r@gmail.com>
----
- drivers/hwmon/ads7828.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> > +     def_bool $(cc-option,-fsanitize=3Dkernel-memory -fsanitize-memory=
+-param-retval)
+> > +
+> > +
+>
+> HAVE_KMSAN_PARAM_RETVAL should be moved under "if KMSAN" so that this
+> isn't unnecessarily evaluated in every kernel build (saving 1 shelling
+> out to clang in most builds).
+Ack.
 
-diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
-index 7246198f0901..20bdee769882 100644
---- a/drivers/hwmon/ads7828.c
-+++ b/drivers/hwmon/ads7828.c
-@@ -89,12 +89,12 @@ static struct attribute *ads7828_attrs[] = {
- 
- ATTRIBUTE_GROUPS(ads7828);
- 
--static const struct regmap_config ads2828_regmap_config = {
-+static const struct regmap_config ads7828_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 16,
- };
- 
--static const struct regmap_config ads2830_regmap_config = {
-+static const struct regmap_config ads7830_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
- };
-@@ -152,11 +152,11 @@ static int ads7828_probe(struct i2c_client *client)
- 	if (chip == ads7828) {
- 		data->lsb_resol = DIV_ROUND_CLOSEST(vref_mv * 1000, 4096);
- 		data->regmap = devm_regmap_init_i2c(client,
--						    &ads2828_regmap_config);
-+						    &ads7828_regmap_config);
- 	} else {
- 		data->lsb_resol = DIV_ROUND_CLOSEST(vref_mv * 1000, 256);
- 		data->regmap = devm_regmap_init_i2c(client,
--						    &ads2830_regmap_config);
-+						    &ads7830_regmap_config);
- 	}
- 
- 	if (IS_ERR(data->regmap))
--- 
-2.25.1
+> > +config KMSAN
+> > +     bool "KMSAN: detector of uninitialized values use"
+> > +     depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
+> > +     depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
+> > +     select STACKDEPOT
+> > +     select STACKDEPOT_ALWAYS_INIT
+> > +     help
+> > +       KernelMemorySanitizer (KMSAN) is a dynamic detector of uses of
+> > +       uninitialized values in the kernel. It is based on compiler
+> > +       instrumentation provided by Clang and thus requires Clang to bu=
+ild.
+> > +
+> > +       An important note is that KMSAN is not intended for production =
+use,
+> > +       because it drastically increases kernel memory footprint and sl=
+ows
+> > +       the whole system down.
+> > +
+> > +       See <file:Documentation/dev-tools/kmsan.rst> for more details.
+> > +
+> > +if KMSAN
+> > +
+> > +config KMSAN_CHECK_PARAM_RETVAL
+> > +     bool "Check for uninitialized values passed to and returned from =
+functions"
+> > +     default HAVE_KMSAN_PARAM_RETVAL
+>
+> This can be enabled even if !HAVE_KMSAN_PARAM_RETVAL. Should this be:
+>
+>         default y
+>         depends on HAVE_KMSAN_PARAM_RETVAL
+>
+> instead?
+>
+Ack
 
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

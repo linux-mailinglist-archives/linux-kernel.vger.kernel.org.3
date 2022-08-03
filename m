@@ -2,150 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 572BC588BA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13B3588BB0
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237618AbiHCL7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 07:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42634 "EHLO
+        id S237681AbiHCMA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237483AbiHCL7K (ORCPT
+        with ESMTP id S237654AbiHCMAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 07:59:10 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D4DE52FFE
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:59:08 -0700 (PDT)
-Received: from [10.20.42.22] (unknown [10.20.42.22])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxCs3+YupiflwDAA--.1278S3;
-        Wed, 03 Aug 2022 19:58:54 +0800 (CST)
-Subject: Re: [PATCH 1/2] irqchip/loongson-eiointc: Check hwirq overflow
-To:     Huacai Chen <chenhuacai@gmail.com>, Marc Zyngier <maz@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20220803042728.3230346-1-chenhuacai@loongson.cn>
- <87r11xbxox.wl-maz@kernel.org>
- <CAAhV-H5d20zj+vnrEYRYW1h7FwRJpGYtJDc1q4hRdPh3KbXruw@mail.gmail.com>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <97d33f58-6a15-3a94-f9c0-42ebd48cf562@loongson.cn>
-Date:   Wed, 3 Aug 2022 19:58:54 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 3 Aug 2022 08:00:25 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F433647C
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 05:00:24 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-10e6bdbe218so20476490fac.10
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 05:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=k85+BXyXynjZ9LSZSXWsf3MQl+dSKBggc5agia098P8=;
+        b=nzSIftlCZzp3NnHVf+zVO4P2cvt7R0Vb/+9SeBIE7ot8a+Nn1akpwSxc0WDrMCtXJj
+         JI5Wvvp+C4dq0ctrpVggyBfSTZZqK31vKg71HccE6605WiBxHVM90sRcfC70eZ3BX3tx
+         +l0MbhSURmo/uGc5YeluJ0GfF7ZLnENFCj4b5CDk6HGCwFaIbvZchvnH8T2Uie1ofxi2
+         /thywAWJTxoq2RFTyHHmKE64nNI1hQ1qHCsKlxrW7jZMK7SYi/HRKTz3Q0HL7EskMRdD
+         UxGDPfOCsSx6BmDytaLpr2kpbuMHCKO1oxcGBvASzy2Sx/za5WF9eT9zGKEfClt7QINY
+         M7kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=k85+BXyXynjZ9LSZSXWsf3MQl+dSKBggc5agia098P8=;
+        b=s6MMfaT1qVihDIYIGsSIblRXLTdWqZI5yAlNuo6jm/cMU2hInzBighsnCUnlLsMhOw
+         ciinqI+cPvrjSWyA0RHOjYWQxr5D7qJgRfGCZkz/SrwNCP9qw4SkHbwEDgK7rLl2bIA+
+         lKekiv6/lC3DQUwfguaie4vx513kSGY5jCMkC4eFeTQo//rNBmqecix9sGSNR4rL7TNc
+         p8yHR1chZdKTxE67nb8nl0oXaHnOThsa2kCh/PYsZPaFxAvgj3HD+f5ZjoZMxEGtIl20
+         IiBcn84D8fkvUq31uR0EQsCa+Ueptnpf+7CIqCPXIl6seRAmsfmtJDjK+5RP5114L5hQ
+         s5HQ==
+X-Gm-Message-State: ACgBeo2YfTO0qhA9FtovEzh9F56TRCYzHTQFf9Hla4xHlV/9Z5L4grfs
+        sFl//iSYmbZ5ykERFrBJgnu6dbd7XxeOEg==
+X-Google-Smtp-Source: AA6agR4OJE3JEX4SdirNZxWAXw9IAgX/r+aRoG9wImJGaaaVzzAwEAFHvKjOXWZNXgjW9YZTnbEifA==
+X-Received: by 2002:a05:6870:a1aa:b0:10d:a546:8aa3 with SMTP id a42-20020a056870a1aa00b0010da5468aa3mr1727370oaf.287.1659528023546;
+        Wed, 03 Aug 2022 05:00:23 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id g8-20020a9d6208000000b0061cbd18bd18sm4078207otj.45.2022.08.03.05.00.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 05:00:22 -0700 (PDT)
+Message-ID: <81d363ba-82ef-d556-2d77-083e3b2d9d02@linaro.org>
+Date:   Wed, 3 Aug 2022 07:00:21 -0500
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H5d20zj+vnrEYRYW1h7FwRJpGYtJDc1q4hRdPh3KbXruw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [greybus-dev] Re: [PATCH linux-next] staging: greybus:using the
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxCs3+YupiflwDAA--.1278S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr17CFWkWr18JFWfJF1UZFb_yoW5JFW8pF
-        WUGayjvF48J34UAr9Fgr1DXFyYy3y3tFyxKay3K3srZr98Ar1DKF1kZFn8uF1kCrWxGFnF
-        vF4jgFs7uF1UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU901xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
-        jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        ACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl
-        42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyU
-        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Greg KH <gregkh@linuxfoundation.org>, cgel.zte@gmail.com
+Cc:     linux-kernel@vger.kernel.org, greybus-dev@lists.linaro.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220803062258.1650792-1-ye.xingchen@zte.com.cn>
+ <YuoWCSQCnNU3DrUL@kroah.com>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <YuoWCSQCnNU3DrUL@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/8/3 下午3:33, Huacai Chen wrote:
-> Hi, Jianmin,
+On 8/3/22 1:30 AM, Greg KH wrote:
+> On Wed, Aug 03, 2022 at 06:22:58AM +0000, cgel.zte@gmail.com wrote:
+>> From: ye xingchen <ye.xingchen@zte.com.cn>
+>>
+>> Using pm_runtime_resume_and_get() to instade of  pm_runtime_get_sync
+>> and pm_runtime_put_noidle.
+>>
+>> Reported-by: Zeal Robot <zealci@zte.com.cn>
+>> Signed-off-by:  <ye.xingchen@zte.com.cn>
+>> ---
+>>   drivers/greybus/core.c | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/greybus/core.c b/drivers/greybus/core.c
+>> index e546c6431877..b9063e86534b 100644
+>> --- a/drivers/greybus/core.c
+>> +++ b/drivers/greybus/core.c
+>> @@ -174,9 +174,8 @@ static int greybus_probe(struct device *dev)
+>>   	if (!id)
+>>   		return -ENODEV;
+>>   
+>> -	retval = pm_runtime_get_sync(&bundle->intf->dev);
+>> +	retval = pm_runtime_resume_and_get(&bundle->intf->dev);
+>>   	if (retval < 0) {
+>> -		pm_runtime_put_noidle(&bundle->intf->dev);
+>>   		return retval;
+>>   	}
+>>   
+>> -- 
+>> 2.25.1
 > 
-> On Wed, Aug 3, 2022 at 3:20 PM Marc Zyngier <maz@kernel.org> wrote:
->>
->> On Wed, 03 Aug 2022 05:27:27 +0100,
->> Huacai Chen <chenhuacai@loongson.cn> wrote:
->>>
->>> Check hwirq overflow when allocate irq in eiointc domain.
->>>
->>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->>> ---
->>>   drivers/irqchip/irq-loongson-eiointc.c | 7 +++++--
->>>   1 file changed, 5 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
->>> index 80d8ca6f2d46..f8060e58ee06 100644
->>> --- a/drivers/irqchip/irq-loongson-eiointc.c
->>> +++ b/drivers/irqchip/irq-loongson-eiointc.c
->>> @@ -241,8 +241,11 @@ static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
->>>        struct eiointc *priv = domain->host_data;
->>>
->>>        ret = irq_domain_translate_onecell(domain, arg, &hwirq, &type);
->>> -     if (ret)
->>> -             return ret;
->>> +     if (ret < 0)
->>> +             return -EINVAL;
->>> +
->>> +     if (hwirq >= IOCSR_EXTIOI_VECTOR_NUM)
->>> +             return -EINVAL;
->>
->> How can this happen? Also, you're allocating a *range*. Surely the
->> upper boundary should matter too?
-> Do you know the exact reason? Please give some information, thanks.
-> 
-
-In our internal repo, we don't have middle domain in pch-msi driver, so 
-no check for hwirq as in alloc of middle domain. When hwirq is assigned 
-failed(negtive value), the wrong hwirq will be passed to parent 
-domain(eio domain)'s alloc, so we add check in eio domain's alloc there.
+> Now this is just being silly.  Consider all future emails also dropped.
 
 
-But here, it seems that the check is unnecessary, because in pch-msi driver:
+No Greg, please don't do this, or please undo this.
 
-static int pch_msi_middle_domain_alloc(struct irq_domain *domain,
-                                            unsigned int virq,
-                                            unsigned int nr_irqs, void 
-*args)
-{
-         struct pch_msi_data *priv = domain->host_data;
-         int hwirq, err, i;
+This happened because the original poster was not a subscriber to the
+greybus-dev mailing list.  Such messages get held until someone (me)
+releases them after picking them out from the mostly spam that is
+caught and held.  I have been trying to do that daily lately but
+it's still not enough to avoid this happening.
 
+You were on the original addressee list.  So you got the message
+immediately.  But the mailing list filter held it and sent it
+again when I released it yesterday.  This is why you saw it the
+second time.
 
-         hwirq = pch_msi_allocate_hwirq(priv, nr_irqs);
-         if (hwirq < 0)
-                 return hwirq;
+Ye Xingchen had nothing to do with your receiving the message twice.
 
+					-Alex
 
-         for (i = 0; i < nr_irqs; i++) {
-                 err = pch_msi_parent_domain_alloc(domain, virq + i, 
-hwirq + i);
-                 [...]
-
-
-If pch_msi_allocate_hwirq failed, pch_msi_middle_domain_alloc will 
-return, and pch_msi_parent_domain_alloc(will call eio domain's alloc) 
-will not be called.
-
-
->>
->> And for the umpteenth time, please add a cover letter when sending
->> multiple patches. This is a hard requirement for me.
-> OK, I will add a cover letter, even for simple fix patches. Sorry.
-> 
-> Huacai
->>
->> Thanks,
->>
->>          M.
->>
->> --
->> Without deviation from the norm, progress is not possible.
+> greg k-h
+> _______________________________________________
+> greybus-dev mailing list -- greybus-dev@lists.linaro.org
+> To unsubscribe send an email to greybus-dev-leave@lists.linaro.org
 

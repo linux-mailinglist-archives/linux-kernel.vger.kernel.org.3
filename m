@@ -2,118 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF07589AA6
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 12:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF30589AA2
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 12:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239174AbiHDK4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 06:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        id S239256AbiHDK7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 06:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239183AbiHDK40 (ORCPT
+        with ESMTP id S231440AbiHDK7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 06:56:26 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5ED13E33;
-        Thu,  4 Aug 2022 03:56:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 84CC520EDD;
-        Thu,  4 Aug 2022 10:56:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1659610583; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mlktYDm7Q9WWK6B+W/bogBPhH4hH8aSA3B4MxQAXBh8=;
-        b=TPP8b3t9rP/4eLEeZXO6gehvwrqcL7GwZPmNp1ThS0tbE/j1542zCGpq07mMbmExjzmwlX
-        lXfgzuJ0CY6iYJqXmo4ApAu9S70VWGRjriAiRy5aI4x0SlodVrU8dHzjD3ON/ppZumNNz6
-        +x3nxSFky7Yjy+JgErlSstlF1EA2l8I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1659610583;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mlktYDm7Q9WWK6B+W/bogBPhH4hH8aSA3B4MxQAXBh8=;
-        b=o817tBQaO2BN6keT74Cjjte1SJotvXncGsbi9oVX1SnL7Y2Brd2tIf1H/kzQQWeXDBGYly
-        BMVwf/IvHGGT+ZCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 06ED513A94;
-        Thu,  4 Aug 2022 10:56:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YtDiANel62J/GwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 04 Aug 2022 10:56:23 +0000
-Message-ID: <5c6e8435-22bb-234a-87a1-96c9f4e93dc9@suse.cz>
-Date:   Thu, 4 Aug 2022 12:56:22 +0200
+        Thu, 4 Aug 2022 06:59:07 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA7013E33
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 03:59:05 -0700 (PDT)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lz5GL5vpnz67RRb;
+        Thu,  4 Aug 2022 18:54:50 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 4 Aug 2022 12:59:03 +0200
+Received: from [10.195.34.58] (10.195.34.58) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 4 Aug
+ 2022 11:59:03 +0100
+Message-ID: <17b5e57b-326e-11c1-d8c7-87f3d3d7d0ff@huawei.com>
+Date:   Thu, 4 Aug 2022 11:59:05 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH Part2 v6 27/49] KVM: SVM: Mark the private vma unmerable
- for SEV-SNP guests
-Content-Language: en-US
-To:     Ashish Kalra <Ashish.Kalra@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, jroedel@suse.de,
-        thomas.lendacky@amd.com, hpa@zytor.com, ardb@kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        jmattson@google.com, luto@kernel.org, dave.hansen@linux.intel.com,
-        slp@redhat.com, pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        michael.roth@amd.com, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <bb10f0a4c5eb13a5338f77ef34f08f1190d4ae30.1655761627.git.ashish.kalra@amd.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <bb10f0a4c5eb13a5338f77ef34f08f1190d4ae30.1655761627.git.ashish.kalra@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: PCI MSI issue with reinserting a driver
+From:   John Garry <john.garry@huawei.com>
+To:     Marc Zyngier <maz@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        <linux-kernel@vger.kernel.org>, <shenyang39@huawei.com>,
+        "zhanjie (F)" <zhanjie9@hisilicon.com>
+References: <cc224272-15db-968b-46a0-95951e11b23f@huawei.com>
+ <87o8h3lj0n.wl-maz@kernel.org>
+ <a80b9be0-c455-c852-ddac-3f514a15e896@huawei.com>
+ <8a54fdd0-950b-f801-e83d-750aef73ab3c@huawei.com>
+ <4848792ce8c9ed7490e2205281a3cbda@kernel.org>
+ <28c56995-501a-880b-e6dd-ac76b8290c2c@huawei.com>
+ <3d3d0155e66429968cb4f6b4feeae4b3@kernel.org>
+ <fd88ce05-8aee-5b1f-5ab6-be88fa53d3aa@huawei.com>
+In-Reply-To: <fd88ce05-8aee-5b1f-5ab6-be88fa53d3aa@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.195.34.58]
+X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/21/22 01:08, Ashish Kalra wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
+On 04/02/2021 10:45, John Garry wrote:
+
+Hi Marc,
+
+Just a friendly reminder that we still have the issue with reinseting a 
+PCI driver which does not allocate a power-of-2 MSIs.
+
+> On 03/02/2021 17:23, Marc Zyngier wrote:
+>>>
+>>> Before:
+>>>  In free path, we have:
+>>>      its_irq_domain_free(nvecs = 27)
+>>>        bitmap_release_region(count order = 5 == 32bits)
+>>>
+>>> Current:
+>>>  In free path, we have:
+>>>      its_irq_domain_free(nvecs = 1) for free each 27 vecs
+>>>        bitmap_release_region(count order = 0 == 1bit)
+>>
+>> Right. I was focusing on the patch and blindly ignored the explanation
+>> at the top of the email. Apologies for that.
 > 
-> When SEV-SNP is enabled, the guest private pages are added in the RMP
-> table; while adding the pages, the rmp_make_private() unmaps the pages
-> from the direct map. If KSM attempts to access those unmapped pages then
-> it will trigger #PF (page-not-present).
+> Yeah, it was a distraction.
 > 
-> Encrypted guest pages cannot be shared between the process, so an
-> userspace should not mark the region mergeable but to be safe, mark the
-> process vma unmerable before adding the pages in the RMP table.
+>>
+>> I'm not overly keen on handling this in the ITS though, and I'd rather
+>> we try and do it in the generic code. How about this (compile tested
+>> only)?
+>>
+>> diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+>> index 6aacd342cd14..cfccad83c2df 100644
+>> --- a/kernel/irq/irqdomain.c
+>> +++ b/kernel/irq/irqdomain.c
+>> @@ -1399,8 +1399,19 @@ static void 
+>> irq_domain_free_irqs_hierarchy(struct irq_domain *domain,
+>>           return;
+>>
+>>       for (i = 0; i < nr_irqs; i++) {
+>> -        if (irq_domain_get_irq_data(domain, irq_base + i))
+>> -            domain->ops->free(domain, irq_base + i, 1);
+>> +        int n ;
+>> +
+>> +        /* Find the largest possible span of IRQs to free in one go */
+>> +        for (n = 0;
+>> +             ((i + n) < nr_irqs &&
+>> +              irq_domain_get_irq_data(domain, irq_base + i + n));
+>> +             n++);
+>> +
+>> +        if (!n)
+>> +            continue;
+>> +
+>> +        domain->ops->free(domain, irq_base + i, n);
+>> +        i += n;
+>>       }
+>>   }
 > 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> That fixed my problem.
+> 
+> For my benefit, if MSIs must be allocated in power of 2, could we check 
+> a flag for the dealloc method? Like, if MSI domain, then do as before 
+> 4615fbc3788d. But I'm not sure on the specific scenario which that 
+> commit fixed. Or even whether you want specifics like that in core code.
 
-Note this doesn't really mark the vma unmergeable, rather it unmarks it as
-mergeable, and unmerges any already merged pages.
-Which seems like a good idea. Is snp_launch_update() the only place that
-needs it or can private pages be added elsewhere too?
-
-However, AFAICS nothing stops userspace to do another
-madvise(MADV_MERGEABLE) afterwards, so we should make somehow sure that ksm
-will still be prevented, as we should protect the kernel even from a buggy
-userspace. So either we stop it with a flag at vma level (see ksm_madvise()
-for which flags currently stop it), or page level - currently only
-PageAnon() pages are handled. The vma level is probably easier/cheaper.
-
-It's also possible that this will solve itself with the switch to UPM as
-those vma's or pages might be incompatible with ksm naturally (didn't check
-closely), and then this patch can be just dropped. But we should double-check.
-
+Thanks,
+John

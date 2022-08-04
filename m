@@ -2,137 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B66589D2F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 16:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD1E589D5B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 16:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239992AbiHDOBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 10:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S239827AbiHDOUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 10:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbiHDOBo (ORCPT
+        with ESMTP id S233941AbiHDOUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 10:01:44 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF20E1C128;
-        Thu,  4 Aug 2022 07:01:43 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a9so18139695lfm.12;
-        Thu, 04 Aug 2022 07:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=JaMe6j4fYY9HfpaAc4kq+NXQn/JQWze+bei2ZzmND0I=;
-        b=QSKMyIcYM/epVOjE3xPWm4g7Fax7lyHTwJQV6QgjlHcsv/cO9qjGpwNheGqSJgDhfx
-         emrqTQFK2mDSQ4NpoATQJCLyuB2zWwcio2s5WMthC2HEW4OqjfATYWffLDBA8Z5QtKkZ
-         EdrQwKuI1Rigsooo83kdn/f1PCIPbrD2BeU9N0Ide6iYB/yq/yopo5SIbE4Bzvo2NpxE
-         8pavzD0D8zzoVWA1GgymHDDf+Lv4icd/sdUYt/dTojG8d5rqwxgNhQtDboOQP+0F3yy1
-         vW6yfJMOZl/AXpGWD0W9//zTRIQ+q+NfA0h4Ybvt7EaW+eLXglfH6Vb3cto0ZC1/rGyw
-         T/MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JaMe6j4fYY9HfpaAc4kq+NXQn/JQWze+bei2ZzmND0I=;
-        b=U4EhkMyn/NpqG3NKFpACQtE5Usb5SPIK/ICMSr4meFQxUuAA/p9R8Lgsf+vTF0Pbok
-         q3F2P4uZbep8NP14lCW2EOx/Jc/PafM4bPdIcuNde1+Ub8UgAhm4pNvQJnYWcKJiQQ1J
-         8EzTSwgrq7GAHxe1PBnyc/EcAXZjoQ+4Opb7EmH3mumf067gSl0ylCFrT+kVNBdWhAsX
-         hCqKaskt7hu8xOfbEex38hgBXWWf+UJWIjhQwIx8/EhcmxoFsS3YcQvZrf8g0IjOub2J
-         J2O9r/sJpjpe1yxWe01cn59Cp9NC7WKQfqUJn54TsiwOjjDMkLluxuxADciaT9nKNaMa
-         U00g==
-X-Gm-Message-State: ACgBeo0O6nFMuwWooNnrPrAq7SvBrHzoJKQIOKPIsLz5Ad/6UK2uLJw+
-        FsCsPa8KKauXlmYUxX66+52QdlzHCJgHFlJhMVw=
-X-Google-Smtp-Source: AA6agR65paGn+KC3Fe8XeawVhkTkP00otnvSfxoWcwCf52HbrAmRlzdXLDzIJw4f2/h6gbNdmVYU9iaaEEjx63FHNO4=
-X-Received: by 2002:a05:6512:692:b0:48a:f5fb:188c with SMTP id
- t18-20020a056512069200b0048af5fb188cmr816276lfe.111.1659621702117; Thu, 04
- Aug 2022 07:01:42 -0700 (PDT)
+        Thu, 4 Aug 2022 10:20:14 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 429192AED;
+        Thu,  4 Aug 2022 07:20:12 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oJbhq-0008EB-00; Thu, 04 Aug 2022 16:20:10 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 2BAB4C01A0; Thu,  4 Aug 2022 15:58:12 +0200 (CEST)
+Date:   Thu, 4 Aug 2022 15:58:12 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
+Message-ID: <20220804135812.GA10513@alpha.franken.de>
+References: <YulSY1pDms0ZyNs9@debian>
+ <20220802175936.2278362-1-nathan@kernel.org>
 MIME-Version: 1.0
-References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com>
- <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com>
- <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
- <20220723030226.8E43CC341C6@smtp.kernel.org> <CAP6Zq1gUvMFG9BNObVNLpVgbMRpV7e--HFxknP8kvL4nGk8Hsw@mail.gmail.com>
- <20220729225603.12528C433D6@smtp.kernel.org>
-In-Reply-To: <20220729225603.12528C433D6@smtp.kernel.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Thu, 4 Aug 2022 17:01:30 +0300
-Message-ID: <CAP6Zq1hOxG+2X-qTbvPkrVHQ5zf04GO21m1n328Jiqgzns2CMA@mail.gmail.com>
-Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Olof Johansson <olof@lixom.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thomas G leixner <tglx@linutronix.de>,
-        Patrick Venture <venture@google.com>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Nancy Yuen <yuenn@google.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        SERIAL DRIVERS <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802175936.2278362-1-nathan@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 30 Jul 2022 at 01:56, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Tomer Maimon (2022-07-24 02:06:54)
-> > On Sat, 23 Jul 2022 at 06:02, Stephen Boyd <sboyd@kernel.org> wrote:
-> > > Furthermore, in DT, reg properties aren't supposed to overlap. When that
-> > > happens it usually indicates the DT is being written to describe driver
-> > > structure instead of the IP blocks that are delivered by the hardware
-> > > engineer. In this case it sounds like a combined clk and reset IP block
-> > > because they piled all the SoC glue stuff into a register range. Are
-> > > there more features in this IO range?
-> >
-> > No, this range only combined the reset and clock together, but it
-> > combined in a way that we cannot split it to two or even three
-> > different registers...
->
-> Because it is jumbled in some range?
-Yes.
->
-> >
-> > I do see a way to combine the clock and the reset driver, the NPCM
-> > reset driver is serving other NPCM BMC's.
-> > Should we use regmap to handle the clock registers instead of ioremap?
->
-> Sure? Using regmap or not looks like a parallel discussion. How does it
-> help use platform APIs?
-I mean to use regmap API instead of platform API for handing the clock
-and reset registers.
-the regmap API gives only one user access to R/W (lock).
-I will be happy to get more suggestions, on how should we solve this situation.
+On Tue, Aug 02, 2022 at 10:59:36AM -0700, Nathan Chancellor wrote:
+> When CONFIG_XPA is enabled, Clang warns:
+> 
+>   arch/mips/mm/tlbex.c:629:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
+>           if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
+>                               ^
+>   arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
+>   # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
+>                                      ^
+>   arch/mips/mm/tlbex.c:2568:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
+>           if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
+>                                 ^
+>   arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
+>   # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
+>                                      ^
+>   2 errors generated.
+> 
+> _PAGE_NO_EXEC can be '0' or '1 << _PAGE_NO_EXEC_SHIFT' depending on the
+> build and runtime configuration, which is what the negation operators
+> are trying to convey. To silence the warning, explicitly compare against
+> 0 so the result of the '<<' operator is not implicitly converted to a
+> boolean.
+> 
+> According to its documentation, GCC enables -Wint-in-bool-context with
+> -Wall but this warning is not visible when building the same
+> configuration with GCC. It appears GCC only warns when compiling C++,
+> not C, although the documentation makes no note of this:
+> https://godbolt.org/z/x39q3brxf
+> 
+> Reported-by: Sudip Mukherjee (Codethink) <sudipm.mukherjee@gmail.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/mips/mm/tlbex.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+> index 8dbbd99fc7e8..be4d4670d649 100644
+> --- a/arch/mips/mm/tlbex.c
+> +++ b/arch/mips/mm/tlbex.c
+> @@ -626,7 +626,7 @@ static __maybe_unused void build_convert_pte_to_entrylo(u32 **p,
+>  		return;
+>  	}
+>  
+> -	if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
+> +	if (cpu_has_rixi && _PAGE_NO_EXEC != 0) {
+>  		if (fill_includes_sw_bits) {
+>  			UASM_i_ROTR(p, reg, reg, ilog2(_PAGE_GLOBAL));
+>  		} else {
+> @@ -2565,7 +2565,7 @@ static void check_pabits(void)
+>  	unsigned long entry;
+>  	unsigned pabits, fillbits;
+>  
+> -	if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
+> +	if (!cpu_has_rixi || _PAGE_NO_EXEC == 0) {
+>  		/*
+>  		 * We'll only be making use of the fact that we can rotate bits
+>  		 * into the fill if the CPU supports RIXI, so don't bother
+> 
+> base-commit: 7d0d3fa7339ed5a06d6608b7cde9f079eba62bb1
+> -- 
+> 2.37.1
 
-Thanks,
+applied to mips-next.
 
-Tomer
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

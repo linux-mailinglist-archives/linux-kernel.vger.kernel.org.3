@@ -2,242 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496AA589C9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DED589C9E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239643AbiHDN1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 09:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S239764AbiHDN1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 09:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiHDN1W (ORCPT
+        with ESMTP id S239785AbiHDN1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 09:27:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC3115FD3;
-        Thu,  4 Aug 2022 06:27:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20054B82431;
-        Thu,  4 Aug 2022 13:27:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49571C433D6;
-        Thu,  4 Aug 2022 13:27:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659619637;
-        bh=ocujRJqNu6S8wBn4i4Rts7b5BhfeYX8ix7T9K2YDATw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fhj9sYzz+Xzc/YOS/8Vu1tdGJjoSj6SLANF2Q274PJUxueDe15uQWXG7rAeWXGsnL
-         a6u6WO9d+oAT6pIoOPTWIXyKBsmAgtDYp6TnkfD2YkjJAKcbOhfan5YEwWJvvE9fRX
-         0IGn6e+en/IGfdo0omoSMCcksC3qVrCEBRlZT627H6qCZQyxBZoJxq36CG/5jq74T9
-         3aIOH5HpmvZf/j/DEWxw6T9cMLefhJlYYSSvOUMrNLh2gqflEAvKxa6Vv+beJ/B4Qn
-         SyHX2cP2ufArEDe5R29IZfOAsK2afggIseoTDywyG3BgnTKSkMwbxDGrXDaityTAAe
-         +bTFUQhK17KPw==
-Date:   Thu, 4 Aug 2022 15:27:11 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
-        lenb@kernel.org, robert.moore@intel.com,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        robin.murphy@arm.com
-Subject: Re: [PATCH] ACPI / scan: Support multiple dma windows with different
- offsets
-Message-ID: <YuvJLxa5zsMj1pGf@lpieralisi>
-References: <1659255431-22796-1-git-send-email-lvjianmin@loongson.cn>
- <e12706ef-70de-08b6-ada0-818d03b8c2f5@loongson.cn>
+        Thu, 4 Aug 2022 09:27:34 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2069.outbound.protection.outlook.com [40.107.223.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893B91F2F2
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:27:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MWTGTKAZp+xxv6txUEBRA7Ra6gREAIu7pXUbXN5KzCiDCdPwP/JSO7kZWud6WZUtUGG8Zd9RZmZKPZ8P72XQhTRzSZ+aawe+AS2y41cKVpPOzSUQB7lIGHjtGKGteaMm3x2+9lfUNKV4cNNwEgSTHkJnEoHUTJZBZhZYUH5m/Jo4uZuT+aZVdOOM5sU+LouXRy1hRy/1EtuypovAyOY2+2KvNrttKbjkKHaYToqd/8ETcHPrV5zkLVyRrnOwOjpnvSIFvWSVnFSzrJAoab80T+MSyuHpMNfH5B9r+EaaT/xpdPaW8ZI919ep6Lvx2+4S0QMRRRLHoShK2OD7zv/pMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cacTPxwas0Ejiku4Lp+559f0Ljr2+TwkVkmPkF6Wd9Y=;
+ b=PUKvg2wDagIy0IqKuHj/k/pZH6IO0joZxCfSM/vwRNlWknqfFcewTkici7AaTCi1ZiimrHJSXRzTd90xmmRhRp/sIiutE/mcSY3N/T6wf4rcVPnWqtT3FFu7MtUta09G9bMgCNlOQgv/1L1yNZrtoCxhXHLY6Lnbv76XLuph0bEkKjPao0T1TRshMMKIwMUbg6RqxKPHQ5oZx7Mlkc4y9ea+880iZq0OlPAzolXFkzJNSFeDfXAzAyUu6dVjpa2Nwfv/DtD2gDr2T2Kv4vU3Cdf+XpVEjyyfTaJqI22ZqJbrDzP6WoX00oE/avvytYyE1v8Gh/Qr+O8SH5grXIdBPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cacTPxwas0Ejiku4Lp+559f0Ljr2+TwkVkmPkF6Wd9Y=;
+ b=2Pdlv8a5NN5w09CRU8AXAyF0x8xmTEd7tvW2lXmhATFjF+gHpt7Ofe+EGvggqMzS/dGEjVph0fL9V70Z1AVnOWYAY+HV12IHqFMkhBNAwTKqxZXbUBfnNDA9r0AAdL5eLgHrW0YVvc67om0xdMRNgmRjauPMHvot9b3CmCC3YkM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by CH2PR12MB4938.namprd12.prod.outlook.com (2603:10b6:610:34::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Thu, 4 Aug
+ 2022 13:27:31 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::6999:13c9:d124:418a]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::6999:13c9:d124:418a%8]) with mapi id 15.20.5504.015; Thu, 4 Aug 2022
+ 13:27:31 +0000
+Message-ID: <938ca191-074b-468c-d44d-0be795fb0700@amd.com>
+Date:   Thu, 4 Aug 2022 09:27:27 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drm/amd/display: restore plane with no modifiers code.
+Content-Language: en-US
+To:     Dave Airlie <airlied@redhat.com>, torvalds@linux-foundation.org
+Cc:     Rodrigo.Siqueira@amd.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20220804055036.691670-1-airlied@redhat.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20220804055036.691670-1-airlied@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT3PR01CA0102.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:85::21) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e12706ef-70de-08b6-ada0-818d03b8c2f5@loongson.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 68f3514f-4545-4b87-9d70-08da761d154f
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4938:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dUOVjJ7PPAsKKrJIqdM+QktupWQRJeNnuOXVb+Xbl3wG8u0fyd5YaAxL3T1vD1s77XUTy20zrMAK/Syc97rVaZ8ZkwYZ5s+T3ruNuXktEe57vt/kHJt/QjADjCgUXXSvib5SC0FCj0gEonPukeSngZvMSvrzmX2cTmjXAay6xVcYMK/eKO1OADAi/sz05Mhfil+f4ZrY7diDaD6t39R0M6DnN5jwq296Bhp5v2ztQjTPoZ8HwOJbSDXEBfVXlV/7Le7/cNjqGEAPL7LIpUu3vg9ZMA5dDGFxMm79WguWYf+Cj/+xPBovW7qEYSiPvhyGNNMS+1LGaLPFQR8d1pN8kO/BVOz5YJ81J/pVxitRPOOQPrgMKSZhYobn87GmcnYfUJILXxJNONtI5Cj0fGvDD53WEedmwwSo+rK3Gcd9GQEji2nIMHW8tQbWcNWii8UZfsGH2uSCC04AGHyKH4nMkkZLzmBonHs5Ad9pyvzl+WouJGAepHD4aT3mQxElkPtD74KXW5TW8blJnCSMxrw5cFu7T6v8yalAUvpJ2TrUsgy2LLeVd2sSsMu6n53TPp+8zzNk8Onfw3hfbwnawJPLjxnEVP1dxr9rSKusNDzwisfDJC3uaUYfNl8H6ilZ6EHSa9CTB8bjEyMeANG7lv1g8l0DCRu+YsAs4HOWfz/A+cWFUJBDsvUP8x7nJoXqNRj6Shc5VgJN6oJszef03Fef3Lb+9wlBEKZho0v818486jOzbQt/YCR9KgTsvAXdrwpdof42R9ykB45+I3vLEUDCVeFBpbYhbzcIdsekunTLpYA2PrRx4occ6njRsPRVIp51EzkdniCKjfmfUx7xI3cvWg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(396003)(366004)(39860400002)(6486002)(36756003)(31686004)(66556008)(4326008)(8676002)(66476007)(83380400001)(8936002)(31696002)(478600001)(5660300002)(66946007)(186003)(44832011)(86362001)(6666004)(41300700001)(2906002)(316002)(53546011)(38100700002)(6506007)(6512007)(2616005)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aklkUTV0Um1EZFd2R2dXaTNGUkN4ekdYNUNpaVhoZ2x0ZU4vUVRrU081WTBn?=
+ =?utf-8?B?VEVsVEVqNzJ4bEZTSmhWOVYyZFdMejl3YXNKLzNlWXNnZndUTi9TRHBDZU9o?=
+ =?utf-8?B?VUtxclFqV1B5UmFmNVdUNXBPNm1GeGgySU5sVllycnYyVW05RTVzc2taa0Nj?=
+ =?utf-8?B?RjFuWlB2MzI4RElSTE1SekNLTE50OUdPMUxHK3liamRLUFRsWFRtVnpVRU9W?=
+ =?utf-8?B?ZUdweTQ1QzQ1Z3NLWVZ1ZDQ4MmIvTzN3M0hrR2MyWkxhQmpjbWNqSmtXT0F1?=
+ =?utf-8?B?aTY3YTZ5ekxBeEFWSlJsRDA0dUxXNVNkV201NDJyb3BwNUEyYkwxMW15WSs5?=
+ =?utf-8?B?ZWhSdVJHZE96WHBMVTE3bDdTWldqdnlyVUl4M2hrYm4yQU91NVFMSk9SVVdT?=
+ =?utf-8?B?V1hyWHA3bGJUcnRnbms1MC9aTi83REhyS3Y3RFA0eHpvQWlkdjhPcVpIRlZQ?=
+ =?utf-8?B?dmVoY2dxZlVDZTNSQzhDQTVxWFZZT0FwOXVEVmNxUVRtcDlxTERxUjNWRXNR?=
+ =?utf-8?B?NkJxR3EwYXRwNXlXNGJLTWp4dVQxK2dLbTZYbjZzRFJnOVQwallXZ3FYdGsy?=
+ =?utf-8?B?K215TmxwcElIRmhvS3NWUW9QRWhPR0hlc3A5NWx5YnBBdW1vK1FCYkI3cVZL?=
+ =?utf-8?B?RFJvSWtyK0xQNElkaUlRbEJnQlZTdjYveERiSFRieVBhbENpMGIvM2lWRFdH?=
+ =?utf-8?B?U3UweE4vK2dBYzNSQm94M1dvN1N3eWRzTDRzZk1KMVZqM3h3RFd4WWNTNDV3?=
+ =?utf-8?B?NWdCSzlJMFc1bUE2VWpnTHo3dzdvangwQ2RjdktuY2I1ejBuR3p2U0tud0xy?=
+ =?utf-8?B?SlowQ0ZRbFhsLzNtNmI3Tjlnbm8rQkZGbzZrR1hiUFFGZWNab2t4d2UyZGJi?=
+ =?utf-8?B?bllnNnk3SGVncklWTEh3NERmTTVaL1EvTVRFa0pyQzJHdVN0WU1qSG1Gbmoz?=
+ =?utf-8?B?N3JzNUUzczA1NlhpL0lkMnNjaTQrRjlMclh5aUlpejI0UEZseUN3TjVCZjQ5?=
+ =?utf-8?B?aXN6WjVtdHMzUnQvb3ZVcktsaE52NWJUd0V2OUQ3c25ESlFLYjhyVFpxNWwz?=
+ =?utf-8?B?RHgyTTFuWmx6Mksxc0NOTzF0ZkpidUdEWnA5bUNBSFdMV0tiYW9kWWxqby8x?=
+ =?utf-8?B?ckYzeTdScFAwUWtzNzRuZVpoWkNGMGxmY0RqZmFtdncwSGpOVHk5aFVKbUdF?=
+ =?utf-8?B?Y0dzQmM5VG81VU1PL0pHQzdJcEpsOVByU2tLTis0c2w4NmRsaUtrQTh4by9r?=
+ =?utf-8?B?M1B1NFhVTm1naDZPdnl3bFhLMytaQUU1dzdaNjVOUEtDcjhFL1RyTlREZE5T?=
+ =?utf-8?B?dWE2VGRtSi9LaXZORmxQb3daN2xjRGNPbFhtZDVOMkhWT3A0MzY0dFpSWGpN?=
+ =?utf-8?B?VGpzRlY3T2kvNi9iMWhoMHdvWklsbXhnV0lGeW4zMmdGYndjQnl4b3N1NWNw?=
+ =?utf-8?B?Wk9KeitNM1FzVElJNk5jQTd4UmpOUUdyYTdtZ1FhWCtDQlQ2VTZvM2dsMnRP?=
+ =?utf-8?B?dTV5NzNiRDFQM2R4c00yUlF0RHlDU1RDYVI3ekdKb0NubmNpMWNiUklWdXBE?=
+ =?utf-8?B?MVIxaE50UzlYdmtlRm8rQkR4Q2FHZXM0Yjk4UmVibEljcFVuTTM5cWZjeHNu?=
+ =?utf-8?B?YVF5c0lrUnhWZ2ZYNWEvU3J2Vko5K1V2WGJTS0NFemVieVQrMnVnRTljaEFM?=
+ =?utf-8?B?aDJDUmY5Yzd0b1JTdk1mVEkwbzR1T3VHUXRuc1JoTnhXT21sOElONVVEK2pP?=
+ =?utf-8?B?eGd5aDRQQXBwdlFMUzJXeUc2aFVDSFBuVzRmaTQ0b2R1WmxRU2luakVvWElh?=
+ =?utf-8?B?RUd6ck5YWUJYdGhrSncxLzJweHp0QWkvcG50amVISjRQRkRsMWNVMUgvdHdo?=
+ =?utf-8?B?cnppbWpmQzR0Y29PWUxMd0Ywd21wTkN2cVdjc1Q1aG4xMTJ6clBtNWVQYnpU?=
+ =?utf-8?B?SjdEbm1wRFYybFlTVmhTZkpRbWVyU0RodUg4T2VqMkdrUU0wMkRPVG80eVZY?=
+ =?utf-8?B?SXphb3Z5bVpsMzJoNVlhZUdwSWdDeTY5RmRtWHoyYlV5T1ZnWis4VGpRVmdC?=
+ =?utf-8?B?Mkt0YnBTUXRvTWZIMHhEMnpmeXdaRkRJYWZkRFIydUJpRVhNTnVHanI1U1p6?=
+ =?utf-8?Q?bMdkPJ5v4MhFw3NdBOGNuyIUj?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68f3514f-4545-4b87-9d70-08da761d154f
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2022 13:27:31.2045
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NFmjfJSTsyAe/YirrfYxgCRUpEv6amalmUnlHh1WuSNZmytWaiOnP79iy6EuyT2SXfcdOPRoZ5wn7VQ2DHcbRQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4938
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+Robin]
-
-On Thu, Aug 04, 2022 at 05:59:23PM +0800, Jianmin Lv wrote:
-> Hi, all
+On 2022-08-04 01:50, Dave Airlie wrote:
+> When this file was split in
 > 
-> Can anybody help to review the patch, or I missed somebody else?
-
-I will review the patch - added Robin since it affects the DMA
-ranges handling.
-
-Lorenzo
-
-> Thanks!
+> 5d945cbcd4b16a29d6470a80dfb19738f9a4319f
+> Author: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> Date:   Wed Jul 20 15:31:42 2022 -0400
 > 
-> On 2022/7/31 下午4:17, Jianmin Lv wrote:
-> > For DT, of_dma_get_range returns bus_dma_region typed dma regions,
-> > which makes multiple dma windows with different offset available
-> > for translation between dma address and cpu address.
-> > 
-> > But for ACPI, acpi_dma_get_range doesn't return similar dma regions,
-> > causing no path for setting dev->dma_range_map conveniently. So the
-> > patch changes acpi_dma_get_range and returns bus_dma_region typed
-> > dma regions according to of_dma_get_range.
-> > 
-> > After changing acpi_dma_get_range, original part of internal code
-> > only available for ARM is moved to acpi_arch_dma_setup for remaining
-> > unchanged.
-> > 
-> > Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> > 
-> > diff --git a/drivers/acpi/arm64/dma.c b/drivers/acpi/arm64/dma.c
-> > index f16739a..840f918 100644
-> > --- a/drivers/acpi/arm64/dma.c
-> > +++ b/drivers/acpi/arm64/dma.c
-> > @@ -9,6 +9,7 @@ void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
-> >   	int ret;
-> >   	u64 end, mask;
-> >   	u64 dmaaddr = 0, size = 0, offset = 0;
-> > +	const struct bus_dma_region *map = NULL;
-> >   	/*
-> >   	 * If @dev is expected to be DMA-capable then the bus code that created
-> > @@ -26,10 +27,37 @@ void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
-> >   	else
-> >   		size = 1ULL << 32;
-> > -	ret = acpi_dma_get_range(dev, &dmaaddr, &offset, &size);
-> > +	ret = acpi_dma_get_range(dev, &map);
-> >   	if (ret == -ENODEV)
-> >   		ret = iort_dma_get_ranges(dev, &size);
-> >   	if (!ret) {
-> > +		const struct bus_dma_region *r = map;
-> > +		u64 len, dma_start, dma_end = 0;
-> > +
-> > +		/* determine the overall bounds of all dma regions */
-> > +		for (dma_start = U64_MAX; r->size; r++) {
-> > +			if (offset && r->offset != offset) {
-> > +				dev_warn(dev, "Can't handle multiple windows with different offsets\n");
-> > +				return;
-> > +			}
-> > +			offset = r->offset;
-> > +
-> > +			/* Take lower and upper limits */
-> > +			if (r->dma_start < dma_start)
-> > +				dma_start = r->dma_start;
-> > +			if (r->dma_start + r->size - 1 > dma_end)
-> > +				dma_end = r->dma_start + r->size - 1;
-> > +		}
-> > +
-> > +		if (dma_start >= dma_end) {
-> > +			dev_dbg(dev, "Invalid DMA regions configuration\n");
-> > +			return;
-> > +		}
-> > +
-> > +		dmaaddr = dma_start;
-> > +		len = dma_end - dma_start;
-> > +		size = max(len, len + 1);
-> > +
-> >   		/*
-> >   		 * Limit coherent and dma mask based on size retrieved from
-> >   		 * firmware.
-> > diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> > index 762b61f..8961b51 100644
-> > --- a/drivers/acpi/scan.c
-> > +++ b/drivers/acpi/scan.c
-> > @@ -20,6 +20,7 @@
-> >   #include <linux/platform_data/x86/apple.h>
-> >   #include <linux/pgtable.h>
-> >   #include <linux/crc32.h>
-> > +#include <linux/dma-direct.h>
-> >   #include "internal.h"
-> > @@ -1492,15 +1493,15 @@ enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
-> >    *
-> >    * Return 0 on success, < 0 on failure.
-> >    */
-> > -int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
-> > -		       u64 *size)
-> > +int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
-> >   {
-> >   	struct acpi_device *adev;
-> >   	LIST_HEAD(list);
-> >   	struct resource_entry *rentry;
-> >   	int ret;
-> >   	struct device *dma_dev = dev;
-> > -	u64 len, dma_start = U64_MAX, dma_end = 0, dma_offset = 0;
-> > +	int num_ranges = 0;
-> > +	struct bus_dma_region *r;
-> >   	/*
-> >   	 * Walk the device tree chasing an ACPI companion with a _DMA
-> > @@ -1525,31 +1526,31 @@ int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
-> >   	ret = acpi_dev_get_dma_resources(adev, &list);
-> >   	if (ret > 0) {
-> > +		list_for_each_entry(rentry, &list, node)
-> > +			num_ranges++;
-> > +
-> > +		r = kcalloc(num_ranges + 1, sizeof(*r), GFP_KERNEL);
-> > +		if (!r) {
-> > +			ret = -ENOMEM;
-> > +			goto out;
-> > +		}
-> > +
-> > +		*map = r;
-> > +
-> >   		list_for_each_entry(rentry, &list, node) {
-> > -			if (dma_offset && rentry->offset != dma_offset) {
-> > +			if (rentry->res->start >= rentry->res->end) {
-> >   				ret = -EINVAL;
-> > -				dev_warn(dma_dev, "Can't handle multiple windows with different offsets\n");
-> > +				dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
-> >   				goto out;
-> >   			}
-> > -			dma_offset = rentry->offset;
-> > -
-> > -			/* Take lower and upper limits */
-> > -			if (rentry->res->start < dma_start)
-> > -				dma_start = rentry->res->start;
-> > -			if (rentry->res->end > dma_end)
-> > -				dma_end = rentry->res->end;
-> > -		}
-> > -		if (dma_start >= dma_end) {
-> > -			ret = -EINVAL;
-> > -			dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
-> > -			goto out;
-> > +			r->cpu_start = rentry->res->start;
-> > +			r->dma_start = rentry->res->start - rentry->offset;
-> > +			r->size = rentry->res->end - rentry->res->start + 1;
-> > +			r->offset = rentry->offset;
-> > +			r++;
-> >   		}
-> > -		*dma_addr = dma_start - dma_offset;
-> > -		len = dma_end - dma_start;
-> > -		*size = max(len, len + 1);
-> > -		*offset = dma_offset;
-> >   	}
-> >    out:
-> >   	acpi_dev_free_resource_list(&list);
-> > diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> > index 0dc1ea0b..e106073 100644
-> > --- a/include/acpi/acpi_bus.h
-> > +++ b/include/acpi/acpi_bus.h
-> > @@ -611,8 +611,7 @@ struct acpi_pci_root {
-> >   int acpi_iommu_fwspec_init(struct device *dev, u32 id,
-> >   			   struct fwnode_handle *fwnode,
-> >   			   const struct iommu_ops *ops);
-> > -int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
-> > -		       u64 *size);
-> > +int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map);
-> >   int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
-> >   			   const u32 *input_id);
-> >   static inline int acpi_dma_configure(struct device *dev,
-> > diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> > index 44975c1..f806092 100644
-> > --- a/include/linux/acpi.h
-> > +++ b/include/linux/acpi.h
-> > @@ -974,8 +974,7 @@ static inline enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
-> >   	return DEV_DMA_NOT_SUPPORTED;
-> >   }
-> > -static inline int acpi_dma_get_range(struct device *dev, u64 *dma_addr,
-> > -				     u64 *offset, u64 *size)
-> > +static inline int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
-> >   {
-> >   	return -ENODEV;
-> >   }
-> > 
+> drm/amd/display: Create a file dedicated to planes
 > 
+> This chunk seemed to get dropped. Linus noticed on this
+> rx580 and I've reproduced on FIJI which makes sense as these
+> are pre-modifier GPUs.
+> 
+> With this applied, I get gdm back.
+> 
+> Fixes: 5d945cbcd4b1 ("drm/amd/display: Create a file dedicated to planes")
+> Signed-off-by: Dave Airlie <airlied@redhat.com>
+
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+
+Harry
+
+> ---
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
+> index 8cd25b2ea0dc..b841b8b0a9d8 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
+> @@ -1591,6 +1591,9 @@ int amdgpu_dm_plane_init(struct amdgpu_display_manager *dm,
+>  	if (res)
+>  		return res;
+>  
+> +	if (modifiers == NULL)
+> +		adev_to_drm(dm->adev)->mode_config.fb_modifiers_not_supported = true;
+> +
+>  	res = drm_universal_plane_init(adev_to_drm(dm->adev), plane, possible_crtcs,
+>  				       &dm_plane_funcs, formats, num_formats,
+>  				       modifiers, plane->type, NULL);
+

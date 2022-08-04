@@ -2,299 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2AD589EA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455CC589EA7
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235936AbiHDP1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
+        id S239828AbiHDP1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234310AbiHDP07 (ORCPT
+        with ESMTP id S239950AbiHDP1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:26:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C464C2127A
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:26:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659626816;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UwVPMHNGaFZ81vFKHr3nYXqw8Kj/v9CVpEE3w8x/Lig=;
-        b=ZiUr3H69wPvNI8hoIdGXa2zlu2unYUHpSPtWFI/MnmaECUjph344tgR+vFSwdM+N6lOIWD
-        MWHKqWoybzkxEEXQZ11pyxJWhzOKmDYe9s4mcdlJKyLUBwgfNdZ1wfU89Qsga2XtOWxy1V
-        mGJHtpXMwiPaad9dJMhf4mBTBguhfDA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-526-OqRHtPYhM2Gz9Xwe5BTvKA-1; Thu, 04 Aug 2022 11:26:53 -0400
-X-MC-Unique: OqRHtPYhM2Gz9Xwe5BTvKA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C31D43800C36;
-        Thu,  4 Aug 2022 15:26:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E9B9403D0D0;
-        Thu,  4 Aug 2022 15:26:50 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] nfs: Fix automount superblock LSM init problem,
- preventing sb sharing
-From:   David Howells <dhowells@redhat.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Scott Mayhew <smayhew@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-nfs@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, dwysocha@redhat.com,
-        dhowells@redhat.com, linux-kernel@vger.kernel.org
-Date:   Thu, 04 Aug 2022 16:26:49 +0100
-Message-ID: <165962680944.3334508.6610023900349142034.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Thu, 4 Aug 2022 11:27:02 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E94C2AE11
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:27:01 -0700 (PDT)
+Received: from linux.gnuweeb.org (linux.gnuweeb.org [172.17.0.3])
+        by gnuweeb.org (Postfix) with ESMTPSA id B86B5806D7;
+        Thu,  4 Aug 2022 15:26:59 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1659626819;
+        bh=HYO9pbZDfPK8O2lWn2CBuaUHv0WEHOMviXfeXDRJLKA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TJeNRHNQL1XWDPG+R6s0LyhOh8/N1EkpcS4OrbbFlgRKczMVApE5eFDNz8p98FfRg
+         HtmXQLrfhDrejMveOWwuLH6EgLSVByl9Lp30U6XB4qpqX7XmBDICi++2hM/eHVgmX8
+         J0wORvL63SXGi6Yp+ry/y7jpGJykibSmETuNRn9AOjrPTz4DQvZp5gncMHEgC+w4bj
+         MuPC5XCIdxAR55+3ayJXnNyCuSAEZ5FwKYy8J2ueqwuxI0Aui2fRnTWRcgXWH4tRZr
+         aJQsRYWOwXhUYr9ueN/bwTvVE/61ZO7dT/sClFjpt0NuZ54nTrtSxkawG94MgKKl0n
+         s7tG85INNuygA==
+From:   Kanna Scarlet <knscarlet@gnuweeb.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
+Cc:     Kanna Scarlet <knscarlet@gnuweeb.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bill Metzenthen <billm@melbpc.org.au>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/1] x86 change mov 0, %reg to xor %reg, %reg
+Date:   Thu,  4 Aug 2022 15:26:54 +0000
+Message-Id: <20220804152656.8840-1-knscarlet@gnuweeb.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When NFS superblocks are created by automounting, their LSM parameters
-aren't set in the fs_context struct prior to sget_fc() being called,
-leading to failure to match existing superblocks.
+Hello Linux x86 maintainers,
 
-Fix this by adding a new LSM hook to load fc->security for submount
-creation when alloc_fs_context() is creating the fs_context for it.
+I'm an informatic student 19 y.o. I am still studying Linux kernel open
+source in GNU/Weeb community. I want to be a linux kerne dev in the
+future. This is my first time sending a patch to Linux Kernel, I am
+still learning the community. I may make a mistake in this email, please
+correct me if i am wrong
 
-However, this uncovers a further bug: nfs_get_root() initialises the
-superblock security manually by calling security_sb_set_mnt_opts() or
-security_sb_clone_mnt_opts() - but then vfs_get_tree() calls
-security_sb_set_mnt_opts(), which can lead to SELinux, at least,
-complaining.
+I want to improve x86-64 assembly code with this patch. This patch
+changes mov $0, %reg with xor %reg, %reg because xor %reg, %reg is
+smaller so it is good to save space
 
-Fix that by adding a flag to the fs_context that suppresses the
-security_sb_set_mnt_opts() call in vfs_get_tree().  This can be set by NFS
-when it sets the LSM context on the new superblock.
+asm:
+ba 00 00 00 00  mov   $0x0,%edx
+31 d2           xor   %edx,%edx
 
-The first bug leads to messages like the following appearing in dmesg:
 
-	NFS: Cache volume key already in use (nfs,4.2,2,108,106a8c0,1,,,,100000,100000,2ee,3a98,1d4c,3a98,1)
+Regards,
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Fixes: 9bc61ab18b1d ("vfs: Introduce fs_context, switch vfs_kern_mount() to it.")
-Fixes: 779df6a5480f ("NFS: Ensure security label is set for root inode)
-cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-cc: Anna Schumaker <anna@kernel.org>
-cc: Alexander Viro <viro@zeniv.linux.org.uk>
-cc: Scott Mayhew <smayhew@redhat.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Paul Moore <paul@paul-moore.com>
-cc: Casey Schaufler <casey@schaufler-ca.com>
-cc: linux-nfs@vger.kernel.org
-cc: selinux@vger.kernel.org
-cc: linux-security-module@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
+Signed-off-by: Kanna Scarlet <knscarlet@gnuweeb.org>
 ---
 
- fs/fs_context.c               |    4 ++++
- fs/nfs/getroot.c              |    1 +
- fs/super.c                    |   10 ++++++----
- include/linux/fs_context.h    |    1 +
- include/linux/lsm_hook_defs.h |    1 +
- include/linux/lsm_hooks.h     |    6 +++++-
- include/linux/security.h      |    6 ++++++
- security/security.c           |    5 +++++
- security/selinux/hooks.c      |   29 +++++++++++++++++++++++++++++
- 9 files changed, 58 insertions(+), 5 deletions(-)
+Kanna Scarlet (1):
+  x86: Change mov $0, %reg with xor %reg, %reg
 
-diff --git a/fs/fs_context.c b/fs/fs_context.c
-index 24ce12f0db32..22248b8a88a8 100644
---- a/fs/fs_context.c
-+++ b/fs/fs_context.c
-@@ -282,6 +282,10 @@ static struct fs_context *alloc_fs_context(struct file_system_type *fs_type,
- 		break;
- 	}
- 
-+	ret = security_fs_context_init(fc, reference);
-+	if (ret < 0)
-+		goto err_fc;
-+
- 	/* TODO: Make all filesystems support this unconditionally */
- 	init_fs_context = fc->fs_type->init_fs_context;
- 	if (!init_fs_context)
-diff --git a/fs/nfs/getroot.c b/fs/nfs/getroot.c
-index 11ff2b2e060f..651bffb0067e 100644
---- a/fs/nfs/getroot.c
-+++ b/fs/nfs/getroot.c
-@@ -144,6 +144,7 @@ int nfs_get_root(struct super_block *s, struct fs_context *fc)
- 	}
- 	if (error)
- 		goto error_splat_root;
-+	fc->lsm_set = true;
- 	if (server->caps & NFS_CAP_SECURITY_LABEL &&
- 		!(kflags_out & SECURITY_LSM_NATIVE_LABELS))
- 		server->caps &= ~NFS_CAP_SECURITY_LABEL;
-diff --git a/fs/super.c b/fs/super.c
-index 60f57c7bc0a6..a1c440336fd9 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -1519,10 +1519,12 @@ int vfs_get_tree(struct fs_context *fc)
- 	smp_wmb();
- 	sb->s_flags |= SB_BORN;
- 
--	error = security_sb_set_mnt_opts(sb, fc->security, 0, NULL);
--	if (unlikely(error)) {
--		fc_drop_locked(fc);
--		return error;
-+	if (!(fc->lsm_set)) {
-+		error = security_sb_set_mnt_opts(sb, fc->security, 0, NULL);
-+		if (unlikely(error)) {
-+			fc_drop_locked(fc);
-+			return error;
-+		}
- 	}
- 
- 	/*
-diff --git a/include/linux/fs_context.h b/include/linux/fs_context.h
-index 13fa6f3df8e4..3876dd96bb20 100644
---- a/include/linux/fs_context.h
-+++ b/include/linux/fs_context.h
-@@ -110,6 +110,7 @@ struct fs_context {
- 	bool			need_free:1;	/* Need to call ops->free() */
- 	bool			global:1;	/* Goes into &init_user_ns */
- 	bool			oldapi:1;	/* Coming from mount(2) */
-+	bool			lsm_set:1;	/* security_sb_set/clone_mnt_opts() already done */
- };
- 
- struct fs_context_operations {
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index eafa1d2489fd..6d1c738e4a84 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -54,6 +54,7 @@ LSM_HOOK(int, 0, bprm_creds_from_file, struct linux_binprm *bprm, struct file *f
- LSM_HOOK(int, 0, bprm_check_security, struct linux_binprm *bprm)
- LSM_HOOK(void, LSM_RET_VOID, bprm_committing_creds, struct linux_binprm *bprm)
- LSM_HOOK(void, LSM_RET_VOID, bprm_committed_creds, struct linux_binprm *bprm)
-+LSM_HOOK(int, 0, fs_context_init, struct fs_context *fc, struct dentry *reference)
- LSM_HOOK(int, 0, fs_context_dup, struct fs_context *fc,
- 	 struct fs_context *src_sc)
- LSM_HOOK(int, -ENOPARAM, fs_context_parse_param, struct fs_context *fc,
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 91c8146649f5..1782814c7c5b 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -87,8 +87,12 @@
-  * Security hooks for mount using fs_context.
-  *	[See also Documentation/filesystems/mount_api.rst]
-  *
-+ * @fs_context_init:
-+ *	Initialise fc->security.  This is initialised to NULL by the caller.
-+ *	@fc indicates the new filesystem context.
-+ *	@dentry indicates a reference for submount/remount
-  * @fs_context_dup:
-- *	Allocate and attach a security structure to sc->security.  This pointer
-+ *	Allocate and attach a security structure to fc->security.  This pointer
-  *	is initialised to NULL by the caller.
-  *	@fc indicates the new filesystem context.
-  *	@src_fc indicates the original filesystem context.
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 7fc4e9f49f54..94834f699b04 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -291,6 +291,7 @@ int security_bprm_creds_from_file(struct linux_binprm *bprm, struct file *file);
- int security_bprm_check(struct linux_binprm *bprm);
- void security_bprm_committing_creds(struct linux_binprm *bprm);
- void security_bprm_committed_creds(struct linux_binprm *bprm);
-+int security_fs_context_init(struct fs_context *fc, struct dentry *reference);
- int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc);
- int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param);
- int security_sb_alloc(struct super_block *sb);
-@@ -620,6 +621,11 @@ static inline void security_bprm_committed_creds(struct linux_binprm *bprm)
- {
- }
- 
-+static inline int security_fs_context_init(struct fs_context *fc,
-+					   struct dentry *reference)
-+{
-+	return 0;
-+}
- static inline int security_fs_context_dup(struct fs_context *fc,
- 					  struct fs_context *src_fc)
- {
-diff --git a/security/security.c b/security/security.c
-index 188b8f782220..e683027f9424 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -880,6 +880,11 @@ void security_bprm_committed_creds(struct linux_binprm *bprm)
- 	call_void_hook(bprm_committed_creds, bprm);
- }
- 
-+int security_fs_context_init(struct fs_context *fc, struct dentry *reference)
-+{
-+	return call_int_hook(fs_context_init, 0, fc, reference);
-+}
-+
- int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc)
- {
- 	return call_int_hook(fs_context_dup, 0, fc, src_fc);
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 1bbd53321d13..ddeaff4f3bb1 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -2768,6 +2768,34 @@ static int selinux_umount(struct vfsmount *mnt, int flags)
- 				   FILESYSTEM__UNMOUNT, NULL);
- }
- 
-+static int selinux_fs_context_init(struct fs_context *fc,
-+				   struct dentry *reference)
-+{
-+	const struct superblock_security_struct *sbsec;
-+	const struct inode_security_struct *root_isec;
-+	struct selinux_mnt_opts *opts;
-+
-+	if (fc->purpose == FS_CONTEXT_FOR_SUBMOUNT) {
-+		opts = kzalloc(sizeof(*opts), GFP_KERNEL);
-+		if (!opts)
-+			return -ENOMEM;
-+
-+		root_isec = backing_inode_security(reference->d_sb->s_root);
-+		sbsec = selinux_superblock(reference->d_sb);
-+		if (sbsec->flags & FSCONTEXT_MNT)
-+			opts->fscontext_sid	= sbsec->sid;
-+		if (sbsec->flags & CONTEXT_MNT)
-+			opts->context_sid	= sbsec->mntpoint_sid;
-+		if (sbsec->flags & ROOTCONTEXT_MNT)
-+			opts->rootcontext_sid	= root_isec->sid;
-+		if (sbsec->flags & DEFCONTEXT_MNT)
-+			opts->defcontext_sid	= sbsec->def_sid;
-+		fc->security = opts;
-+	}
-+
-+	return 0;
-+}
-+
- static int selinux_fs_context_dup(struct fs_context *fc,
- 				  struct fs_context *src_fc)
- {
-@@ -7239,6 +7267,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
- 	/*
- 	 * PUT "CLONING" (ACCESSING + ALLOCATING) HOOKS HERE
- 	 */
-+	LSM_HOOK_INIT(fs_context_init, selinux_fs_context_init),
- 	LSM_HOOK_INIT(fs_context_dup, selinux_fs_context_dup),
- 	LSM_HOOK_INIT(fs_context_parse_param, selinux_fs_context_parse_param),
- 	LSM_HOOK_INIT(sb_eat_lsm_opts, selinux_sb_eat_lsm_opts),
+ arch/x86/boot/compressed/head_64.S     | 2 +-
+ arch/x86/boot/compressed/mem_encrypt.S | 2 +-
+ arch/x86/kernel/ftrace_32.S            | 4 ++--
+ arch/x86/kernel/head_64.S              | 2 +-
+ arch/x86/math-emu/div_Xsig.S           | 2 +-
+ arch/x86/math-emu/reg_u_sub.S          | 2 +-
+ 6 files changed, 7 insertions(+), 7 deletions(-)
 
+
+base-commit: ff89dd08c0f0a3fd330c9ef9d775e880f82c291e
+-- 
+Kanna Scarlet
 

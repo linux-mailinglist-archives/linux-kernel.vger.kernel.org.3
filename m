@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C55589627
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 04:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD816589630
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 04:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239299AbiHDCe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 22:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S234308AbiHDCkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 22:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237493AbiHDCet (ORCPT
+        with ESMTP id S231136AbiHDCkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 22:34:49 -0400
+        Wed, 3 Aug 2022 22:40:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E1A5FAF1;
-        Wed,  3 Aug 2022 19:34:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F78140B6;
+        Wed,  3 Aug 2022 19:40:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E76A61790;
-        Thu,  4 Aug 2022 02:34:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94410C433C1;
-        Thu,  4 Aug 2022 02:34:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D243617C0;
+        Thu,  4 Aug 2022 02:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B22A8C433C1;
+        Thu,  4 Aug 2022 02:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659580486;
-        bh=2bSjUCVSOdvDJPYhExc2ULwhAVVJRZVuYhXgnRtbhtc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kGxq9CUI6c2GC2yFu+9dNXBexIDrJz9dghg7U+Iz94Z2ejreR/71TZZk+8KTXM0vo
-         bPueIpbyRJSyecSV80DOUiYcEluGdX5wUED9AYjK8duLOv0wlX1QANChDup85SvUVg
-         PHGjJfAAnaoaJ4/VwTPj230uFTzmPoZIWJR6DAMhu+IuCqGazHh8YhRioPc1vogHR9
-         EYb8BDkMqwbDp9qlEsglQVr/gZiqQuIuRzqNjtZweUt7/Dn2uJKWO1Vyz0GSJvirwj
-         f9JgqQ29yraHCwSr+1ZhpUxXBeADbqE2KeiOZoZhbxx7VYjJl6utAkesCkNR/Oxazf
-         Fs78coRqfXo5A==
-Date:   Wed, 3 Aug 2022 19:34:44 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Harini Katakam <harini.katakam@xilinx.com>
-Cc:     <nicolas.ferre@microchip.com>, <davem@davemloft.net>,
-        <richardcochran@gmail.com>, <claudiu.beznea@microchip.com>,
-        <andrei.pistirica@microchip.com>, <edumazet@google.com>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <michal.simek@xilinx.com>,
-        <harinikatakamlinux@gmail.com>, <michal.simek@amd.com>,
-        <harini.katakam@amd.com>, <radhey.shyam.pandey@amd.com>
-Subject: Re: [PATCH 0/2] Macb PTP enhancements
-Message-ID: <20220803193444.3b43730d@kernel.org>
-In-Reply-To: <20220802104346.29335-1-harini.katakam@xilinx.com>
-References: <20220802104346.29335-1-harini.katakam@xilinx.com>
+        s=k20201202; t=1659580814;
+        bh=MZUiCpyW7B9UKs13fFaI8X7dzwo4QUJ1YcUWTlo8s+g=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=fV8dl0L5DXt99vwQCfrRfpq3GuIYQHkBiGfM2bKA2Hklp1igRDA5NVtR5cELVmZUX
+         ji/eEOZMK8SlPWANWBTMwr9ETjd8I0OTc/I/WeQb8Y7yPtC6BqdSSQIi/a89YMp5nQ
+         foCiVAjbQpQvRv4/K8xpK7CMp8hxv9qTq/IOrkjKWJ9ft6xn8XFY9L0yBwA6ricgPW
+         81VYFo2D30VJ/Xq7K//Cp9ro8OXSV95QQw8dK09SuB4a7lv6P7QnCvUtRtlQB6CXKl
+         GmFEQlSMT78hf/91fZtPCrrlq2xs1c2+RCSPfg4WIqUZcrKYrwO6IPZqoV0TEfpyMN
+         mrRZt03C7FCdQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9754AC43144;
+        Thu,  4 Aug 2022 02:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: phy: Warn about incorrect mdio_bus_phy_resume()
+ state
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165958081461.15999.9493689639445901983.git-patchwork-notify@kernel.org>
+Date:   Thu, 04 Aug 2022 02:40:14 +0000
+References: <20220801233403.258871-1-f.fainelli@gmail.com>
+In-Reply-To: <20220801233403.258871-1-f.fainelli@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org, opendmb@gmail.com, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,20 +59,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 Aug 2022 16:13:44 +0530 Harini Katakam wrote:
-> From: Harini Katakam <harini.katakam@amd.com>
-> 
-> This series is a follow up for patches 2 and 3 from a previous series:
-> https://lore.kernel.org/all/ca4c97c9-1117-a465-5202-e1bf276fe75b@microchip.com/
-> https://lore.kernel.org/all/20220517135525.GC3344@hoboy.vegasvil.org/
-> Sorry for the delay.
-> 
-> ACK is added only to patch 3 (now patch 2).
-> Patch 1 is updated with check for gem_has_ptp as per Claudiu's comments.
+Hello:
 
-These were separated from the earlier series as non-fixes, right?
-But we are in the period of merge window right now, when all the
-new features flow to Linus's tree and we only take fixes to avoid
-conflicts and give maintainers time to settle the existing ones.
-So these need to wait until -rc1 is cut. (Or is patch 1 a bug fix? 
-I can't tell.)
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon,  1 Aug 2022 16:34:03 -0700 you wrote:
+> Calling mdio_bus_phy_resume() with neither the PHY state machine set to
+> PHY_HALTED nor phydev->mac_managed_pm set to true is a good indication
+> that we can produce a race condition looking like this:
+> 
+> CPU0						CPU1
+> bcmgenet_resume
+>  -> phy_resume
+>    -> phy_init_hw
+>  -> phy_start
+>    -> phy_resume
+>                                                 phy_start_aneg()
+> mdio_bus_phy_resume
+>  -> phy_resume
+>     -> phy_write(..., BMCR_RESET)
+>      -> usleep()                                  -> phy_read()
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] net: phy: Warn about incorrect mdio_bus_phy_resume() state
+    https://git.kernel.org/netdev/net/c/744d23c71af3
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

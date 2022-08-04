@@ -2,228 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A5B5898F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D33589904
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239417AbiHDIE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50910 "EHLO
+        id S239400AbiHDIKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239396AbiHDIEY (ORCPT
+        with ESMTP id S231777AbiHDIJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:04:24 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F7461DB6
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:04:21 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VLLXZiJ_1659600257;
-Received: from 30.240.99.20(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VLLXZiJ_1659600257)
-          by smtp.aliyun-inc.com;
-          Thu, 04 Aug 2022 16:04:18 +0800
-Message-ID: <bc0d16a6-e340-e261-82a0-e17bd236c2d9@linux.alibaba.com>
-Date:   Thu, 4 Aug 2022 16:04:17 +0800
+        Thu, 4 Aug 2022 04:09:58 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB5461DA4;
+        Thu,  4 Aug 2022 01:09:56 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0AC4C5C01C1;
+        Thu,  4 Aug 2022 04:09:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Thu, 04 Aug 2022 04:09:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1659600594; x=
+        1659686994; bh=dPVd4gV1h4qR91/25oTaDRGFw63vpCO4NGp4fr1eceQ=; b=L
+        4C5zAJ5GJihpjtPjr+i70KY92QwrHIPm60/rqiDBhOetsO8vTQnPJ4bmUi01qusM
+        xe6oKGQRb6tzXNU9Eh+wDY8OSRhNbOC41yLizM1+lP1TBWQqTq+UhBCCpxUdCX9+
+        /KYXLHBMNN7oNXWa/SCgRblPuBuC3UasqylTI+thLb4tKsPrGBZMA0WiE5fVICv4
+        RWOpPe5PEnTLmPVeuiOodoUShiU91jsbbIUtApJybz36jXo18kHkbm2LMI6DVvxd
+        nUDVvSHzUNj2TyW72hivREMsw5h5L7dFEkAOY27aX5+60n926wW6hC6JS/iirE1t
+        Tyfi+hVgnY8KWjIFez3vQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659600594; x=1659686994; bh=dPVd4gV1h4qR91/25oTaDRGFw63v
+        pCO4NGp4fr1eceQ=; b=v7gNwiGp2euhBWd7JCNVz8DAbEteA3Y2KfleVSzfFU8b
+        WJDkdspIxWE0JuvNqaC/2UbWji8JAmopZOlTg7d8C6vdd2ym3GBFxzKhekK+WbAl
+        mxMa/BuZ3OMPLyzNktTnJHlAb4RDObzNBcHQWBypIdwfhuOpIXSM6sHBL1yANIe/
+        fztaH8IAA+zITURn37gLXKt93QYVE0YF1YDd3iFVmOkuTtEvp/8ooc8snBbuRUAZ
+        IH+4wLT2fF62lQbibdY3fF/N3NVzzNL2IINLrcBqUDELN7vdwczeKXGojNU2laES
+        //07+dWI2cIR1ejbxhJzVcfUqQTaf1N/JKWkyFL0oQ==
+X-ME-Sender: <xms:0X7rYsUD7RT-JtCYj0mEIGszbzNjwPLTJ_ZVx0CAd8sHvPrVqImMzw>
+    <xme:0X7rYgm133FVbNiY2v-EQ_5m92jX_pYiEBBV2FLO3XVdWo4eHuN5OoKP4oIv7JXfm
+    udo-fy7ntMoTZarWjI>
+X-ME-Received: <xmr:0X7rYgaDkiKErWlNj4j2qdUEc0Zb4NODb5gHvsDLq4uPJxdsNV7icGH8TEw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvkedgudeftdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeflohhs
+    hhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgheqne
+    cuggftrfgrthhtvghrnhepleeljeduiefguedtffejledttdehvdefhffhgfdvieelvddu
+    teefkeeuvdelhffhnecuffhomhgrihhnpeeffedrshhonecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhoshhhsehjohhshhhtrhhiphhlvght
+    thdrohhrgh
+X-ME-Proxy: <xmx:0X7rYrWZhJxJyP82-X2_eCJdO2kmZA00aguZJJ4XLxPvUUYJx-N17A>
+    <xmx:0X7rYmnUrau23hsiPMrZMEU83qhrJiVAKIm4jCjZ9KEQ-fRkkB31Lg>
+    <xmx:0X7rYgdjjKUIrevfOBnKTgGyyj4wi0HT9r7kwMCB3gn7jkIRLfdgdQ>
+    <xmx:0n7rYrylTb8OaFlub4CgFSZW64moEryMmfCOou0x9XcHtbAzeSV1BQ>
+Feedback-ID: i83e94755:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 4 Aug 2022 04:09:53 -0400 (EDT)
+Date:   Thu, 4 Aug 2022 01:09:52 -0700
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Dump command line of faulting process to syslog
+Message-ID: <Yut+0Fg7F99MI48J@localhost>
+References: <20220801152016.36498-1-deller@gmx.de>
+ <YugGFEjJvIwzifq7@localhost>
+ <a0bf15a2-2f9c-5603-3adb-ffa705572a92@gmx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.3
-Subject: Re: [RFC PATCH V4 1/1] mm: add last level page table numa info to
- /proc/pid/numa_pgtable
-To:     David Hildenbrand <david@redhat.com>, willy@infradead.org
-Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220801121727.76186-1-xhao@linux.alibaba.com>
- <20220801121727.76186-2-xhao@linux.alibaba.com>
- <0c1f9e76-9b1d-7069-bb09-c18e4f19f0c4@redhat.com>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <0c1f9e76-9b1d-7069-bb09-c18e4f19f0c4@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0bf15a2-2f9c-5603-3adb-ffa705572a92@gmx.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 02, 2022 at 09:40:50PM +0200, Helge Deller wrote:
+> On 8/1/22 18:57, Josh Triplett wrote:
+> > On Mon, Aug 01, 2022 at 05:20:13PM +0200, Helge Deller wrote:
+> >> This patch series allows the arch-specific kernel fault handlers to dump
+> >> in addition to the typical info (IP address, fault type, backtrace and so on)
+> >> the command line of the faulting process.
+> >>
+> >> The motivation for this patch is that it's sometimes quite hard to find out and
+> >> annoying to not know which program *exactly* faulted when looking at the syslog.
+> >>
+> >> Some examples from the syslog are:
+> >>
+> >> On parisc:
+> >>    do_page_fault() command='cc1' type=15 address=0x00000000 in libc-2.33.so[f6abb000+184000]
+> >>    CPU: 1 PID: 13472 Comm: cc1 Tainted: G            E     5.10.133+ #45
+> >>    Hardware name: 9000/785/C8000
+> >>
+> >> -> We see the "cc1" compiler crashed, but it would be useful to know which file was compiled.
+> >>
+> >> With this patch series, the kernel now prints in addition:
+> >>    cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu -D USE_MINIINTERPRETER -D NO_REGS -D _HPUX_SOURCE -D NOSMP -D THREADED_RTS -include /build/ghc/ghc-9.0.2/includes/dist-install/build/ghcversion.h -iquote compiler/GHC/Iface -quiet -dumpdir /tmp/ghc13413_0/ -dumpbase ghc_5.hc -dumpbase-ext .hc -O -Wimplicit -fno-PIC -fwrapv -fno-builtin -fno-strict-aliasing -o /tmp/ghc13413_0/ghc_5.s
+> >>
+> >> -> now we know that cc1 crashed while compiling some haskell code.
+> >
+> > This does seem really useful for debugging.
+> 
+> Yes.
+> 
+> > However, it's also an information disclosure in various ways. The
+> > arguments of a program are often more sensitive than the name, and logs
+> > have a tendency to end up in various places, such as bug reports.
+> >
+> > An example of how this can be an issue:
+> > - You receive an email or other message with a sensitive link to follow
+> > - You open the link, which launches `firefox https://...`
+> > - You continue browsing from that window
+> > - Firefox crashes (and recovers and restarts, so you don't think
+> >   anything of it)
+> > - Later, you report a bug on a different piece of software, and the bug
+> >   reporting process includes a copy of the kernel log
+> 
+> Yes, that's a possible way how such information can leak.
+> 
+> > I am *not* saying that we shouldn't do this; it seems quite helpful.
+> > However, I think we need to arrange to treat this as sensitive
+> > information, similar to kptr_restrict.
+> 
+> I wonder what the best solution could be.
+> 
+> A somewhat trivial solution is to combine it with the dmesg_restrict sysctl, e.g.:
+> 
+> * When ``dmesg_restrict`` is set to 0 there are no restrictions for users to read
+> dmesg. In this case my patch would limit the information (based on example above):
+>     cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 [note: other parameters hidden due to dmesg_restrict=0 sysctl]
+> So it would show the full argv[0] with a hint that people would need to change dmesg_restrict.
+> 
+> * When ``dmesg_restrict`` is set to 1, users must have ``CAP_SYSLOG`` to use dmesg(8)
+> and the patch could output all parameters:
+>      cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu ....
+> 
+> That would of course still leave few possible corner-cases where information
+> could leak, but since usually programs shouldn't crash and that
+> people usually shouldn't put sensitive information into the parameter
+> list directly, it's somewhat unlikely to happen.
+> 
+> Another different solution would be to add another sysctl.
+> 
+> Any other ideas?
 
-在 2022/8/1 下午9:28, David Hildenbrand 写道:
-> On 01.08.22 14:17, Xin Hao wrote:
->> In many data center servers, the shared memory architectures is
->> Non-Uniform Memory Access (NUMA), remote numa node data access
->> often brings a high latency problem, but what we are easy to ignore
->> is that the page table remote numa access, It can also leads to a
->> performance degradation.
-> Let me try rewriting:
->
-> "
-> Many data center servers employ Non-Uniform Memory Access (NUMA)
-> architectures. Remote numa memory access results in high latency. While
-> memory placement is one issue, sub-optimal page table placement can also
-> result in surprise performance degradation.
-> "
-Thanks,  it reads more clearly.
-
->> So there add a new interface in /proc, This will help developers to
->> get more info about performance issues if they are caused by cross-NUMA.
->
-> Why do we only care about "last level page table", why not about the others?
->
-> IMHO, we could emit something like "0, 1, 3, 0" instead for a given user
-> space address, showing the NUMA node the page table belongs to from
-> highest to lowest page table level.
-
-I have planned to implement the PTE page table in this version first,  
-and then support other page tables in the next patch later.
-
->
->> Reported-by: kernel test robot <lkp@intel.com>
-> The kernel test robot reported that we need "/proc/pid/numa_pgtable" ?! :)
->
-> Just drop that unless it's a follow-up fix.
-Get it.
->
->> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
->> ---
->>   fs/proc/base.c     |  2 ++
->>   fs/proc/internal.h |  1 +
->>   fs/proc/task_mmu.c | 87 ++++++++++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 90 insertions(+)
->>
->> diff --git a/fs/proc/base.c b/fs/proc/base.c
->> index 8dfa36a99c74..487e82dd3275 100644
->> --- a/fs/proc/base.c
->> +++ b/fs/proc/base.c
->> @@ -3224,6 +3224,7 @@ static const struct pid_entry tgid_base_stuff[] = {
->>   	REG("maps",       S_IRUGO, proc_pid_maps_operations),
->>   #ifdef CONFIG_NUMA
->>   	REG("numa_maps",  S_IRUGO, proc_pid_numa_maps_operations),
->> +	REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
->>   #endif
->>   	REG("mem",        S_IRUSR|S_IWUSR, proc_mem_operations),
->>   	LNK("cwd",        proc_cwd_link),
->> @@ -3571,6 +3572,7 @@ static const struct pid_entry tid_base_stuff[] = {
->>   #endif
->>   #ifdef CONFIG_NUMA
->>   	REG("numa_maps", S_IRUGO, proc_pid_numa_maps_operations),
->> +	REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
->>   #endif
->>   	REG("mem",       S_IRUSR|S_IWUSR, proc_mem_operations),
->>   	LNK("cwd",       proc_cwd_link),
->> diff --git a/fs/proc/internal.h b/fs/proc/internal.h
->> index 06a80f78433d..e7ed9ef097b6 100644
->> --- a/fs/proc/internal.h
->> +++ b/fs/proc/internal.h
->> @@ -296,6 +296,7 @@ struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode);
->>
->>   extern const struct file_operations proc_pid_maps_operations;
->>   extern const struct file_operations proc_pid_numa_maps_operations;
->> +extern const struct file_operations proc_pid_numa_pgtable_operations;
->>   extern const struct file_operations proc_pid_smaps_operations;
->>   extern const struct file_operations proc_pid_smaps_rollup_operations;
->>   extern const struct file_operations proc_clear_refs_operations;
->> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
->> index 2d04e3470d4c..77b7a49757f5 100644
->> --- a/fs/proc/task_mmu.c
->> +++ b/fs/proc/task_mmu.c
->> @@ -1999,4 +1999,91 @@ const struct file_operations proc_pid_numa_maps_operations = {
->>   	.release	= proc_map_release,
->>   };
->>
->> +struct pgtable_numa_private {
->> +	struct proc_maps_private proc_maps;
->> +	unsigned long node[MAX_NUMNODES];
->> +};
->> +
->> +static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
->> +				     unsigned long end, struct mm_walk *walk)
->> +{
->> +	struct pgtable_numa_private *priv = walk->private;
->> +	struct page *page;
->> +	int nid;
->> +
->> +	if (pmd_huge(*pmd)) {
->> +		page = virt_to_page(pmd);
->> +	} else {
->> +		page = pmd_page(*pmd);
->> +	}
->> +
->> +	nid = page_to_nid(page);
->> +	priv->node[nid]++;
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct mm_walk_ops show_numa_pgtable_ops = {
->> +	.pmd_entry = gather_pgtable_numa_stats,
->> +};
->> +
->> +/*
->> + * Display the page talbe allocated per node via /proc.
-> s/talbe/table/
->
-> but the comment somehow doesn't make sense. We don't display a page table.
->
->> + */
->> +static int show_numa_pgtable(struct seq_file *m, void *v)
->> +{
->> +	struct pgtable_numa_private *numa_priv = m->private;
->> +	struct vm_area_struct *vma = v;
->> +	struct mm_struct *mm = vma->vm_mm;
->> +	struct file *file = vma->vm_file;
->> +	int nid;
->> +
->> +	if (!mm)
->> +		return 0;
->> +
->> +	memset(numa_priv->node, 0, sizeof(numa_priv->node));
->> +
->> +	seq_printf(m, "%08lx ", vma->vm_start);
->> +
->> +	if (file) {
->> +		seq_puts(m, " file=");
->> +		seq_file_path(m, file, "\n\t= ");
->> +	} else if (vma->vm_start <= mm->brk && vma->vm_end >= mm->start_brk) {
->> +		seq_puts(m, " heap");
->> +	} else if (is_stack(vma)) {
->> +		seq_puts(m, " stack");
->> +	}
->> +
->> +	/* mmap_lock is held by m_start */
->> +	walk_page_vma(vma, &show_numa_pgtable_ops, numa_priv);
->> +
->> +	for_each_node_state(nid, N_MEMORY) {
->> +		if (numa_priv->node[nid])
->> +			seq_printf(m, " N%d=%lu", nid, numa_priv->node[nid]);
->> +	}
->> +	seq_putc(m, '\n');
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct seq_operations proc_pid_numa_pgtable_op = {
->> +	.start  = m_start,
->> +	.next   = m_next,
->> +	.stop   = m_stop,
->> +	.show   = show_numa_pgtable,
->> +};
->> +
->> +static int pid_numa_pgtable_open(struct inode *inode, struct file *file)
->> +{
->> +	return proc_maps_open(inode, file, &proc_pid_numa_pgtable_op,
->> +			sizeof(struct pgtable_numa_private));
->> +}
->> +
->> +const struct file_operations proc_pid_numa_pgtable_operations = {
->> +	.open		= pid_numa_pgtable_open,
->> +	.read		= seq_read,
->> +	.llseek		= seq_lseek,
->> +	.release	= proc_map_release,
->> +};
->> +
->>   #endif /* CONFIG_NUMA */
->> --
->> 2.31.0
->>
->
+I don't think we should overload the meaning of dmesg_restrict. But
+overloading kptr_restrict seems reasonable to me. (Including respecting
+kptr_restrict==2 by not showing this at all.)

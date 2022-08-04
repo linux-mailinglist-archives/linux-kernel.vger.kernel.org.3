@@ -2,62 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DB4589FFE
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E07D758A002
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237144AbiHDRoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 13:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S239328AbiHDRqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 13:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbiHDRoA (ORCPT
+        with ESMTP id S239321AbiHDRqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 13:44:00 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDA11758A
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 10:44:00 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id o3so498137ple.5
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 10:44:00 -0700 (PDT)
+        Thu, 4 Aug 2022 13:46:22 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA74113FAD;
+        Thu,  4 Aug 2022 10:46:19 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 73so501664pgb.9;
+        Thu, 04 Aug 2022 10:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=/ppL5FkBSrChQnljuBdNYbX2wAl9Ivpv6wHBOwZJkEM=;
-        b=mxw+F/7z3YXIMcgO7ctt+zVucnEskLncvgAK2HJeOmAnYh6Cph2ZRwfxDM1CRaSTOi
-         iVzoLZzyS7etkgfM34YtE8JSjm9mqUzPZfnK+MZguv/duKOEV9jPlCLA5kAziuFnPkge
-         bvWaLalW2JFcojyhfq6AO1gwrvtni8dZX3mZbSXLx4TPoTpRIs6cMvFu5wMgOVud8Rsn
-         igo7++jcY0Q/pFvz5iEzmM+BK4VN/kLapf4xHAX+IGgt2tyh/sG8JoV4iUZq6wkeLMhR
-         +n3po08Nut7agW9E9IMHR/bSt/ITrdC06VY7sAHjmKlx4Jy3RfINmQ3Fjpbzwv5k0PKS
-         vS8w==
+        bh=5PGSzs/RHLl4IHT0dS6eKTXoAtufKMWNCxKjyskNDOc=;
+        b=OPwaMWyyNWcKS4pX4rm7X/nACsfm6WSTCGj0Nql2nxvhJjSAENVYUJSVSx/ZWKcWDC
+         fPzlypiDbpIfbx2aOR0Kpkk91qu7Zs0gie84iH7ewzB4wbYOFhq4uvxD8p3Xi+pL4J9/
+         3HHMOTdNMEW9oK/nCFvD3RYuldtMyO/2BLrMuy4dcSMLOu3bCN9zupX0n9yFrJpwdh0f
+         6SeX1ncImbKJdqC6DXEcAGqLIdRoxxoIRbfaP6dtBCzy2z7VDFs5JMzymnC2Y/30WWZW
+         87saak1BeKIT5T17tlgCae/cJy6HD2RCEgYY6lrd3k9OSJGMVeL8p56lqYA+6DmqoLlu
+         R/uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=/ppL5FkBSrChQnljuBdNYbX2wAl9Ivpv6wHBOwZJkEM=;
-        b=7e1KKUweF67DzhZ08EDSHH3xRCuE8qynn85mj6iUsL0iNVIxaxUwzZfqbB53i4YE9D
-         215tu+Q3UFLlaIogiZUePpsyIrGYj7RRmllOkL8rKT0c0Jo6546p9tn1Uik0dgQg+o2g
-         I9VKxzKPccShg2AA1wC3gC+vtgOTFOqGBqEeOOVi7/PfSE32Xrdz8og8IuKokfaMHzq3
-         0ACxebfMywDl74/g98Isz9WbPSFhC0HrP1YdqCwlep/9dFLbVsafDx9pBLTmphUgVssX
-         a8wVWnShsL+b45fRMdleHCXK5H75kZIWih2tXCoIjg5gucgiaC0/E7qHRyDeLu93NAWe
-         DfEg==
-X-Gm-Message-State: ACgBeo1k0z61c4re2/i+QHRhEsSNmugvpVls72QL07RPuhCzuc4gbYzu
-        w7bC0rOg5yUVjZAE1gpyNbLmh2Uux059zocPpJU=
-X-Google-Smtp-Source: AA6agR7xuV+991n6wMtC1ouAKAX7cI9gnY4rfxk9Dx/AvAaj9pYd/kwMVjbYwLgCyuGOWyg0bJBA+anG/BFDOzPSwxQ=
-X-Received: by 2002:a17:90b:1b45:b0:1f3:1974:eb8 with SMTP id
- nv5-20020a17090b1b4500b001f319740eb8mr3231740pjb.200.1659635039717; Thu, 04
- Aug 2022 10:43:59 -0700 (PDT)
+        bh=5PGSzs/RHLl4IHT0dS6eKTXoAtufKMWNCxKjyskNDOc=;
+        b=7skpDbsggmcoqdUEgqGnWVOkew6TGZJ4sOtNZEeKOHs2IvM+VtiBN/Hx047MR9OFXJ
+         xO/+e00skCQ4PweOCJIGXu8iUsx8ttwRQTLPCV9hF3agDReTz5S1C/oeTvEklzs0wcIo
+         Yz1wUJB3rzdMAuxVMBveQcegKfG0QhSqFE6zFdz1FKPAQuuiZrNSh3SoyIHzbBn0gKyy
+         YH0rQ5vmAEg7KZSsvDlq1fkPrevcDoW+TxPgmse201lcAfLjDZNIGcEZWam7Ip7zZFYH
+         iiAHoCSb1LkpWGCBIToH3KQ7iQf/+0m9MYM/kiWqq9qgCaM/VbGD4N+c0ZkZIhHl3wiD
+         x5+w==
+X-Gm-Message-State: ACgBeo17+J1jUbGFCPl7Ci5EK1de4Ar3bDYWGkhlZh45lswqQn73X9Ab
+        XMVO0nC/o+quHthmHyYGk4akkRgWOv2tqby5Jdg=
+X-Google-Smtp-Source: AA6agR4Un5RgIDZjtzNT/XPhuLLmf6rW51HWiK0MwSPytih+XN8Xi+k9yuWmBVramGhSHwIeOdMik6oHG6uuGsx2qdI=
+X-Received: by 2002:a65:5503:0:b0:41b:bbdc:9a5d with SMTP id
+ f3-20020a655503000000b0041bbbdc9a5dmr2418981pgr.587.1659635179149; Thu, 04
+ Aug 2022 10:46:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220803220329.46299-1-peterx@redhat.com>
-In-Reply-To: <20220803220329.46299-1-peterx@redhat.com>
+References: <20220801210946.3069083-1-zokeefe@google.com> <YujpzGKImMQsn8SM@dhcp22.suse.cz>
+ <CAAa6QmS=VbsdvHgvFQCceV+pYHwSSj1pjhX3_voz12T4rJ-EBQ@mail.gmail.com>
+ <YukSvpPRuus2bHOu@dhcp22.suse.cz> <CAAa6QmS2aAtJyWPFi1to99o=vHWFmiQRW72+3HdZ-4qGk2FT5Q@mail.gmail.com>
+In-Reply-To: <CAAa6QmS2aAtJyWPFi1to99o=vHWFmiQRW72+3HdZ-4qGk2FT5Q@mail.gmail.com>
 From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 4 Aug 2022 10:43:47 -0700
-Message-ID: <CAHbLzkoztB1LNOtNWa=8GPABF5xConGox2D1ebdD97467Ykb1A@mail.gmail.com>
-Subject: Re: [PATCH] mm/smaps: Don't access young/dirty bit if pte unpresent
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+Date:   Thu, 4 Aug 2022 10:46:06 -0700
+Message-ID: <CAHbLzkqiWsmwO4Q6nKQ3yoLSWvuoFiTmDCqFMHzN1bqD1xs-aQ@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable] mm/madvise: remove CAP_SYS_ADMIN requirement
+ for process_madvise(MADV_COLLAPSE)
+To:     "Zach O'Keefe" <zokeefe@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
         David Hildenbrand <david@redhat.com>,
-        Konstantin Khlebnikov <khlebnikov@openvz.org>
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Xu <peterx@redhat.com>,
+        Rongwei Wang <rongwei.wang@linux.alibaba.com>,
+        SeongJae Park <sj@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Zi Yan <ziy@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Chris Kennelly <ckennelly@google.com>,
+        Chris Zankel <chris@zankel.net>, Helge Deller <deller@gmx.de>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Patrick Xia <patrickx@google.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -69,49 +97,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 3:03 PM Peter Xu <peterx@redhat.com> wrote:
+On Tue, Aug 2, 2022 at 12:43 PM Zach O'Keefe <zokeefe@google.com> wrote:
 >
-> These bits should only be valid when the ptes are present.  Introducing two
-> booleans for it and set it to false when !pte_present().
+> On Tue, Aug 2, 2022 at 5:04 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Tue 02-08-22 02:48:33, Zach O'Keefe wrote:
+> > [...]
+> > > "mm/madvise: add MADV_COLLAPSE to process_madvise()" in the v7 series
+> > > ended with me mentioning a couple options, but ultimately I didn't
+> > > present a solution, and no consensus was reached[1]. After taking a
+> > > closer look, this is my proposal for what I believe to be the best
+> > > path forward. It should be squashed into the original patch. What do you think?
+> >
+> > If it is agreed that the CAP_SYS_ADMIN is too strict of a requirement
+> > then yes, this should be squashed into the original patch. There is no
+> > real reason to create a potential bisection headache by changing the
+> > permission model in a later patch.
 >
-> Cc: Konstantin Khlebnikov <khlebnikov@openvz.org>
-> Fixes: b1d4d9e0cbd0 ("proc/smaps: carefully handle migration entries", 2012-05-31)
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+> Sorry about the confusion here. Assumed (incorrectly) that Andrew
+> would kindly squash this in mm-unstable since I added the Fixes: tag.
+> Next time I'll add some explicit verbiage saying it should be
+> squashed.
+>
+> > From my POV, I would agree that CAP_SYS_ADMIN is just too strict of a
+> > requirement.
+> >
+> > I didn't really have time to follow recent discussions but I would argue
+> > that the operation is not really destructive or seriously harmful. All
+> > applications can already have their memory (almost) equally THP
+> > collapsed by khupaged with the proposed process_madvise semantic.
+> >
+> > NOHUGEMEM and prctl opt out from THP are both honored AFAIU and the only
+> > difference is the global THP killswitch behavior which I do not think
+> > warrants the strongest CAP_SYS_ADMIN capability (especially because it
+> > doesn't really control all kinds of THPs).
+>
+> Ya. In fact, I don't think the ignoring the THP sysfs controls
+> warrants any additional capability (set alone CAPS_SYS_ADMIN), since a
+> malicious program can't really inflict any more damage than they would
+> with CAP_SYS_NICE and PTRACE_MODE_READ.
+>
+> > If there is a userspace agent collapsing memory and causing problems
+> > then it can be easily fixed in the userspace. And I find that easier
+> > to do than putting the bar so high that userspace agents would be
+> > unfeasible because of CAP_SYS_ADMIN (which is nono in many cases as it
+> > would allow essentially full control of other stuff). So from practical
+> > POV, risking an extended RSS is really a negligible risk to lose a
+> > potentially useful feature for all others.
+> >
+>
+> Agreed.
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
++1
 
-> ---
->  fs/proc/task_mmu.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
 >
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 9913f3be9fd2..482f91577f8c 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -527,10 +527,12 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
->         struct vm_area_struct *vma = walk->vma;
->         bool locked = !!(vma->vm_flags & VM_LOCKED);
->         struct page *page = NULL;
-> -       bool migration = false;
-> +       bool migration = false, young = false, dirty = false;
+> Thanks for taking the time, Michal!
+> Zach
 >
->         if (pte_present(*pte)) {
->                 page = vm_normal_page(vma, addr, *pte);
-> +               young = pte_young(*pte);
-> +               dirty = pte_dirty(*pte);
->         } else if (is_swap_pte(*pte)) {
->                 swp_entry_t swpent = pte_to_swp_entry(*pte);
 >
-> @@ -560,8 +562,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
->         if (!page)
->                 return;
->
-> -       smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte),
-> -                     locked, migration);
-> +       smaps_account(mss, page, false, young, dirty, locked, migration);
->  }
->
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> --
-> 2.32.0
->
+> > Just my 2c
+> >
+> > > Thanks again,
+> > > Zach
+> > >
+> > > [1] https://lore.kernel.org/linux-mm/Ys4aTRqWIbjNs1mI@google.com/
+> >
+> > --
+> > Michal Hocko
+> > SUSE Labs

@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D6F589FC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC72F589FC9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236941AbiHDRRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 13:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
+        id S237992AbiHDRRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 13:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232927AbiHDRRO (ORCPT
+        with ESMTP id S232927AbiHDRRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 13:17:14 -0400
+        Thu, 4 Aug 2022 13:17:41 -0400
 Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FAA6A485;
-        Thu,  4 Aug 2022 10:17:12 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id i14so475384ejg.6;
-        Thu, 04 Aug 2022 10:17:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805635C9D2
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 10:17:40 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id j8so445004ejx.9
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 10:17:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QsqdAv7lzfCzVrls5e3D/1HBUNjDsakydLuhi3H9Yhg=;
-        b=KmSc8/HSgtUjLn/eY3kel/629G+B2lunQLmO6hXxq1nf+hYt51xD57hD1DUHn14NDV
-         GuU4KrLJBRZPUCk/xtb8q7q4qV+gtwvIFPFYmCfo6ZczQeKDHnxNi6Q4FPM08VGpxN9F
-         AT2hgVK6n6aHUnbW7RdrTyTADlBpkKFIdJi/mlRALt5sk3rDKNYsClN4hAF6HYk2k8ud
-         AJh7F1chqTi24O7vdHwXGlWZHnmz1jqddqvqXf9b9QUzCL28CUpEyeuoo2C/WzE5HbWU
-         m49pWie4g/HPSf5BUPsb/VsJx59+rh8m4muCh1vOzFiPnCaCOs0qaYRbKAY0vyKYSgmW
-         zbNg==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=W3oQTjR935kyPwW8JTzNphawSp0RrVbBZvc3FA95SqM=;
+        b=CXWDpj8EE+E/y1A4LLIdWpEV4dz6BU5+YOyxOh/YLtPkJwFlBJB1T2YAT5I0CWpJbm
+         VVDqDcqzQQ8s3ioCrfGbckfIaXDN/DMIQcyKDaq2cGGklhoikD/bu8Yh47Rv2wLjHhXb
+         ti4AKQ9roXLqZxh+MOQdxpogEjPOBzv2zGxt8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QsqdAv7lzfCzVrls5e3D/1HBUNjDsakydLuhi3H9Yhg=;
-        b=r9X5X9bseGsz6VjJWkRCtgkqSA603GliEdUhsmup86x0lLzMkZ2OALE3BKOMqEzJM9
-         mh6T2cT2SADWRZSE0Kqth9XrZ0iZ/6VBEiiH/Vbu/kwMfw7R+2+fijMic4RfVv0OCDbZ
-         9dTitVekV2LGk7UqFdMND+gdtieyvhVkFiH4B+OrLevx/tMwjwKaFc8bGLC6qrXG6d5z
-         IOLMWqjEit0PwSixEySW1gMzS6zRwyWwLG5+iMjScY6xGdNgFNvB/KJ0xdrL22DKtWnU
-         VceIL3ayB2fCscpSpOwKP3CeHXjssodVMUYO7hf0oQRihL14i4IXx9gWouRuFdI/bqVB
-         LSjA==
-X-Gm-Message-State: ACgBeo3o34pWLtCvmV4r0BgMrBXIM3kwoNAd6Z/3FmVFhmavvKDdbZAR
-        XfqFyNnF182o6GA9wD1iAJvuGRsI3T25dUBsciY=
-X-Google-Smtp-Source: AA6agR6OoOj08B7Hsh9uYlMY2QWamsku3wjAUwuzJj8XR5bHi7H75/jMIvGbCspmJi45/sQjkh7ZRgWruXaZmSq+nfE=
-X-Received: by 2002:a17:907:6e02:b0:72b:9f16:1bc5 with SMTP id
- sd2-20020a1709076e0200b0072b9f161bc5mr2244766ejc.676.1659633430590; Thu, 04
- Aug 2022 10:17:10 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=W3oQTjR935kyPwW8JTzNphawSp0RrVbBZvc3FA95SqM=;
+        b=RKyprCBoto//mRXYle0gLKPG7KDI42a6NQXXcK4/rqr6g6scxBQbT3Lau3AytIfgHP
+         gNBCZku0t9KIMSCK17t4bdPkD0I0bfFwiqjp6H5H3Uou5jD2BpxFm0Fa/1Xd4OeyUiW0
+         93eMHGbzpw+MAR4xU009yDQcPzsMXMu5+W86phsytt/YIHI5HNk4HXe54LQtm42DGHc9
+         lkLHfROWZ9/UVFLgPPr+m08/N5BYg1U07zAoHCQ/ABB1dkcyXTTMJX1wfka7M1LQlo51
+         lL4WYly/CZcZbRaZM0tkMaQaYdXP2y/4nzOsYQEUeXPgbI5E+ZUq5000HDWnNhj5KkAF
+         FxzQ==
+X-Gm-Message-State: ACgBeo2bcOL5OVtbDnOW/Q94EH4XLnLWsA22pyJiclCJn+U3FFcw9/6E
+        g4mbAM1md+AQ7TZlwHzdd4Jn2Dt120OlduX7
+X-Google-Smtp-Source: AA6agR7mwNUrVGJA7N2W3aVndGP6lpplDqTbNb+JIuEo6FB8LzxfeywnlPeLzeZ0+DorUAyxbEP0FA==
+X-Received: by 2002:a17:907:7388:b0:730:5c18:da68 with SMTP id er8-20020a170907738800b007305c18da68mr2070330ejc.389.1659633458805;
+        Thu, 04 Aug 2022 10:17:38 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id j1-20020a17090623e100b0072abb95eaa4sm508615ejg.215.2022.08.04.10.17.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 10:17:38 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id j7so524673wrh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 10:17:38 -0700 (PDT)
+X-Received: by 2002:a5d:56cf:0:b0:21e:ce64:afe7 with SMTP id
+ m15-20020a5d56cf000000b0021ece64afe7mr2010623wrw.281.1659633457704; Thu, 04
+ Aug 2022 10:17:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220803134821.425334-1-lee@kernel.org>
-In-Reply-To: <20220803134821.425334-1-lee@kernel.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 4 Aug 2022 10:16:59 -0700
-Message-ID: <CAADnVQ+X_B4LC6CtYM1PXPA4BBprWLj5Qip--Eeu32Zti==Ydw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] bpf: Drop unprotected find_vpid() in favour of find_get_pid()
-To:     Lee Jones <lee@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>
+References: <Yut2otE1h2xtC79o@debian>
+In-Reply-To: <Yut2otE1h2xtC79o@debian>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 4 Aug 2022 10:17:21 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjPF0dXvDeqPiSzpev4KhhWU0-R8muaYVF73vy2Vw=QTw@mail.gmail.com>
+Message-ID: <CAHk-=wjPF0dXvDeqPiSzpev4KhhWU0-R8muaYVF73vy2Vw=QTw@mail.gmail.com>
+Subject: Re: mainline build failure due to 6fdd2077ec03 ("drm/amd/amdgpu: add
+ memory training support for PSP_V13")
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Chengming Gui <Jack.Gui@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,62 +80,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 6:48 AM Lee Jones <lee@kernel.org> wrote:
+On Thu, Aug 4, 2022 at 12:35 AM Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
 >
-> The documentation for find_pid() clearly states:
->
->   "Must be called with the tasklist_lock or rcu_read_lock() held."
->
-> Presently we do neither.
->
-> Let's use find_get_pid() which searches for the vpid, then takes a
-> reference to it preventing early free, all within the safety of
-> rcu_read_lock().  Once we have our reference we can safely make use of
-> it up until the point it is put.
->
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: bpf@vger.kernel.org
-> Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
-> Signed-off-by: Lee Jones <lee@kernel.org>
-> ---
->
-> v1 => v2:
->   * Commit log update - no code differences
->
->  kernel/bpf/syscall.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 83c7136c5788d..c20cff30581c4 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
->         const struct perf_event *event;
->         struct task_struct *task;
->         struct file *file;
-> +       struct pid *ppid;
->         int err;
->
->         if (CHECK_ATTR(BPF_TASK_FD_QUERY))
-> @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
->         if (attr->task_fd_query.flags != 0)
->                 return -EINVAL;
->
-> -       task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
-> +       ppid = find_get_pid(pid);
-> +       task = get_pid_task(ppid, PIDTYPE_PID);
-> +       put_pid(ppid);
+> I will be happy to test any patch or provide any extra log if needed.
 
-rcu_read_lock/unlock around this line
-would be a cheaper and faster alternative than pid's
-refcount inc/dec.
+It sounds like that file just needs to get a
+
+    #include <linux/vmalloc.h>
+
+there, and for some reason architectures other than alpha and mips end
+up getting it accidentally through other headers.
+
+Mind testing just adding that header file, and perhaps even sending a
+patch if (when) that works for you?
+
+                    Linus

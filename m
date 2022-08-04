@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF365897DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 08:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71FB5897DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 08:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238701AbiHDGrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 02:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S238809AbiHDGsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 02:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234863AbiHDGrS (ORCPT
+        with ESMTP id S234863AbiHDGsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 02:47:18 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EC13AB22
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 23:47:16 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-10e615a36b0so21773986fac.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 23:47:16 -0700 (PDT)
+        Thu, 4 Aug 2022 02:48:00 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFE63A485;
+        Wed,  3 Aug 2022 23:47:59 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso4371687pjq.0;
+        Wed, 03 Aug 2022 23:47:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Ca7aQlVikvTUFlDCLSka/jDf7Ip5XoALj+ESY5PyW7k=;
-        b=JDFrv3rzbdtOirKTznQHLZhYF9ipFJmFxhsVyFMFbNnBdmaRKzNAja9YgteJpJIZL7
-         K5llGj4dJrWS8/f0EKS29lYKVZRUO+6VOaQcRHmOfoo5Hvc4RFQsHv1M0IPstAJK9v8Z
-         ClGHHj5qUBV1IjnY/G4dgqkqE3rL36CEBCinaRMJ47HNLSNi3j+tLxbEKC1k+Ivipun7
-         3YtiIbZzZrCcVdOSWCmRhQcPz5Zpt1E5iRl9GFGF5cwMCvtC/cN1AfWUOHqKVe9tKFb2
-         9srcqx58Za3Dc2ANI8uZl2hV8tNjJrZ5GiH3+6uOmelSOpt0/FRmVsdE0H8ClsCPKLDK
-         glbA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=lJ2RcUH4YfpT8xs7Cl3kJdao+iEwbE0ETrJv8eZGZ68=;
+        b=pJ66Y+HXik9WqKVgF5atP1aNTacZkeLEM1AtfQWKWaBNA6QJLpA8yjCILmasHfZe7D
+         Mk2xj1+I6hLWfz84LI1ANXBKYUEIlv1Efp/jiLYPzlmV04nW1B+HgHjc089ep6D+M7Zk
+         PDk3zlAtKDac4MbAfXXHjrmTUTdqlr1lDcf74H/vHOrQyBI84cg/yvWVUXhFXDd7rwbd
+         h9gwh0MjsWX+p2xjvkh/KxbXzb/ETHEGGNmd5sf/LSN8Uu3hcgaYX4fnE60mGl0+SO5a
+         sdaE6VNRC7J+Fh9SiU8wJYDc22Tb3md0ECoU3Upw+7ZokkZZEPLz6yqVXek5jQoL/Wk0
+         RjvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Ca7aQlVikvTUFlDCLSka/jDf7Ip5XoALj+ESY5PyW7k=;
-        b=HpPGGUSCwpmuvu2JZzCcF4BdTwxKfCUm0zBmBoOfn8893rlYSTMeaM68dSnkt1MloL
-         1sJ81h0RUf7u71UHZN99VpH+f5UcACr/QlO65JaVwaEWVUrH8Kk5AIkXhJynMXeI5dUd
-         v8RsPwgHm+ViUYFVPjVUzdlxgrgvrfyqQrf5zYVRvpZq4FDLyXFGT8DpxyKo5JqmaGNJ
-         uQ5CncrdSAOtCusOpaLVi/b+GSHR+SgQJI0rWaxE29M6A/IDgRfS2A5sJxsxVYOBhhQL
-         n7/Z6o1QKtf+m8YwKG1ylBF9CPXNN89v6RQB+osNCYgwVMLn4XLVLyzn73cAoZkrv6tV
-         GLnA==
-X-Gm-Message-State: ACgBeo2i297mbVTKaX7mKHEle9fOPsrQnLzgP8RGnJqHvXR7guPCaUDY
-        ixa2HndY/EVCvtUOcatER3E7qJl21h31Tii9metuQjEuvpo=
-X-Google-Smtp-Source: AA6agR4tQvKb2Uubhm/nwOmxb1j903tmfGNMDszQ1bBlvxy+Vjxl9Bed3RVvBaM/59T6XmsVMDUruUuc5EiT15lt2Uo=
-X-Received: by 2002:a05:6870:961d:b0:10d:7606:b212 with SMTP id
- d29-20020a056870961d00b0010d7606b212mr149567oaq.166.1659595635853; Wed, 03
- Aug 2022 23:47:15 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=lJ2RcUH4YfpT8xs7Cl3kJdao+iEwbE0ETrJv8eZGZ68=;
+        b=h8cxgeEXa3thPmdDHn2/awvod+p2EXNmX8LuxrIPg+w8/3Efv/jKl8HyXrUUmK3g8k
+         VHhiozZbGZE4T4hOdhX84j6xbB8MTq9y15/RrTGgpWTb9bqDv4zHIPSbPcRR6pJSmTm0
+         f6j9nrNzRrHIyYuUkEzf4BzR/pBGgGXBKQzaZqXXZv/JHuEvO+vs0KKEgI/RRveVHUeC
+         6vauEKJ0kPj9I23pnYGVB4m3RrzFaARtwuhB8JM3z+qKiBupg/+3J2WfQdm0EFmax/aH
+         X749Tok0oL0BA7bIUwOWmLu5cszves4zzLgTzjS3NzTET6Nfyk8jpemE7byYk2fkvlve
+         y2CQ==
+X-Gm-Message-State: ACgBeo1hvMOY0Zhk9Oc0Ak0g6syg5uO6qEWPvJw0S//Uo7/d/LveV9qr
+        8E3ZgAabNSh6s/UGXPHVBp37niHCklC+f9SD
+X-Google-Smtp-Source: AA6agR5lzyXnqthclTBCvytEE7zd3YDciHYQ19JqVTciDnAc1KNZNlX65VcV2eJefP7u4brPPngVGw==
+X-Received: by 2002:a17:903:247:b0:16c:5017:9ad4 with SMTP id j7-20020a170903024700b0016c50179ad4mr560350plh.115.1659595678605;
+        Wed, 03 Aug 2022 23:47:58 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w1-20020aa79a01000000b00528f9597fb3sm19808pfj.197.2022.08.03.23.47.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 23:47:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 3 Aug 2022 23:47:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jack Champagne <jackchampagne.r@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
+Subject: Re: [PATCH] hwmon: (ads7828) Rename regmap_config variable
+Message-ID: <20220804063234.GA4122108@roeck-us.net>
+References: <20220803174356.474969-1-jackchampagne.r@gmail.com>
 MIME-Version: 1.0
-References: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
- <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
- <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com> <CAPj87rMSNtqZUbH_5rmGAXpWONKhoZHJsjbw11PwYwXJi0b9jA@mail.gmail.com>
-In-Reply-To: <CAPj87rMSNtqZUbH_5rmGAXpWONKhoZHJsjbw11PwYwXJi0b9jA@mail.gmail.com>
-From:   Oded Gabbay <oded.gabbay@gmail.com>
-Date:   Thu, 4 Aug 2022 09:46:49 +0300
-Message-ID: <CAFCwf12NGpFin3fVrGs=Ca5zqAqztoY5wbyV1WD5vTpZML3LCA@mail.gmail.com>
-Subject: Re: New subsystem for acceleration devices
-To:     Daniel Stone <daniel@fooishbar.org>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803174356.474969-1-jackchampagne.r@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,61 +72,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 2:32 AM Daniel Stone <daniel@fooishbar.org> wrote:
->
-> Hi Oded,
->
-> On Wed, 3 Aug 2022 at 21:21, Oded Gabbay <oded.gabbay@gmail.com> wrote:
-> > The reason it happened now is because I saw two drivers, which are
-> > doing h/w acceleration for AI, trying to be accepted to the misc
-> > subsystem.
->
-> Why misc?
-You will need to ask them ;)
-Seriously, I guess they thought they were not gpu drivers and didn't
-find anything else to go to.
-And at least for one of them, I remember Greg and Arnd pointing them to misc.
+On Wed, Aug 03, 2022 at 01:43:56PM -0400, Jack Champagne wrote:
+> The regmap_config variable for the ads7828 and the ads7830 are both
+> misnamed to `ads2828_regmap_config` and `ads2830_regmap_config`
+> respectively. These variables refer to regmap configs for the ads7828
+> and the ads7830 and should be named accordingly.
+> 
+> This patch does not introduce functional changes as the only two usages
+> of these regmap_config variables are within the changed file.
+> 
+> Signed-off-by: Jack Champagne <jackchampagne.r@gmail.com>
 
->
-> > Regarding the open source userspace rules in drm - yes, I think your
-> > rules are too limiting for the relatively young AI scene, and I saw at
-> > the 2021 kernel summit that other people from the kernel community
-> > think that as well.
-> > But that's not the main reason, or even a reason at all for doing
-> > this. After all, at least for habana, we open-sourced our compiler and
-> > a runtime library. And Greg also asked those two drivers if they have
-> > matching open-sourced user-space code.
-> >
-> > And a final reason is that I thought this can also help in somewhat
-> > reducing the workload on Greg. I saw in the last kernel summit there
-> > was a concern about bringing more people to be kernel maintainers so I
-> > thought this is a step in the right direction.
->
-> Can you please explain what the reason is here?
->
-> Everything you have described - uniform device enumeration, common job
-> description, memory management helpers, unique job submission format,
-> etc - applies exactly to DRM. If open userspace is not a requirement,
-> and bypassing Greg's manual merging is a requirement, then I don't see
-> what the difference is between DRM and this new bespoke subsystem. It
-> would be great to have these differences enumerated in email as well
-> as in kerneldoc.
-I don't think preparing such a list at this point is relevant, because
-I don't have a full-featured subsystem ready, which I can take and
-list all its features and compare it with drm.
-I have a beginning of a subsystem, with very minimal common code, and
-I planned for it to grow with time and with the relevant participants.
+Please refrain from submitting patches with non-functional changes
+like this one unless you are also submitting patches with functional
+changes.
 
-And regarding the serspace issue, I believe it will be less stringent
-than in drm.
-For example, afaik in drm you must upstream your LLVM fork to the
-mainline LLVM tree. This is something that is really a heavy-lifting
-task for most, if not all, companies.
-So this is a requirement I think we can forgo.
+Guenter
 
-Thanks,
-Oded
-
->
-> Cheers,
-> Daniel
+> ---
+>  drivers/hwmon/ads7828.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
+> index 7246198f0901..20bdee769882 100644
+> --- a/drivers/hwmon/ads7828.c
+> +++ b/drivers/hwmon/ads7828.c
+> @@ -89,12 +89,12 @@ static struct attribute *ads7828_attrs[] = {
+>  
+>  ATTRIBUTE_GROUPS(ads7828);
+>  
+> -static const struct regmap_config ads2828_regmap_config = {
+> +static const struct regmap_config ads7828_regmap_config = {
+>  	.reg_bits = 8,
+>  	.val_bits = 16,
+>  };
+>  
+> -static const struct regmap_config ads2830_regmap_config = {
+> +static const struct regmap_config ads7830_regmap_config = {
+>  	.reg_bits = 8,
+>  	.val_bits = 8,
+>  };
+> @@ -152,11 +152,11 @@ static int ads7828_probe(struct i2c_client *client)
+>  	if (chip == ads7828) {
+>  		data->lsb_resol = DIV_ROUND_CLOSEST(vref_mv * 1000, 4096);
+>  		data->regmap = devm_regmap_init_i2c(client,
+> -						    &ads2828_regmap_config);
+> +						    &ads7828_regmap_config);
+>  	} else {
+>  		data->lsb_resol = DIV_ROUND_CLOSEST(vref_mv * 1000, 256);
+>  		data->regmap = devm_regmap_init_i2c(client,
+> -						    &ads2830_regmap_config);
+> +						    &ads7830_regmap_config);
+>  	}
+>  
+>  	if (IS_ERR(data->regmap))
+> -- 
+> 2.25.1
+> 

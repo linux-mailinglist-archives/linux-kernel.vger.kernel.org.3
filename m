@@ -2,232 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8993E58996F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E639589961
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239518AbiHDIn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
+        id S239460AbiHDIku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239224AbiHDImx (ORCPT
+        with ESMTP id S229823AbiHDIko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:42:53 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49D767CB2
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:41:33 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oJWQ2-0007xA-P9; Thu, 04 Aug 2022 10:41:26 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oJWPw-00043J-Kr; Thu, 04 Aug 2022 10:41:20 +0200
-Date:   Thu, 4 Aug 2022 10:41:20 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>,
-        Stefan Agner <stefan@agner.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com
-Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
-Message-ID: <20220804084120.in435n4ofdw6ksfj@pengutronix.de>
-References: <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
- <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com>
- <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
- <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
- <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de>
- <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
- <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
- <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
- <20220803062024.vn7awasmifkp5xow@pengutronix.de>
- <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
+        Thu, 4 Aug 2022 04:40:44 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA16525C72
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:40:43 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso4827678pjd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 01:40:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=a2oIHkAvkJO2cSfKWxioTgiamZhg17v1e6s9LLinDPg=;
+        b=p9gBnon7Qe4+n3jGGSchfH2hlPUh1qW2IZZUkGROGiAQBP615zModVjmiJdo1pXP7t
+         eI9kTMaHionxfwUx+d6J1/GPODQWR5hVB3IQ4ZF1bPX0EQd5y4l5iTeBhntKTdJImMXz
+         0uw5hMUF3hpAUVhFS4mmoGkds6WvqVJHDS9BMyxNXs6KdqnIrTBTh7858/Rzvy1w2OP9
+         RD5l1j4JMA/e1xX7KIhVp8EKUICQvemMlLwlRzMsJ+PU37vVhEO9rC94+7Vi64El0/uy
+         nJjEQJkmVqCkqj4yEFWhclu176syv+CVEbtmNb61sS5OQDQdM+KDdgGXQbEPip9NMi0e
+         F4sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=a2oIHkAvkJO2cSfKWxioTgiamZhg17v1e6s9LLinDPg=;
+        b=ikAu3xYyMs5wXhZ5HWi5tNvTsq9s9nxTcxB4R0s1FEacrqNMD4T3b3kcS03n73MKN3
+         PhToe37OxTjb4yKyQVLyLNg3RjtsOOGW2YUf6lgGRgt+YzlIMH9Y7E3O60V39v/bw4x3
+         u4HEmDnAWiI3tDFYPT0odHrpuwi7PSM6j40dcZ+rAqct442Z9roSLOUEtXkHOguQ5oUS
+         2+j389jkM41Wxl7xliXNpkT7n2Wq/OijEQtKb7RsVsMhWnmXuxTBY0/pH6KR/lyNZWg5
+         vxMkzK5AmSE5OjhV6U6quShug99jJi7rYjnipihFnD0JOqUB9xLPoFo51GvMiYjZFOpD
+         fdow==
+X-Gm-Message-State: ACgBeo2qJHXgvnn36DScDeDHcN/uxA8UkkX9o2D+rI1fNHML+Tm2bjsD
+        KcjbArCWQhzziym4+6cyhbPL5zPO3TI=
+X-Google-Smtp-Source: AA6agR7bbCaDD0oTap6AzaKjr4WaHeIizvt92qD+b8YbUMYrIEWjGkzBhPMaThBzMqGq/HUsnzD9wg==
+X-Received: by 2002:a17:90b:4a07:b0:1f5:1aff:4ab with SMTP id kk7-20020a17090b4a0700b001f51aff04abmr9575816pjb.216.1659602442783;
+        Thu, 04 Aug 2022 01:40:42 -0700 (PDT)
+Received: from localhost ([198.11.178.15])
+        by smtp.gmail.com with ESMTPSA id o16-20020a170902d4d000b0015e8d4eb2easm233783plg.308.2022.08.04.01.40.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 04 Aug 2022 01:40:42 -0700 (PDT)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Tejun Heo <tj@kernel.org>, Petr Mladek <pmladek@suse.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: [RFC PATCH 0/8] workqueue: Fix for prematurely wakeups and cleanups
+Date:   Thu,  4 Aug 2022 16:41:27 +0800
+Message-Id: <20220804084135.92425-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-08-03, Adam Ford wrote:
-> On Wed, Aug 3, 2022 at 1:20 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
-> >
-> > On 22-08-02, Adam Ford wrote:
-> >
-> > ...
-> >
-> > > > I did some reading about the internal timing generator.  It appears
-> > > > that it's required when video formats use fractional bytes, and it's
-> > > > preconfigured to run at 720p by default, but registers 28h through 37h
-> > > > configure it for other video modes.
-> > >
-> > > I think there may still be some issues with the DSIM since some of the
-> > > clock frequencies are set in the device tree.
-> > >
-> > > From what I can tell, the pixel rate is calculated based on the
-> >
-> > By pixel rate you mean the HDMI pixel rate from the ADV? If so then yes.
-> > The ADV has an divider which is already configured by the driver but
-> > meaningless since the driver is lacking of setting the "manual-divider"
-> > bit within the same register.
-> 
-> I was thinking about the pixel clock from the DSI to the ADV.  I did
-> see the manual-divider bit was missing.  I tried enabling that bit,
-> but it didn't appear to make much difference.
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-This depends, e.g. I saw that the HDMI pixel clock is correct if I had
-set this bit, set the divider manually to 6 and configured the dsi-host
-burst clock to 891MHz:
-  -> 891MHz / 2 = 445.5 (DSI-Clock) -> 445.5 / 6 = 74.25 (HDMI pixel
-  clock for 720P)
+Patch1-3 are fixes for prematurely wakeups and patch4-8 are cleanups.
 
-Of course this doesn't happen automatically yet :( I also find it a bit
-of too reduce the lane line, I had removed this logic too. But as I
-said, I got no frames shown on my HDMI monitor.
+Patch2 fixes when prematurely wakeup happens after kthread_bind_mask().
+Patch3 fixes when prematurely wakeup happens before kthread_bind_mask().
+Patch1 prepares for patch2-3.
 
-...
+Like Petr's patch[1], a completion is introduced to do the synchronization,
+but the synchronization is done in a different direction which allows the
+newly created worker itself do some initialization instead of the manager
+and allows for a more simplified code.
+(The changed synchronization direction is not necessarily better.)
 
-> > > samsung,burst-clock-frequency = <1500000000>;
-> >
-> > This is not correct since the burst-clock-freq. specifies the hs-clock
-> > for the data lanes (see above).
-> 
-> But I don't think the clock should be fixed. I think it should vary as
-> the resolution changes. 
+And make workqueue code less dependence on the semantics that kthread
+provides.
 
-You're right and this is something we have on our TODO list as well. But
-this needs a bit more work within the DRM framework. So the client and
-the host can negotiate the frequency.
 
-Remember our main problem: with a correct burst-clock-frequency set and
-lane number set for 720P, the ADV don't display anything.
+[1]: https://lore.kernel.org/all/20220622140853.31383-1-pmladek@suse.com/
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Tejun Heo <tj@kernel.org>,
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Michal Hocko <mhocko@suse.com>,
+Cc: Peter Zijlstra <peterz@infradead.org>,
+Cc: Wedson Almeida Filho <wedsonaf@google.com>
 
-> From what I can tell, NXP's DSI code doesn't
-> hard code this value, but it does appear to cap it at 1.5G.  I did
-> soom looking into the NXP frequency calculation
+Lai Jiangshan (8):
+  workqueue: Unconditionally set cpumask in worker_attach_to_pool()
+  workqueue: Make create_worker() safe against prematurely wakeups
+  workqueue: Set PF_NO_SETAFFINITY instead of kthread_bind_mask()
+  workqueue: Set/Clear PF_WQ_WORKER while attaching/detaching
+  workqueue: Use worker_set_flags() in worker_enter_idle()
+  workqueue: Simplify the starting of the newly created worker
+  workqueue: Remove the outer loop in maybe_create_worker()
+  workqueue: Move the locking out of maybe_create_worker()
 
-Can you provide me a link? There are a lot frequencies involved in this
-discussion ^^ Just that I look at the same location.
+ kernel/workqueue.c          | 123 +++++++++++++++---------------------
+ kernel/workqueue_internal.h |  11 +++-
+ 2 files changed, 60 insertions(+), 74 deletions(-)
 
-> and it is capable of adjusting resolutions to some extent and from
-> what I can see the 891MHz clock is only set when 1080p.  At 720p,
-> thier kernel shows the output frequency at  445.5 MHz. 
+-- 
+2.19.1.6.gb485710b
 
-Yes, we need the dynamic handling but hardcoding it isn't the way we
-should go either. We have the dynamic PLL calculation, so we can
-configure it to all possible values not just a few VESA standards.
-
-> The way the DSIM is currently configured, it's fixed at 891MHz, so I
-> don't expect the output feeding the adv7535 to be correct for the
-> different resolutions.
-
-Why not? The ADV can work with that hs-clock and for 720P@60 we need a
-bandwidth of roughly (only pixels no package header/footer overhead):
-
-  1280x720x24x60 = 1327104000 Bit/s = 1327.104 MBit/s
-
-With 891MHz and 2 lanes we have
-
-  891MBps * 2 = 1782000000 Bit/s = 1782 MBit/s
-
-So this should be fine. With 445.5 MHz and 2 lanes we have not enough
-bandwidth and with 445.5 MHz and 4 lanes we have exactly the same
-bandwidth.
-
-Therefore I still think that there is problem within the ADV.
-
-...
-
-> > > With these settings and the above mentioned code changes, 1080p still
-> > > appears, however when attempting other modes, the display still fails
-> > > to load.  I also noticed that the phy ref clock is set to 27MHz
-> > > instead of NXP's 12MHz.
-> >
-> > That's interesting, I didn't noticed that NXP uses 12 MHz as refclock
-> > but I don't think that this is the problem. Since we have other
-> > converter chips using the bridge driver and they work fine. I still
-> > think that the main problem is within the ADV driver.
-> 
-> Do the other converter chips work fine at different resolutions?
-
-Yes.
-
-> 
-> >
-> > > I attempted to play with that setting, but I couldn't get 1080p to
-> > > work again, so I backed it out.
-> > >
-> > > Maybe I am headed in the wrong direction, but I'm going to examine the
-> > > P/M/S calculation of the timing on NXP's kernel to see how the DSIM in
-> > > this code compares.
-> >
-> > I think the pms values are fine.
-> 
-> I compared the P/M/S values between this driver and NXP's and they
-> calculate different values of PMS when running at 1080P.
-
-NXP don't calculate anything if I remember correctly, they just provide
-PLL values so they reach the frequency. On the other hand with the
-patches from Jagan we can configure the PLL to what-ever value :)
-
-> NXP @ 1080p:
-> fout = 891000, fin = 12000, m = 297, p = 2, s = 1, best_delta = 0
-> 
-> This kernel @ 1080p:
-> 
-> PLL freq 891000000, (p 3, m 99, s 0)
-
-As you said, we use a differnet fin value 27MHz instead of the 12MHz so
-those values must be different.
-
-> at 720P, the NXP Kernel
-> fout = 445500, fin = 12000, m = 297, p = 2, s = 2, best_delta = 0
-> (working)
-> 
-> at 720P, this kernel:
-> PLL freq 891000000, (p 3, m 99, s 0)
-> hs_clk = 891000000, byte_clk = 111375000, esc_clk = 18562500
-> (not working)
-
-Yes, as I said you need to configure the PLL manually (see above).
-
-> > > If someone who understands the interactions between these different
-> > > components has suggestions, I'm willing to run some experiments.
-> >
-> > Did managed to get access to the ADV7535 programming guide? This is the
-> > black box here. Let me check if I can provide you a link with our repo
-> > so you can test our current DSIM state if you want.
-> 
-> I do have access to the programming guide, but it's under NDA, but
-> I'll try to answer questions if I can.
-
-Thanks a lot for your work :)
-
-Regards,
-  Marco

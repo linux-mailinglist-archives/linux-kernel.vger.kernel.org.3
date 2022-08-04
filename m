@@ -2,118 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC81C58A153
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 21:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4367258A168
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 21:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbiHDTik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 15:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S236495AbiHDTnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 15:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbiHDTig (ORCPT
+        with ESMTP id S233703AbiHDTnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 15:38:36 -0400
+        Thu, 4 Aug 2022 15:43:33 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB8E6E2C3;
-        Thu,  4 Aug 2022 12:38:34 -0700 (PDT)
-Received: from [192.168.43.224] (92.40.178.239.threembb.co.uk [92.40.178.239])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5656D9CB
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 12:43:32 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BC6A66601BFA;
-        Thu,  4 Aug 2022 20:38:32 +0100 (BST)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7F0396601BF8;
+        Thu,  4 Aug 2022 20:43:29 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659641913;
-        bh=YR06TcNC313+o+tpJhkeCXhA11OnSzpwetPY80MPTq8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eCtIdWnL2e3j3b9gdVcogqaPJdIXpTMgJxLBj4dlqklzGGr+zjNymQNEg7n7pyu4d
-         GHPEo9M+McUemcrv9Otu2/Z3Fn3IP7VHZBgkh8JdXIgkRumV3jUOUH5bWWDLXChCj1
-         3kyMMD36iE+unBbMXx/uLjMr6ij+L+dRnYM/tSRs0lFwcSU2llcza8j3lFy/3rL3QO
-         B0pR71xhOFsP6GtYzQ9WcKE/BEq9TueMWvOGCDNenJsuNwqohBwmv/Qunff/g1u9PP
-         DO2U1/v78mnY1VI+v/I3DZXZ2f0mQesixMRx4sbXDY5m4+YPxTM8M6VhekCvZUBjIl
-         oNSnzdAWn2foQ==
-Message-ID: <76a2ac43-6e3d-0b62-7c8c-eec5f247f8f8@collabora.com>
-Date:   Thu, 4 Aug 2022 21:38:34 +0200
+        s=mail; t=1659642211;
+        bh=JhqZk6xh4Hi5VnjgPmbWNCLylbZ7vVV8Fj4bhoUCc/c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gVNpQolsJG7SZu+9kmOgAQd3EexsdCX77uA53ofN7k93qpxPsa17QyQIj0jV5UU11
+         jLxDoWd4wMH9N93AbkEzMQdDEPG1+awdm4M4OIdNV1al8Z4wpilXm7Gi2KvzrjFEgs
+         A3Q/OUSRXx7z0BXtCuo6Xs0EZYaWFJGJJdZLi5My32W6mia0C8wY3NECn0ITEYfzKj
+         Bfrc1G77q0NoVeO/RyI9NfB3TkMqL+/RxNWXwqgkwfSDQ5ABX0TMe5QDF5Ago8ugwG
+         4v6U9pliyt3qSqAPrdOeLaOF26RGHYMny3hi6gauNwPWW8b+sZg35CSM2AwXErc1VI
+         CReCIxhk18IbA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] drm/mediatek: dsi: Move mtk_dsi_stop() call back to mtk_dsi_poweroff()
+Date:   Thu,  4 Aug 2022 15:43:25 -0400
+Message-Id: <20220804194325.1596554-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] selftests/landlock: fix broken include of
- linux/landlock.h
-Content-Language: en-US
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
- <f1fc4e6e-e2a6-3ec7-2d3b-215111a4b9ae@digikod.net>
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <f1fc4e6e-e2a6-3ec7-2d3b-215111a4b9ae@digikod.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/08/2022 12:36, Mickaël Salaün wrote:
-> 
-> On 03/08/2022 22:13, Guillaume Tucker wrote:
->> Revert part of the earlier changes to fix the kselftest build when
->> using a sub-directory from the top of the tree as this broke the
->> landlock test build as a side-effect when building with "make -C
->> tools/testing/selftests/landlock".
->>
->> Reported-by: Mickaël Salaün <mic@digikod.net>
->> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers dependency")
->> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
->> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
->> ---
->>   tools/testing/selftests/landlock/Makefile | 7 +++++--
->>   1 file changed, 5 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
->> index a6959df28eb0..02868ac3bc71 100644
->> --- a/tools/testing/selftests/landlock/Makefile
->> +++ b/tools/testing/selftests/landlock/Makefile
->> @@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
->>   TEST_GEN_PROGS_EXTENDED := true
->>     OVERRIDE_TARGETS := 1
->> +top_srcdir := ../../../..
-> 
-> Not sure it changes much, but most other selftests Makefiles use "top_srcdir = ../../../.." (without ":="). Why this change?
+As the comment right before the mtk_dsi_stop() call advises,
+mtk_dsi_stop() should only be called after
+mtk_drm_crtc_atomic_disable(). That's because that function calls
+drm_crtc_wait_one_vblank(), which requires the vblank irq to be enabled.
 
-I didn't simply apply your diff but edited the file by hand to
-test various combinations and see what side effects it might
-have.  So when I added top_srcdir I typed it by hand and used :=
-as a reflex since it's the standard way of assigning variables.
-Using = instead only makes a difference when the r-value has
-something dynamic as it will be re-evaluated every time it's
-used.  So for constant values, I guess it's more of a question of
-coding style and conventions.  Maybe all the top_srcdir variables
-should be changed to := but that's unnecessary churn...  Either
-way, it's benign.
+Previously mtk_dsi_stop(), being in mtk_dsi_poweroff() and guarded by a
+refcount, would only be called at the end of
+mtk_drm_crtc_atomic_disable(), through the call to mtk_crtc_ddp_hw_fini().
+Commit cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from
+enable/disable and define new funcs") moved the mtk_dsi_stop() call to
+mtk_output_dsi_disable(), causing it to be called before
+mtk_drm_crtc_atomic_disable(), and consequently generating vblank
+timeout warnings during suspend.
 
-Shuah, feel free to change this back to = in this particular case
-if it's more consistent with other Makefiles.  Consistency is
-often better than arbitrary rules.  Or conversely, change to :=
-for the khdr_dir definition...  Entirely up to you I think.
+Move the mtk_dsi_stop() call back to mtk_dsi_poweroff() so that we have
+a working vblank irq during mtk_drm_crtc_atomic_disable() and stop
+getting vblank timeout warnings.
 
-Thanks,
-Guillaume
+Fixes: cde7e2e35c28 ("drm/mediatek: Separate poweron/poweroff from enable/disable and define new funcs")
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
->>   include ../lib.mk
->>   +khdr_dir = $(top_srcdir)/usr/include
->> +
->>   $(OUTPUT)/true: true.c
->>       $(LINK.c) $< $(LDLIBS) -o $@ -static
->>   -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
->> -    $(LINK.c) $< $(LDLIBS) -o $@ -lcap
->> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
->> +    $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
+---
+
+ drivers/gpu/drm/mediatek/mtk_dsi.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index 9cc406e1eee1..f8ad59771551 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -685,6 +685,16 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
+ 	if (--dsi->refcount != 0)
+ 		return;
+ 
++	/*
++	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
++	 * mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(),
++	 * which needs irq for vblank, and mtk_dsi_stop() will disable irq.
++	 * mtk_dsi_start() needs to be called in mtk_output_dsi_enable(),
++	 * after dsi is fully set.
++	 */
++	mtk_dsi_stop(dsi);
++
++	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+ 	mtk_dsi_reset_engine(dsi);
+ 	mtk_dsi_lane0_ulp_mode_enter(dsi);
+ 	mtk_dsi_clk_ulp_mode_enter(dsi);
+@@ -735,17 +745,6 @@ static void mtk_output_dsi_disable(struct mtk_dsi *dsi)
+ 	if (!dsi->enabled)
+ 		return;
+ 
+-	/*
+-	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
+-	 * mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(),
+-	 * which needs irq for vblank, and mtk_dsi_stop() will disable irq.
+-	 * mtk_dsi_start() needs to be called in mtk_output_dsi_enable(),
+-	 * after dsi is fully set.
+-	 */
+-	mtk_dsi_stop(dsi);
+-
+-	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+-
+ 	dsi->enabled = false;
+ }
+ 
+-- 
+2.37.1
 

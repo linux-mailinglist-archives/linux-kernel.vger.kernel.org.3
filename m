@@ -2,935 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE615895C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 04:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A965895BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 03:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238491AbiHDCAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 22:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
+        id S238957AbiHDBsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 21:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiHDCAj (ORCPT
+        with ESMTP id S229596AbiHDBsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 22:00:39 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BECF64FC;
-        Wed,  3 Aug 2022 19:00:36 -0700 (PDT)
+        Wed, 3 Aug 2022 21:48:40 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2107.outbound.protection.outlook.com [40.107.94.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DF15F10D;
+        Wed,  3 Aug 2022 18:48:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bwFpyDOkrcmhGLTvWI2gbNvEyyLNHQoQH5OLD4k23aiA8Kz37YIlzS71Fc5u9xeuoB9YthzbUN5/SJDGHEbnTz/BBnBHOHDDjUZyMnu8S3EREWmdkC6LJzHtk4YPWE86mGOt5N9gYjd3xyfgbrpFaFAtPHrtdL6Yw78htIbdIc3AiRCyZl88eUCk0MQxhQ+5BOQ5IgOAlCSOzXiEjNDFdHXr3ZUQ/vPUY66PrkVOMFnOwF9fScufsfLLl9vTfuceOdNr1q82INeexBLBBfaDkah1zxkYkFRFE+ivUGV9ckDfcMBQW0u++AN9ozh2GMqIwSeRBXxEzlLyagQoKz5SoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=urbUIPd9Cik0C5kD5S69kP3XzxRa2GiocManyWSuA9A=;
+ b=ZKG8IHRKWqy+3mviLDuZxUmjhv+DNkKFCzD02vsgE/AZN8Ei68Zgcpv4eK3gUzrraaFP5PeD9xz/KMdYnDrZSfjmOyPAclDa6Rrbb423764wovP4pJ46SrtQ1nuCo/CiodRhwJxoEcDcQSOdRJ5IGzmXZTw59+HYVJb2IgfgfNGeehyxQhYQrBuHkjuek95OCofde2QL1wvNvJjwlGXZb/0AsKAPfOtnFx4Gtna6WB4EIFyI8pI7cmGUqd9CjsalLL9NRsM0ydrpDcdt9NPIviOpsZzlW8OIQxBDiI1NZ+b2gEdhurE6Knsrjs6iD8znvIffeEDqCPvQBgjd8LIyUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659578437; x=1691114437;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5FwZbUVCI96oldTuHCGORfGxf+Ok4IKAm28ynxjAyvM=;
-  b=HeKl0/GFsCEjTWkGsHEeKkwKuV/IrexA3dM5BnXlrw4XFJJVUp9MqBQ6
-   +N8AW0K8phzy28JwqDg3Ck9YPiEsorZ8Y+dN9cG6+LKmDSu/66gZZeJBF
-   WC+eREgtYjt/xnIOXSbq1KrGghXq1cpMWrt5vu9uAV/uH2ZuXJeuSg7D0
-   Q=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 Aug 2022 19:00:36 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 19:00:35 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 3 Aug 2022 19:00:35 -0700
-Received: from [10.38.247.209] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 3 Aug 2022
- 19:00:29 -0700
-Message-ID: <108527a1-03c1-2419-f92a-11a80a2a9805@quicinc.com>
-Date:   Wed, 3 Aug 2022 19:00:27 -0700
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=urbUIPd9Cik0C5kD5S69kP3XzxRa2GiocManyWSuA9A=;
+ b=Aq95Uqo3jsrMD9t+xQI2bOMqmDDPzzFW2BMHjssiYIEJBbrmHkKAmepPGfTCbb70X6lBzm+v55Y6EG1c1hEsBK9Ea8uddqVp6x7zil8Qs/SOT2sZCZhBmTWrIFqBPJ7DvQed+DrtnhLHJgYPANgg0GuwUnJRVMorSkqCxzKyS5o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from DM8PR01MB6824.prod.exchangelabs.com (2603:10b6:8:23::24) by
+ CH2PR01MB6086.prod.exchangelabs.com (2603:10b6:610:45::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5482.14; Thu, 4 Aug 2022 01:48:33 +0000
+Received: from DM8PR01MB6824.prod.exchangelabs.com
+ ([fe80::7058:9dd4:aa01:614a]) by DM8PR01MB6824.prod.exchangelabs.com
+ ([fe80::7058:9dd4:aa01:614a%5]) with mapi id 15.20.5504.014; Thu, 4 Aug 2022
+ 01:48:33 +0000
+From:   Huang Shijie <shijie@os.amperecomputing.com>
+To:     bhelgaas@google.com
+Cc:     patches@amperecomputing.com, zwang@amperecomputing.com,
+        darren@os.amperecomputing.com, corbet@lwn.net,
+        yangyicong@hisilicon.com, linux-pci@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Huang Shijie <shijie@os.amperecomputing.com>
+Subject: [PATCH] PCI: fix the invalid aer-inject git tree
+Date:   Thu,  4 Aug 2022 09:47:55 +0000
+Message-Id: <20220804094755.1885603-1-shijie@os.amperecomputing.com>
+X-Mailer: git-send-email 2.30.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: CH2PR02CA0003.namprd02.prod.outlook.com
+ (2603:10b6:610:4e::13) To DM8PR01MB6824.prod.exchangelabs.com
+ (2603:10b6:8:23::24)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v3 5/6] drm/msm/dsi: Take advantage of
- devm_regulator_bulk_get_const()
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <dri-devel@lists.freedesktop.org>, Mark Brown <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Marek <jonathan@marek.ca>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220802223738.898592-1-dianders@chromium.org>
- <20220802153434.v3.5.I55a9e65cb1c22221316629e98768ff473f47a067@changeid>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220802153434.v3.5.I55a9e65cb1c22221316629e98768ff473f47a067@changeid>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d47650c2-fcb6-46c2-3b11-08da75bb704f
+X-MS-TrafficTypeDiagnostic: CH2PR01MB6086:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WWm5kTzIjrrelyoW55LMEHoUjvVwdK2PpwYyz7JInpVF8ufCdDIK18tij7X23T5kMqHXKjXff+IVn1Vcmi+67bwrRZLDvi40sISfLTsVWuLDKM0D1LTifs5AUhyPuoqc7eAQiPlrkQFcumVhuiOjFD8aTrBr6bzMgL42Vkm1lZTd3SOWM+DXPhMZQT9awDhvPVuBo06GZHTze35+07IA/AIJYIIF0SJCHQqm0sGKhHSx4kn2tMk5TK6nSXeMcN5OdS+5Sk3C2To0NZTJrMAPlhlbnNySrg2NADcb2VoBWGOGkN3KoudYx6zNZHY8pW3IfCA7pB9p9nHI6ZekrBqmQLDBFD/spYtAxFt29sFEW1EekKdJB4A2TQDr04PXUVovfwgV9oZ3pcfiKLlct/Ghw6San5oMcGjf9HKXFVQQL7WjOqBRaQfZ6gzjAKIo6hWC48FlakS0Po7YlaYd1x81gMlM7tU4koLgEn/EUz4YI4zM/pOQD2oLfonlPLWhte4bPEB+XyEvnlAVBLc5Qw77LkIbj2C5ntQYxRYgqDHg5UMJNNFF9/D8lHtGH67k0REZ2gyRvQQ9pB6PVZP5zxAv58R+lnyPJwLvJY/jWOS1F8xojY+1LhVZkJMAWGA8kURMVzT/RdOYo5sJNz0OCfxA6AYpIHgaWyNG4z1By/HyDLgDvLpo1qwyNN0X1mQtfpJqI1ePqvxFP3yaHQl3gBNqSSbHaOVwutOeeHqTc4mHA5PTRp69Ra44qpU2keMo5c3H4yRvw2PNihwxbyvrpzZHAS6Md4ow8YoSfFURG9VZCq4v8+GBGq4M2Z7iVrlykrQp
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR01MB6824.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(396003)(376002)(346002)(39850400004)(83380400001)(5660300002)(2616005)(107886003)(186003)(8936002)(66946007)(4326008)(2906002)(66556008)(1076003)(66476007)(8676002)(316002)(966005)(478600001)(6486002)(52116002)(6916009)(6512007)(6506007)(41300700001)(86362001)(26005)(6666004)(38350700002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?D2Hb16XGGg0ewkLcGHyZLXtmtpVkpuyulx1wt1gkSSaXd6ubZP6HPZYOk1SU?=
+ =?us-ascii?Q?60bnwU2VFw7s3tlX3y91FB6MWnPiru7J3Li49JSe/+BHe4ZbAJolYke8HApV?=
+ =?us-ascii?Q?tjY+8FxOzRNKezd8AIa1wxwoXtWGcQpqTj4FkR8fBVB0UwctL3YbMvvUzIkT?=
+ =?us-ascii?Q?tCvPcCiaYnQO87MuH3Xag4Cdy1WdWpC7xgsTILGec1ExnrL5z250iMMP3Yc6?=
+ =?us-ascii?Q?M6c2DFA6+y9vxGcvv0PU23GNQos6skoMiX5pPDX71HkTaokHpzt6VviccCAE?=
+ =?us-ascii?Q?s+VOmfuILkYArvll3/dlNWv3S10tWlTpg32cxYQLbCk979l2uz0uWep39D+u?=
+ =?us-ascii?Q?O1H8/XRnyBppOZT3c4O94Zqzi4dyBGZsFwt6ZnPnfUv8iOxKlXzqZ0y/h8bW?=
+ =?us-ascii?Q?uDx6JhjUs4uNrm4owX3geb1+kxOPIcTIysgI1RIqVs+FqxD17xmFfaEbQwse?=
+ =?us-ascii?Q?qILOqR7h/kWQ9dPufvfaB28ldSMVxKhyxIEjqQWBvePJSoUAENNWiPExGYl7?=
+ =?us-ascii?Q?j4MqSXEyTQLPmqYE/PNwcUg/rmbF8PLAHgp/tmTk/uBC81oJvk0s9hkuiMfy?=
+ =?us-ascii?Q?D7a770ftdWTBbXwKofNvYCO4lqjlN6+XSILdkCtd26qBOQ43gsZympwyjETu?=
+ =?us-ascii?Q?VgAL26lm7hhocbD4X5ob3Sz8tKUyp+AyVyRyOOauGHCgS8LaAaOCnVtp5Oq3?=
+ =?us-ascii?Q?wt2zGrDGHDSLLpyz5P4OEHGYfFOvcPcdIUzKSsIFWdJ9Kg6Gne8cNQQV/2Wz?=
+ =?us-ascii?Q?Qh2MIsrYAzL6g9d4Mdi7cS3vQiM9oum0WqT1YUkVA4V7zf0eCytog//qVoXG?=
+ =?us-ascii?Q?yT3AYYhCz7dxvAUbcWX8H5F7H/8lVMClPdtFzFEMVqL7MSqoio9MtFthwviW?=
+ =?us-ascii?Q?s/dmpyjvAQNs3ncMbDtoTGmdCGqAF57u23OIb3xQkAtTRpvTrM44k1wrkNaf?=
+ =?us-ascii?Q?zqBY5KmEWQ1XY28iHWw7hCBpCfgSdV2IaQtzUvPVeEB4hTJO2AxlVwJqmqSt?=
+ =?us-ascii?Q?FyV57Vgoks6c1z//75b9FxB+v5ORFbVuaYsbPTj/2M7IC1Ih8NAsHlw/RwV/?=
+ =?us-ascii?Q?1OoS44vYOnCkTM8QKaBKofDMcVAs2BxLaWYFcLoqsnnhq6ffCi4aDFAhzHJs?=
+ =?us-ascii?Q?fHGEWENK9QTH3TTerpTWzuvDTnMe+uYyliqj82/lcL13143HalhYUPZj5t/u?=
+ =?us-ascii?Q?chLdMXIJNTcqmnJh0yZfyCzNrghXWTmNUcdbjet+44b2qaJmijsrC7J3BS8D?=
+ =?us-ascii?Q?UZ9Vmfk4UdEvEt/MjPpuqbwEl/A2XKb14e4v02XO6ZOUN6o6DW5HHeLwAjTJ?=
+ =?us-ascii?Q?cs6JSClYCLTkOczAmkGONnhLPPXpy7ax9NqEk0LSY54p4QWHbh7Ac5fmvZQt?=
+ =?us-ascii?Q?IGvqmJqpMYjbd0k5TBgnfRRo2c8FwdcsmnqcSMZk9Fer9ESEi4lR9EyPsb/H?=
+ =?us-ascii?Q?3fkcooE/RpursL3NLMyVfc24U9MFH6lpGgyScH9kzGKpgLqcw/m6MJD1cSCj?=
+ =?us-ascii?Q?H2CZEehQgcU5DLb7mXVX0P1v3XzSCW4DadB9T7mRcbYFHwAncw+WrByCAH59?=
+ =?us-ascii?Q?4Da67THr0T4OndeBUkX0c9FUM7Lzyx2tHDZwz3AXMbXULFaZj64me8LxNYHA?=
+ =?us-ascii?Q?vShEdFInm515S5tXWzknPPU=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d47650c2-fcb6-46c2-3b11-08da75bb704f
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR01MB6824.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2022 01:48:33.4776
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NtzAMhxGYDlNm+p18B5a1fQ9an78iAZyQlP6XFpFBnCiesVUUZIujASXZCkThK52RSTATEWfPXDvrrRZ/dJZBEmBhbpxOW9wlSsRdbqXwKXWemu4udAcpOpNqod7euCq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR01MB6086
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The old tree is invalid now, fix it with the right git tree:
+    https://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git
 
+Signed-off-by: Huang Shijie <shijie@os.amperecomputing.com>
+---
+ Documentation/PCI/pcieaer-howto.rst | 2 +-
+ drivers/pci/pcie/Kconfig            | 2 +-
+ drivers/pci/pcie/aer_inject.c       | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-On 8/2/2022 3:37 PM, Douglas Anderson wrote:
-> As of the commit 1de452a0edda ("regulator: core: Allow drivers to
-> define their init data as const") we no longer need to do copying of
-> regulator bulk data from initdata to something dynamic. Let's take
-> advantage of that.
-> 
-> In addition to saving some code, this also moves us to using
-> ARRAY_SIZE() to specify how many regulators we have which is less
-> error prone.
-> 
-> This gets rid of some layers of wrappers which makes it obvious that
-> we can get rid of an extra error print.
-> devm_regulator_bulk_get_const() prints errors for you so you don't
-> need an extra layer of printing.
-> 
-> In all cases here I have preserved the old settings without any
-> investigation about whether the loads being set are sensible. In the
-> cases of some of the PHYs if several PHYs in the same file used
-> exactly the same settings I had them point to the same data structure.
-> 
-> NOTE: Though I haven't done the math, this is likely an overall
-> savings in terms of "static const" data. We previously always
-> allocated space for 8 supplies. Each of these supplies took up 36
-> bytes of data (32 for name, 4 for an int).
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+diff --git a/Documentation/PCI/pcieaer-howto.rst b/Documentation/PCI/pcieaer-howto.rst
+index 0b36b9ebfa4b..b31fc9a0edbc 100644
+--- a/Documentation/PCI/pcieaer-howto.rst
++++ b/Documentation/PCI/pcieaer-howto.rst
+@@ -294,7 +294,7 @@ After reboot with new kernel or insert the module, a device file named
+ Then, you need a user space tool named aer-inject, which can be gotten
+ from:
+ 
+-    https://git.kernel.org/cgit/linux/kernel/git/gong.chen/aer-inject.git/
++    https://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git/
+ 
+ More information about aer-inject can be found in the document comes
+ with its source code.
+diff --git a/drivers/pci/pcie/Kconfig b/drivers/pci/pcie/Kconfig
+index 788ac8df3f9d..d6ea0fd9892d 100644
+--- a/drivers/pci/pcie/Kconfig
++++ b/drivers/pci/pcie/Kconfig
+@@ -43,7 +43,7 @@ config PCIEAER_INJECT
+ 	  error injection can fake almost all kinds of errors with the
+ 	  help of a user space helper tool aer-inject, which can be
+ 	  gotten from:
+-	     https://git.kernel.org/cgit/linux/kernel/git/gong.chen/aer-inject.git/
++            https://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git/
+ 
+ #
+ # PCI Express ECRC
+diff --git a/drivers/pci/pcie/aer_inject.c b/drivers/pci/pcie/aer_inject.c
+index 2dab275d252f..262b06b0dc1d 100644
+--- a/drivers/pci/pcie/aer_inject.c
++++ b/drivers/pci/pcie/aer_inject.c
+@@ -6,7 +6,7 @@
+  * trigger various real hardware errors. Software based error
+  * injection can fake almost all kinds of errors with the help of a
+  * user space helper tool aer-inject, which can be gotten from:
+- *   https://git.kernel.org/cgit/linux/kernel/git/gong.chen/aer-inject.git/
++ *   https://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git/
+  *
+  * Copyright 2009 Intel Corporation.
+  *     Huang Ying <ying.huang@intel.com>
+-- 
+2.30.2
 
-LGTM, I am okay with DSI and DSI PHY being in one patch,
-
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-
-
-> ---
-> 
-> Changes in v3:
-> - Do all the PHYs too.
-> - Get rid of error print after devm_regulator_bulk_get_const().
-> - Just directly call the bulk commands; get rid of the wrapper.
-> - Update commit message to point at the git hash of the regulator change.
-> 
-> Changes in v2:
-> - ("Take advantage of devm_regulator_bulk_get_const") new for v2.
-> 
->   drivers/gpu/drm/msm/dsi/dsi.h                 |  12 --
->   drivers/gpu/drm/msm/dsi/dsi_cfg.c             | 172 +++++++++---------
->   drivers/gpu/drm/msm/dsi/dsi_cfg.h             |   3 +-
->   drivers/gpu/drm/msm/dsi/dsi_host.c            |  42 ++---
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c         |  37 +---
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy.h         |   5 +-
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c    |  20 +-
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c    |  32 ++--
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_20nm.c    |  14 +-
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c    |  28 +--
->   .../gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c   |  12 +-
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c     |  32 ++--
->   12 files changed, 167 insertions(+), 242 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi.h b/drivers/gpu/drm/msm/dsi/dsi.h
-> index bb6a5bd05cb1..d661510d570d 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi.h
-> @@ -30,20 +30,8 @@ enum msm_dsi_phy_usecase {
->   	MSM_DSI_PHY_SLAVE,
->   };
->   
-> -#define DSI_DEV_REGULATOR_MAX	8
->   #define DSI_BUS_CLK_MAX		4
->   
-> -/* Regulators for DSI devices */
-> -struct dsi_reg_entry {
-> -	char name[32];
-> -	int enable_load;
-> -};
-> -
-> -struct dsi_reg_config {
-> -	int num;
-> -	struct dsi_reg_entry regs[DSI_DEV_REGULATOR_MAX];
-> -};
-> -
->   struct msm_dsi {
->   	struct drm_device *dev;
->   	struct platform_device *pdev;
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.c b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> index 901d6fd53800..7e97c239ed48 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> @@ -9,16 +9,16 @@ static const char * const dsi_v2_bus_clk_names[] = {
->   	"core_mmss", "iface", "bus",
->   };
->   
-> +static const struct regulator_bulk_data apq8064_dsi_regulators[] = {
-> +	{ .supply = "vdda", .init_load_uA = 100000 },	/* 1.2 V */
-> +	{ .supply = "avdd", .init_load_uA = 10000 },	/* 3.0 V */
-> +	{ .supply = "vddio", .init_load_uA = 100000 },	/* 1.8 V */
-> +};
-> +
->   static const struct msm_dsi_config apq8064_dsi_cfg = {
->   	.io_offset = 0,
-> -	.reg_cfg = {
-> -		.num = 3,
-> -		.regs = {
-> -			{"vdda", 100000},	/* 1.2 V */
-> -			{"avdd", 10000},	/* 3.0 V */
-> -			{"vddio", 100000},	/* 1.8 V */
-> -		},
-> -	},
-> +	.regulator_data = apq8064_dsi_regulators,
-> +	.num_regulators = ARRAY_SIZE(apq8064_dsi_regulators),
->   	.bus_clk_names = dsi_v2_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_v2_bus_clk_names),
->   	.io_start = { 0x4700000, 0x5800000 },
-> @@ -29,16 +29,16 @@ static const char * const dsi_6g_bus_clk_names[] = {
->   	"mdp_core", "iface", "bus", "core_mmss",
->   };
->   
-> +static const struct regulator_bulk_data msm8974_apq8084_regulators[] = {
-> +	{ .supply = "vdd", .init_load_uA = 150000 },	/* 3.0 V */
-> +	{ .supply = "vdda", .init_load_uA = 100000 },	/* 1.2 V */
-> +	{ .supply = "vddio", .init_load_uA = 100000 },	/* 1.8 V */
-> +};
-> +
->   static const struct msm_dsi_config msm8974_apq8084_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 3,
-> -		.regs = {
-> -			{"vdd", 150000},	/* 3.0 V */
-> -			{"vdda", 100000},	/* 1.2 V */
-> -			{"vddio", 100000},	/* 1.8 V */
-> -		},
-> -	},
-> +	.regulator_data = msm8974_apq8084_regulators,
-> +	.num_regulators = ARRAY_SIZE(msm8974_apq8084_regulators),
->   	.bus_clk_names = dsi_6g_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_6g_bus_clk_names),
->   	.io_start = { 0xfd922800, 0xfd922b00 },
-> @@ -49,15 +49,15 @@ static const char * const dsi_8916_bus_clk_names[] = {
->   	"mdp_core", "iface", "bus",
->   };
->   
-> +static const struct regulator_bulk_data msm8916_dsi_regulators[] = {
-> +	{ .supply = "vdda", .init_load_uA = 100000 },	/* 1.2 V */
-> +	{ .supply = "vddio", .init_load_uA = 100000 },	/* 1.8 V */
-> +};
-> +
->   static const struct msm_dsi_config msm8916_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 2,
-> -		.regs = {
-> -			{"vdda", 100000},	/* 1.2 V */
-> -			{"vddio", 100000},	/* 1.8 V */
-> -		},
-> -	},
-> +	.regulator_data = msm8916_dsi_regulators,
-> +	.num_regulators = ARRAY_SIZE(msm8916_dsi_regulators),
->   	.bus_clk_names = dsi_8916_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_8916_bus_clk_names),
->   	.io_start = { 0x1a98000 },
-> @@ -68,34 +68,34 @@ static const char * const dsi_8976_bus_clk_names[] = {
->   	"mdp_core", "iface", "bus",
->   };
->   
-> +static const struct regulator_bulk_data msm8976_dsi_regulators[] = {
-> +	{ .supply = "vdda", .init_load_uA = 100000 },	/* 1.2 V */
-> +	{ .supply = "vddio", .init_load_uA = 100000 },	/* 1.8 V */
-> +};
-> +
->   static const struct msm_dsi_config msm8976_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 2,
-> -		.regs = {
-> -			{"vdda", 100000},	/* 1.2 V */
-> -			{"vddio", 100000},	/* 1.8 V */
-> -		},
-> -	},
-> +	.regulator_data = msm8976_dsi_regulators,
-> +	.num_regulators = ARRAY_SIZE(msm8976_dsi_regulators),
->   	.bus_clk_names = dsi_8976_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_8976_bus_clk_names),
->   	.io_start = { 0x1a94000, 0x1a96000 },
->   	.num_dsi = 2,
->   };
->   
-> +static const struct regulator_bulk_data msm8994_dsi_regulators[] = {
-> +	{ .supply = "vdda", .init_load_uA = 100000 },	/* 1.25 V */
-> +	{ .supply = "vddio", .init_load_uA = 100000 },	/* 1.8 V */
-> +	{ .supply = "vcca", .init_load_uA = 10000 },	/* 1.0 V */
-> +	{ .supply = "vdd", .init_load_uA = 100000 },	/* 1.8 V */
-> +	{ .supply = "lab_reg", .init_load_uA = -1 },
-> +	{ .supply = "ibb_reg", .init_load_uA = -1 },
-> +};
-> +
->   static const struct msm_dsi_config msm8994_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 6,
-> -		.regs = {
-> -			{"vdda", 100000},	/* 1.25 V */
-> -			{"vddio", 100000},	/* 1.8 V */
-> -			{"vcca", 10000},	/* 1.0 V */
-> -			{"vdd", 100000},	/* 1.8 V */
-> -			{"lab_reg", -1},
-> -			{"ibb_reg", -1},
-> -		},
-> -	},
-> +	.regulator_data = msm8994_dsi_regulators,
-> +	.num_regulators = ARRAY_SIZE(msm8994_dsi_regulators),
->   	.bus_clk_names = dsi_6g_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_6g_bus_clk_names),
->   	.io_start = { 0xfd998000, 0xfd9a0000 },
-> @@ -106,16 +106,16 @@ static const char * const dsi_8996_bus_clk_names[] = {
->   	"mdp_core", "iface", "bus", "core_mmss",
->   };
->   
-> +static const struct regulator_bulk_data msm8996_dsi_regulators[] = {
-> +	{ .supply = "vdda", .init_load_uA = 18160 },	/* 1.25 V */
-> +	{ .supply = "vcca", .init_load_uA = 17000 },	/* 0.925 V */
-> +	{ .supply = "vddio", .init_load_uA = 100000 },	/* 1.8 V */
-> +};
-> +
->   static const struct msm_dsi_config msm8996_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 3,
-> -		.regs = {
-> -			{"vdda", 18160},	/* 1.25 V */
-> -			{"vcca", 17000},	/* 0.925 V */
-> -			{"vddio", 100000},/* 1.8 V */
-> -		},
-> -	},
-> +	.regulator_data = msm8996_dsi_regulators,
-> +	.num_regulators = ARRAY_SIZE(msm8996_dsi_regulators),
->   	.bus_clk_names = dsi_8996_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_8996_bus_clk_names),
->   	.io_start = { 0x994000, 0x996000 },
-> @@ -126,15 +126,15 @@ static const char * const dsi_msm8998_bus_clk_names[] = {
->   	"iface", "bus", "core",
->   };
->   
-> +static const struct regulator_bulk_data msm8998_dsi_regulators[] = {
-> +	{ .supply = "vdd", .init_load_uA = 367000 },	/* 0.9 V */
-> +	{ .supply = "vdda", .init_load_uA = 62800 },	/* 1.2 V */
-> +};
-> +
->   static const struct msm_dsi_config msm8998_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 2,
-> -		.regs = {
-> -			{"vdd", 367000},	/* 0.9 V */
-> -			{"vdda", 62800},	/* 1.2 V */
-> -		},
-> -	},
-> +	.regulator_data = msm8998_dsi_regulators,
-> +	.num_regulators = ARRAY_SIZE(msm8998_dsi_regulators),
->   	.bus_clk_names = dsi_msm8998_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_msm8998_bus_clk_names),
->   	.io_start = { 0xc994000, 0xc996000 },
-> @@ -145,14 +145,14 @@ static const char * const dsi_sdm660_bus_clk_names[] = {
->   	"iface", "bus", "core", "core_mmss",
->   };
->   
-> +static const struct regulator_bulk_data sdm660_dsi_regulators[] = {
-> +	{ .supply = "vdda", .init_load_uA = 12560 },	/* 1.2 V */
-> +};
-> +
->   static const struct msm_dsi_config sdm660_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vdda", 12560},	/* 1.2 V */
-> -		},
-> -	},
-> +	.regulator_data = sdm660_dsi_regulators,
-> +	.num_regulators = ARRAY_SIZE(sdm660_dsi_regulators),
->   	.bus_clk_names = dsi_sdm660_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_sdm660_bus_clk_names),
->   	.io_start = { 0xc994000, 0xc996000 },
-> @@ -167,28 +167,28 @@ static const char * const dsi_sc7180_bus_clk_names[] = {
->   	"iface", "bus",
->   };
->   
-> +static const struct regulator_bulk_data sdm845_dsi_regulators[] = {
-> +	{ .supply = "vdda", .init_load_uA = 21800 },	/* 1.2 V */
-> +};
-> +
->   static const struct msm_dsi_config sdm845_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vdda", 21800},	/* 1.2 V */
-> -		},
-> -	},
-> +	.regulator_data = sdm845_dsi_regulators,
-> +	.num_regulators = ARRAY_SIZE(sdm845_dsi_regulators),
->   	.bus_clk_names = dsi_sdm845_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_sdm845_bus_clk_names),
->   	.io_start = { 0xae94000, 0xae96000 },
->   	.num_dsi = 2,
->   };
->   
-> +static const struct regulator_bulk_data sc7180_dsi_regulators[] = {
-> +	{ .supply = "vdda", .init_load_uA = 21800 },	/* 1.2 V */
-> +};
-> +
->   static const struct msm_dsi_config sc7180_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vdda", 21800},	/* 1.2 V */
-> -		},
-> -	},
-> +	.regulator_data = sc7180_dsi_regulators,
-> +	.num_regulators = ARRAY_SIZE(sc7180_dsi_regulators),
->   	.bus_clk_names = dsi_sc7180_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_sc7180_bus_clk_names),
->   	.io_start = { 0xae94000 },
-> @@ -199,14 +199,14 @@ static const char * const dsi_sc7280_bus_clk_names[] = {
->   	"iface", "bus",
->   };
->   
-> +static const struct regulator_bulk_data sc7280_dsi_regulators[] = {
-> +	{ .supply = "vdda", .init_load_uA = 8350 },	/* 1.2 V */
-> +};
-> +
->   static const struct msm_dsi_config sc7280_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vdda", 8350},	/* 1.2 V */
-> -		},
-> -	},
-> +	.regulator_data = sc7280_dsi_regulators,
-> +	.num_regulators = ARRAY_SIZE(sc7280_dsi_regulators),
->   	.bus_clk_names = dsi_sc7280_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_sc7280_bus_clk_names),
->   	.io_start = { 0xae94000 },
-> @@ -217,14 +217,14 @@ static const char * const dsi_qcm2290_bus_clk_names[] = {
->   	"iface", "bus",
->   };
->   
-> +static const struct regulator_bulk_data qcm2290_dsi_cfg_regulators[] = {
-> +	{ .supply = "vdda", .init_load_uA = 21800 },	/* 1.2 V */
-> +};
-> +
->   static const struct msm_dsi_config qcm2290_dsi_cfg = {
->   	.io_offset = DSI_6G_REG_SHIFT,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vdda", 21800},	/* 1.2 V */
-> -		},
-> -	},
-> +	.regulator_data = qcm2290_dsi_cfg_regulators,
-> +	.num_regulators = ARRAY_SIZE(qcm2290_dsi_cfg_regulators),
->   	.bus_clk_names = dsi_qcm2290_bus_clk_names,
->   	.num_bus_clks = ARRAY_SIZE(dsi_qcm2290_bus_clk_names),
->   	.io_start = { 0x5e94000 },
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.h b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> index fe54a999968b..8f04e685a74e 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> @@ -32,7 +32,8 @@
->   
->   struct msm_dsi_config {
->   	u32 io_offset;
-> -	struct dsi_reg_config reg_cfg;
-> +	const struct regulator_bulk_data *regulator_data;
-> +	int num_regulators;
->   	const char * const *bus_clk_names;
->   	const int num_bus_clks;
->   	const resource_size_t io_start[DSI_MAX];
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index a0a1b6d61d05..3364b2affac5 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -106,7 +106,7 @@ struct msm_dsi_host {
->   
->   	void __iomem *ctrl_base;
->   	phys_addr_t ctrl_size;
-> -	struct regulator_bulk_data supplies[DSI_DEV_REGULATOR_MAX];
-> +	struct regulator_bulk_data *supplies;
->   
->   	int num_bus_clks;
->   	struct clk_bulk_data bus_clks[DSI_BUS_CLK_MAX];
-> @@ -253,28 +253,6 @@ static inline struct msm_dsi_host *to_msm_dsi_host(struct mipi_dsi_host *host)
->   	return container_of(host, struct msm_dsi_host, base);
->   }
->   
-> -static int dsi_regulator_init(struct msm_dsi_host *msm_host)
-> -{
-> -	struct regulator_bulk_data *s = msm_host->supplies;
-> -	const struct dsi_reg_entry *regs = msm_host->cfg_hnd->cfg->reg_cfg.regs;
-> -	int num = msm_host->cfg_hnd->cfg->reg_cfg.num;
-> -	int i, ret;
-> -
-> -	for (i = 0; i < num; i++) {
-> -		s[i].supply = regs[i].name;
-> -		s[i].init_load_uA = regs[i].enable_load;
-> -	}
-> -
-> -	ret = devm_regulator_bulk_get(&msm_host->pdev->dev, num, s);
-> -	if (ret < 0) {
-> -		pr_err("%s: failed to init regulator, ret=%d\n",
-> -						__func__, ret);
-> -		return ret;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->   int dsi_clk_init_v2(struct msm_dsi_host *msm_host)
->   {
->   	struct platform_device *pdev = msm_host->pdev;
-> @@ -1982,6 +1960,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
->   {
->   	struct msm_dsi_host *msm_host = NULL;
->   	struct platform_device *pdev = msm_dsi->pdev;
-> +	const struct msm_dsi_config *cfg;
->   	int ret;
->   
->   	msm_host = devm_kzalloc(&pdev->dev, sizeof(*msm_host), GFP_KERNEL);
-> @@ -2014,6 +1993,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
->   		pr_err("%s: get config failed\n", __func__);
->   		goto fail;
->   	}
-> +	cfg = msm_host->cfg_hnd->cfg;
->   
->   	msm_host->id = dsi_host_get_id(msm_host);
->   	if (msm_host->id < 0) {
-> @@ -2023,13 +2003,13 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
->   	}
->   
->   	/* fixup base address by io offset */
-> -	msm_host->ctrl_base += msm_host->cfg_hnd->cfg->io_offset;
-> +	msm_host->ctrl_base += cfg->io_offset;
->   
-> -	ret = dsi_regulator_init(msm_host);
-> -	if (ret) {
-> -		pr_err("%s: regulator init failed\n", __func__);
-> +	ret = devm_regulator_bulk_get_const(&pdev->dev, cfg->num_regulators,
-> +					    cfg->regulator_data,
-> +					    &msm_host->supplies);
-> +	if (ret)
->   		goto fail;
-> -	}
->   
->   	ret = dsi_clk_init(msm_host);
->   	if (ret) {
-> @@ -2510,7 +2490,7 @@ int msm_dsi_host_power_on(struct mipi_dsi_host *host,
->   
->   	msm_dsi_sfpb_config(msm_host, true);
->   
-> -	ret = regulator_bulk_enable(msm_host->cfg_hnd->cfg->reg_cfg.num,
-> +	ret = regulator_bulk_enable(msm_host->cfg_hnd->cfg->num_regulators,
->   				    msm_host->supplies);
->   	if (ret) {
->   		pr_err("%s:Failed to enable vregs.ret=%d\n",
-> @@ -2551,7 +2531,7 @@ int msm_dsi_host_power_on(struct mipi_dsi_host *host,
->   	cfg_hnd->ops->link_clk_disable(msm_host);
->   	pm_runtime_put(&msm_host->pdev->dev);
->   fail_disable_reg:
-> -	regulator_bulk_disable(msm_host->cfg_hnd->cfg->reg_cfg.num,
-> +	regulator_bulk_disable(msm_host->cfg_hnd->cfg->num_regulators,
->   			       msm_host->supplies);
->   unlock_ret:
->   	mutex_unlock(&msm_host->dev_mutex);
-> @@ -2579,7 +2559,7 @@ int msm_dsi_host_power_off(struct mipi_dsi_host *host)
->   	cfg_hnd->ops->link_clk_disable(msm_host);
->   	pm_runtime_put(&msm_host->pdev->dev);
->   
-> -	regulator_bulk_disable(msm_host->cfg_hnd->cfg->reg_cfg.num,
-> +	regulator_bulk_disable(msm_host->cfg_hnd->cfg->num_regulators,
->   			       msm_host->supplies);
->   
->   	msm_dsi_sfpb_config(msm_host, false);
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> index efb6b1726cdb..0a00f9b73fc5 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> @@ -507,33 +507,6 @@ int msm_dsi_cphy_timing_calc_v4(struct msm_dsi_dphy_timing *timing,
->   	return 0;
->   }
->   
-> -static int dsi_phy_regulator_init(struct msm_dsi_phy *phy)
-> -{
-> -	struct regulator_bulk_data *s = phy->supplies;
-> -	const struct dsi_reg_entry *regs = phy->cfg->reg_cfg.regs;
-> -	struct device *dev = &phy->pdev->dev;
-> -	int num = phy->cfg->reg_cfg.num;
-> -	int i, ret;
-> -
-> -	for (i = 0; i < num; i++) {
-> -		s[i].supply = regs[i].name;
-> -		s[i].init_load_uA = regs[i].enable_load;
-> -	}
-> -
-> -	ret = devm_regulator_bulk_get(dev, num, s);
-> -	if (ret < 0) {
-> -		if (ret != -EPROBE_DEFER) {
-> -			DRM_DEV_ERROR(dev,
-> -				      "%s: failed to init regulator, ret=%d\n",
-> -				      __func__, ret);
-> -		}
-> -
-> -		return ret;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->   static int dsi_phy_enable_resource(struct msm_dsi_phy *phy)
->   {
->   	struct device *dev = &phy->pdev->dev;
-> @@ -698,7 +671,9 @@ static int dsi_phy_driver_probe(struct platform_device *pdev)
->   			goto fail;
->   	}
->   
-> -	ret = dsi_phy_regulator_init(phy);
-> +	ret = devm_regulator_bulk_get_const(dev, phy->cfg->num_regulators,
-> +					    phy->cfg->regulator_data,
-> +					    &phy->supplies);
->   	if (ret)
->   		goto fail;
->   
-> @@ -780,7 +755,7 @@ int msm_dsi_phy_enable(struct msm_dsi_phy *phy,
->   		goto res_en_fail;
->   	}
->   
-> -	ret = regulator_bulk_enable(phy->cfg->reg_cfg.num, phy->supplies);
-> +	ret = regulator_bulk_enable(phy->cfg->num_regulators, phy->supplies);
->   	if (ret) {
->   		DRM_DEV_ERROR(dev, "%s: regulator enable failed, %d\n",
->   			__func__, ret);
-> @@ -817,7 +792,7 @@ int msm_dsi_phy_enable(struct msm_dsi_phy *phy,
->   	if (phy->cfg->ops.disable)
->   		phy->cfg->ops.disable(phy);
->   phy_en_fail:
-> -	regulator_bulk_disable(phy->cfg->reg_cfg.num, phy->supplies);
-> +	regulator_bulk_disable(phy->cfg->num_regulators, phy->supplies);
->   reg_en_fail:
->   	dsi_phy_disable_resource(phy);
->   res_en_fail:
-> @@ -831,7 +806,7 @@ void msm_dsi_phy_disable(struct msm_dsi_phy *phy)
->   
->   	phy->cfg->ops.disable(phy);
->   
-> -	regulator_bulk_disable(phy->cfg->reg_cfg.num, phy->supplies);
-> +	regulator_bulk_disable(phy->cfg->num_regulators, phy->supplies);
->   	dsi_phy_disable_resource(phy);
->   }
->   
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-> index dc91b43d5a38..60a99c6525b2 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-> @@ -29,7 +29,8 @@ struct msm_dsi_phy_ops {
->   };
->   
->   struct msm_dsi_phy_cfg {
-> -	struct dsi_reg_config reg_cfg;
-> +	const struct regulator_bulk_data *regulator_data;
-> +	int num_regulators;
->   	struct msm_dsi_phy_ops ops;
->   
->   	unsigned long	min_pll_rate;
-> @@ -98,7 +99,7 @@ struct msm_dsi_phy {
->   	int id;
->   
->   	struct clk *ahb_clk;
-> -	struct regulator_bulk_data supplies[DSI_DEV_REGULATOR_MAX];
-> +	struct regulator_bulk_data *supplies;
->   
->   	struct msm_dsi_dphy_timing timing;
->   	const struct msm_dsi_phy_cfg *cfg;
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
-> index 6a10a1448051..e34a2274db87 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
-> @@ -1028,14 +1028,14 @@ static int dsi_10nm_phy_parse_dt(struct msm_dsi_phy *phy)
->   	return 0;
->   }
->   
-> +static const struct regulator_bulk_data dsi_phy_10nm_regulators[] = {
-> +	{ .supply = "vdds", .init_load_uA = 36000 },
-> +};
-> +
->   const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs = {
->   	.has_phy_lane = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vdds", 36000},
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_10nm_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_10nm_regulators),
->   	.ops = {
->   		.enable = dsi_10nm_phy_enable,
->   		.disable = dsi_10nm_phy_disable,
-> @@ -1052,12 +1052,8 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs = {
->   
->   const struct msm_dsi_phy_cfg dsi_phy_10nm_8998_cfgs = {
->   	.has_phy_lane = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vdds", 36000},
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_10nm_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_10nm_regulators),
->   	.ops = {
->   		.enable = dsi_10nm_phy_enable,
->   		.disable = dsi_10nm_phy_disable,
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> index 0f3d4c56c333..be1500368d95 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> @@ -1024,14 +1024,18 @@ static void dsi_14nm_phy_disable(struct msm_dsi_phy *phy)
->   	wmb();
->   }
->   
-> +static const struct regulator_bulk_data dsi_phy_14nm_17mA_regulators[] = {
-> +	{ .supply = "vcca", .init_load_uA = 17000 },
-> +};
-> +
-> +static const struct regulator_bulk_data dsi_phy_14nm_73p4mA_regulators[] = {
-> +	{ .supply = "vcca", .init_load_uA = 73400 },
-> +};
-> +
->   const struct msm_dsi_phy_cfg dsi_phy_14nm_cfgs = {
->   	.has_phy_lane = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vcca", 17000},
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_14nm_17mA_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_14nm_17mA_regulators),
->   	.ops = {
->   		.enable = dsi_14nm_phy_enable,
->   		.disable = dsi_14nm_phy_disable,
-> @@ -1047,12 +1051,8 @@ const struct msm_dsi_phy_cfg dsi_phy_14nm_cfgs = {
->   
->   const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs = {
->   	.has_phy_lane = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vcca", 73400},
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_14nm_73p4mA_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_14nm_73p4mA_regulators),
->   	.ops = {
->   		.enable = dsi_14nm_phy_enable,
->   		.disable = dsi_14nm_phy_disable,
-> @@ -1068,12 +1068,8 @@ const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs = {
->   
->   const struct msm_dsi_phy_cfg dsi_phy_14nm_8953_cfgs = {
->   	.has_phy_lane = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vcca", 17000},
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_14nm_17mA_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_14nm_17mA_regulators),
->   	.ops = {
->   		.enable = dsi_14nm_phy_enable,
->   		.disable = dsi_14nm_phy_disable,
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_20nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_20nm.c
-> index b7c621d94981..c9752b991744 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_20nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_20nm.c
-> @@ -129,15 +129,15 @@ static void dsi_20nm_phy_disable(struct msm_dsi_phy *phy)
->   	dsi_20nm_phy_regulator_ctrl(phy, false);
->   }
->   
-> +static const struct regulator_bulk_data dsi_phy_20nm_regulators[] = {
-> +	{ .supply = "vddio", .init_load_uA = 100000 },	/* 1.8 V */
-> +	{ .supply = "vcca", .init_load_uA = 10000 },	/* 1.0 V */
-> +};
-> +
->   const struct msm_dsi_phy_cfg dsi_phy_20nm_cfgs = {
->   	.has_phy_regulator = true,
-> -	.reg_cfg = {
-> -		.num = 2,
-> -		.regs = {
-> -			{"vddio", 100000},	/* 1.8 V */
-> -			{"vcca", 10000},	/* 1.0 V */
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_20nm_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_20nm_regulators),
->   	.ops = {
->   		.enable = dsi_20nm_phy_enable,
->   		.disable = dsi_20nm_phy_disable,
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
-> index 6beba387640d..578c671a3bb1 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
-> @@ -769,14 +769,14 @@ static void dsi_28nm_phy_disable(struct msm_dsi_phy *phy)
->   	wmb();
->   }
->   
-> +static const struct regulator_bulk_data dsi_phy_28nm_regulators[] = {
-> +	{ .supply = "vddio", .init_load_uA = 100000 },
-> +};
-> +
->   const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_cfgs = {
->   	.has_phy_regulator = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vddio", 100000},
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_28nm_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_28nm_regulators),
->   	.ops = {
->   		.enable = dsi_28nm_phy_enable,
->   		.disable = dsi_28nm_phy_disable,
-> @@ -792,12 +792,8 @@ const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_cfgs = {
->   
->   const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_famb_cfgs = {
->   	.has_phy_regulator = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vddio", 100000},
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_28nm_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_28nm_regulators),
->   	.ops = {
->   		.enable = dsi_28nm_phy_enable,
->   		.disable = dsi_28nm_phy_disable,
-> @@ -813,12 +809,8 @@ const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_famb_cfgs = {
->   
->   const struct msm_dsi_phy_cfg dsi_phy_28nm_lp_cfgs = {
->   	.has_phy_regulator = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vddio", 100000},	/* 1.8 V */
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_28nm_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_28nm_regulators),
->   	.ops = {
->   		.enable = dsi_28nm_phy_enable,
->   		.disable = dsi_28nm_phy_disable,
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c
-> index 2e942b10fffa..fba1ba88de01 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c
-> @@ -648,14 +648,14 @@ static void dsi_28nm_phy_disable(struct msm_dsi_phy *phy)
->   	wmb();
->   }
->   
-> +static const struct regulator_bulk_data dsi_phy_28nm_8960_regulators[] = {
-> +	{ .supply = "vddio", .init_load_uA = 100000 },	/* 1.8 V */
-> +};
-> +
->   const struct msm_dsi_phy_cfg dsi_phy_28nm_8960_cfgs = {
->   	.has_phy_regulator = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vddio", 100000},	/* 1.8 V */
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_28nm_8960_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_28nm_8960_regulators),
->   	.ops = {
->   		.enable = dsi_28nm_phy_enable,
->   		.disable = dsi_28nm_phy_disable,
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-> index 9c7c49ce1200..cef801c58cdf 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-> @@ -1036,14 +1036,18 @@ static void dsi_7nm_phy_disable(struct msm_dsi_phy *phy)
->   	DBG("DSI%d PHY disabled", phy->id);
->   }
->   
-> +static const struct regulator_bulk_data dsi_phy_7nm_36mA_regulators[] = {
-> +	{ .supply = "vdds", .init_load_uA = 36000 },
-> +};
-> +
-> +static const struct regulator_bulk_data dsi_phy_7nm_37750uA_regulators[] = {
-> +	{ .supply = "vdds", .init_load_uA = 37550 },
-> +};
-> +
->   const struct msm_dsi_phy_cfg dsi_phy_7nm_cfgs = {
->   	.has_phy_lane = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vdds", 36000},
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_7nm_36mA_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_7nm_36mA_regulators),
->   	.ops = {
->   		.enable = dsi_7nm_phy_enable,
->   		.disable = dsi_7nm_phy_disable,
-> @@ -1065,12 +1069,8 @@ const struct msm_dsi_phy_cfg dsi_phy_7nm_cfgs = {
->   
->   const struct msm_dsi_phy_cfg dsi_phy_7nm_8150_cfgs = {
->   	.has_phy_lane = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vdds", 36000},
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_7nm_36mA_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_7nm_36mA_regulators),
->   	.ops = {
->   		.enable = dsi_7nm_phy_enable,
->   		.disable = dsi_7nm_phy_disable,
-> @@ -1087,12 +1087,8 @@ const struct msm_dsi_phy_cfg dsi_phy_7nm_8150_cfgs = {
->   
->   const struct msm_dsi_phy_cfg dsi_phy_7nm_7280_cfgs = {
->   	.has_phy_lane = true,
-> -	.reg_cfg = {
-> -		.num = 1,
-> -		.regs = {
-> -			{"vdds", 37550},
-> -		},
-> -	},
-> +	.regulator_data = dsi_phy_7nm_37750uA_regulators,
-> +	.num_regulators = ARRAY_SIZE(dsi_phy_7nm_37750uA_regulators),
->   	.ops = {
->   		.enable = dsi_7nm_phy_enable,
->   		.disable = dsi_7nm_phy_disable,

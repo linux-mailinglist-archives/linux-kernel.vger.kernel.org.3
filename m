@@ -2,183 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB998589856
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035D6589862
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238988AbiHDH1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S233960AbiHDHaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238202AbiHDH1s (ORCPT
+        with ESMTP id S232987AbiHDH35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:27:48 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6430D22B05;
-        Thu,  4 Aug 2022 00:27:46 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Lz0br4pGXz19G3M;
-        Thu,  4 Aug 2022 15:24:40 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 4 Aug 2022 15:27:44 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 4 Aug
- 2022 15:27:43 +0800
-Message-ID: <5ee1dfb5-fa70-d412-43c2-3e90ee057eec@huawei.com>
-Date:   Thu, 4 Aug 2022 15:27:39 +0800
+        Thu, 4 Aug 2022 03:29:57 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18838220F7
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:29:53 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220804072948euoutp025d0ddbf2e71d6d56d5efece254d2dc46~IE8J5UGV62160821608euoutp02c
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 07:29:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220804072948euoutp025d0ddbf2e71d6d56d5efece254d2dc46~IE8J5UGV62160821608euoutp02c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1659598188;
+        bh=jnUbqqxtqKEs3eL1T2tnuuExSbUm+xevcGXFz+W0Zjs=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=b5bVjBr8G5YaEgeMlRi5OLilr0xgnA+lQ2jxpgYHrxAx/3zdRwhaGsjyEv71yCfsQ
+         C+h5PxZDvI8OMZCQgcMyfaigIMcUAkw9vEAFceTQog27ZMVbXJiW0WXM34tMrISsap
+         XTUq9/wzWzI91w0TNMwcbfuf3D2RbrEpT7lGVo/4=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220804072948eucas1p121431348dc2c1518f5e4162314d7e198~IE8JgzTTM2410624106eucas1p1N;
+        Thu,  4 Aug 2022 07:29:48 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 90.6F.10067.C657BE26; Thu,  4
+        Aug 2022 08:29:48 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220804072947eucas1p13d72273f427549e045227443a1b5986e~IE8JH1r-i3015830158eucas1p1-;
+        Thu,  4 Aug 2022 07:29:47 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220804072947eusmtrp2d9ed2aef8f7f26f182d2f638ed0d03fa~IE8JG9fZC2908429084eusmtrp2a;
+        Thu,  4 Aug 2022 07:29:47 +0000 (GMT)
+X-AuditID: cbfec7f4-dd7ff70000002753-7a-62eb756c783f
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 5E.9C.09038.B657BE26; Thu,  4
+        Aug 2022 08:29:47 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220804072947eusmtip10cdd8d8afa4cf74d25a908afe0f498aa~IE8I7rQ8t1783017830eusmtip1S;
+        Thu,  4 Aug 2022 07:29:47 +0000 (GMT)
+Received: from [192.168.8.130] (106.210.248.112) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Thu, 4 Aug 2022 08:29:45 +0100
+Message-ID: <73f35f39-9637-056e-91b9-ee6b2c104977@samsung.com>
+Date:   Thu, 4 Aug 2022 09:29:44 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] Revert "x86/unwind/orc: Don't skip the first frame for
- inactive tasks"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Thunderbird/91.11.0
+Subject: Re: [dm-devel] [PATCH v9 05/13] nvme: zns: Allow ZNS drives that
+ have non-power_of_2 zone size
 Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
-        <linux-arch@vger.kernel.org>, <peterz@infradead.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <mbenes@suse.cz>
-References: <20220727031506.59322-1-chenzhongjin@huawei.com>
- <20220804045518.bfhe3rxhpkxzn4hk@treble>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20220804045518.bfhe3rxhpkxzn4hk@treble>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Bart Van Assche <bvanassche@acm.org>, <Johannes.Thumshirn@wdc.com>,
+        <snitzer@kernel.org>, <axboe@kernel.dk>,
+        <damien.lemoal@opensource.wdc.com>, <agk@redhat.com>, <hch@lst.de>
+CC:     <pankydev8@gmail.com>, <gost.dev@samsung.com>,
+        <linux-kernel@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
+        <linux-block@vger.kernel.org>, <dm-devel@redhat.com>,
+        <jaegeuk@kernel.org>, <matias.bjorling@wdc.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <2616b59b-8c6b-a482-a396-d9408fa461a3@acm.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [106.210.248.112]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRmVeSWpSXmKPExsWy7djPc7o5pa+TDM4/4bRYf+oYs8Xqu/1s
+        FtM+/GS2+H32PLPF3nezWS1Wrj7KZPFk/Sxmi79d95gs9t7Stri8aw6bxfxlT9ktJrR9Zba4
+        MeEpo8Wam09ZLE7cknbg97h8xdtj56y77B6Xz5Z6bFrVyeaxeUm9x+6bDWweO1vvs3q833eV
+        zePzJjmP9gPdTAFcUVw2Kak5mWWpRfp2CVwZl54dYyk4x1Kx8OVx5gbGJ8xdjBwcEgImEvv/
+        mnUxcnEICaxglJjztoUZwvnCKNE3/T4ThPOZUWLXm8OsXYycYB1vrh1ihUgsZ5TYefoxWAKs
+        asXdaIjELkaJhVsfMIMkeAXsJHZN+cgGYrMIqEj0Xd3BChEXlDg58wkLiC0qECmxZvdZdhBb
+        WCBTYunaxUwgNrOAuMStJ/PBzhAR2M4o8f7XHTCHWaCNSWLuni3sIF+wCWhJNHaCNXMKWEu8
+        XPIHqllTonX7b3YIW16ieetsZogXlCWObJ/LDmHXSqw9doYdZKaEwC1Oib+nV7FAJFwkNpzu
+        ZYOwhSVeHd8C1SAj8X/nfCYIu1ri6Y3fzBDNLYwS/TvXs0GC1Vqi70wORI2jxOKZM1ghwnwS
+        N94KQtzDJzFp23TmCYyqs5DCYhaSn2cheWEWkhcWMLKsYhRPLS3OTU8tNspLLdcrTswtLs1L
+        10vOz93ECEyAp/8d/7KDcfmrj3qHGJk4GA8xSnAwK4nwrrB8nSTEm5JYWZValB9fVJqTWnyI
+        UZqDRUmcNzlzQ6KQQHpiSWp2ampBahFMlomDU6qByflaG++t/LYdK458+38yfr4i1zlpQU8T
+        0d07b3w5IW3I5/3QoXe9W5Vx4svEaGvGhv6qbwFMcWoTJ0v9i/eaUnUq993xJtN8vsO/WhOC
+        WjTzVbbsWpHZ4pTcNS9a97/ttSsLPdw+tfF1bxOcGTFX98aEGBf9I5nCLHsnV06u2Ppv3s7t
+        J2a4TdSUX9Gw5fZ07oULpGfcW3BnynrZxE0Fy40Xcdq5pcbpaFlvvff3n5I4/+9jK/4qfL/R
+        O5Pb2+mwWhRL+5mHy2c7bVPiu8m/zjyabcmXQ9sc53HJPQivZG6Vy7zY8ixv+gbZeqfIbJkC
+        l7rI5TU7BTi+m74wMUtTfnpK9e7T/q8/0mtun5P1VmIpzkg01GIuKk4EABJBtL3vAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMKsWRmVeSWpSXmKPExsVy+t/xu7rZpa+TDBYt1rFYf+oYs8Xqu/1s
+        FtM+/GS2+H32PLPF3nezWS1Wrj7KZPFk/Sxmi79d95gs9t7Stri8aw6bxfxlT9ktJrR9Zba4
+        MeEpo8Wam09ZLE7cknbg97h8xdtj56y77B6Xz5Z6bFrVyeaxeUm9x+6bDWweO1vvs3q833eV
+        zePzJjmP9gPdTAFcUXo2RfmlJakKGfnFJbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5
+        mWWpRfp2CXoZl54dYyk4x1Kx8OVx5gbGJ8xdjJwcEgImEm+uHWLtYuTiEBJYyihxaecKqISM
+        xKcrH9khbGGJP9e62CCKPjJKNJ74AuXsYpQ4s3I7C0gVr4CdxK4pH9lAbBYBFYm+qztYIeKC
+        EidnPgGrERWIlHi4rIkJxBYWyJTYtecmI4jNLCAucevJfCaQoSIC2xkl3v+6A+YwC7QxSczd
+        s4UdYt0HRomjfSuAHA4ONgEticZOsPs4BawlXi75wwQxSVOidftvdghbXqJ562yof5Qljmyf
+        C/VPrcSr+7sZJzCKzkJy4Cwkh8xCMmoWklELGFlWMYqklhbnpucWG+kVJ+YWl+al6yXn525i
+        BKaObcd+btnBuPLVR71DjEwcjIcYJTiYlUR4V1i+ThLiTUmsrEotyo8vKs1JLT7EaAoMpYnM
+        UqLJ+cDklVcSb2hmYGpoYmZpYGppZqwkzutZ0JEoJJCeWJKanZpakFoE08fEwSnVwJR18u2q
+        GvbkpZx9JWxh2csEjyXldhTsZMiK/aOrma9bVyd8yaK6nC/hY32lu7TcY7usyMmKz+1sRSSn
+        84S/uvLNnSOgaKWNxt6Fuc0r74Znbfj2/fqVqd7WTFqBK3jvv+F67/6050bqSqWiXRFz37ge
+        1LkgWBI3v8td8kSg6ZftC/wXllqdbPX7+GRZi8ve2fJnf89mqokMFKyWmNreJSTpae4cde3r
+        Pl0PEcN4hw07VqUzLGq6xvhci/MO9/QM5oX5vd2TXs1/tFDp270raxQjbBsvd/jeqihqkpBe
+        q+syp1nukaP/WslbRfnOwfsyyzwE7Z/s2+Ycu19Wr33Rh7r/tsGeTbVvrtaHKQYqsRRnJBpq
+        MRcVJwIA5SgUHaYDAAA=
+X-CMS-MailID: 20220804072947eucas1p13d72273f427549e045227443a1b5986e
+X-Msg-Generator: CA
+X-RootMTR: 20220803094808eucas1p1a6a800161d32fe4242d39e669e5f3527
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220803094808eucas1p1a6a800161d32fe4242d39e669e5f3527
+References: <20220803094801.177490-1-p.raghav@samsung.com>
+        <CGME20220803094808eucas1p1a6a800161d32fe4242d39e669e5f3527@eucas1p1.samsung.com>
+        <20220803094801.177490-6-p.raghav@samsung.com>
+        <2616b59b-8c6b-a482-a396-d9408fa461a3@acm.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bart,
 
-On 2022/8/4 12:55, Josh Poimboeuf wrote:
-> On Wed, Jul 27, 2022 at 11:15:06AM +0800, Chen Zhongjin wrote:
->> This reverts commit f1d9a2abff66aa8156fbc1493abed468db63ea48.
->>
->> When CONFIG_GCOV_PROFILE_ALL is enabled, show_stack() and related
->> functions (e.g. dump_stack) will break for x86 ORC unwinder.
->>
->> Call Trace:
->>   <TASK>
->>   ? dump_stack_lvl+0x83/0xb7
->>   ? schedule+0x1/0x190
->>   ? dump_stack+0x13/0x1f
->>   ? handler_pre0+0x3f/0x53 [kp_unwind]
->>   ...
->>
->> show_trace_log_lvl() searches text address on stack to validate
->> whether unwind results are reliable. The code:
-> Hi,
->
-> Thanks for the patch.  The change itself makes sense, though I'm having
-> trouble recreating the bug described in the patch description.
->
-> I enabled CONFIG_GCOV_PROFILE_ALL and did 'echo l >
-> /proc/sysrq-trigger', but I got a valid stack trace:
->
->    # echo l > /proc/sysrq-trigger
->    [  343.916728] sysrq: Show backtrace of all active CPUs
->    [  343.917459] NMI backtrace for cpu 2
->    [  343.917884] CPU: 2 PID: 1007 Comm: bash Not tainted 5.19.0-rc8+ #68
->    [  343.918562] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-1.fc36 04/01/2014
->    [  343.919534] Call Trace:
->    [  343.919904]  <TASK>
->    [  343.920226]  dump_stack_lvl+0xcc/0x11b
->    [  343.920742]  dump_stack+0x17/0x24
->    [  343.921199]  nmi_cpu_backtrace.cold+0xb5/0x10d
->    [  343.921795]  ? lapic_can_unplug_cpu+0xa0/0xa0
->    [  343.922375]  nmi_trigger_cpumask_backtrace+0x171/0x200
->    [  343.923053]  arch_trigger_cpumask_backtrace+0x21/0x30
->    [  343.923599]  sysrq_handle_showallcpus+0x1f/0x30
->    [  343.924104]  __handle_sysrq.cold+0x81/0x234
->    [  343.924576]  write_sysrq_trigger+0x6a/0x90
->    [  343.925098]  proc_reg_write+0x99/0x120
->    [  343.925587]  vfs_write+0x16c/0x350
->    [  343.926093]  ksys_write+0x8c/0x180
->    [  343.926597]  __x64_sys_write+0x21/0x30
->    [  343.927144]  do_syscall_64+0x76/0x100
->    [  343.927676]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->    [  343.928343] RIP: 0033:0x7f555e8f7b50
->    [  343.928822] Code: 73 01 c3 48 8b 0d 38 83 2c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 79 db 2c 00 00 75 10 b8 01 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e e3 01 00 48 89 04 24
->    [  343.930801] RSP: 002b:00007ffdd20d0978 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
->    [  343.931761] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f555e8f7b50
->    [  343.932551] RDX: 0000000000000002 RSI: 000055ff471bfe20 RDI: 0000000000000001
->    [  343.933347] RBP: 000055ff471bfe20 R08: 00007f555ebc2740 R09: 00007f555f80f700
->    [  343.934155] R10: 0000000000000073 R11: 0000000000000246 R12: 0000000000000002
->    [  343.934962] R13: 0000000000000001 R14: 00007f555ebc15e0 R15: 00007f555ebbd3c0
->    [  343.935798]  </TASK>
->    [  343.936341] Sending NMI from CPU 2 to CPUs 0-1,3:
->    [  343.937163] NMI backtrace for cpu 3
->    [  343.937167] CPU: 3 PID: 600 Comm: systemd-journal Not tainted 5.19.0-rc8+ #68
->
-> Was this with an upstream kernel?  Can you share the config and
-> toolchain versions?
-Hi,
-
-My kernel is upstream and config is defconfig with only 
-CONFIG_GCOV_PROFILE_ALL=y then make menuconfig.
-
-CONFIG_CC_VERSION_TEXT="gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0"
-
-And I got:
-
-[   29.745728] NMI backtrace for cpu 1
-[   29.745728] CPU: 1 PID: 135 Comm: sh Not tainted 
-5.19.0-02858-ge2b542100719 #58
-[   29.745728] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), 
-BIOS rel-1.15.0-0-g2dd4b9b3f8404
-[   29.745728] Call Trace:
-[   29.745728]  <TASK>
-[   29.745728]  ? dump_stack_lvl+0x72/0xa1
-[   29.745728]  ? dump_stack+0x13/0x1f
-[   29.745728]  ? nmi_cpu_backtrace+0x19f/0x1d0
-[   29.745728]  ? lapic_can_unplug_cpu+0xf0/0xf0
-[   29.745728]  ? nmi_trigger_cpumask_backtrace+0x15e/0x210
-[   29.745728]  ? arch_trigger_cpumask_backtrace+0x18/0x30
-[   29.745728]  ? sysrq_handle_showallcpus+0x16/0x30
-[   29.745728]  ? __handle_sysrq+0xc4/0x250
-[   29.745728]  ? write_sysrq_trigger+0x46/0x60
-[   29.745728]  ? proc_reg_write+0xbc/0x120
-[   29.745728]  ? preempt_count_add+0x8e/0x130
-[   29.745728]  ? vfs_write+0xfe/0x460
-[   29.745728]  ? ksys_write+0xdc/0x170
-[   29.745728]  ? fpregs_assert_state_consistent+0x2d/0x90
-[   29.745728]  ? __x64_sys_write+0x19/0x30
-[   29.745728]  ? do_syscall_64+0x3a/0x90
-[   29.745728]  ? entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   29.745728]  </TASK>
-
-
-It also happened with CONFIG_CC_VERSION_TEXT="gcc-8 (Ubuntu 
-8.4.0-1ubuntu1~18.04) 8.4.0".
-
-I believe disassemble show_stack in vmlinux and if we have:
-
-     push   %rbp
-
-     mov    %rsp,%rbp
-
-     ... (no regs pushed to stack)
-
-     callq  <show_trace_log_lvl>
-
-This can be reproduced.
-
-Your stacktrace looks just as normal as the one in my commit message 
-(show_stack is optimized out).
-
-
-Best,
-
-Chen
-
-
-
+On 2022-08-03 19:22, Bart Van Assche wrote:
+> On 8/3/22 02:47, Pankaj Raghav wrote:
+>> -    sector &= ~(ns->zsze - 1);
+>> +    /*
+>> +     * Round down the sector value to the nearest zone start
+>> +     */
+>> +    div64_u64_rem(sector, ns->zsze, &remainder);
+>> +    sector -= remainder;
+> 
+> Could bdev_offset_from_zone_start() be used here?
+> 
+We call this function during blk_revalidate_disk_zones() to evaluate the
+chunk sectors. So we can't call bdev_offset_from_zone_start() from here
+as the chunk_sectors will not be initialized yet :)

@@ -2,146 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035D6589862
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A16589869
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233960AbiHDHaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        id S238976AbiHDHd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232987AbiHDH35 (ORCPT
+        with ESMTP id S230194AbiHDHdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:29:57 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18838220F7
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:29:53 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220804072948euoutp025d0ddbf2e71d6d56d5efece254d2dc46~IE8J5UGV62160821608euoutp02c
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 07:29:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220804072948euoutp025d0ddbf2e71d6d56d5efece254d2dc46~IE8J5UGV62160821608euoutp02c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659598188;
-        bh=jnUbqqxtqKEs3eL1T2tnuuExSbUm+xevcGXFz+W0Zjs=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=b5bVjBr8G5YaEgeMlRi5OLilr0xgnA+lQ2jxpgYHrxAx/3zdRwhaGsjyEv71yCfsQ
-         C+h5PxZDvI8OMZCQgcMyfaigIMcUAkw9vEAFceTQog27ZMVbXJiW0WXM34tMrISsap
-         XTUq9/wzWzI91w0TNMwcbfuf3D2RbrEpT7lGVo/4=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220804072948eucas1p121431348dc2c1518f5e4162314d7e198~IE8JgzTTM2410624106eucas1p1N;
-        Thu,  4 Aug 2022 07:29:48 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 90.6F.10067.C657BE26; Thu,  4
-        Aug 2022 08:29:48 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220804072947eucas1p13d72273f427549e045227443a1b5986e~IE8JH1r-i3015830158eucas1p1-;
-        Thu,  4 Aug 2022 07:29:47 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220804072947eusmtrp2d9ed2aef8f7f26f182d2f638ed0d03fa~IE8JG9fZC2908429084eusmtrp2a;
-        Thu,  4 Aug 2022 07:29:47 +0000 (GMT)
-X-AuditID: cbfec7f4-dd7ff70000002753-7a-62eb756c783f
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 5E.9C.09038.B657BE26; Thu,  4
-        Aug 2022 08:29:47 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220804072947eusmtip10cdd8d8afa4cf74d25a908afe0f498aa~IE8I7rQ8t1783017830eusmtip1S;
-        Thu,  4 Aug 2022 07:29:47 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.112) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 4 Aug 2022 08:29:45 +0100
-Message-ID: <73f35f39-9637-056e-91b9-ee6b2c104977@samsung.com>
-Date:   Thu, 4 Aug 2022 09:29:44 +0200
+        Thu, 4 Aug 2022 03:33:25 -0400
+Received: from smtp116.iad3a.emailsrvr.com (smtp116.iad3a.emailsrvr.com [173.203.187.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9782250C;
+        Thu,  4 Aug 2022 00:33:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openvpn.net;
+        s=20170822-45nk5nwl; t=1659598403;
+        bh=kYhrOpJX2cllhR3M2EBifKrqWsb/ILqyjRs7YM4OHjU=;
+        h=Date:To:From:Subject:From;
+        b=ISDfqj1G3uusPVK1E44YDt4hYar4Xj2ivxFzmGL2gWAjMMX2ry49Lhk5J9xt8p7el
+         0lrphm899gep807MRhd2qHFAQSvC8nwBSk3Y0FmOAUdFWi1T96aKN1DNXKaNtYKPd7
+         VuCcLGRRCETii3jF68+7Qv1MaGuLh6Cie7efqsqo=
+X-Auth-ID: antonio@openvpn.net
+Received: by smtp23.relay.iad3a.emailsrvr.com (Authenticated sender: antonio-AT-openvpn.net) with ESMTPSA id A1983239B9;
+        Thu,  4 Aug 2022 03:33:22 -0400 (EDT)
+Message-ID: <684e4a61-3fe3-00ac-42d2-213e501f14d4@openvpn.net>
+Date:   Thu, 4 Aug 2022 09:34:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.11.0
-Subject: Re: [dm-devel] [PATCH v9 05/13] nvme: zns: Allow ZNS drives that
- have non-power_of_2 zone size
+ Thunderbird/91.12.0
 Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>, <Johannes.Thumshirn@wdc.com>,
-        <snitzer@kernel.org>, <axboe@kernel.dk>,
-        <damien.lemoal@opensource.wdc.com>, <agk@redhat.com>, <hch@lst.de>
-CC:     <pankydev8@gmail.com>, <gost.dev@samsung.com>,
-        <linux-kernel@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
-        <linux-block@vger.kernel.org>, <dm-devel@redhat.com>,
-        <jaegeuk@kernel.org>, <matias.bjorling@wdc.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <2616b59b-8c6b-a482-a396-d9408fa461a3@acm.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [106.210.248.112]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRmVeSWpSXmKPExsWy7djPc7o5pa+TDM4/4bRYf+oYs8Xqu/1s
-        FtM+/GS2+H32PLPF3nezWS1Wrj7KZPFk/Sxmi79d95gs9t7Stri8aw6bxfxlT9ktJrR9Zba4
-        MeEpo8Wam09ZLE7cknbg97h8xdtj56y77B6Xz5Z6bFrVyeaxeUm9x+6bDWweO1vvs3q833eV
-        zePzJjmP9gPdTAFcUVw2Kak5mWWpRfp2CVwZl54dYyk4x1Kx8OVx5gbGJ8xdjBwcEgImEvv/
-        mnUxcnEICaxglJjztoUZwvnCKNE3/T4ThPOZUWLXm8OsXYycYB1vrh1ihUgsZ5TYefoxWAKs
-        asXdaIjELkaJhVsfMIMkeAXsJHZN+cgGYrMIqEj0Xd3BChEXlDg58wkLiC0qECmxZvdZdhBb
-        WCBTYunaxUwgNrOAuMStJ/PBzhAR2M4o8f7XHTCHWaCNSWLuni3sIF+wCWhJNHaCNXMKWEu8
-        XPIHqllTonX7b3YIW16ieetsZogXlCWObJ/LDmHXSqw9doYdZKaEwC1Oib+nV7FAJFwkNpzu
-        ZYOwhSVeHd8C1SAj8X/nfCYIu1ri6Y3fzBDNLYwS/TvXs0GC1Vqi70wORI2jxOKZM1ghwnwS
-        N94KQtzDJzFp23TmCYyqs5DCYhaSn2cheWEWkhcWMLKsYhRPLS3OTU8tNspLLdcrTswtLs1L
-        10vOz93ECEyAp/8d/7KDcfmrj3qHGJk4GA8xSnAwK4nwrrB8nSTEm5JYWZValB9fVJqTWnyI
-        UZqDRUmcNzlzQ6KQQHpiSWp2ampBahFMlomDU6qByflaG++t/LYdK458+38yfr4i1zlpQU8T
-        0d07b3w5IW3I5/3QoXe9W5Vx4svEaGvGhv6qbwFMcWoTJ0v9i/eaUnUq993xJtN8vsO/WhOC
-        WjTzVbbsWpHZ4pTcNS9a97/ttSsLPdw+tfF1bxOcGTFX98aEGBf9I5nCLHsnV06u2Ppv3s7t
-        J2a4TdSUX9Gw5fZ07oULpGfcW3BnynrZxE0Fy40Xcdq5pcbpaFlvvff3n5I4/+9jK/4qfL/R
-        O5Pb2+mwWhRL+5mHy2c7bVPiu8m/zjyabcmXQ9sc53HJPQivZG6Vy7zY8ixv+gbZeqfIbJkC
-        l7rI5TU7BTi+m74wMUtTfnpK9e7T/q8/0mtun5P1VmIpzkg01GIuKk4EABJBtL3vAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMKsWRmVeSWpSXmKPExsVy+t/xu7rZpa+TDBYt1rFYf+oYs8Xqu/1s
-        FtM+/GS2+H32PLPF3nezWS1Wrj7KZPFk/Sxmi79d95gs9t7Stri8aw6bxfxlT9ktJrR9Zba4
-        MeEpo8Wam09ZLE7cknbg97h8xdtj56y77B6Xz5Z6bFrVyeaxeUm9x+6bDWweO1vvs3q833eV
-        zePzJjmP9gPdTAFcUXo2RfmlJakKGfnFJbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5
-        mWWpRfp2CXoZl54dYyk4x1Kx8OVx5gbGJ8xdjJwcEgImEm+uHWLtYuTiEBJYyihxaecKqISM
-        xKcrH9khbGGJP9e62CCKPjJKNJ74AuXsYpQ4s3I7C0gVr4CdxK4pH9lAbBYBFYm+qztYIeKC
-        EidnPgGrERWIlHi4rIkJxBYWyJTYtecmI4jNLCAucevJfCaQoSIC2xkl3v+6A+YwC7QxSczd
-        s4UdYt0HRomjfSuAHA4ONgEticZOsPs4BawlXi75wwQxSVOidftvdghbXqJ562yof5Qljmyf
-        C/VPrcSr+7sZJzCKzkJy4Cwkh8xCMmoWklELGFlWMYqklhbnpucWG+kVJ+YWl+al6yXn525i
-        BKaObcd+btnBuPLVR71DjEwcjIcYJTiYlUR4V1i+ThLiTUmsrEotyo8vKs1JLT7EaAoMpYnM
-        UqLJ+cDklVcSb2hmYGpoYmZpYGppZqwkzutZ0JEoJJCeWJKanZpakFoE08fEwSnVwJR18u2q
-        GvbkpZx9JWxh2csEjyXldhTsZMiK/aOrma9bVyd8yaK6nC/hY32lu7TcY7usyMmKz+1sRSSn
-        84S/uvLNnSOgaKWNxt6Fuc0r74Znbfj2/fqVqd7WTFqBK3jvv+F67/6050bqSqWiXRFz37ge
-        1LkgWBI3v8td8kSg6ZftC/wXllqdbPX7+GRZi8ve2fJnf89mqokMFKyWmNreJSTpae4cde3r
-        Pl0PEcN4hw07VqUzLGq6xvhci/MO9/QM5oX5vd2TXs1/tFDp270raxQjbBsvd/jeqihqkpBe
-        q+syp1nukaP/WslbRfnOwfsyyzwE7Z/s2+Ycu19Wr33Rh7r/tsGeTbVvrtaHKQYqsRRnJBpq
-        MRcVJwIA5SgUHaYDAAA=
-X-CMS-MailID: 20220804072947eucas1p13d72273f427549e045227443a1b5986e
-X-Msg-Generator: CA
-X-RootMTR: 20220803094808eucas1p1a6a800161d32fe4242d39e669e5f3527
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220803094808eucas1p1a6a800161d32fe4242d39e669e5f3527
-References: <20220803094801.177490-1-p.raghav@samsung.com>
-        <CGME20220803094808eucas1p1a6a800161d32fe4242d39e669e5f3527@eucas1p1.samsung.com>
-        <20220803094801.177490-6-p.raghav@samsung.com>
-        <2616b59b-8c6b-a482-a396-d9408fa461a3@acm.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220719014704.21346-1-antonio@openvpn.net>
+ <20220719014704.21346-2-antonio@openvpn.net> <YtbNBUZ0Kz7pgmWK@lunn.ch>
+ <c490b87c-085b-baca-b7e4-c67a3ee2c25e@openvpn.net> <YuKKJxSFOgOL836y@lunn.ch>
+ <52b9d7c9-9f7c-788e-2327-33af63b9c748@openvpn.net>
+ <20220803084202.4e249bdb@hermes.local>
+ <1219c53f-362e-cd55-73e0-87dfe281ec34@openvpn.net>
+ <20220803091942.0e388f5b@hermes.local>
+From:   Antonio Quartulli <antonio@openvpn.net>
+Organization: OpenVPN Inc.
+Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
+In-Reply-To: <20220803091942.0e388f5b@hermes.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Classification-ID: 35c30856-d3b1-47cd-9a9b-4df3cd07592e-1-1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bart,
+On 03/08/2022 18:19, Stephen Hemminger wrote:
+> On Wed, 3 Aug 2022 17:48:45 +0200
+> Antonio Quartulli <antonio@openvpn.net> wrote:
+> 
+>> There must have been some confusion - sorry about that.
+>>
+>> The repository I linked in my previous email is this very same driver
+>> packaged as "out-of-tree" module (i.e. for people running a kernel that
+>> does not yet ship ovpn-dco) and contains some compat wrapper.
+>>
+>>
+>> The driver I have submitted to the list is 100% standalone and does not
+>> contain any compat code.
+>>
+>>
+>> The only extra component required to do something useful with this
+>> driver is the OpenVPN software in userspace.
+> 
+> 
+> Good to here thanks.
+> I wonder if there is any chance of having multiple VPN projects
+> using same infrastructure. There seems to be some parallel effort
+> in L2TP, OpenVPN, etc.
 
-On 2022-08-03 19:22, Bart Van Assche wrote:
-> On 8/3/22 02:47, Pankaj Raghav wrote:
->> -    sector &= ~(ns->zsze - 1);
->> +    /*
->> +     * Round down the sector value to the nearest zone start
->> +     */
->> +    div64_u64_rem(sector, ns->zsze, &remainder);
->> +    sector -= remainder;
-> 
-> Could bdev_offset_from_zone_start() be used here?
-> 
-We call this function during blk_revalidate_disk_zones() to evaluate the
-chunk sectors. So we can't call bdev_offset_from_zone_start() from here
-as the chunk_sectors will not be initialized yet :)
+Thanks for rising this point, Stephen.
+
+I also believe it would be nice to re-use as much infrastructure as 
+possible (I always strive to reduce code duplication, while keeping core 
+building blocks simple and re-usable), however, it seems that the 
+various implementations currently do not share much logic.
+
+What could be shared is already shared (i.e. crypto, napi, gso, netdev, 
+etc). Handling the data traffic is something that can hardly be shared 
+due to different packet manipulation (i.e. encapsulation).
+
+One area that could still be worth exploring might be the queuing 
+mechanism that handles packet reception+decryption and 
+encryption+transmission. If we factor out the protocol specific bits, we 
+might be able to make the high level logic common.
+
+However, so far all my attempts did not lead to anything that could be 
+implemented in a reasonable manner.
+
+Still, I believe this is something we could work on in the medium/long-term.
+
+
+Regards,
+
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.

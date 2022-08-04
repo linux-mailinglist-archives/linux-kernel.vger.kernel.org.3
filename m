@@ -2,117 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AA8589A55
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 12:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C450589A56
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 12:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237403AbiHDKPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 06:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
+        id S238520AbiHDKPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 06:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiHDKPH (ORCPT
+        with ESMTP id S238266AbiHDKPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 06:15:07 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FDF37F8C;
-        Thu,  4 Aug 2022 03:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659608105; x=1691144105;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XCvsOpbFvXVB0iV70v8x3JyHx/fBHTkYQUv4zcAVYmw=;
-  b=KbSXlB9uN0qyL3eRgQ+gC1QDWbH3mAlarB78V43heP/Oqlj4evLCm0xw
-   jrYv/v91+dkwB4UlcvOvcPmz2DRxlZQCArglp2cGu0SzIeTKyNyc2SA93
-   /yMtbqsTDGFvJqMzOvS4uOr6yiz/keZY59kIo3qH63ezigU2iRMD6ffeB
-   k=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 04 Aug 2022 03:15:05 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 03:15:05 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 4 Aug 2022 03:15:04 -0700
-Received: from [10.216.12.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 4 Aug 2022
- 03:14:58 -0700
-Message-ID: <5507af1a-3548-8e08-be3f-42f59bcc2096@quicinc.com>
-Date:   Thu, 4 Aug 2022 15:44:55 +0530
+        Thu, 4 Aug 2022 06:15:30 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504722BD7;
+        Thu,  4 Aug 2022 03:15:29 -0700 (PDT)
+Date:   Thu, 04 Aug 2022 10:15:19 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1659608122; x=1659867322;
+        bh=OOAFqj5jOkefjruY4cVlXMt+tgX3mni0RziYWRLgIA4=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=vgzmNSefYqbQAcl0K3I8J9pqBZUcN+PyC2c/vCe4wbDQqcFJcHhoAnlj8Z8Em5DQz
+         JWS7tlP/hvnHk6JaRbkdRHoHMBf++vfxuESbZ6EylAq7tnjsm2KANhRl/ytzG+lgt/
+         83DiNZYOaMWL83Hxnf3GB5v1YQjTT2uZbfUcmSiojqQmueOxaiufyS4ioFKw37sDdr
+         iQ4pGGrcCKdHygZhGxf2YNdaOH1H3lQKqoU1jIgoHD0qLuLPnMruOHePKP+szeSr3T
+         4LY3dyECkfc1hvGBXwhAIXPO/0qFE+RdR9L4jWk8aT2WuRuJCuKvnBkg3pEysjihnj
+         o2K4E2/as99hQ==
+To:     Boqun Feng <boqun.feng@gmail.com>
+From:   bjorn3 <bjorn3_gh@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>
+Reply-To: bjorn3 <bjorn3_gh@protonmail.com>
+Subject: Re: [PATCH v8 29/31] MAINTAINERS: Rust
+Message-ID: <LADPltvgY9H_4iPGAi0MyFOayCnS7NQhMPq6tPhBV2GoPIOu2jzx1gmZXYsKQWCIfmywn1Q8z61ye6OkSX-RsX8bfloQyhEespyyWPonnfM=@protonmail.com>
+In-Reply-To: <YuiLM6ca8Ih0WiS3@boqun-archlinux>
+References: <20220802015052.10452-1-ojeda@kernel.org> <20220802015052.10452-30-ojeda@kernel.org> <YuiLM6ca8Ih0WiS3@boqun-archlinux>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/8] dt-bindings: remoteproc: qcom: adsp: Add compatible
- name for SC7280
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <quic_plai@quicinc.com>,
-        <bgoswami@quicinc.com>, <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <quic_rohkumar@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <devicetree@vger.kernel.org>
-References: <1659536480-5176-1-git-send-email-quic_srivasam@quicinc.com>
- <1659536480-5176-3-git-send-email-quic_srivasam@quicinc.com>
- <20220803204359.GA2586715-robh@kernel.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <20220803204359.GA2586715-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tuesday, August 2nd, 2022 at 04:25, Boqun Feng <boqun.feng@gmail.com> wr=
+ote:
 
-On 8/4/2022 2:13 AM, Rob Herring wrote:
-Thanks for your time and valuable inputs Rob!!!
-> On Wed, Aug 03, 2022 at 07:51:14PM +0530, Srinivasa Rao Mandadapu wrote:
->> Add compatible name and update max reg items for SC7280 base platforms.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> ---
->>   .../devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml          | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
->> index 9f11332..147996f 100644
->> --- a/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
->> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
->> @@ -17,11 +17,12 @@ properties:
->>     compatible:
->>       enum:
->>         - qcom,sdm845-adsp-pil
->> +      - qcom,sc7280-adsp-pil
->>   
->>     reg:
->> -    maxItems: 1
->> +    maxItems: 2
-> sdm845 has 2 entries too?
-No. There max items not changed.
+
+> On Tue, Aug 02, 2022 at 03:50:16AM +0200, Miguel Ojeda wrote:
 >
->>       description:
->> -      The base address and size of the qdsp6ss register
->> +      The base address and size of the qdsp6ss register and mcc register
-> Better expressed as:
+> > Miguel, Alex and Wedson will be maintaining the Rust support.
+> >
+> > Reviewed-by: Kees Cook keescook@chromium.org
+> > Co-developed-by: Alex Gaynor alex.gaynor@gmail.com
+> > Signed-off-by: Alex Gaynor alex.gaynor@gmail.com
+> > Co-developed-by: Wedson Almeida Filho wedsonaf@google.com
+> > Signed-off-by: Wedson Almeida Filho wedsonaf@google.com
+> > Signed-off-by: Miguel Ojeda ojeda@kernel.org
+> > ---
+> > MAINTAINERS | 15 +++++++++++++++
+> > 1 file changed, 15 insertions(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 64379c699903..a4f90593b59c 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -17477,6 +17477,21 @@ L: linux-rdma@vger.kernel.org
+> > S: Maintained
+> > F: drivers/infiniband/ulp/rtrs/
+> >
+> > +RUST
+> > +M: Miguel Ojeda ojeda@kernel.org
+> > +M: Alex Gaynor alex.gaynor@gmail.com
+> > +M: Wedson Almeida Filho wedsonaf@google.com
 >
-> minItems: 1
-> items:
->    - description: qdsp6ss register
->    - description: mcc register
 >
-> Though the descriptions could expand on what those registers are.
+> May I join the party and become a reviewer?
 >
-> Rob
-Okay. Will change accordingly and re spin the patches.
+> R: Boqun Feng boqun.feng@gmail.com
+>
+>
+> Also given their activities on GitHub, I'd like to encourge Bj=C3=B6rn Ro=
+y
+> Baron and Gary Guo to become reviewers as well. Of course, they need
+> to be aware of the possible upcoming email volume and sign up themselves
+> ;-)
+>
+> More eyes (especially from Rust language experts) are helpful ;-)
+>
+> Regards,
+> Boqun
+>
+> > +L: rust-for-linux@vger.kernel.org
+> > +S: Supported
+> > +W: https://github.com/Rust-for-Linux/linux
+> > +B: https://github.com/Rust-for-Linux/linux/issues
+> > +T: git https://github.com/Rust-for-Linux/linux.git rust-next
+> > +F: Documentation/rust/
+> > +F: rust/
+> > +F: samples/rust/
+> > +F: scripts/rust
+> > +K: \b(?i:rust)\b
+> > +
+> > RXRPC SOCKETS (AF_RXRPC)
+> > M: David Howells dhowells@redhat.com
+> > M: Marc Dionne marc.dionne@auristor.com
+> > --
+> > 2.37.1
+
+I've already told this Miguel in private, but I did like to join as reviewe=
+r:
+
+R: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
+
+Cheers,
+Bjorn

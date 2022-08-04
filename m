@@ -2,83 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E415D589EEE
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A413589EF3
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbiHDPxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S231982AbiHDPx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiHDPxj (ORCPT
+        with ESMTP id S233149AbiHDPxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:53:39 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281D518B1F
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:53:37 -0700 (PDT)
-Received: from zn.tnic (p200300ea970f4fa7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:4fa7:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 87B551EC04D3;
-        Thu,  4 Aug 2022 17:53:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1659628411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=abo3jbeF3qSuMw54GRiN5rY2eXZCIq4VNp+WXQVhrgc=;
-        b=qnZKNeN0Y1dOTd6f2AeQaxcJu00g4Ic1ffDgz3Zdsvf5Dt5nR65wxSScvyWgynbry0+YYZ
-        WorFioawtrKTyHcGcQBoARkTKfucvt7Nvt5/2avUiQVhtprSrWZsTqM6tQiOKKWsNfimFP
-        yh0vFShV2K4LQjtgzxZyNsrW4M8nrCE=
-Date:   Thu, 4 Aug 2022 17:53:27 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kanna Scarlet <knscarlet@gnuweeb.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bill Metzenthen <billm@melbpc.org.au>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] x86: Change mov $0, %reg with xor %reg, %reg
-Message-ID: <Yuvrd2yWLnyxOVLU@zn.tnic>
-References: <20220804152656.8840-1-knscarlet@gnuweeb.org>
- <20220804152656.8840-2-knscarlet@gnuweeb.org>
+        Thu, 4 Aug 2022 11:53:55 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48F25A89B
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:53:53 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id f11so242434pgj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 08:53:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/lWKffvqFTZzWNvWNNSDXm/V8mIImGxuIj1VjPME2ZY=;
+        b=NfOvEKCUxs6P9aNhsj9GYYrhce29fZRIbZ+dmaJyONYfurBJVch0FTP3Sg6hlViV3H
+         97Q8fSj6HcYhOxx82VSlSrhfWHFsJ3xI1T07JRID3TFjaj4V5HCaCRs8SpYqHx65oBSB
+         aqLNJNB6yxUbp0TO06McTKk92+sgvkz6guu3o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/lWKffvqFTZzWNvWNNSDXm/V8mIImGxuIj1VjPME2ZY=;
+        b=YT5/YDk26X6y3RnOmmacWs/+phgqQ/CQ8tifwTHTlCXozou4LNyRIVdKhkROUF4cUQ
+         Fw3RAE1jBlej8KwG1hA8RWJamNGk+EswTVnYesfzQozpe2IBj8ZaLtWlou2FnEa+3DZB
+         q8whFOoHIWPHH63KXMI6UoWOezRxret8U4L0f93nxlS/LDrdZIHmHjsvzgPTiaZdnWeM
+         Kf/Tg9LrtJfR3vrHjuZE90YK0pl+NCAB2PglpgNw2hu07AbWdq2D3Zcd4PUvU6inO1pR
+         jUFlsIexlArqmBvs5JKLX6qXd9fbE3dT8j+ZUltMsuuEHahFiOA827H6o2SM99RKQdTi
+         DlWQ==
+X-Gm-Message-State: ACgBeo2nQ+LoiH4FKpitiLTCGdpk4xkUkQaruCxLhPQLd9iDe2wAVeh9
+        KevhcandoztE2TcnTYCahu5y4w==
+X-Google-Smtp-Source: AA6agR5qcXxKWPEX8FfLxwsYpaewLTQb6e4vF2dRLmx+JgmWw5oN6PgotTdcXx0I57HR3SVVGmO7jA==
+X-Received: by 2002:a62:7bd6:0:b0:52d:4773:a3de with SMTP id w205-20020a627bd6000000b0052d4773a3demr2297138pfc.70.1659628433198;
+        Thu, 04 Aug 2022 08:53:53 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:87c4:32ca:84b6:e942])
+        by smtp.gmail.com with UTF8SMTPSA id x14-20020aa7956e000000b0052ad49292f0sm1154698pfq.48.2022.08.04.08.53.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 08:53:52 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 08:53:50 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 4/9] usb: dwc3: qcom: fix use-after-free on runtime-PM
+ wakeup
+Message-ID: <YuvrjqSz8XGlm04l@google.com>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-5-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220804152656.8840-2-knscarlet@gnuweeb.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220804151001.23612-5-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 03:26:55PM +0000, Kanna Scarlet wrote:
-> Change mov $0, %reg with xor %reg, %reg because xor %reg, %reg is
-> smaller so it is good to save space
+On Thu, Aug 04, 2022 at 05:09:56PM +0200, Johan Hovold wrote:
+> The Qualcomm dwc3 runtime-PM implementation checks the xhci
+> platform-device pointer in the wakeup-interrupt handler to determine
+> whether the controller is in host mode and if so triggers a resume.
+> 
+> After a role switch in OTG mode the xhci platform-device would have been
+> freed and the next wakeup from runtime suspend would access the freed
+> memory.
+> 
+> Note that role switching is executed from a freezable workqueue, which
+> guarantees that the pointer is stable during suspend.
+> 
+> Also note that runtime PM has been broken since commit 2664deb09306
+> ("usb: dwc3: qcom: Honor wakeup enabled/disabled state"), which
+> incidentally also prevents this issue from being triggered.
+> 
+> Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+> Cc: stable@vger.kernel.org      # 4.18
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Bonus points if you find out what other advantage
-
-XOR reg,reg
-
-has when it comes to clearing integer registers.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

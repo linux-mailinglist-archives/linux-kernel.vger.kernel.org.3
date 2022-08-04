@@ -2,110 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EC258A2DF
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 23:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A138658A2E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 23:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235510AbiHDVtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 17:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S239784AbiHDVub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 17:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiHDVti (ORCPT
+        with ESMTP id S239275AbiHDVuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 17:49:38 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5EB15FE2
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 14:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659649777; x=1691185777;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7rt23PMPBzBSBIB2zxEb7Hv++9uljuJHhPCfAnJfZWQ=;
-  b=bcsf/hV1JEdW9cISLAd94bVXJ6LIqw/UfUG0STLMiH/X5r8dFpP9iXgT
-   Fr6NevmbS75AC3VnDWXV9qbxIyEpMxfPBcx06idv7bXx2V2Xk0uMZSAFI
-   a1XxFFCaTPsmtSJ8WhVD84ro61Qm7fMP1/AMMSTosCk3kjSLroL9fH8CW
-   M8VG+igziS5K2XOL7WC3/vUnQF5y5td2hjcf2f+W4JIjKyJrzzRgFzlQF
-   Ija8wSoDljNFNCeaWP43Rt4nIpAcXpkNFiklPRbhMW+hqtpeh70bI9Xso
-   59ebVWBNskx72JMd+xbiB04KLdh5884m0ynz4/6VjINSd1KX1aeP/s7FK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="287615122"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="287615122"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 14:49:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="671427889"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Aug 2022 14:49:36 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJiil-000Isj-3D;
-        Thu, 04 Aug 2022 21:49:35 +0000
-Date:   Fri, 5 Aug 2022 05:48:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mark:arm64/stacktrace/data-driven 4/4]
- arch/arm64/include/asm/stacktrace.h:153:13: error: cannot compile this GNU
- array range designator extension yet
-Message-ID: <202208050544.mUKbvIhP-lkp@intel.com>
+        Thu, 4 Aug 2022 17:50:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E10AE79;
+        Thu,  4 Aug 2022 14:50:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68783B82772;
+        Thu,  4 Aug 2022 21:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1767DC433D7;
+        Thu,  4 Aug 2022 21:50:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659649814;
+        bh=U9FHl9gguirW2oSvipcGPJE3ApaupYYhfXavrVBTQ40=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mNR4Jtu1rQQ9cAnEb6BKOfX7zZQ1UAwrXOLLVz2WTER0gBuPY01AlXM/pvkSaGS5p
+         LV28SOWuEamxYbaO6vGKLyJnT1wuodAhHpryOUaGPopltZ07/J0+wpPwb/FKwIe+Nj
+         fjPU9k8qiU313eSn3LiVA3KLKrW4rfojcqokqzThNv8scmbiWyXJEgSlz6Ai7w3SCQ
+         PF/pVPQbRzBS3qwv8DvrW3QdVY0TIKSEPZRXhECmTuihJpuOEBx6mqWSdGRCIowBtN
+         awm42g4C3kgTEHHGB5JMAyhJwFj0aALMplTzIxRNFneaWjAmjcKBeEyxjuoDcX/Fw0
+         hkpMLhdElybyA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F0084C43142;
+        Thu,  4 Aug 2022 21:50:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] libbpf: ensure functions with always_inline attribute are
+ inline
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165964981397.20332.3782445822983785211.git-patchwork-notify@kernel.org>
+Date:   Thu, 04 Aug 2022 21:50:13 +0000
+References: <20220803151403.793024-1-james.hilliard1@gmail.com>
+In-Reply-To: <20220803151403.793024-1-james.hilliard1@gmail.com>
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/stacktrace/data-driven
-head:   468d82fe55b7d215b8d1733a8b34a1fc94cd431b
-commit: 468d82fe55b7d215b8d1733a8b34a1fc94cd431b [4/4] WIP: arm64: make stacktrace data-driven
-config: arm64-randconfig-r003-20220803 (https://download.01.org/0day-ci/archive/20220805/202208050544.mUKbvIhP-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=468d82fe55b7d215b8d1733a8b34a1fc94cd431b
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/stacktrace/data-driven
-        git checkout 468d82fe55b7d215b8d1733a8b34a1fc94cd431b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+Hello:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-All errors (new ones prefixed by >>):
+On Wed,  3 Aug 2022 09:14:03 -0600 you wrote:
+> GCC expects the always_inline attribute to only be set on inline
+> functions, as such we should make all functions with this attribute
+> use the __always_inline macro which makes the function inline and
+> sets the attribute.
+> 
+> Fixes errors like:
+> /home/buildroot/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_tracing.h:439:1: error: ‘always_inline’ function might not be inlinable [-Werror=attributes]
+>   439 | ____##name(unsigned long long *ctx, ##args)
+>       | ^~~~
+> 
+> [...]
 
-   In file included from arch/arm64/kernel/stacktrace.c:19:
->> arch/arm64/include/asm/stacktrace.h:153:13: error: cannot compile this GNU array range designator extension yet
-                   .stacks = {
-                             ^
-   1 error generated.
+Here is the summary with links:
+  - [v2] libbpf: ensure functions with always_inline attribute are inline
+    https://git.kernel.org/bpf/bpf-next/c/d25f40ff68aa
 
-
-vim +153 arch/arm64/include/asm/stacktrace.h
-
-   143	
-   144	/*
-   145	 * We can only safely access per-cpu stacks from current in a non-preemptible
-   146	 * context.
-   147	 */
-   148	
-   149	static __always_inline struct kernel_stack_info
-   150	get_accessible_kernel_stacks(const struct task_struct *tsk)
-   151	{
-   152		struct kernel_stack_info info = {
- > 153			.stacks = {
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

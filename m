@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14342589CBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EF8589CC0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239865AbiHDNdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 09:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
+        id S239874AbiHDNdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 09:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239889AbiHDNcq (ORCPT
+        with ESMTP id S239916AbiHDNc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 09:32:46 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710CC3E74D;
-        Thu,  4 Aug 2022 06:32:45 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lz8gd6dbpz67KSZ;
-        Thu,  4 Aug 2022 21:28:29 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 4 Aug 2022 15:32:43 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 4 Aug
- 2022 14:32:42 +0100
-Date:   Thu, 4 Aug 2022 14:32:41 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-next@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH 3/3] Documentation: cxl: remove dangling kernel-doc
- reference
-Message-ID: <20220804143241.000065d7@huawei.com>
-In-Reply-To: <20220804075448.98241-4-bagasdotme@gmail.com>
-References: <20220804075448.98241-1-bagasdotme@gmail.com>
-        <20220804075448.98241-4-bagasdotme@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Thu, 4 Aug 2022 09:32:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB55422CB
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:32:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 880F56183B
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 13:32:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F40F2C433C1;
+        Thu,  4 Aug 2022 13:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659619977;
+        bh=g/dIz72q+86Kq19mtA0p0jyDcY2NYbdmwK4p46ft55g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WnvIBQRNNNYBHQ4S+rWuZS332pK2Rbxm3uhxnuRphpQRf+K14csh+TIHOHw+Wu5lQ
+         SygCoe4hz0OTa2E58rIcqxYKj6sQoJMwvXdZOdwenuwpTiXl/pU4V+R4SLeZjLSodc
+         4/rYEDTg4GeRKwZbUnG5q+EDYd4Ca16BV5b8WqSf6DscdWf7V2ogvUCoQxUqEVar5+
+         x+XcGh0R/Njdq/hSyAiCwneMNdPzNqHtEG1Egyogby8w1xSV0m6Kjfgwsk05frPDlG
+         TxBcRqyfxkjxaEgMrgT87J9C4cxak6bsjbzCf9V8YdwQ2QKgPj8dVpyFxoaK73YY+e
+         47cu1vOozCi+w==
+Message-ID: <7d430cc7-5f6c-536b-0e10-687c2804afa8@kernel.org>
+Date:   Thu, 4 Aug 2022 21:32:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] f2fs: do not allow to decompress files have
+ FI_COMPRESS_RELEASED
+Content-Language: en-US
+To:     Jaewook Kim <jw5454.kim@samsung.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
+        junbeom.yeom@samsung.com, youngjin.gil@samsung.com
+References: <25e501d8a6eb$84cf4090$8e6dc1b0$@samsung.com>
+ <CGME20220803085402epcas1p2a1a70630592fa73f3404ba120c6c1ac8@epcas1p2.samsung.com>
+ <20220803085358.3963-1-jw5454.kim@samsung.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220803085358.3963-1-jw5454.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml731-chm.china.huawei.com (10.201.108.82) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,40 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  4 Aug 2022 14:54:48 +0700
-Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+On 2022/8/3 16:53, Jaewook Kim wrote:
+> If a file has FI_COMPRESS_RELEASED, all writes for it should not be
+> allowed. However, as of now, in case of compress_mode=user, writes
+> triggered by IOCTLs like F2FS_IOC_DE/COMPRESS_FILE are allowed unexpectly,
+> which could crash that file.
+> To fix it, let's do not allow F2FS_IOC_DE/COMPRESS_IOCTL if a file already
+> has FI_COMPRESS_RELEASED flag.
+> 
+> This is the reproduction process:
+> 1.  $ touch ./file
+> 2.  $ chattr +c ./file
+> 3.  $ dd if=/dev/random of=./file bs=4096 count=30 conv=notrunc
+> 4.  $ dd if=/dev/zero of=./file bs=4096 count=34 seek=30 conv=notrunc
+> 5.  $ sync
+> 6.  $ do_compress ./file      ; call F2FS_IOC_COMPRESS_FILE
+> 7.  $ get_compr_blocks ./file ; call F2FS_IOC_GET_COMPRESS_BLOCKS
+> 8.  $ release ./file          ; call F2FS_IOC_RELEASE_COMPRESS_BLOCKS
+> 9.  $ do_compress ./file      ; call F2FS_IOC_COMPRESS_FILE again
+> 10. $ get_compr_blocks ./file ; call F2FS_IOC_GET_COMPRESS_BLOCKS again
+> 
+> This reproduction process is tested in 128kb cluster size.
+> You can find compr_blocks has a negative value.
+> 
+> Fixes: 5fdb322ff2c2b ("f2fs: add F2FS_IOC_DECOMPRESS_FILE and F2FS_IOC_COMPRESS_FILE")
+> 
+> Signed-off-by: Junbeom Yeom <junbeom.yeom@samsung.com>
+> Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
+> Signed-off-by: Youngjin Gil <youngjin.gil@samsung.com>
+> Signed-off-by: Jaewook Kim <jw5454.kim@samsung.com>
 
-> Sphinx reported kernel-doc failure warning, pointing to non-existent
-> drivers/cxl/region.h (which doesn't also exist throughout repo history):
-> 
-> WARNING: kernel-doc './scripts/kernel-doc -rst -enable-lineno -sphinx-version 2.4.4 -no-doc-sections ./drivers/cxl/region.h' failed with return code 1
-> 
-> Above cause error message to be displayed on htmldocs output.
-> 
-> Delete the reference.
-> 
-> Fixes: 779dd20cfb56c5 ("cxl/region: Add region creation support")
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Ah. That went in some refactoring along the way.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> ---
->  Documentation/driver-api/cxl/memory-devices.rst | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/cxl/memory-devices.rst b/Documentation/driver-api/cxl/memory-devices.rst
-> index 66ddc58a21b159..5149ecdc53c796 100644
-> --- a/Documentation/driver-api/cxl/memory-devices.rst
-> +++ b/Documentation/driver-api/cxl/memory-devices.rst
-> @@ -364,9 +364,6 @@ CXL Core
->  
->  CXL Regions
->  -----------
-> -.. kernel-doc:: drivers/cxl/region.h
-> -   :identifiers:
-> -
->  .. kernel-doc:: drivers/cxl/core/region.c
->     :doc: cxl core region
->  
-
+Thanks,

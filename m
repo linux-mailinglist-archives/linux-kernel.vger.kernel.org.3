@@ -2,383 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5312B58A22B
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 22:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A51FA58A23C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 22:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239900AbiHDUkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 16:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
+        id S238438AbiHDUl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 16:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239704AbiHDUkD (ORCPT
+        with ESMTP id S232924AbiHDUlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 16:40:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12FF24C611
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 13:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659645600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yjbqitvPqSyZJdTsNvN60J+IesFSNFAJ7gz7O8lHdlw=;
-        b=MYHn5HiNV5SlN0r0brZiuUkhWB8yUzzyDMCT11mH0kW3XpciIOehJ6hNwzjNWe4Y5ID5We
-        OCwucKIVl+l+EbHImk0TyKOaG3es0sKsOaNncMjpEXvK8uYckNEq09OpxQC46qdmTpGu3e
-        GDndeod5wpTJuG8noe9AUZ4WTCLTAN0=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-199-O_awLECQMAaIrlDx4Z9_cw-1; Thu, 04 Aug 2022 16:39:59 -0400
-X-MC-Unique: O_awLECQMAaIrlDx4Z9_cw-1
-Received: by mail-qk1-f199.google.com with SMTP id bp40-20020a05620a45a800b006b87633579fso505900qkb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 13:39:59 -0700 (PDT)
+        Thu, 4 Aug 2022 16:41:25 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACCB1D0C5;
+        Thu,  4 Aug 2022 13:41:23 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id i14so1390828ejg.6;
+        Thu, 04 Aug 2022 13:41:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=DgPQGcLCx4o5iwg9jMEpN6NueK/NQSopmOAMiTK1bZU=;
+        b=dD36ISaDTLRolSwmb4G+3fkwRUURHTNxqNY6ZpN8HlLPjYJPx4fE6UCbU8DYglqVKZ
+         lpr3qAqtIU8+hdtCreMn+nrnqXml//PIMLzufzHteWcdkvezExwGCChgyvlx2NC4yrvG
+         EAZ2WBOScEoJsMOrlklU0BUtvlzoZXE84nGcwbFAKYPvLCu66C9Hh9LD20f28G4RmmQE
+         9GsLMMOUVAvXTNSBYvCif5D8Lbnp6gtYnWxzogiuSSEmU5N2OYEfnPqsJRRI2beLo7NT
+         stOvwh8AazmbD4YpM0E1xp5+N/Ua2Zl0AHD0Zl7/rY1Rcyt3wd3uZ9NerGpJ+I8J5dDJ
+         TcQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=yjbqitvPqSyZJdTsNvN60J+IesFSNFAJ7gz7O8lHdlw=;
-        b=4fu6unehPExAKSqv710iJVWnV2ukmMt5JHxNEsAJvYtT5L/+TxizIj0KjhQaDIfhaw
-         yaJlnAoVU78bL2mFknR9Alh6vub7uIHnlaEOMYjLYvCUOjFiBC6w05lBcYzkiD72cntu
-         aS0aRKW7JPMW1qxau/sA01FxMs6Z+sLsr0pmqoarSKg9sCRvTReDJRG/2V2Y9nosE+Rn
-         rbMWQna/t3RyVvkvzbG8gDtRf1QubV4V89xSVD8JrO1DqCZH5JCC2QOd3+He7k4revgb
-         Hti4pnYfLJhePfbB8HfG3oUUSPbwo8bZQifn27koA1J1Td+9I+Nj+tRWjP86RNJ4770r
-         9N7A==
-X-Gm-Message-State: ACgBeo3mYPRPIP5F3nkJR2OOLWpkCW85aUF7QfQWOmLD1BBz/RBS9J7i
-        rgj7W4EDD+WS2HIjD0MHZ5s8iCYsn3T8DyVIebgKEmkzJM2O96X/XP6DzjdbPuNFjqQ0FSWIhiP
-        sJQtJs15D0msAcXWliIrN6tve
-X-Received: by 2002:a05:622a:10a:b0:341:bba0:3b05 with SMTP id u10-20020a05622a010a00b00341bba03b05mr3101667qtw.648.1659645598516;
-        Thu, 04 Aug 2022 13:39:58 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR78YxyW7sWXeHw1v5VNrRrWnFysEzZiSyOl3pZEfHSEAaxw5+EQubb7GVQgqtDJNOthk7giRQ==
-X-Received: by 2002:a05:622a:10a:b0:341:bba0:3b05 with SMTP id u10-20020a05622a010a00b00341bba03b05mr3101643qtw.648.1659645598254;
-        Thu, 04 Aug 2022 13:39:58 -0700 (PDT)
-Received: from localhost.localdomain (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id k19-20020ae9f113000000b006b5e50057basm1395266qkg.95.2022.08.04.13.39.56
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 04 Aug 2022 13:39:57 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Huang Ying <ying.huang@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Andi Kleen <andi.kleen@intel.com>, peterx@redhat.com,
-        "Kirill A . Shutemov" <kirill@shutemov.name>
-Subject: [PATCH v2 2/2] mm: Remember young/dirty bit for page migrations
-Date:   Thu,  4 Aug 2022 16:39:52 -0400
-Message-Id: <20220804203952.53665-3-peterx@redhat.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220804203952.53665-1-peterx@redhat.com>
-References: <20220804203952.53665-1-peterx@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=DgPQGcLCx4o5iwg9jMEpN6NueK/NQSopmOAMiTK1bZU=;
+        b=y2UoYMOpEKKi+Wkjpd2/c2R6hPbEwo2jo7WqweovZlNalbrOMOe7q1zijn+fjDKOak
+         qxbEzDNx+Td26p21VOGbXrN6g6nVosIWjeFcKAPnwhmf5wbhlpbWVsw9FyeEo45Lkz8R
+         gyXdZPHKnEhn7ZIMnrm4cvrxeSiGDowUfrPR0RI3K71TsAM0efGau2nGmS20RWLymr3e
+         Gsscbx0DVZXmcZFgolphJ0QW7UkR3aHl4dvdfCFLl90/Fx64IrgPaDRYU6Rfd3davrN8
+         S2sjVFoe5z6kGyf8bSMNQMW6U7KLzL5zdIx268xzxVHXm7uJAO1htMDYUOnpHRZJnKSn
+         1COA==
+X-Gm-Message-State: ACgBeo2Of3OvNIOyw25CDJVvPLMgXfVfuKvG/UX2WUtqdYF7+CEDrXDF
+        o7JY6sY/NRtoxC1Y7YlU2VTZ1b823D39ABGJO6k=
+X-Google-Smtp-Source: AA6agR7JWDOq8bOOvnUuAID4aBlwLQ91blsIUwrbX3ClUsXNa8bPtDlMZF2DVJjA7eC2mZWrngDj9GtNuvnG3yshSUc=
+X-Received: by 2002:a17:907:2dab:b0:72f:f7:bdd6 with SMTP id
+ gt43-20020a1709072dab00b0072f00f7bdd6mr2660728ejc.330.1659645681595; Thu, 04
+ Aug 2022 13:41:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722081146.47262-1-jjhiblot@traphandler.com>
+ <20220722081146.47262-3-jjhiblot@traphandler.com> <CAHp75Vdu-EJRRxkK7+TfuE=zEDkJye1QCXSB+cDLrqxuykJjkA@mail.gmail.com>
+ <5ba34982-52c7-e41a-fba8-d88d93529e47@traphandler.com>
+In-Reply-To: <5ba34982-52c7-e41a-fba8-d88d93529e47@traphandler.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 4 Aug 2022 22:40:44 +0200
+Message-ID: <CAHp75Ve9tug8HzYXx+9HU09=Bae+=M24HwH1n1XOpL=RsUOpQw@mail.gmail.com>
+Subject: Re: [RESEND PATCH v6 2/3] leds: Add driver for the TLC5925 LED controller
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When page migration happens, we always ignore the young/dirty bit settings
-in the old pgtable, and marking the page as old in the new page table using
-either pte_mkold() or pmd_mkold(), and keeping the pte clean.
+On Thu, Aug 4, 2022 at 10:23 PM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+> On 31/07/2022 21:28, Andy Shevchenko wrote:
+> > On Fri, Jul 22, 2022 at 10:14 AM Jean-Jacques Hiblot
+> > <jjhiblot@traphandler.com> wrote:
+> >> The TLC5925 is a 16-channels constant-current LED sink driver.
+> >> It is controlled via SPI but doesn't offer a register-based interface.
+> >> Instead it contains a shift register and latches that convert the
+> >> serial input into a parallel output.
+> >>
+> >> Datasheet: https://www.ti.com/lit/ds/symlink/tlc5925.pdf
+> >> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> >> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Sorry for my slowpokeness, but I just realized that this driver may
+> > not be needed. What is the difference to existing gpio-74x164?
+>
+> It might work. However it might not be as practical and efficient as the
+> dedicated LED driver.
 
-That's fine from functional-wise, but that's not friendly to page reclaim
-because the moving page can be actively accessed within the procedure.  Not
-to mention hardware setting the young bit can bring quite some overhead on
-some systems, e.g. x86_64 needs a few hundreds nanoseconds to set the bit.
-The same slowdown problem to dirty bits when the memory is first written
-after page migration happened.
+I'm not sure what efficiency you are talking about? Using LED GPIO +
+GPIO? But the chip, even if marketed as an LED driver, might be used
+not for LEDs, right? Technically speaking it's a GPIO with powerful
+(by current sink) outputs. With LED + GPIO you get flexibility to
+configure and describe your system exactly how it is designed on the
+PCB level.
 
-Actually we can easily remember the A/D bit configuration and recover the
-information after the page is migrated.  To achieve it, define a new set of
-bits in the migration swap offset field to cache the A/D bits for old pte.
-Then when removing/recovering the migration entry, we can recover the A/D
-bits even if the page changed.
+Note, we have already examples of other chips (like PWM) being used as
+GPIO. In different cases in Linux we have different approaches on how
+to solve that. In general, Linux kernel pin control misses some
+special functions of the pins that may be assigned to them, while
+being a simple pin control (or even GPIO expander).
 
-One thing to mention is that here we used max_swapfile_size() to detect how
-many swp offset bits we have, and we'll only enable this feature if we know
-the swp offset can be big enough to store both the PFN value and the young
-bit.  Otherwise the A/D bits are dropped like before.
+> I'll give a try.
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- include/linux/swapops.h | 91 +++++++++++++++++++++++++++++++++++++++++
- mm/huge_memory.c        | 26 +++++++++++-
- mm/migrate.c            |  6 ++-
- mm/migrate_device.c     |  4 ++
- mm/rmap.c               |  5 ++-
- 5 files changed, 128 insertions(+), 4 deletions(-)
+Thanks!
 
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index 1d17e4bb3d2f..34aa448ac6ee 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -8,6 +8,8 @@
- 
- #ifdef CONFIG_MMU
- 
-+#include <linux/swapfile.h>
-+
- /*
-  * swapcache pages are stored in the swapper_space radix tree.  We want to
-  * get good packing density in that tree, so the index should be dense in
-@@ -35,6 +37,24 @@
- #endif
- #define SWP_PFN_MASK			((1UL << SWP_PFN_BITS) - 1)
- 
-+/**
-+ * Migration swap entry specific bitfield definitions.
-+ *
-+ * @SWP_MIG_YOUNG_BIT: Whether the page used to have young bit set
-+ * @SWP_MIG_DIRTY_BIT: Whether the page used to have dirty bit set
-+ *
-+ * Note: these bits will be stored in migration entries iff there're enough
-+ * free bits in arch specific swp offset.  By default we'll ignore A/D bits
-+ * when migrating a page.  Please refer to migration_entry_supports_ad()
-+ * for more information.
-+ */
-+#define SWP_MIG_YOUNG_BIT		(SWP_PFN_BITS)
-+#define SWP_MIG_DIRTY_BIT		(SWP_PFN_BITS + 1)
-+#define SWP_MIG_TOTAL_BITS		(SWP_PFN_BITS + 2)
-+
-+#define SWP_MIG_YOUNG			(1UL << SWP_MIG_YOUNG_BIT)
-+#define SWP_MIG_DIRTY			(1UL << SWP_MIG_DIRTY_BIT)
-+
- static inline bool is_pfn_swap_entry(swp_entry_t entry);
- 
- /* Clear all flags but only keep swp_entry_t related information */
-@@ -265,6 +285,57 @@ static inline swp_entry_t make_writable_migration_entry(pgoff_t offset)
- 	return swp_entry(SWP_MIGRATION_WRITE, offset);
- }
- 
-+/*
-+ * Returns whether the host has large enough swap offset field to support
-+ * carrying over pgtable A/D bits for page migrations.  The result is
-+ * pretty much arch specific.
-+ */
-+static inline bool migration_entry_supports_ad(void)
-+{
-+	/*
-+	 * max_swapfile_size() returns the max supported swp-offset plus 1.
-+	 * We can support the migration A/D bits iff the pfn swap entry has
-+	 * the offset large enough to cover all of them (PFN, A & D bits).
-+	 */
-+#ifdef CONFIG_SWAP
-+	return max_swapfile_size() >= (1UL << SWP_MIG_TOTAL_BITS);
-+#else
-+	return false;
-+#endif
-+}
-+
-+static inline swp_entry_t make_migration_entry_young(swp_entry_t entry)
-+{
-+	if (migration_entry_supports_ad())
-+		return swp_entry(swp_type(entry),
-+				 swp_offset(entry) | SWP_MIG_YOUNG);
-+	return entry;
-+}
-+
-+static inline bool is_migration_entry_young(swp_entry_t entry)
-+{
-+	if (migration_entry_supports_ad())
-+		return swp_offset(entry) & SWP_MIG_YOUNG;
-+	/* Keep the old behavior of aging page after migration */
-+	return false;
-+}
-+
-+static inline swp_entry_t make_migration_entry_dirty(swp_entry_t entry)
-+{
-+	if (migration_entry_supports_ad())
-+		return swp_entry(swp_type(entry),
-+				 swp_offset(entry) | SWP_MIG_DIRTY);
-+	return entry;
-+}
-+
-+static inline bool is_migration_entry_dirty(swp_entry_t entry)
-+{
-+	if (migration_entry_supports_ad())
-+		return swp_offset(entry) & SWP_MIG_YOUNG_BIT;
-+	/* Keep the old behavior of clean page after migration */
-+	return false;
-+}
-+
- extern void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
- 					spinlock_t *ptl);
- extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
-@@ -311,6 +382,26 @@ static inline int is_readable_migration_entry(swp_entry_t entry)
- 	return 0;
- }
- 
-+static inline swp_entry_t make_migration_entry_young(swp_entry_t entry)
-+{
-+	return entry;
-+}
-+
-+static inline bool is_migration_entry_young(swp_entry_t entry)
-+{
-+	return false;
-+}
-+
-+static inline swp_entry_t make_migration_entry_dirty(swp_entry_t entry)
-+{
-+	return entry;
-+}
-+
-+static inline bool is_migration_entry_dirty(swp_entry_t entry)
-+{
-+	return false;
-+}
-+
- #endif
- 
- typedef unsigned long pte_marker;
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 29e3628687a6..7d79db4bd76a 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2005,6 +2005,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 	pmd_t old_pmd, _pmd;
- 	bool young, write, soft_dirty, pmd_migration = false, uffd_wp = false;
- 	bool anon_exclusive = false;
-+	bool dirty = false;
- 	unsigned long addr;
- 	int i;
- 
-@@ -2088,7 +2089,8 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 		write = is_writable_migration_entry(entry);
- 		if (PageAnon(page))
- 			anon_exclusive = is_readable_exclusive_migration_entry(entry);
--		young = false;
-+		young = is_migration_entry_young(entry);
-+		dirty = is_migration_entry_dirty(entry);
- 		soft_dirty = pmd_swp_soft_dirty(old_pmd);
- 		uffd_wp = pmd_swp_uffd_wp(old_pmd);
- 	} else {
-@@ -2097,6 +2099,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 			SetPageDirty(page);
- 		write = pmd_write(old_pmd);
- 		young = pmd_young(old_pmd);
-+		dirty = pmd_dirty(old_pmd);
- 		soft_dirty = pmd_soft_dirty(old_pmd);
- 		uffd_wp = pmd_uffd_wp(old_pmd);
- 
-@@ -2146,6 +2149,10 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 			else
- 				swp_entry = make_readable_migration_entry(
- 							page_to_pfn(page + i));
-+			if (young)
-+				swp_entry = make_migration_entry_young(swp_entry);
-+			if (dirty)
-+				swp_entry = make_migration_entry_dirty(swp_entry);
- 			entry = swp_entry_to_pte(swp_entry);
- 			if (soft_dirty)
- 				entry = pte_swp_mksoft_dirty(entry);
-@@ -2160,6 +2167,12 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 				entry = pte_wrprotect(entry);
- 			if (!young)
- 				entry = pte_mkold(entry);
-+			if (dirty)
-+				/*
-+				 * NOTE: this may contains setting soft
-+				 * dirty too on some archs like x86.
-+				 */
-+				entry = pte_mkdirty(entry);
- 			if (soft_dirty)
- 				entry = pte_mksoft_dirty(entry);
- 			if (uffd_wp)
-@@ -3148,6 +3161,10 @@ int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
- 		entry = make_readable_exclusive_migration_entry(page_to_pfn(page));
- 	else
- 		entry = make_readable_migration_entry(page_to_pfn(page));
-+	if (pmd_young(pmdval))
-+		entry = make_migration_entry_young(entry);
-+	if (pmd_dirty(pmdval))
-+		entry = make_migration_entry_dirty(entry);
- 	pmdswp = swp_entry_to_pmd(entry);
- 	if (pmd_soft_dirty(pmdval))
- 		pmdswp = pmd_swp_mksoft_dirty(pmdswp);
-@@ -3173,13 +3190,18 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
- 
- 	entry = pmd_to_swp_entry(*pvmw->pmd);
- 	get_page(new);
--	pmde = pmd_mkold(mk_huge_pmd(new, READ_ONCE(vma->vm_page_prot)));
-+	pmde = mk_huge_pmd(new, READ_ONCE(vma->vm_page_prot));
- 	if (pmd_swp_soft_dirty(*pvmw->pmd))
- 		pmde = pmd_mksoft_dirty(pmde);
- 	if (is_writable_migration_entry(entry))
- 		pmde = maybe_pmd_mkwrite(pmde, vma);
- 	if (pmd_swp_uffd_wp(*pvmw->pmd))
- 		pmde = pmd_wrprotect(pmd_mkuffd_wp(pmde));
-+	if (!is_migration_entry_young(entry))
-+		pmde = pmd_mkold(pmde);
-+	if (PageDirty(new) && is_migration_entry_dirty(entry))
-+		/* NOTE: this may contain setting soft-dirty on some archs */
-+		pmde = pmd_mkdirty(pmde);
- 
- 	if (PageAnon(new)) {
- 		rmap_t rmap_flags = RMAP_COMPOUND;
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 1649270bc1a7..957e8e6ee28e 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -199,7 +199,7 @@ static bool remove_migration_pte(struct folio *folio,
- #endif
- 
- 		folio_get(folio);
--		pte = pte_mkold(mk_pte(new, READ_ONCE(vma->vm_page_prot)));
-+		pte = mk_pte(new, READ_ONCE(vma->vm_page_prot));
- 		if (pte_swp_soft_dirty(*pvmw.pte))
- 			pte = pte_mksoft_dirty(pte);
- 
-@@ -207,6 +207,10 @@ static bool remove_migration_pte(struct folio *folio,
- 		 * Recheck VMA as permissions can change since migration started
- 		 */
- 		entry = pte_to_swp_entry(*pvmw.pte);
-+		if (!is_migration_entry_young(entry))
-+			pte = pte_mkold(pte);
-+		if (folio_test_dirty(folio) && is_migration_entry_dirty(entry))
-+			pte = pte_mkdirty(pte);
- 		if (is_writable_migration_entry(entry))
- 			pte = maybe_mkwrite(pte, vma);
- 		else if (pte_swp_uffd_wp(*pvmw.pte))
-diff --git a/mm/migrate_device.c b/mm/migrate_device.c
-index 7feeb447e3b9..47d90df04cc6 100644
---- a/mm/migrate_device.c
-+++ b/mm/migrate_device.c
-@@ -221,6 +221,10 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
- 			else
- 				entry = make_readable_migration_entry(
- 							page_to_pfn(page));
-+			if (pte_young(pte))
-+				entry = make_migration_entry_young(entry);
-+			if (pte_dirty(pte))
-+				entry = make_migration_entry_dirty(entry);
- 			swp_pte = swp_entry_to_pte(entry);
- 			if (pte_present(pte)) {
- 				if (pte_soft_dirty(pte))
-diff --git a/mm/rmap.c b/mm/rmap.c
-index af775855e58f..28aef434ea41 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -2065,7 +2065,10 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 			else
- 				entry = make_readable_migration_entry(
- 							page_to_pfn(subpage));
--
-+			if (pte_young(pteval))
-+				entry = make_migration_entry_young(entry);
-+			if (pte_dirty(pteval))
-+				entry = make_migration_entry_dirty(entry);
- 			swp_pte = swp_entry_to_pte(entry);
- 			if (pte_soft_dirty(pteval))
- 				swp_pte = pte_swp_mksoft_dirty(swp_pte);
 -- 
-2.32.0
-
+With Best Regards,
+Andy Shevchenko

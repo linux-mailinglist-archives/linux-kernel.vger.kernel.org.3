@@ -2,47 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C258058A07C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4897458A07F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235048AbiHDS0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 14:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57910 "EHLO
+        id S240002AbiHDS1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 14:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiHDS0f (ORCPT
+        with ESMTP id S237530AbiHDS1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 14:26:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 957336BD73;
-        Thu,  4 Aug 2022 11:26:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D0A6A113E;
-        Thu,  4 Aug 2022 11:26:33 -0700 (PDT)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 046BA3F73B;
-        Thu,  4 Aug 2022 11:26:31 -0700 (PDT)
-Message-ID: <a26d8edc-a3a6-8f95-0e7a-c9f60ee04462@arm.com>
-Date:   Thu, 4 Aug 2022 19:26:27 +0100
+        Thu, 4 Aug 2022 14:27:37 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8695C37A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 11:27:36 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3246910dac3so3569487b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 11:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eX8vBdPif72AOCUJ7zNNVFek4nz2akIAnOhX0YOIrkY=;
+        b=LuZu0Ou/YgZIzgjMKDbHl+R0wB/6H/k9edimEwdI91oFh0iP12UJy5wg27oD9TmSik
+         AHBmMfm8N99XSQPgEVhEzhJnrWj+/i5saSv7vIOk45CUPV1kgZ0V/PHRd3LUHd8iQHwz
+         p8mNT9kgcxQQ2w5IbvvDxlxdZErHgdPMfuYWqkL4eYcKMiFhSb6LaVoN7HKKLqp3yEx5
+         iFTMpX2iffHDNdomN48pWCVnH2Kp428CANAN4rbBjvkjEkkOkuRftYjgdIbo72JPF0ZE
+         lPbr6jqt17aRChsotgl3Bjkg8x+1l00+OiKZ9CdNvMuWKCvOmONY0ng462Q0hJTLSovo
+         8/Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eX8vBdPif72AOCUJ7zNNVFek4nz2akIAnOhX0YOIrkY=;
+        b=V/zgPuqPzsNauHP9T/yI2ZugCZWymtN2jw/YaUnwpFnWQqicm+LSETDoXJk9VL1ZrF
+         IRgQNhIqX3vMiP0Sej6Xr1jzqQlsvt1uREeJ3KnF+jJRu1EsheaKDFs1BF44B2qOep0u
+         Snm+jmF3Yg2QTGZR0zYjRrt6YJf8yFrXWR6WzxHFTgBLwj7TlDS+X/BL9Z7poaTRk5JX
+         QWoJdwi/4XJHBGqfLXV+WXfvh7ru5fQVigxe77qKY3PwaxArLAOwsGHuMik13c8u5eS4
+         ZSMfHB45vKJUc7NKL6SPs64YRQpRo+Bi8Tcs7b2hRzjrWkaI7r5AIr9/iYMUc97ZREoQ
+         mLVg==
+X-Gm-Message-State: ACgBeo3wMO3D9sKk0E24CneKgzbvQShOx5LWuiAJtIUMbgy0kWOxLseE
+        bw7RVPA4YtuO8SUQP7PHmCm8Rrol5zuPPXC6SN0XNg==
+X-Google-Smtp-Source: AA6agR7LdJ6XIMIA+KJyTSzFSbHsNimiVZHMY8XMW1klW1NNcy0mp80qvlVqIg7vzvT4Yfv022i2v5WunDitOL7XDSQ=
+X-Received: by 2002:a81:50d4:0:b0:31f:5f85:566a with SMTP id
+ e203-20020a8150d4000000b0031f5f85566amr2783119ywb.218.1659637655607; Thu, 04
+ Aug 2022 11:27:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] ACPI / scan: Support multiple dma windows with different
- offsets
-Content-Language: en-GB
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
-        lenb@kernel.org, robert.moore@intel.com,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <1659255431-22796-1-git-send-email-lvjianmin@loongson.cn>
- <e12706ef-70de-08b6-ada0-818d03b8c2f5@loongson.cn>
- <YuvJLxa5zsMj1pGf@lpieralisi>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YuvJLxa5zsMj1pGf@lpieralisi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220804061133.4110734-1-victor.liu@nxp.com> <20220804061133.4110734-2-victor.liu@nxp.com>
+ <CAL_Jsq+B5PMOmZO4hz5DyEsA4V=UkrNn-6b58h8VbcPa2iaQ1g@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+B5PMOmZO4hz5DyEsA4V=UkrNn-6b58h8VbcPa2iaQ1g@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 4 Aug 2022 11:26:58 -0700
+Message-ID: <CAGETcx94De-wofRjtPgNxa+YQoU3+j+we+4K9Evm=vtzhopX8g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] drivers: bus: simple-pm-bus: Populate simple MFD
+ child devices
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Liu Ying <victor.liu@nxp.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,201 +79,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/08/2022 2:27 pm, Lorenzo Pieralisi wrote:
-> [+Robin]
-> 
-> On Thu, Aug 04, 2022 at 05:59:23PM +0800, Jianmin Lv wrote:
->> Hi, all
->>
->> Can anybody help to review the patch, or I missed somebody else?
-> 
-> I will review the patch - added Robin since it affects the DMA
-> ranges handling.
+On Thu, Aug 4, 2022 at 5:18 AM Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Thu, Aug 4, 2022 at 12:10 AM Liu Ying <victor.liu@nxp.com> wrote:
+> >
+> > There could be simple MFD device(s) connected to a simple PM bus as child
+> > node(s), like Freescale i.MX8qxp pixel link MSI bus. Add a child match
+> > table as an argument to of_platform_populate() function call to specify
+> > the simple MFD devices so that they can be populated.
+>
+> There could be a simple-bus under it as well. You should just use
+> of_platform_default_populate() instead.
 
-Thanks Lorenzo!
+I'm confused why we even need this patch. Wouldn't this driver
+automatically probe simple-mfd buses and populate its child devices?
+We already have it in simple_pm_bus_of_match.
 
-> 
-> Lorenzo
-> 
->> Thanks!
->>
->> On 2022/7/31 下午4:17, Jianmin Lv wrote:
->>> For DT, of_dma_get_range returns bus_dma_region typed dma regions,
->>> which makes multiple dma windows with different offset available
->>> for translation between dma address and cpu address.
->>>
->>> But for ACPI, acpi_dma_get_range doesn't return similar dma regions,
->>> causing no path for setting dev->dma_range_map conveniently. So the
->>> patch changes acpi_dma_get_range and returns bus_dma_region typed
->>> dma regions according to of_dma_get_range.
->>>
->>> After changing acpi_dma_get_range, original part of internal code
->>> only available for ARM is moved to acpi_arch_dma_setup for remaining
->>> unchanged.
+I'm wondering if you are trying to workaround the behavior of having
+"ONLY_BUS" set in simple_pm_bus_of_match for "simple-mfd". Have you
+tried deleting that field and see if it does what you want?
 
-This seems a bit silly. If we've finally done the work to parse a proper 
-dma_range_map, we can use it; no need to artificially maintain the old 
-dma_pfn_offset limitation. TBH I wouldn't even preserve the dmaaddr and 
-size calculations as they are either, just set dev->bus_dma_limit based 
-on the highest entry in the map, and pass 0 and U64_MAX to 
-arch_setup_dma_ops() since those are basically meaningless now (I plan 
-to remove them entirely once I unpick the IOMMU setup).
+And we wouldn't need to use of_platform_default_populate() because
+this driver would take care of doing that recursively. Especially when
+you need the clocks and power domain to be able to access the child
+devices, you want the driver to probe and do that at each level before
+automatically recursively adding all the grand-children devices.
 
-Thanks,
-Robin.
+-Saravana
 
->>> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
->>>
->>> diff --git a/drivers/acpi/arm64/dma.c b/drivers/acpi/arm64/dma.c
->>> index f16739a..840f918 100644
->>> --- a/drivers/acpi/arm64/dma.c
->>> +++ b/drivers/acpi/arm64/dma.c
->>> @@ -9,6 +9,7 @@ void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
->>>    	int ret;
->>>    	u64 end, mask;
->>>    	u64 dmaaddr = 0, size = 0, offset = 0;
->>> +	const struct bus_dma_region *map = NULL;
->>>    	/*
->>>    	 * If @dev is expected to be DMA-capable then the bus code that created
->>> @@ -26,10 +27,37 @@ void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
->>>    	else
->>>    		size = 1ULL << 32;
->>> -	ret = acpi_dma_get_range(dev, &dmaaddr, &offset, &size);
->>> +	ret = acpi_dma_get_range(dev, &map);
->>>    	if (ret == -ENODEV)
->>>    		ret = iort_dma_get_ranges(dev, &size);
->>>    	if (!ret) {
->>> +		const struct bus_dma_region *r = map;
->>> +		u64 len, dma_start, dma_end = 0;
->>> +
->>> +		/* determine the overall bounds of all dma regions */
->>> +		for (dma_start = U64_MAX; r->size; r++) {
->>> +			if (offset && r->offset != offset) {
->>> +				dev_warn(dev, "Can't handle multiple windows with different offsets\n");
->>> +				return;
->>> +			}
->>> +			offset = r->offset;
->>> +
->>> +			/* Take lower and upper limits */
->>> +			if (r->dma_start < dma_start)
->>> +				dma_start = r->dma_start;
->>> +			if (r->dma_start + r->size - 1 > dma_end)
->>> +				dma_end = r->dma_start + r->size - 1;
->>> +		}
->>> +
->>> +		if (dma_start >= dma_end) {
->>> +			dev_dbg(dev, "Invalid DMA regions configuration\n");
->>> +			return;
->>> +		}
->>> +
->>> +		dmaaddr = dma_start;
->>> +		len = dma_end - dma_start;
->>> +		size = max(len, len + 1);
->>> +
->>>    		/*
->>>    		 * Limit coherent and dma mask based on size retrieved from
->>>    		 * firmware.
->>> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
->>> index 762b61f..8961b51 100644
->>> --- a/drivers/acpi/scan.c
->>> +++ b/drivers/acpi/scan.c
->>> @@ -20,6 +20,7 @@
->>>    #include <linux/platform_data/x86/apple.h>
->>>    #include <linux/pgtable.h>
->>>    #include <linux/crc32.h>
->>> +#include <linux/dma-direct.h>
->>>    #include "internal.h"
->>> @@ -1492,15 +1493,15 @@ enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
->>>     *
->>>     * Return 0 on success, < 0 on failure.
->>>     */
->>> -int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
->>> -		       u64 *size)
->>> +int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
->>>    {
->>>    	struct acpi_device *adev;
->>>    	LIST_HEAD(list);
->>>    	struct resource_entry *rentry;
->>>    	int ret;
->>>    	struct device *dma_dev = dev;
->>> -	u64 len, dma_start = U64_MAX, dma_end = 0, dma_offset = 0;
->>> +	int num_ranges = 0;
->>> +	struct bus_dma_region *r;
->>>    	/*
->>>    	 * Walk the device tree chasing an ACPI companion with a _DMA
->>> @@ -1525,31 +1526,31 @@ int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
->>>    	ret = acpi_dev_get_dma_resources(adev, &list);
->>>    	if (ret > 0) {
->>> +		list_for_each_entry(rentry, &list, node)
->>> +			num_ranges++;
->>> +
->>> +		r = kcalloc(num_ranges + 1, sizeof(*r), GFP_KERNEL);
->>> +		if (!r) {
->>> +			ret = -ENOMEM;
->>> +			goto out;
->>> +		}
->>> +
->>> +		*map = r;
->>> +
->>>    		list_for_each_entry(rentry, &list, node) {
->>> -			if (dma_offset && rentry->offset != dma_offset) {
->>> +			if (rentry->res->start >= rentry->res->end) {
->>>    				ret = -EINVAL;
->>> -				dev_warn(dma_dev, "Can't handle multiple windows with different offsets\n");
->>> +				dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
->>>    				goto out;
->>>    			}
->>> -			dma_offset = rentry->offset;
->>> -
->>> -			/* Take lower and upper limits */
->>> -			if (rentry->res->start < dma_start)
->>> -				dma_start = rentry->res->start;
->>> -			if (rentry->res->end > dma_end)
->>> -				dma_end = rentry->res->end;
->>> -		}
->>> -		if (dma_start >= dma_end) {
->>> -			ret = -EINVAL;
->>> -			dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
->>> -			goto out;
->>> +			r->cpu_start = rentry->res->start;
->>> +			r->dma_start = rentry->res->start - rentry->offset;
->>> +			r->size = rentry->res->end - rentry->res->start + 1;
->>> +			r->offset = rentry->offset;
->>> +			r++;
->>>    		}
->>> -		*dma_addr = dma_start - dma_offset;
->>> -		len = dma_end - dma_start;
->>> -		*size = max(len, len + 1);
->>> -		*offset = dma_offset;
->>>    	}
->>>     out:
->>>    	acpi_dev_free_resource_list(&list);
->>> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
->>> index 0dc1ea0b..e106073 100644
->>> --- a/include/acpi/acpi_bus.h
->>> +++ b/include/acpi/acpi_bus.h
->>> @@ -611,8 +611,7 @@ struct acpi_pci_root {
->>>    int acpi_iommu_fwspec_init(struct device *dev, u32 id,
->>>    			   struct fwnode_handle *fwnode,
->>>    			   const struct iommu_ops *ops);
->>> -int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
->>> -		       u64 *size);
->>> +int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map);
->>>    int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
->>>    			   const u32 *input_id);
->>>    static inline int acpi_dma_configure(struct device *dev,
->>> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
->>> index 44975c1..f806092 100644
->>> --- a/include/linux/acpi.h
->>> +++ b/include/linux/acpi.h
->>> @@ -974,8 +974,7 @@ static inline enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
->>>    	return DEV_DMA_NOT_SUPPORTED;
->>>    }
->>> -static inline int acpi_dma_get_range(struct device *dev, u64 *dma_addr,
->>> -				     u64 *offset, u64 *size)
->>> +static inline int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
->>>    {
->>>    	return -ENODEV;
->>>    }
->>>
->>
+>
+> >
+> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> > ---
+> > v1->v3:
+> > * No change.
+> >
+> >  drivers/bus/simple-pm-bus.c | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-pm-bus.c
+> > index 6b8d6257ed8a..ff5f8ca5c024 100644
+> > --- a/drivers/bus/simple-pm-bus.c
+> > +++ b/drivers/bus/simple-pm-bus.c
+> > @@ -13,6 +13,11 @@
+> >  #include <linux/platform_device.h>
+> >  #include <linux/pm_runtime.h>
+> >
+> > +static const struct of_device_id simple_pm_bus_child_matches[] = {
+> > +       { .compatible = "simple-mfd", },
+> > +       {}
+> > +};
+> > +
+> >  static int simple_pm_bus_probe(struct platform_device *pdev)
+> >  {
+> >         const struct device *dev = &pdev->dev;
+> > @@ -49,7 +54,7 @@ static int simple_pm_bus_probe(struct platform_device *pdev)
+> >         pm_runtime_enable(&pdev->dev);
+> >
+> >         if (np)
+> > -               of_platform_populate(np, NULL, lookup, &pdev->dev);
+> > +               of_platform_populate(np, simple_pm_bus_child_matches, lookup, &pdev->dev);
+> >
+> >         return 0;
+> >  }
+> > --
+> > 2.25.1
+> >

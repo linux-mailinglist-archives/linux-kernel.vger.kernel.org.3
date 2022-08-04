@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4F658A3FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 01:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7F958A3FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 01:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234779AbiHDXoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 19:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
+        id S240225AbiHDXoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 19:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233937AbiHDXoR (ORCPT
+        with ESMTP id S233937AbiHDXox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 19:44:17 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B825F71719
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 16:44:16 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id z20so1461015ljq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 16:44:16 -0700 (PDT)
+        Thu, 4 Aug 2022 19:44:53 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3B070E55;
+        Thu,  4 Aug 2022 16:44:52 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id b7so767810qvq.2;
+        Thu, 04 Aug 2022 16:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=MYpPnNYYRuA37g2a2Va2k82yWFk09zlElGc9XDuWnSs=;
-        b=FTwjcIb/srKxRRbBqvpJ06fYmJjau68uzGbLTesB1oFsOO7lNJlXHYUYFpW1KvmJoy
-         FPTk7i6awCzVR27iwbftj3AG49Ug6bEew2r3qD8FOuC+3jnrppS5taw5X7x4w3EJTi2m
-         nu2ORpB3Uz0El1sgr58Plv/TYZ0pJQz6jAO7WCJflrru6p+FGZSwML3dwZSofIzF4AJ6
-         XMH+u+md3KYC+BLxBtnKb4bj5rpYXn825k+cvAX1qWhe7zzXcV4BpqIYluQW7aNGT+YK
-         H8OxwRdhNe6PN8dN2XQN8Nblcbw1115JP5YVPh4BwGKk1+a+XW74/LMo0yjATvn5Mjun
-         432Q==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HVkR14o42hi6hJ+phzjown/t9tdn1qa9dzhn9JkAgYE=;
+        b=FUPBygbQUj/wdWVItvPxp+dnHVAGcLFC/JxkbBQs+3cZoWgmaCxQKmzffYZLmcQnV+
+         6EsQGI7fvIAnuFhhox7dtWTgwYdlChzNl1MAwCvHQE97b/YiRxEZMtvxuPqp+62JwORZ
+         GhgOWMepuqTBL9OCkHEGU5AbEMFeNp/dTBiGos5+dXLso5bPexe22yphqS8xzAPuWML8
+         6PGw7RVkDeU53Md4N8kfOhWvWxsXb4JFDlyIF3f2PGCtWbuhPzSYCL0IePbjaIwjMzXM
+         2leMfvDjyFC096vb26dys74XEezet50ye4/YrZZGDMn1Dc+OPZ0gkixG2xWy1u9PRA3s
+         fviA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=MYpPnNYYRuA37g2a2Va2k82yWFk09zlElGc9XDuWnSs=;
-        b=43ZP0v4uaIrLEZRoZbciTdo595FI2sqGLYnU2R30s+GAQDIghRveMcigRmzG+xtdYE
-         MSAFUaAWZ2JW0xlvmIU9cIDlQtrAHs+o9pnq2uc8C6w5Q1XMIN2XOnPY1T2V83QFiRNs
-         vsYfn6j+nZzfPUg2ZQX+UOB4GHmiKilGbj/Jo5euS7waB+2PICav1hrWhnmJvmvcIOjs
-         Cla27YzPLdlPvAxOCdpBR/53/wSisuPXSkCkYediy8IpWBhzPUMMP9oHdNuzA5Kot8Z6
-         02FDTbE4e71ewntFi2UgdTTKQF3F4xTOdIfsQsN9RKfK6KDuAulwjNUOzoT91ZQvU6Um
-         CaJQ==
-X-Gm-Message-State: ACgBeo2jskkkP8UdwyMvqlPkllcOJYvdCYqE0qX0ZiHY3kyasOTO9SPJ
-        Bc7i1XQ8M0OP5GqNtwHfWnVzD51xgWHahUpMss+Neg==
-X-Google-Smtp-Source: AA6agR74kW0u66mRgCpycAF0GIRARSp98NVY/1DMqszGKi68DR/MhsISDtA1DgL/ydMsEfCd8Dan8yoxVMRRIxuMcqk=
-X-Received: by 2002:a2e:81c1:0:b0:24b:f44:3970 with SMTP id
- s1-20020a2e81c1000000b0024b0f443970mr1198098ljg.97.1659656655026; Thu, 04 Aug
- 2022 16:44:15 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HVkR14o42hi6hJ+phzjown/t9tdn1qa9dzhn9JkAgYE=;
+        b=i46VcGw8w91iLi4lvRQPG6i26BbTLDCwFh9DxyKoUAP5/QJKVRyvj6sFiQ88XaSnYS
+         9cNMrV2d7Jv+eReOUn7BI5qvm0J8XUwtfyAIL4iRLebO38gK5h0ezNRHDU6sAOy1sgM1
+         2kMXjzP0pA7t2K32WtZkWvHUgWsgWpb8naaxdh1APbbRPPAlHKQT2tS3jypgBXs/2qVq
+         fQnVCmEJlIyYUNw4TEXXMVE6W6678743pLVvz4JhCEm8Ue/5gRey7mFMIqoJDSVemoSU
+         HZrxyvbeqB/jVzYAb0PCINhq0x1w+AbX5uokYCHLfZ77THnjOISM7lK0RqLg6nzxQFPY
+         lm4w==
+X-Gm-Message-State: ACgBeo3HbDZjZG54YIz1iXQ/zuLADgum5Ov7y2h3TE9iWVb/LSgsDH50
+        +y5BID5ZwMT+MLfrjGBCVg==
+X-Google-Smtp-Source: AA6agR46IBnjSSMjNG8eh7tClgbT4ZO9RhxTMgsNzmRC8MWOIN/iv0pnXymVkhOmG2qUgWy6nn1jtQ==
+X-Received: by 2002:ad4:4ea9:0:b0:474:7389:8593 with SMTP id ed9-20020ad44ea9000000b0047473898593mr3820374qvb.94.1659656692012;
+        Thu, 04 Aug 2022 16:44:52 -0700 (PDT)
+Received: from bytedance (ec2-52-52-7-82.us-west-1.compute.amazonaws.com. [52.52.7.82])
+        by smtp.gmail.com with ESMTPSA id e13-20020a05622a110d00b00339163a06fcsm1721967qty.6.2022.08.04.16.44.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 16:44:51 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 16:44:47 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next] vsock: Reschedule connect_work for
+ O_NONBLOCK connect() requests
+Message-ID: <20220804234447.GA2294@bytedance>
+References: <20220804020925.32167-1-yepeilin.cs@gmail.com>
+ <20220804065923.66bor7cyxwk2bwsf@sgarzare-redhat>
 MIME-Version: 1.0
-References: <cover.1651774250.git.isaku.yamahata@intel.com>
- <bfa4f7415a1d059bd3a4c6d14105f2baf2d03ba6.1651774250.git.isaku.yamahata@intel.com>
- <YuxOHPpkhKnnstqw@google.com> <YuxU/VXlSwVip7ys@google.com>
-In-Reply-To: <YuxU/VXlSwVip7ys@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Thu, 4 Aug 2022 16:43:48 -0700
-Message-ID: <CALzav=ft-kUHrKGPrc8C73=pYf7Na9iaAxtfaeV=PCmHJNimzQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v6 037/104] KVM: x86/mmu: Allow non-zero value for
- non-present SPTE
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Isaku Yamahata <isaku.yamahata@intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Sagi Shahar <sagis@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220804065923.66bor7cyxwk2bwsf@sgarzare-redhat>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +77,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 4:23 PM Sean Christopherson <seanjc@google.com> wrote:
-> On Thu, Aug 04, 2022, David Matlack wrote:
-> > On Thu, May 05, 2022 at 11:14:31AM -0700, isaku.yamahata@intel.com wrote:
-> > > +#ifdef CONFIG_X86_64
-> > > +#define SHADOW_NONPRESENT_VALUE    BIT_ULL(63)
-> > > +static_assert(!(SHADOW_NONPRESENT_VALUE & SPTE_MMU_PRESENT_MASK));
-> > > +#else
-> > > +#define SHADOW_NONPRESENT_VALUE    0ULL
-> > > +#endif
-> >
-> > The terminology "shadow_nonpresent" implies it would be the opposite of
-> > e.g.  is_shadow_present_pte(), when in fact they are completely
-> > different concepts.
->
-> You can fight Paolo over that one :-)  I agree it looks a bit odd when juxtaposed
-> with is_shadow_present_pte(), but at the same time I agree with Paolo that
-> SHADOW_INIT_VALUE is also funky.
->
-> https://lore.kernel.org/all/9dfc44d6-6b20-e864-8d4f-09ab7d489b97@redhat.com
+Hi Stefano,
 
-Ah ok, thanks for the context.
+On Thu, Aug 04, 2022 at 08:59:23AM +0200, Stefano Garzarella wrote:
+> The last thing I was trying to figure out before sending the patch was
+> whether to set sock->state = SS_UNCONNECTED in vsock_connect_timeout().
+> 
+> I think we should do that, otherwise a subsequent to connect() with
+> O_NONBLOCK set would keep returning -EALREADY, even though the timeout has
+> expired.
+> 
+> What do you think?
 
->
-> > Also, this is a good opportunity to follow the same naming terminology
-> > as REMOVED_SPTE in the TDP MMU.
-> >
-> > How about EMPTY_SPTE?
->
-> No, because "empty" implies there's nothing there, and it very much matters that
-> the SUPPRESS_VE bit is set for TDX.
+Thanks for bringing this up, after thinking about sock->state, I have 3
+thoughts:
 
-Fair point. My other idea was INITIAL_SPTE but that's already covered
-by Paolo's objection above :)
+1. I think the root cause of this memleak is, we keep @connect_work
+   pending, even after the 2nd, blocking request times out (or gets
+   interrupted) and sets sock->state back to SS_UNCONNECTED.
 
-I'll change my vote to NONPRESENT_SPTE.
+   @connect_work is effectively no-op when sk->sk_state is
+   TCP_CLOS{E,ING} anyway, so why not we just cancel @connect_work when
+   blocking requests time out or get interrupted?  Something like:
+
+diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+index f04abf662ec6..62628af84164 100644
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1402,6 +1402,9 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+                lock_sock(sk);
+
+                if (signal_pending(current)) {
++                       if (cancel_delayed_work(&vsk->connect_work))
++                               sock_put(sk);
++
+                        err = sock_intr_errno(timeout);
+                        sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
+                        sock->state = SS_UNCONNECTED;
+@@ -1409,6 +1412,9 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+                        vsock_remove_connected(vsk);
+                        goto out_wait;
+                } else if (timeout == 0) {
++                       if (cancel_delayed_work(&vsk->connect_work))
++                               sock_put(sk);
++
+                        err = -ETIMEDOUT;
+                        sk->sk_state = TCP_CLOSE;
+                        sock->state = SS_UNCONNECTED;
+
+   Then no need to worry about rescheduling @connect_work, and the state
+   machine becomes more accurate.  What do you think?  I will ask syzbot
+   to test this.
+
+2. About your suggestion of setting sock->state = SS_UNCONNECTED in
+   vsock_connect_timeout(), I think it makes sense.  Are you going to
+   send a net-next patch for this?
+
+3. After a TCP_SYN_SENT sock receives VIRTIO_VSOCK_OP_RESPONSE in
+   virtio_transport_recv_connecting(), why don't we cancel @connect_work?
+   Am I missing something?
+
+Thanks,
+Peilin Ye
+

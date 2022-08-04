@@ -2,161 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FCB5899D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DED5899D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239099AbiHDJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 05:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S239134AbiHDJVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 05:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236209AbiHDJSy (ORCPT
+        with ESMTP id S229527AbiHDJVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 05:18:54 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0CC3A481
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 02:18:53 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31f443e276fso194831127b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 02:18:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sNY7czIwpusO61rJoPeCDEV4Qf2V9wWZoLziIXNiH+s=;
-        b=vzFkIV/rafqwxh8Mr8sBx/JfIM48MDGM+Jt/kvgG9oTjkJlm+sJY5zCkmX9IFhsBai
-         zDJRaeWnM/aot1ZLjJPo/6qILKNWIwYiWSj8c4uSZ4K9kMeLxTc6tX/TDCYfYrdelfik
-         5Iw5oYsxqaYyARR89wCG3L1R1U9XmGtNYb2X4bffIPZWbVLXsbZ6FkX7TxWMsRnyHGzB
-         W5KRWTwQ/SvKdbBZ3LgfUowTnkIvmBEfyDX7oeiNvKVlQbA3x9n3QGeHSueLV2qxbk7k
-         8GQnjthxPUwk+sBRSGvxRq8sku96p+BFb3Gjex58qD/lmQCN+2u5YIB3nWbg2wHu9psl
-         1XUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sNY7czIwpusO61rJoPeCDEV4Qf2V9wWZoLziIXNiH+s=;
-        b=o57otsHQV9mzic0N1eedH0sQs0pM3plAwjBPBWTEU7JaONo5d/jDPaAr62rnAlk2Lq
-         TJu3ezFVJWSqyw/8Lg2Z+k1VY3VFz5bNp+vb132eMZWL89LBxsxl2k07kX5mjF1faNXi
-         hos9F2yRPp/Ub9+nFsFbVi4zs/ZEYAXDnahAYP/FtY//kMhOmBzOIIIyY6eEQopie+dX
-         ORNpdxuHvHmMWgbMbD0R7eW7bUhzPOadHns82lNnSe1NxYGhftbEERB8vwHCs/ebgS1T
-         K+ajCs7Zt3qioSzw4V9oHYKNqb85abk22H6Gtnddt/cuEF0ezKhqJUn/IzsVbAq6noPb
-         f43w==
-X-Gm-Message-State: ACgBeo3wTJ5o8rvT7CjLREJhffPfQP0yULGy011gW9RrUEOlkUxZc/+r
-        RVI5VS6sxZ+9Q2/0DgA0S1Ff8DR1FV4qgGzQGcMjGQ==
-X-Google-Smtp-Source: AA6agR4OnbPJ7p4M7PNNQa0wGF0qm0yUOdd9l3yhulo7HfOqSXiut4Tj8KXeNTmFHiIsvGpfGPZr5ysGSBfMQxpAa9Q=
-X-Received: by 2002:a0d:e853:0:b0:321:c297:c9b2 with SMTP id
- r80-20020a0de853000000b00321c297c9b2mr852797ywe.493.1659604733056; Thu, 04
- Aug 2022 02:18:53 -0700 (PDT)
+        Thu, 4 Aug 2022 05:21:35 -0400
+Received: from outbound-smtp47.blacknight.com (outbound-smtp47.blacknight.com [46.22.136.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F94922B29
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 02:21:32 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp47.blacknight.com (Postfix) with ESMTPS id 3BC87FABE8
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 10:21:31 +0100 (IST)
+Received: (qmail 19609 invoked from network); 4 Aug 2022 09:21:30 -0000
+Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPA; 4 Aug 2022 09:21:30 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Petr Mladek <pmladek@suse.com>, Michal Hocko <mhocko@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH 1/1] sched/core: Do not requeue task on CPU excluded from cpus_mask
+Date:   Thu,  4 Aug 2022 10:21:19 +0100
+Message-Id: <20220804092119.20137-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20220511060521.465744-1-sumit.garg@linaro.org>
- <CAD=FV=WXoDvWuH=yjzCcqOZ5CeUtYun7C8zrtrBP4FC409GkqA@mail.gmail.com>
- <CAFA6WYPmFqCXk24J71tNO=5bJHgJRAOPFr7cGq8YYLR+MWBoPw@mail.gmail.com>
- <CAD=FV=WdMsqrsWzX=0RU5HJ1a0cy-pm4BwP47siLj=+eeEXUQA@mail.gmail.com> <CAFA6WYP_C7fOkgNw8n0OAaT92fr4UdBnCqAn_du6BT_sQB2KzQ@mail.gmail.com>
-In-Reply-To: <CAFA6WYP_C7fOkgNw8n0OAaT92fr4UdBnCqAn_du6BT_sQB2KzQ@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 4 Aug 2022 14:48:41 +0530
-Message-ID: <CAFA6WYNnb2szmP7_V-W=LrBS1sD+zwV8VrieSp-sQM7B1E4wqA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] arm64: Fix pending single-step debugging issues
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Will Deacon <will@kernel.org>, Wei Li <liwei391@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 at 19:21, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> On Mon, 11 Jul 2022 at 19:17, Doug Anderson <dianders@chromium.org> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, Jul 11, 2022 at 5:44 AM Sumit Garg <sumit.garg@linaro.org> wrote:
-> > >
-> > > > I'll also note that I _think_ I remember that with Wei's series that
-> > > > the gdb function "call" started working. I tried that here and it
-> > > > didn't seem so happy. To keep things simple, I created a dummy
-> > > > function in my kernel that looked like:
-> > > >
-> > > > void doug_test(void)
-> > > > {
-> > > >   pr_info("testing, 1 2 3\n");
-> > > > }
-> > > >
-> > > > I broke into the debugger by echoing "g" to /proc/sysrq-trigger and
-> > > > then tried "call doug_test()". I guess my printout actually printed
-> > > > but it wasn't so happy after that. Seems like it somehow ended up
-> > > > returning to a bogus address after the call which then caused a crash.
-> > > >
-> > >
-> > > I am able to reproduce this issue on my setup as well. But it doesn't
-> > > seem to be a regression caused by this patch-set over Wei's series. As
-> > > I could reproduce this issue with v1 [1] patch-set as well which was
-> > > just a forward port of pending patches from Wei's series to the latest
-> > > upstream.
-> > >
-> > > Maybe it's a different regression caused by other changes? BTW, do you
-> > > remember the kernel version you tested with Wei's series applied?
-> >
-> > Sorry, I don't remember! :( I can't even be 100% sure that I'm
-> > remembering correctly that I tested it back in the day, so it's
-> > possible that it simply never worked...
->
-> Okay, no worries. Let me see if I can come up with a separate fix for this.
->
+The following warning was triggered on a large machine early in boot on
+a distribution kernel but the same problem should also affect mainline.
 
-After digging deep into GDB call function operations for aarch64, it
-is certain that function calls simply never worked due to below
-reasons:
+[    7.732929] ------------[ cut here ]------------
+[    7.736736] WARNING: CPU: 439 PID: 10 at ../kernel/workqueue.c:2231 process_one_work+0x4d/0x440
+[    7.748731] Modules linked in:
+[    7.748731] Supported: Yes
+[    7.748731] CPU: 439 PID: 10 Comm: mm_percpu_wq Not tainted
+[    7.748731] Hardware name: HPE Superdome Flex/Superdome Flex
+[    7.748731] Workqueue:  0x0 (mm_percpu_wq)
+[    7.748731] RIP: 0010:process_one_work+0x4d/0x440
+[    7.748731] Code: 00 00 00 00 4c 0f 44 e0 49 8b 44 24 08 44 8b a8 00 01 00 00 41 83 e5 20 f6 45 10 04 75 0e 65 8b 05 98 64 f5 4e 39 45 04 74 02 <0f> 0b 48 ba eb 83 b5 80 46 86 c8 61 48 0f af d6 48 c1 ea 3a 48 8b
+[    7.748731] RSP: 0000:ffffb15980183e88 EFLAGS: 00010093
+[    7.748731] RAX: 00000000000001b7 RBX: ffff968ec02121f0 RCX: ffff96ddbcbf32a0
+[    7.748731] RDX: ffff96ddbcbf3298 RSI: ffff96ddbcbeff40 RDI: ffff968ec02121c0
+[    7.748731] RBP: ffff96ddbcbf3280 R08: ffff96ddbcc745d0 R09: 0000000000000000
+[    7.748731] R10: ffffb15980183d98 R11: 0000000000000213 R12: ffff96ddbcbfcd00
+[    7.748731] R13: 0000000000000000 R14: ffff96ddbcbfcd88 R15: ffff968ec02121c0
+[    7.748731] FS:  0000000000000000(0000) GS:ffff96ddbcc40000(0000) knlGS:0000000000000000
+[    7.748731] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    7.748731] CR2: 0000000000000000 CR3: 00000028b8810001 CR4: 00000000007706e0
+[    7.748731] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    7.748731] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    7.748731] PKRU: 55555554
+[    7.748731] Call Trace:
+[    7.748731]  <TASK>
+[    7.748731]  rescuer_thread+0x1f6/0x360
+[    7.748731]  ? cancel_delayed_work+0xa0/0xa0
+[    7.748731]  kthread+0x156/0x180
+[    7.748731]  ? set_kthread_struct+0x40/0x40
+[    7.748731]  ret_from_fork+0x22/0x30
+[    7.748731]  </TASK>
+[    7.748731] ---[ end trace 9cfa5ca579d758e4 ]---
 
-1. On aarch64, GDB call function inserts a breakpoint at the
-entrypoint of kernel (which is ffffffc008000000 from your dump) as
-return address from function called. And since it refers to the
-"_text" symbol which is marked non-executable as the actual text
-section starts with the "_stext" symbol. I did a following hack that
-makes it executable:
+Commit c6e7bd7afaeb ("sched/core: Optimize ttwu() spinning on
+p->on_cpu") optimises ttwu by queueing a task that is descheduling
+on the wakelist but does not check if the task descheduling is still
+allowed to run on that CPU.
 
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 626ec32873c6..e39ad1a5f5d6 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -700,7 +700,7 @@ static bool arm64_early_this_cpu_has_bti(void)
- static void __init map_kernel(pgd_t *pgdp)
+In this warning, the problematic task is a workqueue rescue thread which
+checks if the rescue is for a per-cpu workqueue and running on the wrong CPU.
+While this is early in boot and it should be possible to create workers,
+the rescue thread may still used if the MAYDAY_INITIAL_TIMEOUT is reached
+or MAYDAY_INTERVAL and on a sufficiently large machine, the rescue
+thread is being used frequently.
+
+Tracing confirmed that the task should have migrated properly using the
+stopper thread to handle the migration. However, a parallel wakeup from udev
+running on another CPU that does not share CPU cache observes p->on_cpu and
+uses task_cpu(p), queues the task on the old CPU and triggers the warning.
+
+Check that the wakee task that is descheduling is still allowed to run
+on its current CPU and if not, wait for the descheduling to complete
+and select an allowed CPU.
+
+Fixes: c6e7bd7afaeb ("sched/core: Optimize ttwu() spinning on p->on_cpu")
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+---
+ kernel/sched/core.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 189999007f32..139b5b409c46 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3802,7 +3802,7 @@ bool cpus_share_cache(int this_cpu, int that_cpu)
+ 	return per_cpu(sd_llc_id, this_cpu) == per_cpu(sd_llc_id, that_cpu);
+ }
+ 
+-static inline bool ttwu_queue_cond(int cpu)
++static inline bool ttwu_queue_cond(struct task_struct *p, int cpu)
  {
-        static struct vm_struct vmlinux_text, vmlinux_rodata, vmlinux_inittext,
--                               vmlinux_initdata, vmlinux_data;
-+                               vmlinux_initdata, vmlinux_data, vmlinux_htext;
+ 	/*
+ 	 * Do not complicate things with the async wake_list while the CPU is
+@@ -3811,6 +3811,10 @@ static inline bool ttwu_queue_cond(int cpu)
+ 	if (!cpu_active(cpu))
+ 		return false;
+ 
++	/* Ensure the task will still be allowed to run on the CPU. */
++	if (!cpumask_test_cpu(cpu, p->cpus_ptr))
++		return false;
++
+ 	/*
+ 	 * If the CPU does not share cache, then queue the task on the
+ 	 * remote rqs wakelist to avoid accessing remote data.
+@@ -3840,7 +3844,7 @@ static inline bool ttwu_queue_cond(int cpu)
+ 
+ static bool ttwu_queue_wakelist(struct task_struct *p, int cpu, int wake_flags)
+ {
+-	if (sched_feat(TTWU_QUEUE) && ttwu_queue_cond(cpu)) {
++	if (sched_feat(TTWU_QUEUE) && ttwu_queue_cond(p, cpu)) {
+ 		sched_clock_cpu(cpu); /* Sync clocks across CPUs */
+ 		__ttwu_queue_wakelist(p, cpu, wake_flags);
+ 		return true;
+-- 
+2.35.3
 
-        /*
-         * External debuggers may need to write directly to the text
-@@ -721,6 +721,8 @@ static void __init map_kernel(pgd_t *pgdp)
-         * Only rodata will be remapped with different permissions later on,
-         * all other segments are allowed to use contiguous mappings.
-         */
-+       map_kernel_segment(pgdp, _text, _stext, text_prot, &vmlinux_htext, 0,
-+                          VM_NO_GUARD);
-        map_kernel_segment(pgdp, _stext, _etext, text_prot, &vmlinux_text, 0,
-                           VM_NO_GUARD);
-        map_kernel_segment(pgdp, __start_rodata, __inittext_begin, PAGE_KERNEL,
-
-2. For the GDB function "call" to work, GDB inserts a dummy stack
-frame. But in case of kernel on aarch64, the stack used is common
-among the exception handler and the kernel threads. So it's not
-trivial to insert a dummy stack frame and requires rework of exception
-entry code as it pushes pt_regs onto the stack.
-
--Sumit
-
->
-> >
-> > -Doug

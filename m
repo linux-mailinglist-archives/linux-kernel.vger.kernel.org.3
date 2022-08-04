@@ -2,87 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8075899EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BBA5899F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239178AbiHDJ3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 05:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
+        id S239221AbiHDJam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 05:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233576AbiHDJ3d (ORCPT
+        with ESMTP id S239139AbiHDJaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 05:29:33 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4901E6715B
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 02:29:32 -0700 (PDT)
-Received: from zn.tnic (p200300ea970f4fa7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:4fa7:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C80BB1EC0629;
-        Thu,  4 Aug 2022 11:29:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1659605366;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=I/Uy9+UH+hyHqkgD7Pc+RVO6YABs5/zAXDgvZMzohrw=;
-        b=HewL1F2bKHIriv60rm8zcsmvl1aYZR0VXURKDhy466+eHlJwGWN5liiGZVhWTXN9XW2XgS
-        sHCercMqyB4q3peTT91da6sSno2V6/RXaS65jH66fUBoyCAQNLS03G3IayfpmgWTBe00VJ
-        sGiMZmI5rQRK4IgKJ7FXh9KsmU13KCY=
-Date:   Thu, 4 Aug 2022 11:29:22 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zhangfei Gao <zhangfei.gao@foxmail.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: Link: tag and links to submission and reports (was: Re: [GIT
- pull] core/urgent for v5.18-rc6)
-Message-ID: <YuuRcit5hgzW1Pga@zn.tnic>
-References: <165201148069.536527.1960632033331546251.tglx@xen13>
- <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
- <ff841fdc-4db7-7a3d-8caf-d0cddd0dfa31@leemhuis.info>
- <Ynt1z0eZ19eMqp8I@zn.tnic>
- <YnvbLx9FKgQwZJ/F@mit.edu>
- <CAHk-=wgUVHucyjp6M7qmn8b=aqwucfS4SQpqOCR5sKr16zoO5g@mail.gmail.com>
- <YnwP7QmPzyv5FhrZ@zn.tnic>
- <3cf09576-66f2-b18c-0057-2635fc9452de@leemhuis.info>
+        Thu, 4 Aug 2022 05:30:39 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1753DF39
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 02:30:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VLMBxaE_1659605434;
+Received: from 30.240.99.20(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VLMBxaE_1659605434)
+          by smtp.aliyun-inc.com;
+          Thu, 04 Aug 2022 17:30:35 +0800
+Message-ID: <a0e46572-5b37-7bb3-20f0-740a6480e50e@linux.alibaba.com>
+Date:   Thu, 4 Aug 2022 17:30:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3cf09576-66f2-b18c-0057-2635fc9452de@leemhuis.info>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [RFC PATCH V4 1/1] mm: add last level page table numa info to
+ /proc/pid/numa_pgtable
+To:     David Hildenbrand <david@redhat.com>, willy@infradead.org
+Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20220801121727.76186-1-xhao@linux.alibaba.com>
+ <20220801121727.76186-2-xhao@linux.alibaba.com>
+ <0c1f9e76-9b1d-7069-bb09-c18e4f19f0c4@redhat.com>
+ <bc0d16a6-e340-e261-82a0-e17bd236c2d9@linux.alibaba.com>
+ <eaaab6c4-1719-5e21-ebf7-a0c17487314c@redhat.com>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <eaaab6c4-1719-5e21-ebf7-a0c17487314c@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 10:43:07AM +0200, Thorsten Leemhuis wrote:
-> Which leads to the question: can we (and do we want to) teach
-> scripts/checkpatch.pl to point out when a Link: tag is missing and
-> likely appropriate? If a "Reported-by:" is present there should be a
-> "Link:" as well, unless the issue was reported privately, via IRC or
-> something like that. A "Fixes:" tag is also a strong indicator that a
-> link might be appropriate, but not as good.
 
-All good ideas, sure.
+在 2022/8/4 下午4:12, David Hildenbrand 写道:
+> On 04.08.22 10:04, haoxin wrote:
+>> 在 2022/8/1 下午9:28, David Hildenbrand 写道:
+>>> On 01.08.22 14:17, Xin Hao wrote:
+>>>> In many data center servers, the shared memory architectures is
+>>>> Non-Uniform Memory Access (NUMA), remote numa node data access
+>>>> often brings a high latency problem, but what we are easy to ignore
+>>>> is that the page table remote numa access, It can also leads to a
+>>>> performance degradation.
+>>> Let me try rewriting:
+>>>
+>>> "
+>>> Many data center servers employ Non-Uniform Memory Access (NUMA)
+>>> architectures. Remote numa memory access results in high latency. While
+>>> memory placement is one issue, sub-optimal page table placement can also
+>>> result in surprise performance degradation.
+>>> "
+>> Thanks,  it reads more clearly.
+>>
+>>>> So there add a new interface in /proc, This will help developers to
+>>>> get more info about performance issues if they are caused by cross-NUMA.
+>>> Why do we only care about "last level page table", why not about the others?
+>>>
+>>> IMHO, we could emit something like "0, 1, 3, 0" instead for a given user
+>>> space address, showing the NUMA node the page table belongs to from
+>>> highest to lowest page table level.
+>> I have planned to implement the PTE page table in this version first,
+>> and then support other page tables in the next patch later.
+> If there are plans, let's do it all at once, to get a good and single
+> interface to expose that information.
+Ok, thanks for your suggestion, I will implement it in the next version.
 
-At least pointing it out as a hint - not necessarily as a warning -
-would be a good idea. And say, "hey, and while you're adding a Link
-tag, pls make sure it points to the mail which has the most relevant
-discussion on the matter your patch is fixing."
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>

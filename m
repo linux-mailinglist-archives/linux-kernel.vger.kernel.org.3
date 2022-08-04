@@ -2,86 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09E458A2E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 23:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761EE58A2EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 23:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239222AbiHDVuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 17:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59630 "EHLO
+        id S239465AbiHDVxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 17:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237575AbiHDVuQ (ORCPT
+        with ESMTP id S233810AbiHDVxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 17:50:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5FEBC1;
-        Thu,  4 Aug 2022 14:50:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDB63617D4;
-        Thu,  4 Aug 2022 21:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1E44AC433B5;
-        Thu,  4 Aug 2022 21:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659649814;
-        bh=i4PJuzDt2glZTSZaQmE3My1ArcAuGpSkA+2xDdLChko=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XaHo5yFcn0oHiJu6N5owlQQrNuyFtI7xs7Kc7y/siKHuY8C8Qw3Vv+ZGhF4DJn25m
-         bAAKviwfna6M+ef18YLL2tL0FeCQ+Vzg1yud65Stx3tFpX1QR9y3/uQXm+RxNLXuU7
-         Rrz5LQSCSEGSCkUsLFdxlr3Ja0mmNNyHsw9y3R2Pnm7jYSpK6Pj2Ox7SoSx3Ed1pGz
-         ZWrUxi/eiArAwqxDW27c4q4AnX5ycjWT4gsCulG1NTIbgiDGhSAXRzut8udJ1r1lnN
-         KJXN14a0oYJFNLD4NMTwuD/nes0jM00aLpM3fsvZJUDqkM4Geer7ggrnqQXRji4ysX
-         VQEQO62tmmmhA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0651DC43145;
-        Thu,  4 Aug 2022 21:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 4 Aug 2022 17:53:39 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A18B7D6
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 14:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659650019; x=1691186019;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OHCsl+XUzQO7RT4641GA7PUmBwvdkIz4kTfdE4EpX5E=;
+  b=EJyaBDjd9OeY24PKTzTBwfP8Xi2AEqIe6nAKgSm65zTGyBsLrj6zxyIU
+   wLJ/VU2lYP3/Pwy9vyH/2ibxrsiXMKHCXuR+dzvCrQmXRzbcxbM3MAm5T
+   uhZoEbQtKTNAPH4XWZci0utCZhDT+O5CPmeL79hyRqvM5a1XrTRx4Vc8c
+   jxW9AY01cJhiRVRo26iEClJJGbCtIzt3HE8EzsiHWkfQj0uUFz984117B
+   cVc/R2zwUxmyjSrJItHpyVrXmDuPIcxbPjZcOO8JKuNgetbOAU4el2KOO
+   wk1BHDY75l1KfGmnHEFf9UhlpEHW7yMK8lUjqR6ejzbwpc2HdapdSjS+b
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="354051606"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="354051606"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 14:53:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="671428782"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Aug 2022 14:53:36 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJime-000Isz-0H;
+        Thu, 04 Aug 2022 21:53:36 +0000
+Date:   Fri, 05 Aug 2022 05:52:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ 9aeaf5bc4e30ec968ae660b865ed491a28daf500
+Message-ID: <62ec3fa4.IzBQy9swDRQCCzlS%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] libbpf: Initialize err in probe_map_create
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165964981402.20332.403823292048774488.git-patchwork-notify@kernel.org>
-Date:   Thu, 04 Aug 2022 21:50:14 +0000
-References: <20220801025109.1206633-1-f.fainelli@gmail.com>
-In-Reply-To: <20220801025109.1206633-1-f.fainelli@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        davemarchevsky@fb.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+branch HEAD: 9aeaf5bc4e30ec968ae660b865ed491a28daf500  locking/spinlocks: Mark spinlocks noinline when inline spinlocks are disabled
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+elapsed time: 697m
 
-On Sun, 31 Jul 2022 19:51:09 -0700 you wrote:
-> GCC-11 warns about the possibly unitialized err variable in
-> probe_map_create:
-> 
-> libbpf_probes.c: In function 'probe_map_create':
-> libbpf_probes.c:361:38: error: 'err' may be used uninitialized in this function [-Werror=maybe-uninitialized]
->   361 |                 return fd < 0 && err == exp_err ? 1 : 0;
->       |                                  ~~~~^~~~~~~~~~
-> 
-> [...]
+configs tested: 53
+configs skipped: 2
 
-Here is the summary with links:
-  - libbpf: Initialize err in probe_map_create
-    https://git.kernel.org/bpf/bpf-next/c/3045f42a6432
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-You are awesome, thank you!
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+i386                                defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+arc                  randconfig-r043-20220804
+x86_64                               rhel-8.3
+x86_64                        randconfig-a015
+x86_64                           allyesconfig
+i386                          randconfig-a014
+i386                             allyesconfig
+arm                                 defconfig
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a006
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+arm                              allyesconfig
+powerpc                           allnoconfig
+i386                          randconfig-a001
+arm64                            allyesconfig
+alpha                            allyesconfig
+i386                          randconfig-a003
+arc                              allyesconfig
+i386                          randconfig-a005
+ia64                             allmodconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20220804
+hexagon              randconfig-r041-20220804
+x86_64                        randconfig-a012
+i386                          randconfig-a013
+riscv                randconfig-r042-20220804
+x86_64                        randconfig-a016
+s390                 randconfig-r044-20220804
+x86_64                        randconfig-a014
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

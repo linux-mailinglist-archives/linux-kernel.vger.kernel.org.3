@@ -2,162 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D55E589F95
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 18:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8E9589F98
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 18:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236119AbiHDQ4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 12:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
+        id S236556AbiHDQ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 12:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235652AbiHDQ4l (ORCPT
+        with ESMTP id S230177AbiHDQ5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 12:56:41 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D641C1D320
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 09:56:38 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id z3so251019qtv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 09:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=2IfFvaqIAb3sUtS3vl0hfysQvE8nkRK4dXUfA9HeU1c=;
-        b=lld8bLFJEzHSiOXE8dUIcAFqeINLHHTaJxuZkKmUuLhszrVFhi4ZCdyJtYWJNrk+BN
-         3M1IoqDvZnGmJN/fl3PUrUqGJETgxVf94wPZH3+8YCmXIDF9+COkle9j6BLIkD9kmM6Q
-         fAC+EqXFhHuFxi9AjMLo7Q/qM7MLKi1kkLrBNc37Y+/86EgYV+wj0jI23Jagvfo2GSCj
-         flzBqpHyAqsWbI8ciADtfByA+J43zsddfZb9qiCtfD3AAVLXtGXBl9//LYixwYkvRO7I
-         DM6OPP115O7Y3uoCuiT70jkUovXqs+Y2yJLbIVfEGGfbLnRuJFXtbfRmEUf8KLz046kj
-         oXLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=2IfFvaqIAb3sUtS3vl0hfysQvE8nkRK4dXUfA9HeU1c=;
-        b=ulRabN3OeskLRZQYiE4Xcs3RUd3xVjSK84CH0/qmX99uICpGl5Le0chQ/+t4qo5lHJ
-         0lz8UurRUvYv33aD0m5LeJg0b/RGRQ8auJkIiIm6OmmH9/TQm6+sz9ZPrJn6xAFbZppF
-         07SYBnEBnbw31OpCcONzW3EkB99QStZ02kGA8ls/ii2+6JRUs9FU5c9nW3m67DXAq/UN
-         kn1ylfrLjDfK20Gx8CyUDbqdrRBGS4dmEo7mCyCtUALqv9brcKGExiThHUq/2qhTk6NS
-         iKde6H5k/UytCae1+TbYb8t0DVvOSWukW91ZU6NDbbuxoVTrXuiDu0r9TW41YgPkMYGi
-         3DQA==
-X-Gm-Message-State: ACgBeo1f/EgOFaTC6bgL9ZIlQ5l9JOZW1/NctV2xqvTTr2Vdc3K17/hq
-        l6iZ0s3Ekc+hmHJ8IjhaOuvXhQ==
-X-Google-Smtp-Source: AA6agR4ucw3JsXuDN3v9VebA4uXtfn5U9BDGDOSS/aCIAHKAbcY9SjifajrjubtBrbbRIRKg2iNHww==
-X-Received: by 2002:ac8:5809:0:b0:33d:f8e6:350e with SMTP id g9-20020ac85809000000b0033df8e6350emr2324289qtg.682.1659632197970;
-        Thu, 04 Aug 2022 09:56:37 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::77e5])
-        by smtp.gmail.com with ESMTPSA id c25-20020ac84e19000000b00338ae1f5421sm971855qtw.0.2022.08.04.09.56.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 09:56:37 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 12:56:36 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     Tejun Heo <tj@kernel.org>, surenb@google.com, mingo@redhat.com,
-        peterz@infradead.org, corbet@lwn.net, akpm@linux-foundation.org,
-        rdunlap@infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        cgroups@vger.kernel.org
-Subject: Re: [PATCH 8/9] sched/psi: add kernel cmdline parameter
- psi_inner_cgroup
-Message-ID: <Yuv6RHY0GRGBw+as@cmpxchg.org>
-References: <20220721040439.2651-1-zhouchengming@bytedance.com>
- <20220721040439.2651-9-zhouchengming@bytedance.com>
- <Yt7KQc0nnOypB2b2@cmpxchg.org>
- <YuAqWprKd6NsWs7C@slm.duckdns.org>
- <5a3410d6-428d-9ad1-3e5a-01ca805ceeeb@bytedance.com>
- <Yuq3Q6Y9dRnjjcPt@slm.duckdns.org>
- <YurK6MXdJPrV2VYS@cmpxchg.org>
- <f8444db4-3235-d108-698a-6772e03a6b67@bytedance.com>
+        Thu, 4 Aug 2022 12:57:04 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-cusazon11020020.outbound.protection.outlook.com [52.101.61.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD691D31C;
+        Thu,  4 Aug 2022 09:57:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LfAp2OX11a33ooWnwVkr+Qshd+rE3e8mFcM1uwnhAE3EInjTcNc/ueTtTHLT6sT7TMyaGNfdZoeyefuznPws6mZR+uNLrjzBSLBLLe1Q/sPcFJbwdX2orDtpBm77vPZbrrmf0iCy9S7STN4RFIsZIo+oOdX3YEfDgdg9182cMjxoMVrXEcuZUvzPwhJa12j6LTi59gfhrMfkotYtefXon0M43e0EvEsGTe6L/qIo/OThmSs4qGkQLLOuCqbVZYBRAhoEVqu/ZCEE7NC6ELQ9jcDkCcLNwg3ah6TIGbZ5R4/RtzHDL5Ms/aHTI984uWw7A08COFVDw0L+lcjwWiVCZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0fgeSQtEyjd8M5ROiyaDQWBRhU8RPytIGwut89CPcag=;
+ b=OugAvYlBF5WKu/hxxc/kuLSYi0jitj1hozu+ADAN7vCiuzA3tsx3rZqJYkCn4Rik5xnyd5nCGGTxGEi20rqIVVYI8iBPjNQlK9emyzWzLPQP5vbyuiWXrYH0dedlX48SiM9EtQ074TvStmAkuwnQIdsSNHcsZ8V8JSo8XkH7h3PWfDOcYEMWjU6WapAY9nPppzp+Izpwf/xbgE1qdJp0JYBw+bARcz7S7xWJ31+dly4FFXoFzoOHoohjqGe0CjtOmg7tHDy6EDAsw45JV8Z9dVHsp/L2kxoBk3b0tiG/8SQGrT8GwbvPP6C1QkdIEGmmH4j2VRXxzHXYvSvMaUdhfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0fgeSQtEyjd8M5ROiyaDQWBRhU8RPytIGwut89CPcag=;
+ b=Mju5mbPB33yGQiLLf3uaFiPeeYvfhuJ2MeqeTRhhocqthwV8R/A6kUj6LCoSUVEexZDYGP0FZxePhgF8v3WEA5pyUeMUid556z00WeZOmjL4YvwKWlA9LTJ4FD7V7Wfi8PTaT56qP3e/r1G/JAE70NaEUjUkIQv05p+nlDYVBvU=
+Received: from PH0PR21MB3025.namprd21.prod.outlook.com (2603:10b6:510:d2::21)
+ by LV2PR21MB3158.namprd21.prod.outlook.com (2603:10b6:408:174::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Thu, 4 Aug
+ 2022 16:56:57 +0000
+Received: from PH0PR21MB3025.namprd21.prod.outlook.com
+ ([fe80::29af:3ad1:b654:63b8]) by PH0PR21MB3025.namprd21.prod.outlook.com
+ ([fe80::29af:3ad1:b654:63b8%6]) with mapi id 15.20.5525.005; Thu, 4 Aug 2022
+ 16:56:57 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>
+Subject: RE: [PATCH v2] scsi: storvsc: Remove WQ_MEM_RECLAIM from
+ storvsc_error_wq
+Thread-Topic: [PATCH v2] scsi: storvsc: Remove WQ_MEM_RECLAIM from
+ storvsc_error_wq
+Thread-Index: AQHYqBqlPfN3cSbliEK7XzLFKc/zIa2e9bEw
+Date:   Thu, 4 Aug 2022 16:56:57 +0000
+Message-ID: <PH0PR21MB30256870A5E6DED4BEE30C04D79F9@PH0PR21MB3025.namprd21.prod.outlook.com>
+References: <1659628534-17539-1-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1659628534-17539-1-git-send-email-ssengar@linux.microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=89c5634b-76cd-4100-bfc8-d233021ab35e;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-08-04T16:55:07Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d66c14ac-34f5-4917-cee8-08da763a5785
+x-ms-traffictypediagnostic: LV2PR21MB3158:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dSq/60x8XGdNIZNHFlDSfTKqdwo/XR+6ypf+QmNJf2Wtw2KXbLRR+yTe7aL8v/taCtGxNvtYW0RCSqDsJGpad/980zaoz5qZSR+j6TQH1YPteusfK9wqJqG8DJ7THW5Jk2rZIxpDgoxmTqUHNrZRr39Bkr6duAD5heZ92TGYDG5hZfefMd5zCbSmEP9PFlG+AHuM4q3yo+7rCf+1YAXGLNwnjLqsYyafg+9OzvUtTJ436CWRtV261NHWfnxwC9uiZg9XhA0q26vCw5/D4BfQbPRXJyINooWgrb+6NXiT6l/yA893EQlIumxj0HPdfE2IZ44nQn1j3GXvEfzK6qsO+4DPe6By/EhIkVteyBMVhpIKBlQ9vtfnQVHj1qQf1SKMqd7SfF18xcMKemvmYyFhYIOxagJJYclpBlbe4kHveLO7Zj4JWTnZHJpq7yurah++hyrqLmCCh9TjhDyso6n4Yb2/9GTcfshh/z3NW6rsUoFNuq7uAGdOMA35tL+cyyLGoNjy78wdt/xN1jjBPqkJSxxB4IkZTn7BFupXnMnmey6s2Ao2btTVg4CFleC17r5HtCWM8+mzTxMtj2tuIRlHus/+R/ph+/K/oCj4O0GzAN16J4gGXK/BQbnu30200V8+BIEaBYQdMFhol7SlJaUhDUbXrGkx3yPLt9GAAIl9NXouUxkMEp8wEbZXnx5OzXOM7Xo9+TV/gwJRmrOWX8yfn7U+NGFANUIDrDNeXNmzn7k4mO/rHch1OwibU5ixkUksovXmMkFtp3WTQpDVxFLGzpROMO3Qx2UMYqepS8YpmmUwry0VFgEkqSnqOAlQRPbJDmD1yOk2rZ9ruBsWsYBJ17oCvoMLa1mn/I7vXPuV7TwGyq17M1FFoxYfbL0FTacf
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR21MB3025.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(366004)(136003)(39860400002)(396003)(451199009)(122000001)(478600001)(2906002)(38070700005)(83380400001)(921005)(82950400001)(55016003)(41300700001)(8676002)(76116006)(66556008)(8990500004)(66946007)(82960400001)(71200400001)(186003)(64756008)(66446008)(66476007)(7696005)(6506007)(26005)(10290500003)(33656002)(5660300002)(86362001)(38100700002)(52536014)(9686003)(6636002)(110136005)(8936002)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wm/vyjCphr22fYsSzd+mFetM0FwPL5W1f1GXqb5HpxORkTswSLlnSefN9w3T?=
+ =?us-ascii?Q?aJRlOEjzgOvvVgvah3RrKUjM0sB/8jXCWUBhWyaFLcbGJqPSI6A9QhaE4vPB?=
+ =?us-ascii?Q?8CNuc+4+qmU5uGmsEL4rrukggAmS4CSBh9zm8Dze5qwwB8RXR+yFl3VIsTyG?=
+ =?us-ascii?Q?Sdyk+GMl5gcL9hek4QkKPhFzw4R42C4mrMbXjiLyN4H+/FDrhXHEwmWSJYd+?=
+ =?us-ascii?Q?n7VAqMxP9OZOTh82+vzo9TIZid5ulVm9JOlkrht0YLVjzb5Lss1rUn20sZoV?=
+ =?us-ascii?Q?mWwXHvC4uOHg5P8nQ4GPvBaewXwpsj7htGIRi3Ydl9CUZnF0BLCRvB1yhYT6?=
+ =?us-ascii?Q?OMpWKHHG6kUsyUu9xKlv+EMBol7cb3DLfrTvxFDtuHnFETY07x3zGNQlzfjq?=
+ =?us-ascii?Q?p0zMU5Ny4jELknwi85jQDbIe49RwUZ4FS95x9Kwz1pwAdC9h0Gpz3XKCGEdd?=
+ =?us-ascii?Q?XPKx9pfQJjLsEXG17g5LKYkq/FvbGEtiRtbnS2Lni8y/pJ3UZ5Xyke5fbt+j?=
+ =?us-ascii?Q?Z5qmLAI83TYVPtQfiHzo/W/fuG4DzYsPsOxStIOxCjcQXD/UXDMvh9AifOs3?=
+ =?us-ascii?Q?S5jwSxQXduj4kzsbEujOh3yi3XMybVP4Cx5uNhWwdNwaV2oOnV2UtKqWKQwf?=
+ =?us-ascii?Q?6Emi9eQhvO1QBzHdjbdkVAsmUSoYAuTwxWsXb8qSnwmFeH6Yr4Tdci8BGq8j?=
+ =?us-ascii?Q?sEPbhOB4HK2w3hFrCnvQ5IUO6q6R9Sq5M8r3WpAYnTTvjnxRF66s5IMXUfvX?=
+ =?us-ascii?Q?tOzTdCxXQ0Ew61lf1VdKZms7maJSdmYjYTOXb1M/+PE3QcoHcrTVgZi3pwD5?=
+ =?us-ascii?Q?Ye8y6P/4mUVLSevcOp8Jj5yvdy/OJyJELC+68++vCU6JwyfM7rSZNA9DtAre?=
+ =?us-ascii?Q?A396sASaCmnqkik8sjAjw1eznmE03yUGQ6M5RYsKdrLTxJ22Dq6UJMksHBu8?=
+ =?us-ascii?Q?iZ8sZx/3vhkgUPCVw3dxx1lbcdUFu57AaOuUVonGeEjj44Rw49DChLt4/sKU?=
+ =?us-ascii?Q?w75tOK93zDA4ENcHcyES7uzYzJ49x3mdXlFPbb9u9sMkzDno0/6EApU1ZX6U?=
+ =?us-ascii?Q?L20WOVzbsXYZbutoSUZ7rzADHikd/1VvkJYVN0JoIuqVIAdWhSCXM4ZIPyij?=
+ =?us-ascii?Q?K1y0rVl6AWCjilKccQ9cnH12IiUUt+AlxEdCGjiwZKcLQiqxEr51j74cckR/?=
+ =?us-ascii?Q?IbHmpogf1+Jxx9/Y/QLYLpG6R3rXSc2PautRXrQrsm3+hmetQGaEgiFZWeJ7?=
+ =?us-ascii?Q?88CNQlplfQRLHYvN7maro/kMrThma9FoF5HIKpUZkOKKq/UBXS201a1B9enR?=
+ =?us-ascii?Q?QxQ9CzDp6L9g+SLgQDLAbJRmbgw7ZYt3x10MX+wxksSwLD+ynJme8JUxz78a?=
+ =?us-ascii?Q?X1nqc6kaPnkDgCF3aogHwRrKSHw0iGF8+mzHvwkRPkvH0VBGup++Glfhr5tr?=
+ =?us-ascii?Q?fvjuE7LZCtBD1dtKZR2CY8gAZvIx+92zcLyFu9Ynsut5+K6v9O7UvRpsBekM?=
+ =?us-ascii?Q?o2VBTLCypySneSNhlIvK/6acU+obZ/zjaxY2hHgfmhtSQq2ZFLUQCTRBJLWu?=
+ =?us-ascii?Q?VxCxlPAZ5e6Wn6sRblGM8PQ8lxghZAQnvbRdDHoOP3CXdj2aiuY2DoW5fNgl?=
+ =?us-ascii?Q?8Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f8444db4-3235-d108-698a-6772e03a6b67@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR21MB3158
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 09:51:31PM +0800, Chengming Zhou wrote:
-> On 2022/8/4 03:22, Johannes Weiner wrote:
-> > On Wed, Aug 03, 2022 at 07:58:27AM -1000, Tejun Heo wrote:
-> >> Hello,
-> >>
-> >> On Wed, Aug 03, 2022 at 08:17:22PM +0800, Chengming Zhou wrote:
-> >>>> Assuming the above isn't wrong, if we can figure out how we can re-enable
-> >>>> it, which is more difficult as the counters need to be resynchronized with
-> >>>> the current state, that'd be ideal. Then, we can just allow each cgroup to
-> >>>> enable / disable PSI reporting dynamically as they see fit.
-> >>>
-> >>> This method is more fine-grained but more difficult like you said above.
-> >>> I think it may meet most needs to disable PSI stats in intermediate cgroups?
-> >>
-> >> So, I'm not necessarily against implementing something easier but we at
-> >> least wanna get the interface right, so that if we decide to do the full
-> >> thing later we can easily expand on the existing interface. ie. let's please
-> >> not be too hacky. I don't think it'd be that difficult to implement
-> >> per-cgroup disable-only operation that we can later expand to allow
-> >> re-enabling, right?
-> > 
-> > It should be relatively straight-forward to disable and re-enable
-> > state aggregation, time tracking, averaging on a per-cgroup level, if
-> > we can live with losing history from while it was disabled. I.e. the
-> > avgs will restart from 0, total= will have gaps - should be okay, IMO.
-> > 
-> > Where it gets trickier is also stopping the tracking of task counts in
-> > a cgroup. For re-enabling afterwards, we'd have to freeze scheduler
-> > and cgroup state and find all tasks of interest across all CPUs for
-> > the given cgroup to recreate the counts. I'm not quite sure whether
-> > that's feasible, and if so, whether it's worth the savings.
-> > 
-> > It might be good to benchmark the two disabling steps independently.
-> > Maybe stopping aggregation while keeping task counts is good enough,
-> > and we can commit to a disable/re-enable interface from the start.
-> > 
-> > Or maybe it's all in the cachelines and iteration, and stopping the
-> > aggregation while still writing task counts isn't saving much. In that
-> > case we'd have to look closer at reconstructing task counts, to see if
-> > later re-enabling is actually a practical option or whether a one-off
-> > kill switch is more realistic.
-> > 
-> > Chengming, can you experiment with disabling: record_times(), the
-> > test_state() loop and state_mask construction, and the averaging
-> > worker - while keeping the groupc->tasks updates?
-> 
-> Hello,
-> 
-> I did this experiment today with disabling record_times(), test_state()
-> loop and averaging worker, while only keeping groupc->tasks[] updates,
-> the results look promising.
-> 
-> mmtests/config-scheduler-perfpipe on Intel Xeon Platinum with 3 levels of cgroup:
-> 
-> perfpipe
->                                   tip                    tip                patched
->                               psi=off                 psi=on      only groupc->tasks[]
-> Min       Time        7.99 (   0.00%)        8.86 ( -10.95%)        8.31 (  -4.08%)
-> 1st-qrtle Time        8.11 (   0.00%)        8.94 ( -10.22%)        8.39 (  -3.46%)
-> 2nd-qrtle Time        8.17 (   0.00%)        9.02 ( -10.42%)        8.44 (  -3.37%)
-> 3rd-qrtle Time        8.20 (   0.00%)        9.08 ( -10.72%)        8.48 (  -3.43%)
-> Max-1     Time        7.99 (   0.00%)        8.86 ( -10.95%)        8.31 (  -4.08%)
-> Max-5     Time        7.99 (   0.00%)        8.86 ( -10.95%)        8.31 (  -4.08%)
-> Max-10    Time        8.09 (   0.00%)        8.89 (  -9.96%)        8.35 (  -3.22%)
-> Max-90    Time        8.31 (   0.00%)        9.13 (  -9.90%)        8.55 (  -2.95%)
-> Max-95    Time        8.32 (   0.00%)        9.14 (  -9.88%)        8.55 (  -2.81%)
-> Max-99    Time        8.39 (   0.00%)        9.26 ( -10.30%)        8.57 (  -2.09%)
-> Max       Time        8.56 (   0.00%)        9.26 (  -8.23%)        8.72 (  -1.90%)
-> Amean     Time        8.19 (   0.00%)        9.03 * -10.26%*        8.45 *  -3.27%*
+From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Thursday, August 4=
+, 2022 8:56 AM
+>=20
+> storvsc_error_wq workqueue should not be marked as WQ_MEM_RECLAIM
+> as it doesn't need to make forward progress under memory pressure.
+> Marking this workqueue as WQ_MEM_RECLAIM may cause deadlock while
+> flushing a non-WQ_MEM_RECLAIM workqueue.
+> In the current state it causes the following warning:
+>=20
+> [   14.506347] ------------[ cut here ]------------
+> [   14.506354] workqueue: WQ_MEM_RECLAIM storvsc_error_wq_0:storvsc_remov=
+e_lun is flushing !WQ_MEM_RECLAIM events_freezable_power_:disk_events_workf=
+n
+> [   14.506360] WARNING: CPU: 0 PID: 8 at <-snip->kernel/workqueue.c:2623 =
+check_flush_dependency+0xb5/0x130
+> [   14.506390] CPU: 0 PID: 8 Comm: kworker/u4:0 Not tainted 5.4.0-1086-az=
+ure #91~18.04.1-Ubuntu
+> [   14.506391] Hardware name: Microsoft Corporation Virtual Machine/Virtu=
+al Machine, BIOS Hyper-V UEFI Release v4.1 05/09/2022
+> [   14.506393] Workqueue: storvsc_error_wq_0 storvsc_remove_lun
+> [   14.506395] RIP: 0010:check_flush_dependency+0xb5/0x130
+> 		<-snip->
+> [   14.506408] Call Trace:
+> [   14.506412]  __flush_work+0xf1/0x1c0
+> [   14.506414]  __cancel_work_timer+0x12f/0x1b0
+> [   14.506417]  ? kernfs_put+0xf0/0x190
+> [   14.506418]  cancel_delayed_work_sync+0x13/0x20
+> [   14.506420]  disk_block_events+0x78/0x80
+> [   14.506421]  del_gendisk+0x3d/0x2f0
+> [   14.506423]  sr_remove+0x28/0x70
+> [   14.506427]  device_release_driver_internal+0xef/0x1c0
+> [   14.506428]  device_release_driver+0x12/0x20
+> [   14.506429]  bus_remove_device+0xe1/0x150
+> [   14.506431]  device_del+0x167/0x380
+> [   14.506432]  __scsi_remove_device+0x11d/0x150
+> [   14.506433]  scsi_remove_device+0x26/0x40
+> [   14.506434]  storvsc_remove_lun+0x40/0x60
+> [   14.506436]  process_one_work+0x209/0x400
+> [   14.506437]  worker_thread+0x34/0x400
+> [   14.506439]  kthread+0x121/0x140
+> [   14.506440]  ? process_one_work+0x400/0x400
+> [   14.506441]  ? kthread_park+0x90/0x90
+> [   14.506443]  ret_from_fork+0x35/0x40
+> [   14.506445] ---[ end trace 2d9633159fdc6ee7 ]---
+>=20
+> Fixes: 436ad9413353 ("scsi: storvsc: Allow only one remove lun work item =
+to be issued per lun")
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> ---
+> [v2]
+>   - s/it's/it/
+>   - Added Fixes commit
+>=20
+>  drivers/scsi/storvsc_drv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> index fe000da..8ced292 100644
+> --- a/drivers/scsi/storvsc_drv.c
+> +++ b/drivers/scsi/storvsc_drv.c
+> @@ -2012,7 +2012,7 @@ static int storvsc_probe(struct hv_device *device,
+>  	 */
+>  	host_dev->handle_error_wq =3D
+>  			alloc_ordered_workqueue("storvsc_error_wq_%d",
+> -						WQ_MEM_RECLAIM,
+> +						0,
+>  						host->host_no);
+>  	if (!host_dev->handle_error_wq) {
+>  		ret =3D -ENOMEM;
+> --
+> 1.8.3.1
 
-Fantastic!
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
-> Tejun suggested using a bitmap in task to remember whether the task is accounted
-> at a given level or not, which I think also is a very good idea, but I haven't
-> clearly figure out how to do it.
-> 
-> The above performance test result looks good to me, so I think we can implement this
-> per-cgroup "cgroup.psi" interface to disable/re-enable PSI stats from the start,
-> and we can change to a better implementation if needed later?
-
-Yes, that sounds good to me.

@@ -2,169 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE16589E9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2AD589EA4
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239959AbiHDPYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S235936AbiHDP1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239880AbiHDPYE (ORCPT
+        with ESMTP id S234310AbiHDP07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:24:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBB4248CF;
-        Thu,  4 Aug 2022 08:24:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4837661335;
-        Thu,  4 Aug 2022 15:24:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 601DFC433D6;
-        Thu,  4 Aug 2022 15:24:01 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="e4y48Q3b"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659626639;
+        Thu, 4 Aug 2022 11:26:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C464C2127A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659626816;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sMG44mdnxu6+rQubJodHON/qjU/x31iB/DQQ9bsXfp4=;
-        b=e4y48Q3bc2spBfeM8k40zGRYfXaMDGJKLmUTE/z4OEBXYNpH13xlinIZ52b4xl6tqeQo/L
-        VBbY2paH6uBVKnUUngBW9g32k6ihlv0EkYSvgA1dNJhnoCOdX3RrVUytn/4JWicxmC3gyX
-        3WSulx8xwotXOIvG8Qpf2vdA5S/bVXo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b0a42e42 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 4 Aug 2022 15:23:59 +0000 (UTC)
-Date:   Thu, 4 Aug 2022 17:23:55 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, Nadia Heninger <nadiah@cs.ucsd.edu>,
-        Thomas Ristenpart <ristenpart@cornell.edu>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Florian Weimer <fweimer@redhat.com>
-Subject: Re: [PATCH RFC v1] random: implement getrandom() in vDSO
-Message-ID: <Yuvki1nU2vJeINNk@zx2c4.com>
-References: <20220729145525.1729066-1-Jason@zx2c4.com>
- <CAHk-=wiLwz=9h9LD1-_yb1+T+u59a2EjTmMvCiGj4A-ZsPN1wA@mail.gmail.com>
- <YuXCpyULk6jFgGV5@zx2c4.com>
- <87zggnsqwj.ffs@tglx>
- <Yuhe6IIFXqNMZs5b@zx2c4.com>
- <87bkt2sqq4.ffs@tglx>
- <YuktqQS7Rb0IbJNh@zx2c4.com>
- <878ro6smmm.ffs@tglx>
- <CAHmME9pNN6Pc_1NaMDv+hqv_ULXiVUYFXM=Xigu_StvGS_-53A@mail.gmail.com>
- <87zggmqo0w.ffs@tglx>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UwVPMHNGaFZ81vFKHr3nYXqw8Kj/v9CVpEE3w8x/Lig=;
+        b=ZiUr3H69wPvNI8hoIdGXa2zlu2unYUHpSPtWFI/MnmaECUjph344tgR+vFSwdM+N6lOIWD
+        MWHKqWoybzkxEEXQZ11pyxJWhzOKmDYe9s4mcdlJKyLUBwgfNdZ1wfU89Qsga2XtOWxy1V
+        mGJHtpXMwiPaad9dJMhf4mBTBguhfDA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-526-OqRHtPYhM2Gz9Xwe5BTvKA-1; Thu, 04 Aug 2022 11:26:53 -0400
+X-MC-Unique: OqRHtPYhM2Gz9Xwe5BTvKA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C31D43800C36;
+        Thu,  4 Aug 2022 15:26:52 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E9B9403D0D0;
+        Thu,  4 Aug 2022 15:26:50 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] nfs: Fix automount superblock LSM init problem,
+ preventing sb sharing
+From:   David Howells <dhowells@redhat.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Scott Mayhew <smayhew@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        linux-nfs@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, dwysocha@redhat.com,
+        dhowells@redhat.com, linux-kernel@vger.kernel.org
+Date:   Thu, 04 Aug 2022 16:26:49 +0100
+Message-ID: <165962680944.3334508.6610023900349142034.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87zggmqo0w.ffs@tglx>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 12:27:43AM +0200, Thomas Gleixner wrote:
-> Jason!
+When NFS superblocks are created by automounting, their LSM parameters
+aren't set in the fs_context struct prior to sget_fc() being called,
+leading to failure to match existing superblocks.
 
-Thomas!!
+Fix this by adding a new LSM hook to load fc->security for submount
+creation when alloc_fs_context() is creating the fs_context for it.
 
-> Not at all. The concept of 'basically same semantics' is a delusion. It
-> does not exist. Either it's the same or it's not.
-> 
-> I really want to see your reaction on a claim that some RNG
-> implementation is basically the same as the existing one. I'm sure you
-> buy that without complaints.
+However, this uncovers a further bug: nfs_get_root() initialises the
+superblock security manually by calling security_sb_set_mnt_opts() or
+security_sb_clone_mnt_opts() - but then vfs_get_tree() calls
+security_sb_set_mnt_opts(), which can lead to SELinux, at least,
+complaining.
 
-I mean there are some undeniable similarities here. We might be arguing
-over semantics of semantics at this point, but... Barring the additional
-`void *state` argument, they take the same inputs and produce the same
-outputs. Then, most importantly, the way they each produce randomness is
-the same, using the same algorithms and same lifetime rules. For all
-measures that are meaningful to me, they're the "same". Yes yes
-technically that extra `void *state` means something is slightly
-different.  But does that matter? I guess your point is that somehow it
-does matter, and maybe that's where we disagree.
+Fix that by adding a flag to the fs_context that suppresses the
+security_sb_set_mnt_opts() call in vfs_get_tree().  This can be set by NFS
+when it sets the LSM context on the new superblock.
 
-> >> So you have to go through the whole process of a new ABI whether you
-> >> like it or not.
-> >
-> > Ahh, in that sense. Yea, I'd rather not have to do that too, with the
-> > additional opaque handle passed as the first argument. It'd be nice if
-> > there were some private place where I could store the necessary state,
-> > but I'm not really sure where that might be at the moment. If you have
-> > any ideas, please let me know.
-> 
-> That's exactly the problem. VDSO is a stateless syscall wrapper which
-> has to be self contained for obvious reasons.
+The first bug leads to messages like the following appearing in dmesg:
 
-Unless each call can import and export any potential state. That is,
-unless there's a `void *state` argument like what I added. Then the code
-itself doesn't refer to any global state, but can still behave in a
-stateful manner.
+	NFS: Cache volume key already in use (nfs,4.2,2,108,106a8c0,1,,,,100000,100000,2ee,3a98,1d4c,3a98,1)
 
-We could even establish this as a "convention" if necessary, and
-document it as such. That way upgrading a syscall ABI to a vDSO stateful
-ABI always follows some rule, and then this doesn't feel as ad-hoc.
-Heck, it could even be an opaque type, `vdso_handle_t state`, which
-would just be a unsigned long.
+Signed-off-by: David Howells <dhowells@redhat.com>
+Fixes: 9bc61ab18b1d ("vfs: Introduce fs_context, switch vfs_kern_mount() to it.")
+Fixes: 779df6a5480f ("NFS: Ensure security label is set for root inode)
+cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+cc: Anna Schumaker <anna@kernel.org>
+cc: Alexander Viro <viro@zeniv.linux.org.uk>
+cc: Scott Mayhew <smayhew@redhat.com>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: Paul Moore <paul@paul-moore.com>
+cc: Casey Schaufler <casey@schaufler-ca.com>
+cc: linux-nfs@vger.kernel.org
+cc: selinux@vger.kernel.org
+cc: linux-security-module@vger.kernel.org
+cc: linux-fsdevel@vger.kernel.org
+---
 
-> My previous statement:
-> 
->     Everything else is library material, really.
-> 
-> is based on that fact and not on the unwillingness to add magic muck to
-> the VDSO.
-> 
-> The unwillingness part is just the question:
-> 
->     Is there a sensible usecase?
+ fs/fs_context.c               |    4 ++++
+ fs/nfs/getroot.c              |    1 +
+ fs/super.c                    |   10 ++++++----
+ include/linux/fs_context.h    |    1 +
+ include/linux/lsm_hook_defs.h |    1 +
+ include/linux/lsm_hooks.h     |    6 +++++-
+ include/linux/security.h      |    6 ++++++
+ security/security.c           |    5 +++++
+ security/selinux/hooks.c      |   29 +++++++++++++++++++++++++++++
+ 9 files changed, 58 insertions(+), 5 deletions(-)
 
-In the use case department, by the way, apparently there really is.
-arc4random() is too slow for chronyd:
-https://sourceware.org/bugzilla/show_bug.cgi?id=29437
-And that's on a kernel even with the "newer faster getrandom()".
+diff --git a/fs/fs_context.c b/fs/fs_context.c
+index 24ce12f0db32..22248b8a88a8 100644
+--- a/fs/fs_context.c
++++ b/fs/fs_context.c
+@@ -282,6 +282,10 @@ static struct fs_context *alloc_fs_context(struct file_system_type *fs_type,
+ 		break;
+ 	}
+ 
++	ret = security_fs_context_init(fc, reference);
++	if (ret < 0)
++		goto err_fc;
++
+ 	/* TODO: Make all filesystems support this unconditionally */
+ 	init_fs_context = fc->fs_type->init_fs_context;
+ 	if (!init_fs_context)
+diff --git a/fs/nfs/getroot.c b/fs/nfs/getroot.c
+index 11ff2b2e060f..651bffb0067e 100644
+--- a/fs/nfs/getroot.c
++++ b/fs/nfs/getroot.c
+@@ -144,6 +144,7 @@ int nfs_get_root(struct super_block *s, struct fs_context *fc)
+ 	}
+ 	if (error)
+ 		goto error_splat_root;
++	fc->lsm_set = true;
+ 	if (server->caps & NFS_CAP_SECURITY_LABEL &&
+ 		!(kflags_out & SECURITY_LSM_NATIVE_LABELS))
+ 		server->caps &= ~NFS_CAP_SECURITY_LABEL;
+diff --git a/fs/super.c b/fs/super.c
+index 60f57c7bc0a6..a1c440336fd9 100644
+--- a/fs/super.c
++++ b/fs/super.c
+@@ -1519,10 +1519,12 @@ int vfs_get_tree(struct fs_context *fc)
+ 	smp_wmb();
+ 	sb->s_flags |= SB_BORN;
+ 
+-	error = security_sb_set_mnt_opts(sb, fc->security, 0, NULL);
+-	if (unlikely(error)) {
+-		fc_drop_locked(fc);
+-		return error;
++	if (!(fc->lsm_set)) {
++		error = security_sb_set_mnt_opts(sb, fc->security, 0, NULL);
++		if (unlikely(error)) {
++			fc_drop_locked(fc);
++			return error;
++		}
+ 	}
+ 
+ 	/*
+diff --git a/include/linux/fs_context.h b/include/linux/fs_context.h
+index 13fa6f3df8e4..3876dd96bb20 100644
+--- a/include/linux/fs_context.h
++++ b/include/linux/fs_context.h
+@@ -110,6 +110,7 @@ struct fs_context {
+ 	bool			need_free:1;	/* Need to call ops->free() */
+ 	bool			global:1;	/* Goes into &init_user_ns */
+ 	bool			oldapi:1;	/* Coming from mount(2) */
++	bool			lsm_set:1;	/* security_sb_set/clone_mnt_opts() already done */
+ };
+ 
+ struct fs_context_operations {
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index eafa1d2489fd..6d1c738e4a84 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -54,6 +54,7 @@ LSM_HOOK(int, 0, bprm_creds_from_file, struct linux_binprm *bprm, struct file *f
+ LSM_HOOK(int, 0, bprm_check_security, struct linux_binprm *bprm)
+ LSM_HOOK(void, LSM_RET_VOID, bprm_committing_creds, struct linux_binprm *bprm)
+ LSM_HOOK(void, LSM_RET_VOID, bprm_committed_creds, struct linux_binprm *bprm)
++LSM_HOOK(int, 0, fs_context_init, struct fs_context *fc, struct dentry *reference)
+ LSM_HOOK(int, 0, fs_context_dup, struct fs_context *fc,
+ 	 struct fs_context *src_sc)
+ LSM_HOOK(int, -ENOPARAM, fs_context_parse_param, struct fs_context *fc,
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index 91c8146649f5..1782814c7c5b 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -87,8 +87,12 @@
+  * Security hooks for mount using fs_context.
+  *	[See also Documentation/filesystems/mount_api.rst]
+  *
++ * @fs_context_init:
++ *	Initialise fc->security.  This is initialised to NULL by the caller.
++ *	@fc indicates the new filesystem context.
++ *	@dentry indicates a reference for submount/remount
+  * @fs_context_dup:
+- *	Allocate and attach a security structure to sc->security.  This pointer
++ *	Allocate and attach a security structure to fc->security.  This pointer
+  *	is initialised to NULL by the caller.
+  *	@fc indicates the new filesystem context.
+  *	@src_fc indicates the original filesystem context.
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 7fc4e9f49f54..94834f699b04 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -291,6 +291,7 @@ int security_bprm_creds_from_file(struct linux_binprm *bprm, struct file *file);
+ int security_bprm_check(struct linux_binprm *bprm);
+ void security_bprm_committing_creds(struct linux_binprm *bprm);
+ void security_bprm_committed_creds(struct linux_binprm *bprm);
++int security_fs_context_init(struct fs_context *fc, struct dentry *reference);
+ int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc);
+ int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param);
+ int security_sb_alloc(struct super_block *sb);
+@@ -620,6 +621,11 @@ static inline void security_bprm_committed_creds(struct linux_binprm *bprm)
+ {
+ }
+ 
++static inline int security_fs_context_init(struct fs_context *fc,
++					   struct dentry *reference)
++{
++	return 0;
++}
+ static inline int security_fs_context_dup(struct fs_context *fc,
+ 					  struct fs_context *src_fc)
+ {
+diff --git a/security/security.c b/security/security.c
+index 188b8f782220..e683027f9424 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -880,6 +880,11 @@ void security_bprm_committed_creds(struct linux_binprm *bprm)
+ 	call_void_hook(bprm_committed_creds, bprm);
+ }
+ 
++int security_fs_context_init(struct fs_context *fc, struct dentry *reference)
++{
++	return call_int_hook(fs_context_init, 0, fc, reference);
++}
++
+ int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc)
+ {
+ 	return call_int_hook(fs_context_dup, 0, fc, src_fc);
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 1bbd53321d13..ddeaff4f3bb1 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -2768,6 +2768,34 @@ static int selinux_umount(struct vfsmount *mnt, int flags)
+ 				   FILESYSTEM__UNMOUNT, NULL);
+ }
+ 
++static int selinux_fs_context_init(struct fs_context *fc,
++				   struct dentry *reference)
++{
++	const struct superblock_security_struct *sbsec;
++	const struct inode_security_struct *root_isec;
++	struct selinux_mnt_opts *opts;
++
++	if (fc->purpose == FS_CONTEXT_FOR_SUBMOUNT) {
++		opts = kzalloc(sizeof(*opts), GFP_KERNEL);
++		if (!opts)
++			return -ENOMEM;
++
++		root_isec = backing_inode_security(reference->d_sb->s_root);
++		sbsec = selinux_superblock(reference->d_sb);
++		if (sbsec->flags & FSCONTEXT_MNT)
++			opts->fscontext_sid	= sbsec->sid;
++		if (sbsec->flags & CONTEXT_MNT)
++			opts->context_sid	= sbsec->mntpoint_sid;
++		if (sbsec->flags & ROOTCONTEXT_MNT)
++			opts->rootcontext_sid	= root_isec->sid;
++		if (sbsec->flags & DEFCONTEXT_MNT)
++			opts->defcontext_sid	= sbsec->def_sid;
++		fc->security = opts;
++	}
++
++	return 0;
++}
++
+ static int selinux_fs_context_dup(struct fs_context *fc,
+ 				  struct fs_context *src_fc)
+ {
+@@ -7239,6 +7267,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
+ 	/*
+ 	 * PUT "CLONING" (ACCESSING + ALLOCATING) HOOKS HERE
+ 	 */
++	LSM_HOOK_INIT(fs_context_init, selinux_fs_context_init),
+ 	LSM_HOOK_INIT(fs_context_dup, selinux_fs_context_dup),
+ 	LSM_HOOK_INIT(fs_context_parse_param, selinux_fs_context_parse_param),
+ 	LSM_HOOK_INIT(sb_eat_lsm_opts, selinux_sb_eat_lsm_opts),
 
-> Assumed that there is a sensible usecase, there is a way out and that's
-> exactly the library part. You can make that VDSO interface versioned and
-> provide a library in tools/random/ which goes in lockstep with the VDSO
-> changes.
 
-That sounds absolutely dreadful; no way jose. Then we wind up having to
-maintain the data in the vDSO as a particular version, and keep that
-working into the future. That's not going to fly. As I wrote before, I
-don't want to commit the RNG to preserving certain internal semantics
-over time. That's not something I feel comfortable committing to. And
-even if we can "add" new ones with a new version in your hypothetical
-scheme, we'd still have to keep the old ones working, and that could
-prove prohibitive of improvements. So that's not going to work.
-
-And again, I don't see how this is any different than gettimeofday() and
-such. Why didn't you just make versioned accessor functions for each one
-of the various struct fields, and then stick some library code into
-tools/timekeeping/ for glibc to copy and paste once and never update
-again? Why isn't this a nightmare you chose to have each time the moon
-is full? Clearly because doing so would be a maintenance disaster and
-would impede future meaningful progress, not to mention proliferating
-wrong means of reading the time.
-
-Just as gettimeofday benefits from being an actual function in the vDSO,
-so too does getrandom().
-
-> Vs. the storage problem. That yells TLS, but that makes your process
-> wide sharing moot, which might not be the worst of all things IMO.
-
-Yea, TLS is what we want here. The `void *state` argument thing is meant
-for this. You allocate an array of states using that alloc function, and
-then you divvy them up per-thread.
-
-Jason

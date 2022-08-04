@@ -2,74 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5DB58A1DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 22:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A46F58A1E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 22:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235746AbiHDUWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 16:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S236858AbiHDUXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 16:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbiHDUWl (ORCPT
+        with ESMTP id S232290AbiHDUXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 16:22:41 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F44824F34
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 13:22:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=Ww3i3+d1DBIDwwK62d8xCQHXhW9fUy2beppl8MwgrBU=; b=JLV+crfSbV9iGiKgox17YiuPDk
-        QRzgSz5Gt4s4vbVm92r3aLJf/D1atbzvvzBiCcGPo4cGoXn2aQG0Fg56ED47quYkWMpc20QKcYy1X
-        bkpnneI6zub8FaQ/qzCdA08H+/H+M9uN1R4i/jFs0c8jUIJQkEwNsJytmOmPXqdDHM0vqPGpouKNy
-        7c/P4EA8wnJLmvoPrxQPpWriLIfjdcxDSCmupbY7rnnNgDGYV4zAz14+OSARIpwB43otDWOaGXz6y
-        qatn3cjk09YdTRwEnslcFKaglLZSRtLxQR/C4HFs4CghjkiRpTb01n9hwEtXpaeRBrITKppqlNa4C
-        miB5AUiQ==;
-Received: from [187.56.70.103] (helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oJhMY-00GOdL-T2; Thu, 04 Aug 2022 22:22:35 +0200
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org
-Cc:     kernel@gpiccoli.net, gpiccoli@igalia.com
-Subject: [PATCH] mailmap: update Guilherme G. Piccoli's email addresses
-Date:   Thu,  4 Aug 2022 17:22:07 -0300
-Message-Id: <20220804202207.439427-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 4 Aug 2022 16:23:05 -0400
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E7C24F3F;
+        Thu,  4 Aug 2022 13:23:03 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.109.143.103])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id DD42611E010B6;
+        Thu,  4 Aug 2022 22:23:01 +0200 (CEST)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Thu, 4 Aug 2022
+ 22:23:01 +0200
+Message-ID: <5ba34982-52c7-e41a-fba8-d88d93529e47@traphandler.com>
+Date:   Thu, 4 Aug 2022 22:23:00 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH v6 2/3] leds: Add driver for the TLC5925 LED
+ controller
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220722081146.47262-1-jjhiblot@traphandler.com>
+ <20220722081146.47262-3-jjhiblot@traphandler.com>
+ <CAHp75Vdu-EJRRxkK7+TfuE=zEDkJye1QCXSB+cDLrqxuykJjkA@mail.gmail.com>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <CAHp75Vdu-EJRRxkK7+TfuE=zEDkJye1QCXSB+cDLrqxuykJjkA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG1EX1.emp2.local (172.16.2.1) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 3073143796423735771
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvledgudeglecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtjeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeevgedtieehkeetgeefkeellefhhefguefffeefjedugfeuffeftddtvdektdeihfenucffohhmrghinhepthhirdgtohhmnecukfhppedtrddtrddtrddtpdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhohedvke
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both @canonical and @ibm email addresses are invalid now;
-use my personal address instead.
+On 31/07/2022 21:28, Andy Shevchenko wrote:
+> On Fri, Jul 22, 2022 at 10:14 AM Jean-Jacques Hiblot
+> <jjhiblot@traphandler.com> wrote:
+>> The TLC5925 is a 16-channels constant-current LED sink driver.
+>> It is controlled via SPI but doesn't offer a register-based interface.
+>> Instead it contains a shift register and latches that convert the
+>> serial input into a parallel output.
+>>
+>> Datasheet: https://www.ti.com/lit/ds/symlink/tlc5925.pdf
+>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Sorry for my slowpokeness, but I just realized that this driver may
+> not be needed. What is the difference to existing gpio-74x164?
 
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
----
- .mailmap | 2 ++
- 1 file changed, 2 insertions(+)
+It might work. However it might not be as practical and efficient as the 
+dedicated LED driver.
 
-diff --git a/.mailmap b/.mailmap
-index 71577c396252..1a4c9e268b89 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -149,6 +149,8 @@ Greg Kroah-Hartman <gregkh@suse.de>
- Greg Kroah-Hartman <greg@kroah.com>
- Greg Kurz <groug@kaod.org> <gkurz@linux.vnet.ibm.com>
- Gregory CLEMENT <gregory.clement@bootlin.com> <gregory.clement@free-electrons.com>
-+Guilherme G. Piccoli <kernel@gpiccoli.net> <gpiccoli@linux.vnet.ibm.com>
-+Guilherme G. Piccoli <kernel@gpiccoli.net> <gpiccoli@canonical.com>
- Guo Ren <guoren@kernel.org> <guoren@linux.alibaba.com>
- Guo Ren <guoren@kernel.org> <ren_guo@c-sky.com>
- Gustavo Padovan <gustavo@las.ic.unicamp.br>
--- 
-2.37.1
+I'll give a try.
+
+JJ
+
 

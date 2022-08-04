@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B18589681
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 05:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E2F589684
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 05:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238834AbiHDDSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 23:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S239010AbiHDDUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 23:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239254AbiHDDSL (ORCPT
+        with ESMTP id S238639AbiHDDT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 23:18:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF256050A
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 20:17:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8AE47B8244B
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 03:17:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 41F3CC433D7;
-        Thu,  4 Aug 2022 03:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659583075;
-        bh=teA4AMmtGGE5tPWB7CsjfMwgkD+96W6hd/TD1ykoqyU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=g+6H0+Xb+lYr1qbx/IP/bEUAotoLEDMt/GZxi4KiNcYiFfp7i8iUZ4QjWR1uwo4wI
-         6ycf777I34sI5jwoLoKjpWPIXhzFk4q5kB7Z/upVnS8xQDOqVIP4v22g/CYAOz8N8T
-         ZWCG6gxUK1DMWuQEOmZpbDUfhy1vsQrzp4ZWajU6PlBdUIC4NGpOXJ7ilyz9s4mHrT
-         D07xtQFvjm9EvLpQB13KwL49gDnRJCeN7TxdubtG5sz7r4j60LAeY+H95fo8rSqNWk
-         rOyzlyArQjKAdpvwd7JuQiToiE7DRE2mXDJsLZS9V+0djwLbtrQ7upzp1K3CTT8/MF
-         5Lir8xEkzz45A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 31227C43142;
-        Thu,  4 Aug 2022 03:17:55 +0000 (UTC)
-Subject: Re: [git pull] drm for 5.20/6.0
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAPM=9twFEv8AcRQG-WXg5owy_Xhxy3DqnvVCFHgtd4TYCcKWEQ@mail.gmail.com>
-References: <CAPM=9twFEv8AcRQG-WXg5owy_Xhxy3DqnvVCFHgtd4TYCcKWEQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAPM=9twFEv8AcRQG-WXg5owy_Xhxy3DqnvVCFHgtd4TYCcKWEQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-08-03
-X-PR-Tracked-Commit-Id: 5493ee1919eae4f49d62276cf5986b7f7c7aa8f6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b44f2fd87919b5ae6e1756d4c7ba2cbba22238e1
-Message-Id: <165958307519.6841.14174025933378032922.pr-tracker-bot@kernel.org>
-Date:   Thu, 04 Aug 2022 03:17:55 +0000
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 3 Aug 2022 23:19:58 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9345E30C
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 20:19:57 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id v13so6799817vke.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 20:19:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=JEJULrzPwdNHQ/ggnVhsmc574+1cmbi28gF+VqoMdE8=;
+        b=ItzlZ6X4RZlRxPA+fabyikpNA4YcicwUY0cHPfuM5fV5YqCUytGaKaK02kZX26BTM3
+         HC8BswlviJMjctrZXbCTD2+thmqvKuLAQnLGotp+RVxDY01bOYAmVr3+tcOc7Yv55gqE
+         oqsC7lyK4jfcQke1f+jNKxtnbavpN6gQPiRr/jEXSPeFqoaiMvwsO/PTpyDlqdlPNScO
+         zIrQkSw5vo81od6o6OxRWpfOb6PgifQqqP4rCOzLEPWL5GQaepZnbvkE+8JU4hH+HfN4
+         RZS1zZp9bHye/GY29utpcHi0ykhJ1zxMUsrAzmz5TswEJUOSO2CxReB7LhMFg73kA3HJ
+         06Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=JEJULrzPwdNHQ/ggnVhsmc574+1cmbi28gF+VqoMdE8=;
+        b=QzhLRy3pMOW1fJ1BdrX/pQywAPZFRZKFQPZTJvwgSgWZMVI4Gj9SgoJUXYHVThVU/U
+         boephkA5vGN1KAz/4jsq1+etaKGDpwBLgmupOyidmc/VfBkjSVQi7DMS7wtn4Y4A9R/j
+         BxqYc691mN/PKgMVv9b4xuOte745ibB3ngIDP/x0QMB88XjauVMrwBJlmRuWGx4HJ5dl
+         bGXBaORnHIEqT6zNoHy3p4A/W1aVBW6nXm2ARpv4BLSQ17CYoqopO8/7reLYjxFXB0Te
+         +Jyhgl35AtZiL/CbNJ9DpcrvsHLGL6aVPdthJ0zmy/vlcfSYMFsNxCTIInpImDki/YAO
+         K+BQ==
+X-Gm-Message-State: ACgBeo1khHCgOBIpN+5NIx+lWzz9+gbasN2KCVu/DoKIzGH+MLIJP/0p
+        1008jWhuFiN/rcNpkljiWRpSbLK9m73wfPA+POZbpH5QV8I=
+X-Google-Smtp-Source: AA6agR6bH+ek1y8K4AkXf/Y74zT5MSmemJUfzKo66bH1768Q3KVDwlOYLRz6o3ECUoJFFiKUohxftcesm2tIu0ufDPM=
+X-Received: by 2002:a1f:b248:0:b0:377:aa0c:941 with SMTP id
+ b69-20020a1fb248000000b00377aa0c0941mr5792434vkf.37.1659583196085; Wed, 03
+ Aug 2022 20:19:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220804025457.213979-1-chenhuacai@loongson.cn>
+In-Reply-To: <20220804025457.213979-1-chenhuacai@loongson.cn>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 4 Aug 2022 11:19:41 +0800
+Message-ID: <CAAhV-H7J=mofWtm99pSzvcByLxf3-in1BkopBFSYh1hF0_dQ6w@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/loongson-eiointc: Fix a build warning
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 3 Aug 2022 15:37:43 +1000:
+Hi, Marc,
 
-> git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-08-03
+Other build warnings reported by lkp due to the missing CONFIG_ACPI in
+randconfig. So they will be fixed by adjusting arch/loongarch/Kconfig
+and going through loongarch tree. Thanks.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b44f2fd87919b5ae6e1756d4c7ba2cbba22238e1
+Huacai
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+On Thu, Aug 4, 2022 at 10:54 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> Make acpi_get_vec_parent() be a static function, to avoid:
+> drivers/irqchip/irq-loongson-eiointc.c:289:20: warning: no previous prototype for 'acpi_get_vec_parent'
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  drivers/irqchip/irq-loongson-eiointc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> index 317467857478..bffb7b3128e8 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -290,7 +290,7 @@ static void acpi_set_vec_parent(int node, struct irq_domain *parent, struct acpi
+>         }
+>  }
+>
+> -struct irq_domain *acpi_get_vec_parent(int node, struct acpi_vector_group *vec_group)
+> +static struct irq_domain *acpi_get_vec_parent(int node, struct acpi_vector_group *vec_group)
+>  {
+>         int i;
+>
+> --
+> 2.31.1
+>

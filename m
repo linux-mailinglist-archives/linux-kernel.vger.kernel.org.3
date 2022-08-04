@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E31589548
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ABC5589544
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240352AbiHDATg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 20:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
+        id S240372AbiHDATo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 20:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240322AbiHDAT1 (ORCPT
+        with ESMTP id S240293AbiHDATa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 20:19:27 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723555F111
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:19:24 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id k13-20020a056902024d00b0066fa7f50b97so14397234ybs.6
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 17:19:24 -0700 (PDT)
+        Wed, 3 Aug 2022 20:19:30 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515645F11C
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:19:27 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id b8-20020a17090a010800b001f1f4fc8178so1678052pjb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 17:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=AkJtwhRcSLVgZkh37A6eu06a7Z4MqpcONqLQAvOPp2g=;
-        b=EZE9Zwi7vWVtQEUgXTy17gpGuuoCt7uL3gBQelSK2ZkKZl5jS09S9SxpqMPTV32aiO
-         hcgjQqRK1ry7/+m9uONtl9KcDgu4JOEU1ysBhgD00MiS1YABSRfNp/P8ElYZRWWXcRxf
-         KSQhwDJCpyk+1faCODsXi262V9S67EsMGtGn3YVQkYXSxyXPlzDzrVvLCNfRK6m62AR/
-         YaubMKubGJGKfRulZykJWuNix5yo9vhwoQCWI334/k3FicWmWo1PfI2i2pMMoOrFvYfz
-         iOOV76xaTapdhXMDd0EJCceol+PoJtpWwEAVcHpAiZHQjwzcx7qdvFwleXXBf2sL1Kd0
-         Kbqg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc:content-transfer-encoding;
+        bh=CUpwH7upIk3tXirVY7+3lvz5lvV5c1TWQurwVwE8Mh0=;
+        b=dMO5ii1Sdov/2Wc0+/11PTGe2S23636QaStknxJFBqMc5S+8HZJIIdHpsP9sa7lO5d
+         RKE8pLlsgus0rkTFxXHSfQvadTGTwIDdnSlAJ28UNMx9Y6CHv01gxV8T9BV5nkB0J7PN
+         lQt2Bzs0xaUobBZ4RTD46Xa1ojhhl/F9k8Gkr0XyYfzyrjGJKTCsrKYK9xqd4vZZXq1h
+         pP27qoezsE1UtQ0iR26Cb4114aZBM2sgQF72tz2a09fCuPOyAgdtlj5HTo7S30pnsET1
+         +/rGUCKFGDsmnXoDF1btkJAAmQ07SrEFLmYn2slZac/z4/P9MLEUuhh36eTM05eioApQ
+         a8HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=AkJtwhRcSLVgZkh37A6eu06a7Z4MqpcONqLQAvOPp2g=;
-        b=LREOuHTSo23iviHAC8irWUkYPm0+m8ztqabmO2xiTyUu9mQyJh9RqBxW4qzCVWEfzD
-         WZ3Th2mMGT6GQw4Yu3+zmwYD2cv/NV7zu5Wuv71wu4lNWyt9M7ac5jPFD84y9YGPEbnr
-         u5qd/NayYojKIyWl2dLbreh+KY75NxugHUsmuz2gcFO24fyGfL/XoDY7ohKog5wipTQW
-         7UBxDYyYminhDKoOPLOqbR+krwom2PAXZRkynNVNboHcNGWzhfKE7FAYURe4jSjqGeYZ
-         Itx+uej968QtSr0zUUYRRWDxNd9SRiuPMBzcol28oGzSpobUfS9ihQ+PRw9oXxmPL1P9
-         m9zw==
-X-Gm-Message-State: ACgBeo1vQA0sq1EItchpOSsU8GsTE7WKBAQ6EDtiWKGpdPpMXfYLTUc5
-        0z6mLVwlvxEtHMEuEHKQVv9DzF5xzQll
-X-Google-Smtp-Source: AA6agR7PGWTN32fihffSvU58hN+kJz2oEoO/Sa66RmWYKkrb7aA9T93jlV1B4clYctCyQ5b+mJxAVOnj8nnP
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc:content-transfer-encoding;
+        bh=CUpwH7upIk3tXirVY7+3lvz5lvV5c1TWQurwVwE8Mh0=;
+        b=gEOuIhOtVRZS8HfHIkIG6XV9amvQsqr3DY9Hbohk30BT3PyRAYgWqwR6y8j//NOZCx
+         7DbI2bQnx0WlEv5o0HFUSkGJ2a5hGq5N13Npsy8WTo96qu0gFGuTFwaLpZUoH5rwWKJP
+         9aT/0r6ygLMgsM4C3XWjGJKlGCI8zS8jAmBJUZQbGe7ISCKe+dJ/2dogf4EaxkAcDIcn
+         CH+DN2OaYIyzxrNNFH/9xGW8ACRjPDUF2RMa0FdTPC8KhidtHhGYRvhK+qfPVj7Hfw1g
+         RjrYNwzsK6CBbphxkvFBRZNaX7utXgSitgiSI5BgCUiMiHA1oGnJPFxLo53u1vo6tPii
+         3A7g==
+X-Gm-Message-State: ACgBeo3THql20B0yApqiVPq9ruxMXtI79tZaGkASb8rzNZbs5Y0I/XDq
+        HTBMj0zJ2qNZJs5UAef4ObOqLCZdifr0
+X-Google-Smtp-Source: AA6agR51tlVxdLSEJIXMVVKJJJqOshwveLzEROKAB4Aj2FnXQxXx4eWFl1Fv/cYbFKrRL12gLdOIX5AuZiJv
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:dbef:ce2b:2472:e20f])
- (user=irogers job=sendgmr) by 2002:a5b:785:0:b0:671:7708:2f68 with SMTP id
- b5-20020a5b0785000000b0067177082f68mr21176264ybq.96.1659572363719; Wed, 03
- Aug 2022 17:19:23 -0700 (PDT)
-Date:   Wed,  3 Aug 2022 17:19:18 -0700
-Message-Id: <20220804001920.1544379-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a17:902:c713:b0:16e:cbe3:29da with SMTP id
+ p19-20020a170902c71300b0016ecbe329damr22941300plp.61.1659572366744; Wed, 03
+ Aug 2022 17:19:26 -0700 (PDT)
+Date:   Wed,  3 Aug 2022 17:19:19 -0700
+In-Reply-To: <20220804001920.1544379-1-irogers@google.com>
+Message-Id: <20220804001920.1544379-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20220804001920.1544379-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-Subject: [PATCH v2 1/3] perf vendor events: Remove bad broadwellde uncore events
+Subject: [PATCH v2 2/3] perf vendor events: Remove bad ivytown uncore events
 From:   Ian Rogers <irogers@google.com>
 To:     Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -86,27 +88,32 @@ such events using the updated patch:
 https://github.com/intel/event-converter-for-linux-perf/pull/15/commits/485=
 e42418d4f520a641994a1b041c149bb34f4a6
 
-Fixes: ef908a192512 ("perf vendor events: Update Intel broadwellde")
+Fixes: 6220136831e3 ("perf vendor events: Update Intel ivytown")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../arch/x86/broadwellde/uncore-cache.json    | 455 ------------------
- .../arch/x86/broadwellde/uncore-other.json    |  33 --
- 2 files changed, 488 deletions(-)
+ .../arch/x86/ivytown/uncore-cache.json        | 378 ------------------
+ .../arch/x86/ivytown/uncore-interconnect.json |  11 -
+ .../arch/x86/ivytown/uncore-other.json        |  33 --
+ .../arch/x86/ivytown/uncore-power.json        | 190 ---------
+ 4 files changed, 612 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json b=
-/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json
-index caadbca1b15b..75655478952f 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json
-@@ -32,72 +32,6 @@
-         "PublicDescription": "Counts the number of cycles either the local=
- distress or incoming distress signals are asserted.  Incoming distress inc=
-ludes both up and dn.",
+diff --git a/tools/perf/pmu-events/arch/x86/ivytown/uncore-cache.json b/too=
+ls/perf/pmu-events/arch/x86/ivytown/uncore-cache.json
+index 1e53bee8af5c..85bc9c76c0cc 100644
+--- a/tools/perf/pmu-events/arch/x86/ivytown/uncore-cache.json
++++ b/tools/perf/pmu-events/arch/x86/ivytown/uncore-cache.json
+@@ -15,61 +15,6 @@
+         "PublicDescription": "Since occupancy counts can only be captured =
+in the Cbo's 0 counter, this event allows a user to capture occupancy relat=
+ed information by filtering the Cb0 occupancy count captured in Counter 0. =
+  The filtering available is found in the control register - threshold, inv=
+ert and edge detect.   E.g. setting threshold to 1 can effectively monitor =
+how many cycles the monitored queue has an entry.",
          "Unit": "CBO"
      },
 -    {
 -        "BriefDescription": "Cache Lookups; Any Request",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x34",
 -        "EventName": "UNC_C_LLC_LOOKUP.ANY",
 -        "Filter": "CBoFilter0[23:17]",
@@ -115,17 +122,17 @@ ludes both up and dn.",
 sed - this includes code, data, prefetches and hints coming from L2.  This =
 has numerous filters available.  Note the non-standard filtering equation. =
  This event will count requests that lookup the cache multiple times with m=
-ultiple increments.  One must ALWAYS set umask bit 0 and select a state or =
-states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:1=
-8] bits correspond to [FMESI] state.; Filters for any transaction originati=
-ng from the IPQ or IRQ.  This does not include lookups originating from the=
- ISMQ.",
+ultiple increments.  One must ALWAYS set filter mask bit 0 and select a sta=
+te or states to match.  Otherwise, the event will count nothing.   CBoGlCtr=
+l[22:17] bits correspond to [M'FMESI] state.; Filters for any transaction o=
+riginating from the IPQ or IRQ.  This does not include lookups originating =
+from the ISMQ.",
 -        "UMask": "0x11",
 -        "Unit": "CBO"
 -    },
 -    {
 -        "BriefDescription": "Cache Lookups; Data Read Request",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x34",
 -        "EventName": "UNC_C_LLC_LOOKUP.DATA_READ",
 -        "Filter": "CBoFilter0[23:17]",
@@ -134,15 +141,15 @@ ng from the IPQ or IRQ.  This does not include lookups originating from the=
 sed - this includes code, data, prefetches and hints coming from L2.  This =
 has numerous filters available.  Note the non-standard filtering equation. =
  This event will count requests that lookup the cache multiple times with m=
-ultiple increments.  One must ALWAYS set umask bit 0 and select a state or =
-states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:1=
-8] bits correspond to [FMESI] state.; Read transactions",
+ultiple increments.  One must ALWAYS set filter mask bit 0 and select a sta=
+te or states to match.  Otherwise, the event will count nothing.   CBoGlCtr=
+l[22:17] bits correspond to [M'FMESI] state.; Read transactions",
 -        "UMask": "0x3",
 -        "Unit": "CBO"
 -    },
 -    {
 -        "BriefDescription": "Cache Lookups; Lookups that Match NID",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x34",
 -        "EventName": "UNC_C_LLC_LOOKUP.NID",
 -        "Filter": "CBoFilter0[23:17]",
@@ -151,35 +158,18 @@ states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:1=
 sed - this includes code, data, prefetches and hints coming from L2.  This =
 has numerous filters available.  Note the non-standard filtering equation. =
  This event will count requests that lookup the cache multiple times with m=
-ultiple increments.  One must ALWAYS set umask bit 0 and select a state or =
-states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:1=
-8] bits correspond to [FMESI] state.; Qualify one of the other subevents by=
- the Target NID.  The NID is programmed in Cn_MSR_PMON_BOX_FILTER.nid.   In=
- conjunction with STATE =3D I, it is possible to monitor misses to specific=
- NIDs in the system.",
+ultiple increments.  One must ALWAYS set filter mask bit 0 and select a sta=
+te or states to match.  Otherwise, the event will count nothing.   CBoGlCtr=
+l[22:17] bits correspond to [M'FMESI] state.; Qualify one of the other sube=
+vents by the Target NID.  The NID is programmed in Cn_MSR_PMON_BOX_FILTER.n=
+id.   In conjunction with STATE =3D I, it is possible to monitor misses to =
+specific NIDs in the system.",
 -        "UMask": "0x41",
 -        "Unit": "CBO"
 -    },
 -    {
--        "BriefDescription": "Cache Lookups; Any Read Request",
--        "Counter": "0,1,2,3",
--        "EventCode": "0x34",
--        "EventName": "UNC_C_LLC_LOOKUP.READ",
--        "Filter": "CBoFilter0[22:18]",
--        "PerPkg": "1",
--        "PublicDescription": "Counts the number of times the LLC was acces=
-sed - this includes code, data, prefetches and hints coming from L2.  This =
-has numerous filters available.  Note the non-standard filtering equation. =
- This event will count requests that lookup the cache multiple times with m=
-ultiple increments.  One must ALWAYS set umask bit 0 and select a state or =
-states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:1=
-8] bits correspond to [FMESI] state.; Read transactions",
--        "UMask": "0x21",
--        "Unit": "CBO"
--    },
--    {
 -        "BriefDescription": "Cache Lookups; External Snoop Request",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x34",
 -        "EventName": "UNC_C_LLC_LOOKUP.REMOTE_SNOOP",
 -        "Filter": "CBoFilter0[23:17]",
@@ -188,16 +178,16 @@ states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:1=
 sed - this includes code, data, prefetches and hints coming from L2.  This =
 has numerous filters available.  Note the non-standard filtering equation. =
  This event will count requests that lookup the cache multiple times with m=
-ultiple increments.  One must ALWAYS set umask bit 0 and select a state or =
-states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:1=
-8] bits correspond to [FMESI] state.; Filters for only snoop requests comin=
-g from the remote socket(s) through the IPQ.",
+ultiple increments.  One must ALWAYS set filter mask bit 0 and select a sta=
+te or states to match.  Otherwise, the event will count nothing.   CBoGlCtr=
+l[22:17] bits correspond to [M'FMESI] state.; Filters for only snoop reques=
+ts coming from the remote socket(s) through the IPQ.",
 -        "UMask": "0x9",
 -        "Unit": "CBO"
 -    },
 -    {
 -        "BriefDescription": "Cache Lookups; Write Requests",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x34",
 -        "EventName": "UNC_C_LLC_LOOKUP.WRITE",
 -        "Filter": "CBoFilter0[23:17]",
@@ -206,27 +196,28 @@ g from the remote socket(s) through the IPQ.",
 sed - this includes code, data, prefetches and hints coming from L2.  This =
 has numerous filters available.  Note the non-standard filtering equation. =
  This event will count requests that lookup the cache multiple times with m=
-ultiple increments.  One must ALWAYS set umask bit 0 and select a state or =
-states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:1=
-8] bits correspond to [FMESI] state.; Writeback transactions from L2 to the=
- LLC  This includes all write transactions -- both Cachable and UC.",
+ultiple increments.  One must ALWAYS set filter mask bit 0 and select a sta=
+te or states to match.  Otherwise, the event will count nothing.   CBoGlCtr=
+l[22:17] bits correspond to [M'FMESI] state.; Writeback transactions from L=
+2 to the LLC  This includes all write transactions -- both Cachable and UC.=
+",
 -        "UMask": "0x5",
 -        "Unit": "CBO"
 -    },
      {
          "BriefDescription": "Lines Victimized; Lines in E state",
-         "Counter": "0,1,2,3",
-@@ -148,17 +82,6 @@
+         "Counter": "0,1",
+@@ -100,17 +45,6 @@
          "UMask": "0x1",
          "Unit": "CBO"
      },
 -    {
 -        "BriefDescription": "Lines Victimized; Victimized Lines that Match=
  NID",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x37",
 -        "EventName": "UNC_C_LLC_VICTIMS.NID",
--        "Filter": "CBoFilter1[17:10]",
+-        "Filter": "CBoFilter1[15:0]",
 -        "PerPkg": "1",
 -        "PublicDescription": "Counts the number of lines that were victimi=
 zed on a fill.  This can be filtered by the state that the line was in.; Qu=
@@ -237,147 +228,15 @@ sible to monitor misses to specific NIDs in the system.",
 -        "Unit": "CBO"
 -    },
      {
-         "BriefDescription": "Cbo Misc; DRd hitting non-M with raw CV=3D0",
-         "Counter": "0,1,2,3",
-@@ -789,17 +712,6 @@
-         "UMask": "0x1",
-         "Unit": "CBO"
-     },
--    {
--        "BriefDescription": "Probe Queue Retries; Target Node Filter",
--        "Counter": "0,1,2,3",
--        "EventCode": "0x28",
--        "EventName": "UNC_C_RxR_IPQ_RETRY2.TARGET",
--        "Filter": "CBoFilter1[15:0]",
--        "PerPkg": "1",
--        "PublicDescription": "Number of times a snoop (probe) request had =
-to retry.  Filters exist to cover some of the common cases retries.; Counts=
- the number of times that a request from the IPQ was retried filtered by th=
-e Target NodeID as specified in the Cbox's Filter register.",
--        "UMask": "0x40",
--        "Unit": "CBO"
--    },
-     {
-         "BriefDescription": "Ingress Request Queue Rejects; Address Confli=
-ct",
-         "Counter": "0,1,2,3",
-@@ -840,17 +752,6 @@
-         "UMask": "0x20",
-         "Unit": "CBO"
-     },
--    {
--        "BriefDescription": "Ingress Request Queue Rejects",
--        "Counter": "0,1,2,3",
--        "EventCode": "0x32",
--        "EventName": "UNC_C_RxR_IRQ_RETRY.NID",
--        "Filter": "CBoFilter1[15:0]",
--        "PerPkg": "1",
--        "PublicDescription": "Qualify one of the other subevents by a give=
-n RTID destination NID.  The NID is programmed in Cn_MSR_PMON_BOX_FILTER1.n=
-id.",
--        "UMask": "0x40",
--        "Unit": "CBO"
--    },
-     {
-         "BriefDescription": "Ingress Request Queue Rejects; No QPI Credits=
-",
-         "Counter": "0,1,2,3",
-@@ -891,17 +792,6 @@
-         "UMask": "0x2",
-         "Unit": "CBO"
-     },
--    {
--        "BriefDescription": "Ingress Request Queue Rejects; Target Node Fi=
-lter",
--        "Counter": "0,1,2,3",
--        "EventCode": "0x29",
--        "EventName": "UNC_C_RxR_IRQ_RETRY2.TARGET",
--        "Filter": "CBoFilter1[15:0]",
--        "PerPkg": "1",
--        "PublicDescription": "Counts the number of times that a request fr=
-om the IPQ was retried filtered by the Target NodeID as specified in the Cb=
-ox's Filter register.",
--        "UMask": "0x40",
--        "Unit": "CBO"
--    },
-     {
-         "BriefDescription": "ISMQ Retries; Any Reject",
-         "Counter": "0,1,2,3",
-@@ -932,17 +822,6 @@
-         "UMask": "0x20",
-         "Unit": "CBO"
-     },
--    {
--        "BriefDescription": "ISMQ Retries",
--        "Counter": "0,1,2,3",
--        "EventCode": "0x33",
--        "EventName": "UNC_C_RxR_ISMQ_RETRY.NID",
--        "Filter": "CBoFilter1[15:0]",
--        "PerPkg": "1",
--        "PublicDescription": "Number of times a transaction flowing throug=
-h the ISMQ had to retry.  Transaction pass through the ISMQ as responses fo=
-r requests that already exist in the Cbo.  Some examples include: when data=
- is returned or when snoop responses come back from the cores.; Qualify one=
- of the other subevents by a given RTID destination NID.  The NID is progra=
-mmed in Cn_MSR_PMON_BOX_FILTER1.nid.",
--        "UMask": "0x40",
--        "Unit": "CBO"
--    },
-     {
-         "BriefDescription": "ISMQ Retries; No QPI Credits",
-         "Counter": "0,1,2,3",
-@@ -963,17 +842,6 @@
-         "UMask": "0x8",
-         "Unit": "CBO"
-     },
--    {
--        "BriefDescription": "ISMQ Retries",
--        "Counter": "0,1,2,3",
--        "EventCode": "0x33",
--        "EventName": "UNC_C_RxR_ISMQ_RETRY.WB_CREDITS",
--        "Filter": "CBoFilter1[15:0]",
--        "PerPkg": "1",
--        "PublicDescription": "Number of times a transaction flowing throug=
-h the ISMQ had to retry.  Transaction pass through the ISMQ as responses fo=
-r requests that already exist in the Cbo.  Some examples include: when data=
- is returned or when snoop responses come back from the cores.; Qualify one=
- of the other subevents by a given RTID destination NID.  The NID is progra=
-mmed in Cn_MSR_PMON_BOX_FILTER1.nid.",
--        "UMask": "0x80",
--        "Unit": "CBO"
--    },
-     {
-         "BriefDescription": "ISMQ Request Queue Rejects; No AD Sbo Credits=
-",
-         "Counter": "0,1,2,3",
-@@ -994,17 +862,6 @@
-         "UMask": "0x2",
-         "Unit": "CBO"
-     },
--    {
--        "BriefDescription": "ISMQ Request Queue Rejects; Target Node Filte=
-r",
--        "Counter": "0,1,2,3",
--        "EventCode": "0x2A",
--        "EventName": "UNC_C_RxR_ISMQ_RETRY2.TARGET",
--        "Filter": "CBoFilter1[15:0]",
--        "PerPkg": "1",
--        "PublicDescription": "Counts the number of times that a request fr=
-om the ISMQ was retried filtered by the Target NodeID as specified in the C=
-box's Filter register.",
--        "UMask": "0x40",
--        "Unit": "CBO"
--    },
-     {
-         "BriefDescription": "Ingress Occupancy; IPQ",
-         "EventCode": "0x11",
-@@ -1109,17 +966,6 @@
+         "BriefDescription": "Lines Victimized; Lines in S State",
+         "Counter": "0,1",
+@@ -1029,17 +963,6 @@
          "UMask": "0x28",
          "Unit": "CBO"
      },
 -    {
 -        "BriefDescription": "TOR Inserts; Local Memory - Opcode Matched",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.LOCAL_OPCODE",
 -        "Filter": "CBoFilter1[28:20]",
@@ -396,15 +255,15 @@ ed by an opcode,  inserted into the TOR that are satisifed by locally HOMed=
 -    },
      {
          "BriefDescription": "TOR Inserts; Misses to Local Memory",
-         "Counter": "0,1,2,3",
-@@ -1130,28 +976,6 @@
+         "Counter": "0,1",
+@@ -1050,28 +973,6 @@
          "UMask": "0x2A",
          "Unit": "CBO"
      },
 -    {
 -        "BriefDescription": "TOR Inserts; Misses to Local Memory - Opcode =
 Matched",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.MISS_LOCAL_OPCODE",
 -        "Filter": "CBoFilter1[28:20]",
@@ -423,7 +282,7 @@ fed by an opcode, inserted into the TOR that are satisifed by locally HOMed=
 -    },
 -    {
 -        "BriefDescription": "TOR Inserts; Miss Opcode Match",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.MISS_OPCODE",
 -        "Filter": "CBoFilter1[28:20]",
@@ -441,15 +300,15 @@ d into the TOR that match an opcode.",
 -    },
      {
          "BriefDescription": "TOR Inserts; Misses to Remote Memory",
-         "Counter": "0,1,2,3",
-@@ -1162,94 +986,6 @@
+         "Counter": "0,1",
+@@ -1082,94 +983,6 @@
          "UMask": "0x8A",
          "Unit": "CBO"
      },
 -    {
 -        "BriefDescription": "TOR Inserts; Misses to Remote Memory - Opcode=
  Matched",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.MISS_REMOTE_OPCODE",
 -        "Filter": "CBoFilter1[28:20]",
@@ -468,7 +327,7 @@ s or remote memory.",
 -    },
 -    {
 -        "BriefDescription": "TOR Inserts; NID Matched",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.NID_ALL",
 -        "Filter": "CBoFilter1[15:0]",
@@ -488,7 +347,7 @@ mmed in Cn_MSR_PMON_BOX_FILTER.nid.  In conjunction with STATE =3D I, it is=
 -    },
 -    {
 -        "BriefDescription": "TOR Inserts; NID Matched Evictions",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.NID_EVICTION",
 -        "Filter": "CBoFilter1[15:0]",
@@ -506,7 +365,7 @@ sactions inserted into the TOR.",
 -    },
 -    {
 -        "BriefDescription": "TOR Inserts; NID Matched Miss All",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.NID_MISS_ALL",
 -        "Filter": "CBoFilter1[15:0]",
@@ -524,7 +383,7 @@ ests that were inserted into the TOR.",
 -    },
 -    {
 -        "BriefDescription": "TOR Inserts; NID and Opcode Matched Miss",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.NID_MISS_OPCODE",
 -        "Filter": "CBoFilter1[28:20], CBoFilter1[15:0]",
@@ -542,7 +401,7 @@ d into the TOR that match a NID and an opcode.",
 -    },
 -    {
 -        "BriefDescription": "TOR Inserts; NID and Opcode Matched",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.NID_OPCODE",
 -        "Filter": "CBoFilter1[28:20], CBoFilter1[15:0]",
@@ -560,7 +419,7 @@ o the TOR that match a NID and an opcode.",
 -    },
 -    {
 -        "BriefDescription": "TOR Inserts; NID Matched Writebacks",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.NID_WB",
 -        "Filter": "CBoFilter1[15:0]",
@@ -578,7 +437,7 @@ tions inserted into the TOR.",
 -    },
 -    {
 -        "BriefDescription": "TOR Inserts; Opcode Match",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.OPCODE",
 -        "Filter": "CBoFilter1[28:20]",
@@ -596,14 +455,14 @@ o the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
 -    },
      {
          "BriefDescription": "TOR Inserts; Remote Memory",
-         "Counter": "0,1,2,3",
-@@ -1260,17 +996,6 @@
+         "Counter": "0,1",
+@@ -1180,17 +993,6 @@
          "UMask": "0x88",
          "Unit": "CBO"
      },
 -    {
 -        "BriefDescription": "TOR Inserts; Remote Memory - Opcode Matched",
--        "Counter": "0,1,2,3",
+-        "Counter": "0,1",
 -        "EventCode": "0x35",
 -        "EventName": "UNC_C_TOR_INSERTS.REMOTE_OPCODE",
 -        "Filter": "CBoFilter1[28:20]",
@@ -622,8 +481,8 @@ ed by an opcode,  inserted into the TOR that are satisifed by remote caches=
 -    },
      {
          "BriefDescription": "TOR Inserts; Writebacks",
-         "Counter": "0,1,2,3",
-@@ -1308,16 +1033,6 @@
+         "Counter": "0,1",
+@@ -1228,16 +1030,6 @@
          "UMask": "0x28",
          "Unit": "CBO"
      },
@@ -649,7 +508,7 @@ ifed by locally HOMed memory.",
      {
          "BriefDescription": "TOR Occupancy; Miss All",
          "EventCode": "0x36",
-@@ -1336,26 +1051,6 @@
+@@ -1256,26 +1048,6 @@
          "UMask": "0x2A",
          "Unit": "CBO"
      },
@@ -693,7 +552,7 @@ equest was sent to memory or MMIO.",
      {
          "BriefDescription": "TOR Occupancy",
          "EventCode": "0x36",
-@@ -1365,86 +1060,6 @@
+@@ -1285,86 +1057,6 @@
          "UMask": "0x8A",
          "Unit": "CBO"
      },
@@ -840,7 +699,7 @@ that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc).",
      {
          "BriefDescription": "TOR Occupancy",
          "EventCode": "0x36",
-@@ -1454,16 +1069,6 @@
+@@ -1374,16 +1066,6 @@
          "UMask": "0x88",
          "Unit": "CBO"
      },
@@ -866,7 +725,7 @@ ifed by remote caches or remote memory.",
      {
          "BriefDescription": "TOR Occupancy; Writebacks",
          "EventCode": "0x36",
-@@ -1610,66 +1215,6 @@
+@@ -1520,66 +1202,6 @@
          "UMask": "0x8",
          "Unit": "CBO"
      },
@@ -933,21 +792,52 @@ h[5:0]",
 -        "Unit": "HA"
 -    },
      {
-         "BriefDescription": "BT Cycles Not Empty",
+         "BriefDescription": "BT Bypass",
          "Counter": "0,1,2,3",
-diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json b=
-/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json
-index 71bdf75d8016..24c82ca873bd 100644
---- a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json
-+++ b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json
-@@ -416,17 +416,6 @@
-         "UMask": "0x10",
+diff --git a/tools/perf/pmu-events/arch/x86/ivytown/uncore-interconnect.jso=
+n b/tools/perf/pmu-events/arch/x86/ivytown/uncore-interconnect.json
+index b50685fbde12..abd1e11af7fd 100644
+--- a/tools/perf/pmu-events/arch/x86/ivytown/uncore-interconnect.json
++++ b/tools/perf/pmu-events/arch/x86/ivytown/uncore-interconnect.json
+@@ -8,17 +8,6 @@
+         "PublicDescription": "Counts the number of clocks in the QPI LL.  =
+This clock runs at 1/8th the GT/s speed of the QPI link.  For example, a 8G=
+T/s link will have qfclk or 1GHz.  JKT does not support dynamic link speeds=
+, so this frequency is fixed.",
+         "Unit": "QPI LL"
+     },
+-    {
+-        "BriefDescription": "Count of CTO Events",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x38",
+-        "EventName": "UNC_Q_CTO_COUNT",
+-        "ExtSel": "1",
+-        "Filter": "QPIMask0[17:0],QPIMatch0[17:0],QPIMask1[19:16],QPIMatch=
+1[19:16]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of CTO (cluster trigger ou=
+ts) events that were asserted across the two slots.  If both slots trigger =
+in a given cycle, the event will increment by 2.  You can use edge detect t=
+o count the number of cases when both events triggered.",
+-        "Unit": "QPI LL"
+-    },
+     {
+         "BriefDescription": "Direct 2 Core Spawning; Spawn Failure - Egres=
+s Credits",
+         "Counter": "0,1,2,3",
+diff --git a/tools/perf/pmu-events/arch/x86/ivytown/uncore-other.json b/too=
+ls/perf/pmu-events/arch/x86/ivytown/uncore-other.json
+index aa7a5059d79f..6db131b3fd03 100644
+--- a/tools/perf/pmu-events/arch/x86/ivytown/uncore-other.json
++++ b/tools/perf/pmu-events/arch/x86/ivytown/uncore-other.json
+@@ -247,17 +247,6 @@
+         "UMask": "0x2",
          "Unit": "IRP"
      },
 -    {
 -        "BriefDescription": "Inbound Transaction Count; Select Source",
 -        "Counter": "0,1",
--        "EventCode": "0x16",
+-        "EventCode": "0x15",
 -        "EventName": "UNC_I_TRANSACTIONS.ORDERINGQ",
 -        "Filter": "IRPFilter[4:0]",
 -        "PerPkg": "1",
@@ -960,13 +850,13 @@ hat come from the port specified in the IRP_PmonFilter.OrderingQ register. =
  This register allows one to select one specific queue.  It is not possible=
  to monitor multiple queues at a time.  If this bit is not set, then reques=
 ts from all sources will be counted.",
--        "UMask": "0x40",
+-        "UMask": "0x8",
 -        "Unit": "IRP"
 -    },
      {
-         "BriefDescription": "Inbound Transaction Count; Other",
+         "BriefDescription": "Inbound Transaction Count: Read Prefetches",
          "Counter": "0,1",
-@@ -1112,17 +1101,6 @@
+@@ -2269,17 +2258,6 @@
          "UMask": "0x2",
          "Unit": "UBOX"
      },
@@ -985,7 +875,7 @@ able).  Specify the thread to filter on using NCUPMONCTRLGLCTR.ThreadID.",
      {
          "BriefDescription": "Filter Match",
          "Counter": "0,1",
-@@ -1133,17 +1111,6 @@
+@@ -2290,17 +2268,6 @@
          "UMask": "0x8",
          "Unit": "UBOX"
      },
@@ -1002,8 +892,256 @@ able).  Specify the thread to filter on using NCUPMONCTRLGLCTR.ThreadID.",
 -        "Unit": "UBOX"
 -    },
      {
-         "BriefDescription": "Cycles PHOLD Assert to Ack; Assert to ACK",
+         "BriefDescription": "IDI Lock/SplitLock Cycles",
          "Counter": "0,1",
+diff --git a/tools/perf/pmu-events/arch/x86/ivytown/uncore-power.json b/too=
+ls/perf/pmu-events/arch/x86/ivytown/uncore-power.json
+index 304d861c368f..e0cb4cf09743 100644
+--- a/tools/perf/pmu-events/arch/x86/ivytown/uncore-power.json
++++ b/tools/perf/pmu-events/arch/x86/ivytown/uncore-power.json
+@@ -292,196 +292,6 @@
+         "PublicDescription": "Number of times that a deep C state was requ=
+ested, but the delayed C state algorithm rejected the deep sleep state.  In=
+ other words, a wake event occurred before the timer expired that causes a =
+transition into the deeper C state.",
+         "Unit": "PCU"
+     },
+-    {
+-        "BriefDescription": "Core 0 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x1e",
+-        "EventName": "UNC_P_DEMOTIONS_CORE0",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 1 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x1f",
+-        "EventName": "UNC_P_DEMOTIONS_CORE1",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 10 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x42",
+-        "EventName": "UNC_P_DEMOTIONS_CORE10",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 11 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x43",
+-        "EventName": "UNC_P_DEMOTIONS_CORE11",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 12 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x44",
+-        "EventName": "UNC_P_DEMOTIONS_CORE12",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 13 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x45",
+-        "EventName": "UNC_P_DEMOTIONS_CORE13",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 14 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x46",
+-        "EventName": "UNC_P_DEMOTIONS_CORE14",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 2 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x20",
+-        "EventName": "UNC_P_DEMOTIONS_CORE2",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 3 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x21",
+-        "EventName": "UNC_P_DEMOTIONS_CORE3",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 4 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x22",
+-        "EventName": "UNC_P_DEMOTIONS_CORE4",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 5 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x23",
+-        "EventName": "UNC_P_DEMOTIONS_CORE5",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 6 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x24",
+-        "EventName": "UNC_P_DEMOTIONS_CORE6",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 7 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x25",
+-        "EventName": "UNC_P_DEMOTIONS_CORE7",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 8 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x40",
+-        "EventName": "UNC_P_DEMOTIONS_CORE8",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Core 9 C State Demotions",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0x41",
+-        "EventName": "UNC_P_DEMOTIONS_CORE9",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of times when a configurab=
+le cores had a C-state demotion",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Frequency Residency",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0xb",
+-        "EventName": "UNC_P_FREQ_BAND0_CYCLES",
+-        "Filter": "PCUFilter[7:0]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of cycles that the uncore =
+was running at a frequency greater than or equal to the frequency that is c=
+onfigured in the filter.  One can use all four counters with this event, so=
+ it is possible to track up to 4 configurable bands.  One can use edge dete=
+ct in conjunction with this event to track the number of times that we tran=
+sitioned into a frequency greater than or equal to the configurable frequen=
+cy. One can also use inversion to track cycles when we were less than the c=
+onfigured frequency.",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Frequency Residency",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0xc",
+-        "EventName": "UNC_P_FREQ_BAND1_CYCLES",
+-        "Filter": "PCUFilter[15:8]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of cycles that the uncore =
+was running at a frequency greater than or equal to the frequency that is c=
+onfigured in the filter.  One can use all four counters with this event, so=
+ it is possible to track up to 4 configurable bands.  One can use edge dete=
+ct in conjunction with this event to track the number of times that we tran=
+sitioned into a frequency greater than or equal to the configurable frequen=
+cy. One can also use inversion to track cycles when we were less than the c=
+onfigured frequency.",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Frequency Residency",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0xd",
+-        "EventName": "UNC_P_FREQ_BAND2_CYCLES",
+-        "Filter": "PCUFilter[23:16]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of cycles that the uncore =
+was running at a frequency greater than or equal to the frequency that is c=
+onfigured in the filter.  One can use all four counters with this event, so=
+ it is possible to track up to 4 configurable bands.  One can use edge dete=
+ct in conjunction with this event to track the number of times that we tran=
+sitioned into a frequency greater than or equal to the configurable frequen=
+cy. One can also use inversion to track cycles when we were less than the c=
+onfigured frequency.",
+-        "Unit": "PCU"
+-    },
+-    {
+-        "BriefDescription": "Frequency Residency",
+-        "Counter": "0,1,2,3",
+-        "EventCode": "0xe",
+-        "EventName": "UNC_P_FREQ_BAND3_CYCLES",
+-        "Filter": "PCUFilter[31:24]",
+-        "PerPkg": "1",
+-        "PublicDescription": "Counts the number of cycles that the uncore =
+was running at a frequency greater than or equal to the frequency that is c=
+onfigured in the filter.  One can use all four counters with this event, so=
+ it is possible to track up to 4 configurable bands.  One can use edge dete=
+ct in conjunction with this event to track the number of times that we tran=
+sitioned into a frequency greater than or equal to the configurable frequen=
+cy. One can also use inversion to track cycles when we were less than the c=
+onfigured frequency.",
+-        "Unit": "PCU"
+-    },
+     {
+         "BriefDescription": "Current Strongest Upper Limit Cycles",
+         "Counter": "0,1,2,3",
 --=20
 2.37.1.455.g008518b4e5-goog
 

@@ -2,351 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52081589BE5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1102589BF0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239741AbiHDMt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 08:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
+        id S239743AbiHDMwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 08:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiHDMtZ (ORCPT
+        with ESMTP id S230140AbiHDMwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 08:49:25 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277B61AF1F
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 05:49:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659617362; x=1691153362;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+7TkLWEOWJUivI6IYIVqO/8bzqNP8U9uCdgPXPZXekI=;
-  b=SbpJqYVdqVD34nn+XNsjxwH0P83TwSZY5i5JaRRVw3hnRk9UwZUdH4J7
-   zKfykX6h1cHoTVGUP/ivYTV+rfSw7evZczFmRoTJwjY/lSE8Mjj9Ywart
-   QUnaX+Hpje60vfYo+jp2VstJetGRZ0vu/Lg/JUg+Y9axn6CJBGN/vGGox
-   HRbdTBEtgMwbIZW4ytPFXJLrzzwuIvJsiF9mof7DbHr3Iy0hEOfW5r9LT
-   t08a8/6SuMkNslwN9G5Fp3nKnmlNNyz+/TRJz7VdXu3/HMXDFL4fk0MqZ
-   +v6WZ1Pfp0+tOv6rqbMN1vbtJC7rLABiyfMDfhsnNnEzllXOdORcPxXI4
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="272968439"
-X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="272968439"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 05:49:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="553709230"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 04 Aug 2022 05:49:20 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJaHu-000IRz-2z;
-        Thu, 04 Aug 2022 12:49:18 +0000
-Date:   Thu, 4 Aug 2022 20:49:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vadim Fedorenko <vadfed@fb.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [kuba:gnl-gen-dpll 111/133] drivers/ptp/ptp_ocp.c:3721:41: error:
- call to undeclared function 'dpll_priv'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202208042049.C42zYO15-lkp@intel.com>
+        Thu, 4 Aug 2022 08:52:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A2B1D0F6
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 05:52:09 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oJaKR-0002aq-P0; Thu, 04 Aug 2022 14:51:55 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oJaKP-0001In-0S; Thu, 04 Aug 2022 14:51:53 +0200
+Date:   Thu, 4 Aug 2022 14:51:52 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Adam Ford <aford173@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com, NXP Linux Team <linux-imx@nxp.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+Message-ID: <20220804125152.idyzetjqkjzgbbm2@pengutronix.de>
+References: <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
+ <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de>
+ <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
+ <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
+ <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
+ <20220803062024.vn7awasmifkp5xow@pengutronix.de>
+ <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
+ <CAPY8ntBBz56Es=pK+KpqhyYLUET95DT_zE6gorOWx4WkCSxJAg@mail.gmail.com>
+ <20220804093829.42kdelp7u4r743nv@pengutronix.de>
+ <CAPY8ntBovVq1HVt_UneDF8OB9KBdEBv52o=4BCTmf9VpiODxVg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAPY8ntBovVq1HVt_UneDF8OB9KBdEBv52o=4BCTmf9VpiODxVg@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux.git gnl-gen-dpll
-head:   fe9b39bc400264b4403591191c918670b7766de9
-commit: 48c4cd1d7a94aeb6ab460989f1561117291092a5 [111/133] ptp_ocp: implement DPLL ops
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220804/202208042049.C42zYO15-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux.git/commit/?id=48c4cd1d7a94aeb6ab460989f1561117291092a5
-        git remote add kuba https://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux.git
-        git fetch --no-tags kuba gnl-gen-dpll
-        git checkout 48c4cd1d7a94aeb6ab460989f1561117291092a5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+Hi Dave,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 22-08-04, Dave Stevenson wrote:
+> Hi Marco
+> 
+> On Thu, 4 Aug 2022 at 10:38, Marco Felsch <m.felsch@pengutronix.de> wrote:
+> >
+> > Hi Dave, Adam,
+> >
+> > On 22-08-03, Dave Stevenson wrote:
+> > > Hi Adam
+> > >
+> > > On Wed, 3 Aug 2022 at 12:03, Adam Ford <aford173@gmail.com> wrote:
+> >
+> > ...
+> >
+> > > > > Did managed to get access to the ADV7535 programming guide? This is the
+> > > > > black box here. Let me check if I can provide you a link with our repo
+> > > > > so you can test our current DSIM state if you want.
+> > > >
+> > > > I do have access to the programming guide, but it's under NDA, but
+> > > > I'll try to answer questions if I can.
+> > >
+> > > Not meaning to butt in, but I have datasheets for ADV7533 and 7535
+> > > from previously looking at these chips.
+> >
+> > Thanks for stepping into :)
+> >
+> > > Mine fairly plainly states:
+> > > "The DSI receiver input supports DSI video mode operation only, and
+> > > specifically, only supports nonburst mode with sync pulses".
+> >
+> > I've read this also, and we are working in nonburst mode with sync
+> > pulses. I have no access to an MIPI-DSI analyzer therefore I can't
+> > verify it.
+> >
+> > > Non-burst mode meaning that the DSI pixel rate MUST be the same as the
+> > > HDMI pixel rate.
+> >
+> > On DSI side you don't have a pixel-clock instead there is bit-clock.
+> 
+> You have an effective pixel clock, with a fixed conversion for the
+> configuration.
+> 
+> DSI bit-clock * number of lanes / bits_per_pixel = pixel rate.
+> 891Mbit/s * 4 lanes / 24bpp = 148.5 Mpixels/s
 
-All errors (new ones prefixed by >>):
+Okay, I just checked the bandwidth which must equal.
 
->> drivers/ptp/ptp_ocp.c:3721:41: error: call to undeclared function 'dpll_priv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-                                                  ^
-   drivers/ptp/ptp_ocp.c:3721:23: warning: cast to 'struct ptp_ocp *' from smaller integer type 'int' [-Wint-to-pointer-cast]
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/ptp/ptp_ocp.c:3730:41: error: call to undeclared function 'dpll_priv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-                                                  ^
-   drivers/ptp/ptp_ocp.c:3730:23: warning: cast to 'struct ptp_ocp *' from smaller integer type 'int' [-Wint-to-pointer-cast]
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/ptp/ptp_ocp.c:3743:7: error: assigning to 'struct ocp_selector *' from 'const struct ocp_selector *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                   tbl = bp->sma_op->tbl[0];
-                       ^ ~~~~~~~~~~~~~~~~~~
-   drivers/ptp/ptp_ocp.c:3745:7: error: assigning to 'struct ocp_selector *' from 'const struct ocp_selector *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                   tbl = bp->sma_op->tbl[1];
-                       ^ ~~~~~~~~~~~~~~~~~~
-   drivers/ptp/ptp_ocp.c:3753:41: error: call to undeclared function 'dpll_priv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-                                                  ^
-   drivers/ptp/ptp_ocp.c:3753:23: warning: cast to 'struct ptp_ocp *' from smaller integer type 'int' [-Wint-to-pointer-cast]
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/ptp/ptp_ocp.c:3754:23: error: initializing 'struct ocp_selector *' with an expression of type 'const struct ocp_selector *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           struct ocp_selector *tbl = bp->sma_op->tbl[dir];
-                                ^     ~~~~~~~~~~~~~~~~~~~~
-   drivers/ptp/ptp_ocp.c:3766:41: error: call to undeclared function 'dpll_priv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-                                                  ^
-   drivers/ptp/ptp_ocp.c:3766:23: warning: cast to 'struct ptp_ocp *' from smaller integer type 'int' [-Wint-to-pointer-cast]
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/ptp/ptp_ocp.c:3781:41: error: call to undeclared function 'dpll_priv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-                                                  ^
-   drivers/ptp/ptp_ocp.c:3781:23: warning: cast to 'struct ptp_ocp *' from smaller integer type 'int' [-Wint-to-pointer-cast]
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/ptp/ptp_ocp.c:3794:31: error: variable has incomplete type 'struct dpll_device_ops'
-   static struct dpll_device_ops dpll_ops = {
-                                 ^
-   drivers/ptp/ptp_ocp.c:3794:15: note: forward declaration of 'struct dpll_device_ops'
-   static struct dpll_device_ops dpll_ops = {
-                 ^
->> drivers/ptp/ptp_ocp.c:3859:13: error: call to undeclared function 'dpll_device_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           bp->dpll = dpll_device_alloc(&dpll_ops, ARRAY_SIZE(bp->sma), ARRAY_SIZE(bp->sma), bp);
-                      ^
->> drivers/ptp/ptp_ocp.c:3864:2: error: call to undeclared function 'dpll_device_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           dpll_device_register(bp->dpll);
-           ^
-   drivers/ptp/ptp_ocp.c:3864:2: note: did you mean 'device_register'?
-   include/linux/device.h:895:18: note: 'device_register' declared here
-   int __must_check device_register(struct device *dev);
-                    ^
->> drivers/ptp/ptp_ocp.c:3883:2: error: call to undeclared function 'dpll_device_unregister'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           dpll_device_unregister(bp->dpll);
-           ^
->> drivers/ptp/ptp_ocp.c:3884:2: error: call to undeclared function 'dpll_device_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           dpll_device_free(bp->dpll);
-           ^
-   5 warnings and 13 errors generated.
---
->> drivers/dpll/dpll_core.c:77:21: error: conflicting types for 'dpll_device_alloc'
-   struct dpll_device *dpll_device_alloc(struct dpll_device_ops *ops, int sources_count,
-                       ^
-   include/linux/dpll.h:23:21: note: previous declaration is here
-   struct dpll_device *dpll_device_alloc(struct dpll_device_ops *ops, int sources_count,
-                       ^
-   1 error generated.
---
->> drivers/dpll/dpll_netlink.c:227:24: error: initializing 'const struct nlattr **' with an expression of type 'struct nlattr **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           const struct nlattr **attrs = p->attrs;
-                                 ^       ~~~~~~~~
-   drivers/dpll/dpll_netlink.c:252:24: error: initializing 'const struct nlattr **' with an expression of type 'struct nlattr **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           const struct nlattr **attrs = p->attrs;
-                                 ^       ~~~~~~~~
-   drivers/dpll/dpll_netlink.c:600:13: warning: no previous prototype for function 'dpll_netlink_fini' [-Wmissing-prototypes]
-   void __exit dpll_netlink_fini(void)
-               ^
-   drivers/dpll/dpll_netlink.c:600:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __exit dpll_netlink_fini(void)
-   ^
-   static 
-   1 warning and 2 errors generated.
+> As noted elsewhere, the DSI is DDR, so the clock lane itself is only
+> running at 891 / 2 = 445.5MHz.
+> 
+> > > Section 6.1.1 "DSI Input Modes" of adv7533_hardware_user_s_guide is
+> > > even more explicit about the requirement of DSI timing matching
+> >
+> > Is it possible to share the key points of the requirements?
+> 
+> "Specifically the ADV7533 supports the Non-Burst Mode with syncs. This
+> mode requires real time data generation as a pulse packet received
+> becomes a pulse generated. Therefore this mode requires a continuous
+> stream of data with correct video timing to avoid any visual
+> artifacts."
+> 
+> LP mode is supported on data lanes. Clock lane must remain in HS mode.
+> 
+> "... the goal is to accurately convey DPI-type timing over DSI. This
+> includes matching DPI pixel-transmission rates, and widths of timing
+> events."
 
+Thanks for sharing.
 
-vim +/dpll_priv +3721 drivers/ptp/ptp_ocp.c
+> > > The NXP kernel switching down to an hs_clk of 445.5MHz would therefore
+> > > be correct for 720p operation.
+> >
+> > It should be absolute no difference if you work on 891MHz with 2 lanes
+> > or on 445.5 MHz with 4 lanes. What must be ensured is that you need the
+> > minimum required bandwidth which is roughly: 1280*720*24*60 = 1.327
+> > GBps.
+> 
+> Has someone changed the number of lanes in use? I'd missed that if so,
+> but I'll agree that 891MHz over 2 lanes should work for 720p60.
 
-  3718	
-  3719	static int ptp_ocp_dpll_get_status(struct dpll_device *dpll)
-  3720	{
-> 3721		struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-  3722		int sync;
-  3723	
-  3724		sync = ioread32(&bp->reg->status) & OCP_STATUS_IN_SYNC;
-  3725		return sync;
-  3726	}
-  3727	
-  3728	static int ptp_ocp_dpll_get_lock_status(struct dpll_device *dpll)
-  3729	{
-  3730		struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-  3731		int sync;
-  3732	
-  3733		sync = ioread32(&bp->reg->status) & OCP_STATUS_IN_SYNC;
-  3734		return sync;
-  3735	}
-  3736	
-  3737	static int ptp_ocp_sma_get_dpll_type(struct ptp_ocp *bp, int sma_nr)
-  3738	{
-  3739		struct ocp_selector *tbl;
-  3740		u32 val;
-  3741	
-  3742		if (bp->sma[sma_nr].mode == SMA_MODE_IN)
-> 3743			tbl = bp->sma_op->tbl[0];
-  3744		else
-  3745			tbl = bp->sma_op->tbl[1];
-  3746	
-  3747		val = ptp_ocp_sma_get(bp, sma_nr);
-  3748		return tbl[val].dpll_type;
-  3749	}
-  3750	
-  3751	static int ptp_ocp_dpll_type_supported(struct dpll_device *dpll, int sma, int type, int dir)
-  3752	{
-  3753		struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-> 3754		struct ocp_selector *tbl = bp->sma_op->tbl[dir];
-  3755		int i;
-  3756	
-  3757		for (i = 0; i < sizeof(*tbl); i++) {
-  3758			if (tbl[i].dpll_type == type)
-  3759				return 1;
-  3760		}
-  3761		return 0;
-  3762	}
-  3763	
-  3764	static int ptp_ocp_dpll_get_source_type(struct dpll_device *dpll, int sma)
-  3765	{
-  3766		struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-  3767	
-  3768		if (bp->sma[sma].mode != SMA_MODE_IN)
-  3769			return -1;
-  3770	
-  3771		return ptp_ocp_sma_get_dpll_type(bp, sma);
-  3772	}
-  3773	
-  3774	static int ptp_ocp_dpll_get_source_supported(struct dpll_device *dpll, int sma, int type)
-  3775	{
-  3776		return ptp_ocp_dpll_type_supported(dpll, sma, type, 0);
-  3777	}
-  3778	
-  3779	static int ptp_ocp_dpll_get_output_type(struct dpll_device *dpll, int sma)
-  3780	{
-  3781		struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-  3782	
-  3783		if (bp->sma[sma].mode != SMA_MODE_OUT)
-  3784			return -1;
-  3785	
-  3786		return ptp_ocp_sma_get_dpll_type(bp, sma);
-  3787	}
-  3788	
-  3789	static int ptp_ocp_dpll_get_output_supported(struct dpll_device *dpll, int sma, int type)
-  3790	{
-  3791		return ptp_ocp_dpll_type_supported(dpll, sma, type, 1);
-  3792	}
-  3793	
-> 3794	static struct dpll_device_ops dpll_ops = {
-  3795		.get_status		= ptp_ocp_dpll_get_status,
-  3796		.get_lock_status	= ptp_ocp_dpll_get_lock_status,
-  3797		.get_source_type	= ptp_ocp_dpll_get_source_type,
-  3798		.get_source_supported	= ptp_ocp_dpll_get_source_supported,
-  3799		.get_output_type	= ptp_ocp_dpll_get_output_type,
-  3800		.get_output_supported	= ptp_ocp_dpll_get_output_supported,
-  3801	};
-  3802	
-  3803	static int
-  3804	ptp_ocp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-  3805	{
-  3806		struct devlink *devlink;
-  3807		struct ptp_ocp *bp;
-  3808		int err;
-  3809	
-  3810		devlink = devlink_alloc(&ptp_ocp_devlink_ops, sizeof(*bp), &pdev->dev);
-  3811		if (!devlink) {
-  3812			dev_err(&pdev->dev, "devlink_alloc failed\n");
-  3813			return -ENOMEM;
-  3814		}
-  3815	
-  3816		err = pci_enable_device(pdev);
-  3817		if (err) {
-  3818			dev_err(&pdev->dev, "pci_enable_device\n");
-  3819			goto out_free;
-  3820		}
-  3821	
-  3822		bp = devlink_priv(devlink);
-  3823		err = ptp_ocp_device_init(bp, pdev);
-  3824		if (err)
-  3825			goto out_disable;
-  3826	
-  3827		/* compat mode.
-  3828		 * Older FPGA firmware only returns 2 irq's.
-  3829		 * allow this - if not all of the IRQ's are returned, skip the
-  3830		 * extra devices and just register the clock.
-  3831		 */
-  3832		err = pci_alloc_irq_vectors(pdev, 1, 17, PCI_IRQ_MSI | PCI_IRQ_MSIX);
-  3833		if (err < 0) {
-  3834			dev_err(&pdev->dev, "alloc_irq_vectors err: %d\n", err);
-  3835			goto out;
-  3836		}
-  3837		bp->n_irqs = err;
-  3838		pci_set_master(pdev);
-  3839	
-  3840		err = ptp_ocp_register_resources(bp, id->driver_data);
-  3841		if (err)
-  3842			goto out;
-  3843	
-  3844		bp->ptp = ptp_clock_register(&bp->ptp_info, &pdev->dev);
-  3845		if (IS_ERR(bp->ptp)) {
-  3846			err = PTR_ERR(bp->ptp);
-  3847			dev_err(&pdev->dev, "ptp_clock_register: %d\n", err);
-  3848			bp->ptp = NULL;
-  3849			goto out;
-  3850		}
-  3851	
-  3852		err = ptp_ocp_complete(bp);
-  3853		if (err)
-  3854			goto out;
-  3855	
-  3856		ptp_ocp_info(bp);
-  3857		devlink_register(devlink);
-  3858	
-> 3859		bp->dpll = dpll_device_alloc(&dpll_ops, ARRAY_SIZE(bp->sma), ARRAY_SIZE(bp->sma), bp);
-  3860		if (!bp->dpll) {
-  3861			dev_err(&pdev->dev, "dpll_device_alloc failed\n");
-  3862			return 0;
-  3863		}
-> 3864		dpll_device_register(bp->dpll);
-  3865	
-  3866		return 0;
-  3867	
-  3868	out:
-  3869		ptp_ocp_detach(bp);
-  3870	out_disable:
-  3871		pci_disable_device(pdev);
-  3872	out_free:
-  3873		devlink_free(devlink);
-  3874		return err;
-  3875	}
-  3876	
-  3877	static void
-  3878	ptp_ocp_remove(struct pci_dev *pdev)
-  3879	{
-  3880		struct ptp_ocp *bp = pci_get_drvdata(pdev);
-  3881		struct devlink *devlink = priv_to_devlink(bp);
-  3882	
-> 3883		dpll_device_unregister(bp->dpll);
-> 3884		dpll_device_free(bp->dpll);
-  3885		devlink_unregister(devlink);
-  3886		ptp_ocp_detach(bp);
-  3887		pci_disable_device(pdev);
-  3888	
-  3889		devlink_free(devlink);
-  3890	}
-  3891	
+The ADV driver is changing it autom. but this logic is somehow odd and
+there was already a approach to stop the driver doing this.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+To sync up: we have two problems:
+  1) The 720P mode with static DSI host configuration isn't working
+     without hacks.
+  2) The DSI link frequency should changed as soon as required
+     automatically. So we can provide all modes.
+
+I would concentrate on problem 1 first before moving on to the 2nd.
+
+> I have just noted that 720p59.94 at 24bpp on 4 lanes is listed as one
+> of the modes that is mandatory to use the timing generator (reg 0x27
+> bit 7 = 1). On 2 lanes it is not required.
+> I don't know why it's referencing the 1000/1001 pixel clock rates and
+> not the base one, as it's only a base clock change with the same
+> timing (74.176MHz clock instead of 74.25MHz).
+
+Interesting! I would like to know how the HDMI block gets fetched by the
+DSI block and how the timing-generator can influence this in good/bad
+way. So that we know what DSI settings (freq, lanes) are sufficient.
+
+> > > If you do program the manual DSI divider register to allow a DSI pixel
+> > > rate of 148.5MHz vs HDMI pixel rate of 74.25MHz, you'd be relying on
+> >
+> > There is no such DSI pixel rate to be precise, we only have a DSI bit
+> > clock/rate.
+> >
+> > > the ADV753x having at least a half-line FIFO between DSI rx and HDMI
+> > > tx to compensate for the differing data rates. I see no reference to
+> > > such, and I'd be surprised if it was more than a half dozen pixels to
+> > > compensate for the jitter in the cases where the internal timing
+> > > generator is mandatory due to fractional bytes.
+> >
+> > This is interesting and would proofs our assumption that the device
+> > don't have a FIFO :)
+> >
+> > Our assumptions (we don't have the datasheet/programming manual):
+> >   - HDMI part is fetching 3 bytes per HDMI pixclk
+> >   - Ratio between dsi-clk and hdmi-pixelclk must be 3 so the DSI and
+> >     HDMI are in sync. So from bandwidth pov there are no differences
+> >     between:
+> >       - HDMI: 74.25 MHz * 24 Bit  = 1782.0 MBit/s
+> >       - DSI:    891 MHz * 2 lanes = 1782.0 MBit/s (dsi-clock: 445.5 )
+> >       - DSI:  445.5 MHz * 4 lanes = 1782.0 MBit/s (dsi-clock: 222.75)
+> >
+> >     But the ratio is different and therefore the faster clocking option
+> >     let something 'overflow'.
+> 
+> I'll agree that all looks consistent.
+> 
+> > Anyway, but all this means that Adam should configure the
+> > burst-clock-rate to 445.5 and set the lanes to 4. But this doesn't work
+> > either and now we are back on my initial statement -> the driver needs
+> > some attention.
+> 
+> Things always need attention :-)
+
+^^
+
+> I suspect that it's the use of the timing generator that is the issue.
+> The programming guide does recommend using it for all modes, so that
+> would be a sensible first step.
+
+But I tested it without the timing-generator too. Can you or Adam verify
+the timing-generator diable logic?
+
+> I will say that we had a number of issues getting this chip to do
+> anything, and it generally seemed happier on 2 or 3 lanes instead of
+> 4. Suffice to say that we abandoned trying to use it, despite some
+> assistance from ADI.
+
+Even more interessting, what is your alternative to this chip?
+
+Regards,
+  Marco

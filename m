@@ -2,95 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DDC58989F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA8D5898A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239225AbiHDHpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S239151AbiHDHrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239211AbiHDHpV (ORCPT
+        with ESMTP id S229884AbiHDHrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:45:21 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAE96156
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:45:20 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id h12so21259790ljg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 00:45:20 -0700 (PDT)
+        Thu, 4 Aug 2022 03:47:35 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AABF33A03
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:47:34 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id r186so17253101pgr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 00:47:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ororatech.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=dhLsCRYGUtuAwALD1KlxKTdhkhp8QSNYwM9InIv21hY=;
-        b=vhFbtTOGOksHyzcro9kH4cZHaorB7nfGcWpikpO7dNKwncnTRw1+ByiMFJe/2elMHX
-         b7OFjEv9TqgTOdb2zsflnf724l7IR7GO9J3muH/4h9jAjKaDV06uAda+3eRlck9Jm8fU
-         N1FdUO8DhuA0L5atc+KdjD8fiwIjd10nsD5xvo8yOopR+hvLU+gT8/ZsGbBGbSPQGPkR
-         kFaHhPAqmEtHB61cFq/nc59DDMptgPmfVJayemcGQqG1wEx9CUFQBwl1NCvkklilW4zn
-         pPID1KoWR/K7YAtLuEiitRb61GcgIiFrb7XQ5x7X9gM+xOVBccR96aiQBOxUOmkOmO+D
-         DqLQ==
+        d=gmail.com; s=20210112;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc;
+        bh=7tcCc1HXDiltKOsKG0LhJndyX0Ozk+UGCrcm5eA/Ky8=;
+        b=U8X78CLZM79QXisWFnZ5405VtyFR7FqLFDhV7QPrLomfUmf+ZqotwUmc0OXuCuJf4E
+         xFRTLHES1yT4ERdCZd3arOQvJn0blUbJ991OM6O3H+PsYOZz/EEi/4i8JO3kL5+pvkd3
+         NapP8iStNpMSCvst7rN5yfWfCNfhOxMe8O7Q8ls5Tev3yXCeg6IgI5tDBNce5giFsFpT
+         xdKYCIMRGW4Y4ZF/bf2sZi6V9q1TIqaYICy+u+iI2Z7reVH8+z7jAyyrL9QHI/O5guLS
+         lrNPO66eCxGxN7KNtVHiHZoP6i8FFde+CpkDBas9GXhaigqx4zEnOz+83RMA+eRwLPAT
+         hEew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=dhLsCRYGUtuAwALD1KlxKTdhkhp8QSNYwM9InIv21hY=;
-        b=zJl2Zq7wLf0dqpqKI+Z7ufyeib2fiCuaklQtjGFtyo2Mf3P2PI9UNvYRxlXLNToCFU
-         YzX341R+riqYVVFwscL6iOEXFyf/0L7TuQAA4lUCKr+A78OFndKdYblnW/rl1UpRrz1t
-         L/Hr/xN7esyaAGCpYK1g2pfnyG4kEmTrIg7B7GjsUZaZs0SyiFqzEwe26H5AiinRLook
-         dhF2UxSqhbN5q1t0ruJNuuypaGX0o6TAF3ExaynhGYjFOzoR2esiYFg7lNv78fKWSKuZ
-         pqOecP1As42JtAtKoz98mOxCuPKb4IOLxMtYKlhwU3o/pYEXBvdV6WWqmjsUYsRWGCXo
-         yfVw==
-X-Gm-Message-State: ACgBeo3iLf6vIBpEUoiT+tiDmdodu3HJW5Bs2puWtgKXi9fjL9YexL3d
-        cKus63upEUIt5/gl2luMFzwf3mnHPzlshAMF3Z9aLA==
-X-Google-Smtp-Source: AA6agR5Sj3szcvbsmwN7u+7x18QMzCdlRlPvPZm74RpikcBlNUt3W+A0c8kDn0SglEOtyhPijnOp/MbeyjstLRROdpA=
-X-Received: by 2002:a2e:9e55:0:b0:25d:e795:d852 with SMTP id
- g21-20020a2e9e55000000b0025de795d852mr191846ljk.367.1659599118481; Thu, 04
- Aug 2022 00:45:18 -0700 (PDT)
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc;
+        bh=7tcCc1HXDiltKOsKG0LhJndyX0Ozk+UGCrcm5eA/Ky8=;
+        b=uOe2tpaCH5WBAQ1/0qxZvVs8+EmDBZefdTdsRKBJn6MOKlJIqohIN4nz+JBcBT0x2k
+         bTpD3GegUQpkZDpWh1TwerF3YCSROZ0AlzfnL3Lh73kUj1pjjm2RWUwtIMYS9RlNCr5R
+         kV6sk5xHlhMIp5jIqHaREOsTLVeKC3zCzqktHPS0KllAuJLVxe4ju/5nBthe39/Z+lUj
+         48IVsK7OO8g3kOxQeCzLpPkoDpDzth3nAFQ34F1gQcJAtZrEP3+IRaPfz37coAVxN/bK
+         5GccAhq2G79i1OZ4veESO+xMrW9dhlu3NFCwx0mk5s4BEHun4n0OwGdzZUCDwjkx57xq
+         Ylwg==
+X-Gm-Message-State: ACgBeo3yGxo99Fw6R1bDKDKTNfFyfIl++E3C3B5QfD/7GjHr+BSGUTmo
+        ryym1pQ3j71XwML1jFg1OXpMf91Mq1c=
+X-Google-Smtp-Source: AA6agR4qD+uuXyUM5evi3dnEV0EKH6Ed9kcArUhkruGsOeyWsG5Qem0FmA1uzRrwqyRpMEXLpjr8OQ==
+X-Received: by 2002:a63:e4f:0:b0:41a:9472:eca0 with SMTP id 15-20020a630e4f000000b0041a9472eca0mr617331pgo.623.1659599253624;
+        Thu, 04 Aug 2022 00:47:33 -0700 (PDT)
+Received: from haolee.io ([2600:3c01::f03c:91ff:fe02:b162])
+        by smtp.gmail.com with ESMTPSA id y18-20020a170902b49200b0016bdcb8fbcdsm205697plr.47.2022.08.04.00.47.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 00:47:32 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 07:47:30 +0000
+From:   Hao Lee <haolee.swjtu@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     david@redhat.com, yang.shi@linux.alibaba.com, hannes@cmpxchg.org,
+        haolee.swjtu@gmail.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] mm: add DEVICE_ZONE to FOR_ALL_ZONES
+Message-ID: <20220804074730.GA3269@haolee.io>
 MIME-Version: 1.0
-References: <20220803185910.5jpufgziqsslnqtf@pengutronix.de>
- <20220804064803.63157-1-sebastian.wuerl@ororatech.com> <20220804070603.s3llvccpldtkejln@pengutronix.de>
-In-Reply-To: <20220804070603.s3llvccpldtkejln@pengutronix.de>
-From:   =?UTF-8?Q?Sebastian_W=C3=BCrl?= <sebastian.wuerl@ororatech.com>
-Date:   Thu, 4 Aug 2022 09:45:07 +0200
-Message-ID: <CA+KjhYWukGxZUMMch_vFe=TNYCD0-jmuwO2520oUVDPE2kE1Rw@mail.gmail.com>
-Subject: Re: [PATCH] can: mcp251x: Fix race condition on receive interrupt
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Christian Pellegrin <chripell@fsfe.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 9:06 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> Another optimization idea: Do we need to re-read the eflag1? "eflag" is
-> for error handling only and you're optimizing the good path.
+FOR_ALL_ZONES should be consistent with enum zone_type. Otherwise,
+__count_zid_vm_events have the potential to add count to wrong
+item when zid is ZONE_DEVICE.
 
-I'd argue if a new message entered mailbox 1, this also potentially
-changed the error state, so we need to read it.
+Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
+---
+ include/linux/vm_event_item.h | 9 ++++++++-
+ mm/vmstat.c                   | 9 ++++++++-
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
-Thanks a lot for your feedback! Will post v3 soon.
+diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
+index 7b2363388bfa..bcd57ab55413 100644
+--- a/include/linux/vm_event_item.h
++++ b/include/linux/vm_event_item.h
+@@ -20,7 +20,14 @@
+ #define HIGHMEM_ZONE(xx)
+ #endif
+ 
+-#define FOR_ALL_ZONES(xx) DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, HIGHMEM_ZONE(xx) xx##_MOVABLE
++#ifdef CONFIG_ZONE_DEVICE
++#define DEVICE_ZONE(xx) xx##_DEVICE
++#else
++#define DEVICE_ZONE(xx)
++#endif
++
++#define FOR_ALL_ZONES(xx) (DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
++	HIGHMEM_ZONE(xx) xx##_MOVABLE, DEVICE_ZONE(xx))
+ 
+ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
+ 		FOR_ALL_ZONES(PGALLOC),
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index 4057372745d0..5ccaeac44e61 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1167,8 +1167,15 @@ int fragmentation_index(struct zone *zone, unsigned int order)
+ #define TEXT_FOR_HIGHMEM(xx)
+ #endif
+ 
++#ifdef CONFIG_ZONE_DEVICE
++#define TEXT_FOR_DEVICE(xx) xx "_device",
++#else
++#define TEXT_FOR_DEVICE(xx)
++#endif
++
+ #define TEXTS_FOR_ZONES(xx) TEXT_FOR_DMA(xx) TEXT_FOR_DMA32(xx) xx "_normal", \
+-					TEXT_FOR_HIGHMEM(xx) xx "_movable",
++					TEXT_FOR_HIGHMEM(xx) xx "_movable", \
++					TEXT_FOR_DEVICE(xx)
+ 
+ const char * const vmstat_text[] = {
+ 	/* enum zone_stat_item counters */
+-- 
+2.35.1
 
-Also I'm sorry for spam in anyones inbox, I didn't get my mailing
-program to produce plain-text for the last mail.
-
-best,
-Sebastian

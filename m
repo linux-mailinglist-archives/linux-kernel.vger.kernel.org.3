@@ -2,138 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C477589787
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D32589789
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238454AbiHDFtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 01:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S238921AbiHDFur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 01:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238969AbiHDFt2 (ORCPT
+        with ESMTP id S238870AbiHDFun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 01:49:28 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2669161137
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:49:15 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220804054907epoutp0313f2fd234376f350bf6f2a492a4f8498~IDkPwC6Ka2599625996epoutp03m
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 05:49:07 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220804054907epoutp0313f2fd234376f350bf6f2a492a4f8498~IDkPwC6Ka2599625996epoutp03m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659592147;
-        bh=eEByWWlr1hq3Oo9gT1G5MAyMMOkHgVV4ti9vWCBEiA4=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=vL1kii8eIhTC5lqkWqbrCYDGv1FwaEuYUGuj2dx0L+4lONaVnx6Glc2L4eFBK6kbs
-         yUs3ikhWQRhFm4pyAsk7iv26fZkyuyidIxyfADkYyXLYcnv45dEw2WUcj8UQJt81Oi
-         EZ9E8YXhafzl+FG7ep0eXVWKAsFVYQt9sP6Oabgs=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220804054907epcas2p2848db7c14ee034955cb98b3a05929ef4~IDkPVsuuJ0802008020epcas2p2n;
-        Thu,  4 Aug 2022 05:49:07 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.70]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4LyyTZ5f9Mz4x9Q5; Thu,  4 Aug
-        2022 05:49:06 +0000 (GMT)
-X-AuditID: b6c32a47-5e1ff700000025aa-8f-62eb5dd2a3cc
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CB.BB.09642.2DD5BE26; Thu,  4 Aug 2022 14:49:06 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH v6 3/6] scsi: ufs: wb: Add explicit flush sysfs
- attribute
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <28b41877-2697-6bbb-066d-ee0f6e330565@acm.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220804054906epcms2p1f3b7f3dc8be225a96933121e77c6648f@epcms2p1>
-Date:   Thu, 04 Aug 2022 14:49:06 +0900
-X-CMS-MailID: 20220804054906epcms2p1f3b7f3dc8be225a96933121e77c6648f
+        Thu, 4 Aug 2022 01:50:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4371606B3
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:50:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659592241; x=1691128241;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MSgDUBJCyCfmrsSuMQCndywN6lvwJs941h14fgWBi2k=;
+  b=jPSPhuIPl+9NWD4J5rhoMdxSVi3BIqMEcIPpZgBn6MgL8xlCiqsP0iGd
+   3OP6+lWpkVszsPgsK/ETRvW0bYN5p/fTlymw6BfHSBPa9kE/+l/7m2Iu6
+   fJyPi9kgygy5AzwzFtD5kjV2SR9p7/sWvtpbPfeYaUlB74gXtB03gqcYn
+   aRLpv7x9KvGI3WQYnD5HMpJC29J7Br3uvj6mhY516qU0tc5MWAh6gbUY8
+   pwiwKctpsGufmqoT7b918j7yxv9caoVNxRxZ2zTNsBVgHX8qrHSBZXn27
+   sGV+SODjHsJRYFBa0M1gN3Xq2ac7RirwF7vR/b7DAKETs8woB2qXw3sil
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="272891062"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="272891062"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 22:50:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="553592120"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 03 Aug 2022 22:50:40 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJTkl-000I49-2D;
+        Thu, 04 Aug 2022 05:50:39 +0000
+Date:   Thu, 04 Aug 2022 13:50:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:sched/core] BUILD SUCCESS
+ 18c31c9711a90b48a77b78afb65012d9feec444c
+Message-ID: <62eb5e15.facRBn7sd527UZh5%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOJsWRmVeSWpSXmKPExsWy7bCmqe6l2NdJBhev61qcfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Vi2oefzBYvD2laLLqxjcni8q45bBbd13ewWSw//o/JYunWm4wO3B6Xr3h7
-        LN7zksljwqIDjB4tJ/ezeHxf38Hm8fHpLRaPvi2rGD0+b5LzaD/QzRTAGZVtk5GamJJapJCa
-        l5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0rJJCWWJOKVAoILG4WEnf
-        zqYov7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10vL7XEytDAwMgUqDAhO2Pzhhb2gpkcFUe7
-        pjM2MF5h62Lk4JAQMJG4uEusi5GLQ0hgB6PEpeXnmEHivAKCEn93CHcxcnIICwRJbFyzmxnE
-        FhJQkji3ZhYjSImwgIHErV5zkDCbgJ7EzyUz2EBsEYFGFon/G9JAbAkBXokZ7U9ZIGxpie3L
-        tzKC2JwC1hJXd71gg4hrSPxY1ssMYYtK3Fz9lh3Gfn9sPiOELSLReu8sVI2gxIOfu6HikhKH
-        Dn2F+iRfYsOBQIhwjcTb5QegSvQlrnVsBDuBV8BXYumy9awgNouAqsSep99YIWpcJC70/gY7
-        h1lAXmL72zngQGAW0JRYv0sfYrqyxJFbLDBPNWz8zY7OZhbgk+g4/BcuvmPeEyaIVjWJRU1G
-        EGEZia+H57NPYFSahQjkWUjWzkJYu4CReRWjWGpBcW56arFRgTE8WpPzczcxglOslvsOxhlv
-        P+gdYmTiYDzEKMHBrCTCu8LydZIQb0piZVVqUX58UWlOavEhRlOghycyS4km5wOTfF5JvKGJ
-        pYGJmZmhuZGpgbmSOK9XyoZEIYH0xJLU7NTUgtQimD4mDk6pBiYXr+c/hAwP+z3YFsGxTv39
-        Yy6vr99exv0z0p12bNufhCnzq0W0dzo0zN6yyF1LVevgBunymoPGR37dqZyhwB49Nbtm7h/J
-        opA3ykuYJ/5a+DOJ9Xvx0sx/PnX2WhbTD5zSU7lmsFzhmZqE35177lFSXaeVXnSmX6xVaG3t
-        3V1y7GGQ3nTf7f80E0PcjRI9PGzlJALibML3tP90zIowODFD/mCRTc4z1X3sd0Lvnd0d995h
-        T+TtSWV8on9XtfmHqwmXzfyvIlN3j6u04/6Ph2fWn7oo6zr9WKJjotMTtZQlvOtE9xULXjDt
-        rbVyvpjE8OtAp+l8Y5ELbU09bMLPLuodfKaxcVZ1x/IpfjrnWpVYijMSDbWYi4oTAfOz8no6
-        BAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce
-References: <28b41877-2697-6bbb-066d-ee0f6e330565@acm.org>
-        <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2>
-        <20220802080740epcms2p3893fd9cfb765d4addbbfe58c68cf5af3@epcms2p3>
-        <CGME20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p1>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On 8/2/22 01:07, Jinyoung CHOI wrote:
->> +What:		/sys/bus/platform/drivers/ufshcd/*/wb_buf_flush_en
->> +What:		/sys/bus/platform/devices/*.ufs/wb_buf_flush_en
->> +Date:		July 2022
->> +Contact:	Jinyoung Choi <j-young.choi@samsung.com>
->> +Description:	This entry shows the status of WriteBooster buffer flushing
->
->Can we rename this attribute into something that has a word order that 
->is grammatically correct, e.g. enable_wb_buf_flush?
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+branch HEAD: 18c31c9711a90b48a77b78afb65012d9feec444c  sched/fair: Make per-cpu cpumasks static
 
-OK, I will replace it.
-Instead, When the list is printed through "ls",
-it may be difficult to check because the prefix is different.
+elapsed time: 718m
 
->> +		and it can be used to allow or disallow the flushing.
->> +		If the flushing is allowed, the device executes the flush
->> +		operation when the command queue is empty.
->
->The attribute has "enabled" in its name while the above text uses the 
->verb "allowed". Consider changing "allowed" into "enabled". Please also 
->change "If the flushing" into "If flushing".
->
->Thanks,
->
->Bart
+configs tested: 80
+configs skipped: 2
 
-OK, I will apply next patch.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Warm Regards,
-Jinyoung.
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                                defconfig
+m68k                             allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                        randconfig-a002
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                           allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+x86_64                        randconfig-a006
+i386                          randconfig-a012
+i386                          randconfig-a016
+arm                                 defconfig
+i386                          randconfig-a001
+powerpc                           allnoconfig
+i386                          randconfig-a003
+mips                             allyesconfig
+powerpc                          allmodconfig
+i386                          randconfig-a005
+i386                             allyesconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+sh                               allmodconfig
+arc                  randconfig-r043-20220803
+riscv                randconfig-r042-20220803
+s390                 randconfig-r044-20220803
+ia64                             allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+xtensa                         virt_defconfig
+arm                        multi_v7_defconfig
+sh                          rsk7264_defconfig
+loongarch                         allnoconfig
+arm                            qcom_defconfig
+um                                  defconfig
+sh                          r7785rp_defconfig
+sh                                  defconfig
+mips                 decstation_r4k_defconfig
+sh                        sh7757lcr_defconfig
+arc                  randconfig-r043-20220804
+loongarch                           defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                          randconfig-c001
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+i386                          randconfig-a013
+x86_64                        randconfig-a005
+x86_64                        randconfig-a014
+i386                          randconfig-a015
+i386                          randconfig-a011
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+hexagon              randconfig-r041-20220803
+hexagon              randconfig-r045-20220803
+mips                           rs90_defconfig
+powerpc                      obs600_defconfig
+x86_64                        randconfig-k001
+mips                          malta_defconfig
+arm                       cns3420vb_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

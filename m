@@ -2,166 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DED589C9E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC070589CA8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239764AbiHDN1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 09:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S239808AbiHDN2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 09:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239785AbiHDN1e (ORCPT
+        with ESMTP id S234596AbiHDN2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 09:27:34 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2069.outbound.protection.outlook.com [40.107.223.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893B91F2F2
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:27:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MWTGTKAZp+xxv6txUEBRA7Ra6gREAIu7pXUbXN5KzCiDCdPwP/JSO7kZWud6WZUtUGG8Zd9RZmZKPZ8P72XQhTRzSZ+aawe+AS2y41cKVpPOzSUQB7lIGHjtGKGteaMm3x2+9lfUNKV4cNNwEgSTHkJnEoHUTJZBZhZYUH5m/Jo4uZuT+aZVdOOM5sU+LouXRy1hRy/1EtuypovAyOY2+2KvNrttKbjkKHaYToqd/8ETcHPrV5zkLVyRrnOwOjpnvSIFvWSVnFSzrJAoab80T+MSyuHpMNfH5B9r+EaaT/xpdPaW8ZI919ep6Lvx2+4S0QMRRRLHoShK2OD7zv/pMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cacTPxwas0Ejiku4Lp+559f0Ljr2+TwkVkmPkF6Wd9Y=;
- b=PUKvg2wDagIy0IqKuHj/k/pZH6IO0joZxCfSM/vwRNlWknqfFcewTkici7AaTCi1ZiimrHJSXRzTd90xmmRhRp/sIiutE/mcSY3N/T6wf4rcVPnWqtT3FFu7MtUta09G9bMgCNlOQgv/1L1yNZrtoCxhXHLY6Lnbv76XLuph0bEkKjPao0T1TRshMMKIwMUbg6RqxKPHQ5oZx7Mlkc4y9ea+880iZq0OlPAzolXFkzJNSFeDfXAzAyUu6dVjpa2Nwfv/DtD2gDr2T2Kv4vU3Cdf+XpVEjyyfTaJqI22ZqJbrDzP6WoX00oE/avvytYyE1v8Gh/Qr+O8SH5grXIdBPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cacTPxwas0Ejiku4Lp+559f0Ljr2+TwkVkmPkF6Wd9Y=;
- b=2Pdlv8a5NN5w09CRU8AXAyF0x8xmTEd7tvW2lXmhATFjF+gHpt7Ofe+EGvggqMzS/dGEjVph0fL9V70Z1AVnOWYAY+HV12IHqFMkhBNAwTKqxZXbUBfnNDA9r0AAdL5eLgHrW0YVvc67om0xdMRNgmRjauPMHvot9b3CmCC3YkM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by CH2PR12MB4938.namprd12.prod.outlook.com (2603:10b6:610:34::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Thu, 4 Aug
- 2022 13:27:31 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::6999:13c9:d124:418a]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::6999:13c9:d124:418a%8]) with mapi id 15.20.5504.015; Thu, 4 Aug 2022
- 13:27:31 +0000
-Message-ID: <938ca191-074b-468c-d44d-0be795fb0700@amd.com>
-Date:   Thu, 4 Aug 2022 09:27:27 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/amd/display: restore plane with no modifiers code.
-Content-Language: en-US
-To:     Dave Airlie <airlied@redhat.com>, torvalds@linux-foundation.org
-Cc:     Rodrigo.Siqueira@amd.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220804055036.691670-1-airlied@redhat.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20220804055036.691670-1-airlied@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT3PR01CA0102.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:85::21) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Thu, 4 Aug 2022 09:28:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94FFE167D0
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:28:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659619719;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8mI2K9LPqJgaRLMP248bErw8NzNZESg05xXXJKMcom4=;
+        b=RddcYTyxUCc6hS/3fXgZ4g8hFpijdk8SE1sJuHX5xhvo4/lFxwNp9P3+IRWRSO9el0sLQO
+        F5Wd7hr9VNnkUQEaArRkaLyS8AaSqYTeQXVJ1XTn5BpdnJMXSmfeIkvmKjf3wP+c0UE3jg
+        TbjJVoWVbX6iWavyuUNcxYvrjWYtXnI=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-211-un5XmVksOrGZzA0bpIU0ng-1; Thu, 04 Aug 2022 09:28:36 -0400
+X-MC-Unique: un5XmVksOrGZzA0bpIU0ng-1
+Received: by mail-wr1-f70.google.com with SMTP id t12-20020adfba4c000000b0021e7440666bso4863496wrg.22
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 06:28:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=8mI2K9LPqJgaRLMP248bErw8NzNZESg05xXXJKMcom4=;
+        b=DDOlXfoqoOUPkwfxPP2zQYNW3dOSz6BSDbM7j++3WvF+pIg1P4iSYTwkqyTwMDbZbt
+         +DAp9zU4t0+8YgvJINYP1xqUq0kjL+C5hGFJPxL3htZx9cnRQ3YiTXSSx/7gxZa7Zqaw
+         0+A9P5maeT23qeDh3J0sx2A0H7ez04UKUnzwb8+PpPp5dK5nMUakpkD64tFfEFl9XttT
+         DXhgpSPJAOfkSBnWtfXG9gZMxl8d3jtGR8W9joZ7zHQeBT6hRBoz0p2R1smUJf8T97LM
+         kgn2ZGK6IkezWyRDpOaJVov1N8XOMgPCU0+797A0s+3uY/KzDnCOGAamOcspt7iw2NNV
+         uFzg==
+X-Gm-Message-State: ACgBeo0UKGYVMa5ENHKVMZUH4AQ6VynwQVLgG4VeFqrrQ607Jl5PGE80
+        94WRgiq+TxZ83NY5TygyzRdYmmJ+C0I3kBQbWp+1sbpiKx4T1QsiGgKNgxBcCnDkTvVTSn4KTo2
+        lk6NAUZ2OXzz+Fmpvb0iywrbljpYIFXJENQ3du+3YfdOgigb32TF89EUZRyUSHvxKcQSwoaTS7L
+        ta
+X-Received: by 2002:a5d:50c6:0:b0:220:7a2a:bbd1 with SMTP id f6-20020a5d50c6000000b002207a2abbd1mr1428200wrt.471.1659619714354;
+        Thu, 04 Aug 2022 06:28:34 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4+8brnDHpYm4si+9l3eNr2bcRsITNVeDi/VDvPQkPJPDf5a2PIGRTwY4bQ1YtD2eHppADynw==
+X-Received: by 2002:a5d:50c6:0:b0:220:7a2a:bbd1 with SMTP id f6-20020a5d50c6000000b002207a2abbd1mr1428182wrt.471.1659619714056;
+        Thu, 04 Aug 2022 06:28:34 -0700 (PDT)
+Received: from goa-sendmail ([93.56.169.144])
+        by smtp.gmail.com with ESMTPSA id q3-20020a056000136300b0021b956da1dcsm1142942wrz.113.2022.08.04.06.28.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 06:28:33 -0700 (PDT)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Dave Young <ruyang@redhat.com>, Xiaoying Yan <yiyan@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>, stable@vger.kernel.org
+Subject: [PATCH] KVM: x86: revalidate steal time cache if MSR value changes
+Date:   Thu,  4 Aug 2022 15:28:32 +0200
+Message-Id: <20220804132832.420648-1-pbonzini@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 68f3514f-4545-4b87-9d70-08da761d154f
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4938:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dUOVjJ7PPAsKKrJIqdM+QktupWQRJeNnuOXVb+Xbl3wG8u0fyd5YaAxL3T1vD1s77XUTy20zrMAK/Syc97rVaZ8ZkwYZ5s+T3ruNuXktEe57vt/kHJt/QjADjCgUXXSvib5SC0FCj0gEonPukeSngZvMSvrzmX2cTmjXAay6xVcYMK/eKO1OADAi/sz05Mhfil+f4ZrY7diDaD6t39R0M6DnN5jwq296Bhp5v2ztQjTPoZ8HwOJbSDXEBfVXlV/7Le7/cNjqGEAPL7LIpUu3vg9ZMA5dDGFxMm79WguWYf+Cj/+xPBovW7qEYSiPvhyGNNMS+1LGaLPFQR8d1pN8kO/BVOz5YJ81J/pVxitRPOOQPrgMKSZhYobn87GmcnYfUJILXxJNONtI5Cj0fGvDD53WEedmwwSo+rK3Gcd9GQEji2nIMHW8tQbWcNWii8UZfsGH2uSCC04AGHyKH4nMkkZLzmBonHs5Ad9pyvzl+WouJGAepHD4aT3mQxElkPtD74KXW5TW8blJnCSMxrw5cFu7T6v8yalAUvpJ2TrUsgy2LLeVd2sSsMu6n53TPp+8zzNk8Onfw3hfbwnawJPLjxnEVP1dxr9rSKusNDzwisfDJC3uaUYfNl8H6ilZ6EHSa9CTB8bjEyMeANG7lv1g8l0DCRu+YsAs4HOWfz/A+cWFUJBDsvUP8x7nJoXqNRj6Shc5VgJN6oJszef03Fef3Lb+9wlBEKZho0v818486jOzbQt/YCR9KgTsvAXdrwpdof42R9ykB45+I3vLEUDCVeFBpbYhbzcIdsekunTLpYA2PrRx4occ6njRsPRVIp51EzkdniCKjfmfUx7xI3cvWg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(396003)(366004)(39860400002)(6486002)(36756003)(31686004)(66556008)(4326008)(8676002)(66476007)(83380400001)(8936002)(31696002)(478600001)(5660300002)(66946007)(186003)(44832011)(86362001)(6666004)(41300700001)(2906002)(316002)(53546011)(38100700002)(6506007)(6512007)(2616005)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aklkUTV0Um1EZFd2R2dXaTNGUkN4ekdYNUNpaVhoZ2x0ZU4vUVRrU081WTBn?=
- =?utf-8?B?VEVsVEVqNzJ4bEZTSmhWOVYyZFdMejl3YXNKLzNlWXNnZndUTi9TRHBDZU9o?=
- =?utf-8?B?VUtxclFqV1B5UmFmNVdUNXBPNm1GeGgySU5sVllycnYyVW05RTVzc2taa0Nj?=
- =?utf-8?B?RjFuWlB2MzI4RElSTE1SekNLTE50OUdPMUxHK3liamRLUFRsWFRtVnpVRU9W?=
- =?utf-8?B?ZUdweTQ1QzQ1Z3NLWVZ1ZDQ4MmIvTzN3M0hrR2MyWkxhQmpjbWNqSmtXT0F1?=
- =?utf-8?B?aTY3YTZ5ekxBeEFWSlJsRDA0dUxXNVNkV201NDJyb3BwNUEyYkwxMW15WSs5?=
- =?utf-8?B?ZWhSdVJHZE96WHBMVTE3bDdTWldqdnlyVUl4M2hrYm4yQU91NVFMSk9SVVdT?=
- =?utf-8?B?V1hyWHA3bGJUcnRnbms1MC9aTi83REhyS3Y3RFA0eHpvQWlkdjhPcVpIRlZQ?=
- =?utf-8?B?dmVoY2dxZlVDZTNSQzhDQTVxWFZZT0FwOXVEVmNxUVRtcDlxTERxUjNWRXNR?=
- =?utf-8?B?NkJxR3EwYXRwNXlXNGJLTWp4dVQxK2dLbTZYbjZzRFJnOVQwallXZ3FYdGsy?=
- =?utf-8?B?K215TmxwcElIRmhvS3NWUW9QRWhPR0hlc3A5NWx5YnBBdW1vK1FCYkI3cVZL?=
- =?utf-8?B?RFJvSWtyK0xQNElkaUlRbEJnQlZTdjYveERiSFRieVBhbENpMGIvM2lWRFdH?=
- =?utf-8?B?U3UweE4vK2dBYzNSQm94M1dvN1N3eWRzTDRzZk1KMVZqM3h3RFd4WWNTNDV3?=
- =?utf-8?B?NWdCSzlJMFc1bUE2VWpnTHo3dzdvangwQ2RjdktuY2I1ejBuR3p2U0tud0xy?=
- =?utf-8?B?SlowQ0ZRbFhsLzNtNmI3Tjlnbm8rQkZGbzZrR1hiUFFGZWNab2t4d2UyZGJi?=
- =?utf-8?B?bllnNnk3SGVncklWTEh3NERmTTVaL1EvTVRFa0pyQzJHdVN0WU1qSG1Gbmoz?=
- =?utf-8?B?N3JzNUUzczA1NlhpL0lkMnNjaTQrRjlMclh5aUlpejI0UEZseUN3TjVCZjQ5?=
- =?utf-8?B?aXN6WjVtdHMzUnQvb3ZVcktsaE52NWJUd0V2OUQ3c25ESlFLYjhyVFpxNWwz?=
- =?utf-8?B?RHgyTTFuWmx6Mksxc0NOTzF0ZkpidUdEWnA5bUNBSFdMV0tiYW9kWWxqby8x?=
- =?utf-8?B?ckYzeTdScFAwUWtzNzRuZVpoWkNGMGxmY0RqZmFtdncwSGpOVHk5aFVKbUdF?=
- =?utf-8?B?Y0dzQmM5VG81VU1PL0pHQzdJcEpsOVByU2tLTis0c2w4NmRsaUtrQTh4by9r?=
- =?utf-8?B?M1B1NFhVTm1naDZPdnl3bFhLMytaQUU1dzdaNjVOUEtDcjhFL1RyTlREZE5T?=
- =?utf-8?B?dWE2VGRtSi9LaXZORmxQb3daN2xjRGNPbFhtZDVOMkhWT3A0MzY0dFpSWGpN?=
- =?utf-8?B?VGpzRlY3T2kvNi9iMWhoMHdvWklsbXhnV0lGeW4zMmdGYndjQnl4b3N1NWNw?=
- =?utf-8?B?Wk9KeitNM1FzVElJNk5jQTd4UmpOUUdyYTdtZ1FhWCtDQlQ2VTZvM2dsMnRP?=
- =?utf-8?B?dTV5NzNiRDFQM2R4c00yUlF0RHlDU1RDYVI3ekdKb0NubmNpMWNiUklWdXBE?=
- =?utf-8?B?MVIxaE50UzlYdmtlRm8rQkR4Q2FHZXM0Yjk4UmVibEljcFVuTTM5cWZjeHNu?=
- =?utf-8?B?YVF5c0lrUnhWZ2ZYNWEvU3J2Vko5K1V2WGJTS0NFemVieVQrMnVnRTljaEFM?=
- =?utf-8?B?aDJDUmY5Yzd0b1JTdk1mVEkwbzR1T3VHUXRuc1JoTnhXT21sOElONVVEK2pP?=
- =?utf-8?B?eGd5aDRQQXBwdlFMUzJXeUc2aFVDSFBuVzRmaTQ0b2R1WmxRU2luakVvWElh?=
- =?utf-8?B?RUd6ck5YWUJYdGhrSncxLzJweHp0QWkvcG50amVISjRQRkRsMWNVMUgvdHdo?=
- =?utf-8?B?cnppbWpmQzR0Y29PWUxMd0Ywd21wTkN2cVdjc1Q1aG4xMTJ6clBtNWVQYnpU?=
- =?utf-8?B?SjdEbm1wRFYybFlTVmhTZkpRbWVyU0RodUg4T2VqMkdrUU0wMkRPVG80eVZY?=
- =?utf-8?B?SXphb3Z5bVpsMzJoNVlhZUdwSWdDeTY5RmRtWHoyYlV5T1ZnWis4VGpRVmdC?=
- =?utf-8?B?Mkt0YnBTUXRvTWZIMHhEMnpmeXdaRkRJYWZkRFIydUJpRVhNTnVHanI1U1p6?=
- =?utf-8?Q?bMdkPJ5v4MhFw3NdBOGNuyIUj?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68f3514f-4545-4b87-9d70-08da761d154f
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2022 13:27:31.2045
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NFmjfJSTsyAe/YirrfYxgCRUpEv6amalmUnlHh1WuSNZmytWaiOnP79iy6EuyT2SXfcdOPRoZ5wn7VQ2DHcbRQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4938
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-04 01:50, Dave Airlie wrote:
-> When this file was split in
-> 
-> 5d945cbcd4b16a29d6470a80dfb19738f9a4319f
-> Author: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-> Date:   Wed Jul 20 15:31:42 2022 -0400
-> 
-> drm/amd/display: Create a file dedicated to planes
-> 
-> This chunk seemed to get dropped. Linus noticed on this
-> rx580 and I've reproduced on FIJI which makes sense as these
-> are pre-modifier GPUs.
-> 
-> With this applied, I get gdm back.
-> 
-> Fixes: 5d945cbcd4b1 ("drm/amd/display: Create a file dedicated to planes")
-> Signed-off-by: Dave Airlie <airlied@redhat.com>
+Commit 7e2175ebd695 ("KVM: x86: Fix recording of guest steal time
+/ preempted status", 2021-11-11) open coded the previous call to
+kvm_map_gfn, but in doing so it dropped the comparison between the cached
+guest physical address and the one in the MSR.  This cause an incorrect
+cache hit if the guest modifies the steal time address while the memslots
+remain the same.  This can happen with kexec, in which case the steal
+time data is written at the address used by the old kernel instead of
+the old one.
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+While at it, rename the variable from gfn to gpa since it is a plain
+physical address and not a right-shifted one.
 
-Harry
+Reported-by: Dave Young <ruyang@redhat.com>
+Reported-by: Xiaoying Yan  <yiyan@redhat.com>
+Analyzed-by: Dr. David Alan Gilbert <dgilbert@redhat.com>
+Cc: David Woodhouse <dwmw@amazon.co.uk>
+Cc: stable@vger.kernel.org
+Fixes: 7e2175ebd695 ("KVM: x86: Fix recording of guest steal time / preempted status")
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ arch/x86/kvm/x86.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> ---
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-> index 8cd25b2ea0dc..b841b8b0a9d8 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-> @@ -1591,6 +1591,9 @@ int amdgpu_dm_plane_init(struct amdgpu_display_manager *dm,
->  	if (res)
->  		return res;
->  
-> +	if (modifiers == NULL)
-> +		adev_to_drm(dm->adev)->mode_config.fb_modifiers_not_supported = true;
-> +
->  	res = drm_universal_plane_init(adev_to_drm(dm->adev), plane, possible_crtcs,
->  				       &dm_plane_funcs, formats, num_formats,
->  				       modifiers, plane->type, NULL);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e5fa335a4ea7..36dcf18b04bf 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3380,6 +3380,7 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
+ 	struct gfn_to_hva_cache *ghc = &vcpu->arch.st.cache;
+ 	struct kvm_steal_time __user *st;
+ 	struct kvm_memslots *slots;
++	gpa_t gpa = vcpu->arch.st.msr_val & KVM_STEAL_VALID_BITS;
+ 	u64 steal;
+ 	u32 version;
+ 
+@@ -3397,13 +3398,12 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
+ 	slots = kvm_memslots(vcpu->kvm);
+ 
+ 	if (unlikely(slots->generation != ghc->generation ||
++		     gpa != ghc->gpa ||
+ 		     kvm_is_error_hva(ghc->hva) || !ghc->memslot)) {
+-		gfn_t gfn = vcpu->arch.st.msr_val & KVM_STEAL_VALID_BITS;
+-
+ 		/* We rely on the fact that it fits in a single page. */
+ 		BUILD_BUG_ON((sizeof(*st) - 1) & KVM_STEAL_VALID_BITS);
+ 
+-		if (kvm_gfn_to_hva_cache_init(vcpu->kvm, ghc, gfn, sizeof(*st)) ||
++		if (kvm_gfn_to_hva_cache_init(vcpu->kvm, ghc, gpa, sizeof(*st)) ||
+ 		    kvm_is_error_hva(ghc->hva) || !ghc->memslot)
+ 			return;
+ 	}
+-- 
+2.37.1
 

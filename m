@@ -2,267 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF7C589DE7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 16:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 823C2589DE5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 16:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240073AbiHDOwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 10:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
+        id S240057AbiHDOwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 10:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240061AbiHDOwJ (ORCPT
+        with ESMTP id S234497AbiHDOwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 10:52:09 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB5F2613B
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 07:52:07 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id gb36so11751711ejc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 07:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BWfvbI/fCQxffa07xrH5Bhn2ICjeR5HGQt2MGWBy+fg=;
-        b=WzTrf9lbqKCko1Ohdl7g6gYcc1+ksnl0iyuqBbyzdeXMm3kBSFu/bf5X8iSScnV1X/
-         WCejVUwAXVtjzDQXUyrOUvLIH8by18+X98DTdZH2GXlm6S178Sd3QUaJ9cVbfr/eQIkb
-         /jVRYJ2OR9h9YmhtibjX/Sd+txsGUFoAaKvzfZNQgkJsgDi9jJdjICHvTjCnvCAaKfrJ
-         RjNZHm/zVBCnsHAmFSAFRuXmbbBBY98dNgMTdUqtO2CYfdgVC/vd0ChQK+QhuswXHD9r
-         0B8rXxJiRUBj8qkgxHrQfrJOTNJh6QlMAdtAP3AD9Slv+iW0QUPtrtvSahpRRrsD8AuU
-         AOQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BWfvbI/fCQxffa07xrH5Bhn2ICjeR5HGQt2MGWBy+fg=;
-        b=DBiBWEmiPawWd696bVJCETg/oUi+WQlDHAKtTGDNUwwD/Ju0233Dpz+IpAhkBhvIJS
-         FmnKIxXfHDDMZw/Q8CX5DYYNPtR2duCgnOd6phhKm4djfPXY51q47QkZbk+N1+HOf2Qv
-         9A092Bc5PCI2WPY3K4UmmTK7VhOZ/JGhcW20rQnASOypdbGdqWpSFJBeXlRzRJ7fiXZH
-         yzyD8F+/wTFjcNg2mY09+DQ8QK701Dadwlh23yWGx++L7ClyD1bLYLgn+JrEKAEPymIf
-         FdqAZ61FlaqFV2itk3MVnbv0G3EZDQaHCSk4G8lM+TTgRE16UC60RbSX//oBbcDQEusJ
-         Khvg==
-X-Gm-Message-State: ACgBeo0k3xwNuYOnQJ232rKURcUwPypEetLHkT4yt/muJcwf+uIw55LB
-        U7/Vxg9070j0c4kv6h+lH5fiusXYexYk3k5CIvj1lw==
-X-Google-Smtp-Source: AA6agR6dicmwfDEC/wLJzQTmUC5hwNo5Ku3TMvN+XWyi0mIjTYltdiGX2XrBVVs+SBHlPOLwnMoNtu9g/OACV35QSwk=
-X-Received: by 2002:a17:907:c07:b0:730:b91b:2cab with SMTP id
- ga7-20020a1709070c0700b00730b91b2cabmr1762872ejc.294.1659624725670; Thu, 04
- Aug 2022 07:52:05 -0700 (PDT)
+        Thu, 4 Aug 2022 10:52:04 -0400
+Received: from na01-obe.outbound.protection.outlook.com (unknown [52.101.56.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DEB2A253;
+        Thu,  4 Aug 2022 07:52:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zq2JWailuv3Ia+A7vpefhy2SrxCUuFBjLT1IRuLAxy6Eqou0DJCsihroPX4+U75YRfqQUlMbSfm5j/Byrwc3e392XwbeXu3KO5haQkF1axNVl52RCTJD18QtEeXYQhwoj9d7qtRaCFBmvllWNd8AvKHqv//r9KkML0vFvkge0pFYlynHy4XZCOXoJj6YWyUegBLu1M4nYIL5Mmxsr6VG75cyej7RQgC6eXNMv9m7yQYy9hb3bDMFYLVGosO/FLqblhgYMwLPCl/ZK/Mf3p2biQ0L+DRAYfYbp1Kb+9sEO6vWIqfBKP7e4pGLFQ0+EgF0YRrFkWMAg2ljLuOtadyoGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=07n5JxT8vxSTRjtD8fVRsvcWg6Hp6qsZpwoyCPbbmSI=;
+ b=mZnkf9Z9nhJ1g2B2KAYIiCzamR2/lchUYhZR66isnbuUz2EDvjr3SwpJv5geNnIkFqJJKeh9Nnr+siw8L6fMQ9qxy5iT5EzArxy+0pzv/5zFmGOV3vGwdtUKdjT93jw8fYkyqqq54cIDAp5VQdzPXLs7LUaVKTTWOVPlv3i69Zkde77+PVdk0mnOGPZ6nwZ8tPuwLIx4PiEXUTIv/YHOUDVs8dlwIe/l5fbe/MNysw74CISaY/T91uba5S4dXOJSGEg2PLvr5NHu8wYt1rCBmXoBGjIOaiFBHLuXqSVBEkT96SwF1xYS8n82wyY+LPR3DpVJJacZuE+vZE35CahtDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=07n5JxT8vxSTRjtD8fVRsvcWg6Hp6qsZpwoyCPbbmSI=;
+ b=UZ3/1hDqDfVPLTl9nklzK8dJNfKmFqQUA1aEqFYh+6UJzBSZ+0pOVmCdbVTefNYWD/s98zZgSMpWocxkD88C2s6w72LJPUZ8K71hTii936kxF9/g3k4DRRVUPAI0qtfH5FzOmlkPUok7sDMIcSvECO6c3wp/P51Bch0mVGGEmPY=
+Received: from PH0PR21MB3025.namprd21.prod.outlook.com (2603:10b6:510:d2::21)
+ by PH7PR21MB3356.namprd21.prod.outlook.com (2603:10b6:510:1dc::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.12; Thu, 4 Aug
+ 2022 14:52:00 +0000
+Received: from PH0PR21MB3025.namprd21.prod.outlook.com
+ ([fe80::29af:3ad1:b654:63b8]) by PH0PR21MB3025.namprd21.prod.outlook.com
+ ([fe80::29af:3ad1:b654:63b8%6]) with mapi id 15.20.5525.005; Thu, 4 Aug 2022
+ 14:52:00 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>
+Subject: RE: [PATCH] scsi: storvsc: Remove WQ_MEM_RECLAIM from
+ storvsc_error_wq
+Thread-Topic: [PATCH] scsi: storvsc: Remove WQ_MEM_RECLAIM from
+ storvsc_error_wq
+Thread-Index: AQHYpYCi7mFrpB9jL0m3yqafwIHdQa2e1quQ
+Date:   Thu, 4 Aug 2022 14:52:00 +0000
+Message-ID: <PH0PR21MB302574B34EA43A39ED45AF0AD79F9@PH0PR21MB3025.namprd21.prod.outlook.com>
+References: <1659342483-4857-1-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1659342483-4857-1-git-send-email-ssengar@linux.microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=00edeadd-38b4-4353-aa6d-b4e2c96f3f7d;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-08-04T14:45:27Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 58dec0e9-0fbb-4f67-621d-08da7628e323
+x-ms-traffictypediagnostic: PH7PR21MB3356:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EMkEVvd+Qx6SDYXKYQCzgnDRfdVxSZbIPZ0fNxt8fej6zFjTlDUohL8YxVU/UTizlpfQAJC2dp3g5ccL7hKnr6ICA6R91oKiCIpa8WFx+roO4JTA7FX5DAo0CTkBpG68SX+e+iJjIhioFWTNC3XnpZMD0hLFVcx4hlEjRmZ2XgQgxb70babMv86tkABSSFJHS55htTZMHNvYpT9B92rtk+pvJ7X0EYCthpWbmYFyplRLHJp9B/vq53HWuDoP/YvRxGB0ngovavh9iqOMuf2xY8La9YzkAbEY/xLz6s59PzY4Gf9/62m5/GzNKOAz3/k/lumeHUaNjniqTuryp9Mp1mAZW/XyLHam5qeZkFb4M0/J6/7CPjLCigqYHJqw2O8kB/LIRns0LoRjC07jEQY4CBCSjuZW9v1Jb+nmotdq8fcbi+jPY+Eh8v7BhdF/indD4diHreiG3GokVZJr/LMN2kaE+dunP8ewH6nKEUCJIQzxIb0WDg1CPhtbARx/CxzlMgaI1iTqYr5jyCmQ46Tdff9+88dCTVxFZm8Dl+nkQS2jTjuvNwLXCLt5stNZRC0X595+qKUBlgKG9lZpRIb5VYFz9rkeJkkDgnvU9joEFb7gIUZEfLOTbnwwOYXHNGw1f+KCEbnT1eJUFGZZcu8mgqmCxwwn47saVfPp/jQJkJqfkuyOGOzXhJMmr+/JILvIDV6qCBEsKum38wli10lC0T6Il58Yh2JuX9rNQ3oGE6uSWGPpCwix8zLLrZRVrvd0gwJ2nfwp8MOnWKGzWzv//CSkZ7ys3JA0kF79/Sw/89ataF2aWuxR5W3NlQ2zIPsafDV4OOF2OMgaXVhmmB42PJdHYl1gIQPcDxVXbzb1VysihNPN7gvwS6lkgNYcaBeH
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR21MB3025.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(366004)(376002)(136003)(346002)(451199009)(82960400001)(921005)(82950400001)(8990500004)(26005)(5660300002)(52536014)(86362001)(316002)(66446008)(71200400001)(64756008)(8676002)(9686003)(33656002)(66476007)(83380400001)(66556008)(41300700001)(76116006)(66946007)(55016003)(38100700002)(38070700005)(122000001)(186003)(10290500003)(2906002)(478600001)(6636002)(110136005)(8936002)(7696005)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YbBKGzkL1wSI+YrnGDlQuDQj9Zl0GhYpK3RJMSW39KSK6G5S5DOKt5bi6C+W?=
+ =?us-ascii?Q?azGIPtyzwPdprcRJUr8ZYaCVZn7JTyBvLMSIYyPsZy8E3orcFqxczsFqd+lq?=
+ =?us-ascii?Q?HugCZYkYs5yj6lTdrhhhVjh9B4duw6JXeKD7Sze642OJApRnRFNR+Uk6yksr?=
+ =?us-ascii?Q?gO46ub8CEjqYnr/08Q/K4IZScv5FWAofUR1aq4eqBQNw3ngIee4SWlGSteKL?=
+ =?us-ascii?Q?XHVY/W5N6gXmM7NP3UEKBHZRTDco1ufl+OcGKKqJdreY8ZrnJOJVClwmT79V?=
+ =?us-ascii?Q?4eqgVHpMZsw8xFiLqO0phb0KyoljSqJ6KZ4LfI4l/nOmCkF620kA4kX0ir7N?=
+ =?us-ascii?Q?ea9Gyzu6umvS5YiHyE/Ogc1LbYZHlITzyPYIIQR4pRaInidza7wFQ9fQfzVx?=
+ =?us-ascii?Q?9A7Ttmaf9/G3etADjrFXNuvWGwHxtFDe6VbIZr3n1x/JMeJas9WhlMOL2Heu?=
+ =?us-ascii?Q?k4Jm0rurjdkILT7SgU1xGewwnv21SihRvxpTQl5S4GUDfqTEOLULnaveWJ9w?=
+ =?us-ascii?Q?X5aMYBuMvZX4C/ZTnWSMqwpR0jXx+F1PsxbjsxH+D/F4HynD+QFzHw7VjSaX?=
+ =?us-ascii?Q?8hrYFCixmb+oYpH2AYh/OEhE3uD1nasDPd/DYKBA7+rEGgtcXNkjlctsafUM?=
+ =?us-ascii?Q?VEgLipDyaeyucm02Ba3mnPFN7TfjJgLO4ffWEhlkmg7/m7uPnTNm48I9RwEH?=
+ =?us-ascii?Q?ev0kx/auUngz8Q1nII7G9Am6m7+M3qRjL2lgc6GxQjD8m5NoBhY5bOftyWb0?=
+ =?us-ascii?Q?2qH3OyTEw2P/d+4k4FQgFWViSe9dM9yc094ZeL94liEr/jovH71gxt487rl+?=
+ =?us-ascii?Q?61JseL1MeC9B73gNA0phJkBisDNaWZ/N7yuGSPNJR81s5lyhUtlcPcG9WM54?=
+ =?us-ascii?Q?YYmGxS2/Y9lwcbA7qgmRGWvjBVLaVIfbwpYbxfhtjiXSEPVn0ZOQ8W13rX9/?=
+ =?us-ascii?Q?D+UyYLkssLHkKoueXpXd4EotqMVCQutx1T4G3qwlfvVewqzhnV1JUlw2dK7X?=
+ =?us-ascii?Q?Ju09RhELQtMtV/vfH6AjJzVZdCeRGhbRVObhbcMZ2wda5T9PfChseZwXOZ0h?=
+ =?us-ascii?Q?d8CiPjlQKVuu/N5AZtSqaM/S6bCzo9xt/Dphllw8F0DOqW6geKAknref3Uuj?=
+ =?us-ascii?Q?e0Ed7r0A79MxksiWOsDtJUfM4SwgP3wlc1LxbR1uJaWDUbWsm5VJwZvWsJDJ?=
+ =?us-ascii?Q?ZgRxUrSKrxEAm6EbP3sghbF26DBlh8c8VuW45OHivAMXaUwM0X0uX6lc3Ka+?=
+ =?us-ascii?Q?FaYk1+lgT62V8Pk0kwrSqjyFxsYixKeq++i7DgvthmIKAZeV90+QT4dPqTmm?=
+ =?us-ascii?Q?izIpCgdalA+IkpyoinjKo6GzyTLy68tmq2bPEO9GXcMHYTl/qOVIcioYiUNV?=
+ =?us-ascii?Q?wZ8NCsiOvMbuGXUy88oGvnW79tYlTXPheFYPsL3o7HBxyqBxH/ek+sSTkPdh?=
+ =?us-ascii?Q?Clk52fIaSilLMgmj3qkd6LY6KphXJlZzt1+EiUuIisZ9zrkWDxaf1EW1/gH2?=
+ =?us-ascii?Q?jgXEuBayO9cOPIOmaSM0tsbggj6VDUqVi0Yl7Sias60x3xtcaos+Uk+7GX+2?=
+ =?us-ascii?Q?YZKlnuceFrU1LPrLPu3A6YdHz+e+ZXCChe8yOOXe2xrLG/pUF46rnZyIkQUP?=
+ =?us-ascii?Q?PA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
- <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
- <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
- <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
- <20220803062024.vn7awasmifkp5xow@pengutronix.de> <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
- <CAPY8ntBBz56Es=pK+KpqhyYLUET95DT_zE6gorOWx4WkCSxJAg@mail.gmail.com>
- <20220804093829.42kdelp7u4r743nv@pengutronix.de> <CAPY8ntBovVq1HVt_UneDF8OB9KBdEBv52o=4BCTmf9VpiODxVg@mail.gmail.com>
- <20220804125152.idyzetjqkjzgbbm2@pengutronix.de>
-In-Reply-To: <20220804125152.idyzetjqkjzgbbm2@pengutronix.de>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Thu, 4 Aug 2022 15:51:49 +0100
-Message-ID: <CAPY8ntAatYvbf5ehfsj4qcSDC=sODeN1Cj0vDjn6p0M=k320NA@mail.gmail.com>
-Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Adam Ford <aford173@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Marek Vasut <marex@denx.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com, NXP Linux Team <linux-imx@nxp.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR21MB3356
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 4 Aug 2022 at 13:51, Marco Felsch <m.felsch@pengutronix.de> wrote:
->
-> Hi Dave,
->
-> On 22-08-04, Dave Stevenson wrote:
-> > Hi Marco
-> >
-> > On Thu, 4 Aug 2022 at 10:38, Marco Felsch <m.felsch@pengutronix.de> wrote:
-> > >
-> > > Hi Dave, Adam,
-> > >
-> > > On 22-08-03, Dave Stevenson wrote:
-> > > > Hi Adam
-> > > >
-> > > > On Wed, 3 Aug 2022 at 12:03, Adam Ford <aford173@gmail.com> wrote:
-> > >
-> > > ...
-> > >
-> > > > > > Did managed to get access to the ADV7535 programming guide? This is the
-> > > > > > black box here. Let me check if I can provide you a link with our repo
-> > > > > > so you can test our current DSIM state if you want.
-> > > > >
-> > > > > I do have access to the programming guide, but it's under NDA, but
-> > > > > I'll try to answer questions if I can.
-> > > >
-> > > > Not meaning to butt in, but I have datasheets for ADV7533 and 7535
-> > > > from previously looking at these chips.
-> > >
-> > > Thanks for stepping into :)
-> > >
-> > > > Mine fairly plainly states:
-> > > > "The DSI receiver input supports DSI video mode operation only, and
-> > > > specifically, only supports nonburst mode with sync pulses".
-> > >
-> > > I've read this also, and we are working in nonburst mode with sync
-> > > pulses. I have no access to an MIPI-DSI analyzer therefore I can't
-> > > verify it.
-> > >
-> > > > Non-burst mode meaning that the DSI pixel rate MUST be the same as the
-> > > > HDMI pixel rate.
-> > >
-> > > On DSI side you don't have a pixel-clock instead there is bit-clock.
-> >
-> > You have an effective pixel clock, with a fixed conversion for the
-> > configuration.
-> >
-> > DSI bit-clock * number of lanes / bits_per_pixel = pixel rate.
-> > 891Mbit/s * 4 lanes / 24bpp = 148.5 Mpixels/s
->
-> Okay, I just checked the bandwidth which must equal.
->
-> > As noted elsewhere, the DSI is DDR, so the clock lane itself is only
-> > running at 891 / 2 = 445.5MHz.
-> >
-> > > > Section 6.1.1 "DSI Input Modes" of adv7533_hardware_user_s_guide is
-> > > > even more explicit about the requirement of DSI timing matching
-> > >
-> > > Is it possible to share the key points of the requirements?
-> >
-> > "Specifically the ADV7533 supports the Non-Burst Mode with syncs. This
-> > mode requires real time data generation as a pulse packet received
-> > becomes a pulse generated. Therefore this mode requires a continuous
-> > stream of data with correct video timing to avoid any visual
-> > artifacts."
-> >
-> > LP mode is supported on data lanes. Clock lane must remain in HS mode.
-> >
-> > "... the goal is to accurately convey DPI-type timing over DSI. This
-> > includes matching DPI pixel-transmission rates, and widths of timing
-> > events."
->
-> Thanks for sharing.
->
-> > > > The NXP kernel switching down to an hs_clk of 445.5MHz would therefore
-> > > > be correct for 720p operation.
-> > >
-> > > It should be absolute no difference if you work on 891MHz with 2 lanes
-> > > or on 445.5 MHz with 4 lanes. What must be ensured is that you need the
-> > > minimum required bandwidth which is roughly: 1280*720*24*60 = 1.327
-> > > GBps.
-> >
-> > Has someone changed the number of lanes in use? I'd missed that if so,
-> > but I'll agree that 891MHz over 2 lanes should work for 720p60.
->
-> The ADV driver is changing it autom. but this logic is somehow odd and
-> there was already a approach to stop the driver doing this.
+From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Monday, August 1, =
+2022 1:28 AM
+>=20
+> storvsc_error_wq workqueue should not be marked as WQ_MEM_RECLAIM
+> as it's doesn't need to make forward progress under memory pressure.
 
-I'd missed that bit in the driver where it appears to drop to 3 lanes
-for pixel clock < 80000 via a mipi_dsi_detach and _attach. Quirky, but
-probably the only way it can be achieved in the current framework.
+s/it's/it/
 
-> To sync up: we have two problems:
->   1) The 720P mode with static DSI host configuration isn't working
->      without hacks.
->   2) The DSI link frequency should changed as soon as required
->      automatically. So we can provide all modes.
->
-> I would concentrate on problem 1 first before moving on to the 2nd.
+> Marking this workqueue as WQ_MEM_RECLAIM may cause deadlock while
+> flushing a non-WQ_MEM_RECLAIM workqueue.
+> In the current state it causes the following warning:
+>=20
+> [   14.506347] ------------[ cut here ]------------
+> [   14.506354] workqueue: WQ_MEM_RECLAIM storvsc_error_wq_0:storvsc_remov=
+e_lun is flushing !WQ_MEM_RECLAIM events_freezable_power_:disk_events_workf=
+n
+> [   14.506360] WARNING: CPU: 0 PID: 8 at <-snip->kernel/workqueue.c:2623 =
+check_flush_dependency+0xb5/0x130
+> [   14.506390] CPU: 0 PID: 8 Comm: kworker/u4:0 Not tainted 5.4.0-1086-az=
+ure #91~18.04.1-Ubuntu
+> [   14.506391] Hardware name: Microsoft Corporation Virtual Machine/Virtu=
+al Machine, BIOS Hyper-V UEFI Release v4.1 05/09/2022
+> [   14.506393] Workqueue: storvsc_error_wq_0 storvsc_remove_lun
+> [   14.506395] RIP: 0010:check_flush_dependency+0xb5/0x130
+> 		<-snip->
+> [   14.506408] Call Trace:
+> [   14.506412]  __flush_work+0xf1/0x1c0
+> [   14.506414]  __cancel_work_timer+0x12f/0x1b0
+> [   14.506417]  ? kernfs_put+0xf0/0x190
+> [   14.506418]  cancel_delayed_work_sync+0x13/0x20
+> [   14.506420]  disk_block_events+0x78/0x80
+> [   14.506421]  del_gendisk+0x3d/0x2f0
+> [   14.506423]  sr_remove+0x28/0x70
+> [   14.506427]  device_release_driver_internal+0xef/0x1c0
+> [   14.506428]  device_release_driver+0x12/0x20
+> [   14.506429]  bus_remove_device+0xe1/0x150
+> [   14.506431]  device_del+0x167/0x380
+> [   14.506432]  __scsi_remove_device+0x11d/0x150
+> [   14.506433]  scsi_remove_device+0x26/0x40
+> [   14.506434]  storvsc_remove_lun+0x40/0x60
+> [   14.506436]  process_one_work+0x209/0x400
+> [   14.506437]  worker_thread+0x34/0x400
+> [   14.506439]  kthread+0x121/0x140
+> [   14.506440]  ? process_one_work+0x400/0x400
+> [   14.506441]  ? kthread_park+0x90/0x90
+> [   14.506443]  ret_from_fork+0x35/0x40
+> [   14.506445] ---[ end trace 2d9633159fdc6ee7 ]---
+>=20
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 
-If you change your link frequency, it may be worth trying a lower
-resolution again such as 720x480 @ 60fps on 2 lanes. (720480@60 on 4
-lanes is again listed as mandatory for using the timing generator).
+This should have a "Fixes:" tag for commit 436ad9413353 where
+this workqueue was introduced.
 
-> > I have just noted that 720p59.94 at 24bpp on 4 lanes is listed as one
-> > of the modes that is mandatory to use the timing generator (reg 0x27
-> > bit 7 = 1). On 2 lanes it is not required.
-> > I don't know why it's referencing the 1000/1001 pixel clock rates and
-> > not the base one, as it's only a base clock change with the same
-> > timing (74.176MHz clock instead of 74.25MHz).
->
-> Interesting! I would like to know how the HDMI block gets fetched by the
-> DSI block and how the timing-generator can influence this in good/bad
-> way. So that we know what DSI settings (freq, lanes) are sufficient.
->
-> > > > If you do program the manual DSI divider register to allow a DSI pixel
-> > > > rate of 148.5MHz vs HDMI pixel rate of 74.25MHz, you'd be relying on
-> > >
-> > > There is no such DSI pixel rate to be precise, we only have a DSI bit
-> > > clock/rate.
-> > >
-> > > > the ADV753x having at least a half-line FIFO between DSI rx and HDMI
-> > > > tx to compensate for the differing data rates. I see no reference to
-> > > > such, and I'd be surprised if it was more than a half dozen pixels to
-> > > > compensate for the jitter in the cases where the internal timing
-> > > > generator is mandatory due to fractional bytes.
-> > >
-> > > This is interesting and would proofs our assumption that the device
-> > > don't have a FIFO :)
-> > >
-> > > Our assumptions (we don't have the datasheet/programming manual):
-> > >   - HDMI part is fetching 3 bytes per HDMI pixclk
-> > >   - Ratio between dsi-clk and hdmi-pixelclk must be 3 so the DSI and
-> > >     HDMI are in sync. So from bandwidth pov there are no differences
-> > >     between:
-> > >       - HDMI: 74.25 MHz * 24 Bit  = 1782.0 MBit/s
-> > >       - DSI:    891 MHz * 2 lanes = 1782.0 MBit/s (dsi-clock: 445.5 )
-> > >       - DSI:  445.5 MHz * 4 lanes = 1782.0 MBit/s (dsi-clock: 222.75)
-> > >
-> > >     But the ratio is different and therefore the faster clocking option
-> > >     let something 'overflow'.
-> >
-> > I'll agree that all looks consistent.
-> >
-> > > Anyway, but all this means that Adam should configure the
-> > > burst-clock-rate to 445.5 and set the lanes to 4. But this doesn't work
-> > > either and now we are back on my initial statement -> the driver needs
-> > > some attention.
-> >
-> > Things always need attention :-)
->
-> ^^
->
-> > I suspect that it's the use of the timing generator that is the issue.
-> > The programming guide does recommend using it for all modes, so that
-> > would be a sensible first step.
->
-> But I tested it without the timing-generator too. Can you or Adam verify
-> the timing-generator diable logic?
+Michael
 
-Sorry, running without the use of the timing generator is the issue.
-It is mandatory in some modes, but supported in all modes. Always
-using it should therefore avoid not using it in one of the mandatory
-modes (the list looks a little arbitrary).
+> ---
+>  drivers/scsi/storvsc_drv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> index fe000da..8ced292 100644
+> --- a/drivers/scsi/storvsc_drv.c
+> +++ b/drivers/scsi/storvsc_drv.c
+> @@ -2012,7 +2012,7 @@ static int storvsc_probe(struct hv_device *device,
+>  	 */
+>  	host_dev->handle_error_wq =3D
+>  			alloc_ordered_workqueue("storvsc_error_wq_%d",
+> -						WQ_MEM_RECLAIM,
+> +						0,
+>  						host->host_no);
+>  	if (!host_dev->handle_error_wq) {
+>  		ret =3D -ENOMEM;
+> --
+> 1.8.3.1
 
-> > I will say that we had a number of issues getting this chip to do
-> > anything, and it generally seemed happier on 2 or 3 lanes instead of
-> > 4. Suffice to say that we abandoned trying to use it, despite some
-> > assistance from ADI.
->
-> Even more interessting, what is your alternative to this chip?
-
-BCM2711 which supported dual HDMI natively.
-Our investigation of ADV7535 was when trying to build what became
-Pi400 using BCM2710/BCM2837 (only has a single HDMI output). Whilst I
-do have the prototype, the ADV was wired up weirdly with I2C so I
-never really got it running with Linux.
-
-  Dave

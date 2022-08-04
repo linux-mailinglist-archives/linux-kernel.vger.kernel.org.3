@@ -2,114 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1B258987B
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C7A589880
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239135AbiHDHgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
+        id S239190AbiHDHhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234760AbiHDHgr (ORCPT
+        with ESMTP id S239105AbiHDHhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:36:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E852A964;
-        Thu,  4 Aug 2022 00:36:45 -0700 (PDT)
+        Thu, 4 Aug 2022 03:37:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA20A5FAED;
+        Thu,  4 Aug 2022 00:37:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 23A6ECE2591;
-        Thu,  4 Aug 2022 07:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12B64C433D6;
-        Thu,  4 Aug 2022 07:36:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B947B824A8;
+        Thu,  4 Aug 2022 07:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BCDC433D6;
+        Thu,  4 Aug 2022 07:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659598602;
-        bh=ZFnofeLkIUG5GcpftrmIJLMpEZwZvl82kazSu4JuNmY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Umcl8WFsYOcmUtBd5EiP4mOe/lVSrbZ+qU6+lbZrMs+V0lTnU1lb1vMMbzYq/1KHI
-         mUVCo7dYoFQcRv65Z5VlVNfdjwDGuBa+OqWdqYC+X5dmcwUvewvNNaEbe4SnOLEHEM
-         22HHR/J9/E1EHvYpck5VW6M9QjW/qVxMh4OJLa9YI1kYOS3soQ52BQLr7wIdL7ze6V
-         i5EmE17DtlkTCEqRaWMLVg7Smq6xCfTBNrnNF66kghVZinkmU0MtalhayeQUtslJoB
-         GZsH4ho+GER4zt2CNKmSmzzqtUSNspS5rUr/5APnwibs1Md4fCtFGXa+Y3PNzQIoYy
-         1rmx5ry+zNcBw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oJVPi-00036u-QO; Thu, 04 Aug 2022 09:37:02 +0200
-Date:   Thu, 4 Aug 2022 09:37:02 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/8] Revert "dt-bindings: usb: dwc3: Add wakeup-source
- property support"
-Message-ID: <Yut3Hk8akhpGlcah@hovoldconsulting.com>
-References: <20220802151404.1797-1-johan+linaro@kernel.org>
- <20220802151404.1797-6-johan+linaro@kernel.org>
- <CAL_JsqL5ZCzfd06rxOdQodFjk4G3QpDCsxA5heM71x0q5d-hCw@mail.gmail.com>
- <YuokOn0KHEqv/CR4@hovoldconsulting.com>
- <971ad767-68b7-bbb7-f147-c3cce24fbe4f@linaro.org>
+        s=k20201202; t=1659598649;
+        bh=WCCCi7+K04HSk34cpQtOannRRuatd2BnFuBrKl96JQY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iXEh8yK5mnllftkRpyNpPnBhdIyexLOhqftRLlEu/JYtYLlQ9oXjqiBFbB/bAQfZZ
+         kmQjCEoNtgTu+dhzCVc703jzve/2M8cRaK5XqCp29U7dE6UvAkQNAmTzVQDsB2yCfQ
+         zSCeXWbfTQWVwUL2RNDbHqUcPcwcAQDuFumSbisxy37/At0lpMv3S44RnUO1hTlhkE
+         ZiHCcc1VNRr6/ND7llMF1nub3mDzfoqsjMKpM8gHwBlJktsvtlKxK/EcR0KT6pxJyC
+         6e6DLggeDRkgkpWRQQBq6AnlcoN+cYyui4IRe9fe31jzo/XHoTX5xFum2LrmG9Jnfm
+         6TS/PGXgw7jGw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.95)
+        (envelope-from <mchehab@kernel.org>)
+        id 1oJVQ6-0017HL-L8;
+        Thu, 04 Aug 2022 09:37:26 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Move TLB invalidation code for its own  file and document it
+Date:   Thu,  4 Aug 2022 09:37:21 +0200
+Message-Id: <cover.1659598090.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <971ad767-68b7-bbb7-f147-c3cce24fbe4f@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 09:51:00AM +0200, Krzysztof Kozlowski wrote:
-> On 03/08/2022 09:31, Johan Hovold wrote:
-> > On Tue, Aug 02, 2022 at 11:17:22AM -0600, Rob Herring wrote:
-> >> On Tue, Aug 2, 2022 at 9:14 AM Johan Hovold <johan+linaro@kernel.org> wrote:
-> > 
-> >>> It should also not be used to
-> >>> work around Linux driver implementation issues such as how to coordinate
-> >>> the glue and core dwc3 drivers.
-> >>>
-> >>> For the Qualcomm dwc3 controllers, it is the glue device that manages
-> >>> the wakeup interrupts, which may or may not be able to wake the system
-> >>> up from system suspend.
-> >>
-> >> While the reasoning to add this may have been for QCom, having this
-> >> property for other users makes sense. On some platforms, 'snps,dwc3'
-> >> is the only node (i.e. there's no wrapper node). So I don't think this
-> >> should be reverted.
-> > 
-> > Fair enough. Let's keep it in the core child node then where we can
-> > still retrieve from the glue parent directly.
-> > 
-> > (I assume you're not suggesting also adding 'wakeup-source' to the qcom
-> > glue node, which is where the actual wakeup interrupts live.)
-> > 
-> > The glue and core parts needs to work in concert even if the current
-> > implementation tends to make that harder than it should be.
-> 
-> I think it can still exist in the glue node (so your next patch),
-> because as you said this is the place with wakeup interrupt, so it looks
-> like correct hardware description. In the next patch you would need to
-> disallow it for the DWC node.
+There are more things to be added to TLB invalidation. Before doing that,
+move the code to its own file, and add the relevant documentation.
 
-Ok, will do. Thanks.
+Patch 1 fixes vma_invalidate_tlb() logic to make it update the right var;
 
-Johan
+Patch 2 only moves the code and do some function renames. No functional
+change;
+
+Patch 3 adds documentation for the TLB invalidation algorithm and functions.
+
+---
+
+v3: 
+  - Added a fix for an issue from the last TLB patch series;
+  - included a better description about the changes on patch 2;
+  - did some minor fixes at kernel-doc markups;
+
+v2: only patch 2 (kernel-doc) was modified:
+
+  - The kernel-doc markups for TLB were added to i915.rst doc;
+  - Some minor fixes at the texts;
+  - Use a table instead of a literal block while explaining how the algorithm works.
+    That should make easier to understand the logic, both in text form and after
+    its conversion to HTML/PDF;
+  - Remove mention for GuC, as this depends on a series that will be sent later.
+
+
+
+Chris Wilson (1):
+  drm/i915/gt: Move TLB invalidation to its own file
+
+Mauro Carvalho Chehab (2):
+  drm/i915: pass a pointer for tlb seqno at vma_invalidate_tlb()
+  drm/i915/gt: document TLB cache invalidation functions
+
+ Documentation/gpu/i915.rst                |   7 +
+ drivers/gpu/drm/i915/Makefile             |   1 +
+ drivers/gpu/drm/i915/gem/i915_gem_pages.c |   4 +-
+ drivers/gpu/drm/i915/gt/intel_gt.c        | 168 +----------------
+ drivers/gpu/drm/i915/gt/intel_gt.h        |  12 --
+ drivers/gpu/drm/i915/gt/intel_ppgtt.c     |   2 +-
+ drivers/gpu/drm/i915/gt/intel_tlb.c       | 208 ++++++++++++++++++++++
+ drivers/gpu/drm/i915/gt/intel_tlb.h       | 128 +++++++++++++
+ drivers/gpu/drm/i915/i915_vma.c           |   7 +-
+ drivers/gpu/drm/i915/i915_vma.h           |   2 +-
+ 10 files changed, 355 insertions(+), 184 deletions(-)
+ create mode 100644 drivers/gpu/drm/i915/gt/intel_tlb.c
+ create mode 100644 drivers/gpu/drm/i915/gt/intel_tlb.h
+
+-- 
+2.37.1
+
+

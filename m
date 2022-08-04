@@ -2,56 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A16589869
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC37589871
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238976AbiHDHd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S239123AbiHDHfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiHDHdZ (ORCPT
+        with ESMTP id S239126AbiHDHfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:33:25 -0400
-Received: from smtp116.iad3a.emailsrvr.com (smtp116.iad3a.emailsrvr.com [173.203.187.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9782250C;
-        Thu,  4 Aug 2022 00:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openvpn.net;
-        s=20170822-45nk5nwl; t=1659598403;
-        bh=kYhrOpJX2cllhR3M2EBifKrqWsb/ILqyjRs7YM4OHjU=;
-        h=Date:To:From:Subject:From;
-        b=ISDfqj1G3uusPVK1E44YDt4hYar4Xj2ivxFzmGL2gWAjMMX2ry49Lhk5J9xt8p7el
-         0lrphm899gep807MRhd2qHFAQSvC8nwBSk3Y0FmOAUdFWi1T96aKN1DNXKaNtYKPd7
-         VuCcLGRRCETii3jF68+7Qv1MaGuLh6Cie7efqsqo=
-X-Auth-ID: antonio@openvpn.net
-Received: by smtp23.relay.iad3a.emailsrvr.com (Authenticated sender: antonio-AT-openvpn.net) with ESMTPSA id A1983239B9;
-        Thu,  4 Aug 2022 03:33:22 -0400 (EDT)
-Message-ID: <684e4a61-3fe3-00ac-42d2-213e501f14d4@openvpn.net>
-Date:   Thu, 4 Aug 2022 09:34:13 +0200
+        Thu, 4 Aug 2022 03:35:16 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D862AF
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:35:11 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id j1so15821307wrw.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 00:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=5EU04U6zAYyIYzGGcwcDfmg2hMhuz1M0NEedR2ivuW0=;
+        b=RszuOa+odpEaiEJy45G5YW+s0j47TpRmy+lEDVUwPVP6JcsPJrwMo8tspfvRb7fMre
+         W99E7nWmRNZSwcQhGwF7U5/tPYQqr8NnwO1Jj52xEZHtAju58FkRMFQifV7yjHz4R7uZ
+         m+nMVKawX5MR5rLXmzXaeUmOP9JPQ/GTqa8O616Ny/hVj/FzIVxzhR4i5VxzKP4Uxs2N
+         NNcVAj7HwHwKi4SGOn+kAUk7hOVyYV9XW6b6mu/ZbjjRwmTOHtMXIMuyrNK1WhC89ZXv
+         +7u8jVSkbkWWd/rROPN/oXOkKdOy+nWLplYIFpAPipSroyvbydNn4zA69ceObU+QdJu0
+         2W5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=5EU04U6zAYyIYzGGcwcDfmg2hMhuz1M0NEedR2ivuW0=;
+        b=PYTgZsLxLqPcrCETfI8TH5yFET9M8BDWvvSNnk84M57ZRHNBvLEDrKNu3sP0y5oJQl
+         1qaztorxnAXz2HM5xKZcJaK5ebjGTMnFmIaCjnGmDmuuqs03q4LxIySGOPsKvVPrf3H5
+         W1HnhTuIOUMs10vsMlAoSv4IvRW/m8IPPgjpf05Ow8vD1ghoWgkTYOTgTKTNWp0slOG/
+         qkv+UgXuMMPx6w+bNdlq0LRbB8zc87+3Z1sieMkexFVnNvR11LrCFbKbXgPt4Nt8ebK3
+         1zW7bAv+pEAjNFxOpoV10PCe2beXEN2+meWb3RbY2O7rK8ON4x3wqYNtUabc/yb3iZMT
+         YiTw==
+X-Gm-Message-State: ACgBeo0vnWt2HDm7LCIHAwEDAdCKZivZUQ5XdibTqWPxlPfWMPqq8GJo
+        81kJGEVLGeNd/a5//8FKfl4=
+X-Google-Smtp-Source: AA6agR7QyZrRl97ERrAkEom1RkOvNNl2TGMuPIkZIfvXeehObd0r+4cGJ+S6KNmKW/eNfqqc4NTEgg==
+X-Received: by 2002:a5d:64c1:0:b0:220:83fd:521e with SMTP id f1-20020a5d64c1000000b0022083fd521emr435672wri.428.1659598509871;
+        Thu, 04 Aug 2022 00:35:09 -0700 (PDT)
+Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id d14-20020adfe84e000000b0021badf3cb26sm309913wrn.63.2022.08.04.00.35.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 00:35:08 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 08:34:58 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Chengming Gui <Jack.Gui@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: mainline build failure due to 6fdd2077ec03 ("drm/amd/amdgpu: add
+ memory training support for PSP_V13")
+Message-ID: <Yut2otE1h2xtC79o@debian>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-References: <20220719014704.21346-1-antonio@openvpn.net>
- <20220719014704.21346-2-antonio@openvpn.net> <YtbNBUZ0Kz7pgmWK@lunn.ch>
- <c490b87c-085b-baca-b7e4-c67a3ee2c25e@openvpn.net> <YuKKJxSFOgOL836y@lunn.ch>
- <52b9d7c9-9f7c-788e-2327-33af63b9c748@openvpn.net>
- <20220803084202.4e249bdb@hermes.local>
- <1219c53f-362e-cd55-73e0-87dfe281ec34@openvpn.net>
- <20220803091942.0e388f5b@hermes.local>
-From:   Antonio Quartulli <antonio@openvpn.net>
-Organization: OpenVPN Inc.
-Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
-In-Reply-To: <20220803091942.0e388f5b@hermes.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Classification-ID: 35c30856-d3b1-47cd-9a9b-4df3cd07592e-1-1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,55 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/08/2022 18:19, Stephen Hemminger wrote:
-> On Wed, 3 Aug 2022 17:48:45 +0200
-> Antonio Quartulli <antonio@openvpn.net> wrote:
-> 
->> There must have been some confusion - sorry about that.
->>
->> The repository I linked in my previous email is this very same driver
->> packaged as "out-of-tree" module (i.e. for people running a kernel that
->> does not yet ship ovpn-dco) and contains some compat wrapper.
->>
->>
->> The driver I have submitted to the list is 100% standalone and does not
->> contain any compat code.
->>
->>
->> The only extra component required to do something useful with this
->> driver is the OpenVPN software in userspace.
-> 
-> 
-> Good to here thanks.
-> I wonder if there is any chance of having multiple VPN projects
-> using same infrastructure. There seems to be some parallel effort
-> in L2TP, OpenVPN, etc.
+Hi All,
 
-Thanks for rising this point, Stephen.
+The latest mainline kernel branch fails to build for alpha and mips
+allmodconfig with the error:
 
-I also believe it would be nice to re-use as much infrastructure as 
-possible (I always strive to reduce code duplication, while keeping core 
-building blocks simple and re-usable), however, it seems that the 
-various implementations currently do not share much logic.
+drivers/gpu/drm/amd/amdgpu/psp_v13_0.c: In function 'psp_v13_0_memory_training':
+drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:23: error: implicit declaration of function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=implicit-function-declaration]
+  534 |                 buf = vmalloc(sz);
+      |                       ^~~~~~~
+      |                       kvmalloc
+drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:21: error: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
+  534 |                 buf = vmalloc(sz);
+      |                     ^
+drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:545:33: error: implicit declaration of function 'vfree'; did you mean 'kvfree'? [-Werror=implicit-function-declaration]
+  545 |                                 vfree(buf);
+      |                                 ^~~~~
+      |                                 kvfree
 
-What could be shared is already shared (i.e. crypto, napi, gso, netdev, 
-etc). Handling the data traffic is something that can hardly be shared 
-due to different packet manipulation (i.e. encapsulation).
+git bisect pointed to 6fdd2077ec03 ("drm/amd/amdgpu: add memory training support for PSP_V13").
 
-One area that could still be worth exploring might be the queuing 
-mechanism that handles packet reception+decryption and 
-encryption+transmission. If we factor out the protocol specific bits, we 
-might be able to make the high level logic common.
+And, reverting that commit has fixed the build failure.
 
-However, so far all my attempts did not lead to anything that could be 
-implemented in a reasonable manner.
+I will be happy to test any patch or provide any extra log if needed.
 
-Still, I believe this is something we could work on in the medium/long-term.
-
-
-Regards,
-
-
--- 
-Antonio Quartulli
-OpenVPN Inc.
+--
+Regards
+Sudip

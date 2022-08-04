@@ -2,174 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C70158A260
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 22:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDF358A278
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 22:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbiHDUnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 16:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
+        id S238488AbiHDUrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 16:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiHDUnr (ORCPT
+        with ESMTP id S229813AbiHDUrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 16:43:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABFB6D55B
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 13:43:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6FF06176C
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 20:43:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF40C433D6;
-        Thu,  4 Aug 2022 20:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659645825;
-        bh=/dBnGEelz0eNZ7ash2KCkOnK42Kq3O9zA1e57MIkXCU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=juU3p2LUjcxjMlM6vTTY1lLZWVXb/mcsQMqGkZ/WHOsek7V0hDFsZrX6Fy+36KdAL
-         yn6BDe8wUhOCTy+9ZmfJBWS+mP62dLFKmdwlOlB9vlElBwclJg+RepYpdf+Rh/Cr1R
-         u1r3hEtJJAPuVVjBIr5FfU5oSiL0TI8wqQ8BHsU7AMGN+99rp1KPkm9Dpm3bncEXmC
-         lYPlURhbpMy9WqPtn0SPIKyz/PKWa3k6Nr+SvcKaVd542jSA8LDJaEgGIFbA2AG+zj
-         aP9g14qRKxapm+F0brNeG0LRJa69nTT/49cOFbDE96HEXU1PPAUMgBawRt2tazl2La
-         ZP/6K+bDSkX/w==
-Date:   Thu, 4 Aug 2022 13:43:42 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: mainline build failure for x86_64 allmodconfig with clang
-Message-ID: <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
-References: <YuwRyQYPCb1FD+mr@debian>
- <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
- <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
+        Thu, 4 Aug 2022 16:47:40 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6799B6D9F6
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 13:47:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659646058; x=1691182058;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Yqn3Nnq4E2hLzUIj4+j0vVIiwVNuVzq9wUJVnH2WCBM=;
+  b=cdD8auTrOBE7Rtlu0KBUOzTDIEBmK/dPFLLP7V9VMpErVVyRi6igJXy0
+   VgUqP1jLKomfr9uogoB/aNx6TSUzuu5q8AepT/2jCDj2bbgJeyxxTgh0D
+   sn9RpdjllEo6Bcp7b0rpVBm+YthvJfHcpWTVcIF1ptEt7+pGAteUv/B5w
+   WyE9jivYn7N0dgcKpE3QHA7m4MveSqNRkYnV/WbJRQnp0QVFqchVddNdl
+   9KuWRnZwEQbbA3h0rzsJ5FAaw9vmGIs8JVni86hLGc4zbwzUGCGZH4syW
+   y5wC9siOlzGo78pnht1Eb+YLJMfwfPw/vHdEmzjAPDTYwIWs/uF7iwCzN
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="290818340"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="290818340"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 13:47:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="579225641"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 04 Aug 2022 13:47:35 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJhkk-000IqR-2a;
+        Thu, 04 Aug 2022 20:47:34 +0000
+Date:   Fri, 5 Aug 2022 04:47:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guo Ren <guoren@kernel.org>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-zicbom 6/6]
+ arch/riscv/include/asm/errata_list.h:128:9: error: expected ':' or ')'
+ before '__nops'
+Message-ID: <202208050445.jnUp8dLc-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 09:24:41PM +0200, Arnd Bergmann wrote:
-> On Thu, Aug 4, 2022 at 8:52 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Thu, Aug 4, 2022 at 11:37 AM Sudip Mukherjee (Codethink)
-> > <sudipm.mukherjee@gmail.com> wrote:cov_trace_cmp
-> > >
-> > > git bisect points to 3876a8b5e241 ("drm/amd/display: Enable building new display engine with KCOV enabled").
-> >
-> > Ahh. So that was presumably why it was disabled before - because it
-> > presumably does disgusting things that make KCOV generate even bigger
-> > stack frames than it already has.
-> >
-> > Those functions do seem to have fairly big stack footprints already (I
-> > didn't try to look into why, I assume it's partly due to aggressive
-> > inlining, and probably some automatic structures on stack). But gcc
-> > doesn't seem to make it all that much worse with KCOV (and my clang
-> > build doesn't enable KCOV).
-> >
-> > So it's presumably some KCOV-vs-clang thing. Nathan?
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-zicbom
+head:   d20ec7529236a2fcdb2d856fc0bd80b409a217fc
+commit: d20ec7529236a2fcdb2d856fc0bd80b409a217fc [6/6] riscv: implement cache-management errata for T-Head SoCs
+config: riscv-randconfig-r035-20220804 (https://download.01.org/0day-ci/archive/20220805/202208050445.jnUp8dLc-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/d20ec7529236a2fcdb2d856fc0bd80b409a217fc
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-zicbom
+        git checkout d20ec7529236a2fcdb2d856fc0bd80b409a217fc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/ kernel/dma/
 
-Looks like Arnd beat me to it :)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> The dependency was originally added to avoid a link failure in 9d1d02ff3678
->  ("drm/amd/display: Don't build DCN1 when kcov is enabled") after I reported the
-> problem in https://lists.freedesktop.org/archives/dri-devel/2018-August/186131.html
-> 
-> The commit from the bisection just turns off KCOV for the entire directory
-> to avoid the link failure, so it's not actually a problem with KCOV vs clang,
-> but I think a problem with clang vs badly written code that was obscured
-> in allmodconfig builds prior to this.
+All errors (new ones prefixed by >>):
 
-Right, I do think the sanitizers make things worse here too, as those get
-enabled with allmodconfig. I ran some really quick tests with allmodconfig and
-a few instrumentation options flipped on/off:
+   In file included from arch/riscv/include/asm/alternative.h:11,
+                    from arch/riscv/include/asm/errata_list.h:8,
+                    from arch/riscv/include/asm/tlbflush.h:12,
+                    from arch/riscv/include/asm/pgtable.h:108,
+                    from arch/riscv/include/asm/uaccess.h:12,
+                    from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/compat.h:17,
+                    from arch/riscv/include/asm/elf.h:12,
+                    from include/linux/elf.h:6,
+                    from include/linux/module.h:19,
+                    from include/linux/device/driver.h:21,
+                    from include/linux/device.h:32,
+                    from include/linux/dma-mapping.h:7,
+                    from include/linux/dma-direct.h:9,
+                    from arch/riscv/mm/dma-noncoherent.c:8:
+   arch/riscv/mm/dma-noncoherent.c: In function 'arch_sync_dma_for_device':
+>> arch/riscv/include/asm/errata_list.h:128:9: error: expected ':' or ')' before '__nops'
+     128 |         __nops(6),                                                      \
+         |         ^~~~~~
+   arch/riscv/include/asm/alternative-macros.h:123:9: note: in definition of macro '__ALTERNATIVE_CFG_2'
+     123 |         old_c "\n"                                                      \
+         |         ^~~~~
+   arch/riscv/include/asm/alternative-macros.h:200:9: note: in expansion of macro '_ALTERNATIVE_CFG_2'
+     200 |         _ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1,     \
+         |         ^~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/errata_list.h:127:14: note: in expansion of macro 'ALTERNATIVE_2'
+     127 | asm volatile(ALTERNATIVE_2(                                             \
+         |              ^~~~~~~~~~~~~
+   arch/riscv/mm/dma-noncoherent.c:25:17: note: in expansion of macro 'ALT_CMO_OP'
+      25 |                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+         |                 ^~~~~~~~~~
+>> arch/riscv/include/asm/errata_list.h:128:9: error: expected ':' or ')' before '__nops'
+     128 |         __nops(6),                                                      \
+         |         ^~~~~~
+   arch/riscv/include/asm/alternative-macros.h:123:9: note: in definition of macro '__ALTERNATIVE_CFG_2'
+     123 |         old_c "\n"                                                      \
+         |         ^~~~~
+   arch/riscv/include/asm/alternative-macros.h:200:9: note: in expansion of macro '_ALTERNATIVE_CFG_2'
+     200 |         _ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1,     \
+         |         ^~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/errata_list.h:127:14: note: in expansion of macro 'ALTERNATIVE_2'
+     127 | asm volatile(ALTERNATIVE_2(                                             \
+         |              ^~~~~~~~~~~~~
+   arch/riscv/mm/dma-noncoherent.c:28:17: note: in expansion of macro 'ALT_CMO_OP'
+      28 |                 ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+         |                 ^~~~~~~~~~
+>> arch/riscv/include/asm/errata_list.h:128:9: error: expected ':' or ')' before '__nops'
+     128 |         __nops(6),                                                      \
+         |         ^~~~~~
+   arch/riscv/include/asm/alternative-macros.h:123:9: note: in definition of macro '__ALTERNATIVE_CFG_2'
+     123 |         old_c "\n"                                                      \
+         |         ^~~~~
+   arch/riscv/include/asm/alternative-macros.h:200:9: note: in expansion of macro '_ALTERNATIVE_CFG_2'
+     200 |         _ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1,     \
+         |         ^~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/errata_list.h:127:14: note: in expansion of macro 'ALTERNATIVE_2'
+     127 | asm volatile(ALTERNATIVE_2(                                             \
+         |              ^~~~~~~~~~~~~
+   arch/riscv/mm/dma-noncoherent.c:31:17: note: in expansion of macro 'ALT_CMO_OP'
+      31 |                 ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+         |                 ^~~~~~~~~~
+   arch/riscv/mm/dma-noncoherent.c:21:15: warning: unused variable 'vaddr' [-Wunused-variable]
+      21 |         void *vaddr = phys_to_virt(paddr);
+         |               ^~~~~
+   arch/riscv/mm/dma-noncoherent.c: In function 'arch_sync_dma_for_cpu':
+>> arch/riscv/include/asm/errata_list.h:128:9: error: expected ':' or ')' before '__nops'
+     128 |         __nops(6),                                                      \
+         |         ^~~~~~
+   arch/riscv/include/asm/alternative-macros.h:123:9: note: in definition of macro '__ALTERNATIVE_CFG_2'
+     123 |         old_c "\n"                                                      \
+         |         ^~~~~
+   arch/riscv/include/asm/alternative-macros.h:200:9: note: in expansion of macro '_ALTERNATIVE_CFG_2'
+     200 |         _ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1,     \
+         |         ^~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/errata_list.h:127:14: note: in expansion of macro 'ALTERNATIVE_2'
+     127 | asm volatile(ALTERNATIVE_2(                                             \
+         |              ^~~~~~~~~~~~~
+   arch/riscv/mm/dma-noncoherent.c:48:17: note: in expansion of macro 'ALT_CMO_OP'
+      48 |                 ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+         |                 ^~~~~~~~~~
+   arch/riscv/mm/dma-noncoherent.c:41:15: warning: unused variable 'vaddr' [-Wunused-variable]
+      41 |         void *vaddr = phys_to_virt(paddr);
+         |               ^~~~~
+   arch/riscv/mm/dma-noncoherent.c: In function 'arch_dma_prep_coherent':
+>> arch/riscv/include/asm/errata_list.h:128:9: error: expected ':' or ')' before '__nops'
+     128 |         __nops(6),                                                      \
+         |         ^~~~~~
+   arch/riscv/include/asm/alternative-macros.h:123:9: note: in definition of macro '__ALTERNATIVE_CFG_2'
+     123 |         old_c "\n"                                                      \
+         |         ^~~~~
+   arch/riscv/include/asm/alternative-macros.h:200:9: note: in expansion of macro '_ALTERNATIVE_CFG_2'
+     200 |         _ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1,     \
+         |         ^~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/errata_list.h:127:14: note: in expansion of macro 'ALTERNATIVE_2'
+     127 | asm volatile(ALTERNATIVE_2(                                             \
+         |              ^~~~~~~~~~~~~
+   arch/riscv/mm/dma-noncoherent.c:59:9: note: in expansion of macro 'ALT_CMO_OP'
+      59 |         ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size);
+         |         ^~~~~~~~~~
+   arch/riscv/mm/dma-noncoherent.c:57:15: warning: unused variable 'flush_addr' [-Wunused-variable]
+      57 |         void *flush_addr = page_address(page);
+         |               ^~~~~~~~~~
+--
+   kernel/dma/pool.c: In function 'atomic_pool_expand':
+>> kernel/dma/pool.c:105:44: error: implicit declaration of function 'pgprot_dmacoherent' [-Werror=implicit-function-declaration]
+     105 |                                            pgprot_dmacoherent(PAGE_KERNEL),
+         |                                            ^~~~~~~~~~~~~~~~~~
+>> kernel/dma/pool.c:105:44: error: incompatible type for argument 3 of 'dma_common_contiguous_remap'
+     105 |                                            pgprot_dmacoherent(PAGE_KERNEL),
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                            |
+         |                                            int
+   In file included from kernel/dma/pool.c:8:
+   include/linux/dma-map-ops.h:235:76: note: expected 'pgprot_t' but argument is of type 'int'
+     235 | void *dma_common_contiguous_remap(struct page *page, size_t size, pgprot_t prot,
+         |                                                                   ~~~~~~~~~^~~~
+   cc1: some warnings being treated as errors
 
-allmodconfig (CONFIG_KASAN=y, CONFIG_KCSAN=n, CONFIG_KCOV=y, and CONFIG_UBSAN=y):
 
-warning: stack frame size (2216) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2184) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2176) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+vim +128 arch/riscv/include/asm/errata_list.h
 
-allmodconfig + CONFIG_KASAN=n:
+   125	
+   126	#define ALT_CMO_OP(_op, _start, _size, _cachesize)			\
+   127	asm volatile(ALTERNATIVE_2(						\
+ > 128		__nops(6),							\
+   129		"mv a0, %1\n\t"							\
+   130		"j 2f\n\t"							\
+   131		"3:\n\t"							\
+   132		"cbo." __stringify(_op) " (a0)\n\t"				\
+   133		"add a0, a0, %0\n\t"						\
+   134		"2:\n\t"							\
+   135		"bltu a0, %2, 3b\n\t"						\
+   136		"nop", 0, CPUFEATURE_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,		\
+   137		"mv a0, %1\n\t"							\
+   138		"j 2f\n\t"							\
+   139		"3:\n\t"							\
+   140		THEAD_##_op##_A0 "\n\t"						\
+   141		"add a0, a0, %0\n\t"						\
+   142		"2:\n\t"							\
+   143		"bltu a0, %2, 3b\n\t"						\
+   144		THEAD_SYNC_S, THEAD_VENDOR_ID,					\
+   145				ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO)	\
+   146		: : "r"(_cachesize),						\
+   147		    "r"((unsigned long)(_start) & ~((_cachesize) - 1UL)),	\
+   148		    "r"((unsigned long)(_start) + (_size))			\
+   149		: "a0")
+   150	
 
-warning: stack frame size (2112) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-
-allmodconfig + CONFIG_KCOV=n:
-
-warning: stack frame size (2216) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2184) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2176) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-
-allmodconfig + CONFIG_UBSAN=n:
-
-warning: stack frame size (2584) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2680) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2352) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-
-allmodconfig + CONFIG_KASAN=n + CONFIG_KCSAN=y + CONFIG_UBSAN=n:
-
-warning: stack frame size (2504) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2600) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-warning: stack frame size (2264) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-
-allmodconfig + CONFIG_KASAN=n + CONFIG_KCSAN=n + CONFIG_UBSAN=n:
-
-warning: stack frame size (2072) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
-
-There might be other debugging configurations that make this worse too,
-as I don't see those warnings on my distribution configuration.
-
-> The dml30_ModeSupportAndSystemConfigurationFull() function exercises
-> a few paths in the compiler that are otherwise rare. On thing it does is to
-> pass up to 60 arguments to other functions, and it heavily uses float and
-> double variables. Both of these make it rather fragile when it comes to
-> unusual compiler options, so the files keep coming up whenever a new
-> instrumentation feature gets added. There is probably some other flag
-> in allmodconfig that we can disable to improve this again, but I have not
-> checked this time.
-
-I do notice that these files build with a non-configurable
--Wframe-large-than value:
-
-$ rg frame_warn_flag drivers/gpu/drm/amd/display/dc/dml/Makefile
-54:frame_warn_flag := -Wframe-larger-than=2048
-70:CFLAGS_$(AMDDALPATH)/dc/dml/dcn30/display_mode_vba_30.o := $(dml_ccflags) $(frame_warn_flag)
-72:CFLAGS_$(AMDDALPATH)/dc/dml/dcn31/display_mode_vba_31.o := $(dml_ccflags) $(frame_warn_flag)
-76:CFLAGS_$(AMDDALPATH)/dc/dml/dcn32/display_mode_vba_32.o := $(dml_ccflags) $(frame_warn_flag)
-
-I suppose that could just be bumped as a quick workaround? Two of those
-files have a comment that implies modifying them in non-trivial ways is
-not recommended.
-
-/*
- * NOTE:
- *   This file is gcc-parsable HW gospel, coming straight from HW engineers.
- *
- * It doesn't adhere to Linux kernel style and sometimes will do things in odd
- * ways. Unless there is something clearly wrong with it the code should
- * remain as-is as it provides us with a guarantee from HW that it is correct.
- */
-
-I do note that commit 1b54a0121dba ("drm/amd/display: Reduce stack size
-in the mode support function") did have a workaround for GCC. It appears
-clang will still inline mode_support_configuration(). If I mark it as
-'noinline', the warning disappears in that file.
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

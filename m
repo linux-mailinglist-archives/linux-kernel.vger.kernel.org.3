@@ -2,75 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9626A58A3EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 01:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2791158A3F0
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 01:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236195AbiHDXbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 19:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
+        id S237281AbiHDXgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 19:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbiHDXbA (ORCPT
+        with ESMTP id S230432AbiHDXgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 19:31:00 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2F56E8B3;
-        Thu,  4 Aug 2022 16:30:59 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 274NUNmE128600;
-        Thu, 4 Aug 2022 18:30:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1659655823;
-        bh=HUDX6vDFz8YIrTjZ3w2uA6MHjjFNKz+nOiOMOApIlwo=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=QXdaSe0dmFO3V/910XSiFZ2GSl7OasFfKaR5JOdJrTlwCSpiSO3pD9EScDXWLF2qO
-         XGG3X8jPPLBwY79j5SvhYI5kdRZ59+sIBaJsDtoz7lJL/BfJClTPQEI61n28bfFcP4
-         7iV5Z7v5Jy0ha2J10ITgGoeYlj26V75KdhgI019I=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 274NUMbK014332
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 4 Aug 2022 18:30:22 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 4
- Aug 2022 18:30:22 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 4 Aug 2022 18:30:22 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 274NUMad019136;
-        Thu, 4 Aug 2022 18:30:22 -0500
-Date:   Thu, 4 Aug 2022 18:30:22 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-CC:     <daniel.lezcano@linaro.org>, <rafael@kernel.org>,
-        <rui.zhang@intel.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <khilman@baylibre.com>,
-        <abailon@baylibre.com>, <lukasz.luba@arm.com>,
-        <broonie@kernel.org>, <damien.lemoal@opensource.wdc.com>,
-        <heiko@sntech.de>, <hayashi.kunihiko@socionext.com>,
-        <mhiramat@kernel.org>, <talel@amazon.com>,
-        <thierry.reding@gmail.com>, <digetx@gmail.com>,
-        <jonathanh@nvidia.com>, <anarsoul@gmail.com>,
-        <tiny.windzz@gmail.com>, <baolin.wang7@gmail.com>,
-        <f.fainelli@gmail.com>, <bjorn.andersson@linaro.org>,
-        <mcoquelin.stm32@gmail.com>, <glaroque@baylibre.com>,
-        <miquel.raynal@bootlin.com>, <shawnguo@kernel.org>,
-        <niklas.soderlund@ragnatech.se>, <matthias.bgg@gmail.com>,
-        <j-keerthy@ti.com>, Amit Kucheria <amitk@kernel.org>
-Subject: Re: [PATCH v5 21/33] thermal/drivers/banggap: Switch to new of API
-Message-ID: <20220804233022.xmbaapjco47dldj6@bryanbrattlof.com>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220804224349.1926752-22-daniel.lezcano@linexp.org>
+        Thu, 4 Aug 2022 19:36:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2495061B36;
+        Thu,  4 Aug 2022 16:36:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B98ECB8279C;
+        Thu,  4 Aug 2022 23:36:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3EAC433C1;
+        Thu,  4 Aug 2022 23:36:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659656187;
+        bh=pmh3e4mDNTCV0r8NXeHl/HmI/K4YjTK/3rIK77K26zo=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=hAsEHrAxvWjmV3K1Bo5RXXZ+6Rvz8EQSVtKVOKD34XyaBd1yVWuO53ehDrNCt9VqB
+         Lt8+xqtkLlDo7rXJr6hvWTgVnCfMiJ3zvNk/R2TlhbIX1feL05r1V6Ql/rNs8arFnF
+         E+diwAz6JMc8zqis8peA9U0HVLuSIplaHR0vChTj8xFIZowXOBvQ/zbE83QDH58y2g
+         T5EyNBAPrHUxMe+xi12/Y0qlUd6QrecrQFt8SjD0gMi87/UeRexF88ZOCBnZUEHyhG
+         AqwiGzUwusC+QP88Pt5SStJLdjP68Koljyvm/HyFAApqoHs26E1v5+2zuOHC5rr8Hn
+         YME7YMh3+E6NQ==
+Date:   Fri, 5 Aug 2022 01:36:23 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the input tree
+In-Reply-To: <Yuu8rmJ1VsGPakqF@sirena.org.uk>
+Message-ID: <nycvar.YFH.7.76.2208050133310.19850@cbobk.fhfr.pm>
+References: <20220801214434.2058469-1-broonie@kernel.org> <Yuu8rmJ1VsGPakqF@sirena.org.uk>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20220804224349.1926752-22-daniel.lezcano@linexp.org>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,24 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On August  5, 2022 thus sayeth Daniel Lezcano:
-> The thermal OF code has a new API allowing to migrate the OF
-> initialization to a simpler approach. The ops are no longer device
-> tree specific and are the generic ones provided by the core code.
+On Thu, 4 Aug 2022, Mark Brown wrote:
+
+> > Hi all,
+> > 
+> > After merging the hid tree, today's linux-next build (x86_64 allmodconfig)
+> > failed like this:
+> > 
+> > /tmp/next/build/drivers/hid/hid-nintendo.c:406:29: error: redefinition of 'JC_RUMBLE_ZERO_AMP_PKT_CNT'
+> >   406 | static const unsigned short JC_RUMBLE_ZERO_AMP_PKT_CNT = 5;
+> >       |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > /tmp/next/build/drivers/hid/hid-nintendo.c:295:29: note: previous definition of 'JC_RUMBLE_ZERO_AMP_PKT_CNT' was here
+> >   295 | static const unsigned short JC_RUMBLE_ZERO_AMP_PKT_CNT = 5;
+> >       |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> Convert the ops to the thermal_zone_device_ops format and use the new
-> API to register the thermal zone with these generic ops.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> This error persists, I've gone back to 20220722 which seems to be the
+> last version.
 
-Reviewed-by: Bryan Brattlof <bb@ti.com>
+for-next branch accumulated so many reverts and -next-specific fixups (not 
+always correct) over the years (with the only goal of not rebasing it) 
+that it's now time to finally rebase it. Which I just did, and things 
+should be good now.
 
-> ---
->  drivers/thermal/k3_bandgap.c       | 12 ++++++------
->  drivers/thermal/k3_j72xx_bandgap.c | 12 +++++-------
->  2 files changed, 11 insertions(+), 13 deletions(-)
->
+Sorry for the noise,
 
-Thanks for updating the drivers!
+-- 
+Jiri Kosina
+SUSE Labs
 
-~Bryan

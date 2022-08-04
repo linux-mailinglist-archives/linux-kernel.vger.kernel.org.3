@@ -2,149 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5578589898
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B46A589899
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239205AbiHDHmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
+        id S239147AbiHDHoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234760AbiHDHm3 (ORCPT
+        with ESMTP id S232405AbiHDHoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:42:29 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075C232DAA
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:42:27 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220804074226epoutp02512206b34b3cb8b1e8b8c3b748302ab3~IFHLVmRKo2192321923epoutp02S
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 07:42:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220804074226epoutp02512206b34b3cb8b1e8b8c3b748302ab3~IFHLVmRKo2192321923epoutp02S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659598946;
-        bh=Rm83Ec5yFCaQndyEYNktaf6vrS+E3EUgRBd9vlEqa4E=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=BcyBYWlizkylV4wi07KVSbhY3UWioAE1U9oDaZYXMptUTm1s6EZ9eIfxJrSxtgqFW
-         mNlnnZcuc06/s2x8A8ynQpP+m++s8uL44LkiCJ/FpIaCwWqdVWn+aLPiIEAfnxLZt9
-         v4Q4w9E66INNgFG3ZlcZIz/dIwok2tCR5krUn/f4=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220804074225epcas2p340956e2923a6957fcdfbb4be56442c03~IFHKqa6eo0759107591epcas2p3M;
-        Thu,  4 Aug 2022 07:42:25 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.99]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Lz10J6MtHz4x9Px; Thu,  4 Aug
-        2022 07:42:24 +0000 (GMT)
-X-AuditID: b6c32a48-9f7ff700000025be-55-62eb78607d6f
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E6.E1.09662.0687BE26; Thu,  4 Aug 2022 16:42:24 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v7 0/6] scsi: ufs: wb: Add sysfs attribute and cleanup
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220804074224epcms2p18f0ac2f92073aeed981718a9cab23866@epcms2p1>
-Date:   Thu, 04 Aug 2022 16:42:24 +0900
-X-CMS-MailID: 20220804074224epcms2p18f0ac2f92073aeed981718a9cab23866
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDJsWRmVeSWpSXmKPExsWy7bCmhW5Cxeskg5udxhYnn6xhs3gwbxub
-        xcufV9ksDj7sZLGY9uEns8XLQ5oWvf1b2SwW3djGZHF51xw2i+7rO9gslh//x2SxdOtNRgce
-        j8tXvD0W73nJ5DFh0QFGj5aT+1k8vq/vYPP4+PQWi0ffllWMHp83yXm0H+hmCuCMyrbJSE1M
-        SS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAbpYSaEsMacUKBSQ
-        WFyspG9nU5RfWpKqkJFfXGKrlFqQklNgXqBXnJhbXJqXrpeXWmJlaGBgZApUmJCd8eLxX6aC
-        /bwVC/qusjcwHuDqYuTkkBAwkXj6eh57FyMXh5DADkaJY9s/MHUxcnDwCghK/N0hDGIKC7hJ
-        zLnOD1IuJKAkcW7NLEaIsIHErV5zkDCbgJ7EzyUz2EBsEYE2Fon1p9khpvNKzGh/ygJhS0ts
-        X76VEcLWkPixrJcZwhaVuLn6LTuM/f7YfKgaEYnWe2ehagQlHvzcDRWXlDh06CsbyAkSAvkS
-        Gw4EQoRrJN4uPwBVoi9xrWMj2FpeAV+Jrp6XYKexCKhKrJ31lA2ixkVi78EDYDazgLzE9rdz
-        mEFGMgtoSqzfpQ8xXVniyC0WmEcaNv5mR2czC/BJdBz+CxffMe8JE0SrmsSiJiOIsIzE18Pz
-        oUo8JKb0vGGbwKg4CxHGs5CcMAvhhAWMzKsYxVILinPTU4uNCkzg0Zqcn7uJEZxstTx2MM5+
-        +0HvECMTB+MhRgkOZiUR3hWWr5OEeFMSK6tSi/Lji0pzUosPMZoCPT+RWUo0OR+Y7vNK4g1N
-        LA1MzMwMzY1MDcyVxHm9UjYkCgmkJ5akZqemFqQWwfQxcXBKNTCpH51y0OQry++NgbIVj9by
-        HRSO2vu5zWR16BP9OObtXIy71aqs9l/5NpF9cluP2jHOAL7Jtes/uLwtszy1vNKU2zZ+D3ei
-        4a68B88/qd795HCqtv82f0Do6l8rBOZGCItWWrP827p9rsFCHbMJ6+4mvPvHWGD5dEPg0mVH
-        VQ+vOLpC5Nne6nZppYwVvKy5zu9cxEtT7JsX7vhmW8jtc2JxwGZtJvtpfWaVC1+zrDtuO0Wr
-        o9LmG8+eP0EmGVf18/2F2HZ2nuA6PXHtyxcbpzhELpv89UqB5jKvB4kXndcG35DeyXuj7WdK
-        c/yk29yv7MLf8Mn8Wu65/sbLvnd9tu+4G5/JtHMbioV+F72w6ZWOEktxRqKhFnNRcSIAxhoe
-        rD8EAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220804074224epcms2p18f0ac2f92073aeed981718a9cab23866
-References: <CGME20220804074224epcms2p18f0ac2f92073aeed981718a9cab23866@epcms2p1>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 4 Aug 2022 03:44:11 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8AE61D7A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:44:10 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10ee900cce0so11481908fac.5
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 00:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=nUEU9o3cM5Kmc1EYUHE1SdxMORqRyA15fSC0pKpPPpA=;
+        b=jVbav0mnsWsmRr52DoW67vlijQQnljhaeszrKNhLr83Axf0fna1SYSOT3MH0d0MK6u
+         02BjMQtbZNTJ/rD7EqzpxDxQC1nq5KS/970y+cya2OAJlN6pnJdtHbBIQys7TNkYday8
+         yHJoJEHUod6fFDYx++GjLc/1FAAAKyQ+W95EqhbumVIJR3JJvY8gMzQ4tpebokMw9wJx
+         ip3sf17OpIilVpv7envx6eQlptwYXeT3eAM9XukxQ4WuAtYjDD1ZlD/2kht9MLrs1vYI
+         1mH2/0m3hpqdosozylFFtMisZnwJUnCJs2INlP2lPLWMBbGxFqtq3BcUk0Ks4ilWxkAa
+         6bvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=nUEU9o3cM5Kmc1EYUHE1SdxMORqRyA15fSC0pKpPPpA=;
+        b=FrPZfvXrNe4pDG5jGp4CP0V/zxeJl+XvWtcxmFXzaMIQIpLgE/Kot8jWSGA9wJUPF9
+         cSg0oFLKLH8PnVeVVKJjph7NLgot7w6/51cszf0AZ/XLWQC2D+r7WnnLcVm9N2kb/IMo
+         lutbcTAJh/JRKkdYMUZA8GVAeSp9fkIqQzJSYRvexi6VIWp251wZ5IqLf7HTRPVe/Iai
+         RaGNvsl63sE66B0B4toWP3FcN9r2tzLUYV6T9Fa0dAaOh8ZI4Sy04eeaa0deasGhOLQH
+         XBJAwLQj+eUBVhVnyFlYgDKJqO6KHfgcoGtUsMdhX17lcPnEBp8WAvlkemRp984NDTRP
+         SshQ==
+X-Gm-Message-State: ACgBeo1gCn82HpahZCsNYRgqbazeMMd7mdMgIl6fwVGL4T9Z0/dPmY0J
+        IonXntQmgOHIsDvGFRwVhvVCKGSFeYFk7/3tpJk=
+X-Google-Smtp-Source: AA6agR74w1TmI+hmQCaAYcMZ9/+IS/zunLEqTvdiGsyln1BmvAgTP+erCWXjumNm0tyIR9nEsEsbaVEFOvTPB+auiPY=
+X-Received: by 2002:a05:6870:9193:b0:10d:130e:e57c with SMTP id
+ b19-20020a056870919300b0010d130ee57cmr3611160oaf.286.1659599049528; Thu, 04
+ Aug 2022 00:44:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
+ <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
+ <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com> <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
+In-Reply-To: <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
+From:   Oded Gabbay <oded.gabbay@gmail.com>
+Date:   Thu, 4 Aug 2022 10:43:42 +0300
+Message-ID: <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
+Subject: Re: New subsystem for acceleration devices
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series is to clean up UFS's Write Booster code and
-adds sysfs attribute which can control the specific feature of it.
+On Thu, Aug 4, 2022 at 2:54 AM Dave Airlie <airlied@gmail.com> wrote:
+>
+> On Thu, 4 Aug 2022 at 06:21, Oded Gabbay <oded.gabbay@gmail.com> wrote:
+> >
+> > On Wed, Aug 3, 2022 at 10:04 PM Dave Airlie <airlied@gmail.com> wrote:
+> > >
+> > > On Sun, 31 Jul 2022 at 22:04, Oded Gabbay <oded.gabbay@gmail.com> wrote:
+> > > >
+> > > > Hi,
+> > > > Greg and I talked a couple of months ago about preparing a new accel
+> > > > subsystem for compute/acceleration devices that are not GPUs and I
+> > > > think your drivers that you are now trying to upstream fit it as well.
+> > >
+> > > We've had some submissions for not-GPUs to the drm subsystem recently.
+> > >
+> > > Intel GNA, Intel VPU, NVDLA, rpmsg AI processor unit.
+> > >
+> > > why is creating a new subsystem at this time necessary?
+> > >
+> > > Are we just creating a subsystem to avoid the open source userspace
+> > > consumer rules? Or do we have some concrete reasoning behind it?
+> > >
+> > > Dave.
+> >
+> > Hi Dave.
+> > The reason it happened now is because I saw two drivers, which are
+> > doing h/w acceleration for AI, trying to be accepted to the misc
+> > subsystem.
+> > Add to that the fact I talked with Greg a couple of months ago about
+> > doing a subsystem for any compute accelerators, which he was positive
+> > about, I thought it is a good opportunity to finally do it.
+> >
+> > I also honestly think that I can contribute much to these drivers from
+> > my experience with the habana driver (which is now deployed in mass at
+> > AWS) and contribute code from the habana driver to a common framework
+> > for AI drivers.
+>
+> Why not port the habana driver to drm now instead? I don't get why it
+> wouldn't make sense?
 
-V2:
-	- modify commit message
-	- move & modify err messages
-	- remove unnesscessary debug messages
-V3:
-	- split patch (functional, non-functional)
-V4:
-	- split patch (The number of patches from 2 to 7)
-	- modify dev messages
-	- modify commit message
-V5:
-	- drop (scsi: ufs: wb: Move ufshcd_is_wb_allowed() to callee)
-	- fix condition check
-	- add document for sysfs attribute
-	- move ufshcd_is_wb_buf_flush_allowed() to ufs-priv.h
-V6:
-	- Change the function name from ufshcd_wb_config() to
-	ufshcd_configure_wb()
-	- modify document description for wb_buf_flush_en attribute
-	- fix some dev_err messages
-V7:
-	- renaming sysfs attribute name 
-	  (wb_buf_flush_en -> enable_wb_buf_flush)
-	- update document description
-	- change debug message level (info -> dbg)
-	  (5.19/scsi-fixes, https://git.kernel.org/mkp/scsi/c/2ae57c995003)
+imho, no, I don't see the upside. This is not a trivial change, and
+will require a large effort. What will it give me that I need and I
+don't have now ?
 
-Jinyoung Choi (6):
-  scsi: ufs: wb: Change wb_enabled condition test
-  scsi: ufs: wb: Change functions name and modify parameter name
-  scsi: ufs: wb: Add explicit flush sysfs attribute
-  scsi: ufs: wb: Introduce ufshcd_is_wb_buf_flush_allowed() to improve
-    readability
-  scsi: ufs: wb: Modify messages
-  scsi: ufs: wb: Move the comment to the right position
+>
+> Stepping up to create a new subsystem is great, but we need rules
+> around what belongs where, we can't just spawn new subsystems when we
+> have no clear guidelines on where drivers should land.
+>
+> What are the rules for a new accel subsystem? Do we have to now
+> retarget the 3 drivers that are queued up to use drm for accelerators,
+> because 2 drivers don't?
+>
+> There's a lot more to figure out here than merge some structures and
+> it will be fine.
+I totally agree. We need to set some rules and make sure everyone in
+the kernel community is familiar with them, because now you get
+different answers based on who you consult with.
 
- Documentation/ABI/testing/sysfs-driver-ufs |  9 +++
- drivers/ufs/core/ufs-sysfs.c               | 47 ++++++++++++++-
- drivers/ufs/core/ufshcd-priv.h             |  6 ++
- drivers/ufs/core/ufshcd.c                  | 70 ++++++++++++----------
- include/ufs/ufshcd.h                       |  1 +
- 5 files changed, 99 insertions(+), 34 deletions(-)
+My rules of thumb that I thought of was that if you don't have any
+display (you don't need to support X/wayland) and you don't need to
+support opengl/vulkan/opencl/directx or any other gpu-related software
+stack, then you don't have to go through drm.
+In other words, if you don't have gpu-specific h/w and/or you don't
+need gpu uAPI, you don't belong in drm.
 
--- 
-2.25.1
+After all, memory management services, or common device chars handling
+I can get from other subsystems (e.g. rdma) as well. I'm sure I could
+model my uAPI to be rdma uAPI compliant (I can define proprietary uAPI
+there as well), but this doesn't mean I belong there, right ?
+
+>
+> I think the one area I can see a divide where a new subsystem is for
+> accelerators that are single-user, one shot type things like media
+> drivers (though maybe they could be just media drivers).
+>
+> I think anything that does command offloading to firmware or queues
+> belongs in drm, because that is pretty much what the framework does. I
+I think this is a very broad statement which doesn't reflect reality
+in the kernel.
+
+> think it might make sense to enhance some parts of drm to fit things
+> in better, but that shouldn't block things getting started.
+>
+> I'm considering if, we should add an accelerator staging area to drm
+> and land the 2-3 submissions we have and try and steer things towards
+> commonality that way instead of holding them out of tree.
+Sounds like a good idea regardless of this discussion.
+
+>
+> I'd like to offload things from Greg by just not having people submit
+> misc drivers at all for things that should go elsewhere.
+Great, at least we can agree on that.
+
+Thanks,
+Oded
+
+>
+> Dave.
+>
+>
+> >
+> > Regarding the open source userspace rules in drm - yes, I think your
+> > rules are too limiting for the relatively young AI scene, and I saw at
+> > the 2021 kernel summit that other people from the kernel community
+> > think that as well.
+> > But that's not the main reason, or even a reason at all for doing
+> > this. After all, at least for habana, we open-sourced our compiler and
+> > a runtime library. And Greg also asked those two drivers if they have
+> > matching open-sourced user-space code.
+> >
+> > And a final reason is that I thought this can also help in somewhat
+> > reducing the workload on Greg. I saw in the last kernel summit there
+> > was a concern about bringing more people to be kernel maintainers so I
+> > thought this is a step in the right direction.
+> >
+> > Oded

@@ -2,126 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1883958996D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E608A589970
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239514AbiHDImf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:42:35 -0400
+        id S239379AbiHDIpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:45:07 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239515AbiHDIlv (ORCPT
+        with ESMTP id S239346AbiHDIof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:41:51 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DAB6714B
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:41:08 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso4566932pjf.5
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 01:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=2QaqyHfbHLtpliP6PzpyY5kh+sI+NpRD+MBrExwxasE=;
-        b=XQdV9/wIxqZlDtL98Dm1oldeJ5OqgRxntlIF+kEYjxekgPEU6xcw40fS56pvhAhIjh
-         ung5k6CcRLk5vV+nmVOHPIQT/s+/tf/g3TFMEd/uEXuZ3Ilks9ug5T4YzDFnNmbBqSOs
-         IkJERwsDObI0dO2mToe+Qi97mdrmo3/wPZtYAiwUwQvauYBJHLvsf4vEQGvoGfR2vw+C
-         sGYpiqtrKgb4MwApdla51Uwc4QpwcSR1SF8baVZLWK/AItCdmGtYtJS9MJcPKnrWfRsM
-         j8oUD57/QfFFQFbJgzm0XV6s6VBigXpu13yL399G31RQY/3aT7pwS+xUHh3HkUO08XKZ
-         RPCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=2QaqyHfbHLtpliP6PzpyY5kh+sI+NpRD+MBrExwxasE=;
-        b=2rIdHVecp/KfiNP5/aElYcohVZiMc2mo7nBy+KyTf7KDPkqyopjcAiHefT7D5xpPvb
-         6CVMhVPq3ywLNf9xwZ+RnU4SAWVH3RwHOkHJRUfcic+jqB65szmC9zwV23nQ77ltOJ5l
-         rjD7ECTfH9j1ogg4E/8sFjLDoQSE3PvgZD6Aqe0uBa3H4Utc5p6N7IsS/6bpGStdTFuA
-         xCQ0+u3CVqGs3SRHKh7eQzW3fBm+xbhq0UomPKY10MMqEg4DfPI21rOfg/7TJr4uyg6L
-         Y4Xgq4CnxIBRES38xmAffWacMyLTRtivIH9kYEWYnIHfXv6qg3OwNpwJ9zD8+oaCYy+r
-         vk5w==
-X-Gm-Message-State: ACgBeo1xtremPGRStHVQ17KV6rMW64E7ShUPigwCufRNZECx+DcND4R4
-        RIJj/2zQPoEsY3GDgFgXADs7lRjKZsU=
-X-Google-Smtp-Source: AA6agR5bGM+NH+ZIxjElVHsO+022e9ef8Utw5P5HvnbJPQ2hBJUz79XMxY70/3ZvyKTWQPvmwUvsow==
-X-Received: by 2002:a17:90b:33d1:b0:1f5:4fc5:3d72 with SMTP id lk17-20020a17090b33d100b001f54fc53d72mr953449pjb.60.1659602468271;
-        Thu, 04 Aug 2022 01:41:08 -0700 (PDT)
-Received: from localhost ([198.11.178.15])
-        by smtp.gmail.com with ESMTPSA id l21-20020a17090a599500b001f4d4a1b494sm550103pji.7.2022.08.04.01.41.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Aug 2022 01:41:07 -0700 (PDT)
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: [RFC PATCH 8/8] workqueue: Move the locking out of maybe_create_worker()
-Date:   Thu,  4 Aug 2022 16:41:35 +0800
-Message-Id: <20220804084135.92425-9-jiangshanlai@gmail.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20220804084135.92425-1-jiangshanlai@gmail.com>
-References: <20220804084135.92425-1-jiangshanlai@gmail.com>
+        Thu, 4 Aug 2022 04:44:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C3522B2C
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:42:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659602574; x=1691138574;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Rd37YsN2R+cKed2cLhxUrMyllbBQxMnZsWu1bDpROSY=;
+  b=eEKlaeU4WAH7DQp3/STWPTmp21cCsuFrRj5z4Kd3mgoR5bwG0xnBydnK
+   FN8hFzlEpEcCxbd1DQTMcsoEBAwdQ+7bm40VUpHq9Rrs6x7lHZ75D1Saa
+   +KMw3JrrcXixuzXT+2jwCBgK/cSNDrnf2CJkgr6JLeFk/XdN0PA+cF0Cz
+   XJDKr81BRIpLOvImV+0kr436tlrDSx8bZGseuovvWKtJUDS5iTQbBiJ5V
+   HygmCIN47OdweI61nk/j8j08ymwx1sRrgxESVKywJGrtJqmS3Jq+QQPFK
+   zDdcmWWIU91ScCvCVDCDqKlNZK1fYMQlC0JJGPlKBGh9RjTTRbAD9p15L
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="289890318"
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="289890318"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 01:42:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="930724964"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 04 Aug 2022 01:42:44 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJWRH-000IA9-2c;
+        Thu, 04 Aug 2022 08:42:43 +0000
+Date:   Thu, 4 Aug 2022 16:42:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: io_uring/io_uring.c:2932:40: warning: variable 'prev' set but not
+ used
+Message-ID: <202208041642.HDHLXJ6J-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b44f2fd87919b5ae6e1756d4c7ba2cbba22238e1
+commit: ed29b0b4fd835b058ddd151c49d021e28d631ee6 io_uring: move to separate directory
+date:   10 days ago
+config: arm-randconfig-r013-20220804 (https://download.01.org/0day-ci/archive/20220804/202208041642.HDHLXJ6J-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed29b0b4fd835b058ddd151c49d021e28d631ee6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ed29b0b4fd835b058ddd151c49d021e28d631ee6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-The code is cleaner if the reversed pair of unlock() and lock()
-is moved into the caller.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
----
- kernel/workqueue.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 0d9844b81482..013ad61e67b9 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -2091,17 +2091,10 @@ static void pool_mayday_timeout(struct timer_list *t)
-  * sent to all rescuers with works scheduled on @pool to resolve
-  * possible allocation deadlock.
-  *
-- * LOCKING:
-- * raw_spin_lock_irq(pool->lock) which may be released and regrabbed
-- * multiple times.  Does GFP_KERNEL allocations.  Called only from
-- * manager.
-+ * Does GFP_KERNEL allocations.  Called only from manager.
-  */
- static void maybe_create_worker(struct worker_pool *pool)
--__releases(&pool->lock)
--__acquires(&pool->lock)
- {
--	raw_spin_unlock_irq(&pool->lock);
--
- 	/* if we don't make progress in MAYDAY_INITIAL_TIMEOUT, call for help */
- 	mod_timer(&pool->mayday_timer, jiffies + MAYDAY_INITIAL_TIMEOUT);
- 
-@@ -2116,7 +2109,6 @@ __acquires(&pool->lock)
- 	}
- 
- 	del_timer_sync(&pool->mayday_timer);
--	raw_spin_lock_irq(&pool->lock);
- }
- 
- /**
-@@ -2147,7 +2139,9 @@ static bool manage_workers(struct worker *worker)
- 	pool->flags |= POOL_MANAGER_ACTIVE;
- 	pool->manager = worker;
- 
-+	raw_spin_unlock_irq(&pool->lock);
- 	maybe_create_worker(pool);
-+	raw_spin_lock_irq(&pool->lock);
- 
- 	pool->manager = NULL;
- 	pool->flags &= ~POOL_MANAGER_ACTIVE;
+   io_uring/io_uring.c: In function '__io_submit_flush_completions':
+>> io_uring/io_uring.c:2932:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+    2932 |         struct io_wq_work_node *node, *prev;
+         |                                        ^~~~
+
+
+vim +/prev +2932 io_uring/io_uring.c
+
+7a743e225b2a9da fs/io_uring.c Pavel Begunkov 2020-03-03  2928  
+c450178d9be9dc4 fs/io_uring.c Pavel Begunkov 2021-09-08  2929  static void __io_submit_flush_completions(struct io_ring_ctx *ctx)
+a141dd896f544df fs/io_uring.c Jens Axboe     2021-08-12  2930  	__must_hold(&ctx->uring_lock)
+905c172f32c56f0 fs/io_uring.c Pavel Begunkov 2021-02-10  2931  {
+6f33b0bc4ea43f5 fs/io_uring.c Pavel Begunkov 2021-09-24 @2932  	struct io_wq_work_node *node, *prev;
+cd0ca2e048dc0dd fs/io_uring.c Pavel Begunkov 2021-08-09  2933  	struct io_submit_state *state = &ctx->submit_state;
+905c172f32c56f0 fs/io_uring.c Pavel Begunkov 2021-02-10  2934  
+3d4aeb9f98058c3 fs/io_uring.c Pavel Begunkov 2021-11-10  2935  	if (state->flush_cqes) {
+79ebeaee8a21a00 fs/io_uring.c Jens Axboe     2021-08-10  2936  		spin_lock(&ctx->completion_lock);
+6f33b0bc4ea43f5 fs/io_uring.c Pavel Begunkov 2021-09-24  2937  		wq_list_for_each(node, prev, &state->compl_reqs) {
+6f33b0bc4ea43f5 fs/io_uring.c Pavel Begunkov 2021-09-24  2938  			struct io_kiocb *req = container_of(node, struct io_kiocb,
+6f33b0bc4ea43f5 fs/io_uring.c Pavel Begunkov 2021-09-24  2939  						    comp_list);
+5182ed2e332e8e1 fs/io_uring.c Pavel Begunkov 2021-06-26  2940  
+f43de1f88841d59 fs/io_uring.c Pavel Begunkov 2022-06-15  2941  			if (!(req->flags & REQ_F_CQE_SKIP))
+91ef75a7db0d085 fs/io_uring.c Pavel Begunkov 2022-06-15  2942  				__io_fill_cqe_req(ctx, req);
+905c172f32c56f0 fs/io_uring.c Pavel Begunkov 2021-02-10  2943  		}
+3d4aeb9f98058c3 fs/io_uring.c Pavel Begunkov 2021-11-10  2944  
+905c172f32c56f0 fs/io_uring.c Pavel Begunkov 2021-02-10  2945  		io_commit_cqring(ctx);
+79ebeaee8a21a00 fs/io_uring.c Jens Axboe     2021-08-10  2946  		spin_unlock(&ctx->completion_lock);
+905c172f32c56f0 fs/io_uring.c Pavel Begunkov 2021-02-10  2947  		io_cqring_ev_posted(ctx);
+3d4aeb9f98058c3 fs/io_uring.c Pavel Begunkov 2021-11-10  2948  		state->flush_cqes = false;
+3d4aeb9f98058c3 fs/io_uring.c Pavel Begunkov 2021-11-10  2949  	}
+5182ed2e332e8e1 fs/io_uring.c Pavel Begunkov 2021-06-26  2950  
+1cce17aca621c38 fs/io_uring.c Pavel Begunkov 2021-09-24  2951  	io_free_batch_list(ctx, state->compl_reqs.first);
+6f33b0bc4ea43f5 fs/io_uring.c Pavel Begunkov 2021-09-24  2952  	INIT_WQ_LIST(&state->compl_reqs);
+7a743e225b2a9da fs/io_uring.c Pavel Begunkov 2020-03-03  2953  }
+7a743e225b2a9da fs/io_uring.c Pavel Begunkov 2020-03-03  2954  
+
+:::::: The code at line 2932 was first introduced by commit
+:::::: 6f33b0bc4ea43f5c5ce7b7c9ab66051f80837862 io_uring: use slist for completion batching
+
+:::::: TO: Pavel Begunkov <asml.silence@gmail.com>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
 -- 
-2.19.1.6.gb485710b
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

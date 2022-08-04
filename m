@@ -2,379 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1223958955B
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C2C58955E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238034AbiHDAej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 20:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
+        id S238643AbiHDAhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 20:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237066AbiHDAee (ORCPT
+        with ESMTP id S237066AbiHDAh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 20:34:34 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791E55B057
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659573273; x=1691109273;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=122nXMqk96I+h91CikLbrZj0uZqs6F26UUVm3phR/ms=;
-  b=id5gj+NvaxOOLh3byi1NSK1hXjVDI37sbsXCJ8OQeuL7JzP+4TmzGbDj
-   +TU+wjW1okReRIHcoi5Ae9taGTxosN4312ZZ6tj4pNwsRovw8OW3pYmAz
-   QHR6gRxqA8Jgnmby+gQHW6/3wxXyoPxhbCGYXLffPdrTlbsZPzZi/NVnT
-   sOl8pNbSqfC7umxzG+2Vi/Os6kmfFIH0YpQo+YBBom5pY4oqBWRNwcJX6
-   7v9NuuQmuVFOwVpoDPbNfXWteC46C86vX4ZojsKx6HZOgvQTnOLuh+c/O
-   SkRSHZ74l05fxpy+KXiiZmQLn2TGk3PV5BD02CmKsAJSKCWYlKNeAcX9y
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="272852990"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="272852990"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:34:32 -0700
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="848764428"
-Received: from lucasmye-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.42.231])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:34:31 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v10 2/2] selftests: tdx: Test GetReport TDX attestation feature
-Date:   Wed,  3 Aug 2022 17:33:23 -0700
-Message-Id: <20220804003323.1441376-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220804003323.1441376-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220804003323.1441376-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Wed, 3 Aug 2022 20:37:29 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A3E3190B;
+        Wed,  3 Aug 2022 17:37:27 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VLJRyKp_1659573444;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VLJRyKp_1659573444)
+          by smtp.aliyun-inc.com;
+          Thu, 04 Aug 2022 08:37:24 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     michael.chan@broadcom.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH net-next] bnxt_en: Remove duplicated include bnxt_devlink.c
+Date:   Thu,  4 Aug 2022 08:37:22 +0800
+Message-Id: <20220804003722.54088-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In TDX guest, attestation is used to verify the trustworthiness of a
-TD. During the TD bring-up, Intel TDX module measures and records the
-initial contents and configuration of TD, and at runtime, TD software
-uses runtime measurement registers (RMTRs) to measure and record
-details related to kernel image, command line params, ACPI tables,
-initrd, etc. At TD runtime, Intel SGX attestation infrastructure is
-re-used to attest to these measurement data.
+bnxt_ethtool.h is included twice in bnxt_devlink.c,
+remove one of them.
 
-First step in the TDX attestation process is to get the TDREPORT data.
-It is a fixed size data structure generated by the TDX module which
-includes the above mentioned measurements data, a MAC to protect the
-integerity of the TDREPORT, and a 64-Byte of user specified data passed
-during TDREPORT request which can uniquely identify the TDREPORT.
-
-Intel's TDX guest driver exposes TDX_CMD_GET_REPORT IOCTL interface to
-get the TDREPORT from the user space.
-
-Add a kernel selftest module to test this ABI and verify the validity
-of generated TDREPORT.
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=1817
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
+ drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Changes since v9:
- * Copied arch/x86/include/uapi/asm/tdx.h to tools/arch/x86/include to
-   decouple header dependency between kernel source and tools dir.
- * Fixed Makefile to adapt to above change.
- * Fixed commit log and comments.
- * Added __packed to hardware structs.
-
-Changes since v8:
- * Please refer to https://lore.kernel.org/all/ \
-   20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com/
-
- tools/arch/x86/include/uapi/asm/tdx.h         |  51 ++++++
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/tdx/Makefile          |  11 ++
- tools/testing/selftests/tdx/config            |   1 +
- tools/testing/selftests/tdx/tdx_attest_test.c | 156 ++++++++++++++++++
- 5 files changed, 220 insertions(+)
- create mode 100644 tools/arch/x86/include/uapi/asm/tdx.h
- create mode 100644 tools/testing/selftests/tdx/Makefile
- create mode 100644 tools/testing/selftests/tdx/config
- create mode 100644 tools/testing/selftests/tdx/tdx_attest_test.c
-
-diff --git a/tools/arch/x86/include/uapi/asm/tdx.h b/tools/arch/x86/include/uapi/asm/tdx.h
-new file mode 100644
-index 000000000000..c1667b20fe20
---- /dev/null
-+++ b/tools/arch/x86/include/uapi/asm/tdx.h
-@@ -0,0 +1,51 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _UAPI_ASM_X86_TDX_H
-+#define _UAPI_ASM_X86_TDX_H
-+
-+#include <linux/types.h>
-+#include <linux/ioctl.h>
-+
-+/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
-+#define TDX_REPORTDATA_LEN              64
-+
-+/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
-+#define TDX_REPORT_LEN                  1024
-+
-+/**
-+ * struct tdx_report_req: Get TDREPORT using REPORTDATA as input.
-+ *
-+ * @subtype        : Subtype of TDREPORT (fixed as 0 by TDX Module
-+ *                   specification, but added a parameter to handle
-+ *                   future extension).
-+ * @reportdata     : User-defined REPORTDATA to be included into
-+ *                   TDREPORT. Typically it can be some nonce
-+ *                   provided by attestation service, so the
-+ *                   generated TDREPORT can be uniquely verified.
-+ * @rpd_len        : Length of the REPORTDATA (fixed as 64 bytes by
-+ *                   the TDX Module specification, but parameter is
-+ *                   added to handle future extension).
-+ * @tdreport       : TDREPORT output from TDCALL[TDG.MR.REPORT].
-+ * @tdr_len        : Length of the TDREPORT (fixed as 1024 bytes by
-+ *                   the TDX Module specification, but a parameter
-+ *                   is added to accommodate future extension).
-+ *
-+ * Used in TDX_CMD_GET_REPORT IOCTL request.
-+ */
-+struct tdx_report_req {
-+	__u8  subtype;
-+	__u64 reportdata;
-+	__u32 rpd_len;
-+	__u64 tdreport;
-+	__u32 tdr_len;
-+};
-+
-+/*
-+ * TDX_CMD_GET_REPORT - Get TDREPORT using TDCALL[TDG.MR.REPORT]
-+ *
-+ * Return 0 on success, -EIO on TDCALL execution failure, and
-+ * standard errno on other general error cases.
-+ *
-+ */
-+#define TDX_CMD_GET_REPORT		_IOWR('T', 0x01, __u64)
-+
-+#endif /* _UAPI_ASM_X86_TDX_H */
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index de11992dc577..807a839d69c4 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -69,6 +69,7 @@ TARGETS += sync
- TARGETS += syscall_user_dispatch
- TARGETS += sysctl
- TARGETS += tc-testing
-+TARGETS += tdx
- TARGETS += timens
- ifneq (1, $(quicktest))
- TARGETS += timers
-diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
-new file mode 100644
-index 000000000000..014795420184
---- /dev/null
-+++ b/tools/testing/selftests/tdx/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+top_srcdir = ../../../..
-+
-+LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/x86/include
-+
-+CFLAGS += -O3 -Wl,-no-as-needed -Wall -static -I$(LINUX_TOOL_ARCH_INCLUDE)
-+
-+TEST_GEN_PROGS := tdx_attest_test
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/tdx/config b/tools/testing/selftests/tdx/config
-new file mode 100644
-index 000000000000..1340073a4abf
---- /dev/null
-+++ b/tools/testing/selftests/tdx/config
-@@ -0,0 +1 @@
-+CONFIG_INTEL_TDX_GUEST=y
-diff --git a/tools/testing/selftests/tdx/tdx_attest_test.c b/tools/testing/selftests/tdx/tdx_attest_test.c
-new file mode 100644
-index 000000000000..b8cef2707905
---- /dev/null
-+++ b/tools/testing/selftests/tdx/tdx_attest_test.c
-@@ -0,0 +1,156 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test TDX attestation feature
-+ *
-+ * Copyright (C) 2022 Intel Corporation. All rights reserved.
-+ *
-+ * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-+ */
-+
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/ioctl.h>
-+#include <sys/types.h>
-+#include <uapi/asm/tdx.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#define devname         "/dev/tdx-guest"
-+#define HEX_DUMP_SIZE	8
-+#define __packed       __attribute__((packed))
-+
-+/*
-+ * Trusted Execution Environment (TEE) report (TDREPORT_STRUCT) type,
-+ * sub type and version. More details can be found in TDX v1.0 Module
-+ * specification, sec titled "REPORTTYPE".
-+ */
-+struct tdreport_type {
-+	/* 0 - SGX, 81 -TDX, rest are reserved */
-+	__u8 type;
-+	/* Default value is 0 */
-+	__u8 sub_type;
-+	/* Default value is 0 */
-+	__u8 version;
-+	__u8 reserved;
-+}  __packed;
-+
-+/*
-+ * struct reportmac - First field in the TRDREPORT_STRUCT. It is common
-+ * to Intel’s TEE's e.g., SGX and TDX. It is MAC-protected and contains
-+ * hashes of the remainder of the report structure which includes the
-+ * TEE’s measurements, and where applicable, the measurements of additional
-+ * TCB elements not reflected in CPUSVN – e.g., a SEAM’s measurements.
-+ * More details can be found in TDX v1.0 Module specification, sec titled
-+ * "REPORTMACSTRUCT"
-+ */
-+struct reportmac {
-+	struct tdreport_type type;
-+	__u8 reserved1[12];
-+	/* CPU security version */
-+	__u8 cpu_svn[16];
-+	/* SHA384 hash of TEE TCB INFO */
-+	__u8 tee_tcb_info_hash[48];
-+	/* SHA384 hash of TDINFO_STRUCT */
-+	__u8 tee_td_info_hash[48];
-+	/* User defined unique data passed in TDG.MR.REPORT request */
-+	__u8 reportdata[64];
-+	__u8 reserved2[32];
-+	__u8 mac[32];
-+}  __packed;
-+
-+/*
-+ * struct td_info - It contains the measurements and initial configuration
-+ * of the TD that was locked at initialization and a set of measurement
-+ * registers that are run-time extendable. These values are copied from
-+ * the TDCS by the TDG.MR.REPORT function. More details can be found in
-+ * TDX v1.0 Module specification, sec titled "TDINFO_STRUCT".
-+ */
-+struct td_info {
-+	/* TD attributes (like debug, spet_disable, etc) */
-+	__u8 attr[8];
-+	__u64 xfam;
-+	/* Measurement registers */
-+	__u64 mrtd[6];
-+	__u64 mrconfigid[6];
-+	__u64 mrowner[6];
-+	__u64 mrownerconfig[6];
-+	/* Runtime measurement registers */
-+	__u64 rtmr[24];
-+	__u64 reserved[14];
-+} __packed;
-+
-+struct tdreport {
-+	/* Common to TDX/SGX of size 256 bytes */
-+	struct reportmac reportmac;
-+	__u8 tee_tcb_info[239];
-+	__u8 reserved[17];
-+	/* Measurements and configuration data of size 512 byes */
-+	struct td_info tdinfo;
-+}  __packed;
-+
-+#ifdef DEBUG
-+static void print_array_hex(const char *title, const char *prefix_str,
-+		const void *buf, int len)
-+{
-+	const __u8 *ptr = buf;
-+	int i, rowsize = HEX_DUMP_SIZE;
-+
-+	if (!len || !buf)
-+		return;
-+
-+	printf("\t\t%s", title);
-+
-+	for (i = 0; i < len; i++) {
-+		if (!(i % rowsize))
-+			printf("\n%s%.8x:", prefix_str, i);
-+		printf(" %.2x", ptr[i]);
-+	}
-+
-+	printf("\n");
-+}
-+#endif
-+
-+TEST(verify_report)
-+{
-+	__u8 reportdata[TDX_REPORTDATA_LEN];
-+	struct tdreport tdreport;
-+	struct tdx_report_req req;
-+	int devfd, i;
-+
-+	devfd = open(devname, O_RDWR | O_SYNC);
-+
-+	ASSERT_LT(0, devfd);
-+
-+	/* Generate sample report data */
-+	for (i = 0; i < TDX_REPORTDATA_LEN; i++)
-+		reportdata[i] = i;
-+
-+	/* Initialize IOCTL request */
-+	req.subtype     = 0;
-+	req.reportdata  = (__u64)reportdata;
-+	req.rpd_len     = TDX_REPORTDATA_LEN;
-+	req.tdreport    = (__u64)&tdreport;
-+	req.tdr_len     = sizeof(tdreport);
-+
-+	/* Get TDREPORT */
-+	ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
-+
-+#ifdef DEBUG
-+	print_array_hex("\n\t\tTDX report data\n", "",
-+			reportdata, sizeof(reportdata));
-+
-+	print_array_hex("\n\t\tTDX tdreport data\n", "",
-+			&tdreport, sizeof(tdreport));
-+#endif
-+
-+	/* Make sure TDREPORT data includes the REPORTDATA passed */
-+	ASSERT_EQ(0, memcmp(&tdreport.reportmac.reportdata[0],
-+			reportdata, sizeof(reportdata)));
-+
-+	ASSERT_EQ(0, close(devfd));
-+}
-+
-+TEST_HARNESS_MAIN
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
+index 14df8cfc2946..059f96f7a96f 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
+@@ -21,7 +21,6 @@
+ #include "bnxt_ptp.h"
+ #include "bnxt_coredump.h"
+ #include "bnxt_nvm_defs.h"
+-#include "bnxt_ethtool.h"
+ 
+ static void __bnxt_fw_recover(struct bnxt *bp)
+ {
 -- 
-2.25.1
+2.20.1.7.g153144c
 

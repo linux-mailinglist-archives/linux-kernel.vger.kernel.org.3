@@ -2,158 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC16589FDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC3A589FE0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiHDR2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 13:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48810 "EHLO
+        id S238785AbiHDR2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 13:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiHDR2C (ORCPT
+        with ESMTP id S238727AbiHDR2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 13:28:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491FD6301;
-        Thu,  4 Aug 2022 10:28:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8673DB82614;
-        Thu,  4 Aug 2022 17:27:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118A4C433D6;
-        Thu,  4 Aug 2022 17:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659634078;
-        bh=dmSrkl/IWyIBVuUL9KetxyU+zq8M3qYRMqtV+KA7yh0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=S8roUZAIbKjf8HZdyuWka8Q18Md0NJxc9hBf/nnvAtP7nK0VLdaIMmPPf47hurRqE
-         /aepD4y2ZkGYe9PFB6o/y5+olcyDOnTyJUmRrujHRrdLkS4UMSq8q+vR/OKZbSKCrx
-         zqpnT2jFplije8gd4zRpYULc9nRpw8b6qaZCuG6UGe9vypfer2F4LTJWDWRyVhCKFl
-         atLy71cdUoItchEZBhgV8johMg0HCwM7migQv8kgVg/K/XwV6k5Nvx8PIXHc2K9uWA
-         ZyQ47wixHJCNZeLiZ9+i4sa9ZCdYS+b6Uma04mf96CZjnZxv7PVvxd55Z77hBhiEXL
-         Rhgw1lHx/RaLQ==
-Date:   Thu, 4 Aug 2022 12:27:56 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     Cyril Brulebois <kibi@debian.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 0/7] PCI: brcmstb: Re-submit reverted patchset
-Message-ID: <20220804172756.GA944222@bhelgaas>
+        Thu, 4 Aug 2022 13:28:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14A636A4A4
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 10:28:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659634097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ybWDNojv72jmRJcXktwiQRGncl+ABn5fskjt5uRGsbE=;
+        b=BLKQ4dGDMD4auHO1onJLoiImiYAfdgIyjh/qcUhU9ugAcAHaH9JrXWDZBiBn6ZsC0dsr+7
+        VorVctElrGmyN0o5yrxTI4tHfGx1pyGT5bi9UgS5ldEeYbF520ZMcJPJGwFXvUf1CdtaKc
+        J255An9I1tEd03yUpCDNsxzpbBpWV14=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-674-CVkv0YXEPxeFjMEy3PNScg-1; Thu, 04 Aug 2022 13:28:15 -0400
+X-MC-Unique: CVkv0YXEPxeFjMEy3PNScg-1
+Received: by mail-wm1-f72.google.com with SMTP id v130-20020a1cac88000000b003a4f057ed9fso126933wme.7
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 10:28:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=ybWDNojv72jmRJcXktwiQRGncl+ABn5fskjt5uRGsbE=;
+        b=clvacQQWGA2eidWmZHdshV6+dazdNOrcixeZS9Ke5cC9zPq9cpih3kj9h5t87NYztI
+         DW0jMvhMkOYjr/dh1EQHMGiJOP1+Y7ftPmQ09QUZ7lbZ/e2e1rsb1qWp/MlLr8sKgKKz
+         bgmgFoj9jAI6uwM9Qm731VKPROWzXWpODkIV5MRRehpITuFhETkX5+X9brkQ3XpN+K+2
+         CwR7KaGYk5A+QS7dejjfXmGZgH/m2pktkDX5rMJLcQLI6SlCEZUDBJJgb76Hm+0sXLtU
+         HHzYZK/9oTVR5kvZpQuAKQskXV0lIU2dFzXTXguOA11F/oOz12KdYsVbopfv2AOhc1Gi
+         QGBg==
+X-Gm-Message-State: ACgBeo3VmyBdFj8mythdvo3GeU9X9vHU8xQBV9uFsw/Mm5QXr5aMjHjK
+        BegPGXaJqzye1/dVBZy2lZ/R/26jJv8QLBk2iqSfPiPzIaOVenXB95zG15XTR15wlseypvH2PuV
+        /kpz9fKsqhIo7XQOxHa4JvDI8
+X-Received: by 2002:a05:600c:3495:b0:3a3:1fab:d01e with SMTP id a21-20020a05600c349500b003a31fabd01emr7240023wmq.150.1659634094599;
+        Thu, 04 Aug 2022 10:28:14 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6Jmwl7TFdshejfvSaBVgESSXJ5Hx+8ErrzGPMKpQN8r/HQB+h5eJMby069n9WsL4VqCHOjhA==
+X-Received: by 2002:a05:600c:3495:b0:3a3:1fab:d01e with SMTP id a21-20020a05600c349500b003a31fabd01emr7240010wmq.150.1659634094294;
+        Thu, 04 Aug 2022 10:28:14 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id r6-20020a5d4e46000000b0021f0c05859esm1744458wrt.71.2022.08.04.10.28.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 10:28:13 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Tariq Toukan <tariqt@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH net-next V4 1/3] sched/topology: Add NUMA-based CPUs
+ spread API
+In-Reply-To: <20220728191203.4055-2-tariqt@nvidia.com>
+References: <20220728191203.4055-1-tariqt@nvidia.com>
+ <20220728191203.4055-2-tariqt@nvidia.com>
+Date:   Thu, 04 Aug 2022 18:28:12 +0100
+Message-ID: <xhsmhedxvdikz.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANCKTBspR9kc5WE72q8LYJrr0bAOp+xwqzPxEX0Kp4i0RynwFg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 01:05:04PM -0400, Jim Quinlan wrote:
-> On Mon, Aug 1, 2022 at 6:19 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Tue, Jul 26, 2022 at 04:41:09PM -0700, Florian Fainelli wrote:
-> > > On 7/26/22 15:03, Bjorn Helgaas wrote:
-> > > > On Mon, Jul 25, 2022 at 11:12:49AM -0400, Jim Quinlan wrote:
-> > > >> ...
-> > > >> Jim Quinlan (7):
-> > > >>   PCI: brcmstb: Remove unnecessary forward declarations
-> > > >>   PCI: brcmstb: Split brcm_pcie_setup() into two funcs
-> > > >>   PCI: brcmstb: Gate config space access on link status
-> > > >>   PCI: brcmstb: Add mechanism to turn on subdev regulators
-> > > >>   PCI: brcmstb: Add control of subdevice voltage regulators
-> > > >>   PCI: brcmstb: Do not turn off WOL regulators on suspend
-> > > >>   PCI: brcmstb: Have .map_bus function names end with 'map_bus'
-> > > >>
-> > > >>  drivers/pci/controller/pcie-brcmstb.c | 476 ++++++++++++++++++--------
-> > > >>  1 file changed, 341 insertions(+), 135 deletions(-)
-> > > >
-> > > > I reworked these and put them on pci/ctrl/brcm for v5.20.  This is a
-> > > > proposal, not something set in stone.  But time is of the essence to
-> > > > figure out how we want to proceed.
-> > > >
-> > > > I changed a lot of stuff and it's likely I broke something in the
-> > > > process, so please take a look and test this out.  Here's an outline
-> > > > of what I changed:
-> > > >
-> > > >   - Moved the config access "link up" check earlier because it's not
-> > > >     related to the power regulator patches.
-> > > >
-> > > >   - Changed config access "link up" checks to use PCIE_ECAM_REG()
-> > > >     instead of hard-coding 0xfff masks.  The 32-bit accessors already
-> > > >     mask out the low two bits, so we don't need to do that here.
-> > > >
-> > > >   - Squashed pci_subdev_regulators_add_bus() directly into
-> > > >     brcm_pcie_add_bus() for readability.  Similarly for
-> > > >     pci_subdev_regulators_remove_bus().
-> > > >
-> > > >   - This makes a clear split between:
-> > > >
-> > > >     * A patch that adds get/enable of regulators, and starting the
-> > > >       link after enabling regulators, and
-> > > >
-> > > >     * A patch that disables/enables regulators for suspend/resume.
-> > > >
-> > > >   - Since we only support one set of subregulator info (for one Root
-> > > >     Port, and brcm_pcie_suspend_noirq() depends on this since it uses
-> > > >     the pcie->sr pointer), use pcie->sr always instead of
-> > > >     dev->driver_data.
-> > > >
-> > > >   - Squashed wakeup device checking into the suspend/resume patch so
-> > > >     there's not a time when suspend might turn off power to a wakeup
-> > > >     device.
-> > > >
-> > > >   - Renamed brcm_pcie_map_bus32() to brcm7425_pcie_map_bus() so it
-> > > >     ends in "_map_bus()" like other drivers.  Also,
-> > > >     brcm7425_pcie_map_bus() doesn't actually depend on the 32-bitness.
-> > >
-> > > Attached is the diff between Jim's and your branch just so it is easier to see what moved around.
-> > >
-> > > Initial testing on an ARCH_BRCMSTB system with PCIe appears to be good, we don't have any regulator on that board so the dummy ones get picked up which is expected. Same thing with a Raspberry Pi 4B system.
-> > >
-> > > I could unbind and bind again and there were no reference count leaks on the regulators, so this looks good to me.
-> > >
-> > > Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-> > >
-> > > of course, we should have Jim's test results as well as Cyril's ideally to make sure there are no regressions on the CM4 board.
-> >
-> > Cyril, any chance you could test this to be sure it fixes the problem
-> > you reported?  This is in -next and hopefully headed for v5.20/v6.0
-> > soon.
-> 
-> Cyril sent me an email about a week ago saying that he probably
-> wouldn't have the bandwidth to test this.
-> I immediately ordered an overpriced CM4 via Ebay and it recently
-> arrived.  I'm happy to say that this
-> patchset tests successfully, w/ or w/o a device in the slot.
+On 28/07/22 22:12, Tariq Toukan wrote:
+> Implement and expose API that sets the spread of CPUs based on distance,
+> given a NUMA node.  Fallback to legacy logic that uses
+> cpumask_local_spread.
+>
+> This logic can be used by device drivers to prefer some remote cpus over
+> others.
+>
+> Reviewed-by: Gal Pressman <gal@nvidia.com>
+> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
 
-Great, thanks a lot for testing this!
+IIUC you want a multi-CPU version of sched_numa_find_closest(). I'm OK with
+the need (and you have the numbers to back it up), but I have some qualms
+with the implementation, see more below.
 
-> That being said, there is an old device, when paired with the CM4,
-> works with RPi Linux but not with upstream Linux.  It is unrelated
-> to this patchset; i.e. it fails w/ or w/o this patchset applied.  I
-> know the reason for this failure: the current driver
-> assumes clkreq# asserted, which is true for all STB boards.  I can add
-> a patch for this now or in the next release
-> cycle, your choice.
+> ---
+>  include/linux/sched/topology.h |  5 ++++
+>  kernel/sched/topology.c        | 49 ++++++++++++++++++++++++++++++++++
+>  2 files changed, 54 insertions(+)
+>
+> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+> index 56cffe42abbc..a49167c2a0e5 100644
+> --- a/include/linux/sched/topology.h
+> +++ b/include/linux/sched/topology.h
+> @@ -210,6 +210,7 @@ extern void set_sched_topology(struct sched_domain_topology_level *tl);
+>  # define SD_INIT_NAME(type)
+>  #endif
+>
+> +void sched_cpus_set_spread(int node, u16 *cpus, int ncpus);
+>  #else /* CONFIG_SMP */
+>
+>  struct sched_domain_attr;
+> @@ -231,6 +232,10 @@ static inline bool cpus_share_cache(int this_cpu, int that_cpu)
+>       return true;
+>  }
+>
+> +static inline void sched_cpus_set_spread(int node, u16 *cpus, int ncpus)
+> +{
+> +	memset(cpus, 0, ncpus * sizeof(*cpus));
+> +}
+>  #endif	/* !CONFIG_SMP */
+>
+>  #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index 05b6c2ad90b9..157aef862c04 100644
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -2067,8 +2067,57 @@ int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
+>       return found;
+>  }
+>
+> +static bool sched_cpus_spread_by_distance(int node, u16 *cpus, int ncpus)
+                                                       ^^^^^^^^^
+That should be a struct *cpumask.
 
-It's too late for v5.20-rc1, but if this would fix a regression or
-otherwise exceptional bug, Lorenzo might still consider it for the
-v5.20.
+> +{
+> +	cpumask_var_t cpumask;
+> +	int first, i;
+> +
+> +	if (!zalloc_cpumask_var(&cpumask, GFP_KERNEL))
+> +		return false;
+> +
+> +	cpumask_copy(cpumask, cpu_online_mask);
+> +
+> +	first = cpumask_first(cpumask_of_node(node));
+> +
+> +	for (i = 0; i < ncpus; i++) {
+> +		int cpu;
+> +
+> +		cpu = sched_numa_find_closest(cpumask, first);
+> +		if (cpu >= nr_cpu_ids) {
+> +			free_cpumask_var(cpumask);
+> +			return false;
+> +		}
+> +		cpus[i] = cpu;
+> +		__cpumask_clear_cpu(cpu, cpumask);
+> +	}
+> +
+> +	free_cpumask_var(cpumask);
+> +	return true;
+> +}
 
-Bjorn
+This will fail if ncpus > nr_cpu_ids, which shouldn't be a problem. It
+would make more sense to set *up to* ncpus, the calling code can then
+decide if getting fewer than requested is OK or not.
+
+I also don't get the fallback to cpumask_local_spread(), is that if the
+NUMA topology hasn't been initialized yet? It feels like most users of this
+would invoke it late enough (i.e. anything after early initcalls) to have
+the backing data available.
+
+Finally, I think iterating only once per NUMA level would make more sense.
+
+I've scribbled something together from those thoughts, see below. This has
+just the mlx5 bits touched to show what I mean, but that's just compile
+tested.
+---
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eq.c b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+index 229728c80233..2d010d8d670c 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/eq.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+@@ -810,7 +810,7 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
+ {
+ 	struct mlx5_eq_table *table = dev->priv.eq_table;
+ 	int ncomp_eqs = table->num_comp_eqs;
+-	u16 *cpus;
++	cpumask_var_t cpus;
+ 	int ret;
+ 	int i;
+ 
+@@ -825,15 +825,14 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
+ 		return ret;
+ 	}
+ 
+-	cpus = kcalloc(ncomp_eqs, sizeof(*cpus), GFP_KERNEL);
+-	if (!cpus) {
++	if (!zalloc_cpumask_var(&cpus, GFP_KERNEL)) {
+ 		ret = -ENOMEM;
+ 		goto free_irqs;
+ 	}
+-	for (i = 0; i < ncomp_eqs; i++)
+-		cpus[i] = cpumask_local_spread(i, dev->priv.numa_node);
++
++	sched_numa_find_n_closest(cpus, dev->piv.numa_node, ncomp_eqs);
+ 	ret = mlx5_irqs_request_vectors(dev, cpus, ncomp_eqs, table->comp_irqs);
+-	kfree(cpus);
++	free_cpumask_var(cpus);
+ 	if (ret < 0)
+ 		goto free_irqs;
+ 	return ret;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+index 662f1d55e30e..2330f81aeede 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+@@ -448,7 +448,7 @@ void mlx5_irqs_release_vectors(struct mlx5_irq **irqs, int nirqs)
+ /**
+  * mlx5_irqs_request_vectors - request one or more IRQs for mlx5 device.
+  * @dev: mlx5 device that is requesting the IRQs.
+- * @cpus: CPUs array for binding the IRQs
++ * @cpus: cpumask for binding the IRQs
+  * @nirqs: number of IRQs to request.
+  * @irqs: an output array of IRQs pointers.
+  *
+@@ -458,25 +458,22 @@ void mlx5_irqs_release_vectors(struct mlx5_irq **irqs, int nirqs)
+  * This function returns the number of IRQs requested, (which might be smaller than
+  * @nirqs), if successful, or a negative error code in case of an error.
+  */
+-int mlx5_irqs_request_vectors(struct mlx5_core_dev *dev, u16 *cpus, int nirqs,
++int mlx5_irqs_request_vectors(struct mlx5_core_dev *dev,
++			      const struct cpumask *cpus,
++			      int nirqs,
+ 			      struct mlx5_irq **irqs)
+ {
+-	cpumask_var_t req_mask;
++	int cpu = cpumask_first(cpus);
+ 	struct mlx5_irq *irq;
+-	int i;
+ 
+-	if (!zalloc_cpumask_var(&req_mask, GFP_KERNEL))
+-		return -ENOMEM;
+-	for (i = 0; i < nirqs; i++) {
+-		cpumask_set_cpu(cpus[i], req_mask);
+-		irq = mlx5_irq_request(dev, i, req_mask);
++	for (i = 0; i < nirqs && cpu < nr_cpu_ids; i++) {
++		irq = mlx5_irq_request(dev, i, cpumask_of(cpu));
+ 		if (IS_ERR(irq))
+ 			break;
+-		cpumask_clear(req_mask);
+ 		irqs[i] = irq;
++		cpu = cpumask_next(cpu, cpus);
+ 	}
+ 
+-	free_cpumask_var(req_mask);
+ 	return i ? i : PTR_ERR(irq);
+ }
+ 
+diff --git a/include/linux/topology.h b/include/linux/topology.h
+index 4564faafd0e1..bdc9c5df84cd 100644
+--- a/include/linux/topology.h
++++ b/include/linux/topology.h
+@@ -245,5 +245,13 @@ static inline const struct cpumask *cpu_cpu_mask(int cpu)
+ 	return cpumask_of_node(cpu_to_node(cpu));
+ }
+ 
++#ifdef CONFIG_NUMA
++extern int sched_numa_find_n_closest(struct cpumask *cpus, int node, int ncpus);
++#else
++static inline int sched_numa_find_n_closest(struct cpumask *cpus, int node, int ncpus)
++{
++	return -ENOTSUPP;
++}
++#endif
+ 
+ #endif /* _LINUX_TOPOLOGY_H */
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 8739c2a5a54e..499f6ef611fa 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -2067,6 +2067,56 @@ int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
+ 	return found;
+ }
+ 
++/**
++ * sched_numa_find_n_closest - Find the 'n' closest cpus to a given node
++ * @cpus: The cpumask to fill in with CPUs
++ * @ncpus: How many CPUs to look for
++ * @node: The node to start the search from
++ *
++ * This will fill *up to* @ncpus in @cpus, using the closest (in NUMA distance)
++ * first and expanding outside the node if more CPUs are required.
++ *
++ * Return: Number of found CPUs, negative value on error.
++ */
++int sched_numa_find_n_closest(struct cpumask *cpus, int node, int ncpus)
++{
++	struct cpumask ***masks;
++	int cpu, lvl, ntofind = ncpus;
++
++	if (node >= nr_node_ids)
++		return -EINVAL;
++
++	rcu_read_lock();
++
++	masks = rcu_dereference(sched_domains_numa_masks);
++	if (!masks)
++		goto unlock;
++
++	/*
++	 * Walk up the level masks; the first mask should be CPUs LOCAL_DISTANCE
++	 * away (aka the local node), and we incrementally grow the search
++	 * beyond that.
++	 */
++	for (lvl = 0; lvl < sched_domains_numa_levels; lvl++) {
++		if (!masks[lvl][node])
++			goto unlock;
++
++		/* XXX: could be neater with for_each_cpu_andnot() */
++		for_each_cpu(cpu, masks[lvl][node]) {
++			if (cpumask_test_cpu(cpu, cpus))
++				continue;
++
++			__cpumask_set_cpu(cpu, cpus);
++			if (--ntofind == 0)
++				goto unlock;
++		}
++	}
++unlock:
++	rcu_read_unlock();
++	return ncpus - ntofind;
++}
++EXPORT_SYMBOL_GPL(sched_numa_find_n_closest);
++
+ #endif /* CONFIG_NUMA */
+ 
+ static int __sdt_alloc(const struct cpumask *cpu_map)
+

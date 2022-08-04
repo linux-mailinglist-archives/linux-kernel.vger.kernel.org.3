@@ -2,130 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C450589A56
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 12:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA34589A5A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 12:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238520AbiHDKPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 06:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
+        id S232080AbiHDKT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 06:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238266AbiHDKPa (ORCPT
+        with ESMTP id S229687AbiHDKTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 06:15:30 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504722BD7;
-        Thu,  4 Aug 2022 03:15:29 -0700 (PDT)
-Date:   Thu, 04 Aug 2022 10:15:19 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1659608122; x=1659867322;
-        bh=OOAFqj5jOkefjruY4cVlXMt+tgX3mni0RziYWRLgIA4=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=vgzmNSefYqbQAcl0K3I8J9pqBZUcN+PyC2c/vCe4wbDQqcFJcHhoAnlj8Z8Em5DQz
-         JWS7tlP/hvnHk6JaRbkdRHoHMBf++vfxuESbZ6EylAq7tnjsm2KANhRl/ytzG+lgt/
-         83DiNZYOaMWL83Hxnf3GB5v1YQjTT2uZbfUcmSiojqQmueOxaiufyS4ioFKw37sDdr
-         iQ4pGGrcCKdHygZhGxf2YNdaOH1H3lQKqoU1jIgoHD0qLuLPnMruOHePKP+szeSr3T
-         4LY3dyECkfc1hvGBXwhAIXPO/0qFE+RdR9L4jWk8aT2WuRuJCuKvnBkg3pEysjihnj
-         o2K4E2/as99hQ==
-To:     Boqun Feng <boqun.feng@gmail.com>
-From:   bjorn3 <bjorn3_gh@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>
-Reply-To: bjorn3 <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v8 29/31] MAINTAINERS: Rust
-Message-ID: <LADPltvgY9H_4iPGAi0MyFOayCnS7NQhMPq6tPhBV2GoPIOu2jzx1gmZXYsKQWCIfmywn1Q8z61ye6OkSX-RsX8bfloQyhEespyyWPonnfM=@protonmail.com>
-In-Reply-To: <YuiLM6ca8Ih0WiS3@boqun-archlinux>
-References: <20220802015052.10452-1-ojeda@kernel.org> <20220802015052.10452-30-ojeda@kernel.org> <YuiLM6ca8Ih0WiS3@boqun-archlinux>
-Feedback-ID: 27884398:user:proton
+        Thu, 4 Aug 2022 06:19:23 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB942BCA
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 03:19:21 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id n185so10050067wmn.4
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 03:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=czc1T/pKPyg7RnSQHhci8IuoQWmOJ7tlHwHzQ6eQTjM=;
+        b=efxhZZtVUq8SzQ86QyLAe3Ii3McULNSOS5c9BT5DwcnHKqOiy0dK1WigXCDZur6W6O
+         1T894PPr1v9wfY7e/JZeNYeiMTZizMj5YM0xVb/o2PBePekrWYUfaiiBuFqkME4+7xwZ
+         YoF5i13gxy/24HOc3TXn+FvtSIveiRIPTMGv6X35hydqSepm5Oitvtj2r4QVoMPYZvCO
+         YdU65OvtK1aV7lfn1sVHQ14H6GB4jVljU28MddzmvMjyuOiyMuin57o2G/U00ekFeCYu
+         5qkdgUCurBKE/EhS5nCCoWWJOGAqt+ywF/VdxCU4U60T2UeABgijsTQfWv4YYf6jUvGT
+         yifg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=czc1T/pKPyg7RnSQHhci8IuoQWmOJ7tlHwHzQ6eQTjM=;
+        b=la5Snsqb47pVFnFWltbPlVSEQAz7n0VkvVlYeRRm6p0SHu4ySfWjpmBAIvisksWWPj
+         r97OZMEU24u/zSiZSM6JHsPRhxpMeVA2qnAyE2DPz4g2jS8B2iiDfSAbkmBZU2JU3hsU
+         ji7OS8IBPiOinJ1eU8Aqb6afXFGeycZF/eExFHCbVChBntYZ5C8r01ZImekm+fxf9y5C
+         YkOrOi3lw60aOcgo0Lk6pSwp2XZz8MRrMO/+nppsnmMRflkqQ6CeQFNUVdqk6DDqZBGX
+         zabmfqnOZCoCM7eguC/ybcVO/5KbmWf2+kuyY0m/T4tIbY+W32GLtaGDtK9HGhFQJx+R
+         PdbQ==
+X-Gm-Message-State: ACgBeo2td4jEoLeGmG19ExQUTZFpAwnQubDcphPU//MZ6oU7Px5ahfr7
+        MYm1dAdAZJIG+VzhlkS1CCxmWl+bNNDC0fntCqY=
+X-Google-Smtp-Source: AA6agR63hTiBEbRgmBpObKQ8me4eS7iJ8TRUTu6AGt2SC1OW4h8JFmP2UK7duJpdrjCpP1/InOLbxMvArIxT7LoKDH8=
+X-Received: by 2002:a05:600c:1ca9:b0:3a5:125:3738 with SMTP id
+ k41-20020a05600c1ca900b003a501253738mr4484309wms.161.1659608360199; Thu, 04
+ Aug 2022 03:19:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220622140853.31383-1-pmladek@suse.com> <CAJhGHyDHVFto=UNrVQ5bjc11yGCnNmLKAkPPimtwF-Qa+1g==Q@mail.gmail.com>
+In-Reply-To: <CAJhGHyDHVFto=UNrVQ5bjc11yGCnNmLKAkPPimtwF-Qa+1g==Q@mail.gmail.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 4 Aug 2022 18:19:08 +0800
+Message-ID: <CAJhGHyDfRGOS0v8vA7Lf+W2K80r2_+CndFBz9O-HXd6AtrexQA@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: Make create_worker() safe against spurious wakeups
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Michal Hocko <mhocko@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, August 2nd, 2022 at 04:25, Boqun Feng <boqun.feng@gmail.com> wr=
-ote:
+On Thu, Aug 4, 2022 at 4:57 PM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+         ;
+>
+> There might be some wakeups from wake_up_worker() since it is in
+> the idle list.  These wakeups will be "spurious wakeups" in the view
+> of the completion subsystem.
+>
 
 
-> On Tue, Aug 02, 2022 at 03:50:16AM +0200, Miguel Ojeda wrote:
->
-> > Miguel, Alex and Wedson will be maintaining the Rust support.
-> >
-> > Reviewed-by: Kees Cook keescook@chromium.org
-> > Co-developed-by: Alex Gaynor alex.gaynor@gmail.com
-> > Signed-off-by: Alex Gaynor alex.gaynor@gmail.com
-> > Co-developed-by: Wedson Almeida Filho wedsonaf@google.com
-> > Signed-off-by: Wedson Almeida Filho wedsonaf@google.com
-> > Signed-off-by: Miguel Ojeda ojeda@kernel.org
-> > ---
-> > MAINTAINERS | 15 +++++++++++++++
-> > 1 file changed, 15 insertions(+)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 64379c699903..a4f90593b59c 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -17477,6 +17477,21 @@ L: linux-rdma@vger.kernel.org
-> > S: Maintained
-> > F: drivers/infiniband/ulp/rtrs/
-> >
-> > +RUST
-> > +M: Miguel Ojeda ojeda@kernel.org
-> > +M: Alex Gaynor alex.gaynor@gmail.com
-> > +M: Wedson Almeida Filho wedsonaf@google.com
->
->
-> May I join the party and become a reviewer?
->
-> R: Boqun Feng boqun.feng@gmail.com
->
->
-> Also given their activities on GitHub, I'd like to encourge Bj=C3=B6rn Ro=
-y
-> Baron and Gary Guo to become reviewers as well. Of course, they need
-> to be aware of the possible upcoming email volume and sign up themselves
-> ;-)
->
-> More eyes (especially from Rust language experts) are helpful ;-)
->
-> Regards,
-> Boqun
->
-> > +L: rust-for-linux@vger.kernel.org
-> > +S: Supported
-> > +W: https://github.com/Rust-for-Linux/linux
-> > +B: https://github.com/Rust-for-Linux/linux/issues
-> > +T: git https://github.com/Rust-for-Linux/linux.git rust-next
-> > +F: Documentation/rust/
-> > +F: rust/
-> > +F: samples/rust/
-> > +F: scripts/rust
-> > +K: \b(?i:rust)\b
-> > +
-> > RXRPC SOCKETS (AF_RXRPC)
-> > M: David Howells dhowells@redhat.com
-> > M: Marc Dionne marc.dionne@auristor.com
-> > --
-> > 2.37.1
+Oh, sorry, I was wrong. "complete(&worker->ready_to_start);" and
+"worker_enter_idle(worker);" are in the same pool lock region.
 
-I've already told this Miguel in private, but I did like to join as reviewe=
-r:
-
-R: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-
-Cheers,
-Bjorn
+There are no "spurious wakeups" from "wake_up_worker()" as I have
+wrongly described.

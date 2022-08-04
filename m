@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C424858A0A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D529058A0B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240040AbiHDSnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 14:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
+        id S235445AbiHDSpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 14:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbiHDSm7 (ORCPT
+        with ESMTP id S238388AbiHDSpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 14:42:59 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A3961DBE;
-        Thu,  4 Aug 2022 11:42:58 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id s11so709111edd.13;
-        Thu, 04 Aug 2022 11:42:58 -0700 (PDT)
+        Thu, 4 Aug 2022 14:45:46 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1A4F587
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 11:45:45 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id dc19so816165ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 11:45:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=l2WvlJVDhkRnr1kbEx9moKytaqwORKO3J141YHwAb6I=;
-        b=C9p6a3bOmYkZXm4m8ANQX/jZMCp+PePUdKvcdx7dd3FfWAHZbmUF59CqdEBTXdrvZK
-         KihLsfhZTT2f8RYHepGGEI3PHe/FvbAF2ypggB6fqZ+Bw787JQ+cDBSB4oJh73DQYEw9
-         N8rpgwSo5Lk4CXvcsgAzyOkrEM6PwVDZSOez7ikAAMm3KHun7cmKtYSLrRKtXcp/6n/E
-         WgcwfnARYD4u32xtevrqc6NT/YAjLCBO8w/dKB8shtAiA7GkLgiei7pKRDfxd+GoteDY
-         Dlv56/bU48dBm8KsDT48PS4JNuWrTloMAc+a31/E+hFn9jON3i9dfSErtrQomly9YnQR
-         XA+w==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=cwG0I+hEkm6kWFoVuo/ynZfsV9+825Fs1BMQA0uiNPc=;
+        b=W5gGdlxU9iuIN9t2E3RBXdRpDwkdGPbVgkhMVC3h9eBl69+sEBEGIPlmm3/svZn5E4
+         fC4QSkFDdNsUieok6liYVfyUTjuubtN9bgzl96QcvELUoO7BHv71win8GkQEeo1xBmLM
+         fjNXI7kxeo9ensDsvUL4ZSvUgOsY4USJgZB/0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=l2WvlJVDhkRnr1kbEx9moKytaqwORKO3J141YHwAb6I=;
-        b=3bfH5a8KpLioEiRMyNriHUD+O2Klu/tUdX6iiF9vksMs/+nTmq57D/N6WJzTjwDxlv
-         /sfwTTMRcI1Oc7k+pLbB16UOrAdVGHn9Ar1mpVUmfFq4aQrQgU4n8H5nG9rlSYyFnkt4
-         i+s/lTFxaQy8n9mYelL14qcoWJIoQdBTrbuQJYlPPqzhJvuz6QREJpMJd/uC1GLHz3ec
-         uzZk3aAxN9oaSaG/ujzXA7/5OK2C/g3Eh+MBFP2wpXdVVAXZrS1zK2rCwfcFcX9Sn7Ay
-         E+pDo+CbPb0kzJz9Y3S1d7UPab7LUSR49Mx+rmr3E8I5N2HRZM9/6g7pWeOYrNXk8lK/
-         XUxg==
-X-Gm-Message-State: ACgBeo2KtPtBPa+7C66n2mdQEw6FjiVKNgODHktPfW+PtvkDN3Y7wgWG
-        bMziWFmv456FjXoc/+awpqdvTRRZ6ZgUlHhQsBw=
-X-Google-Smtp-Source: AA6agR4xrhY8CkbvzMI/2yxpfhJyHTlze7LkU7wCxGPSzHmnYvPO5jAXRMgZ0VJbIsrYVtAE4OdFoqvgP3iI35n7Snc=
-X-Received: by 2002:a05:6402:40c3:b0:43b:d65a:cbf7 with SMTP id
- z3-20020a05640240c300b0043bd65acbf7mr3396726edb.380.1659638576599; Thu, 04
- Aug 2022 11:42:56 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=cwG0I+hEkm6kWFoVuo/ynZfsV9+825Fs1BMQA0uiNPc=;
+        b=YTZvtP5iUqb0At82g9js2amd/6YNp1/seG7z4kw3JJIjaVXQ4QeL1j8wmDLSVdOlbd
+         Irk6N2C/2aT6EVQS1cD4JPYO6neJqvgKUpER8Smr1AVSZdGpjf6Arm3JPVWafb3+WEsz
+         nj56pzbGRJPq7JXN4zmuFieLe0G1Psuhls4Ng+0no0q0uSUcATzY1nDjHUn+V0quF2Rw
+         i1OQw++OcRTPStsNoa6zBcQJxkNsb/L5UNhLHbZJi+1VPtZHBBX0xXeyeVEso3nqmfaw
+         Q660AoZjQ0F9B5IaRVfUj7sZV948lbEDRUC6HNkX9IwPw30pcv8qK4gPg5kTdSQkQfU5
+         ikdg==
+X-Gm-Message-State: ACgBeo03tscWn0GOASwUqPtrAdPr9UrTHuy/Kj7qW42yEAyB+7P2cSMW
+        5piyjZIlnd/OReeHt9WT/GyZu2I3lEk2ZHoe
+X-Google-Smtp-Source: AA6agR7cT2tpcBh1ruTqVT4zXBxmgtNPz2oeZ7D1O/0h1SRxBeNmoEOj9Y1qONVAyUPg9Cx/1yD15A==
+X-Received: by 2002:a17:907:7349:b0:730:61c8:d80d with SMTP id dq9-20020a170907734900b0073061c8d80dmr2261710ejc.699.1659638743230;
+        Thu, 04 Aug 2022 11:45:43 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id ak20-20020a170906889400b0072fd6e9f707sm614337ejc.100.2022.08.04.11.45.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 11:45:42 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id j7so791721wrh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 11:45:42 -0700 (PDT)
+X-Received: by 2002:a5d:6dae:0:b0:220:8005:7dff with SMTP id
+ u14-20020a5d6dae000000b0022080057dffmr2103512wrs.442.1659638741845; Thu, 04
+ Aug 2022 11:45:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220804075914.67569-1-sebastian.wuerl@ororatech.com> <20220804081411.68567-1-sebastian.wuerl@ororatech.com>
-In-Reply-To: <20220804081411.68567-1-sebastian.wuerl@ororatech.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 4 Aug 2022 20:42:19 +0200
-Message-ID: <CAHp75Vf8VtN5pLDLVrNGKUmq3W=gY8u9jsKX+AqR4UjmmR7zvw@mail.gmail.com>
-Subject: Re: [PATCH v4] can: mcp251x: Fix race condition on receive interrupt
-To:     =?UTF-8?Q?Sebastian_W=C3=BCrl?= <sebastian.wuerl@ororatech.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Christian Pellegrin <chripell@fsfe.org>,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <YuqB0tl2hjT3x7a4@kroah.com> <YuqXtcaUPflINBd6@dev-arch.thelio-3990X>
+In-Reply-To: <YuqXtcaUPflINBd6@dev-arch.thelio-3990X>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 4 Aug 2022 11:45:25 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjdoqmF4fC8orFv0pRZBUfgyQMGM8yS136_vZ=9=8uQ3Q@mail.gmail.com>
+Message-ID: <CAHk-=wjdoqmF4fC8orFv0pRZBUfgyQMGM8yS136_vZ=9=8uQ3Q@mail.gmail.com>
+Subject: Re: [GIT PULL] USB / Thunderbolt driver changes for 6.0-rc1
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Andrey Strachuk <strochuk@ispras.ru>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,54 +75,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 10:42 AM Sebastian W=C3=BCrl
-<sebastian.wuerl@ororatech.com> wrote:
+On Wed, Aug 3, 2022 at 8:43 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> The mcp251x driver uses both receiving mailboxes of the CAN controller
-> chips. For retrieving the CAN frames from the controller via SPI, it chec=
-ks
-> once per interrupt which mailboxes have been filled and will retrieve the
-> messages accordingly.
->
-> This introduces a race condition, as another CAN frame can enter mailbox =
-1
-> while mailbox 0 is emptied. If now another CAN frame enters mailbox 0 unt=
-il
-> the interrupt handler is called next, mailbox 0 is emptied before
-> mailbox 1, leading to out-of-order CAN frames in the network device.
->
-> This is fixed by checking the interrupt flags once again after freeing
-> mailbox 0, to correctly also empty mailbox 1 before leaving the handler.
->
-> For reproducing the bug I created the following setup:
->  - Two CAN devices, one Raspberry Pi with MCP2515, the other can be any.
->  - Setup CAN to 1 MHz
->  - Spam bursts of 5 CAN-messages with increasing CAN-ids
->  - Continue sending the bursts while sleeping a second between the bursts
->  - Check on the RPi whether the received messages have increasing CAN-ids
->  - Without this patch, every burst of messages will contain a flipped pai=
-r
+> For the record, this breaks allmodconfig with clang (I haven't seen a
+> formal report on it anywhere and this missed -next coverage because
+> Stephen is on vacation):
 
-For future submissions...
+Hmm. It passes my own internal clang testing, but that's for a more
+limited config.
 
-> Fixes: bf66f3736a94 ("can: mcp251x: Move to threaded interrupts instead o=
-f workqueues.")
-> Signed-off-by: Sebastian W=C3=BCrl <sebastian.wuerl@ororatech.com>
-> ---
+So I've merged this in my tree, but would appreciate a fixup patch if
+you have one.
 
-When you send the new version of a single patch, use --annotate to put
-a changelog here (after the cutter '---' line) so people will know how
-v4 differes to v3 to v2 and to v1.
-
-
-Also you mentioned some issues with the mail program. Use `git
-send-email` for patch submission. Also you may consider my "smart"
-(no) script [1] for that.
-
-[1]: https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.=
-sh
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+                  Linus

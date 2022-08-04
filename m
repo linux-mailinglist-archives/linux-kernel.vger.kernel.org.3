@@ -2,232 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D863858A2D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 23:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E23158A2E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 23:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236084AbiHDVm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 17:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
+        id S237125AbiHDVuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 17:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235674AbiHDVmY (ORCPT
+        with ESMTP id S237342AbiHDVt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 17:42:24 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938864AD5B;
-        Thu,  4 Aug 2022 14:42:23 -0700 (PDT)
+        Thu, 4 Aug 2022 17:49:59 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E3C15FE2
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 14:49:57 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so1011590pjf.5
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 14:49:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659649343; x=1691185343;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DycE60ZHFlHY7IZxTQKn3nmGZVc4sC/DqRr2Ek6ZW1k=;
-  b=UgL2QPbRwii1dO69CWFeRI5fmDTt+Csg7kL6SSjnUNMTPl9pRkjIKtfp
-   aEnwlEWuF+EYniJDu+4bk6cgwwHIKi3wxfCnPpjSZe7gh0/nD/Oa2BIHe
-   YwbSjHIcanAnhL4PoN6tamNnh19ahJmU3DJ49W+Kv5HhTtRIou++Vr3MD
-   g=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 04 Aug 2022 14:42:23 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 14:42:23 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 4 Aug 2022 14:42:22 -0700
-Received: from [10.111.167.208] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 4 Aug 2022
- 14:42:20 -0700
-Message-ID: <32a0765e-00d9-1a67-bf36-4060c5fcb008@quicinc.com>
-Date:   Thu, 4 Aug 2022 14:42:18 -0700
+        d=arista.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dl/uHM3ElAstTQym1tPaU6HlUkSxu4TZoxj+JcHh5cM=;
+        b=XXQLcHDA7ou9WhstO5NgKbt0J9MmZ5W5B98Fph/5trVWhiz+O2BrHX3FvNaHm6evTr
+         i4/j5Dctb46nenaVTSpKb47jKptM+f71llV/XNjqMmqez2zVEgDyXJ+rv5Axwyaqb4R7
+         fWb0aq2IwuIbKCQhiaatyYHCZnneK16bze2jGE4uRoNZffc4su1QdWXd5T/n+laWlbod
+         cZX3tGTwY26uuL+JzmCv7wGBHQoxk/ILM6GZxEP9xuVwddwI7QjCRi/t0Mlpya+/4Dhx
+         Kms0Cm4DaIwt5a0EvtEMC42Jehzya3dKObo2Kb7b+v1ULjrd9VhtBpacUkKXiIgFl0GM
+         V40Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dl/uHM3ElAstTQym1tPaU6HlUkSxu4TZoxj+JcHh5cM=;
+        b=hmwSgSzMtJXrK6oMonPWNFDCESmv/Xr0Hc4D/reX6myFjod/xe9DsTOh2XKs+nhXF4
+         jdj2tq3MEp0jwmBIjutFxxBT6IsDW7+s5LRA+OWzZckBubzGxXZaSzn9IfCMK/cRpq8T
+         hb7RgSuq6cM0Aytyv7SAoryDMjYbjoIbQHJsVKjfTtIkJdXZ5H4AeNVbELUbsw59bsof
+         TnZPRZbQzpIzZZuTXZ7P4yrBff6Ld0grCr2DSto57qQQ5xpk+rEAWxUYiMPczh9zTqt7
+         mt0cnAgFiSZoC1Rp2Kuoish1MeRuvKu1hnuoymIeoyCcmfkRymLnwMm+4NypnvAvuWUM
+         rFJA==
+X-Gm-Message-State: ACgBeo1JWm0powiUPO2TilQPV7/EgM98bUUMslfSeCZrcTAiPrcfHHpz
+        g2H5r3GvVIzZlzlXjYgQ0b9mpA==
+X-Google-Smtp-Source: AA6agR6h1hti1B5h8Sk8eXHa0fWzVoEs/saDAq1BdHhwzvm6D48FdyR3OFWNnHx7vC3XLBv+/sPJ4A==
+X-Received: by 2002:a17:902:d492:b0:16f:8583:9473 with SMTP id c18-20020a170902d49200b0016f85839473mr3168331plg.103.1659649796895;
+        Thu, 04 Aug 2022 14:49:56 -0700 (PDT)
+Received: from cansun.aristanetworks.com (2603-8081-76f0-8280-243b-9040-c149-8c1c.res6.spectrum.com. [2603:8081:76f0:8280:243b:9040:c149:8c1c])
+        by smtp.gmail.com with ESMTPSA id r15-20020aa7988f000000b0052d481032a7sm1511018pfl.26.2022.08.04.14.49.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 14:49:56 -0700 (PDT)
+From:   Can Sun <cansun@arista.com>
+Cc:     Can Sun <cansun@arista.com>, Kevin Mitchell <kevmitch@arista.com>,
+        Ivan Delalande <colona@arista.com>,
+        weidonghui <weidonghui@allwinnertech.com>,
+        Borislav Petkov <bp@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] scripts/decodecode: add the ability to find code sequence
+Date:   Thu,  4 Aug 2022 16:46:16 -0500
+Message-Id: <20220804214616.71419-1-cansun@arista.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/5] usb: gadget: Add function wakeup support
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_mrana@quicinc.com" <quic_mrana@quicinc.com>
-References: <1659467920-9095-1-git-send-email-quic_eserrao@quicinc.com>
- <1659467920-9095-3-git-send-email-quic_eserrao@quicinc.com>
- <049219f1-8c68-e4cc-7bf9-1e8c214e80aa@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <049219f1-8c68-e4cc-7bf9-1e8c214e80aa@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ It adds a tool to search code sequence from vmlinux. If additional
+ parameters (vmlinux and kernel build path) are provided to decodecode
+ command, it will try to search the code sequence in the binary, and
+ provide a code block surrounding the target.
+ 
+ An example:
+  $ ARCH=x86 PC=0xffffffff8141642f ./decodecode <vmlinux> <kernel build path> < test.oops
+  Code: 04 25 28 00 00 00 74 05 e8 54 85 c5 ff c9 c3 0f 1f 44 00 00 55 48 89 e5 e8 07 31 cb ff c7 05 27 3f ee 00 01 00 00 00 0f ae f8 <c6> 04 25 00 00 00 00 01 5
+  d c3 0f 1f 44 00 00 55 48 89 e5 fb 66 0f
+  All code
+  ========
+  ffffffff81416405:       04 25                   add    $0x25,%al
+  ...
+  Code starting with the faulting instruction
+  ===========================================
+  ffffffff81416405:       c6 04 25 00 00 00 00    movb   $0x1,0x0
+  ...
+  Finding code sequences from /home/cansun/src/vmlinux
+  Failed to find full Code segment, but did find a subsegment.
+  Surrounding code may have changed.
+  Warning: PC provided does not match calculated binary offset.
+  Found code string:  00 00 00 74 05 e8 54 85 c5 ff c9 c3 e8 __ __ __ __ 55 48 89 e5 e8 07 31 cb ff c7 05 27 3f ee 00 01 00 00 00 0f ae f8 c6 04 25 00 00 00 00 0
+  1 5d c3 e8 __ __ __ __ 55 48 89 e5
+  ============================================================
+  ffffffff814163dd:       75 0c                   jne    ffffffff814163eb <moom_callback+0x62>
+                  pr_info("OOM request ignored. No task eligible\n");
+  ffffffff814163df:       48 c7 c7 45 e3 dc 81    mov    $0xffffffff81dce345,%rdi
+  ...
+  ffffffff81416425:       0f ae f8                sfence
+          *killer = 1;
+  ffffffff81416428:*      c6 04 25 00 00 00 00    movb   $0x1,0x0         <-- trapping instruction
+  ffffffff8141642f:       01
+  ...
 
+Signed-off-by: Can Sun <cansun@arista.com>
+Cc: Kevin Mitchell <kevmitch@arista.com>
+Cc: Ivan Delalande <colona@arista.com>
+Cc: weidonghui <weidonghui@allwinnertech.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org
+---
+ scripts/decodecode | 143 ++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 140 insertions(+), 3 deletions(-)
 
-On 8/2/2022 4:51 PM, Thinh Nguyen wrote:
-> On 8/2/2022, Elson Roy Serrao wrote:
->> An interface which is in function suspend state has to send a function
->> wakeup notification to the host in case it needs to initate any data
->> transfer. One notable difference between this and the existing remote
->> wakeup mechanism is that this can be called per-interface, and a UDC
->> would need to know the particular interface number to convey in its
->> Device Notification transaction packet.  Hence, we need to introduce
->> a new callback in the gadget_ops structure that UDC device drivers
->> can implement.  Similarly add a convenience function in the composite
->> driver which function drivers can call. Add support to handle such
->> requests in the composite layer and invoke the gadget op.
-> 
-> Sending the function wake notification should be done in the controller
-> driver. The controller driver knows when is the proper link state
-> (U0/ON) the device is in and would notify the host then.
-> 
-> What we need to add in the usb_gadget is whether the device is remote
-> wakeup capable. Something like a flag usb_gadget->rw_capable.
-> 
-> We would also need some functions like usb_gadget_enable_remote_wakeup()
-> and usb_gadget_disable_remote_wakeup() for the gadget driver to notify
-> the controller driver when it checks against USB_CONFIG_ATT_WAKEUP in
-> the bmAttributes configuration.
-> 
-> BR,
-> Thinh
+diff --git a/scripts/decodecode b/scripts/decodecode
+index c711a196511c..2c848ded85cd 100755
+--- a/scripts/decodecode
++++ b/scripts/decodecode
+@@ -7,9 +7,11 @@
+ # e.g., to decode an i386 oops on an x86_64 system, use:
+ # AFLAGS=--32 decodecode < 386.oops
+ # PC=hex - the PC (program counter) the oops points to
++# To search code sequences from vmlinux:
++# ARCH=x86 decodecode [vmlinux] [kernel build path] < oops.file
+ 
+ cleanup() {
+-	rm -f $T $T.s $T.o $T.oo $T.aa $T.dis
++	rm -f $T $T.s $T.o $T.oo $T.aa $T.ad $T.dis
+ 	exit 1
+ }
+ 
+@@ -51,8 +53,20 @@ if [ -z "$code" ]; then
+ fi
+ 
+ echo $code
++
++# Backup OBJDUMPFLAGS to dump vmlinux later
++objdumpflagsbackup=$OBJDUMPFLAGS
++
++# Encode Code: to \xff\xff format to search in vmlinux
++rawcode=`echo $code | sed -e 's/.*Code://; s/\s//g'`
++
+ code=`echo $code | sed -e 's/.*Code: //'`
+ 
++# Get offset of faulting instruction
++pcoffset=${rawcode%%<*}
++pcoffset=$(( ${#pcoffset} / 2 ))
++rawcode=`echo $rawcode | sed -e 's/[<>()]//g; s/.\{2\}/\\\x&/g'`
++
+ width=`expr index "$code" ' '`
+ width=$((($width-1)/2))
+ case $width in
+@@ -62,10 +76,11 @@ case $width in
+ esac
+ 
+ if [ -z "$ARCH" ]; then
+-    case `uname -m` in
++	case `uname -m` in
+ 	aarch64*) ARCH=arm64 ;;
+ 	arm*) ARCH=arm ;;
+-    esac
++	x86*) ARCH=x86 ;;
++	esac
+ fi
+ 
+ # Params: (tmp_file, pc_sub)
+@@ -144,4 +159,126 @@ faultline=`echo "$faultline" | sed -e 's/\[/\\\[/g; s/\]/\\\]/g'`
+ cat $T.oo | sed -e "${faultlinenum}s/^\([^:]*:\)\(.*\)/\1\*\2\t\t<-- trapping instruction/"
+ echo
+ cat $T.aa
++
++# If a vmlinux binary is provided, try to search code sequences from it
++# It is an x86-specific tool.
++if [ "$ARCH" = "x86" ] && ! [ -z "$1" ] && [ -f "$1" ]; then
++	if [ -z "$2" ] || ! [ -d "$2" ]; then
++		echo
++		echo "Usage:"
++		echo "	$0 [vmlinux] [kernel build path]"
++		echo "	To find code sequences from vmlinux"
++		exit 1
++	fi
++
++	echo > $T.ad
++	echo "Finding code sequences from $1" >> $T.ad
++	vmlinux=$1
++	kernelpath=`readlink -f $2`
++	kernelpathdepth=`echo $kernelpath | grep -o '/' | wc -l`
++	minmatchlen=$(( 10 * 4 ))
++	partialmatch=0
++	removefromstart=1
++else
++	exit
++fi
++
++# __fentry__ (e8 + 4 bytes) is patched by nop ( 0f 1f 44 + 2 bytes ) at runtime
++restoredcode="$(echo $rawcode | \
++		sed -e 's/\\x0f\\x1f\\x44.\{8\}/\\xe8\.\{4\}/g')"
++addressresult=`LANG=C grep -boP --binary --text $restoredcode $vmlinux | \
++	       LANG=C sed 's/:.*$//'`
++
++# Try to find binary sequence, while reducing the length of the pattern
++while [ -z "$addressresult" ] && [ "${#restoredcode}" -gt "$minmatchlen" ]; do
++	partialmatch=1
++	if [ "$removefromstart" -eq 1 ]; then
++		restoredcode=${restoredcode#????}
++		if [ "$pcoffset" -gt 0 ]; then
++			pcoffset=$(( pcoffset - 1 ))
++		fi
++	else
++		restoredcode=${restoredcode%????}
++	fi
++	removefromstart=$((1-removefromstart))
++	addressresult=`LANG=C grep -boP --binary --text $restoredcode $vmlinux | \
++		       LANG=C sed 's/:.*$//' | tr '\n' ' '`
++done
++
++if [ -z "$addressresult" ]; then
++	cat $T.ad
++	echo "No matching code sequences found."
++	echo "================================="
++
++	exit
++fi
++
++minoffset=
++maxoffset=
++regex=
++trappingregex=
++# 0x200000 to cancel the offset in the vmlinux file
++# 0xffffffff81000000 to add the offset into memory of the kernel
++offsetadjust=`echo "ibase=16;FFFFFFFF81000000 - 200000" | bc`
++for address in $addressresult; do
++	offset=$(( address + pcoffset ))
++	if [ -z "$minoffset" ]; then
++		minoffset=$offset
++		maxoffset=$offset
++	else
++		if [ "$minoffset" -gt "$offset" ]; then
++			minoffset=$offset
++		fi
++		if [ "$maxoffset" -lt "$offset" ]; then
++			maxoffset=$offset
++		fi
++	fi
++
++	offset=`echo "obase=16;$offset + $offsetadjust" | bc`
++	fulloffset=$offset
++
++	# Truncate LSB to match any nearby addresses
++	offset=`echo $offset | sed 's/.$//'`
++	if [ -z "$regex" ]; then
++		regex="($offset.:"
++		trappingregex="$fulloffset:"
++	else
++		regex="$regex|$offset.:"
++		trappingregex="$trappingregex|$fulloffset:"
++	fi
++done
++
++regex="$regex)"
++minoffset=`echo "obase=16;$minoffset + $offsetadjust - 4096" | bc`
++maxoffset=`echo "obase=16;$maxoffset + $offsetadjust + 4096" | bc`
++display=
++if [ "$pcoffset" -eq -1 ]; then
++	# No current instruction found, so display the objdump from the beginning
++	# of the code block
++	display='-A 60'
++else
++	# Display around the current instruction
++	display='-C 30'
++fi
++
++OBJDUMPFLAGS="$objdumpflagsbackup -dS --start-address=0x$minoffset --stop-address=0x$maxoffset \
++	      --prefix=$kernelpath --prefix-strip=$kernelpathdepth $vmlinux"
++if [ "$partialmatch" -eq 1 ]; then
++	echo "Failed to find full Code segment, but did find a subsegment." >> $T.ad
++	echo "Surrounding code may have changed." >> $T.ad
++fi
++
++if [ "$PC" ]; then
++	( echo $PC | grep -Eqi $regex ) || echo "Warning: PC provided does not match \
++calculated binary offset." >> $T.ad
++fi
++
++restoredcode=`echo $restoredcode | sed 's/\\\\\x/ /g; s/.{4}/ __ __ __ __/g'`
++echo "Found code string: $restoredcode" >> $T.ad
++echo "============================================================" >> $T.ad
++
++${CROSS_COMPILE}objdump $OBJDUMPFLAGS | grep -Ei $display $regex >> $T.ad
++
++cat $T.ad | sed -e "s/^\(${trappingregex}\)\(.*\)/\1\*\2\t\t<-- trapping instruction/gI"
++
+ cleanup
+-- 
+2.32.1 (Apple Git-133)
 
-
-If we handle this in controller driver, then it would fail to get the 
-right interface id when multiple functions have to send function wake 
-notification. As per USB3.0 spec (below snippets) a function can be 
-independently placed into function suspend state within a composite 
-device and each function in function suspend state has to send a 
-function wake notification to exit.
-
-USB 3.0 Spec Section 9.2.5.3
-"A function may be placed into Function Suspend independently of other 
-functions within a composite device"
-
-USB 3.0 Spec Section 9.2.5.4
-"A function may signal that it wants to exit from Function Suspend by 
-sending a Function Wake Notification to the host if it is enabled for 
-function remote wakeup. This applies to single function devices as well 
-as multiple function ( i.e., composite) devices. If the link is in
-a non-U0 state, then the device must transition the link to U0 prior to 
-sending the remote wake message. If a remote wake event occurs in 
-multiple functions, each function shall send a Function Wake Notification"
-
-Best Regards,
-Elson
-
-> 
->> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->> ---
->>    drivers/usb/gadget/composite.c | 32 ++++++++++++++++++++++++++++++++
->>    drivers/usb/gadget/udc/core.c  |  9 +++++++++
->>    include/linux/usb/composite.h  |  1 +
->>    include/linux/usb/gadget.h     |  2 ++
->>    4 files changed, 44 insertions(+)
->>
->> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
->> index 403563c..6bdce23 100644
->> --- a/drivers/usb/gadget/composite.c
->> +++ b/drivers/usb/gadget/composite.c
->> @@ -490,6 +490,38 @@ int usb_interface_id(struct usb_configuration *config,
->>    }
->>    EXPORT_SYMBOL_GPL(usb_interface_id);
->>    
->> +int usb_func_wakeup(struct usb_function *func)
->> +{
->> +	int ret, id;
->> +	unsigned long flags;
->> +
->> +	if (!func || !func->config || !func->config->cdev ||
->> +	    !func->config->cdev->gadget)
->> +		return -EINVAL;
->> +
->> +	DBG(func->config->cdev, "%s function wakeup\n", func->name);
->> +
->> +	spin_lock_irqsave(&func->config->cdev->lock, flags);
->> +
->> +	for (id = 0; id < MAX_CONFIG_INTERFACES; id++)
->> +		if (func->config->interface[id] == func)
->> +			break;
->> +
->> +	if (id == MAX_CONFIG_INTERFACES) {
->> +		ERROR(func->config->cdev, "Invalid function id:%d\n", id);
->> +		ret = -EINVAL;
->> +		goto err;
->> +	}
->> +
->> +	ret = usb_gadget_func_wakeup(func->config->cdev->gadget, id);
->> +
->> +err:
->> +	spin_unlock_irqrestore(&func->config->cdev->lock, flags);
->> +
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL(usb_func_wakeup);
->> +
->>    static u8 encode_bMaxPower(enum usb_device_speed speed,
->>    		struct usb_configuration *c)
->>    {
->> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
->> index 7886497..fe5c504 100644
->> --- a/drivers/usb/gadget/udc/core.c
->> +++ b/drivers/usb/gadget/udc/core.c
->> @@ -816,6 +816,15 @@ int usb_gadget_activate(struct usb_gadget *gadget)
->>    }
->>    EXPORT_SYMBOL_GPL(usb_gadget_activate);
->>    
->> +int usb_gadget_func_wakeup(struct usb_gadget *gadget, int interface_id)
->> +{
->> +	if (gadget->speed < USB_SPEED_SUPER || !gadget->ops->func_wakeup)
->> +		return -EOPNOTSUPP;
->> +
->> +	return gadget->ops->func_wakeup(gadget, interface_id);
->> +}
->> +EXPORT_SYMBOL_GPL(usb_gadget_func_wakeup);
->> +
->>    /* ------------------------------------------------------------------------- */
->>    
->>    #ifdef	CONFIG_HAS_DMA
->> diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
->> index 9d27622..31b35d7 100644
->> --- a/include/linux/usb/composite.h
->> +++ b/include/linux/usb/composite.h
->> @@ -254,6 +254,7 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g, struct usb_function *f,
->>    
->>    int config_ep_by_speed(struct usb_gadget *g, struct usb_function *f,
->>    			struct usb_ep *_ep);
->> +int usb_func_wakeup(struct usb_function *func);
->>    
->>    #define	MAX_CONFIG_INTERFACES		16	/* arbitrary; max 255 */
->>    
->> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
->> index 3ad58b7..76f9de4 100644
->> --- a/include/linux/usb/gadget.h
->> +++ b/include/linux/usb/gadget.h
->> @@ -311,6 +311,7 @@ struct usb_udc;
->>    struct usb_gadget_ops {
->>    	int	(*get_frame)(struct usb_gadget *);
->>    	int	(*wakeup)(struct usb_gadget *);
->> +	int	(*func_wakeup)(struct usb_gadget *gadget, int interface_id);
->>    	int	(*set_selfpowered) (struct usb_gadget *, int is_selfpowered);
->>    	int	(*vbus_session) (struct usb_gadget *, int is_active);
->>    	int	(*vbus_draw) (struct usb_gadget *, unsigned mA);
->> @@ -612,6 +613,7 @@ int usb_gadget_disconnect(struct usb_gadget *gadget);
->>    int usb_gadget_deactivate(struct usb_gadget *gadget);
->>    int usb_gadget_activate(struct usb_gadget *gadget);
->>    int usb_gadget_check_config(struct usb_gadget *gadget);
->> +int usb_gadget_func_wakeup(struct usb_gadget *gadget, int interface_id);
->>    #else
->>    static inline int usb_gadget_frame_number(struct usb_gadget *gadget)
->>    { return 0; }
-> 

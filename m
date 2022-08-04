@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8FB589AB7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 13:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B90C6589AAB
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 13:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239378AbiHDLAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 07:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
+        id S239410AbiHDLAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 07:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiHDLAi (ORCPT
+        with ESMTP id S239329AbiHDLAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 07:00:38 -0400
+        Thu, 4 Aug 2022 07:00:40 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356D613D05;
-        Thu,  4 Aug 2022 04:00:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFBE10FF1;
+        Thu,  4 Aug 2022 04:00:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1659610837; x=1691146837;
+  t=1659610838; x=1691146838;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5Qla3DMFBdLbSsXeveYGQ+ThO/vsVb1s94dshrAQ42o=;
-  b=HsPWLEYhLHbjOOgPl+BLRQU0thtFpT8fYTRPyJzOkwNhod9oc7UUdf8x
-   19XQl4+u3usvI6xrq3RLwfnksbRBcdd/AijFn0y39mNasbxWk4EF3j/Cy
-   CzFKOISi8NPycTfIIBDsw++g1fXu+BhqIXnqzP3oBGMRhjai5wM92ZU8m
-   Zwk9f7Xgw7xAH2atSDemZYEVc/gLhXE/skMPgwZzCClLQwPnP1QWjRe3K
-   xg97oXwm0IeCiLml0i4Nm8kPBNdXCn+0r6U/JV8h3MBuvUT693+GFnzPi
-   /viDrgFSPkQcjH1HQQeAPW0txg7sMAo0RzsZfIy3Am+l7qludiO44g2Gg
-   w==;
+  bh=9jCiHi0XvA6rQLauSEWZNFmkv5oOx1jrLcalq0OXgBk=;
+  b=I83e1wF8ZNGQ8XKxdD3oxl5cSBiJWE6Ds67/xb9OtpdzzjYKY6/vlKrr
+   EVJNgMzrCws1osZJqgmJTLJcP8PXu9aZmklbj0r3kzvw4xOKjNlNXaJnE
+   OTYc2Uvv7myXp3EXgD/loD11ye6JrNeTH7B2TXYnldjzme3i8PEf8j9RP
+   jXkc1CTogFqmFctkEu+aB8THsOBzUjTL8jWkZQ7ZeY0Muda1Q9uomfRD0
+   xrqkMGiAvvgW7Bkc1NvVafjWNyhx27Tt5xKEj1dsTvGK6LYz8CxZWiDL0
+   zHWDESKhqyl85HL1+PFWB/BILsn2wH8vuxyLUKCU1VD9wmSimBqiq8cN0
+   A==;
 X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="107557249"
+   d="scan'208";a="107557298"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Aug 2022 04:00:35 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Aug 2022 04:00:38 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 4 Aug 2022 04:00:33 -0700
+ 15.1.2375.17; Thu, 4 Aug 2022 04:00:38 -0700
 Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.28 via Frontend Transport; Thu, 4 Aug 2022 04:00:30 -0700
+ 15.1.2375.28 via Frontend Transport; Thu, 4 Aug 2022 04:00:35 -0700
 From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
 To:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <UNGLinuxDriver@microchip.com>, <gregkh@linuxfoundation.org>,
         <arnd@arndb.de>, <dragan.cvetic@xilinx.com>,
         <derek.kiernan@xilinx.com>
-Subject: [PATCH RFC char-misc-next 1/5] misc: microchip: pci1xxxx: load auxiliary bus driver for the PIO function in the multi-function endpoint of pci1xxxx device.
-Date:   Thu, 4 Aug 2022 22:02:15 +0530
-Message-ID: <20220804163219.921640-2-kumaravel.thiagarajan@microchip.com>
+Subject: [PATCH RFC char-misc-next 2/5] misc: microchip: pci1xxxx: load gpio driver for the gpio controller auxiliary device enumerated by the auxiliary bus driver.
+Date:   Thu, 4 Aug 2022 22:02:16 +0530
+Message-ID: <20220804163219.921640-3-kumaravel.thiagarajan@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220804163219.921640-1-kumaravel.thiagarajan@microchip.com>
 References: <20220804163219.921640-1-kumaravel.thiagarajan@microchip.com>
@@ -63,299 +63,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci1xxxx is a PCIe switch with a multi-function endpoint on one of its
-downstream ports. PIO function is one of the functions in the
-multi-function endpoint. PIO function combines a GPIO controller and also
-an interface to program pci1xxxx's OTP & EEPROM. This auxiliary bus driver
-is loaded for the PIO function and separate child devices are enumerated
-for GPIO controller and OTP/EEPROM interface.
+PIO function's auxiliary bus driver enumerates separate child devices for
+GPIO controller and OTP/EEPROM interface. This gpio driver implemented
+based on the gpio framework is loaded for the gpio auxiliary device.
 
 Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
 ---
- MAINTAINERS                                   |   8 +
- drivers/misc/Kconfig                          |   1 +
- drivers/misc/Makefile                         |   3 +-
- drivers/misc/mchp_pci1xxxx/Kconfig            |  10 ++
- drivers/misc/mchp_pci1xxxx/Makefile           |   1 +
- drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c | 167 ++++++++++++++++++
- drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h |  28 +++
- 7 files changed, 217 insertions(+), 1 deletion(-)
- create mode 100644 drivers/misc/mchp_pci1xxxx/Kconfig
- create mode 100644 drivers/misc/mchp_pci1xxxx/Makefile
- create mode 100644 drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
- create mode 100644 drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h
+ MAINTAINERS                                   |   1 +
+ drivers/misc/mchp_pci1xxxx/Makefile           |   2 +-
+ .../misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c   | 163 ++++++++++++++++++
+ 3 files changed, 165 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 285ffe0df5cf..ba491e4fc35f 100644
+index ba491e4fc35f..cc4b6b4c2b9a 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -13244,6 +13244,14 @@ S:	Supported
- F:	Documentation/devicetree/bindings/mtd/atmel-nand.txt
- F:	drivers/mtd/nand/raw/atmel/*
+@@ -13251,6 +13251,7 @@ L:	linux-gpio@vger.kernel.org
+ S:	Supported
+ F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
+ F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h
++F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
  
-+MICROCHIP PCI1XXXX GP DRIVER
-+M:	Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-+M:	UNGLinuxDriver@microchip.com
-+L:	linux-gpio@vger.kernel.org
-+S:	Supported
-+F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
-+F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h
-+
  MICROCHIP OTPC DRIVER
  M:	Claudiu Beznea <claudiu.beznea@microchip.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 94e9fb4cdd76..358ad56f6524 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -513,4 +513,5 @@ source "drivers/misc/cardreader/Kconfig"
- source "drivers/misc/habanalabs/Kconfig"
- source "drivers/misc/uacce/Kconfig"
- source "drivers/misc/pvpanic/Kconfig"
-+source "drivers/misc/mchp_pci1xxxx/Kconfig"
- endmenu
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 2be8542616dd..ac9b3e757ba1 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -60,4 +60,5 @@ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
- obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
- obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
- obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
--obj-$(CONFIG_VCPU_STALL_DETECTOR)	+= vcpu_stall_detector.o
-\ No newline at end of file
-+obj-$(CONFIG_GP_PCI1XXXX)	+= mchp_pci1xxxx/
-+obj-$(CONFIG_VCPU_STALL_DETECTOR)	+= vcpu_stall_detector.o
-diff --git a/drivers/misc/mchp_pci1xxxx/Kconfig b/drivers/misc/mchp_pci1xxxx/Kconfig
-new file mode 100644
-index 000000000000..387a88addfb0
---- /dev/null
-+++ b/drivers/misc/mchp_pci1xxxx/Kconfig
-@@ -0,0 +1,10 @@
-+config GP_PCI1XXXX
-+       tristate "Microchip PCI1XXXX PCIe to GPIO Expander + OTP/EEPROM manager"
-+       select GPIOLIB_IRQCHIP
-+       help
-+         PCI1XXXX is a PCIe GEN 3 switch with one of the endpoints having
-+         multiple functions and one of the functions is a GPIO controller
-+         which also has registers to interface with the OTP and EEPROM.
-+         Select yes, no or module here to include or exclude the driver
-+         for the GPIO function.
-+
 diff --git a/drivers/misc/mchp_pci1xxxx/Makefile b/drivers/misc/mchp_pci1xxxx/Makefile
-new file mode 100644
-index 000000000000..23927ab251c4
---- /dev/null
+index 23927ab251c4..fc4615cfe28b 100644
+--- a/drivers/misc/mchp_pci1xxxx/Makefile
 +++ b/drivers/misc/mchp_pci1xxxx/Makefile
-@@ -0,0 +1 @@
-+obj-$(CONFIG_GP_PCI1XXXX) := mchp_pci1xxxx_gp.o
-diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
+@@ -1 +1 @@
+-obj-$(CONFIG_GP_PCI1XXXX) := mchp_pci1xxxx_gp.o
++obj-$(CONFIG_GP_PCI1XXXX) := mchp_pci1xxxx_gp.o mchp_pci1xxxx_gpio.o
+diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
 new file mode 100644
-index 000000000000..577f0fb456de
+index 000000000000..f2e3b3794ba3
 --- /dev/null
-+++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
-@@ -0,0 +1,167 @@
++++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+@@ -0,0 +1,163 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +// Copyright (C) 2022 Microchip Technology Inc.
++// pci1xxxx gpio driver
 +
-+#include <linux/mfd/core.h>
 +#include <linux/module.h>
-+#include <linux/pci.h>
 +#include <linux/spinlock.h>
 +#include <linux/gpio/driver.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/idr.h>
-+#include "mchp_pci1xxxx_gp.h"
-+
-+struct aux_bus_device {
-+	struct auxiliary_device_wrapper *aux_device_wrapper[2];
-+};
-+
-+DEFINE_IDA(gp_client_ida);
-+static const char aux_dev_otp_e2p_name[15] = "gp_otp_e2p";
-+static const char aux_dev_gpio_name[15] = "gp_gpio";
-+
-+static void gp_auxiliary_device_release(struct device *dev)
-+{
-+	struct auxiliary_device_wrapper *aux_device_wrapper =
-+		(struct auxiliary_device_wrapper *)container_of(dev,
-+				struct auxiliary_device_wrapper, aux_dev.dev);
-+
-+	ida_free(&gp_client_ida, aux_device_wrapper->aux_dev.id);
-+	kfree(aux_device_wrapper);
-+}
-+
-+static int gp_aux_bus_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-+{
-+	struct aux_bus_device *aux_bus;
-+	int retval;
-+
-+	retval = pcim_enable_device(pdev);
-+	if (retval)
-+		return retval;
-+
-+	aux_bus = kzalloc(sizeof(*aux_bus), GFP_KERNEL);
-+	if (!aux_bus)
-+		return -ENOMEM;
-+
-+	aux_bus->aux_device_wrapper[0] = kzalloc(sizeof(*aux_bus->aux_device_wrapper[0]),
-+						 GFP_KERNEL);
-+	if (!aux_bus->aux_device_wrapper[0])
-+		return -ENOMEM;
-+
-+	retval = ida_alloc(&gp_client_ida, GFP_KERNEL);
-+	if (retval < 0)
-+		goto err_ida_alloc_0;
-+
-+	aux_bus->aux_device_wrapper[0]->aux_dev.name = aux_dev_otp_e2p_name;
-+	aux_bus->aux_device_wrapper[0]->aux_dev.dev.parent = &pdev->dev;
-+	aux_bus->aux_device_wrapper[0]->aux_dev.dev.release = gp_auxiliary_device_release;
-+	aux_bus->aux_device_wrapper[0]->aux_dev.id = retval;
-+
-+	aux_bus->aux_device_wrapper[0]->gp_aux_data.region_start = pci_resource_start(pdev, 0);
-+	aux_bus->aux_device_wrapper[0]->gp_aux_data.region_length = pci_resource_end(pdev, 0);
-+
-+	retval = auxiliary_device_init(&aux_bus->aux_device_wrapper[0]->aux_dev);
-+	if (retval < 0)
-+		goto err_aux_dev_init_0;
-+
-+	retval = auxiliary_device_add(&aux_bus->aux_device_wrapper[0]->aux_dev);
-+	if (retval)
-+		goto err_aux_dev_add_0;
-+
-+	aux_bus->aux_device_wrapper[1] = kzalloc(sizeof(*aux_bus->aux_device_wrapper[1]),
-+						 GFP_KERNEL);
-+	if (!aux_bus->aux_device_wrapper[1])
-+		return -ENOMEM;
-+
-+	retval = ida_alloc(&gp_client_ida, GFP_KERNEL);
-+	if (retval < 0)
-+		goto err_ida_alloc_1;
-+
-+
-+	aux_bus->aux_device_wrapper[1]->aux_dev.name = aux_dev_gpio_name;
-+	aux_bus->aux_device_wrapper[1]->aux_dev.dev.parent = &pdev->dev;
-+	aux_bus->aux_device_wrapper[1]->aux_dev.dev.release = gp_auxiliary_device_release;
-+	aux_bus->aux_device_wrapper[1]->aux_dev.id = retval;
-+
-+	aux_bus->aux_device_wrapper[1]->gp_aux_data.region_start = pci_resource_start(pdev, 0);
-+	aux_bus->aux_device_wrapper[1]->gp_aux_data.region_length = pci_resource_end(pdev, 0);
-+
-+	retval = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
-+
-+	if (retval < 0)
-+		return retval;
-+
-+	pdev->irq = pci_irq_vector(pdev, 0);
-+	if (pdev->irq < 0)
-+		return retval;
-+
-+	aux_bus->aux_device_wrapper[1]->gp_aux_data.irq_num = pdev->irq;
-+
-+	retval = auxiliary_device_init(&aux_bus->aux_device_wrapper[1]->aux_dev);
-+	if (retval < 0)
-+		goto err_aux_dev_init_1;
-+
-+	retval = auxiliary_device_add(&aux_bus->aux_device_wrapper[1]->aux_dev);
-+	if (retval)
-+		goto err_aux_dev_add_1;
-+
-+	pci_set_drvdata(pdev, aux_bus);
-+	pci_set_master(pdev);
-+
-+	return 0;
-+
-+err_aux_dev_add_1:
-+	auxiliary_device_uninit(&aux_bus->aux_device_wrapper[1]->aux_dev);
-+
-+err_aux_dev_init_1:
-+	ida_free(&gp_client_ida, aux_bus->aux_device_wrapper[1]->aux_dev.id);
-+
-+err_ida_alloc_1:
-+	kfree(aux_bus->aux_device_wrapper[1]);
-+
-+err_aux_dev_add_0:
-+	auxiliary_device_uninit(&aux_bus->aux_device_wrapper[0]->aux_dev);
-+
-+err_aux_dev_init_0:
-+	ida_free(&gp_client_ida, aux_bus->aux_device_wrapper[0]->aux_dev.id);
-+
-+err_ida_alloc_0:
-+	kfree(aux_bus->aux_device_wrapper[0]);
-+
-+	return retval;
-+}
-+
-+static void gp_aux_bus_remove(struct pci_dev *pdev)
-+{
-+	struct aux_bus_device *aux_bus = pci_get_drvdata(pdev);
-+
-+	auxiliary_device_delete(&aux_bus->aux_device_wrapper[0]->aux_dev);
-+	auxiliary_device_uninit(&aux_bus->aux_device_wrapper[0]->aux_dev);
-+	auxiliary_device_delete(&aux_bus->aux_device_wrapper[1]->aux_dev);
-+	auxiliary_device_uninit(&aux_bus->aux_device_wrapper[1]->aux_dev);
-+	kfree(aux_bus);
-+	pci_disable_device(pdev);
-+}
-+
-+static const struct pci_device_id pci1xxxx_tbl[] = {
-+	{ PCI_DEVICE(0x1055, 0xA005) },
-+	{ PCI_DEVICE(0x1055, 0xA015) },
-+	{ PCI_DEVICE(0x1055, 0xA025) },
-+	{ PCI_DEVICE(0x1055, 0xA035) },
-+	{ PCI_DEVICE(0x1055, 0xA045) },
-+	{ PCI_DEVICE(0x1055, 0xA055) },
-+	{0,}
-+};
-+MODULE_DEVICE_TABLE(pci, pci1xxxx_tbl);
-+
-+static struct pci_driver pci1xxxx_gp_driver = {
-+	.name = "PCI1xxxxGP",
-+	.id_table = pci1xxxx_tbl,
-+	.probe = gp_aux_bus_probe,
-+	.remove = gp_aux_bus_remove,
-+};
-+
-+module_pci_driver(pci1xxxx_gp_driver);
-+
-+MODULE_DESCRIPTION("Microchip Technology Inc. PCI1xxxx GP expander");
-+MODULE_AUTHOR("Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h
-new file mode 100644
-index 000000000000..ee6ba118a12c
---- /dev/null
-+++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h
-@@ -0,0 +1,28 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/* Copyright (C) 2022 Microchip Technology Inc. */
-+
-+#ifndef _GPIO_PCI1XXXX_H
-+#define _GPIO_PCI1XXXX_H
-+
++#include <linux/bio.h>
 +#include <linux/spinlock.h>
 +#include <linux/mutex.h>
 +#include <linux/kthread.h>
-+#include <linux/types.h>
-+#include <linux/auxiliary_bus.h>
 +
-+/* Perform operations like variable length write, read and write with read back for OTP / EEPROM
-+ * Perform bit mode write in OTP
-+ */
++#include "mchp_pci1xxxx_gp.h"
 +
-+struct gp_aux_data_type {
-+	int irq_num;
-+	resource_size_t region_start;
-+	resource_size_t region_length;
++#define PCI1XXXX_NR_PINS		93
++#define PULLUP_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0x40)
++#define PULLDOWN_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0x50)
++#define OPENDRAIN_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0x60)
++#define DEBOUNCE_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0xE0)
++#define PIO_GLOBAL_CONFIG_OFFSET	(0x400 + 0xF0)
++#define PIO_PCI_CTRL_REG_OFFSET	(0x400 + 0xF4)
++#define INTR_MASK_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0x100)
++#define INTR_STATUS_OFFSET(x)		(((x) * 4) + 0x400 + 0xD0)
++
++struct pci1xxxx_gpio {
++	struct auxiliary_device *aux_dev;
++	void __iomem *reg_base;
++	struct gpio_chip gpio;
++	spinlock_t lock;
++	int irq_base;
 +};
 +
-+struct auxiliary_device_wrapper {
-+	struct auxiliary_device aux_dev;
-+	struct gp_aux_data_type gp_aux_data;
++static inline void pci1xxx_assign_bit(void __iomem *base_addr, unsigned int reg_offset,
++				      unsigned int bitpos, bool set)
++{
++	u32 data;
++
++	data = readl(base_addr + reg_offset);
++	if (set)
++		data |= BIT(bitpos);
++	else
++		data &= ~BIT(bitpos);
++	writel(data, base_addr + reg_offset);
++}
++
++static int pci1xxxx_gpio_set_config(struct gpio_chip *gpio, unsigned int offset,
++				    unsigned long config)
++{
++	struct pci1xxxx_gpio *priv = gpiochip_get_data(gpio);
++	unsigned long flags;
++	int ret = 0;
++
++	spin_lock_irqsave(&priv->lock, flags);
++	switch (pinconf_to_config_param(config)) {
++	case PIN_CONFIG_BIAS_PULL_UP:
++		pci1xxx_assign_bit(priv->reg_base, PULLUP_OFFSET(offset), (offset % 32), true);
++		break;
++	case PIN_CONFIG_BIAS_PULL_DOWN:
++		pci1xxx_assign_bit(priv->reg_base, PULLDOWN_OFFSET(offset), (offset % 32), true);
++		break;
++	case PIN_CONFIG_BIAS_DISABLE:
++		pci1xxx_assign_bit(priv->reg_base, PULLUP_OFFSET(offset), (offset % 32), false);
++		pci1xxx_assign_bit(priv->reg_base, PULLDOWN_OFFSET(offset), (offset % 32), false);
++		break;
++	case PIN_CONFIG_DRIVE_OPEN_DRAIN:
++		pci1xxx_assign_bit(priv->reg_base, OPENDRAIN_OFFSET(offset), (offset % 32), true);
++		break;
++	default:
++		ret = -EOPNOTSUPP;
++		break;
++	}
++	spin_unlock_irqrestore(&priv->lock, flags);
++
++	return ret;
++}
++
++static int pci1xxxx_gpio_setup(struct pci1xxxx_gpio *priv, int irq)
++{
++	struct gpio_chip *gchip = &priv->gpio;
++
++	gchip->label = dev_name(&priv->aux_dev->dev);
++	gchip->parent = &priv->aux_dev->dev;
++	gchip->owner = THIS_MODULE;
++	gchip->set_config = pci1xxxx_gpio_set_config;
++	gchip->dbg_show = NULL;
++	gchip->base = -1;
++	gchip->ngpio =  PCI1XXXX_NR_PINS;
++	gchip->can_sleep = false;
++
++	return 0;
++}
++
++static int pci1xxxx_gpio_probe(struct auxiliary_device *aux_dev,
++			       const struct auxiliary_device_id *id)
++
++{
++	struct auxiliary_device_wrapper *aux_dev_wrapper;
++	struct gp_aux_data_type *pdata;
++	struct pci1xxxx_gpio *priv;
++	int retval;
++
++	aux_dev_wrapper = (struct auxiliary_device_wrapper *)
++			  container_of(aux_dev, struct auxiliary_device_wrapper, aux_dev);
++
++	pdata = &(aux_dev_wrapper->gp_aux_data);
++
++	if (!pdata)
++		return -EINVAL;
++
++	priv = devm_kzalloc(&aux_dev->dev, sizeof(struct pci1xxxx_gpio), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->aux_dev = aux_dev;
++
++	if (!devm_request_mem_region(&aux_dev->dev, pdata->region_start, 0x800, aux_dev->name))
++		return -EBUSY;
++
++	priv->reg_base = devm_ioremap(&aux_dev->dev, pdata->region_start, 0x800);
++	if (!priv->reg_base)
++		return -ENOMEM;
++
++	writel(0x0264, (priv->reg_base + 0x400 + 0xF0));
++
++	retval = pci1xxxx_gpio_setup(priv, pdata->irq_num);
++
++	if (retval < 0)
++		return retval;
++
++	dev_set_drvdata(&(aux_dev->dev), priv);
++
++	return devm_gpiochip_add_data(&(aux_dev->dev), &priv->gpio, priv);
++}
++
++const struct auxiliary_device_id pci1xxxx_gpio_auxiliary_id_table[] = {
++	{.name = "mchp_pci1xxxx_gp.gp_gpio"},
++	{}
 +};
 +
-+#endif
++static struct auxiliary_driver pci1xxxx_gpio_driver = {
++	.driver = {
++		.name = "PCI1xxxxGPIO",
++		},
++	.probe = pci1xxxx_gpio_probe,
++	.id_table = pci1xxxx_gpio_auxiliary_id_table
++};
++
++static int __init pci1xxxx_gpio_driver_init(void)
++{
++	return auxiliary_driver_register(&pci1xxxx_gpio_driver);
++}
++
++static void __exit pci1xxxx_gpio_driver_exit(void)
++{
++	auxiliary_driver_unregister(&pci1xxxx_gpio_driver);
++}
++
++module_init(pci1xxxx_gpio_driver_init);
++module_exit(pci1xxxx_gpio_driver_exit);
++
++MODULE_DESCRIPTION("Microchip Technology Inc. PCI1xxxx GPIO controller");
++MODULE_AUTHOR("Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>");
++MODULE_LICENSE("GPL");
 -- 
 2.25.1
 

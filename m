@@ -2,129 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EAD5899B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92CB5899B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238402AbiHDJGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 05:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
+        id S238446AbiHDJJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 05:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237963AbiHDJGl (ORCPT
+        with ESMTP id S231700AbiHDJJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 05:06:41 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB8D2BB01;
-        Thu,  4 Aug 2022 02:06:40 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4A23B5C01A6;
-        Thu,  4 Aug 2022 05:06:40 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 04 Aug 2022 05:06:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1659604000; x=
-        1659690400; bh=rFiIXjECfUiffiTGaGpcuH5wzCwxqCnwZxuo6PM6Lmo=; b=N
-        3FX3KUcFoLOb/hd7V92ghCYY/QhJguPw3bWPOtarRtQQWBjcKwcuHtA7U8/+C/1f
-        Ql79WMRN+XUkvNQCrTpTLxd53LUMO+sIjx2gUa47B3VU/5SWPv59Aur9xbcxfSrp
-        rMrb2u/IwHj8uzzKnaIN+iiPTbSFAD2RNwvJOi6I74ufQSUyq5EqtbzRG08vXbgV
-        pjygCy+gKWSCVPHAMYXsZPPlDMluUKMHkGTTBuZ1ynLpBQSvXfSNam7RO+Gy2rDw
-        OJke9wBSmAzIIohxf9z4lRncC1ucNzM/ZqRKmHYxaJL44btAoSCmV1kg5lfxiyrK
-        Fsfjs6h69sP6rrc4xzv3w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1659604000; x=1659690400; bh=rFiIXjECfUiffiTGaGpcuH5wzCwx
-        qCnwZxuo6PM6Lmo=; b=tsR2gOBm0Ba/WRD+rKF0Erj3xXRSMRrf/m7eomHDseHj
-        U3eRMSqFAfGxA9YQji63CL61AmJzVXfGehRAbA00iL8iDHRd6sqZF0gAWmCnnwRx
-        gaqD7WZmhpdmRquhoWT9guII7n3nnHg+C3ai+gmYNCAX1Novuiow3j346IR/1cJF
-        Z6TfVHGOHDBf5q95SXI01WGoULSIcPfAo7dwRGRT0skwJkOAuX8L6oai/hsN3/lI
-        jkuGzZ3b7rwdhJkoN0BXQcCQXFLo09O/WC4owaaowfxwSwYJ6+9mp1pNQEAM9mjQ
-        mA2W2+uYo1fTyzjAODrVxI5hf7WY9iO7EwvDLJmsPg==
-X-ME-Sender: <xms:IIzrYqamPHg4JWLWDitvFjEH7TBMXf1dxdKVAgOIL4CrV0yYwOnOqw>
-    <xme:IIzrYtY0ioznyafymCRtV4QVh4szLgmxp5KXBSl3Td0Yc-sVHTmx0kASJgzmVqlRT
-    q4jMck-B0TjxkuatK8>
-X-ME-Received: <xmr:IIzrYk8b-UJKglrbA9cU3EF1wZ2xqGO9QJLPvVT3CAgbZEfPQhrCyEOnzJA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvledguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtrodttddtvdenucfhrhhomheplfhoshhh
-    ucfvrhhiphhlvghtthcuoehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeehhedthfeitdeugefhhffftdeigefhjeefleegiedvjeejtdev
-    jeeivdekgfeljeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhg
-X-ME-Proxy: <xmx:IIzrYsoGUUY7VRFyI7eXHOwbVgdewAdKmiAg51WOREBDQKi6WWK31g>
-    <xmx:IIzrYlokFWf96Wn9Te6dxitWJaifvQpbwl6l5Hxy4c6JxadAaU8Wxw>
-    <xmx:IIzrYqTyh_LWCl1LQTpKxuZz72B_QJOE34GopGsERiWEaxz_imCGRQ>
-    <xmx:IIzrYs2iGk_Hm4R4y0UbUdyEwTzP54eu63_bFiBFkbmqhtR3kzMGFQ>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 4 Aug 2022 05:06:39 -0400 (EDT)
-Date:   Thu, 4 Aug 2022 02:06:38 -0700
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] Dump command line of faulting process to syslog
-Message-ID: <YuuMHkMIssKcBYeX@localhost>
-References: <20220801152016.36498-1-deller@gmx.de>
- <YugGFEjJvIwzifq7@localhost>
- <a0bf15a2-2f9c-5603-3adb-ffa705572a92@gmx.de>
- <Yut+0Fg7F99MI48J@localhost>
- <2f4c1abb-ca27-178a-31c3-5e422613e7e8@gmx.de>
+        Thu, 4 Aug 2022 05:09:56 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265B42BB01;
+        Thu,  4 Aug 2022 02:09:55 -0700 (PDT)
+Date:   Thu, 04 Aug 2022 09:09:51 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1659604192;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b5znzIH5NljT5APUouLc8bxPp/gvEn0y7XTQtpyiiqQ=;
+        b=2SJFfENmx5D4ZYYXB3E95KyJmI4wnwHQKg3ywA51+Y+EyJ7gHs9+QzKaQYlWehp+Pdy3O6
+        Es/mOaXjQlRrGWh4JZ1sewlthCGS1D+dNEYHrVkQuK0vTcBYNliCRXWMfz2VyZp5nvnPWp
+        mDha7JIylJS1dd/zSUkcvz2UMyqV0UgsBVmK4eMTMaG6qbH0bLZWfUxHnH8M8wdpxsyucz
+        2DunSI/EXUT6avGgT92M09XCn5SSNrtwNpXQ3fboNM4o+8oT4emV/QF450quSIDKvhDHqh
+        X+h7Jxgo4Ny0nFY/XKoMYQvVqrasjX0+seJCV+kb/vbCDnDV643J3FyA787etg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1659604192;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b5znzIH5NljT5APUouLc8bxPp/gvEn0y7XTQtpyiiqQ=;
+        b=ck3OjAL8FdwSfV5LTs4CurCQRUOCbKXjrXpcgDClspWcNx+U45HqwXst50/LfHLKNrZwCi
+        2DCKZPl0ou8TDgBg==
+From:   "tip-bot2 for Slark Xiao" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/urgent] perf/core: Fix ';;' typo
+Cc:     Slark Xiao <slark_xiao@163.com>, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220720091220.14200-1-slark_xiao@163.com>
+References: <20220720091220.14200-1-slark_xiao@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2f4c1abb-ca27-178a-31c3-5e422613e7e8@gmx.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165960419118.15455.15553677582415200869.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 10:39:52AM +0200, Helge Deller wrote:
-> On 8/4/22 10:09, Josh Triplett wrote:
-> > On Tue, Aug 02, 2022 at 09:40:50PM +0200, Helge Deller wrote:
-> >> On 8/1/22 18:57, Josh Triplett wrote:
-> >>> However, it's also an information disclosure in various ways. The
-> >>> arguments of a program are often more sensitive than the name, and logs
-> >>> have a tendency to end up in various places, such as bug reports.
-> >>>
-> >>> An example of how this can be an issue:
-> >>> - You receive an email or other message with a sensitive link to follow
-> >>> - You open the link, which launches `firefox https://...`
-> >>> - You continue browsing from that window
-> >>> - Firefox crashes (and recovers and restarts, so you don't think
-> >>>   anything of it)
-> >>> - Later, you report a bug on a different piece of software, and the bug
-> >>>   reporting process includes a copy of the kernel log
-> >>
-> >> Yes, that's a possible way how such information can leak.
-> >>
-> >>> I am *not* saying that we shouldn't do this; it seems quite helpful.
-> >>> However, I think we need to arrange to treat this as sensitive
-> >>> information, similar to kptr_restrict.
-[...]
-> > I don't think we should overload the meaning of dmesg_restrict. But
-> > overloading kptr_restrict seems reasonable to me. (Including respecting
-> > kptr_restrict==2 by not showing this at all.)
-> 
-> I'm fine with kptr_restrict, but I'm puzzled for which value of kptr_restrict
-> the command line should be shown then.
-> By looking at the meaning of kptr_restrict, I think the command line should be
-> hidden for values 0-2.
-> Do you suggest to add a new value "3" or am I missing something?
+The following commit has been merged into the perf/urgent branch of tip:
 
-I'm suggesting treating it the same as a pointer value:
+Commit-ID:     99643bab36b642be10bf09cd3285c37c9e5b597f
+Gitweb:        https://git.kernel.org/tip/99643bab36b642be10bf09cd3285c37c9e5b597f
+Author:        Slark Xiao <slark_xiao@163.com>
+AuthorDate:    Wed, 20 Jul 2022 17:12:20 +08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Thu, 04 Aug 2022 11:01:30 +02:00
 
-0: always show command line
-1: show command line if read by privileged caller
-2: never show command line
+perf/core: Fix ';;' typo
 
-That could either use kptr_restrict or use a separate cmdline_restrict.
+Remove double ';;'.
+
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20220720091220.14200-1-slark_xiao@163.com
+---
+ kernel/events/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index c9d32d4..bd23f3e 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -4457,7 +4457,7 @@ int perf_event_read_local(struct perf_event *event, u64 *value,
+ 
+ 	*value = local64_read(&event->count);
+ 	if (enabled || running) {
+-		u64 __enabled, __running, __now;;
++		u64 __enabled, __running, __now;
+ 
+ 		calc_timer_values(event, &__now, &__enabled, &__running);
+ 		if (enabled)

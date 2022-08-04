@@ -2,87 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74D658983C
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C1B589844
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239057AbiHDHSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
+        id S232097AbiHDHXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiHDHSH (ORCPT
+        with ESMTP id S239092AbiHDHXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:18:07 -0400
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8855C969;
-        Thu,  4 Aug 2022 00:18:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1659597467; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=RitbPrTTslmZ0rPk5lvqDAN+IY0eVaS9hFna7Pc9GW8iD/DSs4WLGyXaWsKTh/h0Sv33aOR5AKW24q5Wdl5EHivYpMvkPAWXQNTFV3+W0amucqlIcsHJ4Xb2tiUXzQENIRGJtOAjuFEzX32ExVYJUGDInOgN47mo3zG2/E4EVSw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1659597467; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=MCrWicY2XoCiSIKwKmcXAPX12IeBhhZabwszQBGvXqM=; 
-        b=iY2LdKOooPCVsRu0qmwu0I9Cx/CBcCd9k8jYRS6LJNNkkFSPKdLwHklx5s00McmgtKg640Tts/KS0u2P0ofjFHS2D1tfcli7+pntpEej22Djx7zOwIpm/mYQp3+SLcg4lSrLiP6ojYgcObuyF1L1VxjFqfLYZnpKm4tfo82WuhE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=linux.beauty;
-        spf=pass  smtp.mailfrom=me@linux.beauty;
-        dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659597467;
-        s=zmail; d=linux.beauty; i=me@linux.beauty;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=MCrWicY2XoCiSIKwKmcXAPX12IeBhhZabwszQBGvXqM=;
-        b=LJu2o83LsU5SFrXTdMic49rOunqaJpFgFtVKLTdIhRbHvgZsJKMunXpMjLk2r69R
-        e05WmXzI1FCI9X/uubv2HxT4UUHLv0f9c+S719GbZWyuB7h3iO/VAFUZ9TQJF5SDCWa
-        oR+tXlOIPNnOqnpIGDgCf7wN4DpfEGJr9fukWZxg=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1659597465146222.34603720111716; Thu, 4 Aug 2022 00:17:45 -0700 (PDT)
-Date:   Thu, 04 Aug 2022 16:17:45 +0900
-From:   Li Chen <me@linux.beauty>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Frank Rowand" <frowand.list@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Li Chen" <lchen@ambarella.com>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "DTML" <devicetree@vger.kernel.org>,
-        "Linux-MM" <linux-mm@kvack.org>
-Message-ID: <18267b7a61f.12b26bd91245310.4476663913461696630@linux.beauty>
-In-Reply-To: <CAK8P3a30o1RLifV1TMqDJ26vLhVdOzz3wP6yPrayLV2GPxUtwQ@mail.gmail.com>
-References: <20220711122459.13773-1-me@linux.beauty> <20220711122459.13773-5-me@linux.beauty>
- <CAK8P3a2Mr0ZMXGDx6htYEbBBtm4mubk-meSASJjPRK1j1O-hEA@mail.gmail.com> <181efcca6ae.de84203d522625.7740936811073442334@linux.beauty> <CAK8P3a30o1RLifV1TMqDJ26vLhVdOzz3wP6yPrayLV2GPxUtwQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] sample/reserved_mem: Introduce a sample of struct
- page and dio support to no-map rmem
+        Thu, 4 Aug 2022 03:23:01 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0291C60683;
+        Thu,  4 Aug 2022 00:22:57 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id CF2E82224D;
+        Thu,  4 Aug 2022 09:22:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1659597774;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z3vWBn92jw9wjv8iB6bykXSQHVghyocK8H/JdGa1fPY=;
+        b=H8h5HFdnNZZANsest1Kfov9ceHkPlfP8EoQpXVKZDaeYgmAtpbID1CWSwRy8y22CSYqVLx
+        uBH1L9yG7sRnnafOpFcUye16VmPhefsehiSVsksC6fgisUMUULaErTOlNoonDDcXjZgVmQ
+        NSAi9BXdHfAffMWTBcxJuAXBcR1uI50=
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Thu, 04 Aug 2022 09:22:51 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Ajay.Kathat@microchip.com
+Cc:     David.Laight@aculab.com, Claudiu.Beznea@microchip.com,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mwalle@kernel.org
+Subject: Re: [PATCH] wilc1000: fix DMA on stack objects
+In-Reply-To: <a7bcf24b-1343-b437-4e2e-1e707b5e3bd5@microchip.com>
+References: <20220728152037.386543-1-michael@walle.cc>
+ <0ed9ec85a55941fd93773825fe9d374c@AcuMS.aculab.com>
+ <612ECEE6-1C05-4325-92A3-21E17EC177A9@walle.cc>
+ <a7bcf24b-1343-b437-4e2e-1e707b5e3bd5@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <b40636e354df866d044c07241483ff81@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
----- On Tue, 12 Jul 2022 16:50:46 +0900  Arnd Bergmann  wrote --- 
- > Does your hardware require a fixed address for the buffer? If it can be
- > anywhere in memory (or at least within a certain range) but just has to
- > be physically contiguous, the normal way would be to use a CMA area
- > to allocate from, which gives you 'struct page' backed pages.
+Am 2022-07-29 17:39, schrieb Ajay.Kathat@microchip.com:
+> On 29/07/22 20:28, Michael Walle wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
+>> the content is safe
+>> 
+>> Am 29. Juli 2022 11:51:12 MESZ schrieb David Laight 
+>> <David.Laight@ACULAB.COM>:
+>>> From: Michael Walle
+>>>> Sent: 28 July 2022 16:21
+>>>> 
+>>>> From: Michael Walle <mwalle@kernel.org>
+>>>> 
+>>>> Sometimes wilc_sdio_cmd53() is called with addresses pointing to an
+>>>> object on the stack. E.g. wilc_sdio_write_reg() will call it with an
+>>>> address pointing to one of its arguments. Detect whether the buffer
+>>>> address is not DMA-able in which case a bounce buffer is used. The 
+>>>> bounce
+>>>> buffer itself is protected from parallel accesses by 
+>>>> sdio_claim_host().
+>>>> 
+>>>> Fixes: 5625f965d764 ("wilc1000: move wilc driver out of staging")
+>>>> Signed-off-by: Michael Walle <mwalle@kernel.org>
+>>>> ---
+>>>> The bug itself probably goes back way more, but I don't know if it 
+>>>> makes
+>>>> any sense to use an older commit for the Fixes tag. If so, please 
+>>>> suggest
+>>>> one.
+>>>> 
+>>>> The bug leads to an actual error on an imx8mn SoC with 1GiB of RAM. 
+>>>> But the
+>>>> error will also be catched by CONFIG_DEBUG_VIRTUAL:
+>>>> [    9.817512] virt_to_phys used for non-linear address: 
+>>>> (____ptrval____) (0xffff80000a94bc9c)
+>>>> 
+>>>>   .../net/wireless/microchip/wilc1000/sdio.c    | 28 
+>>>> ++++++++++++++++---
+>>>>   1 file changed, 24 insertions(+), 4 deletions(-)
+>>>> 
+>>>> diff --git a/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>>> b/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>>> index 7962c11cfe84..e988bede880c 100644
+>>>> --- a/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>>> +++ b/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>>> @@ -27,6 +27,7 @@ struct wilc_sdio {
+>>>>       bool irq_gpio;
+>>>>       u32 block_size;
+>>>>       int has_thrpt_enh3;
+>>>> +    u8 *dma_buffer;
+>>>>   };
+>>>> 
+>>>>   struct sdio_cmd52 {
+>>>> @@ -89,6 +90,9 @@ static int wilc_sdio_cmd52(struct wilc *wilc, 
+>>>> struct sdio_cmd52 *cmd)
+>>>>   static int wilc_sdio_cmd53(struct wilc *wilc, struct sdio_cmd53 
+>>>> *cmd)
+>>>>   {
+>>>>       struct sdio_func *func = container_of(wilc->dev, struct 
+>>>> sdio_func, dev);
+>>>> +    struct wilc_sdio *sdio_priv = wilc->bus_data;
+>>>> +    bool need_bounce_buf = false;
+>>>> +    u8 *buf = cmd->buffer;
+>>>>       int size, ret;
+>>>> 
+>>>>       sdio_claim_host(func);
+>>>> @@ -100,12 +104,20 @@ static int wilc_sdio_cmd53(struct wilc *wilc, 
+>>>> struct sdio_cmd53 *cmd)
+>>>>       else
+>>>>               size = cmd->count;
+>>>> 
+>>>> +    if ((!virt_addr_valid(buf) || object_is_on_stack(buf)) &&
+>>> How cheap are the above tests?
+>>> It might just be worth always doing the 'bounce'?
+>> I'm not sure how cheap they are, but I don't think it costs more than 
+>> copying the bulk data around. That's up to the maintainer to decide.
+> 
+> 
+> I think, the above checks for each CMD53 might add up to the processing
+> time of this function. These checks can be avoided, if we add new
+> function similar to 'wilc_sdio_cmd53' which can be called when the 
+> local
+> variables are used. Though we have to perform the memcpy operation 
+> which
+> is anyway required to handle this scenario for small size data.
+> 
+> Mostly, either the static global data or dynamically allocated buffer 
+> is
+> used with cmd53 except wilc_sdio_write_reg, wilc_sdio_read_reg
+> wilc_wlan_handle_txq functions.
+> 
+> I have created a patch using the above approach which can fix this 
+> issue
+> and will have no or minimal impact on existing functionality. The same
+> is copied below:
+> 
+> 
+> ---
+>   .../net/wireless/microchip/wilc1000/netdev.h  |  1 +
+>   .../net/wireless/microchip/wilc1000/sdio.c    | 46 
+> +++++++++++++++++--
+>   .../net/wireless/microchip/wilc1000/wlan.c    |  2 +-
+>   3 files changed, 45 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.h
+> b/drivers/net/wireless/microchip/wilc1000/netdev.h
+> index 43c085c74b7a..2137ef294953 100644
+> --- a/drivers/net/wireless/microchip/wilc1000/netdev.h
+> +++ b/drivers/net/wireless/microchip/wilc1000/netdev.h
+> @@ -245,6 +245,7 @@ struct wilc {
+>       u8 *rx_buffer;
+>       u32 rx_buffer_offset;
+>       u8 *tx_buffer;
+> +    u32 vmm_table[WILC_VMM_TBL_SIZE];
+> 
+>       struct txq_handle txq[NQUEUES];
+>       int txq_entries;
+> diff --git a/drivers/net/wireless/microchip/wilc1000/sdio.c
+> b/drivers/net/wireless/microchip/wilc1000/sdio.c
+> index 600cc57e9da2..19d4350ecc22 100644
+> --- a/drivers/net/wireless/microchip/wilc1000/sdio.c
+> +++ b/drivers/net/wireless/microchip/wilc1000/sdio.c
+> @@ -28,6 +28,7 @@ struct wilc_sdio {
+>       u32 block_size;
+>       bool isinit;
+>       int has_thrpt_enh3;
+> +    u8 *dma_buffer;
+>   };
+> 
+>   struct sdio_cmd52 {
+> @@ -117,6 +118,36 @@ static int wilc_sdio_cmd53(struct wilc *wilc,
+> struct sdio_cmd53 *cmd)
+>       return ret;
+>   }
+> 
+> +static int wilc_sdio_cmd53_extend(struct wilc *wilc, struct sdio_cmd53
+> *cmd)
 
-CMA does support Direct I/O, but it has its own issue: 
-It does not guarantee that the memory previously borrowed by the OS will be returned to the device.
+If you handle all the stack cases anyway, the caller can just use
+a bounce buffer and you don't need to duplicate the function.
 
-We've been plagued by examples like this in the past:
-Many other kernel modules/subsystems have already allocated much memory from both non-CMA and CMA memory,
-When our DSP driver got probed then, cma_alloc will fail in that non-CMA system memory is not enough
-for CMA memory to migrate.  
-
-Regards,
-Li
+-michael

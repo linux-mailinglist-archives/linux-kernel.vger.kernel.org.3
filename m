@@ -2,143 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EAE5897AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 08:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126705897AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 08:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbiHDGLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 02:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
+        id S238678AbiHDGOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 02:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbiHDGLw (ORCPT
+        with ESMTP id S232031AbiHDGON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 02:11:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE5661125;
-        Wed,  3 Aug 2022 23:11:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0B69B8249A;
-        Thu,  4 Aug 2022 06:11:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D482C433D6;
-        Thu,  4 Aug 2022 06:11:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659593508;
-        bh=PivNYhd22ovz+3c6fY+dmZ86T6hM9cCpwWw+EopqWP4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=myg4Gp10acovpgRnnfSKryNqfyVKKViZXK1u0deeL6F4aa6LZ1N8UL9QvwaJ28yo6
-         Fygt4uhFxm94uQ3uytn+h5rZBQrvX42egEhWguL0i4eMWtdzmxUUVbcFpe8j/kuHUE
-         GxhRYhdEqCmH5o4J4UNNMJMesufhU34SS+FV2S775wjtDUa9bYfFG4oIwZL/2EzXgk
-         zIAUZ1SOLoAqvsPvV6TeFTUTrzCXk4mOxCnKH8rXVzbAKbUEOzgh/yyKbwY/TsdMSq
-         M8vIZwBt0mweADhcme2s4WcaM++IClUfe1aX+HC24qXMFnMGINPsjFZsElpDisrr0L
-         xzgTkGurmr1/g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oJU5Y-0003e7-4q; Thu, 04 Aug 2022 08:12:08 +0200
-Date:   Thu, 4 Aug 2022 08:12:08 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] usb: dwc3: qcom: fix broken non-host-mode suspend
-Message-ID: <YutjOESZRD+4mr3Z@hovoldconsulting.com>
-References: <20220802151404.1797-1-johan+linaro@kernel.org>
- <20220802151404.1797-4-johan+linaro@kernel.org>
- <YurIbcXHPF6K3oPa@google.com>
+        Thu, 4 Aug 2022 02:14:13 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7486761131
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 23:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659593652; x=1691129652;
+  h=subject:references:to:cc:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=keluER8k9LcEIGCnCE9Rn2VCqT3BmU8FUYIaHG9ODJg=;
+  b=Ee+Tin3UmTJKhXRpDLwL5J8UoWzZoh36o6Td+o9YmEOyGmF4ap2NfAq3
+   kGWSRLFXlRghCCdb+cYTRhckjF658QApU5mtHW+uOhtsCmq0cpp+74ZFm
+   5rAWkriaNDJQLSMAv5EfOHCGbu3/YDv4OugHQollezXMuisYdrRwYRuoH
+   mnVscc2fRjU2Sx9cacwoDSxXKbY6u/ZcoO6CXOMDyQmcCxh6/WCdZVdd0
+   CRjLPcAlnOQCoX6c2JImSdCWruTovMsMdcsdDl+7gL8GwciAVxtCV+tV8
+   T5YcGiyg69so68c7DkUOYcFc/JHcuXABf28z5XO/EmxQQmhA/0gMYUA0/
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="269623608"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="269623608"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 23:13:42 -0700
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="578940823"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.28.36]) ([10.255.28.36])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 23:13:40 -0700
+Subject: [mark:arm64/stacktrace/rework-cleanup 3/8]
+ arch/arm64/kernel/sdei.c:66:21: error: use of undeclared identifier
+ 'sdei_stack_normal_ptr'
+References: <202208040427.vAzlkXzS-lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Mark Brown <broonie@kernel.org>
+From:   kernel test robot <rong.a.chen@intel.com>
+X-Forwarded-Message-Id: <202208040427.vAzlkXzS-lkp@intel.com>
+Message-ID: <16ba6649-d680-69d4-dbd3-3b1ffb06319b@intel.com>
+Date:   Thu, 4 Aug 2022 14:13:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YurIbcXHPF6K3oPa@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202208040427.vAzlkXzS-lkp@intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 12:11:41PM -0700, Matthias Kaehlcke wrote:
-> On Tue, Aug 02, 2022 at 05:13:59PM +0200, Johan Hovold wrote:
-> > A recent commit implementing wakeup support in host mode instead broke
-> > suspend for peripheral and OTG mode.
-> > 
-> > The hack that was added in the suspend path to determine the speed of
-> > any device connected to the USB2 bus not only accesses internal driver
-> > data for a child device, but also dereferences a NULL pointer when not
-> > in host mode and there is no HCD.
-> > 
-> > As the controller can switch role at any time when in OTG mode, there's
-> > no quick fix to this, and since reverting would leave us with broken
-> > suspend in host-mode (wakeup triggers immediately), keep the hack for
-> > now and only fix the NULL-pointer dereference.
-> > 
-> > Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  drivers/usb/dwc3/dwc3-qcom.c | 11 ++++++++++-
-> >  1 file changed, 10 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > index be2e3dd36440..b75ff40f75a2 100644
-> > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > @@ -301,8 +301,17 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
-> >  static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
-> >  {
-> >  	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> > -	struct usb_hcd *hcd = platform_get_drvdata(dwc->xhci);
-> >  	struct usb_device *udev;
-> > +	struct usb_hcd *hcd;
-> > +
-> > +	if (qcom->mode != USB_DR_MODE_HOST)
-> > +		return USB_SPEED_UNKNOWN;
-> 
-> Couldn't instead the below block in dwc3_qcom_suspend() be conditional on
-> the controller being in host mode?
-> 
-> 	if (device_may_wakeup(qcom->dev)) {
-> 		qcom->usb2_speed = dwc3_qcom_read_usb2_speed(qcom);
-> 		dwc3_qcom_enable_interrupts(qcom);
-> 	}
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git 
+arm64/stacktrace/rework-cleanup
+head:   ff57049f8e5ec88c03b804c73bb4dd44ffa88896
+commit: 10b1649e7fc666d82f11a5b4463013b3e46a7a53 [3/8] arm64: 
+stacktrace: move SDEI stack helpers to stacktrace code
+config: arm64-buildonly-randconfig-r003-20220803 
+(https://download.01.org/0day-ci/archive/20220804/202208040427.vAzlkXzS-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 
+495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
+reproduce (this is a W=1 build):
+         wget 
+https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+-O ~/bin/make.cross
+         chmod +x ~/bin/make.cross
+         # install arm64 cross compiling tool for clang build
+         # apt-get install binutils-aarch64-linux-gnu
+         # 
+https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=10b1649e7fc666d82f11a5b4463013b3e46a7a53
+         git remote add mark 
+https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+         git fetch --no-tags mark arm64/stacktrace/rework-cleanup
+         git checkout 10b1649e7fc666d82f11a5b4463013b3e46a7a53
+         # save the config file
+         mkdir build_dir && cp config build_dir/.config
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 
+O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
 
-Yeah, the authors clearly didn't consider non-host mode when
-implementing this and keeping wakeups disabled in that case probably
-doesn't break anything that was ever working.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> I see, the problem is that the role switch could happen at any time as the
-> commit message says. With this patch there is also a race though, the role
-> switch could happen just after the check and before obtaining 'hcd'.
+All errors (new ones prefixed by >>):
 
-No, there's no race here as I'm checking the static configuration that
-comes from DT. Specifically, I'm not trying to add support for wakeup in
-OTG mode, but just prevent suspend from crashing.
+>> arch/arm64/kernel/sdei.c:66:21: error: use of undeclared identifier 'sdei_stack_normal_ptr'
+                    _free_sdei_stack(&sdei_stack_normal_ptr, cpu);
+                                      ^
+>> arch/arm64/kernel/sdei.c:67:21: error: use of undeclared identifier 'sdei_stack_critical_ptr'
+                    _free_sdei_stack(&sdei_stack_critical_ptr, cpu);
+                                      ^
+    arch/arm64/kernel/sdei.c:92:27: error: use of undeclared identifier 
+'sdei_stack_normal_ptr'
+                    err = _init_sdei_stack(&sdei_stack_normal_ptr, cpu);
+                                            ^
+    arch/arm64/kernel/sdei.c:95:27: error: use of undeclared identifier 
+'sdei_stack_critical_ptr'
+                    err = _init_sdei_stack(&sdei_stack_critical_ptr, cpu);
+                                            ^
+    4 errors generated.
 
-I may be possible address also the host-role in OTG mode, but that means
-continuing to build on this layer violation.
 
-Note that we're in the suspend callback of the parent so as long as the
-drivers for the descendant devices has disabled role switching at this
-stage during suspend, we should be good.
+vim +/sdei_stack_normal_ptr +66 arch/arm64/kernel/sdei.c
 
-But I'm torn about simply ripping this patch out and trying to fix it
-up. I want the feature, but the patch adding this clearly wasn't ready
-for merging.
+f5df26961853d6 James Morse 2018-01-08  57  f5df26961853d6 James Morse 
+2018-01-08  58  static void free_sdei_stacks(void)
+f5df26961853d6 James Morse 2018-01-08  59  {
+f5df26961853d6 James Morse 2018-01-08  60  	int cpu;
+f5df26961853d6 James Morse 2018-01-08  61  eec3bf6861a870 Will Deacon 
+2020-12-01  62  	if (!IS_ENABLED(CONFIG_VMAP_STACK))
+eec3bf6861a870 Will Deacon 2020-12-01  63  		return;
+eec3bf6861a870 Will Deacon 2020-12-01  64  f5df26961853d6 James Morse 
+2018-01-08  65  	for_each_possible_cpu(cpu) {
+f5df26961853d6 James Morse 2018-01-08 @66  	 
+_free_sdei_stack(&sdei_stack_normal_ptr, cpu);
+f5df26961853d6 James Morse 2018-01-08 @67  	 
+_free_sdei_stack(&sdei_stack_critical_ptr, cpu);
+f5df26961853d6 James Morse 2018-01-08  68  	}
+f5df26961853d6 James Morse 2018-01-08  69  }
+f5df26961853d6 James Morse 2018-01-08  70
+:::::: The code at line 66 was first introduced by commit
+:::::: f5df26961853d6809d704cedcaf082c57f635a64 arm64: kernel: Add 
+arch-specific SDEI entry code and CPU masking
 
-I'll take another look at this.
+:::::: TO: James Morse <james.morse@arm.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
 
-Johan
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+

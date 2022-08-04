@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B136058A050
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC9E58A057
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239873AbiHDSNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 14:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
+        id S235442AbiHDSQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 14:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232643AbiHDSNb (ORCPT
+        with ESMTP id S240011AbiHDSP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 14:13:31 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4467B4E860;
-        Thu,  4 Aug 2022 11:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659636810; x=1691172810;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5iohXJB+yV4kt8wNo0jkqP6WbWM7sMLvLkA/LUccLFg=;
-  b=Wc83thVFd3rqV5OmPoGxwcRQX6Lt+sWn0+eoLVa33XYxCnvfg2NDoBTt
-   nWCmv0Ey6/bAqXGwyfopdvl2/r8bO+CBydRFSyKct7LSBfWMenH73T4/5
-   sGBuoRflt3DXIDp2n4+T84FhWyOv90XhdS33zXRdyp9wXDGX6vZd0woxl
-   Vz40TbPMHMfSB8BnanmGtmMxbMfiG5oqqWuQjqTRjRId26B9gCNIAPCLs
-   4h5sxcCk8tv/d7/2pBw3cbSHnkYZvl89jekAh70E4OyB7LAHuDuchQLoX
-   QdmC8brBV5VcBTA95yWcQvnaUUdE4VqRxOGlf5D+BvlWK3a9DtNLqWk3W
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="270391801"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="270391801"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 11:13:21 -0700
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="745566014"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.79.208]) ([10.212.79.208])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 11:13:21 -0700
-Message-ID: <bcbe1db2-cb8e-1889-2888-f4618d749bd4@intel.com>
-Date:   Thu, 4 Aug 2022 11:13:20 -0700
+        Thu, 4 Aug 2022 14:15:59 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB4A6573;
+        Thu,  4 Aug 2022 11:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=OauzY5NPoVxR96fxdrgvniM7lN8jaUTrviVvH2IM4yU=; b=aT1bG0pOIRzByuU5LSozgfLcvg
+        yR/XAd4ZqQFMTxsjJVVFqVCxU1Hrcgg6VB+8gVCf92fpf2GuRCIESt+wh5CQo5DgCkep0zsUx4NoO
+        pINKsNVn9f63uQ915yotJ/D/kZO1lNT0kgi+tpgh6ZKLrs7fkuHTjMwZMBgznCW01+jSDcUFXvPXx
+        hZDDLX/Jv/92AAnEFDCekdVgOhxrs3EtBdwYE2gZyT9jIPp7i0psbIFIq/IygKr1u7wgiGaj3TgiZ
+        dUNdKey6zGGYbdwDjAqghRl/UqelGLOI1B0PCNcI1aaua+r0q7ryA/igzPS9kfoP6lI2lw01RQn42
+        WGMBHBcw==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oJfNm-0087nh-M4; Thu, 04 Aug 2022 18:15:42 +0000
+Message-ID: <30e4c6a0-cd8e-5a86-ac25-ac2af5ec53dd@infradead.org>
+Date:   Thu, 4 Aug 2022 11:15:38 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 0/2] cxl: BG operations and device sanitation
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8.1, 4/7] thermal: mediatek: Add LVTS driver for mt8192
+ thermal zones
 Content-Language: en-US
-To:     Davidlohr Bueso <dave@stgolabs.net>, linux-cxl@vger.kernel.org
-Cc:     dan.j.williams@intel.com, bwidawsk@kernel.org,
-        Jonathan.Cameron@huawei.com, ira.weiny@intel.com,
-        alison.schofield@intel.com, vishal.l.verma@intel.com,
-        a.manzanares@samsung.com, mcgrof@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220804045029.2905056-1-dave@stgolabs.net>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20220804045029.2905056-1-dave@stgolabs.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     bchihi@baylibre.com, rafael@kernel.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+References: <20220804130912.676043-1-bchihi@baylibre.com>
+ <20220804130912.676043-5-bchihi@baylibre.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220804130912.676043-5-bchihi@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi--
 
-On 8/3/2022 9:50 PM, Davidlohr Bueso wrote:
-> Hello,
->
-> The following is a followup to some of the discussions around CXL device security
-> and sanitation[0, 1]. It is marked as RFC mostly to see if the background handling
-> will satisfy all users, not just sanitize/overwrite. For example there has been ideas
-> to avoid command hogging the device and/or interleaving scan media regions instead
-> of all in one, etc. More details in each patch, but:
->
-> Patch 1 adds the required background cmd handling bits. While this is currently
-> only polling, it would be good to know if there are any fundamental blockers for
-> supporting irqs (beyond just background ops) between PCIe and CXL. For example,
-> are there any requirements/difficulties that is not the standard MSI/MSI-X PCI
-> vector allocation + devm_request_irq()? I have not looked at this into details but
-> it the topic has come up in the past as delicate', iirc.
->
-> Patch 2 implements the sanitation commands (overwrite and secure erase).
->
-> As for testing, while I used the mock device to test the secure erase command, I
-> ended up hacking up a prototype[2] for qemu to support overwrite and bg commands.
-> So while the some of the paths this series introduces have been exercised, there
-> is of course a lot more to do.
->
-> Applies against Dave's cxl-security branch[2] which deals with the pmem-only bits.
+On 8/4/22 06:09, bchihi@baylibre.com wrote:
+> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
+> index 592c849b9fed..afef43a0e7ca 100644
+> --- a/drivers/thermal/mediatek/Kconfig
+> +++ b/drivers/thermal/mediatek/Kconfig
+> @@ -20,4 +20,28 @@ config MTK_SOC_THERMAL
+>  	  configures thermal controllers to collect temperature
+>  	  via AUXADC interface.
+>  
+> +config MTK_LVTS_THERMAL
+> +	tristate "LVTS (Low Voltage Thermal Sensor) driver for MediaTek SoCs"
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on RESET_CONTROLLER
+> +	help
+> +	  Enable this option if you want to get SoC temperature
+> +	  information for MediaTek platforms. This driver configures
+> +	  LVTS (Low Voltage Thermal Sensor) thermal controllers to
+> +	  collect temperatures via ASIF (Analog Serial Interface).
+> +
+> +if MTK_LVTS_THERMAL
+> +
+> +config MTK_LVTS_V4
+> +	tristate "LVTS V4 Thermal Driver for MediaTek SoCs"
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on RESET_CONTROLLER
 
- From the operational sense everything looks good to me. As for the 
-polling delay on overwrite, with pre-CXL pmem on Optane, we've 
-discovered that overwrite can take a long time depending on the size. 
-Sometimes MANY hours if the size is really large. We just opted to 
-increment the polling interval as time went on [1] instead of based on size.
+You shouldn't need to repeat all of these "depends on" lines since this
+Kconfig symbol depends on MTK_LVTS_THERMAL, which already depends on these
+3 items.
 
-[1]: 
-https://elixir.bootlin.com/linux/v5.19/source/drivers/nvdimm/security.c#L434
+Have you seen any issue that this is supposed to fix?
 
+> +	help
+> +	  Enable this option if you want to get SoC temperature
+> +	  information for LVTS V4.
+> +
+> +endif
 
-> Thanks,
-> Davidlohr
->
-> [0]: https://lore.kernel.org/all/20220708172455.gi37dh3od4w5lqrd@offworld/
-> [1]: https://lore.kernel.org/all/165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com/
-> [2]: https://github.com/davidlohr/qemu/commit/64a93a5b824b59d3b547f06f7fbb1269fb4790ce
-> [3]: https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git/log/?h=cxl-security
->
-> Davidlohr Bueso (2):
->    cxl/mbox: Add background operation handling machinery
->    cxl/mem: Support sanitation commands
->
->   Documentation/ABI/testing/sysfs-bus-cxl |  19 ++
->   drivers/cxl/core/core.h                 |   2 +-
->   drivers/cxl/core/mbox.c                 | 304 +++++++++++++++++++++++-
->   drivers/cxl/core/memdev.c               |  58 +++++
->   drivers/cxl/core/port.c                 |   9 +-
->   drivers/cxl/cxl.h                       |   8 +
->   drivers/cxl/cxlmem.h                    |  65 ++++-
->   drivers/cxl/pci.c                       |   3 +-
->   drivers/cxl/pmem.c                      |   5 +-
->   drivers/cxl/security.c                  |  13 +-
->   include/uapi/linux/cxl_mem.h            |   2 +
->   11 files changed, 461 insertions(+), 27 deletions(-)
->
-> --
-> 2.37.1
->
+thanks.
+-- 
+~Randy

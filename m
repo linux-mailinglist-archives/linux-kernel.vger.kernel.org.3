@@ -2,239 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB94589757
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1E358975B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236876AbiHDFaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 01:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
+        id S237895AbiHDFe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 01:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbiHDFaP (ORCPT
+        with ESMTP id S237474AbiHDFe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 01:30:15 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF2937F9F
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:30:10 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id y23so10667951ljh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 22:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=uxn4ZMmx203WyOlSVHDAZZ2QkYW3oqKlf8ih7gOJLnk=;
-        b=lLQxvyHvx/3rSn3OOh5hrXaiIxuWrgi5BJsmJOY3SHUfBtpiGAuBPLHWhCq8woPyVn
-         9qHFOvW4QzuQzEI2D+GDZ517t6en3Cu5ooj8WFYjQ9C3Vd6Q9vyBuqPmdhKK6oBmseFB
-         FYYRJLjiEBkK0fFWh7ewCMPBqh8a30fJR1VbtM9jEAG98GVfOyCK0nP3iL4BMwJq5Knf
-         65y3j9b2n2M+/juywtwuDE2r8/2ZFW7kEMW49kb6SKp0PvUL7jvQVgGMC55i9Drv20Ss
-         0IZiavEcWLnfMmou8KX2MDI9Uvw4iYB4DuJ6n2JdmCEoesKnWFQjynzaLzwU++D7lOB2
-         XALA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=uxn4ZMmx203WyOlSVHDAZZ2QkYW3oqKlf8ih7gOJLnk=;
-        b=DgHZDYdjQqXCQMBZ90YYac3LcXfJSaZzsNEl2ZrV2Q323GvdIy+PSLS8RUOmiECs4+
-         /jl73xl+AR+5xzva3hcmUgzjT/8Gxu38x1ydfwp0UwVc0kaaufjhf74li+60slSgmbm0
-         8h4wlyiLovDsbnKd1kB8ItV+m1ICMgqm++9QadhyCcYd/akOjAjHooLckMO9vrFlWyEY
-         m6mgk9ZyEEXrStzI4x/1o9z5JI5K1hnQoqHPj4BfykcfKLj//LgQf8z0t00cTpygFpqe
-         9J6CdU3q165gLhlDLDSMvbyIozHhWSL4Z8xNfgt9xUTgYNE3u6n0q3a+sz0yAd0Pzj2r
-         vyBw==
-X-Gm-Message-State: ACgBeo3CDhLmtcDNYZhcO0IYhWCpCSQCbwST7Vges6dgIUpPUnc+dFNg
-        EUWtZu049YdCNZDC3elkTI8l62QxAn6Ko0TPrAE2DQ==
-X-Google-Smtp-Source: AA6agR7raR6yR9Gk4kq2pWN/JukLAC7hPtGF3ABVdbOWH7tEdtreK7xCt3hgltvbkoqs9ZhJiHj8UIJQ5ZSpY0tqwa8=
-X-Received: by 2002:a2e:a5ca:0:b0:25e:1c49:70f4 with SMTP id
- n10-20020a2ea5ca000000b0025e1c4970f4mr46659ljp.4.1659591008148; Wed, 03 Aug
- 2022 22:30:08 -0700 (PDT)
+        Thu, 4 Aug 2022 01:34:57 -0400
+Received: from spam.unicloud.com (smgmail.unigroup.com.cn [220.194.70.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74ABD474E5
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:34:53 -0700 (PDT)
+Received: from eage.unicloud.com ([220.194.70.35])
+        by spam.unicloud.com with ESMTP id 2745WPDL028081;
+        Thu, 4 Aug 2022 13:32:25 +0800 (GMT-8)
+        (envelope-from luofei@unicloud.com)
+Received: from zgys-ex-mb09.Unicloud.com (10.10.0.24) by
+ zgys-ex-mb10.Unicloud.com (10.10.0.6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.17; Thu, 4 Aug 2022 13:32:24 +0800
+Received: from zgys-ex-mb09.Unicloud.com ([fe80::eda0:6815:ca71:5aa]) by
+ zgys-ex-mb09.Unicloud.com ([fe80::eda0:6815:ca71:5aa%16]) with mapi id
+ 15.01.2375.017; Thu, 4 Aug 2022 13:32:24 +0800
+From:   =?gb2312?B?wt63yQ==?= <luofei@unicloud.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBtbSwgaHdwb2lzb24sIGh1Z2V0bGI6IEZyZWUgaHdw?=
+ =?gb2312?B?b2lzb24gaHVnZSBwYWdlIHRvIGxpc3QgdGFpbCBhbmQgZGlzc29sdmUgaHdw?=
+ =?gb2312?Q?oison_huge_page_first?=
+Thread-Topic: [PATCH] mm, hwpoison, hugetlb: Free hwpoison huge page to list
+ tail and dissolve hwpoison huge page first
+Thread-Index: AQHYpletHIJsP7smmUWPl05kT9nW0K2bT4CAgAIr5oCAALWHDA==
+Date:   Thu, 4 Aug 2022 05:32:24 +0000
+Message-ID: <5f3634ada9c5485cb13538eaf635a852@unicloud.com>
+References: <20220802100711.2425644-1-luofei@unicloud.com>
+ <YulXz+1iLHuZBEDb@monkey>,<1191d45b-fece-659b-1dd1-8cf4ce89c2f1@huawei.com>
+In-Reply-To: <1191d45b-fece-659b-1dd1-8cf4ce89c2f1@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.10.1.7]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <000000000000098a0105e557f130@google.com> <YuqqLfu1E62PqnKS@monkey>
- <YuriiFpv/enJW1oE@xz-m1.local>
-In-Reply-To: <YuriiFpv/enJW1oE@xz-m1.local>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 4 Aug 2022 07:29:56 +0200
-Message-ID: <CACT4Y+ZpLmRLouc+q0vMskPQ0-d5LKKwCoKw-twZ8E9W0vqETg@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in hugetlb_change_protection
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        syzbot <syzbot+824e71311e757a9689ff@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, songmuchun@bytedance.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-DNSRBL: 
+X-MAIL: spam.unicloud.com 2745WPDL028081
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-,On Wed, 3 Aug 2022 at 23:03, Peter Xu <peterx@redhat.com> wrote:
->
-> Hi, Mike,
->
-> Thanks for forwarding.
->
-> On Wed, Aug 03, 2022 at 10:02:37AM -0700, Mike Kravetz wrote:
-> > I'll start looking at this, but adding Peter this may be related to his
-> > recent changes.
-> > --
-> > Mike Kravetz
-> >
-> > On 08/03/22 08:32, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    e65c6a46df94 Merge tag 'drm-fixes-2022-07-30' of git://ano..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=139cc282080000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=26034e6fe0075dad
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=824e71311e757a9689ff
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > userspace arch: i386
-> > >
-> > > Unfortunately, I don't have any reproducer for this issue yet.
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+824e71311e757a9689ff@syzkaller.appspotmail.com
-> > >
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 1 PID: 28745 at include/linux/swapops.h:319 make_pte_marker_entry include/linux/swapops.h:319 [inline]
->
-> This is the warning code I added to make sure pte marker won't be created
-> if not configured at all:
->
-> static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
-> {
->         /* This should never be called if !CONFIG_PTE_MARKER */
->         WARN_ON_ONCE(1);
->         return swp_entry(0, 0);
-> }
->
-> The stack below comes from a UFFDIO_WRITEPROTECT, however logically it
-> shouldn't really reach there - if with !PTE_MARKER then it must be with
-> !PTE_MARKER_UFFD_WP, then we should have returned "false" if hugetlb wanted
-> to register with uffd-wp:
->
-> static inline bool vma_can_userfault(struct vm_area_struct *vma,
->                                      unsigned long vm_flags)
-> {
->         if (vm_flags & VM_UFFD_MINOR)
->                 return is_vm_hugetlb_page(vma) || vma_is_shmem(vma);
->
-> #ifndef CONFIG_PTE_MARKER_UFFD_WP
->         /*
->          * If user requested uffd-wp but not enabled pte markers for
->          * uffd-wp, then shmem & hugetlbfs are not supported but only
->          * anonymous.
->          */
->         if ((vm_flags & VM_UFFD_WP) && !vma_is_anonymous(vma))
->                 return false;
-> #endif
->         return vma_is_anonymous(vma) || is_vm_hugetlb_page(vma) ||
->             vma_is_shmem(vma);
-> }
->
-> Then the UFFDIO_WRITEPROTECT should have failed already.. at:
->
->         if (!userfaultfd_wp(dst_vma))
->                 goto out_unlock;
->
-> in mwriteprotect_range().
->
-> I still have no idea how the bot managed to trigger a real wr-protect upon
-> this vma (which I don't think should have registered with uffd-wp but maybe
-> it can be worked around somehow..).  However to make this even safer we can
-> also guard the pte marker callers with CONFIG_PTE_MARKER_UFFD_WP. Patch
-> attached for that, but since this seems to have no reproducer yet maybe no
-> easy way to verify it.
->
-> At the meantime, I'd also like to double check the kernel config to make
-> sure CONFIG_PTE_MARKER_UFFD_WP will always be unset when CONFIG_PTE_MARKER=n.
-> Anyone knows where I can fetch the config somewhere?
-
-Hi Peter,
-
-If you mean the kernel config for the kernel that produces the
-WARNING, it's in the report above under the "kernel config" link.
-
-Note that so far it was triggered only once:
-https://syzkaller.appspot.com/bug?extid=824e71311e757a9689ff
-which may suggest a very narrow race condition.
-
-
-
-> Thanks,
->
-> > > WARNING: CPU: 1 PID: 28745 at include/linux/swapops.h:319 make_pte_marker include/linux/swapops.h:342 [inline]
-> > > WARNING: CPU: 1 PID: 28745 at include/linux/swapops.h:319 hugetlb_change_protection+0xf85/0x1610 mm/hugetlb.c:6392
-> > > Modules linked in:
-> > > CPU: 1 PID: 28745 Comm: syz-executor.3 Not tainted 5.19.0-rc8-syzkaller-00146-ge65c6a46df94 #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> > > RIP: 0010:make_pte_marker_entry include/linux/swapops.h:319 [inline]
-> > > RIP: 0010:make_pte_marker include/linux/swapops.h:342 [inline]
-> > > RIP: 0010:hugetlb_change_protection+0xf85/0x1610 mm/hugetlb.c:6392
-> > > Code: e8 d0 5a b7 ff 0f b6 94 24 80 00 00 00 48 8b 84 24 98 00 00 00 84 d2 0f 84 ef 02 00 00 49 89 c4 e9 48 fb ff ff e8 ab 5e b7 ff <0f> 0b 48 b9 00 00 00 00 00 fc ff df 48 89 d8 48 c1 e8 03 80 3c 08
-> > > RSP: 0018:ffffc90014cc7780 EFLAGS: 00010212
-> > > RAX: 000000000000082a RBX: ffff88807750e820 RCX: ffffc90006723000
-> > > RDX: 0000000000040000 RSI: ffffffff81c30c25 RDI: 0000000000000007
-> > > RBP: ffff888074de5ea0 R08: 0000000000000007 R09: 0000000000000000
-> > > R10: 0000000000000004 R11: 0000000000000001 R12: 0000000000000000
-> > > R13: 0000000000000000 R14: 0000000000000004 R15: ffff88801fcc8e00
-> > > FS:  0000000000000000(0000) GS:ffff8880b9b00000(0063) knlGS:00000000f7f06b40
-> > > CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
-> > > CR2: 0000000020000040 CR3: 000000001b84c000 CR4: 00000000003526e0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > Call Trace:
-> > >  <TASK>
-> > >  change_protection+0x96b/0x3ad0 mm/mprotect.c:463
-> > >  mwriteprotect_range+0x387/0x5c0 mm/userfaultfd.c:759
-> > >  userfaultfd_writeprotect fs/userfaultfd.c:1823 [inline]
-> > >  userfaultfd_ioctl+0x438/0x4340 fs/userfaultfd.c:1997
-> > >  compat_ptr_ioctl+0x67/0x90 fs/ioctl.c:906
-> > >  __do_compat_sys_ioctl+0x1c7/0x290 fs/ioctl.c:968
-> > >  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
-> > >  __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
-> > >  do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
-> > >  entry_SYSENTER_compat_after_hwframe+0x70/0x82
-> > > RIP: 0023:0xf7f0b549
-> > > Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
-> > > RSP: 002b:00000000f7f065cc EFLAGS: 00000296 ORIG_RAX: 0000000000000036
-> > > RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00000000c018aa06
-> > > RDX: 00000000200000c0 RSI: 0000000000000000 RDI: 0000000000000000
-> > > RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> > > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> > >  </TASK>
-> > > ----------------
-> > > Code disassembly (best guess):
-> > >    0:       03 74 c0 01             add    0x1(%rax,%rax,8),%esi
-> > >    4:       10 05 03 74 b8 01       adc    %al,0x1b87403(%rip)        # 0x1b8740d
-> > >    a:       10 06                   adc    %al,(%rsi)
-> > >    c:       03 74 b4 01             add    0x1(%rsp,%rsi,4),%esi
-> > >   10:       10 07                   adc    %al,(%rdi)
-> > >   12:       03 74 b0 01             add    0x1(%rax,%rsi,4),%esi
-> > >   16:       10 08                   adc    %cl,(%rax)
-> > >   18:       03 74 d8 01             add    0x1(%rax,%rbx,8),%esi
-> > >   1c:       00 00                   add    %al,(%rax)
-> > >   1e:       00 00                   add    %al,(%rax)
-> > >   20:       00 51 52                add    %dl,0x52(%rcx)
-> > >   23:       55                      push   %rbp
-> > >   24:       89 e5                   mov    %esp,%ebp
-> > >   26:       0f 34                   sysenter
-> > >   28:       cd 80                   int    $0x80
-> > > * 2a:       5d                      pop    %rbp <-- trapping instruction
-> > >   2b:       5a                      pop    %rdx
-> > >   2c:       59                      pop    %rcx
-> > >   2d:       c3                      retq
-> > >   2e:       90                      nop
-> > >   2f:       90                      nop
-> > >   30:       90                      nop
-> > >   31:       90                      nop
-> > >   32:       8d b4 26 00 00 00 00    lea    0x0(%rsi,%riz,1),%esi
-> > >   39:       8d b4 26 00 00 00 00    lea    0x0(%rsi,%riz,1),%esi
+Pj4+IFNpZ25lZC1vZmYtYnk6IGx1b2ZlaSA8bHVvZmVpQHVuaWNsb3VkLmNvbT4NCj4+PiAtLS0N
+Cj4+PiAgbW0vaHVnZXRsYi5jIHwgMTMgKysrKysrKystLS0tLQ0KPj4+ICAxIGZpbGUgY2hhbmdl
+ZCwgOCBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQ0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBh
+L21tL2h1Z2V0bGIuYyBiL21tL2h1Z2V0bGIuYw0KPj4+IGluZGV4IDI4NTE2ODgxYTFiMi4uY2E3
+MjIyMGVlZGQ5IDEwMDY0NA0KPj4+IC0tLSBhL21tL2h1Z2V0bGIuYw0KPj4+ICsrKyBiL21tL2h1
+Z2V0bGIuYw0KPj4+IEBAIC0xMTE2LDcgKzExMTYsMTAgQEAgc3RhdGljIHZvaWQgZW5xdWV1ZV9o
+dWdlX3BhZ2Uoc3RydWN0IGhzdGF0ZSAqaCwgc3RydWN0IHBhZ2UgKnBhZ2UpDQo+Pj4gICAgICAg
+bG9ja2RlcF9hc3NlcnRfaGVsZCgmaHVnZXRsYl9sb2NrKTsNCj4+PiAgICAgICBWTV9CVUdfT05f
+UEFHRShwYWdlX2NvdW50KHBhZ2UpLCBwYWdlKTsNCj4+Pg0KPj4+IC0gICAgbGlzdF9tb3ZlKCZw
+YWdlLT5scnUsICZoLT5odWdlcGFnZV9mcmVlbGlzdHNbbmlkXSk7DQo+Pj4gKyAgICBpZiAodW5s
+aWtlbHkoUGFnZUhXUG9pc29uKHBhZ2UpKSkNCj4+PiArICAgICAgICAgICAgbGlzdF9tb3ZlX3Rh
+aWwoJnBhZ2UtPmxydSwgJmgtPmh1Z2VwYWdlX2ZyZWVsaXN0c1tuaWRdKTsNCj4+PiArICAgIGVs
+c2UNCj4+PiArICAgICAgICAgICAgbGlzdF9tb3ZlKCZwYWdlLT5scnUsICZoLT5odWdlcGFnZV9m
+cmVlbGlzdHNbbmlkXSk7DQo+Pj4gICAgICAgaC0+ZnJlZV9odWdlX3BhZ2VzKys7DQo+Pj4gICAg
+ICAgaC0+ZnJlZV9odWdlX3BhZ2VzX25vZGVbbmlkXSsrOw0KPj4+ICAgICAgIFNldEhQYWdlRnJl
+ZWQocGFnZSk7DQo+Pj4gQEAgLTExMzMsNyArMTEzNiw3IEBAIHN0YXRpYyBzdHJ1Y3QgcGFnZSAq
+ZGVxdWV1ZV9odWdlX3BhZ2Vfbm9kZV9leGFjdChzdHJ1Y3QgaHN0YXRlICpoLCBpbnQgbmlkKQ0K
+Pj4+ICAgICAgICAgICAgICAgICAgICAgICBjb250aW51ZTsNCj4+Pg0KPj4+ICAgICAgICAgICAg
+ICAgaWYgKFBhZ2VIV1BvaXNvbihwYWdlKSkNCj4+PiAtICAgICAgICAgICAgICAgICAgICBjb250
+aW51ZTsNCj4+PiArICAgICAgICAgICAgICAgICAgICBicmVhazsNCj4+DQo+PiBJSVJDLCBpdCBp
+cyAncG9zc2libGUnIHRvIHVucG9pc29uIGEgcGFnZSB2aWEgdGhlIGRlYnVnL3Rlc3RpbmcgaW50
+ZXJmYWNlcy4NCj4+IElmIHNvLCB0aGVuIHdlIGNvdWxkIGVuZCB1cCB3aXRoIGZyZWUgdW5wb2lz
+aW9uZWQgcGFnZShzKSBhdCB0aGUgZW5kIG9mDQo+PiB0aGUgbGlzdCB0aGF0IHdvdWxkIG5ldmVy
+IGJlIHVzZWQgYmVjYXVzZSB3ZSBxdWl0IHdoZW4gZW5jb3VudGVyaW5nIGENCj4+IHBvaXNpb25l
+ZCBwYWdlLg0KPg0KPklJVUMsIGFib3ZlIHNjZW5lIHdpbGwgYWN0dWFsbHkgaGFwcGVuLiBXaGF0
+J3MgbW9yZSwgZGlzc29sdmVfZnJlZV9odWdlX3BhZ2UgbWlnaHQgZmFpbCBhZnRlciBodWdldGxi
+DQo+cGFnZSBpcyBod3BvaXNvbmVkIGR1ZSB0byBlLmcuIGFsbCBodWdldGxiIHBhZ2VzIGFyZSBy
+ZXNlcnZlZC4gSW4gdGhhdCBjYXNlLCB0aGUgaHdwb2lzb25lZCBodWdldGxiIHBhZ2UNCj5pcyBu
+b3QgbW92ZWQgdG8gdGhlIHRhaWwgb2YgaHVnZXBhZ2VfZnJlZWxpc3RzIGFuZCB0aHVzIGNhdXNl
+IHByb2JsZW1zLg0KDQpZZXMsIGJvdGggY2FzZXMgY291bGQgaGFwcGVuLg0KSSB0aGluayB0aGUg
+a2V5IHByb2JsZW0gaXMgd2hlbiB0aGUgaHVnZXBhZ2UgYWxyZWFkeSBpbiB0aGUgZnJlZSBsaXN0
+LCBhbmQgaWYgdGhlIGh3cG9pc29uDQpmbGFnIGNoYW5nZWQgYXQgdGhpcyB0aW1lKHN1Y2ggYXMg
+dW5wb2lzb24gb3IgbWNlIGV2ZW50KSwgYWZ0ZXIgdGhlIHByb2Nlc3NpbmcgaXMgZG9uZSwNCmFu
+ZCB0aGUgaHVnZSBwYWdlIHN0aWxsIGluIGZyZWUgbGlzdCwgaXQgc2hvdWxkIGJlIGRlbGV0ZWQg
+YW5kIHJlaW5zZXJ0ZWQgaW50byBjb3JyZWN0IHBvc2l0aW9uLg0KDQpJZiB0aGUgaHVnZSBwYWdl
+IG1heSBzdGlsbCBleGlzdCBpbiB0aGUgZnJlZSBsaXN0IGFmdGVyIHJlY2VudCBjaGFuZ2VzIHRv
+IGh1Z2V0bGIgcG9pc29uaW5nIGNvZGUsDQpJIHdpbGwgcmVzdWJtaXQgYSBuZXcgcGF0Y2guDQoN
+ClRoYW5rcy4NCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCreivP7I
+yzogTWlhb2hlIExpbiA8bGlubWlhb2hlQGh1YXdlaS5jb20+DQq3osvNyrG85DogMjAyMsTqONTC
+NMjVIDEwOjA4OjMzDQrK1bz+yMs6IE1pa2UgS3JhdmV0ejsgwt63yQ0Ks63LzTogTmFveWEgSG9y
+aWd1Y2hpOyBzb25nbXVjaHVuQGJ5dGVkYW5jZS5jb207IGFrcG1AbGludXgtZm91bmRhdGlvbi5v
+cmc7IGxpbnV4LW1tQGt2YWNrLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0K1vfM
+4jogUmU6IFtQQVRDSF0gbW0sIGh3cG9pc29uLCBodWdldGxiOiBGcmVlIGh3cG9pc29uIGh1Z2Ug
+cGFnZSB0byBsaXN0IHRhaWwgYW5kIGRpc3NvbHZlIGh3cG9pc29uIGh1Z2UgcGFnZSBmaXJzdA0K
+DQpPbiAyMDIyLzgvMyAwOjU4LCBNaWtlIEtyYXZldHogd3JvdGU6DQo+IE9uIDA4LzAyLzIyIDA2
+OjA3LCBsdW9mZWkgd3JvdGU6DQo+PiBJZiBmcmVlIGh3cG9pc29uIGh1Z2UgcGFnZSB0byB0aGUg
+ZW5kIG9mIGh1Z2VwYWdlX2ZyZWVsaXN0cywgdGhlDQo+PiBsb29wIGNhbiBleGl0IGRpcmVjdGx5
+IHdoZW4gdGhlIGh3cG9pc29uIGh1Z2UgcGFnZSBpcyB0cmF2ZXJzZWQsDQo+PiB3aGljaCBjYW4g
+ZWZmZWN0aXZlbHkgcmVkdWNlIHRoZSByZXBlYXRlZCB0cmF2ZXJzYWwgb2YgdGhlIGh3cG9pc29u
+DQo+PiBodWdlIHBhZ2UuIE1lYW53aGlsZSwgd2hlbiBmcmVlIHRoZSBmcmVlIGh1Z2UgcGFnZXMg
+dG8gbG93ZXIgbGV2ZWwNCj4+IGFsbG9jYXRvcnMsIGlmIGh3cG9pc29uIG9uZXMgYXJlIHJlbGVh
+c2VkIGZpcnN0LCB0aGlzIGNhbiBpbXByb3ZlDQo+PiB0aGUgZWZmZWN2aXZlIHV0aWxpemF0aW9u
+IHJhdGUgb2YgaHVnZSBwYWdlLg0KPg0KPiBJbiBnZW5lcmFsLCBJIHRoaW5rIHRoaXMgaXMgYSBn
+b29kIGlkZWEuICBBbHRob3VnaCwgaXQgc2VlbXMgdGhhdCB3aXRoDQo+IHJlY2VudCBjaGFuZ2Vz
+IHRvIGh1Z2V0bGIgcG9pc2lvbmluZyBjb2RlIHdlIGFyZSBldmVuIGxlc3MgbGlrZWx5IHRvDQo+
+IGhhdmUgYSBwb2lzaW9uZWQgcGFnZSBvbiBodWdldGxiIGZyZWUgbGlzdHMuDQo+DQo+IEFkZGlu
+ZyBOYW95YSBhbmQgTWlhb2hlIGFzIHRoZXkgaGF2ZSBiZWVuIGxvb2tpbmcgYXQgcGFnZSBwb2lz
+b24gb2YgaHVnZXRsYg0KPiBwYWdlcyByZWNlbnRseS4NCj4NCj4+IFNpZ25lZC1vZmYtYnk6IGx1
+b2ZlaSA8bHVvZmVpQHVuaWNsb3VkLmNvbT4NCj4+IC0tLQ0KPj4gIG1tL2h1Z2V0bGIuYyB8IDEz
+ICsrKysrKysrLS0tLS0NCj4+ICAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCA1IGRl
+bGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9tbS9odWdldGxiLmMgYi9tbS9odWdldGxi
+LmMNCj4+IGluZGV4IDI4NTE2ODgxYTFiMi4uY2E3MjIyMGVlZGQ5IDEwMDY0NA0KPj4gLS0tIGEv
+bW0vaHVnZXRsYi5jDQo+PiArKysgYi9tbS9odWdldGxiLmMNCj4+IEBAIC0xMTE2LDcgKzExMTYs
+MTAgQEAgc3RhdGljIHZvaWQgZW5xdWV1ZV9odWdlX3BhZ2Uoc3RydWN0IGhzdGF0ZSAqaCwgc3Ry
+dWN0IHBhZ2UgKnBhZ2UpDQo+PiAgICAgIGxvY2tkZXBfYXNzZXJ0X2hlbGQoJmh1Z2V0bGJfbG9j
+ayk7DQo+PiAgICAgIFZNX0JVR19PTl9QQUdFKHBhZ2VfY291bnQocGFnZSksIHBhZ2UpOw0KPj4N
+Cj4+IC0gICAgbGlzdF9tb3ZlKCZwYWdlLT5scnUsICZoLT5odWdlcGFnZV9mcmVlbGlzdHNbbmlk
+XSk7DQo+PiArICAgIGlmICh1bmxpa2VseShQYWdlSFdQb2lzb24ocGFnZSkpKQ0KPj4gKyAgICAg
+ICAgICAgIGxpc3RfbW92ZV90YWlsKCZwYWdlLT5scnUsICZoLT5odWdlcGFnZV9mcmVlbGlzdHNb
+bmlkXSk7DQo+PiArICAgIGVsc2UNCj4+ICsgICAgICAgICAgICBsaXN0X21vdmUoJnBhZ2UtPmxy
+dSwgJmgtPmh1Z2VwYWdlX2ZyZWVsaXN0c1tuaWRdKTsNCj4+ICAgICAgaC0+ZnJlZV9odWdlX3Bh
+Z2VzKys7DQo+PiAgICAgIGgtPmZyZWVfaHVnZV9wYWdlc19ub2RlW25pZF0rKzsNCj4+ICAgICAg
+U2V0SFBhZ2VGcmVlZChwYWdlKTsNCj4+IEBAIC0xMTMzLDcgKzExMzYsNyBAQCBzdGF0aWMgc3Ry
+dWN0IHBhZ2UgKmRlcXVldWVfaHVnZV9wYWdlX25vZGVfZXhhY3Qoc3RydWN0IGhzdGF0ZSAqaCwg
+aW50IG5pZCkNCj4+ICAgICAgICAgICAgICAgICAgICAgIGNvbnRpbnVlOw0KPj4NCj4+ICAgICAg
+ICAgICAgICBpZiAoUGFnZUhXUG9pc29uKHBhZ2UpKQ0KPj4gLSAgICAgICAgICAgICAgICAgICAg
+Y29udGludWU7DQo+PiArICAgICAgICAgICAgICAgICAgICBicmVhazsNCj4NCj4gSUlSQywgaXQg
+aXMgJ3Bvc3NpYmxlJyB0byB1bnBvaXNvbiBhIHBhZ2UgdmlhIHRoZSBkZWJ1Zy90ZXN0aW5nIGlu
+dGVyZmFjZXMuDQo+IElmIHNvLCB0aGVuIHdlIGNvdWxkIGVuZCB1cCB3aXRoIGZyZWUgdW5wb2lz
+aW9uZWQgcGFnZShzKSBhdCB0aGUgZW5kIG9mDQo+IHRoZSBsaXN0IHRoYXQgd291bGQgbmV2ZXIg
+YmUgdXNlZCBiZWNhdXNlIHdlIHF1aXQgd2hlbiBlbmNvdW50ZXJpbmcgYQ0KPiBwb2lzaW9uZWQg
+cGFnZS4NCg0KSUlVQywgYWJvdmUgc2NlbmUgd2lsbCBhY3R1YWxseSBoYXBwZW4uIFdoYXQncyBt
+b3JlLCBkaXNzb2x2ZV9mcmVlX2h1Z2VfcGFnZSBtaWdodCBmYWlsIGFmdGVyIGh1Z2V0bGINCnBh
+Z2UgaXMgaHdwb2lzb25lZCBkdWUgdG8gZS5nLiBhbGwgaHVnZXRsYiBwYWdlcyBhcmUgcmVzZXJ2
+ZWQuIEluIHRoYXQgY2FzZSwgdGhlIGh3cG9pc29uZWQgaHVnZXRsYiBwYWdlDQppcyBub3QgbW92
+ZWQgdG8gdGhlIHRhaWwgb2YgaHVnZXBhZ2VfZnJlZWxpc3RzIGFuZCB0aHVzIGNhdXNlIHByb2Js
+ZW1zLg0KDQpUaGFua3MgYm90aC4NCg0KPg0KPiBOYW95YSBhbmQgTWlhb2hlIHdvdWxkIGtub3cg
+Zm9yIHN1cmUuDQo+DQo+IFNhbWUgcG9zc2libGUgaXNzdWUgaW4gZGVtb3RlX3Bvb2xfaHVnZV9w
+YWdlKCkuDQo+DQoNCg==

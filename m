@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E73589C7A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9BB589C7D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239706AbiHDNTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 09:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
+        id S239800AbiHDNTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 09:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbiHDNTU (ORCPT
+        with ESMTP id S239687AbiHDNT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 09:19:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADD51DA73;
-        Thu,  4 Aug 2022 06:19:19 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 31BE02100D;
-        Thu,  4 Aug 2022 13:19:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659619158; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=XZQzMO92Je2z3nTtjnI4WFLSj0n80v2BsrU2KK6eZFA=;
-        b=oJJaPWxt2HrMiVo7ZAheyI/lhUBriP3Qn/atP3ws0v7yIDxZ9ZcqaXfKc8AV2Ucy8/PFIE
-        ctq583KLnNMJTL4aAxiskTb+tDgcBG4N2eXGsjDmuOAh3LTtPsXMEzMJbYRok9+yefwa3G
-        nhdJsMjkstModC1l1Bg2M6PPJ6V3IUg=
-Received: from suse.cz (unknown [10.100.208.146])
+        Thu, 4 Aug 2022 09:19:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A03F1EED8
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:19:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0FE792C141;
-        Thu,  4 Aug 2022 13:19:18 +0000 (UTC)
-Date:   Thu, 4 Aug 2022 15:19:17 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
-Subject: [GIT PULL] livepatching for 5.20
-Message-ID: <YuvHVUrcraF20aIP@alley>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A5561791
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 13:19:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 678FEC433D7;
+        Thu,  4 Aug 2022 13:19:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659619164;
+        bh=M0SSFMxlayeE6mZzPAIICF05y2jkpLApZw26vek9YE4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZMvfGHS22xVkhKiTJb+5h6DTHWe1QefEScOOEvNovwJCmBF1/XIAgD8qg14agOg1E
+         hwgak0W2BzFiDo7AHru6LWmsxcVoyjdwFAh7C7hhTBkUZNaZPfNq2YZR2t4wlSUvPT
+         g5nJorOtnozHTdU4WumucyudengNnRbVbyrQbF0Xcz3on1ko1e4UgWh6M6WUUg2XSC
+         ogD8xbYAgtF5dQ+IbeU1NcTwg51A8n9vWsNZN9jwEVbj2aj8FsqwwLbZQMChQB8QSx
+         V8zBgEsd0oWkPY6RLOlrFToaLyMTQxMRQmLHTRLD6jDM0Qr6vXXATscaVUfujsSMHy
+         UYf7qK0Kvvdcw==
+Message-ID: <0d33f658-a678-530d-0377-1ee6af091309@kernel.org>
+Date:   Thu, 4 Aug 2022 21:19:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170912 (1.9.0)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: handle decompress only post
+ processing in softirq
+Content-Language: en-US
+To:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     Daeho Jeong <daehojeong@google.com>
+References: <20220802192437.1895492-1-daeho43@gmail.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220802192437.1895492-1-daeho43@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 2022/8/3 3:24, Daeho Jeong wrote:
+> From: Daeho Jeong <daehojeong@google.com>
+> 
+> Now decompression is being handled in workqueue and it makes read I/O
+> latency non-deterministic, because of the non-deterministic scheduling
+> nature of workqueues. So, I made it handled in softirq context only if
+> possible, not in low memory devices, since this modification will
+> maintain decompresion related memory a little longer.
+> ---
+> v1: fixed build errors reported by kernel test robot <lkp@intel.com>
+> v2: enhanced readability and removed a redundant code
+> 
+> Signed-off-by: Daeho Jeong <daehojeong@google.com>
 
-please pull the latest livepatching changes from
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git tags/livepatching-for-5.20
-
-======================================
-
-- Make a selftest more reliable.
-
-----------------------------------------------------------------
-Joe Lawrence (1):
-      selftests/livepatch: better synchronize test_klp_callbacks_busy
-
- lib/livepatch/test_klp_callbacks_busy.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Thanks,

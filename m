@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F7858A364
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CDA58A362
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240455AbiHDWq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 18:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
+        id S240189AbiHDWqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 18:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240109AbiHDWqR (ORCPT
+        with ESMTP id S240186AbiHDWqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 18:46:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBCC1F62E;
-        Thu,  4 Aug 2022 15:46:16 -0700 (PDT)
+        Thu, 4 Aug 2022 18:46:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338D21C113
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:46:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ADC861877;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC4DC61870
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 22:46:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A71DC433D7;
         Thu,  4 Aug 2022 22:46:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 71A8EC433B5;
-        Thu,  4 Aug 2022 22:46:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659653175;
-        bh=Zms+t/GNzF9Q4EIhtfY1d4Qf5yAH6x9QRKZIHppwGsU=;
+        s=k20201202; t=1659653176;
+        bh=8GbqkiWfNHy2YTDTpXKrS42/D7bPRs2xpLIZuqfQv1k=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=u2gsg67ht0MR/frWuufby1MnJ+y7p159X/zdTSmbJDU926mJvzFNF2ZNmFkqAn4eB
-         OnYyAsvHM0f2EZy7Y8yUsioCfeGiNVWlltVyB856HQ/XJ1EbxQCIBqmsCDE/mt9bDD
-         NJD6RmbkT8EQ9qI9+A4vLPdZFOO7BU+67KpV25OKN3RMeeEPV8XvFKT4cOar0pnSeW
-         xuJ2nWNH3tJ7503MyX85CUoczZIAtYdQhTYB7OEwO93R0fY+Y4D8kG5mfCtcqC+UXN
-         /qrg/kqeBgsZnPK4Zdq3aJISkJuBZUMC5r/TC0gNiteDFDhCA2oD2w8s3ksGsUs5xy
-         vXea5+dXUynCQ==
+        b=BSaOSXNTpSmPHVDPuPEpDsIUK21kmPwm610k31OZRLDP/LlM+raW8M02bwFjnEq2L
+         Pj/eQsdABgHRDyshPrttb/HUho6yI37RMWk4YzB5M2qBi3nkexzCKcTAMEVoQMasVH
+         gB07M6x6dXCY8djUQjlnbrOlgC5C48QVyR/id+CNZoZYEGCYC5s+4TPWJGDrOQvhMo
+         FoIUUzQuc3CUuEkvS7+wzy2xMve+U+l/KioOo0CNEGeA3AI0T2Qqi3aWrVdBDMCKe+
+         qV3wdVTKK9ul5E9Ojx2vabjrtPUeUfOzfM/QlHAmpzgNJX85+kXgZ8PaMRyktw9WD7
+         86ruYl8wdLfBA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DDDDC43140;
-        Thu,  4 Aug 2022 22:46:15 +0000 (UTC)
-Subject: Re: [GIT PULL] csky changes for v6.0-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0969CC43142;
+        Thu,  4 Aug 2022 22:46:16 +0000 (UTC)
+Subject: Re: [PULL 0/5] xtensa updates for v5.20
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220804033446.1250001-1-guoren@kernel.org>
-References: <20220804033446.1250001-1-guoren@kernel.org>
+In-Reply-To: <20220804181207.1246232-1-jcmvbkbc@gmail.com>
+References: <20220804181207.1246232-1-jcmvbkbc@gmail.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220804033446.1250001-1-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.0-rc1
-X-PR-Tracked-Commit-Id: 45fef4c4b9c94e86d9c13f0b2e7e71bb32254509
+X-PR-Tracked-Message-Id: <20220804181207.1246232-1-jcmvbkbc@gmail.com>
+X-PR-Tracked-Remote: https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20220804
+X-PR-Tracked-Commit-Id: 0847d167d0f9bdc8f61e5e5d32831fa8fdcd150f
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7df9075e232e09d99cf23b657b6cb04c9506e618
-Message-Id: <165965317538.20279.13602377672979795981.pr-tracker-bot@kernel.org>
-Date:   Thu, 04 Aug 2022 22:46:15 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org
+X-PR-Merge-Commit-Id: c040862bfbd9c5f3cb64e1df1c623e20e38fe656
+Message-Id: <165965317603.20279.17958134995271590719.pr-tracker-bot@kernel.org>
+Date:   Thu, 04 Aug 2022 22:46:16 +0000
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed,  3 Aug 2022 23:34:46 -0400:
+The pull request you sent on Thu,  4 Aug 2022 11:12:07 -0700:
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.0-rc1
+> https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20220804
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7df9075e232e09d99cf23b657b6cb04c9506e618
+https://git.kernel.org/torvalds/c/c040862bfbd9c5f3cb64e1df1c623e20e38fe656
 
 Thank you!
 

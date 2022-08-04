@@ -2,181 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6AE58957F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2103589588
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238842AbiHDAyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 20:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        id S238857AbiHDA73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 20:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiHDAx6 (ORCPT
+        with ESMTP id S229686AbiHDA71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 20:53:58 -0400
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A80C5D0D5;
-        Wed,  3 Aug 2022 17:53:54 -0700 (PDT)
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 2740qnit002637;
-        Thu, 4 Aug 2022 02:52:54 +0200
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 5281012005F;
-        Thu,  4 Aug 2022 02:52:45 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-        s=ed201904; t=1659574365; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QQXxUxRYonN3DnTiqF9rDc5G08qopkQ454FbGxazTn8=;
-        b=eBd9tjgWPS47PoKCiFZSzaNK767mmz5G9RA/ssJ824Ah4AWK+oNWVvO/sfIrVbcyq73mmL
-        sPCufU/U3o2tmYCw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-        t=1659574365; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QQXxUxRYonN3DnTiqF9rDc5G08qopkQ454FbGxazTn8=;
-        b=xkfmBoQxpkrVzn6MaBclUIglloslqaqLIL8e+cBI2wQmVE4fRgnz55APYNthrW6vSzwqFY
-        +yOgFFOUw3QL+FZ639FGzNoCSjk4PhHIiHr6bb+CExcx8p2rQfmZEZYJxpbidGptRgSNpf
-        FR38WkW+RXVRzUXgryeI4A46R/uNtlUz9EjsTZOFLxlK/wuOXaOMN2TPoijobGZR2Bh18f
-        CAic4eVD1khhT5IHkQFUsK8KQo8xk/NNJPGQQPqA4FGpkm4Rs5oBdHpp1khna8yygbUImG
-        GcZz5+eLWcumGK6D3jYDqEwKj3Ho3DfpjzjCO3nytZYyu4MN9xbkGjIZff9ebg==
-Date:   Thu, 4 Aug 2022 02:52:45 +0200
-From:   Andrea Mayer <andrea.mayer@uniroma2.it>
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        David Ahern <dsahern@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH] net: seg6: initialize induction variable to first valid
- array index
-Message-Id: <20220804025245.b61ebbfd313a49927aa61f9a@uniroma2.it>
-In-Reply-To: <9e8728e0-75e7-d3a8-038b-48e51be4df07@kernel.org>
-References: <20220802161203.622293-1-ndesaulniers@google.com>
-        <9e8728e0-75e7-d3a8-038b-48e51be4df07@kernel.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 3 Aug 2022 20:59:27 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AAE5F12C
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:59:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659574766; x=1691110766;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=nQ4NmGGd798PNK+j0zJzuGUEQnwUosPvZUU/2kvdGBQ=;
+  b=LR3Pg6rL9deMWencITcO4iSSMe8PdBCXnCFsw0AQEQKiXWtdFKhulBdD
+   1n5tLHd6/bnp+mKpEn4bNlVpQCPZR+uzMqGEPau5SpddCfMcmQhx4/F12
+   0Uq0TeF2dCDZR5G7j4R0+OxWGomUa4Y0lCfHonI6MlCtqd65fKg2fbFVU
+   +kltDZ6tEYpBaOuz0GJULFSrqr00JQUbuwKHY77xHvBLOGb6ikVEKPthP
+   SPKMjgaF31nXvhJf5APOFaFNZ2kTz0gihTcg7K0L6PuFfQ8HtLTfH2Zra
+   E/I/zDv9I9ZM2Uyag5ygpql9ZcXaNa5AuIPzEX3/R+EY9NhYhLwGDpYbe
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="272856291"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="272856291"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:59:26 -0700
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="578865679"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:59:22 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Jagdish Gediya <jvgediya@linux.ibm.com>
+Subject: Re: [PATCH v11 1/8] mm/demotion: Add support for explicit memory tiers
+References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
+        <20220728190436.858458-2-aneesh.kumar@linux.ibm.com>
+        <62e890da7f784_577a029473@dwillia2-xfh.jf.intel.com.notmuch>
+        <874jyvjpw9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <62e89c9addcc_62c2a29443@dwillia2-xfh.jf.intel.com.notmuch>
+        <87zggni13h.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <4a96a3ff-9cb7-4e71-3e9f-95fbd99f5201@linux.ibm.com>
+Date:   Thu, 04 Aug 2022 08:56:25 +0800
+In-Reply-To: <4a96a3ff-9cb7-4e71-3e9f-95fbd99f5201@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Tue, 2 Aug 2022 15:04:49 +0530")
+Message-ID: <87r11wj07a.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
-please see below, thanks.
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 
-> [ cc Andrea ]
-@David Ahern: thanks David!
-
-> On 8/2/22 10:12 AM, Nick Desaulniers wrote:
-> > Fixes the following warnings observed when building
-> > CONFIG_IPV6_SEG6_LWTUNNEL=y with clang:
-> > 
-> >   net/ipv6/seg6_local.o: warning: objtool: seg6_local_fill_encap() falls
-> >   through to next function seg6_local_get_encap_size()
-> >   net/ipv6/seg6_local.o: warning: objtool: seg6_local_cmp_encap() falls
-> >   through to next function input_action_end()
-> > 
-> > LLVM can fully unroll loops in seg6_local_get_encap_size() and
-> > seg6_local_cmp_encap(). One issue in those loops is that the induction
-> > variable is initialized to 0. The loop iterates over members of
-> > seg6_action_params, a global array of struct seg6_action_param calling
-> > their put() function pointer members.  seg6_action_param uses an array
-> > initializer to initialize SEG6_LOCAL_SRH and later elements, which is
-> > the third enumeration of an anonymous union.
-> > 
-> > The guard `if (attrs & SEG6_F_ATTR(i))` may prevent this from being
-> > called at runtime, but it would still be UB for
-> > `seg6_action_params[0]->put` to be called; the unrolled loop will make
-> > the initial iterations unreachable, which LLVM will later rotate to
-> > fallthrough to the next function.
-> > 
-> > Make this more obvious that this cannot happen to the compiler by
-> > initializing the loop induction variable to the minimum valid index that
-> > seg6_action_params is initialized to.
-
-By looking at the patch, it looks that your changes seem reasonable.
-The first two SEG6_LOCAL_{UNSPEC,ACTION} attributes are quite "special" in the
-sense that they do not have the seg6_action_param callbacks set.
-The SEG6_LOCAL_UNSPEC attribute is practically not used; while
-SEG6_LOCAL_ACTION is handled out of the several loops.
-
-Hence, I think we can skip these two attributes (in the loops) by setting the
-induction variable to the value you proposed, i.e. SEG6_LOCAL_SRH.
-
-Ciao,
-Andrea
-
-> > 
-> > Reported-by: Thomas Gleixner <tglx@linutronix.de>
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > ---
-> >  net/ipv6/seg6_local.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> > index 2cd4a8d3b30a..b7de5e46fdd8 100644
-> > --- a/net/ipv6/seg6_local.c
-> > +++ b/net/ipv6/seg6_local.c
-> > @@ -1614,7 +1614,7 @@ static void __destroy_attrs(unsigned long parsed_attrs, int max_parsed,
-> >  	 * callback. If the callback is not available, then we skip to the next
-> >  	 * attribute; otherwise, we call the destroy() callback.
-> >  	 */
-> > -	for (i = 0; i < max_parsed; ++i) {
-> > +	for (i = SEG6_LOCAL_SRH; i < max_parsed; ++i) {
-> >  		if (!(parsed_attrs & SEG6_F_ATTR(i)))
-> >  			continue;
-> >  
-> > @@ -1643,7 +1643,7 @@ static int parse_nla_optional_attrs(struct nlattr **attrs,
-> >  	struct seg6_action_param *param;
-> >  	int err, i;
-> >  
-> > -	for (i = 0; i < SEG6_LOCAL_MAX + 1; ++i) {
-> > +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; ++i) {
-> >  		if (!(desc->optattrs & SEG6_F_ATTR(i)) || !attrs[i])
-> >  			continue;
-> >  
-> > @@ -1742,7 +1742,7 @@ static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
-> >  	}
-> >  
-> >  	/* parse the required attributes */
-> > -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
-> > +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
-> >  		if (desc->attrs & SEG6_F_ATTR(i)) {
-> >  			if (!attrs[i])
-> >  				return -EINVAL;
-> > @@ -1847,7 +1847,7 @@ static int seg6_local_fill_encap(struct sk_buff *skb,
-> >  
-> >  	attrs = slwt->desc->attrs | slwt->parsed_optattrs;
-> >  
-> > -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
-> > +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
-> >  		if (attrs & SEG6_F_ATTR(i)) {
-> >  			param = &seg6_action_params[i];
-> >  			err = param->put(skb, slwt);
-> > @@ -1927,7 +1927,7 @@ static int seg6_local_cmp_encap(struct lwtunnel_state *a,
-> >  	if (attrs_a != attrs_b)
-> >  		return 1;
-> >  
-> > -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
-> > +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
-> >  		if (attrs_a & SEG6_F_ATTR(i)) {
-> >  			param = &seg6_action_params[i];
-> >  			if (param->cmp(slwt_a, slwt_b))
+> On 8/2/22 12:27 PM, Huang, Ying wrote:
+>> Dan Williams <dan.j.williams@intel.com> writes:
+>> 
+>>> Huang, Ying wrote:
+>>>> Dan Williams <dan.j.williams@intel.com> writes:
+>>>>
+>>>>> Aneesh Kumar K.V wrote:
+>>>>>> In the current kernel, memory tiers are defined implicitly via a demotion path
+>>>>>> relationship between NUMA nodes, which is created during the kernel
+>>>>>> initialization and updated when a NUMA node is hot-added or hot-removed. The
+>>>>>> current implementation puts all nodes with CPU into the highest tier, and builds
+>>>>>> the tier hierarchy tier-by-tier by establishing the per-node demotion targets
+>>>>>> based on the distances between nodes.
+>>>>>>
+>>>>>> This current memory tier kernel implementation needs to be improved for several
+>>>>>> important use cases,
+>>>>>>
+>>>>>> The current tier initialization code always initializes each memory-only NUMA
+>>>>>> node into a lower tier. But a memory-only NUMA node may have a high performance
+>>>>>> memory device (e.g. a DRAM-backed memory-only node on a virtual machine) that
+>>>>>> should be put into a higher tier.
+>>>>>>
+>>>>>> The current tier hierarchy always puts CPU nodes into the top tier. But on a
+>>>>>> system with HBM or GPU devices, the memory-only NUMA nodes mapping these devices
+>>>>>> should be in the top tier, and DRAM nodes with CPUs are better to be placed into
+>>>>>> the next lower tier.
+>>>>>>
+>>>>>> With current kernel higher tier node can only be demoted to nodes with shortest
+>>>>>> distance on the next lower tier as defined by the demotion path, not any other
+>>>>>> node from any lower tier. This strict, demotion order does not work in all use
+>>>>>> cases (e.g. some use cases may want to allow cross-socket demotion to another
+>>>>>> node in the same demotion tier as a fallback when the preferred demotion node is
+>>>>>> out of space), This demotion order is also inconsistent with the page allocation
+>>>>>> fallback order when all the nodes in a higher tier are out of space: The page
+>>>>>> allocation can fall back to any node from any lower tier, whereas the demotion
+>>>>>> order doesn't allow that.
+>>>>>>
+>>>>>> This patch series address the above by defining memory tiers explicitly.
+>>>>>>
+>>>>>> Linux kernel presents memory devices as NUMA nodes and each memory device is of
+>>>>>> a specific type. The memory type of a device is represented by its abstract
+>>>>>> distance. A memory tier corresponds to a range of abstract distance. This allows
+>>>>>> for classifying memory devices with a specific performance range into a memory
+>>>>>> tier.
+>>>>>>
+>>>>>> This patch configures the range/chunk size to be 128. The default DRAM
+>>>>>> abstract distance is 512. We can have 4 memory tiers below the default DRAM
+>>>>>> abstract distance which cover the range 0 - 127, 127 - 255, 256- 383, 384 - 511.
+>>>>>> Slower memory devices like persistent memory will have abstract distance below
+>>>>>> the default DRAM level and hence will be placed in these 4 lower tiers.
+>>>>>>
+>>>>>> A kernel parameter is provided to override the default memory tier.
+>>>>>>
+>>>>>> Link: https://lore.kernel.org/linux-mm/CAAPL-u9Wv+nH1VOZTj=9p9S70Y3Qz3+63EkqncRDdHfubsrjfw@mail.gmail.com
+>>>>>> Link: https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
+>>>>>>
+>>>>>> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+>>>>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>>>>>> ---
+>>>>>>  include/linux/memory-tiers.h |  17 ++++++
+>>>>>>  mm/Makefile                  |   1 +
+>>>>>>  mm/memory-tiers.c            | 102 +++++++++++++++++++++++++++++++++++
+>>>>>>  3 files changed, 120 insertions(+)
+>>>>>>  create mode 100644 include/linux/memory-tiers.h
+>>>>>>  create mode 100644 mm/memory-tiers.c
+>>>>>>
+>>>>>> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+>>>>>> new file mode 100644
+>>>>>> index 000000000000..8d7884b7a3f0
+>>>>>> --- /dev/null
+>>>>>> +++ b/include/linux/memory-tiers.h
+>>>>>> @@ -0,0 +1,17 @@
+>>>>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>>>>> +#ifndef _LINUX_MEMORY_TIERS_H
+>>>>>> +#define _LINUX_MEMORY_TIERS_H
+>>>>>> +
+>>>>>> +/*
+>>>>>> + * Each tier cover a abstrace distance chunk size of 128
+>>>>>> + */
+>>>>>> +#define MEMTIER_CHUNK_BITS	7
+>>>>>> +#define MEMTIER_CHUNK_SIZE	(1 << MEMTIER_CHUNK_BITS)
+>>>>>> +/*
+>>>>>> + * For now let's have 4 memory tier below default DRAM tier.
+>>>>>> + */
+>>>>>> +#define MEMTIER_ADISTANCE_DRAM	(1 << (MEMTIER_CHUNK_BITS + 2))
+>>>>>> +/* leave one tier below this slow pmem */
+>>>>>> +#define MEMTIER_ADISTANCE_PMEM	(1 << MEMTIER_CHUNK_BITS)
+>>>>>
+>>>>> Why is memory type encoded in these values? There is no reason to
+>>>>> believe that PMEM is of a lower performance tier than DRAM. Consider
+>>>>> high performance energy backed DRAM that makes it "PMEM", consider CXL
+>>>>> attached DRAM over a switch topology and constrained links that makes it
+>>>>> a lower performance tier than locally attached DRAM. The names should be
+>>>>> associated with tiers that indicate their usage. Something like HOT,
+>>>>> GENERAL, and COLD. Where, for example, HOT is low capacity high
+>>>>> performance compared to the general purpose pool, and COLD is high
+>>>>> capacity low performance intended to offload the general purpose tier.
+>>>>>
+>>>>> It does not need to be exactly that ontology, but please try to not
+>>>>> encode policy meaning behind memory types. There has been explicit
+>>>>> effort to avoid that to date because types are fraught for declaring
+>>>>> relative performance characteristics, and the relative performance
+>>>>> changes based on what memory types are assembled in a given system.
+>>>>
+>>>> Yes.  MEMTIER_ADISTANCE_PMEM is something over simplified.  That is only
+>>>> used in this very first version to make it as simple as possible.  
+>>>
+>>> I am failing to see the simplicity of using names that convey a
+>>> performance contract that are invalid depending on the system.
+>>>
+>>>> I think we can come up with something better in the later version.
+>>>> For example, identify the abstract distance of a PMEM device based on
+>>>> HMAT, etc. 
+>>>
+>>> Memory tiering has nothing to do with persistence why is PMEM in the
+>>> name at all?
+>>>
+>>>>  And even in this first version, we should put MEMTIER_ADISTANCE_PMEM
+>>>>  in dax/kmem.c.  Because it's just for that specific type of memory
+>>>>  used now, not for all PMEM.
+>>>
+>>> dax/kmem.c also handles HBM and "soft reserved" memory in general. There
+>>> is also nothing PMEM specific about the device-dax subsystem.
+>> 
+>> Ah... I see the issue here.  For the systems in our hand, dax/kmem.c is
+>> used to online PMEM only.  Even the "soft reserved" memory is used for
+>> PMEM or simulating PMEM too.  So to make the code as simple as possible,
+>> we treat all memory devices onlined by dax/kmem as PMEM in the first
+>> version.  And plan to support more memory types in the future versions.
+>> 
+>> But from your above words, our assumption are wrong here.  dax/kmem.c
+>> can online HBM and other memory devices already.  If so, how do we
+>> distinguish between them and how to get the performance character of
+>> these devices?  We can start with SLIT?
+>> 
 >
+> We would let low level driver register memory_dev_types for the NUMA nodes
+> that will be mapped to these devices. ie, a papr_scm, ACPI NFIT or CXL
+> can register different memory_dev_type based on device tree, HMAT or CDAT. 
+
+I didn't find ACPI NFIT can provide any performance information, just
+whether it's non-volatile.  HMAT or CDAT should help here, but it's not
+available always.  For now, what we have is just SLIT at least for quite
+some machines.
+
+I prefer to create memory_dev_type in high level driver like dax/kmem.
+And it may query low level driver like SLIT, HMAT, CDAT, etc for more
+information based on availability etc.
+
+Best Regards,
+Huang, Ying

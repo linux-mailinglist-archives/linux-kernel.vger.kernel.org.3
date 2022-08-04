@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A72589AB0
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC7A589AAF
 	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 13:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239462AbiHDLA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 07:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S239478AbiHDLBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 07:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239386AbiHDLAo (ORCPT
+        with ESMTP id S239405AbiHDLAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 07:00:44 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB80C1EAF7;
-        Thu,  4 Aug 2022 04:00:43 -0700 (PDT)
+        Thu, 4 Aug 2022 07:00:50 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B9E2A259;
+        Thu,  4 Aug 2022 04:00:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1659610843; x=1691146843;
+  t=1659610848; x=1691146848;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hLXjlIA28/GZMMuC4vNqzyQZFgkpsPYUoC/g6KuoSBo=;
-  b=05WAu7FZgwJ3g83P/CW3aN9XJknHoa9ks2tyCOQKDBi0x9gNJwAxK39J
-   UObAR0qA5IiAHPI5iR54SGd6mtUBFTTzq4mGM/k8nsiXco2da+EEyLXGJ
-   j7MOJlo1DEEfEtGZWiY70B3u2EL3l+6gxTrS5cpIsXEzfTi3iZq/MWaN3
-   8k67eujQiGMr0FtgtmBOBvrRGNyyXUgrSLvMs4bTS/8bnK9NmN8SwxB/B
-   Xz8LfXvrlRQ5k7vGfFqS+SeYYVzmShojjpe70wEyQOANBeQrSTdz+z1Tz
-   +QGcImHsdcAl2tQpE0oPgH+Ld5ZK4hWHfcRAzL248OiRB9J9dk4C3o1s9
-   A==;
+  bh=8PRn2+8NO981SRSIu6vbjDCVjq9ckDEOBDzmGJpoT/E=;
+  b=cC+HlAxq0PC+EAVjEDgWkAQRJ1HItZTDqm6Xdat4y4XK1coj8V7IQghu
+   3dL52WG6SHzEmI1IYzavvg+DRWWvF/k3rEKdRO/jemdfyPSPyAZ2vwIIb
+   rvLVshA1bZDDeLiuzZFEtH0wtUXsIsfQLnzImgGVReV7se5Uhklqs0RpB
+   6yAmUCGi6SftEd7HgtjaFCKtXGTieL4z5q5WvwxPb74MZnFJuTjXjJH2N
+   +U6d+YbpCYWpV8Z/S/6XYb+O88uDnkmw7ZMhEMT9Ix7KU3/erTJBHtFLy
+   ISRem5lDOUve1WvpQ7ArbLaZdvzBUU/ZBHV2KilUZABAdBqiy0I6Lt+6v
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="185080311"
+   d="scan'208";a="170952594"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Aug 2022 04:00:43 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Aug 2022 04:00:47 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 4 Aug 2022 04:00:43 -0700
+ 15.1.2375.17; Thu, 4 Aug 2022 04:00:47 -0700
 Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.28 via Frontend Transport; Thu, 4 Aug 2022 04:00:40 -0700
+ 15.1.2375.28 via Frontend Transport; Thu, 4 Aug 2022 04:00:45 -0700
 From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
 To:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <UNGLinuxDriver@microchip.com>, <gregkh@linuxfoundation.org>,
         <arnd@arndb.de>, <dragan.cvetic@xilinx.com>,
         <derek.kiernan@xilinx.com>
-Subject: [PATCH RFC char-misc-next 3/5] misc: microchip: pci1xxxx: Add functions to configure gpio pins as input / output, get status, handle I/O for gpio pins.
-Date:   Thu, 4 Aug 2022 22:02:17 +0530
-Message-ID: <20220804163219.921640-4-kumaravel.thiagarajan@microchip.com>
+Subject: [PATCH RFC char-misc-next 4/5] misc: microchip: pci1xxxx: Add gpio irq handler and irq helper functions irq_ack, irq_mask, irq_unmask and irq_set_type of irq_chip.
+Date:   Thu, 4 Aug 2022 22:02:18 +0530
+Message-ID: <20220804163219.921640-5-kumaravel.thiagarajan@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220804163219.921640-1-kumaravel.thiagarajan@microchip.com>
 References: <20220804163219.921640-1-kumaravel.thiagarajan@microchip.com>
@@ -63,127 +63,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-direction_input and direction_output functions configures a gpio pin as
-input and output respectively. get_direction function returns if a gpio
-pin is output or input. get function returns the value of a gpio pin
-whereas set function assigns output value for a gpio pin.
+The helper functions irq_set_type, irq_mask, irq_unmask and
+irq_ack configure the interrupt type, mask, unmask and
+acknowledge the interrupts.
 
 Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
 ---
- .../misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c   | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ .../misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c   | 159 ++++++++++++++++++
+ 1 file changed, 159 insertions(+)
 
 diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-index f2e3b3794ba3..ff94b0f239c7 100644
+index ff94b0f239c7..c58d27407c4d 100644
 --- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
 +++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-@@ -13,6 +13,10 @@
+@@ -9,6 +9,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/mutex.h>
+ #include <linux/kthread.h>
++#include <linux/interrupt.h>
+ 
  #include "mchp_pci1xxxx_gp.h"
  
- #define PCI1XXXX_NR_PINS		93
-+#define OUT_EN_OFFSET(x)		((((x) / 32) * 4) + 0x400)
-+#define INP_EN_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0x10)
-+#define OUT_OFFSET(x)			((((x) / 32) * 4) + 0x400 + 0x20)
-+#define INP_OFFSET(x)			((((x) / 32) * 4) + 0x400 + 0x30)
+@@ -20,6 +21,13 @@
  #define PULLUP_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0x40)
  #define PULLDOWN_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0x50)
  #define OPENDRAIN_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0x60)
-@@ -30,6 +34,24 @@ struct pci1xxxx_gpio {
- 	int irq_base;
- };
- 
-+static int pci1xxxx_gpio_get_direction(struct gpio_chip *gpio, unsigned int nr)
-+{
-+	struct pci1xxxx_gpio *priv = gpiochip_get_data(gpio);
-+	u32 data;
-+	int ret = -EINVAL;
-+
-+	data = readl(priv->reg_base + INP_EN_OFFSET(nr));
-+	if (data & BIT(nr % 32)) {
-+		ret =  1;
-+	} else {
-+		data = readl(priv->reg_base + OUT_EN_OFFSET(nr));
-+		if (data & BIT(nr % 32))
-+			ret =  0;
-+	}
-+
-+	return ret;
-+}
-+
- static inline void pci1xxx_assign_bit(void __iomem *base_addr, unsigned int reg_offset,
- 				      unsigned int bitpos, bool set)
- {
-@@ -43,6 +65,58 @@ static inline void pci1xxx_assign_bit(void __iomem *base_addr, unsigned int reg_
- 	writel(data, base_addr + reg_offset);
++#define WAKEMASK_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0x70)
++#define MODE_OFFSET(x)			((((x) / 32) * 4) + 0x400 + 0x80)
++#define INTR_LO_TO_HI_EDGE_CONFIG(x)	((((x) / 32) * 4) + 0x400 + 0x90)
++#define INTR_HI_TO_LO_EDGE_CONFIG(x)	((((x) / 32) * 4) + 0x400 + 0xA0)
++#define INTR_LEVEL_CONFIG_OFFSET(x)	((((x) / 32) * 4) + 0x400 + 0xB0)
++#define INTR_LEVEL_MASK_OFFSET(x)	((((x) / 32) * 4) + 0x400 + 0xC0)
++#define INTR_STAT_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0xD0)
+ #define DEBOUNCE_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0xE0)
+ #define PIO_GLOBAL_CONFIG_OFFSET	(0x400 + 0xF0)
+ #define PIO_PCI_CTRL_REG_OFFSET	(0x400 + 0xF4)
+@@ -148,9 +156,146 @@ static int pci1xxxx_gpio_set_config(struct gpio_chip *gpio, unsigned int offset,
+ 	return ret;
  }
  
-+static int pci1xxxx_gpio_direction_input(struct gpio_chip *gpio, unsigned int nr)
++static void pci1xxxx_gpio_irq_ack(struct irq_data *data)
 +{
-+	struct pci1xxxx_gpio *priv = gpiochip_get_data(gpio);
++	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
++	struct pci1xxxx_gpio *priv = gpiochip_get_data(chip);
++	unsigned int gpio = irqd_to_hwirq(data);
 +	unsigned long flags;
 +
 +	spin_lock_irqsave(&priv->lock, flags);
-+	pci1xxx_assign_bit(priv->reg_base, INP_EN_OFFSET(nr), (nr % 32), true);
-+	pci1xxx_assign_bit(priv->reg_base, OUT_EN_OFFSET(nr), (nr % 32), false);
++	pci1xxx_assign_bit(priv->reg_base, INTR_STAT_OFFSET(gpio), (gpio % 32), true);
 +	spin_unlock_irqrestore(&priv->lock, flags);
-+
-+	return 0;
 +}
 +
-+static int pci1xxxx_gpio_get(struct gpio_chip *gpio, unsigned int nr)
++static void pci1xxxx_gpio_irq_set_mask(struct irq_data *data, bool set)
 +{
-+	struct pci1xxxx_gpio *priv = gpiochip_get_data(gpio);
-+
-+	return (readl(priv->reg_base + INP_OFFSET(nr)) >> (nr % 32)) & 1;
-+}
-+
-+static int pci1xxxx_gpio_direction_output(struct gpio_chip *gpio,
-+					  unsigned int nr, int val)
-+{
-+	struct pci1xxxx_gpio *priv = gpiochip_get_data(gpio);
-+	unsigned long flags;
-+	u32 data;
-+
-+	spin_lock_irqsave(&priv->lock, flags);
-+	pci1xxx_assign_bit(priv->reg_base, INP_EN_OFFSET(nr), (nr % 32), false);
-+	pci1xxx_assign_bit(priv->reg_base, OUT_EN_OFFSET(nr), (nr % 32), true);
-+	data = readl(priv->reg_base + OUT_OFFSET(nr));
-+	if (val)
-+		data |= (1 << (nr % 32));
-+	else
-+		data &= ~(1 << (nr % 32));
-+	writel(data, priv->reg_base + OUT_OFFSET(nr));
-+	spin_unlock_irqrestore(&priv->lock, flags);
-+
-+	return 0;
-+}
-+
-+static void pci1xxxx_gpio_set(struct gpio_chip *gpio,
-+			      unsigned int nr, int val)
-+{
-+	struct pci1xxxx_gpio *priv = gpiochip_get_data(gpio);
++	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
++	struct pci1xxxx_gpio *priv = gpiochip_get_data(chip);
++	unsigned int gpio = irqd_to_hwirq(data);
 +	unsigned long flags;
 +
 +	spin_lock_irqsave(&priv->lock, flags);
-+	pci1xxx_assign_bit(priv->reg_base, OUT_OFFSET(nr), (nr % 32), val);
++	pci1xxx_assign_bit(priv->reg_base, INTR_MASK_OFFSET(gpio), (gpio % 32), set);
 +	spin_unlock_irqrestore(&priv->lock, flags);
 +}
 +
- static int pci1xxxx_gpio_set_config(struct gpio_chip *gpio, unsigned int offset,
- 				    unsigned long config)
++static void pci1xxxx_gpio_irq_mask(struct irq_data *data)
++{
++	pci1xxxx_gpio_irq_set_mask(data, true);
++}
++
++static void pci1xxxx_gpio_irq_unmask(struct irq_data *data)
++{
++	pci1xxxx_gpio_irq_set_mask(data, false);
++}
++
++static int pci1xxxx_gpio_set_type(struct irq_data *data, unsigned int trigger_type)
++{
++	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
++	struct pci1xxxx_gpio *priv = gpiochip_get_data(chip);
++	unsigned int gpio = irqd_to_hwirq(data);
++	unsigned int bitpos = gpio % 32;
++
++	if (trigger_type & IRQ_TYPE_EDGE_FALLING) {
++		pci1xxx_assign_bit(priv->reg_base, INTR_HI_TO_LO_EDGE_CONFIG(gpio),
++				   bitpos, false);
++		pci1xxx_assign_bit(priv->reg_base, MODE_OFFSET(gpio),
++				   bitpos, false);
++		irq_set_handler_locked(data, handle_edge_irq);
++	} else {
++		pci1xxx_assign_bit(priv->reg_base, INTR_HI_TO_LO_EDGE_CONFIG(gpio),
++				   bitpos, true);
++	}
++
++	if (trigger_type & IRQ_TYPE_EDGE_RISING) {
++		pci1xxx_assign_bit(priv->reg_base, INTR_LO_TO_HI_EDGE_CONFIG(gpio),
++				   bitpos, false);
++		pci1xxx_assign_bit(priv->reg_base, MODE_OFFSET(gpio), bitpos,
++				   false);
++		irq_set_handler_locked(data, handle_edge_irq);
++	} else {
++		pci1xxx_assign_bit(priv->reg_base, INTR_LO_TO_HI_EDGE_CONFIG(gpio),
++				   bitpos, true);
++	}
++
++	if (trigger_type & IRQ_TYPE_LEVEL_LOW) {
++		pci1xxx_assign_bit(priv->reg_base, INTR_LEVEL_CONFIG_OFFSET(gpio),
++				   bitpos, true);
++		pci1xxx_assign_bit(priv->reg_base, INTR_LEVEL_MASK_OFFSET(gpio),
++				   bitpos, false);
++		pci1xxx_assign_bit(priv->reg_base, MODE_OFFSET(gpio), bitpos,
++				   true);
++		irq_set_handler_locked(data, handle_edge_irq);
++	}
++
++	if (trigger_type & IRQ_TYPE_LEVEL_HIGH) {
++		pci1xxx_assign_bit(priv->reg_base, INTR_LEVEL_CONFIG_OFFSET(gpio),
++				   bitpos, false);
++		pci1xxx_assign_bit(priv->reg_base, INTR_LEVEL_MASK_OFFSET(gpio),
++				   bitpos, false);
++		pci1xxx_assign_bit(priv->reg_base, MODE_OFFSET(gpio), bitpos,
++				   true);
++		irq_set_handler_locked(data, handle_edge_irq);
++	}
++
++	if ((!(trigger_type & IRQ_TYPE_LEVEL_LOW)) && (!(trigger_type & IRQ_TYPE_LEVEL_HIGH)))
++		pci1xxx_assign_bit(priv->reg_base, INTR_LEVEL_MASK_OFFSET(gpio), bitpos, true);
++
++	return true;
++}
++
++static irqreturn_t pci1xxxx_gpio_irq_handler(int irq, void *dev_id)
++{
++	struct pci1xxxx_gpio *priv = dev_id;
++	struct gpio_chip *gc =  &priv->gpio;
++	unsigned long int_status = 0;
++	unsigned long flags;
++	u8 pincount;
++	int bit;
++	u8 gpiobank;
++
++	spin_lock_irqsave(&priv->lock, flags);
++	pci1xxx_assign_bit(priv->reg_base, PIO_GLOBAL_CONFIG_OFFSET, 16, true);
++	spin_unlock_irqrestore(&priv->lock, flags);
++	for (gpiobank = 0; gpiobank < 3; gpiobank++) {
++		spin_lock_irqsave(&priv->lock, flags);
++		int_status = readl(priv->reg_base + INTR_STATUS_OFFSET(gpiobank));
++		spin_unlock_irqrestore(&priv->lock, flags);
++		if (gpiobank == 2)
++			pincount = 29;
++		else
++			pincount = 32;
++		for_each_set_bit(bit, &int_status, pincount) {
++			unsigned int irq;
++
++			spin_lock_irqsave(&priv->lock, flags);
++			writel(BIT(bit), priv->reg_base + INTR_STATUS_OFFSET(gpiobank));
++			spin_unlock_irqrestore(&priv->lock, flags);
++			irq = irq_find_mapping(gc->irq.domain, (bit + (gpiobank * 32)));
++			generic_handle_irq(irq);
++		}
++	}
++	spin_lock_irqsave(&priv->lock, flags);
++	pci1xxx_assign_bit(priv->reg_base, PIO_GLOBAL_CONFIG_OFFSET, 16, false);
++	spin_unlock_irqrestore(&priv->lock, flags);
++
++	return IRQ_HANDLED;
++}
++
++static struct irq_chip pci1xxxx_gpio_irqchip = {
++	.name = "pci1xxxx_gpio",
++	.irq_ack = pci1xxxx_gpio_irq_ack,
++	.irq_mask = pci1xxxx_gpio_irq_mask,
++	.irq_unmask = pci1xxxx_gpio_irq_unmask,
++	.irq_set_type = pci1xxxx_gpio_set_type,
++};
++
+ static int pci1xxxx_gpio_setup(struct pci1xxxx_gpio *priv, int irq)
  {
-@@ -81,6 +155,11 @@ static int pci1xxxx_gpio_setup(struct pci1xxxx_gpio *priv, int irq)
+ 	struct gpio_chip *gchip = &priv->gpio;
++	struct gpio_irq_chip *girq;
++	int retval;
+ 
  	gchip->label = dev_name(&priv->aux_dev->dev);
  	gchip->parent = &priv->aux_dev->dev;
- 	gchip->owner = THIS_MODULE;
-+	gchip->direction_input = pci1xxxx_gpio_direction_input;
-+	gchip->direction_output = pci1xxxx_gpio_direction_output;
-+	gchip->get_direction = pci1xxxx_gpio_get_direction;
-+	gchip->get = pci1xxxx_gpio_get;
-+	gchip->set = pci1xxxx_gpio_set;
- 	gchip->set_config = pci1xxxx_gpio_set_config;
- 	gchip->dbg_show = NULL;
- 	gchip->base = -1;
+@@ -166,6 +311,20 @@ static int pci1xxxx_gpio_setup(struct pci1xxxx_gpio *priv, int irq)
+ 	gchip->ngpio =  PCI1XXXX_NR_PINS;
+ 	gchip->can_sleep = false;
+ 
++	retval = devm_request_threaded_irq(&priv->aux_dev->dev, irq,
++		NULL, pci1xxxx_gpio_irq_handler,
++		IRQF_ONESHOT, "PCI1xxxxGPIO", priv);
++
++	if (retval)
++		return retval;
++
++	girq = &priv->gpio.irq;
++	girq->chip = &pci1xxxx_gpio_irqchip;
++	girq->parent_handler = NULL;
++	girq->num_parents = 0;
++	girq->parents = NULL;
++	girq->default_type = IRQ_TYPE_NONE;
++	girq->handler = handle_bad_irq;
+ 	return 0;
+ }
+ 
 -- 
 2.25.1
 

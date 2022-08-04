@@ -2,95 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B675899B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784425899BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238614AbiHDJKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 05:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
+        id S238905AbiHDJNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 05:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbiHDJKE (ORCPT
+        with ESMTP id S230194AbiHDJNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 05:10:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88A061D41;
-        Thu,  4 Aug 2022 02:10:02 -0700 (PDT)
-Date:   Thu, 04 Aug 2022 09:09:59 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659604201;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YuJg6N+fhMpv3s6C9HMpwWkOH8f617D63uQS87KGQRg=;
-        b=tPACn0/C+SHzAPxiXS4cV0AKNTtjNFgASjqN4NU3OjD/nLSL/RtOa90u1jFmsq0iboyM3m
-        CS3vHLITt5KM5+pDonSyjvfgA80cUXgTkdil5OcUAIWs4A9jVWXV0im7JtrqpX2Kn065Gp
-        WZla0RkzqcfDMvrWynGRL+y2BBFA3/EUW1tUs/NjC7ZDDpelTmgL43xEDCNfL+L50T7qIm
-        tV3Df81H4Q4sKzyBboJyIbnwqm9OuZGUiO70Qwjt1lP2LV17ujNGKmM2sbQYWGT3ov6Wre
-        XEzB3WAOrSbmbUw1KRKVuQH5zEJouX9MIQy53p6BsqaYCilFaY2Wp8Hofpx/dw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659604201;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YuJg6N+fhMpv3s6C9HMpwWkOH8f617D63uQS87KGQRg=;
-        b=4Kq3Nk8zbTm5w0WrKRcWolf3mwGgdCf/nppNi0Z0NWOnZidFkdrt3dyYnkUrMBBaSSPfp+
-        KDjEVOaNzT1jqgAQ==
-From:   "tip-bot2 for Xin Gao" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/core: Remove superfluous semicolon
-Cc:     Xin Gao <gaoxin@cdjrlc.com>, Ingo Molnar <mingo@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220719111044.7095-1-gaoxin@cdjrlc.com>
-References: <20220719111044.7095-1-gaoxin@cdjrlc.com>
+        Thu, 4 Aug 2022 05:13:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BA061D67;
+        Thu,  4 Aug 2022 02:13:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D4A4B82447;
+        Thu,  4 Aug 2022 09:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337A7C433C1;
+        Thu,  4 Aug 2022 09:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659604399;
+        bh=IIE9Abyf1eiQoqzflF7AVfJj666NiWeX1LObw1zMpto=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=BnBdTUWvgV1SomEAjzAqjbzrTqsM8+zQaDo7eg9ZFIG5lj2d5DC3ds4DsX6qFEihw
+         Uz6pMAVvhhsWXA+1ItggOQrgQkQX4WJGNUy+8cx3UsMliH7PEvWNl53rW3ZJhZ4jfS
+         0XFzhUzLpLzrzi3xhbxGuYhviCZKYmpF3BHLS3ZxDOXW/fhSlIYuYqsaD4HUp2qG/j
+         upd5G8R6i51Tobsqeo2hJC1/HyV/qChEBzog8+GbIJzzXPZ+aVTdnGNa8vExs3fsYU
+         WgQihjuFL/v16gVFUttvASXlwxZEZ++4daFhS3NcMPFg+vVhreXHQmnPhsNjDQUjO5
+         fqGZ1it0Bu0og==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Veerendranath Jakkam <quic_vjakkam@quicinc.com>,
+        kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Arend van Spriel <aspriel@gmail.com>
+Subject: Re: [GIT PULL] Networking for 6.0
+References: <20220803101438.24327-1-pabeni@redhat.com>
+        <CAHk-=wjhSSHM+ESVnchxazGx4Vi0fEfmHpwYxE45JZDSC8SUAQ@mail.gmail.com>
+Date:   Thu, 04 Aug 2022 12:13:12 +0300
+In-Reply-To: <CAHk-=wjhSSHM+ESVnchxazGx4Vi0fEfmHpwYxE45JZDSC8SUAQ@mail.gmail.com>
+        (Linus Torvalds's message of "Wed, 3 Aug 2022 21:17:07 -0700")
+Message-ID: <87les4id7b.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Message-ID: <165960419995.15455.14077879462438437814.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+Linus Torvalds <torvalds@linux-foundation.org> writes:
 
-Commit-ID:     8648f92a66a323ed01903d2cbb248cdbe2f312d9
-Gitweb:        https://git.kernel.org/tip/8648f92a66a323ed01903d2cbb248cdbe2f312d9
-Author:        Xin Gao <gaoxin@cdjrlc.com>
-AuthorDate:    Tue, 19 Jul 2022 19:10:44 +08:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Thu, 04 Aug 2022 11:02:08 +02:00
+> Hmm. Another issue with the networking pull..
+>
+> On Wed, Aug 3, 2022 at 3:15 AM Paolo Abeni <pabeni@redhat.com> wrote:
+>>
+>>   git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git tags/net-next-6.0
+>>
+>> Veerendranath Jakkam (5):
+>>       cfg80211: Indicate MLO connection info in connect and roam callbacks
+>
+> This one added a
+>
+>                 for_each_valid_link(cr, link) {
+>                         if (WARN_ON_ONCE(!cr->links[link].bss))
+>                                 break;
+>                 }
+>
+> in net/wireless/sme.c, and it seems to trigger on my brand new M2 Macbook Air.
+>
+> Wireless still works fine (I'm writing this report on the machine),
+> but you get a scary splat:
+>
+>   WARNING: CPU: 5 PID: 514 at net/wireless/sme.c:786
+> __cfg80211_connect_result+0x2fc/0x5c0 [cfg80211]
+>
+> full call trace etc in the attachment.
 
-sched/core: Remove superfluous semicolon
+Thanks for the report, adding also Arend and changing Johannes' email.
+Unfortunately Johannes is away this week. Arend, would you be able to
+look at this? I don't have any brcmfmac hardware.
 
-Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20220719111044.7095-1-gaoxin@cdjrlc.com
----
- kernel/sched/core_sched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-index 93878cb..1ec807f 100644
---- a/kernel/sched/core_sched.c
-+++ b/kernel/sched/core_sched.c
-@@ -205,7 +205,7 @@ int sched_core_share_pid(unsigned int cmd, pid_t pid, enum pid_type type,
- 	default:
- 		err = -EINVAL;
- 		goto out;
--	};
-+	}
- 
- 	if (type == PIDTYPE_PID) {
- 		__sched_core_set(task, cookie);
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

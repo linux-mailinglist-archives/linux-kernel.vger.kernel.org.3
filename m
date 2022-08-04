@@ -2,115 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509EE58992A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC63B58992B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239052AbiHDIRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S239116AbiHDISK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiHDIRp (ORCPT
+        with ESMTP id S229665AbiHDISI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:17:45 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E6161D58
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:17:45 -0700 (PDT)
+        Thu, 4 Aug 2022 04:18:08 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D670165813
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:18:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659601065; x=1691137065;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1vRPIPSf2axObKgy7RzZTz1CJOb3G30A7m3DJD+95Ag=;
-  b=juQjS9AawpbrElkerqLdpj5MgWAAQp9RlZyTwFKzaYxsPFJIF5RpwQa+
-   OJn6Mij3mqSEtp8W3fmRoCfAISNQ/i/ePr01PJ0VlqDoN7hCf5WavHx0i
-   ESfRZgA3GJWs5Hf/XgizcNmBPR3SgRlVFbyyvoxThVDFF2ZLNR2+3Nei2
-   sc+h9Tcxzy5hDfT2dVDu1VCRYqu5EfQdH/IrlDAMkRJpnrRZmYL2ngCff
-   WifVDnCdWBn1iSR8C+JDpGgGs8XiCCAc+7kXk3auUoeWtc8cmmN/iEus0
-   I8ioQutJsspZIwkksVY7NbfvuRArASo9hR38dvfcxeAvF1AtzNQNOrws0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="291091605"
+  t=1659601087; x=1691137087;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yQan3K3MzfFlco62xGlbqgCcc6m4f4EY80JPF0pTQKo=;
+  b=EDGp72U97h5uxPWFhn71B3VxQ5naCcqTc5tWmQDQDuHoXnn1uybxGi0y
+   4QUblHMO90xxiBzNet3CBAEaoS997bDsJ3SvBX9EDT+kW44PAhy33Z/z4
+   Y/0Lc1wnMuVK4kBG9TUNrJNPpDpJjsC6RmCQi09jr5nBHatPA67b+IQC8
+   +5X1qwTCJC3Wl3TM7n6oe/NEwNDVchccxvLnN57r1evQdg9DFOQhRPTSg
+   Mgq5VitYNG7KboQlaqoeA9cwcAYPONnjoleDUVc+HCn461pqGH+UISYlG
+   zQw1yzyPSk+f/s6fcUkchyYaWrWcCJOpgJUnUDSTw1liZDaPBy0TGjQsy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="376172285"
 X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="291091605"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 01:17:44 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="376172285"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 01:18:07 -0700
 X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="578983123"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Aug 2022 01:17:43 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJW35-000I9D-0c;
-        Thu, 04 Aug 2022 08:17:43 +0000
-Date:   Thu, 04 Aug 2022 16:17:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cleanups] BUILD SUCCESS
- a50be38f617b11b451c0a432c574859419e69471
-Message-ID: <62eb8081.2dSebJ7vvENDbC2a%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="603135791"
+Received: from fzoltan-mobl1.ger.corp.intel.com (HELO [10.213.220.160]) ([10.213.220.160])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 01:18:03 -0700
+Message-ID: <aa323022-f54c-23e2-92b9-87191209177e@linux.intel.com>
+Date:   Thu, 4 Aug 2022 09:18:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/3] drm/i915: pass a pointer for tlb seqno at
+ vma_invalidate_tlb()
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Michael Cheng <michael.cheng@intel.com>,
+        Ramalingam C <ramalingam.c@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1659598090.git.mchehab@kernel.org>
+ <f9550e6bacea10131ff40dd8981b69eb9251cdcd.1659598090.git.mchehab@kernel.org>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <f9550e6bacea10131ff40dd8981b69eb9251cdcd.1659598090.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
-branch HEAD: a50be38f617b11b451c0a432c574859419e69471  x86/boot: Remove superfluous type casting from arch/x86/boot/bitops.h
 
-elapsed time: 968m
+On 04/08/2022 08:37, Mauro Carvalho Chehab wrote:
+> WRITE_ONCE() should happen at the original var, not on a local
+> copy of it.
+> 
+> Fixes: 5d36acb7198b ("drm/i915/gt: Batch TLB invalidations")
 
-configs tested: 34
-configs skipped: 66
+Cc: stable I think, since the above one was. So both hit 5.21 (or 6.1) 
+together.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Regards,
 
-gcc tested configs:
-i386                                defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-i386                             allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                              defconfig
-x86_64                        randconfig-a006
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
+Tvrtko
 
-clang tested configs:
-i386                          randconfig-a013
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a011
-x86_64                        randconfig-a005
-i386                          randconfig-a015
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v3 0/3] at: https://lore.kernel.org/all/cover.1659598090.git.mchehab@kernel.org/
+> 
+>   drivers/gpu/drm/i915/gt/intel_ppgtt.c | 2 +-
+>   drivers/gpu/drm/i915/i915_vma.c       | 6 +++---
+>   drivers/gpu/drm/i915/i915_vma.h       | 2 +-
+>   3 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gt/intel_ppgtt.c b/drivers/gpu/drm/i915/gt/intel_ppgtt.c
+> index 2da6c82a8bd2..6ee8d1127016 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_ppgtt.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_ppgtt.c
+> @@ -211,7 +211,7 @@ void ppgtt_unbind_vma(struct i915_address_space *vm,
+>   
+>   	vm->clear_range(vm, vma_res->start, vma_res->vma_size);
+>   	if (vma_res->tlb)
+> -		vma_invalidate_tlb(vm, *vma_res->tlb);
+> +		vma_invalidate_tlb(vm, vma_res->tlb);
+>   }
+>   
+>   static unsigned long pd_count(u64 size, int shift)
+> diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
+> index 84a9ccbc5fc5..260371716490 100644
+> --- a/drivers/gpu/drm/i915/i915_vma.c
+> +++ b/drivers/gpu/drm/i915/i915_vma.c
+> @@ -1308,7 +1308,7 @@ I915_SELFTEST_EXPORT int i915_vma_get_pages(struct i915_vma *vma)
+>   	return err;
+>   }
+>   
+> -void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb)
+> +void vma_invalidate_tlb(struct i915_address_space *vm, u32 *tlb)
+>   {
+>   	/*
+>   	 * Before we release the pages that were bound by this vma, we
+> @@ -1318,7 +1318,7 @@ void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb)
+>   	 * the most recent TLB invalidation seqno, and if we have not yet
+>   	 * flushed the TLBs upon release, perform a full invalidation.
+>   	 */
+> -	WRITE_ONCE(tlb, intel_gt_next_invalidate_tlb_full(vm->gt));
+> +	WRITE_ONCE(*tlb, intel_gt_next_invalidate_tlb_full(vm->gt));
+>   }
+>   
+>   static void __vma_put_pages(struct i915_vma *vma, unsigned int count)
+> @@ -1971,7 +1971,7 @@ struct dma_fence *__i915_vma_evict(struct i915_vma *vma, bool async)
+>   			dma_fence_put(unbind_fence);
+>   			unbind_fence = NULL;
+>   		}
+> -		vma_invalidate_tlb(vma->vm, vma->obj->mm.tlb);
+> +		vma_invalidate_tlb(vma->vm, &vma->obj->mm.tlb);
+>   	}
+>   
+>   	/*
+> diff --git a/drivers/gpu/drm/i915/i915_vma.h b/drivers/gpu/drm/i915/i915_vma.h
+> index 5048eed536da..33a58f605d75 100644
+> --- a/drivers/gpu/drm/i915/i915_vma.h
+> +++ b/drivers/gpu/drm/i915/i915_vma.h
+> @@ -213,7 +213,7 @@ bool i915_vma_misplaced(const struct i915_vma *vma,
+>   			u64 size, u64 alignment, u64 flags);
+>   void __i915_vma_set_map_and_fenceable(struct i915_vma *vma);
+>   void i915_vma_revoke_mmap(struct i915_vma *vma);
+> -void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb);
+> +void vma_invalidate_tlb(struct i915_address_space *vm, u32 *tlb);
+>   struct dma_fence *__i915_vma_evict(struct i915_vma *vma, bool async);
+>   int __i915_vma_unbind(struct i915_vma *vma);
+>   int __must_check i915_vma_unbind(struct i915_vma *vma);

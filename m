@@ -2,109 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4018D589F8D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 18:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20D1589F92
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 18:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234576AbiHDQxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 12:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
+        id S235226AbiHDQ4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 12:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiHDQx2 (ORCPT
+        with ESMTP id S233360AbiHDQ4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 12:53:28 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98550252B4;
-        Thu,  4 Aug 2022 09:53:24 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 174735FD06;
-        Thu,  4 Aug 2022 19:53:22 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1659632002;
-        bh=7VqOZGtBUV2rPszzt+iOd/uivE15FHVsI8evbC3zCPg=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=eHQCywSVaPtlqKMhx494PMfhccsQ6LkWBwuqmwxX0aR3pQ9Dupxm3rEGu27kS82Yd
-         MadISbStWePQJuOT4M8KSDFhslHuOJr5ZtnHERDK9Jdg3+7eaiBhf4aMRrbpaB9qJ5
-         mEeSZsZHMnGzldlzRn3mKNNNEKxolhHlkRiLaZ6w3aeb3zKeU54qLyUM0EDIXRv7wf
-         RBou3VFs5y8L0PWsyG3CD3ulOJfeH8mQkeKwi7VUydTAMlk2QyWSF2OZMav48ytZHo
-         WtSXZDLXFlW7SwBjP/vL728whqeweaCpDwzOFbD6xiUgnh/vUoYBIKmBNR6cMfBCKc
-         B4L9ecwOLWLJQ==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  4 Aug 2022 19:53:20 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "narmstrong@baylibre.com" <narmstrong@baylibre.com>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v1] arm64: dts: meson-axg: reserve memory region for Amlogic
- TrustOS
-Thread-Topic: [PATCH v1] arm64: dts: meson-axg: reserve memory region for
- Amlogic TrustOS
-Thread-Index: AQHYqCKmlgn31IcXkUK0U/+U7ZMA5w==
-Date:   Thu, 4 Aug 2022 16:52:59 +0000
-Message-ID: <20220804165317.29086-1-ddrokosov@sberdevices.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 4 Aug 2022 12:56:15 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D56140A3
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 09:56:13 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b16so423098edd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 09:56:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9RAxd8vXCg6ebH7MqJTjtNEjn+NCrIjJbPyy/864Rdw=;
+        b=SgnT3/z7wOSRxmSgBsg2dLV8AI+Yk7NQTu0NY5LahlFhImWUqUw5E7Z7WnrfRXd/XG
+         j9QLj2tmr3MqrmL3EboqUn2ci+T4jLGjO3rmcP7CJ+ZmIg+gYe38yJHxcI2K9hZ42XuW
+         QHerwQ3wkF0tG2HuvqyFd7YawhKRJIMyLkJFjKZEqdwDTG7Br2VV6ZEhWT9ueGQjOgpp
+         O9PEcaDo3atSqwuw+u7N5ztcTrzocGJP+tL/MvNcsovqbZ6cWA0Zw6ZjqaohYCxnexvd
+         sKh2Sv8bi8FEv0LujC74uY8lfptluR76fuy+hYbM9+igE89s8b6fVN4Y2z86G0/uFmca
+         dd8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9RAxd8vXCg6ebH7MqJTjtNEjn+NCrIjJbPyy/864Rdw=;
+        b=jisDsEf+4IAKB4NTXCw831Tt7fjsGjP41U78VfdiFP75UKIyVP3SjYKO4NO7N3a5s7
+         fHnABwaSSSF0vnPCTY1i8JHcTQVZpNh5dukezTojZPFI2+8N0EHeOnQGxtLSwNabi+xA
+         khY06r22795neHwOsy5XDH2pu+2mUCNsK7PfLrEuX22QBlxlniQiWhvAWbZ+nRcuTidd
+         KV5q1bv+jKvqgNpoljI+jPBOQ01jcHw/LLVHCeMVmW5AoGreGSy0E3VWER4y8Otb66y4
+         tjr+a5s8pzO58kusOnj7y1zs2eCbLsyPOJp33OSHPwhk0Fslq+w8y/YTN7tTm4AbBwY6
+         xASw==
+X-Gm-Message-State: ACgBeo3SfQiBHGmwVXP2n372LYUepxpX1xdGH+N+lHWmUIQpzjG/2w0l
+        yyu0zVJ9NI/IsTDFWu0/Xfs8vA==
+X-Google-Smtp-Source: AA6agR4vqzFgi3ZOFoI9pHyekMbM4zYfttqGHcixJ/EQsRgF4Gxfs6K/naNbKjK6+z7G/bzY5AzqjA==
+X-Received: by 2002:a05:6402:888:b0:43c:fce0:2f0e with SMTP id e8-20020a056402088800b0043cfce02f0emr2907897edy.247.1659632172064;
+        Thu, 04 Aug 2022 09:56:12 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id bq7-20020a170906d0c700b0072f1d8e7301sm532588ejb.66.2022.08.04.09.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 09:56:11 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 19:56:09 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC] clk: qcom: common: Detach the power domain at the end of
+ probe
+Message-ID: <20220804165609.hbrcylpayu4ypsbt@linaro.org>
+References: <20220804103456.3176943-1-abel.vesa@linaro.org>
+ <CAA8EJpoYrXNBeZfDTAmjhsHaMqO+jeUVt4BtQkKy=T7Q0EuH8A@mail.gmail.com>
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/04 12:57:00 #20050432
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpoYrXNBeZfDTAmjhsHaMqO+jeUVt4BtQkKy=T7Q0EuH8A@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the all AXG SoC based boards, which run Amlogic vendor ATF and
-TrustOS this memory region 0x5300000-0x6300000 is reserved by BL32,
-so tag it as no-map in the kernel iomem.
+On 22-08-04 17:37:48, Dmitry Baryshkov wrote:
+> On Thu, 4 Aug 2022 at 13:35, Abel Vesa <abel.vesa@linaro.org> wrote:
+> >
+> > None of the CCs actually need the PD attached to their device,
+> > but rather some GDSCs registered by those CCs need that PD as a parent
+> > in order to propagate power gating and the performance state.
+> >
+> > So lets detach the PD from the CC right at the end of probe, after
+> > everything has been successfully set up.
+>
+> Would it still be possible to read the clock registers if we detach
+> the device from the domain?
+> I think it was the original issue behind putting the dispcc/videocc
+> into the MMCX domain: to be able to poke into the clock registers,
+> which are gated by the MMCX.
 
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- arch/arm64/boot/dts/amlogic/meson-axg.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
++Rajendra
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi b/arch/arm64/boot/d=
-ts/amlogic/meson-axg.dtsi
-index 3f5254eeb47b..1fa0d3805969 100644
---- a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-@@ -142,6 +142,12 @@ secmon_reserved: secmon@5000000 {
- 			reg =3D <0x0 0x05000000 0x0 0x300000>;
- 			no-map;
- 		};
-+
-+		/* 16 MiB reserved for Amlogic Trust OS (BL32) */
-+		secos_reserved: secos@5300000 {
-+			reg =3D <0x0 0x05300000 0x0 0x1000000>;
-+			no-map;
-+		};
- 	};
-=20
- 	scpi {
---=20
-2.36.0
+OK, so I might be wrong here, so I'll need to double check. But, AFAICT,
+today, most of the CCs devicetree nodes do not have a power-domain property.
+So I assuming the PD is never really needed for register access by the CC
+itself, but its only use is to be set as parent to those GDSCs that do
+not have specified a different parent.
+
+Again, I need to double check.
+
+>
+>
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>
+>
+> --
+> With best wishes
+> Dmitry

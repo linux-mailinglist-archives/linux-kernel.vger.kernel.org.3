@@ -2,121 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADF0589A47
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 12:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E302F589A4E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 12:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237860AbiHDKH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 06:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
+        id S232405AbiHDKM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 06:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232093AbiHDKHy (ORCPT
+        with ESMTP id S229469AbiHDKMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 06:07:54 -0400
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC2C17AA8;
-        Thu,  4 Aug 2022 03:07:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1659607643; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=K3qQct6hiCA/qe/3eqqnDutSYrR9u7uP3HOb7EIP8GEJqUAitwA91frWueKA3Mr9XKptJ6bpo6FhLheBB04Zgi+2fmlAtBxoD4y1q05l6/fk9IYKpTJnf687Gz8wLe9OWSaSwcQCg6cRz71LAILzPbIpeKu+HX/RA5ornVRRr54=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1659607643; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=BHejHdt53IEYuzqZbZN4EusFHlxvwpJaRPIFVXZsQ/w=; 
-        b=oA7dFRe5t/efFEy7oUCXGA+CSU5zAU+r4dZ5zGXI+ICM+7SHvMdFHQzrSlsCjYgx/6XvF4nQZ4ym2jGNiDAMSDeeqsGRRZAfL+IAiUq8TyqdbM817KrnAkY2/pxmJnZL9H8A0vSeLfrVX0ysZe2oWvbr51v/R+zujEzsPW5ZG+I=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=linux.beauty;
-        spf=pass  smtp.mailfrom=me@linux.beauty;
-        dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659607643;
-        s=zmail; d=linux.beauty; i=me@linux.beauty;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=BHejHdt53IEYuzqZbZN4EusFHlxvwpJaRPIFVXZsQ/w=;
-        b=XpS5AYaon+tYseVZnl44dhmDfl317SyeYKksKDmAij+hF8ZNQHj7flbeunxif3lN
-        f6DW50VFI4RnnL8davV2RenrhkQSR5Gxncnl1EAkDY0+LBzAHCALXqVnc2obmYGgTdK
-        8uJM9nU2fj1HhZcAFqV6c9gbGAaql7cqIK/jma54=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1659607640663544.5780582971333; Thu, 4 Aug 2022 03:07:20 -0700 (PDT)
-Date:   Thu, 04 Aug 2022 19:07:20 +0900
-From:   Li Chen <me@linux.beauty>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Frank Rowand" <frowand.list@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Li Chen" <lchen@ambarella.com>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "DTML" <devicetree@vger.kernel.org>,
-        "Linux-MM" <linux-mm@kvack.org>
-Message-ID: <1826852ea3a.10a917cc826728.6077661125986568031@linux.beauty>
-In-Reply-To: <CAK8P3a0zSGqj3YEi+i9yfSLk8-aJtyiY6Bj069cxCdErk81+cw@mail.gmail.com>
-References: <20220711122459.13773-1-me@linux.beauty> <20220711122459.13773-5-me@linux.beauty>
- <CAK8P3a2Mr0ZMXGDx6htYEbBBtm4mubk-meSASJjPRK1j1O-hEA@mail.gmail.com>
- <181efcca6ae.de84203d522625.7740936811073442334@linux.beauty>
- <CAK8P3a30o1RLifV1TMqDJ26vLhVdOzz3wP6yPrayLV2GPxUtwQ@mail.gmail.com> <18267b7a61f.12b26bd91245310.4476663913461696630@linux.beauty> <CAK8P3a0zSGqj3YEi+i9yfSLk8-aJtyiY6Bj069cxCdErk81+cw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] sample/reserved_mem: Introduce a sample of struct
- page and dio support to no-map rmem
+        Thu, 4 Aug 2022 06:12:53 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F191532DAA;
+        Thu,  4 Aug 2022 03:12:51 -0700 (PDT)
+Date:   Thu, 04 Aug 2022 10:12:48 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1659607970;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tLSZPZSjoAeTGrgSN5RmR7EL5cAJ9diYkxxZcNWNL4s=;
+        b=O5+10C1hO6tN8OpUQDe3V/QvDkB32GSgqx/TNSjBWdHtKDAdi7ri6Fz0OgoZyIZZlqwk04
+        EDyWgDpFUawpCZuyAMyQtMDWO3PQYQDXF9/v54Jjw3Sf4IBNf8kfVnuEFuGebXTaA4G5Kc
+        aKBkeqg+vft3LddCQYkEy/f1F1XfAuI0vJroz8q1ll4LtS8IkyUyrUcbAgco7eduL/c/hd
+        BB1kmuk6IAL4/iUQgDlVWianKoszxp5AQTaT0RYZgF1jpQvlQ3oy3VQMVpTPhf8JzBtJAb
+        ug/cgupC2PYoi8bN3TJbhocJgDGmDU+UhzsudhjeG72/h23m5MpMBNPMwDeNzw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1659607970;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tLSZPZSjoAeTGrgSN5RmR7EL5cAJ9diYkxxZcNWNL4s=;
+        b=VQAMonK1IeG501+VvO1wGyesc5mBrAC82ZCHzNPalzpLxmKOx1UNU67CohWLJovwiPyM69
+        iNUmKUOmvpt+L4Ag==
+From:   "tip-bot2 for Jason Wang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86: Fix various duplicate-word comment typos
+Cc:     Jason Wang <wangborong@cdjrlc.com>, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220715044809.20572-1-wangborong@cdjrlc.com>
+References: <20220715044809.20572-1-wangborong@cdjrlc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <165960796851.15455.16926739892196439639.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/cleanups branch of tip:
 
- ---- On Thu, 04 Aug 2022 17:24:20 +0900  Arnd Bergmann  wrote --- 
- > On Thu, Aug 4, 2022 at 9:17 AM Li Chen me@linux.beauty> wrote:
- > > ---- On Tue, 12 Jul 2022 16:50:46 +0900  Arnd Bergmann  wrote ---
- > >  > Does your hardware require a fixed address for the buffer? If it can be
- > >  > anywhere in memory (or at least within a certain range) but just has to
- > >  > be physically contiguous, the normal way would be to use a CMA area
- > >  > to allocate from, which gives you 'struct page' backed pages.
- > >
- > > CMA does support Direct I/O, but it has its own issue:
- > > It does not guarantee that the memory previously borrowed by the OS will be returned to the device.
- > >
- > > We've been plagued by examples like this in the past:
- > > Many other kernel modules/subsystems have already allocated much memory from both non-CMA and CMA memory,
- > > When our DSP driver got probed then, cma_alloc will fail in that non-CMA system memory is not enough
- > > for CMA memory to migrate.
- > 
- > This part should at least be possible to solve by declaring the amount
- > and location of
- > CMA areas in the right way. It's not great to fine-tune the DT for a
- > particular kernel's
- > use, but if you know which other drivers require CMA type allocations
- > you can find a lower
- > bound that should suffice.
+Commit-ID:     edf13ecbc8d68cc7462df9cae1f4a137df3b827c
+Gitweb:        https://git.kernel.org/tip/edf13ecbc8d68cc7462df9cae1f4a137df3b827c
+Author:        Jason Wang <wangborong@cdjrlc.com>
+AuthorDate:    Fri, 15 Jul 2022 12:48:09 +08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Thu, 04 Aug 2022 12:08:10 +02:00
 
-That's the problem, haha. End users(customers) may modprobe many other modules and modprobe our
-driver in the end. We cannot decide the probe order for end users.
+x86: Fix various duplicate-word comment typos
 
-Apart from our cases, I heard there are some other cases where cma_alloc failed even non-cma system memory has
-enough memory because pages in CMA memory are pinned and cannot move out of CMA. There are some fixes like
-1. move these memory out of CMA before pinned
-2. only allow non-long-time pinned memory allocation from CMA.
+[ mingo: Consolidated 4 very similar patches into one, it's silly to spread this out. ]
 
-But these two solutions are not merged into the mainline yet.
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20220715044809.20572-1-wangborong@cdjrlc.com
+---
+ arch/x86/kernel/amd_gart_64.c | 2 +-
+ arch/x86/kernel/aperture_64.c | 2 +-
+ arch/x86/kvm/vmx/nested.c     | 2 +-
+ arch/x86/platform/efi/efi.c   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
- > 
- > Most coherent allocations tend to be long-lived and only for very
- > small memory regions.
- > If you have another driver that uses large or periodic
- > dma_alloc_coherent() type allocations,
- > you can consider either giving that device its own CMA area, or fixing
- > it to use streaming
- > mappings.
-
-Device-wise CMA also suffers from the problems I mentioned, other modules/subsystems may have already
-alloc from this CMA area and refuse to return it back.
-
-Regards,
-Li
+diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_gart_64.c
+index 194d54e..19a0207 100644
+--- a/arch/x86/kernel/amd_gart_64.c
++++ b/arch/x86/kernel/amd_gart_64.c
+@@ -53,7 +53,7 @@ static u32 *iommu_gatt_base;		/* Remapping table */
+  * of only flushing when an mapping is reused. With it true the GART is
+  * flushed for every mapping. Problem is that doing the lazy flush seems
+  * to trigger bugs with some popular PCI cards, in particular 3ware (but
+- * has been also also seen with Qlogic at least).
++ * has been also seen with Qlogic at least).
+  */
+ static int iommu_fullflush = 1;
+ 
+diff --git a/arch/x86/kernel/aperture_64.c b/arch/x86/kernel/aperture_64.c
+index 7a5630d..4feaa67 100644
+--- a/arch/x86/kernel/aperture_64.c
++++ b/arch/x86/kernel/aperture_64.c
+@@ -36,7 +36,7 @@
+ /*
+  * Using 512M as goal, in case kexec will load kernel_big
+  * that will do the on-position decompress, and could overlap with
+- * with the gart aperture that is used.
++ * the gart aperture that is used.
+  * Sequence:
+  * kernel_small
+  * ==> kexec (with kdump trigger path or gart still enabled)
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index ab135f9..f0ba7da 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -2560,7 +2560,7 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 	 * bits which we consider mandatory enabled.
+ 	 * The CR0_READ_SHADOW is what L2 should have expected to read given
+ 	 * the specifications by L1; It's not enough to take
+-	 * vmcs12->cr0_read_shadow because on our cr0_guest_host_mask we we
++	 * vmcs12->cr0_read_shadow because on our cr0_guest_host_mask we
+ 	 * have more bits than L1 expected.
+ 	 */
+ 	vmx_set_cr0(vcpu, vmcs12->guest_cr0);
+diff --git a/arch/x86/platform/efi/efi.c b/arch/x86/platform/efi/efi.c
+index 1591d67..b6efd2b 100644
+--- a/arch/x86/platform/efi/efi.c
++++ b/arch/x86/platform/efi/efi.c
+@@ -192,7 +192,7 @@ static void __init do_add_efi_memmap(void)
+ }
+ 
+ /*
+- * Given add_efi_memmap defaults to 0 and there there is no alternative
++ * Given add_efi_memmap defaults to 0 and there is no alternative
+  * e820 mechanism for soft-reserved memory, import the full EFI memory
+  * map if soft reservations are present and enabled. Otherwise, the
+  * mechanism to disable the kernel's consideration of EFI_MEMORY_SP is

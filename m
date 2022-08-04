@@ -2,140 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074145898B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57F15898B8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239303AbiHDHwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
+        id S236920AbiHDHxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239285AbiHDHwm (ORCPT
+        with ESMTP id S239292AbiHDHxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:52:42 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9227965541;
-        Thu,  4 Aug 2022 00:52:40 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id iw1so18623001plb.6;
-        Thu, 04 Aug 2022 00:52:40 -0700 (PDT)
+        Thu, 4 Aug 2022 03:53:13 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFE965547;
+        Thu,  4 Aug 2022 00:53:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iMUaXhnaWpxJvgS+MeqwxUCzILa7Wb9dW1Vcvdl4nOE=;
-        b=HdFCAk4fUn+fKOKa1dZysuQQprUZxrEd1O4WOVFQgzl2c7q9vl/OqrY+okaZ7jShBd
-         7oHdrx1TX+qqEj0pwkIAlgAmAqlpDf+Ny2G8L0FfGaH5aWs5Wc93RsI2J7IoCM/KmtH+
-         ggkIFf815HUdsUcQ3X57CwwWtfE67tvSfjYH5oGgIjBqG0JFMlqrN9XGZYJeTvaxaFYg
-         nlGS1y9Fv5xH07wKQdwM3SqSdyybi9WLPykQNlzzlvwiQwVzuAl3kOk7AFR2WX46x+qp
-         iP5KhRijVi4Al3Z+FMpmFeMantDmkdThbwiVfWIYrMSRZp19QqIoR/PgutzoLdyvnYJO
-         DHYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iMUaXhnaWpxJvgS+MeqwxUCzILa7Wb9dW1Vcvdl4nOE=;
-        b=uAAI6MO6JSpBHP3V7BSphLymWsJyX7ZHpo05nNjWgClEp0DaPvEshTvXd2vB6oIiPB
-         IZWT3H89P5HbdWi9uBwJaC6CJ0xnCTXqBd/lZfeYW8Arx+OVu8WrEnvGbW6rzIFW/oOT
-         hMx9GM41jm0Le/iZpnd2mvhBKhHQUxjhVAAWWXklHveSurtF/Lf1qK3S560zwzZqEqP9
-         CzdqLqZQ1HeUOfPVhi1T68UUGI9wuamS0uzhuC4wvENUb66Ysd/RwJRfj9N1Miib4xVY
-         I/LpPwmxbd3cTf3AMrI9ENfHVXpbd1IHNe6NF19mJllcOe7m9QwDQ/pOwv+0bPeP6G8f
-         SkcA==
-X-Gm-Message-State: ACgBeo29lA4s8m8vAzON2j2iycJzcHcuj2xqwexwcFXO/h9OVEHCecXj
-        wICsMGRpMYvOwrpiKzg1NJU=
-X-Google-Smtp-Source: AA6agR4lWkygkbSLOGmLvhfLoZZ1ap2xxaXC37bp8VBvAYIvG5/TmsnHKJXZfbwZjTms0ZnnC5PqmQ==
-X-Received: by 2002:a17:902:efc3:b0:16f:1153:c509 with SMTP id ja3-20020a170902efc300b0016f1153c509mr686056plb.41.1659599560046;
-        Thu, 04 Aug 2022 00:52:40 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id m14-20020a170902f64e00b0016dc0a6f576sm115353plg.250.2022.08.04.00.52.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 00:52:39 -0700 (PDT)
-Message-ID: <41e0b2a0-c53d-870f-d619-4008eb222d42@gmail.com>
-Date:   Thu, 4 Aug 2022 15:52:30 +0800
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659599588; x=1691135588;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=I7OayC0sFap2AlYvZdR6JVxb0RZ2MlfjjD1PjQxCMdY=;
+  b=XjB1PrAdZHg2xDW9BssBu/9O1PdfeVyWyNKsJ+fpS/jDNr/RpftSC31D
+   T8eMtPYyTbOzsF45YiklsbR5Yf8CLqgvd5vY5YbMwm9FpImA7dNO4hdfe
+   cFpGr/DTzU+qOogyktzW2BhwVrU9RXIiBJiaaUvnlRZcLST69VdnzMr7g
+   k=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 04 Aug 2022 00:53:08 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 00:53:07 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 4 Aug 2022 00:53:07 -0700
+Received: from [10.216.4.234] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 4 Aug 2022
+ 00:53:03 -0700
+Message-ID: <7f7bd85a-2444-1939-4ac8-dbf2685eaf24@quicinc.com>
+Date:   Thu, 4 Aug 2022 13:23:00 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 7/7] KVM: VMX: Simplify capability check when handling
- PERF_CAPABILITIES write
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 1/2] drm/msm: Move hangcheck timer restart
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-References: <20220803192658.860033-1-seanjc@google.com>
- <20220803192658.860033-8-seanjc@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20220803192658.860033-8-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Rob Clark <robdclark@gmail.com>
+CC:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220803172302.1976981-1-robdclark@gmail.com>
+ <c80d70b6-a7ad-5900-ea7a-f0f2157e4a40@quicinc.com>
+ <CAF6AEGuDajmv=bnQ9hNgCbkB8ubpFhhoFZVL4881O=2B9xh+_Q@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAF6AEGuDajmv=bnQ9hNgCbkB8ubpFhhoFZVL4881O=2B9xh+_Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/8/2022 3:26 am, Sean Christopherson wrote:
-> Explicitly check for the absence of host support for LBRs or PEBS when
-> userspace attempts to enable said features by writing PERF_CAPABILITIES.
-> Comparing host support against the incoming value is unnecessary and
-> weird since the checks are buried inside an if-statement that verifies
-> userspace wants to enable the feature.
+On 8/4/2022 1:59 AM, Rob Clark wrote:
+> On Wed, Aug 3, 2022 at 12:52 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>> On 8/3/2022 10:53 PM, Rob Clark wrote:
+>>> From: Rob Clark <robdclark@chromium.org>
+>>>
+>>> Don't directly restart the hangcheck timer from the timer handler, but
+>>> instead start it after the recover_worker replays remaining jobs.
+>>>
+>>> If the kthread is blocked for other reasons, there is no point to
+>>> immediately restart the timer.  Fixes a random symptom of the problem
+>>> fixed in the next patch.
+>>>
+>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>> ---
+>>>    drivers/gpu/drm/msm/msm_gpu.c | 14 +++++++++-----
+>>>    1 file changed, 9 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+>>> index fba85f894314..8f9c48eabf7d 100644
+>>> --- a/drivers/gpu/drm/msm/msm_gpu.c
+>>> +++ b/drivers/gpu/drm/msm/msm_gpu.c
+>>> @@ -328,6 +328,7 @@ find_submit(struct msm_ringbuffer *ring, uint32_t fence)
+>>>    }
+>>>
+>>>    static void retire_submits(struct msm_gpu *gpu);
+>>> +static void hangcheck_timer_reset(struct msm_gpu *gpu);
+>>>
+>>>    static void get_comm_cmdline(struct msm_gem_submit *submit, char **comm, char **cmd)
+>>>    {
+>>> @@ -420,6 +421,8 @@ static void recover_worker(struct kthread_work *work)
+>>>        }
+>>>
+>>>        if (msm_gpu_active(gpu)) {
+>>> +             bool restart_hangcheck = false;
+>>> +
+>>>                /* retire completed submits, plus the one that hung: */
+>>>                retire_submits(gpu);
+>>>
+>>> @@ -436,10 +439,15 @@ static void recover_worker(struct kthread_work *work)
+>>>                        unsigned long flags;
+>>>
+>>>                        spin_lock_irqsave(&ring->submit_lock, flags);
+>>> -                     list_for_each_entry(submit, &ring->submits, node)
+>>> +                     list_for_each_entry(submit, &ring->submits, node) {
+>>>                                gpu->funcs->submit(gpu, submit);
+>>> +                             restart_hangcheck = true;
+>>> +                     }
+>>>                        spin_unlock_irqrestore(&ring->submit_lock, flags);
+>>>                }
+>>> +
+>>> +             if (restart_hangcheck)
+>>> +                     hangcheck_timer_reset(gpu);
+>>>        }
+>>>
+>>>        mutex_unlock(&gpu->lock);
+>>> @@ -515,10 +523,6 @@ static void hangcheck_handler(struct timer_list *t)
+>>>                kthread_queue_work(gpu->worker, &gpu->recover_work);
+>>>        }
+>>>
+>>> -     /* if still more pending work, reset the hangcheck timer: */
+>> In the scenario mentioned here, shouldn't we restart the timer?
+> yeah, actually the case where we don't want to restart the timer is
+> *only* when we schedule recover_work..
+>
+> BR,
+> -R
+Not sure if your codebase is different but based on msm-next branch, 
+when "if (fence != ring->hangcheck_fence)" is true, we now skip 
+rescheduling the timer. I don't think that is what we want. There should 
+be a hangcheck timer running as long as there is an active submit, 
+unless we have scheduled a recover_work here.
 
-If you mean this part in the KVM:
+-Akhil.
+>
+>> -Akhil.
+>>> -     if (fence_after(ring->fctx->last_fence, ring->hangcheck_fence))
+>>> -             hangcheck_timer_reset(gpu);
+>>> -
+>>>        /* workaround for missing irq: */
+>>>        msm_gpu_retire(gpu);
+>>>    }
+>>>
 
-	case MSR_IA32_PERF_CAPABILITIES: {
-		...
-		if (data & ~msr_ent.data)
-			return 1;
-		...
-
-then this patch brings a flaw, for example:
-
-a user space can successfully set 0x1 on a host that reports a value of 0x5,
-which should not happen since the semantics of 0x1 and 0x5 for LBR_FMT
-may be completely different from the guest LBR driver's perspective.
-
-For such a model-specific feature, it needs to write to PERF_CAPABILITIES
-the exact value reported by the host/kvm.
-
-A selftest is proposed in the hope of guarding this contract.
-
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/vmx/vmx.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index d7f8331d6f7e..0ada0ee234b7 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2323,15 +2323,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   		if (data && !vcpu_to_pmu(vcpu)->version)
->   			return 1;
->   		if (data & PMU_CAP_LBR_FMT) {
-> -			if ((data & PMU_CAP_LBR_FMT) !=
-> -			    (vmx_get_perf_capabilities() & PMU_CAP_LBR_FMT))
-> +			if (!(vmx_get_perf_capabilities() & PMU_CAP_LBR_FMT))
->   				return 1;
->   			if (!cpuid_model_is_consistent(vcpu))
->   				return 1;
->   		}
->   		if (data & PERF_CAP_PEBS_FORMAT) {
-> -			if ((data & PERF_CAP_PEBS_MASK) !=
-> -			    (vmx_get_perf_capabilities() & PERF_CAP_PEBS_MASK))
-> +			if (!(vmx_get_perf_capabilities() & PERF_CAP_PEBS_MASK))
->   				return 1;
->   			if (!guest_cpuid_has(vcpu, X86_FEATURE_DS))
->   				return 1;

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA92589E64
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EDE589E4B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239664AbiHDPKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
+        id S239548AbiHDPKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239339AbiHDPKE (ORCPT
+        with ESMTP id S238785AbiHDPJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:10:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3491A5FAC0;
-        Thu,  4 Aug 2022 08:09:58 -0700 (PDT)
+        Thu, 4 Aug 2022 11:09:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6896452FF0;
+        Thu,  4 Aug 2022 08:09:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA537B8256B;
-        Thu,  4 Aug 2022 15:09:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB34C4347C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9E4F6101A;
+        Thu,  4 Aug 2022 15:09:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA9BC433D7;
         Thu,  4 Aug 2022 15:09:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1659625795;
-        bh=OoTOgjpz5JFq6UJf0u64NVueuER3638cyeEWhnzjxUU=;
+        bh=Dh5hCxqjDHhUUABQ7LhlclsE5NhFFv8vFrTG0pCapLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JmfxhuYjg1145GVy3MogH8SsRBxtS78xFJ4D0gFXf0HG7VED0UmQzbIg8L4Z9BH97
-         6DWXHgCtFwwNlBqEWW+1MKcXr2C/2xyR3Z4ReFw+yzJwbs3uNIOidvnYUxCIINcjD/
-         mAHM9+y9dqv5gweh6PM+GbMRs9Sjm/nJoUcxR5nAeznBdX0d/K/yhstkzRRjXDcZVX
-         OO4tXahmfeNlTIAdNHRWgiO9pwmIWyJaTuiwm7eShthrwY9MQKXL0yCAxJbHet30+9
-         0u0LRQX47eCYJylOoWUfcpu4z4ijs8Ddc+QA2lwxcy/Egsbd2e9BRDflZXcbPdqtoh
-         TBRceERd6GN3Q==
+        b=XWsrMp4poB2jekVZPx7jyCTLXFEm4nqGvO+xkxyIGetdEyaqZteI30WdzR0tWbh2q
+         nL+uZQDMO3hLf/uNa/GxPfIyjGlfRW4vkj/tG6qf0cWVftsQSqYml0FvqsjT2BbgOG
+         o1yKjH1gbQ8vKdtVjDsethoEq0Z9+UeAvBFohNGuYpwIG/vYMiJl16NYRn64Tey7bP
+         saEyy08H0yrfeCjPTdRmvBSAMs87ZSWPWS2Ocz/G0h6qloj5HzBVEASvHYsEAAafFz
+         0PJlFrKw/3zIKtD8Vct2cBwpNM/tpZe+GMz2IBsfIbHuDPhTOTgzgftV+2wn9hsyWW
+         K+l0mCIrrOQqQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oJcUL-00069W-45; Thu, 04 Aug 2022 17:10:17 +0200
+        id 1oJcUL-00069Y-6e; Thu, 04 Aug 2022 17:10:17 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>
@@ -52,10 +52,10 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH v2 4/9] usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup
-Date:   Thu,  4 Aug 2022 17:09:56 +0200
-Message-Id: <20220804151001.23612-5-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v2 5/9] usb: dwc3: qcom: fix runtime PM wakeup
+Date:   Thu,  4 Aug 2022 17:09:57 +0200
+Message-Id: <20220804151001.23612-6-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220804151001.23612-1-johan+linaro@kernel.org>
 References: <20220804151001.23612-1-johan+linaro@kernel.org>
@@ -70,75 +70,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm dwc3 runtime-PM implementation checks the xhci
-platform-device pointer in the wakeup-interrupt handler to determine
-whether the controller is in host mode and if so triggers a resume.
+A device must enable wakeups during runtime suspend regardless of
+whether it is capable and allowed to wake the system up from system
+suspend.
 
-After a role switch in OTG mode the xhci platform-device would have been
-freed and the next wakeup from runtime suspend would access the freed
-memory.
-
-Note that role switching is executed from a freezable workqueue, which
-guarantees that the pointer is stable during suspend.
-
-Also note that runtime PM has been broken since commit 2664deb09306
-("usb: dwc3: qcom: Honor wakeup enabled/disabled state"), which
-incidentally also prevents this issue from being triggered.
-
-Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
-Cc: stable@vger.kernel.org      # 4.18
+Fixes: 2664deb09306 ("usb: dwc3: qcom: Honor wakeup enabled/disabled state")
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
-
-Changes in v2
- - new patch
-
- drivers/usb/dwc3/dwc3-qcom.c | 14 +++++++++++++-
- drivers/usb/dwc3/host.c      |  1 +
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ drivers/usb/dwc3/dwc3-qcom.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index e9364141661b..6884026b9fad 100644
+index 6884026b9fad..05b4666fde14 100644
 --- a/drivers/usb/dwc3/dwc3-qcom.c
 +++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -298,6 +298,14 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
- 	icc_put(qcom->icc_path_apps);
+@@ -397,7 +397,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+ 	dwc3_qcom_enable_wakeup_irq(qcom->ss_phy_irq, 0);
  }
  
-+/* Only usable in contexts where the role can not change. */
-+static bool dwc3_qcom_is_host(struct dwc3_qcom *qcom)
-+{
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-+
-+	return dwc->xhci;
-+}
-+
- static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+-static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
++static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
  {
- 	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-@@ -460,7 +468,11 @@ static irqreturn_t qcom_dwc3_resume_irq(int irq, void *data)
- 	if (qcom->pm_suspended)
- 		return IRQ_HANDLED;
+ 	u32 val;
+ 	int i, ret;
+@@ -416,7 +416,7 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+ 	if (ret)
+ 		dev_warn(qcom->dev, "failed to disable interconnect: %d\n", ret);
  
--	if (dwc->xhci)
-+	/*
-+	 * This is safe as role switching is done from a freezable workqueue
-+	 * and the wakeup interrupts are disabled as part of resume.
-+	 */
-+	if (dwc3_qcom_is_host(qcom))
- 		pm_runtime_resume(&dwc->xhci->dev);
- 
- 	return IRQ_HANDLED;
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index f56c30cf151e..f6f13e7f1ba1 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -135,4 +135,5 @@ int dwc3_host_init(struct dwc3 *dwc)
- void dwc3_host_exit(struct dwc3 *dwc)
- {
- 	platform_device_unregister(dwc->xhci);
-+	dwc->xhci = NULL;
+-	if (device_may_wakeup(qcom->dev)) {
++	if (wakeup) {
+ 		qcom->usb2_speed = dwc3_qcom_read_usb2_speed(qcom);
+ 		dwc3_qcom_enable_interrupts(qcom);
+ 	}
+@@ -426,7 +426,7 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+ 	return 0;
  }
+ 
+-static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
++static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
+ {
+ 	int ret;
+ 	int i;
+@@ -434,7 +434,7 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
+ 	if (!qcom->is_suspended)
+ 		return 0;
+ 
+-	if (device_may_wakeup(qcom->dev))
++	if (wakeup)
+ 		dwc3_qcom_disable_interrupts(qcom);
+ 
+ 	for (i = 0; i < qcom->num_clocks; i++) {
+@@ -945,9 +945,11 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+ static int __maybe_unused dwc3_qcom_pm_suspend(struct device *dev)
+ {
+ 	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
++	bool wakeup = device_may_wakeup(dev);
+ 	int ret = 0;
+ 
+-	ret = dwc3_qcom_suspend(qcom);
++
++	ret = dwc3_qcom_suspend(qcom, wakeup);
+ 	if (!ret)
+ 		qcom->pm_suspended = true;
+ 
+@@ -957,9 +959,10 @@ static int __maybe_unused dwc3_qcom_pm_suspend(struct device *dev)
+ static int __maybe_unused dwc3_qcom_pm_resume(struct device *dev)
+ {
+ 	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
++	bool wakeup = device_may_wakeup(dev);
+ 	int ret;
+ 
+-	ret = dwc3_qcom_resume(qcom);
++	ret = dwc3_qcom_resume(qcom, wakeup);
+ 	if (!ret)
+ 		qcom->pm_suspended = false;
+ 
+@@ -970,14 +973,14 @@ static int __maybe_unused dwc3_qcom_runtime_suspend(struct device *dev)
+ {
+ 	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
+ 
+-	return dwc3_qcom_suspend(qcom);
++	return dwc3_qcom_suspend(qcom, true);
+ }
+ 
+ static int __maybe_unused dwc3_qcom_runtime_resume(struct device *dev)
+ {
+ 	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
+ 
+-	return dwc3_qcom_resume(qcom);
++	return dwc3_qcom_resume(qcom, true);
+ }
+ 
+ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
 -- 
 2.35.1
 

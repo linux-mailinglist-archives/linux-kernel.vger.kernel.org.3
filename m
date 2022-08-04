@@ -2,151 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040AD589DD7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 16:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D75589DE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 16:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239825AbiHDOpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 10:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S239969AbiHDOui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 10:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239629AbiHDOpL (ORCPT
+        with ESMTP id S233403AbiHDOuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 10:45:11 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67F4111C
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 07:45:09 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id u9so23400480oiv.12
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 07:45:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=K/0tfswiWr5Lvpf3OZ7/6RjAIN83kdceEedNYhOi6eA=;
-        b=VylXISKjzqJ3TzMpV1KV0KUi1LcXcBr8J307PBKOuSQ5PWraDGavJxDfw10YupsHoq
-         dw9OOGSdjuBCUbxqdPULDLFntROHoS/8q/Dikm2cEqy6zK3fx/x7f7ix/2AX6La1R3Gs
-         RaZQ9sIKn9O2kd+IcsYVcXvFSu0MYPSryo5H9hS01ELGUu4er1EsgaGsh5zjfDIWcFmT
-         KHodrrilhqMZo3jhuPLJFD+D3q9uRtDZLsn2CN4o3nuI9hjGJB5EQb/6hvKTujeb6ASV
-         m0ceWQL1DoYkp0o9CD/QwbeQD6Hcz1JWtwLusDDqXIHpoBhKKLPVL9GnWgTFDjPmBCAt
-         MAUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=K/0tfswiWr5Lvpf3OZ7/6RjAIN83kdceEedNYhOi6eA=;
-        b=yPIFpQ84GvrYizSoBFnDZ6LWt6PptSJM8TCeQojxtPngpC0F1FYGkLernYJsNpN3Wb
-         PBg6iLfwpAJYNcaoZvAC+xfK823IjR1luMFpTw4PgYCe+VORjWfa6bUHqFk1c+FKFvfZ
-         foTScuA+FCOSi1D3osL7rxWi3IRUwua3bUaJlycEkVPw6F/SVzlZ5fJx/d3vkDhuqkWZ
-         pURqej173xRD9Fe6QTy8ew2BLozsyvhyAo3Ehs1Cd37iFzsRb4hcxYtkcrjioYwuKtRK
-         6jNXL6Vi9yvuu8A/anK5SjCl9KBPKboh35Ko5QpIxwElHaQNwAWQAzUYmA+yr0+zXgm9
-         giZg==
-X-Gm-Message-State: ACgBeo3gtdPwu1CG425lXAVYIfhrZDxW72glvsneZd7UQmmgPHRBbh/w
-        scf7IXJ6kFqqvob6wCyk588ZfepalFdqFDda2p7r
-X-Google-Smtp-Source: AA6agR7I9CdRAT5wDCPwT9z3xKVMiU8gzwI1WBTP3nOoKTCWY6IZrzIbofvjvb+LfxIgwdAMWUc6zKNd3SJp8T7chWU=
-X-Received: by 2002:a05:6808:2389:b0:33a:cbdb:f37a with SMTP id
- bp9-20020a056808238900b0033acbdbf37amr1062501oib.136.1659624309228; Thu, 04
- Aug 2022 07:45:09 -0700 (PDT)
+        Thu, 4 Aug 2022 10:50:35 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2068.outbound.protection.outlook.com [40.107.223.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED1513EAA
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 07:50:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JRRUEKC4men3xhsKO+vWRLeHcOAjC75lQ5C2FJKXQ9cdJkU4ZTQdveSgqrqkatCtjbBlKpyGho6lA3spyrcht07cksa6JmHsb/bvt1VvKR5xX/suqHlpSz/ilwllAOkmbrmsyqI7iyrTgtO2C+HiiL0MlVPDOCo4lWcSdf+BOvWov8lzwXMBrYRtnHW8thylVuWSBlJgbcaziM5WFI7dlkxRt8AEfo1BdSlVeyPzRGTRDNdjoibxYAW4UsGlKJ6wJZhoW+QD+OyOm3rAZKwBsrpdHf/zZ8I260wsb2mO5gAh+iQOTteTBNuoZdNdoOyti3ZK8Prw670RCGdK600w6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lVBcRVAx9X1uPZPiQV5Rqd5dySwPvCS21UiFAXXVZWA=;
+ b=UAzXegfOpu6V0vjsIYdEAqOKvDJPO8e4rvQbFDnFWfky1E854R7K+dxCmkSDVQXE9RhgJBEDq4BxZYIvCK1dJBJqFnnyZQ/tesor1iFrWrsMCGPQg+vnE4TQ8fwcV54CKOrBmSaGuoLrptj4p8mrtSBzGtdrn2gZFT6If3nxsqNukNpu8+K76RrGU7aoLKR2HcT7iSyp4rmAzCXU/TljZNinYg3tWiITz+aroXoB/52WSqyf8leB5sLVIt9jPyqc18bD8+5/Zafj+P5CYvlfBa9D1IqB7Z2Uq2LclVgvArzvC1IbzDpVicn8vjyPye76Lkw6QLeNcUwq+gfBzjK+pA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lVBcRVAx9X1uPZPiQV5Rqd5dySwPvCS21UiFAXXVZWA=;
+ b=YYGULDoGVEQZ2/17KPSwYSscX0oU6cmyx3BoKETUBLcWF0DXtHRTPlYifaC2Y172Zkq9vb5YLuvsRngilXK+RnvhSEI90PBWJI+TNzKApz6Vrqa7nlwFRxeN+6ef2/FYkOc6qmhP72FTo97vSXoK+KXqBtZKYV3Ux2qybD8W6EjQnrkkx6uOFcE0tQO8w9AwY6d94j9gY2NJhsu9ooKXkjZrtp1ZmavPFW6dGU0y8iD/UhBzeysWSQ1lox5F5iB4nyUlxMAggLh6qtOgxlZ4cUx6M4mYEmRAXF0gZA+1ekf6NCZ291sYvFjHGe+ug+MdebmYVPqwa8b7etee8u74Ng==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by LV2PR12MB5797.namprd12.prod.outlook.com (2603:10b6:408:17b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Thu, 4 Aug
+ 2022 14:50:30 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::1a7:7daa:9230:1372]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::1a7:7daa:9230:1372%7]) with mapi id 15.20.5504.014; Thu, 4 Aug 2022
+ 14:50:30 +0000
+Date:   Thu, 4 Aug 2022 11:50:29 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Oded Gabbay <oded.gabbay@gmail.com>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Subject: Re: New subsystem for acceleration devices
+Message-ID: <YuvctaLwRi+z0Gw4@nvidia.com>
+References: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
+ <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
+ <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com>
+ <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
+ <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
+X-ClientProxiedBy: MN2PR03CA0003.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::8) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <20220803050230.30152-1-yepeilin.cs@gmail.com> <20220803222343.31673-1-yepeilin.cs@gmail.com>
- <CAHC9VhSjA444kYPEsBwWz3fuvY7ohmYb-HKWej4EmBy4mbS4Fw@mail.gmail.com> <5756a75e-ea84-a04b-be07-90e7ee6626d6@kernel.dk>
-In-Reply-To: <5756a75e-ea84-a04b-be07-90e7ee6626d6@kernel.dk>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 4 Aug 2022 10:44:58 -0400
-Message-ID: <CAHC9VhTKtNFLG-2NGrnR0xHnj09WR_100C75aD73+mmn0CKkCA@mail.gmail.com>
-Subject: Re: [PATCH v2] audit, io_uring, io-wq: Fix memory leak in
- io_sq_thread() and io_wqe_worker()
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Eric Paris <eparis@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-audit@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 52fa82fd-9f11-489a-8f58-08da7628ad40
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5797:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YzdrC32APWDk2KLpGY5c5zyCgbLJYkBS0iBQcsfWpcEmK911uphlrya2BIGPGHRljo2feCYMhIQVKVz3pOeDfUwtpmFquKhls195ivAZ17U594FlWT46Its9puqVHBgCsMTjXNQUPxTNP5AKB5iCCsQIklAOecuIxyvKT5Y1ooYPA2wn47euFApTN4sj461g818DDiCumpJL4JYuTpPWVz28vNXe5pMFOSvkXSPQrw+UrS8AzUogpMQZZAAeIfxLioGeCFfpkxBZF88wJfei7IOkHzuS4ZOxz7L0PQWG0kyPRNoNIxL20x8b6j0fDwrhljJs5kXi/jjRuHMyMHTskeC0k3VK+sy4aYxuoJooiHKD/Z3umXdEzCHuPuBomBU7IFaTL3U503iWfaG0CVqe4IkUMhSK1pDJWuPxL0+iMmjN2+LBhu4sxTwO4hGdo7DTxPFMNEkYS2LYdhIqyfbA4mdApDMIf0MO0lC2yrKvIltrc2XoKTjBl7Q5tfjPhbUcDi7+vxuHEXvoh9JNIWF74kit+izKa6ugos/fhSR8BEnmI8iAFBkCr9ggkrwK5TE1OxozEkkCfI2Evg28N6Gx0xG1O+QUPUUur39WDU+c0vgbdEXeZE0lWaUHOdAap5FqhpHyuXacLmF+5cMY8QFRLejMKJzQGkptUZtFvAO8Uo4UPosN6fGwcywwFKs4gzbaUUa7dtFWsOl0qRNp/YVY+r8x43wPPIoCouG5nt4Wvy59vH5cOVqygQD+figOQ/V6cqtuRBEZlTwwOo+vHEIFVTWZoYUcpBM7mM0nWRF6q4g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(396003)(366004)(346002)(136003)(38100700002)(8936002)(186003)(2616005)(4326008)(36756003)(316002)(66556008)(66476007)(6916009)(54906003)(8676002)(66946007)(86362001)(6512007)(6506007)(6486002)(478600001)(2906002)(5660300002)(41300700001)(26005)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vRaHFA8eun9H00hh9xMg09skvdq30ZR7rpUrUVsqL5dcd4idUgNzOlycllMX?=
+ =?us-ascii?Q?9UD7VKRa517e7QtzK19Kfe5rMZj+H0X9B1lK562K5M/J+V76lZLXGMRvuS/g?=
+ =?us-ascii?Q?ufX1PzMMQUJq3K0g96rDwSykMRksk9LdqNoQ+crMtS1IvL2mBOMoCaD0O2PL?=
+ =?us-ascii?Q?nRtM7DvgJz6noK+pg+Uo0VPYHvKHPU5SMtuxZ8LYoo9pPj0eyzhoeb4TKL35?=
+ =?us-ascii?Q?JSaeDJfJsTFkQzSdWHFAAZD+B90ctb43UnUdLvMm81nEd8XBdvUbF1FD9PPT?=
+ =?us-ascii?Q?QEMxDu0m7DbScZ0tiqlFzqpbKoOwoYVASfb9HIytIct6QE1+xLpqfgFatVjc?=
+ =?us-ascii?Q?zWAkHz803VeMl14vpZ+esr+9yqddcXIur9CgdnhT+RD74LAcSoxwh5Ul+RdB?=
+ =?us-ascii?Q?XNc1hRFikT/fGbPnUnPYFBRDZ+qdAcFdn6dZdf49mPskWJqoJC5E10RMncRN?=
+ =?us-ascii?Q?f7g2lw9eMY6iZUf9YnK3CokhmgSPWbUX5lLCG9umirO5daCAWQXgrIGQf7FU?=
+ =?us-ascii?Q?JJ1C5S8PZEEYOGiZb0T2c36KHJRgFo+Tj4qwyYajS0BFAKNrWl9c2kecU73a?=
+ =?us-ascii?Q?g9ZBlyYn3O/Tc2GozDP0/69QhES52q6ckokUxUlTqZVyK7Evr5NdQY+a2lrN?=
+ =?us-ascii?Q?n+GWomEMmRZ6Q7h8/Fj6leh5vEN5KrW3L1+i+m+rtQ5y+gSsNIn0WO2ZoE5A?=
+ =?us-ascii?Q?NUF3P4dp38VLuPNWT8IEqimEVQpL1xsOK5LBwzTtz5bkZs58DlVRoerca72b?=
+ =?us-ascii?Q?Ac6fNXdVoIxHxae1NJWwoLXTG1wzATnTNXgyipokD/zfcHNWAtCdQmHv9s0S?=
+ =?us-ascii?Q?ynAhI+URErmQ53nrlui5xY4jgrLPjYctkDSkrBUCWX7ib1Y7dQf1Azt3tG3R?=
+ =?us-ascii?Q?1pJrDXsX4+o1osh56m7rvSePufbnZpDvvfNSBw+LkT93aAQk+8OCK2HTwlyA?=
+ =?us-ascii?Q?OuXxSCMc7DTxae5IWt6mFkaqVrFupgPro0+mTXK011IbfLPqU0SUkftGwRpG?=
+ =?us-ascii?Q?dq+HmJjTJazFbo8H0rdER9A9Ol6cT/VusJSgBv28aQsDR7VdhXNr5oWVDbU+?=
+ =?us-ascii?Q?K92CA2q5JB/H09BNWMNonupQe+se+Z2hbSnBFtCeIfuO9ODcrEGzXTH3sKYh?=
+ =?us-ascii?Q?Qrw8d5RwjkjRmJGDi3og0PNAU7ZLAEh3sHldipjbg5ZjT5OfH0toqClm8YcS?=
+ =?us-ascii?Q?toqwyb+Hxk9HYBjGuP1dZQNr/ipjOTiChY3NfF8g4ll8KKDtiR4KZc2sdTrx?=
+ =?us-ascii?Q?j3owilGVxlhzePREhh4sJwxgDodvMAfseO39wJf1A6+7HPj5Z6+dYZROXtj0?=
+ =?us-ascii?Q?QSPuwa/yjVj3ztRgZNgt9NqsSFRPDksBBBbsNFnthVkVnx1S5SBS4zqPtKCD?=
+ =?us-ascii?Q?FpgUEwpinqgsT/Xlwc/Ivn1x/9ijQTGAIsRZclYWLd4UKPyTawxq17TI0foY?=
+ =?us-ascii?Q?WQiSrnEI+eQstS5gCMovQNl2Ajjow/ZUC/a65KgG3B7CZAzbVpiCKlJ8Gg5R?=
+ =?us-ascii?Q?L960dMnKlru5VXzERfQKk2XQ9LXV0iCuL0u1uVanyd59fZelZt9w039vaX0e?=
+ =?us-ascii?Q?WLUT3BU3OhYejX62oQT077OfM8CjSEY6FcZB9eJT?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 52fa82fd-9f11-489a-8f58-08da7628ad40
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2022 14:50:30.6160
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VzUMDY1SMTr4qcm5NYmFlja4S6KaVGOFsFLr+TzP+LElg2+a8UJq4drZxM4RfZrK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5797
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 10:32 AM Jens Axboe <axboe@kernel.dk> wrote:
-> On 8/4/22 7:51 AM, Paul Moore wrote:
-> > On Wed, Aug 3, 2022 at 6:24 PM Peilin Ye <yepeilin.cs@gmail.com> wrote:
-> >>
-> >> From: Peilin Ye <peilin.ye@bytedance.com>
-> >>
-> >> Currently @audit_context is allocated twice for io_uring workers:
-> >>
-> >>   1. copy_process() calls audit_alloc();
-> >>   2. io_sq_thread() or io_wqe_worker() calls audit_alloc_kernel() (which
-> >>      is effectively audit_alloc()) and overwrites @audit_context,
-> >>      causing:
-> >>
-> >>   BUG: memory leak
-> >>   unreferenced object 0xffff888144547400 (size 1024):
-> >> <...>
-> >>     hex dump (first 32 bytes):
-> >>       00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00  ................
-> >>       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >>     backtrace:
-> >>       [<ffffffff8135cfc3>] audit_alloc+0x133/0x210
-> >>       [<ffffffff81239e63>] copy_process+0xcd3/0x2340
-> >>       [<ffffffff8123b5f3>] create_io_thread+0x63/0x90
-> >>       [<ffffffff81686604>] create_io_worker+0xb4/0x230
-> >>       [<ffffffff81686f68>] io_wqe_enqueue+0x248/0x3b0
-> >>       [<ffffffff8167663a>] io_queue_iowq+0xba/0x200
-> >>       [<ffffffff816768b3>] io_queue_async+0x113/0x180
-> >>       [<ffffffff816840df>] io_req_task_submit+0x18f/0x1a0
-> >>       [<ffffffff816841cd>] io_apoll_task_func+0xdd/0x120
-> >>       [<ffffffff8167d49f>] tctx_task_work+0x11f/0x570
-> >>       [<ffffffff81272c4e>] task_work_run+0x7e/0xc0
-> >>       [<ffffffff8125a688>] get_signal+0xc18/0xf10
-> >>       [<ffffffff8111645b>] arch_do_signal_or_restart+0x2b/0x730
-> >>       [<ffffffff812ea44e>] exit_to_user_mode_prepare+0x5e/0x180
-> >>       [<ffffffff844ae1b2>] syscall_exit_to_user_mode+0x12/0x20
-> >>       [<ffffffff844a7e80>] do_syscall_64+0x40/0x80
-> >>
-> >> Then,
-> >>
-> >>   3. io_sq_thread() or io_wqe_worker() frees @audit_context using
-> >>      audit_free();
-> >>   4. do_exit() eventually calls audit_free() again, which is okay
-> >>      because audit_free() does a NULL check.
-> >>
-> >> As suggested by Paul Moore, fix it by deleting audit_alloc_kernel() and
-> >> redundant audit_free() calls.
-> >>
-> >> Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
-> >> Suggested-by: Paul Moore <paul@paul-moore.com>
-> >> Cc: stable@vger.kernel.org
-> >> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-> >> ---
-> >> Change since v1:
-> >>   - Delete audit_alloc_kernel() (Paul Moore)
-> >>
-> >>  fs/io-wq.c            |  3 ---
-> >>  fs/io_uring.c         |  4 ----
-> >>  include/linux/audit.h |  5 -----
-> >>  kernel/auditsc.c      | 25 -------------------------
-> >>  4 files changed, 37 deletions(-)
-> >
-> > This looks good to me, thanks!  Although it looks like the io_uring
-> > related changes will need to be applied by hand as they are pointing
-> > to the old layout under fs/ as opposed to the newer layout in
-> > io_uring/ introduced during this merge window.
-> >
-> > Jens, did you want to take this via the io_uring tree or should I take
-> > it via the audit tree?  If the latter, an ACK would be appreciated, if
-> > the former my ACK is below.
-> >
-> > Acked-by: Paul Moore <paul@paul-moore.com>
->
-> Probably better if I take it, since I need to massage it into the
-> current tree anyway. We can then use this one as the base for the stable
-> backports that are going to be required.
+On Thu, Aug 04, 2022 at 10:43:42AM +0300, Oded Gabbay wrote:
 
-Sounds good to me, thanks everyone.
+> After all, memory management services, or common device chars handling
+> I can get from other subsystems (e.g. rdma) as well. I'm sure I could
+> model my uAPI to be rdma uAPI compliant (I can define proprietary uAPI
+> there as well), but this doesn't mean I belong there, right ?
 
--- 
-paul-moore.com
+You sure can, but there is still an expectation, eg in RDMA, that your
+device has a similarity to the established standards (like roce in
+habana's case) that RDMA is geared to support.
+
+I think the the most important thing to establish a new subsystem is
+to actually identify what commonalities it is supposed to be
+providing. Usually this is driven by some standards body, but the
+AI/ML space hasn't gone in that direction at all yet.
+
+We don't need a "subsystem" to have a bunch of drivers expose chardevs
+with completely unique ioctls.
+
+The flip is true of DRM - DRM is pretty general. I bet I could
+implement an RDMA device under DRM - but that doesn't mean it should
+be done.
+
+My biggest concern is that this subsystem not turn into a back door
+for a bunch of abuse of kernel APIs going forward. Though things are
+better now, we still see this in DRM where expediency or performance
+justifies hacky shortcuts instead of good in-kernel architecture. At
+least DRM has reliable and experienced review these days.
+
+Jason

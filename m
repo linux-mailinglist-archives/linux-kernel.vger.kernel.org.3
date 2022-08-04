@@ -2,96 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250FF58982D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2AC6589834
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239023AbiHDHKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S239015AbiHDHN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbiHDHKv (ORCPT
+        with ESMTP id S230001AbiHDHN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:10:51 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550862CE04;
-        Thu,  4 Aug 2022 00:10:47 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id j17so2849222pgl.5;
-        Thu, 04 Aug 2022 00:10:47 -0700 (PDT)
+        Thu, 4 Aug 2022 03:13:26 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485D4606A8;
+        Thu,  4 Aug 2022 00:13:25 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id kb8so20678816ejc.4;
+        Thu, 04 Aug 2022 00:13:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Msx+MTdWqnPNVUHp+3FfvLfdSxDAnztRmbALqvTfmJc=;
-        b=ee2B6ZmuD7w/b216B4sfnS7nxgF19nbbPD5seH0PzGR35P0l0m9VVe9qFY5joUzJwv
-         iGIgbUoJeOoPnK8RYddMDCWsam2EAdTDUk+2AAnJFInausC/w4mQ2e9JWHj5oNqpLmJM
-         ZmraEjxD8qh3F/SCH81nNk09N2xF+KP95AbrPc1phVtNBvj5AX3qcNeulUAWJ7Hymogk
-         VqWvw5PYeg9pv95ntmSIiWZUY7COS9mMSx+VnBuEmtTMpgIUnMguWM3fOELjfqr08cB9
-         YBCc9XKnWP8+/2JP25FF31wt0Z5iUujxqEQEuxCTiUrEDXf51d/LCk8VLAdiABIOIjqV
-         3uTw==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc;
+        bh=3YvlPtzAAZUqzmZnRdFclgixc3h9aOjUwqn3zpjfevE=;
+        b=LVotmRHO7gz0Ww4OVBW3Kw8b2lDL+zylY6Oi1az/4NELdBMEMnNpO3cOZcRLx86Vw/
+         fYGEJnf9qR3pzDFHOSisjcbXJi8XGEE2yqsy5UKVE52KeGbWoa8DSni6oFQXSOSv/E1K
+         CmVeKezBXsjRrnFIMPs/KUNpBbwZBr9xfaTpRXhy52QUYM1SA5Pn66fZpbZ7+EJrfRYy
+         ufwTWNS+8K8xakGnLnMgB3a3XZltpUejuMhBvSE0yU7Xvrrmtr7bqoNe8Gb4R1P42cvK
+         vgDGf6FMVgNwxiI/D1SofOsfx6b7mutKfW9XtM7ea0FW9qL1MFQF3DlT0xK1JjRwXHqd
+         FOOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Msx+MTdWqnPNVUHp+3FfvLfdSxDAnztRmbALqvTfmJc=;
-        b=MT1h+TG2A44d4eNya5+1LTqanxdXxxTxNmEerBcgl7JFD9bC9Q75X89Yfb0Lvfmuml
-         qTfgFiq8DTX73f1YH6q1rgqdvursgeQ3bZ9lNhfir1eK0PdLTJ7YkaUMCZSER93WhTSi
-         oEOyDEgF9cyWSqNo4YrdBh/iOUfGGRJK6n80smwonPR/wzJIZhTjWCRSDkIKHHpalrw/
-         VP5bGqjaN2tpfwrB0A4d2YoxLn2AJQgdU5bUeuiWmWDUhi2LfxpOsi+TLR6mQryo+FuG
-         /33rK0j0lMQN1Y29cy+68KPXAkUZVxG2EF9jFsjNaf9xt8pDf4jIQ+yZxV+4/JJdtjFF
-         GoPQ==
-X-Gm-Message-State: ACgBeo3+WmETvhCNOpd8cbLkeWTKEUIVfAZjqWbDfwJWrqws9MwBYB84
-        VQ3Xv9EGg91MSI3jdewWT1k=
-X-Google-Smtp-Source: AA6agR4epr3dQoXSYo3tVKgoUy+uKNO2hxFagEdJ8l6v4De0QEoIfT716hYj4Pnm1/vc1DQPzChKgQ==
-X-Received: by 2002:a63:e343:0:b0:41c:d5cd:a39 with SMTP id o3-20020a63e343000000b0041cd5cd0a39mr562084pgj.512.1659597046489;
-        Thu, 04 Aug 2022 00:10:46 -0700 (PDT)
-Received: from localhost ([192.55.54.49])
-        by smtp.gmail.com with ESMTPSA id n15-20020a056a00212f00b0052deda6e3d2sm137803pfj.98.2022.08.04.00.10.45
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc;
+        bh=3YvlPtzAAZUqzmZnRdFclgixc3h9aOjUwqn3zpjfevE=;
+        b=oquVCjCJlfjpwFNJt8cuWUFixwD0JCga6X1dhWH0UU5uOJg5a+aq7QwGSo7WYc7O2O
+         AfdBiX9lizx1OOcY8s43JVziLncY1D6erM1CfVlw/c5azEkaET9iDUnaIs7nTCCLCtEu
+         P3PM4RUhmeVpDy2tSJ2rEVprIOPAf3kB1VP2zKnwcbkXApXHP+c6EfkQU/0wdrRt0pJ8
+         W/B4gpDTRErZ2UcuzGb0+Me4vqhH/Zd1Jl93A+hjZVecLAv454Dxdd92yxE1AopM7daO
+         4cRWCsojNp1HBG942zBDH3rxWcrjbBGa9BCncbeKsWCzexpcI/Tt95Jy6NWtEhoNreCu
+         P44w==
+X-Gm-Message-State: ACgBeo1t8W92jYnEmnOtdiWomexW7lseLkU9dIwzaQO+3p6CMhT6/Wzs
+        pL8GdArm4U6zMqBy9OlecLg=
+X-Google-Smtp-Source: AA6agR5/2TFW6vMzbPBpIdm0vp1cBA3HIBmNbeh6YfmNg9r7Kpe3LkFSh5Y+0WPVFnBtQXY15K/ZYA==
+X-Received: by 2002:a17:907:a0c6:b0:72e:ee9a:cf89 with SMTP id hw6-20020a170907a0c600b0072eee9acf89mr396089ejc.43.1659597203811;
+        Thu, 04 Aug 2022 00:13:23 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id dc3-20020a170906c7c300b0073093eaf53esm11889ejb.131.2022.08.04.00.13.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 00:10:45 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 00:10:44 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        isaku.yamahata@gmail.com
-Subject: Re: [PATCH v7 07/14] KVM: Use gfn instead of hva for
- mmu_notifier_retry
-Message-ID: <20220804071044.GA4091749@ls.amr.corp.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-8-chao.p.peng@linux.intel.com>
+        Thu, 04 Aug 2022 00:13:23 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 4 Aug 2022 09:13:21 +0200
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] libbpf: ensure functions with always_inline attribute
+ are inline
+Message-ID: <YutxkVTxtCgVwBiq@krava>
+References: <20220803151403.793024-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220706082016.2603916-8-chao.p.peng@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220803151403.793024-1-james.hilliard1@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -102,54 +82,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 04:20:09PM +0800,
-Chao Peng <chao.p.peng@linux.intel.com> wrote:
+On Wed, Aug 03, 2022 at 09:14:03AM -0600, James Hilliard wrote:
+> GCC expects the always_inline attribute to only be set on inline
+> functions, as such we should make all functions with this attribute
+> use the __always_inline macro which makes the function inline and
+> sets the attribute.
+> 
+> Fixes errors like:
+> /home/buildroot/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_tracing.h:439:1: error: ‘always_inline’ function might not be inlinable [-Werror=attributes]
+>   439 | ____##name(unsigned long long *ctx, ##args)
+>       | ^~~~
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - use __always_inline macro
 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 0bdb6044e316..e9153b54e2a4 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1362,10 +1362,8 @@ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
->  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
->  #endif
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+jirka
+
+> ---
+>  tools/lib/bpf/bpf_tracing.h | 14 +++++++-------
+>  tools/lib/bpf/usdt.bpf.h    |  4 ++--
+>  2 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+> index 43ca3aff2292..5fdb93da423b 100644
+> --- a/tools/lib/bpf/bpf_tracing.h
+> +++ b/tools/lib/bpf/bpf_tracing.h
+> @@ -426,7 +426,7 @@ struct pt_regs;
+>   */
+>  #define BPF_PROG(name, args...)						    \
+>  name(unsigned long long *ctx);						    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static __always_inline typeof(name(0))					    \
+>  ____##name(unsigned long long *ctx, ##args);				    \
+>  typeof(name(0)) name(unsigned long long *ctx)				    \
+>  {									    \
+> @@ -435,7 +435,7 @@ typeof(name(0)) name(unsigned long long *ctx)				    \
+>  	return ____##name(___bpf_ctx_cast(args));			    \
+>  	_Pragma("GCC diagnostic pop")					    \
+>  }									    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static __always_inline typeof(name(0))					    \
+>  ____##name(unsigned long long *ctx, ##args)
 >  
-> -void kvm_inc_notifier_count(struct kvm *kvm, unsigned long start,
-> -				   unsigned long end);
-> -void kvm_dec_notifier_count(struct kvm *kvm, unsigned long start,
-> -				   unsigned long end);
-> +void kvm_inc_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end);
-> +void kvm_dec_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end);
+>  struct pt_regs;
+> @@ -460,7 +460,7 @@ struct pt_regs;
+>   */
+>  #define BPF_KPROBE(name, args...)					    \
+>  name(struct pt_regs *ctx);						    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static __always_inline typeof(name(0))					    \
+>  ____##name(struct pt_regs *ctx, ##args);				    \
+>  typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  {									    \
+> @@ -469,7 +469,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  	return ____##name(___bpf_kprobe_args(args));			    \
+>  	_Pragma("GCC diagnostic pop")					    \
+>  }									    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static __always_inline typeof(name(0))					    \
+>  ____##name(struct pt_regs *ctx, ##args)
 >  
->  long kvm_arch_dev_ioctl(struct file *filp,
->  			unsigned int ioctl, unsigned long arg);
-
-The corresponding changes in kvm_main.c are missing.
-
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index b2c79bef61bd..0184e327f6f5 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -711,8 +711,7 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
-        kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
- }
- 
--void kvm_inc_notifier_count(struct kvm *kvm, unsigned long start,
--                                  unsigned long end)
-+void kvm_inc_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end)
- {
-        /*
-         * The count increase must become visible at unlock time as no
-@@ -786,8 +785,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
-        return 0;
- }
- 
--void kvm_dec_notifier_count(struct kvm *kvm, unsigned long start,
--                                  unsigned long end)
-+void kvm_dec_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end)
- {
-        /*
-         * This sequence increase will notify the kvm page fault that
-
-
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+>  #define ___bpf_kretprobe_args0()       ctx
+> @@ -484,7 +484,7 @@ ____##name(struct pt_regs *ctx, ##args)
+>   */
+>  #define BPF_KRETPROBE(name, args...)					    \
+>  name(struct pt_regs *ctx);						    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static __always_inline typeof(name(0))					    \
+>  ____##name(struct pt_regs *ctx, ##args);				    \
+>  typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  {									    \
+> @@ -540,7 +540,7 @@ static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, ##args)
+>  #define BPF_KSYSCALL(name, args...)					    \
+>  name(struct pt_regs *ctx);						    \
+>  extern _Bool LINUX_HAS_SYSCALL_WRAPPER __kconfig;			    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static __always_inline typeof(name(0))					    \
+>  ____##name(struct pt_regs *ctx, ##args);				    \
+>  typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  {									    \
+> @@ -555,7 +555,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  		return ____##name(___bpf_syscall_args(args));		    \
+>  	_Pragma("GCC diagnostic pop")					    \
+>  }									    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static __always_inline typeof(name(0))					    \
+>  ____##name(struct pt_regs *ctx, ##args)
+>  
+>  #define BPF_KPROBE_SYSCALL BPF_KSYSCALL
+> diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
+> index 4f2adc0bd6ca..fdfd235e52c4 100644
+> --- a/tools/lib/bpf/usdt.bpf.h
+> +++ b/tools/lib/bpf/usdt.bpf.h
+> @@ -232,7 +232,7 @@ long bpf_usdt_cookie(struct pt_regs *ctx)
+>   */
+>  #define BPF_USDT(name, args...)						    \
+>  name(struct pt_regs *ctx);						    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static __always_inline typeof(name(0))					    \
+>  ____##name(struct pt_regs *ctx, ##args);				    \
+>  typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  {									    \
+> @@ -241,7 +241,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
+>          return ____##name(___bpf_usdt_args(args));			    \
+>          _Pragma("GCC diagnostic pop")					    \
+>  }									    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static __always_inline typeof(name(0))					    \
+>  ____##name(struct pt_regs *ctx, ##args)
+>  
+>  #endif /* __USDT_BPF_H__ */
+> -- 
+> 2.34.1
+> 

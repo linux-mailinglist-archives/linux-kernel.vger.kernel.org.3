@@ -2,354 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECF158A148
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 21:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC81C58A153
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 21:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237920AbiHDTcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 15:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
+        id S236845AbiHDTik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 15:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbiHDTb5 (ORCPT
+        with ESMTP id S233658AbiHDTig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 15:31:57 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE45D8A
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 12:31:55 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id z4so890733ljn.8
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 12:31:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=chkiXuTSMte5/THSO1tKei1y+9khIVgeexFrnoY+bEQ=;
-        b=eRQtWhnDrpUQxTRxk74hhVpjgWMp66pOQsJ5r2WONBpJj4FuwPSv4IZeuBwPkYATDM
-         CsON1/KkYaNL8vB/+uLkaJImNlniLAroOrxN589qcDVEwBXoAQL0dCR9ZW6QvgC4/A16
-         3/pmQOoBcuIhdHsIFh0Vr50UF2T6C/HXkgirCLP+eGQvO1HPC7KVT2qhjrSqsI1SbafK
-         4Fn1AdyAxbbB/qJkHgofF4AXnKfItvAccMh72hSznZWlwFztGeF0xb7niju22v6cJyih
-         LehffY7OiQglwW3QsUUARwKXl0QxeKib7P7ZeN+Le6WXIcl19XzgOn+rXX7d2zlvEFdy
-         coKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=chkiXuTSMte5/THSO1tKei1y+9khIVgeexFrnoY+bEQ=;
-        b=D/u7sNUH8o8wre5fvSqtGMGp2vnCLCvIT9g/T/+PJqiJsvx970uYnL8fdYrsVCDkF0
-         q3svAhG8IuXuLlUZUdXRTuaDbU8Ks0oFdxasuqnQlNMOMwQP24rXRhzbiVEBF+mBnL9N
-         hsKOpTEmTUMDPdFMrjbJRSZRLIeG9cVD6ddUcR4RsRRPrivxzNwDYRhPX75gyqnGwkUn
-         C49XGzDyTvaQnhx09+TPBeLwyygwQUmof52QV4y1sjNAbnVzAdtiE0NLKn+5vydHIAw7
-         Y4B58EyGLMD4TMYuAwXVCpiuWVGuMhKghdbwI2wgQNLKtuTFcnqexAtNusB7RcVWm7/f
-         lrVw==
-X-Gm-Message-State: ACgBeo35TqyUe/emzEMpx1pxsysljxXB6KdOcL1BMJwVuiZN3ZTkjTOZ
-        Hq+D/QCX8OK+onDvSYgZYQ2bTg==
-X-Google-Smtp-Source: AA6agR5FBNHMWUF39W4eHNXQwadDmXYbh6xjHi7hmIYySZLly6YhNzTJWxBc2WinoFioVm2jq4OlPg==
-X-Received: by 2002:a2e:a7cf:0:b0:25d:9fe6:7065 with SMTP id x15-20020a2ea7cf000000b0025d9fe67065mr1076334ljp.138.1659641513943;
-        Thu, 04 Aug 2022 12:31:53 -0700 (PDT)
-Received: from [10.43.1.253] ([83.142.187.84])
-        by smtp.gmail.com with ESMTPSA id z5-20020a05651c11c500b0025e505fef30sm209203ljo.63.2022.08.04.12.31.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 12:31:53 -0700 (PDT)
-Message-ID: <47623b4c-5067-b882-01aa-41455f1c3c3f@semihalf.com>
-Date:   Thu, 4 Aug 2022 21:31:51 +0200
+        Thu, 4 Aug 2022 15:38:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB8E6E2C3;
+        Thu,  4 Aug 2022 12:38:34 -0700 (PDT)
+Received: from [192.168.43.224] (92.40.178.239.threembb.co.uk [92.40.178.239])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BC6A66601BFA;
+        Thu,  4 Aug 2022 20:38:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659641913;
+        bh=YR06TcNC313+o+tpJhkeCXhA11OnSzpwetPY80MPTq8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eCtIdWnL2e3j3b9gdVcogqaPJdIXpTMgJxLBj4dlqklzGGr+zjNymQNEg7n7pyu4d
+         GHPEo9M+McUemcrv9Otu2/Z3Fn3IP7VHZBgkh8JdXIgkRumV3jUOUH5bWWDLXChCj1
+         3kyMMD36iE+unBbMXx/uLjMr6ij+L+dRnYM/tSRs0lFwcSU2llcza8j3lFy/3rL3QO
+         B0pR71xhOFsP6GtYzQ9WcKE/BEq9TueMWvOGCDNenJsuNwqohBwmv/Qunff/g1u9PP
+         DO2U1/v78mnY1VI+v/I3DZXZ2f0mQesixMRx4sbXDY5m4+YPxTM8M6VhekCvZUBjIl
+         oNSnzdAWn2foQ==
+Message-ID: <76a2ac43-6e3d-0b62-7c8c-eec5f247f8f8@collabora.com>
+Date:   Thu, 4 Aug 2022 21:38:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] KVM: x86: Add kvm_irq_is_masked()
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] selftests/landlock: fix broken include of
+ linux/landlock.h
 Content-Language: en-US
-To:     eric.auger@redhat.com, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Rong L Liu <rong.l.liu@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Dmitry Torokhov <dtor@google.com>
-References: <20220715155928.26362-1-dmy@semihalf.com>
- <20220715155928.26362-3-dmy@semihalf.com>
- <06cdd944-a00c-9dea-192f-7d6156e487fb@redhat.com>
-From:   Dmytro Maluka <dmy@semihalf.com>
-In-Reply-To: <06cdd944-a00c-9dea-192f-7d6156e487fb@redhat.com>
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
+ <f1fc4e6e-e2a6-3ec7-2d3b-215111a4b9ae@digikod.net>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <f1fc4e6e-e2a6-3ec7-2d3b-215111a4b9ae@digikod.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
-
-On 8/4/22 19:14, Eric Auger wrote:
-> Hi Dmytro
+On 04/08/2022 12:36, Mickaël Salaün wrote:
 > 
-> On 7/15/22 17:59, Dmytro Maluka wrote:
->> In order to implement postponing resamplefd event until an interrupt is
->> unmasked, we need not only to track changes of the interrupt mask state
->> (which is made possible by the previous patch "KVM: x86: Move
->> kvm_(un)register_irq_mask_notifier() to generic KVM") but also to know
->> its initial mask state at the time of registering a resamplefd
-> it is not obvious to me why the vIRQ is supposed to be masked at
-> resamplefd registration time. I would have expected the check to be done
-> in the resamplefd notifier instead (when the vEOI actually happens)?
+> On 03/08/2022 22:13, Guillaume Tucker wrote:
+>> Revert part of the earlier changes to fix the kselftest build when
+>> using a sub-directory from the top of the tree as this broke the
+>> landlock test build as a side-effect when building with "make -C
+>> tools/testing/selftests/landlock".
+>>
+>> Reported-by: Mickaël Salaün <mic@digikod.net>
+>> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers dependency")
+>> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+>> ---
+>>   tools/testing/selftests/landlock/Makefile | 7 +++++--
+>>   1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
+>> index a6959df28eb0..02868ac3bc71 100644
+>> --- a/tools/testing/selftests/landlock/Makefile
+>> +++ b/tools/testing/selftests/landlock/Makefile
+>> @@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
+>>   TEST_GEN_PROGS_EXTENDED := true
+>>     OVERRIDE_TARGETS := 1
+>> +top_srcdir := ../../../..
+> 
+> Not sure it changes much, but most other selftests Makefiles use "top_srcdir = ../../../.." (without ":="). Why this change?
 
-Great point, thanks. Indeed, it's not crucial to know the vIRQ mask
-state at the registration time. It might be ok to check it later, at the
-first vEOI after registration. So the wording should be changed to
-"...but also to know its initial mask state before any mask notifier has
-fired".
+I didn't simply apply your diff but edited the file by hand to
+test various combinations and see what side effects it might
+have.  So when I added top_srcdir I typed it by hand and used :=
+as a reflex since it's the standard way of assigning variables.
+Using = instead only makes a difference when the r-value has
+something dynamic as it will be re-evaluated every time it's
+used.  So for constant values, I guess it's more of a question of
+coding style and conventions.  Maybe all the top_srcdir variables
+should be changed to := but that's unnecessary churn...  Either
+way, it's benign.
 
-As I wrote in [1], the initialization of the mask state in this patchset
-is actually racy (we may miss mask state change at initialization), and
-I was about to send v2 which fixes this race by implementing
-kvm_register_and_fire_irq_mask_notifier() as suggested in [1]. Now your
-suggestion has made me think wouldn't it be possible to avoid this race
-in a simpler way, by checking the vIRQ state directly in the ack (vEOI)
-notifier.
-
-It seems it still would be racy, e.g.:
-
-1. ack notifier checks the vIRQ state, it is masked
-2. the vIRQ gets unmasked
-3. mask notifier fires, but the vIRQ is not flagged as postponed yet, so
-   mask notifier doesn't notify resamplefd
-4. ack notifier flags the vIRQ as postponed and doesn't notify
-   resamplefd either
-
-=> unmask event lost => the physical IRQ is not unmasked by vfio.
-
-This race could be avoided if the ack notifier checked the vIRQ state
-under resampler->lock, i.e. synchronized with the mask notifier. But
-that would deadlock, for the same reason as mentioned in [1]: checking
-the vIRQ state requires locking KVM irqchip lock (e.g. ioapic->lock on
-x86) whereas the mask notifier is called under this lock.
-
-[1] https://lore.kernel.org/lkml/c7b7860e-ae3a-7b98-e97e-28a62470c470@semihalf.com/
+Shuah, feel free to change this back to = in this particular case
+if it's more consistent with other Makefiles.  Consistency is
+often better than arbitrary rules.  Or conversely, change to :=
+for the khdr_dir definition...  Entirely up to you I think.
 
 Thanks,
-Dmytro
+Guillaume
 
-> 
-> Eric
->> listener. So implement kvm_irq_is_masked() for that.
->>
->> Actually, for now it's implemented for x86 only (see below).
->>
->> The implementation is trickier than I'd like it to be, for 2 reasons:
->>
->> 1. Interrupt (GSI) to irqchip pin mapping is not a 1:1 mapping: an IRQ
->>    may map to multiple pins on different irqchips. I guess the only
->>    reason for that is to support x86 interrupts 0-15 for which we don't
->>    know if the guest uses PIC or IOAPIC. For this reason kvm_set_irq()
->>    delivers interrupt to both, assuming the guest will ignore the
->>    unused one. For the same reason, in kvm_irq_is_masked() we should
->>    also take into account the mask state of both irqchips. We consider
->>    an interrupt unmasked if and only if it is unmasked in at least one
->>    of PIC or IOAPIC, assuming that in the unused one all the interrupts
->>    should be masked.
->>
->> 2. For now ->is_masked() implemented for x86 only, so need to handle
->>    the case when ->is_masked() is not provided by the irqchip. In such
->>    case kvm_irq_is_masked() returns failure, and its caller may fall
->>    back to an assumption that an interrupt is always unmasked.
->>
->> Link: https://lore.kernel.org/kvm/31420943-8c5f-125c-a5ee-d2fde2700083@semihalf.com/
->> Signed-off-by: Dmytro Maluka <dmy@semihalf.com>
->> ---
->>  arch/x86/include/asm/kvm_host.h |  1 +
->>  arch/x86/kvm/i8259.c            | 11 +++++++++++
->>  arch/x86/kvm/ioapic.c           | 11 +++++++++++
->>  arch/x86/kvm/ioapic.h           |  1 +
->>  arch/x86/kvm/irq_comm.c         | 16 ++++++++++++++++
->>  include/linux/kvm_host.h        |  3 +++
->>  virt/kvm/irqchip.c              | 34 +++++++++++++++++++++++++++++++++
->>  7 files changed, 77 insertions(+)
->>
->> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
->> index 39a867d68721..64618b890700 100644
->> --- a/arch/x86/include/asm/kvm_host.h
->> +++ b/arch/x86/include/asm/kvm_host.h
->> @@ -1840,6 +1840,7 @@ static inline int __kvm_irq_line_state(unsigned long *irq_state,
->>  
->>  int kvm_pic_set_irq(struct kvm_pic *pic, int irq, int irq_source_id, int level);
->>  void kvm_pic_clear_all(struct kvm_pic *pic, int irq_source_id);
->> +bool kvm_pic_irq_is_masked(struct kvm_pic *pic, int irq);
->>  
->>  void kvm_inject_nmi(struct kvm_vcpu *vcpu);
->>  
->> diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
->> index e1bb6218bb96..2d1ed3bc7cc5 100644
->> --- a/arch/x86/kvm/i8259.c
->> +++ b/arch/x86/kvm/i8259.c
->> @@ -211,6 +211,17 @@ void kvm_pic_clear_all(struct kvm_pic *s, int irq_source_id)
->>  	pic_unlock(s);
->>  }
->>  
->> +bool kvm_pic_irq_is_masked(struct kvm_pic *s, int irq)
->> +{
->> +	bool ret;
+>>   include ../lib.mk
+>>   +khdr_dir = $(top_srcdir)/usr/include
 >> +
->> +	pic_lock(s);
->> +	ret = !!(s->pics[irq >> 3].imr & (1 << irq));
->> +	pic_unlock(s);
->> +
->> +	return ret;
->> +}
->> +
->>  /*
->>   * acknowledge interrupt 'irq'
->>   */
->> diff --git a/arch/x86/kvm/ioapic.c b/arch/x86/kvm/ioapic.c
->> index 765943d7cfa5..874f68a65c87 100644
->> --- a/arch/x86/kvm/ioapic.c
->> +++ b/arch/x86/kvm/ioapic.c
->> @@ -478,6 +478,17 @@ void kvm_ioapic_clear_all(struct kvm_ioapic *ioapic, int irq_source_id)
->>  	spin_unlock(&ioapic->lock);
->>  }
->>  
->> +bool kvm_ioapic_irq_is_masked(struct kvm_ioapic *ioapic, int irq)
->> +{
->> +	bool ret;
->> +
->> +	spin_lock(&ioapic->lock);
->> +	ret = !!ioapic->redirtbl[irq].fields.mask;
->> +	spin_unlock(&ioapic->lock);
->> +
->> +	return ret;
->> +}
->> +
->>  static void kvm_ioapic_eoi_inject_work(struct work_struct *work)
->>  {
->>  	int i;
->> diff --git a/arch/x86/kvm/ioapic.h b/arch/x86/kvm/ioapic.h
->> index 539333ac4b38..fe1f51319992 100644
->> --- a/arch/x86/kvm/ioapic.h
->> +++ b/arch/x86/kvm/ioapic.h
->> @@ -114,6 +114,7 @@ void kvm_ioapic_destroy(struct kvm *kvm);
->>  int kvm_ioapic_set_irq(struct kvm_ioapic *ioapic, int irq, int irq_source_id,
->>  		       int level, bool line_status);
->>  void kvm_ioapic_clear_all(struct kvm_ioapic *ioapic, int irq_source_id);
->> +bool kvm_ioapic_irq_is_masked(struct kvm_ioapic *ioapic, int irq);
->>  void kvm_get_ioapic(struct kvm *kvm, struct kvm_ioapic_state *state);
->>  void kvm_set_ioapic(struct kvm *kvm, struct kvm_ioapic_state *state);
->>  void kvm_ioapic_scan_entry(struct kvm_vcpu *vcpu,
->> diff --git a/arch/x86/kvm/irq_comm.c b/arch/x86/kvm/irq_comm.c
->> index 43e13892ed34..5bff6d6ac54f 100644
->> --- a/arch/x86/kvm/irq_comm.c
->> +++ b/arch/x86/kvm/irq_comm.c
->> @@ -34,6 +34,13 @@ static int kvm_set_pic_irq(struct kvm_kernel_irq_routing_entry *e,
->>  	return kvm_pic_set_irq(pic, e->irqchip.pin, irq_source_id, level);
->>  }
->>  
->> +static bool kvm_is_masked_pic_irq(struct kvm_kernel_irq_routing_entry *e,
->> +				     struct kvm *kvm)
->> +{
->> +	struct kvm_pic *pic = kvm->arch.vpic;
->> +	return kvm_pic_irq_is_masked(pic, e->irqchip.pin);
->> +}
->> +
->>  static int kvm_set_ioapic_irq(struct kvm_kernel_irq_routing_entry *e,
->>  			      struct kvm *kvm, int irq_source_id, int level,
->>  			      bool line_status)
->> @@ -43,6 +50,13 @@ static int kvm_set_ioapic_irq(struct kvm_kernel_irq_routing_entry *e,
->>  				line_status);
->>  }
->>  
->> +static bool kvm_is_masked_ioapic_irq(struct kvm_kernel_irq_routing_entry *e,
->> +				     struct kvm *kvm)
->> +{
->> +	struct kvm_ioapic *ioapic = kvm->arch.vioapic;
->> +	return kvm_ioapic_irq_is_masked(ioapic, e->irqchip.pin);
->> +}
->> +
->>  int kvm_irq_delivery_to_apic(struct kvm *kvm, struct kvm_lapic *src,
->>  		struct kvm_lapic_irq *irq, struct dest_map *dest_map)
->>  {
->> @@ -275,11 +289,13 @@ int kvm_set_routing_entry(struct kvm *kvm,
->>  			if (ue->u.irqchip.pin >= PIC_NUM_PINS / 2)
->>  				return -EINVAL;
->>  			e->set = kvm_set_pic_irq;
->> +			e->is_masked = kvm_is_masked_pic_irq;
->>  			break;
->>  		case KVM_IRQCHIP_IOAPIC:
->>  			if (ue->u.irqchip.pin >= KVM_IOAPIC_NUM_PINS)
->>  				return -EINVAL;
->>  			e->set = kvm_set_ioapic_irq;
->> +			e->is_masked = kvm_is_masked_ioapic_irq;
->>  			break;
->>  		default:
->>  			return -EINVAL;
->> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
->> index 9e12ef503157..e8bfb3b0d4d1 100644
->> --- a/include/linux/kvm_host.h
->> +++ b/include/linux/kvm_host.h
->> @@ -625,6 +625,8 @@ struct kvm_kernel_irq_routing_entry {
->>  	int (*set)(struct kvm_kernel_irq_routing_entry *e,
->>  		   struct kvm *kvm, int irq_source_id, int level,
->>  		   bool line_status);
->> +	bool (*is_masked)(struct kvm_kernel_irq_routing_entry *e,
->> +			  struct kvm *kvm);
->>  	union {
->>  		struct {
->>  			unsigned irqchip;
->> @@ -1598,6 +1600,7 @@ int kvm_set_msi(struct kvm_kernel_irq_routing_entry *irq_entry, struct kvm *kvm,
->>  int kvm_arch_set_irq_inatomic(struct kvm_kernel_irq_routing_entry *e,
->>  			       struct kvm *kvm, int irq_source_id,
->>  			       int level, bool line_status);
->> +int kvm_irq_is_masked(struct kvm *kvm, int irq, bool *masked);
->>  bool kvm_irq_has_notifier(struct kvm *kvm, unsigned irqchip, unsigned pin);
->>  void kvm_notify_acked_gsi(struct kvm *kvm, int gsi);
->>  void kvm_notify_acked_irq(struct kvm *kvm, unsigned irqchip, unsigned pin);
->> diff --git a/virt/kvm/irqchip.c b/virt/kvm/irqchip.c
->> index 58e4f88b2b9f..9252ebedba55 100644
->> --- a/virt/kvm/irqchip.c
->> +++ b/virt/kvm/irqchip.c
->> @@ -97,6 +97,40 @@ int kvm_set_irq(struct kvm *kvm, int irq_source_id, u32 irq, int level,
->>  	return ret;
->>  }
->>  
->> +/*
->> + * Return value:
->> + *  = 0   Interrupt mask state successfully written to `masked`
->> + *  < 0   Failed to read interrupt mask state
->> + */
->> +int kvm_irq_is_masked(struct kvm *kvm, int irq, bool *masked)
->> +{
->> +	struct kvm_kernel_irq_routing_entry irq_set[KVM_NR_IRQCHIPS];
->> +	int ret = -1, i, idx;
->> +
->> +	/* Not possible to detect if the guest uses the PIC or the
->> +	 * IOAPIC. So assume the interrupt to be unmasked iff it is
->> +	 * unmasked in at least one of both.
->> +	 */
->> +	idx = srcu_read_lock(&kvm->irq_srcu);
->> +	i = kvm_irq_map_gsi(kvm, irq_set, irq);
->> +	srcu_read_unlock(&kvm->irq_srcu, idx);
->> +
->> +	while (i--) {
->> +		if (!irq_set[i].is_masked)
->> +			continue;
->> +
->> +		if (!irq_set[i].is_masked(&irq_set[i], kvm)) {
->> +			*masked = false;
->> +			return 0;
->> +		}
->> +		ret = 0;
->> +	}
->> +	if (!ret)
->> +		*masked = true;
->> +
->> +	return ret;
->> +}
->> +
->>  static void free_irq_routing_table(struct kvm_irq_routing_table *rt)
->>  {
->>  	int i;
-> 
+>>   $(OUTPUT)/true: true.c
+>>       $(LINK.c) $< $(LDLIBS) -o $@ -static
+>>   -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
+>> -    $(LINK.c) $< $(LDLIBS) -o $@ -lcap
+>> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
+>> +    $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
+

@@ -2,206 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4095A58953A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FE6589537
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238835AbiHDASp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 20:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        id S240310AbiHDASs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 20:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237044AbiHDASi (ORCPT
+        with ESMTP id S239263AbiHDASm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 20:18:38 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D353C5E33B
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:18:36 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id j11so14100376qvt.10
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 17:18:36 -0700 (PDT)
+        Wed, 3 Aug 2022 20:18:42 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49995F10C;
+        Wed,  3 Aug 2022 17:18:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3To6LMVxoqoKzRmQbA8Jez/sB+9ti+KFrFIpcpqC5DU=;
-        b=jaFMYrAr15hi7try/jB5s91PiWR8kMLB484AM76aPEsChXhIBD+lTzzNWQs7YTYffC
-         63bFlVKk/ZG9whwY4EzkRsgp56VkFoRTAi46PNFdqCIVS5abYmdTkqyYEfi6IXTHpx52
-         NzZEmvnFruMTy2bQtwEpsrjGHOS+HJw3v24rafEiQbLO2WCtUWMg1dTnDoa/wPK7bpPA
-         ZDpkYHp29JtKjxj0PdUJYC1hknjlPP/1LBYX8EFh+xET+Qa4YK4rmKgX3RZdhGdwntmC
-         Dog0Dn1Z1X7nq0Ponu0M/n1lUbjjAv/lXEId6u+zqwop41RL4jilX4EHM1/wUWqYwks2
-         lHug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3To6LMVxoqoKzRmQbA8Jez/sB+9ti+KFrFIpcpqC5DU=;
-        b=ijcWrDYdk1MVQ/Hs1uJ4yBemF4eF0I/OKpJXDVq2zBUDtAP/HDVar4U/GN84dK+TjH
-         mdXzCyA+T+4fXER4qfBZAWi2Q82s9u3TLOpIBCY3vBcre6pqPNXPArD198porywv3DBz
-         Cxre7J/ZgvWjKNn9SLKPDRLIB5VsnGtPkWfykqdJ6QqglmfLdvYzCwUt7ddYEKYXyPGC
-         w8xF/2d/lYv42w4xC3QH5KNAQRiPSebejcsCc9ez7ZI1LY+/VFjKO8ojLw1kHqwspryh
-         XRtfGTFxzSPIYvoLRekxZ1lnIMrUOqVuXUS00EszC6aGOTqzrEd+5zpy0mQwn7SpJ/Gw
-         LZmA==
-X-Gm-Message-State: ACgBeo3I8FPJWQHBjw8ghOr8H34yrfxKhO/qcBdWdj48TgQqfSKizz2G
-        xjBAOvDaydWca5y8ZfszKJDCa5972qhthd75hcrhWA==
-X-Google-Smtp-Source: AA6agR56HJ7ItpZidaVhaD1cOoLc3NenmgaBxnC/k/Z1/A7MiHOP5q4pPn9CxMTyXfYtA5LvUWRUAOIlNT8Nb5+rfuU=
-X-Received: by 2002:a0c:9101:0:b0:473:9b:d92a with SMTP id q1-20020a0c9101000000b00473009bd92amr24057537qvq.17.1659572315631;
- Wed, 03 Aug 2022 17:18:35 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659572318; x=1691108318;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=i99TJo8RbVnlx7Q6fpfJKMDoIMtmjkVLJodpurQRRV4=;
+  b=XlCA0K9dU8zRDgkOsTQEq8Ur+RrF3/jBbmX7a9beiPsA0FlKNqcldf3A
+   LrPXrEjz1oY1Mjb/KM2Qa3E/Y70d65hQ3FYJUzgWw38rMfrDkEvGXQQYM
+   kRIuisMl8nmFwwAjpicgeO3zgBYDgWJAOO9N3HnV+l/zguNP99uNlhmIS
+   4=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 03 Aug 2022 17:18:38 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:18:39 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 3 Aug 2022 17:18:38 -0700
+Received: from [10.38.247.209] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 3 Aug 2022
+ 17:18:34 -0700
+Message-ID: <ce929e8d-cecb-b06d-507d-2d411c98c46f@quicinc.com>
+Date:   Wed, 3 Aug 2022 17:18:32 -0700
 MIME-Version: 1.0
-References: <20220801175407.2647869-1-haoluo@google.com> <20220801175407.2647869-5-haoluo@google.com>
- <c018a834-e834-270c-24b1-2c726b38b729@fb.com>
-In-Reply-To: <c018a834-e834-270c-24b1-2c726b38b729@fb.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 3 Aug 2022 17:18:25 -0700
-Message-ID: <CA+khW7hSFU2YL+jNw2F2qsuYEW0E6r8kJkg1BoBukAqR_sk+6Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 4/8] bpf: Introduce cgroup iter
-To:     Yonghong Song <yhs@fb.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Michal Koutny <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3 4/6] drm/msm/dsi: Use the new regulator bulk feature to
+ specify the load
+Content-Language: en-US
+To:     Douglas Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <dri-devel@lists.freedesktop.org>, Mark Brown <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        "Daniel Vetter" <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220802223738.898592-1-dianders@chromium.org>
+ <20220802153434.v3.4.I7b3c72949883846badb073cfeae985c55239da1d@changeid>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220802153434.v3.4.I7b3c72949883846badb073cfeae985c55239da1d@changeid>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 12:44 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 8/1/22 10:54 AM, Hao Luo wrote:
-> > Cgroup_iter is a type of bpf_iter. It walks over cgroups in three modes:
-> >
-> >   - walking a cgroup's descendants in pre-order.
-> >   - walking a cgroup's descendants in post-order.
-> >   - walking a cgroup's ancestors.
-> >
-> > When attaching cgroup_iter, one can set a cgroup to the iter_link
-> > created from attaching. This cgroup is passed as a file descriptor and
-> > serves as the starting point of the walk. If no cgroup is specified,
-> > the starting point will be the root cgroup.
-> >
-> > For walking descendants, one can specify the order: either pre-order or
-> > post-order. For walking ancestors, the walk starts at the specified
-> > cgroup and ends at the root.
-> >
-> > One can also terminate the walk early by returning 1 from the iter
-> > program.
-> >
-> > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
-> > program is called with cgroup_mutex held.
-> >
-> > Currently only one session is supported, which means, depending on the
-> > volume of data bpf program intends to send to user space, the number
-> > of cgroups that can be walked is limited. For example, given the current
-> > buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
-> > cgroup, assuming PAGE_SIZE is 4kb, the total number of cgroups that can
-> > be walked is 512. This is a limitation of cgroup_iter. If the output
-> > data is larger than the buffer size, the second read() will signal
-> > EOPNOTSUPP. In order to work around, the user may have to update their
->
-> 'the second read() will signal EOPNOTSUPP' is not true. for bpf_iter,
-> we have user buffer from read() syscall and kernel buffer. The above
-> buffer size like 8 * PAGE_SIZE refers to the kernel buffer size.
->
-> If read() syscall buffer size is less than kernel buffer size,
-> the second read() will not signal EOPNOTSUPP. So to make it precise,
-> we can say
->    If the output data is larger than the kernel buffer size, after
->    all data in the kernel buffer is consumed by user space, the
->    subsequent read() syscall will signal EOPNOTSUPP.
->
 
-Thanks Yonghong. Will update.
 
-> > program to reduce the volume of data sent to output. For example, skip
-> > some uninteresting cgroups. In future, we may extend bpf_iter flags to
-> > allow customizing buffer size.
-> >
-> > Acked-by: Yonghong Song <yhs@fb.com>
-> > Acked-by: Tejun Heo <tj@kernel.org>
-> > Signed-off-by: Hao Luo <haoluo@google.com>
-> > ---
-[...]
-> > + *
-> > + * Currently only one session is supported, which means, depending on the
-> > + * volume of data bpf program intends to send to user space, the number
-> > + * of cgroups that can be walked is limited. For example, given the current
-> > + * buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
-> > + * cgroup, assuming PAGE_SIZE is 4kb, the total number of cgroups that can
-> > + * be walked is 512. This is a limitation of cgroup_iter. If the output data
-> > + * is larger than the buffer size, the second read() will signal EOPNOTSUPP.
-> > + * In order to work around, the user may have to update their program to
->
-> same here as above for better description.
->
-
-SG. Will update.
-
-> > + * reduce the volume of data sent to output. For example, skip some
-> > + * uninteresting cgroups.
-> > + */
-> > +
-> > +struct bpf_iter__cgroup {
-> > +     __bpf_md_ptr(struct bpf_iter_meta *, meta);
-> > +     __bpf_md_ptr(struct cgroup *, cgroup);
-> > +};
-> > +
-> > +struct cgroup_iter_priv {
-> > +     struct cgroup_subsys_state *start_css;
-> > +     bool visited_all;
-> > +     bool terminate;
-> > +     int order;
-> > +};
-> > +
-> > +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
-> > +{
-> > +     struct cgroup_iter_priv *p = seq->private;
-> > +
-> > +     mutex_lock(&cgroup_mutex);
-> > +
-> > +     /* cgroup_iter doesn't support read across multiple sessions. */
-> > +     if (*pos > 0) {
-> > +             if (p->visited_all)
-> > +                     return NULL;
->
-> This looks good. thanks!
->
-> > +
-> > +             /* Haven't visited all, but because cgroup_mutex has dropped,
-> > +              * return -EOPNOTSUPP to indicate incomplete iteration.
-> > +              */
-> > +             return ERR_PTR(-EOPNOTSUPP);
-> > +     }
-> > +
-> > +     ++*pos;
-> > +     p->terminate = false;
-> > +     p->visited_all = false;
-> > +     if (p->order == BPF_ITER_CGROUP_PRE)
-> > +             return css_next_descendant_pre(NULL, p->start_css);
-> > +     else if (p->order == BPF_ITER_CGROUP_POST)
-> > +             return css_next_descendant_post(NULL, p->start_css);
-> > +     else /* BPF_ITER_CGROUP_PARENT_UP */
-> > +             return p->start_css;
-> > +}
-> > +
-> [...]
+On 8/2/2022 3:37 PM, Douglas Anderson wrote:
+> As of commit 6eabfc018e8d ("regulator: core: Allow specifying an
+> initial load w/ the bulk API") we can now specify the initial load in
+> the bulk data rather than having to manually call regulator_set_load()
+> on each regulator. Let's use it.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> ---
+> 
+> Changes in v3:
+> - Update commit message to point at the git hash of the regulator change.
+> 
+> Changes in v2:
+> - ("Use the new regulator bulk feature to specify the load") new for v2.
+> 
+>   drivers/gpu/drm/msm/dsi/dsi_host.c    | 13 +++----------
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c | 13 +++----------
+>   2 files changed, 6 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 9df278d39559..a0a1b6d61d05 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -260,8 +260,10 @@ static int dsi_regulator_init(struct msm_dsi_host *msm_host)
+>   	int num = msm_host->cfg_hnd->cfg->reg_cfg.num;
+>   	int i, ret;
+>   
+> -	for (i = 0; i < num; i++)
+> +	for (i = 0; i < num; i++) {
+>   		s[i].supply = regs[i].name;
+> +		s[i].init_load_uA = regs[i].enable_load;
+> +	}
+>   
+>   	ret = devm_regulator_bulk_get(&msm_host->pdev->dev, num, s);
+>   	if (ret < 0) {
+> @@ -270,15 +272,6 @@ static int dsi_regulator_init(struct msm_dsi_host *msm_host)
+>   		return ret;
+>   	}
+>   
+> -	for (i = 0; i < num; i++) {
+> -		if (regs[i].enable_load >= 0) {
+> -			ret = regulator_set_load(s[i].consumer,
+> -						 regs[i].enable_load);
+> -			if (ret < 0)
+> -				return ret;
+> -		}
+> -	}
+> -
+>   	return 0;
+>   }
+>   
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> index 7c105120d73e..efb6b1726cdb 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> @@ -515,8 +515,10 @@ static int dsi_phy_regulator_init(struct msm_dsi_phy *phy)
+>   	int num = phy->cfg->reg_cfg.num;
+>   	int i, ret;
+>   
+> -	for (i = 0; i < num; i++)
+> +	for (i = 0; i < num; i++) {
+>   		s[i].supply = regs[i].name;
+> +		s[i].init_load_uA = regs[i].enable_load;
+> +	}
+>   
+>   	ret = devm_regulator_bulk_get(dev, num, s);
+>   	if (ret < 0) {
+> @@ -529,15 +531,6 @@ static int dsi_phy_regulator_init(struct msm_dsi_phy *phy)
+>   		return ret;
+>   	}
+>   
+> -	for (i = 0; i < num; i++) {
+> -		if (regs[i].enable_load >= 0) {
+> -			ret = regulator_set_load(s[i].consumer,
+> -							regs[i].enable_load);
+> -			if (ret < 0)
+> -				return ret;
+> -		}
+> -	}
+> -
+>   	return 0;
+>   }
+>   

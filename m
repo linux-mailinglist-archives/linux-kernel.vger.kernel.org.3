@@ -2,145 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CEC589EF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79037589EFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236511AbiHDPyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
+        id S237025AbiHDPzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235182AbiHDPyh (ORCPT
+        with ESMTP id S229988AbiHDPzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:54:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 943975A3C1
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659628475;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0KPYk0cvmqpRu1UsMYKSMmpVLkOgi0Pp9d5E7ivg9cQ=;
-        b=cbxupvclykfBQ13ZS8RSuxtbkn5LMy+Zs6MBL4Zzriix/g2t+e2dYyVstilSJ1SbcdnTQo
-        ye5lkO95ObTldiaX66H8fcrP3WJQs2a3SrYIp5aIL3d4SoA38WyBcbkJ+njB8mCyf5rBJg
-        4o87M5bih8fvQCjoFeljr+3s3gofLT0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-IYN9AcQfMkaZKStaVuXUcw-1; Thu, 04 Aug 2022 11:54:33 -0400
-X-MC-Unique: IYN9AcQfMkaZKStaVuXUcw-1
-Received: by mail-wr1-f70.google.com with SMTP id w17-20020adfbad1000000b0021f0acd5398so26341wrg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 08:54:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0KPYk0cvmqpRu1UsMYKSMmpVLkOgi0Pp9d5E7ivg9cQ=;
-        b=q+yFiSRLCqKSVp3PpFcjl1iaQ5JDb/gqtPpABlkkVHZePt8sRh14wk7s3yBn1q+nnV
-         Tred2PbREhPKpKTua+BYD6ShhcgLDCN0rf7IFg4EJBTL6xO+RL604QdDWk3YmX5EZFx+
-         DtpqTYVbXHxJfeh7h/c4cAGNH6NlCkzFK1EimxO4ZUEXmXwY7hy6F+g2kRbsgy549Lyx
-         laNPwq9JAEPcmndX/9pkPEChdmgNmnNw2mL33XzAA16atjoTaHahqG0N4oVHyOgGuX8K
-         /yUUr16OqjkPOHxH4NTikF0kqQo4azY3AnsidUHOGXjXDscE2Of0gRP39Vad3B1ZVpiP
-         AzoQ==
-X-Gm-Message-State: ACgBeo3oM7s2nBYOd8+I9khOY8ZFCvkfUqALX0tuZAfTqmjmXp59Rbbo
-        B+YnqjXDY0PfX3mk9qMXKnuLLXcBMGV+RqmA/ZOJ11yx1siyn9Wfgsk/iKvdMFht1Za/mD1GNpa
-        nmNduUqU53Royf8NCR22Cgpi7
-X-Received: by 2002:a05:600c:1c89:b0:3a4:ef8b:f3c7 with SMTP id k9-20020a05600c1c8900b003a4ef8bf3c7mr1970197wms.82.1659628471794;
-        Thu, 04 Aug 2022 08:54:31 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6QokHbaojcJupLbf2goH5PYgzJaypPWWzG3gWFSp7zY1CDaiB/VOnk1HP9TTfWpY+Hi9lT9A==
-X-Received: by 2002:a05:600c:1c89:b0:3a4:ef8b:f3c7 with SMTP id k9-20020a05600c1c8900b003a4ef8bf3c7mr1970181wms.82.1659628471582;
-        Thu, 04 Aug 2022 08:54:31 -0700 (PDT)
-Received: from work-vm (cpc109025-salf6-2-0-cust480.10-2.cable.virginm.net. [82.30.61.225])
-        by smtp.gmail.com with ESMTPSA id q4-20020a1c4304000000b003a4a5bcd37esm6604835wma.23.2022.08.04.08.54.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 08:54:31 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 16:54:29 +0100
-From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Dave Young <ruyang@redhat.com>,
-        Xiaoying Yan <yiyan@redhat.com>,
-        David Woodhouse <dwmw@amazon.co.uk>, stable@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: revalidate steal time cache if MSR value
- changes
-Message-ID: <YuvrtIj/asIVIf6u@work-vm>
-References: <20220804132832.420648-1-pbonzini@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804132832.420648-1-pbonzini@redhat.com>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 4 Aug 2022 11:55:40 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 346691EC7F;
+        Thu,  4 Aug 2022 08:55:39 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C382820FE2E9;
+        Thu,  4 Aug 2022 08:55:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C382820FE2E9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1659628538;
+        bh=QXebqW0hrTf1CNPskOs0B1CdiWnWrgrHvmlsTreY3iI=;
+        h=From:To:Subject:Date:From;
+        b=XpAj+s7/UC4KrfmgO/5uErQKsx6pZJ8EHfMK18MyuRgk/rKSyDhrTNt03kGN/2Df/
+         AJjH7WkAn0wsu1icQFF7aR0A7BcOPVWeSIRIWQ4yog8Ig6L1nvLd4/uMvviZxxcHcG
+         /yYEE/8fDSkPoaCeODHUnywF2FBS3zdc+Mz3XqDY=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ssengar@microsoft.com, mikelley@microsoft.com
+Subject: [PATCH v2] scsi: storvsc: Remove WQ_MEM_RECLAIM from storvsc_error_wq
+Date:   Thu,  4 Aug 2022 08:55:34 -0700
+Message-Id: <1659628534-17539-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Paolo Bonzini (pbonzini@redhat.com) wrote:
-> Commit 7e2175ebd695 ("KVM: x86: Fix recording of guest steal time
-> / preempted status", 2021-11-11) open coded the previous call to
-> kvm_map_gfn, but in doing so it dropped the comparison between the cached
-> guest physical address and the one in the MSR.  This cause an incorrect
-> cache hit if the guest modifies the steal time address while the memslots
-> remain the same.  This can happen with kexec, in which case the steal
-> time data is written at the address used by the old kernel instead of
-> the old one.
-> 
-> While at it, rename the variable from gfn to gpa since it is a plain
-> physical address and not a right-shifted one.
-> 
-> Reported-by: Dave Young <ruyang@redhat.com>
-> Reported-by: Xiaoying Yan  <yiyan@redhat.com>
-> Analyzed-by: Dr. David Alan Gilbert <dgilbert@redhat.com>
+storvsc_error_wq workqueue should not be marked as WQ_MEM_RECLAIM
+as it doesn't need to make forward progress under memory pressure.
+Marking this workqueue as WQ_MEM_RECLAIM may cause deadlock while
+flushing a non-WQ_MEM_RECLAIM workqueue.
+In the current state it causes the following warning:
 
-The kernel you built with this in passes Dave Young's kexec set I was
-using to debug it, so:
+[   14.506347] ------------[ cut here ]------------
+[   14.506354] workqueue: WQ_MEM_RECLAIM storvsc_error_wq_0:storvsc_remove_lun is flushing !WQ_MEM_RECLAIM events_freezable_power_:disk_events_workfn
+[   14.506360] WARNING: CPU: 0 PID: 8 at <-snip->kernel/workqueue.c:2623 check_flush_dependency+0xb5/0x130
+[   14.506390] CPU: 0 PID: 8 Comm: kworker/u4:0 Not tainted 5.4.0-1086-azure #91~18.04.1-Ubuntu
+[   14.506391] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 05/09/2022
+[   14.506393] Workqueue: storvsc_error_wq_0 storvsc_remove_lun
+[   14.506395] RIP: 0010:check_flush_dependency+0xb5/0x130
+		<-snip->
+[   14.506408] Call Trace:
+[   14.506412]  __flush_work+0xf1/0x1c0
+[   14.506414]  __cancel_work_timer+0x12f/0x1b0
+[   14.506417]  ? kernfs_put+0xf0/0x190
+[   14.506418]  cancel_delayed_work_sync+0x13/0x20
+[   14.506420]  disk_block_events+0x78/0x80
+[   14.506421]  del_gendisk+0x3d/0x2f0
+[   14.506423]  sr_remove+0x28/0x70
+[   14.506427]  device_release_driver_internal+0xef/0x1c0
+[   14.506428]  device_release_driver+0x12/0x20
+[   14.506429]  bus_remove_device+0xe1/0x150
+[   14.506431]  device_del+0x167/0x380
+[   14.506432]  __scsi_remove_device+0x11d/0x150
+[   14.506433]  scsi_remove_device+0x26/0x40
+[   14.506434]  storvsc_remove_lun+0x40/0x60
+[   14.506436]  process_one_work+0x209/0x400
+[   14.506437]  worker_thread+0x34/0x400
+[   14.506439]  kthread+0x121/0x140
+[   14.506440]  ? process_one_work+0x400/0x400
+[   14.506441]  ? kthread_park+0x90/0x90
+[   14.506443]  ret_from_fork+0x35/0x40
+[   14.506445] ---[ end trace 2d9633159fdc6ee7 ]---
 
-Tested-by: Dr. David Alan Gilbert <dgilbert@redhat.com>
+Fixes: 436ad9413353 ("scsi: storvsc: Allow only one remove lun work item to be issued per lun")
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+[v2]
+  - s/it's/it/
+  - Added Fixes commit
 
-> Cc: David Woodhouse <dwmw@amazon.co.uk>
-> Cc: stable@vger.kernel.org
-> Fixes: 7e2175ebd695 ("KVM: x86: Fix recording of guest steal time / preempted status")
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/x86.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index e5fa335a4ea7..36dcf18b04bf 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3380,6 +3380,7 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
->  	struct gfn_to_hva_cache *ghc = &vcpu->arch.st.cache;
->  	struct kvm_steal_time __user *st;
->  	struct kvm_memslots *slots;
-> +	gpa_t gpa = vcpu->arch.st.msr_val & KVM_STEAL_VALID_BITS;
->  	u64 steal;
->  	u32 version;
->  
-> @@ -3397,13 +3398,12 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
->  	slots = kvm_memslots(vcpu->kvm);
->  
->  	if (unlikely(slots->generation != ghc->generation ||
-> +		     gpa != ghc->gpa ||
->  		     kvm_is_error_hva(ghc->hva) || !ghc->memslot)) {
-> -		gfn_t gfn = vcpu->arch.st.msr_val & KVM_STEAL_VALID_BITS;
-> -
->  		/* We rely on the fact that it fits in a single page. */
->  		BUILD_BUG_ON((sizeof(*st) - 1) & KVM_STEAL_VALID_BITS);
->  
-> -		if (kvm_gfn_to_hva_cache_init(vcpu->kvm, ghc, gfn, sizeof(*st)) ||
-> +		if (kvm_gfn_to_hva_cache_init(vcpu->kvm, ghc, gpa, sizeof(*st)) ||
->  		    kvm_is_error_hva(ghc->hva) || !ghc->memslot)
->  			return;
->  	}
-> -- 
-> 2.37.1
-> 
+ drivers/scsi/storvsc_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+index fe000da..8ced292 100644
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -2012,7 +2012,7 @@ static int storvsc_probe(struct hv_device *device,
+ 	 */
+ 	host_dev->handle_error_wq =
+ 			alloc_ordered_workqueue("storvsc_error_wq_%d",
+-						WQ_MEM_RECLAIM,
++						0,
+ 						host->host_no);
+ 	if (!host_dev->handle_error_wq) {
+ 		ret = -ENOMEM;
 -- 
-Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
+1.8.3.1
 

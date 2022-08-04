@@ -2,175 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8955B58A1E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 22:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0926658A1E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 22:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239585AbiHDUXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 16:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
+        id S238682AbiHDUX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 16:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbiHDUXM (ORCPT
+        with ESMTP id S232290AbiHDUX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 16:23:12 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395E26D556;
-        Thu,  4 Aug 2022 13:23:11 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id m4so1338790ejr.3;
-        Thu, 04 Aug 2022 13:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=jXfSwIVHH5n0bd8ihUeImZw7y0OX8igYXCyoA7ZaxS0=;
-        b=LwAXYbKVkp+zbNDblZPDf5TS4z/8LXvzWeOvJhDHqCaj+dRAy2vmB/oSk7HnWNsC2c
-         JxKzLvRfwevhn4fzSUG//t5CW8rvx1UmRD5wsfAUAtO3rCUpgBGuwjWINVmWvicQixNS
-         l9H9BP8Dtk3F1oORE/lpWh84boBRpJ8PeUCehbfivHUJ8dE002kGiiRq5Wfn6qVDEP58
-         ZA2IsJL7kshfxUGMLPNIN3H947Mfkc5eD2iliO8I3DscF0DEuMmNRqiSsPsG8CIrBlc+
-         od9TjS8/l90kO4XsvsNsligDjxHb86lzqVoLHw1TL+ZyrInSTD9hdp7hS9G44unqf2NO
-         xHqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=jXfSwIVHH5n0bd8ihUeImZw7y0OX8igYXCyoA7ZaxS0=;
-        b=vPOJCwM6NPUSr6XEL0SycxqildAGkN+ierIxgA7NLpenZsYd4EimtjacpgLKdIb8E6
-         OWAiew1n4mOBx/PHialWI0Y+AMv3spXyiocXmu7NmkNgRUH8D89821MbADY9ra3kizNl
-         ajNpYby4geRBtItdAu1lxYZDyKi7KMiEMpN1vnnQ83yxaMK9kDpyqe0+BK82CBmjLbAE
-         07Xb8QtPnMYEV66vSIQlsBdlutNY9rxdH/Uvj+69Yz3n53a/vzBcvAwxa5DAI1hyJiSZ
-         s9A+X+W5zpMuNU7OPXpDbFNJqpCdeu7U4DvSsSVoSQaWiGjYd8D4NRjsXhEWq8lSqqYv
-         cfjA==
-X-Gm-Message-State: ACgBeo3YpHd5FJVopfh5/hoCKQjI30AprnzNdEM3gXp0NseoNIoMvEA0
-        K1U0EIUdLIDesL2Nl4Hlzjs=
-X-Google-Smtp-Source: AA6agR4oyK0YED/1FR9FdT7TBlIRZ/M2U896QReMZ+uLFHSeBWKZpEarxRCoOOb6t4tG6jpBFAzqOw==
-X-Received: by 2002:a17:906:ef8b:b0:730:d348:61b9 with SMTP id ze11-20020a170906ef8b00b00730d34861b9mr2654647ejb.350.1659644589481;
-        Thu, 04 Aug 2022 13:23:09 -0700 (PDT)
-Received: from krava ([83.240.62.222])
-        by smtp.gmail.com with ESMTPSA id kx16-20020a170907775000b00724261b592esm661620ejc.186.2022.08.04.13.23.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 13:23:09 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 4 Aug 2022 22:23:07 +0200
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        German Gomez <german.gomez@arm.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v2 0/6] Corrections to cpu map event encoding
-Message-ID: <Yuwqq1g5EgCzUohJ@krava>
-References: <20220614143353.1559597-1-irogers@google.com>
+        Thu, 4 Aug 2022 16:23:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E2624F3F;
+        Thu,  4 Aug 2022 13:23:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=j3nssgGOsRxAdk5zbSCKB6B+tougXOTHjwPnHNLEXAk=; b=G0azAtGuDambxjDpzyqDYcBUfZ
+        LsxmuVeodWclf/6+9lPostC4quBhOZy7wpNzCSSHCIXZvHn8e9RhsP/3HvX1e48bDLiQjpett1fPp
+        Pluw6e21Me890vAC28ORsZSley5oy2+ejXMYxsutAWke8I2DUfCJxFOLkmQ/C1MpTkYww5G58dj+f
+        NO2DUstfysuQ+1agReIexwbYTVLFF+uW2H1pIFkKDqaOTXoI/2aTEKvbC4OwgE7gv80kEWFOy3Qa5
+        VtKyw22vulMPNecC9f5VPVULECwmXgna4cLqH/j2kOxAValZdhz2wXLSDGWhV5SvOmRTRhm55SF5A
+        lyLRwKJg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oJhNi-00Ac9i-R7; Thu, 04 Aug 2022 20:23:46 +0000
+Date:   Thu, 4 Aug 2022 21:23:46 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Enzo Matsumiya <ematsumiya@suse.de>, Tom Talpey <tom@talpey.com>,
+        linux-cifs@vger.kernel.org, smfrench@gmail.com, pc@cjr.nz,
+        ronniesahlberg@gmail.com, nspmangalore@gmail.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        samba-technical@lists.samba.org, pshilovsky@samba.org
+Subject: Re: [RFC PATCH 0/3] Rename "cifs" module to "smbfs"
+Message-ID: <Yuwq0kUJMTAX6F4m@casper.infradead.org>
+References: <20220801190933.27197-1-ematsumiya@suse.de>
+ <c05f4fc668fa97e737758ab03030d7170c0edbd9.camel@kernel.org>
+ <20220802193620.dyvt5qiszm2pobsr@cyberdelia>
+ <6f3479265b446d180d71832fd0c12650b908ebe2.camel@kernel.org>
+ <1c2e8880-3efe-b55d-ee50-87d57efc3130@talpey.com>
+ <20220803015655.7u5b6i4eo5sfnryb@cyberdelia>
+ <cf24d6b5496598e7717428c6bdcb2366a7d49529.camel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220614143353.1559597-1-irogers@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cf24d6b5496598e7717428c6bdcb2366a7d49529.camel@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 07:33:47AM -0700, Ian Rogers wrote:
-> A mask encoding of a cpu map is laid out as:
->   u16 nr
->   u16 long_size
->   unsigned long mask[];
-> However, the mask may be 8-byte aligned meaning there is a 4-byte pad
-> after long_size. This means 32-bit and 64-bit builds see the mask as
-> being at different offsets. On top of this the structure is in the byte
-> data[] encoded as:
->   u16 type
->   char data[]
-> This means the mask's struct isn't the required 4 or 8 byte aligned, but
-> is offset by 2. Consequently the long reads and writes are causing
-> undefined behavior as the alignment is broken.
+On Thu, Aug 04, 2022 at 03:03:23PM -0400, Jeff Layton wrote:
+> On Tue, 2022-08-02 at 22:56 -0300, Enzo Matsumiya wrote:
+> > On 08/02, Tom Talpey wrote:
+> > > The initial goal is to modularize the SMB1 code, so it can be completely
+> > > removed from a running system. The extensive refactoring logically leads
+> > > to this directory renaming, but renaming is basically a side effect.
+> > > 
 > 
-> These changes do minor clean up with const, visibility of functions
-> and using the constant time max function. It then adds 32 and 64-bit
-> mask encoding variants, packed to match current alignment. Taking the
-> address of a packed struct leads to unaligned data, so function
-> arguments are altered to be passed the packed struct. To compact the
-> mask encoding further and drop the padding, the 4-byte variant is
-> preferred. Finally a new range encoding is added, that reduces the
-> size of the common case of a range of CPUs to a single u64.
-> 
-> On a 72 CPU (hyperthread) machine the original encoding of all CPUs is:
-> 0x9a98 [0x28]: event: 74
-> .
-> . ... raw event: size 40 bytes
-> .  0000:  4a 00 00 00 00 00 28 00 01 00 02 00 08 00 00 00  J.....(.........
-> .  0010:  00 00 ff ff ff ff ff ff ff ff ff 00 00 00 00 00  ................
-> .  0020:  00 00 00 00 00 00 00 00                          ........        
-> 
-> 0 0 0x9a98 [0x28]: PERF_RECORD_CPU_MAP
-> 
-> Using the 4-byte encoding it is:
-> 0x9a98@pipe [0x20]: event: 74
-> .
-> . ... raw event: size 32 bytes
-> .  0000:  4a 00 00 00 00 00 20 00 01 00 03 00 04 00 ff ff  J..... .........
-> .  0010:  ff ff ff ff ff ff ff 00 00 00 00 00 00 00 00 00  ................
-> 
-> 0 0 0x9a98 [0x20]: PERF_RECORD_CPU_MAP
-> 
-> Finally, with the range encoding it is:
-> 0x9ab8@pipe [0x10]: event: 74
-> .
-> . ... raw event: size 16 bytes
-> .  0000:  4a 00 00 00 00 00 10 00 02 00 00 00 00 00 47 00  J.............G.
-> 
-> 0 0 0x9ab8 [0x10]: PERF_RECORD_CPU_MAP
-> 
-> v2. Fixes a bug in the size computation of the update header
->     introduced by the last patch (Add range data encoding) and caught
->     by address sanitizer.
-> 
-> Ian Rogers (6):
->   perf cpumap: Const map for max
->   perf cpumap: Synthetic events and const/static
->   perf cpumap: Compute mask size in constant time
->   perf cpumap: Fix alignment for masks in event encoding
->   perf events: Prefer union over variable length array
->   perf cpumap: Add range data encoding
+> This is a great technical goal. Splitting up cifs.ko into smaller
+> modules would be great, in addition to being able to turn off smb1
+> support.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+I don't know the CIFS module that well.  How do you see it being split
+up?  It's #4 in the list of filesystems:
 
-thanks,
-jirka
+$ size /lib/modules/5.18.0-3-amd64/kernel/fs/*/*.ko |sort -n |tail
+ 369020	  28460	    132	 397612	  6112c	/lib/modules/5.18.0-3-amd64/kernel/fs/ubifs/ubifs.ko
+ 395793	  50398	    960	 447151	  6d2af	/lib/modules/5.18.0-3-amd64/kernel/fs/ceph/ceph.ko
+ 477909	  58883	  10512	 547304	  859e8	/lib/modules/5.18.0-3-amd64/kernel/fs/nfsd/nfsd.ko
+ 609260	  84848	    640	 694748	  a99dc	/lib/modules/5.18.0-3-amd64/kernel/fs/f2fs/f2fs.ko
+ 622638	 252078	   1008	 875724	  d5ccc	/lib/modules/5.18.0-3-amd64/kernel/fs/nfs/nfsv4.ko
+ 717343	 111314	   1176	 829833	  ca989	/lib/modules/5.18.0-3-amd64/kernel/fs/ext4/ext4.ko
+ 884247	 206051	    504	1090802	 10a4f2	/lib/modules/5.18.0-3-amd64/kernel/fs/cifs/cifs.ko
+ 890155	 159520	    240	1049915	 10053b	/lib/modules/5.18.0-3-amd64/kernel/fs/ocfs2/ocfs2.ko
+1193834	 274148	    456	1468438	 166816	/lib/modules/5.18.0-3-amd64/kernel/fs/xfs/xfs.ko
+1393088	 126501	  15072	1534661	 176ac5	/lib/modules/5.18.0-3-amd64/kernel/fs/btrfs/btrfs.ko
 
-> 
->  tools/lib/perf/cpumap.c              |   2 +-
->  tools/lib/perf/include/perf/cpumap.h |   2 +-
->  tools/lib/perf/include/perf/event.h  |  61 ++++++++-
->  tools/perf/tests/cpumap.c            |  71 ++++++++---
->  tools/perf/tests/event_update.c      |  14 +--
->  tools/perf/util/cpumap.c             | 111 +++++++++++++---
->  tools/perf/util/cpumap.h             |   4 +-
->  tools/perf/util/event.h              |   4 -
->  tools/perf/util/header.c             |  24 ++--
->  tools/perf/util/session.c            |  35 +++---
->  tools/perf/util/synthetic-events.c   | 182 +++++++++++++--------------
->  tools/perf/util/synthetic-events.h   |   2 +-
->  12 files changed, 327 insertions(+), 185 deletions(-)
-> 
-> -- 
-> 2.36.1.476.g0c4daa206d-goog
-> 
+... but if you look at how NFS is split up:
+
+ 311322	  76200	    392	 387914	  5eb4a	/lib/modules/5.18.0-3-amd64/kernel/fs/nfs/nfs.ko
+  25157	   1100	     72	  26329	   66d9	/lib/modules/5.18.0-3-amd64/kernel/fs/nfs/nfsv2.ko
+  49332	   1544	    120	  50996	   c734	/lib/modules/5.18.0-3-amd64/kernel/fs/nfs/nfsv3.ko
+ 622638	 252078	   1008	 875724	  d5ccc	/lib/modules/5.18.0-3-amd64/kernel/fs/nfs/nfsv4.ko
+
+you can save a lot of RAM if you don't need NFSv4 (then there's also
+nfs_common, 408kB of sunrpc.ko, etc, etc).

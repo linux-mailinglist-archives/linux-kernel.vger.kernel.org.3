@@ -2,96 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDAF6589AFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 13:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 734EA589AFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 13:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbiHDLWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 07:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
+        id S232371AbiHDLXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 07:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiHDLWJ (ORCPT
+        with ESMTP id S230138AbiHDLXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 07:22:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCDA2AE3C;
-        Thu,  4 Aug 2022 04:22:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B31E61633;
-        Thu,  4 Aug 2022 11:22:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CAFC433C1;
-        Thu,  4 Aug 2022 11:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659612126;
-        bh=+6dpbCtRNHtHBP52GVj83vVSR1+Voq0GAalHci9STfo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H96xntaymC3uNf+tMPPHBHt/Oyt8sPKSgJkgAbsJPwMRIj8i4D2aVzWriBLvnsnc/
-         Ryc1VzufKdWBXVfGwQeg8VDhM954gGrFU+xGs0kzGcQksD7hE9J4tm4NgRARONKlga
-         UOt0wRnhz5tTTqwri2t62CKOoHf6SaUL/cR/z7WE=
-Date:   Thu, 4 Aug 2022 13:22:03 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [RFC PATCH 0/8] x86_64: Harden compressed kernel, part 1
-Message-ID: <Yuur2x+H5ESwJmcr@kroah.com>
-References: <cover.1659369873.git.baskov@ispras.ru>
- <e6e7fef1-0dff-ef72-8a17-8ecec89994ca@intel.com>
- <893da11995f93a7ea8f7485d17bf356a@ispras.ru>
- <e8342722-20f8-a566-59c5-8e8f7f271d98@intel.com>
- <29312ea704885f1b8d3c229e1f22dad7@ispras.ru>
- <973736db-2480-bbaa-d2ce-6e1b6dd2ed0c@intel.com>
- <09c1c94fb9c5006199d88caa88f237a3@ispras.ru>
+        Thu, 4 Aug 2022 07:23:35 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67EE2B182;
+        Thu,  4 Aug 2022 04:23:34 -0700 (PDT)
+Received: from fsav116.sakura.ne.jp (fsav116.sakura.ne.jp [27.133.134.243])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 274BNE8H015743;
+        Thu, 4 Aug 2022 20:23:14 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav116.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp);
+ Thu, 04 Aug 2022 20:23:14 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 274BNE6x015740
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 4 Aug 2022 20:23:14 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <d3fa0cc8-472d-d3c9-aeb9-81f50d04f774@I-love.SAKURA.ne.jp>
+Date:   Thu, 4 Aug 2022 20:23:12 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <09c1c94fb9c5006199d88caa88f237a3@ispras.ru>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
+Content-Language: en-US
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
+        Chris Murphy <lists@colorremedies.com>
+Cc:     David Sterba <dsterba@suse.cz>,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, dvyukov@google.com
+References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
+ <20220726164250.GE13489@twin.jikos.cz>
+ <CABXGCsMNF_SKns-av1kAWtR5Yd7u6sjwsFT9er8tSebfuLG8VQ@mail.gmail.com>
+ <1d1afda7-2b4b-4984-adbe-51339ebbdd18@www.fastmail.com>
+ <CABXGCsO5+L2fX-wT=-UYFgzO9JuB7RNKDzv-wg5XrCt=yCuK1w@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CABXGCsO5+L2fX-wT=-UYFgzO9JuB7RNKDzv-wg5XrCt=yCuK1w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 01:41:58PM +0300, Evgeniy Baskov wrote:
-> On 2022-08-03 17:05, Dave Hansen wrote:
-> > 
-> > That shows me that it's _possible_ to build a more strict PE loader that
-> > wouldn't load Linux.  But, in practice is anyone using a more strict PE
-> > loader?  Does anyone actually want that in practice?  Or, again, is this
-> > more strict PE loader just an academic demonstration?
-> > 
-> > The README starts:
-> > 
-> > 	This branch demonstrates...
-> > 
-> > That doesn't seem like something that's _important_ to deal with.
-> > Sounds like a proof-of-concept.
-> > 
-> > Don't get me wrong, I'm all for improving thing, even if the benefits
-> > are far off.  But, let's not fool ourselves.
+On 2022/08/04 16:35, Mikhail Gavrilov wrote:
+> On Thu, Aug 4, 2022 at 1:01 AM Chris Murphy <lists@colorremedies.com> wrote:
+>>
+>> This will be making it into Fedora debug kernels, which have lockdep enabled on them, starting with 5.20 series, which are now building in koji.
+>> https://gitlab.com/cki-project/kernel-ark/-/merge_requests/1921
 > 
-> We have commercial closed-source UEFI firmware implementation at ISP RAS
-> that follows the behavior of the secure_pe branch. That firmware is used
-> as a part of [1].
+> I saw this change, but it would be good if users of all other
+> distributions will be happy too.
 > 
-> [1] https://www.ispras.ru/en/technologies/asperitas/
 
-Are there any plans on getting those changes merged back upstream to the
-main UEFI codebase so that others can test this type of functionality
-out?
+I'm not a lockdep maintainer.
 
-thanks,
+Please submit a patch to lockdep maintainers and persuade lockdep maintainers
+to change the default value. ;-)
 
-greg k-h

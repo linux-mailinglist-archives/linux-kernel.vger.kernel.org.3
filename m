@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB92758A08E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5F058A092
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiHDSax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 14:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
+        id S239610AbiHDShO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 14:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232552AbiHDSav (ORCPT
+        with ESMTP id S238734AbiHDShL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 14:30:51 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932A020BD1;
-        Thu,  4 Aug 2022 11:30:50 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id m8so700469edd.9;
-        Thu, 04 Aug 2022 11:30:50 -0700 (PDT)
+        Thu, 4 Aug 2022 14:37:11 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD7E6A495
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 11:37:09 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id j7so768256wrh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 11:37:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=LLZraREUyJDjKKH1ZAbZl4aViUMskkpVlY1tgmbuzBQ=;
-        b=A82RRj4j5eIvBqjSKhVn9bseSl/A/rKVdZ0C9m/3KEnl5rl/JLMG4t0huZuBjD0lLl
-         XoIkgJgjLIM9abrA2Dpx2l4verQ5BGWbrxmeJFlI2wnrdxL2YxSwA/GUMQp0KH+72u/2
-         wfA/hgrh0zzZbyLJlHbB6Aymvt88PP0iwQ+kp/MwsjRSfdlMpzx63GV9dScK3WYvFCx/
-         OlCJVFplMj5+6sZv1w0cq0qZDEwToKd09dNDqsKVjK8FS0ZqMxat6XAPQwa8nz+RPJLX
-         IsBw3p5Ua7F40iFrX1s6euUDZg5cFVScn92L1HcV6vpHxQYk52rOQkeuj28hX10Ince5
-         trdg==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=B8IeHwDJ6wqDm/ZlgAQSN22yY4qh5x2F6/SpKGeiUr4=;
+        b=RFdiP7g41bMHSuMHMiydnwChvxj1DJWx5rXs+ZgU3/sQs9HhnLQlrPwdGj3Gqqnn9n
+         5z9sg2V6E0k2bf4iy5j5GzNAwM16wjfIT7NubNfE2zdsNcVG//wlm3eQozf6aRqWwdzz
+         A9oMzSdzLMARXzg3mKeGg+bpOPVKB4zBDazlwiZnS643LJda8iK3l0aclLgfHDlCKHCI
+         oMFAW/cnYCqY8qwlYxGNfuu3xlFa0qGS9SKQXnT5H/8U7dkBN8yIo+ciPo49zlXrIu3S
+         06w88Fnm55q4Mb2OZaKqYBm+mdk+9S5lzoytIKUoufIHrV/QdZKZjBo0VqJv6UoXJZ8Q
+         5bEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=LLZraREUyJDjKKH1ZAbZl4aViUMskkpVlY1tgmbuzBQ=;
-        b=RLrINb+T6GDovwqyI84zs55K+mcyGtlYVRbHeJHW074XcdZZFBp8jVkSGugRIJxGYr
-         +sD3ovCEER4aifhrN8vijEkPK7RWSBTadKezxTAciuJRY6rHPVddx+h6xxmHJ1rLWz4D
-         KA/DScuN/xGfikFjkfyBRY+iMkuhmrwhImVAf3qm3xhJmBnuBnxLDeo7GKQ+KU2Gggnx
-         ix3dvUxuVh3TT5PDh0q2kMvvMEIo5kRH7JMaajsgoNS6X2eFAvpz/QZ3Dxl3sxGS4vG/
-         cs0TzWQX88Z2Koxjhwm0XowPuEKFq18n8SUb+Chu0tFesZYJAaK+5mQeKW/9TlEsbdbb
-         zbEw==
-X-Gm-Message-State: ACgBeo2jTBSANcgADt+D0pPaA4vAPcPRoGQZpeb1Riy49FnViV15ME3k
-        /y0O+1o6RkI3EZ1J6jon5Nv1PthOhqKtYvgJzBo=
-X-Google-Smtp-Source: AA6agR4TTHPhRcnwzcotFB2sZSdavSTj78/7Wo1rRxafVgWreln/iVUhj2wzQ7WLrzcXy7Jx9TOnHhbAdbV+35jOnBc=
-X-Received: by 2002:a05:6402:f22:b0:43e:8623:d32c with SMTP id
- i34-20020a0564020f2200b0043e8623d32cmr3362050eda.265.1659637849133; Thu, 04
- Aug 2022 11:30:49 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=B8IeHwDJ6wqDm/ZlgAQSN22yY4qh5x2F6/SpKGeiUr4=;
+        b=1wz3fj5ehkkOP+4BneuomYEkuYTRfD7tdRWAT8NYTd9Bi8uxWPL1zF2TqAjxBlX8pb
+         /9HqIdgX3VVc/DpmqZQ0mMoQG6pj/lDf2pkYh2ur/Q3oJTi8szNAMkbVYazgz72XE+j1
+         LeiJmzaNIwbKYfAw091PcvzQzRoVlnHxB7YLZyUiVvuavXopMfPh9vSCWPYu+6cNGOZ9
+         IgYpbtt2iFIURgNnvDe7cxrDgFiNmhty5PzAVLIvp0Et9jFeV4OZ9uXDSyXfy/p6z9lW
+         SLq8K5tJK3OQcT8tza3bV+VxWs/cNKOy0IgUXBUHTP0CeZYtyaDMzlilEcFl/Y78G+Hk
+         Sm4g==
+X-Gm-Message-State: ACgBeo3fR4zw7vNrBS1/Vcv+m0Eki/m49ia4sgHucxhTB8dkQ+aWxYj3
+        7pTwcaAFQVWe6dVqnQDO/AA=
+X-Google-Smtp-Source: AA6agR6BXtu4trhevGRN8TVyo6MRrwFBM4GRm3VN7u8yo8mEIkgNVkRgvawIxNMQllSvIRGPR7rAVA==
+X-Received: by 2002:a5d:4f86:0:b0:21e:f78b:33f1 with SMTP id d6-20020a5d4f86000000b0021ef78b33f1mr2331775wru.38.1659638228064;
+        Thu, 04 Aug 2022 11:37:08 -0700 (PDT)
+Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id y10-20020adfe6ca000000b0021f0cf9e543sm2070037wrm.2.2022.08.04.11.37.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 11:37:07 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 19:36:57 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     clang-built-linux <llvm@lists.linux.dev>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: mainline build failure for x86_64 allmodconfig with clang
+Message-ID: <YuwRyQYPCb1FD+mr@debian>
 MIME-Version: 1.0
-References: <20220803131132.19630-1-ddrokosov@sberdevices.ru>
- <20220803131132.19630-3-ddrokosov@sberdevices.ru> <CAHp75VcVuC6yVoB1kycCOfqMa=JfCtbe3WYSK5qndtYcJy3vpg@mail.gmail.com>
- <20220803191621.tzrmndkygfe7nlpx@CAB-WSD-L081021.sigma.sbrf.ru> <20220804181723.4bljpxcwkj6cnn2f@CAB-WSD-L081021.sigma.sbrf.ru>
-In-Reply-To: <20220804181723.4bljpxcwkj6cnn2f@CAB-WSD-L081021.sigma.sbrf.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 4 Aug 2022 20:30:12 +0200
-Message-ID: <CAHp75Vcn6JCDDvugop2Ho1cayLi1CX78O42v3GifvnuSY5fvPA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] iio: add MEMSensing MSA311 3-axis accelerometer driver
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,31 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 8:17 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
-> On Wed, Aug 03, 2022 at 07:16:13PM +0000, Dmitry Rokosov wrote:
-> > On Wed, Aug 03, 2022 at 07:49:33PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Aug 3, 2022 at 3:11 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+Hi All,
 
-Please, remove unneeded context when replying!
+The latest mainline kernel branch fails to build for x86_64 allmodconfig
+with clang. The errors are:
 
-...
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3596:6: error: stack frame size (2216) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
 
-> > > > +               dev_err(dev, "cannot %s register %u from debugfs (%d)\n",
-> > > > +                       readval ? "read" : "write", reg, err);
-> > >
-> > > You may consider taking [1] as a precursor here and use str_read_write().
-> > >
-> > > [1]: https://lore.kernel.org/linux-i2c/20220703154232.55549-1-andriy.shevchenko@linux.intel.com/
-> >
-> > Oh, really... Thank you for suggestion!
->
-> I have taken it closer, and it's really helpful and nice, but looks like
-> it's not merged to linux-next.
-> Please advise how I can use it in the driver. Should I provide
-> "Depends-On:" tag as I did for my HZ units patchset?
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3908:6: error: stack frame size (2184) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
 
-No, just take that patch into your series.
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1726:6: error: stack frame size (2176) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
 
--- 
-With Best Regards,
-Andy Shevchenko
+git bisect points to 3876a8b5e241 ("drm/amd/display: Enable building new display engine with KCOV enabled").
+
+My last good build for clang was with e2b542100719 ("Merge tag 'flexible-array-transformations-UAPI-6.0-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux").
+
+I will be happy to test any patch or provide any extra log if needed.
+
+
+--
+Regards
+Sudip

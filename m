@@ -2,110 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716A658995D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C08589963
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239204AbiHDIkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S239447AbiHDIk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbiHDIko (ORCPT
+        with ESMTP id S239175AbiHDIkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:40:44 -0400
-Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A257022B2C;
-        Thu,  4 Aug 2022 01:40:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1659602405; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=HRa3cgBUGDhLJOtXf2p82GY0rr1az36E7wc+47StGrLH24UiWFXG02fYWxBaIkRwq4b6HktX88yLGouzmORH98fcPv34XoxZSUkd9ALyKhkdMrO6IavL66N9GhRKAv9CeB+KaSf+fozh9nMccDG2w7ZB7oGgZar3TWS9XP8bbEc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1659602405; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=r2MuNRxKA7fyF0B0LyObbHN/r25kRQ6vAlitFSyZznY=; 
-        b=M45y1dKNyTY6JZnb43I7pv82XRyC3YLpg0KUU3Z2jYxw4jUzWFL3SRIhgb1YgsCzgrEqGtum2r95MDP7DKrwTAXsGA2hMLk9Yil1KwgTRC7vfKSgk51gpve5kIJ8/hqq6eOqzK1kBfWKlkQGLz0Il1YEdPLhawnMXipl5Cj0pUo=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659602405;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=r2MuNRxKA7fyF0B0LyObbHN/r25kRQ6vAlitFSyZznY=;
-        b=T0BsybSAEPB/jwKl7nOSOJlUl9RcaSNLbHjm5I6vh4QRQfBm0T0UuTdRR9LJmJMt
-        jtJKYRrEWjDEh0edLVRQFLlYfJySlysO818hkuy3jjbnaGZPjWFIsUtZeVTL805Txbj
-        d57YVkn/WeDCN0HwAykHwjczjl1VaQ3Ln1wL5zdU=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1659602376436867.9051997344565; Thu, 4 Aug 2022 14:09:36 +0530 (IST)
-Date:   Thu, 04 Aug 2022 14:09:36 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Eric Biggers" <ebiggers@kernel.org>
-Cc:     "David Howells" <dhowells@redhat.com>,
-        "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        "linux-security-modules" <linux-security-module@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "syzbot+c70d87ac1d001f29a058" 
-        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>
-Message-ID: <182680296de.8276ed8742454.8804921618540697946@siddh.me>
-In-Reply-To: <Yuq7Q//SH/HjLsxH@gmail.com>
-References: <20220728155121.12145-1-code@siddh.me>
- <YunKlJCDlmyn2hJ4@sol.localdomain>
- <18261d8a63a.33799d2a402802.7512018232560408914@siddh.me>
- <Yun1rC59USrgd0fu@sol.localdomain>
- <182621f8dca.1e0e6161130907.1470656861897824669@siddh.me>
- <YuoKi0GigXm/Hcb+@sol.localdomain>
- <18262dcb20e.4bf31faa421018.1228982721921458740@siddh.me> <Yuq7Q//SH/HjLsxH@gmail.com>
-Subject: Re: [PATCH v3] kernel/watch_queue: Make pipe NULL while clearing
- watch_queue
+        Thu, 4 Aug 2022 04:40:47 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E86522B2C;
+        Thu,  4 Aug 2022 01:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1659602441;
+        bh=/KWunlLlCXBxdQLa4M371vyW0miwXwP6bA8Qrbv3P4A=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=A9QI4AA554PQTTAUkdU8v/7do3Yjxln+4zCC4Rxpvac/VZjoi1SwMFfnRX7If/qdJ
+         Jpk8alCLbU7/tdRDym6yN8kKrNtZCo6omqiq7lXmkE3IT+fzyDxyzEJWhcwgx6/iR7
+         5DybDZtymZCrclGjxEvdwE8fSAOmYrZgR0453NUs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.176.33]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MzhnN-1nWnfs0FEn-00vhHE; Thu, 04
+ Aug 2022 10:40:41 +0200
+Message-ID: <2f4c1abb-ca27-178a-31c3-5e422613e7e8@gmx.de>
+Date:   Thu, 4 Aug 2022 10:39:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/3] Dump command line of faulting process to syslog
+Content-Language: en-US
+To:     Josh Triplett <josh@joshtriplett.org>
+Cc:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220801152016.36498-1-deller@gmx.de>
+ <YugGFEjJvIwzifq7@localhost> <a0bf15a2-2f9c-5603-3adb-ffa705572a92@gmx.de>
+ <Yut+0Fg7F99MI48J@localhost>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <Yut+0Fg7F99MI48J@localhost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3GbtEcRdm4ZKQrToTNgAcxFNIFaXcDrbttEfipVSvnfyaK9MYfH
+ yArPiikB//XE1jVgg3ox3WC5+qCbiqXXzv0c99TVW+kebVHGU4nSUQbE6KLSmc8lr3/2qar
+ M3KnmtcPJ8iqTGVSOZQa71wZ9a5FSpHfWS0DyWHtVAF4MDP9zWN3Be13EacIMTgFZNzGNPh
+ CNV5tVKe/1wOpM42Z57IA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vGH8jOU6g9s=:OE2QiVQChxS4HNJOL92EOu
+ w0wNSUjUdH2q+UkzawQ7VwyhWbPJbxVHI3wy+yNUjt4IVCbH7fbrZhfnVDlkSU5+aQNSAEmrd
+ JR8SdC3lU6DCwAica2FiXosHNPXUFEawJHKRXR6XMzTUxChsUnPuPtrPlEI3G0Qgo+90AGHDZ
+ MDQGrEDyQNFqTQ1sZCnYd98zJtqxDSVQ/rp7cKNci+X26hhDSKvh0hRY4MyAbMp+J6G1NEJRQ
+ F9VoQ59DiIMHM2zRqh5KfB4nOfa7UCncGmP8CJID5MzowZY1B6QjaqC6LmOWIQZNXvVDDvS+N
+ j8SKoVuNW2Jl9Hwc0zvMm7W57SkHrGR8tqEDpX0kjrNrefuh5C09L+DqwXyVheFmTtjbnX5Ti
+ Yr1Ox/rew3eUBg0N8To4s9qqrk1f8kNvleLcZTFhxrP/nWiep6PImdvLZIt+4ngYnWOpsht99
+ V0gVaT/slGn65HitVUFNbQmDc1iSECcayAv5JnshZjT0/LbiNA8yv6DCmfZ2elrOucspDzHe9
+ ED4A5mN1lJ30aLI0qAig8wMC2D5wtvubn12H4ArgRrHVqKPlyv/kw3NxV6rWhhNZmhh3uHe1V
+ zbm22HZz/O0COSmmnTUuJamTMMCOzLbpFvHfEAJvb6ksw9EtcF4X4cWLR/cTe0gCXvzbLWcIN
+ jY9sBYPdOQvGFUayehGVCLRfIstW9f3CG8g9EnwI8nnUjmueQYnfpEutGACmBEiLvcZMEWiZL
+ QNXXXYnHZ/IG3BNXg5KzPT/qdSiW0LAWnBVcg2iAyr1jxmazrHT/LKYHCy4jwxeu63GUM0zYS
+ QKi6IlrgRaUEUn8cowOUwbdRZsYDxjtjzZHVbaAzBsiG9MJqoRoXAJzD3Iz5foH1dIINl+GPz
+ jFElHP/Xi3r1Exev421J/Os31ssSafnueJwy9NDiCuCvHZE+VpuFA3f1wDIOBfdi1A/Lt8z4r
+ Pb62o77TuLLYLHdlHqls8GcmX+ozdSJBzyRJw5Yt4SDdDZ3VsQIeyxwxdNuuB6PJxhSmWNjgU
+ YzvHD91Yv3hEVvQy2o9otB29pqeMp/Bq34+LfejGuhHjV3iMg0HFQC1wC8lS+KX2jzLz483Ej
+ HRHeCaYDOSWWb4Kz3dE4TP3JMgmqK2/iwdZQhOY8ea5NFwbd4Zp77V0Lg==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 03 Aug 2022 23:45:31 +0530  Eric Biggers  wrote:
-> Well, you should try listening instead.  Because you are not listening.
+On 8/4/22 10:09, Josh Triplett wrote:
+> On Tue, Aug 02, 2022 at 09:40:50PM +0200, Helge Deller wrote:
+>> On 8/1/22 18:57, Josh Triplett wrote:
+>>> On Mon, Aug 01, 2022 at 05:20:13PM +0200, Helge Deller wrote:
+>>>> This patch series allows the arch-specific kernel fault handlers to d=
+ump
+>>>> in addition to the typical info (IP address, fault type, backtrace an=
+d so on)
+>>>> the command line of the faulting process.
+>>>>
+>>>> The motivation for this patch is that it's sometimes quite hard to fi=
+nd out and
+>>>> annoying to not know which program *exactly* faulted when looking at =
+the syslog.
+>>>>
+>>>> Some examples from the syslog are:
+>>>>
+>>>> On parisc:
+>>>>    do_page_fault() command=3D'cc1' type=3D15 address=3D0x00000000 in =
+libc-2.33.so[f6abb000+184000]
+>>>>    CPU: 1 PID: 13472 Comm: cc1 Tainted: G            E     5.10.133+ =
+#45
+>>>>    Hardware name: 9000/785/C8000
+>>>>
+>>>> -> We see the "cc1" compiler crashed, but it would be useful to know =
+which file was compiled.
+>>>>
+>>>> With this patch series, the kernel now prints in addition:
+>>>>    cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tm=
+p/ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu -D USE_MINIINTERPRETER =
+-D NO_REGS -D _HPUX_SOURCE -D NOSMP -D THREADED_RTS -include /build/ghc/gh=
+c-9.0.2/includes/dist-install/build/ghcversion.h -iquote compiler/GHC/Ifac=
+e -quiet -dumpdir /tmp/ghc13413_0/ -dumpbase ghc_5.hc -dumpbase-ext .hc -O=
+ -Wimplicit -fno-PIC -fwrapv -fno-builtin -fno-strict-aliasing -o /tmp/ghc=
+13413_0/ghc_5.s
+>>>>
+>>>> -> now we know that cc1 crashed while compiling some haskell code.
+>>>
+>>> This does seem really useful for debugging.
+>>
+>> Yes.
+>>
+>>> However, it's also an information disclosure in various ways. The
+>>> arguments of a program are often more sensitive than the name, and log=
+s
+>>> have a tendency to end up in various places, such as bug reports.
+>>>
+>>> An example of how this can be an issue:
+>>> - You receive an email or other message with a sensitive link to follo=
+w
+>>> - You open the link, which launches `firefox https://...`
+>>> - You continue browsing from that window
+>>> - Firefox crashes (and recovers and restarts, so you don't think
+>>>   anything of it)
+>>> - Later, you report a bug on a different piece of software, and the bu=
+g
+>>>   reporting process includes a copy of the kernel log
+>>
+>> Yes, that's a possible way how such information can leak.
+>>
+>>> I am *not* saying that we shouldn't do this; it seems quite helpful.
+>>> However, I think we need to arrange to treat this as sensitive
+>>> information, similar to kptr_restrict.
+>>
+>> I wonder what the best solution could be.
+>>
+>> A somewhat trivial solution is to combine it with the dmesg_restrict sy=
+sctl, e.g.:
+>>
+>> * When ``dmesg_restrict`` is set to 0 there are no restrictions for use=
+rs to read
+>> dmesg. In this case my patch would limit the information (based on exam=
+ple above):
+>>     cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 [note: other=
+ parameters hidden due to dmesg_restrict=3D0 sysctl]
+>> So it would show the full argv[0] with a hint that people would need to=
+ change dmesg_restrict.
+>>
+>> * When ``dmesg_restrict`` is set to 1, users must have ``CAP_SYSLOG`` t=
+o use dmesg(8)
+>> and the patch could output all parameters:
+>>      cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tm=
+p/ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu ....
+>>
+>> That would of course still leave few possible corner-cases where inform=
+ation
+>> could leak, but since usually programs shouldn't crash and that
+>> people usually shouldn't put sensitive information into the parameter
+>> list directly, it's somewhat unlikely to happen.
+>>
+>> Another different solution would be to add another sysctl.
+>>
+>> Any other ideas?
+>
+> I don't think we should overload the meaning of dmesg_restrict. But
+> overloading kptr_restrict seems reasonable to me. (Including respecting
+> kptr_restrict=3D=3D2 by not showing this at all.)
 
-Sorry for that, never meant to come across like that.
+I'm fine with kptr_restrict, but I'm puzzled for which value of kptr_restr=
+ict
+the command line should be shown then.
+By looking at the meaning of kptr_restrict, I think the command line shoul=
+d be
+hidden for values 0-2.
+Do you suggest to add a new value "3" or am I missing something?
 
-> Even if wqueue->pipe was set to NULL during free_pipe_info(), there would still
-> have been a use-after-free, as the real bug was the lack of synchronization
-> between post_one_notification() and free_pipe_info().  That is fixed now.
-
-Okay, noted.
-
-> To re-iterate, I encourage you to send a cleanup patch if you see an
-> opportunity.  It looks like the state wqueue->defunct==true could be replaced
-> with wqueue->pipe==NULL, which would be simpler, so how about doing that?  Just
-> don't claim that it is "fixing" something, unless it is, as that makes things
-> very confusing and difficult for everyone.
-
-Okay, I will do that. That actually seems like a plausible thing to do, in
-v2 convo, David Howells had also remarked similarly about `defunct` to a reply.
-
-https://lore.kernel.org/linux-kernel/3565221.1658933355@warthog.procyon.org.uk/
-
-> A reproducer can just be written as a normal program, in C or another language.
-> The syzkaller reproducers are really hard to read as they are auto-generated, so
-> don't read too much into them -- they're certainly not examples of good code.
-> 
-> - Eric
-
-Okay, noted.
-
-Thanks for your patience, I probably annoyed you.
-
-Thanks,
-Siddh
+Helge

@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65715589CF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0EB589CFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239926AbiHDNl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 09:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
+        id S239934AbiHDNmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 09:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234361AbiHDNlx (ORCPT
+        with ESMTP id S234361AbiHDNmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 09:41:53 -0400
+        Thu, 4 Aug 2022 09:42:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D827129CBA
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:41:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6CE39B98
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:42:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9194DB82431
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 13:41:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B73C433B5;
-        Thu,  4 Aug 2022 13:41:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78BE4B82431
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 13:42:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77679C433C1;
+        Thu,  4 Aug 2022 13:42:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659620510;
-        bh=tft2ehdcPlqOGOhqquXqJ/QmYEfBenOXGUYgu/c2XrI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PP1IwDFDTjFeeOeQNo7hGlCkVvepWKehYd/CgEIL+ybGrIQoWxvQo1U+aYGXu3Ih9
-         SJCR6pJxGtP3vgO53tFYIrmLk5xbxbiCchaQLFUmxDER5zh3NI3IkuuCC/6iqTKMII
-         bPNxMiJJ8ulJgOILmzQ7GzRElWpLTsNCMy9V3ZwHSxME4gL/GOEGaQEMTTj4qCfRmn
-         rMIWlrdMmgv/LpU//u0NVq1rWW5oONeY17+xQf6ecDsSpq1N3cwOzJ/DDAyMnUHp51
-         aLHmC2Rnss5oC2NiUADSN+p4Gycy9sKt2Gb8hRJiHE/G5LxTB75IhVqM34mL9B9KGi
-         TbbOJiRvIdHsw==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH] f2fs: fix to check compression feature before enabling file compression
-Date:   Thu,  4 Aug 2022 21:41:40 +0800
-Message-Id: <20220804134140.14455-1-chao@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        s=k20201202; t=1659620535;
+        bh=/XC5S4YiMuClwldjj+UXqlc4TOiJVqClkgdfFwzoNSo=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=me97mjwwtm8931nbsJzE5o4eIJ/uGRgfJEEh72ynWwhWgzLUHhEVSZjqrQcIM4BFC
+         rKGV6yDH1JgIWmE3ogCBThjOSbZsGD3MVMQVnauR2IKajnk9huT/gQPTUmkKeDTpwR
+         O78L7WlAyEprpkIyaZ7o0PFbS1AYB0GE2plcbRn9+ACx+fSRc0DF7BwwLwToR0l+7F
+         BEOItp4getVa226gkMY0V+zqEoU6bbIEzbBXIzoTZ18wxW3+ZafVUCMT7AB/h8Xt7h
+         XXnbU6mGdw/UhlZIDMhhA12WahtnUWP8iGiSxzqjdTswcYo5K6KOiLhIsSljq1rt6m
+         FHk/rifJkiDew==
+Message-ID: <0b07d2ae-b3c0-1b13-37d0-068a342c7b8f@kernel.org>
+Date:   Thu, 4 Aug 2022 21:42:11 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [f2fs-dev] [PATCH] f2fs: do not set compression bit if kernel
+ doesn't support
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220804034146.3357114-1-jaegeuk@kernel.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220804034146.3357114-1-jaegeuk@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao.yu@oppo.com>
+On 2022/8/4 11:41, Jaegeuk Kim wrote:
+> If kernel doesn't have CONFIG_F2FS_FS_COMPRESSION, a file having FS_COMPR_FL via
+> ioctl(FS_IOC_SETFLAGS) is unaccessible due to f2fs_is_compress_backend_ready().
+> Let's avoid it.
+> 
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
-This patch disallow to enable file compression in image which doesn't
-support compression feature.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
- fs/f2fs/file.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 24f5b02c78e7..4a3f4eaa3fc5 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1872,6 +1872,8 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
- 			if (!f2fs_disable_compressed_file(inode))
- 				return -EINVAL;
- 		} else {
-+			if (!f2fs_sb_has_compression(F2FS_I_SB(inode)))
-+				return -EOPNOTSUPP;
- 			if (!f2fs_may_compress(inode))
- 				return -EINVAL;
- 			if (S_ISREG(inode->i_mode) && F2FS_HAS_BLOCKS(inode))
--- 
-2.36.1
-
+Thanks,

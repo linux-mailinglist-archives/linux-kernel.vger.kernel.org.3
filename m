@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C26589FC6
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D6F589FC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235120AbiHDRRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 13:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        id S236941AbiHDRRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 13:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbiHDRQ4 (ORCPT
+        with ESMTP id S232927AbiHDRRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 13:16:56 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C780F5C9D2
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 10:16:54 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id x23so427164pll.7
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 10:16:54 -0700 (PDT)
+        Thu, 4 Aug 2022 13:17:14 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FAA6A485;
+        Thu,  4 Aug 2022 10:17:12 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id i14so475384ejg.6;
+        Thu, 04 Aug 2022 10:17:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=QHDKoLkk6GDmpCFPVivtCs2hgFz4v8Al+bShpzHhVfw=;
-        b=VqJbMd6Unb+dMzpQ1YaxAmRZ3fFgtuIAqWSj3+TjBB4e0oQiM/3oxOl8xTK19I62E7
-         JumT6OWo9Ht5UVP7BN7bPyC+1pTS4ylOpwKKJ6emRCWMrtR8mOuoCThcaucl6qXTb3bm
-         wcjqg/igMmjOQa8+VkEPOnssCigJzylCu0SKGRCqV9HUECfTu7uPDCTvAIufFaxAVD51
-         qZDeRRK17bN+lMTkt4LLmW3tHQOTnjODwjkT/aGU2Y/VFsWlunNeayGzyOjDe9tE6Kpv
-         ar5PmjCYZndk/cHfxHYhkUW58IUzfbUdnylw4DfVkRCtoclRdUBV99J9491vPZCLxxwQ
-         +tBw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QsqdAv7lzfCzVrls5e3D/1HBUNjDsakydLuhi3H9Yhg=;
+        b=KmSc8/HSgtUjLn/eY3kel/629G+B2lunQLmO6hXxq1nf+hYt51xD57hD1DUHn14NDV
+         GuU4KrLJBRZPUCk/xtb8q7q4qV+gtwvIFPFYmCfo6ZczQeKDHnxNi6Q4FPM08VGpxN9F
+         AT2hgVK6n6aHUnbW7RdrTyTADlBpkKFIdJi/mlRALt5sk3rDKNYsClN4hAF6HYk2k8ud
+         AJh7F1chqTi24O7vdHwXGlWZHnmz1jqddqvqXf9b9QUzCL28CUpEyeuoo2C/WzE5HbWU
+         m49pWie4g/HPSf5BUPsb/VsJx59+rh8m4muCh1vOzFiPnCaCOs0qaYRbKAY0vyKYSgmW
+         zbNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=QHDKoLkk6GDmpCFPVivtCs2hgFz4v8Al+bShpzHhVfw=;
-        b=zuFeXHQb5gKA7RdUG6LXPxrl10hN2b/ARW9aidcEINXWvjST28gkD3oaPx6PIDPddk
-         alt8BOLX6YyXW5JkmWdCThlwgMsrmtUWIvYGfQO5rM7F1nlRuICQT1jjRtjhzW98mjLb
-         V4GkTw468P9Qu4Gi7aevEwYaRCKNo7OZhnBCBtnNZsvxdekXtZahyUZwIv9Z12VtAziQ
-         E6MzW5Tgde456Lmlv+1HLhNa+PSaG3ZyYhYk950fiFFgJCFSLnbglLrBMUF2a31F6dT7
-         p8TUY7WVpWsw4fx3k2bn/2dt0L0FdCo76Ctbuj0j5KJXgVaJmsMcOYVpvVazRNyxGaC3
-         d7EA==
-X-Gm-Message-State: ACgBeo3yVUvxctJY2kTyOTAf68c8EsFGVuBV7JFYZSuVHfq5/a8/2RI5
-        kRi2pY2iKhP3z1RbEz0sToY=
-X-Google-Smtp-Source: AA6agR7u9s3VhH6I4fg6XbCQBSObT3COgDyRm9I5NQPZb+wLdfqVv9G0l0QVaB45S9rdZISkc8gLwQ==
-X-Received: by 2002:a17:90a:fe92:b0:1f5:1b0b:1cd7 with SMTP id co18-20020a17090afe9200b001f51b0b1cd7mr3092551pjb.197.1659633414088;
-        Thu, 04 Aug 2022 10:16:54 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id t17-20020a170902e1d100b0016d8b0dfd61sm1179202pla.178.2022.08.04.10.16.52
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Aug 2022 10:16:53 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH 2/2] mm: Remember young bit for page migrations
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <Yuv811AnT9aoBxbH@xz-m1.local>
-Date:   Thu, 4 Aug 2022 10:16:50 -0700
-Cc:     LKML <linux-kernel@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Minchan Kim <minchan@kernel.org>
-Content-Transfer-Encoding: 7bit
-Message-Id: <40FDA6B1-EB53-484D-91A0-323606199C4E@gmail.com>
-References: <20220803012159.36551-1-peterx@redhat.com>
- <20220803012159.36551-3-peterx@redhat.com>
- <EEBB9DDB-3D67-42BD-BD16-4264F40760CD@gmail.com>
- <YuqmKmVtVYnkDF7J@xz-m1.local>
- <A53E0AC4-D171-41C1-9C2D-F8145AAB4A36@gmail.com>
- <Yuv811AnT9aoBxbH@xz-m1.local>
-To:     Peter Xu <peterx@redhat.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QsqdAv7lzfCzVrls5e3D/1HBUNjDsakydLuhi3H9Yhg=;
+        b=r9X5X9bseGsz6VjJWkRCtgkqSA603GliEdUhsmup86x0lLzMkZ2OALE3BKOMqEzJM9
+         mh6T2cT2SADWRZSE0Kqth9XrZ0iZ/6VBEiiH/Vbu/kwMfw7R+2+fijMic4RfVv0OCDbZ
+         9dTitVekV2LGk7UqFdMND+gdtieyvhVkFiH4B+OrLevx/tMwjwKaFc8bGLC6qrXG6d5z
+         IOLMWqjEit0PwSixEySW1gMzS6zRwyWwLG5+iMjScY6xGdNgFNvB/KJ0xdrL22DKtWnU
+         VceIL3ayB2fCscpSpOwKP3CeHXjssodVMUYO7hf0oQRihL14i4IXx9gWouRuFdI/bqVB
+         LSjA==
+X-Gm-Message-State: ACgBeo3o34pWLtCvmV4r0BgMrBXIM3kwoNAd6Z/3FmVFhmavvKDdbZAR
+        XfqFyNnF182o6GA9wD1iAJvuGRsI3T25dUBsciY=
+X-Google-Smtp-Source: AA6agR6OoOj08B7Hsh9uYlMY2QWamsku3wjAUwuzJj8XR5bHi7H75/jMIvGbCspmJi45/sQjkh7ZRgWruXaZmSq+nfE=
+X-Received: by 2002:a17:907:6e02:b0:72b:9f16:1bc5 with SMTP id
+ sd2-20020a1709076e0200b0072b9f161bc5mr2244766ejc.676.1659633430590; Thu, 04
+ Aug 2022 10:17:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220803134821.425334-1-lee@kernel.org>
+In-Reply-To: <20220803134821.425334-1-lee@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 4 Aug 2022 10:16:59 -0700
+Message-ID: <CAADnVQ+X_B4LC6CtYM1PXPA4BBprWLj5Qip--Eeu32Zti==Ydw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] bpf: Drop unprotected find_vpid() in favour of find_get_pid()
+To:     Lee Jones <lee@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -85,22 +75,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Aug 4, 2022, at 10:07 AM, Peter Xu <peterx@redhat.com> wrote:
+On Wed, Aug 3, 2022 at 6:48 AM Lee Jones <lee@kernel.org> wrote:
+>
+> The documentation for find_pid() clearly states:
+>
+>   "Must be called with the tasklist_lock or rcu_read_lock() held."
+>
+> Presently we do neither.
+>
+> Let's use find_get_pid() which searches for the vpid, then takes a
+> reference to it preventing early free, all within the safety of
+> rcu_read_lock().  Once we have our reference we can safely make use of
+> it up until the point it is put.
+>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: KP Singh <kpsingh@kernel.org>
+> Cc: Stanislav Fomichev <sdf@google.com>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: bpf@vger.kernel.org
+> Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+> Signed-off-by: Lee Jones <lee@kernel.org>
+> ---
+>
+> v1 => v2:
+>   * Commit log update - no code differences
+>
+>  kernel/bpf/syscall.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 83c7136c5788d..c20cff30581c4 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+>         const struct perf_event *event;
+>         struct task_struct *task;
+>         struct file *file;
+> +       struct pid *ppid;
+>         int err;
+>
+>         if (CHECK_ATTR(BPF_TASK_FD_QUERY))
+> @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+>         if (attr->task_fd_query.flags != 0)
+>                 return -EINVAL;
+>
+> -       task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
+> +       ppid = find_get_pid(pid);
+> +       task = get_pid_task(ppid, PIDTYPE_PID);
+> +       put_pid(ppid);
 
-> On Wed, Aug 03, 2022 at 11:42:39PM -0700, Nadav Amit wrote:
->> On Aug 3, 2022, at 9:45 AM, Peter Xu <peterx@redhat.com> wrote:
-> 
-> For this series, I can think more of dropping the young bit for migration
-> entry during these madvises (which should be relatively safe with the
-> pgtable held, since I don't need to touch the page but just modify the swap
-> entry within), but probably that's not really the major problem here, so
-> not sure whether that matters a huge lot (e.g., for FREE we should really
-> drop the whole entry?).
-
-Sounds good to me. I just had a look whether the swap entry should be
-checked and hit these additional cases, so I thought they are worthy of
-consideration. But as they are already not handling some cases, which is
-valid for madvise's hints, leaving it to later sounds fine.
-
-Handling migration entries anyhow might not be worthy of the risk of
-breaking something.
+rcu_read_lock/unlock around this line
+would be a cheaper and faster alternative than pid's
+refcount inc/dec.

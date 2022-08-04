@@ -2,122 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C4658988B
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C1B589891
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239169AbiHDHiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
+        id S239217AbiHDHkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239056AbiHDHim (ORCPT
+        with ESMTP id S239199AbiHDHkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:38:42 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14FD56BBD;
-        Thu,  4 Aug 2022 00:38:40 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id w10so18632700plq.0;
-        Thu, 04 Aug 2022 00:38:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=az7WEft7Sc4VxW/LA8uRMUGhN50YXVj2wsFEmSNbwI0=;
-        b=h0zSFS6uH0vCgxTmF8cF89TYwWQJxdnOVHmR7BohpAqY5YufgaVpHKSzbD77CaVusq
-         QMt/bgVtdLGi5IxWW1OFmUEGlZ8dN1s/r9p/gpbeAUkuSX7dyDKki7z5M4lnWUgBVO4f
-         vgEz8DuxBG3g78WK4iu99y0cgfsJZCNFh3PC73OTA7M7XDi3i667MCsOEBwQoc8AAlW7
-         33jgSB7whMXVoNVE2pJ1RsBT+gPLxSq9uP3cWaWxgfgrTJaRMtHotYWWW+yXF+kGO2Ja
-         48yryQNBuL8blZx4WMaIR9jfo74A7wVIRohIBnCiBRpQito6oBJVUcMbwQNj+nIxGKjY
-         ez6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=az7WEft7Sc4VxW/LA8uRMUGhN50YXVj2wsFEmSNbwI0=;
-        b=sewiGGVLeCN5b6/uHl3XrqkWjH1Z7KBOHlyyBRLz1VC3qwX2VYAxDlsQB16kWhXePj
-         FeCflX5tXE/lDMRNfDo5ZPpRUiKmuaenBd2r1GnQHGCWaBIYbAzBwsHWVwIWHgpln1RJ
-         SQ06acklt3JZE5Fa6FSnAtHP8vBa9A4vTisqkleaCoc25geyLnHHxc0o9NHV4rgQVgDY
-         z23CrK+nCYo7VBBGFCru6uzRnyuMdH8ul2cBsGNcAi/q5S9hnHVA7RLUgVADgMMSuq9z
-         AhWhiS9A3wt6nXMFhfq0LOkk2kKHHWxNSAyyMAUogbSb1KCcxCaWK8kkNk97q7VtEra3
-         zKPg==
-X-Gm-Message-State: ACgBeo0uyxv8/U8D+id4sS+uKtdoW02Lx1qqptsJsdamz2c3MqhMh8n7
-        TC18FegVPy2nqk6schojrko=
-X-Google-Smtp-Source: AA6agR5HjKkbWfhVRJdYtWXLHBqJVjeFK9L9Gw6l6MBsKAAvTPO+da1RezAp5CdL271RyeBZoct95w==
-X-Received: by 2002:a17:90b:1bd2:b0:1f5:313a:de64 with SMTP id oa18-20020a17090b1bd200b001f5313ade64mr727237pjb.116.1659598720030;
-        Thu, 04 Aug 2022 00:38:40 -0700 (PDT)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id k20-20020a170902761400b0016f1ef2cd44sm116556pll.154.2022.08.04.00.38.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 00:38:39 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: kvm/x86: test if it checks all the bits in the LBR_FMT bit-field
-Date:   Thu,  4 Aug 2022 15:38:19 +0800
-Message-Id: <20220804073819.76460-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 4 Aug 2022 03:40:35 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CF92A70A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:40:33 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 16:40:25 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1659598832;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aKocoFOHQjUWCKVWggVJ2diOKUCvDqNI0lkZdeg2bgA=;
+        b=i9z7N0lExHqwmkveUOibcw3zZZk0YbJ90WJB3O858Gpqzft3a0kkWOFQj8zmJvOzvcIDtE
+        mbvuw/O43psDK87O1qnOBvSsdZ5tUncP0EDzG5ZdtSFBurwyXRbknQQBWGZiLGsZZXFptI
+        8wpOloER93fRmvRiOZyL/P1FmU5mwss=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [bug report] mm, hwpoison: memory_failure races with
+ alloc_fresh_huge_page/free_huge_page
+Message-ID: <20220804074025.GA2551573@ik1-406-35019.vs.sakura.ne.jp>
+References: <3c542543-0965-ef60-4627-1a4116077a5b@huawei.com>
+ <Yuii5FnAXe/q7fx/@FVFYT0MHHV2J>
+ <f2ad010b-b3bf-77c9-2256-701114b5d57e@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f2ad010b-b3bf-77c9-2256-701114b5d57e@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Tue, Aug 02, 2022 at 02:27:36PM +0800, Miaohe Lin wrote:
+> On 2022/8/2 12:07, Muchun Song wrote:
+> > On Tue, Aug 02, 2022 at 10:00:50AM +0800, Miaohe Lin wrote:
+> >> Hi all:
+> >>     When I investigate the mm/memory-failure.c code again, I found there's a possible race window
+> >> between memory_failure and alloc_fresh_huge_page/free_huge_page. Thank about the below scene:
+> >>
+> >> CPU 1							CPU 2
+> >> alloc_fresh_huge_page -- page refcnt > 0		memory_failure
+> >>   prep_new_huge_page					  get_huge_page_for_hwpoison
+> >> 							    !PageHeadHuge -- so 2(not a hugepage) is returned
+> >>     hugetlb_vmemmap_optimize -- subpages is read-only
+> >>     set_compound_page_dtor -- PageHuge is true now, but too late!!!
+> >> 							  TestSetPageHWPoison(p)
+> >> 							    -- We might write to read-only subpages here!!!
+> >>
+> >> Another similar scene:
+> >>
+> >> CPU 1							CPU 2
+> >> free_huge_page -- page refcnt == 0 and not PageHuge	memory_failure
+> >> 							  get_huge_page_for_hwpoison
+> >> 							    !PageHeadHuge -- so 2(not a hugepage) is returned
+> >> 							  TestSetPageHWPoison(p)
+> >> 							    -- We might write to read-only subpages here!!!
+> >>   hugetlb_vmemmap_restore -- subpages can be written to now, but too late!!!
+> >>
+> > 
+> > I agree this race is possible, I have proposed this race in thread [1].
 
-User space only enable guest LBR feature when the exactly supported
-LBR format value is initialized to the MSR_IA32_PERF_CAPABILITIES.
-The input is also invalid if only partially supported bits are set.
+Thank you for reminding this, and I agree that we need some solution.
 
-Note for PEBS feature, the PEBS_FORMAT bit field is the primary concern,
-thus if the PEBS_FORMAT input is empty, the other bits check about PEBS
-(like PEBS_TRAP or ARCH_REG) will be ignored.
+> 
+> Oh, I remember I see the race proposed in [1] but I did not look into that carefully at that time. Sorry.
+> 
+> > But I didn't think more how to solve it.
+> I hope this thread can find a good solution. :)
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Both of the races show that __get_huge_page_for_hwpoison() fails to
+capture the case of generic compound page during turning into hugetlb,
+What makes things complicated is that no one knows to which state
+such a compound page finally turns into. So I think that if the page
+to be handled is an unknown compound page, we need to wait until it
+becomes some known page state to avoid misjudging.
 
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-index 6ec901dab61e..98483947f921 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-@@ -13,6 +13,7 @@
- 
- #define _GNU_SOURCE /* for program_invocation_short_name */
- #include <sys/ioctl.h>
-+#include <linux/bitmap.h>
- 
- #include "kvm_util.h"
- #include "vmx.h"
-@@ -56,7 +57,7 @@ int main(int argc, char *argv[])
- 	const struct kvm_cpuid_entry2 *entry_a_0;
- 	struct kvm_vm *vm;
- 	struct kvm_vcpu *vcpu;
--	int ret;
-+	int ret, bit;
- 	union cpuid10_eax eax;
- 	union perf_capabilities host_cap;
- 
-@@ -97,6 +98,12 @@ int main(int argc, char *argv[])
- 	ret = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, 0x30);
- 	TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
- 
-+	/* testcase 4, reject LBR_FMT if only partially supported bits are set */
-+	for_each_set_bit(bit, (unsigned long *)&host_cap.capabilities, 6) {
-+		ret = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, BIT_ULL(bit));
-+		TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
-+	}
-+
- 	printf("Completed perf capability tests.\n");
- 	kvm_vm_free(vm);
- }
--- 
-2.37.1
+If we need a quick small fix, we may replace the check "!PageHeadHuge()"
+in __get_huge_page_for_hwpoison() with "!PageCompound()", and add another
+retry path in get_huge_page_for_hwpoison() for non-hugetlb compound pages.
 
+Thanks,
+Naoya Horiguchi
+
+> 
+> > 
+> > [1] https://lore.kernel.org/linux-mm/20220623235153.2623702-1-naoya.horiguchi@linux.dev/T/#ma094a7cea7df8fd9a77a91551bf39077d89e23bd
+> > 
+> >> I think the above scenes are possible. But I can't found a stable solution to fix it. Any suggestions?
+> >> Or is it not worth to fix it as it's too rare? Or am I miss something?
+> >>
+> > 
+> > Luckily, the system will panic at once, which encountering this race. However,
+> > we don't see any bug report. If we have an easy way to fix it, I think it is worth.
+> 
+> Agree. But I can't find a easy way to fix it yet.
+> 
+> > Just a quick reply, no suggestion/solutions from me.
+> 
+> Many thanks for your quick reply.
+> 
+> > 
+> > Thanks.
+> > 
+> >> Any response would be appreciated!
+> >>
+> >> Thanks!
+> >>
+> > .
+> > 
+> 

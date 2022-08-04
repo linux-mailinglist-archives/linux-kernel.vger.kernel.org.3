@@ -2,77 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4D3589926
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7F9589927
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238944AbiHDIQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
+        id S239483AbiHDIQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239470AbiHDIQp (ORCPT
+        with ESMTP id S239453AbiHDIQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:16:45 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904506564F;
-        Thu,  4 Aug 2022 01:16:36 -0700 (PDT)
-Received: from mail-ej1-f49.google.com ([209.85.218.49]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M7s1M-1oNNuy3ele-004z2a; Thu, 04 Aug 2022 10:16:34 +0200
-Received: by mail-ej1-f49.google.com with SMTP id gk3so23334911ejb.8;
-        Thu, 04 Aug 2022 01:16:34 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2MJ/SGRoMGiPsa4MzvUq42cJCMCZ4KQSCcekc6hRMmxyk84ljm
-        unrL0+SfRGP2b4I6pTU4Sz46udLxovaSNklJufA=
-X-Google-Smtp-Source: AA6agR6Jg653+yBBOUyAYrjW3VBIXsaHZRBgf5YvZt1uhUezA9TFx1DbJkqof0fuLkHWcFEb9AVXoO4ROyCCP0sW+j0=
-X-Received: by 2002:a17:907:7395:b0:730:b636:2c89 with SMTP id
- er21-20020a170907739500b00730b6362c89mr572107ejc.547.1659600994444; Thu, 04
- Aug 2022 01:16:34 -0700 (PDT)
+        Thu, 4 Aug 2022 04:16:46 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799C165812
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659601005; x=1691137005;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jGckr1w3kvfLQM3Vz1vsva5+NTL4JHMNpNhm/eQ3EAk=;
+  b=oCZuK10tg9PqAb6E9XDoU84RfgeJiP+HNtrPfMqtyGXj2vPvk3pJgOaR
+   dCZQvk3WQ/ohE/4xGMV3MO86dxZMyiygtsTIoUJKn3JL7a/U3WpNDbfKP
+   +vT0i7jUiVkEqkfT3mGlip51JF4zWJ7PJdX47RsqRUmfcfLg2Pvae7CEe
+   ywDcw5UERS0Rm/vfQuLCMulxdjDpQQN9m9okdsClnpHu37tpfqvmDDaSB
+   IpwyOWPw9ZkV0xrOLzTW3lIzSZLtJuSKISv5RTBVRjwLSdOHPm+nphxsQ
+   M5HzHsfJgdCAMduK/tgY26jbgw7iZR8XlgHbxPUJPmy6M6MY5feE5T7eR
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="351585237"
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="351585237"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 01:16:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="636006452"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 Aug 2022 01:16:43 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJW27-000I99-0X;
+        Thu, 04 Aug 2022 08:16:43 +0000
+Date:   Thu, 04 Aug 2022 16:16:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 625395c4a0f4775e0fe00f616888d2e6c1ba49db
+Message-ID: <62eb8054.KTKwx9L7ZAfKTwam%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220706231536.2041855-5-heiko@sntech.de> <mhng-d90c67dc-ace1-4413-9010-f9f26c60d3da@palmer-ri-x1c9>
-In-Reply-To: <mhng-d90c67dc-ace1-4413-9010-f9f26c60d3da@palmer-ri-x1c9>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 4 Aug 2022 10:16:18 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1kE0FAbeUoO-JwzHKPsDVyTT7GGCsLoow=V2zKdSr0_Q@mail.gmail.com>
-Message-ID: <CAK8P3a1kE0FAbeUoO-JwzHKPsDVyTT7GGCsLoow=V2zKdSr0_Q@mail.gmail.com>
-Subject: Re: [PATCH v7 4/4] riscv: implement cache-management errata for
- T-Head SoCs
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Fu <wefu@redhat.com>, Guo Ren <guoren@kernel.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Christoph Hellwig <hch@lst.de>,
-        Samuel Holland <samuel@sholland.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:MpEaQL2z72TA8qDsmM+HfNA8MYZVzn5f99pf51FMQyKL/UmAWy3
- H3u8qUyz1rgyAhXYod/ulCVxBm7WYQXYS6k8i/EfAp4onbAynCFI0EDwhc9k+KhE0x3XkRC
- 85znXWSkrxCZ6r9txHUU2lSX5z3ACjEmu6UgH4/KXiq4M/WQzGU54/XQWsYmpWbu5Y+On04
- sd+PPL1vymPEaLniMPjUQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XC4b6I/2uvU=:hDYHUgDsPJYSVAZ2pVm6Zy
- 50QgSwFrhTNBoR++Meg+QWkWZlwyOr8FSIQlnNaAgUF3uMve9oc4CQ2p7T3U08/rhKpnkDn1Q
- HGRBJUzkvG5UgdXipdAN2V8E3ERLh0WHbfcDHR/A/A+43wg0k05EHIGHARM9wNgFANnkqmGaO
- F//sBS28SLLYdAIcU8QlP10y65iw31lzotNyquk2aMKdL1CbFKgEtLsCPpS+0qzk7Oc6MRaNu
- 8gC2sUS9nVU2imae/GdC55HYT/CWBLPLR4uZI7WeYP/F+L7FKKqJivS1hNARvRMPTcwTX3yG9
- RWY5eBalKnBldgzoSJ9Offb4j85w0dvZ1rjd7g8tDYTedD7v1oK1YG6e0WZNGHUzEg6bdmt/X
- 1WkYMbH3UnCgf99FXGkTYeTLopEcYeEKoyUZe+ETwtXFlPG7ZQy9cww8PcTLmnFlnOAzkSI+H
- dbYOEThZ2GEEReTbu2az5TaK12hsUJX6eoabTW9fhM21DWuPGBa5dc/M0A1XkS00nNURGsN0l
- LbJSCgfD5RqVaFTHG5LsGz/AQleAnaXGoMfl0TV0VdWVDSKQ3hGKUmfOAf+j2BIqkK0+C+Zkj
- nyU6YByDygUJQoI684ub+OZvDqe2RvqAFgsJj4sEX2BvwU0ri6e2iErxY83FSy12iFPMMQTv9
- ZBtKfO9y//mkWICuJHMep5q5+nutIW9rYyJolTLvnWb88Xw6165Iy+ZgWamSlDC0NjLNJhekj
- my9zekznES6iW3aLsbXoWfdKkjPBCPpAowsGYPj1NGoOjgTo+gosognJjd8ZnAObbdM9ZPxG8
- yp3m3PWKL2CiSTp2lbrlvgOfVgLgS7ADaDLydtU+0S5/51sFbvM1tNlu6g+TMJYfV1/6yafjL
- r3QkF6H6g9AMHQcdgONQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,17 +62,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 2:28 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 625395c4a0f4775e0fe00f616888d2e6c1ba49db  x86/numa: Use cpumask_available instead of hardcoded NULL check
 
-> I know I said I really don't want the executable .long stuff for this,
-> and IIRC that's a pretty common sentiment.  I'm not sure if I'm just fed
-> up with all the craziness, but I'm kind of inclined to just merge this
-> as-is -- at least that way we can get the hardware working.
+elapsed time: 973m
 
-There is usually not much choice here if you want to allow building
-with older toolchains. You might want to add a comment for each one
-of those to reference the (projected) binutils version that adds support
-so it can be cleaned up after you raise the minimum toolchain
-requirements, but that takes years.
+configs tested: 97
+configs skipped: 66
 
-        Arnd
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+i386                                defconfig
+x86_64                           rhel-8.3-syz
+i386                             allyesconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+csky                              allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+xtensa                         virt_defconfig
+arm                        multi_v7_defconfig
+sh                          rsk7264_defconfig
+loongarch                         allnoconfig
+arm                            qcom_defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arc                  randconfig-r043-20220804
+um                                  defconfig
+sh                          r7785rp_defconfig
+sh                                  defconfig
+mips                 decstation_r4k_defconfig
+sh                        sh7757lcr_defconfig
+loongarch                           defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                          randconfig-c001
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+arc                           tb10x_defconfig
+arc                     haps_hs_smp_defconfig
+powerpc                 mpc8540_ads_defconfig
+sh                        sh7785lcr_defconfig
+alpha                             allnoconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220804
+arm                        mini2440_defconfig
+powerpc                 mpc837x_rdb_defconfig
+m68k                       bvme6000_defconfig
+arm                        cerfcube_defconfig
+sh                           sh2007_defconfig
+powerpc                     mpc83xx_defconfig
+arc                         haps_hs_defconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+s390                             allyesconfig
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                        randconfig-a012
+i386                          randconfig-a013
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a015
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+mips                           rs90_defconfig
+powerpc                      obs600_defconfig
+x86_64                        randconfig-k001
+mips                          malta_defconfig
+arm                       cns3420vb_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,122 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940D3589736
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 06:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DA658973F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238755AbiHDEz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 00:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
+        id S238782AbiHDFEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 01:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiHDEzY (ORCPT
+        with ESMTP id S238660AbiHDFEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 00:55:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457419FE2;
-        Wed,  3 Aug 2022 21:55:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5D40B82493;
-        Thu,  4 Aug 2022 04:55:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE07C433D6;
-        Thu,  4 Aug 2022 04:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659588920;
-        bh=HnsU+b8k30Q3vGwqLH//3BHKuwTI/NeOTRFdsLejRrY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pHPZDwP7URy67k76afgFsEaz5LW9tQzOCmSft6/vcJu8aciaTzdAWofgx+XM8Sq4N
-         DjB17lmc1LbgW5iBiMzTw8yGUXnhz1Trs8soeRPY8jJOZwie3qHaATQaCtquHk1cGX
-         kDK2tsPnl5kA5ZQdYLWVwPG3DDt06onaQaFF9EcfS+/pEVkb2PVBet5MbfLbJlm2bN
-         Tyvdz0T56hm4iulHmW6/hGgQQDU3TeCF/1VgEP0/SVSQpO3YiC17hQYsaMlm6kCpC3
-         eQ1y1wOWTPNJM+1uhjqquAfyDiDIaHzyf6gTs5Ng2qNfa+2nGZhq05qL3p/G+L1U9M
-         NRxPO6GkMnULg==
-Date:   Wed, 3 Aug 2022 21:55:18 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, mbenes@suse.cz
-Subject: Re: [PATCH] Revert "x86/unwind/orc: Don't skip the first frame for
- inactive tasks"
-Message-ID: <20220804045518.bfhe3rxhpkxzn4hk@treble>
-References: <20220727031506.59322-1-chenzhongjin@huawei.com>
+        Thu, 4 Aug 2022 01:04:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A6535FAEC
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659589473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6BgLzkyxivpxssxT30ZKZR41YIXRw12sSiCVIsAhFrQ=;
+        b=Vj97CRW0YyMEYzDVZo0fqR3Ey0aH1mBWu+HH9l1L24Eoc+dU+xAiQuHYk/AEcrBsQKAuDa
+        v//criCHghG+HNGNiCHzs6MAxe/ofEnASrKPtZbD6knZ8U3yf1DAyHvzC8OQjbWvShabSI
+        K6g4GPpFzAIfQGhvrnABQw3R5iGxP2g=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-GxoDlMa-P7SSH2uciyYWRg-1; Thu, 04 Aug 2022 01:04:29 -0400
+X-MC-Unique: GxoDlMa-P7SSH2uciyYWRg-1
+Received: by mail-lf1-f70.google.com with SMTP id f21-20020a056512229500b0048af0b6da1dso3544198lfu.22
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 22:04:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6BgLzkyxivpxssxT30ZKZR41YIXRw12sSiCVIsAhFrQ=;
+        b=eIUa7wmYHxkqg3MTtmkSr3YyExcLYLPCLIEGg31/+OLqI1oo/WKCQ8JabD/6qf+YG3
+         hvf1ZZDQ8WsWUKOKO646+Ml5TQiNBMTYUWJ9BUBRRPhCsmlYTR48PX88hJaEQW5J5J0i
+         W5gv3IBA6we3gAeYawm05oI7fAI55oeCxC8G9Y0yCe30X/ygqqTWNV+gMBq5vbDidJVR
+         HsdybqaBvQYeglLpViNo77UfQawJhaj0XdgmkuVjwUY+2ae2ROcgs6jmtQLra0z3HH0o
+         0kXqjmfQRw+litCIWyhJFW2FdRvL11f3aCyzmRzUX2oKWv5QbG07sjehP6TbpDXVnwD/
+         HhIg==
+X-Gm-Message-State: ACgBeo2XND7KhsBVcz9Ekt0kri4imOduN4Qv9FZ/IEXlyOujjpc5s2bw
+        nxAGUnzSv2BbXXm0moWyPftcOWwB6RJAkqXgtAGu8as49XGLfWXPPfHhdPc/DJPIFDBl8vTiv4G
+        Fo71TTYZz6VMyMtRhVW7pjy8jb2P//W1g/I4p1RZ/
+X-Received: by 2002:a19:ac09:0:b0:48a:d1b5:1791 with SMTP id g9-20020a19ac09000000b0048ad1b51791mr89510lfc.397.1659589467815;
+        Wed, 03 Aug 2022 22:04:27 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4t/K2cGtun6THXBNHPloepeMXgVEufBLuHVeiLudT98dIeu2GyjvQqL3UL5dgFI7QeRnYBIPno+nD0SyHPerE=
+X-Received: by 2002:a19:ac09:0:b0:48a:d1b5:1791 with SMTP id
+ g9-20020a19ac09000000b0048ad1b51791mr89499lfc.397.1659589467615; Wed, 03 Aug
+ 2022 22:04:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220727031506.59322-1-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220721084341.24183-1-qtxuning1999@sjtu.edu.cn>
+ <20220721084341.24183-2-qtxuning1999@sjtu.edu.cn> <16a232ad-e0a1-fd4c-ae3e-27db168daacb@redhat.com>
+ <2a8838c4-2e6f-6de7-dcdc-572699ff3dc9@sjtu.edu.cn> <CACGkMEuwgZRt=J_2i-XugMZtcG-xZ7ZF1RpTjmErT5+RCcZ1OQ@mail.gmail.com>
+ <682271447.4491372.1659449548731.JavaMail.zimbra@sjtu.edu.cn>
+In-Reply-To: <682271447.4491372.1659449548731.JavaMail.zimbra@sjtu.edu.cn>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 4 Aug 2022 13:04:16 +0800
+Message-ID: <CACGkMEt4GzC7t0qqc2SgUWDRB9Amr+XDKiYOKmogrOyfCBFwvA@mail.gmail.com>
+Subject: Re: [RFC 1/5] vhost: reorder used descriptors in a batch
+To:     Guo Zhi <qtxuning1999@sjtu.edu.cn>
+Cc:     eperezma <eperezma@redhat.com>, sgarzare <sgarzare@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 11:15:06AM +0800, Chen Zhongjin wrote:
-> This reverts commit f1d9a2abff66aa8156fbc1493abed468db63ea48.
-> 
-> When CONFIG_GCOV_PROFILE_ALL is enabled, show_stack() and related
-> functions (e.g. dump_stack) will break for x86 ORC unwinder.
-> 
-> Call Trace:
->  <TASK>
->  ? dump_stack_lvl+0x83/0xb7
->  ? schedule+0x1/0x190
->  ? dump_stack+0x13/0x1f
->  ? handler_pre0+0x3f/0x53 [kp_unwind]
->  ...
-> 
-> show_trace_log_lvl() searches text address on stack to validate
-> whether unwind results are reliable. The code:
+On Tue, Aug 2, 2022 at 10:12 PM Guo Zhi <qtxuning1999@sjtu.edu.cn> wrote:
+>
+>
+>
+> ----- Original Message -----
+> > From: "jasowang" <jasowang@redhat.com>
+> > To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>
+> > Cc: "eperezma" <eperezma@redhat.com>, "sgarzare" <sgarzare@redhat.com>,=
+ "Michael Tsirkin" <mst@redhat.com>, "netdev"
+> > <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>=
+, "kvm list" <kvm@vger.kernel.org>,
+> > "virtualization" <virtualization@lists.linux-foundation.org>
+> > Sent: Friday, July 29, 2022 3:32:02 PM
+> > Subject: Re: [RFC 1/5] vhost: reorder used descriptors in a batch
+>
+> > On Thu, Jul 28, 2022 at 4:26 PM Guo Zhi <qtxuning1999@sjtu.edu.cn> wrot=
+e:
+> >>
+> >> On 2022/7/26 15:36, Jason Wang wrote:
+> >>
+> >>
+> >> =E5=9C=A8 2022/7/21 16:43, Guo Zhi =E5=86=99=E9=81=93:
+> >>
+> >> Device may not use descriptors in order, for example, NIC and SCSI may
+> >> not call __vhost_add_used_n with buffers in order.  It's the task of
+> >> __vhost_add_used_n to order them.
+> >>
+> >>
+> >>
+> >> I'm not sure this is ture. Having ooo descriptors is probably by desig=
+n to have
+> >> better performance.
+> >>
+> >> This might be obvious for device that may have elevator or QOS stuffs.
+> >>
+> >> I suspect the right thing to do here is, for the device that can't per=
+form
+> >> better in the case of IN_ORDER, let's simply not offer IN_ORDER (zeroc=
+opy or
+> >> scsi). And for the device we know it can perform better, non-zercopy e=
+thernet
+> >> device we can do that.
+> >>
+> >>
+> >>   This commit reorder the buffers using
+> >> vq->heads, only the batch is begin from the expected start point and i=
+s
+> >> continuous can the batch be exposed to driver.  And only writing out a
+> >> single used ring for a batch of descriptors, according to VIRTIO 1.1
+> >> spec.
+> >>
+> >>
+> >>
+> >> So this sounds more like a "workaround" of the device that can't consu=
+me buffer
+> >> in order, I suspect it can help in performance.
+> >>
+> >> More below.
+> >>
+> >>
+> >>
+> >> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+> >> ---
+> >>   drivers/vhost/vhost.c | 44 +++++++++++++++++++++++++++++++++++++++++=
+--
+> >>   drivers/vhost/vhost.h |  3 +++
+> >>   2 files changed, 45 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> >> index 40097826c..e2e77e29f 100644
+> >> --- a/drivers/vhost/vhost.c
+> >> +++ b/drivers/vhost/vhost.c
+> >> @@ -317,6 +317,7 @@ static void vhost_vq_reset(struct vhost_dev *dev,
+> >>       vq->used_flags =3D 0;
+> >>       vq->log_used =3D false;
+> >>       vq->log_addr =3D -1ull;
+> >> +    vq->next_used_head_idx =3D 0;
+> >>       vq->private_data =3D NULL;
+> >>       vq->acked_features =3D 0;
+> >>       vq->acked_backend_features =3D 0;
+> >> @@ -398,6 +399,8 @@ static long vhost_dev_alloc_iovecs(struct vhost_de=
+v *dev)
+> >>                         GFP_KERNEL);
+> >>           if (!vq->indirect || !vq->log || !vq->heads)
+> >>               goto err_nomem;
+> >> +
+> >> +        memset(vq->heads, 0, sizeof(*vq->heads) * dev->iov_limit);
+> >>       }
+> >>       return 0;
+> >>   @@ -2374,12 +2377,49 @@ static int __vhost_add_used_n(struct vhost_v=
+irtqueue
+> >>   *vq,
+> >>                   unsigned count)
+> >>   {
+> >>       vring_used_elem_t __user *used;
+> >> +    struct vring_desc desc;
+> >>       u16 old, new;
+> >>       int start;
+> >> +    int begin, end, i;
+> >> +    int copy_n =3D count;
+> >> +
+> >> +    if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
+> >>
+> >>
+> >>
+> >> How do you guarantee that ids of heads are contiguous?
+> >>
+> >> There is no need to be contiguous for ids of heads.
+> >>
+> >> For example, I have three buffer { .id =3D 0, 15}, {.id =3D 20, 30} {.=
+id =3D 15, 20}
+> >> for vhost_add_used_n. Then I will let the vq->heads[0].len=3D15.
+> >> vq->heads[15].len=3D5, vq->heads[20].len=3D10 as reorder. Once I found=
+ there is no
+> >> hold in the batched descriptors. I will expose them to driver.
+> >
+> > So spec said:
+> >
+> > "If VIRTIO_F_IN_ORDER has been negotiated, driver uses descriptors in
+> > ring order: starting from offset 0 in the table, and wrapping around
+> > at the end of the table."
+> >
+> > And
+> >
+> > "VIRTIO_F_IN_ORDER(35)This feature indicates that all buffers are used
+> > by the device in the same order in which they have been made
+> > available."
+> >
+> > This means your example is not an IN_ORDER device.
+> >
+> > The driver should submit buffers (assuming each buffer have one
+> > descriptor) in order {id =3D 0, 15}, {id =3D 1, 30} and {id =3D 2, 20}.
+> >
+> > And even if it is submitted in order, we can not use a batch because:
+> >
+> > "The skipped buffers (for which no used ring entry was written) are
+> > assumed to have been used (read or written) by the device completely."
+> >
+> > This means for TX we are probably ok, but for rx, unless we know the
+> > buffers were written completely, we can't write them in a batch.
+> >
+> > I'd suggest to do cross testing for this series:
+> >
+> > 1) testing vhost IN_ORDER support with DPDK virtio PMD
+> > 2) testing virtio IN_ORDER with DPDK vhost-user via testpmd
+> >
+> > Thanks
+> >
+> You are correct, for rx we can't do a batch because we have to let the dr=
+iver know the length of buffers.
 
-Hi,
+Note that we can do a batch for rx when we know all the buffers have
+been fully written.
 
-Thanks for the patch.  The change itself makes sense, though I'm having
-trouble recreating the bug described in the patch description.
+>
+> I think these circumstances can offer batch:
+> 1. tx
+> 2. rx with RX_MRGBUF feature, which introduce a header for each received =
+buffer
+>
+> Consider batch is not a mandatory requirement for in order feature accord=
+ing to spec.
+> I'd like to let current RFC patch focus on in order implementation, and s=
+end another
+> patch series to improve performance by batching on above circumstances.
 
-I enabled CONFIG_GCOV_PROFILE_ALL and did 'echo l >
-/proc/sysrq-trigger', but I got a valid stack trace:
+That's fine, how about simply starting from the patch that offers
+IN_ORDER when zerocopy is disabled?
 
-  # echo l > /proc/sysrq-trigger
-  [  343.916728] sysrq: Show backtrace of all active CPUs
-  [  343.917459] NMI backtrace for cpu 2
-  [  343.917884] CPU: 2 PID: 1007 Comm: bash Not tainted 5.19.0-rc8+ #68
-  [  343.918562] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-1.fc36 04/01/2014
-  [  343.919534] Call Trace:
-  [  343.919904]  <TASK>
-  [  343.920226]  dump_stack_lvl+0xcc/0x11b
-  [  343.920742]  dump_stack+0x17/0x24
-  [  343.921199]  nmi_cpu_backtrace.cold+0xb5/0x10d
-  [  343.921795]  ? lapic_can_unplug_cpu+0xa0/0xa0
-  [  343.922375]  nmi_trigger_cpumask_backtrace+0x171/0x200
-  [  343.923053]  arch_trigger_cpumask_backtrace+0x21/0x30
-  [  343.923599]  sysrq_handle_showallcpus+0x1f/0x30
-  [  343.924104]  __handle_sysrq.cold+0x81/0x234
-  [  343.924576]  write_sysrq_trigger+0x6a/0x90
-  [  343.925098]  proc_reg_write+0x99/0x120
-  [  343.925587]  vfs_write+0x16c/0x350
-  [  343.926093]  ksys_write+0x8c/0x180
-  [  343.926597]  __x64_sys_write+0x21/0x30
-  [  343.927144]  do_syscall_64+0x76/0x100
-  [  343.927676]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-  [  343.928343] RIP: 0033:0x7f555e8f7b50
-  [  343.928822] Code: 73 01 c3 48 8b 0d 38 83 2c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 79 db 2c 00 00 75 10 b8 01 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e e3 01 00 48 89 04 24
-  [  343.930801] RSP: 002b:00007ffdd20d0978 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-  [  343.931761] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f555e8f7b50
-  [  343.932551] RDX: 0000000000000002 RSI: 000055ff471bfe20 RDI: 0000000000000001
-  [  343.933347] RBP: 000055ff471bfe20 R08: 00007f555ebc2740 R09: 00007f555f80f700
-  [  343.934155] R10: 0000000000000073 R11: 0000000000000246 R12: 0000000000000002
-  [  343.934962] R13: 0000000000000001 R14: 00007f555ebc15e0 R15: 00007f555ebbd3c0
-  [  343.935798]  </TASK>
-  [  343.936341] Sending NMI from CPU 2 to CPUs 0-1,3:
-  [  343.937163] NMI backtrace for cpu 3
-  [  343.937167] CPU: 3 PID: 600 Comm: systemd-journal Not tainted 5.19.0-rc8+ #68
+Thanks
 
-Was this with an upstream kernel?  Can you share the config and
-toolchain versions?
+>
+> What's your opinon.
+>
+> Thanks
+> >
+> >>
+> >>
+> >> +        /* calculate descriptor chain length for each used buffer */
+> >>
+> >>
+> >>
+> >> I'm a little bit confused about this comment, we have heads[i].len for=
+ this?
+> >>
+> >> Maybe I should not use vq->heads, some misleading.
+> >>
+> >>
+> >> +        for (i =3D 0; i < count; i++) {
+> >> +            begin =3D heads[i].id;
+> >> +            end =3D begin;
+> >> +            vq->heads[begin].len =3D 0;
+> >>
+> >>
+> >>
+> >> Does this work for e.g RX virtqueue?
+> >>
+> >>
+> >> +            do {
+> >> +                vq->heads[begin].len +=3D 1;
+> >> +                if (unlikely(vhost_get_desc(vq, &desc, end))) {
+> >>
+> >>
+> >>
+> >> Let's try hard to avoid more userspace copy here, it's the source of p=
+erformance
+> >> regression.
+> >>
+> >> Thanks
+> >>
+> >>
+> >> +                    vq_err(vq, "Failed to get descriptor: idx %d addr=
+ %p\n",
+> >> +                           end, vq->desc + end);
+> >> +                    return -EFAULT;
+> >> +                }
+> >> +            } while ((end =3D next_desc(vq, &desc)) !=3D -1);
+> >> +        }
+> >> +
+> >> +        count =3D 0;
+> >> +        /* sort and batch continuous used ring entry */
+> >> +        while (vq->heads[vq->next_used_head_idx].len !=3D 0) {
+> >> +            count++;
+> >> +            i =3D vq->next_used_head_idx;
+> >> +            vq->next_used_head_idx =3D (vq->next_used_head_idx +
+> >> +                          vq->heads[vq->next_used_head_idx].len)
+> >> +                          % vq->num;
+> >> +            vq->heads[i].len =3D 0;
+> >> +        }
+> >> +        /* only write out a single used ring entry with the id corres=
+ponding
+> >> +         * to the head entry of the descriptor chain describing the l=
+ast buffer
+> >> +         * in the batch.
+> >> +         */
+> >> +        heads[0].id =3D i;
+> >> +        copy_n =3D 1;
+> >> +    }
+> >>         start =3D vq->last_used_idx & (vq->num - 1);
+> >>       used =3D vq->used->ring + start;
+> >> -    if (vhost_put_used(vq, heads, start, count)) {
+> >> +    if (vhost_put_used(vq, heads, start, copy_n)) {
+> >>           vq_err(vq, "Failed to write used");
+> >>           return -EFAULT;
+> >>       }
+> >> @@ -2410,7 +2450,7 @@ int vhost_add_used_n(struct vhost_virtqueue *vq,=
+ struct
+> >> vring_used_elem *heads,
+> >>         start =3D vq->last_used_idx & (vq->num - 1);
+> >>       n =3D vq->num - start;
+> >> -    if (n < count) {
+> >> +    if (n < count && !vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
+> >>           r =3D __vhost_add_used_n(vq, heads, n);
+> >>           if (r < 0)
+> >>               return r;
+> >> diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+> >> index d9109107a..7b2c0fbb5 100644
+> >> --- a/drivers/vhost/vhost.h
+> >> +++ b/drivers/vhost/vhost.h
+> >> @@ -107,6 +107,9 @@ struct vhost_virtqueue {
+> >>       bool log_used;
+> >>       u64 log_addr;
+> >>   +    /* Sort heads in order */
+> >> +    u16 next_used_head_idx;
+> >> +
+> >>       struct iovec iov[UIO_MAXIOV];
+> >>       struct iovec iotlb_iov[64];
+> >>       struct iovec *indirect;
+> >>
+> >>
+> >>
+>
 
--- 
-Josh

@@ -2,150 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735C4589FA0
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 18:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42151589FAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237099AbiHDQ7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 12:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S232081AbiHDRFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 13:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232682AbiHDQ7w (ORCPT
+        with ESMTP id S230205AbiHDRFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 12:59:52 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF0367CB5
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 09:59:47 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id bf13so382587pgb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 09:59:47 -0700 (PDT)
+        Thu, 4 Aug 2022 13:05:18 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF621096;
+        Thu,  4 Aug 2022 10:05:16 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id d12-20020a4aeb8c000000b004214e709b72so75498ooj.6;
+        Thu, 04 Aug 2022 10:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ajh2ay/tShS0T3mEFnSZ0by+HsK7Mn/hpkM/mCvNva0=;
-        b=lz/kuCg6IRO4dLKH6V4paHzmXaWNI12uLvsnPN1lBCr6Lleqx3m6d36BH0R40kxcz0
-         qM0qFj55Q76+GJ/6Ctyh/+14pVlT91DCeYlfBOuq4v01aVb7Sc0/S98g7gAK69fVQnPo
-         jB9CGh6CqpjPkKtTIVGO8bRQoqyLxs2RDYqyI=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=LRKg0v+hrcSbPoYGLyRSx0AXbDp9cNywCGo7mnpmDks=;
+        b=OBaqNDQcei+HgcAGQ4eZKg8pDNNCRE1Ok2DXed6QAU4y1VXIbGkSIb9+97K0IwvuLh
+         qqruOdJKYCsAmXm6w4k3WFr4+8qMVkHHsOrRkUh/h8SefJoQE8jDnwQQopsjU9joQlh5
+         Ks9Rv96LDUpY66VUaT5zS2VqEEbhoYlW2eO28r/UoyWVkyqv9/zVKRZ1Txu80YVSLjyv
+         Wldj4ZszUmxO46SuM7pdFqHM7tBoYWx/eL3SfEuzurcsoBZcjxXrLnqEFUUe92BDcmLQ
+         ORqU4dM7fWT88KYcS6qpnM7DqGYEm2gmEiZUzQB3C6JHe9F6kg+lMqmmFLUr2EI/HfQt
+         9Hbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ajh2ay/tShS0T3mEFnSZ0by+HsK7Mn/hpkM/mCvNva0=;
-        b=cXjA+qx8EXgMNJJsABwRLtUE0w4CraF2rOVPgkrT6/Yb2eb2Nc6+K/cOFW+OaVchN2
-         oU8LMuIZ+5pgQIYNOfLAjh31carG2krqd1xozbzNxZ5KlYhnl5zTidqN/P1PdMos6swl
-         ChBnzthBvqQ3JSn3E/mG2mx012sZEahU5h3Y6V0lAsanpvJJPlE8vxUYihPjbWyfPYE6
-         ZKPkvLzOZNAQlYapXcSwxuBixAoiEte0lZBgfEAvS4KJDAmFjgT1RBgJLNML16ehva5O
-         Hz3azehZxYOfPCvNE4x6yTTLpCrwTgneSkzjG7+ioSYjIJm0tlg8EoaF5TukCJUM5/Ll
-         QRgA==
-X-Gm-Message-State: ACgBeo1WvAGJ+b+ue9dDCiVhzVqat2MPsWwNYCP8h+6yVGN9KfAp3aGK
-        7TmwqRqx21DPg+3nuZSrwT0M8A==
-X-Google-Smtp-Source: AA6agR7X25qLSBYYrho0ENYRQNA0Cmh8oMxWYY7cOVtOcXFu+38U/7oHiu3qGRghMajV/hSd5z2nOQ==
-X-Received: by 2002:a63:8242:0:b0:41b:e465:81dd with SMTP id w63-20020a638242000000b0041be46581ddmr2348517pgd.217.1659632386946;
-        Thu, 04 Aug 2022 09:59:46 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:87c4:32ca:84b6:e942])
-        by smtp.gmail.com with UTF8SMTPSA id nu3-20020a17090b1b0300b001f52fa1704csm14280238pjb.3.2022.08.04.09.59.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 09:59:46 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 09:59:44 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 8/9] usb: dwc3: qcom: fix wakeup implementation
-Message-ID: <Yuv7AM/5jtO/pgcm@google.com>
-References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-9-johan+linaro@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=LRKg0v+hrcSbPoYGLyRSx0AXbDp9cNywCGo7mnpmDks=;
+        b=s8zGu+9PJkeENRhcCFp4/UD0TZd1uhTW/VhHSucjz2P0OQhBoz34hQUvf++o/EOj4l
+         B+r7vuFambMYYHCZe/wA6UINb7GUx+Xos9p0DWter8tJAMX1F4fhPgqih5i1ZPizhsAl
+         vgWD0TmQHT8KgCTCrBVO1HcAjTflZ3cFmoS52F4MDySHjZJGpK01EnDnFP2ZpWS0cY81
+         QQlotB7hlag4ecig4iiWA1IXpCEBXe2YqiDXsTEqH5joI3tbUqnol5n2ZA0EqctFepfO
+         6lDGyJXthSSg8hlCPLR+8I+8avV7zfRujIzp0IUyoU4s71Wc4HP4oItkfWcY4jZqD685
+         yigw==
+X-Gm-Message-State: ACgBeo1Uj77vfDxiWV98jBWnpAI1STbFCXCpn+p2D3ajtwLDkKq66WYz
+        iWqE469802r4KyCd08WX61hYtSB5eVZ4+SNazzw=
+X-Google-Smtp-Source: AA6agR7lfWkv+z8R1U3wOdELLwy6A/puWcikTM2/IJvs7aWmmAFjDX7zeOXB7vHBCkmOTK/gCDxQpRmeFcOYJQJgP68=
+X-Received: by 2002:a4a:eacc:0:b0:442:dbc4:be4 with SMTP id
+ s12-20020a4aeacc000000b00442dbc40be4mr375511ooh.35.1659632716142; Thu, 04 Aug
+ 2022 10:05:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220804151001.23612-9-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <4af7c132-1100-3d48-2311-e6be3bdf3629@gmail.com> <20220801221916.GA677562@bhelgaas>
+In-Reply-To: <20220801221916.GA677562@bhelgaas>
+From:   Jim Quinlan <jim2101024@gmail.com>
+Date:   Thu, 4 Aug 2022 13:05:04 -0400
+Message-ID: <CANCKTBspR9kc5WE72q8LYJrr0bAOp+xwqzPxEX0Kp4i0RynwFg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] PCI: brcmstb: Re-submit reverted patchset
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Cyril Brulebois <kibi@debian.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 05:10:00PM +0200, Johan Hovold wrote:
-> It is the Qualcomm glue wakeup interrupts that may be able to wake the
-> system from suspend and this can now be described in the devicetree.
-> 
-> Move the wakeup-source property handling over from the core driver and
-> instead propagate the capability setting to the core device during
-> probe.
-> 
-> This is needed as there is currently no way for the core driver to query
-> the wakeup setting of the glue device, but it is the core driver that
-> manages the PHY power state during suspend.
-> 
-> Also don't leave the PHYs enabled when system wakeup has been disabled
-> through sysfs.
-> 
-> Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/usb/dwc3/core.c      | 5 ++---
->  drivers/usb/dwc3/dwc3-qcom.c | 6 +++++-
->  2 files changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 16d1f328775f..8c8e32651473 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1822,7 +1822,6 @@ static int dwc3_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, dwc);
->  	dwc3_cache_hwparams(dwc);
-> -	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
->  
->  	spin_lock_init(&dwc->lock);
->  	mutex_init(&dwc->mutex);
-> @@ -1984,7 +1983,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		dwc3_core_exit(dwc);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
-> +		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+On Mon, Aug 1, 2022 at 6:19 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Tue, Jul 26, 2022 at 04:41:09PM -0700, Florian Fainelli wrote:
+> > On 7/26/22 15:03, Bjorn Helgaas wrote:
+> > > On Mon, Jul 25, 2022 at 11:12:49AM -0400, Jim Quinlan wrote:
+> > >> ...
+> > >> Jim Quinlan (7):
+> > >>   PCI: brcmstb: Remove unnecessary forward declarations
+> > >>   PCI: brcmstb: Split brcm_pcie_setup() into two funcs
+> > >>   PCI: brcmstb: Gate config space access on link status
+> > >>   PCI: brcmstb: Add mechanism to turn on subdev regulators
+> > >>   PCI: brcmstb: Add control of subdevice voltage regulators
+> > >>   PCI: brcmstb: Do not turn off WOL regulators on suspend
+> > >>   PCI: brcmstb: Have .map_bus function names end with 'map_bus'
+> > >>
+> > >>  drivers/pci/controller/pcie-brcmstb.c | 476 ++++++++++++++++++--------
+> > >>  1 file changed, 341 insertions(+), 135 deletions(-)
+> > >
+> > > I reworked these and put them on pci/ctrl/brcm for v5.20.  This is a
+> > > proposal, not something set in stone.  But time is of the essence to
+> > > figure out how we want to proceed.
+> > >
+> > > I changed a lot of stuff and it's likely I broke something in the
+> > > process, so please take a look and test this out.  Here's an outline
+> > > of what I changed:
+> > >
+> > >   - Moved the config access "link up" check earlier because it's not
+> > >     related to the power regulator patches.
+> > >
+> > >   - Changed config access "link up" checks to use PCIE_ECAM_REG()
+> > >     instead of hard-coding 0xfff masks.  The 32-bit accessors already
+> > >     mask out the low two bits, so we don't need to do that here.
+> > >
+> > >   - Squashed pci_subdev_regulators_add_bus() directly into
+> > >     brcm_pcie_add_bus() for readability.  Similarly for
+> > >     pci_subdev_regulators_remove_bus().
+> > >
+> > >   - This makes a clear split between:
+> > >
+> > >     * A patch that adds get/enable of regulators, and starting the
+> > >       link after enabling regulators, and
+> > >
+> > >     * A patch that disables/enables regulators for suspend/resume.
+> > >
+> > >   - Since we only support one set of subregulator info (for one Root
+> > >     Port, and brcm_pcie_suspend_noirq() depends on this since it uses
+> > >     the pcie->sr pointer), use pcie->sr always instead of
+> > >     dev->driver_data.
+> > >
+> > >   - Squashed wakeup device checking into the suspend/resume patch so
+> > >     there's not a time when suspend might turn off power to a wakeup
+> > >     device.
+> > >
+> > >   - Renamed brcm_pcie_map_bus32() to brcm7425_pcie_map_bus() so it
+> > >     ends in "_map_bus()" like other drivers.  Also,
+> > >     brcm7425_pcie_map_bus() doesn't actually depend on the 32-bitness.
+> >
+> > Attached is the diff between Jim's and your branch just so it is easier to see what moved around.
+> >
+> > Initial testing on an ARCH_BRCMSTB system with PCIe appears to be good, we don't have any regulator on that board so the dummy ones get picked up which is expected. Same thing with a Raspberry Pi 4B system.
+> >
+> > I could unbind and bind again and there were no reference count leaks on the regulators, so this looks good to me.
+> >
+> > Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> >
+> > of course, we should have Jim's test results as well as Cyril's ideally to make sure there are no regressions on the CM4 board.
+>
+> Cyril, any chance you could test this to be sure it fixes the problem
+> you reported?  This is in -next and hopefully headed for v5.20/v6.0
+> soon.
 
-Let me explain the rationale for why device_can_wakeup() was used here:
+Hello Bjorn,
 
-On QCOM SC7180 based Chromebooks we observe that the onboard USB hub consumes
-~80 mW during system suspend when the PHYs are disabled, as opposed to ~17 mW
-when the PHYs remain enabled. This is a significant delta when the device is
-on a battery power.
+Cyril sent me an email about a week ago saying that he probably
+wouldn't have the bandwidth to test this.
+I immediately ordered an overpriced CM4 via Ebay and it recently
+arrived.  I'm happy to say that this
+patchset tests successfully, w/ or w/o a device in the slot.
 
-The initial idea was to leave the PHYs always enabled (in a low power mode),
-but then I dug up commit c4a5153e87fd ("usb: dwc3: core: Power-off core/PHYs
-on system_suspend in host mode"), which provides a rationale for the PHYs
-being powered off:
+That being said, there is an old device, when paired with the CM4,
+works with RPi Linux but not with upstream Linux.  It is unrelated
+to this patchset; i.e. it fails w/ or w/o this patchset applied.  I
+know the reason for this failure: the current driver
+assumes clkreq# asserted, which is true for all STB boards.  I can add
+a patch for this now or in the next release
+cycle, your choice.
 
-  Commit 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during
-  host bus-suspend/resume") updated suspend/resume routines to not
-  power_off and reinit PHYs/core for host mode.
-  It broke platforms that rely on DWC3 core to power_off PHYs to
-  enter low power state on system suspend.
+Regards,
+Jim Quinlan
+Broadcom STB
 
-Unfortunately we don't know which platforms are impacted by this. The idea
-behind using device_can_wakeup() was to use it as a proxy for platforms
-that are *not* impacted. If a platform supports USB wakeup supposedly the
-SoC can enter its low power mode during system suspend with the PHYs
-enabled.
 
-By now I'm not 100% sure if the above assumption is correct. I recently
-saw allegations that the power consumption of a given QC SoC with USB
-wakeup support drops significantly when wakeup is disabled (i.e. when
-the PHYs are off), but haven't confirmed this yet.
+>
+> I see that we failed to reference
+> https://bugzilla.kernel.org/show_bug.cgi?id=215925 in the commit logs,
+> but IIUC, this *should* fix that.
+>
+> Bjorn

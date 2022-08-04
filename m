@@ -2,132 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17D7589964
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8993E58996F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbiHDIlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S239518AbiHDIn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239082AbiHDIkw (ORCPT
+        with ESMTP id S239224AbiHDImx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:40:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06AFE5FADC
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659602449;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=W3oflKZ7g4iM+N4+kxgav6X7gDZ8PgCWL94kRakC7bM=;
-        b=TgTn6oyH1Xea+9shmTeKwd7MYspWJTazf52Acj/XKfd2sns1CeYsErpCszwlwLhSaWACxO
-        6RxO9/Fn/H+w/FUdN8vepPWJTw/P+rljU/ACEjsqFZLXr4B3+le+UjKDp+xVCVo9uIJXpR
-        NSfi8MsYMFCDsDcsBmtlKyucjArLiAY=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-620-MKoiQpVBM4yxyaVlvhxYZg-1; Thu, 04 Aug 2022 04:40:47 -0400
-X-MC-Unique: MKoiQpVBM4yxyaVlvhxYZg-1
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-31f56f635a9so162361887b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 01:40:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=W3oflKZ7g4iM+N4+kxgav6X7gDZ8PgCWL94kRakC7bM=;
-        b=NXh3Q6T5JehELtheYnLCN9/ZCY2SlmSQ7QYueaZbKWNRlzdLi/+rO4vPExn4yw1IU1
-         HUcKSfx3Ru0eImSv00PDwK+go98egwqrwmffzoQSc6/K7QRhdyutLbj/raKnO3CQ/JBe
-         ria19RG57XPYvr12GQRjn4T2ssTmUzce3uTf57CAEgvOlCUV9WTI3e3gQvgDCS0JRDO/
-         4JEgJXeNh2gTRKRBXBGrXEYSHos1PxqhJ2z2vtYqFpvihot8/3yTEBTDN4plgaa4vmTj
-         3QHsm5tC749i2873tBcpJ9VajlyfVhkt+mEM3x7V5UdshWrbQQC+5eY5jSmdiLF0Ld6M
-         7DfA==
-X-Gm-Message-State: ACgBeo3zW3/7PMIq0L3NeZxPKKI/hErYmVH1h63raol8paEROHtpGS+u
-        sefeTltEUCRsNf1t1oHTqLjJxSnYkDyzs/dVyAxd46+OKv3OztbK5YIpzU/PTPK1Vj+zcvrbQNo
-        AkcZkkBCi/SuQ0EQS4kR60MmG2Cng1DdN6NsJjhkb
-X-Received: by 2002:a81:7c03:0:b0:328:25ee:40d with SMTP id x3-20020a817c03000000b0032825ee040dmr772946ywc.12.1659602446568;
-        Thu, 04 Aug 2022 01:40:46 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7fJPHYOm6mQ0iaP+t9lkWuo9d4kCbFvcMsT6xSOPGMlLHLE0dIlFmyYiKvxL5Yjqv125SXMhI0twSJXUsquEU=
-X-Received: by 2002:a81:7c03:0:b0:328:25ee:40d with SMTP id
- x3-20020a817c03000000b0032825ee040dmr772931ywc.12.1659602446379; Thu, 04 Aug
- 2022 01:40:46 -0700 (PDT)
+        Thu, 4 Aug 2022 04:42:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49D767CB2
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:41:33 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oJWQ2-0007xA-P9; Thu, 04 Aug 2022 10:41:26 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oJWPw-00043J-Kr; Thu, 04 Aug 2022 10:41:20 +0200
+Date:   Thu, 4 Aug 2022 10:41:20 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>,
+        Stefan Agner <stefan@agner.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+Message-ID: <20220804084120.in435n4ofdw6ksfj@pengutronix.de>
+References: <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
+ <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com>
+ <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
+ <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
+ <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de>
+ <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
+ <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
+ <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
+ <20220803062024.vn7awasmifkp5xow@pengutronix.de>
+ <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
 MIME-Version: 1.0
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Thu, 4 Aug 2022 10:40:35 +0200
-Message-ID: <CAFqZXNtBouZcXOpfs7agZU8xsW4VcEoHqdTAX9No0uCWrU613g@mail.gmail.com>
-Subject: [BUG] watch_queue resource accounting seems broken
-To:     David Howells <dhowells@redhat.com>
-Cc:     keyrings@vger.kernel.org,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="0000000000004938b705e5664e03"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000004938b705e5664e03
-Content-Type: text/plain; charset="UTF-8"
+On 22-08-03, Adam Ford wrote:
+> On Wed, Aug 3, 2022 at 1:20 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
+> >
+> > On 22-08-02, Adam Ford wrote:
+> >
+> > ...
+> >
+> > > > I did some reading about the internal timing generator.  It appears
+> > > > that it's required when video formats use fractional bytes, and it's
+> > > > preconfigured to run at 720p by default, but registers 28h through 37h
+> > > > configure it for other video modes.
+> > >
+> > > I think there may still be some issues with the DSIM since some of the
+> > > clock frequencies are set in the device tree.
+> > >
+> > > From what I can tell, the pixel rate is calculated based on the
+> >
+> > By pixel rate you mean the HDMI pixel rate from the ADV? If so then yes.
+> > The ADV has an divider which is already configured by the driver but
+> > meaningless since the driver is lacking of setting the "manual-divider"
+> > bit within the same register.
+> 
+> I was thinking about the pixel clock from the DSI to the ADV.  I did
+> see the manual-divider bit was missing.  I tried enabling that bit,
+> but it didn't appear to make much difference.
 
-Hi,
+This depends, e.g. I saw that the HDMI pixel clock is correct if I had
+set this bit, set the divider manually to 6 and configured the dsi-host
+burst clock to 891MHz:
+  -> 891MHz / 2 = 445.5 (DSI-Clock) -> 445.5 / 6 = 74.25 (HDMI pixel
+  clock for 720P)
 
-It seems there is something wrong with resource accounting for
-watch_queues. When a watch_queue is created, its size is set, and then
-both ends are closed, it seems the resource usage increment is not
-released as it should be and repeated creations of watch_queues
-eventually (and quite fast!) exhaust the per-user pipe limit. I tested
-this only on kernels 5.19 and 5.17.5, but I suspect the bug has been
-there since the watch_queue introduction.
+Of course this doesn't happen automatically yet :( I also find it a bit
+of too reduce the lane line, I had removed this logic too. But as I
+said, I got no frames shown on my HDMI monitor.
 
-The issue can be reproduced by the attached C program. When it is run
-by an unprivileged user (or by root with cap_sys_admin and
-cap_sys_resource dropped), the pipe allocation/size setting starts to
-fail after a few iterations.
+...
 
-I found this bug thanks to selinux-testuite's [1] watchkey test, which
-started repeatably failing after I ran it a couple times in a row.
+> > > samsung,burst-clock-frequency = <1500000000>;
+> >
+> > This is not correct since the burst-clock-freq. specifies the hs-clock
+> > for the data lanes (see above).
+> 
+> But I don't think the clock should be fixed. I think it should vary as
+> the resolution changes. 
 
-I'm not very familiar with this code area, so I'm hoping that someone
-who understands the inner workings of watch_queue will be able and
-willing to look into it and fix it.
+You're right and this is something we have on our TODO list as well. But
+this needs a bit more work within the DRM framework. So the client and
+the host can negotiate the frequency.
 
-Thanks,
+Remember our main problem: with a correct burst-clock-frequency set and
+lane number set for 720P, the ADV don't display anything.
 
-[1] https://github.com/SELinuxProject/selinux-testsuite/
+> From what I can tell, NXP's DSI code doesn't
+> hard code this value, but it does appear to cap it at 1.5G.  I did
+> soom looking into the NXP frequency calculation
 
---
-Ondrej Mosnacek
-Senior Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
+Can you provide me a link? There are a lot frequencies involved in this
+discussion ^^ Just that I look at the same location.
 
---0000000000004938b705e5664e03
-Content-Type: text/x-c-code; charset="US-ASCII"; name="watch_queue_bug.c"
-Content-Disposition: attachment; filename="watch_queue_bug.c"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l6dplwvp0>
-X-Attachment-Id: f_l6dplwvp0
+> and it is capable of adjusting resolutions to some extent and from
+> what I can see the 891MHz clock is only set when 1080p.  At 720p,
+> thier kernel shows the output frequency at  445.5 MHz. 
 
-I2RlZmluZSBfR05VX1NPVVJDRQojaW5jbHVkZSA8c3RkbGliLmg+CiNpbmNsdWRlIDxzdGRpby5o
-PgojaW5jbHVkZSA8c3RyaW5nLmg+CiNpbmNsdWRlIDx1bmlzdGQuaD4KI2luY2x1ZGUgPGVycm5v
-Lmg+CiNpbmNsdWRlIDxzeXMvaW9jdGwuaD4KI2luY2x1ZGUgPGxpbnV4L3dhdGNoX3F1ZXVlLmg+
-CgojZGVmaW5lIEJVRl9TSVpFIDI1NgoKaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKiphcmd2KQp7
-CiAgICBpbnQgaSwgcGlwZWZkWzJdLCByZXN1bHQ7CgogICAgZm9yIChpID0gMDsgaSA8IDEwMDA7
-IGkrKykgewogICAgICAgIGZwcmludGYoc3RkZXJyLCAiJWRcbiIsIGkpOwogICAgICAgIHJlc3Vs
-dCA9IHBpcGUyKHBpcGVmZCwgT19OT1RJRklDQVRJT05fUElQRSk7CiAgICAgICAgaWYgKHJlc3Vs
-dCA8IDApIHsKICAgICAgICAgICAgZnByaW50ZihzdGRlcnIsICJGYWlsZWQgdG8gY3JlYXRlIHBp
-cGUyKDIpOiAlc1xuIiwKICAgICAgICAgICAgICAgICAgICBzdHJlcnJvcihlcnJubykpOwogICAg
-ICAgICAgICByZXR1cm4gZXJybm87CiAgICAgICAgfQoKICAgICAgICByZXN1bHQgPSBpb2N0bChw
-aXBlZmRbMF0sIElPQ19XQVRDSF9RVUVVRV9TRVRfU0laRSwgQlVGX1NJWkUpOwogICAgICAgIGlm
-IChyZXN1bHQgPCAwKSB7CiAgICAgICAgICAgIGZwcmludGYoc3RkZXJyLCAiRmFpbGVkIHRvIHNl
-dCB3YXRjaF9xdWV1ZSBzaXplOiAlc1xuIiwKICAgICAgICAgICAgICAgICAgICBzdHJlcnJvcihl
-cnJubykpOwogICAgICAgICAgICByZXR1cm4gZXJybm87CiAgICAgICAgfQoKICAgICAgICBjbG9z
-ZShwaXBlZmRbMF0pOwogICAgICAgIGNsb3NlKHBpcGVmZFsxXSk7CiAgICB9CiAgICByZXR1cm4g
-MDsKfQo=
---0000000000004938b705e5664e03--
+Yes, we need the dynamic handling but hardcoding it isn't the way we
+should go either. We have the dynamic PLL calculation, so we can
+configure it to all possible values not just a few VESA standards.
 
+> The way the DSIM is currently configured, it's fixed at 891MHz, so I
+> don't expect the output feeding the adv7535 to be correct for the
+> different resolutions.
+
+Why not? The ADV can work with that hs-clock and for 720P@60 we need a
+bandwidth of roughly (only pixels no package header/footer overhead):
+
+  1280x720x24x60 = 1327104000 Bit/s = 1327.104 MBit/s
+
+With 891MHz and 2 lanes we have
+
+  891MBps * 2 = 1782000000 Bit/s = 1782 MBit/s
+
+So this should be fine. With 445.5 MHz and 2 lanes we have not enough
+bandwidth and with 445.5 MHz and 4 lanes we have exactly the same
+bandwidth.
+
+Therefore I still think that there is problem within the ADV.
+
+...
+
+> > > With these settings and the above mentioned code changes, 1080p still
+> > > appears, however when attempting other modes, the display still fails
+> > > to load.  I also noticed that the phy ref clock is set to 27MHz
+> > > instead of NXP's 12MHz.
+> >
+> > That's interesting, I didn't noticed that NXP uses 12 MHz as refclock
+> > but I don't think that this is the problem. Since we have other
+> > converter chips using the bridge driver and they work fine. I still
+> > think that the main problem is within the ADV driver.
+> 
+> Do the other converter chips work fine at different resolutions?
+
+Yes.
+
+> 
+> >
+> > > I attempted to play with that setting, but I couldn't get 1080p to
+> > > work again, so I backed it out.
+> > >
+> > > Maybe I am headed in the wrong direction, but I'm going to examine the
+> > > P/M/S calculation of the timing on NXP's kernel to see how the DSIM in
+> > > this code compares.
+> >
+> > I think the pms values are fine.
+> 
+> I compared the P/M/S values between this driver and NXP's and they
+> calculate different values of PMS when running at 1080P.
+
+NXP don't calculate anything if I remember correctly, they just provide
+PLL values so they reach the frequency. On the other hand with the
+patches from Jagan we can configure the PLL to what-ever value :)
+
+> NXP @ 1080p:
+> fout = 891000, fin = 12000, m = 297, p = 2, s = 1, best_delta = 0
+> 
+> This kernel @ 1080p:
+> 
+> PLL freq 891000000, (p 3, m 99, s 0)
+
+As you said, we use a differnet fin value 27MHz instead of the 12MHz so
+those values must be different.
+
+> at 720P, the NXP Kernel
+> fout = 445500, fin = 12000, m = 297, p = 2, s = 2, best_delta = 0
+> (working)
+> 
+> at 720P, this kernel:
+> PLL freq 891000000, (p 3, m 99, s 0)
+> hs_clk = 891000000, byte_clk = 111375000, esc_clk = 18562500
+> (not working)
+
+Yes, as I said you need to configure the PLL manually (see above).
+
+> > > If someone who understands the interactions between these different
+> > > components has suggestions, I'm willing to run some experiments.
+> >
+> > Did managed to get access to the ADV7535 programming guide? This is the
+> > black box here. Let me check if I can provide you a link with our repo
+> > so you can test our current DSIM state if you want.
+> 
+> I do have access to the programming guide, but it's under NDA, but
+> I'll try to answer questions if I can.
+
+Thanks a lot for your work :)
+
+Regards,
+  Marco

@@ -2,78 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4CA589E07
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EB0589E0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240145AbiHDPA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
+        id S231472AbiHDPBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240158AbiHDPAv (ORCPT
+        with ESMTP id S234497AbiHDPBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:00:51 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689FB14012
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:00:50 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id q16so107577pgq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 08:00:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=IaifTpn3u0w2qUkig48qynKFfInn0OoAePTEgfMQ/6g=;
-        b=SM4HtroITzHOZUFHTx7wGP7tvdu9IAxGSxtCMAsBe810xu9aIob9MCZbOolfYzn2+e
-         j79pj5EZWJJzVBm+DlQ9qL0YGGyMyf/egYOSXlw8RgRiClXjQpthTrp7Iqh3PIPjnPAn
-         8+TJD8GinwO57p/omdUnuI5NwqNeM/WSRUkLJT77l1kK5Z4bFz3EuPcZDKrCtkP+ptrr
-         0n/tLCQMaprvpWJ4hh+JWoWexfkLJE+kbl41zeroCm6WyfmY97oCLde4x/mAI5hEbBin
-         fSB7HHpNIuAsqyLbyIMYwB3mCYCMkcOCi78C1cbpMRas/0ldqGJvXkvK2lzByC0iONsi
-         oEMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=IaifTpn3u0w2qUkig48qynKFfInn0OoAePTEgfMQ/6g=;
-        b=aukMVn0Qb4ypBvf2pBPLUzQ4XR40WMczgACWwmmv3xUNaQL0QFkVXHrvg8tnz6GNau
-         5xtbkfTqdXG2oPYvWWU03cwxWhaf9+9jaDndLkTleqJAk3AqYumvOt9YCm77mjqrIiaq
-         X7Z/xqBFHZUEpMh9u4HIyCQD6d8Cn8sm9Shxi1ablzSPQ13nlAwHNdZBWTA01mXUcJQH
-         TDgxr4E+Yjpt3sw3GxEZnAx6fm1tGZOE3P7zq07p+dsyKovDFb97ceNvW24L8lwhHMVd
-         ETwjf71Z89/EwQyQdnMLhKsQ7QQxTjK4UATK4xTH0+ZMAgsOBLPa3IOsbJXRcNKzNVcE
-         2orQ==
-X-Gm-Message-State: ACgBeo3PbsjjcI6FMbpTnojfsD+iWt13Fy2uTnJtHx8VArQV3FiFXTTh
-        Fb3dEbvFyPTA98rRtbDS6QeVQggCgQGkaA==
-X-Google-Smtp-Source: AA6agR6vOOf5eInTDw94W1UE+cE40wpAwMxYjG3kliNFyyKOGQTat2W+Q3wfOpjiZ2CFqYuVxfrSRg==
-X-Received: by 2002:aa7:919a:0:b0:52a:eeef:3e65 with SMTP id x26-20020aa7919a000000b0052aeeef3e65mr2112688pfa.15.1659625249718;
-        Thu, 04 Aug 2022 08:00:49 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170902784600b0016357fd0fd1sm1119297pln.69.2022.08.04.08.00.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 08:00:49 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 15:00:45 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH v2 7/7] KVM: VMX: Simplify capability check when handling
- PERF_CAPABILITIES write
-Message-ID: <YuvfHZLGbU08S4ee@google.com>
-References: <20220803192658.860033-1-seanjc@google.com>
- <20220803192658.860033-8-seanjc@google.com>
- <41e0b2a0-c53d-870f-d619-4008eb222d42@gmail.com>
+        Thu, 4 Aug 2022 11:01:33 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9F11F2EE;
+        Thu,  4 Aug 2022 08:01:31 -0700 (PDT)
+Received: from [172.18.172.87] (unknown [46.183.103.8])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 0544D61EA1928;
+        Thu,  4 Aug 2022 17:01:21 +0200 (CEST)
+Message-ID: <6fef92f3-6932-5c20-57fe-9eb40d676013@molgen.mpg.de>
+Date:   Thu, 4 Aug 2022 17:01:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41e0b2a0-c53d-870f-d619-4008eb222d42@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH v1] dt-binding: ipmi: add fallback to npcm845 compatible
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        jic23@kernel.org, minyard@acm.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org, openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20220804145516.217482-1-tmaimon77@gmail.com>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220804145516.217482-1-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,28 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022, Like Xu wrote:
-> On 4/8/2022 3:26 am, Sean Christopherson wrote:
-> > Explicitly check for the absence of host support for LBRs or PEBS when
-> > userspace attempts to enable said features by writing PERF_CAPABILITIES.
-> > Comparing host support against the incoming value is unnecessary and
-> > weird since the checks are buried inside an if-statement that verifies
-> > userspace wants to enable the feature.
-> 
-> If you mean this part in the KVM:
-> 
-> 	case MSR_IA32_PERF_CAPABILITIES: {
-> 		...
-> 		if (data & ~msr_ent.data)
-> 			return 1;
-> 		...
-> 
-> then this patch brings a flaw, for example:
-> 
-> a user space can successfully set 0x1 on a host that reports a value of 0x5,
-> which should not happen since the semantics of 0x1 and 0x5 for LBR_FMT
-> may be completely different from the guest LBR driver's perspective.
+Dear Tomer,
 
-/facepalm
 
-I keep forgetting the caps need to match the host exactly.  Thanks!
+Am 04.08.22 um 16:55 schrieb Tomer Maimon:
+> Add to npcm845 KCS compatible string a fallback to npcm750 KCS compatible
+> string.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>   Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt b/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> index cbc10a68ddef..4fda76e63396 100644
+> --- a/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> +++ b/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> @@ -7,7 +7,7 @@ used to perform in-band IPMI communication with their host.
+>   Required properties:
+>   - compatible : should be one of
+>       "nuvoton,npcm750-kcs-bmc"
+> -    "nuvoton,npcm845-kcs-bmc"
+> +    "nuvoton,npcm845-kcs-bmc", "nuvoton,npcm750-kcs-bmc"
+
+Isn’t the added string exactly the same as the one below the compatible 
+line?
+
+>   - interrupts : interrupt generated by the controller
+>   - kcs_chan : The KCS channel number in the controller
+
+
+Kind regards,
+
+Paul

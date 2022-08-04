@@ -2,97 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B4358A2F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 23:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4836758A2FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239520AbiHDV7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 17:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        id S239704AbiHDWAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 18:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiHDV7V (ORCPT
+        with ESMTP id S231321AbiHDWAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 17:59:21 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F24C1B794
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 14:59:20 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id uj29so1808273ejc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 14:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=IcNrO1+0hMqd184OyaCGXcplDsRzgmMXiA2NSTUXMiA=;
-        b=DgUfEmbFi+7iccqebXv/ZmxHK9r9RdQFXNZ8Dr8nUqVqSFRu1k1i4dkyHQybTDWbVO
-         sp+j5Hqj+Tzo+GWbTEgXuKCuNQljNQ9hMiFfoJp1J9Mgms1GKmSOP/+HzKIHuHs4qy4O
-         3hYvbGIWtatQX31kWhmvlVBT2gIyBbOi9AxB0=
+        Thu, 4 Aug 2022 18:00:32 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1CF64E5
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:00:30 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id u9-20020a056e021a4900b002dc685a1c13so539165ilv.19
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:00:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=IcNrO1+0hMqd184OyaCGXcplDsRzgmMXiA2NSTUXMiA=;
-        b=zdmga2gWThQ7R3YxCdInB9aGD6o6iLYRvyd2vRrMtF7OI6SSqlku5H6OQ9S9yyS5fd
-         KP3mcebJa1XPAVzctCBfYrYbXwC+4fO4jQYwbhB7vNkNQFAAhrfZOstTe20HE4CnxenK
-         cZdWhzZjE8B1wO5tSRI+hA5pxHMBBlsZSglqEjBCjOhZbnlwlnGuLCJrS7SPEy2VHW73
-         VKYtBKYDjMnkFTaUxl89SiitQcfCHRk44VlK4CHfqmHRL5LLUy9yXQ/1Yw6VNm6Lu5xX
-         GDgT157u3buxCub7eIiuoottZohlM2cxACWIFUv2LBad2BDJlEPNwsM2+ek8xg9pkwh0
-         p/lA==
-X-Gm-Message-State: ACgBeo3T6mvVG9A5rvP++m0fZpqImSsFvemf9svAzxnWHGV5S+E+3t2X
-        E3SDGDUT+XucnsX64tmlWYWDc376O3Nx6Gfa
-X-Google-Smtp-Source: AA6agR4QfR16Kp2/z9EYYip//6E4zm1vhmilW7dEQgmpyoWcxbSg4wzOwBZhT9WkLU0PLbEi9f6F3A==
-X-Received: by 2002:a17:906:8a74:b0:730:7aa8:69eb with SMTP id hy20-20020a1709068a7400b007307aa869ebmr2759733ejc.573.1659650358576;
-        Thu, 04 Aug 2022 14:59:18 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id ky12-20020a170907778c00b0072af930cf97sm758116ejc.115.2022.08.04.14.59.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 14:59:18 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id l4so1201796wrm.13
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 14:59:17 -0700 (PDT)
-X-Received: by 2002:a5d:638b:0:b0:220:6e1a:8794 with SMTP id
- p11-20020a5d638b000000b002206e1a8794mr2534090wru.193.1659650357549; Thu, 04
- Aug 2022 14:59:17 -0700 (PDT)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=f2Aq/HQcpNyfdVHUFhRZWedlVxHPyLOZz5MBuiByUsk=;
+        b=hBS3IROtPn+lL0cXWd872bZD+EVv9nWBR1K2j2oSKPtX0WnFV5VIisKV6lYS8A2LJD
+         SP2SK47M/nM8TpvM8hkCO1tFVQ05ZSja56IYPgo7i2g934uCJD4t2Uy31Cil9yV2HTlL
+         StQ1xr/4XQ7rYgl0NCCLZRaaKZg6b19exbRYFFBs1o+tTjEgZgR88KxY3RjhEx+3uI3B
+         unCTlwzWQIPV+velrn+eiI5y8j8OolMYDafSK140/YKz2Xnsp87+TUc9p0iY3OP7XBrd
+         mvzwjf5ziUYfwU6Rqlkw/nCRDoidX3Z4vOcGgKva2SH5zaEzcer6kOgZaubLp7G/xUXS
+         Xn/w==
+X-Gm-Message-State: ACgBeo2OjqT4ShN3W/gDl50KXw6b02ODbBdlDqYxCcdqtuyyM8NrNz/9
+        shjpyzahcSLyFebUt/Nt+JPWxsmOozVxskCJ7mXzcDx6IzsV
+X-Google-Smtp-Source: AA6agR6UO2jX0H6ux3HhMNmK48a5RJrx/3oBOt3s5qq66mkkN/XpwUWyRNwi9js457ioUD80EldS/JL/fNDyVLs5tImnonGdYwwb
 MIME-Version: 1.0
-References: <YuwRyQYPCb1FD+mr@debian> <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
- <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com> <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
-In-Reply-To: <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 4 Aug 2022 14:59:01 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whpa_FJjvzWdWdSzecTbVtndbQqg35=_o+ohM3X1_xKTA@mail.gmail.com>
-Message-ID: <CAHk-=whpa_FJjvzWdWdSzecTbVtndbQqg35=_o+ohM3X1_xKTA@mail.gmail.com>
-Subject: Re: mainline build failure for x86_64 allmodconfig with clang
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Received: by 2002:a92:ce81:0:b0:2dc:fbec:d023 with SMTP id
+ r1-20020a92ce81000000b002dcfbecd023mr1625181ilo.155.1659650429687; Thu, 04
+ Aug 2022 15:00:29 -0700 (PDT)
+Date:   Thu, 04 Aug 2022 15:00:29 -0700
+In-Reply-To: <00000000000098972c05e2117b39@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005022af05e5717ac8@google.com>
+Subject: Re: [syzbot] memory leak in kobject_set_name_vargs (5)
+From:   syzbot <syzbot+7381dc4ad60658ca4c05@syzkaller.appspotmail.com>
+To:     konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 1:43 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> I do note that commit 1b54a0121dba ("drm/amd/display: Reduce stack size
-> in the mode support function") did have a workaround for GCC. It appears
-> clang will still inline mode_support_configuration(). If I mark it as
-> 'noinline', the warning disappears in that file.
+syzbot has found a reproducer for the following issue on:
 
-That sounds like probably the best option for now. Gcc does not inline
-that function (at least for allmodconfig builds in my testing), so if
-that makes clang match what gcc does, it seems a reasonable thing to
-do.
+HEAD commit:    b44f2fd87919 Merge tag 'drm-next-2022-08-03' of git://anon..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=105fdbca080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=358668a360d9b702
+dashboard link: https://syzkaller.appspot.com/bug?extid=7381dc4ad60658ca4c05
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11c685ca080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120a0fe2080000
 
-            Linus
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7381dc4ad60658ca4c05@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88810c35db80 (size 32):
+  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 25.990s)
+  hex dump (first 32 bytes):
+    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
+    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
+    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
+    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
+    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
+    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
+    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
+    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
+    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
+    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
+    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
+    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
+    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
+    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff88810c35db80 (size 32):
+  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 27.260s)
+  hex dump (first 32 bytes):
+    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
+    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
+    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
+    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
+    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
+    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
+    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
+    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
+    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
+    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
+    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
+    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
+    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
+    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff88810c35db80 (size 32):
+  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 28.520s)
+  hex dump (first 32 bytes):
+    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
+    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
+    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
+    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
+    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
+    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
+    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
+    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
+    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
+    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
+    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
+    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
+    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
+    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff88810c35db80 (size 32):
+  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 31.000s)
+  hex dump (first 32 bytes):
+    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
+    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
+    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
+    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
+    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
+    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
+    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
+    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
+    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
+    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
+    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
+    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
+    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
+    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff88810c35db80 (size 32):
+  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 31.040s)
+  hex dump (first 32 bytes):
+    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
+    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
+    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
+    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
+    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
+    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
+    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
+    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
+    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
+    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
+    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
+    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
+    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
+    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff88810c35db80 (size 32):
+  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 31.080s)
+  hex dump (first 32 bytes):
+    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
+    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
+    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
+    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
+    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
+    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
+    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
+    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
+    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
+    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
+    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
+    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
+    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
+    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
+    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
+    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
+    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
+write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
+write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
+write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
+write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
+write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
+executing program
+write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
+write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
+write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
+write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
+write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
+write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
+write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
+write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
+executing program
+write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
+write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
+

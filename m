@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E8958975A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7411A58975C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237111AbiHDFeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 01:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S238056AbiHDFgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 01:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbiHDFel (ORCPT
+        with ESMTP id S230381AbiHDFgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 01:34:41 -0400
-Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7F33E74D
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:34:40 -0700 (PDT)
-Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-10cf9f5b500so23196619fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 22:34:40 -0700 (PDT)
+        Thu, 4 Aug 2022 01:36:12 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6E04D176
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:36:10 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id x39so19714973lfu.7
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 22:36:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=eqO2GtYLnN7H8loOSrIFFhgBlZEWlA8JNy12iUGG61Q=;
-        b=RZjZyF5xtsj0J3nCLe9sOFJt1ljNSoVHUxDn259NuaKelwtuaZ+c6PVRsJgiGhWfVr
-         3GglKu8mYbVF3PqI5Mpfx8aimJgq0Yht5I6ucsiZ+lxUeekSszKKBpVZgFk9evQ3bktW
-         5QFsC7JBfjYD3s/QZmKlW4r3MwRwOtSRcqj4U1ixw/2FaV3Cb1x4+B8oIMto8DiVxVNd
-         E0cN4Y5P3U1p0/F/Tf8sqG+3LIRGTftPxBDEkElrWztgdn+a/BUmftAb+0zLS8IaMFXF
-         zfLRi4DisS+NqeUdWn5+kseUYhh9c/PsVomP8YEuWUdWwe0npi/MzvVwUgq+N+V3a7t3
-         860g==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=dwToIWTIAZs3lOqbZfyuTvqStRDyOPRIuqWffIxZVLs=;
+        b=Bv0kuu79QynXtlL6xYsnEk1zDgzDROPAnos4WjY8EBYwqkEfJPJ+FOAwN5nQ+MBeLG
+         svTJFxz1xEIGwATYt/RBYurwR6sm5IIRGsx8uBKtYA9Vb5b58iMqR+u/nkoPECElQORL
+         DPbtAr9i8t+mxflbkOt4Xsw4lXGpwzohoSmyx0jNXac1FIHATjYnRNCOjSAIx3NydFHq
+         QdFK5nh/1ee8MNU1AZ1ugMKyYOQ5k33/FXE1N92J+RSWDWCvhogMoDrc5M6F/H4i4dTU
+         sQA3M2e432Lq5HbihniUyiA/sXJzJWO8y1+qlRKv4pS7pnQd5J5jYKs6rybpp7GdEC6h
+         JzKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=eqO2GtYLnN7H8loOSrIFFhgBlZEWlA8JNy12iUGG61Q=;
-        b=3XhddSauQYc1sr6JkrdnmUXsjQLKmBwt4EQGazqfXXdF51Juyyqfwd+ck/cxRXBuL/
-         QblseyUtfSGenJ0gljJ2pbB0gAIITjw52WqbTW2Z0jdGYZUSnhLjM7vzaSAcgg9ntdCU
-         IRIk6kr7HsWR7fB58/4XlnQLf92NZplKJqLZUz9bekcIZR5pUXSzuvCRJuWFqnjazPHn
-         cqH0ZKs7JUi8PfOxesr1DBBrir0YEVyont3WvIHVerIYNoHR4Tf2/yZ8M2LgalfQDJR8
-         L8KBd2+3s7ORFdgymam35gZCSYvnI2Og9BSkCuWi06QGGz5azCZvt2zdM+OI0ItzFFCs
-         2qyA==
-X-Gm-Message-State: ACgBeo0q+86zpukv5bspl1tWdEh7e8WGx9hw1vCmxnMmjKRe6pMsY4zF
-        GMNjB6rpa82XDop8Pd9JHIpsoRRUFkg=
-X-Google-Smtp-Source: AA6agR6gxBIJ8ej0i+PQkYdQATuG4G3BJiABwM5HLlbKJrD2l+1XykpH/W056KEDm561Fnh/2tF0Dw==
-X-Received: by 2002:a05:6870:41c3:b0:10c:529c:3844 with SMTP id z3-20020a05687041c300b0010c529c3844mr61434oac.0.1659591279368;
-        Wed, 03 Aug 2022 22:34:39 -0700 (PDT)
-Received: from bertie (072-190-140-095.res.spectrum.com. [72.190.140.95])
-        by smtp.gmail.com with ESMTPSA id r14-20020a056830120e00b0061c3246bd42sm4491510otp.44.2022.08.03.22.34.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 22:34:39 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 00:34:38 -0500
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     "Huang, Shaoqin" <shaoqin.huang@intel.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] memblock test: Add test to memblock_add() 129th region
-Message-ID: <YutabjAN+hJwUaoF@bertie>
-References: <20220801064901.980558-1-shaoqin.huang@intel.com>
- <YujPDHym0Ly8sxqP@kernel.org>
- <4c8def19-650e-7bc3-a581-3ce2b7c0b3cf@intel.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=dwToIWTIAZs3lOqbZfyuTvqStRDyOPRIuqWffIxZVLs=;
+        b=tgGqwn07JgRSnGvE7fiYybOhtPANxfCuakKlHoz8uxvHJ3M3rzItwdpcbtGSBtd9/D
+         /CDJnD1aEukOV0Mu3FIY7fGfSFGwj/GB6a3rCdmpa7Ppj38ZUlclUHasA2aP8AQxoF73
+         zRmtKspt0tZodgzUQemSkpfmR0lkVKFNKhZ/N4AXWECxCdHP4G8jmiiqLExMbJOUp7ul
+         eU+Ub3RFLDHiN0OYPAjxKkLW0qBT5xEn0Bx3joWFNDqmkfUEIDTZlGiTfU1bu3uzz1eR
+         b0gKIxqOgaVSdln9PNTW1/ZYFAml1myDQy82RkFThBZWm1lNHtnZh7XnHumv5ofeelzs
+         5DiQ==
+X-Gm-Message-State: ACgBeo3UzM8jnegVWTkOzAWvN3OsHTXbppVtTzzaic47Jm0Hp8VRC2St
+        GjOeoi5jwqxyXfFEyOlr9a1ktTQPdOV6Afk9aeFiqA==
+X-Google-Smtp-Source: AA6agR6G7YUcW5wAUYigbUaXEJm2ytrXb2s3k6xmb3ND7ZV6vqdL/8BPuYUXeFIGmYhf8orzcbMeHcQfY2DzuNk8C7Y=
+X-Received: by 2002:a05:6512:6c8:b0:48a:f375:9ecc with SMTP id
+ u8-20020a05651206c800b0048af3759eccmr130541lff.206.1659591369051; Wed, 03 Aug
+ 2022 22:36:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c8def19-650e-7bc3-a581-3ce2b7c0b3cf@intel.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <000000000000d0437b05dffdd1de@google.com> <CACT4Y+Y8DOKJtwhRsyNT7G26C3Fx_oeibpXn43Ks0RtYYdZG3g@mail.gmail.com>
+ <36f4745f-0e47-4f49-8f4e-ff7544f163d8n@googlegroups.com> <CACT4Y+Zy7wLdeRCa+ZH-swo9ut=U6pEk4rP461QE1m-gT6s-uQ@mail.gmail.com>
+ <a55430c3-a0bc-4af6-b7e2-20f2e0d091b2n@googlegroups.com> <CACT4Y+ar18tcxx0tOthV0JBrmWsLXtXAjXVFX4sac5k1UGJ7Lw@mail.gmail.com>
+ <CACT4Y+ZAazG7UjKE1ZHq72bh4Ve1r3_Hw+zcONYoO1J959sukw@mail.gmail.com>
+ <f2bcc414-aa96-cfcb-4df8-fe66cf47068f@ghiti.fr> <CACT4Y+bP+U2Co67SJG4qri=qHqCk38cq_JwGmo7m0s-8hCF8ww@mail.gmail.com>
+ <CA+zEjCv+7k-Lu-rhOgXOVptzF9GpLt1K_1GHKnciMrTyenyT9g@mail.gmail.com>
+In-Reply-To: <CA+zEjCv+7k-Lu-rhOgXOVptzF9GpLt1K_1GHKnciMrTyenyT9g@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 4 Aug 2022 07:35:57 +0200
+Message-ID: <CACT4Y+Yi1NqFq4aXj96rG_hSb8wof2ty1Yiiw2ygDxHuTW5yxQ@mail.gmail.com>
+Subject: Re: [syzbot] riscv/fixes test error: lost connection to test machine
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Alexandre Ghiti <alex@ghiti.fr>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        syzbot <syzbot+2c5da6a0a16a0c4f34aa@syzkaller.appspotmail.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,237 +79,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 03:38:37PM +0800, Huang, Shaoqin wrote:
-> 
-> 
-> On 8/2/2022 3:15 PM, Mike Rapoport wrote:
-> > On Mon, Aug 01, 2022 at 02:48:36PM +0800, shaoqin.huang@intel.com wrote:
-> > > From: Shaoqin Huang <shaoqin.huang@intel.com>
-> > > 
-> > > Add 129th region into the memblock, and this will trigger the
-> > > memblock_double_array() function, this needs valid memory regions. So
-> > > using dummy_physical_memory_init() to allocate some valid memory, when
-> > > memblock_double_array() choose a new memory region from memory.regions,
-> > > it will always choose a valid memory region if we add all valid memory
-> > > region, so the memblock_double_array() must success.
-> > > 
-> > > Another thing should be done is to restore the memory.regions after
-> > > memblock_double_array(), due to now the memory.regions is pointing to a
-> > > memory region allocated by dummy_physical_memory_init(). And it will
-> > > affect the subsequent tests if we don't restore the memory region. So
-> > > Simply record the origin region, and restore it after the test.
-> > > 
-> > > Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
-> > > ---
-> > > Changelog:
-> > > ----------
-> > > v2:
-> > >    - Use ASSERT_EQ() to replace assert().
-> > >    - Not to expose memory_block, and add a function get_memory_block_base() to
-> > >    get the memory_block.base.
-> > >    - Add two functions for common usage, and now it has been used by this patch
-> > >    to allocate many valid memory regions and free them at the end.
-> > > 
-> > >   tools/testing/memblock/tests/basic_api.c | 54 ++++++++++++++++++++++++
-> > >   tools/testing/memblock/tests/common.c    | 38 +++++++++++++++--
-> > >   tools/testing/memblock/tests/common.h    |  6 +++
-> > >   3 files changed, 95 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
-> > > index 66f46f261e66..46948d5a975e 100644
-> > > --- a/tools/testing/memblock/tests/basic_api.c
-> > > +++ b/tools/testing/memblock/tests/basic_api.c
-> > > @@ -326,6 +326,59 @@ static int memblock_add_twice_check(void)
-> > >   	return 0;
-> > >   }
-> > > +static int memblock_add_many_check(void)
-> > > +{
-> > > +	void *base[INIT_MEMBLOCK_REGIONS + 1];
-> > > +	void *orig_region;
-> > > +	struct region r = {
-> > > +		.base = SZ_16K,
-> > > +		.size = MEM_SIZE,
-> > > +	};
-> > > +
-> > > +	PREFIX_PUSH();
-> > > +
-> > > +	reset_memblock_regions();
-> > > +	memblock_allow_resize();
-> > > +
-> > > +	dummy_physical_memory_many_init(base, INIT_MEMBLOCK_REGIONS);
-> > 
-> > Why do we need this?
-> 
-> I want to memblock_add() 128 regions that every region has a valid
-> "physical" memory. So it can make sure the memblock_double_array() success
-> when add a 129-th region.
-> 
+On Tue, 31 May 2022 at 16:10, Alexandre Ghiti
+<alexandre.ghiti@canonical.com> wrote:
+> On Sat, May 28, 2022 at 10:31 AM Dmitry Vyukov <dvyukov@google.com> wrote=
+:
+>>
+>> On Sat, 28 May 2022 at 10:09, Alexandre Ghiti <alex@ghiti.fr> wrote:
+>> >
+>> > On 5/27/22 19:12, Dmitry Vyukov wrote:
+>> > > On Fri, 27 May 2022 at 19:04, Dmitry Vyukov <dvyukov@google.com> wro=
+te:
+>> > >> On Fri, 27 May 2022 at 16:01, Alexandre Ghiti
+>> > >> <alexandre.ghiti@canonical.com> wrote:
+>> > >>> On Friday, May 27, 2022 at 3:55:24 PM UTC+2 Dmitry Vyukov wrote:
+>> > >>>> On Fri, 27 May 2022 at 15:50, Alexandre Ghiti
+>> > >>>> <alexand...@canonical.com> wrote:
+>> > >>>>> On Friday, May 27, 2022 at 3:02:01 PM UTC+2 Dmitry Vyukov wrote:
+>> > >>>>>> On Fri, 27 May 2022 at 14:55, syzbot
+>> > >>>>>> <syzbot+2c5da6...@syzkaller.appspotmail.com> wrote:
+>> > >>>>>>> Hello,
+>> > >>>>>>>
+>> > >>>>>>> syzbot found the following issue on:
+>> > >>>>>>>
+>> > >>>>>>> HEAD commit: c932edeaf6d6 riscv: dts: microchip: fix gpio1 reg=
+ property..
+>> > >>>>>>> git tree: git://git.kernel.org/pub/scm/linux/kernel/git/riscv/=
+linux.git fixes
+>> > >>>>>>> console output: https://syzkaller.appspot.com/x/log.txt?x=3D14=
+18add5f00000
+>> > >>>>>>> kernel config: https://syzkaller.appspot.com/x/.config?x=3Daa6=
+b5702bdf14a17
+>> > >>>>>>> dashboard link: https://syzkaller.appspot.com/bug?extid=3D2c5d=
+a6a0a16a0c4f34aa
+>> > >>>>>>> compiler: riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> > >>>>>>> userspace arch: riscv64
+>> > >>>>>>>
+>> > >>>>>>> IMPORTANT: if you fix the issue, please add the following tag =
+to the commit:
+>> > >>>>>>> Reported-by: syzbot+2c5da6...@syzkaller.appspotmail.com
+>> > >>>>>> The CONFIG_KASAN_VMALLOC allows riscv kernel to boot, but now G=
+o
+>> > >>>>>> processes started crashing with:
+>> > >>>>>>
+>> > >>>>>> 1970/01/01 00:06:55 fuzzer started
+>> > >>>>>> runtime: lfstack.push invalid packing: node=3D0xffffff5908a940 =
+cnt=3D0x1
+>> > >>>>>> packed=3D0xffff5908a9400001 -> node=3D0xffff5908a940
+>> > >>>>>> fatal error: lfstack.push
+>> > >>>>>> runtime stack:
+>> > >>>>>> runtime.throw({0x30884c, 0xc})
+>> > >>>>>> /usr/local/go/src/runtime/panic.go:1198 +0x60
+>> > >>>>>> runtime.(*lfstack).push(0xdb3850, 0xffffff5908a940)
+>> > >>>>>> /usr/local/go/src/runtime/lfstack.go:30 +0x1a8
+>> > >>>>>>
+>> > >>>>>> Go runtime tries to shove some data into the upper 16 bits of p=
+ointers
+>> > >>>>>> assuming they are unused.
+>> > >>>>>> However, the original pointer node=3D0xffffff5908a940 suggest r=
+iscv now
+>> > >>>>>> has 56-bit users-space address space?
+>> > >>>>>
+>> > >>>>> Yes, sv57 was merged recently.
+>> > >>>>>
+>> > >>>>>> Documentation/riscv/vm-layout.rst claims 48-bit pointers:
+>> > >>>>>> "
+>> > >>>>>> The RISC-V privileged architecture document states that the 64b=
+it addresses
+>> > >>>>>> "must have bits 63=E2=80=9348 all equal to bit 47, or else a pa=
+ge-fault exception will
+>> > >>>>>> occur.":
+>> > >>>>>
+>> > >>>>> Thanks for pointing that, I extracted that from the specificatio=
+n before sv57 was specified, I'll fix that.
+>> > >>>>>
+>> > >>>>> The current kernel code will use sv57 as it is supported and adv=
+ertised by qemu, and to my knowledge, you can't downgrade to sv48 unless by=
+ re-compiling qemu using the following:
+>> > >>>>>
+>> > >>>>> diff --git a/target/riscv/csr.c b/target/riscv/csr.c
+>> > >>>>> index 6dbe9b541f..a64b50ed75 100644
+>> > >>>>> --- a/target/riscv/csr.c
+>> > >>>>> +++ b/target/riscv/csr.c
+>> > >>>>> @@ -637,7 +637,7 @@ static const char valid_vm_1_10_64[16] =3D {
+>> > >>>>> [VM_1_10_MBARE] =3D 1,
+>> > >>>>> [VM_1_10_SV39] =3D 1,
+>> > >>>>> [VM_1_10_SV48] =3D 1,
+>> > >>>>> - [VM_1_10_SV57] =3D 1
+>> > >>>>> + [VM_1_10_SV57] =3D 0
+>> > >>>>> };
+>> > >>>>>
+>> > >>>>> /* Machine Information Registers */
+>> > >>>>>
+>> > >>>>>> ...
+>> > >>>>>> 0000000000000000 | 0 | 0000003fffffffff | 256 GB |
+>> > >>>>>> user-space virtual memory, different per mm
+>> > >>>>>> "
+>> > >>>> There is no kernel config to force SV48/39, right?
+>> > >>>
+>> > >>> No, we rely on what the hardware advertises, if it supports sv57, =
+we'll go for sv57, if not, we'll try sv48...etc. I had some patches to forc=
+e the downgrade by using the device tree but they never got merged though.
+>> > >> +original CC list
+>> > >>
+>> > >> FTR sent Go runtime change to support SV57:
+>> > >> https://go-review.googlesource.com/c/go/+/409055
+>> > >
+>> > >
+>> > > Is CONFIG_CMDLINE broken on riscv?
+>> > > I am running with:
+>> > >
+>> > > CONFIG_CMDLINE=3D"earlyprintk=3Dserial net.ifnames=3D0
+>> > > sysctl.kernel.hung_task_all_cpu_backtrace=3D1 ima_policy=3Dtcb
+>> > > nf-conntrack-ftp.ports=3D20000 nf-conntrack-tftp.ports=3D20000
+>> > > nf-conntrack-sip.ports=3D20000 nf-conntrack-irc.ports=3D20000
+>> > > nf-conntrack-sane.ports=3D20000 binder.debug_mask=3D0
+>> > > rcupdate.rcu_expedited=3D1 no_hash_pointers page_owner=3Don
+>> > > sysctl.vm.nr_hugepages=3D4 sysctl.vm.nr_overcommit_hugepages=3D4
+>> > > secretmem.enable=3D1 sysctl.max_rcu_stall_to_panic=3D1
+>> > > msr.allow_writes=3Doff dummy_hcd.num=3D2 smp.csd_lock_timeout=3D3000=
+00
+>> > > watchdog_thresh=3D165 workqueue.watchdog_thresh=3D420
+>> > > sysctl.net.core.netdev_unregister_timeout_secs=3D420 panic_on_warn=
+=3D1"
+>> >
+>> >
+>> > This command line is 608-character long, but we are still stuck with t=
+he
+>> > default COMMAND_LINE_SIZE to 512, I imagine that it is the problem. I
+>> > had proposed a patch last year to bump that to 1024, but it never got
+>> > merged
+>> > https://lore.kernel.org/lkml/CAEn-LTqTXCEC=3DbXTvGyo8SNL0JMWRKtiSwQB7R=
+=3DPc4uhxZUruA@mail.gmail.com/T/#m4b45019dc0f5573f2a50c1f6007c5109fa35efff
+>>
+>>
+>> risc-v maintainers, please merge it now.
+>> I would even suggest 2048:
+>>
+>> git grep "define COMMAND_LINE_SIZE" arch/
+>> arch/alpha/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE   256
+>> arch/arc/include/asm/setup.h:#define COMMAND_LINE_SIZE 256
+>> arch/arm/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE 1024
+>> arch/arm64/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE   2048
+>> arch/ia64/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE    2048
+>> arch/m68k/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE 256
+>> arch/microblaze/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE      =
+256
+>> arch/mips/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE    4096
+>> arch/parisc/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE  1024
+>> arch/powerpc/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE 2048
+>> arch/s390/include/asm/setup.h:#define COMMAND_LINE_SIZE CONFIG_COMMAND_L=
+INE_SIZE
+>> arch/sparc/include/uapi/asm/setup.h:# define COMMAND_LINE_SIZE 2048
+>> arch/sparc/include/uapi/asm/setup.h:# define COMMAND_LINE_SIZE 256
+>> arch/um/include/asm/setup.h:#define COMMAND_LINE_SIZE 4096
+>> arch/x86/include/asm/setup.h:#define COMMAND_LINE_SIZE 2048
+>> arch/xtensa/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE  256
+>>
+>>
+>> It's also interesting how the kernel handles overflow. Imagine one
+>> adds that_critical_security_feature=3D1 to the end of an existing long
+>> line.
+>
+>
+> Your comment rang a bell and I searched in my old patchsets: I had submit=
+ted a patch [1] to output a warning in case of an overflow and to correctly=
+ truncate the command line to avoid such issues: it was taken with another =
+series [2] which was actually never merged...My bad on this one, I followed=
+ my patch in the series but not the series itself.
+>
+> I'll try to re-submit it because I agree the current behaviour is really =
+wrong.
+>
+> [1] https://lore.kernel.org/lkml/ee702ff7-f43c-745c-4157-b1cba53bb0b2@ghi=
+ti.fr/T/
+> [2] https://lore.kernel.org/linux-devicetree/c3d52a6e1423d9d27c59ad7ab945=
+929b09f74866.1617375802.git.christophe.leroy@csgroup.eu/T/
 
-> In the last patch, I didn't put this function here, I just memblock_add()
-> 128 region at here. And after I think if we can encapsulate it to a
-> function, later it can be used to init some valid memory regions into the
-> memblock.
-> 
-> And if no others may be use this functions, the function is not needed.
-> 
-> > 
-> > dummy_physical_memory_init() allocates the "physical" memory, so to trigger
-> > memblock_double_array() it's enough to memblock_add() 129 non-intersecting
-> > chunks in the range [memory_block.base, memory_block.base + MEM_SIZE].
-> > If MEM_SIZE of 16k won't be enough, it can be increased.
-> > 
-> 
-> Yes. And now MEM_SIZE of 16k is enough, no need to increase it now.
-> 
-I experimented with only calling dummy_physical_memory_init() once at the
-beginning and then adding all 129 regions into the memory allocated with
-that call. I found that it only works if at least one of the regions is
-SZ_16K or larger. I think this is because memblock_double_array() needs to
-find a contiguous region large enough to hold
-PAGE_ALIGN(new regions array). If all the regions are SZ_8K or smaller, I
-get the error message:
 
-memblock: Failed to double memory array from 128 to 256 entries !
+FTR I've merged the Go fix for SV57:
+https://go-review.googlesource.com/c/go/+/409055
+but it will only appear in Go 1.20.
 
-What I did was increase MEM_SIZE to SZ_32K, then memblock_add a SZ_16K
-region after calling dummy_physical_memory_init() once. Then, I made the
-remaining regions SZ_16, with a SZ_16 gap between each region.
-
-> > > +
-> > > +	orig_region = memblock.memory.regions;
-> > > +
-> > > +	/* This adds the 129 memory_region, and makes it double array. */
-> > > +	dummy_physical_memory_init();
-> > > +	append_memblock();
-> > > +	base[INIT_MEMBLOCK_REGIONS] = get_memory_block_base();
-> > > +
-> > > +	ASSERT_EQ(memblock.memory.cnt, INIT_MEMBLOCK_REGIONS + 1);
-> > > +	ASSERT_EQ(memblock.memory.total_size, (INIT_MEMBLOCK_REGIONS + 1) * MEM_SIZE);
-> > > +	ASSERT_EQ(memblock.memory.max, INIT_MEMBLOCK_REGIONS * 2);
-> > > +
-> > > +	/* The base is very small, so it should be insert to the first region. */
-> > > +	memblock_add(r.base, r.size);
-> > > +	ASSERT_EQ(memblock.memory.regions[0].base, r.base);
-> > > +	ASSERT_EQ(memblock.memory.regions[0].size, r.size);
-> > > +
-> > > +	ASSERT_EQ(memblock.memory.cnt, INIT_MEMBLOCK_REGIONS + 2);
-> > > +	ASSERT_EQ(memblock.memory.total_size, (INIT_MEMBLOCK_REGIONS + 2) * MEM_SIZE);
-> > > +	ASSERT_EQ(memblock.memory.max, INIT_MEMBLOCK_REGIONS * 2);
-> > > +
-> > > +	/* Free these allocated memory. */
-> > > +	dummy_physical_memory_many_cleanup(base, INIT_MEMBLOCK_REGIONS + 1);
-> > > +
-> > > +	/*
-> > > +	 * The current memory.regions is occupying a range of memory that
-> > > +	 * allocated from dummy_physical_memory_init(). After free the memory,
-> > > +	 * we must not use it. So restore the origin memory region to make sure
-> > > +	 * the tests can run as normal and not affected by the double array.
-> > > +	 */
-> > > +	memblock.memory.regions = orig_region;
-> > > +	memblock.memory.cnt = INIT_MEMBLOCK_REGIONS;
-> > > +
-> > > +	test_pass_pop();
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > >   static int memblock_add_checks(void)
-> > >   {
-> > >   	prefix_reset();
-> > > @@ -339,6 +392,7 @@ static int memblock_add_checks(void)
-> > >   	memblock_add_overlap_bottom_check();
-> > >   	memblock_add_within_check();
-> > >   	memblock_add_twice_check();
-> > > +	memblock_add_many_check();
-> > >   	prefix_pop();
-> > > diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
-> > > index e43b2676af81..960b3ce07696 100644
-> > > --- a/tools/testing/memblock/tests/common.c
-> > > +++ b/tools/testing/memblock/tests/common.c
-> > > @@ -5,8 +5,6 @@
-> > >   #include <linux/memory_hotplug.h>
-> > >   #include <linux/build_bug.h>
-> > > -#define INIT_MEMBLOCK_REGIONS			128
-> > > -#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
-> > >   #define PREFIXES_MAX				15
-> > >   #define DELIM					": "
-> > > @@ -58,10 +56,20 @@ void reset_memblock_attributes(void)
-> > >   	memblock.current_limit	= MEMBLOCK_ALLOC_ANYWHERE;
-> > >   }
-> > > +void *get_memory_block_base(void)
-> > > +{
-> > > +	return memory_block.base;
-> > > +}
-> > > +
-> > > +void append_memblock(void)
-> > > +{
-> > > +	memblock_add((phys_addr_t)memory_block.base, MEM_SIZE);
-> > > +}
-> > > +
-> > >   void setup_memblock(void)
-> > >   {
-> > >   	reset_memblock_regions();
-> > > -	memblock_add((phys_addr_t)memory_block.base, MEM_SIZE);
-> > > +	append_memblock();
-> > >   }
-> > >   void dummy_physical_memory_init(void)
-> > > @@ -75,6 +83,30 @@ void dummy_physical_memory_cleanup(void)
-> > >   	free(memory_block.base);
-> > >   }
-> > > +void dummy_physical_memory_many_init(void *base[], int cnt)
-> > > +{
-> > > +	int i;
-> > > +
-> > > +	for (i = 0; i < cnt; i++) {
-> > > +		dummy_physical_memory_init();
-> > > +		append_memblock();
-> > > +		base[i] = memory_block.base;
-> > > +
-> > > +		ASSERT_EQ(memblock.memory.cnt, i + 1);
-> > > +		ASSERT_EQ(memblock.memory.total_size, (i + 1) * MEM_SIZE);
-> > > +	}
-> > > +}
-> > > +
-> > > +void dummy_physical_memory_many_cleanup(void *base[], int cnt)
-> > > +{
-> > > +	int i;
-> > > +
-> > > +	for (i = 0; i < cnt; i++) {
-> > > +		memory_block.base = base[i];
-> > > +		dummy_physical_memory_cleanup();
-> > > +	}
-> > > +}
-> > > +
-> > >   static void usage(const char *prog)
-> > >   {
-> > >   	BUILD_BUG_ON(ARRAY_SIZE(help_opts) != ARRAY_SIZE(long_opts) - 1);
-> > > diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
-> > > index 3e7f23d341d7..848900aa8db6 100644
-> > > --- a/tools/testing/memblock/tests/common.h
-> > > +++ b/tools/testing/memblock/tests/common.h
-> > > @@ -11,6 +11,8 @@
-> > >   #include <../selftests/kselftest.h>
-> > >   #define MEM_SIZE SZ_16K
-> > > +#define INIT_MEMBLOCK_REGIONS			128
-> > > +#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
-> > >   /**
-> > >    * ASSERT_EQ():
-> > > @@ -68,8 +70,12 @@ struct region {
-> > >   void reset_memblock_regions(void);
-> > >   void reset_memblock_attributes(void);
-> > >   void setup_memblock(void);
-> > > +void append_memblock(void);
-> > > +void *get_memory_block_base(void);
-> > >   void dummy_physical_memory_init(void);
-> > >   void dummy_physical_memory_cleanup(void);
-> > > +void dummy_physical_memory_many_init(void *base[], int cnt);
-> > > +void dummy_physical_memory_many_cleanup(void *base[], int cnt);
-> > >   void parse_args(int argc, char **argv);
-> > >   void test_fail(void);
-> > > -- 
-> > > 2.30.2
-> > > 
-> > > 
-> > 
-Thanks,
-Rebecca
+And we still have the command line length issue for reviving syzbot testing=
+.

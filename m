@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AE0589FED
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A022589FEF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbiHDRgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 13:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S230120AbiHDRgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 13:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiHDRgB (ORCPT
+        with ESMTP id S239243AbiHDRgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 13:36:01 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3087AE0FC;
-        Thu,  4 Aug 2022 10:36:00 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 274HYOYE002612;
-        Thu, 4 Aug 2022 17:35:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=bHrzd4IORsCUFsxr6bF7gsPJpewPI6I31yQT1nNEqFk=;
- b=euFgz/rJ26wWYHptJglzbFqqWybh/0toyyeVwV4A3Aw/m7wlv9K8b0lIAtfvkiO0MtoZ
- L4RYxy1sofAY/j9uENB36goDsK+dgZEbiyQjASVp7b525yT8YsdhkDFHlqSskpPK2J7d
- J7yK+wPwuHRHgD7pZm6McpLrW96EpJeFvAAYsnIFxnw90GIk2fXRsjRTOuVBkWRCOLxP
- P9G+RewNvY9GgYTjoWXl5giN9XkFVd8O4ltU5W4bPLXCA5XuNymEc/N2Z70f8t9LX22e
- vGdlqH7EAgAEGe1pNbx90jAYaLyRXg4TJDoLKwplh0/vh2FcUVDw+QMXIOSXD+su8C9C /Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hrjmkg23t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Aug 2022 17:35:56 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 274HYk5Q004240;
-        Thu, 4 Aug 2022 17:35:55 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hrjmkg21w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Aug 2022 17:35:55 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 274H4rte010715;
-        Thu, 4 Aug 2022 17:35:54 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma01dal.us.ibm.com with ESMTP id 3hq6j009ed-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Aug 2022 17:35:54 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 274HZrUr51773804
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 4 Aug 2022 17:35:53 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F0C2E28058;
-        Thu,  4 Aug 2022 17:35:52 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53EA32805A;
-        Thu,  4 Aug 2022 17:35:51 +0000 (GMT)
-Received: from li-c92d2ccc-254b-11b2-a85c-a700b5bfb098.ibm.com.com (unknown [9.211.67.200])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu,  4 Aug 2022 17:35:51 +0000 (GMT)
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-To:     pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, borntraeger@linux.ibm.com,
-        imbrenda@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH 1/1] KVM: s390: pci: fix airq_iv_create sparse warning
-Date:   Thu,  4 Aug 2022 13:35:46 -0400
-Message-Id: <20220804173546.226968-2-mjrosato@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220804173546.226968-1-mjrosato@linux.ibm.com>
-References: <20220804173546.226968-1-mjrosato@linux.ibm.com>
+        Thu, 4 Aug 2022 13:36:19 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDA0606A7;
+        Thu,  4 Aug 2022 10:36:16 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id w6so124069qkf.3;
+        Thu, 04 Aug 2022 10:36:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=avoNOnlZVAxzPQg+1uXUNZlTJ0YbKBrrRYTPwZcHnyY=;
+        b=JQnbFopw+aj9BR6B2P6sOXHUuSoj1e/9X7npW8I34hJRsQaizZUrQYA5hBkULkmxgm
+         GaBKH/m5DM4oU8aSXz9R84S06bM37mCm1qaEPYhi9LXaxSavMZ6nQ61cZJeulzLN8WFn
+         XQxLijsMXjUCXroFK0/f0zVtxx9HpOoToyEDV7MLR0qeF0+A3+ii5bQYLXb73Ez+WA5B
+         EhG7dWm0axK/XPK/03Pl2D+Vrc9eLvGQP/i6r/53OubRYolh8llqFJqiuj7bPvQYRTpW
+         yW+1FTtth5LWlJ/AXTFz5AO//XJoitM2/19grG046jycKUED735zPIQaGgRpLRkDiYIo
+         ylDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=avoNOnlZVAxzPQg+1uXUNZlTJ0YbKBrrRYTPwZcHnyY=;
+        b=hxxFTtqKKVA5I8n5tRJDllbnOtA+GMkXMU+4V5AVKkBOA5GsdEElCq1cJL9V/X/TP4
+         V0Ag2Q+h8KHtCCvvQQyhnAiwZNUfNzJhfDyGfBYbZB7EQRI2E1asHi9T5ojTMSvndcHD
+         YdLejo3uKGCAn1AJGkfJKxCWY4CcfdRUuABNaGpNoGuW2vxYR6IryLojiqQaJIEBdLeb
+         M5USV9mfqSdqn5z22pBb6DCG5b0tMsjGc/a4dFpqGmPVC6uaH4aSZ2LK5dcl/afKz54f
+         vGiJ1qZKeN66lYndojQSDcGmi1t4SB1p9waaVAW6sMy7Cidglu75nH+JLgbNyP8th9c5
+         8hDA==
+X-Gm-Message-State: ACgBeo3rlJxskyGW2x5Fsd6/VnEuBhaJPY+9awGdSI846k3FKd8whZPg
+        wEaJExxM9CoBdhvu3bFQ4KQQYu5uebc=
+X-Google-Smtp-Source: AA6agR7WOpt+qdu3oWVXRxkI5Rg3+rLPmgv2HqG9RsbFaMhuGjS3WR4+TO7DTgSd2jrcnGzjORRlIA==
+X-Received: by 2002:a37:89c7:0:b0:6b6:104c:b0ee with SMTP id l190-20020a3789c7000000b006b6104cb0eemr2225957qkd.288.1659634575115;
+        Thu, 04 Aug 2022 10:36:15 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id s13-20020a05622a178d00b0031eeefd896esm1112131qtk.3.2022.08.04.10.36.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 10:36:14 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net] net: bcmgenet: Indicate MAC is in charge of PHY PM
+Date:   Thu,  4 Aug 2022 10:36:04 -0700
+Message-Id: <20220804173605.1266574-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: nhnOarOiO2cGbvotrXYpaV2fUq0HRWBj
-X-Proofpoint-GUID: z88Zu_N22C6d5XIoKmIBYdfDc8lMj6Ng
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-04_03,2022-08-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- bulkscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0
- spamscore=0 adultscore=0 mlxlogscore=767 suspectscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2208040075
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the call to airq_iv_create to pass a NULL instead of 0.
+Avoid the PHY library call unnecessarily into the suspend/resume functions by
+setting phydev->mac_managed_pm to true. The GENET driver essentially does
+exactly what mdio_bus_phy_resume() does by calling phy_init_hw() plus
+phy_resume().
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Fixes: fba863b81604 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- arch/s390/kvm/pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The commit ID used in the Fixes: tag is to ensure that this goes back to
+when the support for mac_managed_pm was introduced, however in premise
+this issue has existed for a while, so we might consider a targeted
+backport all the way back to 4.9.
 
-diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
-index 4946fb7757d6..92a6998d8904 100644
---- a/arch/s390/kvm/pci.c
-+++ b/arch/s390/kvm/pci.c
-@@ -58,7 +58,7 @@ static int zpci_setup_aipb(u8 nisc)
- 	if (!zpci_aipb)
- 		return -ENOMEM;
+ drivers/net/ethernet/broadcom/genet/bcmmii.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmmii.c b/drivers/net/ethernet/broadcom/genet/bcmmii.c
+index c888ddee1fc4..7ded559842e8 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmmii.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmmii.c
+@@ -393,6 +393,9 @@ int bcmgenet_mii_probe(struct net_device *dev)
+ 	if (priv->internal_phy && !GENET_IS_V5(priv))
+ 		dev->phydev->irq = PHY_MAC_INTERRUPT;
  
--	aift->sbv = airq_iv_create(ZPCI_NR_DEVICES, AIRQ_IV_ALLOC, 0);
-+	aift->sbv = airq_iv_create(ZPCI_NR_DEVICES, AIRQ_IV_ALLOC, NULL);
- 	if (!aift->sbv) {
- 		rc = -ENOMEM;
- 		goto free_aipb;
++	/* Indicate that the MAC is responsible for PHY PM */
++	dev->phydev->mac_managed_pm = true;
++
+ 	return 0;
+ }
+ 
 -- 
-2.31.1
+2.25.1
 

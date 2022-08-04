@@ -2,146 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCF3589CEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F029A589CE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239922AbiHDNkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 09:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
+        id S239915AbiHDNjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 09:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234361AbiHDNkf (ORCPT
+        with ESMTP id S234361AbiHDNjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 09:40:35 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C774A657D;
-        Thu,  4 Aug 2022 06:40:34 -0700 (PDT)
-Received: from jpiotrowski-Surface-Book-3 (ip-005-146-194-026.um05.pools.vodafone-ip.de [5.146.194.26])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 022C720FFD69;
-        Thu,  4 Aug 2022 06:40:31 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 022C720FFD69
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1659620434;
-        bh=Wvk7LWnN0rvaXsUOte9cvrwZSRKd0TjIvDD1VIvrzMc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZhcDv3iZ9iuFXhM4Qx9qbXf6u5uOak0z8jkeYbGA6Zc5nfdLO3TVkaU7cPyNLABbi
-         Auwc9+aRImu/0iF/2UCYjPh00gf9BgLuISJcPOhEsMbQYZo8LEvJWqGaDmbjXl47Z7
-         nJDakPwYREHUJqFhkXdKfjFUH10tdG4RaqnZBlFs=
-Date:   Thu, 4 Aug 2022 15:39:30 +0200
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jarkko Sakkinen <jarkko@profian.com>,
-        Harald Hoyer <harald@profian.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER - SE..." 
-        <linux-crypto@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] crypto: ccp: Load the firmware twice when SEV API
- version < 1.43
-Message-ID: <YuvMEm4PwTtSL8Ig@jpiotrowski-Surface-Book-3>
-References: <20220804010223.3619-1-jarkko@kernel.org>
- <58e8f9dc-a8d3-a2a5-2dd7-0783355e2567@amd.com>
+        Thu, 4 Aug 2022 09:39:51 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8880A3D5B5
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:39:50 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id 129so21113977vsq.8
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 06:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=WlA+9YfIozAhz8c5LlPhM1dJK7wPGINaWEZjXQbmmhg=;
+        b=pGlXwQSqHYX3ef+b2jrFB9ANxIxJf9EgIP2JHUgBMIt8TdzZGmo4FYXiSeL0nSHOH8
+         M5l1YJWQGzU6I8bcly7Gy/VGEgFF3T8e/AngfVRey7VNjFUHbuM62fc5TkOnDaMNkrfx
+         rjZbLun+dQMISWkzH91VcQLqsQe+Ug1fchRFuRc5k742l3+d/2Su2yqY1ASH+03isoz/
+         lj6Y1tiYq9latVn/KbFBkGGK7d/kjixOo79OnmIkARqjdqRyFssJNad5VkslEjDZCsbA
+         3cSp5FEpo7pGWXXrqPSD0JUemkaW0HNy1NV3OF0aMvVc7+jUQwZInowV7I+i2F3RKGN0
+         sf3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=WlA+9YfIozAhz8c5LlPhM1dJK7wPGINaWEZjXQbmmhg=;
+        b=21CfxxGvEnYwvqyisg8BKT5mWWiwKEUxC7mbDybXHonqHafc2JVyxBYtT2MAjE8NJO
+         TnRDVvRFZVeXhfWrH11nbtMO9OjbXsZTdo+3G4OGylR9tCKXHagPy+b93j1RM8itBkiJ
+         9ENDeNEjIJdd1JayuZTANLl2eKCcaMyagLEZ0bUnz8CM95pP7EzTh5t6t24EKASNpgN7
+         uagxr8zTp4auLnp90PNhjVXv6hoCK27hPvX9a22J6Iwy4PwR14ca9SadueZAPUIrHc2b
+         z7cAtE1tILAstiAxnFdHcg+sbRUJ8hL7FvbLWi0bgUEsYS99beZwF02De4vm/2H8Kl9I
+         yadg==
+X-Gm-Message-State: ACgBeo26Yb7fOsyJ0Ns33kjMvzYGUnJCbVYMHp8wa/Iybz9X0Kg1XlzN
+        wK1iED6CchGQvVAGxbn5Zr+isLFZXLyhP1/OV+c=
+X-Google-Smtp-Source: AA6agR5o+9qN5oqhJ+kdONhztp+V1PMKbvPF9KT+Ij7SmJhWhgH+CT8o/yIh3Vm5CTeqFuOoLFdcw4LjuDeRuooo3fY=
+X-Received: by 2002:a05:6102:356:b0:375:3bbb:149 with SMTP id
+ e22-20020a056102035600b003753bbb0149mr774054vsa.72.1659620389655; Thu, 04 Aug
+ 2022 06:39:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58e8f9dc-a8d3-a2a5-2dd7-0783355e2567@amd.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:612c:11c6:b0:2d3:7e6b:5db3 with HTTP; Thu, 4 Aug 2022
+ 06:39:49 -0700 (PDT)
+Reply-To: goltzwrite@gmail.com
+From:   goltz write <agoudaviadjovi@gmail.com>
+Date:   Thu, 4 Aug 2022 13:39:49 +0000
+Message-ID: <CAEbGuUdHsGtNJcva52AG9aXcd_5TaQxSSNo6tnfA=o-pbwDvhg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        HK_RANDOM_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e42 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.0 HK_RANDOM_REPLYTO Reply-To username looks random
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [agoudaviadjovi[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 08:13:35AM -0500, Tom Lendacky wrote:
-> On 8/3/22 20:02, Jarkko Sakkinen wrote:
-> > From: Jarkko Sakkinen <jarkko@profian.com>
-> > 
-> > SEV-SNP does not initialize to a legit state, unless the firmware is
-> > loaded twice, when SEP API version < 1.43, and the firmware is updated
-> > to a later version. Because of this user space needs to work around
-> > this with "rmmod && modprobe" combo. Fix this by implementing the
-> > workaround to the driver.
-> 
-> The SNP hypervisor patches are placing a minimum supported version
-> requirement for the SEV firmware that exceeds the specified version
-> above [1] (for the reason above, as well as some others), so this patch
-> is not needed, NAK.
-> 
-> [1] https://lore.kernel.org/lkml/87a0481526e66ddd5f6192cbb43a50708aee2883.1655761627.git.ashish.kalra@amd.com/
-> 
-> Thanks,
-> Tom
-
-Hi Tom,
-
-Is there any particular reason for this restriction? Does SNP not work with API
-version <v1.51? Do you have a link to a changelog that describes the changes
-between different firmware versions?
-
-Thanks,
-Jeremi
-
-> 
-> > 
-> > Reported-by: Harald Hoyer <harald@profian.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
-> > ---
-> >   drivers/crypto/ccp/sev-dev.c | 22 +++++++++++++++++++---
-> >   1 file changed, 19 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> > index 799b476fc3e8..f2abb7439dde 100644
-> > --- a/drivers/crypto/ccp/sev-dev.c
-> > +++ b/drivers/crypto/ccp/sev-dev.c
-> > @@ -76,6 +76,9 @@ static void *sev_es_tmr;
-> >   #define NV_LENGTH (32 * 1024)
-> >   static void *sev_init_ex_buffer;
-> > +/*
-> > + * SEV API version >= maj.min?
-> > + */
-> >   static inline bool sev_version_greater_or_equal(u8 maj, u8 min)
-> >   {
-> >   	struct sev_device *sev = psp_master->sev_data;
-> > @@ -89,6 +92,14 @@ static inline bool sev_version_greater_or_equal(u8 maj, u8 min)
-> >   	return false;
-> >   }
-> > +/*
-> > + * SEV API version < maj.min?
-> > + */
-> > +static inline bool sev_version_less(u8 maj, u8 min)
-> > +{
-> > +	return !sev_version_greater_or_equal(maj, min);
-> > +}
-> > +
-> >   static void sev_irq_handler(int irq, void *data, unsigned int status)
-> >   {
-> >   	struct sev_device *sev = data;
-> > @@ -1274,6 +1285,7 @@ void sev_pci_init(void)
-> >   {
-> >   	struct sev_device *sev = psp_master->sev_data;
-> >   	int error, rc;
-> > +	int i;
-> >   	if (!sev)
-> >   		return;
-> > @@ -1283,9 +1295,13 @@ void sev_pci_init(void)
-> >   	if (sev_get_api_version())
-> >   		goto err;
-> > -	if (sev_version_greater_or_equal(0, 15) &&
-> > -	    sev_update_firmware(sev->dev) == 0)
-> > -		sev_get_api_version();
-> > +	/*
-> > +	 * SEV-SNP does not work properly before loading the FW twice in the API
-> > +	 * versions older than SEV 1.43.
-> > +	 */
-> > +	for (i = 0; i < sev_version_greater_or_equal(0, 15) + sev_version_less(1, 43); i++)
-> > +		if (sev_update_firmware(sev->dev) == 0)
-> > +			sev_get_api_version();
-> >   	/* If an init_ex_path is provided rely on INIT_EX for PSP initialization
-> >   	 * instead of INIT.
+Good morning and how are you doing, my name is Miss Kristie Adams Goltz, i
+am from the United States of America. It's a divine connection to meet you.
+i am new here. Please try to reply back to my email, it's important
+Thanks.goltzwrite@gmail.com

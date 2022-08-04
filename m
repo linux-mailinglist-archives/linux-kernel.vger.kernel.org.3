@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E73AA58A014
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2685158A017
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239511AbiHDRza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 13:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
+        id S232682AbiHDR60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 13:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbiHDRz1 (ORCPT
+        with ESMTP id S230456AbiHDR6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 13:55:27 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CD76355
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 10:55:26 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id j11so132019qvt.10
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 10:55:26 -0700 (PDT)
+        Thu, 4 Aug 2022 13:58:23 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4189121E0D;
+        Thu,  4 Aug 2022 10:58:23 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id m10so162197qvu.4;
+        Thu, 04 Aug 2022 10:58:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=Hbjl3nNAZzAxsce6YFBJuobMzGqRGOHNPcP+9siXqBE=;
-        b=Ygon3eKTgfZBTXO4e7G23ZXRLZXIP2ETyigijndRgsIyKoRei+iBusncpugnigANpl
-         d6EwVc6S1sgiD1iIq1ggSGep6SGhBAUKAU4K42wcd3duO6e8Lizg8froZQUzPAxWKtdC
-         kknKw/YWmb3UvH4hXMN43srLv7ZRVbjz3p9Hu8hJbv44IoIfaF9PAwHumSNBvtVCwdIk
-         o8s44V9fB3sal1CQTZOHD64v10mZpzvlSrGl9aFMnsmZG/dmkPuHsc49/vpMXVjf3knF
-         ZjalYHQh3fuxIOH8ZzSYu41XDiIZe3shCJNk3kHHFTLavRz+vtCj0CNiGdfxMvvUN5N/
-         RTJg==
+        bh=W987ISPP8Bt+GvPSaheTpa/RjLogy82MS47AqufvqOQ=;
+        b=i+nKXSYOOUP/QJ93RLbSO+PMCjXUtJ+kPrAa9KZPCL1LkhEzJ56hUheHuSZ7FGEMWf
+         gYnclTUYeh3Sl/4F0utuI+BBJ4xPZiJRjriAd2bx5AVkT7RCuW8Wm/BifQuopk1Eaqi0
+         wO9H/Zb5Jg9YYTfmvLFZH2RQv51rarFphZrW7Lcv7WTgUEiZ8ldOLZeulBSb1+RBtq+a
+         3uiwRFggCR3IdrWJUOGSHKPkYZMd/tnbXHIkbLxB/gNJCav0QgTV4A835bgLvPn5Lmv4
+         TOOWGEfcmH1LpQ+DNCgSDgmiw2ekwJSfM2kByzwCBC/EO6OsuhksAhjpW6oKwIKd406E
+         TQUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=Hbjl3nNAZzAxsce6YFBJuobMzGqRGOHNPcP+9siXqBE=;
-        b=eaOu9YfwIDjJxcUD7rCknCPuXCt/S5aANrdKJL7b6uC8o1tFQQZspeJ2eAJ/GOWc1C
-         BNWF5ytD/O/GQV8ReGZ0AwzRKWzbAEqY8hfE5k/dnzVKNAXgWsVeu5ebUsMxe2snNSkC
-         0BFfR0nyNohcWH10RfTXOE92/eCsri/+IkGut/gwyN2tw+sfJjGbCGyYZ95D2ajs8fqk
-         i01AMF0ltDJBNrtS9frI2gj2tmDiGFGsjL4x1SARewAfxlKadteHgvCB7rMqFVcTZxUt
-         KOKwxjykfS0/QMLCCCNoLEajqdNtwX8TTxH5fdpmD+vUg36Gkfq+Z5zpiE8Jf7Z6CB+l
-         Ceng==
-X-Gm-Message-State: ACgBeo0021kSV77bbzWUdShHNo4ON73BXhIsIefZbGcRq0BLsJzkDh7Y
-        1VxV90U5BFN/t7EnzVn+T1wJVjWf/O0=
-X-Google-Smtp-Source: AA6agR6im+t1U/t5x9jWtYHxLrT0GXVJLmHrJztxXsznigFqDo3eQr0H9U+Ke0xQAt5CGIwLQqUyiA==
-X-Received: by 2002:a05:6214:20a4:b0:476:f037:8ac with SMTP id 4-20020a05621420a400b00476f03708acmr2468793qvd.38.1659635725212;
-        Thu, 04 Aug 2022 10:55:25 -0700 (PDT)
+        bh=W987ISPP8Bt+GvPSaheTpa/RjLogy82MS47AqufvqOQ=;
+        b=oejE7Sp7ngk+Bh6AtcDxNEGk8/NwlZ41UfOmKT4iE3Gy+Ug1XDdzFoIhKX/oJ3qGIq
+         3h4uvZVuTPirKkUrN034p1emwl+RFGm1iF12Q1hz5MiIMwGRSGOQrLLIc1hTFuZyFxiU
+         vNDiar/y5Tf8tTsjxboqUwq5sBvg9eRdcbMQ3fQMTY4N9/4sBnD1nGV4tAevnl72x10I
+         dHOuM3DVY+LZWTZojeny+fLjaXAbL23GW//7N61rrbNUursWK2R2izmn5XsKM7Kdee5A
+         /GVYvFM/Bs4MNx8oDlPGi6CEnx4cLzwy/3zJLIRqHUtGu7fEacgQkhL0p0n3TLmMuFFV
+         9BdA==
+X-Gm-Message-State: ACgBeo1OeZisYmeTLRBuWHESgiKOezV7teVq2IL2r05XBUF9y/3lTSkq
+        rgKNOgntY9ms5MluHHeUV9s=
+X-Google-Smtp-Source: AA6agR6RRgiCyOQAc1M8ENCbjusdjVFACKzmkbSQThj9jB1ZNRgwciNDNoRM0AXgGnKcQKjrAOOd8Q==
+X-Received: by 2002:a05:6214:e86:b0:476:6129:25fc with SMTP id hf6-20020a0562140e8600b00476612925fcmr2507126qvb.9.1659635902279;
+        Thu, 04 Aug 2022 10:58:22 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bi23-20020a05620a319700b006b8fb2a1145sm1100682qkb.124.2022.08.04.10.55.22
+        by smtp.googlemail.com with ESMTPSA id e13-20020a05622a110d00b00339163a06fcsm1131062qty.6.2022.08.04.10.58.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 10:55:24 -0700 (PDT)
-Message-ID: <6008ef46-ccdb-ea01-f9fb-4f8fceed2d29@gmail.com>
-Date:   Thu, 4 Aug 2022 10:55:21 -0700
+        Thu, 04 Aug 2022 10:58:21 -0700 (PDT)
+Message-ID: <c7fea2e5-eeb7-cd66-dc42-9fea98cfda9d@gmail.com>
+Date:   Thu, 4 Aug 2022 10:58:19 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 0/2] mtd: rawnand: brcmnand: Glue driver Kconfig entries
+Subject: Re: [PATCH 0/3] clk: bcm: rpi: Fixes and improvement
 Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-mtd@lists.infradead.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Colin Ian King <colin.king@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        William Zhang <william.zhang@broadcom.com>
-References: <20220711222323.4048197-1-f.fainelli@gmail.com>
+To:     "Ivan T. Ivanov" <iivanov@suse.de>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220713154953.3336-1-stefan.wahren@i2se.com>
+ <20220725081838.nd2tsjcw4uiapl5k@suse>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220711222323.4048197-1-f.fainelli@gmail.com>
+In-Reply-To: <20220725081838.nd2tsjcw4uiapl5k@suse>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,27 +81,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/22 15:23, Florian Fainelli wrote:
-> Hi all,
+On 7/25/22 01:18, Ivan T. Ivanov wrote:
+> Hi,
 > 
-> This patch series allows for a finer control over the BRCMNAND driver
-> glue driver selection such that it defaults to the various platforms
-> enabled in the configuration file.
-
-Miquel are you able to review and apply those patches if satisfactory? Thanks!
-
+> On 07-13 17:49, Stefan Wahren wrote:
+>>
+>> This series tries to fix and improvement the Raspberry Pi firmware clock
+>> driver. This mostly focus on clock discovery mechanism.
+>>
+>> Just a note patch #3 depends on patch #2.
+>>
+>> Stefan Wahren (3):
+>>   clk: bcm: rpi: Prevent out-of-bounds access
+>>   clk: bcm: rpi: Add missing newline
+>>   clk: bcm: rpi: Show clock id limit in error case
+>>
 > 
-> Florian Fainelli (2):
->   mtd: rawnand: brcmnand: Move Kconfig to driver folder
->   mtd: rawnand: brcmnand: Add individual glue driver selection
+> Maybe is little bit late, but still :-)
 > 
->  drivers/mtd/nand/raw/Kconfig           | 22 +-----------
->  drivers/mtd/nand/raw/brcmnand/Kconfig  | 49 ++++++++++++++++++++++++++
->  drivers/mtd/nand/raw/brcmnand/Makefile |  8 ++---
->  3 files changed, 54 insertions(+), 25 deletions(-)
->  create mode 100644 drivers/mtd/nand/raw/brcmnand/Kconfig
-> 
+> Reviewed-by: Ivan T. Ivanov <iivanov@suse.de>
 
-
+Stephen, can you apply those patches? Thanks! 
 -- 
 Florian

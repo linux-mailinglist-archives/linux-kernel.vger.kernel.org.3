@@ -2,160 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D33589904
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74DF58990D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239400AbiHDIKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
+        id S239119AbiHDIMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbiHDIJ6 (ORCPT
+        with ESMTP id S237383AbiHDIMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:09:58 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB5461DA4;
-        Thu,  4 Aug 2022 01:09:56 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0AC4C5C01C1;
-        Thu,  4 Aug 2022 04:09:54 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 04 Aug 2022 04:09:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1659600594; x=
-        1659686994; bh=dPVd4gV1h4qR91/25oTaDRGFw63vpCO4NGp4fr1eceQ=; b=L
-        4C5zAJ5GJihpjtPjr+i70KY92QwrHIPm60/rqiDBhOetsO8vTQnPJ4bmUi01qusM
-        xe6oKGQRb6tzXNU9Eh+wDY8OSRhNbOC41yLizM1+lP1TBWQqTq+UhBCCpxUdCX9+
-        /KYXLHBMNN7oNXWa/SCgRblPuBuC3UasqylTI+thLb4tKsPrGBZMA0WiE5fVICv4
-        RWOpPe5PEnTLmPVeuiOodoUShiU91jsbbIUtApJybz36jXo18kHkbm2LMI6DVvxd
-        nUDVvSHzUNj2TyW72hivREMsw5h5L7dFEkAOY27aX5+60n926wW6hC6JS/iirE1t
-        Tyfi+hVgnY8KWjIFez3vQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1659600594; x=1659686994; bh=dPVd4gV1h4qR91/25oTaDRGFw63v
-        pCO4NGp4fr1eceQ=; b=v7gNwiGp2euhBWd7JCNVz8DAbEteA3Y2KfleVSzfFU8b
-        WJDkdspIxWE0JuvNqaC/2UbWji8JAmopZOlTg7d8C6vdd2ym3GBFxzKhekK+WbAl
-        mxMa/BuZ3OMPLyzNktTnJHlAb4RDObzNBcHQWBypIdwfhuOpIXSM6sHBL1yANIe/
-        fztaH8IAA+zITURn37gLXKt93QYVE0YF1YDd3iFVmOkuTtEvp/8ooc8snBbuRUAZ
-        IH+4wLT2fF62lQbibdY3fF/N3NVzzNL2IINLrcBqUDELN7vdwczeKXGojNU2laES
-        //07+dWI2cIR1ejbxhJzVcfUqQTaf1N/JKWkyFL0oQ==
-X-ME-Sender: <xms:0X7rYsUD7RT-JtCYj0mEIGszbzNjwPLTJ_ZVx0CAd8sHvPrVqImMzw>
-    <xme:0X7rYgm133FVbNiY2v-EQ_5m92jX_pYiEBBV2FLO3XVdWo4eHuN5OoKP4oIv7JXfm
-    udo-fy7ntMoTZarWjI>
-X-ME-Received: <xmr:0X7rYgaDkiKErWlNj4j2qdUEc0Zb4NODb5gHvsDLq4uPJxdsNV7icGH8TEw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvkedgudeftdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeflohhs
-    hhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgheqne
-    cuggftrfgrthhtvghrnhepleeljeduiefguedtffejledttdehvdefhffhgfdvieelvddu
-    teefkeeuvdelhffhnecuffhomhgrihhnpeeffedrshhonecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhoshhhsehjohhshhhtrhhiphhlvght
-    thdrohhrgh
-X-ME-Proxy: <xmx:0X7rYrWZhJxJyP82-X2_eCJdO2kmZA00aguZJJ4XLxPvUUYJx-N17A>
-    <xmx:0X7rYmnUrau23hsiPMrZMEU83qhrJiVAKIm4jCjZ9KEQ-fRkkB31Lg>
-    <xmx:0X7rYgdjjKUIrevfOBnKTgGyyj4wi0HT9r7kwMCB3gn7jkIRLfdgdQ>
-    <xmx:0n7rYrylTb8OaFlub4CgFSZW64moEryMmfCOou0x9XcHtbAzeSV1BQ>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 4 Aug 2022 04:09:53 -0400 (EDT)
-Date:   Thu, 4 Aug 2022 01:09:52 -0700
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] Dump command line of faulting process to syslog
-Message-ID: <Yut+0Fg7F99MI48J@localhost>
-References: <20220801152016.36498-1-deller@gmx.de>
- <YugGFEjJvIwzifq7@localhost>
- <a0bf15a2-2f9c-5603-3adb-ffa705572a92@gmx.de>
+        Thu, 4 Aug 2022 04:12:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FC5B65555
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:12:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659600724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aGdCtTL3UL2LGgp3SeT4qjaDXoDUVEPuKKGyzuwB8kA=;
+        b=PTrs4u0iLHJHnpP+uAEZ8JYgUDydV0OMORVc+PYJ6ZWDLxAM1iaUTZiA19qv3aWfySU5SY
+        jIe3Hyp+F00+vW1wQtvQu7viknatAJZ+qkQAMn5N8yeowXq39i67z0UOkM68mEA4xOkY/L
+        9fDlbSgU+VGql+OVCY2mGDI0LQ76lTo=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-98-5bK4g4AaN5KoBfz071ewDA-1; Thu, 04 Aug 2022 04:12:03 -0400
+X-MC-Unique: 5bK4g4AaN5KoBfz071ewDA-1
+Received: by mail-wr1-f72.google.com with SMTP id w17-20020adfbad1000000b0021f0acd5398so4481767wrg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 01:12:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=aGdCtTL3UL2LGgp3SeT4qjaDXoDUVEPuKKGyzuwB8kA=;
+        b=tHUR9BIt/oM/3NavSnhZj4PkhqZNNphmXLhLlgGYO+1I0LoZE9Chs8RigFM8l8Idaw
+         t6w+674jehxyvEaXIcvA2tSVTLMslYzgGNjcIoG4/uUgLW4F6bqOMFiW3GgkT3pCoU+4
+         o1nomA93V4p2Es3afSCt5b6r5DMxetWC3/kmCIuh3q0+SRwSMycfuD+2nyiW6tjpFCYW
+         puq4D4Txbq7vCDcMHYwg1uMzS7CiEeli7WNgr9hwZQScy4091Z55KF4eWZbJ0RRaa9TA
+         Wq9nT6RiOGQ1WHAECp6bZlykVf5mETeD1oRo31cmuQXwWNfJdfIp4T/yhnwMX/lux6Kj
+         4BwQ==
+X-Gm-Message-State: ACgBeo0qjTiiIGLhdTsMn6v0G/Vz1k+I+pDH2mHHyM7jFJiPs2LzIFTf
+        y+s+9mg8IgbZMwOML6fAC9Dvw2ubjsoSnD9cuJRg8A8xzyCepxnaePSKV+0WVR6cLfE8otEkSym
+        0N5w0AphjzfJA9HUsK3YiCLqe
+X-Received: by 2002:a5d:64ed:0:b0:220:703f:6dac with SMTP id g13-20020a5d64ed000000b00220703f6dacmr565033wri.28.1659600721718;
+        Thu, 04 Aug 2022 01:12:01 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6HngA/rR4yDuzc0gS0/lhCN+Cjjv7Ttco7l7BobC6NlYILDIyPH468IAlqD9bqRIpNFyEfcg==
+X-Received: by 2002:a5d:64ed:0:b0:220:703f:6dac with SMTP id g13-20020a5d64ed000000b00220703f6dacmr565017wri.28.1659600721447;
+        Thu, 04 Aug 2022 01:12:01 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:8900:2c18:b992:1fa1:f88b? (p200300cbc70689002c18b9921fa1f88b.dip0.t-ipconnect.de. [2003:cb:c706:8900:2c18:b992:1fa1:f88b])
+        by smtp.gmail.com with ESMTPSA id s8-20020a05600c384800b003a503a64e5esm3517967wmr.15.2022.08.04.01.12.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 01:12:00 -0700 (PDT)
+Message-ID: <eaaab6c4-1719-5e21-ebf7-a0c17487314c@redhat.com>
+Date:   Thu, 4 Aug 2022 10:12:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a0bf15a2-2f9c-5603-3adb-ffa705572a92@gmx.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH V4 1/1] mm: add last level page table numa info to
+ /proc/pid/numa_pgtable
+Content-Language: en-US
+To:     haoxin <xhao@linux.alibaba.com>, willy@infradead.org
+Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20220801121727.76186-1-xhao@linux.alibaba.com>
+ <20220801121727.76186-2-xhao@linux.alibaba.com>
+ <0c1f9e76-9b1d-7069-bb09-c18e4f19f0c4@redhat.com>
+ <bc0d16a6-e340-e261-82a0-e17bd236c2d9@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <bc0d16a6-e340-e261-82a0-e17bd236c2d9@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 09:40:50PM +0200, Helge Deller wrote:
-> On 8/1/22 18:57, Josh Triplett wrote:
-> > On Mon, Aug 01, 2022 at 05:20:13PM +0200, Helge Deller wrote:
-> >> This patch series allows the arch-specific kernel fault handlers to dump
-> >> in addition to the typical info (IP address, fault type, backtrace and so on)
-> >> the command line of the faulting process.
-> >>
-> >> The motivation for this patch is that it's sometimes quite hard to find out and
-> >> annoying to not know which program *exactly* faulted when looking at the syslog.
-> >>
-> >> Some examples from the syslog are:
-> >>
-> >> On parisc:
-> >>    do_page_fault() command='cc1' type=15 address=0x00000000 in libc-2.33.so[f6abb000+184000]
-> >>    CPU: 1 PID: 13472 Comm: cc1 Tainted: G            E     5.10.133+ #45
-> >>    Hardware name: 9000/785/C8000
-> >>
-> >> -> We see the "cc1" compiler crashed, but it would be useful to know which file was compiled.
-> >>
-> >> With this patch series, the kernel now prints in addition:
-> >>    cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu -D USE_MINIINTERPRETER -D NO_REGS -D _HPUX_SOURCE -D NOSMP -D THREADED_RTS -include /build/ghc/ghc-9.0.2/includes/dist-install/build/ghcversion.h -iquote compiler/GHC/Iface -quiet -dumpdir /tmp/ghc13413_0/ -dumpbase ghc_5.hc -dumpbase-ext .hc -O -Wimplicit -fno-PIC -fwrapv -fno-builtin -fno-strict-aliasing -o /tmp/ghc13413_0/ghc_5.s
-> >>
-> >> -> now we know that cc1 crashed while compiling some haskell code.
-> >
-> > This does seem really useful for debugging.
+On 04.08.22 10:04, haoxin wrote:
 > 
-> Yes.
+> 在 2022/8/1 下午9:28, David Hildenbrand 写道:
+>> On 01.08.22 14:17, Xin Hao wrote:
+>>> In many data center servers, the shared memory architectures is
+>>> Non-Uniform Memory Access (NUMA), remote numa node data access
+>>> often brings a high latency problem, but what we are easy to ignore
+>>> is that the page table remote numa access, It can also leads to a
+>>> performance degradation.
+>> Let me try rewriting:
+>>
+>> "
+>> Many data center servers employ Non-Uniform Memory Access (NUMA)
+>> architectures. Remote numa memory access results in high latency. While
+>> memory placement is one issue, sub-optimal page table placement can also
+>> result in surprise performance degradation.
+>> "
+> Thanks,  it reads more clearly.
 > 
-> > However, it's also an information disclosure in various ways. The
-> > arguments of a program are often more sensitive than the name, and logs
-> > have a tendency to end up in various places, such as bug reports.
-> >
-> > An example of how this can be an issue:
-> > - You receive an email or other message with a sensitive link to follow
-> > - You open the link, which launches `firefox https://...`
-> > - You continue browsing from that window
-> > - Firefox crashes (and recovers and restarts, so you don't think
-> >   anything of it)
-> > - Later, you report a bug on a different piece of software, and the bug
-> >   reporting process includes a copy of the kernel log
+>>> So there add a new interface in /proc, This will help developers to
+>>> get more info about performance issues if they are caused by cross-NUMA.
+>>
+>> Why do we only care about "last level page table", why not about the others?
+>>
+>> IMHO, we could emit something like "0, 1, 3, 0" instead for a given user
+>> space address, showing the NUMA node the page table belongs to from
+>> highest to lowest page table level.
 > 
-> Yes, that's a possible way how such information can leak.
-> 
-> > I am *not* saying that we shouldn't do this; it seems quite helpful.
-> > However, I think we need to arrange to treat this as sensitive
-> > information, similar to kptr_restrict.
-> 
-> I wonder what the best solution could be.
-> 
-> A somewhat trivial solution is to combine it with the dmesg_restrict sysctl, e.g.:
-> 
-> * When ``dmesg_restrict`` is set to 0 there are no restrictions for users to read
-> dmesg. In this case my patch would limit the information (based on example above):
->     cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 [note: other parameters hidden due to dmesg_restrict=0 sysctl]
-> So it would show the full argv[0] with a hint that people would need to change dmesg_restrict.
-> 
-> * When ``dmesg_restrict`` is set to 1, users must have ``CAP_SYSLOG`` to use dmesg(8)
-> and the patch could output all parameters:
->      cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu ....
-> 
-> That would of course still leave few possible corner-cases where information
-> could leak, but since usually programs shouldn't crash and that
-> people usually shouldn't put sensitive information into the parameter
-> list directly, it's somewhat unlikely to happen.
-> 
-> Another different solution would be to add another sysctl.
-> 
-> Any other ideas?
+> I have planned to implement the PTE page table in this version first,  
+> and then support other page tables in the next patch later.
 
-I don't think we should overload the meaning of dmesg_restrict. But
-overloading kptr_restrict seems reasonable to me. (Including respecting
-kptr_restrict==2 by not showing this at all.)
+If there are plans, let's do it all at once, to get a good and single
+interface to expose that information.
+
+-- 
+Thanks,
+
+David / dhildenb
+

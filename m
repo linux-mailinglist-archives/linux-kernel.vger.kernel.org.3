@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F3B58A329
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A8B58A32A
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240053AbiHDWTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 18:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S240153AbiHDWTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 18:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239956AbiHDWSv (ORCPT
+        with ESMTP id S239914AbiHDWSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 18:18:51 -0400
+        Thu, 4 Aug 2022 18:18:54 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C52071BDA
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:18:40 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id y13-20020a5b09cd000000b0067114eb5b50so581491ybq.17
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:18:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FEF71BE4
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:18:42 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id s186-20020a255ec3000000b0067162ed1bd3so607288ybb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:18:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=jj3QL2VB7yeMKctZCaHc1b4ABIGklkTL3vOmKj4cY9M=;
-        b=naXkqYvmoVUVtTztzNIGjOQUWNikWsYOV4jgsyFyUFZsEVsaKf8MXMW+zQer81F4XC
-         MiE02JVtmba5DXcB7DEo0SVOrShXwyh+1RvYubTHhKuCLHRZiY6lUCccPNhELDCPm8Vd
-         /CTEf/hWXLcMlwY6vw/Ptfm2HOcv2cyC5i6A976rZx1jUi5s7RqHjsAUN0YER66k0dpn
-         bbYxMXZWYUuTpnJD4Ln1S98YScsV3aZMxMAQWEG/Ssze9SKPp/I7o6xvEjlHYC6mSkaY
-         vCYf59JQoZkWBuNWZqVb1OSW3LguO3UGRLk1uXRHG3QhiBsTITXT21K+IBjFNE/9nAqX
-         sdnQ==
+        bh=16IOlO4jrn2MK9FURXqlyF6K1fZebhGz75A8J5qtD1g=;
+        b=DtjWNSw2MjvlwjcuEAf0hYe9W4aMN2WxiogWBKB/oocccduWc9R6ai5MWQkNAbhfWH
+         FaevJOoJ27DaVarlwEiz/sjb3Lg/L1eQtxv7IrV3LEE4PvL5mA8eszQgbRa9WWl0rf8m
+         I4VNXmicsQ6X30wN2i6NM0KrtOJQ20X8gUVWZ4j7tWU/u0IrN6FF2kn1v3ijY/txrony
+         z86HPf7C+kwMir0kwBkrwZROsbrmb1/YlSkPpXz5CObcVI7LCXWEX7vKifNGkrrc1ez9
+         RWk0D0i+wLpt/2RUA3GfnSJK5qzp+043437I5AfTQgbuZj6MvBa83II22XkrrQ06d2kB
+         n2+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=jj3QL2VB7yeMKctZCaHc1b4ABIGklkTL3vOmKj4cY9M=;
-        b=Co3dTBSc4w63NxiQSOaRuJHC2pFEzL15C0fDF3LtRtBRVPijoz9zVU4jBB0SwaG5cF
-         di9O9xBnXdLgKKiMR1QQ+wnNcCpB+QJFZHC3rVkRU84qpj2d2IOtCws52LjW/OXXUpW/
-         S9cz7lKLR+Gmv50edxGBIat1La5mXtlWWsju4v8MFhPbkYFq6aHOwXp7lkjlkh5Z4RvL
-         r0tm7gz10jFv7uNl0LHSDOZkqJLtxlOkvJnsTRkfAsaAoTDmXcU4uaQXp4BI9ow78MKY
-         jQnsT6AVrwkG9bZBlVkixXDQVvv6Q5/LO6QzBQ9m3mrtLSO+voVPUqe9l28MCaq7q0xA
-         gvOQ==
-X-Gm-Message-State: ACgBeo1+hAK2zBui/uFekDtHPKzz8eCVqUNZJUTLn+qJYptJXwBtZ4tQ
-        n79Et2Rj4IwuS+4dP7eUVUV927ysiqfc
-X-Google-Smtp-Source: AA6agR6rZdiG6AKqT8iby13icVKn/mvs7v0tmX3sdWha8vwGpee+4AOmvaAMXvvm9MSdbSfLPmP8mirEpP+p
+        bh=16IOlO4jrn2MK9FURXqlyF6K1fZebhGz75A8J5qtD1g=;
+        b=R9gNV4U5va2/ytOBGCVLtoa6bZimrfZlIwNB/ib6hk7yXQw62WMmY6/1QZvH0o85q9
+         MtY5jIkzb+SGrKQxRDjUnRVPZ4UUBoWjMIl0CnCMRrJlC6K85SZo7KOOk0zM9+uRxchO
+         d127dE+D4NcJnX2aola6G5WWIPa4WNuZven4x2MCu+IprbDmTN3YBpYVwZhpjdrFLud/
+         Z/zI3w/YtDFVzDmkm2PyUyWMbZ6aFUkuZMoz8FoCw764I05by1aNwvrQ7Fy5Yb3ttvoB
+         iTbKOgn5Ol6PmyAsK7TcfrOhoiBpln2fAWxnwY8G+imAvpFNd9HD25O1h+Y02/z2bK3x
+         8NrQ==
+X-Gm-Message-State: ACgBeo2j8INGiqmX0H01hOijWWXo3HXHrWFFW9JU4XrN+4fJDWsMNTPg
+        xvbvjECV/GDKQBBXqxCvjn+FVQrt9RMI
+X-Google-Smtp-Source: AA6agR6GlRMybjZShfr/ikrpTB9P0SKEPOm87GFuipgaepuutqAFf8huAl4sOIdCS2Nx7YsUiDmY2VyNaqH+
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:f5e1:5bc5:7dab:2b7c])
- (user=irogers job=sendgmr) by 2002:a25:604:0:b0:676:c237:ddf0 with SMTP id
- 4-20020a250604000000b00676c237ddf0mr3204397ybg.71.1659651519224; Thu, 04 Aug
- 2022 15:18:39 -0700 (PDT)
-Date:   Thu,  4 Aug 2022 15:18:05 -0700
+ (user=irogers job=sendgmr) by 2002:a25:2417:0:b0:675:a9b2:dad0 with SMTP id
+ k23-20020a252417000000b00675a9b2dad0mr2996819ybk.489.1659651521521; Thu, 04
+ Aug 2022 15:18:41 -0700 (PDT)
+Date:   Thu,  4 Aug 2022 15:18:06 -0700
 In-Reply-To: <20220804221816.1802790-1-irogers@google.com>
-Message-Id: <20220804221816.1802790-7-irogers@google.com>
+Message-Id: <20220804221816.1802790-8-irogers@google.com>
 Mime-Version: 1.0
 References: <20220804221816.1802790-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v4 06/17] perf jevents: Provide path to json file on error
+Subject: [PATCH v4 07/17] perf jevents: Sort json files entries
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
         James Clark <james.clark@arm.com>,
@@ -85,32 +85,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a JSONDecoderError or similar is raised then it is useful to know the
-path. Print this and then raise the exception agan.
+Sort the json files entries on conversion to C. The sort order tries to
+replicated cmp_sevent from pmu.c so that the input there is already
+sorted except for sysfs events.
+
+Add the topic to JsonEvent on reading to simplify. Remove an unnecessary
+lambda in the json reading.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/jevents.py | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ tools/perf/pmu-events/jevents.py | 48 +++++++++++++++++++++++---------
+ 1 file changed, 35 insertions(+), 13 deletions(-)
 
 diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 98d18d5c3830..12d2daf3570c 100755
+index 12d2daf3570c..30e0e792221a 100755
 --- a/tools/perf/pmu-events/jevents.py
 +++ b/tools/perf/pmu-events/jevents.py
-@@ -224,7 +224,12 @@ class JsonEvent:
+@@ -18,6 +18,8 @@ _sys_event_tables = []
+ _arch_std_events = {}
+ # Track whether an events table is currently being defined and needs closing.
+ _close_table = False
++# Events to write out when the table is closed
++_pending_events = []
  
- def read_json_events(path: str) -> Sequence[JsonEvent]:
+ 
+ def removesuffix(s: str, suffix: str) -> str:
+@@ -127,6 +129,7 @@ class JsonEvent:
+       eventcode |= int(jd['ExtSel']) << 8
+     configcode = int(jd['ConfigCode'], 0) if 'ConfigCode' in jd else None
+     self.name = jd['EventName'].lower() if 'EventName' in jd else None
++    self.topic = ''
+     self.compat = jd.get('Compat')
+     self.desc = fixdesc(jd.get('BriefDescription'))
+     self.long_desc = fixdesc(jd.get('PublicDescription'))
+@@ -199,7 +202,7 @@ class JsonEvent:
+         s += f'\t{attr} = {value},\n'
+     return s + '}'
+ 
+-  def to_c_string(self, topic_local: str) -> str:
++  def to_c_string(self) -> str:
+     """Representation of the event as a C struct initializer."""
+ 
+     def attr_string(attr: str, value: str) -> str:
+@@ -211,25 +214,27 @@ class JsonEvent:
+       return attr_string(attr, getattr(self, attr))
+ 
+     s = '{\n'
+-    s += f'\t.topic = "{topic_local}",\n'
+     for attr in [
+         'aggr_mode', 'compat', 'deprecated', 'desc', 'event', 'long_desc',
+         'metric_constraint', 'metric_expr', 'metric_group', 'metric_name',
+-        'name', 'perpkg', 'pmu', 'unit'
++        'name', 'perpkg', 'pmu', 'topic', 'unit'
+     ]:
+       s += str_if_present(self, attr)
+     s += '},\n'
+     return s
+ 
+ 
+-def read_json_events(path: str) -> Sequence[JsonEvent]:
++def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
    """Read json events from the specified file."""
--  return json.load(open(path), object_hook=lambda d: JsonEvent(d))
-+
-+  try:
-+    return json.load(open(path), object_hook=lambda d: JsonEvent(d))
-+  except BaseException as err:
-+    print(f"Exception processing {path}")
-+    raise
+ 
+   try:
+-    return json.load(open(path), object_hook=lambda d: JsonEvent(d))
++    result = json.load(open(path), object_hook=JsonEvent)
+   except BaseException as err:
+     print(f"Exception processing {path}")
+     raise
++  for event in result:
++    event.topic = topic
++  return result
  
  
  def preprocess_arch_std_files(archpath: str) -> None:
+@@ -237,7 +242,7 @@ def preprocess_arch_std_files(archpath: str) -> None:
+   global _arch_std_events
+   for item in os.scandir(archpath):
+     if item.is_file() and item.name.endswith('.json'):
+-      for event in read_json_events(item.path):
++      for event in read_json_events(item.path, topic=''):
+         if event.name:
+           _arch_std_events[event.name.lower()] = event
+ 
+@@ -251,19 +256,36 @@ def print_events_table_prefix(tblname: str) -> None:
+   _close_table = True
+ 
+ 
+-def print_events_table_entries(item: os.DirEntry, topic: str) -> None:
+-  """Create contents of an events table."""
++def add_events_table_entries(item: os.DirEntry, topic: str) -> None:
++  """Add contents of file to _pending_events table."""
+   if not _close_table:
+     raise IOError('Table entries missing prefix')
+-  for event in read_json_events(item.path):
+-    _args.output_file.write(event.to_c_string(topic))
++  for e in read_json_events(item.path, topic):
++    _pending_events.append(e)
+ 
+ 
+ def print_events_table_suffix() -> None:
+   """Optionally close events table."""
++
++  def event_cmp_key(j: JsonEvent):
++    def fix_none(s: str):
++      if s is None:
++        return ''
++      return s
++
++    return (not j.desc is None, fix_none(j.topic), fix_none(j.name), fix_none(j.pmu),
++            fix_none(j.metric_name))
++
+   global _close_table
+-  if _close_table:
+-    _args.output_file.write("""{
++  if not _close_table:
++    return
++
++  global _pending_events
++  for event in sorted(_pending_events, key=event_cmp_key):
++    _args.output_file.write(event.to_c_string())
++    _pending_events = []
++
++  _args.output_file.write("""{
+ \t.name = 0,
+ \t.event = 0,
+ \t.desc = 0,
+@@ -306,7 +328,7 @@ def process_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
+   if not item.is_file() or not item.name.endswith('.json'):
+     return
+ 
+-  print_events_table_entries(item, get_topic(item.name))
++  add_events_table_entries(item, get_topic(item.name))
+ 
+ 
+ def print_mapping_table(archs: Sequence[str]) -> None:
 -- 
 2.37.1.559.g78731f0fdb-goog
 

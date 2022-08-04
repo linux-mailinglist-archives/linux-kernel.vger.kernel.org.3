@@ -2,125 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C268589718
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 06:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81029589730
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 06:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238452AbiHDEfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 00:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
+        id S238573AbiHDExW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 00:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237086AbiHDEfl (ORCPT
+        with ESMTP id S229824AbiHDExU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 00:35:41 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2089.outbound.protection.outlook.com [40.107.92.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B66F6372;
-        Wed,  3 Aug 2022 21:35:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PzXKmJfzFrVSOVQ3FFpEjQ41Z/LF+gPk5kZ+Nn2ts0gjtz0DYuOeps2f/21gLarC9MQZeJ42hScbQdkIyqcGO/7PnRiRJfxs426I3gHr7cN1iTDTIE6CV8t48/qXaFPT8bt4eMm6vc451bQ3vfQ5G4XTxtGNDMlPOM6qdZzSika679LKIf/HuPeEDkxMHcAyMrcPiJDDoLsVs9t72+8t30tpbosyrOroAS0+VeHpmLXqQsa84IcZw+8XZcnutqTFXFEriaPMyyQ/24EgCwxYwtMCGUSD3YjFqrq0VrDoaj+mvI692Dg1E2EbkCjt0zt6FoYrYr3SjOpe9lLJBRYLLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WnRBIluF//u41KR47BcOjmbpeweonwGbRRlBMxpp/+I=;
- b=DbF8AeP4h/x9iaF5amhBCHKag16qgIsH0U5WsRgPhltcqwTvfDvzHu415ZIs/mACk0hY4JGGaWiMPtNTvLObi12FpBA5sKYhdf6kmDPUGCTojC/xhtfoZnPUklP7mcEk7Xe4/PLjbe6IeYmLW5CksU0YpAVNg6ehtnO3A9exr+6A//4dlq+sWQCB1J8dgTLrvRgpISWS4WuuxfyqqZ+kPkoYyafxcpeYgK5Bs5HFNCbFoKx3ZPPj7MyLNFrI+0+Tv469D8GlTO5L93iMoxNzI/HzuBiiITkwOgVP0nISLZCTgR3Yulsh7HY+G7YiJnnU/HlVyyz0ZZBQHHeoNjOXiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WnRBIluF//u41KR47BcOjmbpeweonwGbRRlBMxpp/+I=;
- b=dS4TFbxXkTWTygDtnUjVvj7Fd/5AfW/iPKvg1jm3AQ6YhxAOJHDTlTo6GRcVeL+oz8ht8bhYr/P8G2DeNi8oDm7pG01bfBLzIroyA42c3WSE/TIc33/DZN6J47UkywqLsUTB/fq1Ma0aGoZehvAzKjIR9os9nAvz1+Zb7lyWRhU=
-Received: from BYAPR12MB4773.namprd12.prod.outlook.com (2603:10b6:a03:109::17)
- by BN8PR12MB4788.namprd12.prod.outlook.com (2603:10b6:408:a3::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Thu, 4 Aug
- 2022 04:35:31 +0000
-Received: from BYAPR12MB4773.namprd12.prod.outlook.com
- ([fe80::444f:f2a:5b01:7ba6]) by BYAPR12MB4773.namprd12.prod.outlook.com
- ([fe80::444f:f2a:5b01:7ba6%5]) with mapi id 15.20.5504.014; Thu, 4 Aug 2022
- 04:35:31 +0000
-From:   "Katakam, Harini" <harini.katakam@amd.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Harini Katakam <harini.katakam@xilinx.com>
-CC:     "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "claudiu.beznea@microchip.com" <claudiu.beznea@microchip.com>,
-        "andrei.pistirica@microchip.com" <andrei.pistirica@microchip.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "harinikatakamlinux@gmail.com" <harinikatakamlinux@gmail.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
-Subject: RE: [PATCH 0/2] Macb PTP enhancements
-Thread-Topic: [PATCH 0/2] Macb PTP enhancements
-Thread-Index: AQHYplzFWk164uxtMkW/IEqXxo8RKq2eCMkAgAAhI0A=
-Date:   Thu, 4 Aug 2022 04:35:30 +0000
-Message-ID: <BYAPR12MB477398D36AA066E9DB639F099E9F9@BYAPR12MB4773.namprd12.prod.outlook.com>
-References: <20220802104346.29335-1-harini.katakam@xilinx.com>
- <20220803193444.3b43730d@kernel.org>
-In-Reply-To: <20220803193444.3b43730d@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f36afa34-f775-401f-a095-08da75d2c381
-x-ms-traffictypediagnostic: BN8PR12MB4788:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cIIXqsBxcXKkvjnCwLueoLuoGc/4ZoWM7swEpa1dMqKBLdNpr7CuP+gi4D8dfuci1W9VcuOCo7rDUyr3sFUMEacR3RCf6wmi7blidVDUuxsWZFQBDqlawj2wvv4ZWQwT4q6y0gFLPIyh9JRF2unWfvR69ombxnVs3jXdMDquq0NqSdfVHW9I0OEIO4bdr9izzTfUiyNsi6LpGSw9lO7VyQ7N+xfa4Fe2Q5gEODvkO7R00wfX2ILlUK9/V1+XNG0GlLQ3nsQS9yzoRXT3aLZcdmgi3JZq+hPS0zETrGc5u/35Hnrz5WTMyLYxibIRSEoTH6XECPxjk/7JmYlT0ZNw8+irNdX9C/6YIkR2FU25pOVr/6ATGByeQJic9v4fHWporJ4qEgmO0+yFz4xrHFoxxzZvkD9OX/f2DYoORbjgH9PwWlkpaiFj6K2HbPATYsllej/2NwEmN8hRPQqQFqbI6HJ/RP0VZDsQ3eSQwrFFZrPMnYtBkMT87TQlYeNFnvUx+jt3l3CLcCpDS6z+qCgLdvd/1JOZ0mrb+mmVmNj/kMv/SB6eaz8QjjHhaYRORC04QEMdsrfoPYgIZfP1nUS9jax67lGvozzzUNP5XCu/rHgzXiJKAkrLIrn1PFc+oN1sJl9B6p1hPNM/RiLSZ/ja5dcfPrfKENdwQYXxpgWEuslLDnSyDqv2T9cbhixd0ueJUcCNLvl/dM0ogfvX1PWaE1v7e/Icg65kXRvUl7PyKiYM+FSaxyJEw/bNowQashnAc7tcSAqeJOLZ/HFz/PsqYD02KzQ4fHuAlPPU1jLRu0qNxLY/awtT4ETptol25+IaJ9as976lIn23GroieM1szui0yK6DLZIx3YAXPb1TAlYDvSS+0FUthRtzfh6IqlS7
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4773.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(366004)(136003)(396003)(26005)(966005)(186003)(9686003)(33656002)(478600001)(41300700001)(71200400001)(38100700002)(316002)(54906003)(66946007)(122000001)(86362001)(66556008)(53546011)(5660300002)(2906002)(110136005)(76116006)(8936002)(7416002)(66476007)(38070700005)(83380400001)(6506007)(7696005)(55016003)(66446008)(52536014)(64756008)(4326008)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?a4GqOPQYysejTUNJbTSVdl1QTgTz30sRQQ0bMISXkGngINLlu9rgTlBd+faC?=
- =?us-ascii?Q?FCmdteUX5YzODoyQYFOz0ABy8dtPWiBIQAcLwvuj/t7GR7XX9ky4/YeASOo1?=
- =?us-ascii?Q?89BeRkU8hYy15Zbj2qJS1t6NyTf/WuSsn23H+nAZGLYSxkzm/NTIsSr+naGs?=
- =?us-ascii?Q?p2lLWMANhkpPYHbHO85CNRu+RQgd7/S+Z5/syoCVyzzteUm+f/mWDzLCpdFj?=
- =?us-ascii?Q?fp3S033AJK7gte8SzhmoQOqG6UQOADpRt6oqE6scwfDZCuBTi4PyH/QRhycI?=
- =?us-ascii?Q?qPrKZFDGG4DPXqXpVpjWyu9Tqrlue9pRoCEH3G7+YC3iLe24TLJl7LWNA4HC?=
- =?us-ascii?Q?LTFMhHHDNESsCF+PNlShuWtnabyi7kyKTfsuv5Pp7lVwUVCZQqnepvmAa/aS?=
- =?us-ascii?Q?oKlBUi5RX8aFXBtWZGXV2Z4iorbfSDO4XnBqGMc7K9FkAGY9Ml5kB1vChYws?=
- =?us-ascii?Q?FkIPyuGfN3GbkBR3z4Mr7CrLsikOqYqPtnIxfQ48hbKLkSzag2faULq4BPhH?=
- =?us-ascii?Q?LLjaggCKfyu68pkSKHcEq4myZXWG7w9NaILEGpDPo/XBFNOLnUoEKkvfgGLP?=
- =?us-ascii?Q?HGA89HNkhUW3GV/t4JsihCHnYY7ftSxB1NXy6Wtk1yirasWTlje3ijIzF+Wd?=
- =?us-ascii?Q?+s4BCyiGZaKgivEXiXKb2e8J2wgVfvlPmFID68Rgfnx3qnh1RFdwShkcKlum?=
- =?us-ascii?Q?wBcjHGY+fGxto++IJR6hsK50z0DX5utPqAPJZxbQU9gXlUjiE0Sa7VQn+Gw3?=
- =?us-ascii?Q?61SD0r5VoCN3ZdTb38cYrFF973efjKfOvC93+LUNU53XAYoITIvO+JoZBCEB?=
- =?us-ascii?Q?SdPyN4EGZG9HeFY/Fv9D6o3FYLvaAj33pooR53EYZS2DoFc6Wz/4tpW8MKZL?=
- =?us-ascii?Q?fwjh8XlOLEPZAo24KYXb3L2R08OrvivWqHgUvcBf+iDwbmQ0hwyrts3U5RTC?=
- =?us-ascii?Q?UBjoGi509b+Bb4ZIbLBryjvCUh5RcITJA8x0mBKDI0Xzg81mjhP+ci8IW+OI?=
- =?us-ascii?Q?8z+Cpe8Ry4A/V9IVmLVzwWBsgsRU8jEsjQDIZBMNRf4QZsIRx5hlv//MhX7c?=
- =?us-ascii?Q?hlWqHG/629hUkaMVlEW3ElD7bCCzu/EnyaPHo7n2y4GEZ4xGFvzrv5GweL6K?=
- =?us-ascii?Q?29p43m27LpDWYLRus8GQuPCsZtCPHfCKk98Ve+Y5mPOK1hyLbPY+EPRROcmM?=
- =?us-ascii?Q?f0Y8DZSY0KyhIrhG0pQ+tRmItK0m58VbGHX9cVXYvhJMJ94Kkmk6XO0MI3hy?=
- =?us-ascii?Q?d30Gv08PN7Q1cGf0fZ12Ig0LKZ/U104d1ZReB7zHU844RYQI+qYmz3/g2Vnw?=
- =?us-ascii?Q?SLeOIcDRzc0ljREkfOBTe4JJQ0jomHr6Zf9QYfs+jw+748HKG4eNiB3U0H1N?=
- =?us-ascii?Q?VJ1K9/OFq2/ZvA+5Rsn2tYeOi6F40b6KpbyIfhqw4wRC8eKfnfnAh8NvB/ep?=
- =?us-ascii?Q?eaYWdD2KgK/TI7qbSUjuwAXEVtsUw4ZgQJY+RRMYiMpId6I94B8Y29e0emEp?=
- =?us-ascii?Q?c9n8DOicGBdju9nze8x4gw6CjnVfFUZ8BvdsZ5m3w+4DegoTW6JvkOvtmtak?=
- =?us-ascii?Q?0Pv9y3+MvqIjcRjCaJk=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 4 Aug 2022 00:53:20 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D382186FC;
+        Wed,  3 Aug 2022 21:53:19 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 9E3204C1B95;
+        Thu,  4 Aug 2022 04:53:18 +0000 (UTC)
+Received: from pdx1-sub0-mail-a254.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 22D024C198D;
+        Thu,  4 Aug 2022 04:53:18 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1659588798; a=rsa-sha256;
+        cv=none;
+        b=UzJ89vCEHfXrGxb4SG4j907x9I3S1kbJQGeF6ZdG/Qg4WkRaYdk0uXuFclrZY7Nv2Sgkpf
+        GvDy6VLDyRNxrpIto6xc2ywpKXeiWSbGzGOayqvrUZvNnwc3E+esJMjShq6UAS+JeY1Yiu
+        awpMnOfFiQGT4LuVB8OA6L8f9yGHSDJCmUIJRROT07i5bH7PRmwuSI2hXSQLn8cpN9Mm3y
+        Tt7O166p00csnFZcbBFTzUMXQHBgC99fwJPfB6f8JcXPR5eyG7VpOu5FXty+bxh2GTOWzm
+        1Z5GZCxQHACtkSCoyaJorWGXs9NuOsUEp+chSH9tTUGCs5ljx9Cbch7vx3mrsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1659588798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=CR0IilEjTmSBglJdVE7uE6gZjyN8Yc4w1VrpHAB9SKI=;
+        b=RUFzHgnn3guUieZkusMS6aeTqOrk+j6mRtLgiUOnhOxLmz917/MHkEFkRxmHGoZPnQNgTK
+        hmC2q6B/AuZS6OqjeFYInWGXVpGC3VQjvcIhhJqp2Xy6LfLhQx67j5m0R5ecN1umN9sF6Y
+        eKmkQG1bYOAO+OL30jTnHlWXJyvBlsuzVvOz3noNjpR4JSej34FUdXTr/T693e+PyVx+dW
+        QekXuKsYaMdZPpnaPShVAIwz1Xh3ls+kj9mR8WY4j5SgiL+As5acKrsijQKZoSqZpA+lJr
+        +44WwUPuQRqXOWbaFIUXLbisL3tXCZESX6Q2gtdk+Iy15fFn9ZHXgkbrnllL3w==
+ARC-Authentication-Results: i=1;
+        rspamd-7c478d8c66-lg758;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Absorbed-Unite: 5769d0a00ad3aa03_1659588798489_2908946806
+X-MC-Loop-Signature: 1659588798489:3535241750
+X-MC-Ingress-Time: 1659588798489
+Received: from pdx1-sub0-mail-a254.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.110.28.208 (trex/6.7.1);
+        Thu, 04 Aug 2022 04:53:18 +0000
+Received: from offworld (unknown [104.36.25.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a254.dreamhost.com (Postfix) with ESMTPSA id 4LyxF91s2Xz83;
+        Wed,  3 Aug 2022 21:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1659588797;
+        bh=CR0IilEjTmSBglJdVE7uE6gZjyN8Yc4w1VrpHAB9SKI=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=Lfu43C+ook7NEcJrRA+sgZLN8yzafbMbSLrolenUTCPndBEiEaGUuYX+GXis54iuz
+         2JovFM8Nyo4z527M5I9bk5atJQDtMfBCccdUsms32ysCCZ1aJ6qRJp1NgJRiYUp2KX
+         7xWLMt7Zc8M7wJy6ouuDSDfaIIUb516U3oHaARfEt17X5s2WVF7aQMjx03nVLxx7O1
+         KG1piapNDZ5MOr5pgI8jdN4uOC+9C/TxxkFDnddvtt//dsXNdwY0WpOfZtfAwsddbE
+         wXPuRkfb4nO9yqfo9ekm3zsrHpSKbnwaEXLyApVwrtzjgXMxrDBll04xg31jM7/6nN
+         /KKG1mJ7KnjIQ==
+Date:   Wed, 3 Aug 2022 21:36:19 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     linux-cxl@vger.kernel.org
+Cc:     dan.j.williams@intel.com, bwidawsk@kernel.org,
+        Jonathan.Cameron@huawei.com, ira.weiny@intel.com,
+        alison.schofield@intel.com, vishal.l.verma@intel.com,
+        a.manzanares@samsung.com, mcgrof@kernel.org,
+        linux-kernel@vger.kernel.org, dave.jiang@intel.com
+Subject: Re: [RFC PATCH 0/2] cxl: BG operations and device sanitation
+Message-ID: <20220804043619.ko5luhppbvcoh4s5@offworld>
+References: <20220804045029.2905056-1-dave@stgolabs.net>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4773.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f36afa34-f775-401f-a095-08da75d2c381
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Aug 2022 04:35:30.9355
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +wpo5OknIZGsWmfxDlJy6LHJfU7hohMUpcM+zXuI8wWLDVBaawcofZtXN+NmuRuZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB4788
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220804045029.2905056-1-dave@stgolabs.net>
+User-Agent: NeoMutt/20220429
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,46 +100,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+*sigh* Cc Dave.
 
-> -----Original Message-----
-> From: Jakub Kicinski <kuba@kernel.org>
-> Sent: Thursday, August 4, 2022 8:05 AM
-> To: Harini Katakam <harini.katakam@xilinx.com>
-> Cc: nicolas.ferre@microchip.com; davem@davemloft.net;
-> richardcochran@gmail.com; claudiu.beznea@microchip.com;
-> andrei.pistirica@microchip.com; edumazet@google.com;
-> pabeni@redhat.com; netdev@vger.kernel.org; linux-
-> kernel@vger.kernel.org; michal.simek@xilinx.com;
-> harinikatakamlinux@gmail.com; Simek, Michal <michal.simek@amd.com>;
-> Katakam, Harini <harini.katakam@amd.com>; Pandey, Radhey Shyam
-> <radhey.shyam.pandey@amd.com>
-> Subject: Re: [PATCH 0/2] Macb PTP enhancements
->=20
-> On Tue, 2 Aug 2022 16:13:44 +0530 Harini Katakam wrote:
-> > From: Harini Katakam <harini.katakam@amd.com>
-> >
-> > This series is a follow up for patches 2 and 3 from a previous series:
-> > https://lore.kernel.org/all/ca4c97c9-1117-a465-5202-e1bf276fe75b@micro
-> > chip.com/
-> > https://lore.kernel.org/all/20220517135525.GC3344@hoboy.vegasvil.org/
-> > Sorry for the delay.
-> >
-> > ACK is added only to patch 3 (now patch 2).
-> > Patch 1 is updated with check for gem_has_ptp as per Claudiu's comments=
-.
->=20
-> These were separated from the earlier series as non-fixes, right?
-> But we are in the period of merge window right now, when all the new
-> features flow to Linus's tree and we only take fixes to avoid conflicts a=
-nd give
-> maintainers time to settle the existing ones.
-> So these need to wait until -rc1 is cut. (Or is patch 1 a bug fix?
-> I can't tell.)
+On Wed, 03 Aug 2022, Davidlohr Bueso wrote:
 
-Sorry, I missed the window. Yes, both are non-fixes and I'll resend after t=
-he
-Tree is open.
-
-Regards,
-Harini
+>Hello,
+>
+>The following is a followup to some of the discussions around CXL device security
+>and sanitation[0, 1]. It is marked as RFC mostly to see if the background handling
+>will satisfy all users, not just sanitize/overwrite. For example there has been ideas
+>to avoid command hogging the device and/or interleaving scan media regions instead
+>of all in one, etc. More details in each patch, but:
+>
+>Patch 1 adds the required background cmd handling bits. While this is currently
+>only polling, it would be good to know if there are any fundamental blockers for
+>supporting irqs (beyond just background ops) between PCIe and CXL. For example,
+>are there any requirements/difficulties that is not the standard MSI/MSI-X PCI
+>vector allocation + devm_request_irq()? I have not looked at this into details but
+>it the topic has come up in the past as delicate', iirc.
+>
+>Patch 2 implements the sanitation commands (overwrite and secure erase).
+>
+>As for testing, while I used the mock device to test the secure erase command, I
+>ended up hacking up a prototype[2] for qemu to support overwrite and bg commands.
+>So while the some of the paths this series introduces have been exercised, there
+>is of course a lot more to do.
+>
+>Applies against Dave's cxl-security branch[2] which deals with the pmem-only bits.
+>
+>Thanks,
+>Davidlohr
+>
+>[0]: https://lore.kernel.org/all/20220708172455.gi37dh3od4w5lqrd@offworld/
+>[1]: https://lore.kernel.org/all/165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com/
+>[2]: https://github.com/davidlohr/qemu/commit/64a93a5b824b59d3b547f06f7fbb1269fb4790ce
+>[3]: https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git/log/?h=cxl-security
+>
+>Davidlohr Bueso (2):
+>  cxl/mbox: Add background operation handling machinery
+>  cxl/mem: Support sanitation commands
+>
+> Documentation/ABI/testing/sysfs-bus-cxl |  19 ++
+> drivers/cxl/core/core.h                 |   2 +-
+> drivers/cxl/core/mbox.c                 | 304 +++++++++++++++++++++++-
+> drivers/cxl/core/memdev.c               |  58 +++++
+> drivers/cxl/core/port.c                 |   9 +-
+> drivers/cxl/cxl.h                       |   8 +
+> drivers/cxl/cxlmem.h                    |  65 ++++-
+> drivers/cxl/pci.c                       |   3 +-
+> drivers/cxl/pmem.c                      |   5 +-
+> drivers/cxl/security.c                  |  13 +-
+> include/uapi/linux/cxl_mem.h            |   2 +
+> 11 files changed, 461 insertions(+), 27 deletions(-)
+>
+>--
+>2.37.1
+>

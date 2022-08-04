@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039B0589B75
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5AB589B6C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239652AbiHDMIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 08:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S239615AbiHDMIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 08:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239565AbiHDMIi (ORCPT
+        with ESMTP id S239565AbiHDMII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 08:08:38 -0400
-Received: from spam.unicloud.com (gw.haihefund.cn [220.194.70.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC0A51A0E
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 05:08:25 -0700 (PDT)
-Received: from eage.unicloud.com ([220.194.70.35])
-        by spam.unicloud.com with ESMTP id 274C7r4m014658;
-        Thu, 4 Aug 2022 20:07:53 +0800 (GMT-8)
-        (envelope-from luofei@unicloud.com)
-Received: from zgys-ex-mb09.Unicloud.com (10.10.0.24) by
- zgys-ex-mb10.Unicloud.com (10.10.0.6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.17; Thu, 4 Aug 2022 20:07:53 +0800
-Received: from zgys-ex-mb09.Unicloud.com ([fe80::eda0:6815:ca71:5aa]) by
- zgys-ex-mb09.Unicloud.com ([fe80::eda0:6815:ca71:5aa%16]) with mapi id
- 15.01.2375.017; Thu, 4 Aug 2022 20:07:53 +0800
-From:   =?gb2312?B?wt63yQ==?= <luofei@unicloud.com>
-To:     "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-CC:     "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBtbSwgaHdwb2lzb24sIGh1Z2V0bGI6IENoZWNrIGh1?=
- =?gb2312?B?Z2V0bGIgaGVhZCBwYWdlIGh3cG9pc29uIGZsYWcgd2hlbiB1bnBvaXNvbiBw?=
- =?gb2312?Q?age?=
-Thread-Topic: [PATCH] mm, hwpoison, hugetlb: Check hugetlb head page hwpoison
- flag when unpoison page
-Thread-Index: AQHYp/YA2P+b2sgj8UGtO/UrSrrbAq2epYGn
-Date:   Thu, 4 Aug 2022 12:07:53 +0000
-Message-ID: <85ab16d0a56c4942bb8a3e67b9d55858@unicloud.com>
-References: <20220804113308.2901178-1-luofei@unicloud.com>
-In-Reply-To: <20220804113308.2901178-1-luofei@unicloud.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.10.1.7]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Thu, 4 Aug 2022 08:08:08 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC4F1F630;
+        Thu,  4 Aug 2022 05:08:07 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 12so17788781pga.1;
+        Thu, 04 Aug 2022 05:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=oj4umfrgq5/P3WASTduG+ZLVS3oiMhcR65M2eR099cc=;
+        b=LuleUjxrKP6D/pBxul3wAHqGWh0aVcsqdax2/+bYDPi9JbIwgiOsaQqrFp2L++tnXw
+         EMmTYqHhgu844EG6sfW74u2bpTf6JtAQTwvSMWyRgOw9XYj4ebAjpu/UlZtVb4imYf8N
+         6xvzOhH+ozn2/C5AGua6LlNPPgfye+ovsU2ojLHId+s8HsHipnXliz3/v+e7YwCvqdH/
+         soUOFHyEu4pnYc757TTO/aIBzkH4Ay2fGpMpsMawKCu4DiTL3ttn1cBs5d1GhravgpY2
+         quXUGxEc6Pb26yUIZq/9iIgICimkrQfYF5WXiTiQIqAuZVFw7NY2JzM2TXHGx9OclmG6
+         fHoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=oj4umfrgq5/P3WASTduG+ZLVS3oiMhcR65M2eR099cc=;
+        b=AzlxFfpgdWgcZtsFcI1skjFmG8AwbqTMi0Rsz4E37fLPuq02Ke7XI+PhPntKMf709g
+         IpJbKmSTJcc0q3xvzFJCZf/TYMBEOKXFk+yaAjEnB093RgYrxthbCWUgmuP48jgIb0zE
+         iehqekiPIrFU8zA0IbxvrnA9i6yxQlt6ihlw7WCWN41SKNEvolmSELODhc7LL783cmPR
+         2ovXjSHebhCppq1BQQT5QIWgKB0aTyL1b6rs1jYiCEAA89kIhkVvdxKQa8rpcoIrtT0n
+         +WqAuCPWNP32KZ/43IPCIAJqdI1lmzKo1PsMOmAhCfzuK37btEzEXk+c7j6nExs4Sstz
+         3l8Q==
+X-Gm-Message-State: ACgBeo0CJ3CtwAd3re69VDYBcwNsw3Y5TaGN0pyYbvHV88XMyWsZ4kic
+        dT55wcYdouXs1hrB5YGMhFJ1CGUZhr3VuyHezAs=
+X-Google-Smtp-Source: AA6agR7c9B6BmWUZG/MFxtTewAmIGpTLdL4onK9iaW9qAYxPNAcay7lCrms7edzeTuNpJfdlRxdWJNppEDQhPgD2aJQ=
+X-Received: by 2002:a63:5462:0:b0:41c:22c0:a429 with SMTP id
+ e34-20020a635462000000b0041c22c0a429mr1376988pgm.401.1659614887201; Thu, 04
+ Aug 2022 05:08:07 -0700 (PDT)
 MIME-Version: 1.0
-X-DNSRBL: 
-X-MAIL: spam.unicloud.com 274C7r4m014658
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220804110836.138614-1-tw.rayhung@gmail.com> <YuustIMaImn+0UYc@kroah.com>
+In-Reply-To: <YuustIMaImn+0UYc@kroah.com>
+From:   Ray Hung <tw.rayhung@gmail.com>
+Date:   Thu, 4 Aug 2022 20:07:55 +0800
+Message-ID: <CABEaRb5Tp6WL_oGKN0zbKthjez7YQ=Ve1dEo7QKpbOX6sgCZtQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: rndis: use %u instead of %d to print u32 values
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, akpm@linux-foundation.org, dh10.jung@samsung.com,
+        songmuchun@bytedance.com, dan.carpenter@oracle.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-U29ycnksIHdyb25nIHBhdGNoLCBwbGVhc2UgaWdub3JlIHRoaXMgZW1haWwuDQpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQq3orz+yMs6IMLet8kNCreiy83KsbzkOiAy
-MDIyxOo41MI0yNUgMTk6MzM6MDgNCsrVvP7IyzogbmFveWEuaG9yaWd1Y2hpQG5lYy5jb207IGFr
-cG1AbGludXgtZm91bmRhdGlvbi5vcmcNCrOty806IGxpbm1pYW9oZUBodWF3ZWkuY29tOyBsaW51
-eC1tbUBrdmFjay5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IMLet8kNCtb3zOI6
-IFtQQVRDSF0gbW0sIGh3cG9pc29uLCBodWdldGxiOiBDaGVjayBodWdldGxiIGhlYWQgcGFnZSBo
-d3BvaXNvbiBmbGFnIHdoZW4gdW5wb2lzb24gcGFnZQ0KDQpXaGVuIHNvZnR3YXJlLXBvaXNvbiBh
-IGh1Z2UgcGFnZSwgaWYgZGlzc29sdmVfZnJlZV9odWdlX3BhZ2UoKSBmYWlsZWQsDQp0aGUgaHVn
-ZSBwYWdlIHdpbGwgYmUgYWRkZWQgdG8gaHVnZXBhZ2VfZnJlZWxpc3RzLiBJbiB0aGlzIGNhc2Us
-IHRoZQ0KaGVhZCBwYWdlIHdpbGwgaG9sZCB0aGUgaHdwb2lzb24gZmxhZywgYnV0IHRoZSByZWFs
-IHBvaXNvbmVkIHRhaWwgcGFnZQ0KaHdwb2lzb24gZmxhZyBpcyBub3Qgc2V0LCB0aGlzIHdpbGwg
-Y2F1c2UgdW5wb2lzb25fbWVtb3J5KCkgZmFpbCB0bw0KdW5wb2lzb24gdGhlIHByZXZpb3VzbHkg
-cG9pc29uZWQgcGFnZS4NCg0KU28gYWRkIGEgY2hlY2sgb24gaHVnZXRsYiBoZWFkIHBhZ2UsIGFu
-ZCBhbHNvIG5lZWQgdG8gZW5zdXJlIHRoZQ0KcHJldmlvdXNseSBwb2lzb25lZCB0YWlsIHBhZ2Ug
-aW4gaHVnZSBwYWdlIHJhd19od3BfbGlzdC4NCg0KU2lnbmVkLW9mZi1ieTogbHVvZmVpIDxsdW9m
-ZWlAdW5pY2xvdWQuY29tPg0KLS0tDQogbW0vbWVtb3J5LWZhaWx1cmUuYyB8IDI0ICsrKysrKysr
-KysrKysrKysrKysrKysrLQ0KIDEgZmlsZSBjaGFuZ2VkLCAyMyBpbnNlcnRpb25zKCspLCAxIGRl
-bGV0aW9uKC0pDQoNCmRpZmYgLS1naXQgYS9tbS9tZW1vcnktZmFpbHVyZS5jIGIvbW0vbWVtb3J5
-LWZhaWx1cmUuYw0KaW5kZXggMTQ0Mzk4MDZiNWVmLi5mYzU3MWIwY2ViOWQgMTAwNjQ0DQotLS0g
-YS9tbS9tZW1vcnktZmFpbHVyZS5jDQorKysgYi9tbS9tZW1vcnktZmFpbHVyZS5jDQpAQCAtMjI5
-Myw2ICsyMjkzLDI4IEBAIGNvcmVfaW5pdGNhbGwobWVtb3J5X2ZhaWx1cmVfaW5pdCk7DQogICAg
-ICAgICAgICAgICAgcHJfaW5mbyhmbXQsIHBmbik7ICAgICAgICAgICAgICAgICAgICAgIFwNCiB9
-KQ0KDQorc3RhdGljIGJvb2wgaHVnZXRsYl9wYWdlX2hlYWRfcG9pc29uKHN0cnVjdCBwYWdlICpo
-cGFnZSwgc3RydWN0IHBhZ2UgKnBhZ2UpDQorew0KKyAgICAgICBzdHJ1Y3QgbGxpc3RfaGVhZCAq
-aGVhZDsNCisgICAgICAgc3RydWN0IGxsaXN0X25vZGUgKnQsICp0bm9kZTsNCisgICAgICAgc3Ry
-dWN0IHJhd19od3BfcGFnZSAqcDsNCisNCisgICAgICAgaWYgKFBhZ2VIdWdlKHBhZ2UpICYmIFBh
-Z2VIV1BvaXNvbihocGFnZSkgJiYgSFBhZ2VGcmVlZChocGFnZSkpDQorICAgICAgICAgICAgICAg
-cmV0dXJuIGZhbHNlOw0KKw0KKyAgICAgICBpZiAoSFBhZ2VSYXdId3BVbnJlbGlhYmxlKGhwYWdl
-KSkNCisgICAgICAgICAgICAgICByZXR1cm4gZmFsc2U7DQorDQorICAgICAgIGhlYWQgPSByYXdf
-aHdwX2xpc3RfaGVhZChocGFnZSk7DQorICAgICAgIGxsaXN0X2Zvcl9lYWNoX3NhZmUodG5vZGUs
-IHQsIGhlYWQtPmZpcnN0KSB7DQorICAgICAgICAgICAgICAgcCA9IGNvbnRhaW5lcl9vZih0bm9k
-ZSwgc3RydWN0IHJhd19od3BfcGFnZSwgbm9kZSk7DQorICAgICAgICAgICAgICAgaWYgKHAtPnBh
-Z2UgPT0gcGFnZSkNCisgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiB0cnVlOw0KKyAgICAg
-ICB9DQorDQorICAgICAgIHJldHVybiBmYWxzZTsNCit9DQorDQogLyoqDQogICogdW5wb2lzb25f
-bWVtb3J5IC0gVW5wb2lzb24gYSBwcmV2aW91c2x5IHBvaXNvbmVkIHBhZ2UNCiAgKiBAcGZuOiBQ
-YWdlIG51bWJlciBvZiB0aGUgdG8gYmUgdW5wb2lzb25lZCBwYWdlDQpAQCAtMjMzMCw3ICsyMzUy
-LDcgQEAgaW50IHVucG9pc29uX21lbW9yeSh1bnNpZ25lZCBsb25nIHBmbikNCiAgICAgICAgICAg
-ICAgICBnb3RvIHVubG9ja19tdXRleDsNCiAgICAgICAgfQ0KDQotICAgICAgIGlmICghUGFnZUhX
-UG9pc29uKHApKSB7DQorICAgICAgIGlmICghUGFnZUhXUG9pc29uKHApICYmICFodWdldGxiX3Bh
-Z2VfaGVhZF9wb2lzb24ocGFnZSwgcCkpIHsNCiAgICAgICAgICAgICAgICB1bnBvaXNvbl9wcl9p
-bmZvKCJVbnBvaXNvbjogUGFnZSB3YXMgYWxyZWFkeSB1bnBvaXNvbmVkICUjbHhcbiIsDQogICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwZm4sICZ1bnBvaXNvbl9ycyk7DQogICAgICAg
-ICAgICAgICAgZ290byB1bmxvY2tfbXV0ZXg7DQotLQ0KMi4yNy4wDQoNCg==
+Hi,
+
+What commit id does this fix?
+> It's 1da177e4c3f4
+
+And given this is only for debugging, there's no rush, right?
+> Yes, only for debugging
+
+Thanks!
+
+Ray
+
+Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2022=E5=B9=B48=E6=9C=884=E6=
+=97=A5 =E9=80=B1=E5=9B=9B =E6=99=9A=E4=B8=8A7:25=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Thu, Aug 04, 2022 at 07:08:36PM +0800, Ray Hung wrote:
+> > The driver uses the %d format to print u32 values. The correct
+> > format is %u. Fix it.
+> >
+> > Signed-off-by: Ray Hung <tw.rayhung@gmail.com>
+> > ---
+> >  drivers/usb/gadget/function/rndis.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/f=
+unction/rndis.c
+> > index 713efd9aefde..10ba339bcea4 100644
+> > --- a/drivers/usb/gadget/function/rndis.c
+> > +++ b/drivers/usb/gadget/function/rndis.c
+> > @@ -1105,7 +1105,7 @@ static int rndis_proc_show(struct seq_file *m, vo=
+id *v)
+> >                        "used      : %s\n"
+> >                        "state     : %s\n"
+> >                        "medium    : 0x%08X\n"
+> > -                      "speed     : %d\n"
+> > +                      "speed     : %u\n"
+> >                        "cable     : %s\n"
+> >                        "vendor ID : 0x%08X\n"
+> >                        "vendor    : %s\n",
+> > --
+> > 2.25.1
+> >
+>
+> What commit id does this fix?
+>
+> And given this is only for debugging, there's no rush, right?
+>
+> thanks,
+>
+> greg k-h

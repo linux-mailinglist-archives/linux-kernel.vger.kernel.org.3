@@ -2,83 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739925895A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 03:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD405895A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 03:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238823AbiHDBdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 21:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        id S238930AbiHDBe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 21:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiHDBdA (ORCPT
+        with ESMTP id S229728AbiHDBez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 21:33:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E07D5A3EF;
-        Wed,  3 Aug 2022 18:32:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 156166175E;
-        Thu,  4 Aug 2022 01:32:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 951A6C433C1;
-        Thu,  4 Aug 2022 01:32:57 +0000 (UTC)
-Date:   Wed, 3 Aug 2022 21:32:55 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [git pull] vfs.git pile 3 - dcache
-Message-ID: <20220803213255.3ab719e3@gandalf.local.home>
-In-Reply-To: <YusV8cr382PeBNLM@casper.infradead.org>
-References: <YurA3aSb4GRr4wlW@ZenIV>
-        <CAHk-=wizUgMbZKnOjvyeZT5E+WZM0sV+zS5Qxt84wp=BsRk3eQ@mail.gmail.com>
-        <YuruqoGHJONpdZcK@home.goodmis.org>
-        <CAHk-=whJvgykcTnR+BMJNwd+me5wvg+CxjSBeiPYTR1B2g5NpQ@mail.gmail.com>
-        <20220803185936.228dc690@gandalf.local.home>
-        <YusDmF39ykDmfSkF@casper.infradead.org>
-        <CAHk-=wh6VSqsnANHkQpw=yD-Hkt90Y1LX=ad9+r+SusfriUOfA@mail.gmail.com>
-        <YusV8cr382PeBNLM@casper.infradead.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 3 Aug 2022 21:34:55 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2695B7AB;
+        Wed,  3 Aug 2022 18:34:53 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lyrmh1qjmzjXSw;
+        Thu,  4 Aug 2022 09:31:48 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 4 Aug 2022 09:34:51 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 4 Aug 2022 09:34:50 +0800
+Subject: Re: [PATCH v3 1/3] rcu/exp: Use NMI to get the backtrace of
+ cpu_curr(other_cpu) first
+To:     <paulmck@kernel.org>
+CC:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        "Mel Gorman" <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>
+References: <20220730102330.1255-1-thunder.leizhen@huawei.com>
+ <20220730102330.1255-2-thunder.leizhen@huawei.com>
+ <20220801231415.GC2860372@paulmck-ThinkPad-P17-Gen-1>
+ <1fd08a9a-fd2b-2608-da55-5bc526515131@huawei.com>
+ <20220804000700.GM2125313@paulmck-ThinkPad-P17-Gen-1>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <c8d7a8e1-6372-f81c-e2a8-936692fb44d8@huawei.com>
+Date:   Thu, 4 Aug 2022 09:34:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20220804000700.GM2125313@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 4 Aug 2022 01:42:25 +0100
-Matthew Wilcox <willy@infradead.org> wrote:
 
-> > So let's make it verbose and clear and unambiguous. It's not like I
-> > expect to see a _lot_ of those. Knock wood.  
+
+On 2022/8/4 8:07, Paul E. McKenney wrote:
+> On Tue, Aug 02, 2022 at 10:06:00AM +0800, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2022/8/2 7:14, Paul E. McKenney wrote:
+>>> On Sat, Jul 30, 2022 at 06:23:28PM +0800, Zhen Lei wrote:
+>>>> The backtrace of cpu_curr(other_cpu) is unwinded based on the 'fp' saved
+>>>> during its last switch-out. For the most part, it's out of date. So try
+>>>> to use NMI to get the backtrace first, just like those functions in
+>>>> "tree_stall.h" did. Such as rcu_dump_cpu_stacks().
+>>>>
+>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>>
+>>> Much better, thank you!
+>>>
+>>>> ---
+>>>>  kernel/rcu/tree_exp.h | 3 ++-
+>>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+>>>> index 0f70f62039a9090..21381697de23f0b 100644
+>>>> --- a/kernel/rcu/tree_exp.h
+>>>> +++ b/kernel/rcu/tree_exp.h
+>>>> @@ -665,7 +665,8 @@ static void synchronize_rcu_expedited_wait(void)
+>>>>  				mask = leaf_node_cpu_bit(rnp, cpu);
+>>>>  				if (!(READ_ONCE(rnp->expmask) & mask))
+>>>>  					continue;
+>>>> -				dump_cpu_task(cpu);
+>>>> +				if (!trigger_single_cpu_backtrace(cpu))
+>>>> +					dump_cpu_task(cpu);
+>>>
+>>> But why not just leave this unchanged, rather than adding the call to
+>>> trigger_single_cpu_backtrace() in this patch and then removing it in
+>>> the next patch?
+>>
+>> To make the patch clear and easy to describe. Otherwise, I need to
+>> give an additional description of it in the next patch, because I
+>> searched all dump_cpu_task(). This seems to make the next patch
+>> less simple.
+>>
+>> Some of the patch sets I've seen have been done step by step like
+>> this. But I can't find it now.
+>>
+>> On the other hand, this patch is a small fix. Earlier versions may
+>> only backport it, not the next cleanup patch.
 > 
-> Should we have it take a spinlock_t pointer?  We could have lockdep
-> check it is actually held.
+> You do have the option of doing a Cc to stable to control the backporting,
+> if that is a potential issue for you.
+> 
+> On the commit log, just say that the one use case already avoided doing
+> the trigger_single_cpu_backtrace(), and thus did not need to be updated.
+> 
+> So please resend the series, but without the undo/redo.  There would
+> thus be two patches rather than three, but there are plenty of other
+> things that need fixing anyway.
 
-We don't care if the lock is held or not. The point of the matter is that
-spinlocks in RT do not disable preemption. The code that the
-preempt_disable_under_spinlock() is inside, can not be preempted. If it is,
-bad things can happen.
+OK, thanks.
 
-Currently this code assumes that spinlocks disable preemption, so there's
-no need to disable preemption here. But in RT, just holding the spinlock is
-not enough to disable preemption, hence we need to explicitly call it here.
+> 
+> 							Thanx, Paul
+> 
+>>>>  			}
+>>>>  		}
+>>>>  		jiffies_stall = 3 * rcu_exp_jiffies_till_stall_check() + 3;
+>>>> -- 
+>>>> 2.25.1
+>>>>
+>>> .
+>>>
+>>
+>> -- 
+>> Regards,
+>>   Zhen Lei
+> .
+> 
 
-As Linus's name suggests, the "preempt_enable_under_spinlock" is to make
-sure preemption is disabled regardless if it's under a normal spinlock that
-disables preemption, or a RT spinlock that does not.
-
-I wonder if raw_preempt_disable() would be another name to use? We have
-raw_spin_lock() to denote that it's a real spinlock even under PREEMPT_RT.
-We could say that "raw_preempt_disable()" makes sure the location really
-has preemption disabled regardless of PREEMPT_RT.
-
--- Steve
+-- 
+Regards,
+  Zhen Lei

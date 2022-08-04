@@ -2,634 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC62589535
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4095A58953A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238863AbiHDARl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 20:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S238835AbiHDASp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 20:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241014AbiHDARA (ORCPT
+        with ESMTP id S237044AbiHDASi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 20:17:00 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82BD17E33;
-        Wed,  3 Aug 2022 17:16:58 -0700 (PDT)
+        Wed, 3 Aug 2022 20:18:38 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D353C5E33B
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:18:36 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id j11so14100376qvt.10
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 17:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659572219; x=1691108219;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wIh/7l3QF78yX+baqoxDRE0KuieLP2SR3su9sBRG5n0=;
-  b=HyuK0RCnWOa55kjadUo/1466D7kY785o/Tx2pIAo4G7wvjz78U4uBAkN
-   svu+KdAas0vgePAIEhkJQHA9GZ2nJEf1n5f1VIF1UuzN+jsuq9Avaximt
-   s5Pxds9J1KZwo2s4YBLCWY89NdDGMpCaaWqGBY/oqbbuN0TQo4lh5opYL
-   c=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 03 Aug 2022 17:16:59 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:16:57 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 3 Aug 2022 17:16:57 -0700
-Received: from [10.38.247.209] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 3 Aug 2022
- 17:16:52 -0700
-Message-ID: <51846670-fad0-7bae-7590-1d2cd1d72023@quicinc.com>
-Date:   Wed, 3 Aug 2022 17:16:50 -0700
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3To6LMVxoqoKzRmQbA8Jez/sB+9ti+KFrFIpcpqC5DU=;
+        b=jaFMYrAr15hi7try/jB5s91PiWR8kMLB484AM76aPEsChXhIBD+lTzzNWQs7YTYffC
+         63bFlVKk/ZG9whwY4EzkRsgp56VkFoRTAi46PNFdqCIVS5abYmdTkqyYEfi6IXTHpx52
+         NzZEmvnFruMTy2bQtwEpsrjGHOS+HJw3v24rafEiQbLO2WCtUWMg1dTnDoa/wPK7bpPA
+         ZDpkYHp29JtKjxj0PdUJYC1hknjlPP/1LBYX8EFh+xET+Qa4YK4rmKgX3RZdhGdwntmC
+         Dog0Dn1Z1X7nq0Ponu0M/n1lUbjjAv/lXEId6u+zqwop41RL4jilX4EHM1/wUWqYwks2
+         lHug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3To6LMVxoqoKzRmQbA8Jez/sB+9ti+KFrFIpcpqC5DU=;
+        b=ijcWrDYdk1MVQ/Hs1uJ4yBemF4eF0I/OKpJXDVq2zBUDtAP/HDVar4U/GN84dK+TjH
+         mdXzCyA+T+4fXER4qfBZAWi2Q82s9u3TLOpIBCY3vBcre6pqPNXPArD198porywv3DBz
+         Cxre7J/ZgvWjKNn9SLKPDRLIB5VsnGtPkWfykqdJ6QqglmfLdvYzCwUt7ddYEKYXyPGC
+         w8xF/2d/lYv42w4xC3QH5KNAQRiPSebejcsCc9ez7ZI1LY+/VFjKO8ojLw1kHqwspryh
+         XRtfGTFxzSPIYvoLRekxZ1lnIMrUOqVuXUS00EszC6aGOTqzrEd+5zpy0mQwn7SpJ/Gw
+         LZmA==
+X-Gm-Message-State: ACgBeo3I8FPJWQHBjw8ghOr8H34yrfxKhO/qcBdWdj48TgQqfSKizz2G
+        xjBAOvDaydWca5y8ZfszKJDCa5972qhthd75hcrhWA==
+X-Google-Smtp-Source: AA6agR56HJ7ItpZidaVhaD1cOoLc3NenmgaBxnC/k/Z1/A7MiHOP5q4pPn9CxMTyXfYtA5LvUWRUAOIlNT8Nb5+rfuU=
+X-Received: by 2002:a0c:9101:0:b0:473:9b:d92a with SMTP id q1-20020a0c9101000000b00473009bd92amr24057537qvq.17.1659572315631;
+ Wed, 03 Aug 2022 17:18:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v3 3/6] drm/msm/dsi: Don't set a load before disabling a
- regulator
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <dri-devel@lists.freedesktop.org>, Mark Brown <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Marek <jonathan@marek.ca>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Vladimir Lypak" <vladimir.lypak@gmail.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220802223738.898592-1-dianders@chromium.org>
- <20220802153434.v3.3.If1f94fbbdb7c1d0fb3961de61483a851ad1971a7@changeid>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220802153434.v3.3.If1f94fbbdb7c1d0fb3961de61483a851ad1971a7@changeid>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220801175407.2647869-1-haoluo@google.com> <20220801175407.2647869-5-haoluo@google.com>
+ <c018a834-e834-270c-24b1-2c726b38b729@fb.com>
+In-Reply-To: <c018a834-e834-270c-24b1-2c726b38b729@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Wed, 3 Aug 2022 17:18:25 -0700
+Message-ID: <CA+khW7hSFU2YL+jNw2F2qsuYEW0E6r8kJkg1BoBukAqR_sk+6Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 4/8] bpf: Introduce cgroup iter
+To:     Yonghong Song <yhs@fb.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 3, 2022 at 12:44 AM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 8/1/22 10:54 AM, Hao Luo wrote:
+> > Cgroup_iter is a type of bpf_iter. It walks over cgroups in three modes:
+> >
+> >   - walking a cgroup's descendants in pre-order.
+> >   - walking a cgroup's descendants in post-order.
+> >   - walking a cgroup's ancestors.
+> >
+> > When attaching cgroup_iter, one can set a cgroup to the iter_link
+> > created from attaching. This cgroup is passed as a file descriptor and
+> > serves as the starting point of the walk. If no cgroup is specified,
+> > the starting point will be the root cgroup.
+> >
+> > For walking descendants, one can specify the order: either pre-order or
+> > post-order. For walking ancestors, the walk starts at the specified
+> > cgroup and ends at the root.
+> >
+> > One can also terminate the walk early by returning 1 from the iter
+> > program.
+> >
+> > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> > program is called with cgroup_mutex held.
+> >
+> > Currently only one session is supported, which means, depending on the
+> > volume of data bpf program intends to send to user space, the number
+> > of cgroups that can be walked is limited. For example, given the current
+> > buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> > cgroup, assuming PAGE_SIZE is 4kb, the total number of cgroups that can
+> > be walked is 512. This is a limitation of cgroup_iter. If the output
+> > data is larger than the buffer size, the second read() will signal
+> > EOPNOTSUPP. In order to work around, the user may have to update their
+>
+> 'the second read() will signal EOPNOTSUPP' is not true. for bpf_iter,
+> we have user buffer from read() syscall and kernel buffer. The above
+> buffer size like 8 * PAGE_SIZE refers to the kernel buffer size.
+>
+> If read() syscall buffer size is less than kernel buffer size,
+> the second read() will not signal EOPNOTSUPP. So to make it precise,
+> we can say
+>    If the output data is larger than the kernel buffer size, after
+>    all data in the kernel buffer is consumed by user space, the
+>    subsequent read() syscall will signal EOPNOTSUPP.
+>
 
+Thanks Yonghong. Will update.
 
-On 8/2/2022 3:37 PM, Douglas Anderson wrote:
-> As of commit 5451781dadf8 ("regulator: core: Only count load for
-> enabled consumers"), a load isn't counted for a disabled
-> regulator. That means all the code in the DSI driver to specify and
-> set loads before disabling a regulator is not actually doing anything
-> useful. Let's remove it.
-> 
-> It should be noted that all of the loads set that were being specified
-> were pointless noise anyway. The only use for this number is to pick
-> between low power and high power modes of regulators. Regulators
-> appear to do this changeover at loads on the order of 10000 uA. You
-> would need a lot of clients of the same rail for that 100 uA number to
-> count for anything.
-> 
-> Note that now that we get rid of the setting of the load at disable
-> time, we can just set the load once when we first get the regulator
-> and then forget it.
-> 
-> It should also be noted that the regulator functions
-> regulator_bulk_enable() and regulator_set_load() already print error
-> messages when they encounter problems so while moving things around we
-> get rid of some extra error prints.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
-> 
-> Changes in v3:
-> - Fix typo in commit message.
-> - Just directly call the bulk commands; get rid of the wrapper.
-> 
->   drivers/gpu/drm/msm/dsi/dsi.h                 |  1 -
->   drivers/gpu/drm/msm/dsi/dsi_cfg.c             | 52 +++++++-------
->   drivers/gpu/drm/msm/dsi/dsi_host.c            | 71 ++++---------------
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c         | 52 ++------------
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c    |  4 +-
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c    |  6 +-
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_20nm.c    |  4 +-
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c    |  6 +-
->   .../gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c   |  2 +-
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c     |  6 +-
->   10 files changed, 60 insertions(+), 144 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi.h b/drivers/gpu/drm/msm/dsi/dsi.h
-> index 580a1e6358bf..bb6a5bd05cb1 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi.h
-> @@ -37,7 +37,6 @@ enum msm_dsi_phy_usecase {
->   struct dsi_reg_entry {
->   	char name[32];
->   	int enable_load;
-> -	int disable_load;
->   };
->   
->   struct dsi_reg_config {
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.c b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> index 72c018e26f47..901d6fd53800 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> @@ -14,9 +14,9 @@ static const struct msm_dsi_config apq8064_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 3,
->   		.regs = {
-> -			{"vdda", 100000, 100},	/* 1.2 V */
-> -			{"avdd", 10000, 100},	/* 3.0 V */
-> -			{"vddio", 100000, 100},	/* 1.8 V */
-> +			{"vdda", 100000},	/* 1.2 V */
-> +			{"avdd", 10000},	/* 3.0 V */
-> +			{"vddio", 100000},	/* 1.8 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_v2_bus_clk_names,
-> @@ -34,9 +34,9 @@ static const struct msm_dsi_config msm8974_apq8084_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 3,
->   		.regs = {
-> -			{"vdd", 150000, 100},	/* 3.0 V */
-> -			{"vdda", 100000, 100},	/* 1.2 V */
-> -			{"vddio", 100000, 100},	/* 1.8 V */
-> +			{"vdd", 150000},	/* 3.0 V */
-> +			{"vdda", 100000},	/* 1.2 V */
-> +			{"vddio", 100000},	/* 1.8 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_6g_bus_clk_names,
-> @@ -54,8 +54,8 @@ static const struct msm_dsi_config msm8916_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 2,
->   		.regs = {
-> -			{"vdda", 100000, 100},	/* 1.2 V */
-> -			{"vddio", 100000, 100},	/* 1.8 V */
-> +			{"vdda", 100000},	/* 1.2 V */
-> +			{"vddio", 100000},	/* 1.8 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_8916_bus_clk_names,
-> @@ -73,8 +73,8 @@ static const struct msm_dsi_config msm8976_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 2,
->   		.regs = {
-> -			{"vdda", 100000, 100},	/* 1.2 V */
-> -			{"vddio", 100000, 100},	/* 1.8 V */
-> +			{"vdda", 100000},	/* 1.2 V */
-> +			{"vddio", 100000},	/* 1.8 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_8976_bus_clk_names,
-> @@ -88,12 +88,12 @@ static const struct msm_dsi_config msm8994_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 6,
->   		.regs = {
-> -			{"vdda", 100000, 100},	/* 1.25 V */
-> -			{"vddio", 100000, 100},	/* 1.8 V */
-> -			{"vcca", 10000, 100},	/* 1.0 V */
-> -			{"vdd", 100000, 100},	/* 1.8 V */
-> -			{"lab_reg", -1, -1},
-> -			{"ibb_reg", -1, -1},
-> +			{"vdda", 100000},	/* 1.25 V */
-> +			{"vddio", 100000},	/* 1.8 V */
-> +			{"vcca", 10000},	/* 1.0 V */
-> +			{"vdd", 100000},	/* 1.8 V */
-> +			{"lab_reg", -1},
-> +			{"ibb_reg", -1},
->   		},
->   	},
->   	.bus_clk_names = dsi_6g_bus_clk_names,
-> @@ -111,9 +111,9 @@ static const struct msm_dsi_config msm8996_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 3,
->   		.regs = {
-> -			{"vdda", 18160, 1 },	/* 1.25 V */
-> -			{"vcca", 17000, 32 },	/* 0.925 V */
-> -			{"vddio", 100000, 100 },/* 1.8 V */
-> +			{"vdda", 18160},	/* 1.25 V */
-> +			{"vcca", 17000},	/* 0.925 V */
-> +			{"vddio", 100000},/* 1.8 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_8996_bus_clk_names,
-> @@ -131,8 +131,8 @@ static const struct msm_dsi_config msm8998_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 2,
->   		.regs = {
-> -			{"vdd", 367000, 16 },	/* 0.9 V */
-> -			{"vdda", 62800, 2 },	/* 1.2 V */
-> +			{"vdd", 367000},	/* 0.9 V */
-> +			{"vdda", 62800},	/* 1.2 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_msm8998_bus_clk_names,
-> @@ -150,7 +150,7 @@ static const struct msm_dsi_config sdm660_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vdda", 12560, 4 },	/* 1.2 V */
-> +			{"vdda", 12560},	/* 1.2 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_sdm660_bus_clk_names,
-> @@ -172,7 +172,7 @@ static const struct msm_dsi_config sdm845_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vdda", 21800, 4 },	/* 1.2 V */
-> +			{"vdda", 21800},	/* 1.2 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_sdm845_bus_clk_names,
-> @@ -186,7 +186,7 @@ static const struct msm_dsi_config sc7180_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vdda", 21800, 4 },	/* 1.2 V */
-> +			{"vdda", 21800},	/* 1.2 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_sc7180_bus_clk_names,
-> @@ -204,7 +204,7 @@ static const struct msm_dsi_config sc7280_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vdda", 8350, 0 },	/* 1.2 V */
-> +			{"vdda", 8350},	/* 1.2 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_sc7280_bus_clk_names,
-> @@ -222,7 +222,7 @@ static const struct msm_dsi_config qcm2290_dsi_cfg = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vdda", 21800, 4 },	/* 1.2 V */
-> +			{"vdda", 21800},	/* 1.2 V */
->   		},
->   	},
->   	.bus_clk_names = dsi_qcm2290_bus_clk_names,
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index a95d5df52653..9df278d39559 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -203,9 +203,6 @@ static inline void dsi_write(struct msm_dsi_host *msm_host, u32 reg, u32 data)
->   	msm_writel(data, msm_host->ctrl_base + reg);
->   }
->   
-> -static int dsi_host_regulator_enable(struct msm_dsi_host *msm_host);
-> -static void dsi_host_regulator_disable(struct msm_dsi_host *msm_host);
-> -
->   static const struct msm_dsi_cfg_handler *dsi_get_config(
->   						struct msm_dsi_host *msm_host)
->   {
-> @@ -256,56 +253,6 @@ static inline struct msm_dsi_host *to_msm_dsi_host(struct mipi_dsi_host *host)
->   	return container_of(host, struct msm_dsi_host, base);
->   }
->   
-> -static void dsi_host_regulator_disable(struct msm_dsi_host *msm_host)
-> -{
-> -	struct regulator_bulk_data *s = msm_host->supplies;
-> -	const struct dsi_reg_entry *regs = msm_host->cfg_hnd->cfg->reg_cfg.regs;
-> -	int num = msm_host->cfg_hnd->cfg->reg_cfg.num;
-> -	int i;
-> -
-> -	DBG("");
-> -	for (i = num - 1; i >= 0; i--)
-> -		if (regs[i].disable_load >= 0)
-> -			regulator_set_load(s[i].consumer,
-> -					   regs[i].disable_load);
-> -
-> -	regulator_bulk_disable(num, s);
-> -}
-> -
-> -static int dsi_host_regulator_enable(struct msm_dsi_host *msm_host)
-> -{
-> -	struct regulator_bulk_data *s = msm_host->supplies;
-> -	const struct dsi_reg_entry *regs = msm_host->cfg_hnd->cfg->reg_cfg.regs;
-> -	int num = msm_host->cfg_hnd->cfg->reg_cfg.num;
-> -	int ret, i;
-> -
-> -	DBG("");
-> -	for (i = 0; i < num; i++) {
-> -		if (regs[i].enable_load >= 0) {
-> -			ret = regulator_set_load(s[i].consumer,
-> -						 regs[i].enable_load);
-> -			if (ret < 0) {
-> -				pr_err("regulator %d set op mode failed, %d\n",
-> -					i, ret);
-> -				goto fail;
-> -			}
-> -		}
-> -	}
-> -
-> -	ret = regulator_bulk_enable(num, s);
-> -	if (ret < 0) {
-> -		pr_err("regulator enable failed, %d\n", ret);
-> -		goto fail;
-> -	}
-> -
-> -	return 0;
-> -
-> -fail:
-> -	for (i--; i >= 0; i--)
-> -		regulator_set_load(s[i].consumer, regs[i].disable_load);
-> -	return ret;
-> -}
-> -
->   static int dsi_regulator_init(struct msm_dsi_host *msm_host)
->   {
->   	struct regulator_bulk_data *s = msm_host->supplies;
-> @@ -323,6 +270,15 @@ static int dsi_regulator_init(struct msm_dsi_host *msm_host)
->   		return ret;
->   	}
->   
-> +	for (i = 0; i < num; i++) {
-> +		if (regs[i].enable_load >= 0) {
-> +			ret = regulator_set_load(s[i].consumer,
-> +						 regs[i].enable_load);
-> +			if (ret < 0)
-> +				return ret;
-> +		}
-> +	}
-> +
->   	return 0;
->   }
->   
-> @@ -2561,7 +2517,8 @@ int msm_dsi_host_power_on(struct mipi_dsi_host *host,
->   
->   	msm_dsi_sfpb_config(msm_host, true);
->   
-> -	ret = dsi_host_regulator_enable(msm_host);
-> +	ret = regulator_bulk_enable(msm_host->cfg_hnd->cfg->reg_cfg.num,
-> +				    msm_host->supplies);
->   	if (ret) {
->   		pr_err("%s:Failed to enable vregs.ret=%d\n",
->   			__func__, ret);
-> @@ -2601,7 +2558,8 @@ int msm_dsi_host_power_on(struct mipi_dsi_host *host,
->   	cfg_hnd->ops->link_clk_disable(msm_host);
->   	pm_runtime_put(&msm_host->pdev->dev);
->   fail_disable_reg:
-> -	dsi_host_regulator_disable(msm_host);
-> +	regulator_bulk_disable(msm_host->cfg_hnd->cfg->reg_cfg.num,
-> +			       msm_host->supplies);
->   unlock_ret:
->   	mutex_unlock(&msm_host->dev_mutex);
->   	return ret;
-> @@ -2628,7 +2586,8 @@ int msm_dsi_host_power_off(struct mipi_dsi_host *host)
->   	cfg_hnd->ops->link_clk_disable(msm_host);
->   	pm_runtime_put(&msm_host->pdev->dev);
->   
-> -	dsi_host_regulator_disable(msm_host);
-> +	regulator_bulk_disable(msm_host->cfg_hnd->cfg->reg_cfg.num,
-> +			       msm_host->supplies);
->   
->   	msm_dsi_sfpb_config(msm_host, false);
->   
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> index a39de3bdc7fa..7c105120d73e 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> @@ -529,58 +529,16 @@ static int dsi_phy_regulator_init(struct msm_dsi_phy *phy)
->   		return ret;
->   	}
->   
-> -	return 0;
-> -}
-> -
-> -static void dsi_phy_regulator_disable(struct msm_dsi_phy *phy)
-> -{
-> -	struct regulator_bulk_data *s = phy->supplies;
-> -	const struct dsi_reg_entry *regs = phy->cfg->reg_cfg.regs;
-> -	int num = phy->cfg->reg_cfg.num;
-> -	int i;
-> -
-> -	DBG("");
-> -	for (i = num - 1; i >= 0; i--)
-> -		if (regs[i].disable_load >= 0)
-> -			regulator_set_load(s[i].consumer, regs[i].disable_load);
-> -
-> -	regulator_bulk_disable(num, s);
-> -}
-> -
-> -static int dsi_phy_regulator_enable(struct msm_dsi_phy *phy)
-> -{
-> -	struct regulator_bulk_data *s = phy->supplies;
-> -	const struct dsi_reg_entry *regs = phy->cfg->reg_cfg.regs;
-> -	struct device *dev = &phy->pdev->dev;
-> -	int num = phy->cfg->reg_cfg.num;
-> -	int ret, i;
-> -
-> -	DBG("");
->   	for (i = 0; i < num; i++) {
->   		if (regs[i].enable_load >= 0) {
->   			ret = regulator_set_load(s[i].consumer,
->   							regs[i].enable_load);
-> -			if (ret < 0) {
-> -				DRM_DEV_ERROR(dev,
-> -					"regulator %d set op mode failed, %d\n",
-> -					i, ret);
-> -				goto fail;
-> -			}
-> +			if (ret < 0)
-> +				return ret;
->   		}
->   	}
->   
-> -	ret = regulator_bulk_enable(num, s);
-> -	if (ret < 0) {
-> -		DRM_DEV_ERROR(dev, "regulator enable failed, %d\n", ret);
-> -		goto fail;
-> -	}
-> -
->   	return 0;
-> -
-> -fail:
-> -	for (i--; i >= 0; i--)
-> -		regulator_set_load(s[i].consumer, regs[i].disable_load);
-> -	return ret;
->   }
->   
->   static int dsi_phy_enable_resource(struct msm_dsi_phy *phy)
-> @@ -829,7 +787,7 @@ int msm_dsi_phy_enable(struct msm_dsi_phy *phy,
->   		goto res_en_fail;
->   	}
->   
-> -	ret = dsi_phy_regulator_enable(phy);
-> +	ret = regulator_bulk_enable(phy->cfg->reg_cfg.num, phy->supplies);
->   	if (ret) {
->   		DRM_DEV_ERROR(dev, "%s: regulator enable failed, %d\n",
->   			__func__, ret);
-> @@ -866,7 +824,7 @@ int msm_dsi_phy_enable(struct msm_dsi_phy *phy,
->   	if (phy->cfg->ops.disable)
->   		phy->cfg->ops.disable(phy);
->   phy_en_fail:
-> -	dsi_phy_regulator_disable(phy);
-> +	regulator_bulk_disable(phy->cfg->reg_cfg.num, phy->supplies);
->   reg_en_fail:
->   	dsi_phy_disable_resource(phy);
->   res_en_fail:
-> @@ -880,7 +838,7 @@ void msm_dsi_phy_disable(struct msm_dsi_phy *phy)
->   
->   	phy->cfg->ops.disable(phy);
->   
-> -	dsi_phy_regulator_disable(phy);
-> +	regulator_bulk_disable(phy->cfg->reg_cfg.num, phy->supplies);
->   	dsi_phy_disable_resource(phy);
->   }
->   
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
-> index 08b015ea1b1e..6a10a1448051 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
-> @@ -1033,7 +1033,7 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vdds", 36000, 32},
-> +			{"vdds", 36000},
->   		},
->   	},
->   	.ops = {
-> @@ -1055,7 +1055,7 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_8998_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vdds", 36000, 32},
-> +			{"vdds", 36000},
->   		},
->   	},
->   	.ops = {
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> index 8199c53567f4..0f3d4c56c333 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> @@ -1029,7 +1029,7 @@ const struct msm_dsi_phy_cfg dsi_phy_14nm_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vcca", 17000, 32},
-> +			{"vcca", 17000},
->   		},
->   	},
->   	.ops = {
-> @@ -1050,7 +1050,7 @@ const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vcca", 73400, 32},
-> +			{"vcca", 73400},
->   		},
->   	},
->   	.ops = {
-> @@ -1071,7 +1071,7 @@ const struct msm_dsi_phy_cfg dsi_phy_14nm_8953_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vcca", 17000, 32},
-> +			{"vcca", 17000},
->   		},
->   	},
->   	.ops = {
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_20nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_20nm.c
-> index ee7c418a1c29..b7c621d94981 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_20nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_20nm.c
-> @@ -134,8 +134,8 @@ const struct msm_dsi_phy_cfg dsi_phy_20nm_cfgs = {
->   	.reg_cfg = {
->   		.num = 2,
->   		.regs = {
-> -			{"vddio", 100000, 100},	/* 1.8 V */
-> -			{"vcca", 10000, 100},	/* 1.0 V */
-> +			{"vddio", 100000},	/* 1.8 V */
-> +			{"vcca", 10000},	/* 1.0 V */
->   		},
->   	},
->   	.ops = {
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
-> index 48eab80b548e..6beba387640d 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
-> @@ -774,7 +774,7 @@ const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vddio", 100000, 100},
-> +			{"vddio", 100000},
->   		},
->   	},
->   	.ops = {
-> @@ -795,7 +795,7 @@ const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_famb_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vddio", 100000, 100},
-> +			{"vddio", 100000},
->   		},
->   	},
->   	.ops = {
-> @@ -816,7 +816,7 @@ const struct msm_dsi_phy_cfg dsi_phy_28nm_lp_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vddio", 100000, 100},	/* 1.8 V */
-> +			{"vddio", 100000},	/* 1.8 V */
->   		},
->   	},
->   	.ops = {
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c
-> index fc56cdcc9ad6..2e942b10fffa 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c
-> @@ -653,7 +653,7 @@ const struct msm_dsi_phy_cfg dsi_phy_28nm_8960_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vddio", 100000, 100},	/* 1.8 V */
-> +			{"vddio", 100000},	/* 1.8 V */
->   		},
->   	},
->   	.ops = {
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-> index 66ed1919a1db..9c7c49ce1200 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-> @@ -1041,7 +1041,7 @@ const struct msm_dsi_phy_cfg dsi_phy_7nm_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vdds", 36000, 32},
-> +			{"vdds", 36000},
->   		},
->   	},
->   	.ops = {
-> @@ -1068,7 +1068,7 @@ const struct msm_dsi_phy_cfg dsi_phy_7nm_8150_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vdds", 36000, 32},
-> +			{"vdds", 36000},
->   		},
->   	},
->   	.ops = {
-> @@ -1090,7 +1090,7 @@ const struct msm_dsi_phy_cfg dsi_phy_7nm_7280_cfgs = {
->   	.reg_cfg = {
->   		.num = 1,
->   		.regs = {
-> -			{"vdds", 37550, 0},
-> +			{"vdds", 37550},
->   		},
->   	},
->   	.ops = {
+> > program to reduce the volume of data sent to output. For example, skip
+> > some uninteresting cgroups. In future, we may extend bpf_iter flags to
+> > allow customizing buffer size.
+> >
+> > Acked-by: Yonghong Song <yhs@fb.com>
+> > Acked-by: Tejun Heo <tj@kernel.org>
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > ---
+[...]
+> > + *
+> > + * Currently only one session is supported, which means, depending on the
+> > + * volume of data bpf program intends to send to user space, the number
+> > + * of cgroups that can be walked is limited. For example, given the current
+> > + * buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> > + * cgroup, assuming PAGE_SIZE is 4kb, the total number of cgroups that can
+> > + * be walked is 512. This is a limitation of cgroup_iter. If the output data
+> > + * is larger than the buffer size, the second read() will signal EOPNOTSUPP.
+> > + * In order to work around, the user may have to update their program to
+>
+> same here as above for better description.
+>
+
+SG. Will update.
+
+> > + * reduce the volume of data sent to output. For example, skip some
+> > + * uninteresting cgroups.
+> > + */
+> > +
+> > +struct bpf_iter__cgroup {
+> > +     __bpf_md_ptr(struct bpf_iter_meta *, meta);
+> > +     __bpf_md_ptr(struct cgroup *, cgroup);
+> > +};
+> > +
+> > +struct cgroup_iter_priv {
+> > +     struct cgroup_subsys_state *start_css;
+> > +     bool visited_all;
+> > +     bool terminate;
+> > +     int order;
+> > +};
+> > +
+> > +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
+> > +{
+> > +     struct cgroup_iter_priv *p = seq->private;
+> > +
+> > +     mutex_lock(&cgroup_mutex);
+> > +
+> > +     /* cgroup_iter doesn't support read across multiple sessions. */
+> > +     if (*pos > 0) {
+> > +             if (p->visited_all)
+> > +                     return NULL;
+>
+> This looks good. thanks!
+>
+> > +
+> > +             /* Haven't visited all, but because cgroup_mutex has dropped,
+> > +              * return -EOPNOTSUPP to indicate incomplete iteration.
+> > +              */
+> > +             return ERR_PTR(-EOPNOTSUPP);
+> > +     }
+> > +
+> > +     ++*pos;
+> > +     p->terminate = false;
+> > +     p->visited_all = false;
+> > +     if (p->order == BPF_ITER_CGROUP_PRE)
+> > +             return css_next_descendant_pre(NULL, p->start_css);
+> > +     else if (p->order == BPF_ITER_CGROUP_POST)
+> > +             return css_next_descendant_post(NULL, p->start_css);
+> > +     else /* BPF_ITER_CGROUP_PARENT_UP */
+> > +             return p->start_css;
+> > +}
+> > +
+> [...]

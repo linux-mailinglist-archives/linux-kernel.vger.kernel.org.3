@@ -2,90 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CEB5898DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620425898DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239312AbiHDH5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
+        id S239345AbiHDH6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbiHDH52 (ORCPT
+        with ESMTP id S230354AbiHDH6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:57:28 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C0C6335;
-        Thu,  4 Aug 2022 00:57:27 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id d65-20020a17090a6f4700b001f303a97b14so4737352pjk.1;
-        Thu, 04 Aug 2022 00:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=B5ShB1FMDcSOC6vlt1FTAf9Cnw9dE9FUOP5cnHnXKSM=;
-        b=dF7Gh8AP5VyjFSoJdF1MJbwvdrvHEMNkvPD/rUMzqukFyNPcn1/uOevoOE4U12cg7W
-         5iY3/nrYqcWvf/MliZj9CRAUA8aP2ajxz6AyVD+MHSv+D+QR09mEnEl6yUmqC5qSCvzQ
-         K80g5WdczDXsi2JnA/f0Kq4CM3LFIUfXL4KjnSRO2PJlfqus7ZXiaSKtz9XGgsS6hEki
-         nnSAF1HyoMxKGSDKI7RuXyOA0LNQUZvaj0Aco+rlOSMbAJf3aYTziRsRqeXBjSs4clEf
-         t2foOiQkj/93mM9McEEmRgkV+mMxSqgpehDzt6MLjU/4G+fSKSoFF+iDGE0r3vMPwt/Z
-         uWlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=B5ShB1FMDcSOC6vlt1FTAf9Cnw9dE9FUOP5cnHnXKSM=;
-        b=H0ompg0SZt1t+lYY7U2dDnX2hVycXKkD/MRRmv7NUcmQZ6Zz6DMXJFqzIYmoQn2u1N
-         LeIexmEwUVxIF7M+xtlL2Av7khEoJJojigB0POxf6/67d1dWGr/69OgUM/ysEU+VNdNV
-         LLFqnvAK4XMfDoczb98e6elDJVblCqVNN5/OqpyEsbFJeHDGFDAzVnHbRHf3paD5K3F+
-         QlXDkuF2YZikmWYf1IAKe4gvo84bZkqE+H6f+Z5WA/uze5QaeOTX1S6y5X+7j3HrOYBu
-         vivdKBvqYkbgyass0Jl3TAQWlhXzqa2phcycH55Pu7rgXbo8QhVA7DR1Td0U1iIb/4my
-         0Ssg==
-X-Gm-Message-State: ACgBeo1kKlZa9Qelbdsc2RIFqJW76Sk+Mif0Q147BGPglFnOZqHfrrCx
-        qfhqGSACnKH0la5ZSrQWcng=
-X-Google-Smtp-Source: AA6agR4K9kXEsbApykItiq/orOgQ5vrCLFndla99LPDrlpkl5KA7WpFIQqoV2qRJ9IwsmkO08uSrTg==
-X-Received: by 2002:a17:90b:3b85:b0:1f4:f595:b0fe with SMTP id pc5-20020a17090b3b8500b001f4f595b0femr9025186pjb.61.1659599847121;
-        Thu, 04 Aug 2022 00:57:27 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-23.three.co.id. [180.214.232.23])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902f54700b0016db1b67fb9sm147421plf.224.2022.08.04.00.57.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 00:57:26 -0700 (PDT)
-Message-ID: <ed2de577-416d-24a7-a780-846a0ccac87a@gmail.com>
-Date:   Thu, 4 Aug 2022 14:57:21 +0700
+        Thu, 4 Aug 2022 03:58:35 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC5213E14
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:58:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B16443745A;
+        Thu,  4 Aug 2022 07:58:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659599913; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=WsPHXUyR5svouL2wdPIh4vTdx2ko6UbWtKcIEYKt+Bg=;
+        b=hJul8wcNtwKy5log79W9x8J/1P3jd2Bas9ZJvMywg10BumVT5TCkDuk0h2SQHuPdAJAvNO
+        5oT4C0B8MaCNh/mlIztLHECfWKiuXVDoyRLaKmTarqrmyTwC41ZyXxgi1Qj3J1f7dSFaOE
+        LHcg58SGFd85hDgvFTZcCZxUTQhxlGk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659599913;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=WsPHXUyR5svouL2wdPIh4vTdx2ko6UbWtKcIEYKt+Bg=;
+        b=0cwHv9Gczc7T10d56RWREKwdS6Bgev2S8czj41iT2ObiarjW8XZq+ygnhgiPNPawdjAR2E
+        iYCSdv8L4MBohEBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8AB1A13AE1;
+        Thu,  4 Aug 2022 07:58:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JOULISl862IlJAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 04 Aug 2022 07:58:33 +0000
+From:   Takashi Iwai <tiwai@suse.de>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Dave Airlie <airlied@redhat.com>, Sean Paul <sean@poorly.run>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] drm/udl: Fix stray URBs and cleanup
+Date:   Thu,  4 Aug 2022 09:58:22 +0200
+Message-Id: <20220804075826.27036-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 10/10] Documentation/x86: Update resctrl_ui.rst for new
- features
-Content-Language: en-US
-To:     babu.moger@amd.com
-Cc:     fenghua.yu@intel.com, reinette.chatre@intel.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        eranian@google.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <165938717220.724959.10931629283087443782.stgit@bmoger-ubuntu>
- <165938740360.724959.7059659465268246182.stgit@bmoger-ubuntu>
- <YunwoDwcy7GZoKXA@debian.me> <0c3721ba-b564-733a-16d5-5150d2b7a885@amd.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <0c3721ba-b564-733a-16d5-5150d2b7a885@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/3/22 22:59, Moger, Babu wrote:
->> When building this documentation, I get new warnings:
-> Is there a command I can use to build? That would be helpful next time.
+Hi,
 
-Use `make htmldocs`.
+this is a series of fixes for UDL driver to address the leftover URBs
+at suspend/resume.  It begins with the simplification of FIFO control
+code with the standard wait queue, followed by the handling of pending
+URBs, and replace BUG_ON() with WARN_ON() as a cleanup.
+
+
+Takashi
+
+===
+
+Takashi Iwai (4):
+  drm/udl: Replace semaphore with a simple wait queue
+  drm/udl: Sync pending URBs at suspend / disconnect
+  drm/udl: Kill pending URBs at suspend and disconnect
+  drm/udl: Replace BUG_ON() with WARN_ON()
+
+ drivers/gpu/drm/udl/udl_drv.h      |  14 +++-
+ drivers/gpu/drm/udl/udl_main.c     | 125 ++++++++++++++---------------
+ drivers/gpu/drm/udl/udl_modeset.c  |   4 +
+ drivers/gpu/drm/udl/udl_transfer.c |   3 +-
+ 4 files changed, 79 insertions(+), 67 deletions(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.35.3
+

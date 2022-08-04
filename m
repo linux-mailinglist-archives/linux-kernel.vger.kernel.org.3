@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3B6589A13
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C654F589A1B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbiHDJqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 05:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
+        id S239394AbiHDJvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 05:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiHDJql (ORCPT
+        with ESMTP id S239392AbiHDJvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 05:46:41 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B569B248CD
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 02:46:39 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id tl27so18025587ejc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 02:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=a1sj3keWWECHG9q5wjH5xmyLByOGTE53nodjSfqoRDk=;
-        b=a99aSjNgG2uxR9nNtLTkMElTztLf+EKIRREEyIpWszbotB/JO5KqyburT/8NQvdMuA
-         GC6052FsDG1j73dTnWFdIgQm0Xo7YQPgd9oc4VQzXa3+Dp6QXrKJPyyzNht5eYThiYTl
-         gO8ECz21Khh0uy5d502U05EswBUBEIrwr5pQ8RhBAJ5Kq7CIzMEjgnDsEHLyuuOHoOXs
-         bbDmZxPSbRFtFeEtpe8DlMvFK7BGzA817cp78G45HTWVkM7EIwBqRoxrrfYXk8uIiQ5h
-         +qQF6mPbEhIhdGdfANlKtMtynUnQX5RM+HGGyWBF8qMgZ8KBWQaD/9DqKvOQjhXwlICU
-         82fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=a1sj3keWWECHG9q5wjH5xmyLByOGTE53nodjSfqoRDk=;
-        b=45BHpknfHVsayfgA9TGwm+ESPcPZGTXKvZe5HVbgWT3N9xAu0IF4ejI6U+e2+7m/cT
-         idQpv4I/j+ngpZ8KZRVF5wUUI/ap7InWP4mRHuDSBGdukCKFVpUFUpY8mCoDshZsVekU
-         LmrRZ/k5OQHIduNBkslKKOED2xVPloYY2GIluJlZ7tlpxR+dP7e4fQchDjXuMCPDhH/G
-         YnH50iEmZdGgSZ/T55LaeHJFS2N7Kdib84afkg/bKQLVcmJos21g5n0GIOzLtInMQiWJ
-         Y4EpkKekm9p4I/D5cunpfOnBDENVzq3UPD6C2EWLghRDAlqsas2oS5+0RkGI6aDKZ4hx
-         J+KQ==
-X-Gm-Message-State: ACgBeo2aTqRna0sAuNyZCpozu+LjoKePtyfL9hkVI/+kbU79aHVS+two
-        O+sQmgAS4YrFdWYZ82f4R5w=
-X-Google-Smtp-Source: AA6agR4EyiOTKbTWGzkAljZYLv5p3a+wKGD5H5SEgqhLsnGjhHb4HPQaVPGeQMj1NAPM3h6HJdW6kw==
-X-Received: by 2002:a17:906:5d16:b0:72f:248d:525a with SMTP id g22-20020a1709065d1600b0072f248d525amr830878ejt.441.1659606398348;
-        Thu, 04 Aug 2022 02:46:38 -0700 (PDT)
-Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
-        by smtp.gmail.com with ESMTPSA id r25-20020a056402019900b0043a7c24a669sm387143edv.91.2022.08.04.02.46.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 02:46:37 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 4 Aug 2022 11:46:35 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, x86@kernel.org,
-        dave.hansen@linux.intel.com, nikunj@amd.com, hpa@zytor.com,
-        Abraham.Shaju@amd.com
-Subject: Re: [RFC FIX PATCH] x86/e820: Stop kernel boot when RAM resource
- reservation fails
-Message-ID: <YuuVezQMK/ytzMTe@gmail.com>
-References: <20220718085815.1943-1-bharata@amd.com>
- <E7A3FF43-C49F-415E-81C6-CD14F4107349@alien8.de>
- <be498c32-bed6-d31a-ae94-6006dd59ea1e@amd.com>
- <YtV3Ipvt96X/iO2J@zn.tnic>
- <24ccd22f-6708-3265-4012-66f01108ff22@amd.com>
+        Thu, 4 Aug 2022 05:51:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4497A26AE5
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 02:51:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659606699; x=1691142699;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1mAFulNWoLFTDJufnr4AN2fWHLLvDVf708xkkVeQJ1E=;
+  b=M+/3U3Ovfr9OCwTzG146hQeYzhjcBldufqZndJW83LTxYvNOyrQ5mkgV
+   eMcABYYeo4EyebC1WrKkiBF0SBrjS4CiEGzMBRe27jJGLReCLa2ZVEJh7
+   gMpj69cIbByFFq7t7dkHPUvCtzJ4ZvZZqdRzVrC+X2cts3LXrA6gJ+R90
+   KQU9kiHi4YCUSQa5EXmHpGZTEzwSs/VT6mLoej16XrMLtLu2ezxDomEMX
+   XhU2DoFVpQQ2w20RlqHzAi7KLFS8QyP7olL5jmTk5hy4VvtW9VcZix7g5
+   wzRp1edxGMeRGVpSU21ZjdCIBYjCro6HjIQZDfmqQtNtTCSmz2uxnWCOF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="272939370"
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="272939370"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 02:51:38 -0700
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="745405452"
+Received: from mpcastil-mobl2.amr.corp.intel.com (HELO [10.249.40.52]) ([10.249.40.52])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 02:51:34 -0700
+Message-ID: <43ada0d7-f094-7f63-3717-30c64834edd6@linux.intel.com>
+Date:   Thu, 4 Aug 2022 11:47:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24ccd22f-6708-3265-4012-66f01108ff22@amd.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH resend] ASoC: SOF: ipc3-topology: Fix clang -Wformat
+ warning
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Justin Stitt <justinstitt@google.com>
+Cc:     Daniel Baluta <daniel.baluta@nxp.com>, alsa-devel@alsa-project.org,
+        llvm@lists.linux.dev, Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Tom Rix <trix@redhat.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        linux-kernel@vger.kernel.org, sound-open-firmware@alsa-project.org
+References: <20220803204442.2996580-1-justinstitt@google.com>
+ <Yure82N7/4NLEMsW@dev-arch.thelio-3990X>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <Yure82N7/4NLEMsW@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,27 +74,52 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-* Bharata B Rao <bharata@amd.com> wrote:
 
-> On 7/18/2022 8:37 PM, Borislav Petkov wrote:
-> > 
-> > I betcha you can generate a lot of "kernel bugs" with weird qemu
-> > options. If it is not a real use case, nobody cares.
+On 8/3/22 15:47, Nathan Chancellor wrote:
+> On Wed, Aug 03, 2022 at 01:44:42PM -0700, Justin Stitt wrote:
+>> When building with Clang we encounter these warnings:
+>> | sound/soc/sof/ipc3-topology.c:2343:4: error: format specifies type
+>> | 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>> |                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+>> |                  ^~~~~~~~~~~~~~~^~~~~~~~~~~~~~~^~~~~~~~~~~~~
+>>
+>> Use correct format specifier `%d` since args are of type int.
+>>
+>> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+>> Reported-by: Nathan Chancellor <nathan@kernel.org>
+>> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+>> Signed-off-by: Justin Stitt <justinstitt@google.com>
 > 
-> I see that we will hit this problem by default when starting
-> a guest with 1T or more memory using QEMU.
+> Thanks for resending!
 > 
-> > 
-> > And even if it were a real use case, panicking the machine is not the
-> > right fix.
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
 > 
-> I couldn't see a clean exit/recovery option in 
-> setup_arch()->e820__reserve_resources() where this happens. Any 
-> suggestions?
-
-I'd emit a low impact, non-fatal WARN()ing to make sure users aren't silent 
-victims of an easily detectable firmware (Qemu) misconfiguration.
-
-Thanks,
-
-	Ingo
+>> ---
+>> Note: resending with the subject corrected, this patch fixes a build
+>> warning that will break the Clang build when CONFIG_WERROR=y.
+>>
+>> Original patch: https://lore.kernel.org/all/20220721211218.4039288-1-justinstitt@google.com/
+>> Reported by Nathan here: https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
+>>
+>>  sound/soc/sof/ipc3-topology.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/sound/soc/sof/ipc3-topology.c b/sound/soc/sof/ipc3-topology.c
+>> index b2cc046b9f60..65923e7a5976 100644
+>> --- a/sound/soc/sof/ipc3-topology.c
+>> +++ b/sound/soc/sof/ipc3-topology.c
+>> @@ -2338,7 +2338,7 @@ static int sof_ipc3_parse_manifest(struct snd_soc_component *scomp, int index,
+>>  	}
+>>  
+>>  	dev_info(scomp->dev,
+>> -		 "Topology: ABI %d:%d:%d Kernel ABI %hhu:%hhu:%hhu\n",
+>> +		 "Topology: ABI %d:%d:%d Kernel ABI %d:%d:%d\n",
+>>  		 man->priv.data[0], man->priv.data[1], man->priv.data[2],
+>>  		 SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+>>  
+>> -- 
+>> 2.37.1.359.gd136c6c3e2-goog
+>>

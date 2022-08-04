@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6FE589E46
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009C2589E67
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239594AbiHDPKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
+        id S240192AbiHDPKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234093AbiHDPJ5 (ORCPT
+        with ESMTP id S239029AbiHDPKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:09:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375A651A00;
-        Thu,  4 Aug 2022 08:09:56 -0700 (PDT)
+        Thu, 4 Aug 2022 11:10:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6247E5E308;
+        Thu,  4 Aug 2022 08:09:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C65296102A;
-        Thu,  4 Aug 2022 15:09:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D6A4C433C1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 968526106C;
+        Thu,  4 Aug 2022 15:09:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A548C41679;
         Thu,  4 Aug 2022 15:09:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1659625795;
-        bh=VUaMhxBQV8r/Oni90w/+gnoNx4Bzx7lOs5aOtZB5EB0=;
+        bh=IO2m3x1jImWrsxZYiJ2BMxGUrpa2LxovXjBMsp4YmCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GoPRHKvmlGVaXGsNbciqHSCl8N4I00QdRgFPkAwt2VxUrNIQBCbZdqmK2xgwy/9ub
-         tcXmJbbbcOh2MoKfMLqhNfDanyrWIm1u0oDzX1rwY62fgZz97V4KUwWUDkqS+Gssaz
-         EdFiyZOcbyQQIwbk4L0AsuoevmXgvweV/I3uI2cnlLIr1vDjVsDzS9e46KphRlEW4j
-         4gqIdamg4xfDf0HYTXBM7MddJ+Dy/C5I14aURtVMh6mRuR7KfK7125Tvu5MUcCAve0
-         oSWqjUpugNeIeoZqPdpwBmhSC10ZHrd+wGi2rZc63K5Z0etGRCe6H2lEIVUUOuT7Lu
-         E1yYdAsAeyr3w==
+        b=QanGkkS4xs9guEML3UUpdfeTWuhqiyq1gKgwPxX0liM7aZuxQKXtTSxuFlR5aBUBU
+         2JLwKWrkuUxAAMKOH8mLsuGPQ2eYFH7zIT54cDycwqHzjYQXB9rQGG092mY+o0g9AU
+         U0WYe8pYX45Z+mxM25zX5lxAhBml0q91KPnohgt+OUYOPCvTLUZjZpKzY7oyRyV5j0
+         gVlz7IJJkIhOLCUA1lNgtFbVqIR4XdCK8+Sy2DiNUV18khQlQ8oRrhbTTw+rCTyCjl
+         AIulqYUjJl1RC84pkMhtDJTD0Am4w+NNQgswzBDGUw8NOo1nIxzKGCAvRTWac5j6EZ
+         ovUq+BCe8ycVQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oJcUL-00069a-99; Thu, 04 Aug 2022 17:10:17 +0200
+        id 1oJcUL-00069c-CT; Thu, 04 Aug 2022 17:10:17 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>
@@ -52,10 +52,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 6/9] usb: dwc3: qcom: fix peripheral and OTG suspend
-Date:   Thu,  4 Aug 2022 17:09:58 +0200
-Message-Id: <20220804151001.23612-7-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 7/9] dt-bindings: usb: qcom,dwc3: add wakeup-source property
+Date:   Thu,  4 Aug 2022 17:09:59 +0200
+Message-Id: <20220804151001.23612-8-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220804151001.23612-1-johan+linaro@kernel.org>
 References: <20220804151001.23612-1-johan+linaro@kernel.org>
@@ -70,73 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A recent commit implementing wakeup support in host mode instead broke
-suspend for peripheral and OTG mode.
+Add a wakeup-source property to the binding to describe whether the
+wakeup interrupts can wake the system from suspend.
 
-The hack that was added in the suspend path to determine the speed of
-any device connected to the USB2 bus not only accesses internal driver
-data for a child device, but also dereferences a NULL pointer or
-accesses freed data when the controller is not acting as host.
-
-There's no quick fix to the layering violation, but since reverting
-would leave us with broken suspend in host mode with wakeup triggering
-immediately, let's keep the hack for now.
-
-Fix the immediate issues by only checking the host bus speed and
-enabling wakeup interrupts when acting as host.
-
-Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
 
 Changes in v2
- - disable wakeup completely instead of falling back to the
-   "disconnected" host configuration when not acting as host
+ - disallow 'wakeup-source' in child node (Krzysztof)
 
- drivers/usb/dwc3/dwc3-qcom.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 05b4666fde14..6ae0b7fc4e2c 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -309,8 +309,13 @@ static bool dwc3_qcom_is_host(struct dwc3_qcom *qcom)
- static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
- {
- 	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
--	struct usb_hcd *hcd = platform_get_drvdata(dwc->xhci);
- 	struct usb_device *udev;
-+	struct usb_hcd *hcd;
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index fea3e7092ace..d5959bdea63e 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -108,12 +108,17 @@ properties:
+       HS/FS/LS modes are supported.
+     type: boolean
+ 
++  wakeup-source: true
 +
-+	/*
-+	 * FIXME: Fix this layering violation.
-+	 */
-+	hcd = platform_get_drvdata(dwc->xhci);
+ # Required child node:
  
- 	/*
- 	 * It is possible to query the speed of all children of
-@@ -416,7 +421,11 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
- 	if (ret)
- 		dev_warn(qcom->dev, "failed to disable interconnect: %d\n", ret);
+ patternProperties:
+   "^usb@[0-9a-f]+$":
+     $ref: snps,dwc3.yaml#
  
--	if (wakeup) {
-+	/*
-+	 * The role is stable during suspend as role switching is done from a
-+	 * freezable workqueue.
-+	 */
-+	if (dwc3_qcom_is_host(qcom) && wakeup) {
- 		qcom->usb2_speed = dwc3_qcom_read_usb2_speed(qcom);
- 		dwc3_qcom_enable_interrupts(qcom);
- 	}
-@@ -434,7 +443,7 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
- 	if (!qcom->is_suspended)
- 		return 0;
- 
--	if (wakeup)
-+	if (dwc3_qcom_is_host(qcom) && wakeup)
- 		dwc3_qcom_disable_interrupts(qcom);
- 
- 	for (i = 0; i < qcom->num_clocks; i++) {
++    properties:
++      wakeup-source: false
++
+ required:
+   - compatible
+   - reg
 -- 
 2.35.1
 

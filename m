@@ -2,147 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F8D589B11
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 13:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26B1589B15
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 13:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238750AbiHDLbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 07:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
+        id S238965AbiHDLca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 07:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236209AbiHDLbk (ORCPT
+        with ESMTP id S232884AbiHDLc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 07:31:40 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF0D39B8D
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 04:31:38 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id v7so2375911ljj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 04:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6FA3ZfEeBAC9Kp15wqTU0k5tZ0dhaTTUmtqbwpsyYTY=;
-        b=RotSEOoQTObCi0Yo4Rk2W1EXU5o1KIIBkVg4ckpcWxwE1mIYKZWNo1qH7vuL6Hb0Lz
-         yq0rkhznpi9/8km3g3h7y956DhTFWCB6W/1MB1GJhRITv666gVAZtFN5FFpmXriJj12i
-         a9e8u8ntItsOgNRnNgNJq932KPxwL4My2QGn7dcYzTmnZYQ6m0fgnWRR16vidbbH2JJt
-         gvLq18qKywsk4wVMG6jygCQHM6bQRLrNLJ63ch4gJr4T4J8nUq881YNb6zkuii4Oz1Ws
-         nyWDolJkafj8RGzGy1UJnCPm/unjBRTNd7cxx1oLGj/KuZmYhCUuLiElb/5QOFth9Kt6
-         v1KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6FA3ZfEeBAC9Kp15wqTU0k5tZ0dhaTTUmtqbwpsyYTY=;
-        b=vOd8JPt0D4aE8K65iWNlgRXFIhuJw1EgyZnGicHK77fwHnJ/XY8H35M51+uuY14OzU
-         cBtI2XKgjoJAVmokoW8o3/UtoxUIxsecrI3VeWLnoJwLtkPM6gdUNp9amnydMD3ErsZI
-         G3vCgmv3ReA0ruC/eH00hkfWCcbGd2vrmX+sqdUpzgyOzbVAozbTsZVySVCc/CjPvSIm
-         VgL0j+QAObWGvvsohoomOXGPyuN/OMeaxF0NVX+Cbi7sAUOo2NscEH3+ZiJk1nwitJvx
-         5gVV1LCjjd9otzD+FpK+MkIcC2uIOxZPfxK34PoWh0m85042KMF3jpRfjfaLD/z3okBP
-         XFQQ==
-X-Gm-Message-State: ACgBeo19NLhYTMEdWIuD5TBncnnNnokg3A72ZaTiPwj6vrvapXJmvueY
-        dDWbt3//3XJMgLWQO+/yB0BYyA==
-X-Google-Smtp-Source: AA6agR6qGtsHgJ27BPzUx/ISEKRhgxZ20jwAk8krk4pAMSe22eoioT7tH9INbpYDZ3Bx8ZME5cJmdA==
-X-Received: by 2002:a2e:804e:0:b0:25e:7231:c304 with SMTP id p14-20020a2e804e000000b0025e7231c304mr445863ljg.257.1659612696954;
-        Thu, 04 Aug 2022 04:31:36 -0700 (PDT)
-Received: from [192.168.1.6] ([77.222.167.48])
-        by smtp.gmail.com with ESMTPSA id a17-20020a05651c031100b0025dd5b3fabesm87543ljp.102.2022.08.04.04.31.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 04:31:36 -0700 (PDT)
-Message-ID: <b9cc3290-f0cb-0423-7ff0-dae40b52a379@linaro.org>
-Date:   Thu, 4 Aug 2022 13:31:34 +0200
+        Thu, 4 Aug 2022 07:32:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F6133E22;
+        Thu,  4 Aug 2022 04:32:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DF28120F76;
+        Thu,  4 Aug 2022 11:32:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659612745; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HCl/OjddVeNtZUVMWyBB9z3YoC/s9vWuMMjCgHDOT+4=;
+        b=oZV8hjCSBWL4mpbrjQhzchhr/BtE6mgR7djPTS2OVBZ3iELB+6291X3SQjSPhCcnOYsgit
+        C9nFloX33EHU5KVCxbYxZqdYUotwowNM5AhLkOqwqSRZe+c8iHpqwZD26gFFUdD+hasPyv
+        +6dj1UqpiNEvMltlw+98T7FVa/Bwa0s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659612745;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HCl/OjddVeNtZUVMWyBB9z3YoC/s9vWuMMjCgHDOT+4=;
+        b=wjXBWwQ3EPt/K5efSJFcWPg+8unFrMpTy/qJoflswDS31lNt8et/zTPGorAFRn1ls+bLD6
+        1F3EVqIPC/yeJKAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 48AA413434;
+        Thu,  4 Aug 2022 11:32:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LYvFEEmu62LGKQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 04 Aug 2022 11:32:25 +0000
+Message-ID: <ee123648-3ac4-6e0c-419c-281fb09edaa6@suse.cz>
+Date:   Thu, 4 Aug 2022 13:32:25 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] spi: dt-binding: add Microchip CoreQSPI compatible
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH Part2 v6 21/49] KVM: SVM: Make AVIC backing, VMSA and VMCB
+ memory allocation SNP safe
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor.dooley@microchip.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
- <20220801094255.664548-2-nagasuresh.relli@microchip.com>
- <6d36b192-9e63-ec13-5583-22b81c99c18b@linaro.org>
- <Yuki3jpCSJDdXcWA@sirena.org.uk>
- <dc7bca02-5eb3-3b33-8911-a950b630f197@linaro.org>
- <Yup4JLh00HZxFQLc@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Yup4JLh00HZxFQLc@sirena.org.uk>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, jroedel@suse.de,
+        thomas.lendacky@amd.com, hpa@zytor.com, ardb@kernel.org,
+        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        jmattson@google.com, luto@kernel.org, dave.hansen@linux.intel.com,
+        slp@redhat.com, pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        michael.roth@amd.com, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <4896f0fd85947a139dce0ad514044c76048eaed2.1655761627.git.ashish.kalra@amd.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <4896f0fd85947a139dce0ad514044c76048eaed2.1655761627.git.ashish.kalra@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/08/2022 15:29, Mark Brown wrote:
-> On Wed, Aug 03, 2022 at 08:11:03AM +0200, Krzysztof Kozlowski wrote:
->> On 02/08/2022 15:13, Mark Brown wrote:
->>> On Tue, Aug 02, 2022 at 10:52:25AM +0200, Krzysztof Kozlowski wrote:
->>>> On 01/08/2022 11:42, Naga Sureshkumar Relli wrote:
+On 6/21/22 01:06, Ashish Kalra wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
 > 
->>>>> +    oneOf:
->>>>> +      - description: Microchip's Polarfire SoC SPI controller.
->>>>> +        const: microchip,mpfs-spi
->>>>> +      - description: Microchip's Polarfire SoC QSPI controller.
+> Implement a workaround for an SNP erratum where the CPU will incorrectly
+> signal an RMP violation #PF if a hugepage (2mb or 1gb) collides with the
+> RMP entry of a VMCB, VMSA or AVIC backing page.
 > 
->>>> Useless descriptions - they repeat compatible. Just keep it as enum and
->>>> skip descriptions. What value do they bring?
+> When SEV-SNP is globally enabled, the CPU marks the VMCB, VMSA, and AVIC
+> backing   pages as "in-use" in the RMP after a successful VMRUN.  This
+> is done for _all_ VMs, not just SNP-Active VMs.
 > 
->>> Someone not familiar with the full Microchip product line might not be
->>> aware of the expansion of mpfs, it's not blindingly obvious.
+> If the hypervisor accesses an in-use page through a writable
+> translation, the CPU will throw an RMP violation #PF. On early SNP
+> hardware, if an in-use page is 2mb aligned and software accesses any
+> part of the associated 2mb region with a hupage, the CPU will
+> incorrectly treat the entire 2mb region as in-use and signal a spurious
+> RMP violation #PF.
 > 
->> Then it should be explained in title/description of the binding, not in
->> compatible. This is the usual way of providing some text description,
->> not for each compatible by repeating the compatible text.
+> The recommended is to not use the hugepage for the VMCB, VMSA or
+> AVIC backing page. Add a generic allocator that will ensure that the
+> page returns is not hugepage (2mb or 1gb) and is safe to be used when
+> SEV-SNP is enabled.
 > 
-> I'm not convinced this is a useful rule to try to enforce, and I'm not
-> sure how well it will work if the same IP is used in several different
-> places.  It's not clear to me what the benefit is intended to be.
+> Co-developed-by: Marc Orr <marcorr@google.com>
+> Signed-off-by: Marc Orr <marcorr@google.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/include/asm/kvm-x86-ops.h |  1 +
+>  arch/x86/include/asm/kvm_host.h    |  2 ++
+>  arch/x86/kvm/lapic.c               |  5 ++++-
+>  arch/x86/kvm/svm/sev.c             | 35 ++++++++++++++++++++++++++++++
+>  arch/x86/kvm/svm/svm.c             | 16 ++++++++++++--
+>  arch/x86/kvm/svm/svm.h             |  1 +
+>  6 files changed, 57 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index da47f60a4650..a66292dae698 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -128,6 +128,7 @@ KVM_X86_OP(msr_filter_changed)
+>  KVM_X86_OP(complete_emulated_msr)
+>  KVM_X86_OP(vcpu_deliver_sipi_vector)
+>  KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
+> +KVM_X86_OP(alloc_apic_backing_page)
+>  
+>  #undef KVM_X86_OP
+>  #undef KVM_X86_OP_OPTIONAL
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index c24a72ddc93b..0205e2944067 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1512,6 +1512,8 @@ struct kvm_x86_ops {
+>  	 * Returns vCPU specific APICv inhibit reasons
+>  	 */
+>  	unsigned long (*vcpu_get_apicv_inhibit_reasons)(struct kvm_vcpu *vcpu);
+> +
+> +	void *(*alloc_apic_backing_page)(struct kvm_vcpu *vcpu);
+>  };
+>  
+>  struct kvm_x86_nested_ops {
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 66b0eb0bda94..7c7fc6c4a7f9 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -2506,7 +2506,10 @@ int kvm_create_lapic(struct kvm_vcpu *vcpu, int timer_advance_ns)
+>  
+>  	vcpu->arch.apic = apic;
+>  
+> -	apic->regs = (void *)get_zeroed_page(GFP_KERNEL_ACCOUNT);
+> +	if (kvm_x86_ops.alloc_apic_backing_page)
+> +		apic->regs = static_call(kvm_x86_alloc_apic_backing_page)(vcpu);
+> +	else
+> +		apic->regs = (void *)get_zeroed_page(GFP_KERNEL_ACCOUNT);
+>  	if (!apic->regs) {
+>  		printk(KERN_ERR "malloc apic regs error for vcpu %x\n",
+>  		       vcpu->vcpu_id);
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index b49c370d5ae9..93365996bd59 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -3030,3 +3030,38 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
+>  		break;
+>  	}
+>  }
+> +
+> +struct page *snp_safe_alloc_page(struct kvm_vcpu *vcpu)
+> +{
+> +	unsigned long pfn;
+> +	struct page *p;
+> +
+> +	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
+> +		return alloc_page(GFP_KERNEL_ACCOUNT | __GFP_ZERO);
+> +
+> +	/*
+> +	 * Allocate an SNP safe page to workaround the SNP erratum where
+> +	 * the CPU will incorrectly signal an RMP violation  #PF if a
+> +	 * hugepage (2mb or 1gb) collides with the RMP entry of VMCB, VMSA
+> +	 * or AVIC backing page. The recommeded workaround is to not use the
+> +	 * hugepage.
+> +	 *
+> +	 * Allocate one extra page, use a page which is not 2mb aligned
+> +	 * and free the other.
+> +	 */
+> +	p = alloc_pages(GFP_KERNEL_ACCOUNT | __GFP_ZERO, 1);
+> +	if (!p)
+> +		return NULL;
+> +
+> +	split_page(p, 1);
+> +
+> +	pfn = page_to_pfn(p);
+> +	if (IS_ALIGNED(__pfn_to_phys(pfn), PMD_SIZE)) {
 
-First, the description here is really not adding any useful information.
+I think you could simply IS_ALIGNED(pfn, PTRS_PER_PMD), no need to expand to
+full phys.
 
-"description: Microchip's Polarfire SoC SPI controller."
-Microchip - already in comaptible
-SPI controller - already in compatible and in device description
+> +		pfn++;
+> +		__free_page(p);
 
-The only useful piece could be extending pfs to Polarfire SoC.
+To avoid pfn_to_page(), drop 'pfn++' and
 
-And now imagine every binding doing the same, adding such
-acronym-explanations in every compatible list. Basically we loose easy
-to read, compare, analyze and check for errors enum:
-  enum
-    - microchip,mpfs-spi
-    - microchip,mpfs-qspi
-    - microchip,coreqspi-rtl-v2
-    - microchip,mpfs-some-more-spi
-    - microchip,mpfs-even-newer-spi
+__free_page(p++);
 
-into double-sized oneOf with additional descriptions each one explaining
-"mpfs".
+> +	} else {
+> +		__free_page(pfn_to_page(pfn + 1));
 
-  oneOf:
-    - description: Microchip's Polarfire SoC SPI controller.
-      const: microchip,mpfs-spi
-    - description: Microchip's Polarfire SoC QSPI controller.
-      const: microchip,mpfs-qspi
-    - description: Microchip's FPGA QSPI controller.
-      const: microchip,coreqspi-rtl-v2
-    - description: Microchip's Polarfire SoC some-more SPI controller.
-      const: microchip,mpfs-some-more-spi
-    - description: Microchip's Polarfire SoC even newer SPI controller.
-      const: microchip,mpfs-even-newer-spi
+__free_page(p+1);
 
-Why do you need to explain "mpfs" more than once? Why explaining these
-are SPI or QSPI controllers? It's obvious from compatible.
+> +	}
+> +
+> +	return pfn_to_page(pfn);
 
-Just keep it simple and small. We all have too much code to look at...
+return p;
 
-Best regards,
-Krzysztof
+> +}
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index efc7623d0f90..b4bd64f94d3a 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -1260,7 +1260,7 @@ static int svm_vcpu_create(struct kvm_vcpu *vcpu)
+>  	svm = to_svm(vcpu);
+>  
+>  	err = -ENOMEM;
+> -	vmcb01_page = alloc_page(GFP_KERNEL_ACCOUNT | __GFP_ZERO);
+> +	vmcb01_page = snp_safe_alloc_page(vcpu);
+>  	if (!vmcb01_page)
+>  		goto out;
+>  
+> @@ -1269,7 +1269,7 @@ static int svm_vcpu_create(struct kvm_vcpu *vcpu)
+>  		 * SEV-ES guests require a separate VMSA page used to contain
+>  		 * the encrypted register state of the guest.
+>  		 */
+> -		vmsa_page = alloc_page(GFP_KERNEL_ACCOUNT | __GFP_ZERO);
+> +		vmsa_page = snp_safe_alloc_page(vcpu);
+>  		if (!vmsa_page)
+>  			goto error_free_vmcb_page;
+>  
+> @@ -4598,6 +4598,16 @@ static int svm_vm_init(struct kvm *kvm)
+>  	return 0;
+>  }
+>  
+> +static void *svm_alloc_apic_backing_page(struct kvm_vcpu *vcpu)
+> +{
+> +	struct page *page = snp_safe_alloc_page(vcpu);
+> +
+> +	if (!page)
+> +		return NULL;
+> +
+> +	return page_address(page);
+> +}
+> +
+>  static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  	.name = "kvm_amd",
+>  
+> @@ -4722,6 +4732,8 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  
+>  	.vcpu_deliver_sipi_vector = svm_vcpu_deliver_sipi_vector,
+>  	.vcpu_get_apicv_inhibit_reasons = avic_vcpu_get_apicv_inhibit_reasons,
+> +
+> +	.alloc_apic_backing_page = svm_alloc_apic_backing_page,
+>  };
+>  
+>  /*
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 1f4a8bd09c9e..9672e25a338d 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -659,6 +659,7 @@ void sev_es_vcpu_reset(struct vcpu_svm *svm);
+>  void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector);
+>  void sev_es_prepare_switch_to_guest(struct sev_es_save_area *hostsa);
+>  void sev_es_unmap_ghcb(struct vcpu_svm *svm);
+> +struct page *snp_safe_alloc_page(struct kvm_vcpu *vcpu);
+>  
+>  /* vmenter.S */
+>  
+

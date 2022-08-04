@@ -2,97 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B6E589CC6
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B98589CC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239946AbiHDNfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 09:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
+        id S239951AbiHDNhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 09:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239915AbiHDNfp (ORCPT
+        with ESMTP id S239818AbiHDNhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 09:35:45 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FDC3B972;
-        Thu,  4 Aug 2022 06:35:44 -0700 (PDT)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lz8kJ2RzGz67NKF;
-        Thu,  4 Aug 2022 21:30:48 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 4 Aug 2022 15:35:42 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 4 Aug
- 2022 14:35:41 +0100
-Date:   Thu, 4 Aug 2022 14:35:40 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-next@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH 2/3] cxl/region: describe targets and nr_targets members
- of cxl_region_params
-Message-ID: <20220804143540.000041c2@huawei.com>
-In-Reply-To: <20220804075448.98241-3-bagasdotme@gmail.com>
-References: <20220804075448.98241-1-bagasdotme@gmail.com>
-        <20220804075448.98241-3-bagasdotme@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Thu, 4 Aug 2022 09:37:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E191CFFA
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:36:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 87580344F1;
+        Thu,  4 Aug 2022 13:36:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1659620209; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yYZcEiL+RiDvPwAfOXSFsIqyOOAKdK4eqWC1xb4r4Xk=;
+        b=iMTQ2hCh/7WfVQaniQcB66scOEG7yOiTeChPhGwyMqc8MmUD85dOjkLkPJjgfk6jzBkGi1
+        Vr3c14MoCwa+mKLlIy9zmRzSA2HgMVVICfm1U2bkOr8xUvKgN739MfO7ejpAhmpaIJaUxh
+        M2r66avKHiuXv8U86nTnol4iDBu241Y=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 671C913434;
+        Thu,  4 Aug 2022 13:36:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RRrDFnHL62KCYAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 04 Aug 2022 13:36:49 +0000
+Date:   Thu, 4 Aug 2022 15:36:48 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <hansen.dave@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/hugetlb: add dedicated func to get 'allowed' nodemask
+ for current process
+Message-ID: <YuvLcBp34Ac6Pd7a@dhcp22.suse.cz>
+References: <YuuitMLOYqBcXMR3@dhcp22.suse.cz>
+ <20220804130342.63355-1-feng.tang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml731-chm.china.huawei.com (10.201.108.82) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220804130342.63355-1-feng.tang@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  4 Aug 2022 14:54:47 +0700
-Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+On Thu 04-08-22 21:03:42, Feng Tang wrote:
+> Muchun Song found that after MPOL_PREFERRED_MANY policy was introduced
+> in commit b27abaccf8e8 ("mm/mempolicy: add MPOL_PREFERRED_MANY for multiple preferred nodes")
+> [1], the policy_nodemask_current()'s semantics for this new policy
+> has been changed, which returns 'preferred' nodes instead of 'allowed'
+> nodes, and could hurt the usage of its caller in hugetlb:
+> allowed_mems_nr().
 
-> Sphinx reported undescribed parameters in cxl_region_params struct:
+The acutal user visible effect description is missing here. AFAIU it
+would be this.
+
+With the changed semantic of policy_nodemask_current a taks with
+MPOL_PREFERRED_MANY policy could fail to get its reservation even though
+it can fall back to other nodes (either defined by cpusets or all online
+nodes) for that reservation failing mmap calles unnecessarily early.
+
+The fix is to not consider MPOL_PREFERRED_MANY for reservations at all
+because they, unlike MPOL_MBIND, do not pose any actual hard constrain.
+
+You can keep the rest.
+> Michal found the policy_nodemask_current() is only used by hugetlb,
+> and suggested to move it to hugetlb code with more explicit name to
+> enforce the 'allowed' semantics for which only MPOL_BIND policy
+> matters.
 > 
-> ./drivers/cxl/cxl.h:376: warning: Function parameter or member 'targets' not described in 'cxl_region_params'
-> ./drivers/cxl/cxl.h:376: warning: Function parameter or member 'nr_targets' not described in 'cxl_region_params'
+> One note for the new policy_mbind_nodemask() is, the cross check
+> from MPOL_BIND, gfp flags and cpuset configuration can lead to
+> a no available node case, which is considered to be broken
+> configuration, and 'NULL' (equals all nodes) will be returned.
+
+This is neither important nor useful for this particular patch.
+
+> apply_policy_zone() is made extern to be called in hugetlb code
+> and its return value is changed to bool.
 > 
-> Describe these members.
-> 
-> Fixes: dd5ba0ebbdc414 ("cxl/region: Add a 'uuid' attribute")
-That seems unlikely to be right tag. Probably b9686e8c8e39
+> [1]. https://lore.kernel.org/lkml/20220801084207.39086-1-songmuchun@bytedance.com/t/
 
-With that tidied up.
+Fixes: b27abaccf8e8 ("mm/mempolicy: add MPOL_PREFERRED_MANY for multiple preferred nodes")
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+I do not think stable is really required.
 
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Reported-by: Muchun Song <songmuchun@bytedance.com>
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
+
+with that
+Acked-by: Michal Hocko <mhocko@suse.com>
+
+thanks!
 > ---
->  drivers/cxl/cxl.h | 2 ++
->  1 file changed, 2 insertions(+)
+>  include/linux/mempolicy.h | 13 +------------
+>  mm/hugetlb.c              | 24 ++++++++++++++++++++----
+>  mm/mempolicy.c            |  2 +-
+>  3 files changed, 22 insertions(+), 17 deletions(-)
 > 
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 75674400cc8d41..65aaf15aa17e29 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -362,6 +362,8 @@ enum cxl_config_state {
->   * @interleave_ways: number of endpoints in the region
->   * @interleave_granularity: capacity each endpoint contributes to a stripe
->   * @res: allocated iomem capacity for this region
-> + * @targets: active ordered targets in current decoder configuration
-> + * @nr_targets: number of targets
->   *
->   * State transitions are protected by the cxl_region_rwsem
->   */
+> diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
+> index 668389b4b53d..d232de7cdc56 100644
+> --- a/include/linux/mempolicy.h
+> +++ b/include/linux/mempolicy.h
+> @@ -151,13 +151,6 @@ extern bool mempolicy_in_oom_domain(struct task_struct *tsk,
+>  				const nodemask_t *mask);
+>  extern nodemask_t *policy_nodemask(gfp_t gfp, struct mempolicy *policy);
+>  
+> -static inline nodemask_t *policy_nodemask_current(gfp_t gfp)
+> -{
+> -	struct mempolicy *mpol = get_task_policy(current);
+> -
+> -	return policy_nodemask(gfp, mpol);
+> -}
+> -
+>  extern unsigned int mempolicy_slab_node(void);
+>  
+>  extern enum zone_type policy_zone;
+> @@ -189,6 +182,7 @@ static inline bool mpol_is_preferred_many(struct mempolicy *pol)
+>  	return  (pol->mode == MPOL_PREFERRED_MANY);
+>  }
+>  
+> +extern bool apply_policy_zone(struct mempolicy *policy, enum zone_type zone);
+>  
+>  #else
+>  
+> @@ -294,11 +288,6 @@ static inline void mpol_put_task_policy(struct task_struct *task)
+>  {
+>  }
+>  
+> -static inline nodemask_t *policy_nodemask_current(gfp_t gfp)
+> -{
+> -	return NULL;
+> -}
+> -
+>  static inline bool mpol_is_preferred_many(struct mempolicy *pol)
+>  {
+>  	return  false;
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index a18c071c294e..ad84bb85b6de 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -4330,18 +4330,34 @@ static int __init default_hugepagesz_setup(char *s)
+>  }
+>  __setup("default_hugepagesz=", default_hugepagesz_setup);
+>  
+> +static nodemask_t *policy_mbind_nodemask(gfp_t gfp)
+> +{
+> +#ifdef CONFIG_NUMA
+> +	struct mempolicy *mpol = get_task_policy(current);
+> +
+> +	/*
+> +	 * Only enforce MPOL_BIND policy which overlaps with cpuset policy
+> +	 * (from policy_nodemask) specifically for hugetlb case
+> +	 */
+> +	if (mpol->mode == MPOL_BIND &&
+> +		(apply_policy_zone(mpol, gfp_zone(gfp)) &&
+> +		 cpuset_nodemask_valid_mems_allowed(&mpol->nodes)))
+> +		return &mpol->nodes;
+> +#endif
+> +	return NULL;
+> +}
+> +
+>  static unsigned int allowed_mems_nr(struct hstate *h)
+>  {
+>  	int node;
+>  	unsigned int nr = 0;
+> -	nodemask_t *mpol_allowed;
+> +	nodemask_t *mbind_nodemask;
+>  	unsigned int *array = h->free_huge_pages_node;
+>  	gfp_t gfp_mask = htlb_alloc_mask(h);
+>  
+> -	mpol_allowed = policy_nodemask_current(gfp_mask);
+> -
+> +	mbind_nodemask = policy_mbind_nodemask(gfp_mask);
+>  	for_each_node_mask(node, cpuset_current_mems_allowed) {
+> -		if (!mpol_allowed || node_isset(node, *mpol_allowed))
+> +		if (!mbind_nodemask || node_isset(node, *mbind_nodemask))
+>  			nr += array[node];
+>  	}
+>  
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index d39b01fd52fe..9f15bc533601 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -1805,7 +1805,7 @@ bool vma_policy_mof(struct vm_area_struct *vma)
+>  	return pol->flags & MPOL_F_MOF;
+>  }
+>  
+> -static int apply_policy_zone(struct mempolicy *policy, enum zone_type zone)
+> +bool apply_policy_zone(struct mempolicy *policy, enum zone_type zone)
+>  {
+>  	enum zone_type dynamic_policy_zone = policy_zone;
+>  
+> -- 
+> 2.27.0
 
+-- 
+Michal Hocko
+SUSE Labs

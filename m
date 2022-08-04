@@ -2,124 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6D1589E11
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3C0589E1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240133AbiHDPC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
+        id S234617AbiHDPDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbiHDPC1 (ORCPT
+        with ESMTP id S231687AbiHDPDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:02:27 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4451EAE5
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:02:26 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id a8so6352837pjg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 08:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=/+Qu4SA+U5B19qotIneyUe7lEJqXtlaY9V1J6vW6hl0=;
-        b=OYcFFrRtycrYUKktAjeEsW1kLlLOtu0wXntfNIQmIpeMcZcpfNVtlxuOWAtptenSKi
-         MeqWNoSX06S1Po1tn26CkikmWJpvX/NhsGelThRkHwNOiduJkoE3nMa2rswoJRamVSXs
-         +/Q1/BzRovfs/vlWWEbZaVgLiCnGcfn9TTk9+Gq5nAZEKQr4g6VfjN1Sj5KdZSLXX2uJ
-         PdqtiDjB822mcSa0/R8dckWnd0Q11xJzOk71ZuufRyQH/OaW3qZIYk9ZbTZSxcgt823i
-         cGTIo/3lA8ri/EDTT3U30XxL1NXNpwHKIeEP3GCPZHfe2dRF1MKAJy/MReXePcYH7xDJ
-         2rFQ==
+        Thu, 4 Aug 2022 11:03:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 023245142C
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659625387;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pekLGGTwGU134kB3IB43TJmHr3pL+ZOzWfhqhMa54MU=;
+        b=Nli4dPZJ5Lao3yQu51XIMf2TEf/jx4S8wZLfpvwhRcXTus/myWQ4VZhysU4MxLMDfAvNOb
+        F20YgKGXqmeefIgDOKaCB+jWTa6tJcS/9hQ+sgAqkgIlfcGTzS9CeNppi377U5CK6yYt5A
+        0UBEPDpXiM/CMty0K8tgbrU2uj1rMAw=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-452-Bji1SXFpMz2v8r-2KkZFnQ-1; Thu, 04 Aug 2022 11:03:03 -0400
+X-MC-Unique: Bji1SXFpMz2v8r-2KkZFnQ-1
+Received: by mail-qv1-f69.google.com with SMTP id p13-20020ad45f4d000000b0044399a9bb4cso12004585qvg.15
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 08:03:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=/+Qu4SA+U5B19qotIneyUe7lEJqXtlaY9V1J6vW6hl0=;
-        b=Dy0P/RQOM/0U9+qxp1UNjsqzmZAqIfx+R55axlg56Yetlpr1qG/glJkzbYKmxsY2KM
-         uxfOYSYKL0V70tiS+hLjNTDhRyP0Y9ObuD1CGeyJ1cZEGmoWkrBJbeWZzoBpZzaaoGIB
-         RyrIv6pG0jqYnXSWTysBJxygEh+S0qpIh32v2cgqj0cpzMF1rEvGYYTZI5strgLvNZw1
-         tXu0ecvmcvJ5B5zov/w6P74a1zmh+8jqIrYTQJ7XQDoDZUZhpdPcaKbylfPnYki/uJ0f
-         kagod5ZjwHvuLO8xPtY84paFGrUSas3UssPk4ifEwMRWi8cVcn6SCxXgtRYQXJMhKbiQ
-         jO3g==
-X-Gm-Message-State: ACgBeo3ELbSF1CM3jDF+XDyNVrTWDUJYCOMXCiRE+UMuatTNxrsrrRc7
-        CmndupHNjRqG0aZMnv5mXXN4a34CJ0oTKQ==
-X-Google-Smtp-Source: AA6agR4MChB8vbuAqSp7lVDmPN3qP8fuuYpPFNg5PLTQgTPMCRw1qtbT1WJkSXuP3OjIl+IBsp47YQ==
-X-Received: by 2002:a17:903:2685:b0:16e:da0a:9d8 with SMTP id jf5-20020a170903268500b0016eda0a09d8mr2305106plb.42.1659625345968;
-        Thu, 04 Aug 2022 08:02:25 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h10-20020aa796ca000000b0052d1275a570sm1114348pfq.64.2022.08.04.08.02.25
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pekLGGTwGU134kB3IB43TJmHr3pL+ZOzWfhqhMa54MU=;
+        b=J0asbNE4CmFmjHm7zvQOJBwF2rBGLrmK0Rk997j6boTjxB+SS2yZ7MX9Mkdxx8eync
+         f9FKSUqk+L79JpBdPXdBUqI9AtUEKqwcTohj2/zNUQsFcHAC+uFyJWbofGoEZlsCnX53
+         VR2+fnjzyQp6QXWtt7AkZpwz7iseT93QqU5JXTgjoH1ZeH9Zj3WPi5+4Ob5ZihM1W0wL
+         slK3Ec6ylGl7xBm3uN7E+YDNP7AYq0pHNLRWS7Hn1kr87JIoOjuXvdQeTLSnGaeGCYDO
+         jKIng1cZTVvNcnIEEnmFvno+emy1eJU5isbtX5tvMztbpn5+tTNPWHzuLddfC3Vv9YVo
+         bwfA==
+X-Gm-Message-State: ACgBeo361HGRmfZQ6S3b0xLiEnHseejFiabNE1Y3lJYht3dJpSR7jJOG
+        H/ofmV/fTNgc+e07BHlekX3J5U5O+C/Ph2aJAobyai04/zGAtTOvDAUhHA78jIlNVq16iFMbgEz
+        5zHXrKTNDp6w+omRMEarDvRFo
+X-Received: by 2002:a05:620a:4154:b0:6b6:145:6c28 with SMTP id k20-20020a05620a415400b006b601456c28mr1624631qko.573.1659625381900;
+        Thu, 04 Aug 2022 08:03:01 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4SnRw3zx1frfS9MHDCpUTfs75xGTCUxzJocWdjVHyndB+Ww02uUX4aInm8ap5i4tebIDZbDg==
+X-Received: by 2002:a05:620a:4154:b0:6b6:145:6c28 with SMTP id k20-20020a05620a415400b006b601456c28mr1624591qko.573.1659625381443;
+        Thu, 04 Aug 2022 08:03:01 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id u13-20020a37ab0d000000b006b90c318dfdsm491961qke.88.2022.08.04.08.02.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 08:02:25 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 15:02:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
-        joro@8bytes.org, wanpengli@tencent.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: X86: Explicitly set the 'fault.async_page_fault'
- value in kvm_fixup_and_inject_pf_error().
-Message-ID: <YuvffeDKpwL6y+R6@google.com>
-References: <20220718074756.53788-1-yu.c.zhang@linux.intel.com>
- <Ytb/le8ymDSyx8oJ@google.com>
- <20220721092214.tohdta5ewba556th@linux.intel.com>
- <20220804031436.scozztchwd6iqxbv@linux.intel.com>
+        Thu, 04 Aug 2022 08:03:00 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 11:02:59 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        syzbot <syzbot+824e71311e757a9689ff@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, songmuchun@bytedance.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [syzbot] WARNING in hugetlb_change_protection
+Message-ID: <Yuvfox48yeQxQVmm@xz-m1.local>
+References: <000000000000098a0105e557f130@google.com>
+ <YuqqLfu1E62PqnKS@monkey>
+ <YuriiFpv/enJW1oE@xz-m1.local>
+ <CACT4Y+ZpLmRLouc+q0vMskPQ0-d5LKKwCoKw-twZ8E9W0vqETg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220804031436.scozztchwd6iqxbv@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CACT4Y+ZpLmRLouc+q0vMskPQ0-d5LKKwCoKw-twZ8E9W0vqETg@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022, Yu Zhang wrote:
-> On Thu, Jul 21, 2022 at 05:22:14PM +0800, Yu Zhang wrote:
-> > On Tue, Jul 19, 2022 at 07:01:41PM +0000, Sean Christopherson wrote:
-> > > On Mon, Jul 18, 2022, Yu Zhang wrote:
-> > > > kvm_fixup_and_inject_pf_error() was introduced to fixup the error code(
-> > > > e.g., to add RSVD flag) and inject the #PF to the guest, when guest
-> > > > MAXPHYADDR is smaller than the host one.
-> > > > 
-> > > > When it comes to nested, L0 is expected to intercept and fix up the #PF
-> > > > and then inject to L2 directly if
-> > > > - L2.MAXPHYADDR < L0.MAXPHYADDR and
-> > > > - L1 has no intention to intercept L2's #PF (e.g., L2 and L1 have the
-> > > >   same MAXPHYADDR value && L1 is using EPT for L2),
-> > > > instead of constructing a #PF VM Exit to L1. Currently, with PFEC_MASK
-> > > > and PFEC_MATCH both set to 0 in vmcs02, the interception and injection
-> > > > may happen on all L2 #PFs.
-> > > > 
-> > > > However, failing to initialize 'fault' in kvm_fixup_and_inject_pf_error()
-> > > > may cause the fault.async_page_fault being NOT zeroed, and later the #PF
-> > > > being treated as a nested async page fault, and then being injected to L1.
-> > > > Instead of zeroing 'fault' at the beginning of this function, we mannually
-> > > > set the value of 'fault.async_page_fault', because false is the value we
-> > > > really expect.
-> > > > 
-> > > > Fixes: 897861479c064 ("KVM: x86: Add helper functions for illegal GPA checking and page fault injection")
-> > > > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216178
-> > > > Reported-by: Yang Lixiao <lixiao.yang@intel.com>
-> > > > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > > 
-> > > No need for my SoB, I was just providing feedback.  Other than that, 
-> > > 
-> > Thanks! It's a very detailed suggestion. :)
-> > 
-> > > Reviewed-by: Sean Christopherson <seanjc@google.com>
-> > > 
-> > 
-> > @Paolo Any comment on this fix, and on the test case change(https://www.spinics.net/lists/kvm/msg283600.html)? Thanks!
-> > 
-> > B.R.
-> > Yu
+On Thu, Aug 04, 2022 at 07:29:56AM +0200, Dmitry Vyukov wrote:
+> ,On Wed, 3 Aug 2022 at 23:03, Peter Xu <peterx@redhat.com> wrote:
+> >
+> > Hi, Mike,
+> >
+> > Thanks for forwarding.
+> >
+> > On Wed, Aug 03, 2022 at 10:02:37AM -0700, Mike Kravetz wrote:
+> > > I'll start looking at this, but adding Peter this may be related to his
+> > > recent changes.
+> > > --
+> > > Mike Kravetz
+> > >
+> > > On 08/03/22 08:32, syzbot wrote:
+> > > > Hello,
+> > > >
+> > > > syzbot found the following issue on:
+> > > >
+> > > > HEAD commit:    e65c6a46df94 Merge tag 'drm-fixes-2022-07-30' of git://ano..
+> > > > git tree:       upstream
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=139cc282080000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=26034e6fe0075dad
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=824e71311e757a9689ff
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > userspace arch: i386
+> > > >
+> > > > Unfortunately, I don't have any reproducer for this issue yet.
+> > > >
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+824e71311e757a9689ff@syzkaller.appspotmail.com
+> > > >
+> > > > ------------[ cut here ]------------
+> > > > WARNING: CPU: 1 PID: 28745 at include/linux/swapops.h:319 make_pte_marker_entry include/linux/swapops.h:319 [inline]
+> >
+> > This is the warning code I added to make sure pte marker won't be created
+> > if not configured at all:
+> >
+> > static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
+> > {
+> >         /* This should never be called if !CONFIG_PTE_MARKER */
+> >         WARN_ON_ONCE(1);
+> >         return swp_entry(0, 0);
+> > }
+> >
+> > The stack below comes from a UFFDIO_WRITEPROTECT, however logically it
+> > shouldn't really reach there - if with !PTE_MARKER then it must be with
+> > !PTE_MARKER_UFFD_WP, then we should have returned "false" if hugetlb wanted
+> > to register with uffd-wp:
+> >
+> > static inline bool vma_can_userfault(struct vm_area_struct *vma,
+> >                                      unsigned long vm_flags)
+> > {
+> >         if (vm_flags & VM_UFFD_MINOR)
+> >                 return is_vm_hugetlb_page(vma) || vma_is_shmem(vma);
+> >
+> > #ifndef CONFIG_PTE_MARKER_UFFD_WP
+> >         /*
+> >          * If user requested uffd-wp but not enabled pte markers for
+> >          * uffd-wp, then shmem & hugetlbfs are not supported but only
+> >          * anonymous.
+> >          */
+> >         if ((vm_flags & VM_UFFD_WP) && !vma_is_anonymous(vma))
+> >                 return false;
+> > #endif
+> >         return vma_is_anonymous(vma) || is_vm_hugetlb_page(vma) ||
+> >             vma_is_shmem(vma);
+> > }
+> >
+> > Then the UFFDIO_WRITEPROTECT should have failed already.. at:
+> >
+> >         if (!userfaultfd_wp(dst_vma))
+> >                 goto out_unlock;
+> >
+> > in mwriteprotect_range().
+> >
+> > I still have no idea how the bot managed to trigger a real wr-protect upon
+> > this vma (which I don't think should have registered with uffd-wp but maybe
+> > it can be worked around somehow..).  However to make this even safer we can
+> > also guard the pte marker callers with CONFIG_PTE_MARKER_UFFD_WP. Patch
+> > attached for that, but since this seems to have no reproducer yet maybe no
+> > easy way to verify it.
+> >
+> > At the meantime, I'd also like to double check the kernel config to make
+> > sure CONFIG_PTE_MARKER_UFFD_WP will always be unset when CONFIG_PTE_MARKER=n.
+> > Anyone knows where I can fetch the config somewhere?
 > 
-> Ping... Or should I send another version? Thanks!
+> Hi Peter,
+> 
+> If you mean the kernel config for the kernel that produces the
+> WARNING, it's in the report above under the "kernel config" link.
 
-Shouldn't need to send a new version.
+Thanks Dmitry. That was a stupid question and Mike helped me to figure it
+out..  Somehow I had an impression that config was normally attached to the
+end of the email so I didn't try looking upwards. :(
 
-Paolo, can you grab this for 6.0-rc1?
+> 
+> Note that so far it was triggered only once:
+> https://syzkaller.appspot.com/bug?extid=824e71311e757a9689ff
+> which may suggest a very narrow race condition.
+
+I found that the config is as expected (PTE_MARKER_UFFD_WP not defined), so
+far I still don't know how the race has happened, so maybe the patch
+attachd can at least help avoid the warning.  It'll be interesting to know
+the race if hopefully it can have a reproducer somehow.
+
+Thanks,
+
+-- 
+Peter Xu
+

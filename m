@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C7A589880
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CBC58987E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239190AbiHDHhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
+        id S239157AbiHDHhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239105AbiHDHhd (ORCPT
+        with ESMTP id S239124AbiHDHha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:37:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA20A5FAED;
-        Thu,  4 Aug 2022 00:37:31 -0700 (PDT)
+        Thu, 4 Aug 2022 03:37:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2B856BBD
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:37:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B947B824A8;
-        Thu,  4 Aug 2022 07:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BCDC433D6;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFF72610F4
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 07:37:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21972C433B5;
         Thu,  4 Aug 2022 07:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1659598649;
-        bh=WCCCi7+K04HSk34cpQtOannRRuatd2BnFuBrKl96JQY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=iXEh8yK5mnllftkRpyNpPnBhdIyexLOhqftRLlEu/JYtYLlQ9oXjqiBFbB/bAQfZZ
-         kmQjCEoNtgTu+dhzCVc703jzve/2M8cRaK5XqCp29U7dE6UvAkQNAmTzVQDsB2yCfQ
-         zSCeXWbfTQWVwUL2RNDbHqUcPcwcAQDuFumSbisxy37/At0lpMv3S44RnUO1hTlhkE
-         ZiHCcc1VNRr6/ND7llMF1nub3mDzfoqsjMKpM8gHwBlJktsvtlKxK/EcR0KT6pxJyC
-         6e6DLggeDRkgkpWRQQBq6AnlcoN+cYyui4IRe9fe31jzo/XHoTX5xFum2LrmG9Jnfm
-         6TS/PGXgw7jGw==
+        bh=/u32o8/KhC8mWHjp/YPgOef2++CtnNOIZCAj3beykhU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=q2PNOEbOtnqWyJKxqsZ8mPMlhHa9u7TL3dsAmt5gUEEA3+5tuLeCCPeU0Qw3dj86B
+         crzF7qU8SCzFq5nlTEHCfF62Ws6Ba7c0Vi84Ai9NdrEjEqzPWbqbtTSVvmnubcJfO2
+         cA7jfEes7ZFpuqR/Hf9/g3G9rbt8ydKGulY3iVw8K9U6ahp3Pl0vYDL+Dt5fNKcxj4
+         Pk0ANd4aNWHuYhL4wNUB2+e14/5It3Z9RpXI/w61EGshbAh3xcYQJ9Fo2o/SSiglAU
+         2ffhmVfwUmMc/QUuHZlEf1ZKkXvh2b0fCL6ikvF5WJIQbgpTweF6+z3iQdSkq5oFoK
+         U6LMQSX+jI17w==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1oJVQ6-0017HL-L8;
+        id 1oJVQ6-0017HO-NR;
         Thu, 04 Aug 2022 09:37:26 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
         Andi Shyti <andi.shyti@linux.intel.com>,
         Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Chris Wilson <chris.p.wilson@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Michael Cheng <michael.cheng@intel.com>,
+        Ramalingam C <ramalingam.c@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
         dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/3] Move TLB invalidation code for its own  file and document it
-Date:   Thu,  4 Aug 2022 09:37:21 +0200
-Message-Id: <cover.1659598090.git.mchehab@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/3] drm/i915: pass a pointer for tlb seqno at vma_invalidate_tlb()
+Date:   Thu,  4 Aug 2022 09:37:22 +0200
+Message-Id: <f9550e6bacea10131ff40dd8981b69eb9251cdcd.1659598090.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <cover.1659598090.git.mchehab@kernel.org>
+References: <cover.1659598090.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -65,56 +75,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are more things to be added to TLB invalidation. Before doing that,
-move the code to its own file, and add the relevant documentation.
+WRITE_ONCE() should happen at the original var, not on a local
+copy of it.
 
-Patch 1 fixes vma_invalidate_tlb() logic to make it update the right var;
-
-Patch 2 only moves the code and do some function renames. No functional
-change;
-
-Patch 3 adds documentation for the TLB invalidation algorithm and functions.
-
+Fixes: 5d36acb7198b ("drm/i915/gt: Batch TLB invalidations")
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
-v3: 
-  - Added a fix for an issue from the last TLB patch series;
-  - included a better description about the changes on patch 2;
-  - did some minor fixes at kernel-doc markups;
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH v3 0/3] at: https://lore.kernel.org/all/cover.1659598090.git.mchehab@kernel.org/
 
-v2: only patch 2 (kernel-doc) was modified:
+ drivers/gpu/drm/i915/gt/intel_ppgtt.c | 2 +-
+ drivers/gpu/drm/i915/i915_vma.c       | 6 +++---
+ drivers/gpu/drm/i915/i915_vma.h       | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-  - The kernel-doc markups for TLB were added to i915.rst doc;
-  - Some minor fixes at the texts;
-  - Use a table instead of a literal block while explaining how the algorithm works.
-    That should make easier to understand the logic, both in text form and after
-    its conversion to HTML/PDF;
-  - Remove mention for GuC, as this depends on a series that will be sent later.
-
-
-
-Chris Wilson (1):
-  drm/i915/gt: Move TLB invalidation to its own file
-
-Mauro Carvalho Chehab (2):
-  drm/i915: pass a pointer for tlb seqno at vma_invalidate_tlb()
-  drm/i915/gt: document TLB cache invalidation functions
-
- Documentation/gpu/i915.rst                |   7 +
- drivers/gpu/drm/i915/Makefile             |   1 +
- drivers/gpu/drm/i915/gem/i915_gem_pages.c |   4 +-
- drivers/gpu/drm/i915/gt/intel_gt.c        | 168 +----------------
- drivers/gpu/drm/i915/gt/intel_gt.h        |  12 --
- drivers/gpu/drm/i915/gt/intel_ppgtt.c     |   2 +-
- drivers/gpu/drm/i915/gt/intel_tlb.c       | 208 ++++++++++++++++++++++
- drivers/gpu/drm/i915/gt/intel_tlb.h       | 128 +++++++++++++
- drivers/gpu/drm/i915/i915_vma.c           |   7 +-
- drivers/gpu/drm/i915/i915_vma.h           |   2 +-
- 10 files changed, 355 insertions(+), 184 deletions(-)
- create mode 100644 drivers/gpu/drm/i915/gt/intel_tlb.c
- create mode 100644 drivers/gpu/drm/i915/gt/intel_tlb.h
-
+diff --git a/drivers/gpu/drm/i915/gt/intel_ppgtt.c b/drivers/gpu/drm/i915/gt/intel_ppgtt.c
+index 2da6c82a8bd2..6ee8d1127016 100644
+--- a/drivers/gpu/drm/i915/gt/intel_ppgtt.c
++++ b/drivers/gpu/drm/i915/gt/intel_ppgtt.c
+@@ -211,7 +211,7 @@ void ppgtt_unbind_vma(struct i915_address_space *vm,
+ 
+ 	vm->clear_range(vm, vma_res->start, vma_res->vma_size);
+ 	if (vma_res->tlb)
+-		vma_invalidate_tlb(vm, *vma_res->tlb);
++		vma_invalidate_tlb(vm, vma_res->tlb);
+ }
+ 
+ static unsigned long pd_count(u64 size, int shift)
+diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
+index 84a9ccbc5fc5..260371716490 100644
+--- a/drivers/gpu/drm/i915/i915_vma.c
++++ b/drivers/gpu/drm/i915/i915_vma.c
+@@ -1308,7 +1308,7 @@ I915_SELFTEST_EXPORT int i915_vma_get_pages(struct i915_vma *vma)
+ 	return err;
+ }
+ 
+-void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb)
++void vma_invalidate_tlb(struct i915_address_space *vm, u32 *tlb)
+ {
+ 	/*
+ 	 * Before we release the pages that were bound by this vma, we
+@@ -1318,7 +1318,7 @@ void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb)
+ 	 * the most recent TLB invalidation seqno, and if we have not yet
+ 	 * flushed the TLBs upon release, perform a full invalidation.
+ 	 */
+-	WRITE_ONCE(tlb, intel_gt_next_invalidate_tlb_full(vm->gt));
++	WRITE_ONCE(*tlb, intel_gt_next_invalidate_tlb_full(vm->gt));
+ }
+ 
+ static void __vma_put_pages(struct i915_vma *vma, unsigned int count)
+@@ -1971,7 +1971,7 @@ struct dma_fence *__i915_vma_evict(struct i915_vma *vma, bool async)
+ 			dma_fence_put(unbind_fence);
+ 			unbind_fence = NULL;
+ 		}
+-		vma_invalidate_tlb(vma->vm, vma->obj->mm.tlb);
++		vma_invalidate_tlb(vma->vm, &vma->obj->mm.tlb);
+ 	}
+ 
+ 	/*
+diff --git a/drivers/gpu/drm/i915/i915_vma.h b/drivers/gpu/drm/i915/i915_vma.h
+index 5048eed536da..33a58f605d75 100644
+--- a/drivers/gpu/drm/i915/i915_vma.h
++++ b/drivers/gpu/drm/i915/i915_vma.h
+@@ -213,7 +213,7 @@ bool i915_vma_misplaced(const struct i915_vma *vma,
+ 			u64 size, u64 alignment, u64 flags);
+ void __i915_vma_set_map_and_fenceable(struct i915_vma *vma);
+ void i915_vma_revoke_mmap(struct i915_vma *vma);
+-void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb);
++void vma_invalidate_tlb(struct i915_address_space *vm, u32 *tlb);
+ struct dma_fence *__i915_vma_evict(struct i915_vma *vma, bool async);
+ int __i915_vma_unbind(struct i915_vma *vma);
+ int __must_check i915_vma_unbind(struct i915_vma *vma);
 -- 
 2.37.1
-
 

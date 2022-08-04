@@ -2,72 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D225589555
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F1D589559
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238699AbiHDA3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 20:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
+        id S238702AbiHDAaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 20:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238499AbiHDA26 (ORCPT
+        with ESMTP id S237226AbiHDAaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 20:28:58 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891DB59277
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:28:56 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id d7so13485064pgc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 17:28:56 -0700 (PDT)
+        Wed, 3 Aug 2022 20:30:06 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CBC57231
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:30:05 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id i7so14130581qvr.8
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 17:30:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc;
-        bh=tO+wsGhSIZsG6c5Z1F7KUZCWEiBIeM5DSp57+76HAlQ=;
-        b=XZA0eFnsUfz5rWb15WLff/IXlvW/hjpuRAikCDaV56k9OIuNq8mTZsqY8zpKJExSXU
-         GZ4hPwqBWwRQyOfjyd+pzpNaLvIPr/rNqlZ0gZBQOgmqyrpjNPe+QQ9NG1Not+QUGuw8
-         XHjeRwTY2974E8cL6MkjWVXxHCeJwTFX3AuQD/G5s3m8Cnd5P6Jzubz2okXuWnnzOW12
-         X2KkZrr7ka5cORr1zQAH4FsdxlzMTPoudqLzYyZ21ueabdqXL8KH/Px+4tYCQwlWqjR1
-         F46+6RDZaIdhD38h5CRh1VrEHVclpJVqrxzNd/UJt/tbmg8muNuychEPOfV0trI5oP0l
-         Gj3w==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m6XkC9SsYbws11fU/lKUsxSKL8HIjijhC5ukFJOVAg0=;
+        b=lxEIIB2x2iibG4PBjXLIXWtMcmcGyMl4ihpwyUY7PqULj9eFbsANj8sp9BO+MIUc8m
+         zgNMHvRyeehg1eLXEKH5zHrm09x2KfCSBSu6bQ61eEnE7/U8ZFIDtE1DBHsg89oyx8Xi
+         TzUM3+OD77maP7r32Y/hBG7zSRhgSIYYBeLg9HrW+kyLW+hNXP7nZNBWp/2n1zhfso8F
+         1xMgQDUNo4e32+zlSmzj1CyN7BCj/a/ucsdHY4YiGVIc5X0eHj8/l1dm4sVUjbwNn/g1
+         bdg8VkTe1CITpGeKNCaNEXdPGxxj/gQnFejEErFBpDXIlSYDeEqCFDviYLvbd692DIio
+         Hz4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc;
-        bh=tO+wsGhSIZsG6c5Z1F7KUZCWEiBIeM5DSp57+76HAlQ=;
-        b=K2lQx/w6ypY/258qAtdKZAHvl8WzhZWkZuWgWy2ulJ2tPpp6azsDwHpHJ4Ia9/9aZv
-         BHs0jW0qibYVAhxFnxmVZI21tsZXlw4MPINsMCCZUx+rk52VTuAWzx2TxTKxI7tX85lz
-         lupJPZRvOLlS7enYZJaZzkDyWdLXUgii5nLVIAr5euMTEHzPBvtw4DjP7Ym1DjPoKdsY
-         /9V1F5z77oFyqTRV0svD1RPgvuwTjTyH7C/La9V8vjFHZ03pR5I2zQ/05fagKks7DePf
-         42cqame/3JmbZ72TbxB9jdOxkUeVWzxgG/KMp/31cdPeXUqg161bFPX+nj6LHtsyZ6VE
-         6crw==
-X-Gm-Message-State: AJIora+vRBh8wsnHVAOkpI7szFoVtV/be/Ca3w+j6k3fY3IQPkUg9IYW
-        M6f6yvxHWhkHhUyngRrrnR200w==
-X-Google-Smtp-Source: AGRyM1s0DV1sadB+/WiUHXwXBFAI4nR8qQ286Fi+9cysQML65r1WIlsN0IhL/DJe+frrhzM7J9NOdQ==
-X-Received: by 2002:a63:1b13:0:b0:41a:6481:56e0 with SMTP id b19-20020a631b13000000b0041a648156e0mr22946113pgb.5.1659572935803;
-        Wed, 03 Aug 2022 17:28:55 -0700 (PDT)
-Received: from localhost ([50.221.140.186])
-        by smtp.gmail.com with ESMTPSA id y18-20020a17090322d200b0016892555955sm2594114plg.179.2022.08.03.17.28.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 17:28:55 -0700 (PDT)
-Date:   Wed, 03 Aug 2022 17:28:55 -0700 (PDT)
-X-Google-Original-Date: Wed, 03 Aug 2022 17:28:53 PDT (-0700)
-Subject:     Re: [PATCH v7 4/4] riscv: implement cache-management errata for T-Head SoCs
-In-Reply-To: <20220706231536.2041855-5-heiko@sntech.de>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu, Christoph Hellwig <hch@lst.de>,
-        samuel@sholland.org, atishp@atishpatra.org, anup@brainfault.org,
-        mick@ics.forth.gr, robh+dt@kernel.org, krzk+dt@kernel.org,
-        devicetree@vger.kernel.org, drew@beagleboard.org,
-        rdunlap@infradead.org, heiko@sntech.de
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     heiko@sntech.de
-Message-ID: <mhng-d90c67dc-ace1-4413-9010-f9f26c60d3da@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m6XkC9SsYbws11fU/lKUsxSKL8HIjijhC5ukFJOVAg0=;
+        b=cHpyVwz3WqYSopH0F+q1UWhOGtedjTIQ1OmOnTj0eYJzkg9y7PSq4zYSnoPnOc0djo
+         JXvA6NKJtcHem50sifqsOQhnq0s84HpRdHwYnKHYZMfVKTFEFeKk8VqWAVOszsHHYzMo
+         heD3RkFxCqqjcGqjelCKCvSrd4vu5lR5F0BKD3y083LMuRgqBbkRHU1+Xw9Rvfv2jlgp
+         nktHBWcfEswLvNKle9feHnrvUIsUBlJn2SZMcNF7BP7sRwd91LWSzUbkhJ3WEpo7z8g6
+         ZivzJhefe6uAHGLkCg/UJ+eEFkEFlsIg23gNblIrD7OI+jx4CyRc9Le7MtJ0Bo/lkr5u
+         l33g==
+X-Gm-Message-State: ACgBeo1yOLFvb+AJuGIlJ/hwzNPFm0pt+I/EMFJNd6kL5uk77o649Uxu
+        +9I0wASX7qXdhReYFWzxXxIiQjMaCkY8M5QzY1zXLQ==
+X-Google-Smtp-Source: AA6agR6lahu4GM/VNiA4RD1/ceM/yj+jVGPjA2YZnH7aavqPzYhk9txYF8tPePFZuNAGK+/RFKNZQettinIlm70U8Dw=
+X-Received: by 2002:a0c:b31a:0:b0:473:8062:b1b4 with SMTP id
+ s26-20020a0cb31a000000b004738062b1b4mr24728083qve.85.1659573004159; Wed, 03
+ Aug 2022 17:30:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220722174829.3422466-1-yosryahmed@google.com>
+ <20220722174829.3422466-5-yosryahmed@google.com> <CAEf4BzbD38XFVxMy5crO-=+Xg7U3Vc_fB4Ntug4BEbmdLpvuDQ@mail.gmail.com>
+ <CA+khW7jftQikVsc8moM6rNRqBerUHDM6WRDjb33exdbogDc7aQ@mail.gmail.com>
+ <CAEf4BzYDqaTQr-S8TuLkysQ+FhT+6qMS0z=Sp_7+-wk84_4h6Q@mail.gmail.com>
+ <CA+khW7jDD9p80xnZj0Z3m5oFHjb2u___NAiJkbyRgD5FKopGhg@mail.gmail.com> <CAEf4BzZhy49KLe5VG4aXZtWBExADskgA__MzhC+6k3DVgU5o5w@mail.gmail.com>
+In-Reply-To: <CAEf4BzZhy49KLe5VG4aXZtWBExADskgA__MzhC+6k3DVgU5o5w@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Wed, 3 Aug 2022 17:29:53 -0700
+Message-ID: <CA+khW7ggTFp8je0zwo83uGN8pKZXy+D07y+tPRRAXmY+e3pm-g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/8] bpf: Introduce cgroup iter
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org,
+        Kui-Feng Lee <kuifeng@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,170 +91,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 06 Jul 2022 16:15:36 PDT (-0700), heiko@sntech.de wrote:
-> The T-Head C906 and C910 implement a scheme for handling
-> cache operations different from the generic Zicbom extension.
+On Wed, Aug 3, 2022 at 1:40 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> Add an errata for it next to the generic dma coherency ops.
+> On Wed, Aug 3, 2022 at 1:30 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > On Tue, Aug 2, 2022 at 3:50 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Tue, Aug 2, 2022 at 3:27 PM Hao Luo <haoluo@google.com> wrote:
+> > > >
+> > > > On Mon, Aug 1, 2022 at 8:43 PM Andrii Nakryiko
+> > > > <andrii.nakryiko@gmail.com> wrote:
+> > > > >
+> > > > > On Fri, Jul 22, 2022 at 10:48 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+[...]
+> > > > > > +};
+> > > > > > +
+> > > > > >  union bpf_iter_link_info {
+> > > > > >         struct {
+> > > > > >                 __u32   map_fd;
+> > > > > >         } map;
+> > > > > > +
+> > > > > > +       /* cgroup_iter walks either the live descendants of a cgroup subtree, or the
+> > > > > > +        * ancestors of a given cgroup.
+> > > > > > +        */
+> > > > > > +       struct {
+> > > > > > +               /* Cgroup file descriptor. This is root of the subtree if walking
+> > > > > > +                * descendants; it's the starting cgroup if walking the ancestors.
+> > > > > > +                * If it is left 0, the traversal starts from the default cgroup v2
+> > > > > > +                * root. For walking v1 hierarchy, one should always explicitly
+> > > > > > +                * specify the cgroup_fd.
+> > > > > > +                */
+> > > > > > +               __u32   cgroup_fd;
+> > > > >
+> > > > > Now, similar to what I argued in regard of pidfd vs pid, I think the
+> > > > > same applied to cgroup_fd vs cgroup_id. Why can't we support both?
+> > > > > cgroup_fd has some benefits, but cgroup_id is nice due to simplicity
+> > > > > and not having to open/close/keep extra FDs (which can add up if we
+> > > > > want to periodically query something about a large set of cgroups).
+> > > > > Please see my arguments from [0] above.
+> > > > >
+> > > > > Thoughts?
+> > > > >
+> > > >
+> > > > We can support both, it's a good idea IMO. But what exactly is the
+> > > > interface going to look like? Can you be more specific about that?
+> > > > Below is something I tried based on your description.
+> > > >
+> > > > @@ -91,6 +91,18 @@ union bpf_iter_link_info {
+> > > >         struct {
+> > > >                 __u32   map_fd;
+> > > >         } map;
+> > > > +       struct {
+> > > > +               /* PRE/POST/UP/SELF */
+> > > > +               __u32 order;
+> > > > +               struct {
+> > > > +                       __u32 cgroup_fd;
+> > > > +                       __u64 cgroup_id;
+> > > > +               } cgroup;
+> > > > +               struct {
+> > > > +                       __u32 pid_fd;
+> > > > +                       __u64 pid;
+> > > > +               } task;
+> > > > +       };
+> > > >  };
+> > > >
+> > >
+> > > So I wouldn't combine task and cgroup definition together, let's keep
+> > > them independent.
+> > >
+> > > then for cgroup we can do something like:
+> > >
+> > > struct {
+> > >     __u32 order;
+> > >     __u32 cgroup_fd; /* cgroup_fd ^ cgroup_id, exactly one can be non-zero */
+> > >     __u32 cgroup_id;
+> > > } cgroup
+> > >
+> > > Similar idea with task, but it's a bit more complicated because there
+> > > we have target that can be pid, pidfd, or cgroup (cgroup_fd and
+> > > cgroup_id). I haven't put much thought into the best representation,
+> > > though.
+> > >
+> >
+> > The cgroup part sounds good to me. For the full picture, how about
+> > this? I'm just trying  a prototype, hoping that it can help people to
+> > get a clear picture.
+> >
+> > union bpf_iter_link_info {
+> >           struct {
+> >                   __u32   map_fd;
+> >           } map;
+> >           struct {
+> >                   __u32   order; /* PRE/POST/UP/SELF */
+> >                   __u32   cgroup_fd;
+> >                   __u64   cgroup_id;
+> >           } cgroup;
 >
-> Reviewed-by: Samuel Holland <samuel@sholland.org>
-> Tested-by: Samuel Holland <samuel@sholland.org>
-> Reviewed-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/Kconfig.erratas           | 11 +++++++
->  arch/riscv/errata/thead/errata.c     | 20 ++++++++++++
->  arch/riscv/include/asm/errata_list.h | 48 +++++++++++++++++++++++++---
->  3 files changed, 74 insertions(+), 5 deletions(-)
+> lgtm
 >
-> diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-> index 457ac72c9b36..3223e533fd87 100644
-> --- a/arch/riscv/Kconfig.erratas
-> +++ b/arch/riscv/Kconfig.erratas
-> @@ -55,4 +55,15 @@ config ERRATA_THEAD_PBMT
+> >           struct {
+> >                   __u32   pid;
+> >                   __u32   pid_fd;
+> >                   __u64   cgroup_id;
+> >                   __u32   cgroup_fd;
+> >                   __u32   mode; /* SELF or others */
 >
->  	  If you don't know what to do here, say "Y".
+> I'd move mode to be first. I'm undecided on using 4 separate fields
+> for pid/pid_fd/cgroup_{id,fd} vs a single union (or just generic "u64
+> target"  and then mode can define how we should treat target --
+> whether it's pid, pid_fd, cgroup ID or FD. I'm fine either way, I
+> think. But for cgroup case not having to duplicate PRE/POST/UP/SELF
+> for cgroup id and then for cgroup fd seems like a win. So separate
+> fields might be better. It's also pretty extendable. And I'm
+> personally not worried about using few more bytes in bpf_attr for
+> disjoin fields like this.
 >
-> +config ERRATA_THEAD_CMO
-> +	bool "Apply T-Head cache management errata"
-> +	depends on ERRATA_THEAD
-> +	select RISCV_DMA_NONCOHERENT
-> +	default y
-> +	help
-> +	  This will apply the cache management errata to handle the
-> +	  non-standard handling on non-coherent operations on T-Head SoCs.
-> +
-> +	  If you don't know what to do here, say "Y".
-> +
->  endmenu
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> index b37b6fedd53b..202c83f677b2 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -27,6 +27,23 @@ static bool errata_probe_pbmt(unsigned int stage,
->  	return false;
->  }
->
-> +static bool errata_probe_cmo(unsigned int stage,
-> +			     unsigned long arch_id, unsigned long impid)
-> +{
-> +#ifdef CONFIG_ERRATA_THEAD_CMO
-> +	if (arch_id != 0 || impid != 0)
-> +		return false;
-> +
-> +	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> +		return false;
-> +
-> +	riscv_noncoherent_supported();
-> +	return true;
-> +#else
-> +	return false;
-> +#endif
-> +}
-> +
->  static u32 thead_errata_probe(unsigned int stage,
->  			      unsigned long archid, unsigned long impid)
->  {
-> @@ -35,6 +52,9 @@ static u32 thead_errata_probe(unsigned int stage,
->  	if (errata_probe_pbmt(stage, archid, impid))
->  		cpu_req_errata |= (1U << ERRATA_THEAD_PBMT);
->
-> +	if (errata_probe_cmo(stage, archid, impid))
-> +		cpu_req_errata |= (1U << ERRATA_THEAD_CMO);
-> +
->  	return cpu_req_errata;
->  }
->
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> index 79d89aeeaa6c..19a771085781 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -16,7 +16,8 @@
->
->  #ifdef CONFIG_ERRATA_THEAD
->  #define	ERRATA_THEAD_PBMT 0
-> -#define	ERRATA_THEAD_NUMBER 1
-> +#define	ERRATA_THEAD_CMO 1
-> +#define	ERRATA_THEAD_NUMBER 2
->  #endif
->
->  #define	CPUFEATURE_SVPBMT 0
-> @@ -88,17 +89,54 @@ asm volatile(ALTERNATIVE(						\
->  #define ALT_THEAD_PMA(_val)
->  #endif
->
-> +/*
-> + * dcache.ipa rs1 (invalidate, physical address)
-> + * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> + *   0000001    01010      rs1       000      00000  0001011
-> + * dache.iva rs1 (invalida, virtual address)
-> + *   0000001    00110      rs1       000      00000  0001011
-> + *
-> + * dcache.cpa rs1 (clean, physical address)
-> + * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> + *   0000001    01001      rs1       000      00000  0001011
-> + * dcache.cva rs1 (clean, virtual address)
-> + *   0000001    00100      rs1       000      00000  0001011
-> + *
-> + * dcache.cipa rs1 (clean then invalidate, physical address)
-> + * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> + *   0000001    01011      rs1       000      00000  0001011
-> + * dcache.civa rs1 (... virtual address)
-> + *   0000001    00111      rs1       000      00000  0001011
-> + *
-> + * sync.s (make sure all cache operations finished)
-> + * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> + *   0000000    11001     00000      000      00000  0001011
-> + */
-> +#define THEAD_inval_A0	".long 0x0265000b"
-> +#define THEAD_clean_A0	".long 0x0245000b"
-> +#define THEAD_flush_A0	".long 0x0275000b"
-> +#define THEAD_SYNC_S	".long 0x0190000b"
 
-I'm not sure what to do with these: I really don't want to have a bunch 
-of raw binary instruction encodings floating around, but it looks like 
-the T-Head folks want to re-write their ISA manual before merging the 
-GAS support for it which means we'd be stuck going another release cycle 
-(and presumably another year of LTS) before getting the hardware 
-supported.  It really seems like we're just going in circles here trying 
-to get everything lined up, and it's getting silly blocking real 
-hardware from working because of a little bit of ugliness.
+Sounds good. Thanks for clarification. Using separate fields looks
+good to me. Since we settled on the cgroup part, I will apply update
+in cgroup_iter v7.
 
-I know I said I really don't want the executable .long stuff for this, 
-and IIRC that's a pretty common sentiment.  I'm not sure if I'm just fed 
-up with all the craziness, but I'm kind of inclined to just merge this 
-as-is -- at least that way we can get the hardware working.  In the long 
-run I think we're going to end up with some much uglier errata, so I 
-doubt we'll be all that worried about this one later.
 
-That said, I'll give folks some time to chime in as IIRC this has been 
-pointed out a handful of times.
-
-> +
->  #define ALT_CMO_OP(_op, _start, _size, _cachesize)			\
-> -asm volatile(ALTERNATIVE(						\
-> -	__nops(5),							\
-> +asm volatile(ALTERNATIVE_2(						\
-> +	__nops(6),							\
->  	"mv a0, %1\n\t"							\
->  	"j 2f\n\t"							\
->  	"3:\n\t"							\
->  	"cbo." __stringify(_op) " (a0)\n\t"				\
->  	"add a0, a0, %0\n\t"						\
->  	"2:\n\t"							\
-> -	"bltu a0, %2, 3b\n\t", 0,					\
-> -		CPUFEATURE_ZICBOM, CONFIG_RISCV_ISA_ZICBOM)		\
-> +	"bltu a0, %2, 3b\n\t"						\
-> +	"nop", 0, CPUFEATURE_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,		\
-> +	"mv a0, %1\n\t"							\
-> +	"j 2f\n\t"							\
-> +	"3:\n\t"							\
-> +	THEAD_##_op##_A0 "\n\t"						\
-> +	"add a0, a0, %0\n\t"						\
-> +	"2:\n\t"							\
-> +	"bltu a0, %2, 3b\n\t"						\
-> +	THEAD_SYNC_S, THEAD_VENDOR_ID,					\
-> +			ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO)	\
->  	: : "r"(_cachesize),						\
->  	    "r"((unsigned long)(_start) & ~((_cachesize) - 1UL)),	\
->  	    "r"((unsigned long)(_start) + (_size))			\
+> >           } task;
+> > };
+> >
+> > > > > > +               __u32   traversal_order;
+> > > > > > +       } cgroup;
+> > > > > >  };
+> > > > > >
+> > > > > >  /* BPF syscall commands, see bpf(2) man-page for more details. */
+> > > > >
+> > > > > [...]

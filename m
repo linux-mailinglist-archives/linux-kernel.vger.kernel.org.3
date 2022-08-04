@@ -2,110 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79037589EFB
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1109589F00
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237025AbiHDPzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
+        id S232856AbiHDP6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiHDPzk (ORCPT
+        with ESMTP id S236637AbiHDP6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:55:40 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 346691EC7F;
-        Thu,  4 Aug 2022 08:55:39 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C382820FE2E9;
-        Thu,  4 Aug 2022 08:55:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C382820FE2E9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1659628538;
-        bh=QXebqW0hrTf1CNPskOs0B1CdiWnWrgrHvmlsTreY3iI=;
-        h=From:To:Subject:Date:From;
-        b=XpAj+s7/UC4KrfmgO/5uErQKsx6pZJ8EHfMK18MyuRgk/rKSyDhrTNt03kGN/2Df/
-         AJjH7WkAn0wsu1icQFF7aR0A7BcOPVWeSIRIWQ4yog8Ig6L1nvLd4/uMvviZxxcHcG
-         /yYEE/8fDSkPoaCeODHUnywF2FBS3zdc+Mz3XqDY=
-From:   Saurabh Sengar <ssengar@linux.microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ssengar@microsoft.com, mikelley@microsoft.com
-Subject: [PATCH v2] scsi: storvsc: Remove WQ_MEM_RECLAIM from storvsc_error_wq
-Date:   Thu,  4 Aug 2022 08:55:34 -0700
-Message-Id: <1659628534-17539-1-git-send-email-ssengar@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 4 Aug 2022 11:58:03 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CD25B7B3
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:58:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E3FY0ZKu7o9LybalRPXbhAT565zzlxNBRfgHzNyAvPnVVSCkP65OkgDf7Gb6GkH+JnbAeEUZrVPRUBv1ZDcbckzEJNEVnIvmWJthLJ+kfH+9EPYYLe7dcF346V2iNKmOp6lDY2P9ne9Gj0RT1b+51RNxeHWkn5qY9Q909v9rZM0JMSTmOo82VHYCwuNktgBHfp6NgTeLWJb8A1Rsnx3+ugnaN8nLdxduHczUtknlW4WC0hOs31TGXYGbAYbhVSXNTROu72NwQItXxGrT50OB/mc1V2I60Lqh7+5+moyo4Ic0PR91Lop5YDejn51VK44MljBdTSdL+5xaMHVTt32lJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1/7LUD56mzNocyfHqMWn6umhSKqicGk/bea/sEkDOzU=;
+ b=fIiCr7eq3J79CySwK85DKXvUpiH/JtoZB3zMQ/IlLzTzgMof0ff5FXWaBWF0HiTDg1vKxS+HDTKeISUtr6WEzptfO+s7D87ygVechcfS+4jlTqzIoy7LPlPOang72PWROD92Cv/eNWJyBgYiSvvRLhPfpdR3JK8BWItiA6AqKj1Exb2vz6taOARLU0eoHW+P0K2+oJzFctKCizLEFhnCmOp3B/lP7dbrlfQXQ/neUYuGhkF2DdXplzdHT/6Av45tp6Sg3wJyRHE0jfDpliUxTgsyg3h/+WOziGWcGoqmbmxdbYvyNM6bMW2B9/Mq+BMUKKE1mjcQ0uR74/gfLZpYMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1/7LUD56mzNocyfHqMWn6umhSKqicGk/bea/sEkDOzU=;
+ b=iIEiK7nCqD2IDFvFsz4dwqpFF1E4NNv8jPLucg2XnIFgh+znD3uTW2WUPE75ozHtNHLomHYOMXVka0/l+SmtrGVoVm2wpHiMZdp4SF9N6I6PU+VgMA5H0SRJHFlc8YPcQ78ujMiTW/cBEd17MXsnKDNIOyleT5n3S2v8LqgCOCY=
+Received: from CY4PR05MB3047.namprd05.prod.outlook.com (2603:10b6:903:f4::7)
+ by DM6PR05MB4107.namprd05.prod.outlook.com (2603:10b6:5:8a::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.10; Thu, 4 Aug
+ 2022 15:57:58 +0000
+Received: from CY4PR05MB3047.namprd05.prod.outlook.com
+ ([fe80::14fc:26d8:a523:ce02]) by CY4PR05MB3047.namprd05.prod.outlook.com
+ ([fe80::14fc:26d8:a523:ce02%3]) with mapi id 15.20.5504.014; Thu, 4 Aug 2022
+ 15:57:58 +0000
+From:   Zack Rusin <zackr@vmware.com>
+To:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm/vmwgfx: cleanup comments
+Thread-Topic: [PATCH] drm/vmwgfx: cleanup comments
+Thread-Index: AQHYpBxI6b1XVVpgZ0mAD+AUOrTWbq2e7bSA
+Date:   Thu, 4 Aug 2022 15:57:58 +0000
+Message-ID: <541ceb5f87460873e65e454ae7432f1cf35cc4a3.camel@vmware.com>
+References: <20220730135704.2889434-1-trix@redhat.com>
+In-Reply-To: <20220730135704.2889434-1-trix@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.1-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f9807b1a-d68c-42e1-d037-08da763219f5
+x-ms-traffictypediagnostic: DM6PR05MB4107:EE_
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: futAcShIkw3DmqKpFEInAF9XahXyeBH2ojqWmthsM6Ejz613I9kusFWe59WdFadSHorhz3jVjxXhVAVUA+5goKods1tN9eyhVV0tgC79EcxNDExuXIoGkWCLMcjo+qQQSpKQi3xoABDlhkyrXM3/rPLd/+KR/XcADLxsyCwTqjSK+I30eKPpoAV5wqqT+5NrIf4EMOWLd7bBrxrey1MMFbmubVww2xKF6QNYJ8GQCopgGTy/BkZEkhS8GwxdWE1h0W8Y9PgLlcqHqmIMIpOB9eoapl1NgFYvBssdgoEfRBpR+/cfLQik5bm47abNgpI2xjDmm9J/aBKZyOIaXWcxtfguEPTEV2Pg5iqzXRIn4J7x8kKwTFY1WiKBRP/e8F2BJ8JAY9j79ojrKlMBR4Y3KOEeK9qOjoU55q/TG3xqKPP6qNXt2HtJJnqwBh0EefBbZnvdp50u2iPsU83+GXBM8fEbn5Fpunz2olIU8oz6K+gQnsV+6SavRYV78V2BuSyRUanuZ32UNff1S3Pp5VEICzvKkoXOqBkrRi6rWlNYejnv4J27H1wzVQETHY42AWJ+3qd8Fs5d/J/PWBc6oUmgkhY+BL2EqV4q/FrrnFYvP17PRTFYdnJ4/4bCfkXLw79eSZEClBH6wirVsgk4GjfUZoiXxsdONMb7iB0w2m5aLJn1cM9Xe9uLbsNFwcyFzg2+jXXAzxHiZct8PrSxIUlVqP6rNkLWe//lLsr0M9x6BwvIyL7whYSygnIh2N5QI+h03TRhqoLKH2JrkU97Tv3kq4uFTIEmfUiw493WYHLIbGJJrwhNVFLWoQLsZnE7ZeQ4
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR05MB3047.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(136003)(366004)(376002)(396003)(5660300002)(4744005)(66556008)(64756008)(76116006)(91956017)(4326008)(66946007)(66446008)(186003)(8936002)(66476007)(86362001)(2906002)(38100700002)(122000001)(71200400001)(8676002)(6512007)(316002)(26005)(54906003)(2616005)(110136005)(6506007)(478600001)(6486002)(41300700001)(36756003)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y1RZRmJXWnJrU3c0amgvTzEzc0orVVl3S1NGOFczSjVRSFRWbEd3bDVUTEFK?=
+ =?utf-8?B?K0dXaUkxYzdtbUh4SDZWeGtlUGxueEljSElXcmd5UWNMRW8yTXVucVpaTmtG?=
+ =?utf-8?B?MEZpclhlTndCWVNobTZTdlZEd3FoczVsamd2Y2JDV05yVElCTkZhd3pYTE1Z?=
+ =?utf-8?B?WE9qSVpZUDBrT3o0RkpNcFFISjZlZGJocTNHNDl1YzFQblRHTzkraUlHcTFx?=
+ =?utf-8?B?UnRNZk1JcTZGelJ3dVZad2ZJcDNIekNzRkZWMjNxbWdSdVhPUFFaYklvcVFs?=
+ =?utf-8?B?YUlEcGRvTEFnL2x0WFlTSDJOMjRTbUt3SFQ1T0lpdi9rZjI5ZG9MamNEMURp?=
+ =?utf-8?B?R2dJL1RTRFdpY3ZDOVpIeDVwekxGYTBZYTU2ZmlHcFZJdWR3bkRCcE52L2xm?=
+ =?utf-8?B?WVJyb1RRUURxQW00NkEvY0JEeFJjOFc5WmMyS0VrclB3clp0ajBJZ2d1NkU2?=
+ =?utf-8?B?aytBQnh5SHFJUEtuY1MxTXBQSzBzWXZYRWJubkE2RHRRY1NncmpCSitwVS90?=
+ =?utf-8?B?b0Y1Wk96U2dZVjZYam1DWVRBK3FaeG5HZmNrcjM4NnpWZEFQWmwwNk0rVHdE?=
+ =?utf-8?B?NUtnN1haY1JBU1hxcDcyVEJTUzlYL1B0WndnZ3R4V3g3YU9CZXRmUWtLQmds?=
+ =?utf-8?B?WXBVbCsxdThwRDRaQllReVEvN0FhZ3c4KzdHYy9CSkFHTUVDa21uTkZaUEl3?=
+ =?utf-8?B?NDhwOWNVekVVdlJXUjZkMGpHK05ObmcrQTJGeGJScFoxSStNbm5DQW5wMVND?=
+ =?utf-8?B?RktwdFBHa0g3SHo0S2dISlBpTG8vSjVCM2JBQkhGVjBRS2pHZE9jaFNxRlFX?=
+ =?utf-8?B?aWdDTDdVT1cvTFV6QVd0YU5XZDZMOFZzZnhZMjNuOU54ZFY2NVlmMXEva2Vo?=
+ =?utf-8?B?WDIwYXRRSlovaVFpTFVvWCsvRjBHUEdtQXBlVkY5L3F6ZUh5Y2VHaXRCaGRM?=
+ =?utf-8?B?UnllSVlZZ2FCVUNzRjlxZGRRaG5wSlh6UVhnQjdQK3F5RTBhN1YwelladVQ1?=
+ =?utf-8?B?TlJGbkFjQUlkSEc2TmU1QWNUZDRjZVJDU3ZtcURlTmRIUUhNeDA0VjdJVFJ1?=
+ =?utf-8?B?cXVPa3FBZjFINVI3cUVxZ2NneTQ5cndmVm50dFR4dFVUWUNGMUx6VjRGZ3FI?=
+ =?utf-8?B?b2s2WHhLSEdrZlpLSDBWNm1iM3JBbW01cjh0UnphZndBZEdjblRFbDlFQzVl?=
+ =?utf-8?B?Ylc3aDBPbkZXQnRNZGN4MktmN2JMTnB3ZWUwY2N6em5MSldueFlIbUIzenFo?=
+ =?utf-8?B?YXJrUGx1cE15algwMUUrS3l3a3drWnhjQ0JDYnB0TXVqWlRQUHBVTDBQN202?=
+ =?utf-8?B?QzV6R1FEOE1zb2RCYTI0S0dFWWc2WDhKbVA5ZGo3TkgvT1lOQnF2RWJub3J2?=
+ =?utf-8?B?MHZOL09BMmlSTWpYdXZzQjhmYXZRM3pKL2dkbmlSNkFzekZ5b2VaRCtzK1dm?=
+ =?utf-8?B?REZQY0gyWEVXQ3pQTTNoamNhbThNTWNSMVNhd05SR2RqMlQwU1FIcllwYThQ?=
+ =?utf-8?B?UUtpNVE1S0YvMFEzRXdiZXFzK1FnRHMrTVVXMWRUSVhJUjc0cGJsQkxoczJ6?=
+ =?utf-8?B?a0hZK2ptZzVYcDRnZDNlUnJVL2FjZGE3ekVML0ZvZzh1c1RxVktZNWhDejgw?=
+ =?utf-8?B?ejRzcHNSTlV3aGN1TTZsYm9LdG1lMGI3SytkelpDbm5BYlRVdFMxQ0syYmN5?=
+ =?utf-8?B?VGc5ck5ZaDVuNVJQSlJtQ0ljL3B2elRmdThxVEFrNHU5a2dseEdQUS9QRUg1?=
+ =?utf-8?B?QkZFVmwvYnE0UzNTSERYMHZEdnNmc1FwNkN0U0MxRVh6bTlxVEdwQ1B5M2hy?=
+ =?utf-8?B?OVpJWU1NU2ZNMWI2RGZNWEl1WGdxelgyMm5wemlmMC9CZkdabmZ0b3JRQXVT?=
+ =?utf-8?B?TTJ0YzErR3NueHpIZTdQMXBYeFdUQ1owWHUwaERRZWZTS2poS1hyL25HY0Yw?=
+ =?utf-8?B?Z0lqUTE2aUpDTEx2OWtXWkZLdTJpUzY1UE13aWZ2Wm9Qem9qQWMrR3JON2tD?=
+ =?utf-8?B?TWVHdzRzWTNIOEFxK0I3TEdEMXM4L0k0bEFvRU5wMG1XcjlFOC8wZkIwYWJ0?=
+ =?utf-8?B?bHgxOW5WQTVEdW9HcWxjVkwzQXg4ZFFvOGNEYVgyaFhvV0tjQTlQQ1p6Qjg1?=
+ =?utf-8?Q?AU/VUoWOc+A/8GIAuYpiX12Zd?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <70AFFE65AD948149BEF5D3E6CFB74DF7@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR05MB3047.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9807b1a-d68c-42e1-d037-08da763219f5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Aug 2022 15:57:58.1860
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5aTUZGScCe3lgxaluZYkPiLM2w25t3XSnA/PEiYNhEh51UZn7/mXXht1Lm0OUxPtlZMNqrjSjjKuSnpSuyIwDQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR05MB4107
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-storvsc_error_wq workqueue should not be marked as WQ_MEM_RECLAIM
-as it doesn't need to make forward progress under memory pressure.
-Marking this workqueue as WQ_MEM_RECLAIM may cause deadlock while
-flushing a non-WQ_MEM_RECLAIM workqueue.
-In the current state it causes the following warning:
-
-[   14.506347] ------------[ cut here ]------------
-[   14.506354] workqueue: WQ_MEM_RECLAIM storvsc_error_wq_0:storvsc_remove_lun is flushing !WQ_MEM_RECLAIM events_freezable_power_:disk_events_workfn
-[   14.506360] WARNING: CPU: 0 PID: 8 at <-snip->kernel/workqueue.c:2623 check_flush_dependency+0xb5/0x130
-[   14.506390] CPU: 0 PID: 8 Comm: kworker/u4:0 Not tainted 5.4.0-1086-azure #91~18.04.1-Ubuntu
-[   14.506391] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 05/09/2022
-[   14.506393] Workqueue: storvsc_error_wq_0 storvsc_remove_lun
-[   14.506395] RIP: 0010:check_flush_dependency+0xb5/0x130
-		<-snip->
-[   14.506408] Call Trace:
-[   14.506412]  __flush_work+0xf1/0x1c0
-[   14.506414]  __cancel_work_timer+0x12f/0x1b0
-[   14.506417]  ? kernfs_put+0xf0/0x190
-[   14.506418]  cancel_delayed_work_sync+0x13/0x20
-[   14.506420]  disk_block_events+0x78/0x80
-[   14.506421]  del_gendisk+0x3d/0x2f0
-[   14.506423]  sr_remove+0x28/0x70
-[   14.506427]  device_release_driver_internal+0xef/0x1c0
-[   14.506428]  device_release_driver+0x12/0x20
-[   14.506429]  bus_remove_device+0xe1/0x150
-[   14.506431]  device_del+0x167/0x380
-[   14.506432]  __scsi_remove_device+0x11d/0x150
-[   14.506433]  scsi_remove_device+0x26/0x40
-[   14.506434]  storvsc_remove_lun+0x40/0x60
-[   14.506436]  process_one_work+0x209/0x400
-[   14.506437]  worker_thread+0x34/0x400
-[   14.506439]  kthread+0x121/0x140
-[   14.506440]  ? process_one_work+0x400/0x400
-[   14.506441]  ? kthread_park+0x90/0x90
-[   14.506443]  ret_from_fork+0x35/0x40
-[   14.506445] ---[ end trace 2d9633159fdc6ee7 ]---
-
-Fixes: 436ad9413353 ("scsi: storvsc: Allow only one remove lun work item to be issued per lun")
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
----
-[v2]
-  - s/it's/it/
-  - Added Fixes commit
-
- drivers/scsi/storvsc_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-index fe000da..8ced292 100644
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -2012,7 +2012,7 @@ static int storvsc_probe(struct hv_device *device,
- 	 */
- 	host_dev->handle_error_wq =
- 			alloc_ordered_workqueue("storvsc_error_wq_%d",
--						WQ_MEM_RECLAIM,
-+						0,
- 						host->host_no);
- 	if (!host_dev->handle_error_wq) {
- 		ret = -ENOMEM;
--- 
-1.8.3.1
-
+T24gU2F0LCAyMDIyLTA3LTMwIGF0IDA5OjU3IC0wNDAwLCBUb20gUml4IHdyb3RlOg0KPiBSZW1v
+dmUgc2Vjb25kICdzaG91bGQnDQo+IA0KPiBTcGVsbGluZyByZXBsYWNlbWVudHMNCj4gYXFjdWly
+ZSAgICAgLT4gYWNxdWlyZQ0KPiBhcHBsY2F0aW9ucyAtPiBhcHBsaWNhdGlvbnMNCj4gYXNzdW1p
+bmdzICAgLT4gYXNzdW1lcw0KPiBiZWdpbmluZyAgICAtPiBiZWdpbm5pbmcNCj4gY29tbWl0ZWQg
+ICAgLT4gY29tbWl0dGVkDQo+IGNvbnRvbCAgICAgIC0+IGNvbnRyb2wNCj4gaW5iZXR3ZWVuICAg
+LT4gaW4gYmV0d2Vlbg0KPiByZXNvcmNlcyAgICAtPiByZXNvdXJjZXMNCj4gc3VjY2VzZnVsICAg
+LT4gc3VjY2Vzc2Z1bA0KPiBzdWNjZXNzZnVsZSAtPiBzdWNjZXNzZnVsDQo+IA0KPiBTaWduZWQt
+b2ZmLWJ5OiBUb20gUml4IDx0cml4QHJlZGhhdC5jb20+DQoNClRoYW5rcywgbG9va3MgZ29vZC4g
+SSBwdXNoZWQgaXQgdGhyb3VnaCBkcm0tbWlzYy1uZXh0Lg0KDQp6DQo=

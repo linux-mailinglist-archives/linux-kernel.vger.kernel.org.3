@@ -2,369 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB3B589C4D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDC3589C57
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 15:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239830AbiHDNKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 09:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
+        id S239578AbiHDNMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 09:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239823AbiHDNKU (ORCPT
+        with ESMTP id S229625AbiHDNMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 09:10:20 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037DE3B7
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:10:09 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id c22so10281603wmr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 06:10:09 -0700 (PDT)
+        Thu, 4 Aug 2022 09:12:15 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CD0D7
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 06:12:14 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id w3so9630038edc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 06:12:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cla0lM4BldOpdb6hEqlLWVngdnoWs3axmUG8txIxp54=;
-        b=IJrM87wbpGCvXj70KwixdInKdcktY/525oInwlXZaqH3/HWmLnQHPLGgV+IzGKCQLD
-         qaD0iwZSqgD09TxvOOWc3+rvefb0CTTt6K0PGyuhVFHolhiaIFpR00ot+3GsmOjrlElz
-         V2o1Pi8oxEDLoiCoDc5z31p+P2foC+McHOht/KSu3FHsuV/idbm47AWTqHW0Tf/zJi7m
-         t+yBUQfVe7YlI/5q6UsvrzgV9shJKZ/GA0R+dfw3mnhCDlNDHA2wnb1x7tP5w6N+IRDQ
-         Yc0gXiSxBA24lnN4Pt9ygruZrDJMZ0gxwD0zvBg9PvZ96yZxfA7nDCEWh8EownBGPOIk
-         Lq9g==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=pxlpwqz2U0nprgA9SX9XfiSxlw1G8D+hUCD56lG3Qk8=;
+        b=otoinzBGWa4C2yyOS1sV4Xn0HaJMXmJAcZGmGRMVv3bPV2OngDyE2EWkqvyJJdp0VH
+         OqWr/BG0jvK6yw+gO7u6LK5sCwEmutGkvx9bxfHuEuKmIGBCIMhoW/XRzTsaJ+eqWNzO
+         gPQRmYVWsFW8j/Ltan5RYEyGMkgCcppN3+GhrmDi/v6+xfR3hkAqNmkOCoiZVXYWQ//D
+         G431WBxNEbVKWChlbIrH8lQNQu1AW+qZ69CJ/LTxR45/4IeY3UY+W7BxZKdDwo4SLbud
+         aDrnSuKdHOgxkExvLBGwboK0SYKIYqn2kdhXpNZPO9Y+RSHfbdZ2ebY0KXd3AnsCEcVt
+         nRqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cla0lM4BldOpdb6hEqlLWVngdnoWs3axmUG8txIxp54=;
-        b=a49+iYjUnkekLIjU1JykgMZCsFQIBbGAGo1MyzradFXIzHrTO3UH9q4IxywxYCXy4Z
-         G/EQ1w/Q4GqLUCYjauefPyvETuw0iB0ApE4ScNiFMcMXvfX8ef0OqKcEgNmPQFoih1Be
-         Pp+je4M7Zi+z92nlNSSZf63pvlGin9H7RGp4mUCMBPnp97L5OOFsROxZ3ho35iuVkSas
-         Hbpmq/RbpvuKPbJD/qGAQVgGq0KoI+xbCNfbG15MsvcOc7O2KhL5wgw6UITbbinA3yYO
-         pQiPer0njxXqb9dkBHyGP3rMKtrlVcbz3hi71WFFy/n3zJDTuL473xPUY1hYFMEjAPou
-         e5lA==
-X-Gm-Message-State: ACgBeo379X6Y1yMDC7BYzUslU3ipyLKi0l/QJMeZgHQrYnvbi93AhhX1
-        Tahedtf7ZWGCssuqtDn3QmmGyQ==
-X-Google-Smtp-Source: AA6agR4FHom/Hb5zs4LT+11P8Qnc2UjkasWQfOka/HpKPxrvCMFaQXG6iQpiiTxD44HRyTYVlSeb9Q==
-X-Received: by 2002:a05:600c:3556:b0:3a3:2a9c:f26 with SMTP id i22-20020a05600c355600b003a32a9c0f26mr6193299wmq.58.1659618609259;
-        Thu, 04 Aug 2022 06:10:09 -0700 (PDT)
-Received: from Balsam-ThinkPad-T480.. (235.163.185.81.rev.sfr.net. [81.185.163.235])
-        by smtp.gmail.com with ESMTPSA id o15-20020adfcf0f000000b0021d6a520ce9sm1156817wrj.47.2022.08.04.06.10.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 06:10:08 -0700 (PDT)
-From:   bchihi@baylibre.com
-To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Subject: [PATCH v8.1, 7/7] thermal: mediatek: Add thermal zone settings for mt8195
-Date:   Thu,  4 Aug 2022 15:09:12 +0200
-Message-Id: <20220804130912.676043-8-bchihi@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220804130912.676043-1-bchihi@baylibre.com>
-References: <20220804130912.676043-1-bchihi@baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=pxlpwqz2U0nprgA9SX9XfiSxlw1G8D+hUCD56lG3Qk8=;
+        b=HWH0ERotyHheRWBaVKq1N5Xs6uo+Bv+uK8CSy1ZnuVR7p6S6r9fTvWR9zBMQ8Izngw
+         HTwlVPRXq/HAWNpwzDXb7Rm5SJDluH+J+SKQeB3kKxNVphKoFUFZZBryj/gpP7D9+BB+
+         J/mmk9ASX8MeoiPG/u5bGcqolxIdgkkk2cMQDG4O/RA0R+qXhoKeQtbIhDs5ph4YS3Tf
+         ecbP9oAotpUwukCmozn5cGm3mDvYF1vhqrbWrh2EAme8e0zKI2Dm/qAHvcRZme8ajETw
+         4n7Qpi8BaJguSrmVYojeQAirG3VMQb2H/SJ3S12CJdjtLO0kDZMprtETYORieGP9ehMY
+         mN7w==
+X-Gm-Message-State: ACgBeo2Z/zza9JW4b99imp/YSaZkxzj+K/pf7CqM9ieb8pQq//TD8TtA
+        O3FwX/NfL63F+OOuALZIKEUagYFeCWz9eOlcXew=
+X-Google-Smtp-Source: AA6agR7beNF5dM/Bk3iQ/n4MlMrLoQJYvih6dwcd/58OaEdNpdLh/0i9r+IbVaHTFivllZZcITiSsTlmB5tYGQgTjBA=
+X-Received: by 2002:a05:6402:254a:b0:43d:a634:a0ab with SMTP id
+ l10-20020a056402254a00b0043da634a0abmr1970731edb.298.1659618732385; Thu, 04
+ Aug 2022 06:12:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
+ <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
+ <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
+ <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
+ <20220803062024.vn7awasmifkp5xow@pengutronix.de> <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
+ <CAPY8ntBBz56Es=pK+KpqhyYLUET95DT_zE6gorOWx4WkCSxJAg@mail.gmail.com>
+ <20220804093829.42kdelp7u4r743nv@pengutronix.de> <CAPY8ntBovVq1HVt_UneDF8OB9KBdEBv52o=4BCTmf9VpiODxVg@mail.gmail.com>
+ <20220804125152.idyzetjqkjzgbbm2@pengutronix.de>
+In-Reply-To: <20220804125152.idyzetjqkjzgbbm2@pengutronix.de>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Thu, 4 Aug 2022 08:12:01 -0500
+Message-ID: <CAHCN7xKXe14z1QxrdLHNkNOmpR=txUZAt3BsEry7TymbjtDsjA@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com, NXP Linux Team <linux-imx@nxp.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Kao <michael.kao@mediatek.com>
+On Thu, Aug 4, 2022 at 7:52 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
+>
+> Hi Dave,
+>
+> On 22-08-04, Dave Stevenson wrote:
+> > Hi Marco
+> >
+> > On Thu, 4 Aug 2022 at 10:38, Marco Felsch <m.felsch@pengutronix.de> wrote:
+> > >
+> > > Hi Dave, Adam,
+> > >
+> > > On 22-08-03, Dave Stevenson wrote:
+> > > > Hi Adam
+> > > >
+> > > > On Wed, 3 Aug 2022 at 12:03, Adam Ford <aford173@gmail.com> wrote:
+> > >
+> > > ...
+> > >
+> > > > > > Did managed to get access to the ADV7535 programming guide? This is the
+> > > > > > black box here. Let me check if I can provide you a link with our repo
+> > > > > > so you can test our current DSIM state if you want.
+> > > > >
+> > > > > I do have access to the programming guide, but it's under NDA, but
+> > > > > I'll try to answer questions if I can.
+> > > >
+> > > > Not meaning to butt in, but I have datasheets for ADV7533 and 7535
+> > > > from previously looking at these chips.
+> > >
+> > > Thanks for stepping into :)
+> > >
+> > > > Mine fairly plainly states:
+> > > > "The DSI receiver input supports DSI video mode operation only, and
+> > > > specifically, only supports nonburst mode with sync pulses".
+> > >
+> > > I've read this also, and we are working in nonburst mode with sync
+> > > pulses. I have no access to an MIPI-DSI analyzer therefore I can't
+> > > verify it.
+> > >
+> > > > Non-burst mode meaning that the DSI pixel rate MUST be the same as the
+> > > > HDMI pixel rate.
+> > >
+> > > On DSI side you don't have a pixel-clock instead there is bit-clock.
+> >
+> > You have an effective pixel clock, with a fixed conversion for the
+> > configuration.
+> >
+> > DSI bit-clock * number of lanes / bits_per_pixel = pixel rate.
+> > 891Mbit/s * 4 lanes / 24bpp = 148.5 Mpixels/s
+>
+> Okay, I just checked the bandwidth which must equal.
+>
+> > As noted elsewhere, the DSI is DDR, so the clock lane itself is only
+> > running at 891 / 2 = 445.5MHz.
+> >
+> > > > Section 6.1.1 "DSI Input Modes" of adv7533_hardware_user_s_guide is
+> > > > even more explicit about the requirement of DSI timing matching
+> > >
+> > > Is it possible to share the key points of the requirements?
+> >
+> > "Specifically the ADV7533 supports the Non-Burst Mode with syncs. This
+> > mode requires real time data generation as a pulse packet received
+> > becomes a pulse generated. Therefore this mode requires a continuous
+> > stream of data with correct video timing to avoid any visual
+> > artifacts."
+> >
+> > LP mode is supported on data lanes. Clock lane must remain in HS mode.
+> >
+> > "... the goal is to accurately convey DPI-type timing over DSI. This
+> > includes matching DPI pixel-transmission rates, and widths of timing
+> > events."
+>
+> Thanks for sharing.
+>
+> > > > The NXP kernel switching down to an hs_clk of 445.5MHz would therefore
+> > > > be correct for 720p operation.
+> > >
+> > > It should be absolute no difference if you work on 891MHz with 2 lanes
+> > > or on 445.5 MHz with 4 lanes. What must be ensured is that you need the
+> > > minimum required bandwidth which is roughly: 1280*720*24*60 = 1.327
+> > > GBps.
+> >
+> > Has someone changed the number of lanes in use? I'd missed that if so,
+> > but I'll agree that 891MHz over 2 lanes should work for 720p60.
+>
+> The ADV driver is changing it autom. but this logic is somehow odd and
+> there was already a approach to stop the driver doing this.
+>
+> To sync up: we have two problems:
+>   1) The 720P mode with static DSI host configuration isn't working
+>      without hacks.
 
-Add thermal zone settings for mt8195
+can you share your hacks with me about getting 720p to work?  I've
+been struggling to get 720 to work.
 
-Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
----
- drivers/thermal/mediatek/lvts_thermal.h |   1 +
- drivers/thermal/mediatek/lvts_v4.c      | 223 ++++++++++++++++++++++++
- 2 files changed, 224 insertions(+)
+>   2) The DSI link frequency should changed as soon as required
+>      automatically. So we can provide all modes.
+>
+> I would concentrate on problem 1 first before moving on to the 2nd.
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.h b/drivers/thermal/mediatek/lvts_thermal.h
-index 9095f9cd232b..4db2c135661e 100644
---- a/drivers/thermal/mediatek/lvts_thermal.h
-+++ b/drivers/thermal/mediatek/lvts_thermal.h
-@@ -16,6 +16,7 @@
- #define FEATURE_DEVICE_AUTO_RCK	BIT(0)
- #define NUM_EFUSE_ADDR			22
- #define NUM_EFUSE_BLOCK_MT8192	1
-+#define NUM_EFUSE_BLOCK_MT8195	2
- #define DEFAULT_GOLDEN_TEMP		50
- #define DEFAULT_CUONT_R			35000
- #define DEFAULT_CUONT_RC		2750
-diff --git a/drivers/thermal/mediatek/lvts_v4.c b/drivers/thermal/mediatek/lvts_v4.c
-index 6477d386c9e1..e216b66625db 100644
---- a/drivers/thermal/mediatek/lvts_v4.c
-+++ b/drivers/thermal/mediatek/lvts_v4.c
-@@ -32,6 +32,31 @@ enum mt8192_lvts_ap_sensor_enum {
- 	MT8192_NUM_TS_AP
- };
- 
-+enum mt8195_lvts_mcu_sensor_enum {
-+	MT8195_TS1_0,		// cpu_big1
-+	MT8195_TS1_1,		// cpu_big2
-+	MT8195_TS2_0,		// cpu_big3
-+	MT8195_TS2_1,		// cpu_big4
-+	MT8195_TS3_0,		// cpu_little1
-+	MT8195_TS3_1,		// cpu_little2
-+	MT8195_TS3_2,		// cpu_little3
-+	MT8195_TS3_3,		// cpu_little4
-+	MT8195_NUM_TS_MCU
-+};
-+
-+enum mt8195_lvts_ap_sensor_enum {
-+	MT8195_TS4_0,		// vpu1
-+	MT8195_TS4_1,		// vpu2
-+	MT8195_TS5_0,		// gpu1
-+	MT8195_TS5_1,		// gpu2
-+	MT8195_TS6_0,		// vdec
-+	MT8195_TS6_1,		// img
-+	MT8195_TS6_2,		// infra
-+	MT8195_TS7_0,		// cam1
-+	MT8195_TS7_1,		// cam2
-+	MT8195_NUM_TS_AP
-+};
-+
- static void mt8192_mcu_efuse_to_cal_data(struct lvts_data *lvts_data)
- {
- 	const unsigned int mt8192_ts[] = { MT8192_TS2_0, MT8192_TS3_0 };
-@@ -74,6 +99,60 @@ static void mt8192_ap_efuse_to_cal_data(struct lvts_data *lvts_data)
- 	}
- }
- 
-+static void mt8195_mcu_efuse_to_cal_data(struct lvts_data *lvts_data)
-+{
-+	struct lvts_sensor_cal_data *cal_data = &lvts_data->cal_data;
-+
-+	cal_data->golden_temp = GET_CAL_DATA_BITMASK(0, lvts_data, 31, 24);
-+
-+	cal_data->count_r[MT8195_TS1_0] = GET_CAL_DATA_BITMASK(1, lvts_data, 23, 0);
-+	cal_data->count_r[MT8195_TS1_1] = (GET_CAL_DATA_BITMASK(2, lvts_data, 15, 0) << 8) +
-+		GET_CAL_DATA_BITMASK(1, lvts_data, 31, 24);
-+	cal_data->count_r[MT8195_TS2_0] = GET_CAL_DATA_BITMASK(3, lvts_data, 31, 8);
-+	cal_data->count_r[MT8195_TS2_1] = GET_CAL_DATA_BITMASK(4, lvts_data, 23, 0);
-+	cal_data->count_r[MT8195_TS3_0] = (GET_CAL_DATA_BITMASK(6, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(5, lvts_data, 31, 16);
-+	cal_data->count_r[MT8195_TS3_1] = GET_CAL_DATA_BITMASK(6, lvts_data, 31, 8);
-+	cal_data->count_r[MT8195_TS3_2] = GET_CAL_DATA_BITMASK(7, lvts_data, 23, 0);
-+	cal_data->count_r[MT8195_TS3_3] = (GET_CAL_DATA_BITMASK(8, lvts_data, 15, 0) << 8) +
-+		GET_CAL_DATA_BITMASK(7, lvts_data, 31, 24);
-+
-+	cal_data->count_rc[MT8195_TS1_0] = (GET_CAL_DATA_BITMASK(3, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(2, lvts_data, 31, 16);
-+	cal_data->count_rc[MT8195_TS2_0] = (GET_CAL_DATA_BITMASK(5, lvts_data, 15, 0) << 8) +
-+		GET_CAL_DATA_BITMASK(4, lvts_data, 31, 24);
-+	cal_data->count_rc[MT8195_TS3_0] = (GET_CAL_DATA_BITMASK(9, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(8, lvts_data, 31, 16);
-+}
-+
-+static void mt8195_ap_efuse_to_cal_data(struct lvts_data *lvts_data)
-+{
-+	struct lvts_sensor_cal_data *cal_data = &lvts_data->cal_data;
-+
-+	cal_data->golden_temp = GET_CAL_DATA_BITMASK(0, lvts_data, 31, 24);
-+
-+	cal_data->count_r[MT8195_TS4_0] = GET_CAL_DATA_BITMASK(9, lvts_data, 31, 8);
-+	cal_data->count_r[MT8195_TS4_1] = GET_CAL_DATA_BITMASK(10, lvts_data, 23, 0);
-+	cal_data->count_r[MT8195_TS5_0] = (GET_CAL_DATA_BITMASK(12, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(11, lvts_data, 31, 16);
-+	cal_data->count_r[MT8195_TS5_1] = GET_CAL_DATA_BITMASK(12, lvts_data, 31, 8);
-+	cal_data->count_r[MT8195_TS6_0] = (GET_CAL_DATA_BITMASK(14, lvts_data, 15, 0) << 8) +
-+		GET_CAL_DATA_BITMASK(13, lvts_data, 31, 24);
-+	cal_data->count_r[MT8195_TS6_1] = (GET_CAL_DATA_BITMASK(15, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(14, lvts_data, 31, 16);
-+	cal_data->count_r[MT8195_TS6_2] = GET_CAL_DATA_BITMASK(15, lvts_data, 31, 8);
-+	cal_data->count_r[MT8195_TS7_0] = (GET_CAL_DATA_BITMASK(17, lvts_data, 15, 0) << 8) +
-+		GET_CAL_DATA_BITMASK(16, lvts_data, 31, 24);
-+	cal_data->count_r[MT8195_TS7_1] = (GET_CAL_DATA_BITMASK(18, lvts_data, 7, 0) << 16) +
-+		GET_CAL_DATA_BITMASK(17, lvts_data, 31, 16);
-+
-+	cal_data->count_rc[MT8195_TS4_0] = (GET_CAL_DATA_BITMASK(11, lvts_data, 15, 0) << 8) +
-+						GET_CAL_DATA_BITMASK(10, lvts_data, 31, 24);
-+	cal_data->count_rc[MT8195_TS5_0] = GET_CAL_DATA_BITMASK(13, lvts_data, 23, 0);
-+	cal_data->count_rc[MT8195_TS6_0] = GET_CAL_DATA_BITMASK(16, lvts_data, 23, 0);
-+	cal_data->count_rc[MT8195_TS7_0] = GET_CAL_DATA_BITMASK(18, lvts_data, 31, 8);
-+}
-+
- static struct lvts_speed_settings tc_speed_mt8192 = {
- 	.period_unit = PERIOD_UNIT,
- 	.group_interval_delay = GROUP_INTERVAL_DELAY,
-@@ -81,6 +160,13 @@ static struct lvts_speed_settings tc_speed_mt8192 = {
- 	.sensor_interval_delay = SENSOR_INTERVAL_DELAY,
- };
- 
-+static struct lvts_speed_settings tc_speed_mt8195 = {
-+	.period_unit = PERIOD_UNIT,
-+	.group_interval_delay = GROUP_INTERVAL_DELAY,
-+	.filter_interval_delay = FILTER_INTERVAL_DELAY,
-+	.sensor_interval_delay = SENSOR_INTERVAL_DELAY,
-+};
-+
- static const struct lvts_tc_settings mt8192_tc_mcu_settings[] = {
- 	[0] = {
- 		.dev_id = 0x81,
-@@ -164,6 +250,89 @@ static const struct lvts_tc_settings mt8192_tc_ap_settings[] = {
- 	}
- };
- 
-+static const struct lvts_tc_settings mt8195_tc_mcu_settings[] = {
-+	[0] = {
-+		.dev_id = 0x81,
-+		.addr_offset = 0x0,
-+		.num_sensor = 2,
-+		.sensor_map = { MT8195_TS1_0, MT8195_TS1_1 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT1,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(3),
-+	},
-+	[1] = {
-+		.dev_id = 0x82,
-+		.addr_offset = 0x100,
-+		.num_sensor = 2,
-+		.sensor_map = { MT8195_TS2_0, MT8195_TS2_1 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT0,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(4),
-+	},
-+	[2] = {
-+		.dev_id = 0x83,
-+		.addr_offset = 0x200,
-+		.num_sensor = 4,
-+		.sensor_map = { MT8195_TS3_0, MT8195_TS3_1, MT8195_TS3_2, MT8195_TS3_3 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT0,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(5),
-+	}
-+};
-+
-+static const struct lvts_tc_settings mt8195_tc_ap_settings[] = {
-+	[0] = {
-+		.dev_id = 0x84,
-+		.addr_offset = 0x0,
-+		.num_sensor = 2,
-+		.sensor_map = { MT8195_TS4_0, MT8195_TS4_1 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT0,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(3),
-+	},
-+	[1] = {
-+		.dev_id = 0x85,
-+		.addr_offset = 0x100,
-+		.num_sensor = 2,
-+		.sensor_map = { MT8195_TS5_0, MT8195_TS5_1 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT1,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(4),
-+	},
-+	[2] = {
-+		.dev_id = 0x86,
-+		.addr_offset = 0x200,
-+		.num_sensor = 3,
-+		.sensor_map = { MT8195_TS6_0, MT8195_TS6_1, MT8195_TS6_2 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT1,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(5),
-+	},
-+	[3] = {
-+		.dev_id = 0x87,
-+		.addr_offset = 0x300,
-+		.num_sensor = 2,
-+		.sensor_map = { MT8195_TS7_0, MT8195_TS7_1 },
-+		.tc_speed = &tc_speed_mt8195,
-+		.hw_filter = LVTS_FILTER_2_OF_4,
-+		.dominator_sensing_point = SENSING_POINT0,
-+		.hw_reboot_trip_point = HW_REBOOT_TRIP_POINT,
-+		.irq_bit = BIT(6),
-+	}
-+};
-+
- static const struct lvts_data mt8192_lvts_mcu_data = {
- 	.num_tc = (ARRAY_SIZE(mt8192_tc_mcu_settings)),
- 	.tc = mt8192_tc_mcu_settings,
-@@ -216,9 +385,63 @@ static const struct lvts_data mt8192_lvts_ap_data = {
- 	},
- };
- 
-+static const struct lvts_data mt8195_lvts_mcu_data = {
-+	.num_tc = (ARRAY_SIZE(mt8195_tc_mcu_settings)),
-+	.tc = mt8195_tc_mcu_settings,
-+	.num_sensor = MT8195_NUM_TS_MCU,
-+	.ops = {
-+		.efuse_to_cal_data = mt8195_mcu_efuse_to_cal_data,
-+		.device_enable_and_init = lvts_device_enable_and_init,
-+		.device_enable_auto_rck = lvts_device_enable_auto_rck_v4,
-+		.device_read_count_rc_n = lvts_device_read_count_rc_n_v4,
-+		.set_cal_data = lvts_set_calibration_data_v4,
-+		.init_controller = lvts_init_controller_v4,
-+	},
-+	.feature_bitmap = FEATURE_DEVICE_AUTO_RCK,
-+	.num_efuse_addr = NUM_EFUSE_ADDR,
-+	.num_efuse_block = NUM_EFUSE_BLOCK_MT8195,
-+	.cal_data = {
-+		.default_golden_temp = DEFAULT_GOLDEN_TEMP,
-+		.default_count_r = DEFAULT_CUONT_R,
-+		.default_count_rc = DEFAULT_CUONT_RC,
-+	},
-+	.coeff = {
-+		.a = COEFF_A,
-+		.b = COEFF_B,
-+	},
-+};
-+
-+static const struct lvts_data mt8195_lvts_ap_data = {
-+	.num_tc = (ARRAY_SIZE(mt8195_tc_ap_settings)),
-+	.tc = mt8195_tc_ap_settings,
-+	.num_sensor = MT8195_NUM_TS_AP,
-+	.ops = {
-+		.efuse_to_cal_data = mt8195_ap_efuse_to_cal_data,
-+		.device_enable_and_init = lvts_device_enable_and_init,
-+		.device_enable_auto_rck = lvts_device_enable_auto_rck_v4,
-+		.device_read_count_rc_n = lvts_device_read_count_rc_n_v4,
-+		.set_cal_data = lvts_set_calibration_data_v4,
-+		.init_controller = lvts_init_controller_v4,
-+	},
-+	.feature_bitmap = FEATURE_DEVICE_AUTO_RCK,
-+	.num_efuse_addr = NUM_EFUSE_ADDR,
-+	.num_efuse_block = NUM_EFUSE_BLOCK_MT8195,
-+	.cal_data = {
-+		.default_golden_temp = DEFAULT_GOLDEN_TEMP,
-+		.default_count_r = DEFAULT_CUONT_R,
-+		.default_count_rc = DEFAULT_CUONT_RC,
-+	},
-+	.coeff = {
-+		.a = COEFF_A,
-+		.b = COEFF_B,
-+	},
-+};
-+
- static const struct of_device_id lvts_of_match[] = {
- 	{ .compatible = "mediatek,mt8192-lvts-mcu", .data = &mt8192_lvts_mcu_data, },
- 	{ .compatible = "mediatek,mt8192-lvts-ap", .data = &mt8192_lvts_ap_data, },
-+	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data, },
-+	{ .compatible = "mediatek,mt8195-lvts-ap", .data = &mt8195_lvts_ap_data, },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, lvts_of_match);
--- 
-2.34.1
+I do have some code that does #2 already.  I can clean it up and share
+if you want.  I've been bouncing back and forth between the NXP kernel
+and the Jagan/Fabio kernel to compare and with my clock change, it
+appears to be generating similar clocks to the NXP, yet it still won't
+sync at 720P.
 
+>
+> > I have just noted that 720p59.94 at 24bpp on 4 lanes is listed as one
+> > of the modes that is mandatory to use the timing generator (reg 0x27
+> > bit 7 = 1). On 2 lanes it is not required.
+> > I don't know why it's referencing the 1000/1001 pixel clock rates and
+> > not the base one, as it's only a base clock change with the same
+> > timing (74.176MHz clock instead of 74.25MHz).
+>
+> Interesting! I would like to know how the HDMI block gets fetched by the
+> DSI block and how the timing-generator can influence this in good/bad
+> way. So that we know what DSI settings (freq, lanes) are sufficient.
+>
+> > > > If you do program the manual DSI divider register to allow a DSI pixel
+> > > > rate of 148.5MHz vs HDMI pixel rate of 74.25MHz, you'd be relying on
+> > >
+> > > There is no such DSI pixel rate to be precise, we only have a DSI bit
+> > > clock/rate.
+> > >
+> > > > the ADV753x having at least a half-line FIFO between DSI rx and HDMI
+> > > > tx to compensate for the differing data rates. I see no reference to
+> > > > such, and I'd be surprised if it was more than a half dozen pixels to
+> > > > compensate for the jitter in the cases where the internal timing
+> > > > generator is mandatory due to fractional bytes.
+> > >
+> > > This is interesting and would proofs our assumption that the device
+> > > don't have a FIFO :)
+> > >
+> > > Our assumptions (we don't have the datasheet/programming manual):
+> > >   - HDMI part is fetching 3 bytes per HDMI pixclk
+> > >   - Ratio between dsi-clk and hdmi-pixelclk must be 3 so the DSI and
+> > >     HDMI are in sync. So from bandwidth pov there are no differences
+> > >     between:
+> > >       - HDMI: 74.25 MHz * 24 Bit  = 1782.0 MBit/s
+> > >       - DSI:    891 MHz * 2 lanes = 1782.0 MBit/s (dsi-clock: 445.5 )
+> > >       - DSI:  445.5 MHz * 4 lanes = 1782.0 MBit/s (dsi-clock: 222.75)
+> > >
+> > >     But the ratio is different and therefore the faster clocking option
+> > >     let something 'overflow'.
+> >
+> > I'll agree that all looks consistent.
+> >
+> > > Anyway, but all this means that Adam should configure the
+> > > burst-clock-rate to 445.5 and set the lanes to 4. But this doesn't work
+> > > either and now we are back on my initial statement -> the driver needs
+> > > some attention.
+> >
+> > Things always need attention :-)
+>
+> ^^
+>
+> > I suspect that it's the use of the timing generator that is the issue.
+> > The programming guide does recommend using it for all modes, so that
+> > would be a sensible first step.
+>
+> But I tested it without the timing-generator too. Can you or Adam verify
+> the timing-generator diable logic?
+
+The internal timing generator is enabled by setting bit 7 of register 27.
+
+After the timings bits are set, the generator must be reset by
+toggling bit 6.  Bits [5:0] must be 001011b
+
+So going between CB and 8B does this task.  From what I can tell, this
+code is correct.
+
+The NXP kernel which appears to sync at a few additional resolutions
+appears to do this as well.
+
+>
+> > I will say that we had a number of issues getting this chip to do
+> > anything, and it generally seemed happier on 2 or 3 lanes instead of
+> > 4. Suffice to say that we abandoned trying to use it, despite some
+> > assistance from ADI.
+
+Ideally, I'd like to experiment with 2-lane as well.  Part of me
+wonders if this could be dynamic to help further adjust timings.  When
+I try to get clock settings for slower rates, it seems like the clock
+generation is off.
+
+adam
+>
+> Even more interessting, what is your alternative to this chip?
+>
+> Regards,
+>   Marco

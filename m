@@ -2,183 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B07858997F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124BC58997D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236802AbiHDIt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
+        id S231819AbiHDItS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbiHDItV (ORCPT
+        with ESMTP id S229687AbiHDItQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:49:21 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB58EC3F;
-        Thu,  4 Aug 2022 01:49:17 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 17so18824906pfy.0;
-        Thu, 04 Aug 2022 01:49:17 -0700 (PDT)
+        Thu, 4 Aug 2022 04:49:16 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F9AC3F;
+        Thu,  4 Aug 2022 01:49:14 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id b16so16941359edd.4;
+        Thu, 04 Aug 2022 01:49:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YuZgAf9eJDiIQ1pfzGSgYaDFUDPS+whO4VhSlSI0bQI=;
-        b=Nmc3YZfbiVDljfe1S3Nnwdzg+Heu9NiAzb8XYTDkWy//pJAFpCxwgfFeLQf2ohvT/e
-         mFW7ObPEdj0F3bnRJeesXm2sulwWEH/fC4xRE1xeyPCZApTHvR1I+OV17k7a/gAJ/1m8
-         6mZ+FkdlsDjiA7CatUJuQmtJaC0KKnO/koGR5mJOLAS942loviG+34p3x7vSykD4xFlJ
-         fTqe49yQlWYEfucrNvf1To1zhNLim+Q2z8++lkfY0C+d+++st5vFrouiFj39nqKn0hGs
-         zrErSeX9TCxrqnrEcxd7WK7KfJd9y6v7+2Jh/DrFSyMglhHV/7Qh7XCcxMd6YMHqS+t5
-         eGXA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PDqST7Byow9W+iNy4StAr+ocDX/ur332SaJcGD+0QOs=;
+        b=Iac/k5ega7/2roee9dVTuPSAofjPoyHYUAjuYJvvpKrIGY7b2AfJ5ZLodTuwTsj7pi
+         yYh+Tf9dp/SG4ZE++/7FX3vZRBKuAqLAJ3PSzmxu2doTZRGj9T6BbRrTvNZ/6QZG4CyA
+         QDOdbQGb3x7krNvtvMbwoP1UXgxt1TrsXSq21lEcmM48Vg/GTo/kBIDPyPixIMLddRCl
+         65Cxm0kZZj6wyw3JWpE0ELMGU4WDxreJYTtlEXDH77ppjnfUwTUwSeIxj5ZhPwy7uecD
+         Lhx8k5AvcU/yBMt/RF20fGIJ3ZAyklaR/bz1glW6xtuO95kGl3zPz42qLOUuBSf3tM8A
+         jfuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YuZgAf9eJDiIQ1pfzGSgYaDFUDPS+whO4VhSlSI0bQI=;
-        b=b3Axv2Eng02YYx8gZi54WVuEjncGMpz3Qbk3mPAoua9OGPw/dCrblNNZ+Hyi69RiW8
-         GMQL6egs8rPCtZ4wn4wFqAyfwNq35klYVVilXqmLlYcq8zQRa/IgREQ8F7cVb1aZduVE
-         OO5LAzLc0JQ5LPHXgkjhL82650pB0zaZi5NIEVtBpNVnOiW7bh3Q93DYjhszaOVVyxwA
-         xWj9VQLyNgTGoSAf3ZiPScbddFv1EwDHKeDiONCM1cyFoYkJNeixFNWj/rG0KBROI8Sc
-         lb6PwWt7hU7Q+ppsuAAzBU1zI3RoSFdYvMq61P7bK6XPrrmwq6B/7UOxjE5r0xUWFpvv
-         ketA==
-X-Gm-Message-State: ACgBeo01Ds+uPTLUn2RMx5TvrAfS1AZniJKI6Xd2EspeZWUYyxv83Fdj
-        H2uIMWqrs+3M+AWkGQbY/J4=
-X-Google-Smtp-Source: AA6agR6f3u0cPfCCQAl+H1d7gVecNdB5HL/YM90VhrCkP10fYBmef0cMO23jtPBYj2yRVDo6s4uuhg==
-X-Received: by 2002:a63:fd0b:0:b0:415:f76b:a2cd with SMTP id d11-20020a63fd0b000000b00415f76ba2cdmr816661pgh.440.1659602957225;
-        Thu, 04 Aug 2022 01:49:17 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id z4-20020a170902ccc400b0016be9d498d0sm283814ple.211.2022.08.04.01.49.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 01:49:16 -0700 (PDT)
-Message-ID: <fcb0e878-29ff-e408-ccf3-3b594160c0df@gmail.com>
-Date:   Thu, 4 Aug 2022 16:49:08 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/7] perf/x86/core: Remove unnecessary stubs provided
- for KVM-only helpers
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=PDqST7Byow9W+iNy4StAr+ocDX/ur332SaJcGD+0QOs=;
+        b=o+bRD27XiVY8iqjSeLNJBzBRzfpIChF9SPAdL06zeZ/c2H2sfXNyVoi/grRWTCRt0P
+         QDhFAZds2USE+/mFQUZGw+irx8q0Dpe/zHDPXGZs7U5pm9anPZQulKhT22N2dY7hImhS
+         UbBH7NtO1tkPaMHae6CjXT6RvcVtje9LF+ndSmWc7W3Dr22jk6MZZc8kzDu/E1iig0h7
+         WV5la3gX7MPvMFZiw8EawsZgS+yk/eb4xnDLYJgC2iQ3TP2m8aBr4lRQgTfYRt9Wavea
+         KSFrAWykWmooq+LDlNcb5dBy68JhJSh8B/Eju17o7n4kS4ao30kJKPqsFkvDkA9OOtl2
+         U0jg==
+X-Gm-Message-State: ACgBeo0rDrCydVUYNMAK/IqR6wIgtAqhZd8wRUI0udn/zeWFt50zPw0u
+        v9zJju3ROz6CN0nArHvzt4k=
+X-Google-Smtp-Source: AA6agR6EX97LVGRg3+3k1XQ4q9e9rO9X3J4o5LnVoZ/LF7tZx30N+5SegaDbFCgkQHVYF+mhZCbTYw==
+X-Received: by 2002:a05:6402:84f:b0:437:6293:d264 with SMTP id b15-20020a056402084f00b004376293d264mr937597edz.317.1659602952927;
+        Thu, 04 Aug 2022 01:49:12 -0700 (PDT)
+Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
+        by smtp.gmail.com with ESMTPSA id d6-20020a056402144600b0043bbb3535d6sm325949edx.66.2022.08.04.01.49.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 01:49:12 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Thu, 4 Aug 2022 10:49:10 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Vince Weaver <vincent.weaver@maine.edu>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-References: <20220803192658.860033-1-seanjc@google.com>
- <20220803192658.860033-3-seanjc@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20220803192658.860033-3-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Kajol Jain <kjain@linux.ibm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v3 1/3] perf: Align user space counter reading with code
+Message-ID: <YuuIBr2aqB+1992Q@gmail.com>
+References: <20220719223946.176299-1-irogers@google.com>
+ <20220719223946.176299-2-irogers@google.com>
+ <ef5125e0-8265-8c16-e904-c95c8ddc2754@maine.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ef5125e0-8265-8c16-e904-c95c8ddc2754@maine.edu>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/8/2022 3:26 am, Sean Christopherson wrote:
-> Remove CONFIG_PERF_EVENT=n stubs for functions that are effectively
-> KVM-only.  KVM selects PERF_EVENT and will never consume the stubs.
-> Dropping the unnecessary stubs will allow simplifying x86_perf_get_lbr()
 
-Giggling, I used to have a similar cleanup patch sitting in a corner somewhere.
+* Vince Weaver <vincent.weaver@maine.edu> wrote:
 
-> by getting rid of the impossible-to-hit error path (which KVM doesn't
-> even check).
+> On Tue, 19 Jul 2022, Ian Rogers wrote:
 > 
-> Opportunstically reorganize the declarations to collapse multiple
-> CONFIG_PERF_EVENTS #ifdefs.
+> > Align the user space counter reading documentation with the code in
+> > perf_mmap__read_self. Previously the documentation was based on the perf
+> > rdpmc test, but now general purpose code is provided by libperf.
+> > 
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  include/uapi/linux/perf_event.h       | 35 +++++++++++++++++----------
+> >  tools/include/uapi/linux/perf_event.h | 35 +++++++++++++++++----------
+> >  2 files changed, 44 insertions(+), 26 deletions(-)
+> > 
+> > diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+> > index d37629dbad72..6826dabb7e03 100644
+> > --- a/include/uapi/linux/perf_event.h
+> > +++ b/include/uapi/linux/perf_event.h
+> > @@ -538,9 +538,13 @@ struct perf_event_mmap_page {
+> >  	 *
+> >  	 *     if (pc->cap_usr_time && enabled != running) {
+> >  	 *       cyc = rdtsc();
+> > -	 *       time_offset = pc->time_offset;
+> >  	 *       time_mult   = pc->time_mult;
+> >  	 *       time_shift  = pc->time_shift;
+> > +	 *       time_offset = pc->time_offset;
+> > +	 *       if (pc->cap_user_time_short) {
+> > +	 *         time_cycles = pc->time_cycles;
+> > +	 *         time_mask = pc->time_mask;
+> > +	 *       }
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/include/asm/perf_event.h | 53 ++++++++-----------------------
->   1 file changed, 13 insertions(+), 40 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-> index cc47044401ff..aba196172500 100644
-> --- a/arch/x86/include/asm/perf_event.h
-> +++ b/arch/x86/include/asm/perf_event.h
-> @@ -509,46 +509,18 @@ extern u64 perf_get_hw_event_config(int hw_event);
->   extern void perf_check_microcode(void);
->   extern void perf_clear_dirty_counters(void);
->   extern int x86_perf_rdpmc_index(struct perf_event *event);
-> -#else
-> -static inline void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
-> -{
-> -	memset(cap, 0, sizeof(*cap));
-> -}
->   
-> -static inline u64 perf_get_hw_event_config(int hw_event)
-> -{
-> -	return 0;
-> -}
-> -
-> -static inline void perf_events_lapic_init(void)	{ }
-> -static inline void perf_check_microcode(void) { }
-> -#endif
-> -
-> -#if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
-> +#ifdef CONFIG_CPU_SUP_INTEL
->   extern struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr, void *data);
->   extern int x86_perf_get_lbr(struct x86_pmu_lbr *lbr);
-> -#else
-> -struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr, void *data);
-> -static inline int x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
-> -{
-> -	return -1;
-> -}
-> -#endif
-> +extern void intel_pt_handle_vmx(int on);
-> +#endif /* CONFIG_CPU_SUP_INTEL */
->   
-> -#ifdef CONFIG_CPU_SUP_INTEL
-> - extern void intel_pt_handle_vmx(int on);
-> -#else
-> -static inline void intel_pt_handle_vmx(int on)
-> -{
-> +#ifdef CONFIG_CPU_SUP_AMD
-> +extern void amd_pmu_enable_virt(void);
-> +extern void amd_pmu_disable_virt(void);
->   
-> -}
-> -#endif
-> -
-> -#if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_AMD)
-> - extern void amd_pmu_enable_virt(void);
-> - extern void amd_pmu_disable_virt(void);
-> -
-> -#if defined(CONFIG_PERF_EVENTS_AMD_BRS)
-> +#ifdef CONFIG_PERF_EVENTS_AMD_BRS
->   
->   #define PERF_NEEDS_LOPWR_CB 1
->   
-> @@ -566,12 +538,13 @@ static inline void perf_lopwr_cb(bool lopwr_in)
->   	static_call_mod(perf_lopwr_cb)(lopwr_in);
->   }
->   
-> -#endif /* PERF_NEEDS_LOPWR_CB */
+> From what I've been told, and from what perf_mmap__read_self() actually 
+> does, many of these MMAP fields need to be accessed by READ_ONCE()
+> (a GPLv2 only interface) to be correct.
 
-Oops, now the definition of PERF_NEEDS_LOPWR_CB will not be unset.
-This is not mentioned in the commit message and may cause trouble.
+BTW., for this purpose I guess we could add a READ_ONCE() variant to perf 
+tooling that reimplements it with more relaxed licensing, so that the 
+headers & sample code can be included in GPL-incompatible projects?
 
-> +#endif /* CONFIG_PERF_EVENTS_AMD_BRS */
-> +#endif /* CONFIG_CPU_SUP_AMD */
->   
-> -#else
-> - static inline void amd_pmu_enable_virt(void) { }
-> - static inline void amd_pmu_disable_virt(void) { }
-> -#endif
-> +#else  /* !CONFIG_PERF_EVENTS */
-> +static inline void perf_events_lapic_init(void)	{ }
-> +static inline void perf_check_microcode(void) { }
-> +#endif /* CONFIG_PERF_EVENTS */
->   
->   #define arch_perf_out_copy_user copy_from_user_nmi
->   
+READ_ONCE() isn't a super complicated primitive, and we've always been 
+permissive with simple primitives.
+
+Thanks,
+
+	Ingo

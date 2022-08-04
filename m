@@ -2,134 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311F658A247
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 22:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C70158A260
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 22:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239640AbiHDUmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 16:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
+        id S235193AbiHDUnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 16:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbiHDUmI (ORCPT
+        with ESMTP id S229813AbiHDUnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 16:42:08 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEA26D573;
-        Thu,  4 Aug 2022 13:42:06 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id y13so1322118ejp.13;
-        Thu, 04 Aug 2022 13:42:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IRiMxNbXrc+JNPj6jAzlN/4D6lsjKm+nRyRjn4MsJWg=;
-        b=abpFYpzUFF/Czb5Du5GtOLlV3sZXrSns2VbpUGYCJQ0JDibFZgdL/U37QcxRzO+GIH
-         zOYFWFmt3AO8B1j8+4Q2BR08CQ8ll/ZZpN25qERHBiQEq+87H/Yx4bbnvpsN9zeZSLMA
-         42eVHNvDQeupN/AGdCE4Af8GklFhOwF1S4/avRBNICFp25XGuKLs6ZSEQ6ss8JSLqcPl
-         m2VXl2MQrFGzVaq6M7SomtIIY6REqOxgbRkNz7pvd9n+cNoJPGEF+1dXCn+H860ZqmsG
-         FClTlAa9JR7jEGygdGx+e1yh5sLa8ewY0aVdYz0Ze7W8/qH2dJmbpotI+8fxmyAsnVqi
-         R/rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IRiMxNbXrc+JNPj6jAzlN/4D6lsjKm+nRyRjn4MsJWg=;
-        b=jvkynrh1FfV7SC6ubU09rKI1JFV94HdxZTiQ3yoJkloIB/lU0Wqg7ZxcosBOWcbqyH
-         2Y2D1+7+QJbXFg5OFkAVQq5928Esu7TeklBJv3YpmXU3qleCtvgzLObsUC9U20BnzDJ2
-         GIGrhU9fvC7teImtd8M0T2xTP9k5L7h36ucEpB4b0tJViMGcrYchyt2xsVTHFNDxtEzw
-         rOX9u99YXRU8woRUX+YIf9gbwIjvX+iA3GhRlQH7S+gQr2TPUcWFgdj8jrgW4h84LInd
-         FhbaSMKGI0TtQkePCmAKPX9kdoQU63BFQg5FpQkuxITvFFA9hTg/98TV4hw1uT3TO2D1
-         UkZg==
-X-Gm-Message-State: ACgBeo3nzzvFu0/svBnh1PilGxzgdsyDi5QWG3txpiiciaRAvMpn+IB4
-        ib1Y183tOVxNGzUcvBqxXO60We0NfkUo3sM8Eq8=
-X-Google-Smtp-Source: AA6agR7KlG2r253Z1TIYojaIng1yQJgrUt/kN+VBpDOWJ778Mq/+M/SMM69rh1+T+mQ0y7YkK3ZSiNWZgik8omsHzxM=
-X-Received: by 2002:a17:907:971c:b0:72b:83d2:aa7a with SMTP id
- jg28-20020a170907971c00b0072b83d2aa7amr2629773ejc.633.1659645725255; Thu, 04
- Aug 2022 13:42:05 -0700 (PDT)
+        Thu, 4 Aug 2022 16:43:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABFB6D55B
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 13:43:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6FF06176C
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 20:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF40C433D6;
+        Thu,  4 Aug 2022 20:43:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659645825;
+        bh=/dBnGEelz0eNZ7ash2KCkOnK42Kq3O9zA1e57MIkXCU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=juU3p2LUjcxjMlM6vTTY1lLZWVXb/mcsQMqGkZ/WHOsek7V0hDFsZrX6Fy+36KdAL
+         yn6BDe8wUhOCTy+9ZmfJBWS+mP62dLFKmdwlOlB9vlElBwclJg+RepYpdf+Rh/Cr1R
+         u1r3hEtJJAPuVVjBIr5FfU5oSiL0TI8wqQ8BHsU7AMGN+99rp1KPkm9Dpm3bncEXmC
+         lYPlURhbpMy9WqPtn0SPIKyz/PKWa3k6Nr+SvcKaVd542jSA8LDJaEgGIFbA2AG+zj
+         aP9g14qRKxapm+F0brNeG0LRJa69nTT/49cOFbDE96HEXU1PPAUMgBawRt2tazl2La
+         ZP/6K+bDSkX/w==
+Date:   Thu, 4 Aug 2022 13:43:42 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: mainline build failure for x86_64 allmodconfig with clang
+Message-ID: <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
+References: <YuwRyQYPCb1FD+mr@debian>
+ <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
+ <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220802091030.3742334-1-asavkov@redhat.com> <20220802091030.3742334-3-asavkov@redhat.com>
-In-Reply-To: <20220802091030.3742334-3-asavkov@redhat.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 4 Aug 2022 13:41:53 -0700
-Message-ID: <CAADnVQL7GH0MBhjTHA2xWXVzkDgdzk4RS9qS+DJ1+t1T8NkYxA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: export crash_kexec() as destructive kfunc
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>,
-        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 2:10 AM Artem Savkov <asavkov@redhat.com> wrote:
->
-> Allow properly marked bpf programs to call crash_kexec().
->
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> ---
->  kernel/kexec_core.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index 4d34c78334ce..9259ea3bd693 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -39,6 +39,8 @@
->  #include <linux/hugetlb.h>
->  #include <linux/objtool.h>
->  #include <linux/kmsg_dump.h>
-> +#include <linux/btf.h>
-> +#include <linux/btf_ids.h>
->
->  #include <asm/page.h>
->  #include <asm/sections.h>
-> @@ -1238,3 +1240,22 @@ void __weak arch_kexec_protect_crashkres(void)
->
->  void __weak arch_kexec_unprotect_crashkres(void)
->  {}
-> +
-> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> +BTF_SET8_START(kexec_btf_ids)
-> +BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
-> +BTF_SET8_END(kexec_btf_ids)
-> +
-> +static const struct btf_kfunc_id_set kexec_kfunc_set = {
-> +       .owner = THIS_MODULE,
-> +       .set   = &kexec_btf_ids,
-> +};
-> +
-> +static int __init crash_kfunc_init(void)
-> +{
-> +       register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &kexec_kfunc_set);
-> +       return 0;
-> +}
-> +
-> +subsys_initcall(crash_kfunc_init);
-> +#endif
+On Thu, Aug 04, 2022 at 09:24:41PM +0200, Arnd Bergmann wrote:
+> On Thu, Aug 4, 2022 at 8:52 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Thu, Aug 4, 2022 at 11:37 AM Sudip Mukherjee (Codethink)
+> > <sudipm.mukherjee@gmail.com> wrote:cov_trace_cmp
+> > >
+> > > git bisect points to 3876a8b5e241 ("drm/amd/display: Enable building new display engine with KCOV enabled").
+> >
+> > Ahh. So that was presumably why it was disabled before - because it
+> > presumably does disgusting things that make KCOV generate even bigger
+> > stack frames than it already has.
+> >
+> > Those functions do seem to have fairly big stack footprints already (I
+> > didn't try to look into why, I assume it's partly due to aggressive
+> > inlining, and probably some automatic structures on stack). But gcc
+> > doesn't seem to make it all that much worse with KCOV (and my clang
+> > build doesn't enable KCOV).
+> >
+> > So it's presumably some KCOV-vs-clang thing. Nathan?
 
-It feels there will be a bunch of such boiler plate code
-in different .c files in many places in the kernel
-if we go with this approach.
+Looks like Arnd beat me to it :)
 
-Maybe we should do one call:
-register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING
-from kernel/bpf/helper.c
-to register all tracing kfuncs ?
+> The dependency was originally added to avoid a link failure in 9d1d02ff3678
+>  ("drm/amd/display: Don't build DCN1 when kcov is enabled") after I reported the
+> problem in https://lists.freedesktop.org/archives/dri-devel/2018-August/186131.html
+> 
+> The commit from the bisection just turns off KCOV for the entire directory
+> to avoid the link failure, so it's not actually a problem with KCOV vs clang,
+> but I think a problem with clang vs badly written code that was obscured
+> in allmodconfig builds prior to this.
 
-And gate
-BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
-with #ifdef CONFIG_KEXEC_CORE.
+Right, I do think the sanitizers make things worse here too, as those get
+enabled with allmodconfig. I ran some really quick tests with allmodconfig and
+a few instrumentation options flipped on/off:
 
-We have such a pattern in verifier.c already.
+allmodconfig (CONFIG_KASAN=y, CONFIG_KCSAN=n, CONFIG_KCOV=y, and CONFIG_UBSAN=y):
+
+warning: stack frame size (2216) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+warning: stack frame size (2184) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+warning: stack frame size (2176) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+
+allmodconfig + CONFIG_KASAN=n:
+
+warning: stack frame size (2112) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+
+allmodconfig + CONFIG_KCOV=n:
+
+warning: stack frame size (2216) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+warning: stack frame size (2184) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+warning: stack frame size (2176) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+
+allmodconfig + CONFIG_UBSAN=n:
+
+warning: stack frame size (2584) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+warning: stack frame size (2680) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+warning: stack frame size (2352) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+
+allmodconfig + CONFIG_KASAN=n + CONFIG_KCSAN=y + CONFIG_UBSAN=n:
+
+warning: stack frame size (2504) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+warning: stack frame size (2600) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+warning: stack frame size (2264) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+
+allmodconfig + CONFIG_KASAN=n + CONFIG_KCSAN=n + CONFIG_UBSAN=n:
+
+warning: stack frame size (2072) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+
+There might be other debugging configurations that make this worse too,
+as I don't see those warnings on my distribution configuration.
+
+> The dml30_ModeSupportAndSystemConfigurationFull() function exercises
+> a few paths in the compiler that are otherwise rare. On thing it does is to
+> pass up to 60 arguments to other functions, and it heavily uses float and
+> double variables. Both of these make it rather fragile when it comes to
+> unusual compiler options, so the files keep coming up whenever a new
+> instrumentation feature gets added. There is probably some other flag
+> in allmodconfig that we can disable to improve this again, but I have not
+> checked this time.
+
+I do notice that these files build with a non-configurable
+-Wframe-large-than value:
+
+$ rg frame_warn_flag drivers/gpu/drm/amd/display/dc/dml/Makefile
+54:frame_warn_flag := -Wframe-larger-than=2048
+70:CFLAGS_$(AMDDALPATH)/dc/dml/dcn30/display_mode_vba_30.o := $(dml_ccflags) $(frame_warn_flag)
+72:CFLAGS_$(AMDDALPATH)/dc/dml/dcn31/display_mode_vba_31.o := $(dml_ccflags) $(frame_warn_flag)
+76:CFLAGS_$(AMDDALPATH)/dc/dml/dcn32/display_mode_vba_32.o := $(dml_ccflags) $(frame_warn_flag)
+
+I suppose that could just be bumped as a quick workaround? Two of those
+files have a comment that implies modifying them in non-trivial ways is
+not recommended.
+
+/*
+ * NOTE:
+ *   This file is gcc-parsable HW gospel, coming straight from HW engineers.
+ *
+ * It doesn't adhere to Linux kernel style and sometimes will do things in odd
+ * ways. Unless there is something clearly wrong with it the code should
+ * remain as-is as it provides us with a guarantee from HW that it is correct.
+ */
+
+I do note that commit 1b54a0121dba ("drm/amd/display: Reduce stack size
+in the mode support function") did have a workaround for GCC. It appears
+clang will still inline mode_support_configuration(). If I mark it as
+'noinline', the warning disappears in that file.
+
+Cheers,
+Nathan

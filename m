@@ -2,79 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AC6589834
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087E4589839
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239015AbiHDHN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
+        id S237036AbiHDHQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbiHDHN0 (ORCPT
+        with ESMTP id S229592AbiHDHQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:13:26 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485D4606A8;
-        Thu,  4 Aug 2022 00:13:25 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id kb8so20678816ejc.4;
-        Thu, 04 Aug 2022 00:13:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc;
-        bh=3YvlPtzAAZUqzmZnRdFclgixc3h9aOjUwqn3zpjfevE=;
-        b=LVotmRHO7gz0Ww4OVBW3Kw8b2lDL+zylY6Oi1az/4NELdBMEMnNpO3cOZcRLx86Vw/
-         fYGEJnf9qR3pzDFHOSisjcbXJi8XGEE2yqsy5UKVE52KeGbWoa8DSni6oFQXSOSv/E1K
-         CmVeKezBXsjRrnFIMPs/KUNpBbwZBr9xfaTpRXhy52QUYM1SA5Pn66fZpbZ7+EJrfRYy
-         ufwTWNS+8K8xakGnLnMgB3a3XZltpUejuMhBvSE0yU7Xvrrmtr7bqoNe8Gb4R1P42cvK
-         vgDGf6FMVgNwxiI/D1SofOsfx6b7mutKfW9XtM7ea0FW9qL1MFQF3DlT0xK1JjRwXHqd
-         FOOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc;
-        bh=3YvlPtzAAZUqzmZnRdFclgixc3h9aOjUwqn3zpjfevE=;
-        b=oquVCjCJlfjpwFNJt8cuWUFixwD0JCga6X1dhWH0UU5uOJg5a+aq7QwGSo7WYc7O2O
-         AfdBiX9lizx1OOcY8s43JVziLncY1D6erM1CfVlw/c5azEkaET9iDUnaIs7nTCCLCtEu
-         P3PM4RUhmeVpDy2tSJ2rEVprIOPAf3kB1VP2zKnwcbkXApXHP+c6EfkQU/0wdrRt0pJ8
-         W/B4gpDTRErZ2UcuzGb0+Me4vqhH/Zd1Jl93A+hjZVecLAv454Dxdd92yxE1AopM7daO
-         4cRWCsojNp1HBG942zBDH3rxWcrjbBGa9BCncbeKsWCzexpcI/Tt95Jy6NWtEhoNreCu
-         P44w==
-X-Gm-Message-State: ACgBeo1t8W92jYnEmnOtdiWomexW7lseLkU9dIwzaQO+3p6CMhT6/Wzs
-        pL8GdArm4U6zMqBy9OlecLg=
-X-Google-Smtp-Source: AA6agR5/2TFW6vMzbPBpIdm0vp1cBA3HIBmNbeh6YfmNg9r7Kpe3LkFSh5Y+0WPVFnBtQXY15K/ZYA==
-X-Received: by 2002:a17:907:a0c6:b0:72e:ee9a:cf89 with SMTP id hw6-20020a170907a0c600b0072eee9acf89mr396089ejc.43.1659597203811;
-        Thu, 04 Aug 2022 00:13:23 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id dc3-20020a170906c7c300b0073093eaf53esm11889ejb.131.2022.08.04.00.13.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 00:13:23 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 4 Aug 2022 09:13:21 +0200
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] libbpf: ensure functions with always_inline attribute
- are inline
-Message-ID: <YutxkVTxtCgVwBiq@krava>
-References: <20220803151403.793024-1-james.hilliard1@gmail.com>
+        Thu, 4 Aug 2022 03:16:51 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388545C343;
+        Thu,  4 Aug 2022 00:16:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1659597387;
+        bh=oc1O2fPy86MLR9on/4I4+s39V+Vb+PCt1rvjb0LYkOY=;
+        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
+        b=PxNTHLa2k/Zbg+dSGTUhdxetK3v7W5se6qrcFG5akgWHcxTXRcpfcuE9It71HAj2O
+         M63IA01jWlvaPGBtGb+uoen3Ve9CtLSe91X9WCANYr1GVy4jSHnkwjxrcGwfFUQhLm
+         B1SwnLYaha7HGM34vmcgvOL3uxwXeKTFyPBFsqRc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.176.33]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8QS8-1oNsoV0Gqu-004W85; Thu, 04
+ Aug 2022 09:16:27 +0200
+Message-ID: <35e860bb-c76c-ca5f-3f48-2bf6cb798689@gmx.de>
+Date:   Thu, 4 Aug 2022 09:15:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220803151403.793024-1-james.hilliard1@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] tty: vt: selection: Add check for valid tiocl_selection
+ values
+Content-Language: en-US
+To:     Jiri Slaby <jirislaby@kernel.org>,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        syzbot <syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <000000000000bbdd0405d120c155@google.com>
+ <20220729065139.6529-1-khalid.masum.92@gmail.com>
+ <eb4a26aa-da30-ceee-7d27-c1e902dd4218@gmx.de> <YuV9PybMPgc83Jis@p100>
+ <1eb62346-304b-54d5-8a62-8a35888d51bd@kernel.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <1eb62346-304b-54d5-8a62-8a35888d51bd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:jRjVNDDdqJHTUKkL7mG+988yDQwcDTyIxbhpOuX4s43shVA9Dnn
+ 5Cvvi8qFu3DTjPAR/E+WPnIE8z9iciQ6Tf9wG/dvgCcJXxl1wbZdtQu9E9KpfxbzqqzxeaO
+ jSdPCN8QQ8zzlV7s21qEQ5jCHSGV3tSiQD6ixnIlwoE+fZwGFZDorgdwWgrk3BDke3rDOYa
+ s/qZseDPGQt5C/ZekneLg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4K5fc628s8A=:XCAXeu6N7qnxQkJwrpOxpL
+ wyCC+Qj/fffBLtSuyuC0m767p5PPfBVxHtIEB/ABrvowUqZdizfH9OxmlYvD3RP0RBRbRY3ga
+ l8mvJzbjGNb1HcaobCSYnlNOJDD8pNKscvzLoGh9Jf0wWnMiwqNUtjJI51/dKDFWoU5CBo76P
+ KzBE4q/kN3AHcqEGoCDIiyXl41FfdD8pXc6HptplYcXB/8GsJAtz/t/3V6qfCOPtQC7xNKF7S
+ 0pqfJweTYJ+8pqcq0fy2OKspKmRKWo8z7bhoMwYalrMYuyL+YsDVWSYMBNS5qbmIXcKf3upef
+ 2o41Z0QVBo9qxwpvH+8kQiBHBk/ZEg5jHICcJuUB3ZvxCF/D+ZuM3KZOgql4e7PAMTZpA4twM
+ gPfuSFm3vD18t9XBnwgJnAKS+0sSzJYkBEeoy8tngaYgb4ji+x/Ex0bSp+WwOrGIcAEY/aKd6
+ aKr+a27jAR1jk/7L7iUAnIY2r5WFz0NYGY+5/lBRIJbooNIYLsoRP4SdZ/pDY5eIUVz/y2mFN
+ /bYm6EDEzzUEZThnisptKj4uImXxtIRmrqylzEwMAJTOwL2nGf8/YYFZ6UuAqF+EDIugLlNs8
+ OTKRqy5Gdo1VQuJ4IpjVDrsa3YStYfSjHTGFEEifrsHBW0jreAcGC3BGd7lOVUHif8oQKc9zV
+ tYe4pQXpX3OfxoQk3b4tMnThcBa28ucR+lcxi8kLHtu7xE1YEiTjh90raPcYaSUavJcFh/4b+
+ zlClaruuhBcf6jl8BRLzNGXguI9I30dH9soFD+M4CeAjtdpE8B2opgiMAzPSzzWpy6xk8Dkfo
+ TWyQAMuvL7WQIAkKyh2zuq+LDQbu7uRm1E5EUYcwCZhwMzxWWfKJZkVhfq3zQvQ/KW7zswsVM
+ ykAwI2M2+ZlEofDZzxvX8xcR5MgIP2lMrely93n4lnbhIoi1xezltWJbDRZwFrJFXyAxLe98l
+ VwvXRCwF3P+jimfzcudB647Zm41WAMwZrrdyGvSUKHfOb9KwmxJVNTDWbAtMkxd4uVjCd603e
+ iXcHI9quiP9ohCOvpNES5AZSQwx9MQ2aYI570s3S2I2Q3jOOvd0H6c6nKwKeIf/RhQzlazrp1
+ PQIvYarnKAQLHY3tZfYO4QE+F7ChmUOP0Tynq9u+kfAkUImAqTrBlEhzA==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,120 +79,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 09:14:03AM -0600, James Hilliard wrote:
-> GCC expects the always_inline attribute to only be set on inline
-> functions, as such we should make all functions with this attribute
-> use the __always_inline macro which makes the function inline and
-> sets the attribute.
-> 
-> Fixes errors like:
-> /home/buildroot/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_tracing.h:439:1: error: ‘always_inline’ function might not be inlinable [-Werror=attributes]
->   439 | ____##name(unsigned long long *ctx, ##args)
->       | ^~~~
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - use __always_inline macro
+Hello Jiri,
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+Thanks for looking into this patch!
 
-jirka
+On 8/4/22 07:47, Jiri Slaby wrote:
+> On 30. 07. 22, 20:49, Helge Deller wrote:
+>> The line and column numbers for the selection need to start at 1.
+>> Add the checks to prevent invalid input.
+>>
+>> Signed-off-by: Helge Deller <deller@gmx.de>
+>> Reported-by: syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com
+>>
+>> diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
+>> index f7755e73696e..58692a9b4097 100644
+>> --- a/drivers/tty/vt/selection.c
+>> +++ b/drivers/tty/vt/selection.c
+>> @@ -326,6 +326,9 @@ static int vc_selection(struct vc_data *vc, struct =
+tiocl_selection *v,
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>
+>> +=C2=A0=C2=A0=C2=A0 if (!v->xs || !v->ys || !v->xe || !v->ye)
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
+>
+> Hmm, I'm not sure about this. It potentially breaks userspace (by
+> returning EINVAL now).
 
-> ---
->  tools/lib/bpf/bpf_tracing.h | 14 +++++++-------
->  tools/lib/bpf/usdt.bpf.h    |  4 ++--
->  2 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-> index 43ca3aff2292..5fdb93da423b 100644
-> --- a/tools/lib/bpf/bpf_tracing.h
-> +++ b/tools/lib/bpf/bpf_tracing.h
-> @@ -426,7 +426,7 @@ struct pt_regs;
->   */
->  #define BPF_PROG(name, args...)						    \
->  name(unsigned long long *ctx);						    \
-> -static __attribute__((always_inline)) typeof(name(0))			    \
-> +static __always_inline typeof(name(0))					    \
->  ____##name(unsigned long long *ctx, ##args);				    \
->  typeof(name(0)) name(unsigned long long *ctx)				    \
->  {									    \
-> @@ -435,7 +435,7 @@ typeof(name(0)) name(unsigned long long *ctx)				    \
->  	return ____##name(___bpf_ctx_cast(args));			    \
->  	_Pragma("GCC diagnostic pop")					    \
->  }									    \
-> -static __attribute__((always_inline)) typeof(name(0))			    \
-> +static __always_inline typeof(name(0))					    \
->  ____##name(unsigned long long *ctx, ##args)
->  
->  struct pt_regs;
-> @@ -460,7 +460,7 @@ struct pt_regs;
->   */
->  #define BPF_KPROBE(name, args...)					    \
->  name(struct pt_regs *ctx);						    \
-> -static __attribute__((always_inline)) typeof(name(0))			    \
-> +static __always_inline typeof(name(0))					    \
->  ____##name(struct pt_regs *ctx, ##args);				    \
->  typeof(name(0)) name(struct pt_regs *ctx)				    \
->  {									    \
-> @@ -469,7 +469,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
->  	return ____##name(___bpf_kprobe_args(args));			    \
->  	_Pragma("GCC diagnostic pop")					    \
->  }									    \
-> -static __attribute__((always_inline)) typeof(name(0))			    \
-> +static __always_inline typeof(name(0))					    \
->  ____##name(struct pt_regs *ctx, ##args)
->  
->  #define ___bpf_kretprobe_args0()       ctx
-> @@ -484,7 +484,7 @@ ____##name(struct pt_regs *ctx, ##args)
->   */
->  #define BPF_KRETPROBE(name, args...)					    \
->  name(struct pt_regs *ctx);						    \
-> -static __attribute__((always_inline)) typeof(name(0))			    \
-> +static __always_inline typeof(name(0))					    \
->  ____##name(struct pt_regs *ctx, ##args);				    \
->  typeof(name(0)) name(struct pt_regs *ctx)				    \
->  {									    \
-> @@ -540,7 +540,7 @@ static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, ##args)
->  #define BPF_KSYSCALL(name, args...)					    \
->  name(struct pt_regs *ctx);						    \
->  extern _Bool LINUX_HAS_SYSCALL_WRAPPER __kconfig;			    \
-> -static __attribute__((always_inline)) typeof(name(0))			    \
-> +static __always_inline typeof(name(0))					    \
->  ____##name(struct pt_regs *ctx, ##args);				    \
->  typeof(name(0)) name(struct pt_regs *ctx)				    \
->  {									    \
-> @@ -555,7 +555,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
->  		return ____##name(___bpf_syscall_args(args));		    \
->  	_Pragma("GCC diagnostic pop")					    \
->  }									    \
-> -static __attribute__((always_inline)) typeof(name(0))			    \
-> +static __always_inline typeof(name(0))					    \
->  ____##name(struct pt_regs *ctx, ##args)
->  
->  #define BPF_KPROBE_SYSCALL BPF_KSYSCALL
-> diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
-> index 4f2adc0bd6ca..fdfd235e52c4 100644
-> --- a/tools/lib/bpf/usdt.bpf.h
-> +++ b/tools/lib/bpf/usdt.bpf.h
-> @@ -232,7 +232,7 @@ long bpf_usdt_cookie(struct pt_regs *ctx)
->   */
->  #define BPF_USDT(name, args...)						    \
->  name(struct pt_regs *ctx);						    \
-> -static __attribute__((always_inline)) typeof(name(0))			    \
-> +static __always_inline typeof(name(0))					    \
->  ____##name(struct pt_regs *ctx, ##args);				    \
->  typeof(name(0)) name(struct pt_regs *ctx)				    \
->  {									    \
-> @@ -241,7 +241,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
->          return ____##name(___bpf_usdt_args(args));			    \
->          _Pragma("GCC diagnostic pop")					    \
->  }									    \
-> -static __attribute__((always_inline)) typeof(name(0))			    \
-> +static __always_inline typeof(name(0))					    \
->  ____##name(struct pt_regs *ctx, ##args)
->  
->  #endif /* __USDT_BPF_H__ */
-> -- 
-> 2.34.1
-> 
+Right.
+According to the code below, my interpretation is that all xs/ys/xe/ye val=
+ues
+should be > 0. But of course I might be wrong on this, as I didn't find an=
+y
+documentation for TIOCL_SETSEL.
+
+And if userspace tries to set an invalid selection (e.g. by selecting row =
+0),
+my patch now returns -EINVAL, while it returned success before.
+
+> And the code below should handle this just fine, right:
+>>       v->xs =3D min_t(u16, v->xs - 1, vc->vc_cols - 1);
+>>       v->ys =3D min_t(u16, v->ys - 1, vc->vc_rows - 1);
+>>       v->xe =3D min_t(u16, v->xe - 1, vc->vc_cols - 1);
+
+It "handles it fine" in the sense that it can cope with the
+input and will not crash.
+But it returns (maybe?) unexpected results...
+
+For example, if a user selects row 0 (where I assume he wanted to set
+the first line), he instead selects the last row.
+I'm not sure if this is the expected behaviour.
+
+Do you know of any userspace program which breaks because of this?
+
+Helge

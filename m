@@ -2,342 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC3A589FE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87612589FE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238785AbiHDR2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 13:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S238626AbiHDRcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 13:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238727AbiHDR2U (ORCPT
+        with ESMTP id S230120AbiHDRcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 13:28:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14A636A4A4
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 10:28:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659634097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ybWDNojv72jmRJcXktwiQRGncl+ABn5fskjt5uRGsbE=;
-        b=BLKQ4dGDMD4auHO1onJLoiImiYAfdgIyjh/qcUhU9ugAcAHaH9JrXWDZBiBn6ZsC0dsr+7
-        VorVctElrGmyN0o5yrxTI4tHfGx1pyGT5bi9UgS5ldEeYbF520ZMcJPJGwFXvUf1CdtaKc
-        J255An9I1tEd03yUpCDNsxzpbBpWV14=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-674-CVkv0YXEPxeFjMEy3PNScg-1; Thu, 04 Aug 2022 13:28:15 -0400
-X-MC-Unique: CVkv0YXEPxeFjMEy3PNScg-1
-Received: by mail-wm1-f72.google.com with SMTP id v130-20020a1cac88000000b003a4f057ed9fso126933wme.7
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 10:28:15 -0700 (PDT)
+        Thu, 4 Aug 2022 13:32:51 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B581D109;
+        Thu,  4 Aug 2022 10:32:50 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id s7so260843ioa.0;
+        Thu, 04 Aug 2022 10:32:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ZQf4XnBOCJB+vfAUnlzSwte/cUU8bNUatf6/Q8jOgEg=;
+        b=jpJNn4uLeRXOgYq2sOuJhfouM6NXGvrYP/ciqu+C1dEv8Ch9RTeh8d36GTYbPmery4
+         YPHeKo3EBsBL8wYh6OU1klWoV6E2JHKHqkj9MY32X4tnZjm9yDPqYpcl/bm9XTxH/RKY
+         9H+1RyOckouKnvkStdM+hA8mVWt6KY8oFYHH5lOMoLg8V8eSFtBIv1i5ntmYfKKD6Kif
+         ctmsJpuoPRiS5GnZnO7uil5A32DiFAWEUN1DRp5TyaSInoFyDT68uz2TpPtEfFub8wqn
+         qCovJNGdPNUPHJN1zvaEB+vRABBMQr7pQXhXW+iKugKjiPfiYAoF1k+IxBInGDKboBZm
+         Exxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=ybWDNojv72jmRJcXktwiQRGncl+ABn5fskjt5uRGsbE=;
-        b=clvacQQWGA2eidWmZHdshV6+dazdNOrcixeZS9Ke5cC9zPq9cpih3kj9h5t87NYztI
-         DW0jMvhMkOYjr/dh1EQHMGiJOP1+Y7ftPmQ09QUZ7lbZ/e2e1rsb1qWp/MlLr8sKgKKz
-         bgmgFoj9jAI6uwM9Qm731VKPROWzXWpODkIV5MRRehpITuFhETkX5+X9brkQ3XpN+K+2
-         CwR7KaGYk5A+QS7dejjfXmGZgH/m2pktkDX5rMJLcQLI6SlCEZUDBJJgb76Hm+0sXLtU
-         HHzYZK/9oTVR5kvZpQuAKQskXV0lIU2dFzXTXguOA11F/oOz12KdYsVbopfv2AOhc1Gi
-         QGBg==
-X-Gm-Message-State: ACgBeo3VmyBdFj8mythdvo3GeU9X9vHU8xQBV9uFsw/Mm5QXr5aMjHjK
-        BegPGXaJqzye1/dVBZy2lZ/R/26jJv8QLBk2iqSfPiPzIaOVenXB95zG15XTR15wlseypvH2PuV
-        /kpz9fKsqhIo7XQOxHa4JvDI8
-X-Received: by 2002:a05:600c:3495:b0:3a3:1fab:d01e with SMTP id a21-20020a05600c349500b003a31fabd01emr7240023wmq.150.1659634094599;
-        Thu, 04 Aug 2022 10:28:14 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6Jmwl7TFdshejfvSaBVgESSXJ5Hx+8ErrzGPMKpQN8r/HQB+h5eJMby069n9WsL4VqCHOjhA==
-X-Received: by 2002:a05:600c:3495:b0:3a3:1fab:d01e with SMTP id a21-20020a05600c349500b003a31fabd01emr7240010wmq.150.1659634094294;
-        Thu, 04 Aug 2022 10:28:14 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id r6-20020a5d4e46000000b0021f0c05859esm1744458wrt.71.2022.08.04.10.28.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 10:28:13 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>
-Subject: Re: [PATCH net-next V4 1/3] sched/topology: Add NUMA-based CPUs
- spread API
-In-Reply-To: <20220728191203.4055-2-tariqt@nvidia.com>
-References: <20220728191203.4055-1-tariqt@nvidia.com>
- <20220728191203.4055-2-tariqt@nvidia.com>
-Date:   Thu, 04 Aug 2022 18:28:12 +0100
-Message-ID: <xhsmhedxvdikz.mognet@vschneid.remote.csb>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ZQf4XnBOCJB+vfAUnlzSwte/cUU8bNUatf6/Q8jOgEg=;
+        b=VtOprNe/J4aOrJ4hltM6NRKePgXM5HBOsMFJ6wm2mm7bVkTd1W4srq5hBfFYItRX/X
+         2r4u2Qm0N+hv+I11KpaqNsRWML1Vjl0HLiPQrwU3TKmhZQYSb2KtXuwMc7FNtAVThs21
+         aUT+JoCwbXntbmHO9cE0ItVfQXJvLSUb+nOqoOCvbGXL4o5Snw5tvO6JI99Cqklv6C2c
+         4NHlxCpIO71F5+ejNxpzgi8bAs+zxnd9CvVn694ybnQxoIB8rJekqAw2AkEPYS2Jz4cC
+         EJhUyQMg7sICUN/mtknpJCeN+gT3xC74lH7tiKnOKwoKWexMpTVk6OIjiTsFRSfT/SPh
+         z7mQ==
+X-Gm-Message-State: ACgBeo267crFPidAtwFBFl6UnRB5M/6ZOARfAb9JaXP51U9wNuFbZXa1
+        MF5d56VtBH27vMLsLiw8AY4zDzY82w+q/7Iuy4IKnO7B
+X-Google-Smtp-Source: AA6agR7l+0CbFrUgBA7wD4UHjdEAojTPkkSEOy0SRKRZdOZG7J7o6ZyxuIxXmVlYDjjCoFMxBCQ95tMMlKSldAZtRrE=
+X-Received: by 2002:a02:9622:0:b0:342:86af:7506 with SMTP id
+ c31-20020a029622000000b0034286af7506mr1287121jai.311.1659634369569; Thu, 04
+ Aug 2022 10:32:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220803172302.1976981-1-robdclark@gmail.com> <c80d70b6-a7ad-5900-ea7a-f0f2157e4a40@quicinc.com>
+ <CAF6AEGuDajmv=bnQ9hNgCbkB8ubpFhhoFZVL4881O=2B9xh+_Q@mail.gmail.com> <7f7bd85a-2444-1939-4ac8-dbf2685eaf24@quicinc.com>
+In-Reply-To: <7f7bd85a-2444-1939-4ac8-dbf2685eaf24@quicinc.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 4 Aug 2022 10:33:16 -0700
+Message-ID: <CAF6AEGv8sYG=72ne4wMx_OQwWOUkx88fYdKM2EEszdmYzOrg1A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm/msm: Move hangcheck timer restart
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/22 22:12, Tariq Toukan wrote:
-> Implement and expose API that sets the spread of CPUs based on distance,
-> given a NUMA node.  Fallback to legacy logic that uses
-> cpumask_local_spread.
+On Thu, Aug 4, 2022 at 12:53 AM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
 >
-> This logic can be used by device drivers to prefer some remote cpus over
-> others.
+> On 8/4/2022 1:59 AM, Rob Clark wrote:
+> > On Wed, Aug 3, 2022 at 12:52 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+> >> On 8/3/2022 10:53 PM, Rob Clark wrote:
+> >>> From: Rob Clark <robdclark@chromium.org>
+> >>>
+> >>> Don't directly restart the hangcheck timer from the timer handler, but
+> >>> instead start it after the recover_worker replays remaining jobs.
+> >>>
+> >>> If the kthread is blocked for other reasons, there is no point to
+> >>> immediately restart the timer.  Fixes a random symptom of the problem
+> >>> fixed in the next patch.
+> >>>
+> >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>> ---
+> >>>    drivers/gpu/drm/msm/msm_gpu.c | 14 +++++++++-----
+> >>>    1 file changed, 9 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+> >>> index fba85f894314..8f9c48eabf7d 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_gpu.c
+> >>> +++ b/drivers/gpu/drm/msm/msm_gpu.c
+> >>> @@ -328,6 +328,7 @@ find_submit(struct msm_ringbuffer *ring, uint32_t fence)
+> >>>    }
+> >>>
+> >>>    static void retire_submits(struct msm_gpu *gpu);
+> >>> +static void hangcheck_timer_reset(struct msm_gpu *gpu);
+> >>>
+> >>>    static void get_comm_cmdline(struct msm_gem_submit *submit, char **comm, char **cmd)
+> >>>    {
+> >>> @@ -420,6 +421,8 @@ static void recover_worker(struct kthread_work *work)
+> >>>        }
+> >>>
+> >>>        if (msm_gpu_active(gpu)) {
+> >>> +             bool restart_hangcheck = false;
+> >>> +
+> >>>                /* retire completed submits, plus the one that hung: */
+> >>>                retire_submits(gpu);
+> >>>
+> >>> @@ -436,10 +439,15 @@ static void recover_worker(struct kthread_work *work)
+> >>>                        unsigned long flags;
+> >>>
+> >>>                        spin_lock_irqsave(&ring->submit_lock, flags);
+> >>> -                     list_for_each_entry(submit, &ring->submits, node)
+> >>> +                     list_for_each_entry(submit, &ring->submits, node) {
+> >>>                                gpu->funcs->submit(gpu, submit);
+> >>> +                             restart_hangcheck = true;
+> >>> +                     }
+> >>>                        spin_unlock_irqrestore(&ring->submit_lock, flags);
+> >>>                }
+> >>> +
+> >>> +             if (restart_hangcheck)
+> >>> +                     hangcheck_timer_reset(gpu);
+> >>>        }
+> >>>
+> >>>        mutex_unlock(&gpu->lock);
+> >>> @@ -515,10 +523,6 @@ static void hangcheck_handler(struct timer_list *t)
+> >>>                kthread_queue_work(gpu->worker, &gpu->recover_work);
+> >>>        }
+> >>>
+> >>> -     /* if still more pending work, reset the hangcheck timer: */
+> >> In the scenario mentioned here, shouldn't we restart the timer?
+> > yeah, actually the case where we don't want to restart the timer is
+> > *only* when we schedule recover_work..
+> >
+> > BR,
+> > -R
+> Not sure if your codebase is different but based on msm-next branch,
+> when "if (fence != ring->hangcheck_fence)" is true, we now skip
+> rescheduling the timer. I don't think that is what we want. There should
+> be a hangcheck timer running as long as there is an active submit,
+> unless we have scheduled a recover_work here.
 >
-> Reviewed-by: Gal Pressman <gal@nvidia.com>
-> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
 
-IIUC you want a multi-CPU version of sched_numa_find_closest(). I'm OK with
-the need (and you have the numbers to back it up), but I have some qualms
-with the implementation, see more below.
+right, v2 will change that to only skip rescheduling the timer in the
+recover path
 
-> ---
->  include/linux/sched/topology.h |  5 ++++
->  kernel/sched/topology.c        | 49 ++++++++++++++++++++++++++++++++++
->  2 files changed, 54 insertions(+)
+BR,
+-R
+
+> -Akhil.
+> >
+> >> -Akhil.
+> >>> -     if (fence_after(ring->fctx->last_fence, ring->hangcheck_fence))
+> >>> -             hangcheck_timer_reset(gpu);
+> >>> -
+> >>>        /* workaround for missing irq: */
+> >>>        msm_gpu_retire(gpu);
+> >>>    }
+> >>>
 >
-> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-> index 56cffe42abbc..a49167c2a0e5 100644
-> --- a/include/linux/sched/topology.h
-> +++ b/include/linux/sched/topology.h
-> @@ -210,6 +210,7 @@ extern void set_sched_topology(struct sched_domain_topology_level *tl);
->  # define SD_INIT_NAME(type)
->  #endif
->
-> +void sched_cpus_set_spread(int node, u16 *cpus, int ncpus);
->  #else /* CONFIG_SMP */
->
->  struct sched_domain_attr;
-> @@ -231,6 +232,10 @@ static inline bool cpus_share_cache(int this_cpu, int that_cpu)
->       return true;
->  }
->
-> +static inline void sched_cpus_set_spread(int node, u16 *cpus, int ncpus)
-> +{
-> +	memset(cpus, 0, ncpus * sizeof(*cpus));
-> +}
->  #endif	/* !CONFIG_SMP */
->
->  #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index 05b6c2ad90b9..157aef862c04 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -2067,8 +2067,57 @@ int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
->       return found;
->  }
->
-> +static bool sched_cpus_spread_by_distance(int node, u16 *cpus, int ncpus)
-                                                       ^^^^^^^^^
-That should be a struct *cpumask.
-
-> +{
-> +	cpumask_var_t cpumask;
-> +	int first, i;
-> +
-> +	if (!zalloc_cpumask_var(&cpumask, GFP_KERNEL))
-> +		return false;
-> +
-> +	cpumask_copy(cpumask, cpu_online_mask);
-> +
-> +	first = cpumask_first(cpumask_of_node(node));
-> +
-> +	for (i = 0; i < ncpus; i++) {
-> +		int cpu;
-> +
-> +		cpu = sched_numa_find_closest(cpumask, first);
-> +		if (cpu >= nr_cpu_ids) {
-> +			free_cpumask_var(cpumask);
-> +			return false;
-> +		}
-> +		cpus[i] = cpu;
-> +		__cpumask_clear_cpu(cpu, cpumask);
-> +	}
-> +
-> +	free_cpumask_var(cpumask);
-> +	return true;
-> +}
-
-This will fail if ncpus > nr_cpu_ids, which shouldn't be a problem. It
-would make more sense to set *up to* ncpus, the calling code can then
-decide if getting fewer than requested is OK or not.
-
-I also don't get the fallback to cpumask_local_spread(), is that if the
-NUMA topology hasn't been initialized yet? It feels like most users of this
-would invoke it late enough (i.e. anything after early initcalls) to have
-the backing data available.
-
-Finally, I think iterating only once per NUMA level would make more sense.
-
-I've scribbled something together from those thoughts, see below. This has
-just the mlx5 bits touched to show what I mean, but that's just compile
-tested.
----
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eq.c b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-index 229728c80233..2d010d8d670c 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-@@ -810,7 +810,7 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
- {
- 	struct mlx5_eq_table *table = dev->priv.eq_table;
- 	int ncomp_eqs = table->num_comp_eqs;
--	u16 *cpus;
-+	cpumask_var_t cpus;
- 	int ret;
- 	int i;
- 
-@@ -825,15 +825,14 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
- 		return ret;
- 	}
- 
--	cpus = kcalloc(ncomp_eqs, sizeof(*cpus), GFP_KERNEL);
--	if (!cpus) {
-+	if (!zalloc_cpumask_var(&cpus, GFP_KERNEL)) {
- 		ret = -ENOMEM;
- 		goto free_irqs;
- 	}
--	for (i = 0; i < ncomp_eqs; i++)
--		cpus[i] = cpumask_local_spread(i, dev->priv.numa_node);
-+
-+	sched_numa_find_n_closest(cpus, dev->piv.numa_node, ncomp_eqs);
- 	ret = mlx5_irqs_request_vectors(dev, cpus, ncomp_eqs, table->comp_irqs);
--	kfree(cpus);
-+	free_cpumask_var(cpus);
- 	if (ret < 0)
- 		goto free_irqs;
- 	return ret;
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-index 662f1d55e30e..2330f81aeede 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-@@ -448,7 +448,7 @@ void mlx5_irqs_release_vectors(struct mlx5_irq **irqs, int nirqs)
- /**
-  * mlx5_irqs_request_vectors - request one or more IRQs for mlx5 device.
-  * @dev: mlx5 device that is requesting the IRQs.
-- * @cpus: CPUs array for binding the IRQs
-+ * @cpus: cpumask for binding the IRQs
-  * @nirqs: number of IRQs to request.
-  * @irqs: an output array of IRQs pointers.
-  *
-@@ -458,25 +458,22 @@ void mlx5_irqs_release_vectors(struct mlx5_irq **irqs, int nirqs)
-  * This function returns the number of IRQs requested, (which might be smaller than
-  * @nirqs), if successful, or a negative error code in case of an error.
-  */
--int mlx5_irqs_request_vectors(struct mlx5_core_dev *dev, u16 *cpus, int nirqs,
-+int mlx5_irqs_request_vectors(struct mlx5_core_dev *dev,
-+			      const struct cpumask *cpus,
-+			      int nirqs,
- 			      struct mlx5_irq **irqs)
- {
--	cpumask_var_t req_mask;
-+	int cpu = cpumask_first(cpus);
- 	struct mlx5_irq *irq;
--	int i;
- 
--	if (!zalloc_cpumask_var(&req_mask, GFP_KERNEL))
--		return -ENOMEM;
--	for (i = 0; i < nirqs; i++) {
--		cpumask_set_cpu(cpus[i], req_mask);
--		irq = mlx5_irq_request(dev, i, req_mask);
-+	for (i = 0; i < nirqs && cpu < nr_cpu_ids; i++) {
-+		irq = mlx5_irq_request(dev, i, cpumask_of(cpu));
- 		if (IS_ERR(irq))
- 			break;
--		cpumask_clear(req_mask);
- 		irqs[i] = irq;
-+		cpu = cpumask_next(cpu, cpus);
- 	}
- 
--	free_cpumask_var(req_mask);
- 	return i ? i : PTR_ERR(irq);
- }
- 
-diff --git a/include/linux/topology.h b/include/linux/topology.h
-index 4564faafd0e1..bdc9c5df84cd 100644
---- a/include/linux/topology.h
-+++ b/include/linux/topology.h
-@@ -245,5 +245,13 @@ static inline const struct cpumask *cpu_cpu_mask(int cpu)
- 	return cpumask_of_node(cpu_to_node(cpu));
- }
- 
-+#ifdef CONFIG_NUMA
-+extern int sched_numa_find_n_closest(struct cpumask *cpus, int node, int ncpus);
-+#else
-+static inline int sched_numa_find_n_closest(struct cpumask *cpus, int node, int ncpus)
-+{
-+	return -ENOTSUPP;
-+}
-+#endif
- 
- #endif /* _LINUX_TOPOLOGY_H */
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 8739c2a5a54e..499f6ef611fa 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -2067,6 +2067,56 @@ int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
- 	return found;
- }
- 
-+/**
-+ * sched_numa_find_n_closest - Find the 'n' closest cpus to a given node
-+ * @cpus: The cpumask to fill in with CPUs
-+ * @ncpus: How many CPUs to look for
-+ * @node: The node to start the search from
-+ *
-+ * This will fill *up to* @ncpus in @cpus, using the closest (in NUMA distance)
-+ * first and expanding outside the node if more CPUs are required.
-+ *
-+ * Return: Number of found CPUs, negative value on error.
-+ */
-+int sched_numa_find_n_closest(struct cpumask *cpus, int node, int ncpus)
-+{
-+	struct cpumask ***masks;
-+	int cpu, lvl, ntofind = ncpus;
-+
-+	if (node >= nr_node_ids)
-+		return -EINVAL;
-+
-+	rcu_read_lock();
-+
-+	masks = rcu_dereference(sched_domains_numa_masks);
-+	if (!masks)
-+		goto unlock;
-+
-+	/*
-+	 * Walk up the level masks; the first mask should be CPUs LOCAL_DISTANCE
-+	 * away (aka the local node), and we incrementally grow the search
-+	 * beyond that.
-+	 */
-+	for (lvl = 0; lvl < sched_domains_numa_levels; lvl++) {
-+		if (!masks[lvl][node])
-+			goto unlock;
-+
-+		/* XXX: could be neater with for_each_cpu_andnot() */
-+		for_each_cpu(cpu, masks[lvl][node]) {
-+			if (cpumask_test_cpu(cpu, cpus))
-+				continue;
-+
-+			__cpumask_set_cpu(cpu, cpus);
-+			if (--ntofind == 0)
-+				goto unlock;
-+		}
-+	}
-+unlock:
-+	rcu_read_unlock();
-+	return ncpus - ntofind;
-+}
-+EXPORT_SYMBOL_GPL(sched_numa_find_n_closest);
-+
- #endif /* CONFIG_NUMA */
- 
- static int __sdt_alloc(const struct cpumask *cpu_map)
-

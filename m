@@ -2,272 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB9558A015
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A26358A011
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 19:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239532AbiHDRzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 13:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S239504AbiHDRy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 13:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239626AbiHDRzp (ORCPT
+        with ESMTP id S231712AbiHDRy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 13:55:45 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A66BCA9
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 10:55:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659635743; x=1691171743;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gZkOyoiV0ZbMA805mv3p5PYtu7vOdgaeY4SEvlIX/Io=;
-  b=BACgLcSYZ2VHKSHjvhwmsRu+CsX4hsLZtf6J/cFBCsQOTC6BA/PSBpA8
-   BikL85tJ7UCdmq75Ibg+0VkFu4+e9sfBawLF6VQmyMX6LkCTVUQ5ey0mN
-   XGnNybFbgvHSJOJqox7Oxl+sTdglKvko7Y6Y01E65UgHdVvjvtOOx8NxD
-   AA9zyYEbUpcHaq1BzJFYUoSXuCqNEq5JiGaGzIBQzEbcf962jgLplE9TX
-   TPYRmSphOC+KVXSQODpv25YOdn1Sd/6Mft/Nja58GHn420VUv5aEdqUP1
-   ku0/oOFsiH5s98Z7kyhNNkJcgrj/7+FUxOAPHJq7RXeqvI2P++pY3RyN2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="351717216"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="351717216"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 10:55:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="662639058"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Aug 2022 10:55:30 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJf4D-000IhP-1F;
-        Thu, 04 Aug 2022 17:55:29 +0000
-Date:   Fri, 5 Aug 2022 01:54:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sebastian =?iso-8859-1?Q?W=FCrl?= <sebastian.wuerl@ororatech.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: drivers/net/can/spi/mcp251x.c:1073:7: warning: variable 'intf1' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <202208050128.gFQ9dERP-lkp@intel.com>
+        Thu, 4 Aug 2022 13:54:56 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6521A6AA2A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 10:54:55 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id r6so277907ilc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 10:54:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Q94Q2VDlGnfmsIVyKku4OjRypxckGbu+KvrwMMNdhgs=;
+        b=lvlLlE7olQ5iMWyiRKxfNMtkZzWDdxp8/mVxNcRkMZH6idmzmJ+atn9c5BDlpGUrKu
+         FVhK6HEEUsRFAHOdZY+MRmjSYBywMpoNw2sneaMMNrqkdn8AZoP1vdPmR1Ls7aHDiEyc
+         l5HOCLI+BuYNahdSsPJrSNvwqhvEx7O6pe8qE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Q94Q2VDlGnfmsIVyKku4OjRypxckGbu+KvrwMMNdhgs=;
+        b=4w/t0lC/xyol2IvE4/qCuzebnCndoYmFLlt4799lcjCGWNDoKkzgpsLy6NhvUtqSny
+         vxZdLzgyjfaw8U+6VY71dmbEVymaU3yIjPYFMHnvtZj+wEBrgs2Iw6+B4921AV5GoxoC
+         e1sCaUcmYhGlsb6Q/huZtfe4NmImNAOtHAjxNnsvRdaDiGFUjbMBly/IHQXO8h5a36bR
+         V/Bk2PPdX/eShlyWYD6RiXdd7SlKfryAkkhl2Ba5h35uTV7wZB/MITqlw2dVXegqChCl
+         bXEbTxHSL/pJy9Cp45fczop8y5vpSIeOvxdQ9ahEZean8mszbvElTfzTCJQE74dT6rxo
+         mITg==
+X-Gm-Message-State: ACgBeo0P2YnmC3x3+4csEhPLszMg9CzMQgxpPi/9jKGTF+ujx/OJV9sT
+        oSGsEfL2Gz/hAG7fXJAlH8bkbZMaHGLMRQCJ
+X-Google-Smtp-Source: AA6agR6cpl4xb48DdbG/vARgtND91stRcKRDk41AV1O+QZylWu2JjFcKlpJKRyYN1wYMhzTFaZTV5g==
+X-Received: by 2002:a05:6e02:1d81:b0:2de:e4d2:787d with SMTP id h1-20020a056e021d8100b002dee4d2787dmr1374803ila.126.1659635694321;
+        Thu, 04 Aug 2022 10:54:54 -0700 (PDT)
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
+        by smtp.gmail.com with ESMTPSA id m9-20020a0566022ac900b00681b6e20a82sm659506iov.46.2022.08.04.10.54.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 10:54:52 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id v185so236310ioe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 10:54:51 -0700 (PDT)
+X-Received: by 2002:a05:6638:2614:b0:33f:5bc2:b385 with SMTP id
+ m20-20020a056638261400b0033f5bc2b385mr1356611jat.246.1659635690978; Thu, 04
+ Aug 2022 10:54:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <1657544224-10680-1-git-send-email-quic_vpolimer@quicinc.com>
+ <CAD=FV=U_GStziLOCVLs_FC_2Vr=ykGfbb4ZtUp79iV8V=B0cEA@mail.gmail.com> <CAG3jFyv3up0o4S+UYMKaAjanKL6hxCNtEa5zQTQEeNREab-NRA@mail.gmail.com>
+In-Reply-To: <CAG3jFyv3up0o4S+UYMKaAjanKL6hxCNtEa5zQTQEeNREab-NRA@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 4 Aug 2022 10:54:36 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VL2ATy=Ap5fAVxMYZZ5G6_8pdFGw=gdOc=PuqiOPHMow@mail.gmail.com>
+Message-ID: <CAD=FV=VL2ATy=Ap5fAVxMYZZ5G6_8pdFGw=gdOc=PuqiOPHMow@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] Add PSR support for eDP
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220804-145223/Sebastian-W-rl/drivers-net-can-spi-mcp251x-c-Fix-race-condition-on-receive-interrupt/20220803-233455
-head:   ba4ce3d25ad57d7601a8bc5f41293923b46eb134
-commit: ba4ce3d25ad57d7601a8bc5f41293923b46eb134 can: mcp251x: Fix race condition on receive interrupt
-date:   11 hours ago
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220805/202208050128.gFQ9dERP-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ba4ce3d25ad57d7601a8bc5f41293923b46eb134
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220804-145223/Sebastian-W-rl/drivers-net-can-spi-mcp251x-c-Fix-race-condition-on-receive-interrupt/20220803-233455
-        git checkout ba4ce3d25ad57d7601a8bc5f41293923b46eb134
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/can/spi/
+Hi,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Aug 4, 2022 at 9:21 AM Robert Foss <robert.foss@linaro.org> wrote:
+>
+> On Fri, 29 Jul 2022 at 02:22, Doug Anderson <dianders@chromium.org> wrote:
+> >
+> > Hi,
+> >
+> > On Mon, Jul 11, 2022 at 5:57 AM Vinod Polimera
+> > <quic_vpolimer@quicinc.com> wrote:
+> > >
+> > > Changes in v2:
+> > >   - Use dp bridge to set psr entry/exit instead of dpu_enocder.
+> > >   - Don't modify whitespaces.
+> > >   - Set self refresh aware from atomic_check.
+> > >   - Set self refresh aware only if psr is supported.
+> > >   - Provide a stub for msm_dp_display_set_psr.
+> > >   - Move dp functions to bridge code.
+> > >
+> > > Changes in v3:
+> > >   - Change callback names to reflect atomic interfaces.
+> > >   - Move bridge callback change to separate patch as suggested by Dmitry.
+> > >   - Remove psr function declaration from msm_drv.h.
+> > >   - Set self_refresh_aware flag only if psr is supported.
+> > >   - Modify the variable names to simpler form.
+> > >   - Define bit fields for PSR settings.
+> > >   - Add comments explaining the steps to enter/exit psr.
+> > >   - Change DRM_INFO to drm_dbg_db.
+> > >
+> > > Changes in v4:
+> > >   - Move the get crtc functions to drm_atomic.
+> > >   - Add atomic functions for DP bridge too.
+> > >   - Add ternary operator to choose eDP or DP ops.
+> > >   - Return true/false instead of 1/0.
+> > >   - mode_valid missing in the eDP bridge ops.
+> > >   - Move the functions to get crtc into drm_atomic.c.
+> > >   - Fix compilation issues.
+> > >   - Remove dpu_assign_crtc and get crtc from drm_enc instead of dpu_enc.
+> > >   - Check for crtc state enable while reserving resources.
+> > >
+> > > Changes in v5:
+> > >   - Move the mode_valid changes into a different patch.
+> > >   - Complete psr_op_comp only when isr is set.
+> > >   - Move the DP atomic callback changes to a different patch.
+> > >   - Get crtc from drm connector state crtc.
+> > >   - Move to separate patch for check for crtc state enable while
+> > > reserving resources.
+> > >
+> > > Changes in v6:
+> > >   - Remove crtc from dpu_encoder_virt struct.
+> > >   - fix crtc check during vblank toggle crtc.
+> > >   - Misc changes.
+> > >
+> > > Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> > > Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> > > Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> > >
+> > > Vinod Polimera (10):
+> > >   drm/msm/disp/dpu: clear dpu_assign_crtc and get crtc from connector
+> > >     state instead of dpu_enc
+> > >   drm: add helper functions to retrieve old and new crtc
+> > >   drm/msm/dp: use atomic callbacks for DP bridge ops
+> > >   drm/msm/dp: Add basic PSR support for eDP
+> > >   drm/msm/dp: use the eDP bridge ops to validate eDP modes
+> > >   drm/bridge: use atomic enable/disable callbacks for panel bridge
+> > >   drm/bridge: add psr support for panel bridge callbacks
+> > >   drm/msm/disp/dpu: use atomic enable/disable callbacks for encoder
+> > >     functions
+> > >   drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
+> > >   drm/msm/disp/dpu: check for crtc enable rather than crtc active to
+> > >     release shared resources
+> > >
+> > >  drivers/gpu/drm/bridge/panel.c              |  68 ++++++++--
+> > >  drivers/gpu/drm/drm_atomic.c                |  60 +++++++++
+> > >  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  17 ++-
+> > >  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  56 +++++----
+> > >  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |   8 --
+> > >  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |   2 +-
+> > >  drivers/gpu/drm/msm/dp/dp_catalog.c         |  81 ++++++++++++
+> > >  drivers/gpu/drm/msm/dp/dp_catalog.h         |   4 +
+> > >  drivers/gpu/drm/msm/dp/dp_ctrl.c            |  73 +++++++++++
+> > >  drivers/gpu/drm/msm/dp/dp_ctrl.h            |   3 +
+> > >  drivers/gpu/drm/msm/dp/dp_display.c         |  31 +++--
+> > >  drivers/gpu/drm/msm/dp/dp_display.h         |   2 +
+> > >  drivers/gpu/drm/msm/dp/dp_drm.c             | 184 ++++++++++++++++++++++++++--
+> > >  drivers/gpu/drm/msm/dp/dp_drm.h             |   9 +-
+> > >  drivers/gpu/drm/msm/dp/dp_link.c            |  36 ++++++
+> > >  drivers/gpu/drm/msm/dp/dp_panel.c           |  22 ++++
+> > >  drivers/gpu/drm/msm/dp/dp_panel.h           |   6 +
+> > >  drivers/gpu/drm/msm/dp/dp_reg.h             |  27 ++++
+> > >  include/drm/drm_atomic.h                    |   7 ++
+> > >  19 files changed, 631 insertions(+), 65 deletions(-)
+> >
+>
+> Which tree does this series apply to?
 
-All warnings (new ones prefixed by >>):
+It ought to apply to msm-next, but as I mentioned in my reply to patch
+#1 it doesn't apply to the top of msm-next. I think I also had to
+manually apply a few of the later patches with "patch -p1".
 
->> drivers/net/can/spi/mcp251x.c:1073:7: warning: variable 'intf1' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (intf0 & CANINTF_RX0IF) {
-                       ^~~~~~~~~~~~~~~~~~~~~
-   drivers/net/can/spi/mcp251x.c:1092:7: note: uninitialized use occurs here
-                   if (intf1 & CANINTF_RX1IF) {
-                       ^~~~~
-   drivers/net/can/spi/mcp251x.c:1073:3: note: remove the 'if' if its condition is always true
-                   if (intf0 & CANINTF_RX0IF) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/can/spi/mcp251x.c:1066:24: note: initialize the variable 'intf1' to silence this warning
-                   u8 intf, intf0, intf1, eflag, eflag0, eflag1;
-                                        ^
-                                         = '\0'
->> drivers/net/can/spi/mcp251x.c:1082:8: warning: variable 'eflag1' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                           if (intf0 & CANINTF_RX1IF) {
-                               ^~~~~~~~~~~~~~~~~~~~~
-   drivers/net/can/spi/mcp251x.c:1101:20: note: uninitialized use occurs here
-                   eflag = eflag0 | eflag1;
-                                    ^~~~~~
-   drivers/net/can/spi/mcp251x.c:1082:4: note: remove the 'if' if its condition is always false
-                           if (intf0 & CANINTF_RX1IF) {
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/can/spi/mcp251x.c:1073:7: warning: variable 'eflag1' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (intf0 & CANINTF_RX0IF) {
-                       ^~~~~~~~~~~~~~~~~~~~~
-   drivers/net/can/spi/mcp251x.c:1101:20: note: uninitialized use occurs here
-                   eflag = eflag0 | eflag1;
-                                    ^~~~~~
-   drivers/net/can/spi/mcp251x.c:1073:3: note: remove the 'if' if its condition is always true
-                   if (intf0 & CANINTF_RX0IF) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/can/spi/mcp251x.c:1066:47: note: initialize the variable 'eflag1' to silence this warning
-                   u8 intf, intf0, intf1, eflag, eflag0, eflag1;
-                                                               ^
-                                                                = '\0'
-   3 warnings generated.
-
-
-vim +1073 drivers/net/can/spi/mcp251x.c
-
-  1056	
-  1057	static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
-  1058	{
-  1059		struct mcp251x_priv *priv = dev_id;
-  1060		struct spi_device *spi = priv->spi;
-  1061		struct net_device *net = priv->net;
-  1062	
-  1063		mutex_lock(&priv->mcp_lock);
-  1064		while (!priv->force_quit) {
-  1065			enum can_state new_state;
-  1066			u8 intf, intf0, intf1, eflag, eflag0, eflag1;
-  1067			u8 clear_intf = 0;
-  1068			int can_id = 0, data1 = 0;
-  1069	
-  1070			mcp251x_read_2regs(spi, CANINTF, &intf0, &eflag0);
-  1071	
-  1072			/* receive buffer 0 */
-> 1073			if (intf0 & CANINTF_RX0IF) {
-  1074				mcp251x_hw_rx(spi, 0);
-  1075				/* Free one buffer ASAP
-  1076				 * (The MCP2515/25625 does this automatically.)
-  1077				 */
-  1078				if (mcp251x_is_2510(spi))
-  1079					mcp251x_write_bits(spi, CANINTF,
-  1080							   CANINTF_RX0IF, 0x00);
-  1081	
-> 1082				if (intf0 & CANINTF_RX1IF) {
-  1083					/* buffer 1 is already known to be full, no need to re-read */
-  1084					intf1 = intf0;
-  1085				} else {
-  1086					/* intf needs to be read again to avoid a race condition */
-  1087					mcp251x_read_2regs(spi, CANINTF, &intf1, &eflag1);
-  1088				}
-  1089			}
-  1090	
-  1091			/* receive buffer 1 */
-  1092			if (intf1 & CANINTF_RX1IF) {
-  1093				mcp251x_hw_rx(spi, 1);
-  1094				/* The MCP2515/25625 does this automatically. */
-  1095				if (mcp251x_is_2510(spi))
-  1096					clear_intf |= CANINTF_RX1IF;
-  1097			}
-  1098	
-  1099			/* combine flags from both operations for error handling */
-  1100			intf = intf0 | intf1;
-  1101			eflag = eflag0 | eflag1;
-  1102	
-  1103			/* mask out flags we don't care about */
-  1104			intf &= CANINTF_RX | CANINTF_TX | CANINTF_ERR;
-  1105	
-  1106			/* any error or tx interrupt we need to clear? */
-  1107			if (intf & (CANINTF_ERR | CANINTF_TX))
-  1108				clear_intf |= intf & (CANINTF_ERR | CANINTF_TX);
-  1109			if (clear_intf)
-  1110				mcp251x_write_bits(spi, CANINTF, clear_intf, 0x00);
-  1111	
-  1112			if (eflag & (EFLG_RX0OVR | EFLG_RX1OVR))
-  1113				mcp251x_write_bits(spi, EFLG, eflag, 0x00);
-  1114	
-  1115			/* Update can state */
-  1116			if (eflag & EFLG_TXBO) {
-  1117				new_state = CAN_STATE_BUS_OFF;
-  1118				can_id |= CAN_ERR_BUSOFF;
-  1119			} else if (eflag & EFLG_TXEP) {
-  1120				new_state = CAN_STATE_ERROR_PASSIVE;
-  1121				can_id |= CAN_ERR_CRTL;
-  1122				data1 |= CAN_ERR_CRTL_TX_PASSIVE;
-  1123			} else if (eflag & EFLG_RXEP) {
-  1124				new_state = CAN_STATE_ERROR_PASSIVE;
-  1125				can_id |= CAN_ERR_CRTL;
-  1126				data1 |= CAN_ERR_CRTL_RX_PASSIVE;
-  1127			} else if (eflag & EFLG_TXWAR) {
-  1128				new_state = CAN_STATE_ERROR_WARNING;
-  1129				can_id |= CAN_ERR_CRTL;
-  1130				data1 |= CAN_ERR_CRTL_TX_WARNING;
-  1131			} else if (eflag & EFLG_RXWAR) {
-  1132				new_state = CAN_STATE_ERROR_WARNING;
-  1133				can_id |= CAN_ERR_CRTL;
-  1134				data1 |= CAN_ERR_CRTL_RX_WARNING;
-  1135			} else {
-  1136				new_state = CAN_STATE_ERROR_ACTIVE;
-  1137			}
-  1138	
-  1139			/* Update can state statistics */
-  1140			switch (priv->can.state) {
-  1141			case CAN_STATE_ERROR_ACTIVE:
-  1142				if (new_state >= CAN_STATE_ERROR_WARNING &&
-  1143				    new_state <= CAN_STATE_BUS_OFF)
-  1144					priv->can.can_stats.error_warning++;
-  1145				fallthrough;
-  1146			case CAN_STATE_ERROR_WARNING:
-  1147				if (new_state >= CAN_STATE_ERROR_PASSIVE &&
-  1148				    new_state <= CAN_STATE_BUS_OFF)
-  1149					priv->can.can_stats.error_passive++;
-  1150				break;
-  1151			default:
-  1152				break;
-  1153			}
-  1154			priv->can.state = new_state;
-  1155	
-  1156			if (intf & CANINTF_ERRIF) {
-  1157				/* Handle overflow counters */
-  1158				if (eflag & (EFLG_RX0OVR | EFLG_RX1OVR)) {
-  1159					if (eflag & EFLG_RX0OVR) {
-  1160						net->stats.rx_over_errors++;
-  1161						net->stats.rx_errors++;
-  1162					}
-  1163					if (eflag & EFLG_RX1OVR) {
-  1164						net->stats.rx_over_errors++;
-  1165						net->stats.rx_errors++;
-  1166					}
-  1167					can_id |= CAN_ERR_CRTL;
-  1168					data1 |= CAN_ERR_CRTL_RX_OVERFLOW;
-  1169				}
-  1170				mcp251x_error_skb(net, can_id, data1);
-  1171			}
-  1172	
-  1173			if (priv->can.state == CAN_STATE_BUS_OFF) {
-  1174				if (priv->can.restart_ms == 0) {
-  1175					priv->force_quit = 1;
-  1176					priv->can.can_stats.bus_off++;
-  1177					can_bus_off(net);
-  1178					mcp251x_hw_sleep(spi);
-  1179					break;
-  1180				}
-  1181			}
-  1182	
-  1183			if (intf == 0)
-  1184				break;
-  1185	
-  1186			if (intf & CANINTF_TX) {
-  1187				if (priv->tx_busy) {
-  1188					net->stats.tx_packets++;
-  1189					net->stats.tx_bytes += can_get_echo_skb(net, 0,
-  1190										NULL);
-  1191					priv->tx_busy = false;
-  1192				}
-  1193				netif_wake_queue(net);
-  1194			}
-  1195		}
-  1196		mutex_unlock(&priv->mcp_lock);
-  1197		return IRQ_HANDLED;
-  1198	}
-  1199	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-Doug

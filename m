@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C5758A02A
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E83958A02C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239647AbiHDSFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 14:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S238559AbiHDSFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 14:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiHDSFW (ORCPT
+        with ESMTP id S239661AbiHDSFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 14:05:22 -0400
+        Thu, 4 Aug 2022 14:05:35 -0400
 Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B032C6251;
-        Thu,  4 Aug 2022 11:05:21 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id j4so159779qkl.10;
-        Thu, 04 Aug 2022 11:05:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8291B11809;
+        Thu,  4 Aug 2022 11:05:34 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id m7so177304qkk.6;
+        Thu, 04 Aug 2022 11:05:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=aB/PldDZXUYY/be10rIxd+dJr9axoQmchPJ7d8SPF30=;
-        b=Ar5jsIsj5W+aSbtcehzlbML3DXX7e/p/VGk4Tz6qTWegTbSN7/xXH32K9OUTCTMPWn
-         d3ADVBgz6JyKNMhUqUtOsVurYgXsufKEfnnTb0mNAC61luvJ/t9VEhXjutS5O0am03sA
-         9rMH0KtH3+TuR2QfT+2jg/kJCzX0FlSFaa/7P5N8h9ie6CyuwaQ54WbfJ5aWAMhy9Qj5
-         24WBZskQtqAutIjbbz6X7iFnZlmuYXsmPdabUROjaLBhuSssc0N1/bHlQokk8qdXJ5rR
-         1DlN8eDlwBjbvb3KbH1Nc1N8PMK9hZaIJg9PzcdUmZ6Kmbnj4XazaG3PZU106dXZLEeb
-         KLag==
+        bh=y7GHYHDTz7l37bBfrS3qC04MROO33/NUwdBDx0ZvXU8=;
+        b=mIpR9X3geDgmpo3XGhs8yCUc5LGJqlMQRONwoC/cKce3P+3hcUW0TZ37SpNlKikz3c
+         XisFL8+Hs0vVIzk5SXauiL1uXQcyj/AgNDYY26xQzBXOgUcrOVZ9kAKGBXISdcPcUPjp
+         1cE+AIhuzAbFCnRyctkZxVgbTvWbKqmbZKVuuha2rdcXDkgXypnY9qGX9E12JCObrzwn
+         6H3QePoAbLmG+FRju0cBiDouTAD7acu+fXfE/a1viA03/vFSwwn7+SLzZHHg5Pab23qE
+         JtPhB9VZ2q5tBYwRiJ1tW6WgQl5oC5FImv9bUHbF48mVnMeXk17Bmx9x84DQUMVBASqd
+         NfzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=aB/PldDZXUYY/be10rIxd+dJr9axoQmchPJ7d8SPF30=;
-        b=q+nmLJJ3eSfqi8f0IeVTAVTB82qYAUWP51Bs7nbRHIGOvOIfP/i+pXjDSqWd/8/OKl
-         aw8qYLfg9/VXp10KX4bZvbtgj2NiqPxev5HoI0KcTc8M7ReoiM2LfgqcVs+aoTK4iHCW
-         pXcaNe8k5XTi6gP5WzDZfGZ8DcSClmvATER6psZIMHAnVS/D3j88rIoNouDTXI56eA5n
-         ZdQ/JWYoN6iHukwtGCCkQG+ckQMD4zlThWC4W0sNTXFE8/X93Mat4gXEyeCDgq7J0cn1
-         cLVV/a4OgTL5AqQ0WNDLAsxkx9fUnjKzI1I/Ng5G1zAcR9AuOLzrh2r4VTGxZEgnbGF2
-         KreA==
-X-Gm-Message-State: ACgBeo0RLgoPxToFzp1uOiLkbGkzs1qvDXCN3B02BOrjyHFLWvLqiyc9
-        BGPX+F5pqBDXqSyhH7EPLho=
-X-Google-Smtp-Source: AA6agR7fICJICh6oOG0o42l+SmZKcPlsqrj26H4vT8led2b3p4gz3z0wOCx+hicfTVVjw8Hz8IX1Hw==
-X-Received: by 2002:a05:620a:28c1:b0:6b5:e608:3edd with SMTP id l1-20020a05620a28c100b006b5e6083eddmr2470378qkp.730.1659636320667;
-        Thu, 04 Aug 2022 11:05:20 -0700 (PDT)
+        bh=y7GHYHDTz7l37bBfrS3qC04MROO33/NUwdBDx0ZvXU8=;
+        b=HUh4Pd33LJW4jYIGw5Zz1+Y0SnKqzRtkR9r8NUUOnIh6cxZqhQ8rcSUyfViFo2ehuC
+         le0HBFd2AZHe+bKfJ2yEhRAlhPSMZbICA8rUdRK3COU+5YKJjNVT6ivI7mXfO2ukrbdH
+         /OCKUn89zVRaSL66YWonmLjtQS11/EatykMyqGv/HutAgJ6desdDhD6X6k2/u0uj++J1
+         FICU99y+M20UDOa96p/EHwuy3KI4BWGVxxIgzQYVrkVPffH9uTtwqDM7q+58NRslidVj
+         ymVCiqHUH6cyvgfB8b86SQlUppcQL8PeTuV/E4iAEchqTOK0gzLbLAc4rOhi3nsAuC+J
+         o1dA==
+X-Gm-Message-State: ACgBeo2LAX0PZ7jYVdWxlnO66tFNhTbT22uWMp6cFQHzXOl+5np8RUa1
+        TruSPmFKoTdXPdUezSem4Z4=
+X-Google-Smtp-Source: AA6agR6+k1CqeAtlKIoEMcblNgdSY1XncWgDSuo+6DMVZ8HycRX5FH//Vfs5+8egv8FrH2DwV2WTWw==
+X-Received: by 2002:a05:620a:c01:b0:6b6:1aaf:bade with SMTP id l1-20020a05620a0c0100b006b61aafbademr2312795qki.524.1659636333584;
+        Thu, 04 Aug 2022 11:05:33 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id i9-20020ac87649000000b0033d7ea63684sm1033895qtr.54.2022.08.04.11.05.17
+        by smtp.gmail.com with ESMTPSA id o14-20020ac8428e000000b0031ece8b6666sm1106040qtl.43.2022.08.04.11.05.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 11:05:19 -0700 (PDT)
+        Thu, 04 Aug 2022 11:05:32 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     bcm-kernel-feedback-list@broadcom.com,
         William Zhang <william.zhang@broadcom.com>,
@@ -57,12 +57,12 @@ Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] ARM: dts: bcmbca: bcm63178: fix timer node cpu mask flag
-Date:   Thu,  4 Aug 2022 11:05:16 -0700
-Message-Id: <20220804180516.1338796-1-f.fainelli@gmail.com>
+Subject: Re: [PATCH 2/4] ARM: dts: bcmbca: bcm63178: clean up psci node
+Date:   Thu,  4 Aug 2022 11:05:30 -0700
+Message-Id: <20220804180530.1338924-1-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220801194448.29363-1-william.zhang@broadcom.com>
-References: <20220801194448.29363-1-william.zhang@broadcom.com>
+In-Reply-To: <20220801194448.29363-2-william.zhang@broadcom.com>
+References: <20220801194448.29363-1-william.zhang@broadcom.com> <20220801194448.29363-2-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,9 +75,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  1 Aug 2022 12:44:45 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> The cpu mask flag value should match the number of cpu cores in the
-> chip. Correct the value to three cpus for BCM63178 triple core SoC.
+On Mon,  1 Aug 2022 12:44:46 -0700, William Zhang <william.zhang@broadcom.com> wrote:
+> Remove unnecessary cpu_on and cpu_off properties from psci
+> node as they are only needed for psci version prior to 0.2.
 > 
 > Fixes: fc85b7e64acb ("ARM: dts: add dts files for bcmbca soc 63178")
 > Signed-off-by: William Zhang <william.zhang@broadcom.com>

@@ -2,145 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0B45896BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 05:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3A85896BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 05:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236977AbiHDDs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 23:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S237147AbiHDDxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 23:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237278AbiHDDsT (ORCPT
+        with ESMTP id S236876AbiHDDxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 23:48:19 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4B040BD3;
-        Wed,  3 Aug 2022 20:48:12 -0700 (PDT)
-X-UUID: 55d72df2c4754f31af5ae95a9e561dd4-20220804
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:86fbc1be-f836-4396-8a7a-d5dbfa366c5e,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:0f94e32,CLOUDID:c3c03ed0-a6cf-4fb6-be1b-c60094821ca2,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 55d72df2c4754f31af5ae95a9e561dd4-20220804
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2044710540; Thu, 04 Aug 2022 11:48:09 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 4 Aug 2022 11:48:08 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 4 Aug 2022 11:48:08 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     Bear Wang <bear.wang@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul@gmail.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: typec: altmodes/displayport: correct pin assignment for UFP receptacles
-Date:   Thu, 4 Aug 2022 11:48:03 +0800
-Message-ID: <20220804034803.19486-1-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220727110503.5260-1-macpaul.lin@mediatek.com>
-References: <20220727110503.5260-1-macpaul.lin@mediatek.com>
+        Wed, 3 Aug 2022 23:53:03 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B555D0F9
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 20:53:02 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b96so13436234edf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 20:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=iRR1iLqoiLPd05xUeu4QA8DoUj4NMWZ3GKO/1gQCb2I=;
+        b=GxolS5frGx/BtcZWjbwLLwCuSaexugK/wUcVJmuMVPzwWd3CYbwSLUTiOJy07fEwtP
+         d8WJPIyN2HaPusVtWhz4Ut9sGpp45K45rI/i85Fq1hTolady9EZ8zSVZuBQ6uNNKVwNB
+         gRmYmsAa8aLiDH2PDaBmb+jsp4CGgRMBcYtf2cACrbr5FDWp4gdKpR/fjL2eFjp2p+qZ
+         gTRJner75WzQHAcLBvFSzIPnVvfQx1MiAHOMvtjOhHyJROpafhv+n4Ry7FchlYlEUktK
+         M7u3RJyZkWZdWoG85npqZjb1s7he5hnG5wDGr1RNOiyIuiq5GRNhI7fwaMjccYsU8Fqx
+         FtXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=iRR1iLqoiLPd05xUeu4QA8DoUj4NMWZ3GKO/1gQCb2I=;
+        b=dblIPAxQfHHUBvgiUysMun1+NXgof9yL3A/uJMVbsRe9XzEy6OYXsR4fPUEz+kN9Sd
+         TLI+fGLBiPauzzXsQEXjaIAFF3WQ4RAbqgGlNVG7fbPZQJEnJl6OzZDX4K0WgEt0C3Ch
+         EvLkQQJ+r4LO5fx3Q8lyw/nsF2nO3gFpfOTa63rjJhw221T5+zIIkalhDTGE1ZYbhYbq
+         rV/feGFX7RoJb0lE0+ceN6b9oZXKtfgbV6XJGT46KHL4fUCjQO9pPv1iKaBfoMamxMrm
+         JPl8zBCtJFkxZ+4QOsGoje8ozWa6D+OjPyvNctNykcmBcZYZrpAUDC4tbwHS49bvOSkX
+         cKTw==
+X-Gm-Message-State: AJIora817HzlWGltepKvkRLhpZSVui3LWyy+1AHMsH3QsEThiqvfs5TU
+        bN/U2l6krcFXLMU868z8uj7ZFMgYd9O9OC+rQVc=
+X-Google-Smtp-Source: AGRyM1vSAPI2YsHTOOApkyHPOdms11QNqSrKtkzqP9s71qm9oI9T7GNWpOXvWGFo/ZgLzLVt38DGnhbxrJAIhpPjBGk=
+X-Received: by 2002:a05:6402:90e:b0:43b:914e:f084 with SMTP id
+ g14-20020a056402090e00b0043b914ef084mr29091987edz.144.1659585180675; Wed, 03
+ Aug 2022 20:53:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAPM=9twFEv8AcRQG-WXg5owy_Xhxy3DqnvVCFHgtd4TYCcKWEQ@mail.gmail.com>
+ <CAHk-=whXSt2N0GcoPC6XxXXLMpXm-34ua+X4AhPsLoqBcF6Xqg@mail.gmail.com>
+ <CAHk-=wj8UHvjsVPohpRA1RJo1upyKoSnjcsys+=vbRVbpPvBMg@mail.gmail.com>
+ <CAPM=9txsYE1zFDW+ehHQv138DoeT1Fw6hfzfPa4czvXGSjefjw@mail.gmail.com> <CAHk-=wj+yzauNXiEwHfCrkbdLSQkizdR1Q3YJLAqPo6AVq2_4Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wj+yzauNXiEwHfCrkbdLSQkizdR1Q3YJLAqPo6AVq2_4Q@mail.gmail.com>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Thu, 4 Aug 2022 13:52:49 +1000
+Message-ID: <CAPM=9txkjJg5uArn1ann7Hf+JFCukQFGwqv+YHAx97Cdxezs_Q@mail.gmail.com>
+Subject: Re: [git pull] drm for 5.20/6.0
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Sun <pablo.sun@mediatek.com>
+On Thu, 4 Aug 2022 at 13:47, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, Aug 3, 2022 at 8:37 PM Dave Airlie <airlied@gmail.com> wrote:
+> >
+> > Actually I did miss that so that looks good.
+>
+> .. I wish it did, but I just actually test-booted my desktop with the
+> result, and it crashes the X server.  This seems to be the splat in
+> Xorg.0.log:
+>
+>   (II) Initializing extension DRI2
+>   (II) AMDGPU(0): Setting screen physical size to 2032 x 571
+>   (EE)
+>   (EE) Backtrace:
+>   (EE) 0: /usr/libexec/Xorg (OsLookupColor+0x13d) [0x55b1dc61258d]
+>   (EE) 1: /lib64/libc.so.6 (__sigaction+0x50) [0x7f7972a3ea70]
+>   (EE) 2: /usr/lib64/xorg/modules/drivers/amdgpu_drv.so
+> (AMDGPUCreateWindow_oneshot+0x101) [0x7f797207ddd1]
+>   (EE) 3: /usr/libexec/Xorg (compIsAlternateVisual+0xdc4) [0x55b1dc545fa4]
+>   (EE) 4: /usr/libexec/Xorg (InitRootWindow+0x17) [0x55b1dc4e0047]
+>   (EE) 5: /usr/libexec/Xorg (miPutImage+0xd4c) [0x55b1dc49e60b]
+>   (EE) 6: /lib64/libc.so.6 (__libc_start_call_main+0x80) [0x7f7972a29550]
+>   (EE) 7: /lib64/libc.so.6 (__libc_start_main+0x89) [0x7f7972a29609]
+>   (EE) 8: /usr/libexec/Xorg (_start+0x25) [0x55b1dc49f2c5]
+>   (EE)
+>   (EE) Segmentation fault at address 0x4
+>   (EE)
+> Fatal server error:
+>   (EE) Caught signal 11 (Segmentation fault). Server aborting
+>
+> so something is going horribly wrong. No kernel oops, though.
+>
+> It works on my intel laptop, so it's amdgpu somewhere.
 
-Fix incorrect pin assignment values when connecting to a monitor with
-Type-C receptacle instead of a plug.
+I'll spin my ryzen up to see if I can reproduce, and test against the
+drm-next pre-merge tree as well.
 
-According to specification, an UFP_D receptacle's pin assignment
-should came from the UFP_D pin assignments field (bit 23:16), while
-an UFP_D plug's assignments are described in the DFP_D pin assignments
-(bit 15:8) during Mode Discovery.
-
-For example the LG 27 UL850-W is a monitor with Type-C receptacle.
-The monitor responds to MODE DISCOVERY command with following
-DisplayPort Capability flag:
-
-        dp->alt->vdo=0x140045
-
-The existing logic only take cares of UPF_D plug case,
-and would take the bit 15:8 for this 0x140045 case.
-
-This results in an non-existing pin assignment 0x0 in
-dp_altmode_configure.
-
-To fix this problem a new set of macros are introduced
-to take plug/receptacle differences into consideration.
-
-Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
-Co-developed-by: Pablo Sun <pablo.sun@mediatek.com>
-Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
-Co-developed-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Reviewed-by: Guillaume Ranquet <granquet@baylibre.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: stable@vger.kernel.org
----
-Changes in v2:
- - Fix commit message.
-  - Remove duplicate "From:" tag.
-  - Add "Fixes:" tag.
-  - Add more "Reviewed-by:" tag. 
-
- drivers/usb/typec/altmodes/displayport.c | 4 ++--
- include/linux/usb/typec_dp.h             | 5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index 9360ca177c7d..8dd0e505ef99 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -98,8 +98,8 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
- 	case DP_STATUS_CON_UFP_D:
- 	case DP_STATUS_CON_BOTH: /* NOTE: First acting as DP source */
- 		conf |= DP_CONF_UFP_U_AS_UFP_D;
--		pin_assign = DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo) &
--			     DP_CAP_UFP_D_PIN_ASSIGN(dp->port->vdo);
-+		pin_assign = DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo) &
-+				 DP_CAP_PIN_ASSIGN_DFP_D(dp->port->vdo);
- 		break;
- 	default:
- 		break;
-diff --git a/include/linux/usb/typec_dp.h b/include/linux/usb/typec_dp.h
-index cfb916cccd31..8d09c2f0a9b8 100644
---- a/include/linux/usb/typec_dp.h
-+++ b/include/linux/usb/typec_dp.h
-@@ -73,6 +73,11 @@ enum {
- #define DP_CAP_USB			BIT(7)
- #define DP_CAP_DFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(15, 8)) >> 8)
- #define DP_CAP_UFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(23, 16)) >> 16)
-+/* Get pin assignment taking plug & receptacle into consideration */
-+#define DP_CAP_PIN_ASSIGN_UFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
-+			DP_CAP_UFP_D_PIN_ASSIGN(_cap_) : DP_CAP_DFP_D_PIN_ASSIGN(_cap_))
-+#define DP_CAP_PIN_ASSIGN_DFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
-+			DP_CAP_DFP_D_PIN_ASSIGN(_cap_) : DP_CAP_UFP_D_PIN_ASSIGN(_cap_))
- 
- /* DisplayPort Status Update VDO bits */
- #define DP_STATUS_CONNECTION(_status_)	((_status_) & 3)
--- 
-2.18.0
-
+Dave.

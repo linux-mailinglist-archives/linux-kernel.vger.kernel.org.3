@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F7558A387
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBCF58A3A8
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240251AbiHDWxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 18:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
+        id S240246AbiHDWyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 18:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240198AbiHDWxI (ORCPT
+        with ESMTP id S239940AbiHDWxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 18:53:08 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4197391D
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:52:34 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id a11so604227wmq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:52:34 -0700 (PDT)
+        Thu, 4 Aug 2022 18:53:11 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2066773928
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:52:38 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id p8-20020a05600c05c800b003a50311d75cso2691662wmd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=BqOsgjVEw9Tt6uQERI+yLCfRaS3oyJEXM6rueaWDbTA=;
-        b=OCD0y3QgfAQloSgUF+zgv7CA7DEWyXGFNLika9s+rO/f5K5SEp2+xcNUfT+hikmJ0L
-         7B4oEOoZe5kERppsB3aHyT2fi0ZQ9sCR9V2CgML5jAGXOhkTQeJxT3g8NuKtAGrxbuRo
-         wNHiGGyEimXMiDuCs/IRSFxwqtFD6GoF1CF0J5zpGwwJxoiihbeJKN18owk4DXpb3tDO
-         wcHgOat2GagF0ZezvxMGV4gHfMr9y9NBDi/fKjRUN/NzwEJZcG1TSPzEE7TyQ899tD5/
-         UgmVYOftMlK8jKb7rs5/LDpsvLUv21bl/75BuDlDuEvuRSSXcyGWNJHbXNfEcyZvKo2J
-         0scA==
+        bh=lgLe7sgvzaU3jF4XA+SfoE2vippSYThYf8kMVph3yKg=;
+        b=BnUNUZYLN7ye95mrTNiuuTRdjINFgpZDmCQNh/1OQ+ENDcf7DLutgXECkAisxOizCh
+         Fcx1GPr9x9ucUiL1dpmhJSo1m5G+ZHUxOhPWJeDeKoZU4VgCt6lWMK9BSw8f68WEq+E9
+         V/JCMmc9L2TbCHxldIBDdywRSdKg5gvABW20mWM6XBaUz2ds0p8MrJPe+BHjjysdrmla
+         V8uqRUw7ANKPDuKOMrcnm75alHOjyrtd+Pt6feqr4Ul1emiH9yiXM1eBQo0XuPg1g81D
+         lVq+naLM5MDcBXkj0Co1SrcgZ8y6lP8Bq/2hU7VPcXvbtXZDPEMryVxMal4cpZv/Fysy
+         ywrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=BqOsgjVEw9Tt6uQERI+yLCfRaS3oyJEXM6rueaWDbTA=;
-        b=wzEM5wBYDdcs/mZFlVP2ygQdgG/sIaeeFRiuytrW5hKjbuSi9WkZ3PYyllb496C62h
-         5FjVepnknLkE4G68ZL5S35S/nH6NpgcAeG/3EwgZUSWocVUQ+NrxegSERtQtKrL49W0x
-         IRcH65pbxsGCl6GyRjJQtgBPCRfqJ/yricr2dFZ380x+P1hrA5AAFpJmmn9seM1PegWq
-         dBJAs6R2DoPwZViGab0v7zzbQK6JE/GK3spJf78ao7JrfJrffflf8mEt+qrGtmGUH+al
-         kmPWvHgeMcBRAdAD/RI56usfjmLpXRX6H8DKrNOZqBBdOiErRnUM33PJDZeuvl4i994d
-         tP+w==
-X-Gm-Message-State: ACgBeo1QhuCgULjyaHw46/0sdPlZeQNvHLjcjK4Pxz3UFMhFz7CSG9ZU
-        5I302TzSs6309bCUYPVolMouqw==
-X-Google-Smtp-Source: AA6agR4Q/pp5eAxAatZvxQ81jOJXnhc9G7oQn37iUavXl9RM8lOiCKFSkD0sbxFc0a8hBci25BgozA==
-X-Received: by 2002:a05:600c:3b15:b0:3a5:49e:81a6 with SMTP id m21-20020a05600c3b1500b003a5049e81a6mr4331582wms.49.1659653553087;
-        Thu, 04 Aug 2022 15:52:33 -0700 (PDT)
+        bh=lgLe7sgvzaU3jF4XA+SfoE2vippSYThYf8kMVph3yKg=;
+        b=ZMPHpGBwG5TE9A7Jwha4TeDgucoqvXLfQTOcipF55sphJ/CLctrLsu+3R4N88GpJJh
+         EsDNk73vGEWfBhwowIym4D+pxGAXi4pbp+L22VQHjQMYZgxGC5rw6CdrOfbh1/Z8oMzr
+         gTICzQH1dfD1R8FG8Pc/4BKuPdr07lTgx0oP6O+8v4yTnID/RluO1AdEftJvyGNITH53
+         cFhmW2LbD8F2l41bHNj2Dd5deWPn+JG40DIvDnF0qUOn7W1+dkLI9DBgiDm5Svulrz+x
+         P3Jk+ObWaSKKuOmc2v+oIV+4SLofqhlwDJWgdfaODfOksIsn2dS8dw19MiKs8KrvdP4b
+         tBAw==
+X-Gm-Message-State: ACgBeo1NKvSxS541Nmps010sSNheNdf7NUey1HrFmtGySCQZYRTIq2yY
+        OkLmE2mNxmcqTWSVjOKZBn0yNw==
+X-Google-Smtp-Source: AA6agR5QyPu3uRUeCiCJ42UmZqVJIVRkJlxI0ymgy5gtoBV4l1VoQoknXLstuesOJR/T9yR6ehtu/w==
+X-Received: by 2002:a05:600c:a146:b0:3a3:1e79:4446 with SMTP id ib6-20020a05600ca14600b003a31e794446mr2795380wmb.158.1659653555553;
+        Thu, 04 Aug 2022 15:52:35 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:31aa:ed2c:3f7:19d])
-        by smtp.gmail.com with ESMTPSA id a16-20020a056000051000b0021f87e8945asm2495906wrf.12.2022.08.04.15.52.31
+        by smtp.gmail.com with ESMTPSA id a16-20020a056000051000b0021f87e8945asm2495906wrf.12.2022.08.04.15.52.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 15:52:32 -0700 (PDT)
+        Thu, 04 Aug 2022 15:52:35 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
@@ -62,18 +62,24 @@ Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
         glaroque@baylibre.com, miquel.raynal@bootlin.com,
         shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
         matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v5 15/33] thermal/drivers/db8500: Switch to new of API
-Date:   Fri,  5 Aug 2022 00:43:31 +0200
-Message-Id: <20220804224349.1926752-16-daniel.lezcano@linexp.org>
+        Amit Kucheria <amitk@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
+        / MXC ARM ARCHITECTURE)
+Subject: [PATCH v5 16/33] thermal/drivers/imx: Switch to new of API
+Date:   Fri,  5 Aug 2022 00:43:32 +0200
+Message-Id: <20220804224349.1926752-17-daniel.lezcano@linexp.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
 References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,43 +95,89 @@ API to register the thermal zone with these generic ops.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 ---
- drivers/thermal/db8500_thermal.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/thermal/imx8mm_thermal.c | 14 +++++++-------
+ drivers/thermal/imx_sc_thermal.c | 14 +++++++-------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
-index 121cf853e545..cb10e280681f 100644
---- a/drivers/thermal/db8500_thermal.c
-+++ b/drivers/thermal/db8500_thermal.c
-@@ -58,9 +58,9 @@ struct db8500_thermal_zone {
- };
- 
- /* Callback to get current temperature */
--static int db8500_thermal_get_temp(void *data, int *temp)
-+static int db8500_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
--	struct db8500_thermal_zone *th = data;
-+	struct db8500_thermal_zone *th = tz->devdata;
- 
- 	/*
- 	 * TODO: There is no PRCMU interface to get temperature data currently,
-@@ -72,7 +72,7 @@ static int db8500_thermal_get_temp(void *data, int *temp)
+diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+index af666bd9e8d4..e2c2673025a7 100644
+--- a/drivers/thermal/imx8mm_thermal.c
++++ b/drivers/thermal/imx8mm_thermal.c
+@@ -96,15 +96,15 @@ static int imx8mp_tmu_get_temp(void *data, int *temp)
  	return 0;
  }
  
--static struct thermal_zone_of_device_ops thdev_ops = {
-+static const struct thermal_zone_device_ops thdev_ops = {
- 	.get_temp = db8500_thermal_get_temp,
+-static int tmu_get_temp(void *data, int *temp)
++static int tmu_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+-	struct tmu_sensor *sensor = data;
++	struct tmu_sensor *sensor = tz->devdata;
+ 	struct imx8mm_tmu *tmu = sensor->priv;
+ 
+-	return tmu->socdata->get_temp(data, temp);
++	return tmu->socdata->get_temp(sensor, temp);
+ }
+ 
+-static struct thermal_zone_of_device_ops tmu_tz_ops = {
++static const struct thermal_zone_device_ops tmu_tz_ops = {
+ 	.get_temp = tmu_get_temp,
  };
  
-@@ -182,7 +182,7 @@ static int db8500_thermal_probe(struct platform_device *pdev)
- 	}
+@@ -165,9 +165,9 @@ static int imx8mm_tmu_probe(struct platform_device *pdev)
+ 	for (i = 0; i < data->num_sensors; i++) {
+ 		tmu->sensors[i].priv = tmu;
+ 		tmu->sensors[i].tzd =
+-			devm_thermal_zone_of_sensor_register(&pdev->dev, i,
+-							     &tmu->sensors[i],
+-							     &tmu_tz_ops);
++			devm_thermal_of_zone_register(&pdev->dev, i,
++						      &tmu->sensors[i],
++						      &tmu_tz_ops);
+ 		if (IS_ERR(tmu->sensors[i].tzd)) {
+ 			ret = PTR_ERR(tmu->sensors[i].tzd);
+ 			dev_err(&pdev->dev,
+diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+index 331a241eb0ef..10bfa6507eb4 100644
+--- a/drivers/thermal/imx_sc_thermal.c
++++ b/drivers/thermal/imx_sc_thermal.c
+@@ -43,11 +43,11 @@ struct imx_sc_msg_misc_get_temp {
+ 	} data;
+ } __packed __aligned(4);
  
- 	/* register of thermal sensor and get info from DT */
--	th->tz = devm_thermal_zone_of_sensor_register(dev, 0, th, &thdev_ops);
-+	th->tz = devm_thermal_of_zone_register(dev, 0, th, &thdev_ops);
- 	if (IS_ERR(th->tz)) {
- 		dev_err(dev, "register thermal zone sensor failed\n");
- 		return PTR_ERR(th->tz);
+-static int imx_sc_thermal_get_temp(void *data, int *temp)
++static int imx_sc_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+ 	struct imx_sc_msg_misc_get_temp msg;
+ 	struct imx_sc_rpc_msg *hdr = &msg.hdr;
+-	struct imx_sc_sensor *sensor = data;
++	struct imx_sc_sensor *sensor = tz->devdata;
+ 	int ret;
+ 
+ 	msg.data.req.resource_id = sensor->resource_id;
+@@ -70,7 +70,7 @@ static int imx_sc_thermal_get_temp(void *data, int *temp)
+ 	return 0;
+ }
+ 
+-static const struct thermal_zone_of_device_ops imx_sc_thermal_ops = {
++static const struct thermal_zone_device_ops imx_sc_thermal_ops = {
+ 	.get_temp = imx_sc_thermal_get_temp,
+ };
+ 
+@@ -109,10 +109,10 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+ 			break;
+ 		}
+ 
+-		sensor->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
+-								   sensor->resource_id,
+-								   sensor,
+-								   &imx_sc_thermal_ops);
++		sensor->tzd = devm_thermal_of_zone_register(&pdev->dev,
++							    sensor->resource_id,
++							    sensor,
++							    &imx_sc_thermal_ops);
+ 		if (IS_ERR(sensor->tzd)) {
+ 			dev_err(&pdev->dev, "failed to register thermal zone\n");
+ 			ret = PTR_ERR(sensor->tzd);
 -- 
 2.25.1
 

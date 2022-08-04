@@ -2,112 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CED589983
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FE7589988
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238294AbiHDIvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S236680AbiHDIyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238999AbiHDIul (ORCPT
+        with ESMTP id S229665AbiHDIyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:50:41 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2070.outbound.protection.outlook.com [40.92.99.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D6F28D
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:50:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FBUadjffGCbejuUpq6i33pMXwakYWWY5zyc30qsRrvuO7Vw+otXY1e4ZKwcZwv+4DH1yuCYIOv2VrnIYnEYeCDYVRrfd7WBMZEdIMW+7wr6KWl/tKASYHK8eusxu5SbZ6JVJmkRklbG/klOxlhqa9kSf2Na15iJwTPvsjfoxvr81/bwPL7RtB3Zc5Z+gJ5yaarCSn78IsZb0pKgFVcCTysC5+KZXU4aekPUcxR1aNyd8KDFTx3CMVh0aeGey0HMRJxloC9WG7M7wpZcAW6AGpcmP2rlggiZPDl9CMVN7IBlfmdSzu6jyMYI66M6OWYR2DetYOOHqqq4+LiW7ySBHUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=btW7GZGUqXSnEvWFWgq0+uPXk0Simxjpu/Rd8PxXGvI=;
- b=BRbCtpUO4ycAFu7TBukvAhPUN5/hjbMqxZh3FI+T2T4EKn1hS8TtKmYjaH/XZ/4O1F2WrJrQLXdFOw80tyXKwQvwbMrK94po3i5F0tJN0+kH6Vj8jqnBbOZrzl206tnwt4h7kS9Jy3Ojyr2315zrkf49mcZzgqR+c0rEUrYzbGoY1DVaQuNb2hqcLStiut+8pxq1pZpZqXojXuFUgJLgnWZfJSuxzqlH/kRxkn4M+BOPbzVmeXPeGzx3eTlaNLPaiTVI3KNoAzZ7MRUoeI8k4CITnsvv2i6ORqgwz4HYQaagVYsFoTg8UY5W356dN0Xowb7R7wx++NvgeK7YX5G8gQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=btW7GZGUqXSnEvWFWgq0+uPXk0Simxjpu/Rd8PxXGvI=;
- b=e84TDJ5Zhp4eFPzqTjukJxso6ri+m8Gui3ApkC47Ta45tlyZR6RxHQ8FksdKvmpikETqlatyOumrskZE8uD/Y1NYt+LhHYeKi2GI3f4I8AR4bdqsPZg1GOm5RJ51k5zHHCC6G7ofEEeIBpSRWs65AO+XjNmyOEDf6Yqf3VWZsQW2rnj2HTEHe4HtScpMMGxDWkLkThlU6TZ9nxBHN9/OApTZHRxj510pBQUvhsItalGRoWkkaub5Bicv6IRp9Ty/manHntltUgiY3+DziaV/sNgDFzaqwF3v8pd97VEc4aVqU5ZFctsIwxxvUODHevbKUndKFRpdKMhP2cTt9JB8/w==
-Received: from TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:ff::9) by
- OSZP286MB1080.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:112::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5482.6; Thu, 4 Aug 2022 08:50:24 +0000
-Received: from TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM
- ([fe80::d10b:afc9:3056:11d]) by TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM
- ([fe80::d10b:afc9:3056:11d%4]) with mapi id 15.20.5504.014; Thu, 4 Aug 2022
- 08:50:24 +0000
-Message-ID: <TYYP286MB1763C4319C6D5CC50E5ECCF2C69F9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
-Date:   Thu, 4 Aug 2022 16:50:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH 3/3] scripts/gdb: fix lx-timerlist for
- HRTIMER_MAX_CLOCK_BASES printing
-Content-Language: en-US
-To:     jan.kiszka@siemens.com, kbingham@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Peng Liu <liupeng17@lenovo.com>
-References: <20220720122711.6174-1-pngliu@hotmail.com>
- <TYYP286MB17639886A7064A1E610FB2E3C68E9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
-From:   Peng Liu <pngliu@hotmail.com>
-In-Reply-To: <TYYP286MB17639886A7064A1E610FB2E3C68E9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN:  [1Khxw6qC2Lze+W9NH8irB9/ejNdux3M6]
-X-ClientProxiedBy: SG2PR06CA0213.apcprd06.prod.outlook.com
- (2603:1096:4:68::21) To TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:ff::9)
-X-Microsoft-Original-Message-ID: <badc6eb8-15c7-09b5-af38-9ce3d8adf227@hotmail.com>
+        Thu, 4 Aug 2022 04:54:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DC8F03;
+        Thu,  4 Aug 2022 01:54:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3075B614D9;
+        Thu,  4 Aug 2022 08:54:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10BCCC433D6;
+        Thu,  4 Aug 2022 08:54:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659603256;
+        bh=tkKPSh8kyDhnq3IzJjjXOCdA6Qkeb1uUtfHbUbuOX2s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=npADsvgdtsnuILlktuvNZWTg4mehhUKaESuLh30aTKWz62BZD/RJrcOOZJ5aDGZJy
+         xExCrKiAZgZNvxXDa9T7ATm1GxP5xQsxVkZdwSvmCUGRPyG3StrbXCOnqIvSl0dcBU
+         PvZEiLJATUynMKwUV1epniwMRKvevTfAfbrFOMWJP42cpiZtzpRbMc4axgzUjdA6Zb
+         4qXcTTfuDzvFjgfNjIDadGj//BA1D1E3W6FJFbNfLPEmKgaZ9nGNy+2vjWARTp1aLn
+         /hU1gHSs/ih7WjdxwXd2TzMImTVpmzaO98mfgoTo6Xkl7+tQ5sk7z2oeg50TBOjO8d
+         66Yl1O/hwwjdQ==
+Date:   Thu, 4 Aug 2022 14:24:12 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dma <dmaengine@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL]: dmaengine updates for v6.0-rc1
+Message-ID: <YuuJNJ7/3AXzKMF7@matsya>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9a926483-784f-4563-0b16-08da75f65f0e
-X-MS-TrafficTypeDiagnostic: OSZP286MB1080:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0oxX3l1Dd4E3npuwENxi8+kkw2pCGxUtKLMHMJnxoLuyjTFeZ61CK9DCz6Zyrd5lYia+z5pdU4KTSs/E3SAFrXNya7Uk03RLz39J8m3SSixqLNewu1NlbtKUozurT6ysVuMHG3JDICtg0P+A07llL1W1Bwb84O8hgF+SDcLfkUGTU1R9f/9MKHQYst7+JWZDCI/fQtdWM+gd/HjhlKZj4DtdY96/r+atvI5PVyIZ+gUK3D2VPdHt8ETt+aeaAU8B5tEzUotj5Drg+cW74Hz68qfG+dC2HkgfqoB5vVlcdRZ70f52nUR36OJh7nYWvAGLrHd5/h4iqozDVtVS721eEZT13AD0Wr6RB76SyrysRtl1ntbQD0iXTYKL6k/WC1CnDSFe+hE324psfEPz9/DFT78M8v4Wk39WTFmDQx8qAEeE5OQpiCDI453yb41HkDkh3n6MWrE9G3MZAmAJhwh9og+2KOqsGvUZCRMMC/9HlDmPt+cKMVRh6vyDsCNgjI3hueVwOukuSiNxKRjsZWhJM1HZFa77Bmzeav+4wFGrNclVw6heEcX6tztEO7JTnwhiMKOHM8tZvb5LMfQZp/cfBso3iE+Zbst+Qs1NLyRK6QgHeASxfECY99m7JI2FnkwdOivUTd4YY6A5W6No+eIpHpzAj3bpd/m+RVIh5WpnFxm3C/hbh/ATyfU6foIfOt2r
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SnVNdWNpRGltd1BnSFhVOWJFWG5ZM2g0elVhdnduTWpiMGdVQ2FyTlBXY3BH?=
- =?utf-8?B?Y2ltKzg5MkRBVmNDMHBXSzZWMnZNRTZUNjZ1OHpQVTY0aVBWY2x0WEk3emJt?=
- =?utf-8?B?VmdwVjBqSzVHNXBvK29QVS9YbnpnZ3RGSDFWQ3NiZllHTmtrNkhHN1hHVWZ1?=
- =?utf-8?B?U2FPS1NoKzk1byt3c3UzcTk3STI4b3AwVXJEeDUyRlhNQllpK0dLVmtlaHFL?=
- =?utf-8?B?TjRZZjRONzFkS3M1ekI0cEhnMnFJTjR2VGU4TDVadVFGK3dWdXFFMjJwYTg1?=
- =?utf-8?B?cHovQkc3TCttME9Td1VLMExaUnRJdGpxSEJtdDh3blptZjlLRHhZTFVZKzI2?=
- =?utf-8?B?NkRXR3JvbFNCVHhmWE1LcTE4VFlYbmNMb29jV3p2dFBKZktFZ0l2SGc5RlFB?=
- =?utf-8?B?MUhocUp0NnlzS2NEaGhjaXltNi9KRWxIcXRhK3piY2RZWVc4VFFoWUZUQjVE?=
- =?utf-8?B?WHNPQm1oeitpRWQvWFdBSXEyWFhTYTc1U2NzWmhJeHY0NVZsNTQrc0d3a0I0?=
- =?utf-8?B?amdzWDlSUHJ1dkljL0xOTzlQK1JuS2pSVlV5Qjc3ZS9ER294N1Jwb1RrTTFr?=
- =?utf-8?B?VXkvanIzQ2ZrZGtvWVlETCtiNURyUEQvWm1aN0dqa0J2YWlCZmxqZldpNlBm?=
- =?utf-8?B?NUVpNGhydUhGdlVkVzRuZzRob2Y4TUdudXd2Zys1aDY5YWwwVnFhQkVYRnFv?=
- =?utf-8?B?TUtQV3VRRERDNVVFaXlNV1JwNS9HdXdSVmk2dGdURDdLME91c2p0OTFGcEZv?=
- =?utf-8?B?bnh0YTY2aGl2VVh2bXFEODJienNGaVdNS0RRTnRTblhtWFlsSEh4aENiRzM4?=
- =?utf-8?B?R3FqRFBIL0xmUFRNZWM5ZWpxTk00NEdwMVlyWTR0Q0Y5eWF6VXJlU29XQVlF?=
- =?utf-8?B?QXdEOU80dDdJMHFHYVJZQ2lLZFlFNlpiZnNQS1k4WE9OOFE2S1NtR0Q4SUJY?=
- =?utf-8?B?VWZGY2RDRVFRWUlYRHNKSTk0eGQyNldKNFQzUlA5TDVscmd1VEpJcjgxMkFY?=
- =?utf-8?B?cjlOWDRpdGJ5Z1dFb3YzSndpYXVuNlFCU09XU0hTTGVzQXBWaHByVmxEeHAw?=
- =?utf-8?B?Sk1JQWtFSm1VU0pBWnBoTk1aYnpIc2VFMVFnVm5ROXhkQmFLLzI5czQxMkVl?=
- =?utf-8?B?K1poK3dEaE4wVHNGNFlxbUxMeUhKN0dwNVhNdWh6cXM2NG5YYVl2elZmNk9W?=
- =?utf-8?B?bGQ2dE1OVk9UWGlaY2g5bk9tNXJseEl6MERtWXgyeDBzZ0pMRW1iN3l5eVBV?=
- =?utf-8?B?cW8rdEY1bC95bWtwL2VkNFBLWHR5aEVlODFFM2Exc0tuM0NpVGFSaVlvbWV2?=
- =?utf-8?B?RXB5dWZkWTFqVzZCYkpZQjc2Q2VBcGRPWEV2S0tsREMwdml6MUhaUUJCODUz?=
- =?utf-8?B?Kys4b1NQZURReXJLNFJZajlhVkpwaStoMlA1RlFnY2hkcjF1cXkya1ZNY0w5?=
- =?utf-8?B?bzBwOW04eVRPSEVyUUNnbm5scG50WWxyMXdnRGxGaEQvMStFMFBxeWozWHN2?=
- =?utf-8?B?UVYxUkQvcVRQU1hnSTI4VExPV3ZjSE9wbDFORWoxdFlXcGVaK2pzSVRTVWNa?=
- =?utf-8?B?NjQzYU9ZalpmSGdEMk5YK1piQklEY0g0QXFCN1h6Zk5nZ2xHWmhadGN6dVR4?=
- =?utf-8?B?NlR4ZlA0M1VjcTVZUWE0bVU1ck5PUFEzSndxaTdlWFZlQVZLT1FjajBKM2lr?=
- =?utf-8?Q?fCI2/CKifLwWk9yUQjNm?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a926483-784f-4563-0b16-08da75f65f0e
-X-MS-Exchange-CrossTenant-AuthSource: TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2022 08:50:24.5694
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB1080
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="RuxD/X4zjazRFSzM"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -115,28 +53,246 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2022/7/20 20:27, pngliu@hotmail.com wrote:
-> From: Peng Liu <liupeng17@lenovo.com>
->
-> HRTIMER_MAX_CLOCK_BASES is of enum type hrtimer_base_type. To print
-> it as an integer, HRTIMER_MAX_CLOCK_BASES should be converted first.
->
-> Signed-off-by: Peng Liu <liupeng17@lenovo.com>
-> ---
->   scripts/gdb/linux/timerlist.py | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/scripts/gdb/linux/timerlist.py b/scripts/gdb/linux/timerlist.py
-> index 8281da068c5b..249f0e804b24 100644
-> --- a/scripts/gdb/linux/timerlist.py
-> +++ b/scripts/gdb/linux/timerlist.py
-> @@ -188,7 +188,8 @@ class LxTimerList(gdb.Command):
->           max_clock_bases = gdb.parse_and_eval("HRTIMER_MAX_CLOCK_BASES")
->   
->           text = "Timer List Version: gdb scripts\n"
-> -        text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(max_clock_bases)
-> +        text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(
-> +            max_clock_bases.type.fields()[max_clock_bases].enumval)
->           text += "now at {} nsecs\n".format(ktime_get())
->   
->           for cpu in cpus.each_online_cpu():
+--RuxD/X4zjazRFSzM
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Linus,
+
+Please pull to receive dmaengine updates for v6.0-rc1. One thing which
+might interest you is the Apple ADMAC driver which should be for your
+shiny new laptop :)
+
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dm=
+aengine-6.0-rc1
+
+for you to fetch changes up to a1873f837f9e5c1001462a635af1b0bab31aa9fd:
+
+  dmaengine: mediatek: mtk-hsdma: Fix typo 'the the' in comment (2022-07-26=
+ 22:06:05 +0530)
+
+----------------------------------------------------------------
+dmaengine updates for v6.0-rc1
+
+ New support/Core
+ - Remove DMA_MEMCPY_SG for lack of users
+ - Tegra 234 dmaengine support
+ - Mediatek MT8365 dma support
+ - Apple ADMAC driver
+
+ Updates:
+ - Yaml conversion for ST-Ericsson DMA40 binding and Freescale edma
+ - rz-dmac updates and device_synchronize support
+ - Bunch of typo in comments fixes in drivers
+ - multithread support in sf-pdma driver
+
+----------------------------------------------------------------
+Akhil R (2):
+      dt-bindings: dmaengine: Add compatible for Tegra234
+      dmaengine: tegra: Add terminate() for Tegra234
+
+Alexey Khoroshilov (1):
+      dmaengine: stm32-mdma: Remove dead code in stm32_mdma_irq_handler()
+
+Ben Dooks (2):
+      dmaengine: dw-axi-dmac: do not print NULL LLI during error
+      dmaengine: dw-axi-dmac: ignore interrupt if no descriptor
+
+Biju Das (1):
+      dmaengine: sh: rz-dmac: Add device_synchronize callback
+
+Christoph Hellwig (1):
+      dmaengine: remove DMA_MEMCPY_SG once again
+
+Colin Ian King (1):
+      dmaengine: fsl-edma: remove redundant assignment to pointer last_sg
+
+Conor Dooley (1):
+      dt-bindings: dma: dw-axi-dmac: extend the number of interrupts
+
+Dave Jiang (1):
+      MAINTAINERS: idxd driver maintainer update
+
+Fabien Parent (1):
+      dt-bindings: dma: mediatek,uart-dma: add MT8365 bindings
+
+Fabio Estevam (2):
+      dmaengine: imx-sdma: Improve the SDMA irq name
+      dmaengine: imx-dma: Cast of_device_get_match_data() with (uintptr_t)
+
+Fenghua Yu (1):
+      dmaengine: idxd: Correct IAX operation code names
+
+Geert Uytterhoeven (3):
+      dmaengine: dmatest: Remove spaces before tabs
+      dmaengine: dmatest: Replace symbolic permissions by octal permissions
+      dmaengine: apple-admac: Use {low,upp}er_32_bits() to split 64-bit add=
+ress
+
+Jayesh Choudhary (1):
+      dmaengine: ti: k3-psil-j721s2: Add psil threads for sa2ul
+
+Jiang Jian (1):
+      dmaengine: ep93xx: Fix typo in comments
+
+Jiapeng Chong (1):
+      dmaengine: altera-msgdma: Fixed some inconsistent function name descr=
+iptions
+
+Julia Lawall (7):
+      dmaengine: fix typos in comments
+      dmaengine: mediatek-cqdma: fix typo in comment
+      dmaengine: owl: fix typo in comment
+      dmaengine: qcom: fix typo in comment
+      dmaengine: s3c24xx: fix typo in comment
+      dmaengine: jz4780: fix typo in comment
+      dmaengine: ste_dma40: fix typo in comment
+
+Linus Walleij (1):
+      dt-bindings: dma: Rewrite ST-Ericsson DMA40 to YAML
+
+Lukas Bulwahn (1):
+      MAINTAINERS: add include/dt-bindings/dma to DMA GENERIC OFFLOAD ENGIN=
+E SUBSYSTEM
+
+Martin Povi=C5=A1er (3):
+      dt-bindings: dma: Add Apple ADMAC
+      dmaengine: apple-admac: Add Apple ADMAC driver
+      MAINTAINERS: Add ADMAC driver under ARM/APPLE MACHINE
+
+Mathias Tausen (1):
+      dmaengine: axi-dmac: check cache coherency register
+
+Miquel Raynal (2):
+      dmaengine: dw: dmamux: Export the module device table
+      dmaengine: dw: dmamux: Fix build without CONFIG_OF
+
+Peng Fan (1):
+      dt-bindings: dma: fsl-edma: Convert to DT schema
+
+Rob Herring (1):
+      dt-bindings: dma: apple,admac: Fix example interrupt parsing
+
+Samuel Holland (1):
+      dmaengine: sun4i: Set the maximum segment size
+
+Shengjiu Wang (2):
+      dmaengine: imx-sdma: Add missing struct documentation
+      dmaengine: imx-sdma: Add FIFO stride support for multi FIFO script
+
+Slark Xiao (1):
+      dmaengine: mediatek: mtk-hsdma: Fix typo 'the the' in comment
+
+Tang Bin (1):
+      dmaengine: xilinx_dpdma: Omit superfluous error message in xilinx_dpd=
+ma_probe()
+
+Uwe Kleine-K=C3=B6nig (1):
+      dmaengine: sprd: Cleanup in .remove() after pm_runtime_get_sync() fai=
+led
+
+Viacheslav Mitrofanov (1):
+      dmaengine: sf-pdma: Add multithread support for a DMA channel
+
+Vinod Koul (1):
+      dmaengine: apple-admac: Fix print format
+
+Vladimir Zapolskiy (1):
+      dmaengine: dw-edma: remove a macro conditional with similar branches
+
+Xiang wangx (2):
+      dmaengine: at_xdmac: Fix typo in comment
+      dmaengine: mediatek: mtk-hsdma: Fix typo in comment
+
+XueBing Chen (2):
+      dmaengine: dmatest: use strscpy to replace strlcpy
+      dmaengine: xilinx: use strscpy to replace strlcpy
+
+ .../devicetree/bindings/dma/apple,admac.yaml       |  80 ++
+ .../devicetree/bindings/dma/fsl,edma.yaml          | 155 ++++
+ Documentation/devicetree/bindings/dma/fsl-edma.txt | 111 ---
+ .../devicetree/bindings/dma/mediatek,uart-dma.yaml |   1 +
+ .../bindings/dma/nvidia,tegra186-gpc-dma.yaml      |   4 +-
+ .../devicetree/bindings/dma/snps,dw-axi-dmac.yaml  |   7 +-
+ .../devicetree/bindings/dma/ste-dma40.txt          | 138 ----
+ .../devicetree/bindings/dma/stericsson,dma40.yaml  | 159 ++++
+ Documentation/driver-api/dmaengine/provider.rst    |  10 -
+ MAINTAINERS                                        |   6 +-
+ drivers/dma/Kconfig                                |   8 +
+ drivers/dma/Makefile                               |   1 +
+ drivers/dma/altera-msgdma.c                        |   4 +-
+ drivers/dma/amba-pl08x.c                           |   2 +-
+ drivers/dma/apple-admac.c                          | 818 +++++++++++++++++=
+++++
+ drivers/dma/at_xdmac.c                             |   2 +-
+ drivers/dma/dma-axi-dmac.c                         |  16 +
+ drivers/dma/dma-jz4780.c                           |   2 +-
+ drivers/dma/dmaengine.c                            |   7 -
+ drivers/dma/dmatest.c                              |  45 +-
+ drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c     |  11 +
+ drivers/dma/dw-edma/dw-edma-v0-core.c              |   8 -
+ drivers/dma/dw/rzn1-dmamux.c                       |   3 +
+ drivers/dma/ep93xx_dma.c                           |   2 +-
+ drivers/dma/fsl-edma-common.c                      |   3 -
+ drivers/dma/imx-dma.c                              |   2 +-
+ drivers/dma/imx-sdma.c                             |  38 +-
+ drivers/dma/mediatek/mtk-cqdma.c                   |   2 +-
+ drivers/dma/mediatek/mtk-hsdma.c                   |   4 +-
+ drivers/dma/mv_xor_v2.c                            |   2 +-
+ drivers/dma/owl-dma.c                              |   2 +-
+ drivers/dma/s3c24xx-dma.c                          |   2 +-
+ drivers/dma/sf-pdma/sf-pdma.c                      |  44 +-
+ drivers/dma/sh/rz-dmac.c                           |  17 +
+ drivers/dma/sprd-dma.c                             |   5 +-
+ drivers/dma/ste_dma40.c                            |   2 +-
+ drivers/dma/stm32-mdma.c                           |   5 -
+ drivers/dma/sun4i-dma.c                            |  32 +-
+ drivers/dma/tegra186-gpc-dma.c                     |  26 +-
+ drivers/dma/ti/k3-psil-j721s2.c                    |   8 +
+ drivers/dma/xilinx/xilinx_dma.c                    | 122 ---
+ drivers/dma/xilinx/xilinx_dpdma.c                  |   6 +-
+ include/linux/dma/imx-dma.h                        |  13 +
+ include/linux/dma/qcom-gpi-dma.h                   |   2 +-
+ include/linux/dmaengine.h                          |  20 -
+ include/uapi/linux/idxd.h                          |   6 +-
+ 46 files changed, 1461 insertions(+), 502 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/apple,admac.yaml
+ create mode 100644 Documentation/devicetree/bindings/dma/fsl,edma.yaml
+ delete mode 100644 Documentation/devicetree/bindings/dma/fsl-edma.txt
+ delete mode 100644 Documentation/devicetree/bindings/dma/ste-dma40.txt
+ create mode 100644 Documentation/devicetree/bindings/dma/stericsson,dma40.=
+yaml
+ create mode 100644 drivers/dma/apple-admac.c
+
+Thanks
+--=20
+~Vinod
+
+--RuxD/X4zjazRFSzM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmLrWuMACgkQfBQHDyUj
+g0df5g/8D4IyxwFdewZthyL58Rn33OcPaw1L4NJ53hMAW07474q7+TFhu5zuwhfB
+AMoaVjS3SGLCeTQD33/ahOQSgBVJK5C/44v1S+6koyIEn4PyqkKditJ/MGgNS1Tb
+YWv/Gy+ufzYkmERaXl4WAYRXconKMA9DijRxJol3anePfS3lF3etdUQZdFOOYtl4
+iQh24oO3Hk4tavCGnuN/r/JuJ6MpeObxEtNJBQgwIw6oMq15AsATlpTed90jsWP6
+IIHi55FL3G3IHEsPBDP0m4M38ABD79DShiRR4Dy7ClzcrxO+Zo25BzaEROUG05oT
+xiY/Sz6/iSuOyZ7go+a86sQXnMS/nb81Zjq4n2tt+Z02VBKlt4CnF5dzwueMwZSv
+7Wtc3oJo9f0nIYyN70w33+xq/+LYpt1RYymFRCndYI4RwbzEnBIusAQXQVj7yLwj
+yUt+2JOQegfw9z44D+2GnIzEsiNAjLqxtWLGOsmQlzDAnNnc9q2eQDCVu+ipUr81
+OtjSNoDHBH6TEYltkeZM9aZMFwVJC7nvt407bwT7q/rXQhtR7TjI9bcr72SD0/U6
+oEhcK/csE8WyZtFhTw+t1Ym3yCSH4fh1bBszSSzNu0ysbNmUtGvflLBvo86kzXia
+HgA0fVYCk7y3m2EOokATaJhhdy1NYjxyGwR/p/uFK2EqIzy94hI=
+=mQTe
+-----END PGP SIGNATURE-----
+
+--RuxD/X4zjazRFSzM--

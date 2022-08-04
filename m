@@ -2,171 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA1F58A0EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AF658A0F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235060AbiHDSzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 14:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47798 "EHLO
+        id S236180AbiHDS4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 14:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiHDSzg (ORCPT
+        with ESMTP id S232130AbiHDS43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 14:55:36 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C3C65A2;
-        Thu,  4 Aug 2022 11:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659639335; x=1691175335;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vTjXRsL4lAnfzqth+z2XycE86BJ3XSQ3FJU78c46BNU=;
-  b=Mb6Uom0PeUWSmRlY9CGzmj+0X2WD7MZhsWsdiOexQeKvk20aFjfoDsvI
-   /zZqGi4MuD8Wt+AggIUZn9GRi1pZTr11UVWrhHHx0/0czibQNglDPRflx
-   sGB4+2HO+1QP62LSvID/Gm57sY7h51Wi8GBARpvCyPnFBMaR7WmWAEVxG
-   OINGlE6IGbtudnp4LV/ap+PtQUS/jWGibDyzg81invPpanUGII5/RPr5T
-   9c6JEwIP+otOTttRlS/bGpj+/CYli9Cj6cJqhcGCbEjzUN9IodzJMNmOE
-   jrUDJHbhWqq3YTmJHHTs0PCVEuWt22T2MQIZAkBJTH7Gl65P3vstdTnhu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="288779234"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="288779234"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 11:55:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="671382107"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Aug 2022 11:55:31 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJg0J-000Ijv-0J;
-        Thu, 04 Aug 2022 18:55:31 +0000
-Date:   Fri, 5 Aug 2022 02:55:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yang Jihong <yangjihong1@huawei.com>, rostedt@goodmis.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, yangjihong1@huawei.com
-Subject: Re: [PATCH] perf/core: Fix syzkaller reported issue "Internal error
- in read_pmevcntrn"
-Message-ID: <202208050241.9fLxoaz4-lkp@intel.com>
-References: <20220804105918.113833-1-yangjihong1@huawei.com>
+        Thu, 4 Aug 2022 14:56:29 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838DC175B9
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 11:56:28 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id h7so519669qtu.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 11:56:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=bVALqVTUnqV3lcvJzi/YzDZb6mzm8cCv/nt8rs+22ls=;
+        b=qdNtAT26wkBHtepS1n/e8GS+wgIy1R7t+9Fg8hEbc7ASBeGbC+QeeNrP5ZsrAiwTj9
+         rMHUJ5ganVNDE7+NA+NiLQpZQAwNsqmtiZ5z7R4IITi0VWpKWRXzEaL94NNXIG4LDzqW
+         ZyVedSLny9ByjXpuIJfTRcuSpw79Tqe0TooAabsgDiB//X90OYt1+9Y0aw2wqA8YO6rw
+         d6d3RnycFuw7vo4akSGz637fSdyU9X+0T0NQvzyZD8uYFhdt25rFVRyPsG5twNKv5+Rl
+         USZjJlzSfFq3WaMXnc/jvES3JPJLGj2s7ZeQ7wIDeIGd7i/upxwx6VixZQGUlrksDmzH
+         n2dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=bVALqVTUnqV3lcvJzi/YzDZb6mzm8cCv/nt8rs+22ls=;
+        b=yQz7IKavbAhL34ZCF6dj007iMB97NoU3HXVdJ5s+g6SPkKxucRPWStfzhDVqCU7Zq4
+         5G1bM1l+GPrmg1HndO+j8vhm9ER1FfcMT6cfBl2dLFtfDpIVq/LRd8QSDUK4alIINBVg
+         rGoPXZHgBpTxhpXaKfIUd1kEX2N+lzxUliPfx4BaZS4FYHs711E6f1T6cU0Ob5zBS47X
+         MZdWXq+QT0gfTlFCYkG55fGbsMw29+QcRStf7Xt0gaWV1CK8EFwEoDE1YVfmhbeqeb/S
+         T7pIOsVOTvX3lifw/3SKvMmuK/QOpsUZCJqVSOTqr3HUlr/+HLBmAZuxEas65gXhE1MZ
+         MFCA==
+X-Gm-Message-State: ACgBeo11znPKNuddW9+g9FnIQq8Yp540OOXRkeAEUyP/8TPk7S7Tsjgj
+        ypnNLoKaw/z8Y9rAquNi3qbq9NN+DjCGpUIQ1xPTDz2BXthBTA==
+X-Google-Smtp-Source: AA6agR7JBGnZHyBShIRr5222e5e6NeJtQ7KU63Fdm0M0jrWGzJuzNM+PD3hNmvpyjjsIKV1ge1MkwFBzvmdq8zM2Z7o=
+X-Received: by 2002:a05:622a:1102:b0:31f:29ed:2e2 with SMTP id
+ e2-20020a05622a110200b0031f29ed02e2mr2777169qty.54.1659639387605; Thu, 04 Aug
+ 2022 11:56:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804105918.113833-1-yangjihong1@huawei.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220804180358.32944-1-ubizjak@gmail.com> <91ccae0b-6135-6163-f59b-4e99624090a5@intel.com>
+In-Reply-To: <91ccae0b-6135-6163-f59b-4e99624090a5@intel.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Thu, 4 Aug 2022 20:56:16 +0200
+Message-ID: <CAFULd4YRzEXL1+cvBPT1hmfq=ZLwtrexHt+vDABnA2QMiVMBpg@mail.gmail.com>
+Subject: Re: [PATCH] x86/acrn: Improve ACRN hypercalls
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
+On Thu, Aug 4, 2022 at 8:41 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 8/4/22 11:03, Uros Bizjak wrote:
+> > As explained in section 6.47.5.2, "Specifying Registers for Local Variables"
+> > of the GCC info documentation, the correct way to specify register for
+> > input operands when calling Extended 'asm' is to define a local register
+> > variable and associate it with a specified register:
+> >
+> >       register unsigned long r8 asm ("r8") = hcall_id;
+>
+> IIRC, that's what the ACRN folks proposed first.  But, it's more fragile
+> because you can't, for instance, put a printk() in that function between
+> the variable definition and assebly.
 
-Thank you for the patch! Perhaps something to improve:
+Yes, this is also stated in the documentation. The solution is to:
 
-[auto build test WARNING on tip/perf/core]
-[also build test WARNING on linus/master v5.19 next-20220803]
-[cannot apply to acme/perf/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+--quote--
+    register int *p1 asm ("r0") = ...;
+    register int *p2 asm ("r1") = ...;
+    register int *result asm ("r0");
+    asm ("sysint" : "=r" (result) : "0" (p1), "r" (p2));
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yang-Jihong/perf-core-Fix-syzkaller-reported-issue-Internal-error-in-read_pmevcntrn/20220804-190347
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 326ecc15c61c349cd49d1700ff9e3e31c6fd1cd5
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220805/202208050241.9fLxoaz4-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/9c758a8d3d13d1ac89f651850b79d91b23b41b02
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yang-Jihong/perf-core-Fix-syzkaller-reported-issue-Internal-error-in-read_pmevcntrn/20220804-190347
-        git checkout 9c758a8d3d13d1ac89f651850b79d91b23b41b02
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/events/
+_Warning:_ In the above example, be aware that a register (for example
+'r0') can be call-clobbered by subsequent code, including function calls
+and library calls for arithmetic operators on other variables (for
+example the initialization of 'p2').  In this case, use temporary
+variables for expressions between the register assignments:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    int t1 = ...;
+    register int *p1 asm ("r0") = ...;
+    register int *p2 asm ("r1") = t1;
+    register int *result asm ("r0");
+    asm ("sysint" : "=r" (result) : "0" (p1), "r" (p2));
+--/quote--
 
-All warnings (new ones prefixed by >>):
+The %r8 is not preserved across function calls, so your statement
+above is correct. But as long as there is no function call *between*
+the variable definition and the assembly, the approach with the local
+register variable works without any problems. It is even something GCC
+itself has used in its library for years.
 
-   In file included from include/linux/spinlock.h:54,
-                    from include/linux/wait.h:9,
-                    from include/linux/wait_bit.h:8,
-                    from include/linux/fs.h:6,
-                    from kernel/events/core.c:11:
-   kernel/events/core.c: In function 'perf_output_read_group':
-   kernel/events/core.c:6942:27: error: 'flags' undeclared (first use in this function)
-    6942 |         local_irq_restore(flags);
-         |                           ^~~~~
-   include/linux/typecheck.h:11:16: note: in definition of macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                ^
-   include/linux/irqflags.h:228:22: note: in expansion of macro 'raw_irqs_disabled_flags'
-     228 |                 if (!raw_irqs_disabled_flags(flags))    \
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/events/core.c:6942:9: note: in expansion of macro 'local_irq_restore'
-    6942 |         local_irq_restore(flags);
-         |         ^~~~~~~~~~~~~~~~~
-   kernel/events/core.c:6942:27: note: each undeclared identifier is reported only once for each function it appears in
-    6942 |         local_irq_restore(flags);
-         |                           ^~~~~
-   include/linux/typecheck.h:11:16: note: in definition of macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                ^
-   include/linux/irqflags.h:228:22: note: in expansion of macro 'raw_irqs_disabled_flags'
-     228 |                 if (!raw_irqs_disabled_flags(flags))    \
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/events/core.c:6942:9: note: in expansion of macro 'local_irq_restore'
-    6942 |         local_irq_restore(flags);
-         |         ^~~~~~~~~~~~~~~~~
->> include/linux/typecheck.h:12:25: warning: comparison of distinct pointer types lacks a cast
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                         ^~
-   include/linux/irqflags.h:193:17: note: in expansion of macro 'typecheck'
-     193 |                 typecheck(unsigned long, flags);        \
-         |                 ^~~~~~~~~
-   include/linux/irqflags.h:228:22: note: in expansion of macro 'raw_irqs_disabled_flags'
-     228 |                 if (!raw_irqs_disabled_flags(flags))    \
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/events/core.c:6942:9: note: in expansion of macro 'local_irq_restore'
-    6942 |         local_irq_restore(flags);
-         |         ^~~~~~~~~~~~~~~~~
->> include/linux/typecheck.h:12:25: warning: comparison of distinct pointer types lacks a cast
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                         ^~
-   include/linux/irqflags.h:182:17: note: in expansion of macro 'typecheck'
-     182 |                 typecheck(unsigned long, flags);        \
-         |                 ^~~~~~~~~
-   include/linux/irqflags.h:230:17: note: in expansion of macro 'raw_local_irq_restore'
-     230 |                 raw_local_irq_restore(flags);           \
-         |                 ^~~~~~~~~~~~~~~~~~~~~
-   kernel/events/core.c:6942:9: note: in expansion of macro 'local_irq_restore'
-    6942 |         local_irq_restore(flags);
-         |         ^~~~~~~~~~~~~~~~~
-
-
-vim +12 include/linux/typecheck.h
-
-e0deaff470900a4c Andrew Morton 2008-07-25   4  
-e0deaff470900a4c Andrew Morton 2008-07-25   5  /*
-e0deaff470900a4c Andrew Morton 2008-07-25   6   * Check at compile time that something is of a particular type.
-e0deaff470900a4c Andrew Morton 2008-07-25   7   * Always evaluates to 1 so you may use it easily in comparisons.
-e0deaff470900a4c Andrew Morton 2008-07-25   8   */
-e0deaff470900a4c Andrew Morton 2008-07-25   9  #define typecheck(type,x) \
-e0deaff470900a4c Andrew Morton 2008-07-25  10  ({	type __dummy; \
-e0deaff470900a4c Andrew Morton 2008-07-25  11  	typeof(x) __dummy2; \
-e0deaff470900a4c Andrew Morton 2008-07-25 @12  	(void)(&__dummy == &__dummy2); \
-e0deaff470900a4c Andrew Morton 2008-07-25  13  	1; \
-e0deaff470900a4c Andrew Morton 2008-07-25  14  })
-e0deaff470900a4c Andrew Morton 2008-07-25  15  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Uros.

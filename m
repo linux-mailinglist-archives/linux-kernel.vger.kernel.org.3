@@ -2,128 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3764858A3DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 01:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EF058A3DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 01:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240059AbiHDXUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 19:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S240030AbiHDXXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 19:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiHDXUX (ORCPT
+        with ESMTP id S235255AbiHDXXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 19:20:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C88848E85;
-        Thu,  4 Aug 2022 16:20:22 -0700 (PDT)
-Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8887A6601B8B;
-        Fri,  5 Aug 2022 00:20:18 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659655220;
-        bh=T0qa+MBJicKTTAZecGrlpW67BsO3JhfQBcWJNXRa4zk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hH1TgnyvKoh2vVAqSo9D86sEPyQp9coth65EX7I5eUQx1zM2/dicl2FTfdJNQkBvz
-         KspkfArJl68MM4tj//R3mx7eW/CtBz4mI4gHGSGG5+uG5cRKXeglv9/eh05xzedmgr
-         JaWDG3SAxSgKH+1d0PsF2WmRgKqPce6H535Wx2LfoWCQjSMwwLcPvkCOO2FvoBvT2/
-         bipN9umw3NmBsHaIQVOugavHQ+tnhuE05FMe5rX60Y8VSfX7HE37VyasHD9nGbhh+A
-         Fil0Mc38682UP0nno7MpyiPESI3P3ShO669oOE7bSswoeY3tTVh4+Yv1ZKS4gGsi+I
-         2NnqbtkScB3ng==
-Date:   Thu, 4 Aug 2022 19:20:15 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     bchihi@baylibre.com
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Subject: Re: [PATCH v8.1, 3/7] arm64: dts: mt8192: Add thermal zone
-Message-ID: <20220804232015.wz23cjuh73zceoa5@notapiano>
-References: <20220804130912.676043-1-bchihi@baylibre.com>
- <20220804130912.676043-4-bchihi@baylibre.com>
+        Thu, 4 Aug 2022 19:23:47 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176594D4CC
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 16:23:47 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id h28so806653pfq.11
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 16:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=1h56T+GF0bC064cXeA855D8CjIl/Gq1Kdu3reSRrqBI=;
+        b=qEzRAGXdmEDfDJ+CfwhA/pwWYgR2fu9PYCiNa2nJkNLppvE4A/aGqwYoR6OKi++roG
+         HIfMywN7bxEaWj5ps1VHfYbwEOkb1cbA1wmawhm2scdWlyXZUkCZ9i+uZ49/FLH2OVHU
+         1UpruqnLv1jFOQoLvtAFTmlFhuZKxMWzCCu5tgUJUJ+EJ1VOuT6rSP8QEnyi1g6vL50y
+         steY61/RoY+kPuu9bWf02aS5XwspwD4RSmRmO+9YxzDM+2lEYOQMNzNyTAC13Hc10pVZ
+         Pa7R4hIrJ6RcXipbbk/aqTI+t/b0tZVRR2mx4RfdOQ0TIJu3lDRCpWVBbh1HI2tjks1c
+         PruA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=1h56T+GF0bC064cXeA855D8CjIl/Gq1Kdu3reSRrqBI=;
+        b=Bw40MXO37EzdHlFFPdEuJ1YeiHiwZcSC6COpIO6XBDRGbyXGnZEcB3TJfBPwwdoPMP
+         gQJl4jJrlKBeNVoNXiOFIpD3yKIbHIfyvNQhALCqiFALyZZgjBUXRC1a9718y5UlnADi
+         0uJgrqagXovyIn0/duTt9DKerMuPOZegQNYnipd2zQ0qIJzXOkA9Q1uOotICwG77bls1
+         6sMKJnbA+K/hBtAn6PACWCcgNMnfvWQsAXx2jkz2xo1mz3hPPnH0LQ6i0f0CgAmO3SeO
+         qG8EkU40tMT7SPBr8ltTBfw3ZDCSRVqxQkW1AC1enDM15pVbAxYARLeR2/mEKamriT/E
+         FBmA==
+X-Gm-Message-State: ACgBeo0Xn2B3Cx9DiFO94FZyDbQIiDl4nqbD7yN7AJTdj2Xy/7qGW4Wa
+        Ka/GYV4HiVsGQsykybIvNKZEPw==
+X-Google-Smtp-Source: AA6agR4IWgC9IuMM9zJP8m4skrduVubby7ccpw1GNk0NMJYpp/lX6AmSa1azZp/z/oEIV7K4IuyymQ==
+X-Received: by 2002:a05:6a00:2181:b0:51b:560b:dd30 with SMTP id h1-20020a056a00218100b0051b560bdd30mr3937001pfi.44.1659655426435;
+        Thu, 04 Aug 2022 16:23:46 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id g64-20020a625243000000b0052d6ad246a4sm1550629pfb.144.2022.08.04.16.23.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 16:23:45 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 23:23:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sagi Shahar <sagis@google.com>
+Subject: Re: [RFC PATCH v6 037/104] KVM: x86/mmu: Allow non-zero value for
+ non-present SPTE
+Message-ID: <YuxU/VXlSwVip7ys@google.com>
+References: <cover.1651774250.git.isaku.yamahata@intel.com>
+ <bfa4f7415a1d059bd3a4c6d14105f2baf2d03ba6.1651774250.git.isaku.yamahata@intel.com>
+ <YuxOHPpkhKnnstqw@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220804130912.676043-4-bchihi@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YuxOHPpkhKnnstqw@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 03:09:08PM +0200, bchihi@baylibre.com wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
+On Thu, Aug 04, 2022, David Matlack wrote:
+> On Thu, May 05, 2022 at 11:14:31AM -0700, isaku.yamahata@intel.com wrote:
+> > +static inline void kvm_init_shadow_page(void *page)
+> > +{
+> > +#ifdef CONFIG_X86_64
+> > +	int ign;
+> > +
+> > +	WARN_ON_ONCE(shadow_nonpresent_value != SHADOW_NONPRESENT_VALUE);
+> > +	asm volatile (
+> > +		"rep stosq\n\t"
+> > +		: "=c"(ign), "=D"(page)
+> > +		: "a"(SHADOW_NONPRESENT_VALUE), "c"(4096/8), "D"(page)
+> > +		: "memory"
+> > +	);
 > 
-> This adds the thermal zone for the mt8192.
+> Use memset64()?
+
+Huh.  The optimized x86-64 versions were added in 2017 (4c51248533ad ("x86: implement
+memset16, memset32 & memset64"), so I can't even claim I wrote this before there
+was a perfect fit.
+
+> > @@ -5643,7 +5687,8 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+> >  	vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
+> >  	vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
+> >  
+> > -	vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+> > +	if (!(is_tdp_mmu_enabled(vcpu->kvm) && shadow_nonpresent_value))
+> > +		vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
 > 
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> ---
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 113 ++++++++++++++++++++++-
->  1 file changed, 112 insertions(+), 1 deletion(-)
+> Is there any reason to prefer using __GFP_ZERO? I suspect the code would
+> be simpler if KVM unconditionally initialized shadow pages.
+
+Hmm, we'd have to implement kvm_init_shadow_page() for 32-bit builds, and I don't
+love having "gfp_zero" but not using it when we need zeros, but if the end result
+is simpler, I'm definitely ok with omitting __GFP_ZERO and always flowing through
+kvm_init_shadow_page().
+
+> > diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+> > index fbbab180395e..3319ca7f8f48 100644
+> > --- a/arch/x86/kvm/mmu/spte.h
+> > +++ b/arch/x86/kvm/mmu/spte.h
+> > @@ -140,6 +140,19 @@ static_assert(MMIO_SPTE_GEN_LOW_BITS == 8 && MMIO_SPTE_GEN_HIGH_BITS == 11);
+> >  
+> >  #define MMIO_SPTE_GEN_MASK		GENMASK_ULL(MMIO_SPTE_GEN_LOW_BITS + MMIO_SPTE_GEN_HIGH_BITS - 1, 0)
+> >  
+> > +/*
+> > + * non-present SPTE value for both VMX and SVM for TDP MMU.
+> > + * For SVM NPT, for non-present spte (bit 0 = 0), other bits are ignored.
+> > + * For VMX EPT, bit 63 is ignored if #VE is disabled.
+> > + *              bit 63 is #VE suppress if #VE is enabled.
+> > + */
+> > +#ifdef CONFIG_X86_64
+> > +#define SHADOW_NONPRESENT_VALUE	BIT_ULL(63)
+> > +static_assert(!(SHADOW_NONPRESENT_VALUE & SPTE_MMU_PRESENT_MASK));
+> > +#else
+> > +#define SHADOW_NONPRESENT_VALUE	0ULL
+> > +#endif
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index cbae5a5ee4a0..3320b5c14ee3 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-[..]
-> +		vdec-thermal {
+> The terminology "shadow_nonpresent" implies it would be the opposite of
+> e.g.  is_shadow_present_pte(), when in fact they are completely
+> different concepts.
 
-		infra-thermal
+You can fight Paolo over that one :-)  I agree it looks a bit odd when juxtaposed
+with is_shadow_present_pte(), but at the same time I agree with Paolo that
+SHADOW_INIT_VALUE is also funky.
 
-> +			polling-delay = <0>;
-> +			polling-delay-passive = <0>;
-> +			thermal-sensors = <&lvts_ap 4>;
-> +		};
-> +		img-thermal {
+https://lore.kernel.org/all/9dfc44d6-6b20-e864-8d4f-09ab7d489b97@redhat.com
 
-		cam-thermal
-
-> +			polling-delay = <0>;
-> +			polling-delay-passive = <0>;
-> +			thermal-sensors = <&lvts_ap 5>;
-> +		};
-> +		infra-thermal {
-
-		md1-thermal
-
-> +			polling-delay = <0>;
-> +			polling-delay-passive = <0>;
-> +			thermal-sensors = <&lvts_ap 6>;
-> +		};
-> +		cam1-thermal {
-
-		md2-thermal
-
-> +			polling-delay = <0>;
-> +			polling-delay-passive = <0>;
-> +			thermal-sensors = <&lvts_ap 7>;
-> +		};
-> +		cam2-thermal {
-
-		md3-thermal
-
-Thanks,
-Nícolas
-
-> +			polling-delay = <0>;
-> +			polling-delay-passive = <0>;
-> +			thermal-sensors = <&lvts_ap 8>;
-> +		};
-> +	};
->  };
-> -- 
-> 2.34.1
+> Also, this is a good opportunity to follow the same naming terminology
+> as REMOVED_SPTE in the TDP MMU.
 > 
-> 
+> How about EMPTY_SPTE?
+
+No, because "empty" implies there's nothing there, and it very much matters that
+the SUPPRESS_VE bit is set for TDX.

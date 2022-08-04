@@ -2,128 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD219589949
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2907589953
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239453AbiHDI2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        id S239449AbiHDIcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235042AbiHDI2a (ORCPT
+        with ESMTP id S230038AbiHDIcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:28:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770EA65821
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:28:28 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oJWD7-0006bS-EP; Thu, 04 Aug 2022 10:28:05 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 719DCC28ED;
-        Thu,  4 Aug 2022 08:28:02 +0000 (UTC)
-Date:   Thu, 4 Aug 2022 10:28:01 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Sebastian =?utf-8?B?V8O8cmw=?= <sebastian.wuerl@ororatech.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Christian Pellegrin <chripell@fsfe.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] can: mcp251x: Fix race condition on receive interrupt
-Message-ID: <20220804082801.prjdwdindpe3alk3@pengutronix.de>
-References: <20220804081411.68567-1-sebastian.wuerl@ororatech.com>
+        Thu, 4 Aug 2022 04:32:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC68C5F98D
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:32:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659601949;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0auJsCK06PWTESW74y0ftQcvvf4/UB9cG0roNrgm6PM=;
+        b=HoSfioQLx/TlkONr7r6cptFhNK0B6OCZ/Vh9kyq3+xtcXHPOkPtjQkzQzEVz/UC6qkzael
+        tABhLSd/3gRI3WPhNvSxNaX/xWulBxQSRQc1xk7HwLq0BT9723MQrKjz5fimqrBjb54CmO
+        y0sGmReaolFQoZhheuPTIiN3HTecOYo=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-303-FNN2limCNWWmgdeOC9qT_g-1; Thu, 04 Aug 2022 04:32:28 -0400
+X-MC-Unique: FNN2limCNWWmgdeOC9qT_g-1
+Received: by mail-ed1-f72.google.com with SMTP id q18-20020a056402519200b0043dd2ff50feso6095847edd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 01:32:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0auJsCK06PWTESW74y0ftQcvvf4/UB9cG0roNrgm6PM=;
+        b=rYsDmLuC3xNyFPKIL7ckKA3kBgCv+eF6H+Pa3a9igruvUUz3R5Fp3dM6TgFU5fn/zY
+         pIW/fmwTSz5aFw0efDtgYB1UuiV8H6ziPUmc6HmlWMUW0h1rQrWiBKhGadU9X+VKxeOK
+         UfWJz8lZEbVZZBcU2IRfsJGC31jvqnamEGosMn4kCxJnvr1HMV/1Pt5QLUsz6yfZ76cz
+         7h3WnO/CyJv6gSGW35WL98jKs6YWzrZB8YvF3BM/UadZSKq0tASeXc83PUoFmzD2UtDH
+         /p4j1U+StWrUAhaop12TbhBgwC5j6wKBHecwv/IDNOx+3xDfHe8mF5P4sfMe/jAz4sit
+         l6sQ==
+X-Gm-Message-State: ACgBeo3s33rgH5OaDu8AWZZ6roJxjAY7MpyRTDg1Anu940pcNOAF0AC9
+        9i1FGGnWcRt9HI0TsvgSsPIwaNxGI+Idiu/4A+2i8GuEnfgLtUsbfE8zjggG1otBdULaGk73EUG
+        pv2OPJOI3OHW0t1snM0iNlQRg
+X-Received: by 2002:a05:6402:4381:b0:43b:cb55:ae3c with SMTP id o1-20020a056402438100b0043bcb55ae3cmr889695edc.45.1659601947643;
+        Thu, 04 Aug 2022 01:32:27 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5ftOGy44vO+4n3LYxeMS36KALCYj0N9kx8p1IMh8cFSJwJS1ngCJxRjXd3sz+0KKmEt8qqMA==
+X-Received: by 2002:a05:6402:4381:b0:43b:cb55:ae3c with SMTP id o1-20020a056402438100b0043bcb55ae3cmr889679edc.45.1659601947436;
+        Thu, 04 Aug 2022 01:32:27 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id y18-20020a1709063db200b00726c0e63b94sm112530ejh.27.2022.08.04.01.32.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 01:32:26 -0700 (PDT)
+Message-ID: <d24e781c-3c84-26eb-14b9-8cb4ea3b32ba@redhat.com>
+Date:   Thu, 4 Aug 2022 10:32:26 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qwd6lmx2fq4bhe5q"
-Content-Disposition: inline
-In-Reply-To: <20220804081411.68567-1-sebastian.wuerl@ororatech.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] drm: panel-orientation-quirks: Add quirk for Anbernic
+ Win600
+Content-Language: en-US
+To:     Maccraft123 <maccraft123mc@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220803182402.1217293-1-maccraft123mc@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220803182402.1217293-1-maccraft123mc@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---qwd6lmx2fq4bhe5q
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 8/3/22 20:24, Maccraft123 wrote:
+> From: Maya Matuszczyk <maccraft123mc@gmail.com>
+> 
+> This device is another x86 gaming handheld, and as (hopefully) there is
+> only one set of DMI IDs it's using DMI_EXACT_MATCH
+> 
+> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
 
-On 04.08.2022 10:14:11, Sebastian W=C3=BCrl wrote:
-> The mcp251x driver uses both receiving mailboxes of the CAN controller
-> chips. For retrieving the CAN frames from the controller via SPI, it chec=
-ks
-> once per interrupt which mailboxes have been filled and will retrieve the
-> messages accordingly.
->=20
-> This introduces a race condition, as another CAN frame can enter mailbox 1
-> while mailbox 0 is emptied. If now another CAN frame enters mailbox 0 unt=
-il
-> the interrupt handler is called next, mailbox 0 is emptied before
-> mailbox 1, leading to out-of-order CAN frames in the network device.
->=20
-> This is fixed by checking the interrupt flags once again after freeing
-> mailbox 0, to correctly also empty mailbox 1 before leaving the handler.
->=20
-> For reproducing the bug I created the following setup:
->  - Two CAN devices, one Raspberry Pi with MCP2515, the other can be any.
->  - Setup CAN to 1 MHz
->  - Spam bursts of 5 CAN-messages with increasing CAN-ids
->  - Continue sending the bursts while sleeping a second between the bursts
->  - Check on the RPi whether the received messages have increasing CAN-ids
->  - Without this patch, every burst of messages will contain a flipped pair
->=20
-> Fixes: bf66f3736a94 ("can: mcp251x: Move to threaded interrupts instead o=
-f workqueues.")
-> Signed-off-by: Sebastian W=C3=BCrl <sebastian.wuerl@ororatech.com>
+Thanks, patch looks good to me:
 
-I've reduced the scope of intf1, eflag1 while applying the patch to
-can-next/master.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-Thanks,
-Marc
+Since we are currently in the middle of the merge window
+and this patch needs to go to a -fixes branch I'm not quite
+sure how to handle this.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Hopefully one of the drm-misc maintainers can pick this
+up (once rc1 is out?) .
 
---qwd6lmx2fq4bhe5q
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
 
------BEGIN PGP SIGNATURE-----
+Hans
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLrgw4ACgkQrX5LkNig
-0105lQgAsm+Bkp2do8C0S2QsVI8ZhY+9fLBsoaF/xT63CdKufAbDA6tDFMI6sCEC
-5krLrMRxtRogbpx8nJkPcWhIULA8vAs26KCuSEJO4xcOqsfZxeq0YF4DnFjZzmdA
-IYKPer7wB78gBgdBQiJlad44enwtcfVREGHDfd3PhZ34AMFUrKMEOGZ+ATleK1QB
-ryXUSa8i3SDTfKBWQx86/ns8i42JdnBTHcsNSkuPDvPf1DBWe9hWZabP0yky1ck9
-XCvbL3kNGepG0TBBRXSMTADNGj3DXgA7QvsMq38ZVE2EX4i5oia56dauC2X4H2E5
-2hPZiEAgghwGJMHb8dx+5uUSEqNNaw==
-=G5re
------END PGP SIGNATURE-----
 
---qwd6lmx2fq4bhe5q--
+
+> ---
+>  drivers/gpu/drm/drm_panel_orientation_quirks.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> index d4e0f2e85548..a8681610ede7 100644
+> --- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> +++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> @@ -128,6 +128,12 @@ static const struct dmi_system_id orientation_data[] = {
+>  		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "One S1003"),
+>  		},
+>  		.driver_data = (void *)&lcd800x1280_rightside_up,
+> +	}, {	/* Anbernic Win600 */
+> +		.matches = {
+> +		  DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Anbernic"),
+> +		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Win600"),
+> +		},
+> +		.driver_data = (void *)&lcd720x1280_rightside_up,
+>  	}, {	/* Asus T100HA */
+>  		.matches = {
+>  		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+

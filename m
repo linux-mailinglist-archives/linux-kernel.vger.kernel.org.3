@@ -2,85 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B11E5895AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 03:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739925895A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 03:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238946AbiHDBgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 21:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
+        id S238823AbiHDBdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 21:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiHDBgV (ORCPT
+        with ESMTP id S229728AbiHDBdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 21:36:21 -0400
-X-Greylist: delayed 419 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 03 Aug 2022 18:36:19 PDT
-Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [IPv6:2a01:4f8:a0:821d::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C2D720BD7;
-        Wed,  3 Aug 2022 18:36:19 -0700 (PDT)
-Received: from [192.168.20.102] (unknown [77.239.252.99])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 3 Aug 2022 21:33:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E07D5A3EF;
+        Wed,  3 Aug 2022 18:32:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 1C9D514015B;
-        Thu,  4 Aug 2022 01:29:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
-        s=donut; t=1659576558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nRaqQSwJE0HG3dU4ptJs4IAer95j88GgLQPrsa6QiKQ=;
-        b=yqIm8IT+tVTcypMS/waMqRVq2pDNsPD5JJrWicP0sd46VynMJL5Z3Rmt7mxIZYqhn9GJwX
-        YZ6AknPi0KgiKLUVYGGi9fzCmn4CUjMig4BdMF3Z8ij8YGd9lCQVsr2PMoqK7je7K6PVtd
-        EE7nWOy8JgbrqmshX6Vr4dhH+90anyI=
-Message-ID: <f66c2053-74bd-04fb-13e4-8eeb7f426608@postmarketos.org>
-Date:   Thu, 4 Aug 2022 04:29:17 +0300
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 156166175E;
+        Thu,  4 Aug 2022 01:32:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 951A6C433C1;
+        Thu,  4 Aug 2022 01:32:57 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 21:32:55 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [git pull] vfs.git pile 3 - dcache
+Message-ID: <20220803213255.3ab719e3@gandalf.local.home>
+In-Reply-To: <YusV8cr382PeBNLM@casper.infradead.org>
+References: <YurA3aSb4GRr4wlW@ZenIV>
+        <CAHk-=wizUgMbZKnOjvyeZT5E+WZM0sV+zS5Qxt84wp=BsRk3eQ@mail.gmail.com>
+        <YuruqoGHJONpdZcK@home.goodmis.org>
+        <CAHk-=whJvgykcTnR+BMJNwd+me5wvg+CxjSBeiPYTR1B2g5NpQ@mail.gmail.com>
+        <20220803185936.228dc690@gandalf.local.home>
+        <YusDmF39ykDmfSkF@casper.infradead.org>
+        <CAHk-=wh6VSqsnANHkQpw=yD-Hkt90Y1LX=ad9+r+SusfriUOfA@mail.gmail.com>
+        <YusV8cr382PeBNLM@casper.infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] clk: qcom: gcc-sdm660: Use floor ops for SDCC1 clock
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220714203822.186448-1-marijn.suijten@somainline.org>
-From:   Alexey Minnekhanov <alexeymin@postmarketos.org>
-In-Reply-To: <20220714203822.186448-1-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 23:38, Marijn Suijten wrote:
-> In commit 3f905469c8ce ("clk: qcom: gcc: Use floor ops for SDCC clocks")
-> floor ops were applied to SDCC2 only, but flooring is also required on
-> the SDCC1 apps clock which is used by the eMMC card on Sony's Nile
-> platform, and otherwise result in the typicial "Card appears
-> overclocked" warnings observed on many other platforms before:
-> 
->      mmc0: Card appears overclocked; req 52000000 Hz, actual 100000000 Hz
->      mmc0: Card appears overclocked; req 52000000 Hz, actual 100000000 Hz
->      mmc0: Card appears overclocked; req 104000000 Hz, actual 192000000 Hz
-> 
-> Fixes: f2a76a2955c0 ("clk: qcom: Add Global Clock controller (GCC) driver for SDM660")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->
+On Thu, 4 Aug 2022 01:42:25 +0100
+Matthew Wilcox <willy@infradead.org> wrote:
 
-Tried this on my SDM660 xiaomi-lavender, warnings are gone, thanks!
+> > So let's make it verbose and clear and unambiguous. It's not like I
+> > expect to see a _lot_ of those. Knock wood.  
+> 
+> Should we have it take a spinlock_t pointer?  We could have lockdep
+> check it is actually held.
 
-Tested-by: Alexey Minnekhanov <alexeymin@postmarketos.org>
+We don't care if the lock is held or not. The point of the matter is that
+spinlocks in RT do not disable preemption. The code that the
+preempt_disable_under_spinlock() is inside, can not be preempted. If it is,
+bad things can happen.
+
+Currently this code assumes that spinlocks disable preemption, so there's
+no need to disable preemption here. But in RT, just holding the spinlock is
+not enough to disable preemption, hence we need to explicitly call it here.
+
+As Linus's name suggests, the "preempt_enable_under_spinlock" is to make
+sure preemption is disabled regardless if it's under a normal spinlock that
+disables preemption, or a RT spinlock that does not.
+
+I wonder if raw_preempt_disable() would be another name to use? We have
+raw_spin_lock() to denote that it's a real spinlock even under PREEMPT_RT.
+We could say that "raw_preempt_disable()" makes sure the location really
+has preemption disabled regardless of PREEMPT_RT.
+
+-- Steve

@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F1B58A04E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C825858A04F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239859AbiHDSLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 14:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S239878AbiHDSML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 14:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbiHDSL3 (ORCPT
+        with ESMTP id S232643AbiHDSMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 14:11:29 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217BA4F186;
-        Thu,  4 Aug 2022 11:11:29 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id o1so178939qkg.9;
-        Thu, 04 Aug 2022 11:11:29 -0700 (PDT)
+        Thu, 4 Aug 2022 14:12:09 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801DE4E860
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 11:12:08 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso537310pjd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 11:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=37y1pNEyQ+ddREX5K3poWhk+osrjYe1S/O8gGeEYV/s=;
-        b=XcUgUM14PB1rlQx8PWU05XJdYwxpGH95vXAU1vNxBwwBGgsb5J9xX61pPBfV5V0ddc
-         B7uuHsIwFNy5VdzmEYs4+v0lNIQlUJ6IzCg7B7ZWaqgKH4X7jJRzYmPjW/FR/1C07hGo
-         FKzCQMGlZWq+oqTg8J7e1JhAo+VZI5vqD5FPqDoSnHqrx73iRxwiN/AvprUf7LNTAU1X
-         4Q7Sven4ksdBwjhdXUYtHz7xsS6X2PwGc8/ZTzGxwninwdSkfyx3kgn4/ReO+Iqf7FGh
-         mbLetj4EdRfGkqqGzSfpDINsGjm8KWaH37ksejtLjGWJ0IvHnBU2zckAVGIHuWW2CGJ+
-         JX3A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=WF/cYFGagnF40nv8l7k9eP25Q0NBXp9Z9COyyJ/N54o=;
+        b=cjD75C8zkKUPAnEZi2R8ZifsZOuBDxI97ehOWuAjwg9BU9nlwTsRbKXh3SGxTngkip
+         KVam6izMKL3D9XccgmS8FZvf+SYP4i0ieM2bk1nI6xqSpBPqyDM/be1sfOpZDOsz6xbi
+         fDPASsXiSdWTwliZCcBTXWmGLBP4N0p4BaH4wFKq9KVrldbdhkF+Cr+P+Zcv2sQI18Z1
+         i1hR0X0pAHePEH/K0ca2C+1YObl3Kb8e/cbMFWsdKs4OLUpf9XwVrR0moe8/uaP5eOC3
+         7XNdpDq2UpAS2tOr6JFRyZDwiCdZshHkyZTgD56YBznu6nfVxa6VmRzC5YfdKg/7OTkv
+         mHAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=37y1pNEyQ+ddREX5K3poWhk+osrjYe1S/O8gGeEYV/s=;
-        b=Gty95mr6roseTlWV+BUpnulVPyS0TPqgdXCzs5NIjQKRPO5OQKVblOwu7HlaSdt7rF
-         BYmc9u/yn+E89BpLEuldveapqt68W0LJT0nG/jeObBZQJQflXqu9/HsZFxgyMsxqgFtU
-         DOWA3S2cXKaHQUy7Ij8PLNHOMiQZcmWAnmK864hvFOXFYVUzcSZD2ikc6oSWYAhYVPs3
-         nj7Apz3Z/IHPL0Eaylqo/UUcNAcdzdVBY8eTkOWIfEaupn29SDyJVcubtFgxGN9naoD3
-         7j6pXIq6Qg6J1rRjvpCD5gdKV7EM97lR6Ua+XA5h023p9sWLXyYTkrAoU8kv/GBr1Kg6
-         gj0A==
-X-Gm-Message-State: ACgBeo3NcMAMs7iTpbaPAqxqt1feITrszhEAcz6yk10073oU1u7uFo6w
-        WOawIok/5NOir04rVM2iTDk=
-X-Google-Smtp-Source: AA6agR4EMHKVAO4xz80mWJI5XkyalMXnqJMhr9DdtUfGt7By7jtilYYT3BzC5TDnMIh6vEefcLO2sQ==
-X-Received: by 2002:a05:620a:bcc:b0:6b6:5746:f8f9 with SMTP id s12-20020a05620a0bcc00b006b65746f8f9mr2334700qki.729.1659636688203;
-        Thu, 04 Aug 2022 11:11:28 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bx7-20020a05622a090700b0031ef67386a5sm998062qtb.68.2022.08.04.11.11.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 11:11:26 -0700 (PDT)
-Message-ID: <143a7faf-70fc-010f-bdbd-9f96f918c280@gmail.com>
-Date:   Thu, 4 Aug 2022 11:11:23 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=WF/cYFGagnF40nv8l7k9eP25Q0NBXp9Z9COyyJ/N54o=;
+        b=Tb6U3RSQ/hYzokM+Pv+ZQmlX899Jgaa7SaAtaKcp5e6Z/hUL+De3rUV+otrhv9TZGA
+         8Rt4OfCZT/OcMxNo8PooMDsfhTwcBBfs7Tupp6r62qZ9NWlIw05dJvEy+i+W085mBk2z
+         FEWkdLubV0s2ZFsI9fGCO+rNu9Zb0Oc1d5PE5xzv2z5cRFd8xudte+TVsyv4Ze4ksaLE
+         gdBfKTeqa73/CRvMPL35rw3K5Sub8zTRa1opEbT+DRHLFzjLuuc8dGM/hA8RkT+H8CMG
+         3TNLeQY4EuiTHc8Y5ekhwqp4Df+btAOsj9/GGABP293/weIrDrxjQNGKLQ2zNFtR5WtI
+         yUyw==
+X-Gm-Message-State: ACgBeo3v8uK6FZXSkVfolEYKeY6hLLvBoypLdokixtTN6bbMhJkjwnt9
+        +5JHauclx3TmiDrb1XSUoXk=
+X-Google-Smtp-Source: AA6agR5BOXJKtSK2Srv6y9MJ6RPVaTE8HZIlIMfABcIutnJuDFoSMbRF+hWRXs+8Tr5daapCWiEZoQ==
+X-Received: by 2002:a17:902:6a8c:b0:16d:ca07:61df with SMTP id n12-20020a1709026a8c00b0016dca0761dfmr3038813plk.124.1659636727982;
+        Thu, 04 Aug 2022 11:12:07 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:6f47:bd53:1f33:e84c])
+        by smtp.gmail.com with ESMTPSA id a6-20020a170902ecc600b0016d5a356b31sm1320642plh.116.2022.08.04.11.12.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 11:12:07 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PULL 0/5] xtensa updates for v5.20
+Date:   Thu,  4 Aug 2022 11:12:07 -0700
+Message-Id: <20220804181207.1246232-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/4] dt-bindings: soc: bcm: use absolute path to other
- schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Saenz Julienne <nsaenz@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220726115841.101249-1-krzysztof.kozlowski@linaro.org>
- <20220726115841.101249-2-krzysztof.kozlowski@linaro.org>
- <a70148d3-c87f-969a-b743-11c679d161d3@gmail.com>
- <d83f7689-303f-cecd-882a-ed6e03a8db5b@linaro.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <d83f7689-303f-cecd-882a-ed6e03a8db5b@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 10:31, Krzysztof Kozlowski wrote:
-> On 26/07/2022 17:59, Florian Fainelli wrote:
->> On 7/26/22 04:58, Krzysztof Kozlowski wrote:
->>> Absolute path to other DT schema is preferred over relative one.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
->>
->> Are you applying those patches or do you want the SoC maintainer to do that?
-> 
-> The best if  you (SoC maintainer) would pick them up. If you cannot or
-> it is too late for this, maybe arm-soc could grab them (already Cced).
+Hi Linus,
 
-Arnd ended up picking up patches 1 and 2, FWIW.
+please pull the following updates for the xtensa architecture.
+
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
+
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20220804
+
+for you to fetch changes up to 0847d167d0f9bdc8f61e5e5d32831fa8fdcd150f:
+
+  xtensa: enable ARCH_HAS_GCOV_PROFILE_ALL (2022-07-14 00:54:47 -0700)
+
+----------------------------------------------------------------
+Xtensa updates for v5.20
+
+- support KCOV
+- enable ARCH_HAS_GCOV_PROFILE_ALL
+- minor ISS network driver cleanups
+
+----------------------------------------------------------------
+Max Filippov (4):
+      xtensa: iss/network: drop 'devices' list
+      xtensa: iss/network: provide release() callback
+      xtensa: enable KCOV support
+      xtensa: enable ARCH_HAS_GCOV_PROFILE_ALL
+
+Yang Yingliang (1):
+      xtensa: iss: fix handling error cases in iss_net_configure()
+
+ .../debug/gcov-profile-all/arch-support.txt        |  2 +-
+ Documentation/features/debug/kcov/arch-support.txt |  2 +-
+ arch/xtensa/Kconfig                                |  2 +
+ arch/xtensa/boot/lib/Makefile                      |  2 +
+ arch/xtensa/platforms/iss/network.c                | 63 ++++++++++------------
+ 5 files changed, 34 insertions(+), 37 deletions(-)
+
 -- 
-Florian
+Thanks.
+-- Max

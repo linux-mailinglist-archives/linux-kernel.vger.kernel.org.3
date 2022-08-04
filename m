@@ -2,72 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DD9589B60
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1549589B5F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239587AbiHDMCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 08:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
+        id S239632AbiHDMCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 08:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbiHDMB6 (ORCPT
+        with ESMTP id S239610AbiHDMCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 08:01:58 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2807F606B5;
-        Thu,  4 Aug 2022 05:01:56 -0700 (PDT)
-X-QQ-mid: bizesmtp90t1659614511tg57ozor
-Received: from localhost.localdomain ( [182.148.15.41])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 04 Aug 2022 20:01:50 +0800 (CST)
-X-QQ-SSF: 01000000008000F0U000B00A0000020
-X-QQ-FEAT: zT6n3Y95oi3S/F9OUGlPecUpO7yksKBmy+Db8DugP9WQ6Y/JVUiJKpNtK7HE4
-        JPWHZ5fbPfUu4hhetLS1LJXLdkH1AKIk4R/wySQO0SpuJUYSfOIanor5rd+pn/v9OFylXND
-        2h6lmQjnwz2s23bhABaDmVeyNoJ896EiUWcseJamluFFA7ddmTdGYAoHU5evuoFpnrb854r
-        jM1K4KLx5KGZuVc0LZVy6Me3hIEE0usPbWZlJd6ymHUPyJCcmRY5y6mx3azylZlm2xnGfr9
-        RzngkSoNTB4fPmDA0EcZGudQopGajsqul9+lP3PNEvboHdINwNYsTnWHdhzt4yBa74kreoz
-        rHGgef7gSy7po/yze9PiqyhOVg7rEhOXHZhdObTbEGGOA/krvvIZPxGcgbEHNYWXKiAjCHG
-        6bZfhESOQRs=
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     mchehab@kernel.org
-Cc:     sakari.ailus@linux.intel.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] media: v4l2-flash: Fix comment typo
-Date:   Thu,  4 Aug 2022 20:01:48 +0800
-Message-Id: <20220804120148.56268-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 4 Aug 2022 08:02:03 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A2061D54;
+        Thu,  4 Aug 2022 05:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1659614517;
+        bh=fCjUUGj0H5+LN32Fc+pxVbqnw9CBv61Qb6x5ZNzenXo=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=UHClCpkuushOMkk/R3oi3YHK8sMnllTODfyUNz+ce/67B2kTtZNcH2EPFVBySydEd
+         NcGb6CdbPaVfXFSv5lAMGa80NhiF2vRFG3WYmKgFEfbx+LFH71UUoUHlLddmPeBARP
+         ljWZ0BBDKmVKv8rWJsFsk+27x0DetB2rwhWNCVnA=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 08ADF1281703;
+        Thu,  4 Aug 2022 08:01:57 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KjdDuEFOdhpJ; Thu,  4 Aug 2022 08:01:56 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1659614516;
+        bh=fCjUUGj0H5+LN32Fc+pxVbqnw9CBv61Qb6x5ZNzenXo=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=MQ2YdagDcLWbTuU34z/RTW2/Fmj+aJGZqST2OBM/1OWiH95bakfXWWEHUPlmu8XkS
+         XfN/PIxZqy8LeBQ9X4xYEtm3mSV+l00sL5nu5GJZULMAkut7FQRsnv2nuiHRpBeO7s
+         GWyNfgruAvhVCsB9m5dLCC0Gnjdslu+F/7xgpV88=
+Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id AA48212816BC;
+        Thu,  4 Aug 2022 08:01:55 -0400 (EDT)
+Message-ID: <5653318a776a8044f413ed1a4b6e3965fac2297e.camel@HansenPartnership.com>
+Subject: Re: [GIT PULL] tpmdd updates for v5.20
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Kalle Valo <kvalo@kernel.org>, Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Date:   Thu, 04 Aug 2022 08:01:53 -0400
+In-Reply-To: <87pmhgikhk.fsf@kernel.org>
+References: <20220803210228.158993-1-jarkko@kernel.org>
+         <87pmhgikhk.fsf@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `the' is duplicated in the comment, remove one.
+On Thu, 2022-08-04 at 09:35 +0300, Kalle Valo wrote:
+> Jarkko Sakkinen <jarkko@kernel.org> writes:
+[...]
+> > M...rten Lindahl (1):
+> >       tpm: Add check for Failure mode for TPM2 modules
+> 
+> Some encoding problems in the name? At least my Gnus didn't show them
+> correctly.
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/media/v4l2-core/v4l2-flash-led-class.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+My mail tool correctly renders the 'å' character, and lore has it too:
 
-diff --git a/drivers/media/v4l2-core/v4l2-flash-led-class.c b/drivers/media/v4l2-core/v4l2-flash-led-class.c
-index e70e128ccc9c..355595a0fefa 100644
---- a/drivers/media/v4l2-core/v4l2-flash-led-class.c
-+++ b/drivers/media/v4l2-core/v4l2-flash-led-class.c
-@@ -94,7 +94,7 @@ static int v4l2_flash_set_led_brightness(struct v4l2_flash *v4l2_flash,
- 	 * brightness <-> intensity conversion, it also must have defined
- 	 * related v4l2 control step == 1. In such a case a backward conversion
- 	 * from led brightness to v4l2 intensity is required to find out the
--	 * the aligned intensity value.
-+	 * aligned intensity value.
- 	 */
- 	if (has_flash_op(v4l2_flash, led_brightness_to_intensity))
- 		ctrl->val = call_flash_op(v4l2_flash,
--- 
-2.35.1
+https://lore.kernel.org/all/20220803210228.158993-1-jarkko@kernel.org/
+
+So I think you have a local UTF-8 translation problem.
+
+James
+
 

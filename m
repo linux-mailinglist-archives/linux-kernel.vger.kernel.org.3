@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EB45895D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 04:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714C55895D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 04:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237123AbiHDCIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 22:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
+        id S237128AbiHDCKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 22:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiHDCIh (ORCPT
+        with ESMTP id S238815AbiHDCKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 22:08:37 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44ECB5F13F
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 19:08:36 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LysYb6ZGmzTgY3;
-        Thu,  4 Aug 2022 10:07:15 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 4 Aug 2022 10:08:33 +0800
-Subject: Re: [PATCH] mm, hwpoison, hugetlb: Free hwpoison huge page to list
- tail and dissolve hwpoison huge page first
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        luofei <luofei@unicloud.com>
-CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        <songmuchun@bytedance.com>, <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220802100711.2425644-1-luofei@unicloud.com>
- <YulXz+1iLHuZBEDb@monkey>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <1191d45b-fece-659b-1dd1-8cf4ce89c2f1@huawei.com>
-Date:   Thu, 4 Aug 2022 10:08:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 3 Aug 2022 22:10:07 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF995FAC6;
+        Wed,  3 Aug 2022 19:10:06 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id q3so14247896qvp.5;
+        Wed, 03 Aug 2022 19:10:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ryAwNGrW/zNWRU/n0Vrh+3u0JLChoMJ0BiRRlgoBG8M=;
+        b=L26ghPJl+d8Avfsqq+BtKVAjZDCcpALpykn5pFBHYmsj0YlEZYBsxtlV11AyEgQzZi
+         7Gjd+xTvQ0lqwVYK90hwaC5L+SQkqRR8Bj5bhH4RcATGq0lfhLq/of5EOf82W95hZ4b1
+         bACjfDn7s7dzj8VO9ruFWTM8FFbzAfFXjJPfEpg4JkFkGiTu39HzS2oMTL+JlrVXVtS9
+         YHLbEaF3hWV4vQfG5m3iZpeBa3RGju+zzfg/qXe4SEDyxPBFAXhSDyGCBkEaSd8xvEgL
+         x0PCWigGZEHiBGcWyqzvak2xfJjiUl8MakvGRTMiTfMQv1I2K81msHYlvlPVYyLD3mMq
+         pZ2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ryAwNGrW/zNWRU/n0Vrh+3u0JLChoMJ0BiRRlgoBG8M=;
+        b=UnMFxv8T30xyeF5WgDnvZ+K0H31WxP/FCQSbZ4cXOEpj/86Ny8Wf7EiLQq0fYvJu8V
+         uMM9fKEyPnEZxoZZaxhkKa2wAf7IW75/3VtFiv7FOBXxnzC8ajdn597KIRO8gHxuW1Mz
+         PgDnwEnxnUkHUq45MIqNO3Xds2yErzSTBH6lU0w+cXvN2Dq8X2dbPudNvthXVJJ+QJUG
+         m0ia/ejxqWhT4cOwbl3Tk2VZeLGKPOwrly11a3hIT75BEdy6OQ5YFCs4kOQqSjSbrn0k
+         YWiFN4heR9sn5RXlceQLKONW8STID9oKaJG8mgxvfR7EqOb8cVdCkPclu7xE9NeLKzk5
+         GByg==
+X-Gm-Message-State: ACgBeo1VMjJbIjHPHVu2e4r7R34Pe2I2yDL2LHAV+mPXa2PhWM/00lbP
+        jq6WSNMjnJALd2NQo7/UriorXdlOUA==
+X-Google-Smtp-Source: AA6agR7el9tcxV4nWCFBnB41rmuBjV6aa8JwA2QBa29vugGEEkt9HD5/q6v/fBlXXnFiaD3YPTmVNw==
+X-Received: by 2002:a05:6214:226d:b0:476:564c:ee73 with SMTP id gs13-20020a056214226d00b00476564cee73mr18411247qvb.77.1659579005172;
+        Wed, 03 Aug 2022 19:10:05 -0700 (PDT)
+Received: from bytedance.bytedance.net ([74.199.177.246])
+        by smtp.gmail.com with ESMTPSA id l3-20020a05620a28c300b006b61b2cb1d2sm14004792qkp.46.2022.08.03.19.10.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 19:10:04 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH RFC net-next] vsock: Reschedule connect_work for O_NONBLOCK connect() requests
+Date:   Wed,  3 Aug 2022 19:09:25 -0700
+Message-Id: <20220804020925.32167-1-yepeilin.cs@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YulXz+1iLHuZBEDb@monkey>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,64 +73,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/3 0:58, Mike Kravetz wrote:
-> On 08/02/22 06:07, luofei wrote:
->> If free hwpoison huge page to the end of hugepage_freelists, the
->> loop can exit directly when the hwpoison huge page is traversed,
->> which can effectively reduce the repeated traversal of the hwpoison
->> huge page. Meanwhile, when free the free huge pages to lower level
->> allocators, if hwpoison ones are released first, this can improve
->> the effecvive utilization rate of huge page.
-> 
-> In general, I think this is a good idea.  Although, it seems that with
-> recent changes to hugetlb poisioning code we are even less likely to
-> have a poisioned page on hugetlb free lists.
-> 
-> Adding Naoya and Miaohe as they have been looking at page poison of hugetlb
-> pages recently.
-> 
->> Signed-off-by: luofei <luofei@unicloud.com>
->> ---
->>  mm/hugetlb.c | 13 ++++++++-----
->>  1 file changed, 8 insertions(+), 5 deletions(-)
->>
->> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->> index 28516881a1b2..ca72220eedd9 100644
->> --- a/mm/hugetlb.c
->> +++ b/mm/hugetlb.c
->> @@ -1116,7 +1116,10 @@ static void enqueue_huge_page(struct hstate *h, struct page *page)
->>  	lockdep_assert_held(&hugetlb_lock);
->>  	VM_BUG_ON_PAGE(page_count(page), page);
->>  
->> -	list_move(&page->lru, &h->hugepage_freelists[nid]);
->> +	if (unlikely(PageHWPoison(page)))
->> +		list_move_tail(&page->lru, &h->hugepage_freelists[nid]);
->> +	else
->> +		list_move(&page->lru, &h->hugepage_freelists[nid]);
->>  	h->free_huge_pages++;
->>  	h->free_huge_pages_node[nid]++;
->>  	SetHPageFreed(page);
->> @@ -1133,7 +1136,7 @@ static struct page *dequeue_huge_page_node_exact(struct hstate *h, int nid)
->>  			continue;
->>  
->>  		if (PageHWPoison(page))
->> -			continue;
->> +			break;
-> 
-> IIRC, it is 'possible' to unpoison a page via the debug/testing interfaces.
-> If so, then we could end up with free unpoisioned page(s) at the end of
-> the list that would never be used because we quit when encountering a
-> poisioned page.
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-IIUC, above scene will actually happen. What's more, dissolve_free_huge_page might fail after hugetlb
-page is hwpoisoned due to e.g. all hugetlb pages are reserved. In that case, the hwpoisoned hugetlb page
-is not moved to the tail of hugepage_freelists and thus cause problems.
+An O_NONBLOCK vsock_connect() request may try to reschedule
+@connect_work.  Consider the following vsock_connect() requests:
 
-Thanks both.
+  1. The 1st, non-blocking request schedules @connect_work, which will
+     expire after, say, 200 jiffies.  Socket state is now SS_CONNECTING;
 
-> 
-> Naoya and Miaohe would know for sure.
-> 
-> Same possible issue in demote_pool_huge_page().
-> 
+  2. Later, the 2nd, blocking request gets interrupted by a signal after
+     5 jiffies while waiting for the connection to be established.
+     Socket state is back to SS_UNCONNECTED, and @connect_work will
+     expire after 100 jiffies;
+
+  3. Now, the 3rd, non-blocking request tries to schedule @connect_work
+     again, but @connect_work has already been scheduled, and will
+     expire in, say, 50 jiffies.
+
+In this scenario, currently this 3rd request simply decreases the sock
+reference count and returns.  Instead, let it reschedules @connect_work
+and resets the timeout back to @connect_timeout.
+
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
+Hi all,
+
+This patch is RFC because it bases on Stefano's WIP fix [1] for a bug [2]
+reported by syzbot, and it won't apply on current net-next.  I think it
+solves a separate issue.
+
+Please advise, thanks!
+Peilin Ye
+
+[1] https://gitlab.com/sgarzarella/linux/-/commit/2d0f0b9cbbb30d58fdcbca7c1a857fd8f3110d61
+[2] https://syzkaller.appspot.com/bug?id=cd9103dc63346d26acbbdbf5c6ba9bd74e48c860
+
+ net/vmw_vsock/af_vsock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+index 194d22291d8b..417e4ad17c03 100644
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1395,7 +1395,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+ 			/* If the timeout function is already scheduled, ungrab
+ 			 * the socket refcount to not leave it unbalanced.
+ 			 */
+-			if (!schedule_delayed_work(&vsk->connect_work, timeout))
++			if (mod_delayed_work(system_wq, &vsk->connect_work, timeout))
+ 				sock_put(sk);
+ 
+ 			/* Skip ahead to preserve error code set above. */
+-- 
+2.20.1
 

@@ -2,134 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63510589534
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF6E58953B
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240294AbiHDAPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 20:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
+        id S239257AbiHDARi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 20:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240125AbiHDAPc (ORCPT
+        with ESMTP id S240979AbiHDAQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 20:15:32 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B74D17E33
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659572131; x=1691108131;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=l7WZXdv2XrPnPHDwU04lAWjh1cZdwXb0E2z3t3ATqqA=;
-  b=Vj45fGyR98OG4LsVtFCSmPTrK8lqOAHQIX49Vxky4YlHp3A0NVjF+54S
-   6wt84N/It7Xjr1W5NT3T39jgVwMvKSGkcsbFQj9ftQxsKuGAj0DL0eIHx
-   gKRAND9u1LXLGWwddwGrL8KhXjjlUuqILK88bPI6CbE9mrDtSdCx/2/o+
-   izvaEOtxFUBdUFz9D9i0/CYoBleThk1wKcd7cqeH+bVwaAwBT6j7PpjFr
-   DRYkGMJ441n+RSkZOLPC0ZCRIagROoI9b7+zIdvWLw/3kdxek44Lh6LKr
-   ehKtcZYeTft04rqn8uin9WMYCm75UbAz2/4EdGwHRJNV79w/iy9L3xZFX
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="270186229"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="270186229"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:15:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="553514327"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 03 Aug 2022 17:15:29 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJOWO-000Hoe-2t;
-        Thu, 04 Aug 2022 00:15:28 +0000
-Date:   Thu, 4 Aug 2022 08:15:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Subject: [rmk-arm:zii 15/87] drivers/net/dsa/microchip/ksz9477.c:1334:22:
- error: incompatible function pointer types initializing 'void (*)(struct
- dsa_switch *, int, struct phylink_config *, phy_interface_t *)' with an
- expression of type 'void (struct dsa_switch *, int, struct phylin...
-Message-ID: <202208040812.1vQa7ayZ-lkp@intel.com>
+        Wed, 3 Aug 2022 20:16:54 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD10B1A82B
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:16:52 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id q19so8555877pfg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 17:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=OwwKALsnNZGHXS5uAQdLbs0BkUXfWVuRe9TMpcy12j0=;
+        b=AB9uM0DJMUFK/SdbngnGLeR1FojbEFIefdFjsjpNolnva+3Kc9zYNPMr7x+TFRyXEN
+         r9mZzpaNPUdeIgUimUWES3DSN55fGypwbBbzMr02CEwvKHwMa5K4kxb7n/qImZ/ss9cH
+         faF+2cgQYB7MppMABsJeYkIFsVBbITwd7adosX1oyHPJK3H9ShtTuu34GYfLfT4YD8gs
+         qNPlxdlfYgWhSDdJ+Kj7NJk1HfirRSPVLKIxfGLDBdBv6vsxvbWWN2omF6Dgr5vdUwVP
+         22G8DX1AZnuastiAyZVYjVdcoBMH07dM/t4EEssFgHswWKXUPG/xrB4htKdRSMfvyGvH
+         Oftw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=OwwKALsnNZGHXS5uAQdLbs0BkUXfWVuRe9TMpcy12j0=;
+        b=BZiEzfOCAz8QFU7tmzMs3pT9byShQPbvI2m1yORQ8W/sjKZj50JfNN8b2WlzbXgZw9
+         lUvRk4vf/pA8xDFVgIhgrpP2Z5qlzedMqC2sdYgHxKdY6TGxUl+7KzIhq15SIsvBqWE0
+         L+XHpidCKrwVsdNuaR7Ft6lwlFpaSuyUGvQbh1Nern2SivL5zszh8ltWa1ae0BhGlv83
+         oImMq70OTIx7Ll3NNkW6GBmxnSr366hYPtVGKinPU1pW2woud+TzAeA2pC89eI2prT/i
+         uUf02T7a9QwvRFsN7Au1x56VUHjEYCumfLMGSQMcOtPeaLlxo04Tisc/ClfCW47CpUPE
+         OtgQ==
+X-Gm-Message-State: AJIora9qd/qUzqvyl92DcNERqeK9h0DyTAHSWoPOhIj7mvzL+58ZQUWI
+        n9PShkQaIcSqLeBvir0l5QheWocd9ckDzw==
+X-Google-Smtp-Source: AGRyM1vL+zuPWK2CKM04SaYVYPFGcmL+OMGCft1CxMQMlG88EDJw/0dmCqJs2TS3zrFemwQLnAoNTA==
+X-Received: by 2002:a63:f143:0:b0:41a:3744:8639 with SMTP id o3-20020a63f143000000b0041a37448639mr22940854pgk.254.1659572212150;
+        Wed, 03 Aug 2022 17:16:52 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 139-20020a621991000000b0050dc76281e0sm13612933pfz.186.2022.08.03.17.16.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 17:16:51 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 00:16:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Roth <michael.roth@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH v2 2/3] KVM: x86/mmu: Fully re-evaluate MMIO caching when
+ SPTE masks change
+Message-ID: <YusP8FaOCLvq3VFE@google.com>
+References: <20220803224957.1285926-1-seanjc@google.com>
+ <20220803224957.1285926-3-seanjc@google.com>
+ <d924ec235d9b0fb27f80cb03b02b5c7d8466fec1.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d924ec235d9b0fb27f80cb03b02b5c7d8466fec1.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
-head:   315d00812d1f8ed8bbbce4e4fd8d32fc883900a0
-commit: 8ed5becb72c09d9835bedc0bdaf431cc23f8b7de [15/87] net: dsa: add support for retrieving the interface mode
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220804/202208040812.1vQa7ayZ-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm zii
-        git checkout 8ed5becb72c09d9835bedc0bdaf431cc23f8b7de
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/microchip/
+On Thu, Aug 04, 2022, Kai Huang wrote:
+> On Wed, 2022-08-03 at 22:49 +0000, Sean Christopherson wrote:
+> > +void __init kvm_mmu_spte_module_init(void)
+> > +{
+> > +	/*
+> > +	 * Snapshot userspace's desire to allow MMIO caching.  Whether or not
+> > +	 * KVM can actually enable MMIO caching depends on vendor-specific
+> > +	 * hardware capabilities and other module params that can't be resolved
+> > +	 * until the vendor module is loaded, i.e. enable_mmio_caching can and
+> > +	 * will change when the vendor module is (re)loaded.
+> > +	 */
+> > +	allow_mmio_caching = enable_mmio_caching;
+> 
+> ... Perhaps 'use_mmio_caching' or 'want_mmio_caching' is better as it reflects
+> userspace's desire? Anyway let you decide.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/dsa/microchip/ksz9477.c:1334:22: error: incompatible function pointer types initializing 'void (*)(struct dsa_switch *, int, struct phylink_config *, phy_interface_t *)' with an expression of type 'void (struct dsa_switch *, int, struct phylink_config *)' [-Werror,-Wincompatible-function-pointer-types]
-           .phylink_get_caps       = ksz9477_get_caps,
-                                     ^~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +1334 drivers/net/dsa/microchip/ksz9477.c
-
-c2e866911e2540 Tristram Ha       2018-11-20  1327  
-c2e866911e2540 Tristram Ha       2018-11-20  1328  static const struct dsa_switch_ops ksz9477_switch_ops = {
-c2e866911e2540 Tristram Ha       2018-11-20  1329  	.get_tag_protocol	= ksz9477_get_tag_protocol,
-c2e866911e2540 Tristram Ha       2018-11-20  1330  	.setup			= ksz9477_setup,
-c2e866911e2540 Tristram Ha       2018-11-20  1331  	.phy_read		= ksz9477_phy_read16,
-c2e866911e2540 Tristram Ha       2018-11-20  1332  	.phy_write		= ksz9477_phy_write16,
-143a102e309053 Codrin Ciubotariu 2020-07-02  1333  	.phylink_mac_link_down	= ksz_mac_link_down,
-65ac79e1812016 Arun Ramadoss     2022-05-17 @1334  	.phylink_get_caps	= ksz9477_get_caps,
-c2e866911e2540 Tristram Ha       2018-11-20  1335  	.port_enable		= ksz_enable_port,
-997d2126ac6112 Arun Ramadoss     2022-05-17  1336  	.get_strings		= ksz_get_strings,
-c2e866911e2540 Tristram Ha       2018-11-20  1337  	.get_ethtool_stats	= ksz_get_ethtool_stats,
-c2e866911e2540 Tristram Ha       2018-11-20  1338  	.get_sset_count		= ksz_sset_count,
-c2e866911e2540 Tristram Ha       2018-11-20  1339  	.port_bridge_join	= ksz_port_bridge_join,
-c2e866911e2540 Tristram Ha       2018-11-20  1340  	.port_bridge_leave	= ksz_port_bridge_leave,
-c2e866911e2540 Tristram Ha       2018-11-20  1341  	.port_stp_state_set	= ksz9477_port_stp_state_set,
-c2e866911e2540 Tristram Ha       2018-11-20  1342  	.port_fast_age		= ksz_port_fast_age,
-c2e866911e2540 Tristram Ha       2018-11-20  1343  	.port_vlan_filtering	= ksz9477_port_vlan_filtering,
-c2e866911e2540 Tristram Ha       2018-11-20  1344  	.port_vlan_add		= ksz9477_port_vlan_add,
-c2e866911e2540 Tristram Ha       2018-11-20  1345  	.port_vlan_del		= ksz9477_port_vlan_del,
-c2e866911e2540 Tristram Ha       2018-11-20  1346  	.port_fdb_dump		= ksz9477_port_fdb_dump,
-c2e866911e2540 Tristram Ha       2018-11-20  1347  	.port_fdb_add		= ksz9477_port_fdb_add,
-c2e866911e2540 Tristram Ha       2018-11-20  1348  	.port_fdb_del		= ksz9477_port_fdb_del,
-c2e866911e2540 Tristram Ha       2018-11-20  1349  	.port_mdb_add           = ksz9477_port_mdb_add,
-c2e866911e2540 Tristram Ha       2018-11-20  1350  	.port_mdb_del           = ksz9477_port_mdb_del,
-c2e866911e2540 Tristram Ha       2018-11-20  1351  	.port_mirror_add	= ksz9477_port_mirror_add,
-c2e866911e2540 Tristram Ha       2018-11-20  1352  	.port_mirror_del	= ksz9477_port_mirror_del,
-c6101dd7ffb8b7 Arun Ramadoss     2022-04-26  1353  	.get_stats64		= ksz_get_stats64,
-e18058ea998603 Oleksij Rempel    2022-03-08  1354  	.port_change_mtu	= ksz9477_change_mtu,
-e18058ea998603 Oleksij Rempel    2022-03-08  1355  	.port_max_mtu		= ksz9477_max_mtu,
-c2e866911e2540 Tristram Ha       2018-11-20  1356  };
-c2e866911e2540 Tristram Ha       2018-11-20  1357  
-
-:::::: The code at line 1334 was first introduced by commit
-:::::: 65ac79e1812016d7c5760872736802f985ec7455 net: dsa: microchip: add the phylink get_caps
-
-:::::: TO: Arun Ramadoss <arun.ramadoss@microchip.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Part of me likes "want_mmio_caching", but the module param really is only for
+testing, i.e. any sane configuration always wants MMIO caching, but sometimes it's
+explicitly disallowed purely so that KVM can mimic hardware that doesn't support
+MMIO caching.

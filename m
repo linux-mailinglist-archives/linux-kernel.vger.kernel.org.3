@@ -2,131 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D02589F56
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 18:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E16589F5E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 18:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbiHDQXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 12:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S231303AbiHDQZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 12:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiHDQXa (ORCPT
+        with ESMTP id S231265AbiHDQZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 12:23:30 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA676611A
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 09:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659630209; x=1691166209;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3kWs5o/+hZT7N90RvtWkqIUU/kntGG5fNzPwgl40Bh4=;
-  b=MDJ9zs3RudeGBdKdkDJBSGx8WvbPQAQs1DcFYbr8fUim8TY+TcBm64XF
-   iS0IkMIKjhbMwm3jVbPrTl/dbVAzNCCeQ35m9lWWXqsRv9/wBLOJjcE1N
-   0bwcFIeJfil4QLiRhLrRCqqGiP20rHL5DDi6bj5ioscYghE4Shhy2V+M5
-   1HnVf7CJtHew51jg1qO2cPDOwFVmvga/9vmR54gpeXPg3ht6YgTvQ+WVz
-   MKU7MTs3fJCx5k0jIwUvTdJPEwjNznPS/0YSQ+0w8z+2XpwLgxIpanmCb
-   KZsvgTvA9sqt2G9MyiWkGQRBeHUO79nLUi67tZDEceWHFqZtJIlYldV82
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="287542548"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="287542548"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 09:23:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="636150180"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Aug 2022 09:23:27 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJdd8-000Id1-2q;
-        Thu, 04 Aug 2022 16:23:26 +0000
-Date:   Fri, 5 Aug 2022 00:22:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ckkim <changkon12@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dongjin Kim <tobetter@gmail.com>
-Subject: [tobetter:odroid-5.19.y 56/99]
- drivers/power/reset/odroid-reboot.c:141:17: error: 'arm_pm_restart'
- undeclared; did you mean 'alarm_restart'?
-Message-ID: <202208050028.g2cqh6xx-lkp@intel.com>
+        Thu, 4 Aug 2022 12:25:08 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C55A66120
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 09:25:07 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id f11so316439pgj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 09:25:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=3wVsJA9REgYaA9xqxDVynsjE4mtxXkKRS8lurVV7Rd8=;
+        b=j7IxrmwybnOOybGV1M8hTyPbW0g++4s3715LouwSbNkw72fTCLAP4AWnyrn13Ntcbh
+         uSK3ST1fETadsvXDyfQJ0WseJ/4fqAD+0a9l8UzGMPbyPjvv1zoXylGKSxjZdad6TNyV
+         7ZYo4E2gFwO7bdLcrZHlRM6BnriJJZEWtgRZU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=3wVsJA9REgYaA9xqxDVynsjE4mtxXkKRS8lurVV7Rd8=;
+        b=lkNlZl6ZASra+GDS67hvn4Z81RauivaUnSbgIOYbAI3r+PrZ0pBLvYnPWwXipG8jiz
+         mBeaEq68G1dZqK8pthbLMtbLGeXsW9NgxRlSBB65YWmEB3rGM0/sOYWmOxsZJX4GzzcD
+         BQs0oZ0xpp+yAgBgRk/musFHbmzHCXSYPqEtLc4LWZFSKdZFZtYMZ5ZP7beHmBpHMygO
+         fDSZ5gXsO6PtJOrV/8l2Tzqihn1o5K/ZjDD+o4jVm2zthKlFGeUwA+aKISlLGxXgYmJR
+         EgoNgGh2BOFW6rptD1o+xSl5VTRlfzbAOuOLlEY3w5ImZ3cfOrTQE/MjjWcZ+lJ5cJWT
+         roAQ==
+X-Gm-Message-State: ACgBeo28WMrLT5xlfuVrdB5RSgIvPysPsDx17T4HNnuSNS5RMhJSG7ds
+        iYE92KwmXQKiqHAMP4NFyGjUSg==
+X-Google-Smtp-Source: AA6agR4VqvkmGRVsnu/p8nE6quW5fqKSSYapdhXGs+labp3XwjT+la4kPogMITPJez/PHlt/EfBBEA==
+X-Received: by 2002:a63:8ac3:0:b0:41b:ba48:e3f6 with SMTP id y186-20020a638ac3000000b0041bba48e3f6mr2151943pgd.567.1659630306651;
+        Thu, 04 Aug 2022 09:25:06 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:87c4:32ca:84b6:e942])
+        by smtp.gmail.com with UTF8SMTPSA id y1-20020a17090322c100b0016d93c84049sm1256747plg.54.2022.08.04.09.25.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 09:25:06 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 09:25:04 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/8] usb: dwc3: qcom: fix runtime PM wakeup
+Message-ID: <Yuvy4CjCgs48nFnM@google.com>
+References: <20220802151404.1797-1-johan+linaro@kernel.org>
+ <20220802151404.1797-5-johan+linaro@kernel.org>
+ <YurviWfzut9sursr@google.com>
+ <Yut2tLqGfu82xcDs@hovoldconsulting.com>
+ <YuvnLliIKLK71wx0@google.com>
+ <YuvuJR0ZqSvwMSi1@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YuvuJR0ZqSvwMSi1@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/tobetter/linux odroid-5.19.y
-head:   7df5baf82efb498c71096e60e58d2bba6f4fb0e1
-commit: 4a7314866e26cccea64238e1c4f30a16e903a6c8 [56/99] ODROID-COMMON: power:reset: Add odroid support
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220805/202208050028.g2cqh6xx-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/tobetter/linux/commit/4a7314866e26cccea64238e1c4f30a16e903a6c8
-        git remote add tobetter https://github.com/tobetter/linux
-        git fetch --no-tags tobetter odroid-5.19.y
-        git checkout 4a7314866e26cccea64238e1c4f30a16e903a6c8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Thu, Aug 04, 2022 at 06:04:53PM +0200, Johan Hovold wrote:
+> On Thu, Aug 04, 2022 at 08:35:10AM -0700, Matthias Kaehlcke wrote:
+> > On Thu, Aug 04, 2022 at 09:35:16AM +0200, Johan Hovold wrote:
+> 
+> > After enabling runtime suspend for the dwc3 core, dwc3 glue and the xHCI
+> > the dwc3-qcom enters autosuspend when the delay expires.
+> > 
+> > > And the controller is resumed in the wakeup-interrupt handler for the
+> > > runtime PM case.
+> > >
+> > > It seems to work ok, and it looks like the driver has supported this
+> > > since it was first merged.
+> > 
+> > With and without your patch dwc3-qcom enters autosuspend and stays there.
+> > USB devices like a mouse or a USB to Ethernet adapter keep working while
+> > the glue is suspended.
+> 
+> Are you sure you're looking at the right controller? And that it is
+> actually suspended?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Good point! My mind was set on a SC7180 system, which has a single dwc3
+controller, but this time I was tinkering on a SC7280 board, which has
+two dwc3, and obviously I was looking at the wrong one (－‸ლ)
 
-All errors (new ones prefixed by >>):
+> If you plug in a keyboard, enable autosuspend for all devices in the
+> path (from glue to the keyboard device) and type away, then the
+> controller must remain active. Stop typing, and all devices in the chain
+> should suspend.
 
-   drivers/power/reset/odroid-reboot.c:63:6: warning: no previous prototype for 'odroid_card_reset' [-Wmissing-prototypes]
-      63 | void odroid_card_reset(void)
-         |      ^~~~~~~~~~~~~~~~~
-   drivers/power/reset/odroid-reboot.c: In function 'odroid_restart_probe':
->> drivers/power/reset/odroid-reboot.c:141:17: error: 'arm_pm_restart' undeclared (first use in this function); did you mean 'alarm_restart'?
-     141 |                 arm_pm_restart = do_odroid_restart;
-         |                 ^~~~~~~~~~~~~~
-         |                 alarm_restart
-   drivers/power/reset/odroid-reboot.c:141:17: note: each undeclared identifier is reported only once for each function it appears in
+That's what I expected, and now that I'm looking at the right controller
+I'm seeing it. I wondered whether the glue device was somehow special.
 
+> > How is the runtime resume triggered for the dwc3 glue?
+> 
+> Either by the host driver when it needs to access the device, or by the
+> device if it is remote-wakeup capable (e.g. a keyboard, but not
+> necessarily a speaker).
+> 
+> Note that the latter part is what is broken currently as the wakeup
+> interrupts were not enabled and those are needed to wake up sc8280xp 
+> when the dwc3 glue has been runtime suspended.
 
-vim +141 drivers/power/reset/odroid-reboot.c
-
-   133	
-   134	static int odroid_restart_probe(struct platform_device *pdev)
-   135	{
-   136		struct device_node *of_node;
-   137		u32 id;
-   138	
-   139		if (!of_property_read_u32(pdev->dev.of_node, "sys_reset", &id)) {
-   140			psci_function_id_restart = id;
- > 141			arm_pm_restart = do_odroid_restart;
-   142		}
-   143	
-   144		if (!of_property_read_u32(pdev->dev.of_node, "sys_poweroff", &id)) {
-   145			psci_function_id_poweroff = id;
-   146			pm_power_off = do_odroid_poweroff;
-   147		}
-   148	
-   149		of_node = pdev->dev.of_node;
-   150	
-   151		sd_vqsw = of_get_named_gpio(of_node, "sd-vqsw", 0);
-   152		if (!gpio_is_valid(sd_vqsw)) sd_vqsw = 0;
-   153	
-   154		sd_vmmc = of_get_named_gpio(of_node, "sd-vmmc", 0);
-   155		if (!gpio_is_valid(sd_vmmc)) sd_vmmc = 0;
-   156	
-   157		sd_vqen = of_get_named_gpio(of_node, "sd-vqen", 0);
-   158		if (!gpio_is_valid(sd_vqen)) sd_vqen = 0;
-   159	
-   160		return 0;
-   161	}
-   162	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks for helping me to get a better understanding!

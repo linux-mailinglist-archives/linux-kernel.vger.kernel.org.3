@@ -2,105 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6448D5899AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A2C5899AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238281AbiHDJCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 05:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
+        id S238361AbiHDJDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 05:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237920AbiHDJCc (ORCPT
+        with ESMTP id S237429AbiHDJDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 05:02:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B374D4C3
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 02:02:31 -0700 (PDT)
+        Thu, 4 Aug 2022 05:03:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416184D4C9;
+        Thu,  4 Aug 2022 02:03:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 648F0CE2544
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 09:02:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F41C433C1;
-        Thu,  4 Aug 2022 09:02:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C706F6155B;
+        Thu,  4 Aug 2022 09:03:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29064C433D6;
+        Thu,  4 Aug 2022 09:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659603747;
-        bh=FAPfqA1BxBDBpuGmMp4lrKxBMRFkiCvMfk1ZhdaiILU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FWyGBxsrtOB1KMNgNyEQbv3S8yu+winatVk5BpuKktdEOAdZZyG4yBO8hOV44MAFm
-         dkVdd9K/+tjAQeGziwZ3kJOZdW/ayltIfNPNc6ushjpaDUtz6jHGwbfoGtWbTAQ5zC
-         5rwzdvm1Dqr0Vlbj18K2fHedmqWAwOfJajvqxmZuHzqDpci8GFqVNFiY3IGx+JzztU
-         CdlpMiWhzvrip4bDiEhzLpGihy59smtyrXLe24Sune6EnWx/XNjwjiVwHfl5zfcGKf
-         +b5hhB9DHoAsChP4WlKuilVqQ0HOpZS5ztTtNbgHVvsvWKVYHKhgbPNEy/CNOboynf
-         KTupq2v4yVTwg==
-Message-ID: <c6ff0967-eae8-9ec1-6024-16c9b654e917@kernel.org>
-Date:   Thu, 4 Aug 2022 11:02:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH] mm/smaps: Don't access young/dirty bit if pte unpresent
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Konstantin Khlebnikov <khlebnikov@openvz.org>
-References: <20220803220329.46299-1-peterx@redhat.com>
-Content-Language: en-US
-From:   "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <20220803220329.46299-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        s=k20201202; t=1659603793;
+        bh=SivxL3skWvzw9jhqnKcu/8CxHVkrZngsEGy7QHmjwIE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VKKKZClcZEJ9Q3mSncYVDlpJDWwX5lRtpWJVA7hyjLfbZ+6VuQD0FBo6dTCyVfVwm
+         3Z+OPcs+kQzFAMkdB34czVDofL9lxQ3iayIdjT2p06IJtaGmFBLk82Vn7WH3HEKdI7
+         DNEedPtHJhb3zvI3W7kaN/jmnz9i+WlEeLTlGRAOfRZ/P/FhbyaTQ6wWNnKv8QIDDU
+         un2vaEgq4hQ5P4lnAss5fn9MSlZ+jVo1OcYVGIhmnqmdtOZDflHdrbXY0TrmZS4/F5
+         kUejs6MYQKkSPwdEf5pRSqy0/QQXSonr6A7nmYvr9+iznlHJkvU7JqrLRpmP8MOhMn
+         YiT3WcV4dxkNg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oJWl4-000us9-Li;
+        Thu, 04 Aug 2022 10:03:10 +0100
+Date:   Thu, 04 Aug 2022 10:03:10 +0100
+Message-ID: <87o7x0wfch.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "samuel@sholland.org" <samuel@sholland.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: [PATCH 1/1] iommu/hyper-v: Use helper instead of directly accessing affinity
+In-Reply-To: <PH0PR21MB302502058A130F3529FE341DD79C9@PH0PR21MB3025.namprd21.prod.outlook.com>
+References: <1658796820-2261-1-git-send-email-mikelley@microsoft.com>
+        <5ea65d3d-745e-0a16-c885-a224a20ee7ce@infradead.org>
+        <PH0PR21MB302502058A130F3529FE341DD79C9@PH0PR21MB3025.namprd21.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mikelley@microsoft.com, rdunlap@infradead.org, sthemmin@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, joro@8bytes.org, will@kernel.org, robin.murphy@arm.com, samuel@sholland.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, iommu@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/4/22 00:03, Peter Xu wrote:
-> These bits should only be valid when the ptes are present.  Introducing two
-> booleans for it and set it to false when !pte_present().
+On Wed, 03 Aug 2022 17:26:10 +0100,
+"Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
 > 
-> Cc: Konstantin Khlebnikov <khlebnikov@openvz.org>
-> Fixes: b1d4d9e0cbd0 ("proc/smaps: carefully handle migration entries", 2012-05-31)
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-> ---
->  fs/proc/task_mmu.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> From: Randy Dunlap <rdunlap@infradead.org> Sent: Monday, July 25, 2022 7:39 PM
+> > 
+> > On 7/25/22 17:53, Michael Kelley wrote:
+> > > Recent changes to solve inconsistencies in handling IRQ masks #ifdef
+> > > out the affinity field in irq_common_data for non-SMP configurations.
+> > > The current code in hyperv_irq_remapping_alloc() gets a compiler error
+> > > in that case.
+> > >
+> > > Fix this by using the new irq_data_update_affinity() helper, which
+> > > handles the non-SMP case correctly.
+> > >
+> > 
+> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > > Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> > Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> > Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> > 
+> > Thanks.
+> > 
+> > > ---
+> > >  drivers/iommu/hyperv-iommu.c | 4 +---
+> > >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/iommu/hyperv-iommu.c b/drivers/iommu/hyperv-iommu.c
+> > > index 51bd66a..e190bb8 100644
+> > > --- a/drivers/iommu/hyperv-iommu.c
+> > > +++ b/drivers/iommu/hyperv-iommu.c
+> > > @@ -68,7 +68,6 @@ static int hyperv_irq_remapping_alloc(struct irq_domain
+> > *domain,
+> > >  {
+> > >  	struct irq_alloc_info *info = arg;
+> > >  	struct irq_data *irq_data;
+> > > -	struct irq_desc *desc;
+> > >  	int ret = 0;
+> > >
+> > >  	if (!info || info->type != X86_IRQ_ALLOC_TYPE_IOAPIC || nr_irqs > 1)
+> > > @@ -90,8 +89,7 @@ static int hyperv_irq_remapping_alloc(struct irq_domain *domain,
+> > >  	 * Hypver-V IO APIC irq affinity should be in the scope of
+> > >  	 * ioapic_max_cpumask because no irq remapping support.
+> > >  	 */
+> > > -	desc = irq_data_to_desc(irq_data);
+> > > -	cpumask_copy(desc->irq_common_data.affinity, &ioapic_max_cpumask);
+> > > +	irq_data_update_affinity(irq_data, &ioapic_max_cpumask);
+> > >
+> > >  	return 0;
+> > >  }
+> > 
+> > --
 > 
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 9913f3be9fd2..482f91577f8c 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -527,10 +527,12 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
->  	struct vm_area_struct *vma = walk->vma;
->  	bool locked = !!(vma->vm_flags & VM_LOCKED);
->  	struct page *page = NULL;
-> -	bool migration = false;
-> +	bool migration = false, young = false, dirty = false;
->  
->  	if (pte_present(*pte)) {
->  		page = vm_normal_page(vma, addr, *pte);
-> +		young = pte_young(*pte);
-> +		dirty = pte_dirty(*pte);
->  	} else if (is_swap_pte(*pte)) {
->  		swp_entry_t swpent = pte_to_swp_entry(*pte);
->  
-> @@ -560,8 +562,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
->  	if (!page)
->  		return;
->  
-> -	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte),
-> -		      locked, migration);
-> +	smaps_account(mss, page, false, young, dirty, locked, migration);
->  }
->  
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> Marc --
+> 
+> Could you pick up this patch for the 6.0 merge window?  It's a fix to a
+> side effect of Samuel Holland's series to unify SMP and UP handling of
+> affinity masks that went through your irq/irqchip-next tree.
 
+Applied with a:
+
+Fixes: aa0813581b8d ("genirq: Provide an IRQ affinity mask in non-SMP configs")
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

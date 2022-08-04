@@ -2,155 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78227589EDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B93589EDF
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbiHDPnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
+        id S237340AbiHDPpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiHDPnd (ORCPT
+        with ESMTP id S230482AbiHDPpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:43:33 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3140252BF
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:43:31 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 274EYUag023748;
-        Thu, 4 Aug 2022 15:43:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=Qs8dniwne9jKSHHgdOMyZn2b2E8k4xTF6TyfM5TV310=;
- b=ggv9+cQ7kFRs4FFb0vVXIEKqcJMtNrtdUWfSZMkrHsyia7+X67zwcEgoy5fN0QnV37IJ
- eW7dPV7PSBPfZWbP8SOSy8PrqJJvhlubSHB2Z6ekcHao8PlX9lbAHy9RHO6nsbpkC3hX
- Zx/QGowQ0K6q09oft5IyHDFKwySFlZW3e97oNCmQ1dys7SryMACT+AOZ7TMqw3Ni2+jp
- TVHu3Qm1nmgos/XLmQuhe01NNkpWnq18TZzaI99o38sz3edDPcowEtBtmtvQvoPSqgMM
- G0YrT4WvzmQ6KrCDOBeBuF/Y17MNjH0Gqr0OvhTLXrLN4dbd4FVT/CGygW0ogx2324KA 8g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hrg05tsp1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Aug 2022 15:43:03 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 274EZlem027499;
-        Thu, 4 Aug 2022 15:43:02 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hrg05tsn3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Aug 2022 15:43:02 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 274FNCCN001181;
-        Thu, 4 Aug 2022 15:43:00 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06fra.de.ibm.com with ESMTP id 3hmuwht88u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Aug 2022 15:43:00 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 274FgwjC30343616
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 4 Aug 2022 15:42:58 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D46B11C050;
-        Thu,  4 Aug 2022 15:42:58 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E24C711C04C;
-        Thu,  4 Aug 2022 15:42:57 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.176.127])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu,  4 Aug 2022 15:42:57 +0000 (GMT)
-Date:   Thu, 4 Aug 2022 17:42:46 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, hch@infradead.org,
-        wangkefeng.wang@huawei.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 01/11] mm/ioremap: change the return value of
- io[re|un]map_allowed
-Message-ID: <Yuvo9jWGL6VWStDO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20220801144029.57829-1-bhe@redhat.com>
- <20220801144029.57829-2-bhe@redhat.com>
+        Thu, 4 Aug 2022 11:45:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00610BE0
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:45:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AEBA61365
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:45:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2013EC433D7;
+        Thu,  4 Aug 2022 15:45:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659627912;
+        bh=67a399x+rTfEKj3nLw9NN0oJirD4h+nRr31AXlDVvHI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N82xEdy/Fr8KzE7n6Qlyi0dN8RXfUDw5VTEOM0KkETgf9/6DNZw5yaeBSQO2zag2E
+         mG3Um/HXyEb64a7pCR7+YCvg6mArhjDphmDRdFUAv5RTQfOs3duv5nJ7QRVrZG9Fww
+         94efEV/JoLXhcJED0BsylpLnjyu8TkjbnwYgeUP29/vDvfyE1FkEqgCvuBOV5G0Dmc
+         CjSf87Zgi5eyBbyVxPqYHhI98G/nh3j+n50R60dI2j5Iez+T+24kzl09hPxNUQCqda
+         35a4XgbqoYNbayumx+MJXJqBAsiYWJzoG1evZUH8d/552qbLpAD2mG0wzgBBsLRWxl
+         4LgZfV/PCfNBw==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH] f2fs: iostat: support accounting compressed IO
+Date:   Thu,  4 Aug 2022 23:45:00 +0800
+Message-Id: <20220804154500.17719-1-chao@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801144029.57829-2-bhe@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: le9rdsRVjWcSIk49df1kvrGphIsDtxce
-X-Proofpoint-GUID: 5UicurC8gMMnk31CoSegeIIHBqn6pKjU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-04_03,2022-08-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 spamscore=0
- adultscore=0 clxscore=1011 suspectscore=0 priorityscore=1501
- mlxlogscore=771 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208040067
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 10:40:19PM +0800, Baoquan He wrote:
+From: Chao Yu <chao.yu@oppo.com>
 
-Hi Baoquan,
+Previously, we supported to account FS_CDATA_READ_IO type IO only,
+in this patch, it adds to account more type IO for compressed file:
+- APP_BUFFERED_CDATA_IO
+- APP_MAPPED_CDATA_IO
+- FS_CDATA_IO
+- APP_BUFFERED_CDATA_READ_IO
+- APP_MAPPED_CDATA_READ_IO
 
-> --- a/arch/arm64/mm/ioremap.c
-> +++ b/arch/arm64/mm/ioremap.c
-> @@ -3,19 +3,20 @@
->  #include <linux/mm.h>
->  #include <linux/io.h>
->  
-> -bool ioremap_allowed(phys_addr_t phys_addr, size_t size, unsigned long prot)
-> +void __iomem *ioremap_allowed(phys_addr_t phys_addr, size_t size, unsigned long prot)
->  {
->  	unsigned long last_addr = phys_addr + size - 1;
-> +	int ret = -EINVAL;
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+ fs/f2fs/compress.c          |  2 +-
+ fs/f2fs/f2fs.h              |  5 ++++
+ fs/f2fs/file.c              | 27 ++++++++++++++++----
+ fs/f2fs/iostat.c            | 50 ++++++++++++++++++++++---------------
+ include/trace/events/f2fs.h | 24 ++++++++++++++----
+ 5 files changed, 77 insertions(+), 31 deletions(-)
 
-If ret variable is really needed?
+diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+index fa237e5c7173..6855fdca0464 100644
+--- a/fs/f2fs/compress.c
++++ b/fs/f2fs/compress.c
+@@ -1537,7 +1537,7 @@ int f2fs_write_multi_pages(struct compress_ctx *cc,
+ 		}
+ 
+ 		err = f2fs_write_compressed_pages(cc, submitted,
+-							wbc, io_type);
++							wbc, FS_CDATA_IO);
+ 		if (!err)
+ 			return 0;
+ 		f2fs_bug_on(F2FS_I_SB(cc->inode), err != -EAGAIN);
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index d187bdc39b79..8cd191fc0c5d 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1156,7 +1156,10 @@ enum iostat_type {
+ 	APP_BUFFERED_IO,		/* app buffered write IOs */
+ 	APP_WRITE_IO,			/* app write IOs */
+ 	APP_MAPPED_IO,			/* app mapped IOs */
++	APP_BUFFERED_CDATA_IO,		/* app buffered write IOs on compressed file */
++	APP_MAPPED_CDATA_IO,		/* app mapped write IOs on compressed file */
+ 	FS_DATA_IO,			/* data IOs from kworker/fsync/reclaimer */
++	FS_CDATA_IO,			/* data IOs from kworker/fsync/reclaimer on compressed file */
+ 	FS_NODE_IO,			/* node IOs from kworker/fsync/reclaimer */
+ 	FS_META_IO,			/* meta IOs from kworker/reclaimer */
+ 	FS_GC_DATA_IO,			/* data IOs from forground gc */
+@@ -1170,6 +1173,8 @@ enum iostat_type {
+ 	APP_BUFFERED_READ_IO,		/* app buffered read IOs */
+ 	APP_READ_IO,			/* app read IOs */
+ 	APP_MAPPED_READ_IO,		/* app mapped read IOs */
++	APP_BUFFERED_CDATA_READ_IO,	/* app buffered read IOs on compressed file  */
++	APP_MAPPED_CDATA_READ_IO,	/* app mapped read IOs on compressed file  */
+ 	FS_DATA_READ_IO,		/* data read IOs */
+ 	FS_GDATA_READ_IO,		/* data read IOs from background gc */
+ 	FS_CDATA_READ_IO,		/* compressed data read IOs */
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 4a3f4eaa3fc5..a7b33edb4e83 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -42,9 +42,14 @@ static vm_fault_t f2fs_filemap_fault(struct vm_fault *vmf)
+ 	vm_fault_t ret;
+ 
+ 	ret = filemap_fault(vmf);
+-	if (!ret)
+-		f2fs_update_iostat(F2FS_I_SB(inode), APP_MAPPED_READ_IO,
++	if (!ret) {
++		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
++
++		f2fs_update_iostat(sbi, APP_MAPPED_READ_IO, F2FS_BLKSIZE);
++		if (f2fs_compressed_file(inode))
++			f2fs_update_iostat(sbi, APP_MAPPED_CDATA_READ_IO,
+ 							F2FS_BLKSIZE);
++	}
+ 
+ 	trace_f2fs_filemap_fault(inode, vmf->pgoff, (unsigned long)ret);
+ 
+@@ -155,6 +160,8 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
+ 		SetPageUptodate(page);
+ 
+ 	f2fs_update_iostat(sbi, APP_MAPPED_IO, F2FS_BLKSIZE);
++	if (f2fs_compressed_file(inode))
++		f2fs_update_iostat(sbi, APP_MAPPED_CDATA_IO, F2FS_BLKSIZE);
+ 	f2fs_update_time(sbi, REQ_TIME);
+ 
+ 	trace_f2fs_vm_page_mkwrite(page, DATA);
+@@ -4308,8 +4315,14 @@ static ssize_t f2fs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 		ret = f2fs_dio_read_iter(iocb, to);
+ 	} else {
+ 		ret = filemap_read(iocb, to, 0);
+-		if (ret > 0)
+-			f2fs_update_iostat(F2FS_I_SB(inode), APP_BUFFERED_READ_IO, ret);
++		if (ret > 0) {
++			struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
++
++			f2fs_update_iostat(sbi, APP_BUFFERED_READ_IO, ret);
++			if (f2fs_compressed_file(inode))
++				f2fs_update_iostat(sbi,
++					APP_BUFFERED_CDATA_READ_IO, ret);
++		}
+ 	}
+ 	if (trace_f2fs_dataread_end_enabled())
+ 		trace_f2fs_dataread_end(inode, pos, ret);
+@@ -4425,8 +4438,12 @@ static ssize_t f2fs_buffered_write_iter(struct kiocb *iocb,
+ 	current->backing_dev_info = NULL;
+ 
+ 	if (ret > 0) {
++		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
++
+ 		iocb->ki_pos += ret;
+-		f2fs_update_iostat(F2FS_I_SB(inode), APP_BUFFERED_IO, ret);
++		f2fs_update_iostat(sbi, APP_BUFFERED_IO, ret);
++		if (f2fs_compressed_file(inode))
++			f2fs_update_iostat(sbi, APP_BUFFERED_CDATA_IO, ret);
+ 	}
+ 	return ret;
+ }
+diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
+index d84c5f6cc09d..2fc156a8b32b 100644
+--- a/fs/f2fs/iostat.c
++++ b/fs/f2fs/iostat.c
+@@ -31,55 +31,65 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
+ 
+ 	/* print app write IOs */
+ 	seq_puts(seq, "[WRITE]\n");
+-	seq_printf(seq, "app buffered:	%-16llu\n",
++	seq_printf(seq, "app buffered data:	%-16llu\n",
+ 				sbi->rw_iostat[APP_BUFFERED_IO]);
+-	seq_printf(seq, "app direct:	%-16llu\n",
++	seq_printf(seq, "app direct data:	%-16llu\n",
+ 				sbi->rw_iostat[APP_DIRECT_IO]);
+-	seq_printf(seq, "app mapped:	%-16llu\n",
++	seq_printf(seq, "app mapped data:	%-16llu\n",
+ 				sbi->rw_iostat[APP_MAPPED_IO]);
++	seq_printf(seq, "app buffered cdata:	%-16llu\n",
++				sbi->rw_iostat[APP_BUFFERED_CDATA_IO]);
++	seq_printf(seq, "app mapped cdata:	%-16llu\n",
++				sbi->rw_iostat[APP_MAPPED_CDATA_IO]);
+ 
+ 	/* print fs write IOs */
+-	seq_printf(seq, "fs data:	%-16llu\n",
++	seq_printf(seq, "fs data:		%-16llu\n",
+ 				sbi->rw_iostat[FS_DATA_IO]);
+-	seq_printf(seq, "fs node:	%-16llu\n",
++	seq_printf(seq, "fs cdata:		%-16llu\n",
++				sbi->rw_iostat[FS_CDATA_IO]);
++	seq_printf(seq, "fs node:		%-16llu\n",
+ 				sbi->rw_iostat[FS_NODE_IO]);
+-	seq_printf(seq, "fs meta:	%-16llu\n",
++	seq_printf(seq, "fs meta:		%-16llu\n",
+ 				sbi->rw_iostat[FS_META_IO]);
+-	seq_printf(seq, "fs gc data:	%-16llu\n",
++	seq_printf(seq, "fs gc data:		%-16llu\n",
+ 				sbi->rw_iostat[FS_GC_DATA_IO]);
+-	seq_printf(seq, "fs gc node:	%-16llu\n",
++	seq_printf(seq, "fs gc node:		%-16llu\n",
+ 				sbi->rw_iostat[FS_GC_NODE_IO]);
+-	seq_printf(seq, "fs cp data:	%-16llu\n",
++	seq_printf(seq, "fs cp data:		%-16llu\n",
+ 				sbi->rw_iostat[FS_CP_DATA_IO]);
+-	seq_printf(seq, "fs cp node:	%-16llu\n",
++	seq_printf(seq, "fs cp node:		%-16llu\n",
+ 				sbi->rw_iostat[FS_CP_NODE_IO]);
+-	seq_printf(seq, "fs cp meta:	%-16llu\n",
++	seq_printf(seq, "fs cp meta:		%-16llu\n",
+ 				sbi->rw_iostat[FS_CP_META_IO]);
+ 
+ 	/* print app read IOs */
+ 	seq_puts(seq, "[READ]\n");
+-	seq_printf(seq, "app buffered:	%-16llu\n",
++	seq_printf(seq, "app buffered data:		%-16llu\n",
+ 				sbi->rw_iostat[APP_BUFFERED_READ_IO]);
+-	seq_printf(seq, "app direct:	%-16llu\n",
++	seq_printf(seq, "app direct data:		%-16llu\n",
+ 				sbi->rw_iostat[APP_DIRECT_READ_IO]);
+-	seq_printf(seq, "app mapped:	%-16llu\n",
++	seq_printf(seq, "app mapped data:		%-16llu\n",
+ 				sbi->rw_iostat[APP_MAPPED_READ_IO]);
++	seq_printf(seq, "app buffered cdata:		%-16llu\n",
++				sbi->rw_iostat[APP_BUFFERED_CDATA_READ_IO]);
++	seq_printf(seq, "app mapped cdata:		%-16llu\n",
++				sbi->rw_iostat[APP_MAPPED_CDATA_READ_IO]);
+ 
+ 	/* print fs read IOs */
+-	seq_printf(seq, "fs data:	%-16llu\n",
++	seq_printf(seq, "fs data:		%-16llu\n",
+ 				sbi->rw_iostat[FS_DATA_READ_IO]);
+-	seq_printf(seq, "fs gc data:	%-16llu\n",
++	seq_printf(seq, "fs gc data:		%-16llu\n",
+ 				sbi->rw_iostat[FS_GDATA_READ_IO]);
+-	seq_printf(seq, "fs compr_data:	%-16llu\n",
++	seq_printf(seq, "fs cdata:		%-16llu\n",
+ 				sbi->rw_iostat[FS_CDATA_READ_IO]);
+-	seq_printf(seq, "fs node:	%-16llu\n",
++	seq_printf(seq, "fs node:		%-16llu\n",
+ 				sbi->rw_iostat[FS_NODE_READ_IO]);
+-	seq_printf(seq, "fs meta:	%-16llu\n",
++	seq_printf(seq, "fs meta:		%-16llu\n",
+ 				sbi->rw_iostat[FS_META_READ_IO]);
+ 
+ 	/* print other IOs */
+ 	seq_puts(seq, "[OTHER]\n");
+-	seq_printf(seq, "fs discard:	%-16llu\n",
++	seq_printf(seq, "fs discard:		%-16llu\n",
+ 				sbi->rw_iostat[FS_DISCARD]);
+ 
+ 	return 0;
+diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+index 513e889ef8aa..e395442502e8 100644
+--- a/include/trace/events/f2fs.h
++++ b/include/trace/events/f2fs.h
+@@ -1823,7 +1823,10 @@ TRACE_EVENT(f2fs_iostat,
+ 		__field(unsigned long long,	app_bio)
+ 		__field(unsigned long long,	app_wio)
+ 		__field(unsigned long long,	app_mio)
++		__field(unsigned long long,	app_bcdio)
++		__field(unsigned long long,	app_mcdio)
+ 		__field(unsigned long long,	fs_dio)
++		__field(unsigned long long,	fs_cdio)
+ 		__field(unsigned long long,	fs_nio)
+ 		__field(unsigned long long,	fs_mio)
+ 		__field(unsigned long long,	fs_gc_dio)
+@@ -1835,6 +1838,8 @@ TRACE_EVENT(f2fs_iostat,
+ 		__field(unsigned long long,	app_brio)
+ 		__field(unsigned long long,	app_rio)
+ 		__field(unsigned long long,	app_mrio)
++		__field(unsigned long long,	app_bcrio)
++		__field(unsigned long long,	app_mcrio)
+ 		__field(unsigned long long,	fs_drio)
+ 		__field(unsigned long long,	fs_gdrio)
+ 		__field(unsigned long long,	fs_cdrio)
+@@ -1849,7 +1854,10 @@ TRACE_EVENT(f2fs_iostat,
+ 		__entry->app_bio	= iostat[APP_BUFFERED_IO];
+ 		__entry->app_wio	= iostat[APP_WRITE_IO];
+ 		__entry->app_mio	= iostat[APP_MAPPED_IO];
++		__entry->app_bcdio	= iostat[APP_BUFFERED_CDATA_IO];
++		__entry->app_mcdio	= iostat[APP_MAPPED_CDATA_IO];
+ 		__entry->fs_dio		= iostat[FS_DATA_IO];
++		__entry->fs_cdio	= iostat[FS_CDATA_IO];
+ 		__entry->fs_nio		= iostat[FS_NODE_IO];
+ 		__entry->fs_mio		= iostat[FS_META_IO];
+ 		__entry->fs_gc_dio	= iostat[FS_GC_DATA_IO];
+@@ -1861,6 +1869,8 @@ TRACE_EVENT(f2fs_iostat,
+ 		__entry->app_brio	= iostat[APP_BUFFERED_READ_IO];
+ 		__entry->app_rio	= iostat[APP_READ_IO];
+ 		__entry->app_mrio	= iostat[APP_MAPPED_READ_IO];
++		__entry->app_bcrio	= iostat[APP_BUFFERED_CDATA_READ_IO];
++		__entry->app_mcrio	= iostat[APP_MAPPED_CDATA_READ_IO];
+ 		__entry->fs_drio	= iostat[FS_DATA_READ_IO];
+ 		__entry->fs_gdrio	= iostat[FS_GDATA_READ_IO];
+ 		__entry->fs_cdrio	= iostat[FS_CDATA_READ_IO];
+@@ -1870,20 +1880,24 @@ TRACE_EVENT(f2fs_iostat,
+ 	),
+ 
+ 	TP_printk("dev = (%d,%d), "
+-		"app [write=%llu (direct=%llu, buffered=%llu), mapped=%llu], "
+-		"fs [data=%llu, node=%llu, meta=%llu, discard=%llu], "
++		"app [write=%llu (direct=%llu, buffered=%llu), mapped=%llu, "
++		"compr(buffered=%llu, mapped=%llu)], "
++		"fs [data=%llu, cdata=%llu, node=%llu, meta=%llu, discard=%llu], "
+ 		"gc [data=%llu, node=%llu], "
+ 		"cp [data=%llu, node=%llu, meta=%llu], "
+ 		"app [read=%llu (direct=%llu, buffered=%llu), mapped=%llu], "
+-		"fs [data=%llu, (gc_data=%llu, compr_data=%llu), "
++		"compr(buffered=%llu, mapped=%llu)], "
++		"fs [data=%llu, (gc_data=%llu, cdata=%llu), "
+ 		"node=%llu, meta=%llu]",
+ 		show_dev(__entry->dev), __entry->app_wio, __entry->app_dio,
+-		__entry->app_bio, __entry->app_mio, __entry->fs_dio,
++		__entry->app_bio, __entry->app_mio, __entry->app_bcdio,
++		__entry->app_mcdio, __entry->fs_dio, __entry->fs_cdio,
+ 		__entry->fs_nio, __entry->fs_mio, __entry->fs_discard,
+ 		__entry->fs_gc_dio, __entry->fs_gc_nio, __entry->fs_cp_dio,
+ 		__entry->fs_cp_nio, __entry->fs_cp_mio,
+ 		__entry->app_rio, __entry->app_drio, __entry->app_brio,
+-		__entry->app_mrio, __entry->fs_drio, __entry->fs_gdrio,
++		__entry->app_mrio, __entry->app_bcrio, __entry->app_mcrio,
++		__entry->fs_drio, __entry->fs_gdrio,
+ 		__entry->fs_cdrio, __entry->fs_nrio, __entry->fs_mrio)
+ );
+ 
+-- 
+2.36.1
 
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index 72974cb81343..d72eb310fb3c 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -967,26 +967,27 @@ static inline void iounmap(volatile void __iomem *addr)
->  /*
->   * Arch code can implement the following two hooks when using GENERIC_IOREMAP
->   * ioremap_allowed() return a bool,
-> - *   - true means continue to remap
-> - *   - false means skip remap and return directly
-> + *   - IS_ERR means return an error
-> + *   - NULL means continue to remap
-> + *   - a non-NULL, non-IS_ERR pointer is returned directly
-
-If ioremap_allowed() returns a valid pointer, then the function name
-is not as precise anymore.
-
-> @@ -28,8 +29,11 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
->  	phys_addr -= offset;
->  	size = PAGE_ALIGN(size + offset);
->  
-> -	if (!ioremap_allowed(phys_addr, size, prot))
-> +	base = ioremap_allowed(phys_addr, size, prot);
-> +	if (IS_ERR(base))
->  		return NULL;
-> +	else if (base)
-> +		return base;
-
-It is probably just me, but the base name bit misleading here.
-
-> @@ -50,9 +54,9 @@ EXPORT_SYMBOL(ioremap_prot);
->  
->  void iounmap(volatile void __iomem *addr)
->  {
-> -	void *vaddr = (void *)((unsigned long)addr & PAGE_MASK);
-> +	void __iomem *vaddr = (void __iomem *)((unsigned long)addr & PAGE_MASK);
->  
-> -	if (!iounmap_allowed(vaddr))
-> +	if (iounmap_allowed(vaddr))
-
-I guess, iounmap_allowed() should accept void __iomem *, not void *.
-Then addr needs to be passed to iounmap_allowed() not vaddr.
-
->  		return;

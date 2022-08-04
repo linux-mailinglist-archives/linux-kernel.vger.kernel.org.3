@@ -2,200 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BCA589BF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E13D589BFD
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239750AbiHDMyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 08:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        id S238342AbiHDM5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 08:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiHDMyP (ORCPT
+        with ESMTP id S230140AbiHDM46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 08:54:15 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02641EAD6;
-        Thu,  4 Aug 2022 05:54:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659617655; x=1691153655;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=55gLq/Evz7860X870V3xMl8C7NdTHRdmbsUo5zw4ovk=;
-  b=BxFOxpgPftN73a/yzsKDrkPCHXfhTGLFxv+DzkVJXenRWXI7Tu+V1S/g
-   dx5aiHx6Q/r/VNFFCRUv4vG52BHj+OPqOQjoNOHnq7Yz1YzmizAS7YKk7
-   2O6QLal1JBTJG3dwVzSG+Q8B6z5+61vDZYj1TUCIeZLGzFqvz1gQsZhr1
-   13xoxXB+pVmlEN9ijKFZgLQjLGr+43FKyfZL7sS5u14igO6RNyfdMk1zM
-   XsKLFMf1ojELtlPsG8Lo+LApn7h2QUyxGdEgX4TxTHy4XXAce9fZruVHz
-   fWedL2Hs41sSX7DH1Yxb/kBDkO/mb5+dK40BrXgzFQfS1sXcgBc4/vcc+
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="290698145"
-X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="290698145"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 05:54:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="729579380"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by orsmga004.jf.intel.com with ESMTP; 04 Aug 2022 05:54:00 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 4 Aug 2022 05:54:00 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Thu, 4 Aug 2022 05:54:00 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Thu, 4 Aug 2022 05:53:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QygraVTch9Rbe2F4c2smufCHxJBXoHCUYs0ACd5aoihlluczJX1B8eI3MAgMphr5FDOQkwVKfiePsciNpKS5Z9HkSAzopHaWNHsxfv+ZZYUriQIHsfqwucJeiIFIFooCKj+RFSdC2Hi3oOXxeyUqgARhCZMKQuCUtC7XFLpoYaB6vpkR+oqX/lCT/utZ/G1cC6+RsJTpIUcy+EIIxarbpxWnlzyet1Y9iFXAH9m0VG9Rl4oBW51Ur8Jw+DkILRWKnJfA3MK5ZRa17rTBmpTvSt4Nt1YUE8k3Uo3vOka0f6s18GwNM3drAdbvmRcCuFBuq9jiYCTnR6oRRiMAzH8+Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hAN9II9paxihWFFejoGMNnBI94A3JTRLhu0h2kZ1N1I=;
- b=BHx1KcGmbFEdQRXsdqBKHYmjPVDhEue/nHmK4HaXKu5K0jT7aj2BFyZl+elm9UJ+eJnYAA6YEdaq2TQjV1+lFoh9YAQH9BFfZCCKjgio4Jyvyl2ENAbFGOmfS5pxtijnS8lN4danLELXQFl0QxDe5u5luhgvzjWZzIj86THUt/xPGMFALJBgadlNg77Ny5bq2rV4TGsF2d9NadJZoB+MJ0bXMs6wxKB93tjx8FkGVCbdBqITWOF8wI8kAzX/txTx7kWjmf4K6aYm0Pfh1M5Q1eZZqfAwhp1fB8ldNGYDqzjughApNjhfzBA0epu3KUaWDiBCTVymFKx7pZEyUdAt2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com (2603:10b6:a03:79::29)
- by BL1PR11MB5239.namprd11.prod.outlook.com (2603:10b6:208:31a::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.15; Thu, 4 Aug
- 2022 12:53:57 +0000
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::682f:e9fd:d1d7:f3b9]) by BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::682f:e9fd:d1d7:f3b9%4]) with mapi id 15.20.5504.014; Thu, 4 Aug 2022
- 12:53:56 +0000
-From:   "G, GurucharanX" <gurucharanx.g@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-CC:     "Weiny, Ira" <ira.weiny@intel.com>
-Subject: RE: [Intel-wired-lan] [PATCH] ixgbe: Use kmap_local_page in
- ixgbe_check_lbtest_frame()
-Thread-Topic: [Intel-wired-lan] [PATCH] ixgbe: Use kmap_local_page in
- ixgbe_check_lbtest_frame()
-Thread-Index: AQHYi8qqEhC7uGL1skKc8LIYqnadyK2e6oNg
-Date:   Thu, 4 Aug 2022 12:53:55 +0000
-Message-ID: <BYAPR11MB3367DD6AC06593E589092ED2FC9F9@BYAPR11MB3367.namprd11.prod.outlook.com>
-References: <20220629085836.18042-1-fmdefrancesco@gmail.com>
-In-Reply-To: <20220629085836.18042-1-fmdefrancesco@gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 174daddc-a627-4616-304c-08da76186444
-x-ms-traffictypediagnostic: BL1PR11MB5239:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /zZf3VwlmargIlCXWeQDHWYkRmHY+Py2jzzO1UAsENlxmbE9VjOjtmIllKlU96G3NbQjetPEnF2fD3IVkXwSAanGYP19IPVeFv4SMErMgH5QoB+ozAqKHpMavv3z482ZvI+LwIbamp1QI1ZiZxNnIbs0gI0vJiLPeVndkB00yq8KxyqQnZZQABzBECybqAM6ID4qIN1XVYL3kOQ+Mbnt38MzTky9uyowWVe8QZEturAVgrHWCFHkgtwkcgN/9kFMhCOkbu3TX/MLkS3r4CYsmohJan90J28pATpwUwe/W6VLIXg+7nUudjmo3mRB74zLYcCVl8UJiQwabfTP7/CYXtWyXk8CN9/QZ9W+quxqJFiDA8ihTK35fEFz4vcG4PHtuomSh6BbMbUwsSXGlAo9ZG2T4NCiTbpP9+2gqWSWVkvIIh/Arr/7uFqsT3paBNJ4avS2Exx1wMC6AqRsV39VLvG4G9C02l5MIn4IQLtqz91NQzrkdPXcN1Nnd235n+dOmwiYLNQtzJU2EsA2UgWP/q7T/1dHakOkKu2cp7WoStcKytxaqXBCngKZW6kzxSguIqVLRe/Z15tJSZX2FtuMpIu6R+F48kifaxrjsAMiC76vM66yQTLTGUJzBsoneQWqZDxf+52dqGSi0NXGh6TL8uWzXO8ykXcjm+e/teFc0c1f6nyg8Zzlj8wcq7NqF35Le6HjMGQc/+usBI6tucCT9uZBBMxLxrj37e7sqRLs8zKhwtstZOeHyXUV0Z/QkqDRNY6EWbKkNXVvlHDalbei6PWYxKIeSO/StDO4va8XNL43a7jOOrGVeo4WD7c+zaRMdJcURMvhfVHfLm25YE0vTA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3367.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(39860400002)(376002)(136003)(346002)(366004)(122000001)(71200400001)(38100700002)(186003)(107886003)(83380400001)(2906002)(33656002)(5660300002)(7416002)(478600001)(8936002)(921005)(55016003)(316002)(86362001)(52536014)(110136005)(9686003)(7696005)(6506007)(53546011)(26005)(41300700001)(82960400001)(38070700005)(66476007)(66446008)(8676002)(4326008)(64756008)(66556008)(66946007)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1tJ8NSnRHfEI6B0bZwq/nRzj3xqG/RdCB3ysuaPasA1iQljSv7T8uFH8jNPi?=
- =?us-ascii?Q?8B1qTvFkRUNlKU9xGPKka+i3LiqhzFpolOb8A4bHlzXd2idwUPoL8x7LXjjA?=
- =?us-ascii?Q?4UUKPdR59yc5oq2Gtfz7XFRSo3rstsnJxGBsW3322YK/0ViYp3rrhzTYwRcO?=
- =?us-ascii?Q?qBGYwnoh1xfE0BXlwuvfqsXTWNEjmMvDa02K2ZSfxiL9AW4F73/6ErfprGoo?=
- =?us-ascii?Q?H4fZz2dK4ycQz989RCXGL/qz3M3EBBRg/PCrGV/jpFQgvDnL7THV7eEtYAr1?=
- =?us-ascii?Q?9x0Jprhsr/zL+RvabJyjnAvQWLjv9uLIFrgqbu0SXaUOo/c7eMqv/K9Tj3fV?=
- =?us-ascii?Q?IYkdNQUD+cXyHjrM7FMqi1uR3PLbrsTDP9nNpWwv73RQhXgekBaxNbp+VxvA?=
- =?us-ascii?Q?JMzR8F2+phQJaF0WyOEG6Akn1qx77LSsAgyWVYmByc3X4AFa6AWblyrXIIG5?=
- =?us-ascii?Q?nrhDEA+doQoQ41T6lL4tgPv/WFEJy5lOb0O4BbiS8ffDeKfw09JSygHX8Nqt?=
- =?us-ascii?Q?YDg1Kgqkak/yiQRxPdQZMN6iAPJFevxfbjUlBKTZuCqCtrFMOcX+iOkwafAj?=
- =?us-ascii?Q?RQ6Bv79D4YE4Xq4aKiET9AF73ZXZ3gCDl+zH1Z95ZW1rinjyhPKy2hw0K+w8?=
- =?us-ascii?Q?0q2wDXq3ET3M+93SjJaRK6gVadcLebzN3WVmiSSwze8yALPQJ9TsbGcYG30y?=
- =?us-ascii?Q?SotGFDmrw21B8TbDtorOyL/zGsz88kM1jIX4LX4RozGoS/lHX1w979vPTuwk?=
- =?us-ascii?Q?xPsJBCpZGcFo3Ew6uc/k2s47FON1SGOi59SHWhFQc3NC8SCeY1+p2E/fJDCp?=
- =?us-ascii?Q?cWoBRj2f8qkh2E+dauTutjmDlSqDzEVedB5dWjO3WcUTffmGoV2VLTajXgFc?=
- =?us-ascii?Q?u5ftB1LeONPlW2HuRMMaN5PtyUNhREvM5YlsJHYdcZFPaV2HNM56o0GgJw7D?=
- =?us-ascii?Q?3j2n5Kj4Pfffh9/whlTOhtFanKzpVmyuKIJr5Ivqo5TZN0kh36COMFTcDaZB?=
- =?us-ascii?Q?hCRhBFk8u5++KaHcsAAs4an8xNw7znVu3Nn/KwVPcQdi/IIlnSJDPFpb4wNQ?=
- =?us-ascii?Q?PkIphM28deZL0/Lzq+ZKtU7rbAyP7N9WiirGNwgpgp24P19TzBUmL7R8tcVA?=
- =?us-ascii?Q?040vYNU6h6xIJhT8irm1nKujW5YN31uNCXoHnFrpZe8TCTJO5OY+p8+85TBJ?=
- =?us-ascii?Q?O/S9qmUgNlMlpOVLoO6eSsMb7Vge2SxwsIg8DT4MqfhecPV/D961zepPjtyC?=
- =?us-ascii?Q?1M6QztUgXzI+AKjbhhlIZQOJf9+C+r5afR3M2sXXD/+NTAygeyK236fISw6d?=
- =?us-ascii?Q?CT7Bbx2dLGMRnXD7gYsSewJ5KYSAM90/NPV9lCav15/GaVg3gwv35QY+xj8h?=
- =?us-ascii?Q?Wg+laEkLV8t6BcmdxQANK20M2cMAmNomRS5orsLzFf2Ah6i2m3gK5dO+PaOH?=
- =?us-ascii?Q?pfuS0naVTt1giY/yr7sx+x5gzh60P5O5l7G40crpV9WzpadrtuRrvGreu/qL?=
- =?us-ascii?Q?iywVHumGJwa7b7dA8/NOYut2jLgeie2foDRDj1xGGinPf7i4PoV0WtMYYQAp?=
- =?us-ascii?Q?i5ffnwGzZwPCqVFByrJM3pbUJf4Gq/wVplML0w4H?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 4 Aug 2022 08:56:58 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71160DAA;
+        Thu,  4 Aug 2022 05:56:57 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 5394222247;
+        Thu,  4 Aug 2022 14:56:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1659617815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jaEDWcu+4coERTQ4F5Dn8hy3E8UM6SKbLO+tkYltEpE=;
+        b=cFh7tAFpSF9d8F79yKAJsB4ToWAtUEvxL/XqU0lN3iG/XxXe+D0x1+7TwJlag/AQnXPN/w
+        WnJnApeKb8WYxWlVcXbAL93wY9D8Qu9IOddsETnV4tCrQeGqMrMF0ftmHJrozstf3p5c8W
+        IZjcGe2Nk9UHl4R5/ZJgsQwXsMJBGBQ=
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3367.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 174daddc-a627-4616-304c-08da76186444
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Aug 2022 12:53:55.9517
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 71gLqE66xnscU00lFe+hYE7w3qqseyJWXi5OESpVq+SMn/atNLfHhqXCg0MsvsGCwm2bBoqW98ezFoSzgasO3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5239
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Thu, 04 Aug 2022 14:56:55 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Ajay.Kathat@microchip.com
+Cc:     David.Laight@aculab.com, Claudiu.Beznea@microchip.com,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mwalle@kernel.org
+Subject: Re: [PATCH] wilc1000: fix DMA on stack objects
+In-Reply-To: <6ccf4fd8-f456-8757-288d-e8bd057eaae8@microchip.com>
+References: <20220728152037.386543-1-michael@walle.cc>
+ <0ed9ec85a55941fd93773825fe9d374c@AcuMS.aculab.com>
+ <612ECEE6-1C05-4325-92A3-21E17EC177A9@walle.cc>
+ <a7bcf24b-1343-b437-4e2e-1e707b5e3bd5@microchip.com>
+ <b40636e354df866d044c07241483ff81@walle.cc>
+ <6ccf4fd8-f456-8757-288d-e8bd057eaae8@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <8800236c103839e7996a2d976aeada97@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 2022-08-04 14:43, schrieb Ajay.Kathat@microchip.com:
+> On 04/08/22 12:52, Michael Walle wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know
+>> the content is safe
+>> 
+>> Am 2022-07-29 17:39, schrieb Ajay.Kathat@microchip.com:
+>>> On 29/07/22 20:28, Michael Walle wrote:
+>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you 
+>>>> know
+>>>> the content is safe
+>>>> 
+>>>> Am 29. Juli 2022 11:51:12 MESZ schrieb David Laight
+>>>> <David.Laight@ACULAB.COM>:
+>>>>> From: Michael Walle
+>>>>>> Sent: 28 July 2022 16:21
+>>>>>> 
+>>>>>> From: Michael Walle <mwalle@kernel.org>
+>>>>>> 
+>>>>>> Sometimes wilc_sdio_cmd53() is called with addresses pointing to 
+>>>>>> an
+>>>>>> object on the stack. E.g. wilc_sdio_write_reg() will call it with 
+>>>>>> an
+>>>>>> address pointing to one of its arguments. Detect whether the 
+>>>>>> buffer
+>>>>>> address is not DMA-able in which case a bounce buffer is used. The
+>>>>>> bounce
+>>>>>> buffer itself is protected from parallel accesses by
+>>>>>> sdio_claim_host().
+>>>>>> 
+>>>>>> Fixes: 5625f965d764 ("wilc1000: move wilc driver out of staging")
+>>>>>> Signed-off-by: Michael Walle <mwalle@kernel.org>
+>>>>>> ---
+>>>>>> The bug itself probably goes back way more, but I don't know if it
+>>>>>> makes
+>>>>>> any sense to use an older commit for the Fixes tag. If so, please
+>>>>>> suggest
+>>>>>> one.
+>>>>>> 
+>>>>>> The bug leads to an actual error on an imx8mn SoC with 1GiB of 
+>>>>>> RAM.
+>>>>>> But the
+>>>>>> error will also be catched by CONFIG_DEBUG_VIRTUAL:
+>>>>>> [    9.817512] virt_to_phys used for non-linear address:
+>>>>>> (____ptrval____) (0xffff80000a94bc9c)
+>>>>>> 
+>>>>>>   .../net/wireless/microchip/wilc1000/sdio.c    | 28
+>>>>>> ++++++++++++++++---
+>>>>>>   1 file changed, 24 insertions(+), 4 deletions(-)
+>>>>>> 
+>>>>>> diff --git a/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>>>>> b/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>>>>> index 7962c11cfe84..e988bede880c 100644
+>>>>>> --- a/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>>>>> +++ b/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>>>>> @@ -27,6 +27,7 @@ struct wilc_sdio {
+>>>>>>       bool irq_gpio;
+>>>>>>       u32 block_size;
+>>>>>>       int has_thrpt_enh3;
+>>>>>> +    u8 *dma_buffer;
+>>>>>>   };
+>>>>>> 
+>>>>>>   struct sdio_cmd52 {
+>>>>>> @@ -89,6 +90,9 @@ static int wilc_sdio_cmd52(struct wilc *wilc,
+>>>>>> struct sdio_cmd52 *cmd)
+>>>>>>   static int wilc_sdio_cmd53(struct wilc *wilc, struct sdio_cmd53
+>>>>>> *cmd)
+>>>>>>   {
+>>>>>>       struct sdio_func *func = container_of(wilc->dev, struct
+>>>>>> sdio_func, dev);
+>>>>>> +    struct wilc_sdio *sdio_priv = wilc->bus_data;
+>>>>>> +    bool need_bounce_buf = false;
+>>>>>> +    u8 *buf = cmd->buffer;
+>>>>>>       int size, ret;
+>>>>>> 
+>>>>>>       sdio_claim_host(func);
+>>>>>> @@ -100,12 +104,20 @@ static int wilc_sdio_cmd53(struct wilc 
+>>>>>> *wilc,
+>>>>>> struct sdio_cmd53 *cmd)
+>>>>>>       else
+>>>>>>               size = cmd->count;
+>>>>>> 
+>>>>>> +    if ((!virt_addr_valid(buf) || object_is_on_stack(buf)) &&
+>>>>> How cheap are the above tests?
+>>>>> It might just be worth always doing the 'bounce'?
+>>>> I'm not sure how cheap they are, but I don't think it costs more 
+>>>> than
+>>>> copying the bulk data around. That's up to the maintainer to decide.
+>>> 
+>>> 
+>>> I think, the above checks for each CMD53 might add up to the 
+>>> processing
+>>> time of this function. These checks can be avoided, if we add new
+>>> function similar to 'wilc_sdio_cmd53' which can be called when the
+>>> local
+>>> variables are used. Though we have to perform the memcpy operation
+>>> which
+>>> is anyway required to handle this scenario for small size data.
+>>> 
+>>> Mostly, either the static global data or dynamically allocated buffer
+>>> is
+>>> used with cmd53 except wilc_sdio_write_reg, wilc_sdio_read_reg
+>>> wilc_wlan_handle_txq functions.
+>>> 
+>>> I have created a patch using the above approach which can fix this
+>>> issue
+>>> and will have no or minimal impact on existing functionality. The 
+>>> same
+>>> is copied below:
+>>> 
+>>> 
+>>> ---
+>>>   .../net/wireless/microchip/wilc1000/netdev.h  |  1 +
+>>>   .../net/wireless/microchip/wilc1000/sdio.c    | 46
+>>> +++++++++++++++++--
+>>>   .../net/wireless/microchip/wilc1000/wlan.c    |  2 +-
+>>>   3 files changed, 45 insertions(+), 4 deletions(-)
+>>> 
+>>> diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.h
+>>> b/drivers/net/wireless/microchip/wilc1000/netdev.h
+>>> index 43c085c74b7a..2137ef294953 100644
+>>> --- a/drivers/net/wireless/microchip/wilc1000/netdev.h
+>>> +++ b/drivers/net/wireless/microchip/wilc1000/netdev.h
+>>> @@ -245,6 +245,7 @@ struct wilc {
+>>>       u8 *rx_buffer;
+>>>       u32 rx_buffer_offset;
+>>>       u8 *tx_buffer;
+>>> +    u32 vmm_table[WILC_VMM_TBL_SIZE];
+>>> 
+>>>       struct txq_handle txq[NQUEUES];
+>>>       int txq_entries;
+>>> diff --git a/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>> b/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>> index 600cc57e9da2..19d4350ecc22 100644
+>>> --- a/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>> +++ b/drivers/net/wireless/microchip/wilc1000/sdio.c
+>>> @@ -28,6 +28,7 @@ struct wilc_sdio {
+>>>       u32 block_size;
+>>>       bool isinit;
+>>>       int has_thrpt_enh3;
+>>> +    u8 *dma_buffer;
+>>>   };
+>>> 
+>>>   struct sdio_cmd52 {
+>>> @@ -117,6 +118,36 @@ static int wilc_sdio_cmd53(struct wilc *wilc,
+>>> struct sdio_cmd53 *cmd)
+>>>       return ret;
+>>>   }
+>>> 
+>>> +static int wilc_sdio_cmd53_extend(struct wilc *wilc, struct 
+>>> sdio_cmd53
+>>> *cmd)
+>> 
+>> If you handle all the stack cases anyway, the caller can just use
+>> a bounce buffer and you don't need to duplicate the function.
+> 
+> 
+> Thanks. Indeed, the duplicate function can be avoided. I will update 
+> the
+> patch and send modified patch for the review.
+> Btw, I was trying to reproduce the warning message by enabling
+> CONFIG_DEBUG_VIRTUAL config but no luck. It seems enabling the config 
+> is
+> not enough to test on my host or may be I am missing something.
 
+Did you bring the interface up?
 
-> -----Original Message-----
-> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
-> Fabio M. De Francesco
-> Sent: Wednesday, June 29, 2022 2:29 PM
-> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
-> <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
-> Eric Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>;
-> Paolo Abeni <pabeni@redhat.com>; Alexei Starovoitov <ast@kernel.org>;
-> Daniel Borkmann <daniel@iogearbox.net>; Jesper Dangaard Brouer
-> <hawk@kernel.org>; John Fastabend <john.fastabend@gmail.com>; intel-
-> wired-lan@lists.osuosl.org; netdev@vger.kernel.org; linux-
-> kernel@vger.kernel.org; bpf@vger.kernel.org
-> Cc: Weiny, Ira <ira.weiny@intel.com>; Fabio M. De Francesco
-> <fmdefrancesco@gmail.com>
-> Subject: [Intel-wired-lan] [PATCH] ixgbe: Use kmap_local_page in
-> ixgbe_check_lbtest_frame()
->=20
-> The use of kmap() is being deprecated in favor of kmap_local_page().
->=20
-> With kmap_local_page(), the mapping is per thread, CPU local and not
-> globally visible. Furthermore, the mapping can be acquired from any conte=
-xt
-> (including interrupts).
->=20
-> Therefore, use kmap_local_page() in ixgbe_check_lbtest_frame() because
-> this mapping is per thread, CPU local, and not globally visible.
->=20
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->  drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
+> I would
+> need the help to test and confirm if the modified patch do solve the
+> issue with imx8mn.
 
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Int=
-el)
+sure, just put me on cc and i can test it on my board.
+
+-michael

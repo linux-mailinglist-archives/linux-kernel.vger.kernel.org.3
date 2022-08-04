@@ -2,164 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387D45898ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429FD5898F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 10:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239305AbiHDIBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 04:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
+        id S229794AbiHDIDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 04:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239363AbiHDIAp (ORCPT
+        with ESMTP id S231782AbiHDID3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 04:00:45 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5798214012
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 01:00:43 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id c22so9890894wmr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 01:00:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ororatech.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=ZmSGwqc22zHtNCEdp7Vy7QwaMLxmz8BdxpDnQjqdtXg=;
-        b=KIkxKI6luZq5tLkph4q7fQi4668NPC6UFYLq0iwb+oG0K7RPx8awcoUYNCkNvbmfN+
-         XYp4xqDMW8NWA0U1fD/R57XN8pMjg671P/jSqu2+aab+0CE60Zu6tzbi1C1yfl0peZ/a
-         o1AmiIahXnT3P49w4n+R/8iSJN//zocvmMt/nkYWRP4m+82w8udfImtdwzL+QEhVgp+3
-         mqSPeZCjaSmhIvMtdgF3SywUSSBia+tUk/Ir4U5jmNs0j9Teriy5T82GWYdkwFpXrWjR
-         X7Vb+ZjAeZdjjxFxYq3dSkIjPcPEtogHnVrn0CgnVcPHMTzSjMpk4IFYiwwV68XGQVOh
-         MXBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=ZmSGwqc22zHtNCEdp7Vy7QwaMLxmz8BdxpDnQjqdtXg=;
-        b=XN0lDNKma3qRlZkodzoBm8ekeIbgELQg+B7KJ1yCtFc7bi6yYQ8KTG4QvvNb9Pq1Sk
-         1tOr1tLUScCL4I2MO7KI4WgGeJNpcpnUE33TOkJwgGZOvfwypqJWMrg2+KoObEFGnFtv
-         +KEyIGC7GIumnoiu6v0LS+oKV8A3Y9zj/JP6mMQ4iOaqVkkUAIia5e9D1C4sZeLDRT2u
-         YempnkERWXPr9u52R1hOm6WcCn9ZsvOidZAwBHX3dk/JNF4V0Z3FHvsJjg66wUZGHmxS
-         vvqEKu98wyCKyWW8hQYLwi2lpjDp8gdC5CBThBTfnFiyJOEQcu87XYq964gvKMrAbkcW
-         1mJw==
-X-Gm-Message-State: ACgBeo1UwveS3/2snkoFFuMIvcNuwcyVvvcj+3PeQbIbGP8xTlTPO7BE
-        vXtlDvat2Rb76RDmi8mNQO2uiA==
-X-Google-Smtp-Source: AA6agR6pevlYnJMHzIdk0hsOSR/fooey3Mj1GDawX/YAJI5hKRtyeKVZO7fVCGKmzapwgbaSuujYZw==
-X-Received: by 2002:a7b:ca47:0:b0:3a3:1874:648 with SMTP id m7-20020a7bca47000000b003a318740648mr489939wml.139.1659600041325;
-        Thu, 04 Aug 2022 01:00:41 -0700 (PDT)
-Received: from toolbox.dsn.orora.tech (host-88-217-137-115.customer.m-online.net. [88.217.137.115])
-        by smtp.googlemail.com with ESMTPSA id bv20-20020a0560001f1400b0021d6d18a9f8sm335653wrb.76.2022.08.04.01.00.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 01:00:40 -0700 (PDT)
-From:   =?UTF-8?q?Sebastian=20W=C3=BCrl?= <sebastian.wuerl@ororatech.com>
-To:     sebastian.wuerl@ororatech.com
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Christian Pellegrin <chripell@fsfe.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] can: mcp251x: Fix race condition on receive interrupt
-Date:   Thu,  4 Aug 2022 09:59:14 +0200
-Message-Id: <20220804075914.67569-1-sebastian.wuerl@ororatech.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220804075152.kqlp5weoz4grzbpp@pengutronix.de>
-References: <20220804075152.kqlp5weoz4grzbpp@pengutronix.de>
+        Thu, 4 Aug 2022 04:03:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB37361DAD;
+        Thu,  4 Aug 2022 01:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659600208; x=1691136208;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=n6vj1E+K6IGerPlEyIy+T8JA9iaBmJsVY3SC0cCq/5I=;
+  b=kI7egYbOvMahyhUNcbWWU/Sh/50H7H0GJ+QDCwuBCzrQc5D4o65w7DyJ
+   767egw8Svkz76V5teVSOzOxjNKnrWmgaYRe02rGDfixym1aZrL4h4klzX
+   RO2Fs31YhmsvAmuhU14VgtbzlmustEppJ0buZ8jNoDGoS5dApEIK6XKOW
+   teVaQnLpCBtFK37IUEv6tkyyZ6MX5ZMOxmWbYMHfaEkh5OzMYBeQ64ErK
+   9ZcoHSP6HD39Df4HUCRtEgjixxBSf4C+YfzEI1QI36ZC6bwUjr8Ee/Fz4
+   7JStrUeZkx4ml4n2iGuLjHvsTHCnj1Wz1o8INRMSwACt6kJNwFKt+viAN
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="288627961"
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="288627961"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 01:03:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="631482938"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga008.jf.intel.com with ESMTP; 04 Aug 2022 01:03:17 -0700
+Date:   Thu, 4 Aug 2022 15:58:30 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Wei Wang <wei.w.wang@linux.intel.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Message-ID: <20220804075830.GA645378@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <YtgrkXqP/GIi9ujZ@google.com>
+ <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
+ <20220721092906.GA153288@chaop.bj.intel.com>
+ <YtmT2irvgInX1kPp@google.com>
+ <20220725130417.GA304216@chaop.bj.intel.com>
+ <YuQ64RgWqdoAAGdY@google.com>
+ <Yuh0ikhoh+tCK6VW@google.com>
+ <YulTH7bL4MwT5v5K@google.com>
+ <20220803094827.GA607465@chaop.bj.intel.com>
+ <YuqZfPvRo+3GvLF1@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuqZfPvRo+3GvLF1@google.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mcp251x driver uses both receiving mailboxes of the CAN controller
-chips. For retrieving the CAN frames from the controller via SPI, it checks
-once per interrupt which mailboxes have been filled and will retrieve the
-messages accordingly.
+On Wed, Aug 03, 2022 at 03:51:24PM +0000, Sean Christopherson wrote:
+> On Wed, Aug 03, 2022, Chao Peng wrote:
+> > On Tue, Aug 02, 2022 at 04:38:55PM +0000, Sean Christopherson wrote:
+> > > On Tue, Aug 02, 2022, Sean Christopherson wrote:
+> > > > I think we should avoid UNMAPPABLE even on the KVM side of things for the core
+> > > > memslots functionality and instead be very literal, e.g.
+> > > > 
+> > > > 	KVM_HAS_FD_BASED_MEMSLOTS
+> > > > 	KVM_MEM_FD_VALID
+> > > > 
+> > > > We'll still need KVM_HAS_USER_UNMAPPABLE_MEMORY, but it won't be tied directly to
+> > > > the memslot.  Decoupling the two thingis will require a bit of extra work, but the
+> > > > code impact should be quite small, e.g. explicitly query and propagate
+> > > > MEMFILE_F_USER_INACCESSIBLE to kvm_memory_slot to track if a memslot can be private.
+> > > > And unless I'm missing something, it won't require an additional memslot flag.
+> > > > The biggest oddity (if we don't also add KVM_MEM_PRIVATE) is that KVM would
+> > > > effectively ignore the hva for fd-based memslots for VM types that don't support
+> > > > private memory, i.e. userspace can't opt out of using the fd-based backing, but that
+> > > > doesn't seem like a deal breaker.
+> > 
+> > I actually love this idea. I don't mind adding extra code for potential
+> > usage other than confidential VMs if we can have a workable solution for
+> > it.
+> > 
+> > > 
+> > > Hrm, but basing private memory on top of a generic FD_VALID would effectively require
+> > > shared memory to use hva-based memslots for confidential VMs.  That'd yield a very
+> > > weird API, e.g. non-confidential VMs could be backed entirely by fd-based memslots,
+> > > but confidential VMs would be forced to use hva-based memslots.
+> > 
+> > It would work if we can treat userspace_addr as optional for
+> > KVM_MEM_FD_VALID, e.g. userspace can opt in to decide whether needing
+> > the mappable part or not for a regular VM and we can enforce KVM for
+> > confidential VMs. But the u64 type of userspace_addr doesn't allow us to
+> > express a 'null' value so sounds like we will end up needing another
+> > flag anyway.
+> > 
+> > In concept, we could have three cofigurations here:
+> >   1. hva-only: without any flag and use userspace_addr;
+> >   2. fd-only:  another new flag is needed and use fd/offset;
+> >   3. hva/fd mixed: both userspace_addr and fd/offset is effective.
+> >      KVM_MEM_PRIVATE is a subset of it for confidential VMs. Not sure
+> >      regular VM also wants this.
+> 
+> My mental model breaks things down slightly differently, though the end result is
+> more or less the same. 
+> 
+> After this series, there will be two types of memory: private and "regular" (I'm
+> trying to avoid "shared").  "Regular" memory is always hva-based (userspace_addr),
+> and private always fd-based (fd+offset).
+> 
+> In the future, if we want to support fd-based memory for "regular" memory, then
+> as you said we'd need to add a new flag, and a new fd+offset pair.
+> 
+> At that point, we'd have two new (relatively to current) flags:
+> 
+>   KVM_MEM_PRIVATE_FD_VALID
+>   KVM_MEM_FD_VALID
+> 
+> along with two new pairs of fd+offset (private_* and "regular").  Mapping those
+> to your above list:
 
-This introduces a race condition, as another CAN frame can enter mailbox 1
-while mailbox 0 is emptied. If now another CAN frame enters mailbox 0 until
-the interrupt handler is called next, mailbox 0 is emptied before
-mailbox 1, leading to out-of-order CAN frames in the network device.
+I previously thought we could reuse the private_fd (name should be
+changed) for regular VM as well so only need one pair of fd+offset, the
+meaning of the fd can be decided by the flag. But introducing two pairs
+of them may support extra usages like one fd for regular memory and
+another private_fd for private memory, though unsure this is a useful
+configuration.
 
-This is fixed by checking the interrupt flags once again after freeing
-mailbox 0, to correctly also empty mailbox 1 before leaving the handler.
+>   
+>   1.  Neither *_FD_VALID flag set.
+>   2a. Both PRIVATE_FD_VALID and FD_VALID are set
+>   2b. FD_VALID is set and the VM doesn't support private memory
+>   3.  Only PRIVATE_FD_VALID is set (which private memory support in the VM).
+> 
+> Thus, "regular" VMs can't have a mix in a single memslot because they can't use
+> private memory.
+> 
+> > There is no direct relationship between unmappable and fd-based since
+> > even fd-based can also be mappable for regular VM?
 
-For reproducing the bug I created the following setup:
- - Two CAN devices, one Raspberry Pi with MCP2515, the other can be any.
- - Setup CAN to 1 MHz
- - Spam bursts of 5 CAN-messages with increasing CAN-ids
- - Continue sending the bursts while sleeping a second between the bursts
- - Check on the RPi whether the received messages have increasing CAN-ids
- - Without this patch, every burst of messages will contain a flipped pair
+Hmm, yes, for private memory we have special treatment in page fault
+handler and that is not applied to regular VM.
 
-Fixes: bf66f3736a94 ("can: mcp251x: Move to threaded interrupts instead of workqueues.")
-Signed-off-by: Sebastian Würl <sebastian.wuerl@ororatech.com>
----
- drivers/net/can/spi/mcp251x.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+> 
+> Yep.
+> 
+> > > Ignore this idea for now.  If there's an actual use case for generic fd-based memory
+> > > then we'll want a separate flag, fd, and offset, i.e. that support could be added
+> > > independent of KVM_MEM_PRIVATE.
+> > 
+> > If we ignore this idea now (which I'm also fine), do you still think we
+> > need change KVM_MEM_PRIVATE to KVM_MEM_USER_UNMAPPBLE?
+> 
+> Hmm, no.  After working through this, I think it's safe to say KVM_MEM_USER_UNMAPPABLE
+> is bad name because we could end up with "regular" memory that's backed by an
+> inaccessible (unmappable) file.
+> 
+> One alternative would be to call it KVM_MEM_PROTECTED.  That shouldn't cause
+> problems for the known use of "private" (TDX and SNP), and it gives us a little
+> wiggle room, e.g. if we ever get a use case where VMs can share memory that is
+> otherwise protected.
+> 
+> That's a pretty big "if" though, and odds are good we'd need more memslot flags and
+> fd+offset pairs to allow differentiating "private" vs. "protected-shared" without
+> forcing userspace to punch holes in memslots, so I don't know that hedging now will
+> buy us anything.
+> 
+> So I'd say that if people think KVM_MEM_PRIVATE brings additional and meaningful
+> clarity over KVM_MEM_PROTECTECD, then lets go with PRIVATE.  But if PROTECTED is
+> just as good, go with PROTECTED as it gives us a wee bit of wiggle room for the
+> future.
 
-diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-index 89897a2d41fa..df748b2e7421 100644
---- a/drivers/net/can/spi/mcp251x.c
-+++ b/drivers/net/can/spi/mcp251x.c
-@@ -1068,15 +1068,12 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
- 	mutex_lock(&priv->mcp_lock);
- 	while (!priv->force_quit) {
- 		enum can_state new_state;
--		u8 intf, eflag;
-+		u8 intf, intf1, eflag, eflag1;
- 		u8 clear_intf = 0;
- 		int can_id = 0, data1 = 0;
- 
- 		mcp251x_read_2regs(spi, CANINTF, &intf, &eflag);
- 
--		/* mask out flags we don't care about */
--		intf &= CANINTF_RX | CANINTF_TX | CANINTF_ERR;
--
- 		/* receive buffer 0 */
- 		if (intf & CANINTF_RX0IF) {
- 			mcp251x_hw_rx(spi, 0);
-@@ -1086,6 +1083,16 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
- 			if (mcp251x_is_2510(spi))
- 				mcp251x_write_bits(spi, CANINTF,
- 						   CANINTF_RX0IF, 0x00);
-+
-+			/* check ifbuffer 1 is already known to be full, no need to re-read */
-+			if (!(intf & CANINTF_RX1IF)) {
-+				/* intf needs to be read again to avoid a race condition */
-+				mcp251x_read_2regs(spi, CANINTF, &intf1, &eflag1);
-+
-+				/* combine flags from both operations for error handling */
-+				intf |= intf1;
-+				eflag |= eflag1;
-+			}
- 		}
- 
- 		/* receive buffer 1 */
-@@ -1096,6 +1103,9 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
- 				clear_intf |= CANINTF_RX1IF;
- 		}
- 
-+		/* mask out flags we don't care about */
-+		intf &= CANINTF_RX | CANINTF_TX | CANINTF_ERR;
-+
- 		/* any error or tx interrupt we need to clear? */
- 		if (intf & (CANINTF_ERR | CANINTF_TX))
- 			clear_intf |= intf & (CANINTF_ERR | CANINTF_TX);
--- 
-2.30.2
+Then I'd stay with PRIVATE.
 
+> 
+> Note, regardless of what name we settle on, I think it makes to do the
+> KVM_PRIVATE_MEM_SLOTS => KVM_INTERNAL_MEM_SLOTS rename.
+
+Agreed.
+
+Chao

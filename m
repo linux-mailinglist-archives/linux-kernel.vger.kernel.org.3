@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41EE9589795
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD6D58978E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238933AbiHDF4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 01:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S238947AbiHDFww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 01:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiHDF4m (ORCPT
+        with ESMTP id S238937AbiHDFwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 01:56:42 -0400
+        Thu, 4 Aug 2022 01:52:50 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B1E61101
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:56:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92502606AA
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:52:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659592601; x=1691128601;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WuiSEBophrQc/ISXHMcTf+eN27iJ0Puc1lcpkCjfnUg=;
-  b=BIvVzUJ6r+9onvr0HKHj2Y5xXgkXgxFDc82vasVCRJKNFP2cOH+MF2J4
-   L/U63obemGwqUnigikcyUXMfJ0rEeVdtjSUcEYKn+vFMNaUWduCQgYhTK
-   nuVpeL7L+TeOmMiRDH2ggW80lIjrShwakQ2mKAYk8ffxa8Ljs1SaIQheD
-   MY51XJckL720hSDLFQ5klK7Qzg4ZAAo26ko7FAuj1YHgwVn/3dlI8G0aj
-   XcqMEjzjiVHIloUYQ3chf0m9SkwwZHBVmiCmrIqtnZB3ykff/YJyk7OPh
-   ewqYeSYzTqmtbdD/p9efFECw6vFeFXDlQtWyNijAtOVKIt/M1493XmYU8
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="287408532"
+  t=1659592369; x=1691128369;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WWJ2nxf8DmAoNTiMy7J5Jl0UJtHRXxyUfURlVtvvZ/k=;
+  b=mnyKPNY0FV6A8xNkGOn9cl5rAJ4EoN0SOXQ5WZN278Kxn95kpL7rVbUr
+   UXqUH4ZrroxD8H7TTsqnkzfsfKCtgPpwfYlXESSyzaFESME3sctHoBuys
+   uJ2CBHCYAcVL+ZrvV5h1isu2zelkonp4C8A+MEGfaFuxfW7oAr4t6EnGw
+   S4BEM8+SyFfENZqYRMzTUs4qeg9qaQXFyS/gdEqe411FwRWiy2fcgFh0u
+   VIE2cY0h68A66sTvRNQe6Ze9zgqvMJPudFFN9mtz/PcZTPkuKICsz/uX+
+   RXk9XF/Ha9Nmabeus47nU8JhOfowLCVyf5SEtc5xWHiZcY56O+rLrJij2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="287407994"
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="287408532"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 22:56:41 -0700
+   d="scan'208";a="287407994"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 22:52:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="848839307"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Aug 2022 22:56:40 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJTqZ-000I4h-2y;
-        Thu, 04 Aug 2022 05:56:39 +0000
-Date:   Thu, 4 Aug 2022 13:56:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Russell King <rmk+kernel@arm.linux.org.uk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [rmk-arm:clearfog 8/9] drivers/pci/pcie/portdrv_core.c:330
- pcie_port_device_register() warn: inconsistent indenting
-Message-ID: <202208041347.FHCjyytU-lkp@intel.com>
+   d="scan'208";a="553592910"
+Received: from louislifei-optiplex-7090.sh.intel.com ([10.239.146.218])
+  by orsmga003.jf.intel.com with ESMTP; 03 Aug 2022 22:52:46 -0700
+From:   Fei Li <fei1.li@intel.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     gregkh@linuxfoundation.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        yu1.wang@intel.com, conghui.chen@intel.com, fei1.li@intel.com
+Subject: [PATCH] x86/acrn: Set up timekeeping
+Date:   Thu,  4 Aug 2022 13:59:03 +0800
+Message-Id: <20220804055903.365211-1-fei1.li@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -61,86 +58,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm clearfog
-head:   6df556f02478218e0aae7757ef1a7025569464d8
-commit: 006166c0b29e4fde042ada6c2608ae4b41c1e9dc [8/9] mvebu/clearfog pcie updates
-config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220804/202208041347.FHCjyytU-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+ACRN Hypervisor reports timing information via CPUID leaf 0x40000010.
+Get the TSC and CPU frequency via CPUID leaf 0x40000010 and set the
+kernel values accordingly.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Fei Li <fei1.li@intel.com>
+Reviewed-by: Conghui <conghui.chen@intel.com>
+---
+ arch/x86/include/asm/acrn.h | 14 ++++++++++++++
+ arch/x86/kernel/cpu/acrn.c  |  3 +++
+ 2 files changed, 17 insertions(+)
 
-New smatch warnings:
-drivers/pci/pcie/portdrv_core.c:330 pcie_port_device_register() warn: inconsistent indenting
+diff --git a/arch/x86/include/asm/acrn.h b/arch/x86/include/asm/acrn.h
+index e003a01b7c67..1dd14381bcb6 100644
+--- a/arch/x86/include/asm/acrn.h
++++ b/arch/x86/include/asm/acrn.h
+@@ -10,6 +10,15 @@
+ /* Bit 0 indicates whether guest VM is privileged */
+ #define	ACRN_FEATURE_PRIVILEGED_VM	BIT(0)
+ 
++/*
++ * Timing Information.
++ * This leaf returns the current TSC frequency in kHz.
++ *
++ * EAX: (Virtual) TSC frequency in kHz.
++ * EBX, ECX, EDX: RESERVED (reserved fields are set to zero).
++ */
++#define ACRN_CPUID_TIMING_INFO		0x40000010
++
+ void acrn_setup_intr_handler(void (*handler)(void));
+ void acrn_remove_intr_handler(void);
+ 
+@@ -21,6 +30,11 @@ static inline u32 acrn_cpuid_base(void)
+ 	return 0;
+ }
+ 
++static inline unsigned long acrn_get_tsc_khz(void)
++{
++	return cpuid_eax(ACRN_CPUID_TIMING_INFO);
++}
++
+ /*
+  * Hypercalls for ACRN
+  *
+diff --git a/arch/x86/kernel/cpu/acrn.c b/arch/x86/kernel/cpu/acrn.c
+index 23f5f27b5a02..485441b7f030 100644
+--- a/arch/x86/kernel/cpu/acrn.c
++++ b/arch/x86/kernel/cpu/acrn.c
+@@ -28,6 +28,9 @@ static void __init acrn_init_platform(void)
+ {
+ 	/* Setup the IDT for ACRN hypervisor callback */
+ 	alloc_intr_gate(HYPERVISOR_CALLBACK_VECTOR, asm_sysvec_acrn_hv_callback);
++
++	x86_platform.calibrate_tsc = acrn_get_tsc_khz;
++	x86_platform.calibrate_cpu = acrn_get_tsc_khz;
+ }
+ 
+ static bool acrn_x2apic_available(void)
 
-Old smatch warnings:
-drivers/pci/pcie/portdrv_core.c:343 pcie_port_device_register() warn: inconsistent indenting
-
-vim +330 drivers/pci/pcie/portdrv_core.c
-
-   310	
-   311	/**
-   312	 * pcie_port_device_register - register PCI Express port
-   313	 * @dev: PCI Express port to register
-   314	 *
-   315	 * Allocate the port extension structure and register services associated with
-   316	 * the port.
-   317	 */
-   318	int pcie_port_device_register(struct pci_dev *dev)
-   319	{
-   320		int status, capabilities, i, nr_service;
-   321		int irqs[PCIE_PORT_DEVICE_MAXSERVICES];
-   322	
-   323		/* Enable PCI Express port device */
-   324		status = pci_enable_device(dev);
-   325		if (status)
-   326			return status;
-   327	
-   328		/* Get and check PCI Express port services */
-   329		capabilities = get_port_device_capability(dev);
- > 330	dev_info(&dev->dev, "PCIe capabilities: 0x%x\n", capabilities);
-   331		if (!capabilities)
-   332			return 0;
-   333	
-   334		pci_set_master(dev);
-   335		/*
-   336		 * Initialize service irqs. Don't use service devices that
-   337		 * require interrupts if there is no way to generate them.
-   338		 * However, some drivers may have a polling mode (e.g. pciehp_poll_mode)
-   339		 * that can be used in the absence of irqs.  Allow them to determine
-   340		 * if that is to be used.
-   341		 */
-   342		status = pcie_init_service_irqs(dev, irqs, capabilities);
-   343	dev_info(&dev->dev, "init_service_irqs: %d\n", status);
-   344		if (status) {
-   345			capabilities &= PCIE_PORT_SERVICE_HP;
-   346			if (!capabilities)
-   347				goto error_disable;
-   348		}
-   349	
-   350		/* Allocate child services if any */
-   351		status = -ENODEV;
-   352		nr_service = 0;
-   353		for (i = 0; i < PCIE_PORT_DEVICE_MAXSERVICES; i++) {
-   354			int service = 1 << i;
-   355			if (!(capabilities & service))
-   356				continue;
-   357			if (!pcie_device_init(dev, service, irqs[i]))
-   358				nr_service++;
-   359		}
-   360		if (!nr_service)
-   361			goto error_cleanup_irqs;
-   362	
-   363		return 0;
-   364	
-   365	error_cleanup_irqs:
-   366		pci_free_irq_vectors(dev);
-   367	error_disable:
-   368		pci_disable_device(dev);
-   369		return status;
-   370	}
-   371	
-
+base-commit: e0dccc3b76fb35bb257b4118367a883073d7390e
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E806E589788
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6787B58978A
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237259AbiHDFui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 01:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        id S238968AbiHDFuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 01:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbiHDFug (ORCPT
+        with ESMTP id S238912AbiHDFuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 01:50:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFBEA564DF
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:50:34 -0700 (PDT)
+        Thu, 4 Aug 2022 01:50:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8840606A8
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:50:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659592234;
+        s=mimecast20190719; t=1659592244;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
         bh=cev55DyzC4odc+3YqhUlZqMO2fmB6uB34qSnSGdGLMo=;
-        b=g+7HwM+wLY02k+xOf7EyLCNvMFrsjdRUjPe5oW85lwe1pqPTmtOmMVRejid+nI42srxiAs
-        PsiqfrhG8oUoqgBzudzwSIfzrXEaPOoWPHmixtywohINhwPio30VWOYl0PKtPyUMcvVMjG
-        B9c+D86PIDl0s8NVMUBdchZsMhdzGyI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        b=iAdopc6NXnL2VLGzaWJN/JqbRKeqEOT6Q2qdwxK+hrg7hpoX9AnimblYjVPJWoG7VcQOPg
+        PoeQW6Zz0dT7gs9sc9stV/31KrGkceOm6UZBs8+rRRs0ItOf50HasVjkbK0liQP+xvqi2L
+        JQgIh8xGHpNXPyCrbcG6h8GUk0IQYb8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-25-xLw5-T0PN7S3FRc7P6Pr9g-1; Thu, 04 Aug 2022 01:50:25 -0400
-X-MC-Unique: xLw5-T0PN7S3FRc7P6Pr9g-1
+ us-mta-650-yscdKHn_MJ6Me-W3PePBzw-1; Thu, 04 Aug 2022 01:50:41 -0400
+X-MC-Unique: yscdKHn_MJ6Me-W3PePBzw-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D74F101A54E;
-        Thu,  4 Aug 2022 05:50:24 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1AB1E1C05AA9;
+        Thu,  4 Aug 2022 05:50:41 +0000 (UTC)
 Received: from dreadlord.bne.redhat.com (fdacunha.bne.redhat.com [10.64.0.157])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CD38B2166B26;
-        Thu,  4 Aug 2022 05:50:22 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 505A72166B26;
+        Thu,  4 Aug 2022 05:50:39 +0000 (UTC)
 From:   Dave Airlie <airlied@redhat.com>
 To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.sf.net,
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         Rodrigo.Siqueira@amd.com, Dave Airlie <airlied@redhat.com>
 Subject: [PATCH] drm/amd/display: restore plane with no modifiers code.
-Date:   Thu,  4 Aug 2022 15:50:20 +1000
-Message-Id: <20220804055020.691656-1-airlied@redhat.com>
+Date:   Thu,  4 Aug 2022 15:50:36 +1000
+Message-Id: <20220804055036.691670-1-airlied@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net

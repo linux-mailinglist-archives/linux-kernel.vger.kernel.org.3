@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DCF58A02E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220BB58A034
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 20:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239724AbiHDSGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 14:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
+        id S239738AbiHDSGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 14:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239701AbiHDSFz (ORCPT
+        with ESMTP id S239732AbiHDSGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 14:05:55 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACC9BF66;
-        Thu,  4 Aug 2022 11:05:55 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id a15so374401qto.10;
-        Thu, 04 Aug 2022 11:05:55 -0700 (PDT)
+        Thu, 4 Aug 2022 14:06:43 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC16F6BD5E
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 11:06:42 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id g5so273454ybg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 11:06:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=ueZWNCVbjk07SHSEjZ5pMZCyMRunEn5a84H2Prm1c7s=;
-        b=ZhzGJ/YPL1nWALnFj7utS28xVrTIMis8RxQmn4PoomFommjaFBkRvndKATuUHuktAe
-         Pv3BPgRogMuYO9pOAiszoJiC+I2y7+KhCrvQTAcoOqc5168b1z08SjEKeNKiuneMVCM5
-         sA9aVKGTTdX7KhgSDKx0/Plapa+dANimJoYTSrhM7Gaa9M0W2VFKgDu1o8xOhrUk7tSv
-         adYAoJ8zcZD+WvpFqFP1Hfc7f6fWG6GeHiCGjVy3qIe+0J9f86u+lPsa0QDb6TpKlxHl
-         jCPHahdXtVEU4RuMd6UVbJeDkeQE8vTkT/5PbM1zC4arDh41IuwIIaD+8RWNxatQSNVa
-         /7FQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=W5vtOsGoRNFUeWobww4WWm+woSsVgSrVSuurs+lnPco=;
+        b=Q4OVg/NCWfPBpO0ZwT+yZpjwRI5Ie989Hve6f+OWo+s3Asy9HPU46cI5AIaTJdwuNj
+         NjmBa5dIdzN0o/iUiosBRTX85lzcOmurw8yGwJzgJkPQYVw10FbxjXSrGeKDmqs0BXYf
+         n6ePRZze6YOK4/F60l5ES0L2Wro7NL1X+FOQnKyjwlB+EivnOGXcPo2dSwVzqjG7lgve
+         Duwd+X0N+MA4+cwin9Ls9y894QMToWhZ5iz6qpEv0WfnHjVAkUdXPUZKMTwIQvZEa1Qj
+         5/AL2iZPzqcNSvCTmTlpPAZ0uSVVrU/53dFvYKzwaEVDbsjhh9RPBE1UGMJuMEFgCcSG
+         vYDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=ueZWNCVbjk07SHSEjZ5pMZCyMRunEn5a84H2Prm1c7s=;
-        b=THXOKANSdE+iHVxpp7SDeW2pJKTFQ77VGcpUjYzIAFFtaqUkiaVoOLDfA0ermEt2Zs
-         eZzwQq6Z5L3YU6WbsLOXoajdw+SY48X22085OxOjdJpkLMl6Phzkdf0/HIlLnkX1+K0d
-         NdUioxYZTvq27C0UQc/HT9vu7hGmNLKhY9JZBRQgdeDE8K7wlcX/OCZP/j/KgPspGNtz
-         iVe45Arco960FYxsCoIKsXY8qX8aBJwosBgFzxWYtXfpo8Q5FfscbcPIS6A0enwBXc8Z
-         jO3TWpulPSj5VEsDO7xTFkC++F7J+6q1YPUo2v098iy3GbKC7gCvpAGkxQMd2bdNBuFg
-         WQvQ==
-X-Gm-Message-State: ACgBeo3I8UQlrFoJzFqh2UvwL8Jnxq6Pc68U8ZGje21S+yXlX81/dz7F
-        4r823DkLVb0rBSDWFNe9A9E=
-X-Google-Smtp-Source: AA6agR68eo/nNfsPH9Glbr4xHb9nMHYY7b3F4Rs/VqehRSEHk7DiIw8lNb/EhOnamW6/opfzW0nLmQ==
-X-Received: by 2002:a05:622a:164a:b0:31e:d373:b1e5 with SMTP id y10-20020a05622a164a00b0031ed373b1e5mr2641983qtj.689.1659636353894;
-        Thu, 04 Aug 2022 11:05:53 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y20-20020a05620a44d400b006a6ebde4799sm1185861qkp.90.2022.08.04.11.05.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 11:05:52 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
-        joel.peshkin@broadcom.com, kursad.oney@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] ARM: dts: bcmbca: bcm63178: fix interrupt controller node
-Date:   Thu,  4 Aug 2022 11:05:50 -0700
-Message-Id: <20220804180550.1339046-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220801194448.29363-3-william.zhang@broadcom.com>
-References: <20220801194448.29363-1-william.zhang@broadcom.com> <20220801194448.29363-3-william.zhang@broadcom.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=W5vtOsGoRNFUeWobww4WWm+woSsVgSrVSuurs+lnPco=;
+        b=X8lhYf3lf51mbF4A586RTCtJ/kT8jiyLqNa/qYW6K4lOMqOOLO2sJIQ+hsBbejrH+U
+         KKnJvuTovwHTQc6n5ePzPRFdFgjWbyHgJ/W4SL5PWJUQGlgtyjzL+4HDzhGdvx72r2F7
+         /wuyfP6YwMo10qsn9uJIjOhrAuf7gSupkk1KJFdwSqgB89ZuBafqeXndKALsU2j+jvIX
+         dS+Ja4Sp9EttTJBG1bSmNRtq9aYWEoooVhphziuRKdZGUnEvFgZD5Kak7v3G38OVE3Dt
+         6mGaLEIo6FHROpe0dzab/+GOQFTquuPxAuNHY1gv6SzXT1dYNrN/+1vMww2AryKr60L0
+         PiAg==
+X-Gm-Message-State: ACgBeo1OdKRH0tPFjHpRRjyKBe1S567tsTnQfRq/6DIZznI9Ay6X1tAt
+        Mnily/O+Jow73SuZiLBSPv8ksrayQk32iDjUMpw=
+X-Google-Smtp-Source: AA6agR57/OeeTbYU5ZkJThBEpdOtwXIQZvZCIqiQ04Q1TZ4ctcZEEhntZH9Yy6UT9m1c3NZp2bWN9S5OdB1CpEm2Tx4=
+X-Received: by 2002:a25:508b:0:b0:672:e8af:3bfe with SMTP id
+ e133-20020a25508b000000b00672e8af3bfemr2283126ybb.106.1659636401974; Thu, 04
+ Aug 2022 11:06:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <Yut2otE1h2xtC79o@debian> <CAHk-=wjPF0dXvDeqPiSzpev4KhhWU0-R8muaYVF73vy2Vw=QTw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjPF0dXvDeqPiSzpev4KhhWU0-R8muaYVF73vy2Vw=QTw@mail.gmail.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Thu, 4 Aug 2022 19:06:05 +0100
+Message-ID: <CADVatmOTkf1LfC0teDe8OLm6+Ctm28TWvefRM=frf+aB_seSKw@mail.gmail.com>
+Subject: Re: mainline build failure due to 6fdd2077ec03 ("drm/amd/amdgpu: add
+ memory training support for PSP_V13")
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Chengming Gui <Jack.Gui@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,13 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  1 Aug 2022 12:44:47 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> Add the missing gic registers and interrupts property to the gic node.
-> 
-> Fixes: fc85b7e64acb ("ARM: dts: add dts files for bcmbca soc 63178")
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
+On Thu, Aug 4, 2022 at 6:17 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Thu, Aug 4, 2022 at 12:35 AM Sudip Mukherjee (Codethink)
+> <sudipm.mukherjee@gmail.com> wrote:
+> >
+> > I will be happy to test any patch or provide any extra log if needed.
+>
+> It sounds like that file just needs to get a
+>
+>     #include <linux/vmalloc.h>
+>
+> there, and for some reason architectures other than alpha and mips end
+> up getting it accidentally through other headers.
+>
+> Mind testing just adding that header file, and perhaps even sending a
+> patch if (when) that works for you?
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/fixes, thanks!
+Tested on alpha allmodconfig, that worked.
+And also sent the patch.
+
+
 --
-Florian
+Regards
+Sudip

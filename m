@@ -2,182 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFEF5897F2
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 08:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18ABE5897F9
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 08:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238950AbiHDGzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 02:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
+        id S238887AbiHDG7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 02:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiHDGz3 (ORCPT
+        with ESMTP id S238670AbiHDG7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 02:55:29 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8189F6469
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 23:55:28 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id j17so2819442pgl.5
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 23:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=GuVM7gKhQND8I7y9IPoXxEMzzZslmNdwtV7SuQsxHVU=;
-        b=5HDQrH59USeGPDJOHElvyJo52weo6SvT/vGhzU3vJwuqaGJbTNVR9h+qV63D7vGNgl
-         4HBbm3Sg67rSbr3uhMavl0eZ7BgJ9IgWtgfiKSoM8JrOOZpwFxTg2mWeDWbubJRnqD1t
-         RaXX1ohgk0DSq2JpwcQEx3/WOqzkKgSOYIKJD39RLOJRyp8La694rhm4EGGQp/8sWEsj
-         hjZv2G0tm6ebv86j1GSqKT89fc5MwD9+Ky2WZD1YGUf2NfjCmLDbnOHDb9XnuTm1mhYt
-         AcAUUMDtdSffLl2wjFDARklK6WLozx9+quwAd5SjtAzpKqKAe1+bCYAZAIp7/LnvdHeF
-         7qxQ==
+        Thu, 4 Aug 2022 02:59:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B416161B0F
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 23:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659596369;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ExEtxHMeVEdV8bG+hyv5znpbqanF/kL14mBYzm730MI=;
+        b=KvaJG2fMx4mDJ0HUlkHDSpevIPET9ZFnaBd5b9N7Vt4VN3m0kQhB0ziQUiEkD6wJABkpuH
+        x8iq42368YQaQzLcM0NaQPGeBgnqOu8Y8i2hDBRqqKtM/3Tog61wv+LpFcG3EVFCQY4URf
+        GkYJvDUJPXNM8GibtKCRn4hqTYlX2WQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-280-0h9aE7qTPPGMH1cFA7sA5g-1; Thu, 04 Aug 2022 02:59:28 -0400
+X-MC-Unique: 0h9aE7qTPPGMH1cFA7sA5g-1
+Received: by mail-ed1-f70.google.com with SMTP id i5-20020a05640242c500b0043e50334109so2229958edc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 23:59:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=GuVM7gKhQND8I7y9IPoXxEMzzZslmNdwtV7SuQsxHVU=;
-        b=vYP980Dk5uarFU1Xnn9QqwB83LLOjwh2JcqcJohpkyy4aO3EXPiXPEYq+o8zcLYsJn
-         O7EakrpuGCR6wRSlllFPHtMJqkoAkKPt07HN4iFYjmc6dRORP+/kA4vNVI/VhNoPpF6Y
-         tfYrDKEmoNw4L64Wiq8ZZJZzxcSKXbOVvNjilaTdFx33SkeSidDrHnYq/FYJTaIkMPI2
-         1EoHWuEQCrilbmvrzTc79mGX5V2XR4M98vn8fFo+o01GAweunK3TUMwEufWH53g59Ja8
-         d+phiHrAcwEUdjN6rCzFabkbq/5mjH8QjRPHJg4X+CBQ+W6jdmJ6AY3bRZ0Af7fk/iXn
-         nSnQ==
-X-Gm-Message-State: ACgBeo3/q+ZJBgkneuUgWcxFKrHpcKPPUsC3C7CDLEoSatgmFpGX8khs
-        ZsyEBRAbIHr9DmGBCsrWnTRGPQ==
-X-Google-Smtp-Source: AA6agR6ZOn1TFy9F+PIK9rHzzfYE08TOonKZG4SmOvcqohSoJiFZYK2oZdcceyGjmbwgEvc+Q/ZE5w==
-X-Received: by 2002:a63:5353:0:b0:419:f140:2dae with SMTP id t19-20020a635353000000b00419f1402daemr503806pgl.526.1659596128000;
-        Wed, 03 Aug 2022 23:55:28 -0700 (PDT)
-Received: from MacBook-Pro.local.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id f1-20020a655501000000b0041975999455sm353120pgr.75.2022.08.03.23.55.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Aug 2022 23:55:27 -0700 (PDT)
-From:   lizhe.67@bytedance.com
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        lizefan.x@bytedance.com, yuanzhu@bytedance.com,
-        lizhe.67@bytedance.com
-Subject: [RFC] page_ext: move up page_ext_init() to catch early page allocation if DEFERRED_STRUCT_PAGE_INIT is n
-Date:   Thu,  4 Aug 2022 14:55:15 +0800
-Message-Id: <20220804065515.85794-1-lizhe.67@bytedance.com>
-X-Mailer: git-send-email 2.32.0
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ExEtxHMeVEdV8bG+hyv5znpbqanF/kL14mBYzm730MI=;
+        b=GT1TBQYCIzFBv4YT1WyTt4pQl8vzJO+HGTjEoPYU3noumP1qUSx+zcJGox83iiPgVI
+         y/OZpheyYfMKjJH4sbNYAG6Nkyr4YUG5IlpAj2MicFdFx9Cdk3EKjPf9WVLlNj4MPXDy
+         uifn3/xn1EBp3AXLi8Yj2yFJi8HOFMv83LBU7hrJLpwTBJ68Y8r8L176XODMwB179GCZ
+         eETcq5DJHX0mbm5hvd1JxP5UAZ6JGxHWFb8WpEhcgnERe0aZHELoQIG/Ki61z0wam4+L
+         MOQVo7Vt+U3CkUvXwm5e/KTn9/8QvOrnfDR3mlu87JF7Dk8sPuO1wCFsq6vL/teVkgp4
+         nEJg==
+X-Gm-Message-State: ACgBeo3gAXDkrqi/JrYoPnlxEpPMBbnLWqeMuirfdhYDkRHVcsiB7Sx6
+        Z1FnmLByYUPBPCz6c3U9CeYl5c+ovjU0EQpLExFZzsWvcsPJoctsIDMUXZn3hFAvjDk1xGaWuVo
+        xUzjwWuRf1BGUaxdOALK1PaFs
+X-Received: by 2002:a17:906:7952:b0:730:6ab7:6655 with SMTP id l18-20020a170906795200b007306ab76655mr360577ejo.171.1659596367225;
+        Wed, 03 Aug 2022 23:59:27 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7Ik1DuQerRmV01wlFYMNwdnqCD+oKxuFKA0C8LkP/PgPoBMCDxqmCixUtgsIrJfFVs/lJMKQ==
+X-Received: by 2002:a17:906:7952:b0:730:6ab7:6655 with SMTP id l18-20020a170906795200b007306ab76655mr360560ejo.171.1659596366980;
+        Wed, 03 Aug 2022 23:59:26 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
+        by smtp.gmail.com with ESMTPSA id u1-20020a1709061da100b0072b2ffc662esm167ejh.156.2022.08.03.23.59.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 23:59:26 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 08:59:23 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next] vsock: Reschedule connect_work for
+ O_NONBLOCK connect() requests
+Message-ID: <20220804065923.66bor7cyxwk2bwsf@sgarzare-redhat>
+References: <20220804020925.32167-1-yepeilin.cs@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220804020925.32167-1-yepeilin.cs@gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Zhe <lizhe.67@bytedance.com>
+On Wed, Aug 03, 2022 at 07:09:25PM -0700, Peilin Ye wrote:
+>From: Peilin Ye <peilin.ye@bytedance.com>
+>
+>An O_NONBLOCK vsock_connect() request may try to reschedule
+>@connect_work.  Consider the following vsock_connect() requests:
+>
+>  1. The 1st, non-blocking request schedules @connect_work, which will
+>     expire after, say, 200 jiffies.  Socket state is now SS_CONNECTING;
+>
+>  2. Later, the 2nd, blocking request gets interrupted by a signal after
+>     5 jiffies while waiting for the connection to be established.
+>     Socket state is back to SS_UNCONNECTED, and @connect_work will
+>     expire after 100 jiffies;
+>
+>  3. Now, the 3rd, non-blocking request tries to schedule @connect_work
+>     again, but @connect_work has already been scheduled, and will
+>     expire in, say, 50 jiffies.
+>
+>In this scenario, currently this 3rd request simply decreases the sock
+>reference count and returns.  Instead, let it reschedules @connect_work
+>and resets the timeout back to @connect_timeout.
+>
+>Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+>---
+>Hi all,
+>
+>This patch is RFC because it bases on Stefano's WIP fix [1] for a bug 
+>[2]
+>reported by syzbot, and it won't apply on current net-next.  I think it
+>solves a separate issue.
 
-In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
-we call page_ext_init() after page_alloc_init_late() to avoid some panic
-problem. It seems that we cannot track early page allocations in current
-kernel even if page structure has been initialized early.
+Nice, this is better!
 
-This patch move up page_ext_init() to catch early page allocations when
-DEFERRED_STRUCT_PAGE_INIT is n. After this patch, we only need to turn
-DEFERRED_STRUCT_PAGE_INIT to n then we are able to analyze the early page
-allocations. This is useful especially when we find that the free memory
-value is not the same right after different kernel booting.
+Feel free to include my patch in this (inclunding also the Fixes tag and 
+maybe senidng to syzbot and including its tag as well).
 
-Signed-off-by: Li Zhe <lizhe.67@bytedance.com>
----
- include/linux/page_ext.h | 28 ++++++++++++++++++++++++++--
- init/main.c              |  7 +++++--
- mm/page_ext.c            |  2 +-
- 3 files changed, 32 insertions(+), 5 deletions(-)
+The last thing I was trying to figure out before sending the patch was 
+whether to set sock->state = SS_UNCONNECTED in vsock_connect_timeout(). 
 
-diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
-index fabb2e1e087f..82ebca63779c 100644
---- a/include/linux/page_ext.h
-+++ b/include/linux/page_ext.h
-@@ -43,14 +43,34 @@ extern void pgdat_page_ext_init(struct pglist_data *pgdat);
- static inline void page_ext_init_flatmem(void)
- {
- }
--extern void page_ext_init(void);
- static inline void page_ext_init_flatmem_late(void)
- {
- }
-+extern void _page_ext_init(void);
-+#ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-+static inline void page_ext_init_early(void)
-+{
-+}
-+static inline void page_ext_init_late(void)
-+{
-+	_page_ext_init();
-+}
-+#else
-+static inline void page_ext_init_early(void)
-+{
-+	_page_ext_init();
-+}
-+static inline void page_ext_init_late(void)
-+{
-+}
-+#endif /* CONFIG_DEFERRED_STRUCT_PAGE_INIT */
- #else
- extern void page_ext_init_flatmem(void);
- extern void page_ext_init_flatmem_late(void);
--static inline void page_ext_init(void)
-+static inline void page_ext_init_early(void)
-+{
-+}
-+static inline void page_ext_init_late(void)
- {
- }
- #endif
-@@ -80,6 +100,10 @@ static inline void page_ext_init(void)
- {
- }
- 
-+static inline void page_ext_init_late(void)
-+{
-+}
-+
- static inline void page_ext_init_flatmem_late(void)
- {
- }
-diff --git a/init/main.c b/init/main.c
-index 91642a4e69be..7f9533ba527d 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -845,6 +845,7 @@ static void __init mm_init(void)
- 	 * slab is ready so that stack_depot_init() works properly
- 	 */
- 	page_ext_init_flatmem_late();
-+	page_ext_init_early();
- 	kmemleak_init();
- 	pgtable_init();
- 	debug_objects_mem_init();
-@@ -1605,8 +1606,10 @@ static noinline void __init kernel_init_freeable(void)
- 
- 	padata_init();
- 	page_alloc_init_late();
--	/* Initialize page ext after all struct pages are initialized. */
--	page_ext_init();
-+	/* Initialize page ext after all struct pages are initialized if
-+	 * CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled
-+	 */
-+	page_ext_init_late();
- 
- 	do_basic_setup();
- 
-diff --git a/mm/page_ext.c b/mm/page_ext.c
-index 3dc715d7ac29..50419e7349cb 100644
---- a/mm/page_ext.c
-+++ b/mm/page_ext.c
-@@ -378,7 +378,7 @@ static int __meminit page_ext_callback(struct notifier_block *self,
- 	return notifier_from_errno(ret);
- }
- 
--void __init page_ext_init(void)
-+void __init _page_ext_init(void)
- {
- 	unsigned long pfn;
- 	int nid;
--- 
-2.20.1
+I think we should do that, otherwise a subsequent to connect() with 
+O_NONBLOCK set would keep returning -EALREADY, even though the timeout 
+has expired.
+
+What do you think?
+
+I don't think it changes anything for the bug raised by sysbot, so it 
+could be a separate patch.
+
+Thanks,
+Stefano
+
+>
+>Please advise, thanks!
+>Peilin Ye
+>
+>[1] https://gitlab.com/sgarzarella/linux/-/commit/2d0f0b9cbbb30d58fdcbca7c1a857fd8f3110d61
+>[2] https://syzkaller.appspot.com/bug?id=cd9103dc63346d26acbbdbf5c6ba9bd74e48c860
+>
+> net/vmw_vsock/af_vsock.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index 194d22291d8b..417e4ad17c03 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1395,7 +1395,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+> 			/* If the timeout function is already scheduled, ungrab
+> 			 * the socket refcount to not leave it unbalanced.
+> 			 */
+>-			if (!schedule_delayed_work(&vsk->connect_work, timeout))
+>+			if (mod_delayed_work(system_wq, &vsk->connect_work, timeout))
+> 				sock_put(sk);
+>
+> 			/* Skip ahead to preserve error code set above. */
+>-- 
+>2.20.1
+>
 

@@ -2,135 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CB758A2FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1B558A30F
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239700AbiHDWDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 18:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S239881AbiHDWGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 18:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiHDWDP (ORCPT
+        with ESMTP id S236637AbiHDWG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 18:03:15 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F129BDEBA
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:03:14 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id h188so841556oia.13
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=A3KaqbTDvr6yI86EPzA1l0NOPWv07KWx997g85QsDx4=;
-        b=V06sSFt2ksPjM8k6wnSbaG2QkPaVwvcAPAKnSzq34sTv9ksxh2OqhTuqg8SpivF9Y0
-         BeAYJPw9WS7SWCrlAS2ZuZhlUV0Va814LRQgaD8u4FmAed6qJn5lA7YVe7jiuQtzViV2
-         U2pdwnl+QBpBXtgGdP1BnbBo3Ok4S5SQTNkLc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=A3KaqbTDvr6yI86EPzA1l0NOPWv07KWx997g85QsDx4=;
-        b=nQtWSEBD9LYuGnsRmcxMmYHua/57BDyb/DzIjHNEPXlLkaufUqrUp0dHXpLRFgrhTz
-         ftzetZzafcC1LTWW3gjeqtp/CSe9dIgG9sDMBfb+ri10H/gVgzU9vGRy0NZ7/KPp4FA8
-         8K+FnYFnGZPiLR1ZgIwFaKcFhtK9VHe90R6xoxGSoMQ2eABisXWFooMnNYn3iYhpfuA7
-         Eojjp9Gr8Wr9N6IFn86uUNdtjJNYyOHy7LrVcxNxee54nGT94NeLAp0RQfOSLJ9fPMKg
-         qpuvrvlQ5CrZeDRjS7csXfkY87m2H0Y2iMJOOmkmtSqb8Po+ny2jNSGwlNHmfTcdAsad
-         7Bdw==
-X-Gm-Message-State: ACgBeo3+/KGstFtp8yUi/DB3n8Up3X9+5Bmts3Kxt2GNgrU5PXSRL+jU
-        Ef6X6IonQNW8k4lMyBwXk+we1jHu5WZaRw==
-X-Google-Smtp-Source: AA6agR5ZCtL3IkfxdFw2tj5QBLkjoNUFXf9hxfv/I4IiSLMKBTeWUorGlgIdUTwXCnr2T5Yvi7zYOQ==
-X-Received: by 2002:aca:2217:0:b0:33a:e056:dc76 with SMTP id b23-20020aca2217000000b0033ae056dc76mr1696058oic.128.1659650594266;
-        Thu, 04 Aug 2022 15:03:14 -0700 (PDT)
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com. [209.85.160.46])
-        by smtp.gmail.com with ESMTPSA id 6-20020a9d0686000000b0061c7ec80898sm349711otx.23.2022.08.04.15.03.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 15:03:14 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-10cf9f5b500so1081884fac.2
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:03:14 -0700 (PDT)
-X-Received: by 2002:a05:6870:b4a1:b0:10e:50b8:50aa with SMTP id
- y33-20020a056870b4a100b0010e50b850aamr1952047oap.174.1659650171298; Thu, 04
- Aug 2022 14:56:11 -0700 (PDT)
+        Thu, 4 Aug 2022 18:06:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EFA286FB;
+        Thu,  4 Aug 2022 15:06:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33679B82757;
+        Thu,  4 Aug 2022 22:06:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 912BDC433D6;
+        Thu,  4 Aug 2022 22:06:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659650786;
+        bh=oPo+trFJwGzdnE753WffpO/1jwPCCYWeSZJO0oqEqaA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NcBNpvjQO4/Ba3ZoxMKk9AdLkBatj56K2n1wPO6zomZqV4AZDU6bq5rqpISraScot
+         uKxeJnjtNFapCSqQSw3OKOWl4oOdCUCrQsD1IdrYPzyMbCVZTlWg3bowSmcdvbizpk
+         2wOEv3ebaASWRrlZBHnrTJXmnsrTmwblr5m7yP6g3vcMBDyxNeoRFqO7Nr7uYAET2E
+         bOGM4vyTASTSoGGYkQQvXQk7Z4I0mH9oxyrLDgMAgfKgFS/6BayLTaU5ZesEJzaepB
+         TOTt7Rm1kP8g9xRoFCp621d7aQiHNWL0xqZqzBUB3w+bb0D1JPB59N3QOFRaeHbo0U
+         7stLSHcamX1PQ==
+Date:   Thu, 4 Aug 2022 15:06:23 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, mbenes@suse.cz
+Subject: Re: [PATCH] Revert "x86/unwind/orc: Don't skip the first frame for
+ inactive tasks"
+Message-ID: <20220804220623.a2s7ucblryudm63m@treble>
+References: <20220727031506.59322-1-chenzhongjin@huawei.com>
+ <20220804045518.bfhe3rxhpkxzn4hk@treble>
+ <5ee1dfb5-fa70-d412-43c2-3e90ee057eec@huawei.com>
 MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
- <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
- <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
- <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
- <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
- <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
- <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com> <YusZ8gD/LjiAXadR@kernel.org>
-In-Reply-To: <YusZ8gD/LjiAXadR@kernel.org>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Thu, 4 Aug 2022 14:55:35 -0700
-X-Gmail-Original-Message-ID: <CAE=gft6LaNZLTK72n_Z7an0VA1FxxFFgGk6rmUF_Jvf=JinG3A@mail.gmail.com>
-Message-ID: <CAE=gft6LaNZLTK72n_Z7an0VA1FxxFFgGk6rmUF_Jvf=JinG3A@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Encrypted Hibernation
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Matthew Garrett <mgarrett@aurora.tech>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5ee1dfb5-fa70-d412-43c2-3e90ee057eec@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 5:59 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Tue, Aug 02, 2022 at 11:36:43AM -0700, Matthew Garrett wrote:
-> > On Mon, Aug 1, 2022 at 3:33 PM Evan Green <evgreen@chromium.org> wrote:
-> >
-> > > One more bump here, as we'd really love to get encrypted hibernation
-> > > to a form upstream would accept if at all possible. We were
-> > > considering landing this in our Chrome OS tree for now, then coming
-> > > back in a couple months with a "we've been baking this ourselves and
-> > > it's going so great, oooh yeah". I'm not sure if upstream would find
-> > > that compelling or not. But in any case, some guidance towards making
-> > > this more upstream friendly would be well appreciated.
-> > >
-> > > One thing I realized in attempting to pick this myself is that the
-> > > trusted key blob format has moved to ASN.1. So I should really move
-> > > the creation ticket to the new ASN.1 format (if I can figure out the
-> > > right OID for that piece), which would allow me to drop a lot of the
-> > > ugly stuff in tpm2_unpack_blob(). Maybe if I get no other comments
-> > > I'll work on that and resend.
-> >
-> > I've been revamping my TPM-backed verified hibernation implementation
-> > based on this work, so I'd definitely be enthusiastic about it being
-> > mergeable.
->
-> BTW, is it tested with QEMU + swtpm?
+On Thu, Aug 04, 2022 at 03:27:39PM +0800, Chen Zhongjin wrote:
+> I believe disassemble show_stack in vmlinux and if we have:
+> 
+>     push   %rbp
+> 
+>     mov    %rsp,%rbp
+> 
+>     ... (no regs pushed to stack)
+> 
+>     callq  <show_trace_log_lvl>
+> 
+> This can be reproduced.
 
-For myself, so far I've been testing on a recent Intel Chromebook. The
-H1 (aka cr50) security chip on modern chromebooks implements a subset
-[1] of TPM2.0, and is exposed through the standard TPM APIs in the
-kernel. I can make sure to test on Qemu as well, is there anything in
-particular I should look out for?
+Weird, that's what I have.  This is GCC 12.1.
 
--Evan
+ffffffff81056de0 <show_stack>:
+ffffffff81056de0:	e8 0b 43 05 00       	call   ffffffff810ab0f0 <__fentry__>
+ffffffff81056de5:	55                   	push   %rbp
+ffffffff81056de6:	48 83 05 b2 0f c9 02 01 	addq   $0x1,0x2c90fb2(%rip)        # ffffffff83ce7da0 <__gcov0.show_stack>
+ffffffff81056dee:	48 89 e5             	mov    %rsp,%rbp
+ffffffff81056df1:	48 85 ff             	test   %rdi,%rdi
+ffffffff81056df4:	74 41                	je     ffffffff81056e37 <show_stack+0x57>
+ffffffff81056df6:	48 85 f6             	test   %rsi,%rsi
+ffffffff81056df9:	0f 85 c2 24 15 01    	jne    ffffffff821a92c1 <show_stack.cold+0xd>
+ffffffff81056dff:	65 48 8b 04 25 c0 bd 01 00 	mov    %gs:0x1bdc0,%rax
+ffffffff81056e08:	48 39 c7             	cmp    %rax,%rdi
+ffffffff81056e0b:	0f 85 a3 24 15 01    	jne    ffffffff821a92b4 <show_stack.cold>
+ffffffff81056e11:	48 83 05 af 0f c9 02 01 	addq   $0x1,0x2c90faf(%rip)        # ffffffff83ce7dc8 <__gcov0.show_stack+0x28>
+ffffffff81056e19:	48 89 ee             	mov    %rbp,%rsi
+ffffffff81056e1c:	48 89 d1             	mov    %rdx,%rcx
+ffffffff81056e1f:	48 89 f2             	mov    %rsi,%rdx
+ffffffff81056e22:	31 f6                	xor    %esi,%esi
+ffffffff81056e24:	e8 8e 20 15 01       	call   ffffffff821a8eb7 <show_trace_log_lvl>
+ffffffff81056e29:	48 83 05 9f 0f c9 02 01 	addq   $0x1,0x2c90f9f(%rip)        # ffffffff83ce7dd0 <__gcov0.show_stack+0x30>
+ffffffff81056e31:	5d                   	pop    %rbp
+ffffffff81056e32:	e9 49 b2 5a 01       	jmp    ffffffff82602080 <__x86_return_thunk>
+ffffffff81056e37:	48 83 05 69 0f c9 02 01 	addq   $0x1,0x2c90f69(%rip)        # ffffffff83ce7da8 <__gcov0.show_stack+0x8>
+ffffffff81056e3f:	65 48 8b 3c 25 c0 bd 01 00 	mov    %gs:0x1bdc0,%rdi
+ffffffff81056e48:	eb ac                	jmp    ffffffff81056df6 <show_stack+0x16>
+ffffffff81056e4a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-[1] https://chromium-review.googlesource.com/c/chromiumos/third_party/tpm2/+/3373466
-
->
-> BR, Jarkko
+-- 
+Josh

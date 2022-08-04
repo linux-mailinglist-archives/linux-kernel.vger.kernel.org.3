@@ -2,179 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3B5589ED9
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3CF589EDB
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237307AbiHDPmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
+        id S238585AbiHDPmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiHDPmP (ORCPT
+        with ESMTP id S231617AbiHDPmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:42:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F201F252BF;
-        Thu,  4 Aug 2022 08:42:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D3D761313;
-        Thu,  4 Aug 2022 15:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBD07C433D7;
-        Thu,  4 Aug 2022 15:42:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659627733;
-        bh=Qq7NlW7jpulKxTpi/vp74Z763atoHCYyI0gLVo/h6WY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=c+mC/Ptmoqk64R5Onm2m28MP+eI0EVeW1BfEOk8Svmh8A9ywPO/rUtM1izNZnDu1i
-         95dmQp5l2wX65dfoq6c+kTevxOqknkLbUsb+SbsUaaaRa9gw7Pn/P36+3iDFlCmpdk
-         crAg6BWojkQu7YFqo1An79FtMjGLTU54lf+IC6bOcE0viT426MlP5kP6MdPBjekM3p
-         dPkDxvp2kW6Uxw9OIkk6mm0TLbjUrfGZu7QzDStOOcbnIZsDXxc7sr5NrBqA7T5nJ0
-         kIFZ9KprId96f64GYc+W4yw4EM6Nmlb7jQxeWlSZxlqfrgBAa9TZE2LxAULbiNgprH
-         j8F2Pad7oIqYg==
-Received: by mail-vk1-f180.google.com with SMTP id c22so7221889vko.7;
-        Thu, 04 Aug 2022 08:42:13 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0kB+MH2G+xK/QaToWWC2mokGHUy5QvKnyDtrg0KUe382wkUpr9
-        PfNE9ky47BUUsES2xhb0HBm7GY1lVhwB06XQdg==
-X-Google-Smtp-Source: AA6agR75oE+Wp/3SrMZokWfZBcG1lnqwFNBtXZ4BbBn6bhDGle+sjw5dsgaNvBf0d2CqY58Cs/qb1BDYtXNqctNdUIo=
-X-Received: by 2002:a1f:2dc2:0:b0:377:84fa:dbe5 with SMTP id
- t185-20020a1f2dc2000000b0037784fadbe5mr1192421vkt.15.1659627732775; Thu, 04
- Aug 2022 08:42:12 -0700 (PDT)
+        Thu, 4 Aug 2022 11:42:40 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF5F252BF
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659627759; x=1691163759;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/sO3bK65pKVZ1iDdvnWnZimmDSlRaWOseNM6XOn2moM=;
+  b=HsmRd3cb+9wqjv+csa6jV7u/5IQCxcTsgO9UaeKiThj5Lw08kthkXeJ4
+   OV1NPFcJ16DWyByhbzMSJWHK1xyHHbnfPMu0tCkr/1NSIUYYd7Sxw3V8V
+   p9qodtbq//f+DDN8GBO0YYmTX/+Uf43nGvPR6oCUgi83HPI00LletoM0t
+   ZTsFPYANISq8WOkP+f49kOZGMFObcASvblITUJbI8eqSIW/RuBHjwnGeY
+   C+cMc7ajbty9XRU7TtLJ23jjY1NavlXd/SKPYFrbqQNSwLN9lZoPmPtiv
+   AuTHU5UgSGbs0AKYdyeNdawOwEc5R0fSEE1+EX6KC2QFkxT3scbT1OCea
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="287529391"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="287529391"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 08:42:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="579119349"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 04 Aug 2022 08:42:26 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJczR-000IaF-1N;
+        Thu, 04 Aug 2022 15:42:25 +0000
+Date:   Thu, 4 Aug 2022 23:42:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: drivers/clocksource/timer-ti-dm.c:1039:34: warning: unused variable
+ 'omap_timer_match'
+Message-ID: <202208042325.gDk2PAQf-lkp@intel.com>
 MIME-Version: 1.0
-References: <YuJXMHoT4ijUxnRb@hovoldconsulting.com>
-In-Reply-To: <YuJXMHoT4ijUxnRb@hovoldconsulting.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 4 Aug 2022 09:42:01 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJJdEFspgJkJnC4jmeq+qaQjkRQU2-WTRmYVOzWrnKifQ@mail.gmail.com>
-Message-ID: <CAL_JsqJJdEFspgJkJnC4jmeq+qaQjkRQU2-WTRmYVOzWrnKifQ@mail.gmail.com>
-Subject: Re: Second-source devices and interrupt-mapping race
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux Input <linux-input@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 3:30 AM Johan Hovold <johan@kernel.org> wrote:
->
-> Hi Marc, Rob and Krzysztof,
->
-> When adding support for the new Lenovo Thinkpad X13s laptop, we realised
-> that it comes with two different touchpad controllers.
->
-> To enable some early adopters to use the alternate touchpad, I tried to
-> enable both nodes in the devicetree and have the i2c-hid driver bind to
-> the one that is actually present.
->
-> This turned out to be racy due to the hid driver in question enabling
-> async probing so that the populated and non-populated nodes can be
-> probed in parallel, which in turn lead to some interesting findings.
->
-> Specifically, it seems like the interrupt-domain mapping code is racy in
-> that it can return two different mappings for the same hwirq, and when
-> the hid driver enables one of them, this may end up looking like
-> spurious interrupts for the other mapping:
->
-> [  +0.014042] i2c_hid_of 0-002c: i2c_device_probe
-> [  +0.000001] i2c_hid_of 0-0015: i2c_device_probe
-> [  +0.000025] i2c_hid_of 0-002c: i2c_device_probe - irq mapped (166)
-> [  +0.000013] i2c_hid_of 0-0015: i2c_device_probe - irq mapped (167)
-> [  +0.000051] i2c_hid_of 0-002c: supply vddl not found, using dummy regulator
-> [  +0.000056] i2c_hid_of 0-0015: supply vddl not found, using dummy regulator
-> [  +0.000016] i2c_hid_of 0-002c: HID probe called for i2c 0x2c
-> [  +0.000374] i2c_hid_of 0-0015: HID probe called for i2c 0x15
-> ...
-> [  +0.000180] i2c_hid_of 0-002c: Requesting IRQ: 166
-> [  +0.000045] irq 167, desc: (____ptrval____), depth: 1, count: 0, unhandled: 0
-> [  +0.000014] ->handle_irq():  (____ptrval____), handle_bad_irq+0x0/0x220
-> [  +0.000015] ->irq_data.chip(): (____ptrval____), msm_gpio_irq_chip+0x0/0x108
-> [  +0.000011] ->action(): 0000000000000000
-> [  +0.000006]    IRQ_NOPROBE set
->
-> The interrupt is eventually disabled and the populated device fails to
-> probe. Note that this only happens intermittently.
->
-> This second-source example could obviously be dismissed as something
-> which is simply not supported (the boot firmware should have made sure
-> only the populated node was enabled), but what if there were actually
-> two separate devices sharing an interrupt and that now end up with two
-> different virq?
->
-> Async probing has been around for a while now and needs to be supported,
-> even if the platform bus doesn't use it (yet).
->
-> TL;DR:
->
-> 1. Marc, does the irq mapping code need to be serialised to handle the
-> valid case of two devices sharing an interrupt being probed in parallel?
-> It may not be a common setup, but correctness first?
->
-> I've just posted a patch that should address this here:
->
->         https://lore.kernel.org/r/20220728092710.21190-1-johan+linaro@kernel.org
->
->
-> 2. Rob, Krzysztof, I assume that handling second-source devices by
-> enabling multiple variants in the devicetree can not be considered
-> correct?
+Hi Tony,
 
-Probably not, but there's not really any defined policy there. What
-that looks like in DT depends on the component. Displays are a common
-one and don't lend well to populating multiple in the DT. For those,
-the only solution so far is we require the 2nd source to be compatible
-with the default/1st. I think that was QCom chromebooks...
+First bad commit (maybe != root cause):
 
-The easy answer is firmware should deal with figuring out what's
-actually there and update the DT accordingly.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b44f2fd87919b5ae6e1756d4c7ba2cbba22238e1
+commit: ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567 clocksource/drivers/timer-ti-dm: Make timer selectable for ARCH_K3
+date:   8 days ago
+config: hexagon-randconfig-r011-20220804 (https://download.01.org/0day-ci/archive/20220804/202208042325.gDk2PAQf-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clocksource/
 
-> What about the related case of simply non-populated devices (e.g. laptop
-> variants without a touchscreen)?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Shouldn't that just be a case of the driver not screaming if there's no device?
+All warnings (new ones prefixed by >>):
 
-> Note that we have at least two cases of "second-source" nodes in mainline
-> ("rtc" and "trackpad", respectively):
->
->         85a9efcd4e29 ("ARM: mvebu: add DT support for Seagate NAS 2 and 4-Bay")
->         689b937bedde ("arm64: dts: mediatek: add mt8173 elm and hana board")
->
-> and that, for example, the i2c-hid driver explicitly supports
-> non-populated devices:
->
->         b3a81b6c4fc6 ("HID: i2c-hid: check if device is there before really probing")
->
-> and the commit message indicates that this is something that Chromebooks
-> rely on.
->
-> For the X13s, I'm not sure how we would go about to tell the variants
-> apart (the ACPI tables that Windows use include both touchpads and an
-> optional touchscreen). In the end, the boot firmware might need to
-> resort to a similar kind of probing if we don't allow the kernel to do
-> it.
->
-> Finally, note that while disabling async probing for "second-source"
-> nodes (e.g. if we could mark them as requiring that) would take care of
-> the irq-mapping race, we'd still currently also need to move any
-> pinconfig handles to the parent bus node (as is also done in one of the
-> in-tree examples above) to suppress the corresponding pinctrl errors in
-> case the populated device is probed and bound first:
->
-> [  +0.010217] sc8280xp-tlmm f100000.pinctrl: pin GPIO_182 already requested by 0-0015; cannot claim for 0-002c
+>> drivers/clocksource/timer-ti-dm.c:1039:34: warning: unused variable 'omap_timer_match' [-Wunused-const-variable]
+   static const struct of_device_id omap_timer_match[] = {
+                                    ^
+   1 warning generated.
 
-If the config is the same for both we could suppress that warning. If
-not the same, seems a bit dangerous to configure the wrong config...
 
-Rob
+vim +/omap_timer_match +1039 drivers/clocksource/timer-ti-dm.c
+
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1038  
+9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14 @1039  static const struct of_device_id omap_timer_match[] = {
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1040  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1041  		.compatible = "ti,omap2420-timer",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1042  	},
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1043  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1044  		.compatible = "ti,omap3430-timer",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1045  		.data = &omap3plus_pdata,
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1046  	},
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1047  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1048  		.compatible = "ti,omap4430-timer",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1049  		.data = &omap3plus_pdata,
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1050  	},
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1051  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1052  		.compatible = "ti,omap5430-timer",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1053  		.data = &omap3plus_pdata,
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1054  	},
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1055  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1056  		.compatible = "ti,am335x-timer",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1057  		.data = &omap3plus_pdata,
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1058  	},
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1059  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1060  		.compatible = "ti,am335x-timer-1ms",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1061  		.data = &omap3plus_pdata,
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1062  	},
+8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1063  	{
+8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1064  		.compatible = "ti,dm816-timer",
+8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1065  		.data = &omap3plus_pdata,
+8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1066  	},
+9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1067  	{},
+9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1068  };
+9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1069  MODULE_DEVICE_TABLE(of, omap_timer_match);
+9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1070  
+
+:::::: The code at line 1039 was first introduced by commit
+:::::: 9725f4451a9ccd159b1d13f63e05896cd9bce07d ARM: OMAP: Add DT support for timer driver
+
+:::::: TO: Jon Hunter <jon-hunter@ti.com>
+:::::: CC: Jon Hunter <jon-hunter@ti.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,128 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714C55895D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 04:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A645895D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 04:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237128AbiHDCKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 22:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S238806AbiHDCKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 22:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238815AbiHDCKH (ORCPT
+        with ESMTP id S229986AbiHDCKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 22:10:07 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF995FAC6;
-        Wed,  3 Aug 2022 19:10:06 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id q3so14247896qvp.5;
-        Wed, 03 Aug 2022 19:10:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ryAwNGrW/zNWRU/n0Vrh+3u0JLChoMJ0BiRRlgoBG8M=;
-        b=L26ghPJl+d8Avfsqq+BtKVAjZDCcpALpykn5pFBHYmsj0YlEZYBsxtlV11AyEgQzZi
-         7Gjd+xTvQ0lqwVYK90hwaC5L+SQkqRR8Bj5bhH4RcATGq0lfhLq/of5EOf82W95hZ4b1
-         bACjfDn7s7dzj8VO9ruFWTM8FFbzAfFXjJPfEpg4JkFkGiTu39HzS2oMTL+JlrVXVtS9
-         YHLbEaF3hWV4vQfG5m3iZpeBa3RGju+zzfg/qXe4SEDyxPBFAXhSDyGCBkEaSd8xvEgL
-         x0PCWigGZEHiBGcWyqzvak2xfJjiUl8MakvGRTMiTfMQv1I2K81msHYlvlPVYyLD3mMq
-         pZ2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ryAwNGrW/zNWRU/n0Vrh+3u0JLChoMJ0BiRRlgoBG8M=;
-        b=UnMFxv8T30xyeF5WgDnvZ+K0H31WxP/FCQSbZ4cXOEpj/86Ny8Wf7EiLQq0fYvJu8V
-         uMM9fKEyPnEZxoZZaxhkKa2wAf7IW75/3VtFiv7FOBXxnzC8ajdn597KIRO8gHxuW1Mz
-         PgDnwEnxnUkHUq45MIqNO3Xds2yErzSTBH6lU0w+cXvN2Dq8X2dbPudNvthXVJJ+QJUG
-         m0ia/ejxqWhT4cOwbl3Tk2VZeLGKPOwrly11a3hIT75BEdy6OQ5YFCs4kOQqSjSbrn0k
-         YWiFN4heR9sn5RXlceQLKONW8STID9oKaJG8mgxvfR7EqOb8cVdCkPclu7xE9NeLKzk5
-         GByg==
-X-Gm-Message-State: ACgBeo1VMjJbIjHPHVu2e4r7R34Pe2I2yDL2LHAV+mPXa2PhWM/00lbP
-        jq6WSNMjnJALd2NQo7/UriorXdlOUA==
-X-Google-Smtp-Source: AA6agR7el9tcxV4nWCFBnB41rmuBjV6aa8JwA2QBa29vugGEEkt9HD5/q6v/fBlXXnFiaD3YPTmVNw==
-X-Received: by 2002:a05:6214:226d:b0:476:564c:ee73 with SMTP id gs13-20020a056214226d00b00476564cee73mr18411247qvb.77.1659579005172;
-        Wed, 03 Aug 2022 19:10:05 -0700 (PDT)
-Received: from bytedance.bytedance.net ([74.199.177.246])
-        by smtp.gmail.com with ESMTPSA id l3-20020a05620a28c300b006b61b2cb1d2sm14004792qkp.46.2022.08.03.19.10.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 19:10:04 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH RFC net-next] vsock: Reschedule connect_work for O_NONBLOCK connect() requests
-Date:   Wed,  3 Aug 2022 19:09:25 -0700
-Message-Id: <20220804020925.32167-1-yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 3 Aug 2022 22:10:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDCD5F9A8;
+        Wed,  3 Aug 2022 19:10:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7ED38B82398;
+        Thu,  4 Aug 2022 02:09:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F19C43143;
+        Thu,  4 Aug 2022 02:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659578998;
+        bh=fUku56VQ2QJ/iS0vukKD33SzPJmyHQRWdFJILjyWgdA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XbBugSmWJvnJ/F0sEnNDkbqI7NQrMy3jdjQbJ80MHgMUwTr0vRtcP+B1CaiS4WxBu
+         Hx7mgaJJGqh0U3+ZPHOu2StmBipPmhV/VjxZuZsTQXMEoqEXUX9N5AsEJ8nqZcugsz
+         Jd7wcLFvhxueZzeRljkup0+sWkQ6KQ82weBGGAsJMMRYGCkikTniYAJZyiLbKgrATH
+         EZ5k/+29P6nAnXF3PaeT/RnnMsEUldxKAL0Wx6VnduGe54+JdRLTB1xS5xXwx4bANV
+         f6rLKoY3O+QCR9sCYeMDxL0RROQi4c+gyGJ1KTT3FrwetDUcitEATybAbh1QbzE+lJ
+         qYR28iqSO/ANg==
+Received: by mail-oi1-f180.google.com with SMTP id u190so1683322oie.3;
+        Wed, 03 Aug 2022 19:09:58 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3hRWzCn1MKBZjCNaXku9friZJixcH0cTVhjSoDptxq+peVYgRB
+        f6mPmS2aVuqDEg/BnB4lhT+aI6CdPyKBY8SvuZg=
+X-Google-Smtp-Source: AA6agR4+z8qNh9gQH5GYsp/nQ60cgGpjBe6+LMaLKEYQwTGENsFDC/lucJe1wCE0kICaI6NGXcudgjmukq14S+LsnGo=
+X-Received: by 2002:a05:6808:1a26:b0:33a:76f6:fc19 with SMTP id
+ bk38-20020a0568081a2600b0033a76f6fc19mr2862221oib.19.1659578997421; Wed, 03
+ Aug 2022 19:09:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220613013051.1741434-1-guoren@kernel.org> <20220613142947.GA4110@lst.de>
+In-Reply-To: <20220613142947.GA4110@lst.de>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 4 Aug 2022 10:09:44 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQtnMoeb62-63Ou8y4DBrdYM7iztdtfLuXX9U0LTWUHLA@mail.gmail.com>
+Message-ID: <CAJF2gTQtnMoeb62-63Ou8y4DBrdYM7iztdtfLuXX9U0LTWUHLA@mail.gmail.com>
+Subject: Re: [PATCH] uapi: Fixup strace compile error
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+On Mon, Jun 13, 2022 at 10:29 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> The change looks fine, but the commit log could use some work, please
+> move the notes from the back to the front and make them a standalone
+> commit log and just drop the rest.
 
-An O_NONBLOCK vsock_connect() request may try to reschedule
-@connect_work.  Consider the following vsock_connect() requests:
+Okay.
 
-  1. The 1st, non-blocking request schedules @connect_work, which will
-     expire after, say, 200 jiffies.  Socket state is now SS_CONNECTING;
-
-  2. Later, the 2nd, blocking request gets interrupted by a signal after
-     5 jiffies while waiting for the connection to be established.
-     Socket state is back to SS_UNCONNECTED, and @connect_work will
-     expire after 100 jiffies;
-
-  3. Now, the 3rd, non-blocking request tries to schedule @connect_work
-     again, but @connect_work has already been scheduled, and will
-     expire in, say, 50 jiffies.
-
-In this scenario, currently this 3rd request simply decreases the sock
-reference count and returns.  Instead, let it reschedules @connect_work
-and resets the timeout back to @connect_timeout.
-
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
-Hi all,
-
-This patch is RFC because it bases on Stefano's WIP fix [1] for a bug [2]
-reported by syzbot, and it won't apply on current net-next.  I think it
-solves a separate issue.
-
-Please advise, thanks!
-Peilin Ye
-
-[1] https://gitlab.com/sgarzarella/linux/-/commit/2d0f0b9cbbb30d58fdcbca7c1a857fd8f3110d61
-[2] https://syzkaller.appspot.com/bug?id=cd9103dc63346d26acbbdbf5c6ba9bd74e48c860
-
- net/vmw_vsock/af_vsock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 194d22291d8b..417e4ad17c03 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1395,7 +1395,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
- 			/* If the timeout function is already scheduled, ungrab
- 			 * the socket refcount to not leave it unbalanced.
- 			 */
--			if (!schedule_delayed_work(&vsk->connect_work, timeout))
-+			if (mod_delayed_work(system_wq, &vsk->connect_work, timeout))
- 				sock_put(sk);
- 
- 			/* Skip ahead to preserve error code set above. */
 -- 
-2.20.1
-
+Best Regards
+ Guo Ren

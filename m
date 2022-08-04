@@ -2,330 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF8D589748
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A52058974D
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 07:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238637AbiHDFLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 01:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
+        id S237555AbiHDFT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 01:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiHDFLo (ORCPT
+        with ESMTP id S230124AbiHDFTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 01:11:44 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C6729C90;
-        Wed,  3 Aug 2022 22:11:43 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id a89so23902900edf.5;
-        Wed, 03 Aug 2022 22:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VyZa5TJB9oiw7FauEZNXxwEhTJ8c38FlpshZL71Yq5g=;
-        b=I9+dszNyPQlVgxbzYD9E2EbYroZLkzVgaJEsEZVhu6OEzvgfaU9ERbqABInGimYesm
-         O5MKciSgFuzqBQQ4PgHqQOUV4x6PILpEx1qhlawKFdmFIn61gxBuRrSCLFvHPAM2DhLG
-         dMgeSAItCtuDTSuk2DbeH6OFLKpha0jprJXeEG/TWi9xNUvV8ai0npDukeZcniUiXY5X
-         eBuDJATq1iC/x6W6OORZMBmc28DiF772r5PZ4pI84Cb19NiNLjCiEBI+5E7QtRP8f3Rf
-         Tn6/Cbi6nsRH8OgDwbsn8jYL0GQMg1znnsjKV3JozifJzR80icg0b5g9N2+VfokU9iWq
-         ycwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VyZa5TJB9oiw7FauEZNXxwEhTJ8c38FlpshZL71Yq5g=;
-        b=xUg6cCpOU0kUcOK+905SySJ+p/TVOxLfGh8CmaBfdyDQHebJ6COs7pXcWmy0qKFU7G
-         gejxLLre0lrlYT1v638mtFpmj3OU8CJ+9ZERN9sxFuk5BzIbJ8c7tfHUjd892uAfpqoF
-         es707HqwEIq4T77QgS5JVJwgLdeNGbjNtZN84xJARcMh2nReaagUgLxfl9dVag/7veUW
-         GnmHgh3Db2x3J+tHzdCMJrPRJJiUbDvpqtuYAzKVRO0lPAZPLhpuh+SNK9hKFZTy4Ihz
-         l6coeJ3HTCQJhjOmso/15O8KML/7mgF1i9LYvZsApWkF5Od5LBhd3PVjPCLucnORI+np
-         SNFg==
-X-Gm-Message-State: ACgBeo0cMIVJu2AYSAMRTOeyGzZwEzodwKiH3hFDRFR1F+q2Gm3lM4Vn
-        HmF6aKMcmPt9Kwj6oPwAVuc=
-X-Google-Smtp-Source: AA6agR6uxLpA8e87m8/yg5mswH8hlsBA8l67gyBlhaV3Vi88H08mWYRGyheqjz6+QFEmbSo0t0R/4g==
-X-Received: by 2002:a05:6402:3506:b0:43d:6a88:12cd with SMTP id b6-20020a056402350600b0043d6a8812cdmr197170edd.211.1659589901556;
-        Wed, 03 Aug 2022 22:11:41 -0700 (PDT)
-Received: from jernej-laptop.localnet (194-152-27-124.dynamic.telemach.net. [194.152.27.124])
-        by smtp.gmail.com with ESMTPSA id g26-20020a170906539a00b0073080c22898sm4263400ejo.15.2022.08.03.22.11.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 22:11:41 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Rob Herring <robh@kernel.org>, Samuel Holland <samuel@sholland.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 3/4] regulator: dt-bindings: Add Allwinner D1 LDOs
-Date:   Thu, 04 Aug 2022 07:11:39 +0200
-Message-ID: <5588658.DvuYhMxLoT@jernej-laptop>
-In-Reply-To: <918a83a7-1b8d-04b1-4f7b-386fc800e653@sholland.org>
-References: <20220802053213.3645-1-samuel@sholland.org> <20220802150452.GA86158-robh@kernel.org> <918a83a7-1b8d-04b1-4f7b-386fc800e653@sholland.org>
+        Thu, 4 Aug 2022 01:19:24 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481603ED58
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 22:19:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659590360; x=1691126360;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=qTXg76Xk7C7UMD2yV3rIhJoi0cq734Wu0jvaFWh/TwY=;
+  b=bXaKiZxXEKP1shhHu/J6WKi5YtHPsRnXnkzRCXQOiwXFQLVmF2GpgL+2
+   /7QtqJb0sqvUZMrYoyHyMBW1czKrtPura0/vTfzpMlgCIuN1ZOOQK8a7g
+   eynS/bqcLFXKty/ZbxpncRvkFQmAqhWhlKBMvQLV1wQTZAS1Pwxe1DdkS
+   86v6sXIPJa8vFgso3LzbOwEXGmbuZWP3pOmJSRh1vHy8JtAC5KMD1C9qT
+   7oeAbFGiwYpuRs0TolIP64s5uq4pVkE/w+udUhavvF14L1m+LlQVtoyCF
+   UTYGT3X3JG0ACPUSU36+IgYudE9lTCI2YXEzIbCoQR9AB99XmGXMGnYqz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="315714065"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="315714065"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 22:19:19 -0700
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="553584426"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 22:19:15 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Jagdish Gediya <jvgediya@linux.ibm.com>
+Subject: Re: [PATCH v11 1/8] mm/demotion: Add support for explicit memory tiers
+References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
+        <20220728190436.858458-2-aneesh.kumar@linux.ibm.com>
+        <62e890da7f784_577a029473@dwillia2-xfh.jf.intel.com.notmuch>
+        <874jyvjpw9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <62e89c9addcc_62c2a29443@dwillia2-xfh.jf.intel.com.notmuch>
+        <87zggni13h.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <4a96a3ff-9cb7-4e71-3e9f-95fbd99f5201@linux.ibm.com>
+        <87r11wj07a.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <30212141-9f72-6727-ce7b-74623c25552c@linux.ibm.com>
+Date:   Thu, 04 Aug 2022 13:19:11 +0800
+In-Reply-To: <30212141-9f72-6727-ce7b-74623c25552c@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Thu, 4 Aug 2022 10:19:42 +0530")
+Message-ID: <87iln8io1c.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne =C4=8Detrtek, 04. avgust 2022 ob 05:03:07 CEST je Samuel Holland napisa=
-l(a):
-> Hi Rob,
->=20
-> Thanks again for your review.
->=20
-> On 8/2/22 10:04 AM, Rob Herring wrote:
-> > On Tue, Aug 02, 2022 at 12:32:12AM -0500, Samuel Holland wrote:
-> >> The Allwinner D1 SoC contains two pairs of in-package LDOs. One pair is
-> >> for general purpose use. LDOA generally powers the board's 1.8 V rail.
-> >> LDOB generally powers the in-package DRAM, where applicable.
-> >>=20
-> >> The other pair of LDOs powers the analog power domains inside the SoC,
-> >> including the audio codec, thermal sensor, and ADCs. These LDOs require
-> >> a 0.9 V bandgap voltage reference. The calibration value for the volta=
-ge
-> >> reference is stored in an eFuse, accessed via an NVMEM cell.
-> >>=20
-> >> Neither LDO control register is in its own MMIO range; instead, each
-> >> regulator device relies on a regmap/syscon exported by its parent.
-> >>=20
-> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> >> ---
-> >>=20
-> >> Changes in v2:
-> >>  - Remove syscon property from bindings
-> >>  - Update binding examples to fix warnings and provide context
-> >> =20
-> >>  .../allwinner,sun20i-d1-analog-ldos.yaml      | 65 +++++++++++++++++++
-> >>  .../allwinner,sun20i-d1-system-ldos.yaml      | 57 ++++++++++++++++
-> >>  2 files changed, 122 insertions(+)
-> >>  create mode 100644
-> >>  Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-analo=
-g-
-> >>  ldos.yaml create mode 100644
-> >>  Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-syste=
-m-
-> >>  ldos.yaml>>=20
-> >> diff --git
-> >> a/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-anal=
-og
-> >> -ldos.yaml
-> >> b/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-anal=
-og
-> >> -ldos.yaml new file mode 100644
-> >> index 000000000000..19c984ef4e53
-> >> --- /dev/null
-> >> +++
-> >> b/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-anal=
-og
-> >> -ldos.yaml @@ -0,0 +1,65 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id:
-> >> http://devicetree.org/schemas/regulator/allwinner,sun20i-d1-analog-ldo=
-s.
-> >> yaml# +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Allwinner D1 Analog LDOs
-> >> +
-> >> +description:
-> >> +  Allwinner D1 contains a set of LDOs which are designed to supply
-> >> analog power +  inside and outside the SoC. They are controlled by a
-> >> register within the audio +  codec MMIO space, but which is not part of
-> >> the audio codec clock/reset domain. +
-> >> +maintainers:
-> >> +  - Samuel Holland <samuel@sholland.org>
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - allwinner,sun20i-d1-analog-ldos
-> >> +
-> >> +  nvmem-cells:
-> >> +    items:
-> >> +      - description: NVMEM cell for the calibrated bandgap reference
-> >> trim value +
-> >> +  nvmem-cell-names:
-> >> +    items:
-> >> +      - const: bg_trim
-> >> +
-> >> +patternProperties:
-> >=20
-> >> +  "^(aldo|hpldo)$":
-> > '^(a|hp)ldo$'
-> >=20
-> >> +    type: object
-> >> +    $ref: regulator.yaml#
-> >>=20
-> >        unevaluatedProperties: false
-> >>=20
-> >> +
-> >> +required:
-> >> +  - compatible
-> >> +  - nvmem-cells
-> >> +  - nvmem-cell-names
-> >> +
-> >> +unevaluatedProperties: false
-> >> +
-> >> +examples:
-> >> +  - |
-> >> +    audio-codec@2030000 {
-> >> +        compatible =3D "simple-mfd", "syscon";
-> >=20
-> > Needs a specific compatible. Obviously there's some other functionality
-> > here if this is an 'audio-codec'.
->=20
-> I am not yet ready to submit the binding or driver for the audio codec, a=
-s I
-> still need to work out the details for jack detection (and some other
-> issues). If I added the specific audio codec compatible now, without the
-> properties required for the sound driver, that would create backward
-> compatibility issues, right?
->=20
-> My intention is to add the specific compatible along with the ASoC suppor=
-t.
->=20
-> > 'simple-mfd' also means the child nodes have zero dependence on the
-> > parent node and its resources.
->=20
-> That is correct. The regulators have zero dependencies on the audio codec
-> resources (clocks/resets/etc.). The _only_ relationship is the overlapping
-> address of the MMIO register.
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 
-LDO registers are at the end of analogue codec MMIO space, right? We can=20
-easily split that to separate device, like it's been done for A20 timer &=20
-watchdog.
+> On 8/4/22 6:26 AM, Huang, Ying wrote:
+>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>> 
+>>> On 8/2/22 12:27 PM, Huang, Ying wrote:
+>>>> Dan Williams <dan.j.williams@intel.com> writes:
+>>>>
+>>>>> Huang, Ying wrote:
+>>>>>> Dan Williams <dan.j.williams@intel.com> writes:
+>>>>>>
+>>>>>>> Aneesh Kumar K.V wrote:
+>>>>>>>> In the current kernel, memory tiers are defined implicitly via a demotion path
+>>>>>>>> relationship between NUMA nodes, which is created during the kernel
+>>>>>>>> initialization and updated when a NUMA node is hot-added or hot-removed. The
+>>>>>>>> current implementation puts all nodes with CPU into the highest tier, and builds
+>>>>>>>> the tier hierarchy tier-by-tier by establishing the per-node demotion targets
+>>>>>>>> based on the distances between nodes.
+>>>>>>>>
+>>>>>>>> This current memory tier kernel implementation needs to be improved for several
+>>>>>>>> important use cases,
+>>>>>>>>
+>>>>>>>> The current tier initialization code always initializes each memory-only NUMA
+>>>>>>>> node into a lower tier. But a memory-only NUMA node may have a high performance
+>>>>>>>> memory device (e.g. a DRAM-backed memory-only node on a virtual machine) that
+>>>>>>>> should be put into a higher tier.
+>>>>>>>>
+>>>>>>>> The current tier hierarchy always puts CPU nodes into the top tier. But on a
+>>>>>>>> system with HBM or GPU devices, the memory-only NUMA nodes mapping these devices
+>>>>>>>> should be in the top tier, and DRAM nodes with CPUs are better to be placed into
+>>>>>>>> the next lower tier.
+>>>>>>>>
+>>>>>>>> With current kernel higher tier node can only be demoted to nodes with shortest
+>>>>>>>> distance on the next lower tier as defined by the demotion path, not any other
+>>>>>>>> node from any lower tier. This strict, demotion order does not work in all use
+>>>>>>>> cases (e.g. some use cases may want to allow cross-socket demotion to another
+>>>>>>>> node in the same demotion tier as a fallback when the preferred demotion node is
+>>>>>>>> out of space), This demotion order is also inconsistent with the page allocation
+>>>>>>>> fallback order when all the nodes in a higher tier are out of space: The page
+>>>>>>>> allocation can fall back to any node from any lower tier, whereas the demotion
+>>>>>>>> order doesn't allow that.
+>>>>>>>>
+>>>>>>>> This patch series address the above by defining memory tiers explicitly.
+>>>>>>>>
+>>>>>>>> Linux kernel presents memory devices as NUMA nodes and each memory device is of
+>>>>>>>> a specific type. The memory type of a device is represented by its abstract
+>>>>>>>> distance. A memory tier corresponds to a range of abstract distance. This allows
+>>>>>>>> for classifying memory devices with a specific performance range into a memory
+>>>>>>>> tier.
+>>>>>>>>
+>>>>>>>> This patch configures the range/chunk size to be 128. The default DRAM
+>>>>>>>> abstract distance is 512. We can have 4 memory tiers below the default DRAM
+>>>>>>>> abstract distance which cover the range 0 - 127, 127 - 255, 256- 383, 384 - 511.
+>>>>>>>> Slower memory devices like persistent memory will have abstract distance below
+>>>>>>>> the default DRAM level and hence will be placed in these 4 lower tiers.
+>>>>>>>>
+>>>>>>>> A kernel parameter is provided to override the default memory tier.
+>>>>>>>>
+>>>>>>>> Link: https://lore.kernel.org/linux-mm/CAAPL-u9Wv+nH1VOZTj=9p9S70Y3Qz3+63EkqncRDdHfubsrjfw@mail.gmail.com
+>>>>>>>> Link: https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
+>>>>>>>>
+>>>>>>>> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+>>>>>>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>>>>>>>> ---
+>>>>>>>>  include/linux/memory-tiers.h |  17 ++++++
+>>>>>>>>  mm/Makefile                  |   1 +
+>>>>>>>>  mm/memory-tiers.c            | 102 +++++++++++++++++++++++++++++++++++
+>>>>>>>>  3 files changed, 120 insertions(+)
+>>>>>>>>  create mode 100644 include/linux/memory-tiers.h
+>>>>>>>>  create mode 100644 mm/memory-tiers.c
+>>>>>>>>
+>>>>>>>> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+>>>>>>>> new file mode 100644
+>>>>>>>> index 000000000000..8d7884b7a3f0
+>>>>>>>> --- /dev/null
+>>>>>>>> +++ b/include/linux/memory-tiers.h
+>>>>>>>> @@ -0,0 +1,17 @@
+>>>>>>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>>>>>>> +#ifndef _LINUX_MEMORY_TIERS_H
+>>>>>>>> +#define _LINUX_MEMORY_TIERS_H
+>>>>>>>> +
+>>>>>>>> +/*
+>>>>>>>> + * Each tier cover a abstrace distance chunk size of 128
+>>>>>>>> + */
+>>>>>>>> +#define MEMTIER_CHUNK_BITS	7
+>>>>>>>> +#define MEMTIER_CHUNK_SIZE	(1 << MEMTIER_CHUNK_BITS)
+>>>>>>>> +/*
+>>>>>>>> + * For now let's have 4 memory tier below default DRAM tier.
+>>>>>>>> + */
+>>>>>>>> +#define MEMTIER_ADISTANCE_DRAM	(1 << (MEMTIER_CHUNK_BITS + 2))
+>>>>>>>> +/* leave one tier below this slow pmem */
+>>>>>>>> +#define MEMTIER_ADISTANCE_PMEM	(1 << MEMTIER_CHUNK_BITS)
+>>>>>>>
+>>>>>>> Why is memory type encoded in these values? There is no reason to
+>>>>>>> believe that PMEM is of a lower performance tier than DRAM. Consider
+>>>>>>> high performance energy backed DRAM that makes it "PMEM", consider CXL
+>>>>>>> attached DRAM over a switch topology and constrained links that makes it
+>>>>>>> a lower performance tier than locally attached DRAM. The names should be
+>>>>>>> associated with tiers that indicate their usage. Something like HOT,
+>>>>>>> GENERAL, and COLD. Where, for example, HOT is low capacity high
+>>>>>>> performance compared to the general purpose pool, and COLD is high
+>>>>>>> capacity low performance intended to offload the general purpose tier.
+>>>>>>>
+>>>>>>> It does not need to be exactly that ontology, but please try to not
+>>>>>>> encode policy meaning behind memory types. There has been explicit
+>>>>>>> effort to avoid that to date because types are fraught for declaring
+>>>>>>> relative performance characteristics, and the relative performance
+>>>>>>> changes based on what memory types are assembled in a given system.
+>>>>>>
+>>>>>> Yes.  MEMTIER_ADISTANCE_PMEM is something over simplified.  That is only
+>>>>>> used in this very first version to make it as simple as possible.  
+>>>>>
+>>>>> I am failing to see the simplicity of using names that convey a
+>>>>> performance contract that are invalid depending on the system.
+>>>>>
+>>>>>> I think we can come up with something better in the later version.
+>>>>>> For example, identify the abstract distance of a PMEM device based on
+>>>>>> HMAT, etc. 
+>>>>>
+>>>>> Memory tiering has nothing to do with persistence why is PMEM in the
+>>>>> name at all?
+>>>>>
+>>>>>>  And even in this first version, we should put MEMTIER_ADISTANCE_PMEM
+>>>>>>  in dax/kmem.c.  Because it's just for that specific type of memory
+>>>>>>  used now, not for all PMEM.
+>>>>>
+>>>>> dax/kmem.c also handles HBM and "soft reserved" memory in general. There
+>>>>> is also nothing PMEM specific about the device-dax subsystem.
+>>>>
+>>>> Ah... I see the issue here.  For the systems in our hand, dax/kmem.c is
+>>>> used to online PMEM only.  Even the "soft reserved" memory is used for
+>>>> PMEM or simulating PMEM too.  So to make the code as simple as possible,
+>>>> we treat all memory devices onlined by dax/kmem as PMEM in the first
+>>>> version.  And plan to support more memory types in the future versions.
+>>>>
+>>>> But from your above words, our assumption are wrong here.  dax/kmem.c
+>>>> can online HBM and other memory devices already.  If so, how do we
+>>>> distinguish between them and how to get the performance character of
+>>>> these devices?  We can start with SLIT?
+>>>>
+>>>
+>>> We would let low level driver register memory_dev_types for the NUMA nodes
+>>> that will be mapped to these devices. ie, a papr_scm, ACPI NFIT or CXL
+>>> can register different memory_dev_type based on device tree, HMAT or CDAT. 
+>> 
+>> I didn't find ACPI NFIT can provide any performance information, just
+>> whether it's non-volatile.  HMAT or CDAT should help here, but it's not
+>> available always.  For now, what we have is just SLIT at least for quite
+>> some machines.
+>> 
+>
+>
+> The lower level driver that is creating the nvdimm regions can assign a
+> memory type to the numa node which it associates with the region. For now,
+> drivers like papr_scm do that on ppc64. When it associates a numa node to
+> nvdimm regions, it can query every detail available (device tree
+> in case of papr_scm, can be HMAT/SLIT or CDAT) to associate the NUMA node
+> to a memory type. 
 
-Best regards,
-Jernej
+If we have only one information source, it's OK to create all memory
+type with this source.  But if we have multiple sources, we need a
+mechanism to coordinate among these sources.  It gives us good
+flexibility to create memory types in driver.  Because drivers can
+use any information sources.
 
->=20
-> >> +        reg =3D <0x2030000 0x1000>;
-> >> +
-> >> +        regulators {
-> >> +            compatible =3D "allwinner,sun20i-d1-analog-ldos";
-> >=20
-> > Is there a defined set of registers for these regulators? If so, put
-> > them into 'reg'.
->=20
-> What do you suggest for 'ranges' in the parent device? I ask because the
-> SRAM/system controller binding requires an empty 'ranges' property.
->=20
-> With empty 'ranges', the child has to compute the relative address for use
-> with the parent's regmap, but maybe that is okay?
->=20
-> >> +            nvmem-cells =3D <&bg_trim>;
-> >> +            nvmem-cell-names =3D "bg_trim";
-> >> +
-> >> +            reg_aldo: aldo {
-> >> +                regulator-min-microvolt =3D <1800000>;
-> >> +                regulator-max-microvolt =3D <1800000>;
-> >> +            };
-> >> +
-> >> +            reg_hpldo: hpldo {
-> >> +                regulator-min-microvolt =3D <1800000>;
-> >> +                regulator-max-microvolt =3D <1800000>;
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +...
-> >> diff --git
-> >> a/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-syst=
-em
-> >> -ldos.yaml
-> >> b/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-syst=
-em
-> >> -ldos.yaml new file mode 100644
-> >> index 000000000000..c95030a827d6
-> >> --- /dev/null
-> >> +++
-> >> b/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-syst=
-em
-> >> -ldos.yaml @@ -0,0 +1,57 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id:
-> >> http://devicetree.org/schemas/regulator/allwinner,sun20i-d1-system-ldo=
-s.
-> >> yaml# +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Allwinner D1 System LDOs
-> >> +
-> >> +description:
-> >> +  Allwinner D1 contains a pair of general-purpose LDOs which are
-> >> designed to +  supply power inside and outside the SoC. They are
-> >> controlled by a register +  within the system control MMIO space.
-> >> +
-> >> +maintainers:
-> >> +  - Samuel Holland <samuel@sholland.org>
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - allwinner,sun20i-d1-system-ldos
-> >> +
-> >> +patternProperties:
-> >=20
-> >> +  "^(ldoa|ldob)$":
-> > '^ldo[ab]$'
-> >=20
-> > Any reason the naming is not consistent with 'ldo' as the prefix or
-> > suffix?
->=20
-> All four names match the pin names from the SoC datasheet.
->=20
-> >> +    type: object
-> >> +    $ref: regulator.yaml#
-> >>=20
-> >        unevaluatedProperties: false
->=20
-> I will fix these for v3.
->=20
-> Regards,
-> Samuel
->=20
-> >> +
-> >> +required:
-> >> +  - compatible
-> >> +
-> >> +unevaluatedProperties: false
-> >> +
-> >> +examples:
-> >> +  - |
-> >> +    syscon@3000000 {
-> >> +        compatible =3D "allwinner,sun20i-d1-system-control";
-> >> +        reg =3D <0x3000000 0x1000>;
-> >> +        ranges;
-> >> +        #address-cells =3D <1>;
-> >> +        #size-cells =3D <1>;
-> >> +
-> >> +        regulators {
-> >> +            compatible =3D "allwinner,sun20i-d1-system-ldos";
-> >> +
-> >> +            reg_ldoa: ldoa {
-> >> +                regulator-min-microvolt =3D <1800000>;
-> >> +                regulator-max-microvolt =3D <1800000>;
-> >> +            };
-> >> +
-> >> +            reg_ldob: ldob {
-> >> +                regulator-name =3D "vcc-dram";
-> >> +                regulator-min-microvolt =3D <1500000>;
-> >> +                regulator-max-microvolt =3D <1500000>;
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> >> +...
+Best Regards,
+Huang, Ying
 
-
-
-
+>> I prefer to create memory_dev_type in high level driver like dax/kmem.
+>> And it may query low level driver like SLIT, HMAT, CDAT, etc for more
+>> information based on availability etc.
+>> 
+>> Best Regards,
+>> Huang, Ying

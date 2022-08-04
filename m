@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7F958A3FD
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 01:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6103458A402
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 01:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240225AbiHDXoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 19:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
+        id S240218AbiHDXug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 19:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233937AbiHDXox (ORCPT
+        with ESMTP id S230266AbiHDXue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 19:44:53 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3B070E55;
-        Thu,  4 Aug 2022 16:44:52 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id b7so767810qvq.2;
-        Thu, 04 Aug 2022 16:44:52 -0700 (PDT)
+        Thu, 4 Aug 2022 19:50:34 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D1D13E09
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 16:50:31 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id b11-20020aa7810b000000b0052aeb125cb3so399571pfi.11
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 16:50:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HVkR14o42hi6hJ+phzjown/t9tdn1qa9dzhn9JkAgYE=;
-        b=FUPBygbQUj/wdWVItvPxp+dnHVAGcLFC/JxkbBQs+3cZoWgmaCxQKmzffYZLmcQnV+
-         6EsQGI7fvIAnuFhhox7dtWTgwYdlChzNl1MAwCvHQE97b/YiRxEZMtvxuPqp+62JwORZ
-         GhgOWMepuqTBL9OCkHEGU5AbEMFeNp/dTBiGos5+dXLso5bPexe22yphqS8xzAPuWML8
-         6PGw7RVkDeU53Md4N8kfOhWvWxsXb4JFDlyIF3f2PGCtWbuhPzSYCL0IePbjaIwjMzXM
-         2leMfvDjyFC096vb26dys74XEezet50ye4/YrZZGDMn1Dc+OPZ0gkixG2xWy1u9PRA3s
-         fviA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:reply-to:from:to:cc;
+        bh=oy6h1dP3SvYtRyYZ4ufO2gPmn5HL77YkRDjgUecCeHs=;
+        b=gKNxN/3/a8zeFxraeErk9leW17wtygqv43Lsb1/i0DwwN4W3bCHGYn9S6fOaUbkAZI
+         JgaCrlUOUpzp7A3mL7RHHXiqgflW31pv4/n9075W1jw6ioZsTYYkvHXCIQvzsh2kwAfa
+         0+poQHr2JsnhfnwON8CcuDSqxO7cTGfbVXTfcSFL9JwC6u0vjWEbfSR56OJxBpqLman6
+         uJ84/FqgAAnbS5hlm0ApFrNKn/33njsdP6Fz+NuQCSD5g/afKxTDAW4FerIB0JfRKPhW
+         7ktE7f+y7nC0j/hMfTa/OKnmyhfGvQbDv1lV8lVLfKKDBbiLOsOA+u7VAb36jgq4UWsV
+         UEvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HVkR14o42hi6hJ+phzjown/t9tdn1qa9dzhn9JkAgYE=;
-        b=i46VcGw8w91iLi4lvRQPG6i26BbTLDCwFh9DxyKoUAP5/QJKVRyvj6sFiQ88XaSnYS
-         9cNMrV2d7Jv+eReOUn7BI5qvm0J8XUwtfyAIL4iRLebO38gK5h0ezNRHDU6sAOy1sgM1
-         2kMXjzP0pA7t2K32WtZkWvHUgWsgWpb8naaxdh1APbbRPPAlHKQT2tS3jypgBXs/2qVq
-         fQnVCmEJlIyYUNw4TEXXMVE6W6678743pLVvz4JhCEm8Ue/5gRey7mFMIqoJDSVemoSU
-         HZrxyvbeqB/jVzYAb0PCINhq0x1w+AbX5uokYCHLfZ77THnjOISM7lK0RqLg6nzxQFPY
-         lm4w==
-X-Gm-Message-State: ACgBeo3HbDZjZG54YIz1iXQ/zuLADgum5Ov7y2h3TE9iWVb/LSgsDH50
-        +y5BID5ZwMT+MLfrjGBCVg==
-X-Google-Smtp-Source: AA6agR46IBnjSSMjNG8eh7tClgbT4ZO9RhxTMgsNzmRC8MWOIN/iv0pnXymVkhOmG2qUgWy6nn1jtQ==
-X-Received: by 2002:ad4:4ea9:0:b0:474:7389:8593 with SMTP id ed9-20020ad44ea9000000b0047473898593mr3820374qvb.94.1659656692012;
-        Thu, 04 Aug 2022 16:44:52 -0700 (PDT)
-Received: from bytedance (ec2-52-52-7-82.us-west-1.compute.amazonaws.com. [52.52.7.82])
-        by smtp.gmail.com with ESMTPSA id e13-20020a05622a110d00b00339163a06fcsm1721967qty.6.2022.08.04.16.44.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 16:44:51 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 16:44:47 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC net-next] vsock: Reschedule connect_work for
- O_NONBLOCK connect() requests
-Message-ID: <20220804234447.GA2294@bytedance>
-References: <20220804020925.32167-1-yepeilin.cs@gmail.com>
- <20220804065923.66bor7cyxwk2bwsf@sgarzare-redhat>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804065923.66bor7cyxwk2bwsf@sgarzare-redhat>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:mime-version:message-id:date:reply-to
+         :x-gm-message-state:from:to:cc;
+        bh=oy6h1dP3SvYtRyYZ4ufO2gPmn5HL77YkRDjgUecCeHs=;
+        b=2JWBnSVOugaG+/9zofsSP1uunrkL6Ob8tzmS3R6z0wmclG+A3rpkcgCm2tajwRbUZ/
+         nsmbVFp75BPRXv3PO5RkYHW9UjFNL3LXoSbfgXSen+T32INMB/eJ57strFyC7pE7U49Y
+         wedimorlCIZSnkG+1JsmLymn3uwgK8jBDuZa52yn/pssiKkYsfO3LT94b7/pwwFgMzAy
+         qrY298bhzwfqIJ8Jkss7Kr3QtcUIkuiLjDO/KHoTairG3V4xhjXViMDRArCI8x/KEZ6I
+         /inL1g2rSCpbyS4NRsFS+IyKKQgSENYUzzYkgdW13Oc6nF3eH63hGTovv/btSNIYyQMH
+         cIPQ==
+X-Gm-Message-State: ACgBeo0xS5Q7tZpEhnCGFwtc4y/bIHGFfCR0DIz2cahu2zzNn/eKe+ze
+        r/wPVQ4BKluqEzofvABAqFkCSi1GKLY=
+X-Google-Smtp-Source: AA6agR511SS21Ee6V1g4M7SEWOr+6FGj2uU4QiBlt0ii0pTgIG2XIwTe8wxu9CPu27tjXD+oyko18PLi2ps=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:350b:b0:1f0:23d9:57eb with SMTP id
+ ls11-20020a17090b350b00b001f023d957ebmr12545340pjb.17.1659657030897; Thu, 04
+ Aug 2022 16:50:30 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu,  4 Aug 2022 23:50:28 +0000
+Message-Id: <20220804235028.1766253-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH] KVM: x86: Bug the VM if an accelerated x2APIC trap occurs on
+ a "bad" reg
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,66 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefano,
+Bug the VM if retrieving the x2APIC MSR/register while processing an
+accelerated vAPIC trap VM-Exit fails.  In theory it's impossible for the
+lookup to fail as hardware has already validated the register, but bugs
+happen, and not checking the result of kvm_lapic_msr_read() would result
+in consuming the uninitialized "val" if a KVM or hardware bug occurs.
 
-On Thu, Aug 04, 2022 at 08:59:23AM +0200, Stefano Garzarella wrote:
-> The last thing I was trying to figure out before sending the patch was
-> whether to set sock->state = SS_UNCONNECTED in vsock_connect_timeout().
-> 
-> I think we should do that, otherwise a subsequent to connect() with
-> O_NONBLOCK set would keep returning -EALREADY, even though the timeout has
-> expired.
-> 
-> What do you think?
+Fixes: 1bd9dfec9fd4 ("KVM: x86: Do not block APIC write for non ICR registers")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/lapic.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Thanks for bringing this up, after thinking about sock->state, I have 3
-thoughts:
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index e2ce3556915e..9dda989a1cf0 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2284,10 +2284,12 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
+ 	struct kvm_lapic *apic = vcpu->arch.apic;
+ 	u64 val;
+ 
+-	if (apic_x2apic_mode(apic))
+-		kvm_lapic_msr_read(apic, offset, &val);
+-	else
++	if (apic_x2apic_mode(apic)) {
++		if (KVM_BUG_ON(kvm_lapic_msr_read(apic, offset, &val), vcpu->kvm))
++			return;
++	} else {
+ 		val = kvm_lapic_get_reg(apic, offset);
++	}
+ 
+ 	/*
+ 	 * ICR is a single 64-bit register when x2APIC is enabled.  For legacy
 
-1. I think the root cause of this memleak is, we keep @connect_work
-   pending, even after the 2nd, blocking request times out (or gets
-   interrupted) and sets sock->state back to SS_UNCONNECTED.
-
-   @connect_work is effectively no-op when sk->sk_state is
-   TCP_CLOS{E,ING} anyway, so why not we just cancel @connect_work when
-   blocking requests time out or get interrupted?  Something like:
-
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index f04abf662ec6..62628af84164 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1402,6 +1402,9 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
-                lock_sock(sk);
-
-                if (signal_pending(current)) {
-+                       if (cancel_delayed_work(&vsk->connect_work))
-+                               sock_put(sk);
-+
-                        err = sock_intr_errno(timeout);
-                        sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
-                        sock->state = SS_UNCONNECTED;
-@@ -1409,6 +1412,9 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
-                        vsock_remove_connected(vsk);
-                        goto out_wait;
-                } else if (timeout == 0) {
-+                       if (cancel_delayed_work(&vsk->connect_work))
-+                               sock_put(sk);
-+
-                        err = -ETIMEDOUT;
-                        sk->sk_state = TCP_CLOSE;
-                        sock->state = SS_UNCONNECTED;
-
-   Then no need to worry about rescheduling @connect_work, and the state
-   machine becomes more accurate.  What do you think?  I will ask syzbot
-   to test this.
-
-2. About your suggestion of setting sock->state = SS_UNCONNECTED in
-   vsock_connect_timeout(), I think it makes sense.  Are you going to
-   send a net-next patch for this?
-
-3. After a TCP_SYN_SENT sock receives VIRTIO_VSOCK_OP_RESPONSE in
-   virtio_transport_recv_connecting(), why don't we cancel @connect_work?
-   Am I missing something?
-
-Thanks,
-Peilin Ye
+base-commit: 93472b79715378a2386598d6632c654a2223267b
+-- 
+2.37.1.559.g78731f0fdb-goog
 

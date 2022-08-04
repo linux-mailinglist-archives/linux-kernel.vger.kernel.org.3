@@ -2,139 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E302F589A4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 12:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AA8589A55
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 12:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiHDKM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 06:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S237403AbiHDKPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 06:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiHDKMx (ORCPT
+        with ESMTP id S229469AbiHDKPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 06:12:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F191532DAA;
-        Thu,  4 Aug 2022 03:12:51 -0700 (PDT)
-Date:   Thu, 04 Aug 2022 10:12:48 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659607970;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tLSZPZSjoAeTGrgSN5RmR7EL5cAJ9diYkxxZcNWNL4s=;
-        b=O5+10C1hO6tN8OpUQDe3V/QvDkB32GSgqx/TNSjBWdHtKDAdi7ri6Fz0OgoZyIZZlqwk04
-        EDyWgDpFUawpCZuyAMyQtMDWO3PQYQDXF9/v54Jjw3Sf4IBNf8kfVnuEFuGebXTaA4G5Kc
-        aKBkeqg+vft3LddCQYkEy/f1F1XfAuI0vJroz8q1ll4LtS8IkyUyrUcbAgco7eduL/c/hd
-        BB1kmuk6IAL4/iUQgDlVWianKoszxp5AQTaT0RYZgF1jpQvlQ3oy3VQMVpTPhf8JzBtJAb
-        ug/cgupC2PYoi8bN3TJbhocJgDGmDU+UhzsudhjeG72/h23m5MpMBNPMwDeNzw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659607970;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tLSZPZSjoAeTGrgSN5RmR7EL5cAJ9diYkxxZcNWNL4s=;
-        b=VQAMonK1IeG501+VvO1wGyesc5mBrAC82ZCHzNPalzpLxmKOx1UNU67CohWLJovwiPyM69
-        iNUmKUOmvpt+L4Ag==
-From:   "tip-bot2 for Jason Wang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86: Fix various duplicate-word comment typos
-Cc:     Jason Wang <wangborong@cdjrlc.com>, Ingo Molnar <mingo@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220715044809.20572-1-wangborong@cdjrlc.com>
-References: <20220715044809.20572-1-wangborong@cdjrlc.com>
+        Thu, 4 Aug 2022 06:15:07 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FDF37F8C;
+        Thu,  4 Aug 2022 03:15:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659608105; x=1691144105;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XCvsOpbFvXVB0iV70v8x3JyHx/fBHTkYQUv4zcAVYmw=;
+  b=KbSXlB9uN0qyL3eRgQ+gC1QDWbH3mAlarB78V43heP/Oqlj4evLCm0xw
+   jrYv/v91+dkwB4UlcvOvcPmz2DRxlZQCArglp2cGu0SzIeTKyNyc2SA93
+   /yMtbqsTDGFvJqMzOvS4uOr6yiz/keZY59kIo3qH63ezigU2iRMD6ffeB
+   k=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 04 Aug 2022 03:15:05 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 03:15:05 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 4 Aug 2022 03:15:04 -0700
+Received: from [10.216.12.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 4 Aug 2022
+ 03:14:58 -0700
+Message-ID: <5507af1a-3548-8e08-be3f-42f59bcc2096@quicinc.com>
+Date:   Thu, 4 Aug 2022 15:44:55 +0530
 MIME-Version: 1.0
-Message-ID: <165960796851.15455.16926739892196439639.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/8] dt-bindings: remoteproc: qcom: adsp: Add compatible
+ name for SC7280
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <quic_plai@quicinc.com>,
+        <bgoswami@quicinc.com>, <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <quic_rohkumar@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        <devicetree@vger.kernel.org>
+References: <1659536480-5176-1-git-send-email-quic_srivasam@quicinc.com>
+ <1659536480-5176-3-git-send-email-quic_srivasam@quicinc.com>
+ <20220803204359.GA2586715-robh@kernel.org>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <20220803204359.GA2586715-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
 
-Commit-ID:     edf13ecbc8d68cc7462df9cae1f4a137df3b827c
-Gitweb:        https://git.kernel.org/tip/edf13ecbc8d68cc7462df9cae1f4a137df3b827c
-Author:        Jason Wang <wangborong@cdjrlc.com>
-AuthorDate:    Fri, 15 Jul 2022 12:48:09 +08:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Thu, 04 Aug 2022 12:08:10 +02:00
-
-x86: Fix various duplicate-word comment typos
-
-[ mingo: Consolidated 4 very similar patches into one, it's silly to spread this out. ]
-
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20220715044809.20572-1-wangborong@cdjrlc.com
----
- arch/x86/kernel/amd_gart_64.c | 2 +-
- arch/x86/kernel/aperture_64.c | 2 +-
- arch/x86/kvm/vmx/nested.c     | 2 +-
- arch/x86/platform/efi/efi.c   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_gart_64.c
-index 194d54e..19a0207 100644
---- a/arch/x86/kernel/amd_gart_64.c
-+++ b/arch/x86/kernel/amd_gart_64.c
-@@ -53,7 +53,7 @@ static u32 *iommu_gatt_base;		/* Remapping table */
-  * of only flushing when an mapping is reused. With it true the GART is
-  * flushed for every mapping. Problem is that doing the lazy flush seems
-  * to trigger bugs with some popular PCI cards, in particular 3ware (but
-- * has been also also seen with Qlogic at least).
-+ * has been also seen with Qlogic at least).
-  */
- static int iommu_fullflush = 1;
- 
-diff --git a/arch/x86/kernel/aperture_64.c b/arch/x86/kernel/aperture_64.c
-index 7a5630d..4feaa67 100644
---- a/arch/x86/kernel/aperture_64.c
-+++ b/arch/x86/kernel/aperture_64.c
-@@ -36,7 +36,7 @@
- /*
-  * Using 512M as goal, in case kexec will load kernel_big
-  * that will do the on-position decompress, and could overlap with
-- * with the gart aperture that is used.
-+ * the gart aperture that is used.
-  * Sequence:
-  * kernel_small
-  * ==> kexec (with kdump trigger path or gart still enabled)
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index ab135f9..f0ba7da 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -2560,7 +2560,7 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
- 	 * bits which we consider mandatory enabled.
- 	 * The CR0_READ_SHADOW is what L2 should have expected to read given
- 	 * the specifications by L1; It's not enough to take
--	 * vmcs12->cr0_read_shadow because on our cr0_guest_host_mask we we
-+	 * vmcs12->cr0_read_shadow because on our cr0_guest_host_mask we
- 	 * have more bits than L1 expected.
- 	 */
- 	vmx_set_cr0(vcpu, vmcs12->guest_cr0);
-diff --git a/arch/x86/platform/efi/efi.c b/arch/x86/platform/efi/efi.c
-index 1591d67..b6efd2b 100644
---- a/arch/x86/platform/efi/efi.c
-+++ b/arch/x86/platform/efi/efi.c
-@@ -192,7 +192,7 @@ static void __init do_add_efi_memmap(void)
- }
- 
- /*
-- * Given add_efi_memmap defaults to 0 and there there is no alternative
-+ * Given add_efi_memmap defaults to 0 and there is no alternative
-  * e820 mechanism for soft-reserved memory, import the full EFI memory
-  * map if soft reservations are present and enabled. Otherwise, the
-  * mechanism to disable the kernel's consideration of EFI_MEMORY_SP is
+On 8/4/2022 2:13 AM, Rob Herring wrote:
+Thanks for your time and valuable inputs Rob!!!
+> On Wed, Aug 03, 2022 at 07:51:14PM +0530, Srinivasa Rao Mandadapu wrote:
+>> Add compatible name and update max reg items for SC7280 base platforms.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> ---
+>>   .../devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml          | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
+>> index 9f11332..147996f 100644
+>> --- a/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
+>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
+>> @@ -17,11 +17,12 @@ properties:
+>>     compatible:
+>>       enum:
+>>         - qcom,sdm845-adsp-pil
+>> +      - qcom,sc7280-adsp-pil
+>>   
+>>     reg:
+>> -    maxItems: 1
+>> +    maxItems: 2
+> sdm845 has 2 entries too?
+No. There max items not changed.
+>
+>>       description:
+>> -      The base address and size of the qdsp6ss register
+>> +      The base address and size of the qdsp6ss register and mcc register
+> Better expressed as:
+>
+> minItems: 1
+> items:
+>    - description: qdsp6ss register
+>    - description: mcc register
+>
+> Though the descriptions could expand on what those registers are.
+>
+> Rob
+Okay. Will change accordingly and re spin the patches.

@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647D658A355
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE3F58A36B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240082AbiHDWlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 18:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
+        id S235459AbiHDWv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 18:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239408AbiHDWlC (ORCPT
+        with ESMTP id S230510AbiHDWvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 18:41:02 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007A525C64
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:41:00 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id c19-20020a17090ae11300b001f2f94ed5c6so6308860pjz.1
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:41:00 -0700 (PDT)
+        Thu, 4 Aug 2022 18:51:53 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9DE31238
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:51:52 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id j7so1370966wrh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=vDHjZ8yszXNqAT8oVMtZut5RsvFWrYQzXv0LVo98SfY=;
-        b=h42pxwa3xB/ENcIaxWfpk/OWlmx42M3Sm+YneiVTKr3d3KlVDh9gfH17Ck0Vfjo6Qw
-         ZEcLOs6fdJy9jK/UVJCghT0+NAc2nXRd/HxaYMACTCeMt4GcsUJp80qtDubvo+Ywsxp7
-         G2vXxCkEqgpCzPKtE8aKoZTO7vO/soj6nCz/SlBp30FPLcQzOpqaRe4L4gyJCM50MRwL
-         zrj3dhivb5ssVlIWw2dKALONwjEBkuOVFyqH0DmMmNXxSmVy4VdFMxiQbDARW5Exgrik
-         AoBL2Rf8OeDf+dkK7i83ozcMDccjsMgIheTVPSIj0UcugFnw4TidB0Gqy/GpdmUJN/rp
-         0H8Q==
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=pznRh7mSZnRSGOsJjKLdAY7waBRS/asCiUcfzryOWi0=;
+        b=0ebtnK/y24MmBsXTmBaxlpeTrQb9Xeuc98Q4ZuIFGK0LAQNxjJeDYG8k7e/RRLF6pC
+         E7r2FianE7MBL3q9LwyTsDnRtDqkrfI563ODr6oiy9AlouokuCH9J3vlTPc4poO/1oia
+         amJTk6uY4+kunwOCRELBa5s9GdiQrXDu3l2zmvVqXMwKRe+fA8pSS41Vj1v394J5u9jz
+         7GHTZxRxX54ltsTHaZwtu3cfXEz8gFqJKM7hJypVyJnyNmH7spGSHtx8W/wcyJK/nrLM
+         uyMPIs5E7HqjcY8uU8TQPO8eCk2iIaYzyFYghNfzDaHXyYOCk5KtlElMHWYw0luAnLsS
+         bg2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=vDHjZ8yszXNqAT8oVMtZut5RsvFWrYQzXv0LVo98SfY=;
-        b=6ErPjyfB5uiIFPgvrdfLorUEYMH+eFatCAzzKRiKIVtNLSaxZFsG1iggmugKn/X+XT
-         CcnrRbRDGMZOioHTS8DzL/FFWvlulHWiOcilk2+I2eoYLIUVBTcil/qVe17BsgZwk0Wa
-         AbtAXlI3rB6dPj7yBqUADKryhL3zbD6Ky/WOyvvEOjB388g3Qpyp6uN+JiPk6Qs87Zof
-         CJvVq52CTVveH6fp97KruCSRXnDv/wa5YLZM19YbUlBB3gO836z0F0yWaga7QPlsgv7C
-         2sq2kSRrlvxWPbHwqo9i2Rec9C3HRR8NZXNGy4MiXcZC4KpmpiXsMjXSpXtoIJpih1HZ
-         AIWw==
-X-Gm-Message-State: ACgBeo3+ZpTC5pgCIevP5V6kB6+BoZgUZgIBHLGQtsL07zD+auumaV4d
-        ZRfniSK5iJrk0EmovIIA+5k=
-X-Google-Smtp-Source: AA6agR62j2FHRodNlGZy4e3m/e5MAug8zgPO3TQ/EjrVhRU/nDxTyZMvLisaJp62NO28+9rrAFKtUg==
-X-Received: by 2002:a17:90b:1110:b0:1f4:fc9a:be2d with SMTP id gi16-20020a17090b111000b001f4fc9abe2dmr12614588pjb.41.1659652860291;
-        Thu, 04 Aug 2022 15:41:00 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id o15-20020a634e4f000000b0041bb35b9e80sm344726pgl.53.2022.08.04.15.40.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Aug 2022 15:40:59 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v2 2/2] mm: Remember young/dirty bit for page migrations
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20220804203952.53665-3-peterx@redhat.com>
-Date:   Thu, 4 Aug 2022 15:40:57 -0700
-Cc:     Linux MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hugh Dickins <hughd@google.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A84CB6A0-86C8-4CAB-A977-47495D877C31@gmail.com>
-References: <20220804203952.53665-1-peterx@redhat.com>
- <20220804203952.53665-3-peterx@redhat.com>
-To:     Peter Xu <peterx@redhat.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=pznRh7mSZnRSGOsJjKLdAY7waBRS/asCiUcfzryOWi0=;
+        b=FVKuklrmsGwWqHNU3DgwYZr5LBlMTOzHigKTlbcJ0yxVUV1+y9+0nFWQvpO7PnNtUP
+         FsUpX8Sqni4MSu3zVRTIDohYTjSWLPdGCNC1EJ52COnkF9LDMaZlhHcUYdBUmqWME+4u
+         3p6hRSLt1xfgTO0HlQUPF0O/4EvJN8pMWJoFL9V0YUMvk6oaiuAVKJAT1Q0jmw0sFIXI
+         suA13lhGkbbe0zB98LwL50gqwLdqKEka6hSnvfYP1bU5trff5HKD2r66yDvnZlek0Sui
+         d8oGPZR6se6coEBAAEnMV9OwrJb++IoVTz6NFt7UR0x7hZOf4OYeD+DIOXBAcWB4Har2
+         Vg3A==
+X-Gm-Message-State: ACgBeo2nGaaH6o24SfaWs+7609ceboqygD2UELTuzdjLGZ69ykqibTRQ
+        vMMW4T2wmEl1sdvuNXGKwRJSRA==
+X-Google-Smtp-Source: AA6agR6xlUrCJZRalcLrOlbeA+kMgLim+vxdzaOp3Np77E5iu6trJdNx7e2SaIRCrcLZLbpJxZAV0Q==
+X-Received: by 2002:a5d:548d:0:b0:21e:e704:94e4 with SMTP id h13-20020a5d548d000000b0021ee70494e4mr2470875wrv.87.1659653510622;
+        Thu, 04 Aug 2022 15:51:50 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:31aa:ed2c:3f7:19d])
+        by smtp.gmail.com with ESMTPSA id a16-20020a056000051000b0021f87e8945asm2495906wrf.12.2022.08.04.15.51.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 15:51:50 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
+        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
+        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com
+Subject: [PATCH v5 00/33] New thermal OF code
+Date:   Fri,  5 Aug 2022 00:43:16 +0200
+Message-Id: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,222 +78,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Aug 4, 2022, at 1:39 PM, Peter Xu <peterx@redhat.com> wrote:
+The following changes are depending on:
 
-> When page migration happens, we always ignore the young/dirty bit =
-settings
-> in the old pgtable, and marking the page as old in the new page table =
-using
-> either pte_mkold() or pmd_mkold(), and keeping the pte clean.
->=20
-> That's fine from functional-wise, but that's not friendly to page =
-reclaim
-> because the moving page can be actively accessed within the procedure. =
- Not
-> to mention hardware setting the young bit can bring quite some =
-overhead on
-> some systems, e.g. x86_64 needs a few hundreds nanoseconds to set the =
-bit.
-> The same slowdown problem to dirty bits when the memory is first =
-written
-> after page migration happened.
->=20
-> Actually we can easily remember the A/D bit configuration and recover =
-the
-> information after the page is migrated.  To achieve it, define a new =
-set of
-> bits in the migration swap offset field to cache the A/D bits for old =
-pte.
-> Then when removing/recovering the migration entry, we can recover the =
-A/D
-> bits even if the page changed.
->=20
-> One thing to mention is that here we used max_swapfile_size() to =
-detect how
-> many swp offset bits we have, and we'll only enable this feature if we =
-know
-> the swp offset can be big enough to store both the PFN value and the =
-young
-> bit.  Otherwise the A/D bits are dropped like before.
->=20
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
-> include/linux/swapops.h | 91 +++++++++++++++++++++++++++++++++++++++++
-> mm/huge_memory.c        | 26 +++++++++++-
-> mm/migrate.c            |  6 ++-
-> mm/migrate_device.c     |  4 ++
-> mm/rmap.c               |  5 ++-
-> 5 files changed, 128 insertions(+), 4 deletions(-)
->=20
-> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> index 1d17e4bb3d2f..34aa448ac6ee 100644
-> --- a/include/linux/swapops.h
-> +++ b/include/linux/swapops.h
-> @@ -8,6 +8,8 @@
->=20
-> #ifdef CONFIG_MMU
->=20
-> +#include <linux/swapfile.h>
+ - 20220722200007.1839356-1-daniel.lezcano@linexp.org
 
-Shouldn=E2=80=99t the ifdef go into linux/swapfile.h if that=E2=80=99s =
-the right thing to do
-to prevent others from mistakenly including it?
+which are present in the thermal/linux-next branch:
 
-> +
-> /*
->  * swapcache pages are stored in the swapper_space radix tree.  We =
-want to
->  * get good packing density in that tree, so the index should be dense =
-in
-> @@ -35,6 +37,24 @@
-> #endif
-> #define SWP_PFN_MASK			((1UL << SWP_PFN_BITS) - 1)
->=20
-> +/**
-> + * Migration swap entry specific bitfield definitions.
-> + *
-> + * @SWP_MIG_YOUNG_BIT: Whether the page used to have young bit set
-> + * @SWP_MIG_DIRTY_BIT: Whether the page used to have dirty bit set
-> + *
-> + * Note: these bits will be stored in migration entries iff there're =
-enough
-> + * free bits in arch specific swp offset.  By default we'll ignore =
-A/D bits
-> + * when migrating a page.  Please refer to =
-migration_entry_supports_ad()
-> + * for more information.
-> + */
-> +#define SWP_MIG_YOUNG_BIT		(SWP_PFN_BITS)
-> +#define SWP_MIG_DIRTY_BIT		(SWP_PFN_BITS + 1)
-> +#define SWP_MIG_TOTAL_BITS		(SWP_PFN_BITS + 2)
-> +
-> +#define SWP_MIG_YOUNG			(1UL << =
-SWP_MIG_YOUNG_BIT)
-> +#define SWP_MIG_DIRTY			(1UL << =
-SWP_MIG_DIRTY_BIT)
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
 
-Any reason not to use BIT(x) ?
+The series introduces a new thermal OF code. The patch description gives
+a detailed explanation of the changes. Basically we write new OF parsing
+functions, we migrate all the users of the old thermal OF API to the new
+one and then we finish by removing the old OF code.
 
-> +
-> static inline bool is_pfn_swap_entry(swp_entry_t entry);
->=20
-> /* Clear all flags but only keep swp_entry_t related information */
-> @@ -265,6 +285,57 @@ static inline swp_entry_t =
-make_writable_migration_entry(pgoff_t offset)
-> 	return swp_entry(SWP_MIGRATION_WRITE, offset);
-> }
->=20
-> +/*
-> + * Returns whether the host has large enough swap offset field to =
-support
-> + * carrying over pgtable A/D bits for page migrations.  The result is
-> + * pretty much arch specific.
-> + */
-> +static inline bool migration_entry_supports_ad(void)
-> +{
-> +	/*
-> +	 * max_swapfile_size() returns the max supported swp-offset plus =
-1.
-> +	 * We can support the migration A/D bits iff the pfn swap entry =
-has
-> +	 * the offset large enough to cover all of them (PFN, A & D =
-bits).
-> +	 */
-> +#ifdef CONFIG_SWAP
-> +	return max_swapfile_size() >=3D (1UL << SWP_MIG_TOTAL_BITS);
+That is the second step to rework the thermal OF code. More patches will
+come after that to remove the duplication of the trip definitions in the
+different drivers which will result in more code duplication removed and
+consolidation of the core thermal framework.
 
-This is an actual a function call (unless LTO has some trick). A bit of =
-a
-shame it cannot be at least memoized.
+Thanks for those who tested the series on their platform and
+investigated the regression with the disabled by default thermal zones.
 
-Or at least mark max_swapfile_size() as __attribute_const__ so it would =
-not
-be called twice for make_migration_entry_young() and
-make_migration_entry_dirty().
+Changelog:
+ v5:
+   - Fixed st, exynos_tmu and adc iio sun4i compilation issue when
+     THERMAL_EMULATION or THERMAL_OF are not set
+   - Add the pmbus_core.c API conversion which was missing
+   - Collected more tags
+ v4:
+   - Fixed a compilation error when THERMAL_OF=n
+   - Collected more tags
+ v3:
+   - Rebased on the right branch as reported by Niklas Söderlund
+   - Collected more tags
+ v2:
+   - Changed the code in the register thermal zone function to prevent
+     the 'const' annotation being removed in the different drivers
+   - Collected the tags and adding Cc for more context
+   - Changed the first line patch description to comply to the 'input'
+     subsystem format
+   - Give a more detailed description in the changelog for the drivers
+   - Remove pointless calls to unregister as the devm version is used
+     instead
+   - Moved dummy functions from one patch to another to prevent git
+     bisecting issue when THERMAL_OF=n
+   - Fixed thermal zone disabled by default
 
-> +#else
-> +	return false;
-> +#endif
-> +}
-> +
-> +static inline swp_entry_t make_migration_entry_young(swp_entry_t =
-entry)
-> +{
-> +	if (migration_entry_supports_ad())
-> +		return swp_entry(swp_type(entry),
-> +				 swp_offset(entry) | SWP_MIG_YOUNG);
-> +	return entry;
-> +}
-> +
-> +static inline bool is_migration_entry_young(swp_entry_t entry)
-> +{
-> +	if (migration_entry_supports_ad())
-> +		return swp_offset(entry) & SWP_MIG_YOUNG;
-> +	/* Keep the old behavior of aging page after migration */
-> +	return false;
-> +}
-> +
-> +static inline swp_entry_t make_migration_entry_dirty(swp_entry_t =
-entry)
-> +{
-> +	if (migration_entry_supports_ad())
-> +		return swp_entry(swp_type(entry),
-> +				 swp_offset(entry) | SWP_MIG_DIRTY);
-> +	return entry;
-> +}
-> +
-> +static inline bool is_migration_entry_dirty(swp_entry_t entry)
-> +{
-> +	if (migration_entry_supports_ad())
-> +		return swp_offset(entry) & SWP_MIG_YOUNG_BIT;
 
-Shouldn=E2=80=99t it be SWP_MIG_DIRTY ?
+Daniel Lezcano (33):
+  thermal/of: Rework the thermal device tree initialization
+  thermal/of: Make new code and old code co-exist
+  thermal/drivers/rockchip: Switch to new of API
+  thermal/drivers/uniphier: Switch to new of API
+  thermal/drivers/generic-adc: Switch to new of API
+  thermal/drivers/mmio: Switch to new of API
+  thermal/drivers/tegra: Switch to new of API
+  thermal/drivers/sun8i: Switch to new of API
+  thermal/drivers/sprd: Switch to new of API
+  thermal/drivers/broadcom: Switch to new of API
+  thermal/drivers/qcom: Switch to new of API
+  thermal/drivers/st: Switch to new of API
+  thermal/drivers/amlogic: Switch to new of API
+  thermal/drivers/armada: Switch to new of API
+  thermal/drivers/db8500: Switch to new of API
+  thermal/drivers/imx: Switch to new of API
+  thermal/drivers/rcar: Switch to new of API
+  thermal/drivers/rzg2l: Switch to new of API
+  thermal/drivers/qoriq: Switch to new of API
+  thermal/drivers/mtk: Switch to new of API
+  thermal/drivers/banggap: Switch to new of API
+  thermal/drivers/maxim: Switch to new of API
+  thermal/drivers/hisilicon: Switch to new of API
+  thermal/drivers/ti-soc: Switch to new of API
+  ata/drivers/ahci_imx: Switch to new of thermal API
+  hwmon/drivers/pm_bus: Switch to new of thermal API
+  hwmon/drivers/core: Switch to new of thermal API
+  iio/drivers/sun4i_gpadc: Switch to new of thermal API
+  Input: sun4i-ts - switch to new of thermal API
+  regulator/drivers/max8976: Switch to new of thermal API
+  thermal/drivers/samsung: Switch to new of thermal API
+  thermal/core: Move set_trip_temp ops to the sysfs code
+  thermal/of: Remove old OF code
 
-> +	/* Keep the old behavior of clean page after migration */
-> +	return false;
-> +}
-> +
-> extern void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
-> 					spinlock_t *ptl);
-> extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
-> @@ -311,6 +382,26 @@ static inline int =
-is_readable_migration_entry(swp_entry_t entry)
-> 	return 0;
-> }
->=20
-> +static inline swp_entry_t make_migration_entry_young(swp_entry_t =
-entry)
-> +{
-> +	return entry;
-> +}
-> +
-> +static inline bool is_migration_entry_young(swp_entry_t entry)
-> +{
-> +	return false;
-> +}
-> +
-> +static inline swp_entry_t make_migration_entry_dirty(swp_entry_t =
-entry)
-> +{
-> +	return entry;
-> +}
-> +
-> +static inline bool is_migration_entry_dirty(swp_entry_t entry)
-> +{
-> +	return false;
-> +}
-> +
-> #endif
+ drivers/ata/ahci_imx.c                        |   15 +-
+ drivers/hwmon/hwmon.c                         |   14 +-
+ drivers/hwmon/pmbus/pmbus_core.c              |   10 +-
+ drivers/hwmon/scpi-hwmon.c                    |   14 +-
+ drivers/iio/adc/sun4i-gpadc-iio.c             |   14 +-
+ drivers/input/touchscreen/sun4i-ts.c          |   10 +-
+ drivers/regulator/max8973-regulator.c         |   10 +-
+ drivers/thermal/amlogic_thermal.c             |   16 +-
+ drivers/thermal/armada_thermal.c              |   12 +-
+ drivers/thermal/broadcom/bcm2711_thermal.c    |   14 +-
+ drivers/thermal/broadcom/bcm2835_thermal.c    |   14 +-
+ drivers/thermal/broadcom/brcmstb_thermal.c    |   20 +-
+ drivers/thermal/broadcom/ns-thermal.c         |   50 +-
+ drivers/thermal/broadcom/sr-thermal.c         |   16 +-
+ drivers/thermal/db8500_thermal.c              |    8 +-
+ drivers/thermal/hisi_thermal.c                |   14 +-
+ drivers/thermal/imx8mm_thermal.c              |   14 +-
+ drivers/thermal/imx_sc_thermal.c              |   14 +-
+ drivers/thermal/k3_bandgap.c                  |   12 +-
+ drivers/thermal/k3_j72xx_bandgap.c            |   12 +-
+ drivers/thermal/max77620_thermal.c            |    8 +-
+ drivers/thermal/mtk_thermal.c                 |   10 +-
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c      |   19 +-
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |   12 +-
+ drivers/thermal/qcom/tsens.c                  |   16 +-
+ drivers/thermal/qoriq_thermal.c               |   12 +-
+ drivers/thermal/rcar_gen3_thermal.c           |   16 +-
+ drivers/thermal/rcar_thermal.c                |   13 +-
+ drivers/thermal/rockchip_thermal.c            |   14 +-
+ drivers/thermal/rzg2l_thermal.c               |   10 +-
+ drivers/thermal/samsung/exynos_tmu.c          |   24 +-
+ drivers/thermal/sprd_thermal.c                |   18 +-
+ drivers/thermal/st/stm_thermal.c              |   18 +-
+ drivers/thermal/sun8i_thermal.c               |   14 +-
+ drivers/thermal/tegra/soctherm.c              |   21 +-
+ drivers/thermal/tegra/tegra-bpmp-thermal.c    |   19 +-
+ drivers/thermal/tegra/tegra30-tsensor.c       |   12 +-
+ drivers/thermal/thermal-generic-adc.c         |   10 +-
+ drivers/thermal/thermal_core.c                |    6 -
+ drivers/thermal/thermal_core.h                |    2 -
+ drivers/thermal/thermal_mmio.c                |   17 +-
+ drivers/thermal/thermal_of.c                  | 1140 ++++++-----------
+ drivers/thermal/thermal_sysfs.c               |    5 +-
+ .../ti-soc-thermal/ti-thermal-common.c        |   16 +-
+ drivers/thermal/uniphier_thermal.c            |   10 +-
+ include/linux/thermal.h                       |   85 +-
+ 46 files changed, 708 insertions(+), 1142 deletions(-)
 
-While at it, can you change to:
-
-#endif /* CONFIG_MIGRATION */
-
-[ these ifdefs burn my eyes ]
-
-Other than that looks good.
-
-Thanks,
-Nadav
-
+-- 
+2.25.1
 

@@ -2,71 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA26589B55
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF54589B53
 	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239559AbiHDL7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 07:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        id S239584AbiHDL7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 07:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238949AbiHDL7g (ORCPT
+        with ESMTP id S239562AbiHDL7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 07:59:36 -0400
-Received: from bg5.exmail.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0EB30579;
-        Thu,  4 Aug 2022 04:59:34 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1659614366t67r7ki2
-Received: from localhost.localdomain ( [182.148.15.41])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 04 Aug 2022 19:59:25 +0800 (CST)
-X-QQ-SSF: 01000000008000F0U000B00A0000020
-X-QQ-FEAT: Xz3VOcA7Mr3laMDebUHydeSJslzKpwtdfFqopWs0h6WOE39I/HQueeYyWvh/T
-        hzt60bmqVcFhlnnxHLHvd9yaE8g5ORzN94VFNdzW4iV3uRiJ2S2lu3N6gD/+Am/GORu0Ru6
-        Rih8qmixS9CORmOUn/TJBCmaWFd2FZcD3NTzwaAogHvqQqhvkDpPJGK2M0G+M661WifgymL
-        xFfkjc+f5zG/A4SqPQGxnl+M4weXeGRLITdCSYF3ATBgcOLTDjBP8u/LC2PyK80oaNBo01O
-        d0aG5IAbnh14HR664nwA2M3WDjELVorYCx2cWh2p/gKg1EJ3FJi5zqBeyINI8dQ5G3HYdw7
-        uLFEWsrV+o0gFj8Vqlg2qRhCFPMaCc8evb3wi/WHXAdcdT6VR4kjn2sxye5gTZydPK8S/CF
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     mchehab@kernel.org
-Cc:     jacopo@jmondi.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] media: mt9v111: Fix comment typo
-Date:   Thu,  4 Aug 2022 19:59:24 +0800
-Message-Id: <20220804115924.54296-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 4 Aug 2022 07:59:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C977745F6C;
+        Thu,  4 Aug 2022 04:59:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4AB1820D15;
+        Thu,  4 Aug 2022 11:59:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659614379; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EUCS7g/zgoM7nhHrg1a17fSw/MKdtZCCwVWMf7qRsAc=;
+        b=warjybyVgrYrMdXWqixrvgR9ppCn3cIpgd8v8HwN7LXFbZGRIY8weVG4bLIZGaK+1K3Gon
+        kbmOcgZShqDMni5ZDJmORkjCgmF6asIrU7xlHyh3al2ZqSNtdMBexMhncIQ00O9GwH0N14
+        Tg2w33If7y5ZsBrMSGhuf2jVau/VOc8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659614379;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EUCS7g/zgoM7nhHrg1a17fSw/MKdtZCCwVWMf7qRsAc=;
+        b=UEvkDTqVuOZL858W4cHq7ic1Ql23IRE8Fr66+KT/SfzoffnMD5ZbjcWZRxft/9SRGObIrD
+        1DI/+yXe+vfIqvCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 105E513434;
+        Thu,  4 Aug 2022 11:59:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7W+yAau062JbNQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Thu, 04 Aug 2022 11:59:39 +0000
+Date:   Thu, 4 Aug 2022 13:59:38 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+Cc:     Talel Shenhar <talel@amazon.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH] thermal/drivers/thermal_mmio: Drop of_match_ptr()
+Message-ID: <20220804135938.7f69f5d9@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `the' is duplicated in the comment, remove one.
+From: Jean Delvare <jdelvare@suse.de>
+Subject: thermal/drivers/thermal_mmio: Drop of_match_ptr()
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+Now that the driver depends on OF, we know what of_match_ptr() will
+always resolve to, so we might as well save cpp some work.
+
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Talel Shenhar <talel@amazon.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/media/i2c/mt9v111.c | 2 +-
+This could have been folded into my previous patch, sorry for missing
+it.
+
+ drivers/thermal/thermal_mmio.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/mt9v111.c b/drivers/media/i2c/mt9v111.c
-index 2dc4a0f24ce8..7beca0b70b72 100644
---- a/drivers/media/i2c/mt9v111.c
-+++ b/drivers/media/i2c/mt9v111.c
-@@ -633,7 +633,7 @@ static int mt9v111_hw_config(struct mt9v111_dev *mt9v111)
+--- linux-5.18.orig/drivers/thermal/thermal_mmio.c	2022-05-22 21:52:31.000000000 +0200
++++ linux-5.18/drivers/thermal/thermal_mmio.c	2022-08-04 13:50:46.426178245 +0200
+@@ -107,7 +107,7 @@ static struct platform_driver thermal_mm
+ 	.probe = thermal_mmio_probe,
+ 	.driver = {
+ 		.name = "thermal-mmio",
+-		.of_match_table = of_match_ptr(thermal_mmio_id_table),
++		.of_match_table = thermal_mmio_id_table,
+ 	},
+ };
  
- 	/*
- 	 * Set pixel integration time to the whole frame time.
--	 * This value controls the the shutter delay when running with AE
-+	 * This value controls the shutter delay when running with AE
- 	 * disabled. If longer than frame time, it affects the output
- 	 * frame rate.
- 	 */
--- 
-2.35.1
 
+
+-- 
+Jean Delvare
+SUSE L3 Support

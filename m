@@ -2,225 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F1D589559
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDC158955C
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 02:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238702AbiHDAaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 20:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
+        id S237244AbiHDAeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 20:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237226AbiHDAaG (ORCPT
+        with ESMTP id S236904AbiHDAed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 20:30:06 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CBC57231
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:30:05 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id i7so14130581qvr.8
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 17:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m6XkC9SsYbws11fU/lKUsxSKL8HIjijhC5ukFJOVAg0=;
-        b=lxEIIB2x2iibG4PBjXLIXWtMcmcGyMl4ihpwyUY7PqULj9eFbsANj8sp9BO+MIUc8m
-         zgNMHvRyeehg1eLXEKH5zHrm09x2KfCSBSu6bQ61eEnE7/U8ZFIDtE1DBHsg89oyx8Xi
-         TzUM3+OD77maP7r32Y/hBG7zSRhgSIYYBeLg9HrW+kyLW+hNXP7nZNBWp/2n1zhfso8F
-         1xMgQDUNo4e32+zlSmzj1CyN7BCj/a/ucsdHY4YiGVIc5X0eHj8/l1dm4sVUjbwNn/g1
-         bdg8VkTe1CITpGeKNCaNEXdPGxxj/gQnFejEErFBpDXIlSYDeEqCFDviYLvbd692DIio
-         Hz4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m6XkC9SsYbws11fU/lKUsxSKL8HIjijhC5ukFJOVAg0=;
-        b=cHpyVwz3WqYSopH0F+q1UWhOGtedjTIQ1OmOnTj0eYJzkg9y7PSq4zYSnoPnOc0djo
-         JXvA6NKJtcHem50sifqsOQhnq0s84HpRdHwYnKHYZMfVKTFEFeKk8VqWAVOszsHHYzMo
-         heD3RkFxCqqjcGqjelCKCvSrd4vu5lR5F0BKD3y083LMuRgqBbkRHU1+Xw9Rvfv2jlgp
-         nktHBWcfEswLvNKle9feHnrvUIsUBlJn2SZMcNF7BP7sRwd91LWSzUbkhJ3WEpo7z8g6
-         ZivzJhefe6uAHGLkCg/UJ+eEFkEFlsIg23gNblIrD7OI+jx4CyRc9Le7MtJ0Bo/lkr5u
-         l33g==
-X-Gm-Message-State: ACgBeo1yOLFvb+AJuGIlJ/hwzNPFm0pt+I/EMFJNd6kL5uk77o649Uxu
-        +9I0wASX7qXdhReYFWzxXxIiQjMaCkY8M5QzY1zXLQ==
-X-Google-Smtp-Source: AA6agR6lahu4GM/VNiA4RD1/ceM/yj+jVGPjA2YZnH7aavqPzYhk9txYF8tPePFZuNAGK+/RFKNZQettinIlm70U8Dw=
-X-Received: by 2002:a0c:b31a:0:b0:473:8062:b1b4 with SMTP id
- s26-20020a0cb31a000000b004738062b1b4mr24728083qve.85.1659573004159; Wed, 03
- Aug 2022 17:30:04 -0700 (PDT)
+        Wed, 3 Aug 2022 20:34:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16341248FB
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 17:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659573272; x=1691109272;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oAYWtI6yfLaGJLAiZp2/doF+k9ne/f77mF8s2wIbDl0=;
+  b=RCBJArhmRbgyl0lS9UC09Y3NN4nDxMOuKKXfb04YA/0NQXoCB5oTIe5I
+   Vj98YWQeRGb4w7RNl6dLBZIIgOunJoOUNCYmvaO8n3x8etcw1gsQ7uhNY
+   hLvDr68EBHjP09MP0GVZCSKjbkMShmWi+hCgQmsdRV5eZyXa+ZWlJWZvf
+   iIGPQ1D+Ff38eIHMH4YvJ9hmA3a2ID2EeSmwNSIzyooSrk34Xm6fuPPqG
+   6Balr5yKw/HW3fwJDYstrrcrusvG1CWIQxiQc0xuhGjxEiV4gb1mJuctF
+   oqOKQro/asgk6vm49K58P9AgFSci2Uxu3hynYF125QxSN6NcSutw8c64I
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="272852987"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="272852987"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:34:31 -0700
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="848764421"
+Received: from lucasmye-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.42.231])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:34:30 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v10 1/2] x86/tdx: Add TDX Guest attestation interface driver
+Date:   Wed,  3 Aug 2022 17:33:22 -0700
+Message-Id: <20220804003323.1441376-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220722174829.3422466-1-yosryahmed@google.com>
- <20220722174829.3422466-5-yosryahmed@google.com> <CAEf4BzbD38XFVxMy5crO-=+Xg7U3Vc_fB4Ntug4BEbmdLpvuDQ@mail.gmail.com>
- <CA+khW7jftQikVsc8moM6rNRqBerUHDM6WRDjb33exdbogDc7aQ@mail.gmail.com>
- <CAEf4BzYDqaTQr-S8TuLkysQ+FhT+6qMS0z=Sp_7+-wk84_4h6Q@mail.gmail.com>
- <CA+khW7jDD9p80xnZj0Z3m5oFHjb2u___NAiJkbyRgD5FKopGhg@mail.gmail.com> <CAEf4BzZhy49KLe5VG4aXZtWBExADskgA__MzhC+6k3DVgU5o5w@mail.gmail.com>
-In-Reply-To: <CAEf4BzZhy49KLe5VG4aXZtWBExADskgA__MzhC+6k3DVgU5o5w@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 3 Aug 2022 17:29:53 -0700
-Message-ID: <CA+khW7ggTFp8je0zwo83uGN8pKZXy+D07y+tPRRAXmY+e3pm-g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/8] bpf: Introduce cgroup iter
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org,
-        Kui-Feng Lee <kuifeng@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 1:40 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Aug 3, 2022 at 1:30 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Tue, Aug 2, 2022 at 3:50 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Tue, Aug 2, 2022 at 3:27 PM Hao Luo <haoluo@google.com> wrote:
-> > > >
-> > > > On Mon, Aug 1, 2022 at 8:43 PM Andrii Nakryiko
-> > > > <andrii.nakryiko@gmail.com> wrote:
-> > > > >
-> > > > > On Fri, Jul 22, 2022 at 10:48 AM Yosry Ahmed <yosryahmed@google.com> wrote:
-[...]
-> > > > > > +};
-> > > > > > +
-> > > > > >  union bpf_iter_link_info {
-> > > > > >         struct {
-> > > > > >                 __u32   map_fd;
-> > > > > >         } map;
-> > > > > > +
-> > > > > > +       /* cgroup_iter walks either the live descendants of a cgroup subtree, or the
-> > > > > > +        * ancestors of a given cgroup.
-> > > > > > +        */
-> > > > > > +       struct {
-> > > > > > +               /* Cgroup file descriptor. This is root of the subtree if walking
-> > > > > > +                * descendants; it's the starting cgroup if walking the ancestors.
-> > > > > > +                * If it is left 0, the traversal starts from the default cgroup v2
-> > > > > > +                * root. For walking v1 hierarchy, one should always explicitly
-> > > > > > +                * specify the cgroup_fd.
-> > > > > > +                */
-> > > > > > +               __u32   cgroup_fd;
-> > > > >
-> > > > > Now, similar to what I argued in regard of pidfd vs pid, I think the
-> > > > > same applied to cgroup_fd vs cgroup_id. Why can't we support both?
-> > > > > cgroup_fd has some benefits, but cgroup_id is nice due to simplicity
-> > > > > and not having to open/close/keep extra FDs (which can add up if we
-> > > > > want to periodically query something about a large set of cgroups).
-> > > > > Please see my arguments from [0] above.
-> > > > >
-> > > > > Thoughts?
-> > > > >
-> > > >
-> > > > We can support both, it's a good idea IMO. But what exactly is the
-> > > > interface going to look like? Can you be more specific about that?
-> > > > Below is something I tried based on your description.
-> > > >
-> > > > @@ -91,6 +91,18 @@ union bpf_iter_link_info {
-> > > >         struct {
-> > > >                 __u32   map_fd;
-> > > >         } map;
-> > > > +       struct {
-> > > > +               /* PRE/POST/UP/SELF */
-> > > > +               __u32 order;
-> > > > +               struct {
-> > > > +                       __u32 cgroup_fd;
-> > > > +                       __u64 cgroup_id;
-> > > > +               } cgroup;
-> > > > +               struct {
-> > > > +                       __u32 pid_fd;
-> > > > +                       __u64 pid;
-> > > > +               } task;
-> > > > +       };
-> > > >  };
-> > > >
-> > >
-> > > So I wouldn't combine task and cgroup definition together, let's keep
-> > > them independent.
-> > >
-> > > then for cgroup we can do something like:
-> > >
-> > > struct {
-> > >     __u32 order;
-> > >     __u32 cgroup_fd; /* cgroup_fd ^ cgroup_id, exactly one can be non-zero */
-> > >     __u32 cgroup_id;
-> > > } cgroup
-> > >
-> > > Similar idea with task, but it's a bit more complicated because there
-> > > we have target that can be pid, pidfd, or cgroup (cgroup_fd and
-> > > cgroup_id). I haven't put much thought into the best representation,
-> > > though.
-> > >
-> >
-> > The cgroup part sounds good to me. For the full picture, how about
-> > this? I'm just trying  a prototype, hoping that it can help people to
-> > get a clear picture.
-> >
-> > union bpf_iter_link_info {
-> >           struct {
-> >                   __u32   map_fd;
-> >           } map;
-> >           struct {
-> >                   __u32   order; /* PRE/POST/UP/SELF */
-> >                   __u32   cgroup_fd;
-> >                   __u64   cgroup_id;
-> >           } cgroup;
->
-> lgtm
->
-> >           struct {
-> >                   __u32   pid;
-> >                   __u32   pid_fd;
-> >                   __u64   cgroup_id;
-> >                   __u32   cgroup_fd;
-> >                   __u32   mode; /* SELF or others */
->
-> I'd move mode to be first. I'm undecided on using 4 separate fields
-> for pid/pid_fd/cgroup_{id,fd} vs a single union (or just generic "u64
-> target"  and then mode can define how we should treat target --
-> whether it's pid, pid_fd, cgroup ID or FD. I'm fine either way, I
-> think. But for cgroup case not having to duplicate PRE/POST/UP/SELF
-> for cgroup id and then for cgroup fd seems like a win. So separate
-> fields might be better. It's also pretty extendable. And I'm
-> personally not worried about using few more bytes in bpf_attr for
-> disjoin fields like this.
->
+In TDX guest, attestation is used to verify the trustworthiness of a TD
+to other entities before provisioning secrets to the TD. Such attestation
+process is required by 3rd party servers before sending sensitive
+information to TD guests. One usage example is to get encryption keys
+from the key server for mounting the encrypted rootfs or secondary drive.
 
-Sounds good. Thanks for clarification. Using separate fields looks
-good to me. Since we settled on the cgroup part, I will apply update
-in cgroup_iter v7.
+During the TD launch, the initial contents and configuration of the TD
+are recorded by the Intel TDX module in build time measurement register
+(MRTD). It is a SHA384 digest created using data from TD private pages(
+including TD firmware) and the configuration of the TD.
 
+After TD build, run-time measurement registers (RTMRs)  can be used by
+the guest TD software to extend the TD measurements. TDX supports 4
+RTMR registers, and TDG.MR.RTMR.EXTEND TDCALL is used to update the
+RTMR registers securely. RTMRs are mainly used to record measurements
+related to sections like the kernel image, command line parameters,
+initrd, ACPI tables, firmware data, configuration firmware volume (CFV)
+of TDVF, etc. For more details, please refer to TDX Virtual Firmware
+design specification, sec titled "TD Measurement".
 
-> >           } task;
-> > };
-> >
-> > > > > > +               __u32   traversal_order;
-> > > > > > +       } cgroup;
-> > > > > >  };
-> > > > > >
-> > > > > >  /* BPF syscall commands, see bpf(2) man-page for more details. */
-> > > > >
-> > > > > [...]
+At TD runtime, the Intel TDX module reuses the Intel SGX attestation
+infrastructure to provide support for attesting to these measurements
+as described below.
+
+The attestation process consists of two steps: TDREPORT generation and
+Quote generation.
+
+TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated by
+the TDX module which contains TD-specific information (such as TD
+measurements), platform security version, and the MAC to protect the
+integrity of the TDREPORT. The TD kernel uses TDCALL[TDG.MR.REPORT] to
+get the TDREPORT from the TDX module. A user-provided 64-Byte
+REPORTDATA is used as input and included in the TDREPORT. Typically it
+can be some nonce provided by attestation service so the TDREPORT can
+be verified uniquely. More details about TDREPORT can be found in
+Intel TDX Module specification, section titled "TDG.MR.REPORT Leaf".
+
+TDREPORT by design can only be verified on local platform as the MAC
+key is bound to the platform. To support remote verification of the
+TDREPORT, TDX leverages Intel SGX Quote Enclave (QE) to verify the
+TDREPORT locally and convert it to a remote verifiable Quote.
+
+After getting the TDREPORT, the second step of the attestation process
+is to send it to the QE to generate the Quote. TDX doesn't support SGX
+inside the TD, so the QE can be deployed in the host, or in another
+legacy VM with SGX support. QE uses EVERIFYREPORT2 instruction to help
+check the integrity of TDREPORT and if it is valid, a certified quote
+signing key is used to sign the Quote. How to send the TDREPORT to QE
+and receive the Quote is implementation and deployment specific.
+
+Implement a basic TD guest misc driver to allow TD userspace to get the
+TDREPORT. The TD userspace attestation software can get the TDREPORT
+and then choose whatever communication channel available (i.e. vsock
+or hypercall) to send the TDREPORT to QE and receive the Quote.
+
+Also note that explicit access permissions are not enforced in this
+driver because the quote and measurements are not a secret. However
+the access permissions of the device node can be used to set any
+desired access policy. The udev default is usually root access
+only.
+
+Operations like getting TDREPORT or Quote generation involves sending
+a blob of data as input and getting another blob of data as output. It
+was considered to use a sysfs interface for this, but it doesn't fit
+well into the standard sysfs model for configuring values. It would be
+possible to do read/write on files, but it would need multiple file
+descriptors, which would be somewhat messy. IOCTLs seems to be the best
+fitting and simplest model for this use case. This is similar to AMD
+SEV platform, which also uses IOCTL interface to support attestation.
+
+Any distribution enabling TDX is also expected to need attestation. So
+enable it by default with TDX guest support.
+
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Acked-by: Kai Huang <kai.huang@intel.com>
+Acked-by: Wander Lairson Costa <wander@redhat.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+---
+
+Changes since v9:
+ * Dropped the cover letter. Since this patch set only adds
+   TDREPORT support, the commit log itself has all the required details.
+ * Dropped the Quote support and event IRQ support as per Dave's
+   review suggestion.
+ * Dropped attest.c and moved its contents to tdx.c
+ * Updated commit log and comments to reflect latest changes.
+
+Changes since v8:
+ * Please refer to https://lore.kernel.org/all/ \
+   20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com/
+
+ arch/x86/coco/tdx/tdx.c         | 117 ++++++++++++++++++++++++++++++++
+ arch/x86/include/uapi/asm/tdx.h |  51 ++++++++++++++
+ 2 files changed, 168 insertions(+)
+ create mode 100644 arch/x86/include/uapi/asm/tdx.h
+
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index 928dcf7a20d9..3abb3d1daa9e 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -5,16 +5,21 @@
+ #define pr_fmt(fmt)     "tdx: " fmt
+ 
+ #include <linux/cpufeature.h>
++#include <linux/miscdevice.h>
++#include <linux/mm.h>
++#include <linux/io.h>
+ #include <asm/coco.h>
+ #include <asm/tdx.h>
+ #include <asm/vmx.h>
+ #include <asm/insn.h>
+ #include <asm/insn-eval.h>
+ #include <asm/pgtable.h>
++#include <uapi/asm/tdx.h>
+ 
+ /* TDX module Call Leaf IDs */
+ #define TDX_GET_INFO			1
+ #define TDX_GET_VEINFO			3
++#define TDX_GET_REPORT			4
+ #define TDX_ACCEPT_PAGE			6
+ 
+ /* TDX hypercall Leaf IDs */
+@@ -34,6 +39,10 @@
+ #define VE_GET_PORT_NUM(e)	((e) >> 16)
+ #define VE_IS_IO_STRING(e)	((e) & BIT(4))
+ 
++#define DRIVER_NAME	"tdx-guest"
++
++static struct miscdevice tdx_misc_dev;
++
+ /*
+  * Wrapper for standard use of __tdx_hypercall with no output aside from
+  * return code.
+@@ -775,3 +784,111 @@ void __init tdx_early_init(void)
+ 
+ 	pr_info("Guest detected\n");
+ }
++
++static long tdx_get_report(void __user *argp)
++{
++	u8 *reportdata = NULL, *tdreport = NULL;
++	struct tdx_report_req req;
++	long ret;
++
++	/* Copy request struct from the user buffer */
++	if (copy_from_user(&req, argp, sizeof(req)))
++		return -EFAULT;
++
++	/*
++	 * Per TDX Module 1.0 specification, section titled
++	 * "TDG.MR.REPORT", REPORTDATA and TDREPORT length
++	 * is fixed as TDX_REPORTDATA_LEN and TDX_REPORT_LEN.
++	 */
++	if (req.rpd_len != TDX_REPORTDATA_LEN || req.tdr_len != TDX_REPORT_LEN)
++		return -EINVAL;
++
++	/* Allocate kernel buffers for REPORTDATA and TDREPORT */
++	reportdata = kzalloc(req.rpd_len, GFP_KERNEL);
++	if (!reportdata) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	tdreport = kzalloc(req.tdr_len, GFP_KERNEL);
++	if (!tdreport) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++
++	/* Copy REPORTDATA from user to kernel buffer */
++	if (copy_from_user(reportdata, (void *)req.reportdata, req.rpd_len)) {
++		ret = -EFAULT;
++		goto out;
++	}
++
++	/*
++	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
++	 *
++	 * Get the TDREPORT using REPORTDATA as input. Refer to
++	 * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
++	 * Specification for detailed information.
++	 */
++	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
++				virt_to_phys(reportdata), req.subtype,
++				0, NULL);
++	if (ret) {
++		ret = -EIO;
++		goto out;
++	}
++
++	/* Copy TDREPORT data back to the user buffer */
++	if (copy_to_user((void *)req.tdreport, tdreport, req.tdr_len))
++		ret = -EFAULT;
++
++out:
++	kfree(reportdata);
++	kfree(tdreport);
++	return ret;
++}
++static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
++			    unsigned long arg)
++{
++	void __user *argp = (void __user *)arg;
++	long ret = -EINVAL;
++
++	switch (cmd) {
++	case TDX_CMD_GET_REPORT:
++		ret = tdx_get_report(argp);
++		break;
++	default:
++		pr_debug("cmd %d not supported\n", cmd);
++		break;
++	}
++
++	return ret;
++}
++
++static const struct file_operations tdx_guest_fops = {
++	.owner		= THIS_MODULE,
++	.unlocked_ioctl	= tdx_guest_ioctl,
++	.llseek		= no_llseek,
++};
++
++static int __init tdx_guest_init(void)
++{
++	int ret;
++
++	/* Make sure we are in a valid TDX platform */
++	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++		return -EIO;
++
++	tdx_misc_dev.name = DRIVER_NAME;
++	tdx_misc_dev.minor = MISC_DYNAMIC_MINOR;
++	tdx_misc_dev.fops = &tdx_guest_fops;
++
++	ret = misc_register(&tdx_misc_dev);
++	if (ret) {
++		pr_err("misc device registration failed\n");
++		return ret;
++	}
++
++	return 0;
++}
++device_initcall(tdx_guest_init)
+diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
+new file mode 100644
+index 000000000000..c1667b20fe20
+--- /dev/null
++++ b/arch/x86/include/uapi/asm/tdx.h
+@@ -0,0 +1,51 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef _UAPI_ASM_X86_TDX_H
++#define _UAPI_ASM_X86_TDX_H
++
++#include <linux/types.h>
++#include <linux/ioctl.h>
++
++/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
++#define TDX_REPORTDATA_LEN              64
++
++/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
++#define TDX_REPORT_LEN                  1024
++
++/**
++ * struct tdx_report_req: Get TDREPORT using REPORTDATA as input.
++ *
++ * @subtype        : Subtype of TDREPORT (fixed as 0 by TDX Module
++ *                   specification, but added a parameter to handle
++ *                   future extension).
++ * @reportdata     : User-defined REPORTDATA to be included into
++ *                   TDREPORT. Typically it can be some nonce
++ *                   provided by attestation service, so the
++ *                   generated TDREPORT can be uniquely verified.
++ * @rpd_len        : Length of the REPORTDATA (fixed as 64 bytes by
++ *                   the TDX Module specification, but parameter is
++ *                   added to handle future extension).
++ * @tdreport       : TDREPORT output from TDCALL[TDG.MR.REPORT].
++ * @tdr_len        : Length of the TDREPORT (fixed as 1024 bytes by
++ *                   the TDX Module specification, but a parameter
++ *                   is added to accommodate future extension).
++ *
++ * Used in TDX_CMD_GET_REPORT IOCTL request.
++ */
++struct tdx_report_req {
++	__u8  subtype;
++	__u64 reportdata;
++	__u32 rpd_len;
++	__u64 tdreport;
++	__u32 tdr_len;
++};
++
++/*
++ * TDX_CMD_GET_REPORT - Get TDREPORT using TDCALL[TDG.MR.REPORT]
++ *
++ * Return 0 on success, -EIO on TDCALL execution failure, and
++ * standard errno on other general error cases.
++ *
++ */
++#define TDX_CMD_GET_REPORT		_IOWR('T', 0x01, __u64)
++
++#endif /* _UAPI_ASM_X86_TDX_H */
+-- 
+2.25.1
+

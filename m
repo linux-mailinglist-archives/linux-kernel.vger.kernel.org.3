@@ -2,75 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6D2589B74
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5898B589B79
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 14:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239662AbiHDMJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 08:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
+        id S239665AbiHDML3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 08:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239565AbiHDMJ2 (ORCPT
+        with ESMTP id S232031AbiHDML1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 08:09:28 -0400
-Received: from bg5.exmail.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A7A51A0E;
-        Thu,  4 Aug 2022 05:09:27 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1659614955tbc9z673
-Received: from localhost.localdomain ( [182.148.15.41])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 04 Aug 2022 20:09:13 +0800 (CST)
-X-QQ-SSF: 01000000008000F0U000B00A0000020
-X-QQ-FEAT: zT6n3Y95oi36ac8W/ajpseDSN2k/mvuSYYNCi980UU/EI34PLtAzm9rsUaP+R
-        ib4cdvZOkbgB1b7zM7lGKz+iiOBe3g6lvnPSN5BNB8k+/rYEm2D0JLyERAj87FktZMmpPW9
-        +u7hs185y4uvWWO7L2VguTuQazPhF1XxJZJmd9xZTh2/leh72hf72ZcMckI0KqWI8FcyDBb
-        EQ1WuKmV1ETbP980WKyoOpN6KCmUPfMr3CdxYQmuH3HEME5qOfoswLPEK7ICcaTsxdIupFc
-        ny4J64oTbeH5MZZ938QO1UP+kfkoMAgNZNBmJryPPnHYikTubCzV4uaPmmvDBg4dLGAVZ2m
-        qIx1Wl/U8PpkB2079VD2c7PmwuyCvbB+Dg9DjyvKnhbCiDnKlHbGWs7Pb+5IA2nrWX3W9Z/
-        GgnRMVrF6hY=
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     sumit.saxena@broadcom.com
-Cc:     kashyap.desai@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, megaraidlinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] scsi: megaraid: Fix comment typo
-Date:   Thu,  4 Aug 2022 20:09:11 +0800
-Message-Id: <20220804120911.61806-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 4 Aug 2022 08:11:27 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD4125E98;
+        Thu,  4 Aug 2022 05:11:26 -0700 (PDT)
+Received: from zn.tnic (p200300ea970f4fa7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:4fa7:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A09BE1EC056A;
+        Thu,  4 Aug 2022 14:11:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1659615080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=dnIT6BfnSCaKhEYKVBp/iA/Xm7t6NZGreWnaebbwv6k=;
+        b=W0AeNaoVM6CH3GtewEuI+fIELWnyUWnbtPopu0teCfDVXAA+IY0af/WCp/fUXMNVQlR+TK
+        T7iY6EHSMJ5d5w6FvIBUxFmeoZ0H7X7gmQt0AFqnck6ptA9thEH0t2Ga6yTQM2/CzR8WOk
+        nJnFZXaVIpDqFzGDdrWHxjYY2fcrKx4=
+Date:   Thu, 4 Aug 2022 14:11:16 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Subject: Re: [PATCH Part2 v6 07/49] x86/sev: Invalid pages from direct map
+ when adding it to RMP table
+Message-ID: <Yuu3ZK+/hL+saV27@zn.tnic>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
+ <YuFvbm/Zck9Tr5pq@zn.tnic>
+ <SN6PR12MB27676E6CEDF242F2D33CA2AB8E9A9@SN6PR12MB2767.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SN6PR12MB27676E6CEDF242F2D33CA2AB8E9A9@SN6PR12MB2767.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `be' is duplicated in the comment, remove one.
+On Mon, Aug 01, 2022 at 11:57:09PM +0000, Kalra, Ashish wrote:
+> You mean set_memory_present() ?
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/scsi/megaraid/megaraid_sas_base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Right, that.
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index a3e117a4b8e7..aec33fa565d4 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -2823,7 +2823,7 @@ static int megasas_wait_for_outstanding(struct megasas_instance *instance)
- 			       "commands to complete\n",i,outstanding);
- 			/*
- 			 * Call cmd completion routine. Cmd to be
--			 * be completed directly without depending on isr.
-+			 * completed directly without depending on isr.
- 			 */
- 			megasas_complete_cmd_dpc((unsigned long)instance);
- 		}
+We have set_memory_np() but set_memory_present(). Talk about
+consistence... ;-\
+
+> But again, calling set_direct_map_invalid_noflush() is easier to
+> understand from the calling function's point of view as it correlates
+> to the functionality of invalidating the page from kernel direct map ?
+
+You mean, we prefer easy to understand to performance?
+
+set_direct_map_invalid_noflush() means crap to me. I have to go look it
+up - set memory P or NP is much clearer.
+
+The patch which added those things you consider easier to understand is:
+
+commit d253ca0c3865a8d9a8c01143cf20425e0be4d0ce
+Author: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Date:   Thu Apr 25 17:11:34 2019 -0700
+
+    x86/mm/cpa: Add set_direct_map_*() functions
+    
+    Add two new functions set_direct_map_default_noflush() and
+    set_direct_map_invalid_noflush() for setting the direct map alias for the
+    page to its default valid permissions and to an invalid state that cannot
+    be cached in a TLB, respectively. These functions do not flush the TLB.
+
+I don't see how this fits with your use case...
+
+Also, your helpers are called restore_direct_map and
+invalidate_direct_map. That's already explaining what this is supposed
+to do.
+
 -- 
-2.35.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

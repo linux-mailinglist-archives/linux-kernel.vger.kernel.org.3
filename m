@@ -2,133 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C1B589891
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04338589892
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 09:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239217AbiHDHkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 03:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S239239AbiHDHkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 03:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239199AbiHDHkf (ORCPT
+        with ESMTP id S239211AbiHDHki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 03:40:35 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CF92A70A
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:40:33 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 16:40:25 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1659598832;
+        Thu, 4 Aug 2022 03:40:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE91661D7A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 00:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659598836;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aKocoFOHQjUWCKVWggVJ2diOKUCvDqNI0lkZdeg2bgA=;
-        b=i9z7N0lExHqwmkveUOibcw3zZZk0YbJ90WJB3O858Gpqzft3a0kkWOFQj8zmJvOzvcIDtE
-        mbvuw/O43psDK87O1qnOBvSsdZ5tUncP0EDzG5ZdtSFBurwyXRbknQQBWGZiLGsZZXFptI
-        8wpOloER93fRmvRiOZyL/P1FmU5mwss=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [bug report] mm, hwpoison: memory_failure races with
- alloc_fresh_huge_page/free_huge_page
-Message-ID: <20220804074025.GA2551573@ik1-406-35019.vs.sakura.ne.jp>
-References: <3c542543-0965-ef60-4627-1a4116077a5b@huawei.com>
- <Yuii5FnAXe/q7fx/@FVFYT0MHHV2J>
- <f2ad010b-b3bf-77c9-2256-701114b5d57e@huawei.com>
+        bh=+WZV3/cdkw6cQVZQcHjV7n6CKEOnJ0svsTCr3g/sk6M=;
+        b=Vxs+fw2cdA36/+WF/lVr/lssRN0Ci3q0sxpuUUpi4uN67th8pmZdkqzY/AVsFHhADZlUFd
+        JduosQkqJ5K5g0CD5XuVY7hPLevtc01ehLpvYxz54WFiO1VIQJFRnnPIFfmhGjBmpWDQsH
+        lGZRWO1NNbydICJazT773TmKPqmOwvU=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-T3yfTbQhPFGkZN7gVc7Oww-1; Thu, 04 Aug 2022 03:40:35 -0400
+X-MC-Unique: T3yfTbQhPFGkZN7gVc7Oww-1
+Received: by mail-wm1-f72.google.com with SMTP id 189-20020a1c02c6000000b003a50fa69823so379386wmc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 00:40:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=+WZV3/cdkw6cQVZQcHjV7n6CKEOnJ0svsTCr3g/sk6M=;
+        b=HRUlPG2IeGoBhIIwO1/mq4WIKNBQdw8a90zVt2ZieKJfmlolT5oaq5ihtUZt8XQMkl
+         NXcHtKK6FKJcL31xUTNiV+Ivao6OuhQL0KT8adF/kLkaMIjjn6f+lR5AHnP/wvvrIjrt
+         bM6USuhjZG7c3QLWEU8iqTlal7Dcbv2GHrUcm/rcq6/NNoxA6QWESpy4IdyQJhxWYjXg
+         40qZCzRmb9H+mv2LKRBKAJoD80v4gbNK0faMkCuZpYvOYtF10MXO/ktFgqfCkJ+0AGJ0
+         yRHtOh4bMjYd/5FrglKXHQjccLDZBF+MBBC4ImKaTy7fQMOynoYcqxJQsw90OZsDPo7l
+         lxag==
+X-Gm-Message-State: ACgBeo3bpsuehiGJx0ps+2pxSyMorgLn6oFpfR49u29F5O0kvtIdeqT7
+        xrfRCfvHy+Hpt/vVuAk4WjdPVuQYP8AM0SisrwGwHd6d0OpBAJO2j2mLgFOa1/VRAc02yYVCtWP
+        EBuJdkdKriIgqF0z416S8MZ2H
+X-Received: by 2002:a05:600c:22cc:b0:3a5:1209:bbba with SMTP id 12-20020a05600c22cc00b003a51209bbbamr537666wmg.131.1659598834569;
+        Thu, 04 Aug 2022 00:40:34 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR62Y6ne1DiShrSRbqQYc5mJ1dX+bf+AhMe3Je4WkCvDmV0K71eWzKuDsDTM0GKL/fS5+JSR8Q==
+X-Received: by 2002:a05:600c:22cc:b0:3a5:1209:bbba with SMTP id 12-20020a05600c22cc00b003a51209bbbamr537653wmg.131.1659598834309;
+        Thu, 04 Aug 2022 00:40:34 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:8900:2c18:b992:1fa1:f88b? (p200300cbc70689002c18b9921fa1f88b.dip0.t-ipconnect.de. [2003:cb:c706:8900:2c18:b992:1fa1:f88b])
+        by smtp.gmail.com with ESMTPSA id c16-20020adffb50000000b002205c907474sm226711wrs.107.2022.08.04.00.40.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 00:40:33 -0700 (PDT)
+Message-ID: <4cfb6fd5-f820-b56d-bbfe-13c92a5bf682@redhat.com>
+Date:   Thu, 4 Aug 2022 09:40:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f2ad010b-b3bf-77c9-2256-701114b5d57e@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] mm/gup.c: Simplify and fix
+ check_and_migrate_movable_pages() return codes
+Content-Language: en-US
+To:     Alistair Popple <apopple@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, jgg@nvidia.com, minchan@kernel.org,
+        linux-kernel@vger.kernel.org, jhubbard@nvidia.com,
+        pasha.tatashin@soleen.com
+References: <814dee5d3aadd38c3370eaaf438ba7eee9bf9d2b.1659399696.git-series.apopple@nvidia.com>
+ <20220802171215.3c909e1984ec345ff94af155@linux-foundation.org>
+ <87czdg7tlt.fsf@nvdebian.thelocal>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <87czdg7tlt.fsf@nvdebian.thelocal>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 02:27:36PM +0800, Miaohe Lin wrote:
-> On 2022/8/2 12:07, Muchun Song wrote:
-> > On Tue, Aug 02, 2022 at 10:00:50AM +0800, Miaohe Lin wrote:
-> >> Hi all:
-> >>     When I investigate the mm/memory-failure.c code again, I found there's a possible race window
-> >> between memory_failure and alloc_fresh_huge_page/free_huge_page. Thank about the below scene:
-> >>
-> >> CPU 1							CPU 2
-> >> alloc_fresh_huge_page -- page refcnt > 0		memory_failure
-> >>   prep_new_huge_page					  get_huge_page_for_hwpoison
-> >> 							    !PageHeadHuge -- so 2(not a hugepage) is returned
-> >>     hugetlb_vmemmap_optimize -- subpages is read-only
-> >>     set_compound_page_dtor -- PageHuge is true now, but too late!!!
-> >> 							  TestSetPageHWPoison(p)
-> >> 							    -- We might write to read-only subpages here!!!
-> >>
-> >> Another similar scene:
-> >>
-> >> CPU 1							CPU 2
-> >> free_huge_page -- page refcnt == 0 and not PageHuge	memory_failure
-> >> 							  get_huge_page_for_hwpoison
-> >> 							    !PageHeadHuge -- so 2(not a hugepage) is returned
-> >> 							  TestSetPageHWPoison(p)
-> >> 							    -- We might write to read-only subpages here!!!
-> >>   hugetlb_vmemmap_restore -- subpages can be written to now, but too late!!!
-> >>
-> > 
-> > I agree this race is possible, I have proposed this race in thread [1].
-
-Thank you for reminding this, and I agree that we need some solution.
-
+On 04.08.22 02:12, Alistair Popple wrote:
 > 
-> Oh, I remember I see the race proposed in [1] but I did not look into that carefully at that time. Sorry.
+> Andrew Morton <akpm@linux-foundation.org> writes:
 > 
-> > But I didn't think more how to solve it.
-> I hope this thread can find a good solution. :)
+>> On Tue,  2 Aug 2022 10:30:12 +1000 Alistair Popple <apopple@nvidia.com> wrote:
+>>
+>>> When pinning pages with FOLL_LONGTERM check_and_migrate_movable_pages()
+>>> is called to migrate pages out of zones which should not contain any
+>>> longterm pinned pages.
+>>>
+>>> When migration succeeds all pages will have been unpinned so pinning
+>>> needs to be retried. This is indicated by returning zero. When all pages
+>>> are in the correct zone the number of pinned pages is returned.
+>>>
+>>> However migration can also fail, in which case pages are unpinned and
+>>> -ENOMEM is returned. However if the failure was due to not being unable
+>>> to isolate a page zero is returned. This leads to indefinite looping in
+>>> __gup_longterm_locked().
+>>>
+>>> Fix this by simplifying the return codes such that zero indicates all
+>>> pages were successfully pinned in the correct zone while errors indicate
+>>> either pages were migrated and pinning should be retried or that
+>>> migration has failed and therefore the pinning operation should fail.
+>>>
+>>> This fixes the indefinite looping on page isolation failure by failing
+>>> the pin operation instead of retrying indefinitely.
+>>>
+>>
+>> Are we able to identify a Fixes: for this?  Presumably something in the
+>> series "Add MEMORY_DEVICE_COHERENT for coherent device memory mapping"?
+> 
+> It seems the infinite loop was desired behaviour so I will re-spin this
+> as a pure clean-up.
+> 
 
-Both of the races show that __get_huge_page_for_hwpoison() fails to
-capture the case of generic compound page during turning into hugetlb,
-What makes things complicated is that no one knows to which state
-such a compound page finally turns into. So I think that if the page
-to be handled is an unknown compound page, we need to wait until it
-becomes some known page state to avoid misjudging.
+How can the infinite loop trigger when we allow longterm-pinning the
+shared zeropage? (note: disallowing that for now was a bug)
 
-If we need a quick small fix, we may replace the check "!PageHeadHuge()"
-in __get_huge_page_for_hwpoison() with "!PageCompound()", and add another
-retry path in get_huge_page_for_hwpoison() for non-hugetlb compound pages.
-
+-- 
 Thanks,
-Naoya Horiguchi
 
-> 
-> > 
-> > [1] https://lore.kernel.org/linux-mm/20220623235153.2623702-1-naoya.horiguchi@linux.dev/T/#ma094a7cea7df8fd9a77a91551bf39077d89e23bd
-> > 
-> >> I think the above scenes are possible. But I can't found a stable solution to fix it. Any suggestions?
-> >> Or is it not worth to fix it as it's too rare? Or am I miss something?
-> >>
-> > 
-> > Luckily, the system will panic at once, which encountering this race. However,
-> > we don't see any bug report. If we have an easy way to fix it, I think it is worth.
-> 
-> Agree. But I can't find a easy way to fix it yet.
-> 
-> > Just a quick reply, no suggestion/solutions from me.
-> 
-> Many thanks for your quick reply.
-> 
-> > 
-> > Thanks.
-> > 
-> >> Any response would be appreciated!
-> >>
-> >> Thanks!
-> >>
-> > .
-> > 
-> 
+David / dhildenb
+

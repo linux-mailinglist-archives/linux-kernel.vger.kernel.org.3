@@ -2,80 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C73589ED0
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46B6589ED2
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236741AbiHDPiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        id S234776AbiHDPk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234837AbiHDPiU (ORCPT
+        with ESMTP id S231617AbiHDPk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:38:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88A951D30D
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:38:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659627498;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yog9DRxVr54iQAe1p9ahsjOiy30Sl9RiTZ3r7Sc6V88=;
-        b=ibMRhE9RSY70aOHpXR36dPf+eyT3fju6Ri2rtZVnNmGTp2edZGHmqdPk/s6guiHzZBD+oy
-        lvrC4oUdP44ZuwV/fotaK8oYVYb/mFqsDEClUbjLAsrTWbYdEOw0UYaC6oB5mdegiwn7OJ
-        HxWtcS1fQzXY0m1zR/gsHCN59LeVpKY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-QsAES3BkMXC2cZWKAdz1-w-1; Thu, 04 Aug 2022 11:38:15 -0400
-X-MC-Unique: QsAES3BkMXC2cZWKAdz1-w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD34A8037AA;
-        Thu,  4 Aug 2022 15:38:14 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 51A0CC15D4F;
-        Thu,  4 Aug 2022 15:38:13 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <165962680944.3334508.6610023900349142034.stgit@warthog.procyon.org.uk>
-References: <165962680944.3334508.6610023900349142034.stgit@warthog.procyon.org.uk>
-To:     viro@zeniv.linux.org.uk
-Cc:     dhowells@redhat.com,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Scott Mayhew <smayhew@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-nfs@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, dwysocha@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] nfs: Fix automount superblock LSM init problem, preventing sb sharing
+        Thu, 4 Aug 2022 11:40:56 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80664F17;
+        Thu,  4 Aug 2022 08:40:55 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id s9so259650ljs.6;
+        Thu, 04 Aug 2022 08:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=1leJD2jYdoCH2YF7serqPkhW+3ZM8UEl9gxlKtZpBek=;
+        b=laH6fB3jX1QrWTXtnY0qRiG3yiIKuZ4sSkr3yP8rxh1K2TGiHIorSIQj6pXgAPPmeB
+         xjuQPlvW66l4ncnGmdARxcrcDDCuJip7fBWe/TENNYsO6wB8viV1yd7NePXWO7qdTqYx
+         8MfNKUYe0peXYXpxBRzDrWsNShuAsTnMWECNSf1keJI2JPSIsOflFQGQKG9g3i7souQ4
+         vlEEDBcYzkLA3n4eGouBn/EOQRxK7qHWWNwZIozIXzHZExLeIMgz7zNd/S4ay+07kWlX
+         Jm52skrNW+E54wGgzw53RO8RayH5aAClCL5hZm0q1mY5SUz9ja90B+8TdmhYjukln66M
+         ZsDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=1leJD2jYdoCH2YF7serqPkhW+3ZM8UEl9gxlKtZpBek=;
+        b=yXYMGHeQzhXGY0SoI9eHRsdppCvPmnWib8jPRaQYymlhrRxryr+1oWOVxtl6YVCDvd
+         dKgHHgvmyqEjKyXLfK15IcXC1k9kxCYB/SuJy4rbbxb2bFRrXxM/44g4JGOpqnfLNVE6
+         oKMGcIKV5Diq/nOnbXlROSlDP1THoej7EE4kaaEwnYkLHzRtP4gD04nRQBlWx5o2OHp1
+         INFBUwFFHqRnrVPMWIeXuwTlhiwlEgulnoVBTlhDb1lgN77aqhcn4r+sKI35awBPLuaY
+         /RLBDhSH6PUSitRnXGw0jr7DV2+6NXRbdfb78SYMFx7aixEw+XXb7m2AI0199qeYHKq1
+         n7aw==
+X-Gm-Message-State: ACgBeo0Y1GZpjOj6zjj79gcXCrxhLqO72Vbj8RJOIILKPw8hg0lOjlnt
+        eNM5I9PxjLOYjzSNpESd2Fz8yuB87SO3j/OfHs0=
+X-Google-Smtp-Source: AA6agR5RGzkugERz/4oeLaBfhq3ArqArrOJPuit3/LvK760dfD+laKr6a9iKinniQ0NQiCL5MKgOdQhbs91FsvnJysg=
+X-Received: by 2002:a05:651c:2d0:b0:25e:6c94:59d5 with SMTP id
+ f16-20020a05651c02d000b0025e6c9459d5mr810993ljo.488.1659627653867; Thu, 04
+ Aug 2022 08:40:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3366905.1659627492.1@warthog.procyon.org.uk>
-Date:   Thu, 04 Aug 2022 16:38:12 +0100
-Message-ID: <3366906.1659627492@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220804145516.217482-1-tmaimon77@gmail.com> <6fef92f3-6932-5c20-57fe-9eb40d676013@molgen.mpg.de>
+In-Reply-To: <6fef92f3-6932-5c20-57fe-9eb40d676013@molgen.mpg.de>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Thu, 4 Aug 2022 18:40:42 +0300
+Message-ID: <CAP6Zq1hvDdDO3yA=rFAvKMg20EM6OuoiVnxOBMbrpB9oHaMbfw@mail.gmail.com>
+Subject: Re: [PATCH v1] dt-binding: ipmi: add fallback to npcm845 compatible
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonathan Cameron <jic23@kernel.org>, minyard@acm.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Meh.  Forgot to commit before mailing.  I've posted a v2 with the smack
-changes and a change to make SELinux check reference != NULL instead of
-fc->purpose == FS_CONTEXT_FOR_SUBMOUNT.
+Hi Paul,
 
-David
+On Thu, 4 Aug 2022 at 18:01, Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+>
+> Dear Tomer,
+>
+>
+> Am 04.08.22 um 16:55 schrieb Tomer Maimon:
+> > Add to npcm845 KCS compatible string a fallback to npcm750 KCS compatib=
+le
+> > string.
+> >
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > ---
+> >   Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt=
+ b/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> > index cbc10a68ddef..4fda76e63396 100644
+> > --- a/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> > +++ b/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> > @@ -7,7 +7,7 @@ used to perform in-band IPMI communication with their h=
+ost.
+> >   Required properties:
+> >   - compatible : should be one of
+> >       "nuvoton,npcm750-kcs-bmc"
+> > -    "nuvoton,npcm845-kcs-bmc"
+> > +    "nuvoton,npcm845-kcs-bmc", "nuvoton,npcm750-kcs-bmc"
+>
+> Isn=E2=80=99t the added string exactly the same as the one below the comp=
+atible
+> line?
+it is not the same, it describes a fallback to NPCM7XX KCS Since
+NPCM8XX KCS and NPCM7XX KCS modules are similar.
+>
+> >   - interrupts : interrupt generated by the controller
+> >   - kcs_chan : The KCS channel number in the controller
+>
+>
+> Kind regards,
+>
+> Paul
 
+Best regards,
+
+Tomer

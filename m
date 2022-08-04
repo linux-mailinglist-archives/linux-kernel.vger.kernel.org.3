@@ -2,121 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FD3589E35
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754CC589E39
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 17:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238249AbiHDPH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 11:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
+        id S238382AbiHDPJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 11:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233333AbiHDPHt (ORCPT
+        with ESMTP id S234093AbiHDPJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:07:49 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB76E1C902
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:07:48 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id v16-20020a17090abb9000b001f25244c65dso5586733pjr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 08:07:48 -0700 (PDT)
+        Thu, 4 Aug 2022 11:09:52 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC6B1C133
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 08:09:51 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id z25so31267834lfr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 08:09:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=neB+q0Kh/QsWUNLfDZS1PKd7092ZvbprenIhcvXZr4s=;
-        b=DEtCTuZuYtlNCKENrIWS/qrP6UQrptimFrP7vr/8hGEfVxGNVAqaGxVs1Mqahh3fJf
-         Bk8KfmBIyI2ctXtvBZ8yDNsVrvvumQU+Y395lVQju+2V1hs0PKE68RlkcSPVWHTOTL/2
-         KBO5J9nzOj09abxmKMh61PutppsEYFH+qAyutY6ntxdijTFkg3Z9Vl3W8ItxXlYwoc62
-         qYRqdStaJn4e9fw7YPAtUq0kDQ9F+l1royE+v4mZgpIA9xi6VuvhXezVDhLWxacvVRVN
-         XTiuz3CEDMVaaP23QuuUGKS8aObobALB2lOYSdnHgRuQopka5bRyrcoIrQ+HGDYOdtzO
-         yysA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6Ls3wmwZc27FOQS4WF8l9pDgrn7cd87DuWOgr6YV+4E=;
+        b=ry/Jo/Ok9+ZPG+82b0uF1vKq1QNAELdkGNfI7VaEYH0ZsY84RoECLsV8WP67WdFRyw
+         7FJNlhQGiady5DovDtRe/sfuxxZjHPX975QQMmgsGbP5GChZ6/Gn11+R/RlNC/CeJxob
+         ia3qIvsgLSgPGDjoR6s9sS1AH9cNjOSDO/lcwQEoV4qb0hRJ1T1mnIjOYH+DH8ZReSLf
+         35MfUIXVLmklevioSRjGU3GuukTaX50dnOeYT0LhPhVQaIjtx4vU4jVM1Ed6tpVMgoZw
+         ufTr6ccTJkc79a6LvE9SZ7WqUAqVyIq7d5qE62/EhMJGzVdjlhlsQWv1YzuKoo7eaOPQ
+         sJGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=neB+q0Kh/QsWUNLfDZS1PKd7092ZvbprenIhcvXZr4s=;
-        b=2uE42Ojd2razSjAvMyhTErFb8kmqEbLteJ1c9AM8TWh2J22tDsivQXKa8uH5tQ3NEh
-         pdNAklRm6taJXavRbQdmrtBq8Yx480A3QCxeubefaFocDnTspD9fpilPdTyrJ09ws5fo
-         M5ZloXN7+lDOM75/Pg3qX3urBs70X/4Rx48aKRlY2m/Dt8+J7aYWoTfXSgW50w1AcoHF
-         JZCJGmrdUUkwwCVhvWFS5swm2IVELZ14lTYSqN15r87INuamhH/JBUTow50oLnMwwTJa
-         ScHSgsJeshYR6cV0oYZ887Q0QQLxQmzctZu8XXT/HBF/x0spEfRwFmHJWlTu+EFxuJWt
-         bXCA==
-X-Gm-Message-State: ACgBeo2knE25xnJKvl7W4NElmHAZRPslhZcX2iwEWIKBLqiRlQYe33Xj
-        8TVwX0xaAMZRKA4L74qg1hWNMJDSfyW9Tw==
-X-Google-Smtp-Source: AA6agR70GYTX3ilAS5d1f2gctcAwETJuwcR3TW4OSclNNeLqgXdvT9Jce7p5cZBSSsf9/7R9avPxpQ==
-X-Received: by 2002:a17:902:788f:b0:16e:f6b8:16c6 with SMTP id q15-20020a170902788f00b0016ef6b816c6mr2331324pll.3.1659625668331;
-        Thu, 04 Aug 2022 08:07:48 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x16-20020a170902ec9000b0016c9e5f291bsm1103441plg.111.2022.08.04.08.07.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6Ls3wmwZc27FOQS4WF8l9pDgrn7cd87DuWOgr6YV+4E=;
+        b=Po+QVUqPpkqTzoFxScHh90FS25VeIMzw6dYDlyAqLGgtj/6GJDzdRvbsw3ZvStApJa
+         Pg7Cy6irKQfU+mjVumQboZxwxeNFGgqQccuCsOTzhd2qtWLcrXi4F6XwApbhqIRRWx74
+         5E5KfocDG34WrJy5xRx/jES9lDb+Dbi0MjL1AervnGn8S+ixilKRDtFAmLlmOEqh5p6x
+         3Hn+u+TUCLGXADJ+5YMtz2QM6fjtS2P8FLemVA+SAk9BRCRiUbnJ6a7EEEFVPjarRbGc
+         FVMserFVnTb1vs3tJ1GRxnR8w+H0Y3UWHuemPeU2CedF96fNwI6bAKUQCje97HO3B02R
+         aUpg==
+X-Gm-Message-State: ACgBeo1mqH1LRxzfdq7z1dFBWBpV0jyrq0meKpWrgx8opf1/Amn/GNl3
+        1YWr+nheLL5g75Z56XpIF8rV/w==
+X-Google-Smtp-Source: AA6agR5X0yl7CVbndZJi7Hs/+Xnnpb6lNmxgp0Wl/kB+ntjRtZ+aQgTxPPqdoYXv4nAKYO2X3G1YBQ==
+X-Received: by 2002:a05:6512:ba4:b0:48a:f185:db17 with SMTP id b36-20020a0565120ba400b0048af185db17mr790025lfv.107.1659625789282;
+        Thu, 04 Aug 2022 08:09:49 -0700 (PDT)
+Received: from krzk-bin.. ([77.222.167.48])
+        by smtp.gmail.com with ESMTPSA id be39-20020a056512252700b0048b37d29256sm152681lfb.63.2022.08.04.08.09.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 08:07:47 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 15:07:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [PATCH v2 2/7] perf/x86/core: Remove unnecessary stubs provided
- for KVM-only helpers
-Message-ID: <Yuvgv4QC3oKPlKs2@google.com>
-References: <20220803192658.860033-1-seanjc@google.com>
- <20220803192658.860033-3-seanjc@google.com>
- <fcb0e878-29ff-e408-ccf3-3b594160c0df@gmail.com>
+        Thu, 04 Aug 2022 08:09:48 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] dt-bindings: arm: aspeed: adjust qcom,dc-scm-v1-bmc compatible after rename
+Date:   Thu,  4 Aug 2022 17:09:35 +0200
+Message-Id: <20220804150935.121890-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fcb0e878-29ff-e408-ccf3-3b594160c0df@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022, Like Xu wrote:
-> On 4/8/2022 3:26 am, Sean Christopherson wrote:
-> > -#if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_AMD)
-> > - extern void amd_pmu_enable_virt(void);
-> > - extern void amd_pmu_disable_virt(void);
-> > -
-> > -#if defined(CONFIG_PERF_EVENTS_AMD_BRS)
-> > +#ifdef CONFIG_PERF_EVENTS_AMD_BRS
-> >   #define PERF_NEEDS_LOPWR_CB 1
-> > @@ -566,12 +538,13 @@ static inline void perf_lopwr_cb(bool lopwr_in)
-> >   	static_call_mod(perf_lopwr_cb)(lopwr_in);
-> >   }
-> > -#endif /* PERF_NEEDS_LOPWR_CB */
-> 
-> Oops, now the definition of PERF_NEEDS_LOPWR_CB will not be unset.
-> This is not mentioned in the commit message and may cause trouble.
+The Nuvia DC-SCM BMC board compatible was renamed iin commit
+7f058112873e ("ARM: dts: aspeed: nuvia: rename vendor nuvia to qcom"),
+so adjust the bindings as well.
 
-PERF_NEEDS_LOPWR_CB isn't being "unset" in the existing code, the comment is simply
-wrong.  The #endif pairs with CONFIG_PERF_EVENTS_AMD_BRS.
+Fixes: f77024c80147 ("dt-bindings: arm: aspeed: document board compatibles")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-  #if defined(CONFIG_PERF_EVENTS_AMD_BRS)
+---
 
-  #define PERF_NEEDS_LOPWR_CB 1
+Changes since v1:
+1. Use proper qcom compatible.
+---
+ Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  /*
-   * architectural low power callback impacts
-   * drivers/acpi/processor_idle.c
-   * drivers/acpi/acpi_pad.c
-   */
-  extern void perf_amd_brs_lopwr_cb(bool lopwr_in);
+diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+index 1895ce9de461..4f0b308e9f0f 100644
+--- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
++++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+@@ -80,7 +80,7 @@ properties:
+               - ibm,tacoma-bmc
+               - inventec,transformer-bmc
+               - jabil,rbp-bmc
+-              - nuvia,dc-scm-bmc
++              - qcom,dc-scm-v1-bmc
+               - quanta,s6q-bmc
+           - const: aspeed,ast2600
+ 
+-- 
+2.34.1
 
-  DECLARE_STATIC_CALL(perf_lopwr_cb, perf_amd_brs_lopwr_cb);
-
-  static inline void perf_lopwr_cb(bool lopwr_in)
-  {
-  	static_call_mod(perf_lopwr_cb)(lopwr_in);
-  }
-
-  #endif /* PERF_NEEDS_LOPWR_CB */ <=== should be /* CONFIG_PERF_EVENTS_AMD_BRS */

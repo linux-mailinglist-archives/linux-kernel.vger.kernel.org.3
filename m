@@ -2,262 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4836758A2FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CB758A2FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 00:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239704AbiHDWAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 18:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S239700AbiHDWDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 18:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiHDWAc (ORCPT
+        with ESMTP id S231321AbiHDWDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 18:00:32 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1CF64E5
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:00:30 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id u9-20020a056e021a4900b002dc685a1c13so539165ilv.19
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:00:30 -0700 (PDT)
+        Thu, 4 Aug 2022 18:03:15 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F129BDEBA
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 15:03:14 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id h188so841556oia.13
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:03:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=A3KaqbTDvr6yI86EPzA1l0NOPWv07KWx997g85QsDx4=;
+        b=V06sSFt2ksPjM8k6wnSbaG2QkPaVwvcAPAKnSzq34sTv9ksxh2OqhTuqg8SpivF9Y0
+         BeAYJPw9WS7SWCrlAS2ZuZhlUV0Va814LRQgaD8u4FmAed6qJn5lA7YVe7jiuQtzViV2
+         U2pdwnl+QBpBXtgGdP1BnbBo3Ok4S5SQTNkLc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=f2Aq/HQcpNyfdVHUFhRZWedlVxHPyLOZz5MBuiByUsk=;
-        b=hBS3IROtPn+lL0cXWd872bZD+EVv9nWBR1K2j2oSKPtX0WnFV5VIisKV6lYS8A2LJD
-         SP2SK47M/nM8TpvM8hkCO1tFVQ05ZSja56IYPgo7i2g934uCJD4t2Uy31Cil9yV2HTlL
-         StQ1xr/4XQ7rYgl0NCCLZRaaKZg6b19exbRYFFBs1o+tTjEgZgR88KxY3RjhEx+3uI3B
-         unCTlwzWQIPV+velrn+eiI5y8j8OolMYDafSK140/YKz2Xnsp87+TUc9p0iY3OP7XBrd
-         mvzwjf5ziUYfwU6Rqlkw/nCRDoidX3Z4vOcGgKva2SH5zaEzcer6kOgZaubLp7G/xUXS
-         Xn/w==
-X-Gm-Message-State: ACgBeo2OjqT4ShN3W/gDl50KXw6b02ODbBdlDqYxCcdqtuyyM8NrNz/9
-        shjpyzahcSLyFebUt/Nt+JPWxsmOozVxskCJ7mXzcDx6IzsV
-X-Google-Smtp-Source: AA6agR6UO2jX0H6ux3HhMNmK48a5RJrx/3oBOt3s5qq66mkkN/XpwUWyRNwi9js457ioUD80EldS/JL/fNDyVLs5tImnonGdYwwb
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=A3KaqbTDvr6yI86EPzA1l0NOPWv07KWx997g85QsDx4=;
+        b=nQtWSEBD9LYuGnsRmcxMmYHua/57BDyb/DzIjHNEPXlLkaufUqrUp0dHXpLRFgrhTz
+         ftzetZzafcC1LTWW3gjeqtp/CSe9dIgG9sDMBfb+ri10H/gVgzU9vGRy0NZ7/KPp4FA8
+         8K+FnYFnGZPiLR1ZgIwFaKcFhtK9VHe90R6xoxGSoMQ2eABisXWFooMnNYn3iYhpfuA7
+         Eojjp9Gr8Wr9N6IFn86uUNdtjJNYyOHy7LrVcxNxee54nGT94NeLAp0RQfOSLJ9fPMKg
+         qpuvrvlQ5CrZeDRjS7csXfkY87m2H0Y2iMJOOmkmtSqb8Po+ny2jNSGwlNHmfTcdAsad
+         7Bdw==
+X-Gm-Message-State: ACgBeo3+/KGstFtp8yUi/DB3n8Up3X9+5Bmts3Kxt2GNgrU5PXSRL+jU
+        Ef6X6IonQNW8k4lMyBwXk+we1jHu5WZaRw==
+X-Google-Smtp-Source: AA6agR5ZCtL3IkfxdFw2tj5QBLkjoNUFXf9hxfv/I4IiSLMKBTeWUorGlgIdUTwXCnr2T5Yvi7zYOQ==
+X-Received: by 2002:aca:2217:0:b0:33a:e056:dc76 with SMTP id b23-20020aca2217000000b0033ae056dc76mr1696058oic.128.1659650594266;
+        Thu, 04 Aug 2022 15:03:14 -0700 (PDT)
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com. [209.85.160.46])
+        by smtp.gmail.com with ESMTPSA id 6-20020a9d0686000000b0061c7ec80898sm349711otx.23.2022.08.04.15.03.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 15:03:14 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-10cf9f5b500so1081884fac.2
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 15:03:14 -0700 (PDT)
+X-Received: by 2002:a05:6870:b4a1:b0:10e:50b8:50aa with SMTP id
+ y33-20020a056870b4a100b0010e50b850aamr1952047oap.174.1659650171298; Thu, 04
+ Aug 2022 14:56:11 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:ce81:0:b0:2dc:fbec:d023 with SMTP id
- r1-20020a92ce81000000b002dcfbecd023mr1625181ilo.155.1659650429687; Thu, 04
- Aug 2022 15:00:29 -0700 (PDT)
-Date:   Thu, 04 Aug 2022 15:00:29 -0700
-In-Reply-To: <00000000000098972c05e2117b39@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005022af05e5717ac8@google.com>
-Subject: Re: [syzbot] memory leak in kobject_set_name_vargs (5)
-From:   syzbot <syzbot+7381dc4ad60658ca4c05@syzkaller.appspotmail.com>
-To:     konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
+ <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
+ <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
+ <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
+ <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
+ <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
+ <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com> <YusZ8gD/LjiAXadR@kernel.org>
+In-Reply-To: <YusZ8gD/LjiAXadR@kernel.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Thu, 4 Aug 2022 14:55:35 -0700
+X-Gmail-Original-Message-ID: <CAE=gft6LaNZLTK72n_Z7an0VA1FxxFFgGk6rmUF_Jvf=JinG3A@mail.gmail.com>
+Message-ID: <CAE=gft6LaNZLTK72n_Z7an0VA1FxxFFgGk6rmUF_Jvf=JinG3A@mail.gmail.com>
+Subject: Re: [PATCH 00/10] Encrypted Hibernation
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Matthew Garrett <mgarrett@aurora.tech>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Wed, Aug 3, 2022 at 5:59 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Tue, Aug 02, 2022 at 11:36:43AM -0700, Matthew Garrett wrote:
+> > On Mon, Aug 1, 2022 at 3:33 PM Evan Green <evgreen@chromium.org> wrote:
+> >
+> > > One more bump here, as we'd really love to get encrypted hibernation
+> > > to a form upstream would accept if at all possible. We were
+> > > considering landing this in our Chrome OS tree for now, then coming
+> > > back in a couple months with a "we've been baking this ourselves and
+> > > it's going so great, oooh yeah". I'm not sure if upstream would find
+> > > that compelling or not. But in any case, some guidance towards making
+> > > this more upstream friendly would be well appreciated.
+> > >
+> > > One thing I realized in attempting to pick this myself is that the
+> > > trusted key blob format has moved to ASN.1. So I should really move
+> > > the creation ticket to the new ASN.1 format (if I can figure out the
+> > > right OID for that piece), which would allow me to drop a lot of the
+> > > ugly stuff in tpm2_unpack_blob(). Maybe if I get no other comments
+> > > I'll work on that and resend.
+> >
+> > I've been revamping my TPM-backed verified hibernation implementation
+> > based on this work, so I'd definitely be enthusiastic about it being
+> > mergeable.
+>
+> BTW, is it tested with QEMU + swtpm?
 
-HEAD commit:    b44f2fd87919 Merge tag 'drm-next-2022-08-03' of git://anon..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=105fdbca080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=358668a360d9b702
-dashboard link: https://syzkaller.appspot.com/bug?extid=7381dc4ad60658ca4c05
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11c685ca080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120a0fe2080000
+For myself, so far I've been testing on a recent Intel Chromebook. The
+H1 (aka cr50) security chip on modern chromebooks implements a subset
+[1] of TPM2.0, and is exposed through the standard TPM APIs in the
+kernel. I can make sure to test on Qemu as well, is there anything in
+particular I should look out for?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7381dc4ad60658ca4c05@syzkaller.appspotmail.com
+-Evan
 
-BUG: memory leak
-unreferenced object 0xffff88810c35db80 (size 32):
-  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 25.990s)
-  hex dump (first 32 bytes):
-    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
-    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
-    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
-    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
-    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
-    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
-    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
-    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
-    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
-    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
-    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
-    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
-    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
-    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
-    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
-    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[1] https://chromium-review.googlesource.com/c/chromiumos/third_party/tpm2/+/3373466
 
-BUG: memory leak
-unreferenced object 0xffff88810c35db80 (size 32):
-  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 27.260s)
-  hex dump (first 32 bytes):
-    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
-    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
-    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
-    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
-    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
-    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
-    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
-    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
-    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
-    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
-    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
-    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
-    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
-    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
-    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
-    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88810c35db80 (size 32):
-  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 28.520s)
-  hex dump (first 32 bytes):
-    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
-    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
-    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
-    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
-    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
-    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
-    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
-    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
-    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
-    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
-    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
-    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
-    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
-    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
-    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
-    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88810c35db80 (size 32):
-  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 31.000s)
-  hex dump (first 32 bytes):
-    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
-    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
-    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
-    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
-    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
-    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
-    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
-    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
-    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
-    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
-    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
-    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
-    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
-    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
-    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
-    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88810c35db80 (size 32):
-  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 31.040s)
-  hex dump (first 32 bytes):
-    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
-    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
-    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
-    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
-    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
-    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
-    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
-    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
-    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
-    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
-    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
-    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
-    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
-    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
-    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
-    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88810c35db80 (size 32):
-  comm "syz-executor261", pid 3645, jiffies 4294950822 (age 31.080s)
-  hex dump (first 32 bytes):
-    6c 6f 6f 70 37 00 00 00 00 00 00 00 00 00 00 00  loop7...........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814bf836>] kstrdup+0x36/0x70 mm/util.c:61
-    [<ffffffff814bf8c3>] kstrdup_const+0x53/0x80 mm/util.c:84
-    [<ffffffff8239c002>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
-    [<ffffffff82492b6b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
-    [<ffffffff82492fed>] kobject_add_varg lib/kobject.c:352 [inline]
-    [<ffffffff82492fed>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
-    [<ffffffff81e10e8a>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
-    [<ffffffff81df964c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
-    [<ffffffff81de57ab>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
-    [<ffffffff81de57ab>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
-    [<ffffffff8164981b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815e2c68>] vfs_get_tree+0x28/0x100 fs/super.c:1497
-    [<ffffffff81626e27>] do_new_mount fs/namespace.c:3040 [inline]
-    [<ffffffff81626e27>] path_mount+0xc37/0x1120 fs/namespace.c:3370
-    [<ffffffff81627a5e>] do_mount fs/namespace.c:3383 [inline]
-    [<ffffffff81627a5e>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff81627a5e>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff81627a5e>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
-    [<ffffffff845cad15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845cad15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
-executing program
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
-executing program
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
-
+>
+> BR, Jarkko

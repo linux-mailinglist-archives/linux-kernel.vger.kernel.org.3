@@ -2,72 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014B1589AC5
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 13:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25983589ACA
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 13:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239513AbiHDLKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 07:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S239261AbiHDLNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 07:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbiHDLKV (ORCPT
+        with ESMTP id S231308AbiHDLNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 07:10:21 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B276F597
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 04:10:20 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id d6-20020a056e020be600b002dcc7977592so11870245ilu.17
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 04:10:20 -0700 (PDT)
+        Thu, 4 Aug 2022 07:13:52 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3319D61D6B
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 04:13:50 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id m22so18497078lfl.9
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 04:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ocrse2lQ6Zu05i5TSECxP89aNNukjo6UNe8sPBi1Tac=;
+        b=Y2sE4cFmB+/Hm7t80UvbhOR/3iDhNxGiy5cDtxtu9grrPVx2hr5S4QbpVJlNmxk6Nh
+         mW7pS10lAUh+BRUSydRJ0e0ES3++9AvWsbBo5QD6+KpFKfQ7qHe4FvJ4X9W6mgScBwO5
+         EY0FwScIlrnBeCj9kj59E2Zv68PyHW5L6+BOpfdqYKEgOc3G5oq5pFMzKZkm3ah4jpHi
+         QnggCBo+4a8zuLbnCkVtz934XZeLP5t5bw+AieLC+OT0Q6dv2xCCekI58pY4x5l4sck9
+         NguMsVmActDL8MZmcrH4fmHm0q5SakwlZyYMV+AO/TNd3t73mvxk5fEJa/2G05oT0a2x
+         UNQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=nU94kHDqKyyobD2ylU+XWg3IoudilPeOz7R9wa3wlH8=;
-        b=BFW0Ebfo23BLzqQgNloxmH+lN7HB1MzkInHRaUlVdTrdtJklA7SuQFt+VfveA/y498
-         l61l5+mWPJO96jAxYy9Mgof+f2x9fSBMvFT9F6mv6expPx+WF3ScTUuwoeKseIOfz1X1
-         AYEWmmAwP2DhxNkIJ8N8H9pEm3LjxVVwtdHYcrIA+0NYvyBtSUBR3e3s4dIiC2wZcUMp
-         4v9M9OMUIkoewTboCEZVn48oqjmkEc68SEenX8z0kyDxNg8x0F3XE3KSQW9Wy2Ts2/Ks
-         KRaeSf4zCDUozlif6JUYkiZ+yiPd7SH/uPFUW4A0ihVb7amUkD7rvIhsBEI9epZqM3uE
-         DcYA==
-X-Gm-Message-State: ACgBeo0VH2EnQIZNAcbM44QsChfMEnEUDgiK2P3YHh3FoMBDLOevCPNE
-        FFtHRaLT/malSN3pQKoGBir0rjZ0ScEMcd9Pyvy4fnHPGlrL
-X-Google-Smtp-Source: AA6agR6zJ0RDbdqXaXGsqZlPdtPopdtEakk0dfE/D/G4PEctqmzlr5RcMtURSqsdPF3DSsqRiOi1R6f87rjTYRDuwZpj1MFWi2Kf
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ocrse2lQ6Zu05i5TSECxP89aNNukjo6UNe8sPBi1Tac=;
+        b=dQ1OA2jJ4gS3BYDNRMpL4yE0yIbvyJmLE7SG5Ds8SMBDQDmPbh7HA/vJYgXridZBaM
+         uZUoydZLc36AA39x4swB5HXiPtsRrA7q5Q35HmQZsJv6Up9MJhvKgs3j00gD+bPuA8P7
+         qIgx+z22DTWiMZrQeXD/MyhbUNSB2LLSNpaUlTLE6nSPviMApjhW/jCAIPfSptrcjtsF
+         tnmL5pKP+BrIW0NbGa9fBk2dzdnbyNLq0VGQHzdqhXreivHfhGmtfYA/2IMK8nPGxLq6
+         osGLXc3VBt2mUlfpmCDjWUER9f6671fFOL8vk9c0MWJWthycFRQ46/H5IuL9kda30cRi
+         JLzQ==
+X-Gm-Message-State: ACgBeo2ujUnDNYEZXcbvBLnVQpRVj49+ycKwIQgaZNW7VJ1f87HPN8jp
+        oNrpvx5kvUvW/jFkTjQHz+ChHw==
+X-Google-Smtp-Source: AA6agR63N/Slocyhyqr3XJV8eS2xQ5DeoyAUJHauggb0t0T4y0jeXLCPYsVQtaa2lc9r7TngPF7lIg==
+X-Received: by 2002:a05:6512:3f05:b0:48a:ca44:80f2 with SMTP id y5-20020a0565123f0500b0048aca4480f2mr519981lfa.224.1659611628451;
+        Thu, 04 Aug 2022 04:13:48 -0700 (PDT)
+Received: from [192.168.1.6] ([77.222.167.48])
+        by smtp.gmail.com with ESMTPSA id r15-20020ac25f8f000000b0048b03f9adcdsm84592lfe.309.2022.08.04.04.13.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 04:13:47 -0700 (PDT)
+Message-ID: <ae06f644-b988-8fc3-fde8-258299f8f2ae@linaro.org>
+Date:   Thu, 4 Aug 2022 13:13:45 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a92:c246:0:b0:2de:b25b:e75 with SMTP id
- k6-20020a92c246000000b002deb25b0e75mr628863ilo.246.1659611420034; Thu, 04 Aug
- 2022 04:10:20 -0700 (PDT)
-Date:   Thu, 04 Aug 2022 04:10:20 -0700
-In-Reply-To: <20220804105325.1600-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000280dfd05e5686579@google.com>
-Subject: Re: [syzbot] INFO: trying to register non-static key in rxe_cleanup_task
-From:   syzbot <syzbot+833061116fa28df97f3b@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/3] dt-bindings: mediatek: mt8188: Add binding for MM &
+ INFRA IOMMU
+Content-Language: en-US
+To:     "Chengci.Xu" <chengci.xu@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220804105834.626-1-chengci.xu@mediatek.com>
+ <20220804105834.626-2-chengci.xu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220804105834.626-2-chengci.xu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 04/08/2022 12:58, Chengci.Xu wrote:
+> This patch adds descriptions for mt8188 IOMMU which also use ARM
+> Short-Descriptor translation table format.
+> 
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-and-tested-by: syzbot+833061116fa28df97f3b@syzkaller.appspotmail.com
+Thank you for your patch. There is something to discuss/improve.
 
-Tested on:
+>      then:
+>        required:
+> diff --git a/include/dt-bindings/memory/mt8188-memory-port.h
+>  b/include/dt-bindings/memory/mt8188-memory-port.h
+> new file mode 100644
+> index 000000000000..612fd366c3a7
+> --- /dev/null
+> +++ b/include/dt-bindings/memory/mt8188-memory-port.h
 
-commit:         cb71b93c Add linux-next specific files for 20220628
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=14347bd2080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=833061116fa28df97f3b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1471202e080000
+Use vendor prefix in filename, so mediatek,mt8188-memory-port.h
 
-Note: testing is done by a robot and is best-effort only.
+> @@ -0,0 +1,482 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+
+
+This should be dual-license, if possible.
+
+
+> +/*
+> + * Copyright (c) 2022 MediaTek Inc.
+> + * Author: Chengci Xu <chengci.xu@mediatek.com>
+> + */
+> +#ifndef _DT_BINDINGS_MEMORY_MT8188_LARB_PORT_H_
+> +#define _DT_BINDINGS_MEMORY_MT8188_LARB_PORT_H_
+> +
+> +#include <dt-bindings/memory/mtk-memory-port.h>
+> +
+> +/*
+> + * MM IOMMU supports 16GB dma address. We separate it to four ranges:
+> + * 0 ~ 4G; 4G ~ 8G; 8G ~ 12G; 12G ~ 16G, we could adjust these masters
+> + * locate in anyone region. BUT:
+> + * a) Make sure all the ports inside a larb are in one range.
+> + * b) The iova of any master can NOT cross the 4G/8G/12G boundary.
+> + *
+> + * This is the suggested mapping in this SoC:
+> + *
+> + * modules    dma-address-region	larbs-ports
+> + * disp         0 ~ 4G                  larb0/1/2/3
+> + * vcodec      4G ~ 8G                  larb19/21/23
+> + * cam/mdp     8G ~ 12G                 the other larbs.
+> + * N/A         12G ~ 16G
+> + * CCU0   0x24000_0000 ~ 0x243ff_ffff   larb27: port 0/1
+> + * CCU1   0x24400_0000 ~ 0x247ff_ffff   larb27: port 2/3
+> + *
+> + * This SoC have two MM IOMMU HWs, this is the connected information:
+> + * iommu-vdo: larb0/2/5/9/10/11A/11C/13/16B/17B/19/21
+> + * iommu-vpp: larb1/3/4/6/7/11B/12/14/15/16A/17A/23/27
+> + */
+> +
+> +/* MM IOMMU larbs */
+> +#define SMI_L0_ID		(0)
+
+No need for ().
+
+> +#define SMI_L1_ID		(1)
+> +#define SMI_L2_ID		(2)
+> +#define SMI_L3_ID		(3)\
+
+
+Best regards,
+Krzysztof

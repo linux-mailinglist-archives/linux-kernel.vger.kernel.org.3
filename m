@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BBA5899F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03565899F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239221AbiHDJam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 05:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
+        id S233287AbiHDJer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 05:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239139AbiHDJaj (ORCPT
+        with ESMTP id S229720AbiHDJen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 05:30:39 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1753DF39
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 02:30:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VLMBxaE_1659605434;
-Received: from 30.240.99.20(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VLMBxaE_1659605434)
-          by smtp.aliyun-inc.com;
-          Thu, 04 Aug 2022 17:30:35 +0800
-Message-ID: <a0e46572-5b37-7bb3-20f0-740a6480e50e@linux.alibaba.com>
-Date:   Thu, 4 Aug 2022 17:30:33 +0800
+        Thu, 4 Aug 2022 05:34:43 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B74B67177
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 02:34:42 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id uj29so22697594ejc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 02:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=SrICNljyj+6EXk05+As4iI9xNsWvqnooXHxi71ozYp8=;
+        b=YW8LuDZtomDZOqmE+44RmUZEwic4lHO0nCWukhHaK1F/3ObsGls+OUjWoGEfPUNFt4
+         b5W9aFjc5xSuU7kU5arw2KbBF0TTSoXcbAAttFN7B/EyORkqMlRFdLtwidM49lk/WP3f
+         0sZh3e8AMRQTi5W2Yr+1o9v/76PWag13rZKf0wUlLScE3MuQfzUUZn9pizJ22HiQ7v50
+         DRLDN9hqOiPyhf4gR2FdvtHih3ZojrifKl64+paJSsSG4HoOJ0f2HmSyKLRsqh9A2UGo
+         BtkDsYC3DoaOF8rlIQQPB96hQIzJCdkEBcV88BdV+nQPtbyDG8kwFD2AY7iynQC2myHy
+         gwCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=SrICNljyj+6EXk05+As4iI9xNsWvqnooXHxi71ozYp8=;
+        b=wHsHRxHqVIKlmV8vX4durwJ5InAUwfFi0rB/wbdzN/VPbrC5eebiPSFgFhAaZY0IoJ
+         qy1ZkpDNFFzGlJj+8nZdJuImVcY6mn8ZW503plr3PJsUu+e3V+DTxJuj7kjtGYKGF7X7
+         Mdss4Tk2+hGyGBmZYs/aJTjCWSyByG5D9YMIsNqCmEusfx7i4Qty0W5surWXkjAv2dlQ
+         11zYJHgBlDADyhyXANe5DbM142QOoQaaJwPxsX8GvTUAjwMb3+5Cd3+2p0TQ8uOIbBqm
+         1N0eHqicrtRa01ctm3h9z+T6U0e9lqIiA51BBGOElO3rDBzwWtf6RkshC3cgCNMDft+3
+         tpHg==
+X-Gm-Message-State: ACgBeo0AA8x1hnJyV2S8DoJwoQM8+7fzfpM0Ka230UxZ7/yRDPWyucw7
+        r8FT/wv4A3schm6igIQFRH2YY4Dr1zydu9vrkLE=
+X-Google-Smtp-Source: AA6agR4Znwk9W9zT21sIGGDfdCof3AZa7sxzhHopD4Lax3SdE/zPr/MvV3DYsA5GbuCPEksU+y9yVRsEPD/GoKZ5Kqk=
+X-Received: by 2002:a17:906:cc14:b0:730:d5e9:a12e with SMTP id
+ ml20-20020a170906cc1400b00730d5e9a12emr613229ejb.515.1659605680641; Thu, 04
+ Aug 2022 02:34:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.3
-Subject: Re: [RFC PATCH V4 1/1] mm: add last level page table numa info to
- /proc/pid/numa_pgtable
-To:     David Hildenbrand <david@redhat.com>, willy@infradead.org
-Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220801121727.76186-1-xhao@linux.alibaba.com>
- <20220801121727.76186-2-xhao@linux.alibaba.com>
- <0c1f9e76-9b1d-7069-bb09-c18e4f19f0c4@redhat.com>
- <bc0d16a6-e340-e261-82a0-e17bd236c2d9@linux.alibaba.com>
- <eaaab6c4-1719-5e21-ebf7-a0c17487314c@redhat.com>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <eaaab6c4-1719-5e21-ebf7-a0c17487314c@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6402:1e8c:b0:43e:7fe2:9090 with HTTP; Thu, 4 Aug 2022
+ 02:34:39 -0700 (PDT)
+Reply-To: ndlovuraymonds@yandex.com
+From:   Raymond Ndlovu <hamfranck877@gmail.com>
+Date:   Thu, 4 Aug 2022 10:34:39 +0100
+Message-ID: <CANe2if0+F75QZubZ-0KtRqk9whk6cZF8cRp4AoNXOO6t-qxbsA@mail.gmail.com>
+Subject: JOINT INVESTMENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:629 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6776]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [hamfranck877[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [hamfranck877[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Good day,
+I am in search of a trustworthy Individual or company to partner with
+on a business with good Return On Investment(ROI).
+If interested,I look forward to reading your mail.
 
-在 2022/8/4 下午4:12, David Hildenbrand 写道:
-> On 04.08.22 10:04, haoxin wrote:
->> 在 2022/8/1 下午9:28, David Hildenbrand 写道:
->>> On 01.08.22 14:17, Xin Hao wrote:
->>>> In many data center servers, the shared memory architectures is
->>>> Non-Uniform Memory Access (NUMA), remote numa node data access
->>>> often brings a high latency problem, but what we are easy to ignore
->>>> is that the page table remote numa access, It can also leads to a
->>>> performance degradation.
->>> Let me try rewriting:
->>>
->>> "
->>> Many data center servers employ Non-Uniform Memory Access (NUMA)
->>> architectures. Remote numa memory access results in high latency. While
->>> memory placement is one issue, sub-optimal page table placement can also
->>> result in surprise performance degradation.
->>> "
->> Thanks,  it reads more clearly.
->>
->>>> So there add a new interface in /proc, This will help developers to
->>>> get more info about performance issues if they are caused by cross-NUMA.
->>> Why do we only care about "last level page table", why not about the others?
->>>
->>> IMHO, we could emit something like "0, 1, 3, 0" instead for a given user
->>> space address, showing the NUMA node the page table belongs to from
->>> highest to lowest page table level.
->> I have planned to implement the PTE page table in this version first,
->> and then support other page tables in the next patch later.
-> If there are plans, let's do it all at once, to get a good and single
-> interface to expose that information.
-Ok, thanks for your suggestion, I will implement it in the next version.
+Regards.
 
->
+Raymond Ndlovu
+Investment Executive and Stockbroker
++447743328087

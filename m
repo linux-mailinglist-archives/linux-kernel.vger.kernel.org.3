@@ -2,136 +2,604 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56DA5899D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABDD5899DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 11:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238985AbiHDJWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 05:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
+        id S239170AbiHDJXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 05:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiHDJWb (ORCPT
+        with ESMTP id S229527AbiHDJXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 05:22:31 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118FC65653;
-        Thu,  4 Aug 2022 02:22:29 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id k26so20075867ejx.5;
-        Thu, 04 Aug 2022 02:22:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=KLFS4WUlaqxZbqoy7i8FOJPlIwGNfBkjIWJSYKEP0DM=;
-        b=Lu3eMfFMg5YQ95Hxel+uncrI6PQ4kkPR46VScIK4X0f960uTO6qXwxYB25FfB10msO
-         fe9CuDl+RGxNh5NoFuQmLEvMEgcXQPXcsnNmHXSDDW5LqG52/pH/TxdAc9Nn/fAPnS0a
-         qkRKon5NRh3UfNXxI0RsJ6r0m4VZGVw2yrsJwJ9HAZ3lDLuwDbpDVpKVxzk+VXJxvqo5
-         jVeCRCZJaV4hYwTZg2qaLzRh9BfLbGwy8rG9jpadrnbaEQGT80WFCsG4WtRcgl/TIICK
-         JTS4+EhetoTWx4ImNC6GMFUN6eo3grpWM7F+8ksysW26vmrUXPGsERMAA93e3l9OcCbL
-         otrg==
-X-Gm-Message-State: ACgBeo28Gc/F8G8j9AZanhV+vWZU0sMNvTRB8ky5kVf9CZ4IycpeO4I/
-        BjOCPsCU6nUOjM1oC0l4yAs4ahFWoISXSg==
-X-Google-Smtp-Source: AA6agR7nr7rXhSDs20ISvDf9usQGNbKryjMfX5Glou808Dft/hnakz10xMZehmVM2yJKUeqPtOtHwQ==
-X-Received: by 2002:a17:907:b14:b0:730:abbd:e965 with SMTP id h20-20020a1709070b1400b00730abbde965mr711749ejl.245.1659604947641;
-        Thu, 04 Aug 2022 02:22:27 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id a17-20020aa7cf11000000b0043cfb6af49asm377023edy.16.2022.08.04.02.22.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 02:22:27 -0700 (PDT)
-Message-ID: <2d4e82f9-e370-bb01-8656-fe0376c22a77@kernel.org>
-Date:   Thu, 4 Aug 2022 11:22:26 +0200
+        Thu, 4 Aug 2022 05:23:50 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF4D67159
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 02:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659605027; x=1691141027;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hLiE/z/NOArgWys9rmumQXpnv5cIWCPRlRNLF96AAHo=;
+  b=e7Spy92Vhiq3+S771kjN3F6UZ1YhD0A7GOOqfuWeFvSXi5hoR9nPlafR
+   izUpIyH8/51Z+rPXMzs5Q9bQxdeowrPrr6POKG5DJvuP5cInUNYWY10lW
+   JBROnOj2/aG3DshoTkMVLYBEa55VTd9okOUiUeLRa3bOr/doI9sRpA3Sd
+   BK79GhmKHw/aUHEnmANXuRV+A3pCpO6H8J/IF8TQxSv+b/fjl2qx8URuF
+   mnHvL2G2/Ypr2fTfYHKE8+mQZdslELVqjnkQqTuRljZBYhP0+msoQnioM
+   gECeKu12qHAslnOMTWKeIq7dUJDVGjqO++inm8DBelZkikXkuLdjiLlWI
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="289900115"
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="289900115"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 02:23:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="692565683"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Aug 2022 02:23:46 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJX4z-000ICg-1V;
+        Thu, 04 Aug 2022 09:23:45 +0000
+Date:   Thu, 4 Aug 2022 17:23:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [rmk-arm:sa1100 26/51]
+ drivers/tty/serial/serial_mctrl_gpio.h:171:20: error: old-style parameter
+ declarations in prototyped function definition
+Message-ID: <202208041734.GGnGQt8q-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] tty: vt: selection: Add check for valid tiocl_selection
- values
-Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        syzbot <syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <000000000000bbdd0405d120c155@google.com>
- <20220729065139.6529-1-khalid.masum.92@gmail.com>
- <eb4a26aa-da30-ceee-7d27-c1e902dd4218@gmx.de> <YuV9PybMPgc83Jis@p100>
- <1eb62346-304b-54d5-8a62-8a35888d51bd@kernel.org>
- <35e860bb-c76c-ca5f-3f48-2bf6cb798689@gmx.de>
- <0fbc2150-b4aa-f2cb-5084-3a9f69b3455d@gmx.de>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <0fbc2150-b4aa-f2cb-5084-3a9f69b3455d@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04. 08. 22, 10:44, Helge Deller wrote:
-> On 8/4/22 09:15, Helge Deller wrote:
->> Hello Jiri,
->>
->> Thanks for looking into this patch!
->>
->> On 8/4/22 07:47, Jiri Slaby wrote:
->>> On 30. 07. 22, 20:49, Helge Deller wrote:
->>>> The line and column numbers for the selection need to start at 1.
->>>> Add the checks to prevent invalid input.
->>>>
->>>> Signed-off-by: Helge Deller <deller@gmx.de>
->>>> Reported-by: syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com
->>>>
->>>> diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
->>>> index f7755e73696e..58692a9b4097 100644
->>>> --- a/drivers/tty/vt/selection.c
->>>> +++ b/drivers/tty/vt/selection.c
->>>> @@ -326,6 +326,9 @@ static int vc_selection(struct vc_data *vc, struct tiocl_selection *v,
->>>>            return 0;
->>>>        }
->>>>
->>>> +    if (!v->xs || !v->ys || !v->xe || !v->ye)
->>>> +        return -EINVAL;
->>>
->>> Hmm, I'm not sure about this. It potentially breaks userspace (by
->>> returning EINVAL now).
->>
->> Right.
->> According to the code below, my interpretation is that all xs/ys/xe/ye values
->> should be > 0. But of course I might be wrong on this, as I didn't find any
->> documentation for TIOCL_SETSEL.
->>
->> And if userspace tries to set an invalid selection (e.g. by selecting row 0),
->> my patch now returns -EINVAL, while it returned success before.
->>
->>> And the code below should handle this just fine, right:
->>>>        v->xs = min_t(u16, v->xs - 1, vc->vc_cols - 1);
->>>>        v->ys = min_t(u16, v->ys - 1, vc->vc_rows - 1);
->>>>        v->xe = min_t(u16, v->xe - 1, vc->vc_cols - 1);
->>
->> It "handles it fine" in the sense that it can cope with the
->> input and will not crash.
->> But it returns (maybe?) unexpected results...
-> 
-> After some more thinking maybe you are right.
-> In case a user provided invalid values in the past, simply an unexpected
-> selection was set, but nothing broke.
-> Since the patch doesn't fix any critical issue, we could just drop this patch
-> and leave it as is.
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm sa1100
+head:   2e73962c8797ccdf52841ea3065779839ac60e0e
+commit: cbd9dc8cc7a7ad1790670c6652520fa866a9c72d [26/51] tty: serial_mctrl_gpio: add wakeup support for serial control gpios
+config: sh-polaris_defconfig (https://download.01.org/0day-ci/archive/20220804/202208041734.GGnGQt8q-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+        git fetch --no-tags rmk-arm sa1100
+        git checkout cbd9dc8cc7a7ad1790670c6652520fa866a9c72d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
 
-We can still do a trial and revert it if something breaks... It's just 
-that _noone_ knows with all this undocumented stuff ;).
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-But in fact, 0 currently means full row/column. Isn't it on purpose?
+All errors (new ones prefixed by >>):
 
-Today, we are out of luck, codesearch.debian.net gives no clue about users:
-https://codesearch.debian.net/search?q=%5CbTIOCL_SETSEL%5Cb&literal=0
+   In file included from drivers/tty/serial/sh-sci.c:57:
+   drivers/tty/serial/serial_mctrl_gpio.h:166:1: error: version control conflict marker in file
+     166 | <<<<<<< HEAD
+         | ^~~~~~~
+   drivers/tty/serial/serial_mctrl_gpio.h: In function 'mctrl_gpio_disable_irq_wake':
+   drivers/tty/serial/serial_mctrl_gpio.h:172:1: error: version control conflict marker in file
+     172 | =======
+         | ^~~~~~~
+   drivers/tty/serial/serial_mctrl_gpio.h:181:1: error: version control conflict marker in file
+     181 | >>>>>>> eef01d4b6b91 (tty: serial_mctrl_gpio: add wakeup support for serial control gpios)
+         | ^~~~~~~
+   In file included from drivers/tty/serial/sh-sci.c:58:
+   drivers/tty/serial/sh-sci.h:14:1: warning: empty declaration
+      14 | enum {
+         | ^~~~
+   drivers/tty/serial/sh-sci.c:61:1: warning: empty declaration
+      61 | enum {
+         | ^~~~
+   drivers/tty/serial/sh-sci.c:79:1: warning: empty declaration
+      79 | enum SCI_CLKS {
+         | ^~~~
+   drivers/tty/serial/sh-sci.c:103:1: warning: empty declaration
+     103 | struct plat_sci_reg {
+         | ^~~~~~
+   drivers/tty/serial/sh-sci.c:107:1: warning: empty declaration
+     107 | struct sci_port_params {
+         | ^~~~~~
+   drivers/tty/serial/sh-sci.c:117:1: warning: empty declaration
+     117 | struct sci_port {
+         | ^~~~~~
+>> drivers/tty/serial/sh-sci.c:164:24: error: storage class specified for parameter 'sci_ports'
+     164 | static struct sci_port sci_ports[SCI_NPORTS];
+         |                        ^~~~~~~~~
+>> drivers/tty/serial/sh-sci.c:165:22: error: storage class specified for parameter 'sci_ports_in_use'
+     165 | static unsigned long sci_ports_in_use;
+         |                      ^~~~~~~~~~~~~~~~
+>> drivers/tty/serial/sh-sci.c:166:27: error: storage class specified for parameter 'sci_uart_driver'
+     166 | static struct uart_driver sci_uart_driver;
+         |                           ^~~~~~~~~~~~~~~
+>> drivers/tty/serial/sh-sci.c:170:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     170 | {
+         | ^
+>> drivers/tty/serial/sh-sci.c:174:37: error: storage class specified for parameter 'sci_port_params'
+     174 | static const struct sci_port_params sci_port_params[SCIx_NR_REGTYPES] = {
+         |                                     ^~~~~~~~~~~~~~~
+>> drivers/tty/serial/sh-sci.c:174:21: error: parameter 'sci_port_params' is initialized
+     174 | static const struct sci_port_params sci_port_params[SCIx_NR_REGTYPES] = {
+         |                     ^~~~~~~~~~~~~~~
+>> drivers/tty/serial/sh-sci.c:179:10: error: array index in non-array initializer
+     179 |         [SCIx_SCI_REGTYPE] = {
+         |          ^~~~~~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:179:10: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:179:9: warning: braces around scalar initializer
+     179 |         [SCIx_SCI_REGTYPE] = {
+         |         ^
+   drivers/tty/serial/sh-sci.c:179:9: note: (near initialization for 'sci_port_params')
+>> drivers/tty/serial/sh-sci.c:180:17: error: field name not in record or union initializer
+     180 |                 .regs = {
+         |                 ^
+   drivers/tty/serial/sh-sci.c:180:17: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:180:17: warning: braces around scalar initializer
+   drivers/tty/serial/sh-sci.c:180:17: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:181:26: error: array index in non-array initializer
+     181 |                         [SCSMR]         = { 0x00,  8 },
+         |                          ^~~~~
+   drivers/tty/serial/sh-sci.c:181:26: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:181:25: warning: braces around scalar initializer
+     181 |                         [SCSMR]         = { 0x00,  8 },
+         |                         ^
+   drivers/tty/serial/sh-sci.c:181:25: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:181:52: warning: excess elements in scalar initializer
+     181 |                         [SCSMR]         = { 0x00,  8 },
+         |                                                    ^
+   drivers/tty/serial/sh-sci.c:181:52: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:182:26: error: array index in non-array initializer
+     182 |                         [SCBRR]         = { 0x01,  8 },
+         |                          ^~~~~
+   drivers/tty/serial/sh-sci.c:182:26: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:182:25: warning: braces around scalar initializer
+     182 |                         [SCBRR]         = { 0x01,  8 },
+         |                         ^
+   drivers/tty/serial/sh-sci.c:182:25: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:182:45: warning: initialization of 'const struct sci_port_params *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     182 |                         [SCBRR]         = { 0x01,  8 },
+         |                                             ^~~~
+   drivers/tty/serial/sh-sci.c:182:45: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:182:52: warning: excess elements in scalar initializer
+     182 |                         [SCBRR]         = { 0x01,  8 },
+         |                                                    ^
+   drivers/tty/serial/sh-sci.c:182:52: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:182:43: warning: excess elements in scalar initializer
+     182 |                         [SCBRR]         = { 0x01,  8 },
+         |                                           ^
+   drivers/tty/serial/sh-sci.c:182:43: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:183:26: error: array index in non-array initializer
+     183 |                         [SCSCR]         = { 0x02,  8 },
+         |                          ^~~~~
+   drivers/tty/serial/sh-sci.c:183:26: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:183:25: warning: braces around scalar initializer
+     183 |                         [SCSCR]         = { 0x02,  8 },
+         |                         ^
+   drivers/tty/serial/sh-sci.c:183:25: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:183:45: warning: initialization of 'const struct sci_port_params *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     183 |                         [SCSCR]         = { 0x02,  8 },
+         |                                             ^~~~
+   drivers/tty/serial/sh-sci.c:183:45: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:183:52: warning: excess elements in scalar initializer
+     183 |                         [SCSCR]         = { 0x02,  8 },
+         |                                                    ^
+   drivers/tty/serial/sh-sci.c:183:52: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:183:43: warning: excess elements in scalar initializer
+     183 |                         [SCSCR]         = { 0x02,  8 },
+         |                                           ^
+   drivers/tty/serial/sh-sci.c:183:43: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:184:26: error: array index in non-array initializer
+     184 |                         [SCxTDR]        = { 0x03,  8 },
+         |                          ^~~~~~
+   drivers/tty/serial/sh-sci.c:184:26: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:184:25: warning: braces around scalar initializer
+     184 |                         [SCxTDR]        = { 0x03,  8 },
+         |                         ^
+   drivers/tty/serial/sh-sci.c:184:25: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:184:45: warning: initialization of 'const struct sci_port_params *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     184 |                         [SCxTDR]        = { 0x03,  8 },
+         |                                             ^~~~
+   drivers/tty/serial/sh-sci.c:184:45: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:184:52: warning: excess elements in scalar initializer
+     184 |                         [SCxTDR]        = { 0x03,  8 },
+         |                                                    ^
+   drivers/tty/serial/sh-sci.c:184:52: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:184:43: warning: excess elements in scalar initializer
+     184 |                         [SCxTDR]        = { 0x03,  8 },
+         |                                           ^
+   drivers/tty/serial/sh-sci.c:184:43: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:185:26: error: array index in non-array initializer
+     185 |                         [SCxSR]         = { 0x04,  8 },
+         |                          ^~~~~
+   drivers/tty/serial/sh-sci.c:185:26: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:185:25: warning: braces around scalar initializer
+     185 |                         [SCxSR]         = { 0x04,  8 },
+         |                         ^
+   drivers/tty/serial/sh-sci.c:185:25: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:185:45: warning: initialization of 'const struct sci_port_params *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     185 |                         [SCxSR]         = { 0x04,  8 },
+         |                                             ^~~~
+   drivers/tty/serial/sh-sci.c:185:45: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:185:52: warning: excess elements in scalar initializer
+     185 |                         [SCxSR]         = { 0x04,  8 },
+         |                                                    ^
+   drivers/tty/serial/sh-sci.c:185:52: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:185:43: warning: excess elements in scalar initializer
+     185 |                         [SCxSR]         = { 0x04,  8 },
+         |                                           ^
+   drivers/tty/serial/sh-sci.c:185:43: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:186:26: error: array index in non-array initializer
+     186 |                         [SCxRDR]        = { 0x05,  8 },
+         |                          ^~~~~~
+--
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:493:17: error: field name not in record or union initializer
+     493 |                 .error_clear = SCIF_ERROR_CLEAR & ~SCIFA_ORER,
+         |                 ^
+   drivers/tty/serial/sh-sci.c:493:17: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.h:103:33: warning: excess elements in scalar initializer
+     103 | #define SCIF_ERROR_CLEAR        (u32)(~(SCIF_PER | SCIF_FER | SCIF_ER))
+         |                                 ^
+   drivers/tty/serial/sh-sci.c:493:32: note: in expansion of macro 'SCIF_ERROR_CLEAR'
+     493 |                 .error_clear = SCIF_ERROR_CLEAR & ~SCIFA_ORER,
+         |                                ^~~~~~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.h:103:33: note: (near initialization for 'sci_port_params')
+     103 | #define SCIF_ERROR_CLEAR        (u32)(~(SCIF_PER | SCIF_FER | SCIF_ER))
+         |                                 ^
+   drivers/tty/serial/sh-sci.c:493:32: note: in expansion of macro 'SCIF_ERROR_CLEAR'
+     493 |                 .error_clear = SCIF_ERROR_CLEAR & ~SCIFA_ORER,
+         |                                ^~~~~~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:477:38: warning: excess elements in scalar initializer
+     477 |         [SCIx_SH7705_SCIF_REGTYPE] = {
+         |                                      ^
+   drivers/tty/serial/sh-sci.c:477:38: note: (near initialization for 'sci_port_params')
+   drivers/tty/serial/sh-sci.c:506:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     506 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:520:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     520 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:532:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     532 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:548:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     548 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:561:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     561 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:573:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     573 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:603:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     603 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:626:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     626 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:638:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     638 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:652:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     652 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:699:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     699 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:713:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     713 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:763:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     763 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:780:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     780 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:785:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     785 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:806:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     806 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:854:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     854 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:928:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     928 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:966:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     966 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:993:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+     993 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1018:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1018 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1077:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1077 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1086:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1086 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1096:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1096 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1106:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1106 | {
+         | ^
+   In file included from include/linux/node.h:18,
+                    from include/linux/cpu.h:17,
+                    from include/linux/cpufreq.h:12,
+                    from drivers/tty/serial/sh-sci.c:23:
+>> include/linux/device.h:132:33: error: storage class specified for parameter 'dev_attr_rx_fifo_trigger'
+     132 |         struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+         |                                 ^~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1123:8: note: in expansion of macro 'DEVICE_ATTR_RW'
+    1123 | static DEVICE_ATTR_RW(rx_fifo_trigger);
+         |        ^~~~~~~~~~~~~~
+>> include/linux/device.h:132:16: error: parameter 'dev_attr_rx_fifo_trigger' is initialized
+     132 |         struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+         |                ^~~~~~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1123:8: note: in expansion of macro 'DEVICE_ATTR_RW'
+    1123 | static DEVICE_ATTR_RW(rx_fifo_trigger);
+         |        ^~~~~~~~~~~~~~
+   In file included from include/linux/kobject.h:20,
+                    from include/linux/energy_model.h:7,
+                    from include/linux/device.h:16:
+>> drivers/tty/serial/sh-sci.c:1123:23: error: 'rx_fifo_trigger_show' undeclared (first use in this function)
+    1123 | static DEVICE_ATTR_RW(rx_fifo_trigger);
+         |                       ^~~~~~~~~~~~~~~
+   include/linux/sysfs.h:104:19: note: in definition of macro '__ATTR'
+     104 |         .show   = _show,                                                \
+         |                   ^~~~~
+   include/linux/device.h:132:52: note: in expansion of macro '__ATTR_RW'
+     132 |         struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+         |                                                    ^~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1123:8: note: in expansion of macro 'DEVICE_ATTR_RW'
+    1123 | static DEVICE_ATTR_RW(rx_fifo_trigger);
+         |        ^~~~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1123:23: note: each undeclared identifier is reported only once for each function it appears in
+    1123 | static DEVICE_ATTR_RW(rx_fifo_trigger);
+         |                       ^~~~~~~~~~~~~~~
+   include/linux/sysfs.h:104:19: note: in definition of macro '__ATTR'
+     104 |         .show   = _show,                                                \
+         |                   ^~~~~
+   include/linux/device.h:132:52: note: in expansion of macro '__ATTR_RW'
+     132 |         struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+         |                                                    ^~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1123:8: note: in expansion of macro 'DEVICE_ATTR_RW'
+    1123 | static DEVICE_ATTR_RW(rx_fifo_trigger);
+         |        ^~~~~~~~~~~~~~
+>> drivers/tty/serial/sh-sci.c:1123:23: error: 'rx_fifo_trigger_store' undeclared (first use in this function)
+    1123 | static DEVICE_ATTR_RW(rx_fifo_trigger);
+         |                       ^~~~~~~~~~~~~~~
+   include/linux/sysfs.h:105:19: note: in definition of macro '__ATTR'
+     105 |         .store  = _store,                                               \
+         |                   ^~~~~~
+   include/linux/device.h:132:52: note: in expansion of macro '__ATTR_RW'
+     132 |         struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+         |                                                    ^~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1123:8: note: in expansion of macro 'DEVICE_ATTR_RW'
+    1123 | static DEVICE_ATTR_RW(rx_fifo_trigger);
+         |        ^~~~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1128:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1128 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1145:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1145 | {
+         | ^
+>> include/linux/device.h:132:33: error: storage class specified for parameter 'dev_attr_rx_fifo_timeout'
+     132 |         struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+         |                                 ^~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1169:8: note: in expansion of macro 'DEVICE_ATTR_RW'
+    1169 | static DEVICE_ATTR_RW(rx_fifo_timeout);
+         |        ^~~~~~~~~~~~~~
+>> include/linux/device.h:132:16: error: parameter 'dev_attr_rx_fifo_timeout' is initialized
+     132 |         struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+         |                ^~~~~~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1169:8: note: in expansion of macro 'DEVICE_ATTR_RW'
+    1169 | static DEVICE_ATTR_RW(rx_fifo_timeout);
+         |        ^~~~~~~~~~~~~~
+>> drivers/tty/serial/sh-sci.c:1169:23: error: 'rx_fifo_timeout_show' undeclared (first use in this function)
+    1169 | static DEVICE_ATTR_RW(rx_fifo_timeout);
+         |                       ^~~~~~~~~~~~~~~
+   include/linux/sysfs.h:104:19: note: in definition of macro '__ATTR'
+     104 |         .show   = _show,                                                \
+         |                   ^~~~~
+   include/linux/device.h:132:52: note: in expansion of macro '__ATTR_RW'
+     132 |         struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+         |                                                    ^~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1169:8: note: in expansion of macro 'DEVICE_ATTR_RW'
+    1169 | static DEVICE_ATTR_RW(rx_fifo_timeout);
+         |        ^~~~~~~~~~~~~~
+>> drivers/tty/serial/sh-sci.c:1169:23: error: 'rx_fifo_timeout_store' undeclared (first use in this function)
+    1169 | static DEVICE_ATTR_RW(rx_fifo_timeout);
+         |                       ^~~~~~~~~~~~~~~
+   include/linux/sysfs.h:105:19: note: in definition of macro '__ATTR'
+     105 |         .store  = _store,                                               \
+         |                   ^~~~~~
+   include/linux/device.h:132:52: note: in expansion of macro '__ATTR_RW'
+     132 |         struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+         |                                                    ^~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1169:8: note: in expansion of macro 'DEVICE_ATTR_RW'
+    1169 | static DEVICE_ATTR_RW(rx_fifo_timeout);
+         |        ^~~~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1671:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1671 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1675:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1675 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1682:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1682 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1733:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1733 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1745:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1745 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1760:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1760 | {
+         | ^
+   drivers/tty/serial/sh-sci.c:1800:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+    1800 | {
+         | ^
+>> drivers/tty/serial/sh-sci.c:1849:3: error: storage class specified for parameter 'sci_irq_desc'
+    1849 | } sci_irq_desc[] = {
+         |   ^~~~~~~~~~~~
+>> drivers/tty/serial/sh-sci.c:1849:1: error: parameter 'sci_irq_desc' is initialized
+    1849 | } sci_irq_desc[] = {
+         | ^
+   drivers/tty/serial/sh-sci.c:1853:10: error: array index in non-array initializer
+    1853 |         [SCIx_ERI_IRQ] = {
+         |          ^~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1853:10: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1853:9: warning: braces around scalar initializer
+    1853 |         [SCIx_ERI_IRQ] = {
+         |         ^
+   drivers/tty/serial/sh-sci.c:1853:9: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1854:17: error: field name not in record or union initializer
+    1854 |                 .desc = "rx err",
+         |                 ^
+   drivers/tty/serial/sh-sci.c:1854:17: note: (near initialization for 'sci_irq_desc')
+>> drivers/tty/serial/sh-sci.c:1854:25: error: initialization of 'const struct sci_irq_desc *' from incompatible pointer type 'char *' [-Werror=incompatible-pointer-types]
+    1854 |                 .desc = "rx err",
+         |                         ^~~~~~~~
+   drivers/tty/serial/sh-sci.c:1854:25: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1855:17: error: field name not in record or union initializer
+    1855 |                 .handler = sci_er_interrupt,
+         |                 ^
+   drivers/tty/serial/sh-sci.c:1855:17: note: (near initialization for 'sci_irq_desc')
+>> drivers/tty/serial/sh-sci.c:1855:28: error: 'sci_er_interrupt' undeclared (first use in this function); did you mean 'hrtimer_interrupt'?
+    1855 |                 .handler = sci_er_interrupt,
+         |                            ^~~~~~~~~~~~~~~~
+         |                            hrtimer_interrupt
+   drivers/tty/serial/sh-sci.c:1855:28: warning: excess elements in scalar initializer
+   drivers/tty/serial/sh-sci.c:1855:28: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1858:10: error: array index in non-array initializer
+    1858 |         [SCIx_RXI_IRQ] = {
+         |          ^~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1858:10: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1858:9: warning: braces around scalar initializer
+    1858 |         [SCIx_RXI_IRQ] = {
+         |         ^
+   drivers/tty/serial/sh-sci.c:1858:9: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1859:17: error: field name not in record or union initializer
+    1859 |                 .desc = "rx full",
+         |                 ^
+   drivers/tty/serial/sh-sci.c:1859:17: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1859:25: error: initialization of 'const struct sci_irq_desc *' from incompatible pointer type 'char *' [-Werror=incompatible-pointer-types]
+    1859 |                 .desc = "rx full",
+         |                         ^~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1859:25: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1860:17: error: field name not in record or union initializer
+    1860 |                 .handler = sci_rx_interrupt,
+         |                 ^
+   drivers/tty/serial/sh-sci.c:1860:17: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1860:28: error: 'sci_rx_interrupt' undeclared (first use in this function); did you mean 'in_interrupt'?
+    1860 |                 .handler = sci_rx_interrupt,
+         |                            ^~~~~~~~~~~~~~~~
+         |                            in_interrupt
+   drivers/tty/serial/sh-sci.c:1860:28: warning: excess elements in scalar initializer
+   drivers/tty/serial/sh-sci.c:1860:28: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1858:26: warning: excess elements in scalar initializer
+    1858 |         [SCIx_RXI_IRQ] = {
+         |                          ^
+   drivers/tty/serial/sh-sci.c:1858:26: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1863:10: error: array index in non-array initializer
+    1863 |         [SCIx_TXI_IRQ] = {
+         |          ^~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1863:10: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1863:9: warning: braces around scalar initializer
+    1863 |         [SCIx_TXI_IRQ] = {
+         |         ^
+   drivers/tty/serial/sh-sci.c:1863:9: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1864:17: error: field name not in record or union initializer
+    1864 |                 .desc = "tx empty",
+         |                 ^
+   drivers/tty/serial/sh-sci.c:1864:17: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1864:25: error: initialization of 'const struct sci_irq_desc *' from incompatible pointer type 'char *' [-Werror=incompatible-pointer-types]
+    1864 |                 .desc = "tx empty",
+         |                         ^~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1864:25: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1865:17: error: field name not in record or union initializer
+    1865 |                 .handler = sci_tx_interrupt,
+         |                 ^
+   drivers/tty/serial/sh-sci.c:1865:17: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1865:28: error: 'sci_tx_interrupt' undeclared (first use in this function); did you mean 'note_interrupt'?
+    1865 |                 .handler = sci_tx_interrupt,
+         |                            ^~~~~~~~~~~~~~~~
+         |                            note_interrupt
+   drivers/tty/serial/sh-sci.c:1865:28: warning: excess elements in scalar initializer
+   drivers/tty/serial/sh-sci.c:1865:28: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1863:26: warning: excess elements in scalar initializer
+    1863 |         [SCIx_TXI_IRQ] = {
+         |                          ^
+   drivers/tty/serial/sh-sci.c:1863:26: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1868:10: error: array index in non-array initializer
+    1868 |         [SCIx_BRI_IRQ] = {
+         |          ^~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1868:10: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1868:9: warning: braces around scalar initializer
+    1868 |         [SCIx_BRI_IRQ] = {
+         |         ^
+   drivers/tty/serial/sh-sci.c:1868:9: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1869:17: error: field name not in record or union initializer
+    1869 |                 .desc = "break",
+         |                 ^
+   drivers/tty/serial/sh-sci.c:1869:17: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1869:25: error: initialization of 'const struct sci_irq_desc *' from incompatible pointer type 'char *' [-Werror=incompatible-pointer-types]
+    1869 |                 .desc = "break",
+         |                         ^~~~~~~
+   drivers/tty/serial/sh-sci.c:1869:25: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1870:17: error: field name not in record or union initializer
+    1870 |                 .handler = sci_br_interrupt,
+         |                 ^
+   drivers/tty/serial/sh-sci.c:1870:17: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1870:28: error: 'sci_br_interrupt' undeclared (first use in this function); did you mean 'hrtimer_interrupt'?
+    1870 |                 .handler = sci_br_interrupt,
+         |                            ^~~~~~~~~~~~~~~~
+         |                            hrtimer_interrupt
+   drivers/tty/serial/sh-sci.c:1870:28: warning: excess elements in scalar initializer
+   drivers/tty/serial/sh-sci.c:1870:28: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1868:26: warning: excess elements in scalar initializer
+    1868 |         [SCIx_BRI_IRQ] = {
+         |                          ^
+   drivers/tty/serial/sh-sci.c:1868:26: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1873:10: error: array index in non-array initializer
+    1873 |         [SCIx_DRI_IRQ] = {
+         |          ^~~~~~~~~~~~
+   drivers/tty/serial/sh-sci.c:1873:10: note: (near initialization for 'sci_irq_desc')
+   drivers/tty/serial/sh-sci.c:1873:9: warning: braces around scalar initializer
 
-thanks,
+
+vim +171 drivers/tty/serial/serial_mctrl_gpio.h
+
+9978c2f14f20a1a Erwan Le Ray 2022-02-03  170  
+9978c2f14f20a1a Erwan Le Ray 2022-02-03 @171  static inline void mctrl_gpio_disable_irq_wake(struct mctrl_gpios *gpios)
+cbd9dc8cc7a7ad1 Russell King 2016-09-24  172  =======
+cbd9dc8cc7a7ad1 Russell King 2016-09-24  173  static inline int mctrl_gpio_enable_wake(struct mctrl_gpios *gpios,
+cbd9dc8cc7a7ad1 Russell King 2016-09-24  174  					 enum mctrl_gpio_idx gidx)
+cbd9dc8cc7a7ad1 Russell King 2016-09-24  175  {
+cbd9dc8cc7a7ad1 Russell King 2016-09-24  176  	return 0;
+cbd9dc8cc7a7ad1 Russell King 2016-09-24  177  }
+cbd9dc8cc7a7ad1 Russell King 2016-09-24  178  
+
+:::::: The code at line 171 was first introduced by commit
+:::::: 9978c2f14f20a1aaea3840c16220ef64e4ad1872 serial: mctrl_gpio: add a new API to enable / disable wake_irq
+
+:::::: TO: Erwan Le Ray <erwan.leray@foss.st.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
 -- 
-js
-suse labs
+0-DAY CI Kernel Test Service
+https://01.org/lkp

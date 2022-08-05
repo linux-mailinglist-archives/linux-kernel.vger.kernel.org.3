@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D9E58B26A
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BAA358B26E
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241812AbiHEWV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 18:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
+        id S241826AbiHEWWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 18:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241818AbiHEWVu (ORCPT
+        with ESMTP id S241730AbiHEWVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 18:21:50 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3994C1CB1B
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:21:49 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id j11-20020a05690212cb00b006454988d225so3152361ybu.10
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:21:49 -0700 (PDT)
+        Fri, 5 Aug 2022 18:21:52 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5C11CFD1
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:21:51 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id s14-20020a5b044e000000b00672caf96368so3119629ybp.21
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:21:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=mbnTnCyzBrPsZ2cIyy/polFSFcHi5iA+y2wZHy5S50g=;
-        b=O1tv2Chuzvi0NDU6zf4N/Fshq6yGCqiuDTuun/edjoU5VnoWU6HlwRqRq214Cym4mz
-         noFPwUsXvo0SYNfeNEjWoXIVZcign3gEgsFpITz4QnZrbGOtKfeY+cDS9TK5falMgCNI
-         DJ6xcL5LbkGOVjDMSML6SM3jRDsvX6GsPMXFLvFKSYD1BtYOfgnhaOBaYbe12JSlISWh
-         zKPVACct5OHq40PuoLQGZTx+YFMcXX1RgsGmCiYPiEbumgKzZ847z4pJf7UeYvrXqLcR
-         FAIEKIHGSOX0P4KPT7WoPV95vsdEH3BO4vgVQ2JI3EeE9rV4Ph0MSuemj+SCfQWNltzS
-         3OGg==
+        bh=5E4PGAWMReAFHkj0eA7xzWpJk8N5M4FgV4LT8CvMVPA=;
+        b=TDuzZmP48qciezv1MXsf3LVuEa0sxCTwiXmz3GaFb6bY9Qtk1DrEr4hk/hgSUCSU9D
+         AfNdO6ggJ2vgmMWeMOlX/leMgSXGcQVjNK0zYR0phfm+32xYcPAHGvQSYoqPiNbxudnk
+         HvE2bkCtTLZ4+b3Ay+j53c5ejYOvr0jzKdc8h62ng9xyA/YGHmq7HQjrLzA1ZaYH+BV9
+         0FZ6JoFGedju30kgJTOIXqXWVdCHFjQ55uchR5QBZO9lhMl46oSxaKE6Z0a+P78bLdDl
+         tNj+/17Hexg7tUbRBM+OCbb+sqB6gZJt9lxBqysd3REOSfOgCXMUXOEiZd1Awo0K8DSt
+         9wmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=mbnTnCyzBrPsZ2cIyy/polFSFcHi5iA+y2wZHy5S50g=;
-        b=5wYBSxWmcS890kbBm70mdtag84TBFm+rWqFkoVlfT4Z137hbmjz/OFcsU6KCFHcuD4
-         bzQlVBx8XVX2f33ZEZfI0rzD14Z6gF4r3vI9AcWRJGzEkrv0bfIQLBQih0j20uEI5pVo
-         hF80cUMLeovOsaqmPCzi1J7Ifd34RgbXvy9Rn8YIMoFsu+bApc3lrZ4xDYCzhocLJnEI
-         6JU7eKrHN6QwLS3S9VK2wfNK2MJNXbYGsn+YUwGgqSRuQCqffqB3C+81z5EiTqLdL/rt
-         GaXAF0sAh2pp5BmQXbrfMOV80OLBtLWf6S5Hp80rwCtz/wSbQ+c8md/p7G/sl2UYz9TN
-         1fDg==
-X-Gm-Message-State: ACgBeo3DKsxt3JY2CDOl92YMgkR8oSEo5oTy5qdlAkgDDaf3UevggY+F
-        BAzOl6dxe8aIdMsQTQOTnoeEwNYPJFg=
-X-Google-Smtp-Source: AA6agR6sCneuMkIn8ODRd5RHoaPnFVjTcuaTHnQMf3gsH0n2vQfppBnVbsN+vr+g2fHjPeLdvPi2NkEA0yQ=
+        bh=5E4PGAWMReAFHkj0eA7xzWpJk8N5M4FgV4LT8CvMVPA=;
+        b=vkSddsHy996CBN8ekXqt4p5n68JpjcfKNzxLfCtm5xCclqEV6vcxYUPD1DK9W32wQb
+         35o8+f+VH8/ALyoFYVrNtP5R1gm5ARRuGCIkwwtaFYEy4ZIUBx1KpVI9WtBHxuxh2OyD
+         eEJviGm0Inzd18be4w3U5KvF6352cDzUiqC9mWc/x5Fgedl5yDGW5VlqQe0djwI95ttj
+         9xEW2xmcTQpod/Tb4uTgfyDSI72FIkth9jUAAYoMAMtRyq/pyUjzEbmxeObrr1pVJhs5
+         PcdtMt5BdoLIi/NsS7AWE/YL8E+BxagXBvT6/yK4NQVK6O95yppeBj3eX73ktcaFcz22
+         m+ag==
+X-Gm-Message-State: ACgBeo20dgyf+xsVcO5QA0T9Rxn2vjW8KxoLAHnIIHenskhkvZoUUQFT
+        hF57S3HmHtmDiRMBIJ4nZElJx/FkZSc=
+X-Google-Smtp-Source: AA6agR55Nd+GF+Zicb9UzLXVsBAJG/nkDrQRMgHX77YRUR2vsXmmAEpB7Hc955x1MuY3F3Ah7dc0fEbCssM=
 X-Received: from jeffxud.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:e37])
- (user=jeffxu job=sendgmr) by 2002:a05:6902:723:b0:677:115b:553c with SMTP id
- l3-20020a056902072300b00677115b553cmr7776175ybt.214.1659738108553; Fri, 05
- Aug 2022 15:21:48 -0700 (PDT)
-Date:   Fri,  5 Aug 2022 22:21:22 +0000
+ (user=jeffxu job=sendgmr) by 2002:a25:9c87:0:b0:671:82fd:9106 with SMTP id
+ y7-20020a259c87000000b0067182fd9106mr7167620ybo.546.1659738110679; Fri, 05
+ Aug 2022 15:21:50 -0700 (PDT)
+Date:   Fri,  5 Aug 2022 22:21:23 +0000
 In-Reply-To: <20220805222126.142525-1-jeffxu@google.com>
-Message-Id: <20220805222126.142525-2-jeffxu@google.com>
+Message-Id: <20220805222126.142525-3-jeffxu@google.com>
 Mime-Version: 1.0
 References: <20220805222126.142525-1-jeffxu@google.com>
 X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v2 1/5] mm/memfd: add F_SEAL_EXEC
+Subject: [PATCH v2 2/5] mm/memfd: add MFD_NOEXEC flag to memfd_create
 From:   <jeffxu@google.com>
 To:     skhan@linuxfoundation.org
 Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
@@ -65,7 +65,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,73 +74,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daniel Verkamp <dverkamp@chromium.org>
 
-The new F_SEAL_EXEC flag will prevent modification of the exec bits:
-written as traditional octal mask, 0111, or as named flags, S_IXUSR |
-S_IXGRP | S_IXOTH. Any chmod(2) or similar call that attempts to modify
-any of these bits after the seal is applied will fail with errno EPERM.
+The new MFD_NOEXEC flag allows the creation of a permanently
+non-executable memfd. This is accomplished by creating it with a
+different set of file mode bits (0666) than the default (0777) and
+applying the F_SEAL_EXEC seal at creation time, so there is no window
+between memfd creation and seal application.
 
-This will preserve the execute bits as they are at the time of sealing,
-so the memfd will become either permanently executable or permanently
-un-executable.
+Unfortunately, the default for memfd must remain executable, since
+changing this would be an API break, and some programs depend on being
+able to exec code from a memfd directly. However, this new flag will
+allow programs to create non-executable memfds, and a distribution may
+choose to enforce use of this flag in memfd_create calls via other
+security mechanisms.
 
 Co-developed-by: Jeff Xu <jeffxu@chromium.org>
 Signed-off-by: Jeff Xu <jeffxu@chromium.org>
 Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
 ---
- include/uapi/linux/fcntl.h | 1 +
- mm/memfd.c                 | 2 ++
- mm/shmem.c                 | 6 ++++++
- 3 files changed, 9 insertions(+)
+ include/uapi/linux/memfd.h |  1 +
+ mm/memfd.c                 | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
-index 2f86b2ad6d7e..a472ba69596c 100644
---- a/include/uapi/linux/fcntl.h
-+++ b/include/uapi/linux/fcntl.h
-@@ -43,6 +43,7 @@
- #define F_SEAL_GROW	0x0004	/* prevent file from growing */
- #define F_SEAL_WRITE	0x0008	/* prevent writes */
- #define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
-+#define F_SEAL_EXEC     0x0020  /* prevent chmod modifying exec bits */
- /* (1U << 31) is reserved for signed error codes */
+diff --git a/include/uapi/linux/memfd.h b/include/uapi/linux/memfd.h
+index 7a8a26751c23..140e125c9f65 100644
+--- a/include/uapi/linux/memfd.h
++++ b/include/uapi/linux/memfd.h
+@@ -8,6 +8,7 @@
+ #define MFD_CLOEXEC		0x0001U
+ #define MFD_ALLOW_SEALING	0x0002U
+ #define MFD_HUGETLB		0x0004U
++#define MFD_NOEXEC              0x0008U
  
  /*
+  * Huge page size encoding when MFD_HUGETLB is specified, and a huge page
 diff --git a/mm/memfd.c b/mm/memfd.c
-index 08f5f8304746..4ebeab94aa74 100644
+index 4ebeab94aa74..b841514eb0fd 100644
 --- a/mm/memfd.c
 +++ b/mm/memfd.c
-@@ -147,6 +147,7 @@ static unsigned int *memfd_file_seals_ptr(struct file *file)
- }
+@@ -263,7 +263,7 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
+ #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
+ #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
  
- #define F_ALL_SEALS (F_SEAL_SEAL | \
-+		     F_SEAL_EXEC | \
- 		     F_SEAL_SHRINK | \
- 		     F_SEAL_GROW | \
- 		     F_SEAL_WRITE | \
-@@ -175,6 +176,7 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
- 	 *   SEAL_SHRINK: Prevent the file from shrinking
- 	 *   SEAL_GROW: Prevent the file from growing
- 	 *   SEAL_WRITE: Prevent write access to the file
-+	 *   SEAL_EXEC: Prevent modification of the exec bits in the file mode
- 	 *
- 	 * As we don't require any trust relationship between two parties, we
- 	 * must prevent seals from being removed. Therefore, sealing a file
-diff --git a/mm/shmem.c b/mm/shmem.c
-index e5e43b990fdc..bb530f562bdd 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -1082,6 +1082,12 @@ static int shmem_setattr(struct user_namespace *mnt_userns,
- 	if (error)
- 		return error;
+-#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
++#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | MFD_NOEXEC)
  
-+	if ((info->seals & F_SEAL_EXEC) && (attr->ia_valid & ATTR_MODE)) {
-+		if ((inode->i_mode ^ attr->ia_mode) & 0111) {
-+			return -EPERM;
-+		}
+ SYSCALL_DEFINE2(memfd_create,
+ 		const char __user *, uname,
+@@ -333,6 +333,14 @@ SYSCALL_DEFINE2(memfd_create,
+ 		*file_seals &= ~F_SEAL_SEAL;
+ 	}
+ 
++	if (flags & MFD_NOEXEC) {
++		struct inode *inode = file_inode(file);
++
++		inode->i_mode &= ~0111;
++		file_seals = memfd_file_seals_ptr(file);
++		*file_seals |= F_SEAL_EXEC;
 +	}
 +
- 	if (S_ISREG(inode->i_mode) && (attr->ia_valid & ATTR_SIZE)) {
- 		loff_t oldsize = inode->i_size;
- 		loff_t newsize = attr->ia_size;
+ 	fd_install(fd, file);
+ 	kfree(name);
+ 	return fd;
 -- 
 2.37.1.559.g78731f0fdb-goog
 

@@ -2,121 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D091058AEBA
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 19:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E105858AECC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 19:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241107AbiHERQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 13:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
+        id S241142AbiHERYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 13:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237539AbiHERQJ (ORCPT
+        with ESMTP id S238133AbiHERYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 13:16:09 -0400
-Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9931D2C640
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 10:16:07 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Lzsgp0LP4zMqK1c;
-        Fri,  5 Aug 2022 19:16:06 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Lzsgn3LXJzlrKd0;
-        Fri,  5 Aug 2022 19:16:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1659719766;
-        bh=lNZkRZlxYcCJLjsqfaYlILC0M7oDXWgtnjCf/3RVbso=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=nlMcoVN0nI7/hM8/BvLhgkqom/D3l9NBJGb+AvenQOKT9B64m2q2mF6yym8jifJdc
-         wagOCf6RToWl4xwARp+ViE9QU+5XJJXVxfzmvPzOU8Pvtv21I0FjKLlZCtCPFud9Kv
-         TdDiviqF5B+g0Tnm7E+EsSnVaX4q9lsBv8m0JBpw=
-Message-ID: <3de9a64e-6f27-8f76-9626-6ee082d382ea@digikod.net>
-Date:   Fri, 5 Aug 2022 19:16:04 +0200
+        Fri, 5 Aug 2022 13:24:04 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F99765E;
+        Fri,  5 Aug 2022 10:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659720244; x=1691256244;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gA+aK7p4JPfKPh6XWb3jT6QvhY4lfvwF9wFUlII7414=;
+  b=nOcAuOkAYDCvmQnpGI1mxztF3vXmNp0Fbw1Mlg26xkAslMlQpw8EbgER
+   0A2zRTO3DfFA6ptozJdIVLY1xOe/SFbACxjpT2/DtVObrKLAKZRwSYVVn
+   X58eHO/SGQU2PRcFmu1K41J6eXoyBS+4uJBKbffnRWBsPiEJgxxueK0bM
+   56sBUsujAQfxqPvjUOvQJQRWRpxWwaP7DJi8G/4LqQSDN8b2/1hAbGSAl
+   9QIm4SlT6LdK6Q1EEa7FmJ3EBcaW0Ir9adj0ZblE+FpaMOsRZZe0wiM+b
+   cKohLG43uq+LmbYi6REGrb21TaUc6oitPOgPwWYZCU8Blz3lva3BSzsxY
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="351969430"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="351969430"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 10:24:03 -0700
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="579571659"
+Received: from rderber-mobl1.amr.corp.intel.com (HELO [10.212.217.71]) ([10.212.217.71])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 10:24:03 -0700
+Message-ID: <b3464e21-95e8-a80e-bf98-3c90c06afb91@intel.com>
+Date:   Fri, 5 Aug 2022 10:24:04 -0700
 MIME-Version: 1.0
-User-Agent: 
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] x86/fpu: Allow PKRU to be (once again) written by
+ ptrace.
 Content-Language: en-US
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
- <f1fc4e6e-e2a6-3ec7-2d3b-215111a4b9ae@digikod.net>
- <76a2ac43-6e3d-0b62-7c8c-eec5f247f8f8@collabora.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH] selftests/landlock: fix broken include of
- linux/landlock.h
-In-Reply-To: <76a2ac43-6e3d-0b62-7c8c-eec5f247f8f8@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Kyle Huey <me@kylehuey.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Borislav Petkov <bp@suse.de>, kvm@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220804031632.52921-1-khuey@kylehuey.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220804031632.52921-1-khuey@kylehuey.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/3/22 20:16, Kyle Huey wrote:
+> When management of the PKRU register was moved away from XSTATE, emulation
+> of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
+> for APIs that write XSTATE. This can be seen by running gdb and executing
+> `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
+> write to the PKRU register (which gdb performs through ptrace) is ignored.
 
-On 04/08/2022 21:38, Guillaume Tucker wrote:
-> On 04/08/2022 12:36, Mickaël Salaün wrote:
->>
->> On 03/08/2022 22:13, Guillaume Tucker wrote:
->>> Revert part of the earlier changes to fix the kselftest build when
->>> using a sub-directory from the top of the tree as this broke the
->>> landlock test build as a side-effect when building with "make -C
->>> tools/testing/selftests/landlock".
->>>
->>> Reported-by: Mickaël Salaün <mic@digikod.net>
->>> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers dependency")
->>> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
->>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
->>> ---
->>>    tools/testing/selftests/landlock/Makefile | 7 +++++--
->>>    1 file changed, 5 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
->>> index a6959df28eb0..02868ac3bc71 100644
->>> --- a/tools/testing/selftests/landlock/Makefile
->>> +++ b/tools/testing/selftests/landlock/Makefile
->>> @@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
->>>    TEST_GEN_PROGS_EXTENDED := true
->>>      OVERRIDE_TARGETS := 1
->>> +top_srcdir := ../../../..
->>
->> Not sure it changes much, but most other selftests Makefiles use "top_srcdir = ../../../.." (without ":="). Why this change?
-> 
-> I didn't simply apply your diff but edited the file by hand to
-> test various combinations and see what side effects it might
-> have.  So when I added top_srcdir I typed it by hand and used :=
-> as a reflex since it's the standard way of assigning variables.
-> Using = instead only makes a difference when the r-value has
-> something dynamic as it will be re-evaluated every time it's
-> used.  So for constant values, I guess it's more of a question of
-> coding style and conventions.  Maybe all the top_srcdir variables
-> should be changed to := but that's unnecessary churn...  Either
-> way, it's benign.
-> 
-> Shuah, feel free to change this back to = in this particular case
-> if it's more consistent with other Makefiles.  Consistency is
-> often better than arbitrary rules.  Or conversely, change to :=
-> for the khdr_dir definition...  Entirely up to you I think.
-
-Looks good to me, thanks! Shuah, feel free to add
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-
-> 
-> Thanks,
-> Guillaume
-> 
->>>    include ../lib.mk
->>>    +khdr_dir = $(top_srcdir)/usr/include
->>> +
->>>    $(OUTPUT)/true: true.c
->>>        $(LINK.c) $< $(LDLIBS) -o $@ -static
->>>    -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
->>> -    $(LINK.c) $< $(LDLIBS) -o $@ -lcap
->>> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
->>> +    $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
-> 
+Do you happen to have a reproducer for this sitting around?  I'd love to
+get an addition to the pkeys selftest/ in place to make sure we don't
+break this again.  PKRU is a very special snowflake.

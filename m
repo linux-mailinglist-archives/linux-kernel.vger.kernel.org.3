@@ -2,101 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BD358A77E
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7827658A789
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240330AbiHEHvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 03:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
+        id S240348AbiHEHzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 03:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237225AbiHEHvL (ORCPT
+        with ESMTP id S235835AbiHEHy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 03:51:11 -0400
-Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B52010FFE
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 00:51:07 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1659685542t4v7n1qq
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 05 Aug 2022 15:45:35 +0800 (CST)
-X-QQ-SSF: 01400000002000G0T000B00A0000000
-X-QQ-FEAT: uGhnJwy6xZL//SSZC3HXd/LF7Y+7O4moIWupnV6N5uQNk3UE1T8Ttyb6tSIbA
-        J+ewUm1c5SOaXZxL+/Ue2QUIIJSBS7/p7BIr0E1nquVgyQ4v/bgPPzcq0IkF3GMARxp1CBd
-        4srJOxvnadce8LximV4oOk9vhukNgDTU/CItX08Yqfyu0GvayvQx9xWz/zJn9qWrcfg701h
-        G0Yb0YkvwL2xtIT0BjNq9qllZbUtD0UwoO319A9XozhIRPZPhKmo10XDjWF127ZLCrokSxt
-        Qfz/Flok4eAeSjt9rkgFhKO2pcC9nLi30JmYg4/m3S39qH30u9FrmWp4pvoHUJ6qa37pWvC
-        /NH+qCTboKcZ0C8IhAyXHtHzJ09azuEQsTAF5jpnA4Z/7YDXzDGUjVvYnkclYpsMBy5U76X
-        +knTQluTscY=
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     perex@perex.cz, tiwai@suse.com
-Cc:     tcrawford@system76.com, wse@tuxedocomputers.com,
-        kai.heng.feng@canonical.com, tanureal@opensource.cirrus.com,
-        cam@neo-zeon.de, kailang@realtek.com,
-        sbinding@opensource.cirrus.com, andy.chi@canonical.com,
-        yong.wu@mediatek.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH v2] ALSA: hda/realtek: Add quirk for another Asus K42JZ model
-Date:   Fri,  5 Aug 2022 15:45:34 +0800
-Message-Id: <20220805074534.20003-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Fri, 5 Aug 2022 03:54:56 -0400
+X-Greylist: delayed 504 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 05 Aug 2022 00:54:54 PDT
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6712872EC7;
+        Fri,  5 Aug 2022 00:54:53 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.218:53364.1398039832
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-10.133.8.199 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id D69DB280099;
+        Fri,  5 Aug 2022 15:46:16 +0800 (CST)
+X-189-SAVE-TO-SEND: +sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id 2f870a74468f4d4b992006056bb14515 for j.vosburgh@gmail.com;
+        Fri, 05 Aug 2022 15:46:22 CST
+X-Transaction-ID: 2f870a74468f4d4b992006056bb14515
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
+To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, huyd12@chinatelecom.cn,
+        sunshouxin@chinatelecom.cn
+Subject: [PATCH] net:bonding:support balance-alb interface with vlan to bridge
+Date:   Fri,  5 Aug 2022 00:45:56 -0700
+Message-Id: <20220805074556.70297-1-sunshouxin@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is another Asus K42JZ model with the PCI SSID 1043:1313
-that requires the quirk ALC269VB_FIXUP_ASUS_MIC_NO_PRESENCE.
-Add the corresponding entry to the quirk table.
+In my test, balance-alb bonding with two slaves eth0 and eth1,
+and then Bond0.150 is created with vlan id attached bond0.
+After adding bond0.150 into one linux bridge, I noted that Bond0,
+bond0.150 and  bridge were assigned to the same MAC as eth0.
+Once bond0.150 receives a packet whose dest IP is bridge's
+and dest MAC is eth1's, the linux bridge cannot process it as expected.
+The patch fix the issue, and diagram as below:
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+eth1(mac:eth1_mac)--bond0(balance-alb,mac:eth0_mac)--eth0(mac:eth0_mac)
+      		      |
+      		   bond0.150(mac:eth0_mac)
+      		      |
+      	           bridge(ip:br_ip, mac:eth0_mac)--other port
+
+Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
 ---
- sound/pci/hda/patch_realtek.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/net/bonding/bond_main.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 383a814b8539..4461237a3474 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -6842,6 +6842,7 @@ enum {
- 	ALC269_FIXUP_LIMIT_INT_MIC_BOOST,
- 	ALC269VB_FIXUP_ASUS_ZENBOOK,
- 	ALC269VB_FIXUP_ASUS_ZENBOOK_UX31A,
-+	ALC269VB_FIXUP_ASUS_MIC_NO_PRESENCE,
- 	ALC269_FIXUP_LIMIT_INT_MIC_BOOST_MUTE_LED,
- 	ALC269VB_FIXUP_ORDISSIMO_EVE2,
- 	ALC283_FIXUP_CHROME_BOOK,
-@@ -7427,6 +7428,15 @@ static const struct hda_fixup alc269_fixups[] = {
- 		.chained = true,
- 		.chain_id = ALC269VB_FIXUP_ASUS_ZENBOOK,
- 	},
-+	[ALC269VB_FIXUP_ASUS_MIC_NO_PRESENCE] = {
-+		.type = HDA_FIXUP_PINS,
-+		.v.pins = (const struct hda_pintbl[]) {
-+			{ 0x18, 0x01a110f0 },  /* use as headset mic */
-+			{ }
-+		},
-+		.chained = true,
-+		.chain_id = ALC269_FIXUP_HEADSET_MIC
-+	},
- 	[ALC269_FIXUP_LIMIT_INT_MIC_BOOST_MUTE_LED] = {
- 		.type = HDA_FIXUP_FUNC,
- 		.v.func = alc269_fixup_limit_int_mic_boost,
-@@ -9124,6 +9134,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1043, 0x12a0, "ASUS X441UV", ALC233_FIXUP_EAPD_COEF_AND_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1043, 0x12e0, "ASUS X541SA", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x12f0, "ASUS X541UV", ALC256_FIXUP_ASUS_MIC),
-+	SND_PCI_QUIRK(0x1043, 0x1313, "Asus K42JZ", ALC269VB_FIXUP_ASUS_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1043, 0x13b0, "ASUS Z550SA", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x1427, "Asus Zenbook UX31E", ALC269VB_FIXUP_ASUS_ZENBOOK),
- 	SND_PCI_QUIRK(0x1043, 0x1517, "Asus Zenbook UX31A", ALC269VB_FIXUP_ASUS_ZENBOOK_UX31A),
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index e75acb14d066..6210a9c7ca76 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -1537,9 +1537,11 @@ static rx_handler_result_t bond_handle_frame(struct sk_buff **pskb)
+ 	struct sk_buff *skb = *pskb;
+ 	struct slave *slave;
+ 	struct bonding *bond;
++	struct net_device *vlan;
+ 	int (*recv_probe)(const struct sk_buff *, struct bonding *,
+ 			  struct slave *);
+ 	int ret = RX_HANDLER_ANOTHER;
++	unsigned int headroom;
+ 
+ 	skb = skb_share_check(skb, GFP_ATOMIC);
+ 	if (unlikely(!skb))
+@@ -1591,6 +1593,24 @@ static rx_handler_result_t bond_handle_frame(struct sk_buff **pskb)
+ 				  bond->dev->addr_len);
+ 	}
+ 
++	if (skb_vlan_tag_present(skb)) {
++		if (BOND_MODE(bond) == BOND_MODE_ALB && skb->pkt_type == PACKET_HOST) {
++			vlan = __vlan_find_dev_deep_rcu(bond->dev, skb->vlan_proto,
++							skb_vlan_tag_get(skb) & VLAN_VID_MASK);
++			if (vlan) {
++				if (vlan->priv_flags & IFF_BRIDGE_PORT) {
++					headroom = skb->data - skb_mac_header(skb);
++					if (unlikely(skb_cow_head(skb, headroom))) {
++						kfree_skb(skb);
++						return RX_HANDLER_CONSUMED;
++					}
++					bond_hw_addr_copy(eth_hdr(skb)->h_dest, vlan->dev_addr,
++							  vlan->addr_len);
++				}
++			}
++		}
++	}
++
+ 	return ret;
+ }
+ 
 -- 
-2.20.1
+2.27.0
 

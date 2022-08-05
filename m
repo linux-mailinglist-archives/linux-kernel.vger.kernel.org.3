@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCCC58B0C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 22:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2573A58B0C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 22:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241534AbiHEUM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 16:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
+        id S241462AbiHEUPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 16:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241536AbiHEUMy (ORCPT
+        with ESMTP id S234198AbiHEUPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 16:12:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DB1C1A3AC
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 13:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659730372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=EWmziQ+zkkO5p4AUbX/aH6NjevdABku8Grwyp4hC0jQ=;
-        b=OkJJay4yjv/I6GlDEQOW7L2XLRinvLC/oBWDwEf0uH6wbLTnEQVt7QaF3HsQfatPfXwWEx
-        eYVvX5LyKizle1q+D1tDESSjPS5/9QDnklMT+7xpIitquzoccztZAWde3XQzOOoxRAqoPs
-        9A19FKGpXU+EPoUyvHZO8UgVe8L65Co=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176-q3dwFkIRPA66pN-OBAdp7w-1; Fri, 05 Aug 2022 16:12:51 -0400
-X-MC-Unique: q3dwFkIRPA66pN-OBAdp7w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 078F43C0CD5A;
-        Fri,  5 Aug 2022 20:12:51 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.192.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C8880C28125;
-        Fri,  5 Aug 2022 20:12:49 +0000 (UTC)
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] gfs2 fixes
-Date:   Fri,  5 Aug 2022 22:12:48 +0200
-Message-Id: <20220805201248.123846-1-agruenba@redhat.com>
+        Fri, 5 Aug 2022 16:15:00 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FFA2127A
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 13:14:58 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id k12so5402655ybk.6
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 13:14:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=BuvSK/V0ZrRKTjqHjq+/D2pJjzmruPCNM8f6YTDi3So=;
+        b=JfVZtcvrjjM5c3/DFrRrII6jtFVVItnLL1BxEQyPgTOrYybcRox8CnOaKTS5BzWUfy
+         iX1aic9UF60wqyscoAmuo900iQf3NazGvwC4AGnfj6JAPxy0RIf3mk3x+5HlbiAHUttT
+         QQBSh+sTlN6yKrBsOCWNWg1j/jqJg+z/j0dkY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=BuvSK/V0ZrRKTjqHjq+/D2pJjzmruPCNM8f6YTDi3So=;
+        b=4DOHUKOKXG6nE1HCsfJK2ws13argdZ2vQbKcJEL8qR+ovar5M866L6inPNtbv4D3QV
+         Ahl0sq3dlNLGLbdiTl2bM8CB4T6i0v1kKhbk29tbJZ5QsOId/N7Am1zPCNktxJNed5ny
+         rytdHbaFweXwNDernvqPYzS1EQvPoUQEaHumMpxhVZTiWEloiyfeD7hO6B1pCrRq3hBn
+         bIAuTTJfvITz1n0sZOOPuStrF4pW1RYKgPesXF+xYdGGgIQts8HNzohWgrE/SJH8F3GV
+         rSpTeeqXtm5f3d/etfJkV+z1FBJh9euGYfSbMwsnT5E6OBkqXtHAAEnRxt48hOXzLPPx
+         Ajrg==
+X-Gm-Message-State: ACgBeo1WhjQP2ZsDY2zdRxAwjJh6roEfdOCrleQHelg6FNIT5IfBPWQh
+        f9J5g3YkHuIiLRv7t9Z1zbb3XKU+1IJ9PfKmZRFUeA==
+X-Google-Smtp-Source: AA6agR5pHpD5rHBwIEtOATaPhjzSmS6L0l+TlGZuwOJZsdiIBBueHjlsXtJnN4GzHFgUQaN6uQGikkY/b6A1XiTRIWQ=
+X-Received: by 2002:a25:d91:0:b0:67a:7d85:83d9 with SMTP id
+ 139-20020a250d91000000b0067a7d8583d9mr6739484ybn.373.1659730498053; Fri, 05
+ Aug 2022 13:14:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+References: <CA+wXwBQ-VhK+hpBtYtyZP-NiX4g8fqRRWithFOHQW-0coQ3vLg@mail.gmail.com>
+ <20220223115457.7bb575c1@gandalf.local.home> <CABWYdi1aKXWDjT+-aAQvn7eLcySbmeEucVS+8RAbUPE+bprK6A@mail.gmail.com>
+ <20220805145333.1360dbbb@gandalf.local.home>
+In-Reply-To: <20220805145333.1360dbbb@gandalf.local.home>
+From:   Ivan Babrou <ivan@cloudflare.com>
+Date:   Fri, 5 Aug 2022 13:14:47 -0700
+Message-ID: <CABWYdi05VjumiXUT1sNWrLKxSVm0FeaGzjkVqbesKK3C_8nu=A@mail.gmail.com>
+Subject: Re: 5.15 ftrace bug when enabling function_graph
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Dao <dqminh@cloudflare.com>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -57,73 +68,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Aug 5, 2022 at 11:53 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Fri, 5 Aug 2022 11:37:56 -0700
+> Ivan Babrou <ivan@cloudflare.com> wrote:
+>
+> > root@foo:~# echo 'bpf_dispatcher_*_func' >
+> > /sys/kernel/tracing/set_ftrace_notrace
+> >
+> > root@foo:~# trace-cmd record -p function_graph -l handle_mm_fault -P 3367417
+> > plugin 'function_graph'
+> > Hit Ctrl^C to stop recording
+>
+>
+> > [1459709.204253] ------------[ ftrace bug ]------------
+> > [1459709.204257] ftrace failed to modify
+> > [1459709.204262] [<ffffffffac3ea960>] bpf_dispatcher_xdp_func+0x0/0x10
+> > [1459709.204275]  actual:   ffffffe9:ffffff9b:76:ffffffb0:14
+> > [1459709.204302] Setting ftrace call site to call ftrace function
+> > [1459709.204305] ftrace record flags: 10000001
+> > [1459709.204309]  (1)
+> >                   expected tramp: ffffffffabc4bcb0
+> > [1459709.204325] ------------[ cut here ]------------
+>
+> Did you reboot since the error happened? Because the command you showed
+> should not have touched bpf_dispatcher_xdp_func.
 
-please consider pulling the following gfs2 fixes.
-
-Thank you very much,
-Andreas
-
-The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
-
-  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v5.19-rc4-fixes
-
-for you to fetch changes up to 446279168e030fd0ed68e2bba336bef8bb3da352:
-
-  Merge part of branch 'for-next.instantiate' into for-next (2022-08-05 18:37:03 +0200)
-
-----------------------------------------------------------------
-gfs2 fixes
-
-- Instantiate glocks ouside of the glock state engine, in the contect of
-  the process taking the glock.  This moves unnecessary complexity out
-  of the core glock code.  Clean up the instantiate logic to be more
-  sensible.
-
-- In gfs2_glock_async_wait(), cancel pending locking request upon
-  failure.  Make sure all glocks are left in a consistent state.
-
-- Various other minor cleanups and fixes.
-
-----------------------------------------------------------------
-Andreas Gruenbacher (9):
-      gfs2: Minor gfs2_glock_nq_m cleanup
-      gfs2: Fix up gfs2_glock_async_wait
-      gfs2: Instantiate glocks ouside of glock state engine
-      gfs2: Revert 'Fix "truncate in progress" hang'
-      gfs2: Add new go_held glock operation
-      gfs2: Make go_instantiate take a glock
-      gfs2: Use better variable name
-      gfs2: List traversal in do_promote is safe
-      Merge part of branch 'for-next.instantiate' into for-next
-
-Bob Peterson (2):
-      gfs2: Rewrap overlong comment in do_promote
-      gfs2: do_promote glock holder stealing fix
-
-Minghao Chi (1):
-      gfs2: Remove redundant NULL check before kfree
-
-Zhang Jiaming (1):
-      gfs2: Fix spelling mistake in comment
-
- fs/gfs2/dir.c        |   2 +-
- fs/gfs2/file.c       |   3 +-
- fs/gfs2/glock.c      | 200 ++++++++++++++++++++-------------------------------
- fs/gfs2/glock.h      |   2 +-
- fs/gfs2/glops.c      |  31 ++++----
- fs/gfs2/incore.h     |   6 +-
- fs/gfs2/lock_dlm.c   |   2 +-
- fs/gfs2/main.c       |   1 -
- fs/gfs2/ops_fstype.c |   2 -
- fs/gfs2/quota.c      |  28 +-------
- fs/gfs2/rgrp.c       |  12 ++--
- fs/gfs2/rgrp.h       |   5 +-
- fs/gfs2/super.c      |   2 +-
- fs/gfs2/xattr.c      |   2 +-
- 14 files changed, 111 insertions(+), 187 deletions(-)
-
+I did reboot, but I can reproduce if you have things for me to try.

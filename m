@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8367558A6F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E840D58A6F6
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240464AbiHEHSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 03:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S231882AbiHEHTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 03:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240450AbiHEHSi (ORCPT
+        with ESMTP id S240376AbiHEHSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 03:18:38 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AA775396;
-        Fri,  5 Aug 2022 00:18:12 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id w14so1905111plp.9;
-        Fri, 05 Aug 2022 00:18:12 -0700 (PDT)
+        Fri, 5 Aug 2022 03:18:39 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E246A74DEB;
+        Fri,  5 Aug 2022 00:18:15 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id g12so1541812pfb.3;
+        Fri, 05 Aug 2022 00:18:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Zbgh2rgkAipGuhCwaEdIJ5QN1l75SbejwY6P2FNLcRI=;
-        b=Cz/6Sm8o9QXAi1UDUhJXmuLmUEO+SyQQpke2NROxKqtVltCrCBKcWc+bhtmVqR336W
-         I878a8T0XAjVHqbvRKdWKLb4xWIGGT+SkYiE1NC6X04f31pzksExIsej6B9CCYcEgOws
-         QJi0Bk0vuBQCSB3sLGecm+SjoLjUKB/jgjTQ/Na1IOlQUacTQ1QpME0bddO/9qgIby68
-         Nd3kypS+2TGAUMpt3XuHkiLHG7R4ryoy4hY+uQP+o8pAktjRLHb5tUwOa6Y1OPHwftE2
-         v227ArLR0nqaJ87toTtV3SftjXgbIZ9M+2rHdtXSSte1w99vI9bze5gj8vpaX1SrgnuW
-         S8bA==
+        bh=fdJjDYFxYS68E9ZUvuM71CJZvMzbAXojm0SHTDHnZVE=;
+        b=M3EQBeTYuIoV/C+5aXlU6ck4Rp/nhgyHrBFT4nyoKJpeGmGV/3BnSE+U8efjyBwvRh
+         xSeToo/qe1lbMQvTxoG8trK9RwJZVy7aLGKsmC1m+03T/N8/YocjMURbDvc8SAbnUbUe
+         Q6NG0tRwQ0u+AL0Vf059aCqTmZAzsjUxHO2DUZqz3t14qXefAgpTUmZFWJPvh5EbsBYO
+         weEHeVxNYsUvilfQb2tQgU1rv8CAdFPgbOCmV2MeXV4Ir3nz7FikZPWUacR/bpF6zDXV
+         NmG2nE9sfC3j9jVk/7cCGxUb9/sKPZrrApFa2MWI9tG2ktRaKLOoUvgtU6AnTVC+srcL
+         hynQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Zbgh2rgkAipGuhCwaEdIJ5QN1l75SbejwY6P2FNLcRI=;
-        b=YnAMp+pGt+e1uyq4LwPjLAf5YxWM1Z+qHE6o9HQsGXK4j6B4xL8s7VD+iv/EQdThtM
-         /5sVqh+uhEdanr2iv12lvOahd31Ys0d35DkbSAQN/naPd+JR8jiCL9APl2NxVRyIrRKq
-         m274Xrvlhy+2Br5o9f3sVNv8GIXdKVEUeERd+U72kwNmemJarapg2TV5sGUkiJUwh5OE
-         JKLQTFGUg8FJQZRgsWQy6nv+ENtNHvw2hGl9RXNDIl33AdQe94frtRN4M9Xnv3X6pNf6
-         3CbA/mnjj301XPBAWx341vS2PMt1p01sM4jyG91sNh1Y66lteYEsiz7o9m44WyR2WLzl
-         zpBA==
-X-Gm-Message-State: ACgBeo07mtNRz4Spf9nZ9caUFG3tHrp/sBLBK/s4cZAc+ZlGwWgCAVFm
-        UOuaEAmatU0KZqTay9iGX2Q=
-X-Google-Smtp-Source: AA6agR5biHhF/rWe8KEFpxANXG5AOxXtNntHsmoSVPpqYj4LvoiSr16ElVesJP7lj+tnp//FIYMhIw==
-X-Received: by 2002:a17:90a:c690:b0:1f5:858e:f538 with SMTP id n16-20020a17090ac69000b001f5858ef538mr2556673pjt.10.1659683891719;
-        Fri, 05 Aug 2022 00:18:11 -0700 (PDT)
+        bh=fdJjDYFxYS68E9ZUvuM71CJZvMzbAXojm0SHTDHnZVE=;
+        b=zO4YJyXhHEIAn4+yFmkfCw/X62wrD30qrUfjc2YvrqeznbkCM9uhIJRVpGbq5j8Tj5
+         2g7bCXitp3L02sfTWjHVZlXUUHeSrqK5uSDXZvNi/JQPQCZLdM8FYrh9Bylegy3+2a6n
+         XuepxpCWfnRdl1SLiHQP6ddb9Zi+rZnMIDZuiPvLrX2euto/G6rWxdgB1Sk28B7Wg5dv
+         R2mgfwG6Uq2bXbyZbLKBTYlNFRvsDHd77vzeoGLby2WmALziei68X2Rzzx/DI8EppjBZ
+         89mqLexAu5gFnXY0ub7EsWbLelzea2NYKCuWLi0VitD6ONIyB6WMvSB6zZ8M/WO51rDi
+         fOzg==
+X-Gm-Message-State: ACgBeo0UGMZ079zldl+RqUcl8tbyVN5YCKcv9kJWYFVO138X3ZW96GpJ
+        Y6VM9/jK35NC9p3Ck1xNDsU=
+X-Google-Smtp-Source: AA6agR4R+qMqVIYB7Z74fLjIVNabHS1FWajL6pXrjCuEVY7QZGtf2FlklqvJkHAnccpqIcZEjxzXzQ==
+X-Received: by 2002:a65:46c1:0:b0:41a:f5f9:b878 with SMTP id n1-20020a6546c1000000b0041af5f9b878mr4724374pgr.497.1659683895201;
+        Fri, 05 Aug 2022 00:18:15 -0700 (PDT)
 Received: from genechen-System-Product-Name.richtek.com ([2402:7500:579:6a6f:254a:2074:501f:264b])
-        by smtp.gmail.com with ESMTPSA id z23-20020aa79597000000b00528c066678csm2226147pfj.72.2022.08.05.00.18.08
+        by smtp.gmail.com with ESMTPSA id z23-20020aa79597000000b00528c066678csm2226147pfj.72.2022.08.05.00.18.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 00:18:11 -0700 (PDT)
+        Fri, 05 Aug 2022 00:18:14 -0700 (PDT)
 From:   Gene Chen <gene.chen.richtek@gmail.com>
 To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
         gregkh@linuxfoundation.org, robh+dt@kernel.org,
@@ -55,9 +55,9 @@ To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, gene_chen@richtek.com,
         cy_huang@richtek.com
-Subject: [PATCH v4 6/7] usb: typec: tcpci: Move function "tcpci_to_typec_cc" to common
-Date:   Fri,  5 Aug 2022 15:17:12 +0800
-Message-Id: <20220805071714.150882-7-gene.chen.richtek@gmail.com>
+Subject: [PATCH v4 7/7] usb: typec: tcpci_rt1711h: Fix CC PHY noise filter of voltage level
+Date:   Fri,  5 Aug 2022 15:17:13 +0800
+Message-Id: <20220805071714.150882-8-gene.chen.richtek@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220805071714.150882-1-gene.chen.richtek@gmail.com>
 References: <20220805071714.150882-1-gene.chen.richtek@gmail.com>
@@ -75,93 +75,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Gene Chen <gene_chen@richtek.com>
 
-Move transition function "tcpci_to_typec_cc" to common header
+Fix CC PHY noise filter of voltage level according to
+current cc voltage level
 
 Signed-off-by: Gene Chen <gene_chen@richtek.com>
 Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/typec/tcpm/tcpci.c | 22 ----------------------
- include/linux/usb/tcpci.h      | 22 ++++++++++++++++++++++
- 2 files changed, 22 insertions(+), 22 deletions(-)
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c | 58 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 57 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index 8127847..50674ec 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -27,11 +27,6 @@
- #define	VPPS_VALID_MIN_MV			100
- #define	VSINKDISCONNECT_PD_MIN_PERCENT		90
+diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+index ff7deae..5dc34f9 100644
+--- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
++++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+@@ -24,8 +24,11 @@
+ #define RT1711H_PHYCTRL1	0x80
+ #define RT1711H_PHYCTRL2	0x81
  
--#define tcpc_presenting_rd(reg, cc) \
--	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
--	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
--	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
--
- struct tcpci {
- 	struct device *dev;
+-#define RT1711H_RTCTRL8		0x9B
++#define RT1711H_RTCTRL4		0x93
++/* rx threshold of rd/rp: 1b0 for level 0.4V/0.7V, 1b1 for 0.35V/0.75V */
++#define RT1711H_BMCIO_RXDZSEL	BIT(0)
  
-@@ -218,23 +213,6 @@ static int tcpci_start_toggling(struct tcpc_dev *tcpc,
- 			    TCPC_CMD_LOOK4CONNECTION);
++#define RT1711H_RTCTRL8		0x9B
+ /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
+ #define RT1711H_RTCTRL8_SET(ck300, ship_off, auto_idle, tout) \
+ 			    (((ck300) << 7) | ((ship_off) << 5) | \
+@@ -44,6 +47,10 @@
+ #define RT1711H_RTCTRL15	0xA2
+ #define RT1711H_RTCTRL16	0xA3
+ 
++#define RT1711H_RTCTRL18	0xAF
++/* 1b0 as fixed rx threshold of rd/rp 0.55V, 1b1 depends on RTCRTL4[0] */
++#define BMCIO_RXDZEN	BIT(0)
++
+ struct rt1711h_chip {
+ 	struct tcpci_data data;
+ 	struct tcpci *tcpci;
+@@ -164,6 +171,53 @@ static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
+ 				  RT1711H_AUTOIDLEEN, enable ? 0 : RT1711H_AUTOIDLEEN);
  }
  
--static enum typec_cc_status tcpci_to_typec_cc(unsigned int cc, bool sink)
--{
--	switch (cc) {
--	case 0x1:
--		return sink ? TYPEC_CC_RP_DEF : TYPEC_CC_RA;
--	case 0x2:
--		return sink ? TYPEC_CC_RP_1_5 : TYPEC_CC_RD;
--	case 0x3:
--		if (sink)
--			return TYPEC_CC_RP_3_0;
--		fallthrough;
--	case 0x0:
--	default:
--		return TYPEC_CC_OPEN;
--	}
--}
--
- static int tcpci_get_cc(struct tcpc_dev *tcpc,
- 			enum typec_cc_status *cc1, enum typec_cc_status *cc2)
- {
-diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-index 20c0bed..1765745 100644
---- a/include/linux/usb/tcpci.h
-+++ b/include/linux/usb/tcpci.h
-@@ -167,6 +167,11 @@
- /* I2C_WRITE_BYTE_COUNT + 1 when TX_BUF_BYTE_x is only accessible I2C_WRITE_BYTE_COUNT */
- #define TCPC_TRANSMIT_BUFFER_MAX_LEN		31
- 
-+#define tcpc_presenting_rd(reg, cc) \
-+	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-+	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
-+	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
-+
- struct tcpci;
- 
- /*
-@@ -207,4 +212,21 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci);
- 
- struct tcpm_port;
- struct tcpm_port *tcpci_get_tcpm_port(struct tcpci *tcpci);
-+
-+static inline enum typec_cc_status tcpci_to_typec_cc(unsigned int cc, bool sink)
++/*
++ * Selects the CC PHY noise filter voltage level according to the remote current
++ * CC voltage level.
++ *
++ * @status: The port's current cc status read from IC
++ * Return 0 if writes succeed; failure code otherwise
++ */
++static inline int rt1711h_init_cc_params(struct rt1711h_chip *chip, u8 status)
 +{
-+	switch (cc) {
-+	case 0x1:
-+		return sink ? TYPEC_CC_RP_DEF : TYPEC_CC_RA;
-+	case 0x2:
-+		return sink ? TYPEC_CC_RP_1_5 : TYPEC_CC_RD;
-+	case 0x3:
-+		if (sink)
-+			return TYPEC_CC_RP_3_0;
-+		fallthrough;
-+	case 0x0:
-+	default:
-+		return TYPEC_CC_OPEN;
++	int ret, cc1, cc2;
++	u8 role = 0;
++	u32 rxdz_en, rxdz_sel;
++
++	ret = rt1711h_read8(chip, TCPC_ROLE_CTRL, &role);
++	if (ret < 0)
++		return ret;
++
++	cc1 = tcpci_to_typec_cc((status >> TCPC_CC_STATUS_CC1_SHIFT) &
++				TCPC_CC_STATUS_CC1_MASK,
++				status & TCPC_CC_STATUS_TERM ||
++				tcpc_presenting_rd(role, CC1));
++	cc2 = tcpci_to_typec_cc((status >> TCPC_CC_STATUS_CC2_SHIFT) &
++				TCPC_CC_STATUS_CC2_MASK,
++				status & TCPC_CC_STATUS_TERM ||
++				tcpc_presenting_rd(role, CC2));
++
++	if ((cc1 >= TYPEC_CC_RP_1_5 && cc2 < TYPEC_CC_RP_DEF) ||
++	    (cc2 >= TYPEC_CC_RP_1_5 && cc1 < TYPEC_CC_RP_DEF)) {
++		rxdz_en = BMCIO_RXDZEN;
++		if (chip->did == RT1715_DID)
++			rxdz_sel = RT1711H_BMCIO_RXDZSEL;
++		else
++			rxdz_sel = 0;
++	} else {
++		rxdz_en = 0;
++		rxdz_sel = RT1711H_BMCIO_RXDZSEL;
 +	}
++
++	ret = regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL18,
++				 BMCIO_RXDZEN, rxdz_en);
++	if (ret < 0)
++		return ret;
++
++	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL4,
++				  RT1711H_BMCIO_RXDZSEL, rxdz_sel);
 +}
- #endif /* __LINUX_USB_TCPCI_H */
++
+ static int rt1711h_start_drp_toggling(struct tcpci *tcpci,
+ 				      struct tcpci_data *tdata,
+ 				      enum typec_cc_status cc)
+@@ -224,6 +278,8 @@ static irqreturn_t rt1711h_irq(int irq, void *dev_id)
+ 		/* Clear cc change event triggered by starting toggling */
+ 		if (status & TCPC_CC_STATUS_TOGGLING)
+ 			rt1711h_write8(chip, TCPC_ALERT, TCPC_ALERT_CC_STATUS);
++		else
++			rt1711h_init_cc_params(chip, status);
+ 	}
+ 
+ out:
 -- 
 2.7.4
 

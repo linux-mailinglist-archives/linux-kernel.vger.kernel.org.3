@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966BB58B071
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 21:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B1558B073
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 21:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241361AbiHETkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 15:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S241421AbiHETk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 15:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240504AbiHETkr (ORCPT
+        with ESMTP id S241443AbiHETky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 15:40:47 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA09F11452
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 12:40:45 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id x39so4755067lfu.7
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 12:40:45 -0700 (PDT)
+        Fri, 5 Aug 2022 15:40:54 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E86311805
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 12:40:53 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id c17so4775160lfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 12:40:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=rty6mPaEYkYj+hk2AIwEoGnTyks1fl0dWOatixd39IQ=;
-        b=ZVdfbFAYeIUhGFL1MsmiiKPKr/iDRfw7LNLWovNYdZMMSqGycmpqxqzuBFS59yToBK
-         MPF47XlwvkHwloFZ0QU+WvcrJW+xDfoqtCH6+uSUqgYSW2NOjGo2det5Od7Njoq5Ml6/
-         +CwAoGIa929cRNttmpn9qxEz7B25vEtt9azLRc4iOHcQBoQNErztOE3hjKnLTHyzGigl
-         4mvtAuLzu+sJRNekNhuKmQSjb7IotNHEnum47KHJxbGqltNqRcXB5U3smOfpln9CRsBE
-         QX1tQ+doOlI35hmgOmUSmYGQtWtHtzm0jO8ApsmID8pbklD+AmnrFFEawPFrZlRm05Ee
-         pU5A==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=0bqeAVxOv1cvt506AIyaShQcLeSdfwwBjFLTn7gNzK4=;
+        b=f+F1IOVIZjUPQzuXQjLojG+pXD/2sSikKxH++DYAxDArMLZIaUoZP8lbDkzAlcjMUE
+         3W1VS4h7HTzzTgV8Rsi/LHB//SqzkqQmMnYRFk+p6ziWmHaNhHKVonZ9XA3/AE4MwK9I
+         RajpOltnDRXaQ71wGyWRXMWHkU3GeLbwsqgBIKwzfTf41/bYJGWldMdHFUc2Pj1ml54W
+         Ct6J49rpys0VfRvRk2Y6jZ95BcFSOOONBGH9pE/h/2FpmdEh6vH3BckAFsVmkP8CT4mB
+         VfTaB4xrqr7TKe5Zv+rWY706d7g9ZLpEJL6Q7hBB2/gtLGPEpL+GsgEkfiIjln+JgsL9
+         dsIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=rty6mPaEYkYj+hk2AIwEoGnTyks1fl0dWOatixd39IQ=;
-        b=ClFEGE0Nl+q5oTU/tetMBsDw9Q0bNvw9yUnDCFwSOndE2oKYXRi4SQ891SSpsA0A4B
-         fjCCSG/pCl17F4d5XPr55ZSa0rPafMeEVVUvkLgHTkXV4VftsKitc4KsVlOmk4oEkSRM
-         1L75tMfexKAX/1Uhqfk6pRwvDiu7P9RQePdgw8ECXBuPrehpF4npjzLdFRlcFVAV9e0x
-         QekBcCoiGFYKtkm01ivPSaPkzvXHjRvOZHv3jlas4nATgJODbOih9kNYwq0Dyy//4VzA
-         HLF0lYhwk0QwE4H59A+xzJOLnTMrK53rEa4G9TyerSmRWL7Q0JnpBu1i4i4oc0tIX5Ox
-         t6dg==
-X-Gm-Message-State: ACgBeo1RgPMNGdkn/sKboIdw0qb1FbUXWWh8xcnyaEnDfzQLB8z7o9oL
-        AV3XX9xfSOGu+8C9vUK3jISPyA==
-X-Google-Smtp-Source: AA6agR4yyOputGlNoeiiinUA89rWH8MyQHy5pMHZ5HQQAH93EmzS4UkCpxA03zHmJI4OgjW4LGuxNA==
-X-Received: by 2002:a05:6512:3981:b0:48a:6fb9:74b7 with SMTP id j1-20020a056512398100b0048a6fb974b7mr2647305lfu.98.1659728443958;
-        Fri, 05 Aug 2022 12:40:43 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=0bqeAVxOv1cvt506AIyaShQcLeSdfwwBjFLTn7gNzK4=;
+        b=WSjXRtT1DT6pEWms0Aqki9VuXBRmJ6Q23fL4rTtiqFss/HanzqRfDFv+Y+a5ogR+J6
+         yU2KG8boY4UyaEfjy9En98hvYMazoKEGLt+/8PATF5DTfM69S8rVottCPmVNOGrWEY7z
+         LTWTz7zflU0i/NVFzLc6fgn9xsbVhmEhErvSlFeTvj8Cz3TBdxcoldLoR4kwOdK2o91a
+         GFK6P1ECgIgn0WdOKsSounPKYmMwcIEcMAGw+/sKjpuCJVSyE2yyVNEYvnHU8yF34aWa
+         3eY6ZwvEaGw10F+8vwQSHrZTSu3Y41LY1gbU36Az6WRFiMjxSZ/Qz5CFyqbRYnN/JW2u
+         JmVQ==
+X-Gm-Message-State: ACgBeo2Sk2pmcL88lPg4rRmzzNFP/5USRG9a8nx88EbqJrYbDFWJ0ln1
+        S2wkPPQm159nzdI6rJukgwevdA==
+X-Google-Smtp-Source: AA6agR76FJBZdHn7btHunKBLYS4zn4FmHKBrHNCN2JU1T8z3s5vYHmzhIOcyrYHULuYztfgrwHMXQg==
+X-Received: by 2002:a05:6512:1283:b0:48b:9817:ce2b with SMTP id u3-20020a056512128300b0048b9817ce2bmr206194lfs.417.1659728451592;
+        Fri, 05 Aug 2022 12:40:51 -0700 (PDT)
 Received: from dmaluka.office.semihalf.net ([83.142.187.84])
-        by smtp.gmail.com with ESMTPSA id o4-20020a056512230400b0048a407f41bbsm560079lfu.238.2022.08.05.12.40.42
+        by smtp.gmail.com with ESMTPSA id o4-20020a056512230400b0048a407f41bbsm560079lfu.238.2022.08.05.12.40.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 12:40:43 -0700 (PDT)
+        Fri, 05 Aug 2022 12:40:51 -0700 (PDT)
 From:   Dmytro Maluka <dmy@semihalf.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
@@ -63,15 +63,17 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
         Dmitry Torokhov <dtor@google.com>,
         Dmytro Maluka <dmy@semihalf.com>
-Subject: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
-Date:   Fri,  5 Aug 2022 21:39:14 +0200
-Message-Id: <20220805193919.1470653-1-dmy@semihalf.com>
+Subject: [PATCH v2 1/5] KVM: x86: Move irq mask notifiers from x86 to generic KVM
+Date:   Fri,  5 Aug 2022 21:39:15 +0200
+Message-Id: <20220805193919.1470653-2-dmy@semihalf.com>
 X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+In-Reply-To: <20220805193919.1470653-1-dmy@semihalf.com>
+References: <20220805193919.1470653-1-dmy@semihalf.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,68 +81,214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The existing KVM mechanism for forwarding of level-triggered interrupts
-using resample eventfd doesn't work quite correctly in the case of
-interrupts that are handled in a Linux guest as oneshot interrupts
-(IRQF_ONESHOT). Such an interrupt is acked to the device in its
-threaded irq handler, i.e. later than it is acked to the interrupt
-controller (EOI at the end of hardirq), not earlier. The existing KVM
-code doesn't take that into account, which results in erroneous extra
-interrupts in the guest caused by premature re-assert of an
-unacknowledged IRQ by the host.
+Currently irq mask notifiers are used only internally in the x86 code
+for PIT emulation. However they are not really arch specific. We are
+going to use them in the generic irqfd code, for postponing resampler
+irqfd notification until the interrupt is unmasked. So move the
+implementation of mask notifiers to the generic code, to allow irqfd to
+register its mask notifiers.
 
-This patch series fixes this issue (for now on x86 only) by checking if
-the interrupt is unmasked when we receive irq ack (EOI) and, in case if
-it's masked, postponing resamplefd notify until the guest unmasks it.
+Note that calling mask notifiers via calling kvm_fire_mask_notifiers()
+is still implemented for x86 only, so registering mask notifiers on
+other architectures will have no effect for now.
 
-Patches 1 and 2 extend the existing support for irq mask notifiers in
-KVM, which is a prerequisite needed for KVM irqfd to use mask notifiers
-to know when an interrupt is masked or unmasked.
+Signed-off-by: Dmytro Maluka <dmy@semihalf.com>
+---
+ arch/x86/include/asm/kvm_host.h | 16 ----------------
+ arch/x86/kvm/irq_comm.c         | 33 ---------------------------------
+ arch/x86/kvm/x86.c              |  1 -
+ include/linux/kvm_host.h        | 15 +++++++++++++++
+ virt/kvm/eventfd.c              | 33 +++++++++++++++++++++++++++++++++
+ virt/kvm/kvm_main.c             |  1 +
+ 6 files changed, 49 insertions(+), 50 deletions(-)
 
-Patch 3 implements the actual fix: postponing resamplefd notify in irqfd
-until the irq is unmasked.
-
-Patches 4 and 5 just do some optional renaming for consistency, as we
-are now using irq mask notifiers in irqfd along with irq ack notifiers.
-
-Please see individual patches for more details.
-
-v2:
-  - Fixed compilation failure on non-x86: mask_notifier_list moved from
-    x86 "struct kvm_arch" to generic "struct kvm".
-  - kvm_fire_mask_notifiers() also moved from x86 to generic code, even
-    though it is not called on other architectures for now.
-  - Instead of kvm_irq_is_masked() implemented
-    kvm_register_and_fire_irq_mask_notifier() to fix potential race
-    when reading the initial IRQ mask state.
-  - Renamed for clarity:
-      - irqfd_resampler_mask() -> irqfd_resampler_mask_notify()
-      - kvm_irq_has_notifier() -> kvm_irq_has_ack_notifier()
-      - resampler->notifier -> resampler->ack_notifier
-  - Reorganized code in irqfd_resampler_ack() and
-    irqfd_resampler_mask_notify() to make it easier to follow.
-  - Don't follow unwanted "return type on separate line" style for
-    irqfd_resampler_mask_notify().
-
-Dmytro Maluka (5):
-  KVM: x86: Move irq mask notifiers from x86 to generic KVM
-  KVM: x86: Add kvm_register_and_fire_irq_mask_notifier()
-  KVM: irqfd: Postpone resamplefd notify for oneshot interrupts
-  KVM: irqfd: Rename resampler->notifier
-  KVM: Rename kvm_irq_has_notifier()
-
- arch/x86/include/asm/kvm_host.h |  17 +---
- arch/x86/kvm/i8259.c            |   6 ++
- arch/x86/kvm/ioapic.c           |   8 +-
- arch/x86/kvm/ioapic.h           |   1 +
- arch/x86/kvm/irq_comm.c         |  74 +++++++++++------
- arch/x86/kvm/x86.c              |   1 -
- include/linux/kvm_host.h        |  21 ++++-
- include/linux/kvm_irqfd.h       |  16 +++-
- virt/kvm/eventfd.c              | 136 ++++++++++++++++++++++++++++----
- virt/kvm/kvm_main.c             |   1 +
- 10 files changed, 221 insertions(+), 60 deletions(-)
-
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 9217bd6cf0d1..dc76617f11c1 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1198,9 +1198,6 @@ struct kvm_arch {
+ 
+ 	struct kvm_xen_hvm_config xen_hvm_config;
+ 
+-	/* reads protected by irq_srcu, writes by irq_lock */
+-	struct hlist_head mask_notifier_list;
+-
+ 	struct kvm_hv hyperv;
+ 	struct kvm_xen xen;
+ 
+@@ -1688,19 +1685,6 @@ int load_pdptrs(struct kvm_vcpu *vcpu, unsigned long cr3);
+ int emulator_write_phys(struct kvm_vcpu *vcpu, gpa_t gpa,
+ 			  const void *val, int bytes);
+ 
+-struct kvm_irq_mask_notifier {
+-	void (*func)(struct kvm_irq_mask_notifier *kimn, bool masked);
+-	int irq;
+-	struct hlist_node link;
+-};
+-
+-void kvm_register_irq_mask_notifier(struct kvm *kvm, int irq,
+-				    struct kvm_irq_mask_notifier *kimn);
+-void kvm_unregister_irq_mask_notifier(struct kvm *kvm, int irq,
+-				      struct kvm_irq_mask_notifier *kimn);
+-void kvm_fire_mask_notifiers(struct kvm *kvm, unsigned irqchip, unsigned pin,
+-			     bool mask);
+-
+ extern bool tdp_enabled;
+ 
+ u64 vcpu_tsc_khz(struct kvm_vcpu *vcpu);
+diff --git a/arch/x86/kvm/irq_comm.c b/arch/x86/kvm/irq_comm.c
+index 0687162c4f22..f27e4c9c403e 100644
+--- a/arch/x86/kvm/irq_comm.c
++++ b/arch/x86/kvm/irq_comm.c
+@@ -234,39 +234,6 @@ void kvm_free_irq_source_id(struct kvm *kvm, int irq_source_id)
+ 	mutex_unlock(&kvm->irq_lock);
+ }
+ 
+-void kvm_register_irq_mask_notifier(struct kvm *kvm, int irq,
+-				    struct kvm_irq_mask_notifier *kimn)
+-{
+-	mutex_lock(&kvm->irq_lock);
+-	kimn->irq = irq;
+-	hlist_add_head_rcu(&kimn->link, &kvm->arch.mask_notifier_list);
+-	mutex_unlock(&kvm->irq_lock);
+-}
+-
+-void kvm_unregister_irq_mask_notifier(struct kvm *kvm, int irq,
+-				      struct kvm_irq_mask_notifier *kimn)
+-{
+-	mutex_lock(&kvm->irq_lock);
+-	hlist_del_rcu(&kimn->link);
+-	mutex_unlock(&kvm->irq_lock);
+-	synchronize_srcu(&kvm->irq_srcu);
+-}
+-
+-void kvm_fire_mask_notifiers(struct kvm *kvm, unsigned irqchip, unsigned pin,
+-			     bool mask)
+-{
+-	struct kvm_irq_mask_notifier *kimn;
+-	int idx, gsi;
+-
+-	idx = srcu_read_lock(&kvm->irq_srcu);
+-	gsi = kvm_irq_map_chip_pin(kvm, irqchip, pin);
+-	if (gsi != -1)
+-		hlist_for_each_entry_rcu(kimn, &kvm->arch.mask_notifier_list, link)
+-			if (kimn->irq == gsi)
+-				kimn->func(kimn, mask);
+-	srcu_read_unlock(&kvm->irq_srcu, idx);
+-}
+-
+ bool kvm_arch_can_set_irq_routing(struct kvm *kvm)
+ {
+ 	return irqchip_in_kernel(kvm);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e5fa335a4ea7..a0a776f5c42f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -11818,7 +11818,6 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+ 	if (ret)
+ 		goto out_page_track;
+ 
+-	INIT_HLIST_HEAD(&kvm->arch.mask_notifier_list);
+ 	INIT_LIST_HEAD(&kvm->arch.assigned_dev_head);
+ 	atomic_set(&kvm->arch.noncoherent_dma_count, 0);
+ 
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 90a45ef7203b..dd5f14e31996 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -760,7 +760,10 @@ struct kvm {
+ 	struct kvm_irq_routing_table __rcu *irq_routing;
+ #endif
+ #ifdef CONFIG_HAVE_KVM_IRQFD
++	/* reads protected by irq_srcu, writes by irq_lock */
+ 	struct hlist_head irq_ack_notifier_list;
++	/* reads protected by irq_srcu, writes by irq_lock */
++	struct hlist_head irq_mask_notifier_list;
+ #endif
+ 
+ #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+@@ -1581,6 +1584,12 @@ struct kvm_irq_ack_notifier {
+ 	void (*irq_acked)(struct kvm_irq_ack_notifier *kian);
+ };
+ 
++struct kvm_irq_mask_notifier {
++	void (*func)(struct kvm_irq_mask_notifier *kimn, bool masked);
++	int irq;
++	struct hlist_node link;
++};
++
+ int kvm_irq_map_gsi(struct kvm *kvm,
+ 		    struct kvm_kernel_irq_routing_entry *entries, int gsi);
+ int kvm_irq_map_chip_pin(struct kvm *kvm, unsigned irqchip, unsigned pin);
+@@ -1599,6 +1608,12 @@ void kvm_register_irq_ack_notifier(struct kvm *kvm,
+ 				   struct kvm_irq_ack_notifier *kian);
+ void kvm_unregister_irq_ack_notifier(struct kvm *kvm,
+ 				   struct kvm_irq_ack_notifier *kian);
++void kvm_register_irq_mask_notifier(struct kvm *kvm, int irq,
++				    struct kvm_irq_mask_notifier *kimn);
++void kvm_unregister_irq_mask_notifier(struct kvm *kvm, int irq,
++				      struct kvm_irq_mask_notifier *kimn);
++void kvm_fire_mask_notifiers(struct kvm *kvm, unsigned irqchip, unsigned pin,
++			     bool mask);
+ int kvm_request_irq_source_id(struct kvm *kvm);
+ void kvm_free_irq_source_id(struct kvm *kvm, int irq_source_id);
+ bool kvm_arch_irqfd_allowed(struct kvm *kvm, struct kvm_irqfd *args);
+diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
+index 2a3ed401ce46..39403d9fbdcc 100644
+--- a/virt/kvm/eventfd.c
++++ b/virt/kvm/eventfd.c
+@@ -518,6 +518,39 @@ void kvm_unregister_irq_ack_notifier(struct kvm *kvm,
+ 	synchronize_srcu(&kvm->irq_srcu);
+ 	kvm_arch_post_irq_ack_notifier_list_update(kvm);
+ }
++
++void kvm_register_irq_mask_notifier(struct kvm *kvm, int irq,
++				    struct kvm_irq_mask_notifier *kimn)
++{
++	mutex_lock(&kvm->irq_lock);
++	kimn->irq = irq;
++	hlist_add_head_rcu(&kimn->link, &kvm->irq_mask_notifier_list);
++	mutex_unlock(&kvm->irq_lock);
++}
++
++void kvm_unregister_irq_mask_notifier(struct kvm *kvm, int irq,
++				      struct kvm_irq_mask_notifier *kimn)
++{
++	mutex_lock(&kvm->irq_lock);
++	hlist_del_rcu(&kimn->link);
++	mutex_unlock(&kvm->irq_lock);
++	synchronize_srcu(&kvm->irq_srcu);
++}
++
++void kvm_fire_mask_notifiers(struct kvm *kvm, unsigned irqchip, unsigned pin,
++			     bool mask)
++{
++	struct kvm_irq_mask_notifier *kimn;
++	int idx, gsi;
++
++	idx = srcu_read_lock(&kvm->irq_srcu);
++	gsi = kvm_irq_map_chip_pin(kvm, irqchip, pin);
++	if (gsi != -1)
++		hlist_for_each_entry_rcu(kimn, &kvm->irq_mask_notifier_list, link)
++			if (kimn->irq == gsi)
++				kimn->func(kimn, mask);
++	srcu_read_unlock(&kvm->irq_srcu, idx);
++}
+ #endif
+ 
+ void
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index a49df8988cd6..5ca7fb0b8257 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1144,6 +1144,7 @@ static struct kvm *kvm_create_vm(unsigned long type)
+ 
+ #ifdef CONFIG_HAVE_KVM_IRQFD
+ 	INIT_HLIST_HEAD(&kvm->irq_ack_notifier_list);
++	INIT_HLIST_HEAD(&kvm->irq_mask_notifier_list);
+ #endif
+ 
+ 	r = kvm_init_mmu_notifier(kvm);
 -- 
 2.37.1.559.g78731f0fdb-goog
 

@@ -2,109 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE1B58ACA0
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E7758ACA5
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240992AbiHEO5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 10:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        id S240986AbiHEO6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 10:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240979AbiHEO5s (ORCPT
+        with ESMTP id S240983AbiHEO5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 5 Aug 2022 10:57:48 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD2D61B15
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 07:57:44 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id v131-20020a1cac89000000b003a4bb3f786bso4107422wme.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 07:57:44 -0700 (PDT)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34A44E601
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 07:57:45 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id v3so3614418wrp.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 07:57:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=o4qJMXGfl1V64TlbGvBfcm+LN8g9SJYD1xysElPFV+w=;
-        b=eZBBQdzncTXK3CK4MNTJG2M8VMM9rVBloXv1jN1nCd/+1qkQTnhO/efbCMPGsHhhR+
-         LkPnBwv6SEuDRRqbP4CWHuoWPe0LYtlwAYHYzu7nLu2RQ9eNKs31G4BO00vnBeVluRHm
-         F6lVr3xKzO4OJNDhthOsWntpeK8XfnlCsYPqlu1GNRnUqZRmjQMxSMITM3i8NmDgkJiw
-         N9jyAaTL78pezdHS7VG3xL+31qb/AMCztVGDnaoGR20Pd9fOLaGgv6/4Bb9YfWYQaAXU
-         hMshzCDOxdv7JGUkwANk9lJ+Ptm+ejVa54gcxN8sJptA+2GYUfqVUuglLeC1A/aFJV8i
-         ttqA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=z4eHIO/lP3A7ZmU9L/R4eUIpQ8+3A+dh/CZJHP5Vb9c=;
+        b=qFnMDrz+uYD+N3o0PqMq4uFKr5E5Tp6sTgWHVwZYmCiavy4ji+ykAshfVE2DNoXWRw
+         HnaCniRrefTSJd7+bN7WNSmZ3YSHZLJzeHczxrTwjKZkTzLSBYMBBc0QtO5nUCg7I4ac
+         ZcnaTzvxn+km0T1MGeqd0CK90w756JVoecYNEafxQMQ3DUWIdwvATw03BJqhjqIhvv/A
+         MZzvIbus9sATIPNdgQhoWFPDWI+nCZ69e/EHQzCSfUJadLDwswO5fBYGpUp9n3Tanb5a
+         fDjTSXDdsN+xD0NBGsJrPMerrMyP1ZXbaTdzAkjH02p6gsxd5Tv7dGeaI6FlzYRA2pFO
+         dILQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=o4qJMXGfl1V64TlbGvBfcm+LN8g9SJYD1xysElPFV+w=;
-        b=6jxFTB6BgMn56JjS5ihYfjlmQAzlqYG+D/AYCVEnSX3uAAFH5mJInMGWUxki1tBBtt
-         76UuWQrpMcKYQ7r3VZ7vdDWzBOfrsNbpgPuHcqUgAhmuY98qYmf5FqvaT1vcHUUZxLFg
-         s51F/fdaI9R8bMA6I1joSiHJc81Ie+MEvqkq4NpEPsYJMvljp80CZP+Cx8ZgViJGqWtB
-         KmdgkvTkpuFVQP5pbiCcmcAEnkh5kIaglr8rdwCDKjBi/Ue9BA8W/iphQ8M32WD53ttf
-         DUmGGP05FkljT7qe2rlV+P66Oj4S5kGaYqxpOJxG1NUgbElaXL5V1AOBbZiYnoBH1zCZ
-         w6xw==
-X-Gm-Message-State: ACgBeo33CvI1VDTq60DrnC4yTed/ijsxQxT7Q1iKymnDWbiAlrIIIHnx
-        Y3siZo6redQwb603D9uRF5VAbA==
-X-Google-Smtp-Source: AA6agR5vgKZ1scONDwjrANviaKFae/NRN/p3900F4LwCunVN/wiI0liT70nfxxj9L1NFTeuSjjFQYQ==
-X-Received: by 2002:a7b:c3c6:0:b0:3a3:2065:e022 with SMTP id t6-20020a7bc3c6000000b003a32065e022mr5079223wmj.117.1659711462808;
-        Fri, 05 Aug 2022 07:57:42 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=z4eHIO/lP3A7ZmU9L/R4eUIpQ8+3A+dh/CZJHP5Vb9c=;
+        b=5KpeQ71wQ9Id7QCk065x68KGjV08r3AaWJwsOXBzNFkGxEjQm6/4yKFQAI7kRCg3oB
+         YWt3NUiT2kkM3Hyhcf89ELWigXRpKlF6T0Zhwt5cfM4UVnmRXI0MDzFBegB8mrzYGrLD
+         EpclEc5CA3qFG/CeWU+RKzORsU48mRBeTClPaHqN3oo5IQEWC/ytdg35PHnISTw3Eqjq
+         I09cMzVQtjgwoIKNgoGX+5oMlP7IJon++p1G6l6NlY7NjYpqoiBdDrje06vkDCsumWTT
+         dfw64EvBkUsc0LJMZNlH5TCsnBnaj66xaAruAMjAp3KGoWm54Fz70ZsoWrtuBjMsF66e
+         Z6XQ==
+X-Gm-Message-State: ACgBeo0wUGaIv/sQizKXFJCmOq58gz5MdAKA4TfQNtQD0mZeKJxxZCts
+        MvpTp/7hRTJ1Ld0c1sRval0bWw==
+X-Google-Smtp-Source: AA6agR6Jw0CG4h6Jy6P/v5zaalR06eLrHXXbUe+WPBRRIHHubcSA0kV0ytLWnd4GPi7YDybYzdVrxA==
+X-Received: by 2002:a5d:6d84:0:b0:220:5dda:a0e8 with SMTP id l4-20020a5d6d84000000b002205ddaa0e8mr4564710wrs.493.1659711464164;
+        Fri, 05 Aug 2022 07:57:44 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:aef0:8606:da6b:79ef])
-        by smtp.gmail.com with ESMTPSA id y1-20020adfd081000000b0022159d92004sm3102448wrh.82.2022.08.05.07.57.39
+        by smtp.gmail.com with ESMTPSA id y1-20020adfd081000000b0022159d92004sm3102448wrh.82.2022.08.05.07.57.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 07:57:42 -0700 (PDT)
+        Fri, 05 Aug 2022 07:57:43 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH v1 00/26] Rework the trip points creation
-Date:   Fri,  5 Aug 2022 16:57:03 +0200
-Message-Id: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
+Subject: [PATCH v1 01/26] thermal/core: encapsulate ops->get_trip_* ops into a function
+Date:   Fri,  5 Aug 2022 16:57:04 +0200
+Message-Id: <20220805145729.2491611-2-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
+References: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,157 +70,426 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This work is the pre-requisite of handling correctly when the trip
-point are crossed. For that we need to rework how the trip points are
-declared and assigned to a thermal zone.
+The thermal_zone_device_ops structure defines a set of ops family,
+get_trip_temp(), get_trip_hyst(), get_trip_type(). Each of them is
+returning a property of a trip point.
 
-Even if it appears to be a common sense to have the trip points being
-ordered, this no guarantee neither documentation telling that is the
-case.
+The result is the code is calling the ops everywhere to get a trip
+point which is supposed to be defined in the backend driver. It is a
+non-sense as a thermal trip can be generic and used by the backend
+driver to declare its trip points.
 
-One solution could have been to create an ordered array of trips built
-when registering the thermal zone by calling the different get_trip*
-ops. However those ops receive a thermal zone pointer which is not
-known as it is in the process of creating it.
+Part of the thermal framework has been changed and all the OF thermal
+drivers are using the same definition for the trip point and use a
+thermal zone registration variant to pass those trip points which are
+part of the thermal zone device structure.
 
-This cyclic dependency shows we have to rework how we manage the trip
-points.
+Consequently, we can use a generic function to get the trip points
+when they are stored in the thermal zone device structure.
 
-Actually, all the trip points definition can be common to the backend
-sensor drivers and we can factor out the thermal trip structure in all
-of them.
+This approach can be generalized to all the drivers and we can get rid
+of the ops->get_trip_*. That will result to a much more simpler code
+and make possible to rework how the thermal trip are handled in the
+thermal core framework as discussed previously.
 
-Then, as we register the thermal trips array, they will be available
-in the thermal zone structure and a core function can return the trip
-given its id.
+This change adds a function thermal_zone_get_trip() where we get the
+thermal trip point structure which contains all the properties (type,
+temp, hyst) instead of doing multiple calls to ops->get_trip_*.
 
-The get_trip_* ops won't be needed anymore and could be removed. The
-resulting code will be another step forward to a self encapsulated
-generic thermal framework.
+That opens the door for trip point extension with more attributes. For
+instance, replacing the trip points disabled bitmask with a 'disabled'
+field in the structure.
 
-Most of the drivers can be converted more or less easily. This series
-does a first round with most of the drivers. Some remain and will be
-converted but with a smaller set of changes as the conversion is a bit
-more complex.
+Here we replace all the calls to ops->get_trip_* in the thermal core
+code with a call to the thermal_zone_get_trip() function.
 
-Cc: Raju Rangoju <rajur@chelsio.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Peter Kaestle <peter@piie.net>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Mark Gross <markgross@kernel.org>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>
-Cc: Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Ray Jui <rjui@broadcom.com>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: Support Opensource <support.opensource@diasemi.com>
-Cc: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Thara Gopinath <thara.gopinath@linaro.org>
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
-Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>
-Cc: Eduardo Valentin <edubezval@gmail.com>
-Cc: Keerthy <j-keerthy@ti.com>
-Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Antoine Tenart <atenart@kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Dmitry Osipenko <digetx@gmail.com>
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: platform-driver-x86@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: linux-rpi-kernel@lists.infradead.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-renesas-soc@vger.kernel.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: linux-tegra@vger.kernel.org
-Cc: linux-omap@vger.kernel.org
+While at it, add the thermal_zone_get_num_trips() to encapsulate the
+code more and reduce the grip with the thermal framework internals.
 
-Daniel Lezcano (26):
-  thermal/core: encapsulate ops->get_trip_* ops into a function
-  thermal/sysfs: Do not make get_trip_hyst optional
-  thermal/core/governors: Use thermal_zone_get_trip() instead of ops
-    functions
-  thermal/drivers/st: Use generic trip points
-  thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
-  thermal/drivers/imx: Use generic thermal_zone_get_trip() function
-  thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
-  thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
-  thermal/drivers/uniphier: Use generic thermal_zone_get_trip() function
-  thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
-  thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
-  thermal/drivers/OF: Use generic thermal_zone_get_trip() function
-  thermal/drivers/armada: Use generic thermal_zone_get_trip() function
-  thermal/core/OF: Remove unused functions
-  thermal/drivers/rcar_gen3: Use the generic function to get the number
-    of trips
-  thermal/drivers/exynos: of_thermal_get_ntrips()
-  thermal/core/of: Remove of_thermal_get_ntrips()
-  thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by
-    thermal_zone_get_trip()
-  thermal/core/of: Remove of_thermal_is_trip_valid()
-  thermal/drivers/broadcom: Use generic thermal_zone_get_trip() function
-  thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
-  thermal/drivers/ti: Remove unused macros ti_thermal_get_trip_value() /
-    ti_thermal_trip_is_valid()
-  thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
-  thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
-  thermal/intel/int340x: Replace parameter to simplify
-  thermal/drivers/intel: Use generic thermal_zone_get_trip() function
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/thermal_core.c    | 68 ++++++++++++++++++++-----------
+ drivers/thermal/thermal_core.h    |  8 ++++
+ drivers/thermal/thermal_helpers.c | 28 ++++++-------
+ drivers/thermal/thermal_netlink.c | 21 ++++------
+ drivers/thermal/thermal_sysfs.c   | 66 ++++++++++++------------------
+ 5 files changed, 102 insertions(+), 89 deletions(-)
 
- drivers/net/ethernet/chelsio/cxgb4/cxgb4.h    |   2 -
- .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  41 ++----
- drivers/platform/x86/acerhdf.c                |  73 ++++-------
- drivers/thermal/armada_thermal.c              |  39 +++---
- drivers/thermal/broadcom/bcm2835_thermal.c    |   8 +-
- drivers/thermal/da9062-thermal.c              |  52 ++------
- drivers/thermal/gov_bang_bang.c               |  23 ++--
- drivers/thermal/gov_fair_share.c              |  18 +--
- drivers/thermal/gov_power_allocator.c         |  51 ++++----
- drivers/thermal/gov_step_wise.c               |  22 ++--
- drivers/thermal/hisi_thermal.c                |  11 +-
- drivers/thermal/imx_thermal.c                 |  72 ++++-------
- .../int340x_thermal/int340x_thermal_zone.c    |  31 ++---
- .../int340x_thermal/int340x_thermal_zone.h    |   4 +-
- .../processor_thermal_device.c                |  10 +-
- drivers/thermal/intel/x86_pkg_temp_thermal.c  | 120 ++++++++++--------
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |  39 +++---
- drivers/thermal/rcar_gen3_thermal.c           |   2 +-
- drivers/thermal/rcar_thermal.c                |  49 +------
- drivers/thermal/samsung/exynos_tmu.c          |  60 ++++-----
- drivers/thermal/st/st_thermal.c               |  47 +------
- drivers/thermal/tegra/soctherm.c              |  33 ++---
- drivers/thermal/tegra/tegra30-tsensor.c       |  17 ++-
- drivers/thermal/thermal_core.c                |  68 ++++++----
- drivers/thermal/thermal_core.h                |  30 ++---
- drivers/thermal/thermal_helpers.c             |  28 ++--
- drivers/thermal/thermal_netlink.c             |  21 ++-
- drivers/thermal/thermal_of.c                  |  88 -------------
- drivers/thermal/thermal_sysfs.c               |  91 +++++--------
- drivers/thermal/ti-soc-thermal/ti-thermal.h   |  15 ---
- drivers/thermal/uniphier_thermal.c            |  26 ++--
- 31 files changed, 434 insertions(+), 757 deletions(-)
-
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index b4c68410c158..7d95cbcfa24d 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -354,35 +354,31 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
+ 		tz->ops->critical(tz);
+ }
+ 
+-static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
++static void handle_thermal_trip(struct thermal_zone_device *tz, int trip_id)
+ {
+-	enum thermal_trip_type type;
+-	int trip_temp, hyst = 0;
++	struct thermal_trip trip;
+ 
+ 	/* Ignore disabled trip points */
+-	if (test_bit(trip, &tz->trips_disabled))
++	if (test_bit(trip_id, &tz->trips_disabled))
+ 		return;
+ 
+-	tz->ops->get_trip_temp(tz, trip, &trip_temp);
+-	tz->ops->get_trip_type(tz, trip, &type);
+-	if (tz->ops->get_trip_hyst)
+-		tz->ops->get_trip_hyst(tz, trip, &hyst);
++	thermal_zone_get_trip(tz, trip_id, &trip);
+ 
+ 	if (tz->last_temperature != THERMAL_TEMP_INVALID) {
+-		if (tz->last_temperature < trip_temp &&
+-		    tz->temperature >= trip_temp)
+-			thermal_notify_tz_trip_up(tz->id, trip,
++		if (tz->last_temperature < trip.temperature &&
++		    tz->temperature >= trip.temperature)
++			thermal_notify_tz_trip_up(tz->id, trip_id,
+ 						  tz->temperature);
+-		if (tz->last_temperature >= trip_temp &&
+-		    tz->temperature < (trip_temp - hyst))
+-			thermal_notify_tz_trip_down(tz->id, trip,
++		if (tz->last_temperature >= trip.temperature &&
++		    tz->temperature < (trip.temperature - trip.hysteresis))
++			thermal_notify_tz_trip_down(tz->id, trip_id,
+ 						    tz->temperature);
+ 	}
+ 
+-	if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
+-		handle_critical_trips(tz, trip, trip_temp, type);
++	if (trip.type == THERMAL_TRIP_CRITICAL || trip.type == THERMAL_TRIP_HOT)
++		handle_critical_trips(tz, trip_id, trip.temperature, trip.type);
+ 	else
+-		handle_non_critical_trips(tz, trip);
++		handle_non_critical_trips(tz, trip_id);
+ 	/*
+ 	 * Alright, we handled this trip successfully.
+ 	 * So, start monitoring again.
+@@ -1162,6 +1158,33 @@ static void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms
+ 		*delay_jiffies = round_jiffies(*delay_jiffies);
+ }
+ 
++int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
++			  struct thermal_trip *trip)
++{
++	int ret;
++
++	if (!tz || trip_id < 0 || trip_id >= tz->num_trips || !trip)
++		return -EINVAL;
++
++	if (tz->trips) {
++		*trip = tz->trips[trip_id];
++		return 0;
++	}
++
++	if (tz->ops->get_trip_hyst) {
++		ret = tz->ops->get_trip_hyst(tz, trip_id, &trip->hysteresis);
++		if (ret)
++			return ret;
++	} else trip->hysteresis = 0;
++
++	ret = tz->ops->get_trip_temp(tz, trip_id, &trip->temperature);
++	if (ret)
++		return ret;
++
++	return tz->ops->get_trip_type(tz, trip_id, &trip->type);
++}
++
++
+ /**
+  * thermal_zone_device_register_with_trips() - register a new thermal zone device
+  * @type:	the thermal zone device type
+@@ -1194,8 +1217,6 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+ 					int polling_delay)
+ {
+ 	struct thermal_zone_device *tz;
+-	enum thermal_trip_type trip_type;
+-	int trip_temp;
+ 	int id;
+ 	int result;
+ 	int count;
+@@ -1222,7 +1243,7 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+-	if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp))
++	if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
+@@ -1272,9 +1293,10 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+ 		goto release_device;
+ 
+ 	for (count = 0; count < num_trips; count++) {
+-		if (tz->ops->get_trip_type(tz, count, &trip_type) ||
+-		    tz->ops->get_trip_temp(tz, count, &trip_temp) ||
+-		    !trip_temp)
++		struct thermal_trip trip;
++
++		result = thermal_zone_get_trip(tz, count, &trip);
++		if (result)
+ 			set_bit(count, &tz->trips_disabled);
+ 	}
+ 
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index 2241d2dce017..194e98a5b102 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -110,6 +110,14 @@ void thermal_unregister_governor(struct thermal_governor *);
+ int thermal_zone_device_set_policy(struct thermal_zone_device *, char *);
+ int thermal_build_list_of_policies(char *buf);
+ 
++int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
++			  struct thermal_trip *trip);
++
++static inline int thermal_zone_get_num_trips(struct thermal_zone_device *tz)
++{
++	return tz->num_trips;
++}
++
+ /* Helpers */
+ void thermal_zone_set_trips(struct thermal_zone_device *tz);
+ 
+diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
+index 690890f054a3..626a70d70567 100644
+--- a/drivers/thermal/thermal_helpers.c
++++ b/drivers/thermal/thermal_helpers.c
+@@ -79,7 +79,7 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	int ret = -EINVAL;
+ 	int count;
+ 	int crit_temp = INT_MAX;
+-	enum thermal_trip_type type;
++	struct thermal_trip trip;
+ 
+ 	if (!tz || IS_ERR(tz) || !tz->ops->get_temp)
+ 		goto exit;
+@@ -90,10 +90,9 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
+ 
+ 	if (IS_ENABLED(CONFIG_THERMAL_EMULATION) && tz->emul_temperature) {
+ 		for (count = 0; count < tz->num_trips; count++) {
+-			ret = tz->ops->get_trip_type(tz, count, &type);
+-			if (!ret && type == THERMAL_TRIP_CRITICAL) {
+-				ret = tz->ops->get_trip_temp(tz, count,
+-						&crit_temp);
++			ret = thermal_zone_get_trip(tz, count, &trip);
++			if (!ret && trip.type == THERMAL_TRIP_CRITICAL) {
++				crit_temp = trip.temperature;
+ 				break;
+ 			}
+ 		}
+@@ -127,29 +126,30 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
+  */
+ void thermal_zone_set_trips(struct thermal_zone_device *tz)
+ {
+-	int low = -INT_MAX;
+-	int high = INT_MAX;
+-	int trip_temp, hysteresis;
++	struct thermal_trip trip;
++	int low = -INT_MAX, high = INT_MAX;
+ 	int i, ret;
+ 
+ 	mutex_lock(&tz->lock);
+ 
+-	if (!tz->ops->set_trips || !tz->ops->get_trip_hyst)
++	if (!tz->ops->set_trips)
+ 		goto exit;
+ 
+ 	for (i = 0; i < tz->num_trips; i++) {
+ 		int trip_low;
+ 
+-		tz->ops->get_trip_temp(tz, i, &trip_temp);
+-		tz->ops->get_trip_hyst(tz, i, &hysteresis);
++		ret = thermal_zone_get_trip(tz, i , &trip);
++		if (ret)
++			goto exit;
+ 
+-		trip_low = trip_temp - hysteresis;
++		trip_low = trip.temperature - trip.hysteresis;
+ 
+ 		if (trip_low < tz->temperature && trip_low > low)
+ 			low = trip_low;
+ 
+-		if (trip_temp > tz->temperature && trip_temp < high)
+-			high = trip_temp;
++		if (trip.temperature > tz->temperature &&
++		    trip.temperature < high)
++			high = trip.temperature;
+ 	}
+ 
+ 	/* No need to change trip points */
+diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+index 050d243a5fa1..ce56d441c88c 100644
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -452,7 +452,8 @@ static int thermal_genl_cmd_tz_get_trip(struct param *p)
+ 	struct sk_buff *msg = p->msg;
+ 	struct thermal_zone_device *tz;
+ 	struct nlattr *start_trip;
+-	int i, id;
++	struct thermal_trip trip;
++	int ret, i, id;
+ 
+ 	if (!p->attrs[THERMAL_GENL_ATTR_TZ_ID])
+ 		return -EINVAL;
+@@ -471,18 +472,14 @@ static int thermal_genl_cmd_tz_get_trip(struct param *p)
+ 
+ 	for (i = 0; i < tz->num_trips; i++) {
+ 
+-		enum thermal_trip_type type;
+-		int temp, hyst = 0;
+-
+-		tz->ops->get_trip_type(tz, i, &type);
+-		tz->ops->get_trip_temp(tz, i, &temp);
+-		if (tz->ops->get_trip_hyst)
+-			tz->ops->get_trip_hyst(tz, i, &hyst);
+-
++		ret = thermal_zone_get_trip(tz, i, &trip);
++		if (ret)
++			goto out_cancel_nest;
++		
+ 		if (nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, i) ||
+-		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TYPE, type) ||
+-		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TEMP, temp) ||
+-		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_HYST, hyst))
++		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TYPE, trip.type) ||
++		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TEMP, trip.temperature) ||
++		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_HYST, trip.hysteresis))
+ 			goto out_cancel_nest;
+ 	}
+ 
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 3c513561d346..2b53927f3263 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -79,20 +79,17 @@ trip_point_type_show(struct device *dev, struct device_attribute *attr,
+ 		     char *buf)
+ {
+ 	struct thermal_zone_device *tz = to_thermal_zone(dev);
+-	enum thermal_trip_type type;
+-	int trip, result;
++	struct thermal_trip trip;
++	int trip_id, result;
+ 
+-	if (!tz->ops->get_trip_type)
+-		return -EPERM;
+-
+-	if (sscanf(attr->attr.name, "trip_point_%d_type", &trip) != 1)
++	if (sscanf(attr->attr.name, "trip_point_%d_type", &trip_id) != 1)
+ 		return -EINVAL;
+ 
+-	result = tz->ops->get_trip_type(tz, trip, &type);
++	result = thermal_zone_get_trip(tz, trip_id, &trip);
+ 	if (result)
+ 		return result;
+ 
+-	switch (type) {
++	switch (trip.type) {
+ 	case THERMAL_TRIP_CRITICAL:
+ 		return sprintf(buf, "critical\n");
+ 	case THERMAL_TRIP_HOT:
+@@ -111,37 +108,31 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
+ 		      const char *buf, size_t count)
+ {
+ 	struct thermal_zone_device *tz = to_thermal_zone(dev);
+-	int trip, ret;
+-	int temperature, hyst = 0;
+-	enum thermal_trip_type type;
++	struct thermal_trip trip;
++	int trip_id, ret;
+ 
+ 	if (!tz->ops->set_trip_temp && !tz->trips)
+ 		return -EPERM;
+ 
+-	if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip) != 1)
++	if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) != 1)
+ 		return -EINVAL;
+ 
+-	if (kstrtoint(buf, 10, &temperature))
++	if (kstrtoint(buf, 10, &trip.temperature))
+ 		return -EINVAL;
+ 
+-	ret = tz->ops->set_trip_temp(tz, trip, temperature);
++	ret = tz->ops->set_trip_temp(tz, trip_id, trip.temperature);
+ 	if (ret)
+ 		return ret;
+ 
+ 	if (tz->trips)
+-		tz->trips[trip].temperature = temperature;
+-
+-	if (tz->ops->get_trip_hyst) {
+-		ret = tz->ops->get_trip_hyst(tz, trip, &hyst);
+-		if (ret)
+-			return ret;
+-	}
++		tz->trips[trip_id].temperature = trip.temperature;
+ 
+-	ret = tz->ops->get_trip_type(tz, trip, &type);
++	ret = thermal_zone_get_trip(tz, trip_id, &trip);
+ 	if (ret)
+ 		return ret;
+ 
+-	thermal_notify_tz_trip_change(tz->id, trip, type, temperature, hyst);
++	thermal_notify_tz_trip_change(tz->id, trip_id, trip.type,
++				      trip.temperature, trip.hysteresis);
+ 
+ 	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+ 
+@@ -153,21 +144,17 @@ trip_point_temp_show(struct device *dev, struct device_attribute *attr,
+ 		     char *buf)
+ {
+ 	struct thermal_zone_device *tz = to_thermal_zone(dev);
+-	int trip, ret;
+-	int temperature;
+-
+-	if (!tz->ops->get_trip_temp)
+-		return -EPERM;
++	struct thermal_trip trip;
++	int trip_id, ret;
+ 
+-	if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip) != 1)
++	if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) != 1)
+ 		return -EINVAL;
+ 
+-	ret = tz->ops->get_trip_temp(tz, trip, &temperature);
+-
++	ret = thermal_zone_get_trip(tz, trip_id, &trip);
+ 	if (ret)
+ 		return ret;
+ 
+-	return sprintf(buf, "%d\n", temperature);
++	return sprintf(buf, "%d\n", trip.temperature);
+ }
+ 
+ static ssize_t
+@@ -205,18 +192,17 @@ trip_point_hyst_show(struct device *dev, struct device_attribute *attr,
+ 		     char *buf)
+ {
+ 	struct thermal_zone_device *tz = to_thermal_zone(dev);
+-	int trip, ret;
+-	int temperature;
++	struct thermal_trip trip;
++	int trip_id, ret;
+ 
+-	if (!tz->ops->get_trip_hyst)
+-		return -EPERM;
+-
+-	if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip) != 1)
++	if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip_id) != 1)
+ 		return -EINVAL;
+ 
+-	ret = tz->ops->get_trip_hyst(tz, trip, &temperature);
++	ret = thermal_zone_get_trip(tz, trip_id, &trip);
++	if (ret)
++		return ret;
+ 
+-	return ret ? ret : sprintf(buf, "%d\n", temperature);
++	return ret ? ret : sprintf(buf, "%d\n", trip.hysteresis);
+ }
+ 
+ static ssize_t
 -- 
 2.25.1
 

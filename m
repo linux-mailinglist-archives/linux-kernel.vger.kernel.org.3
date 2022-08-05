@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB06658ACDD
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D1458ACDE
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241237AbiHEO7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 10:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S241033AbiHEO7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 10:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241161AbiHEO6p (ORCPT
+        with ESMTP id S241064AbiHEO6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 10:58:45 -0400
+        Fri, 5 Aug 2022 10:58:54 -0400
 Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1076D572
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33C86610F
         for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 07:58:18 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id z12so3521183wrs.9
+Received: by mail-wr1-x436.google.com with SMTP id z16so3495283wrh.12
         for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 07:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=+LKPhNKLGEVFzXPLROXys6y1jDgivXC9DTGdXpCbdug=;
-        b=esaMTjnp69RL3woTrdc24TQt0JCs8qISF4KHdB2djLUrswQOeXm4f1WklijtlNaS8W
-         y/Lb4HeyDgvShVesCqKsGyd1+kO6fLVgxMcftLr+sMbS/Hifl9STEeUOE4dwtDEToE6y
-         DZyj99tqanRhk91LPmTtpFJbq4vMT/A74niwa3YHDhIiZev8NL5wwzqccBYvBOkJ2Ruc
-         Xgjl3H7vC5E2PTXbfzrTUP3VRiHGRElS7IaVAU0FuWAJnaKAP6Dj/mYRbOVqG8Uxt6hN
-         esVhoie2iQtM1rAPzjDUaQ5gZocv2ffH3WclUad+iXQc/i83mMZDvv5t8KCHxMgH0zus
-         sWfQ==
+        bh=l3fRfb6BSvk17nYo2OZ/MJX0g9ONEvlXMuKYYAVUpVc=;
+        b=bOcTdtgw0QnUbozX/U7W+Xnnmq8BvelHhbzO904NPqYZ51+PUbDzOzLiliYJlhcplt
+         M012X6B3rZiwiJ4Db1NjJBsy3AcrKvg8hLWM3tJV2A2zbh8UIPS6fbhWZop9wVW6s0xT
+         GquJjGofHZRtAUhDXrA5HZkx/mz2NXfVE9GaY8lFNiW9mN4XhH1+KAirIKH+mxGB8vSQ
+         s7bYHbly1gQKyuhCMncUJxTHJrUlZSK4LWlnz8vb0FWXV+yLzaUbi/paXvtl8/ahKB2z
+         yhU4echgJ9+OQlRjCcV9JnOC1SpmUDDm8fl6lnQ8IhmjLXrpztbyz7XIrkVAwwDlkwBB
+         d/og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=+LKPhNKLGEVFzXPLROXys6y1jDgivXC9DTGdXpCbdug=;
-        b=cgE23t93w4IRGIbhXWHkp5xflXa4/S4EnFoh3+hWfwTk78F8mit2pJQKoKU+7VEVmi
-         9jl+lzqzIFF+Cg926Nvp1LTEuZAmQmJJD1fjTccSMzkah0fz5sleD3XeZsNwGQoNQY78
-         8XDq58AdY8tgGlxaKtSKlGXNPp3RH4JnkXjPBtVC4lW/G9kLU9QTV3YBe2Y4BU40META
-         lBMq7DYqY/xnX5/kkvPPDMDubn+0eBQfKVK/qW+kf5/VxUVxrnczncCqGkNuX7pocAYa
-         vTKY2Tehs4upl1aNVnPZmC0hzSjr/eZSGQEh1BVKI+6HRi184nPCDFTX3xx0vik2v3um
-         1C8w==
-X-Gm-Message-State: ACgBeo04URMeidQajP2BXeDU0Z8gft/bAWMudb4Vw9LLUx4WYejKjG9p
-        5MxWQDNMFfFnVi0I+2jzuRFk2Q==
-X-Google-Smtp-Source: AA6agR7u6zk+rXVU+V7Sgy68MHi+eF2Emd07lie03xAjqv2erUPFXDdl1laFdt+SVm/JxI/N9bNeoA==
-X-Received: by 2002:a5d:595f:0:b0:220:619d:da07 with SMTP id e31-20020a5d595f000000b00220619dda07mr4567517wri.10.1659711496782;
-        Fri, 05 Aug 2022 07:58:16 -0700 (PDT)
+        bh=l3fRfb6BSvk17nYo2OZ/MJX0g9ONEvlXMuKYYAVUpVc=;
+        b=nGdpzC95UfyULls4lyBpLfi1hEqRE3RNy37MOrZmh/3Z9BGAHOLabI49Z+YTTS2A74
+         elk653nivuaxvYHBphnbVx1VWR8yxEhdnpvFKtu8tkaQRR7SQaW+QkTTXn443B2tyiLy
+         Jc5YEpmdscZTPYwRfDlxcZJ9/YYxzNymTaT1GQc47KtZXJg1Jxz5GrvoaVp0en7NEaDO
+         e0IU29Oo61VRotNR2UwNtyvWeOt0k0Ibx4YT97SV0caV0yk6d+HG10RpL/qY2d0qtoV2
+         LZOEvG/5WXkT+L1ULQTIGEJhldKAbbmahOB46Z+Nb/LK3CxfC2vIfPnOPipdGKLByckU
+         sQJA==
+X-Gm-Message-State: ACgBeo3u+0Q1enLyqKDsJVwttQsoVZvLxzM91aNEmJz08Jkiz+OB2Ize
+        wRunDYyGohR537L5bqhnBL+VoQ==
+X-Google-Smtp-Source: AA6agR6OhC4s23ZUxa+t8aBsW/O166/9Ow+naaCg256tXgw0tCVEuGl/ihB6jpQQCePKrLhy/yS9zw==
+X-Received: by 2002:a05:6000:2c6:b0:21e:6efd:1f05 with SMTP id o6-20020a05600002c600b0021e6efd1f05mr4792679wry.339.1659711498238;
+        Fri, 05 Aug 2022 07:58:18 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:aef0:8606:da6b:79ef])
-        by smtp.gmail.com with ESMTPSA id y1-20020adfd081000000b0022159d92004sm3102448wrh.82.2022.08.05.07.58.15
+        by smtp.gmail.com with ESMTPSA id y1-20020adfd081000000b0022159d92004sm3102448wrh.82.2022.08.05.07.58.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 07:58:16 -0700 (PDT)
+        Fri, 05 Aug 2022 07:58:17 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org (open list:ACER ASPIRE ONE
-        TEMPERATURE AND FAN DRIVER)
-Subject: [PATCH v1 23/26] thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
-Date:   Fri,  5 Aug 2022 16:57:26 +0200
-Message-Id: <20220805145729.2491611-24-daniel.lezcano@linaro.org>
+        linux-kernel@vger.kernel.org, Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev@vger.kernel.org (open list:CXGB4 ETHERNET DRIVER (CXGB4))
+Subject: [PATCH v1 24/26] thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
+Date:   Fri,  5 Aug 2022 16:57:27 +0200
+Message-Id: <20220805145729.2491611-25-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
 References: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -84,138 +84,88 @@ thermal zone.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/platform/x86/acerhdf.c | 73 ++++++++++++----------------------
- 1 file changed, 26 insertions(+), 47 deletions(-)
+ drivers/net/ethernet/chelsio/cxgb4/cxgb4.h    |  2 -
+ .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    | 41 ++++---------------
+ 2 files changed, 8 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-index 3463629f8764..cf757f3a1e6b 100644
---- a/drivers/platform/x86/acerhdf.c
-+++ b/drivers/platform/x86/acerhdf.c
-@@ -46,6 +46,8 @@
-  * measured by the on-die thermal monitor are within 0 <= Tj <= 90. So,
-  * assume 89°C is critical temperature.
-  */
-+#define ACERHDF_DEFAULT_TEMP_FANON 60000
-+#define ACERHDF_DEFAULT_TEMP_FANOFF 53000
- #define ACERHDF_TEMP_CRIT 89000
- #define ACERHDF_FAN_OFF 0
- #define ACERHDF_FAN_AUTO 1
-@@ -70,8 +72,8 @@ static int kernelmode;
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h b/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h
+index 5657ac8cfca0..fca9533bc011 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h
++++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4.h
+@@ -1079,8 +1079,6 @@ struct mbox_list {
+ #if IS_ENABLED(CONFIG_THERMAL)
+ struct ch_thermal {
+ 	struct thermal_zone_device *tzdev;
+-	int trip_temp;
+-	int trip_type;
+ };
  #endif
  
- static unsigned int interval = 10;
--static unsigned int fanon = 60000;
--static unsigned int fanoff = 53000;
-+static unsigned int fanon = ACERHDF_DEFAULT_TEMP_FANON;
-+static unsigned int fanoff = ACERHDF_DEFAULT_TEMP_FANOFF;
- static unsigned int verbose;
- static unsigned int list_supported;
- static unsigned int fanstate = ACERHDF_FAN_AUTO;
-@@ -137,6 +139,15 @@ struct ctrl_settings {
- 	int mcmd_enable;
- };
- 
-+static struct thermal_trip trips[] = {
-+	[0] = { .temperature = ACERHDF_DEFAULT_TEMP_FANON,
-+		.hysteresis = ACERHDF_DEFAULT_TEMP_FANON - ACERHDF_DEFAULT_TEMP_FANOFF,
-+		.type = THERMAL_TRIP_ACTIVE },
-+
-+	[1] = { .temperature = ACERHDF_TEMP_CRIT,
-+		.type = THERMAL_TRIP_CRITICAL }
-+};
-+
- static struct ctrl_settings ctrl_cfg __read_mostly;
- 
- /* Register addresses and values for different BIOS versions */
-@@ -326,6 +337,15 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
- 		fanon = ACERHDF_MAX_FANON;
- 	}
- 
-+	if (fanon < fanoff) {
-+		pr_err("fanoff temperature (%d) is above fanon temperature (%d), clamping to %d\n",
-+		       fanoff, fanon, fanon);
-+		fanoff = fanon;
-+	};
-+	
-+	trips[0].temperature = fanon;
-+	trips[0].hysteresis  = fanon - fanoff;
-+	
- 	if (kernelmode && prev_interval != interval) {
- 		if (interval > ACERHDF_MAX_INTERVAL) {
- 			pr_err("interval too high, set to %d\n",
-@@ -424,43 +444,6 @@ static int acerhdf_change_mode(struct thermal_zone_device *thermal,
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c
+index 9a6d65243334..1d49cfe3e2ab 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c
++++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c
+@@ -29,36 +29,12 @@ static int cxgb4_thermal_get_temp(struct thermal_zone_device *tzdev,
  	return 0;
  }
  
--static int acerhdf_get_trip_type(struct thermal_zone_device *thermal, int trip,
--				 enum thermal_trip_type *type)
+-static int cxgb4_thermal_get_trip_type(struct thermal_zone_device *tzdev,
+-				       int trip, enum thermal_trip_type *type)
 -{
--	if (trip == 0)
--		*type = THERMAL_TRIP_ACTIVE;
--	else if (trip == 1)
--		*type = THERMAL_TRIP_CRITICAL;
--	else
+-	struct adapter *adap = tzdev->devdata;
+-
+-	if (!adap->ch_thermal.trip_temp)
 -		return -EINVAL;
 -
+-	*type = adap->ch_thermal.trip_type;
 -	return 0;
 -}
 -
--static int acerhdf_get_trip_hyst(struct thermal_zone_device *thermal, int trip,
--				 int *temp)
+-static int cxgb4_thermal_get_trip_temp(struct thermal_zone_device *tzdev,
+-				       int trip, int *temp)
 -{
--	if (trip != 0)
+-	struct adapter *adap = tzdev->devdata;
+-
+-	if (!adap->ch_thermal.trip_temp)
 -		return -EINVAL;
 -
--	*temp = fanon - fanoff;
--
+-	*temp = adap->ch_thermal.trip_temp;
 -	return 0;
 -}
 -
--static int acerhdf_get_trip_temp(struct thermal_zone_device *thermal, int trip,
--				 int *temp)
--{
--	if (trip == 0)
--		*temp = fanon;
--	else if (trip == 1)
--		*temp = ACERHDF_TEMP_CRIT;
--	else
--		return -EINVAL;
--
--	return 0;
--}
--
- static int acerhdf_get_crit_temp(struct thermal_zone_device *thermal,
- 				 int *temperature)
- {
-@@ -474,13 +457,9 @@ static struct thermal_zone_device_ops acerhdf_dev_ops = {
- 	.unbind = acerhdf_unbind,
- 	.get_temp = acerhdf_get_ec_temp,
- 	.change_mode = acerhdf_change_mode,
--	.get_trip_type = acerhdf_get_trip_type,
--	.get_trip_hyst = acerhdf_get_trip_hyst,
--	.get_trip_temp = acerhdf_get_trip_temp,
- 	.get_crit_temp = acerhdf_get_crit_temp,
+ static struct thermal_zone_device_ops cxgb4_thermal_ops = {
+ 	.get_temp = cxgb4_thermal_get_temp,
+-	.get_trip_type = cxgb4_thermal_get_trip_type,
+-	.get_trip_temp = cxgb4_thermal_get_trip_temp,
  };
  
++static struct thermal_trip trip = { .type = THERMAL_TRIP_CRITICAL } ;
++
+ int cxgb4_thermal_init(struct adapter *adap)
+ {
+ 	struct ch_thermal *ch_thermal = &adap->ch_thermal;
+@@ -79,15 +55,14 @@ int cxgb4_thermal_init(struct adapter *adap)
+ 	if (ret < 0) {
+ 		num_trip = 0; /* could not get trip temperature */
+ 	} else {
+-		ch_thermal->trip_temp = val * 1000;
+-		ch_thermal->trip_type = THERMAL_TRIP_CRITICAL;
++		trip.temperature = val * 1000;
+ 	}
 -
- /*
-  * cooling device callback functions
-  * get maximal fan cooling state
-@@ -710,10 +689,10 @@ static int __init acerhdf_register_thermal(void)
- 	if (IS_ERR(cl_dev))
- 		return -EINVAL;
- 
--	thz_dev = thermal_zone_device_register("acerhdf", 2, 0, NULL,
--					      &acerhdf_dev_ops,
--					      &acerhdf_zone_params, 0,
--					      (kernelmode) ? interval*1000 : 0);
-+	thz_dev = thermal_zone_device_register_with_trips("acerhdf", trips, ARRAY_SIZE(trips),
-+							  0, NULL, &acerhdf_dev_ops,
-+							  &acerhdf_zone_params, 0,
-+							  (kernelmode) ? interval*1000 : 0);
- 	if (IS_ERR(thz_dev))
- 		return -EINVAL;
- 
++	
+ 	snprintf(ch_tz_name, sizeof(ch_tz_name), "cxgb4_%s", adap->name);
+-	ch_thermal->tzdev = thermal_zone_device_register(ch_tz_name, num_trip,
+-							 0, adap,
+-							 &cxgb4_thermal_ops,
+-							 NULL, 0, 0);
++	ch_thermal->tzdev = thermal_zone_device_register_with_trips(ch_tz_name, &trip, num_trip,
++								    0, adap,
++								    &cxgb4_thermal_ops,
++								    NULL, 0, 0);
+ 	if (IS_ERR(ch_thermal->tzdev)) {
+ 		ret = PTR_ERR(ch_thermal->tzdev);
+ 		dev_err(adap->pdev_dev, "Failed to register thermal zone\n");
 -- 
 2.25.1
 

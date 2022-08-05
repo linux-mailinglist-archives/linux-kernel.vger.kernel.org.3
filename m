@@ -2,151 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA3F58AC7B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C1E58AC7C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237972AbiHEOp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 10:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S240970AbiHEOqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 10:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236039AbiHEOp5 (ORCPT
+        with ESMTP id S240820AbiHEOqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 10:45:57 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150042.outbound.protection.outlook.com [40.107.15.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA46F1EAD2;
-        Fri,  5 Aug 2022 07:45:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gMuirTFnN3PQkCSXQmBm9JLtRozMKKmWzwBvuwwqM3KHZixxMldBFMejDSpjIr4tIJOrhqKz+DFJwxIDb/uHh8N5tUQtIyJx297K/PQ/TW10faGseAQ9t7d7xxg9yaOIdXZI/MnnJeUkBEI2FnrDkY+sGzAiMXG/WtF0Lv4Vzy9E1nhgkfKrFC399oIwTnQ1XEecjUikRw6tcH+DfVYzfHTlkP7ShQJM0mX80Qmrn+fNPU+BXAPXNnaRmFtq65Wu6blfyHEPI/eLL7ze6oURR5kRfl4F60QcFkIBI9QhigpxsWV9svA45OTVYnmRY4/Z9nwyQ4UnF94D4dpypr/GTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZhZHEWuLj4w67vr6qVBJ6rYh34VVsTLBrCummv0aZ70=;
- b=erzs+eOTv+LkxFYsh+XtTWszhpgpUR2X9SBDBcWZQccA8HTw7ub0mrgT/x+WgzRshkEuaMRk0EUr4S8E/mT/HF6nCtVXp6Pg2SrLyKNw72cjD1Cxh8RbG7LH7Pi9J8hIOCuR7nZAQHcN17dhz1K8jWn4xldyZ9RD/jTOd6JyLYt9QF5+GZ4mcCjLEgfk78V96dr1yt/yV3ic1WMGDTo5A73aRCuwYrXYvjXFWg8tpv7EbkYPy4ub5X19zj9gqDEYThG/siRgebHZ9ZWT70t/O0LCuLMvYMxrzh+S5dOz1bZ09gQocJThBVVeP1isIf7VmaBe8uFMFmyEbE7uiQDC+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZhZHEWuLj4w67vr6qVBJ6rYh34VVsTLBrCummv0aZ70=;
- b=W9ys/97OY2d0kep9goWqr815CQpdUST/8xDA6gzT5jwDtg1vUTTZDIG2Bx6Z4doffd+RLXsfXEVNO29ctftBdSLjdHg6bEQPdeunHofVy1OeIJ6atkME1pnGHWmSidDWBbZrGDSTkdcPVtHqKvBV6utlkjk/uH9nxZt/XxCnUcY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8274.eurprd04.prod.outlook.com (2603:10a6:20b:3e8::23)
- by DB8PR04MB6811.eurprd04.prod.outlook.com (2603:10a6:10:fa::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Fri, 5 Aug
- 2022 14:45:53 +0000
-Received: from AM9PR04MB8274.eurprd04.prod.outlook.com
- ([fe80::747c:397f:a003:dbca]) by AM9PR04MB8274.eurprd04.prod.outlook.com
- ([fe80::747c:397f:a003:dbca%5]) with mapi id 15.20.5504.015; Fri, 5 Aug 2022
- 14:45:53 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, Shenwei Wang <shenwei.wang@nxp.com>,
-        Nicolas Diaz <nicolas.diaz@nxp.com>
-Subject: [PATCH v2 1/1] serial: fsl_lpuart: RS485 RTS polariy is inverse
-Date:   Fri,  5 Aug 2022 09:45:29 -0500
-Message-Id: <20220805144529.604856-1-shenwei.wang@nxp.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR19CA0008.namprd19.prod.outlook.com
- (2603:10b6:208:178::21) To AM9PR04MB8274.eurprd04.prod.outlook.com
- (2603:10a6:20b:3e8::23)
+        Fri, 5 Aug 2022 10:46:02 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E8F5E315;
+        Fri,  5 Aug 2022 07:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659710761; x=1691246761;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cW8TOt2AOoJIUa4hQwkY7LnTl78Uw0yQOYwnQjGXAV8=;
+  b=bWYsx1kiq0ec+oM1Vtbx9h3lvq6/dMzX37ZANzalKyn+YIm7NgVceFqP
+   VPjhL8f6NIzR0amhdBWctDkI4haw2pmsdip4s3RZx6le8krXvmUQkEACO
+   cgHHgk3a6NVvaXcS/k9HZeQdSw/VLuy1OGEQ9BUbu+7T8o89lE4MAtSAN
+   FLEa6vlCUDYKSOuF40b0MuhfUvqr+PCaxGy03qFXbsaCzTzUpAmC411LS
+   2SGG9ylHUDaLHd09NlmZPpFDk4k6G9wboSu3Dy8pVPuaYfPwpvxwLdbve
+   8jcPBfiUVUwu2FBscfBAwGfBKSjeO8WAVN5zmXwGwTaL9RyN9k52Z3IVX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="290223341"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="290223341"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 07:45:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="579519718"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 05 Aug 2022 07:45:34 -0700
+Received: from [10.252.214.183] (kliang2-mobl1.ccr.corp.intel.com [10.252.214.183])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 91701580B9F;
+        Fri,  5 Aug 2022 07:45:32 -0700 (PDT)
+Message-ID: <3f85d0f9-921f-4f5c-7b5c-8a8e1773512a@linux.intel.com>
+Date:   Fri, 5 Aug 2022 10:45:31 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e3d39de2-27e8-4cf5-62d9-08da76f13285
-X-MS-TrafficTypeDiagnostic: DB8PR04MB6811:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rDed16pkzEBuUos951cFMQGfxaq1W4lUEE3Wj1sq1s7DK2VfMhkS293SxUoeFx3+YFq9Ohg1WmUscCTyl/e2IHxBr0PzF2XDJES88Mx8kxBJEyGWc1hMYBJO4ePHEX3NnOlH+BQVRDi1i7llQlg3PYJwnaTv8kWsTMOXgD8l9J0GwSnwQhliR7Eyx3l3yYAtdh4wlyg0rqxc3niMqm9lFsfvs6pRvTjHMz4M+XAC9bb02Cuh0uhry8Jja7ymvon3pfqQ5N2Y3cT7YxMXMK5tVY1+kHrk93Ma9Aj1fKJjtON6gAFMvhjYIEwNxLeh0chKid/g7jyVQFLYzn9va7EQjAgeRNZFzA+IP2uFI4h9ub1V8dauVP6hHIEw8L2loEa74MQuh04q/dRVCBaCq8eXtobQ0TP+0hiezqzTLS7ZBI9MfvwAxPxn6FwNsBhvfpxeQJUsSauU8vw4FeMBNIjKFAnC/gevzFdwLfRcNEBVmv5eKWbo0yVigJVkQcECIK9qOoYylkqJ1ey3K36WuZGR/1qtH9IC3zcAT7hOZlE9HbU0i0Mk0NZCGTt1+4QMjo1ZETiSWftkMciaQ7effXcosGuwViQMwvoBKIe1kmC3J0+nRLWKukY6MzdB84eb5WpT/pfvAZWcNBmb+LPK/qs+rvGlXUhJQ727P9n0XpESQ4xqlJ1Dd+j3saALZnuJmTBx6Ba/QZYAhMYzH68D0nz/Fz+lQLV8iKfS9j5WbtGohlTpUF4fhR7W9WKKrMOTWLdiH5Q4sJj+HNXmibTyNNELlFdBx96Hruwhq4uZ0JakWabdXgSdPj4GIcJ4ceCLMa+R
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8274.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(366004)(396003)(136003)(376002)(2616005)(44832011)(38100700002)(38350700002)(6486002)(86362001)(478600001)(8676002)(26005)(5660300002)(66556008)(6512007)(66476007)(4326008)(66946007)(1076003)(8936002)(186003)(83380400001)(316002)(36756003)(2906002)(6666004)(55236004)(54906003)(52116002)(6506007)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qx/iWtlWVyLE3li/lssuB5TqF+dLKh0NjmIqByrURHrWgOlVJagrIWuFYlL9?=
- =?us-ascii?Q?j9xyS1aUp41N3VAdj91JelfvS2HGPFOzsFNWlg/a8OO8I8LB4sP+CFC+qmZi?=
- =?us-ascii?Q?f0TYdAE1dnjwZHNIurkSzBZpOkJQCG19RkCXwNoUlD0i44/bieeLPDfS4hgg?=
- =?us-ascii?Q?Fkf4+sprkTIY/aRpZoTGCjqR2gcXqdyZUT5CFiyZ02bMYJRARBqF8xjzVNfa?=
- =?us-ascii?Q?wftlVLi2+rdFXFYYDfhaTKcXdo+Z/4nP/2DLQt1+ysXswVpqXcopVPwR6SzP?=
- =?us-ascii?Q?ThYStitBp9skEX7VAHqIjmy6FCF20ohWKmvCdsvT+aRgv14Gho8wJBt56hoi?=
- =?us-ascii?Q?6++2eM5RhQ/A1KznS3DqphmIxQnmGyRLezaPzzY37EMqbFBbzGve+TGCQE48?=
- =?us-ascii?Q?XfnXLoNt82WP/VlmZoHnjP8hYhCTfZR9R9fWUeswU03coeAWpJs3mpYeM08m?=
- =?us-ascii?Q?981E40TDUTMho5OVDV73z1x0vwsuZjMf3EFdIGsN/Q3OIj2xmVD3QxBOYe+9?=
- =?us-ascii?Q?GVRY9HZclg4ntnStas0nd4AFvK0DjB46tIa2k442k3SPdXCpTZCIp6+k5TVx?=
- =?us-ascii?Q?l3lybAPalKlaORgmP/JWujULeAJzxdTGYxbr1YJT9y/nw7aRzV60MQ7ShfPx?=
- =?us-ascii?Q?Rn4nOFOdeH+ETGZ8lmaUJ2o1uoiFdMPX34yuAnYVXcmVg4IzsxeMjmVj74QW?=
- =?us-ascii?Q?WumaStgZFgW225TVhEhIPWmX5ITZda01jQs4/8t0YS+Rp/1iT5mLX0s+cB0R?=
- =?us-ascii?Q?JRnDgjRL97fl63jn8fHQaOiGC/TZYywa6BkK/R4iM/UvBFW1l+njAevqs0dX?=
- =?us-ascii?Q?qlFFoLgJ0CE45aT74FBXK0wYlOq0Bi20wnvw1J567mustR7UEqQwp1Rax6RI?=
- =?us-ascii?Q?ZTfw8WT8u6C6bpH5pFbFKXkPz47Z9tmcsqETvF0rwieGLOj06BaWAEW9Zvj+?=
- =?us-ascii?Q?zyGfH23D64jdPE95YfxJc0demMqb6yRfICdmptIK+yjzwkVolM3AYTe1W1sg?=
- =?us-ascii?Q?PGwXJXMIP83XRkWLngdjMwPhTCL3XIkORopwP3RJg/RAx1fz6YNk3fqASIIh?=
- =?us-ascii?Q?VLToJscNzNUHtNUXr61tp2qYa5FKf2WuX+HW6e5EODe/4NuDcRtc2steWYU4?=
- =?us-ascii?Q?jBvTvYSMbXQS2/yK+qR0wUHy+fmHB4JJiPCkoyq8HzPa+3t61+Uem5SgRyD1?=
- =?us-ascii?Q?GyTtFPfL9sG4R+oAANBoWvylL7PnO+eYYZPINVcBFzywVES1yMJ965fExyfT?=
- =?us-ascii?Q?MRxmboy1vwQwEX1UP86MES9I6ZkzzLkgH2LZxqbS2Lf07Rv/uP/q+A9cqBo/?=
- =?us-ascii?Q?yNRhHUN+a0cdcNvq+Hn7/+9QH6mfNrQ7/woMkUV7Z7Pyzy60V98dHgWQAX0z?=
- =?us-ascii?Q?dwCNyP+m+yU/z0rmBjF+OUtJEr5KgB430alMVajw/vB4Q1JIOg4zDpUbgG7M?=
- =?us-ascii?Q?5zraYGxvS+35IZ3aGv3JfIYAWheMGAuT4TMV3wsaOoWixRpGXQ1H1p0JCoJe?=
- =?us-ascii?Q?scPOIwYStu8EauYoH+CadzNpzOmKABPT3orTY7nB0MSfrQJdAqhS4ChvVfCt?=
- =?us-ascii?Q?hGcBBB8TOtLaGSuB8uVQJ6kzJP/cma+HEDrmXbKjhbdX2qpPGKCye0RIq++m?=
- =?us-ascii?Q?Gg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3d39de2-27e8-4cf5-62d9-08da76f13285
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8274.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2022 14:45:53.5020
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pGXCj8y96XGIHE7z3pOoGJ4QCVC4p0PBeWqBdjxN7yR+53gmHCA7HRhre9WLoTB8c6v8DwcOkCQcxzhgnv/nhg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6811
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH v3 0/3] Remove bad uncore filter/events
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>, perry.taylor@intel.com,
+        caleb.biggers@intel.com, kshipra.bopardikar@intel.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220805013856.1842878-1-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220805013856.1842878-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The setting of RS485 RTS polarity is inverse in the current driver.
 
-When the property of 'rs485-rts-active-low' is enabled in the dts node,
-the RTS signal should be LOW during sending. Otherwise, if there is no
-such a property, the RTS should be HIGH during sending.
 
-Fixes: 03895cf41d18 ("tty: serial: fsl_lpuart: Add support for RS-485")
+On 2022-08-04 9:38 p.m., Ian Rogers wrote:
+> The event converter scripts at:
+> https://github.com/intel/event-converter-for-linux-perf
+> passes Filter values from data on 01.org that is bogus in a perf command
+> line and can cause perf to infinitely recurse in parse events. Remove
+> such events or filter using the updated patch:
+> https://github.com/intel/event-converter-for-linux-perf/pull/15/commits/afd779df99ee41aac646eae1ae5ae651cda3394d
+> 
+> v3. Removed filters rather than events in some cases as Suggested-by:
+>     Liang, Kan <kan.liang@linux.intel.com>
+> v2. Manually fixed a broken \\Inbound\\ ivytown event.
+> 
+> Ian Rogers (3):
+>   perf vendor events: Remove bad broadwellde uncore events
+>   perf vendor events: Remove bad ivytown uncore events
+>   perf vendor events: Remove bad jaketown uncore events
+> 
 
-Signed-off-by: Nicolas Diaz <nicolas.diaz@nxp.com>
-Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 
----
-changes in v2:
-- add the fix tag
+Thanks,
+Kan
 
- drivers/tty/serial/fsl_lpuart.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index afa0f941c862..abc3a3674bc3 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -1394,9 +1394,9 @@ static int lpuart_config_rs485(struct uart_port *port, struct ktermios *termios,
- 		 * Note: UART is assumed to be active high.
- 		 */
- 		if (rs485->flags & SER_RS485_RTS_ON_SEND)
--			modem &= ~UARTMODEM_TXRTSPOL;
--		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
- 			modem |= UARTMODEM_TXRTSPOL;
-+		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
-+			modem &= ~UARTMODEM_TXRTSPOL;
- 	}
-
- 	writeb(modem, sport->port.membase + UARTMODEM);
---
-2.25.1
-
+>  .../arch/x86/broadwellde/uncore-cache.json    | 97 -------------------
+>  .../arch/x86/broadwellde/uncore-other.json    | 13 ---
+>  .../arch/x86/ivytown/uncore-cache.json        | 90 -----------------
+>  .../arch/x86/ivytown/uncore-interconnect.json |  1 -
+>  .../arch/x86/ivytown/uncore-other.json        | 13 ---
+>  .../arch/x86/ivytown/uncore-power.json        | 19 ----
+>  .../arch/x86/jaketown/uncore-cache.json       | 30 ------
+>  .../arch/x86/jaketown/uncore-other.json       | 13 ---
+>  .../arch/x86/jaketown/uncore-power.json       | 11 ---
+>  9 files changed, 287 deletions(-)
+> 

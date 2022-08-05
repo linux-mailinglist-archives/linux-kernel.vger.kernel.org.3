@@ -2,65 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F6E58A902
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE6258A90B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240551AbiHEJsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 05:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S237790AbiHEJyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 05:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235201AbiHEJsM (ORCPT
+        with ESMTP id S235336AbiHEJyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 05:48:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F5DC76949
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659692890;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=JGXjlckN6O3TaYu7WH0RynAN6PGi/OJ02XD8PcQh3VU=;
-        b=ZVYYhBdKOTZspnTbe5tSOk5ZPCN59Ih1wkW8XLkUeaIAgMihKpRPoymXJuLPuv7mWtwdtv
-        fIR/pUkS35i7fCLXmXIHon0+YpAWe/NqMoBD8oXKrL6+Nj/j1aWwO5JhvI+HFWnrmCSj3j
-        GtPU2xcxV+1hp8zvTnOFnuVVwJT9v9g=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-314-Bd270-BlPK6YAZeBYNn-FA-1; Fri, 05 Aug 2022 05:48:09 -0400
-X-MC-Unique: Bd270-BlPK6YAZeBYNn-FA-1
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-31f5960500bso17798067b3.14
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 02:48:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=JGXjlckN6O3TaYu7WH0RynAN6PGi/OJ02XD8PcQh3VU=;
-        b=hJ/FYTUq9JsLLIdkVIKtOue78KFol5pdLSKdh4VPUSxPsintMENOT7wsl8zGRhmjdE
-         RnNPj1pN0rFuBdy3PjHkibmI/QVZ9GLDRzxNFyHSSfvWN3swBACwy3O5dH1Sy25MVSbr
-         pTEFzNrx1FvBBrJb89SYQ12e9eWZJKFO19UPragFgKZSOpu7cmZfT+HJd4VqslPWYO91
-         ey5KJ+Y35BNdxKMb4HMc77V7pfZA27C3MWeFiT9TnuaYlHwz3q8/zeXcCF9Y4fMhS/9Y
-         G0g4NULShKZHYEV6LSE913QztTp7JISsacLP77+2/LD8j9EiYp1D86DamLcNwA2wHZBM
-         wV+g==
-X-Gm-Message-State: ACgBeo35W6euyDyHBMhqlbYXF2xeUhNg91AMlCxMF8ICp9Nmvv/EsbAB
-        Hp8h4onKQGARqd1O2KEy5+M4VNCEauQmlrhiLNaTOO59IdVlqoaQ03oFP67Z9DQGkL0YsSGsYDt
-        2xu9ctU2lGiBLoF4QeDaI2nXne4ttIBpoitR5Fc5R
-X-Received: by 2002:a81:d34a:0:b0:31f:4467:4ae0 with SMTP id d10-20020a81d34a000000b0031f44674ae0mr5241453ywl.477.1659692888294;
-        Fri, 05 Aug 2022 02:48:08 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4ASS2Fx9gAPH6yJx8HN9U+GWh1ghQITFYgwEcHE8GkgxmM8O+fgr3r6GhQC9OhrI+MMm5ZPxt9AnlbTnZfTNQ=
-X-Received: by 2002:a81:d34a:0:b0:31f:4467:4ae0 with SMTP id
- d10-20020a81d34a000000b0031f44674ae0mr5241446ywl.477.1659692888067; Fri, 05
- Aug 2022 02:48:08 -0700 (PDT)
+        Fri, 5 Aug 2022 05:54:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDBC24950;
+        Fri,  5 Aug 2022 02:54:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2791B82857;
+        Fri,  5 Aug 2022 09:54:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0ABC433C1;
+        Fri,  5 Aug 2022 09:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659693250;
+        bh=Y7bpRxh677nvBHpDr/YdwyVa10B2W0VbLa853su/mTM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ke+UyKDoZZ0MZO6c4ecLCwlICMB57BcYFC3UiOS80uxKrx9RrvWrZUHK0CqL+3KfO
+         6NYDwNauYXcJqgPZ6JMoyivFM2fMzwj/IQvTyyJxf2C6tv7PVjNxgrdISefDBqbI9B
+         OAmv9LSu/fJLctsFf940FFUf5EaX4iDdHOJFhcWkuFh2vJkAwotGWhsw2v5coyb+5e
+         eJgz3uB/gWB3h+iibeb8kTR8DVh0OwQM+JVKfdMCB1ABvoU2VCn8ZY4cvzC4R+6orP
+         N5ql+D5UE3l53WC+W+PZIaUHv5ljhr+VDeZfZmyiHnwz4xBFOsuOiqWn5kdhFn2Qag
+         wq9FxsPHdLzsw==
+Date:   Fri, 5 Aug 2022 10:54:07 +0100
+From:   Filipe Manana <fdmanana@kernel.org>
+To:     Dominique MARTINET <dominique.martinet@atmark-techno.com>
+Cc:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Josef Bacik <josef@toxicpanda.com>, Chris Mason <clm@fb.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Chen Liang-Chun <featherclc@gmail.com>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        kernel@openvz.org, Yu Kuai <yukuai3@huawei.com>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: fiemap is slow on btrfs on files with multiple extents
+Message-ID: <20220805095407.GA1876904@falcondesktop>
+References: <YuwUw2JLKtIa9X+S@localhost.localdomain>
+ <21dd32c6-f1f9-f44a-466a-e18fdc6788a7@virtuozzo.com>
+ <YuzI7Tqi3n+d+V+P@atmark-techno.com>
 MIME-Version: 1.0
-From:   Bruno Goncalves <bgoncalv@redhat.com>
-Date:   Fri, 5 Aug 2022 11:47:57 +0200
-Message-ID: <CA+QYu4rPbfH-4wNR06Vn=31RCGKFFEB-KRskn52Jtig_UugYzg@mail.gmail.com>
-Subject: [5.19.0] [aarch64] WARNING: CPU: 0 PID: 1 at mm/page_alloc.c:5407 __alloc_pages+0x1a0/0x290
-To:     linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     CKI Project <cki-project@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuzI7Tqi3n+d+V+P@atmark-techno.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,57 +62,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Aug 05, 2022 at 04:38:21PM +0900, Dominique MARTINET wrote:
+> Pavel Tikhomirov wrote on Thu, Aug 04, 2022 at 07:30:52PM +0300:
+> > I see a similar problem here
+> > https://lore.kernel.org/linux-btrfs/Yr4nEoNLkXPKcOBi@atmark-techno.com/#r ,
+> > but in my case I have "5.18.6-200.fc36.x86_64" fedora kernel which does not
+> > have 5ccc944dce3d ("filemap: Correct the conditions for marking a folio as
+> > accessed") commit, so it should be something else.
+> 
+> The root cause might be different but I guess they're related enough: if
+> fiemap gets faster enough even when the whole file is in cache I guess
+> that works for me :)
+> 
+> Josef Bacik wrote on Thu, Aug 04, 2022 at 02:49:39PM -0400:
+> > On Thu, Aug 04, 2022 at 07:30:52PM +0300, Pavel Tikhomirov wrote:
+> > > I ran the below test on Fedora 36 (the test basically creates "very" sparse
+> > > file, with 4k data followed by 4k hole again and again for the specified
+> > > length and uses fiemap to count extents in this file) and face the problem
+> > > that fiemap hangs for too long (for instance comparing to ext4 version).
+> > > Fiemap with 32768 extents takes ~37264 us and with 65536 extents it takes
+> > > ~34123954 us, which is x1000 times more when file only increased twice the
+> > > size:
+> > >
+> > 
+> > Ah that was helpful, thank you.  I think I've spotted the problem, please give
+> > this a whirl to make sure we're seeing the same thing.  Thanks,
+> 
+> FWIW this patch does help a tiny bit, but I'm still seeing a huge
+> slowdown: with patch cp goes from ~600MB/s (55s) to 136MB/s (3m55s) on
+> the second run; and without the patch I'm getting 47s and 5m35
+> respectively so this has gotten a bit better but these must still be
+> cases running through the whole list (e.g. when not hitting a hole?)
+> 
+> 
+> My reproducer is just running 'cp file /dev/null' twice on a file with
+> 194955 extents (same file with mixed compressed & non-compressed extents
+> as last time), so should be close enough to what Pavel was describing in
+> just much worse.
 
-Since commit "c1c76700a0d6" we started to hit the following call trace
-on aarch64 VMs when looking at journalctl log
+I remember your original report Dominique, it came along with the short
+reads issue when using using io_uring with qemu.
 
-kernel: Mountpoint-cache hash table entries: 16384 (order: 5, 131072
-bytes, linear)
-kernel: ACPI PPTT: No PPTT table found, CPU and cache topology may be inaccurate
-kernel: ------------[ cut here ]------------
-kernel: WARNING: CPU: 0 PID: 1 at mm/page_alloc.c:5407 __alloc_pages+0x1a0/0x290
-kernel: Modules linked in:
-kernel: CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0 #1
-kernel: pstate: 20400005 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-kernel: pc : __alloc_pages+0x1a0/0x290
-kernel: lr : alloc_page_interleave+0x24/0xbc
-kernel: sp : ffff80000803bb90
-kernel: x29: ffff80000803bb90 x28: 0000000000000000 x27: 0000000000000000
-kernel: x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-kernel: x23: 000000000000001e x22: 0000000000000000 x21: 000000000000001e
-kernel: x20: 000000000000001e x19: 0000000000040b20 x18: 0000000000000014
-kernel: x17: 6e69206562207961 x16: 6d2079676f6c6f70 x15: 6f74206568636163
-kernel: x14: 20646e6120555043 x13: 6574617275636361 x12: 6e69206562207961
-kernel: x11: 6d2079676f6c6f70 x10: 6f74206568636163 x9 : ffffa4f6617fd5e8
-kernel: x8 : ffffa4f663ed0440 x7 : 0000000000000007 x6 : 0000000000000000
-kernel: x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-kernel: x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffffa4f663c53532
-kernel: Call trace:
-kernel:  __alloc_pages+0x1a0/0x290
-kernel:  alloc_page_interleave+0x24/0xbc
-kernel:  alloc_pages+0x10c/0x16c
-kernel:  kmalloc_order+0x3c/0xc0
-kernel:  kmalloc_order_trace+0x38/0x130
-kernel:  __kmalloc+0x2e8/0x350
-kernel:  detect_cache_attributes+0x9c/0x110
-kernel:  update_siblings_masks+0x34/0x270
-kernel:  store_cpu_topology+0x7c/0xc0
-kernel:  smp_prepare_cpus+0x34/0x108
-kernel:  kernel_init_freeable+0x108/0x1b8
-kernel:  kernel_init+0x30/0x150
-kernel:  ret_from_fork+0x10/0x20
-kernel: ---[ end trace 0000000000000000 ]---
-kernel: Early cacheinfo failed, ret = -12
-kernel: cblist_init_generic: Setting adjustable number of callback queues.
-kernel: cblist_init_generic: Setting shift to 2 and lim to 1.
+I had a quick look before going on vacations. In your post at:
 
-test logs: https://datawarehouse.cki-project.org/kcidb/tests/4712644
-cki issue tracker: https://datawarehouse.cki-project.org/issue/1485
+https://lore.kernel.org/linux-btrfs/Ysace25wh5BbLd5f@atmark-techno.com/
 
-kernel config: https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/605193135/build%20aarch64/2816138306/artifacts/kernel-mainline.kernel.org-redhat_605193135_aarch64.config
-kernel build: https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/605193135/publish%20aarch64/2816138315/artifacts/kernel-mainline.kernel.org-redhat_605193135_aarch64.tar.gz
+you mentioned a lot of time spent on count_range_bits(), and I quickly
+came with a testing patch for that specific area:
 
-Thanks,
-Bruno Goncalves
+https://git.kernel.org/pub/scm/linux/kernel/git/fdmanana/linux.git/commit/?h=fiemap_speedup&id=6bdc02edbb52786df2d8c2405d790390d9a9443c
 
+Basically whenever we call that, we start searching from the root of the
+extent states rbtree - if the rbtree is large, that takes a lot of time.
+The idea is to start the search from the last record instead.
+
+I haven't actually made any performance tests, as vacations came in and
+I noticed that such change will very likely make little or no difference
+because algorithmically btrfs' fiemap implementation is very ineficient
+for several reasons. It basically works like this:
+
+1) We start the search for the first extent. First we go search the inode's
+   extent map rbtree - if we can't find it, then we will search in the
+   fs b+tree - after this we create an extent map based on the file extent
+   item we found in the b+tree and add it to the extent map rbtree.
+
+   We then pass to fiemap extent information based on the extent map
+   (there's a few extra minor details, like merging, etc);
+
+2) Then we search for the next extent, with a start offset based on the
+   end offset of the previous one +1.
+
+   Again, if we can't find it in the extent map rbtree, we go search the
+   fs b+tree, then create an extent map based on the file extent item we
+   found there and add it to extent map rbtree.
+
+   This is silly. On each iteration the extent maps rbtree gets bigger and
+   bigger, and we always search from the root node. We are spending time
+   searching there and then allocating memory for the extent map and adding
+   it to the rbtree, which is yet more cpu time spent.
+
+   We should only create extent maps when we are doing IO against, for a
+   data write or read operation, we are just spending a lot of time on
+   this and consuming memory too.
+
+   Then it's silly again because we will search the fs b+tree again, starting
+   from the root. So we end up visting the same leaves over and over;
+
+3) Whenever we find a hole, or a prealloc/unwritten extent, we have to check
+   if there's pending dealloc for that region. That's where count_range_bits()
+   is used - everytime it's called it starts from the root node of the extent
+   states rbtree.
+
+My idea to address this is to basically rewrite fiemap so that it works like
+this:
+
+1) Go over each leaf in the fs b+tree and for each file extent item emit the
+   extent information for fiemap - like this we don't do many repeated b+tree
+   searches to end up in the same leaf;
+
+2) Never create extent maps, so that we don't grow the extent maps rbtree
+   unnecessarily, saving cpu time and avoiding memory allocations;
+
+3) Whenever we find a hole or prealloc/unwritten extent, then check if there's
+   pending delalloc in the range by using count_range_bits() like we currently
+   do (and maybe add that patch to avoid always starting the search from the
+   root).
+
+   If there's delalloc, then lookup for the correspond extent maps and use
+   their info to emit extent information for fiemap. And keep using rb_next()
+   while an extent map ends before the hole/unwritten range;
+
+4) Because emitting all the extent information for fiemap and doing other things
+   like checking if an extent is shared, calling count_range_bits(), etc can
+   take some time, to avoid holding a read lock for too long on the fs b+tree
+   leaf and block other tasks, clone the leaf, release the lock on the leaf and
+   use the private clone. This is fine since we start fiemap we lock the file
+   range, so no one else can go and create or drop extents in the range before
+   fiemap finishes.
+
+That's the high level idea.
+
+There's another factor that can slowdown fiemap a lot, which is figuring out if
+an extent is shared or not (reflinks, snapshots), but in your case you don't
+have shared extents IIRC. I would have to look at that separetely, we probably
+have some room for improvement there as well.
+
+I haven't had the time to work on that, as I've been working on other stuff
+unrelated to fiemap, but maybe in a week or two I may start it.
+
+> 
+> -- 
+> Dominique

@@ -2,330 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F7458B27F
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE5858B283
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241135AbiHEWrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 18:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S241403AbiHEWzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 18:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237614AbiHEWq7 (ORCPT
+        with ESMTP id S241268AbiHEWzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 18:46:59 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884871EAC8
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:46:58 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id q15so3883037vsr.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:46:58 -0700 (PDT)
+        Fri, 5 Aug 2022 18:55:41 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F0512A8A
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:55:40 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a7so7392987ejp.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:55:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=xdl2TGiLFJ43p+TlXIrGU8PPeGj5ZwGEbAl6klIJQ3c=;
-        b=hc/hXPYNAirB9dbqAcJkCB4A5hFn8vxD7tQVBVVjnLAvc3ngHvE8o27g/e99BJRaY6
-         pkCFzmLYiyXoFVpA17awrydCcbSeQ4Jin9tqOaXw8IcOloHGtFik2JuB7WnmIMJndY0A
-         BmOhP6g8O4HgIL2y+DrBeXLBG/51XIMc9xRpIn1PpdqrTreIppqLGLQ8P4mI2sy5cbwU
-         DebabFbDcBlHsczdbKn0nACAptq8e+ZLvmw9+ZCpdAmIu4vjxNmN3Eh8TaLdM7oGWTYm
-         D94ZIkt94x3B0zIuuJ0eJmghjM9sj9zYWhD/eIo+FG5I5s1IEKj8ni4CcycYN1KB6xVn
-         7Wdg==
+        bh=puij2beJO9hYAB1eciKRnLNvVRh/gtLqmDF4nwZ+p6c=;
+        b=HpLSttOzDSTpOIUjAJDRq+Nl/JF8jMde3MHpShVKHbIFCpqbqN1+MDKcSkzK2ALJo8
+         O85aPTI3egNwZYEnL0LU2IUSyGHhwVbcOd3Sn6ipwyWkeOmpXNO/kQeeyZah15XEfE56
+         wWImdw6e45kEunNw+g3eH5B8/HEvPN40DDTXw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=xdl2TGiLFJ43p+TlXIrGU8PPeGj5ZwGEbAl6klIJQ3c=;
-        b=Eck76+E6FHcEIhT/Oa6jK1plambzXzhaReEwN6GCR5qCAIeBDZN2GkmhRM2ryShE5Z
-         c+bAcoanvgEHQm6L9TYqIY+tT86PBVgf2TRVwNrLNr71vSU/BwMaJZvIw/U8A/Yl0jWN
-         LeYz32auJnaVOyuKz2XbO8gpZPkvTim+Jt5QUu9byUnW019Modkbldk2Y62c5W6GVI5c
-         xghQkfmcz3F/eQHm8ox8rWgRGFiM/jJKMdj5w5c33JSt21PAc+77hlTV6BW3YEaTzPrf
-         OGnWRBB2jt/AQggrW3SgobbVzJLDP+pQ1yUo82giwlp/VrqeXtNoXgZMx9xkPD2qg2hG
-         5eYQ==
-X-Gm-Message-State: ACgBeo2f0IrET4kvEBW7Gu6UuN48+jAE6jpI7u6BiAjNyKN4ohdCC7ll
-        9Irkela7hSrFMBwiR0DTf/h/8M6quAQjBnCK0mSovw==
-X-Google-Smtp-Source: AA6agR6G9llgTVmgHqydeiuj9quI7QP6bB3GwyFOI78OQRgDpiC9rcqH4OMeNnz4fcU10XQddl5R1CuQftRrmyDFdTc=
-X-Received: by 2002:a67:c895:0:b0:357:48d2:fa1 with SMTP id
- v21-20020a67c895000000b0035748d20fa1mr4072773vsk.22.1659739617498; Fri, 05
- Aug 2022 15:46:57 -0700 (PDT)
+        bh=puij2beJO9hYAB1eciKRnLNvVRh/gtLqmDF4nwZ+p6c=;
+        b=aVfXe96xX+Zcb4UGSjY7TWShfwqzien3DrXFJ0Y+QpdJX0m4WzutTePwGXAWO7S11J
+         gsU9+Vh0GQ9iQtjWCO7jTUOUSQFBFkuvNJz7/XltifiL3BBEPxYhm3azh7xxnH0v7f/D
+         JEjk4ijeJ5PvIJ5WniDtmKWX82rgmPb0R+oqV3LoRyGfkIjg1W0uzLXru8FVoOdd4zJ5
+         u1YX0EYOkKPAXvPopOvnIFOmIbrW0csbDmq+BWpt9QlHltj6wNub+r0YROVepd932OUq
+         5H/H4ks50rlq+/PLy6PVD2ATIF2Wtwn1WLZII3wuZOhBsYeHc5QIaS9TBBiEKK2a3Gw3
+         9kFw==
+X-Gm-Message-State: ACgBeo2KfufBAMOVs4XJMTuQUMOFaqHyjQBB05+dHUClFEqBzPa6fH1D
+        /9T/YBRUmoexVmEOw5gFnY2VtX2D84BSBGzB
+X-Google-Smtp-Source: AA6agR6IGMDQzknGjydlyZhFCETW2atqOVVQEAhjsWnpfEphscTIKXLJF8zcR7+RZYfXmieSaSj+7A==
+X-Received: by 2002:a17:907:724c:b0:72e:e6fe:5ea4 with SMTP id ds12-20020a170907724c00b0072ee6fe5ea4mr6864527ejc.421.1659740139110;
+        Fri, 05 Aug 2022 15:55:39 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id e13-20020a170906314d00b00730948cd6c9sm2075637eje.118.2022.08.05.15.55.37
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 15:55:37 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id z16so4650624wrh.12
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:55:37 -0700 (PDT)
+X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
+ c18-20020adffb12000000b0020c79b2a200mr5532612wrr.617.1659740137452; Fri, 05
+ Aug 2022 15:55:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220803215855.258704-1-mairacanal@riseup.net>
- <CABVgOS=Yq2+uDw_iVK11eqBjEB-BErEr6naYpTswtTvyehAzYw@mail.gmail.com> <ad483719-24b2-3207-cdcc-f5055d7a8895@riseup.net>
-In-Reply-To: <ad483719-24b2-3207-cdcc-f5055d7a8895@riseup.net>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 6 Aug 2022 06:46:46 +0800
-Message-ID: <CABVgOSm_59Yr82deQm2C=18jjSv_akmn66zs4jxx3hfziXPeHg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] Introduce KUNIT_EXPECT_MEMEQ and
- KUNIT_EXPECT_MEMNEQ macros
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        andrealmeid@riseup.net, melissa.srw@gmail.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000578fc805e5863e30"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220805111836.1.Id5a4dc0a2c046236116693aa55672295513a0f2a@changeid>
+ <CAD=FV=W9VWbvWqdEEY9=OnNSsAnQ+CgQPRifbAu2ixrgPQd54A@mail.gmail.com> <Yu118qfzoYcHgJs3@google.com>
+In-Reply-To: <Yu118qfzoYcHgJs3@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 5 Aug 2022 15:55:25 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=W4ULDUAj-X1eMpMmvYoxTRA0ujAabniEYOCrMo7Zv-JA@mail.gmail.com>
+Message-ID: <CAD=FV=W4ULDUAj-X1eMpMmvYoxTRA0ujAabniEYOCrMo7Zv-JA@mail.gmail.com>
+Subject: Re: [PATCH] usb: misc: onboard_usb_hub: Drop reset delay in onboard_hub_power_off()
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000578fc805e5863e30
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Fri, Aug 5, 2022 at 8:18 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
-te:
+On Fri, Aug 5, 2022 at 12:56 PM Matthias Kaehlcke <mka@chromium.org> wrote:
 >
-> On 8/5/22 01:44, David Gow wrote:
-> > On Thu, Aug 4, 2022 at 5:59 AM Ma=C3=ADra Canal <mairacanal@riseup.net>=
- wrote:
-> >>
-> >> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPEC=
-T_EQ or
-> >> KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp func=
-tion,
-> >> such as:
-> >>   KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
-> >>
-> >> Although this usage produces correct results for the test cases, if th=
-e
-> >> expectation fails the error message is not very helpful, indicating on=
-ly the
-> >> return of the memcmp function.
-> >>
-> >> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
-> >> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a determined size=
-. In
-> >> case of expectation failure, those macros print the hex dump of the me=
-mory
-> >> blocks, making it easier to debug test failures for memory blocks.
-> >>
-> >> Other than the style changes, this v3 brings alignment to the bytes, m=
-aking
-> >> it easier to identify the faulty bytes. So, on the previous version, t=
-he
-> >> output from a failure would be:
-> >> [14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gp=
-u/drm/tests/drm_format_helper_test.c:248
-> >> [14:27:42] Expected dst =3D=3D result->expected, but
-> >> [14:27:42] dst =3D=3D
-> >> [14:27:42] 33 0a <60> 12 00 a8 00 00 <00> 00 8e 6b <33> 0a 60 12
-> >> [14:27:42] 00 00 <00> 00 00 a8 <8e> 6b 33 0a 00 00 <00> 00
-> >> [14:27:42] result->expected =3D=3D
-> >> [14:27:42] 33 0a <61> 12 00 a8 00 00 <01> 00 8e 6b <31> 0a 60 12
-> >> [14:27:42] 00 00 <01> 00 00 a8 <81> 6b 33 0a 00 00 <01> 00
-> >>
-> >> Now, with the alignment, the output is:
-> >> [14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gp=
-u/drm/tests/drm_format_helper_test.c:248
-> >> [14:27:42] Expected dst =3D=3D result->expected, but
-> >> [14:27:42] dst =3D=3D
-> >> [14:27:42] 33  0a <60> 12  00  a8  00  00 <00> 00  8e  6b <33> 0a  60 =
- 12
-> >> [14:27:42] 00  00 <00> 00  00  a8 <8e> 6b  33  0a  00  00 <00> 00
-> >> [14:27:42] result->expected =3D=3D
-> >> [14:27:42] 33  0a <61> 12  00  a8  00  00 <01> 00  8e  6b <31> 0a  60 =
- 12
-> >> [14:27:42] 00  00 <01> 00  00  a8 <81> 6b  33  0a  00  00 <01> 00
-> >>
-> >> Moreover, on the raw output, there were some indentation problems. Tho=
-se
-> >> problems were solved with the use of KUNIT_SUBSUBTEST_INDENT.
-> >>
-> >> The first patch of the series introduces the KUNIT_EXPECT_MEMEQ and
-> >> KUNIT_EXPECT_MEMNEQ. The second patch adds an example of memory block
-> >> expectations on the kunit-example-test.c. And the last patch replaces =
-the
-> >> KUNIT_EXPECT_EQ for KUNIT_EXPECT_MEMEQ on the existing occurrences.
-> >>
-> >> Best Regards,
-> >> - Ma=C3=ADra Canal
-> >>
-> >> v1 -> v2: https://lore.kernel.org/linux-kselftest/2a0dcd75-5461-5266-2=
-749-808f638f4c50@riseup.net/T/#m402cc72eb01fb3b88d6706cf7d1705fdd51e5da2
-> >>
-> >> - Change "determinated" to "specified" (Daniel Latypov).
-> >> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order =
-to make
-> >> it easier for users to infer the right size unit (Daniel Latypov).
-> >> - Mark the different bytes on the failure message with a <> (Daniel La=
-typov).
-> >> - Replace a constant number of array elements for ARRAY_SIZE() (Andr=
-=C3=A9 Almeida).
-> >> - Rename "array" and "expected" variables to "array1" and "array2" (Da=
-niel Latypov).
-> >>
-> >> v2 -> v3: https://lore.kernel.org/linux-kselftest/20220802212621.42084=
-0-1-mairacanal@riseup.net/T/#t
-> >>
-> >> - Make the bytes aligned at output.
-> >> - Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Danie=
-l Latypov).
-> >> - Line up the trailing \ at macros using tabs (Daniel Latypov).
-> >> - Line up the params to the functions (Daniel Latypov).
-> >> - Change "Increament" to "Augment" (Daniel Latypov).
-> >> - Use sizeof() for array sizes (Daniel Latypov).
-> >>
-> >> Ma=C3=ADra Canal (3):
-> >>   kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
-> >>   kunit: Add KUnit memory block assertions to the example_all_expect_m=
-acros_test
-> >>   kunit: Use KUNIT_EXPECT_MEMEQ macro
-> >>
-> >>  .../gpu/drm/tests/drm_format_helper_test.c    |  6 +-
-> >>  include/kunit/assert.h                        | 34 +++++++++
-> >>  include/kunit/test.h                          | 76 ++++++++++++++++++=
-+
-> >>  lib/kunit/assert.c                            | 56 ++++++++++++++
-> >>  lib/kunit/kunit-example-test.c                |  7 ++
-> >>  net/core/dev_addr_lists_test.c                |  4 +-
-> >>  6 files changed, 178 insertions(+), 5 deletions(-)
-> >>
-> >> --
-> >> 2.37.1
-> >>
-> >> --
-> >> You received this message because you are subscribed to the Google Gro=
-ups "KUnit Development" group.
-> >> To unsubscribe from this group and stop receiving emails from it, send=
- an email to kunit-dev+unsubscribe@googlegroups.com.
-> >> To view this discussion on the web visit https://groups.google.com/d/m=
-sgid/kunit-dev/20220803215855.258704-1-mairacanal%40riseup.net.
-> >
-> > These patches look pretty good to me overall, but I was unable to
-> > apply v3 to test -- it looks like the mail client has wrapped some
-> > lines or something...
-> >
-> > davidgow@slicestar:~/linux-kselftest$ git am
-> > ./v3_20220803_mairacanal_introduce_kunit_expect_memeq_and_kunit_expect_=
-memneq_macros.mbx
-> > Applying: kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ m=
-acros
-> > error: corrupt patch at line 24
-> > Patch failed at 0001 kunit: Introduce KUNIT_EXPECT_MEMEQ and
-> > KUNIT_EXPECT_MEMNEQ macros
-> >
-> > Checkpatch also picks up an issue:
-> > ERROR: patch seems to be corrupt (line wrapped?)
-> > #62: FILE: include/kunit/assert.h:255:
-> >                                    const struct va_format *message,
-> >
-> > v2 applied clearnly, so it seems to be specific to v3.
+> Hi Doug,
 >
-> I'll check this issue and submit a v4. Thank you!
->
-
-Thanks!
-
+> On Fri, Aug 05, 2022 at 12:26:35PM -0700, Doug Anderson wrote:
+> > Hi,
 > >
-> > In general, I like the patches, though. While I think there are a few
-> > places it'd be slightly suboptimale if it's being used to compare more
-> > structured data, such as the prospect of comparing padding between
-> > elements, as well as the output formatting not being ideal. It's
-> > perfect for the cases where memcmp() otherwise would be used, though.
+> > On Fri, Aug 5, 2022 at 11:19 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+> > >
+> > > onboard_hub_power_off() currently has a delay after asserting the
+> > > reset of the hub. There is already a delay in onboard_hub_power_on()
+> > > before de-asserting the reset, which ensures that the reset is
+> > > asserted for the required time, so the delay in _power_off() is not
+> > > needed.
+> > >
+> > > Skip the reset GPIO check before calling gpiod_set_value_cansleep(),
+> > > the function returns early when the GPIO descriptor is NULL.
+> > >
+> > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > > ---
+> > >
+> > >  drivers/usb/misc/onboard_usb_hub.c | 5 +----
+> > >  1 file changed, 1 insertion(+), 4 deletions(-)
+> >
+> > I was trying to figure out what this "reset" was defined to do and I
+> > looked for the device tree bindings. They don't seem to exist. Was
+> > that an oversight?
 >
-> Do you any take on how to make the output formatting more ideal?
+> It's not in the binding of the RTS5411 which I guess you looked at,
+> because that hub doesn't have a reset line.
 >
+> The reset functionality was initially added for the TI USB8041, the
+> binding has the reset, but I found it hasn't landed yet:
+>
+> https://patchwork.kernel.org/project/linux-usb/patch/20220727093801.687361-1-alexander.stein@ew.tq-group.com/
 
-I don't actually think we need to change any of the formatting in this
-patch, I'm just noting that usinng MEMEQ()/MEMNEQ() might not be the
-best choice for comparing, e.g., structs (and that comparing their
-members individually might be better there).
-_Maybe_ that's something that could be mentioned in the documentation,
-but I wouldn't change the code at all.
+Ah, I see. I actually clicked on the "Link" for the patches that
+landed and found that they landed without a bindings patch. I guess it
+dropped on v4, which I see you yelled about in v3. ;-)
 
-Cheers,
--- David
 
---000000000000578fc805e5863e30
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> > In any case, I'm not convinced that your patch is correct. Timing
+> > diagrams often show a needed delay between adjusting a reset GPIO and
+> > turning on/off the power. The timing diagrams can sometimes show a
+> > required delay on both sides. I guess at the moment the only user of
+> > this reset GPIO has a symmetric delay, but I can totally expect that
+> > someone could come along and say that they needed 10 ms on one side
+> > and 1 ms on the other side...
+>
+> As of now none of the supported hubs (there are only two of them) has
+> an asymmetric delay. The RTS5411 doesn't have a reset line, and the
+> TI USB8041 only specifies a power on delay (in my interpretation).
+>
+> [1] has some discussion between Alexander and me about this second
+> reset. The patch that added the delay was merged before this
+> discussion concluded.
+>
+> If the driver is going to support a hub that needs an additional
+> reset delay when the hub is powered off I'm totally in favor of
+> adding that delay, however that isn't currently the case in my
+> understanding. If you draw a different conclusion from the TI
+> USB8041 datasheet please let me know.
+>
+> [1] https://patchwork.kernel.org/project/linux-usb/patch/20220727141117.909361-1-alexander.stein@ew.tq-group.com/
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAGH0uAg+eV8wUdHQOJ7
-yfswDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjA2MjAw
-MjAzNTNaFw0yMjEyMTcwMjAzNTNaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCv9aO5pJtu5ZPHSb99iASzp2mcnJtk
-JIh8xsJ+fNj9OOm0B7Rbg2l0+F4c19b1DyIzz/DHXIX9Gc55kfd4TBzhITOJmB+WdbaWS8Lnr9gu
-SVO8OISymO6uVA0Lmkfne3zV0TwRtFkEeff0+P+MqdaLutOmOcLQRp8eAzb/TNKToSROBYmBRcuA
-hDOMCVZZozIJ7T4nHBjfOrR+nJ4mjBIDRnDucs4dazypyiYiHYLfedCxp8vldywHMsTxl59Ue9Yk
-RVewDw3HWvWUIMbc+Y636UXdUn4axP1TXN0khUpexMoc5qCHxpBIE/AyeS4WPASlE8uVY9Qg8dT6
-kJmeOT+ZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFDyAvtuc
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDH
-iivf8RUxQXK3eAwTl3dnJUCEwlnwNSr5hpbk9BdCADAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA4MDUyMjQ2NTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAI+6+5vnGO8beMJiMK6ip
-cuNB2H6ZDr43T/PrTitfRfTwt3VobnzDaYaTFZiZtXXYn7AsjvHy/2BxjdDPP1tSkspuOqxkXoJ2
-/KTrfFJOy3/ob80hh/Rqo8IevKnQASECKoOvJQn+wXEC1AUgos7mVS2uYSxnrWhShTzZLtbvNmKF
-ZXg8Si3tM4npcKlZIDQqjOkZaj4vbXHP4+iyLsRLORzSjSFuxEwWHAAXwLQ5S1qQvJ0DoZStGnNx
-SWyxiYwrAvhjt/FY8wtkJp/96IXotfCbJmc+uJvnBQyEm+9ZRAJHxw7enr6F9zSilkJzEl8O4Gjy
-5Yv6OOGZQFk4pYNEtg==
---000000000000578fc805e5863e30--
+Ah, OK. With this context:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

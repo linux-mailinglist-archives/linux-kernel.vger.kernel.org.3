@@ -2,139 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCC358B04C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 21:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AF958B061
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 21:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241299AbiHETWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 15:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S241582AbiHETZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 15:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbiHETWi (ORCPT
+        with ESMTP id S241552AbiHETZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 15:22:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7321C65641;
-        Fri,  5 Aug 2022 12:22:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAE2CB829F7;
-        Fri,  5 Aug 2022 19:22:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92430C433D6;
-        Fri,  5 Aug 2022 19:22:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659727353;
-        bh=6NiXLQm8OcoUZ8csmIKR/ARQpbG7nd98ZNzdAF0IdKc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hvRVdYrVCaYzMJdZQi7TucyGzVAt9jUJykVgus5XNs0aRvS2Sq6n8kzeLrPkZN4kc
-         zdWykUkoZx6Ip1nCKjA2b4MOdGOhEJQWTPodJAjkIC2NggA5fpwOmIl6qy3v3dpD1A
-         A9T2HAT+cOpXP/WF41x+4N1+jCVUmsDQRUFoqWAKWHe/lvqU4Gnyx4IiXVxM9Kdwug
-         USFZWyRY8CHwk8jliYVI4v/jSKe+L0K7pgIf6Dmd840A4gVBzlSg9OIY335+yakyCK
-         DvyCnxnD2WLw76hyAj9Mq9DPw3hn9lnriUY673qvzbWUCjASH/L12YrXB0+93ECG2i
-         z9p6fx5K0hv8A==
-Date:   Fri, 5 Aug 2022 21:22:25 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Vijayanand Jitta <quic_vjitta@quicinc.com>
-Cc:     Faiyaz Mohammed <quic_faiyazm@quicinc.com>, karahmed@amazon.de,
-        qperret@google.com, robh@kernel.org, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, frowand.list@gmail.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] mm: memblock: avoid to create memmap for memblock nomap
- regions
-Message-ID: <Yu1t8TpXT1f372v/@kernel.org>
-References: <1649704172-13181-1-git-send-email-quic_faiyazm@quicinc.com>
- <YlW2TO0O8qDHpkGW@kernel.org>
- <7b18bea8-b996-601d-f490-cb8aadfffa1b@quicinc.com>
- <YnQBKPWtPa87y4NA@kernel.org>
- <42f28e7b-c001-7d01-1eb6-fe963491898e@quicinc.com>
- <Ynj+M9cRm6zdCMMi@kernel.org>
- <22aca197-8d18-2c9e-b3c4-f6fdc893ceb1@quicinc.com>
+        Fri, 5 Aug 2022 15:25:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413717D797
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 12:24:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=RKUUIUL1iHAOgJ7936O2ZK1JZMqC/oeNpBXr/pO1c2M=; b=XJonR3uwtW+WFiDJvcdgEOl5Kg
+        L664nZw2YIp6hE1O6Qa+MmAJJ4n0YqnRjJBba1/WsTLd9MgOcskgoMdSRVSB2JbQm1LVodaeCXU+q
+        7iHdF1eiEah4flMBuDP7zr50XS1sGdOl1hrQD/cGRypY011bkx1UCICnW09y2C+Pppfp9+5F3+iYY
+        jUy6BGqiw16FGVBSikLW2qXTeGZJ14+ksYukXsbdKqTPnMHt829lbOqZhcHf8GwbO3n8ZlOFAGRqv
+        weBjofOa+m4GgZLBgWKRsxY8yWv4FOzwuIyso3BHJO1mhGCUmzJVz6/Nfb8+FHUMLGb7lKjKsrnJR
+        jUP1fpVg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oK2vp-00BVNL-VE; Fri, 05 Aug 2022 19:24:26 +0000
+Date:   Fri, 5 Aug 2022 20:24:25 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Rik van Riel <riel@fb.com>
+Cc:     "Alex Zhu (Kernel)" <alexlzhu@fb.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3] mm: add thp_utilization metrics to
+ /proc/thp_utilization
+Message-ID: <Yu1uabedm+NYnnAj@casper.infradead.org>
+References: <20220805184016.2926168-1-alexlzhu@fb.com>
+ <Yu1mcD6Jp4fCVEMi@casper.infradead.org>
+ <0b16dbac6444bfcdfbeb4df4280354839bfe1a8f.camel@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <22aca197-8d18-2c9e-b3c4-f6fdc893ceb1@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0b16dbac6444bfcdfbeb4df4280354839bfe1a8f.camel@fb.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vijay,
-
-On Wed, Aug 03, 2022 at 04:27:33PM +0530, Vijayanand Jitta wrote:
-> 
-> On 5/9/2022 5:12 PM, Mike Rapoport wrote:
-> > On Mon, May 09, 2022 at 04:37:30PM +0530, Faiyaz Mohammed wrote:
-> >>
-> >> On 5/5/2022 10:24 PM, Mike Rapoport wrote:
-> >>> On Thu, May 05, 2022 at 08:46:15PM +0530, Faiyaz Mohammed wrote:
-> >>>> On 4/12/2022 10:56 PM, Mike Rapoport wrote:
-> >>>>> On Tue, Apr 12, 2022 at 12:39:32AM +0530, Faiyaz Mohammed wrote:
-> >>>>>> This 'commit 86588296acbf ("fdt: Properly handle "no-map" field in the
-> >>>>>> memory region")' is keeping the no-map regions in memblock.memory with
-> >>>>>> MEMBLOCK_NOMAP flag set to use no-map memory for EFI using memblock api's,
-> >>>>>> but during the initialization sparse_init mark all memblock.memory as
-> >>>>>> present using for_each_mem_pfn_range, which is creating the memmap for
-> >>>>>> no-map memblock regions. To avoid it skiping the memblock.memory regions
-> >>>>>> set with MEMBLOCK_NOMAP set and with this change we will be able to save
-> >>>>>> ~11MB memory for ~612MB carve out.
-> >>>>> The MEMBLOCK_NOMAP is very fragile and caused a lot of issues already. I
-> >>>>> really don't like the idea if adding more implicit assumptions about how
-> >>>>> NOMAP memory may or may not be used in a generic iterator function.
-> >>>> Sorry for delayed response.
-> >>>> Yes, it is possible that implicit assumption can create
-> >>>> misunderstanding. How about adding command line option and control the
-> >>>> no-map region in fdt.c driver, to decide whether to keep "no-map" region
-> >>>> with NOMAP flag or remove?. Something like below
-> >>> I really don't like memblock_remove() for such cases.
-> >>> Pretending there is a hole when there is an actual DRAM makes things really
-> >>> hairy when it comes to memory map and page allocator initialization.
-> >>> You wouldn't want to trade system stability and random memory corruptions
-> >>> for 11M of "saved" memory.
-> >>
-> >> Creating memory map for holes memory is adding 11MB overhead which is
-> >> huge on low memory target and same time 11MB memory saving is good enough
-> >> on low memory target.
-> >>
-> >> Or we can have separate list of NOMAP like reserved?.
-> >>
-> >> Any other suggestion to address this issue?.
+On Fri, Aug 05, 2022 at 07:04:30PM +0000, Rik van Riel wrote:
+> On Fri, 2022-08-05 at 19:50 +0100, Matthew Wilcox wrote:
+> > > 
+> > > This change introduces a tool that scans through all of physical
+> > > memory for anonymous THPs and groups them into buckets based
+> > > on utilization. It also includes an interface under
+> > > /proc/thp_utilization.
 > > 
-> > Make your firmware to report the memory that Linux cannot use as a hole,
-> > i.e. _not_ report it as memory.
-> >  
+> > OK, so I understand why we want to do the scanning, but why do we
+> > want to
+> > report it to userspace at all?  And if we do, why do we want to do it
+> > in
+> > this format?  AFAIK, there's nothing userspace can do with the
+> > information
+> > "93% of your THPs are underutilised".  If there was something
+> > userspace
+> > could do about it, wouldn't it need to know which ones?
+> > 
+> > Isn't the real solution here entirely in-kernel?  This scanning
+> > thread
+> > you've created should be the one splitting the THPs.  And anyway,
+> > isn't
+> > this exactly the kind of thing that DAMON was invented for?
 > 
-> Thanks, Mike for the comments.
-> 
-> Few concerns with this approach.
-> 
-> 1) One concern is, even if firmware doesn't report these regions as
-> memory, we would need addresses for these to be part of device tree so
-> that the clients would be able to get these addresses. Otherwise there
-> is no way for client to know these addresses.
-> 
-> 2) This would also add a dependency on firmware to be able to pass these
-> regions not as memory, though we know that these regions would be used
-> by the clients. Isn't it better to have such control within the kernel ?
+> Alex does have an (in kernel) shrinker that can reclaim
+> underutilized THPs in order to free memory.
 
-If it is memory that is used by the kernel it should be reported as memory
-and have the memory map. 
-If this is a hole in the memory layout from the kernel perspective, then
-kernel should not bother with this memory.
+Ah!  So when that exists, this interface tells us "how well" we're doing.
 
-And I'm not buying "low memory target" argument if you have enough memory
-to carve out ~600M for some mysterious clients.
- 
-> Let me know your comments on these.
+> This is a regular shrinker called from kswapd. I am not
+> sure a shrinker going through the DAMON infrastructure
+> would be any smaller, faster, or better. OTOH, DAMON
+> does allow for more flexible policy...
 > 
-> Thanks,
-> Vijay
+> Getting some info on the effectiveness of the shrinker
+> seems useful, though. Could debugfs be a better place?
+> Should this be resubmitted together with the shrinker
+> code that makes this more useful?
 
--- 
-Sincerely yours,
-Mike.
+Yeah, debugfs seems like a better place.  And I'd love to see the shrinker
+code.  Before you mentioned that I was having all kinds of peculiar
+feelings about this code.  For example, suppose you have incredibly hot
+256kB of data, but the other 1792kB of data are never touched ... that
+could cause us to do entirely the wrong thing and break up this THP.
+Having it as a shrinker makes sense because the hot 256kB will keep the
+THP from reaching the end of the list and being reclaimed.

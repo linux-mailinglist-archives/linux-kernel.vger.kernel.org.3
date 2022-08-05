@@ -2,141 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D8F58A90E
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD0358A90D
 	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240475AbiHEJy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 05:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
+        id S240584AbiHEJyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 05:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240416AbiHEJyW (ORCPT
+        with ESMTP id S240566AbiHEJy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 05:54:22 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015A31276C
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:54:19 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b986e329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:986e:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 673001EC026E;
-        Fri,  5 Aug 2022 11:54:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1659693254;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=tIfI1N0OONraULlSScaWCqIMJV2l+ByDvpkRGd3vG54=;
-        b=eHl+JkodlgJQbZ2VLjg9LAOurlfEyzlBSTD9IUQWef3IoIobqpsgAeajCjP90mIZT42oOf
-        VXNNB5jmdzl6HIPL60bf/lO1r6EM8VcsIbHGhm4LTRogwDB+Rh3unSxm4O7gU6xa9eJHjs
-        8TewOGVhZhxc5+lJ4dl1S8TF9P9f5YQ=
-Date:   Fri, 5 Aug 2022 11:54:09 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kanna Scarlet <knscarlet@gnuweeb.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bill Metzenthen <billm@melbpc.org.au>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Fri, 5 Aug 2022 05:54:28 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6487B481E9
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:54:27 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id h13so2652028wrf.6
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 02:54:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc;
+        bh=7oSWzw08ErorXdwfypMz8hOIDNIrEaUdKP8DUsP4jtU=;
+        b=f+ctR6gR3+OEFkDVj9plmzsdkBb31hxP79tU+tYv/+FhqmSJcUmhamtjX0hFqfmXjc
+         hBJz5e1T3VfJLFSGroOguIBJEPppsSAUOwsuSD/lwSI0pOB/qlMCRw2aHo2wKFnQF9qg
+         rk/Yzjk2nPuDBvu9ER9GNHnvmIDvIfAuonh7+R/6c9ahgDQdyZH0EWVPFDoR6qifEodK
+         NaWuCEQxcB21oaKAJ34/f+KyDKM65eD8hMV1/rMnUme/k2iwKH8g5oC3m4/Bw4miMWm8
+         izHYCe0dPe2CZ0yuLHjuIDbhzegLhyuzVY4fp4kx0ehYReyiKnjlr4BkWiC+lfGTpTOi
+         8PQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=7oSWzw08ErorXdwfypMz8hOIDNIrEaUdKP8DUsP4jtU=;
+        b=s75ohc2yIfC4Kj1eON3W0QBv2HLksJl1aVL0tNaTmovSsxmPpDOxjLKHxsmGc2hF6z
+         c3RLuSTyvBwk/96IjR9cMuqJQq5PvxAmes2sq97wm8Ky7CZaBfTK3vrdy2m4xhPPgZK4
+         CS/alDVC/8bdnfEcknCxBD1LNu4aoxpJ4rsXjvjZ5mvP77NAI0LWXPfNhEb8hBl22FNn
+         TUnPZubP/+zjlVkuA+MDN9jQHwuHYdX4DTvAzHxnoLm7VhpSUEUMWJGXJkH2vtre1d4z
+         GD7sfbf3Sdy7Y+YLuPZ32xwHnSQest8IIIfeMiaKM79Pi+JX2jStWfYFPAPYsN5U73JE
+         RtWg==
+X-Gm-Message-State: ACgBeo2rm7ceAzKNS9u9Z9Jo1wci5qvVXIrgwxLy2SYbBiAFX4jMCyAP
+        +IgHHp43qsUu87TSi2dJjWypLQqbcFjybg==
+X-Google-Smtp-Source: AA6agR6OP/1EzHrpiLLNyC/MBF+Ne6PJ3pwk4CH6O+KC7SZZQqg0Czw/jqOYMEfDPTmSZt4mx+OdZg==
+X-Received: by 2002:adf:fec1:0:b0:221:6cd7:1cfb with SMTP id q1-20020adffec1000000b002216cd71cfbmr1580517wrs.197.1659693265878;
+        Fri, 05 Aug 2022 02:54:25 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id t16-20020adff050000000b0021ee28ff76esm3449594wro.38.2022.08.05.02.54.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 02:54:25 -0700 (PDT)
+Date:   Fri, 5 Aug 2022 10:54:23 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Lee Jones <lee@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] x86: Change mov $0, %reg with xor %reg, %reg
-Message-ID: <YuzowUBt4pTLcMRc@zn.tnic>
-References: <20220804152656.8840-1-knscarlet@gnuweeb.org>
- <20220804152656.8840-2-knscarlet@gnuweeb.org>
- <Yuvrd2yWLnyxOVLU@zn.tnic>
- <20220804180805.9077-1-knscarlet@gnuweeb.org>
+Subject: [GIT PULL] Backlight for v5.20
+Message-ID: <Yuzoz21D5Cb0yROm@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220804180805.9077-1-knscarlet@gnuweeb.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 06:08:05PM +0000, Kanna Scarlet wrote:
-> Hello sir Borislav,
+Good morning Linus,
 
-Please, no "sir" - just Boris or Borislav,
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-> Thank you for your response. I tried to find out other advantages of
-> xor reg,reg on Google and found this:
-> https://stackoverflow.com/a/33668295/7275114
-> 
->   "xor (being a recognized zeroing idiom, unlike mov reg, 0) has some
->   obvious and some subtle advantages:
-> 
->   1. smaller code-size than mov reg,0. (All CPUs)
->   2. avoids partial-register penalties for later code.
->      (Intel P6-family and SnB-family).
->   3. doesn't use an execution unit, saving power and freeing up
->      execution resources. (Intel SnB-family)
->   4. smaller uop (no immediate data) leaves room in the uop cache-line
->      for nearby instructions to borrow if needed. (Intel SnB-family).
->   5. doesn't use up entries in the physical register file. (Intel
->      SnB-family (and P4) at least, possibly AMD as well since they use
->      a similar PRF design instead of keeping register state in the ROB
->      like Intel P6-family microarchitectures.)"
-> 
-> Should I add all in the explanation sir?
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-You should try to understand what this means and write the gist of it in
-your own words. This is how you can learn something.
+are available in the Git repository at:
 
-> We also find more files to patch with this command:
-> 
->    grep -rE "mov.?\s+\\$\\0\s*," arch/x86
-> 
-> it shows many immediate zero moves to 64-bit register in file
-> arch/x86/crypto/curve25519-x86_64.c, but the next instruction may depend
-> on the previous %rflags value, we are afraid to change this because
-> xor touches %rflags. We will try to change it to movl $0, %r32 to
-> reduce the code size.
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git tags/backlight-next-5.20
 
-I don't think you need to do that - you can do this one patch in order
-to go through the whole process of creating and submitting a patch but
-you should not go on a "let's convert everything" spree just for the
-sake of it.
+for you to fetch changes up to fe201f6fa4cf96749b0a6b6a61b33b6a82de4e49:
 
-Because maintainers barely have time to look at patches, you don't have
-to send them more when they're not really needed.
+  MAINTAINERS: Use Lee Jones' kernel.org address for Backlight submissions (2022-08-03 08:26:30 +0100)
 
-Rather, I'd suggest you go and try to fix real bugs. This has some ideas
-what to do:
+----------------------------------------------------------------
+ - Core Frameworks
+   - Change maintainer email address
 
-https://www.linux.com/news/three-ways-beginners-contribute-linux-kernel/
+ - Fix-ups
+   - Obtain OCP level from Device Tree; rt4831-backlight
+   - DT fix-ups/conversions; richtek,rt4831-backlight
+   - Remove unused code / functionatlity; platform_lcd
+   - Switch to atomic PWM API; lp855x_bl
 
-Looking at the kernel bugzilla and trying to understand and reproduce a
-bug from there would get you a long way. And you'll learn a lot.
+----------------------------------------------------------------
+ChiYuan Huang (2):
+      dt-bindings: backlight: rt4831: Add the new ocp level property
+      backlight: rt4831: Apply ocp level from devicetree
 
-Also, you should peruse
+Lee Jones (2):
+      dt-bindings: backlight: Update Lee Jones' email address
+      MAINTAINERS: Use Lee Jones' kernel.org address for Backlight submissions
 
-https://www.kernel.org/doc/html/latest/process/index.html
+Maíra Canal (1):
+      backlight: lp855x: Switch to atomic PWM API
 
-which has a lot of information about how this whole community thing
-works.
+Rob Herring (1):
+      Revert "drivers/video/backlight/platform_lcd.c: add support for device tree based probe"
 
-I sincerely hope that helps.
-
-Thx.
-
+ .../devicetree/bindings/leds/backlight/common.yaml |  2 +-
+ .../bindings/leds/backlight/gpio-backlight.yaml    |  2 +-
+ .../bindings/leds/backlight/led-backlight.yaml     |  2 +-
+ .../bindings/leds/backlight/lm3630a-backlight.yaml |  2 +-
+ .../bindings/leds/backlight/pwm-backlight.yaml     |  2 +-
+ .../leds/backlight/richtek,rt4831-backlight.yaml   |  5 ++++
+ MAINTAINERS                                        |  2 +-
+ drivers/video/backlight/lp855x_bl.c                | 21 ++++++--------
+ drivers/video/backlight/platform_lcd.c             | 10 -------
+ drivers/video/backlight/rt4831-backlight.c         | 33 +++++++++++++++++++++-
+ 10 files changed, 52 insertions(+), 29 deletions(-)
+ 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

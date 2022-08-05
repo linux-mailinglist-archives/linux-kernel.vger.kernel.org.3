@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957C558AE4F
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9556558AE55
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238464AbiHEQn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 12:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
+        id S240689AbiHEQqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 12:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233431AbiHEQny (ORCPT
+        with ESMTP id S233121AbiHEQqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 12:43:54 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995BA1581C
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:43:53 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id w3so4102848edc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:43:53 -0700 (PDT)
+        Fri, 5 Aug 2022 12:46:37 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05F422B06
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:46:34 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id m22so4163212lfl.9
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:46:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=RjlAE1bDXXp4HDJF+2mcQXBU2IPR7RnkcGIixgvhqQE=;
-        b=QdolgzFU7nxQe/dQ2LOhT1Yg7cAzE0MdA+20Mp50S1fk7aPCiJmmBAhP/XQxOtOBeQ
-         mHU2vDwtZpUQbV+dp9lteDW9Xvygr7yEtzaeyd3XvYOpwwAwO7XmPz+g/oDXp++26btk
-         BWXVv2w49lrw+/VkrszLSDCEQ+JWE6sJtp7N2CnQ5ODOd7uOCoByulXzr36RdoJNxV5S
-         UcsFwJTjiqDBakf58sxyf/gOB7GJBPZExk8lE6YYUXiM6QAgqUa/K9eo8YzcnlpMUWsA
-         Ykoq95p92BquHw2Dk3IUa+alHPfimQt+NEGPoCgUE9XroSqY8ajpVKbylNbdWgFCcWCk
-         OVIg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=v4S4GpdOqCe9ywueQ5iRWEaheO0mHSYsO11UhtnP4Kw=;
+        b=eiMdbmKw/RMPYU34GsfGF9tqVlLo0yhNy07CN3kvU9+gvJKdS6LGyZajM6t6MC++b+
+         EaarukS4tP9X663Y3KYt/fmJ3MIexUsBcUrsJmphJ89P10rYnNY/4IJa0yemwbNv+QyT
+         4aSNtPSvgbaUpfxRgBXeP/sCkwBFjTC3BW0oA2FrnPmcbDbShytiKU7e1tSFLK0lrP/F
+         LOekxXj0Ew1YLwuoqh6PBtBwlPFqxtOSu9sG2R2GR3wizZvXcSMqZ2ynziODrpMiZBKJ
+         xH9hnywLvKq5boHLg0HlblFIqSx72j4//oOEs4H9SCU/LjaxGg18LA00agBBPKsvkXeR
+         VQHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=RjlAE1bDXXp4HDJF+2mcQXBU2IPR7RnkcGIixgvhqQE=;
-        b=R4m7mrCs/1ohC3QREYx6a2hDzhFGaG2WqZbGsOpTT/qeHktBXFoG0BUPmstq+LeXYv
-         Id1WKV+0hh73JxuMqzJhYCzbg33LbHSH/4vxr/OUvpZb48fGEgImI2HsAgq8JIE7CMX3
-         DDk0l0j16vnhqhe+pz91e4OLHOdW3i/NP4PRTPZIAOVIGmWqKBn6iIJalJKZHZCydfbj
-         L4dWpjFrUVcylFoxVjbT42CU520aYaucHQ9203aXfwf7ylAyCh7MMFN4+ngqLJfB/TfL
-         CaB4v+FZC03oJ1a39robXjA3ObRlo5I9+X0SG/sN5g563AkrYiVMpY9qmzFGxe+e3pkk
-         o9qQ==
-X-Gm-Message-State: ACgBeo0vIoaf7FKe851Zg7o7DGRqzS2WxWXxdiJOr9Lyti3FPvadZ5pt
-        NlJdA3Kq5QkuiXQISymKW4OGPGwCusc=
-X-Google-Smtp-Source: AA6agR69m7IIA5pQgvBv/jXnWdN7mZ7yFkL9gscYsV7z9vVAK2xMr1Hdzt0ovu0Yh9b/gEFUgvnB1A==
-X-Received: by 2002:a05:6402:2b88:b0:43a:6c58:6c64 with SMTP id fj8-20020a0564022b8800b0043a6c586c64mr7516817edb.348.1659717832106;
-        Fri, 05 Aug 2022 09:43:52 -0700 (PDT)
-Received: from [192.168.1.103] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id a15-20020a056402168f00b0043aba618bf6sm118775edv.80.2022.08.05.09.43.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 09:43:51 -0700 (PDT)
-Message-ID: <8b0a61dc-1d30-2731-4497-a69fff57cd2b@gmail.com>
-Date:   Fri, 5 Aug 2022 18:43:47 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=v4S4GpdOqCe9ywueQ5iRWEaheO0mHSYsO11UhtnP4Kw=;
+        b=vXWzq/vZbi75b0tsYesU26YJHIuz0sMtLuxrUg9caiNxUysfI9SyFHxWjYIID5CWv4
+         oX0bgC+kDQPvo6swdldw0uYSRjTZyDQC0QWQkYCqo0yYJ+EFBfwIOrGdSI4F8uMXU8R3
+         qmpMf5mb7cpmUGzxY0+7l4Rq2wBFwLE/RjD04KB2RkwTewF3CABXTR4PpxFyiP0AcPXp
+         oUuyW71L0sEWb5718Ikvcp46kyu7BbOKWzZ1FJspMOADPC72y0Tlss576jaR9zyRIywN
+         X1aGF19wDi7wZsCEQPKXm7m6IH4+OIzeVhV4dr0yrO3Coyae93mWvweT219tSu5zdDFR
+         Fdmg==
+X-Gm-Message-State: ACgBeo188HenYzpIab83PyR/aN2wSeMXCx8olzs7DDdsrqTF6RW1vgMZ
+        44Fh0ILXNSOIndjXnCoO73iY/yH8gZA7sAuT4XngYQ==
+X-Google-Smtp-Source: AA6agR7ErOMbgNtM3KHMVUr3afCrBmKArRGWmslrkB2fIIxGYS2UF8B+73dnoapsgas/bKbCfxwS4kEHT4YRzYKJJVw=
+X-Received: by 2002:a19:ab02:0:b0:48b:3f9:add1 with SMTP id
+ u2-20020a19ab02000000b0048b03f9add1mr2724754lfe.329.1659717993081; Fri, 05
+ Aug 2022 09:46:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 0/4] staging: r8188eu: cleanup some metadata issues
-Content-Language: en-US
-To:     Grzegorz Szymaszek <gszymaszek@short.pl>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <cover.1659715931.git.gszymaszek@short.pl>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <cover.1659715931.git.gszymaszek@short.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1651774250.git.isaku.yamahata@intel.com>
+ <bfa4f7415a1d059bd3a4c6d14105f2baf2d03ba6.1651774250.git.isaku.yamahata@intel.com>
+ <YuxOHPpkhKnnstqw@google.com> <CALzav=cf_2dz8vMD+D_Xo1zBJZndJmtMBxbnYpQKP_mci1np=A@mail.gmail.com>
+ <BL1PR11MB5978DB988E482B8329339881F79E9@BL1PR11MB5978.namprd11.prod.outlook.com>
+In-Reply-To: <BL1PR11MB5978DB988E482B8329339881F79E9@BL1PR11MB5978.namprd11.prod.outlook.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Fri, 5 Aug 2022 09:46:06 -0700
+Message-ID: <CALzav=cJ_Bp2Vg1n=aHv4ewH0U-rDGG5Nni=0CdizG-64GtpLA@mail.gmail.com>
+Subject: Re: [RFC PATCH v6 037/104] KVM: x86/mmu: Allow non-zero value for
+ non-present SPTE
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Shahar, Sagi" <sagis@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/5/22 18:27, Grzegorz Szymaszek wrote:
-> This patchset tries to improve the r8188eu driver metadata. Some
-> hardcoded values are replaced with proper macros, some unnecessary
-> macros are removed.
-> 
-> Changes for v2:
-> - added a cover letter and a base tree reference;
-> - added Philipp Hortmann's Tested-by;
-> - replaced the second and the third patch with different ones, per Greg
->    Kroah-Hartman's suggestions to make better use of existing kernel
->    macros and remove unnecessary ones.
-> 
-> Grzegorz Szymaszek (4):
->    staging: r8188eu: set firmware path in a macro
->    staging: r8188eu: use KBUILD_MODNAME instead of a string constant
->    staging: r8188eu: drop the DRV_NAME macro
->    staging: r8188eu: drop the DRIVERVERSION macro
-> 
->   drivers/staging/r8188eu/core/rtw_fw.c       | 2 +-
->   drivers/staging/r8188eu/include/drv_types.h | 4 +---
->   drivers/staging/r8188eu/os_dep/os_intfs.c   | 3 +--
->   drivers/staging/r8188eu/os_dep/usb_intf.c   | 2 +-
->   4 files changed, 4 insertions(+), 7 deletions(-)
-> 
-> 
-> base-commit: 9de1f9c8ca5100a02a2e271bdbde36202e251b4b
-> prerequisite-patch-id: 79964bd0bcd260f1df53830a81e009c34993ee6f
+On Thu, Aug 4, 2022 at 5:04 PM Huang, Kai <kai.huang@intel.com> wrote:
+>
+> > > In addition to the suggestions above, I'd suggest breaking this patch
+> > > up, since it is doing multiple things:
+> > >
+> > > 1. Patch initialize shadow page tables to EMPTY_SPTE (0) and
+> > >    replace TDP MMU hard-coded 0 with EMPTY_SPTE.
+> > > 2. Patch to change FNAME(sync_page) to not assume EMPTY_SPTE is 0.
+> > > 3. Patch to set bit 63 in EMPTY_SPTE.
+> > > 4. Patch to set bit 63 in REMOVED_SPTE.
+>
+> I think 1/2 can be separate patches, but 3/4 should be done together.
+>
+> Patch 3 alone is broken as when TDP MMU zaps SPTE and replaces it with REMOVED_SPTE, it loses bit 63.  This is not what we want.  We always want bit 63 set if it is supposed to be  set to a non-present SPTE.
 
+How is patch 3 alone be broken? The TDX support that depends on bit 63
+does not exist at this point in the series, i.e. setting bit 63 is
+entirely optional and only done in preparation for future patches.
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+>
+> But I also don't see splitting to 3  patches is absolutely worth to do as doing above in one patch is also fine to me.
+
+Splitting patches up into logically independent changes makes it a lot
+easier to review, and therefore reduces the chances of bugs.
+
+Smaller changes also makes it easier for patches to get through the
+review process, because reviewers can sign-off on specific patches
+with Reviewed-by tags while discussion continues on patches that still
+need more work. If the patches are too large, it makes it more
+difficult to collect Reviewed-by tags because the entire patch has to
+be correct.
+
+Case in point, the above patch description has 9 paragraphs because
+the patch is doing so many different things. It's difficult to keep
+track of all of the different changes this patch aims to accomplish
+when reviewing the code.

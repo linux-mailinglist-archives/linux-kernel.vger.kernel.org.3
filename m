@@ -2,273 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA0F58A95B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 12:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6C058A95E
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 12:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237462AbiHEKPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 06:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
+        id S240741AbiHEKQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 06:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240599AbiHEKPN (ORCPT
+        with ESMTP id S240559AbiHEKQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 06:15:13 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916C2FD;
-        Fri,  5 Aug 2022 03:15:10 -0700 (PDT)
-X-UUID: 3e7b18dba3fe4f4d858146a3d6ddfe5c-20220805
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=sGX6YzjigDRiefwq1x9TnO0pG3WTYmLcs7/JWY07XCk=;
-        b=dbU4CWEAgTI3N3A1dt6XycD6D57MpJUI8a4RfZTvNzY7dknN5xCfQovSOsPXSk3+/58vjJ/a0aXBQa9XHpT5+ctJCNjZ2dKvM3aq8IMVcZJnZ1nJ1rqR0PUqwfXbvFkKe1aV0uBmVdVPhSh6LVIHWwJlGhf7jRl+xt1LiX7Kybc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:d34b1369-3efb-4565-a8f0-01e15deb4436,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:0f94e32,CLOUDID:fd10e19b-da39-4e3b-a854-56c7d2111b46,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 3e7b18dba3fe4f4d858146a3d6ddfe5c-20220805
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1036865094; Fri, 05 Aug 2022 18:15:01 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 5 Aug 2022 18:15:01 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 5 Aug 2022 18:15:00 +0800
-From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v16 8/8] drm/mediatek: Use cached audio config when changing resolution
-Date:   Fri, 5 Aug 2022 18:14:59 +0800
-Message-ID: <20220805101459.3386-9-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
-References: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
+        Fri, 5 Aug 2022 06:16:31 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3FBA1AF
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 03:15:34 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id dc19so4127877ejb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 03:15:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
+        b=gck0UKShMSLbdV0VdCDOVnjiBdRKrTWHxqVV7aTCZPW1myRkWHqrohk6ZF99OoZsIL
+         0fo6ALIq3qtEUUYOonJgS9bMPrageprovDad0j8LMqPE9/vr/KGlBv4NelP8hDtqO3yr
+         UjjcxiB8lzCpolAL7ra0fSaQD6aIb0W676brgcdWID5CvYgteZZNRwvfX/t/DCnEGHuv
+         d4TeQY7n4X1uNchsvMXQ0BMXuwRwjJ1Dym7TJxvOGx6amzfnGnjV4Z/qixqk0Ig3Pex3
+         I/3rmXuM7UqhEdS8ZEhkKj9DGUnqQfVDwu0xqe+8MYytk0XuNn7Yl2KBKrnuC0vsXZU3
+         zMpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
+        b=lQbNjH1sYMUigZX7es4q9jyYYRiz2lgt6JhZzrEfKkZNAd7dALV/Up0QlQjmfWPerU
+         USItfcHFUCxg9slJM52CNh62FyVkJ1TDCyAZ1NkBDwAjG7KSUvvFn5sUQG6JMXpOeicb
+         cxbeEg84bj1YqyTXB+EGps2sUTFCmb0lrcpInk6fe0Odq97+Rl3cOazaxtNJpZXo7cFq
+         WDW7sHTHa5zXLb2LTSQAGZqHFIdpvXlaEynGyBNJG2YUw1+chUNs19VZ9P/RTGgqsfuc
+         vAOjRiXrbfoI28AGTZWZBg2Hmed+7CxOLGJUJcXyCwPZYMx6sVu6GFGwZeIsvyJyDeWu
+         /BfQ==
+X-Gm-Message-State: ACgBeo3FRDwJ2Dv3RL4HuOi4ZnI7qRq0pQa71jGQmL4/2sL+Aji/NYmR
+        jqDTJhEABYEDFxkCRcCJxMwMuXNf5gbuoiJzU3Y=
+X-Google-Smtp-Source: AA6agR6VSjIbagy4oKHaOhED/UilEBrSkBmwL1CWlU5mz69lKDUVcBMzyMKt/TW5mqqRTj4G3Z2jW6nrKuulanI8CV8=
+X-Received: by 2002:a17:907:d25:b0:730:cdec:ab12 with SMTP id
+ gn37-20020a1709070d2500b00730cdecab12mr5017860ejc.263.1659694532521; Fri, 05
+ Aug 2022 03:15:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:2745:b0:730:d730:f98a with HTTP; Fri, 5 Aug 2022
+ 03:15:32 -0700 (PDT)
+Reply-To: davidnelson7702626@gmail.com
+From:   Alio Baare <aliobaare1990@gmail.com>
+Date:   Fri, 5 Aug 2022 11:15:32 +0100
+Message-ID: <CAEqq5SsL7=o7=uE_oKwX4_sE0So0ANXQjirsQOnx5xphAxkF+w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:62c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5272]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [aliobaare1990[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [aliobaare1990[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [davidnelson7702626[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the audio is playing, we need to use the original configuration to
-set the audio instead of using new configuration. Therefore, use the
-cached audio configuration during a resolution switch to avoid loss of
-sound.
-
-Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/mediatek/mtk_dp.c | 108 +++++-------------------------
- 1 file changed, 17 insertions(+), 91 deletions(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-index 3efac9920304..e725e3104147 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-@@ -45,18 +45,6 @@
- #define MTK_DP_TRAIN_DOWNSCALE_RETRY 8
- #define MTK_DP_VERSION 0x11
- 
--#define MTK_DP_CEA_SAD_FREQ_32KHZ  BIT(0)
--#define MTK_DP_CEA_SAD_FREQ_44KHZ  BIT(1)
--#define MTK_DP_CEA_SAD_FREQ_48KHZ  BIT(2)
--#define MTK_DP_CEA_SAD_FREQ_88KHZ  BIT(3)
--#define MTK_DP_CEA_SAD_FREQ_96KHZ  BIT(4)
--#define MTK_DP_CEA_SAD_FREQ_176KHZ BIT(5)
--#define MTK_DP_CEA_SAD_FREQ_192KHZ BIT(6)
--
--#define MTK_DP_CEA_SAD_UNCOMPRESSED_WORD_16BIT BIT(0)
--#define MTK_DP_CEA_SAD_UNCOMPRESSED_WORD_20BIT BIT(1)
--#define MTK_DP_CEA_SAD_UNCOMPRESSED_WORD_24BIT BIT(2)
--
- struct mtk_dp_train_info {
- 	bool tps3;
- 	bool tps4;
-@@ -106,7 +94,7 @@ struct mtk_dp_info {
- 	struct videomode vm;
- 	u8 frame_rate;
- 	u32 pix_rate_khz;
--	struct mtk_dp_audio_cfg audio_caps;
-+	struct mtk_dp_audio_cfg audio_cur_cfg;
- };
- 
- struct dp_cal_data {
-@@ -413,48 +401,6 @@ static void mtk_dp_pg_enable(struct mtk_dp *mtk_dp, bool enable)
- 			   4 << PGEN_PATTERN_SEL_SHIFT, PGEN_PATTERN_SEL_MASK);
- }
- 
--static int mtk_dp_cea_sad_get_sample_rate(const struct cea_sad *sad)
--{
--	switch (sad->freq) {
--	case MTK_DP_CEA_SAD_FREQ_32KHZ:
--		return 32000;
--	case MTK_DP_CEA_SAD_FREQ_44KHZ:
--		return 44100;
--	case MTK_DP_CEA_SAD_FREQ_48KHZ:
--		return 48000;
--	case MTK_DP_CEA_SAD_FREQ_88KHZ:
--		return 88200;
--	case MTK_DP_CEA_SAD_FREQ_96KHZ:
--		return 96000;
--	case MTK_DP_CEA_SAD_FREQ_176KHZ:
--		return 176400;
--	case MTK_DP_CEA_SAD_FREQ_192KHZ:
--		return 192000;
--	default:
--		return -EINVAL;
--	}
--}
--
--static int mtk_dp_cea_sad_get_uncompressed_word_length(const struct cea_sad *sad)
--{
--	if (sad->format != HDMI_AUDIO_CODING_TYPE_PCM) {
--		pr_err("Unable to get the uncompressed word length for format: %u\n",
--		       sad->format);
--		return -EINVAL;
--	}
--
--	switch (sad->byte2) {
--	case MTK_DP_CEA_SAD_UNCOMPRESSED_WORD_16BIT:
--		return 16;
--	case MTK_DP_CEA_SAD_UNCOMPRESSED_WORD_20BIT:
--		return 20;
--	case MTK_DP_CEA_SAD_UNCOMPRESSED_WORD_24BIT:
--		return 24;
--	default:
--		return -EINVAL;
--	}
--}
--
- static void mtk_dp_audio_setup_channels(struct mtk_dp *mtk_dp,
- 					struct mtk_dp_audio_cfg *cfg)
- {
-@@ -1859,9 +1805,7 @@ static bool mtk_dp_edid_parse_audio_capabilities(struct mtk_dp *mtk_dp,
- 						 struct mtk_dp_audio_cfg *cfg)
- {
- 	struct cea_sad *sads;
--	int sad_count;
--	int i;
--	bool ret = false;
-+	int ret;
- 
- 	if (!mtk_dp->data->audio_supported)
- 		return false;
-@@ -1872,36 +1816,16 @@ static bool mtk_dp_edid_parse_audio_capabilities(struct mtk_dp *mtk_dp,
- 		dev_err(mtk_dp->dev, "EDID not found!\n");
- 		return false;
- 	}
--	sad_count = drm_edid_to_sad(mtk_dp->edid, &sads);
--	mutex_unlock(&mtk_dp->edid_lock);
- 
--	if (sad_count <= 0) {
-+	ret = drm_edid_to_sad(mtk_dp->edid, &sads);
-+	mutex_unlock(&mtk_dp->edid_lock);
-+	if (ret <= 0) {
- 		drm_info(mtk_dp->drm_dev, "The SADs is NULL\n");
- 		return false;
- 	}
--
--	for (i = 0; i < sad_count; i++) {
--		int sample_rate, word_length;
--
--		/* Only PCM supported at the moment */
--		if (sads[i].format != HDMI_AUDIO_CODING_TYPE_PCM)
--			continue;
--
--		sample_rate = mtk_dp_cea_sad_get_sample_rate(&sads[i]);
--		word_length =
--			mtk_dp_cea_sad_get_uncompressed_word_length(&sads[i]);
--		if (sample_rate <= 0 || word_length <= 0)
--			continue;
--
--		cfg->channels = sads[i].channels;
--		cfg->word_length_bits = word_length;
--		cfg->sample_rate = sample_rate;
--		ret = true;
--		break;
--	}
- 	kfree(sads);
- 
--	return ret;
-+	return true;
- }
- 
- static void mtk_dp_train_change_mode(struct mtk_dp *mtk_dp)
-@@ -2070,13 +1994,13 @@ static int mtk_dp_training(struct mtk_dp *mtk_dp)
- 
- 	mtk_dp->audio_enable =
- 		mtk_dp_edid_parse_audio_capabilities(mtk_dp,
--						     &mtk_dp->info.audio_caps);
-+						     &mtk_dp->info.audio_cur_cfg);
- 	if (mtk_dp->audio_enable) {
--		mtk_dp_audio_setup(mtk_dp, &mtk_dp->info.audio_caps);
-+		mtk_dp_audio_setup(mtk_dp, &mtk_dp->info.audio_cur_cfg);
- 		mtk_dp_audio_mute(mtk_dp, false);
- 	} else {
--		memset(&mtk_dp->info.audio_caps, 0,
--		       sizeof(mtk_dp->info.audio_caps));
-+		memset(&mtk_dp->info.audio_cur_cfg, 0,
-+		       sizeof(mtk_dp->info.audio_cur_cfg));
- 	}
- 
- 	return 0;
-@@ -2442,6 +2366,9 @@ static void mtk_dp_bridge_atomic_disable(struct drm_bridge *bridge,
- 	if (mtk_dp_plug_state(mtk_dp)) {
- 		drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POWER_D3);
- 		usleep_range(2000, 3000);
-+	} else {
-+		memset(&mtk_dp->info.audio_cur_cfg, 0,
-+		       sizeof(mtk_dp->info.audio_cur_cfg));
- 	}
- 
- 	mtk_dp_video_mute(mtk_dp, true);
-@@ -2641,18 +2568,17 @@ static int mtk_dp_audio_hw_params(struct device *dev, void *data,
- 				  struct hdmi_codec_params *params)
- {
- 	struct mtk_dp *mtk_dp = dev_get_drvdata(dev);
--	struct mtk_dp_audio_cfg cfg;
- 
- 	if (!mtk_dp->enabled) {
- 		dev_err(mtk_dp->dev, "%s, DP is not ready!\n", __func__);
- 		return -ENODEV;
- 	}
- 
--	cfg.channels = params->cea.channels;
--	cfg.sample_rate = params->sample_rate;
--	cfg.word_length_bits = 24;
-+	mtk_dp->info.audio_cur_cfg.channels = params->cea.channels;
-+	mtk_dp->info.audio_cur_cfg.sample_rate = params->sample_rate;
-+	mtk_dp->info.audio_cur_cfg.word_length_bits = 24;
- 
--	mtk_dp_audio_setup(mtk_dp, &cfg);
-+	mtk_dp_audio_setup(mtk_dp, &mtk_dp->info.audio_cur_cfg);
- 
- 	return 0;
- }
--- 
-2.18.0
-
+Hello friend, I want to send money to you to enable me invest in your
+country get back to me if you are interested.

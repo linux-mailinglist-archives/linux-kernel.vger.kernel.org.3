@@ -2,204 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F209358B266
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEA158B265
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241690AbiHEWVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 18:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
+        id S241644AbiHEWVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 18:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241467AbiHEWVd (ORCPT
+        with ESMTP id S241229AbiHEWVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 18:21:33 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB7D1ADAF
+        Fri, 5 Aug 2022 18:21:31 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DE51ADAE
         for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:21:30 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3282fe8f48fso31473507b3.17
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1659738091;
-  x=1691274091;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4iOxNsMSbtpOM27Z8TD3Hj1cDpxzqVK5IPL4dyFrR5g=;
-  b=WL/zRxMUofsJB/SNA3df3G2Bz75aDODaZnW3uREQjzfYl6hU9TJrwmwS
-   uWi9H/CvYx15Xi78KeVvo1tsRL6Ct1pndeRChqAch5dmVMCp7gnd5UlGX
-   Wr6lX2RmLxe5mCpGxXTQoPYhocUVx6pa7maN2p+f+8WuPMhgI60itmd0N
-   5nTGRhFFOlqg5o0chGuH9BXDRMAGX9yb2IRxpgBOTe2+xc0hYhcBw1/Or
-   28CNhjEZkHimfSlBJyvi23dPnfQIkRWybEJWy4tl8LDt9nDQ/LuugMKd1
-   4O1QuxJnEN6kLZFqN8Leu3Q5bk/HUdhDn+0/g+ts5W8ChGAQmDf75ir8U
-   A==;
-From:   Niklas Carlsson <Niklas.Carlsson@axis.com>
-To:     Lars-Peter Clausen <lars@metafoo.de>,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-CC:     Niklas Carlsson <niklasc@axis.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ASoC: adau1761: Reset codec at probe and shutdown
-Date:   Sat, 6 Aug 2022 00:21:20 +0200
-Message-ID: <20220805222120.2560501-1-Niklas.Carlsson@axis.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=vA6JwiPIQ35idH1LwuHfAoXwWih02NenmEQERtaUlQk=;
+        b=jhXFbm4GcOo7tzG+m2t/JAjwLoRiHbKfayX9CRJ+Z1nBjUfj/kt8Ulq1F0LhapnHWU
+         vQlRbYT/RRAr/19sZxiy7+Gw5YKLAuSi4obedsMyt5ePFm2VbgAXa76LqWzI0gy3+k7G
+         auoB2i1RLoWlA1oVdLXZeqvneSg9IDJwiQbvRGCr9hOj2w857WdGRB+BjlL6R4waJY4P
+         UezKtbOhs+xqa+UUczDURSiB9HsJ+jdEiKKrN79HQVMKHizSOYPwBCpveob6fId8+EHN
+         bXZmZjRBWoxEGFljMetZFd/jY81w8X/1pO15hW5wCu1fcpJu1QQ4WMOAumNIK4XDuGno
+         KpcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=vA6JwiPIQ35idH1LwuHfAoXwWih02NenmEQERtaUlQk=;
+        b=SlLmKAWee0xAEziheHHPJ4m0zOly5uV3k2cqCEpYEBs9xG9jkvkOYDIMEGrcZIMRd6
+         m8+q8zDhBuoWCYTd2q2p6LCzly3N0nu/RGhX+jg5dR1JKRBQnjjxcaAXW5gv5H2QCSzk
+         EFwkWZFFbTsrWg3994h0aiwZ318zD5nEYKvSi6dnIU6GNdhBDZfWCXnECEZZgeJwsPQR
+         XQ53bd4FaEGEHhTYw/y9qQRpzbTKwTW1hJN7yrAXVPFsl8njThNTg16DREAzJrFgfC5W
+         ODTtCnNq6qxcrC7Rtx4Yccx0vSpZqgDMLSYSJ1T3FD1p/UIh1F3THtBpIhRYFrZVJqvX
+         Dv2g==
+X-Gm-Message-State: ACgBeo2G0F51HMOjHhwdb/f4hdfQYvvdyovuwnGj6iKOD0bMtThS7o5N
+        aJKx5moTYpv49NPxXFfl4wuB3sf3mC0=
+X-Google-Smtp-Source: AA6agR5/FcLDV3dK7SdDaErdRpC2Y/obPbr0lLOpjjFPaMlZeqQoYgCKLv8ONTsUzWRhe9Uj92AsbR6yrYs=
+X-Received: from jeffxud.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:e37])
+ (user=jeffxu job=sendgmr) by 2002:a05:6902:13c7:b0:671:7cb2:9a82 with SMTP id
+ y7-20020a05690213c700b006717cb29a82mr7285411ybu.334.1659738090124; Fri, 05
+ Aug 2022 15:21:30 -0700 (PDT)
+Date:   Fri,  5 Aug 2022 22:21:21 +0000
+Message-Id: <20220805222126.142525-1-jeffxu@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH v2 0/5] mm/memfd: MFD_NOEXEC for memfd_create
+From:   <jeffxu@google.com>
+To:     skhan@linuxfoundation.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
+        Jeff Xu <jeffxu@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Carlsson <niklasc@axis.com>
+From: Jeff Xu <jeffxu@chromium.org>
 
-ADAU1X61 doesn't have a reset pin, which leads to the codec retaining
-the register values after the device has been rebooted without a power
-cycle. This causes the driver to be out of sync with the codec.
+Hi,
 
-Simulating a hardware reset ensures that the codec is in a defined
-state.
+This v2 series MFD_NOEXEC, this series includes:
+1> address comments in V1
+2> add sysctl (vm.mfd_noexec) to change the default file permissions
+    of memfd_create to be non-executable.
 
-Link: https://lore.kernel.org/all/alpine.DEB.2.02.1603291544160.3594@lnxricardw1.se.axis.com/
-Link: https://lore.kernel.org/all/alpine.DEB.2.02.1604211547540.31333@lnxricardw1.se.axis.com/
-Signed-off-by: Niklas Carlsson <niklasc@axis.com>
----
- sound/soc/codecs/adau1761-i2c.c |  6 +++++
- sound/soc/codecs/adau1761-spi.c |  6 +++++
- sound/soc/codecs/adau1761.c     | 43 +++++++++++++++++++++++++++++++++
- sound/soc/codecs/adau1761.h     |  1 +
- 4 files changed, 56 insertions(+)
+Below are cover-level for v1:
 
-diff --git a/sound/soc/codecs/adau1761-i2c.c b/sound/soc/codecs/adau1761-i2c.c
-index 0683caf86aea..23bffbd74469 100644
---- a/sound/soc/codecs/adau1761-i2c.c
-+++ b/sound/soc/codecs/adau1761-i2c.c
-@@ -36,6 +36,11 @@ static int adau1761_i2c_remove(struct i2c_client *client)
- 	return 0;
- }
- 
-+static void adau1761_i2c_shutdown(struct i2c_client *client)
-+{
-+	adau1761_shutdown(&client->dev);
-+}
-+
- static const struct i2c_device_id adau1761_i2c_ids[] = {
- 	{ "adau1361", ADAU1361 },
- 	{ "adau1461", ADAU1761 },
-@@ -63,6 +68,7 @@ static struct i2c_driver adau1761_i2c_driver = {
- 	},
- 	.probe_new = adau1761_i2c_probe,
- 	.remove = adau1761_i2c_remove,
-+	.shutdown = adau1761_i2c_shutdown,
- 	.id_table = adau1761_i2c_ids,
- };
- module_i2c_driver(adau1761_i2c_driver);
-diff --git a/sound/soc/codecs/adau1761-spi.c b/sound/soc/codecs/adau1761-spi.c
-index 7c9242c2ff94..5bbbc3d3b5be 100644
---- a/sound/soc/codecs/adau1761-spi.c
-+++ b/sound/soc/codecs/adau1761-spi.c
-@@ -50,6 +50,11 @@ static void adau1761_spi_remove(struct spi_device *spi)
- 	adau17x1_remove(&spi->dev);
- }
- 
-+static void adau1761_spi_shutdown(struct spi_device *spi)
-+{
-+	adau1761_shutdown(&spi->dev);
-+}
-+
- static const struct spi_device_id adau1761_spi_id[] = {
- 	{ "adau1361", ADAU1361 },
- 	{ "adau1461", ADAU1761 },
-@@ -77,6 +82,7 @@ static struct spi_driver adau1761_spi_driver = {
- 	},
- 	.probe = adau1761_spi_probe,
- 	.remove = adau1761_spi_remove,
-+	.shutdown = adau1761_spi_shutdown,
- 	.id_table = adau1761_spi_id,
- };
- module_spi_driver(adau1761_spi_driver);
-diff --git a/sound/soc/codecs/adau1761.c b/sound/soc/codecs/adau1761.c
-index 8f887227981f..ac544e1e8dc7 100644
---- a/sound/soc/codecs/adau1761.c
-+++ b/sound/soc/codecs/adau1761.c
-@@ -974,6 +974,39 @@ static struct snd_soc_dai_driver adau1761_dai_driver = {
- 	.ops = &adau17x1_dai_ops,
- };
- 
-+static void adau1761_reset(struct regmap *regmap)
-+{
-+	size_t i;
-+
-+	/*
-+	 * Handle the lack of a reset pin in ADAU1X61 by manually writing all
-+	 * registers to their default values.
-+	 *
-+	 * Steps for performing the reset:
-+	 *   1) Make sure that the cache is marked as dirty by writing all
-+	 *      default values directly to the cache.
-+	 *
-+	 *   2) Enable the core clock which is needed for writing all registers
-+	 *      except CLOCK_CONTROL.
-+	 *
-+	 *   3) Use regcache_sync() for synchronizing the dirty cache back to
-+	 *      the hardware.
-+	 */
-+
-+	regcache_cache_only(regmap, true);
-+	for (i = 0; i < ARRAY_SIZE(adau1761_reg_defaults); i++)
-+		regmap_write(regmap, adau1761_reg_defaults[i].reg,
-+			     adau1761_reg_defaults[i].def);
-+	regcache_cache_only(regmap, false);
-+
-+	regmap_update_bits(regmap, ADAU17X1_CLOCK_CONTROL,
-+			   ADAU17X1_CLOCK_CONTROL_SYSCLK_EN,
-+			   ADAU17X1_CLOCK_CONTROL_SYSCLK_EN);
-+	regcache_sync(regmap);
-+	regmap_update_bits(regmap, ADAU17X1_CLOCK_CONTROL,
-+			   ADAU17X1_CLOCK_CONTROL_SYSCLK_EN, 0);
-+}
-+
- int adau1761_probe(struct device *dev, struct regmap *regmap,
- 	enum adau17x1_type type, void (*switch_mode)(struct device *dev))
- {
-@@ -997,6 +1030,8 @@ int adau1761_probe(struct device *dev, struct regmap *regmap,
- 	if (ret)
- 		return ret;
- 
-+	adau1761_reset(regmap);
-+
- 	/* Enable cache only mode as we could miss writes before bias level
- 	 * reaches standby and the core clock is enabled */
- 	regcache_cache_only(regmap, true);
-@@ -1006,6 +1041,14 @@ int adau1761_probe(struct device *dev, struct regmap *regmap,
- }
- EXPORT_SYMBOL_GPL(adau1761_probe);
- 
-+void adau1761_shutdown(struct device *dev)
-+{
-+	struct adau *adau = dev_get_drvdata(dev);
-+
-+	adau1761_reset(adau->regmap);
-+}
-+EXPORT_SYMBOL_GPL(adau1761_shutdown);
-+
- const struct regmap_config adau1761_regmap_config = {
- 	.val_bits = 8,
- 	.reg_bits = 16,
-diff --git a/sound/soc/codecs/adau1761.h b/sound/soc/codecs/adau1761.h
-index 7beabf448ad1..98d698ebde27 100644
---- a/sound/soc/codecs/adau1761.h
-+++ b/sound/soc/codecs/adau1761.h
-@@ -16,6 +16,7 @@ struct device;
- 
- int adau1761_probe(struct device *dev, struct regmap *regmap,
- 	enum adau17x1_type type, void (*switch_mode)(struct device *dev));
-+void adau1761_shutdown(struct device *dev);
- 
- extern const struct regmap_config adau1761_regmap_config;
- 
+The default file permissions on a memfd include execute bits, which
+means that such a memfd can be filled with a executable and passed to
+the exec() family of functions. This is undesirable on systems where all
+code is verified and all filesystems are intended to be mounted noexec,
+since an attacker may be able to use a memfd to load unverified code and
+execute it.
+
+Additionally, execution via memfd is a common way to avoid scrutiny for
+malicious code, since it allows execution of a program without a file
+ever appearing on disk. This attack vector is not totally mitigated with
+this new flag, since the default memfd file permissions must remain
+executable to avoid breaking existing legitimate uses, but it should be
+possible to use other security mechanisms to prevent memfd_create calls
+without MFD_NOEXEC on systems where it is known that executable memfds
+are not necessary.
+
+This patch series adds a new MFD_NOEXEC flag for memfd_create(), which
+allows creation of non-executable memfds, and as part of the
+implementation of this new flag, it also adds a new F_SEAL_EXEC seal,
+which will prevent modification of any of the execute bits of a sealed
+memfd.
+
+I am not sure if this is the best way to implement the desired behavior
+(for example, the F_SEAL_EXEC seal is really more of an implementation
+detail and feels a bit clunky to expose), so suggestions are welcome
+for alternate approaches.
+
+v1: https://lwn.net/Articles/890096/
+
+Daniel Verkamp (4):
+  mm/memfd: add F_SEAL_EXEC
+  mm/memfd: add MFD_NOEXEC flag to memfd_create
+  selftests/memfd: add tests for F_SEAL_EXEC
+  selftests/memfd: add tests for MFD_NOEXEC
+
+Jeff Xu (1):
+  sysctl: add support for mfd_noexec
+
+ include/linux/mm.h                         |   4 +
+ include/uapi/linux/fcntl.h                 |   1 +
+ include/uapi/linux/memfd.h                 |   1 +
+ kernel/sysctl.c                            |   9 ++
+ mm/memfd.c                                 |  39 ++++-
+ mm/shmem.c                                 |   6 +
+ tools/testing/selftests/memfd/memfd_test.c | 163 ++++++++++++++++++++-
+ 7 files changed, 221 insertions(+), 2 deletions(-)
+
+
+base-commit: 9e2f40233670c70c25e0681cb66d50d1e2742829
 -- 
-2.30.2
+2.37.1.559.g78731f0fdb-goog
 

@@ -2,113 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E8C58A8A0
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E213858A8A6
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240474AbiHEJSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 05:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S240298AbiHEJWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 05:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235698AbiHEJSw (ORCPT
+        with ESMTP id S233773AbiHEJWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 05:18:52 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7976074E2C
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:18:51 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id z20so2440944ljq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 02:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GTjcoqI8Zy27Jjru/d59SIQfAPUV+r8g0eBDkIE396k=;
-        b=lKhJRkSEw51vKDVAn2VeUUsFqN2x/2Od3nB1tmiYf6aGDUh/wZ0B+lDEho5FuKYvyr
-         Fantq8i5HJb/ZXuQzQ770l6rOlhAJNk+Zx+EhJpn5mT75AToQhQfOQzIyPF053hvOOOf
-         n4Mg0txMOKJBUZRIgNk9sj1/Ci3RUqtMf+QnYEBF85ngVA5KzK13/Dc+Cr7mO/XKnIvW
-         aBVXwo4/3ztNXMMq98gtV/6zvdrWXk3FOMc7di6PWYLTDo3RzMd5w5sRkCKE69lhyty3
-         d0hOO52zMLIR4QiEYLpLMag0aQPUfTVCr0oclshUUKbWkkgMEKpOR/gk0wspWTsFyVO6
-         co4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GTjcoqI8Zy27Jjru/d59SIQfAPUV+r8g0eBDkIE396k=;
-        b=i3f83aOEIkZ6MymL8QEJO45GoLvZF1pVc7t/nWAYl2EB26j37c4mxBcBI17fkofZtC
-         DB9acdbN7Qvm0UNQ3zzJzPdQEV7ycOjJgYxWeaWb8++BI+Vj3PDSSusDME+ABzBN7aem
-         uKD1UTZVtgKJVBcSQudO4aObPFsAjkmud8/wpeRuEcPW7mB8Owv9FRkCseCKGf0O8idr
-         WrwswoNO/qiLNBiYYxrZRwRkeWbEWN+Ou5H3lyaTIC1lUZA0moDzZad6mBonscA6hi4D
-         YKIYrZFVmW9wDCERROJ063YtG8iUksOiOHJuvIK5hPJCB/CCDNuSP4ssL9PETWYTovAC
-         I75w==
-X-Gm-Message-State: ACgBeo0dDo8XyLrX8/RCWI7NOLPUpLgdR05rnCXAdEm/NS24wpWm5nOU
-        zz5mrBJh8LjeeccEa+wFSV3/OQ==
-X-Google-Smtp-Source: AA6agR7wHuNA7a+JazzGC2jn/GP7TBwgHVZRkO2xAVt7CAJVVMAvSYiwie/Daa3N1pCyJKOHQtY0/w==
-X-Received: by 2002:a2e:82c5:0:b0:25d:83d8:41b with SMTP id n5-20020a2e82c5000000b0025d83d8041bmr1705001ljh.140.1659691129869;
-        Fri, 05 Aug 2022 02:18:49 -0700 (PDT)
-Received: from [192.168.1.6] ([77.222.167.48])
-        by smtp.gmail.com with ESMTPSA id u13-20020ac25bcd000000b0048b0062a14fsm405209lfn.144.2022.08.05.02.18.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 02:18:49 -0700 (PDT)
-Message-ID: <106e443a-e765-51fe-b556-e4e7e2aa771c@linaro.org>
-Date:   Fri, 5 Aug 2022 11:18:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: cpufreq: add mt8188 cpufreq hw
- dt-bindings
-Content-Language: en-US
-To:     "jia-wei.chang" <jia-wei.chang@mediatek.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hector Yuan <hector.yuan@mediatek.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com
-References: <20220805091211.2791-1-jia-wei.chang@mediatek.com>
- <20220805091211.2791-2-jia-wei.chang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220805091211.2791-2-jia-wei.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 5 Aug 2022 05:22:01 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF7B7390A
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:21:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VLQfg.m_1659691274;
+Received: from localhost(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VLQfg.m_1659691274)
+          by smtp.aliyun-inc.com;
+          Fri, 05 Aug 2022 17:21:52 +0800
+From:   Liu Song <liusong@linux.alibaba.com>
+To:     catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: spectre: increase parameters that can be used to turn off bhb mitigation individually
+Date:   Fri,  5 Aug 2022 17:21:14 +0800
+Message-Id: <1659691274-48554-1-git-send-email-liusong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/08/2022 11:12, jia-wei.chang wrote:
-> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> 
-> Add mt8188 cpufreq hw compatible in dt-bindings.
-> 
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> ---
->  .../devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml      | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> index 9cd42a64b13e..b56d36224612 100644
-> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> @@ -16,7 +16,9 @@ description:
->  
->  properties:
->    compatible:
-> -    const: mediatek,cpufreq-hw
-> +    enum:
-> +      - mediatek,cpufreq-hw
+From: Liu Song <liusong@linux.alibaba.com>
 
-Can you add a comment mentioning for which SoCs this is? Someone added a
-generic compatible covering all MediaTek cpufreq-hw (all!) and now you
-say it does not cover all?
+In our environment, it was found that the mitigation BHB has a great
+impact on the benchmark performance. For example, in the lmbench test,
+the "process fork && exit" test performance drops by 20%.
+So it is necessary to have the ability to turn off the mitigation
+individually through cmdline, thus avoiding having to compile the
+kernel by adjusting the config.
 
-Best regards,
-Krzysztof
+Signed-off-by: Liu Song <liusong@linux.alibaba.com>
+---
+ arch/arm64/kernel/proton-pack.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kernel/proton-pack.c b/arch/arm64/kernel/proton-pack.c
+index 40be3a7..bd16903 100644
+--- a/arch/arm64/kernel/proton-pack.c
++++ b/arch/arm64/kernel/proton-pack.c
+@@ -988,6 +988,14 @@ static void this_cpu_set_vectors(enum arm64_bp_harden_el1_vectors slot)
+ 	isb();
+ }
+ 
++static bool __read_mostly __nospectre_bhb;
++static int __init parse_spectre_bhb_param(char *str)
++{
++	__nospectre_bhb = true;
++	return 0;
++}
++early_param("nospectre_bhb", parse_spectre_bhb_param);
++
+ void spectre_bhb_enable_mitigation(const struct arm64_cpu_capabilities *entry)
+ {
+ 	bp_hardening_cb_t cpu_cb;
+@@ -1001,7 +1009,7 @@ void spectre_bhb_enable_mitigation(const struct arm64_cpu_capabilities *entry)
+ 		/* No point mitigating Spectre-BHB alone. */
+ 	} else if (!IS_ENABLED(CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY)) {
+ 		pr_info_once("spectre-bhb mitigation disabled by compile time option\n");
+-	} else if (cpu_mitigations_off()) {
++	} else if (cpu_mitigations_off() || __nospectre_bhb) {
+ 		pr_info_once("spectre-bhb mitigation disabled by command line option\n");
+ 	} else if (supports_ecbhb(SCOPE_LOCAL_CPU)) {
+ 		state = SPECTRE_MITIGATED;
+-- 
+1.8.3.1
+

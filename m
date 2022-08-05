@@ -2,142 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723E958AB5C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F2B58AB69
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240449AbiHENK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 09:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S240652AbiHENMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 09:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiHENKS (ORCPT
+        with ESMTP id S240497AbiHENML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 09:10:18 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEF9F74;
-        Fri,  5 Aug 2022 06:10:16 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id 17so1779884qky.8;
-        Fri, 05 Aug 2022 06:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=9J24cDKKqsOduTS9UUyGj2I+dc2JXq9COm3ho1bp/NE=;
-        b=NZ/lhCyR9M4uoWmE11gXdKIY5QHCgnKHevuKo4TMG1DjXmtxuHL9IGeJwZ4LfPJ5Sx
-         An9X10WyEwlH6gobWrRkcQrihAvfFo/NEkJHppMNCjVysFpqBcUQppBPmmWv/gJlRwNJ
-         AJ5R5hBz/6Z6zt3zcMCzNBlOWAFcgddiIbDO26176idaVxtdAeLEwOB83fyRhNgFshT0
-         PgEvwdsJAJBc7N5GmC3tSOdTGVFK5PY33vJvxUo6aKPI13T8ZPWktLxzYyY8DyD7/CRd
-         N6n68KF39/cpPvRO/LCj/Zk8AkuXDm7CeFfWTupOMgC5Oh24O5OoP7ydY1qxP317WUAG
-         zV8Q==
+        Fri, 5 Aug 2022 09:12:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F4AA222B5
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659705129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AyPKB0mAxCNUUWTYUlhhyb+rMbnmnQZaMJrhaPpuC5o=;
+        b=E9Veu4guNeoWSqMSIo84fbvrWcotQOTKgEM63+qL7tUXVcpL3HuE/XmQvwdtXMCfvGo7Ke
+        O4LnAsR8XUS7biYqaAgo8d2ju137eR8ZOJ/KLpk5L0aB+YQFEhSwG7BmaoR0hfVUZbgzGo
+        ewtz78BGPnONi94jEkrADcvlSlBeeIY=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-480-pFepo_N4NDigmpTU2JG1Xg-1; Fri, 05 Aug 2022 09:11:50 -0400
+X-MC-Unique: pFepo_N4NDigmpTU2JG1Xg-1
+Received: by mail-wr1-f71.google.com with SMTP id m7-20020adfa3c7000000b0021ef71807e3so481920wrb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 06:11:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=9J24cDKKqsOduTS9UUyGj2I+dc2JXq9COm3ho1bp/NE=;
-        b=imnwJFAhn0BzI6QmhPhz1U4EMSdkH2oU/MKgzSijN8NrAZvqPsT3SmYCIPaydWTw+W
-         C+GMV4zm+HDbL8yAK3bSXfIH9oCI0N8yLoDGYmil4Wz8nyLAwgQdvPUp0jcy4bCGFVWn
-         M/eCqLghhNqljBSHXy4itcoo9c0RP1CgGUlmLphYsDdQO4cXNKhwpaQGabHvlwHAeyBx
-         nqUHJQV6SGlz35n7NIvlJDDRfxc7pUPy/trsCkmVsxROIUbJKLs1Ry6Rd7oQCbRkWj7I
-         Sv5ATnTjtpPvfwg466Lk7ZGrOlpkE6+NswsjwEE5nYft3EmyxTiMBW2yWaYvaslAAtR2
-         jlrw==
-X-Gm-Message-State: ACgBeo0lApKLBx6Q3ehTsBJXbCCufPGZVxhm/wC5XpLUsJG5WoMhWrea
-        UYfQFHa2ttEgoUSEE/4r8eEwjRgXfaslLWLEAcI=
-X-Google-Smtp-Source: AA6agR6KCeqnEoqyKUTU9bwzHJxmJAXoC1uA/8jBqjS4KNKKgC3bBRK/UzGUzHpzrq29/PrSFNdU8y5czcT3jzWXnGE=
-X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
- s13-20020a05620a254d00b006ab84b825ebmr5054205qko.383.1659705015729; Fri, 05
- Aug 2022 06:10:15 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=AyPKB0mAxCNUUWTYUlhhyb+rMbnmnQZaMJrhaPpuC5o=;
+        b=PXW71UjZDNGUuK7/L9FYh4feOZgCfsIczyE3n/b0FIlhpzvIhNlPeElWI2rxVdrRlV
+         EuWVOTi430gbbjpY76WprFfr8Rzha+oFG8pWg2hdZRMCdVbZehjgoaa15okb9GsBjAGq
+         5rFjdao5GaqJ4RRXbi6SrlpOcWCivEuoUXc35DJeIT1QgAlzsNN4YIdV0BH0M/C6m6WO
+         lom/xGdvsz8FQQBdhlUkrEyB7YYzkfyXsFuVLR0y6TZghODOnpGkYjhXZr0Lqcz4a9qp
+         uYW5xtEIaLY+qD8paXpg3YokJSRxtzk4iBoIT3vT6db8nUPBrZimWOdcg2VFI7NYAnxY
+         mPKQ==
+X-Gm-Message-State: ACgBeo23OlIq0FYD5FITmmDpF5rIxvSSY9hPoOBk6zavbObaT7dBK1Qk
+        ZldWLcp2VsaL126cwLZIQw62llupcEvE4ptI7TLoz4PBw26T/OlvJmE8sfYT8Y4FgfNqFNCZvax
+        OSIX+TMiIkViSn32+DJP2AB8H
+X-Received: by 2002:a05:600c:22d8:b0:3a5:1450:669e with SMTP id 24-20020a05600c22d800b003a51450669emr4266317wmg.102.1659705109371;
+        Fri, 05 Aug 2022 06:11:49 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4maTuPBUIPkvn2YU8/xJs1p/whDw6HWacNW7NECuUlgU3tCxwmiRypaxnYb/j68PL3fr0dTA==
+X-Received: by 2002:a05:600c:22d8:b0:3a5:1450:669e with SMTP id 24-20020a05600c22d800b003a51450669emr4266282wmg.102.1659705109038;
+        Fri, 05 Aug 2022 06:11:49 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:fb00:f5c3:24b2:3d03:9d52? (p200300cbc706fb00f5c324b23d039d52.dip0.t-ipconnect.de. [2003:cb:c706:fb00:f5c3:24b2:3d03:9d52])
+        by smtp.gmail.com with ESMTPSA id b21-20020a05600c06d500b0039c5ab7167dsm8505998wmn.48.2022.08.05.06.11.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 06:11:48 -0700 (PDT)
+Message-ID: <c0c10ef9-b811-f259-9117-f056612c8bd1@redhat.com>
+Date:   Fri, 5 Aug 2022 15:11:46 +0200
 MIME-Version: 1.0
-References: <20220805070610.3516-1-peterwu.pub@gmail.com> <20220805070610.3516-13-peterwu.pub@gmail.com>
-In-Reply-To: <20220805070610.3516-13-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 5 Aug 2022 15:09:39 +0200
-Message-ID: <CAHp75VcdU6AVdksuhsHkzvD6mOBJ6G=yrmuHA9zAXLroXDFAjg@mail.gmail.com>
-Subject: Re: [PATCH v7 12/13] leds: flash: mt6370: Add MediaTek MT6370
- flashlight support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-3-chao.p.peng@linux.intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v7 02/14] selftests/memfd: Add tests for
+ F_SEAL_AUTO_ALLOCATE
+In-Reply-To: <20220706082016.2603916-3-chao.p.peng@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 9:07 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> From: Alice Chen <alice_chen@richtek.com>
->
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
-> LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
->
-> Add a support for the MT6370 Flash LED driver. Flash LED in MT6370
-> has 2 channels and support torch/strobe mode.
+On 06.07.22 10:20, Chao Peng wrote:
+> Add tests to verify sealing memfds with the F_SEAL_AUTO_ALLOCATE works
+> as expected.
+> 
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  tools/testing/selftests/memfd/memfd_test.c | 166 +++++++++++++++++++++
+>  1 file changed, 166 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+> index 94df2692e6e4..b849ece295fd 100644
+> --- a/tools/testing/selftests/memfd/memfd_test.c
+> +++ b/tools/testing/selftests/memfd/memfd_test.c
+> @@ -9,6 +9,7 @@
+>  #include <fcntl.h>
+>  #include <linux/memfd.h>
+>  #include <sched.h>
+> +#include <setjmp.h>
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <signal.h>
+> @@ -232,6 +233,31 @@ static void mfd_fail_open(int fd, int flags, mode_t mode)
+>  	}
+>  }
+>  
+> +static void mfd_assert_fallocate(int fd)
+> +{
+> +	int r;
+> +
+> +	r = fallocate(fd, 0, 0, mfd_def_size);
+> +	if (r < 0) {
+> +		printf("fallocate(ALLOC) failed: %m\n");
+> +		abort();
+> +	}
+> +}
+> +
+> +static void mfd_assert_punch_hole(int fd)
+> +{
+> +	int r;
+> +
+> +	r = fallocate(fd,
+> +		      FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+> +		      0,
+> +		      mfd_def_size);
+> +	if (r < 0) {
+> +		printf("fallocate(PUNCH_HOLE) failed: %m\n");
+> +		abort();
+> +	}
+> +}
+> +
+>  static void mfd_assert_read(int fd)
+>  {
+>  	char buf[16];
+> @@ -594,6 +620,94 @@ static void mfd_fail_grow_write(int fd)
+>  	}
+>  }
+>  
+> +static void mfd_assert_hole_write(int fd)
+> +{
+> +	ssize_t l;
+> +	void *p;
+> +	char *p1;
+> +
+> +	/*
+> +	 * huegtlbfs does not support write, but we want to
+> +	 * verify everything else here.
+> +	 */
+> +	if (!hugetlbfs_test) {
+> +		/* verify direct write() succeeds */
+> +		l = write(fd, "\0\0\0\0", 4);
+> +		if (l != 4) {
+> +			printf("write() failed: %m\n");
+> +			abort();
+> +		}
+> +	}
+> +
+> +	/* verify mmaped write succeeds */
+> +	p = mmap(NULL,
+> +		 mfd_def_size,
+> +		 PROT_READ | PROT_WRITE,
+> +		 MAP_SHARED,
+> +		 fd,
+> +		 0);
+> +	if (p == MAP_FAILED) {
+> +		printf("mmap() failed: %m\n");
+> +		abort();
+> +	}
+> +	p1 = (char *)p + mfd_def_size - 1;
+> +	*p1 = 'H';
+> +	if (*p1 != 'H') {
+> +		printf("mmaped write failed: %m\n");
+> +		abort();
+> +
+> +	}
+> +	munmap(p, mfd_def_size);
+> +}
+> +
+> +sigjmp_buf jbuf, *sigbuf;
+> +static void sig_handler(int sig, siginfo_t *siginfo, void *ptr)
+> +{
+> +	if (sig == SIGBUS) {
+> +		if (sigbuf)
+> +			siglongjmp(*sigbuf, 1);
+> +		abort();
+> +	}
+> +}
+> +
+> +static void mfd_fail_hole_write(int fd)
+> +{
+> +	ssize_t l;
+> +	void *p;
+> +	char *p1;
+> +
+> +	/* verify direct write() fails */
+> +	l = write(fd, "data", 4);
+> +	if (l > 0) {
+> +		printf("expected failure on write(), but got %d: %m\n", (int)l);
+> +		abort();
+> +	}
+> +
+> +	/* verify mmaped write fails */
+> +	p = mmap(NULL,
+> +		 mfd_def_size,
+> +		 PROT_READ | PROT_WRITE,
+> +		 MAP_SHARED,
+> +		 fd,
+> +		 0);
+> +	if (p == MAP_FAILED) {
+> +		printf("mmap() failed: %m\n");
+> +		abort();
+> +	}
+> +
+> +	sigbuf = &jbuf;
+> +	if (sigsetjmp(*sigbuf, 1))
+> +		goto out;
+> +
+> +	/* Below write should trigger SIGBUS signal */
+> +	p1 = (char *)p + mfd_def_size - 1;
+> +	*p1 = 'H';
 
-Same comments as per previous LED related patch.
+Maybe you want to verify separately, that bothj
 
-...
+> +	printf("failed to receive SIGBUS for mmaped write: %m\n");
+> +	abort();
+> +out:
+> +	munmap(p, mfd_def_size);
+> +}
+> +
+>  static int idle_thread_fn(void *arg)
+>  {
+>  	sigset_t set;
+> @@ -880,6 +994,57 @@ static void test_seal_resize(void)
+>  	close(fd);
+>  }
+>  
+> +/*
+> + * Test F_SEAL_AUTO_ALLOCATE
+> + * Test whether F_SEAL_AUTO_ALLOCATE actually prevents allocation.
+> + */
+> +static void test_seal_auto_allocate(void)
+> +{
+> +	struct sigaction act;
+> +	int fd;
+> +
+> +	printf("%s SEAL-AUTO-ALLOCATE\n", memfd_str);
+> +
+> +	memset(&act, 0, sizeof(act));
+> +	act.sa_sigaction = sig_handler;
+> +	act.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGBUS, &act, 0)) {
+> +		printf("sigaction() failed: %m\n");
+> +		abort();
+> +	}
+> +
+> +	fd = mfd_assert_new("kern_memfd_seal_auto_allocate",
+> +			    mfd_def_size,
+> +			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
+> +
+> +	/* read/write should pass if F_SEAL_AUTO_ALLOCATE not set */
+> +	mfd_assert_read(fd);
+> +	mfd_assert_hole_write(fd);
+> +
+> +	mfd_assert_has_seals(fd, 0);
+> +	mfd_assert_add_seals(fd, F_SEAL_AUTO_ALLOCATE);
+> +	mfd_assert_has_seals(fd, F_SEAL_AUTO_ALLOCATE);
+> +
+> +	/* read/write should pass for pre-allocated area */
+> +	mfd_assert_read(fd);
+> +	mfd_assert_hole_write(fd);
+> +
+> +	mfd_assert_punch_hole(fd);
+> +
+> +	/* read should pass, write should fail in hole */
+> +	mfd_assert_read(fd);
+> +	mfd_fail_hole_write(fd);
+> +
+> +	mfd_assert_fallocate(fd);
+> +
+> +	/* read/write should pass after fallocate */
+> +	mfd_assert_read(fd);
+> +	mfd_assert_hole_write(fd);
+> +
+> +	close(fd);
+> +}
 
-> +       /*
-> +        * For the flash to turn on/off, we need to wait HW ramping up/down time
-> +        * 5ms/500us to prevent the unexpected problem.
-> +        */
-> +       if (!priv->fled_strobe_used && curr)
-> +               usleep_range(5000, 6000);
-> +       else if (priv->fled_strobe_used && !curr)
-> +               usleep_range(500, 600);
+What might make sense is to verify for the following operations:
+* read()
+* write()
+* read via mmap
+* write via mmap
 
-Now it's much better!
+After sealing on a hole, that there is *still* a hole and that only the
+read() might succeed, with a comment stating that shmem optimized for
+read on holes by reading from the shared zeropage.
 
-...
+I'd suggest decoupling hole_write from hole_mmap_write and similarly
+have hole_read and hole_mmap_read.
 
-> +       /*
-> +        * Always configure as min level when off to
-> +        * prevent flash current spike
-
-/*
- * You need to check the style
- * of multi-line comments like
- * this one.
- */
-
-> +        */
+You should be able to use fstat() to obtain the number of allocated
+blocks to check that fairly easily.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
+
+David / dhildenb
+

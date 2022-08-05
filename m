@@ -2,390 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749F958ABB7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7870358ABB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240382AbiHENgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 09:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S240840AbiHENhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 09:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237962AbiHENgj (ORCPT
+        with ESMTP id S240861AbiHENhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 09:36:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2179F1AD92
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659706597;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=FveOI+PyR55xiDD8ECsYnqeMy4oF1BYIv8FfvKLpO+w=;
-        b=JMMVdxUqRM3a8GHzK3viplAMS8oH73G2rJwlZZE9scivJDbCybLNqnWdOKPyGE0TiRV52W
-        rZmZApSlFctbJLzMCIZAZhRrO0zdcvUVEkmhlPoaHm1+P3hTvphJmWSoyEfeHwTbaJy/By
-        huL8hiw+i03pq9OnGc/vbxQB7+VoGGo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-618-X9Ry0vGjMieDCXjecInN5w-1; Fri, 05 Aug 2022 09:36:34 -0400
-X-MC-Unique: X9Ry0vGjMieDCXjecInN5w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 5 Aug 2022 09:37:02 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794961AD92
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:37:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659706620; x=1691242620;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cYx8WEbufGc2kIoF+g8WEsSpIhTPOn9T8tPs3QjTGcw=;
+  b=PAaWiVrgl5KV/yZ7nv6eoPTunwKpcmgda5+6a31N22NgS1Qzk0yNJCiv
+   vOL3IlJSt9YHs0TYnw43joB8/TnXLFIssn0IM27xu+ZqjHBwn2OgaWD8x
+   GeEmTly4huZKx7XTHz3BWU6CFZzoOS0nN7NHOBtm648B8lZ+n+pqORGvN
+   TV7E30h+e90qLMa2F9RvAsxEpiQyQhJOxGvadbir9glozcNqT+RTLsp2+
+   K6ZPcVFrThBskVDDv/Ntc911mZ0xDMPcwCeDtKR4x8/Fgc64ZY7qmoHRV
+   h8Owr/ZNJTfliqAFlPp2bEmWaoJI2s1U3OFhnOnQYifzGjetwLD1af034
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="290974289"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="290974289"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 06:36:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="607129633"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga007.fm.intel.com with ESMTP; 05 Aug 2022 06:36:39 -0700
+Received: from [10.252.214.183] (kliang2-mobl1.ccr.corp.intel.com [10.252.214.183])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F0231C004FE;
-        Fri,  5 Aug 2022 13:36:33 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9FF3218EB7;
-        Fri,  5 Aug 2022 13:36:31 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v3] nfs: Fix automount superblock LSM init problem,
- preventing sb sharing
-From:   David Howells <dhowells@redhat.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Scott Mayhew <smayhew@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-nfs@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, dwysocha@redhat.com,
-        dhowells@redhat.com, linux-kernel@vger.kernel.org
-Date:   Fri, 05 Aug 2022 14:36:30 +0100
-Message-ID: <165970659095.2812394.6868894171102318796.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        by linux.intel.com (Postfix) with ESMTPS id 72925580AE2;
+        Fri,  5 Aug 2022 06:36:38 -0700 (PDT)
+Message-ID: <4fdaeb87-7f0a-78e0-2952-3035a3776198@linux.intel.com>
+Date:   Fri, 5 Aug 2022 09:36:37 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [BUG] perf/x86/intel/pebs: PEBS timestamps overwritten
+To:     Stephane Eranian <eranian@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Liang, Kan" <kan.liang@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, andreas.kogler.0x@gmail.com
+References: <CABPqkBTqQaaYH+ySu3reLm5i+X6P4BsqKycp8NBOP1gW3ZV4QA@mail.gmail.com>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CABPqkBTqQaaYH+ySu3reLm5i+X6P4BsqKycp8NBOP1gW3ZV4QA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When NFS superblocks are created by automounting, their LSM parameters
-aren't set in the fs_context struct prior to sget_fc() being called,
-leading to failure to match existing superblocks.
 
-Fix this by adding a new LSM hook to load fc->security for submount
-creation when alloc_fs_context() is creating the fs_context for it.
 
-However, this uncovers a further bug: nfs_get_root() initialises the
-superblock security manually by calling security_sb_set_mnt_opts() or
-security_sb_clone_mnt_opts() - but then vfs_get_tree() calls
-security_sb_set_mnt_opts(), which can lead to SELinux, at least,
-complaining.
+On 2022-08-05 6:49 a.m., Stephane Eranian wrote:
+> Hi,
+> 
+> I was alerted by an internal user that the PEBS TSC-based timestamps
+> do not appear
+> correctly in the final perf.data output file from perf record.
+> 
+> After some investigation, I came to the conclusion that indeed the
+> data->time field setup
+> by PEBS in the setup_pebs_fixed_sample_data() is later overwritten by
+> perf_events generic
+> code in perf_prepare_sample(). There is an ordering problem here.
+> 
+> Looking around we found that this problem had been uncovered back in
+> May 2020 and a
+> patch had been posted then:
+> https://lore.kernel.org/lkml/e754b625-bf14-8f5f-bd1a-71d774057005@gmail.com/T/
+> 
+> However this patch was never commented upon or committed.
+> 
+> The problem is still present in the upstream code today.
+> 
+> 1. perf_sample_data_init()
+> 2. setup_pebs_fixed_sample_data(): data->time =
+> native_sched_clock_from_tsc(pebs->tsc);
+> 3. perf_prepare_sample(): data->time = perf_event_clock(event);
+> 
+> The patch from 2020 (Andreas Kogler) fixes the problem by making the
+> assignment in 3.
+> conditioned to the value of data->time being 0. Andreas also suggested
+> an alternative which
+> would break up the call to perf_event_ouput() like this is done in the
+> BTS code allowing
+> the prepare_sample() call to be made before PEBS samples are
+> extracted. That would
+> generate some code duplication. Although this approach appears more
+> robust, the one
+> issue I see is that prepare_sample may need data that would be filled
+> by PEBS and
+> therefore it would  need to be called afterwards.
+> 
+> Any better ideas?
 
-Fix that by adding a flag to the fs_context that suppresses the
-security_sb_set_mnt_opts() call in vfs_get_tree().  This can be set by NFS
-when it sets the LSM context on the new superblock.
+I think Andreas's patch is the most straightforward and simplest patch
+to fix the issue. But, if I recall correctly, Peter prefers to minimize
+the cachelines touched by the perf_sample_data_init(). So initializing
+the data->time in the perf_sample_data_init() seems break the rule.
 
-The first bug leads to messages like the following appearing in dmesg:
+I think HW will provide more and more such kind of precise information.
+Maybe we can use a flag variable to track whether the information is
+already provided to avoid the overwritten.
 
-	NFS: Cache volume key already in use (nfs,4.2,2,108,106a8c0,1,,,,100000,100000,2ee,3a98,1d4c,3a98,1)
+Here are the two patches (Not test yet). The first one is to fix the
+timestamp issue. The second one is to use the flag to replace
+data->br_stack = NULL; as an examples. I think we can further move other
+variables out of the perf_sample_data_init() to minimize the cachelines
+touched by the perf_sample_data_init().
 
-Changes
-=======
-ver #2)
- - Made LSM parameter extraction dependent on fc->purpose ==
-   FS_CONTEXT_FOR_SUBMOUNT.  Shouldn't happen on FOR_RECONFIGURE.
 
-ver #2)
- - Added Smack support
- - Made LSM parameter extraction dependent on reference != NULL.
+From a46c2e17597717090013d390b6d64f51a69b4ea0 Mon Sep 17 00:00:00 2001
+From: Kan Liang <kan.liang@linux.intel.com>
+Date: Fri, 5 Aug 2022 06:01:15 -0700
+Subject: [PATCH 1/2] perf: Avoid overwriting precise timestamp
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Fixes: 9bc61ab18b1d ("vfs: Introduce fs_context, switch vfs_kern_mount() to it.")
-Fixes: 779df6a5480f ("NFS: Ensure security label is set for root inode)
-cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-cc: Anna Schumaker <anna@kernel.org>
-cc: Alexander Viro <viro@zeniv.linux.org.uk>
-cc: Scott Mayhew <smayhew@redhat.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Paul Moore <paul@paul-moore.com>
-cc: Casey Schaufler <casey@schaufler-ca.com>
-cc: linux-nfs@vger.kernel.org
-cc: selinux@vger.kernel.org
-cc: linux-security-module@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
+ arch/x86/events/intel/ds.c | 8 ++++++--
+ include/linux/perf_event.h | 3 +++
+ kernel/events/core.c       | 2 +-
+ 3 files changed, 10 insertions(+), 3 deletions(-)
 
- fs/fs_context.c               |    4 +++
- fs/nfs/getroot.c              |    1 +
- fs/super.c                    |   10 ++++---
- include/linux/fs_context.h    |    1 +
- include/linux/lsm_hook_defs.h |    1 +
- include/linux/lsm_hooks.h     |    6 +++-
- include/linux/security.h      |    6 ++++
- security/security.c           |    5 +++
- security/selinux/hooks.c      |   29 +++++++++++++++++++
- security/smack/smack_lsm.c    |   61 +++++++++++++++++++++++++++++++++++++++++
- 10 files changed, 119 insertions(+), 5 deletions(-)
-
-diff --git a/fs/fs_context.c b/fs/fs_context.c
-index 24ce12f0db32..22248b8a88a8 100644
---- a/fs/fs_context.c
-+++ b/fs/fs_context.c
-@@ -282,6 +282,10 @@ static struct fs_context *alloc_fs_context(struct file_system_type *fs_type,
- 		break;
- 	}
- 
-+	ret = security_fs_context_init(fc, reference);
-+	if (ret < 0)
-+		goto err_fc;
-+
- 	/* TODO: Make all filesystems support this unconditionally */
- 	init_fs_context = fc->fs_type->init_fs_context;
- 	if (!init_fs_context)
-diff --git a/fs/nfs/getroot.c b/fs/nfs/getroot.c
-index 11ff2b2e060f..651bffb0067e 100644
---- a/fs/nfs/getroot.c
-+++ b/fs/nfs/getroot.c
-@@ -144,6 +144,7 @@ int nfs_get_root(struct super_block *s, struct fs_context *fc)
- 	}
- 	if (error)
- 		goto error_splat_root;
-+	fc->lsm_set = true;
- 	if (server->caps & NFS_CAP_SECURITY_LABEL &&
- 		!(kflags_out & SECURITY_LSM_NATIVE_LABELS))
- 		server->caps &= ~NFS_CAP_SECURITY_LABEL;
-diff --git a/fs/super.c b/fs/super.c
-index 60f57c7bc0a6..a1c440336fd9 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -1519,10 +1519,12 @@ int vfs_get_tree(struct fs_context *fc)
- 	smp_wmb();
- 	sb->s_flags |= SB_BORN;
- 
--	error = security_sb_set_mnt_opts(sb, fc->security, 0, NULL);
--	if (unlikely(error)) {
--		fc_drop_locked(fc);
--		return error;
-+	if (!(fc->lsm_set)) {
-+		error = security_sb_set_mnt_opts(sb, fc->security, 0, NULL);
-+		if (unlikely(error)) {
-+			fc_drop_locked(fc);
-+			return error;
-+		}
- 	}
- 
- 	/*
-diff --git a/include/linux/fs_context.h b/include/linux/fs_context.h
-index 13fa6f3df8e4..3876dd96bb20 100644
---- a/include/linux/fs_context.h
-+++ b/include/linux/fs_context.h
-@@ -110,6 +110,7 @@ struct fs_context {
- 	bool			need_free:1;	/* Need to call ops->free() */
- 	bool			global:1;	/* Goes into &init_user_ns */
- 	bool			oldapi:1;	/* Coming from mount(2) */
-+	bool			lsm_set:1;	/* security_sb_set/clone_mnt_opts() already done */
- };
- 
- struct fs_context_operations {
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index eafa1d2489fd..6d1c738e4a84 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -54,6 +54,7 @@ LSM_HOOK(int, 0, bprm_creds_from_file, struct linux_binprm *bprm, struct file *f
- LSM_HOOK(int, 0, bprm_check_security, struct linux_binprm *bprm)
- LSM_HOOK(void, LSM_RET_VOID, bprm_committing_creds, struct linux_binprm *bprm)
- LSM_HOOK(void, LSM_RET_VOID, bprm_committed_creds, struct linux_binprm *bprm)
-+LSM_HOOK(int, 0, fs_context_init, struct fs_context *fc, struct dentry *reference)
- LSM_HOOK(int, 0, fs_context_dup, struct fs_context *fc,
- 	 struct fs_context *src_sc)
- LSM_HOOK(int, -ENOPARAM, fs_context_parse_param, struct fs_context *fc,
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 91c8146649f5..1782814c7c5b 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -87,8 +87,12 @@
-  * Security hooks for mount using fs_context.
-  *	[See also Documentation/filesystems/mount_api.rst]
-  *
-+ * @fs_context_init:
-+ *	Initialise fc->security.  This is initialised to NULL by the caller.
-+ *	@fc indicates the new filesystem context.
-+ *	@dentry indicates a reference for submount/remount
-  * @fs_context_dup:
-- *	Allocate and attach a security structure to sc->security.  This pointer
-+ *	Allocate and attach a security structure to fc->security.  This pointer
-  *	is initialised to NULL by the caller.
-  *	@fc indicates the new filesystem context.
-  *	@src_fc indicates the original filesystem context.
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 7fc4e9f49f54..94834f699b04 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -291,6 +291,7 @@ int security_bprm_creds_from_file(struct linux_binprm *bprm, struct file *file);
- int security_bprm_check(struct linux_binprm *bprm);
- void security_bprm_committing_creds(struct linux_binprm *bprm);
- void security_bprm_committed_creds(struct linux_binprm *bprm);
-+int security_fs_context_init(struct fs_context *fc, struct dentry *reference);
- int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc);
- int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param);
- int security_sb_alloc(struct super_block *sb);
-@@ -620,6 +621,11 @@ static inline void security_bprm_committed_creds(struct linux_binprm *bprm)
- {
- }
- 
-+static inline int security_fs_context_init(struct fs_context *fc,
-+					   struct dentry *reference)
-+{
-+	return 0;
-+}
- static inline int security_fs_context_dup(struct fs_context *fc,
- 					  struct fs_context *src_fc)
- {
-diff --git a/security/security.c b/security/security.c
-index 188b8f782220..e683027f9424 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -880,6 +880,11 @@ void security_bprm_committed_creds(struct linux_binprm *bprm)
- 	call_void_hook(bprm_committed_creds, bprm);
- }
- 
-+int security_fs_context_init(struct fs_context *fc, struct dentry *reference)
-+{
-+	return call_int_hook(fs_context_init, 0, fc, reference);
-+}
-+
- int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc)
- {
- 	return call_int_hook(fs_context_dup, 0, fc, src_fc);
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 1bbd53321d13..ddeaff4f3bb1 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -2768,6 +2768,34 @@ static int selinux_umount(struct vfsmount *mnt, int flags)
- 				   FILESYSTEM__UNMOUNT, NULL);
- }
- 
-+static int selinux_fs_context_init(struct fs_context *fc,
-+				   struct dentry *reference)
-+{
-+	const struct superblock_security_struct *sbsec;
-+	const struct inode_security_struct *root_isec;
-+	struct selinux_mnt_opts *opts;
-+
-+	if (fc->purpose == FS_CONTEXT_FOR_SUBMOUNT) {
-+		opts = kzalloc(sizeof(*opts), GFP_KERNEL);
-+		if (!opts)
-+			return -ENOMEM;
-+
-+		root_isec = backing_inode_security(reference->d_sb->s_root);
-+		sbsec = selinux_superblock(reference->d_sb);
-+		if (sbsec->flags & FSCONTEXT_MNT)
-+			opts->fscontext_sid	= sbsec->sid;
-+		if (sbsec->flags & CONTEXT_MNT)
-+			opts->context_sid	= sbsec->mntpoint_sid;
-+		if (sbsec->flags & ROOTCONTEXT_MNT)
-+			opts->rootcontext_sid	= root_isec->sid;
-+		if (sbsec->flags & DEFCONTEXT_MNT)
-+			opts->defcontext_sid	= sbsec->def_sid;
-+		fc->security = opts;
-+	}
-+
-+	return 0;
-+}
-+
- static int selinux_fs_context_dup(struct fs_context *fc,
- 				  struct fs_context *src_fc)
- {
-@@ -7239,6 +7267,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
- 	/*
- 	 * PUT "CLONING" (ACCESSING + ALLOCATING) HOOKS HERE
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index 34be3bc5151a..a2c26eaeb0d9 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -1687,8 +1687,10 @@ static void setup_pebs_fixed_sample_data(struct
+perf_event *event,
+ 	 * We can only do this for the default trace clock.
  	 */
-+	LSM_HOOK_INIT(fs_context_init, selinux_fs_context_init),
- 	LSM_HOOK_INIT(fs_context_dup, selinux_fs_context_dup),
- 	LSM_HOOK_INIT(fs_context_parse_param, selinux_fs_context_parse_param),
- 	LSM_HOOK_INIT(sb_eat_lsm_opts, selinux_sb_eat_lsm_opts),
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 6207762dbdb1..6ba32bb097b5 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -612,6 +612,66 @@ static int smack_add_opt(int token, const char *s, void **mnt_opts)
- 	return -EINVAL;
- }
- 
-+/**
-+ * smack_fs_context_init - Initialise security data for a filesystem context
-+ * @fc: The filesystem context.
-+ * @reference: Reference dentry (automount/reconfigure) or NULL
-+ *
-+ * Returns 0 on success or -ENOMEM on error.
-+ */
-+static int smack_fs_context_init(struct fs_context *fc,
-+				 struct dentry *reference)
-+{
-+	struct superblock_smack *sbsp;
-+	struct smack_mnt_opts *ctx;
-+	struct inode_smack *isp;
-+
-+	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+	fc->security = ctx;
-+
-+	if (fc->purpose == FS_CONTEXT_FOR_SUBMOUNT) {
-+		sbsp = smack_superblock(reference->d_sb);
-+		isp = smack_inode(reference->d_sb->s_root->d_inode);
-+
-+		if (sbsp->smk_default) {
-+			ctx->fsdefault = kstrdup(sbsp->smk_default->smk_known, GFP_KERNEL);
-+			if (!ctx->fsdefault)
-+				return -ENOMEM;
-+		}
-+
-+		if (sbsp->smk_floor) {
-+			ctx->fsfloor = kstrdup(sbsp->smk_floor->smk_known, GFP_KERNEL);
-+			if (!ctx->fsfloor)
-+				return -ENOMEM;
-+		}
-+
-+		if (sbsp->smk_hat) {
-+			ctx->fshat = kstrdup(sbsp->smk_hat->smk_known, GFP_KERNEL);
-+			if (!ctx->fshat)
-+				return -ENOMEM;
-+		}
-+
-+
-+		if (isp->smk_flags & SMK_INODE_TRANSMUTE) {
-+			if (sbsp->smk_root) {
-+				ctx->fstransmute = kstrdup(sbsp->smk_root->smk_known, GFP_KERNEL);
-+				if (!ctx->fstransmute)
-+					return -ENOMEM;
-+			}
-+		} else {
-+			if (sbsp->smk_root) {
-+				ctx->fsroot = kstrdup(sbsp->smk_root->smk_known, GFP_KERNEL);
-+				if (!ctx->fsroot)
-+					return -ENOMEM;
-+			}
-+		}
+ 	if (x86_pmu.intel_cap.pebs_format >= 3 &&
+-		event->attr.use_clockid == 0)
++		event->attr.use_clockid == 0) {
+ 		data->time = native_sched_clock_from_tsc(pebs->tsc);
++		data->flags |= PERF_SAMPLE_DATA_TIME;
 +	}
-+
-+	return 0;
-+}
-+
- /**
-  * smack_fs_context_dup - Duplicate the security data on fs_context duplication
-  * @fc: The new filesystem context.
-@@ -4755,6 +4815,7 @@ static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(ptrace_traceme, smack_ptrace_traceme),
- 	LSM_HOOK_INIT(syslog, smack_syslog),
- 
-+	LSM_HOOK_INIT(fs_context_init, smack_fs_context_init),
- 	LSM_HOOK_INIT(fs_context_dup, smack_fs_context_dup),
- 	LSM_HOOK_INIT(fs_context_parse_param, smack_fs_context_parse_param),
- 
+
+ 	if (has_branch_stack(event))
+ 		data->br_stack = &cpuc->lbr_stack;
+@@ -1750,8 +1752,10 @@ static void
+setup_pebs_adaptive_sample_data(struct perf_event *event,
+ 	perf_sample_data_init(data, 0, event->hw.last_period);
+ 	data->period = event->hw.last_period;
+
+-	if (event->attr.use_clockid == 0)
++	if (event->attr.use_clockid == 0) {
+ 		data->time = native_sched_clock_from_tsc(basic->tsc);
++		data->flags |= PERF_SAMPLE_DATA_TIME;
++	}
+
+ 	/*
+ 	 * We must however always use iregs for the unwinder to stay sane; the
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index da759560eec5..33054bf31fc1 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -999,6 +999,7 @@ int perf_event_read_local(struct perf_event *event,
+u64 *value,
+ extern u64 perf_event_read_value(struct perf_event *event,
+ 				 u64 *enabled, u64 *running);
+
++#define PERF_SAMPLE_DATA_TIME		0x1
+
+ struct perf_sample_data {
+ 	/*
+@@ -1012,6 +1013,7 @@ struct perf_sample_data {
+ 	union perf_sample_weight	weight;
+ 	u64				txn;
+ 	union  perf_mem_data_src	data_src;
++	u64				flags;
+
+ 	/*
+ 	 * The other fields, optionally {set,used} by
+@@ -1061,6 +1063,7 @@ static inline void perf_sample_data_init(struct
+perf_sample_data *data,
+ 	data->weight.full = 0;
+ 	data->data_src.val = PERF_MEM_NA;
+ 	data->txn = 0;
++	data->flags = 0;
+ }
+
+ /*
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 65e0bcba2e21..057c197ae106 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -6799,7 +6799,7 @@ static void __perf_event_header__init_id(struct
+perf_event_header *header,
+ 		data->tid_entry.tid = perf_event_tid(event, current);
+ 	}
+
+-	if (sample_type & PERF_SAMPLE_TIME)
++	if ((sample_type & PERF_SAMPLE_TIME) && !(data->flags &
+PERF_SAMPLE_DATA_TIME))
+ 		data->time = perf_event_clock(event);
+
+ 	if (sample_type & (PERF_SAMPLE_ID | PERF_SAMPLE_IDENTIFIER))
+-- 
+2.35.1
 
 
+
+
+The patch as below use a new flag to track the availability of the br_stack.
+
+
+
+From c384353e17e200781145557cd5395c3f8adde6f9 Mon Sep 17 00:00:00 2001
+From: Kan Liang <kan.liang@linux.intel.com>
+Date: Fri, 5 Aug 2022 06:12:41 -0700
+Subject: [PATCH 2/2] perf: Add perf sample data flag for br_stack
+
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+---
+ arch/x86/events/intel/ds.c | 5 ++++-
+ include/linux/perf_event.h | 5 +++--
+ kernel/events/core.c       | 4 ++--
+ 3 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index a2c26eaeb0d9..27c440c13bfd 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -1692,8 +1692,10 @@ static void setup_pebs_fixed_sample_data(struct
+perf_event *event,
+ 		data->flags |= PERF_SAMPLE_DATA_TIME;
+ 	}
+
+-	if (has_branch_stack(event))
++	if (has_branch_stack(event)) {
+ 		data->br_stack = &cpuc->lbr_stack;
++		data->flags |= PERF_SAMPLE_DATA_BR_STACK;
++	}
+ }
+
+ static void adaptive_pebs_save_regs(struct pt_regs *regs,
+@@ -1847,6 +1849,7 @@ static void setup_pebs_adaptive_sample_data(struct
+perf_event *event,
+ 		if (has_branch_stack(event)) {
+ 			intel_pmu_store_pebs_lbrs(lbr);
+ 			data->br_stack = &cpuc->lbr_stack;
++			data->flags |= PERF_SAMPLE_DATA_BR_STACK;
+ 		}
+ 	}
+
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 33054bf31fc1..8c4a2913ec58 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1000,6 +1000,7 @@ extern u64 perf_event_read_value(struct perf_event
+*event,
+ 				 u64 *enabled, u64 *running);
+
+ #define PERF_SAMPLE_DATA_TIME		0x1
++#define PERF_SAMPLE_DATA_BR_STACK	0x2
+
+ struct perf_sample_data {
+ 	/*
+@@ -1008,7 +1009,6 @@ struct perf_sample_data {
+ 	 */
+ 	u64				addr;
+ 	struct perf_raw_record		*raw;
+-	struct perf_branch_stack	*br_stack;
+ 	u64				period;
+ 	union perf_sample_weight	weight;
+ 	u64				txn;
+@@ -1019,6 +1019,8 @@ struct perf_sample_data {
+ 	 * The other fields, optionally {set,used} by
+ 	 * perf_{prepare,output}_sample().
+ 	 */
++	struct perf_branch_stack	*br_stack;
++
+ 	u64				type;
+ 	u64				ip;
+ 	struct {
+@@ -1058,7 +1060,6 @@ static inline void perf_sample_data_init(struct
+perf_sample_data *data,
+ 	/* remaining struct members initialized in perf_prepare_sample() */
+ 	data->addr = addr;
+ 	data->raw  = NULL;
+-	data->br_stack = NULL;
+ 	data->period = period;
+ 	data->weight.full = 0;
+ 	data->data_src.val = PERF_MEM_NA;
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 057c197ae106..cd19ce85ef59 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -7039,7 +7039,7 @@ void perf_output_sample(struct perf_output_handle
+*handle,
+ 	}
+
+ 	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
+-		if (data->br_stack) {
++		if (data->flags & PERF_SAMPLE_DATA_BR_STACK) {
+ 			size_t size;
+
+ 			size = data->br_stack->nr
+@@ -7339,7 +7339,7 @@ void perf_prepare_sample(struct perf_event_header
+*header,
+
+ 	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
+ 		int size = sizeof(u64); /* nr */
+-		if (data->br_stack) {
++		if (data->flags & PERF_SAMPLE_DATA_BR_STACK) {
+ 			if (perf_sample_save_hw_index(event))
+ 				size += sizeof(u64);
+
+-- 
+2.35.1
+
+
+Thanks,
+Kan

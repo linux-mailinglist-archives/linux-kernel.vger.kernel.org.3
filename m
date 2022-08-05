@@ -2,162 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0746A58B27C
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F7458B27F
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241340AbiHEWmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 18:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
+        id S241135AbiHEWrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 18:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238057AbiHEWmU (ORCPT
+        with ESMTP id S237614AbiHEWq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 18:42:20 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BA21DA75
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:42:18 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 275MSk6d018534;
-        Fri, 5 Aug 2022 22:41:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=HXrKptEeIZ3Ddei+aJSNZMW98NacYD1bCbCOMhWPrno=;
- b=KapuPc2fS2TQhO92MVJGyTSfBl3QianYMHZ8xQS7CsyCx7o/2Dgfrvl1CnwQVA53u4r8
- DIN1OVQHTGfFL1QN/4h+nUhgY5SJ1GN2qpC9tipe6En3sVWXXgYxNBUcCVwOFKOIEOyZ
- M4GDdXnNUH/ZQfbSY4NcqkswmsbxrE4ztEa2ec+lFuxOfVbo/txhkEmhijN4122lAt6t
- Qw4yCIRPlwXP7ss7sRKHjDBwIadPPbGBkTN0+0MJN+KiQFDsjuGuGzNJFI4CLS/POJm4
- eikWPHosqn2a3lul0RK51RnWgHj5d5+2pMPWjKpvoIvwRv8T8stY1rtEa8LMBXJ4Krwe 2Q== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hmvha0jg2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 05 Aug 2022 22:41:38 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 275LKgnh010951;
-        Fri, 5 Aug 2022 22:41:38 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hmu35sf9n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 05 Aug 2022 22:41:37 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bBFCoRyp2s2qy/mRgPIbzQ6kChiurcQOSKTjfF4FDIVIm1vqv81ovpHXX5ezxFeQtvAuAcCRuLX5C813TbG03m+nOs5phuYloemHnyuL4D0Fb4xVVqnIQHiDken1RK26uxOLKCLwOR6Y68L9ZENDMITSv2JiPicAIYCRIApzjlFDq8hlssbYgjYQi82P4XHKjOiBSPKUAQ2JLZfJSCcFBaTZo/AX7DyD24JE9EKtaabetCoji3LRM4o2J1s88FzeSf/yLxXpRfTMbn2dNzhBCy2ftCWCYXhy2KIPN2gKyRboc1TZ7tktiAp/lslNy8yM65q6scJxnjmBu8ZilfTgKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HXrKptEeIZ3Ddei+aJSNZMW98NacYD1bCbCOMhWPrno=;
- b=NUvlSaaH3+l+9Wzx+5IW4AxF9Re58bp2w9vuhlhdJ3+/H8yx2zo8QuL4FHyJ+YKZOECezbKt1I6m2xHKcvJgzZgUSK8p/aCfiAu1ndQIDFy4gQgxOp0t1bGaeieEP/7I7YqzJaqjeJ9LA8Jb1fkfos/3evvTWNhD6eGAtu9dpyKQJrOaFk62fZFTu/xppv5hSSnagcf91bYNocMD4MS9IGhMxygFC1gkwHY7znYNcjU/KrPCM98GM2nmWoGSL+FDsOlfteP5zNekLxkl7goAEP7EvXLIcLy/23j5a62r3eJf7cqkWzUWZAGDvfgmztBQ3/dns5JnzbxhCWzIDbdCbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 5 Aug 2022 18:46:59 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884871EAC8
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:46:58 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id q15so3883037vsr.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HXrKptEeIZ3Ddei+aJSNZMW98NacYD1bCbCOMhWPrno=;
- b=FUkBMGWSpU2Dqk4LYhhPq33YaII9LdgJreJ2CJhoAD7goUXefMm/sBhAz8NRDOLs9mt4KTERcjGBJ87bhT3TGNSHI9jabVClBEWT8DVq7qQ2g3xYzsZycF+YR7bWxHqqDpnY/U9WO8GjOI3f+isbxW7Ij4jbZOakEYpDPOFol1c=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by CH2PR10MB4071.namprd10.prod.outlook.com (2603:10b6:610:e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Fri, 5 Aug
- 2022 22:41:35 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::c1ba:c197:f81f:ec0%5]) with mapi id 15.20.5504.016; Fri, 5 Aug 2022
- 22:41:35 +0000
-Date:   Fri, 5 Aug 2022 15:41:32 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH v4 4/8] hugetlbfs: catch and handle truncate racing
- with page faults
-Message-ID: <Yu2cnC+A+zPvlA1G@monkey>
-References: <20220706202347.95150-1-mike.kravetz@oracle.com>
- <20220706202347.95150-5-mike.kravetz@oracle.com>
- <ee6af38d-f797-a64f-e5c4-78bad3753aca@huawei.com>
- <YuGLT+RlCynFM9Z4@monkey>
- <ae24c722-0b4a-def4-8cfe-e8b3b48a22c6@huawei.com>
- <YuK9KqTLqEGavv7N@monkey>
- <e0d9b4c4-1195-730a-5838-08c10905adaf@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e0d9b4c4-1195-730a-5838-08c10905adaf@redhat.com>
-X-ClientProxiedBy: MW4PR03CA0235.namprd03.prod.outlook.com
- (2603:10b6:303:b9::30) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=xdl2TGiLFJ43p+TlXIrGU8PPeGj5ZwGEbAl6klIJQ3c=;
+        b=hc/hXPYNAirB9dbqAcJkCB4A5hFn8vxD7tQVBVVjnLAvc3ngHvE8o27g/e99BJRaY6
+         pkCFzmLYiyXoFVpA17awrydCcbSeQ4Jin9tqOaXw8IcOloHGtFik2JuB7WnmIMJndY0A
+         BmOhP6g8O4HgIL2y+DrBeXLBG/51XIMc9xRpIn1PpdqrTreIppqLGLQ8P4mI2sy5cbwU
+         DebabFbDcBlHsczdbKn0nACAptq8e+ZLvmw9+ZCpdAmIu4vjxNmN3Eh8TaLdM7oGWTYm
+         D94ZIkt94x3B0zIuuJ0eJmghjM9sj9zYWhD/eIo+FG5I5s1IEKj8ni4CcycYN1KB6xVn
+         7Wdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xdl2TGiLFJ43p+TlXIrGU8PPeGj5ZwGEbAl6klIJQ3c=;
+        b=Eck76+E6FHcEIhT/Oa6jK1plambzXzhaReEwN6GCR5qCAIeBDZN2GkmhRM2ryShE5Z
+         c+bAcoanvgEHQm6L9TYqIY+tT86PBVgf2TRVwNrLNr71vSU/BwMaJZvIw/U8A/Yl0jWN
+         LeYz32auJnaVOyuKz2XbO8gpZPkvTim+Jt5QUu9byUnW019Modkbldk2Y62c5W6GVI5c
+         xghQkfmcz3F/eQHm8ox8rWgRGFiM/jJKMdj5w5c33JSt21PAc+77hlTV6BW3YEaTzPrf
+         OGnWRBB2jt/AQggrW3SgobbVzJLDP+pQ1yUo82giwlp/VrqeXtNoXgZMx9xkPD2qg2hG
+         5eYQ==
+X-Gm-Message-State: ACgBeo2f0IrET4kvEBW7Gu6UuN48+jAE6jpI7u6BiAjNyKN4ohdCC7ll
+        9Irkela7hSrFMBwiR0DTf/h/8M6quAQjBnCK0mSovw==
+X-Google-Smtp-Source: AA6agR6G9llgTVmgHqydeiuj9quI7QP6bB3GwyFOI78OQRgDpiC9rcqH4OMeNnz4fcU10XQddl5R1CuQftRrmyDFdTc=
+X-Received: by 2002:a67:c895:0:b0:357:48d2:fa1 with SMTP id
+ v21-20020a67c895000000b0035748d20fa1mr4072773vsk.22.1659739617498; Fri, 05
+ Aug 2022 15:46:57 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9afc7bdb-e1ab-4ee6-5d59-08da7733a692
-X-MS-TrafficTypeDiagnostic: CH2PR10MB4071:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XR5uOOVqiW3Lo+4jZEqfEH8O32cP7H40ajb2AQ14tutyu8a08eHXrPOB5sbGdfSMUIy+IcyhwcD4X9+xgKur5TVrIjzZknvN6pPlk0JEFM/wxwKVvR+4dcZ8AK6WufL5NYhnBJpba0TacYOJ6tdxfBV2srky05w3rN3kfqzoCQv3WaWBzDIygHFnJ/NzeSSswrVBnsg2WPyFKPDq1xiFXrt283A/9b2tAuurQdu79ZJqtKLJ7Q3wv05SlgWhw+mvB1CuLpcZjOiFaDJ7iA2lwmpZvWtkH0PD0HgDq3xLH0ltA1ZBYFVgsD9Brtp41c3lU1K+bxOOWVPtmNq0WnvW9uZtYs/um6vaIrxfARz82dQ2DW+EOE51w0lpqGB0r/iHInPxGKjgZkk2Sh+kIad1urW96w6aJ/NqvXCqEq6b4xp0he8w9rHZ2atsDPGPTyIitAEr4JXt2lXnapd/g6WiUjvpVmNO/6rRGsWsq+72TrO3wqUQ48Q4miYz7tUJ2IL2dpUSNt5Vd4faWKT9qVrymoyTMDs0J2g+L9Zd0w9I85zKgX7FmzcQ9MNl3ds/P4PE6RiZDcBQ1teDBGvIWjaUR/p2SkTiU+OCO7WG+1cY4VjwpGk61nhiAPLLA6m/qPcbXrSBiYiCJkhelC3+qqDwFN2nHiglyrpYf/3Kru+jGnjifLsrd+CSoLSEkQi3HpyN6Hb7LAupN15n5WLrxFEvYH08HpqBIrDaPtSDR9RTGca85PpmiohXp8D8yymIqlBj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(346002)(366004)(39860400002)(376002)(396003)(6486002)(478600001)(41300700001)(86362001)(26005)(6666004)(53546011)(6512007)(9686003)(6506007)(83380400001)(316002)(6916009)(54906003)(186003)(4326008)(33716001)(44832011)(8936002)(8676002)(66556008)(66946007)(66476007)(38100700002)(5660300002)(2906002)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZLyMq/ItEMpUwSpob4rjfuznfVbbGK8LyFmyi5TW+A0yD89rw/4FfSAreNea?=
- =?us-ascii?Q?fY46MxAK5BjsWKo6rbSuvix1HGKZ75tUTV7nyNz8ufHAWj1VpJJqFkuObxxT?=
- =?us-ascii?Q?48gKuh+/BTvMeyNXAUddgg82wJbm3OVCEXDQeW6H/Q2Tw1D4FyqCztW/wf0n?=
- =?us-ascii?Q?GMwTK0vU+bZxRcx6P43gmKHFRVbHaqB0jTbACFWqF0S0X9SEWe1Ah8NOTUHA?=
- =?us-ascii?Q?DnR6OLXx4Uw01V3MDHqG2unt9AsuatsEnqKvpXorf4rM8oSPLqk7ruFShZ2t?=
- =?us-ascii?Q?T77UwD+fOQkZ/TJZOK+r7vPrNHCYWxELDS+qhskQcPYC7SuqY47e3qZi7TEm?=
- =?us-ascii?Q?xxos3lEliBz65bmFAwWFKMyBiZjmo0RwR15JPW6p/MxQOryiot9TT2ixNWbP?=
- =?us-ascii?Q?st26Rd2nmdNDY8rykSJn0npK86QyRC7eOIZAQTjhIJiLtTW3BKEsk6jrDVRp?=
- =?us-ascii?Q?G/CsWPUMuY1JNqalrVwbx8dwGb2g+/FqXUGf3n861lULqvguuPFXBk3CygWK?=
- =?us-ascii?Q?/JpgdC7rh2fdheR/lYPLoZP1RGwIjoJlfLE9TWVWZfNl+3VBdoqbv03bwMHD?=
- =?us-ascii?Q?v1hsVjkUvVLFvC8xiCQjzMioKi0XyvRH/iGUQAwmcGkom6XrtpTY0RVa5ZzS?=
- =?us-ascii?Q?2K1nQHN/0hD8JYiV4zb3/Mkwyya32Rl5TVfqJTmJ2mIjNc58ZQd+sqgqBCwE?=
- =?us-ascii?Q?WtAHG+ZSfYioQVnt8LuV2hJqWVRwvQRR9DdmAOmvGocrYyGOh2o6vVu1corw?=
- =?us-ascii?Q?vRg8Lqyo5QVzlT0l+/ymg5jucLv8XB8IdwZdvBpUOMEjDP2AqSOoPJH6Hs6C?=
- =?us-ascii?Q?/wRPET1UUcXJ/AahoMyM8zkWN/vWe1xXViRuHhI2/y4dQDjp4lYD5LrZ0pvJ?=
- =?us-ascii?Q?k0aSqt4ny0gk13jK9vnJFGttBZaSIJ1AuI800gL7iqyCSQJOk12CDn0aOOPv?=
- =?us-ascii?Q?Q4Eg5sHF6k6h+x90fjLn9g5S8CMlyaBdaIJztwpjIXGH2/kkaoM2HqUqQrmS?=
- =?us-ascii?Q?DmjemPkizX+rE57qN/UlnhsBWzbT6GIuAilgmpl5XZU2LIWQNj0hD4z0KdHi?=
- =?us-ascii?Q?hUfnm7xHPVWqjOMwc/BdQ2W/H5cy1xHup/ciUs9LQ1Ew440z2r5YQXgOxmx3?=
- =?us-ascii?Q?8k86eOBtaHPuDBD0+HYT2Mw6sVMLaX1H1Dpg7GOCMltRmOFzhEy5KqebDpEb?=
- =?us-ascii?Q?kgHR9kdWSoCuI12gGAb4jxA07zrdTTIIezCD36DJneYKRi704fC0JS+e94nZ?=
- =?us-ascii?Q?XWCdmXDPPvPN2sok5lh5AIUUMPcl47jWscSKRbQkdmP/oy7Q19VSvEiUpIeD?=
- =?us-ascii?Q?9IPWtgLv+sWGEFjN3IlrYIe293uamcqLhvcv73r24k1CBTcmd4bcDERO0dLu?=
- =?us-ascii?Q?kET3saxR9bHlSAyw/dJVlCR//w2g//m88QHvUqpUXPHu8jLx19WNlTsy4f3z?=
- =?us-ascii?Q?W7sKB9Kzp0f58nqqqA/ZcSuW632OKayXlCxSntBris8RwvhamKF77nKNRrtT?=
- =?us-ascii?Q?Bgmy2WJDMfcZ+JEmT9WlV8soKZMXbry/fp1alnhD2ZgJekijpacy22dW8g85?=
- =?us-ascii?Q?OBr7UEAYPJHScx6fcDANBmbUIzDgyEQvvsJgXFNgl+bSjeMz+l6DT9YZNc2N?=
- =?us-ascii?Q?IQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9afc7bdb-e1ab-4ee6-5d59-08da7733a692
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2022 22:41:35.0172
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uhXxeOFWpcIgd5VkQJH2LhQlqeq1ckD2pV+DN5Qp1YXcRZdqzIxSzEsewveLilRhUrh8v68WC61/qNf8ZcgZYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4071
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-05_12,2022-08-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
- malwarescore=0 bulkscore=0 spamscore=0 phishscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208050099
-X-Proofpoint-ORIG-GUID: ns1GWkV0hFcVzgSuyE5c4aQ7iJHwCM_G
-X-Proofpoint-GUID: ns1GWkV0hFcVzgSuyE5c4aQ7iJHwCM_G
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220803215855.258704-1-mairacanal@riseup.net>
+ <CABVgOS=Yq2+uDw_iVK11eqBjEB-BErEr6naYpTswtTvyehAzYw@mail.gmail.com> <ad483719-24b2-3207-cdcc-f5055d7a8895@riseup.net>
+In-Reply-To: <ad483719-24b2-3207-cdcc-f5055d7a8895@riseup.net>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 6 Aug 2022 06:46:46 +0800
+Message-ID: <CABVgOSm_59Yr82deQm2C=18jjSv_akmn66zs4jxx3hfziXPeHg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] Introduce KUNIT_EXPECT_MEMEQ and
+ KUNIT_EXPECT_MEMNEQ macros
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        andrealmeid@riseup.net, melissa.srw@gmail.com,
+        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000578fc805e5863e30"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -165,106 +83,249 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/22 18:28, David Hildenbrand wrote:
-> On 28.07.22 18:45, Mike Kravetz wrote:
-> > On 07/28/22 10:02, Miaohe Lin wrote:
-> >> On 2022/7/28 3:00, Mike Kravetz wrote:
-> >>> On 07/27/22 17:20, Miaohe Lin wrote:
-> >>>> On 2022/7/7 4:23, Mike Kravetz wrote:
-> >>>>> Most hugetlb fault handling code checks for faults beyond i_size.
-> >>>>> While there are early checks in the code paths, the most difficult
-> >>>>> to handle are those discovered after taking the page table lock.
-> >>>>> At this point, we have possibly allocated a page and consumed
-> >>>>> associated reservations and possibly added the page to the page cache.
-> >>>>>
-> >>>>> When discovering a fault beyond i_size, be sure to:
-> >>>>> - Remove the page from page cache, else it will sit there until the
-> >>>>>   file is removed.
-> >>>>> - Do not restore any reservation for the page consumed.  Otherwise
-> >>>>>   there will be an outstanding reservation for an offset beyond the
-> >>>>>   end of file.
-> >>>>>
-> >>>>> The 'truncation' code in remove_inode_hugepages must deal with fault
-> >>>>> code potentially removing a page/folio from the cache after the page was
-> >>>>> returned by filemap_get_folios and before locking the page.  This can be
-> >>>>> discovered by a change in folio_mapping() after taking folio lock.  In
-> >>>>> addition, this code must deal with fault code potentially consuming
-> >>>>> and returning reservations.  To synchronize this, remove_inode_hugepages
-> >>>>> will now take the fault mutex for ALL indices in the hole or truncated
-> >>>>> range.  In this way, it KNOWS fault code has finished with the page/index
-> >>>>> OR fault code will see the updated file size.
-> >>>>>
-> >>>>> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-> >>>>> ---
-> >>>>
-> >>>> <snip>
-> >>>>
-> >>>>> @@ -5606,8 +5610,10 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
-> >>>>>  
-> >>>>>  	ptl = huge_pte_lock(h, mm, ptep);
-> >>>>>  	size = i_size_read(mapping->host) >> huge_page_shift(h);
-> >>>>> -	if (idx >= size)
-> >>>>> +	if (idx >= size) {
-> >>>>> +		beyond_i_size = true;
-> >>>>
-> >>>> Thanks for your patch. There is one question:
-> >>>>
-> >>>> Since races between hugetlb pagefault and truncate is guarded by hugetlb_fault_mutex,
-> >>>> do we really need to check it again after taking the page table lock?
-> >>>>
-> >>>
-> >>> Well, the fault mutex can only guard a single hugetlb page.  The fault mutex
-> >>> is actually an array/table of mutexes hashed by mapping address and file index.
-> >>> So, during truncation we take take the mutex for each page as they are
-> >>> unmapped and removed.  So, the fault mutex only synchronizes operations
-> >>> on one specific page.  The idea with this patch is to coordinate the fault
-> >>> code and truncate code when operating on the same page.
-> >>>
-> >>> In addition, changing the file size happens early in the truncate process
-> >>> before taking any locks/mutexes.
+--000000000000578fc805e5863e30
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Aug 5, 2022 at 8:18 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
+te:
+>
+> On 8/5/22 01:44, David Gow wrote:
+> > On Thu, Aug 4, 2022 at 5:59 AM Ma=C3=ADra Canal <mairacanal@riseup.net>=
+ wrote:
 > >>
-> >> I wonder whether we can somewhat live with it to make code simpler. When changing the file size happens
-> >> after checking i_size but before taking the page table lock in hugetlb_fault, the truncate code would
-> >> remove the hugetlb page from the page cache for us after hugetlb_fault finishes if we don't roll back
-> >> when checking i_size again under the page table lock?
+> >> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPEC=
+T_EQ or
+> >> KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp func=
+tion,
+> >> such as:
+> >>   KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
 > >>
-> >> In a word, if hugetlb_fault see a truncated inode, back out early. If not, let truncate code does its
-> >> work. So we don't need to complicate the already complicated error path. Or am I miss something?
+> >> Although this usage produces correct results for the test cases, if th=
+e
+> >> expectation fails the error message is not very helpful, indicating on=
+ly the
+> >> return of the memcmp function.
 > >>
-> > 
-> > Thank you! I believe your observations and suggestions are correct.
-> > 
-> > We can just let the fault code proceed after the early "idx >= size",
-> > and let the truncation code remove the page.  This also eliminates the
-> > need for patch 3 (hugetlbfs: move routine remove_huge_page to hugetlb.c).
-> 
-> At least remaining the functions would be very welcome nonetheless :)
+> >> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
+> >> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a determined size=
+. In
+> >> case of expectation failure, those macros print the hex dump of the me=
+mory
+> >> blocks, making it easier to debug test failures for memory blocks.
+> >>
+> >> Other than the style changes, this v3 brings alignment to the bytes, m=
+aking
+> >> it easier to identify the faulty bytes. So, on the previous version, t=
+he
+> >> output from a failure would be:
+> >> [14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gp=
+u/drm/tests/drm_format_helper_test.c:248
+> >> [14:27:42] Expected dst =3D=3D result->expected, but
+> >> [14:27:42] dst =3D=3D
+> >> [14:27:42] 33 0a <60> 12 00 a8 00 00 <00> 00 8e 6b <33> 0a 60 12
+> >> [14:27:42] 00 00 <00> 00 00 a8 <8e> 6b 33 0a 00 00 <00> 00
+> >> [14:27:42] result->expected =3D=3D
+> >> [14:27:42] 33 0a <61> 12 00 a8 00 00 <01> 00 8e 6b <31> 0a 60 12
+> >> [14:27:42] 00 00 <01> 00 00 a8 <81> 6b 33 0a 00 00 <01> 00
+> >>
+> >> Now, with the alignment, the output is:
+> >> [14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gp=
+u/drm/tests/drm_format_helper_test.c:248
+> >> [14:27:42] Expected dst =3D=3D result->expected, but
+> >> [14:27:42] dst =3D=3D
+> >> [14:27:42] 33  0a <60> 12  00  a8  00  00 <00> 00  8e  6b <33> 0a  60 =
+ 12
+> >> [14:27:42] 00  00 <00> 00  00  a8 <8e> 6b  33  0a  00  00 <00> 00
+> >> [14:27:42] result->expected =3D=3D
+> >> [14:27:42] 33  0a <61> 12  00  a8  00  00 <01> 00  8e  6b <31> 0a  60 =
+ 12
+> >> [14:27:42] 00  00 <01> 00  00  a8 <81> 6b  33  0a  00  00 <01> 00
+> >>
+> >> Moreover, on the raw output, there were some indentation problems. Tho=
+se
+> >> problems were solved with the use of KUNIT_SUBSUBTEST_INDENT.
+> >>
+> >> The first patch of the series introduces the KUNIT_EXPECT_MEMEQ and
+> >> KUNIT_EXPECT_MEMNEQ. The second patch adds an example of memory block
+> >> expectations on the kunit-example-test.c. And the last patch replaces =
+the
+> >> KUNIT_EXPECT_EQ for KUNIT_EXPECT_MEMEQ on the existing occurrences.
+> >>
+> >> Best Regards,
+> >> - Ma=C3=ADra Canal
+> >>
+> >> v1 -> v2: https://lore.kernel.org/linux-kselftest/2a0dcd75-5461-5266-2=
+749-808f638f4c50@riseup.net/T/#m402cc72eb01fb3b88d6706cf7d1705fdd51e5da2
+> >>
+> >> - Change "determinated" to "specified" (Daniel Latypov).
+> >> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order =
+to make
+> >> it easier for users to infer the right size unit (Daniel Latypov).
+> >> - Mark the different bytes on the failure message with a <> (Daniel La=
+typov).
+> >> - Replace a constant number of array elements for ARRAY_SIZE() (Andr=
+=C3=A9 Almeida).
+> >> - Rename "array" and "expected" variables to "array1" and "array2" (Da=
+niel Latypov).
+> >>
+> >> v2 -> v3: https://lore.kernel.org/linux-kselftest/20220802212621.42084=
+0-1-mairacanal@riseup.net/T/#t
+> >>
+> >> - Make the bytes aligned at output.
+> >> - Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Danie=
+l Latypov).
+> >> - Line up the trailing \ at macros using tabs (Daniel Latypov).
+> >> - Line up the params to the functions (Daniel Latypov).
+> >> - Change "Increament" to "Augment" (Daniel Latypov).
+> >> - Use sizeof() for array sizes (Daniel Latypov).
+> >>
+> >> Ma=C3=ADra Canal (3):
+> >>   kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
+> >>   kunit: Add KUnit memory block assertions to the example_all_expect_m=
+acros_test
+> >>   kunit: Use KUNIT_EXPECT_MEMEQ macro
+> >>
+> >>  .../gpu/drm/tests/drm_format_helper_test.c    |  6 +-
+> >>  include/kunit/assert.h                        | 34 +++++++++
+> >>  include/kunit/test.h                          | 76 ++++++++++++++++++=
++
+> >>  lib/kunit/assert.c                            | 56 ++++++++++++++
+> >>  lib/kunit/kunit-example-test.c                |  7 ++
+> >>  net/core/dev_addr_lists_test.c                |  4 +-
+> >>  6 files changed, 178 insertions(+), 5 deletions(-)
+> >>
+> >> --
+> >> 2.37.1
+> >>
+> >> --
+> >> You received this message because you are subscribed to the Google Gro=
+ups "KUnit Development" group.
+> >> To unsubscribe from this group and stop receiving emails from it, send=
+ an email to kunit-dev+unsubscribe@googlegroups.com.
+> >> To view this discussion on the web visit https://groups.google.com/d/m=
+sgid/kunit-dev/20220803215855.258704-1-mairacanal%40riseup.net.
+> >
+> > These patches look pretty good to me overall, but I was unable to
+> > apply v3 to test -- it looks like the mail client has wrapped some
+> > lines or something...
+> >
+> > davidgow@slicestar:~/linux-kselftest$ git am
+> > ./v3_20220803_mairacanal_introduce_kunit_expect_memeq_and_kunit_expect_=
+memneq_macros.mbx
+> > Applying: kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ m=
+acros
+> > error: corrupt patch at line 24
+> > Patch failed at 0001 kunit: Introduce KUNIT_EXPECT_MEMEQ and
+> > KUNIT_EXPECT_MEMNEQ macros
+> >
+> > Checkpatch also picks up an issue:
+> > ERROR: patch seems to be corrupt (line wrapped?)
+> > #62: FILE: include/kunit/assert.h:255:
+> >                                    const struct va_format *message,
+> >
+> > v2 applied clearnly, so it seems to be specific to v3.
+>
+> I'll check this issue and submit a v4. Thank you!
+>
 
-Agree.
+Thanks!
 
-> 
-> > 
-> > I will make these changes in the next version.
-> 
-> Just so I understand correctly, we want to let fault handling code back
-> out early if we find any incompatible change, and simply retry the
-> fault? I'm thinking about some kind of a high-level seqcount.
-> 
+> >
+> > In general, I like the patches, though. While I think there are a few
+> > places it'd be slightly suboptimale if it's being used to compare more
+> > structured data, such as the prospect of comparing padding between
+> > elements, as well as the output formatting not being ideal. It's
+> > perfect for the cases where memcmp() otherwise would be used, though.
+>
+> Do you any take on how to make the output formatting more ideal?
+>
 
-Not exactly.
+I don't actually think we need to change any of the formatting in this
+patch, I'm just noting that usinng MEMEQ()/MEMNEQ() might not be the
+best choice for comparing, e.g., structs (and that comparing their
+members individually might be better there).
+_Maybe_ that's something that could be mentioned in the documentation,
+but I wouldn't change the code at all.
 
-In the routine hugetlb_no_page, there are two (no three) places where we
-check for races with truncation to see if the fault is beyond the end of
-the file.  The first two are before adding a newly allocated page to the
-page cache.  The third check is after taking the page table lock to
-update the pte.
+Cheers,
+-- David
 
-The idea is to eliminate this third check that requires backing out the
-page from the cache.  So, it is 'possible' that the fault code could add
-a page beyond i_size.  With the updates to the truncation code (actually
-remove_inode_hugepages), we know that this page beyond i_size will be
-removed by the racing truncation code.
+--000000000000578fc805e5863e30
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Hope that makes sense.
--- 
-Mike Kravetz
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDH
+iivf8RUxQXK3eAwTl3dnJUCEwlnwNSr5hpbk9BdCADAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA4MDUyMjQ2NTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAI+6+5vnGO8beMJiMK6ip
+cuNB2H6ZDr43T/PrTitfRfTwt3VobnzDaYaTFZiZtXXYn7AsjvHy/2BxjdDPP1tSkspuOqxkXoJ2
+/KTrfFJOy3/ob80hh/Rqo8IevKnQASECKoOvJQn+wXEC1AUgos7mVS2uYSxnrWhShTzZLtbvNmKF
+ZXg8Si3tM4npcKlZIDQqjOkZaj4vbXHP4+iyLsRLORzSjSFuxEwWHAAXwLQ5S1qQvJ0DoZStGnNx
+SWyxiYwrAvhjt/FY8wtkJp/96IXotfCbJmc+uJvnBQyEm+9ZRAJHxw7enr6F9zSilkJzEl8O4Gjy
+5Yv6OOGZQFk4pYNEtg==
+--000000000000578fc805e5863e30--

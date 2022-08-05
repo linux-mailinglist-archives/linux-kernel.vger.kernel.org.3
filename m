@@ -2,132 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6153458A49B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 04:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC00F58A4A2
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 04:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbiHECDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 22:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S234186AbiHECLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 22:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiHECDJ (ORCPT
+        with ESMTP id S230160AbiHECLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 22:03:09 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CEC326E2
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 19:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659664988; x=1691200988;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Dxb72Pqg+YY01TS4F8rIDqgbCx3wH4ueD+vQr0MQFlw=;
-  b=V9vA2pjS5o7po2vf2CLvJoED5Fd7yrgnmCU6ZBsvAgsGyJgGK2MOEsWx
-   +8zc/Xk+DZJAAbnS6da67/G01XvEwaTFp/4Pn30lyAOWsCvpG1tGh7nrK
-   ICoKEw0TSWYKe5J6az5ZqbSAYZFaAFBq9gtOSlHpVjUzyc4H2gArDsk7E
-   +PnbYWdmLHfUMISh4sVCxYYReSTw9jNz1LsxvMgyPKBGf2Bge0dtquibc
-   uhc/O2iaEG1/xHae0BKL+t3x5vYsZovZikJbu/MrBjy1Iy+vjRxo7xCLq
-   hwrRTLp3BQeXNU6HuLJFnKqZyEc+8211WFFUKm9rjXvlZa3dvJjltsF0r
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="270482098"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="270482098"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 19:03:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="849183045"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 04 Aug 2022 19:03:07 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJmg6-000J3L-1K;
-        Fri, 05 Aug 2022 02:03:06 +0000
-Date:   Fri, 5 Aug 2022 10:03:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Subject: include/trace/events/nilfs2.h:191:1: sparse: sparse: cast to
- restricted blk_opf_t
-Message-ID: <202208051050.mUx9O9G8-lkp@intel.com>
+        Thu, 4 Aug 2022 22:11:42 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFBB22B09
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 19:11:40 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso6964759pjq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 19:11:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZBv8b9c4g8sQpi4JwtXwCRRIJobNpf05vkQmlOBt0GU=;
+        b=acYVXqXDWpkd968kXD5iMyGCoeU0bJ4NJUR8G0z4Ggi/3BEulgm/TqvZrMiOOMLCrb
+         EPrj7fFJYpysy05X4guBNReacl3ZVmYKcPIPYKOhCKQFiLSxbv3Jv3WWP1xHdKYHStub
+         3oLmRlhn4atjD8e1GK+O9UZ/6Ld+xlN1JTUbo9fL7IiQFKaTyP3+wo+1ikma8IR4lUqe
+         Qg3qN8Pa1xXHudttjZJq2kxOYTDc9hs1ine+uBLZSUnF5zioxxmM3jVHydQ/dUbtHlTx
+         hL+ROnYwbIW75Ljc08PSPlXnOrUFlu6u3YyOCpaZu98g3HP0YPhuXQMgHW7oyhGO41cq
+         M8gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZBv8b9c4g8sQpi4JwtXwCRRIJobNpf05vkQmlOBt0GU=;
+        b=Nko64U3/T2qZzjhG1PssoI59goKCXAY9lYrzLJm/4Rpj8tKNaFgLceox1pun88cLIR
+         gp3QkwaM38O8UuB1XZ8/NfPVcqpQnvfLIMnpUBMDzhMCtlr5vDGk9mU+1mYsxpIM1f6J
+         28cmGzNBWytnWOAXeNpmWaQGd6kuSARelZSi8zUumaftdtqXBNm3lbQANGm5EDB44rbg
+         u2D8YHFvJJLLGx4oKFTl78r390PWldh1y30kNZyjPMj+lorbUvzWfslHP7HzjTUaiy4a
+         IPV9bHH021aQvilKIAekbYQqjO98gbfaolDWBRxiTjK6jisX/sGyFQ7s9XC7nBiil1sF
+         4NdA==
+X-Gm-Message-State: ACgBeo3Rn8uwIgKimNwkMPjIY6wjs29llW9H1fL0Ob+KvojX+3AI/TJ9
+        DjbcuIyIlYpLVDgfjBU7GG+PZw==
+X-Google-Smtp-Source: AA6agR5oePxSxfRP06omoCeia/pi9r0NJJQCc09OVZvwYEO4zSCa+NzkJdZGza1vEZIw9ppheQE5YA==
+X-Received: by 2002:a17:902:f785:b0:16a:4f3b:a20c with SMTP id q5-20020a170902f78500b0016a4f3ba20cmr4570711pln.118.1659665500210;
+        Thu, 04 Aug 2022 19:11:40 -0700 (PDT)
+Received: from [10.4.84.52] ([139.177.225.240])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170902680700b0016dbaf3ff2esm1683875plk.22.2022.08.04.19.11.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 19:11:39 -0700 (PDT)
+Message-ID: <6ba013c5-e500-7e75-dc9e-5d1c016530c8@bytedance.com>
+Date:   Fri, 5 Aug 2022 10:11:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.0
+Subject: Re: [PATCH v3 08/10] sched/fair: refactor detach/attach_entity_cfs_rq
+ using update_load_avg()
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        vschneid@redhat.com
+References: <20220801042745.7794-9-zhouchengming@bytedance.com>
+ <202208011647.2KU7IF9Y-lkp@intel.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <202208011647.2KU7IF9Y-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c040862bfbd9c5f3cb64e1df1c623e20e38fe656
-commit: ed4512590bd5839f8ea9eef1626b0f4db626b1d1 fs/nilfs2: Use the enum req_op and blk_opf_t types
-date:   3 weeks ago
-config: x86_64-randconfig-s023 (https://download.01.org/0day-ci/archive/20220805/202208051050.mUx9O9G8-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed4512590bd5839f8ea9eef1626b0f4db626b1d1
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ed4512590bd5839f8ea9eef1626b0f4db626b1d1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/nilfs2/
+On 2022/8/1 16:07, kernel test robot wrote:
+> Hi Chengming,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on tip/sched/core]
+> [also build test ERROR on next-20220728]
+> [cannot apply to linus/master v5.19]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Chengming-Zhou/sched-fair-task-load-tracking-optimization-and-cleanup/20220801-122957
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 8da3d9b8590bc178752d4b72938745e9a6c4c416
+> config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220801/202208011647.2KU7IF9Y-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://github.com/intel-lab-lkp/linux/commit/336247ff1d2b402a18689fd891d79e99d8b444fc
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Chengming-Zhou/sched-fair-task-load-tracking-optimization-and-cleanup/20220801-122957
+>         git checkout 336247ff1d2b402a18689fd891d79e99d8b444fc
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    kernel/sched/fair.c:672:5: warning: no previous prototype for 'sched_update_scaling' [-Wmissing-prototypes]
+>      672 | int sched_update_scaling(void)
+>          |     ^~~~~~~~~~~~~~~~~~~~
+>    kernel/sched/fair.c: In function 'enqueue_entity':
+>>> kernel/sched/fair.c:4462:16: error: 'struct sched_entity' has no member named 'avg'
+>     4462 |         if (!se->avg.last_update_time)
+>          |                ^~
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the test report!
 
-sparse warnings: (new ones prefixed by >>)
-   fs/nilfs2/segment.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/nilfs2.h):
->> include/trace/events/nilfs2.h:191:1: sparse: sparse: cast to restricted blk_opf_t
->> include/trace/events/nilfs2.h:191:1: sparse: sparse: cast to restricted blk_opf_t
->> include/trace/events/nilfs2.h:191:1: sparse: sparse: restricted blk_opf_t degrades to integer
->> include/trace/events/nilfs2.h:191:1: sparse: sparse: restricted blk_opf_t degrades to integer
+It seems because sched_entity has no member avg on !CONFIG_SMP,
+I think we'd better drop this patch for now since it's just code
+refactor, not real improvement.
 
-vim +191 include/trace/events/nilfs2.h
-
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  190  
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06 @191  TRACE_EVENT(nilfs2_mdt_submit_block,
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  192  	    TP_PROTO(struct inode *inode,
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  193  		     unsigned long ino,
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  194  		     unsigned long blkoff,
-ed4512590bd583 Bart Van Assche 2022-07-14  195  		     enum req_op mode),
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  196  
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  197  	    TP_ARGS(inode, ino, blkoff, mode),
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  198  
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  199  	    TP_STRUCT__entry(
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  200  		    __field(struct inode *, inode)
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  201  		    __field(unsigned long, ino)
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  202  		    __field(unsigned long, blkoff)
-ed4512590bd583 Bart Van Assche 2022-07-14  203  		    __field(enum req_op, mode)
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  204  	    ),
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  205  
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  206  	    TP_fast_assign(
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  207  		    __entry->inode = inode;
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  208  		    __entry->ino = ino;
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  209  		    __entry->blkoff = blkoff;
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  210  		    __entry->mode = mode;
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  211  		    ),
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  212  
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  213  	    TP_printk("inode = %p ino = %lu blkoff = %lu mode = %x",
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  214  		      __entry->inode,
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  215  		      __entry->ino,
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  216  		      __entry->blkoff,
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  217  		      __entry->mode)
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  218  );
-a9cd207c23ca4f Hitoshi Mitake  2015-11-06  219  
-
-:::::: The code at line 191 was first introduced by commit
-:::::: a9cd207c23ca4fa5bd5f1092e867e87542e349a3 nilfs2: add tracepoints for analyzing reading and writing metadata files
-
-:::::: TO: Hitoshi Mitake <mitake.hitoshi@lab.ntt.co.jp>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> vim +4462 kernel/sched/fair.c
+> 
+>   4419	
+>   4420	/*
+>   4421	 * MIGRATION
+>   4422	 *
+>   4423	 *	dequeue
+>   4424	 *	  update_curr()
+>   4425	 *	    update_min_vruntime()
+>   4426	 *	  vruntime -= min_vruntime
+>   4427	 *
+>   4428	 *	enqueue
+>   4429	 *	  update_curr()
+>   4430	 *	    update_min_vruntime()
+>   4431	 *	  vruntime += min_vruntime
+>   4432	 *
+>   4433	 * this way the vruntime transition between RQs is done when both
+>   4434	 * min_vruntime are up-to-date.
+>   4435	 *
+>   4436	 * WAKEUP (remote)
+>   4437	 *
+>   4438	 *	->migrate_task_rq_fair() (p->state == TASK_WAKING)
+>   4439	 *	  vruntime -= min_vruntime
+>   4440	 *
+>   4441	 *	enqueue
+>   4442	 *	  update_curr()
+>   4443	 *	    update_min_vruntime()
+>   4444	 *	  vruntime += min_vruntime
+>   4445	 *
+>   4446	 * this way we don't have the most up-to-date min_vruntime on the originating
+>   4447	 * CPU and an up-to-date min_vruntime on the destination CPU.
+>   4448	 */
+>   4449	
+>   4450	static void
+>   4451	enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>   4452	{
+>   4453		bool renorm = !(flags & ENQUEUE_WAKEUP) || (flags & ENQUEUE_MIGRATED);
+>   4454		bool curr = cfs_rq->curr == se;
+>   4455		int action = UPDATE_TG;
+>   4456	
+>   4457		/*
+>   4458		 * !last_update_time means we've passed through migrate_task_rq_fair()
+>   4459		 * or task_change_group_fair() indicating we migrated cfs_rq. IOW we're
+>   4460		 * enqueueing a task on a new CPU or moving task to a new cgroup.
+>   4461		 */
+>> 4462		if (!se->avg.last_update_time)
+>   4463			action |= DO_ATTACH;
+>   4464	
+>   4465		/*
+>   4466		 * If we're the current task, we must renormalise before calling
+>   4467		 * update_curr().
+>   4468		 */
+>   4469		if (renorm && curr)
+>   4470			se->vruntime += cfs_rq->min_vruntime;
+>   4471	
+>   4472		update_curr(cfs_rq);
+>   4473	
+>   4474		/*
+>   4475		 * Otherwise, renormalise after, such that we're placed at the current
+>   4476		 * moment in time, instead of some random moment in the past. Being
+>   4477		 * placed in the past could significantly boost this task to the
+>   4478		 * fairness detriment of existing tasks.
+>   4479		 */
+>   4480		if (renorm && !curr)
+>   4481			se->vruntime += cfs_rq->min_vruntime;
+>   4482	
+>   4483		/*
+>   4484		 * When enqueuing a sched_entity, we must:
+>   4485		 *   - Update loads to have both entity and cfs_rq synced with now.
+>   4486		 *   - For group_entity, update its runnable_weight to reflect the new
+>   4487		 *     h_nr_running of its group cfs_rq.
+>   4488		 *   - For group_entity, update its weight to reflect the new share of
+>   4489		 *     its group cfs_rq
+>   4490		 *   - Add its new weight to cfs_rq->load.weight
+>   4491		 */
+>   4492		update_load_avg(cfs_rq, se, action);
+>   4493		se_update_runnable(se);
+>   4494		update_cfs_group(se);
+>   4495		account_entity_enqueue(cfs_rq, se);
+>   4496	
+>   4497		if (flags & ENQUEUE_WAKEUP)
+>   4498			place_entity(cfs_rq, se, 0);
+>   4499	
+>   4500		check_schedstat_required();
+>   4501		update_stats_enqueue_fair(cfs_rq, se, flags);
+>   4502		check_spread(cfs_rq, se);
+>   4503		if (!curr)
+>   4504			__enqueue_entity(cfs_rq, se);
+>   4505		se->on_rq = 1;
+>   4506	
+>   4507		if (cfs_rq->nr_running == 1) {
+>   4508			check_enqueue_throttle(cfs_rq);
+>   4509			if (!throttled_hierarchy(cfs_rq))
+>   4510				list_add_leaf_cfs_rq(cfs_rq);
+>   4511		}
+>   4512	}
+>   4513	
+> 

@@ -2,46 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7668758AADA
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 14:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A165558AAF3
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 14:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240719AbiHEM2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 08:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
+        id S240628AbiHEMmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 08:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237655AbiHEM2A (ORCPT
+        with ESMTP id S233513AbiHEMms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 08:28:00 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A4F28711;
-        Fri,  5 Aug 2022 05:27:57 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LzlD35kSszlVlK;
-        Fri,  5 Aug 2022 20:25:07 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 5 Aug
- 2022 20:27:53 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <lczerner@redhat.com>,
-        <enwlinux@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yebin10@huawei.com>, <yukuai3@huawei.com>,
-        <libaokun1@huawei.com>
-Subject: [PATCH] ext4: fix null-ptr-deref in ext4_write_info
-Date:   Fri, 5 Aug 2022 20:39:47 +0800
-Message-ID: <20220805123947.565152-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 5 Aug 2022 08:42:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EDA81AD98
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 05:42:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659703366;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JbNzuUNlONNPGBpeyjfKi2f8mYMJka6a1j60uZitIeU=;
+        b=dyk/NYJrRNWrdFm4ZIvFlYQ8ihhmex0RsQd1hhHfpU5nUxm87qNlXN0mtyVuLtxt8pxFzC
+        oTQe96/VUEBSTkFT62qd1mKSP3/deAEYikF5iyqLQa4TFsdocIP4tDwPSdJKhcOUQomQ49
+        Xrnys8lFctUyKlv44ATaifUj4RS84e0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-382-mrbaKI6NO1CHmFNYXh5B6w-1; Fri, 05 Aug 2022 08:42:45 -0400
+X-MC-Unique: mrbaKI6NO1CHmFNYXh5B6w-1
+Received: by mail-wr1-f71.google.com with SMTP id s25-20020adf9799000000b002207a9d2166so450749wrb.19
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 05:42:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=JbNzuUNlONNPGBpeyjfKi2f8mYMJka6a1j60uZitIeU=;
+        b=pPy72hrkJi9jh+QNizLKze2LjQhwGvBxBMmu/xIm+/SodqiZZY0V6ukPdSkKg051tP
+         oFGoKugADuEbye3YGl6qoVcZyK2msJ2zJjkwkbTWqsG3dyQX42kMS1CBAiLJj+AJpdgM
+         9WWWu753ci5OMJq232b8xahhzirrfcMxiu7ykaD/TT2u8icLyR1suf5TCSHP50Yys2tN
+         FtlNNeuAlEm/7Ucw9x+SDJdTU454TJbyGTacjQ1olZIdZmcFWmCxPTnSeQyJtcEF+doy
+         8HmxP5EySuWL3wG269ENZv5gRBv1cJijmHQ0dphBkoMn1en3AcTO7Vk9Owll7lF/qL1t
+         5+Rg==
+X-Gm-Message-State: ACgBeo3K7nwjRDtumuvCyH3FVQc93Mzpr/yGT4UE+VUUrJkCc9iCx1tX
+        ggdlHNsItzd82wI3Ym8H/kGeGSct8Tsz+pML5HPD6XIAOcxR4qs3a5g8MfU4/sbXL73QB+TB73l
+        T0bTMN1KkCBQ3WsaaTEZ/F8JL
+X-Received: by 2002:a05:6000:10c3:b0:21f:15aa:1b68 with SMTP id b3-20020a05600010c300b0021f15aa1b68mr4285507wrx.693.1659703364150;
+        Fri, 05 Aug 2022 05:42:44 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4FBixHL1jxLf6cGBv7tQy3XiRqmkIIqWAMrqrcbMs3wyml1Ga267IspwQxC1cUWPEdc4mg6g==
+X-Received: by 2002:a05:6000:10c3:b0:21f:15aa:1b68 with SMTP id b3-20020a05600010c300b0021f15aa1b68mr4285486wrx.693.1659703363869;
+        Fri, 05 Aug 2022 05:42:43 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
+        by smtp.gmail.com with ESMTPSA id l3-20020a5d4803000000b0021e42e7c7dbsm3802357wrq.83.2022.08.05.05.42.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 05:42:43 -0700 (PDT)
+Date:   Fri, 5 Aug 2022 14:42:39 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC net-next] vsock: Reschedule connect_work for
+ O_NONBLOCK connect() requests
+Message-ID: <20220805124239.iy5lkeytqwjyvn7g@sgarzare-redhat>
+References: <20220804020925.32167-1-yepeilin.cs@gmail.com>
+ <20220804065923.66bor7cyxwk2bwsf@sgarzare-redhat>
+ <20220804234447.GA2294@bytedance>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220804234447.GA2294@bytedance>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,73 +84,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I caught a null-ptr-deref bug as follows:
-==================================================================
-KASAN: null-ptr-deref in range [0x0000000000000068-0x000000000000006f]
-CPU: 1 PID: 1589 Comm: umount Not tainted 5.10.0-02219-dirty #339
-RIP: 0010:ext4_write_info+0x53/0x1b0
-[...]
-Call Trace:
- dquot_writeback_dquots+0x341/0x9a0
- ext4_sync_fs+0x19e/0x800
- __sync_filesystem+0x83/0x100
- sync_filesystem+0x89/0xf0
- generic_shutdown_super+0x79/0x3e0
- kill_block_super+0xa1/0x110
- deactivate_locked_super+0xac/0x130
- deactivate_super+0xb6/0xd0
- cleanup_mnt+0x289/0x400
- __cleanup_mnt+0x16/0x20
- task_work_run+0x11c/0x1c0
- exit_to_user_mode_prepare+0x203/0x210
- syscall_exit_to_user_mode+0x5b/0x3a0
- do_syscall_64+0x59/0x70
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
- ==================================================================
+On Thu, Aug 04, 2022 at 04:44:47PM -0700, Peilin Ye wrote:
+>Hi Stefano,
+>
+>On Thu, Aug 04, 2022 at 08:59:23AM +0200, Stefano Garzarella wrote:
+>> The last thing I was trying to figure out before sending the patch was
+>> whether to set sock->state = SS_UNCONNECTED in vsock_connect_timeout().
+>>
+>> I think we should do that, otherwise a subsequent to connect() with
+>> O_NONBLOCK set would keep returning -EALREADY, even though the timeout has
+>> expired.
+>>
+>> What do you think?
+>
+>Thanks for bringing this up, after thinking about sock->state, I have 3
+>thoughts:
+>
+>1. I think the root cause of this memleak is, we keep @connect_work
+>   pending, even after the 2nd, blocking request times out (or gets
+>   interrupted) and sets sock->state back to SS_UNCONNECTED.
+>
+>   @connect_work is effectively no-op when sk->sk_state is
+>   TCP_CLOS{E,ING} anyway, so why not we just cancel @connect_work when
+>   blocking requests time out or get interrupted?  Something like:
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index f04abf662ec6..62628af84164 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1402,6 +1402,9 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+>                lock_sock(sk);
+>
+>                if (signal_pending(current)) {
+>+                       if (cancel_delayed_work(&vsk->connect_work))
+>+                               sock_put(sk);
+>+
+>                        err = sock_intr_errno(timeout);
+>                        sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
+>                        sock->state = SS_UNCONNECTED;
+>@@ -1409,6 +1412,9 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+>                        vsock_remove_connected(vsk);
+>                        goto out_wait;
+>                } else if (timeout == 0) {
+>+                       if (cancel_delayed_work(&vsk->connect_work))
+>+                               sock_put(sk);
+>+
+>                        err = -ETIMEDOUT;
+>                        sk->sk_state = TCP_CLOSE;
+>                        sock->state = SS_UNCONNECTED;
+>
+>   Then no need to worry about rescheduling @connect_work, and the state
+>   machine becomes more accurate.  What do you think?  I will ask syzbot
+>   to test this.
 
-Above issue may happen as follows:
--------------------------------------
-exit_to_user_mode_prepare
- task_work_run
-  __cleanup_mnt
-   cleanup_mnt
-    deactivate_super
-     deactivate_locked_super
-      kill_block_super
-       generic_shutdown_super
-        shrink_dcache_for_umount
-         dentry = sb->s_root
-         sb->s_root = NULL              <--- Here set NULL
-        sync_filesystem
-         __sync_filesystem
-          sb->s_op->sync_fs > ext4_sync_fs
-           dquot_writeback_dquots
-            sb->dq_op->write_info > ext4_write_info
-             ext4_journal_start(d_inode(sb->s_root), EXT4_HT_QUOTA, 2)
-              d_inode(sb->s_root)
-               s_root->d_inode          <--- Null pointer dereference
+It could work, but should we set `sk->sk_err` and call sk_error_report() 
+to wake up thread waiting on poll()?
 
-To solve this problem, we use ext4_journal_start_sb directly
-to avoid s_root being used.
+Maybe the previous version is simpler.
 
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
- fs/ext4/super.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>2. About your suggestion of setting sock->state = SS_UNCONNECTED in
+>   vsock_connect_timeout(), I think it makes sense.  Are you going to
+>   send a net-next patch for this?
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 9a66abcca1a8..0ce4565422f6 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -6653,7 +6653,7 @@ static int ext4_write_info(struct super_block *sb, int type)
- 	handle_t *handle;
- 
- 	/* Data block + inode block */
--	handle = ext4_journal_start(d_inode(sb->s_root), EXT4_HT_QUOTA, 2);
-+	handle = ext4_journal_start_sb(sb, EXT4_HT_QUOTA, 2);
- 	if (IS_ERR(handle))
- 		return PTR_ERR(handle);
- 	ret = dquot_commit_info(sb, type);
--- 
-2.31.1
+If you have time, feel free to send it.
+
+Since it is a fix, I believe you can use the "net" tree. (Also for this 
+patch).
+
+Remember to put the "Fixes" tag that should be the same.
+
+>
+>3. After a TCP_SYN_SENT sock receives VIRTIO_VSOCK_OP_RESPONSE in
+>   virtio_transport_recv_connecting(), why don't we cancel 
+>   @connect_work?
+>   Am I missing something?
+
+Because when the timeout will fire, vsock_connect_timeout() will just 
+call sock_put() since sk->sk_state is changed.
+
+Of course, we can cancel it if we want, but I think it's not worth it.
+In the end, this rescheduling patch should solve all the problems.
+
+Thanks,
+Stefano
 

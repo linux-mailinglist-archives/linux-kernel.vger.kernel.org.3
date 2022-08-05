@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B2358A6E9
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49ED258A6ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240300AbiHEHSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 03:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
+        id S240460AbiHEHSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 03:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236316AbiHEHSA (ORCPT
+        with ESMTP id S237056AbiHEHSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 03:18:00 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9F06FA1C;
-        Fri,  5 Aug 2022 00:18:00 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d20so1537131pfq.5;
-        Fri, 05 Aug 2022 00:18:00 -0700 (PDT)
+        Fri, 5 Aug 2022 03:18:16 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F2C74CE2;
+        Fri,  5 Aug 2022 00:18:04 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id m2so1930241pls.4;
+        Fri, 05 Aug 2022 00:18:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wmQvfTLfhSexD9Eu2cDWkazSz8+Yx4MBahcS3Xy6S+Q=;
-        b=JAKhImu3eGgYN6HOXihH6/c/bb7lHbLwfwWYgYh2T2VvoDNj38ySz6uhHOsANgpOFW
-         Lsy4TpYGhYt6fsf0YKfDri6YKemLuJHJi7JnrFvFI/9M/4T3v25ZZ549CvfKevXodLlp
-         kv33BT1SjRym9itPtEpxvmm94mafo88v9Wg2jqBS9DQNy7AUDZ1vzkzXp8WqWaNpo5Ia
-         Y7z83FcVY+EPsastjdJB4abRaD//aEHTOW6ieAJsZQm85C3EnpTgvYW5dOUk0qeX2Zan
-         eFAiJFVjhica/8UnZpINZNMrLkUHBerjdIuIYJRlM3yxcJPY18V8CkmKD1uYNveWUMNj
-         NKLQ==
+        bh=Ujg4hDDvyV4s7RmKQP40QabcGXdYDiqK7t+igL1GTqc=;
+        b=J3uEOywwe0pFzy3VX05gPSwfkeohBApGj2UdiQkUW9SGez1S9KotXjqMCQtGSLBhXo
+         jwzkcQ7oJmNrp3dqjR5niQyO9fPtcza7xUhgCa1sGHGpcVheG2HSIZ73/8rz7AmuHALA
+         AdghWgzxDSBfC4/zwuh8w4MRRj4b1w6MvMsFCBP2DlUKIThYJmJN7Mw/9hStAoOH2Nai
+         kMin8TIIfYQvxyPIvfQbEZoXP+wAoDqCuYsbk0DV5Kd/BeaBZ5fjtR7r3R1Yd72kKBPL
+         QQJp1TfcJHKwktlYvwS9k2TJ5kkFJ80KSM8wWe15QyazCaxn8F4z6cbIeOKcx9fT1/nF
+         T/Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wmQvfTLfhSexD9Eu2cDWkazSz8+Yx4MBahcS3Xy6S+Q=;
-        b=YZYvchpID3YPRriIeGXCA8xMxFyaHp54+tS68NWKUIrEViZLNhVeqvXI9HOkW/zNhd
-         gu9V2S2AU5SGRg2Mwwelw1yYj3a3PAcUq+t2x6Z8Pzm9iKzba0YuYDyAypOV2mQd5xIs
-         hjsiocoVxfX4O5Ck/jKFZ+oTG4QoTRbzGzUCDjrdxVJ31Zeb+4/yT8wqD2cyqMt/oDHZ
-         7j+TDwigO7SLTmcsnwb5NSE9nNNnr3RhXLiBg6MOYSKJXVVNzAIO1bG/pXs4MSHOPPYD
-         wzKyWDDrgXGKmtCDM/RSqboVluelPNVYgMo+azbPM+wBG5CeTxbiDZay1afn/e4pNQqj
-         BwHw==
-X-Gm-Message-State: ACgBeo32Sy0vKLPyeTQ8MmY6x3Bp7L9LaP4xoAHB33G/qQFIJXPz4FGS
-        mBgEQABoaAfDf4D7Sw7DWCM=
-X-Google-Smtp-Source: AA6agR7xYlDesKGSE+vAQqDfsv7sf27mKnxcGVl9UmTspDmudfGeeoDRnFGwmIJIBB3tY0+/wIs8+Q==
-X-Received: by 2002:a05:6a00:b89:b0:52b:2bc7:68ab with SMTP id g9-20020a056a000b8900b0052b2bc768abmr5724112pfj.80.1659683879503;
-        Fri, 05 Aug 2022 00:17:59 -0700 (PDT)
+        bh=Ujg4hDDvyV4s7RmKQP40QabcGXdYDiqK7t+igL1GTqc=;
+        b=5jvltgAmzNySci7ETG5m9gLn9E/t6Fzvs5Quclk5UHgq+H6bGOTOMGxETGG6WLJpDm
+         5j6DZgXp9Eo8AVEWIgnWorAC75hTbs55ktO9vkomZQKERe3yvHT6OIwpA4bSvKPX4AsZ
+         XEsK1WZrXN74FscqIHoATg5gBoUYH4x5c3xh+lqlMGDfkZNEw38CdoeBPOomiGuUWL/A
+         sFvQsibxPlKOnNnrvJRPrFy1LXgz9av/WqnSCBVaI+n3y3Rcd3P8cJeSoexmmcBQjRUt
+         xb0S8RsFstfrP1HGXCJYIebToNLZYfqqEssIBRyvK/eNV92QZJ6qed1KE2EI9KpSGvlw
+         X6eQ==
+X-Gm-Message-State: ACgBeo3HH9DNz/jvg5R9e/MDgDw8H3t967B0kPqTMpyb7C/2YPv8iCmN
+        DPQvCvl+v0kIQK00mdM+W74=
+X-Google-Smtp-Source: AA6agR4R+Q+n5hbfkkc52HAhugGr23JgYwh+VNGWFJkq11ngBHDKLfijymiEX+8FlpqtN8yEN8PxhQ==
+X-Received: by 2002:a17:90b:b13:b0:1f3:7ab:35b2 with SMTP id bf19-20020a17090b0b1300b001f307ab35b2mr14738615pjb.118.1659683883698;
+        Fri, 05 Aug 2022 00:18:03 -0700 (PDT)
 Received: from genechen-System-Product-Name.richtek.com ([2402:7500:579:6a6f:254a:2074:501f:264b])
-        by smtp.gmail.com with ESMTPSA id z23-20020aa79597000000b00528c066678csm2226147pfj.72.2022.08.05.00.17.56
+        by smtp.gmail.com with ESMTPSA id z23-20020aa79597000000b00528c066678csm2226147pfj.72.2022.08.05.00.17.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 00:17:59 -0700 (PDT)
+        Fri, 05 Aug 2022 00:18:03 -0700 (PDT)
 From:   Gene Chen <gene.chen.richtek@gmail.com>
 To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
         gregkh@linuxfoundation.org, robh+dt@kernel.org,
@@ -55,9 +55,9 @@ To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, gene_chen@richtek.com,
         cy_huang@richtek.com
-Subject: [PATCH v4 3/7] usb: typec: tcpci_rt1711h: Add regulator support when source vbus
-Date:   Fri,  5 Aug 2022 15:17:09 +0800
-Message-Id: <20220805071714.150882-4-gene.chen.richtek@gmail.com>
+Subject: [PATCH v4 4/7] usb: typec: tcpci_rt1711h: Add initial phy setting
+Date:   Fri,  5 Aug 2022 15:17:10 +0800
+Message-Id: <20220805071714.150882-5-gene.chen.richtek@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220805071714.150882-1-gene.chen.richtek@gmail.com>
 References: <20220805071714.150882-1-gene.chen.richtek@gmail.com>
@@ -75,75 +75,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Gene Chen <gene_chen@richtek.com>
 
-Add regulator support when source vbus
+Add initial phy setting about phy dicard retry,
+rx filter deglitch time and BMC-encoded wait time
 
 Signed-off-by: Gene Chen <gene_chen@richtek.com>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/usb/typec/tcpm/tcpci_rt1711h.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-index f2f1fb0..fb19d7b 100644
+index fb19d7b..5c51d04 100644
 --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
 +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-@@ -14,6 +14,7 @@
- #include <linux/usb/tcpci.h>
- #include <linux/usb/tcpm.h>
- #include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
- 
+@@ -19,6 +19,9 @@
  #define RT1711H_VID		0x29CF
  #define RT1711H_PID		0x1711
-@@ -41,6 +42,8 @@ struct rt1711h_chip {
- 	struct tcpci_data data;
- 	struct tcpci *tcpci;
- 	struct device *dev;
-+	struct regulator *vbus;
-+	bool src_en;
- };
  
- static int rt1711h_read16(struct rt1711h_chip *chip, unsigned int reg, u16 *val)
-@@ -104,6 +107,26 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
++#define RT1711H_PHYCTRL1	0x80
++#define RT1711H_PHYCTRL2	0x81
++
+ #define RT1711H_RTCTRL8		0x9B
  
- 	/* dcSRC.DRP : 33% */
- 	return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
-+
-+}
-+
-+static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata,
-+			    bool src, bool snk)
-+{
-+	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
-+	int ret;
-+
-+	if (chip->src_en == src)
-+		return 0;
-+
-+	if (src)
-+		ret = regulator_enable(chip->vbus);
-+	else
-+		ret = regulator_disable(chip->vbus);
-+
-+	if (!ret)
-+		chip->src_en = src;
-+	return ret;
- }
- 
- static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
-@@ -247,7 +270,12 @@ static int rt1711h_probe(struct i2c_client *client,
- 	if (ret < 0)
+ /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
+@@ -106,8 +109,18 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
  		return ret;
  
-+	chip->vbus = devm_regulator_get(&client->dev, "vbus");
-+	if (IS_ERR(chip->vbus))
-+		return PTR_ERR(chip->vbus);
+ 	/* dcSRC.DRP : 33% */
+-	return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
++	ret = rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
++	if (ret < 0)
++		return ret;
 +
- 	chip->data.init = rt1711h_init;
-+	chip->data.set_vbus = rt1711h_set_vbus;
- 	chip->data.set_vconn = rt1711h_set_vconn;
- 	chip->data.start_drp_toggling = rt1711h_start_drp_toggling;
- 	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
++	/* Enable phy discard retry, retry count 7, rx filter deglitch 100 us */
++	ret = rt1711h_write8(chip, RT1711H_PHYCTRL1, 0xF1);
++	if (ret < 0)
++		return ret;
+ 
++	/* Decrease wait time of BMC-encoded 1 bit from 2.67us to 2.55us */
++	/* wait time : (val * .4167) us */
++	return rt1711h_write8(chip, RT1711H_PHYCTRL2, 62);
+ }
+ 
+ static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata,
 -- 
 2.7.4
 

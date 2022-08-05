@@ -2,88 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48BB58A5A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 07:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376E458A5A9
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 07:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235921AbiHEFbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 01:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
+        id S235521AbiHEFdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 01:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235598AbiHEFbN (ORCPT
+        with ESMTP id S232456AbiHEFd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 01:31:13 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EC872ECD;
-        Thu,  4 Aug 2022 22:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1659677469; x=1691213469;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X47q7DThyrWu/kkT8n4MueOYo1D/I729fdsIdMKG9zk=;
-  b=rVYPrL5qxVv3Q6unLblJnLAtc3cV9ybKdHXYVh5aGjrGtJIAOOT3l+Yi
-   vG1IUhKUqz5eJ3qdmDYREUXC6VjO5EvyV4RKUdCKAQc4Nh1qVOCZcGF2O
-   pl0An+DUMdUV216MBsj78YptrWr2HB2WiEoKx6aB0R3GK6c6qyRiT4YlT
-   57Jz2aI9x3ctMRADDvA51TbAq52zuTmg726Be+J/uJCHYlrIO49z1/Fvh
-   BD2kQvUYbKG1KWkw/oldd5ISAuyS7YpDyVvReKMoSctUhhhcl76ojOfTD
-   D56fAzQEQCyhj/bQOVrMSYh+qf4JpLsyNc2tx5V3mJDCqpD6PbJIaz+xl
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="185227164"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Aug 2022 22:31:07 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 4 Aug 2022 22:31:05 -0700
-Received: from microchip-OptiPlex-5040.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.28 via Frontend Transport; Thu, 4 Aug 2022 22:31:02 -0700
-From:   Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor.dooley@microchip.com>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Valentina.FernandezAlanis@microchip.com>,
-        Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-Subject: [PATCH v3 4/4] MAINTAINERS: add qspi to Polarfire SoC entry
-Date:   Fri, 5 Aug 2022 11:00:19 +0530
-Message-ID: <20220805053019.996484-5-nagasuresh.relli@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220805053019.996484-1-nagasuresh.relli@microchip.com>
-References: <20220805053019.996484-1-nagasuresh.relli@microchip.com>
+        Fri, 5 Aug 2022 01:33:29 -0400
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E036E2EF
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 22:33:26 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id ZDM00019;
+        Fri, 05 Aug 2022 13:33:19 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201605.home.langchao.com (10.100.2.5) with Microsoft SMTP Server id
+ 15.1.2507.9; Fri, 5 Aug 2022 13:33:20 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <dan.j.williams@intel.com>, <vishal.l.verma@intel.com>,
+        <dave.jiang@intel.com>
+CC:     <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] dax: Check dev_set_name() return value
+Date:   Fri, 5 Aug 2022 01:33:19 -0400
+Message-ID: <20220805053319.3865-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.200.104.97]
+tUid:   2022805133319b82b3ecbb11bc9c5f2588e7020cc85a0
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the qspi driver to existing Polarfire SoC entry.
+It's possible that dev_set_name() returns -ENOMEM, catch and handle this.
 
-Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Bo Liu <liubo03@inspur.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/dax/bus.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 295ca16a415b..0329dca23fe2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17146,6 +17146,7 @@ S:	Supported
- F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
-+F:	drivers/spi/spi-microchip-core-qspi.c
- F:	drivers/spi/spi-microchip-core.c
- F:	include/soc/microchip/mpfs.h
+diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
+index 1dad813ee4a6..36cf245ee467 100644
+--- a/drivers/dax/bus.c
++++ b/drivers/dax/bus.c
+@@ -765,7 +765,12 @@ static int devm_register_dax_mapping(struct dev_dax *dev_dax, int range_id)
+ 	device_initialize(dev);
+ 	dev->parent = &dev_dax->dev;
+ 	dev->type = &dax_mapping_type;
+-	dev_set_name(dev, "mapping%d", mapping->id);
++	rc = dev_set_name(dev, "mapping%d", mapping->id);
++	if (rc) {
++		kfree(mapping);
++		return rc;
++	}
++
+ 	rc = device_add(dev);
+ 	if (rc) {
+ 		put_device(dev);
+@@ -1334,7 +1339,9 @@ struct dev_dax *devm_create_dev_dax(struct dev_dax_data *data)
+ 	dev_dax->region = dax_region;
+ 	dev = &dev_dax->dev;
+ 	device_initialize(dev);
+-	dev_set_name(dev, "dax%d.%d", dax_region->id, dev_dax->id);
++	rc = dev_set_name(dev, "dax%d.%d", dax_region->id, dev_dax->id);
++	if (rc)
++		goto err_range;
  
+ 	rc = alloc_dev_dax_range(dev_dax, dax_region->res.start, data->size);
+ 	if (rc)
 -- 
-2.25.1
+2.27.0
 

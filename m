@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9209358A9DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B05058A9DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236587AbiHELCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 07:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S240179AbiHELDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 07:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiHELCW (ORCPT
+        with ESMTP id S236628AbiHELDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 07:02:22 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFB61D300;
-        Fri,  5 Aug 2022 04:02:19 -0700 (PDT)
-Received: from [192.168.1.101] (abxi232.neoplus.adsl.tpnet.pl [83.9.2.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 5 Aug 2022 07:03:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 989BB1DA68
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 04:03:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659697417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=axbvuGfzRKP5qtlYak3e27rTAxoNG/HGZ2Avx7lCAAo=;
+        b=SdH3JJgzqjnUOXfUxCTBGBTJc0Nn6C/g1sj9rU8NlfIRwjjLeSbB011zwtoU7/CB698FWl
+        N0umDpvBh2idmpbov1btu+lOh8YtIbTCvtKeozOJ0fg4FA0Yqbxhz5JH3trOwWsEWVN9/C
+        q0e5LYjX2R262evH68ko6ANUtfNFypI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-357-Xc_IahtxMmGRBwMFKpIk1A-1; Fri, 05 Aug 2022 07:03:34 -0400
+X-MC-Unique: Xc_IahtxMmGRBwMFKpIk1A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 9F8D63EE91;
-        Fri,  5 Aug 2022 13:02:16 +0200 (CEST)
-Message-ID: <03f115b0-74ae-7793-5248-61df76ab184b@somainline.org>
-Date:   Fri, 5 Aug 2022 13:02:14 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2EB1101A54E;
+        Fri,  5 Aug 2022 11:03:33 +0000 (UTC)
+Received: from t480s.fritz.box (unknown [10.39.194.85])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 14A6440C1288;
+        Fri,  5 Aug 2022 11:03:30 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Feiner <pfeiner@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH v1 0/2] mm/hugetlb: fix write-fault handling for shared mappings
+Date:   Fri,  5 Aug 2022 13:03:27 +0200
+Message-Id: <20220805110329.80540-1-david@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 0/7] arm64: dts: qcom: sc8280xp: HID wakeup sources and
- alt. touchpad
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220805092317.4985-1-johan+linaro@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220805092317.4985-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I observed that hugetlb does not support/expect write-faults in shared
+mappings that would have to map the R/O-mapped page writable -- and I
+found one case where we could currently get such faults and would
+erroneously map an anon page into a shared mapping, by triggering
+clear_refs to clear soft-dirty tracking at the wrong point in time on a
+process.
 
+I propose to backport the fix to stable trees, as the fix for write-notify
+should be straight forward.
 
-On 5.08.2022 11:23, Johan Hovold wrote:
-> This series clean up the sc8280xp CRD and X13s HID nodes somewhat and
-> marks the keyboard and touchpad as wakeup sources.
-> 
-> Included is also support for the alternate (second-source) touchpad
-> found on some X13s laptops. Note that the node is disabled for now as
-> ideally the boot firmware should be determining which touchpad is
-> actually populated.
-Interesting, what bootloader is used on these? Are you chainloading
-something on top of Qualcomm's XBL UEFI?
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Muchun Song <songmuchun@bytedance.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Peter Feiner <pfeiner@google.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Konrad
-> 
-> With some additional fixes it is possible to have both nodes enabled and
-> letting Linux do the probing, but let's wait for a conclusion to the
-> discussion about whether that is desirable before enabling them both:
-> 
-> 	https://lore.kernel.org/all/YuJXMHoT4ijUxnRb@hovoldconsulting.com
-> 
-> Johan
-> 
-> 
-> Johan Hovold (7):
->   arm64: dts: qcom: sc8280xp-crd: disable touchscreen pull-up
->   arm64: dts: qcom: sc8280xp-crd: move HID pin config
->   arm64: dts: qcom: sc8280xp-crd: mark HID wakeup sources
->   arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: disable touchscreen
->     pull-up
->   arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: move HID pin config
->   arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: mark HID wakeup
->     sources
->   arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: add alternate
->     touchpad
-> 
->  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     | 22 +++++++++--
->  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 38 +++++++++++++++++--
->  2 files changed, 54 insertions(+), 6 deletions(-)
-> 
+David Hildenbrand (2):
+  mm/hugetlb: fix hugetlb not supporting write-notify
+  mm/hugetlb: support write-faults in shared mappings
+
+ mm/hugetlb.c | 21 ++++++++++++++-------
+ mm/mmap.c    |  7 +++++++
+ 2 files changed, 21 insertions(+), 7 deletions(-)
+
+-- 
+2.35.3
+

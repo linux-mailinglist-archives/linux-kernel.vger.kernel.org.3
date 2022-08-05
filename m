@@ -2,99 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6BA58AF3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 19:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5FC058AF42
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 19:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241026AbiHERzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 13:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
+        id S241533AbiHERzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 13:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241483AbiHERzi (ORCPT
+        with ESMTP id S241489AbiHERzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 13:55:38 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3190065FB;
-        Fri,  5 Aug 2022 10:55:37 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b986e329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:986e:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 718381EC04C2;
-        Fri,  5 Aug 2022 19:55:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1659722131;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=lgHt3P8hxmYNsCsO6oz+2j46ElNujepttLSppVvmEgo=;
-        b=LhH4G9E2jS2NJtKOOrZhc5cvM3+7Wrv9VzdHWSsSgwvfMzg2i4SHyA0giKHc4WZ+vu6DWw
-        yNR87bw4s/ZIL3vRfcdv9jPSqoamVpaCFtwHf2gWSNe/wr0bUiBy793oG1PF9N/MSAVJGN
-        Nu3L3/WqLhVSJ8i5Be/Ek30EdBieORA=
-Date:   Fri, 5 Aug 2022 19:55:27 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kim Phillips <kim.phillips@amd.com>
-Cc:     x86@kernel.org, peterz@infradead.org, bpf@vger.kernel.org,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, thomas.lendacky@amd.com
-Subject: Re: [PATCH] x86/bugs: Enable STIBP for IBPB mitigated RetBleed
-Message-ID: <Yu1Zj5mNZiAWdJgK@zn.tnic>
-References: <20220804192201.439596-1-kim.phillips@amd.com>
- <Yu0sT6vCofyWiAMI@zn.tnic>
- <86921fe7-6a6b-2731-b09e-a6e03f38a6b9@amd.com>
+        Fri, 5 Aug 2022 13:55:46 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110CAE0E9;
+        Fri,  5 Aug 2022 10:55:45 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z22so4288157edd.6;
+        Fri, 05 Aug 2022 10:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3pDyPaXmSjg1dfYYTVcD5twgm0VJEcQCaH5PzUebh+o=;
+        b=NasTXfyIKwSXshhH6uRWdhVe4jCKkDoBRipCni1OVWDHHkSZE8iK0Vhw289lgKT2uv
+         qS6eMQm42wwQy1UZM4kkyrdch99ditPm3awIimLr82sU3if3bt8aw/xZpAu/zujUoS54
+         cekJu+G0f5hLStL7JaE8TqYvMOIiGi/Jpq7aUtENnLq1amafw+ZX0Y2XkXTjLvABPgZy
+         B2U3SlVeDIS9e9u0kjZ4XgI66qvYPgtf+Dc14Ob180027TtXQXfKeB9PzzQrAjBFtZj5
+         NCEt46wYh/AQ0HNsMQk9lnmN60NZeyIIR4J9rMfvYs5Q3+KGn6pMjwuXrHIEpd4ll7dC
+         5XQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3pDyPaXmSjg1dfYYTVcD5twgm0VJEcQCaH5PzUebh+o=;
+        b=TVlx1kQ+ha3dWHQG8yoWH5f/MhMl/SOMwkbKc0Qb06cl3SA4nN3h4wptGqxB7i9qUc
+         sJGHAs7gb6itmZxkzn8PZdteNdCtSM0QyeDqXLxB+3NDeGCvirpN5KdRp5ySspcUwfx3
+         gyj1WhNz/xPWvlXw7Z3XeKrSg3/XwxXtaygwD4YvFrXcP1Gb/2Ra2+3e3ZLD2onnXjMz
+         yA8KUwYuvfh4o5kQHUqQjpiKcv6W5yrVP6tXsvR8Y5hqwfFNmtTmj26UiGKBQXVueuk/
+         R0LlCXaAPxffPeCOgrnCagzMjaKxTxnVavBli9qKRDc4+phh5CI7e/1Nz12rsj0wVGQ+
+         zV5g==
+X-Gm-Message-State: ACgBeo2phJFfYh2nwdG4n7DvZeWHLPGjrvxqqA6arqu/6XQckarWDOTj
+        OyYKRgQ//b0uCruObqkQ/lIjOgr2WQxwjA==
+X-Google-Smtp-Source: AA6agR5VWBwmuMByhlGp2jZk5km25TlB77WRs6fSjW6q6o8glqXJyrvjZip6gTq1ZgU4MWVWBbx1Kw==
+X-Received: by 2002:a05:6402:5518:b0:43a:9e32:b6fc with SMTP id fi24-20020a056402551800b0043a9e32b6fcmr8004431edb.252.1659722143505;
+        Fri, 05 Aug 2022 10:55:43 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id b11-20020a17090630cb00b0072b36cbcdaasm1809391ejb.92.2022.08.05.10.55.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 10:55:42 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
+Date:   Fri, 5 Aug 2022 19:55:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <86921fe7-6a6b-2731-b09e-a6e03f38a6b9@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
+ <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 12:04:34PM -0500, Kim Phillips wrote:
-> On 8/5/22 9:42 AM, Borislav Petkov wrote:
-> > On Thu, Aug 04, 2022 at 02:22:01PM -0500, Kim Phillips wrote:
-> > > For retbleed=ibpb, force STIBP on machines that have it,
-> > 
-> > Because?
+On 7/21/22 11:44, David Hildenbrand wrote:
 > 
-> See "6.1.2 IBPB On Privileged Mode Entry / SMT Safety":
-> 
-> https://www.amd.com/system/files/documents/technical-guidance-for-mitigating-branch-type-confusion_v7_20220712.pdf
-> 
-> Did you want me to re-quote the whitepaper, or reference it,
-> or paraphrase it, or...?
+> Also, I*think*  you can place pages via userfaultfd into shmem. Not
+> sure if that would count "auto alloc", but it would certainly bypass
+> fallocate().
 
-I would like for our commit messages to be fully standalone and explain
-in detail why a change is being done. So that when doing git archeology
-months, years from now it is perfectly clear why a change was needed.
+Yeah, userfaultfd_register would probably have to forbid this for 
+F_SEAL_AUTO_ALLOCATE vmas.  Maybe the memfile_node can be reused for 
+this, adding a new MEMFILE_F_NO_AUTO_ALLOCATE flags?  Then 
+userfault_register would do something like 
+memfile_node_get_flags(vma->vm_file) and check the result.
 
-This holds especially true for the CPU vuln nightmares.
+This means moving this patch later, after "mm: Introduce memfile_notifier".
 
-So please explain the "why" of your change. In your own words.
+Thanks,
 
-> "{unret,ibpb} alone does not stop sibling threads influencing the predictions of
-> other sibling threads.  For that reason, we use STIBP on processors that support
-> it, and mitigate SMT on processors that don't."
-
-Pretty much. I'd even explain each case explicitly:
-
-                        ibpb         - mitigate short speculation windows on
-                                       basic block boundaries too. Safe, highest
-                                       perf impact. On AMD, it also enables STIBP if
-				       present.
-                        ibpb,nosmt   - like ibpb, but will disable SMT when STIBP
-                                       is not available. This is the alternative for
-				       systems which do not have STIBP.
-
-> Those messages only get printed on non-AMD hardware?
-
-See, I got confused by our spaghetti code from hell. ;-\
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Paolo

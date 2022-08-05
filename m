@@ -2,126 +2,462 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD0358A90D
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96FB558A910
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240584AbiHEJyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 05:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S240578AbiHEJzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 05:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240566AbiHEJy2 (ORCPT
+        with ESMTP id S240382AbiHEJzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 05:54:28 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6487B481E9
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:54:27 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id h13so2652028wrf.6
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 02:54:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc;
-        bh=7oSWzw08ErorXdwfypMz8hOIDNIrEaUdKP8DUsP4jtU=;
-        b=f+ctR6gR3+OEFkDVj9plmzsdkBb31hxP79tU+tYv/+FhqmSJcUmhamtjX0hFqfmXjc
-         hBJz5e1T3VfJLFSGroOguIBJEPppsSAUOwsuSD/lwSI0pOB/qlMCRw2aHo2wKFnQF9qg
-         rk/Yzjk2nPuDBvu9ER9GNHnvmIDvIfAuonh7+R/6c9ahgDQdyZH0EWVPFDoR6qifEodK
-         NaWuCEQxcB21oaKAJ34/f+KyDKM65eD8hMV1/rMnUme/k2iwKH8g5oC3m4/Bw4miMWm8
-         izHYCe0dPe2CZ0yuLHjuIDbhzegLhyuzVY4fp4kx0ehYReyiKnjlr4BkWiC+lfGTpTOi
-         8PQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=7oSWzw08ErorXdwfypMz8hOIDNIrEaUdKP8DUsP4jtU=;
-        b=s75ohc2yIfC4Kj1eON3W0QBv2HLksJl1aVL0tNaTmovSsxmPpDOxjLKHxsmGc2hF6z
-         c3RLuSTyvBwk/96IjR9cMuqJQq5PvxAmes2sq97wm8Ky7CZaBfTK3vrdy2m4xhPPgZK4
-         CS/alDVC/8bdnfEcknCxBD1LNu4aoxpJ4rsXjvjZ5mvP77NAI0LWXPfNhEb8hBl22FNn
-         TUnPZubP/+zjlVkuA+MDN9jQHwuHYdX4DTvAzHxnoLm7VhpSUEUMWJGXJkH2vtre1d4z
-         GD7sfbf3Sdy7Y+YLuPZ32xwHnSQest8IIIfeMiaKM79Pi+JX2jStWfYFPAPYsN5U73JE
-         RtWg==
-X-Gm-Message-State: ACgBeo2rm7ceAzKNS9u9Z9Jo1wci5qvVXIrgwxLy2SYbBiAFX4jMCyAP
-        +IgHHp43qsUu87TSi2dJjWypLQqbcFjybg==
-X-Google-Smtp-Source: AA6agR6OP/1EzHrpiLLNyC/MBF+Ne6PJ3pwk4CH6O+KC7SZZQqg0Czw/jqOYMEfDPTmSZt4mx+OdZg==
-X-Received: by 2002:adf:fec1:0:b0:221:6cd7:1cfb with SMTP id q1-20020adffec1000000b002216cd71cfbmr1580517wrs.197.1659693265878;
-        Fri, 05 Aug 2022 02:54:25 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id t16-20020adff050000000b0021ee28ff76esm3449594wro.38.2022.08.05.02.54.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 02:54:25 -0700 (PDT)
-Date:   Fri, 5 Aug 2022 10:54:23 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Lee Jones <lee@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] Backlight for v5.20
-Message-ID: <Yuzoz21D5Cb0yROm@google.com>
+        Fri, 5 Aug 2022 05:55:04 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C36824BD9;
+        Fri,  5 Aug 2022 02:55:02 -0700 (PDT)
+Received: from [10.88.19.200] (10.88.19.200) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2507.6; Fri, 5 Aug 2022
+ 17:54:54 +0800
+Message-ID: <4119d339-0570-2132-3e9f-19ec45ef6e8d@amlogic.com>
+Date:   Fri, 5 Aug 2022 17:55:00 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH v4 1/4] perf/amlogic: Add support for Amlogic meson G12
+ SoC DDR PMU driver
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chris Healy <cphealy@gmail.com>,
+        kernel test robot <lkp@intel.com>
+References: <20220805071426.2598818-1-jiucheng.xu@amlogic.com>
+ <3597d068-2c44-9450-4a0c-4704f3639a37@linaro.org>
+From:   Jiucheng Xu <jiucheng.xu@amlogic.com>
+In-Reply-To: <3597d068-2c44-9450-4a0c-4704f3639a37@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.88.19.200]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good morning Linus,
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+On 2022/8/5 16:38, Krzysztof Kozlowski wrote:
+> [ EXTERNAL EMAIL ]
+>
+> On 05/08/2022 09:14, Jiucheng Xu wrote:
+>> This patch adds support Amlogic meson G12 series SoC
+>> DDR bandwidth PMU driver framework and interfaces.
+>>
+>> The PMU not only can monitor the total DDR bandwidth,
+>> but also the bandwidth which is from individual IP module.
+>>
+>> Example usage:
+>>
+>>   $ perf stat -a -e aml_ddr_bw/total_rw_bytes/ -I 1000 sleep 10
+>>
+>> - or -
+> Thank you for your patch. There is something to discuss/improve.
+>
+>> +
+>> +static void fmt_attr_fill(struct attribute **fmt_attr)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; fmt_attr[i]; i++)
+>> +		ddr_perf_format_attrs[i] = fmt_attr[i];
+>> +
+>> +	ddr_perf_format_attrs[i] = NULL;
+>> +}
+>> +
+>> +static int ddr_pmu_parse_dt(struct platform_device *pdev, struct dmc_hw_info *info)
+>> +{
+>> +	/*struct pinctrl *p;*/
+> No dead code in kernel.
+>
+>> +	void __iomem *base;
+>> +	int i, ret = -EINVAL;
+>> +
+>> +	for (i = 0; i < info->dmc_nr; i++) {
+> Your binding does not allow to have more than 1. Remove dead code.
+>
+>> +		/* resource 0 for ddr register base */
+>> +		base = devm_platform_ioremap_resource(pdev, i);
+>> +		if (IS_ERR(base)) {
+>> +			dev_err(&pdev->dev, "couldn't ioremap ddr reg %d\n", i);
+> Error message is not needed.
+>
+>> +			return PTR_ERR(base);
+>> +		}
+>> +		info->ddr_reg[i] = base;
+>> +	}
+>> +
+>> +	/* resource i for pll register base */
+>> +	base = devm_platform_ioremap_resource(pdev, i);
+>> +	if (IS_ERR(base)) {
+>> +		dev_err(&pdev->dev, "couldn't ioremap for pll reg\n");
+> Error message is not needed.
+>
+>> +		return PTR_ERR(base);
+>> +	}
+>> +	info->pll_reg = base;
+>> +
+>> +	ret = platform_get_irq(pdev, 0);
+>> +	if (ret < 0) {
+>> +		dev_err(&pdev->dev, "couldn't get irq\n");
+> Error message is not needed.
+>
+>> +		return ret;
+>> +	}
+>> +	info->irq_num = ret;
+>> +
+>> +	ret = devm_request_irq(&pdev->dev, info->irq_num, dmc_irq_handler,
+>> +			       IRQF_NOBALANCING, dev_name(&pdev->dev),
+>> +			       (void *)info);
+>> +	if (ret < 0)
+>> +		dev_err(&pdev->dev, "ddr request irq failed\n");
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +int meson_ddr_pmu_create(struct platform_device *pdev, struct ddr_pmu *pmu)
+>> +{
+>> +	int ret;
+>> +	char *name;
+>> +	struct pmu tmp_pmu = {
+>> +		.module		= THIS_MODULE,
+>> +		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
+>> +		.task_ctx_nr	= perf_invalid_context,
+>> +		.attr_groups	= attr_groups,
+>> +		.event_init	= meson_ddr_perf_event_init,
+>> +		.add		= meson_ddr_perf_event_add,
+>> +		.del		= meson_ddr_perf_event_del,
+>> +		.start		= meson_ddr_perf_event_start,
+>> +		.stop		= meson_ddr_perf_event_stop,
+>> +		.read		= meson_ddr_perf_event_update,
+>> +	};
+>> +
+>> +	pmu->pmu = tmp_pmu;
+>> +
+>> +	ret = ddr_pmu_parse_dt(pdev, &pmu->info);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	fmt_attr_fill(pmu->info.fmt_attr);
+>> +
+>> +	pmu->cpu = raw_smp_processor_id();
+> smp_processor_id()
+> (or why do you need to use raw?)
+>
+>
+>> +
+>> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, DDR_PERF_DEV_NAME);
+>> +	if (!name) {
+>> +		dev_err(&pdev->dev, "couldn't allocat name\n");
+> No error messages for allocation. Run basic tools on your code -
+> coccinelle, checkaptch, smatch and sparse.
+Okay, I just only run checkpatch. I will use the other tools to check my 
+patches.
+>
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN, name, NULL,
+>> +				      ddr_perf_offline_cpu);
+>> +	if (ret < 0) {
+>> +		dev_err(&pdev->dev, "cpuhp_setup_state_multi failed\n");
+>> +		return ret;
+>> +	}
+>> +	pmu->cpuhp_state = ret;
+>> +
+>> +	/* Register the pmu instance for cpu hotplug */
+>> +	ret = cpuhp_state_add_instance_nocalls(pmu->cpuhp_state, &pmu->node);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "Error %d registering hotplug\n", ret);
+>> +		goto cpuhp_instance_err;
+>> +	}
+>> +
+>> +	fill_event_attr(pmu);
+>> +
+>> +	ret = perf_pmu_register(&pmu->pmu, name, -1);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "perf pmu register failed\n");
+>> +		goto pmu_register_err;
+>> +	}
+>> +
+>> +	pmu->name = name;
+>> +	pmu->dev = &pdev->dev;
+>> +	pmu->pmu_enabled = false;
+>> +
+>> +	platform_set_drvdata(pdev, pmu);
+>> +
+>> +	return 0;
+>> +
+>> +pmu_register_err:
+>> +	cpuhp_state_remove_instance_nocalls(pmu->cpuhp_state, &pmu->node);
+>> +cpuhp_instance_err:
+>> +	cpuhp_remove_state(pmu->cpuhp_state);
+>> +
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL(meson_ddr_pmu_create);
+> Why is this exported?
+>
+> Also misses kerneldoc.
+Okay, I will remove them.
+>
+>> +
+>> +int meson_ddr_pmu_remove(struct platform_device *pdev)
+>> +{
+>> +	struct ddr_pmu *pmu = platform_get_drvdata(pdev);
+>> +
+>> +	perf_pmu_unregister(&pmu->pmu);
+>> +	cpuhp_state_remove_instance_nocalls(pmu->cpuhp_state, &pmu->node);
+>> +	cpuhp_remove_state(pmu->cpuhp_state);
+>> +
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL(meson_ddr_pmu_remove);
+> Why is this exported?
+>
+> Also misses kerneldoc.
+>
+>> diff --git a/drivers/perf/amlogic/meson_g12_ddr_pmu.c b/drivers/perf/amlogic/meson_g12_ddr_pmu.c
+>> new file mode 100644
+>> index 000000000000..ba1908733bee
+>> --- /dev/null
+>> +++ b/drivers/perf/amlogic/meson_g12_ddr_pmu.c
+>> @@ -0,0 +1,388 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2022 Amlogic, Inc. All rights reserved.
+>> + */
+> (...)
+Do you mean a new blank line need be added?
+>
+>> +static int dmc_g12_irq_handler(struct dmc_hw_info *info,
+>> +			       struct dmc_counter *counter)
+>> +{
+>> +	unsigned int val;
+>> +	int ret = -EINVAL;
+>> +
+>> +	val = readl(info->ddr_reg[0] + DMC_MON_G12_CTRL0);
+>> +	if (val & DMC_QOS_IRQ) {
+>> +		dmc_g12_get_counters(info, counter);
+>> +		/* clear irq flags */
+>> +		writel(val, info->ddr_reg[0] + DMC_MON_G12_CTRL0);
+>> +		ret = 0;
+>> +	}
+>> +	return ret;
+>> +}
+>> +
+>> +static struct dmc_pmu_hw_ops g12_ops = {
+> static const?
+Yes, I will modify it.
+>
+>> +	.enable		= dmc_g12_counter_enable,
+>> +	.disable	= dmc_g12_counter_disable,
+>> +	.irq_handler	= dmc_g12_irq_handler,
+>> +	.get_counters	= dmc_g12_get_counters,
+>> +	.config_axi_id	= dmc_g12_config_axi_id,
+>> +};
+>> +
+>> +static int __init g12_ddr_pmu_probe(struct platform_device *pdev)
+>> +{
+>> +	struct ddr_pmu *pmu;
+>> +
+>> +	if (of_device_is_compatible(pdev->dev.of_node,
+>> +				    "amlogic,g12a-ddr-pmu")) {
+>> +		format_attr_nna.attr.mode = 0;
+>> +		format_attr_gdc.attr.mode = 0;
+>> +		format_attr_arm1.attr.mode = 0;
+>> +		format_attr_mipi_isp.attr.mode = 0;
+> No. That's not correct patter. You must use variant specific driver data.
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+Do you mean use of_device_id.data? Could your please give me an
 
-are available in the Git repository at:
+example code in kernel source?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git tags/backlight-next-5.20
+>
+>> +	} else if (of_device_is_compatible(pdev->dev.of_node,
+>> +					   "amlogic,sm1-ddr-pmu")) {
+>> +		format_attr_gdc.attr.mode = 0;
+>> +		format_attr_arm1.attr.mode = 0;
+>> +		format_attr_mipi_isp.attr.mode = 0;
+> No. That's not correct patter. You must use variant specific driver data.
+>
+>> +	}
+>> +
+>> +	pmu = devm_kzalloc(&pdev->dev, sizeof(struct ddr_pmu), GFP_KERNEL);
+>> +	if (!pmu)
+>> +		return -ENOMEM;
+>> +
+>> +	/*
+>> +	 * G12 series Soc have single dmc controller and
+>> +	 * 4x ddr bandwidth monitor channels
+>> +	 */
+>> +	pmu->info.dmc_nr = 1;
+>> +	pmu->info.chann_nr = 4;
+>> +	pmu->info.ops = &g12_ops;
+>> +	pmu->info.fmt_attr = g12_pmu_format_attrs;
+>> +
+>> +	return meson_ddr_pmu_create(pdev, pmu);
+>> +}
+>> +
+>> +static int __exit g12_ddr_pmu_remove(struct platform_device *pdev)
+>> +{
+>> +	meson_ddr_pmu_remove(pdev);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id meson_ddr_pmu_dt_match[] = {
+>> +	{
+>> +		.compatible = "amlogic,g12-ddr-pmu",
+> Undocumented compatible. Did you run checkpatch and fix all the errors?
 
-for you to fetch changes up to fe201f6fa4cf96749b0a6b6a61b33b6a82de4e49:
+Yes, I run "./scripts/checkpatch --strict *.patch", and no errors/warnings.
 
-  MAINTAINERS: Use Lee Jones' kernel.org address for Backlight submissions (2022-08-03 08:26:30 +0100)
+Any other options should be used to check strictly?
 
-----------------------------------------------------------------
- - Core Frameworks
-   - Change maintainer email address
+I think it could be removed.
 
- - Fix-ups
-   - Obtain OCP level from Device Tree; rt4831-backlight
-   - DT fix-ups/conversions; richtek,rt4831-backlight
-   - Remove unused code / functionatlity; platform_lcd
-   - Switch to atomic PWM API; lp855x_bl
-
-----------------------------------------------------------------
-ChiYuan Huang (2):
-      dt-bindings: backlight: rt4831: Add the new ocp level property
-      backlight: rt4831: Apply ocp level from devicetree
-
-Lee Jones (2):
-      dt-bindings: backlight: Update Lee Jones' email address
-      MAINTAINERS: Use Lee Jones' kernel.org address for Backlight submissions
-
-Maíra Canal (1):
-      backlight: lp855x: Switch to atomic PWM API
-
-Rob Herring (1):
-      Revert "drivers/video/backlight/platform_lcd.c: add support for device tree based probe"
-
- .../devicetree/bindings/leds/backlight/common.yaml |  2 +-
- .../bindings/leds/backlight/gpio-backlight.yaml    |  2 +-
- .../bindings/leds/backlight/led-backlight.yaml     |  2 +-
- .../bindings/leds/backlight/lm3630a-backlight.yaml |  2 +-
- .../bindings/leds/backlight/pwm-backlight.yaml     |  2 +-
- .../leds/backlight/richtek,rt4831-backlight.yaml   |  5 ++++
- MAINTAINERS                                        |  2 +-
- drivers/video/backlight/lp855x_bl.c                | 21 ++++++--------
- drivers/video/backlight/platform_lcd.c             | 10 -------
- drivers/video/backlight/rt4831-backlight.c         | 33 +++++++++++++++++++++-
- 10 files changed, 52 insertions(+), 29 deletions(-)
- 
+>
+>> +	},
+>> +	{
+>> +		.compatible = "amlogic,g12a-ddr-pmu",
+>> +	},
+>> +	{
+>> +		.compatible = "amlogic,g12b-ddr-pmu",
+>> +	},
+>> +	{
+>> +		.compatible = "amlogic,sm1-ddr-pmu",
+> Why four different entries for the same devices without driver data?
+> This is confusing.
+Do you mean use a common compatible and different driver data?
+>
+>> +	},
+>> +	{}
+>> +};
+>> +
+>> +static struct platform_driver g12_ddr_pmu_driver = {
+>> +	.driver = {
+>> +		.name = "amlogic,ddr-pmu",
+>> +		.of_match_table = meson_ddr_pmu_dt_match,
+>> +	},
+>> +	.remove = __exit_p(g12_ddr_pmu_remove),
+> You made the driver non-hotpluggable - why?
+> In the same time it is still unbindable, whis is a bit confusing. If you
+> can unbind it, you should be able to hot-unplug it.
+Sorry, I couldn't know why the driver is non-hotpluggable. Could you 
+tell the detail?
+>> +};
+>> +
+>> +module_platform_driver_probe(g12_ddr_pmu_driver, g12_ddr_pmu_probe);
+>> +MODULE_AUTHOR("Jiucheng Xu");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("Amlogic G12 series SoC DDR PMU");
+>> diff --git a/include/soc/amlogic/meson_ddr_pmu.h b/include/soc/amlogic/meson_ddr_pmu.h
+>> new file mode 100644
+>> index 000000000000..882efe3c2f58
+>> --- /dev/null
+>> +++ b/include/soc/amlogic/meson_ddr_pmu.h
+>> @@ -0,0 +1,76 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (c) 2022 Amlogic, Inc. All rights reserved.
+>> + */
+>> +
+>> +#ifndef __MESON_DDR_PMU_H__
+>> +#define __MESON_DDR_PMU_H__
+>> +
+>> +#define MAX_CHANNEL_NUM		8
+>> +
+>> +enum {
+>> +	ALL_CHAN_COUNTER_ID,
+>> +	CHAN1_COUNTER_ID,
+>> +	CHAN2_COUNTER_ID,
+>> +	CHAN3_COUNTER_ID,
+>> +	CHAN4_COUNTER_ID,
+>> +	CHAN5_COUNTER_ID,
+>> +	CHAN6_COUNTER_ID,
+>> +	CHAN7_COUNTER_ID,
+>> +	CHAN8_COUNTER_ID,
+>> +	COUNTER_MAX_ID,
+>> +};
+>> +
+>> +struct dmc_hw_info;
+>> +
+>> +struct dmc_counter {
+>> +	u64 all_cnt;	/* The count of all requests come in/out ddr controller */
+>> +	union {
+>> +		u64 all_req;
+>> +		struct {
+>> +			u64 all_idle_cnt;
+>> +			u64 all_16bit_cnt;
+>> +		};
+>> +	};
+>> +	u64 channel_cnt[MAX_CHANNEL_NUM]; /* To save a DMC bandwidth-monitor channel counter */
+>> +};
+>> +
+>> +struct dmc_pmu_hw_ops {
+>> +	void (*enable)(struct dmc_hw_info *info);
+>> +	void (*disable)(struct dmc_hw_info *info);
+>> +	/* Bind an axi line to a bandwidth-monitor channel */
+>> +	void (*config_axi_id)(struct dmc_hw_info *info, int axi_id, int chann);
+>> +	int (*irq_handler)(struct dmc_hw_info *info,
+>> +			   struct dmc_counter *counter);
+>> +	void (*get_counters)(struct dmc_hw_info *info,
+>> +			     struct dmc_counter *counter);
+>> +};
+>> +
+>> +struct dmc_hw_info {
+>> +	struct dmc_pmu_hw_ops *ops;
+>> +	void __iomem *ddr_reg[4];
+>> +	unsigned long timer_value;	/* Timer value in TIMER register */
+>> +	void __iomem *pll_reg;
+>> +	int irq_num;			/* irq vector number */
+>> +	int dmc_nr;			/* The number of dmc controller */
+>> +	int chann_nr;			/* The number of dmc bandwidth monitor channels */
+>> +	int id;				/* The number of supported channels */
+>> +	struct attribute **fmt_attr;
+>> +};
+>> +
+>> +struct ddr_pmu {
+>> +	struct pmu pmu;
+>> +	struct dmc_hw_info info;
+>> +	struct dmc_counter counters;	/* save counters from hw */
+>> +	bool pmu_enabled;
+>> +	struct device *dev;
+>> +	char *name;
+>> +	struct hlist_node node;
+>> +	enum cpuhp_state cpuhp_state;
+>> +	int cpu;			/* for cpu hotplug */
+>> +};
+> Linux-wide headers should not include your private data structures.
+> Entier header looks unused - should be made private.
+Do you mean the header should be in driver dir, or the structures should 
+be within .c file?
+>
+> Best regards,
+> Krzysztof
+>
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thanks,
+Jiucheng
+

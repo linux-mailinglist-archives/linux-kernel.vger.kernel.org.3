@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3C158AA4F
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34DB58AA51
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237948AbiHELqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 07:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S238075AbiHELr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 07:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236440AbiHELqe (ORCPT
+        with ESMTP id S233062AbiHELr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 07:46:34 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262863AE5C
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 04:46:33 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id d4-20020a056e02214400b002df95f624a4so607726ilv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 04:46:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=0VzqJygc5Za6Af8Uvt2WofNNb8ZfUsjKpLmF8pLSvZk=;
-        b=d+0dkBWIoN0OzhcdIMgOXcLFJww1FCNyM/YqBryyX5nXsOQ0+8rxqtspOJ9QoT9Dy+
-         WSAF+CPImRFidATqEiAhy6eXM9/DibrWi5w2h/bG9h1T2O59WYwhePHUePIg4bUno8pC
-         oB82SCddeesHlDgcUTq6ZUuPbNRFy80aeaDtHHAB/SofchP6eWbuxq3ErnNI29Vx5Zcx
-         Znv/9rxamslGmi5SXaltTA806gWl2NH6K8wu/+jtKRilUTMtO+nPPJ6WScUL0bdUhn1w
-         D1ThPQkCn7UsPmjmRtb/JaoboXG2a9GUmOHgaVyTRI4XtOhjyAZ4Biey+oolH1vsO64t
-         oLqQ==
-X-Gm-Message-State: ACgBeo03C1fw7WOkAxJRZl7/65cUgyeo/1iC9JbNOj6dtkAYrau9Djop
-        xPV9v8wzVGQutXf8JKGXyN5LUziEcQyH+Mj9AJXzg3yUdYu+
-X-Google-Smtp-Source: AA6agR7Cipv2HUy00gO8pSrxtUAcvbMrVKwx77m//+jLEVApWjB/QxRWVj/of4qt3UGst/LEqj9r4gC9iaNUN/3II7mQs+huBpr1
+        Fri, 5 Aug 2022 07:47:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27B231238;
+        Fri,  5 Aug 2022 04:47:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 913C2B82884;
+        Fri,  5 Aug 2022 11:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35365C433C1;
+        Fri,  5 Aug 2022 11:47:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659700073;
+        bh=JMMJeixBs3l9ubdtNRBE7DXk1PsGjT8Uuky1AgfqSc0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ppfklYZLyx6qK75yBrHA6LYRgkcnNugJOsJPgFXVl1oESd225AcOJiQUjBSJErSh7
+         Nr7eLrI1Izyj+wsSCjb70hLOIgovFxqfcbnNvRTzIOx5A8JhQukJESNoHLFwJYFN29
+         pFFgWqs1m4VUPVbIkEIYLwpj4+tXPBCx1cuwljDLRurGUntZ3gEZUTZfsGEeEtVpM/
+         O1IDYP2ShQNUF0bOlWOoSPlbedqgeF+Q6QrldusqfsbIsPh2KszsgCAuUvg2106tvL
+         10+x9xMMk09P6Nr+ay6dAmdyupB4+aIim2OtUj6Z9dbOIWB/UvZeCmGi2LmORIWcW/
+         nZzfAUgLelbZQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oJvoO-0002Nk-Uk; Fri, 05 Aug 2022 13:48:17 +0200
+Date:   Fri, 5 Aug 2022 13:48:16 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Amireddy mallikarjuna reddy <mallikarjuna.reddy@ftdichip.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, malliamireddy009@gmail.com,
+        arun.pappan@ftdichip.com, sowjanya.reddy@ftdichip.com
+Subject: Re: [PATCH v1] USB: serial: ftdi_sio: add IDs for NEW FTDI Products
+Message-ID: <Yu0DgKWYqGim7y3E@hovoldconsulting.com>
+References: <ac28f2c5eba23a645b3b9299c224f2755a233eef.1658385786.git.mallikarjuna.reddy@ftdichip.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c0e:b0:2df:622c:37cd with SMTP id
- l14-20020a056e021c0e00b002df622c37cdmr2989419ilh.234.1659699992516; Fri, 05
- Aug 2022 04:46:32 -0700 (PDT)
-Date:   Fri, 05 Aug 2022 04:46:32 -0700
-In-Reply-To: <0000000000008f6d2005c9e53c59@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007ce13a05e57d0418@google.com>
-Subject: Re: [syzbot] kernel BUG in ext4_get_group_info
-From:   syzbot <syzbot+e2efa3efc15a1c9e95c3@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac28f2c5eba23a645b3b9299c224f2755a233eef.1658385786.git.mallikarjuna.reddy@ftdichip.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,89 +58,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Thu, Jul 21, 2022 at 03:02:44PM +0800, Amireddy mallikarjuna reddy wrote:
+> Add the product IDs for the USB-to-Serial devices FT2233HP, FT2233HP,
+> FT4233HP, FT4232HP, FT233HP, FT232HP, and FT4232HAQ.
+> Also include BCD values so that the chiptype can be determined.
+> 
+> Signed-off-by: Amireddy mallikarjuna reddy <mallikarjuna.reddy@ftdichip.com>
+> ---
+> v1:
+> - Initial version.
 
-HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15a655b6080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
-dashboard link: https://syzkaller.appspot.com/bug?extid=e2efa3efc15a1c9e95c3
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b248e1080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ba3e3e080000
+Thanks for the patch. This looks mostly good even I should revisit some
+clean-up patches I have laying around that gets rid of the unnecessary
+device-type conditionals that you're now extending.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e2efa3efc15a1c9e95c3@syzkaller.appspotmail.com
+I'll either rebase this patch on top or the other way around, but either
+way I'll get this in in some form in a few weeks (e.g. after the merge
+window closes).
 
-EXT4-fs (loop0): ext4_check_descriptors: Checksum for group 0 failed (14603!=0)
-EXT4-fs (loop0): orphan cleanup on readonly fs
-EXT4-fs error (device loop0): ext4_mb_clear_bb:5962: comm syz-executor137: Freeing blocks in system zone - Block = 16, count = 16
-EXT4-fs (loop0): Remounting filesystem read-only
-------------[ cut here ]------------
-kernel BUG at fs/ext4/ext4.h:3319!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3607 Comm: syz-executor137 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:ext4_get_group_info+0x36e/0x3d0 fs/ext4/ext4.h:3319
-Code: ff 48 c7 c2 a0 b5 e2 89 be c3 02 00 00 48 c7 c7 00 b6 e2 89 c6 05 39 e3 89 0b 01 e8 fc 1d 16 07 e9 d9 fd ff ff e8 22 af 5d ff <0f> 0b e8 9b 76 aa ff e9 ea fc ff ff e8 91 76 aa ff e9 24 fd ff ff
-RSP: 0018:ffffc90002fcf210 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 00000000ffffffff RCX: 0000000000000000
-RDX: ffff888024b99d80 RSI: ffffffff821d2a9e RDI: 0000000000000004
-RBP: ffff888021e86000 R08: 0000000000000004 R09: 0000000000000001
-R10: 00000000ffffffff R11: 0000000000000001 R12: ffff888021ee2000
-R13: ffff888021ee2678 R14: 0000000000000001 R15: dffffc0000000000
-FS:  00005555570a1300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000005ded08 CR3: 0000000025559000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- ext4_mb_clear_bb fs/ext4/mballoc.c:5935 [inline]
- ext4_free_blocks+0x4a2/0x2060 fs/ext4/mballoc.c:6185
- ext4_clear_blocks+0x329/0x430 fs/ext4/indirect.c:880
- ext4_free_data+0x1a3/0x3e0 fs/ext4/indirect.c:954
- ext4_ind_truncate+0x6a2/0x950 fs/ext4/indirect.c:1146
- ext4_truncate+0x696/0x1440 fs/ext4/inode.c:4244
- ext4_evict_inode+0xa5f/0x1970 fs/ext4/inode.c:284
- evict+0x2ed/0x6b0 fs/inode.c:664
- iput_final fs/inode.c:1744 [inline]
- iput.part.0+0x562/0x820 fs/inode.c:1770
- iput+0x58/0x70 fs/inode.c:1760
- ext4_quota_enable fs/ext4/super.c:6781 [inline]
- ext4_enable_quotas+0x5c4/0xb70 fs/ext4/super.c:6804
- ext4_orphan_cleanup+0xde1/0x10f0 fs/ext4/orphan.c:432
- __ext4_fill_super fs/ext4/super.c:5368 [inline]
- ext4_fill_super+0xac9a/0xe830 fs/ext4/super.c:5507
- get_tree_bdev+0x440/0x760 fs/super.c:1292
- vfs_get_tree+0x89/0x2f0 fs/super.c:1497
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa6cfe974da
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc803cf6f8 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffc803cf750 RCX: 00007fa6cfe974da
-RDX: 0000000020000000 RSI: 0000000020000040 RDI: 00007ffc803cf710
-RBP: 00007ffc803cf710 R08: 00007ffc803cf750 R09: 0000000800000015
-R10: 0000000000000081 R11: 0000000000000206 R12: 0000000000000004
-R13: 0000000000000003 R14: 0000000000000003 R15: 0000000000000010
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:ext4_get_group_info+0x36e/0x3d0 fs/ext4/ext4.h:3319
-Code: ff 48 c7 c2 a0 b5 e2 89 be c3 02 00 00 48 c7 c7 00 b6 e2 89 c6 05 39 e3 89 0b 01 e8 fc 1d 16 07 e9 d9 fd ff ff e8 22 af 5d ff <0f> 0b e8 9b 76 aa ff e9 ea fc ff ff e8 91 76 aa ff e9 24 fd ff ff
-RSP: 0018:ffffc90002fcf210 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 00000000ffffffff RCX: 0000000000000000
-RDX: ffff888024b99d80 RSI: ffffffff821d2a9e RDI: 0000000000000004
-RBP: ffff888021e86000 R08: 0000000000000004 R09: 0000000000000001
-R10: 00000000ffffffff R11: 0000000000000001 R12: ffff888021ee2000
-R13: ffff888021ee2678 R14: 0000000000000001 R15: dffffc0000000000
-FS:  00005555570a1300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc803d0000 CR3: 0000000025559000 CR4: 0000000000350ef0
-
+Johan

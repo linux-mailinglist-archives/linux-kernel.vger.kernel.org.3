@@ -2,193 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B2358AFCB
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 20:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0216158AFCC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 20:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241389AbiHESfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 14:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S241417AbiHESfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 14:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241378AbiHESfF (ORCPT
+        with ESMTP id S237177AbiHESfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 14:35:05 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-cusazon11020020.outbound.protection.outlook.com [52.101.61.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A54D7B1C0;
-        Fri,  5 Aug 2022 11:35:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I9Em5BbH64ZNXKaIFbw/61dO8/9eE3vEA8+fGqYuH/eFoSNqupJtoQLJht5Ch1CPQqTDXGk+zcAE2pch7YWi9Eb5GvoBBoLdui3Fsy4ZvTe8yINdwJ7KhMDImoZdwhVkN7nyOnWmQxjNns6F5qQZMSycDCDEbtGRHSRMijPDhSZdz/4zhR8BaVllNwamHcl6mMQiJVYScNT68BZqG2JnX4LdJvCUtyue8SKE9Xg9WWfUTf6+3mQDINvxrXEL68DVd6651b7EmcoKhQTKZr5oOVhbT/518LSD8YRrJoi1+PLTk66xi3i9fqc0EFq9Uq1L81eEKTx8Py6BUL0zkxY0VA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MYP8DjgNImKn3Sumv0DM+z5UnJhXqDJL7y/sHXX3kiY=;
- b=arKCUgojMaX2bdKvYL09QzDFaoW/eQf4jWDly1wj+2BmTIn1PZxWpWwjgWS1XvpuLKNWu4jr0IffF7/mCLFSNtw3zeMqiZhFZEE+I5bI+48bLkNsRwnsDHtutrdEkjKClKLfK9EgWrcbttLbU00Ntit9+FpW4R2lnB3Vlth8k1E9NvCjzVcrMMaWYyiWHSohH8shwG9MOYWKTQ2Ih7mlYinw+Fn2leqp/p1VFtJ0oT4CNJpuativNWPoC1OLOc2grr5siltXqDR+KMOL8h1/ugqUy5R59qP3irGJ6C03mXmEsqWaXdNLgdOmQZnyoVuFblMWib6kyWqhBQ4DtP11KA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MYP8DjgNImKn3Sumv0DM+z5UnJhXqDJL7y/sHXX3kiY=;
- b=O9eDccU5XWattU0UI4OiH7+DMBlIvl0l+0TfuLH8aN0qak6LExK/W7dhMyggKEad8+10Jibd2MmB0vJBABfI/x4lgRU2k2vKVqpepxkoPRbF2BHSky+XRiLrt5OQrd8xM88dHu5rO/+b9VC1IuYle0e6AEWcGHTa8djfuhA+soI=
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com (2603:10b6:510:d2::21)
- by CH2PR21MB1431.namprd21.prod.outlook.com (2603:10b6:610:5d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Fri, 5 Aug
- 2022 18:35:02 +0000
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::29af:3ad1:b654:63b8]) by PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::29af:3ad1:b654:63b8%6]) with mapi id 15.20.5525.005; Fri, 5 Aug 2022
- 18:35:01 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Deepak Rawat <drawat.floss@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: RE: [PATCH] drm/hyperv: Fix an error handling path in
- hyperv_vmbus_probe()
-Thread-Topic: [PATCH] drm/hyperv: Fix an error handling path in
- hyperv_vmbus_probe()
-Thread-Index: AQHYpRhoWdKqZI1ivUaFNPBsm/0vva2gp4OA
-Date:   Fri, 5 Aug 2022 18:35:01 +0000
-Message-ID: <PH0PR21MB3025D61C85CD6E724919A9D8D79E9@PH0PR21MB3025.namprd21.prod.outlook.com>
-References: <7dfa372af3e35fbb1d6f157183dfef2e4512d3be.1659297696.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <7dfa372af3e35fbb1d6f157183dfef2e4512d3be.1659297696.git.christophe.jaillet@wanadoo.fr>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=fe3841fb-4099-4e82-98b0-b322b10f7934;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-08-05T18:26:17Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6d09bf18-c340-4f59-bc20-08da7711354b
-x-ms-traffictypediagnostic: CH2PR21MB1431:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rvmo36Kvlxkw08YxnOcQyRTS/WXwtsua2J5U+tQMz6gqoTMXlAAaS18lGIeCOAdbcALB/Tud63nFdzUmKC3tu0cE5yBBfgDVGgworFAhYQsALrdB6UnLK5Tr+qgs2lIryLRsSPRDRWlu4tj2Cbbdl8ntMJP0wiA8l0mHUGXhMp1PuV29DvndssTtIhTf/HWpyuoVd56anCtMpYUaf/7CTjkPT/OyXICv1A2VAYtexNZWt0pYhdGVZkZMaj9IxRkWYa8cb0EEUw2u7nLkjCGjZAIjQth52W4+R600QuNtEv5f/SRUKymFoLNNAk7rbA1kjH3I1xCxHnYrp5NzmIWjeIEaJO9r3b+356Gq1aTJCZjWABs7wyAA0uIGuoZg6MVmXHhUMAALSlgaC1N+ck/p+QsS4tYspPyRVziq7y0QsDXLD9hWaiLe6EX6h65aavEEIslvpDaj0aUmcAoM1kR33SCfG2MPSeV0j4LlPT46Od7H7lJrBHd8m8ojvTha7z4xfo/CnuFTb78RQkIkcvhiAT5Q26r9VXe12o7cyGEqlQJ4YLTRF+e9iY6V2PLPjZuVzzs5upoDJkxbqqi/nlbp9531bJjm3G7zxP5+8ALSTjmI3ROdqiRMxdD1GGtXVRbTGQko2ZSMRVmTB2NbiUxkwTbXr4aVEdPU5hCDAqs9h53liX1QkaYRwoAb/pvStglyGaGxCBU1H2ZwnMPG/LfvnOEB9/7KjAUKmKYIDeBKmj0KFeICcdCuhBu88hID483eD4knMnIFSyOJI6wHEJ6hXwm4Of/K0U/C89MZLt2UuLLRh5vy1gGbDsSiFVhFYMiYdluWO80kTkBUmvAxar3fh6/tme812118gb6UMn5OTnA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR21MB3025.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(346002)(396003)(366004)(136003)(451199009)(110136005)(5660300002)(52536014)(8990500004)(8936002)(33656002)(316002)(66476007)(66946007)(54906003)(64756008)(76116006)(66446008)(4326008)(8676002)(55016003)(66556008)(71200400001)(478600001)(10290500003)(7696005)(122000001)(38100700002)(38070700005)(6506007)(41300700001)(86362001)(9686003)(26005)(82950400001)(186003)(82960400001)(2906002)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lNipHprEqhPu0jlqATcy5bqSyLj/kYseTT6u41n5ZeKb76ySpVdeNiJsc0Oq?=
- =?us-ascii?Q?lcXtUMI9hQ506boccLjrYfhtFq3d7Rtrc24j0WpI00QRhLqQwUJsd4D92xLX?=
- =?us-ascii?Q?p9YDrT5knC+XIW/Z72hn9U8KcRfe8LayOlLbocS9xPHzQKDgkmthzJnV9YtK?=
- =?us-ascii?Q?yVJO1TmkYQfjyhQmWRBKofSljjjfpx+8y0EF8UZAHtQ1aJSQOsExJ2GPEUjo?=
- =?us-ascii?Q?M86Wc1NhGQ2A0bGv5gvO7QoGpxrBFm5qTnKaZ0VnkrhTv/2BQIfx0foZbTKH?=
- =?us-ascii?Q?wtaj84Gf0qItN269NzE8TNO8dKkxQomPih1cqO47UcyLjkzytAFB1X5de9d7?=
- =?us-ascii?Q?czBJ6AWdPA5HznITfXENhRaNJe5vaX1Y/w8iS7CvxKdINOcfEsJfJB55AHq4?=
- =?us-ascii?Q?fy6WV714UonucGcysY6sO9k/lStU+Su6iXvyr9IqyugxFD2pPpOyhaCwEgWB?=
- =?us-ascii?Q?RL7+948F05InS8G7sSG1qyCLeM6lJKS1kK5sVRoF0mxJiZMGKjqgj3UPmMLZ?=
- =?us-ascii?Q?LhCbxgdIyhufzZG9BnikKx+VrCnF3Ab7/31XgNAA8FmO01FE7HySiOeEoOEr?=
- =?us-ascii?Q?DpycPFl8P5KR+1In85DQ80VY2IOMk/f/u/TExwg5obyiSNMEwhUWEqy/yOb3?=
- =?us-ascii?Q?ja23UYQ5drY3pDCZBCOZTOAbA1r+I9PTjpW/rlp1Cky+4ZbYCXRg317flC20?=
- =?us-ascii?Q?oSQXL/oWSYtGIPeGGFWJRsiIdAy1dx+NyQ4AMWmVoPLrunnSy9vv59vRMBXR?=
- =?us-ascii?Q?NL6NFmlP77a2fYE7HygNbrV1G3qRneT4V14ls+5QEs9A69vmevVoBRhickB3?=
- =?us-ascii?Q?QrNCU03eGbid9a93VHqSj/sd5eaIp6KWWBbikoUcd/tediUL/O1uw8fqNCg6?=
- =?us-ascii?Q?8/NTSYEry4lk3XGXZx6IZTpwauZXVF7fBxxI2UjDUw87nbUDY249dOYejYnO?=
- =?us-ascii?Q?aLDHB0BoAig68C9drlAhjypijMENfjiBKREvX9exGUNckR5HGj/gb0tEiDOj?=
- =?us-ascii?Q?gvxacfmhusvnM/LoxARBscRRWxBRMMwnJSzRQB/62QNRr/oZSm7FpbXBquTX?=
- =?us-ascii?Q?u9LrQj9TLzS03L5P8s7cgaWxtDCtcicetYvP0vGMlEhGZJ/zOtQsW1uZOuzf?=
- =?us-ascii?Q?dBwEICq4ZFo0jkB4it1TjI6dhD0jMOId58EDYBLATfUA72wRwXhA9OLMpckP?=
- =?us-ascii?Q?Bv/ZqsLv9ddE/vzPqRryT2utTXr/YrURZDHfBN6WK+7veH9SGG999T0KIfib?=
- =?us-ascii?Q?uyXExTuMU2wbeUlk0K/b84suvC3sX1wGMJ4c2vFgUYclqDSXKsNCcOF3gtck?=
- =?us-ascii?Q?6ImQZ1KlZzenBcBuI4M9ng5dWmEYmwFelLOTW2rCNX7plA23Fm4NIT09Lnsz?=
- =?us-ascii?Q?4ve5BorvsJqrimIOXMBRV3vGgMYHcMrmfPBzzJYTeVV5gNQYEcZN3d6hjjPa?=
- =?us-ascii?Q?VSnsrO8Jh79O2kYRITd8yDLQT7m3S1lrkg7doVMiMe0aUpizc6MNHlfAJItj?=
- =?us-ascii?Q?n+IOY/dx88btuMmX+jjhhxbwWlJU6km1BSPMmbWmOzP1Ix5ZFqdZ10gtCWD3?=
- =?us-ascii?Q?hnEY6+qnKxsjuAHJmO+Ex+JDk1pg6DpJDeyOHMJT1fRgVWZpl0MMFMKemPAP?=
- =?us-ascii?Q?mw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 5 Aug 2022 14:35:15 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10655D45
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 11:35:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659724514; x=1691260514;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fQgkM0I77hhrK0bNqR1N2VYcwPL7X5dAPZAJQSyDdF4=;
+  b=C+9L/VH1gO39sSBa2JDh9eaAqxHbzMW6m6EONq6j4MaVrwP5vl5r688E
+   oZIatQ/jhd2TQhvdAnE9pUXdvUQQFzBzZbIKgqBA5vAH+kiNXj7iK3ACx
+   cXeV696TPNj2+6kM6AdpIb2315lE/jSDEI+6Mo8Zd40q7qUEiUiuOQneV
+   nrzIgVuMQdiJXFSzLic4hZTZysZEHBHxJ7OE2frEaFsV1Vad5YfY1y7SN
+   /FQ9cXITlF5ARtUzRaIi35d6FaPHWuuWyQnurtWcru3QpL87ULrcPQ0ik
+   Is/YWJrdAnBN12V4BHVnUrrHtyPcRg0zBvpUE3ak32Zh3dg8JSVRhBaaw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="351983237"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="351983237"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 11:35:13 -0700
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="579592613"
+Received: from rderber-mobl1.amr.corp.intel.com (HELO [10.212.217.71]) ([10.212.217.71])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 11:35:13 -0700
+Message-ID: <1660cdf4-96c1-b6bb-a3be-d02c7a3affb9@intel.com>
+Date:   Fri, 5 Aug 2022 11:35:14 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR21MB1431
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [patch V4 09/65] x86/fpu: Sanitize xstateregs_set()
+Content-Language: en-US
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Andrei Vagin <avagin@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Borislav Petkov <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Megha Dey <megha.dey@linux.intel.com>,
+        Oliver Sang <oliver.sang@intel.com>
+References: <20210623120127.327154589@linutronix.de>
+ <20210623121452.214903673@linutronix.de>
+ <CANaxB-wkcNKWjyNGFuMn6f6H2DQSGwwQjUgg1eATdUgmM-Kg+A@mail.gmail.com>
+ <4812abd6-626c-67e4-7314-be282cd25a4a@intel.com>
+ <CANaxB-w1+zCupiS5HyofGhVD7TKqZCoRjv9VZiegROiPkMY3NA@mail.gmail.com>
+ <291808ee-d5ab-a7b2-33e2-62a449e90cbf@intel.com>
+ <37ba2de3-26b3-12eb-6a9d-c0f0572b832c@intel.com>
+ <CANaxB-wFSTO+CCv2wCZb3JXwo1j8okiR2qAOMYcOiL8mn6WaTw@mail.gmail.com>
+ <6f7db66e-c486-4687-bd8e-75478df06a28@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <6f7db66e-c486-4687-bd8e-75478df06a28@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr> Sent: Sunday, July=
- 31, 2022 1:02 PM
->=20
-> hyperv_setup_vram() calls vmbus_allocate_mmio().
-> This must be undone in the error handling path of the probe, as already
-> done in the remove function.
->=20
-> This patch depends on commit a0ab5abced55 ("drm/hyperv : Removing the
-> restruction of VRAM allocation with PCI bar size").
-> Without it, something like what is done in commit e048834c209a
-> ("drm/hyperv: Fix device removal on Gen1 VMs") should be done.
+On 8/5/22 11:24, Chang S. Bae wrote:
+> On 8/5/2022 5:12 AM, Andrei Vagin wrote:
+>> gVisor test passes with this change too. Chang, are you going to send
+>> a patch?
+> 
+> Oh, sounds good then.
+> 
+> Will post patches. But I guess I need to revise them a bit.
 
-Should the above paragraph be below the '---' as a comment, rather than
-part of the commit message?  It's more about staging instructions than a
-long-term record of the actual functional/code change.
-
->=20
-> Fixes: 76c56a5affeb ("drm/hyperv: Add DRM driver for hyperv synthetic vid=
-eo device")
-
-I wonder if the Fixes: dependency should be on a0ab5abced55.  As you noted,
-this patch won't apply cleanly on stable kernel versions that lack that com=
-mit,
-so we'll need a separate patch for stable if we want to make the fix there.
-
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-
-All that said, the fix looks good, so
-
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-
-> ---
->  drivers/gpu/drm/hyperv/hyperv_drm_drv.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> index 6d11e7938c83..fc8b4e045f5d 100644
-> --- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> +++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
-> @@ -133,7 +133,6 @@ static int hyperv_vmbus_probe(struct hv_device *hdev,
->  	}
->=20
->  	ret =3D hyperv_setup_vram(hv, hdev);
-> -
->  	if (ret)
->  		goto err_vmbus_close;
->=20
-> @@ -150,18 +149,20 @@ static int hyperv_vmbus_probe(struct hv_device *hde=
-v,
->=20
->  	ret =3D hyperv_mode_config_init(hv);
->  	if (ret)
-> -		goto err_vmbus_close;
-> +		goto err_free_mmio;
->=20
->  	ret =3D drm_dev_register(dev, 0);
->  	if (ret) {
->  		drm_err(dev, "Failed to register drm driver.\n");
-> -		goto err_vmbus_close;
-> +		goto err_free_mmio;
->  	}
->=20
->  	drm_fbdev_generic_setup(dev, 0);
->=20
->  	return 0;
->=20
-> +err_free_mmio:
-> +	vmbus_free_mmio(hv->mem->start, hv->fb_size);
->  err_vmbus_close:
->  	vmbus_close(hdev->channel);
->  err_hv_set_drv_data:
-> --
-> 2.34.1
-
+I've also got a series that Andy, Thomas and I were poking at last week.
+ I'll try and get it out the door today.

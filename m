@@ -2,169 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7C058AEF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 19:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4667658AEFC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 19:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238307AbiHERdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 13:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48548 "EHLO
+        id S236383AbiHERhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 13:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiHERdF (ORCPT
+        with ESMTP id S230098AbiHERhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 13:33:05 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF0F3A2
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 10:33:04 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id t22so3393233pjy.1
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 10:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=rZtwmuWIKJRZKs7sJolgB/YTLmgyIVLtF2FTeQENAKA=;
-        b=cWzBk5CsfTOPBiDuvc8HX3X8YRWrERP57Qe85hgJsdyGLoTSO6mTs0Aw8yl2ETfVVL
-         LQ6P+QyV3H95Y0nQIndg3cHMhoaxJIcs1oxaCGtctP1ej99kx1dtvGgLporEOijiY5up
-         dSnvvjnt1wvshH333faX0u+mub6gTkpxErxkN5XkEQ/TIhi1F15nxoRtPlMnu8y/V+5i
-         SRei16P8CzHxh4qm2XCoskapfNQ/328M0XLIYsqvNKE1UZT1ItyUE6wjic0nN8intNwc
-         GGuKSjgWnrgaxDmmgJZ7Jt5OsIXf91Ztyhis8NlkAFlbi/z2zeDJlpzT79OxRqFlLVJU
-         jB8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=rZtwmuWIKJRZKs7sJolgB/YTLmgyIVLtF2FTeQENAKA=;
-        b=Nn2ylKXSBxOpGU2ppfsc06KUJpK3jL6abiSOzVsw/RwapjhzfAgiI1zdzGPpSeso/c
-         AjV3HbDY7SaJ49TQuF6P5WExLe7oc5rBuwlVOV/JNrL42ZMR1Bhkou0CyNbT7woLDOuH
-         UptJPb4RUoaU/4mD/9uGUYtnuwfOdogg/dHQQ9mowc+2MfTHsWJ65zK2Lx/bnf54Kpe+
-         JXbo2/TaancXyppSApCPuMJBciVCibMW2GR0gEofg176zllprekW/1I289gUwJZc0+9a
-         E5XyqUDmo8Q7VRZZ32qahR8MWhvYfvvmyJZH9IXGT8RgoksjVWCbG/Ye4Av0Ni1HRBsi
-         Ye3A==
-X-Gm-Message-State: ACgBeo0RCg90AG06faLUTt+w0LonsGYIa2QPggdKbGe3L5uPw2FwxkL5
-        4Cz+znDgTg8UM+9k4pEHm1PccGDC+rY=
-X-Google-Smtp-Source: AA6agR4TzY0EtG9blLfWDhjBRChkONpmZLWVrj/WjTLdbuFHvKEc1dAOxUI4sd6ymqR5oUfR9FX51Q==
-X-Received: by 2002:a17:90b:3e86:b0:1f5:2b4f:7460 with SMTP id rj6-20020a17090b3e8600b001f52b4f7460mr17183530pjb.97.1659720784164;
-        Fri, 05 Aug 2022 10:33:04 -0700 (PDT)
-Received: from [192.168.86.235] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
-        by smtp.gmail.com with ESMTPSA id t13-20020a17090340cd00b0016dc6279ab8sm3236534pld.159.2022.08.05.10.33.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 10:33:03 -0700 (PDT)
-Message-ID: <7498668e-0e91-be2b-daf2-a45bf0cf40c9@gmail.com>
-Date:   Fri, 5 Aug 2022 10:33:02 -0700
+        Fri, 5 Aug 2022 13:37:20 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441FB1EC60
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 10:37:19 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8E0E55BF40;
+        Fri,  5 Aug 2022 17:37:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1659721037; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eMP2kDKbfbQJ6BZX8Kb8O2013nxbES9eYTQ7jcxrBBk=;
+        b=Sf2Q62GhWFIRURhnc5pIZ7qXov0ZXsC/IfXej/lEch4ffj9yhcJ3UhUg6jsQ4szv/ys/RZ
+        h0fPOGe/XqRPM3M91lR8A5NNqVULkkPmPvpbATLBOxnkPqNoOpmZnzt1yQSnTBnQnXNmXQ
+        dUJNzwx4/a8Q6xcevNx7XXG+Z1KU+1E=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6C5B713A9C;
+        Fri,  5 Aug 2022 17:37:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IKDpF01V7WKeCQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 05 Aug 2022 17:37:17 +0000
+Date:   Fri, 5 Aug 2022 19:37:16 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Donnelly <john.p.donnelly@oracle.com>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dma/pool: do not complain if DMA pool is not allocated
+Message-ID: <Yu1VTAxd9/jP/iEk@dhcp22.suse.cz>
+References: <20220325164856.GA16800@lst.de>
+ <Yj3zyLs4f+ba6UqF@dhcp22.suse.cz>
+ <YupFSpXOrcfXJNya@dhcp22.suse.cz>
+ <YuqNToCACD8kKBG+@MiWiFi-R3L-srv>
+ <YuqOrJKcgfamdXkk@dhcp22.suse.cz>
+ <YuqU87SDwP0zg+c7@MiWiFi-R3L-srv>
+ <YuqX0OAItlMDfRUV@dhcp22.suse.cz>
+ <YuunCO2lsLDWTGw+@MiWiFi-R3L-srv>
+ <Yuu1EyC95XL98XNI@dhcp22.suse.cz>
+ <Yu0OWLbzLxCkSGVJ@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] lib/cmdline: avoid page fault in next_arg
-Content-Language: en-US
-To:     Neel Natu <neelnatu@google.com>, linux-kernel@vger.kernel.org
-References: <20220728232434.1666488-1-neelnatu@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-In-Reply-To: <20220728232434.1666488-1-neelnatu@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yu0OWLbzLxCkSGVJ@MiWiFi-R3L-srv>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri 05-08-22 20:34:32, Baoquan He wrote:
+> On 08/04/22 at 02:01pm, Michal Hocko wrote:
+> ...snip...
+> > > > > > > > Thinking about it. We should get a warning when the actual allocation
+> > > > > > > > from the pool fails no? That would be more useful information than the
+> > > > > > > > pre-allocation failure when it is not really clear whether anybody is
+> > > > > > > > ever going to consume it.
+> > > > > > > 
+> > > > > > > Hi Michal,
+> > > > > > > 
+> > > > > > > You haven't told on which ARCH you met this issue, is it x86_64?
+> > > > > > 
+> > > > > > yes x86_64, so a small 16MB DMA zone.
+> > > > > 
+> > > > > Yeah, the 16M DMA zone is redicilous and exists only for hardly seen
+> > > > > ISA-style devices support. Haven't prepared the log well.
+> > > > 
+> > > > Agreed on that! I would essentially suggest to completely ignore pool
+> > > > pre-allocation failures for the small DMA zone. There is barely anything
+> > > > to be ever consuming it.
+> > > 
+> > > I would personally suggest to keep it. W/o that, we even don't know the
+> > > issue we are talking about now. I see below commit as a workaround, and
+> > > have been trying to fix it finally with a better solution.
+> > > 
+> > > commit c4dc63f0032c ("mm/page_alloc.c: do not warn allocation failure on zone DMA if no managed pages")
+> > 
+> > This will not help in any case but an empty DMA zone. As you can see
+> > this is not the case in my example.
+> 
+> Yeah, it's different case.
+> 
+> > 
+> > > After attempts, I realize it's time to let one zone DMA or DMA32 cover
+> > > the whole low 4G memory on x86_64. That's the real fix. The tiny 16M DMA
+> > > on 64bit system is root cause.
+> > 
+> > Yes, I would agree with that. This means DMA zone is gone completely.
+> >  
+> > [...]
+> > > > This also mostly papers over this particular problem by allocating
+> > > > allocating two pools for the same range.
+> > > 
+> > > No, it doesn't paper over anything, and isn't a hack. Zone dma now covers
+> > > low 4G, just zone DMA32 is empty. Any allocation request with GFP_DMA will
+> > > be satisfied, while request with GFP_DMA32 will fall back to zone DMA.
+> > 
+> > This is breaking expectation of the DMA zone on x86. This is not
+> > acceptable. You really want to do it other way around. Only have DMA32
+> > zone and cover the whole 32b phys address range. DMA zone would be empty
+> > which is something we can have already. This would make the crap HW fail
+> > on allocations.
+> 
+> OK, I will consider it in the direction that only DMA32 zone cover the
+> low 4G as you suggested. Do you have pointer about them? Really
+> appreciate it.
 
-On 7/28/22 16:24, Neel Natu wrote:
-> An argument list like "arg=val arg2 \"" can trigger a page fault
-> if the page pointed by 'args[0xffffffff]' is not mapped and potential
-> memory corruption otherwise (unlikely but possible if the bogus
-> address is mapped and contents happen to match the ascii value
-> of the quote character).
->
-> The fix is to ensure that we load 'args[i-1]' only when (i > 0).
->
-> Prior to this commit the following command would trigger an
-> unhandled page fault in the kernel:
->
-> root@(none):/linus/fs/fat# insmod ./fat.ko  "foo=bar \""
-> [   33.870507] BUG: unable to handle page fault for address: ffff888204252608
-> [   33.872180] #PF: supervisor read access in kernel mode
-> [   33.873414] #PF: error_code(0x0000) - not-present page
-> [   33.874650] PGD 4401067 P4D 4401067 PUD 0
-> [   33.875321] Oops: 0000 [#1] SMP DEBUG_PAGEALLOC PTI
-> [   33.876113] CPU: 16 PID: 399 Comm: insmod Not tainted 5.19.0-dbg-DEV #4
-> [   33.877193] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-> [   33.878739] RIP: 0010:next_arg+0xd1/0x110
-> [   33.879399] Code: 22 75 1d 41 c6 04 01 00 41 80 f8 22 74 18 eb 35 4c 89 0e 45 31 d2 4c 89 cf 48 c7 02 00 00 00 00 41 80 f8 22 75 1f 41 8d 42 ff <41> 80 3c 01 22 75 14 41 c6 04 01 00 eb 0d 48 c7 02 00 00 00 00 41
-> [   33.882338] RSP: 0018:ffffc90001253d08 EFLAGS: 00010246
-> [   33.883174] RAX: 00000000ffffffff RBX: ffff888104252608 RCX: 0fc317bba1c1dd00
-> [   33.884311] RDX: ffffc90001253d40 RSI: ffffc90001253d48 RDI: ffff888104252609
-> [   33.885450] RBP: ffffc90001253d10 R08: 0000000000000022 R09: ffff888104252609
-> [   33.886595] R10: 0000000000000000 R11: ffffffff82c7ff20 R12: 0000000000000282
-> [   33.887748] R13: 00000000ffff8000 R14: 0000000000000000 R15: 0000000000007fff
-> [   33.888887] FS:  00007f04ec7432c0(0000) GS:ffff88813d300000(0000) knlGS:0000000000000000
-> [   33.890183] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   33.891111] CR2: ffff888204252608 CR3: 0000000100f36005 CR4: 0000000000170ee0
-> [   33.892241] Call Trace:
-> [   33.892641]  <TASK>
-> [   33.892989]  parse_args+0x8f/0x220
-> [   33.893538]  load_module+0x138b/0x15a0
-> [   33.894149]  ? prepare_coming_module+0x50/0x50
-> [   33.894879]  ? kernel_read_file_from_fd+0x5f/0x90
-> [   33.895639]  __se_sys_finit_module+0xce/0x130
-> [   33.896342]  __x64_sys_finit_module+0x1d/0x20
-> [   33.897042]  do_syscall_64+0x44/0xa0
-> [   33.897622]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> [   33.898434] RIP: 0033:0x7f04ec85ef79
-> [   33.899009] Code: 48 8d 3d da db 0d 00 0f 05 eb a5 66 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d c7 9e 0d 00 f7 d8 64 89 01 48
-> [   33.901912] RSP: 002b:00007fffae81bfe8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-> [   33.903081] RAX: ffffffffffffffda RBX: 0000559c5f1d2640 RCX: 00007f04ec85ef79
-> [   33.904191] RDX: 0000000000000000 RSI: 0000559c5f1d12a0 RDI: 0000000000000003
-> [   33.905304] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> [   33.906421] R10: 0000000000000003 R11: 0000000000000246 R12: 0000559c5f1d12a0
-> [   33.907526] R13: 0000000000000000 R14: 0000559c5f1d25f0 R15: 0000559c5f1d12a0
-> [   33.908631]  </TASK>
-> [   33.908986] Modules linked in: fat(+) [last unloaded: fat]
-> [   33.909843] CR2: ffff888204252608
-> [   33.910375] ---[ end trace 0000000000000000 ]---
-> [   33.911172] RIP: 0010:next_arg+0xd1/0x110
-> [   33.911796] Code: 22 75 1d 41 c6 04 01 00 41 80 f8 22 74 18 eb 35 4c 89 0e 45 31 d2 4c 89 cf 48 c7 02 00 00 00 00 41 80 f8 22 75 1f 41 8d 42 ff <41> 80 3c 01 22 75 14 41 c6 04 01 00 eb 0d 48 c7 02 00 00 00 00 41
-> [   33.914643] RSP: 0018:ffffc90001253d08 EFLAGS: 00010246
-> [   33.915446] RAX: 00000000ffffffff RBX: ffff888104252608 RCX: 0fc317bba1c1dd00
-> [   33.916544] RDX: ffffc90001253d40 RSI: ffffc90001253d48 RDI: ffff888104252609
-> [   33.917636] RBP: ffffc90001253d10 R08: 0000000000000022 R09: ffff888104252609
-> [   33.918727] R10: 0000000000000000 R11: ffffffff82c7ff20 R12: 0000000000000282
-> [   33.919821] R13: 00000000ffff8000 R14: 0000000000000000 R15: 0000000000007fff
-> [   33.920908] FS:  00007f04ec7432c0(0000) GS:ffff88813d300000(0000) knlGS:0000000000000000
-> [   33.922125] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   33.923017] CR2: ffff888204252608 CR3: 0000000100f36005 CR4: 0000000000170ee0
-> [   33.924098] Kernel panic - not syncing: Fatal exception
-> [   33.925776] Kernel Offset: disabled
-> [   33.926347] Rebooting in 10 seconds..
->
-> Signed-off-by: Neel Natu <neelnatu@google.com>
+Not sure I understand what you are asking.
 
+[...]
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+> > the expected behavior should be to fail the allocation.
+> 
+> Could you tell why we should fail the allocation?
 
-Thanks.
+If we cannot guarantee DMA (low 16MB) then the allocation should fail
+otherwise any HW that really requires that address range could fail in
+unpredictable way. Sure you can try harder and check whether DMA32 zone
+has any pages from that range but I am not really sure this is worth it.
 
+> With my understanding, whether it is allocation request with GFP_DMA
+> or GFP_DMA32, it's requesting memory for DMA buffer, or requesting
+> memory under 32bit. If we only have zone DMA32 covering low 4G, and
+> people requests meomry with GFP_DMA, we should try to satisfy it with
+> memory from zone DMA32. Because people may not know the internal detail
+> about memory from zone DMA or DMA32, and they just want to get a buffer
+> for DMA transfering.
 
-> ---
->   lib/cmdline.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/cmdline.c b/lib/cmdline.c
-> index 5546bf588780..90ed997d9570 100644
-> --- a/lib/cmdline.c
-> +++ b/lib/cmdline.c
-> @@ -260,7 +260,7 @@ char *next_arg(char *args, char **param, char **val)
->   				args[i-1] = '\0';
->   		}
->   	}
-> -	if (quoted && args[i-1] == '"')
-> +	if (quoted && i > 0 && args[i-1] == '"')
->   		args[i-1] = '\0';
->   
->   	if (args[i]) {
+GFP_DMA is a misnomer. It doesn't really say that the allocation should
+be done for actual DMA. GFP_DMA really says allocate from ZONE_DMA. It
+is my understanding that all actual DMA users should use a dedicated dma
+allocation APIs which should do the right thing wrt. address constrains.
+
+> With your saying, if there's only DMA32 existing and cover the whole low
+> 4G, any allocation request with GFP_DMA need be failed, we need search
+> and change all those places where GFP_DMA is set.
+
+Yes a mass review of GFP_DMA usage is certainly due and it would have to
+preceed any other changes. This is likely the reason why no unification
+has happened yet.
+ 
+> > > See gfp_zone(), it will return ZONE_NORMAL to user even though
+> > > user expects to get memory for DMA handling?
+> > 
+> > It's been quite some time since I've had gfp_zone cached in my brain. I
+> > suspect it would require some special casing for GFP_DMA to always fail.
+> > I would have to study the code again. We have discussed this at some
+> > LSFMM few years back. Maybe you can find something at lwn.
+> > 
+> > In any case. This is a larger change. Do you agree that the warning is
+> > pointless and __GFP_NOWARN is a very simple way to deal with it until we
+> > sort out situation of the DMA zone on x86 which is a long standing
+> > problem?
+> 
+> I understand the warning will be annoying and customer will complain
+> about it. We can mute it for the time being, and may open it later
+> when we get rid of the 16M DMA zone.
+> 
+> So, yes, I agree that there's nothing we can do currently except of
+> muting it. I can add my tag when you update and post.
+
+Thanks. I will wait for Christoph and his comments and post a full patch
+next week.
+
+-- 
+Michal Hocko
+SUSE Labs

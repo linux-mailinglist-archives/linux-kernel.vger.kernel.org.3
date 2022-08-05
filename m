@@ -2,155 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B3958B01A
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 20:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5150B58B028
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 21:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241020AbiHES5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 14:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
+        id S241204AbiHETDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 15:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237004AbiHES5G (ORCPT
+        with ESMTP id S240804AbiHETC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 14:57:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1366A5A884
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 11:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659725825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=38HMOlpiHz3hAI7+jcYvoHMIUhKTjvFP/aWFO5JyZUs=;
-        b=NA5xk7nBGxY7S5Ui0byHXMEhwPEW5iMZJIt+m7ZwA6/IQFwSC2kw6B/1DqrtKBjFYAlAbJ
-        YSJRRLKKNapajujn/L2kRyKcwv4gKxezQ7QT/5R64D/7AVPOHscpgbA3i1QtGgDyWw3IIY
-        GVYOhWDXz2wFwA4jFdS9rhYQadQinQs=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-32-9_dNNs6NNuqIxfOk6S5YfA-1; Fri, 05 Aug 2022 14:57:03 -0400
-X-MC-Unique: 9_dNNs6NNuqIxfOk6S5YfA-1
-Received: by mail-wm1-f69.google.com with SMTP id 18-20020a05600c029200b003a500b612e2so1578419wmk.9
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 11:57:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=38HMOlpiHz3hAI7+jcYvoHMIUhKTjvFP/aWFO5JyZUs=;
-        b=KCN8sXB3inF4HNDGulH8VJ+QoIUzm44rVqWxebnTdF8PHGIil3jGOXUIbTruxIco/Q
-         rkHqX7RflzrfQSsV8ObACbIXDb1gV+7kg6vji0k/CakksdX0ElubHYglc0Akx46T7UbW
-         AA4QRUCGOWbQ7qggEc8snlmW6LEQ09vRwIINC+6C2pqMzvxnrDVzvYLT9pA9RPIB9ppv
-         6tLib8FqUxDWZ3vm9ydxzTbLNgcgJI6ukOmh9MtcjHyRylYaeqFiSSAn07TIN3u+d03E
-         bBaMYOfW9UUANWTUb15fhJh9sEns016A4IDJQjEJv3bbLREY7q97C5OK5J2GWvrzXzOJ
-         5Qcw==
-X-Gm-Message-State: ACgBeo3x4mL2rCL0u3KZ9ebN9owDwSwG5MuX14kKlgo928Q+Mm/eCyxF
-        GzDh60R0J1OG4nTTEfZRY0V76/O8TsszPL2RhvR9JBc1/8DflCeNANj2ggMbZ8gXZhiKHV5+6Sd
-        pmvaQAZEYDukR5/MucimqG8cK
-X-Received: by 2002:a5d:5081:0:b0:220:6262:be0b with SMTP id a1-20020a5d5081000000b002206262be0bmr4863596wrt.228.1659725822066;
-        Fri, 05 Aug 2022 11:57:02 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4KFDPpXTnLc9xcWmV5EbrjJoKCLSsWZAX9+Qv0fALjuvgGAb/bq9BvB7bwLwfeM2udXcmh0A==
-X-Received: by 2002:a5d:5081:0:b0:220:6262:be0b with SMTP id a1-20020a5d5081000000b002206262be0bmr4863590wrt.228.1659725821805;
-        Fri, 05 Aug 2022 11:57:01 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:fb00:f5c3:24b2:3d03:9d52? (p200300cbc706fb00f5c324b23d039d52.dip0.t-ipconnect.de. [2003:cb:c706:fb00:f5c3:24b2:3d03:9d52])
-        by smtp.gmail.com with ESMTPSA id b4-20020adff904000000b0021e9fafa601sm4458360wrr.22.2022.08.05.11.57.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 11:57:01 -0700 (PDT)
-Message-ID: <73050e64-e40f-0c94-be96-316d1e8d5f3b@redhat.com>
-Date:   Fri, 5 Aug 2022 20:57:00 +0200
+        Fri, 5 Aug 2022 15:02:56 -0400
+Received: from mx08-0057a101.pphosted.com (mx08-0057a101.pphosted.com [185.183.31.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550551A825;
+        Fri,  5 Aug 2022 12:02:54 -0700 (PDT)
+Received: from pps.filterd (m0214196.ppops.net [127.0.0.1])
+        by mx07-0057a101.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 275IwEkG013875;
+        Fri, 5 Aug 2022 21:00:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=westermo.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=12052020; bh=DY+k8f6xizD0E3lDErdfonPO+Yme8zArGJdWjHyUqU8=;
+ b=3VptLbCDLonm4U2mDgkzwUEUC52OQtaEECvttjmJGO6EyOdi1IBEJtIJZS4HE+ocj+90
+ v8Rm5ZSoqnUJS4z3swui6gcJRXZJFE2D1JsnWSU1t6FqMVoJOY2lI2dIT0FztKh7xv3d
+ VrKdtuPxOCwF308CQ56PQLgEnEPUx+bbqMMu619/NybVRu65fC0I7KymMDlB3BOGvvSQ
+ UVaSrEbzvrnim4Q/wA8BLrU4Vbyv666WUHEYELrLYQIwZPYYtfpycck7h0ZsBA6w1U4T
+ oarnPJVD2oBOdaPFiVOT4BjAhL4ukEiJB6aUElOQ2GVp0asJrijgxCAEGjhmIQJNREv9 BA== 
+Received: from mail.beijerelectronics.com ([195.67.87.131])
+        by mx07-0057a101.pphosted.com (PPS) with ESMTPS id 3hr402hn6v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 05 Aug 2022 21:00:20 +0200
+Received: from Orpheus.nch.westermo.com (172.29.100.2) by
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.2375.17; Fri, 5 Aug 2022 21:00:17 +0200
+From:   Matthias May <matthias.may@westermo.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <nicolas.dichtel@6wind.com>,
+        <eyal.birger@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <jesse@nicira.com>, <pshelar@nicira.com>, <tgraf@suug.ch>,
+        Matthias May <matthias.may@westermo.com>
+Subject: [PATCH v4 net] geneve: fix TOS inheriting for ipv4
+Date:   Fri, 5 Aug 2022 21:00:06 +0200
+Message-ID: <20220805190006.8078-1-matthias.may@westermo.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Feiner <pfeiner@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        stable@vger.kernel.org
-References: <20220805110329.80540-1-david@redhat.com>
- <20220805110329.80540-2-david@redhat.com> <Yu1eCsMqa641zj5C@xz-m1.local>
- <Yu1gHnpKRZBhSTZB@monkey> <c2a3b903-099c-4b79-6923-8b288d404c51@redhat.com>
- <Yu1ie559zt8VvDc1@monkey>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 1/2] mm/hugetlb: fix hugetlb not supporting
- write-notify
-In-Reply-To: <Yu1ie559zt8VvDc1@monkey>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.29.100.2]
+X-ClientProxiedBy: wsevst-s0023.westermo.com (192.168.130.120) To
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25)
+X-Proofpoint-GUID: AfOFOut94Z3B6azK3CtgGuOFKlYf8rtW
+X-Proofpoint-ORIG-GUID: AfOFOut94Z3B6azK3CtgGuOFKlYf8rtW
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.08.22 20:33, Mike Kravetz wrote:
-> On 08/05/22 20:25, David Hildenbrand wrote:
->> On 05.08.22 20:23, Mike Kravetz wrote:
->>> On 08/05/22 14:14, Peter Xu wrote:
->>>> On Fri, Aug 05, 2022 at 01:03:28PM +0200, David Hildenbrand wrote:
->>>>> diff --git a/mm/mmap.c b/mm/mmap.c
->>>>> index 61e6135c54ef..462a6b0344ac 100644
->>>>> --- a/mm/mmap.c
->>>>> +++ b/mm/mmap.c
->>>>> @@ -1683,6 +1683,13 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
->>>>>  	if ((vm_flags & (VM_WRITE|VM_SHARED)) != ((VM_WRITE|VM_SHARED)))
->>>>>  		return 0;
->>>>>  
->>>>> +	/*
->>>>> +	 * Hugetlb does not require/support writenotify; especially, it does not
->>>>> +	 * support softdirty tracking.
->>>>> +	 */
->>>>> +	if (is_vm_hugetlb_page(vma))
->>>>> +		return 0;
->>>>
->>>> I'm kind of confused here..  you seems to be fixing up soft-dirty for
->>>> hugetlb but here it's explicitly forbidden.
->>>>
->>>> Could you explain a bit more on why this patch is needed if (assume
->>>> there'll be a working) patch 2 being provided?
->>>>
->>>
->>> No comments on the patch, but ...
->>>
->>> Since it required little thought, I ran the test program on next-20220802 and
->>> was surprised that the issue did not recreate.  Even added a simple printk
->>> to make sure we were getting into vma_wants_writenotify with a hugetlb vma.
->>> We were.
->>
->>
->> ... does your config have CONFIG_MEM_SOFT_DIRTY enabled?
->>
-> 
-> No, Duh!
-> 
-> FYI - Some time back, I started looking at adding soft dirty support for
-> hugetlb mappings.  I did not finish that work.  But, I seem to recall
-> places where code was operating on hugetlb mappings when perhaps it should
-> not.
-> 
-> Perhaps, it would also be good to just disable soft dirty for hugetlb at
-> the source?
+The current code retrieves the TOS field after the lookup
+on the ipv4 routing table. The routing process currently
+only allows routing based on the original 3 TOS bits, and
+not on the full 6 DSCP bits.
+As a result the retrieved TOS is cut to the 3 bits.
+However for inheriting purposes the full 6 bits should be used.
 
-I thought about that as well. But I came to the conclusion that without
-patch #2, hugetlb VMAs cannot possibly support write-notify, so there is
-no need to bother in vma_wants_writenotify() at all.
+Extract the full 6 bits before the route lookup and use
+that instead of the cut off 3 TOS bits.
 
-The "root" would be places where we clear VM_SOFTDIRTY. That should only
-be fs/proc/task_mmu.c:clear_refs_write() IIRC.
+Fixes: e305ac6cf5a1 ("geneve: Add support to collect tunnel metadata.")
+Signed-off-by: Matthias May <matthias.may@westermo.com>
+---
+v1 -> v2:
+ - Fix typo in "Fixes" tag
+v2 -> v3:
+ - Add missing CCs
+v3 -> v4:
+ - Drop reference to IPv6 equivalent of this patch (Guillaume Nault)
+ - Return of full_tos in geneve_get_v4_rt only when needed (David Ahern))
+---
+ drivers/net/geneve.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-So I don't particularly care, I consider this patch a bit cleaner and
-more generic, but I can adjust clear_refs_write() instead of there is a
-preference.
-
+diff --git a/drivers/net/geneve.c b/drivers/net/geneve.c
+index 018d365f9deb..fafe7dea2227 100644
+--- a/drivers/net/geneve.c
++++ b/drivers/net/geneve.c
+@@ -797,7 +797,8 @@ static struct rtable *geneve_get_v4_rt(struct sk_buff *skb,
+ 				       struct geneve_sock *gs4,
+ 				       struct flowi4 *fl4,
+ 				       const struct ip_tunnel_info *info,
+-				       __be16 dport, __be16 sport)
++				       __be16 dport, __be16 sport,
++				       __u8 *full_tos)
+ {
+ 	bool use_cache = ip_tunnel_dst_cache_usable(skb, info);
+ 	struct geneve_dev *geneve = netdev_priv(dev);
+@@ -823,6 +824,8 @@ static struct rtable *geneve_get_v4_rt(struct sk_buff *skb,
+ 		use_cache = false;
+ 	}
+ 	fl4->flowi4_tos = RT_TOS(tos);
++	if (full_tos)
++		*full_tos = tos;
+ 
+ 	dst_cache = (struct dst_cache *)&info->dst_cache;
+ 	if (use_cache) {
+@@ -911,6 +914,7 @@ static int geneve_xmit_skb(struct sk_buff *skb, struct net_device *dev,
+ 	const struct ip_tunnel_key *key = &info->key;
+ 	struct rtable *rt;
+ 	struct flowi4 fl4;
++	__u8 full_tos;
+ 	__u8 tos, ttl;
+ 	__be16 df = 0;
+ 	__be16 sport;
+@@ -921,7 +925,7 @@ static int geneve_xmit_skb(struct sk_buff *skb, struct net_device *dev,
+ 
+ 	sport = udp_flow_src_port(geneve->net, skb, 1, USHRT_MAX, true);
+ 	rt = geneve_get_v4_rt(skb, dev, gs4, &fl4, info,
+-			      geneve->cfg.info.key.tp_dst, sport);
++			      geneve->cfg.info.key.tp_dst, sport, &full_tos);
+ 	if (IS_ERR(rt))
+ 		return PTR_ERR(rt);
+ 
+@@ -965,7 +969,7 @@ static int geneve_xmit_skb(struct sk_buff *skb, struct net_device *dev,
+ 
+ 		df = key->tun_flags & TUNNEL_DONT_FRAGMENT ? htons(IP_DF) : 0;
+ 	} else {
+-		tos = ip_tunnel_ecn_encap(fl4.flowi4_tos, ip_hdr(skb), skb);
++		tos = ip_tunnel_ecn_encap(full_tos, ip_hdr(skb), skb);
+ 		if (geneve->cfg.ttl_inherit)
+ 			ttl = ip_tunnel_get_ttl(ip_hdr(skb), skb);
+ 		else
+@@ -1149,7 +1153,7 @@ static int geneve_fill_metadata_dst(struct net_device *dev, struct sk_buff *skb)
+ 					  1, USHRT_MAX, true);
+ 
+ 		rt = geneve_get_v4_rt(skb, dev, gs4, &fl4, info,
+-				      geneve->cfg.info.key.tp_dst, sport);
++				      geneve->cfg.info.key.tp_dst, sport, NULL);
+ 		if (IS_ERR(rt))
+ 			return PTR_ERR(rt);
+ 
 -- 
-Thanks,
-
-David / dhildenb
+2.35.1
 

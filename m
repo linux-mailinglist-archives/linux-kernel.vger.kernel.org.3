@@ -2,190 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3356D58AA6A
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD3458AA6C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236083AbiHEL5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 07:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
+        id S240605AbiHEL6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 07:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiHEL5u (ORCPT
+        with ESMTP id S230169AbiHEL6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 07:57:50 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65CF76470
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 04:57:48 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x21so3109220edd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 04:57:48 -0700 (PDT)
+        Fri, 5 Aug 2022 07:58:33 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B14876470;
+        Fri,  5 Aug 2022 04:58:33 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d16so1821033qtw.8;
+        Fri, 05 Aug 2022 04:58:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=9IFcrRZX/CnV4UIXqlxp6Mdb1PIceUrFZLWlYBsRj8o=;
-        b=bTy+O1/anUql+Hc31tuF6+5KPrD6TJMZRBYrkS/MOA9/wBX+81dCSgYJMu2WSOiTna
-         d+8XCnNTXtxNaOmYvCIG5YnzXl1uLqDJTsSgR+jxTpzGNkmvwDLkrsYDLZ5NtpVgWcHv
-         GPr1ibEwLfnfT3hxMSmTU6TouSRjE92sSr7VUZ5YM9QC0MFptzJ5YvZjUsBlpIs7roL4
-         hit7DT5J0FcWTRhhEr/7lzDoTpj13h1rBfkv4EvGQ7QETsLuW73l1uyKqDVrqQxmVskn
-         JW5Dbmzb9VDRmh+GO2ekcu2um3H5IySy9DCfi+wbHzmItpopW5JPOYWitblR+ZczbndK
-         C3Jg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc;
+        bh=12EUweBf0CXLW8+gSAKKg9xplGZSYosR37oZCD2Y1Eg=;
+        b=VT9RgJ+oVb09HdRQa6Lq62UkO+czbOAM9zhFz3mQzPOunpvHA/Dup3iDIDNBrSTcRg
+         ISw6ghOW+btNX/HqH0k2wNgSXpUg9bL7XcttzO3HDDNNozk+y3dM1mVPrsLCuGG1wDEB
+         zPDESdIoCLKl87M3ZHZOLwvWZcZCGfdRYxSeLVkv1UokGzv1nB/bnYzWf+ZQw+cvxeeO
+         puAKsVq9rrDGTJ2pP8KskFUBBm5iQIXGPWMPTn0Fzqb9UMJ5bQb/k0gtuQPFCBlS4+N1
+         kK6jb8sG7doAKbDSIiJhVitTkmnihXzpan+QM+ytoVxdChvksAv2+bOnb1FKMbKjMQbE
+         tC4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=9IFcrRZX/CnV4UIXqlxp6Mdb1PIceUrFZLWlYBsRj8o=;
-        b=qqhPMWyYn2p25Qi6fJEDAgDi2mAYSy164jQ/1dtFMqpUrknmILgTQm8U/tKxvgd9Lx
-         jenj5y+Dkz6zy9d6YZAVdXaOVj2GSnFxhkApSuxSexP5qntNvad36Rbw1UtMToCtFpjS
-         q+khVtOH9shiv/RniOrS+Oqbq0EUMiY2+euRWj9XSA3SOsphqGe9pVA+HUqauVSoDvXz
-         oo9VLx6ypWyGx5ksKhm2Kn8U+HhSyZR1KYPNoxIaEkJ0oe0fE4TEyYVupJMdvdXd0pEG
-         yebnulnP+iV7+1zVvwdRMcG1SH6S+yd5M5W/eo1kb5S0Qupusn469ex00WzK3nhNydSu
-         Hsbg==
-X-Gm-Message-State: ACgBeo0PSkZ75XACoxhUsj/ACXMBUW1Z79EaoI05iMHPOGZZjQC29cVR
-        1YSffwYRkfPiYy9OzzmoVBrLqFjfDlVkJQ==
-X-Google-Smtp-Source: AA6agR5QOMzpP+mAS3PyycCHlndfEHgm/KzScHlT1ys5+53/fXBo1JTgNdgTNbjFD8uFYoGMmJJ3AQ==
-X-Received: by 2002:aa7:c14e:0:b0:43d:7bad:b53e with SMTP id r14-20020aa7c14e000000b0043d7badb53emr6219629edp.353.1659700667002;
-        Fri, 05 Aug 2022 04:57:47 -0700 (PDT)
-Received: from localhost.localdomain (p200300d99703c2003e69dd231e074304.dip0.t-ipconnect.de. [2003:d9:9703:c200:3e69:dd23:1e07:4304])
-        by smtp.googlemail.com with ESMTPSA id dy9-20020a05640231e900b0043bc19efc15sm1977921edb.28.2022.08.05.04.57.46
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc;
+        bh=12EUweBf0CXLW8+gSAKKg9xplGZSYosR37oZCD2Y1Eg=;
+        b=wDByAgHNHZJ03deDYW2vEKKN/OA1nnGtxUt7DOTrHR/lVsi8rMVlIEMlGVgH88E5GU
+         A8JenB0e7ck384WpGVpOyKwjHwWnAclWHSVPn6ZEe6aHKq92+9BiXKGcKUasVVJZjloj
+         BE9uQGzUnjWznEV+XKSplBqZDmGxntS6/vc4osTcXOqMjeKYzvFFO2khP8HIp5h8ThLw
+         ZuObo52DhhJtb+bOWWN+HDgb2+l7fn0poUJQzIHZQTpoUmxMzUKa/ANwpUalcA6cAfWP
+         /pGPXM+T/fwqvAY5hK5LCvnRpoJ29Nb8+6JePLV15ZKre5summq35N5wvDNhbFQ4fxcs
+         9Ufw==
+X-Gm-Message-State: ACgBeo1gQoX60o65JtOKcTQN9vl6/Y8R8BCfCgBgE27gaHvzH+dXlOEI
+        TpCiniKe4Jqg62HbgiuuwA==
+X-Google-Smtp-Source: AA6agR4yn9VOrQApcMy/JIE89HsYzBMvrpAkEphl5ssbELPYZNrOf1zrKpwK4oe95pmrgYf1HSEKPA==
+X-Received: by 2002:a05:622a:346:b0:31f:c40:eac0 with SMTP id r6-20020a05622a034600b0031f0c40eac0mr5373701qtw.326.1659700711064;
+        Fri, 05 Aug 2022 04:58:31 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id c8-20020ac85188000000b0031eb51dd72csm2491484qtn.85.2022.08.05.04.58.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 04:57:46 -0700 (PDT)
-From:   Manfred Spraul <manfred@colorfullife.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Eric W . Biederman" <ebiederm@xmission.com>,
-        Davidlohr Bueso <dave@stgolabs.net>, 1vier1@web.de,
-        Manfred Spraul <manfred@colorfullife.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH] ipc/util.c: Cleanup and improve sysvipc_find_ipc(), V3
-Date:   Fri,  5 Aug 2022 13:57:33 +0200
-Message-Id: <20220805115733.104763-1-manfred@colorfullife.com>
-X-Mailer: git-send-email 2.37.1
+        Fri, 05 Aug 2022 04:58:30 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:8c5c:a823:f5bd:8751])
+        by serve.minyard.net (Postfix) with ESMTPSA id 4CFC71800FA;
+        Fri,  5 Aug 2022 11:58:29 +0000 (UTC)
+Date:   Fri, 5 Aug 2022 06:58:27 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        jic23@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, openbmc@lists.ozlabs.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2] dt-binding: ipmi: add fallback to npcm845 compatible
+Message-ID: <20220805115827.GG3834@minyard.net>
+Reply-To: minyard@acm.org
+References: <20220804181800.235368-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220804181800.235368-1-tmaimon77@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sysvipc_find_ipc() can be simplified further:
+On Thu, Aug 04, 2022 at 09:18:00PM +0300, Tomer Maimon wrote:
+> Add to npcm845 KCS compatible string a fallback to npcm750 KCS compatible
+> string becuase NPCM845 and NPCM750 BMCs are using identical KCS modules.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt b/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> index cbc10a68ddef..4fda76e63396 100644
+> --- a/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> +++ b/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> @@ -7,7 +7,7 @@ used to perform in-band IPMI communication with their host.
+>  Required properties:
+>  - compatible : should be one of
+>      "nuvoton,npcm750-kcs-bmc"
+> -    "nuvoton,npcm845-kcs-bmc"
+> +    "nuvoton,npcm845-kcs-bmc", "nuvoton,npcm750-kcs-bmc"
 
-- It uses a for() loop to locate the next entry in the idr.
-  This can be replaced with idr_get_next().
+This is just wrong.  The compatible is supposed to identify the device,
+not the board the device is on.  I think compatible here should be
+"npcm7xx-kcs-bmc", and just use that everywhere.  It's fine if that is
+used on a board named npcm845.
 
-- It receives two parameters (pos - which is actually
-  an idr index and not a position, and new_pos, which
-  is really a position).
-  One parameter is sufficient.
+-corey
 
-Link: https://lore.kernel.org/all/20210903052020.3265-3-manfred@colorfullife.com/
-Acked-by: Waiman Long <longman@redhat.com>
-Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
----
-
-Resending the patch, it seems it was stuck:
-- typo noticed by Waiman corrected.
-- rediffed
-- retested
-
-@Andrew: Could you add it it linux-next/mm?
-It is in my outbox for > 6 months now, and using a for() loop instead of
-idr_get_next() is just wrong.
-And the variable naming should be cleaned up as well
-(idx -> index, without sequence number. id -> user space id, with
-sequence number. The current function doesn't follow that)
-
-  ipc/util.c | 53 ++++++++++++++++++++++++++++++++---------------------
- 1 file changed, 32 insertions(+), 21 deletions(-)
-
-diff --git a/ipc/util.c b/ipc/util.c
-index a2208d0f26b2..05cb9de66735 100644
---- a/ipc/util.c
-+++ b/ipc/util.c
-@@ -782,28 +782,37 @@ struct pid_namespace *ipc_seq_pid_ns(struct seq_file *s)
- 	return iter->pid_ns;
- }
- 
--/*
-- * This routine locks the ipc structure found at least at position pos.
-+/**
-+ * sysvipc_find_ipc - Find and lock the ipc structure based on seq pos
-+ * @ids: ipc identifier set
-+ * @pos: expected position
-+ *
-+ * The function finds an ipc structure, based on the sequence file
-+ * position @pos. If there is no ipc structure at position @pos, then
-+ * the successor is selected.
-+ * If a structure is found, then it is locked (both rcu_read_lock() and
-+ * ipc_lock_object()) and  @pos is set to the position needed to locate
-+ * the found ipc structure.
-+ * If nothing is found (i.e. EOF), @pos is not modified.
-+ *
-+ * The function returns the found ipc structure, or NULL at EOF.
-  */
--static struct kern_ipc_perm *sysvipc_find_ipc(struct ipc_ids *ids, loff_t pos,
--					      loff_t *new_pos)
-+static struct kern_ipc_perm *sysvipc_find_ipc(struct ipc_ids *ids, loff_t *pos)
- {
--	struct kern_ipc_perm *ipc = NULL;
--	int max_idx = ipc_get_maxidx(ids);
-+	int tmpidx;
-+	struct kern_ipc_perm *ipc;
- 
--	if (max_idx == -1 || pos > max_idx)
--		goto out;
-+	/* convert from position to idr index -> "-1" */
-+	tmpidx = *pos - 1;
- 
--	for (; pos <= max_idx; pos++) {
--		ipc = idr_find(&ids->ipcs_idr, pos);
--		if (ipc != NULL) {
--			rcu_read_lock();
--			ipc_lock_object(ipc);
--			break;
--		}
-+	ipc = idr_get_next(&ids->ipcs_idr, &tmpidx);
-+	if (ipc != NULL) {
-+		rcu_read_lock();
-+		ipc_lock_object(ipc);
-+
-+		/* convert from idr index to position  -> "+1" */
-+		*pos = tmpidx + 1;
- 	}
--out:
--	*new_pos = pos + 1;
- 	return ipc;
- }
- 
-@@ -817,11 +826,13 @@ static void *sysvipc_proc_next(struct seq_file *s, void *it, loff_t *pos)
- 	if (ipc && ipc != SEQ_START_TOKEN)
- 		ipc_unlock(ipc);
- 
--	return sysvipc_find_ipc(&iter->ns->ids[iface->ids], *pos, pos);
-+	/* Next -> search for *pos+1 */
-+	(*pos)++;
-+	return sysvipc_find_ipc(&iter->ns->ids[iface->ids], pos);
- }
- 
- /*
-- * File positions: pos 0 -> header, pos n -> ipc id = n - 1.
-+ * File positions: pos 0 -> header, pos n -> ipc idx = n - 1.
-  * SeqFile iterator: iterator value locked ipc pointer or SEQ_TOKEN_START.
-  */
- static void *sysvipc_proc_start(struct seq_file *s, loff_t *pos)
-@@ -846,8 +857,8 @@ static void *sysvipc_proc_start(struct seq_file *s, loff_t *pos)
- 	if (*pos == 0)
- 		return SEQ_START_TOKEN;
- 
--	/* Find the (pos-1)th ipc */
--	return sysvipc_find_ipc(ids, *pos - 1, pos);
-+	/* Otherwise return the correct ipc structure */
-+	return sysvipc_find_ipc(ids, pos);
- }
- 
- static void sysvipc_proc_stop(struct seq_file *s, void *it)
--- 
-2.37.1
-
+>  - interrupts : interrupt generated by the controller
+>  - kcs_chan : The KCS channel number in the controller
+>  
+> -- 
+> 2.33.0
+> 

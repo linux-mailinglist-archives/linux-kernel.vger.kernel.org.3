@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1BB58ACE7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 17:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77A458ACEB
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 17:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240975AbiHEPDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 11:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
+        id S240905AbiHEPHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 11:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241142AbiHEPDW (ORCPT
+        with ESMTP id S231845AbiHEPHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 11:03:22 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908593AB;
-        Fri,  5 Aug 2022 08:02:33 -0700 (PDT)
-Received: from localhost.localdomain (unknown [83.149.199.65])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 9C66C40755C7;
-        Fri,  5 Aug 2022 15:02:31 +0000 (UTC)
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Robin van der Gracht <robin@protonic.nl>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: [PATCH] can: j1939: fix memory leak of skbs
-Date:   Fri,  5 Aug 2022 18:02:16 +0300
-Message-Id: <20220805150216.66313-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.25.1
+        Fri, 5 Aug 2022 11:07:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FEF19C03
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 08:07:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D49E614B5
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:07:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F404EC433C1;
+        Fri,  5 Aug 2022 15:07:43 +0000 (UTC)
+Date:   Fri, 5 Aug 2022 11:07:42 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>
+Subject: [for-linus][PATCH] rv: Unlock on error path in
+ rv_unregister_reactor()
+Message-ID: <20220805110742.7a6d55c1@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to drop skb references taken in j1939_session_skb_queue() when
-destroying a session in j1939_session_destroy(). Otherwise those skbs
-would be lost.
 
-Link to Syzkaller info and repro: https://forge.ispras.ru/issues/11743.
 
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+Dan Carpenter (1):
+      rv: Unlock on error path in rv_unregister_reactor()
 
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Suggested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
- net/can/j1939/transport.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+----
+ kernel/trace/rv/rv_reactors.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+---------------------------
+commit f1a15b977ff864513133ecb611eb28603d32c1b4
+Author: Dan Carpenter <dan.carpenter@oracle.com>
+Date:   Thu Aug 4 17:33:48 2022 +0300
 
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index 307ee1174a6e..d7d86c944d76 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -260,6 +260,8 @@ static void __j1939_session_drop(struct j1939_session *session)
- 
- static void j1939_session_destroy(struct j1939_session *session)
+    rv: Unlock on error path in rv_unregister_reactor()
+    
+    Unlock the "rv_interface_lock" mutex before returning.
+    
+    Link: https://lkml.kernel.org/r/YuvYzNfGMgV+PIhd@kili
+    
+    Fixes: 04acadcb4453 ("rv: Add runtime reactors interface")
+    Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+    Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+diff --git a/kernel/trace/rv/rv_reactors.c b/kernel/trace/rv/rv_reactors.c
+index a6522c196382..6aae106695b6 100644
+--- a/kernel/trace/rv/rv_reactors.c
++++ b/kernel/trace/rv/rv_reactors.c
+@@ -329,6 +329,7 @@ int rv_register_reactor(struct rv_reactor *reactor)
+ int rv_unregister_reactor(struct rv_reactor *reactor)
  {
-+	struct sk_buff *skb;
-+
- 	if (session->transmission) {
- 		if (session->err)
- 			j1939_sk_errqueue(session, J1939_ERRQUEUE_TX_ABORT);
-@@ -274,7 +276,11 @@ static void j1939_session_destroy(struct j1939_session *session)
- 	WARN_ON_ONCE(!list_empty(&session->sk_session_queue_entry));
- 	WARN_ON_ONCE(!list_empty(&session->active_session_list_entry));
+ 	struct rv_reactor_def *ptr, *next;
++	int ret = 0;
  
--	skb_queue_purge(&session->skb_queue);
-+	while ((skb = skb_dequeue(&session->skb_queue)) != NULL) {
-+		/* drop ref taken in j1939_session_skb_queue() */
-+		skb_unref(skb);
-+		kfree_skb(skb);
-+	}
- 	__j1939_session_drop(session);
- 	j1939_priv_put(session->priv);
- 	kfree(session);
--- 
-2.25.1
-
+ 	mutex_lock(&rv_interface_lock);
+ 
+@@ -343,13 +344,14 @@ int rv_unregister_reactor(struct rv_reactor *reactor)
+ 				       ptr->reactor->name, ptr->counter);
+ 				printk(KERN_WARNING "rv: the rv_reactor %s cannot be removed\n",
+ 				       ptr->reactor->name);
+-				return -EBUSY;
++				ret = -EBUSY;
++				break;
+ 			}
+ 		}
+ 	}
+ 
+ 	mutex_unlock(&rv_interface_lock);
+-	return 0;
++	return ret;
+ }
+ 
+ /*

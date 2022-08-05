@@ -2,133 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C07258A4F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 05:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2A558A506
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 05:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237108AbiHEDXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 23:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
+        id S240518AbiHED1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 23:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbiHEDXS (ORCPT
+        with ESMTP id S240490AbiHED0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 23:23:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8244B21E25;
-        Thu,  4 Aug 2022 20:23:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Y19hlVOIXSvoA/5DX9WI7p0EBJzFwJEvgDdU1vLVsK4=; b=BI85Qhy4InI5DYNjrWkW9bWt/h
-        sa/60Y2LY23zuokLQ87n0BBwIDkwGpc2DaEb0L9mCVUQ37y91UtlfPuRpnsrJKYUhWeyKqpAeZxHt
-        qfO4N+7cWcts5/7+9Dn6FkUPH717h0vV+PpaO869gGVkpQ2mn72r/oALuJSeEZIEcHee/HPxOlsMG
-        HU0D+xzovgd4uhkKzrdzrktIWQdkZ1vjbKzxd12bt4hQogTQzDz70+/xbJ7JQYWkp7KxnZ73MvINm
-        LjwDI86Q0w6Xq3OBoZyMI49G+omek1fb1V7ZBfJiHFeDALNcI+ajkqVfPnOctnRZ1VOEFFOL0euI6
-        UG57muEQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oJnvP-00AuLn-KN; Fri, 05 Aug 2022 03:22:59 +0000
-Date:   Fri, 5 Aug 2022 04:22:59 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mikulas Patocka <mpatocka@redhat.com>
+        Thu, 4 Aug 2022 23:26:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF44ABE38;
+        Thu,  4 Aug 2022 20:26:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D13160A66;
+        Fri,  5 Aug 2022 03:26:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ED9C8C433D7;
+        Fri,  5 Aug 2022 03:26:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659669972;
+        bh=lnluQbGXEjbKkSL0VjKQBiVpj8vxjDj76CDKB1He2nQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=r9qAKgDb64IjLPthz6UWZtJfGcZYF/GkI1tdIBe1J2xd82GtpOwKke+qogPnkDr//
+         U8MbpTlnxxrqdhqh5DCxytRdvLz1BqXnPVFzkW2DPTKPRjOMVf4Cpr2G8xoesCDLRF
+         8T3aojfgsbPJfXPjv2T67BBjD4MOsYaVm0TkdiEKcFAJq/zMGdT2l+sa6EBv6T+GG/
+         yoz5qjdWGMIIIxbnYVyI6SIJtBXpY+xh8uw5MMM7ht2j+9DarUBfk1y7oVg9jDtUvc
+         gQgtIfJiI7NOKm3vkZYQBCGJb6hBfXa+myXOxTMQkDf8CN9weQNtJKHzWu7KI3Exgl
+         U1fPYClU6naug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DDEF9C43142;
+        Fri,  5 Aug 2022 03:26:11 +0000 (UTC)
+Subject: Re: [GIT PULL] ext4 updates for 5.20/6.0
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YutOk+yCBPujKZeA@mit.edu>
+References: <YutOk+yCBPujKZeA@mit.edu>
+X-PR-Tracked-List-Id: <linux-ext4.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YutOk+yCBPujKZeA@mit.edu>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus
+X-PR-Tracked-Commit-Id: d95efb14c0b81b684deb32ba10cdb78b4178ae5b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9daee913dc8d15eb65e0ff560803ab1c28bb480b
+Message-Id: <165966997190.9883.8866479310620617134.pr-tracker-bot@kernel.org>
+Date:   Fri, 05 Aug 2022 03:26:11 +0000
+To:     Theodore Ts'o <tytso@mit.edu>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] change buffer_locked, so that it has acquire
- semantics
-Message-ID: <YuyNE5c06WStxQ2z@casper.infradead.org>
-References: <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
- <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
- <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com>
- <YuflGG60pHiXp2z/@casper.infradead.org>
- <alpine.LRH.2.02.2208011040190.27101@file01.intranet.prod.int.rdu2.redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.02.2208011040190.27101@file01.intranet.prod.int.rdu2.redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 11:01:40AM -0400, Mikulas Patocka wrote:
-> 
-> 
-> On Mon, 1 Aug 2022, Matthew Wilcox wrote:
-> 
-> > On Mon, Aug 01, 2022 at 06:43:55AM -0400, Mikulas Patocka wrote:
-> > > Let's have a look at this piece of code in __bread_slow:
-> > > 	get_bh(bh);
-> > > 	bh->b_end_io = end_buffer_read_sync;
-> > > 	submit_bh(REQ_OP_READ, 0, bh);
-> > > 	wait_on_buffer(bh);
-> > > 	if (buffer_uptodate(bh))
-> > > 		return bh;
-> > > Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
-> > > Consequently, if someone calls sb_bread and then reads the buffer data,
-> > > the read of buffer data may be executed before wait_on_buffer(bh) on
-> > > architectures with weak memory ordering and it may return invalid data.
-> > > 
-> > > Fix this bug by changing the function buffer_locked to have the acquire
-> > > semantics - so that code that follows buffer_locked cannot be moved before
-> > > it.
-> > 
-> > I think this is the wrong approach.  Instead, buffer_set_uptodate()
-> > should have the smp_wmb() and buffer_uptodate should have the smp_rmb().
-> > Just like the page flags.  As I said last night.
-> 
-> Linus said that he prefers acquire/release to smp_rmb/smp_wmb. So, sort it 
-> out with him :)
-> 
-> In most cases, the buffer is set uptodate while it is locked, so that 
-> there is no race on the uptodate flag (the race exists on the locked 
-> flag). Are there any cases where the uptodate flag is modified on unlocked 
-> buffer, so that it needs special treatment too?
+The pull request you sent on Thu, 4 Aug 2022 00:44:03 -0400:
 
-I think you misunderstand the purpose of locked/uptodate.  At least
-for pages, the lock flag does not order access to the data in the page.
-Indeed, the contents of the page can be changed while you hold the lock.
-But the uptodate flag does order access to the data.  At the point where
-you can observe the uptodate flag set, you know the contents of the page
-have been completely read from storage.  And you don't need to hold the
-lock to check the uptodate flag.  So this is wrong:
+> https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus
 
-	buffer_lock()
-	*data = 0x12345678;
-	buffer_set_uptodate_not_ordered()
-	buffer_unlock_ordered()
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9daee913dc8d15eb65e0ff560803ab1c28bb480b
 
-because a reader can do:
+Thank you!
 
-	while (!buffer_test_uptodate()) {
-		buffer_lock();
-		buffer_unlock();
-	}
-	x = *data;
-
-and get x != 0x12345678 because the compiler can move the
-buffer_set_uptodate_not_ordered() before the store to *data.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,56 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1261B58ADDF
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B5358ADE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241273AbiHEQGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 12:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
+        id S241235AbiHEQHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 12:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241235AbiHEQFx (ORCPT
+        with ESMTP id S240588AbiHEQHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 12:05:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B8E402CA;
-        Fri,  5 Aug 2022 09:05:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C4734CE2ABB;
-        Fri,  5 Aug 2022 16:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9298C433D7;
-        Fri,  5 Aug 2022 16:05:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659715548;
-        bh=meLN3iFq0dB6/cRPWbxA3YaJYvQo+JhwHofyvaOjkjA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=NbUpIVz3tIzfFG4V82gy2lgVrqrJgDHgNQKYqnqcc9wsh8f3ZCxDp8t9FlJDYylzv
-         +Iu3a5h4Oa/48zEzWvJ5n7fxdlhFiaayxvOGAM5zduVXc1ew5pkQOhCIyGAheh+wto
-         mECOAk/aaIKLCzR5MmhxOm+Z552Te38YesDwSMU1fG3u/gCBrGCxfL9anSCux5Irjg
-         noqkXknHkKnRo3zvoeWuisCJfsbbCMEn5aaPr74JUaV9r1kY3/5YAMIxPnZqsCwjvh
-         SrSvXLJziQ3ZRqApUsruuxrCVwbyFKklJ4dYx1zMJl1i/+XBwGXy+kTfIzRPME+C1I
-         hI0cNl8b7GJPg==
-Date:   Fri, 5 Aug 2022 11:05:45 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Arinzon, David" <darinzon@amazon.com>
-Cc:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "Dagan, Noam" <ndagan@amazon.com>,
-        "Agroskin, Shay" <shayagr@amazon.com>,
-        "Brandes, Shai" <shaibran@amazon.com>,
-        "Kiyanovski, Arthur" <akiyano@amazon.com>,
-        "mk@semihalf.com" <mk@semihalf.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: vfio/pci - uAPI for WC
-Message-ID: <20220805160545.GA1020364@bhelgaas>
+        Fri, 5 Aug 2022 12:07:16 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC82B32DA4
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:07:14 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id l22so3746525wrz.7
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:07:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=foE9NLSu+Hm19YIAVmVBxv5cqU+R70Qhy9c+iSwfgU8=;
+        b=aIKKpgqOwqtohc0kEcEbtcv4xGlQ2qiXde4MKN4UU6u37Axtk1NjJ9Di04o7fRfGVb
+         9RcVNIsoldcjZuMR1JP86JcdPuSS+g5O2PAF7Orpud3x2bMQaHBM/aWQYbJUSoe+zShL
+         Occ/s+iJZRU1uiyFu7xyY9p4murvMWZpoIirIXzkGln3wZ3oiIeCs9YPJopsYxT0fYjz
+         Valh7TSSoQomjuwv2eLixJrqCrNIyt+5/N4S0iQqk7PNjvYZ357718rqI4I5zY28J2wR
+         SsTXVHfJ+pc3Fl+52/KRNN6JJajI+8XCXVMlR3AyKw1jVsYbCFRa0yFdXjHVdxu4AWbY
+         5QCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=foE9NLSu+Hm19YIAVmVBxv5cqU+R70Qhy9c+iSwfgU8=;
+        b=QltUVEAG7foUkJFGrS1YnJgG7h08NEF+D+0dx46dRVXcRss9EKaEeGFxnhhiijsJrB
+         Af234rP/NUxaFXE7JpsrXNAq6hQY7aXswWZ7Y/ltSdUzFNmbyvrDOiuJyeRakdpCLFpV
+         59pBwmi2Pk9cvCHDd088gsvkjCYra0jpQxVv3neLCZ8HQYRhPtgB/6p8c921/Oi8mht4
+         Qh/8IZ1ZJrBbLWJkMW2cNVm1zD3aKDp5S0rNz0QD7V1ioFaBoDKoK8Fz2Xj71CcKA3fi
+         TfC/r01UDpxwo1KddcWqDvt07wQ+xsyrpSh9JZirAjCE5dzEy5jHK8fzHM+ONQfZz9+m
+         hQGw==
+X-Gm-Message-State: ACgBeo0eP0xsbplBaN9dUE3SOxSrcVsUtisOEyrk2Rg4QfKVfHZ+ECv1
+        ioq6U7F3ThX+bKvZgznCWrP7Ig==
+X-Google-Smtp-Source: AA6agR7avs62yuynakGDNbLvwYzOeyYpJ1lkFW/hY7pOB/UOWJMsaHtToegMOmwouDTDbCsAYD72MQ==
+X-Received: by 2002:a5d:4301:0:b0:21b:8af6:4a21 with SMTP id h1-20020a5d4301000000b0021b8af64a21mr5060330wrq.296.1659715633284;
+        Fri, 05 Aug 2022 09:07:13 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:aef0:8606:da6b:79ef? ([2a05:6e02:1041:c10:aef0:8606:da6b:79ef])
+        by smtp.googlemail.com with ESMTPSA id bh19-20020a05600c3d1300b003a2f6367049sm5051263wmb.48.2022.08.05.09.07.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 09:07:12 -0700 (PDT)
+Message-ID: <6cf66002-f13d-a1ee-7fa6-dfa78d6be427@linaro.org>
+Date:   Fri, 5 Aug 2022 18:07:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d42f195bffa444719065f4e84098fe0c@EX13D47EUB004.ant.amazon.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] Revert "mlxsw: core: Add the hottest thermal zone
+ detection"
+Content-Language: en-US
+To:     Vadim Pasternak <vadimp@nvidia.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+References: <20220801095622.949079-1-daniel.lezcano@linaro.org>
+ <20220801095622.949079-2-daniel.lezcano@linaro.org>
+ <BN9PR12MB538167CB6E0EE463ED25898CAF9F9@BN9PR12MB5381.namprd12.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <BN9PR12MB538167CB6E0EE463ED25898CAF9F9@BN9PR12MB5381.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,35 +85,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Alex, Cornelia, kvm, lkml (from "get_maintainer.pl drivers/vfio")
-and rewrapped for plain-text readability]
-On Thu, Aug 04, 2022 at 09:47:36AM +0000, Arinzon, David wrote:
-> Hi,
-> 
-> There's currently no mechanism for vfio that exposes WC-related
-> operations (check if memory is WC capable, ask to WC memory) to user
-> space module entities, such as DPDK, for example.
->
-> This topic has been previously discussed in [1], [2] and [3], but
-> there was no follow-up.
->
-> This capability is very useful for DPDK, specifically to the DPDK
-> ENA driver that uses vfio-pci, which requires memory to be WC on the
-> TX path. Without WC, higher CPU utilization and performance
-> degradation are observed.
->
-> In the above mentioned discussions, three options were suggested:
-> sysfs, ioctl, mmap extension (extra attributes).
-> 
-> Was there any progress on this area? Is there someone who's looking
-> into this?
->
-> We're leaning towards the ioctl option, if there are no objections,
-> we'd come up with an RFC.
 
-> [1]: https://patchwork.kernel.org/project/kvm/patch/20171009025000.39435-1-aik@ozlabs.ru/
-> [2]: https://lore.kernel.org/linux-pci/2b539df4c9ec703458e46da2fc879ee3b310b31c.camel@kernel.crashing.org/
-> [3]: https://lore.kernel.org/lkml/20210429162906.32742-2-sdonthineni@nvidia.com/
+Hi Vadim,
+
+
+On 04/08/2022 14:21, Vadim Pasternak wrote:
 > 
-> Thanks,
-> David
+> 
+>> -----Original Message-----
+>> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Sent: Monday, August 1, 2022 12:56 PM
+>> To: daniel.lezcano@linaro.org; rafael@kernel.org
+>> Cc: Vadim Pasternak <vadimp@nvidia.com>; davem@davemloft.net;
+>> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Ido Schimmel
+>> <idosch@nvidia.com>; Petr Machata <petrm@nvidia.com>; Eric Dumazet
+>> <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
+>> <pabeni@redhat.com>
+>> Subject: [PATCH 2/2] Revert "mlxsw: core: Add the hottest thermal zone
+>> detection"
+>>
+>> This reverts commit 6f73862fabd93213de157d9cc6ef76084311c628.
+>>
+>> As discussed in the thread:
+>>
+>> https://lore.kernel.org/all/f3c62ebe-7d59-c537-a010-
+>> bff366c8aeba@linaro.org/
+>>
+>> the feature provided by commits 2dc2f760052da and 6f73862fabd93 is
+>> actually already handled by the thermal framework via the cooling device
+>> state aggregation, thus all this code is pointless.
+>>
+>> The revert conflicts with the following changes:
+>>   - 7f4957be0d5b8: thermal: Use mode helpers in drivers
+>>   - 6a79507cfe94c: mlxsw: core: Extend thermal module with per QSFP module
+>> thermal zones
+>>
+>> These conflicts were fixed and the resulting changes are in this patch.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Tested-by: Vadim Pasternak <vadimp@nvidia.com>
+
+Thanks for testing
+
+> Daniel,
+> Could you, please, re-base the patch on top of net-next as Jakub mentioned?
+> Or do you want me to do it?
+
+It is fine, I can do it. The conflict is trivial.
+
+However, I would have preferred to have the patch in my tree so I can 
+continue the consolidation work.
+
+Is it ok if I pick the patch and the conflict being simple, that can be 
+handle at merge time, no?
+
+> There is also redundant blank line in this patch:
+> 							&mlxsw_thermal_module_ops,
+> +
+>   							&mlxsw_thermal_params,
+
+Yeah, thanks.
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

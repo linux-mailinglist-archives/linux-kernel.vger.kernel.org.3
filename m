@@ -2,145 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F35C358ADF1
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197A158ADF3
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240946AbiHEQQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 12:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S240979AbiHEQRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 12:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiHEQQN (ORCPT
+        with ESMTP id S231545AbiHEQRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 12:16:13 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34D919009
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:16:12 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id a14-20020a0568300b8e00b0061c4e3eb52aso2225176otv.3
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc;
-        bh=npxCWy2DywcBQq9OCNxxK3fUiVjXtjApy10t54oASAI=;
-        b=QD9jxvcRtMkPIoFQ+exYKNhms4w3hMDDiVDy9a4iu/LjGZjXnshubXy2efJDu9/1AF
-         H1bAlvBmDJP2QDDq3ablYyb1DfUsJOWK37ZMhlIZapF7d5yfa1DsxUQriWr/6kyI6L0G
-         BgRDSXus/xCZ88eWmasJyqOock7KD+tsYhH0/dZYAp6Pgt80ELyzucy7w3Gkyi25601T
-         zCHJAVzJ9Uw6F/OJ3h3r+Z9uwVm5oTniDpW8qzwPTMfmb6tNnOxpqq+rNy+F/PJMcu9S
-         +AOCpFp8zxubYMmKVXYIOlChkDn1xW8Aid4fxKrqJjmyKYu71lmVQaJNw/OmNrCF4et7
-         uLtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=npxCWy2DywcBQq9OCNxxK3fUiVjXtjApy10t54oASAI=;
-        b=oSeSbJEBZKRP1POQTa19eFBOanY+IcMjJS0s1UoatJHdlyxKswxgpmqcmbsPWt6spi
-         JijQRBO8FfAPVA5iknAccVjbOauZsQbFsWUFdt0TwBJ7Q0OoyGaSQu3hZN/RraSjOA8R
-         0SFFn69UXtCpHkYD5PTv/1IOnerKgTwovNoGayMubL3ibLOv00J9WzCbUx2bdjWH/VLL
-         pbE+Eg0dyzuLqLyeaekFA48rodxlug9Fl/FSk69uCoeEf+Pr7PKLkbwtmSPFJZLIjXY0
-         r6SMP64B4gIqJxnaqzl4D6COlTzcwO7HY7MRbvHTRcmBdh3h4pYTkP0pHdBIo47CU/tF
-         +dyg==
-X-Gm-Message-State: ACgBeo09AzQvKTTYrxAhB8R5wChdu5SP2Br4OaaYAG4AEnmUUHNpYL8v
-        pOWLpikvZBkeYq166JP/qAd6D58N9/Gps/1msho=
-X-Google-Smtp-Source: AA6agR5x2opsVFkfAUCf07eN0+lauWtlsaPhRoDs+YM/iQDA5UVHFu3abHEGvrNUn98KQR4MJTP5NS1zvdtjEwyAM6U=
-X-Received: by 2002:a05:6830:110f:b0:636:a2c2:518f with SMTP id
- w15-20020a056830110f00b00636a2c2518fmr2818861otq.86.1659716171288; Fri, 05
- Aug 2022 09:16:11 -0700 (PDT)
+        Fri, 5 Aug 2022 12:17:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B482C1902B
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:17:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D66A161775
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 16:17:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E3B0C433D7
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 16:17:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659716223;
+        bh=8grFLuwlQy0Ot8AOJ3yQKp3FjPtqCsWnDxEz8xLu22U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=S1Zay7+AGgZcUCq7wrx5A/C0aep+dKgB5hcEjFtW4tftu/80/B6Q8OcvcwNhq+Otu
+         o222N5h+m/UXeaeDBok542Ri8zeZAGBgaLJ+Y31oeXxv6WUrdkg5fE5gyoBtFjQtmk
+         slz8VGRuiJsttzZCXh9Z0zJADXe35fRHrOy/k/qhXYgTTneYaN95kk+9Al5yDGJa6w
+         7yBzHnwUTcOdXpHxuzYOeTY70INSOjkjzzKg/g7OxKzY1RXLJ0KNZiLIBF+/1WJDjV
+         Qyd4zMIPm7hw9L2O/QptByvsMheDELqbCm0et8wP2oNga9unCv5w1R9iOgczug9GBK
+         SAZ8bzhOxoZvQ==
+Received: by mail-ej1-f47.google.com with SMTP id a7so5893936ejp.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:17:03 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1w1IHBk7kyavxtf1DkdsURl99cRPjCCMouqBaw/JNffI4Of2mi
+        xq0ZgDBFID3rV3Y/uu+DYhEb2yZd5uMjd5/H32s=
+X-Google-Smtp-Source: AA6agR4R1JzUUmCUe4J6toqC9u62zKSlRPtv5bfElt/h5Y16RKiwaSKXI4eB4mnRJZxJJ+hBT4gy7eHrda+QQm1kO9Q=
+X-Received: by 2002:a17:907:28d6:b0:731:5d0:4401 with SMTP id
+ en22-20020a17090728d600b0073105d04401mr1753624ejc.765.1659716221514; Fri, 05
+ Aug 2022 09:17:01 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6808:1521:0:0:0:0 with HTTP; Fri, 5 Aug 2022 09:16:10
- -0700 (PDT)
-Reply-To: abraaahammorrison1980@gmail.com
-From:   Abraham Morrison <drjameswilliams1924@gmail.com>
-Date:   Fri, 5 Aug 2022 09:16:10 -0700
-Message-ID: <CAPBADDEvSYyx4czdeNKhPwBo2q-MU-TfeqLtT0RmOnds+GPdcw@mail.gmail.com>
-Subject: Good day!
-To:     undisclosed-recipients:;
+References: <YuwRyQYPCb1FD+mr@debian> <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
+ <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
+ <YuwvfsztWaHvquwC@dev-arch.thelio-3990X> <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
+In-Reply-To: <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 5 Aug 2022 18:16:45 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com>
+Message-ID: <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com>
+Subject: Re: mainline build failure for x86_64 allmodconfig with clang
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:32e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5012]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [drjameswilliams1924[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [drjameswilliams1924[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [abraaahammorrison1980[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aufmerksamkeit bitte,
+On Fri, Aug 5, 2022 at 5:32 PM Harry Wentland <harry.wentland@amd.com> wrote:
+> > I do notice that these files build with a non-configurable
+> > -Wframe-large-than value:
+> >
+> > $ rg frame_warn_flag drivers/gpu/drm/amd/display/dc/dml/Makefile
+> > 54:frame_warn_flag := -Wframe-larger-than=2048
+>
+> Tbh, I was looking at the history and I can't find a good reason this
+> was added. It should be safe to drop this. I would much rather use
+> the CONFIG_FRAME_WARN value than override it.
+>
+> AFAIK most builds use 2048 by default anyways.
 
-Ich bin Mr. Abraham Morrison, wie geht es Ihnen, ich hoffe, Sie sind
-wohlauf und gesund? Hiermit m=C3=B6chte ich Sie dar=C3=BCber informieren, d=
-ass
-ich die Transaktion mit Hilfe eines neuen Partners aus Indien
-erfolgreich abgeschlossen habe und nun der Fonds nach Indien auf das
-Bankkonto des neuen Partners =C3=BCberwiesen wurde.
+I'm fairly sure this was done for 32-bit builds, which default to a lower
+warning limit of 1024 bytes and would otherwise run into this
+problem when 64-bit platforms don't. With the default warning limit,
+clang warns even more about an i386 build:
 
-Inzwischen habe ich mich entschieden, Sie mit der Summe von 500.000,00
-=E2=82=AC (nur f=C3=BCnfhunderttausend Euro) f=C3=BCr Ihre bisherigen Bem=
-=C3=BChungen zu
-entsch=C3=A4digen, obwohl Sie mich auf der ganzen Linie entt=C3=A4uscht hab=
-en.
-Aber trotzdem freue ich mich sehr =C3=BCber den reibungslosen und
-erfolgreichen Abschluss der Transaktion und habe mich daher
-entschieden, Sie mit der Summe von 500.000,00 =E2=82=AC zu entsch=C3=A4dige=
-n, damit
-Sie die Freude mit mir teilen.
+display/dc/dml/dcn20/display_rq_dlg_calc_20.c:1549:6: error: stack
+frame size (1324) exceeds limit (1024) in 'dml20_rq_dlg_get_dlg_reg'
+display/dc/dml/dcn20/display_rq_dlg_calc_20v2.c:1550:6: error: stack
+frame size (1324) exceeds limit (1024) in 'dml20v2_rq_dlg_get_dlg_reg'
+display/dc/dml/dcn30/display_rq_dlg_calc_30.c:1742:6: error: stack
+frame size (1484) exceeds limit (1024) in 'dml30_rq_dlg_get_dlg_reg'
+display/dc/dml/dcn31/display_rq_dlg_calc_31.c:1571:6: error: stack
+frame size (1548) exceeds limit (1024) in 'dml31_rq_dlg_get_dlg_reg'
+display/dc/dml/dcn21/display_rq_dlg_calc_21.c:1657:6: error: stack
+frame size (1388) exceeds limit (1024) in 'dml21_rq_dlg_get_dlg_reg'
+display/dc/dml/dcn32/display_rq_dlg_calc_32.c:206:6: error: stack
+frame size (1276) exceeds limit (1024) in 'dml32_rq_dlg_get_dlg_reg'
+display/dc/dml/dcn31/display_mode_vba_31.c:2049:13: error: stack frame
+size (1468) exceeds limit (1024) in
+'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
+display/dc/dml/dcn20/display_mode_vba_20v2.c:1145:13: error: stack
+frame size (1228) exceeds limit (1024) in
+'dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
+display/dc/dml/dcn20/display_mode_vba_20.c:1085:13: error: stack frame
+size (1340) exceeds limit (1024) in
+'dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
+display/dc/dml/dcn31/display_mode_vba_31.c:3908:6: error: stack frame
+size (1996) exceeds limit (1024) in
+'dml31_ModeSupportAndSystemConfigurationFull'
+display/dc/dml/dcn21/display_mode_vba_21.c:1466:13: error: stack frame
+size (1308) exceeds limit (1024) in
+'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
+display/dc/dml/dcn20/display_mode_vba_20v2.c:3393:6: error: stack
+frame size (1356) exceeds limit (1024) in
+'dml20v2_ModeSupportAndSystemConfigurationFull'
+display/dc/dml/dcn20/display_mode_vba_20.c:3286:6: error: stack frame
+size (1468) exceeds limit (1024) in
+'dml20_ModeSupportAndSystemConfigurationFull'
+display/dc/dml/dcn21/display_mode_vba_21.c:3518:6: error: stack frame
+size (1228) exceeds limit (1024) in
+'dml21_ModeSupportAndSystemConfigurationFull'
+display/dc/dml/dcn30/display_mode_vba_30.c:1906:13: error: stack frame
+size (1436) exceeds limit (1024) in
+'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'
+display/dc/dml/dcn30/display_mode_vba_30.c:3596:6: error: stack frame
+size (2092) exceeds limit (1024) in
+'dml30_ModeSupportAndSystemConfigurationFull'
+> > I do note that commit 1b54a0121dba ("drm/amd/display: Reduce stack size
+> > in the mode support function") did have a workaround for GCC. It appears
+> > clang will still inline mode_support_configuration(). If I mark it as
+> > 'noinline', the warning disappears in that file.
+>
+> That'd be the best quick fix. I guess if we split out functions to fix
+> stack usage we should mark them as 'noinline' in the future to avoid
+> agressive compiler optimizations.
 
-Ich rate Ihnen, sich an meine Sekret=C3=A4rin zu wenden, um eine
-Bankomatkarte =C3=BCber 500.000,00 =E2=82=AC zu erhalten, die ich f=C3=BCr =
-Sie
-aufbewahrt habe. Kontaktieren Sie sie jetzt ohne Verz=C3=B6gerung.
+While splitting out sub-functions can help reduce the maximum stack
+usage, it seems that in this case it makes the actual problem worse:
+I see 2168 bytes for the combined
+dml32_ModeSupportAndSystemConfigurationFull(), but marking
+mode_support_configuration() as noinline gives me 1992 bytes
+for the outer function plus 384 bytes for the inner one. So it does
+avoid the warning (barely), but not the problem that the warning tries
+to point out.
 
-Name: Linda Kofi
-E-Mail: koffilinda785@gmail.com
-
-
-Bitte best=C3=A4tigen Sie ihr die folgenden Informationen:
-
-Ihr vollst=C3=A4ndiger Name:........
-Deine Adresse:..........
-Dein Land:..........
-Ihr Alter: .........
-Ihr Beruf:..........
-Ihre Handynummer: ...........
-Ihr Reisepass oder F=C3=BChrerschein:.........
-
-Beachten Sie, dass, wenn Sie ihr die oben genannten Informationen
-nicht vollst=C3=A4ndig gesendet haben, sie die Bankomatkarte nicht an Sie
-herausgeben wird, da sie sicher sein muss, dass Sie es sind. Bitten
-Sie sie, Ihnen den Gesamtbetrag (=E2=82=AC 500.000,00) der Bankomatkarte zu
-schicken, die ich f=C3=BCr Sie aufbewahrt habe.
-
-Mit freundlichen Gr=C3=BC=C3=9Fen,
-
-Herr Abraham Morrison
+        Arnd

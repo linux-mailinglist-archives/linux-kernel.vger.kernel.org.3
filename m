@@ -2,194 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE6258A90B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D8F58A90E
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237790AbiHEJyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 05:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
+        id S240475AbiHEJy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 05:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235336AbiHEJyO (ORCPT
+        with ESMTP id S240416AbiHEJyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 05:54:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDBC24950;
-        Fri,  5 Aug 2022 02:54:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 5 Aug 2022 05:54:22 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015A31276C
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:54:19 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b986e329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:986e:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2791B82857;
-        Fri,  5 Aug 2022 09:54:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0ABC433C1;
-        Fri,  5 Aug 2022 09:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659693250;
-        bh=Y7bpRxh677nvBHpDr/YdwyVa10B2W0VbLa853su/mTM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ke+UyKDoZZ0MZO6c4ecLCwlICMB57BcYFC3UiOS80uxKrx9RrvWrZUHK0CqL+3KfO
-         6NYDwNauYXcJqgPZ6JMoyivFM2fMzwj/IQvTyyJxf2C6tv7PVjNxgrdISefDBqbI9B
-         OAmv9LSu/fJLctsFf940FFUf5EaX4iDdHOJFhcWkuFh2vJkAwotGWhsw2v5coyb+5e
-         eJgz3uB/gWB3h+iibeb8kTR8DVh0OwQM+JVKfdMCB1ABvoU2VCn8ZY4cvzC4R+6orP
-         N5ql+D5UE3l53WC+W+PZIaUHv5ljhr+VDeZfZmyiHnwz4xBFOsuOiqWn5kdhFn2Qag
-         wq9FxsPHdLzsw==
-Date:   Fri, 5 Aug 2022 10:54:07 +0100
-From:   Filipe Manana <fdmanana@kernel.org>
-To:     Dominique MARTINET <dominique.martinet@atmark-techno.com>
-Cc:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Josef Bacik <josef@toxicpanda.com>, Chris Mason <clm@fb.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Chen Liang-Chun <featherclc@gmail.com>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        kernel@openvz.org, Yu Kuai <yukuai3@huawei.com>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: fiemap is slow on btrfs on files with multiple extents
-Message-ID: <20220805095407.GA1876904@falcondesktop>
-References: <YuwUw2JLKtIa9X+S@localhost.localdomain>
- <21dd32c6-f1f9-f44a-466a-e18fdc6788a7@virtuozzo.com>
- <YuzI7Tqi3n+d+V+P@atmark-techno.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 673001EC026E;
+        Fri,  5 Aug 2022 11:54:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1659693254;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=tIfI1N0OONraULlSScaWCqIMJV2l+ByDvpkRGd3vG54=;
+        b=eHl+JkodlgJQbZ2VLjg9LAOurlfEyzlBSTD9IUQWef3IoIobqpsgAeajCjP90mIZT42oOf
+        VXNNB5jmdzl6HIPL60bf/lO1r6EM8VcsIbHGhm4LTRogwDB+Rh3unSxm4O7gU6xa9eJHjs
+        8TewOGVhZhxc5+lJ4dl1S8TF9P9f5YQ=
+Date:   Fri, 5 Aug 2022 11:54:09 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kanna Scarlet <knscarlet@gnuweeb.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bill Metzenthen <billm@melbpc.org.au>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] x86: Change mov $0, %reg with xor %reg, %reg
+Message-ID: <YuzowUBt4pTLcMRc@zn.tnic>
+References: <20220804152656.8840-1-knscarlet@gnuweeb.org>
+ <20220804152656.8840-2-knscarlet@gnuweeb.org>
+ <Yuvrd2yWLnyxOVLU@zn.tnic>
+ <20220804180805.9077-1-knscarlet@gnuweeb.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YuzI7Tqi3n+d+V+P@atmark-techno.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220804180805.9077-1-knscarlet@gnuweeb.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 04:38:21PM +0900, Dominique MARTINET wrote:
-> Pavel Tikhomirov wrote on Thu, Aug 04, 2022 at 07:30:52PM +0300:
-> > I see a similar problem here
-> > https://lore.kernel.org/linux-btrfs/Yr4nEoNLkXPKcOBi@atmark-techno.com/#r ,
-> > but in my case I have "5.18.6-200.fc36.x86_64" fedora kernel which does not
-> > have 5ccc944dce3d ("filemap: Correct the conditions for marking a folio as
-> > accessed") commit, so it should be something else.
+On Thu, Aug 04, 2022 at 06:08:05PM +0000, Kanna Scarlet wrote:
+> Hello sir Borislav,
+
+Please, no "sir" - just Boris or Borislav,
+
+> Thank you for your response. I tried to find out other advantages of
+> xor reg,reg on Google and found this:
+> https://stackoverflow.com/a/33668295/7275114
 > 
-> The root cause might be different but I guess they're related enough: if
-> fiemap gets faster enough even when the whole file is in cache I guess
-> that works for me :)
+>   "xor (being a recognized zeroing idiom, unlike mov reg, 0) has some
+>   obvious and some subtle advantages:
 > 
-> Josef Bacik wrote on Thu, Aug 04, 2022 at 02:49:39PM -0400:
-> > On Thu, Aug 04, 2022 at 07:30:52PM +0300, Pavel Tikhomirov wrote:
-> > > I ran the below test on Fedora 36 (the test basically creates "very" sparse
-> > > file, with 4k data followed by 4k hole again and again for the specified
-> > > length and uses fiemap to count extents in this file) and face the problem
-> > > that fiemap hangs for too long (for instance comparing to ext4 version).
-> > > Fiemap with 32768 extents takes ~37264 us and with 65536 extents it takes
-> > > ~34123954 us, which is x1000 times more when file only increased twice the
-> > > size:
-> > >
-> > 
-> > Ah that was helpful, thank you.  I think I've spotted the problem, please give
-> > this a whirl to make sure we're seeing the same thing.  Thanks,
+>   1. smaller code-size than mov reg,0. (All CPUs)
+>   2. avoids partial-register penalties for later code.
+>      (Intel P6-family and SnB-family).
+>   3. doesn't use an execution unit, saving power and freeing up
+>      execution resources. (Intel SnB-family)
+>   4. smaller uop (no immediate data) leaves room in the uop cache-line
+>      for nearby instructions to borrow if needed. (Intel SnB-family).
+>   5. doesn't use up entries in the physical register file. (Intel
+>      SnB-family (and P4) at least, possibly AMD as well since they use
+>      a similar PRF design instead of keeping register state in the ROB
+>      like Intel P6-family microarchitectures.)"
 > 
-> FWIW this patch does help a tiny bit, but I'm still seeing a huge
-> slowdown: with patch cp goes from ~600MB/s (55s) to 136MB/s (3m55s) on
-> the second run; and without the patch I'm getting 47s and 5m35
-> respectively so this has gotten a bit better but these must still be
-> cases running through the whole list (e.g. when not hitting a hole?)
+> Should I add all in the explanation sir?
+
+You should try to understand what this means and write the gist of it in
+your own words. This is how you can learn something.
+
+> We also find more files to patch with this command:
 > 
+>    grep -rE "mov.?\s+\\$\\0\s*," arch/x86
 > 
-> My reproducer is just running 'cp file /dev/null' twice on a file with
-> 194955 extents (same file with mixed compressed & non-compressed extents
-> as last time), so should be close enough to what Pavel was describing in
-> just much worse.
+> it shows many immediate zero moves to 64-bit register in file
+> arch/x86/crypto/curve25519-x86_64.c, but the next instruction may depend
+> on the previous %rflags value, we are afraid to change this because
+> xor touches %rflags. We will try to change it to movl $0, %r32 to
+> reduce the code size.
 
-I remember your original report Dominique, it came along with the short
-reads issue when using using io_uring with qemu.
+I don't think you need to do that - you can do this one patch in order
+to go through the whole process of creating and submitting a patch but
+you should not go on a "let's convert everything" spree just for the
+sake of it.
 
-I had a quick look before going on vacations. In your post at:
+Because maintainers barely have time to look at patches, you don't have
+to send them more when they're not really needed.
 
-https://lore.kernel.org/linux-btrfs/Ysace25wh5BbLd5f@atmark-techno.com/
+Rather, I'd suggest you go and try to fix real bugs. This has some ideas
+what to do:
 
-you mentioned a lot of time spent on count_range_bits(), and I quickly
-came with a testing patch for that specific area:
+https://www.linux.com/news/three-ways-beginners-contribute-linux-kernel/
 
-https://git.kernel.org/pub/scm/linux/kernel/git/fdmanana/linux.git/commit/?h=fiemap_speedup&id=6bdc02edbb52786df2d8c2405d790390d9a9443c
+Looking at the kernel bugzilla and trying to understand and reproduce a
+bug from there would get you a long way. And you'll learn a lot.
 
-Basically whenever we call that, we start searching from the root of the
-extent states rbtree - if the rbtree is large, that takes a lot of time.
-The idea is to start the search from the last record instead.
+Also, you should peruse
 
-I haven't actually made any performance tests, as vacations came in and
-I noticed that such change will very likely make little or no difference
-because algorithmically btrfs' fiemap implementation is very ineficient
-for several reasons. It basically works like this:
+https://www.kernel.org/doc/html/latest/process/index.html
 
-1) We start the search for the first extent. First we go search the inode's
-   extent map rbtree - if we can't find it, then we will search in the
-   fs b+tree - after this we create an extent map based on the file extent
-   item we found in the b+tree and add it to the extent map rbtree.
+which has a lot of information about how this whole community thing
+works.
 
-   We then pass to fiemap extent information based on the extent map
-   (there's a few extra minor details, like merging, etc);
+I sincerely hope that helps.
 
-2) Then we search for the next extent, with a start offset based on the
-   end offset of the previous one +1.
+Thx.
 
-   Again, if we can't find it in the extent map rbtree, we go search the
-   fs b+tree, then create an extent map based on the file extent item we
-   found there and add it to extent map rbtree.
+-- 
+Regards/Gruss,
+    Boris.
 
-   This is silly. On each iteration the extent maps rbtree gets bigger and
-   bigger, and we always search from the root node. We are spending time
-   searching there and then allocating memory for the extent map and adding
-   it to the rbtree, which is yet more cpu time spent.
-
-   We should only create extent maps when we are doing IO against, for a
-   data write or read operation, we are just spending a lot of time on
-   this and consuming memory too.
-
-   Then it's silly again because we will search the fs b+tree again, starting
-   from the root. So we end up visting the same leaves over and over;
-
-3) Whenever we find a hole, or a prealloc/unwritten extent, we have to check
-   if there's pending dealloc for that region. That's where count_range_bits()
-   is used - everytime it's called it starts from the root node of the extent
-   states rbtree.
-
-My idea to address this is to basically rewrite fiemap so that it works like
-this:
-
-1) Go over each leaf in the fs b+tree and for each file extent item emit the
-   extent information for fiemap - like this we don't do many repeated b+tree
-   searches to end up in the same leaf;
-
-2) Never create extent maps, so that we don't grow the extent maps rbtree
-   unnecessarily, saving cpu time and avoiding memory allocations;
-
-3) Whenever we find a hole or prealloc/unwritten extent, then check if there's
-   pending delalloc in the range by using count_range_bits() like we currently
-   do (and maybe add that patch to avoid always starting the search from the
-   root).
-
-   If there's delalloc, then lookup for the correspond extent maps and use
-   their info to emit extent information for fiemap. And keep using rb_next()
-   while an extent map ends before the hole/unwritten range;
-
-4) Because emitting all the extent information for fiemap and doing other things
-   like checking if an extent is shared, calling count_range_bits(), etc can
-   take some time, to avoid holding a read lock for too long on the fs b+tree
-   leaf and block other tasks, clone the leaf, release the lock on the leaf and
-   use the private clone. This is fine since we start fiemap we lock the file
-   range, so no one else can go and create or drop extents in the range before
-   fiemap finishes.
-
-That's the high level idea.
-
-There's another factor that can slowdown fiemap a lot, which is figuring out if
-an extent is shared or not (reflinks, snapshots), but in your case you don't
-have shared extents IIRC. I would have to look at that separetely, we probably
-have some room for improvement there as well.
-
-I haven't had the time to work on that, as I've been working on other stuff
-unrelated to fiemap, but maybe in a week or two I may start it.
-
-> 
-> -- 
-> Dominique
+https://people.kernel.org/tglx/notes-about-netiquette

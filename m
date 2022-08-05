@@ -2,158 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115EA58A7F7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 10:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E18FF58A7FA
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 10:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240577AbiHEIT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 04:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S240197AbiHEIVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 04:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240481AbiHEITo (ORCPT
+        with ESMTP id S231347AbiHEIVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 04:19:44 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB5576475;
-        Fri,  5 Aug 2022 01:19:40 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 36E11320094A;
-        Fri,  5 Aug 2022 04:19:39 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 05 Aug 2022 04:19:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1659687578; x=1659773978; bh=OQ
-        hNQIozvZ77I0GYktwRr7T2SqZvLGHg5DmWy8+lW0s=; b=lWvdquzZvVduxt4Dg7
-        0/P19TrRC9c/fiFXJvtH0hOBuwSKDqwdbErbnARkhlnhLV3AcmwMBhIgi2hOdm3E
-        3+8iVTxxLHv58tfEHdQSlKgLHm3qNhvmxIZED+fqPcaw7/1fPSCLeoqrMRPeb3Gd
-        XWmGBsjzm2lQVi0Ha7iEG48GcSFjoCrOjsaqEVHDNzbItqh8yowuugPZ9bbatp9Z
-        h3hgzp2og6lhi+/Hf+4dF/rMSDM658c93CmMg0cDncKD6Qx0+g8wcWcYFc2Pw4WI
-        V+qKuKeF/F6x6dZovkdvkOmDpq2tm9jvSvWVlJZf9EZn7sgl92Is/WF3lSllRmu3
-        Q28w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1659687578; x=1659773978; bh=OQhNQIozvZ77I
-        0GYktwRr7T2SqZvLGHg5DmWy8+lW0s=; b=nT+cSgDjI959jQHv3Sjbn9ab59y1y
-        /jxpRto/5mxVCVTuqA/+l+mRdi4+PMn5sjj/YJM18O22JhtXKjZlEFTfqwVv+IGU
-        fF1NxNejyxeZbvQ35is5ztCCiBjuoX2OqF2F4NQxqvz1+Lt/t9hrrdMo9J1nsqIe
-        DqsXenNxUPB6zHnQiNtAR6RLfkILuwAhQTEOTz4L8GGU7kwthN6wWXUmhavK451H
-        J2shmVY5HyIf5drMISKIYMKLMdKzDn78KjGTp2vh8oE9QkwR/CZfC7cuW5XnX21H
-        sxTMGMCAYHDUjECPqc+Uns/1pnj4W36TUBMzOfimhoRS1GSa0UA/RlsEQ==
-X-ME-Sender: <xms:mtLsYnxinjntagKrJWoxgTSAXU-IzZaMOXuH1DjR745_uPxxjrdvuw>
-    <xme:mtLsYvRyMW-5o2AfEIkRKa5ZICvZCynLk8vi-CF0MP0ZUB4JbzEy3SzbQlNiWIHLl
-    pxQaShUYpIC6aZjV5M>
-X-ME-Received: <xmr:mtLsYhWCpU3shxguvezAz7zpVIO2ZwNUygRz2LQvm-0tJ023h6gvNn_Dqg6k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefuddgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
-    jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:mtLsYhitliiCvZRZrpA5-YwIwoC0G2y2GAkAYjZb2Y7QvJn-ScW5kg>
-    <xmx:mtLsYpAHD0ZpqKZZdsqxBasc6hQ2qxtJVeWEwQBGHWf8sQaTw7NWUQ>
-    <xmx:mtLsYqI02K4kmNxhkpsmVqmhWTH0AKP6Q1g8viZ53-RfqYYFYv-hDQ>
-    <xmx:mtLsYsN2PaJ4BTmk-Oi8i5_qdBs81xwXOKdv1Rt1Zofu9sQKF9yLWQ>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Aug 2022 04:19:36 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     hdegoede@redhat.com
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 5/5] asus-wmi: Convert all attr _show to use sysfs_emit
-Date:   Fri,  5 Aug 2022 20:19:09 +1200
-Message-Id: <20220805081909.10962-6-luke@ljones.dev>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220805081909.10962-1-luke@ljones.dev>
-References: <20220805081909.10962-1-luke@ljones.dev>
+        Fri, 5 Aug 2022 04:21:42 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F9074E3E
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 01:21:41 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id a9so2373901lfm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 01:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SBUuFiz/VDWMI2OJalxtSfG/SXidOC9PQ998o7vzahU=;
+        b=Nb6sBy9TLlxKcxgL0XerQ6xLCQKP8U2euxXhT7Uu8LrpSwyRU3Hp/7+LTAn2EcPH9n
+         zdVc1OZzG21bCg3JXuaGY3N2vx2gWeoQndeYh2NKPnrxXAEJ60Wo3MogTGswwQvxS7rD
+         aJ9h7bkl+DiiRgqG3lwLFbh2pMxEJ4IRTWbKEhRVzmnKhrIM84WimPhwnlA7zkanCCr8
+         4QqTY2z1hpZxbnGnODJVR0pq4NZNmUGl8xCi0rkJmZrRcYDog7XSvy+IbiYKS7LGf0LG
+         6Oih3+kshSZ2nrJZS+aeQR4lO7PvUGoQNewdNM115HlvWXxBK1kJir8lXLmVrjK9zHMv
+         nOCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SBUuFiz/VDWMI2OJalxtSfG/SXidOC9PQ998o7vzahU=;
+        b=dorja77NHgIrK+j/nwLD9AUOv1dQXTSyF7x7dLur3CVZ7H9OuiAba7nj14/niJr2Tm
+         wtthoOlHNFrIT5CKizG/irN/5Ah8bsi8whxjBqcgsRiYrt8UWOv7bBlc++JU0Bpx4f5g
+         1msPPVXhE2+ge2R4jIz5dy5yWKkpGjGacQMcxDAH+2wvrzTXr8QEy6Qz/fkf26QweGW/
+         OJpc8LPUmu+2cJKb9ofbzIyQyh35Pp2AYvcAOdBdDD5gZCz0iIbBHbgOkdXRwKCboZud
+         mj1tT/2HBCuRF8ZHyNLX/A30ItgtPKHV0SwwuZV064kpj1PGZYDKaOhl54Qwa+xOjBae
+         gUMA==
+X-Gm-Message-State: ACgBeo3Bu8HFlRdEIDVn+xZEP7jrPZiKU0xbXnaK2eMK6+DL8yJ62zJV
+        0+4ew+SmUZNDVrYjESZWht1W8w==
+X-Google-Smtp-Source: AA6agR4Sz+5EXQ1U2l6iQKUZo4mMFmM29ugOmMqyrB6IqERZVbLuRtXk27pb4Dk2YrqAQI9Ne5OWIw==
+X-Received: by 2002:a05:6512:3d9f:b0:48b:965:71be with SMTP id k31-20020a0565123d9f00b0048b096571bemr1899268lfv.461.1659687699326;
+        Fri, 05 Aug 2022 01:21:39 -0700 (PDT)
+Received: from [192.168.1.6] ([77.222.167.48])
+        by smtp.gmail.com with ESMTPSA id x12-20020a056512078c00b0048b4690c78esm125510lfr.288.2022.08.05.01.21.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 01:21:38 -0700 (PDT)
+Message-ID: <a3cd55ad-cec2-9570-2078-6724ab1d7300@linaro.org>
+Date:   Fri, 5 Aug 2022 10:21:37 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 4/4] dt-binding: perf: Add Amlogic DDR PMU
+Content-Language: en-US
+To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chris Healy <cphealy@gmail.com>
+References: <20220805071426.2598818-1-jiucheng.xu@amlogic.com>
+ <20220805071426.2598818-4-jiucheng.xu@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220805071426.2598818-4-jiucheng.xu@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- drivers/platform/x86/asus-wmi.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+On 05/08/2022 09:14, Jiucheng Xu wrote:
+> Add binding documentation for the Amlogic G12 series DDR
+> performance monitor unit.
+> 
 
-diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index ad758845edc0..1e1b5226e0b3 100644
---- a/drivers/platform/x86/asus-wmi.c
-+++ b/drivers/platform/x86/asus-wmi.c
-@@ -914,7 +914,7 @@ static ssize_t charge_control_end_threshold_show(struct device *device,
- 						 struct device_attribute *attr,
- 						 char *buf)
- {
--	return sprintf(buf, "%d\n", charge_end_threshold);
-+	return sysfs_emit(buf, "%d\n", charge_end_threshold);
- }
- 
- static DEVICE_ATTR_RW(charge_control_end_threshold);
-@@ -2021,7 +2021,7 @@ static ssize_t pwm1_show(struct device *dev,
- 		value = -1;
- 	}
- 
--	return sprintf(buf, "%d\n", value);
-+	return sysfs_emit(buf, "%d\n", value);
- }
- 
- static ssize_t pwm1_store(struct device *dev,
-@@ -2081,7 +2081,7 @@ static ssize_t fan1_input_show(struct device *dev,
- 		return -ENXIO;
- 	}
- 
--	return sprintf(buf, "%d\n", value < 0 ? -1 : value*100);
-+	return sysfs_emit(buf, "%d\n", value < 0 ? -1 : value*100);
- }
- 
- static ssize_t pwm1_enable_show(struct device *dev,
-@@ -2099,7 +2099,7 @@ static ssize_t pwm1_enable_show(struct device *dev,
- 	 * in practice on X532FL at least (the bit is always 0) and there's
- 	 * also nothing in the DSDT to indicate that this behaviour exists.
- 	 */
--	return sprintf(buf, "%d\n", asus->fan_pwm_mode);
-+	return sysfs_emit(buf, "%d\n", asus->fan_pwm_mode);
- }
- 
- static ssize_t pwm1_enable_store(struct device *dev,
-@@ -2167,7 +2167,7 @@ static ssize_t fan1_label_show(struct device *dev,
- 					  struct device_attribute *attr,
- 					  char *buf)
- {
--	return sprintf(buf, "%s\n", ASUS_FAN_DESC);
-+	return sysfs_emit(buf, "%s\n", ASUS_FAN_DESC);
- }
- 
- static ssize_t asus_hwmon_temp1(struct device *dev,
-@@ -2360,7 +2360,7 @@ static ssize_t fan_boost_mode_show(struct device *dev,
- {
- 	struct asus_wmi *asus = dev_get_drvdata(dev);
- 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", asus->fan_boost_mode);
-+	return sysfs_emit(buf, "%d\n", asus->fan_boost_mode);
- }
- 
- static ssize_t fan_boost_mode_store(struct device *dev,
-@@ -2913,7 +2913,7 @@ static ssize_t throttle_thermal_policy_show(struct device *dev,
- 	struct asus_wmi *asus = dev_get_drvdata(dev);
- 	u8 mode = asus->throttle_thermal_policy_mode;
- 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", mode);
-+	return sysfs_emit(buf, "%d\n", mode);
- }
- 
- static ssize_t throttle_thermal_policy_store(struct device *dev,
--- 
-2.37.1
+Bindings go first in the series, before their implementation.
 
+> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+> ---
+> Changes v3 -> v4:
+>   - Fix "$id: relative path/filename doesn't match actual path or
+>     filename" warning
+> 
+> Changes v2 -> v3:
+>   - Remove oneOf
+>   - Add descriptions
+>   - Fix compiling warning
+> 
+> Changes v1 -> v2:
+>   - Rename file, from aml_ddr_pmu.yaml to amlogic,g12_ddr_pmu.yaml
+>   - Delete "model", "dmc_nr", "chann_nr" new properties
+>   - Fix compiling error
+> ---
+>  .../bindings/perf/amlogic,g12-ddr-pmu.yaml    | 52 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml b/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
+> new file mode 100644
+> index 000000000000..4d018574ffd1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/perf/amlogic,g12-ddr-pmu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic G12 DDR performance monitor
+> +
+> +maintainers:
+> +  - Jiucheng Xu <jiucheng.xu@amlogic.com>
+> +
+> +description: |
+> +  Amlogic G12 series SoC integrate DDR bandwidth monitor.
+> +  A timer is inside and can generate interrupt when timeout.
+> +  The bandwidth is counted in the timer ISR. Different platform
+> +  has different subset of event format attribute.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+
+You have only one item, so remove "items".
+
+> +      - enum:
+> +          - amlogic,g12b-ddr-pmu
+> +          - amlogic,g12a-ddr-pmu
+> +          - amlogic,sm1-ddr-pmu
+> +
+> +  reg:
+> +    items:
+> +      - description: Physical address of DMC bandwidth register
+> +          and size of the configuration address space.
+
+Skip obvious pieces, so only:
+
+description: DMC bandwidth register space
+
+> +      - description: Physical address of DMC PLL register and
+> +          size of the configuration address space.
+
+description: DMC PLL bandwidth register space
+
+
+> +
+> +  interrupts:
+> +    items:
+> +      - description: The IRQ of the inside timer timeout.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    ddr_pmu@ff638000 {
+
+No underscores in node names, generic node names, so just "pmu".
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +        compatible = "amlogic,g12a-ddr-pmu";
+> +        reg = <0xff638000 0x100
+> +               0xff638c00 0x100>;
+
+This is still not fixed. Binding says you have two items, but you
+declared here only one item.
+
+Best regards,
+Krzysztof

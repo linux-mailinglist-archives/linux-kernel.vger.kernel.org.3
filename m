@@ -2,99 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC75758AC24
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFAB858AC28
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240610AbiHEOKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 10:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S240887AbiHEOKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 10:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiHEOKN (ORCPT
+        with ESMTP id S230095AbiHEOKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 10:10:13 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B7B2DCD;
-        Fri,  5 Aug 2022 07:10:10 -0700 (PDT)
-Received: from mail-ed1-f48.google.com ([209.85.208.48]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MEV7U-1oDuZ90Hf8-00G42h; Fri, 05 Aug 2022 16:10:09 +0200
-Received: by mail-ed1-f48.google.com with SMTP id b16so3548908edd.4;
-        Fri, 05 Aug 2022 07:10:09 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2dSVIivKhcx4KQcXObqYE4Nx8RlkV7dPJLgx13fGzonAmKrqHo
-        OGAOo2xV4atX4p00mCxLWHkWGZT8bX82WN2fNV4=
-X-Google-Smtp-Source: AA6agR5MgCQ7W85cRkQaUheEvCb+TFX/hsp6VXNQop8SnX1T6GAWSxE7KW8sxZxnJnZqaTvbnIpiw9jBHdeVB28dn8Q=
-X-Received: by 2002:a05:6402:520e:b0:43d:df14:fbed with SMTP id
- s14-20020a056402520e00b0043ddf14fbedmr6882796edd.16.1659708608714; Fri, 05
- Aug 2022 07:10:08 -0700 (PDT)
+        Fri, 5 Aug 2022 10:10:35 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E53558E8;
+        Fri,  5 Aug 2022 07:10:32 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C1C2BE000C;
+        Fri,  5 Aug 2022 14:10:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1659708631;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vwkQ0qv8d11cIg/eLHddZY+Oe9mA1gFNjKFinhC1Y8M=;
+        b=Y1gyFXYgDm/ZkaFa+HUYy1liTzoVSUHLysu92DcYh1vFOetVC5OCigjwOg1EJ601fO8iHZ
+        mwz27HvzOeoLBrFX1bv/bOd5HIIUlkzrhie3LRcoErS94ZhGHUBsEYkhq8l/fzH/ST3dtb
+        3uNjPFxSo1WyCtvHdhitFluYFvCtRWJcJ9QQALKn1RCjAGggmQEwgNLC+kkS5xLBVrFuJc
+        fECGlIB4YnmVUmqS1r5zxgDqRBhPr0Zb8/rhUYREU5KZad1vAgqBMYTGEFbUFsQxQFunyI
+        leci3TREwFuoLw+BCmfXHLpZ9U4SKNvo0FgL7NectIbI5moe970rgDny7E0Dsw==
+Date:   Fri, 5 Aug 2022 16:10:28 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 1/2] media: sunxi: Fix some error handling path of
+ sun8i_a83t_mipi_csi2_probe()
+Message-ID: <Yu0k1ER3jVhGx92u@aptenodytes>
+References: <62c0aef8d3b86d8f290bf6787f1b2b41efbb0b55.1659295329.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-References: <20220711122459.13773-1-me@linux.beauty> <20220711122459.13773-5-me@linux.beauty>
- <CAK8P3a2Mr0ZMXGDx6htYEbBBtm4mubk-meSASJjPRK1j1O-hEA@mail.gmail.com>
- <181efcca6ae.de84203d522625.7740936811073442334@linux.beauty>
- <CAK8P3a30o1RLifV1TMqDJ26vLhVdOzz3wP6yPrayLV2GPxUtwQ@mail.gmail.com>
- <18267b7a61f.12b26bd91245310.4476663913461696630@linux.beauty>
- <CAK8P3a0zSGqj3YEi+i9yfSLk8-aJtyiY6Bj069cxCdErk81+cw@mail.gmail.com> <1826852ea3a.10a917cc826728.6077661125986568031@linux.beauty>
-In-Reply-To: <1826852ea3a.10a917cc826728.6077661125986568031@linux.beauty>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 5 Aug 2022 16:09:52 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2hyhzjYqeL1LY7WziDjXQJasg3jFe83eErzKgbfP-a3w@mail.gmail.com>
-Message-ID: <CAK8P3a2hyhzjYqeL1LY7WziDjXQJasg3jFe83eErzKgbfP-a3w@mail.gmail.com>
-Subject: Re: [PATCH 4/4] sample/reserved_mem: Introduce a sample of struct
- page and dio support to no-map rmem
-To:     Li Chen <me@linux.beauty>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Li Chen <lchen@ambarella.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:O5wHPtUzcovKFvcYfkOjBWal1dMfG7bvsw6kM80MG6+iSNp7txg
- 2FWsQTt9ciiljV6Yq5/7ZY9rfbf9HyaxIUy4Rar5Vp3fMvLziPqUtfxTtW5A46MbTS8Iw/s
- QAjtKwNgHzCpusbSgDdkjpbo8cpv1YoJ3qnTava90VlhzOfUvPExZB5s3Atyv9+Bbgmbgbv
- q/p+ppttYZLBtPiLwlx0A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dHDGKKnKDaA=:kQOIcC5Ei802S23mnxuMro
- n/Z+GfqsIq5BJoRjeZS9Toro0mviJu4JWy3tgsfKljbB8cs9E6EZCm1n1NkNGABvCKhr7xlFT
- Da2pJ4osJyvPAQpiULS7Z92UhN7MccFQxbaQEKMto/JpMuOYhP5RxD1EjpXOt36keWVNkyqj0
- Rc9D12QfoOJgLk/xGnXh40x1wcaMauLadFslIaVxKV1HGnIwfKLBiSteUpHm86ptOrhXzp2NZ
- 098sti8NJpSdtkLghxGRgjUQf6teIq4wu+mU9CETAEJBLOYnpa2UjEmRPAd2YaM4M/8a71SV2
- XXkGh4FGC+TMwDvxVtoyYN4fVLbTT6B3LYpXznZJCe+JodAAN8O28plI76NE2+as+sES2ytlz
- x5Pcy8wm4IktZkL3se4PxmFsTYfMlzLPm0HF6iYW2JwXqDZu/yejt5QV8Gc450YmXLXk6/eMr
- bXjOPxZNw6zVr2VoJ8DNAiPTmMDJeA0T656iWgFJA72ch9oVrDkXcG33ugyoVkZk66bd3yLb9
- jtC0vtXPKzhykjvyIaQZkAPm5xF/SCHLuFLV5bZeuM2DH180Swb4muGwU/v3NCeEpdluQh3Fz
- zEAMA2ee1tdB4CQsrJD/oc881L6jhDP+6w2yiL0xjhCtlS+CbFf5xAqyR6NyqQl9ME63ddScG
- qsvG1PX1V5wFTHyHQLI3uhtT7v5vEnUK3dLe2gsXXsmUbO3z9xVzJ6NR5YU4jNgMA0rnzsLVZ
- IzxP2Omx5rlp9cVD2REoTelrVAeNhek3fQK7W4rae8P5huEtw0K60buioNnFTIkOS/MgPy1jf
- kHe7F5azYtFW0ifNdcwy9tZSqOAb2DC+T+2UtA5ApfTwO22mIkuo4JFDkKtGEL/csBdfSBzPz
- 31P8feaxm1WAiAg+WNRw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hqu9GGmQSmzk8QQV"
+Content-Disposition: inline
+In-Reply-To: <62c0aef8d3b86d8f290bf6787f1b2b41efbb0b55.1659295329.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 12:07 PM Li Chen <me@linux.beauty> wrote:
 
-> Apart from our cases, I heard there are some other cases where cma_alloc
->  failed even non-cma system memory has enough memory because pages in
-> CMA memory are pinned and cannot move out of CMA. There are some fixes like
-> 1. move these memory out of CMA before pinned
-> 2. only allow non-long-time pinned memory allocation from CMA.
->
-> But these two solutions are not merged into the mainline yet.
+--hqu9GGmQSmzk8QQV
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Right, I think this has come up before, not sure why it wasn't implemented.
-My feeling is that 2. cannot work because you don't know if memory will be
-pinned in the future at the time of allocation, but 1. should be doable.
+Hi Christophe,
 
-A possible alternative here would be to avoid the pinning. In most workloads
-it should not be possible to pin a large number of pages, but I assume there
-is a good reason to do so here.
+On Sun 31 Jul 22, 21:22, Christophe JAILLET wrote:
+> Release some resources in the error handling path of the probe and of
+> sun8i_a83t_mipi_csi2_resources_setup(), as already done in the remove
+> function.
 
-        Arnd
+Great finds, thanks! Just some nitpick about the label names to make them
+consistent with other labels (also from the sun6i-csi rework).
+=20
+> Fixes: 576d196c522b ("media: sunxi: Add support for the A83T MIPI CSI-2 c=
+ontroller")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> I'm unsure about the phy_exit() call in
+> sun8i_a83t_mipi_csi2_resources_cleanup() because no explicit phy_init()
+> call is performed.
+>=20
+> The same code is in sun6i-mipi-csi2/sun6i_mipi_csi2.c, but in this driver
+> phy_init() IS called.
+>=20
+> I leave it as-is because I don't if it is an issue or not.
+> My feeling is that it is a copy'n'paste error and that it should be
+> removed.
+> ---
+>  .../sun8i_a83t_mipi_csi2.c                    | 21 ++++++++++++++-----
+>  1 file changed, 16 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t=
+_mipi_csi2.c b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t=
+_mipi_csi2.c
+> index d052ee77ef0a..67c7475d5d10 100644
+> --- a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_c=
+si2.c
+> +++ b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_c=
+si2.c
+> @@ -719,13 +719,15 @@ sun8i_a83t_mipi_csi2_resources_setup(struct sun8i_a=
+83t_mipi_csi2_device *csi2_de
+>  	csi2_dev->clock_mipi =3D devm_clk_get(dev, "mipi");
+>  	if (IS_ERR(csi2_dev->clock_mipi)) {
+>  		dev_err(dev, "failed to acquire mipi clock\n");
+> -		return PTR_ERR(csi2_dev->clock_mipi);
+> +		ret =3D PTR_ERR(csi2_dev->clock_mipi);
+> +		goto err_put_clk_rate;
+>  	}
+> =20
+>  	csi2_dev->clock_misc =3D devm_clk_get(dev, "misc");
+>  	if (IS_ERR(csi2_dev->clock_misc)) {
+>  		dev_err(dev, "failed to acquire misc clock\n");
+> -		return PTR_ERR(csi2_dev->clock_misc);
+> +		ret =3D PTR_ERR(csi2_dev->clock_misc);
+> +		goto err_put_clk_rate;
+>  	}
+> =20
+>  	/* Reset */
+> @@ -733,7 +735,8 @@ sun8i_a83t_mipi_csi2_resources_setup(struct sun8i_a83=
+t_mipi_csi2_device *csi2_de
+>  	csi2_dev->reset =3D devm_reset_control_get_shared(dev, NULL);
+>  	if (IS_ERR(csi2_dev->reset)) {
+>  		dev_err(dev, "failed to get reset controller\n");
+> -		return PTR_ERR(csi2_dev->reset);
+> +		ret =3D PTR_ERR(csi2_dev->reset);
+> +		goto err_put_clk_rate;
+>  	}
+> =20
+>  	/* D-PHY */
+> @@ -741,7 +744,7 @@ sun8i_a83t_mipi_csi2_resources_setup(struct sun8i_a83=
+t_mipi_csi2_device *csi2_de
+>  	ret =3D sun8i_a83t_dphy_register(csi2_dev);
+>  	if (ret) {
+>  		dev_err(dev, "failed to initialize MIPI D-PHY\n");
+> -		return ret;
+> +		goto err_put_clk_rate;
+>  	}
+> =20
+>  	/* Runtime PM */
+> @@ -749,6 +752,10 @@ sun8i_a83t_mipi_csi2_resources_setup(struct sun8i_a8=
+3t_mipi_csi2_device *csi2_de
+>  	pm_runtime_enable(dev);
+> =20
+>  	return 0;
+> +
+> +err_put_clk_rate:
+
+Please call this "error_clock_rate_exclusive",
+
+> +	clk_rate_exclusive_put(csi2_dev->clock_mod);
+
+and add a blank line here.
+
+> +	return ret;
+>  }
+> =20
+>  static void
+> @@ -778,9 +785,13 @@ static int sun8i_a83t_mipi_csi2_probe(struct platfor=
+m_device *platform_dev)
+> =20
+>  	ret =3D sun8i_a83t_mipi_csi2_bridge_setup(csi2_dev);
+>  	if (ret)
+> -		return ret;
+> +		goto err_cleanup_resources;
+> =20
+>  	return 0;
+> +
+> +err_cleanup_resources:
+
+Please call this "error_resources",
+
+> +	sun8i_a83t_mipi_csi2_resources_cleanup(csi2_dev);
+
+and add a blank line here.
+
+Thanks!
+
+Paul
+
+> +	return ret;
+>  }
+> =20
+>  static int sun8i_a83t_mipi_csi2_remove(struct platform_device *platform_=
+dev)
+> --=20
+> 2.34.1
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--hqu9GGmQSmzk8QQV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmLtJNQACgkQ3cLmz3+f
+v9EKVgf/eJBH4biR6Ppa4WNEg0C3+uaXI4M06qGKmX8fWvyljWZ6L9Q7WoDOt0+P
+lM5SJdnMNd/dDUzm2JZ/U6R+ojz6tmWM4VhEAFQG/VfiTIh0nqFkuqRXcOBL9MSG
+S8ekLSy0MpnVwxP4kWRu6VLAjemciTixmBPLSpxT87+a2kWxRd5AsU7e02y1MkhZ
+eRK1BzErjvpkC2YpoQs+GPWf83Fblns9iDu12Rm4VH8q56WOJ7Rcg6CqIoskQDU7
+ia2fR8anMC0vkA1YCvI4L6MsJhgVWm7hLR1iZN8xGzyUEEwPPPrKmKAWppdQZvCV
+b5c3wioSX4p/hpZ5Ppb+MLZnfQmjwA==
+=dnOM
+-----END PGP SIGNATURE-----
+
+--hqu9GGmQSmzk8QQV--

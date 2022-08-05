@@ -2,120 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6305D58AEF0
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 19:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89EF558AEF2
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 19:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241407AbiHERa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 13:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S241349AbiHERbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 13:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241307AbiHERag (ORCPT
+        with ESMTP id S241318AbiHERah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 13:30:36 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3471CFCC
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 10:30:27 -0700 (PDT)
+        Fri, 5 Aug 2022 13:30:37 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A051DA45
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 10:30:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659720627; x=1691256627;
+  t=1659720630; x=1691256630;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=2dM1WuVb6OYAaV0IBScAMcULpTf1F1saRBlYGODMl4Y=;
-  b=O5NQFTmWrIh3RahCydOgJk4XM95UBTpl1FJzoA2lIfaeXtzKEqJZim0Y
-   R99n+uoeLEnIBj9hLQCqjjBrCiyYPzwAoYiyvpHt5sN3PTPh/M1I7M5lJ
-   dnH+am/nvT1wVZ7OecFSNyuyQBCDoSn8T0Mz97uM4l8Kk/vLVhQm8Hk0j
-   ANFbj9PRCZnjGFKc62+ZZSZ25H09b9FceMULrN4w6YaMPozUw/He6zj/K
-   KLThPCnZlVxievzZ8T/NTuCZHW492AWBHA6E9X+VtshR2+D+EFAjMdzNz
-   D9lAc/3nAn8WQgYDzjSbl6MTHL8MX1DP9JI3Z7585aLoMgzVlpFkRUseX
+  bh=iUggmBbv/Gb/pP6+Y41ZS7OmaZpg2F4gACjroqSJRII=;
+  b=Dwf8tOHyzbEVprbqAc9GRqWsYyOXda4W7shOayppfpqjLZYrT6ojQ0MH
+   qKuVwoa8rGH+hEYVL9gV5vPA6LgYi8GPmzKVNYGZIQ0FQhUNiADH1VUCc
+   wCXO7f6B5IYnXNd4cOQeDqq2V3yRsxwAQbYD24vHRk1Mua7wJzh2xLu4S
+   9hlfEEgaQ1vSErUCiB5finiUBy3pnwSkri94qckClO8fU8wQMS225IkAf
+   Vo7BPpZxjInrXxH651zKd7Sb4VqAvw9FhdclyMeNpKV4MFNG5VVjGKgdd
+   eFyAaok4nJ9QGjNG+K1c/i3PBTLzHMEyeyCQT6IRgbgiYM8t2k1vNttwC
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="270634129"
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="316144805"
 X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="270634129"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 10:30:27 -0700
+   d="scan'208";a="316144805"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 10:30:29 -0700
 X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="706678695"
+   d="scan'208";a="636565369"
 Received: from amecham-mobl.amr.corp.intel.com (HELO localhost) ([10.255.0.242])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 10:30:26 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 10:30:28 -0700
 From:   ira.weiny@intel.com
 To:     Rik van Riel <riel@surriel.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@intel.com>
-Cc:     Dave Jones <dsj@fb.com>, x86@kernel.org,
+Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: [RFC PATCH 4/5] x86,mm: print likely CPU at segfault time
-Date:   Fri,  5 Aug 2022 10:30:08 -0700
-Message-Id: <20220805173009.3128098-5-ira.weiny@intel.com>
+Subject: [RFC PATCH 5/5] x86/entry: Store CPU info on exception entry
+Date:   Fri,  5 Aug 2022 10:30:09 -0700
+Message-Id: <20220805173009.3128098-6-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220805173009.3128098-1-ira.weiny@intel.com>
 References: <20220805173009.3128098-1-ira.weiny@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rik van Riel <riel@surriel.com>
+From: Ira Weiny <ira.weiny@intel.com>
 
-In a large enough fleet of computers, it is common to have a few bad CPUs.
-Those can often be identified by seeing that some commonly run kernel code,
-which runs fine everywhere else, keeps crashing on the same CPU core on one
-particular bad system.
+The CPU information of an exception is useful in determining where bad
+CPUs are in a large data center.
 
-However, the failure modes in CPUs that have gone bad over the years are
-often oddly specific, and the only bad behavior seen might be segfaults
-in programs like bash, python, or various system daemons that run fine
-everywhere else.
+Define arch_{save|restore}_auxiliary_pt_regs() and set
+ARCH_HAS_PTREGS_AUXILIARY default to yes.
 
-Add a printk() to show_signal_msg() to print the CPU, core, and socket
-at segfault time. This is not perfect, since the task might get rescheduled
-on another CPU between when the fault hit, and when the message is printed,
-but in practice this has been good enough to help us identify several bad
-CPU cores.
+Store the CPU on exception entry and use it later.
 
-segfault[1349]: segfault at 0 ip 000000000040113a sp 00007ffc6d32e360 error 4 in segfault[401000+1000] on CPU 0 (core 0, socket 0)
-
-This printk can be controlled through /proc/sys/debug/exception-trace
-
-Signed-off-by: Rik van Riel <riel@surriel.com>
-CC: Dave Jones <dsj@fb.com>
+Cc: Rik van Riel <riel@surriel.com>
+Suggested-by: Borislav Petkov <bp@alien8.de>
+Suggested-by: Dave Hansen <dave.hansen@intel.com>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 ---
- arch/x86/mm/fault.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ arch/x86/Kconfig                    |  2 +-
+ arch/x86/include/asm/entry-common.h | 12 ++++++++++++
+ arch/x86/include/asm/ptrace.h       |  1 +
+ arch/x86/mm/fault.c                 |  4 ++--
+ 4 files changed, 16 insertions(+), 3 deletions(-)
 
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index b35f6a472e09..707650a6ecb2 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1876,7 +1876,7 @@ config X86_INTEL_MEMORY_PROTECTION_KEYS
+ 
+ config ARCH_HAS_PTREGS_AUXILIARY
+ 	depends on X86_64
+-	bool
++	def_bool y
+ 
+ choice
+ 	prompt "TSX enable mode"
+diff --git a/arch/x86/include/asm/entry-common.h b/arch/x86/include/asm/entry-common.h
+index 674ed46d3ced..eb145106929a 100644
+--- a/arch/x86/include/asm/entry-common.h
++++ b/arch/x86/include/asm/entry-common.h
+@@ -95,4 +95,16 @@ static __always_inline void arch_exit_to_user_mode(void)
+ }
+ #define arch_exit_to_user_mode arch_exit_to_user_mode
+ 
++#ifdef CONFIG_ARCH_HAS_PTREGS_AUXILIARY
++
++static inline void arch_save_aux_pt_regs(struct pt_regs *regs)
++{
++	struct pt_regs_auxiliary *aux_pt_regs = &to_extended_pt_regs(regs)->aux;
++
++	aux_pt_regs->cpu = raw_smp_processor_id();
++}
++#define arch_save_aux_pt_regs arch_save_aux_pt_regs
++
++#endif
++
+ #endif
+diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
+index 5a9c85893459..b403b469996f 100644
+--- a/arch/x86/include/asm/ptrace.h
++++ b/arch/x86/include/asm/ptrace.h
+@@ -97,6 +97,7 @@ struct pt_regs {
+  * ARCH_HAS_PTREGS_AUXILIARY.  Failure to do so will result in a build failure.
+  */
+ struct pt_regs_auxiliary {
++	int cpu;
+ };
+ 
+ struct pt_regs_extended {
 diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index 971977c438fc..82cf23975aa1 100644
+index 82cf23975aa1..5df99fe49494 100644
 --- a/arch/x86/mm/fault.c
 +++ b/arch/x86/mm/fault.c
-@@ -769,6 +769,8 @@ show_signal_msg(struct pt_regs *regs, unsigned long error_code,
+@@ -768,9 +768,9 @@ static inline void
+ show_signal_msg(struct pt_regs *regs, unsigned long error_code,
  		unsigned long address, struct task_struct *tsk)
  {
++	struct pt_regs_auxiliary *aux_pt_regs = &to_extended_pt_regs(regs)->aux;
  	const char *loglvl = task_pid_nr(tsk) > 1 ? KERN_INFO : KERN_EMERG;
-+	/* This is a racy snapshot, but it's better than nothing. */
-+	int cpu = raw_smp_processor_id();
+-	/* This is a racy snapshot, but it's better than nothing. */
+-	int cpu = raw_smp_processor_id();
++	int cpu = aux_pt_regs->cpu;
  
  	if (!unhandled_signal(tsk, SIGSEGV))
  		return;
-@@ -782,6 +784,14 @@ show_signal_msg(struct pt_regs *regs, unsigned long error_code,
- 
- 	print_vma_addr(KERN_CONT " in ", regs->ip);
- 
-+	/*
-+	 * Dump the likely CPU where the fatal segfault happened.
-+	 * This can help identify faulty hardware.
-+	 */
-+	printk(KERN_CONT " on CPU %d (core %d, socket %d)", cpu,
-+	       topology_core_id(cpu), topology_physical_package_id(cpu));
-+
-+
- 	printk(KERN_CONT "\n");
- 
- 	show_opcodes(regs, loglvl);
 -- 
 2.35.3
 

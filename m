@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BF358A7F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 10:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115EA58A7F7
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 10:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240563AbiHEITx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 04:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S240577AbiHEIT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 04:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240501AbiHEITm (ORCPT
+        with ESMTP id S240481AbiHEITo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 04:19:42 -0400
+        Fri, 5 Aug 2022 04:19:44 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE1A7695C;
-        Fri,  5 Aug 2022 01:19:36 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 801E63200927;
-        Fri,  5 Aug 2022 04:19:35 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB5576475;
+        Fri,  5 Aug 2022 01:19:40 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 36E11320094A;
+        Fri,  5 Aug 2022 04:19:39 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 05 Aug 2022 04:19:35 -0400
+  by compute5.internal (MEProxy); Fri, 05 Aug 2022 04:19:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1659687575; x=1659773975; bh=aB
-        qjFOkmI8PL7POoRXMtjyOJErJ2AaHnIz8e0+S1/gE=; b=idSlT92q9EyUPg/nvQ
-        ElPAKCQRibCOJqOBGW5LUTF0P67dhzxs0m3voxESZPbuQHxOUOSg3Fx7HCjvYxGZ
-        J88N1uTB0g2ypVb65s+wiIseG+/zI+5OzMNXFjEXLJ7AIl1ku7v+/UhB7YC32eq/
-        DqDmEsLmO4P/flpnsgYkvZJVaT1gWGL67S4hWeNfNJ5xJDMkl59Q/UH+5m4bcSyt
-        EWBz69SpcVHdGNNbqehN1H7qDVYfBqe4B2Spfb95tQ68gwuoJn6N52EoJYx2PdGt
-        3ziQhBL8NAK8Rz6PH+MycxFcnj3fyUJPU9nK0w5w5xuXajyHi+sjQ5KyFNNZPB82
-        b0aQ==
+        :subject:subject:to:to; s=fm2; t=1659687578; x=1659773978; bh=OQ
+        hNQIozvZ77I0GYktwRr7T2SqZvLGHg5DmWy8+lW0s=; b=lWvdquzZvVduxt4Dg7
+        0/P19TrRC9c/fiFXJvtH0hOBuwSKDqwdbErbnARkhlnhLV3AcmwMBhIgi2hOdm3E
+        3+8iVTxxLHv58tfEHdQSlKgLHm3qNhvmxIZED+fqPcaw7/1fPSCLeoqrMRPeb3Gd
+        XWmGBsjzm2lQVi0Ha7iEG48GcSFjoCrOjsaqEVHDNzbItqh8yowuugPZ9bbatp9Z
+        h3hgzp2og6lhi+/Hf+4dF/rMSDM658c93CmMg0cDncKD6Qx0+g8wcWcYFc2Pw4WI
+        V+qKuKeF/F6x6dZovkdvkOmDpq2tm9jvSvWVlJZf9EZn7sgl92Is/WF3lSllRmu3
+        Q28w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1659687575; x=1659773975; bh=aBqjFOkmI8PL7
-        POoRXMtjyOJErJ2AaHnIz8e0+S1/gE=; b=rwaCDdBqLz2wfAxM6Ov2BtRkADeCd
-        WbTDckylZVzGP585p7dpLSWyU+gpakJS5yt1gaR992WZu7KLmMpKgbCxnyd2egr4
-        NyAVsbDdAvbw5y1tZhdKMlblpDidlNuM8kKCtnlxH4sBQjW+QO7NEdgVbE4q72CG
-        8JypY4wVquMr+9T9i8CU4dlRjCGUioYIrtzVFurQKjf9a0OuBp0NbLEhbSBRBoJY
-        HbfdPqpWRSCckIsuA1CgIux3dKsAPBaIblFmMDsmLJsC2hqjxGfW9GMAP19nD+sA
-        RpWjOpEjWTGF5JcCSSDZUoV0SdINnVX1REdbSf7lUsi+fWge5sCbdQLZg==
-X-ME-Sender: <xms:ltLsYpUDcRdiJnXUrTqrfR_fiuOG9YooJFCkURGKNaCP3eYBOmc7Kg>
-    <xme:ltLsYpmAqE9q8TkcyiCgb1umPgU5n2NiFDTUkQUvf2pYNe-OFh8Zzp2z__hRkJHaT
-    G6llXSsQuGddu8o_uI>
-X-ME-Received: <xmr:ltLsYlaPtICewcjhW1XVqAZH3b_Jv_zERfvUeWaAXdZzRxgajOj1BTza7iIR>
+        :x-sasl-enc; s=fm3; t=1659687578; x=1659773978; bh=OQhNQIozvZ77I
+        0GYktwRr7T2SqZvLGHg5DmWy8+lW0s=; b=nT+cSgDjI959jQHv3Sjbn9ab59y1y
+        /jxpRto/5mxVCVTuqA/+l+mRdi4+PMn5sjj/YJM18O22JhtXKjZlEFTfqwVv+IGU
+        fF1NxNejyxeZbvQ35is5ztCCiBjuoX2OqF2F4NQxqvz1+Lt/t9hrrdMo9J1nsqIe
+        DqsXenNxUPB6zHnQiNtAR6RLfkILuwAhQTEOTz4L8GGU7kwthN6wWXUmhavK451H
+        J2shmVY5HyIf5drMISKIYMKLMdKzDn78KjGTp2vh8oE9QkwR/CZfC7cuW5XnX21H
+        sxTMGMCAYHDUjECPqc+Uns/1pnj4W36TUBMzOfimhoRS1GSa0UA/RlsEQ==
+X-ME-Sender: <xms:mtLsYnxinjntagKrJWoxgTSAXU-IzZaMOXuH1DjR745_uPxxjrdvuw>
+    <xme:mtLsYvRyMW-5o2AfEIkRKa5ZICvZCynLk8vi-CF0MP0ZUB4JbzEy3SzbQlNiWIHLl
+    pxQaShUYpIC6aZjV5M>
+X-ME-Received: <xmr:mtLsYhWCpU3shxguvezAz7zpVIO2ZwNUygRz2LQvm-0tJ023h6gvNn_Dqg6k>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefuddgtdegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
@@ -54,20 +54,20 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefuddgtdegucetufdoteggod
     jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
     fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgeptden
     ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:ltLsYsW30wH8OWFZjia1fmhacRwVKikRpF3EaI5ObKefLhaTry4lmQ>
-    <xmx:ltLsYjkBIHpI5GRdNHWBDWxeCg9YQlGxbrGwl32afC7143bvSOO43Q>
-    <xmx:ltLsYpdXLNCHeghneiMYSaJLF4w7R6e9uG-L8k07XrDfWVI0vuJCSA>
-    <xmx:l9LsYoyc6u_oB-8Ncrr1UNZudLhwKV_zu8mzpVCSzVsnACgJLIhCwQ>
+X-ME-Proxy: <xmx:mtLsYhitliiCvZRZrpA5-YwIwoC0G2y2GAkAYjZb2Y7QvJn-ScW5kg>
+    <xmx:mtLsYpAHD0ZpqKZZdsqxBasc6hQ2qxtJVeWEwQBGHWf8sQaTw7NWUQ>
+    <xmx:mtLsYqI02K4kmNxhkpsmVqmhWTH0AKP6Q1g8viZ53-RfqYYFYv-hDQ>
+    <xmx:mtLsYsN2PaJ4BTmk-Oi8i5_qdBs81xwXOKdv1Rt1Zofu9sQKF9yLWQ>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Aug 2022 04:19:32 -0400 (EDT)
+ 5 Aug 2022 04:19:36 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     hdegoede@redhat.com
 Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 4/5] asus-wmi: Document many of the undocumented API
-Date:   Fri,  5 Aug 2022 20:19:08 +1200
-Message-Id: <20220805081909.10962-5-luke@ljones.dev>
+Subject: [PATCH 5/5] asus-wmi: Convert all attr _show to use sysfs_emit
+Date:   Fri,  5 Aug 2022 20:19:09 +1200
+Message-Id: <20220805081909.10962-6-luke@ljones.dev>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220805081909.10962-1-luke@ljones.dev>
 References: <20220805081909.10962-1-luke@ljones.dev>
@@ -84,67 +84,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Luke D. Jones <luke@ljones.dev>
 ---
- .../ABI/testing/sysfs-platform-asus-wmi       | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ drivers/platform/x86/asus-wmi.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-index 04885738cf15..afcaba6c4bfd 100644
---- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
-+++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-@@ -57,3 +57,53 @@ Description:
- 			* 0 - default,
- 			* 1 - overboost,
- 			* 2 - silent
-+
-+What:		/sys/devices/platform/<platform>/dgpu_disable
-+Date:		Dec 2022
-+KernelVersion:	5.17
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Disable discrete GPU:
-+			* 0 - Enable dGPU,
-+			* 1 - Disable dGPU,
-+
-+What:		/sys/devices/platform/<platform>/egpu_enable
-+Date:		Dec 2022
-+KernelVersion:	5.17
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Enable the external GPU paired with ROG X-Flow laptops.
-+		Toggling this setting will also trigger ACPI to disable the dGPU:
-+			* 0 - Disable,
-+			* 1 - Enable,
-+
-+What:		/sys/devices/platform/<platform>/keyboard_rgb_mode
-+Date:		Dec 2022
-+KernelVersion:	5.20
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set some RGB keyboard modes and features (write-only).
-+
-+		The accepted input is "save mode speed", where "n n n" options
-+		are:
-+			* save - 0 or 1, if 0 then settings are not retained on boot
-+			* mode - 0 to 12, each is an RGB such as static, rainbow, pulse.
-+					Not all keyboards accept every mode.
-+			* speed - 0, 1, 2, equal to low, medium, high.
-+					Only applies to certain modes.
-+
-+What:		/sys/devices/platform/<platform>/panel_od
-+Date:		Dec 2022
-+KernelVersion:	5.20
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Set some RGB keyboard power states (write-only).
-+
-+		The accepted input is "boot awake sleep keyboard", where "n n n n n"
-+		options	are:
-+			* save - 0 or 1, if 0 then settings are not retained on boot
-+			* boot - 0 or 1, controls if a boot animation is shown
-+			* awake - 0 or 1, controls if the keyboard LED are on during awake
-+			* sleep - 0 or 1, controls if a suspended animation is shown.
-+						This is only active if the AC is connected.
-+			* keyboard - 0 or 1, unknown what effect this really has
+diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+index ad758845edc0..1e1b5226e0b3 100644
+--- a/drivers/platform/x86/asus-wmi.c
++++ b/drivers/platform/x86/asus-wmi.c
+@@ -914,7 +914,7 @@ static ssize_t charge_control_end_threshold_show(struct device *device,
+ 						 struct device_attribute *attr,
+ 						 char *buf)
+ {
+-	return sprintf(buf, "%d\n", charge_end_threshold);
++	return sysfs_emit(buf, "%d\n", charge_end_threshold);
+ }
+ 
+ static DEVICE_ATTR_RW(charge_control_end_threshold);
+@@ -2021,7 +2021,7 @@ static ssize_t pwm1_show(struct device *dev,
+ 		value = -1;
+ 	}
+ 
+-	return sprintf(buf, "%d\n", value);
++	return sysfs_emit(buf, "%d\n", value);
+ }
+ 
+ static ssize_t pwm1_store(struct device *dev,
+@@ -2081,7 +2081,7 @@ static ssize_t fan1_input_show(struct device *dev,
+ 		return -ENXIO;
+ 	}
+ 
+-	return sprintf(buf, "%d\n", value < 0 ? -1 : value*100);
++	return sysfs_emit(buf, "%d\n", value < 0 ? -1 : value*100);
+ }
+ 
+ static ssize_t pwm1_enable_show(struct device *dev,
+@@ -2099,7 +2099,7 @@ static ssize_t pwm1_enable_show(struct device *dev,
+ 	 * in practice on X532FL at least (the bit is always 0) and there's
+ 	 * also nothing in the DSDT to indicate that this behaviour exists.
+ 	 */
+-	return sprintf(buf, "%d\n", asus->fan_pwm_mode);
++	return sysfs_emit(buf, "%d\n", asus->fan_pwm_mode);
+ }
+ 
+ static ssize_t pwm1_enable_store(struct device *dev,
+@@ -2167,7 +2167,7 @@ static ssize_t fan1_label_show(struct device *dev,
+ 					  struct device_attribute *attr,
+ 					  char *buf)
+ {
+-	return sprintf(buf, "%s\n", ASUS_FAN_DESC);
++	return sysfs_emit(buf, "%s\n", ASUS_FAN_DESC);
+ }
+ 
+ static ssize_t asus_hwmon_temp1(struct device *dev,
+@@ -2360,7 +2360,7 @@ static ssize_t fan_boost_mode_show(struct device *dev,
+ {
+ 	struct asus_wmi *asus = dev_get_drvdata(dev);
+ 
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", asus->fan_boost_mode);
++	return sysfs_emit(buf, "%d\n", asus->fan_boost_mode);
+ }
+ 
+ static ssize_t fan_boost_mode_store(struct device *dev,
+@@ -2913,7 +2913,7 @@ static ssize_t throttle_thermal_policy_show(struct device *dev,
+ 	struct asus_wmi *asus = dev_get_drvdata(dev);
+ 	u8 mode = asus->throttle_thermal_policy_mode;
+ 
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", mode);
++	return sysfs_emit(buf, "%d\n", mode);
+ }
+ 
+ static ssize_t throttle_thermal_policy_store(struct device *dev,
 -- 
 2.37.1
 

@@ -2,254 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D6658A93D
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 12:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65ABB58A955
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 12:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240200AbiHEKJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 06:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
+        id S240369AbiHEKPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 06:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239543AbiHEKJx (ORCPT
+        with ESMTP id S240349AbiHEKPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 06:09:53 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7FF6715E
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 03:09:51 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id y11so1438943qvn.3
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 03:09:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8osKs3XHWs2tJshTy51ciuxCpaj0R2ycT8OfaZIOWNQ=;
-        b=Wux8wYgJ+wtdOYj6/wLNTMNtVsjmK6vhZFf4SpuJ5w5bV7UGZQ1ODQTPVja2hW1nwv
-         QgUs9HzuV1/ZtfI+iJGCQR5A4oz8ElXQKwCIjVPoecshhsQ+d4a9hjiRKIz2+KCoyBQ7
-         49OwqChszzHDLl7bviXz2rTxmIKZvQAZCz+gU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8osKs3XHWs2tJshTy51ciuxCpaj0R2ycT8OfaZIOWNQ=;
-        b=bOVoJMx7DyAyxFXeOjZgUunN87jNLlVEyeCr9FZzhTRZm9xkp8T4wlbrm8Z/deaoKh
-         6gnMXSFRsMzdZgC/VjFk765m3Xp9lqTheZomMg0Iv0aYU5FfKnpcbkVe4FIrcxaUpF1L
-         PqjmFmChW/MHjoafJ0zWCmCnv1qLRO9AMOYibFIuJzgjKXKkvZtZ56qW9rQ91tQ2+0it
-         JepxgPUldL6oxFfNklEBPQoEOac8k3qOmUu8NQ4nHMm9f2NkLl3leCtmUJtcmdVgbLCz
-         a5l2Y5BiSKFL2Tyx7a4C+HT7IkoL6tLrXb3B+YhwKSUQyWekYElBtVXHO2buxxNBvNWZ
-         lb3A==
-X-Gm-Message-State: ACgBeo3wFPvtO3GBRbeE3whDzgShbnk5rXNyxtvGgIFP8QxoBPUleMv2
-        6/NM/eiW/+HO2Izwe+vjEtaUaZT0c/z4PQ==
-X-Google-Smtp-Source: AA6agR4XjncOxX9YknPvQhYhjPqvbE7dHkGa4NVgk+N78MgRyWS9zjJxzrlN/gYeQjDr89Iar5Kmbw==
-X-Received: by 2002:a05:6214:d81:b0:45a:e07e:6bcb with SMTP id e1-20020a0562140d8100b0045ae07e6bcbmr4954954qve.29.1659694190445;
-        Fri, 05 Aug 2022 03:09:50 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id ew7-20020a05622a514700b0031eb65e1cb6sm2339868qtb.5.2022.08.05.03.09.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 03:09:48 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 123so3077797ybv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 03:09:47 -0700 (PDT)
-X-Received: by 2002:a05:6902:1382:b0:66f:f9fe:79d6 with SMTP id
- x2-20020a056902138200b0066ff9fe79d6mr4625654ybu.493.1659694187287; Fri, 05
- Aug 2022 03:09:47 -0700 (PDT)
+        Fri, 5 Aug 2022 06:15:10 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FD76D545;
+        Fri,  5 Aug 2022 03:15:08 -0700 (PDT)
+X-UUID: 4bb969e1a5b8465e89155655ce581c6f-20220805
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=lAS2O9PuTxJaCOqMglIlP/YQM9lwAM21zfkhqEBKX7Y=;
+        b=YvPT/y8Ag678zKNhTlEiYa4Hw4o2yS2kPqrXkyp/rXdk2VTKDtvkZCTPCz/lgFeMGh6KQ5ZnGiyH9fUzNsiazKXvrV3Adqxf4wxzZ34OGPr/PzeCUD2iWumtxAwIcCp1JLtGDTV7XAdWACmu2UarF0EPYJIbK6Swkq4nErzH55w=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:1f9088d0-4229-4938-af5b-de92dea24392,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:f87007ae-9535-44a6-aa9b-7f62b79b6ff6,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 4bb969e1a5b8465e89155655ce581c6f-20220805
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 362737757; Fri, 05 Aug 2022 18:15:01 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 5 Aug 2022 18:14:59 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 5 Aug 2022 18:14:59 +0800
+From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v16 0/8] drm/mediatek: Add MT8195 DisplayPort driver
+Date:   Fri, 5 Aug 2022 18:14:51 +0800
+Message-ID: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <CAAFQd5AL=OejdaubnYDRF4M1EKyStZP_FAMPz4CJ=KCa_8QjaA@mail.gmail.com>
- <CF192A87-1664-45B2-B26C-A9B8B6A52523@soulik.info>
-In-Reply-To: <CF192A87-1664-45B2-B26C-A9B8B6A52523@soulik.info>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 5 Aug 2022 19:09:35 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DTNDkZ7W0Rs8Xfq-x+y+cmHZHkDYQys29aNt2YvCJc1A@mail.gmail.com>
-Message-ID: <CAAFQd5DTNDkZ7W0Rs8Xfq-x+y+cmHZHkDYQys29aNt2YvCJc1A@mail.gmail.com>
-Subject: Re: [PATCH] [Draft]: media: videobuf2-dma-heap: add a vendor defined
- memory runtine
-To:     ayaka <ayaka@soulik.info>
-Cc:     Hsia-Jun Li <randy.li@synaptics.com>, linux-media@vger.kernel.org,
-        m.szyprowski@samsung.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 9:21 PM ayaka <ayaka@soulik.info> wrote:
->
-> Sorry, the previous one contains html data.
->
-> > On Aug 2, 2022, at 3:33 PM, Tomasz Figa <tfiga@chromium.org> wrote:
-> >
-> > =EF=BB=BFOn Mon, Aug 1, 2022 at 8:43 PM ayaka <ayaka@soulik.info> wrote=
-:
-> >> Sent from my iPad
-> >>>> On Aug 1, 2022, at 5:46 PM, Tomasz Figa <tfiga@chromium.org> wrote:
-> >>> =EF=BB=BFCAUTION: Email originated externally, do not click links or =
-open attachments unless you recognize the sender and know the content is sa=
-fe.
-> >>>> On Mon, Aug 1, 2022 at 3:44 PM Hsia-Jun Li <Randy.Li@synaptics.com> =
-wrote:
-> >>>>> On 8/1/22 14:19, Tomasz Figa wrote:
-> >>>> Hello Tomasz
-> >>>>> ?Hi Randy,
-> >>>>> On Mon, Aug 1, 2022 at 5:21 AM <ayaka@soulik.info> wrote:
-> >>>>>> From: Randy Li <ayaka@soulik.info>
-> >>>>>> This module is still at a early stage, I wrote this for showing wh=
-at
-> >>>>>> APIs we need here.
-> >>>>>> Let me explain why we need such a module here.
-> >>>>>> If you won't allocate buffers from a V4L2 M2M device, this module
-> >>>>>> may not be very useful. I am sure the most of users won't know a
-> >>>>>> device would require them allocate buffers from a DMA-Heap then
-> >>>>>> import those buffers into a V4L2's queue.
-> >>>>>> Then the question goes back to why DMA-Heap. From the Android's
-> >>>>>> description, we know it is about the copyright's DRM.
-> >>>>>> When we allocate a buffer in a DMA-Heap, it may register that buff=
-er
-> >>>>>> in the trusted execution environment so the firmware which is runn=
-ing
-> >>>>>> or could only be acccesed from there could use that buffer later.
-> >>>>>> The answer above leads to another thing which is not done in this
-> >>>>>> version, the DMA mapping. Although in some platforms, a DMA-Heap
-> >>>>>> responses a IOMMU device as well. For the genernal purpose, we wou=
-ld
-> >>>>>> be better assuming the device mapping should be done for each devi=
-ce
-> >>>>>> itself. The problem here we only know alloc_devs in those DMAbuf
-> >>>>>> methods, which are DMA-heaps in my design, the device from the que=
-ue
-> >>>>>> is not enough, a plane may requests another IOMMU device or table
-> >>>>>> for mapping.
-> >>>>>> Signed-off-by: Randy Li <ayaka@soulik.info>
-> >>>>>> ---
-> >>>>>> drivers/media/common/videobuf2/Kconfig        |   6 +
-> >>>>>> drivers/media/common/videobuf2/Makefile       |   1 +
-> >>>>>> .../common/videobuf2/videobuf2-dma-heap.c     | 350 ++++++++++++++=
-++++
-> >>>>>> include/media/videobuf2-dma-heap.h            |  30 ++
-> >>>>>> 4 files changed, 387 insertions(+)
-> >>>>>> create mode 100644 drivers/media/common/videobuf2/videobuf2-dma-he=
-ap.c
-> >>>>>> create mode 100644 include/media/videobuf2-dma-heap.h
-> >>>>> First of all, thanks for the series.
-> >>>>> Possibly a stupid question, but why not just allocate the DMA-bufs
-> >>>>> directly from the DMA-buf heap device in the userspace and just imp=
-ort
-> >>>>> the buffers to the V4L2 device using V4L2_MEMORY_DMABUF?
-> >>>> Sometimes the allocation policy could be very complex, let's suppose=
- a
-> >>>> multiple planes pixel format enabling with frame buffer compression.
-> >>>> Its luma, chroma data could be allocated from a pool which is delega=
-ted
-> >>>> for large buffers while its metadata would come from a pool which ma=
-ny
-> >>>> users could take some few slices from it(likes system pool).
-> >>>> Then when we have a new users knowing nothing about this platform, i=
-f we
-> >>>> just configure the alloc_devs in each queues well. The user won't ne=
-ed
-> >>>> to know those complex rules.
-> >>>> The real situation could be more complex, Samsung MFC's left and rig=
-ht
-> >>>> banks could be regarded as two pools, many devices would benefit fro=
-m
-> >>>> this either from the allocation times or the security buffers policy=
-.
-> >>>> In our design, when we need to do some security decoding(DRM video),
-> >>>> codecs2 would allocate buffers from the pool delegated for that. Whi=
-le
-> >>>> the non-DRM video, users could not care about this.
-> >>> I'm a little bit surprised about this, because on Android all the
-> >>> graphics buffers are allocated from the system IAllocator and importe=
-d
-> >>> to the specific devices.
-> >> In the non-tunnel mode, yes it is. While the tunnel mode is completely=
- vendor defined. Neither HWC nor codec2 cares about where the buffers comin=
-g from, you could do what ever you want.
-> >> Besides there are DRM video in GNU Linux platform, I heard the webkit =
-has made huge effort here and Playready is one could work in non-Android Li=
-nux.
-> >>> Would it make sense to instead extend the UAPI to expose enough
-> >>> information about the allocation requirements to the userspace, so it
-> >>> can allocate correctly?
-> >> Yes, it could. But as I said it would need the users to do more works.
-> >>> My reasoning here is that it's not a driver's decision to allocate
-> >>> from a DMA-buf heap (and which one) or not. It's the userspace which
-> >>> knows that, based on the specific use case that it wants to fulfill.
-> >> Although I would like to let the users decide that, users just can=E2=
-=80=99t do that which would violate the security rules in some platforms.
-> >> For example,  video codec and display device could only access a regio=
-n of memory, any other device or trusted apps can=E2=80=99t access it. User=
-s have to allocate the buffer from the pool the vendor decided.
-> >> So why not we offer a quick way that users don=E2=80=99t need to try a=
-nd error.
-> >
-> > In principle, I'm not against integrating DMA-buf heap with vb2,
-> > however I see some problems I mentioned before:
-> >
-> > 1) How would the driver know if it should allocate from a DMA-buf heap =
-or not?
->
-> struct vb2_queue.mem_ops
->
-> int (*queue_setup)(struct vb2_queue *q,unsigned int *num_buffers, unsigne=
-d int *num_planes, unsigned int sizes[], struct device *alloc_devs[]);
+This patch is separated from v10 which is including dp driver, phy driver
+and dpintf driver. This series is only contained the DisplayPort driver.
 
-Sorry, I don't understand what you mean here.
+This series can be tested using 5.19-rc2 kernel and I test it in MT8195
+Tomato Chromebook. Modetest these modes:
 
-Just to make sure we're on the same page - what I'm referring to is
-that whether DMA-buf heap is used or not is specific to a given use
-case, which is controlled by the userspace. So the userspace must be
-able to control whether the driver allocates from a DMA-buf heap or
-the regular way.
+for eDP:
+  #0 2256x1504 60.00 2256 2304 2336 2536 1504 1507 1513 1549 235690 flags: phsync, nvsync; type: preferred, driver
+  #1 2256x1504 48.00 2256 2304 2336 2536 1504 1507 1513 1549 188550 flags: phsync, nvsync; type: driver
 
->
-> > 2) How would the driver know which heap to allocate from?
->
-> From vb2_queue.alloc_devs
->
-> What I did now is likes what MFC does, create some mem_alloc_devs.
-> It would be better that we could retrieve the DMA-heaps=E2=80=99 devices =
-from kernel, but that is not enough, we need a place to store the heap flag=
-s although none of them are defined yet.
->
-> From Android documents, I think it is unlikely we would have heap flags.
-> =E2=80=9CStandardization: The DMA-BUF heaps framework offers a well-defin=
-ed UAPI. ION allowed custom flags and heap IDs that prevented developing a =
-common testing framework because each device=E2=80=99s ION implementation c=
-ould behave differently.=E2=80=9D
->
+for DP:
+  #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500 flags: phsync, pvsync; type: preferred, driver
+  #1 1920x1080 59.94 1920 2008 2052 2200 1080 1084 1089 1125 148352 flags: phsync, pvsync; type: driver
+  #2 1920x1080 50.00 1920 2448 2492 2640 1080 1084 1089 1125 148500 flags: phsync, pvsync; type: driver
+  #3 1680x1050 59.95 1680 1784 1960 2240 1050 1053 1059 1089 146250 flags: nhsync, pvsync; type: driver
+  #4 1600x900 60.00 1600 1624 1704 1800 900 901 904 1000 108000 flags: phsync, pvsync; type: driver
+  #5 1280x1024 60.02 1280 1328 1440 1688 1024 1025 1028 1066 108000 flags: phsync, pvsync; type: driver
+  #6 1280x800 59.81 1280 1352 1480 1680 800 803 809 831 83500 flags: nhsync, pvsync; type: driver
+  #7 1280x720 60.00 1280 1390 1430 1650 720 725 730 750 74250 flags: phsync, pvsync; type: driver
+  #8 1280x720 59.94 1280 1390 1430 1650 720 725 730 750 74176 flags: phsync, pvsync; type: driver
+  #9 1280x720 50.00 1280 1720 1760 1980 720 725 730 750 74250 flags: phsync, pvsync; type: driver
+  #10 1024x768 60.00 1024 1048 1184 1344 768 771 777 806 65000 flags: nhsync, nvsync; type: driver
+  #11 800x600 60.32 800 840 968 1056 600 601 605 628 40000 flags: phsync, pvsync; type: driver
+  #12 720x576 50.00 720 732 796 864 576 581 586 625 27000 flags: nhsync, nvsync; type: driver
+  #13 720x480 60.00 720 736 798 858 480 489 495 525 27027 flags: nhsync, nvsync; type: driver
+  #14 720x480 59.94 720 736 798 858 480 489 495 525 27000 flags: nhsync, nvsync; type: driver
+  #15 640x480 60.00 640 656 752 800 480 490 492 525 25200 flags: nhsync, nvsync; type: driver
+  #16 640x480 59.94 640 656 752 800 480 490 492 525 25175 flags: nhsync, nvsync; type: driver
 
-alloc_devs is something that the driver sets and it's a struct device
-for which the DMA API can be called to manage the DMA buffers for this
-video device. It's not a way to select a use case-dependent allocation
-method.
+Changes from v15 for dp driver:
+dt-binding:
+  - Modify maintainers' comments.
+common part:
+  - Drop modification of cea_sad helpers because we don't use them anymore.
+dp drivers:
+  - Remove some unused register definitions.
+  - Extract the same drivers for training function.
+  - Use of device data for feature variables to judge what we want to do instead of using is_edp.
+  - Drop retry patch because we don't encounter this issue in current drivers.
 
-> > 3) How would the heap know how to allocate properly for the device?
-> >
-> Because =E2=80=9Ceach DMA-BUF heap is a separate character device=E2=80=
-=9D.
+Changes from v14 for dp driver:
+dt-binding:
+  - Add more description for difference of edp and dp.
+  - Add description that why we don't need clock property.
+common part:
+  - Fix reviewers' comments.
+dp drivers:
+  - Expand drivers to one function of irq handle.
+  - Fix reviewers' comments.
+  - Remove some redundant check.
+  - Remove limitation of 60fps.
+  - Add one patch for adding retry.
+  - Add unregister flow of audio platform.
 
-Could you elaborate? Sorry, I'm not sure how this answers my question.
+Changes from v13 for dp driver:
+dt-binding:
+  - Move data-lanes to port.
+dp drivers:
+  - Reporting for data-lanes using port.
+  - Remove unnecessary drivers.
+  - Refine mtk_dp_aux_transfer().
+  - Refine mtk_dp_hpd_isr_handler().
+  - Remove fec related drivers.
 
-> But as I said in the first draft I am not sure about the DMA mapping part=
-. alloc_devs responds for the heap, we have a device variable in the queue =
-that mapping function could access, but that may not be enough. A plane may=
- apply a different mapping policy or IOMMU here.
->
-> Would it be better that I create a interface here that creating a memdev =
-with DMA-heap description ?
+Changes from v12 for dp driver:
+dt-binding:
+  - Fix build error.
+embedded dp drivers:
+  - Revise Kconfig to let this driver independent.
+  - Drop some unused/redundant drivers.
+  - Move some features to patches of external dp and audio.
+  - Refine format error control flow.
+  - Add error control of write register functions.
+  - Use mtk sip common definitions.
 
-My intuition still tells me that it would be universally better to
-just let the userspace allocate the buffers independently (like with
-gralloc/Ion) and import to V4L2 using V4L2_MEM_DMABUF. It was possible
-to do things this way nicely with regular Android graphics buffers, so
-could you explain what difference of your use case makes it
-impossible?
+Changes from v11 for dp driver:
+dt-binding:
+  - Use data-lanes to determine the max supported lane numbers.
+  - Add mhz to max-linkrate to show the units.
+embedded dp drivers:
+  - Modify Makefile.
+  - Drop some unused/redundant drivers.
+  - Move some features to patches of external dp and audio.
+  - Modify break condition of training loop to control cr/eq fail.
+  - Replace some function/definition with ones of common drm drivers.
+  - Remove dp_lock mutex because it's only locked in power_on/off.
+  - Add drm_dp_aux_(un)register in mtk_dp_bridge_(de)attach.
 
-Best regards,
-Tomasz
+Changes from v10 for dp driver:
+- Drop return value for write registers to make code more clear.
+- Refine training state.
+- Add property for dt-binding.
+- Add new bug fix patches for audio and suspend.
+- Rebase to v5.19-rc1.
+
+Changes from v9:
+- The DP-Phy is back to being a child device of the DP driver (as in v8)
+- hot plug detection has been added back to Embedded Display Port... as
+  after discussing with mediatek experts, this is needed eventhough the
+  Embedded Display port is not un-pluggable
+- rebased on linux-next
+- simplified/split train_handler function, as suggested by Rex
+- added comments on the sleep/delays present in the code
+- removed previous patch introducing retries when receiving AUX_DEFER as
+  this is already handled in the dp_aux framework
+- added max-lane and max-linkrate device tree u8 properties instead of
+  hardcoded #defines
+
+Older revisions:
+RFC - https://lore.kernel.org/linux-mediatek/20210816192523.1739365-1-msp@baylibre.com/
+v1  - https://lore.kernel.org/linux-mediatek/20210906193529.718845-1-msp@baylibre.com/
+v2  - https://lore.kernel.org/linux-mediatek/20210920084424.231825-1-msp@baylibre.com/
+v3  - https://lore.kernel.org/linux-mediatek/20211001094443.2770169-1-msp@baylibre.com/
+v4  - https://lore.kernel.org/linux-mediatek/20211011094624.3416029-1-msp@baylibre.com/
+v5  - https://lore.kernel.org/all/20211021092707.3562523-1-msp@baylibre.com/
+v6  - https://lore.kernel.org/linux-mediatek/20211110130623.20553-1-granquet@baylibre.com/
+v7  - https://lore.kernel.org/linux-mediatek/20211217150854.2081-1-granquet@baylibre.com/
+v8  - https://lore.kernel.org/linux-mediatek/20220218145437.18563-1-granquet@baylibre.com/
+v9  - https://lore.kernel.org/all/20220327223927.20848-1-granquet@baylibre.com/
+v10 - https://lore.kernel.org/all/20220523104758.29531-1-granquet@baylibre.com/
+v11 - https://lore.kernel.org/r/20220610105522.13449-1-rex-bc.chen@mediatek.com
+v12 - https://lore.kernel.org/all/20220627080341.5087-1-rex-bc.chen@mediatek.com/
+v13 - https://lore.kernel.org/all/20220701062808.18596-1-rex-bc.chen@mediatek.com/
+v14 - https://lore.kernel.org/all/20220712111223.13080-1-rex-bc.chen@mediatek.com/
+v15 - https://lore.kernel.org/all/20220727045035.32225-1-rex-bc.chen@mediatek.com/
+
+Bo-Chen Chen (2):
+  drm/mediatek: set monitor to DP_SET_POWER_D3 to avoid garbage
+  drm/mediatek: Use cached audio config when changing resolution
+
+Guillaume Ranquet (2):
+  drm/mediatek: Add MT8195 External DisplayPort support
+  drm/mediatek: DP audio support for MT8195
+
+Jitao Shi (1):
+  drm/mediatek: add hpd debounce
+
+Markus Schneider-Pargmann (3):
+  dt-bindings: mediatek,dp: Add Display Port binding
+  video/hdmi: Add audio_infoframe packing for DP
+  drm/mediatek: Add MT8195 Embedded DisplayPort driver
+
+ .../display/mediatek/mediatek,dp.yaml         |  116 +
+ drivers/gpu/drm/mediatek/Kconfig              |    9 +
+ drivers/gpu/drm/mediatek/Makefile             |    2 +
+ drivers/gpu/drm/mediatek/mtk_dp.c             | 2856 +++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_dp_reg.h         |  499 +++
+ drivers/video/hdmi.c                          |   82 +-
+ include/drm/display/drm_dp.h                  |    2 +
+ include/linux/hdmi.h                          |    7 +-
+ 8 files changed, 3553 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
+
+-- 
+2.18.0
+

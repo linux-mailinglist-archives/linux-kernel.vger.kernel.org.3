@@ -2,176 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998AA58B271
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEB258B274
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241857AbiHEWWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 18:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S241320AbiHEWZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 18:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241804AbiHEWV7 (ORCPT
+        with ESMTP id S237744AbiHEWZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 18:21:59 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2761C135
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:21:58 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31cdce3ed04so31819677b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:21:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=p3xudRLR9dNuWUK9U/ylm6O3b8FVaNLRrb9pQqFzR0w=;
-        b=tEC+w7ZCMSi41gOV32xpW1cs0vFZd0pjxoK1AeJyyH01noSX4dLvRhywvBcccI9kdU
-         JKFh83XKg1Si8IMewvVtmvDTWjRKjw3vuzZtx6w3xA2KeuXUxoU/6vRz//098kabUzjE
-         eFwl26ps6MG+nYqCcCI1foMbFHepHOTyrxI0z85iwM8dIVVGbzs366K/ASaVu+V0zPT/
-         uJ/lsElcVWzYS8YYewDpoOAwFTi+w1gRSdsGaOWMYHEI+AEzCyag0hQVzUs3cU93g+T8
-         p0Ut/ZVPUs8LdBcNe3+7UfinveQxYxEtWF7YFesMt+DabZUIKwIYMEaR3aoNOvIbKV0C
-         8E5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=p3xudRLR9dNuWUK9U/ylm6O3b8FVaNLRrb9pQqFzR0w=;
-        b=p0otPQkQTj/9A4nKR0nb0zbo163/gGx1LH7P/GW6q4LvJOIyjBCaiDqbJ4VvTAppZq
-         gZh6gc4s2fFDjHXMl55VyZucLZxagJ9wsD3mX+zEGzyNsfhFXWb7WWrYj+xamI+kiTfZ
-         PCxKXyZMvLqTKRT2qUyaUv5zpZ7MI/KLrrELVaBAqx1ivCj/PwVocJxaqQM+9oEh4b/X
-         Xjfia5NSzkJhB5Yf6bWuFC89v8bVr5Pm8VFJFAUCiBBGsTI/3Z2KuqjcYRlShg5UwtfY
-         mJKfQKMtWfw6jrlPEgj54mmgORkm0szyw+Z8jVuVwBuT+FfX4r9v1h12NxGze1Co119E
-         AOcA==
-X-Gm-Message-State: ACgBeo1rUYWxckiBtjMe8mMMCsboxA2zuqo/m6lR5zuz2WxgIH1SOIT3
-        gZFpXND2l2mi5V2RKP3rsf9TeiuqjmE=
-X-Google-Smtp-Source: AA6agR7Pdt67CAVIWF/fYp+P3xXpceR93JSbt9+i7cJEfvpa+CoelR+6dqwVhJxpBe3viA/07hQjowUu1E0=
-X-Received: from jeffxud.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:e37])
- (user=jeffxu job=sendgmr) by 2002:a25:33c5:0:b0:67a:6950:c188 with SMTP id
- z188-20020a2533c5000000b0067a6950c188mr7334020ybz.175.1659738117501; Fri, 05
- Aug 2022 15:21:57 -0700 (PDT)
-Date:   Fri,  5 Aug 2022 22:21:26 +0000
-In-Reply-To: <20220805222126.142525-1-jeffxu@google.com>
-Message-Id: <20220805222126.142525-6-jeffxu@google.com>
-Mime-Version: 1.0
-References: <20220805222126.142525-1-jeffxu@google.com>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v2 5/5] sysctl: add support for mfd_noexec
-From:   <jeffxu@google.com>
-To:     skhan@linuxfoundation.org
-Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
-        Jeff Xu <jeffxu@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 5 Aug 2022 18:25:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FBC1705E
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:25:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F05260DDE
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 22:25:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC4F9C433D6;
+        Fri,  5 Aug 2022 22:25:53 +0000 (UTC)
+Date:   Fri, 5 Aug 2022 18:25:52 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     Daniel Dao <dqminh@cloudflare.com>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: 5.15 ftrace bug when enabling function_graph
+Message-ID: <20220805182552.742c4162@gandalf.local.home>
+In-Reply-To: <CABWYdi05VjumiXUT1sNWrLKxSVm0FeaGzjkVqbesKK3C_8nu=A@mail.gmail.com>
+References: <CA+wXwBQ-VhK+hpBtYtyZP-NiX4g8fqRRWithFOHQW-0coQ3vLg@mail.gmail.com>
+        <20220223115457.7bb575c1@gandalf.local.home>
+        <CABWYdi1aKXWDjT+-aAQvn7eLcySbmeEucVS+8RAbUPE+bprK6A@mail.gmail.com>
+        <20220805145333.1360dbbb@gandalf.local.home>
+        <CABWYdi05VjumiXUT1sNWrLKxSVm0FeaGzjkVqbesKK3C_8nu=A@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Xu <jeffxu@chromium.org>
+On Fri, 5 Aug 2022 13:14:47 -0700
+Ivan Babrou <ivan@cloudflare.com> wrote:
 
-Add vm.mfd_noexec.  When the value is 1 (enabled),
-memfd_create syscall will created non-executable memfd.
+> On Fri, Aug 5, 2022 at 11:53 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > On Fri, 5 Aug 2022 11:37:56 -0700
+> > Ivan Babrou <ivan@cloudflare.com> wrote:
+> >  
+> > > root@foo:~# echo 'bpf_dispatcher_*_func' >
+> > > /sys/kernel/tracing/set_ftrace_notrace
+> > >
+> > > root@foo:~# trace-cmd record -p function_graph -l handle_mm_fault -P 3367417
+> > > plugin 'function_graph'
+> > > Hit Ctrl^C to stop recording  
+> >
+> >  
+> > > [1459709.204253] ------------[ ftrace bug ]------------
+> > > [1459709.204257] ftrace failed to modify
+> > > [1459709.204262] [<ffffffffac3ea960>] bpf_dispatcher_xdp_func+0x0/0x10
+> > > [1459709.204275]  actual:   ffffffe9:ffffff9b:76:ffffffb0:14
+> > > [1459709.204302] Setting ftrace call site to call ftrace function
+> > > [1459709.204305] ftrace record flags: 10000001
+> > > [1459709.204309]  (1)
+> > >                   expected tramp: ffffffffabc4bcb0
+> > > [1459709.204325] ------------[ cut here ]------------  
+> >
+> > Did you reboot since the error happened? Because the command you showed
+> > should not have touched bpf_dispatcher_xdp_func.  
+> 
+> I did reboot, but I can reproduce if you have things for me to try.
 
-The default value is 0 (disabled), admin can change the
-setting from 0 => 1, however 1 => 0 is not allowed,
-unless reboot.
+Let's see if this works manually.
 
-Signed-off-by: Jeff Xu <jeffxu@chromium.org>
----
- include/linux/mm.h |  4 ++++
- kernel/sysctl.c    |  9 +++++++++
- mm/memfd.c         | 27 +++++++++++++++++++++++++++
- 3 files changed, 40 insertions(+)
+Reboot again.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 7898e29bcfb5..1c66cf4aca11 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -203,6 +203,10 @@ extern int sysctl_overcommit_memory;
- extern int sysctl_overcommit_ratio;
- extern unsigned long sysctl_overcommit_kbytes;
- 
-+extern int sysctl_mfd_noexec_scope;
-+extern int mfd_noexec_dointvec_minmax(struct ctl_table *table, int write,
-+		void *buffer, size_t *lenp, loff_t *ppos);
-+
- int overcommit_ratio_handler(struct ctl_table *, int, void *, size_t *,
- 		loff_t *);
- int overcommit_kbytes_handler(struct ctl_table *, int, void *, size_t *,
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index b233714a1c78..54510da007ff 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2362,6 +2362,15 @@ static struct ctl_table vm_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= mmap_min_addr_handler,
- 	},
-+	{
-+		.procname       = "mfd_noexec",
-+		.data           = &sysctl_mfd_noexec_scope,
-+		.maxlen         = sizeof(sysctl_mfd_noexec_scope),
-+		.mode           = 0644,
-+		.proc_handler   = mfd_noexec_dointvec_minmax,
-+		.extra1         = SYSCTL_ZERO,
-+		.extra2         = SYSCTL_ONE,
-+	},
- #endif
- #ifdef CONFIG_NUMA
- 	{
-diff --git a/mm/memfd.c b/mm/memfd.c
-index b841514eb0fd..c6ccb8481ed2 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -20,6 +20,11 @@
- #include <linux/memfd.h>
- #include <uapi/linux/memfd.h>
- 
-+#define MFD_NOEXEC_SCOPE_DISABLED	0
-+#define MFD_NOEXEC_SCOPE_ENABLED	1
-+
-+int sysctl_mfd_noexec_scope __read_mostly = MFD_NOEXEC_SCOPE_DISABLED;
-+
- /*
-  * We need a tag: a new tag would expand every xa_node by 8 bytes,
-  * so reuse a tag which we firmly believe is never set or cleared on tmpfs
-@@ -275,6 +280,10 @@ SYSCALL_DEFINE2(memfd_create,
- 	char *name;
- 	long len;
- 
-+	if (sysctl_mfd_noexec_scope == MFD_NOEXEC_SCOPE_ENABLED) {
-+		flags |= MFD_NOEXEC;
-+	}
-+
- 	if (!(flags & MFD_HUGETLB)) {
- 		if (flags & ~(unsigned int)MFD_ALL_FLAGS)
- 			return -EINVAL;
-@@ -351,3 +360,21 @@ SYSCALL_DEFINE2(memfd_create,
- 	kfree(name);
- 	return error;
- }
-+
-+#ifdef CONFIG_SYSCTL
-+int mfd_noexec_dointvec_minmax(struct ctl_table *table, int write,
-+		void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	struct ctl_table table_copy;
-+
-+	if (write && !capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	/* Lock the max value if it ever gets set. */
-+	table_copy = *table;
-+	if (*(int *)table_copy.data == *(int *)table_copy.extra2)
-+		table_copy.extra1 = table_copy.extra2;
-+
-+	return proc_dointvec_minmax(&table_copy, write, buffer, lenp, ppos);
-+}
-+#endif
--- 
-2.37.1.559.g78731f0fdb-goog
+Make sure the above "ftrace bug" is not there.
 
+If not already mounted, as root:
+
+ # mount -t tracefs tracefs /sys/krenel/tracing
+ # cd /sys/kernel/tracing
+ # cat enabled_functions
+
+Let me know what is there.
+
+ # echo handle_mm_fault > set_ftrace_filter
+ # cat set_ftrace_filter
+
+to make sure that handle_mm_fault is listed.
+
+ # echo function_graph > current_tracer
+
+If it fails again, let me know. It should not, but if it does, it needs to
+be investigated.
+
+Oh, and what exactly is this kernel version. The backtrace you posted shows:
+
+  5.15.19-cloudflare-2022.2.1
+
+If you can not reproduce this on a vanilla 5.15.19 kernel, then it may be a
+bad backport of some patch.
+
+-- Steve

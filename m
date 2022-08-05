@@ -2,121 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C0958AB23
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 14:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9510E58AB28
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 14:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240416AbiHEM4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 08:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S240649AbiHEM5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 08:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240860AbiHEM4c (ORCPT
+        with ESMTP id S240881AbiHEM47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 08:56:32 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87B152F003
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 05:56:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 02EB3106F;
-        Fri,  5 Aug 2022 05:56:25 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.42.224])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B0953F73B;
-        Fri,  5 Aug 2022 05:56:23 -0700 (PDT)
-Date:   Fri, 5 Aug 2022 13:56:20 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Bruno Goncalves <bgoncalv@redhat.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        CKI Project <cki-project@redhat.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [5.19.0] [aarch64] WARNING: CPU: 0 PID: 1 at
- mm/page_alloc.c:5407 __alloc_pages+0x1a0/0x290
-Message-ID: <Yu0TdPm3CUT6gq/J@FVFF77S0Q05N>
-References: <CA+QYu4rPbfH-4wNR06Vn=31RCGKFFEB-KRskn52Jtig_UugYzg@mail.gmail.com>
+        Fri, 5 Aug 2022 08:56:59 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A81328719;
+        Fri,  5 Aug 2022 05:56:58 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id h13so3171332wrf.6;
+        Fri, 05 Aug 2022 05:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=tdktkdyoss6MPtWcDNXEp8QoORxZwPnYjcB5REPGiQo=;
+        b=OSkPRZN6X00ZnwdYODz3BqQFJz0cTxlx4ZzBtSe4jpVuyA+EAtR8ZCRTGtWssasCtI
+         JPEibItr1eH4zQlnwWqoNmiOEwftcB1TJtFMSNNxgXiOdnOeVO8Ki3b5n2NkkI7NbZzW
+         +Rle2I2M0IQNcfBTXgsCtLtVx2Q1pBIvzyCRtlnRnFn8laoNP0+11YU/PGTqa8HMf6D+
+         2kpvAUccVDNwnD8BsYmKnKdxQO9NBsHPPkTXIpMDKbL7c3xg0F1vIP8HrQdBmkdtMZWp
+         N9fN7ckGs7bTs4KUZsKqRxStybFDptbwa3vxMtYy92l9OnZhsW8A+GXubgxoNzqiMa4M
+         4Pfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=tdktkdyoss6MPtWcDNXEp8QoORxZwPnYjcB5REPGiQo=;
+        b=iroqVjOH/Om4G8KABUkjl5AyYxKpNVHq1V/wiUq3g/Ovg9d7dtm8GJ/U5xYGctVNx/
+         zxbbe1fT01qg2c8KDNoEanAbmq+IBEJi9+MBZCxGKvF1Nb+xzgm/T3yUj7vkRJfgOIYE
+         pZzm8Lub5rsGPiIR3Ja9bqhjyq0e7lG8Kw0vxdqVwAF2R/CEefhN8PHhwfeshzd/ToXG
+         Emi+C1yOdBRJOlUnHh9ytCanKKQXf6OORjkeg7rlJmY3MvUqml7ZJKRqucfYq62k53M1
+         JsKie9PSxyv4yBaXyC0km1ltZtG9IxP1Cyw2wLcauGDqyZWZ2zEDGAoDMNRsaSSfrBpo
+         DwgQ==
+X-Gm-Message-State: ACgBeo0WJ76qmEMh2KauUORgbhBBDqPE02ASop82a60cDmhKQJGzsbW3
+        thAmvzIfBEqpX3wdY76uFVLJd/5XjeoXaXFC
+X-Google-Smtp-Source: AA6agR7lFaFf1EZ4qUuP857h9tRe63pqmkOx6LwGZ/CX7EHwv84Y9sspkJUZH9s10FqYb6n9PL+Mow==
+X-Received: by 2002:adf:ce89:0:b0:220:6cc5:aff8 with SMTP id r9-20020adfce89000000b002206cc5aff8mr4301687wrn.396.1659704216667;
+        Fri, 05 Aug 2022 05:56:56 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id u13-20020a5d514d000000b0021d7ad6b9fdsm3866500wrt.57.2022.08.05.05.56.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 05:56:56 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        linux1394-devel@lists.sourceforge.net
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ieee1394: Use correct function names in comment blocks
+Date:   Fri,  5 Aug 2022 13:56:55 +0100
+Message-Id: <20220805125655.2347072-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+QYu4rPbfH-4wNR06Vn=31RCGKFFEB-KRskn52Jtig_UugYzg@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 11:47:57AM +0200, Bruno Goncalves wrote:
-> Hello,
-> 
-> Since commit "c1c76700a0d6" we started to hit the following call trace
-> on aarch64 VMs when looking at journalctl log
+The incorrect function name is being used in the comment for functions
+init_ohci1394_dma_on_all_controllers and setup_ohci1394_dma. Correct
+these comments.
 
-For everyone else's benefit that's commit:
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/firewire/init_ohci1394_dma.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-  c1c76700a0d6 ("Merge tag 'spdx-6.0-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/spdx")
+diff --git a/drivers/firewire/init_ohci1394_dma.c b/drivers/firewire/init_ohci1394_dma.c
+index 659256927b42..11796931f9c4 100644
+--- a/drivers/firewire/init_ohci1394_dma.c
++++ b/drivers/firewire/init_ohci1394_dma.c
+@@ -251,7 +251,8 @@ static inline void __init init_ohci1394_controller(int num, int slot, int func)
+ }
+ 
+ /**
+- * debug_init_ohci1394_dma - scan for OHCI1394 controllers and init DMA on them
++ * init_ohci1394_dma_on_all_controllers - scan for OHCI1394 controllers and
++ * init DMA on them
+  * Scans the whole PCI space for OHCI1394 controllers and inits DMA on them
+  */
+ void __init init_ohci1394_dma_on_all_controllers(void)
+@@ -283,7 +284,7 @@ void __init init_ohci1394_dma_on_all_controllers(void)
+ }
+ 
+ /**
+- * setup_init_ohci1394_early - enables early OHCI1394 DMA initialization
++ * setup_ohci1394_dma - enables early OHCI1394 DMA initialization
+  */
+ static int __init setup_ohci1394_dma(char *opt)
+ {
+-- 
+2.35.3
 
-Could you please include the commit title when citing a patch?
-
-... did you try to bisect this?
-
-> kernel: Mountpoint-cache hash table entries: 16384 (order: 5, 131072
-> bytes, linear)
-> kernel: ACPI PPTT: No PPTT table found, CPU and cache topology may be inaccurate
-> kernel: ------------[ cut here ]------------
-> kernel: WARNING: CPU: 0 PID: 1 at mm/page_alloc.c:5407 __alloc_pages+0x1a0/0x290
-
-IIUC that's:
-
-  WARN_ON_ONCE_GFP(order >= MAX_ORDER, gfp)
-
-... and IIUC that's fixed by commit:
-
-  11969d698f8cda31 ("cacheinfo: Use atomic allocation for percpu cache attributes")
-
-Thanks,
-Mark.
-
-> kernel: Modules linked in:
-> kernel: CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0 #1
-> kernel: pstate: 20400005 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> kernel: pc : __alloc_pages+0x1a0/0x290
-> kernel: lr : alloc_page_interleave+0x24/0xbc
-> kernel: sp : ffff80000803bb90
-> kernel: x29: ffff80000803bb90 x28: 0000000000000000 x27: 0000000000000000
-> kernel: x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-> kernel: x23: 000000000000001e x22: 0000000000000000 x21: 000000000000001e
-> kernel: x20: 000000000000001e x19: 0000000000040b20 x18: 0000000000000014
-> kernel: x17: 6e69206562207961 x16: 6d2079676f6c6f70 x15: 6f74206568636163
-> kernel: x14: 20646e6120555043 x13: 6574617275636361 x12: 6e69206562207961
-> kernel: x11: 6d2079676f6c6f70 x10: 6f74206568636163 x9 : ffffa4f6617fd5e8
-> kernel: x8 : ffffa4f663ed0440 x7 : 0000000000000007 x6 : 0000000000000000
-> kernel: x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-> kernel: x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffffa4f663c53532
-> kernel: Call trace:
-> kernel:  __alloc_pages+0x1a0/0x290
-> kernel:  alloc_page_interleave+0x24/0xbc
-> kernel:  alloc_pages+0x10c/0x16c
-> kernel:  kmalloc_order+0x3c/0xc0
-> kernel:  kmalloc_order_trace+0x38/0x130
-> kernel:  __kmalloc+0x2e8/0x350
-> kernel:  detect_cache_attributes+0x9c/0x110
-> kernel:  update_siblings_masks+0x34/0x270
-> kernel:  store_cpu_topology+0x7c/0xc0
-> kernel:  smp_prepare_cpus+0x34/0x108
-> kernel:  kernel_init_freeable+0x108/0x1b8
-> kernel:  kernel_init+0x30/0x150
-> kernel:  ret_from_fork+0x10/0x20
-> kernel: ---[ end trace 0000000000000000 ]---
-> kernel: Early cacheinfo failed, ret = -12
-> kernel: cblist_init_generic: Setting adjustable number of callback queues.
-> kernel: cblist_init_generic: Setting shift to 2 and lim to 1.
-> 
-> test logs: https://datawarehouse.cki-project.org/kcidb/tests/4712644
-> cki issue tracker: https://datawarehouse.cki-project.org/issue/1485
-> 
-> kernel config: https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/605193135/build%20aarch64/2816138306/artifacts/kernel-mainline.kernel.org-redhat_605193135_aarch64.config
-> kernel build: https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/605193135/publish%20aarch64/2816138315/artifacts/kernel-mainline.kernel.org-redhat_605193135_aarch64.tar.gz
-> 
-> Thanks,
-> Bruno Goncalves
-> 

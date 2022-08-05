@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A604058A85C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 10:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3E158A863
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 10:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240316AbiHEI4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 04:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
+        id S240283AbiHEI66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 04:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234856AbiHEI41 (ORCPT
+        with ESMTP id S234856AbiHEI6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 04:56:27 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA896AA3C;
-        Fri,  5 Aug 2022 01:56:25 -0700 (PDT)
-Received: from [192.168.31.174] (unknown [95.31.173.239])
-        by mail.ispras.ru (Postfix) with ESMTPSA id BBDCD40737C5;
-        Fri,  5 Aug 2022 08:56:19 +0000 (UTC)
-Message-ID: <18aa0617-0afe-2543-89cf-2f04c682ea88@ispras.ru>
-Date:   Fri, 5 Aug 2022 11:56:18 +0300
+        Fri, 5 Aug 2022 04:58:55 -0400
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C543B74E26;
+        Fri,  5 Aug 2022 01:58:53 -0700 (PDT)
+Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.9; Fri, 5 Aug 2022
+ 16:58:51 +0800
+From:   Yu Tu <yu.tu@amlogic.com>
+To:     <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     Yu Tu <yu.tu@amlogic.com>
+Subject: [PATCH V3 0/6] Add S4 SoC PLL and Peripheral clock controller
+Date:   Fri, 5 Aug 2022 16:57:10 +0800
+Message-ID: <20220805085716.5635-1-yu.tu@amlogic.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] can: j1939: fix memory leak of skbs
-Content-Language: en-US
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-References: <20220708175949.539064-1-pchelkin@ispras.ru>
- <20220729042244.GC30201@pengutronix.de>
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-In-Reply-To: <20220729042244.GC30201@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.18.11.248]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oleksij,
+1. Add PLL and Peripheral clock controller driver for S4 SOC.
 
-On 29.07.2022 07:22, Oleksij Rempel wrote:
-> Initial issue can be reproduced by using real (slow) CAN with j1939cat[1]
-> tool. Both parts should be started to make sure the j1939_session_tx_dat() will
-> actually start using the queue. After pushing about 100K of data, application
-> will try to close the socket and exit. After socket is closed, all skb related
-> to this socket will be freed and j1939_session_tx_dat() will use freed skbs.
+Yu Tu (6):
+  dt-bindings: clock: meson: add S4 SoC PLL clock controller bindings
+  arm64: dts: meson: add S4 Soc PLL clock controller in DT
+  clk: meson: S4: add support for Amlogic S4 SoC PLL clock driver
+  dt-bindings: clk: meson: add S4 SoC peripheral clock controller
+    bindings
+  arm64: dts: meson: add S4 Soc Peripheral clock controller in DT
+  clk: meson: s4: add s4 SoC peripheral clock controller driver
 
-Ok, the patch I suggested was a kind of a guess, now I understand that
-it breaks important logic.
+V2 -> V3: Use two clock controller.
+V1 -> V2: Change format as discussed in the email.
 
-On 29.07.2022 07:22, Oleksij Rempel wrote:
- > This skb_get() is counter part of skb_unref()
- > j1939_session_skb_drop_old().
+Link:https://lore.kernel.org/all/20220728054202.6981-1-yu.tu@amlogic.com/
 
-However, we have a case [1] where j1939_session_skb_queue() is called
-but the corresponding j1939_session_skb_drop_old() is not called and it
-causes a memory leak.
+ .../bindings/clock/amlogic,s4-clkc.yaml       |   92 +
+ .../bindings/clock/amlogic,s4-pll-clkc.yaml   |   51 +
+ MAINTAINERS                                   |    1 +
+ arch/arm64/boot/dts/amlogic/meson-s4.dtsi     |   34 +
+ drivers/clk/meson/Kconfig                     |   25 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/s4-pll.c                    |  891 ++++
+ drivers/clk/meson/s4-pll.h                    |   88 +
+ drivers/clk/meson/s4.c                        | 3878 +++++++++++++++++
+ drivers/clk/meson/s4.h                        |  232 +
+ include/dt-bindings/clock/amlogic,s4-clkc.h   |  131 +
+ .../dt-bindings/clock/amlogic,s4-pll-clkc.h   |   30 +
+ 12 files changed, 5455 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,s4-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/s4-pll.c
+ create mode 100644 drivers/clk/meson/s4-pll.h
+ create mode 100644 drivers/clk/meson/s4.c
+ create mode 100644 drivers/clk/meson/s4.h
+ create mode 100644 include/dt-bindings/clock/amlogic,s4-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,s4-pll-clkc.h
 
-I tried to investigate it a little bit: the thing is that
-j1939_session_skb_drop_old() can be called only when processing
-J1939_ETP_CMD_CTS. On the contrary, as I can see,
-j1939_session_skb_queue() can be called independently from
-J1939_ETP_CMD_CTS so the two functions obviously do not correspond to
-each other.
 
-In reproducer case there is a J1939_ETP_CMD_RTS processing, then
-we send some messages (where j1939_session_skb_queue() is called) and
-after that J1939_ETP_CMD_ABORT is processed and we lose those skbs.
+base-commit: 08fc500fe3d4b1f0603fb97ad353f246a3d52d2d
+-- 
+2.33.1
 
-[1] https://forge.ispras.ru/issues/11743

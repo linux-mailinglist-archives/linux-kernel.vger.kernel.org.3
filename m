@@ -2,81 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9709858AB36
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0253658AB3F
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240842AbiHENCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 09:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S240855AbiHENGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 09:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236060AbiHENCE (ORCPT
+        with ESMTP id S231492AbiHENGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 09:02:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7AB27FE4
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:02:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659704523; x=1691240523;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/YHy+UW6b2JCwuDLlbsQHM3sjjmf5ju3H89apsgwvjg=;
-  b=VJ8OrvopqwLqx5MHUIotzv5ZKGzaVwv94JwHV4lRduNlpbtbfioPkoLH
-   JHcEYIvMyZcW5uu4/750H39WywzvdsKU/q8ydV4bf+4sn+6kBBi49TLSw
-   kAzMZ0dQc440otoYwXOCq+jLRMDAg3rF52hCZOXSa9PHTOW0iPOuR4Rtt
-   exeJRQqcjTYsbXwMxcOb1aFQ9nFQKeJQFqbm3LdIFMC4JJKU+iQQlc8Kv
-   C+pULyruCFYldaFfgfiiEWdwZcigMdGp44HP6J66KP1RKsPQrCHolRNtL
-   PFofuQw+aHKGMiHBFoWIpRtHc9w15igPfVULLypFYW+edAp0/Dz8kj8qO
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="316084909"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="316084909"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 06:01:49 -0700
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="779736006"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 06:01:46 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 05 Aug 2022 16:01:44 +0300
-Date:   Fri, 5 Aug 2022 16:01:44 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Brad Campbell <lists2009@fnarfbargle.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Apple Thunderbolt Display chaining
-Message-ID: <Yu0UuOVGeIv/U+jU@lahna>
-References: <YkcMofXKr/ZmOSwH@lahna>
- <7ea44c20-6c65-224f-af7b-aa1bd310d038@fnarfbargle.com>
- <YkrEE0uh9EVCchfl@lahna>
- <d112651d-919d-ce2d-efac-6abbd9de0f07@fnarfbargle.com>
- <YkrqL/wnACNVOpSi@lahna>
- <ae336e2d-8e7c-9167-ab3d-8d642cd4fb2c@fnarfbargle.com>
- <Yk2qMt568oEeTj8H@lahna>
- <49183e52-2e73-b32f-11ad-6036b1040d7c@fnarfbargle.com>
- <Yuz/Q3MTVIhCZU+0@lahna>
- <f5c8b9f0-0d6d-c6db-ae0b-894acb58d078@fnarfbargle.com>
+        Fri, 5 Aug 2022 09:06:44 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9270A205F5
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:06:35 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id p10so3182283wru.8
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 06:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wMBHKeG+uj2RCiscp/m14dBH4g2RDMQBDvQVGQjAQpA=;
+        b=CCCgaKAT/t03FTKn2Ul9JcmLP30Sb1n8CRn2Na8/JwSzHTJuDnRH80W++218pg/NNE
+         qNCul8Ee9O3nwrro/2qu2oGUUP19pFO0mkZvk8t9Zqdz3PmFYnAuPQ942TgsZ3xpbP3O
+         I70rEKjHcXe8hBg7bGni0qxfQcHJ+RyMFCv3q/L5EB+NyyOCx9+TP5V9tKUd2FDQMrKQ
+         UDXqjphViRdXF7Na4aOOGpe53KKbLs/VfZ758wLFjLnpxZiIxC3H2JkGcerAqD/Z8Shn
+         7Dv3v5h9vehGqCXnby5bL0sFwmUjXYIKpN8vaCF01k/eswQGTs9BzDMSVwOVtSH+74Hv
+         RJNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wMBHKeG+uj2RCiscp/m14dBH4g2RDMQBDvQVGQjAQpA=;
+        b=Df81o3IrlRosSGtSXlxiUWTaUxboKNrIcTMSOrhVKynttL6DIvZEQpxbbAGY5UNsGw
+         G2Anvkj/AJhEHUOEkZU1P48qNRU60Yf7WpilVqOhIfHMCH7q0nIKhW1PN3Moc14v6MWw
+         JQ0LSvIRvlZ2YtfIwotxjwKGM7sOif+T1ezVG2ELQoiZyElcvfZlVV1DSgv0dVxhJvRY
+         KP9AAkYDApHXmn1cGK8FvM6XDkVWHpF5MD2zgG+MkoRp1YM3PReq9V6oLlSjgIB3pQtL
+         5urAmY5a9alCzbK7n+sy/F1CHpB35UCn1IHRFY5qVzXjbJqOz1FpoDm4337Gg3cM5TiP
+         sHuQ==
+X-Gm-Message-State: ACgBeo1mwTIdAPWxOapdMicr0SEP3r5Ek3cevLlSqHurX5HzDiNeDv84
+        MwahoW2ofoq4Ho8oMNTvGJhYu95alQ9hVPEY
+X-Google-Smtp-Source: AA6agR60jW2rSIVn/470RYnjAIjv8R48SysKold+eZg1dX80YmmCzW2tJNa33tfHW7I2jUj7F7L/FQ==
+X-Received: by 2002:a5d:5581:0:b0:20f:fc51:7754 with SMTP id i1-20020a5d5581000000b0020ffc517754mr4458033wrv.413.1659704793841;
+        Fri, 05 Aug 2022 06:06:33 -0700 (PDT)
+Received: from localhost (cpc109575-know16-2-0-cust250.17-2.cable.virginm.net. [94.175.88.251])
+        by smtp.gmail.com with ESMTPSA id f10-20020a05600c4e8a00b003a30fbde91dsm10920176wmq.20.2022.08.05.06.06.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 06:06:33 -0700 (PDT)
+From:   Alix Dixon <notdixon.alix@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Alix Dixon <notdixon.alix@gmail.com>
+Subject: [PATCH] drivers: android: binder: Fixed coding style issue
+Date:   Fri,  5 Aug 2022 14:06:11 +0100
+Message-Id: <20220805130611.59289-1-notdixon.alix@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5c8b9f0-0d6d-c6db-ae0b-894acb58d078@fnarfbargle.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 08:43:08PM +0800, Brad Campbell wrote:
-> > Well can you try so that you disable PCIe PM for starters? Pass
-> > "pcie_port_pm=off" in the command line and see if anything changes. Of
-> > course this prevents low power states.
-> > 
-> 
-> That allows me to modprobe thunderbolt from an xterm :
+Fixed issue with comments on multiple lines not being aligned correctly + multiline comments not being on multiple lines
 
-Okay does it work any better if you don't have anything attached to the
-TBT ports when you boot up? If it does, how about just adding a single
-device (no display connected)?
+Signed-off-by: Alix Dixon <notdixon.alix@gmail.com>
+---
+ drivers/android/binder.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index c964d7c8c..5a6da6765 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -5289,8 +5289,10 @@ static long binder_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 	unsigned int size = _IOC_SIZE(cmd);
+ 	void __user *ubuf = (void __user *)arg;
+ 
+-	/*pr_info("binder_ioctl: %d:%d %x %lx\n",
+-			proc->pid, current->pid, cmd, arg);*/
++	/*
++	 * pr_info("binder_ioctl: %d:%d %x %lx\n",
++	 *		proc->pid, current->pid, cmd, arg);
++	 */
+ 
+ 	binder_selftest_alloc(&proc->alloc);
+ 
+@@ -6544,8 +6546,8 @@ static int __init binder_init(void)
+ 	if (!IS_ENABLED(CONFIG_ANDROID_BINDERFS) &&
+ 	    strcmp(binder_devices_param, "") != 0) {
+ 		/*
+-		* Copy the module_parameter string, because we don't want to
+-		* tokenize it in-place.
++		 * Copy the module_parameter string, because we don't want to
++		 * tokenize it in-place.
+ 		 */
+ 		device_names = kstrdup(binder_devices_param, GFP_KERNEL);
+ 		if (!device_names) {
+-- 
+2.34.1
+

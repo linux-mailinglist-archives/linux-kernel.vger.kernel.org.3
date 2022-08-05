@@ -2,91 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C5358AB80
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF0A58AB8B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240751AbiHENVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 09:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
+        id S236786AbiHENXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 09:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240713AbiHENUx (ORCPT
+        with ESMTP id S235985AbiHENXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 09:20:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B09AE002;
-        Fri,  5 Aug 2022 06:20:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C83F3B828CC;
-        Fri,  5 Aug 2022 13:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8660DC433B5;
-        Fri,  5 Aug 2022 13:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659705649;
-        bh=QbDEzNgc+tnc/EiRK7ewfx5pdjf8B3pqEY2X5VmRCA0=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=G2CQRtkcZxgj4cRCaza74SDg0mC8LLXsZdycE3/7iVxfEWWKalDr8XrP2YOVTdedS
-         2ZnrXa8kP+epGICHHPE0b6TI1gu5OaIlzazaPhZ1QY6tdiDdm6s2S92S39Ek3Pl1vA
-         9VQT5OfFGdzSgPdw1fGL3yK6fr1w6Lzzx9k8f3JUxd07tHc59gIezXNhgaZiWA2B/V
-         ovKulmCUIxEieDaSLX+vokVq9usYn1/Fc9QS4H4zr7Il7s7lR15BTCMIGwYDRmdF1T
-         rCyPq/QiR+1tijG0GgR+Vua0wWoPPAGbvGAgqOUVFxrsj4brZIVZCraJG+WnrO4vr6
-         B6B67N951K18w==
-From:   Mark Brown <broonie@kernel.org>
-To:     David Jander <david@protonic.nl>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-In-Reply-To: <20220805084458.1602277-1-david@protonic.nl>
-References: <20220805084458.1602277-1-david@protonic.nl>
-Subject: Re: [PATCH] spi: spi.c: Add missing __percpu annotations in users of spi_statistics
-Message-Id: <165970564827.1040888.14839667895342115884.b4-ty@kernel.org>
-Date:   Fri, 05 Aug 2022 14:20:48 +0100
+        Fri, 5 Aug 2022 09:23:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C65C1C122
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:23:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659705784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cvTnOWMtENdA0lewWHSDMt4C5p+Z0vLjSaKneQSan0A=;
+        b=MSyBv72bxSAo5Jj4RwDbNpd9f/GBm559GaoTwgDIYTbTQnfMuYfxvbcvotyTLkkQ3KWSl2
+        n4GBLE+/3XrE3DbREuWYBKluAANbXpp59GH4kGMhmWHdlKVamAxNMrIJ7jUkRx9detw+0K
+        lETpc2KbxTxmqpq9VGdyJ9Q6iFD8+eM=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-JY_XTT3YNhmMSYy2Juz4AA-1; Fri, 05 Aug 2022 09:23:02 -0400
+X-MC-Unique: JY_XTT3YNhmMSYy2Juz4AA-1
+Received: by mail-wr1-f72.google.com with SMTP id v5-20020adfa1c5000000b002205c89c80aso489879wrv.6
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 06:23:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=cvTnOWMtENdA0lewWHSDMt4C5p+Z0vLjSaKneQSan0A=;
+        b=T8XYwWJyj1btZsdK6j9N6RJd2F0InPSi0VJyHRa83Hxr27vo/aukruVHHsQlnmB5Sc
+         jQZQg1kxHGREuDDd+L9lpHJ5sMyWNdG+fdGmzq4/fLuuSq6ZzGGO4CD1VicNV0MsNqEm
+         maTHG0+8KqEJlMViO3RRr5FJucJPOLPdBOkgUBdi183Bzgb2N3xDh2iuOR+zkxS4fcBZ
+         Wpt0KKcNNJ7zXPEYgk+ENaM3V+OoNPo+m4Xk411G0hc1nOUj4vB08kQdtkyJr6/xAe/p
+         Q/o1lSkCD/9AQPdLnC8vtRwjHRnUy/H2U9ogWQFNn3rnO97A+Xnn8ZFkxIMgTMSLU9Bj
+         oa/A==
+X-Gm-Message-State: ACgBeo1wzXX1s19RUAXQEi8Z0Gfo2p7tG45yCnjD/Wvsz7jByYnauf05
+        ICx3QVi/qhAOhSNyag5DP8nxNPDqmUsR0cYb2XiwccAlZlHQAgmurQgya8usWTIY6fPDgIzGzW1
+        cksxfQmbTYllTS+QemVesDfpv
+X-Received: by 2002:adf:ce92:0:b0:220:5ef0:876d with SMTP id r18-20020adfce92000000b002205ef0876dmr4402383wrn.647.1659705781190;
+        Fri, 05 Aug 2022 06:23:01 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4uPBaWEs/z4mc87PDNQd0FqLSk3+CEo5G4UY36ZDFdxSdxTMNZ5FFOGBR2vXXQe8nDaUxZUw==
+X-Received: by 2002:adf:ce92:0:b0:220:5ef0:876d with SMTP id r18-20020adfce92000000b002205ef0876dmr4402357wrn.647.1659705780923;
+        Fri, 05 Aug 2022 06:23:00 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:fb00:f5c3:24b2:3d03:9d52? (p200300cbc706fb00f5c324b23d039d52.dip0.t-ipconnect.de. [2003:cb:c706:fb00:f5c3:24b2:3d03:9d52])
+        by smtp.gmail.com with ESMTPSA id h36-20020a05600c49a400b003a2c7bf0497sm4326304wmp.16.2022.08.05.06.22.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 06:23:00 -0700 (PDT)
+Message-ID: <13394075-fca0-6f2b-92a2-f1291fcec9a3@redhat.com>
+Date:   Fri, 5 Aug 2022 15:22:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fe10a
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-4-chao.p.peng@linux.intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v7 03/14] mm: Introduce memfile_notifier
+In-Reply-To: <20220706082016.2603916-4-chao.p.peng@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 Aug 2022 10:44:58 +0200, David Jander wrote:
-> Fixes sparse warnings of this kind:
-> drivers/spi/spi.c:117:16: sparse:     expected struct spi_statistics *
-> drivers/spi/spi.c:117:16: sparse:     got struct spi_statistics [noderef]
->  __percpu *[assigned] pcpu_stats
+On 06.07.22 10:20, Chao Peng wrote:
+> This patch introduces memfile_notifier facility so existing memory file
+> subsystems (e.g. tmpfs/hugetlbfs) can provide memory pages to allow a
+> third kernel component to make use of memory bookmarked in the memory
+> file and gets notified when the pages in the memory file become
+> invalidated.
+
+Stupid question, but why is this called "memfile_notifier" and not
+"memfd_notifier". We're only dealing with memfd's after all ... which
+are anonymous files essentially. Or what am I missing? Are there any
+other plans for fs than plain memfd support that I am not aware of?
+
 > 
+> It will be used for KVM to use a file descriptor as the guest memory
+> backing store and KVM will use this memfile_notifier interface to
+> interact with memory file subsystems. In the future there might be other
+> consumers (e.g. VFIO with encrypted device memory).
 > 
+> It consists below components:
+>  - memfile_backing_store: Each supported memory file subsystem can be
+>    implemented as a memory backing store which bookmarks memory and
+>    provides callbacks for other kernel systems (memfile_notifier
+>    consumers) to interact with.
+>  - memfile_notifier: memfile_notifier consumers defines callbacks and
+>    associate them to a file using memfile_register_notifier().
+>  - memfile_node: A memfile_node is associated with the file (inode) from
+>    the backing store and includes feature flags and a list of registered
+>    memfile_notifier for notifying.
+> 
+> In KVM usages, userspace is in charge of guest memory lifecycle: it first
+> allocates pages in memory backing store and then passes the fd to KVM and
+> lets KVM register memory slot to memory backing store via
+> memfile_register_notifier.
 
-Applied to
+Can we add documentation/description in any form how the different
+functions exposed in linux/memfile_notifier.h are supposed to be used?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Staring at memfile_node_set_flags() and memfile_notifier_invalidate()
+it's not immediately clear to me who's supposed to call that and under
+which conditions.
 
-Thanks!
-
-[1/1] spi: spi.c: Add missing __percpu annotations in users of spi_statistics
-      commit: d501cc4cfc6be1ab9aef3ff0fa3b2afc52a1af23
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
+-- 
 Thanks,
-Mark
+
+David / dhildenb
+

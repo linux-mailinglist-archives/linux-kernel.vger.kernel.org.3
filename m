@@ -2,168 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDDB58A929
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 12:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E036C58A930
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 12:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236608AbiHEKBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 06:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
+        id S236610AbiHEKFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 06:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235995AbiHEKAi (ORCPT
+        with ESMTP id S232412AbiHEKFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 06:00:38 -0400
-Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8495A896;
-        Fri,  5 Aug 2022 03:00:34 -0700 (PDT)
-Received: from [10.88.19.200] (10.88.19.200) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.2507.6; Fri, 5 Aug 2022
- 18:00:31 +0800
-Message-ID: <880842a1-a769-f228-7c91-5402e6d9391e@amlogic.com>
-Date:   Fri, 5 Aug 2022 18:00:37 +0800
+        Fri, 5 Aug 2022 06:05:18 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66977267D
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 03:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659693917; x=1691229917;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x4z2n+0ul8epVGqGJkMwZlvquRalUboGw6+5B8SZyGI=;
+  b=KlUMBbR87W30Zroh/1ILjv2t2UuYw+kqIfMX1aJdBNEaliR+4SzO/yH+
+   nL1DqX8uUaoaOKJo+PCa4xDHA9Bmv5l/8OpkwE5Na/JKh952sjmdw93ab
+   0T6h259WsiLJMTXYEyBPhAQ3Yq77LZq0Rfz9SaCt1bWDqFQCT3zaYQClS
+   LRCKP6tJWf24A2RRuI2jnnpUaZ69YWUujmmj/P6iBF+ltjKaovqwZ6WZF
+   qjkF9QS7iJoTi9UtEm9NmJsbKDvCnHwyRMQILYFi3n5cswfaKUJvzkeS0
+   lkSVjx1Tz7/ygL6MnNfG3Kf2Sy/AA8ocUZxPX7JDSQMMjFQjp3Z2/4h2W
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="273214648"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="273214648"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 03:05:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="579449750"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 05 Aug 2022 03:05:14 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJuCg-000JH5-14;
+        Fri, 05 Aug 2022 10:05:14 +0000
+Date:   Fri, 05 Aug 2022 18:04:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ de979c83574abf6e78f3fa65b716515c91b2613d
+Message-ID: <62eceb47.wSjrCVaH28afjjh0%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH v4 4/4] dt-binding: perf: Add Amlogic DDR PMU
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chris Healy <cphealy@gmail.com>
-References: <20220805071426.2598818-1-jiucheng.xu@amlogic.com>
- <20220805071426.2598818-4-jiucheng.xu@amlogic.com>
- <a3cd55ad-cec2-9570-2078-6724ab1d7300@linaro.org>
-From:   Jiucheng Xu <jiucheng.xu@amlogic.com>
-In-Reply-To: <a3cd55ad-cec2-9570-2078-6724ab1d7300@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.88.19.200]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: de979c83574abf6e78f3fa65b716515c91b2613d  x86/entry: Build thunk_$(BITS) only if CONFIG_PREEMPTION=y
 
-On 2022/8/5 16:21, Krzysztof Kozlowski wrote:
-> [ EXTERNAL EMAIL ]
->
-> On 05/08/2022 09:14, Jiucheng Xu wrote:
->> Add binding documentation for the Amlogic G12 series DDR
->> performance monitor unit.
->>
-> Bindings go first in the series, before their implementation.
->
->> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
->> ---
->> Changes v3 -> v4:
->>    - Fix "$id: relative path/filename doesn't match actual path or
->>      filename" warning
->>
->> Changes v2 -> v3:
->>    - Remove oneOf
->>    - Add descriptions
->>    - Fix compiling warning
->>
->> Changes v1 -> v2:
->>    - Rename file, from aml_ddr_pmu.yaml to amlogic,g12_ddr_pmu.yaml
->>    - Delete "model", "dmc_nr", "chann_nr" new properties
->>    - Fix compiling error
->> ---
->>   .../bindings/perf/amlogic,g12-ddr-pmu.yaml    | 52 +++++++++++++++++++
->>   MAINTAINERS                                   |  1 +
->>   2 files changed, 53 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml b/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
->> new file mode 100644
->> index 000000000000..4d018574ffd1
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
->> @@ -0,0 +1,52 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/perf/amlogic,g12-ddr-pmu.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Amlogic G12 DDR performance monitor
->> +
->> +maintainers:
->> +  - Jiucheng Xu <jiucheng.xu@amlogic.com>
->> +
->> +description: |
->> +  Amlogic G12 series SoC integrate DDR bandwidth monitor.
->> +  A timer is inside and can generate interrupt when timeout.
->> +  The bandwidth is counted in the timer ISR. Different platform
->> +  has different subset of event format attribute.
->> +
->> +properties:
->> +  compatible:
->> +    items:
-> You have only one item, so remove "items".
->
->> +      - enum:
->> +          - amlogic,g12b-ddr-pmu
->> +          - amlogic,g12a-ddr-pmu
->> +          - amlogic,sm1-ddr-pmu
->> +
->> +  reg:
->> +    items:
->> +      - description: Physical address of DMC bandwidth register
->> +          and size of the configuration address space.
-> Skip obvious pieces, so only:
->
-> description: DMC bandwidth register space
->
->> +      - description: Physical address of DMC PLL register and
->> +          size of the configuration address space.
-> description: DMC PLL bandwidth register space
->
->
->> +
->> +  interrupts:
->> +    items:
->> +      - description: The IRQ of the inside timer timeout.
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    ddr_pmu@ff638000 {
-> No underscores in node names, generic node names, so just "pmu".
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
->
->> +        compatible = "amlogic,g12a-ddr-pmu";
->> +        reg = <0xff638000 0x100
->> +               0xff638c00 0x100>;
-> This is still not fixed. Binding says you have two items, but you
-> declared here only one item.
+elapsed time: 813m
 
-Okay, I will change it as your comments.
+configs tested: 41
+configs skipped: 14
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> Best regards,
-> Krzysztof
->
+gcc tested configs:
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                         amcore_defconfig
+sh                             shx3_defconfig
+parisc                generic-64bit_defconfig
+i386                          randconfig-c001
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+powerpc                    amigaone_defconfig
+arc                        nsim_700_defconfig
+sh                          landisk_defconfig
+mips                            ar7_defconfig
+openrisc                 simple_smp_defconfig
+
+clang tested configs:
+x86_64                        randconfig-k001
+arm                        mvebu_v5_defconfig
+mips                        bcm63xx_defconfig
+arm                              alldefconfig
+
 -- 
-Thanks,
-Jiucheng
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

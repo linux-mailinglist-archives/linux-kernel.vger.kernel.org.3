@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B6058A87A
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF6A58A87C
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240423AbiHEJHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 05:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
+        id S240431AbiHEJIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 05:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiHEJHk (ORCPT
+        with ESMTP id S235839AbiHEJIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 05:07:40 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFF821E10
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:07:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R761e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VLQUkIs_1659690448;
-Received: from 30.227.90.139(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VLQUkIs_1659690448)
-          by smtp.aliyun-inc.com;
-          Fri, 05 Aug 2022 17:07:29 +0800
-Message-ID: <b36d1ddc-c2db-501c-1e37-17aaefc2b271@linux.alibaba.com>
-Date:   Fri, 5 Aug 2022 17:07:27 +0800
+        Fri, 5 Aug 2022 05:08:14 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC9F21E10;
+        Fri,  5 Aug 2022 02:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659690493; x=1691226493;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VCbk/q9Wd0lGTGIEGbC69VxKX0QDmTy8SvpJ1KoCfF0=;
+  b=biSEyLDpCGbC085vqq4/C7VcR++Gz//BsrGNyI6UYr4FpmOL3E1o6lR2
+   TikNhO5QuSbvVNEFVIt3KNTiCwKRxvcBluqyClmMyYPHpmwrRFoX/RW+V
+   LHG6mD4MDTWoUi+QO5WBxylKaYOYMmZ6VrZjCKzU2tZzrHq9ZKFgZWTuD
+   obUhfGUVuGRwjMrTy5OsaY4LS/Tw66zzFebJOax3Qcx9rAylKisq2lMIt
+   zdnjoxFDc3BGrF+hES5qwMEnAbaVJQw0HJYF20W9ldCk6senONYh1/dLk
+   9nECiHfPoOE/fadh/BNwz0PQbZ6uqc5+kg7o0xtvw/Sp9Nl5WXIJBIg1F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="316045584"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="316045584"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 02:08:13 -0700
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="631945398"
+Received: from mborg-mobl1.ger.corp.intel.com (HELO intel.com) ([10.251.214.158])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 02:08:07 -0700
+Date:   Fri, 5 Aug 2022 11:08:05 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] drm/i915/gt: document TLB cache invalidation
+ functions
+Message-ID: <Yuzd9Ysc3BDQHuSW@alfio.lan>
+References: <cover.1659598090.git.mchehab@kernel.org>
+ <cc68d62a1979ea859b447b94413e100472331f57.1659598090.git.mchehab@kernel.org>
+ <0698c5a5-3bf2-daa4-e10e-2715f9b0d080@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/3] drivers/perf: add DDR Sub-System Driveway PMU
- driver for Yitian 710 SoC
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     baolin.wang@linux.alibaba.com, yaohongbo@linux.alibaba.com,
-        nengchen@linux.alibaba.com, zhuo.song@linux.alibaba.com,
-        Jonathan.Cameron@Huawei.com, rdunlap@infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, mark.rutland@arm.com
-References: <20220617111825.92911-1-xueshuai@linux.alibaba.com>
- <20220720065815.60772-1-xueshuai@linux.alibaba.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20220720065815.60772-1-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0698c5a5-3bf2-daa4-e10e-2715f9b0d080@infradead.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Will,
+Hi Randy,
 
-I was wondering that do you have any comments to this patch set?
+> > +/**
+> > + * intel_gt_invalidate_tlb_full - do full TLB cache invalidation
+> > + * @gt: GT structure
+> 
+> In multiple places (here and below) it would be nice to know what a
+> GT structure is. I looked thru multiple C and header files yesterday
+> and didn't find any comments about it.
+> 
+> Just saying that @gt is a GT structure isn't very helpful, other
+> than making kernel-doc shut up.
 
-Thank you.
+the 'gt' belongs to the drivers/gpu/drm/i915/gt/ subsystem and
+it's widely used a throughout i915.
 
-Best Regards,
-Shuai
+I think it's inappropriate to describe it just here. On the other
+hand I agree that a better documentation is required for the GT
+itself where other parts can point to.
 
-在 2022/7/20 PM2:58, Shuai Xue 写道:
-> This patchset adds support for Yitian 710 DDR Sub-System Driveway PMU driver,
-> which custom-built by Alibaba Group's chip development business, T-Head.
-> 
-> Changes since v2:
-> - relaxe build constraints and add COMPILE_TEST
-> - explicitly include dependent headers
-> - add Reviewed-by, thanks Jonathan Cameron and Randy Dunlap for their valuable review and comments
-> - Link: https://lore.kernel.org/linux-arm-kernel/20220715151310.90091-4-xueshuai@linux.alibaba.com/T/#m1116abc4b0bda1943ab436a45d95359f9bbe0858
-> 
-> Changes since v1:
-> - add high level workflow about DDRC so that user cloud better understand the
->   PMU hardware mechanism
-> - rewrite patch description and add interrupt sharing constraints
-> - delete event perf prefix
-> - add a condition to fix bug in ali_drw_pmu_isr
-> - perfer CPU in the same Node when migrating irq
-> - use FIELD_PREP and FIELD_GET to make code more readable
-> - add T-Head HID and leave ARMHD700 as CID for compatibility
-> - Link: https://lore.kernel.org/linux-arm-kernel/eb50310d-d4a0-c7ff-7f1c-b4ffd919b10c@linux.alibaba.com/T/
-> 
-> Shuai Xue (3):
->   docs: perf: Add description for Alibaba's T-Head PMU driver
->   drivers/perf: add DDR Sub-System Driveway PMU driver for Yitian 710
->     SoC
->   MAINTAINERS: add maintainers for Alibaba' T-Head PMU driver
-> 
->  .../admin-guide/perf/alibaba_pmu.rst          | 100 +++
->  Documentation/admin-guide/perf/index.rst      |   1 +
->  MAINTAINERS                                   |   7 +
->  drivers/perf/Kconfig                          |   7 +
->  drivers/perf/Makefile                         |   1 +
->  drivers/perf/alibaba_uncore_drw_pmu.c         | 810 ++++++++++++++++++
->  6 files changed, 926 insertions(+)
->  create mode 100644 Documentation/admin-guide/perf/alibaba_pmu.rst
->  create mode 100644 drivers/perf/alibaba_uncore_drw_pmu.c
-> 
+Andi

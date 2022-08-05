@@ -2,147 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28ED58A4BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 04:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4628258A4C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 04:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235647AbiHECca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 22:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S235780AbiHECdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 22:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiHECc2 (ORCPT
+        with ESMTP id S235305AbiHECdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 22:32:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7998417A84;
-        Thu,  4 Aug 2022 19:32:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BEA0C113E;
-        Thu,  4 Aug 2022 19:32:26 -0700 (PDT)
-Received: from entos-ampere-02.shanghai.arm.com (entos-ampere-02.shanghai.arm.com [10.169.212.215])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2F7DD3F73B;
-        Thu,  4 Aug 2022 19:32:21 -0700 (PDT)
-From:   Jia He <justin.he@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>
-Cc:     Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, Jia He <justin.he@arm.com>
-Subject: [PATCH] ACPI: APEI: move edac_init ahead of ghes platform drv register
-Date:   Fri,  5 Aug 2022 02:32:00 +0000
-Message-Id: <20220805023200.154634-1-justin.he@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 4 Aug 2022 22:33:23 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918BB17A84
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 19:33:21 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LzV1c5Z2zzjXl1;
+        Fri,  5 Aug 2022 10:30:12 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 5 Aug 2022 10:33:17 +0800
+Subject: Re: [bug report] mm, hwpoison: memory_failure races with
+ alloc_fresh_huge_page/free_huge_page
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+References: <3c542543-0965-ef60-4627-1a4116077a5b@huawei.com>
+ <Yuii5FnAXe/q7fx/@FVFYT0MHHV2J>
+ <f2ad010b-b3bf-77c9-2256-701114b5d57e@huawei.com>
+ <20220804074025.GA2551573@ik1-406-35019.vs.sakura.ne.jp>
+ <20220804074444.GB2551573@ik1-406-35019.vs.sakura.ne.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <e583b5cb-8d42-1fbb-d816-f5c95caf8a16@huawei.com>
+Date:   Fri, 5 Aug 2022 10:33:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220804074444.GB2551573@ik1-406-35019.vs.sakura.ne.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in
-apci_init()") introduced a bug that invoking ghes_edac_register()
-before edac_init(). Because at that time, the bus "edac" hasn't been
-registered, this created sysfs /devices/mc0 instead of
-/sys/devices/system/edac/mc/mc0 and caused a sysfs dup splat on an
-Ampere eMag server:
- sysfs: cannot create duplicate filename '/devices/mc0'
- CPU: 19 PID: 1 Comm: swapper/0 Not tainted 5.19.0+ #138
- random: crng init done
- Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 0.14 02/22/2019
- Call trace:
-  sysfs_warn_dup+0x6c/0x88
-  sysfs_create_dir_ns+0xec/0x108
-  kobject_add_internal+0xc0/0x328
-  kobject_add+0x94/0x108
-  device_add+0x104/0x8b0
-  pmu_dev_alloc+0xb4/0x128
-  perf_pmu_register+0x308/0x438
-  xgene_pmu_dev_add+0x168/0x2c8
-  acpi_pmu_dev_add+0x1f0/0x370
-  acpi_ns_walk_namespace+0x16c/0x1ec
-  acpi_walk_namespace+0xb0/0xf8
-  xgene_pmu_probe+0x6b8/0x8a0
-  platform_probe+0x70/0xe0
-  really_probe+0x164/0x3b0
-  __driver_probe_device+0x11c/0x190
-  driver_probe_device+0x44/0xf8
-  __driver_attach+0xc4/0x1b8
-  bus_for_each_dev+0x78/0xd0
-  driver_attach+0x2c/0x38
-  bus_add_driver+0x150/0x240
-  driver_register+0x6c/0x128
-  __platform_driver_register+0x30/0x40
-  xgene_pmu_driver_init+0x24/0x30
-  do_one_initcall+0x50/0x248
-  kernel_init_freeable+0x284/0x328
-  kernel_init+0x2c/0x140
-  ret_from_fork+0x10/0x20
- kobject_add_internal failed for mc0 with -EEXIST, don't try to register things with the same name in the same
+On 2022/8/4 15:44, Naoya Horiguchi wrote:
+> On Thu, Aug 04, 2022 at 04:40:25PM +0900, Naoya Horiguchi wrote:
+>> On Tue, Aug 02, 2022 at 02:27:36PM +0800, Miaohe Lin wrote:
+>>> On 2022/8/2 12:07, Muchun Song wrote:
+>>>> On Tue, Aug 02, 2022 at 10:00:50AM +0800, Miaohe Lin wrote:
+>>>>> Hi all:
+>>>>>     When I investigate the mm/memory-failure.c code again, I found there's a possible race window
+>>>>> between memory_failure and alloc_fresh_huge_page/free_huge_page. Thank about the below scene:
+>>>>>
+>>>>> CPU 1							CPU 2
+>>>>> alloc_fresh_huge_page -- page refcnt > 0		memory_failure
+>>>>>   prep_new_huge_page					  get_huge_page_for_hwpoison
+>>>>> 							    !PageHeadHuge -- so 2(not a hugepage) is returned
+>>>>>     hugetlb_vmemmap_optimize -- subpages is read-only
+>>>>>     set_compound_page_dtor -- PageHuge is true now, but too late!!!
+>>>>> 							  TestSetPageHWPoison(p)
+>>>>> 							    -- We might write to read-only subpages here!!!
+>>>>>
+>>>>> Another similar scene:
+>>>>>
+>>>>> CPU 1							CPU 2
+>>>>> free_huge_page -- page refcnt == 0 and not PageHuge	memory_failure
+>>>>> 							  get_huge_page_for_hwpoison
+>>>>> 							    !PageHeadHuge -- so 2(not a hugepage) is returned
+>>>>> 							  TestSetPageHWPoison(p)
+>>>>> 							    -- We might write to read-only subpages here!!!
+>>>>>   hugetlb_vmemmap_restore -- subpages can be written to now, but too late!!!
+>>>>>
+>>>>
+>>>> I agree this race is possible, I have proposed this race in thread [1].
+>>
+>> Thank you for reminding this, and I agree that we need some solution.
+>>
+>>>
+>>> Oh, I remember I see the race proposed in [1] but I did not look into that carefully at that time. Sorry.
+>>>
+>>>> But I didn't think more how to solve it.
+>>> I hope this thread can find a good solution. :)
+>>
+>> Both of the races show that __get_huge_page_for_hwpoison() fails to
+>> capture the case of generic compound page during turning into hugetlb,
+> 
+> I noticed my wrong description just after sending this out. The second race
+> is about generic compound page turning into "buddy", sorry.
 
-This patch fixes it by moving edac_init() into acpi_ghes_init() and ahead of
-platform_driver_register().
+Never mind. Thanks for your thought.
 
-Fixes: dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in apci_init()")
-Signed-off-by: Jia He <justin.he@arm.com>
-Cc: Shuai Xue <xueshuai@linux.alibaba.com>
----
- drivers/acpi/apei/ghes.c   | 1 +
- drivers/edac/edac_module.c | 3 +--
- include/linux/edac.h       | 1 +
- 3 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> - Naoya Horiguchi
+> 
+>> What makes things complicated is that no one knows to which state
+>> such a compound page finally turns into. So I think that if the page
+>> to be handled is an unknown compound page, we need to wait until it
+>> becomes some known page state to avoid misjudging.
+>>
+>> If we need a quick small fix, we may replace the check "!PageHeadHuge()"
+>> in __get_huge_page_for_hwpoison() with "!PageCompound()", and add another
+>> retry path in get_huge_page_for_hwpoison() for non-hugetlb compound pages.
 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index d91ad378c00d..1127dfffeeb0 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -1462,6 +1462,7 @@ void __init acpi_ghes_init(void)
- 	int rc;
- 
- 	sdei_init();
-+	edac_init();
- 
- 	if (acpi_disabled)
- 		return;
-diff --git a/drivers/edac/edac_module.c b/drivers/edac/edac_module.c
-index 32a931d0cb71..34ada2064b36 100644
---- a/drivers/edac/edac_module.c
-+++ b/drivers/edac/edac_module.c
-@@ -99,7 +99,7 @@ EXPORT_SYMBOL_GPL(edac_get_sysfs_subsys);
-  * edac_init
-  *      module initialization entry point
-  */
--static int __init edac_init(void)
-+int __init edac_init(void)
- {
- 	int err = 0;
- 
-@@ -160,7 +160,6 @@ static void __exit edac_exit(void)
- /*
-  * Inform the kernel of our entry and exit points
-  */
--subsys_initcall(edac_init);
- module_exit(edac_exit);
- 
- MODULE_LICENSE("GPL");
-diff --git a/include/linux/edac.h b/include/linux/edac.h
-index e730b3468719..104b22c2c177 100644
---- a/include/linux/edac.h
-+++ b/include/linux/edac.h
-@@ -30,6 +30,7 @@ struct device;
- 
- extern int edac_op_state;
- 
-+int __init edac_init(void);
- struct bus_type *edac_get_sysfs_subsys(void);
- 
- static inline void opstate_init(void)
--- 
-2.25.1
+Sounds like a good idea. If we can figure out a stable way to tell it from other
+compound page, it will be worth fixing it. Let's have a try. :)
+
+>>
+>> Thanks,
+>> Naoya Horiguchi
+
+Many thanks for your suggestion, Naoya.
+
+> .
+> 
 

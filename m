@@ -2,266 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7272E58A7E9
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 10:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D56758A7EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 10:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237612AbiHEISl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 04:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
+        id S239984AbiHEITN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 04:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiHEISj (ORCPT
+        with ESMTP id S231347AbiHEITL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 04:18:39 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B59D74CE0;
-        Fri,  5 Aug 2022 01:18:38 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id e69so1432820iof.5;
-        Fri, 05 Aug 2022 01:18:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=ZWk9ma5M79Z4Wqhxv3DfLZj3YkPOjUsw905Ysq/x12o=;
-        b=NpmAHdMwOklNCLaKhx1KSd5S4DvLO87IMiPPfx2aofLGFcCCC/yvh8K0s+jsIwujgR
-         GEozheo+M2woXmuPYoG4dwBvDF56DdEmgVSjDlD7Flkcds+BaA3YcaY+6175JGS3jvN7
-         G0n7bjLPX9h6W4juZkcoS/eHoGiFARGM8EJu/TD59JezxpnZNbJ6Oy75Sdc4BnyerCLp
-         0JvnPsgZm3j1ALRtZFtbukV0RnCrNn0C/eWmwvaTFWqqWACBcryiQN13qWwPWzKBqfF6
-         r/kRRcnVAk4gJzQ7OaHkjzaSOsdM2G4Cj4NKUbNOTHq+8wizKc7YMMxRIb2avrCA+nRN
-         kkVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=ZWk9ma5M79Z4Wqhxv3DfLZj3YkPOjUsw905Ysq/x12o=;
-        b=DyE9R0KDZZ5N1s7yWoCEf+3qsrWp6YmFf+fhjYDpJXxuuTfZVIFE6VtsmxJeb41ddh
-         iiN9NEleHNQr0hJeTHR6d9Ju25xJJDQr6i7S45cC9oZS+/vjhVh/jZ2mu6rWONWB45Xz
-         ZOVX47q0s2LFHCM8HnljPeFLYS0NDUNSmMYPFeg9NwZjcFbkQDJBrCs/ExOhgXmz+jFG
-         JQ0P62JQTHZJk5vEmOTxAMmUW8r59YehWQaEc1KGi/Qi0LJ0mN0cN94rCtse8gRtaVxM
-         rK3fl1Z0vv400IHLB9M2uei2wYnBMSLHq3+kQQuiaFCFAn3af6s7DMtFBZJ3PDpF22WX
-         Rnrw==
-X-Gm-Message-State: ACgBeo3yvAI1H+SofW9lLf5mo1rb6SvCEfWkwuSW1cutn/zJ6gbdbPbh
-        Qli9JshO9MFMX4qhuIqRcyybydUmRvE=
-X-Google-Smtp-Source: AA6agR5S+4JoqVlSPTsqskM4MLpfrRizxDDKs4Zg+OjJCYgF4ofsSCCJxb/qQPmy8/Qbc9+ci82TCg==
-X-Received: by 2002:a05:6638:4705:b0:342:74bb:dfa3 with SMTP id cs5-20020a056638470500b0034274bbdfa3mr2570392jab.1.1659687516958;
-        Fri, 05 Aug 2022 01:18:36 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
-        by smtp.gmail.com with ESMTPSA id h3-20020a92d843000000b002de42539fddsm1385624ilq.68.2022.08.05.01.18.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 01:18:36 -0700 (PDT)
-From:   James Hilliard <james.hilliard1@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH v4] bpf/scripts: Generate GCC compatible helper defs header
-Date:   Fri,  5 Aug 2022 02:17:12 -0600
-Message-Id: <20220805081713.2182833-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 5 Aug 2022 04:19:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2CA74CE0
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 01:19:10 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 62F1C2024C;
+        Fri,  5 Aug 2022 08:19:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659687549; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xgtt9kzVWfZSVp0PoBg/cZ+kftEKip8e85AsU4Im3t0=;
+        b=erdCUU2qN+3K03QyJvMCnfMy/rgIdAwdXf0V8P+lIjeWmBSbsxpkUVVbf8xFW/jc+5cqsK
+        MzjEwqLl57RZtRuxSLSIjFXAmgmDiA6tz3xe9dX8Mn+DXwflHcUv9L2E3/tEvO9VgLmJWg
+        LpXNZ5JkVbhdFC36zzRhQQIJIEgE+k0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659687549;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xgtt9kzVWfZSVp0PoBg/cZ+kftEKip8e85AsU4Im3t0=;
+        b=euAtSjRQGCkgEKDL/BR+WsE16YLw3HZImAspNhQHbtUWykxTSwzUNaqY46fNU0OSrdeznr
+        6P1SC+WbIvuz9hDQ==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7ADD62C141;
+        Fri,  5 Aug 2022 08:19:07 +0000 (UTC)
+Date:   Fri, 5 Aug 2022 09:19:04 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     "guanjing (D)" <guanjing6@huawei.com>
+Cc:     srikar@linux.vnet.ibm.com, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com,
+        "open list:SCHEDULER" <linux-kernel@vger.kernel.org>
+Subject: Re: Fwd: Question about how to fix numabalancing to work with
+ isolated cpus?
+Message-ID: <20220805081904.GJ3493@suse.de>
+References: <ccd220cd-fbca-ad8a-c290-e812c4850e2f@huawei.com>
+ <83e7d5ee-e5b7-9a71-7532-9d4d13aaf706@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <83e7d5ee-e5b7-9a71-7532-9d4d13aaf706@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current bpf_helper_defs.h helpers are llvm specific and don't work
-correctly with gcc.
+On Fri, Aug 05, 2022 at 02:42:18PM +0800, guanjing (D) wrote:
+> On 2022/6/25 14:33, guanjing (D) wrote:
+> > Hi,
+> >     I notice a problem that you guys discussed in the link below:
+> > 
+> >     https://lore.kernel.org/all/1491464210.4718.82.camel@gmx.de/T/
+> >     "The isolated cpus are part of the cpus allowed list. In the above
+> > case,
+> >      numabalancing ends up scheduling some of these tasks on isolated
+> > cpus. "
+> > 
+> >     I wonder if we're going to fix this eventually?
+> > 
 
-GCC requires kernel helper funcs to have the following attribute set:
-__attribute__((kernel_helper(NUM)))
+The last discussion did not reach a solid conclusion. Isolated CPUs
+are avoided by the general CPU scheduler but if a task explicitly uses
+sched_setaffinity() to include the isolated CPUs then by definition it's
+allowed to use those CPUs and NUMA balancing will use allowed CPUs to
+improve locality if possible. It's not clear that this is a bug at all
+other than it may be surprising in some cases. Furthermore, a task that
+is sensitive to latency probably should be using mempolicies to avoid NUMA
+balancing entirely as it's a source of interference.
 
-Generate gcc compatible headers based on the format in bpf-helpers.h.
+There needs to be a use case that describes exactly what the sematics should
+be for a task using isolated CPUs and why. For example, if the task policy
+only allowed isolated CPUs then NUMA balancing may never be able to select
+a CPU with task_numa_find_cpu, is that expected? Should it be the case
+that NUMA balancing avoids isolated CPUs but will select one if no other
+local CPU is available? If so, why? If only isolated CPUs are available,
+is it expected and desired that data will be migrated instead? If a task is
+running on an isolated CPU, should NUMA balancing avoid moving the task off
+the CPU? If so, why? Should the behaviour be that if a task is allowed to
+run on isolated CPUs, should NUMA balancing simply be disabled? If so, why?
+Whatever the result, the sematics should be mentioned under the isocpus=
+parameter with an additional note under numa_balancing=.
 
-This leaves the bpf_helper_defs.h entirely unchanged and generates a
-fully separate GCC compatible bpf_helper_defs_attr.h header file
-which is conditionally included if the GCC kernel_helper attribute
-is supported.
+If anything is to change here, it needs to be made clear why it's a bug
+that NUMA balancing selects an allowed but isolated CPU and a description
+of what the desired semantics should be.
 
-This adds GCC attribute style kernel helpers in bpf_helper_defs_attr.h:
-	void *bpf_map_lookup_elem(void *map, const void *key) __attribute__((kernel_helper(1)));
-
-	long bpf_map_update_elem(void *map, const void *key, const void *value, __u64 flags) __attribute__((kernel_helper(2)));
-
-See:
-https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/config/bpf/bpf-helpers.h#L24-L27
-
-This fixes the following build error:
-error: indirect call in function, which are not supported by eBPF
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v3 -> v4:
-  - don't modify bpf_helper_defs.h
-  - generate bpf_helper_defs_attr.h for GCC
-  - check __has_attribute(kernel_helper) for selecting GCC defs
-Changes v2 -> v3:
-  - use a conditional helper macro
-Changes v1 -> v2:
-  - more details in commit log
----
- scripts/bpf_doc.py          | 58 ++++++++++++++++++++++---------------
- tools/lib/bpf/Makefile      |  7 ++++-
- tools/lib/bpf/bpf_helpers.h |  4 +++
- 3 files changed, 45 insertions(+), 24 deletions(-)
-
-diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-index dfb260de17a8..c4e8fa3619d8 100755
---- a/scripts/bpf_doc.py
-+++ b/scripts/bpf_doc.py
-@@ -570,9 +570,10 @@ class PrinterHelpers(Printer):
-     be included from BPF program.
-     @parser: A HeaderParser with Helper objects to print to standard output
-     """
--    def __init__(self, parser):
-+    def __init__(self, parser, attr_header):
-         self.elements = parser.helpers
-         self.elem_number_check(parser.desc_unique_helpers, parser.define_unique_helpers, 'helper', '__BPF_FUNC_MAPPER')
-+        self.attr_header = attr_header
- 
-     type_fwds = [
-             'struct bpf_fib_lookup',
-@@ -719,6 +720,24 @@ class PrinterHelpers(Printer):
- 
-     seen_helpers = set()
- 
-+    def print_args(self, proto):
-+        comma = ''
-+        for i, a in enumerate(proto['args']):
-+            t = a['type']
-+            n = a['name']
-+            if proto['name'] in self.overloaded_helpers and i == 0:
-+                    t = 'void'
-+                    n = 'ctx'
-+            one_arg = '{}{}'.format(comma, self.map_type(t))
-+            if n:
-+                if a['star']:
-+                    one_arg += ' {}'.format(a['star'])
-+                else:
-+                    one_arg += ' '
-+                one_arg += '{}'.format(n)
-+            comma = ', '
-+            print(one_arg, end='')
-+
-     def print_one(self, helper):
-         proto = helper.proto_break_down()
- 
-@@ -742,26 +761,16 @@ class PrinterHelpers(Printer):
-                 print(' *{}{}'.format(' \t' if line else '', line))
- 
-         print(' */')
--        print('static %s %s(*%s)(' % (self.map_type(proto['ret_type']),
--                                      proto['ret_star'], proto['name']), end='')
--        comma = ''
--        for i, a in enumerate(proto['args']):
--            t = a['type']
--            n = a['name']
--            if proto['name'] in self.overloaded_helpers and i == 0:
--                    t = 'void'
--                    n = 'ctx'
--            one_arg = '{}{}'.format(comma, self.map_type(t))
--            if n:
--                if a['star']:
--                    one_arg += ' {}'.format(a['star'])
--                else:
--                    one_arg += ' '
--                one_arg += '{}'.format(n)
--            comma = ', '
--            print(one_arg, end='')
--
--        print(') = (void *) %d;' % len(self.seen_helpers))
-+        if self.attr_header:
-+            print('%s %s%s(' % (self.map_type(proto['ret_type']),
-+                                          proto['ret_star'], proto['name']), end='')
-+            self.print_args(proto)
-+            print(') __attribute__((kernel_helper(%d)));' % len(self.seen_helpers))
-+        else:
-+            print('static %s %s(*%s)(' % (self.map_type(proto['ret_type']),
-+                                          proto['ret_star'], proto['name']), end='')
-+            self.print_args(proto)
-+            print(') = (void *) %d;' % len(self.seen_helpers))
-         print('')
- 
- ###############################################################################
-@@ -785,6 +794,8 @@ rst2man utility.
- """)
- argParser.add_argument('--header', action='store_true',
-                        help='generate C header file')
-+argParser.add_argument('--attr-header', action='store_true',
-+                       help='generate GCC attr style C header file')
- if (os.path.isfile(bpfh)):
-     argParser.add_argument('--filename', help='path to include/uapi/linux/bpf.h',
-                            default=bpfh)
-@@ -799,10 +810,11 @@ headerParser = HeaderParser(args.filename)
- headerParser.run()
- 
- # Print formatted output to standard output.
--if args.header:
-+if args.header or args.attr_header:
-     if args.target != 'helpers':
-         raise NotImplementedError('Only helpers header generation is supported')
--    printer = PrinterHelpers(headerParser)
-+    attr_header = True if args.attr_header else False
-+    printer = PrinterHelpers(headerParser, attr_header)
- else:
-     printer = printers[args.target](headerParser)
- printer.print_all()
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 4c904ef0b47e..cf9efe764030 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -116,7 +116,8 @@ STATIC_OBJDIR	:= $(OUTPUT)staticobjs/
- BPF_IN_SHARED	:= $(SHARED_OBJDIR)libbpf-in.o
- BPF_IN_STATIC	:= $(STATIC_OBJDIR)libbpf-in.o
- BPF_HELPER_DEFS	:= $(OUTPUT)bpf_helper_defs.h
--BPF_GENERATED	:= $(BPF_HELPER_DEFS)
-+BPF_HELPER_DEFS_ATTR	:= $(OUTPUT)bpf_helper_defs_attr.h
-+BPF_GENERATED	:= $(BPF_HELPER_DEFS) $(BPF_HELPER_DEFS_ATTR)
- 
- LIB_TARGET	:= $(addprefix $(OUTPUT),$(LIB_TARGET))
- LIB_FILE	:= $(addprefix $(OUTPUT),$(LIB_FILE))
-@@ -160,6 +161,10 @@ $(BPF_HELPER_DEFS): $(srctree)/tools/include/uapi/linux/bpf.h
- 	$(QUIET_GEN)$(srctree)/scripts/bpf_doc.py --header \
- 		--file $(srctree)/tools/include/uapi/linux/bpf.h > $(BPF_HELPER_DEFS)
- 
-+$(BPF_HELPER_DEFS_ATTR): $(srctree)/tools/include/uapi/linux/bpf.h
-+	$(QUIET_GEN)$(srctree)/scripts/bpf_doc.py --attr-header \
-+		--file $(srctree)/tools/include/uapi/linux/bpf.h > $(BPF_HELPER_DEFS_ATTR)
-+
- $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
- 
- $(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN_SHARED) $(VERSION_SCRIPT)
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 7349b16b8e2f..b7573e7d3feb 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -8,7 +8,11 @@
-  * in advance since bpf_helper_defs.h uses such types
-  * as __u64.
-  */
-+#if __has_attribute(kernel_helper)
-+#include "bpf_helper_defs_attr.h"
-+#else
- #include "bpf_helper_defs.h"
-+#endif
- 
- #define __uint(name, val) int (*name)[val]
- #define __type(name, val) typeof(val) *name
 -- 
-2.34.1
-
+Mel Gorman
+SUSE Labs

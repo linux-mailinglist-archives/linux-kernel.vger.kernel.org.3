@@ -2,73 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B6558A4EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 05:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14FC58A4EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 05:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236618AbiHEDOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 23:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S235099AbiHEDOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 23:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235372AbiHEDOQ (ORCPT
+        with ESMTP id S229477AbiHEDOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 23:14:16 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2782127A;
-        Thu,  4 Aug 2022 20:14:14 -0700 (PDT)
+        Thu, 4 Aug 2022 23:14:11 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325402127A
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 20:14:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659669254; x=1691205254;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=em9d5nkk91eNJNYUWeeKE/vxo3/VpN9Fz85Yl8KbRSM=;
-  b=jPW0SkGb8mjQMbbY1L1kzjgq7laJyZliIIBr49pd9vkN2G60FGRQP/HL
-   51blIQhZ8mruC8ndsa4efgwbn50r3Bx6sz1VV7Pt670uObDWmng2Qfdtb
-   l5TKTEqu8IdsHDSxRgd6Gtt+7YTUrZB84vcDRQJ4/RmA/q++MhnPU3Ls+
-   XoWrWm9XNjMtyg4ZdU8R7K1/NRuuhHg8/tXFa6Gt/TE4bj/KZWEnG/nQJ
-   vLy2qCog5lx4/4W7241/tFTrbU+lQbS2PJ5UkHXIFgjTVYV2+rRMWhb92
-   IcSlvwDRCWNgFB0VHc7WyWo27talXWcvepdToQd6MrkvaeKPd+wnEdR9J
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="291332220"
+  t=1659669250; x=1691205250;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0cX+DQoW2QryIy+M2qCtgHGKyzKjLOtceyNmjms8I8k=;
+  b=n4HQrI2cXvFjZZmT6vDrV5UlPYcOHTYW/MMhTG/yrKliqdeC8g08MUqb
+   vk4RRhz2YAX3at4CImTaWhUu0h5vPKjv2bMhV2BH/MEOJ8epBApgTjMWq
+   eVubJzcS7CfiRx/2t8gQcAGd6orDdlw4/uyH4naw0c6zq3lzSzB8/nnxw
+   /1sB9juxWEXDA/AOoxqXY/FFfnD37TrDtWw8d47Ph31dkKsuo+clVfY6X
+   kfdRkAmv1xU009LBM5KFr7GbcYWSYaidgV1A7Y/eQRW312VOOUtm2iuyf
+   3ZLnOSCabw+RoNocHhtPAUbxbmy56u2d9E+XPcvbNASoJkEnDmzTzC4b/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="351822765"
 X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="291332220"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 20:14:13 -0700
+   d="scan'208";a="351822765"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 20:14:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="636347985"
+   d="scan'208";a="671541637"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Aug 2022 20:14:08 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 04 Aug 2022 20:14:08 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oJnmp-000J5s-39;
+        id 1oJnmp-000J5p-35;
         Fri, 05 Aug 2022 03:14:07 +0000
-Date:   Fri, 5 Aug 2022 11:14:04 +0800
+Date:   Fri, 5 Aug 2022 11:14:05 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        helgaas@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Subject: Re: [PATCH v5 3/3] PCI: qcom: Add retry logic for link to be stable
- in L1ss
-Message-ID: <202208051112.qnLsiuff-lkp@intel.com>
-References: <1659526134-22978-4-git-send-email-quic_krichai@quicinc.com>
+To:     Dylan Yudaken <dylany@fb.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: io_uring/net.c:564:44: sparse: sparse: incorrect type in assignment
+ (different address spaces)
+Message-ID: <202208051104.7NeIlCzj-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1659526134-22978-4-git-send-email-quic_krichai@quicinc.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -78,92 +61,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krishna,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on helgaas-pci/next]
-[also build test WARNING on next-20220804]
-[cannot apply to linus/master v5.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-chaitanya-chundru/PCI-Restrict-pci-transactions-after-pci-suspend/20220803-193033
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: arm64-randconfig-r024-20220804 (https://download.01.org/0day-ci/archive/20220805/202208051112.qnLsiuff-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
-reproduce (this is a W=1 build):
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   31be1d0fbd950395701d9fd47d8fb1f99c996f61
+commit: 9bb66906f23e50d6db1e11f7498b72dfca1982a2 io_uring: support multishot in recvmsg
+date:   11 days ago
+config: alpha-randconfig-s043-20220804 (https://download.01.org/0day-ci/archive/20220805/202208051104.7NeIlCzj-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/64b4ad561ad4a28aa8840303f29669bf7af77757
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-chaitanya-chundru/PCI-Restrict-pci-transactions-after-pci-suspend/20220803-193033
-        git checkout 64b4ad561ad4a28aa8840303f29669bf7af77757
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9bb66906f23e50d6db1e11f7498b72dfca1982a2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9bb66906f23e50d6db1e11f7498b72dfca1982a2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pci/controller/dwc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+sparse warnings: (new ones prefixed by >>)
+   io_uring/net.c: note: in included file (through io_uring/io_uring.h):
+   io_uring/slist.h:138:29: sparse: sparse: no newline at end of file
+>> io_uring/net.c:564:44: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *msg_control_user @@     got void * @@
+   io_uring/net.c:564:44: sparse:     expected void [noderef] __user *msg_control_user
+   io_uring/net.c:564:44: sparse:     got void *
+>> io_uring/net.c:569:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user * @@     got void * @@
+   io_uring/net.c:569:14: sparse:     expected void [noderef] __user *
+   io_uring/net.c:569:14: sparse:     got void *
 
->> drivers/pci/controller/dwc/pcie-qcom.c:1847:6: warning: format specifies type 'int' but the argument has type 's64' (aka 'long long') [-Wformat]
-                                           ktime_to_ms(ktime_get() - start));
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
-           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                    ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   1 warning generated.
+vim +564 io_uring/net.c
 
-
-vim +1847 drivers/pci/controller/dwc/pcie-qcom.c
-
-  1827	
-  1828	static int __maybe_unused qcom_pcie_pm_suspend(struct device *dev)
-  1829	{
-  1830		struct qcom_pcie *pcie = dev_get_drvdata(dev);
-  1831		u32 val;
-  1832		ktime_t timeout, start;
-  1833	
-  1834		if (!pcie->cfg->supports_system_suspend)
-  1835			return 0;
-  1836	
-  1837		start = ktime_get();
-  1838		/* Wait max 100 ms */
-  1839		timeout = ktime_add_ms(start, 100);
-  1840		while (1) {
-  1841			bool timedout = ktime_after(ktime_get(), timeout);
-  1842	
-  1843			/* if the link is not in l1ss don't turn off clocks */
-  1844			val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
-  1845			if ((val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
-  1846				dev_info(dev, "Link enters L1ss after %d ms\n",
-> 1847						ktime_to_ms(ktime_get() - start));
-  1848				break;
-  1849			}
-  1850	
-  1851			if (timedout) {
-  1852				dev_warn(dev, "Link is not in L1ss\n");
-  1853				return 0;
-  1854			}
-  1855			usleep_range(1000, 1200);
-  1856		}
-  1857	
-  1858		if (pcie->cfg->ops->suspend)
-  1859			pcie->cfg->ops->suspend(pcie);
-  1860	
-  1861		pcie->is_suspended = true;
-  1862	
-  1863		return 0;
-  1864	}
-  1865	
+   548	
+   549	static int io_recvmsg_prep_multishot(struct io_async_msghdr *kmsg,
+   550					     struct io_sr_msg *sr, void __user **buf,
+   551					     size_t *len)
+   552	{
+   553		unsigned long ubuf = (unsigned long) *buf;
+   554		unsigned long hdr;
+   555	
+   556		hdr = sizeof(struct io_uring_recvmsg_out) + kmsg->namelen +
+   557			kmsg->controllen;
+   558		if (*len < hdr)
+   559			return -EFAULT;
+   560	
+   561		if (kmsg->controllen) {
+   562			unsigned long control = ubuf + hdr - kmsg->controllen;
+   563	
+ > 564			kmsg->msg.msg_control_user = (void *) control;
+   565			kmsg->msg.msg_controllen = kmsg->controllen;
+   566		}
+   567	
+   568		sr->buf = *buf; /* stash for later copy */
+ > 569		*buf = (void *) (ubuf + hdr);
+   570		kmsg->payloadlen = *len = *len - hdr;
+   571		return 0;
+   572	}
+   573	
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,496 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9ED58A9C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 12:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7556458A9C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 12:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240488AbiHEKyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 06:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S235900AbiHEKzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 06:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235203AbiHEKyo (ORCPT
+        with ESMTP id S235108AbiHEKzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 06:54:44 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BEE15701;
-        Fri,  5 Aug 2022 03:54:42 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id i4so1479724qvv.7;
-        Fri, 05 Aug 2022 03:54:42 -0700 (PDT)
+        Fri, 5 Aug 2022 06:55:20 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214A813D02
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 03:55:19 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id s11so2841423edd.13
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 03:55:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=1IuwnO7gSr9+HTKZ6nRnM2nx9f/6IsVkUTcZCIS7gDs=;
-        b=FgPYUO8oQfcfwANBCcBPyvpGflE0cKvUU3muwGxRksalW+5BQ2drSJxDWcwNLffW2W
-         PdvfOVMbrSu1B7AR5YeHREz0TtDVoPRLjtDvPpmGpeaBESa18aUFmdqeN68wBIUJZ4UD
-         eqNuIVn1Ri5UAu1lZk+EUWTP9XeJHGAVIDF9CJRBl5t5962UQQ/KcxZH6dyBsSQF7MEf
-         WoInD9nbvh4pnzrT5+38jHEGOOe4bOs1DU/ye994k+6syAgGRwIXXEwswVAEzOIvWUWu
-         a9kXrGSbjTcp4SVs+C+qn6IM4OdyUPXDuMaBPfXyuTZMSmDOqYF70ElN1gn2mkV16L/j
-         WvTg==
+        bh=iDg4Y7RACSUgijrE3yosJSWPAf5wsZ1FunLHsaChv1A=;
+        b=odN0VN0XdgZeLB4Yr3HCWU8sUbAhMWFMDiTS/Qnb70SOtV2tjvzSwIW/kGa8/o9OL1
+         tr+DwoHSwjZyQfPs/kE9TUaCNpuG5TFqiSTOlObzzSHjkDgvIoT3wr7cAi+xOeho97Db
+         Jaggkv+t/VbCrOn17ymui+lgcFakG2SqTYDJTkkOcho1PuxFD20ZTThV2El4gcmv56h4
+         Lg7Fha+N2kpAH+RcisfJv1WB//kDzb6NW3PXqWrTFlhfmHL+tCn4qAM9kRwX9LVmLJQu
+         H1vW7FWcsBHSMhY59oSL2A8h/sosMKPz2YtQ6n3NjQ2CQ5MVGNyV4hnjGGEMwSkS8tBd
+         rmyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=1IuwnO7gSr9+HTKZ6nRnM2nx9f/6IsVkUTcZCIS7gDs=;
-        b=ZqKEaSEYQqtTsfyNdBXzsYwY3Ze2icJtd1VwmxKZ8XeE7xvey5E6NTC+8U/tAqUtXn
-         xlg1d2gejKAff269DYDmxtqMVulB5gyBlQAPMlWv5Qn6L6NEVuOXbnm3RCu2yOMsrc2h
-         U+94+XrWk9ItbK8KpKJFP3jseZ5ORgSuFwrIhqc4psP8aziFw0ukx7TQwVyQNpuNXy73
-         WiWf3eKVlqywPVf5qMESw2QScKrsWLFxLmFb0vU4QnA9GGrhnzx+wy1Ux6V3f6O5dlOQ
-         CX1DajChWs74i22q6ygbpgiKcgV3CKphe3IoeDSvzI9FylCr237ivRnJiw4bFsAU1wtC
-         wmrA==
-X-Gm-Message-State: ACgBeo0su+klyCD5cUR8K/umlRzCGfhtVzxCJU5oabQEJiMbfirQnR1a
-        4c7rMNOiU+RPj3c36iEOXoL1V4pWynamSZzBjts=
-X-Google-Smtp-Source: AA6agR574W/5TXhESofdY0GJo78qfkw9igzfei6a43F0u3wRCj3aLsR2jggm7yfIjfJsEzyuxfpiQFxyxOY6/xWHsEM=
-X-Received: by 2002:a05:6214:e69:b0:476:b991:586f with SMTP id
- jz9-20020a0562140e6900b00476b991586fmr5045801qvb.48.1659696881750; Fri, 05
- Aug 2022 03:54:41 -0700 (PDT)
+        bh=iDg4Y7RACSUgijrE3yosJSWPAf5wsZ1FunLHsaChv1A=;
+        b=PiARViLCWa1WQq3G2DTF0RRwK7L5aNDDPaWHLNOKLPWbVaJIwOLcDi74aChurrnIqZ
+         UzDhRSOG0k2IQ251nki8vyr+qd0CCCzkJwCko8JrXvtQiQtxTNX0mQVpF0mkbUpFbdJw
+         NkNVeZZEEr/rEDP9Xy3xDe6nswuT+wlzWmXb1b+OOV0zCtbCoGsHhUqrmaSTP/+0Et1R
+         vfUkJPUFRfrSN9I8+LtqgwuOqUSWjx6nUCAP7hBc8h4C/08sIxNrdLOlBrtPRHHS9YFz
+         dvReqNCMUTRl9v+mXJhHQETzU4QQrSmHRkzN54Ye8Zr4LyFAjOTkpgyuuiVLtQtqCXcr
+         y/0w==
+X-Gm-Message-State: ACgBeo1XXY10paxOqdoc4fvNVAgwFhKCrQEpGhcDWawKa9FpxHGh3JKn
+        ReX1RGptot2N9bA2xppVp57dTP1vEhw/rqEpfvknEter
+X-Google-Smtp-Source: AA6agR4xcSwY6tEhKu+tPfDnndlldQpTb5Jo71ZJSjxDSKZsSO1L46PXMfdMeLcx99ls73Gagg4ZLCmTF2MGLz3fpYY=
+X-Received: by 2002:a05:6402:254a:b0:43d:a634:a0ab with SMTP id
+ l10-20020a056402254a00b0043da634a0abmr6050964edb.298.1659696917404; Fri, 05
+ Aug 2022 03:55:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220805070610.3516-1-peterwu.pub@gmail.com> <20220805070610.3516-10-peterwu.pub@gmail.com>
-In-Reply-To: <20220805070610.3516-10-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 5 Aug 2022 12:54:04 +0200
-Message-ID: <CAHp75VexyNqEFKY4PG_jYQxQGmdvE12SeuvMzHThfPY-gB4f7A@mail.gmail.com>
-Subject: Re: [PATCH v7 09/13] iio: adc: mt6370: Add MediaTek MT6370 support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
+References: <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
+ <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
+ <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
+ <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
+ <20220803062024.vn7awasmifkp5xow@pengutronix.de> <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
+ <CAPY8ntBBz56Es=pK+KpqhyYLUET95DT_zE6gorOWx4WkCSxJAg@mail.gmail.com>
+ <20220804093829.42kdelp7u4r743nv@pengutronix.de> <CAPY8ntBovVq1HVt_UneDF8OB9KBdEBv52o=4BCTmf9VpiODxVg@mail.gmail.com>
+ <20220804125152.idyzetjqkjzgbbm2@pengutronix.de> <CAPY8ntAatYvbf5ehfsj4qcSDC=sODeN1Cj0vDjn6p0M=k320NA@mail.gmail.com>
+ <CAHCN7x+DkJgGvMLnYBXscSMDmTCeaHeJKK6T9eLUm+rXSx=NQA@mail.gmail.com> <OS0PR01MB592206843B43BC93F4F699FC869E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB592206843B43BC93F4F699FC869E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Fri, 5 Aug 2022 05:55:06 -0500
+Message-ID: <CAHCN7x+UAk1wPTOj7EFUXkRY3b3BPXTT6SqD4A7sJO87ZpHgFg@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
         dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        "robert.chiras@nxp.com" <robert.chiras@nxp.com>,
+        "laurentiu.palcu@nxp.com" <laurentiu.palcu@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
+        Robert Foss <robert.foss@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 9:07 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+On Fri, Aug 5, 2022 at 3:44 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
 >
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> Hi Adam and all,
 >
-> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
-> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
-> driver, display bias voltage supply, one general purpose LDO, and the
-> USB Type-C & PD controller complies with the latest USB Type-C and PD
-> standards.
+> > Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+> >
+> > On Thu, Aug 4, 2022 at 9:52 AM Dave Stevenson
+> > <dave.stevenson@raspberrypi.com> wrote:
+> > >
+> > > On Thu, 4 Aug 2022 at 13:51, Marco Felsch <m.felsch@pengutronix.de>
+> > wrote:
+> > > >
+> > > > Hi Dave,
+> > > >
+> > > > On 22-08-04, Dave Stevenson wrote:
+> > > > > Hi Marco
+> > > > >
+> > > > > On Thu, 4 Aug 2022 at 10:38, Marco Felsch
+> > <m.felsch@pengutronix.de> wrote:
+> > > > > >
+> > > > > > Hi Dave, Adam,
+> > > > > >
+> > > > > > On 22-08-03, Dave Stevenson wrote:
+> > > > > > > Hi Adam
+> > > > > > >
+> > > > > > > On Wed, 3 Aug 2022 at 12:03, Adam Ford <aford173@gmail.com>
+> > wrote:
+> > > > > >
+> > > > > > ...
+> > > > > >
+> > > > > > > > > Did managed to get access to the ADV7535 programming
+> > > > > > > > > guide? This is the black box here. Let me check if I can
+> > > > > > > > > provide you a link with our repo so you can test our
+> > current DSIM state if you want.
+> > > > > > > >
+> > > > > > > > I do have access to the programming guide, but it's under
+> > > > > > > > NDA, but I'll try to answer questions if I can.
+> > > > > > >
+> > > > > > > Not meaning to butt in, but I have datasheets for ADV7533 and
+> > > > > > > 7535 from previously looking at these chips.
+> > > > > >
+> > > > > > Thanks for stepping into :)
+> > > > > >
+> > > > > > > Mine fairly plainly states:
+> > > > > > > "The DSI receiver input supports DSI video mode operation
+> > > > > > > only, and specifically, only supports nonburst mode with sync
+> > pulses".
+> > > > > >
+> > > > > > I've read this also, and we are working in nonburst mode with
+> > > > > > sync pulses. I have no access to an MIPI-DSI analyzer therefore
+> > > > > > I can't verify it.
+> > > > > >
+> > > > > > > Non-burst mode meaning that the DSI pixel rate MUST be the
+> > > > > > > same as the HDMI pixel rate.
+> > > > > >
+> > > > > > On DSI side you don't have a pixel-clock instead there is bit-
+> > clock.
+> > > > >
+> > > > > You have an effective pixel clock, with a fixed conversion for the
+> > > > > configuration.
+> > > > >
+> > > > > DSI bit-clock * number of lanes / bits_per_pixel = pixel rate.
+> > > > > 891Mbit/s * 4 lanes / 24bpp = 148.5 Mpixels/s
+> > > >
+> > > > Okay, I just checked the bandwidth which must equal.
+> > > >
+> > > > > As noted elsewhere, the DSI is DDR, so the clock lane itself is
+> > > > > only running at 891 / 2 = 445.5MHz.
+> > > > >
+> > > > > > > Section 6.1.1 "DSI Input Modes" of
+> > > > > > > adv7533_hardware_user_s_guide is even more explicit about the
+> > > > > > > requirement of DSI timing matching
+> > > > > >
+> > > > > > Is it possible to share the key points of the requirements?
+> > > > >
+> > > > > "Specifically the ADV7533 supports the Non-Burst Mode with syncs.
+> > > > > This mode requires real time data generation as a pulse packet
+> > > > > received becomes a pulse generated. Therefore this mode requires a
+> > > > > continuous stream of data with correct video timing to avoid any
+> > > > > visual artifacts."
+> > > > >
+> > > > > LP mode is supported on data lanes. Clock lane must remain in HS
+> > mode.
+> > > > >
+> > > > > "... the goal is to accurately convey DPI-type timing over DSI.
+> > > > > This includes matching DPI pixel-transmission rates, and widths of
+> > > > > timing events."
+> > > >
+> > > > Thanks for sharing.
+> > > >
+> > > > > > > The NXP kernel switching down to an hs_clk of 445.5MHz would
+> > > > > > > therefore be correct for 720p operation.
+> > > > > >
+> > > > > > It should be absolute no difference if you work on 891MHz with 2
+> > > > > > lanes or on 445.5 MHz with 4 lanes. What must be ensured is that
+> > > > > > you need the minimum required bandwidth which is roughly:
+> > > > > > 1280*720*24*60 = 1.327 GBps.
+> > > > >
+> > > > > Has someone changed the number of lanes in use? I'd missed that if
+> > > > > so, but I'll agree that 891MHz over 2 lanes should work for
+> > 720p60.
+> > > >
+> > > > The ADV driver is changing it autom. but this logic is somehow odd
+> > > > and there was already a approach to stop the driver doing this.
+> > >
+> > > I'd missed that bit in the driver where it appears to drop to 3 lanes
+> > > for pixel clock < 80000 via a mipi_dsi_detach and _attach. Quirky, but
+> > > probably the only way it can be achieved in the current framework.
+> > >
+> > > > To sync up: we have two problems:
+> > > >   1) The 720P mode with static DSI host configuration isn't working
+> > > >      without hacks.
+> > > >   2) The DSI link frequency should changed as soon as required
+> > > >      automatically. So we can provide all modes.
+> > > >
+> > > > I would concentrate on problem 1 first before moving on to the 2nd.
+> > >
+> > > If you change your link frequency, it may be worth trying a lower
+> > > resolution again such as 720x480 @ 60fps on 2 lanes. (720480@60 on 4
+> > > lanes is again listed as mandatory for using the timing generator).
+> > >
+> > > > > I have just noted that 720p59.94 at 24bpp on 4 lanes is listed as
+> > > > > one of the modes that is mandatory to use the timing generator
+> > > > > (reg 0x27 bit 7 = 1). On 2 lanes it is not required.
+> > > > > I don't know why it's referencing the 1000/1001 pixel clock rates
+> > > > > and not the base one, as it's only a base clock change with the
+> > > > > same timing (74.176MHz clock instead of 74.25MHz).
+> > > >
+> > > > Interesting! I would like to know how the HDMI block gets fetched by
+> > > > the DSI block and how the timing-generator can influence this in
+> > > > good/bad way. So that we know what DSI settings (freq, lanes) are
+> > sufficient.
+> > > >
+> > > > > > > If you do program the manual DSI divider register to allow a
+> > > > > > > DSI pixel rate of 148.5MHz vs HDMI pixel rate of 74.25MHz,
+> > > > > > > you'd be relying on
+> > > > > >
+> > > > > > There is no such DSI pixel rate to be precise, we only have a
+> > > > > > DSI bit clock/rate.
+> > > > > >
+> > > > > > > the ADV753x having at least a half-line FIFO between DSI rx
+> > > > > > > and HDMI tx to compensate for the differing data rates. I see
+> > > > > > > no reference to such, and I'd be surprised if it was more than
+> > > > > > > a half dozen pixels to compensate for the jitter in the cases
+> > > > > > > where the internal timing generator is mandatory due to
+> > fractional bytes.
+> > > > > >
+> > > > > > This is interesting and would proofs our assumption that the
+> > > > > > device don't have a FIFO :)
+> > > > > >
+> > > > > > Our assumptions (we don't have the datasheet/programming
+> > manual):
+> > > > > >   - HDMI part is fetching 3 bytes per HDMI pixclk
+> > > > > >   - Ratio between dsi-clk and hdmi-pixelclk must be 3 so the DSI
+> > and
+> > > > > >     HDMI are in sync. So from bandwidth pov there are no
+> > differences
+> > > > > >     between:
+> > > > > >       - HDMI: 74.25 MHz * 24 Bit  = 1782.0 MBit/s
+> > > > > >       - DSI:    891 MHz * 2 lanes = 1782.0 MBit/s (dsi-clock:
+> > 445.5 )
+> > > > > >       - DSI:  445.5 MHz * 4 lanes = 1782.0 MBit/s (dsi-clock:
+> > > > > > 222.75)
+> > > > > >
+> > > > > >     But the ratio is different and therefore the faster clocking
+> > option
+> > > > > >     let something 'overflow'.
+> > > > >
+> > > > > I'll agree that all looks consistent.
+> > > > >
+> > > > > > Anyway, but all this means that Adam should configure the
+> > > > > > burst-clock-rate to 445.5 and set the lanes to 4. But this
+> > > > > > doesn't work either and now we are back on my initial statement
+> > > > > > -> the driver needs some attention.
+> > > > >
+> > > > > Things always need attention :-)
+> > > >
+> > > > ^^
+> > > >
+> > > > > I suspect that it's the use of the timing generator that is the
+> > issue.
+> > > > > The programming guide does recommend using it for all modes, so
+> > > > > that would be a sensible first step.
+> > > >
+> > > > But I tested it without the timing-generator too. Can you or Adam
+> > > > verify the timing-generator diable logic?
+> > >
+> > > Sorry, running without the use of the timing generator is the issue.
+> > > It is mandatory in some modes, but supported in all modes. Always
+> > > using it should therefore avoid not using it in one of the mandatory
+> > > modes (the list looks a little arbitrary).
+> > >
+> > > > > I will say that we had a number of issues getting this chip to do
+> > > > > anything, and it generally seemed happier on 2 or 3 lanes instead
+> > > > > of 4. Suffice to say that we abandoned trying to use it, despite
+> > > > > some assistance from ADI.
+> > > >
+> > > > Even more interessting, what is your alternative to this chip?
+> > >
+> > > BCM2711 which supported dual HDMI natively.
+> > > Our investigation of ADV7535 was when trying to build what became
+> > > Pi400 using BCM2710/BCM2837 (only has a single HDMI output). Whilst I
+> > > do have the prototype, the ADV was wired up weirdly with I2C so I
+> > > never really got it running with Linux.
+> >
+> > I think I have convinced myself that the DSIM is working good enough to
+> > match that of the NXP.
+> >
+> > I've gone through and made a list of the register differences between a
+> > working display using NXP's kernel and the non-working display.  I've
+> > identified a small handful of registers on both the CEC bank of
+> > registers and main set of registers.
+> >
+> > I noticed that the working NXP version doesn't rescale the number of
+> > lanes based on the clock rate, and it stays fixed at 4 lanes.
 >
-> Add a support for the MT6370 ADC driver for system monitoring, including
-> charger current, voltage, and temperature.
+> Does it mean theoretically rescale of lanes is not required??
 
-On Fri, Aug 5, 2022 at 9:07 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> From: ChiYuan Huang <cy_huang@richtek.com>
->
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual
-> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
->
-> Add a support for the Type-C & Power Delivery controller in
-> MediaTek MT6370 IC.
+On the custom kernel from NXP, I can sync at 720p at 4-lanes.
+Unfortunately, I haven't yet been able to replicate all the register
+settings between my working version at 720p and my non-working
+version, and I still have yet to sync at 720p using the mainline
+adv7535 driver.  I am still wrokong on it.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> At least 2 platforms can work with fixed 4 lanes@720p.
+>
+> and looks like few platforms have display stability issue working with 4 lanes@720p,
+> so, as a workaround they changed to 3 lanes based on clock rate to make it work.
+>
+> Can you please confirm, is my understanding correct?
 
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
->
-> v7
-> - Add AICR(100mA ~ 350mA), ICHG(100mA ~ 800mA) macros
-> - Remove 400mA AICR and 900mA ICHG macros
-> - Revise using 'if-else' to 'switch-case' in mt6370_adc_read_scale()
->   where the adc channel is ibus or ibat
-> ---
->  drivers/iio/adc/Kconfig      |  12 ++
->  drivers/iio/adc/Makefile     |   1 +
->  drivers/iio/adc/mt6370-adc.c | 305 +++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 318 insertions(+)
->  create mode 100644 drivers/iio/adc/mt6370-adc.c
->
-> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-> index 7fe5930..995cbb5 100644
-> --- a/drivers/iio/adc/Kconfig
-> +++ b/drivers/iio/adc/Kconfig
-> @@ -736,6 +736,18 @@ config MEDIATEK_MT6360_ADC
->           is used in smartphones and tablets and supports a 11 channel
->           general purpose ADC.
->
-> +config MEDIATEK_MT6370_ADC
-> +       tristate "MediaTek MT6370 ADC driver"
-> +       depends on MFD_MT6370
-> +       help
-> +         Say yes here to enable MediaTek MT6370 ADC support.
-> +
-> +         This ADC driver provides 9 channels for system monitoring (charger
-> +         current, voltage, and temperature).
-> +
-> +         This driver can also be built as a module. If so, the module
-> +         will be called "mt6370-adc".
-> +
->  config MEDIATEK_MT6577_AUXADC
->         tristate "MediaTek AUXADC driver"
->         depends on ARCH_MEDIATEK || COMPILE_TEST
-> diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-> index 1772a54..c6bc35f 100644
-> --- a/drivers/iio/adc/Makefile
-> +++ b/drivers/iio/adc/Makefile
-> @@ -68,6 +68,7 @@ obj-$(CONFIG_MCP320X) += mcp320x.o
->  obj-$(CONFIG_MCP3422) += mcp3422.o
->  obj-$(CONFIG_MCP3911) += mcp3911.o
->  obj-$(CONFIG_MEDIATEK_MT6360_ADC) += mt6360-adc.o
-> +obj-$(CONFIG_MEDIATEK_MT6370_ADC) += mt6370-adc.o
->  obj-$(CONFIG_MEDIATEK_MT6577_AUXADC) += mt6577_auxadc.o
->  obj-$(CONFIG_MEN_Z188_ADC) += men_z188_adc.o
->  obj-$(CONFIG_MESON_SARADC) += meson_saradc.o
-> diff --git a/drivers/iio/adc/mt6370-adc.c b/drivers/iio/adc/mt6370-adc.c
-> new file mode 100644
-> index 0000000..2a46471
-> --- /dev/null
-> +++ b/drivers/iio/adc/mt6370-adc.c
-> @@ -0,0 +1,305 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2022 Richtek Technology Corp.
-> + *
-> + * Author: ChiaEn Wu <chiaen_wu@richtek.com>
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/units.h>
-> +
-> +#include <dt-bindings/iio/adc/mediatek,mt6370_adc.h>
-> +
-> +#define MT6370_REG_CHG_CTRL3           0x113
-> +#define MT6370_REG_CHG_CTRL7           0x117
-> +#define MT6370_REG_CHG_ADC             0x121
-> +#define MT6370_REG_ADC_DATA_H          0x14C
-> +
-> +#define MT6370_ADC_START_MASK          BIT(0)
-> +#define MT6370_ADC_IN_SEL_MASK         GENMASK(7, 4)
-> +#define MT6370_AICR_ICHG_MASK          GENMASK(7, 2)
-> +
-> +#define MT6370_AICR_100_mA             0x0
-> +#define MT6370_AICR_150_mA             0x1
-> +#define MT6370_AICR_200_mA             0x2
-> +#define MT6370_AICR_250_mA             0x3
-> +#define MT6370_AICR_300_mA             0x4
-> +#define MT6370_AICR_350_mA             0x5
-> +
-> +#define MT6370_ICHG_100_mA             0x0
-> +#define MT6370_ICHG_200_mA             0x1
-> +#define MT6370_ICHG_300_mA             0x2
-> +#define MT6370_ICHG_400_mA             0x3
-> +#define MT6370_ICHG_500_mA             0x4
-> +#define MT6370_ICHG_600_mA             0x5
-> +#define MT6370_ICHG_700_mA             0x6
-> +#define MT6370_ICHG_800_mA             0x7
-> +
-> +#define ADC_CONV_TIME_MS               35
-> +#define ADC_CONV_POLLING_TIME_US       1000
-> +
-> +struct mt6370_adc_data {
-> +       struct device *dev;
-> +       struct regmap *regmap;
-> +       /*
-> +        * This mutex lock is for preventing the different ADC channels
-> +        * from being read at the same time.
-> +        */
-> +       struct mutex adc_lock;
-> +};
-> +
-> +static int mt6370_adc_read_channel(struct mt6370_adc_data *priv, int chan,
-> +                                  unsigned long addr, int *val)
-> +{
-> +       unsigned int reg_val;
-> +       __be16 be_val;
-> +       int ret;
-> +
-> +       mutex_lock(&priv->adc_lock);
-> +
-> +       reg_val = MT6370_ADC_START_MASK |
-> +                 FIELD_PREP(MT6370_ADC_IN_SEL_MASK, addr);
-> +       ret = regmap_write(priv->regmap, MT6370_REG_CHG_ADC, reg_val);
-> +       if (ret)
-> +               goto adc_unlock;
-> +
-> +       msleep(ADC_CONV_TIME_MS);
-> +
-> +       ret = regmap_read_poll_timeout(priv->regmap,
-> +                                      MT6370_REG_CHG_ADC, reg_val,
-> +                                      !(reg_val & MT6370_ADC_START_MASK),
-> +                                      ADC_CONV_POLLING_TIME_US,
-> +                                      ADC_CONV_TIME_MS * MILLI * 3);
-> +       if (ret) {
-> +               dev_err(priv->dev, "Failed to read ADC register (%d)\n", ret);
-> +               goto adc_unlock;
-> +       }
-> +
-> +       ret = regmap_raw_read(priv->regmap, MT6370_REG_ADC_DATA_H,
-> +                             &be_val, sizeof(be_val));
-> +       if (ret)
-> +               goto adc_unlock;
-> +
-> +       *val = be16_to_cpu(be_val);
-> +       ret = IIO_VAL_INT;
-> +
-> +adc_unlock:
-> +       mutex_unlock(&priv->adc_lock);
-> +
-> +       return ret;
-> +}
-> +
-> +static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
-> +                                int chan, int *val1, int *val2)
-> +{
-> +       unsigned int reg_val;
-> +       int ret;
-> +
-> +       switch (chan) {
-> +       case MT6370_CHAN_VBAT:
-> +       case MT6370_CHAN_VSYS:
-> +       case MT6370_CHAN_CHG_VDDP:
-> +               *val1 = 5;
-> +               return IIO_VAL_INT;
-> +       case MT6370_CHAN_IBUS:
-> +               ret = regmap_read(priv->regmap, MT6370_REG_CHG_CTRL3, &reg_val);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               reg_val = FIELD_GET(MT6370_AICR_ICHG_MASK, reg_val);
-> +               switch (reg_val) {
-> +               case MT6370_AICR_100_mA:
-> +               case MT6370_AICR_150_mA:
-> +               case MT6370_AICR_200_mA:
-> +               case MT6370_AICR_250_mA:
-> +               case MT6370_AICR_300_mA:
-> +               case MT6370_AICR_350_mA:
-> +                       *val1 = 3350;
-> +                       break;
-> +               default:
-> +                       *val1 = 5000;
-> +                       break;
-> +               }
-> +
-> +               *val2 = 100;
-> +
-> +               return IIO_VAL_FRACTIONAL;
-> +       case MT6370_CHAN_IBAT:
-> +               ret = regmap_read(priv->regmap, MT6370_REG_CHG_CTRL7, &reg_val);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               reg_val = FIELD_GET(MT6370_AICR_ICHG_MASK, reg_val);
-> +               switch (reg_val) {
-> +               case MT6370_ICHG_100_mA:
-> +               case MT6370_ICHG_200_mA:
-> +               case MT6370_ICHG_300_mA:
-> +               case MT6370_ICHG_400_mA:
-> +                       *val1 = 2375;
-> +                       break;
-> +               case MT6370_ICHG_500_mA:
-> +               case MT6370_ICHG_600_mA:
-> +               case MT6370_ICHG_700_mA:
-> +               case MT6370_ICHG_800_mA:
-> +                       *val1 = 2680;
-> +                       break;
-> +               default:
-> +                       *val1 = 5000;
-> +                       break;
-> +               }
-> +
-> +               *val2 = 100;
-> +
-> +               return IIO_VAL_FRACTIONAL;
-> +       case MT6370_CHAN_VBUSDIV5:
-> +               *val1 = 25;
-> +               return IIO_VAL_INT;
-> +       case MT6370_CHAN_VBUSDIV2:
-> +               *val1 = 50;
-> +               return IIO_VAL_INT;
-> +       case MT6370_CHAN_TS_BAT:
-> +               *val1 = 25;
-> +               *val2 = 10000;
-> +               return IIO_VAL_FRACTIONAL;
-> +       case MT6370_CHAN_TEMP_JC:
-> +               *val1 = 2000;
-> +               return IIO_VAL_FRACTIONAL;
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +}
-> +
-> +static int mt6370_adc_read_offset(struct mt6370_adc_data *priv,
-> +                                 int chan, int *val)
-> +{
-> +       *val = -20;
-> +
-> +       return IIO_VAL_INT;
-> +}
-> +
-> +static int mt6370_adc_read_raw(struct iio_dev *iio_dev,
-> +                              const struct iio_chan_spec *chan,
-> +                              int *val, int *val2, long mask)
-> +{
-> +       struct mt6370_adc_data *priv = iio_priv(iio_dev);
-> +
-> +       switch (mask) {
-> +       case IIO_CHAN_INFO_RAW:
-> +               return mt6370_adc_read_channel(priv, chan->channel,
-> +                                              chan->address, val);
-> +       case IIO_CHAN_INFO_SCALE:
-> +               return mt6370_adc_read_scale(priv, chan->channel, val, val2);
-> +       case IIO_CHAN_INFO_OFFSET:
-> +               return mt6370_adc_read_offset(priv, chan->channel, val);
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +}
-> +
-> +static const char * const mt6370_channel_labels[MT6370_CHAN_MAX] = {
-> +       [MT6370_CHAN_VBUSDIV5] = "vbusdiv5",
-> +       [MT6370_CHAN_VBUSDIV2] = "vbusdiv2",
-> +       [MT6370_CHAN_VSYS] = "vsys",
-> +       [MT6370_CHAN_VBAT] = "vbat",
-> +       [MT6370_CHAN_TS_BAT] = "ts_bat",
-> +       [MT6370_CHAN_IBUS] = "ibus",
-> +       [MT6370_CHAN_IBAT] = "ibat",
-> +       [MT6370_CHAN_CHG_VDDP] = "chg_vddp",
-> +       [MT6370_CHAN_TEMP_JC] = "temp_jc",
-> +};
-> +
-> +static int mt6370_adc_read_label(struct iio_dev *iio_dev,
-> +                                struct iio_chan_spec const *chan, char *label)
-> +{
-> +       return sysfs_emit(label, "%s\n", mt6370_channel_labels[chan->channel]);
-> +}
-> +
-> +static const struct iio_info mt6370_adc_iio_info = {
-> +       .read_raw = mt6370_adc_read_raw,
-> +       .read_label = mt6370_adc_read_label,
-> +};
-> +
-> +#define MT6370_ADC_CHAN(_idx, _type, _addr, _extra_info) {     \
-> +       .type = _type,                                          \
-> +       .channel = MT6370_CHAN_##_idx,                          \
-> +       .address = _addr,                                       \
-> +       .scan_index = MT6370_CHAN_##_idx,                       \
-> +       .indexed = 1,                                           \
-> +       .info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |          \
-> +                             BIT(IIO_CHAN_INFO_SCALE) |        \
-> +                             _extra_info,                      \
-> +}
-> +
-> +static const struct iio_chan_spec mt6370_adc_channels[] = {
-> +       MT6370_ADC_CHAN(VBUSDIV5, IIO_VOLTAGE, 1, 0),
-> +       MT6370_ADC_CHAN(VBUSDIV2, IIO_VOLTAGE, 2, 0),
-> +       MT6370_ADC_CHAN(VSYS, IIO_VOLTAGE, 3, 0),
-> +       MT6370_ADC_CHAN(VBAT, IIO_VOLTAGE, 4, 0),
-> +       MT6370_ADC_CHAN(TS_BAT, IIO_VOLTAGE, 6, 0),
-> +       MT6370_ADC_CHAN(IBUS, IIO_CURRENT, 8, 0),
-> +       MT6370_ADC_CHAN(IBAT, IIO_CURRENT, 9, 0),
-> +       MT6370_ADC_CHAN(CHG_VDDP, IIO_VOLTAGE, 11, 0),
-> +       MT6370_ADC_CHAN(TEMP_JC, IIO_TEMP, 12, BIT(IIO_CHAN_INFO_OFFSET)),
-> +};
-> +
-> +static int mt6370_adc_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct mt6370_adc_data *priv;
-> +       struct iio_dev *indio_dev;
-> +       struct regmap *regmap;
-> +       int ret;
-> +
-> +       regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +       if (!regmap)
-> +               return dev_err_probe(dev, -ENODEV, "Failed to get regmap\n");
-> +
-> +       indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
-> +       if (!indio_dev)
-> +               return -ENOMEM;
-> +
-> +       priv = iio_priv(indio_dev);
-> +       priv->dev = dev;
-> +       priv->regmap = regmap;
-> +       mutex_init(&priv->adc_lock);
-> +
-> +       ret = regmap_write(priv->regmap, MT6370_REG_CHG_ADC, 0);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret, "Failed to reset ADC\n");
-> +
-> +       indio_dev->name = "mt6370-adc";
-> +       indio_dev->info = &mt6370_adc_iio_info;
-> +       indio_dev->modes = INDIO_DIRECT_MODE;
-> +       indio_dev->channels = mt6370_adc_channels;
-> +       indio_dev->num_channels = ARRAY_SIZE(mt6370_adc_channels);
-> +
-> +       return devm_iio_device_register(dev, indio_dev);
-> +}
-> +
-> +static const struct of_device_id mt6370_adc_of_id[] = {
-> +       { .compatible = "mediatek,mt6370-adc", },
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(of, mt6370_adc_of_id);
-> +
-> +static struct platform_driver mt6370_adc_driver = {
-> +       .driver = {
-> +               .name = "mt6370-adc",
-> +               .of_match_table = mt6370_adc_of_id,
-> +       },
-> +       .probe = mt6370_adc_probe,
-> +};
-> +module_platform_driver(mt6370_adc_driver);
-> +
-> +MODULE_AUTHOR("ChiaEn Wu <chiaen_wu@richtek.com>");
-> +MODULE_DESCRIPTION("MT6370 ADC Driver");
-> +MODULE_LICENSE("GPL v2");
-> --
-> 2.7.4
->
+That is my understanding.
 
+>
+> Note:
+>  On Renesas RZ/G2L platform, 720p with 3 lanes will work, but it needs
+>  different pll parameters to generate the dot clock to work.
 
--- 
-With Best Regards,
-Andy Shevchenko
+The NXP platform I am using also needs to regenerate the clock.  From
+what I can tell, it looks like the clock calculation on my board
+appears correct for both
+>
+> Cheers,
+> Biju

@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9A058A640
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB12E58A644
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240070AbiHEG5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 02:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S237495AbiHEHAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 03:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236168AbiHEG5j (ORCPT
+        with ESMTP id S231800AbiHEHAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 02:57:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A932973936;
-        Thu,  4 Aug 2022 23:57:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D71461291;
-        Fri,  5 Aug 2022 06:57:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F29C433B5;
-        Fri,  5 Aug 2022 06:57:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659682656;
-        bh=7wVSYAXfgVRFomBLJ5fepMw1/KUsFhNQwWZThUeegwY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lZy9/fITFaey8t+kOVz6102aWgEQed/6TU/EP200llXv1YeHyxlrtAjahm/CYBJYR
-         C9hDI6UIHfrro+AWYmxu/Mq/jDokusSgR/BQnBVC0DZIF0TN25Zyb9STlCFCR2uuho
-         YCzwhA1U5w9/4ZAotSCw9MPvonjVuXE0Yu5bB9r8XC2eg0GzWUNG296yCZ2eGtWV/r
-         BRBEU7KYN5g4KNJEq/GXu+DxvVPTvv4VuVYM0plm0bRzNHdbwbHFb9W/STvm8ooOSv
-         GDrFLnH32f/UuwPb0tV3ayRPj68OAYwKEwzwdNVIwYColT0LK1vsSbErGEhuTMJwEv
-         pge1KeVNxzkcg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oJrHU-0007IR-27; Fri, 05 Aug 2022 08:58:00 +0200
-Date:   Fri, 5 Aug 2022 08:58:00 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, kbuild-all@lists.01.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/9] usb: dwc3: qcom: fix peripheral and OTG suspend
-Message-ID: <Yuy/eM1Wo+gDAJPQ@hovoldconsulting.com>
-References: <20220804151001.23612-7-johan+linaro@kernel.org>
- <202208050544.ijUhoUyB-lkp@intel.com>
+        Fri, 5 Aug 2022 03:00:04 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245305B7AE
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 00:00:03 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id m10so1224443qvu.4
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 00:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc;
+        bh=V23YyaSN3DWPPYAn9D9n416ps4WPEzww+UTnDIeOTcI=;
+        b=QF5IDfDmB2zNU4hnSxsegVdLhkty0mmkn1IW57VVuO8HsCl1pEPeQp7v6hFNsLZaWb
+         GU5TxBrIOyt476ie8/a4vxM8Y7iuWNOE5Si3nxeWYqwW66Aj+Fv0nXzou28b+KDZ4y0R
+         3kTwJVd8vCrvoChn3myvdLZ8MX8UJSus/JpAgW7surhLnzVYSTGHG5mQOMqirp8LKlAM
+         li6SuBuSf7pQa+s7vcEt5pt7hZjxxomNbGTJKRlRWFsvH9RMJBBvSKL5UJd4afgcGLpr
+         CLieZNi7TI+Lsr6Vha/X3RdpkcxkGQWSaqXQMxsqOa4LP6ZfU2wJejosrRJGvyc15a9T
+         j8uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc;
+        bh=V23YyaSN3DWPPYAn9D9n416ps4WPEzww+UTnDIeOTcI=;
+        b=wQzMXTzf01VHkx5fs1s2OEHPXu3xhRX9HE/ZMduUwm/ff/x4oxogREXPQcWVrSt6MO
+         obqZtbfxYAWrgs76aWfRnwOV6TRk06A9WvzxPeT04R4gKBrs6QH5ByIZ++OmGCFAnTff
+         a790adwCKqszj8XNfKi+S+bvZo4EuCyy30+TlJThoaUUHfad/Ye59QgqKDRKnI8WxV4m
+         GeBXMFjccMIEYCKHd7ZyTDVXX2ccWT1mpcU+fT0V8HuOxf2Ezx1EdGesej7L568frDql
+         1KnppJnxTDqRZp/GmnIXLc1lkSwfo4NrauAE+xTyESQewnnOtA7PvJspoUV5NNVRHXfm
+         vvJg==
+X-Gm-Message-State: ACgBeo2zdv98FfgAqZzCLiVCAQq5AryiP4Q66Du6Ci1QiMjcQCaKKMBk
+        kuI7MQWcgIOQmB7oPrtlMTK5PhFueg4=
+X-Google-Smtp-Source: AA6agR4heZNqSplr6DnILMFOQdgIjXozlfO0bTixAhsw9AHaZRt1GwPZQnoQLLQWaNkdG99YiEevvw==
+X-Received: by 2002:ad4:5ca9:0:b0:474:9143:6ffc with SMTP id q9-20020ad45ca9000000b0047491436ffcmr4521027qvh.19.1659682802149;
+        Fri, 05 Aug 2022 00:00:02 -0700 (PDT)
+Received: from [10.5.100.6] (modemcable117.130-83-70.mc.videotron.ca. [70.83.130.117])
+        by smtp.gmail.com with ESMTPSA id x21-20020a05620a0ed500b006b615cd8c13sm2181708qkm.106.2022.08.05.00.00.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 00:00:01 -0700 (PDT)
+Message-ID: <7e3dca87-54d9-b67c-4c69-91ccd470aa82@gmail.com>
+Date:   Fri, 5 Aug 2022 03:00:01 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202208050544.ijUhoUyB-lkp@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Content-Language: en-CA
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Denis Roy <denisjroy@gmail.com>
+Subject: Kernel bug starting after 5.13.0-35
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 05:38:30AM +0800, kernel test robot wrote:
-> Hi Johan,
-> 
-> I love your patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on usb/usb-testing]
-> [also build test WARNING on linus/master next-20220804]
-> [cannot apply to robh/for-next v5.19]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/usb-dwc3-qcom-fix-wakeup-implementation/20220804-231122
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> config: arc-randconfig-r002-20220804 (https://download.01.org/0day-ci/archive/20220805/202208050544.ijUhoUyB-lkp@intel.com/config)
-> compiler: arc-elf-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/f3778ca026b16474e49c5e0188a0eb91d73eef2f
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Johan-Hovold/usb-dwc3-qcom-fix-wakeup-implementation/20220804-231122
->         git checkout f3778ca026b16474e49c5e0188a0eb91d73eef2f
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/dwc3/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/usb/dwc3/dwc3-qcom.c: In function 'dwc3_qcom_read_usb2_speed':
-> >> drivers/usb/dwc3/dwc3-qcom.c:313:25: warning: variable 'hcd' set but not used [-Wunused-but-set-variable]
->      313 |         struct usb_hcd *hcd;
->          |                         ^~~> 
+Subject:
+Kernel bug starting after 5.13.0-35
+From:
+Denis Roy <denisjroy@gmail.com>
+Date:
+2022-08-05, 2:52 a.m.
 
-I'm not seeing this one with gcc-10.3.0, but I'll slap a __maybe_unused
-in there to keep your robot's W=1 builds quiet.
+To:
+"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 
-Johan
+
+A couple of months there were repeated kernel updates, then one of these 
+updates prevented me from booting into Ubuntu . After testing, going 
+back to 5.13.0-35, everything was as it was. Any version after that I 
+can’t login to Ubuntu.
+
+I have a MSI MEG X570 UNIFY motherboard with a Sabrent 1TB Rocket Nvme 
+PCIe 4.0 M.2. I have also, a sata raid 0 encloser for two 2.5 drives, 
+AMD® Ryzen 9 3900x, Radeon RX 5500 XT MECH 8G OC
+
+Obviously Ubuntu is booting from my nvme drive.
+
+

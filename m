@@ -2,116 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE06F58AC86
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969CF58AC88
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238717AbiHEOxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 10:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
+        id S240860AbiHEOy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 10:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240425AbiHEOxu (ORCPT
+        with ESMTP id S232185AbiHEOy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 10:53:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797713F30E;
-        Fri,  5 Aug 2022 07:53:49 -0700 (PDT)
+        Fri, 5 Aug 2022 10:54:26 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBE95C34F;
+        Fri,  5 Aug 2022 07:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659711229; x=1691247229;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cW59A0boZIrZcRLHW5J56RfVnKU27mehgVJoXc75M14=;
-  b=CbGtY5Y33/bC213ZXNfdPMhCxYAj3Q3uYNOMSIxgfD+gx+MSeQPPc4+7
-   UIb3T0Z/0NL4Lx8Z9uWscZgJS2u6+4bkcpcRpRnpjAN6TVYaKI1P2ItnT
-   rOAMfh3qRj5AiNuLpyp04FxUOZpnPlBp2zNdlIE+lD8pLrpUxgUq7OhU0
-   N+mep48IIVCuTIlPQkaZd5aKAMKR6d4kOcKFOUB44aTOjnboJtzipmUv5
-   rjy/3fnmXd6jKQGHeOTvL4siOUk9c5gOnXcRExDLAwYAO6g7Vnm+FccLM
-   5r/eM/F2auzh9YUqA1PQh9CmJJX5gT5cfcm3ioHl3jeQids953QagC5eV
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="291437687"
+  t=1659711264; x=1691247264;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=85sOUquFlJ/tQRW7uPa7MBnstCcG8G62zfua8oflet0=;
+  b=IORpVpnuQXPIfGcNeEV56RA6tIZf/m1C01dn2CKUCuKLKxaslMzMvhn6
+   IWgL+MJFB9I+7mxw4UwbB7P/Xd23a00BboHDU7kofXp/p1bvX3Kjs1mKS
+   nzzT7Bht9knHltVm2ubxEaPkKYfj88YoKQvwsh0gK93WZWbTM4g2IHuT/
+   tUxpTc/thhq7w0+1cYVJJ8KZs9QciNqkg7mxKLbAAQf62RtlA59Uc1KtT
+   85sSoCrHFW6TXAbyyDDo0M+Pww9glUhA5JylW5MKqjd3q5WlxIsUeeFY1
+   Rxv12zj05OMIHGar5LMyMA7m59nlAuAb+Z2olmNmSPIMnyPzBavA0ekMR
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="376511085"
 X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="291437687"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 07:53:49 -0700
+   d="scan'208";a="376511085"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 07:54:24 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="579521566"
-Received: from rderber-mobl1.amr.corp.intel.com (HELO [10.212.217.71]) ([10.212.217.71])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 07:53:48 -0700
-Message-ID: <6501ea6b-5659-53ee-7ae0-7ad248844086@intel.com>
-Date:   Fri, 5 Aug 2022 07:53:49 -0700
+   d="scan'208";a="671709650"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Aug 2022 07:54:21 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJyiT-000JSh-0Q;
+        Fri, 05 Aug 2022 14:54:21 +0000
+Date:   Fri, 5 Aug 2022 22:53:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     AceLan Kao <acelan.kao@canonical.com>,
+        Igor Russkikh <irusskikh@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dmitrii Tarakanov <Dmitrii.Tarakanov@aquantia.com>,
+        Alexander Loktionov <Alexander.Loktionov@aquantia.com>,
+        David VomLehn <vomlehn@texas.net>,
+        Dmitry Bezrukov <Dmitry.Bezrukov@aquantia.com>,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] net: atlantic: fix aq_vec index out of range error
+Message-ID: <202208052211.yWBUaHIc-lkp@intel.com>
+References: <20220805093319.3722179-1-acelan.kao@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
-        Mel Gorman <mgorman@techsingularity.net>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
- <8cf143e7-2b62-1a1e-de84-e3dcc6c027a4@suse.cz>
- <cb9d3310-3bc0-8ecf-5e71-becce980235f@redhat.com>
- <f936b024-43e1-5390-e33f-ad7d355a2802@suse.cz>
- <e828b48f-dcd8-6404-fc30-6e1dd682252f@redhat.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <e828b48f-dcd8-6404-fc30-6e1dd682252f@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805093319.3722179-1-acelan.kao@canonical.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/5/22 07:22, David Hildenbrand wrote:
->> A list that sits besides the existing free_area, contains only >=pageblock
->> order sizes of unaccepted pages (no migratetype distinguished) and we tap
->> into it approximately before __rmqueue_fallback()? There would be some
->> trickery around releasing zone-lock for doing accept_memory(), but should be
->> manageable.
->>
-> Just curious, do we have a microbenchmark that is able to reveal the
-> impact of such code changes before we start worrying?
+Hi AceLan,
 
-Nope.  I went looking to see if I could find any impact.  I think Kirill
-did too.  Too bad that effort didn't make it into the changelog yet.
+Thank you for the patch! Perhaps something to improve:
 
-The merging check at least is just checking a field in a cache-hot
-'struct page'.  The common case is probably three instructions:
+[auto build test WARNING on net-next/master]
+[also build test WARNING on net/master linus/master horms-ipvs/master v5.19 next-20220804]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-	load to a register
-	check the bit
-	jump if not set
+url:    https://github.com/intel-lab-lkp/linux/commits/AceLan-Kao/net-atlantic-fix-aq_vec-index-out-of-range-error/20220805-173434
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git f86d1fbbe7858884d6754534a0afbb74fc30bc26
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220805/202208052211.yWBUaHIc-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/23a65a8ebdb1e74cf7fc03a89741246de646622b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review AceLan-Kao/net-atlantic-fix-aq_vec-index-out-of-range-error/20220805-173434
+        git checkout 23a65a8ebdb1e74cf7fc03a89741246de646622b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/aquantia/atlantic/
 
-It adds a wee bit of icache pressure, but it's also the kind of thing
-that should be a piece of cake for the branch predictors.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-That dynamic check could easily be wrapped by a static branch.  But,
-that first requires more code to go dig in the nooks and crannies of the
-page allocator to make sure *ALL* pages are accepted.
+All warnings (new ones prefixed by >>):
+
+   drivers/net/ethernet/aquantia/atlantic/aq_nic.c: In function 'aq_nic_polling_timer_cb':
+>> drivers/net/ethernet/aquantia/atlantic/aq_nic.c:268:26: warning: variable 'aq_vec' set but not used [-Wunused-but-set-variable]
+     268 |         struct aq_vec_s *aq_vec = NULL;
+         |                          ^~~~~~
+   drivers/net/ethernet/aquantia/atlantic/aq_nic.c: In function 'aq_nic_stop':
+   drivers/net/ethernet/aquantia/atlantic/aq_nic.c:1384:26: warning: variable 'aq_vec' set but not used [-Wunused-but-set-variable]
+    1384 |         struct aq_vec_s *aq_vec = NULL;
+         |                          ^~~~~~
+
+
+vim +/aq_vec +268 drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+
+97bde5c4f909a55a David VomLehn         2017-01-23  264  
+e99e88a9d2b06746 Kees Cook             2017-10-16  265  static void aq_nic_polling_timer_cb(struct timer_list *t)
+97bde5c4f909a55a David VomLehn         2017-01-23  266  {
+e99e88a9d2b06746 Kees Cook             2017-10-16  267  	struct aq_nic_s *self = from_timer(self, t, polling_timer);
+97bde5c4f909a55a David VomLehn         2017-01-23 @268  	struct aq_vec_s *aq_vec = NULL;
+97bde5c4f909a55a David VomLehn         2017-01-23  269  	unsigned int i = 0U;
+97bde5c4f909a55a David VomLehn         2017-01-23  270  
+97bde5c4f909a55a David VomLehn         2017-01-23  271  	for (i = 0U, aq_vec = self->aq_vec[0];
+23a65a8ebdb1e74c Chia-Lin Kao (AceLan  2022-08-05  272) 		self->aq_vecs > i; ++i)
+23a65a8ebdb1e74c Chia-Lin Kao (AceLan  2022-08-05  273) 		aq_vec_isr(i, (void *)self->aq_vec[i]);
+97bde5c4f909a55a David VomLehn         2017-01-23  274  
+97bde5c4f909a55a David VomLehn         2017-01-23  275  	mod_timer(&self->polling_timer, jiffies +
+97bde5c4f909a55a David VomLehn         2017-01-23  276  		  AQ_CFG_POLLING_TIMER_INTERVAL);
+97bde5c4f909a55a David VomLehn         2017-01-23  277  }
+97bde5c4f909a55a David VomLehn         2017-01-23  278  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

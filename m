@@ -2,336 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7870358ABB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AFF358ABBB
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240840AbiHENhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 09:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
+        id S238255AbiHENjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 09:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240861AbiHENhC (ORCPT
+        with ESMTP id S236060AbiHENjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 09:37:02 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794961AD92
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:37:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659706620; x=1691242620;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cYx8WEbufGc2kIoF+g8WEsSpIhTPOn9T8tPs3QjTGcw=;
-  b=PAaWiVrgl5KV/yZ7nv6eoPTunwKpcmgda5+6a31N22NgS1Qzk0yNJCiv
-   vOL3IlJSt9YHs0TYnw43joB8/TnXLFIssn0IM27xu+ZqjHBwn2OgaWD8x
-   GeEmTly4huZKx7XTHz3BWU6CFZzoOS0nN7NHOBtm648B8lZ+n+pqORGvN
-   TV7E30h+e90qLMa2F9RvAsxEpiQyQhJOxGvadbir9glozcNqT+RTLsp2+
-   K6ZPcVFrThBskVDDv/Ntc911mZ0xDMPcwCeDtKR4x8/Fgc64ZY7qmoHRV
-   h8Owr/ZNJTfliqAFlPp2bEmWaoJI2s1U3OFhnOnQYifzGjetwLD1af034
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="290974289"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="290974289"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 06:36:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="607129633"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga007.fm.intel.com with ESMTP; 05 Aug 2022 06:36:39 -0700
-Received: from [10.252.214.183] (kliang2-mobl1.ccr.corp.intel.com [10.252.214.183])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Fri, 5 Aug 2022 09:39:02 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CA51AD92;
+        Fri,  5 Aug 2022 06:39:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 72925580AE2;
-        Fri,  5 Aug 2022 06:36:38 -0700 (PDT)
-Message-ID: <4fdaeb87-7f0a-78e0-2952-3035a3776198@linux.intel.com>
-Date:   Fri, 5 Aug 2022 09:36:37 -0400
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 18E34205C1;
+        Fri,  5 Aug 2022 13:39:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659706740; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4fUGftCh+M9MgogM/ULV9Ld8sZEIEZ7PClbDaS2W+nE=;
+        b=D+kEVNjzYfXvldJYaFOj5ruPF3HbAPd1RTtNyDXO5s9Vr7b1FvUVwcELgPkROgutphj7nM
+        iiSynX1+4TbllV29hbsrR302sIj7NfXZ7IJX60SePWGOU3/zaepY+xQ42vPlATE3nVKiVV
+        r8DHVCwFJzRdQ5klIaNM0LEzfHm/818=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659706740;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4fUGftCh+M9MgogM/ULV9Ld8sZEIEZ7PClbDaS2W+nE=;
+        b=CLiDkKcWHQhufTXRuMvyOhl3nB3aO/ZcIjwms2qYoxLv6GjUOx+1rIHjF1ArgPsKth9MMu
+        BsA7bdcANtdIV7Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9E898133B5;
+        Fri,  5 Aug 2022 13:38:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rQT5JXMd7WKCNQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 05 Aug 2022 13:38:59 +0000
+Message-ID: <f936b024-43e1-5390-e33f-ad7d355a2802@suse.cz>
+Date:   Fri, 5 Aug 2022 15:38:59 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [BUG] perf/x86/intel/pebs: PEBS timestamps overwritten
-To:     Stephane Eranian <eranian@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Liang, Kan" <kan.liang@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, andreas.kogler.0x@gmail.com
-References: <CABPqkBTqQaaYH+ySu3reLm5i+X6P4BsqKycp8NBOP1gW3ZV4QA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
 Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CABPqkBTqQaaYH+ySu3reLm5i+X6P4BsqKycp8NBOP1gW3ZV4QA@mail.gmail.com>
+To:     David Hildenbrand <david@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
+        tim.gardner@canonical.com, khalid.elmously@canonical.com,
+        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
+        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
+        Mel Gorman <mgorman@techsingularity.net>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
+ <8cf143e7-2b62-1a1e-de84-e3dcc6c027a4@suse.cz>
+ <cb9d3310-3bc0-8ecf-5e71-becce980235f@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <cb9d3310-3bc0-8ecf-5e71-becce980235f@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-08-05 6:49 a.m., Stephane Eranian wrote:
-> Hi,
+On 8/5/22 14:09, David Hildenbrand wrote:
+> On 05.08.22 13:49, Vlastimil Babka wrote:
+>> On 6/14/22 14:02, Kirill A. Shutemov wrote:
+>>> UEFI Specification version 2.9 introduces the concept of memory
+>>> acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
+>>> SEV-SNP, require memory to be accepted before it can be used by the
+>>> guest. Accepting happens via a protocol specific to the Virtual Machine
+>>> platform.
+>>>
+>>> There are several ways kernel can deal with unaccepted memory:
+>>>
+>>>  1. Accept all the memory during the boot. It is easy to implement and
+>>>     it doesn't have runtime cost once the system is booted. The downside
+>>>     is very long boot time.
+>>>
+>>>     Accept can be parallelized to multiple CPUs to keep it manageable
+>>>     (i.e. via DEFERRED_STRUCT_PAGE_INIT), but it tends to saturate
+>>>     memory bandwidth and does not scale beyond the point.
+>>>
+>>>  2. Accept a block of memory on the first use. It requires more
+>>>     infrastructure and changes in page allocator to make it work, but
+>>>     it provides good boot time.
+>>>
+>>>     On-demand memory accept means latency spikes every time kernel steps
+>>>     onto a new memory block. The spikes will go away once workload data
+>>>     set size gets stabilized or all memory gets accepted.
+>>>
+>>>  3. Accept all memory in background. Introduce a thread (or multiple)
+>>>     that gets memory accepted proactively. It will minimize time the
+>>>     system experience latency spikes on memory allocation while keeping
+>>>     low boot time.
+>>>
+>>>     This approach cannot function on its own. It is an extension of #2:
+>>>     background memory acceptance requires functional scheduler, but the
+>>>     page allocator may need to tap into unaccepted memory before that.
+>>>
+>>>     The downside of the approach is that these threads also steal CPU
+>>>     cycles and memory bandwidth from the user's workload and may hurt
+>>>     user experience.
+>>>
+>>> Implement #2 for now. It is a reasonable default. Some workloads may
+>>> want to use #1 or #3 and they can be implemented later based on user's
+>>> demands.
+>>>
+>>> Support of unaccepted memory requires a few changes in core-mm code:
+>>>
+>>>   - memblock has to accept memory on allocation;
+>>>
+>>>   - page allocator has to accept memory on the first allocation of the
+>>>     page;
+>>>
+>>> Memblock change is trivial.
+>>>
+>>> The page allocator is modified to accept pages on the first allocation.
+>>> The new page type (encoded in the _mapcount) -- PageUnaccepted() -- is
+>>> used to indicate that the page requires acceptance.
+>>>
+>>> Architecture has to provide two helpers if it wants to support
+>>> unaccepted memory:
+>>>
+>>>  - accept_memory() makes a range of physical addresses accepted.
+>>>
+>>>  - range_contains_unaccepted_memory() checks anything within the range
+>>>    of physical addresses requires acceptance.
+>>>
+>>> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>>> Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
+>>> Reviewed-by: David Hildenbrand <david@redhat.com>
+>> 
+>> Hmm I realize it's not ideal to raise this at v7, and maybe it was discussed
+>> before, but it's really not great how this affects the core page allocator
+>> paths. Wouldn't it be possible to only release pages to page allocator when
+>> accepted, and otherwise use some new per-zone variables together with the
+>> bitmap to track how much exactly is where to accept? Then it could be hooked
+>> in get_page_from_freelist() similarly to CONFIG_DEFERRED_STRUCT_PAGE_INIT -
+>> if we fail zone_watermark_fast() and there are unaccepted pages in the zone,
+>> accept them and continue. With a static key to flip in case we eventually
+>> accept everything. Because this is really similar scenario to the deferred
+>> init and that one was solved in a way that adds minimal overhead.
 > 
-> I was alerted by an internal user that the PEBS TSC-based timestamps
-> do not appear
-> correctly in the final perf.data output file from perf record.
-> 
-> After some investigation, I came to the conclusion that indeed the
-> data->time field setup
-> by PEBS in the setup_pebs_fixed_sample_data() is later overwritten by
-> perf_events generic
-> code in perf_prepare_sample(). There is an ordering problem here.
-> 
-> Looking around we found that this problem had been uncovered back in
-> May 2020 and a
-> patch had been posted then:
-> https://lore.kernel.org/lkml/e754b625-bf14-8f5f-bd1a-71d774057005@gmail.com/T/
-> 
-> However this patch was never commented upon or committed.
-> 
-> The problem is still present in the upstream code today.
-> 
-> 1. perf_sample_data_init()
-> 2. setup_pebs_fixed_sample_data(): data->time =
-> native_sched_clock_from_tsc(pebs->tsc);
-> 3. perf_prepare_sample(): data->time = perf_event_clock(event);
-> 
-> The patch from 2020 (Andreas Kogler) fixes the problem by making the
-> assignment in 3.
-> conditioned to the value of data->time being 0. Andreas also suggested
-> an alternative which
-> would break up the call to perf_event_ouput() like this is done in the
-> BTS code allowing
-> the prepare_sample() call to be made before PEBS samples are
-> extracted. That would
-> generate some code duplication. Although this approach appears more
-> robust, the one
-> issue I see is that prepare_sample may need data that would be filled
-> by PEBS and
-> therefore it would  need to be called afterwards.
-> 
-> Any better ideas?
+> I kind of like just having the memory stats being correct (e.g., free
+> memory) and acceptance being an internal detail to be triggered when
+> allocating pages -- just like the arch_alloc_page() callback.
 
-I think Andreas's patch is the most straightforward and simplest patch
-to fix the issue. But, if I recall correctly, Peter prefers to minimize
-the cachelines touched by the perf_sample_data_init(). So initializing
-the data->time in the perf_sample_data_init() seems break the rule.
+Hm, good point about the stats. Could be tweaked perhaps so it appears
+correct on the outside, but might be tricky.
 
-I think HW will provide more and more such kind of precise information.
-Maybe we can use a flag variable to track whether the information is
-already provided to avoid the overwritten.
+> I'm sure we could optimize for the !unaccepted memory via static keys
+> also in this version with some checks at the right places if we find
+> this to hurt performance?
 
-Here are the two patches (Not test yet). The first one is to fix the
-timestamp issue. The second one is to use the flag to replace
-data->br_stack = NULL; as an examples. I think we can further move other
-variables out of the perf_sample_data_init() to minimize the cachelines
-touched by the perf_sample_data_init().
+It would be great if we would at least somehow hit the necessary code only
+when dealing with a >=pageblock size block. The bitmap approach and
+accepting everything smaller uprofront actually seems rather compatible. Yet
+in the current patch we e.g. check PageUnaccepted(buddy) on every buddy size
+while merging.
 
-
-From a46c2e17597717090013d390b6d64f51a69b4ea0 Mon Sep 17 00:00:00 2001
-From: Kan Liang <kan.liang@linux.intel.com>
-Date: Fri, 5 Aug 2022 06:01:15 -0700
-Subject: [PATCH 1/2] perf: Avoid overwriting precise timestamp
-
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- arch/x86/events/intel/ds.c | 8 ++++++--
- include/linux/perf_event.h | 3 +++
- kernel/events/core.c       | 2 +-
- 3 files changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index 34be3bc5151a..a2c26eaeb0d9 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -1687,8 +1687,10 @@ static void setup_pebs_fixed_sample_data(struct
-perf_event *event,
- 	 * We can only do this for the default trace clock.
- 	 */
- 	if (x86_pmu.intel_cap.pebs_format >= 3 &&
--		event->attr.use_clockid == 0)
-+		event->attr.use_clockid == 0) {
- 		data->time = native_sched_clock_from_tsc(pebs->tsc);
-+		data->flags |= PERF_SAMPLE_DATA_TIME;
-+	}
-
- 	if (has_branch_stack(event))
- 		data->br_stack = &cpuc->lbr_stack;
-@@ -1750,8 +1752,10 @@ static void
-setup_pebs_adaptive_sample_data(struct perf_event *event,
- 	perf_sample_data_init(data, 0, event->hw.last_period);
- 	data->period = event->hw.last_period;
-
--	if (event->attr.use_clockid == 0)
-+	if (event->attr.use_clockid == 0) {
- 		data->time = native_sched_clock_from_tsc(basic->tsc);
-+		data->flags |= PERF_SAMPLE_DATA_TIME;
-+	}
-
- 	/*
- 	 * We must however always use iregs for the unwinder to stay sane; the
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index da759560eec5..33054bf31fc1 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -999,6 +999,7 @@ int perf_event_read_local(struct perf_event *event,
-u64 *value,
- extern u64 perf_event_read_value(struct perf_event *event,
- 				 u64 *enabled, u64 *running);
-
-+#define PERF_SAMPLE_DATA_TIME		0x1
-
- struct perf_sample_data {
- 	/*
-@@ -1012,6 +1013,7 @@ struct perf_sample_data {
- 	union perf_sample_weight	weight;
- 	u64				txn;
- 	union  perf_mem_data_src	data_src;
-+	u64				flags;
-
- 	/*
- 	 * The other fields, optionally {set,used} by
-@@ -1061,6 +1063,7 @@ static inline void perf_sample_data_init(struct
-perf_sample_data *data,
- 	data->weight.full = 0;
- 	data->data_src.val = PERF_MEM_NA;
- 	data->txn = 0;
-+	data->flags = 0;
- }
-
- /*
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 65e0bcba2e21..057c197ae106 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6799,7 +6799,7 @@ static void __perf_event_header__init_id(struct
-perf_event_header *header,
- 		data->tid_entry.tid = perf_event_tid(event, current);
- 	}
-
--	if (sample_type & PERF_SAMPLE_TIME)
-+	if ((sample_type & PERF_SAMPLE_TIME) && !(data->flags &
-PERF_SAMPLE_DATA_TIME))
- 		data->time = perf_event_clock(event);
-
- 	if (sample_type & (PERF_SAMPLE_ID | PERF_SAMPLE_IDENTIFIER))
--- 
-2.35.1
-
-
-
-
-The patch as below use a new flag to track the availability of the br_stack.
-
-
-
-From c384353e17e200781145557cd5395c3f8adde6f9 Mon Sep 17 00:00:00 2001
-From: Kan Liang <kan.liang@linux.intel.com>
-Date: Fri, 5 Aug 2022 06:12:41 -0700
-Subject: [PATCH 2/2] perf: Add perf sample data flag for br_stack
-
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- arch/x86/events/intel/ds.c | 5 ++++-
- include/linux/perf_event.h | 5 +++--
- kernel/events/core.c       | 4 ++--
- 3 files changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index a2c26eaeb0d9..27c440c13bfd 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -1692,8 +1692,10 @@ static void setup_pebs_fixed_sample_data(struct
-perf_event *event,
- 		data->flags |= PERF_SAMPLE_DATA_TIME;
- 	}
-
--	if (has_branch_stack(event))
-+	if (has_branch_stack(event)) {
- 		data->br_stack = &cpuc->lbr_stack;
-+		data->flags |= PERF_SAMPLE_DATA_BR_STACK;
-+	}
- }
-
- static void adaptive_pebs_save_regs(struct pt_regs *regs,
-@@ -1847,6 +1849,7 @@ static void setup_pebs_adaptive_sample_data(struct
-perf_event *event,
- 		if (has_branch_stack(event)) {
- 			intel_pmu_store_pebs_lbrs(lbr);
- 			data->br_stack = &cpuc->lbr_stack;
-+			data->flags |= PERF_SAMPLE_DATA_BR_STACK;
- 		}
- 	}
-
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 33054bf31fc1..8c4a2913ec58 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1000,6 +1000,7 @@ extern u64 perf_event_read_value(struct perf_event
-*event,
- 				 u64 *enabled, u64 *running);
-
- #define PERF_SAMPLE_DATA_TIME		0x1
-+#define PERF_SAMPLE_DATA_BR_STACK	0x2
-
- struct perf_sample_data {
- 	/*
-@@ -1008,7 +1009,6 @@ struct perf_sample_data {
- 	 */
- 	u64				addr;
- 	struct perf_raw_record		*raw;
--	struct perf_branch_stack	*br_stack;
- 	u64				period;
- 	union perf_sample_weight	weight;
- 	u64				txn;
-@@ -1019,6 +1019,8 @@ struct perf_sample_data {
- 	 * The other fields, optionally {set,used} by
- 	 * perf_{prepare,output}_sample().
- 	 */
-+	struct perf_branch_stack	*br_stack;
-+
- 	u64				type;
- 	u64				ip;
- 	struct {
-@@ -1058,7 +1060,6 @@ static inline void perf_sample_data_init(struct
-perf_sample_data *data,
- 	/* remaining struct members initialized in perf_prepare_sample() */
- 	data->addr = addr;
- 	data->raw  = NULL;
--	data->br_stack = NULL;
- 	data->period = period;
- 	data->weight.full = 0;
- 	data->data_src.val = PERF_MEM_NA;
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 057c197ae106..cd19ce85ef59 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -7039,7 +7039,7 @@ void perf_output_sample(struct perf_output_handle
-*handle,
- 	}
-
- 	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
--		if (data->br_stack) {
-+		if (data->flags & PERF_SAMPLE_DATA_BR_STACK) {
- 			size_t size;
-
- 			size = data->br_stack->nr
-@@ -7339,7 +7339,7 @@ void perf_prepare_sample(struct perf_event_header
-*header,
-
- 	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
- 		int size = sizeof(u64); /* nr */
--		if (data->br_stack) {
-+		if (data->flags & PERF_SAMPLE_DATA_BR_STACK) {
- 			if (perf_sample_save_hw_index(event))
- 				size += sizeof(u64);
-
--- 
-2.35.1
-
-
-Thanks,
-Kan
+A list that sits besides the existing free_area, contains only >=pageblock
+order sizes of unaccepted pages (no migratetype distinguished) and we tap
+into it approximately before __rmqueue_fallback()? There would be some
+trickery around releasing zone-lock for doing accept_memory(), but should be
+manageable.

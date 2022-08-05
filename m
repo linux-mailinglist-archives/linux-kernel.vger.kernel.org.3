@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B1E58A5F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4737A58A5F6
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235794AbiHEGjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 02:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S235585AbiHEGkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 02:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235406AbiHEGjp (ORCPT
+        with ESMTP id S235920AbiHEGkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 02:39:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7C972ED2
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 23:39:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 392DA61313
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:39:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40CEAC43470;
-        Fri,  5 Aug 2022 06:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659681583;
-        bh=I+kcE97Ve6/ReO0B8c5180Bc7abr6kASH5KpHGYE8A8=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=1hq61QxoWIElS+9Pl/b8sRq11hctbk7P2Ebd6DPZ8el95aG0HUuqJyMoMmRaaojzi
-         qUl3aMHwnnVYaiY3rRlYHbbJnNqN1IyFzjyFLT4oLR5B0dAhYUtZ7oLFFjimQfWD1J
-         cuRWQ6a8gZuYy0u8l2jUu2sT0fqhvZWD3eudoyws=
-Date:   Fri, 5 Aug 2022 08:39:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Grzegorz Szymaszek <gszymaszek@short.pl>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH 3/3] staging: r8188eu: make driver metadata macro names
- more consistent
-Message-ID: <Yuy7Lc/TJMinuupA@kroah.com>
-References: <6c83e05e5dbccff5630ccfed9e40bf84c889b647.1659565180.git.gszymaszek@short.pl>
- <7cc838a1e7f64c9aa88deffdb7986fbe55753be8.1659565180.git.gszymaszek@short.pl>
+        Fri, 5 Aug 2022 02:40:04 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFE273905
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 23:40:02 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id j8so3299654ejx.9
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 23:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=VbilywkyD/M8bgsQ+Goos9KyMxX3bX3Ox36YlxJ8d/c=;
+        b=kpA6bYaZVNdY5XPuTwRvs/4t2P2Jn7AIV5rT96nKfRBPIB8wjbIhAI7XMVCuac5coR
+         o4CO9nwCDgK+whRCFocX/baE6lWplV7v0ePT/D5Zm+V5MOoc47d3uDQkHzBTy60nfPgx
+         kh0ocgfXKM2mMG1ncreWjMHozyZd6Sm6lXfUv+rwHNvCtLVuCBq1FLLa5kfqNKfmzuRI
+         it+GR7DmZpbaIQdX2cK0ZsjVWWMVrJMRLfpu0y6nbck1Z+nMO1OoYhyMHPDj63ShN/Gz
+         8LZzqE3E3ogl7GLsA3/2tSgV9c7qKgkw9YRhIXPGs1X8bOlBzUBTfdvPNlAtDMEYY77q
+         8DCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=VbilywkyD/M8bgsQ+Goos9KyMxX3bX3Ox36YlxJ8d/c=;
+        b=nJ58OBhghCF0Isjj3DY2dICmA5ykK55ePpljSYortbJKIpyZpUyjUvLmohEq2YamJb
+         L86+ORGYnRvoyGOHjwXYd4pzyVfY2h2NblM6v7kTsum6Kx1qOZe+DCmTlScW/qF+Yorf
+         bXRngDaIWFRG8znFelq1MLJWwAL+aupMMi+N55nCCHmDWzHWJxPqeSDYXe0TU/5DHHdT
+         InG4HGQDiJPgTFeMePq9l/wZGuhS2TxdQ6yGrJFAw1oEc37CFUWKqYEPVSTNoAOT1X0G
+         2NNXLvfkmZIgeDXvmKH4SDJB24haJaoqDv0jkqkOLSX714RpODzwxK6Czn90XKDxRq34
+         WBKA==
+X-Gm-Message-State: ACgBeo3/jHll+qXJ+jo2c0yR2v7y7ZTjVewxOIRd2H17kVIdBMaf6Uny
+        IIgvIvTYMyolSCD4S7XQ7Cs=
+X-Google-Smtp-Source: AA6agR5MnwJei2qMi9xCPBXMyJBR3CjOgKjjo5gERif3wfzLaWzUTeQyRhVX5l+BxEggBeS4PVlK1g==
+X-Received: by 2002:a17:906:93ef:b0:730:69e0:dd0c with SMTP id yl15-20020a17090693ef00b0073069e0dd0cmr4120144ejb.609.1659681600787;
+        Thu, 04 Aug 2022 23:40:00 -0700 (PDT)
+Received: from pca.lan (dd57636e4.access.telenet.be. [213.118.54.228])
+        by smtp.gmail.com with ESMTPSA id p7-20020a170906140700b0073066d4d7a4sm1184987ejc.80.2022.08.04.23.39.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 23:40:00 -0700 (PDT)
+From:   Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: fsl_sai: fix incorrect mclk number in error message
+Date:   Fri,  5 Aug 2022 08:39:42 +0200
+Message-Id: <20220805063942.8520-1-pieterjan.camerlynck@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cc838a1e7f64c9aa88deffdb7986fbe55753be8.1659565180.git.gszymaszek@short.pl>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 12:29:10AM +0200, Grzegorz Szymaszek wrote:
-> Rename DRIVERVERSION to DRV_VERSION so that it looks more alike the
-> other macros, DRV_NAME and FW_*, and matches the most popular (as it
-> seems from a quick review) conventions in other drivers.
-> 
-> Signed-off-by: Grzegorz Szymaszek <gszymaszek@short.pl>
-> ---
->  drivers/staging/r8188eu/include/drv_types.h | 5 ++---
->  drivers/staging/r8188eu/os_dep/os_intfs.c   | 2 +-
->  2 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/include/drv_types.h b/drivers/staging/r8188eu/include/drv_types.h
-> index f51b83515953..3328c66d1ef1 100644
-> --- a/drivers/staging/r8188eu/include/drv_types.h
-> +++ b/drivers/staging/r8188eu/include/drv_types.h
-> @@ -10,8 +10,6 @@
->  #ifndef __DRV_TYPES_H__
->  #define __DRV_TYPES_H__
->  
-> -#define DRV_NAME "r8188eu"
+In commit <c3ecef21c3f26> ("ASoC: fsl_sai: add sai master mode support")
+the loop was changed to start iterating from 1 instead of 0. The error
+message however was not updated, reporting the wrong clock to the user.
 
-This should just be KBUILD_MODNAME, no need to create yet-another-macro
-for this one.
+Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+---
+ sound/soc/fsl/fsl_sai.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> -
->  #include "osdep_service.h"
->  #include "wlan_bssdef.h"
->  #include "rtw_ht.h"
-> @@ -36,7 +34,8 @@
->  #include "rtl8188e_hal.h"
->  #include "rtw_fw.h"
->  
-> -#define DRIVERVERSION	"v4.1.4_6773.20130222"
-> +#define DRV_NAME	"r8188eu"
+diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
+index ffc24afb5a7a..f0602077b385 100644
+--- a/sound/soc/fsl/fsl_sai.c
++++ b/sound/soc/fsl/fsl_sai.c
+@@ -1054,7 +1054,7 @@ static int fsl_sai_probe(struct platform_device *pdev)
+ 		sai->mclk_clk[i] = devm_clk_get(&pdev->dev, tmp);
+ 		if (IS_ERR(sai->mclk_clk[i])) {
+ 			dev_err(&pdev->dev, "failed to get mclk%d clock: %ld\n",
+-					i + 1, PTR_ERR(sai->mclk_clk[i]));
++					i, PTR_ERR(sai->mclk_clk[i]));
+ 			sai->mclk_clk[i] = NULL;
+ 		}
+ 	}
+-- 
+2.25.1
 
-Again, KBUILD_MODNAME
-
-> +#define DRV_VERSION	"v4.1.4_6773.20130222"
-
-As the driver is now in the kernel, this "version" string can just go
-away.  Can you redo this patch to do the DRV_NAME thing first, and then
-drop the DRV_VERSION field after that?
-
-thanks,
-
-greg k-h

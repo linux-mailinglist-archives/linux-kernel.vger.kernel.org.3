@@ -2,90 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5642D58ABE2
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC92458ABED
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235095AbiHEN52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 09:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
+        id S240685AbiHEN5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 09:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbiHEN5Z (ORCPT
+        with ESMTP id S237309AbiHEN5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 09:57:25 -0400
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616B9BC32;
-        Fri,  5 Aug 2022 06:57:23 -0700 (PDT)
-Received: by mail-pf1-f182.google.com with SMTP id z187so2306842pfb.12;
-        Fri, 05 Aug 2022 06:57:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=WXsHnW98Ol/RR5LVCi+lD4WhQ/7kAEJ76/fSyx1eUIs=;
-        b=S5DA0pZAZ6x+OdpWADKIE6qKzgcf1fJMQxBIPu7XvBRDngWSbM/Pv49a/azv1woHh2
-         MbrAvmDr8h7n1AXt2FdHmrW/ak9ycNFxsnzcH7VkaNe4RrH8+0BdF5w/+5SyyENvaNOu
-         ZcD0kjUqLMMYd6A92CTAdsnKmKCXu05/gxEDMY0NUsRgbT834CE9Cw5gumSO115RwUH2
-         qF3tjMBL8qJS6TlgACrHDmoGvJSzbF8LAhsulR5plvZLbCAwilDI/mXr+yU9sMekCP+n
-         aq8xg2F0QQuoqTA/edw1M5LCsVF+9YpG8AvauPzAHMqkusDYAKBM6LjxDNRzAmIPjDG9
-         K+zQ==
-X-Gm-Message-State: ACgBeo0DOEvUL7jYm//3OGpLMxHlidrgOMC/ZWoXSADrXuAK6cZWMQVV
-        WWzib94U99f4SBJOLqnflsHcnk4GOe0=
-X-Google-Smtp-Source: AA6agR62oAu3mdPvL4Yt6CYvizPyqvuAN1v2Us7b4hFhGKtkTfR92yJf+SoRooWfkiF6Zui4o9azWQ==
-X-Received: by 2002:a05:6a00:2449:b0:528:3a29:e79d with SMTP id d9-20020a056a00244900b005283a29e79dmr7269921pfj.39.1659707842665;
-        Fri, 05 Aug 2022 06:57:22 -0700 (PDT)
-Received: from [192.168.3.217] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170903124500b0016bf2a4598asm3055571plh.229.2022.08.05.06.57.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 06:57:21 -0700 (PDT)
-Message-ID: <d105bbea-9414-053a-1481-dfed663c83a8@acm.org>
-Date:   Fri, 5 Aug 2022 06:57:20 -0700
+        Fri, 5 Aug 2022 09:57:43 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8774F183;
+        Fri,  5 Aug 2022 06:57:41 -0700 (PDT)
+Received: from localhost.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 540B91F9E2;
+        Fri,  5 Aug 2022 15:57:38 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: [PATCH v2 0/5] Add Qcom PM6125 PMIC, and use in Sony Xperia Seine PDX201
+Date:   Fri,  5 Aug 2022 15:57:24 +0200
+Message-Id: <20220805135729.1037079-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] RDMA/srp: Check dev_set_name() return value
-Content-Language: en-US
-To:     Bo Liu <liubo03@inspur.com>, jgg@ziepe.ca, leon@kernel.org
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220805053434.3944-1-liubo03@inspur.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220805053434.3944-1-liubo03@inspur.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/4/22 22:34, Bo Liu wrote:
-> It's possible that dev_set_name() returns -ENOMEM, catch and handle this.
-> 
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
-> ---
->   drivers/infiniband/ulp/srp/ib_srp.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
-> index 7720ea270ed8..a6f788e3b84b 100644
-> --- a/drivers/infiniband/ulp/srp/ib_srp.c
-> +++ b/drivers/infiniband/ulp/srp/ib_srp.c
-> @@ -3905,8 +3905,9 @@ static struct srp_host *srp_add_port(struct srp_device *device, u8 port)
->   
->   	host->dev.class = &srp_class;
->   	host->dev.parent = device->dev->dev.parent;
-> -	dev_set_name(&host->dev, "srp-%s-%d", dev_name(&device->dev->dev),
-> -		     port);
-> +	if (dev_set_name(&host->dev, "srp-%s-%d", dev_name(&device->dev->dev),
-> +		     port))
-> +		goto free_host;
->   
->   	if (device_register(&host->dev))
->   		goto free_host;
+This series adds initial support for the PM6125 PMIC, and its power key
+handling and thermal monitoring capabilities are configured for Sony's
+PDX201 (Xperia 10II).
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+One patch for pm660 is included to fix a node address mismatch with its
+reg field.
+
+Note that this series has been based on top of:
+
+  https://lore.kernel.org/linux-arm-msm/20220508100336.127176-1-marijn.suijten@somainline.org/T/#u
+
+To prevent conflicts with the moving around of sdc2 nodes, presuming
+that series is applied first.
+
+All dts patches are expected to go through the QCOM DTS tree, whereas
+the sole iio patch goes through the IIO tree.
+
+Changes since v1:
+- Dropped both pinctrl patches that have already been applied;
+- Add -us suffix to qcom,hw-settle-time properties on ADC TM5 nodes
+  (this suffix is not present on regular ADC5/VADC nodes);
+- Add -state suffix to pm6125_gpio pinctrl nodes;
+- Use PMIC_GPIO_FUNC_NORMAL instead of the string-literal "normal";
+- Removed #address-cells and #size-cells from empty pmic@1 node;
+- Removed ADC5_AMUX_THM3 / ADC5_GPIO2_100K_PU channels from the ADC5
+  patch, these are unused on my board and hence untested.
+
+v1: https://lore.kernel.org/phone-devel/20220511220613.1015472-1-marijn.suijten@somainline.org/T/#u
+
+Marijn Suijten (5):
+  arm64: dts: qcom: pm660: Use unique ADC5_VCOIN address in node name
+  iio: adc: qcom-spmi-adc5: Add missing VCOIN/GPIO[134] channels
+  arm64: dts: qcom: Add PM6125 PMIC
+  arm64: dts: qcom: sm6125-seine: Include PM6125 and configure PON
+  arm64: dts: qcom: sm6125-seine: Configure additional trinket
+    thermistors
+
+ arch/arm64/boot/dts/qcom/pm6125.dtsi          | 154 +++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm660.dtsi           |   2 +-
+ .../qcom/sm6125-sony-xperia-seine-pdx201.dts  | 162 +++++++++++++++++-
+ drivers/iio/adc/qcom-spmi-adc5.c              |   8 +
+ 4 files changed, 324 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/pm6125.dtsi
+
+-- 
+2.37.1
+

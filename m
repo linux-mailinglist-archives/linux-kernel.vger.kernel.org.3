@@ -2,119 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3E958AE2B
+	by mail.lfdr.de (Postfix) with ESMTP id 67DFB58AE2C
 	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241289AbiHEQ3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 12:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S241115AbiHEQ3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 12:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241115AbiHEQ3J (ORCPT
+        with ESMTP id S241349AbiHEQ3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 12:29:09 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFD91704F
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:29:08 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id l22so3808115wrz.7
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Bx9G8JNLiLJhDs2y+OulTQ6Arh93SHt8PJNhnkzS76A=;
-        b=G8MjgRH1Dn5QHvCiGLUoHF1aRHWwuzqsY8+wvXJca/a+ZTHD0d/fJq9ByzAG71C4Gm
-         brpuYzE4q5EjV6KvPCrpP4q8RpKDe6BQP38FTgiaz7FvOaWB6HnBXC7Y+QemmGTQ6XFG
-         Lql/qMKUyGD9o89w4PxplbuWHyocXiBfg11Ydjl3fzyMGp0iFa5haHQaEJ6LYLEGv/VD
-         VoFzWhQ3mh9Itj2HrYNPxF09k6/cIDE9Bhv/zErgH0H7Z96OQE0yeeQlrN1EThLHsKpH
-         JEYKHdu+rxrhXp70NsNm7i69uxBxb+6KjfurAgrsGgo0faWi1e/J/E9qFugnQXv6KItI
-         NW8g==
+        Fri, 5 Aug 2022 12:29:23 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D651EAC1;
+        Fri,  5 Aug 2022 09:29:22 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id j63so4509738ybb.13;
+        Fri, 05 Aug 2022 09:29:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Bx9G8JNLiLJhDs2y+OulTQ6Arh93SHt8PJNhnkzS76A=;
-        b=enH77B53FJJeWvyv50Atapmq7Cn5K5Q5YV447atdYzaeXBiYYmINUA0AnSXXZnKLfS
-         UxGnD7SU2VNBDatB4Wy+VT8jpUVooAMQ35BQSxoyM6c+MBAMFsIQTmnkQMwkC5/cz1qT
-         OuwhjrF02dICB6BMReYvpo46oiAdhQo+mzYNMzYyVDJQKmHZVf6pOal5UVUu7FrlKHeT
-         vw1E981eW2canVT5RMGBaLdJ6beyS1vjJBJT6D2WqggMUK1utbVx15km+5oE3lmFANA0
-         fT58UThqyNW9ho0yLqkOuXidFFoGIRqSONCJSRisCmGKBD/MRMeTIEe4Uv1UYKOCPi2b
-         L7zg==
-X-Gm-Message-State: ACgBeo1Ju3iERhUK8aG8gElaS/qk6yHm1eEldeFUvj/OXpoMDcVm5zRf
-        C770/CG98uYBcoZIR07vKP3d1w==
-X-Google-Smtp-Source: AA6agR4qNHuK519Im+LmKC2Dyrt7fi+TNPv6Ialp08tZQks0jZtMsiBr2xk+CxzRIiLrK+LeQ/NxSg==
-X-Received: by 2002:adf:fbc6:0:b0:21d:3fc3:99e with SMTP id d6-20020adffbc6000000b0021d3fc3099emr4737953wrs.550.1659716946942;
-        Fri, 05 Aug 2022 09:29:06 -0700 (PDT)
-Received: from henark71.. ([93.107.66.220])
-        by smtp.gmail.com with ESMTPSA id b10-20020a056000054a00b00220633d96f2sm5210086wrf.72.2022.08.05.09.29.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 09:29:06 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH 3/3] dt-bindings: riscv: add new riscv,isa strings for emulators
-Date:   Fri,  5 Aug 2022 17:28:45 +0100
-Message-Id: <20220805162844.1554247-4-mail@conchuod.ie>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220805162844.1554247-1-mail@conchuod.ie>
-References: <20220805162844.1554247-1-mail@conchuod.ie>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=JpK4cKjWfUdf5fiTOgPLG1JC3Xe7mGK2psxBpm/kgz0=;
+        b=5WmvgU3LEnUUlhoZvFAANJwRfEBY0n0UwBf2M7r7VbcsC//hRMH0CahIzWYYQpe7Y4
+         UvNAXCjug+d09y5p4dngiLK0+QAV/TaV57+LQc9bsTpOaJx5Qza+zsri7ODpKGVujXIO
+         bIZsNR1ZIPoCwpp5V48xoUvDzXQn9jnFemS6ofNEGcrd7/LbnS0QsNgnD44cVSJezucc
+         lTzFnagbCXpKyEM56vM+XKlhO71vJNrK7NShs2hmW27BxLOk1nEpU6M+nCpnMWdCpHtQ
+         gTtnsi5qH7K4CixJWsT0BFOlrWrOOer17BtX/EJkOrSCt7iRvFQu98fPhLUhWG52KfS+
+         vTJw==
+X-Gm-Message-State: ACgBeo0oDEqwOK+M4vgyeEK8YJn+eVK4JB0rrOPID19i5sZAZMd40V9D
+        diGI6JW3faDuUWg+91xcJMmtVIZdb6GVnno98e4=
+X-Google-Smtp-Source: AA6agR7Zsuuvu2R22w+jsFCs5Obdld9ZRUWowUJ7/XDtMD+zovP2x7IJKUXlcChmvQ7oXdoo4RS6v+yWnnoBfovePVI=
+X-Received: by 2002:a25:cc51:0:b0:676:ccba:875 with SMTP id
+ l78-20020a25cc51000000b00676ccba0875mr6093715ybf.137.1659716960892; Fri, 05
+ Aug 2022 09:29:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220805153834.2510142-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20220805153834.2510142-1-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 5 Aug 2022 18:29:09 +0200
+Message-ID: <CAJZ5v0jVp+AW06MqgOmQV=AmGtb7VdY_FYSxC6wT2BZw9uzxnQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] thermal/core: Rearm the monitoring only one time
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Aug 5, 2022 at 5:38 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> The current code calls monitor_thermal_zone() inside the
+> handle_thermal_trip() function. But this one is called in a loop for
+> each trip point which means the monitoring is rearmed several times
+> for nothing (assuming there could be several passive and active trip
+> points).
+>
+> Move the monitor_thermal_zone() function out of the
+> handle_thermal_trip() function and after the thermal trip loop, so the
+> timer will be disabled or rearmed one time.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-The QEMU virt and spike machines currently export a riscv,isa string of
-"rv64imafdcsuh", but this obviously has illegal extensions in it.
-The presense of "su" is a QEMU bug, so add an entry for the valid
-portion of the isa string.
+Does this series depend on any other?
 
-Reported-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/linux-riscv/20220803170552.GA2250266-robh@kernel.org/
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-Although the commit message says "a" string, I have added more than one
-isa string. My patched version of QEMU emits the full string with the
-multi letter extensions and I am not sure what the policy is for
-including them in the binding. Obviously I am more than willing to
-change the patch text if needed.
----
- Documentation/devicetree/bindings/riscv/cpus.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+You've been sending quite a lot of material lately and it is not
+always easy to tell what the dependencies between the different patch
+series are.
 
-diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-index d632ac76532e..59b942c5b9aa 100644
---- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-+++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-@@ -77,6 +77,8 @@ properties:
-     enum:
-       - rv64imac
-       - rv64imafdc
-+      - rv64imafdch
-+      - rv64imafdch_zicsr_zifencei_zba_zbb_zbc_zbs
- 
-   # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
-   timebase-frequency: false
--- 
-2.37.1
-
+> ---
+>  drivers/thermal/thermal_core.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index b4c68410c158..4e1a83987b99 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -383,11 +383,6 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+>                 handle_critical_trips(tz, trip, trip_temp, type);
+>         else
+>                 handle_non_critical_trips(tz, trip);
+> -       /*
+> -        * Alright, we handled this trip successfully.
+> -        * So, start monitoring again.
+> -        */
+> -       monitor_thermal_zone(tz);
+>  }
+>
+>  static void update_temperature(struct thermal_zone_device *tz)
+> @@ -503,6 +498,8 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
+>
+>         for (count = 0; count < tz->num_trips; count++)
+>                 handle_thermal_trip(tz, count);
+> +
+> +       monitor_thermal_zone(tz);
+>  }
+>  EXPORT_SYMBOL_GPL(thermal_zone_device_update);
+>
+> --
+> 2.25.1
+>

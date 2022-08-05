@@ -2,122 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4051258AE86
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8665858AE66
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240999AbiHEQz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 12:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S240923AbiHEQut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 12:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiHEQz5 (ORCPT
+        with ESMTP id S230244AbiHEQup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 12:55:57 -0400
-X-Greylist: delayed 437 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 05 Aug 2022 09:55:56 PDT
-Received: from hop.stappers.nl (hop.stappers.nl [IPv6:2a02:2308:0:14e::686f:7030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60ACB2871A;
-        Fri,  5 Aug 2022 09:55:56 -0700 (PDT)
-Received: from gpm.stappers.nl (gpm.stappers.nl [82.168.249.201])
-        by hop.stappers.nl (Postfix) with ESMTP id EFFC4200F4;
-        Fri,  5 Aug 2022 16:48:35 +0000 (UTC)
-Received: by gpm.stappers.nl (Postfix, from userid 1000)
-        id 96E2F304049; Fri,  5 Aug 2022 18:48:35 +0200 (CEST)
-Date:   Fri, 5 Aug 2022 18:48:35 +0200
-From:   Geert Stappers <stappers@stappers.nl>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH v9 01/27] kallsyms: use `sizeof` instead of hardcoded size
-Message-ID: <20220805164834.4xq7hm6ee6ywjpjo@gpm.stappers.nl>
-References: <20220805154231.31257-1-ojeda@kernel.org>
- <20220805154231.31257-2-ojeda@kernel.org>
+        Fri, 5 Aug 2022 12:50:45 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E001BEA5
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:50:44 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id bv3so3868632wrb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=yFyYh97IYuVooEC2yIKQXKO7OyDRqCyKCP13Fg1c4I4=;
+        b=NrSGXLYMebNqXf4mU8+m7aQGcgnArFz4n1QpBagkao3kWUCAU04iwwHRMQSQgSLRnA
+         O6JZq2cAbUId7q9FI+VJ7B0zBBTnKdO5gHSi2xR2O6YmVMJy/Dms3bdz3mKJ9NP4wJ4p
+         jQbz4SbEwslYi7JXN1D6aAsyqXS/iIcyTaWd9JoXidiTzl3RX9rk9h1b89GzdwVfEs71
+         k8qMK0e+mZC9xZgu9Kfqw/t2VAemEk+B5Uvupf7OE45Cslih9jEOFZ/kcfdrht719rOF
+         IMEaHJ+6IEuLG120BP9BJLvhjCBHb1LisD0wGsnZ4E2+Q41UzWuhM+f1YZk+HB8VG87O
+         hfGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=yFyYh97IYuVooEC2yIKQXKO7OyDRqCyKCP13Fg1c4I4=;
+        b=UtQDs7pbW52MiJRMER/nSsm3A0kt20IpIODveahUAassdAgqR5/eHPdkeCnmZ1UGt9
+         UeFgOXfQwCRxPvAo3LAEsLQNtrnI3JalgY2wb0R3OAnpU9ymXO92y6PZRQjpCoaRyzox
+         S1PvxxLaznyzv5NCBgUIfPcMx1rmILcSPuOKS+ghYKmFtCalP7GNmFooel4okmcM5oMN
+         50qsDR6OIh9T6TijD+jSuMDRIhh921uxp3z+VQccEqXoxhVjrLACShW7Gb4IWanGqayM
+         0aVdlWUMqV1Up1iv21keC5H+X2Kz+PZSwPH/La47ICBTF2ML2csiAumOoI0Tm9pEROL7
+         e46g==
+X-Gm-Message-State: ACgBeo1FMZW/UcelKe8+KVUEKif9wA4iaTYAyHOU2n6+4TtPH5d2j7sf
+        WoR1nO/aoc8dgRmz+iTUYUOITA==
+X-Google-Smtp-Source: AA6agR7rP8RAt3poO3DgHsTL5x3vNMfPJ30328j41H5hxzzcKLK2RonYR5W/ky83T7ZtboO9xdeECA==
+X-Received: by 2002:a05:6000:178e:b0:220:635f:eb13 with SMTP id e14-20020a056000178e00b00220635feb13mr4940675wrg.634.1659718243421;
+        Fri, 05 Aug 2022 09:50:43 -0700 (PDT)
+Received: from rainbowdash.office.codethink.co.uk ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id h28-20020a05600c2cbc00b003a4f08495b7sm11325374wmc.34.2022.08.05.09.50.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 09:50:42 -0700 (PDT)
+From:   Ben Dooks <ben.dooks@sifive.com>
+To:     linux-pwm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha --subject-prefix=PATCH v3 
+        <jude.onyenegecha@sifive.com>
+Subject: DesignWare PWM support for device-tree probing
+Date:   Fri,  5 Aug 2022 17:50:25 +0100
+Message-Id: <20220805165033.140958-1-ben.dooks@sifive.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ojgl5e33l337cax4"
-Content-Disposition: inline
-In-Reply-To: <20220805154231.31257-2-ojeda@kernel.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series is tidying up and adding device-tree support for the
+DesignWare DW-APB-timers block.
 
---ojgl5e33l337cax4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes:
 
-On Fri, Aug 05, 2022 at 05:41:46PM +0200, Miguel Ojeda wrote:
-> From: Boqun Feng <boqun.feng@gmail.com>
->=20
-> This removes one place where the `500` constant is hardcoded.
->=20
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  scripts/kallsyms.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index f18e6dfc68c5..52f5488c61bc 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -206,7 +206,7 @@ static struct sym_entry *read_symbol(FILE *in)
-> =20
->  	rc =3D fscanf(in, "%llx %c %499s\n", &addr, &type, name);
->  	if (rc !=3D 3) {
-> -		if (rc !=3D EOF && fgets(name, 500, in) =3D=3D NULL)
-> +		if (rc !=3D EOF && fgets(name, sizeof(name), in) =3D=3D NULL)
->  			fprintf(stderr, "Read error or end of file.\n");
->  		return NULL;
->  	}
-> --=20
-> 2.37.1
->=20
+v3:
+- change the compatible name
+- squash down pwm count patch
+- fixup patch naming
 
-
-Signed-off-by: Geert Stappers <stappers@stappers.nl>
-
-
-And I think that this patch and all other "rust" kallsyms patches
-allready should have been accepted in the v3 or v5 series.
+v2:
+- fix #pwm-cells count to be 3
+- fix indetation 
+- merge the two clock patches
+- add HAS_IOMEM as a config dependency
 
 
 
-
-
-Regards
-Geert Stappers
---=20
-Silence is hard to parse
-
---ojgl5e33l337cax4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEin8gjG2ecykWV0FNITXRI9jBm+wFAmLtSdsACgkQITXRI9jB
-m+yFvRAAqobvCSSsxB7Z87XEpwzMkNsdtwn04eRPEsQctCU3u1bfvVVHqq9G8rvH
-RwUeyPpAOxbmEs+B5UCE3CbU5p/tSuw4au2+Gn3S23aAJLSNQd/ddtai3ca02y5a
-Sw6ype8LlZsFnhmocfB+RsHsch7PQyS0CMkcfsFaYx7Lj44YsaHMLtuHOYt2jmCI
-/B2kKn7dze85uCPF/tronsLR9aD1kpSEQ4x/ZUyZ88OtE3pQKQvPu1IWHLsGPBNC
-bjg6NzkgyO4qFb3bgmv21q+VOSK3jMwr3kY1t9FoxMsHtoPi4c5+87aj4iLze0zK
-enrSYseH670xScX19DqZvrY+C9uh5iVBsv2+Pz/0WaR3HT4sUxg3xkl1wdMlA1Ui
-xLoBK3ayljhdaxhkLx6Eif5YxyB4BBCXq3cjugkMECT0L86DSj91dPB9mWGAItFN
-dydrsOmAnh4Jl/LahJYoSmnkmCBtxAL4p2WkLmpEvHHcAfw/Hx8Bwu0LKXigMdDh
-I4/BtNKknlceQ9hzY0VkeVbj3WUnZ2bkMPd1Q87YpQPVZlj6ArS+QXEB1Uq1GeHE
-29gmr3CZOlOMiXEXnLM17uS8w9smjIkx4WpuE5CK3F4aVjYBdRWZF8NDsmYWglMT
-K3RJ/FYKfaXfeXBwLLcN/vkgqOulY1Dg3buhg6mX5kYcjNCHlt4=
-=6Oog
------END PGP SIGNATURE-----
-
---ojgl5e33l337cax4--

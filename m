@@ -2,90 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A1D58B2BA
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 01:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D969B58B2C2
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 01:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241608AbiHEXVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 19:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S241623AbiHEXax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 19:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238141AbiHEXVG (ORCPT
+        with ESMTP id S241431AbiHEXav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 19:21:06 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE241D0F2
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 16:21:03 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id m4so7448799ejr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 16:21:03 -0700 (PDT)
+        Fri, 5 Aug 2022 19:30:51 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CCB1A81B
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 16:30:49 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id d14so5301948lfl.13
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 16:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=iJnXDkhY3WibcgHqNJ/apiNs6qhmQXpZMLsKos5BMCQ=;
-        b=eFUwGAvhoJ8EEYaGa/arj7adR8QlkncfXKcdX7iXgroj9yZ+Gm7dJ7Ts8/p6/xX1J5
-         x2r64ctbmyaFhx/lwup2rv3LDgDyHASHgKfhjxJiW6vrzdpSBUQpTRk11nT06VQg+LMi
-         l9uKIxCdZxEdhmLdSRr30emGV+zBPUQDQ3YRY=
+        bh=5+e88HfQH2lIucsXxwkZxdyfP+2njFIpGKdmQ0s6vaQ=;
+        b=ZK8Dljk4TO46z8nvkk219ZxDRYc85V4rtZtlROQhonB3PPjOO2z0gTucP8WSJdOsKe
+         qbGdeJOABn0xfboUvrMhnjnYC7+mQvxuFGsvcfVL2IdEgEOgYpgBzgQhuhgKcjZ6l80q
+         7DLaTUu2PpD0ClnNPaU1NAQvEGM+Voi6VXTVzJuNxhyP4GKlyTId4Gw1eRPCfScJhoxh
+         MrKfzPxGa+JXf/Skg/YJcDDyECArSk5+EuGP33YpIYG99HBZuAaCX8lzPH8g/9vmeRA1
+         7lCOCLqML6TfLAOLeNOxWiaesSJor/7yCdZmoJaO1uBlXWzv0DZYj/gFyJ4jR5nUISGa
+         nf7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=iJnXDkhY3WibcgHqNJ/apiNs6qhmQXpZMLsKos5BMCQ=;
-        b=E3WcEbEzVEOy8WjUP0hK/P4xqn4/DWkoYPruQEg+JEvzm/8yw/mxzy/hf36lk9G183
-         gzGkwHRVSkB42yfegSvmuRcj9L1811oCOSurUEQJ3wKC/44zsmg7/SB9g5QdgSZJ2Cp9
-         vBv5gkZHtgeeH1QlDMdMRURT38VFECqLiof1fp8pI0MMX5HhAmdoOcYTnjOKtIP0XJf2
-         GQ3eQiBtSm5KoBZnVQuriVD7fFmBBNr1+rqBNB7mQfvlopPbV6G2WGbrPr95ZxEdEaKL
-         2WN/07zTJJ4b+UZebcK8Ua2L1RgIfrSDuSaMgWVsJoSOWT0yrD0O/9q0B6FBY4sopOpQ
-         z7KQ==
-X-Gm-Message-State: ACgBeo0RWaF7Vl/sWEWHmlphdM3YLcjMu7Mlow5kC+B6/+Nnz2h619WT
-        dnwLzWCzTCyvjgkCk4cuYYfWuVxAUHghF+5k
-X-Google-Smtp-Source: AA6agR75d0gH/FGh6g4hAyW3MAD2UBwlM4m71fCYL3m3wU3Kg9oC4EcUmoM0hCMLC0UFtkZlJQGN1A==
-X-Received: by 2002:a17:907:7292:b0:72f:d76:b243 with SMTP id dt18-20020a170907729200b0072f0d76b243mr6781374ejc.230.1659741662242;
-        Fri, 05 Aug 2022 16:21:02 -0700 (PDT)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id l18-20020a1709060cd200b00730223dc5c0sm2054168ejh.206.2022.08.05.16.21.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 16:21:01 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id v5so2056243wmj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 16:21:01 -0700 (PDT)
-X-Received: by 2002:a1c:f603:0:b0:3a5:23ca:3e7c with SMTP id
- w3-20020a1cf603000000b003a523ca3e7cmr1634050wmc.38.1659741660817; Fri, 05 Aug
- 2022 16:21:00 -0700 (PDT)
+        bh=5+e88HfQH2lIucsXxwkZxdyfP+2njFIpGKdmQ0s6vaQ=;
+        b=vghr2rLhiSscU72xHhV1Xi1MVMsXkkknharZ0Nbxpn9LI/KegkxASOghL6ah+os+yY
+         icSDs/emf6GLRliA087ptPazTMbwGSdYAPJmO002dNA8Zye6+jPKYXRisJuLlD+vQ0Ve
+         qpCSKsfUekLM+KJpLr1yKJl6MXJGD4CQ9Bm/XEW7rFzd4tqVSGVOkvKArCmLDwwhDJkK
+         fENz/GpDmTN6e3ESSYS89NMTelK5nUxlGzbtLFEuyF8HC6hUnBwIIh/Bod5y6r2knjZT
+         FFple8PcKIDKWJNMac3qY37ZkWu+Dj8qat0KBC411hdKB4ioNnG5zkPkg7XjRvJ6C9C1
+         fZew==
+X-Gm-Message-State: ACgBeo0prMZciaTWIpbsXMqxmXpY5SKx2gtnXN6YdVA3VgIKQD3Vsyi/
+        nIqqrhJlTV8fH7LPjVFM/pzIPpyGYfCx4f4oYlNvcw==
+X-Google-Smtp-Source: AA6agR71hMou1+TenheE26zSVkyrFcJSLp/xxnA0rMCiPfBjfVp6MbcTrdFToBJoN9OoHXbHFye0UY5qBwCaNzGDYu8=
+X-Received: by 2002:a05:6512:b03:b0:489:e00a:b32 with SMTP id
+ w3-20020a0565120b0300b00489e00a0b32mr2883849lfu.368.1659742248023; Fri, 05
+ Aug 2022 16:30:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220803133541.18b82ec9344ed0e8b975fe5b@linux-foundation.org>
-In-Reply-To: <20220803133541.18b82ec9344ed0e8b975fe5b@linux-foundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 5 Aug 2022 16:20:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wheFdrnTLNhw6+2ekT_AuJHXHTWEKVQyJrA864mmjFKtQ@mail.gmail.com>
-Message-ID: <CAHk-=wheFdrnTLNhw6+2ekT_AuJHXHTWEKVQyJrA864mmjFKtQ@mail.gmail.com>
-Subject: Re: [GIT PULL] MM updates for 5.20-rc1
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     mm-commits@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+References: <20220801151928.270380-1-vipinsh@google.com> <YuhPT2drgqL+osLl@google.com>
+ <YuhoJUoPBOu5eMz8@google.com> <YulRZ+uXFOE1y2dj@google.com>
+ <YuldSf4T2j4rIrIo@google.com> <4ccbafb5-9157-ec73-c751-ec71164f8688@redhat.com>
+ <Yul3A4CmaAHMui2Z@google.com> <cedcced0-b92c-07bd-ef2b-272ae58fdf40@redhat.com>
+In-Reply-To: <cedcced0-b92c-07bd-ef2b-272ae58fdf40@redhat.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Fri, 5 Aug 2022 16:30:11 -0700
+Message-ID: <CAHVum0c=s8DH=p8zJcGzYDsfLY_qHEmvD1uF58h5WoUk6ZF8rQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Make page tables for eager page splitting
+ NUMA aware
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 1:35 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+On Wed, Aug 3, 2022 at 8:08 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> There are 6-7 conflicts with your tree here.  All very minor, mainly
-> related to the rename of Documentation/vm to Documentation/mm.
+> On 8/2/22 21:12, Sean Christopherson wrote:
+> > Ah crud, I misread the patch.  I was thinking tdp_mmu_spte_to_nid() was getting
+> > the node for the existing shadow page, but it's actually getting the node for the
+> > underlying physical huge page.
+> >
+> > That means this patch is broken now that KVM doesn't require a "struct page" to
+> > create huge SPTEs (commit  a8ac499bb6ab ("KVM: x86/mmu: Don't require refcounted
+> > "struct page" to create huge SPTEs").  I.e. this will explode as pfn_to_page()
+> > may return garbage.
+> >
+> >       return page_to_nid(pfn_to_page(spte_to_pfn(spte)));
+>
+> I was about to say that yesterday.  However my knowledge of struct page
+> things has been proved to be spotty enough, that I wasn't 100% sure of
+> that.  But yeah, with a fresh mind it's quite obvious that anything that
+> goes through hva_to_pfn_remap and similar paths will fail.
+>
+> > That said, I still don't like this patch, at least not as a one-off thing.  I do
+> > like the idea of having page table allocations follow the node requested for the
+> > target pfn, what I don't like is having one-off behavior that silently overrides
+> > userspace policy.
+>
+> Yes, I totally agree with making it all or nothing.
+>
+> > I would much rather we solve the problem for all page table allocations, maybe
+> > with a KVM_CAP or module param?  Unfortunately, that's a very non-trivial change
+> > because it will probably require having a per-node cache in each of the per-vCPU
+> > caches.
+>
+> A module parameter is fine.  If you care about performance to this
+> level, your userspace is probably homogeneous enough.
+>
 
-What? No. Yeah, the doc conflicts were annoying enough, with the
-Chinese translations having incorrect pointers to the original sources
-both before and after the move in the MM tree.
+Thank you all for the feedback and suggestions.
 
-But that xfs conflict was positively nasty and definitely not minor.
-Had to look up Darrick Wong's "here's how to do it" message from the
-linux-next days.
+Regarding dirty_log_perf_test, I will send out a patch to add an
+option which will tag vcpus to physical cpus using sched_setaffinity()
+calls. This should increase accuracy for the test.
 
-So I think I got it all right, but "very minor" it wasn't.
+ It seems like we are agreeing on two things:
 
-              Linus
+1. Keep the same behavior for the page table pages allocation for both
+during the page fault and during eager page splitting.
+2. Page table pages should be allocated on the same node where the
+underlying guest memory page is residing.
+
+Here are the two approaches, please provide feedback on which one
+looks more appropriate before I start spamming your inbox with my
+patches
+
+Approach A:
+Have per numa node cache for page table pages allocation
+
+Instead of having only one mmu_shadow_page_cache per vcpu, we provide
+multiple caches for each node
+
+either:
+mmu_shadow_page_cache[MAX_NUMNODES]
+or
+mmu_shadow_page_cache->objects[MAX_NUMNODES * KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE]
+
+We can decrease KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE to some lower value
+instead of 40 to control memory consumption.
+
+When a fault happens, use the pfn to find which node the page should
+belong to and use the corresponding cache to get page table pages.
+
+struct *page = kvm_pfn_to_refcounted_page(pfn);
+int nid;
+if(page) {
+      nid = page_to_nid(page);
+} else {
+     nid = numa_node_id();
+}
+
+...
+tdp_mmu_alloc_sp(nid, vcpu);
+...
+
+static struct kvm_mmu_page *tdp_mmu_alloc_sp(int nid, struct kvm_vcpu *vcpu) {
+...
+      sp->spt = kvm_mmu_memory_cache_alloc(nid,
+&vcpu->arch.mmu_shadow_page_cache);
+...
+}
+
+
+Since we are changing cache allocation for page table pages, should we
+also make similar changes for other caches like mmu_page_header_cache,
+mmu_gfn_array_cache, and mmu_pte_list_desc_cache? I am not sure how
+good this idea is.
+
+Approach B:
+Ask page from the specific node on fault path with option to fallback
+to the original cache and default task policy.
+
+This is what Sean's rough patch looks like.

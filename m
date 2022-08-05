@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01D458A8E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EB858A8E7
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240481AbiHEJgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 05:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        id S240539AbiHEJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 05:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237747AbiHEJg2 (ORCPT
+        with ESMTP id S240510AbiHEJgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 05:36:28 -0400
-Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F5329C91
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:36:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1659692153; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=e8TEMtLGWdvaN+wQZyT3nid9x9H52KceesT4LF/aXprbqVFGvnkFamzRHbUxCXVInKR1sF/J8vHtvD2elNhclA7fU+oEExzjU3jMMUt0QFODZPwJaQelvzYEYbcAnLd66+1UY7keDq6f+JlvGXR9lL/01Xc8sRFOBK1VrdVrusw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1659692153; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=ljhgzI/UF42hWnfoA4KaadY/VnflCDZrqOXQeik+4k4=; 
-        b=YW/6kywpozQh5mHOMfZ6bANCeGZGJBACRGt1QvRdZuDozgR/Q1Go6ps9xugIQ5V92tOB6C6TAYk26mKUJEjU2s5gUd4fjQp2WNlMr8msuU0VTuB0GUaqum5GBpIS5sOfTTYLx3Q30M7xxOMzmNnt5NIg4E4ru2sNDnemFlLFhDY=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659692153;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=ljhgzI/UF42hWnfoA4KaadY/VnflCDZrqOXQeik+4k4=;
-        b=a788DdDnnTYwwNEgkeNo6PlCJubYZK4nrWsaH3b/BshXQbsqkzKY6FzY9kqGT8jL
-        UlDeS2Cfg7+KrDRF9NNtnqF1DsA3HPgfKA1B4Jg4DAkCqNtkUSFN4JYYnqUAf+k3GN3
-        Djcu6mrZQbsKU1UAR7ET6isvaWDDveebxRlsY44s=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1659692141228305.5750996748818; Fri, 5 Aug 2022 15:05:41 +0530 (IST)
-Date:   Fri, 05 Aug 2022 15:05:41 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Eric Biggers" <ebiggers@kernel.org>
-Cc:     "christophe.jaillet" <christophe.jaillet@wanadoo.fr>,
-        "corbet" <corbet@lwn.net>, "dhowells" <dhowells@redhat.com>,
-        "edumazet" <edumazet@google.com>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "mchehab" <mchehab@kernel.org>, "rdunlap" <rdunlap@infradead.org>
-Message-ID: <1826d5c4a90.282ac4bf118702.5300662644268737477@siddh.me>
-In-Reply-To: <YuzFrzrTnTtUHMn/@sol.localdomain>
-References: <cd2a10ffd8cb11c79754f43d0d20fd3cd4ba9b7e.1659618705.git.code@siddh.me>
- <20220804144152.468916-1-code@siddh.me> <YuzFrzrTnTtUHMn/@sol.localdomain>
-Subject: Re: [PATCH v2 3/3] kernel/watch_queue: Remove wqueue->defunct and
- use pipe for clear check
+        Fri, 5 Aug 2022 05:36:49 -0400
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB9E7823F;
+        Fri,  5 Aug 2022 02:36:46 -0700 (PDT)
+Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Fri, 5 Aug 2022
+ 17:36:44 +0800
+Message-ID: <759c681e-ec03-4230-b34e-0b2ee67ac870@amlogic.com>
+Date:   Fri, 5 Aug 2022 17:36:44 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 5/6] arm64: dts: meson: add S4 Soc Peripheral clock
+ controller in DT
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220805085716.5635-1-yu.tu@amlogic.com>
+ <20220805085716.5635-6-yu.tu@amlogic.com>
+ <60f30470-ca14-1e12-3ed2-7b34c7a93f8a@linaro.org>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <60f30470-ca14-1e12-3ed2-7b34c7a93f8a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+X-Originating-IP: [10.18.29.47]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,27 +59,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 05 Aug 2022 12:54:31 +0530  Eric Biggers  wrote:
-> Why is the READ_ONCE() needed?  Doesn't wqueue->lock protect wqueue->pipe?
+Hi Krzysztof,
+     Thank you for your reply.
 
-We are changing the pointer while a notification can be potentially waiting to
-be posted to the pipe. So a barrier is needed to prevent compiler magic from
-reloading the value.
-
-This was remarked by David Howells here:
-https://lore.kernel.org/lkml/3558070.1658933200@warthog.procyon.org.uk/
-
-> This isn't the correct block comment format; it should look like:
+On 2022/8/5 17:16, Krzysztof Kozlowski wrote:
+> [ EXTERNAL EMAIL ]
 > 
->      /*
->       * This pipe will get freed by the caller free_pipe_info().
->       * Removing this reference also prevents new notifications.
->       */
+> On 05/08/2022 10:57, Yu Tu wrote:
+>> Added information about the S4 SOC Peripheral Clock controller in DT.
+>>
+>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>> ---
+>>   arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 26 +++++++++++++++++++++++
+>>   1 file changed, 26 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>> index a816b1f7694b..71be1dda15a2 100644
+>> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>> @@ -6,6 +6,8 @@
+>>   #include <dt-bindings/interrupt-controller/irq.h>
+>>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>   #include <dt-bindings/gpio/gpio.h>
+>> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
+>> +#include <dt-bindings/clock/amlogic,s4-clkc.h>
+>>   
+>>   / {
+>>   	cpus {
+>> @@ -100,6 +102,30 @@ clkc_pll: pll-clock-controller@8000 {
+>>   				#clock-cells = <1>;
+>>   			};
+>>   
+>> +			clkc_periphs: periphs-clock-controller {
 > 
-> - Eric
+> Node names should be generic, so "clock-controller"
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 > 
-
-Okay, will make the change.
-
-Thanks,
-Siddh
+> You miss here unit address. Test your DTS with dtbs check and with
+> regular compile with W=1.
+I will change to clkc_periphs: clock-controller@0 {.
+Is that okay?
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+> .

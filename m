@@ -2,163 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B08F58A6C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD24458A6C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240247AbiHEHL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 03:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
+        id S240340AbiHEHL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 03:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240376AbiHEHLB (ORCPT
+        with ESMTP id S240407AbiHEHLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 5 Aug 2022 03:11:01 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A083A13D6D
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 00:10:40 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id pm17so1906768pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 00:10:40 -0700 (PDT)
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CB027CFB
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 00:10:50 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id x25so2145767ljm.5
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 00:10:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=+TTzONA/D6X8kOwQstBuCxA5JSSlF4quOuCiq/JFqPg=;
-        b=d2EcMeO5TdFW9fstG94LiP18zn2Gj1wSiCI3bwsAPs/krF3f1Mfkvt4SWjqTtQDu1O
-         11pOO8xwKj6alzWd6jNxEB9daCp5+d0ga2Q815SF5H0YFfENBzV+E6iCaLcS0Gz5AxIB
-         VR7tRnCNLliA2Br88hcAIQ0qAAoCALIgtvj9/ylWxYKTxhl6LOxHtWocx/D0fvI4DLrQ
-         KkCP/orNv9usNby0jB5YX6tcHa6b6V7zoZ7GfBT+wRa6vX7oCeMFMAz68FbFSlkzDshe
-         ZphCfr6IWiecz+lFdxX+veoZm0RMK/VR1aUSx6r87pueHF1QOuNWNIb5DFe4j4YpDwbq
-         n8Ew==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=100CdEkhDrosnmQz7EudbC8ZWfUwtalSJ5D3M18Q6FY=;
+        b=QC830ppYy9m2gC8NTb7waklpSdUNcb+Jxp4muQSkcH91nbEqv6CEzgsLVXhngw6luL
+         GJ/IRTssrkJi2Vkp34a97meDQzyhAjGMZfWjEsYuV1VETpWJt31UsJVhaSVZEcse34Vb
+         VaV5RLaHXMRR/sdZzNt86nqSoBTEpREwhLKBQ5jfqtTEXvGWaTf3iBVE3SMWx292BnVL
+         tOcqoE/klRPV9FcB26tahB7ikUlUko1JJmT8BIpb6GE3Dgrsbnsex2H+nZQD21soVnf+
+         vZ0yBkgqzLPA6hF3F6EvP9n4NbC5rz2n1IpNWIXBAO8O16sFapdeG/d9DuUL3IxhWc35
+         /Lnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=+TTzONA/D6X8kOwQstBuCxA5JSSlF4quOuCiq/JFqPg=;
-        b=nmCyho9aTXAFeX0c0MI3/Q/Z6/LI/X2rq+71bcnmVgZX2RG3wQRmAekWXY4vFF3qKF
-         f2pmR9PB6iOqxz240jPsXcJsu0m8G+EFxXLWwXbJuL6e6vwUYKw4kcTgUZeCLH2pw11E
-         nX5H3cPMeWekrIWdbfERmwflYzwanX+9q2/ZszVhaqevdzBSnDLKi4m+SjvBgqPOVbiq
-         s5bVk4fYZURf55Vtur9iCBn5beyO72AVaLvlA5F0j4GGja9U+nRSpjiKr4iDtt46qD2Q
-         MHlYoYl4iPdWfZZrTUhdzlxQB08c1qABsG9WpNcEmJslS/XjlM+LaC1HFefAAUvq6Xqb
-         onDA==
-X-Gm-Message-State: ACgBeo3nujkywMWqgyOCQc4zLmGanfcmtfRqViujv+I2PWilqxcV5mdy
-        mCHnoWSESDXx6RTOjP2hDZoSn4F847GvZg==
-X-Google-Smtp-Source: AA6agR7TIErJU5B8btuaj/7lSLhxgrr4y84Xe0iMDLWqN9Ma/jXVwav3sx8UkoP4J9xfbxtiC8axeg==
-X-Received: by 2002:a17:90b:350a:b0:1f5:6a5e:5d12 with SMTP id ls10-20020a17090b350a00b001f56a5e5d12mr6663202pjb.46.1659683440092;
-        Fri, 05 Aug 2022 00:10:40 -0700 (PDT)
-Received: from [10.4.82.173] ([139.177.225.242])
-        by smtp.gmail.com with ESMTPSA id 204-20020a6218d5000000b00528c22fbb45sm2197721pfy.141.2022.08.05.00.10.36
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=100CdEkhDrosnmQz7EudbC8ZWfUwtalSJ5D3M18Q6FY=;
+        b=tzpUS+akdkqfGf7wGFY0bSMFOWRj+GtHNaGjikL3AiK31SPTfTCDl1a2uulFRmeBz2
+         /7BBpRAZED4WAeVHUajxufZHGzY0qJlpgF0sWqdvhVvJ/2Vth4WuvgGlKvn28e7Z25/S
+         ckRIgmQsB1DAsa+m9rxZ4OA0vSuwDJvjqPxKi90nX9wJaW8SCKGa4SAcANkorZUntS2x
+         uF6OmrPmsq/IgfgkyXYnl92WRrUGzhQ2IPWp0sDyHTMnR0zYd8F5DqsSMpk2E/RUvgFM
+         VPpaLBP0+1aCSF+NB3/ke0MmeOXLLzy8nsv2lcdL1mWREOmFuHTOegtzblmZ8jBSRhpZ
+         XGzg==
+X-Gm-Message-State: ACgBeo0eSAS5ToR0iM1UJjNrhl09rAd/NfbUk8yy1EPJWm9ds8bnr1Lv
+        KSdCJdn5Ydr+IloYFy5eJtKcOw==
+X-Google-Smtp-Source: AA6agR7bAellR9/ZAGMxlXj+T/e5BasXnChRj/qcqk+9/FSr4g+EdL9aKZIDF7BARWF/PCScbmh0xw==
+X-Received: by 2002:a05:651c:1a1f:b0:25d:af55:1a2b with SMTP id by31-20020a05651c1a1f00b0025daf551a2bmr1726953ljb.49.1659683449294;
+        Fri, 05 Aug 2022 00:10:49 -0700 (PDT)
+Received: from [192.168.1.6] ([77.222.167.48])
+        by smtp.gmail.com with ESMTPSA id e5-20020ac25465000000b0048ae518364dsm369552lfn.148.2022.08.05.00.10.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 00:10:39 -0700 (PDT)
-Message-ID: <5dbced25-7cef-7078-78a9-f47545e6a9fe@bytedance.com>
-Date:   Fri, 5 Aug 2022 15:10:34 +0800
+        Fri, 05 Aug 2022 00:10:47 -0700 (PDT)
+Message-ID: <cbd36b1b-1ddf-2d6b-40aa-88c40a41b526@linaro.org>
+Date:   Fri, 5 Aug 2022 09:10:45 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0
-Subject: Re: [PATCH v2] arm64: run softirqs on the per-CPU IRQ stack
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] dt-bindings: iio: gyroscope: bosch,bmg160: correct number
+ of pins
 Content-Language: en-US
-To:     will@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-References: <20220802065325.39740-1-zhengqi.arch@bytedance.com>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20220802065325.39740-1-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220727140148.223508-1-krzysztof.kozlowski@linaro.org>
+ <20220731133034.034dced1@jic23-huawei>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220731133034.034dced1@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/8/2 14:53, Qi Zheng wrote:
-> Currently arm64 supports per-CPU IRQ stack, but softirqs
-> are still handled in the task context.
+On 31/07/2022 14:30, Jonathan Cameron wrote:
+> On Wed, 27 Jul 2022 16:01:48 +0200
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> Since any call to local_bh_enable() at any level in the task's
-> call stack may trigger a softirq processing run, which could
-> potentially cause a task stack overflow if the combined stack
-> footprints exceed the stack's size, let's run these softirqs
-> on the IRQ stack as well.
+>> BMG160 has two interrupt pins to which interrupts can be freely mapped.
+>> Correct the schema to express such case and fix warnings like:
+>>
+>>   qcom/msm8916-alcatel-idol347.dtb: gyroscope@68: interrupts: [[97, 1], [98, 1]] is too long
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Acked-by: Will Deacon <will@kernel.org>
+> We may need more than this.  What if only INT2 is wired?  
 
-Hi Will,
+Right, thanks for pointing it out.
 
-Are we good to merge it into 6.0-rc1?
+> I'd expect such
+> a device's binding to include interrupt-names to cover that case.
+> We'd also need a bunch of driver code to route the resulting interrupts.
 
-Thanks,
-Qi
+Yes, which is a bit out of scope of fixing schema/DTS. The driver
+supports only one interrupt and bindings are unspecific, so I think the
+author just did not care about making it correct.
 
-> ---
-> v1: https://lore.kernel.org/lkml/20220708094950.41944-1-zhengqi.arch@bytedance.com/
-> RFC: https://lore.kernel.org/lkml/20220707110511.52129-1-zhengqi.arch@bytedance.com/
 > 
-> Changelog in v1 -> v2:
->   - temporarily discard [PATCH v1 2/2] to allow this patch to be merged first
->   - rebase onto the v5.19
->   - collect Reviewed-by and Acked-by
-> 
-> Changelog in RFC -> v1:
->   - fix conflicts with commit f2c5092190f2 ("arch/*: Disable softirq stacks on PREEMPT_RT.")
-> 
->   arch/arm64/Kconfig      |  1 +
->   arch/arm64/kernel/irq.c | 13 +++++++++++++
->   2 files changed, 14 insertions(+)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 1652a9800ebe..90f1ab403724 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -226,6 +226,7 @@ config ARM64
->   	select THREAD_INFO_IN_TASK
->   	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
->   	select TRACE_IRQFLAGS_SUPPORT
-> +	select HAVE_SOFTIRQ_ON_OWN_STACK
->   	help
->   	  ARM 64-bit (AArch64) Linux support.
->   
-> diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
-> index bda49430c9ea..c36ad20a52f3 100644
-> --- a/arch/arm64/kernel/irq.c
-> +++ b/arch/arm64/kernel/irq.c
-> @@ -22,6 +22,7 @@
->   #include <linux/vmalloc.h>
->   #include <asm/daifflags.h>
->   #include <asm/vmap_stack.h>
-> +#include <asm/exception.h>
->   
->   /* Only access this in an NMI enter/exit */
->   DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
-> @@ -71,6 +72,18 @@ static void init_irq_stacks(void)
->   }
->   #endif
->   
-> +#ifndef CONFIG_PREEMPT_RT
-> +static void ____do_softirq(struct pt_regs *regs)
-> +{
-> +	__do_softirq();
-> +}
-> +
-> +void do_softirq_own_stack(void)
-> +{
-> +	call_on_irq_stack(NULL, ____do_softirq);
-> +}
-> +#endif
-> +
->   static void default_handle_irq(struct pt_regs *regs)
->   {
->   	panic("IRQ taken without a root IRQ handler\n");
+> I think the snag is that adding such support will break existing bindings using the
+> below.
 
--- 
-Thanks,
-Qi
+I can prepare more relaxed version of the patch.
+
+Best regards,
+Krzysztof

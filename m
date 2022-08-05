@@ -2,249 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E8258A5F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B1E58A5F5
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235242AbiHEGj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 02:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
+        id S235794AbiHEGjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 02:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbiHEGjY (ORCPT
+        with ESMTP id S235406AbiHEGjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 02:39:24 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B09572EC7;
-        Thu,  4 Aug 2022 23:39:23 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-324293f1414so16587497b3.0;
-        Thu, 04 Aug 2022 23:39:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=+HMohhGyweMhIzKHTWtejYZYutFOLonOQxMpd/tWt8Q=;
-        b=pg/8JT7UyuGlPrRJ+2LQobjUgAuAQY9r2cQ+sQ99VOxFCABKbl7evpB9/VIboXfvyD
-         /s5WzUibPd6EcMYaKgsYP8v/FYnStcvUZnXx9W32Nm9oHP38obULIw1a8gPaMGdvfQPz
-         n8kGXGkb4/8PAqxslzf2NLw6jVF8vvjwHA0ectmf8uqxbzSqrQebxCwy3kKswqwHbcz0
-         zM1qq3HrhhvrtxlVvdTui4k3vZZMsBYRAfQFozSfCSnoBsmCOP664Ez0jqIJhn5/uYlb
-         ABnNfaXS+SimrG4cBqw9Tte6gzVkS/0F+5mcqMnJYAGHkc5+zphl+Yq10Pm/EL7zBFLO
-         fy3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+HMohhGyweMhIzKHTWtejYZYutFOLonOQxMpd/tWt8Q=;
-        b=MyGwUPHfN3ew1TIvd3QQCaiTuuRdzuMfqYStA/dHBvhuCeQbTs6taXZeizk0s1yFfe
-         OMBPxoHr2crIvqY4N6uPZk5a6U37P4czxTPvgcRBX30ia2I29r4Tlqp+oJld1ldmW1z5
-         nVaLkYPDqerbN1ON942ngo9LTeXQ+zWUCbd4I8V9T+ZFMt+8EKsaS5wL9LJmGcWnwdry
-         SKfswFpRPmBLY7Bl5Qjy2F1CjBSZ9FTziQtzL4rDPwR+J1hSdTkcD6JEmyGKlYcX1JwQ
-         9etEseLvqe45JYXRIvDzZugBj1yZm+lPo7R5pmGyOo05+N7kamG69jCZjRMG4ZcRf3q/
-         2oiQ==
-X-Gm-Message-State: ACgBeo1o/ok6Dtx8FSH9N1RsPRuXz6yKjRq7fKlErYtEITXk8OKNwQ0c
-        Oisx0VGWtWOTEGWuivC110kFcBtXV0zcDhEZKLU=
-X-Google-Smtp-Source: AA6agR6WkscG/ILZIJPc9ZQv0+GfINu9/9mcuZD/iEHyJmSlIsbOHQ8yztEQvir74orenW4wu/nU0ltvY3fqGmYdkxA=
-X-Received: by 2002:a81:7702:0:b0:328:297a:fdcb with SMTP id
- s2-20020a817702000000b00328297afdcbmr4653126ywc.335.1659681562232; Thu, 04
- Aug 2022 23:39:22 -0700 (PDT)
+        Fri, 5 Aug 2022 02:39:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7C972ED2
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 23:39:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 392DA61313
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:39:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40CEAC43470;
+        Fri,  5 Aug 2022 06:39:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659681583;
+        bh=I+kcE97Ve6/ReO0B8c5180Bc7abr6kASH5KpHGYE8A8=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=1hq61QxoWIElS+9Pl/b8sRq11hctbk7P2Ebd6DPZ8el95aG0HUuqJyMoMmRaaojzi
+         qUl3aMHwnnVYaiY3rRlYHbbJnNqN1IyFzjyFLT4oLR5B0dAhYUtZ7oLFFjimQfWD1J
+         cuRWQ6a8gZuYy0u8l2jUu2sT0fqhvZWD3eudoyws=
+Date:   Fri, 5 Aug 2022 08:39:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Grzegorz Szymaszek <gszymaszek@short.pl>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH 3/3] staging: r8188eu: make driver metadata macro names
+ more consistent
+Message-ID: <Yuy7Lc/TJMinuupA@kroah.com>
+References: <6c83e05e5dbccff5630ccfed9e40bf84c889b647.1659565180.git.gszymaszek@short.pl>
+ <7cc838a1e7f64c9aa88deffdb7986fbe55753be8.1659565180.git.gszymaszek@short.pl>
 MIME-Version: 1.0
-References: <20220724214100.593287-1-mazinalhaddad05@gmail.com>
-In-Reply-To: <20220724214100.593287-1-mazinalhaddad05@gmail.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Fri, 5 Aug 2022 08:39:11 +0200
-Message-ID: <CAKXUXMyQgNQf9O5Dvok7LCg-8nmk6LwTHbiew1q+anup=OkrMQ@mail.gmail.com>
-Subject: Re: [PATCH v2] media: dvb-usb: fix memory leak in dvb_usb_adapter_init()
-To:     Mazin Al Haddad <mazinalhaddad05@gmail.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        syzbot+f66dd31987e6740657be@syzkaller.appspotmail.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7cc838a1e7f64c9aa88deffdb7986fbe55753be8.1659565180.git.gszymaszek@short.pl>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 11:42 PM Mazin Al Haddad
-<mazinalhaddad05@gmail.com> wrote:
->
-> Fix a memory leak in dvb_usb_adapter_init() reported by syzkaller. The
-> problem is due to the error path exiting before incrementing
-> num_adapters_initalized, which is used as a reference counter to free
-> adapter's private data. There are multiple error paths that
-> dvb_usb_adapter_init() can exit from before incrementing the counter,
-> which lead to a memory leak as the current iteration is not accounted for.
-> Fix this by freeing the current iteration's adap->priv in each of the
-> error paths.
->
-> Syz Report:
-> BUG: memory leak
-> unreferenced object 0xffff8881172f1a00 (size 512):
->   comm "kworker/0:2", pid 139, jiffies 4294994873 (age 10.960s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffff844af012>] dvb_usb_adapter_init drivers/media/usb/dvb-usb/dvb-usb-init.c:75 [inline]
->     [<ffffffff844af012>] dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:184 [inline]
->     [<ffffffff844af012>] dvb_usb_device_init.cold+0x4e5/0x79e drivers/media/usb/dvb-usb/dvb-usb-init.c:308
->     [<ffffffff830db21d>] dib0700_probe+0x8d/0x1b0 drivers/media/usb/dvb-usb/dib0700_core.c:883
->     [<ffffffff82d3fdc7>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
->     [<ffffffff8274ab37>] call_driver_probe drivers/base/dd.c:542 [inline]
->     [<ffffffff8274ab37>] really_probe.part.0+0xe7/0x310 drivers/base/dd.c:621
->     [<ffffffff8274ae6c>] really_probe drivers/base/dd.c:583 [inline]
->     [<ffffffff8274ae6c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:752
->     [<ffffffff8274af6a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:782
->     [<ffffffff8274b786>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:899
->     [<ffffffff82747c87>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
->     [<ffffffff8274b352>] __device_attach+0x122/0x260 drivers/base/dd.c:970
->     [<ffffffff827498f6>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:487
->     [<ffffffff82745cdb>] device_add+0x5fb/0xdf0 drivers/base/core.c:3405
->     [<ffffffff82d3d202>] usb_set_configuration+0x8f2/0xb80 drivers/usb/core/message.c:2170
->     [<ffffffff82d4dbfc>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
->     [<ffffffff82d3f49c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
->     [<ffffffff8274ab37>] call_driver_probe drivers/base/dd.c:542 [inline]
->     [<ffffffff8274ab37>] really_probe.part.0+0xe7/0x310 drivers/base/dd.c:621
->     [<ffffffff8274ae6c>] really_probe drivers/base/dd.c:583 [inline]
->     [<ffffffff8274ae6c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:752
->
-> Link: https://syzkaller.appspot.com/bug?id=4d54f8bf7b98eecf6cd76ed5aaea883c5d9e502a
-> Reported-by: syzbot+f66dd31987e6740657be@syzkaller.appspotmail.com
-> Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
+On Thu, Aug 04, 2022 at 12:29:10AM +0200, Grzegorz Szymaszek wrote:
+> Rename DRIVERVERSION to DRV_VERSION so that it looks more alike the
+> other macros, DRV_NAME and FW_*, and matches the most popular (as it
+> seems from a quick review) conventions in other drivers.
+> 
+> Signed-off-by: Grzegorz Szymaszek <gszymaszek@short.pl>
 > ---
->
-> Changes in v2:
-> - Remove variable that is used to refcount and instead free current
->   iteration private data.
->
->  drivers/media/usb/dvb-usb/dvb-usb-init.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-> index 61439c8f33ca..69520d7ca25d 100644
-> --- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-> +++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-> @@ -80,16 +80,22 @@ static int dvb_usb_adapter_init(struct dvb_usb_device *d, short *adapter_nrs)
->                 }
->
->                 ret = dvb_usb_adapter_stream_init(adap);
-> -               if (ret)
-> +               if (ret) {
-> +                       kfree(adap->priv);
->                         return ret;
-> +               }
->
->                 ret = dvb_usb_adapter_dvb_init(adap, adapter_nrs);
-> -               if (ret)
-> +               if (ret) {
-> +                       kfree(adap->priv);
->                         goto dvb_init_err;
-> +               }
->
->                 ret = dvb_usb_adapter_frontend_init(adap);
-> -               if (ret)
-> +               if (ret) {
-> +                       kfree(adap->priv);
->                         goto frontend_init_err;
-> +               }
->
->                 /* use exclusive FE lock if there is multiple shared FEs */
->                 if (adap->fe_adap[1].fe)
-> @@ -112,6 +118,7 @@ static int dvb_usb_adapter_init(struct dvb_usb_device *d, short *adapter_nrs)
->
->  frontend_init_err:
->         dvb_usb_adapter_dvb_exit(adap);
-> +       return ret;
->  dvb_init_err:
->         dvb_usb_adapter_stream_exit(adap);
->         return ret;
+>  drivers/staging/r8188eu/include/drv_types.h | 5 ++---
+>  drivers/staging/r8188eu/os_dep/os_intfs.c   | 2 +-
+>  2 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/include/drv_types.h b/drivers/staging/r8188eu/include/drv_types.h
+> index f51b83515953..3328c66d1ef1 100644
+> --- a/drivers/staging/r8188eu/include/drv_types.h
+> +++ b/drivers/staging/r8188eu/include/drv_types.h
+> @@ -10,8 +10,6 @@
+>  #ifndef __DRV_TYPES_H__
+>  #define __DRV_TYPES_H__
+>  
+> -#define DRV_NAME "r8188eu"
 
-Mazin,
+This should just be KBUILD_MODNAME, no need to create yet-another-macro
+for this one.
 
-I did not review if this patch is right semantically, but concerning
-how to write and to modify error handling paths, there are a few
-questions and potential improvements for your patch:
+> -
+>  #include "osdep_service.h"
+>  #include "wlan_bssdef.h"
+>  #include "rtw_ht.h"
+> @@ -36,7 +34,8 @@
+>  #include "rtl8188e_hal.h"
+>  #include "rtw_fw.h"
+>  
+> -#define DRIVERVERSION	"v4.1.4_6773.20130222"
+> +#define DRV_NAME	"r8188eu"
 
-Before your patch,  dvb_usb_adapter_init() had three exit paths:
+Again, KBUILD_MODNAME
 
-- an early return when dvb_usb_adapter_stream_init() fails
-- a path to label dvb_init_err when dvb_usb_adapter_dvb_init() fails
-- a path to label frontend_init_err when dvb_usb_adapter_stream_exit() fails
+> +#define DRV_VERSION	"v4.1.4_6773.20130222"
 
-When dvb_usb_adapter_stream_exit() fails, the operations needed to
-roll back dvb_usb_adapter_dvb_init() were also needed.
-In other words, the execution path from frontend_init_err continues
-into the operations of the label dvb_init_err and does not just
-return.
+As the driver is now in the kernel, this "version" string can just go
+away.  Can you redo this patch to do the DRV_NAME thing first, and then
+drop the DRV_VERSION field after that?
 
-With your patch, you changed this:
+thanks,
 
-Why do you now not need to call dvb_usb_adapter_stream_exit() in the
-frontend_init_err case?
-
-Now, a simple syntactic and stylistic improvement to consider:
-
-You would like to have a kfree on all three error paths, rather than
-adding them three times you could just add them once. I have not
-checked if kfree(...) needs to be called before
-dvb_usb_adapter_dvb_exit() and dvb_usb_adapter_stream_exit(), or if it
-is fine to just call it after. Usually, this patch below implements a
-pretty standard pattern, though:
-
-diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-index 61439c8f33ca..58eea8ab5477 100644
---- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-+++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-@@ -81,7 +81,7 @@ static int dvb_usb_adapter_init(struct
-dvb_usb_device *d, short *adapter_nrs)
-
-                ret = dvb_usb_adapter_stream_init(adap);
-                if (ret)
--                       return ret;
-+                       goto stream_init_err;
-
-                ret = dvb_usb_adapter_dvb_init(adap, adapter_nrs);
-                if (ret)
-@@ -114,6 +114,8 @@ static int dvb_usb_adapter_init(struct
-dvb_usb_device *d, short *adapter_nrs)
-        dvb_usb_adapter_dvb_exit(adap);
- dvb_init_err:
-        dvb_usb_adapter_stream_exit(adap);
-+stream_init_err:
-+       kfree(adap->priv);
-        return ret;
- }
-
-
-I hope this helps a bit in your work.
-
-
-Just another hint:
-
-It might help if you can describe how somebody else (e.g., another
-mentee) can trigger the memory leak without your patch and see it
-being gone with your patch applied:
-
-Provide the kernel config (better even just the fragment needed), the
-link to a rootfs, the exact qemu command and the C reproducer.
-
-Then ask other mentees to test before and after the application of
-your patch and report their results. It is perfectly fine to ask
-others in the community to help you---they will help if they know you
-will help them in the future as well. The simpler the task and the
-better the task needed for testing is described, the higher chances
-that somebody may help here.
-
-In the end that interaction among mentees will also convince the
-maintainers (in this case: Mauro) that picking this patch into his
-tree is the right thing to do.
-
-Good luck.
-
-Lukas
+greg k-h

@@ -2,162 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E329758B259
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6BF58B262
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241817AbiHEWHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 18:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
+        id S241547AbiHEWR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 18:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241779AbiHEWHL (ORCPT
+        with ESMTP id S238102AbiHEWR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 18:07:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ECB12768;
-        Fri,  5 Aug 2022 15:07:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 376CD34598;
-        Fri,  5 Aug 2022 22:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659737228; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Sqb3DDDY6ymKLXpHg1cCPpNN3i1H+Y7M1+qegvCFOI4=;
-        b=owGONwNjkyDx95TgILNkWKR92IRHXPrKWLIhdBa33xZ7TGd9cttWU2pHqMucrGfdqiwmvG
-        8FSURQp08XTNUmacDqe4wD8rgn3el5kbpnWUiLnTx0ASDUtt3iIGEQdqkntaJnh3w1+s7h
-        M+lL/WvbZOiC5Ioi887IJHtx8AZs5Sc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659737228;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Sqb3DDDY6ymKLXpHg1cCPpNN3i1H+Y7M1+qegvCFOI4=;
-        b=n18gR4H902usgtITEMeNsF+ybYEfNiX6guWgSObTz7JeMISB3AutF5cvF615lSNyXRsJ3w
-        VbSd4lIZz1b7cJDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ECB5613A9C;
-        Fri,  5 Aug 2022 22:07:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RmgHOIuU7WLtUgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 05 Aug 2022 22:07:07 +0000
-Date:   Sat, 6 Aug 2022 00:07:06 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     linux-watchdog@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH] watchdog: wdat_wdt: Set the min and max timeout values
- properly
-Message-ID: <20220806000706.3eeafc9c@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Fri, 5 Aug 2022 18:17:26 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55C7183AC
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:17:24 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id w14so3746272plp.9
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=ZJtcr9fEhex1ZbEYDZnoQSyBPhqS7q79HP7zTOYQSF8=;
+        b=FljTYTTkjpeuCYnmkCbpOCLALwZfJbnC5bQKGbqsr2ZWzJZodmLrJgX+yf3MZeztLE
+         FWWuR7MuPGkOLeeSKrLii4CnmbfTB8h1xTcgDNJV5cttJ9oI4nuoWl7gXJsSGS+6gQhQ
+         IaL8a72rMqr72M3b1HtHbxfGl3TTu/785Z1/s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=ZJtcr9fEhex1ZbEYDZnoQSyBPhqS7q79HP7zTOYQSF8=;
+        b=zNv+Tnk9MOLSyQdappPrry//+XwRp16gGM4/qsSeI7Y2GxQWGt/niIVzN/VyjLnHwg
+         D8VBUGZ5os8OX3yGekFUp/Drv5C+9epxNxff7IiKySj6zF2+NxmzhrOmAKlu+mWr+4Mq
+         6lKQOOyK5L043WV+nnLzhBzdozt7WW8dJH9LeTXwgm1PuVpJ3Xljs3/uBGk97bJek6Am
+         vQyCA8ZWG4u/+p+2KENZSS1ZVfxujYx/X6uqYFy16h+cAf3I1NtgNIGP+/+F4jUl0Ryw
+         qMj4Oxrd+Dktzcd8VMRO2J0Er1kLq7sRCMkgrxRxhwVGKZfaUzlFwpbIbSZRspv4WFck
+         mQdw==
+X-Gm-Message-State: ACgBeo0793wUxlD2JdS3OuBWjQHxh4BGCW3ZuZ7gVxe/9vpw59PNmKaN
+        pUzcRBBqCtdy3Bp4+Vj0SHa5zA==
+X-Google-Smtp-Source: AA6agR5ZCKWJCg6qYS0tP2dZfL9pHJTLa4Wn6fzy1yZcEme+4Ko4oC/h354MUmj2/cT4Y+UYBTcLhQ==
+X-Received: by 2002:a17:90a:b785:b0:1f1:be59:a607 with SMTP id m5-20020a17090ab78500b001f1be59a607mr9456164pjr.84.1659737844220;
+        Fri, 05 Aug 2022 15:17:24 -0700 (PDT)
+Received: from evgreen-glaptop.lan ([98.45.66.167])
+        by smtp.gmail.com with ESMTPSA id b10-20020aa78eca000000b0052dce4edceesm3489164pfr.169.2022.08.05.15.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 15:17:23 -0700 (PDT)
+From:   Evan Green <evgreen@chromium.org>
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     Rajat Jain <rajatja@chromium.org>,
+        Evan Green <evgreen@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] platform/chrome: cros_ec: Expose suspend_timeout in debugfs
+Date:   Fri,  5 Aug 2022 15:17:17 -0700
+Message-Id: <20220805151551.1.Idd188ff3f9caddebc17ac357a13005f93333c21f@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wdat_wdt driver is misusing the min_hw_heartbeat_ms field. This
-field should only be used when the hardware watchdog device should not
-be pinged more frequently than a specific period. The ACPI WDAT
-"Minimum Count" field, on the other hand, specifies the minimum
-timeout value that can be set. This corresponds to the min_timeout
-field in Linux's watchdog infrastructure.
+In modern Chromebooks, the embedded controller has a mechanism where
+it will watch a hardware-controlled line that toggles in suspend, and
+wake the system up if an expected sleep transition didn't occur. This
+can be very useful for detecting power management issues where the
+system appears to suspend, but doesn't actually reach its lowest
+expected power states.
 
-Setting min_hw_heartbeat_ms instead can cause pings to the hardware
-to be delayed when there is no reason for that, eventually leading to
-unexpected firing of the watchdog timer (and thus unexpected reboot).
+Sometimes it's useful in debug and test scenarios to be able to control
+the duration of that timeout, or even disable the EC timeout mechanism
+altogether. Add a debugfs control to set the timeout to values other
+than the EC-defined default, for more convenient debug and
+development iteration.
 
-I'm also changing max_hw_heartbeat_ms to max_timeout for symmetry,
-although the use of this one isn't fundamentally wrong, but there is
-also no reason to enable the software-driven ping mechanism for the
-wdat_wdt driver.
-
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Fixes: 058dfc767008 ("ACPI / watchdog: Add support for WDAT hardware watchdog")
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc! Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Evan Green <evgreen@chromium.org>
 ---
-Untested, as I have no supported hardware at hand.
 
-Note to the watchdog subsystem maintainers: I must say I find the
-whole thing pretty confusing.
+ Documentation/ABI/testing/debugfs-cros-ec   | 22 +++++++++++++++++++++
+ drivers/platform/chrome/cros_ec.c           |  3 ++-
+ drivers/platform/chrome/cros_ec_debugfs.c   |  3 +++
+ include/linux/platform_data/cros_ec_proto.h |  1 +
+ 4 files changed, 28 insertions(+), 1 deletion(-)
 
-First of all, the name symmetry between min_hw_heartbeat_ms and
-max_hw_heartbeat_ms, while these properties are completely unrelated,
-is heavily misleading. max_hw_heartbeat_ms is really max_hw_timeout
-and should be renamed to that IMHO, if we keep it at all.
-
-Secondly, the coexistence of max_timeout and max_hw_heartbeat_ms is
-also making the code pretty hard to understand and get right.
-Historically, max_timeout was already supposed to be the maximum
-hardware timeout value. I don't understand why a new field with that
-meaning was introduced, subsequently changing the original meaning of
-max_timeout to become a software-only limit... but only if
-max_hw_heartbeat_ms is set.
-
-To be honest, I'm not sold to the idea of a software-emulated
-maximum timeout value above what the hardware can do, but if doing
-that makes sense in certain situations, then I believe it should be
-implemented as a boolean flag (named emulate_large_timeout, for
-example) to complement max_timeout instead of a separate time value.
-Is there a reason I'm missing, why it was not done that way?
-
-Currently, a comment in watchdog.h claims that max_timeout is ignored
-when max_hw_heartbeat_ms is set. However in watchdog_dev.c, sysfs
-attribute max_timeout is created unconditionally, and
-max_hw_heartbeat_ms doesn't have a sysfs attribute. So userspace has
-no way to know if max_timeout is the hardware limit, or whether
-software emulation will kick in for a specified timeout value. Also,
-there is no complaint if both max_hw_heartbeat_ms and max_timeout
-are set.
-
- drivers/watchdog/wdat_wdt.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
---- linux-5.18.orig/drivers/watchdog/wdat_wdt.c	2022-07-27 07:32:33.336928967 +0200
-+++ linux-5.18/drivers/watchdog/wdat_wdt.c	2022-08-05 19:49:19.607793835 +0200
-@@ -342,8 +342,8 @@ static int wdat_wdt_probe(struct platfor
- 		return -EINVAL;
+diff --git a/Documentation/ABI/testing/debugfs-cros-ec b/Documentation/ABI/testing/debugfs-cros-ec
+index 1fe0add99a2a99..8e7e76e6481550 100644
+--- a/Documentation/ABI/testing/debugfs-cros-ec
++++ b/Documentation/ABI/testing/debugfs-cros-ec
+@@ -54,3 +54,25 @@ Description:
+ 		this feature.
  
- 	wdat->period = tbl->timer_period;
--	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
--	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
-+	wdat->wdd.min_timeout = DIV_ROUND_UP(wdat->period * tbl->min_count, 1000);
-+	wdat->wdd.max_timeout = wdat->period * tbl->max_count / 1000;
- 	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
- 	wdat->wdd.info = &wdat_wdt_info;
- 	wdat->wdd.ops = &wdat_wdt_ops;
-@@ -450,8 +450,8 @@ static int wdat_wdt_probe(struct platfor
- 	 * watchdog properly after it has opened the device. In some cases
- 	 * the BIOS default is too short and causes immediate reboot.
- 	 */
--	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
--	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
-+	if (timeout < wdat->min_timeout ||
-+	    timeout > wdat->max_timeout) {
- 		dev_warn(dev, "Invalid timeout %d given, using %d\n",
- 			 timeout, WDAT_DEFAULT_TIMEOUT);
- 		timeout = WDAT_DEFAULT_TIMEOUT;
-
-
+ 		Output will be in the format: "0x%08x\n".
++
++What:		/sys/kernel/debug/<cros-ec-device>/suspend_timeout
++Date:		August 2022
++KernelVersion:	6.0
++Description:
++		Some ECs have a feature where they will track transitions to the
++		a hardware-controlled sleep line, such as Intel's SLP_S0 line,
++		in order to detect cases where a system failed to go into deep
++		sleep states. The suspend_timeout file controls the amount of
++		time in milliseconds the EC will wait before declaring a sleep
++		timeout event and attempting to wake the system.
++
++		Supply 0 to use the default value coded into EC firmware. Supply
++		65535 to disable the EC sleep failure detection mechanism.
++		Values in between 0 and 65535 indicate the number of
++		milliseconds the EC should wait after a sleep transition before
++		declaring a timeout. This includes both the duration after a
++		sleep command was received but before the hardware line changed,
++		as well as the duration between when the hardware line changed
++		and the kernel sent an EC resume command.
++
++		Output will be in the format: "%u\n".
+diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+index 8aace50d446d65..e8d3e2a29a58f5 100644
+--- a/drivers/platform/chrome/cros_ec.c
++++ b/drivers/platform/chrome/cros_ec.c
+@@ -115,7 +115,7 @@ static int cros_ec_sleep_event(struct cros_ec_device *ec_dev, u8 sleep_event)
+ 	if (ec_dev->host_sleep_v1) {
+ 		buf.u.req1.sleep_event = sleep_event;
+ 		buf.u.req1.suspend_params.sleep_timeout_ms =
+-				EC_HOST_SLEEP_TIMEOUT_DEFAULT;
++				ec_dev->suspend_timeout;
+ 
+ 		buf.msg.outsize = sizeof(buf.u.req1);
+ 		if ((sleep_event == HOST_SLEEP_EVENT_S3_RESUME) ||
+@@ -188,6 +188,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 	ec_dev->max_passthru = 0;
+ 	ec_dev->ec = NULL;
+ 	ec_dev->pd = NULL;
++	ec_dev->suspend_timeout = EC_HOST_SLEEP_TIMEOUT_DEFAULT;
+ 
+ 	ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
+ 	if (!ec_dev->din)
+diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
+index 0dbceee87a4b1a..530378bd4359dd 100644
+--- a/drivers/platform/chrome/cros_ec_debugfs.c
++++ b/drivers/platform/chrome/cros_ec_debugfs.c
+@@ -470,6 +470,9 @@ static int cros_ec_debugfs_probe(struct platform_device *pd)
+ 	debugfs_create_x32("last_resume_result", 0444, debug_info->dir,
+ 			   &ec->ec_dev->last_resume_result);
+ 
++	debugfs_create_u16("suspend_timeout", 0664, debug_info->dir,
++			   &ec->ec_dev->suspend_timeout);
++
+ 	ec->debug_info = debug_info;
+ 
+ 	dev_set_drvdata(&pd->dev, ec);
+diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+index 408b29ca4004be..60132444f7daa6 100644
+--- a/include/linux/platform_data/cros_ec_proto.h
++++ b/include/linux/platform_data/cros_ec_proto.h
+@@ -169,6 +169,7 @@ struct cros_ec_device {
+ 	int event_size;
+ 	u32 host_event_wake_mask;
+ 	u32 last_resume_result;
++	u16 suspend_timeout;
+ 	ktime_t last_event_time;
+ 	struct notifier_block notifier_ready;
+ 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.31.0
+

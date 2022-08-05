@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BB958B069
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 21:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 966BB58B071
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 21:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237936AbiHETch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 15:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S241361AbiHETkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 15:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiHETcf (ORCPT
+        with ESMTP id S240504AbiHETkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 15:32:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECBC1A810
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 12:32:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CB9261A18
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 19:32:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE23C43140
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 19:32:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659727953;
-        bh=mfEh6ybw6rE7/YvSjSNtL1TZqU0Vwg2ccAlpa8gmxCw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LX1rWOzm68paQ6IF/V/Z7Jyc4mrDJMxk18613pIutd20SJHjYfs8ZhEb+NcRWW05d
-         MXovB+DdlRSYT/gY3UIS7oUWTnQ6Ma47JwlMLJ2KnAmdSKv5rbgaSpS2BtD2/28tq4
-         rB1JGnZgbQBUwc6ohYPWw+vYSmCvEqBTbnujzgvplYHbExArH2u2i3DUWOv8LBCE7g
-         ScShm5/Xl1O0DZjH6hn6562iDgdMKwrr3b80zPM5FwwhwBnYEAnjLxH5S+is3Jhp9p
-         plohILwpbGdi9lOPyJmrVHVYDzrzbXoMNGgzVr7pUDH3A3H1U39o2wxM/bwqRJexqt
-         3iAmOBvR3Rk3A==
-Received: by mail-ej1-f51.google.com with SMTP id a7so6715293ejp.2
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 12:32:33 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3l/0Ol2w6CMs1rkk4Ehdox5T/WXGe/WoA/zccmO5XvEh3MWu63
-        Wcsg13Jrc3KFJq0kayozI7jMN0YX9PktRAaYNPo=
-X-Google-Smtp-Source: AA6agR6sufpPn7fKAXba69irZ//FbrrVb5P7LMB5EmBMDbLarfIv7nL6lJv4uXFV2w0bUTCcP1jOVQ494qKG5VTQJm8=
-X-Received: by 2002:a17:907:28d6:b0:731:5d0:4401 with SMTP id
- en22-20020a17090728d600b0073105d04401mr2212923ejc.765.1659727951560; Fri, 05
- Aug 2022 12:32:31 -0700 (PDT)
+        Fri, 5 Aug 2022 15:40:47 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA09F11452
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 12:40:45 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id x39so4755067lfu.7
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 12:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=rty6mPaEYkYj+hk2AIwEoGnTyks1fl0dWOatixd39IQ=;
+        b=ZVdfbFAYeIUhGFL1MsmiiKPKr/iDRfw7LNLWovNYdZMMSqGycmpqxqzuBFS59yToBK
+         MPF47XlwvkHwloFZ0QU+WvcrJW+xDfoqtCH6+uSUqgYSW2NOjGo2det5Od7Njoq5Ml6/
+         +CwAoGIa929cRNttmpn9qxEz7B25vEtt9azLRc4iOHcQBoQNErztOE3hjKnLTHyzGigl
+         4mvtAuLzu+sJRNekNhuKmQSjb7IotNHEnum47KHJxbGqltNqRcXB5U3smOfpln9CRsBE
+         QX1tQ+doOlI35hmgOmUSmYGQtWtHtzm0jO8ApsmID8pbklD+AmnrFFEawPFrZlRm05Ee
+         pU5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=rty6mPaEYkYj+hk2AIwEoGnTyks1fl0dWOatixd39IQ=;
+        b=ClFEGE0Nl+q5oTU/tetMBsDw9Q0bNvw9yUnDCFwSOndE2oKYXRi4SQ891SSpsA0A4B
+         fjCCSG/pCl17F4d5XPr55ZSa0rPafMeEVVUvkLgHTkXV4VftsKitc4KsVlOmk4oEkSRM
+         1L75tMfexKAX/1Uhqfk6pRwvDiu7P9RQePdgw8ECXBuPrehpF4npjzLdFRlcFVAV9e0x
+         QekBcCoiGFYKtkm01ivPSaPkzvXHjRvOZHv3jlas4nATgJODbOih9kNYwq0Dyy//4VzA
+         HLF0lYhwk0QwE4H59A+xzJOLnTMrK53rEa4G9TyerSmRWL7Q0JnpBu1i4i4oc0tIX5Ox
+         t6dg==
+X-Gm-Message-State: ACgBeo1RgPMNGdkn/sKboIdw0qb1FbUXWWh8xcnyaEnDfzQLB8z7o9oL
+        AV3XX9xfSOGu+8C9vUK3jISPyA==
+X-Google-Smtp-Source: AA6agR4yyOputGlNoeiiinUA89rWH8MyQHy5pMHZ5HQQAH93EmzS4UkCpxA03zHmJI4OgjW4LGuxNA==
+X-Received: by 2002:a05:6512:3981:b0:48a:6fb9:74b7 with SMTP id j1-20020a056512398100b0048a6fb974b7mr2647305lfu.98.1659728443958;
+        Fri, 05 Aug 2022 12:40:43 -0700 (PDT)
+Received: from dmaluka.office.semihalf.net ([83.142.187.84])
+        by smtp.gmail.com with ESMTPSA id o4-20020a056512230400b0048a407f41bbsm560079lfu.238.2022.08.05.12.40.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 12:40:43 -0700 (PDT)
+From:   Dmytro Maluka <dmy@semihalf.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Rong L Liu <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
+        Dmitry Torokhov <dtor@google.com>,
+        Dmytro Maluka <dmy@semihalf.com>
+Subject: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
+Date:   Fri,  5 Aug 2022 21:39:14 +0200
+Message-Id: <20220805193919.1470653-1-dmy@semihalf.com>
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
 MIME-Version: 1.0
-References: <YuwRyQYPCb1FD+mr@debian> <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
- <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
- <YuwvfsztWaHvquwC@dev-arch.thelio-3990X> <9fb73284-7572-5703-93d3-f83a43535baf@amd.com>
- <CAK8P3a3Fv=_+GV9r=k4jP72zZOjJowL-GOue-51EhyVDBaEfEw@mail.gmail.com> <Yu1bMqL5tsbq1ojj@dev-arch.thelio-3990X>
-In-Reply-To: <Yu1bMqL5tsbq1ojj@dev-arch.thelio-3990X>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 5 Aug 2022 21:32:13 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3PAxkctN6AXOsoTBTFgwHhk7_OSYwJ4Rgk7Dbs+bc0Qw@mail.gmail.com>
-Message-ID: <CAK8P3a3PAxkctN6AXOsoTBTFgwHhk7_OSYwJ4Rgk7Dbs+bc0Qw@mail.gmail.com>
-Subject: Re: mainline build failure for x86_64 allmodconfig with clang
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,81 +79,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 8:02 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> On Fri, Aug 05, 2022 at 06:16:45PM +0200, Arnd Bergmann wrote:
-> > On Fri, Aug 5, 2022 at 5:32 PM Harry Wentland <harry.wentland@amd.com> wrote:
-> > While splitting out sub-functions can help reduce the maximum stack
-> > usage, it seems that in this case it makes the actual problem worse:
-> > I see 2168 bytes for the combined
-> > dml32_ModeSupportAndSystemConfigurationFull(), but marking
-> > mode_support_configuration() as noinline gives me 1992 bytes
-> > for the outer function plus 384 bytes for the inner one. So it does
-> > avoid the warning (barely), but not the problem that the warning tries
-> > to point out.
->
-> I haven't had a chance to take a look at splitting things up yet, would
-> you recommend a different approach?
+The existing KVM mechanism for forwarding of level-triggered interrupts
+using resample eventfd doesn't work quite correctly in the case of
+interrupts that are handled in a Linux guest as oneshot interrupts
+(IRQF_ONESHOT). Such an interrupt is acked to the device in its
+threaded irq handler, i.e. later than it is acked to the interrupt
+controller (EOI at the end of hardirq), not earlier. The existing KVM
+code doesn't take that into account, which results in erroneous extra
+interrupts in the guest caused by premature re-assert of an
+unacknowledged IRQ by the host.
 
-Splitting up large functions can help when you have large local variables
-that are used in different parts of the function, and the split gets the
-compiler to reuse stack locations.
+This patch series fixes this issue (for now on x86 only) by checking if
+the interrupt is unmasked when we receive irq ack (EOI) and, in case if
+it's masked, postponing resamplefd notify until the guest unmasks it.
 
-I think in this particular function, the problem isn't actually local variables
-but either pushing variables on the stack for argument passing,
-or something that causes the compiler to run out of registers so it
-has to spill registers to the stack.
+Patches 1 and 2 extend the existing support for irq mask notifiers in
+KVM, which is a prerequisite needed for KVM irqfd to use mask notifiers
+to know when an interrupt is masked or unmasked.
 
-In either case, one has to actually look at the generated output
-and then try to rearrange the codes so this does not happen.
+Patch 3 implements the actual fix: postponing resamplefd notify in irqfd
+until the irq is unmasked.
 
-One thing to try would be to condense a function call like
+Patches 4 and 5 just do some optional renaming for consistency, as we
+are now using irq mask notifiers in irqfd along with irq ack notifiers.
 
-                dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport(
+Please see individual patches for more details.
 
-&v->dummy_vars.dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport,
-                        mode_lib->vba.USRRetrainingRequiredFinal,
-                        mode_lib->vba.UsesMALLForPStateChange,
+v2:
+  - Fixed compilation failure on non-x86: mask_notifier_list moved from
+    x86 "struct kvm_arch" to generic "struct kvm".
+  - kvm_fire_mask_notifiers() also moved from x86 to generic code, even
+    though it is not called on other architectures for now.
+  - Instead of kvm_irq_is_masked() implemented
+    kvm_register_and_fire_irq_mask_notifier() to fix potential race
+    when reading the initial IRQ mask state.
+  - Renamed for clarity:
+      - irqfd_resampler_mask() -> irqfd_resampler_mask_notify()
+      - kvm_irq_has_notifier() -> kvm_irq_has_ack_notifier()
+      - resampler->notifier -> resampler->ack_notifier
+  - Reorganized code in irqfd_resampler_ack() and
+    irqfd_resampler_mask_notify() to make it easier to follow.
+  - Don't follow unwanted "return type on separate line" style for
+    irqfd_resampler_mask_notify().
 
-mode_lib->vba.PrefetchModePerState[mode_lib->vba.VoltageLevel][mode_lib->vba.maxMpcComb],
-                        mode_lib->vba.NumberOfActiveSurfaces,
-                        mode_lib->vba.MaxLineBufferLines,
-                        mode_lib->vba.LineBufferSizeFinal,
-                        mode_lib->vba.WritebackInterfaceBufferSize,
-                        mode_lib->vba.DCFCLK,
-                        mode_lib->vba.ReturnBW,
-                        mode_lib->vba.SynchronizeTimingsFinal,
+Dmytro Maluka (5):
+  KVM: x86: Move irq mask notifiers from x86 to generic KVM
+  KVM: x86: Add kvm_register_and_fire_irq_mask_notifier()
+  KVM: irqfd: Postpone resamplefd notify for oneshot interrupts
+  KVM: irqfd: Rename resampler->notifier
+  KVM: Rename kvm_irq_has_notifier()
 
-mode_lib->vba.SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
-                        mode_lib->vba.DRRDisplay,
-                        v->dpte_group_bytes,
-                        v->meta_row_height,
-                        v->meta_row_height_chroma,
+ arch/x86/include/asm/kvm_host.h |  17 +---
+ arch/x86/kvm/i8259.c            |   6 ++
+ arch/x86/kvm/ioapic.c           |   8 +-
+ arch/x86/kvm/ioapic.h           |   1 +
+ arch/x86/kvm/irq_comm.c         |  74 +++++++++++------
+ arch/x86/kvm/x86.c              |   1 -
+ include/linux/kvm_host.h        |  21 ++++-
+ include/linux/kvm_irqfd.h       |  16 +++-
+ virt/kvm/eventfd.c              | 136 ++++++++++++++++++++++++++++----
+ virt/kvm/kvm_main.c             |   1 +
+ 10 files changed, 221 insertions(+), 60 deletions(-)
 
-v->dummy_vars.DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation.mmSOCParameters,
-                        mode_lib->vba.WritebackChunkSize,
-                        mode_lib->vba.SOCCLK,
-                        v->DCFCLKDeepSleep,
-                        mode_lib->vba.DETBufferSizeY,
-                        mode_lib->vba.DETBufferSizeC,
-                        mode_lib->vba.SwathHeightY,
-                        mode_lib->vba.SwathHeightC,
-                        mode_lib->vba.LBBitPerPixel,
-                        v->SwathWidthY,
-                        v->SwathWidthC,
-                        mode_lib->vba.HRatio,
-                        mode_lib->vba.HRatioChroma,
-                        mode_lib->vba.vtaps,
-                        mode_lib->vba.VTAPsChroma,
-                        mode_lib->vba.VRatio,
-                        mode_lib->vba.VRatioChroma,
-                        mode_lib->vba.HTotal,
-                        mode_lib->vba.VTotal,
-                        mode_lib->vba.VActive,
-                        mode_lib->vba.PixelClock,
-                        mode_lib->vba.BlendingAndTiming,
-                        .... /* more arguments */);
+-- 
+2.37.1.559.g78731f0fdb-goog
 
-into calling conventions that take a pointer to 'mode_lib->vba' and another
-one to 'v', so these are no longer passed on the stack individually.
-
-       Arnd

@@ -2,122 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB3D58AC72
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F5958AC76
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240935AbiHEOll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 10:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
+        id S240755AbiHEOmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 10:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiHEOlk (ORCPT
+        with ESMTP id S238404AbiHEOmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 10:41:40 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3627F6151;
-        Fri,  5 Aug 2022 07:41:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659710499; x=1691246499;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jEZRMajvp62irH+o7cgsjZocWv3ZqbtMu1G37xj5vFw=;
-  b=CceQ7Xbdwk4FWfHSrIVCYF6ff5Z1hYhHkCpzaNPgJEEI/piT+/ZMbl6P
-   SqtEnwqF/XLS6DQ3RBnwRCJwIdGUugwGkU7n8xeF796z8LoAJjurEcThq
-   15rFBxPQZvf5maVLgh4FY1DbmBktpfJMvyZdBH+JiovTEl6HTpvD19kT0
-   2U/8m+ed3yw2aG3hfYISXCWZI3ExlgmdzXPF6wAquOgq+yyTuiqFIq75H
-   +wBzSu3kPgnjyFGUJHTXxCOeXqBY5OYSBaTi1nbjXcL72xz9oAdXI9Glo
-   kSbxurz8IagGvVhOtW7RZ67EkM7dur8WCebtt8tRrjHu8VNQredBnwr7w
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="376508901"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="376508901"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 07:41:38 -0700
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="579518635"
-Received: from rderber-mobl1.amr.corp.intel.com (HELO [10.212.217.71]) ([10.212.217.71])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 07:41:37 -0700
-Message-ID: <eb83fcd9-f331-4d54-1ab9-78db106ee66d@intel.com>
-Date:   Fri, 5 Aug 2022 07:41:38 -0700
+        Fri, 5 Aug 2022 10:42:35 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3480A6151;
+        Fri,  5 Aug 2022 07:42:34 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b986e329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:986e:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 997221EC04E4;
+        Fri,  5 Aug 2022 16:42:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1659710548;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=KkCwkA7DjGXzsX/Cj6z7o8QdXSs7RYlnTW9pafNUiVQ=;
+        b=JbhthMoEMvcUdbGNovlRlTGwXXNxq9AHlh5mpQPMJ8Av836+IAU1hZ7mRQjNTYKdPUvwnO
+        l6Dgc1hN5Em2KU+M/qzS3szBsmhLy3voT9pETQ8rdQUYlpdtdfxHil+q6zUZA4JJWChOna
+        1s6lbbzBI9hvQNPLCsu5gV//qAjVrc8=
+Date:   Fri, 5 Aug 2022 16:42:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kim Phillips <kim.phillips@amd.com>
+Cc:     x86@kernel.org, peterz@infradead.org, bpf@vger.kernel.org,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, thomas.lendacky@amd.com
+Subject: Re: [PATCH] x86/bugs: Enable STIBP for IBPB mitigated RetBleed
+Message-ID: <Yu0sT6vCofyWiAMI@zn.tnic>
+References: <20220804192201.439596-1-kim.phillips@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
-Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
-        Mel Gorman <mgorman@techsingularity.net>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
- <8cf143e7-2b62-1a1e-de84-e3dcc6c027a4@suse.cz>
- <cb9d3310-3bc0-8ecf-5e71-becce980235f@redhat.com>
- <f936b024-43e1-5390-e33f-ad7d355a2802@suse.cz>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <f936b024-43e1-5390-e33f-ad7d355a2802@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220804192201.439596-1-kim.phillips@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/5/22 06:38, Vlastimil Babka wrote:
->> I'm sure we could optimize for the !unaccepted memory via static keys
->> also in this version with some checks at the right places if we find
->> this to hurt performance?
-> It would be great if we would at least somehow hit the necessary code only
-> when dealing with a >=pageblock size block. The bitmap approach and
-> accepting everything smaller uprofront actually seems rather compatible. Yet
-> in the current patch we e.g. check PageUnaccepted(buddy) on every buddy size
-> while merging.
+On Thu, Aug 04, 2022 at 02:22:01PM -0500, Kim Phillips wrote:
+> For retbleed=ibpb, force STIBP on machines that have it,
 
-Needing to check PageUnaccepted() during the merge is fallout from
-moving the acceptance to post_alloc_hook().  I _think_ an earlier
-version of this did page acceptance under the zone lock, closer to where
-the page comes off the 2M/4M lists.
+Because?
 
-But, page acceptance is horribly slow, so I asked Kirill to move it out
-from under the zone lock.  Doing it in post_alloc_hook() (after the zone
-lock is dropped) makes a lot of sense since we do zeroing in there and
-zeroing is also nice and slow.
+> and report its SMT vulnerability status accordingly.
+> 
+> Fixes: 3ebc17006888 ("x86/bugs: Add retbleed=ibpb")
+> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt |  4 +++-
+>  arch/x86/kernel/cpu/bugs.c                      | 10 ++++++----
+>  2 files changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 597ac77b541c..127fa4328360 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -5212,10 +5212,12 @@
+>  			ibpb	     - mitigate short speculation windows on
+>  				       basic block boundaries too. Safe, highest
+>  				       perf impact.
 
-But, post_alloc_hook() is long after the 2M page has been split and that
-means that we have to deal with potentially unaccepted pages during merges.
+You should put some blurb here about STIBP and why it is being enabled,
+where present.
 
-I think there are three basic options:
+> +			ibpb,nosmt   - like ibpb, but will disable SMT when STIBP
+> +			               is not available.
+>  			unret        - force enable untrained return thunks,
+>  				       only effective on AMD f15h-f17h
+>  				       based systems.
+> -			unret,nosmt  - like unret, will disable SMT when STIBP
+> +			unret,nosmt  - like unret, but will disable SMT when STIBP
+>  			               is not available.
+>  
+>  			Selecting 'auto' will choose a mitigation method at run
+> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> index fd5464ff714d..f710c012f1eb 100644
+> --- a/arch/x86/kernel/cpu/bugs.c
+> +++ b/arch/x86/kernel/cpu/bugs.c
+> @@ -152,7 +152,7 @@ void __init check_bugs(void)
+>  	/*
+>  	 * spectre_v2_user_select_mitigation() relies on the state set by
+>  	 * retbleed_select_mitigation(); specifically the STIBP selection is
+> -	 * forced for UNRET.
+> +	 * forced for UNRET or IBPB.
+>  	 */
+>  	spectre_v2_user_select_mitigation();
+>  	ssb_select_mitigation();
+> @@ -1181,7 +1181,8 @@ spectre_v2_user_select_mitigation(void)
+>  	    boot_cpu_has(X86_FEATURE_AMD_STIBP_ALWAYS_ON))
+>  		mode = SPECTRE_V2_USER_STRICT_PREFERRED;
+>  
+> -	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
+> +	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
+> +	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
+>  		if (mode != SPECTRE_V2_USER_STRICT &&
+>  		    mode != SPECTRE_V2_USER_STRICT_PREFERRED)
+>  			pr_info("Selecting STIBP always-on mode to complement retbleed mitigation\n");
+> @@ -2346,10 +2347,11 @@ static ssize_t srbds_show_state(char *buf)
+>  
+>  static ssize_t retbleed_show_state(char *buf)
+>  {
+> -	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
+> +	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
+> +	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
+>  	    if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+>  		boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
+> -		    return sprintf(buf, "Vulnerable: untrained return thunk on non-Zen uarch\n");
+> +		    return sprintf(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
 
-1. This patch: Do acceptance after the zone lock is dropped and deal
-   with mixed-acceptance merges
-2. Do acceptance under the zone lock as pages come off the 2M/4M lists,
-   but before the page is split.
-3. Pull the page off the 2M/4M lists, drop the zone lock, accept it,
-   then put it back.
+Well, you can't lump those together.
 
-I'm not sure any of those other options are better.
+You can't especially say "Vulnerable" and "IBPB" in one line.
+
+To quote from the BTC paper:
+
+"Software may choose to perform an IBPB command on entry into privileged
+code in order to avoid any previous branch prediction information from
+subsequently being used. This effectively mitigates all forms of BTC for
+scenarios like user-to-supervisor or VM-to-hypervisor attacks."
+
+Especially if we disable SMT only on !STIBP parts:
+
+        if (mitigate_smt && !boot_cpu_has(X86_FEATURE_STIBP) &&
+            (retbleed_nosmt || cpu_mitigations_auto_nosmt()))
+                cpu_smt_disable(false);
+
+If there are AMD parts which have IBPB but DO NOT have STIBP, then you
+can say "Vulnerable... IBPB" but then you need to check for !STIBP and
+issue that on a separate line.
+
+I'd say...
+
+-- 
+Regards/Gruss,
+    Boris.

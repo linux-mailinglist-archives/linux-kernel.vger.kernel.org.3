@@ -2,372 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A0A58B0AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 22:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D447258B0AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 22:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241493AbiHEUBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 16:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
+        id S241530AbiHEUB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 16:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241363AbiHEUBS (ORCPT
+        with ESMTP id S241528AbiHEUBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 16:01:18 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804AD11A1C
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 13:01:17 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-32851d0f8beso29060947b3.22
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 13:01:17 -0700 (PDT)
+        Fri, 5 Aug 2022 16:01:45 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FCD78597;
+        Fri,  5 Aug 2022 13:01:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1659729698; x=1691265698;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=P9SSN6vz5v5tnJK62nzSEhUN7uUMSnnySHBc5Ru9evI=;
+  b=rwo3IFUFM+na1bcM83Z5qRsmwEkJFImOzXI2Z4aRYg5+cjMNmBkfPNtX
+   o4WBBDXz2XNfPnuyLNTt5aY9eT6LSaZlGkpoR9vCOWyglVF85a1eaXiXe
+   U1ES5v3Vpj0AwPN5Daaqa1S1Nl1U+dvVoYte+8IipSTSiB6IJxlpupxPI
+   u7iCWFBC1Vl4I/K4MSo0YPm9NSXlXsNmXhO/L15uheOdCoqY0mCvcRuXY
+   I1MzSrwVJrOa+whoF2nYMKnDAuvNXISGC95aa6BKQweKk6iEeBqU8Adcn
+   FLXlLIdBuy1UyVjDZqtPRL7iy9ByzzEmm0xynjdCWeoQV4YMoVit8aHbH
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="171205681"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Aug 2022 13:01:37 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 5 Aug 2022 13:01:32 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Fri, 5 Aug 2022 13:01:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nqMyiLU/VYWD/aJcZv1WufbC6AbfAtLRzqiDvDto1UBHIisWMnTBXxGVKC77/C7XduBi7b+/GelX0GAmeOYbfkYAJHOl99ajtmuvgExJIhz2vkBxfkFo5EA1LT1cBhu9HcMDlS/jGwDiL6d/oNZ8VhIkS2/H3gV2roNdw3xSI6gQ/0TIvSVmJiT3gkREDDlME5oUUWvTYHxFqodbuOzBELhNI0xaONE2eFPtba5ULiLFHDnLqHeBMHmEeOv3iPjGYfsSFmODfO4Dd36HDuG+DY2WoRkdMo1KoC9iQTvaUzJkfftwkxbuYQiWvdRNNnFXaeGcqUGOI3vJYTsZLVtM+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P9SSN6vz5v5tnJK62nzSEhUN7uUMSnnySHBc5Ru9evI=;
+ b=F4UGm6FUcTx6ZdilHAEfBEzJDOnEL7VcRDEuYDUfqUsuqco0RGGZF86/jpfTNq6EAssYp45Wcn5wBGjJ4w3YS7d6JNR1jvdUpA7DkOa2/jfJSVSmug1pg80UDUph3gGfAyBXzD8qWX6+WPnbn7hORz1q86CCg5FWakDbAQvrwlKteLrMVIagfpU6+Wj0b+vuOsJZgRSJua6pagc/0+BZRDAVl4a0JxcCxJCZTbYnYr67Qmq6dSOaou3Tbyh+1FBYKZX6T/6osbxcSB3zZqiLLjVelq7Qv81tnAIBPXShh6lWHi9WQ8ZhDy1HW5RYeVF7sa6pFciYYf62DRq0ZW4Kag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=ha9AD4Sj+hwkiJ3LZTNTfKrp4WGHbc/BqXCKSvNaYpQ=;
-        b=B1hn6NxEJwKhZ1y8v6wcsYv5OAhMgoPF1X7sBQp1zn/zhwxJ9v3UT+oYd8CF6XuPLD
-         nnaR68gWVZm+QUpliphguKJ0VhvLNtsdAbLPPmBLpT7z/ni05Cngqwufj1cKQuLjLRRZ
-         s4yoa3x9013utzi8WqmloQGiUAGcToryptixS8l6+C4Qkd2BqMDCQT8zoJW8C971ubpC
-         2mn5d1ATcUsEgwm/mBiVh3s5Zf2bOpBgOS1kaDhIbMd4eJBltEDGkAPCs8EA92B5gu63
-         JyrQlQLieyTddsanpcdtAkZK12BoZPbOXJFSkPprkEd/W0m7Q41d9EBhk/QpWbhdkiro
-         uf5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=ha9AD4Sj+hwkiJ3LZTNTfKrp4WGHbc/BqXCKSvNaYpQ=;
-        b=N7971kz/9aCiLXA4R8LZyz7gUa5YS7DuHEFm7dW4wl7yiaiAkmoftqWzdcyAkUqq61
-         VY59HlcgftG+iKbDn3PHkxGfRxMpoWx2gFLV5UbLP9yrzBluWua3UCd6pVBu9V0No+Bp
-         jlmZpAtwrn2GLgoEd4Fi1fUW9z8KqptBCHsEUM1JiEWovTb1u+SN+jLrj6tZ7kVjHIfM
-         XNyZ2oJ/TsLEBY9NXcyT8fNsv6r8dulhp/X4/E0XP5Tnp2jJ2KChLjQHqaje/w5DI0Ps
-         d/8Tm7F9uYe+Y4ZveSQvQEBfuLlsI0/zoODnPP1NCeP3koqL8/t/a8jB7E6Rb7Qt+1TU
-         RR6w==
-X-Gm-Message-State: ACgBeo2OycSrVFg6zNbtMR4MMmRQKuo/EWO1ZdBYpogLJerAkvPVT/Hf
-        uubAUeyLNLkIAPiIC9R3S9f/09EVGvCD
-X-Google-Smtp-Source: AA6agR5ju/xKakaL3jFGX9yKp9awnqabU23NtmPCyvaZVpb5r10aHOzlqS8M1bOtMXWsHMg3sW02NQiajQ5+
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7470:b814:73a6:b6b9])
- (user=irogers job=sendgmr) by 2002:a25:58f:0:b0:672:52cf:5948 with SMTP id
- 137-20020a25058f000000b0067252cf5948mr6327035ybf.574.1659729676801; Fri, 05
- Aug 2022 13:01:16 -0700 (PDT)
-Date:   Fri,  5 Aug 2022 13:01:05 -0700
-In-Reply-To: <20220805200105.2020995-1-irogers@google.com>
-Message-Id: <20220805200105.2020995-3-irogers@google.com>
-Mime-Version: 1.0
-References: <20220805200105.2020995-1-irogers@google.com>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v7 2/2] perf test: Json format checking
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Claire Jensen <cjense@google.com>, Alyssa Ross <hi@alyssa.is>,
-        Like Xu <likexu@tencent.com>,
-        James Clark <james.clark@arm.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Claire Jensen <clairej735@gmail.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P9SSN6vz5v5tnJK62nzSEhUN7uUMSnnySHBc5Ru9evI=;
+ b=mtg//BgzEBAS32tJKdYL4RodqQWfw+X0abdu80gPULOtYxsBisXO29RN6gheH6LJGcuawcSzYzBF9kkzdKp01W701cVN8KAJUibbqLiEdcqgFGwAye5x2fmyH8XfO2rHE5LVQhTN8tIZCPLsWiwupl6OkeFnGyK3cQU1mn4KRP4=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by DM8PR11MB5701.namprd11.prod.outlook.com (2603:10b6:8:20::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Fri, 5 Aug
+ 2022 20:01:27 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3%8]) with mapi id 15.20.5504.016; Fri, 5 Aug 2022
+ 20:01:27 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <u.kleine-koenig@pengutronix.de>, <Conor.Dooley@microchip.com>
+CC:     <Daire.McNamara@microchip.com>, <devicetree@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lee.jones@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <robh+dt@kernel.org>,
+        <thierry.reding@gmail.com>
+Subject: Re: [PATCH v7 3/4] pwm: add microchip soft ip corePWM driver
+Thread-Topic: [PATCH v7 3/4] pwm: add microchip soft ip corePWM driver
+Thread-Index: AQHYnSZd8pL1UjMIH0GsTy6F2x+lta2bXl6AgAA/1YCABTL/AIAAAMoA
+Date:   Fri, 5 Aug 2022 20:01:27 +0000
+Message-ID: <428842ed-4070-ced8-e032-bfb48d5af4fe@microchip.com>
+References: <20220721172109.941900-1-mail@conchuod.ie>
+ <20220721172109.941900-4-mail@conchuod.ie>
+ <20220802084619.wunl3nglcpgo6j5i@pengutronix.de>
+ <e55e4a7f-b0bc-f48a-b555-d4b96d69bb87@microchip.com>
+ <20220805195836.vh3wv4xbpwjhuvfs@pengutronix.de>
+In-Reply-To: <20220805195836.vh3wv4xbpwjhuvfs@pengutronix.de>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6d2793be-5a5c-4220-56aa-08da771d482c
+x-ms-traffictypediagnostic: DM8PR11MB5701:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: p1Qw+JMi8uQ4ofkD0Aq6qwwl5sYWJhOhj3+9yoKVMf5tFFa1FEZDXDHIw9ip+MRzLrDOCR+pP+UeL4pQISDX9pU5ssuQGqMoRjaktGLMcPTJVZYEjFgtULW0l7Uxtpl3w8jnPz/rLncOizfnwmwxfLH5w4mn/A5U0DGrKX684ZDWp0PP00u+g0iLONimBa5sk1nYqsmrojZkyzvEL3UI+Yc7jYgoyCWKYBBD2nYvECv5OckMTFthFcod+ujGrMi393MhZVVAvKZic8kcxbSNq+ADOzwjDL+qNVrVxgx9/l3xrBG8O/f98N11cQHjx3+YhHSDnNduorJUwmYWj+mGlbLICHCgD9C0EOkKTLtvWpxdd+M2FRPdIzkzc3etgayqx0wJ19UWkXXSNdWAly4wF/YIamO6uxV+Csm3rh54Uc0aL5KUq8CHW7FkuAT2x2mHvIlIxHfrLF5ZKU6nNy0fBSByXBJqSpwF+tK9/P8k60fBwg1v5JHbXSrGTTrCr7Y7girsrgkGD5S6xPHocNjbfcYimQkERWPlTPz0I4Kff5T4G7RIND2ZiRx/NZXFgn9JpkKW1iSamHnwZ2tyrDNYo6kkAtzS/UzcmsIa5ilIF2vRpYeirC64KkU/c3MuOxSfvTnj60YVO/y3dTroNM3C5l5WrZAS2Wx3Zshcv8fyiv5l/CvUQe+GcFH5tGNDYKvC7dPS7frspKVvTXMeA0zCodcRs5bxd+WgQSoMMPkoHHnsC9QsNXuWpvG5v2wwku/GgjtWVY0sqkd/E+VFdJWI5fAZVBP7abZgJhS1g3KEOLA6+xV2rH69Or3q6b67DLsYVSaPwfDhX8WzIVrL9XeK8cceaLGEBfJE6RvyI/B5uasLeLqTQj5sRVHmDgLZ2aUa
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(366004)(396003)(136003)(346002)(39860400002)(71200400001)(41300700001)(26005)(31696002)(2906002)(122000001)(4744005)(6486002)(186003)(38100700002)(8936002)(5660300002)(6506007)(38070700005)(36756003)(316002)(31686004)(53546011)(8676002)(110136005)(64756008)(4326008)(66556008)(66446008)(54906003)(76116006)(66476007)(66946007)(6512007)(2616005)(478600001)(91956017)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M1hmSDRUTWxyMXZFY3MvVStUZS9TMU1veTFLRzFYb0NOajlGcERHLzZmaFA2?=
+ =?utf-8?B?MVlvN0paRktySHRRcFFlSVRlYmluSVFtZk43OHN5dzVpOU1SWHZsN2Y2NTMw?=
+ =?utf-8?B?U2NYZzEwb29LbWdJdjJQNmp0RVk0UGN2YVpFamJTSnZyQ3lJQWRyM045bnhj?=
+ =?utf-8?B?UlBocmY1UWlxdmtBdmpIWUNrcW05cE1DRXFFd3Z4ZkgrelZiajJvWlIzeDBB?=
+ =?utf-8?B?Q3liS2dCQ0E4Uk5KbGJkUUFyY21tOE51VndqNEFZSmdRRkdKR05MVGl2czBw?=
+ =?utf-8?B?eXdPcmVyZVE1RDdEUEZidHQrYjBHNXVxV0JtbktjdXkwb1lUYjd0SFUwRWlB?=
+ =?utf-8?B?SFBjMnB1Y2xFN2l2V0FFZ2tIV2JmdGpxdFF4aGJjLy9FUFVsanFWVVVPaHp2?=
+ =?utf-8?B?aFp4Nk1JZFZOZjNoOTdlYzJSbmk1SFNQMVY2eSszZ0tjdUJoSy9MSDhYaXpV?=
+ =?utf-8?B?T0QyY2R0YzBJYldsU3BxY1RDNGovQ2hHZ0tNY1dZdFFKNWJxQjV0Qk5EQzlO?=
+ =?utf-8?B?MjZxZkc2Y0dRT1cvM29kUDk2NGgxT2M0NlBuVTBLcHYvMGdPWXFyb1gyS2R1?=
+ =?utf-8?B?R2lCMjdVZXBEcUF1U0xFdG5icHp2aHhmSzhNM3ZhcU13QS9rZytCbmgzMWls?=
+ =?utf-8?B?RnVDZ3BzZzFDRDhFNFhaNFJiOThydURHV1JCQTFSRDBMZkNJbTNNZzRKYU1s?=
+ =?utf-8?B?WmhUaEpBcGNTaUdTTEZIRTFQQ3NYdjlERnJON1Fzc2Vqdk1mL3o2Qm8rdXhq?=
+ =?utf-8?B?VUtTb0tVd3NYVGpJYXhYNy9mN2UvZDduQ1kvdE1QUGQ0cGxMYldZK0FObkxt?=
+ =?utf-8?B?cVBOS2xaUFN2L0I0bkJLV3BsTTdieU1abDlIbTgya2xCMFRVUUtKYlhnSTRG?=
+ =?utf-8?B?Mm9ZcHRlSS9GRWthdlRsSlFobCtkSHlHS05hcHNBVWlJN214Q295bHpMQjhQ?=
+ =?utf-8?B?UnZXSWFsNWRRYnE2YnRUZTFNYkl6V1Ywdk1MMnV2SEw4eE4rRHhkTmtQSENL?=
+ =?utf-8?B?MDhKc0VQRC9ZQ3JNcHRWb2JjekUxeDJtdWhhOTdwaFJUV1hwQTJSYzZuRjZz?=
+ =?utf-8?B?TWNuSnVaR0l5L0h5dHcremFwUDFmNzYwMHlpNFpmalJKbHkxVVI5OWpDVVNN?=
+ =?utf-8?B?d256NkFpa0duNzZEbTZQcWNhT044UmtCZWdWVEFXaG94OERJVXErWFh0WG9n?=
+ =?utf-8?B?R3d5Y1g5YjZ3bnVFdFcwNFhRakxOa09Fc0xvUk9TQlBSY0t5M1ZDaHR2QUQr?=
+ =?utf-8?B?TXhoandrUnN4c2F5S3AvclozMmVHd2t2dXA2Um8xQVJGMmhHUXkyandjWjZM?=
+ =?utf-8?B?MFl3STJlbU5za3VYNSs5RFcxMjlsUEV3dGQwby9vV0hhUU94VTBNeUxjSFNi?=
+ =?utf-8?B?MThXcXFvNDlYek9BeEZ6ZkRiS1crLzJpS1Q5U1JPRzhCcXBHdy9OSy84Mk5p?=
+ =?utf-8?B?UWx0SVI2ZmdORVVqM1lKVUl0RHBDL0kxQlNFbnJOYk9aUEl0S0QrZVhDeUla?=
+ =?utf-8?B?M1VmZzllR1ZFeWZPTElYbEk1aGYyNjE3d3JRQkQxdVdjSjF5VUc3bExhNlV3?=
+ =?utf-8?B?QXB4V1hGdkFuRlRJTkV2bTNHTy81THZzdzZBZk5pRGI3Yk1Yc21rTzY2Y0Q1?=
+ =?utf-8?B?RnpGK0IxYldsZU90bjF1RlE0SGVrdWUxc0VtSmFCajZCY013NW1DR1lzcU1n?=
+ =?utf-8?B?VDQ5RW1rck5WN0h0cWYyamF3UkhJM1lhSmRtNlREQm5nSXFQekx3TFMwN0sr?=
+ =?utf-8?B?ZytvZkp6WDRXcUNYeW44bnN6bE40KzdZbFN1cnRtK09xc29UTG5CeUtaT1Fp?=
+ =?utf-8?B?NFNmZkVxZWNDZTBaajE0TlphaDBRVVdnQ3VCbm83MHBNQy9lV3hzdlJnbHgv?=
+ =?utf-8?B?K1BSTkpqRFZFalJsbTRMdmNzTlM1UHlkMmJaM0w3a3dodXB1emNsaG96VzRj?=
+ =?utf-8?B?ZGY0b1NBR1lLcVZMZE9FTGpEbENGa1RvWVZvd0tpMitqSU9pbDBhU3E3NElx?=
+ =?utf-8?B?eUdzdHdTK25RR0Z2VDZvaDc4WVFySzE0SEZlNm5OMjVyZ3BWeGt5UlN4b3ZN?=
+ =?utf-8?B?K0pqbUlNNERyVjFiUkpLS3MxTk1SMVYyS0wxZW14OG1Da1hCY01sWlV2aHI0?=
+ =?utf-8?B?dmNhRFhCUEZ2bm5jT040U1VUQk9DOXhLNU1kN3dVK25MSFNzVDdUcTBLNW5t?=
+ =?utf-8?B?OFE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <83689A9343C6664EAB4DBB9663077B4D@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d2793be-5a5c-4220-56aa-08da771d482c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2022 20:01:27.4500
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fOXP2Th3srR0APvDD2clvmZ5hLW+wvBp91HPmGOSZu36nivFU8aVLAVY3YSMmpUFy6dkHgY3kEeG4UXSULAbx8d1XSDrkul5DYAlrL6oRwY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5701
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claire Jensen <cjense@google.com>
-
-Add field checking tests for perf stat JSON output.
-Sanity checks the expected number of fields are present, that the
-expected keys are present and they have the correct values.
-
-Signed-off-by: Claire Jensen <cjense@google.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.perf                      |   3 +-
- .../tests/shell/lib/perf_json_output_lint.py  |  96 ++++++++++++
- tools/perf/tests/shell/stat+json_output.sh    | 147 ++++++++++++++++++
- 3 files changed, 245 insertions(+), 1 deletion(-)
- create mode 100644 tools/perf/tests/shell/lib/perf_json_output_lint.py
- create mode 100755 tools/perf/tests/shell/stat+json_output.sh
-
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 5053b563bf9c..b4c5160d3e85 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -1005,7 +1005,8 @@ install-tests: all install-gtk
- 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
- 		$(INSTALL) tests/shell/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
- 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
--		$(INSTALL) tests/shell/lib/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
-+		$(INSTALL) tests/shell/lib/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib' \
-+		$(INSTALL) tests/shell/lib/*.py '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
- 
- install-bin: install-tools install-tests install-traceevent-plugins
- 
-diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-new file mode 100644
-index 000000000000..d90f8d102eb9
---- /dev/null
-+++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-@@ -0,0 +1,96 @@
-+#!/usr/bin/python
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+# Basic sanity check of perf JSON output as specified in the man page.
-+
-+import argparse
-+import sys
-+import json
-+
-+ap = argparse.ArgumentParser()
-+ap.add_argument('--no-args', action='store_true')
-+ap.add_argument('--interval', action='store_true')
-+ap.add_argument('--system-wide-no-aggr', action='store_true')
-+ap.add_argument('--system-wide', action='store_true')
-+ap.add_argument('--event', action='store_true')
-+ap.add_argument('--per-core', action='store_true')
-+ap.add_argument('--per-thread', action='store_true')
-+ap.add_argument('--per-die', action='store_true')
-+ap.add_argument('--per-node', action='store_true')
-+ap.add_argument('--per-socket', action='store_true')
-+args = ap.parse_args()
-+
-+Lines = sys.stdin.readlines()
-+
-+def isfloat(num):
-+  try:
-+    float(num)
-+    return True
-+  except ValueError:
-+    return False
-+
-+
-+def isint(num):
-+  try:
-+    int(num)
-+    return True
-+  except ValueError:
-+    return False
-+
-+def is_counter_value(num):
-+  return isfloat(num) or num == '<not counted>' or num == '<not supported>'
-+
-+def check_json_output(expected_items):
-+  if expected_items != -1:
-+    for line in Lines:
-+      if 'failed' not in line:
-+        count = 0
-+        count = line.count(',')
-+        if count != expected_items and count >= 1 and count <= 3 and 'metric-value' in line:
-+          # Events that generate >1 metric may have isolated metric
-+          # values and possibly other prefixes like interval, core and
-+          # aggregate-number.
-+          continue
-+        if count != expected_items:
-+          raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
-+                             f' in \'{line}\'')
-+  checks = {
-+      'aggregate-number': lambda x: isfloat(x),
-+      'core': lambda x: True,
-+      'counter-value': lambda x: is_counter_value(x),
-+      'cgroup': lambda x: True,
-+      'cpu': lambda x: isint(x),
-+      'die': lambda x: True,
-+      'event': lambda x: True,
-+      'event-runtime': lambda x: isfloat(x),
-+      'interval': lambda x: isfloat(x),
-+      'metric-unit': lambda x: True,
-+      'metric-value': lambda x: isfloat(x),
-+      'node': lambda x: True,
-+      'pcnt-running': lambda x: isfloat(x),
-+      'socket': lambda x: True,
-+      'thread': lambda x: True,
-+      'unit': lambda x: True,
-+  }
-+  input = '[\n' + ','.join(Lines) + '\n]'
-+  for item in json.loads(input):
-+    for key, value in item.items():
-+      if key not in checks:
-+        raise RuntimeError(f'Unexpected key: key={key} value={value}')
-+      if not checks[key](value):
-+        raise RuntimeError(f'Check failed for: key={key} value={value}')
-+
-+
-+try:
-+  if args.no_args or args.system_wide or args.event:
-+    expected_items = 6
-+  elif args.interval or args.per_thread or args.system_wide_no_aggr:
-+    expected_items = 7
-+  elif args.per_core or args.per_socket or args.per_node or args.per_die:
-+    expected_items = 8
-+  else:
-+    # If no option is specified, don't check the number of items.
-+    expected_items = -1
-+  check_json_output(expected_items)
-+except:
-+  print('Test failed for input:\n' + '\n'.join(Lines))
-+  raise
-diff --git a/tools/perf/tests/shell/stat+json_output.sh b/tools/perf/tests/shell/stat+json_output.sh
-new file mode 100755
-index 000000000000..ea8714a36051
---- /dev/null
-+++ b/tools/perf/tests/shell/stat+json_output.sh
-@@ -0,0 +1,147 @@
-+#!/bin/bash
-+# perf stat JSON output linter
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+# Checks various perf stat JSON output commands for the
-+# correct number of fields.
-+
-+set -e
-+
-+pythonchecker=$(dirname $0)/lib/perf_json_output_lint.py
-+if [ "x$PYTHON" == "x" ]
-+then
-+	if which python3 > /dev/null
-+	then
-+		PYTHON=python3
-+	elif which python > /dev/null
-+	then
-+		PYTHON=python
-+	else
-+		echo Skipping test, python not detected please set environment variable PYTHON.
-+		exit 2
-+	fi
-+fi
-+
-+# Return true if perf_event_paranoid is > $1 and not running as root.
-+function ParanoidAndNotRoot()
-+{
-+	 [ $(id -u) != 0 ] && [ $(cat /proc/sys/kernel/perf_event_paranoid) -gt $1 ]
-+}
-+
-+check_no_args()
-+{
-+	echo -n "Checking json output: no args "
-+	perf stat -j true 2>&1 | $PYTHON $pythonchecker --no-args
-+	echo "[Success]"
-+}
-+
-+check_system_wide()
-+{
-+	echo -n "Checking json output: system wide "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j -a true 2>&1 | $PYTHON $pythonchecker --system-wide
-+	echo "[Success]"
-+}
-+
-+check_system_wide_no_aggr()
-+{
-+	echo -n "Checking json output: system wide "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	echo -n "Checking json output: system wide no aggregation "
-+	perf stat -j -A -a --no-merge true 2>&1 | $PYTHON $pythonchecker --system-wide-no-aggr
-+	echo "[Success]"
-+}
-+
-+check_interval()
-+{
-+	echo -n "Checking json output: interval "
-+	perf stat -j -I 1000 true 2>&1 | $PYTHON $pythonchecker --interval
-+	echo "[Success]"
-+}
-+
-+
-+check_event()
-+{
-+	echo -n "Checking json output: event "
-+	perf stat -j -e cpu-clock true 2>&1 | $PYTHON $pythonchecker --event
-+	echo "[Success]"
-+}
-+
-+check_per_core()
-+{
-+	echo -n "Checking json output: per core "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-core -a true 2>&1 | $PYTHON $pythonchecker --per-core
-+	echo "[Success]"
-+}
-+
-+check_per_thread()
-+{
-+	echo -n "Checking json output: per thread "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-thread -a true 2>&1 | $PYTHON $pythonchecker --per-thread
-+	echo "[Success]"
-+}
-+
-+check_per_die()
-+{
-+	echo -n "Checking json output: per die "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-die -a true 2>&1 | $PYTHON $pythonchecker --per-die
-+	echo "[Success]"
-+}
-+
-+check_per_node()
-+{
-+	echo -n "Checking json output: per node "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-node -a true 2>&1 | $PYTHON $pythonchecker --per-node
-+	echo "[Success]"
-+}
-+
-+check_per_socket()
-+{
-+	echo -n "Checking json output: per socket "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-socket -a true 2>&1 | $PYTHON $pythonchecker --per-socket
-+	echo "[Success]"
-+}
-+
-+check_no_args
-+check_system_wide
-+check_system_wide_no_aggr
-+check_interval
-+check_event
-+check_per_core
-+check_per_thread
-+check_per_die
-+check_per_node
-+check_per_socket
-+exit 0
--- 
-2.37.1.559.g78731f0fdb-goog
-
+T24gMDUvMDgvMjAyMiAyMDo1OCwgVXdlIEtsZWluZS1Lw7ZuaWcgd3JvdGU6DQo+IEhlbGxvIENv
+bm9yLA0KPiANCj4gT24gVHVlLCBBdWcgMDIsIDIwMjIgYXQgMTI6MzQ6MTRQTSArMDAwMCwgQ29u
+b3IuRG9vbGV5QG1pY3JvY2hpcC5jb20gd3JvdGU6DQo+PiBJJ2xsIGZpeCBpdCBhbGwgdXAgJiBz
+dWJtaXQgdjggYWZ0ZXIgLXJjMS4NCj4gDQo+IEkgZGlzY2FyZCB0aGUgd2hvbGUgc2VyaWVzIGlu
+IHBhdGNod29yayBpbiB0aGUgZXhwZWN0YXRpb24gdGhhdCBhbGwNCj4gcGF0Y2hlcyB3aWxsIGJl
+IHBhcnQgb2YgeW91ciB2OC4NCg0KVGhhdCB3YXMgbXkgcGxhbiwgZG9uJ3QgdGhpbmsgdGhlcmUn
+cyBhIHJ1c2ggb24gdGhlIGR0LWJpbmRpbmcgZml4Lg0KVGhhbmtzIFV3ZSwNCkNvbm9yLg0K

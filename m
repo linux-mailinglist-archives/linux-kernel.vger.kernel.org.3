@@ -2,181 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB32158B2B3
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 01:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D485358B2E6
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 01:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241578AbiHEXN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 19:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
+        id S238535AbiHEXy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 19:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241449AbiHEXNy (ORCPT
+        with ESMTP id S232791AbiHEXy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 19:13:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F5135589
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 16:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659741231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CQ0tUUX9dSdS4JRTC1zPGHaQM3Hc6bp+ASxYzjmtUmQ=;
-        b=E555HY3/Kht+Je+3fgfn9tVF44MH7avovwzM2VCN4BOZg5jU82FXTSTEXZugdZYPVj5y/3
-        1obQXpjJ79DJ5XJiMKTNcaDEVFBZh6jq1QWny9UlxBUHqJfq8KzYDcOAwU4bEr3s0SM6di
-        xlTj8kHW016iJpBtQRjtTyGGTAjoQno=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-sW-jUhTwMg-UXYrGQwbwag-1; Fri, 05 Aug 2022 19:13:50 -0400
-X-MC-Unique: sW-jUhTwMg-UXYrGQwbwag-1
-Received: by mail-qt1-f197.google.com with SMTP id a8-20020a05622a064800b00342240a9fccso2805949qtb.18
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 16:13:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=CQ0tUUX9dSdS4JRTC1zPGHaQM3Hc6bp+ASxYzjmtUmQ=;
-        b=Mi+qj8AMOhHIkdL3ZFPkpQvfos/JyMjIRgH6kC1RpC4z7Fb7NDnEHXJKPtD+eUhDtk
-         ipaRHP6tdcNN9kZgSjXQ76xb5wQV+b5F8POSEhH5L8Q1MBufc+9rlcL05+vozUI2AbzY
-         WI2MREN+1PSmwrLbNIelJZPjB9q4V38+c0cpSL6/xSFwaGxn7a4Xz9sa/mV+8V+VzqQI
-         hGkNuEYkbiaXw2oBCT0FN68fEe5nga4GzP/4K+UcXruSUqGEUWGhFeXVnap1uOVSHZYx
-         0s+7J4Uum2T/1nkCn3XgqAiOHVj/9gkvJz9LxnwSAeFvR5an5wOHLI20rLbcniKfZIHn
-         AoXg==
-X-Gm-Message-State: ACgBeo3fOzIGxNmaWRUsFH/j2wPYREZMijkdManf4L4mNDy4mFAXBWdh
-        ZIGQmVSTfORw568OrkDIixzVTOQiHtbeSfDQHQDu2cZoe78AKJEfivBbxK5SIi4nxNKmg5QZ3vN
-        CAp+B4F4J3ai8pKdaMXozcnqY
-X-Received: by 2002:a05:620a:b86:b0:6b8:d74e:1e08 with SMTP id k6-20020a05620a0b8600b006b8d74e1e08mr6881001qkh.166.1659741229905;
-        Fri, 05 Aug 2022 16:13:49 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7vQnU94QQncO9wXjydH0biWvfzN2On2lgdFWzew+raRRdFz5zCSICz/EgkRwetHoifGyaVTQ==
-X-Received: by 2002:a05:620a:b86:b0:6b8:d74e:1e08 with SMTP id k6-20020a05620a0b8600b006b8d74e1e08mr6880984qkh.166.1659741229647;
-        Fri, 05 Aug 2022 16:13:49 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id r11-20020ac87eeb000000b0031f286f868dsm3289067qtc.92.2022.08.05.16.13.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 16:13:49 -0700 (PDT)
-Date:   Fri, 5 Aug 2022 19:13:47 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Feiner <pfeiner@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] mm/hugetlb: fix hugetlb not supporting
- write-notify
-Message-ID: <Yu2kK6s8m8NLDjuV@xz-m1.local>
-References: <20220805110329.80540-1-david@redhat.com>
- <20220805110329.80540-2-david@redhat.com>
- <Yu1eCsMqa641zj5C@xz-m1.local>
- <Yu1gHnpKRZBhSTZB@monkey>
- <c2a3b903-099c-4b79-6923-8b288d404c51@redhat.com>
- <Yu1ie559zt8VvDc1@monkey>
- <73050e64-e40f-0c94-be96-316d1e8d5f3b@redhat.com>
- <Yu2CI4wGLHCjMSWm@monkey>
+        Fri, 5 Aug 2022 19:54:27 -0400
+X-Greylist: delayed 1039 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 05 Aug 2022 16:54:22 PDT
+Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB8C1AF0D
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 16:54:22 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; bh=J8J6PPB5B9eM7a3M73is6IRjHMAiGebZrLZRQe+1Ff0=;
+ c=relaxed/relaxed; d=matoro.tk;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@matoro.tk; s=20220801; t=1659741627; v=1; x=1660173627;
+ b=g5XrCDNUzsVAjAjZFsZjYZ24S9aLRq7h/3KSaEGcnBcDDqaRK+RSYwnaAY90FpzwxVaQF1NF
+ 3MNa0IT70NknLcM1JlhzVaAvQ+T5FBHftTYXNPo4hgTx0R4UhKsKuCKHtlDfIrMx0qroqwzkrIt
+ 5lYn0OTCxgw9jmpERilnPHUEtyNv+qrNEGNGMyeI6gJ70td5TRT9RGCTDtcQ2E2ynutTu8f+QZy
+ 325oIMukW3iVu4swvQWbAfnHhPDMXBfw0p4VEurlJcPV4c+kgK6s2DXoCoGjYhXQ2oQEEzqG2dn
+ +ewxJ9nfIXrleZivMz1tTsf4ESkGszpDSOmZwrlReRj5erU0nycGsjb+Uz+iGJG+1XyjtYiwYzG
+ Oi3DGEclNrMEVTK+9LVsmZCrlDpLHxM9hxB0z+5YormW9a6TcAm6aQJbUiSNSBmVNio7UbtJ8NM
+ vVvqS/VxfeR7kEzvghlzoRsApdAt4BUZqLt9sdJLg/uoQ1gGs9W+/Ve9qO5bXt15gGdLqS6t8Iz
+ TezdH1KfzS7jZkbq+1+HLY1ujy8PLBYPz+mWB1zX6OpS2OfY0IU7uLdqojRK5CIO9IMaJ8saIUx
+ HdIKZ+wnH/t556N4AH1FiEvdcRzzRzBLJM4dFqYf6bicPLvHbuIZ4LZWDTEyHA/eE1ESVmLp+mX
+ ywkEoUfpnsE=
+Received: by matoro.tk (envelope-sender
+ <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id 8629941e; Fri, 05 Aug
+ 2022 19:20:27 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yu2CI4wGLHCjMSWm@monkey>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Fri, 05 Aug 2022 19:20:27 -0400
+From:   matoro <matoro_mailinglist_kernel@matoro.tk>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+In-Reply-To: <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+References: <20220513113930.10488-1-masahiroy@kernel.org>
+ <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+Message-ID: <2c496d24174e63b27ec047f383df6700@matoro.tk>
+X-Sender: matoro_mailinglist_kernel@matoro.tk
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 01:48:35PM -0700, Mike Kravetz wrote:
-> On 08/05/22 20:57, David Hildenbrand wrote:
-> > On 05.08.22 20:33, Mike Kravetz wrote:
-> > > On 08/05/22 20:25, David Hildenbrand wrote:
-> > >> On 05.08.22 20:23, Mike Kravetz wrote:
-> > >>> On 08/05/22 14:14, Peter Xu wrote:
-> > >>>> On Fri, Aug 05, 2022 at 01:03:28PM +0200, David Hildenbrand wrote:
-> > >>>>> diff --git a/mm/mmap.c b/mm/mmap.c
-> > >>>>> index 61e6135c54ef..462a6b0344ac 100644
-> > >>>>> --- a/mm/mmap.c
-> > >>>>> +++ b/mm/mmap.c
-> > >>>>> @@ -1683,6 +1683,13 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
-> > >>>>>  	if ((vm_flags & (VM_WRITE|VM_SHARED)) != ((VM_WRITE|VM_SHARED)))
-> > >>>>>  		return 0;
-> > >>>>>  
-> > >>>>> +	/*
-> > >>>>> +	 * Hugetlb does not require/support writenotify; especially, it does not
-> > >>>>> +	 * support softdirty tracking.
-> > >>>>> +	 */
-> > >>>>> +	if (is_vm_hugetlb_page(vma))
-> > >>>>> +		return 0;
-> > >>>>
-> > >>>> I'm kind of confused here..  you seems to be fixing up soft-dirty for
-> > >>>> hugetlb but here it's explicitly forbidden.
-> > >>>>
-> > >>>> Could you explain a bit more on why this patch is needed if (assume
-> > >>>> there'll be a working) patch 2 being provided?
-> > >>>>
-> > >>>
-> > >>> No comments on the patch, but ...
-> > >>>
-> > >>> Since it required little thought, I ran the test program on next-20220802 and
-> > >>> was surprised that the issue did not recreate.  Even added a simple printk
-> > >>> to make sure we were getting into vma_wants_writenotify with a hugetlb vma.
-> > >>> We were.
-> > >>
-> > >>
-> > >> ... does your config have CONFIG_MEM_SOFT_DIRTY enabled?
-> > >>
-> > > 
-> > > No, Duh!
-> > > 
-> > > FYI - Some time back, I started looking at adding soft dirty support for
-> > > hugetlb mappings.  I did not finish that work.  But, I seem to recall
-> > > places where code was operating on hugetlb mappings when perhaps it should
-> > > not.
-> > > 
-> > > Perhaps, it would also be good to just disable soft dirty for hugetlb at
-> > > the source?
-> > 
-> > I thought about that as well. But I came to the conclusion that without
-> > patch #2, hugetlb VMAs cannot possibly support write-notify, so there is
-> > no need to bother in vma_wants_writenotify() at all.
-> > 
-> > The "root" would be places where we clear VM_SOFTDIRTY. That should only
-> > be fs/proc/task_mmu.c:clear_refs_write() IIRC.
-> > 
-> > So I don't particularly care, I consider this patch a bit cleaner and
-> > more generic, but I can adjust clear_refs_write() instead of there is a
-> > preference.
-> > 
+Hi Masahiro, I'm sorry to raise this after release but this seems to be 
+broken on SOME architectures.  So far I have tested:
+
+Affected - sparc, alpha
+Unaffected - riscv, ia64
+
+The affected systems are unable to load modules, similar to the 
+previously reported issue.  All module loading fails with "disagrees 
+about version of symbol module_layout".
+
+Bisect blames 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b, but this does 
+not revert cleanly.  Presumably CONFIG_MODVERSIONS=n would fix, but this 
+is a pretty core feature.
+
+Unlike the issue Sedat reported, this is on a GNU toolchain, no clang 
+involved.
+
+Here are the configs I am using (with make olddefconfig on upgrade to 
+5.19):
+
+Broken - sparc - https://dpaste.com/5A8F2JD6U
+Broken - alpha - https://dpaste.com/FYKK23L9X
+Working - riscv - https://dpaste.com/HV6Y4V6NT
+Working - ia64 - https://dpaste.com/HDLDNEAK4
+
+Please let me know if there's anything I can do to help track down this 
+regression.
+
+
+-------- Original Message --------
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups 
+(modpost, LTO, MODULE_REL_CRCS, export.h)
+Date: 2022-05-13 08:20
+ From: Masahiro Yamada <masahiroy@kernel.org>
+To: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+
+On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> 
+wrote:
 > 
-> After a closer look, I agree that this may be the simplest/cleanest way to
-> proceed.  I was going to suggest that you note hugetlb does not support
-> softdirty, but see you did in the comment.
 > 
-> Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
+> This is the third batch of cleanups in this development cycle.
+> 
 
-Filtering out hugetlbfs in vma_wants_writenotify() is still a bit hard to
-follow to me, since it's not clear why hugetlbfs never wants writenotify.
 
-If it's only about soft-dirty, we could have added the hugetlbfs check into
-vma_soft_dirty_enabled(), then I think it'll achieve the same thing and
-much clearer - with the soft-dirty check constantly returning false for it,
-hugetlbfs shared vmas should have vma_wants_writenotify() naturally return
-0 already.
+This series is available at
+git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+  lto-cleanup-v6
 
-For the long term - shouldn't we just enable soft-dirty for hugetlbfs?  I
-remember Mike used to have that in todo.  Since we've got patch 2 already,
-I feel like that's really much close (is the only missing piece the clear
-refs write part? or maybe some more that I didn't notice).
 
-Then patch 1 (or IMHO equivalant check in vma_soft_dirty_enabled(), but
-maybe in stable trees we don't have vma_soft_dirty_enabled then it's
-exactly patch 1) can be a stable-only backport just to avoid the bug from
-triggering.
-
-Thanks,
-
--- 
-Peter Xu
+> 
+> Changes in v6:
+>   - Fix false-positive warnings when CONFIG_TRIM_UNUSED_KSYMS=y
+> 
+> Changes in v5:
+>   - Fix the build error when CONFIG_DEBUG_INFO_BTF=y (reported by 
+> Nathan)
+>   - Clean up arch/m68k/include/asm/export.h (Nick)
+>   - Keep gen_symversions (and will be removed by a later patch)
+>   - Add more comments in the script
+> 
+> Changes in v4:
+>   - Rename .vmlinux-symver.c to .vmlinux.export.c
+>     because I notice this approach is useful for further cleanups,
+>     not only for modversioning but also for overall EXPORT_SYMBOL.
+>   - New patch
+>   - New.
+>     Resent of my previous submission.
+>     
+> https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
+>   - New
+>     Resent of my previous submission
+>     
+> https://lore.kernel.org/linux-kbuild/20210831074004.3195284-11-masahiroy@kernel.org/
+> 
+> Changes in v3:
+>   - New patch
+> 
+> Changes in v2:
+>   - Simplify the implementation (parse .cmd files after ELF)
+>   - New patch
+>  - replace the chain of $(if ...) with $(and )
+>   - New patch
+>   - New patch
+> 
+> Masahiro Yamada (10):
+>   modpost: extract symbol versions from *.cmd files
+>   kbuild: link symbol CRCs at final link, removing
+>     CONFIG_MODULE_REL_CRCS
+>   kbuild: stop merging *.symversions
+>   genksyms: adjust the output format to modpost
+>   kbuild: do not create *.prelink.o for Clang LTO or IBT
+>   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
+>   kbuild: make built-in.a rule robust against too long argument error
+>   kbuild: make *.mod rule robust against too long argument error
+>   kbuild: add cmd_and_savecmd macro
+>   kbuild: rebuild multi-object modules when objtool is updated
+> 
+>  arch/m68k/include/asm/Kbuild    |   1 +
+>  arch/m68k/include/asm/export.h  |   2 -
+>  arch/powerpc/Kconfig            |   1 -
+>  arch/s390/Kconfig               |   1 -
+>  arch/um/Kconfig                 |   1 -
+>  include/asm-generic/export.h    |  22 ++-
+>  include/linux/export-internal.h |  16 +++
+>  include/linux/export.h          |  30 ++--
+>  init/Kconfig                    |   4 -
+>  kernel/module.c                 |  10 +-
+>  scripts/Kbuild.include          |  10 +-
+>  scripts/Makefile.build          | 134 ++++++------------
+>  scripts/Makefile.lib            |   7 -
+>  scripts/Makefile.modfinal       |   5 +-
+>  scripts/Makefile.modpost        |   9 +-
+>  scripts/check-local-export      |  64 +++++++++
+>  scripts/genksyms/genksyms.c     |  18 +--
+>  scripts/link-vmlinux.sh         |  33 ++---
+>  scripts/mod/modpost.c           | 236 +++++++++++++++++++++-----------
+>  19 files changed, 320 insertions(+), 284 deletions(-)
+>  delete mode 100644 arch/m68k/include/asm/export.h
+>  create mode 100644 include/linux/export-internal.h
+>  create mode 100755 scripts/check-local-export
+> 
+> --
+> 2.32.0
+> 
 

@@ -2,100 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D690A58B008
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 20:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEFF58B006
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 20:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241184AbiHESuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 14:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S240806AbiHESu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 14:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240890AbiHESud (ORCPT
+        with ESMTP id S236448AbiHESuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 14:50:33 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3951EACA;
-        Fri,  5 Aug 2022 11:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659725432; x=1691261432;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ENJPNo+mS2vVgVFpAyn8Gp1tJVNvhEDTmG7q+6S3Ib8=;
-  b=cHoZ7rPgMCeZbqUfDxNOfwUIsp8AAGRH2ZbDyz/KTluLlAwWV1bsZ+c0
-   xT+amQz/FyhM/OGzQH72Di6OGUnMtY1R5zN7xFRfQ+luUTDVd9Wj3N68e
-   sOtDtvb2JFt6NF2165O5XzgKG8CZCyJiATgU9WbPPg7TVs2J8UAvVKOm/
-   oQ6U18POaTZWEB1sm4+eTfawvAasMisMTbReZSpbJAfirHQefZq/pNYw4
-   1zRTWOE/3FimLkmPr0BlKKSIb94XClT559FGviMvgqBIArt8Jx5W42bO/
-   h3hBz8JggExr0WpHZS3YQXTUsx1OKZIPPHYr2WWzZrBwSczhmLZ3pukyp
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="289024199"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="289024199"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 11:50:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="579596290"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 05 Aug 2022 11:50:29 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oK2Oz-000JeB-0v;
-        Fri, 05 Aug 2022 18:50:29 +0000
-Date:   Sat, 6 Aug 2022 02:50:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     kbuild-all@lists.01.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>
-Subject: Re: [PATCH v1 26/26] thermal/drivers/intel: Use generic
- thermal_zone_get_trip() function
-Message-ID: <202208060216.XOxVJyCy-lkp@intel.com>
-References: <20220805145729.2491611-27-daniel.lezcano@linaro.org>
+        Fri, 5 Aug 2022 14:50:23 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228717645
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 11:50:20 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s206so3388269pgs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 11:50:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=IcI0dLC9PfhjnsRXg+d0B7Dkxih292fFLLz0vnGA0yk=;
+        b=A4cz+6MJrIAigBX3SMz8GASWuAFGOE2ABZwdbuYRFcUm88GxYfjBG4qljFTZOuYtUq
+         Wa9gINp37YjkMMvityfLVreV1kl61mG4sMbGJMS5nqt4dOeLS0QJ5Elt1fgOOhgJAB6Q
+         BfjXNg3mF9lnychcnaCeFa+UjZVag+o67gDTNSMuKB1qbPpdvhg5GvJUlgrEsxZdBxkv
+         esLu6LSuaHxQ4ng6AvGy4HKv/E/xJuG987BHT2Fncs30Ry5cAGjVPZyew2HhZ3twL6jI
+         6gMefXAI3egr2B0tOlcAuaRvGrzQLK9rNAMUHs8Deys22SKcFt5QOxlUev3TdpryUw56
+         nW2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=IcI0dLC9PfhjnsRXg+d0B7Dkxih292fFLLz0vnGA0yk=;
+        b=sKDbhtYsZPsKicMdgwjv/OE7gbODOY6cSOc8MdvePWr90gN+AZFi4g4ls9D9Y96Sps
+         fgDNFw2vxKUwEBjmFYP0y9vdWAEg4tcGF3V4SWOvBaqrf4T7S88H8HzOQUsKFctzK9TE
+         g4TJ2ifRZgpyH+B3fzXbqAO87aiLr1pG41AVqd+oyUAs664WngGVp8b28rcOOPUgX49g
+         wHWTyV6TiSYssgeYrKaPAgZiPBorQoC8nyqktzJvJ7+tQnqw8lmYcPs895I4SpW/tOJt
+         xE9QihUjqcv2+dy0jHAEOSbdT48f/4DxWoSCvfYaPB9+c85M6f54BqfcFjl+FMDp6oM1
+         /oBg==
+X-Gm-Message-State: ACgBeo3u8gPYAdMJ7W24muGaRvHaOQh+PBSoGJ0sHipPfQDdbtlpQhqB
+        iQry4hD2Oel5uHEsiGNjSIxm4A==
+X-Google-Smtp-Source: AA6agR5lmpe/MTkZsFSxmfgL2Dw/FuKlbLRGdONHPB/BeqByVsc7b8wIBZS5DjYiZeKGpHOY+ohKvw==
+X-Received: by 2002:a63:6941:0:b0:41c:9703:d2ea with SMTP id e62-20020a636941000000b0041c9703d2eamr6655204pgc.304.1659725419479;
+        Fri, 05 Aug 2022 11:50:19 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u2-20020a170902e5c200b0016ec8286733sm3377528plf.243.2022.08.05.11.50.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 11:50:19 -0700 (PDT)
+Date:   Fri, 5 Aug 2022 18:50:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Coleman Dietsch <dietschc@csp.edu>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2 2/2] KVM: x86/xen: Stop Xen timer before changing the
+ IRQ vector
+Message-ID: <Yu1mZyJeYf/0/LP+@google.com>
+References: <20220729184640.244969-1-dietschc@csp.edu>
+ <20220729184640.244969-3-dietschc@csp.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805145729.2491611-27-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220729184640.244969-3-dietschc@csp.edu>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Fri, Jul 29, 2022, Coleman Dietsch wrote:
+> This moves the stop xen timer call outside of the previously unreachable
 
-I love your patch! Yet something to improve:
+Please avoid "This", "This patch", etc... and describe what the change is, not
+what the patch is.
 
-[auto build test ERROR on next-20220804]
-[cannot apply to rafael-pm/thermal tegra/for-next linus/master v5.19 v5.19-rc8 v5.19-rc7 v5.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> if else statement as well as making sure that the timer is stopped first
+> before changing IRQ vector. Code was streamlined a bit also.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/Rework-the-trip-points-creation/20220805-230055
-base:    899926f2ccb4453c51943f6738a71b2c5ad98b71
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20220806/202208060216.XOxVJyCy-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/134d3142f385a8d7212933db3eae29466faf5cab
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/Rework-the-trip-points-creation/20220805-230055
-        git checkout 134d3142f385a8d7212933db3eae29466faf5cab
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Generally speaking, don't describe the literal code changes, e.g. write the changelog
+as if you were describing the bug and the fix to someone in a verbal conversation.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> This was contributing to the ODEBUG bug in kvm_xen_vcpu_set_attr crash that
+> was discovered by syzbot.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+That's not proper justification as it doesn't explain why this patch is needed
+even after fixing the immedate cause of the ODEBUG splat.
 
->> ERROR: modpost: "thermal_zone_device_register_with_trips" [drivers/thermal/intel/x86_pkg_temp_thermal.ko] undefined!
+  Stop Xen's timer (if it's running) prior to changing the vector and
+  potentially (re)starting the timer.  Changing the vector while the timer
+  is still running can result in KVM injecting a garbage event, e.g.
+  vm_xen_inject_timer_irqs() could see a non-zero xen.timer_pending from
+  a previous timer but inject the new xen.timer_virq.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ODEBUG: init active (active state 0)
+> object type: hrtimer hint: xen_timer_callbac0
+> RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:502
+> Call Trace:
+> __debug_object_init
+> debug_hrtimer_init
+> debug_init
+> hrtimer_init
+> kvm_xen_init_timer
+> kvm_xen_vcpu_set_attr
+> kvm_arch_vcpu_ioctl
+> kvm_vcpu_ioctl
+> vfs_ioctl
+> 
+
+Fixes: 536395260582 ("KVM: x86/xen: handle PV timers oneshot mode")
+Cc: stable@vger.kernel.org
+
+> Link: https://syzkaller.appspot.com/bug?id=8234a9dfd3aafbf092cc5a7cd9842e3ebc45fc42
+> Reported-by: syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
+> Signed-off-by: Coleman Dietsch <dietschc@csp.edu>
+> ---
+>  arch/x86/kvm/xen.c | 37 ++++++++++++++++++-------------------
+>  1 file changed, 18 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+> index 2dd0f72a62f2..f612fac0e379 100644
+> --- a/arch/x86/kvm/xen.c
+> +++ b/arch/x86/kvm/xen.c
+> @@ -707,27 +707,26 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+>  		break;
+>  
+>  	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
+> -		if (data->u.timer.port) {
+> -			if (data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
+> -				r = -EINVAL;
+> -				break;
+> -			}
+> -			vcpu->arch.xen.timer_virq = data->u.timer.port;
+> -
+> -			/* Check for existing timer */
+> -			if (!vcpu->arch.xen.timer.function)
+> -				kvm_xen_init_timer(vcpu);
+> -
+> -			/* Restart the timer if it's set */
+> -			if (data->u.timer.expires_ns)
+> -				kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
+> -						    data->u.timer.expires_ns -
+> -						    get_kvmclock_ns(vcpu->kvm));
+> -		} else if (kvm_xen_timer_enabled(vcpu)) {
+> -			kvm_xen_stop_timer(vcpu);
+> -			vcpu->arch.xen.timer_virq = 0;
+> +		if (data->u.timer.port &&
+> +		    data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
+> +			r = -EINVAL;
+> +			break;
+>  		}
+>  
+> +		/* Check for existing timer */
+> +		if (!vcpu->arch.xen.timer.function)
+> +			kvm_xen_init_timer(vcpu);
+> +
+> +		/* Stop the timer (if it's running) before changing the vector */
+> +		kvm_xen_stop_timer(vcpu);
+> +		vcpu->arch.xen.timer_virq = data->u.timer.port;
+> +
+> +		/* Restart the timer if it's set */
+
+The "if it's set" part is stale, maybe this?
+
+		/* Start the timer if the new value has a valid vector+expiry. */
+
+> +		if (data->u.timer.port && data->u.timer.expires_ns)
+> +			kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
+> +					    data->u.timer.expires_ns -
+> +					    get_kvmclock_ns(vcpu->kvm));
+> +
+>  		r = 0;
+>  		break;
+>  
+> -- 
+> 2.34.1
+> 

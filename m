@@ -2,84 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D750C58A8FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5222458A8FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbiHEJq2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 5 Aug 2022 05:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
+        id S240550AbiHEJrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 05:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235781AbiHEJqZ (ORCPT
+        with ESMTP id S240376AbiHEJrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 05:46:25 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9239918360
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:46:23 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-104-h1MPgfUiOlGb8MK07c2j0g-1; Fri, 05 Aug 2022 10:46:20 +0100
-X-MC-Unique: h1MPgfUiOlGb8MK07c2j0g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Fri, 5 Aug 2022 10:46:20 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Fri, 5 Aug 2022 10:46:20 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Nathan Chancellor' <nathan@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?iso-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: RE: mainline build failure for x86_64 allmodconfig with clang
-Thread-Topic: mainline build failure for x86_64 allmodconfig with clang
-Thread-Index: AQHYqELnfwGtm9+LUkavntQYoCiIfK2gD2yw
-Date:   Fri, 5 Aug 2022 09:46:20 +0000
-Message-ID: <385f76aa6f4140fc8d30ef443e6e725c@AcuMS.aculab.com>
-References: <YuwRyQYPCb1FD+mr@debian>
- <CAHk-=whptVSSZL=wSUQJdRBeVfS+Xy_K4anQ7eQOky7XUrXhUQ@mail.gmail.com>
- <CAK8P3a2bEaExue0OtNeLa2CVzBx-1dE9w2HZ2PAV5N8Ct9G=JQ@mail.gmail.com>
- <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
-In-Reply-To: <YuwvfsztWaHvquwC@dev-arch.thelio-3990X>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 5 Aug 2022 05:47:08 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0760D76474
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:47:07 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id ha11so2247730pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 02:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
+        bh=t2xo6E1uDVXBL9rtyALdnKwGeumoPy0aKoIQA7ijnWQ=;
+        b=MgkZsXM4hV9EzcfZZeIUMDvNVfe9uC9D/QdN0zFq5uGIqDbVxptUIj68tC//QZ0b14
+         v1Cvv5ep+qpOicbLDIyGN80cdODoke7ZjXJcA2ithGLApaKfykoAtxnxux1GvNSg8LIs
+         FUCSKfEPB4n0AaFZKdSgn6BNvsowYU6AjJiJNrunFbh3zsL9DfbdsaGluU3pfBmoVK/Q
+         WGjcOg1a3EhS50qU3l9p6q7YU1Q2W7woLeP6wxxOXmvLnVaRUwatvzlUGCOaRY+CMuM/
+         qIIXO/E6o7eeXr6clWGjKjRQFBB8TYtUSWstsbEJKobEsX9mQ7Bc8Aq3b9zEilqXQaSL
+         2MtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=t2xo6E1uDVXBL9rtyALdnKwGeumoPy0aKoIQA7ijnWQ=;
+        b=2jHhsUA1XDF7nFqGj/xiUSn2NWZbXbyhAHRUYvFQ7z7GqYXJJ+l1wCfpf7bSsRmb0+
+         Ks6XxkQicp36uuUIiQgVqT3RlJsCp5NsLy2AbeHdE9hFfJGKG5nikqwHYC7cORjAJERA
+         RKnCJVOZt6Z4v1pIRGhH164PSvCsYvp3BLSS6CWTeGdrWN/jkgKJQ2mb8DR88osLkxrP
+         S8bukIJbhMJW4HJ9I7mw29FpLFbLAdLW2/WZBofhdfSsnc+lmpluG37pStywNuPP7Sed
+         oijsnL8fkyELRfTCwNpmgPSa2KxoMNGqqRbNbVI1InWgw/IjjqJeEWoDZ9fg4duZFg/8
+         I/NQ==
+X-Gm-Message-State: ACgBeo2FaoNWyODbOjNPKdwusYmVzn6A/sJDOOLNQ0ksBKszjD0PpPDZ
+        y5ZkWA4BDscOPxKq1wRLCrcyMDVY3Uuye9KITdjBwQ0qAnTrQZQE
+X-Google-Smtp-Source: AA6agR7E/I8artnUFv9E1qBCos4kD/WtesJ92zCOdi1xp8K8MzG0Td4pay3kDLxYRwavkda1zAFtO+RwVgZdRu6W8sM=
+X-Received: by 2002:a67:d90a:0:b0:386:a043:2e25 with SMTP id
+ t10-20020a67d90a000000b00386a0432e25mr2561364vsj.31.1659692815403; Fri, 05
+ Aug 2022 02:46:55 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Sender: idtemy67@gmail.com
+Received: by 2002:a05:6124:340a:b0:2fd:b1dc:d642 with HTTP; Fri, 5 Aug 2022
+ 02:46:54 -0700 (PDT)
+From:   "higginsnigel.ceomydesk@barclays.co.uk" <nigelhiggins.md5@gmail.com>
+Date:   Fri, 5 Aug 2022 10:46:54 +0100
+X-Google-Sender-Auth: cFc_OtioDLN-Io0AFhFU01VamUk
+Message-ID: <CAGdTmRt_TXcMB0eau78W9wx3h=dN5uvb5bR_mX_gk0mW2bnTwg@mail.gmail.com>
+Subject: RE PAYMENT NOTIFICATION UPDATE
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_2_EMAILS_SHORT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,YOU_INHERIT autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1031 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [idtemy67[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [idtemy67[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  2.5 YOU_INHERIT Discussing your inheritance
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 FROM_2_EMAILS_SHORT Short body and From looks like 2 different
+        *      emails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-...
->  * NOTE:
->  *   This file is gcc-parsable HW gospel, coming straight from HW engineers.
+-- 
+Hello,
 
-I never trust hardware engineers to write code :-)
-(Although at the moment they trust me to write VHDL...)
+I am the Group Chairman of Barclays Bank Plc. This is to formally
+notify you that your delayed inheritance payment has been irrevocably
+released to you today after a successful review. Get back for more
+details.
 
-	David
+Yours sincerely,
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Nigel Higgins, (Group Chairman),
+Barclays Bank Plc,
+Registered number: 1026167,
+1 Churchill Place, London, ENG E14 5HP,
+SWIFT Code: BARCGB21,
+Direct Telephone: +44 770 000 8965,
+WhatsApp, SMS Number: + 44 787 229 9022
+www.barclays.co.uk

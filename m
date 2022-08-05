@@ -2,158 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF0A58AB8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8954658AB91
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236786AbiHENXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 09:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
+        id S240702AbiHEN0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 09:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235985AbiHENXG (ORCPT
+        with ESMTP id S229475AbiHEN0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 09:23:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C65C1C122
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:23:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659705784;
+        Fri, 5 Aug 2022 09:26:06 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C6A24F21
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:26:02 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b986e329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:986e:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A7B5D1EC0681;
+        Fri,  5 Aug 2022 15:25:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1659705956;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cvTnOWMtENdA0lewWHSDMt4C5p+Z0vLjSaKneQSan0A=;
-        b=MSyBv72bxSAo5Jj4RwDbNpd9f/GBm559GaoTwgDIYTbTQnfMuYfxvbcvotyTLkkQ3KWSl2
-        n4GBLE+/3XrE3DbREuWYBKluAANbXpp59GH4kGMhmWHdlKVamAxNMrIJ7jUkRx9detw+0K
-        lETpc2KbxTxmqpq9VGdyJ9Q6iFD8+eM=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-344-JY_XTT3YNhmMSYy2Juz4AA-1; Fri, 05 Aug 2022 09:23:02 -0400
-X-MC-Unique: JY_XTT3YNhmMSYy2Juz4AA-1
-Received: by mail-wr1-f72.google.com with SMTP id v5-20020adfa1c5000000b002205c89c80aso489879wrv.6
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 06:23:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=cvTnOWMtENdA0lewWHSDMt4C5p+Z0vLjSaKneQSan0A=;
-        b=T8XYwWJyj1btZsdK6j9N6RJd2F0InPSi0VJyHRa83Hxr27vo/aukruVHHsQlnmB5Sc
-         jQZQg1kxHGREuDDd+L9lpHJ5sMyWNdG+fdGmzq4/fLuuSq6ZzGGO4CD1VicNV0MsNqEm
-         maTHG0+8KqEJlMViO3RRr5FJucJPOLPdBOkgUBdi183Bzgb2N3xDh2iuOR+zkxS4fcBZ
-         Wpt0KKcNNJ7zXPEYgk+ENaM3V+OoNPo+m4Xk411G0hc1nOUj4vB08kQdtkyJr6/xAe/p
-         Q/o1lSkCD/9AQPdLnC8vtRwjHRnUy/H2U9ogWQFNn3rnO97A+Xnn8ZFkxIMgTMSLU9Bj
-         oa/A==
-X-Gm-Message-State: ACgBeo1wzXX1s19RUAXQEi8Z0Gfo2p7tG45yCnjD/Wvsz7jByYnauf05
-        ICx3QVi/qhAOhSNyag5DP8nxNPDqmUsR0cYb2XiwccAlZlHQAgmurQgya8usWTIY6fPDgIzGzW1
-        cksxfQmbTYllTS+QemVesDfpv
-X-Received: by 2002:adf:ce92:0:b0:220:5ef0:876d with SMTP id r18-20020adfce92000000b002205ef0876dmr4402383wrn.647.1659705781190;
-        Fri, 05 Aug 2022 06:23:01 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4uPBaWEs/z4mc87PDNQd0FqLSk3+CEo5G4UY36ZDFdxSdxTMNZ5FFOGBR2vXXQe8nDaUxZUw==
-X-Received: by 2002:adf:ce92:0:b0:220:5ef0:876d with SMTP id r18-20020adfce92000000b002205ef0876dmr4402357wrn.647.1659705780923;
-        Fri, 05 Aug 2022 06:23:00 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:fb00:f5c3:24b2:3d03:9d52? (p200300cbc706fb00f5c324b23d039d52.dip0.t-ipconnect.de. [2003:cb:c706:fb00:f5c3:24b2:3d03:9d52])
-        by smtp.gmail.com with ESMTPSA id h36-20020a05600c49a400b003a2c7bf0497sm4326304wmp.16.2022.08.05.06.22.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 06:23:00 -0700 (PDT)
-Message-ID: <13394075-fca0-6f2b-92a2-f1291fcec9a3@redhat.com>
-Date:   Fri, 5 Aug 2022 15:22:58 +0200
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=6MNYFh3knJQqjTyK3tQne7TyY6FmwOU1SnwBH6n2hhI=;
+        b=RdHEq0y2/CWwiYi9bjnj9fDdOcaHx2cJCeDvadwM/02MevNjc1AmWrevnZW2BRcofX3+ew
+        Z++75LriEHcsppePOVQgVubVuCb2rUphMRXhPo7ZZmUF/mzJMbCDGklEvqcvdaYK/CFLrO
+        /Y0QMAHjY/VY2EYfnSZUGhI1jMHpeDs=
+Date:   Fri, 5 Aug 2022 15:25:52 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rik van Riel <riel@surriel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        Thomas Gleixner <tglx@linutronix.de>, Dave Jones <dsj@fb.com>,
+        Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v2]  x86,mm: print likely CPU at segfault time
+Message-ID: <Yu0aYIbCAjFtEBVZ@zn.tnic>
+References: <20220804155450.08c5b87e@imladris.surriel.com>
+ <YuzsJfHi+qV6Z16E@zn.tnic>
+ <2239a6e4f5e9d12ef7a55da6dba716df681201ff.camel@surriel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-4-chao.p.peng@linux.intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v7 03/14] mm: Introduce memfile_notifier
-In-Reply-To: <20220706082016.2603916-4-chao.p.peng@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2239a6e4f5e9d12ef7a55da6dba716df681201ff.camel@surriel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.07.22 10:20, Chao Peng wrote:
-> This patch introduces memfile_notifier facility so existing memory file
-> subsystems (e.g. tmpfs/hugetlbfs) can provide memory pages to allow a
-> third kernel component to make use of memory bookmarked in the memory
-> file and gets notified when the pages in the memory file become
-> invalidated.
+On Fri, Aug 05, 2022 at 08:53:46AM -0400, Rik van Riel wrote:
+> Having a small percentage of the segfaults show up on
+> cores other than the broken one does not cause issues with
+> detection or diagnosis.
 
-Stupid question, but why is this called "memfile_notifier" and not
-"memfd_notifier". We're only dealing with memfd's after all ... which
-are anonymous files essentially. Or what am I missing? Are there any
-other plans for fs than plain memfd support that I am not aware of?
+I'm sorry but I'm not buying any of this: this should either be 100%
+correct or it can stay on your kernels.
 
+> We could, but then we would be reading the CPU number
+> on every page fault, just in case it's a segfault.
 > 
-> It will be used for KVM to use a file descriptor as the guest memory
-> backing store and KVM will use this memfile_notifier interface to
-> interact with memory file subsystems. In the future there might be other
-> consumers (e.g. VFIO with encrypted device memory).
-> 
-> It consists below components:
->  - memfile_backing_store: Each supported memory file subsystem can be
->    implemented as a memory backing store which bookmarks memory and
->    provides callbacks for other kernel systems (memfile_notifier
->    consumers) to interact with.
->  - memfile_notifier: memfile_notifier consumers defines callbacks and
->    associate them to a file using memfile_register_notifier().
->  - memfile_node: A memfile_node is associated with the file (inode) from
->    the backing store and includes feature flags and a list of registered
->    memfile_notifier for notifying.
-> 
-> In KVM usages, userspace is in charge of guest memory lifecycle: it first
-> allocates pages in memory backing store and then passes the fd to KVM and
-> lets KVM register memory slot to memory backing store via
-> memfile_register_notifier.
+> That does not seem like a worthwhile tradeoff, given
+> how much of a hot path page faults are, and how rare
+> segfaults are.
 
-Can we add documentation/description in any form how the different
-functions exposed in linux/memfile_notifier.h are supposed to be used?
+Oh wow, a whopping single instruction:
 
-Staring at memfile_node_set_flags() and memfile_notifier_invalidate()
-it's not immediately clear to me who's supposed to call that and under
-which conditions.
+	movl %gs:cpu_number(%rip), %eax # cpu_number, pfo_val__
+
+What tradeoff?
 
 -- 
-Thanks,
+Regards/Gruss,
+    Boris.
 
-David / dhildenb
-
+https://people.kernel.org/tglx/notes-about-netiquette

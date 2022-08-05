@@ -2,146 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D28558B289
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0692D58B294
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 01:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241466AbiHEW5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 18:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S241229AbiHEXCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 19:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241366AbiHEW53 (ORCPT
+        with ESMTP id S238582AbiHEXCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 18:57:29 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C22413CEF
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:57:28 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gb36so7322865ejc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:57:28 -0700 (PDT)
+        Fri, 5 Aug 2022 19:02:04 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB2E5C9E5
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 16:02:01 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id l64so3863375pge.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 16:02:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=NC4cysuywW8XEpGdMjzU9OYVRS8Z3YSMAD203AMlbrk=;
-        b=PNM6Y8lm9ttp+NtlMA+qdF4huhKjki+bO3qHRvhBcY+z3fHP/eUCW5t5Gi/UerFvRG
-         kz0DAnJwoIcevopFDxtDsQgEAG8CrQpDfXEGOJ1PH0xz1l7AMECbSvLvUELV++v9xVlY
-         H/TFMy3P0J0tlCY9z9/FBqus6oF44i1nNmUY8=
+        d=kylehuey.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=0IQUf1XbUyKScDj19IIOVRrRzAluObv3VpeYozO/xMU=;
+        b=EJZAxUC98UB2M+84zuoAM0XjqIyYi2AQeV1Fd5+0Vvw6uoCjCWVHeKuPonMk0YY+ku
+         BKhK3+Tx5i44lWmmDoV0CkPv4ya2uS53DuUmf2IqSUtIbI4FEwAiR4+jT15nZnL6ADKB
+         bT1IBFEczYLCyJ7vzN9kaJkLQXRAab3X0FxAIPW0kjo40/I3wkVDmZCyQqIND2A0fa6g
+         LHwjYH+HZnbwIHLUVc6VEG2SDp5DIfuSYzsXAw9HyBxF76n/G3XWqeC2s5MUhoULWvu5
+         KPlSDFGTOlslLON3ZbZwgNYLyrPyMnitShLtmdhpUC057WYEIpOwajxSlGgRe4bDj/On
+         Pbmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=NC4cysuywW8XEpGdMjzU9OYVRS8Z3YSMAD203AMlbrk=;
-        b=IQE7jZ1ptLId9Z1P7ef52bsj5qZ2Mpe7YmRyDIPC0p7nmKkJWs1iURhAlnH/BW8sTj
-         ugIMjwAc/mBTuADIqKo2fAHgTYFbwpcnbVvXCEGRKwwdhCB2NnzLsFxfHYC0psLzQMPr
-         hQpgFi8nscsXoSPk/4Lq5RXEtJdgAnsXF114rqxr+NrMZdS5YSoIkeAh3RnUqwNeD5uM
-         pcGCvLD1n+Y35+aJU9NY+2TC79I/ALZO7iw7n1d0UHiaWG/OyNo5QzwZl+M145GmIXCe
-         Gh/izklmwDSp5wNyI4SrU4CgUutOZbQvWVloC8DPbfB8AivUlbr5teKAggLtC4Glbl6p
-         K9Cg==
-X-Gm-Message-State: ACgBeo3IKy5E1s5BO9G+clk6jM3hO+5XkWARX+17aMh4Wg7q6OQvZvbg
-        I/og2cVCpks3T0YlZOsaJ+InMvVWCoeW8j1z
-X-Google-Smtp-Source: AA6agR6say7LERp7Vj1yZQs6Wf963gb5C3ZJqX6qCdv8cFWw/AIMmM78mtcwTJBL2LunMHJhkw0UTQ==
-X-Received: by 2002:a17:907:969f:b0:730:df57:123d with SMTP id hd31-20020a170907969f00b00730df57123dmr5454840ejc.430.1659740246836;
-        Fri, 05 Aug 2022 15:57:26 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id zm7-20020a170906994700b0072b13a10477sm2051773ejb.108.2022.08.05.15.57.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 15:57:25 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id a11so2012193wmq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:57:25 -0700 (PDT)
-X-Received: by 2002:a05:600c:1d94:b0:3a4:ffd9:bb4a with SMTP id
- p20-20020a05600c1d9400b003a4ffd9bb4amr5768966wms.8.1659740244625; Fri, 05 Aug
- 2022 15:57:24 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=0IQUf1XbUyKScDj19IIOVRrRzAluObv3VpeYozO/xMU=;
+        b=Hbhw8exiyp4T63QJyUMW4556SJBi5NxZB9wjK0bYeJBhtQ+4CpLsN3Q5zokUq048sR
+         uCH5qCwE3PMB9lO3pe7xsYD7/+iEBu9MAsjFU6v/kQhIQ4mJ6IuqnWdGItJ6W6svv3/n
+         qvKsRVy3bjKOxaJjhOmfaGNJZvXzlmjsLxsB7zGnGD67AVBZWDhksWJV5H9AIottxFDL
+         EP+NzFsVGu9GlrOxrTxXcG9NdkRDefmH5iNYoVxk+nSlMznFahVcXzG99+jPWsjTsBGG
+         9+8Qbtm8eqgLCSQ2uHeAz2IT4CcXuC/kqjkmDzjAsrv/b0/mx14u0GlYO3gH8NFkG2tD
+         pm3Q==
+X-Gm-Message-State: ACgBeo3Ba7pMwcCmH/ACeC49Ob1EN9Yz1RIXC9qGdR4OlxWySUS9IL8c
+        gHtQ4DZudUkgqxi2TQ1x6QeaXw==
+X-Google-Smtp-Source: AA6agR5eSrbNndEhmiX61O4JBJpwyAE+Y8vYnb1AdQLWqRg9V496J01SOhjaem2A0ePwXcb+2e88Ng==
+X-Received: by 2002:a05:6a00:8cb:b0:52c:6962:2782 with SMTP id s11-20020a056a0008cb00b0052c69622782mr8944542pfu.81.1659740521052;
+        Fri, 05 Aug 2022 16:02:01 -0700 (PDT)
+Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
+        by smtp.gmail.com with ESMTPSA id g18-20020a635652000000b0041af82dacf7sm1958702pgm.73.2022.08.05.16.01.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 16:02:00 -0700 (PDT)
+From:   Kyle Huey <me@kylehuey.com>
+X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Kyle Huey <me@kylehuey.com>, Borislav Petkov <bp@suse.de>,
+        kvm@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v4 1/2] x86/fpu: Allow PKRU to be (once again) written by ptrace.
+Date:   Fri,  5 Aug 2022 16:01:57 -0700
+Message-Id: <20220805230158.39378-1-khuey@kylehuey.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-References: <20220805181105.GA29848@willie-the-truck>
-In-Reply-To: <20220805181105.GA29848@willie-the-truck>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 5 Aug 2022 15:57:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wip-Lju3ZdNwknS6ouyw+nKXeRSnhqVyNo8WSEdk-BfGw@mail.gmail.com>
-Message-ID: <CAHk-=wip-Lju3ZdNwknS6ouyw+nKXeRSnhqVyNo8WSEdk-BfGw@mail.gmail.com>
-Subject: Re: IOTLB support for vhost/vsock breaks crosvm on Android
-To:     Will Deacon <will@kernel.org>
-Cc:     mst@redhat.com, stefanha@redhat.com, jasowang@redhat.com,
-        ascull@google.com, maz@kernel.org, keirf@google.com,
-        jiyong@google.com, kernel-team@android.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        Stefano Garzarella <sgarzare@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 11:11 AM Will Deacon <will@kernel.org> wrote:
->
-> [tl;dr a change from ~18 months ago breaks Android userspace and I don't
->  know what to do about it]
+From: Kyle Huey <me@kylehuey.com>
 
-Augh.
+When management of the PKRU register was moved away from XSTATE, emulation
+of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
+for APIs that write XSTATE. This can be seen by running gdb and executing
+`p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
+write to the PKRU register (which gdb performs through ptrace) is ignored.
 
-I had hoped that android being "closer" to upstream would have meant
-that somebody actually tests android with upstream kernels. People
-occasionally talk about it, but apparently it's not actually done.
+There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
+sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
+make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
+down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
+and sigreturn pass in pointers to the appropriate PKRU value.
 
-Or maybe it's done onl;y with a very limited android user space.
+This also adds code to initialize the PKRU value to the hardware init value
+(namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
+This is a change to the current KVM_SET_XSAVE behavior.
 
-The whole "we notice that something that happened 18 months ago broke
-our environment" is kind of broken.
+Changelog since v3:
+- The v3 patch is now part 1 of 2.
+- Adds a selftest in part 2 of 2.
 
-> After some digging, we narrowed this change in behaviour down to
-> e13a6915a03f ("vhost/vsock: add IOTLB API support") and further digging
-> reveals that the infamous VIRTIO_F_ACCESS_PLATFORM feature flag is to
-> blame. Indeed, our tests once again pass if we revert that patch (there's
-> a trivial conflict with the later addition of VIRTIO_VSOCK_F_SEQPACKET
-> but otherwise it reverts cleanly).
+Changelog since v2:
+- Removed now unused variables in fpu_copy_uabi_to_guest_fpstate
 
-I have to say, this smells for *so* many reasons.
+Changelog since v1:
+- Handles the error case of copy_to_buffer().
 
-Why is "IOMMU support" called "VIRTIO_F_ACCESS_PLATFORM"?
+Signed-off-by: Kyle Huey <me@kylehuey.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: kvm@vger.kernel.org # For edge case behavior of KVM_SET_XSAVE
+Cc: stable@vger.kernel.org # 5.14+
+Fixes: e84ba47e313d ("x86/fpu: Hook up PKRU into ptrace()")
+---
+ arch/x86/kernel/fpu/core.c   | 13 +------------
+ arch/x86/kernel/fpu/regset.c |  2 +-
+ arch/x86/kernel/fpu/signal.c |  2 +-
+ arch/x86/kernel/fpu/xstate.c | 28 +++++++++++++++++++++++-----
+ arch/x86/kernel/fpu/xstate.h |  4 ++--
+ 5 files changed, 28 insertions(+), 21 deletions(-)
 
-That seems insane, but seems fundamental in that commit e13a6915a03f
-("vhost/vsock: add IOTLB API support")
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 3b28c5b25e12..46b935bc87c8 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -391,8 +391,6 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+ {
+ 	struct fpstate *kstate = gfpu->fpstate;
+ 	const union fpregs_state *ustate = buf;
+-	struct pkru_state *xpkru;
+-	int ret;
+ 
+ 	if (!cpu_feature_enabled(X86_FEATURE_XSAVE)) {
+ 		if (ustate->xsave.header.xfeatures & ~XFEATURE_MASK_FPSSE)
+@@ -406,16 +404,7 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+ 	if (ustate->xsave.header.xfeatures & ~xcr0)
+ 		return -EINVAL;
+ 
+-	ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
+-	if (ret)
+-		return ret;
+-
+-	/* Retrieve PKRU if not in init state */
+-	if (kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU) {
+-		xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
+-		*vpkru = xpkru->pkru;
+-	}
+-	return 0;
++	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+ }
+ EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);
+ #endif /* CONFIG_KVM */
+diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+index 75ffaef8c299..6d056b68f4ed 100644
+--- a/arch/x86/kernel/fpu/regset.c
++++ b/arch/x86/kernel/fpu/regset.c
+@@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+ 	}
+ 
+ 	fpu_force_restore(fpu);
+-	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
++	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
+ 
+ out:
+ 	vfree(tmpbuf);
+diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
+index 91d4b6de58ab..558076dbde5b 100644
+--- a/arch/x86/kernel/fpu/signal.c
++++ b/arch/x86/kernel/fpu/signal.c
+@@ -396,7 +396,7 @@ static bool __fpu_restore_sig(void __user *buf, void __user *buf_fx,
+ 
+ 	fpregs = &fpu->fpstate->regs;
+ 	if (use_xsave() && !fx_only) {
+-		if (copy_sigframe_from_user_to_xstate(fpu->fpstate, buf_fx))
++		if (copy_sigframe_from_user_to_xstate(tsk, buf_fx))
+ 			return false;
+ 	} else {
+ 		if (__copy_from_user(&fpregs->fxsave, buf_fx,
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index c8340156bfd2..e01d3514ae68 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1197,7 +1197,7 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
+ 
+ 
+ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+-			       const void __user *ubuf)
++			       const void __user *ubuf, u32 *pkru)
+ {
+ 	struct xregs_state *xsave = &fpstate->regs.xsave;
+ 	unsigned int offset, size;
+@@ -1235,6 +1235,24 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+ 	for (i = 0; i < XFEATURE_MAX; i++) {
+ 		mask = BIT_ULL(i);
+ 
++		if (i == XFEATURE_PKRU) {
++			/*
++			 * Retrieve PKRU if not in init state, otherwise
++			 * initialize it.
++			 */
++			if (hdr.xfeatures & mask) {
++				struct pkru_state xpkru = {0};
++
++				if (copy_from_buffer(&xpkru, xstate_offsets[i],
++						     sizeof(xpkru), kbuf, ubuf))
++					return -EFAULT;
++
++				*pkru = xpkru.pkru;
++			} else {
++				*pkru = 0;
++			}
++		}
++
+ 		if (hdr.xfeatures & mask) {
+ 			void *dst = __raw_xsave_addr(xsave, i);
+ 
+@@ -1264,9 +1282,9 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+  * Convert from a ptrace standard-format kernel buffer to kernel XSAVE[S]
+  * format and copy to the target thread. Used by ptrace and KVM.
+  */
+-int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
++int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru)
+ {
+-	return copy_uabi_to_xstate(fpstate, kbuf, NULL);
++	return copy_uabi_to_xstate(fpstate, kbuf, NULL, pkru);
+ }
+ 
+ /*
+@@ -1274,10 +1292,10 @@ int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
+  * XSAVE[S] format and copy to the target thread. This is called from the
+  * sigreturn() and rt_sigreturn() system calls.
+  */
+-int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate,
++int copy_sigframe_from_user_to_xstate(struct task_struct *tsk,
+ 				      const void __user *ubuf)
+ {
+-	return copy_uabi_to_xstate(fpstate, NULL, ubuf);
++	return copy_uabi_to_xstate(tsk->thread.fpu.fpstate, NULL, ubuf, &tsk->thread.pkru);
+ }
+ 
+ static bool validate_independent_components(u64 mask)
+diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
+index 5ad47031383b..a4ecb04d8d64 100644
+--- a/arch/x86/kernel/fpu/xstate.h
++++ b/arch/x86/kernel/fpu/xstate.h
+@@ -46,8 +46,8 @@ extern void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
+ 				      u32 pkru_val, enum xstate_copy_mode copy_mode);
+ extern void copy_xstate_to_uabi_buf(struct membuf to, struct task_struct *tsk,
+ 				    enum xstate_copy_mode mode);
+-extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf);
+-extern int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate, const void __user *ubuf);
++extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru);
++extern int copy_sigframe_from_user_to_xstate(struct task_struct *tsk, const void __user *ubuf);
+ 
+ 
+ extern void fpu__init_cpu_xstate(void);
+-- 
+2.37.0
 
-This code
-
-        if ((features & (1ULL << VIRTIO_F_ACCESS_PLATFORM))) {
-                if (vhost_init_device_iotlb(&vsock->dev, true))
-                        goto err;
-        }
-
-just makes me go "What?"  It makes no sense. Why isn't that feature
-called something-something-IOTLB?
-
-Can we please just split that flag into two, and have that odd
-"platform access" be one bit, and the "enable iommu" be an entirely
-different bit?
-
-Now, since clearly nobody runs Android on newer kernels, I do think
-that the actual bit number choice should probably be one that makes
-the non-android use case binaries continue to work. And then the
-android system binaries that use this could maybe be compiled to know
-about *both* bits,. and work regardless?
-
-I'm also hoping that maybe Google android people could actually do
-some *testing*? I know, that sounds like a lot to ask, but humor me.
-Even if the product team runs stuff that is 18 months old, how about
-the dev team have a machine or two that actually tests current
-kernels, so that it's not a "oh, a few years have passed, and now we
-notice that a change doesn't work for us" situation any more.
-
-Is that really too much to ask for a big company like google?
-
-And hey, it's possible that the bit encoding is *so* incestuous that
-it's really hard to split it into two. But it really sounds to me like
-somebody mindlessly re-used a feature bit for a *completely* different
-thing. Why?
-
-Why have feature bits at all, when you then re-use the same bit for
-two different features? It kind of seems to defeat the whole purpose.
-
-                 Linus

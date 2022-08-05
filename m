@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DFB58AE2C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD0758AE2F
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241115AbiHEQ3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 12:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S241394AbiHEQ3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 12:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241349AbiHEQ3X (ORCPT
+        with ESMTP id S241389AbiHEQ3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 12:29:23 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D651EAC1;
-        Fri,  5 Aug 2022 09:29:22 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id j63so4509738ybb.13;
-        Fri, 05 Aug 2022 09:29:22 -0700 (PDT)
+        Fri, 5 Aug 2022 12:29:33 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6313B74DE2
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:29:31 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id z187so2661082pfb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=NVt7Ojg3Pa9myW1UbaAE8JylBQrIfDsdr5w11ENknyw=;
+        b=lFQZi1y05/nvkc6BXdArl9nxUC1CMoH7PILR8V4/ROTQMYu78xXHNpbWVHulHnGtX+
+         ED10wQPlrJB/4a3/wgamkJy43WE0rxYMtQTsmHd+gtLFWQVVOPc1irb8FJRL/d9wAbxn
+         0Zw2Y+WVaFg4tGE4IEH2RRJ7eU9VfSk+z2x4jN/Gkam9r6a7uj9Gy4swGlxhRI6PH6RL
+         L2zrnvP6MN5U9QStnSfJL1Y9gg0zML0/XkDVeEh8rp2nD3mLfLk7gJrs2IsQkUAbp1CP
+         ES+9Yij3IV6vhzH3RTuq+f/DQSk/jPeyNph49hAP35OTN9Us/O7Syihk8WbwLmEFAqDo
+         EtPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JpK4cKjWfUdf5fiTOgPLG1JC3Xe7mGK2psxBpm/kgz0=;
-        b=5WmvgU3LEnUUlhoZvFAANJwRfEBY0n0UwBf2M7r7VbcsC//hRMH0CahIzWYYQpe7Y4
-         UvNAXCjug+d09y5p4dngiLK0+QAV/TaV57+LQc9bsTpOaJx5Qza+zsri7ODpKGVujXIO
-         bIZsNR1ZIPoCwpp5V48xoUvDzXQn9jnFemS6ofNEGcrd7/LbnS0QsNgnD44cVSJezucc
-         lTzFnagbCXpKyEM56vM+XKlhO71vJNrK7NShs2hmW27BxLOk1nEpU6M+nCpnMWdCpHtQ
-         gTtnsi5qH7K4CixJWsT0BFOlrWrOOer17BtX/EJkOrSCt7iRvFQu98fPhLUhWG52KfS+
-         vTJw==
-X-Gm-Message-State: ACgBeo0oDEqwOK+M4vgyeEK8YJn+eVK4JB0rrOPID19i5sZAZMd40V9D
-        diGI6JW3faDuUWg+91xcJMmtVIZdb6GVnno98e4=
-X-Google-Smtp-Source: AA6agR7Zsuuvu2R22w+jsFCs5Obdld9ZRUWowUJ7/XDtMD+zovP2x7IJKUXlcChmvQ7oXdoo4RS6v+yWnnoBfovePVI=
-X-Received: by 2002:a25:cc51:0:b0:676:ccba:875 with SMTP id
- l78-20020a25cc51000000b00676ccba0875mr6093715ybf.137.1659716960892; Fri, 05
- Aug 2022 09:29:20 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=NVt7Ojg3Pa9myW1UbaAE8JylBQrIfDsdr5w11ENknyw=;
+        b=jrzH9uCaiTNlMdfJzcSVf1wvyNSAa5vUcZIgNcth4/i3VhFpepQEg8gXzuQv1T6wp9
+         NF/c14b0B+d6KPRDkEvBE0490rHUneuk5qsyZ4Q5r8TUQBJDw5qDQQKnIDktbQYxcBAl
+         0lqcz87cF1FA7wc9OLUEZ4NUytBXcdNi3ore+Sv4Hd59OprVUHpbLPaJBeQYqNShqupc
+         A1RyUozNjuEJz2BOUGrl1G5GbP3Q/UFSdy5T1vYJR3AF8s66pfwLV2lo+awYBNHeLVTm
+         4DTQmCy4020SH16/UmVCUY0dE0bsKAcAXUdIc4iovyeXGn+JMl53C8HcCaWNB/CwrImD
+         TvPQ==
+X-Gm-Message-State: ACgBeo1xvPxI8/AQ4c0xmlZItIgaBDRPsy9rp0O2UjA4mTmkt6cG7Scx
+        5Lt5ydq5rZHaxUUfs3H09NovSEg2svwtFw==
+X-Google-Smtp-Source: AA6agR5+qG2pYhy9LeF+iT26oZG1qHU3SLkrzITuutbQNXg0ttnlL7wTy7pN+ka1mTZ4g/wCBkRUuw==
+X-Received: by 2002:aa7:88d1:0:b0:52e:f8e:aab5 with SMTP id k17-20020aa788d1000000b0052e0f8eaab5mr7738603pff.63.1659716970583;
+        Fri, 05 Aug 2022 09:29:30 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w18-20020a170902e89200b0016dcbdf9492sm3296786plg.92.2022.08.05.09.29.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 09:29:29 -0700 (PDT)
+Date:   Fri, 5 Aug 2022 16:29:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] KVM: x86: Reject writes to PERF_CAPABILITIES feature
+ MSR after KVM_RUN
+Message-ID: <Yu1FZX7hwT1X7DSw@google.com>
+References: <20220805083744.78767-1-likexu@tencent.com>
+ <20220805083744.78767-2-likexu@tencent.com>
 MIME-Version: 1.0
-References: <20220805153834.2510142-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20220805153834.2510142-1-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 5 Aug 2022 18:29:09 +0200
-Message-ID: <CAJZ5v0jVp+AW06MqgOmQV=AmGtb7VdY_FYSxC6wT2BZw9uzxnQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] thermal/core: Rearm the monitoring only one time
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805083744.78767-2-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 5:38 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> The current code calls monitor_thermal_zone() inside the
-> handle_thermal_trip() function. But this one is called in a loop for
-> each trip point which means the monitoring is rearmed several times
-> for nothing (assuming there could be several passive and active trip
-> points).
->
-> Move the monitor_thermal_zone() function out of the
-> handle_thermal_trip() function and after the thermal trip loop, so the
-> timer will be disabled or rearmed one time.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Fri, Aug 05, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> KVM may do the "wrong" thing if userspace changes PERF_CAPABILITIES
+> after running the vCPU, i.e. after KVM_RUN. Similar to disallowing CPUID
+> changes after KVM_RUN, KVM should also disallow changing the feature MSRs
+> (conservatively starting from PERF_CAPABILITIES) after KVM_RUN to prevent
+> unexpected behavior.
+> 
+> Applying the same logic to most feature msrs in do_set_msr() may
+> reduce the flexibility (one odd but reasonable user space may want
+> per-vcpu control, feature by feature)
 
-Does this series depend on any other?
+I don't follow this argument.  vcpu->arch.last_vmentry_cpu is per-vCPU, nothing
+prevents userspace from defining 
 
-You've been sending quite a lot of material lately and it is not
-always easy to tell what the dependencies between the different patch
-series are.
+> and also increases the overhead.
 
-> ---
->  drivers/thermal/thermal_core.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index b4c68410c158..4e1a83987b99 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -383,11 +383,6 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
->                 handle_critical_trips(tz, trip, trip_temp, type);
->         else
->                 handle_non_critical_trips(tz, trip);
-> -       /*
-> -        * Alright, we handled this trip successfully.
-> -        * So, start monitoring again.
-> -        */
-> -       monitor_thermal_zone(tz);
->  }
->
->  static void update_temperature(struct thermal_zone_device *tz)
-> @@ -503,6 +498,8 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
->
->         for (count = 0; count < tz->num_trips; count++)
->                 handle_thermal_trip(tz, count);
-> +
-> +       monitor_thermal_zone(tz);
->  }
->  EXPORT_SYMBOL_GPL(thermal_zone_device_update);
->
-> --
-> 2.25.1
->
+Yes, there is a small amount of overhead, but it's trivial compared to the massive
+switch statements in {svm,vmx}_set_msr().  And there are multiple ways to make the
+overhead practically meaningless.
+
+Ha!  Modern compilers are fantastic.  If we special case the VMX MSRs, which isn't
+a terrible idea anyways (it's a good excuse to add proper defines instead of open
+coding "MSR_IA32_VMX_BASIC ... MSR_IA32_VMX_VMFUNC" everywhere), then the lookup
+can use a compile-time constant array and generate what is effectively a switch
+statement without actually needed a switch statemen, and without needed to play
+macro games are have redundant lists (maintenance burden).
+
+E.g. with some prep work, the lookup can be this
+
+/*
+ * All feature MSRs except uCode revID, which tracks the currently loaded uCode
+ * patch, are immutable once the vCPU model is defined.  Special case the VMX
+ * MSRs to keep the primarly lookup loop short.
+ */
+static bool kvm_is_immutable_feature_msr(u32 msr)
+{
+	int i;
+
+	if (msr >= KVM_FIRST_VMX_FEATURE_MSR && msr <= KVM_LAST_VMX_FEATURE_MSR)
+		return true;
+
+	for (i = 0; i < ARRAY_SIZE(msr_based_features_all_except_vmx); i++) {
+		if (msr == msr_based_features_all_except_vmx[i])
+			return msr != MSR_IA32_UCODE_REV;
+	}
+
+	return false;
+}
+
+which gcc translates to a series of CMP+JCC/SETcc instructions.
+
+   0x00000000000291d0 <+48>:	8d 86 80 fb ff ff	lea    -0x480(%rsi),%eax
+   0x00000000000291d6 <+54>:	83 f8 11	cmp    $0x11,%eax
+   0x00000000000291d9 <+57>:	76 65	jbe    0x29240 <do_set_msr+160>
+   0x00000000000291db <+59>:	81 fe 29 10 01 c0	cmp    $0xc0011029,%esi
+   0x00000000000291e1 <+65>:	74 5d	je     0x29240 <do_set_msr+160>
+   0x00000000000291e3 <+67>:	81 fe 8b 00 00 00	cmp    $0x8b,%esi
+   0x00000000000291e9 <+73>:	0f 94 c0	sete   %al
+   0x00000000000291ec <+76>:	81 fe 0a 01 00 00	cmp    $0x10a,%esi
+   0x00000000000291f2 <+82>:	0f 94 c2	sete   %dl
+   0x00000000000291f5 <+85>:	08 d0	or     %dl,%al
+   0x00000000000291f7 <+87>:	75 3e	jne    0x29237 <do_set_msr+151>
+   0x00000000000291f9 <+89>:	81 fe 45 03 00 00	cmp    $0x345,%esi
+   0x00000000000291ff <+95>:	74 36	je     0x29237 <do_set_msr+151>
+
+I'll send a series.

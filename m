@@ -2,185 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3BB058A40D
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 02:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C9A58A40F
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 02:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239523AbiHEAEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 20:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S239436AbiHEAGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 20:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiHEAEB (ORCPT
+        with ESMTP id S229916AbiHEAGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 20:04:01 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248E26E8B7;
-        Thu,  4 Aug 2022 17:04:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659657840; x=1691193840;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=aYGMrJhMG7VwH6G8GGglk7gFn5B7F4FWtQOqfyNd9WQ=;
-  b=iO7PjO6O3SMOf9pEmkwyHVQ+I+u59sMAxdQVYvsq5xVRbjuUUaLXmsPp
-   DGNVG7Vtvae4pfKflmDXBfUQsTV5IrJuaPwSEPkCvwkXKRxpx5mxLKp3N
-   gtWzVzNFAHGi7H2s3lmfwTvMOum4sP1gO1grAZzabp0t5i0nazoIbotSr
-   VO4Vvz4KFugQClklJZmeRrlYxW9DcHk9YmTtS1veCX8vAq3KzFmOJXWss
-   2C5aI/urVgZgNFZ6SWtCslFb0xO1zciOxLXAcVEOAoifycFQn0z3zKqb3
-   P9aIA+HYhWHB/KeEtc61vnUPfvzBOOKI4dIadbgnVKARah6a8vs2n54nH
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="287645409"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="287645409"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 17:03:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="745672187"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Aug 2022 17:03:59 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 4 Aug 2022 17:03:59 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Thu, 4 Aug 2022 17:03:59 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Thu, 4 Aug 2022 17:03:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gq26JXB4wuolJjA+r6eYjx6nBbmiD7RA+2gs8/h2houWN4y9GUMy/a5jR8HoCW6iaLkqGqzEDnYu/gEE5wAWlZ5tityLIPpIG26spFgRH1JYGxE2XMz/Y/rd38L56p9c21HJsciJUMt/JFEIDx2z/2CKnP5Rd3PbXz5gXNXsDY94s9+1GlNO0uBP6lkrd6vN3ZhAjJxbQP+RuJGRNsCRSTtXCyEujnoemDk8Zg6ErFxj8Aljsp8ztRPtsGqbOD/v08+9xGwSQbSdUw9prpVsiprTBau18kmpoVUOTrZt7+LnhNlGJfptdHWhu+46iWJtUkCOF50aM62SFZXG7p3BcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aYGMrJhMG7VwH6G8GGglk7gFn5B7F4FWtQOqfyNd9WQ=;
- b=E3lv02xOGwIDC/LKP7rx4x9Wbzkj6ZfqXbcjYCf76tUIGqUea+uleog+Iz0S1gTueSsVvuKA61341N5HNBWuwsOKokUp1nv37lNzPfhXk3aMR+ez/3zS69GEJlvRJslx+FUcQsvXMRkJ9F7buvV8xOnm8ayH15xkcfm3LniCzX3I1LSGns5NU/+gLdaSMNRfrWo2IlcLSMSHhObp2lXiN0b1HV4TArfLGhX7gKSlTewMTI7UsTGqgSHcEmTohBKzvQaeHZsbH3tNg0aGHjJANtyfXs19FuoUhp6EWEwPOld+2D0kJ93gjdse1bGF8D+a/y7OiulLODn16AcNr0bwJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by BL0PR11MB3204.namprd11.prod.outlook.com (2603:10b6:208:60::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Fri, 5 Aug
- 2022 00:03:57 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::fd67:814c:7bf7:7ddb]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::fd67:814c:7bf7:7ddb%9]) with mapi id 15.20.5504.014; Fri, 5 Aug 2022
- 00:03:57 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     David Matlack <dmatlack@google.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-CC:     kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Shahar, Sagi" <sagis@google.com>
-Subject: RE: [RFC PATCH v6 037/104] KVM: x86/mmu: Allow non-zero value for
- non-present SPTE
-Thread-Topic: [RFC PATCH v6 037/104] KVM: x86/mmu: Allow non-zero value for
- non-present SPTE
-Thread-Index: AQHYYKy8zPILIEnT00ajAOEUUOd8O62f6OoAgAAG0wCAAApGoA==
-Date:   Fri, 5 Aug 2022 00:03:57 +0000
-Message-ID: <BL1PR11MB5978DB988E482B8329339881F79E9@BL1PR11MB5978.namprd11.prod.outlook.com>
-References: <cover.1651774250.git.isaku.yamahata@intel.com>
- <bfa4f7415a1d059bd3a4c6d14105f2baf2d03ba6.1651774250.git.isaku.yamahata@intel.com>
- <YuxOHPpkhKnnstqw@google.com>
- <CALzav=cf_2dz8vMD+D_Xo1zBJZndJmtMBxbnYpQKP_mci1np=A@mail.gmail.com>
-In-Reply-To: <CALzav=cf_2dz8vMD+D_Xo1zBJZndJmtMBxbnYpQKP_mci1np=A@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.500.17
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 614318fc-2004-47d9-8064-08da7675fe1f
-x-ms-traffictypediagnostic: BL0PR11MB3204:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5VLXJS6jIdKIFHwQnTTNPaA7K6SZrc9m8U2il0dPVonza3OLeAfz6M01qKR59deLvYiJCG68PgFsr2ILpMr/w9ozIKpGVTeFyTCNvmfRbAIS0HjURacYEB79HObx+9FQ/6y2VrTOiRzLeYgKpGGG3MIl7aDP/o33T6KsyQWpKkcaW9i2TMjHj95QB0643SoYhnAPcKi2kZgXelGn6y20JtRBWFf4djJKOR/BHkpp32vrKuB70c/64BtTW+hYsMCh1OaaXE7LnBGm+CzlPCx/nEb4I3S0Eu34hszJjg5avZ0sLSHmD3Ov8RLoomU+r6MiNj2vqtbcpLSxY7USfzNKvTk918Wr0gNnybqrf7NW4qoxRgGpWY3KPMJydvsVBSGMM3DCvgeBGV77E7vHhxecEM3SCqAXWxuw1c8ZcswUFSewLgUUyaX/wJxy1LvhNs6bMkZ2M0hCL8aRmTItcFzdThZz1+GQa1nH+dQO6kmy+7tMPLN0ebK7bk6EmuJn8LoULv0ZiQSbQHbIo/kw/2CqIS1+R9hE/giSLU7YfjFA/mQ6h5Rgc38bVcyJboai5o1WD3rn3e8F//r2KP4nrg9RNFvgqZKTQoUYyNvfye2FzdaraXHRMg6jeB0+cPN7xsGd2HvX+AUhcMFyxudShdTt6UGSPzyPWVjykRQzuVCaZfbWasMCuI4DX7sV87CeBv+iLVdNlge3rAj8CLfwcK9zGI+inddLNV+3NZQKRKX5k5nauzE3Gi5XHeVAmBldmw8Imh7bTKS6NI453ul4s2FQj9BWW/gzO4VrgNVITp54D5M=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(346002)(376002)(39860400002)(366004)(396003)(41300700001)(4744005)(316002)(478600001)(71200400001)(110136005)(54906003)(8676002)(2906002)(76116006)(55016003)(66476007)(66556008)(64756008)(66446008)(8936002)(4326008)(52536014)(66946007)(5660300002)(82960400001)(6636002)(38100700002)(122000001)(38070700005)(86362001)(7696005)(186003)(33656002)(6506007)(26005)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Uy9WclorWm1FZ1l0ZWphTkZ4VjMzTjh2TDlXTzdoMGVOamFPNTJmU1o2YlRU?=
- =?utf-8?B?bC91QWNxbUk2cHRGbmVXWTBlREl5MWZGYTAxZE9tUTNPR0d3OVh5NElBZ3lD?=
- =?utf-8?B?Sm5uaVBhUFVySXhlR1dnSHZwOWo3cllVVGpDWlBFYkgyVnpsWkxqcnc2MlZN?=
- =?utf-8?B?UjYrdE9QYWV0WFBDVys2S3Npay9nOUNEa2VNUklLdDZvWTYyVmlCLzZkWTJE?=
- =?utf-8?B?cmVoWDE4d0VrNTBqWFVsZ2J4ZjIvd0Jlczl3eThmQXYxcG94WkxybkZsWkJp?=
- =?utf-8?B?VjdiNFpFYVNtZ0JxMXJtZHBQcHNodE9qU0R2dUhTdFN4UVdUWTgrSlgzaHFQ?=
- =?utf-8?B?a2VvRVUwUG5sbE5OSmRmQ3hRcGsyRUpUOEM3UzBxMTUyUnRIVE5kRy9KdWN5?=
- =?utf-8?B?TTIvSHJzdzA2Rzl0UzdNdFdlQWFoLzA0WTd5QzVILzlZVnZwYmZHQ3JDalc2?=
- =?utf-8?B?RTI3N3dxWFUrc25ISW1JOUFRSnVSMVBweEw2SW5hRy8wdEcySXpBVlZmbVhp?=
- =?utf-8?B?cW16cWxUTFNXNUdRSkVVNHVWOGp1UWtkWTJXTnNheEVvNzQ1a2xHdDBXaThl?=
- =?utf-8?B?RFNQUDFGZUVZN2JiRHZSOUM2aytaUWhpc2lyOTAxdy83QXdBV1YzQUhPRzBE?=
- =?utf-8?B?b2ZYaEUxVDM3TEpScU5TUVlKMk1GemdhOG81ZVZSNk9VVkRueUZWL2Vld3Nw?=
- =?utf-8?B?RjQvN2J5c1JSVDFvZjY3TWlqeUN3Ymg4WWdqNExqZWo4YzMzWVpQS2lVdUZz?=
- =?utf-8?B?bzdlOWtsakNWNTM3Q2ZNcys0SThicW1HTEFEMElRQzVva1hWWFVlNWNyQTVo?=
- =?utf-8?B?TnV4TEhGeG1EcjBHS1llbFRZNnE3RHdQWGhya2tHVmM4aUplalNxMDR0ODkx?=
- =?utf-8?B?Z0kzUlNHdGc1cnFEaEs4Z1d5N0Q2YXQyUFR0ejlGbFAwdDNiTUFKWmFKQWNY?=
- =?utf-8?B?K3JTZGNhTEFTRHc0bG9UQ2pjRFY4a1ZQUktUNDhyNTBydG54UTRpU1R4V0I2?=
- =?utf-8?B?UkpwUWNuTjUwcFp3cVgrODJMOGRJTGdrK1g2R0dUY1p0WlplK2JDbW5hTjJT?=
- =?utf-8?B?cG14WW1DUHFSM0NJZFVZeXpPR2xDTWNRRTJ2ZEcvSFdtaEs2RHhJajFNNDV5?=
- =?utf-8?B?ZXZuMHAyZTRnalNvRjVBY0JDa1ptWG9xSFR1VnUrdHR2R21sY2l5bysvN0Mv?=
- =?utf-8?B?R1lBRWw4eDQraXRXNlIxVkI1aWp5V2dSSjZicHlCZ3JJTi8xOURGQStGMndq?=
- =?utf-8?B?VnR1bkVnakR0MEQwOTJUMUllYVhLcHRyOTJDN0VSMnFOVDBmU0hvU1pSaE8w?=
- =?utf-8?B?b2lqRFY1UnZocGxFNVdvRCszdWdjTjcrbXE1YlVGWkcvNld2YXM4VDBDZ2VS?=
- =?utf-8?B?a2NYZTRrbDZHUkpsWHg1RHM2elYrYWZGTVlzWFl3R294VEcrWVQ3M1NJQ3NP?=
- =?utf-8?B?VDFndU1xZjJseGR6OEg1VVZJMDhNaHRVbVFyRGhOV3pNVXFCNHhjcjc2VmpH?=
- =?utf-8?B?UzJOYlR3TlViSnFSUlNIS1F0eHFCdVBWOUYxNVNLYlRoaFUyZU9mQmlKMmtj?=
- =?utf-8?B?TURjSDN2TWtNVkNiZFJ6Njh5eXdoVGNkZHpZZGtUNHgrOWpJaHVSY1hRQmdK?=
- =?utf-8?B?Vi9MY1FYZ0pKRTd0NjNHU2s0cFkxbW9pRkdOMUtIWU9LNFhQY05HN29ZOXdo?=
- =?utf-8?B?WGkzakVXdCtORjROWXUxYWlKK0ZlOW1JK3lHc2VVWG14SlllTWt2Y0N0b3hO?=
- =?utf-8?B?Ykd2RytLcVhXL0tEODhiWU81NXFaYmhBanFURHcvMXg3SURtTU5VS09sc0pP?=
- =?utf-8?B?M2VPaDdpN3ppcGpRcndBN0RqN2hnbnhpZkkvcVh2UTRvNmt6WmM5OXVzdDBw?=
- =?utf-8?B?TWhZY1JDamRVbFJGSEtwVUtUOW1CL1VvWU9Wd0phdlJUWU51eUhiL2d0VmIz?=
- =?utf-8?B?Qk5BcGIyNi9KN05uNStRVGRmbjVXTlJzaHRhMFc4VzRIdmtOYnM4cjBmcmFu?=
- =?utf-8?B?ZnNLZmNUU2Y1U1paQmJaKzBaQWlDSjZWc0lLeWNlMTVnaTdad3NZWlpNbGND?=
- =?utf-8?B?QkVlbU91MHlEb2tMbWNPSUNaUzU2a2dXSEhONWJsZExldWxiQ3d0bDZMeEFz?=
- =?utf-8?Q?7cgk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 4 Aug 2022 20:06:01 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72E21836D
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 17:05:59 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id f22so1525205edc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 17:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=gsGGPxAFQbPGQpDuay5H4e/BwFqybiw3htx2qLQDm2I=;
+        b=QHjb3Zuo//MXAKQPKfrs3vVH4nTMd0bBCbL4DfX2tbvLKoOuc/v7D3JDqfKZuFrcIr
+         Br7A5LH6vv+AAh2ocrAqCp9a8MSbMrdwCdgCi5aqv2ByzPWlDQ2kl6jcF2V80BKjFqEZ
+         EKh56TkJ7xWxhONlwjZ7BhOtC6np6I7ck/1aNMd0JZT+OR5jfAnADYJm+BiPlo3PY5Ir
+         3U6D4XixXxxPX3RxmxLciAnEA/9dgcs5jiHppdSoOvsaoFKOoU4r97KwS0Ia2xt7BLGh
+         +7v5cyFtfWU953toeK0uqgHvPejnNRUIhIm7IE1Fls4PsImtRlRhc9NyJiI+5JQbKTwN
+         n1gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=gsGGPxAFQbPGQpDuay5H4e/BwFqybiw3htx2qLQDm2I=;
+        b=02epgoHjOgdHrMEgzKIqYkDV4SYVnYM8f46Mhndl+EMAGUm/lpA8SrTD5YfHyksX9D
+         9+RSuGv2LnFsr3BRVnEId5JO9vtcj3f++Hnd6OIp/jxiIKtVbALFrzcwv5EQXvGHdI7J
+         7lkXRzgTV82IrIWmt2xeeT2SMU8ahg01d5RmDiLEzSVYsgZVWOfhPZkTjzY/bkh1fm9E
+         FDnn7kL1i1ZgaeEx2S1zczjxMaNeO7xg/5dMPW7Dwc2FrA3pgLadosndNsMvYNlWyvzo
+         iN0EqQtxx3S3NxHFKNz9GGaiVxjjgXOjvBJDKv0MDu1pyHX3juwEe6xOpNIvGfCEYpVT
+         zkpw==
+X-Gm-Message-State: ACgBeo0vteEnDaI85ZY6PxBoTgMQ9e+6YU871Pl6/WstsAMRDQJCc7id
+        xwSKaoJmwncFLbDvqciJKVwCEFF1o/LHp0rUyAA=
+X-Google-Smtp-Source: AA6agR4k06l9foPALtOj13OoPQfcUaayxqlXJ/Lve/9Ril1KTiLOakYyVvgJ/x9mpM5i4lhnFV+wo4bJUMMI9lSTJ7I=
+X-Received: by 2002:a05:6402:2079:b0:43d:a218:9b8a with SMTP id
+ bd25-20020a056402207900b0043da2189b8amr4190111edb.357.1659657958138; Thu, 04
+ Aug 2022 17:05:58 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 614318fc-2004-47d9-8064-08da7675fe1f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2022 00:03:57.1357
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZCsrlMwsPGUVseyGjauRPjJDQjg4IT7u0jqHeOn9OtZgB2Y/oFg0nu44/4Uwdv2VLSr53beHppHY15SF7kZH9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3204
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
+ <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
+ <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
+ <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
+ <20220803062024.vn7awasmifkp5xow@pengutronix.de> <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
+ <CAPY8ntBBz56Es=pK+KpqhyYLUET95DT_zE6gorOWx4WkCSxJAg@mail.gmail.com>
+ <20220804093829.42kdelp7u4r743nv@pengutronix.de> <CAPY8ntBovVq1HVt_UneDF8OB9KBdEBv52o=4BCTmf9VpiODxVg@mail.gmail.com>
+ <20220804125152.idyzetjqkjzgbbm2@pengutronix.de> <CAPY8ntAatYvbf5ehfsj4qcSDC=sODeN1Cj0vDjn6p0M=k320NA@mail.gmail.com>
+In-Reply-To: <CAPY8ntAatYvbf5ehfsj4qcSDC=sODeN1Cj0vDjn6p0M=k320NA@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Thu, 4 Aug 2022 19:05:46 -0500
+Message-ID: <CAHCN7x+DkJgGvMLnYBXscSMDmTCeaHeJKK6T9eLUm+rXSx=NQA@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Marco Felsch <m.felsch@pengutronix.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com, NXP Linux Team <linux-imx@nxp.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+IEluIGFkZGl0aW9uIHRvIHRoZSBzdWdnZXN0aW9ucyBhYm92ZSwgSSdkIHN1Z2dlc3QgYnJl
-YWtpbmcgdGhpcyBwYXRjaA0KPiA+IHVwLCBzaW5jZSBpdCBpcyBkb2luZyBtdWx0aXBsZSB0aGlu
-Z3M6DQo+ID4NCj4gPiAxLiBQYXRjaCBpbml0aWFsaXplIHNoYWRvdyBwYWdlIHRhYmxlcyB0byBF
-TVBUWV9TUFRFICgwKSBhbmQNCj4gPiAgICByZXBsYWNlIFREUCBNTVUgaGFyZC1jb2RlZCAwIHdp
-dGggRU1QVFlfU1BURS4NCj4gPiAyLiBQYXRjaCB0byBjaGFuZ2UgRk5BTUUoc3luY19wYWdlKSB0
-byBub3QgYXNzdW1lIEVNUFRZX1NQVEUgaXMgMC4NCj4gPiAzLiBQYXRjaCB0byBzZXQgYml0IDYz
-IGluIEVNUFRZX1NQVEUuDQo+ID4gNC4gUGF0Y2ggdG8gc2V0IGJpdCA2MyBpbiBSRU1PVkVEX1NQ
-VEUuDQoNCkkgdGhpbmsgMS8yIGNhbiBiZSBzZXBhcmF0ZSBwYXRjaGVzLCBidXQgMy80IHNob3Vs
-ZCBiZSBkb25lIHRvZ2V0aGVyLg0KDQpQYXRjaCAzIGFsb25lIGlzIGJyb2tlbiBhcyB3aGVuIFRE
-UCBNTVUgemFwcyBTUFRFIGFuZCByZXBsYWNlcyBpdCB3aXRoIFJFTU9WRURfU1BURSwgaXQgbG9z
-ZXMgYml0IDYzLiAgVGhpcyBpcyBub3Qgd2hhdCB3ZSB3YW50LiAgV2UgYWx3YXlzIHdhbnQgYml0
-IDYzIHNldCBpZiBpdCBpcyBzdXBwb3NlZCB0byBiZSAgc2V0IHRvIGEgbm9uLXByZXNlbnQgU1BU
-RS4gDQoNCkJ1dCBJIGFsc28gZG9uJ3Qgc2VlIHNwbGl0dGluZyB0byAzICBwYXRjaGVzIGlzIGFi
-c29sdXRlbHkgd29ydGggdG8gZG8gYXMgZG9pbmcgYWJvdmUgaW4gb25lIHBhdGNoIGlzIGFsc28g
-ZmluZSB0byBtZS4NCg0K
+On Thu, Aug 4, 2022 at 9:52 AM Dave Stevenson
+<dave.stevenson@raspberrypi.com> wrote:
+>
+> On Thu, 4 Aug 2022 at 13:51, Marco Felsch <m.felsch@pengutronix.de> wrote:
+> >
+> > Hi Dave,
+> >
+> > On 22-08-04, Dave Stevenson wrote:
+> > > Hi Marco
+> > >
+> > > On Thu, 4 Aug 2022 at 10:38, Marco Felsch <m.felsch@pengutronix.de> wrote:
+> > > >
+> > > > Hi Dave, Adam,
+> > > >
+> > > > On 22-08-03, Dave Stevenson wrote:
+> > > > > Hi Adam
+> > > > >
+> > > > > On Wed, 3 Aug 2022 at 12:03, Adam Ford <aford173@gmail.com> wrote:
+> > > >
+> > > > ...
+> > > >
+> > > > > > > Did managed to get access to the ADV7535 programming guide? This is the
+> > > > > > > black box here. Let me check if I can provide you a link with our repo
+> > > > > > > so you can test our current DSIM state if you want.
+> > > > > >
+> > > > > > I do have access to the programming guide, but it's under NDA, but
+> > > > > > I'll try to answer questions if I can.
+> > > > >
+> > > > > Not meaning to butt in, but I have datasheets for ADV7533 and 7535
+> > > > > from previously looking at these chips.
+> > > >
+> > > > Thanks for stepping into :)
+> > > >
+> > > > > Mine fairly plainly states:
+> > > > > "The DSI receiver input supports DSI video mode operation only, and
+> > > > > specifically, only supports nonburst mode with sync pulses".
+> > > >
+> > > > I've read this also, and we are working in nonburst mode with sync
+> > > > pulses. I have no access to an MIPI-DSI analyzer therefore I can't
+> > > > verify it.
+> > > >
+> > > > > Non-burst mode meaning that the DSI pixel rate MUST be the same as the
+> > > > > HDMI pixel rate.
+> > > >
+> > > > On DSI side you don't have a pixel-clock instead there is bit-clock.
+> > >
+> > > You have an effective pixel clock, with a fixed conversion for the
+> > > configuration.
+> > >
+> > > DSI bit-clock * number of lanes / bits_per_pixel = pixel rate.
+> > > 891Mbit/s * 4 lanes / 24bpp = 148.5 Mpixels/s
+> >
+> > Okay, I just checked the bandwidth which must equal.
+> >
+> > > As noted elsewhere, the DSI is DDR, so the clock lane itself is only
+> > > running at 891 / 2 = 445.5MHz.
+> > >
+> > > > > Section 6.1.1 "DSI Input Modes" of adv7533_hardware_user_s_guide is
+> > > > > even more explicit about the requirement of DSI timing matching
+> > > >
+> > > > Is it possible to share the key points of the requirements?
+> > >
+> > > "Specifically the ADV7533 supports the Non-Burst Mode with syncs. This
+> > > mode requires real time data generation as a pulse packet received
+> > > becomes a pulse generated. Therefore this mode requires a continuous
+> > > stream of data with correct video timing to avoid any visual
+> > > artifacts."
+> > >
+> > > LP mode is supported on data lanes. Clock lane must remain in HS mode.
+> > >
+> > > "... the goal is to accurately convey DPI-type timing over DSI. This
+> > > includes matching DPI pixel-transmission rates, and widths of timing
+> > > events."
+> >
+> > Thanks for sharing.
+> >
+> > > > > The NXP kernel switching down to an hs_clk of 445.5MHz would therefore
+> > > > > be correct for 720p operation.
+> > > >
+> > > > It should be absolute no difference if you work on 891MHz with 2 lanes
+> > > > or on 445.5 MHz with 4 lanes. What must be ensured is that you need the
+> > > > minimum required bandwidth which is roughly: 1280*720*24*60 = 1.327
+> > > > GBps.
+> > >
+> > > Has someone changed the number of lanes in use? I'd missed that if so,
+> > > but I'll agree that 891MHz over 2 lanes should work for 720p60.
+> >
+> > The ADV driver is changing it autom. but this logic is somehow odd and
+> > there was already a approach to stop the driver doing this.
+>
+> I'd missed that bit in the driver where it appears to drop to 3 lanes
+> for pixel clock < 80000 via a mipi_dsi_detach and _attach. Quirky, but
+> probably the only way it can be achieved in the current framework.
+>
+> > To sync up: we have two problems:
+> >   1) The 720P mode with static DSI host configuration isn't working
+> >      without hacks.
+> >   2) The DSI link frequency should changed as soon as required
+> >      automatically. So we can provide all modes.
+> >
+> > I would concentrate on problem 1 first before moving on to the 2nd.
+>
+> If you change your link frequency, it may be worth trying a lower
+> resolution again such as 720x480 @ 60fps on 2 lanes. (720480@60 on 4
+> lanes is again listed as mandatory for using the timing generator).
+>
+> > > I have just noted that 720p59.94 at 24bpp on 4 lanes is listed as one
+> > > of the modes that is mandatory to use the timing generator (reg 0x27
+> > > bit 7 = 1). On 2 lanes it is not required.
+> > > I don't know why it's referencing the 1000/1001 pixel clock rates and
+> > > not the base one, as it's only a base clock change with the same
+> > > timing (74.176MHz clock instead of 74.25MHz).
+> >
+> > Interesting! I would like to know how the HDMI block gets fetched by the
+> > DSI block and how the timing-generator can influence this in good/bad
+> > way. So that we know what DSI settings (freq, lanes) are sufficient.
+> >
+> > > > > If you do program the manual DSI divider register to allow a DSI pixel
+> > > > > rate of 148.5MHz vs HDMI pixel rate of 74.25MHz, you'd be relying on
+> > > >
+> > > > There is no such DSI pixel rate to be precise, we only have a DSI bit
+> > > > clock/rate.
+> > > >
+> > > > > the ADV753x having at least a half-line FIFO between DSI rx and HDMI
+> > > > > tx to compensate for the differing data rates. I see no reference to
+> > > > > such, and I'd be surprised if it was more than a half dozen pixels to
+> > > > > compensate for the jitter in the cases where the internal timing
+> > > > > generator is mandatory due to fractional bytes.
+> > > >
+> > > > This is interesting and would proofs our assumption that the device
+> > > > don't have a FIFO :)
+> > > >
+> > > > Our assumptions (we don't have the datasheet/programming manual):
+> > > >   - HDMI part is fetching 3 bytes per HDMI pixclk
+> > > >   - Ratio between dsi-clk and hdmi-pixelclk must be 3 so the DSI and
+> > > >     HDMI are in sync. So from bandwidth pov there are no differences
+> > > >     between:
+> > > >       - HDMI: 74.25 MHz * 24 Bit  = 1782.0 MBit/s
+> > > >       - DSI:    891 MHz * 2 lanes = 1782.0 MBit/s (dsi-clock: 445.5 )
+> > > >       - DSI:  445.5 MHz * 4 lanes = 1782.0 MBit/s (dsi-clock: 222.75)
+> > > >
+> > > >     But the ratio is different and therefore the faster clocking option
+> > > >     let something 'overflow'.
+> > >
+> > > I'll agree that all looks consistent.
+> > >
+> > > > Anyway, but all this means that Adam should configure the
+> > > > burst-clock-rate to 445.5 and set the lanes to 4. But this doesn't work
+> > > > either and now we are back on my initial statement -> the driver needs
+> > > > some attention.
+> > >
+> > > Things always need attention :-)
+> >
+> > ^^
+> >
+> > > I suspect that it's the use of the timing generator that is the issue.
+> > > The programming guide does recommend using it for all modes, so that
+> > > would be a sensible first step.
+> >
+> > But I tested it without the timing-generator too. Can you or Adam verify
+> > the timing-generator diable logic?
+>
+> Sorry, running without the use of the timing generator is the issue.
+> It is mandatory in some modes, but supported in all modes. Always
+> using it should therefore avoid not using it in one of the mandatory
+> modes (the list looks a little arbitrary).
+>
+> > > I will say that we had a number of issues getting this chip to do
+> > > anything, and it generally seemed happier on 2 or 3 lanes instead of
+> > > 4. Suffice to say that we abandoned trying to use it, despite some
+> > > assistance from ADI.
+> >
+> > Even more interessting, what is your alternative to this chip?
+>
+> BCM2711 which supported dual HDMI natively.
+> Our investigation of ADV7535 was when trying to build what became
+> Pi400 using BCM2710/BCM2837 (only has a single HDMI output). Whilst I
+> do have the prototype, the ADV was wired up weirdly with I2C so I
+> never really got it running with Linux.
+
+I think I have convinced myself that the DSIM is working good enough
+to match that of the NXP.
+
+I've gone through and made a list of the register differences between
+a working display using NXP's kernel and
+the non-working display.  I've identified a small handful of registers
+on both the CEC bank of registers and main set of registers.
+
+I noticed that the working NXP version doesn't rescale the number of
+lanes based on the clock rate, and it stays fixed at 4 lanes.
+
+That might actually explain some of the issues I am seeing on their
+kernel still not syncing at low resolutions.
+
+I'm going to try to go through the code and identify other differences
+and see if I can hack this version of the ADv7535 driver to get it
+into a similar working state as the NXP one (not that theirs is the
+best).  With a couple of the hacks, I can get my screen to sync, but
+it just displays blue, so I think I am making some progress.
+
+I should have a few more hours tomorrow to work on this.  It's a
+side-project for me, but I have time over the weekend too.
+
+adam
+>
+>   Dave

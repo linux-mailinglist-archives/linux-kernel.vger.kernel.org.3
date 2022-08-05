@@ -2,195 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5854958AAA2
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 14:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119CE58AAA8
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 14:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240669AbiHEMS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 08:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S240680AbiHEMTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 08:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbiHEMSZ (ORCPT
+        with ESMTP id S232176AbiHEMTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 08:18:25 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8059928709;
-        Fri,  5 Aug 2022 05:18:24 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4Lzl4D619vz9rwt;
-        Fri,  5 Aug 2022 12:18:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1659701903; bh=x4KMxTVE17HVu5TEjEC0MsTy0o85wBRihPIa06Wqnpk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=diQYDxzk0nNAXQ207Ib5FkeMqAOz/YYT2h3pv6GQrDZU0bgwcDDodCQANfqIjGPta
-         hcvSY7nBo5fZK3gqlip4XMqw6KFDXYojUoDZpnSE7meWScnUBW4eeY60h4lPay0rDB
-         GmgZFJIZ6JsPgTOZPkXOLJXr+zi9qnlZug6vAdKk=
-X-Riseup-User-ID: 8F1703E09777E2DBB8AB9A0A3D112253BDA56237E670C033CB6579E5EBADACAE
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4Lzl474xqXz1yWd;
-        Fri,  5 Aug 2022 12:18:15 +0000 (UTC)
-Message-ID: <ad483719-24b2-3207-cdcc-f5055d7a8895@riseup.net>
-Date:   Fri, 5 Aug 2022 09:18:12 -0300
-MIME-Version: 1.0
-Subject: Re: [PATCH v3 0/3] Introduce KUNIT_EXPECT_MEMEQ and
- KUNIT_EXPECT_MEMNEQ macros
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        andrealmeid@riseup.net, melissa.srw@gmail.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220803215855.258704-1-mairacanal@riseup.net>
- <CABVgOS=Yq2+uDw_iVK11eqBjEB-BErEr6naYpTswtTvyehAzYw@mail.gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <CABVgOS=Yq2+uDw_iVK11eqBjEB-BErEr6naYpTswtTvyehAzYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 5 Aug 2022 08:19:04 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E06C28709
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 05:19:02 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a7so4754651ejp.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 05:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=HO4kC4nNlnQFlc8G8Nch+zBVqAbftzSR6y0K4mCpcH4=;
+        b=Q8ibbL+jSGTCKibqPgl9QTeN/9uRKy5Ayj41IGiv58kG+oL7A1HWoRdKKLSuacBz71
+         3slBzyhL3HJm34bV9Ja342qVx1tq1I0jABW59O3i7lsX+aCn1lCQ9FLy8GDbzMvXDMD6
+         +kyXoexlvW4STHlEsCKZ1ZSUKnpb5dBjnQ4BG08/nILOmy0fg91Sw1fB0ThImRaaxWn8
+         UHAVuCJeKhkNbfGR1eCAg56w+NIJqsWaBARgQI55qtvH78jG1cUpA0g/HVt2cGDloyzm
+         2DcCJl+hsZHDjNhdZiLkSgkiB5pu3Ebnv4mYQImojJKAPV0sW3TGa5zjciy9GW+hn3HT
+         0aSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=HO4kC4nNlnQFlc8G8Nch+zBVqAbftzSR6y0K4mCpcH4=;
+        b=ID8wzeJ+rNqPDDCeKHHmBewOXz6Wset+O+07aUmTyWTiRE1YNFUjQcNwt18gHdBeLW
+         KCkZV2GXZKTjyRo8aDNtUIhHvEpdbrpbc0yyLVWOnNv83o8yJmxVdgh4G3Uvjb+4mC7w
+         DxM8q2J0Yhex0E3sow8DKh5w3ZD17hagKJ00t8WRqypSBC91j3HIOUx4zPypLej7J0nK
+         Bh76qF0fyUPLpCJfNVpWGlPZwaTvNbgdoa5dWjpIXj9eP9/bmozIXRodJIfaATnr2HXm
+         zm8YMgKFCLTCxzEhhQbVOtXlu1MaFxADwAknlhxxyVtwwM4Y81diX4ReYnJ8qvaN5Aw9
+         d6IQ==
+X-Gm-Message-State: ACgBeo0pOWJQHNdCzrPGgpaQ7PMi80GDw7Ze3opkAJ9/38zE4is3G7VV
+        Sh5Y0GUP15JaUXIvlhvCHCFTqw==
+X-Google-Smtp-Source: AA6agR5D7QIau7/K3B5Rpnw537SaJBhGRUmTRgJ5l36RUL394ZSxU98Yj8nsSV6NPcwWlt5LAQATiA==
+X-Received: by 2002:a17:907:7f1d:b0:730:da23:5b56 with SMTP id qf29-20020a1709077f1d00b00730da235b56mr4093968ejc.140.1659701941168;
+        Fri, 05 Aug 2022 05:19:01 -0700 (PDT)
+Received: from localhost.localdomain (2a02-8440-5241-be09-b892-f882-607f-7a79.rev.sfr.net. [2a02:8440:5241:be09:b892:f882:607f:7a79])
+        by smtp.gmail.com with ESMTPSA id kx13-20020a170907774d00b0072b3464c043sm1506111ejc.116.2022.08.05.05.18.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 05:19:00 -0700 (PDT)
+From:   Jerome Neanne <jneanne@baylibre.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com
+Cc:     khilman@baylibre.com, narmstrong@baylibre.com, msp@baylibre.com,
+        j-keerthy@ti.com, lee.jones@linaro.org, jneanne@baylibre.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org
+Subject: [PATCH v3 00/10] Add support for TI TPS65219 PMIC.
+Date:   Fri,  5 Aug 2022 14:18:42 +0200
+Message-Id: <20220805121852.21254-1-jneanne@baylibre.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/5/22 01:44, David Gow wrote:
-> On Thu, Aug 4, 2022 at 5:59 AM Maíra Canal <mairacanal@riseup.net> wrote:
->>
->> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_EQ or
->> KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp function,
->> such as:
->>   KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
->>
->> Although this usage produces correct results for the test cases, if the
->> expectation fails the error message is not very helpful, indicating only the
->> return of the memcmp function.
->>
->> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
->> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a determined size. In
->> case of expectation failure, those macros print the hex dump of the memory
->> blocks, making it easier to debug test failures for memory blocks.
->>
->> Other than the style changes, this v3 brings alignment to the bytes, making
->> it easier to identify the faulty bytes. So, on the previous version, the
->> output from a failure would be:
->> [14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gpu/drm/tests/drm_format_helper_test.c:248
->> [14:27:42] Expected dst == result->expected, but
->> [14:27:42] dst ==
->> [14:27:42] 33 0a <60> 12 00 a8 00 00 <00> 00 8e 6b <33> 0a 60 12
->> [14:27:42] 00 00 <00> 00 00 a8 <8e> 6b 33 0a 00 00 <00> 00
->> [14:27:42] result->expected ==
->> [14:27:42] 33 0a <61> 12 00 a8 00 00 <01> 00 8e 6b <31> 0a 60 12
->> [14:27:42] 00 00 <01> 00 00 a8 <81> 6b 33 0a 00 00 <01> 00
->>
->> Now, with the alignment, the output is:
->> [14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gpu/drm/tests/drm_format_helper_test.c:248
->> [14:27:42] Expected dst == result->expected, but
->> [14:27:42] dst ==
->> [14:27:42] 33  0a <60> 12  00  a8  00  00 <00> 00  8e  6b <33> 0a  60  12
->> [14:27:42] 00  00 <00> 00  00  a8 <8e> 6b  33  0a  00  00 <00> 00
->> [14:27:42] result->expected ==
->> [14:27:42] 33  0a <61> 12  00  a8  00  00 <01> 00  8e  6b <31> 0a  60  12
->> [14:27:42] 00  00 <01> 00  00  a8 <81> 6b  33  0a  00  00 <01> 00
->>
->> Moreover, on the raw output, there were some indentation problems. Those
->> problems were solved with the use of KUNIT_SUBSUBTEST_INDENT.
->>
->> The first patch of the series introduces the KUNIT_EXPECT_MEMEQ and
->> KUNIT_EXPECT_MEMNEQ. The second patch adds an example of memory block
->> expectations on the kunit-example-test.c. And the last patch replaces the
->> KUNIT_EXPECT_EQ for KUNIT_EXPECT_MEMEQ on the existing occurrences.
->>
->> Best Regards,
->> - Maíra Canal
->>
->> v1 -> v2: https://lore.kernel.org/linux-kselftest/2a0dcd75-5461-5266-2749-808f638f4c50@riseup.net/T/#m402cc72eb01fb3b88d6706cf7d1705fdd51e5da2
->>
->> - Change "determinated" to "specified" (Daniel Latypov).
->> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to make
->> it easier for users to infer the right size unit (Daniel Latypov).
->> - Mark the different bytes on the failure message with a <> (Daniel Latypov).
->> - Replace a constant number of array elements for ARRAY_SIZE() (André Almeida).
->> - Rename "array" and "expected" variables to "array1" and "array2" (Daniel Latypov).
->>
->> v2 -> v3: https://lore.kernel.org/linux-kselftest/20220802212621.420840-1-mairacanal@riseup.net/T/#t
->>
->> - Make the bytes aligned at output.
->> - Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Daniel Latypov).
->> - Line up the trailing \ at macros using tabs (Daniel Latypov).
->> - Line up the params to the functions (Daniel Latypov).
->> - Change "Increament" to "Augment" (Daniel Latypov).
->> - Use sizeof() for array sizes (Daniel Latypov).
->>
->> Maíra Canal (3):
->>   kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
->>   kunit: Add KUnit memory block assertions to the example_all_expect_macros_test
->>   kunit: Use KUNIT_EXPECT_MEMEQ macro
->>
->>  .../gpu/drm/tests/drm_format_helper_test.c    |  6 +-
->>  include/kunit/assert.h                        | 34 +++++++++
->>  include/kunit/test.h                          | 76 +++++++++++++++++++
->>  lib/kunit/assert.c                            | 56 ++++++++++++++
->>  lib/kunit/kunit-example-test.c                |  7 ++
->>  net/core/dev_addr_lists_test.c                |  4 +-
->>  6 files changed, 178 insertions(+), 5 deletions(-)
->>
->> --
->> 2.37.1
->>
->> --
->> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
->> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
->> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220803215855.258704-1-mairacanal%40riseup.net.
-> 
-> These patches look pretty good to me overall, but I was unable to
-> apply v3 to test -- it looks like the mail client has wrapped some
-> lines or something...
-> 
-> davidgow@slicestar:~/linux-kselftest$ git am
-> ./v3_20220803_mairacanal_introduce_kunit_expect_memeq_and_kunit_expect_memneq_macros.mbx
-> Applying: kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
-> error: corrupt patch at line 24
-> Patch failed at 0001 kunit: Introduce KUNIT_EXPECT_MEMEQ and
-> KUNIT_EXPECT_MEMNEQ macros
-> 
-> Checkpatch also picks up an issue:
-> ERROR: patch seems to be corrupt (line wrapped?)
-> #62: FILE: include/kunit/assert.h:255:
->                                    const struct va_format *message,
-> 
-> v2 applied clearnly, so it seems to be specific to v3.
+This driver supports
+- 3 Buck regulators and 4 LDOs
+- low-power standby mode
+- warm/soft reset
+- basic fault handling (via interrupts).
+- power button
 
-I'll check this issue and submit a v4. Thank you!
+Not implemented
+- DVS
 
-> 
-> In general, I like the patches, though. While I think there are a few
-> places it'd be slightly suboptimale if it's being used to compare more
-> structured data, such as the prospect of comparing padding between
-> elements, as well as the output formatting not being ideal. It's
-> perfect for the cases where memcmp() otherwise would be used, though.
+1-Regulators:
+Full implementation and test
+Visual check: cat /sys/kernel/debug/regulator/regulator_summary
+Full validation requires userspace-consumer and virtual-regulator
+LDO1 is not used and output can be probbed on TP84.
 
-Do you any take on how to make the output formatting more ideal?
+2-Reset WARM/COLD
+test procedure: launch reboot on the console and check visually
 
-Best Regards,
-- Maíra Canal
+warm vs. cold can be configured on the kernel command-line at boot time.
+Default is cold, but adding `reboot=w`
+to kernel command allow testing warm reboot.
 
-> 
-> Cheers,
-> -- David
+Alternative:
+`# echo warm > /sys/kernel/reboot/mode` 
+
+3-SW Shutdown
+test procedure: launch halt on the console and check visually
+
+Note: enters in competition with other source during probe
+
+Board Test Points can be used to check voltage after system shutdown.
+baseport is not handling wakeup.
+A power OFF/ON cycle is needed to recover.
+
+4-Interrupt Pin (nINT):
+
+Interrupt occurring on PMIC TPS65219 is propagated to SOC
+through EXTINTn pin connected to gic500 interrupt controller
+
+Interrupt lines for TPS65219 shows-up on console:
+cat /proc/interrupts
+
+Validation:
+Create a Residual Voltage interrupt and handling and interrupt source is cleared.
+`tps65219 0-0030: Registered residual voltage for LDO1`
+`533:          1          0  tps65219_irq  35 Edge      LDO1_RV`
+
+Mapped to power button (use TP90 to GND to emulate a physical button)
+
+5-PB Startup and Shutdown:
+New implementation to support both rising and falling edge.
+
+TPS65219 has different interrupts compared to other TPS6521* chips.
+TPS65219 defines two interrupts for the powerbutton one for push and one
+for release.
+
+
+Interrupt support: cat proc/interrupts
+`557:          0          0  tps65219_irq  47 Edge      tps65219-pwrbutton.1.auto`
+`558:          0          0  tps65219_irq  48 Edge      tps65219-pwrbutton.1.auto`
+
+TPS65219 has a multipurpose pin called EN/PB/VSENSE that can be either:
+- EN in which case it functions as an enable pin.
+- VSENSE which compares the voltages and triggers an automatic on/off request.
+- PB in which case it can be configured to trigger an interrupt to the SoC.
+ti,power-button reflects the last one of those options
+where the board has a button wired to the pin and triggers
+an interrupt on pressing it.
+
+6-Changes vs v1:
+
+6.1- Regulators:
+- Further to Mark Brown review:
+Use standard regmap helpers for set_voltage, enable and disable.
+tps65219_set_mode, return -EINVAL in default statement for clarity.
+Reshaped irq handler to report events through the notification API:
+regulator_notifier_call_chain().
+Use standard regulator events (consumer.h).
+
+6.2- Device tree
+- Further to Nishanth Menon review:
+add tag DONOTMERGE
+Board support is pending waiting for TI commitment.
+This device tree is needed for driver test purpose but should not go upstream.
+
+6.3- Bindings
+- Further to Rob Herring review:
+Squash interrupt commit into regulator dt-binding.
+Squash pwrbutton commit into regulator dt-binding.
+Remove interrupt-controller/cells properties because no consumer for those interrupts.
+
+- Further to Mark Brown review:
+Remove constraints on regulator-name.
+
+- Pending for decision from Lee Jones further to Mark Brown review
+The entire binding document should probably be in MFD if it's going to
+have properties for other functions added to it.
+
+6.4- Misc
+- Further to Mark Brown review:
+Use C++ (//) formatting for file header block including SPDX License
+in mfd, regulator and pwrbutton.
+
+7-Changes vs v2:
+
+7.1- Bindings
+- Further to Markus Schneider-Pargmann review:
+Fix description and align name with dts: ti,power-button
+
+7.2- Maintainers
+- Further to Nishanth Menon review:
+On behalf of Markus SP. Remove MAINTAINERS-OMAP2-support-add-tps65218-pwrbutton.patch
+from the series.
+Not needed, driver is not missing, went through INPUT tree instead.
+
+Jerome Neanne (9):
+  DONOTMERGE: arm64: dts: ti: Add TI TPS65219 PMIC support for AM642 SK
+    board.
+  DONOTMERGE: arm64: dts: ti: Add pinmux and irq mapping for TPS65219
+    external interrupts
+  DONOTMERGE: arm64: dts: ti: k3-am642-sk: Enable tps65219 power-button
+  regulator: dt-bindings: Add TI TPS65219 PMIC bindings
+  mfd: drivers: Add TI TPS65219 PMIC support
+  mfd: drivers: Add interrupts support to TI TPS65219 PMIC
+  regulator: drivers: Add TI TPS65219 PMIC regulators support
+  Input: Add tps65219 interrupt driven powerbutton
+  arm64: defconfig: Add tps65219 as modules
+
+Markus Schneider-Pargmann (1):
+  mfd: tps65219: Add power-button support
+
+ .../bindings/regulator/ti,tps65219.yaml       | 173 +++++++
+ MAINTAINERS                                   |   2 +
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts        | 115 +++++
+ arch/arm64/configs/defconfig                  |   3 +
+ drivers/input/misc/Kconfig                    |  10 +
+ drivers/input/misc/Makefile                   |   1 +
+ drivers/input/misc/tps65219-pwrbutton.c       | 150 ++++++
+ drivers/mfd/Kconfig                           |  15 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/tps65219.c                        | 437 ++++++++++++++++++
+ drivers/regulator/Kconfig                     |   9 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/tps65219-regulator.c        | 416 +++++++++++++++++
+ include/linux/mfd/tps65219.h                  | 364 +++++++++++++++
+ 14 files changed, 1697 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
+ create mode 100644 drivers/input/misc/tps65219-pwrbutton.c
+ create mode 100644 drivers/mfd/tps65219.c
+ create mode 100644 drivers/regulator/tps65219-regulator.c
+ create mode 100644 include/linux/mfd/tps65219.h
+
+-- 
+2.17.1
+

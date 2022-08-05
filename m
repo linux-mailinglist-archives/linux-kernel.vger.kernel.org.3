@@ -2,104 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5733C58B08D
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 21:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E108558B091
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 21:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241279AbiHETyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 15:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
+        id S241303AbiHET4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 15:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiHETyp (ORCPT
+        with ESMTP id S234198AbiHET4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 15:54:45 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D2E10FFB;
-        Fri,  5 Aug 2022 12:54:40 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id tl27so6800338ejc.1;
-        Fri, 05 Aug 2022 12:54:40 -0700 (PDT)
+        Fri, 5 Aug 2022 15:56:38 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EC31E3C6
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 12:56:38 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id c19-20020a17090ae11300b001f2f94ed5c6so8105581pjz.1
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 12:56:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uNNCMzM6wGgvKylIcV8lYZcNxMUBwXushcdpJCRFwXA=;
-        b=e6zKPWvo6IkiM49qZMgVKOQWfbZ4SrSe6FffLSmDWP8fLIdlY1yC8OE/wQSvLo7meO
-         H+G1B1j8KGTDWa3VYpZ9mL+EiFelSvWjLwXE7DG8n8DQ+D5rzmDidw5gGMSxEtzBTYay
-         CLtkEm9skbWSrqajt3PPDuzophplCTD2rEc2ozvNuGxaWnQx2yPBCEFUqeaSi77JFMf/
-         Lw2RNp9XxDE8YMazE5oWBsI9D+FoaBUwg1aWZoHlGg3LGNcIATEAW1twLhw3HNGCMwn7
-         vwJyZXFiNu98nw+DG5ql1wkGSRaTKJ8FnxsEEAQxBwk2IlQrhE2vSCh672yBPBlGzRGv
-         RtWw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/xQgp4opYOG0vmRMTReD0uWzh7NbyzqbCzsK8/nQYSo=;
+        b=R9jZhtKbUQnEneEQjJ8jLw7PLvhRt45Tl67KG4Od/o0c44dIGta/DDx3Pzl+fNbna4
+         A8dY1W1Ak++zvNw88n7hf6sLx11tz1KhsCFKwfnyes7mGI9ZDqMqNKMrvmjjfju1ismb
+         4fQpfjC14tIAIjPv6QfpQRYlYQdhc1oy8l4+Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uNNCMzM6wGgvKylIcV8lYZcNxMUBwXushcdpJCRFwXA=;
-        b=0RjUpMCrVyar1nwWqr9Ws+duYx/0HXjYpl9Gj+cHR8FF0sGcMPNSQojNtf3pK70SFA
-         qUqmfGosMBcTfQX2abSfGkgwx6BfejzYqep4JuGHA2nNREckc5FgtXReQYPvXS0Rprpi
-         hjh5/X1mY2DALri16RMatRMSQqhiM1W1yALcAiSCEfUDgOQmK1oKYS3YuSr0StSA/DzV
-         fzPh7axUsMX/B61swxVJlULayT+NGaVbO2OZFAmkP3cMtEBZSG9rH3WXGbT0T/AEOa/U
-         h4KpqHaH9nDrRB9KyRln2RS0VCX7l3b/8mWRi+rtFnk8qKPv2eOR60BMsOCB2Yj0+Fzh
-         nfkw==
-X-Gm-Message-State: ACgBeo07GdJoqRg7dh+8WskaxfZe6Nj9naSGF454IgCZEgZZ4KTO8heJ
-        7Rb/CIR3ReR+TT2aY3Q++vc=
-X-Google-Smtp-Source: AA6agR69gHdIOk66u3DOAUGxbgd3W9IYbjKGJ4TRriMkRlw9SK3I2HFpGUjJDA71iNteqeGQVxRwjg==
-X-Received: by 2002:a17:907:2719:b0:730:a5e7:9da7 with SMTP id w25-20020a170907271900b00730a5e79da7mr6558802ejk.26.1659729279246;
-        Fri, 05 Aug 2022 12:54:39 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id 2-20020a170906200200b0073100dfa7b0sm947743ejo.8.2022.08.05.12.54.35
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/xQgp4opYOG0vmRMTReD0uWzh7NbyzqbCzsK8/nQYSo=;
+        b=h8kJ2ppcjcgbcOmbVhfAVAz54ldXZ4wifFEayLqV/0WRsDyVcGjHxkxpjo1mjutM/f
+         g3sxcoiRnxV8RHw19QlNO5g62dV+Y1ml2YDGRetVPh1ZGC0jtrJWcsxE8MY1wPgzVOvj
+         vS4V2xbAMcKUu2BvuQPUl30KYdP1N5kl2fa7c+X2Yp7gmfGREmAL+TYyNNsrs5oq3PdO
+         h+7TXmrr6l8eem2n+LAFMNXcwRYv0rpxNoRuc329iEX2g+ZCAtBSRYRDYhay0ziJovZA
+         cellQttmDoGUarC8GICz8AIwpYun/CjO+dmD07SXmY5tIpl3+hRnM1OYI2grlrRIcGWh
+         BIVA==
+X-Gm-Message-State: ACgBeo03N1fT9BzNFWEnaBHCUCU/LEFZuVNCOo7NwduhZHUmlr/wxLai
+        ZzJ9xNjME7XIA6yBOXRa7XG8dA==
+X-Google-Smtp-Source: AA6agR7K8LcP635a8rB8xE9ZBlfwu99pVvBL/VC185RKUOzC5U67ib7PnUOjVI0QLKGrxY38sD5J2g==
+X-Received: by 2002:a17:902:db12:b0:16e:e5fc:56db with SMTP id m18-20020a170902db1200b0016ee5fc56dbmr8545810plx.46.1659729396437;
+        Fri, 05 Aug 2022 12:56:36 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:c59c:1680:614c:3338])
+        by smtp.gmail.com with UTF8SMTPSA id h10-20020a170902680a00b0016dd1e8c1ddsm3326736plk.247.2022.08.05.12.56.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 12:54:38 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <ec3fe997-37d8-22b5-65f1-72f08a16474f@redhat.com>
-Date:   Fri, 5 Aug 2022 21:54:35 +0200
+        Fri, 05 Aug 2022 12:56:36 -0700 (PDT)
+Date:   Fri, 5 Aug 2022 12:56:34 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: misc: onboard_usb_hub: Drop reset delay in
+ onboard_hub_power_off()
+Message-ID: <Yu118qfzoYcHgJs3@google.com>
+References: <20220805111836.1.Id5a4dc0a2c046236116693aa55672295513a0f2a@changeid>
+ <CAD=FV=W9VWbvWqdEEY9=OnNSsAnQ+CgQPRifbAu2ixrgPQd54A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-9-chao.p.peng@linux.intel.com>
- <YuQutJAhKWcsrrYl@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YuQutJAhKWcsrrYl@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=W9VWbvWqdEEY9=OnNSsAnQ+CgQPRifbAu2ixrgPQd54A@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,17 +71,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 21:02, Sean Christopherson wrote:
-> If we really want a different name, I'd vote for nomenclature that captures the
-> invalidation aspect, which is really what the variables are all trackng, e.g.
-> 
->    mmu_invalidate_seq
->    mmu_invalidate_in_progress
->    mmu_invalidate_range_start
->    mmu_invalidate_range_end
-> 
+Hi Doug,
 
-Agreed, and this can of course be committed separately if Chao Peng 
-sends it outside this series.
+On Fri, Aug 05, 2022 at 12:26:35PM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Fri, Aug 5, 2022 at 11:19 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > onboard_hub_power_off() currently has a delay after asserting the
+> > reset of the hub. There is already a delay in onboard_hub_power_on()
+> > before de-asserting the reset, which ensures that the reset is
+> > asserted for the required time, so the delay in _power_off() is not
+> > needed.
+> >
+> > Skip the reset GPIO check before calling gpiod_set_value_cansleep(),
+> > the function returns early when the GPIO descriptor is NULL.
+> >
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> >
+> >  drivers/usb/misc/onboard_usb_hub.c | 5 +----
+> >  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> I was trying to figure out what this "reset" was defined to do and I
+> looked for the device tree bindings. They don't seem to exist. Was
+> that an oversight?
 
-Paolo
+It's not in the binding of the RTS5411 which I guess you looked at,
+because that hub doesn't have a reset line.
+
+The reset functionality was initially added for the TI USB8041, the
+binding has the reset, but I found it hasn't landed yet:
+
+https://patchwork.kernel.org/project/linux-usb/patch/20220727093801.687361-1-alexander.stein@ew.tq-group.com/
+
+> In any case, I'm not convinced that your patch is correct. Timing
+> diagrams often show a needed delay between adjusting a reset GPIO and
+> turning on/off the power. The timing diagrams can sometimes show a
+> required delay on both sides. I guess at the moment the only user of
+> this reset GPIO has a symmetric delay, but I can totally expect that
+> someone could come along and say that they needed 10 ms on one side
+> and 1 ms on the other side...
+
+As of now none of the supported hubs (there are only two of them) has
+an asymmetric delay. The RTS5411 doesn't have a reset line, and the
+TI USB8041 only specifies a power on delay (in my interpretation).
+
+[1] has some discussion between Alexander and me about this second
+reset. The patch that added the delay was merged before this
+discussion concluded.
+
+If the driver is going to support a hub that needs an additional
+reset delay when the hub is powered off I'm totally in favor of
+adding that delay, however that isn't currently the case in my
+understanding. If you draw a different conclusion from the TI
+USB8041 datasheet please let me know.
+
+[1] https://patchwork.kernel.org/project/linux-usb/patch/20220727141117.909361-1-alexander.stein@ew.tq-group.com/

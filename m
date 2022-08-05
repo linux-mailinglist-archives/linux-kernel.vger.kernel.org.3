@@ -2,52 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76DDA58ADC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 17:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AC458ADC3
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 17:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240954AbiHEP4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 11:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
+        id S241086AbiHEP4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 11:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241466AbiHEPzc (ORCPT
+        with ESMTP id S241641AbiHEP4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 11:55:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E3F62D1
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 08:55:18 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oJzfP-00026g-Om; Fri, 05 Aug 2022 17:55:15 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oJzfL-001vCS-6j; Fri, 05 Aug 2022 17:55:13 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oJzfM-009klO-RL; Fri, 05 Aug 2022 17:55:12 +0200
-Date:   Fri, 5 Aug 2022 17:55:09 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Tamseel Shams <m.shams@samsung.com>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com
-Subject: Re: [PATCH] pwm: removes period check from pwm_apply_state()
-Message-ID: <20220805155509.edqwxcvyoqfic4pn@pengutronix.de>
-References: <CGME20220805102056epcas5p29f22d42c854bebe6d0301b56094cf3ea@epcas5p2.samsung.com>
- <20220805101125.47955-1-m.shams@samsung.com>
+        Fri, 5 Aug 2022 11:56:03 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E2D94;
+        Fri,  5 Aug 2022 08:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1659714950;
+        bh=qz85uU+tOnmR0AteWIOLiGeXxgQrVxjjX0htQ9uuwk4=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=baNdOGFxnhK/hvMaSWj51ixHAbsWhrNo5JBjG7k6VRH8DMtmVm4qTmZbNzHgvBJWd
+         eccRp51bb1NeUbfLst72zSdnKNeLxqLr033n1GCX2D3HufVtKZbfCSllvLvyJX7uGQ
+         semLAYuLAPJNQK/Y+JzvQd2ZEOAS3ktqmhOnePMc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from p100 ([92.116.139.128]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mf078-1nnew81W0Y-00gawC; Fri, 05
+ Aug 2022 17:55:50 +0200
+Date:   Fri, 5 Aug 2022 17:55:46 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        John David Anglin <dave.anglin@bell.net>
+Subject: [GIT PULL] parisc architecture fixes and updates for v5.20-rc1
+Message-ID: <Yu09gjA99eDcPNFM@p100>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xs6xr6e4bpqmmt22"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805101125.47955-1-m.shams@samsung.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Provags-ID: V03:K1:lFJBL0IcNQ0tJLX/2H4A66QIte4cR+/qxlFnxo3hhlHVJydOqDJ
+ QkA+Zv1wH6VY0D+8XlAGurRWGQPB5DUO23GyBAU0/VKdZHBVwPjF0uA6GvnctBXO3Bie//X
+ 4SVWF/TeSD4bYT6XpzmII4j8+vH22F1HS0bFl0UXKHgcG653EiOa0Gv2tikHkqCHkXniSrB
+ Qxburc6MbIFAZYj/vpZNA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:uA+XH9mc53s=:c+psU45UPbY/BK9G42HrqA
+ KfpPoPws7VdubNwz9JDsnPaQeiVbSxL/E5xkyx43mXr+bl293Qkz2QvWTNehPpZ/RM9y9RCSU
+ 2uxwaGddFktaADOTByXVgcXtpIkZ9w2HVAEFidvwH35bCnBA5VOJnFYQAdz5rhzDq+3ekqi15
+ 8QBNsmPr/H0NZAtRuTskjnhC2aOklDhalKw6OFWs7e/twvVEiaHU4Qj4q9x8lqBnMjI5r02aS
+ czZr6Rk7e3WDwF22QkhdZcyIdKkR+RHp95fYUPXEYz/9Sm5+gjmemkPcBV7zE/k874Ot1Ew4p
+ kQBJt4fpjs4HRBRmbo6lQdUX7D5l7qAE6ilhF3LWfDayVW1/4hWWFXx6HVXbP9k5siUHdvG0B
+ x1GXeJdnZyfnTfNx2yjt3hYrtBs5S2x42+f8TRpBPVSC5QiNELJFZ0VYct2mfSpi1NDgHNfrD
+ RiUJMx8S6l7XFcp7JsUUV2TfUSLa5niJ9SlJq2D2M/mT5pme8RXUyXAFaQnB0gVbuIq/6AdGQ
+ ErE9ykRFd9FBLW8PT8kWNTfHwyY2D+Dcji7l6wy9xg6/tGj/lOiwbklO17BF539KYm+EvFeor
+ rREAGDufKTyVoI7b6bx7yxxHj2Pvaw5MirXA7AG9RvnPSXBbZ4fzHF+0C1HxwIY4B9gDJGsCv
+ hDZzc39alN+rSFW3nS4Ff0OEHLCr/JAz1LVmeGQYuenCBYzedPzDVQcPsJNVgPYYoKciI2Bte
+ LIa82atdZi/9OJTaBTvvu7z+KaaAWG1bwHz8/BZUDEg5VLUHLV9UfM5ikixmgMd60KFrEptvM
+ TG/Kif/AbZ4D9WwWDOMdzxfzEcRAARJ1KkvF5wBhI/ByA1uObyk7Oe9lxEtzLwp/tjOJL0KUL
+ LRnf9MiPWKmbAJTZYF51N0NYap0CCL1SFEwFERLduC6PQYfGcqiFBEucoG2oMe1wuIHBZKvvZ
+ V1aF+mghk+bZ+JVHXM+lfmqKnCE+zBnjV8Casd6OYXdQeXpGYd8SPjwlG2vvvhSokqMsFf8hT
+ BoCowqQqMw/JIMY7KqdYWRn563N4VfxxckBHAWm8955jUR8bt24TZ1Y9m1ZbczhGuowRcGFag
+ +dd37gvsoDCjlzEwf2BRVZ4rKe/3UzCXceFoCoUVUl5TFOTckegX2rMvA==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,69 +68,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit 3d7cb6b04c3f3115719235cc6866b10326de34cd:
 
---xs6xr6e4bpqmmt22
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 5.19 (2022-07-31 14:03:01 -0700)
 
-Hello,
+are available in the Git repository at:
 
-On Fri, Aug 05, 2022 at 03:41:25PM +0530, Tamseel Shams wrote:
-> There may be situation when PWM is exported using sysfs,
-> but at that point PWM period is not set. At this situation
-> if we issue a system suspend, it calls pwm_class_suspend
-> which in turn calls pwm_apply_state, where PWM period value is
-> checked which returns an invalid argument error casuing Kernel
-> to panic. So, check for PWM period value is removed so as to
-> fix the kernel panic observed during suspend.
+  git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/for-5.20/parisc-1
 
-This looks and sounds wrong. One thing I would accept is:
+for you to fetch changes up to e61b3125a4f036b3c6b87ffd656fc1ab00440ae9:
 
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index 0e042410f6b9..075bbcdad6c1 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -557,8 +557,8 @@ int pwm_apply_state(struct pwm_device *pwm, const struc=
-t pwm_state *state)
- 	 */
- 	might_sleep();
-=20
--	if (!pwm || !state || !state->period ||
--	    state->duty_cycle > state->period)
-+	if (!pwm || !state || state->enabled && (!state->period ||
-+	    state->duty_cycle > state->period))
- 		return -EINVAL;
-=20
- 	chip =3D pwm->chip;
+  Input: gscps2 - check return value of ioremap() in gscps2_probe() (2022-08-02 10:31:59 +0200)
 
-That is, don't refuse calling pwm_apply_state() for state->period =3D 0
-and even state->duty_cycle > state->period if the PWM is not enabled.
+----------------------------------------------------------------
+parisc architecture fixes and updates for kernel v5.20-rc1:
 
-But anyhow, even without that the kernel should not panic. So I ask you
-to research and provide some more info about the problem. (Which
-hardware does it affect? Where does it panic? ...)
+One real bugfix to change the io_pgetevents_time64() syscall to use the compat
+implementation when running in compat mode, otherwise the signed int32
+parameters min_nr and nr will be incorrectly handled as unsigned int64 values.
 
-Best regards
-Uwe
+Other than that just small cleanups:
+* hardware database housekeeping and proper /proc/iomem output
+* add function exit code if probe functions fail
+* drop stale variables (pa_swapper_pg_lock)
+* drop unneccessary zero-initializations
+* typo fixes in comments
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+----------------------------------------------------------------
+Helge Deller (4):
+      parisc: Clean up names in hardware database
+      parisc: Fix device names in /proc/iomem
+      parisc: Drop pa_swapper_pg_lock spinlock
+      parisc: io_pgetevents_time64() needs compat syscall in 32-bit compat mode
 
---xs6xr6e4bpqmmt22
-Content-Type: application/pgp-signature; name="signature.asc"
+Jason Wang (2):
+      parisc: Fix comment typo in fault.c
+      parisc: Drop zero variable initialisations in mm/init.c
 
------BEGIN PGP SIGNATURE-----
+William Dean (1):
+      parisc: Check the return value of ioremap() in lba_driver_probe()
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLtPVsACgkQwfwUeK3K
-7AkyeggAlIF4i7X3hL+F6WL3ld2fObx/1FvrgJASGSAoNdEVn0srMhrNEhjZrugG
-Bdy3IESIAp86OHLfMwyAbF+w1Ww/mXcTq8Me3BrRN5cN2D4mtm0J4Pm4q3A2K85x
-JdTfOiUV6exqQZScwhvSym3YMPwZO2sRc2gY2idBZhO4PRrdpE/aiifN0IdGKIQx
-kEA7TEQfPm2/ZQR0nHpIGte2TLX8YzyHkdeRbmmV3+JNO/ywi+YwXM+aA79g1qVL
-MGCsBDB6HjCu4RMpCpIZbGTuy9Xv7zFomVdvSMd8xF5vB5Y63JxsW0/JGZ1eP7VJ
-bNo40HqSbGyEDCgwAipnhdUV+mVW1g==
-=56AU
------END PGP SIGNATURE-----
+Xie Shaowen (1):
+      Input: gscps2 - check return value of ioremap() in gscps2_probe()
 
---xs6xr6e4bpqmmt22--
+Xin Gao (1):
+      parisc: Do not initialise statics to 0
+
+ arch/parisc/kernel/cache.c              |  3 ---
+ arch/parisc/kernel/drivers.c            |  9 ++++-----
+ arch/parisc/kernel/hardware.c           | 11 ++++-------
+ arch/parisc/kernel/pci-dma.c            |  4 ++--
+ arch/parisc/kernel/syscalls/syscall.tbl |  2 +-
+ arch/parisc/mm/fault.c                  |  2 +-
+ arch/parisc/mm/init.c                   |  2 +-
+ drivers/input/serio/gscps2.c            |  4 ++++
+ drivers/parisc/lba_pci.c                |  6 +++++-
+ 9 files changed, 22 insertions(+), 21 deletions(-)

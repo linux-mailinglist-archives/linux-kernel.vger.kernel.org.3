@@ -2,151 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D8858AEEA
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 19:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE39F58AEEC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 19:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241218AbiHERaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 13:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
+        id S241256AbiHERaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 13:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241105AbiHER3z (ORCPT
+        with ESMTP id S241201AbiHERaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 13:29:55 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2A03CBFE
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 10:29:53 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id a15-20020a170902eccf00b0016f92ee2d54so1330414plh.15
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 10:29:53 -0700 (PDT)
+        Fri, 5 Aug 2022 13:30:16 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53CCB6C
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 10:30:12 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a7so6217977ejp.2
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 10:30:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:reply-to:from:to:cc;
-        bh=e3KAREkpALrV805apy/PR/815kpRUNyRkecRR9ka60I=;
-        b=s7N8DoTy9J5L3pDUtmYf7WwNsc0rFgtyd//8fTsC4PsYsqL01l+itwXylbdINPpF42
-         zPqY+T5YPKXBC3/JvrM3fdfnqfj/eeTcdNWnvE2iwA5uirekuCrZ+3S9oVF/pisilJ8V
-         LJnz35HXY/vNeAkyWc9LeE7xQN7v1LIDjP0xhck2iHjbmhSHWtJDWRMYTkGiEu18k8tW
-         2j0XG9x6d3IpbZgWahqwD8bBO6zToasLMve6pEoNb59EoXystkjZTr6HZAMiG4EppzGa
-         0GOmS6f0zKmKP584mT1zChMCT4aA8jfOhHAOmOSPahOmuEAYMiDzD5/RGMCPQFcKLllQ
-         aq3g==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ONebu+4QLRptJ6A+Ou0an3ofnAwu546ZMSAcmQOzkVY=;
+        b=IWmWAJxYsy3IA4Cg/AofIaZIQu5z2QPcTD8IKLllL/eWUVmIqjemQRBI8751Gav7zj
+         eEKQzkAkZK6Gehr3Ikl7Y7fdWkSSAgArdgJVV3ae7bL7M5nvXGvUQ5GYGjlAI7xgGz/s
+         kI4jX93SFRIST1Y8CKlfAGLpScBIaYeX43zm0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc;
-        bh=e3KAREkpALrV805apy/PR/815kpRUNyRkecRR9ka60I=;
-        b=douC2pAmGcOrycTBgskLMfwV6z9bm4IERX9whhadQvYO31tGMxut6zoP0AqCzur7W8
-         LJnEybTQZkb0m7o3nWkGm3z11WiYP1gsRNsl2aGZDrb2SN+ljdkAkP16ZnDcbl1/Wa4G
-         AH/jSiqZOp6yB5zVMkx0RfkI2kJFYNrKar/q889KDiB/CLc3oGtfSLMChaQMngAZZ8UQ
-         b5lgRmTYUeDfHhHeUSpoqcONfV/uK1udDHP9XAfB/edIcDbnwd7yrSNlbENF96g325Ia
-         BLU9toTcZdiwVlnycd7O6Fg2Ll+SHtqtOk7kwtpNNMEga/5i5s1fClPivm8tAyOGqMpr
-         7Hdw==
-X-Gm-Message-State: ACgBeo0j3el8yNVxUzbAT8tIcDzPkVQFvSFzYRgDDsCo5GUHMgsdKO2V
-        Catb24rQ1IBpVWDnP1RvMvFdtUhsPF0=
-X-Google-Smtp-Source: AA6agR7cDzyiCPI5AYha+X3FMq8JCwRkuQH5rIHqmN9FcS0gSD5AMv3QZdmmLboxNF++r74yljs+DnBr5gk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:4a8f:b0:1f5:ee3:a6a1 with SMTP id
- lp15-20020a17090b4a8f00b001f50ee3a6a1mr17251912pjb.149.1659720593556; Fri, 05
- Aug 2022 10:29:53 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  5 Aug 2022 17:29:45 +0000
-In-Reply-To: <20220805172945.35412-1-seanjc@google.com>
-Message-Id: <20220805172945.35412-4-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220805172945.35412-1-seanjc@google.com>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [RFC PATCH 3/3] KVM: x86: Disallow writes to immutable feature MSRs
- after KVM_RUN
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ONebu+4QLRptJ6A+Ou0an3ofnAwu546ZMSAcmQOzkVY=;
+        b=K/QriIWz2xrDWoGKYmPvDwftCM76VsFtEwMNt+vLuPsunjM15i/vkKiCnHHu+5bzei
+         Yg5HgBISL+Sb+VJvuIExRxBCHee6DGVlp7hiEs7ysROVNWWGkA21L7gY4ypZT9HoywP6
+         NgIUNbb1ntzSbAjTGxCL1uH6LpDIxJYio8Jx7Cu9BRnuMnBrZUCGMVWHlfmCcMizbhP5
+         Cxudw3c5wHbSdE7gaHYh5tXaSqhcAMWZB5st7r0Xq7invk6roUcblB+hIwcQJovIz0BJ
+         vfhhJjk0+RYsC3xZ5okB6JmSAgZrZ6m4OE6bBEjBIdOW1INArDCycZhbuXBrVwvXzOzH
+         6i3g==
+X-Gm-Message-State: ACgBeo3El9gTB3nTZ86Jc3DAJhDS2rL/+4LWj55ouEGhVFPPmgjLfIWE
+        6gVoVpNsMq/+XUibWWL1ITvaSkOoGJOh/vN1
+X-Google-Smtp-Source: AA6agR4BoR7Xl4Unrgxa1ep9YOH/L+09cEftGawilq3H61joat83hUncRKw78yCxiDYnkgjiHQgT3A==
+X-Received: by 2002:a17:906:6a0a:b0:72b:60b8:d2e7 with SMTP id qw10-20020a1709066a0a00b0072b60b8d2e7mr5882543ejc.607.1659720610760;
+        Fri, 05 Aug 2022 10:30:10 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id kv14-20020a17090778ce00b0072fa1571c99sm1786231ejc.137.2022.08.05.10.30.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 10:30:10 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id n4so2214493wrp.10
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 10:30:09 -0700 (PDT)
+X-Received: by 2002:a5d:64c1:0:b0:220:8590:3809 with SMTP id
+ f1-20020a5d64c1000000b0022085903809mr5008022wri.97.1659720609554; Fri, 05 Aug
+ 2022 10:30:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAK8P3a2jgQcLaDXX6eOTNrU0RJ2O625e75LBMy6v2ABP0cdoww@mail.gmail.com>
+In-Reply-To: <CAK8P3a2jgQcLaDXX6eOTNrU0RJ2O625e75LBMy6v2ABP0cdoww@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 5 Aug 2022 10:29:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com>
+Message-ID: <CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com>
+Subject: Re: [GIT PULL] asm-generic: updates for 6.0
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disallow writes to feature MSRs after KVM_RUN to prevent userspace from
-changing the vCPU model after running the vCPU.  Similar to guest CPUID,
-KVM uses feature MSRs to configure intercepts, determine what operations
-are/aren't allowed, etc.  Changing the capabilities while the vCPU is
-active will at best yield unpredictable guest behavior, and at worst
-could be dangerous to KVM.
+On Fri, Aug 5, 2022 at 3:25 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+>  - A patch from Sebastian Siewior to rework the handling of
+>    IRQ stacks in softirqs across architectures, which is
+>    needed for enabling PREEMPT_RT.
 
-Allow writing the current value, e.g. so that userspace can blindly set
-all MSRs when emulating RESET, and unconditionally allow writes to
-MSR_IA32_UCODE_REV so that userspace can emulate patch loads.
+I am quite fed up with the chaos and garbage that PREEMPT_RT has
+caused this release.
 
-Special case the VMX MSRs to keep the generic list small, i.e. so that
-KVM can do a linear walk of the generic list without incurring meaningful
-overhead.
+Once again, this pull request contains senseless code because of a
+PREEMPT_RT patch that was merged based on some bogus "the RT code
+needs this".
 
-Cc: Like Xu <like.xu.linux@gmail.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+First off, the RT code isn't currently enabled in upstream kernels, so
+none of this merits any kind of big hurry and mindless "need to apply
+because it's a bug".
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index a1c65b77fb16..4da26a1f14c1 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1541,6 +1541,26 @@ static u32 msr_based_features[ARRAY_SIZE(msr_based_features_all_except_vmx) +
- 			      (KVM_LAST_EMULATED_VMX_MSR - KVM_FIRST_EMULATED_VMX_MSR + 1)];
- static unsigned int num_msr_based_features;
- 
-+/*
-+ * All feature MSRs except uCode revID, which tracks the currently loaded uCode
-+ * patch, are immutable once the vCPU model is defined.
-+ */
-+static bool kvm_is_immutable_feature_msr(u32 msr)
-+{
-+	int i;
-+
-+	if (msr >= KVM_FIRST_EMULATED_VMX_MSR && msr <= KVM_LAST_EMULATED_VMX_MSR)
-+		return true;
-+
-+	for (i = 0; i < ARRAY_SIZE(msr_based_features_all_except_vmx); i++) {
-+		if (msr == msr_based_features_all_except_vmx[i])
-+			return msr != MSR_IA32_UCODE_REV;
-+	}
-+
-+	return false;
-+}
-+
-+
- static u64 kvm_get_arch_capabilities(void)
- {
- 	u64 data = 0;
-@@ -2136,6 +2156,23 @@ static int do_get_msr(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
- 
- static int do_set_msr(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
- {
-+	u64 val;
-+
-+	/*
-+	 * Disallow writes to immutable feature MSRs after KVM_RUN.  KVM does
-+	 * not support modifying the guest vCPU model on the fly, e.g. changing
-+	 * the nVMX capabilities while L2 is running is nonsensical.  Ignore
-+	 * writes of the same value, e.g. to allow userspace to blindly stuff
-+	 * all MSRs when emulating RESET.
-+	 */
-+	if (vcpu->arch.last_vmentry_cpu != -1 &&
-+	    kvm_is_immutable_feature_msr(index)) {
-+		if (do_get_msr(vcpu, index, &val) || *data != val)
-+			return -EINVAL;
-+
-+		return 0;
-+	}
-+
- 	return kvm_set_msr_ignored_check(vcpu, index, *data, true);
- }
- 
--- 
-2.37.1.559.g78731f0fdb-goog
+Secondly, that patch is HORRENDOUSLY UGLY.
 
+I hereby ask every single maintainer to immediately stop taking these
+bogus patches that contain variations on random
+
+  #ifdef CONFIG_PREEMPT_RT
+
+because they are clearly left-over turds from the RT tree that were
+unbelievably ugly hacks, and should never have been merged upstream.
+
+Why am I so upset?
+
+WE ALREADY HAVE A DIFFERENT CONFIG VARIABLE EXPLICITLY FOR THIS!
+
+In fact, you can *see* that config variable in the patch.
+
+There's a very specific HAVE_SOFTIRQ_ON_OWN_STACK variable that has
+the following help message (even if that help will never be shown
+because it's not an actual question, it's a helper config variable
+that gets selected):
+
+   config HAVE_SOFTIRQ_ON_OWN_STACK
+        bool
+        help
+          Architecture provides a function to run __do_softirq() on a
+          separate stack.
+
+and that config variable ALREADY PROTECTS the do_softirq_own_stack()
+declaration in asm-generic. The very one you just added the
+CONFIG_PREEMPT_RT thing around.
+
+In other words, the RT patch is just mindless and ugly, and the right
+thing to do would have been
+
+ (a) make HAVE_SOFTIRQ_ON_OWN_STACK have a
+
+        depends on !PREEMPT_RT
+
+ (b) as PREEMPT_RT is enabled one architecture at a time, you can make
+the architecture header files also use that HAVE_SOFTIRQ_ON_OWN_STACK
+thing, which makes a whole lot more sense than sprinkling random
+CONFIG_REEMPT_RT things around.
+
+I have pulled this, but I'm really *really* fed up with these
+PREEMPT_RT patches that add code that MAKES NO SENSE.
+
+In just this merge window:
+
+ We had it in the dentry tree.
+
+ Then we had it in the printk tree to the point where I refused to even pull it.
+
+ And now we have it in the asm-generic tree too.
+
+The rule about RT patches has *always* been that we merge them as they
+become clean enough to make sense. That rule seems to have entirely
+flown out the window here, and suddenly it has become a sport to add
+random senseless #ifdef CONFIG_PREEMPT_RT lines to code.
+
+At least the dentry case had a nice big comment (which really was
+required exactly because the code made no sense on its own). This
+patch had nothing of the sort.
+
+PREEMPT_RT is special enough that it really needs to spend a _lot_
+more time making the code sensible, rather than add random hacks like
+this. And when we have a config parameter that is *explicitly* about
+this very issue, we should use that one, not some PREEMPT_RT hack.
+
+And the RT tree has had literally decades where people tried very hard
+to do exactly that - make proper abstractions, and make sure that
+merging the RT patches made sense even outside the context of the RT
+code.
+
+Now suddenly all that "this code has to make sense" seems to be history.
+
+And it really shouldn't be.
+
+              Linus

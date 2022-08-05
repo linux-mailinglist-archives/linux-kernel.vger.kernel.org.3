@@ -2,153 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B5358ADE6
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946D858ADEB
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241235AbiHEQHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 12:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
+        id S240675AbiHEQLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 12:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240588AbiHEQHQ (ORCPT
+        with ESMTP id S238240AbiHEQLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 12:07:16 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC82B32DA4
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:07:14 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id l22so3746525wrz.7
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:07:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=foE9NLSu+Hm19YIAVmVBxv5cqU+R70Qhy9c+iSwfgU8=;
-        b=aIKKpgqOwqtohc0kEcEbtcv4xGlQ2qiXde4MKN4UU6u37Axtk1NjJ9Di04o7fRfGVb
-         9RcVNIsoldcjZuMR1JP86JcdPuSS+g5O2PAF7Orpud3x2bMQaHBM/aWQYbJUSoe+zShL
-         Occ/s+iJZRU1uiyFu7xyY9p4murvMWZpoIirIXzkGln3wZ3oiIeCs9YPJopsYxT0fYjz
-         Valh7TSSoQomjuwv2eLixJrqCrNIyt+5/N4S0iQqk7PNjvYZ357718rqI4I5zY28J2wR
-         SsTXVHfJ+pc3Fl+52/KRNN6JJajI+8XCXVMlR3AyKw1jVsYbCFRa0yFdXjHVdxu4AWbY
-         5QCg==
+        Fri, 5 Aug 2022 12:11:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F38C71BF0
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:11:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659715897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hDt22zsCsVGrbg9q8dPTaduQ2hORoxHmBldXfY6vzAc=;
+        b=dm/NdEyAD1Yr1+BDWbbcacTjZre9Zu5cL/GzbsukXEVHQQ/hU7aD4y+Vg9xtdgzbXkzHMI
+        cHfCKZ5p9x84NhSqUPiX1z7VRhRw2hVPKp9cF1SWEowR1imbfKl7+5GFrpm2riEXSM11qh
+        3/OfOzSq6s4Hty5nPzFKu3T6P4S4Wo0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-bfnXTwRENbiisZIGl60tyA-1; Fri, 05 Aug 2022 12:11:36 -0400
+X-MC-Unique: bfnXTwRENbiisZIGl60tyA-1
+Received: by mail-wm1-f72.google.com with SMTP id q10-20020a1ce90a000000b003a4f6e08166so562364wmc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:11:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=foE9NLSu+Hm19YIAVmVBxv5cqU+R70Qhy9c+iSwfgU8=;
-        b=QltUVEAG7foUkJFGrS1YnJgG7h08NEF+D+0dx46dRVXcRss9EKaEeGFxnhhiijsJrB
-         Af234rP/NUxaFXE7JpsrXNAq6hQY7aXswWZ7Y/ltSdUzFNmbyvrDOiuJyeRakdpCLFpV
-         59pBwmi2Pk9cvCHDd088gsvkjCYra0jpQxVv3neLCZ8HQYRhPtgB/6p8c921/Oi8mht4
-         Qh/8IZ1ZJrBbLWJkMW2cNVm1zD3aKDp5S0rNz0QD7V1ioFaBoDKoK8Fz2Xj71CcKA3fi
-         TfC/r01UDpxwo1KddcWqDvt07wQ+xsyrpSh9JZirAjCE5dzEy5jHK8fzHM+ONQfZz9+m
-         hQGw==
-X-Gm-Message-State: ACgBeo0eP0xsbplBaN9dUE3SOxSrcVsUtisOEyrk2Rg4QfKVfHZ+ECv1
-        ioq6U7F3ThX+bKvZgznCWrP7Ig==
-X-Google-Smtp-Source: AA6agR7avs62yuynakGDNbLvwYzOeyYpJ1lkFW/hY7pOB/UOWJMsaHtToegMOmwouDTDbCsAYD72MQ==
-X-Received: by 2002:a5d:4301:0:b0:21b:8af6:4a21 with SMTP id h1-20020a5d4301000000b0021b8af64a21mr5060330wrq.296.1659715633284;
-        Fri, 05 Aug 2022 09:07:13 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:aef0:8606:da6b:79ef? ([2a05:6e02:1041:c10:aef0:8606:da6b:79ef])
-        by smtp.googlemail.com with ESMTPSA id bh19-20020a05600c3d1300b003a2f6367049sm5051263wmb.48.2022.08.05.09.07.12
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=hDt22zsCsVGrbg9q8dPTaduQ2hORoxHmBldXfY6vzAc=;
+        b=I0TC9n9Yl8gMY4uv4aOvTg4P4S4iYx6F5Cnhscz+yLFz94Nx0UT9+WRbYwJgssrBi7
+         xbqlpFXiG4wKIakOYU7jPWZNTVTmCbNHFgC/ef0cYD+wKfuRUtjWgxhRcRMFkPa+wL69
+         VuAth0PDKCT/iMWE/BXJfq+Eh1kLvcbe6wbt+z29tdfiadWlz3y+fucGoIBoMpOb4sLD
+         71xXSDK0VZHP2ZJ/gGVBlct8YZzHy5ncFP4ZIonJVrJ1RFK1gjeuAv5yjn8KgrcBLq+q
+         yNUhVA57FbRTDYDNxBGkeqa7njZIptl5M7E1JEPFJGIPbo3TZl4V2ucjOqhnWwWGNCTa
+         /G/w==
+X-Gm-Message-State: ACgBeo26yCYEYohz0Wg5XNHIM4rkZzPW8zrDOIdivAtzQ7JIjpmOAKhk
+        JZ6uqkWiWlgWztf6Wjzjwpm4dyoaJ/dKxUc52ZiQlmyaAdrxIrgJpGVERv1sQPF228+MC8v+rVq
+        SYm7xuAaoRxErN3RzmWaW5fLm
+X-Received: by 2002:a5d:5273:0:b0:220:5d3e:c50f with SMTP id l19-20020a5d5273000000b002205d3ec50fmr4964719wrc.291.1659715894972;
+        Fri, 05 Aug 2022 09:11:34 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4udtf/a4YHeijwoGO6Qa35YGkwnp+iDFfapRsOcZTilnRWoETsppr0kdNEFB4CmsFBOxkxpA==
+X-Received: by 2002:a5d:5273:0:b0:220:5d3e:c50f with SMTP id l19-20020a5d5273000000b002205d3ec50fmr4964692wrc.291.1659715894774;
+        Fri, 05 Aug 2022 09:11:34 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:fb00:f5c3:24b2:3d03:9d52? (p200300cbc706fb00f5c324b23d039d52.dip0.t-ipconnect.de. [2003:cb:c706:fb00:f5c3:24b2:3d03:9d52])
+        by smtp.gmail.com with ESMTPSA id h20-20020a05600c351400b0039db31f6372sm10699400wmq.2.2022.08.05.09.11.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 09:07:12 -0700 (PDT)
-Message-ID: <6cf66002-f13d-a1ee-7fa6-dfa78d6be427@linaro.org>
-Date:   Fri, 5 Aug 2022 18:07:11 +0200
+        Fri, 05 Aug 2022 09:11:34 -0700 (PDT)
+Message-ID: <58c2a14d-f8e2-4cc6-a2f7-68214405aae9@redhat.com>
+Date:   Fri, 5 Aug 2022 18:11:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] Revert "mlxsw: core: Add the hottest thermal zone
- detection"
+Subject: Re: [RFC PATCH v4 3/8] hugetlbfs: move routine remove_huge_page to
+ hugetlb.c
 Content-Language: en-US
-To:     Vadim Pasternak <vadimp@nvidia.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-References: <20220801095622.949079-1-daniel.lezcano@linaro.org>
- <20220801095622.949079-2-daniel.lezcano@linaro.org>
- <BN9PR12MB538167CB6E0EE463ED25898CAF9F9@BN9PR12MB5381.namprd12.prod.outlook.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <BN9PR12MB538167CB6E0EE463ED25898CAF9F9@BN9PR12MB5381.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220706202347.95150-1-mike.kravetz@oracle.com>
+ <20220706202347.95150-4-mike.kravetz@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220706202347.95150-4-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06.07.22 22:23, Mike Kravetz wrote:
+> In preparation for code in hugetlb.c removing pages from the page
+> cache, move remove_huge_page to hugetlb.c.  For a more descriptive
+> global name, rename to hugetlb_delete_from_page_cache.  Also,> rename huge_add_to_page_cache to be consistent.
 
-Hi Vadim,
+"hugetlb_add_to_page_cache"
 
-
-On 04/08/2022 14:21, Vadim Pasternak wrote:
 > 
-> 
->> -----Original Message-----
->> From: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Sent: Monday, August 1, 2022 12:56 PM
->> To: daniel.lezcano@linaro.org; rafael@kernel.org
->> Cc: Vadim Pasternak <vadimp@nvidia.com>; davem@davemloft.net;
->> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Ido Schimmel
->> <idosch@nvidia.com>; Petr Machata <petrm@nvidia.com>; Eric Dumazet
->> <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
->> <pabeni@redhat.com>
->> Subject: [PATCH 2/2] Revert "mlxsw: core: Add the hottest thermal zone
->> detection"
->>
->> This reverts commit 6f73862fabd93213de157d9cc6ef76084311c628.
->>
->> As discussed in the thread:
->>
->> https://lore.kernel.org/all/f3c62ebe-7d59-c537-a010-
->> bff366c8aeba@linaro.org/
->>
->> the feature provided by commits 2dc2f760052da and 6f73862fabd93 is
->> actually already handled by the thermal framework via the cooling device
->> state aggregation, thus all this code is pointless.
->>
->> The revert conflicts with the following changes:
->>   - 7f4957be0d5b8: thermal: Use mode helpers in drivers
->>   - 6a79507cfe94c: mlxsw: core: Extend thermal module with per QSFP module
->> thermal zones
->>
->> These conflicts were fixed and the resulting changes are in this patch.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Tested-by: Vadim Pasternak <vadimp@nvidia.com>
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-Thanks for testing
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-> Daniel,
-> Could you, please, re-base the patch on top of net-next as Jakub mentioned?
-> Or do you want me to do it?
-
-It is fine, I can do it. The conflict is trivial.
-
-However, I would have preferred to have the patch in my tree so I can 
-continue the consolidation work.
-
-Is it ok if I pick the patch and the conflict being simple, that can be 
-handle at merge time, no?
-
-> There is also redundant blank line in this patch:
-> 							&mlxsw_thermal_module_ops,
-> +
->   							&mlxsw_thermal_params,
-
-Yeah, thanks.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Thanks,
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+David / dhildenb
+

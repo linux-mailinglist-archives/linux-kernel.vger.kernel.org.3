@@ -2,118 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8200258A6C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B08F58A6C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 09:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240342AbiHEHLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 03:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S240247AbiHEHL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 03:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240199AbiHEHKj (ORCPT
+        with ESMTP id S240376AbiHEHLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 03:10:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1038474E22;
-        Fri,  5 Aug 2022 00:09:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8989FB80DE4;
-        Fri,  5 Aug 2022 07:09:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10733C433D6;
-        Fri,  5 Aug 2022 07:09:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659683377;
-        bh=QY/xj/dmLrpvXEfYnnD6E0lu77VY+niG/pRPN+FTJRM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Swju3PYz3cB3wLhsGTed8uo46PsMXQ6CUeuXyHwbAK/hPulOHWHst5X18xBc+A23i
-         Jqn+enSqJ8QCdi+bmdRk4vcgGvzdzrblA6AesOvDCAV8XspD7P6Qk4hyoMWnODFTFS
-         A+DrwSD+UjYtyy2r8vne0fr8FMf3NkHFqrbpGqfNygtiQN3Tf7hwQrFYuO0rr4IsXz
-         0yC+LzJ79cuJ4ZoRP+ad71FcdjWi1vy9go+q25DQT60J4ZNU3WZW6VcS/3D0vFfJir
-         hDAb2LQ4wWZZZSJ+FAa+xcwRhpR3MOOKNokZSnodck4A7K0dNL6oHtSGO60bOoZ8qd
-         gy+Zubvlu3BmQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oJrT6-0007hp-1M; Fri, 05 Aug 2022 09:10:00 +0200
-Date:   Fri, 5 Aug 2022 09:10:00 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, kbuild-all@lists.01.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/9] usb: dwc3: qcom: fix peripheral and OTG suspend
-Message-ID: <YuzCSCr2fkTLxvAs@hovoldconsulting.com>
-References: <20220804151001.23612-7-johan+linaro@kernel.org>
- <202208050544.ijUhoUyB-lkp@intel.com>
- <Yuy/eM1Wo+gDAJPQ@hovoldconsulting.com>
+        Fri, 5 Aug 2022 03:11:01 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A083A13D6D
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 00:10:40 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id pm17so1906768pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 00:10:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=+TTzONA/D6X8kOwQstBuCxA5JSSlF4quOuCiq/JFqPg=;
+        b=d2EcMeO5TdFW9fstG94LiP18zn2Gj1wSiCI3bwsAPs/krF3f1Mfkvt4SWjqTtQDu1O
+         11pOO8xwKj6alzWd6jNxEB9daCp5+d0ga2Q815SF5H0YFfENBzV+E6iCaLcS0Gz5AxIB
+         VR7tRnCNLliA2Br88hcAIQ0qAAoCALIgtvj9/ylWxYKTxhl6LOxHtWocx/D0fvI4DLrQ
+         KkCP/orNv9usNby0jB5YX6tcHa6b6V7zoZ7GfBT+wRa6vX7oCeMFMAz68FbFSlkzDshe
+         ZphCfr6IWiecz+lFdxX+veoZm0RMK/VR1aUSx6r87pueHF1QOuNWNIb5DFe4j4YpDwbq
+         n8Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=+TTzONA/D6X8kOwQstBuCxA5JSSlF4quOuCiq/JFqPg=;
+        b=nmCyho9aTXAFeX0c0MI3/Q/Z6/LI/X2rq+71bcnmVgZX2RG3wQRmAekWXY4vFF3qKF
+         f2pmR9PB6iOqxz240jPsXcJsu0m8G+EFxXLWwXbJuL6e6vwUYKw4kcTgUZeCLH2pw11E
+         nX5H3cPMeWekrIWdbfERmwflYzwanX+9q2/ZszVhaqevdzBSnDLKi4m+SjvBgqPOVbiq
+         s5bVk4fYZURf55Vtur9iCBn5beyO72AVaLvlA5F0j4GGja9U+nRSpjiKr4iDtt46qD2Q
+         MHlYoYl4iPdWfZZrTUhdzlxQB08c1qABsG9WpNcEmJslS/XjlM+LaC1HFefAAUvq6Xqb
+         onDA==
+X-Gm-Message-State: ACgBeo3nujkywMWqgyOCQc4zLmGanfcmtfRqViujv+I2PWilqxcV5mdy
+        mCHnoWSESDXx6RTOjP2hDZoSn4F847GvZg==
+X-Google-Smtp-Source: AA6agR7TIErJU5B8btuaj/7lSLhxgrr4y84Xe0iMDLWqN9Ma/jXVwav3sx8UkoP4J9xfbxtiC8axeg==
+X-Received: by 2002:a17:90b:350a:b0:1f5:6a5e:5d12 with SMTP id ls10-20020a17090b350a00b001f56a5e5d12mr6663202pjb.46.1659683440092;
+        Fri, 05 Aug 2022 00:10:40 -0700 (PDT)
+Received: from [10.4.82.173] ([139.177.225.242])
+        by smtp.gmail.com with ESMTPSA id 204-20020a6218d5000000b00528c22fbb45sm2197721pfy.141.2022.08.05.00.10.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 00:10:39 -0700 (PDT)
+Message-ID: <5dbced25-7cef-7078-78a9-f47545e6a9fe@bytedance.com>
+Date:   Fri, 5 Aug 2022 15:10:34 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yuy/eM1Wo+gDAJPQ@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0
+Subject: Re: [PATCH v2] arm64: run softirqs on the per-CPU IRQ stack
+Content-Language: en-US
+To:     will@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20220802065325.39740-1-zhengqi.arch@bytedance.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <20220802065325.39740-1-zhengqi.arch@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 08:58:00AM +0200, Johan Hovold wrote:
-> On Fri, Aug 05, 2022 at 05:38:30AM +0800, kernel test robot wrote:
-> > Hi Johan,
-> > 
-> > I love your patch! Perhaps something to improve:
-> > 
-> > [auto build test WARNING on usb/usb-testing]
-> > [also build test WARNING on linus/master next-20220804]
-> > [cannot apply to robh/for-next v5.19]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/usb-dwc3-qcom-fix-wakeup-implementation/20220804-231122
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > config: arc-randconfig-r002-20220804 (https://download.01.org/0day-ci/archive/20220805/202208050544.ijUhoUyB-lkp@intel.com/config)
-> > compiler: arc-elf-gcc (GCC) 12.1.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/intel-lab-lkp/linux/commit/f3778ca026b16474e49c5e0188a0eb91d73eef2f
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Johan-Hovold/usb-dwc3-qcom-fix-wakeup-implementation/20220804-231122
-> >         git checkout f3778ca026b16474e49c5e0188a0eb91d73eef2f
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/dwc3/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> >    drivers/usb/dwc3/dwc3-qcom.c: In function 'dwc3_qcom_read_usb2_speed':
-> > >> drivers/usb/dwc3/dwc3-qcom.c:313:25: warning: variable 'hcd' set but not used [-Wunused-but-set-variable]
-> >      313 |         struct usb_hcd *hcd;
-> >          |                         ^~~> 
+
+
+On 2022/8/2 14:53, Qi Zheng wrote:
+> Currently arm64 supports per-CPU IRQ stack, but softirqs
+> are still handled in the task context.
 > 
-> I'm not seeing this one with gcc-10.3.0, but I'll slap a __maybe_unused
-> in there to keep your robot's W=1 builds quiet.
+> Since any call to local_bh_enable() at any level in the task's
+> call stack may trigger a softirq processing run, which could
+> potentially cause a task stack overflow if the combined stack
+> footprints exceed the stack's size, let's run these softirqs
+> on the IRQ stack as well.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Will Deacon <will@kernel.org>
 
-Correction: of course I'm seeing it in the affected build configuration...
+Hi Will,
 
-Johan
+Are we good to merge it into 6.0-rc1?
+
+Thanks,
+Qi
+
+> ---
+> v1: https://lore.kernel.org/lkml/20220708094950.41944-1-zhengqi.arch@bytedance.com/
+> RFC: https://lore.kernel.org/lkml/20220707110511.52129-1-zhengqi.arch@bytedance.com/
+> 
+> Changelog in v1 -> v2:
+>   - temporarily discard [PATCH v1 2/2] to allow this patch to be merged first
+>   - rebase onto the v5.19
+>   - collect Reviewed-by and Acked-by
+> 
+> Changelog in RFC -> v1:
+>   - fix conflicts with commit f2c5092190f2 ("arch/*: Disable softirq stacks on PREEMPT_RT.")
+> 
+>   arch/arm64/Kconfig      |  1 +
+>   arch/arm64/kernel/irq.c | 13 +++++++++++++
+>   2 files changed, 14 insertions(+)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 1652a9800ebe..90f1ab403724 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -226,6 +226,7 @@ config ARM64
+>   	select THREAD_INFO_IN_TASK
+>   	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
+>   	select TRACE_IRQFLAGS_SUPPORT
+> +	select HAVE_SOFTIRQ_ON_OWN_STACK
+>   	help
+>   	  ARM 64-bit (AArch64) Linux support.
+>   
+> diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
+> index bda49430c9ea..c36ad20a52f3 100644
+> --- a/arch/arm64/kernel/irq.c
+> +++ b/arch/arm64/kernel/irq.c
+> @@ -22,6 +22,7 @@
+>   #include <linux/vmalloc.h>
+>   #include <asm/daifflags.h>
+>   #include <asm/vmap_stack.h>
+> +#include <asm/exception.h>
+>   
+>   /* Only access this in an NMI enter/exit */
+>   DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
+> @@ -71,6 +72,18 @@ static void init_irq_stacks(void)
+>   }
+>   #endif
+>   
+> +#ifndef CONFIG_PREEMPT_RT
+> +static void ____do_softirq(struct pt_regs *regs)
+> +{
+> +	__do_softirq();
+> +}
+> +
+> +void do_softirq_own_stack(void)
+> +{
+> +	call_on_irq_stack(NULL, ____do_softirq);
+> +}
+> +#endif
+> +
+>   static void default_handle_irq(struct pt_regs *regs)
+>   {
+>   	panic("IRQ taken without a root IRQ handler\n");
+
+-- 
+Thanks,
+Qi

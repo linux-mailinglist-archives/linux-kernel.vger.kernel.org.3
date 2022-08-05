@@ -2,147 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C911158AE73
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5390758AE7F
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241219AbiHEQvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 12:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
+        id S240941AbiHEQwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 12:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241037AbiHEQuy (ORCPT
+        with ESMTP id S241270AbiHEQvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 12:50:54 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B81528E01
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:50:51 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id m41-20020a05600c3b2900b003a4e094256eso1545695wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:50:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=yBJp61T732NhGvuYuS8ssmWnNYi45D7jFrvNVeym7no=;
-        b=LUgQeOOwftQJP0tKGwJY1ZErHDgZUvn4JHdWsZOolJMRDJPF33KXTjxkBQjFIU0GQt
-         YfEAVlMNTTy2rCodHHTHKM4yTERMMIimuLasIyIRLPe69kjbnSvZlV0qVFiR+oMnEKE5
-         eM/NYISQApci32tIh1y2eBx50mc8+03wgBXPGkWtW8+zqmwgshsy+8CQMUXtS+ChE9Vn
-         IyOE5RiHl0iEsfROzcLquyDInSs2SVs6oOT8OdFCzMzEU4085GX6Wf5ci9eACkF4ZUBK
-         i3hpu2/Y0JFdLpwd0x+hvDfPGl9S9S/BhS7oyqaZExY/jnlhHxROpw+JkyCejYVww/Ik
-         dL/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=yBJp61T732NhGvuYuS8ssmWnNYi45D7jFrvNVeym7no=;
-        b=iymediTGUSmXXLORHXZS/O68fTPVl5OkuUvttj8334t91w/BvN2/U6KP7K3TagSvJN
-         SGuk3LGujp5VmDqyogN68Slq7rGBZpW0UxxVFk8A1C2iQTtUBBd6S9sWwKE8lsacSL+I
-         wHeTCdwI/I+d6Rp5bIYxK+bYeaUMIJHRXTRHFnjbw7jHcASbDYyQPfexX8EW1M9Sd3PP
-         Kkyfi7bySAhnf/8tCoIC+iA4q4JggTIrSKiOi/sXmAn89fUzOlLCFYW6Q0cEplYdppCE
-         vIblWzMCSdCg0R9bjaCEkCMNKa2kLqzeuocElmsKF3jyMlsEqgNc51Yx4BxdSK4P8c1t
-         pYbA==
-X-Gm-Message-State: ACgBeo1M/e2AG60Ze+erUgONGjEA7tyqQINIMz2A/K9fWBKQ1umr6sum
-        xilwx1/2wRkHr3ZR+mqYiDCm6g==
-X-Google-Smtp-Source: AA6agR4PJ6FvfUDry8dDMg/k/gZ2UHnGi7IpK1O00WLhlYJzCF6UAcvJhmmLLVY1R3TAfAXGSTClqw==
-X-Received: by 2002:a05:600c:a18f:b0:3a5:174e:d650 with SMTP id id15-20020a05600ca18f00b003a5174ed650mr3463797wmb.47.1659718249542;
-        Fri, 05 Aug 2022 09:50:49 -0700 (PDT)
-Received: from rainbowdash.office.codethink.co.uk ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id h28-20020a05600c2cbc00b003a4f08495b7sm11325374wmc.34.2022.08.05.09.50.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 09:50:49 -0700 (PDT)
-From:   Ben Dooks <ben.dooks@sifive.com>
-To:     linux-pwm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha --subject-prefix=PATCH v3 
-        <jude.onyenegecha@sifive.com>, Ben Dooks <ben.dooks@sifive.com>
-Subject: [PATCH 8/8] pwm: dwc: add PWM bit unset in get_state call
-Date:   Fri,  5 Aug 2022 17:50:33 +0100
-Message-Id: <20220805165033.140958-9-ben.dooks@sifive.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220805165033.140958-1-ben.dooks@sifive.com>
-References: <20220805165033.140958-1-ben.dooks@sifive.com>
+        Fri, 5 Aug 2022 12:51:52 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852757B784;
+        Fri,  5 Aug 2022 09:51:27 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 008ce5cc8209cc32; Fri, 5 Aug 2022 18:51:18 +0200
+Received: from kreacher.localnet (public-gprs522492.centertel.pl [31.61.160.61])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 91B5366CECD;
+        Fri,  5 Aug 2022 18:51:17 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-input@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH] i2c: ACPI: Do not check ACPI_FADT_LOW_POWER_S0
+Date:   Fri, 05 Aug 2022 18:51:11 +0200
+Message-ID: <12042830.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 31.61.160.61
+X-CLIENT-HOSTNAME: public-gprs522492.centertel.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefuddguddtkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepfedurdeiuddrudeitddriedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepfedurdeiuddrudeitddriedupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtohepjhhikhhosheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsggvnhhjrghmihhnrdhtihhsshhoihhrvghssehrvgguhhgrthdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhk
+ rgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqihhnphhuthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we are not in PWM mode, then the output is technically a 50%
-output based on a single timer instead of the high-low based on
-the two counters. Add a check for the PWM mode in dwc_pwm_get_state()
-and if DWC_TIM_CTRL_PWM is not set, then return a 50% cycle.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This may only be an issue on initialisation, as the rest of the
-code currently assumes we're always going to have the extended
-PWM mode using two counters.
+The ACPI_FADT_LOW_POWER_S0 flag merely means that it is better to
+use low-power S0 idle on the given platform than S3 (provided that
+the latter is supported) and it doesn't preclude using either of
+them (which of them will be used depends on the choices made by user
+space).
 
-Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+Because of that, ACPI_FADT_LOW_POWER_S0 is generally not sufficient
+for making decisions in device drivers and so i2c_hid_acpi_probe()
+should not use it.
+
+Moreover, Linux always supports suspend-to-idle, so if a given
+device can wake up the system from suspend-to-idle, then it can be
+marked as wakeup capable unconditionally, so make that happen in
+i2c_hid_acpi_probe().
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/pwm/pwm-dwc.c | 34 +++++++++++++++++++++++-----------
- 1 file changed, 23 insertions(+), 11 deletions(-)
+ drivers/hid/i2c-hid/i2c-hid-acpi.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
-index 5edfb8f8acbf..49e666be7afd 100644
---- a/drivers/pwm/pwm-dwc.c
-+++ b/drivers/pwm/pwm-dwc.c
-@@ -171,23 +171,35 @@ static void dwc_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
- {
- 	struct dwc_pwm *dwc = to_dwc_pwm(chip);
- 	u64 duty, period;
-+	u32 ctrl, ld, ld2;
+Index: linux-pm/drivers/hid/i2c-hid/i2c-hid-acpi.c
+===================================================================
+--- linux-pm.orig/drivers/hid/i2c-hid/i2c-hid-acpi.c
++++ linux-pm/drivers/hid/i2c-hid/i2c-hid-acpi.c
+@@ -105,10 +105,8 @@ static int i2c_hid_acpi_probe(struct i2c
  
- 	pm_runtime_get_sync(chip->dev);
+ 	acpi_device_fix_up_power(adev);
  
--	state->enabled = !!(dwc_pwm_readl(dwc,
--				DWC_TIM_CTRL(pwm->hwpwm)) & DWC_TIM_CTRL_EN);
-+	ctrl = dwc_pwm_readl(dwc, DWC_TIM_CTRL(pwm->hwpwm));
-+	ld = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(pwm->hwpwm));
-+	ld2 = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(pwm->hwpwm));
+-	if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0) {
+-		device_set_wakeup_capable(dev, true);
+-		device_set_wakeup_enable(dev, false);
+-	}
++	device_set_wakeup_capable(dev, true);
++	device_set_wakeup_enable(dev, false);
  
--	duty = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(pwm->hwpwm));
--	duty += 1;
--	duty *= dwc->clk_ns;
--	state->duty_cycle = duty;
-+	state->enabled = !!(ctrl & DWC_TIM_CTRL_EN);
- 
--	period = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(pwm->hwpwm));
--	period += 1;
--	period *= dwc->clk_ns;
--	period += duty;
--	state->period = period;
-+	/* If we're not in PWM, technically the output is a 50-50
-+	 * based on the timer load-count only.
-+	 */
-+	if (ctrl & DWC_TIM_CTRL_PWM) {
-+		duty = ld;
-+		duty += 1;
-+		duty *= dwc->clk_ns;
-+
-+		period = ld2;
-+		period += 1;
-+		period *= dwc->clk_ns;
-+		period += duty;
-+	} else {
-+		duty = (ld + 1) * dwc->clk_ns;
-+		period = duty * 2;
-+	}
- 
-+	state->period = period;
-+	state->duty_cycle = duty;
- 	state->polarity = PWM_POLARITY_INVERSED;
- 
- 	pm_runtime_put_sync(chip->dev);
--- 
-2.35.1
+ 	return i2c_hid_core_probe(client, &ihid_acpi->ops,
+ 				  hid_descriptor_address, 0);
+
+
 

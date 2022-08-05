@@ -2,52 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0E658ABF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D93358AC0B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240851AbiHEN6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 09:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
+        id S240732AbiHEOAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 10:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236440AbiHEN5q (ORCPT
+        with ESMTP id S240950AbiHEOAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 09:57:46 -0400
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BD752DD2;
-        Fri,  5 Aug 2022 06:57:44 -0700 (PDT)
-Received: from localhost.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 806B11FBC6;
-        Fri,  5 Aug 2022 15:57:42 +0200 (CEST)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: [PATCH v2 5/5] arm64: dts: qcom: sm6125-seine: Configure additional trinket thermistors
-Date:   Fri,  5 Aug 2022 15:57:29 +0200
-Message-Id: <20220805135729.1037079-6-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220805135729.1037079-1-marijn.suijten@somainline.org>
-References: <20220805135729.1037079-1-marijn.suijten@somainline.org>
+        Fri, 5 Aug 2022 10:00:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5813054AFA
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:59:59 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADB66106F;
+        Fri,  5 Aug 2022 06:59:59 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A0C83F73B;
+        Fri,  5 Aug 2022 06:59:58 -0700 (PDT)
+Date:   Fri, 5 Aug 2022 14:59:55 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Bruno Goncalves <bgoncalv@redhat.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        CKI Project <cki-project@redhat.com>
+Subject: Re: [5.19.0] [aarch64] WARNING: CPU: 0 PID: 1 at
+ mm/page_alloc.c:5407 __alloc_pages+0x1a0/0x290
+Message-ID: <20220805135955.5to2bm6ou35p5zsy@bogus>
+References: <CA+QYu4rPbfH-4wNR06Vn=31RCGKFFEB-KRskn52Jtig_UugYzg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+QYu4rPbfH-4wNR06Vn=31RCGKFFEB-KRskn52Jtig_UugYzg@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,197 +45,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In addition to PMIC-specific (pm6125) thermistors downstream extends
-this set with the rf-pa0/rf-pa1, quiet, camera-flash and UFS/eMMC
-thermistors in sm6125 (trinket) board and seine-specific DT files.  All
-thermistors report sensible temperature readings in userspace.
+On Fri, Aug 05, 2022 at 11:47:57AM +0200, Bruno Goncalves wrote:
+> Hello,
+> 
+> Since commit "c1c76700a0d6" we started to hit the following call trace
+> on aarch64 VMs when looking at journalctl log
+>
+> kernel: Mountpoint-cache hash table entries: 16384 (order: 5, 131072
+> bytes, linear)
+> kernel: ACPI PPTT: No PPTT table found, CPU and cache topology may be inaccurate
+> kernel: ------------[ cut here ]------------
+> kernel: WARNING: CPU: 0 PID: 1 at mm/page_alloc.c:5407 __alloc_pages+0x1a0/0x290
+> kernel: Modules linked in:
+> kernel: CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0 #1
+> kernel: pstate: 20400005 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> kernel: pc : __alloc_pages+0x1a0/0x290
+> kernel: lr : alloc_page_interleave+0x24/0xbc
+> kernel: sp : ffff80000803bb90
+> kernel: x29: ffff80000803bb90 x28: 0000000000000000 x27: 0000000000000000
+> kernel: x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+> kernel: x23: 000000000000001e x22: 0000000000000000 x21: 000000000000001e
+> kernel: x20: 000000000000001e x19: 0000000000040b20 x18: 0000000000000014
+> kernel: x17: 6e69206562207961 x16: 6d2079676f6c6f70 x15: 6f74206568636163
+> kernel: x14: 20646e6120555043 x13: 6574617275636361 x12: 6e69206562207961
+> kernel: x11: 6d2079676f6c6f70 x10: 6f74206568636163 x9 : ffffa4f6617fd5e8
+> kernel: x8 : ffffa4f663ed0440 x7 : 0000000000000007 x6 : 0000000000000000
+> kernel: x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+> kernel: x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffffa4f663c53532
+> kernel: Call trace:
+> kernel:  __alloc_pages+0x1a0/0x290
+> kernel:  alloc_page_interleave+0x24/0xbc
+> kernel:  alloc_pages+0x10c/0x16c
+> kernel:  kmalloc_order+0x3c/0xc0
+> kernel:  kmalloc_order_trace+0x38/0x130
+> kernel:  __kmalloc+0x2e8/0x350
+> kernel:  detect_cache_attributes+0x9c/0x110
+> kernel:  update_siblings_masks+0x34/0x270
+> kernel:  store_cpu_topology+0x7c/0xc0
+> kernel:  smp_prepare_cpus+0x34/0x108
+> kernel:  kernel_init_freeable+0x108/0x1b8
+> kernel:  kernel_init+0x30/0x150
+> kernel:  ret_from_fork+0x10/0x20
+> kernel: ---[ end trace 0000000000000000 ]---
+> kernel: Early cacheinfo failed, ret = -12
+> kernel: cblist_init_generic: Setting adjustable number of callback queues.
+> kernel: cblist_init_generic: Setting shift to 2 and lim to 1.
+>
 
-The sensors are also added to their respective Thermal Monitor node,
-with thermal zones to match where applicable: emmc-ufs and camera-flash
-are not available on the TM5 block, hence cannot be configured with a
-tripping point and will not have a thermal zone.
+Thanks for the report. I will see if I can reproduce by forcing the absence
+of PPTT which is something I haven't tested after I fixed hotplug issues
+reported with my changes.
 
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
----
- .../qcom/sm6125-sony-xperia-seine-pdx201.dts  | 151 ++++++++++++++++++
- 1 file changed, 151 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-index c5967140d028..bfeea20fdd4f 100644
---- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-+++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-@@ -9,6 +9,7 @@
- #include "pm6125.dtsi"
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/gpio-keys.h>
-+#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
- 
- / {
- 	/* required for bootloader to select correct board */
-@@ -82,12 +83,162 @@ cmdline_mem: memory@ffd00000 {
- 			no-map;
- 		};
- 	};
-+
-+	thermal-zones {
-+		rf-pa0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm6125_adc_tm 0>;
-+
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		quiet-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <5000>;
-+			thermal-sensors = <&pm6125_adc_tm 1>;
-+
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		xo-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm6125_adc_tm 2>;
-+
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		rf-pa1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm6125_adc_tm 3>;
-+
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
- };
- 
- &hsusb_phy1 {
- 	status = "okay";
- };
- 
-+&pm6125_adc {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&camera_flash_therm &emmc_ufs_therm &rf_pa1_therm>;
-+
-+	rf-pa0-therm@4d {
-+		reg = <ADC5_AMUX_THM1_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+		qcom,pre-scaling = <1 1>;
-+	};
-+
-+	quiet-therm@4e {
-+		reg = <ADC5_AMUX_THM2_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+		qcom,pre-scaling = <1 1>;
-+	};
-+
-+	camera-flash-therm@52 {
-+		reg = <ADC5_GPIO1_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+		qcom,pre-scaling = <1 1>;
-+	};
-+
-+	emmc-ufs-therm@54 {
-+		reg = <ADC5_GPIO3_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+		qcom,pre-scaling = <1 1>;
-+	};
-+
-+	rf-pa1-therm@55 {
-+		reg = <ADC5_GPIO4_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+		qcom,pre-scaling = <1 1>;
-+	};
-+};
-+
-+&pm6125_adc_tm {
-+	status = "okay";
-+
-+	rf-pa0-therm@0 {
-+		reg = <0>;
-+		io-channels = <&pm6125_adc ADC5_AMUX_THM1_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+
-+	quiet-therm@1 {
-+		reg = <1>;
-+		io-channels = <&pm6125_adc ADC5_AMUX_THM2_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+
-+	xo-therm@2 {
-+		reg = <2>;
-+		io-channels = <&pm6125_adc ADC5_XO_THERM_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+
-+	rf-pa1-therm@3 {
-+		reg = <3>;
-+		io-channels = <&pm6125_adc ADC5_GPIO4_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time-us = <200>;
-+	};
-+};
-+
-+&pm6125_gpio {
-+	camera_flash_therm: camera-flash-therm-state {
-+		pins = "gpio3";
-+		function = PMIC_GPIO_FUNC_NORMAL;
-+		bias-high-impedance;
-+	};
-+
-+	emmc_ufs_therm: emmc-ufs-therm-state {
-+		pins = "gpio6";
-+		function = PMIC_GPIO_FUNC_NORMAL;
-+		bias-high-impedance;
-+	};
-+
-+	rf_pa1_therm: rf-pa1-therm-state {
-+		pins = "gpio7";
-+		function = PMIC_GPIO_FUNC_NORMAL;
-+		bias-high-impedance;
-+	};
-+};
-+
- &pon_pwrkey {
- 	status = "okay";
- };
--- 
-2.37.1
-
+--
+Regards,
+Sudeep

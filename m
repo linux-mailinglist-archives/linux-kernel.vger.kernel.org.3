@@ -2,124 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D756958ADD5
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EA058ADDC
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241072AbiHEQDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 12:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
+        id S241211AbiHEQFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 12:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234130AbiHEQDw (ORCPT
+        with ESMTP id S241162AbiHEQFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 12:03:52 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A43F581;
-        Fri,  5 Aug 2022 09:03:50 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id v1so2146372qkg.11;
-        Fri, 05 Aug 2022 09:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=288X2VDrP2DG5uIW/Tl+V/IQYhuK5aN7/B0TNeGg6x0=;
-        b=nP3O7xgoPV6zNfddHMPrxmYdhB3DNflQN/hr4dvbav/GdhnyWDkejJVI/x1XTmxjXR
-         1c1hH2nqatXaI9tGzXniSExrQbpFAzzyLmIpkDbTjRPLGevFjxKQ/4uA6H2VwAww0g80
-         pcXA+dHmoAgXhzFjp0bzjVDYoOyxrHV7pDihkRI9kY6S1HmOioWNEo4d4vWg+TM3aV+o
-         0uJxIVqVJlPdzq55fbIizARdy5BhFqvDS8wMn0uYWsi1wzXy8A6+A0NJdjgHKnBxSW1f
-         RFrB0mNweyusXwy7DxEEC1iVlx2tyywg5+IS2NvpUi2B5tX8fc4uTIq2S7jNoVA9qbkc
-         jhNA==
+        Fri, 5 Aug 2022 12:05:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE73815835
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:05:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659715540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KO2+Lhn1y2XnVi7bI4Cc5ciAkJZHya2Xso0bWfCh5JA=;
+        b=asfYgS+LNK+c7OobwJ43vYVFp1dTTK4pR7dzyZvc5SkdUhABvQscgEH5YtMCiEMp/3DW/O
+        z8zEYNgwtr/W9HFj1mtwbh7JdJOpDCBl+PY8UA0+PDuWYXXUjTJXRauU6jt9eM+ZF2ohhs
+        gm00aj/bRF/E24eduiU3/MWU/L2bjp4=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-SrcrarIMO3SdaGIO_JGpsw-1; Fri, 05 Aug 2022 12:05:39 -0400
+X-MC-Unique: SrcrarIMO3SdaGIO_JGpsw-1
+Received: by mail-qk1-f200.google.com with SMTP id m17-20020a05620a291100b006b6590830feso2299492qkp.13
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:05:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=288X2VDrP2DG5uIW/Tl+V/IQYhuK5aN7/B0TNeGg6x0=;
-        b=b91KISZ8m9xTN4E9wh2sA1crvZM2fQIZZgxaTF/vwIzVoHEgC9hzoiSstN1XgmtAe4
-         hass22mlPgqFwuHqtqA7V+Bz8A8SkprZ9Vjh5JmsmKES6gsBaF7GcUjA6spez+zmRwn/
-         gX4GjKww7yj/M8BvekihHcM9U5CosSQeicS63kEXFsmPi/4/fInyRdsGRNjl69C5Yrwo
-         ej0wFFVcsw9cQ8MXhF/mmlkzXwFF8HYxEuLlQ0jC8GibclQN1B+D0hq7lXfevLDn+oHV
-         87+poe57AwdF5YyEtqvrc3rFKBY/aq4F3alEAp6uKG+jayZkLeU1Sd1DPJHvYz8+Nvv3
-         yvkg==
-X-Gm-Message-State: ACgBeo37NGpfUcyXWAF0+1NoKk5cAIUFtPUFxwTWFVp+t50cKP2vZam0
-        0r/I9nXQbCsb9kZzhbMSUiQXnSwm83VAYIVJKHo=
-X-Google-Smtp-Source: AA6agR5HcpJu0qkIJQb0mUob4lakApYVEcb7BtZU0NNfmbPRFGvVzIe5F2ndiOWwmfIZFnHBJPA0ow4rJ5My4We/7Ak=
-X-Received: by 2002:a05:620a:2809:b0:6b6:5908:316e with SMTP id
- f9-20020a05620a280900b006b65908316emr5905506qkp.734.1659715428838; Fri, 05
- Aug 2022 09:03:48 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=KO2+Lhn1y2XnVi7bI4Cc5ciAkJZHya2Xso0bWfCh5JA=;
+        b=W55y1MDKrWDi9jYNdmLgwHZV7mzEgz8taOFd0XyW9NmN7m+gQ8WzdTfnBAU7u4CUoI
+         N5S+u2J5mKyBsz2zLdwa9DslF3OorwZO8fiuYketF4kk8Ra4WqsVkRMbgo1AkD/qs5iO
+         pGPiwv7mkzCQk38Rzpu1C9otLUvHEvlzbL+lStJZ0/XmO/PwzNQTqwuYMgwaufJ4rQuZ
+         0mMHDQZC+TX+gf+wRLEJYXO9q4kP8udn6IA0MB9swcMS6PLptMvCZaCIYDERdjYw2qkG
+         66OKQDroZUtKZ+07k3ZIiXR3jsC8S8frlYsdFPsW5t8DzWtzNUNHQm27f8sSDU4rtMza
+         byuA==
+X-Gm-Message-State: ACgBeo1jXGPMluq1FdL1x7WFeMqH+3LXvFHaVzq85vIki/84sBL2TPix
+        qb3hI/I0KVOOQV5zvWs3JcPyUugr7HvfEapxjc0v5uOz02Zfe5gtq8SyClWOe49pchOHEtyvkIh
+        kAMdFRTOcYJE+Z+iFx7j48NBF
+X-Received: by 2002:ad4:5ce3:0:b0:474:71c0:adf3 with SMTP id iv3-20020ad45ce3000000b0047471c0adf3mr6391520qvb.47.1659715538458;
+        Fri, 05 Aug 2022 09:05:38 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6V/dJ4FYdWc2pXQmkRsGFLohJ8WPMbtbN/X/1uVIpxzDhT0pzdU07XUiuvIlyTbScoDMAaoA==
+X-Received: by 2002:ad4:5ce3:0:b0:474:71c0:adf3 with SMTP id iv3-20020ad45ce3000000b0047471c0adf3mr6391470qvb.47.1659715538111;
+        Fri, 05 Aug 2022 09:05:38 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
+        by smtp.gmail.com with ESMTPSA id z9-20020a05622a028900b003422c7ccbc5sm2577102qtw.59.2022.08.05.09.05.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 09:05:37 -0700 (PDT)
+Date:   Fri, 5 Aug 2022 18:05:28 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v3 0/9] vsock: updates for SO_RCVLOWAT handling
+Message-ID: <20220805160528.4jzyrjppdftrvdr5@sgarzare-redhat>
+References: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
 MIME-Version: 1.0
-References: <20220803131132.19630-1-ddrokosov@sberdevices.ru>
- <20220803131132.19630-3-ddrokosov@sberdevices.ru> <CAHp75VcVuC6yVoB1kycCOfqMa=JfCtbe3WYSK5qndtYcJy3vpg@mail.gmail.com>
- <20220803191621.tzrmndkygfe7nlpx@CAB-WSD-L081021.sigma.sbrf.ru>
- <20220804181723.4bljpxcwkj6cnn2f@CAB-WSD-L081021.sigma.sbrf.ru>
- <CAHp75Vcn6JCDDvugop2Ho1cayLi1CX78O42v3GifvnuSY5fvPA@mail.gmail.com> <20220805140430.c773smfzxg5zcj4b@CAB-WSD-L081021.sigma.sbrf.ru>
-In-Reply-To: <20220805140430.c773smfzxg5zcj4b@CAB-WSD-L081021.sigma.sbrf.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 5 Aug 2022 18:03:12 +0200
-Message-ID: <CAHp75VeHXemqJH6rCfH5Tvoq=nDBM4d9nGr-b6LN-fKMEEvyfA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] iio: add MEMSensing MSA311 3-axis accelerometer driver
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 4:04 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+Hi Arseniy,
+sorry but I didn't have time to review this series. I will definitely do 
+it next Monday!
+
+Have a nice weekend,
+Stefano
+
+On Wed, Aug 03, 2022 at 01:48:06PM +0000, Arseniy Krasnov wrote:
+>Hello,
 >
-> On Thu, Aug 04, 2022 at 08:30:12PM +0200, Andy Shevchenko wrote:
-> > > > > > +               dev_err(dev, "cannot %s register %u from debugfs (%d)\n",
-> > > > > > +                       readval ? "read" : "write", reg, err);
-> > > > >
-> > > > > You may consider taking [1] as a precursor here and use str_read_write().
-> > > > >
-> > > > > [1]: https://lore.kernel.org/linux-i2c/20220703154232.55549-1-andriy.shevchenko@linux.intel.com/
-> > > >
-> > > > Oh, really... Thank you for suggestion!
-> > >
-> > > I have taken it closer, and it's really helpful and nice, but looks like
-> > > it's not merged to linux-next.
-> > > Please advise how I can use it in the driver. Should I provide
-> > > "Depends-On:" tag as I did for my HZ units patchset?
-> >
-> > No, just take that patch into your series.
+>This patchset includes some updates for SO_RCVLOWAT:
 >
-> Do you mean include your patch to this reply-thread through the
-> message-id linking?
+>1) af_vsock:
+>   During my experiments with zerocopy receive, i found, that in some
+>   cases, poll() implementation violates POSIX: when socket has non-
+>   default SO_RCVLOWAT(e.g. not 1), poll() will always set POLLIN and
+>   POLLRDNORM bits in 'revents' even number of bytes available to read
+>   on socket is smaller than SO_RCVLOWAT value. In this case,user sees
+>   POLLIN flag and then tries to read data(for example using  'read()'
+>   call), but read call will be blocked, because  SO_RCVLOWAT logic is
+>   supported in dequeue loop in af_vsock.c. But the same time,  POSIX
+>   requires that:
+>
+>   "POLLIN     Data other than high-priority data may be read without
+>               blocking.
+>    POLLRDNORM Normal data may be read without blocking."
+>
+>   See https://www.open-std.org/jtc1/sc22/open/n4217.pdf, page 293.
+>
+>   So, we have, that poll() syscall returns POLLIN, but read call will
+>   be blocked.
+>
+>   Also in man page socket(7) i found that:
+>
+>   "Since Linux 2.6.28, select(2), poll(2), and epoll(7) indicate a
+>   socket as readable only if at least SO_RCVLOWAT bytes are available."
+>
+>   I checked TCP callback for poll()(net/ipv4/tcp.c, tcp_poll()), it
+>   uses SO_RCVLOWAT value to set POLLIN bit, also i've tested TCP with
+>   this case for TCP socket, it works as POSIX required.
+>
+>   I've added some fixes to af_vsock.c and virtio_transport_common.c,
+>   test is also implemented.
+>
+>2) virtio/vsock:
+>   It adds some optimization to wake ups, when new data arrived. Now,
+>   SO_RCVLOWAT is considered before wake up sleepers who wait new data.
+>   There is no sense, to kick waiter, when number of available bytes
+>   in socket's queue < SO_RCVLOWAT, because if we wake up reader in
+>   this case, it will wait for SO_RCVLOWAT data anyway during dequeue,
+>   or in poll() case, POLLIN/POLLRDNORM bits won't be set, so such
+>   exit from poll() will be "spurious". This logic is also used in TCP
+>   sockets.
+>
+>3) vmci/vsock:
+>   Same as 2), but i'm not sure about this changes. Will be very good,
+>   to get comments from someone who knows this code.
+>
+>4) Hyper-V:
+>   As Dexuan Cui mentioned, for Hyper-V transport it is difficult to
+>   support SO_RCVLOWAT, so he suggested to disable this feature for
+>   Hyper-V.
+>
+>Thank You
+>
+>Arseniy Krasnov(9):
+> vsock: SO_RCVLOWAT transport set callback
+> hv_sock: disable SO_RCVLOWAT support
+> virtio/vsock: use 'target' in notify_poll_in callback
+> vmci/vsock: use 'target' in notify_poll_in callback
+> vsock: pass sock_rcvlowat to notify_poll_in as target
+> vsock: add API call for data ready
+> virtio/vsock: check SO_RCVLOWAT before wake up reader
+> vmci/vsock: check SO_RCVLOWAT before wake up reader
+> vsock_test: POLLIN + SO_RCVLOWAT test
+>
+> include/net/af_vsock.h                       |   2 +
+> net/vmw_vsock/af_vsock.c                     |  38 +++++++++-
+> net/vmw_vsock/hyperv_transport.c             |   7 ++
+> net/vmw_vsock/virtio_transport_common.c      |   7 +-
+> net/vmw_vsock/vmci_transport_notify.c        |  10 +--
+> net/vmw_vsock/vmci_transport_notify_qstate.c |  12 +--
+> tools/testing/vsock/vsock_test.c             | 107 +++++++++++++++++++++++++++
+> 7 files changed, 166 insertions(+), 17 deletions(-)
+>
+> Changelog:
+>
+> v1 -> v2:
+> 1) Patches for VMCI transport(same as for virtio-vsock).
+> 2) Patches for Hyper-V transport(disabling SO_RCVLOWAT setting).
+> 3) Waiting logic in test was updated(sleep() -> poll()).
+>
+> v2 -> v3:
+> 1) Patches were reordered.
+> 2) Commit message updated in 0005.
+> 3) Check 'transport' pointer in 0001 for NULL.
+> 4) Check 'value' in 0001 for > buffer_size.
+>
+>-- 
+>2.25.1
 
-No, just take it as a part of your series. Ah, I wrote almost the same
-thing above...
-
-The idea is you rebase your tree interactively and put a breakpoint to
-the beginning of your series, then you take a link and run `b4 am -s
-...` (-s is important) followed by `git am ...` (b4 will show you the
-command you need to run). Then you continue your rebasing. Now, when
-you send a new version of the series, take one more patch into it by
-changing depth from 3 (the number of patches in your series) to 4 (+
-my patch).
-
-Generally speaking the HZ series is something different. It's a series
-which can't be simply taken because it might touch the different
-subsystem(s). Luckily for you the "different subsystem(s)" is the same
-subsystem you are taking these patches with. Hence it might not be a
-problem to attach it as well into a chain.
-
-Speaking of lib/ code almost any maintainer can take it via their
-trees. So taking a _single_ patch against lib/ is fine in most cases.
-
--- 
-With Best Regards,
-Andy Shevchenko

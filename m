@@ -2,329 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA8C58A4D4
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 04:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DE958A4D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 04:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239879AbiHECrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 22:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        id S236538AbiHECsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 22:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237554AbiHECrC (ORCPT
+        with ESMTP id S230015AbiHECs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 22:47:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BE670E76
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 19:47:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659667621; x=1691203621;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=E39ZJi+fK0k/tLrnny5MphRS3c/RTFP05Ljn5tZgGl0=;
-  b=AjpP7shZrDY17+YCBzI2oEidqM7E1CD4n9XeRWxAgX6YiZlD12zuRDLY
-   fMrV+ELr+Be7DVQ3yISkKZYtas3vOmGf5mHBJ3bxIa+qDc0OochfFZvbP
-   zvnA6HO9lik1/xptQ5XfxCIB07+uUjhiOEgormkHMGR98rxv8Sz0WW8jj
-   pWkQip44Asux/AD2lRZEnj0YSxU5fvCPQk9BfIbyWUXDrYe3deR2jy/0m
-   8RcqPV64a0dxpY1Iqa148JnQUUcYHiO/TsQm6p0ShpD1muHGF+av9N0Z8
-   02aeTseXlSqhqL4l6La8wN/Ch4fqZBjb2rvaIjnPoH2XFt5wQu7JvGv2T
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="351819032"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="351819032"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 19:47:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="662814913"
-Received: from sunyi-station.sh.intel.com (HELO sunyi-station..) ([10.239.159.10])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Aug 2022 19:46:58 -0700
-From:   Yi Sun <yi.sun@intel.com>
-To:     dave.hansen@intel.com, sohil.mehta@intel.com, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        david.laight@aculab.com, mingo@kernel.org, andrii@kernel.org
-Cc:     heng.su@intel.com, yi.sun@intel.com
-Subject: [PATCH v3 2/2] scripts/x86: Add script to consume trace log of xsave latency
-Date:   Fri,  5 Aug 2022 10:46:52 +0800
-Message-Id: <20220805024652.2194190-3-yi.sun@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220805024652.2194190-1-yi.sun@intel.com>
-References: <20220805024652.2194190-1-yi.sun@intel.com>
+        Thu, 4 Aug 2022 22:48:28 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00904220F6;
+        Thu,  4 Aug 2022 19:48:27 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d16so1462636pll.11;
+        Thu, 04 Aug 2022 19:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=NJmpSabGYVySx6BZBYlXrVGI+AUkhQcvqbpP5TAjxAs=;
+        b=KhuBnWDMJyITR1swyC10Dikh3DeQ8Cps4R1NrejKNF+SrrvfRiRUynX4tqfzZ2yoc4
+         5Za8ftfsBAfx1IHMMaRWgHYBJAfP0/u6vjmZ9TCvx93nb26PvslquXUH3Gsr20sHBlYc
+         qr0mkZGH44kWj59dMALKKCB1WU7EVnHy7ntu9ck7tZceaTdTKqJDw2LilCv8DfbRz6TC
+         YSE8duWnL0OvXvSbsvJctfOuHa3bED4hXQT5qFKc9ZTeBFkh2zm+CgEIZDrZbC2EQDuv
+         VdIIeMf/MaEfLgjpazk1lZWlyrcPI+1omNIJjv08cJIuG3Wz51bDaweV3eAa8qRiGn0v
+         NLBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=NJmpSabGYVySx6BZBYlXrVGI+AUkhQcvqbpP5TAjxAs=;
+        b=OZL8VK+W2+sSWwKthuXYjajqbN/r0q8+rxh+IY9h7+ia5adaO4nJqiiu6SQAiMO5Lq
+         3ggGSC2EhYXxSKlB99FsprHi61xUpUTc7co6TkYB5TGazBypoKE4HUK4QdeWw0IfTcQC
+         d1wpyLAD6zussifhixNcNB8vackq2hWxACXtnOfWs7vNUGnXfdiTGPXGmjRysf6l6EyE
+         mEqioB6TSUMaC1aYeABqjOx3eZgCPhFf9lIqjsUSNKTHmatubg8pT7vWP+/zIadHhOok
+         1J68+j2UOZwAq8hsQtyVEF+p/Ld0NppsfCPARhgCInHaby+p/mtpw4ersJToJfYMzha2
+         BcXg==
+X-Gm-Message-State: ACgBeo03D5tpDbD/IJJXZ2pqrSd4yG9wxESUaMFe7/d5aJTQJl+MMek1
+        oGHpWAx7CTdjZIOhdPPz7ZI9wDj5g/IOUfjLx99JsFqwqoyyr6Y=
+X-Google-Smtp-Source: AA6agR6gZikLvwmG4YAjYzlgW6RPbub+vhwTLBM35vXf/i9hvAAoKYKKSKGO1wlYtRNMJMFVbIxfKOFU5KSteImpazk=
+X-Received: by 2002:a17:90b:388e:b0:1f5:40d4:828d with SMTP id
+ mu14-20020a17090b388e00b001f540d4828dmr5379294pjb.31.1659667707464; Thu, 04
+ Aug 2022 19:48:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220804124125.3506755-1-zheyuma97@gmail.com> <YuvbI8NEpzciTgfc@finarfin>
+In-Reply-To: <YuvbI8NEpzciTgfc@finarfin>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Fri, 5 Aug 2022 10:48:16 +0800
+Message-ID: <CAMhUBjnf6T=eJAhkOW=TOKBTjQojCmNwMB0ekOss8yf65aRBTg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Fix bugs in *_set_par() caused by user input
+To:     Ondrej Zajicek <santiago@crfreenet.org>
+Cc:     Helge Deller <deller@gmx.de>, adaplas@gmail.com,
+        akpm@linux-foundation.org,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consume the trace log dumped by trace points x86_fpu_latency_xsave and
-x86_fpu_latency_xrstor, calculate latency ranges for each RFBM and
-XINUSE combination including min, max, average and 97% tail latency.
+Hello,
 
-Add the average of 97% tail latency to remove the unreasonable
-data which is introduced by interrupts or other noise. By adding the
-experimental code disabling interrupts before the calculation of
-latency, it's obvious to get the 3% tail latency has been filtered.
+On Thu, Aug 4, 2022 at 10:43 PM Ondrej Zajicek <santiago@crfreenet.org> wrote:
+>
+> On Thu, Aug 04, 2022 at 08:41:22PM +0800, Zheyu Ma wrote:
+> > In the function *_set_par(), the value of 'screen_size' is
+> > calculated by the user input. If the user provides the improper value,
+> > the value of 'screen_size' may larger than 'info->screen_size', which
+> > may cause a bug in the memset_io().
+>
+> Hi
+>
+> I did not saw fbdev code in years, but should not this be already checked
+> by *_check_var() ?
+>
+> arkfb_check_var():
+>
+>         ...
+>         /* Check whether have enough memory */
+>         mem = ((var->bits_per_pixel * var->xres_virtual) >> 3) * var->yres_virtual;
+>         if (mem > info->screen_size)
+>         ...
 
-Make use of sqlite3 to make the data statistics more efficient and
-concise. The output looks like following:
+Thanks for the reminder. But since the user can control all the
+parameters of the ioctl system call, it is possible to assign
+'var->bits_per_pixel' to be 0 and thus 'mem' will be 0, bypassing this
+check. And in *_set_par(), when 'var->bits_per_pixel' is 0,
+'screen_size' will be calculated as follows:
 
-EVENTs                	RFBM   	XINUSE	lat_min	lat_max	lat_avg	lat_avg(97%)
-----------------------	-------	------	-------	-------	-------	------------
-x86_fpu_latency_xrstor	0x206e7	0x0   	364    	364    	364    	364
-x86_fpu_latency_xrstor	0x206e7	0x202 	112    	1152   	300    	276
-x86_fpu_latency_xsave 	0x206e7	0x202 	80     	278    	141    	137
-x86_fpu_latency_xsave 	0x206e7	0x246 	108    	234    	180    	177
+    u32 bpp = info->var.bits_per_pixel;
+    if (bpp != 0) {
+        ...
+    } else {
+        ...
+        screen_size = (info->var.xres_virtual * info->var.yres_virtual) / 64;
+    }
 
-The XSAVE/XRSTOR latency trace log can be got by two ways:
-1. Generated by Kernel debugfs
-  echo 1 > /sys/kernel/debug/tracing/events/x86_fpu/enable
-  cat /sys/kernel/debug/tracing/trace_pipe > trace-log
+resulting in a very large value.
 
-2. Generated by helper tool like 'trace-cmd'
-   trace-cmd record -e x86_fpu -F <command>
-   trace-cmd report > trace-log
+regards,
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Yi Sun <yi.sun@intel.com>
-
-diff --git a/tools/testing/fpu/xsave-latency-trace.sh b/tools/testing/fpu/xsave-latency-trace.sh
-new file mode 100755
-index 000000000000..d45563984fd6
---- /dev/null
-+++ b/tools/testing/fpu/xsave-latency-trace.sh
-@@ -0,0 +1,227 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# (c) 2022 Yi Sun <yi.sun@intel.com>
-+
-+trace_log=$1
-+trace_lat_log=".trace_lat_log"
-+db_name="db_trace"
-+db_file="${db_name}.db"
-+table_raw="t_trace"
-+table_tail="t_trace_tail"
-+table_results="t_results"
-+events="x86_fpu_latency_xsave|x86_fpu_latency_xrstor"
-+
-+# The regex for the trace log. The rough pattern:
-+# (proc) (No.cpu) (flags) (timestamp): (tracepoint): latency:(123) RFBM:0x(123) XINUSE:0x(123)$
-+# Fold the regex into 3 parts making it easier to read.
-+regex1="([^\ ]*)[[:space:]]*\[([0-9]+)\][[:space:]]*(.....\ )?[[:space:]]*"
-+regex2="([0-9.]*):[[:space:]]*([^\ :]*):.*latency:([0-9]*)[[:space:]]*"
-+regex3="RFBM:(0x[0-9a-f]*)[[:space:]]*XINUSE:(0x[0-9a-f]*)$"
-+
-+function usage() {
-+	echo "This script consumes the tracepoint data, and dumps out the"
-+	echo "latency ranges for each RFBM combination."
-+	echo "Usage:"
-+	echo "$0 <trace-log>"
-+	echo "   trace-log:"
-+	echo "     Either generated by Kernel sysfs:"
-+	echo "       echo 1 > /sys/kernel/debug/tracing/events/x86_fpu/enable"
-+	echo "       cat /sys/kernel/debug/tracing/trace_pipe > trace-log"
-+	echo ""
-+	echo "     Or generate by helper tool like 'trace-cmd':"
-+	echo "       trace-cmd record -e x86_fpu"
-+	echo "       trace-cmd report > trace-log"
-+}
-+
-+# Check the dependent tools
-+# {@}: a list of third-part tools
-+function check_packages() {
-+	for pack in "$@"; do
-+		which $pack >& /dev/null
-+		if [[ $? != 0 ]]; then
-+			echo "Please install $pack before running this script."
-+			exit 1
-+		fi
-+	done
-+}
-+
-+# Run SQL command with sqlite3
-+# ${*}: SQL command fed to sqlite3
-+function SQL_CMD() {
-+	sqlite3 $db_file "$*"
-+}
-+
-+# Run SQL command with sqlite3 and format the output with headers and column.
-+# ${*}: SQL command fed to sqlite3
-+function SQL_CMD_HEADER() {
-+	sqlite3 -column -header $db_file "$*"
-+}
-+
-+# Create a table in the DB
-+# ${1}： name of the table
-+function create_table() {
-+	if [[ "$1" == "" ]]; then
-+		echo "Empty table name!"
-+		exit 1
-+	fi
-+	SQL_CMD "create table $1 (
-+		id INTEGER PRIMARY KEY AUTOINCREMENT,
-+		process TEXT,
-+		cpu INT,
-+		timestamp FLOAT,
-+		event_name TEXT,
-+		lat INT,
-+		RFBM INT,
-+		XINUSE INT);"
-+}
-+
-+# Round to the nearest whole number
-+# ${1}: a float number
-+# Output: integer
-+function round() {
-+	echo "scale=0; ($1+0.5)/1" | bc
-+}
-+
-+# Insert a record in the trace table
-+#
-+# process cpu  timestamp  event_name  lat  RFBM  XINUSE
-+# $2      $3   $4         $5          $6   $7    $8
-+
-+function insert_line() {
-+	if [[ "$1" == "" ]]; then
-+		echo "Empty table name!"
-+		exit 1
-+	fi
-+	SQL_CMD "INSERT INTO $1 (process, cpu, timestamp, event_name, lat, RFBM, XINUSE)
-+		VALUES (\"$2\", $3, $4, \"$5\", $6, $7, $8);"
-+}
-+
-+# Show the results of the trace statistics
-+function get_latency_stat() {
-+	SQL_CMD "create table $table_results (
-+		id INTEGER PRIMARY KEY AUTOINCREMENT,
-+		event_name TEXT,
-+		RFBM INT,
-+		XINUSE INT,
-+		lat_min INT,
-+		lat_max INT,
-+		lat_avg INT,
-+		lat_tail_avg INT);"
-+
-+	for((i=0; i<$cnt; i++));do
-+		event_name=`get_comb_item $table_raw $i event_name`
-+		RFBM=`get_comb_item $table_raw $i RFBM`
-+		XINUSE=`get_comb_item $table_raw $i XINUSE`
-+		lat_min=`get_comb_item $table_raw $i min\(lat\)`
-+		lat_max=`get_comb_item $table_raw $i max\(lat\)`
-+		lat_avg=`get_comb_item $table_raw $i avg\(lat\)`
-+		lat_tail_avg=`get_comb_item $table_tail $i avg\(lat\)`
-+
-+		lat_avg=`round $lat_avg`
-+		lat_tail_avg=`round $lat_tail_avg`
-+
-+		SQL_CMD "INSERT INTO $table_results
-+			(event_name, RFBM,XINUSE, lat_min, lat_max, lat_avg, lat_tail_avg)
-+			VALUES (\"$event_name\", $RFBM, $XINUSE, $lat_min, $lat_max,
-+			$lat_avg, $lat_tail_avg);"
-+	done
-+
-+	SQL_CMD_HEADER "select event_name[EVENTs],printf('0x%x',RFBM)[RFBM],
-+			printf('0x%x',XINUSE)[XINUSE],lat_min,lat_max,lat_avg,
-+			lat_tail_avg[lat_avg(97%)]
-+			from $table_results;"
-+}
-+
-+# Get the count of the combination of event_name, RFBM, XINUSE amount all lat trace records
-+function get_combs_cnt() {
-+	SQL_CMD "SELECT event_name, RFBM, XINUSE from $table_raw
-+		group by event_name,RFBM,XINUSE;" | wc -l
-+}
-+
-+# Get a specified combination from a table
-+# ${1}: name of table
-+# ${2}: the order of the combination of event_name, RFBM, XINUSE
-+# ${3}: the items which are wanted to be shown
-+function get_comb_item() {
-+	table=$1
-+	cnt=$2
-+	col=$3
-+	SQL_CMD "SELECT $col from $table group by event_name,RFBM,XINUSE limit $cnt,1;"
-+}
-+
-+# Get count of the records in a given table
-+# ${1}: name of the table
-+function get_rows_cnt() {
-+	table=$1
-+	SQL_CMD "SELECT count(*) from $table;"
-+}
-+
-+# Generate a new table from the raw trace table removing 3% tail traces.
-+function gen_tail_lat() {
-+	cnt=`get_combs_cnt`
-+	create_table $table_tail
-+
-+	for((i=0; i<$cnt; i++));do
-+		create_table t$i
-+		event_name=`get_comb_item $table_raw $i event_name`
-+		RFBM=`get_comb_item $table_raw $i RFBM`
-+		XINUSE=`get_comb_item $table_raw $i XINUSE`
-+
-+		SQL_CMD "insert into t$i(process,cpu,timestamp,event_name,lat,RFBM,XINUSE)
-+			select process,cpu,timestamp,event_name,lat,RFBM,XINUSE
-+			from $table_raw where event_name=\"$event_name\" and RFBM=$RFBM and
-+			XINUSE=$XINUSE ORDER BY lat ASC;"
-+
-+		row=`get_rows_cnt t$i`
-+		row=`echo "scale=0; ($row*0.97 + 0.5)/1" | bc`
-+
-+		SQL_CMD "insert into $table_tail
-+			(process,cpu,timestamp,event_name,lat,RFBM,XINUSE)
-+			select process,cpu,timestamp,event_name,lat,RFBM,XINUSE
-+			from t$i limit 0,$row;"
-+	done
-+
-+}
-+
-+if [[ ! -e "$trace_log" || $# != 1 ]];then
-+	usage
-+	exit 1
-+fi
-+
-+# Check dependency
-+# Make sure having following packages
-+check_packages sqlite3 bc wc cut
-+
-+# Filter trace log keeping latency related lines only
-+grep -E "$events" $trace_log > $trace_lat_log
-+cnt_lines=`wc -l $trace_lat_log | cut -d' ' -f1`
-+# Remove the old db file if it existed before creating
-+[[ -f $db_file ]] && rm -rf $db_file
-+
-+create_table $table_raw
-+
-+# Read each line from the temp file and insert into the table
-+i=0
-+while IFS= read -r line;
-+do
-+	((i = i + 1))
-+	echo -ne "(${i}/$cnt_lines) Importing trace log into database!\r"
-+	if [[ "$line" =~ ${regex1}${regex2}${regex3} ]]; then
-+		pname=${BASH_REMATCH[1]}
-+		cpu=${BASH_REMATCH[2]}
-+		ts=${BASH_REMATCH[4]}
-+		ename=${BASH_REMATCH[5]}
-+		lat=${BASH_REMATCH[6]}
-+		((rfbm=${BASH_REMATCH[7]}))
-+		((xinuse=${BASH_REMATCH[8]}))
-+
-+		insert_line $table_raw $pname $cpu $ts $ename $lat $rfbm $xinuse
-+	fi
-+done < $trace_lat_log
-+
-+gen_tail_lat
-+get_latency_stat
-+
-+# Cleanup
-+rm -rf $trace_lat_log $db_file
--- 
-2.34.1
-
+Zheyu Ma

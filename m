@@ -2,76 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F414558B119
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 23:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB5758B11E
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 23:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241778AbiHEVZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 17:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
+        id S241634AbiHEV32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 17:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241752AbiHEVZf (ORCPT
+        with ESMTP id S236064AbiHEV3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 17:25:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9C61260E
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 14:25:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0BF5B82A50
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 21:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9B254C43141;
-        Fri,  5 Aug 2022 21:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659734731;
-        bh=8daNeUFJUbtUNVfJoQFeGANuiGWkDw9DmZzEoODYOoo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=fJn+idQ1wSbM9AKQVY44vRWmePauqou/AmkONBWDnF1XRpr/uW8Toi+0U3S+b0AB7
-         yHa+kmK4Mo4e/oIUzoHObiIJUKvwkdCznkfj1MJHY4W7+q+FjLKVIF/OlZ3BvImM7C
-         xYy/QB5xwn/1ZXXAHXi1TitNv41e2y/nc6c3ddJ+by28K3LCkIFdj6e0MEmlqEOeMK
-         AH71aoL0f0SQqaTpJlWH5f6pFpyzd/N0wulN4GfJ6IbzRt+ONeg1inwf5aGZuxPAAO
-         8tIJVQtod4iv8obrSfUgKZL0DEPotqZhFNeDipV8VCTsygZGdiZW1i19Qc/Z90LyKa
-         JOgyxbMW0klRA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 89D1EC43140;
-        Fri,  5 Aug 2022 21:25:31 +0000 (UTC)
-Subject: Re: [GIT PULL] MTD changes for v5.20-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1047109049.69854.1659733300067.JavaMail.zimbra@nod.at>
-References: <1047109049.69854.1659733300067.JavaMail.zimbra@nod.at>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1047109049.69854.1659733300067.JavaMail.zimbra@nod.at>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git tags/mtd/for-5.20
-X-PR-Tracked-Commit-Id: 7ec4cdb321738d44ae5d405e7b6ac73dfbf99caa
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 74cae210a335d159f2eb822e261adee905b6951a
-Message-Id: <165973473156.8747.6504412873304188452.pr-tracker-bot@kernel.org>
-Date:   Fri, 05 Aug 2022 21:25:31 +0000
-To:     Richard Weinberger <richard@nod.at>
-Cc:     torvalds <torvalds@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        miquel.raynal@bootlin.com, vigneshr@ti.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 5 Aug 2022 17:29:25 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FEC1AD9C;
+        Fri,  5 Aug 2022 14:29:24 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id A72695C01E3;
+        Fri,  5 Aug 2022 17:29:23 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 05 Aug 2022 17:29:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1659734963; x=1659821363; bh=EfIpyjOOcf
+        4jZ6FdNb5kXcSL5JG3gIWiATWUoT9UbSo=; b=g/rB3Mk7OZyOV7qNxZ02rIJZU/
+        CD+6g+7aPLfCBWXz2DFpNRp/p6IZhuy0hfMySxoBHu1l36B8+8NaqGl3W0o9SJFF
+        CX+AsO00Sxgh1pOKecu4uDp1gLFuXF71o219UTN+bBd3g99QlZx7ojns6CHtlxr2
+        KU36NSi0K5wsNSDjXAyo6dqmuPOyJuIpvvQK9QQDtcAoNbpqUVmWAc9BgRYUI3M8
+        zQaUTlB5+beUDJ1HRi1IMIDzh84kMeNCeVCAjLS3CkHqd0AsKMbKiFaoVuVVo3xY
+        zTTDdTy8+FMIM8fRd5kRxAg3jKZoBvmtGg/qoQyOxr7x2/5owmx5gRlrUNpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659734963; x=1659821363; bh=EfIpyjOOcf4jZ6FdNb5kXcSL5JG3
+        gIWiATWUoT9UbSo=; b=CF94houWiFG+lmfWQBJVsDopxR8Ark49aTNy3SNhYgyb
+        FOiNhZbGM45X/6+s5/fXcdniwIA1GUPjKYWFWA7t5wfikog9TrHg1XO2SnopeD2X
+        l4qCoVj7Mfk/4/lbR/O0+pBkz1oNz9FJ9BkYpKkM5wEGiXmFf+spe7KTIfuDuyYw
+        YyKUkHOYLhqSBYe+oSNHSmZKFWChQ7mWFPM+uf2uMJBsr6O64xK7JX8qJKFxV/y4
+        Aqy55tfgnSt36btanBFmriSDU7KqgYjmsS681XvQ4YRC4JmW9vtBm1MwenC2I6lM
+        SxIgBOL85239ZL5MVJlDTkhgNLJT6goaLODbdStDLg==
+X-ME-Sender: <xms:s4vtYlJPeepfo7L_J27IFTK75A8Z_m1mMyESHIMHfrhvn6iV3Gc1GQ>
+    <xme:s4vtYhKOeFY5nCVrvcFqKzjkJTHE7E5-Kf_kIZMLk7ScpsckewySkw1PeaKMvA7CJ
+    c5FeFv-D7rRHawqs6w>
+X-ME-Received: <xmr:s4vtYtsB8ayZ7ECrJaldVDoGgjhWlMfTaUa7-V7aH95yImirX4yfg-OaabM5_SyU9QDTwg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefuddgudeihecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffuvfevkfgjfhfogggtsehttdertdertddvnecuhfhrohhmpefnuhhk
+    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
+    hnpedvvdegledtheefieejgfevgeefiefhtdevteefteduhfevtdefleethfetgeeluden
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
+    eslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:s4vtYmb4Dw9dtrqZnUx9kW4OlZHI3zo-etQySUzV_acUC2JaIoTkyA>
+    <xmx:s4vtYsYrRHFizcTAfo890bxj7ub32kmMci_duTxzn_IijUGh0Z1Ewg>
+    <xmx:s4vtYqAjyQj67d5YfM8qdgWFsIBIlOPQ-ID2sF0cLNKvEPEotNh0rA>
+    <xmx:s4vtYrmrYvsA1LwMjuK4IZHJYjzho_xhf7lgV7Ofihp4zUfCajuFDg>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 Aug 2022 17:29:19 -0400 (EDT)
+Date:   Sat, 06 Aug 2022 09:29:06 +1200
+From:   Luke Jones <luke@ljones.dev>
+Subject: Re: [PATCH 3/5] asus-wmi: Add support for TUF laptop keyboard states
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <IOV5GR.PZU2YHNSNKYD2@ljones.dev>
+In-Reply-To: <20220805120859.GB20036@duo.ucw.cz>
+References: <20220805081909.10962-1-luke@ljones.dev>
+        <20220805081909.10962-4-luke@ljones.dev> <20220805120859.GB20036@duo.ucw.cz>
+X-Mailer: geary/40.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 5 Aug 2022 23:01:40 +0200 (CEST):
+Hi Pavel,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git tags/mtd/for-5.20
+On Fri, Aug 5 2022 at 14:08:59 +0200, Pavel Machek <pavel@ucw.cz> wrote:
+> Hi!
+>> 
+>>  Adds two paths:
+>>  - /sys/devices/platform/asus-nb-wmi/keyboard_rgb_state
+>>  - /sys/devices/platform/asus-nb-wmi/keyboard_rgb_state_index
+> 
+> Patches 2-3 -- we already have pattern trigger. This should use it...
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/74cae210a335d159f2eb822e261adee905b6951a
+Can you please provide more information? I'd be happy to use it, but 
+because I do this in my free time I don't have the best knowledge of 
+helpful stuff that already exists - so far I've been learning about 
+stuff like this when someone like yourself brings it up, otherwise I 
+try to follow existing code patterns in the source file.
 
-Thank you!
+Many thanks,
+Luke.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> 
+> Best regards,
+> 									Pavel
+> --
+> People of Russia, stop Putin before his war on Ukraine escalates.
+
+

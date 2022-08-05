@@ -2,102 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0743C58A827
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 10:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3E858A82B
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 10:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237761AbiHEIgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 04:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S239895AbiHEIiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 04:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237631AbiHEIgr (ORCPT
+        with ESMTP id S235062AbiHEIiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 04:36:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C964B18
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 01:36:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD2A161778
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 08:36:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4448C433C1;
-        Fri,  5 Aug 2022 08:36:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659688605;
-        bh=996x4MLdOWeDhTT9hrni14uHtO+Hp28DkrLdhwmkeUw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=02fXsVlK151lgx6auA0mExQ7V9KY31TP+VyoijWvmrsby94+LXYJUcnXsoRpcmwDc
-         BB1vE19AsiWExN0qOlh3xW23ZVEGj4mcrkKCi4Qx/DxxYVF+Joad/nmbnFUNMjWvEd
-         61r8H1NXvtcyFUFEC0VoD4ybdl55hZI3pUGLXEXc=
-Date:   Fri, 5 Aug 2022 10:36:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Simone Serra <serrazimone@gmail.com>
-Cc:     fabioaiuto83@gmail.com, soumya.negi97@gmail.com,
-        hdegoede@redhat.com, straube.linux@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Fixed checkpatch warnings
-Message-ID: <YuzWmlHVioUGIVfP@kroah.com>
-References: <20220805080538.230906-1-serrazimone@gmail.com>
+        Fri, 5 Aug 2022 04:38:04 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CB1B2B;
+        Fri,  5 Aug 2022 01:38:03 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id f30so1290525pfq.4;
+        Fri, 05 Aug 2022 01:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=yAcw6WHysBHdbzS3p6yPzUqgaV+Ou/Bsh0qiTnO7eVg=;
+        b=dpkwBfBgMoQf6OOcfrgVnoCrrCrYJRFRcUCeLLsERj6zMoviBnjieIo0BEOBYAO3J5
+         sOnVGuiPCDuNadFwcddIkxOQiCF6hUa7E0FFti+Mlxx1GfgYe0t6Myro0BLBQwRSd6bA
+         wYH48vt2jA5LAvETV9WmEXZKKiGaYJFckHf0TO6jfKGYJ2TiTEmSz465+Y7u7gB40YFp
+         15xMQzUzQXa8kLL88qw5ntVgtJFI4c/M0La5SO9V3zyQ2OUZtfLUIJXsV/8Osl3sVx43
+         DyHd4wtebtAOY2LmLkf0HgK4BFM9oZcOBR/MLEGTEDf9Uc98HbLM5kzW/0mrPHy8xtEW
+         A8Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=yAcw6WHysBHdbzS3p6yPzUqgaV+Ou/Bsh0qiTnO7eVg=;
+        b=4/OELlzZOOA+ZmlcoylQagfxOow5NNM+Ujg2eD1EZyqlZdYfnCt0ILiYIdmu7J6g0W
+         zSngvyrsGQkZkTv6OE0j+p9VS3dxhkJXwzAEfL9qIolB2O/XIH+3VxRPxU2wYyY49FwM
+         zyhbGJhId8F+KfSowFnMZPay2bzQ75ncXb6bxCx3lFTXRRSXzsJ1qKah3zsbuVeGlVkN
+         ejHiJwS4ngtr04CxdVOm3OLbUlNfZh+c1QP78RmVJS7Bdt1MD2G/pXJcXVYW1CGquhqR
+         ceGzKKXwJgNvYJkRlHJzBOd/AOQnC9AKVJnd1owcOQSAQIi0YHA07s3kMvnugzuIdcNn
+         ISLg==
+X-Gm-Message-State: ACgBeo2RjC4GamY86GEtkKoPGGA9mFdrBVNlFu8uKx4KKKLPnTg5NqEa
+        9ql5HVFcuoJlEvtgKirB6Nk=
+X-Google-Smtp-Source: AA6agR4CkBMkrL/Xf2KWLR3pQ0xcwlNp5C/WZ/cSDR53XtnVqFjJYfFa52RoB2hfLaNxNOa8nSLmWQ==
+X-Received: by 2002:a05:6a00:1946:b0:52a:e551:2241 with SMTP id s6-20020a056a00194600b0052ae5512241mr5883037pfk.29.1659688682747;
+        Fri, 05 Aug 2022 01:38:02 -0700 (PDT)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id c126-20020a621c84000000b005289627ae6asm2347686pfc.187.2022.08.05.01.38.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 01:38:02 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+Subject: [PATCH v2 1/3] KVM: selftests: Test all possible "invalid" PERF_CAPABILITIES.LBR_FMT vals
+Date:   Fri,  5 Aug 2022 16:37:42 +0800
+Message-Id: <20220805083744.78767-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220805080538.230906-1-serrazimone@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 10:05:38AM +0200, Simone Serra wrote:
-> Fixed all checkpatch warnings
-> 
-> Signed-off-by: Simone Serra <serrazimone@gmail.com>
-> ---
->  drivers/staging/rtl8723bs/core/rtw_efuse.c | 25 +++++++++++++++-------
->  1 file changed, 17 insertions(+), 8 deletions(-)
-> 
+From: Sean Christopherson <seanjc@google.com>
 
-Hi,
+Test all possible input values to verify that KVM rejects all values
+except the exact host value.  Due to the LBR format affecting the core
+functionality of LBRs, KVM can't emulate "other" formats, so even though
+there are a variety of legal values, KVM should reject anything but an
+exact host match.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Suggested-by: Like Xu <like.xu.linux@gmail.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+v1: https://lore.kernel.org/kvm/20220804073819.76460-1-likexu@tencent.com/
+v1 -> v2 Changelog:
+- Replace testcase #3 with fully exhaustive approach; (Sean)
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+ .../selftests/kvm/x86_64/vmx_pmu_caps_test.c    | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-- Your patch did many different things all at once, making it difficult
-  to review.  All Linux kernel patches need to only do one thing at a
-  time.  If you need to do multiple things (such as clean up all coding
-  style issues in a file/driver), do it in a sequence of patches, each
-  one doing only one thing.  This will make it easier to review the
-  patches to ensure that they are correct, and to help alleviate any
-  merge issues that larger patches can cause.
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+index 6ec901dab61e..928c10e520c7 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
+ 	int ret;
+ 	union cpuid10_eax eax;
+ 	union perf_capabilities host_cap;
++	uint64_t val;
+ 
+ 	host_cap.capabilities = kvm_get_feature_msr(MSR_IA32_PERF_CAPABILITIES);
+ 	host_cap.capabilities &= (PMU_CAP_FW_WRITES | PMU_CAP_LBR_FMT);
+@@ -91,11 +92,17 @@ int main(int argc, char *argv[])
+ 	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, host_cap.lbr_format);
+ 	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), (u64)host_cap.lbr_format);
+ 
+-	/* testcase 3, check invalid LBR format is rejected */
+-	/* Note, on Arch LBR capable platforms, LBR_FMT in perf capability msr is 0x3f,
+-	 * to avoid the failure, use a true invalid format 0x30 for the test. */
+-	ret = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, 0x30);
+-	TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
++	/*
++	 * Testcase 3, check that an "invalid" LBR format is rejected.  Only an
++	 * exact match of the host's format (and 0/disabled) is allowed.
++	 */
++	for (val = 1; val <= PMU_CAP_LBR_FMT; val++) {
++		if (val == host_cap.lbr_format)
++			continue;
++
++		ret = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, val);
++		TEST_ASSERT(!ret, "Bad LBR FMT = 0x%lx didn't fail", val);
++	}
+ 
+ 	printf("Completed perf capability tests.\n");
+ 	kvm_vm_free(vm);
+-- 
+2.37.1
 
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what a proper Subject: line should
-  look like.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot

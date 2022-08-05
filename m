@@ -2,115 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C1E58AC7C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991E758AC84
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240970AbiHEOqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 10:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S238399AbiHEOxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 10:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240820AbiHEOqC (ORCPT
+        with ESMTP id S232185AbiHEOxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 10:46:02 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E8F5E315;
-        Fri,  5 Aug 2022 07:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659710761; x=1691246761;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cW8TOt2AOoJIUa4hQwkY7LnTl78Uw0yQOYwnQjGXAV8=;
-  b=bWYsx1kiq0ec+oM1Vtbx9h3lvq6/dMzX37ZANzalKyn+YIm7NgVceFqP
-   VPjhL8f6NIzR0amhdBWctDkI4haw2pmsdip4s3RZx6le8krXvmUQkEACO
-   cgHHgk3a6NVvaXcS/k9HZeQdSw/VLuy1OGEQ9BUbu+7T8o89lE4MAtSAN
-   FLEa6vlCUDYKSOuF40b0MuhfUvqr+PCaxGy03qFXbsaCzTzUpAmC411LS
-   2SGG9ylHUDaLHd09NlmZPpFDk4k6G9wboSu3Dy8pVPuaYfPwpvxwLdbve
-   8jcPBfiUVUwu2FBscfBAwGfBKSjeO8WAVN5zmXwGwTaL9RyN9k52Z3IVX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="290223341"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="290223341"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 07:45:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="579519718"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 05 Aug 2022 07:45:34 -0700
-Received: from [10.252.214.183] (kliang2-mobl1.ccr.corp.intel.com [10.252.214.183])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 91701580B9F;
-        Fri,  5 Aug 2022 07:45:32 -0700 (PDT)
-Message-ID: <3f85d0f9-921f-4f5c-7b5c-8a8e1773512a@linux.intel.com>
-Date:   Fri, 5 Aug 2022 10:45:31 -0400
+        Fri, 5 Aug 2022 10:53:32 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD7D27B2A;
+        Fri,  5 Aug 2022 07:53:30 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so3126765pjl.0;
+        Fri, 05 Aug 2022 07:53:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:cc:references:subject
+         :content-language:from:in-reply-to:content-transfer-encoding;
+        bh=33AZt7ymDP4nFwb3HoRxIJj1gr2kC1zCUk6/IWw48yE=;
+        b=TLwTF1vdMyAUqMHSboElOLVaAalCTo0wu68+EKsDUDSnc+prYVb0/ScfgXXfT783kq
+         Pb7rPiryzdSBDR96vTPk+JfTyvIdROsEl2/0yrIAMUP5vBunzxkxlwYj1Ttp9OtjrhPl
+         QIH4WA4K1UG7x9Z15ZAYu3vuLDfhA4kz092U3Imdi2lgHgaoqMuxkytofSJ1ClbfjapD
+         ihZs1YbOthi73/THKIXHv8b4ReNAfeS6nSyp3wcw8dwSytyJm0edPLE9EMNJ6JSQrB7d
+         RwVqT37lr7tDaK0Ky6qJbSaF51zx51e0D8qkwIYHzvyHxChjzOYkQmuYYEXPn0OeNuxo
+         HOQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:in-reply-to
+         :content-transfer-encoding;
+        bh=33AZt7ymDP4nFwb3HoRxIJj1gr2kC1zCUk6/IWw48yE=;
+        b=lH/cfSICsc6fYZtu2OqEA9XEzYOwNYTdypEwOEDwPbDuoz72TkWrAKF9H+VCXA4MxL
+         rFeCC5LJnDfbO3XqOjo+pb85MVvuO0H1PEOwUFPtebPD7Vv91PVWonvE0DKzLa2lMhoY
+         qT3NwmqfXm+N195LForzX/BRP8aqmkYGWYKSisbW3KnKLVID3dLe0xbNC0TTnDbDAyJl
+         piaB5bTXHtOusdEpZAweAczmTQlbQYYEgQ1zcjgcdbcWRLJKjVkUb9e8pp9F5UoH6lQ2
+         TB7OrYsKDXbvRBlp7zioCVrF+rJjyFifcsU5pVoXCliTtFFPwCFCYsuUKmOUCCjv1LiZ
+         4pVA==
+X-Gm-Message-State: ACgBeo3mbwwubTY00/yuGfRy+VjJWJes/iaLeBBO64/pgxAmFPymMgBO
+        JVUEmLjnMc57wmMuQsyP3Y0=
+X-Google-Smtp-Source: AA6agR6CWsFqFxK/1Qgoi9OqNggL10FVM8/rDylB+Vqe15zY26HgqewrSu5O5pCifAnUgHs8F9L1Cg==
+X-Received: by 2002:a17:903:234e:b0:16e:e279:913c with SMTP id c14-20020a170903234e00b0016ee279913cmr7044716plh.47.1659711209559;
+        Fri, 05 Aug 2022 07:53:29 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id j15-20020a170902da8f00b0016f04c098ddsm3114520plx.226.2022.08.05.07.53.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 07:53:28 -0700 (PDT)
+Message-ID: <7c61db45-8e40-9918-ec7c-69a6deb8f71a@gmail.com>
+Date:   Fri, 5 Aug 2022 23:53:24 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH v3 0/3] Remove bad uncore filter/events
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+To:     bagasdotme@gmail.com
+Cc:     bhelgaas@google.com, corbet@lwn.net, darren@os.amperecomputing.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, patches@amperecomputing.com,
+        shijie@os.amperecomputing.com, yangyicong@hisilicon.com,
+        zwang@amperecomputing.com
+References: <6556c478-976c-27f1-ad9b-606fe47f7ce1@gmail.com>
+Subject: Re: [PATCH v3] PCI: update the links for aer-inject git tree
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, perry.taylor@intel.com,
-        caleb.biggers@intel.com, kshipra.bopardikar@intel.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20220805013856.1842878-1-irogers@google.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220805013856.1842878-1-irogers@google.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <6556c478-976c-27f1-ad9b-606fe47f7ce1@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-08-04 9:38 p.m., Ian Rogers wrote:
-> The event converter scripts at:
-> https://github.com/intel/event-converter-for-linux-perf
-> passes Filter values from data on 01.org that is bogus in a perf command
-> line and can cause perf to infinitely recurse in parse events. Remove
-> such events or filter using the updated patch:
-> https://github.com/intel/event-converter-for-linux-perf/pull/15/commits/afd779df99ee41aac646eae1ae5ae651cda3394d
+Fri, 5 Aug 2022 20:31:33 +0700, Bagas Sanjaya wrote:
+> On 8/5/22 17:52, Huang Shijie wrote:
+>> The aer-inject tree has been moved to:
+>>     https://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git
+>> Update the links.
+>> 
+>> Signed-off-by: Huang Shijie <shijie@os.amperecomputing.com>
+>> ---
+>> v1 --> v2: Modified the commit message and the title.
+>> v2 --> v3: Change the commit message again.
+>> ---
 > 
-> v3. Removed filters rather than events in some cases as Suggested-by:
->     Liang, Kan <kan.liang@linux.intel.com>
-> v2. Manually fixed a broken \\Inbound\\ ivytown event.
-> 
-> Ian Rogers (3):
->   perf vendor events: Remove bad broadwellde uncore events
->   perf vendor events: Remove bad ivytown uncore events
->   perf vendor events: Remove bad jaketown uncore events
-> 
+> The change log could have been before the diffstat below (so it won't be
+> displayed on git log when applied).
+Are you sure Bagas?  :-)
 
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+>> Signed-off-by: Huang Shijie <shijie@os.amperecomputing.com>
+>> ---
 
-Thanks,
-Kan
+I guess this "---" should work as the end marker of changelog.
 
->  .../arch/x86/broadwellde/uncore-cache.json    | 97 -------------------
->  .../arch/x86/broadwellde/uncore-other.json    | 13 ---
->  .../arch/x86/ivytown/uncore-cache.json        | 90 -----------------
->  .../arch/x86/ivytown/uncore-interconnect.json |  1 -
->  .../arch/x86/ivytown/uncore-other.json        | 13 ---
->  .../arch/x86/ivytown/uncore-power.json        | 19 ----
->  .../arch/x86/jaketown/uncore-cache.json       | 30 ------
->  .../arch/x86/jaketown/uncore-other.json       | 13 ---
->  .../arch/x86/jaketown/uncore-power.json       | 11 ---
->  9 files changed, 287 deletions(-)
+>> v1 --> v2: Modified the commit message and the title.
+>> v2 --> v3: Change the commit message again.
+>> ---
+
+Another "---" here does no harm.
+
+        Thanks, Akira
+
 > 
+>>  Documentation/PCI/pcieaer-howto.rst | 2 +-
+>>  drivers/pci/pcie/Kconfig            | 2 +-
+>>  drivers/pci/pcie/aer_inject.c       | 2 +-
+>>  3 files changed, 3 insertions(+), 3 deletions(-)
+

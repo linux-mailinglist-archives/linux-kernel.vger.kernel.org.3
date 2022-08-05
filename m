@@ -2,117 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587BE58AA2A
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D43E58AA2D
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240653AbiHELcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 07:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        id S240662AbiHELdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 07:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235412AbiHELcS (ORCPT
+        with ESMTP id S235412AbiHELdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 07:32:18 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E831A808;
-        Fri,  5 Aug 2022 04:32:17 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id m41-20020a05600c3b2900b003a4e094256eso1182552wms.0;
-        Fri, 05 Aug 2022 04:32:17 -0700 (PDT)
+        Fri, 5 Aug 2022 07:33:04 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DDD1A808;
+        Fri,  5 Aug 2022 04:33:03 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d20so2006311pfq.5;
+        Fri, 05 Aug 2022 04:33:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=qNoWZJdxKVVEwFk/7zUUPQn8nhtmRlSYmnr02okBx1Y=;
-        b=ESvJKXlQEXUIWf5pmCGO3WO7e9NM4dPHOzTviWdHVMZr6Et2W9iySs6g8fAZnQGk62
-         IgIUjYYaE5eJP5+J5mOb6bVNWSZJy3JWXCbB/3mTe9ZUb3N3u176h7t0lUYJRIEyE1N0
-         UEx/TTkEFl8lSB5VcliXDneL0PsSobKtgZdBNmEZtAj3dj/giwyyAUo4eGxWQxR7JOSu
-         Ym0RAj9mmRQcEj7Pcxh3UQpTmVX5TGVXAd2GJjynd6vBgAZj91mFuUUXkRqoY1uPhb1e
-         8KAA0DV7Byy4tBU5iQE7LgbnraGhvmWR+F4K+I5YVzK9gx2m91xWmIYZ3q/CqJFvC9ED
-         SDOA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=Ys2cufA0W9YH0DvF/7j4rd5OdjNghGHdGyLEQ6zen2M=;
+        b=Y1XJOO3oPDar4WkrbbEK58Ugq5udEKVmoTTmYS0hSiQS6zCc5d6tvrHXoeCTThT/+s
+         /5mV0iKl6YsRDK9aCCQ9wq56SOYbbLBsIOMy0+NJ4TANstXCvlbtWj3RWibzADXlL7Yw
+         XNEjfeQTKe90bK4bAD25ldm764tt2EbGifBjeDNDCJhQToDRmgtW2vaumdaCRFQ1flR0
+         hByvoR6d7JshVF9RrpHVlr0fUuhROsrIBkpzU3DoBBS4GTQU9ToNlL/RNI0n1sMmngEa
+         WoQQZN9bT2fJPzGEGkV5ql0OOkHbAnVY1mUkOVAyOWYC835GyW0xlDwdUcwnioZb6h2z
+         RJuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=qNoWZJdxKVVEwFk/7zUUPQn8nhtmRlSYmnr02okBx1Y=;
-        b=7b4ogD1XNRbYt/+t+JFtxngKcuyJO9R94Ia6mWi6VVEDPYZwlLcR2FDu7ITTOeqWkt
-         6COBNKuPr7Tc31p/fKvyyTgCuXEvxOBTy2qsOV0x0CRFzK04+C9VYnwfmRnEqMDq3ezX
-         5DI4EIOxkYGEedaN+JxWhitj1MPf5vdf3lvjnpsZafver/lsdCQf/w6+f+JpgFz18SKx
-         M6Wzn6RKwjdMCt6X8/QxzAw9ZxpXir07F+Wwh87Zn4VA5sk8+Ua9amyGwwZ0JMu4liyS
-         dpjyX27CJLhGx9w/20M8u3mMB0q0lo94hI0dlMA7brxM7VJJB66BWnNdCIkus97RyCZ0
-         TK6g==
-X-Gm-Message-State: ACgBeo36WCMn9io+h83P7y15OuhuVf67DE/AnLucN3Zq6aRCquOrTQHm
-        GFZZsDLA07xA2u9LIXTpkWw=
-X-Google-Smtp-Source: AA6agR4dBa/UE3vHdxVFqhoAY9xuBNTNITH/se2ZbETiQg5G0HiwdAqOO5AT/We6wRETAocCNKmAeg==
-X-Received: by 2002:a05:600c:42ca:b0:3a4:e56c:1d39 with SMTP id j10-20020a05600c42ca00b003a4e56c1d39mr9101689wme.183.1659699135750;
-        Fri, 05 Aug 2022 04:32:15 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id c5-20020a05600c0a4500b003a305c0ab06sm11087748wmq.31.2022.08.05.04.32.14
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=Ys2cufA0W9YH0DvF/7j4rd5OdjNghGHdGyLEQ6zen2M=;
+        b=hRFarF0NXPBLegla9NkgcP8E+RdNRMLPEYGzpwnOJBOmXzTLxDC+jWukD6WsvBL5Yl
+         +MX3MqnzGwmC1ugePginr3kFs4bmVguYPnwd8tQSQi6TUF1ZVqrlnpSDpLi6BIkMkOSy
+         buPu6j/Nx7Bp51Wpzodcvjm7IXGuWsQpiz6VVPPicWvpYL6q4v5OHs09URAIW2fEASHg
+         RbDiN9iap04rFWFQmGgdsN9EQLpEpp+BPK820QkzcKaMnxjkIkpqEfhWh/MtbuYDkbiB
+         b59LmM0svwU7cdWhZKdUfxqVRFWsW2VtW+dNNLn8kachbzFEsgIGCwDdMD0sVF3iuykd
+         b0ag==
+X-Gm-Message-State: ACgBeo3bh7AT1Nz2J6umDS/o3k+sZyuz03fPTez4eiGB8d31tflb4WbF
+        fvHIEdvq7PVUq0bg5Sqt0EI=
+X-Google-Smtp-Source: AA6agR5NkAma8lVHzVZGAJi/ocnzJItYVC7/k/6atQk36OJq4T/5kZ0UnKJEGiJ8Fuh4uqd+KgVXsg==
+X-Received: by 2002:a63:91c3:0:b0:41d:271:4930 with SMTP id l186-20020a6391c3000000b0041d02714930mr2538435pge.341.1659699183078;
+        Fri, 05 Aug 2022 04:33:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s5-20020a625e05000000b0052dde3e965fsm2735168pfb.108.2022.08.05.04.32.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 04:32:15 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: message: fusion: remove redundant variable iocnum
-Date:   Fri,  5 Aug 2022 12:32:14 +0100
-Message-Id: <20220805113214.2339022-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Fri, 05 Aug 2022 04:32:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 5 Aug 2022 04:32:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Gene Chen <gene.chen.richtek@gmail.com>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, gene_chen@richtek.com,
+        cy_huang@richtek.com
+Subject: Re: [PATCH v4 6/7] usb: typec: tcpci: Move function
+ "tcpci_to_typec_cc" to common
+Message-ID: <20220805113237.GD1011279@roeck-us.net>
+References: <20220805071714.150882-1-gene.chen.richtek@gmail.com>
+ <20220805071714.150882-7-gene.chen.richtek@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805071714.150882-7-gene.chen.richtek@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable iocnum is assigned a value that is never read, the assignment
-and hence the variable are redundant can be removed. Also update the
-the comment to reflect the correct name of the variable being updated.
+On Fri, Aug 05, 2022 at 03:17:12PM +0800, Gene Chen wrote:
+> From: Gene Chen <gene_chen@richtek.com>
+> 
+> Move transition function "tcpci_to_typec_cc" to common header
+> 
+> Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Cleans up clang-scan warning:
-drivers/message/fusion/mptctl.c:641:8: warning: Although the value stored
-to 'iocnum' is used in the enclosing expression, the value is never
-actually read from 'iocnum' [deadcode.DeadStores]
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/message/fusion/mptctl.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/message/fusion/mptctl.c b/drivers/message/fusion/mptctl.c
-index f9ee957072c3..673145c8936b 100644
---- a/drivers/message/fusion/mptctl.c
-+++ b/drivers/message/fusion/mptctl.c
-@@ -620,7 +620,6 @@ __mptctl_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- {
- 	mpt_ioctl_header __user *uhdr = (void __user *) arg;
- 	mpt_ioctl_header	 khdr;
--	int iocnum;
- 	unsigned iocnumX;
- 	int nonblock = (file->f_flags & O_NONBLOCK);
- 	int ret;
-@@ -634,12 +633,11 @@ __mptctl_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 	}
- 	ret = -ENXIO;				/* (-6) No such device or address */
- 
--	/* Verify intended MPT adapter - set iocnum and the adapter
-+	/* Verify intended MPT adapter - set iocnumX and the adapter
- 	 * pointer (iocp)
- 	 */
- 	iocnumX = khdr.iocnum & 0xFF;
--	if (((iocnum = mpt_verify_adapter(iocnumX, &iocp)) < 0) ||
--	    (iocp == NULL))
-+	if ((mpt_verify_adapter(iocnumX, &iocp) < 0) || (iocp == NULL))
- 		return -ENODEV;
- 
- 	if (!iocp->active) {
--- 
-2.35.3
-
+> ---
+>  drivers/usb/typec/tcpm/tcpci.c | 22 ----------------------
+>  include/linux/usb/tcpci.h      | 22 ++++++++++++++++++++++
+>  2 files changed, 22 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index 8127847..50674ec 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -27,11 +27,6 @@
+>  #define	VPPS_VALID_MIN_MV			100
+>  #define	VSINKDISCONNECT_PD_MIN_PERCENT		90
+>  
+> -#define tcpc_presenting_rd(reg, cc) \
+> -	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
+> -	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
+> -	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
+> -
+>  struct tcpci {
+>  	struct device *dev;
+>  
+> @@ -218,23 +213,6 @@ static int tcpci_start_toggling(struct tcpc_dev *tcpc,
+>  			    TCPC_CMD_LOOK4CONNECTION);
+>  }
+>  
+> -static enum typec_cc_status tcpci_to_typec_cc(unsigned int cc, bool sink)
+> -{
+> -	switch (cc) {
+> -	case 0x1:
+> -		return sink ? TYPEC_CC_RP_DEF : TYPEC_CC_RA;
+> -	case 0x2:
+> -		return sink ? TYPEC_CC_RP_1_5 : TYPEC_CC_RD;
+> -	case 0x3:
+> -		if (sink)
+> -			return TYPEC_CC_RP_3_0;
+> -		fallthrough;
+> -	case 0x0:
+> -	default:
+> -		return TYPEC_CC_OPEN;
+> -	}
+> -}
+> -
+>  static int tcpci_get_cc(struct tcpc_dev *tcpc,
+>  			enum typec_cc_status *cc1, enum typec_cc_status *cc2)
+>  {
+> diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
+> index 20c0bed..1765745 100644
+> --- a/include/linux/usb/tcpci.h
+> +++ b/include/linux/usb/tcpci.h
+> @@ -167,6 +167,11 @@
+>  /* I2C_WRITE_BYTE_COUNT + 1 when TX_BUF_BYTE_x is only accessible I2C_WRITE_BYTE_COUNT */
+>  #define TCPC_TRANSMIT_BUFFER_MAX_LEN		31
+>  
+> +#define tcpc_presenting_rd(reg, cc) \
+> +	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
+> +	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
+> +	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
+> +
+>  struct tcpci;
+>  
+>  /*
+> @@ -207,4 +212,21 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci);
+>  
+>  struct tcpm_port;
+>  struct tcpm_port *tcpci_get_tcpm_port(struct tcpci *tcpci);
+> +
+> +static inline enum typec_cc_status tcpci_to_typec_cc(unsigned int cc, bool sink)
+> +{
+> +	switch (cc) {
+> +	case 0x1:
+> +		return sink ? TYPEC_CC_RP_DEF : TYPEC_CC_RA;
+> +	case 0x2:
+> +		return sink ? TYPEC_CC_RP_1_5 : TYPEC_CC_RD;
+> +	case 0x3:
+> +		if (sink)
+> +			return TYPEC_CC_RP_3_0;
+> +		fallthrough;
+> +	case 0x0:
+> +	default:
+> +		return TYPEC_CC_OPEN;
+> +	}
+> +}
+>  #endif /* __LINUX_USB_TCPCI_H */
+> -- 
+> 2.7.4
+> 

@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8556758A8EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F0258A8F4
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240573AbiHEJjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 05:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
+        id S234856AbiHEJmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 05:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiHEJjP (ORCPT
+        with ESMTP id S240416AbiHEJmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 05:39:15 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F909785A9;
-        Fri,  5 Aug 2022 02:39:11 -0700 (PDT)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Fri, 5 Aug 2022
- 17:39:09 +0800
-Message-ID: <c223a85a-b76e-0e82-9a8c-6b60588dc03a@amlogic.com>
-Date:   Fri, 5 Aug 2022 17:39:07 +0800
+        Fri, 5 Aug 2022 05:42:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C5815728
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:42:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 546FD2109A;
+        Fri,  5 Aug 2022 09:42:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659692528; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7KSNjVUG6R4YnRfpCIx6Z0AzxajKicByex9Au7ZxKnk=;
+        b=HrueHj64QgzXnZ4AoZexf5pOy56rfAdrH6U1q6Wzz/CroDW6TDAu+EfLGZpnA5O7smBDxD
+        VezJuqNnRUoYPfw/KAeKvh9GLEGNwbIfEj/4AHS5AGXrfMmNRb78OKlhAiRm5P0R8qj5SC
+        siaIrBfuPCOkeC1o/uvHw1dxF5Ox7Wc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659692528;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7KSNjVUG6R4YnRfpCIx6Z0AzxajKicByex9Au7ZxKnk=;
+        b=VJy9FqFKir2Bg7V2kmxAdrkGojKcBAk6os+RAO/SXPTsBnkCcD+KYcoNq7uXuQUh+DZwLO
+        8n5ncV0FxwmYH6CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 42691133B5;
+        Fri,  5 Aug 2022 09:42:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EmowEPDl7GL8WAAAMHmgww
+        (envelope-from <bp@suse.de>); Fri, 05 Aug 2022 09:42:08 +0000
+Date:   Fri, 5 Aug 2022 11:42:03 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Can Sun <cansun@arista.com>
+Cc:     Kevin Mitchell <kevmitch@arista.com>,
+        Ivan Delalande <colona@arista.com>,
+        weidonghui <weidonghui@allwinnertech.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scripts/decodecode: add the ability to find code sequence
+Message-ID: <Yuzl64bME7GUWo10@zn.tnic>
+References: <20220804214616.71419-1-cansun@arista.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V3 2/6] arm64: dts: meson: add S4 Soc PLL clock controller
- in DT
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220805085716.5635-1-yu.tu@amlogic.com>
- <20220805085716.5635-3-yu.tu@amlogic.com>
- <19654574-bdc0-9fa5-6465-fc88b20e20c5@linaro.org>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <19654574-bdc0-9fa5-6465-fc88b20e20c5@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220804214616.71419-1-cansun@arista.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-     Thank you for your reply.
+On Thu, Aug 04, 2022 at 04:46:16PM -0500, Can Sun wrote:
+>  It adds a tool to search code sequence from vmlinux. If additional
+>  parameters (vmlinux and kernel build path) are provided to decodecode
+>  command, it will try to search the code sequence in the binary, and
+>  provide a code block surrounding the target.
 
-On 2022/8/5 17:16, Krzysztof Kozlowski wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On 05/08/2022 10:57, Yu Tu wrote:
->> Added information about the S4 SOC PLL Clock controller in DT.
->>
->> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->> ---
->>   arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->> index ff213618a598..a816b1f7694b 100644
->> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->> @@ -92,6 +92,14 @@ apb4: apb4@fe000000 {
->>   			#size-cells = <2>;
->>   			ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
->>   
->> +			clkc_pll: pll-clock-controller@8000 {
-> 
-> Node names should be generic - clock-controller.
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-> 
-I will change to clkc_pll: clock-controller@8000, in next version.
-> 
-> Best regards,
-> Krzysztof
-> 
-> .
+The use case being?
+
+objdump -d vmlinux and searching for the rIP is too much typing?
+
+Besides, with the kernel being more and more runtime-patched and
+rewritten, the live code differs more and more from the actual compiled
+opcode bytes in vmlinux, as you noticed yourself with restoredcode
+below.
+
+So maybe I'm missing some important use case but right now this looks
+pointless to me.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

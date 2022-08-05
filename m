@@ -2,112 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C59D58A63C
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9A058A640
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236840AbiHEG5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 02:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
+        id S240070AbiHEG5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 02:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237624AbiHEG5b (ORCPT
+        with ESMTP id S236168AbiHEG5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 02:57:31 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405465FAD6
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 23:57:30 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id f20so2143937lfc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 23:57:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xMkGLwqA1mZq7hExgTupMO8I0C9+XtTTkXpKuqm9Ujw=;
-        b=DSeNS3jRZHgPZZ+INM8dpcAeWV8cIjv76LYbNH6dH08Z+9GSG6imrfAZmDRsgl9q2o
-         l6MgySiyZik2m1y3WiLYUofInLCO+nLS9faaJVnw1PSYlEMQLo4ImCbxz0SnNJSCwRWd
-         2uXF4myknLMbg59GhGMB337epFkNcvCDpSTfdlQxOEJ/5t8NQfdmHttAcWw/ZquIvnL6
-         4A1Dbw0S/JakSggt5Dmr+QZRpCqAvgl6KFCnTEiSFI3IJxYg3sj3Hhu/7OP1DKIHun/+
-         yhaIumIxYbLc9VHuU1n7yWI9eT70d/TzL8YUa62cejMfv/yHnFhkEt505mXlzY3Vf1J2
-         GvTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xMkGLwqA1mZq7hExgTupMO8I0C9+XtTTkXpKuqm9Ujw=;
-        b=eocKHj6CYKGgJLv2pAZFpqIMbJZ/bIja1mlyj+1MXnaBvkqjcaIyoe8Ptul0fQzZVR
-         /Gn/lx6D+woXQBYDoTDO18oxPY4auw/63tTPKajKgHIr+zQ+hgEq1q7/I9K4yj0jg/5y
-         7a0m1b8M0UATbDtzI3Afo1xyrmM66uNv7zZkI/cJLi3SCMVUFM1g5F8XbmikwCRleJT3
-         tOJ/vI4i+Me+aAb7guM8qh4Clais2DCxWUe1Fo4NWe9OiBG8EHoEJxTaUibvGWnSVhhx
-         NFupUttRI4DcB/3YVncnABspWNl61O023AowH0qDJNR4HSYSlaU/KlqdZhEOVOzi/lqq
-         mgdQ==
-X-Gm-Message-State: ACgBeo3wKKVwE7R0LWmAbnzrYmHRrU7V4rTN5UzUZsf6cCS4lJzG4ez1
-        XZE6UH/UBM3BWh3dq9Cqft2iFA==
-X-Google-Smtp-Source: AA6agR6x2gIKuZ+sm8NQfXGc1OBDUj5wibHkXB/NWTPw0ZjTRxVF1vZy/vDgj1MbZ8INnZPMZDUSqQ==
-X-Received: by 2002:a05:6512:2344:b0:48a:e5a8:3a6e with SMTP id p4-20020a056512234400b0048ae5a83a6emr1784338lfu.505.1659682648650;
-        Thu, 04 Aug 2022 23:57:28 -0700 (PDT)
-Received: from [192.168.1.6] ([77.222.167.48])
-        by smtp.gmail.com with ESMTPSA id t8-20020a2e8e68000000b0025e77564a55sm269178ljk.42.2022.08.04.23.57.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 23:57:27 -0700 (PDT)
-Message-ID: <c3060197-ef5c-ad41-1c18-9d39641d1ad6@linaro.org>
-Date:   Fri, 5 Aug 2022 08:57:26 +0200
+        Fri, 5 Aug 2022 02:57:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A932973936;
+        Thu,  4 Aug 2022 23:57:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D71461291;
+        Fri,  5 Aug 2022 06:57:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F29C433B5;
+        Fri,  5 Aug 2022 06:57:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659682656;
+        bh=7wVSYAXfgVRFomBLJ5fepMw1/KUsFhNQwWZThUeegwY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lZy9/fITFaey8t+kOVz6102aWgEQed/6TU/EP200llXv1YeHyxlrtAjahm/CYBJYR
+         C9hDI6UIHfrro+AWYmxu/Mq/jDokusSgR/BQnBVC0DZIF0TN25Zyb9STlCFCR2uuho
+         YCzwhA1U5w9/4ZAotSCw9MPvonjVuXE0Yu5bB9r8XC2eg0GzWUNG296yCZ2eGtWV/r
+         BRBEU7KYN5g4KNJEq/GXu+DxvVPTvv4VuVYM0plm0bRzNHdbwbHFb9W/STvm8ooOSv
+         GDrFLnH32f/UuwPb0tV3ayRPj68OAYwKEwzwdNVIwYColT0LK1vsSbErGEhuTMJwEv
+         pge1KeVNxzkcg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oJrHU-0007IR-27; Fri, 05 Aug 2022 08:58:00 +0200
+Date:   Fri, 5 Aug 2022 08:58:00 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, kbuild-all@lists.01.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 6/9] usb: dwc3: qcom: fix peripheral and OTG suspend
+Message-ID: <Yuy/eM1Wo+gDAJPQ@hovoldconsulting.com>
+References: <20220804151001.23612-7-johan+linaro@kernel.org>
+ <202208050544.ijUhoUyB-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 3/3] firmware: imx: add imx-scu GPIO driver
-Content-Language: en-US
-To:     Shenwei Wang <shenwei.wang@nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
-        brgl@bgdev.pl, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220804184908.470216-1-shenwei.wang@nxp.com>
- <20220804184908.470216-4-shenwei.wang@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220804184908.470216-4-shenwei.wang@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202208050544.ijUhoUyB-lkp@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/08/2022 20:49, Shenwei Wang wrote:
-> The SCU firmware on i.MX8 platforms provides a set of APIs to
-> control the GPIO PINs on the SCU domain. This patch implements the
-> standard GPIO driver interface to access those PINs on the
-> SCU domain over the SCU APIs.
+On Fri, Aug 05, 2022 at 05:38:30AM +0800, kernel test robot wrote:
+> Hi Johan,
 > 
-> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-> ---
->  drivers/firmware/imx/Kconfig        |   6 ++
->  drivers/firmware/imx/Makefile       |   1 +
->  drivers/firmware/imx/imx-scu-gpio.c | 139 ++++++++++++++++++++++++++++
->  3 files changed, 146 insertions(+)
->  create mode 100644 drivers/firmware/imx/imx-scu-gpio.c
+> I love your patch! Perhaps something to improve:
 > 
-> diff --git a/drivers/firmware/imx/Kconfig b/drivers/firmware/imx/Kconfig
-> index c027d99f2a59..484c13f3149a 100644
-> --- a/drivers/firmware/imx/Kconfig
-> +++ b/drivers/firmware/imx/Kconfig
-> @@ -28,3 +28,9 @@ config IMX_SCU_PD
->  	depends on IMX_SCU
->  	help
->  	  The System Controller Firmware (SCFW) based power domain driver.
-> +
-> +config IMX_SCU_GPIO
-> +       def_bool y
-> +       depends on IMX_SCU
-> +       help
-> +         Say Y here to enable the imx8 gpio over SCFW MISC API
+> [auto build test WARNING on usb/usb-testing]
+> [also build test WARNING on linus/master next-20220804]
+> [cannot apply to robh/for-next v5.19]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/usb-dwc3-qcom-fix-wakeup-implementation/20220804-231122
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> config: arc-randconfig-r002-20220804 (https://download.01.org/0day-ci/archive/20220805/202208050544.ijUhoUyB-lkp@intel.com/config)
+> compiler: arc-elf-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/f3778ca026b16474e49c5e0188a0eb91d73eef2f
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Johan-Hovold/usb-dwc3-qcom-fix-wakeup-implementation/20220804-231122
+>         git checkout f3778ca026b16474e49c5e0188a0eb91d73eef2f
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/dwc3/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    drivers/usb/dwc3/dwc3-qcom.c: In function 'dwc3_qcom_read_usb2_speed':
+> >> drivers/usb/dwc3/dwc3-qcom.c:313:25: warning: variable 'hcd' set but not used [-Wunused-but-set-variable]
+>      313 |         struct usb_hcd *hcd;
+>          |                         ^~~> 
 
-gpio driver go to drivers/gpio/
+I'm not seeing this one with gcc-10.3.0, but I'll slap a __maybe_unused
+in there to keep your robot's W=1 builds quiet.
 
-Best regards,
-Krzysztof
+Johan

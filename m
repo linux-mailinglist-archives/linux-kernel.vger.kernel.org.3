@@ -2,115 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296AE58A4C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 04:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA25858A4C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 04:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235824AbiHECeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 22:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
+        id S235658AbiHECiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 22:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiHECeK (ORCPT
+        with ESMTP id S231175AbiHECiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 22:34:10 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FECB6FA26
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 19:34:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659666849; x=1691202849;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lSzcseguImRnPZJT5m0YlPxXYETupsB73+jk/O7Rs5A=;
-  b=MJyGQ1FclzhgcFrUM7+1LxJrlq2HTnkbB6doZxsMNoBTVY0dzxNpIKzx
-   lM8vh3nByMqKdOAVMMaaeF86clRm7ofdKL2mLTwDxKJGys2BrGi3IDwvp
-   A5PXptKKpUkxYoxPhj5eXRoD56e4QPmqYnbyRqNYW1MNWrlwVFzu3ftQA
-   GNjnBk1+xAWmxGaBdZDgzXXz7/T4yKLuXwNH7n8EQeauwTpivJvhDicjy
-   BXUlT2Kt4Z5aer1vK8HO2kbIWa8OzNEBN7kfFDHEkEhvWLWwgoOOL54Hy
-   s0p+om/CZQqtxo+lLtLYiF9g6JoxwgyMttfoN4F34cw1LP0AJcBli8uU1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="354104105"
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="354104105"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 19:34:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="553958242"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 04 Aug 2022 19:34:07 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJnA7-000J4J-08;
-        Fri, 05 Aug 2022 02:34:07 +0000
-Date:   Fri, 05 Aug 2022 10:33:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/platform] BUILD SUCCESS
- 81a71f51b89e84f39df2a3b1daf4274ae6b7b194
-Message-ID: <62ec8195.Skm5+kStH6qWkl9Q%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 4 Aug 2022 22:38:50 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5A51EAD2
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 19:38:46 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VLPIjgi_1659667122;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VLPIjgi_1659667122)
+          by smtp.aliyun-inc.com;
+          Fri, 05 Aug 2022 10:38:43 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     Rodrigo.Siqueira@amd.com
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next RESEND] drm/amd/display: Simplify bool conversion
+Date:   Fri,  5 Aug 2022 10:38:41 +0800
+Message-Id: <20220805023841.16869-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/platform
-branch HEAD: 81a71f51b89e84f39df2a3b1daf4274ae6b7b194  x86/acrn: Set up timekeeping
+Fix the following coccicheck warning:
+./drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c:109:52-57: WARNING: conversion to bool not needed here
 
-elapsed time: 978m
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-configs tested: 34
-configs skipped: 74
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-i386                                defconfig
-x86_64                              defconfig
-i386                             allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a013
-i386                          randconfig-a014
-x86_64                        randconfig-a011
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-i386                          randconfig-a001
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a015
-i386                          randconfig-a003
-x86_64                    rhel-8.3-kselftests
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a004
-i386                          randconfig-a005
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-
-clang tested configs:
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a012
-i386                          randconfig-a002
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+index 594fe8a4d02b..0c425c2ab2a3 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+@@ -106,7 +106,7 @@ static void vblank_control_worker(struct work_struct *work)
+ 		dm->active_vblank_irq_count--;
+ 
+ 	dc_allow_idle_optimizations(
+-		dm->dc, dm->active_vblank_irq_count == 0 ? true : false);
++		dm->dc, dm->active_vblank_irq_count == 0);
+ 
+ 	DRM_DEBUG_KMS("Allow idle optimizations (MALL): %d\n", dm->active_vblank_irq_count == 0);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.20.1.7.g153144c
+

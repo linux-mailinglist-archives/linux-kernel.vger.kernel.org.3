@@ -2,65 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F7958A5C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C3A58A5CF
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236417AbiHEGDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 02:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        id S235997AbiHEGLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 02:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbiHEGDk (ORCPT
+        with ESMTP id S230492AbiHEGLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 02:03:40 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C237427B03;
-        Thu,  4 Aug 2022 23:03:35 -0700 (PDT)
-X-UUID: 4da849926483465fb7441a17ac2c6379-20220805
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=JWSwfN8mSEnWeeZ9W2+DjYGYc2dFgD2DckE83Uv9OzA=;
-        b=UTpyA/I8l54TNohu2UmYJSnOFd9mvIxFeKeHZcQmOLAC4PitjRXaSgvy7PpZ3ufnW2OnYQLTpanIqkYmyFGzpAwbfOFdC/Vci1BUS/iprguzQecwFpjIIoO6BmG7G/heUNtE+4Xp1kzcXsvCznRKtewI+znEkNEz2vaZpYKkOXI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:9e95f804-d7aa-435c-ade9-d69c0d664c26,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:5da3ffad-9535-44a6-aa9b-7f62b79b6ff6,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 4da849926483465fb7441a17ac2c6379-20220805
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1874094933; Fri, 05 Aug 2022 14:03:32 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 5 Aug 2022 14:03:31 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 5 Aug 2022 14:03:30 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: [PATCH v2 2/2] usb: xhci-mtk: fix bandwidth release issue
-Date:   Fri, 5 Aug 2022 14:03:28 +0800
-Message-ID: <20220805060328.6189-2-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220805060328.6189-1-chunfeng.yun@mediatek.com>
-References: <20220805060328.6189-1-chunfeng.yun@mediatek.com>
+        Fri, 5 Aug 2022 02:11:00 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7EE6462;
+        Thu,  4 Aug 2022 23:10:59 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id s206so1873260pgs.3;
+        Thu, 04 Aug 2022 23:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=y5Uc7o9PWYp9IW61XAc1ElNuAfAMidHdLgh8XzLPcns=;
+        b=Woc+rxSGTh6ioPfFT0PT2lOFTL9fCmFNeNbzNOXybrSTTEdeiUREDhCIo6JRN4/678
+         u0eE34zCvwHT0CCAwOi3CrkkKLzTAfb3JnXV8EKhWrwq/ETk08Ts7uWZqIkL1rmyoNJr
+         snsKy+AOjh4m8wQ2ZWMIqwFxOSkr9nhuUUO9UKm7+N3I9kIJbhSAsOk86rNoLDQg6UMP
+         1dlJJJsbdE99nbNh8/19+E4e5J38UCHSWmhp6FnLpOgD5vzmb0dt6pwdN+uabVr8FSnh
+         8VxdfVea3LUxEYceq9QYBaSkqcNFBJvgZruZ667ASBvyMPbchoKG68dfBqgGj70Uaqsn
+         7zCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=y5Uc7o9PWYp9IW61XAc1ElNuAfAMidHdLgh8XzLPcns=;
+        b=m1EFNMoR679s1o6UrK1SvyVS4ih7EphPl5dRn4wV8JLdqcoeBVLkOFZZX44NNgQvEC
+         r0yIJ4WmT7xbSEM4LyHFa7CVCJ1Ua9JEeUbslm7/bxyxfQx/vV1d150F+FkIGZJOhkow
+         dJBkDCdaKrP5lWq0BjZYZ8eP/O0n/juTSf3JwGJl8iLUUakoh7q9o+6dHR9ZK42wLtDA
+         ILrxZZY4Px6FEgQDF28gClXt7lLEikTlSoYoxaB28GOHblSuGxmSa4JhDKe/XoTWdilX
+         SITiBR1pMPwEsT/HOlEDNupurVPoBPaJyMAxw8VG7rknuXDxMvoa7wbH0NSAN5p+cXZB
+         aJ4A==
+X-Gm-Message-State: ACgBeo38+AHGSegkiRLWszPQl4bWykXk7FYRO1cm0Obs5LqRSE64YKFI
+        BpX0P3edQaZI9BiQUTgOl4zOBugTtmumsw==
+X-Google-Smtp-Source: AA6agR5IEXMEVkbNYfh35eMT1e6HVis2QH8JZnO0yI+Fl0lDc3ZwRU0jWo7RAOB4y3RbKwmqbHd1TQ==
+X-Received: by 2002:a63:f0a:0:b0:41a:6c24:1bcb with SMTP id e10-20020a630f0a000000b0041a6c241bcbmr4633636pgl.474.1659679858823;
+        Thu, 04 Aug 2022 23:10:58 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id j7-20020a63cf07000000b00415d873b7a2sm828793pgg.11.2022.08.04.23.10.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 23:10:58 -0700 (PDT)
+Message-ID: <d213bbf8-85da-d275-7032-4d9989f45e48@gmail.com>
+Date:   Fri, 5 Aug 2022 14:10:50 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH] selftests: kvm/x86: test if it checks all the bits in the
+ LBR_FMT bit-field
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220804073819.76460-1-likexu@tencent.com>
+ <YuxVnDif6UMcFZ5I@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <YuxVnDif6UMcFZ5I@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,52 +77,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This happens when @udev->reset_resume is set to true, when usb resume,
-the flow as below:
-  - hub_resume
-    - usb_disable_interface
-      - usb_disable_endpoint
-        - usb_hcd_disable_endpoint
-          - xhci_endpoint_disable  // it set @ep->hcpriv to NULL
+On 5/8/2022 7:26 am, Sean Christopherson wrote:
+> On Thu, Aug 04, 2022, Like Xu wrote:
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> User space only enable guest LBR feature when the exactly supported
+>> LBR format value is initialized to the MSR_IA32_PERF_CAPABILITIES.
+>> The input is also invalid if only partially supported bits are set.
+>>
+>> Note for PEBS feature, the PEBS_FORMAT bit field is the primary concern,
+>> thus if the PEBS_FORMAT input is empty, the other bits check about PEBS
+>> (like PEBS_TRAP or ARCH_REG) will be ignored.
+>>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+>> ---
+>>   tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c | 9 ++++++++-
+>>   1 file changed, 8 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+>> index 6ec901dab61e..98483947f921 100644
+>> --- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+>> +++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+>> @@ -13,6 +13,7 @@
+>>   
+>>   #define _GNU_SOURCE /* for program_invocation_short_name */
+>>   #include <sys/ioctl.h>
+>> +#include <linux/bitmap.h>
+>>   
+>>   #include "kvm_util.h"
+>>   #include "vmx.h"
+>> @@ -56,7 +57,7 @@ int main(int argc, char *argv[])
+>>   	const struct kvm_cpuid_entry2 *entry_a_0;
+>>   	struct kvm_vm *vm;
+>>   	struct kvm_vcpu *vcpu;
+>> -	int ret;
+>> +	int ret, bit;
+>>   	union cpuid10_eax eax;
+>>   	union perf_capabilities host_cap;
+>>   
+>> @@ -97,6 +98,12 @@ int main(int argc, char *argv[])
+>>   	ret = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, 0x30);
+>>   	TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
+>>   
+>> +	/* testcase 4, reject LBR_FMT if only partially supported bits are set */
+>> +	for_each_set_bit(bit, (unsigned long *)&host_cap.capabilities, 6) {
+>> +		ret = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, BIT_ULL(bit));
+>> +		TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
+>> +	}
+> 
+> Rather than add another testcase and target only a subset of possible values, what
+> about replacing (fixing IMO) testcase #3 with fully exhaustive approach?
 
-Then when reset usb device, it will drop allocated endpoints,
-the flow as below:
-  - usb_reset_and_verify_device
-    - usb_hcd_alloc_bandwidth
-      - xhci_mtk_drop_ep
+Yeah, much better.
 
-but @ep->hcpriv is already set to NULL, the bandwidth will be not
-released anymore.
+> 
+> ---
+> From: Sean Christopherson <seanjc@google.com>
+> Date: Thu, 4 Aug 2022 12:18:15 -0700
+> Subject: [PATCH] KVM: selftests: Test all possible "invalid"
+>   PERF_CAPABILITIES.LBR_FMT vals
+> 
+> Test all possible input values to verify that KVM rejects all values
+> except the exact host value.  Due to the LBR format affecting the core
+> functionality of LBRs, KVM can't emulate "other" formats, so even though
+> there are a variety of legal values, KVM should reject anything but an
+> exact host match.
+> 
+> Suggested-by: Like Xu <like.xu.linux@gmail.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   .../selftests/kvm/x86_64/vmx_pmu_caps_test.c    | 17 ++++++++++++-----
+>   1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+> index 6ec901dab61e..069589c52f41 100644
+> --- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+> @@ -59,6 +59,7 @@ int main(int argc, char *argv[])
+>   	int ret;
+>   	union cpuid10_eax eax;
+>   	union perf_capabilities host_cap;
+> +	uint64_t val;
+> 
+>   	host_cap.capabilities = kvm_get_feature_msr(MSR_IA32_PERF_CAPABILITIES);
+>   	host_cap.capabilities &= (PMU_CAP_FW_WRITES | PMU_CAP_LBR_FMT);
+> @@ -91,11 +92,17 @@ int main(int argc, char *argv[])
+>   	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, host_cap.lbr_format);
+>   	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), (u64)host_cap.lbr_format);
+> 
+> -	/* testcase 3, check invalid LBR format is rejected */
+> -	/* Note, on Arch LBR capable platforms, LBR_FMT in perf capability msr is 0x3f,
+> -	 * to avoid the failure, use a true invalid format 0x30 for the test. */
+> -	ret = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, 0x30);
+> -	TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
+> +	/*
+> +	 * Testcase 3, check that an "invalid" LBR format is rejected.  Only an
+> +	 * exact match of the host's format (and 0/disabled) is allowed.
+> +	 */
+> +	for (val = 1; val <= PMU_CAP_LBR_FMT; val++) {
+> +		if (val == (host_cap.capabilities & PMU_CAP_LBR_FMT))
 
-Due to the added endponts are stored in hash table, we can drop the check
-of @ep->hcpriv.
+Emm,
 
-Fixes: 4ce186665e7c ("usb: xhci-mtk: Do not use xhci's virt_dev in
- drop_endpoint")
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v2: add comment
----
- drivers/usb/host/xhci-mtk-sch.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+		if (val == host_cap.lbr_format)
 
-diff --git a/drivers/usb/host/xhci-mtk-sch.c
- b/drivers/usb/host/xhci-mtk-sch.c
-index a17bc584ee99..579899eb24c1 100644
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -764,8 +764,8 @@ int xhci_mtk_drop_ep(struct usb_hcd *hcd, struct
- usb_device *udev,
- 	if (ret)
- 		return ret;
- 
--	if (ep->hcpriv)
--		drop_ep_quirk(hcd, udev, ep);
-+	/* needn't check @ep->hcpriv, xhci_endpoint_disable set it NULL */
-+	drop_ep_quirk(hcd, udev, ep);
- 
- 	return 0;
- }
--- 
-2.18.0
+to save a minor cost of logical operation.
 
+> +			continue;
+> +
+> +		ret = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, val);
+> +		TEST_ASSERT(!ret, "Bad LBR FMT = 0x%lx didn't fail", val);
+> +	}
+> 
+>   	printf("Completed perf capability tests.\n");
+>   	kvm_vm_free(vm);
+> 
+> base-commit: 93472b79715378a2386598d6632c654a2223267b
+> --
+> 

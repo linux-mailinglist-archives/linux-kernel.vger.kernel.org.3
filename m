@@ -2,461 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB3858A417
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 02:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA04758A423
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 02:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239745AbiHEAKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 20:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S240005AbiHEAWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 20:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiHEAKe (ORCPT
+        with ESMTP id S239879AbiHEAV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 20:10:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C63D18368;
-        Thu,  4 Aug 2022 17:10:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67B1961956;
-        Fri,  5 Aug 2022 00:10:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A531EC433C1;
-        Fri,  5 Aug 2022 00:10:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659658230;
-        bh=4gXwFib+hP/SHBsmpz5v7D7FEqiQA0ZHRLJHf8IudWo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=G+hX13f7v6lg0hgtrle7gePQZKIEtqj0z/Qp0DC9yW3kQIQ4Ji40eW0rehowEb+in
-         Tm6ZVd86/j764bRqU9J5lfyW9lcqs5C90pqwwExcBaZZl8EEs4Yb690xfIlbwzdhnu
-         LVaou/vDGs1vJmSNqkYisFKCqllQkwAcDM5FcEH4AHtQcCKNoEv3aTHhfqE47j7qzK
-         Lsp927GXnK//uJ2Pe079XGuQucsUMDhRrA9E6q5u4F4hpBhqi1brSY5FtgDl8VF2PD
-         dMPpJVduLalM2or/s7LU/uU7Bv+y1q5cMFWRlwpJWUZh5DkA6KLtVBCdbMYAxVVRJl
-         brR8494BWNaGg==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] clk changes for the merge window
-Date:   Thu,  4 Aug 2022 17:10:29 -0700
-Message-Id: <20220805001029.4036778-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+        Thu, 4 Aug 2022 20:21:58 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0DC72EEB
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 17:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659658913; x=1691194913;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kmocP3pQlHDoCikAfL+rSE6N9vOwDpKEdF2hdHk9vw0=;
+  b=dMubeN0VwRBkbgngp3AXs0L3mdCw6SNXqz5igRt97efRAFv8BKXO90c1
+   bKm2bjlO1BlmX1lkQVpgeWwXcRlDTqfqgv8vhj5MiLq+AVaic+rjm70CZ
+   MxZNJos+UhvfSW8wV5NGelTvvBX8f/Lgmo/WwjecBZq+aJvImprNpeQ0N
+   a2Ati6feBDqL1s2QG2bMiGyQ4ZQGNC/6xUz5N77W3TN3SihwRVdyEo2rG
+   DeqOd/uFpylyhIsl/i0F+O4gcSZ/uFKVlaVtLjtA89aimoS3loSlcNCZG
+   DgK8ux9gzAEU2+52Zu3Ls79dK7zYpJVA/E3Vmxoa/bdXH0O+4HlTg3Egz
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="269858098"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="269858098"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 17:21:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="553923538"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 04 Aug 2022 17:21:51 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJl66-000Iyx-2R;
+        Fri, 05 Aug 2022 00:21:50 +0000
+Date:   Fri, 5 Aug 2022 08:21:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Deepak Kumar Singh <quic_deesin@quicinc.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: drivers/soc/qcom/smem.c:702:27: sparse: sparse: cast to restricted
+ __le32
+Message-ID: <202208050850.XNdMMV1C-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 3d7cb6b04c3f3115719235cc6866b10326de34cd:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c040862bfbd9c5f3cb64e1df1c623e20e38fe656
+commit: f1383348ad0fe0d568dfd37f2552b0b4f044dbe5 soc: qcom: smem: validate fields of shared structures
+date:   4 months ago
+config: sh-randconfig-s041-20220804 (https://download.01.org/0day-ci/archive/20220805/202208050850.XNdMMV1C-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f1383348ad0fe0d568dfd37f2552b0b4f044dbe5
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f1383348ad0fe0d568dfd37f2552b0b4f044dbe5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash drivers/soc/qcom/
 
-  Linux 5.19 (2022-07-31 14:03:01 -0700)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-are available in the Git repository at:
+sparse warnings: (new ones prefixed by >>)
+   drivers/soc/qcom/smem.c:430:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
+   drivers/soc/qcom/smem.c:430:16: sparse:     expected struct smem_header *header
+   drivers/soc/qcom/smem.c:430:16: sparse:     got void [noderef] __iomem *virt_base
+   drivers/soc/qcom/smem.c:517:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
+   drivers/soc/qcom/smem.c:517:16: sparse:     expected struct smem_header *header
+   drivers/soc/qcom/smem.c:517:16: sparse:     got void [noderef] __iomem *virt_base
+   drivers/soc/qcom/smem.c:537:50: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void * @@     got void [noderef] __iomem * @@
+   drivers/soc/qcom/smem.c:537:50: sparse:     expected void *
+   drivers/soc/qcom/smem.c:537:50: sparse:     got void [noderef] __iomem *
+   drivers/soc/qcom/smem.c:698:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_partition_header *phdr @@     got void [noderef] __iomem *virt_base @@
+   drivers/soc/qcom/smem.c:698:22: sparse:     expected struct smem_partition_header *phdr
+   drivers/soc/qcom/smem.c:698:22: sparse:     got void [noderef] __iomem *virt_base
+>> drivers/soc/qcom/smem.c:702:27: sparse: sparse: cast to restricted __le32
+>> drivers/soc/qcom/smem.c:702:27: sparse: sparse: cast to restricted __le32
+>> drivers/soc/qcom/smem.c:702:27: sparse: sparse: cast to restricted __le32
+>> drivers/soc/qcom/smem.c:702:27: sparse: sparse: cast to restricted __le32
+>> drivers/soc/qcom/smem.c:702:27: sparse: sparse: cast to restricted __le32
+>> drivers/soc/qcom/smem.c:702:27: sparse: sparse: cast to restricted __le32
+   drivers/soc/qcom/smem.c:706:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_partition_header *phdr @@     got void [noderef] __iomem *virt_base @@
+   drivers/soc/qcom/smem.c:706:22: sparse:     expected struct smem_partition_header *phdr
+   drivers/soc/qcom/smem.c:706:22: sparse:     got void [noderef] __iomem *virt_base
+   drivers/soc/qcom/smem.c:710:27: sparse: sparse: cast to restricted __le32
+   drivers/soc/qcom/smem.c:710:27: sparse: sparse: cast to restricted __le32
+   drivers/soc/qcom/smem.c:710:27: sparse: sparse: cast to restricted __le32
+   drivers/soc/qcom/smem.c:710:27: sparse: sparse: cast to restricted __le32
+   drivers/soc/qcom/smem.c:710:27: sparse: sparse: cast to restricted __le32
+   drivers/soc/qcom/smem.c:710:27: sparse: sparse: cast to restricted __le32
+   drivers/soc/qcom/smem.c:713:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
+   drivers/soc/qcom/smem.c:713:24: sparse:     expected struct smem_header *header
+   drivers/soc/qcom/smem.c:713:24: sparse:     got void [noderef] __iomem *virt_base
+   drivers/soc/qcom/smem.c:726:30: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/soc/qcom/smem.c:726:30: sparse:    void *
+   drivers/soc/qcom/smem.c:726:30: sparse:    void [noderef] __iomem *
+   drivers/soc/qcom/smem.c:747:36: sparse: sparse: subtraction of different types can't work (different address spaces)
+   drivers/soc/qcom/smem.c:756:28: sparse: sparse: subtraction of different types can't work (different address spaces)
+   drivers/soc/qcom/smem.c:765:36: sparse: sparse: subtraction of different types can't work (different address spaces)
+   drivers/soc/qcom/smem.c:780:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
+   drivers/soc/qcom/smem.c:780:16: sparse:     expected struct smem_header *header
+   drivers/soc/qcom/smem.c:780:16: sparse:     got void [noderef] __iomem *virt_base
+   drivers/soc/qcom/smem.c:813:57: sparse: sparse: restricted __le32 degrades to integer
+   drivers/soc/qcom/smem.c:834:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_partition_header *header @@     got void [noderef] __iomem * @@
+   drivers/soc/qcom/smem.c:834:16: sparse:     expected struct smem_partition_header *header
+   drivers/soc/qcom/smem.c:834:16: sparse:     got void [noderef] __iomem *
+   drivers/soc/qcom/smem.c:985:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_ptable *ptable @@     got void [noderef] __iomem * @@
+   drivers/soc/qcom/smem.c:985:22: sparse:     expected struct smem_ptable *ptable
+   drivers/soc/qcom/smem.c:985:22: sparse:     got void [noderef] __iomem *
+   drivers/soc/qcom/smem.c:1094:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
+   drivers/soc/qcom/smem.c:1094:16: sparse:     expected struct smem_header *header
+   drivers/soc/qcom/smem.c:1094:16: sparse:     got void [noderef] __iomem *virt_base
+   drivers/soc/qcom/smem.c:1115:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *ptr @@     got restricted __le32 * @@
+   drivers/soc/qcom/smem.c:1115:16: sparse:     expected void const volatile [noderef] __iomem *ptr
+   drivers/soc/qcom/smem.c:1115:16: sparse:     got restricted __le32 *
+   drivers/soc/qcom/smem.c:1115:52: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *ptr @@     got restricted __le32 * @@
+   drivers/soc/qcom/smem.c:1115:52: sparse:     expected void const volatile [noderef] __iomem *ptr
+   drivers/soc/qcom/smem.c:1115:52: sparse:     got restricted __le32 *
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
+vim +702 drivers/soc/qcom/smem.c
 
-for you to fetch changes up to 08fc500fe3d4b1f0603fb97ad353f246a3d52d2d:
-
-  Merge branch 'clk-allwinner' into clk-next (2022-08-02 12:20:51 -0700)
-
-----------------------------------------------------------------
-The clk core gains a new set of APIs that allow drivers to both acquire clks
-and prepare and enable them at the same time. This also comes with devm support
-so that drivers can make a single call to get and prepare and enable the clk
-and have that all undone when their driver is removed. Many folks have
-requested this feature over the years, but we've had disagreements about how to
-implement it and if it was worthwhile to encourage drivers to use such an API.
-Now it's here, so let's see how it goes. I hope that by introducing this API we
-can identify drivers that would benefit from further consolidation of clk API
-usage, possibly by moving such logic to the bus layer and out of drivers
-altogether.
-
-Outside of that major API update, we have the usual collection of driver
-updates. A few new SoCs are supported, mostly Qualcomm and Renesas this time
-around. Then we have the long tail of non-critical fixes and minor feature
-additions to various clk drivers. And finally more clk provider migration to
-struct clk_parent_data, reducing boot times in the process.
-
-Core:
- - devm helpers for clk_get() + clk_prepare() and clk_enable()
-
-New Drivers:
- - Support for the camera clock controller in Qualcomm SM8450 and
-   the display and gpu clock controllers in Qualcomm SM8350
- - Add support for the Renesas RZ/Five SoC
-
-Updates:
- - Various fixes, new clocks and USB GDSCs are introduced for Qualcomm IPQ8074
- - Fixes to Qualcomm MSM8939 for issues introduced by inheriting the MSM8916
-   GCC driver
- - Support for a new type of voteable GDSCs used by Qualcomm SC8280XP PCIe
-   GDSCs
- - Qualcomm SC8280XP pipe clocks transitioned to the new phy-mux implementation
- - Qualcomm MSM8996 GCC, RPM clock driver and some clocks in MSM8994 GCC are
-   migrated to use clk_parent_data
- - Corrected the topology for Titan (camera) GDSCs on Qualcomm SDM845 and
-   SM8250
- - Qualcomm MSM8916 gains more possible frequencies for its GP clocks.
- - The GCC and tsens handling on Qualcomm MSM8960 is reworked to mimic the
-   design in IPQ8074 to allow the GCC driver to probe earlier.
- - The regulator based mmcx supply for Qualcomm dispcc and videocc is dropped,
-   as the only upstream target that adapted this interface was transitioned
-   several kernel versions ago
- - Qualcomm GDSCs found to be enabled at boot will now reflect in the enable
-   count of the supply, as was done with the regulator supplies previously
- - Correct adc1, nic_media and edma1's parents for NXP i.MX93
- - rdiv, mfd values, the return rate in recalc_rate and add more frequencies in
-   the table for fracn-gppll on i.MX
- - Remove Allwinner workaround logic/compatible in fixed factor code
- - MediaTek clk driver cleanups
- - Add reset support to more MediaTek clk drivers
- - deduplicate Allwinner ccu_clks arrays
- - Allwinner H6 GPU DFS support
- - Adjust Allwinner Kconfig to limit choice
- - Fix initconst confusion on Renesas R-Car Gen4
- - Add GPT/POEG (PWM) clocks and resets on Renesas RZ/G2L
- - Add PFC and WDT clocks and resets on Renesas RZ/V2M
- - Add thermal, SDHI, Z (CPU core), PCIe, and HSCIF (serial) clocks on
-   Renesas R-Car S4-8
-
-----------------------------------------------------------------
-Abel Vesa (1):
-      clk: qcom: Drop mmcx gdsc supply for dispcc and videocc
-
-Andi Kleen (1):
-      clk: renesas: rcar-gen4: Fix initconst confusion for cpg_pll_config
-
-Andy Shevchenko (1):
-      clk: Remove never used devm_clk_*unregister()
-
-Biju Das (3):
-      clk: renesas: r9a07g044: Add GPT clock and reset entry
-      clk: renesas: r9a07g044: Add POEG clock and reset entries
-      clk: renesas: rzg2l: Fix reset status function
-
-Bjorn Andersson (5):
-      Merge tag '20220608105238.2973600-1-dmitry.baryshkov@linaro.org' into clk-for-5.20
-      Merge branch '20220515210048.483898-8-robimarko@gmail.com' into clk-for-5.20
-      Merge branch '20220701062622.2757831-2-vladimir.zapolskiy@linaro.org' into clk-for-5.20
-      Merge branch '20220706154337.2026269-1-robert.foss@linaro.org' into clk-for-5.20
-      clk: qcom: gdsc: Bump parent usage count when GDSC is found enabled
-
-Bryan O'Donoghue (10):
-      clk: qcom: gcc-msm8939: Add missing SYSTEM_MM_NOC_BFDCD_CLK_SRC
-      clk: qcom: gcc-msm8939: Fix bimc_ddr_clk_src rcgr base address
-      clk: qcom: gcc-msm8939: Add missing system_mm_noc_bfdcd_clk_src
-      clk: qcom: gcc-msm8939: Point MM peripherals to system_mm_noc clock
-      clk: qcom: gcc-msm8939: Fix weird field spacing in ftbl_gcc_camss_cci_clk
-      clk: qcom: gcc-msm8939: Add missing CAMSS CCI bus clock
-      clk: qcom: gcc-msm8939: Fix venus0_vcodec0_clk frequency definitions
-      clk: qcom: gcc-msm8939: Add missing CAMSS CPP clock frequencies
-      clk: qcom: gcc-msm8939: Add missing MDSS MDP clock frequencies
-      clk: qcom: gcc-msm8939: Add missing USB HS system clock frequencies
-
-Christian Marangi (5):
-      clk: qcom: clk-hfpll: use poll_timeout macro
-      clk: qcom: clk-krait: unlock spin after mux completion
-      clk: qcom: clk-krait: add apq/ipq8064 errata workaround
-      dt-bindings: clock: fix wrong clock documentation for qcom,rpmcc
-      clk: qcom: clk-rpm: convert to parent_data API
-
-Cixi Geng (2):
-      dt-bindings: clk: sprd: Add bindings for ums512 clock controller
-      clk: sprd: Add dt-bindings include file for UMS512
-
-Dmitry Baryshkov (11):
-      clk: qcom: mmcc-msm8996: use ARRAY_SIZE instead of specifying num_parents
-      clk: qcom: mmcc-msm8996: move clock parent tables down
-      clk: qcom: mmcc-msm8996: use parent_hws/_data instead of parent_names
-      clk: qcom: regmap: add PHY clock source implementation
-      clk: qcom: gcc-sm8450: use new clk_regmap_phy_mux_ops for PCIe pipe clocks
-      clk: qcom: gcc-sc7280: use new clk_regmap_phy_mux_ops for PCIe pipe clocks
-      dt-bindings: clock: qcom,gcc-apq8064: move msm8960 compat from gcc-other.yaml
-      dt-bindings: clock: qcom,gcc-apq8064: split tsens to the child node
-      clk: qcom: gcc-msm8960: create tsens device if there are no child nodes
-      dt-bindings: clock: qcom,gcc-msm8996: add more GCC clock sources
-      clk: qcom: gcc-msm8994: use parent_hws for gpll0/4
-
-Geert Uytterhoeven (9):
-      clk: renesas: r8a73a4: Remove r8a73a4_cpg.reg
-      clk: renesas: r8a7740: Remove r8a7740_cpg.reg
-      clk: renesas: sh73a0: Remove sh73a0_cpg.reg
-      clk: renesas: r8a7778: Remove struct r8a7778_cpg
-      clk: renesas: r8a7779: Remove struct r8a7779_cpg
-      clk: renesas: rza1: Remove struct rz_cpg
-      dt-bindings: clock: renesas,rzg2l: Simplify header file references
-      clk: renesas: r8a779f0: Add Z0 and Z1 clock support
-      Merge tag 'renesas-r9a07g043-dt-binding-defs-tag2' into HEAD
-
-Haibo Chen (1):
-      clk: imx93: use adc_root as the parent clock of adc1
-
-Jacky Bai (1):
-      clk: imx93: Correct the edma1's parent clock
-
-Johan Hovold (4):
-      clk: qcom: gdsc: add collapse-bit helper
-      clk: qcom: gdsc: add support for collapse-vote registers
-      clk: qcom: gcc-sc8280xp: use collapse-voting for PCIe GDSCs
-      clk: qcom: gcc-sc8280xp: use phy-mux clock for PCIe
-
-Jonathan Marek (1):
-      clk: qcom: add support for SM8350 DISPCC
-
-Krzysztof Kozlowski (1):
-      dt-bindings: clock: qcom,gcc-sdm845: add parent power domain
-
-Lad Prabhakar (2):
-      dt-bindings: clock: r9a07g043-cpg: Add Renesas RZ/Five CPG Clock and Reset Definitions
-      clk: renesas: r9a07g043: Add support for RZ/Five SoC
-
-Li kunyu (1):
-      clk: qcom: gcc-sm6350: Drop extra semicolon
-
-Liu Ying (1):
-      clk: imx: clk-fracn-gppll: Return rate in rate table properly in ->recalc_rate()
-
-Marijn Suijten (3):
-      clk: divider: Introduce devm_clk_hw_register_divider_parent_hw()
-      clk: mux: Introduce devm_clk_hw_register_mux_parent_hws()
-      clk: fixed-factor: Introduce *clk_hw_register_fixed_factor_parent_hw()
-
-Matthias Brugger (2):
-      dt-bindings: ARM: Mediatek: Remove msdc binding of MT8192 clock
-      clk: mediatek: Delete MT8192 msdc gate
-
-Nikita Travkin (3):
-      clk: qcom: clk-rcg2: Fail Duty-Cycle configuration if MND divider is not enabled.
-      clk: qcom: clk-rcg2: Make sure to not write d=0 to the NMD register
-      clk: qcom: gcc-msm8916: Add rates to the GP clocks
-
-Peng Fan (4):
-      clk: imx93: correct nic_media parent
-      clk: imx: clk-fracn-gppll: fix mfd value
-      clk: imx: clk-fracn-gppll: correct rdiv
-      clk: imx: clk-fracn-gppll: Add more freq config for video pll
-
-Phil Edworthy (2):
-      clk: renesas: r9a09g011: Add PFC clock and reset entries
-      clk: renesas: r9a09g011: Add WDT clock and reset entries
-
-Ralph Siemsen (2):
-      clk: renesas: r9a06g032: Drop some unused fields
-      clk: renesas: r9a06g032: Fix UART clkgrp bitsel
-
-Ren Zhijie (1):
-      clk: qcom: fix build error initializer element is not constant
-
-Rex-BC Chen (17):
-      clk: mediatek: reset: Add reset.h
-      clk: mediatek: reset: Fix written reset bit offset
-      clk: mediatek: reset: Refine and reorder functions in reset.c
-      clk: mediatek: reset: Extract common drivers to update function
-      clk: mediatek: reset: Merge and revise reset register function
-      clk: mediatek: reset: Revise structure to control reset register
-      clk: mediatek: reset: Support nonsequence base offsets of reset registers
-      clk: mediatek: reset: Support inuput argument index mode
-      clk: mediatek: reset: Change return type for clock reset register function
-      clk: mediatek: reset: Add new register reset function with device
-      clk: mediatek: reset: Add reset support for simple probe
-      dt-bindings: arm: mediatek: Add #reset-cells property for MT8192/MT8195
-      dt-bindings: reset: mediatek: Add infra_ao reset index for MT8192/MT8195
-      clk: mediatek: reset: Add infra_ao reset support for MT8192/MT8195
-      dt-bindings: reset: mediatek: Add infra_ao reset index for MT8186
-      dt-bindings: arm: mediatek: Add #reset-cells property for MT8186
-      clk: mediatek: reset: Add infra_ao reset support for MT8186
-
-Robert Foss (1):
-      clk: qcom: add support for SM8350 GPUCC
-
-Robert Marko (9):
-      clk: qcom: ipq8074: fix NSS core PLL-s
-      clk: qcom: ipq8074: SW workaround for UBI32 PLL lock
-      clk: qcom: ipq8074: fix NSS port frequency tables
-      dt-bindings: clock: qcom: ipq8074: add PPE crypto clock
-      clk: qcom: ipq8074: add PPE crypto clock
-      clk: qcom: ipq8074: set BRANCH_HALT_DELAY flag for UBI clocks
-      dt-bindings: clocks: qcom,gcc-ipq8074: support power domains
-      clk: qcom: ipq8074: add USB GDSCs
-      clk: qcom: ipq8074: dont disable gcc_sleep_clk_src
-
-Roman Stratiienko (1):
-      clk: sunxi-ng: sun50i: h6: Modify GPU clock configuration to support DFS
-
-Samuel Holland (5):
-      clk: sunxi-ng: Deduplicate ccu_clks arrays
-      clk: fixed: Remove Allwinner A10 special-case logic
-      dt-bindings: clock: fixed-factor: Drop Allwinner A10 compatible
-      clk: sunxi: Limit legacy clocks to 32-bit ARM
-      clk: sunxi: Do not select the PRCM MFD
-
-Stephen Boyd (9):
-      Merge tag 'renesas-clk-for-v5.20-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers into clk-renesas
-      clk: qcom: rpmh: Add note about sleep/wake state for BCMs
-      Merge tag 'renesas-clk-for-v5.20-tag2' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers into clk-renesas
-      Merge tag 'sunxi-clk-for-5.20-1' of https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into clk-allwinner
-      Merge tag 'clk-imx-5.20' of git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux into clk-imx
-      Merge tag 'qcom-clk-for-5.20' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into clk-qcom
-      Merge branches 'clk-basic', 'clk-mtk', 'clk-devm-enable' and 'clk-ti-dt' into clk-next
-      Merge branches 'clk-renesas', 'clk-spreadtrum', 'clk-imx' and 'clk-qcom' into clk-next
-      Merge branch 'clk-allwinner' into clk-next
-
-Tony Lindgren (1):
-      clk: ti: Stop using legacy clkctrl names for omap4 and 5
-
-Uwe Kleine-König (5):
-      clk: Improve documentation for devm_clk_get() and its optional variant
-      clk: generalize devm_clk_get() a bit
-      clk: Provide new devm_clk helpers for prepared and enabled clocks
-      clk: meson: axg-audio: Don't duplicate devm_clk_get_enabled()
-      clk: Fix pointer casting to prevent oops in devm_clk_release()
-
-Vladimir Zapolskiy (8):
-      clk: qcom: camcc-sm8250: Fix halt on boot by reducing driver's init level
-      clk: qcom: camcc-sdm845: Fix topology around titan_top power domain
-      clk: qcom: camcc-sm8250: Fix topology around titan_top power domain
-      clk: qcom: clk-alpha-pll: fix clk_trion_pll_configure description
-      clk: qcom: clk-alpha-pll: limit exported symbols to GPL licensed code
-      clk: qcom: clk-alpha-pll: add Lucid EVO PLL configuration interfaces
-      clk: qcom: clk-alpha-pll: add Rivian EVO PLL configuration interfaces
-      clk: qcom: add camera clock controller driver for SM8450 SoC
-
-Wolfram Sang (3):
-      clk: renesas: r8a779f0: Add thermal clock
-      clk: renesas: r8a779f0: Add SDHI0 clock
-      clk: renesas: r8a779f0: Add HSCIF clocks
-
-Yoshihiro Shimoda (1):
-      clk: renesas: r8a779f0: Add PCIe clocks
-
- .../arm/mediatek/mediatek,mt8186-sys-clock.yaml    |    3 +
- .../arm/mediatek/mediatek,mt8192-clock.yaml        |    8 -
- .../arm/mediatek/mediatek,mt8192-sys-clock.yaml    |    3 +
- .../arm/mediatek/mediatek,mt8195-sys-clock.yaml    |    3 +
- .../bindings/clock/fixed-factor-clock.yaml         |    1 -
- .../bindings/clock/qcom,dispcc-sm8x50.yaml         |    6 +-
- .../bindings/clock/qcom,gcc-apq8064.yaml           |   40 +-
- .../bindings/clock/qcom,gcc-ipq8074.yaml           |    5 +
- .../bindings/clock/qcom,gcc-msm8996.yaml           |   16 +
- .../devicetree/bindings/clock/qcom,gcc-other.yaml  |    5 +-
- .../devicetree/bindings/clock/qcom,gcc-sdm845.yaml |    3 +
- .../bindings/clock/qcom,gpucc-sm8350.yaml          |   72 +
- .../devicetree/bindings/clock/qcom,rpmcc.yaml      |   85 +-
- .../bindings/clock/qcom,sm8450-camcc.yaml          |   80 +
- .../bindings/clock/renesas,rzg2l-cpg.yaml          |    7 +-
- .../devicetree/bindings/clock/sprd,ums512-clk.yaml |   71 +
- drivers/clk/clk-devres.c                           |   91 +-
- drivers/clk/clk-fixed-factor.c                     |   56 +-
- drivers/clk/clk.c                                  |   48 -
- drivers/clk/imx/clk-fracn-gppll.c                  |   36 +-
- drivers/clk/imx/clk-imx93.c                        |    6 +-
- drivers/clk/mediatek/clk-mt2701-eth.c              |   10 +-
- drivers/clk/mediatek/clk-mt2701-g3d.c              |   10 +-
- drivers/clk/mediatek/clk-mt2701-hif.c              |   10 +-
- drivers/clk/mediatek/clk-mt2701.c                  |   22 +-
- drivers/clk/mediatek/clk-mt2712.c                  |   22 +-
- drivers/clk/mediatek/clk-mt7622-eth.c              |   10 +-
- drivers/clk/mediatek/clk-mt7622-hif.c              |   12 +-
- drivers/clk/mediatek/clk-mt7622.c                  |   22 +-
- drivers/clk/mediatek/clk-mt7629-eth.c              |   10 +-
- drivers/clk/mediatek/clk-mt7629-hif.c              |   12 +-
- drivers/clk/mediatek/clk-mt8135.c                  |   22 +-
- drivers/clk/mediatek/clk-mt8173.c                  |   22 +-
- drivers/clk/mediatek/clk-mt8183.c                  |   18 +-
- drivers/clk/mediatek/clk-mt8186-infra_ao.c         |   23 +
- drivers/clk/mediatek/clk-mt8192-msdc.c             |   21 -
- drivers/clk/mediatek/clk-mt8192.c                  |   29 +
- drivers/clk/mediatek/clk-mt8195-infra_ao.c         |   24 +
- drivers/clk/mediatek/clk-mtk.c                     |    7 +
- drivers/clk/mediatek/clk-mtk.h                     |    9 +-
- drivers/clk/mediatek/reset.c                       |  198 +-
- drivers/clk/mediatek/reset.h                       |   82 +
- drivers/clk/meson/axg-audio.c                      |   36 +-
- drivers/clk/qcom/Kconfig                           |   22 +-
- drivers/clk/qcom/Makefile                          |    3 +
- drivers/clk/qcom/camcc-sdm845.c                    |    4 +
- drivers/clk/qcom/camcc-sm8250.c                    |   16 +-
- drivers/clk/qcom/camcc-sm8450.c                    | 2856 ++++++++++++++++++++
- drivers/clk/qcom/clk-alpha-pll.c                   |  144 +-
- drivers/clk/qcom/clk-alpha-pll.h                   |   11 +-
- drivers/clk/qcom/clk-hfpll.c                       |   15 +-
- drivers/clk/qcom/clk-krait.c                       |   23 +-
- drivers/clk/qcom/clk-krait.h                       |    1 +
- drivers/clk/qcom/clk-rcg2.c                        |   16 +-
- drivers/clk/qcom/clk-regmap-phy-mux.c              |   62 +
- drivers/clk/qcom/clk-regmap-phy-mux.h              |   33 +
- drivers/clk/qcom/clk-rpm.c                         |   24 +-
- drivers/clk/qcom/clk-rpmh.c                        |    5 +
- drivers/clk/qcom/dispcc-sm8250.c                   |   64 +-
- drivers/clk/qcom/gcc-ipq8074.c                     |  104 +-
- drivers/clk/qcom/gcc-msm8916.c                     |   35 +
- drivers/clk/qcom/gcc-msm8939.c                     |   47 +-
- drivers/clk/qcom/gcc-msm8960.c                     |    6 +-
- drivers/clk/qcom/gcc-msm8994.c                     |    8 +-
- drivers/clk/qcom/gcc-sc7280.c                      |   49 +-
- drivers/clk/qcom/gcc-sc8280xp.c                    |  142 +-
- drivers/clk/qcom/gcc-sm6350.c                      |    2 +-
- drivers/clk/qcom/gcc-sm8450.c                      |   49 +-
- drivers/clk/qcom/gdsc.c                            |   36 +-
- drivers/clk/qcom/gdsc.h                            |    4 +
- drivers/clk/qcom/gpucc-sm8350.c                    |  637 +++++
- drivers/clk/qcom/krait-cc.c                        |    8 +
- drivers/clk/qcom/mmcc-msm8996.c                    | 1052 ++++---
- drivers/clk/qcom/videocc-sm8250.c                  |    4 -
- drivers/clk/renesas/clk-r8a73a4.c                  |   22 +-
- drivers/clk/renesas/clk-r8a7740.c                  |   20 +-
- drivers/clk/renesas/clk-r8a7778.c                  |   31 +-
- drivers/clk/renesas/clk-r8a7779.c                  |   27 +-
- drivers/clk/renesas/clk-rz.c                       |   33 +-
- drivers/clk/renesas/clk-sh73a0.c                   |   26 +-
- drivers/clk/renesas/r8a779f0-cpg-mssr.c            |   10 +
- drivers/clk/renesas/r9a06g032-clocks.c             |   32 +-
- drivers/clk/renesas/r9a07g043-cpg.c                |   32 +
- drivers/clk/renesas/r9a07g044-cpg.c                |   17 +-
- drivers/clk/renesas/r9a09g011-cpg.c                |    5 +
- drivers/clk/renesas/rcar-gen4-cpg.c                |    2 +-
- drivers/clk/renesas/rzg2l-cpg.c                    |    2 +-
- drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c             |   15 +-
- drivers/clk/sunxi-ng/ccu-sun50i-h6.c               |   16 +-
- drivers/clk/sunxi-ng/ccu-sun8i-de2.c               |   77 +-
- drivers/clk/sunxi-ng/ccu-sun8i-h3.c                |  113 +-
- drivers/clk/sunxi-ng/ccu-sun8i-r.c                 |   40 +-
- drivers/clk/sunxi-ng/ccu-sun8i-v3s.c               |   80 +-
- drivers/clk/sunxi/Kconfig                          |    4 +-
- drivers/clk/ti/clk-44xx.c                          |  210 +-
- drivers/clk/ti/clk-54xx.c                          |  160 +-
- drivers/clk/ti/clkctrl.c                           |    4 -
- include/dt-bindings/clock/qcom,dispcc-sm8350.h     |    1 +
- include/dt-bindings/clock/qcom,gcc-ipq8074.h       |    4 +
- include/dt-bindings/clock/qcom,gcc-msm8939.h       |    1 +
- include/dt-bindings/clock/qcom,gpucc-sm8350.h      |   52 +
- include/dt-bindings/clock/qcom,sm8450-camcc.h      |  159 ++
- include/dt-bindings/clock/r9a07g043-cpg.h          |   20 +
- include/dt-bindings/clock/sprd,ums512-clk.h        |  397 +++
- include/dt-bindings/reset/mt8186-resets.h          |    5 +
- include/dt-bindings/reset/mt8192-resets.h          |    8 +
- include/dt-bindings/reset/mt8195-resets.h          |    6 +
- include/linux/clk-provider.h                       |   36 +-
- include/linux/clk.h                                |  134 +-
- 109 files changed, 7067 insertions(+), 1492 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
- create mode 100644 drivers/clk/mediatek/reset.h
- create mode 100644 drivers/clk/qcom/camcc-sm8450.c
- create mode 100644 drivers/clk/qcom/clk-regmap-phy-mux.c
- create mode 100644 drivers/clk/qcom/clk-regmap-phy-mux.h
- create mode 100644 drivers/clk/qcom/gpucc-sm8350.c
- create mode 120000 include/dt-bindings/clock/qcom,dispcc-sm8350.h
- create mode 100644 include/dt-bindings/clock/qcom,gpucc-sm8350.h
- create mode 100644 include/dt-bindings/clock/qcom,sm8450-camcc.h
- create mode 100644 include/dt-bindings/clock/sprd,ums512-clk.h
+   504	
+   505	static void *qcom_smem_get_global(struct qcom_smem *smem,
+   506					  unsigned item,
+   507					  size_t *size)
+   508	{
+   509		struct smem_header *header;
+   510		struct smem_region *region;
+   511		struct smem_global_entry *entry;
+   512		u64 entry_offset;
+   513		u32 e_size;
+   514		u32 aux_base;
+   515		unsigned i;
+   516	
+ > 517		header = smem->regions[0].virt_base;
+   518		entry = &header->toc[item];
+   519		if (!entry->allocated)
+   520			return ERR_PTR(-ENXIO);
+   521	
+   522		aux_base = le32_to_cpu(entry->aux_base) & AUX_BASE_MASK;
+   523	
+   524		for (i = 0; i < smem->num_regions; i++) {
+   525			region = &smem->regions[i];
+   526	
+   527			if ((u32)region->aux_base == aux_base || !aux_base) {
+   528				e_size = le32_to_cpu(entry->size);
+   529				entry_offset = le32_to_cpu(entry->offset);
+   530	
+   531				if (WARN_ON(e_size + entry_offset > region->size))
+   532					return ERR_PTR(-EINVAL);
+   533	
+   534				if (size != NULL)
+   535					*size = e_size;
+   536	
+   537				return region->virt_base + entry_offset;
+   538			}
+   539		}
+   540	
+   541		return ERR_PTR(-ENOENT);
+   542	}
+   543	
+   544	static void *qcom_smem_get_private(struct qcom_smem *smem,
+   545					   struct smem_partition *part,
+   546					   unsigned item,
+   547					   size_t *size)
+   548	{
+   549		struct smem_private_entry *e, *end;
+   550		struct smem_partition_header *phdr;
+   551		void *item_ptr, *p_end;
+   552		u32 padding_data;
+   553		u32 e_size;
+   554	
+   555		phdr = (struct smem_partition_header __force *)part->virt_base;
+   556		p_end = (void *)phdr + part->size;
+   557	
+   558		e = phdr_to_first_uncached_entry(phdr);
+   559		end = phdr_to_last_uncached_entry(phdr);
+   560	
+   561		while (e < end) {
+   562			if (e->canary != SMEM_PRIVATE_CANARY)
+   563				goto invalid_canary;
+   564	
+   565			if (le16_to_cpu(e->item) == item) {
+   566				if (size != NULL) {
+   567					e_size = le32_to_cpu(e->size);
+   568					padding_data = le16_to_cpu(e->padding_data);
+   569	
+   570					if (WARN_ON(e_size > part->size || padding_data > e_size))
+   571						return ERR_PTR(-EINVAL);
+   572	
+   573					*size = e_size - padding_data;
+   574				}
+   575	
+   576				item_ptr = uncached_entry_to_item(e);
+   577				if (WARN_ON(item_ptr > p_end))
+   578					return ERR_PTR(-EINVAL);
+   579	
+   580				return item_ptr;
+   581			}
+   582	
+   583			e = uncached_entry_next(e);
+   584		}
+   585	
+   586		if (WARN_ON((void *)e > p_end))
+   587			return ERR_PTR(-EINVAL);
+   588	
+   589		/* Item was not found in the uncached list, search the cached list */
+   590	
+   591		e = phdr_to_first_cached_entry(phdr, part->cacheline);
+   592		end = phdr_to_last_cached_entry(phdr);
+   593	
+   594		if (WARN_ON((void *)e < (void *)phdr || (void *)end > p_end))
+   595			return ERR_PTR(-EINVAL);
+   596	
+   597		while (e > end) {
+   598			if (e->canary != SMEM_PRIVATE_CANARY)
+   599				goto invalid_canary;
+   600	
+   601			if (le16_to_cpu(e->item) == item) {
+   602				if (size != NULL) {
+   603					e_size = le32_to_cpu(e->size);
+   604					padding_data = le16_to_cpu(e->padding_data);
+   605	
+   606					if (WARN_ON(e_size > part->size || padding_data > e_size))
+   607						return ERR_PTR(-EINVAL);
+   608	
+   609					*size = e_size - padding_data;
+   610				}
+   611	
+   612				item_ptr = cached_entry_to_item(e);
+   613				if (WARN_ON(item_ptr < (void *)phdr))
+   614					return ERR_PTR(-EINVAL);
+   615	
+   616				return item_ptr;
+   617			}
+   618	
+   619			e = cached_entry_next(e, part->cacheline);
+   620		}
+   621	
+   622		if (WARN_ON((void *)e < (void *)phdr))
+   623			return ERR_PTR(-EINVAL);
+   624	
+   625		return ERR_PTR(-ENOENT);
+   626	
+   627	invalid_canary:
+   628		dev_err(smem->dev, "Found invalid canary in hosts %hu:%hu partition\n",
+   629				le16_to_cpu(phdr->host0), le16_to_cpu(phdr->host1));
+   630	
+   631		return ERR_PTR(-EINVAL);
+   632	}
+   633	
+   634	/**
+   635	 * qcom_smem_get() - resolve ptr of size of a smem item
+   636	 * @host:	the remote processor, or -1
+   637	 * @item:	smem item handle
+   638	 * @size:	pointer to be filled out with size of the item
+   639	 *
+   640	 * Looks up smem item and returns pointer to it. Size of smem
+   641	 * item is returned in @size.
+   642	 */
+   643	void *qcom_smem_get(unsigned host, unsigned item, size_t *size)
+   644	{
+   645		struct smem_partition *part;
+   646		unsigned long flags;
+   647		int ret;
+   648		void *ptr = ERR_PTR(-EPROBE_DEFER);
+   649	
+   650		if (!__smem)
+   651			return ptr;
+   652	
+   653		if (WARN_ON(item >= __smem->item_count))
+   654			return ERR_PTR(-EINVAL);
+   655	
+   656		ret = hwspin_lock_timeout_irqsave(__smem->hwlock,
+   657						  HWSPINLOCK_TIMEOUT,
+   658						  &flags);
+   659		if (ret)
+   660			return ERR_PTR(ret);
+   661	
+   662		if (host < SMEM_HOST_COUNT && __smem->partitions[host].virt_base) {
+   663			part = &__smem->partitions[host];
+   664			ptr = qcom_smem_get_private(__smem, part, item, size);
+   665		} else if (__smem->global_partition.virt_base) {
+   666			part = &__smem->global_partition;
+   667			ptr = qcom_smem_get_private(__smem, part, item, size);
+   668		} else {
+   669			ptr = qcom_smem_get_global(__smem, item, size);
+   670		}
+   671	
+   672		hwspin_unlock_irqrestore(__smem->hwlock, &flags);
+   673	
+   674		return ptr;
+   675	
+   676	}
+   677	EXPORT_SYMBOL(qcom_smem_get);
+   678	
+   679	/**
+   680	 * qcom_smem_get_free_space() - retrieve amount of free space in a partition
+   681	 * @host:	the remote processor identifying a partition, or -1
+   682	 *
+   683	 * To be used by smem clients as a quick way to determine if any new
+   684	 * allocations has been made.
+   685	 */
+   686	int qcom_smem_get_free_space(unsigned host)
+   687	{
+   688		struct smem_partition *part;
+   689		struct smem_partition_header *phdr;
+   690		struct smem_header *header;
+   691		unsigned ret;
+   692	
+   693		if (!__smem)
+   694			return -EPROBE_DEFER;
+   695	
+   696		if (host < SMEM_HOST_COUNT && __smem->partitions[host].virt_base) {
+   697			part = &__smem->partitions[host];
+   698			phdr = part->virt_base;
+   699			ret = le32_to_cpu(phdr->offset_free_cached) -
+   700			      le32_to_cpu(phdr->offset_free_uncached);
+   701	
+ > 702			if (ret > le32_to_cpu(part->size))
+   703				return -EINVAL;
+   704		} else if (__smem->global_partition.virt_base) {
+   705			part = &__smem->global_partition;
+   706			phdr = part->virt_base;
+   707			ret = le32_to_cpu(phdr->offset_free_cached) -
+   708			      le32_to_cpu(phdr->offset_free_uncached);
+   709	
+   710			if (ret > le32_to_cpu(part->size))
+   711				return -EINVAL;
+   712		} else {
+   713			header = __smem->regions[0].virt_base;
+   714			ret = le32_to_cpu(header->available);
+   715	
+   716			if (ret > __smem->regions[0].size)
+   717				return -EINVAL;
+   718		}
+   719	
+   720		return ret;
+   721	}
+   722	EXPORT_SYMBOL(qcom_smem_get_free_space);
+   723	
 
 -- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+0-DAY CI Kernel Test Service
+https://01.org/lkp

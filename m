@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB5758B11E
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 23:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F51058B124
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 23:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241634AbiHEV32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 17:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        id S241391AbiHEVa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 17:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236064AbiHEV3Z (ORCPT
+        with ESMTP id S234104AbiHEVaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 17:29:25 -0400
+        Fri, 5 Aug 2022 17:30:24 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FEC1AD9C;
-        Fri,  5 Aug 2022 14:29:24 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id A72695C01E3;
-        Fri,  5 Aug 2022 17:29:23 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 05 Aug 2022 17:29:23 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A0DCE01;
+        Fri,  5 Aug 2022 14:30:23 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3E8425C0193;
+        Fri,  5 Aug 2022 17:30:23 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 05 Aug 2022 17:30:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1659734963; x=1659821363; bh=EfIpyjOOcf
-        4jZ6FdNb5kXcSL5JG3gIWiATWUoT9UbSo=; b=g/rB3Mk7OZyOV7qNxZ02rIJZU/
-        CD+6g+7aPLfCBWXz2DFpNRp/p6IZhuy0hfMySxoBHu1l36B8+8NaqGl3W0o9SJFF
-        CX+AsO00Sxgh1pOKecu4uDp1gLFuXF71o219UTN+bBd3g99QlZx7ojns6CHtlxr2
-        KU36NSi0K5wsNSDjXAyo6dqmuPOyJuIpvvQK9QQDtcAoNbpqUVmWAc9BgRYUI3M8
-        zQaUTlB5+beUDJ1HRi1IMIDzh84kMeNCeVCAjLS3CkHqd0AsKMbKiFaoVuVVo3xY
-        zTTDdTy8+FMIM8fRd5kRxAg3jKZoBvmtGg/qoQyOxr7x2/5owmx5gRlrUNpg==
+        :subject:to:to; s=fm2; t=1659735023; x=1659821423; bh=Z3kAfDDHZi
+        MWfE1loWKkH4N3TfbNAIObShduimNijm0=; b=RUdc9qrcM8RLyp6kwEZOxkWzbg
+        eeAfYciZr1tjgmCCDflgpNH/T7nlaXzeCZCtyVSo6agdArlQMyP68yYQM7loYnNE
+        idAHyNFIZDDw83U5edTUJjjdx00oUDTqYSzmru+zl7wunA8N+Hl3X4Egvx33JL0o
+        U6BKXL5BoqpGqJQeZ0ntHpF3bHoaNoo894dViu17zqU01l8mE96QU+DTep6qXaz9
+        6gLPaG1RN+ObQ2tPBqbiRPACDx8RO4FsTYkchn6nMeZAXRxsH1zzHY7xpo0CgCQX
+        MH9GzfTbfTNJ4a4vaH8XEiK20fJKiGUj+bTiCwEOVdAUVjstrEfKTTfgdAGQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1659734963; x=1659821363; bh=EfIpyjOOcf4jZ6FdNb5kXcSL5JG3
-        gIWiATWUoT9UbSo=; b=CF94houWiFG+lmfWQBJVsDopxR8Ark49aTNy3SNhYgyb
-        FOiNhZbGM45X/6+s5/fXcdniwIA1GUPjKYWFWA7t5wfikog9TrHg1XO2SnopeD2X
-        l4qCoVj7Mfk/4/lbR/O0+pBkz1oNz9FJ9BkYpKkM5wEGiXmFf+spe7KTIfuDuyYw
-        YyKUkHOYLhqSBYe+oSNHSmZKFWChQ7mWFPM+uf2uMJBsr6O64xK7JX8qJKFxV/y4
-        Aqy55tfgnSt36btanBFmriSDU7KqgYjmsS681XvQ4YRC4JmW9vtBm1MwenC2I6lM
-        SxIgBOL85239ZL5MVJlDTkhgNLJT6goaLODbdStDLg==
-X-ME-Sender: <xms:s4vtYlJPeepfo7L_J27IFTK75A8Z_m1mMyESHIMHfrhvn6iV3Gc1GQ>
-    <xme:s4vtYhKOeFY5nCVrvcFqKzjkJTHE7E5-Kf_kIZMLk7ScpsckewySkw1PeaKMvA7CJ
-    c5FeFv-D7rRHawqs6w>
-X-ME-Received: <xmr:s4vtYtsB8ayZ7ECrJaldVDoGgjhWlMfTaUa7-V7aH95yImirX4yfg-OaabM5_SyU9QDTwg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefuddgudeihecutefuodetggdotefrod
+        fm3; t=1659735023; x=1659821423; bh=Z3kAfDDHZiMWfE1loWKkH4N3TfbN
+        AIObShduimNijm0=; b=oHOJMIH1hgh8dTxeOl/38oDtGdEIGmG85qYJAR8YmHFS
+        +ZZm5kNN6oo42WtGmcw4MaKDbI1Fm7/xVbQUowRUJXCo9UhnwOejB1ySUhtf3VX/
+        IVz1QMUoGe04VMZn3ue2x2FDvcsXRWOJczCktUBz/WCPC7LmBWEohbiCC6wgyvLE
+        bz3RlXu3JdijgSnt7ZOfsUDUGYS5GPFxQRaBTQHGhiu4UwaBcWlw774b5zF1z6IG
+        9O1C6OfUnxbQ4Hp8SEbYFCG9E6O2GyIPBlbdZ7IPXCnpeUaM0ZDNBTzHCQlBnknC
+        FV3397lhFVvXWVrJ1iNe1a254BoEPyL017vf72XXbg==
+X-ME-Sender: <xms:74vtYk_f2-plhgN7sD2TKy8WaA0dZJMqPSGJqAkP_2BnJJtYbsUZIQ>
+    <xme:74vtYssqCTFnrkfHOCCbYeP-bjD1XZOmz4BpSDpVAh1PT5l5Dnc8G0CUPMGO8jQuT
+    5rAtU0gY7JtE5aRiGk>
+X-ME-Received: <xmr:74vtYqDy3ZHJHa4fgtvJYHxeIanUnEnRuV9VnNVOx8cPhMmzSctSlaFm8MSnrCh3wZ3tXg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefuddgudeigecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpeffhffuvfevkfgjfhfogggtsehttdertdertddvnecuhfhrohhmpefnuhhk
@@ -54,23 +54,23 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefuddgudeihecutefuodetgg
     hnpedvvdegledtheefieejgfevgeefiefhtdevteefteduhfevtdefleethfetgeeluden
     ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
     eslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:s4vtYmb4Dw9dtrqZnUx9kW4OlZHI3zo-etQySUzV_acUC2JaIoTkyA>
-    <xmx:s4vtYsYrRHFizcTAfo890bxj7ub32kmMci_duTxzn_IijUGh0Z1Ewg>
-    <xmx:s4vtYqAjyQj67d5YfM8qdgWFsIBIlOPQ-ID2sF0cLNKvEPEotNh0rA>
-    <xmx:s4vtYrmrYvsA1LwMjuK4IZHJYjzho_xhf7lgV7Ofihp4zUfCajuFDg>
+X-ME-Proxy: <xmx:74vtYkd63zOaXmuGJ1LH532UvQRFVB4XgIeoso43ncRdG0DnSYvKrQ>
+    <xmx:74vtYpOeumU4QuQLjBlscxzKOziVVS-4qEkjVfIJ46UVNjjDW28ELQ>
+    <xmx:74vtYukyWCX9dlxMu8_jEmEiavp66YyDpoQrsCsCDpqwc3ET6udE2Q>
+    <xmx:74vtYibLlfrQoBEPf5vLFzXHDfgYXfJp4xyEDvEB6JM_Cno3Nkxj1Q>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Aug 2022 17:29:19 -0400 (EDT)
-Date:   Sat, 06 Aug 2022 09:29:06 +1200
+ 5 Aug 2022 17:30:18 -0400 (EDT)
+Date:   Sat, 06 Aug 2022 09:30:07 +1200
 From:   Luke Jones <luke@ljones.dev>
-Subject: Re: [PATCH 3/5] asus-wmi: Add support for TUF laptop keyboard states
+Subject: Re: [PATCH 0/5] asus-wmi: Add support for RGB keyboards
 To:     Pavel Machek <pavel@ucw.cz>
 Cc:     hdegoede@redhat.com, markgross@kernel.org,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <IOV5GR.PZU2YHNSNKYD2@ljones.dev>
-In-Reply-To: <20220805120859.GB20036@duo.ucw.cz>
+Message-Id: <7QV5GR.SLNVJBURF77S2@ljones.dev>
+In-Reply-To: <20220805120539.GA20036@duo.ucw.cz>
 References: <20220805081909.10962-1-luke@ljones.dev>
-        <20220805081909.10962-4-luke@ljones.dev> <20220805120859.GB20036@duo.ucw.cz>
+        <20220805120539.GA20036@duo.ucw.cz>
 X-Mailer: geary/40.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
@@ -84,29 +84,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
+I'll be sure to do that when I next adjust things. Thanks!
 
-On Fri, Aug 5 2022 at 14:08:59 +0200, Pavel Machek <pavel@ucw.cz> wrote:
+On Fri, Aug 5 2022 at 14:05:39 +0200, Pavel Machek <pavel@ucw.cz> wrote:
 > Hi!
->> 
->>  Adds two paths:
->>  - /sys/devices/platform/asus-nb-wmi/keyboard_rgb_state
->>  - /sys/devices/platform/asus-nb-wmi/keyboard_rgb_state_index
 > 
-> Patches 2-3 -- we already have pattern trigger. This should use it...
-
-Can you please provide more information? I'd be happy to use it, but 
-because I do this in my free time I don't have the best knowledge of 
-helpful stuff that already exists - so far I've been learning about 
-stuff like this when someone like yourself brings it up, otherwise I 
-try to follow existing code patterns in the source file.
-
-Many thanks,
-Luke.
-
+>>  This is a patch series to add RGB support for ASUS laptops.
+>>  The laptops with this RGB tend to be the TUF series of gamer 
+>> laptops.
+>> 
+>>  The first step is initial bringup of support using the multicolor 
+>> LED API.
+>> 
+>>  These types of keyboards implement a slightly more complex 
+>> interface than
+>>  just RGB control however - they also have modes with can be static 
+>> LED,
+>>  blinking, rainbow, color cycles, and more. They also have some 
+>> custom
+>>  animations that can play depending on device state, such as 
+>> suspended
+>>  playing a fancy colour cycle, or playing a "wave" animation.
+>> 
+>>  Two of the patches add support for these features.
+> 
+> Please Cc: LED maintainers with LED patches.
 > 
 > Best regards,
-> 									Pavel
+> 								Pavel
+> 
 > --
 > People of Russia, stop Putin before his war on Ukraine escalates.
 

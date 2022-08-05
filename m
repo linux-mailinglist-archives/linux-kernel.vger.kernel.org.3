@@ -2,114 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9556558AE55
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0453B58AE57
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 18:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240689AbiHEQqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 12:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S240761AbiHEQrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 12:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233121AbiHEQqh (ORCPT
+        with ESMTP id S238054AbiHEQrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 12:46:37 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05F422B06
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:46:34 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id m22so4163212lfl.9
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 09:46:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=v4S4GpdOqCe9ywueQ5iRWEaheO0mHSYsO11UhtnP4Kw=;
-        b=eiMdbmKw/RMPYU34GsfGF9tqVlLo0yhNy07CN3kvU9+gvJKdS6LGyZajM6t6MC++b+
-         EaarukS4tP9X663Y3KYt/fmJ3MIexUsBcUrsJmphJ89P10rYnNY/4IJa0yemwbNv+QyT
-         4aSNtPSvgbaUpfxRgBXeP/sCkwBFjTC3BW0oA2FrnPmcbDbShytiKU7e1tSFLK0lrP/F
-         LOekxXj0Ew1YLwuoqh6PBtBwlPFqxtOSu9sG2R2GR3wizZvXcSMqZ2ynziODrpMiZBKJ
-         xH9hnywLvKq5boHLg0HlblFIqSx72j4//oOEs4H9SCU/LjaxGg18LA00agBBPKsvkXeR
-         VQHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=v4S4GpdOqCe9ywueQ5iRWEaheO0mHSYsO11UhtnP4Kw=;
-        b=vXWzq/vZbi75b0tsYesU26YJHIuz0sMtLuxrUg9caiNxUysfI9SyFHxWjYIID5CWv4
-         oX0bgC+kDQPvo6swdldw0uYSRjTZyDQC0QWQkYCqo0yYJ+EFBfwIOrGdSI4F8uMXU8R3
-         qmpMf5mb7cpmUGzxY0+7l4Rq2wBFwLE/RjD04KB2RkwTewF3CABXTR4PpxFyiP0AcPXp
-         oUuyW71L0sEWb5718Ikvcp46kyu7BbOKWzZ1FJspMOADPC72y0Tlss576jaR9zyRIywN
-         X1aGF19wDi7wZsCEQPKXm7m6IH4+OIzeVhV4dr0yrO3Coyae93mWvweT219tSu5zdDFR
-         Fdmg==
-X-Gm-Message-State: ACgBeo188HenYzpIab83PyR/aN2wSeMXCx8olzs7DDdsrqTF6RW1vgMZ
-        44Fh0ILXNSOIndjXnCoO73iY/yH8gZA7sAuT4XngYQ==
-X-Google-Smtp-Source: AA6agR7ErOMbgNtM3KHMVUr3afCrBmKArRGWmslrkB2fIIxGYS2UF8B+73dnoapsgas/bKbCfxwS4kEHT4YRzYKJJVw=
-X-Received: by 2002:a19:ab02:0:b0:48b:3f9:add1 with SMTP id
- u2-20020a19ab02000000b0048b03f9add1mr2724754lfe.329.1659717993081; Fri, 05
- Aug 2022 09:46:33 -0700 (PDT)
+        Fri, 5 Aug 2022 12:47:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555B4286F7
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 09:47:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF00CB829CD
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 16:47:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05793C433D6;
+        Fri,  5 Aug 2022 16:47:02 +0000 (UTC)
+Date:   Fri, 5 Aug 2022 12:47:01 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andreas Schwab <schwab@suse.de>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        jianchunfu <jianchunfu@cmss.chinamobile.com>
+Subject: Re: [GIT PULL] rtla: Updates for 5.20/6.0
+Message-ID: <20220805124701.4b44195d@gandalf.local.home>
+In-Reply-To: <CAHk-=wh+e1qcCnEYJ3JRDVLNCYbJ=0u+Ts5bOYZnY3mX_k-hFA@mail.gmail.com>
+References: <20220803104936.7df810fd@gandalf.local.home>
+        <CAHk-=wh+e1qcCnEYJ3JRDVLNCYbJ=0u+Ts5bOYZnY3mX_k-hFA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <cover.1651774250.git.isaku.yamahata@intel.com>
- <bfa4f7415a1d059bd3a4c6d14105f2baf2d03ba6.1651774250.git.isaku.yamahata@intel.com>
- <YuxOHPpkhKnnstqw@google.com> <CALzav=cf_2dz8vMD+D_Xo1zBJZndJmtMBxbnYpQKP_mci1np=A@mail.gmail.com>
- <BL1PR11MB5978DB988E482B8329339881F79E9@BL1PR11MB5978.namprd11.prod.outlook.com>
-In-Reply-To: <BL1PR11MB5978DB988E482B8329339881F79E9@BL1PR11MB5978.namprd11.prod.outlook.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Fri, 5 Aug 2022 09:46:06 -0700
-Message-ID: <CALzav=cJ_Bp2Vg1n=aHv4ewH0U-rDGG5Nni=0CdizG-64GtpLA@mail.gmail.com>
-Subject: Re: [RFC PATCH v6 037/104] KVM: x86/mmu: Allow non-zero value for
- non-present SPTE
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Shahar, Sagi" <sagis@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 5:04 PM Huang, Kai <kai.huang@intel.com> wrote:
->
-> > > In addition to the suggestions above, I'd suggest breaking this patch
-> > > up, since it is doing multiple things:
-> > >
-> > > 1. Patch initialize shadow page tables to EMPTY_SPTE (0) and
-> > >    replace TDP MMU hard-coded 0 with EMPTY_SPTE.
-> > > 2. Patch to change FNAME(sync_page) to not assume EMPTY_SPTE is 0.
-> > > 3. Patch to set bit 63 in EMPTY_SPTE.
-> > > 4. Patch to set bit 63 in REMOVED_SPTE.
->
-> I think 1/2 can be separate patches, but 3/4 should be done together.
->
-> Patch 3 alone is broken as when TDP MMU zaps SPTE and replaces it with REMOVED_SPTE, it loses bit 63.  This is not what we want.  We always want bit 63 set if it is supposed to be  set to a non-present SPTE.
+On Fri, 5 Aug 2022 09:40:25 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-How is patch 3 alone be broken? The TDX support that depends on bit 63
-does not exist at this point in the series, i.e. setting bit 63 is
-entirely optional and only done in preparation for future patches.
+> On Wed, Aug 3, 2022 at 7:49 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > Changes to RTLA:  
+> 
+> Btw, I note that the error messages for missing libraries got fixed
+> (already some time ago, not this pull), but didn't get around to
+> actually building until now.
+> 
+> It says to do
+> 
+>     e.g., 'dnf install libtraceevent' on Fedora
+> 
+> but it's actually the devel packages that are needed for building, not
+> the bare libraries.
+> 
+> So it should be libtraceevent-devel, and libtracefs-devel.
 
->
-> But I also don't see splitting to 3  patches is absolutely worth to do as doing above in one patch is also fine to me.
+Thanks for the report (I obviously have them installed, and thus didn't see
+this :-/). Not to mention, I always forget to add the -dev/-devel appendix
+to my packages.
 
-Splitting patches up into logically independent changes makes it a lot
-easier to review, and therefore reduces the chances of bugs.
+Daniel,
 
-Smaller changes also makes it easier for patches to get through the
-review process, because reviewers can sign-off on specific patches
-with Reviewed-by tags while discussion continues on patches that still
-need more work. If the patches are too large, it makes it more
-difficult to collect Reviewed-by tags because the entire patch has to
-be correct.
+Can you send a fix?
 
-Case in point, the above patch description has 9 paragraphs because
-the patch is doing so many different things. It's difficult to keep
-track of all of the different changes this patch aims to accomplish
-when reviewing the code.
+Thanks!
+
+-- Steve

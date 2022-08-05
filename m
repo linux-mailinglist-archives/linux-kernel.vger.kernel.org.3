@@ -2,133 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FC458AB7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F0558AB78
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 15:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiHENUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 09:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S238070AbiHENT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 09:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237188AbiHENUE (ORCPT
+        with ESMTP id S230169AbiHENTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 09:20:04 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF0E29823
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:20:02 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id w14so2609636plp.9
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 06:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=dcjIT1g0RtFKgH5EkyMJsy1rJrd93nNrE+p7/OkVeLg=;
-        b=GKWrYDIzWoZ5X4vJXNLyCTeurJShxbWFGF1MGwCJVRVn9Lfh6hH0oPZeDxMIzvaDt6
-         omiY8LhyvqlYDECeD9TgltYv8wRVjjMigqkSQTQgh5zNWeRd3+VHAxxGMEXHiVucuGSS
-         SzPBdmrvGYfULHjJkhSHrYILRPGYFWWwo5bDgaZy9IiT+Oq3WQZZ0zUNtSF55JMQRr9u
-         0soKYt5nPrl3ePVhN4imhRnqssAeOP32yhhNs469RiawxmdaMP/ySGjCg0JAmOUp4hEu
-         jAI8aXPnJ/ZQMQPqXM6V6VtDh9LD9AH+dZWt6uzC2FY/iq3I1tinHWEILP3JYbBL8S6I
-         xGhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=dcjIT1g0RtFKgH5EkyMJsy1rJrd93nNrE+p7/OkVeLg=;
-        b=5/sfeork+E9KNAw45QbSuRX6OYhhUTB8/36ljckOQQ70QJ18Jv4/QbHkTYwh7/BQ0W
-         p9LQR1w9+YzT7ccn7zBQTHB08WIE+5y3Hskx92jaVHTW2tdpE8TmK/9hVuIcDm0FBF/+
-         4qZl3dE+uY1Tm8a5VQrrv15q926gv4hYaIFAvMxNXpJ6CEY+b9n8HDBWcfALx/l+yyGI
-         +DhopmBEciDeKaEH71itSG3sFIPUJ5ijrR38eelxZ0Wy4CqQp+9bblmqf4Ny5ZPccTex
-         H4xGm0Rr4kbF/FVWlWjQVhiJU/gGBmzjSU+sQ7VxmCPRDfTJsveto7FRJ8u+LxnzlItc
-         NpiQ==
-X-Gm-Message-State: ACgBeo1kLE8fAAVLfAa3wfIkzB4+REYSHZ+diwWVFf5ZQ45TKll1NeYQ
-        l9hY3L0oK7DpcgdIigeeRxnNbw==
-X-Google-Smtp-Source: AA6agR5Uw1FO39ZriroJot/zJqQ35F6AuTQRe3bn0VVE7eWp5+j84Ai4POahvu6hbOAfU8NxT/C1UQ==
-X-Received: by 2002:a17:90b:3511:b0:1f4:e0cd:1e04 with SMTP id ls17-20020a17090b351100b001f4e0cd1e04mr16532665pjb.154.1659705602470;
-        Fri, 05 Aug 2022 06:20:02 -0700 (PDT)
-Received: from bogon.bytedance.net ([61.120.150.71])
-        by smtp.gmail.com with ESMTPSA id a125-20020a621a83000000b0052dc5c14ee2sm2936716pfa.194.2022.08.05.06.19.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 06:20:01 -0700 (PDT)
-From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel@vger.kernel.org (open list:FUSE: FILESYSTEM IN USERSPACE),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Subject: [PATCH] fuse: invalidate dentry on EEXIST creates or ENOENT deletes
-Date:   Fri,  5 Aug 2022 21:18:22 +0800
-Message-Id: <20220805131823.83544-1-zhangjiachen.jaycee@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 5 Aug 2022 09:19:23 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E98328E00
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 06:19:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659705562; x=1691241562;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ARlvhJInnfvdCOPFnSbHX5nHoDKCV1RJixQI6NU0UM0=;
+  b=Bc1+4qvccG3CR1esb4ZcJH5vnL/bH2w2wA/19cmf0EyPi2SQYK4Z2XTG
+   uhm0TNz+jdooRuohknaBT9G+u1V0wzDXT+cLVYpq3pnKQ7+GP0igYfAw2
+   0iPF4sEpjd6IgHn1pjuLWIT8rUxIbYZKRdkyahl36fwU0vPgTytB6zZXr
+   /OXdXO9mkfSIpCpdEVTG5/RvSib/UfCFUPElkwe+pLnmpvcpqUhCN59AZ
+   AhxymXGYF/gUkiu3xr3zE4Zgp/KnbUMCrZ11pDTe7xsZBlesWfGa+lQ2e
+   2j/zDK6NSXfrTRiP8vRX+sxl2iC5O5wk1Ui0xNtsrImGIPiLVgd8oyifw
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="354193725"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="354193725"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 06:19:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="632010043"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 05 Aug 2022 06:19:19 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJxEV-000JPb-0Q;
+        Fri, 05 Aug 2022 13:19:19 +0000
+Date:   Fri, 5 Aug 2022 21:18:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mikko Perttunen <mperttunen@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <treding@nvidia.com>
+Subject: drivers/gpu/drm/tegra/submit.c:107:28: sparse: sparse: symbol
+ 'gather_bo_ops' was not declared. Should it be static?
+Message-ID: <202208052102.Ns7gQs4s-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If kernel creates a file which already exists on the server (EEXIST), we'd
-better invalidate its negative dentry cache. Similarly, if kernel wants
-to delete a file that is already deleted on the server (ENOENT), we can
-also invalidate its positive dentry cache. This commit does this by
-setting the fuse dentry timeout to 0 using fuse_invalidate_entry().
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b2a88c212e652e94f1e4b635910972ac57ba4e97
+commit: 13abe0bb15ceac2fb8e8853bd30c278426d95ad0 drm/tegra: Implement job submission part of new UAPI
+date:   12 months ago
+config: arm-randconfig-s031-20220805 (https://download.01.org/0day-ci/archive/20220805/202208052102.Ns7gQs4s-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13abe0bb15ceac2fb8e8853bd30c278426d95ad0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 13abe0bb15ceac2fb8e8853bd30c278426d95ad0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/ drivers/gpu/drm/msm/ drivers/gpu/drm/tegra/
 
-Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
----
- fs/fuse/dir.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-index 74303d6e987b..3bb34a849831 100644
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -669,7 +669,8 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
- 	if (err == -ENOSYS) {
- 		fc->no_create = 1;
- 		goto mknod;
--	}
-+	} else if (err == -EEXIST)
-+		fuse_invalidate_entry(entry);
- out_dput:
- 	dput(res);
- 	return err;
-@@ -758,6 +759,8 @@ static int create_new_entry(struct fuse_mount *fm, struct fuse_args *args,
- 	return 0;
- 
-  out_put_forget_req:
-+	if (err == -EEXIST)
-+		fuse_invalidate_entry(entry);
- 	kfree(forget);
- 	return err;
- }
-@@ -892,7 +895,7 @@ static int fuse_unlink(struct inode *dir, struct dentry *entry)
- 	if (!err) {
- 		fuse_dir_changed(dir);
- 		fuse_entry_unlinked(entry);
--	} else if (err == -EINTR)
-+	} else if (err == -EINTR || err == -ENOENT)
- 		fuse_invalidate_entry(entry);
- 	return err;
- }
-@@ -915,7 +918,7 @@ static int fuse_rmdir(struct inode *dir, struct dentry *entry)
- 	if (!err) {
- 		fuse_dir_changed(dir);
- 		fuse_entry_unlinked(entry);
--	} else if (err == -EINTR)
-+	} else if (err == -EINTR || err == -ENOENT)
- 		fuse_invalidate_entry(entry);
- 	return err;
- }
-@@ -956,7 +959,7 @@ static int fuse_rename_common(struct inode *olddir, struct dentry *oldent,
- 		/* newent will end up negative */
- 		if (!(flags & RENAME_EXCHANGE) && d_really_is_positive(newent))
- 			fuse_entry_unlinked(newent);
--	} else if (err == -EINTR) {
-+	} else if (err == -EINTR || err == -ENOENT) {
- 		/* If request was interrupted, DEITY only knows if the
- 		   rename actually took place.  If the invalidation
- 		   fails (e.g. some process has CWD under the renamed
+sparse warnings: (new ones prefixed by >>)
+>> drivers/gpu/drm/tegra/submit.c:107:28: sparse: sparse: symbol 'gather_bo_ops' was not declared. Should it be static?
+
+vim +/gather_bo_ops +107 drivers/gpu/drm/tegra/submit.c
+
+    66	
+    67	static struct host1x_bo_mapping *
+    68	gather_bo_pin(struct device *dev, struct host1x_bo *bo, enum dma_data_direction direction)
+    69	{
+    70		struct gather_bo *gather = container_of(bo, struct gather_bo, base);
+    71		struct host1x_bo_mapping *map;
+    72		int err;
+    73	
+    74		map = kzalloc(sizeof(*map), GFP_KERNEL);
+    75		if (!map)
+    76			return ERR_PTR(-ENOMEM);
+    77	
+    78		kref_init(&map->ref);
+    79		map->bo = host1x_bo_get(bo);
+    80		map->direction = direction;
+    81		map->dev = dev;
+    82	
+    83		map->sgt = kzalloc(sizeof(*map->sgt), GFP_KERNEL);
+    84		if (!map->sgt) {
+    85			err = -ENOMEM;
+    86			goto free;
+    87		}
+    88	
+    89		err = dma_get_sgtable(gather->dev, map->sgt, gather->gather_data, gather->gather_data_dma,
+    90				      gather->gather_data_words * 4);
+    91		if (err)
+    92			goto free_sgt;
+    93	
+    94		err = dma_map_sgtable(dev, map->sgt, direction, 0);
+    95		if (err)
+    96			goto free_sgt;
+    97	
+    98		map->phys = sg_dma_address(map->sgt->sgl);
+    99		map->size = gather->gather_data_words * 4;
+   100		map->chunks = err;
+   101	
+   102		return map;
+   103	
+   104	free_sgt:
+   105		sg_free_table(map->sgt);
+   106		kfree(map->sgt);
+ > 107	free:
+   108		kfree(map);
+   109		return ERR_PTR(err);
+   110	}
+   111	
+
 -- 
-2.20.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

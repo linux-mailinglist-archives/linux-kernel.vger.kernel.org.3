@@ -2,90 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FD958A5DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2D758A5E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236637AbiHEGX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 02:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
+        id S236862AbiHEG3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 02:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbiHEGXy (ORCPT
+        with ESMTP id S230475AbiHEG31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 02:23:54 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC385A3D8;
-        Thu,  4 Aug 2022 23:23:53 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id b96so2242642edf.0;
-        Thu, 04 Aug 2022 23:23:53 -0700 (PDT)
+        Fri, 5 Aug 2022 02:29:27 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F06606A2;
+        Thu,  4 Aug 2022 23:29:26 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so1972562pjl.0;
+        Thu, 04 Aug 2022 23:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=66sTXdJI9D/uDofdTmj8j7tOsf58bY5fHMNycNv2J+8=;
+        b=Sxdyg77bcCLSPX470DdsbQZEx5dV699VcOaq5ukagYnFSrvwC6HCy6vHuf29m2kzp6
+         6jlO5vrBv6NObDGMAjeraj5FLjwX4Tp57UVpDYadL+P63SZnQR2VEepuzrElBjCWGE8/
+         +V6pk4L1PxDZwIuzbVDBKMz6WLi0M1IjfDen82CXXNhEWXDk+qM9p/pLtMdIvmNo2PJT
+         WHk8uGpaVfr3eJ9XKUIyyzUTYWXCgzKqEwS5ozEO9N/nS/wbPBA5xXHiRKnxWY9Wzagj
+         Tv9LS/prQ9/4JbanwL3geBEP5n6WIzJHm3X1kW3HTTAuocL1BTGLHwnPRpnzbUWWbSQl
+         ZW9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=lSzazp4IeqQAxjSxCTiM6IIef8FSwkAGeIFyEp8bbW8=;
-        b=sapD9pwzfamCAD+TEEnV3hUFmBzJJfELbnw2+NYTEIyqsPhDuzdi4D5QwdB+0mZx4O
-         bGxV999O87BLabWc6n6NBpIjkiB7vGyZgwwvOQ1mtCZPtOLFcz1g0x4eGWEgbH8+PGUO
-         CHLxZXSLG9uvNMjl+QSXElLsCQXBJPngJJaYxU494QrhvCPuTMaKyFAhh1LGiTktBX5Z
-         hV7saG7J3xfr/dIEKilTTishxQHisrrWAsJMfUDMuY2IC4U7erhegX2rIWJYh+SB3CKm
-         sYxza4+KulSbcd/Ga2OkkKmii8pilz584VIxvLetnUM/SXFLP/qWq9mwEnidZisj4oIs
-         HsFw==
-X-Gm-Message-State: ACgBeo1i55VwumWC2Yukrig3Znxl7TN0abRNBhOd/2fK0nQ8/aZfKr22
-        mqV0MHqPztVg+atVlCidARQ=
-X-Google-Smtp-Source: AA6agR7JfOIsUi61tf8PKiHiROvK+umLKkQHpRB7QosKc1O4XZoIWJizrdKe41LiNuqThsOTc1rg1Q==
-X-Received: by 2002:a05:6402:4442:b0:43b:c866:21be with SMTP id o2-20020a056402444200b0043bc86621bemr5373348edb.28.1659680632342;
-        Thu, 04 Aug 2022 23:23:52 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id g6-20020a170906538600b0072b609d9a36sm1242446ejo.16.2022.08.04.23.23.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 23:23:51 -0700 (PDT)
-Message-ID: <f0cb47c3-04b8-7bef-ed84-8aa7a9b05ec3@kernel.org>
-Date:   Fri, 5 Aug 2022 08:23:50 +0200
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=66sTXdJI9D/uDofdTmj8j7tOsf58bY5fHMNycNv2J+8=;
+        b=SZC9ZEub+rI28dbQ37FbG9tOhEboafy/rd5CbCO0BgxlMGGcxNs8D5TZpF4hlS1ZQY
+         AFPlQbO9GFbKDPFoV2PiMU0vTonzR2DEFC9ORDhumtfFwlg4m71MKsfO/cD09lo9YLnT
+         5nLlQTj+m8IDaxbqj41fM/FBfAip8wr09i5KfOZiLkClhgaMnwpujOJk8aW0q+zLKz/H
+         7mjF7ynxKDyIXwZUidWTAz95Klrg+I72LwFPCc/KUtgPC/e6TRY64McEjmVjeenZV93+
+         UvNNlKCKHbvug+FTF7qYISLaAFnHIvCKoxvzMxdjx7GkC53fqyB9nhRTSXZqcQEEpDmt
+         9wUQ==
+X-Gm-Message-State: ACgBeo2RDmxl8exq2NucYq3MU3yJahQ1GRBy7iYaFaRKeYlL/DLQJby6
+        8telO/etrA0F5vE1wOxImgi6UZa1/xSPoot8dfI=
+X-Google-Smtp-Source: AA6agR6UmBwWOgZYHRJ2y4V+wTp2HKx/I92yQS+ZTaDQ6QxXZrn2yn1rC0fWpJKkVCxNVmTpSak5dw==
+X-Received: by 2002:a17:90a:558f:b0:1f5:bbc:c58e with SMTP id c15-20020a17090a558f00b001f50bbcc58emr14305788pji.102.1659680965733;
+        Thu, 04 Aug 2022 23:29:25 -0700 (PDT)
+Received: from localhost ([117.136.0.155])
+        by smtp.gmail.com with ESMTPSA id m17-20020a170902d19100b0016d83ed0a2csm2056223plb.80.2022.08.04.23.29.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 23:29:25 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     kuba@kernel.org
+Cc:     18801353760@163.com, andrii@kernel.org, ast@kernel.org,
+        borisp@nvidia.com, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, guwen@linux.alibaba.com,
+        jakub@cloudflare.com, john.fastabend@gmail.com, kafai@fb.com,
+        kgraul@linux.ibm.com, kpsingh@kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, paskripkin@gmail.com, skhan@linuxfoundation.org,
+        songliubraving@fb.com,
+        syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com, yin31149@gmail.com
+Subject: Re: [PATCH v4] net: fix refcount bug in sk_psock_get (2)
+Date:   Fri,  5 Aug 2022 14:28:44 +0800
+Message-Id: <20220805062844.89787-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220804082913.5dac303c@kernel.org>
+References: <20220804082913.5dac303c@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [EXT] Re: [PATCH 1/1] serial: fsl_lpuart: RS485 RTS polariy is
- inverse
-Content-Language: en-US
-To:     Shenwei Wang <shenwei.wang@nxp.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Nicolas Diaz <nicolas.diaz@nxp.com>
-References: <20220802163854.1055323-1-shenwei.wang@nxp.com>
- <c63877d8-4df2-778e-7e3d-2fdd0e14d4e1@kernel.org>
- <AM9PR04MB8274F4B0895FF2BA4467DA90899F9@AM9PR04MB8274.eurprd04.prod.outlook.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <AM9PR04MB8274F4B0895FF2BA4467DA90899F9@AM9PR04MB8274.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04. 08. 22, 16:35, Shenwei Wang wrote:
->> On 02. 08. 22, 18:38, Shenwei Wang wrote:
->>> The setting of RS485 RTS polarity is inverse in the current driver.
->>>
->>> When the property of 'rs485-rts-active-low' is enabled in the dts
->>> node, the RTS signal should be LOW during sending. Otherwise, if there
->>> is no such a property, the RTS should be HIGH during sending.
->>
->> What commit this fixes? I.e. I am missing a Fixes tag below.
-> 
-> It is a fix for the following commit:
-> Fixes: 03895cf41d18 ("tty: serial: fsl_lpuart: Add support for RS-485")
-> 
-> Should I send out a new version to update it?
-
-It's up to Greg, but I guess so.
-
--- 
-js
-suse labs
+On Thu, 4 Aug 2022 at 23:29, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Thu,  4 Aug 2022 11:05:15 +0800 Hawkins Jiawei wrote:
+> > I wonder if it is proper to gather these together in a patchset, for
+> > they are all about flags in sk_user_data, maybe:
+> >
+> > [PATCH v5 0/2] net: enhancement to flags in sk_user_data field
+> >       - introduce the patchset
+> >
+> > [PATCH v5 1/2] net: clean up code for flags in sk_user_data field
+> >       - refactor the things in include/linux/skmsg.h and
+> > include/net/sock.h
+> >       - refactor the flags's usage by other code, such as
+> > net/core/skmsg.c and kernel/bpf/reuseport_array.c
+> >
+> > [PATCH v5 2/2] net: fix refcount bug in sk_psock_get (2)
+> >       - add SK_USER_DATA_PSOCK flag in sk_user_data field
+>
+> Usually the fix comes first, because it needs to be backported to
+> stable, and we don't want to have to pull extra commits into stable
+> and risk regressions in code which was not directly involved in the bug.
+Ok, I got it. Thanks for the explanation.

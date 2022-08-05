@@ -2,44 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE0858A88B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B39258A88E
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 11:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240417AbiHEJNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 05:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        id S240545AbiHEJN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 05:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240152AbiHEJNK (ORCPT
+        with ESMTP id S240496AbiHEJNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 05:13:10 -0400
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47A674DDE;
-        Fri,  5 Aug 2022 02:13:01 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id AJS00156;
-        Fri, 05 Aug 2022 17:12:56 +0800
-Received: from localhost.localdomain (10.200.104.97) by
- jtjnmail201605.home.langchao.com (10.100.2.5) with Microsoft SMTP Server id
- 15.1.2507.9; Fri, 5 Aug 2022 17:12:55 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <mst@redhat.com>, <jasowang@redhat.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] vhost-vdpa: Call ida_simple_remove() when failed
-Date:   Fri, 5 Aug 2022 05:12:54 -0400
-Message-ID: <20220805091254.20026-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
+        Fri, 5 Aug 2022 05:13:21 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CAA78226
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:13:17 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bq11so2582505lfb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 02:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=1YjciTp42v6B8MpUc3bNVR0+p597jmP1NofHHP0CW5A=;
+        b=G+mXJvAK1kPPno2wsq/kuteBFt9rHaI3XejdqGG+vSGgabb/tWi6KkiARj4ncVr30H
+         ozH8qcFU3E/N7VoT6+mvc1W/5DSc5mJ3pS7J4NaXRpqM1Oozjfa/1quzdWqRFH3xe00M
+         Bl5gXBKCSD88+0dY5qYrxekCNmIS7ndOGQilK5JC9XTE0uX7rqY1w9JKmyaCUSkAHcHD
+         04CX/swFSCUCtv/wQbqdwNTzIzRLXvrGb6vesKSkdIZURhGXwcGsqTlObd8sobGh0+8F
+         N6wOp9h/YH3NZHAgbZKWG8vPOhoM7SrHQh5fIgFWsTda0l9RaJpgRE92Pvq5cvqP5+6Z
+         nlFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1YjciTp42v6B8MpUc3bNVR0+p597jmP1NofHHP0CW5A=;
+        b=KoXkXlKSWEiv8a8iuxJHCjGM896Y7lrz7zWSfd3xVGoMg8VumKLBn12HBekkuDcy6b
+         e1OMHTdV5j0bo0rcegpl58SpSqgLAqrwpwnxeqxVv+QYocgdrxrvaG7H6hQi5IhIggio
+         sNv7OJDD0mkAN0w3vmuErlO9sds9X3uGkNzh1ORzP8WJov0e8gTKFTeoSQdgat0WumGK
+         IBZs4yglQU8HF80o/x60yFnurp8K7Lbzjz8bQCN8XgUwjwB/3TnIVl3nGDdH7oymWDaz
+         zbXSKpOHqYZoJYQ7GTU/LMPWokg3vQew+U0sz60Oio7dcC9ZDZ+DT8xbps/67P9AlEJ2
+         Ppgg==
+X-Gm-Message-State: ACgBeo0QIYZklt66KGZFr2Dm4+Z0FvqwMSz4ObIr7fskG6+qBYT/RKMk
+        XSd2H/grZZc/W5B/Qm1nUQoeBA==
+X-Google-Smtp-Source: AA6agR4bULYrPCXU3n8gQGnJBTOftjBg7+4i0kVjoCT2OP2w4PZcyJyxhpxAhpaVtFgNcT5U4DyRxw==
+X-Received: by 2002:a05:6512:3b8e:b0:48b:23c6:9b0 with SMTP id g14-20020a0565123b8e00b0048b23c609b0mr2164925lfv.470.1659690795468;
+        Fri, 05 Aug 2022 02:13:15 -0700 (PDT)
+Received: from [192.168.1.6] ([77.222.167.48])
+        by smtp.gmail.com with ESMTPSA id q1-20020a2eb4a1000000b0025e6d665a3fsm409199ljm.18.2022.08.05.02.13.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 02:13:12 -0700 (PDT)
+Message-ID: <370378a9-4341-30fc-79b0-57ccfa7f3def@linaro.org>
+Date:   Fri, 5 Aug 2022 11:13:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.200.104.97]
-tUid:   20228051712564b68e5e4e530f6396c94bdd65571fa10
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V3 1/6] dt-bindings: clock: meson: add S4 SoC PLL clock
+ controller bindings
+Content-Language: en-US
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220805085716.5635-1-yu.tu@amlogic.com>
+ <20220805085716.5635-2-yu.tu@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220805085716.5635-2-yu.tu@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,26 +84,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In function vhost_vdpa_probe(), when code execution fails, we should
-call ida_simple_remove() to free ida.
+On 05/08/2022 10:57, Yu Tu wrote:
+> Add the documentation to support Amlogic S4 SoC PLL clock driver and
+> add S4 SoC PLL clock controller bindings.
+> 
+> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> ---
+>  .../bindings/clock/amlogic,s4-pll-clkc.yaml   | 51 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  .../dt-bindings/clock/amlogic,s4-pll-clkc.h   | 30 +++++++++++
+>  3 files changed, 82 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
+>  create mode 100644 include/dt-bindings/clock/amlogic,s4-pll-clkc.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
+> new file mode 100644
+> index 000000000000..079ae905b69e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/amlogic,s4-pll-clkc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Meson S serials PLL Clock Controller Device Tree Bindings
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
----
- drivers/vhost/vdpa.c | 1 +
- 1 file changed, 1 insertion(+)
+s/Device Tree Bindings//
 
-diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-index 7fa671ac4bdf..c7c89f969249 100644
---- a/drivers/vhost/vdpa.c
-+++ b/drivers/vhost/vdpa.c
-@@ -1396,6 +1396,7 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
- 
- err:
- 	put_device(&v->dev);
-+	ida_simple_remove(&vhost_vdpa_ida, v->minor);
- 	return r;
- }
- 
--- 
-2.27.0
+With above:
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Best regards,
+Krzysztof

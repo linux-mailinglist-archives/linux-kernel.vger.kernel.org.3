@@ -2,105 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCA358AC58
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E76358AC5A
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 16:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240917AbiHEOWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 10:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52628 "EHLO
+        id S240940AbiHEOXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 10:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiHEOWw (ORCPT
+        with ESMTP id S240941AbiHEOW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 10:22:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA86F5A8A3
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 07:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659709369;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nKJNisKgyypX3Bk0DMUA5psdWAWJAJ4t4udQLs3H4mQ=;
-        b=OTpkd2e5A8D9xI1neUEE+p88mf6mYW+5MG5iz08Z6BNySbzfe3RYK7N2JtgaSpszq64Sfr
-        n3ewQSugAyLwBb1UvQTV88BkqseKT3exWy4BQ+4pBy/QHXrq8FH6zjr2CTBFuT9LqCDzVt
-        a1PGm4k9/vjN7/HrWmvjH1fXt9dydQM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-317-zXRUFUwdOnSBOCuokhjhRg-1; Fri, 05 Aug 2022 10:22:48 -0400
-X-MC-Unique: zXRUFUwdOnSBOCuokhjhRg-1
-Received: by mail-wr1-f71.google.com with SMTP id i15-20020adfa50f000000b002207a6887b3so525679wrb.15
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 07:22:48 -0700 (PDT)
+        Fri, 5 Aug 2022 10:22:59 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E4A5C34F;
+        Fri,  5 Aug 2022 07:22:57 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id f65so2770816pgc.12;
+        Fri, 05 Aug 2022 07:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Gvfjl9OgW7oKULwG0V9MP7wEf5nbK9Je3oX1ODMbHCE=;
+        b=Sdd/1wVliKDgMzgVEJG/3jV1wUZBdOwfmKm0sXyoyvBXhrmzcBJA77KyS5bFLIhyNZ
+         6sFD9Gn4Vl+jPjGnjXC/3dmcdLTAJjbh6RnetILr+cuijvJrsc/VAz3NV35XMZZeQSFk
+         VGIdAVlf5r8rn0rfiVUo/RRIQPpbfYURiBbvKtoI+b4QkY9QMVVuHbLBE6PgF0Tvnndw
+         Xpo6b0GpE0WQdlO+jSkK1hPr79OJWp/mkKysV+NmOpZ/uC+L+NVAmEuksYsuGOkaNIhI
+         s3onldSv7E0+cdJnCvCWJoonxJaes3V8huyMgiX9YEuf/tSNwBcFggIwvf+RsDImfF3Q
+         5JcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=nKJNisKgyypX3Bk0DMUA5psdWAWJAJ4t4udQLs3H4mQ=;
-        b=7qTA4Yzv9YbCnTT2oy0RKUXdK0JH4a63OsO0SAsEd5BF169X1v6rYWoBzKpS/932vA
-         szvDyxt5GVDOsEtp7UNLtV8d2gXe6sGdpU1q70jyjcixJB3WFAv86tgdNhqni8TZPsI1
-         a39KTEStUVlaBa2xjo6ob6yFuA9HDT3m92oLvlEJM270VOzyL/DaVANfdhW41ayCsG2X
-         UigHdA+XMNU6rpTwiwb8LVErGPC9HZrH1Jn1L+XreolLRIZesB8m61jEzBd0fe9Dilzz
-         Xpo1v2lQlqn9WeRsVNvj8g4l4//STSWxXJ/AN5xoCe5BK81scQKSunFGnx2Y7TfU8Rcf
-         Xn1g==
-X-Gm-Message-State: ACgBeo3FTLid5V4R436oof9sNlLSrz71ohq5v0CpEMPZlLNxzf03L587
-        ILPv7OhpuzPp5yrBAcLUeo0N9AnjE/WKGcfIT7RXjrMWFiS7E5kTMV8KVPUXIowYkWVjMcfN2Dj
-        1k0/KLX4atywMYhVBp3L5yK64
-X-Received: by 2002:a05:6000:1684:b0:220:6e60:768d with SMTP id y4-20020a056000168400b002206e60768dmr4252365wrd.121.1659709367590;
-        Fri, 05 Aug 2022 07:22:47 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6CYXT+ni9gsbRr8mZUNjpQ2tsstwjGkxFUtVPtwZkG8v0kEXmlA6Rh4FAkaG7a+zr3bUpxBw==
-X-Received: by 2002:a05:6000:1684:b0:220:6e60:768d with SMTP id y4-20020a056000168400b002206e60768dmr4252330wrd.121.1659709367252;
-        Fri, 05 Aug 2022 07:22:47 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:fb00:f5c3:24b2:3d03:9d52? (p200300cbc706fb00f5c324b23d039d52.dip0.t-ipconnect.de. [2003:cb:c706:fb00:f5c3:24b2:3d03:9d52])
-        by smtp.gmail.com with ESMTPSA id j37-20020a05600c1c2500b003a2c67aa6c0sm5760334wms.23.2022.08.05.07.22.45
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Gvfjl9OgW7oKULwG0V9MP7wEf5nbK9Je3oX1ODMbHCE=;
+        b=lJobbH2p6sd9xB7DqGmJUeALGsDVeMF4fTm7+2wnnx42GMPv8aHG8IIRKjtIDiNOki
+         HHVBIWr/jk/QaylLfAK/yjyIZraaF45RxolDyf900wBU4u70xCzXbrZoBHrH3Qv1Tlm2
+         Ebu0InzAJ27OpYwU0Uem2IbmkBXAmJ5MTwNYgW7o/+mkKtES28S1I4zwoXuhwWn1iZxH
+         bieCixbeOfc81V8DuJYp+WA4ZJXek+TgQtHck8J63YRhOtvWqxokIPbJTEAPQC/q3OZr
+         /xaf6noT+SYDfIV+MCjyrJ4lNw2L7Ph8qnezoUjq7aw861TkstcsTW2ElHz3pzwcf5tR
+         xZDg==
+X-Gm-Message-State: ACgBeo1RKaknfyXJbkzgXOuhbMkNANTHoHlersuWIw00HGcHV9MaOkyu
+        2f8Tuvistj7+z+LWgnhDXoU=
+X-Google-Smtp-Source: AA6agR4Z12BjhC/EGtDn0xlsN5OVyNwdQnjwPaXzSrD7lH8ChYZOEyvGExbJmMKg6ZP1J3d74Z6ZwQ==
+X-Received: by 2002:a63:c1f:0:b0:41a:9b73:a89e with SMTP id b31-20020a630c1f000000b0041a9b73a89emr5912637pgl.342.1659709377122;
+        Fri, 05 Aug 2022 07:22:57 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id u4-20020a17090341c400b0016be681f008sm3112839ple.290.2022.08.05.07.22.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 07:22:46 -0700 (PDT)
-Message-ID: <e828b48f-dcd8-6404-fc30-6e1dd682252f@redhat.com>
-Date:   Fri, 5 Aug 2022 16:22:45 +0200
+        Fri, 05 Aug 2022 07:22:56 -0700 (PDT)
+Message-ID: <c5bf0f4a-2852-204f-cfdd-01bb921cfe8f@gmail.com>
+Date:   Fri, 5 Aug 2022 23:22:53 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
+Subject: [PATCH 1/3] docs/conf.py: Treat mathjax as fallback math renderer
 Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
-        Mel Gorman <mgorman@techsingularity.net>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
- <8cf143e7-2b62-1a1e-de84-e3dcc6c027a4@suse.cz>
- <cb9d3310-3bc0-8ecf-5e71-becce980235f@redhat.com>
- <f936b024-43e1-5390-e33f-ad7d355a2802@suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <f936b024-43e1-5390-e33f-ad7d355a2802@suse.cz>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <12d078f5-6995-b039-7076-bdb1f372a799@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <12d078f5-6995-b039-7076-bdb1f372a799@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,116 +77,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.08.22 15:38, Vlastimil Babka wrote:
-> On 8/5/22 14:09, David Hildenbrand wrote:
->> On 05.08.22 13:49, Vlastimil Babka wrote:
->>> On 6/14/22 14:02, Kirill A. Shutemov wrote:
->>>> UEFI Specification version 2.9 introduces the concept of memory
->>>> acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
->>>> SEV-SNP, require memory to be accepted before it can be used by the
->>>> guest. Accepting happens via a protocol specific to the Virtual Machine
->>>> platform.
->>>>
->>>> There are several ways kernel can deal with unaccepted memory:
->>>>
->>>>  1. Accept all the memory during the boot. It is easy to implement and
->>>>     it doesn't have runtime cost once the system is booted. The downside
->>>>     is very long boot time.
->>>>
->>>>     Accept can be parallelized to multiple CPUs to keep it manageable
->>>>     (i.e. via DEFERRED_STRUCT_PAGE_INIT), but it tends to saturate
->>>>     memory bandwidth and does not scale beyond the point.
->>>>
->>>>  2. Accept a block of memory on the first use. It requires more
->>>>     infrastructure and changes in page allocator to make it work, but
->>>>     it provides good boot time.
->>>>
->>>>     On-demand memory accept means latency spikes every time kernel steps
->>>>     onto a new memory block. The spikes will go away once workload data
->>>>     set size gets stabilized or all memory gets accepted.
->>>>
->>>>  3. Accept all memory in background. Introduce a thread (or multiple)
->>>>     that gets memory accepted proactively. It will minimize time the
->>>>     system experience latency spikes on memory allocation while keeping
->>>>     low boot time.
->>>>
->>>>     This approach cannot function on its own. It is an extension of #2:
->>>>     background memory acceptance requires functional scheduler, but the
->>>>     page allocator may need to tap into unaccepted memory before that.
->>>>
->>>>     The downside of the approach is that these threads also steal CPU
->>>>     cycles and memory bandwidth from the user's workload and may hurt
->>>>     user experience.
->>>>
->>>> Implement #2 for now. It is a reasonable default. Some workloads may
->>>> want to use #1 or #3 and they can be implemented later based on user's
->>>> demands.
->>>>
->>>> Support of unaccepted memory requires a few changes in core-mm code:
->>>>
->>>>   - memblock has to accept memory on allocation;
->>>>
->>>>   - page allocator has to accept memory on the first allocation of the
->>>>     page;
->>>>
->>>> Memblock change is trivial.
->>>>
->>>> The page allocator is modified to accept pages on the first allocation.
->>>> The new page type (encoded in the _mapcount) -- PageUnaccepted() -- is
->>>> used to indicate that the page requires acceptance.
->>>>
->>>> Architecture has to provide two helpers if it wants to support
->>>> unaccepted memory:
->>>>
->>>>  - accept_memory() makes a range of physical addresses accepted.
->>>>
->>>>  - range_contains_unaccepted_memory() checks anything within the range
->>>>    of physical addresses requires acceptance.
->>>>
->>>> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
->>>> Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
->>>> Reviewed-by: David Hildenbrand <david@redhat.com>
->>>
->>> Hmm I realize it's not ideal to raise this at v7, and maybe it was discussed
->>> before, but it's really not great how this affects the core page allocator
->>> paths. Wouldn't it be possible to only release pages to page allocator when
->>> accepted, and otherwise use some new per-zone variables together with the
->>> bitmap to track how much exactly is where to accept? Then it could be hooked
->>> in get_page_from_freelist() similarly to CONFIG_DEFERRED_STRUCT_PAGE_INIT -
->>> if we fail zone_watermark_fast() and there are unaccepted pages in the zone,
->>> accept them and continue. With a static key to flip in case we eventually
->>> accept everything. Because this is really similar scenario to the deferred
->>> init and that one was solved in a way that adds minimal overhead.
->>
->> I kind of like just having the memory stats being correct (e.g., free
->> memory) and acceptance being an internal detail to be triggered when
->> allocating pages -- just like the arch_alloc_page() callback.
-> 
-> Hm, good point about the stats. Could be tweaked perhaps so it appears
-> correct on the outside, but might be tricky.
-> 
->> I'm sure we could optimize for the !unaccepted memory via static keys
->> also in this version with some checks at the right places if we find
->> this to hurt performance?
-> 
-> It would be great if we would at least somehow hit the necessary code only
-> when dealing with a >=pageblock size block. The bitmap approach and
-> accepting everything smaller uprofront actually seems rather compatible. Yet
-> in the current patch we e.g. check PageUnaccepted(buddy) on every buddy size
-> while merging.
-> 
-> A list that sits besides the existing free_area, contains only >=pageblock
-> order sizes of unaccepted pages (no migratetype distinguished) and we tap
-> into it approximately before __rmqueue_fallback()? There would be some
-> trickery around releasing zone-lock for doing accept_memory(), but should be
-> manageable.
-> 
+Currently, math expressions using the "math::" directive or
+the ":math:" role of Sphinx need the imgmath extension for proper
+rendering in html and epub builds.
+imgmath requires dvipng (and latex).
+Otherwise, "make htmldocs" will complain of missing commands.
 
-Just curious, do we have a microbenchmark that is able to reveal the
-impact of such code changes before we start worrying?
+As a matter of fact, the mathjax extension is loaded by default since
+Sphinx v1.8 and it is good enough for html docs without any dependency
+on texlive packages.
 
+Stop loading the imgmath extension for html docs unless requirements
+for imgmath are met.
+
+For epub docs, keep the same behavior of always loading imgmath.
+
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ Documentation/conf.py | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index 934727e23e0e..3ec1f845c839 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -15,6 +15,23 @@
+ import sys
+ import os
+ import sphinx
++from subprocess import check_output
++
++# helper
++# ------
++
++def have_command(cmd, ver_opt, str_in_ver):
++    """Run ```cmd`` with ``ver_opt`` and see if ``str_in_ver`` is found
++    or not.
++    """
++
++    try:
++        ver_str = check_output([cmd, ver_opt]).decode('utf-8', 'ignore')
++        have_cmd = str_in_ver in ver_str
++    except:
++        have_cmd = False
++
++    return have_cmd
+ 
+ # Get Sphinx version
+ major, minor, patch = sphinx.version_info[:3]
+@@ -106,7 +123,22 @@ else:
+ autosectionlabel_prefix_document = True
+ autosectionlabel_maxdepth = 2
+ 
+-extensions.append("sphinx.ext.imgmath")
++# Load math renderer:
++# For html builder, load imgmath only when its dependencies are met.
++# mathjax is the default math renderer since Sphinx 1.8.
++have_latex =  have_command('latex', '--version', 'pdfTeX')
++have_dvipng = have_command('dvipng', '--version', 'dvipng')
++load_imgmath = ((have_latex and have_dvipng)
++                or (major == 1 and minor < 8)
++                or 'epub' in sys.argv)
++
++if load_imgmath:
++    extensions.append("sphinx.ext.imgmath")
++    math_renderer = 'imgmath'
++else:
++    math_renderer = 'mathjax'
++
++sys.stderr.write("math_renderer: %s\n" % math_renderer)
+ 
+ # Add any paths that contain templates here, relative to this directory.
+ templates_path = ['_templates']
 -- 
-Thanks,
+2.25.1
 
-David / dhildenb
 

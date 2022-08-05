@@ -2,147 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5B758AA25
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587BE58AA2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237286AbiHELbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 07:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S240653AbiHELcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 07:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbiHELbX (ORCPT
+        with ESMTP id S235412AbiHELcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 07:31:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C46C81A808
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 04:31:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659699080;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iJ2vojdH8FtOr3UJApDg2Ea8FrlKufBhz/SYWXyGjZg=;
-        b=DJTPjypqfpO//WJIGt+b8qUF89Clj6wf7+9Cnl5eYtjd4SFwVqCUqVNG/QQHLy+5drpGlf
-        E8JyCwd6sfrHnWIeLIgeChF8y9/fzjFgBx2sHwUCmPlZdWx9srql8NVuvqRcSivYQHw7Yu
-        LNWQxSLLS8hdgVpYzOCfHVzeZNsfsLU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-38-msbGWBtKM9GAzByWCUYbKg-1; Fri, 05 Aug 2022 07:31:19 -0400
-X-MC-Unique: msbGWBtKM9GAzByWCUYbKg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D74DA108C19D;
-        Fri,  5 Aug 2022 11:31:18 +0000 (UTC)
-Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 242A618EB7;
-        Fri,  5 Aug 2022 11:31:17 +0000 (UTC)
-Date:   Fri, 5 Aug 2022 13:31:15 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>,
-        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: export crash_kexec() as destructive
- kfunc
-Message-ID: <Yuz/g8nONMJyiyrh@samus.usersys.redhat.com>
-Mail-Followup-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>, Jiri Olsa <olsajiri@gmail.com>,
-        Song Liu <song@kernel.org>, Daniel Xu <dxu@dxuuu.xyz>
-References: <20220802091030.3742334-1-asavkov@redhat.com>
- <20220802091030.3742334-3-asavkov@redhat.com>
- <CAADnVQL7GH0MBhjTHA2xWXVzkDgdzk4RS9qS+DJ1+t1T8NkYxA@mail.gmail.com>
+        Fri, 5 Aug 2022 07:32:18 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E831A808;
+        Fri,  5 Aug 2022 04:32:17 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id m41-20020a05600c3b2900b003a4e094256eso1182552wms.0;
+        Fri, 05 Aug 2022 04:32:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=qNoWZJdxKVVEwFk/7zUUPQn8nhtmRlSYmnr02okBx1Y=;
+        b=ESvJKXlQEXUIWf5pmCGO3WO7e9NM4dPHOzTviWdHVMZr6Et2W9iySs6g8fAZnQGk62
+         IgIUjYYaE5eJP5+J5mOb6bVNWSZJy3JWXCbB/3mTe9ZUb3N3u176h7t0lUYJRIEyE1N0
+         UEx/TTkEFl8lSB5VcliXDneL0PsSobKtgZdBNmEZtAj3dj/giwyyAUo4eGxWQxR7JOSu
+         Ym0RAj9mmRQcEj7Pcxh3UQpTmVX5TGVXAd2GJjynd6vBgAZj91mFuUUXkRqoY1uPhb1e
+         8KAA0DV7Byy4tBU5iQE7LgbnraGhvmWR+F4K+I5YVzK9gx2m91xWmIYZ3q/CqJFvC9ED
+         SDOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=qNoWZJdxKVVEwFk/7zUUPQn8nhtmRlSYmnr02okBx1Y=;
+        b=7b4ogD1XNRbYt/+t+JFtxngKcuyJO9R94Ia6mWi6VVEDPYZwlLcR2FDu7ITTOeqWkt
+         6COBNKuPr7Tc31p/fKvyyTgCuXEvxOBTy2qsOV0x0CRFzK04+C9VYnwfmRnEqMDq3ezX
+         5DI4EIOxkYGEedaN+JxWhitj1MPf5vdf3lvjnpsZafver/lsdCQf/w6+f+JpgFz18SKx
+         M6Wzn6RKwjdMCt6X8/QxzAw9ZxpXir07F+Wwh87Zn4VA5sk8+Ua9amyGwwZ0JMu4liyS
+         dpjyX27CJLhGx9w/20M8u3mMB0q0lo94hI0dlMA7brxM7VJJB66BWnNdCIkus97RyCZ0
+         TK6g==
+X-Gm-Message-State: ACgBeo36WCMn9io+h83P7y15OuhuVf67DE/AnLucN3Zq6aRCquOrTQHm
+        GFZZsDLA07xA2u9LIXTpkWw=
+X-Google-Smtp-Source: AA6agR4dBa/UE3vHdxVFqhoAY9xuBNTNITH/se2ZbETiQg5G0HiwdAqOO5AT/We6wRETAocCNKmAeg==
+X-Received: by 2002:a05:600c:42ca:b0:3a4:e56c:1d39 with SMTP id j10-20020a05600c42ca00b003a4e56c1d39mr9101689wme.183.1659699135750;
+        Fri, 05 Aug 2022 04:32:15 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id c5-20020a05600c0a4500b003a305c0ab06sm11087748wmq.31.2022.08.05.04.32.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 04:32:15 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: message: fusion: remove redundant variable iocnum
+Date:   Fri,  5 Aug 2022 12:32:14 +0100
+Message-Id: <20220805113214.2339022-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAADnVQL7GH0MBhjTHA2xWXVzkDgdzk4RS9qS+DJ1+t1T8NkYxA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 01:41:53PM -0700, Alexei Starovoitov wrote:
-> On Tue, Aug 2, 2022 at 2:10 AM Artem Savkov <asavkov@redhat.com> wrote:
-> >
-> > Allow properly marked bpf programs to call crash_kexec().
-> >
-> > Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> > ---
-> >  kernel/kexec_core.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> >
-> > diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> > index 4d34c78334ce..9259ea3bd693 100644
-> > --- a/kernel/kexec_core.c
-> > +++ b/kernel/kexec_core.c
-> > @@ -39,6 +39,8 @@
-> >  #include <linux/hugetlb.h>
-> >  #include <linux/objtool.h>
-> >  #include <linux/kmsg_dump.h>
-> > +#include <linux/btf.h>
-> > +#include <linux/btf_ids.h>
-> >
-> >  #include <asm/page.h>
-> >  #include <asm/sections.h>
-> > @@ -1238,3 +1240,22 @@ void __weak arch_kexec_protect_crashkres(void)
-> >
-> >  void __weak arch_kexec_unprotect_crashkres(void)
-> >  {}
-> > +
-> > +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> > +BTF_SET8_START(kexec_btf_ids)
-> > +BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
-> > +BTF_SET8_END(kexec_btf_ids)
-> > +
-> > +static const struct btf_kfunc_id_set kexec_kfunc_set = {
-> > +       .owner = THIS_MODULE,
-> > +       .set   = &kexec_btf_ids,
-> > +};
-> > +
-> > +static int __init crash_kfunc_init(void)
-> > +{
-> > +       register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &kexec_kfunc_set);
-> > +       return 0;
-> > +}
-> > +
-> > +subsys_initcall(crash_kfunc_init);
-> > +#endif
-> 
-> It feels there will be a bunch of such boiler plate code
-> in different .c files in many places in the kernel
-> if we go with this approach.
-> 
-> Maybe we should do one call:
-> register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING
-> from kernel/bpf/helper.c
-> to register all tracing kfuncs ?
-> 
-> And gate
-> BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
-> with #ifdef CONFIG_KEXEC_CORE.
-> 
-> We have such a pattern in verifier.c already.
+Variable iocnum is assigned a value that is never read, the assignment
+and hence the variable are redundant can be removed. Also update the
+the comment to reflect the correct name of the variable being updated.
 
-Good idea, thanks for the pointers. I'll do that in next version.
+Cleans up clang-scan warning:
+drivers/message/fusion/mptctl.c:641:8: warning: Although the value stored
+to 'iocnum' is used in the enclosing expression, the value is never
+actually read from 'iocnum' [deadcode.DeadStores]
 
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/message/fusion/mptctl.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/message/fusion/mptctl.c b/drivers/message/fusion/mptctl.c
+index f9ee957072c3..673145c8936b 100644
+--- a/drivers/message/fusion/mptctl.c
++++ b/drivers/message/fusion/mptctl.c
+@@ -620,7 +620,6 @@ __mptctl_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ {
+ 	mpt_ioctl_header __user *uhdr = (void __user *) arg;
+ 	mpt_ioctl_header	 khdr;
+-	int iocnum;
+ 	unsigned iocnumX;
+ 	int nonblock = (file->f_flags & O_NONBLOCK);
+ 	int ret;
+@@ -634,12 +633,11 @@ __mptctl_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 	}
+ 	ret = -ENXIO;				/* (-6) No such device or address */
+ 
+-	/* Verify intended MPT adapter - set iocnum and the adapter
++	/* Verify intended MPT adapter - set iocnumX and the adapter
+ 	 * pointer (iocp)
+ 	 */
+ 	iocnumX = khdr.iocnum & 0xFF;
+-	if (((iocnum = mpt_verify_adapter(iocnumX, &iocp)) < 0) ||
+-	    (iocp == NULL))
++	if ((mpt_verify_adapter(iocnumX, &iocp) < 0) || (iocp == NULL))
+ 		return -ENODEV;
+ 
+ 	if (!iocp->active) {
 -- 
- Artem
+2.35.3
 

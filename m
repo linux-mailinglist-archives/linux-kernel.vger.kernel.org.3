@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F8F58AA61
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD43658AA66
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240523AbiHEL4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 07:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S240603AbiHEL47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 07:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiHEL4S (ORCPT
+        with ESMTP id S236059AbiHEL4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 07:56:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DB75D0DD
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 04:56:16 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oJvvw-0005JE-AQ; Fri, 05 Aug 2022 13:56:04 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oJvvt-0000dw-Ug; Fri, 05 Aug 2022 13:56:01 +0200
-Date:   Fri, 5 Aug 2022 13:56:01 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 07/10] net: dsa: microchip: warn about not
- supported synclko properties on KSZ9893 chips
-Message-ID: <20220805115601.GB10667@pengutronix.de>
-References: <20220729130346.2961889-1-o.rempel@pengutronix.de>
- <20220729130346.2961889-8-o.rempel@pengutronix.de>
- <20220802113633.73rxlb2kmihivwpx@skbuf>
+        Fri, 5 Aug 2022 07:56:55 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F637646E;
+        Fri,  5 Aug 2022 04:56:54 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id r1-20020a05600c35c100b003a326685e7cso3813362wmq.1;
+        Fri, 05 Aug 2022 04:56:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=GtM/cD7hflcv6BD0/3bodvkpI0nOjm8qfPi0VHcfBA8=;
+        b=GQCxOQ9ymOiXtZRK5e3o3fqq3FRHxzS+LX8p/DO5szFAXxNc0eflCk59DGneDzPMJA
+         8T/TzsnPGz/HjiT/6kUrffGCTgcqb9r/wGCZGG+ZrCXdH1S/Yp7Ro50FFysg3pzb+iVy
+         bx5rL2lGTC8tzdcVt5iDHHSJsidzmMgF7xjQFRk6J2x3m8lOvgxkxegpfGm3kxpGa06C
+         O3WQGolRr9lQwuXj3WPh77go0vp4tRw9LyL8DdEcVYWbGrv2Eq5HXhAQeU03D40I843+
+         wcyPd5lVJrpJmrWUYjty40nuRMIuduErV3RFyTNPpqE/OrvVqAJi7kUDEHHYgxWd2dNO
+         Z3ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=GtM/cD7hflcv6BD0/3bodvkpI0nOjm8qfPi0VHcfBA8=;
+        b=cd/vnEXxpeyWyC+V7HoqX7/+stdq7thouqyWRlZv0av/v6hoTz8YOheJEEoXzumNdl
+         0jPkTWqH82lY2u2W4nGZYdvsmwij9LTxDHGpRNLrixQB+f6E73g1DoAlUXlrGxYMCxbn
+         dVAsj6O1Hav+PPmBlHoMgVkH3tt+YQyhT3FGHPeCZl6WRogF5+IEaHXFsJWVQxnb/IiT
+         vYDdr5k0VEKLePnMtEIh3b6WwR+JcPfmvIpWU/qCHgJXV1NE4GBx07EuSVSJ6Q6Ip9vP
+         2E6IVU9ud1LkH7ux+jTQB1LbK5TaTlBo98e7RVhRXKuJ7PYZZqcV3XmJO8wWx2eIrghH
+         jQzQ==
+X-Gm-Message-State: ACgBeo2sicjurEzSo/48wCpOHh5dH1e6n1oz5BSKs5wDMNBrOI3gj/6d
+        o2IPGEQO5YK2EjtQZmcIVHhLWg5N3HYInd0G
+X-Google-Smtp-Source: AA6agR5CaTanmJoi83t6yf9QMs9jyIizyAaIYrJvx6dNOdWDPmKbY11fIfYuAHeW5xn6H8e8oUaKxA==
+X-Received: by 2002:a05:600c:501e:b0:3a3:4a04:fdb5 with SMTP id n30-20020a05600c501e00b003a34a04fdb5mr9556965wmr.168.1659700613091;
+        Fri, 05 Aug 2022 04:56:53 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id i17-20020a05600c355100b003a2e92edeccsm9108432wmq.46.2022.08.05.04.56.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 04:56:52 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: st: remove redundant variable pointer stp
+Date:   Fri,  5 Aug 2022 12:56:52 +0100
+Message-Id: <20220805115652.2340991-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220802113633.73rxlb2kmihivwpx@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 02:36:33PM +0300, Vladimir Oltean wrote:
-> On Fri, Jul 29, 2022 at 03:03:43PM +0200, Oleksij Rempel wrote:
-> > KSZ9893 family of chips do not support synclko property. So warn about
-> > without preventing driver from start.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  drivers/net/dsa/microchip/ksz_common.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-> > index 71b5349d006a..d3a9836c706f 100644
-> > --- a/drivers/net/dsa/microchip/ksz_common.c
-> > +++ b/drivers/net/dsa/microchip/ksz_common.c
-> > @@ -1916,6 +1916,13 @@ int ksz_switch_register(struct ksz_device *dev)
-> >  			dev_err(dev->dev, "inconsistent synclko settings\n");
-> >  			return -EINVAL;
-> >  		}
-> > +
-> > +		if (dev->chip_id == KSZ9893_CHIP_ID && (dev->synclko_125 ||
-> > +							dev->synclko_disable)) {
-> > +			dev_warn(dev->dev, "microchip,synclko-125 and microchip,synclko-disable "
-> > +				 "properties are not supported on this chip. "
-> > +				 "Please fix you devicetree.\n");
-> 
-> s/you/your/
-> 
-> Does KSZ8 have a REFCLK output of any sort? If it doesn't, then
-> "microchip,synclko-disable" is kind of supported, right?
-> 
-> I wonder what there is to gain by saying that you should remove some
-> device tree properties from non-ksz9477. After all, anyone can add any
-> random properties to a KSZ8 switch OF node and you won't warn about
-> those.
+Variable stp is assigned a value that is never read, the assignment
+and the variable stp are redundant and can be removed.
 
-Hm, if we will have any random not support OF property in the switch
-node. We won't be able to warn about it anyway. So, if it is present
-but not supported, we will just ignore it.
+Cleans up clang scan build warning:
+drivers/scsi/st.c:4253:7: warning: Although the value stored to 'stp'
+is used in the enclosing expression, the value is never actually
+read from 'stp' [deadcode.DeadStores]
 
-I'll drop this patch.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/scsi/st.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Regards,
-Oleksij
+diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
+index 850172a2b8f1..65f521b036c1 100644
+--- a/drivers/scsi/st.c
++++ b/drivers/scsi/st.c
+@@ -4246,11 +4246,10 @@ static int st_probe(struct device *dev)
+ 	struct st_partstat *STps;
+ 	struct st_buffer *buffer;
+ 	int i, error;
+-	char *stp;
+ 
+ 	if (SDp->type != TYPE_TAPE)
+ 		return -ENODEV;
+-	if ((stp = st_incompatible(SDp))) {
++	if (st_incompatible(SDp)) {
+ 		sdev_printk(KERN_INFO, SDp,
+ 			    "OnStream tapes are no longer supported;\n");
+ 		sdev_printk(KERN_INFO, SDp,
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.35.3
+

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953FF58B0F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 22:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AE258B0F0
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 22:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240981AbiHEUxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 16:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
+        id S234826AbiHEUxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 16:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240390AbiHEUxo (ORCPT
+        with ESMTP id S230098AbiHEUx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 16:53:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AC46582A
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 13:53:39 -0700 (PDT)
+        Fri, 5 Aug 2022 16:53:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B2C14D0F
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 13:53:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659732819; x=1691268819;
+  t=1659732808; x=1691268808;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=scKvlEy0EmpXTjyB9aEHto1bj7/eJOEs3+sYkYXVOuM=;
-  b=PnsefIwYJBgTTuoOcL5kzX++/silpfMVC3wc7SPRQJGAKKwUE0cMBYo7
-   m36vGaIwItHrBrOIoBcqSAE1qz7gS5c6/p9MrOy+GvwyNJSOrNSyMnFzO
-   xb9GuKAlHmYys7eGO/tdYW96b/ItogsgGMIuYadwXWFAwI/QmiIYkhX01
-   RsnTx7qXqn3c8ZdvhRmvKpwX3WfTpS0CBUB8HkkG9w43Ty5JiE4JY/5w+
-   ywq7YMDgCytnOdgZBEiX6R/SBVIYln2WlidVsHjhMc1LZ6QETP67jc+Uj
-   uLBzmAY/BhPC3AcizMS7G27Bz06xIkxkWvPPIaCiTsI8p8fOoepetJpGn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="291513887"
+  bh=EXghPQuaJMyTR5Ic0RE8Yvr7esSnX3aRewGCrlOrFTU=;
+  b=HsOlkPPDqca8i9kk8NaqKpAIAXnQtsa9DGCKi7vPNldrxEzXROxy9BeV
+   JRv5wjgjNvUmASG+7j7sLEuFrCXUwe1XvJotsl4EcfxhM/NpsU38g72i7
+   1BnmZh05GzP6ZLhk6ejbnxvg5RIATOBU+8c7/nAaOqSwN47FZ+X9xkZkr
+   BVhSmnYn6OMQN6ohwym2jHxqEzrGFcDuSXPU4sPxSPiZwl21kwNbQGqMq
+   tkFbMhMbaXGvq5hIiv7++L7XVlNGqDyV4ixz/cnECHgONnkfuvw4/Fgtz
+   RqRtFEsfBdCYjLVAbE/SGNgOb32+YRcaF6GNU/7+OWqif+NsvCFePLU8P
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="316185191"
 X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="291513887"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 13:53:28 -0700
+   d="scan'208";a="316185191"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 13:53:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
-   d="scan'208";a="554238791"
+   d="scan'208";a="849447496"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 05 Aug 2022 13:53:27 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 05 Aug 2022 13:53:26 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 58A5B1D0; Fri,  5 Aug 2022 23:53:38 +0300 (EEST)
+        id 62A8611C; Fri,  5 Aug 2022 23:53:38 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
@@ -47,124 +47,252 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH v1 4/5] regmap: mmio: Get rid of broken 64-bit IO
-Date:   Fri,  5 Aug 2022 23:53:20 +0300
-Message-Id: <20220805205321.19452-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 5/5] regmap: mmio: Introduce IO accessors that can talk to IO port
+Date:   Fri,  5 Aug 2022 23:53:21 +0300
+Message-Id: <20220805205321.19452-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220805205321.19452-1-andriy.shevchenko@linux.intel.com>
 References: <20220805205321.19452-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current implementation, besides having no active users, is broken
-by design of regmap. For 64-bit IO we need to supply 64-bit value,
-otherwise there is no way to handle upper 32 bits in 64-bit register.
+Currently regmap MMIO is inconsistent with IO accessors. I.e.
+the Big Endian counterparts are using ioreadXXbe() / iowriteXXbe()
+which are not clean implementations of readXXbe(). Besides that
+some users may use regmap MMIO for IO ports, and this can be done
+by assigning ioreadXX()/iowriteXX() and their Big Endian counterparts
+to the regmap context.
 
-Hence, remove the broken IO accessors for good and wait for real user
-that can fix entire regmap API for that.
+That said, reimplement current Big Endian MMIO accessors by replacing
+ioread()/iowrite() with respective read()/write() and swab() calls.
+While at it, add IO port support with a corresponding flag added.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/base/regmap/regmap-mmio.c | 49 -------------------------------
- 1 file changed, 49 deletions(-)
+ drivers/base/regmap/regmap-mmio.c | 102 +++++++++++++++++++++++++++---
+ include/linux/regmap.h            |   3 +
+ 2 files changed, 96 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/base/regmap/regmap-mmio.c b/drivers/base/regmap/regmap-mmio.c
-index c2b18973144b..698295a8f5a6 100644
+index 698295a8f5a6..6a0d370ac83b 100644
 --- a/drivers/base/regmap/regmap-mmio.c
 +++ b/drivers/base/regmap/regmap-mmio.c
-@@ -32,9 +32,6 @@ static int regmap_mmio_regbits_check(size_t reg_bits)
- 	case 8:
- 	case 16:
- 	case 32:
--#ifdef CONFIG_64BIT
--	case 64:
--#endif
- 		return 0;
- 	default:
- 		return -EINVAL;
-@@ -56,11 +53,6 @@ static int regmap_mmio_get_min_stride(size_t val_bits)
- 	case 32:
- 		min_stride = 4;
- 		break;
--#ifdef CONFIG_64BIT
--	case 64:
--		min_stride = 8;
--		break;
--#endif
- 	default:
- 		return -EINVAL;
- 	}
-@@ -124,22 +116,6 @@ static void regmap_mmio_write32be(struct regmap_mmio_context *ctx,
+@@ -74,6 +74,12 @@ static void regmap_mmio_write8_relaxed(struct regmap_mmio_context *ctx,
+ 	writeb_relaxed(val, ctx->regs + reg);
+ }
+ 
++static void regmap_mmio_iowrite8(struct regmap_mmio_context *ctx,
++				 unsigned int reg, unsigned int val)
++{
++	iowrite8(val, ctx->regs + reg);
++}
++
+ static void regmap_mmio_write16le(struct regmap_mmio_context *ctx,
+ 				  unsigned int reg,
+ 				  unsigned int val)
+@@ -88,9 +94,21 @@ static void regmap_mmio_write16le_relaxed(struct regmap_mmio_context *ctx,
+ 	writew_relaxed(val, ctx->regs + reg);
+ }
+ 
++static void regmap_mmio_iowrite16le(struct regmap_mmio_context *ctx,
++				    unsigned int reg, unsigned int val)
++{
++	iowrite16(val, ctx->regs + reg);
++}
++
+ static void regmap_mmio_write16be(struct regmap_mmio_context *ctx,
+ 				  unsigned int reg,
+ 				  unsigned int val)
++{
++	writew(swab16(val), ctx->regs + reg);
++}
++
++static void regmap_mmio_iowrite16be(struct regmap_mmio_context *ctx,
++				    unsigned int reg, unsigned int val)
+ {
+ 	iowrite16be(val, ctx->regs + reg);
+ }
+@@ -109,9 +127,21 @@ static void regmap_mmio_write32le_relaxed(struct regmap_mmio_context *ctx,
+ 	writel_relaxed(val, ctx->regs + reg);
+ }
+ 
++static void regmap_mmio_iowrite32le(struct regmap_mmio_context *ctx,
++				    unsigned int reg, unsigned int val)
++{
++	iowrite32(val, ctx->regs + reg);
++}
++
+ static void regmap_mmio_write32be(struct regmap_mmio_context *ctx,
+ 				  unsigned int reg,
+ 				  unsigned int val)
++{
++	writel(swab32(val), ctx->regs + reg);
++}
++
++static void regmap_mmio_iowrite32be(struct regmap_mmio_context *ctx,
++				    unsigned int reg, unsigned int val)
+ {
  	iowrite32be(val, ctx->regs + reg);
  }
- 
--#ifdef CONFIG_64BIT
--static void regmap_mmio_write64le(struct regmap_mmio_context *ctx,
--				  unsigned int reg,
--				  unsigned int val)
--{
--	writeq(val, ctx->regs + reg);
--}
--
--static void regmap_mmio_write64le_relaxed(struct regmap_mmio_context *ctx,
--				  unsigned int reg,
--				  unsigned int val)
--{
--	writeq_relaxed(val, ctx->regs + reg);
--}
--#endif
--
- static int regmap_mmio_write(void *context, unsigned int reg, unsigned int val)
- {
- 	struct regmap_mmio_context *ctx = context;
-@@ -204,20 +180,6 @@ static unsigned int regmap_mmio_read32be(struct regmap_mmio_context *ctx,
- 	return ioread32be(ctx->regs + reg);
+@@ -144,6 +174,12 @@ static unsigned int regmap_mmio_read8_relaxed(struct regmap_mmio_context *ctx,
+ 	return readb_relaxed(ctx->regs + reg);
  }
  
--#ifdef CONFIG_64BIT
--static unsigned int regmap_mmio_read64le(struct regmap_mmio_context *ctx,
--				         unsigned int reg)
--{
--	return readq(ctx->regs + reg);
--}
--
--static unsigned int regmap_mmio_read64le_relaxed(struct regmap_mmio_context *ctx,
--						 unsigned int reg)
--{
--	return readq_relaxed(ctx->regs + reg);
--}
--#endif
--
- static int regmap_mmio_read(void *context, unsigned int reg, unsigned int *val)
++static unsigned int regmap_mmio_ioread8(struct regmap_mmio_context *ctx,
++					unsigned int reg)
++{
++	return ioread8(ctx->regs + reg);
++}
++
+ static unsigned int regmap_mmio_read16le(struct regmap_mmio_context *ctx,
+ 				         unsigned int reg)
  {
- 	struct regmap_mmio_context *ctx = context;
-@@ -317,17 +279,6 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
- 				ctx->reg_write = regmap_mmio_write32le;
+@@ -156,8 +192,20 @@ static unsigned int regmap_mmio_read16le_relaxed(struct regmap_mmio_context *ctx
+ 	return readw_relaxed(ctx->regs + reg);
+ }
+ 
++static unsigned int regmap_mmio_ioread16le(struct regmap_mmio_context *ctx,
++					   unsigned int reg)
++{
++	return ioread16(ctx->regs + reg);
++}
++
+ static unsigned int regmap_mmio_read16be(struct regmap_mmio_context *ctx,
+ 				         unsigned int reg)
++{
++	return swab16(readw(ctx->regs + reg));
++}
++
++static unsigned int regmap_mmio_ioread16be(struct regmap_mmio_context *ctx,
++					   unsigned int reg)
+ {
+ 	return ioread16be(ctx->regs + reg);
+ }
+@@ -174,8 +222,20 @@ static unsigned int regmap_mmio_read32le_relaxed(struct regmap_mmio_context *ctx
+ 	return readl_relaxed(ctx->regs + reg);
+ }
+ 
++static unsigned int regmap_mmio_ioread32le(struct regmap_mmio_context *ctx,
++					   unsigned int reg)
++{
++	return ioread32(ctx->regs + reg);
++}
++
+ static unsigned int regmap_mmio_read32be(struct regmap_mmio_context *ctx,
+ 				         unsigned int reg)
++{
++	return swab32(readl(ctx->regs + reg));
++}
++
++static unsigned int regmap_mmio_ioread32be(struct regmap_mmio_context *ctx,
++					   unsigned int reg)
+ {
+ 	return ioread32be(ctx->regs + reg);
+ }
+@@ -253,7 +313,10 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
+ #endif
+ 		switch (config->val_bits) {
+ 		case 8:
+-			if (config->use_relaxed_mmio) {
++			if (config->io_port) {
++				ctx->reg_read = regmap_mmio_ioread8;
++				ctx->reg_write = regmap_mmio_iowrite8;
++			} else if (config->use_relaxed_mmio) {
+ 				ctx->reg_read = regmap_mmio_read8_relaxed;
+ 				ctx->reg_write = regmap_mmio_write8_relaxed;
+ 			} else {
+@@ -262,7 +325,10 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
  			}
  			break;
--#ifdef CONFIG_64BIT
--		case 64:
+ 		case 16:
 -			if (config->use_relaxed_mmio) {
--				ctx->reg_read = regmap_mmio_read64le_relaxed;
--				ctx->reg_write = regmap_mmio_write64le_relaxed;
--			} else {
--				ctx->reg_read = regmap_mmio_read64le;
--				ctx->reg_write = regmap_mmio_write64le;
--			}
--			break;
--#endif
++			if (config->io_port) {
++				ctx->reg_read = regmap_mmio_ioread16le;
++				ctx->reg_write = regmap_mmio_iowrite16le;
++			} else if (config->use_relaxed_mmio) {
+ 				ctx->reg_read = regmap_mmio_read16le_relaxed;
+ 				ctx->reg_write = regmap_mmio_write16le_relaxed;
+ 			} else {
+@@ -271,7 +337,10 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
+ 			}
+ 			break;
+ 		case 32:
+-			if (config->use_relaxed_mmio) {
++			if (config->io_port) {
++				ctx->reg_read = regmap_mmio_ioread32le;
++				ctx->reg_write = regmap_mmio_iowrite32le;
++			} else if (config->use_relaxed_mmio) {
+ 				ctx->reg_read = regmap_mmio_read32le_relaxed;
+ 				ctx->reg_write = regmap_mmio_write32le_relaxed;
+ 			} else {
+@@ -290,16 +359,31 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
+ #endif
+ 		switch (config->val_bits) {
+ 		case 8:
+-			ctx->reg_read = regmap_mmio_read8;
+-			ctx->reg_write = regmap_mmio_write8;
++			if (config->io_port) {
++				ctx->reg_read = regmap_mmio_ioread8;
++				ctx->reg_write = regmap_mmio_iowrite8;
++			} else {
++				ctx->reg_read = regmap_mmio_read8;
++				ctx->reg_write = regmap_mmio_write8;
++			}
+ 			break;
+ 		case 16:
+-			ctx->reg_read = regmap_mmio_read16be;
+-			ctx->reg_write = regmap_mmio_write16be;
++			if (config->io_port) {
++				ctx->reg_read = regmap_mmio_ioread16be;
++				ctx->reg_write = regmap_mmio_iowrite16be;
++			} else {
++				ctx->reg_read = regmap_mmio_read16be;
++				ctx->reg_write = regmap_mmio_write16be;
++			}
+ 			break;
+ 		case 32:
+-			ctx->reg_read = regmap_mmio_read32be;
+-			ctx->reg_write = regmap_mmio_write32be;
++			if (config->io_port) {
++				ctx->reg_read = regmap_mmio_ioread32be;
++				ctx->reg_write = regmap_mmio_iowrite32be;
++			} else {
++				ctx->reg_read = regmap_mmio_read32be;
++				ctx->reg_write = regmap_mmio_write32be;
++			}
+ 			break;
  		default:
  			ret = -EINVAL;
- 			goto err_free;
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index 7cf2157134ac..8cccc247cd37 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -311,6 +311,8 @@ typedef void (*regmap_unlock)(void *);
+  *		  This field is a duplicate of a similar file in
+  *		  'struct regmap_bus' and serves exact same purpose.
+  *		   Use it only for "no-bus" cases.
++ * @io_port:	  Support IO port accessors. Makes sense only when MMIO vs. IO port
++ *		  access can be distinguished.
+  * @max_register: Optional, specifies the maximum valid register address.
+  * @wr_table:     Optional, points to a struct regmap_access_table specifying
+  *                valid ranges for write access.
+@@ -399,6 +401,7 @@ struct regmap_config {
+ 	size_t max_raw_write;
+ 
+ 	bool fast_io;
++	bool io_port;
+ 
+ 	unsigned int max_register;
+ 	const struct regmap_access_table *wr_table;
 -- 
 2.35.1
 

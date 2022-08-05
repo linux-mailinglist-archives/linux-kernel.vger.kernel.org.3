@@ -2,262 +2,423 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFBD58B0FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 23:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD5558B0FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 23:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237993AbiHEVBu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 5 Aug 2022 17:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
+        id S240396AbiHEVFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 17:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbiHEVBt (ORCPT
+        with ESMTP id S233731AbiHEVFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 17:01:49 -0400
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D1B120B8
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 14:01:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id E699B615CC86;
-        Fri,  5 Aug 2022 23:01:40 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 3iyyf1dXrnE0; Fri,  5 Aug 2022 23:01:40 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 423FD61F1103;
-        Fri,  5 Aug 2022 23:01:40 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id h96QZXm-UAyt; Fri,  5 Aug 2022 23:01:40 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 1F970615CC86;
-        Fri,  5 Aug 2022 23:01:40 +0200 (CEST)
-Date:   Fri, 5 Aug 2022 23:01:40 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        miquel.raynal@bootlin.com, vigneshr@ti.com
-Message-ID: <1047109049.69854.1659733300067.JavaMail.zimbra@nod.at>
-Subject: [GIT PULL] MTD changes for v5.20-rc1
+        Fri, 5 Aug 2022 17:05:50 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1371DA4E
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 14:05:48 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gb36so6978385ejc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 14:05:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=7p80Yi4ha4MyJClpDNxOS+05Egu0byNIpa228CYGpOc=;
+        b=nl/5LUuB2pkS9TXIbwBqUrVbyqH6HqLPe8nskNgTbKZ7IUjejMaBU0iGwYkKMSCf4q
+         qVsVuTEFiLVvQ+zcTAqbCFH1CiyPWOo/ojJwEdx93vy9SzsQsvgzWBqAMxkI/BPbRD6u
+         yl2FGnGba0cl7d+3gl2ZwJ4BrOchNvd6WIK9hueCd7LMT+DqK7qzr/eaqV8HGfWRbq+U
+         Ut6Z5vkWx0S0qZFyRHqhK1nmQQmAXH5pjFeEp76hF5i4mIXOfPFBdgCKGsW9XmUpVSaU
+         vX+8m+jNBerR/Lc1mUah98zptzz4A78xBg89DOZ7J3UArdGVKfb9Z38OO3dqcdqnq+s/
+         ZbwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=7p80Yi4ha4MyJClpDNxOS+05Egu0byNIpa228CYGpOc=;
+        b=T2TzVmZVTNe2JI+nfccOVVYb9ZVrkFL5XUpKDxH1LE4QmudSwNzUnSQ0/6YCo5XpmF
+         8ZzBR+AvjGdg+z52MnbFMxsXGr278++/PZwHTRNFlgLOAS6DlBADdiBUGGHnpL1x75We
+         NCB+eKzQRcsmZ5OAET3W+IEDKWn7Hu2QOTvC6xSfmJ8DBuGVccwsW0kTWmaYaGhaxVRP
+         +1BQdw+QzO3DKPGVURooNv/NyLLR2Y91FusDjWrzMrbdYBOAgeMEvhAsxMsNrGH0GkMS
+         /m2cc+r2Wv1qsDSfILMYtmq5kDKT2KjaoWrRANONiv34Qg+ABHG45gph7Ck3dj7DmxXK
+         PQ8w==
+X-Gm-Message-State: ACgBeo2TnXdIR0yzj8UmxmWjuMCcIqW4vVA6B41ALpXRgwmSIrCCY41/
+        eDLDnIvp42TXjzdPWLCjqK00SR51oirnsLJx6lc=
+X-Google-Smtp-Source: AA6agR5eVG41whRe1NHXF3sWbALmE2zoW/5IRkdU1cMcXQ1qZaXWCncLfqYPVfsr+qJYNgvMprmisZkYpUcQ95Ypo5E=
+X-Received: by 2002:a17:907:a428:b0:730:aee3:2da7 with SMTP id
+ sg40-20020a170907a42800b00730aee32da7mr6208248ejc.613.1659733546601; Fri, 05
+ Aug 2022 14:05:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Index: asPtL/kLql9/4nWO0950+Wy6u7sp8g==
-Thread-Topic: MTD changes for v5.20-rc1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
+ <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
+ <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
+ <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
+ <20220803062024.vn7awasmifkp5xow@pengutronix.de> <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
+ <CAPY8ntBBz56Es=pK+KpqhyYLUET95DT_zE6gorOWx4WkCSxJAg@mail.gmail.com>
+ <20220804093829.42kdelp7u4r743nv@pengutronix.de> <CAPY8ntBovVq1HVt_UneDF8OB9KBdEBv52o=4BCTmf9VpiODxVg@mail.gmail.com>
+ <20220804125152.idyzetjqkjzgbbm2@pengutronix.de> <CAPY8ntAatYvbf5ehfsj4qcSDC=sODeN1Cj0vDjn6p0M=k320NA@mail.gmail.com>
+ <CAHCN7x+DkJgGvMLnYBXscSMDmTCeaHeJKK6T9eLUm+rXSx=NQA@mail.gmail.com>
+ <OS0PR01MB592206843B43BC93F4F699FC869E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CAHCN7x+UAk1wPTOj7EFUXkRY3b3BPXTT6SqD4A7sJO87ZpHgFg@mail.gmail.com> <CAHCN7xJ4TWpLmD_WRrEXoHWy52MEfUL-_R5x=kF-1JC0_C8Q1Q@mail.gmail.com>
+In-Reply-To: <CAHCN7xJ4TWpLmD_WRrEXoHWy52MEfUL-_R5x=kF-1JC0_C8Q1Q@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Fri, 5 Aug 2022 16:05:35 -0500
+Message-ID: <CAHCN7x+y9zrfs_wtptFNQW3+hcF2aeuqZY7xFs+gcGJNv334oQ@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        "robert.chiras@nxp.com" <robert.chiras@nxp.com>,
+        "laurentiu.palcu@nxp.com" <laurentiu.palcu@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Fri, Aug 5, 2022 at 7:56 AM Adam Ford <aford173@gmail.com> wrote:
+>
+> On Fri, Aug 5, 2022 at 5:55 AM Adam Ford <aford173@gmail.com> wrote:
+> >
+> > On Fri, Aug 5, 2022 at 3:44 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > >
+> > > Hi Adam and all,
+> > >
+> > > > Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+> > > >
+> > > > On Thu, Aug 4, 2022 at 9:52 AM Dave Stevenson
+> > > > <dave.stevenson@raspberrypi.com> wrote:
+> > > > >
+> > > > > On Thu, 4 Aug 2022 at 13:51, Marco Felsch <m.felsch@pengutronix.de>
+> > > > wrote:
+> > > > > >
+> > > > > > Hi Dave,
+> > > > > >
+> > > > > > On 22-08-04, Dave Stevenson wrote:
+> > > > > > > Hi Marco
+> > > > > > >
+> > > > > > > On Thu, 4 Aug 2022 at 10:38, Marco Felsch
+> > > > <m.felsch@pengutronix.de> wrote:
+> > > > > > > >
+> > > > > > > > Hi Dave, Adam,
+> > > > > > > >
+> > > > > > > > On 22-08-03, Dave Stevenson wrote:
+> > > > > > > > > Hi Adam
+> > > > > > > > >
+> > > > > > > > > On Wed, 3 Aug 2022 at 12:03, Adam Ford <aford173@gmail.com>
+> > > > wrote:
+> > > > > > > >
+> > > > > > > > ...
+> > > > > > > >
+> > > > > > > > > > > Did managed to get access to the ADV7535 programming
+> > > > > > > > > > > guide? This is the black box here. Let me check if I can
+> > > > > > > > > > > provide you a link with our repo so you can test our
+> > > > current DSIM state if you want.
+> > > > > > > > > >
+> > > > > > > > > > I do have access to the programming guide, but it's under
+> > > > > > > > > > NDA, but I'll try to answer questions if I can.
+> > > > > > > > >
+> > > > > > > > > Not meaning to butt in, but I have datasheets for ADV7533 and
+> > > > > > > > > 7535 from previously looking at these chips.
+> > > > > > > >
+> > > > > > > > Thanks for stepping into :)
+> > > > > > > >
+> > > > > > > > > Mine fairly plainly states:
+> > > > > > > > > "The DSI receiver input supports DSI video mode operation
+> > > > > > > > > only, and specifically, only supports nonburst mode with sync
+> > > > pulses".
+> > > > > > > >
+> > > > > > > > I've read this also, and we are working in nonburst mode with
+> > > > > > > > sync pulses. I have no access to an MIPI-DSI analyzer therefore
+> > > > > > > > I can't verify it.
+> > > > > > > >
+> > > > > > > > > Non-burst mode meaning that the DSI pixel rate MUST be the
+> > > > > > > > > same as the HDMI pixel rate.
+> > > > > > > >
+> > > > > > > > On DSI side you don't have a pixel-clock instead there is bit-
+> > > > clock.
+> > > > > > >
+> > > > > > > You have an effective pixel clock, with a fixed conversion for the
+> > > > > > > configuration.
+> > > > > > >
+> > > > > > > DSI bit-clock * number of lanes / bits_per_pixel = pixel rate.
+> > > > > > > 891Mbit/s * 4 lanes / 24bpp = 148.5 Mpixels/s
+> > > > > >
+> > > > > > Okay, I just checked the bandwidth which must equal.
+> > > > > >
+> > > > > > > As noted elsewhere, the DSI is DDR, so the clock lane itself is
+> > > > > > > only running at 891 / 2 = 445.5MHz.
+> > > > > > >
+> > > > > > > > > Section 6.1.1 "DSI Input Modes" of
+> > > > > > > > > adv7533_hardware_user_s_guide is even more explicit about the
+> > > > > > > > > requirement of DSI timing matching
+> > > > > > > >
+> > > > > > > > Is it possible to share the key points of the requirements?
+> > > > > > >
+> > > > > > > "Specifically the ADV7533 supports the Non-Burst Mode with syncs.
+> > > > > > > This mode requires real time data generation as a pulse packet
+> > > > > > > received becomes a pulse generated. Therefore this mode requires a
+> > > > > > > continuous stream of data with correct video timing to avoid any
+> > > > > > > visual artifacts."
+> > > > > > >
+> > > > > > > LP mode is supported on data lanes. Clock lane must remain in HS
+> > > > mode.
+> > > > > > >
+> > > > > > > "... the goal is to accurately convey DPI-type timing over DSI.
+> > > > > > > This includes matching DPI pixel-transmission rates, and widths of
+> > > > > > > timing events."
+> > > > > >
+> > > > > > Thanks for sharing.
+> > > > > >
+> > > > > > > > > The NXP kernel switching down to an hs_clk of 445.5MHz would
+> > > > > > > > > therefore be correct for 720p operation.
+> > > > > > > >
+> > > > > > > > It should be absolute no difference if you work on 891MHz with 2
+> > > > > > > > lanes or on 445.5 MHz with 4 lanes. What must be ensured is that
+> > > > > > > > you need the minimum required bandwidth which is roughly:
+> > > > > > > > 1280*720*24*60 = 1.327 GBps.
+> > > > > > >
+> > > > > > > Has someone changed the number of lanes in use? I'd missed that if
+> > > > > > > so, but I'll agree that 891MHz over 2 lanes should work for
+> > > > 720p60.
+> > > > > >
+> > > > > > The ADV driver is changing it autom. but this logic is somehow odd
+> > > > > > and there was already a approach to stop the driver doing this.
+> > > > >
+> > > > > I'd missed that bit in the driver where it appears to drop to 3 lanes
+> > > > > for pixel clock < 80000 via a mipi_dsi_detach and _attach. Quirky, but
+> > > > > probably the only way it can be achieved in the current framework.
+> > > > >
+> > > > > > To sync up: we have two problems:
+> > > > > >   1) The 720P mode with static DSI host configuration isn't working
+> > > > > >      without hacks.
+> > > > > >   2) The DSI link frequency should changed as soon as required
+> > > > > >      automatically. So we can provide all modes.
+> > > > > >
+> > > > > > I would concentrate on problem 1 first before moving on to the 2nd.
+> > > > >
+> > > > > If you change your link frequency, it may be worth trying a lower
+> > > > > resolution again such as 720x480 @ 60fps on 2 lanes. (720480@60 on 4
+> > > > > lanes is again listed as mandatory for using the timing generator).
+>
+> Marco,
+>
+> Looking through the DSIM driver that NXP uses, it appears that they
+> have a few special cases where they intentionally manipulate the DSIM
+> under certain conditions:
+>
+> /* '1280x720@60Hz' mode with 2 data lanes
+> * requires special fine tuning for DPHY
+> * TIMING config according to the tests.
+> */
+>
+> There is also a separate one for the 4-lane mode:
+>
+> /* workaround for CEA standard mode "1280x720@60" "1920x1080p24"
+> * display on 4 data lanes with Non-burst with sync
+> * pulse DSI mode, since use the standard horizontal
+> * timings cannot display correctly. And this code
+> * cannot be put into the dsim Bridge's mode_fixup,
+> * since the DSI device lane number change always
+> * happens after that.
+> */
+>
+> And lastly, they address issues with 3-lane mode:
+>
+> /* TODO: DSIM 3 lanes has some display issue, so
+> * avoid 3 lanes enable, and force data lanes to
+> * be 2.
+> */
+>
+> Since the ADV is trying to adjust the lanes to 3 when running at 720p,
+> it could be part of the reason you need to jump to 2-lane mode.
+>
+> > > > >
+> > > > > > > I have just noted that 720p59.94 at 24bpp on 4 lanes is listed as
+> > > > > > > one of the modes that is mandatory to use the timing generator
+> > > > > > > (reg 0x27 bit 7 = 1). On 2 lanes it is not required.
+> > > > > > > I don't know why it's referencing the 1000/1001 pixel clock rates
+> > > > > > > and not the base one, as it's only a base clock change with the
+> > > > > > > same timing (74.176MHz clock instead of 74.25MHz).
+> > > > > >
+> > > > > > Interesting! I would like to know how the HDMI block gets fetched by
+> > > > > > the DSI block and how the timing-generator can influence this in
+> > > > > > good/bad way. So that we know what DSI settings (freq, lanes) are
+> > > > sufficient.
+> > > > > >
+> > > > > > > > > If you do program the manual DSI divider register to allow a
+> > > > > > > > > DSI pixel rate of 148.5MHz vs HDMI pixel rate of 74.25MHz,
+> > > > > > > > > you'd be relying on
+> > > > > > > >
+> > > > > > > > There is no such DSI pixel rate to be precise, we only have a
+> > > > > > > > DSI bit clock/rate.
+> > > > > > > >
+> > > > > > > > > the ADV753x having at least a half-line FIFO between DSI rx
+> > > > > > > > > and HDMI tx to compensate for the differing data rates. I see
+> > > > > > > > > no reference to such, and I'd be surprised if it was more than
+> > > > > > > > > a half dozen pixels to compensate for the jitter in the cases
+> > > > > > > > > where the internal timing generator is mandatory due to
+> > > > fractional bytes.
+> > > > > > > >
+> > > > > > > > This is interesting and would proofs our assumption that the
+> > > > > > > > device don't have a FIFO :)
+> > > > > > > >
+> > > > > > > > Our assumptions (we don't have the datasheet/programming
+> > > > manual):
+> > > > > > > >   - HDMI part is fetching 3 bytes per HDMI pixclk
+> > > > > > > >   - Ratio between dsi-clk and hdmi-pixelclk must be 3 so the DSI
+> > > > and
+> > > > > > > >     HDMI are in sync. So from bandwidth pov there are no
+> > > > differences
+> > > > > > > >     between:
+> > > > > > > >       - HDMI: 74.25 MHz * 24 Bit  = 1782.0 MBit/s
+> > > > > > > >       - DSI:    891 MHz * 2 lanes = 1782.0 MBit/s (dsi-clock:
+> > > > 445.5 )
+> > > > > > > >       - DSI:  445.5 MHz * 4 lanes = 1782.0 MBit/s (dsi-clock:
+> > > > > > > > 222.75)
+> > > > > > > >
+> > > > > > > >     But the ratio is different and therefore the faster clocking
+> > > > option
+> > > > > > > >     let something 'overflow'.
+> > > > > > >
+> > > > > > > I'll agree that all looks consistent.
+> > > > > > >
+> > > > > > > > Anyway, but all this means that Adam should configure the
+> > > > > > > > burst-clock-rate to 445.5 and set the lanes to 4. But this
+> > > > > > > > doesn't work either and now we are back on my initial statement
+> > > > > > > > -> the driver needs some attention.
+> > > > > > >
+> > > > > > > Things always need attention :-)
+> > > > > >
+> > > > > > ^^
+> > > > > >
+> > > > > > > I suspect that it's the use of the timing generator that is the
+> > > > issue.
+> > > > > > > The programming guide does recommend using it for all modes, so
+> > > > > > > that would be a sensible first step.
+> > > > > >
+> > > > > > But I tested it without the timing-generator too. Can you or Adam
+> > > > > > verify the timing-generator diable logic?
+> > > > >
+> > > > > Sorry, running without the use of the timing generator is the issue.
+> > > > > It is mandatory in some modes, but supported in all modes. Always
+> > > > > using it should therefore avoid not using it in one of the mandatory
+> > > > > modes (the list looks a little arbitrary).
 
-The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
+I tested running various modes with the timing generator disable on an
+NXP kernel with functional video, and some of the video modes stopped
+operating or became blurry.  With the generator on, it appeared to
+make the issues go away, so I think it should be left on.
 
-  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
+> > > > >
+> > > > > > > I will say that we had a number of issues getting this chip to do
+> > > > > > > anything, and it generally seemed happier on 2 or 3 lanes instead
+> > > > > > > of 4. Suffice to say that we abandoned trying to use it, despite
+> > > > > > > some assistance from ADI.
+> > > > > >
+> > > > > > Even more interessting, what is your alternative to this chip?
+> > > > >
+> > > > > BCM2711 which supported dual HDMI natively.
+> > > > > Our investigation of ADV7535 was when trying to build what became
+> > > > > Pi400 using BCM2710/BCM2837 (only has a single HDMI output). Whilst I
+> > > > > do have the prototype, the ADV was wired up weirdly with I2C so I
+> > > > > never really got it running with Linux.
+> > > >
+> > > > I think I have convinced myself that the DSIM is working good enough to
+> > > > match that of the NXP.
+> > > >
+> > > > I've gone through and made a list of the register differences between a
+> > > > working display using NXP's kernel and the non-working display.  I've
+> > > > identified a small handful of registers on both the CEC bank of
+> > > > registers and main set of registers.
+> > > >
+> > > > I noticed that the working NXP version doesn't rescale the number of
+> > > > lanes based on the clock rate, and it stays fixed at 4 lanes.
+> > >
+> > > Does it mean theoretically rescale of lanes is not required??
+> >
+> > On the custom kernel from NXP, I can sync at 720p at 4-lanes.
+> > Unfortunately, I haven't yet been able to replicate all the register
+> > settings between my working version at 720p and my non-working
+> > version, and I still have yet to sync at 720p using the mainline
+> > adv7535 driver.  I am still wrokong on it.
+> >
+> > > At least 2 platforms can work with fixed 4 lanes@720p.
+>
+> Based on what I'm seeing for this NXP platform, it almost seems like
+> the DSI transmitter should make the determination on whether or not to
+> scale the number of lanes instead of having the ADV7373 do it.  Since
+> their custom kernel is able to do 720p in 4-lane mode with this part,
+> it doesn't seem unreasonable to me.
 
-are available in the Git repository at:
+I did a bunch of comparisons between registers for both the ADV7535
+and the DSIM, and it appears that the video information is somehow
+different between the working NXP kernel and non-working one.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git tags/mtd/for-5.20
+The two main differences are around the values of htotal  hfp.  Both
+the DSIM and the ADV7535 are using different values for htotal and the
+hfp between the kernels.  I am wondering if there is a bug in the 5.19
+driver which is fetching wrong info or somehow the data isn't being
+calculated properly because both the DSIM and the ADV timings match
+each other, but don't match the working kernel.
 
-for you to fetch changes up to 7ec4cdb321738d44ae5d405e7b6ac73dfbf99caa:
 
-  mtd: core: check partition before dereference (2022-08-01 21:33:11 +0200)
+720p Working on NXP:
 
-----------------------------------------------------------------
-MTD core changes:
-* Dynamic partition support
-* Fix deadlock in sm_ftl
-* Various refcount fixes in maps, partitions and parser code
-* Integer overflow fixes in mtdchar
-* Support for Sercomm partitions
+[   24.657957] sec_mipi_dsim_set_main_mode: vmode->hfront_porch 112 ->
+hfp_wc = 78
+[   24.665284] sec_mipi_dsim_set_main_mode: vmode->hsync_len 40 -> hsa_wc = 24
+[   24.681496] adv7511_dsi_config_timing_gen: htotal 1652
+[   24.691372] adv7511_dsi_config_timing_gen: hfp 112
 
-NAND driver changes:
-* Clockrate fix for arasan
-* Add ATO25D1GA support
-* Double free fix for meson driver
-* Fix probe/remove methods in cafe NAND
-* Support unprotected spare data pages in qcom_nandc
+720p Not working:
 
-SPI NOR core changes:
-* move SECT_4K_PMC flag out of the core as it's a vendor specific flag
-* s/addr_width/addr_nbytes: address width means the number of IO lines
-used for the address, whereas in the code it is used as the number of
-address bytes.
-* do not change nor->addr_nbytes at SFDP parsing time. At the SFDP parsing
-time we should not change members of struct spi_nor, but instead fill
-members of struct spi_nor_flash_parameters which could later on be used
-by the callers.
-* track flash's internal address mode so that we can use 4B opcodes
-together with opcodes that don't have a 4B opcode correspondent.
+[  106.424404] samsung_dsim_set_display_mode: vfp = 5
+[  106.429216] samsung_dsim_set_display_mode: bfp = 20
+[  106.441777] sec_mipi_dsim_set_main_mode: vmode->hfront_porch 110 ->
+hfp_wc = 77
+[  106.449221] sec_mipi_dsim_set_main_mode: vmode->hsync_len 40 -> hsa_wc = 24
+[  106.456314] LCD size = 1280x720
+[  106.470115] adv7511_dsi_config_timing_gen: htotal = 1650
+[  106.480707] adv7511_dsi_config_timing_gen: hfp = 110
 
-SPI NOR manufacturer drivers changes:
-* esmt: Rename "f25l32qa" flash name to "f25l32qa-2s".
-* micron-st: Skip FSR reading if SPI controller does not support it to
-allow flashes that support FSR to work even when attached to such SPI
-controllers.
-* spansion: Add s25hl-t/s25hs-t IDs and fixups.
-
-----------------------------------------------------------------
-Aidan MacDonald (1):
-      mtd: spinand: Add support for ATO25D1GA
-
-Amit Kumar Mahapatra (1):
-      mtd: rawnand: arasan: Update NAND bus clock instead of system clock
-
-Christian Marangi (6):
-      mtd: nand: raw: qcom_nandc: reorder qcom_nand_host struct
-      mtd: nand: raw: qcom_nandc: add support for unprotected spare data pages
-      dt-bindings: mtd: qcom_nandc: document qcom,boot-partitions binding
-      dt-bindings: mtd: partitions: support label/name only partition
-      dt-bindings: mtd: partitions: add additional example for qcom,smem-part
-      mtd: core: introduce of support for dynamic partitions
-
-Christophe JAILLET (1):
-      mtd: rawnand: meson: Fix a potential double free issue
-
-Duoming Zhou (1):
-      mtd: sm_ftl: Fix deadlock caused by cancel_work_sync in sm_release
-
-Geert Uytterhoeven (1):
-      mtd: hyperbus: rpc-if: Fix RPM imbalance in probe error path
-
-Jiang Jian (1):
-      mtd: rawnand: sm_common: drop unexpected word 'is' in the comments
-
-Mark Brown (1):
-      mtd: dataflash: Add SPI ID table
-
-Miaoqian Lin (4):
-      mtd: maps: Fix refcount leak in of_flash_probe_versatile
-      mtd: maps: Fix refcount leak in ap_flash_init
-      mtd: partitions: Fix refcount leak in parse_redboot_of
-      mtd: parsers: ofpart: Fix refcount leak in bcm4908_partitions_fw_offset
-
-Michael Walle (1):
-      mtd: spi-nor: move SECT_4K_PMC special handling
-
-Michał Kępień (2):
-      mtdchar: prevent integer overflow in a safety check
-      mtdchar: use kvmalloc() for potentially large allocations
-
-Mika Westerberg (1):
-      mtd: spi-nor: micron-st: Skip FSR reading if SPI controller does not support it
-
-Mikhail Zhilkin (1):
-      mtd: parsers: add support for Sercomm partitions
-
-Olga Kitaina (1):
-      mtd: rawnand: arasan: Fix clock rate in NV-DDR
-
-Patrice Chotard (1):
-      mtd: spi-nor: fix spi_nor_spimem_setup_op() call in spi_nor_erase_{sector,chip}()
-
-Peng Wu (1):
-      mtd: rawnand: cafe: fix drivers probe/remove methods
-
-Pratyush Yadav (1):
-      MAINTAINERS: Use my kernel.org email
-
-Richard Weinberger (2):
-      Merge remote-tracking branch 'korg_git/nand/next' into mtd/next
-      Merge tag 'spi-nor/for-5.20' into mtd/next
-
-Rob Herring (1):
-      dt-bindings: mtd: mxc-nand: Drop undocumented properties from example
-
-Sungbo Eo (1):
-      mtd: spi-nor: esmt: Use correct name of f25l32qa
-
-Takahiro Kuwano (3):
-      mtd: spi-nor: core: Return error code from set_4byte_addr_mode()
-      mtd: spi-nor: spansion: Add local function to discover page size
-      mtd: spi-nor: spansion: Add s25hl-t/s25hs-t IDs and fixups
-
-Tetsuo Handa (1):
-      mtd: core: check partition before dereference
-
-Tudor Ambarus (4):
-      mtd: spi-nor: s/addr_width/addr_nbytes
-      mtd: spi-nor: core: Shrink the storage size of the flash_info's addr_nbytes
-      mtd: spi-nor: Do not change nor->addr_nbytes at SFDP parsing time
-      mtd: spi-nor: core: Track flash's internal address mode
-
-Uwe Kleine-König (16):
-      mtd: hyperbus: Make hyperbus_unregister_device() return void
-      mtd: powernv_flash: Warn about failure to unregister mtd device
-      mtd: lpddr2_nvm: Warn about failure to unregister mtd device
-      mtd: spear_smi: Don't skip cleanup after mtd_device_unregister() failed
-      mtd: spear_smi: Drop if with an always false condition
-      mtd: rawnand: omap2: Suppress error message after WARN in .remove()
-      mtd: rawnand: tegra: Don't skip cleanup after mtd_device_unregister() failed
-      mtd: rawnand: meson: Don't skip cleanup after mtd_device_unregister() failed
-      mtd: rawnand: meson: Drop cleaning platform data in .remove()
-      mtd: physmap: Don't skip cleanup after mtd_device_unregister() failed
-      mtd: physmap: Drop if with an always false condition
-      mtd: rawnand: atmel: Warn about failure to unregister mtd device
-      mtd: st_spi_fsm: Add a clk_disable_unprepare() in .probe()'s error path
-      mtd: st_spi_fsm: Warn about failure to unregister mtd device
-      mtd: st_spi_fsm: Disable clock only after device was unregistered
-      mtd: st_spi_fsm: Simplify error checking in .probe() a bit
-
-Yang Yingliang (1):
-      mtd: parsers: scpart: add missing of_node_put() in scpart_parse()
-
- .../devicetree/bindings/mtd/mxc-nand.yaml          |   2 -
- .../bindings/mtd/partitions/partition.yaml         |  20 +-
- .../bindings/mtd/partitions/qcom,smem-part.yaml    |  27 ++
- .../devicetree/bindings/mtd/qcom,nandc.yaml        |  27 ++
- MAINTAINERS                                        |   2 +-
- drivers/mtd/devices/mtd_dataflash.c                |   8 +
- drivers/mtd/devices/powernv_flash.c                |   4 +-
- drivers/mtd/devices/spear_smi.c                    |  10 +-
- drivers/mtd/devices/st_spi_fsm.c                   |  23 +-
- drivers/mtd/hyperbus/hbmc-am654.c                  |   6 +-
- drivers/mtd/hyperbus/hyperbus-core.c               |   8 +-
- drivers/mtd/hyperbus/rpc-if.c                      |  13 +-
- drivers/mtd/lpddr/lpddr2_nvm.c                     |   4 +-
- drivers/mtd/maps/physmap-core.c                    |  13 +-
- drivers/mtd/maps/physmap-versatile.c               |   2 +
- drivers/mtd/mtdchar.c                              |  13 +-
- drivers/mtd/mtdcore.c                              |  63 +++++
- drivers/mtd/nand/raw/arasan-nand-controller.c      |  16 +-
- drivers/mtd/nand/raw/atmel/nand-controller.c       |   4 +-
- drivers/mtd/nand/raw/cafe_nand.c                   |   9 +-
- drivers/mtd/nand/raw/meson_nand.c                  |  17 +-
- drivers/mtd/nand/raw/omap2.c                       |   6 +-
- drivers/mtd/nand/raw/qcom_nandc.c                  | 306 +++++++++++++++++----
- drivers/mtd/nand/raw/sm_common.c                   |   2 +-
- drivers/mtd/nand/raw/tegra_nand.c                  |   5 +-
- drivers/mtd/nand/spi/Makefile                      |   2 +-
- drivers/mtd/nand/spi/ato.c                         |  86 ++++++
- drivers/mtd/nand/spi/core.c                        |   1 +
- drivers/mtd/parsers/Kconfig                        |   9 +
- drivers/mtd/parsers/Makefile                       |   1 +
- drivers/mtd/parsers/ofpart_bcm4908.c               |   3 +
- drivers/mtd/parsers/redboot.c                      |   1 +
- drivers/mtd/parsers/scpart.c                       | 249 +++++++++++++++++
- drivers/mtd/sm_ftl.c                               |   2 +-
- drivers/mtd/spi-nor/controllers/hisi-sfc.c         |   2 +-
- drivers/mtd/spi-nor/controllers/nxp-spifi.c        |   8 +-
- drivers/mtd/spi-nor/core.c                         |  70 +++--
- drivers/mtd/spi-nor/core.h                         |  21 +-
- drivers/mtd/spi-nor/debugfs.c                      |   2 +-
- drivers/mtd/spi-nor/esmt.c                         |   2 +-
- drivers/mtd/spi-nor/issi.c                         |  31 ++-
- drivers/mtd/spi-nor/micron-st.c                    |  12 +-
- drivers/mtd/spi-nor/otp.c                          |  12 +-
- drivers/mtd/spi-nor/sfdp.c                         |  34 +--
- drivers/mtd/spi-nor/spansion.c                     | 185 +++++++++++--
- drivers/mtd/spi-nor/xilinx.c                       |   2 +-
- include/linux/mtd/hyperbus.h                       |   4 +-
- include/linux/mtd/spi-nor.h                        |   4 +-
- include/linux/mtd/spinand.h                        |   1 +
- include/uapi/mtd/mtd-abi.h                         |   4 +-
- 50 files changed, 1108 insertions(+), 250 deletions(-)
- create mode 100644 drivers/mtd/nand/spi/ato.c
- create mode 100644 drivers/mtd/parsers/scpart.c
+adam
+>
+> > >
+> > > and looks like few platforms have display stability issue working with 4 lanes@720p,
+> > > so, as a workaround they changed to 3 lanes based on clock rate to make it work.
+> > >
+> > > Can you please confirm, is my understanding correct?
+> >
+> > That is my understanding.
+> >
+> > >
+> > > Note:
+> > >  On Renesas RZ/G2L platform, 720p with 3 lanes will work, but it needs
+> > >  different pll parameters to generate the dot clock to work.
+> >
+> > The NXP platform I am using also needs to regenerate the clock.  From
+> > what I can tell, it looks like the clock calculation on my board
+> > appears correct for both
+> > >
+> > > Cheers,
+> > > Biju

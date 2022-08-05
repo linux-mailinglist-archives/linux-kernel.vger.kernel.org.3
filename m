@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081CC58A615
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F80358A618
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 08:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237302AbiHEGr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 02:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S237477AbiHEGtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 02:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbiHEGry (ORCPT
+        with ESMTP id S237415AbiHEGtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 02:47:54 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7501017AA1
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 23:47:53 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id v7so2104357ljj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 23:47:53 -0700 (PDT)
+        Fri, 5 Aug 2022 02:49:23 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC556E8BE
+        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 23:49:21 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id t22so2183849lfg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 04 Aug 2022 23:49:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PmFeWvuOsvFqIarJirnBQu/eQawP6gPgXVaBOBY1IN0=;
-        b=yQYu0aCVNEnx/hdbtFW3QKhXozW4BMi0Gs2M9Ccc2vka9JnK2pizgjaYlUbZSGA8ML
-         paDCYOMnbya19+hsGsX+fwRSAlF45RoMdTayxjqtBWl7I0OgZWpVBuXc4f6aUa9TedzY
-         rE/HY54wpNEezB953AsgiH/oUxgGTBxrY6A2ySGrP+HH0f4IH14A2oN+9udx4aJvei0P
-         NKGkgXExFwyPM1sLVy/A8zzKf6e8/Rh4DTjCKEjNddFA276N0xPKIfN81vFBbh2Fveqi
-         OLhaG2kVzrKhYgNEb/9i3ogfjn5wNrAS/bMKU14EfTNUKuMqY+PriaUQFTBjp4GLJeqz
-         kUQA==
+        bh=7EUN6mgYtvmab9+9xYnDik55xkpctoRpJSTqZ3obc7k=;
+        b=N6mJm80XjBqVXo/IbXj00jmu8VAkJXLCcAR8tgQ2afEMNFyI3C0xjff96RfQlNiINh
+         zT7hZdHRCUBTy05f4IheB9Xu8cDFQB9rgKHj0rXwTscEpOrP4g7DhWCr3TxFULYIP6wm
+         y3iWiJ/3iT0c7Uvxxe4Tn/Y+elBahmPXmxch3HmW0KwA4/0tFhqt6WtfmQAUIIuJ4gq+
+         74203AVzxtXsTD9jx2LtwyCmlUajZnlw5wmKDeSHn3aeSd6OpO1iBpzwQPy1ncY6DMfC
+         R5bCFoeSD7zxJ6HBWO/EafXTwnIV8ByQ/AWHBWSh1tnaRhtfzW1wh/CCKSM0zZ5frdrQ
+         rD1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=PmFeWvuOsvFqIarJirnBQu/eQawP6gPgXVaBOBY1IN0=;
-        b=FpVXbidwqg+RhqnoAJTIECi5d9BwZj6Ya83N/M/A6pL+tyoiPclYStLLiCGBiZ8/hv
-         g56bPvqmqWSW0dqfOtpyJfK8mM8S8fzm0zh6xj2Xnj/MZS6+xeQLOCWmM170Csn7Kllv
-         8aorJZmKptJMrp4OMzotbMXY6nC0BywMcoza+Po/TKOAE/9z8Ou6ygMJHkfCe/GEyaSW
-         XYMhYwvjHOuOAregkFNftM+BfrIwnonqCSesMHD2VFAzl36YaokjLaollLj0PvJDjwXl
-         a/sU0eOiFP8NfWSFCoVBCuVpa/2S3wpoe66zPYY7t1zJZOgakXL4vZt0ez+AMy41Zpqw
-         PowA==
-X-Gm-Message-State: ACgBeo2HPPEXKVaP0HNm+jAsq4x4nG22AQTlczgjD7yLBBTrgNXCdV7c
-        JNBQwkYhYywCYjAbzzaaP6r4oQ==
-X-Google-Smtp-Source: AA6agR5eleQqymCQPIxFfTF3U1lX2Tm7Odlj4hz/7K77cIt/DGtNBXPIFt42ojhGNG/UpSvJEXAshw==
-X-Received: by 2002:a2e:bd03:0:b0:25e:6aca:ab1c with SMTP id n3-20020a2ebd03000000b0025e6acaab1cmr1643507ljq.479.1659682071839;
-        Thu, 04 Aug 2022 23:47:51 -0700 (PDT)
+        bh=7EUN6mgYtvmab9+9xYnDik55xkpctoRpJSTqZ3obc7k=;
+        b=zMTUE7iXas2nrMZE0lGK36ihaL0IWakcsfMzL6PDPadi4DXO/NlVEWk1tIjwgI9gR+
+         6R8S9TiLOhxbCK9Zp3W54e5707FLF6/g5fLQfdpaIqYGdKaecVmtgEVBkDVfcSFV0AkL
+         WKr3zSwiKJNeKkpmX4AeS1hGOIapX2ycGjuIsg+oDvETK6mCsFsZp5aqINbhzpCLG/b2
+         FO3fKTZ/EHvKefjUi+tIJOSLyIcI3Hw33AmxaY2D2EzqzmSpdZOx84VJlBemkCUwA9Ta
+         M2MUFhCQ5I+lwmDzEO8hNYghW133P4lsUxF23MQEJQHHsJJt3eT8yLzomw2Vzh+juRAU
+         x0Uw==
+X-Gm-Message-State: ACgBeo1NYFdzwcBTndmk9uZYYC5M1EwWn5BiAkaX5sL2aqDNT5Uf4v/l
+        ZFQ3xpukoO1vrPh4zr7F3r7b1g==
+X-Google-Smtp-Source: AA6agR47AKu8+Dquc1tvUBq64luu4Y6CBLJt42MI5yUUSbfwGNOzOKTHtmqOaeJQ19EmscutbMy61w==
+X-Received: by 2002:a05:6512:31d0:b0:48b:1262:23be with SMTP id j16-20020a05651231d000b0048b126223bemr1961478lfe.679.1659682160256;
+        Thu, 04 Aug 2022 23:49:20 -0700 (PDT)
 Received: from [192.168.1.6] ([77.222.167.48])
-        by smtp.gmail.com with ESMTPSA id s15-20020a056512214f00b0048b143c09c2sm359055lfr.259.2022.08.04.23.47.49
+        by smtp.gmail.com with ESMTPSA id o3-20020ac24e83000000b0047faab456cesm361251lfr.237.2022.08.04.23.49.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 23:47:50 -0700 (PDT)
-Message-ID: <86f726ab-d2a3-8ffa-87f0-2bf3dd37ae84@linaro.org>
-Date:   Fri, 5 Aug 2022 08:47:48 +0200
+        Thu, 04 Aug 2022 23:49:19 -0700 (PDT)
+Message-ID: <a83c5784-6c86-497c-78d8-1550e8add7ec@linaro.org>
+Date:   Fri, 5 Aug 2022 08:49:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
@@ -79,15 +79,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 05/08/2022 07:30, Naga Sureshkumar Relli wrote:
-> Microchip's PolarFire SoC QSPI IP core is based on coreQSPI,
-> so add coreqspi as a fallback to mpfs-qspi.
-> 
-> Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-> ---
+> diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> index a47d4923b51b..84d32c1a4d60 100644
+> --- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> @@ -18,10 +18,12 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - microchip,mpfs-spi
+> -      - microchip,mpfs-qspi
+> -      - microchip,coreqspi-rtl-v2 # FPGA QSPI
+> +   oneOf:
+> +    - items:
+> +        - const: microchip,mpfs-qspi
+> +        - const: microchip,coreqspi-rtl-v2
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+Eh, this does not make sense after looking at your driver...
 
 Best regards,
 Krzysztof

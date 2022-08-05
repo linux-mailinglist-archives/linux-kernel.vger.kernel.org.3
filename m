@@ -2,87 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D0558A4C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 04:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D50458A4CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 04:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235846AbiHECkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 4 Aug 2022 22:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S232108AbiHECmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 4 Aug 2022 22:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiHECkS (ORCPT
+        with ESMTP id S231175AbiHECmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 4 Aug 2022 22:40:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEBB1105
-        for <linux-kernel@vger.kernel.org>; Thu,  4 Aug 2022 19:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 382E2B827DC
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 02:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B58F0C433D6;
-        Fri,  5 Aug 2022 02:40:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659667213;
-        bh=rGqPr+ZYa5Fa9SDIlx0KLNnQD/6z8SqgTSiv57flWPw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=alZHoTP15EG0WWNphvOQxyYpbaNuqohYxtoCC3sIoyi3XilpEk4fzcAkICbMNYeLC
-         H2JQN7LuiHAEJ+tmvtC19V5lY8rh0Zk1iCW1OcLqr/Oix2AEwCO1gCjCjXNRxQYHKZ
-         NZ0HvQQm9nwyIXRqI19+XZMHqvxf8PPresgfTo+JmVPUNJYBotFzACI09MJ+StkWk9
-         wJnpe1Qd4ccKwRz+bs6VvyigqP7Vrvemt9R955A8Mbf4oRv4fzcsD7AOK7NOv3NyvD
-         C5D416LljpRCKUqFCUMWhztR4TyxYWAO/2F/VKjjVkNPLB3A0VJbU/lMna/p92yOxv
-         xHs6q/JjfhUgA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99C49C43140;
-        Fri,  5 Aug 2022 02:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 4 Aug 2022 22:42:07 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AC624F21;
+        Thu,  4 Aug 2022 19:42:05 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so235329pjm.3;
+        Thu, 04 Aug 2022 19:42:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=cAnfyTe4YbIMA28amHKuN6if+IaEiolejn/27PV5VqY=;
+        b=lUc+4VDVAdsjt6H14ZWSKd1i+qBr7Hb88ZxVLb4IsOin5KUeVWCLgMlwygYepdj1A+
+         NuNjgOr38+tVUhkQWwNB9MriD5s90Y+jjIIoIbeikj67CWgzy40BpPuJCrrxAEWl2Of+
+         vpN2DMi6xHrX5Lkjfpd8emSfz2nea+vvJhiZ7a7PIcWJM+GU9kU9pdIaMgd1wJC9Os6g
+         tPwkiCodcuE0khDkKrPocsRoj1bj6fEeHVHcR1NA3/OVKiOrNhohCjNSvFDvqb5WOGUL
+         hdg9AB9RE8L6zXe1vDvdiVrcojsoUBhN2w43IqSk5c/s3FJUcSavDDzGcEhXpWb2SYWz
+         PpWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=cAnfyTe4YbIMA28amHKuN6if+IaEiolejn/27PV5VqY=;
+        b=i/xsaQkqzH0XovTZnhKet5mp0A5MGQsXtMxQn30d2cwMxwpuCcGv6RpJFi++GBA1wx
+         sO6WoW5ZE5Z0AKonozS2LNoDzbDSl9+Dzl8SaetOUVHHt+LJrg7ZDw+15VxSIrLJBVf5
+         RlLSpNCJxv6AABIUEufo+UeayTqC6sFMaslKisbHc6X2F0GVvo61YLcp6V+Cub2jY9LD
+         9jf6GtUb2TWf5EQD3gNjyisGtZFzy1DibCR/E9pNzyHMVmPxfXjVGw+TJyViW57p3mQI
+         dhRD78mnYI1GQIHmfUcOMqA1h+SQr00FNyEy8IhxT1+XOqVfQkeCFC0N7JAv4TL8UwNZ
+         6wJw==
+X-Gm-Message-State: ACgBeo3GdIkis0OUhWCUSPqBBx5hLS5TMUaYfCPD12STF8Rqkl+7aUUD
+        9zrOPwQC24dqs0Q2aRHZsow=
+X-Google-Smtp-Source: AA6agR6y1NDXxAWoYZHxDWmR88V6IAx6+xw5lqqQWQxl15yElLKFhOQfxPZSXCe7ygeQN4x5rENU9Q==
+X-Received: by 2002:a17:90b:1bd0:b0:1f5:32a7:2bc8 with SMTP id oa16-20020a17090b1bd000b001f532a72bc8mr5055608pjb.61.1659667324520;
+        Thu, 04 Aug 2022 19:42:04 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-7.three.co.id. [180.214.232.7])
+        by smtp.gmail.com with ESMTPSA id iz19-20020a170902ef9300b0016d150c6c6dsm1695574plb.45.2022.08.04.19.42.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 19:42:04 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9E808103824; Fri,  5 Aug 2022 09:41:59 +0700 (WIB)
+Date:   Fri, 5 Aug 2022 09:41:58 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Huang Shijie <shijie@os.amperecomputing.com>
+Cc:     bhelgaas@google.com, patches@amperecomputing.com,
+        zwang@amperecomputing.com, darren@os.amperecomputing.com,
+        corbet@lwn.net, yangyicong@hisilicon.com,
+        linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: update the link for aer-inject git tree
+Message-ID: <YuyDdtIC8r8k/QDd@debian.me>
+References: <20220804103008.1960215-1-shijie@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v1] platform/chrome: cros_ec_proto: Update version on
- GET_NEXT_EVENT failure
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165966721362.15379.12989245947386222213.git-patchwork-notify@kernel.org>
-Date:   Fri, 05 Aug 2022 02:40:13 +0000
-References: <20220802154128.21175-1-pdk@semihalf.com>
-In-Reply-To: <20220802154128.21175-1-pdk@semihalf.com>
-To:     Patryk Duda <pdk@semihalf.com>
-Cc:     bleung@chromium.org, groeck@chromium.org, gwendal@google.com,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        upstream@semihalf.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220804103008.1960215-1-shijie@os.amperecomputing.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
-
-On Tue,  2 Aug 2022 17:41:28 +0200 you wrote:
-> Some EC based devices (e.g. Fingerpint MCU) can jump to RO part of the
-> firmware (intentionally or due to device reboot). The RO part doesn't
-> change during the device lifecycle, so it won't support newer version
-> of EC_CMD_GET_NEXT_EVENT command.
+On Thu, Aug 04, 2022 at 10:30:08AM +0000, Huang Shijie wrote:
+> The aer-inject tree has been moved to:
+>     https://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git
 > 
-> Function cros_ec_query_all() is responsible for finding maximum
-> supported MKBP event version. It's usually called when the device is
-> running RW part of the firmware, so the command version can be
-> potentially higher than version supported by the RO.
+> This patch updates the links.
 > 
-> [...]
 
-Here is the summary with links:
-  - [v1] platform/chrome: cros_ec_proto: Update version on GET_NEXT_EVENT failure
-    https://git.kernel.org/chrome-platform/c/c2b1dc63ba41
+What you wrote above is descriptive mood (this does something) instead
+of imperative mood (do something). Better say "The aer-inject tree has
+been moved to <tree link>. Update the links."
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+An old man doll... just what I always wanted! - Clara

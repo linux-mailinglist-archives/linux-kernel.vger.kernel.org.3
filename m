@@ -2,67 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506A658A975
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 12:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2B858A97E
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 12:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240548AbiHEK0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 06:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
+        id S235713AbiHEKaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 06:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235062AbiHEK0j (ORCPT
+        with ESMTP id S236199AbiHEKa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 06:26:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BACB1F2DD
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 03:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659695197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=VM1CrAZwmo9IxcxMWGbg5M1gbxuV+2l4DzbmfYuxkp6RcMA42vKca8nQ4l1sdWbyVZHKzD
-        JOjqsDcTQL7a+7ESgnHBDEfhTtmzcjI6deFRTIPHXKRm00rX+SPgdd7POHp+eAw4QncNx0
-        g/tHNbHRJZf5CFrlrkBazk5Lg9KMXTE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-5a5Bq0vINuulVWWeCTUw7g-1; Fri, 05 Aug 2022 06:26:34 -0400
-X-MC-Unique: 5a5Bq0vINuulVWWeCTUw7g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 097F585A585;
-        Fri,  5 Aug 2022 10:26:34 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 89D9E2026D4C;
-        Fri,  5 Aug 2022 10:26:33 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        jmattson@google.com, joro@8bytes.org, wanpengli@tencent.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: X86: Explicitly set the 'fault.async_page_fault' value in kvm_fixup_and_inject_pf_error().
-Date:   Fri,  5 Aug 2022 06:26:31 -0400
-Message-Id: <20220805102631.1423861-1-pbonzini@redhat.com>
-In-Reply-To: <20220718074756.53788-1-yu.c.zhang@linux.intel.com>
-References: 
+        Fri, 5 Aug 2022 06:30:29 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8E511162;
+        Fri,  5 Aug 2022 03:30:28 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id r1-20020a05600c35c100b003a326685e7cso3728686wmq.1;
+        Fri, 05 Aug 2022 03:30:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=+IEVdmP51rnzVA/x8YfipRlkpoA1oQ5jbgQSu+6DecI=;
+        b=QX+4ptbOt00Pnh5p456T0hXo1mbbOetLQgh2yaE0O/bFnru5ihpFplnbLtVLZKo9dP
+         RWPox3wWC28s9dBCixgjwjWFfUeTg3Tk/9U4SfbqUi2uq4LBV/M3g8eiq53AS9iFgBuC
+         mVYpoBToEiB2lYSxvTsfjP4akaIdg4jbENK5xg++UyvS1NeMPrtbtaVSNLqjpXabLd1W
+         NOattS1neMx8iE4kehxfJDOij2Sdy3APtbWcN+TElKppwvlYKcMR/mmgsZvemaJi+11Y
+         rsjlA1hqjCavuIdxw+rHElMHMWQsLoaR+8ZsrgTR1H4hyfxjOZ57DN1/+UF6+VRzJAXi
+         NO+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=+IEVdmP51rnzVA/x8YfipRlkpoA1oQ5jbgQSu+6DecI=;
+        b=ke5rKn/RNNZM4H6EIxJjtOv5STwjSqtdD7Yg/kgyZdsQhupVACoH90i4DkGjAZEce7
+         KiK6S16er2RdHCBLJd2EUDKFjdEXGz5tKUUyE64Y99hhwmQH8UDFyBooKuT8FFPP3pCc
+         5KqB6Uh2cr/htluOKQKk/Nl6prDrIQXjoFnGTlPhtJN4G9yUgxF1wSNdeH2RGRpBjj1F
+         cW7K0M0hmPft3aSJ3grCJONtqjNNYME9u91pXbNuw6Y2ibqvZf3sJDfRZl/lxsfc9yW0
+         MF9g1QUufipaAD8Zc4ON8EfHscrNkHYsKMr+EF6sBNPRQWsQkUL1ri2w+bsDJv5/uZix
+         ArHQ==
+X-Gm-Message-State: ACgBeo3nlTQ5UzBPKoAMJApx3cMaoNnECzDVxc1dwkv8q5kPSNpB8atZ
+        m/sNH8lr9ZcCI0GMGCe3saUIL3DdNuA=
+X-Google-Smtp-Source: AA6agR5y0uTwhEoLiv5aV1D/OQr6ZSFk/w8nrKlMpQ9AmguCqGaMlV60oTBGq0IX0fc7Uzy3FevQ8w==
+X-Received: by 2002:a05:600c:4113:b0:3a3:4b67:d086 with SMTP id j19-20020a05600c411300b003a34b67d086mr8890943wmi.20.1659695426462;
+        Fri, 05 Aug 2022 03:30:26 -0700 (PDT)
+Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id r6-20020a5d4e46000000b0021f0c05859esm3512969wrt.71.2022.08.05.03.30.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 03:30:25 -0700 (PDT)
+Date:   Fri, 5 Aug 2022 11:30:18 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: mainline build failure due to c4371c563973 ("gpio: remove VR41XX
+ related gpio driver")
+Message-ID: <YuzxOoNLdE4Ejz1W@debian>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
+Hi All,
 
-Paolo
+The latest mainline kernel branch fails to build for mips tb0226_defconfig
+with the error:
+
+mipsel-linux-ld: arch/mips/pci/fixup-tb0226.o: in function `pcibios_map_irq':
+fixup-tb0226.c:(.text+0x38): undefined reference to `vr41xx_set_irq_trigger'
+mipsel-linux-ld: fixup-tb0226.c:(.text+0x44): undefined reference to `vr41xx_set_irq_level'
+mipsel-linux-ld: fixup-tb0226.c:(.text+0x64): undefined reference to `vr41xx_set_irq_trigger'
+mipsel-linux-ld: fixup-tb0226.c:(.text+0x70): undefined reference to `vr41xx_set_irq_level'
+mipsel-linux-ld: fixup-tb0226.c:(.text+0xb0): undefined reference to `vr41xx_set_irq_trigger'
+mipsel-linux-ld: fixup-tb0226.c:(.text+0xbc): undefined reference to `vr41xx_set_irq_level'
+mipsel-linux-ld: fixup-tb0226.c:(.text+0xd4): undefined reference to `vr41xx_set_irq_trigger'
+mipsel-linux-ld: fixup-tb0226.c:(.text+0xe0): undefined reference to `vr41xx_set_irq_level'
+mipsel-linux-ld: fixup-tb0226.c:(.text+0xf4): undefined reference to `vr41xx_set_irq_trigger'
+mipsel-linux-ld: fixup-tb0226.c:(.text+0x100): undefined reference to `vr41xx_set_irq_level'
+
+git bisect pointed to c4371c563973 ("gpio: remove VR41XX related gpio driver")
+
+And, reverting that commit has fixed the build failure.
+
+I will be happy to test any patch or provide any extra log if needed.
 
 
+--
+Regards
+Sudip

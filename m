@@ -2,136 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AA158AA76
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 14:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4EB58AA77
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 14:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbiHEMED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 08:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
+        id S240622AbiHEMEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 08:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiHEMEB (ORCPT
+        with ESMTP id S230169AbiHEMEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 08:04:01 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80043.outbound.protection.outlook.com [40.107.8.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E96140ED;
-        Fri,  5 Aug 2022 05:03:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QL1Eb22yzLGU1z76UJcfyWb1PGTbjaK95ajYf5H5m0OwKbcJBw2yiCj9POpU/L8A5GVXNsJpe6jbSZKa/5C7CPFgMozI/9mZLT+7+ngsVmPFdygWk7LiMTZdltD/Ghh3/m7HOufi675bw1r8ofsIavFmUzmcaneaTuTi9Cdwo49gVZMmfCNiXM2K30lik5+5NLiIVfwT41DO0Vzjfc+0/6JHPy/Mq+lcOZLFupGfr/gUhhoqyfTMfE5RkQE/kNStiAFjnXSqxIedFLTcDa05nbf3+HqPAT0zNJ4t+52+ZkzMJr6pISX9gjMKuHwTJnsgyVqrBQtbt5QykX8N+WUfZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wrqnvOYYg3EExQWLYkdvzrKyXZv0psz6SCt5+a1YYww=;
- b=X/8M/qqvqpsqUVMBZPafKUHljfmdPuTA+yKDOFHPiqYCFpchFNN7C/ufj4gNjimdnmmuzXy8pbk+D6N50ff5ZQHNEve6xnMPlb+6EDW09eM7/jFfUCw9no3VyI6nHuee4LdtmbRHOz4QWz5hsl5Er10fbsPl8EGw3Y1JT/lho4BrFOozDLWWIR2Frhgt96DIMzwIsHsaJEs3g7c+zJkZUr9pjunkoJD47EdSQy2ncArddIg05OoQ9ckymsXjF/skvZo6dYcjYm8nW1y998Hi+jHgVbWBBagI3OJ5iznr343h3f5fVAAxTovTKhZm6IVR3nAHyqRFWU9ZX5DQ+Naf4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.73) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wrqnvOYYg3EExQWLYkdvzrKyXZv0psz6SCt5+a1YYww=;
- b=zwIU0U8ryYHh1ReMwimQjYr+LQkFSEUMfzxIc/g+03tbcGWTjKmi4Kev/esKzvYm1XqoS/OmLPDda/bM9xqUUlMqGEWUyreQ1z85umBHFodoIi1pA9hsj8n9AVkjK4jF0KKGM20KCsy//uskUpBLLk4tjNh2NvYnvd47RcTMlZ9dSZp5aUVwL4+hdPSqcCdcxWdODOMlHztHfuY/nD40BOmpsHUa7dnbqDvhJw5ry4lWdOy9rZVtJoyJYCk+IJUiKJl8PpkZqA0WydIPTjAvv31d5pSlUl4EMJ/2peV/hMHTIeJcQWWI8gWSmjUauvriCC31T7zmuL2lhqldH7bGLQ==
-Received: from GV3P280CA0111.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:8::28) by
- AS1PR10MB5413.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4af::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Fri, 5 Aug
- 2022 12:03:56 +0000
-Received: from HE1EUR01FT004.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:150:8:cafe::a4) by GV3P280CA0111.outlook.office365.com
- (2603:10a6:150:8::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14 via Frontend
- Transport; Fri, 5 Aug 2022 12:03:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.73; helo=hybrid.siemens.com; pr=C
-Received: from hybrid.siemens.com (194.138.21.73) by
- HE1EUR01FT004.mail.protection.outlook.com (10.152.1.233) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5504.14 via Frontend Transport; Fri, 5 Aug 2022 12:03:55 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.9; Fri, 5 Aug 2022 14:03:55 +0200
-Received: from md1za8fc.ad001.siemens.net (139.25.0.80) by
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.9; Fri, 5 Aug 2022 14:03:54 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, <linux-leds@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Henning Schild <henning.schild@siemens.com>
-Subject: [PATCH] leds: simatic-ipc-leds-gpio: make sure we have the GPIO providing driver
-Date:   Fri, 5 Aug 2022 14:03:43 +0200
-Message-ID: <20220805120343.5027-1-henning.schild@siemens.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 5 Aug 2022 08:04:43 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5451B140ED;
+        Fri,  5 Aug 2022 05:04:42 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id n185so1317970wmn.4;
+        Fri, 05 Aug 2022 05:04:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=jmupmgL/y2HrrDUu//62/jqyRcBAlD1KYeBUZ5VB29Q=;
+        b=b8qEIFbxhE6kPRN0WZdb4m+PaZL+4KC/1yg4Gz1Jce1OEuy99CmL5Vr5idAf9saHWg
+         VsETqlLVqRi/tNA2+I79MkFR7H8+WG4DPKeJqZ0FnRNpctc1ZauGLyXzwmscDeA6mtyh
+         txBplgaDJZoVpBgskaKuoCBKug8rJHmh9nv/tE/XH+PnT+6kQ/hIyHQ19uiwK5fKrEEK
+         OkKgBZYACjruR0Wpg/U72t4BJz6Im4q0NOfWhzThXI/R+UHMj5Rw2AI8xGdMoYOWf+XP
+         /6gi4lnAE9eAjE+g6+cas3xASUIIckjfF42pCqLuXb5W4Il+vhXHG4E7ngQcwXC15c2l
+         SRHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=jmupmgL/y2HrrDUu//62/jqyRcBAlD1KYeBUZ5VB29Q=;
+        b=8Q4EseuGUMBYQX0mzcWD7CH6OOyKS7Brz2OdFzPRJttfIBIG5LBUcyzqWxGCDMjCvb
+         3FgxrclHSAp/ldp/LbGTK9uxy5b+4PUO+tA5h+6e0nvMBqMZzJis9zwyKbqV/orNPmYB
+         +7FasIW7AZdMYXIOlAqF3YVTmMZtsIZHieHUqpLA0Ze78rsZCN4fUJCbeIFs6KiD68zA
+         aLLa6SxogojeqyxhAAAUstheHG+pAIj8cb816DBHQJat/xmzBj43Gx7ym7JJAOWjgm7U
+         HBzpFlu80mWtCqewZ/Wk/74Klz/OubjWXWo/LCsaOftJR/nfV/VXvFDMfK2oFjc3ryGT
+         SRtw==
+X-Gm-Message-State: ACgBeo2RNJgmD0AIs6FK1PGzYAKaFYAvuSjmj0gQSw4WIs8ceSEAUy+u
+        X5Yx0+4MBrRRr3IDX0/DKv8=
+X-Google-Smtp-Source: AA6agR6u9Puh26OFXNYNA2fGhuTHgRV6hSXWlKH1p0IlWaXaoWvPpuNub8BzWmlWTKsp2X5M9NTADw==
+X-Received: by 2002:a7b:c7cd:0:b0:3a3:8f1:8aeb with SMTP id z13-20020a7bc7cd000000b003a308f18aebmr9227015wmk.90.1659701080818;
+        Fri, 05 Aug 2022 05:04:40 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id m8-20020a7bca48000000b003a3442f1229sm8977412wml.29.2022.08.05.05.04.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 05:04:40 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: ice1712: remove redundant assignment to new
+Date:   Fri,  5 Aug 2022 13:04:39 +0100
+Message-Id: <20220805120439.2341600-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [139.25.0.80]
-X-ClientProxiedBy: DEMCHDC89XA.ad011.siemens.net (139.25.226.103) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 15e9dfe4-9f90-4630-e6ca-08da76da9289
-X-MS-TrafficTypeDiagnostic: AS1PR10MB5413:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YHJaVW6vbEFC57cdQI0gpP2jA/CB0aquNtr/i9bHGk1td+hglSpZr9KNDn1DuY3Jlpl7uumHpitwZN92xgEe9XzC57NVciaG1RdTZ5d5XCmMaVUvHeTmkqsItD8meOFS0W0vAInOT/EkfPNMns56GIBps0gZx7+fYhWC0Mmgi9S+tq5mJVl1oWV/GQbd9Z1Ez5+KfIEWkRe9lDHh6XnuPdnfAiNnqnCCkS3o4nxz8SjLWLzQooJQUSVX2rlNIjUwYfwTql2RfTIMlkDhtsTgVtrwPUXEwfEySmET1URTm11CCEi+lkv1aSzbfPTvNi3kXZi7M7dRozqXnavn12O2hw1+8bl3k8Z/1a+hrxMDIk9Js4GSVOalJCKvor17/FKMWoxB3VnY2DYSo9nwrj64D3blwsxclrz4kAIOLar2VyonaBuyYy/2f5PH9CYmeEGG2Tb5O/RDxsk+f0z/VkQaLlScYsB/BMRIUaPt4qpaxA9P2sP77bLNhQ4uowv0jeW1oEax5wdO+YbcGeE3HGiFRLENSWqgi/pQN41urHrVZeNsKMTIOHu2/CIDR0ZWGciHkrbfRAQOP84uV3kybnZUvryHDBqlOrWUpzfJ67V18E1aOeStylxi9NssY/c1/MsJ+iKHCnsKQqJNeKlklGtd4axOUn7Rpi1yY1p5wTUjYLhhbe2QfSqrhu4Zkg6vfkIggKBLoGSLzy38yEEtfTzgMu2ojg/Y8dRm+HIGpvy7pTUwB2UhuLl1w0Z+MkMwngzoWfjiMqoBQdG5JdHC5YzUc6s7/R/9rKjfUyH4U4uHRoKB91nM6Gk5s4Vi9KmanvKOdFDNpD5yqiWpTXfntDj+hw==
-X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(136003)(346002)(376002)(36840700001)(46966006)(40470700004)(40480700001)(36860700001)(83380400001)(186003)(82310400005)(956004)(2616005)(36756003)(16526019)(110136005)(336012)(47076005)(82740400003)(356005)(1076003)(107886003)(26005)(82960400001)(81166007)(316002)(478600001)(86362001)(41300700001)(6666004)(2906002)(5660300002)(40460700003)(44832011)(8936002)(8676002)(4326008)(70586007)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2022 12:03:55.8868
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15e9dfe4-9f90-4630-e6ca-08da76da9289
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT004.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR10MB5413
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we register a "leds-gpio" platform device for GPIO pins that do not
-exist we get a -EPROBE_DEFER and the probe will be tried again later.
-If there is not driver to provide that pin we will poll forever and also
-create a lot of log messages.
+The variable new is initialized with a value but it is never read. It is
+being re-assigned a new value in every case path in the following switch
+statement. The assignment is redundant and can be removed.
 
-So check if that GPIO driver is configured, if so it will come up
-eventually. If not we exit our probe function early and do not even
-bother registering the "leds-gpio". This method was chosen over "Kconfig
-depends" since this way we can add support for more devices and GPIO
-backends more easily without "depends"ing on all GPIO backends.
+Cleans up clang scan build warning:
+sound/pci/ice1712/quartet.c:569:8: warning: Although the value stored
+to 'new' is used in the enclosing expression, the value is never actually
+read from 'new' [deadcode.DeadStores]
 
-Signed-off-by: Henning Schild <henning.schild@siemens.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
- 1 file changed, 2 insertions(+)
+ sound/pci/ice1712/quartet.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio.c b/drivers/leds/simple/simatic-ipc-leds-gpio.c
-index 4c9e663a90ba..0c96ba98e338 100644
---- a/drivers/leds/simple/simatic-ipc-leds-gpio.c
-+++ b/drivers/leds/simple/simatic-ipc-leds-gpio.c
-@@ -57,6 +57,8 @@ static int simatic_ipc_leds_gpio_probe(struct platform_device *pdev)
- 	struct gpio_desc *gpiod;
- 	int err;
- 
-+	if (!IS_ENABLED(CONFIG_PINCTRL_BROXTON))
-+		return -ENODEV;
- 	gpiod_add_lookup_table(&simatic_ipc_led_gpio_table);
- 	simatic_leds_pdev = platform_device_register_resndata(NULL,
- 		"leds-gpio", PLATFORM_DEVID_NONE, NULL, 0,
+diff --git a/sound/pci/ice1712/quartet.c b/sound/pci/ice1712/quartet.c
+index 0dfa093f7dca..20b3e8f94719 100644
+--- a/sound/pci/ice1712/quartet.c
++++ b/sound/pci/ice1712/quartet.c
+@@ -566,7 +566,7 @@ static int qtet_ain12_sw_put(struct snd_kcontrol *kcontrol,
+ {
+ 	struct snd_ice1712 *ice = snd_kcontrol_chip(kcontrol);
+ 	unsigned int old, new, tmp, masked_old;
+-	old = new = get_scr(ice);
++	old = get_scr(ice);
+ 	masked_old = old & (SCR_AIN12_SEL1 | SCR_AIN12_SEL0);
+ 	tmp = ucontrol->value.integer.value[0];
+ 	if (tmp == 2)
 -- 
-2.35.1
+2.35.3
 

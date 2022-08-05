@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A197758B009
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 20:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAAD58B013
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 20:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241239AbiHESun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 14:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S240926AbiHESxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 14:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240985AbiHESui (ORCPT
+        with ESMTP id S236448AbiHESxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 14:50:38 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6391CB28
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 11:50:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=N40CH4N73F1aD5pR/zImIWWFoHIInIlo6IUf8Y19MV0=; b=N6rJq8jMhgWcZ3MLB16mRqHuVE
-        wHqstFKdhqAwhAarzMyJAF+t0mABjjawok3vFmh+pnewjj5k7atDabLw1ABjKta/ovvQtQvq5P6VP
-        hxq70zWICpQEV2dSGHz1/tDKiRZNAHx6Dh4RQlVIe6/00LZ5NgagidUCpGiwUTRJCb/maR2eEUOlM
-        XdWvV8yl9j6MIUGofJ8JRDAbvOZ18v1wMxoaqA5OGpxZkWorOhNBWC6fuuRSn/lUK/2dc9yAn3qhD
-        kNnFw9KQIFPg3hwPAoWrGlgWVsAyFKQfr0srcQOiHHhxBLcbvKraQOBCBFIHn+bMQ9sJi4Dj37xVH
-        xpA/fCrw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oK2Ou-00BUBv-EF; Fri, 05 Aug 2022 18:50:24 +0000
-Date:   Fri, 5 Aug 2022 19:50:24 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     alexlzhu@fb.com
-Cc:     linux-mm@kvack.org, kernel-team@fb.com,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-Subject: Re: [PATCH v3] mm: add thp_utilization metrics to
- /proc/thp_utilization
-Message-ID: <Yu1mcD6Jp4fCVEMi@casper.infradead.org>
-References: <20220805184016.2926168-1-alexlzhu@fb.com>
+        Fri, 5 Aug 2022 14:53:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1831C1570F
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 11:53:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A812A619D9
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 18:53:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 551F0C433D7;
+        Fri,  5 Aug 2022 18:53:35 +0000 (UTC)
+Date:   Fri, 5 Aug 2022 14:53:33 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     Daniel Dao <dqminh@cloudflare.com>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: 5.15 ftrace bug when enabling function_graph
+Message-ID: <20220805145333.1360dbbb@gandalf.local.home>
+In-Reply-To: <CABWYdi1aKXWDjT+-aAQvn7eLcySbmeEucVS+8RAbUPE+bprK6A@mail.gmail.com>
+References: <CA+wXwBQ-VhK+hpBtYtyZP-NiX4g8fqRRWithFOHQW-0coQ3vLg@mail.gmail.com>
+        <20220223115457.7bb575c1@gandalf.local.home>
+        <CABWYdi1aKXWDjT+-aAQvn7eLcySbmeEucVS+8RAbUPE+bprK6A@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220805184016.2926168-1-alexlzhu@fb.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 11:40:16AM -0700, alexlzhu@fb.com wrote:
-> THPs have historically been enabled on a per application basis due to
-> performance increase or decrease depending on how the particular
-> application uses physical memory. When THPs are heavily utilized,
-> application performance improves due to fewer TLB cache misses.
-> It has long been suspected that performance regressions when THP
-> is enabled happens due to heavily underutilized anonymous THPs.
-> 
-> Previously there was no way to track how much of a THP is
-> actually being used. With this change, we seek to gain visibility
-> into the utilization of THPs in order to make more intelligent
-> decisions regarding paging.
-> 
-> This change introduces a tool that scans through all of physical
-> memory for anonymous THPs and groups them into buckets based
-> on utilization. It also includes an interface under
-> /proc/thp_utilization.
+On Fri, 5 Aug 2022 11:37:56 -0700
+Ivan Babrou <ivan@cloudflare.com> wrote:
 
-OK, so I understand why we want to do the scanning, but why do we want to
-report it to userspace at all?  And if we do, why do we want to do it in
-this format?  AFAIK, there's nothing userspace can do with the information
-"93% of your THPs are underutilised".  If there was something userspace
-could do about it, wouldn't it need to know which ones?
+> root@foo:~# echo 'bpf_dispatcher_*_func' >
+> /sys/kernel/tracing/set_ftrace_notrace
+> 
+> root@foo:~# trace-cmd record -p function_graph -l handle_mm_fault -P 3367417
+> plugin 'function_graph'
+> Hit Ctrl^C to stop recording
 
-Isn't the real solution here entirely in-kernel?  This scanning thread
-you've created should be the one splitting the THPs.  And anyway, isn't
-this exactly the kind of thing that DAMON was invented for?
+
+> [1459709.204253] ------------[ ftrace bug ]------------
+> [1459709.204257] ftrace failed to modify
+> [1459709.204262] [<ffffffffac3ea960>] bpf_dispatcher_xdp_func+0x0/0x10
+> [1459709.204275]  actual:   ffffffe9:ffffff9b:76:ffffffb0:14
+> [1459709.204302] Setting ftrace call site to call ftrace function
+> [1459709.204305] ftrace record flags: 10000001
+> [1459709.204309]  (1)
+>                   expected tramp: ffffffffabc4bcb0
+> [1459709.204325] ------------[ cut here ]------------
+
+Did you reboot since the error happened? Because the command you showed
+should not have touched bpf_dispatcher_xdp_func.
+
+-- Steve

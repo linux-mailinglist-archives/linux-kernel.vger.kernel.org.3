@@ -2,127 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B7C58B279
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB91458B27B
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 00:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241474AbiHEWjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 18:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S241532AbiHEWkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 18:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiHEWje (ORCPT
+        with ESMTP id S230198AbiHEWkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 18:39:34 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72E71AF15
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 15:39:33 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id v5so2024731wmj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 15:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=a4+alUb2V+A+FrnxdAfx95t0xsifhWlq+vFrSrgmIiw=;
-        b=GLKZ3acW7kyjSzl8FTgV7hTdmon7BqyPQJ9gE7JaEMFcR609IsISTVm1E2MPaaMOB2
-         bDT5IiITAqvcb/od/wDtbLYaiCF/q/CPhQqI0eAhe7tVfC73sI/hqY8ewv2ZZH4iDNy/
-         +q2EycnykKC1/E91JFv9KG312V+rrS9wpRWbr0H+Aai1ctTHKe6hViIDegmpPOL0fDOg
-         fC0hM154DKNYySj7EEkhzp1no6yVpdNJ1t4EKTw0sY0+WwOVnpx/9SvppwkVxg9pIC7Q
-         Q/U66K4J+HOeN3qfrYlHQbVGyhRsbW4PmPRoiEz4/b61aG2N4Cuzpab/ab9XCTfIeI7Y
-         CfYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=a4+alUb2V+A+FrnxdAfx95t0xsifhWlq+vFrSrgmIiw=;
-        b=VMeE4Pa+uKhm6Y8BoKmYi1hJFdPaLHthzDKsnulfbnDS6tlPB/CgTbabfaYw4oS9aB
-         cw+skrfjT5vjJktNsSQ3n0vHV555wmYsrQvXCLKI3/B4OAlPwU/I//WRLy54z8rNNcop
-         6UlArkZ4tfOzBoCo3zEbvJbx+LgbrpaVTnQepwd6FyG9T9xh8NTmxydrfLDkQm87cIQ7
-         NNh0sSxUiv84H/arDP/wkuVsaWF8S0VfFHfBIl/Yfvr+tRhMIsLeYSKDIlSRXklRZ95x
-         GQ2JjG86Sg7yAjHsb+savMv6pFSBLA/sHKLZU7FPQVfKhW9eOVEwyISCazAH6UVtw5ko
-         XOwQ==
-X-Gm-Message-State: ACgBeo0bURh7j1/wh1Et+JKpVaS6xCaX5vCRCyRAAZPOSkK8EdxMDeVj
-        4CN43kpp9/lfdZJSkZusYdPJXD5zrAxSAFXaacMbZQ==
-X-Google-Smtp-Source: AA6agR7AHekHXLe5no7RXaVKXf0rP2CNhnvxhSm2gC5BYXCEhjXzSalxmhI9FqE9JMTUwofhlW4WId6korNGY+Dg5C4=
-X-Received: by 2002:a05:600c:4e86:b0:3a3:417a:2fcd with SMTP id
- f6-20020a05600c4e8600b003a3417a2fcdmr6046018wmq.149.1659739172136; Fri, 05
- Aug 2022 15:39:32 -0700 (PDT)
+        Fri, 5 Aug 2022 18:40:40 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223F69FDF;
+        Fri,  5 Aug 2022 15:40:38 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 88CD841247;
+        Fri,  5 Aug 2022 22:40:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:message-id:subject:subject:from:from:date:date
+        :received:received:received:received; s=mta-01; t=1659739236; x=
+        1661553637; bh=RGBn4gn057kvr82Uvwa4Lu7kl+xoVeBNqUFVrZ3dKNA=; b=m
+        /YdYFmajKpKyI3N96dfc7z+T7oVqptjPriW356F0ODppSZU0QCwxlqKJqbyJBqgN
+        p6akS3II/fnVfQ6VhnLk9KfmcxrBubcQajGpuITJ9XxE5I+dlgk27MunKETRWYGL
+        Z9CoJefhXjRR4sFi8+tBSZwRcVLPyOCs4LXuFCjL24=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UTLVhjoiFngK; Sat,  6 Aug 2022 01:40:36 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id A29AC41246;
+        Sat,  6 Aug 2022 01:40:35 +0300 (MSK)
+Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Sat, 6 Aug 2022 01:40:35 +0300
+Received: from yadro.com (10.178.119.167) by T-EXCH-09.corp.yadro.com
+ (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Sat, 6 Aug 2022
+ 01:40:34 +0300
+Date:   Sat, 6 Aug 2022 01:40:33 +0300
+From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
+To:     <ojeda@kernel.org>
+CC:     <boqun.feng@gmail.com>, <gregkh@linuxfoundation.org>,
+        <jarkko@kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
+        <rust-for-linux@vger.kernel.org>, <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v9 01/27] kallsyms: use `sizeof` instead of hardcoded size
+Message-ID: <Yu2cYShT1h8gquW8@yadro.com>
 MIME-Version: 1.0
-References: <20220805220645.95855-1-brianrob@linux.microsoft.com>
-In-Reply-To: <20220805220645.95855-1-brianrob@linux.microsoft.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 5 Aug 2022 15:39:20 -0700
-Message-ID: <CAP-5=fVhwVcNqr+z+KfUrH1Rq=3sbrkwX3U1nZBbW6_ASVp13w@mail.gmail.com>
-Subject: Re: [PATCH v2] perf inject jit: Ignore memfd and anonymous mmap
- events if jitdump present
-To:     Brian Robbins <brianrob@linux.microsoft.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220805154231.31257-2-ojeda@kernel.org>
+X-Originating-IP: [10.178.119.167]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-09.corp.yadro.com (172.17.11.59)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 3:06 PM Brian Robbins
-<brianrob@linux.microsoft.com> wrote:
->
-> Some processes store jitted code in memfd mappings to avoid having rwx
-> mappings.  These processes map the code with a writeable mapping and a
-> read-execute mapping.  They write the code using the writeable mapping
-> and then unmap the writeable mapping.  All subsequent execution is
-> through the read-execute mapping.
->
-> perf inject --jit ignores //anon* mappings for each process where a
-> jitdump is present because it expects to inject mmap events for each
-> jitted code range, and said jitted code ranges will overlap with the
-> //anon* mappings.
->
-> Ignore /memfd: and [anon:* mappings so that jitted code contained in
-> /memfd: and [anon:* mappings is treated the same way as jitted code
-> contained in //anon* mappings.
->
-> Signed-off-by: Brian Robbins <brianrob@linux.microsoft.com>
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index f18e6dfc68c5..52f5488c61bc 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -206,7 +206,7 @@ static struct sym_entry *read_symbol(FILE *in)
+>  
+>  	rc = fscanf(in, "%llx %c %499s\n", &addr, &type, name);
+>  	if (rc != 3) {
+> -		if (rc != EOF && fgets(name, 500, in) == NULL)
+> +		if (rc != EOF && fgets(name, sizeof(name), in) == NULL)
+>  			fprintf(stderr, "Read error or end of file.\n");
+>  		return NULL;
+>  	}
 
-Acked-by: Ian Rogers <irogers@google.com>
-
-Thanks,
-Ian
-
-> ---
->  tools/perf/util/jitdump.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/perf/util/jitdump.c b/tools/perf/util/jitdump.c
-> index a23255773c60..4e6632203704 100644
-> --- a/tools/perf/util/jitdump.c
-> +++ b/tools/perf/util/jitdump.c
-> @@ -845,8 +845,13 @@ jit_process(struct perf_session *session,
->         if (jit_detect(filename, pid, nsi)) {
->                 nsinfo__put(nsi);
->
-> -               // Strip //anon* mmaps if we processed a jitdump for this pid
-> -               if (jit_has_pid(machine, pid) && (strncmp(filename, "//anon", 6) == 0))
-> +               /*
-> +                * Strip //anon*, [anon:* and /memfd:* mmaps if we processed a jitdump for this pid
-> +                */
-> +               if (jit_has_pid(machine, pid) &&
-> +                       ((strncmp(filename, "//anon", 6) == 0) ||
-> +                        (strncmp(filename, "[anon:", 6) == 0) ||
-> +                        (strncmp(filename, "/memfd:", 7) == 0)))
->                         return 1;
->
->                 return 0;
-> --
-> 2.25.1
->
+Might be another nit, but IMO it's better to use ARRAY_SIZE() here.

@@ -2,253 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEACB58AA0B
-	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219DE58AA0F
+	for <lists+linux-kernel@lfdr.de>; Fri,  5 Aug 2022 13:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240591AbiHELUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 07:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S240598AbiHELWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 07:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiHELU3 (ORCPT
+        with ESMTP id S229811AbiHELWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 07:20:29 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F60B488;
-        Fri,  5 Aug 2022 04:20:26 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Lzjlp6t5vzKGGR;
-        Fri,  5 Aug 2022 19:19:02 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgDHRzH0_OxiZWTmAA--.5716S3;
-        Fri, 05 Aug 2022 19:20:21 +0800 (CST)
-Subject: Re: [PATCH -next v10 3/4] block, bfq: refactor the counting of
- 'num_groups_with_pending_reqs'
-To:     Yu Kuai <yukuai1@huaweicloud.com>,
-        Paolo VALENTE <paolo.valente@unimore.it>
-Cc:     Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20220610021701.2347602-1-yukuai3@huawei.com>
- <20220610021701.2347602-4-yukuai3@huawei.com>
- <27F2DF19-7CC6-42C5-8CEB-43583EB4AE46@linaro.org>
- <abdbb5db-e280-62f8-0670-536fcb8ec4d9@huaweicloud.com>
- <C2CF100A-9A7C-4300-9A70-1295BC939C66@unimore.it>
- <9b2d667f-6636-9347-08a1-8bd0aa2346f2@huaweicloud.com>
- <2f94f241-445f-1beb-c4a8-73f6efce5af2@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <57689e84-e47d-29e2-327e-b8f172329681@huaweicloud.com>
-Date:   Fri, 5 Aug 2022 19:20:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 5 Aug 2022 07:22:20 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D2F20BD5;
+        Fri,  5 Aug 2022 04:22:19 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 275A5TN6006270;
+        Fri, 5 Aug 2022 11:21:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=1ctBnoGWPrgG54jNnl013X5UISDafseGHzr85rUimIE=;
+ b=xKzLtfSNcaNEEV+/8c286Ubz4sR7pEii0MayA4aSESUBd5eTTq0ApMTulr8Mm2ufoRq3
+ fnqTYVFqZz5SckP+z+TSHFUgyQKoMHHks8+ZCpQWoT5mRT1omFFbBnaRZao25rNBcE1F
+ BBW3AUte3EMz/D7bA6aYvi5DBprzjeu/GHneM3/hgrQN7tF1tRSytfZXMiH9EyTroKFW
+ CGzur21rGqRXoUgobugZpLIxps6R4hlxvAP0RauQMnFUOJdsGkj2eDtVZrcPoVYs+RWA
+ gaboSAl3X31UwerGZ9Qi4w8mWTMHit0tFat5qox9eIRfshu3yoo0bWYpvFfcgEwvNqvt 4Q== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hmw6tqh6p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 05 Aug 2022 11:21:58 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 275A04El003010;
+        Fri, 5 Aug 2022 11:21:56 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2048.outbound.protection.outlook.com [104.47.73.48])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hmu359wqv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 05 Aug 2022 11:21:56 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BAyfN+biTujxSwPLY0/FEIgVqNmdjzQJyq/tF8Up0feHqiOvAW7DKL4QOwcNmvqlFv305TNpjVATUgTpITcGXXzwyTrHM3PkeZ4Aff7ZgmdGdxQSLBQp3M5AUVHRQDNFZOzXDjcx14vXUqnkoKYfpbdBzlJuOByPoeEiCDHTLPRdbbSC0MvgOnU1jSqyTWP00zJdsikjCYWlqLgmd87GcosmmafFFq9zg32bwyP8vYLVObrCaYhk+ONIjeH7Zau03MGmouC0qDYEDxJOiEAV1oX2vfnKzifsG9A20/8I1PMuSf2p23cBAnxIgS3a+WjqEePSUqfaF9iBKyvHYXM4BA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1ctBnoGWPrgG54jNnl013X5UISDafseGHzr85rUimIE=;
+ b=lM0TTvNAwO5kDvJeor4ERJK8W/o6y7zOjb6qvvzD3qwV150St4VlKIKNaENMBhujnkGQ7C24UR8tiM9ZbA7HZi2KQlil2aoFLhzGSmWIVYBmiNYi62pHL7ZwDI8Wn7Zbjms1tuhqK1L96LU7I6P3X1ThvzK98mFch+g6ka1sdkR8ii4HojK3pNRkTtMEVhk46AoF/FeWAZn+Ya9leIQIl8fJXSFZI3eZ95P3ylfkCnZ/5qxAve5uijKLVq5f7+0jBE8U1mm1S0huZCGCvMtQ4Lvm61YgVQ2rH42lMtFUgspE//+OuyEPmQuLpHi8TNbQSEFwu3/eqtTuS4MVsWXVqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1ctBnoGWPrgG54jNnl013X5UISDafseGHzr85rUimIE=;
+ b=JKF/6V5Io9OWJqSF71Nh2umLE9siywDHM1TJ0NbW7sTKv+PDRL+ObucKhYInyjchzEWjET9b6h+bkV1F9/Ooi5EXD7ROuoaZIpwtnVcfO9gyCTwqx1srIstm+eousEoIVuo4Az3/H9ayeG1C+sCNzR3hu2vXC5X1IeaqKjeeLbY=
+Received: from SN4PR10MB5559.namprd10.prod.outlook.com (2603:10b6:806:202::16)
+ by BL0PR10MB2963.namprd10.prod.outlook.com (2603:10b6:208:78::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Fri, 5 Aug
+ 2022 11:21:54 +0000
+Received: from SN4PR10MB5559.namprd10.prod.outlook.com
+ ([fe80::1c9e:630c:a63f:fdf]) by SN4PR10MB5559.namprd10.prod.outlook.com
+ ([fe80::1c9e:630c:a63f:fdf%3]) with mapi id 15.20.5504.016; Fri, 5 Aug 2022
+ 11:21:54 +0000
+From:   William Kucharski <william.kucharski@oracle.com>
+To:     Leon Romanovsky <leon@kernel.org>
+CC:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rxe: fix xa_alloc_cycle() error return value check again
+Thread-Topic: [PATCH] rxe: fix xa_alloc_cycle() error return value check again
+Thread-Index: AQHYe8/FJJbPDZ0ej0ioquz7QorGFa1RxqqAgE68y4A=
+Date:   Fri, 5 Aug 2022 11:21:53 +0000
+Message-ID: <46D857DC-26BB-44F4-954C-A42416B474EB@oracle.com>
+References: <20220609070656.1446121-1-dzm91@hust.edu.cn>
+ <YqrwibTkaDig+QfI@unreal>
+In-Reply-To: <YqrwibTkaDig+QfI@unreal>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3729.0.22.1.31)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ee962c54-47af-48dc-d9a2-08da76d4b37a
+x-ms-traffictypediagnostic: BL0PR10MB2963:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WC01XWprpS/tb3hOvww36Z8ci8mHIPS1Jzrbs6efF933JPaDjCpQePAzc7PNZ0oXlPa8I/TkXMZf9KVahRyKQftxx0Qh7d6dHx3WXE5nqcfKbvo6xAG+EuNnUlQAcuUBYSS1Sn/NTt2sWmjbbeo2iq4s6v7YtcZV/1WhFM7o6e/Cst7zAzwnweiyiElDfJFT13g2rNbY8ort0UbOS0vvbINfg7w/vMV4A2w8zxPRVI6N2SWL3HAstCUS4ussgJV1SvqyPD6XqynvmsxcEfcawwwlEgRxL9erS6GCOlpJUVD5yyzKUfqEnD+HufIJ70yfxxJaorz2M/We7mYeuLx3qOkMfGnS/PDI11tlJ4vo8w8SaoSrOAa3+Sb0QcdQ2JXsmlfztOHEM2wm42wHQCF/xRNlfbyAn0YM3W0awx90Drs2eHJIMiAqrh2F4tQngUJyCXAg6dCBWGA9xNnLH34QkhTiIeqlqsqBRyybsbhEx3XVZVbdiABkkEEclex3/0MiWDzQpvSZ6EteoYlFdmtybxMlRC9LG9kBTzHx/C3FvKFziPMK7490RnEa/GyPwSnJZgg7nYWub28BWn+2bu2V4iSFdZI0fJ/3Rg4HFnRdU5CQJPNaxMUCEYFpdgUZNiMqydsR3si5j/GggkksC1pryFaO/hpQpCCkHrB4CCh2D2ENENMO8FTZNFzlrYE/+GDF50rJWEmKa62nWqHkjPjOsJwxKTWNZHAAmZCQigWI0g7gPeAgJrqsTMNVjWneFT54zoG8KWCC1hkEI0JGoLzxF5SeOmyx3hDqzFHbbYg81esJMw8NPLKtoJvkNnPGtWGt8De1+yZ4hHnH5wHYhbx4PA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR10MB5559.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(396003)(39860400002)(376002)(346002)(478600001)(6486002)(41300700001)(6506007)(6512007)(5660300002)(44832011)(2906002)(6916009)(33656002)(36756003)(86362001)(54906003)(71200400001)(53546011)(316002)(38070700005)(2616005)(38100700002)(122000001)(186003)(66556008)(91956017)(8936002)(66946007)(76116006)(66446008)(66476007)(4326008)(64756008)(8676002)(83380400001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/TeH+isymPHqFq4LxKvkmKDzauEXih812jsP4WWIbcRlPfvWk1D9iVgrIxx6?=
+ =?us-ascii?Q?q3HWUxE/jMoRWe89MvRJ9Jz2pEEo7bbWjL83BGxe3tcpB0XiS9z+cfOggSyi?=
+ =?us-ascii?Q?WXSfIFkXp0voDI84MtnNI62c3BF7Zu1m4B8GUG2prsZB4rYbkcc887HSVLTQ?=
+ =?us-ascii?Q?5IQ3crRyoA/ogMIm+EFW1byaBIgJpSpaIg3nzmtr9OhOdMaBekd8K7OsyIHC?=
+ =?us-ascii?Q?2EWhk37xltyG9YvuIi0HrIuvmfcwlCn5FGNk4DLl9ZW+UH6wKn0yDXTxe5mA?=
+ =?us-ascii?Q?n9l1rhbHL/y1SjgjjVsVFDJLVUBjHMoHri/BQjGK1zsMfLfKhAouPC14Wylr?=
+ =?us-ascii?Q?0nppSDIMkpZeoExks3AfgAkIxh2g1tdIM+Z8suG/DHRCVeT9neHGIYmSkmMe?=
+ =?us-ascii?Q?dnj4et5OJl8QZvwfNEvN+8cav2x8/Vlj+O6dNFFOlb7+xh/dbNSFQOA+7aCa?=
+ =?us-ascii?Q?v0eA3zdrE8o/KnHykWdqRhN8NwobIj6BhTvkNrv9y3kPfSaIePEhGnl5OKcr?=
+ =?us-ascii?Q?IcsPaX5u4/6RKSS3iQtXV2igQ+C0R+yAxSFQSrHN5eCp4GEpJtM4SLKIl1+s?=
+ =?us-ascii?Q?K9AjDxQ1TFmkmvI5RKQyueJrK6Z0nBMBR3EmCNChojzOqmaJj78696qBWo+J?=
+ =?us-ascii?Q?WCl5cSxejA4wMquwe/LdemBP617MWihrBy6Mw4cSMZrFfAObioAaylmDEgXh?=
+ =?us-ascii?Q?yYcGf5Xce45EyS7m2fbYepjptmTiZU5GBbBF9WMwkm7atK23uc/eUahmD98W?=
+ =?us-ascii?Q?DFx+P6LaVleTtS3aN+xoBdL5e0aI5c0585nSpsOE3c+kD0n04Dp6zRr8KcW9?=
+ =?us-ascii?Q?NKCEmxBFpg9ih5qo9GlY52dIQwPJDdwewhBHuewBjE1ShOjN0jiMu1m9/xNp?=
+ =?us-ascii?Q?uACd+xzucOmXOZrt8AqiYJEm4FFsQ+JOnPmM7rRtH/+OgJB8uR+PJ7FRKVVY?=
+ =?us-ascii?Q?b3UU6D7tmqfAUlGv90+uknPdG9NjWxCpZTvPU54lz1N9n0hZYRhlkhycddiA?=
+ =?us-ascii?Q?lXEigrJXwuOxrV2LTXrmYP1UZMw3bQIzbk6SYp3N+YovbI33yjEOlPXxLHyR?=
+ =?us-ascii?Q?mrl5Vd2B6jNcbRkppBO0nfqDs6Wt3yDwITPNg23WOm1Fb8fYzJjQ+uxyq4GP?=
+ =?us-ascii?Q?Bp8SkeTWyTP/cMjdom1ymDVMpJCphg4d4RCkUz37D0gXaBy+H0VktlxbYjv3?=
+ =?us-ascii?Q?IPRx5fI5z8TTvVByy6mUFkyO3Npr1OZhVbB3HPomy0aKzXtLxZ8twE0fJtFC?=
+ =?us-ascii?Q?bsp/7K7FuhjqvaUE4jMMygU2br3b76ve1Xn5DC5ZdmOISCkGnvuiGzzNTfvo?=
+ =?us-ascii?Q?4rs34R63LbBfGIqeaXd/sy8VvIHIM7jA0bMwtCmTxsX4wy3RIaI2686PhgoE?=
+ =?us-ascii?Q?1fnnYGN1nW/Lu6A/JPK+JdyQhJrIGDnZ6zmduih7MlsBrc4JL+TG8hh+O8+a?=
+ =?us-ascii?Q?3JpYbxhaUSN9+j/q7gp3Mo1ro9k7SER8v/bSLEWyJmQwfkSgPhSy9GMojC+z?=
+ =?us-ascii?Q?XIJTB3HUeVNNc8zwg0SqdgCq98BufyuHu1fEe+OAbfe5gyudkiVbOhAg22Wa?=
+ =?us-ascii?Q?zVQZM9nmga1L83J6BP0bC5T8I2JsBMbEyJX6ABYV5nfddjHm5oRHLwiP9aea?=
+ =?us-ascii?Q?RwwGs2lv85p8i5yH3MR7/L3ZiaDoK+ey90fc78cV5aSVx5stDaL/m02blXch?=
+ =?us-ascii?Q?uU8mKA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <578D11755B6408438F784642104A8F12@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <2f94f241-445f-1beb-c4a8-73f6efce5af2@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDHRzH0_OxiZWTmAA--.5716S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxtrW3XrWruFy3WryDGFW8Crg_yoWxGrWUp3
-        yfKa17Ar4UXr1ftr1jq3WUXrySqryfJry8Wr1DJr1SyrnFyFn2qF12qw409Fy8ZrWkJr12
-        qr1UW3srZw1UtFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR10MB5559.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee962c54-47af-48dc-d9a2-08da76d4b37a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2022 11:21:54.2507
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BW1LG3snM5kewZzegFMjCWpKX7Ex35cnpllMnLfe6E3aCzpZKKbPk6MJDckbVe2efYC19sY4zv0wtPcEPQt12F4IFgIihyElCl46lenb5No=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR10MB2963
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-05_04,2022-08-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 bulkscore=0 mlxscore=0 phishscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2208050056
+X-Proofpoint-GUID: DRgLtvMHp4lfMzid17EzMrxW0O2g_86k
+X-Proofpoint-ORIG-GUID: DRgLtvMHp4lfMzid17EzMrxW0O2g_86k
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I erroneously sent a duplicate of this patch last week because I didn't see=
+ the fix in the 5.19 kernel as of yet.
 
-在 2022/07/27 20:11, Yu Kuai 写道:
-> Hi, Paolo
-> 
-> Are you still interested in this patchset?
+Do we know when it might be pulled into Linus' tree?
 
-Friendly ping...
-> 
-> 在 2022/07/20 19:38, Yu Kuai 写道:
->> Hi
->>
->> 在 2022/07/20 19:24, Paolo VALENTE 写道:
->>>
->>>
->>>> Il giorno 12 lug 2022, alle ore 15:30, Yu Kuai 
->>>> <yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
->>>>
->>>> Hi!
->>>>
->>>> I'm copying my reply with new mail address, because Paolo seems
->>>> didn't receive my reply.
->>>>
->>>> 在 2022/06/23 23:32, Paolo Valente 写道:
->>>>> Sorry for the delay.
->>>>>> Il giorno 10 giu 2022, alle ore 04:17, Yu Kuai <yukuai3@huawei.com 
->>>>>> <mailto:yukuai3@huawei.com>> ha scritto:
->>>>>>
->>>>>> Currently, bfq can't handle sync io concurrently as long as they
->>>>>> are not issued from root group. This is because
->>>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
->>>>>> bfq_asymmetric_scenario().
->>>>>>
->>>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->>>>>>
->>>>>> Before this patch:
->>>>>> 1) root group will never be counted.
->>>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
->>>>>> 3) Don't count if bfqg and it's child bfqgs complete all the 
->>>>>> requests.
->>>>>>
->>>>>> After this patch:
->>>>>> 1) root group is counted.
->>>>>> 2) Count if bfqg have pending requests.
->>>>>> 3) Don't count if bfqg complete all the requests.
->>>>>>
->>>>>> With this change, the occasion that only one group is activated 
->>>>>> can be
->>>>>> detected, and next patch will support concurrent sync io in the
->>>>>> occasion.
->>>>>>
->>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com 
->>>>>> <mailto:yukuai3@huawei.com>>
->>>>>> Reviewed-by: Jan Kara <jack@suse.cz <mailto:jack@suse.cz>>
->>>>>> ---
->>>>>> block/bfq-iosched.c | 42 ------------------------------------------
->>>>>> block/bfq-iosched.h | 18 +++++++++---------
->>>>>> block/bfq-wf2q.c    | 19 ++++---------------
->>>>>> 3 files changed, 13 insertions(+), 66 deletions(-)
->>>>>>
->>>>>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
->>>>>> index 0ec21018daba..03b04892440c 100644
->>>>>> --- a/block/bfq-iosched.c
->>>>>> +++ b/block/bfq-iosched.c
->>>>>> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct 
->>>>>> bfq_data *bfqd,
->>>>>> void bfq_weights_tree_remove(struct bfq_data *bfqd,
->>>>>>     struct bfq_queue *bfqq)
->>>>>> {
->>>>>> -struct bfq_entity *entity = bfqq->entity.parent;
->>>>>> -
->>>>>> -for_each_entity(entity) {
->>>>>> -struct bfq_sched_data *sd = entity->my_sched_data;
->>>>>> -
->>>>>> -if (sd->next_in_service || sd->in_service_entity) {
->>>>>> -/*
->>>>>> -* entity is still active, because either
->>>>>> -* next_in_service or in_service_entity is not
->>>>>> -* NULL (see the comments on the definition of
->>>>>> -* next_in_service for details on why
->>>>>> -* in_service_entity must be checked too).
->>>>>> -*
->>>>>> -* As a consequence, its parent entities are
->>>>>> -* active as well, and thus this loop must
->>>>>> -* stop here.
->>>>>> -*/
->>>>>> -break;
->>>>>> -}
->>>>>> -
->>>>>> -/*
->>>>>> -* The decrement of num_groups_with_pending_reqs is
->>>>>> -* not performed immediately upon the deactivation of
->>>>>> -* entity, but it is delayed to when it also happens
->>>>>> -* that the first leaf descendant bfqq of entity gets
->>>>>> -* all its pending requests completed. The following
->>>>>> -* instructions perform this delayed decrement, if
->>>>>> -* needed. See the comments on
->>>>>> -* num_groups_with_pending_reqs for details.
->>>>>> -*/
->>>>>> -if (entity->in_groups_with_pending_reqs) {
->>>>>> -entity->in_groups_with_pending_reqs = false;
->>>>>> -bfqd->num_groups_with_pending_reqs--;
->>>>>> -}
->>>>>> -}
->>>>> With this part removed, I'm missing how you handle the following
->>>>> sequence of events:
->>>>> 1.  a queue Q becomes non busy but still has dispatched requests, so
->>>>> it must not be removed from the counter of queues with pending reqs
->>>>> yet
->>>>> 2.  the last request of Q is completed with Q being still idle (non
->>>>> busy).  At this point Q must be removed from the counter.  It seems to
->>>>> me that this case is not handled any longer
->>>> Hi, Paolo
->>>>
->>>> 1) At first, patch 1 support to track if bfqq has pending requests, 
->>>> it's
->>>> done by setting the flag 'entity->in_groups_with_pending_reqs' when the
->>>> first request is inserted to bfqq, and it's cleared when the last
->>>> request is completed(based on weights_tree insertion and removal).
->>>>
->>>
->>> In patch 1 I don't see the flag cleared for the request-completion 
->>> event :(
->>>
->>> The piece of code involved is this:
->>>
->>> static void bfq_completed_request(struct bfq_queue *bfqq, struct 
->>> bfq_data *bfqd)
->>> {
->>> u64 now_ns;
->>> u32 delta_us;
->>>
->>> bfq_update_hw_tag(bfqd);
->>>
->>> bfqd->rq_in_driver[bfqq->actuator_idx]--;
->>> bfqd->tot_rq_in_driver--;
->>> bfqq->dispatched--;
->>>
->>> if (!bfqq->dispatched && !bfq_bfqq_busy(bfqq)) {
->>> /*
->>> * Set budget_timeout (which we overload to store the
->>> * time at which the queue remains with no backlog and
->>> * no outstanding request; used by the weight-raising
->>> * mechanism).
->>> */
->>> bfqq->budget_timeout = jiffies;
->>>
->>> bfq_weights_tree_remove(bfqd, bfqq);
->>> }
->>> ...
->>>
->>> Am I missing something?
->>
->> I add a new api bfq_del_bfqq_in_groups_with_pending_reqs() in patch 1
->> to clear the flag, and it's called both from bfq_del_bfqq_busy() and
->> bfq_completed_request(). I think you may miss the later:
->>
->> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
->> index 0d46cb728bbf..0ec21018daba 100644
->> --- a/block/bfq-iosched.c
->> +++ b/block/bfq-iosched.c
->> @@ -6263,6 +6263,7 @@ static void bfq_completed_request(struct 
->> bfq_queue *bfqq, struct bfq_data *bfqd)
->>           */
->>          bfqq->budget_timeout = jiffies;
->>
->> +        bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
->>          bfq_weights_tree_remove(bfqd, bfqq);
->>      }
->>
->> Thanks,
->> Kuai
->>>
->>> Thanks,
->>> Paolo
-> 
-> .
-> 
+Thanks,
+    William Kucharski
+
+> On Jun 16, 2022, at 2:57 AM, Leon Romanovsky <leon@kernel.org> wrote:
+>=20
+> On Thu, Jun 09, 2022 at 03:06:56PM +0800, Dongliang Mu wrote:
+>> From: Dongliang Mu <mudongliangabcd@gmail.com>
+>>=20
+>> Currently rxe_alloc checks ret to indicate error, but 1 is also a valid
+>> return and just indicates that the allocation succeeded with a wrap.
+>>=20
+>> Fix this by modifying the check to be < 0.
+>>=20
+>> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+>> ---
+>> drivers/infiniband/sw/rxe/rxe_pool.c | 2 +-
+>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> I applied same fix to rxe_alloc() and added Fixes line.
+>=20
+> Thanks, applied.
+>=20
+>>=20
+>> diff --git a/drivers/infiniband/sw/rxe/rxe_pool.c b/drivers/infiniband/s=
+w/rxe/rxe_pool.c
+>> index 1cc8e847ccff..e9f3bbd8d605 100644
+>> --- a/drivers/infiniband/sw/rxe/rxe_pool.c
+>> +++ b/drivers/infiniband/sw/rxe/rxe_pool.c
+>> @@ -167,7 +167,7 @@ int __rxe_add_to_pool(struct rxe_pool *pool, struct =
+rxe_pool_elem *elem)
+>>=20
+>> err =3D xa_alloc_cyclic(&pool->xa, &elem->index, elem, pool->limit,
+>>      &pool->next, GFP_KERNEL);
+>> - if (err)
+>> + if (err < 0)
+>> goto err_cnt;
+>>=20
+>> return 0;
+>> --=20
+>> 2.25.1
+>>=20
 

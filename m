@@ -2,91 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DF458B2EA
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 02:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5A558B2EB
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 02:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238875AbiHFAEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 20:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
+        id S240876AbiHFAF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 20:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiHFAEg (ORCPT
+        with ESMTP id S230490AbiHFAFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 20:04:36 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F94C1EAD6;
-        Fri,  5 Aug 2022 17:04:35 -0700 (PDT)
-Date:   Fri, 5 Aug 2022 17:04:28 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1659744273;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SNPSSSNCcsODM6FcDFTB0/QY2xvnSXXiMzXUqFnL7G8=;
-        b=FXngCiEGbKvBUUX68HPXzkns0r27XmBrR+fYTljzWMaejRXpC9hRR4viZ8aYC+gc0IktZM
-        y3QjaRpKHUXg+3r+d7U67kpVNj7nf2HYBHqBMJuL19JyLOVtve5YQyaSHgqsA/bkihSR28
-        5aplmwopU8LWek5bL786EIuMKHeFqfA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
+        Fri, 5 Aug 2022 20:05:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE83D12AB5;
+        Fri,  5 Aug 2022 17:05:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77F74B829D8;
+        Sat,  6 Aug 2022 00:05:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F54C433D6;
+        Sat,  6 Aug 2022 00:05:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1659744351;
+        bh=mwUbPBYbpjlx0Ck1uwp4vA3CrzrvGUmVGR8nHBrzkRA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=al4PJ1GM200DeBhIH0jRzLDmeyQO+D7WT08RSs/AI49NrU1CzLwvElTmC15UIR1tv
+         +UWwssdlqHfxVQnGiH5k61jRRQPtkeyalZsNXo8ZQFqNOJsychR5+kM+9jME5Hqo1Z
+         EDk/2CCsEy113ycYtnMfv7r7JtN8YmtXNNK9KsQQ=
+Date:   Fri, 5 Aug 2022 17:05:50 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        mm-commits@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Dave Chinner <dchinner@redhat.com>
+Cc:     mm-commits@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [GIT PULL] MM updates for 5.20-rc1
-Message-ID: <Yu2wDNcOYE0RdkA3@P9FQF9L96D.corp.robot.car>
+Message-Id: <20220805170550.7b8d738155ad7083d680cf9a@linux-foundation.org>
+In-Reply-To: <CAHk-=wheFdrnTLNhw6+2ekT_AuJHXHTWEKVQyJrA864mmjFKtQ@mail.gmail.com>
 References: <20220803133541.18b82ec9344ed0e8b975fe5b@linux-foundation.org>
- <CAHk-=wiOSXvk=70tpR9E1tvDmCf8s-81bT+92aE-iKocxdTsyw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiOSXvk=70tpR9E1tvDmCf8s-81bT+92aE-iKocxdTsyw@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        <CAHk-=wheFdrnTLNhw6+2ekT_AuJHXHTWEKVQyJrA864mmjFKtQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 04:32:34PM -0700, Linus Torvalds wrote:
+On Fri, 5 Aug 2022 16:20:44 -0700 Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
 > On Wed, Aug 3, 2022 at 1:35 PM Andrew Morton <akpm@linux-foundation.org> wrote:
 > >
-> > - memcg debug/visibility work from Roman Gushchin
+> > There are 6-7 conflicts with your tree here.  All very minor, mainly
+> > related to the rename of Documentation/vm to Documentation/mm.
 > 
-> Well, not just memcg.
+> What? No. Yeah, the doc conflicts were annoying enough, with the
+> Chinese translations having incorrect pointers to the original sources
+> both before and after the move in the MM tree.
 > 
-> There's that new CONFIG_SHRINKER_DEBUG too.
+> But that xfs conflict was positively nasty and definitely not minor.
+> Had to look up Darrick Wong's "here's how to do it" message from the
+> linux-next days.
 > 
-> Which looks like yet another "people add Kconfig options incorrectly".
-> 
-> We don't make new features "default y" unless there's some truly
-> pressing reason for it (ie "99.9% of all people will want this" or "we
-> used to always compile this in, now it's optional").
+> So I think I got it all right, but "very minor" it wasn't.
 
-Hi Linus!
+Huh.  sorry, there was no XFS conflict with your tree when I did my
+test merge and I don't recall seeing emails from Darrick or Stephen on
+this one :(
 
-It actually was 'default n' in one of the earlier version of the patchset
-and has been switched to 'default y' based on the following feedback from
-Dave Chinner (https://lore.kernel.org/lkml/YmiWK56bOHyrr64u@rh/):
+I guess that taking a peek at linux-next would be a good way to get at
+the tested resolution for these things?
 
-    No. The argument that "if we turn it off there's no overhead" means
-    one of two things:
+Emails which might prove useful later in this merge window are:
 
-    1. nobody turns it on and it never gets tested and so bitrots and is
-    useless, or
-    2. distro's all turn it on because some tool they ship or customer
-    they ship to wants it.
 
-    Either way, hiding it behind a config option is not an acceptible
-    solution for mering poorly thought out infrastructure.
-
-Personally I think that the feature is not that useful for the majority
-of users (this is why default was n), but it's not adding much of the
-overhead, so I had no strong reasons to oppose Dave.
-Cc'ing him just in case.
-
-Thanks!
+EIF tree: https://lkml.kernel.org/r/20220726194643.47f6c020@canb.auug.org.au
+bitmap tree: https://lkml.kernel.org/r/20220726194151.71e511e7@canb.auug.org.au
+crypto: https://lkml.kernel.org/r/20220718195342.6817be63@canb.auug.org.au
+bitmap again: https://lkml.kernel.org/r/20220715211409.4fba48e8@canb.auug.org.au

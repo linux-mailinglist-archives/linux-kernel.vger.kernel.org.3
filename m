@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD56058B4B0
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 10:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066C158B4B3
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 11:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241835AbiHFI7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 04:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
+        id S238941AbiHFJBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 05:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241790AbiHFI7J (ORCPT
+        with ESMTP id S229671AbiHFJBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 04:59:09 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56AB16593
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 01:59:06 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id b16so5934538edd.4
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 01:59:06 -0700 (PDT)
+        Sat, 6 Aug 2022 05:01:11 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D306247
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 02:01:10 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id gk3so8643326ejb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 02:01:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=3871ruND0nqZUe2qICGzGQqrskPExm04SE4C1XZsJ8o=;
-        b=ZY+zRK3kKzOlXDBqE7+YeZFTpnrXzUt3GkZXVTtB5iU6c8286dqfKaxJNbUKlkpB7Z
-         CQsa+yAKydvH6CKwZTMwSEhN5a6jgyRq9L3qg3YvVekqOSNgAYkXkjSAQpOGL8tpI6FV
-         RIJJL7N4P4OHVJQTtV9yD1hvEQ5qmbzq7kSpHDvpqDzSk0COfcKtVu+GKNG5mWoF59M6
-         fqSxVIzb+thLLBFMn9YuRV6mJ9pKpU4kYQGonoch1YtcllOtGiwOE0J/7HJc1ZW55GZK
-         CbflHra272yreW0uICNNYLC0Ne7ynT9K19IeSB7IkNXEm6YasI7f+zW3GUpIwG7TbdLm
-         ThSQ==
+        bh=DvA7gIYLKdSlMsij3HUvnX2FQpTb4BmvioirPFjs7cI=;
+        b=m+5r+cX5H9Ep5iYGbILeoOvHfYSF5Wg/s+5Xkz38RMFUQhmigwChbijRwI21lYybpY
+         vLOaTbP3y52FwjXH2gRa2V2Wc0YyIKGru5AM+Mh3+Xc3yJrDgmn/mS0lTOFOC+igk14R
+         COG/f6RVH9F3hZnUhLCuD48hYU2+agdTjQelfDRGP15KVPIVkVCmT0h9YLBFjD//Jag7
+         E234qd6FjSLva9SD/kHF2otu8fZaS1f0RfjA2wm1FlugBNTh/RUxyRO+eaezVdJu9Jwk
+         XDN/TQr0uoWuVRxvVEwcGYJ1yRMvi/gMoJyQ2uHWw/sGu8DDdziCgCWd+1svXRz3MG0w
+         UmDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=3871ruND0nqZUe2qICGzGQqrskPExm04SE4C1XZsJ8o=;
-        b=awTnZPasO7XxIPXbH78S8i4tdsCYDwsoJJZtT4/KliFUM+xlxyy/onVBX3Nuw9fhKt
-         up+UfWeg1mU7axkZ1D4iu/UMFVducRJ94UZnbb8KDU52/oklfebHX5IKLAExJNOI8KUO
-         JO+tUJ7igQ9sRl2BJ4OelWEJwsI4XQ1Deg4HMQ6KhIAiAqk66wDdgOrt3ZIV/Si0zxzq
-         +c7f3viWJufdOf7xobVqoCcnl5HZsnJm5sbpM2V0Cnj8Y61kvZMeKKWijgrpOtegeCie
-         P7X6KyxP1fKCgXRLqQIqwpfGlBZ4ERm0wdBzrN/s4OsU4UKG+MZIPpnryQ0rJbxUQ68s
-         3ccA==
-X-Gm-Message-State: ACgBeo3kZIhD/kyub5yPu/phYV30s5CFrHwt+KOV4uJS2yQStP/1yxYP
-        vfL/6hMM33WOYJ4kp7kwKTo=
-X-Google-Smtp-Source: AA6agR6zzMXGg7/Rm6mSBvH9lCwN98uU6d62QJ7mGE2xoiMZPRaPzYmQtya3LzUp5RsTXnSUYPc0xA==
-X-Received: by 2002:a05:6402:2b8f:b0:43a:66d4:a025 with SMTP id fj15-20020a0564022b8f00b0043a66d4a025mr9990648edb.121.1659776345408;
-        Sat, 06 Aug 2022 01:59:05 -0700 (PDT)
+        bh=DvA7gIYLKdSlMsij3HUvnX2FQpTb4BmvioirPFjs7cI=;
+        b=5+HOAUVCcJTyZo1Q1oIWRUO100/3xlbmrhk5iAII9cbAIcwFX8jvrTGT6jXxJOB2WL
+         41s45qFX5UvjmJH52bo5y3kmRsgeFnmXL/mEjcM8ei/87PLTKUgwXyvDg1CRWGvbBQGk
+         7MGQWqan9rG/Gk2OxvDfDHBCxU36kYUDZZkB9LpwInCGeRhhj5QfAsHYPOhG+mkaUBJa
+         aj9TuabLRnIhflHf/DgzZG6pJBMBqGg8KWDslFr162zp2M16Lsvp0RjFU1P4VFK+iaqW
+         ocKZ4rV3qeBbG6o2aU7sTWSr6dBwIX2qsty2dupqaHgtpkcJfsdfCL5UJivmN8NDM/d1
+         6hhw==
+X-Gm-Message-State: ACgBeo2jg3yGccmOC+E2fPwSg6wwKX36R+IQWUX0pu8LO1X9JvfZIudQ
+        ogEtrp0ki4Alfh5ynlFWqIY=
+X-Google-Smtp-Source: AA6agR5q3YeZ/o15o6tsAzRGwp/OESnBLi6FZGe1vnPyKN+v4Vxt1USE6yp5sSqsGR+nh6QJpGXr0w==
+X-Received: by 2002:a17:906:7955:b0:72f:97d9:9796 with SMTP id l21-20020a170906795500b0072f97d99796mr7900853ejo.436.1659776468925;
+        Sat, 06 Aug 2022 02:01:08 -0700 (PDT)
 Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
-        by smtp.gmail.com with ESMTPSA id u1-20020a1709061da100b0072f5fa11d19sm2412559ejh.202.2022.08.06.01.59.04
+        by smtp.gmail.com with ESMTPSA id ee41-20020a056402292900b0043cf1c6bb10sm1196338edb.25.2022.08.06.02.01.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 01:59:04 -0700 (PDT)
+        Sat, 06 Aug 2022 02:01:08 -0700 (PDT)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 6 Aug 2022 10:59:03 +0200
+Date:   Sat, 6 Aug 2022 11:01:06 +0200
 From:   Ingo Molnar <mingo@kernel.org>
-To:     Rik van Riel <riel@surriel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH v3] x86,mm: print likely CPU at segfault time
-Message-ID: <Yu4tV9FmEQmbB4AU@gmail.com>
-References: <20220805101644.2e674553@imladris.surriel.com>
- <Yu0o3J2T5QwKtoan@zn.tnic>
- <20220805104007.115359b5@imladris.surriel.com>
- <Yu4qja8L2ulHaqVt@gmail.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     ira.weiny@intel.com, Rik van Riel <riel@surriel.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 5/5] x86/entry: Store CPU info on exception entry
+Message-ID: <Yu4t0jkpIY4grgxL@gmail.com>
+References: <20220805173009.3128098-1-ira.weiny@intel.com>
+ <20220805173009.3128098-6-ira.weiny@intel.com>
+ <5d62c1d0-7425-d5bb-ecb5-1dc3b4d7d245@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yu4qja8L2ulHaqVt@gmail.com>
+In-Reply-To: <5d62c1d0-7425-d5bb-ecb5-1dc3b4d7d245@intel.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
@@ -79,31 +76,36 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-* Ingo Molnar <mingo@kernel.org> wrote:
+* Dave Hansen <dave.hansen@intel.com> wrote:
 
-> >  	instrumentation_begin();
-> > -	handle_page_fault(regs, error_code, address);
-> > +	handle_page_fault(regs, error_code, address, cpu);
+> On 8/5/22 10:30, ira.weiny@intel.com wrote:
+> > +static inline void arch_save_aux_pt_regs(struct pt_regs *regs)
+> > +{
+> > +	struct pt_regs_auxiliary *aux_pt_regs = &to_extended_pt_regs(regs)->aux;
+> > +
+> > +	aux_pt_regs->cpu = raw_smp_processor_id();
+> > +}
 > 
-> Not convinced that this is a good change: this will bloat all the 
-> affected code by a couple of dozen instructions - for no good reason in 
-> the context of this patch.
+> This is in a fast path that all interrupt and exception entry uses.  So,
+> I was curious what the overhead is.
 > 
-> Boris, why should we do this? Extracting a parameter at higher levels and 
-> passing it down to lower levels is almost always a bad idea from a code 
-> generation POV, unless the majority of lower levels needs this 
-> information anyway (which isn't the case here).
+> Code generation in irqentry_enter() gets a _bit_ more complicated
+> because arch_save_aux_pt_regs() has to be done on the way out of the
+> function and the compiler can't (for instance) do a
+> 
+> 	mov    $0x1,%eax
+> 	ret
+> 
+> to return.  But, the gist of the change is still only two instructions
+> that read a pretty hot, read-only per-cpu cacheline:
+> 
+> 	mov    %gs:0x7e21fa4a(%rip),%eax        # 15a38 <cpu_number>
+> 	mov    %eax,-0x8(%rbx)
+> 
+> That doesn't seem too bad.
 
-Oh, I just got to this series in my mbox:
-
-  [RFC PATCH 0/5] Print CPU at segfault time
-  ...
-  [RFC PATCH 5/5] x86/entry: Store CPU info on exception entry
-
-With that basis, printing the segfault CPU becomes a 'free' feature.
-
-At the cost of putting ~2 new instructions into the hotpath of every 
-exception though. :-/
+It's still 2 instructions more than what we had before, while the 
+fault-time CPU number is only needed infrequently AFAICS.
 
 Thanks,
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3EA58B6C9
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1ECF58B6CA
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbiHFQZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 12:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S233390AbiHFQZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 12:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232878AbiHFQZd (ORCPT
+        with ESMTP id S232893AbiHFQZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 12:25:33 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2570411457
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 09:25:32 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id f28so4737837pfk.1
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 09:25:32 -0700 (PDT)
+        Sat, 6 Aug 2022 12:25:35 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C36011461
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 09:25:34 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id s206so5104741pgs.3
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 09:25:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Tlr/PaqbxkpfKuux+ZeYdthv16cbtlg5RBXZEsNXtGw=;
-        b=Mn+5qAQtoswA528bAeJwnZfGXmUf3wXZiCtGaiNazI8Xqczs3yY10dq/W7sMOYjAfJ
-         NO7KYhT2nYfV0xByuSTfyCHOWsPeMjUleWaHlDX8JYMi6ZRwtMMVJDHrowG04BxfNKEi
-         O+pymlw5q6lrPn8TzpvkGnH4iQEJQjEVN8q1NL++Bu05CmaN59TN/2QrUnmUsWJUuY7l
-         SvbQ1mkGfIqQ7K4oNQ2YQzF8Gr44HI5GrcKe7ZqJOLVd3FQ2BRoMMWkMBTreo41gMXrz
-         Q2x1BLZcWXZJftwR0dKlDGDRtTtQrr+y5o+QXj2uRJtcffd1CV02PAFVDmLjSn6bF+T7
-         3rng==
+        bh=FpRML5FM7z0q20RyQQ3Ksaz1Bp1mVVRpaiFCWoESebI=;
+        b=SYK4ZlgIr9eRjmImdozBr1Er95Hpb183FLl1WmZOoT/hmx1oznn4IEH+4sZgTsITDe
+         Jbbu8iWKh61Z3o19R3jNU30AOlf/7mkIHa5NoprcmKIBA2geuRGt4Ssuqi83T2FMNi1M
+         /oT5Ys/zOXkuWTaXajq76Wlyd39Sg50TxBrGvPfACYej1WV1F8bc+ow3111dTGpZy/vl
+         borTfKp//mA/v6GzRnAqQ3v8tXMbbJqsEnlrQQQ/mO7QcYy6Zphbh+wHtR0/0XH3960c
+         ySXPNwgaqtIEOqGbLJltYARNPabPNIEW9zs2Hjv1ylJAjBB9XO0OtMVqevNj1LejCsEe
+         SfyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Tlr/PaqbxkpfKuux+ZeYdthv16cbtlg5RBXZEsNXtGw=;
-        b=PwOER3YuA4qL3ZpM8Mmjki629Li9NldJgU0+MxBxachasOCeH0r97Z+De+4vDcuucS
-         lXdtCaa9iroJSNKfttBJ7dxjZqwnGCB0Tf6ZxLFbalhOk5/yFfdJyXG712wGQ2CX5PyT
-         McFnLGBIfgrswTXSimDObR2DAZDojuzRnrZ+Z44Ig69nXtUIx9McPhf3qvTORCHgbI0t
-         PtoBEGEOklBJXvoQbGIkGAkNsQmmVD90Xatmo5z/SvLVrUSVLgHI2Q8p6YSyuNnwRoGC
-         IcHfWGeJyd2EcAaPlrcnvwmMfACmSnRF00jY21epaasFt7wO92sxv8tdRziC+PiR9qRw
-         niqg==
-X-Gm-Message-State: ACgBeo1WI02BZtz+MaVDsFpkNc3cSHqrkK8/xvPZF7m9nJV8eC782iOL
-        Ak7YGmEnJUGPup09O4hewOM=
-X-Google-Smtp-Source: AA6agR6scjUmAyGOnOVRExK9PxzftY+DxlzyKN/lR+WECWZVYdxE6FD4KvF6yE9ORQT5sqbN5DnFCQ==
-X-Received: by 2002:a05:6a00:2392:b0:52e:b4fb:848 with SMTP id f18-20020a056a00239200b0052eb4fb0848mr8705112pfc.8.1659803131495;
-        Sat, 06 Aug 2022 09:25:31 -0700 (PDT)
+        bh=FpRML5FM7z0q20RyQQ3Ksaz1Bp1mVVRpaiFCWoESebI=;
+        b=xC4/wqCpxfpeuMVPeC9Zlwp5Jl96lK7Lr3ir8FjvQNa3MwjYSklIibGDDDFmwMn5qO
+         hzYBSN80+k8jhUpGdGr66YYYBiTXt/TaOuw1M928iqMUI52flWqzIby8utVbVhGdRNXN
+         4ckGLIL+ZGuwQM+qFbYJhP0Bdd0INKGgfGt5miPgzBfs2597KA/Jbee901NQGnWXvGZv
+         ELRDhWRX2jLWcNqi9uu6shQTsPNNNGtRDnTDB6HOl0Vuh8l+q9fQZkPDCMyuImgNG39N
+         oYPo0sDOgCiZembuc//YOqhO/IS1SOQ7eDYhq2iR6qwwPi9NczrZfXCtmGnX7z14QvJI
+         7lbA==
+X-Gm-Message-State: ACgBeo2fWtZZD8TXRnZ5qTNeFSLR1683kbEeSXTfifaaN981WyolfTka
+        xqEPUI4VfRms/vNbqaD8BsI=
+X-Google-Smtp-Source: AA6agR6F32DLoFeS/le46RtJyB6ofXPLEFyPdCXRVyFSziywcYwNA6QpmRdZvjdLoGIdkJX7pUgh3w==
+X-Received: by 2002:a05:6a00:2190:b0:52b:fe5f:5939 with SMTP id h16-20020a056a00219000b0052bfe5f5939mr12039594pfi.83.1659803134119;
+        Sat, 06 Aug 2022 09:25:34 -0700 (PDT)
 Received: from localhost.localdomain (ec2-13-113-80-70.ap-northeast-1.compute.amazonaws.com. [13.113.80.70])
-        by smtp.gmail.com with ESMTPSA id s1-20020a17090a2f0100b001f04479017fsm4990927pjd.29.2022.08.06.09.25.28
+        by smtp.gmail.com with ESMTPSA id s1-20020a17090a2f0100b001f04479017fsm4990927pjd.29.2022.08.06.09.25.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 09:25:31 -0700 (PDT)
+        Sat, 06 Aug 2022 09:25:33 -0700 (PDT)
 From:   Zhang Boyang <zhangboyang.id@gmail.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ferdinand Blomqvist <ferdinand.blomqvist@gmail.com>,
@@ -55,9 +55,9 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
 Cc:     Kees Cook <keescook@chromium.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         Zhang Boyang <zhangboyang.id@gmail.com>
-Subject: [PATCH RESEND V3 3/6] rslib: Fix obvious documentation mistakes
-Date:   Sun,  7 Aug 2022 00:25:07 +0800
-Message-Id: <20220806162510.157196-4-zhangboyang.id@gmail.com>
+Subject: [PATCH RESEND V3 4/6] rslib: Fix kernel-doc style for rs_modnn()
+Date:   Sun,  7 Aug 2022 00:25:08 +0800
+Message-Id: <20220806162510.157196-5-zhangboyang.id@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220806162510.157196-1-zhangboyang.id@gmail.com>
 References: <20220806162510.157196-1-zhangboyang.id@gmail.com>
@@ -73,42 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes some obvious documentation mistakes.
+This patch fixes the style of kernel-doc of rs_modnn().
 
 Signed-off-by: Zhang Boyang <zhangboyang.id@gmail.com>
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 ---
- include/linux/rslib.h           | 4 ++--
- lib/reed_solomon/reed_solomon.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ include/linux/rslib.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/rslib.h b/include/linux/rslib.h
-index 507fa14c03b2..cd0b5a7a5698 100644
+index cd0b5a7a5698..e92923fff3bc 100644
 --- a/include/linux/rslib.h
 +++ b/include/linux/rslib.h
-@@ -19,8 +19,8 @@
-  *
-  * @mm:		Bits per symbol
-  * @nn:		Symbols per block (= (1<<mm)-1)
-- * @alpha_to:	log lookup table
-- * @index_of:	Antilog lookup table
-+ * @alpha_to:	exp() lookup table
-+ * @index_of:	log() lookup table
-  * @genpoly:	Generator polynomial
-  * @nroots:	Number of generator roots = number of parity symbols
-  * @fcr:	First consecutive root, index form
-diff --git a/lib/reed_solomon/reed_solomon.c b/lib/reed_solomon/reed_solomon.c
-index bb4f44c8edba..da46026a60b8 100644
---- a/lib/reed_solomon/reed_solomon.c
-+++ b/lib/reed_solomon/reed_solomon.c
-@@ -56,7 +56,7 @@ static DEFINE_MUTEX(rslistlock);
+@@ -107,7 +107,8 @@ struct rs_control *init_rs_non_canonical(int symsize, int (*func)(int),
+ /* Release a rs control structure */
+ void free_rs(struct rs_control *rs);
  
- /**
-  * codec_init - Initialize a Reed-Solomon codec
-- * @symsize:	symbol size, bits (1-8)
-+ * @symsize:	the symbol size (number of bits)
-  * @gfpoly:	Field generator polynomial coefficients
-  * @gffunc:	Field generator function
-  * @fcr:	first root of RS code generator polynomial, index form
+-/** modulo replacement for galois field arithmetics
++/**
++ * rs_modnn() - Modulo replacement for galois field arithmetics
+  *
+  *  @rs:	Pointer to the RS codec
+  *  @x:		the value to reduce
 -- 
 2.30.2
 

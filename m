@@ -2,84 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF29C58B601
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B53258B606
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiHFOPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 10:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
+        id S231251AbiHFOTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 10:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbiHFOPs (ORCPT
+        with ESMTP id S230133AbiHFOTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 10:15:48 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED87065C2
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 07:15:46 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id f11so4898911pgj.7
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 07:15:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=AdmoEx+WmT67i1BIIL03YLuO83QgajHTg/kt7epiFgg=;
-        b=VrZJ2jGiKcVNK94TZNAGg/tkmL38wNQtqKf1THHLxvabAuue0RgYwgLjqMlPwYJPwr
-         deDcuS/h4N+T+kUZ1zX+bKB6wUO8FseklOntC5piKZ2TBQXA+rDUSkYQyJamrMZ4szC4
-         keWYVLrynR5M35re6QSxMrHFCuncmrp+JoLVjK2k2SlTzRYqJIcchVo36wfjSnctADoa
-         xXLnAGuLJhUVz/NhozC9XK+6Sziz3RJNO+6pYDcF657f5KRrEJqe5hKTQOf/q3sInf4L
-         AQ9TNGqMj0SVJBi/kJN4Q0FY4CvxGad5RLpwYq1a9DhRtI7QM/E3yk58J1ji5u9WyHP5
-         KSLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=AdmoEx+WmT67i1BIIL03YLuO83QgajHTg/kt7epiFgg=;
-        b=EqtACU8IKlMh+8w+MotPIPjMZ4CC6rooRcp63LKw2zAXAbTglU7y4XHV1GxXTZuoT6
-         LuSdXbThhIZsDLr7XA8Tar9wZVoBYxlRlOZrQe9LSHSFE3LdQUGlEeT5N488yKxiLsP4
-         Bl65fEit/uoR6hSDUkIwno6sc5X9s65CE2uS6t8ZdWBiHPNkOQ/0LEtSSfEuC40YXGPR
-         cpaNLHgOp5a49DGdbMjpa/71cNXC6d7GWLkocRSeyiibL8XkXaZi/Bhq53tbqEv9Dtj9
-         eWrlmdOInyCweVAcLAaRGBC4BO7pQHzPT8+DZQ7M3ROZcNZQkzKUYeZNyc0FPs8rri2A
-         kquQ==
-X-Gm-Message-State: ACgBeo132VWc4Jx7fL5KTuFUb5gS8dQgt+ZYpwsSdbSlRekgIcwFpbu+
-        uaAKCZNaLUNuNznXuN8SYAvX
-X-Google-Smtp-Source: AA6agR53FZGAkMJLYJQ36JfX/HuotRuqldhgQsqY+teYfZJBmLRHMgEFBpkrxL9w0zZ1OKME5h++eQ==
-X-Received: by 2002:a63:560e:0:b0:41c:590a:62ed with SMTP id k14-20020a63560e000000b0041c590a62edmr9686308pgb.250.1659795346368;
-        Sat, 06 Aug 2022 07:15:46 -0700 (PDT)
-Received: from thinkpad ([117.202.188.20])
-        by smtp.gmail.com with ESMTPSA id z10-20020a6553ca000000b0041c1965dd96sm3207803pgr.27.2022.08.06.07.15.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 07:15:45 -0700 (PDT)
-Date:   Sat, 6 Aug 2022 19:45:36 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 3/9] usb: dwc3: qcom: fix gadget-only builds
-Message-ID: <20220806141536.GD14384@thinkpad>
-References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-4-johan+linaro@kernel.org>
+        Sat, 6 Aug 2022 10:19:01 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB20B11A22
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 07:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659795540; x=1691331540;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lGFG+m2rPaOrC3XzWp68OGLkCRMQUX6JRII3iBPY3NM=;
+  b=gVzWWSMcozPGGablHnz6N6bPbRtFGrxWlkLkOrPmMqP0vb+/7X6MM9uw
+   d7/xlSFIvJTEpI6DJ6usqJflzpR0qWK3qqICl0J8+nHifwCgMDmI+/qy8
+   aDwkiAqO0aOAqjsgeUG0sl2eJY6wvWIvvjB4oVWs3isDwW0eYx6RkZgDK
+   qoTarhyXu6dhOiMUKiE/0utXyMZ6K8zMGE0tEfMW158AAgXxMARwpNxAC
+   TWgl700CcutyJXUBZ24rCg3PwkN3q6+T2gYqiFNMduhqOAKxXy6A/7yP7
+   HFkyYg4nVJd7cJQqI3k/emAa4242rxl01MzerIkZqEedeumbvFPPeN2IY
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="291597615"
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="291597615"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 07:19:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="931545793"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Aug 2022 07:18:58 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKKdl-000KQq-2h;
+        Sat, 06 Aug 2022 14:18:57 +0000
+Date:   Sat, 6 Aug 2022 22:18:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [hverkuil-media-tree:for-v5.21b 12/13]
+ drivers/media/platform/nxp/dw100/dw100.c:382:25: warning: variable 'dh' set
+ but not used
+Message-ID: <202208062217.dM0Br18Z-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220804151001.23612-4-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,49 +65,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 05:09:55PM +0200, Johan Hovold wrote:
-> A recent change added a dependency to the USB host stack and broke
-> gadget-only builds of the driver.
-> 
-> Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> --`-
-> 
-> Changes in v2
->  - new patch
-> 
->  drivers/usb/dwc3/dwc3-qcom.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index be2e3dd36440..e9364141661b 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -310,8 +310,11 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
->  	 * currently supports only 1 port per controller. So
->  	 * this is sufficient.
->  	 */
-> +#ifdef CONFIG_USB
->  	udev = usb_hub_find_child(hcd->self.root_hub, 1);
-> -
-> +#else
-> +	udev = NULL;
-> +#endif
+tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.21b
+head:   ac27e33a9e4dd1487bde072493d9303358af0507
+commit: b92bfb7b8350160895d0ea34a98831ed4f01af1d [12/13] media: dw100: Add i.MX8MP dw100 dewarper driver
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220806/202208062217.dM0Br18Z-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree for-v5.21b
+        git checkout b92bfb7b8350160895d0ea34a98831ed4f01af1d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/media/platform/nxp/dw100/
 
-Perhaps the check should be moved to the caller instead? This function still
-references "usb_hcd" struct and I don't think that's intended for gadget only
-mode.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Mani
+All warnings (new ones prefixed by >>):
 
->  	if (!udev)
->  		return USB_SPEED_UNKNOWN;
->  
-> -- 
-> 2.35.1
-> 
+   drivers/media/platform/nxp/dw100/dw100.c: In function 'dw100_ctrl_dewarping_map_init':
+>> drivers/media/platform/nxp/dw100/dw100.c:382:25: warning: variable 'dh' set but not used [-Wunused-but-set-variable]
+     382 |         u32 sw, sh, dw, dh, mw, mh, idx;
+         |                         ^~
+>> drivers/media/platform/nxp/dw100/dw100.c:382:21: warning: variable 'dw' set but not used [-Wunused-but-set-variable]
+     382 |         u32 sw, sh, dw, dh, mw, mh, idx;
+         |                     ^~
+
+
+vim +/dh +382 drivers/media/platform/nxp/dw100/dw100.c
+
+   363	
+   364	/*
+   365	 * Initialize the dewarping map with an identity mapping.
+   366	 *
+   367	 * A 16 pixels cell size grid is mapped on the destination image.
+   368	 * The last cells width/height might be lesser than 16 if the destination image
+   369	 * width/height is not divisible by 16. This dewarping grid map specifies the
+   370	 * source image pixel location (x, y) on each grid intersection point.
+   371	 * Bilinear interpolation is used to compute inner cell points locations.
+   372	 *
+   373	 * The coordinates are saved in UQ12.4 fixed point format.
+   374	 */
+   375	static void dw100_ctrl_dewarping_map_init(const struct v4l2_ctrl *ctrl,
+   376						  u32 from_idx, u32 elems,
+   377						  union v4l2_ctrl_ptr ptr)
+   378	{
+   379		struct dw100_ctx *ctx =
+   380			container_of(ctrl->handler, struct dw100_ctx, hdl);
+   381	
+ > 382		u32 sw, sh, dw, dh, mw, mh, idx;
+   383		u16 qx, qy, qdx, qdy, qsh, qsw;
+   384		u32 *map = ctrl->p_cur.p_u32;
+   385	
+   386		sw = ctx->q_data[DW100_QUEUE_SRC].pix_fmt.width;
+   387		dw = ctx->q_data[DW100_QUEUE_DST].pix_fmt.width;
+   388		sh = ctx->q_data[DW100_QUEUE_SRC].pix_fmt.height;
+   389		dh = ctx->q_data[DW100_QUEUE_DST].pix_fmt.height;
+   390	
+   391		mw = ctrl->dims[0];
+   392		mh = ctrl->dims[1];
+   393	
+   394		qsw = dw100_map_convert_to_uq12_4(sw);
+   395		qsh = dw100_map_convert_to_uq12_4(sh);
+   396		qdx = qsw / (mw - 1);
+   397		qdy = qsh / (mh - 1);
+   398	
+   399		ctx->map_width = mw;
+   400		ctx->map_height = mh;
+   401		ctx->map_size = mh * mw * sizeof(u32);
+   402	
+   403		for (idx = from_idx; idx < elems; idx++) {
+   404			qy = min_t(u32, (idx / mw) * qdy, qsh);
+   405			qx = min_t(u32, (idx % mw) * qdx, qsw);
+   406			map[idx] = dw100_map_format_coordinates(qx, qy);
+   407		}
+   408	
+   409		ctx->user_map_is_set = false;
+   410	}
+   411	
 
 -- 
-மணிவண்ணன் சதாசிவம்
+0-DAY CI Kernel Test Service
+https://01.org/lkp

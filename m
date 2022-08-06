@@ -2,63 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9660C58B703
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D162058B709
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbiHFQoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 12:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S233851AbiHFQox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 12:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbiHFQoG (ORCPT
+        with ESMTP id S233782AbiHFQor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 12:44:06 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBF6A183;
-        Sat,  6 Aug 2022 09:44:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659804245; x=1691340245;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jXbt3yEp1PdNwvWnNUWK/iDHpKohU1vrRqIucTRmWws=;
-  b=gt6gvS/PvNVRedsJ7pAcb55C8XArzl3wks4SOvo2BxuNcpeQi25v70i0
-   KcKjOH9PNC3J97INJaVmtyJffB+WhEwNSTREJkU0pz95m80B+ewKdeKPP
-   m5pS54sAcaAe+BgxAgYrGbYdut1svojDBtAu7n8MgkF5ItGQ0R7hbc2mp
-   0l33tF1Wbmksr8d2xcdz1zNHkzQBvE3LL0YWAXAxNRDWUvCIgrnWAER8L
-   wbZu4N+y+6VOGSXvFHDSq576DZPVQf7IBJsz+u+uDRUIkoI6MzMT98oIm
-   4AtfeemeUQVNGoDAP9PY0krsmBNgevshqIDwf6+vINeCXy+PehIUYTURN
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="270153055"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="270153055"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 09:44:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="746173900"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Aug 2022 09:44:03 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKMuB-000KX3-0L;
-        Sat, 06 Aug 2022 16:44:03 +0000
-Date:   Sun, 7 Aug 2022 00:43:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v1 1/1] leds: bcm6358: Get rid of custom
- led_init_default_state_get()
-Message-ID: <202208070030.kV6Z7e9R-lkp@intel.com>
-References: <20220802212542.7153-1-andriy.shevchenko@linux.intel.com>
+        Sat, 6 Aug 2022 12:44:47 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68709B494
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 09:44:45 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id f28so4761996pfk.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 09:44:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=EeVXZM18o949tN0qq5RHF4dl6C4L5bffGDwRqH8GiUU=;
+        b=xQcDen4rmkms9d2IMbQOqk5TIScNtuNMuhz7oPH4Hl05YdCwGN0N7niRmyFza+nrNc
+         uSqw+CWMwkNT5y2WEpVOrXCCwNxnVwW6y6r8ziqM8mWL9JhEzTOCY8ayweKOEWPRaiG6
+         uHr+69m3di/tJbcooBQH8QIhHosVYCHaS6YgvihezHzvUTNICFZZllFeuZRFmiI3q/Rg
+         O9F1V6MBG4zz4rFIlwO8s0pSsDYQd5Y7g35FL+iv6iQl0pcFMoABjC/wvF8jq6iIDPGj
+         xgMmLW+9MoWPmq4s/hgk/4x3IurGNfwxV5A8Mj0BRQ15ZOUctAsiXkiZ2nzcQGGU+/ux
+         +Waw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=EeVXZM18o949tN0qq5RHF4dl6C4L5bffGDwRqH8GiUU=;
+        b=vJ7tjkbFXrdQZkKCrW7yHpAfpEIFcDq/MOE4pz0VIePqQJlYehOlLjLHkBOxmnzY+v
+         +QYuNjPxAxx28ZayIt4w9lbQlPzUPYWsZeufjde8fA6eMElSUh2lii/idQvVYEupvsjh
+         FyJReWKeZAIHGQAxmQXZJRJt2cwqIUQHUOik7LjiX1HUWWQHBziTuTKgPetflsn5lW1O
+         +69Xj3BnDyIrqV7BZgeLmqscJkkj0I11H58seTA0lhMYlHfT58ucJMkIq8EQUsH0t8XJ
+         DFXPOp0hrUlXnFwA+BWvY5Wvs1iwYWrspvUHuW1WM8fCWeEfgPutPwo+AIFxgqtykSsw
+         WCLw==
+X-Gm-Message-State: ACgBeo0VrhLFYljRv1P/o96BUKwutnjG34QC9ov5hlw8rQxDv3woRpLV
+        BD1CD7HvdifIhnvnt0kX1BvY
+X-Google-Smtp-Source: AA6agR4GjBwEjRaNT6AKyfrcOBbIQjOgmfF57fE8Ye3GD77o1OL3xoCGwCKLzYSbl8ZRr7ndVeCXWQ==
+X-Received: by 2002:a63:2bcc:0:b0:40c:95b5:46a4 with SMTP id r195-20020a632bcc000000b0040c95b546a4mr9907552pgr.535.1659804284859;
+        Sat, 06 Aug 2022 09:44:44 -0700 (PDT)
+Received: from thinkpad ([117.202.188.20])
+        by smtp.gmail.com with ESMTPSA id x26-20020aa78f1a000000b0052e2435784asm5378736pfr.8.2022.08.06.09.44.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 09:44:44 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 22:14:35 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 4/9] usb: dwc3: qcom: fix use-after-free on runtime-PM
+ wakeup
+Message-ID: <20220806164435.GL14384@thinkpad>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-5-johan+linaro@kernel.org>
+ <20220806143311.GE14384@thinkpad>
+ <Yu6SE1wKXk6/qT9Z@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220802212542.7153-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yu6SE1wKXk6/qT9Z@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,100 +91,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Sat, Aug 06, 2022 at 06:08:51PM +0200, Johan Hovold wrote:
+> On Sat, Aug 06, 2022 at 08:03:11PM +0530, Manivannan Sadhasivam wrote:
+> > On Thu, Aug 04, 2022 at 05:09:56PM +0200, Johan Hovold wrote:
+> > > The Qualcomm dwc3 runtime-PM implementation checks the xhci
+> > > platform-device pointer in the wakeup-interrupt handler to determine
+> > > whether the controller is in host mode and if so triggers a resume.
+> > > 
+> > > After a role switch in OTG mode the xhci platform-device would have been
+> > > freed and the next wakeup from runtime suspend would access the freed
+> > > memory.
+> > > 
+> > > Note that role switching is executed from a freezable workqueue, which
+> > > guarantees that the pointer is stable during suspend.
+> > > 
+> > > Also note that runtime PM has been broken since commit 2664deb09306
+> > > ("usb: dwc3: qcom: Honor wakeup enabled/disabled state"), which
+> > > incidentally also prevents this issue from being triggered.
+> > > 
+> > > Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+> > > Cc: stable@vger.kernel.org      # 4.18
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > 
+> > It'd be good to mention the introduction of dwc3_qcom_is_host() function.
+> > Initially I thought it is used in a single place, but going through the rest of
+> > the patches reveals that it is used later on.
+> 
+> I think the helper is warranted on its own as it serves as documentation
+> of the underlying assumptions that this code relies on.
+> 
 
-I love your patch! Yet something to improve:
+That's even better.
 
-[auto build test ERROR on pavel-leds/for-next]
-[also build test ERROR on linus/master v5.19 next-20220805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
+Mani
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-bcm6358-Get-rid-of-custom-led_init_default_state_get/20220803-053220
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: arm-buildonly-randconfig-r004-20220801 (https://download.01.org/0day-ci/archive/20220807/202208070030.kV6Z7e9R-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/ad3083d8ac0e2beb10b75a7d87085911b4f6139a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/leds-bcm6358-Get-rid-of-custom-led_init_default_state_get/20220803-053220
-        git checkout ad3083d8ac0e2beb10b75a7d87085911b4f6139a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/leds/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/leds/leds-bcm6358.c:116:10: error: call to undeclared function 'led_init_default_state_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           state = led_init_default_state_get(init_data.fwnode);
-                   ^
-   1 error generated.
-
-
-vim +/led_init_default_state_get +116 drivers/leds/leds-bcm6358.c
-
-    93	
-    94	static int bcm6358_led(struct device *dev, struct device_node *nc, u32 reg,
-    95			       void __iomem *mem, spinlock_t *lock)
-    96	{
-    97		struct led_init_data init_data = {};
-    98		struct bcm6358_led *led;
-    99		enum led_default_state state;
-   100		unsigned long val;
-   101		int rc;
-   102	
-   103		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
-   104		if (!led)
-   105			return -ENOMEM;
-   106	
-   107		led->pin = reg;
-   108		led->mem = mem;
-   109		led->lock = lock;
-   110	
-   111		if (of_property_read_bool(nc, "active-low"))
-   112			led->active_low = true;
-   113	
-   114		init_data.fwnode = of_fwnode_handle(nc);
-   115	
- > 116		state = led_init_default_state_get(init_data.fwnode);
-   117		switch (state) {
-   118		case LEDS_DEFSTATE_ON:
-   119			led->cdev.brightness = LED_FULL;
-   120			break;
-   121		case LEDS_DEFSTATE_KEEP:
-   122			val = bcm6358_led_read(led->mem + BCM6358_REG_MODE);
-   123			val &= BIT(led->pin);
-   124			if ((led->active_low && !val) || (!led->active_low && val))
-   125				led->cdev.brightness = LED_FULL;
-   126			else
-   127				led->cdev.brightness = LED_OFF;
-   128			break;
-   129		default:
-   130			led->cdev.brightness = LED_OFF;
-   131		}
-   132	
-   133		bcm6358_led_set(&led->cdev, led->cdev.brightness);
-   134	
-   135		led->cdev.brightness_set = bcm6358_led_set;
-   136	
-   137		rc = devm_led_classdev_register_ext(dev, &led->cdev, &init_data);
-   138		if (rc < 0)
-   139			return rc;
-   140	
-   141		dev_dbg(dev, "registered LED %s\n", led->cdev.name);
-   142	
-   143		return 0;
-   144	}
-   145	
+> > > +/* Only usable in contexts where the role can not change. */
+> > > +static bool dwc3_qcom_is_host(struct dwc3_qcom *qcom)
+> > > +{
+> > > +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> > > +
+> > > +	return dwc->xhci;
+> > > +}
+> > > +
+> > >  static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+> > >  {
+> > >  	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> > > @@ -460,7 +468,11 @@ static irqreturn_t qcom_dwc3_resume_irq(int irq, void *data)
+> > >  	if (qcom->pm_suspended)
+> > >  		return IRQ_HANDLED;
+> > >  
+> > > -	if (dwc->xhci)
+> > > +	/*
+> > > +	 * This is safe as role switching is done from a freezable workqueue
+> > > +	 * and the wakeup interrupts are disabled as part of resume.
+> > > +	 */
+> > > +	if (dwc3_qcom_is_host(qcom))
+> > >  		pm_runtime_resume(&dwc->xhci->dev);
+> > >  
+> > >  	return IRQ_HANDLED;
+> > > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> > > index f56c30cf151e..f6f13e7f1ba1 100644
+> > > --- a/drivers/usb/dwc3/host.c
+> > > +++ b/drivers/usb/dwc3/host.c
+> > > @@ -135,4 +135,5 @@ int dwc3_host_init(struct dwc3 *dwc)
+> > >  void dwc3_host_exit(struct dwc3 *dwc)
+> > >  {
+> > >  	platform_device_unregister(dwc->xhci);
+> > > +	dwc->xhci = NULL;
+> > >  }
+> > > -- 
+> > > 2.35.1
+> 
+> Johan
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+மணிவண்ணன் சதாசிவம்

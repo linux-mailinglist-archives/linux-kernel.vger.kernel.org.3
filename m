@@ -2,136 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C85958B6D5
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F3D58B6DF
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbiHFQ3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 12:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
+        id S232967AbiHFQeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 12:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbiHFQ3P (ORCPT
+        with ESMTP id S231597AbiHFQeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 12:29:15 -0400
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63D911804;
-        Sat,  6 Aug 2022 09:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=0/EWJspkALZrTjeOIOA2+pvDgmwguZHERdtDusPdfjA=; b=FuwoneNfT65l3UvNLYJXO78yv4
-        T5Z0WHKuNAyln87RP6k8H9XmNnEI89215lp4xzYGGKvcUuqRH4JfaZvdhTdLNlRKBMDKbg9tc8wiR
-        GrECcTEx10AW1zG9vD7qnaFMjmWTXk+1Cz/XFSMHOXKnYkkekq6sGuZS/9GBtbzs0gP6i5ZCICvRH
-        FkEbcN1n4tACbwsmm7IYZUkfaoCdWgeOLEKLlGDHBhWLzsklmmyZJ4fCyaA7i92OOctaPA8dkEQxm
-        uQr318HnuhMYM6tFsyR5onGhzFvuH94zbNp+Q/EOCBTDTxjVOwZKzVgaESBruD9MPlIDbHSFpsnIh
-        LFhCo/CA==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <lars@metafoo.de>)
-        id 1oKMfo-0004JB-1N; Sat, 06 Aug 2022 18:29:12 +0200
-Received: from [2001:a61:2aaa:fe01:9e5c:8eff:fe01:8578]
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1oKMfn-000IWg-TF; Sat, 06 Aug 2022 18:29:11 +0200
-Message-ID: <c28e5dfa-9ce8-a60e-a72a-1c733711ccca@metafoo.de>
-Date:   Sat, 6 Aug 2022 18:29:11 +0200
+        Sat, 6 Aug 2022 12:34:02 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A37FD22;
+        Sat,  6 Aug 2022 09:34:01 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id p10so2739313ile.5;
+        Sat, 06 Aug 2022 09:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=CrJZA7OyrjgVNT2yluOnXy9DkAQBVd94845d/Gv6tLM=;
+        b=BBnD1fZYV9L2qmB93O8uuBM7b56i/6rpHB39Gt4NkxShp0AsrpWMBGl/hy/vBshktb
+         uqT7gsS2icCt8SfpYN2cW6sPvBtB/02bOxI5UVcvvsI/8/XBDUx7U4iufh68Zr1Vyx0U
+         XvNmYYOCkUDsh5TTrbb9bEEjDI+H/1OLOc0H1OlLUGHf9BtWfGLsiDMZMr/jTUTb0gmn
+         yGOy1qm7kpSH4/DUDZ1T6G81Bd6zON/uxEygpVzX3b1VL4aJi8ob277QNJZpYb1V0xo0
+         pf/bRHA4vutnBu8e7AerEFWX2zS+hrsbt2OeIkRRfDjTTVllZumPKga35ZYUcjwZIZp7
+         aOig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=CrJZA7OyrjgVNT2yluOnXy9DkAQBVd94845d/Gv6tLM=;
+        b=T2GHP5MRfLr/qE5C7SU/xy2qZFIasNgxb7LXrXD7mcjc9ZyBrToCFeaUQh0sCly0GN
+         cL9PaZMEjtq7yUP0Pm8yPUZ0xZ0LNG4AUSWO0ONYLuE09boHpVwUc0wld0HrMXphkbQY
+         oqqp7KwSbDikmqAHqYb5P9GTjx7wW4DrtSqU2XX60u8GaMPoAdNArnApZZAnOqohndM9
+         SCzL4Jj+VfNALd5JmFOLimNXQOGlr8wrfw+cvpHnFe4Cm/r5l+cDhbZNqnozKWFKIk0K
+         ah3IekXYCuyqX1GztM2Js5j8qHuXR57+Ja/QfzdABjuy1SFf4R9Bhl7sUyPIHPvRud+6
+         TDpw==
+X-Gm-Message-State: ACgBeo0JRZBxxgvYtl24KQtKUpDLZJv9ZIQCGDPKK3V8wCEi1ZLS26kC
+        NEYUTGslHJv+bKmYUeNSuJkGCa921DUb4hEU
+X-Google-Smtp-Source: AA6agR4ik2yLjyl4JGzH05jPebblOZOGEbVYo9YxyJpbB8q+HpxUbT/8PJmzG5GbANnhrZXBdyKDhQ==
+X-Received: by 2002:a05:6e02:1a61:b0:2e0:c417:4cb0 with SMTP id w1-20020a056e021a6100b002e0c4174cb0mr1025014ilv.186.1659803640515;
+        Sat, 06 Aug 2022 09:34:00 -0700 (PDT)
+Received: from nergzd-desktop.localdomain (tor-exit-50.for-privacy.net. [185.220.101.50])
+        by smtp.gmail.com with ESMTPSA id a20-20020a056e020e1400b002de6fa0d0c0sm2908009ilk.63.2022.08.06.09.33.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 09:34:00 -0700 (PDT)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Tony Lindgren <tony@atomide.com>, linux-doc@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH v2 0/3] Add generic framebuffer support to EFI earlycon driver
+Date:   Sat,  6 Aug 2022 19:32:21 +0300
+Message-Id: <20220806163255.10404-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] iio: temperature: mlx90632 Add supply regulator to
- sensor
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>, Crt Mori <cmo@melexis.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220802103022.423328-1-cmo@melexis.com>
- <20220806171345.45cf1228@jic23-huawei>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <20220806171345.45cf1228@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26619/Sat Aug  6 09:53:47 2022)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/6/22 18:15, Jonathan Cameron wrote:
-> On Tue,  2 Aug 2022 12:30:22 +0200
-> Crt Mori <cmo@melexis.com> wrote:
->
->> Provide possibility to toggle power supply to the sensor so that user
->> can optimize their setup and not have the sensor constantly powered.
->>
->> Signed-off-by: Crt Mori <cmo@melexis.com>
->> ---
->>   drivers/iio/temperature/mlx90632.c | 52 ++++++++++++++++++++++++++++++
->>   1 file changed, 52 insertions(+)
->>
->> diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperature/mlx90632.c
->> index 7ee7ff8047a4..e6e5e649a9f9 100644
->> --- a/drivers/iio/temperature/mlx90632.c
->> +++ b/drivers/iio/temperature/mlx90632.c
->> @@ -18,6 +18,7 @@
->>   #include <linux/math64.h>
->>   #include <linux/pm_runtime.h>
->>   #include <linux/regmap.h>
->> +#include <linux/regulator/consumer.h>
->>   
->>   #include <linux/iio/iio.h>
->>   #include <linux/iio/sysfs.h>
->> @@ -128,6 +129,7 @@
->>    *        calculations
->>    * @object_ambient_temperature: Ambient temperature at object (might differ of
->>    *                              the ambient temperature of sensor.
->> + * @regulator: Regulator of the device
->>    */
->>   struct mlx90632_data {
->>   	struct i2c_client *client;
->> @@ -136,6 +138,7 @@ struct mlx90632_data {
->>   	u16 emissivity;
->>   	u8 mtyp;
->>   	u32 object_ambient_temperature;
->> +	struct regulator *regulator;
->>   };
->>   
->>   static const struct regmap_range mlx90632_volatile_reg_range[] = {
->> @@ -841,6 +844,37 @@ static int mlx90632_wakeup(struct mlx90632_data *data)
->>   	return mlx90632_pwr_continuous(data->regmap);
->>   }
->>   
->> +static void mlx90632_disable_regulator(void *_data)
->> +{
->> +	struct mlx90632_data *data = _data;
->> +	int ret;
->> +
->> +	ret = regulator_disable(data->regulator);
->> +	if (ret < 0)
->> +		dev_err(regmap_get_device(data->regmap),
->> +			"Failed to disable power regulator: %d\n", ret);
->> +}
->> +
->> +static int mlx90632_enable_regulator(struct mlx90632_data *data)
->> +{
->> +	int ret;
->> +
->> +	ret = regulator_set_voltage(data->regulator, 3200000, 3600000);
->> +	if (ret < 0) {
-> Hmm. This can be problematic, as a valid option is for the a stub regulator to
-> have been returned.  Mostly for device where it is common for them to be wired
-> to fixed regulators, we just assume the firmware set the voltage correctly.
-> Ideally it provides a fixed (or controllable) regulator to make that clear.
+Make the EFI earlycon driver be suitable for any linear framebuffers.
+This should be helpful for early porting of boards with no other means of
+output, like smartphones/tablets. There seems to be an issue with early_ioremap
+function on ARM32, but I am unable to find the exact cause. It appears the mappings
+returned by it are somehow incorrect, thus the driver is disabled on ARM. EFI early
+console was disabled on IA64 previously because of missing early_memremap_prot,
+and this is inherited to this driver.
 
-Just to add to what Jonathan said. For configurable regulators the 
-allowed voltage values should be provided in the devicetree and the 
-regulator framework will set it automatically. See the 
-regulator-min-microvolt and regulator-max-microvolt DT properties.
+This patch also changes behavior on EFI systems, by selecting the mapping type
+based on if the framebuffer region intersects with system RAM. If it does, it's
+common sense that it should be in RAM as a whole, and so the system RAM mapping is
+used. It was tested to be working on my PC (Intel Z490 platform), as well as several
+ARM64 boards (Samsung Galaxy S9 (Exynos), iPad Air 2, Xiaomi Mi Pad 4, ...).
+
+Markuss Broks (2):
+  drivers: serial: earlycon: Pass device-tree node
+  efi: earlycon: Add support for generic framebuffers and move to fbdev
+    subsystem
+
+
+v1 -> v2:
+
+- a new patch correcting serial/earlycon.c argument name to "offset" instead
+  of "node"
+- move IA64 exclusion from EFI earlycon Kconfig to earlycon driver Kconfig
+  (IA64 has no early_memremap_prot)
+- move driver from fbdev to console subsystem
+- select EFI earlycon by default
+- fetch stride manually from device-tree, as on some devices it seems stride
+  doesn't match the horizontal resolution * bpp.
+- use saner format (e.g. 1920x1080x32 instead of 1920,1080,32).
+
+ .../admin-guide/kernel-parameters.txt         |  12 +-
+ MAINTAINERS                                   |   5 +
+ drivers/firmware/efi/Kconfig                  |   6 +-
+ drivers/firmware/efi/Makefile                 |   1 -
+ drivers/firmware/efi/earlycon.c               | 246 --------------
+ drivers/tty/serial/earlycon.c                 |   3 +
+ drivers/video/fbdev/Kconfig                   |  11 +
+ drivers/video/fbdev/Makefile                  |   1 +
+ drivers/video/fbdev/earlycon.c                | 301 ++++++++++++++++++
+ include/linux/serial_core.h                   |   1 +
+ 10 files changed, 331 insertions(+), 256 deletions(-)
+ delete mode 100644 drivers/firmware/efi/earlycon.c
+ create mode 100644 drivers/video/fbdev/earlycon.c
+
+-- 
+2.37.0
 

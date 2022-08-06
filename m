@@ -2,100 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98DC258B550
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 14:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F60058B552
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 14:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiHFMGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 08:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S230470AbiHFMGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 08:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbiHFMFt (ORCPT
+        with ESMTP id S230133AbiHFMGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 08:05:49 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9572B14083
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 05:05:47 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d16so4727837pll.11
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 05:05:47 -0700 (PDT)
+        Sat, 6 Aug 2022 08:06:48 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C05BF4C
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 05:06:46 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id k12so7381811ybk.6
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 05:06:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=B0kDW3n73/YJtEBYuBAaHlkDVhHbuG8uEXjeR76NRXQ=;
-        b=HOwD30nidxj8TRJDvMEt7DZGPmPNIskaCEBYf1vaxK0PzNO2rKRfzG+oRA6qxPhcEg
-         5TC2eJOwOeOMvsNkH6tzSx7/9oc01PLAmMwADbzOXdlNneii9Of5+K8RSI8HmgZx+vY5
-         3OwTdPgX1+T6KF8ezLYrYhzwvJbUJ2Yqvs6+70IuTU3ZEMRy9IzczEPZs0YQjuLsLN+P
-         GISNPGjyj2EjJ69BVyurbVefNQJPXvk/wVvx93nFVf0x6vLTyPJ4JmF8l7DdPOHDQ7nY
-         kz3i+iFswlPHCSJqkg1iBmYwv0zo3+Ny62myGSTCwTbWhXyF7/MJqHh/xIk2yCZ1yfqj
-         d2jw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=2ER2WW01ET2wH1WV2jGlyhputEhjwKA2tNpxchjmONE=;
+        b=K/hL0OKR4t9R4c852ucTt6XoUxDMugTeeHaQBMbrgXND1A+PeUlDrDHjtog4xqsqD5
+         BUiK74ydJ1PiAwd0R8s5nFYFc69DREZjdWWheL3CmMiNOv8N+qTBDU2Pnp6NIMCgfnch
+         LkIA65VXVdl4nlsLP3FUXj6bZJjKX7LP9FKLWOBct/3b6AYT3K34W3rmEi99SX9gT5/J
+         Y7/TdzPIWN2mEMhvt99H53/SCS5jBHV1l2hwzxJev/ldaT0Ck4k3+8xSEJmgpklSv5l2
+         66vu/LT44C4pyTmJ2ltQWjgD07wa35Q/SWUdn0geLemWB5fkKyBmX5FccZclV52OdaCd
+         EEBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=B0kDW3n73/YJtEBYuBAaHlkDVhHbuG8uEXjeR76NRXQ=;
-        b=7soO+3fWtI92wzM0AvcOlaBVgt4GeqkO7kI4RAsHm1ph45ivzHcJd6Es2IF34nr3vV
-         89a/F3aJaahWFEna2LCShrQMxRYX93/0hEklMZA+ghWvEJMumGuRFnoTTaiQn7mCsOZh
-         IQHW2/yes7fIth8XqX5NTDJDDPYRtmJfIm/Q2w7U1mmAcSnKDHr0GjKZHZdsg7LuUFA/
-         ZQaOYWhOIACxKY4zHGtJLwe0BCkkKoeXq1/6zTGsZO4HRekbZ188YmHguit5Fz0sxPTt
-         9dwTuop/MQ6xTLUC/TElSXt2lppDaOSJvslsmqQ1gAYmx1a5ZkyVHK7ZrDEIzfOAVwwS
-         auWw==
-X-Gm-Message-State: ACgBeo26qVAcGVx/jhuJWpOoKXnoRD5ip+T+XuZoJI9c+fzu6xM5PVAc
-        dvTdUGQhsCvivtaIV8u/6MFswQ==
-X-Google-Smtp-Source: AA6agR53D0SuL1XIiR+rmxRcrxKX+bO+Lb2m0Cq+adYY3x4InNWOF1SlBkF/3RyQ8MzUoqWY7Rk0fA==
-X-Received: by 2002:a17:90b:3892:b0:1f5:8be1:d8a0 with SMTP id mu18-20020a17090b389200b001f58be1d8a0mr7396598pjb.162.1659787547075;
-        Sat, 06 Aug 2022 05:05:47 -0700 (PDT)
-Received: from C02G87K0MD6R.bytedance.net ([139.177.225.228])
-        by smtp.gmail.com with ESMTPSA id t4-20020a63eb04000000b003db7de758besm3035003pgh.5.2022.08.06.05.05.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 05:05:45 -0700 (PDT)
-From:   Hao Jia <jiahao.os@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
-Subject: [PATCH 3/3] sched/psi: Remove redundant cgroup_psi() when !CONFIG_CGROUPS
-Date:   Sat,  6 Aug 2022 20:05:10 +0800
-Message-Id: <20220806120510.96131-4-jiahao.os@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20220806120510.96131-1-jiahao.os@bytedance.com>
-References: <20220806120510.96131-1-jiahao.os@bytedance.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=2ER2WW01ET2wH1WV2jGlyhputEhjwKA2tNpxchjmONE=;
+        b=Z4WnPcvkcjs88uIIR693QVJvCMOqPjmJuiLsMhbEAJk1ze8fmNgJ0bdtzoSKyeQQzC
+         S0/3YbVjyfC6TuXFJ7a5cuK7ytEVjpt1LwdxojG/Hk5OSY0BFSjNmQRQ8VgYQEGddcNs
+         wpLGpQtFe7tvJUwaXjKKKNFkJpKb+pC2Cc9lrr2XrZOpQmbi3B682DWle0RKM/MkcBoR
+         xLNXZ9wBNcH71I9cvgF5i++x1S7Q/V4gBB1emkFYvmgG9vXhZg6VXOcKNEp5IY5LDSYb
+         3uR5YkOiiz6JVm+MzMPUa9HKJcHRuih6IL/L3SptJMV7icDhYc7/rVeESN2TEDxL7mvY
+         Yv3Q==
+X-Gm-Message-State: ACgBeo0PpRpeZGieiO22q5gdMA8fHlzA0b90eq/15EdRiZFCsWduDUhm
+        blKsGIV/VMHyWm6qnY96hkM7E3TC7aA5F4fe9k0=
+X-Google-Smtp-Source: AA6agR4A8acqcfwVKOHfoffkRYBGjT7WOBlNDrcfX9Qa3koTirWKJ9yfFVdw7+cbakpchkY25Av+7pYwYwCttSNDmmw=
+X-Received: by 2002:a25:b708:0:b0:672:adcb:1ab8 with SMTP id
+ t8-20020a25b708000000b00672adcb1ab8mr8398899ybj.605.1659787605935; Sat, 06
+ Aug 2022 05:06:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:7021:b0:18d:6408:2f21 with HTTP; Sat, 6 Aug 2022
+ 05:06:45 -0700 (PDT)
+Reply-To: Drlisawilliams919@gmail.com
+From:   Drlisawilliams <grahamkhudori@gmail.com>
+Date:   Sat, 6 Aug 2022 14:06:45 +0200
+Message-ID: <CAOPDNSG7ULJ4ufnV7WrVOY5X+bEjFj4i_NhZ-bJ+kQZsR6bgEQ@mail.gmail.com>
+Subject: Hi Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b34 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [grahamkhudori[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [drlisawilliams919[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cgroup_psi() is only called under CONFIG_CGROUPS.
-We don't need cgroup_psi() when !CONFIG_CGROUPS,
-so we can remove it in this case.
+Hi Dear,
 
-Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
----
- include/linux/cgroup.h | 5 -----
- 1 file changed, 5 deletions(-)
+My name is Dr Lisa Williams from the United States.I am a French and
+American nationality (dual) living in the U.S and sometimes in France
+for Work Purpose.
 
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index ed53bfe7c46c..ac5d0515680e 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -734,11 +734,6 @@ static inline struct cgroup *cgroup_parent(struct cgroup *cgrp)
- 	return NULL;
- }
- 
--static inline struct psi_group *cgroup_psi(struct cgroup *cgrp)
--{
--	return NULL;
--}
--
- static inline bool cgroup_psi_enabled(void)
- {
- 	return false;
--- 
-2.32.0
+I hope you consider my friend request. I will share some of my pics
+and more details about myself when I get your response.
 
+Thanks
+With love
+Lisa

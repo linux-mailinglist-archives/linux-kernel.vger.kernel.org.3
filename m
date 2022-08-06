@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8080E58B387
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 05:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E3C58B388
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 05:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238624AbiHFDcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 23:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S239236AbiHFDeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 23:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235716AbiHFDcm (ORCPT
+        with ESMTP id S235716AbiHFDem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 23:32:42 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B9719C11
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 20:32:40 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso9829636pjf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 20:32:40 -0700 (PDT)
+        Fri, 5 Aug 2022 23:34:42 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0540D1A044
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 20:34:42 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id t22-20020a17090a449600b001f617f2bf3eso1472345pjg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 20:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tg4NqtSjU5XuVyDQiVNzVWf9P9SeByvm1yWNtEyxPVc=;
-        b=fxgTY/Vjxw5wi7/JasXkvEFil2jV0OHHXJTvu2o7ec0Ho6BHNtW+E2EUsOKbf0bttA
-         hmVmRa5NUSZJMpdRKaGH2Rk5vj36TkQs6xoJEiD++Nj2s6hW/eQPIVkJZEVyz6c+Ze+M
-         pVz8+6bBZTB0xFcOiaCGFwyCk9CBMoMlFo+1CFkPBSplf8B49bKcjwH+yRjVqiiqfZ3N
-         l8yU/zQPdi0+2k44KYpvDxE66e27tn5oB25bEyks/5lGKfwxVcirgK7Alz6KXt6p/qvd
-         uOVFc4nkhY5wXmkrqyiT4IGmxeqyBgcJBQfOkYpB3Z+vbRYKTOUWmu+rZsTXRGeCMaTn
-         OFKA==
+        bh=D+hrmdEAmwTGkEMDWBMXJiZSEXBkeTQ+/+EoUioJM3U=;
+        b=mqAOQmzcb9wJFWUxgqeyhQaX659m3/RPcVAs2RjJr1dLGpkVTlbDV8wCbnbrpFdr3+
+         8Z/cVyaItHnEFaMYY9rqMfql61BaeGKWOkkNZMdFQLNrwZgRgH+tcLJAvKDby+r178Yk
+         V/tcnOagRrnvGVAFlglNttt4wM1umnqdMJoB7XTHMFPnt1+zGphCOoPlIqj7EUjvjxH/
+         YWgoJV4Xjqkw6ZpWLDglL9dl3esyn3XhLpKe66hfR0f1REQavi2Ni/FjzIjmKXmy+HBw
+         3UF1hYLVpqW3nv/wbqXfXzsPM5JEvE8FwPOpGr0ou4maYWJBECx6vAAyR0cPRQJiqGMu
+         WRQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tg4NqtSjU5XuVyDQiVNzVWf9P9SeByvm1yWNtEyxPVc=;
-        b=kwS7vFQE/ADSJvSQGK2kMZmg21ebbaHxgEA6+k2JOFKE1TP2xoRDiILvE5spiCI+De
-         mPa8vZ779tWETZfytG/P3msjpCzXoyLYVBHY/JS31DaaDZVDI+wsH0imOKlWh+FPC50T
-         1n9aB1FCXoOwK0hYgLcUimwnAZjl4L9e42Atk9+gNJmLV+M+nZJCAl+fCVpjIFI4paio
-         itGFpTqt5RrG9PQQI/+qed0qgFlk7Q88kXpPb1RJSeWE3g2JI9riNzZZP8fe8khuPnGw
-         Q1IzSkCdgnX5fo+pHKI0jqFlp/vR+Jp/4TeRTPdY8DelXIz2Q+TrbvMG23dPAQfRjbao
-         zOIQ==
-X-Gm-Message-State: ACgBeo2NRw1A7H/pUMnavFOVKs+8Lmz4Drk7Bize1SmgBKf3VbUNFJrZ
-        1txA22iIpeQGKMIxyGTvOfVG4Q==
-X-Google-Smtp-Source: AA6agR4M3DVrnATT7rSwbZDjb+owoi+595hWPep9TEfDL344GrMNcwwVGwVkUrASwgeEH9UqbNQ0Wg==
-X-Received: by 2002:a17:902:d2c3:b0:16e:ea56:7840 with SMTP id n3-20020a170902d2c300b0016eea567840mr9535113plc.142.1659756759202;
-        Fri, 05 Aug 2022 20:32:39 -0700 (PDT)
+        bh=D+hrmdEAmwTGkEMDWBMXJiZSEXBkeTQ+/+EoUioJM3U=;
+        b=MLxJrOwtqpstNVBKar/tyiTpZOYhuo/obttGbvykJfCjUn6uw/9LmrHiv3CpY2J8lu
+         wu6q27AGfk6H8GoiCZySd4KP8j7FdBiB5C8TDFUzKgE0JrT7zhl5FUR0Y8w0ILGcQWaa
+         /BPUm0+DIcY2njRNmE80IzWTMi3sGdbI7rD4V05Gx21vm0Xp3JGJ4+PwyiAet6+uhzGa
+         oyPqmwV5u+o5h38vRujqgCzAWqn3ndtu8oFdCAOIV8iMQnmawVwvxxZulL+JtP6YCh3H
+         NbA6u+kl4OZN8MYagfaCF1jY5xoV1q5vkkSpxZtFCCynr9E8xqOcL5NQjCQZqQ76YQMZ
+         zgAg==
+X-Gm-Message-State: ACgBeo3kiY+C1hsOPjYRMBI4fmZ6RjUxl+9xqOyonVpQawWI8yWBdO6h
+        Zi5W4eRBCvo7MLiwpETxSAULQw==
+X-Google-Smtp-Source: AA6agR77xQPUr1ibDY28USqNXT0ehsNzUDHGC/TVV0pGo6GzePAbxNw4umUsnFLfxBtw6HUrkB0hrg==
+X-Received: by 2002:a17:902:f54b:b0:16e:f07b:46d0 with SMTP id h11-20020a170902f54b00b0016ef07b46d0mr9632990plf.77.1659756881331;
+        Fri, 05 Aug 2022 20:34:41 -0700 (PDT)
 Received: from localhost (ec2-18-144-7-244.us-west-1.compute.amazonaws.com. [18.144.7.244])
-        by smtp.gmail.com with ESMTPSA id y2-20020aa793c2000000b0052d27ccea39sm3986012pff.19.2022.08.05.20.32.38
+        by smtp.gmail.com with ESMTPSA id a14-20020aa7970e000000b0052e82671a57sm3842614pfg.73.2022.08.05.20.34.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 20:32:38 -0700 (PDT)
+        Fri, 05 Aug 2022 20:34:40 -0700 (PDT)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Ian Rogers <irogers@google.com>,
@@ -59,9 +59,9 @@ To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2] perf test: Introduce script for data symbol testing
-Date:   Sat,  6 Aug 2022 11:32:34 +0800
-Message-Id: <20220806033234.121781-1-leo.yan@linaro.org>
+Subject: [PATCH 0/2] perf test: Add test for java symbol
+Date:   Sat,  6 Aug 2022 11:34:32 +0800
+Message-Id: <20220806033434.121908-1-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,127 +75,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit introduces a shell script for data symbol testing.
+This patch set is to add a test for java symbol.
 
-The testing is designed a data structure with 64-byte alignment, it has
-two fields "data1" and "data2", and other fields are reserved.
+To allow a shell script to know the installed lib path, we need to
+export the environment variable "PREFIX" in the C code.  We use the
+first patch for this purpose.  The second patch introduces the java
+symbol testing.
 
-Using "perf mem" command, we can record and report memory samples for a
-self-contained workload with 1 second duration.  If have no any memory
-sample for the data structure "buf1", it reports failure;  and by
-checking the offset in structure "buf1", if any memory accessing is not
-for "data1" and "data2" fields, it means wrong data symbol parsing and
-returns failure.
+The test has been verified on my x86_64 machine with mainline kernel.
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
 
-Changes from v1:
-- Removed "killall" since the test has no child process (Ian);
-- Used "char" instead of "long" in the buf structure.
+Leo Yan (2):
+  perf subcmd: Set environment variable "PREFIX"
+  perf test: Introduce script for java symbol testing
 
- tools/perf/tests/shell/test_data_symbol.sh | 92 ++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
- create mode 100755 tools/perf/tests/shell/test_data_symbol.sh
+ tools/lib/subcmd/exec-cmd.c                |  3 +
+ tools/perf/tests/shell/test_java_symbol.sh | 66 ++++++++++++++++++++++
+ 2 files changed, 69 insertions(+)
+ create mode 100755 tools/perf/tests/shell/test_java_symbol.sh
 
-diff --git a/tools/perf/tests/shell/test_data_symbol.sh b/tools/perf/tests/shell/test_data_symbol.sh
-new file mode 100755
-index 000000000000..d007513ecfbe
---- /dev/null
-+++ b/tools/perf/tests/shell/test_data_symbol.sh
-@@ -0,0 +1,92 @@
-+#!/bin/bash
-+# Test data symbol
-+
-+# SPDX-License-Identifier: GPL-2.0
-+# Leo Yan <leo.yan@linaro.org>, 2022
-+
-+skip_if_no_mem_event() {
-+	perf mem record -e list 2>&1 | egrep -q 'available' && return 0
-+	return 2
-+}
-+
-+skip_if_no_mem_event || exit 2
-+
-+# skip if there's no compiler
-+if ! [ -x "$(command -v cc)" ]; then
-+	echo "skip: no compiler, install gcc"
-+	exit 2
-+fi
-+
-+TEST_PROGRAM_SOURCE=$(mktemp /tmp/__perf_test.program.XXXXX.c)
-+TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
-+PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-+
-+check_result() {
-+	# The memory report format is as below:
-+	#    99.92%  ...  [.] buf1+0x38  ...
-+	result=$(perf mem report -i ${PERF_DATA} --stdio 2>&1 | egrep "buf1" | \
-+		awk '{ for (i = 1; i <= NF; i++) { if ($i ~ /^buf1/) { print $i; break; } } }')
-+
-+	# Testing is failed if has no any sample for "buf1"
-+	[ -z "$result" ] && return 1
-+
-+	while IFS= read -r line; do
-+		# The "data1" and "data2" fields in structure "buf1" have
-+		# offset "0x0" and "0x38", returns failure if detect any
-+		# other offset value.
-+		if [ "$line" != "buf1+0x0" ] && [ "$line" != "buf1+0x38" ]; then
-+			return 1
-+		fi
-+	done <<< "$result"
-+
-+	return 0
-+}
-+
-+cleanup_files()
-+{
-+	echo "Cleaning up files..."
-+	rm -f ${PERF_DATA}
-+	rm -f ${TEST_PROGRAM_SOURCE}
-+	rm -f ${TEST_PROGRAM}
-+}
-+
-+trap cleanup_files exit term int
-+
-+# compile test program
-+cat << EOF > $TEST_PROGRAM_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+typedef struct _buf {
-+	char data1;
-+	char reserved[55];
-+	char data2;
-+} buf __attribute__((aligned(64)));
-+
-+static buf buf1;
-+
-+int main() {
-+	int i;
-+	for (;;) {
-+		buf1.data1++;
-+		buf1.data2 += buf1.data1;
-+	}
-+	return 0;
-+}
-+EOF
-+
-+echo "Compiling test program..."
-+cc $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
-+
-+echo "Recording workload..."
-+perf mem record --all-user -o ${PERF_DATA} -- $TEST_PROGRAM &
-+PERFPID=$!
-+
-+sleep 1
-+
-+kill $PERFPID
-+wait $PERFPID
-+
-+check_result
-+exit $?
 -- 
 2.25.1
 

@@ -2,196 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D7258B73B
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 19:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51B958B738
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 19:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbiHFRLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 13:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S232147AbiHFRJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 13:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiHFRK6 (ORCPT
+        with ESMTP id S229639AbiHFRJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 13:10:58 -0400
-X-Greylist: delayed 397 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 06 Aug 2022 10:10:55 PDT
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CF6F5A2;
-        Sat,  6 Aug 2022 10:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1659805455; bh=q4ABFkCbSH96OqX58TPcyYOM49oSlhTNadDmH/B85F4=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=sEFTyfKX9sQOeJMwWcvpgLUSFDljZ4ZPhLANt4SFBBEQqj87NkeVwlM3T2HiBtHRN
-         po+JJ1bGn0sgZJQRCbb5JiPM/DLzfsYWlZODKmrZsfDwGNABshy/90xETXAstplq2T
-         9kDvdPATIMER9wVtfGZYYGAaLhO76/wzTIj9Sm/Q=
-Date:   Sat, 6 Aug 2022 19:04:14 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Caleb Connolly <kc@postmarketos.org>
-Cc:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        martijn@brixit.nl, ayufan@ayufan.eu, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add initial support for
- Pine64 PinePhone Pro
-Message-ID: <20220806170414.qogs4ad2mooluxie@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        martijn@brixit.nl, ayufan@ayufan.eu, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20220805234411.303055-1-tom@tom-fitzhenry.me.uk>
- <20220805234411.303055-4-tom@tom-fitzhenry.me.uk>
- <f9cbc047-f30f-e711-3213-56fcbb7bbc8a@postmarketos.org>
- <9a168a20-1fd1-5d73-1d33-bd2f054d60d7@tom-fitzhenry.me.uk>
- <eb4327d0-b31b-b6ea-e0d3-d5cff3508f39@postmarketos.org>
+        Sat, 6 Aug 2022 13:09:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3137CE0E3;
+        Sat,  6 Aug 2022 10:09:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0B17B8055F;
+        Sat,  6 Aug 2022 17:09:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BBFDC433D6;
+        Sat,  6 Aug 2022 17:09:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659805757;
+        bh=3IaGu2oBhS+OaZaEspVsjKtafiJKtrRdiWBzpL6AIN0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BNh2Cja2wey/saX8ZVQ33r/c1kMBgmxkH4if/QfP4pkTkcLXAqrAEJoKIy5bzXwfe
+         vl/TbXcA4rmRAWKnd38E7oUAwfg5WifMcIv90l4+PygLa3AG/1D9Bn3PNTexvCw+Hj
+         54aiizOHU5oUMuQxJWXS7Kp8VfBFjdboW8OqGMfXZa+54jr5s9xGoo/vPL8H/dGzeq
+         TVUqjmE1gCuIMw9pd9MDMXon9suo0lCggid/Vzvs5Z1pWJx733vAkOTDecB7wJ4YcR
+         SHgjzjxFtYmK9tVG5SKPlofSU09fhU035q1aW3Rpb5ShNyYdxXajr/DCvlRNN+m7Ov
+         HXySMQc0tKTIA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oKNJ2-0003Xr-CD; Sat, 06 Aug 2022 19:09:45 +0200
+Date:   Sat, 6 Aug 2022 19:09:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 7/9] dt-bindings: usb: qcom,dwc3: add wakeup-source
+ property
+Message-ID: <Yu6gWHt5BphADaNR@hovoldconsulting.com>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-8-johan+linaro@kernel.org>
+ <20220806150848.GH14384@thinkpad>
+ <Yu6ZwePzzkl7tewV@hovoldconsulting.com>
+ <20220806165238.GM14384@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <eb4327d0-b31b-b6ea-e0d3-d5cff3508f39@postmarketos.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220806165238.GM14384@thinkpad>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Caleb and Tom,
-
-more below.
-
-On Sat, Aug 06, 2022 at 03:58:17PM +0100, Caleb Connolly wrote:
-> On 06/08/2022 03:37, Tom Fitzhenry wrote:
-> > On 6/8/22 12:10, Caleb Connolly wrote:
-> > > According to the link below (and my own knowledge of PPP
-> > > development) Kamil is the original author of this patch, both Kamil
-> > > and Martijn created the initial version of the devicetree. Given
-> > > that you're using their work as a base, Kamil's authorship should be
-> > > respected in the patch you submit.
+On Sat, Aug 06, 2022 at 10:22:38PM +0530, Manivannan Sadhasivam wrote:
+> On Sat, Aug 06, 2022 at 06:41:37PM +0200, Johan Hovold wrote:
+> > On Sat, Aug 06, 2022 at 08:38:48PM +0530, Manivannan Sadhasivam wrote:
+> > > On Thu, Aug 04, 2022 at 05:09:59PM +0200, Johan Hovold wrote:
+> > > > Add a wakeup-source property to the binding to describe whether the
+> > > > wakeup interrupts can wake the system from suspend.
+> > > > 
+> > > > Acked-by: Rob Herring <robh@kernel.org>
+> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > 
+> > > So this is based on the fact that Qcom glue wrapper is supplying the wakeup
+> > > interrupts. But isn't it possible that on other platform, the DWC IP can supply
+> > > wakeup interrupts?
 > > 
-> > I agree authorship is important, and thus Kamil, Martijn and Megi are
-> > listed as Co-developed-by in this patch.
-> To be clear, by authorship I mean literally the author of the patch, the
-> previous patch in this series was created by Samuel and you left his
-> authorship intact - it has "From: Samuel Dionne-Riel
-> <samuel@dionne-riel.com>" at the top, so when a maintainer picks it up and
-> it ends up in Linux, anyone looking at it will see that he was the author of
-> the patch.
-> 
-> This patch is from you, there is no From: tag overriding it, and the
-> diffstat in your cover letter shows you as the author. Whilst you have
-> obviously made some heavy changes to this patch, it isn't your original work
-> as you state yourself in the commit message. Authorship should be attributed
-> to Kamil as they are the author of the earliest version of this patch we
-> have.
+> > Yeah, possibly, and that's why Rob suggested keeping the 'wakeup-source'
+> > property also in the core node.
 > > 
-> > > Their original patch [2] contained SoBs from them and Martijn, those
-> > > are both missing below. Both of their signed-off-by tags should be
-> > > added before this patch hits the mailing list, and the same for
-> > > Ondrej. The order also seems wrong (Ondrej should be last before
-> > > you).
+> > > In the driver, the wakeup-source parsing has been moved to the Qcom glue driver.
+> > > But this contradicts with the binding.
 > > 
-> > Yes, this patch's acceptance is blocked until all Co-developed-by
-> > authors (Kamil, Martjin, Megi) provide their Signed-off-by to this
-> > patch.
-> You should obtain SoBs from Co-developers /before/ sending this patch
-> upstream, this indicates that everyone is on board and that the patch has
-> some sensible history. The mailing list isn't the place to ask your
-> co-developers to sign off a patch after you've made extensive changes to it.
-
-Looks like there's some confusion here, that I may have added to at some
-point by a bit of patch squashing, and some SoB tag creativity. ;)
-
-Let me try to clear it up a bit, since it's my squashed patch this discussion
-and this submission is based around. Patch [2] you're linking to is not an
-original patch by Martijn or Kamil.
-
-It's just a squashed bunch of patches that I took from a secret repo that Kamil
-shared with me once upon a time, so that I can help with kernel development and
-camera support for Pinephone Pro about a year ago, when it was still a secret
-thing.
-
-*AFAIK*, original patches in the secret repo were never published by authors,
-but only through my squashed patch from my kernel tree. All the prior work seems
-to be either in unlisted git repos, or in login gated git repos.
-
-So hereby I give my Signed-off-by: Ondrej Jriman <megi@xff.cz> for the patch
-[2] this submission by Tom was developed from, stating that to the best of my
-knowledge:
-
-1) Original author is Martijn Braam and "Fuzhou Rockchip Electronics Co., Ltd".
-   Kamil Trzciński extended the Martijn's original DT with some things that are
-   mostly stripped off in this submission, other than a few oneliners and the
-   gpio power key node. I also have maybe one or two lines in this submission.
-2) Original work was published under MIT or GPL2.0+
-3) Original work is missing copyright header from Rockchip and any SoB on the
-   patches. I have added the SoB for Martijn/Kamil myself without asking them.
-   Sorry for that. And I guess this is the source of some confusion here, too.
-
-That should cover the requirement b) of "Developer’s Certificate of Origin 1.1"
-which should be all that's necessary.
-
-So now that we have all the needed SoB for the base patch, and Tom already has
-SoB for his modifications, all the Co-developed-by are in place, and copyright
-notices from original authors are untouched in the code, except for Rockchip,
-the way forward should be to re-add missing:
-
-  Copyright (c) 2021 Fuzhou Rockchip Electronics Co., Ltd
-
-to the code and add my SoB to the commit message. That should make the
-provenance of this code clear and properly accounted for.
-
-SoB from Martijn would be nice to have, just to reassure about the Rockchip
-copyright, which I assume authored the Android factory kernel code/DT. But I'm
-presonally quite sure this code is MIT/GPL2.0+, regardless.
-
-------
-
-If you want more details, then here is the original patch series from the secret
-repo: https://megous.com/git/linux/log/?h=ayufan-secret/pinephone-pro
-
-Martijn's original patch as taken over by Kamil is
-https://megous.com/git/linux/commit/?h=ayufan-secret/pinephone-pro&id=9f1a4867c21a9fa88177bd0903bdc1d82e213310
-It has Martijn's copyright and is published under GPL2.0+ OR MIT. This is the
-earliest available code this all is based on.
-
-It will sure have some history, too, given that almost all of rk818 node content
-matches the decompiled Android factory image's device tree to the
-T and that's like 50% of the code in this submission. :) That's where my guess
-that the original patch is missing Rockchip's copyright is comming from.
-
-Android DT was never published in code form for all I know. I guess that's what
-we get for requiring DT be licensed under MIT license. Some Rockchip engineer
-likely wrote half of this submission. Rockchip copyright is thus probably
-missing from the patch. Decompiled DT here: https://megous.com/dl/tmp/01_dtbdump_rockchip,android.dts
-
-Kamil seems to have these changes in this submission:
-
-https://megous.com/git/linux/commit/?h=ayufan-secret/pinephone-pro&id=30976b1d8b7c7958474bd54fc86db79ba11d7a17
-https://megous.com/git/linux/commit/?h=ayufan-secret/pinephone-pro&id=28b33d187f6b8dd672115e69a19d8d9a6725c834
-https://megous.com/git/linux/commit/?h=ayufan-secret/pinephone-pro&id=083d7b514a7ac0e97a18bf4012259f4d9fa37733
-https://megous.com/git/linux/commit/?h=ayufan-secret/pinephone-pro&id=bbc9ca6051500baf28296908d92286ff1c4087e0
-(just the power key part)
-
-kind regards,
-	Ondrej
-
-
-> I missed the following points in my original email:
+> > That's irrelevant. The core driver does not implement wakeup support. It
+> > was just added as a hack for the Qualcomm driver, and you won't get
+> > wakeup-capability for other platforms by just parsing the property in
+> > the core driver.
+> > 
+> > When/if wakeup support for such a platform is added, then the core
+> > driver may need to look at the property again.
+> > 
 > 
-> Please read the documentation on modifying patches [1] as it applies here,
-> and add a comment before your SoB explaining your changes, something like
-> 
-> [tom: strip down to minimal booting DT for initial support]
+> My point is, the platform drivers are free to add "wakeup-source" property in
+> the DWC node. Then in that case, the DWC driver should handle the capability,
+> isn't it?
 
-These rules are for subsystem maintainers. At least it says so on top.
+No, not really. They wouldn't violate the current binding, but it would
+arguably still be wrong to do so unless that platform actually supports
+wakeup without involvement from a glue layer.
 
-> This way the history of the patch is preserved properly for anyone looking
-> back at it in the future. In a similar vein, replace the external git links
-> with links to exact commits so they don't degrade over time.
+Perhaps we should reconsider reverting the binding update adding this
+property to the core node and only add it selectively for the platforms
+for which is actually applies (if they even exist).
 
+> I know it is broken currently, but moving the wakeup parsing code is not
+> helping either.
+
+It's not even broken. It has never even been implemented.
+
+Just because someone added a hack that should probably never have been
+merged in the first place, doesn't mean we should somehow pretend that
+we support it.
+
+> And... I'm aware of the fact that the binding should describe the hardware and
+> not the limitation of the driver. So perhaps we should document it in the
+> driver as a TODO or something?
+
+I'd rather just revert the binding update to avoid having discussions
+like this. We don't even know if it's possible to support on any
+platform yet (and remember that none of this has even been in an rc
+release yet).
+
+Johan

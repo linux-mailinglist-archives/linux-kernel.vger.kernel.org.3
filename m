@@ -2,90 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80DB58B547
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 13:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE8F58B54D
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 14:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiHFL6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 07:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S230310AbiHFMF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 08:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiHFL6P (ORCPT
+        with ESMTP id S229853AbiHFMFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 07:58:15 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFCA13FB0;
-        Sat,  6 Aug 2022 04:58:13 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id d139so3640829iof.4;
-        Sat, 06 Aug 2022 04:58:13 -0700 (PDT)
+        Sat, 6 Aug 2022 08:05:25 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17297678
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 05:05:24 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id z187so4328078pfb.12
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 05:05:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tUfbb3VHymyxnMR94FjI2mkzesHqJLKSWp1RL/4sb4c=;
-        b=Y3qOPv56DTeB7tJ2XtMJpFGR93nZ+K/pi/poz2ZHSDlZeglmnHE6f/1x/JTbT2Ikp/
-         oU13pjqcwy/MQM/20pfyY7OuppLSV9phlD5rULnCMdChOKzCyWr+cHGEqOU/mveHfD3s
-         C3cXXUE3nMd2WIYiGWTokuUzSlT2uRTHE3AkloXdVAMt9jHp2HFpdDfQLxSvufJsXt0B
-         bR2Y4eRdh0z35mnviqT1SGtVFTCQia2rlxVE+oDEDGKZSn8Issi8tFBVvZHQZ3Uuz0xI
-         6RDRlEsWor1c7IAnVHPXvXge3HgFJdP7+gp247h8pRThr/D/J2HdWp+ZxNCgquQMl08G
-         A4Kg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=vbeuqHIUa/KXXqYUj/NLMGTaRYx/rAIMle+RJ5jBKww=;
+        b=US0qaNDWb4wLSHHn8QyfD78b4W5rPmfHKzl/VIUy92TBATnJj9nK9uhd5qZ2s+f8Ab
+         iHMH+GVDZqbvGqBUaAkgzN51MvM8uOZxTaR3RZA109zAP7DiQ1SsKKSqqXSj2xWROELe
+         oX535Ygo2zUJ5bainadO6GTIGwNLHHRdPHGNJT3r07MNsYkM+7c5Z66o+A0YV677n9aG
+         zMRtiswzovT382LPrHfyEvWjLU5E1uN064fU5JqXHBDZT6cC1Om5LenK044R8sdmVb8m
+         OlcMVHO7EC3MTYF0nkNY4RhAnHxM27r/ZBB5DzpcZ41E74bKTSovJRhZz8GN8Of21XhG
+         lQ1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tUfbb3VHymyxnMR94FjI2mkzesHqJLKSWp1RL/4sb4c=;
-        b=FI0lk3QZMMN/nc7+0BCh6XH9tRFH07WLElzDxYv64ezMc0TcAqVu9WqAjvWAE+fLMG
-         MgKyIPNl/ihx9zM3P0qn4wXvx8J+q7eczO9Co3L66BnkjdJUnnjsv1QCOtkEI7lQ7Tp4
-         4ptWtNdqlJ9db9AkTvjyaXm3wArKXL1mNgYYpIP7w78XVA+r7hyzwNMl2wMjDtsTXin0
-         8rbVAwAzxBIpPb+TMNiVHn4P+Yh01kLZ3F2syNfQtRJnkvfIfcqeAwGoSuRGMWiyewDr
-         Q2xVTHceB2jEdO+moHbNdPid9lwF3+vADL0SnfqMInBkDq3Mc22wRmPPapfwgtjq0Ku8
-         +VIA==
-X-Gm-Message-State: ACgBeo3jK6Z15lBQhnCvTEX5lU6Fwelgr7lMXoEl6mjlCs1IoR+rcFn4
-        2XyGNdyqd2fKsUrSS72VA7Ut+vMqTrF4g+7kMsU=
-X-Google-Smtp-Source: AA6agR5aI215Ei9SZ/4y1a3HZxN881CoGJtKo6kLP9/0RFkvORY0NNgMAes2xh5t/q/g6cHbT6ERaroTVUQuKHphxzI=
-X-Received: by 2002:a05:6638:25cb:b0:341:6546:1534 with SMTP id
- u11-20020a05663825cb00b0034165461534mr4729711jat.308.1659787093414; Sat, 06
- Aug 2022 04:58:13 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=vbeuqHIUa/KXXqYUj/NLMGTaRYx/rAIMle+RJ5jBKww=;
+        b=cjTB+NMhSKpfS35BwVGW84RAYrB2AyAxcIeluJDojIsZKCs9Jf+VIMWMpFlgPFWEu5
+         vhg55XB5WeXJjQrZtwyEQa4d5OSyt2R8S2PN3YxJNzEEGNAouSgTH2E21lpdC0vaQOfW
+         /HYxJBlOfcrucux2+f1qVWqLEOjuKKGo1eYf+JUEYzYZEacMDheUBUiRiSA23mZ1p5om
+         t4DrzH5WABjj2K1WphsSUyhBOlZV94KMOJ/dZc3blq/D6NTnAAb35hBJFy67Sxj1vXBW
+         GMJCjR3ElXKtjTGJKBQdinUKUj+/58GF7jpBLnI3CkuMlOsH8pd7Y3ZaNXq/1Hpmu290
+         rzJQ==
+X-Gm-Message-State: ACgBeo1cHHG7HPwPZwc2yj5h2JbQI9b7k1AnSn2cdHQmosNVxgpsuQxb
+        ghEVK6bA3t1MiDaUN3VRx09X0w==
+X-Google-Smtp-Source: AA6agR48VCKz83IdueqFefo0pb9JNxMyBMO34Xpn8SndgwZW9jWeog6ve9H65E8mRQ1l/nqP13nqUw==
+X-Received: by 2002:a63:e4f:0:b0:41a:9472:eca0 with SMTP id 15-20020a630e4f000000b0041a9472eca0mr8998329pgo.623.1659787524427;
+        Sat, 06 Aug 2022 05:05:24 -0700 (PDT)
+Received: from C02G87K0MD6R.bytedance.net ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id t4-20020a63eb04000000b003db7de758besm3035003pgh.5.2022.08.06.05.05.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 05:05:23 -0700 (PDT)
+From:   Hao Jia <jiahao.os@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
+Subject: [PATCH 0/3] sched/psi: psi bug fixes and cleanups
+Date:   Sat,  6 Aug 2022 20:05:07 +0800
+Message-Id: <20220806120510.96131-1-jiahao.os@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-References: <20220802015052.10452-29-ojeda@kernel.org> <YukvvPOOu8uZl7+n@yadro.com>
- <CANiq72m30zTwgSgV3+CDiMqdt2LH7TvkcnkMSw3B2do_gLn=Ng@mail.gmail.com> <Yu0BlTVYG2/OKw0f@yadro.com>
-In-Reply-To: <Yu0BlTVYG2/OKw0f@yadro.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 6 Aug 2022 13:58:02 +0200
-Message-ID: <CANiq72n9wbE-YU2WOT8V20eiie3w5EqzjP8WQXpYDQNfUzcN_A@mail.gmail.com>
-Subject: Re: [PATCH v8 28/31] samples: add Rust examples
-To:     Konstantin Shelekhin <k.shelekhin@yadro.com>
-Cc:     ojeda@kernel.org, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 1:40 PM Konstantin Shelekhin
-<k.shelekhin@yadro.com> wrote:
->
-> Cool, thanks. I suggest it for the next patchset iteration, since it's
-> already has a GH issue.
+These three patches are about PSI.
+patch 1: Fixed PSI statistics error caused by unzeroed memory
+in struct psi_group.
+patch 2 and patch 3 are to clean up some unused functions
+and parameters.
 
-Gary implemented a subset of string literals to cover this without
-having to vendor extra external code in
-https://github.com/Rust-for-Linux/linux/pull/858:
+Hao Jia (3):
+  sched/psi: Zero the memory of struct psi_group
+  sched/psi: Remove unused parameter nbytes of psi_trigger_create()
+  sched/psi: Remove redundant cgroup_psi() when !CONFIG_CGROUPS
 
-    module! {
-        type: RustNetfilter,
-        name: "rust_netfilter",
-        author: "Rust for Linux Contributors",
-        description: "Rust netfilter sample",
-        license: "GPL",
-    }
+ include/linux/cgroup.h |  5 -----
+ include/linux/psi.h    |  2 +-
+ kernel/cgroup/cgroup.c |  2 +-
+ kernel/sched/psi.c     | 10 +++-------
+ 4 files changed, 5 insertions(+), 14 deletions(-)
 
-It will be there in v10.
+-- 
+2.32.0
 
-Cheers,
-Miguel

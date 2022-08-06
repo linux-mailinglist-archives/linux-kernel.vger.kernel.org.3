@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F3A58B404
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 08:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 572BE58B405
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 08:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241669AbiHFGJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 02:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S241626AbiHFGL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 02:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241428AbiHFGJu (ORCPT
+        with ESMTP id S238543AbiHFGLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 02:09:50 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C95120199
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 23:09:49 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id r4so5654361edi.8
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 23:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5I+v5QzSk+bZ7pDEdk0V2aAobL+DUNvbn5oomeG6tvY=;
-        b=HeQCo2ZfyOw4W49h46NkhEu6w+zLcUJVhq/30mHdViNiPMyxecNFQaRnNTeFn8H5zz
-         ghd8/ZUrSpmwkW7DlPlRp6bXNrJFJNp0udcmU/MernpCLbyMUNCznjdME/WoGKW3lWLA
-         9lrZJwnaGRnC420kqt9fyWMeRqBhIkgsF1fkoiNkh+7xJWXSWJv2pWAhnJcZ2255eUK0
-         ra/c8jB0vht7yqYEubTjwyzQtMEQDI/GSfol8XKg/t4ka42dTAZVT2Uah8l0DD9J2g3a
-         KleAZf5kZ1TYnPqjZ7g5lj7+eaRiIfUXa+nHqTh6l8ck4kdk2XQHPAC8HATAh7ZLNxvi
-         Bncg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5I+v5QzSk+bZ7pDEdk0V2aAobL+DUNvbn5oomeG6tvY=;
-        b=MHag2Wy90kjGGXuKNwj3bYIKlzseu9nsA1i1uvjQOPXDCi4qv7Xqvdwl+MCqojbeQq
-         BAn7UQxSQEeZEdLFa/0h+S/tPNtOvMPUKR/Xp5LkYYUsn7Be2HOkhZuYs4VLgYQxsofp
-         HDE+Tb/2keOsDngbxrlCWKNyiVl2PGqkIyR54EuVDg93w1yHwIf7noehfFGNSo3T0fXr
-         27VHdQXDSYX3r3WQu0zcWbsQlLAps/T/RW/DhAfjVOv76CcchScluBjGfu81iTylUyTo
-         snck8MxJgaGAY/hRBCLQjakwFNfyayu2IgfOT4oDKpu9chDs2Kzw/JRCEVu+qmRxcihM
-         5i4A==
-X-Gm-Message-State: ACgBeo32PHWXPi4EsEwvx6+vCNfR//t4J6ZlYchLpLAutoZJMtESNEAV
-        Sx6DGPs+HYj7ZJYFx9fJdt8=
-X-Google-Smtp-Source: AA6agR4X086kYSluvhH2r9JDQeydIYZWbBtoDvzYITewnsvHTsK+lv4A0M56P6j4odwzeMx6og0f/Q==
-X-Received: by 2002:aa7:d712:0:b0:43d:3651:7217 with SMTP id t18-20020aa7d712000000b0043d36517217mr9328225edq.79.1659766187590;
-        Fri, 05 Aug 2022 23:09:47 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abba5.dynamic.kabel-deutschland.de. [95.90.187.165])
-        by smtp.gmail.com with ESMTPSA id p10-20020a05640243ca00b0043a7293a03dsm1002357edc.7.2022.08.05.23.09.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 23:09:47 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 3/3] staging: r8188eu: clean up comment for phy_calculate_bit_shift()
-Date:   Sat,  6 Aug 2022 08:09:29 +0200
-Message-Id: <20220806060929.11022-4-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220806060929.11022-1-straube.linux@gmail.com>
-References: <20220806060929.11022-1-straube.linux@gmail.com>
+        Sat, 6 Aug 2022 02:11:25 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8063205D2
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 23:11:22 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M0BtG1xhbz4x1L;
+        Sat,  6 Aug 2022 16:11:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1659766278;
+        bh=o16cnLqkT45HVNmCHzKMkKaK5D6KOmyqnKHR/jo9WQg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=F0k4JJsf6dlADVbLTDunhkjECm2UunQBp1O2eD0YKpnsJjq3QgWETDKTJLh0EfGq/
+         pAwauCOcVCU2cHYLNdMaMTTG4n4MZ1BLIfFCTkkY4xDyZ+eBAgwTu9IqazkgugLkZW
+         CcB2YTIDVmUwys5cJQG7/lu5JLaxVhQx+aSL8Jm+a6jhNfV4/Pdb8H5qyBNMmJdqPR
+         hmYax/Soa3t4Ljsd43aHpdWN0Tr34BDt5d0n51G3kEgVwrUlp3hIReR49PD5D5l7sD
+         /6iAF3qX/lHB5F+RAdRzv0VaTNv+xCtarkboPGc92ZXQ+x5GNmENuNjKXDVCy6dDJ3
+         DCO19qRHihlDg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>
+Subject: Re: [GIT PULL] Bitmap patches for v6.0-rc1
+In-Reply-To: <20220805022940.1637978-1-yury.norov@gmail.com>
+References: <20220805022940.1637978-1-yury.norov@gmail.com>
+Date:   Sat, 06 Aug 2022 16:11:17 +1000
+Message-ID: <87edxtaol6.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the comment for function phy_calculate_bit_shift().
+Hi Linus,
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/hal/rtl8188e_phycfg.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+This pull request has a conflict with the random tree in some powerpc
+code.
 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-index e9e24efabd76..a435ec65d4b1 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-@@ -12,17 +12,7 @@
- /*  1. BB register R/W API */
- /*  */
- 
--/**
--* Function:	phy_CalculateBitShift
--*
--* OverView:	Get shifted position of the BitMask
--*
--* Input:
--*			u32		BitMask,
--*
--* Output:	none
--* Return:		u32		Return the shift bit bit position of the mask
--*/
-+/* Get shifted position of the bit mask */
- static u32 phy_calculate_bit_shift(u32 bitmask)
- {
- 	u32 i = ffs(bitmask);
--- 
-2.37.1
+The random tree removed CONFIG_ARCH_RANDOM and changed the arguments and
+names of the arch_get_random_xxx() calls, meanwhile the commit in the
+bitmap tree moved our arch_get_random_seed_long() into a C file.
 
+Yury Norov <yury.norov@gmail.com> writes:
+> The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
+>
+>   Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+>
+> are available in the Git repository at:
+>
+>   https://github.com/norov/linux.git/ tags/bitmap-6.0-rc1
+>
+> for you to fetch changes up to 36d4b36b69590fed99356a4426c940a253a93800:
+>
+>   lib/nodemask: inline next_node_in() and node_random() (2022-08-01 08:13:21 -0700)
+...
+>  arch/powerpc/include/asm/archrandom.h              |   9 +-
+>  arch/powerpc/kernel/setup-common.c                 |  12 +
+
+There is a textual conflict in archrandom.h. But there's also a fixup
+needed in setup-common.c.
+
+Mark spotted it in linux-next but the resolution is not quite right, I
+describe the correct result here:
+
+  https://lore.kernel.org/all/87h72q9bgg.fsf@mpe.ellerman.id.au/T/#m068009a89d2412dd4ca14ac598a7d6b8288d4568
+
+Or the end state is attached below.
+
+cheers
+
+
+==== arch/powerpc/kernel/setup-common.c ====
+...
+
+size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+{
+	if (max_longs && ppc_md.get_random_seed && ppc_md.get_random_seed(v))
+		return 1;
+
+	return 0;
+}
+EXPORT_SYMBOL(arch_get_random_seed_longs);
+
+...
+
+==== arch/powerpc/include/asm/archrandom.h ====
+/* SPDX-License-Identifier: GPL-2.0 */
+#ifndef _ASM_POWERPC_ARCHRANDOM_H
+#define _ASM_POWERPC_ARCHRANDOM_H
+
+static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
+{
+	return 0;
+}
+
+size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs);
+
+#ifdef CONFIG_PPC_POWERNV
+int pnv_get_random_long(unsigned long *v);
+#endif
+
+#endif /* _ASM_POWERPC_ARCHRANDOM_H */

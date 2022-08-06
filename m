@@ -2,62 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D2458B644
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 17:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7414358B64A
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 17:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiHFPBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 11:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
+        id S231816AbiHFPJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 11:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiHFPBC (ORCPT
+        with ESMTP id S229942AbiHFPI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 11:01:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E1610544;
-        Sat,  6 Aug 2022 08:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659798061; x=1691334061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N2n+7pfk025Ahr8LJDCTmAQFqmwhe72MJrkRgL4kXiA=;
-  b=cW7PQaYtLuTS3uBUEaO7RZ7yzjjcs+ITEHrTDwo4Acslkql1xBBVJKxn
-   sQraZRLvvBDuLnQyX1DX5R+PhCnmGVAOSW0DqkW904jWaJUmeOumYpafv
-   2E2O+e6OJtvJA3kU1ZRBR2UQMkaP6p3PZAJ7ovma0ln8AGMu0nNSFExdP
-   wXEY4qLcxDOSo+S8ukwBE6G7svSm+nvHPKA65f/Hv5wDYhr2YDLgOhnnW
-   VjWE5I0Ci3NbvOeFG6UJ15lHsTqgShvpMKXAd/VumirVdOi/EwkYuYduc
-   ZM5wocmaNQ7Gl7vBDHqe0u5Nl5iOBfa1WH+tMh73e6seDay5tVtqbt/PZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="352097014"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="352097014"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 08:01:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="600649427"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 06 Aug 2022 08:00:59 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKLIQ-000KSl-2q;
-        Sat, 06 Aug 2022 15:00:58 +0000
-Date:   Sat, 6 Aug 2022 23:00:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v1 1/1] leds: bcm6358: Get rid of custom
- led_init_default_state_get()
-Message-ID: <202208062208.6mgNYMMy-lkp@intel.com>
-References: <20220802212542.7153-1-andriy.shevchenko@linux.intel.com>
+        Sat, 6 Aug 2022 11:08:59 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA3BFD29
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 08:08:58 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id c24so125651pgg.11
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 08:08:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uU4q+1kcLLtSx8+NPQzdu8kyauS2SIpK22Q1e7AOuwQ=;
+        b=VSAHKMeN2BFKXhSB9mCom3orXUV6CDkNpa4g8LCmLWnwRbHujmQtNX8Y6V8rSf/56q
+         6T/avkIb0/OHfFSlt5KI/XadFRTEWFxL6W3dw1jXevlfQRPGNJdjGVHqh4yj9GoC/hvq
+         t5vMkJeQaojH8X9crW3APgOxuDTqFRnWf+qnXY/xiOsBBOmnDBkmU0BdQV14mSeOHpwZ
+         alGlTDNR0pWi9N1eGNXZE4R3UpPulij3sIo1BxLPw2C2DFbGKuRSceEAw8Tzcp/lc5Ga
+         Z1ddTWJv/1YgCd01l+LtwexpoNmsaC+f1KMSO/LQfdLdz+bRWqXZ6y0NEzesnpqNRKDC
+         hvHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uU4q+1kcLLtSx8+NPQzdu8kyauS2SIpK22Q1e7AOuwQ=;
+        b=Ba3XtExBJLILqxrlDOwZFadcGJOa3zAe+Vjo2KN60qhNdD1MnDc3o4ego47cDE7Nug
+         /qnkmPJnPNTI9eSUVktkb5BgU+qpNnC9kH9QYNgXAcpPz2Ph1cJYKIbuPpI/fb6qzL0p
+         VN9TfMcYtAjMRLcwbnAphPlxdPsxW4ypsJAhpWT23m/WwahaIZlyBGyKrs1vRu2WDQ9U
+         3Vzda4TGRUOX89HJAsFjkYktH+nB+QyW6Rd0N5Z9MFgPQy8dZNHEDKXSgTmlHt0j9S9R
+         g5ox7HEXbzJ0JVZ/sKQIEn3kyZh7yzoNY2hlVlY9i2qv/9qfysvjTDa2fhVPUuBC0E3t
+         Tq5w==
+X-Gm-Message-State: ACgBeo09+sccGaxTnNAzjbG58ngoGnZDbIJcLUH7r/4R+csrw18z9MhO
+        23rEgdkt32ShugILoQ/aqbWI
+X-Google-Smtp-Source: AA6agR6HkJfzjY4xHcQDLXq9sUwFM7dPJqu+aUYTXPgnE+DcB+YVXM9CNjgMSNPlGgwdJ4qDOVdL5w==
+X-Received: by 2002:a63:8c47:0:b0:40d:2d4:e3a2 with SMTP id q7-20020a638c47000000b0040d02d4e3a2mr9868130pgn.2.1659798538271;
+        Sat, 06 Aug 2022 08:08:58 -0700 (PDT)
+Received: from thinkpad ([117.202.188.20])
+        by smtp.gmail.com with ESMTPSA id h20-20020aa796d4000000b0052d4afc4302sm5253854pfq.175.2022.08.06.08.08.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 08:08:57 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 20:38:48 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 7/9] dt-bindings: usb: qcom,dwc3: add wakeup-source
+ property
+Message-ID: <20220806150848.GH14384@thinkpad>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-8-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220802212542.7153-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220804151001.23612-8-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,100 +88,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Thu, Aug 04, 2022 at 05:09:59PM +0200, Johan Hovold wrote:
+> Add a wakeup-source property to the binding to describe whether the
+> wakeup interrupts can wake the system from suspend.
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-I love your patch! Yet something to improve:
+So this is based on the fact that Qcom glue wrapper is supplying the wakeup
+interrupts. But isn't it possible that on other platform, the DWC IP can supply
+wakeup interrupts?
 
-[auto build test ERROR on pavel-leds/for-next]
-[also build test ERROR on linus/master v5.19 next-20220805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+In the driver, the wakeup-source parsing has been moved to the Qcom glue driver.
+But this contradicts with the binding.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-bcm6358-Get-rid-of-custom-led_init_default_state_get/20220803-053220
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: parisc-randconfig-r014-20220801 (https://download.01.org/0day-ci/archive/20220806/202208062208.6mgNYMMy-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ad3083d8ac0e2beb10b75a7d87085911b4f6139a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/leds-bcm6358-Get-rid-of-custom-led_init_default_state_get/20220803-053220
-        git checkout ad3083d8ac0e2beb10b75a7d87085911b4f6139a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/leds/
+Thanks,
+Mani
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/leds/leds-bcm6358.c: In function 'bcm6358_led':
->> drivers/leds/leds-bcm6358.c:116:17: error: implicit declaration of function 'led_init_default_state_get'; did you mean 'led_get_default_pattern'? [-Werror=implicit-function-declaration]
-     116 |         state = led_init_default_state_get(init_data.fwnode);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                 led_get_default_pattern
-   cc1: some warnings being treated as errors
-
-
-vim +116 drivers/leds/leds-bcm6358.c
-
-    93	
-    94	static int bcm6358_led(struct device *dev, struct device_node *nc, u32 reg,
-    95			       void __iomem *mem, spinlock_t *lock)
-    96	{
-    97		struct led_init_data init_data = {};
-    98		struct bcm6358_led *led;
-    99		enum led_default_state state;
-   100		unsigned long val;
-   101		int rc;
-   102	
-   103		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
-   104		if (!led)
-   105			return -ENOMEM;
-   106	
-   107		led->pin = reg;
-   108		led->mem = mem;
-   109		led->lock = lock;
-   110	
-   111		if (of_property_read_bool(nc, "active-low"))
-   112			led->active_low = true;
-   113	
-   114		init_data.fwnode = of_fwnode_handle(nc);
-   115	
- > 116		state = led_init_default_state_get(init_data.fwnode);
-   117		switch (state) {
-   118		case LEDS_DEFSTATE_ON:
-   119			led->cdev.brightness = LED_FULL;
-   120			break;
-   121		case LEDS_DEFSTATE_KEEP:
-   122			val = bcm6358_led_read(led->mem + BCM6358_REG_MODE);
-   123			val &= BIT(led->pin);
-   124			if ((led->active_low && !val) || (!led->active_low && val))
-   125				led->cdev.brightness = LED_FULL;
-   126			else
-   127				led->cdev.brightness = LED_OFF;
-   128			break;
-   129		default:
-   130			led->cdev.brightness = LED_OFF;
-   131		}
-   132	
-   133		bcm6358_led_set(&led->cdev, led->cdev.brightness);
-   134	
-   135		led->cdev.brightness_set = bcm6358_led_set;
-   136	
-   137		rc = devm_led_classdev_register_ext(dev, &led->cdev, &init_data);
-   138		if (rc < 0)
-   139			return rc;
-   140	
-   141		dev_dbg(dev, "registered LED %s\n", led->cdev.name);
-   142	
-   143		return 0;
-   144	}
-   145	
+> ---
+> 
+> Changes in v2
+>  - disallow 'wakeup-source' in child node (Krzysztof)
+> 
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index fea3e7092ace..d5959bdea63e 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -108,12 +108,17 @@ properties:
+>        HS/FS/LS modes are supported.
+>      type: boolean
+>  
+> +  wakeup-source: true
+> +
+>  # Required child node:
+>  
+>  patternProperties:
+>    "^usb@[0-9a-f]+$":
+>      $ref: snps,dwc3.yaml#
+>  
+> +    properties:
+> +      wakeup-source: false
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.35.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+மணிவண்ணன் சதாசிவம்

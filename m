@@ -2,59 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802A358B620
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAF858B625
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbiHFOe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 10:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48890 "EHLO
+        id S232001AbiHFOfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 10:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbiHFOey (ORCPT
+        with ESMTP id S231204AbiHFOfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 10:34:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3497311A28;
-        Sat,  6 Aug 2022 07:34:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EDC95B8047E;
-        Sat,  6 Aug 2022 14:34:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2C5C433D6;
-        Sat,  6 Aug 2022 14:34:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659796490;
-        bh=AhYiIWPnTRlaUDS/vZCjq5TqXn2f3QFoArzUU29QEUs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eNB6fQqT5MNjaMAbJuyqpQainl+7tJva/dlj6asR4fCfCRtWmMLF75hedwfO04MPi
-         SPZ1B5m94OuVDgYau+aijbNcvFZV3bZXFyqkWPZGhIkBTQ40DrYSm0P54QMVyKoQ9T
-         qazWakgcHICQADGjVye7cMzR2TRGEKIjH8nttApyhRTfNUjMld6L/COSlDuf806Es9
-         QhuFw86EG1sXPru2WOc9IaP+6TMkweTuQXQMq7u783rSDiM79cUgnWFEjI8900X7Uk
-         eIFWPoAZagGdNtojBlXDF1TnrC6R3x/r9Rqo/ONSLL3pjGyEPYBkuZwDz3PG6EDXs+
-         cAT2z7Vev5wmQ==
-Date:   Sat, 6 Aug 2022 15:34:44 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Stefan Hajnoczi <shajnocz@redhat.com>
-Cc:     Stefano Garzarella <sgarzare@redhat.com>, mst@redhat.com,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        torvalds@linux-foundation.org, ascull@google.com, maz@kernel.org,
-        keirf@google.com, jiyong@google.com, kernel-team@android.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
-Subject: Re: IOTLB support for vhost/vsock breaks crosvm on Android
-Message-ID: <20220806143443.GA30658@willie-the-truck>
-References: <20220805181105.GA29848@willie-the-truck>
- <20220806074828.zwzgn5gj47gjx5og@sgarzare-redhat>
- <20220806094239.GA30268@willie-the-truck>
- <CAD60JZMbbkwFHqCm_iCrOrKgRLBUMkDQfuJ=Q1T-sZt59eTBrw@mail.gmail.com>
+        Sat, 6 Aug 2022 10:35:39 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF52DFBE
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 07:35:38 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id f28so4579456pfk.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 07:35:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=1D/80i9Z0nZkycuUkNoAcEIyiKHwsYEJG9bfZe9RA6k=;
+        b=Oy8rIZsIwYOxTINnlEQ/wP6W+gHg55yQUtXB1EmEw9aBCIPIaF/ZdE8jqBapGNxi4b
+         QjD009j2OxcYZwnFJIZULyKiMjooSxv5d5IabX0ltoSJHISNjq6dhtCWKMH0rQVdB48l
+         ZTz6Wb5ZYLwrFOtpa655fEa9LfX+4Fucae0cqtzggvTJiT6sHpoYP13JeXz1UgIQvetG
+         Wa3WG09iZL0YdRi5Yw+J4cnb7jTa/KFFkDNlXnFwOQYAILDjL9HqJIFuFyMGgbM35mD6
+         snUZVan7Yvn4kpxmBRQcI3Wxiws9QVeLlep0zYEHGxgOLz20X6Vidoz8uR2JvGEWrvCd
+         X0nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1D/80i9Z0nZkycuUkNoAcEIyiKHwsYEJG9bfZe9RA6k=;
+        b=I0CvAA5N4YdVbJDig8qJ4y4K7IwCnFoel9uSMuvJvz6dOl/yIl8ChLQ593maGrQ92p
+         WKDZwSeiFBwG7E5sazwzuFXfk3jNPrpw+1HZbVWII8SnBCUAWlnBO8VJAUkp5fR0dcWY
+         4HnV7A8/VzrsfVGHVgp6AhBfL//W7KPkMpdJQFE7tKRxhdA9iP1dm/kGk2nUWEvp2/Aj
+         NLXKvP8SLIdHJsI8Ov1sa5NVOzj7+Qwjxu34kf3180PiLdoiF0yRGtP6hbwZY9mlPs7g
+         QhSlekGz/bk0ZgYFsqVrf6tsvHj+mASgGoEseHqtR+Ox+4+yTD81SKgz2nvqtAtyDrjj
+         7z0g==
+X-Gm-Message-State: ACgBeo3J2zrl9UxHsjR7a0ATfZLW6G4ZJ3sBGLjeCEF4qrmQI3YPGqAA
+        peZohO9+m6/15lMvS+m4GFiP
+X-Google-Smtp-Source: AA6agR5WB0gMQVi/j7aZbv3bvTE6aBfq2g85CHNUCRmMU+FdolPTbBfM9RTyCSvYwZQy0jfkrqYK7w==
+X-Received: by 2002:a63:5650:0:b0:41a:dfa4:bdee with SMTP id g16-20020a635650000000b0041adfa4bdeemr9583170pgm.515.1659796537541;
+        Sat, 06 Aug 2022 07:35:37 -0700 (PDT)
+Received: from thinkpad ([117.202.188.20])
+        by smtp.gmail.com with ESMTPSA id g6-20020a170902c38600b0016d27cead72sm5029259plg.196.2022.08.06.07.35.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 07:35:37 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 20:05:29 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/9] usb: dwc3: qcom: fix runtime PM wakeup
+Message-ID: <20220806143529.GF14384@thinkpad>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-6-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAD60JZMbbkwFHqCm_iCrOrKgRLBUMkDQfuJ=Q1T-sZt59eTBrw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220804151001.23612-6-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,64 +86,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 06, 2022 at 06:52:15AM -0400, Stefan Hajnoczi wrote:
-> On Sat, Aug 6, 2022 at 5:50 AM Will Deacon <will@kernel.org> wrote:
-> > On Sat, Aug 06, 2022 at 09:48:28AM +0200, Stefano Garzarella wrote:
-> > > On Fri, Aug 05, 2022 at 07:11:06PM +0100, Will Deacon wrote:
-> > > If the VMM implements the translation feature, it is right in my opinion
-> > > that it does not enable the feature for the vhost device. Otherwise, if it
-> > > wants the vhost device to do the translation, enable the feature and send
-> > > the IOTLB messages to set the translation.
-> > >
-> > > QEMU for example masks features when not required or supported.
-> > > crosvm should negotiate only the features it supports.
-> > >
-> > > @Michael and @Jason can correct me, but if a vhost device negotiates
-> > > VIRTIO_F_ACCESS_PLATFORM, then it expects the VMM to send IOTLB messages to
-> > > set the translation.
-> >
-> > As above, the issue is that vhost now unconditionally advertises this in
-> > VHOST_GET_FEATURES and so a VMM with no knowledge of IOTLB can end up
-> > enabling it by accident.
+On Thu, Aug 04, 2022 at 05:09:57PM +0200, Johan Hovold wrote:
+> A device must enable wakeups during runtime suspend regardless of
+> whether it is capable and allowed to wake the system up from system
+> suspend.
 > 
-> Unconditionally exposing all vhost feature bits to the guest is
-> incorrect. The emulator must filter out only the feature bits that it
-> supports.
+> Fixes: 2664deb09306 ("usb: dwc3: qcom: Honor wakeup enabled/disabled state")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-I've evidently done a bad job of explaining this, sorry.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-crosvm _does_ filter the feature bits which it passes to vhost. It takes the
-feature set which it has negotiated with the guest and then takes the
-intersection of this set with the set of features which vhost advertises.
-The result is what is passed to VHOST_SET_FEATURES. I included the rust
-for this in my initial mail, but in C it might look something like:
+Thanks,
+Mani
 
-	u64 features = negotiate_features_with_guest(dev);
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 6884026b9fad..05b4666fde14 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -397,7 +397,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+>  	dwc3_qcom_enable_wakeup_irq(qcom->ss_phy_irq, 0);
+>  }
+>  
+> -static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+> +static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+>  {
+>  	u32 val;
+>  	int i, ret;
+> @@ -416,7 +416,7 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+>  	if (ret)
+>  		dev_warn(qcom->dev, "failed to disable interconnect: %d\n", ret);
+>  
+> -	if (device_may_wakeup(qcom->dev)) {
+> +	if (wakeup) {
+>  		qcom->usb2_speed = dwc3_qcom_read_usb2_speed(qcom);
+>  		dwc3_qcom_enable_interrupts(qcom);
+>  	}
+> @@ -426,7 +426,7 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+>  	return 0;
+>  }
+>  
+> -static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
+> +static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
+>  {
+>  	int ret;
+>  	int i;
+> @@ -434,7 +434,7 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
+>  	if (!qcom->is_suspended)
+>  		return 0;
+>  
+> -	if (device_may_wakeup(qcom->dev))
+> +	if (wakeup)
+>  		dwc3_qcom_disable_interrupts(qcom);
+>  
+>  	for (i = 0; i < qcom->num_clocks; i++) {
+> @@ -945,9 +945,11 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+>  static int __maybe_unused dwc3_qcom_pm_suspend(struct device *dev)
+>  {
+>  	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
+> +	bool wakeup = device_may_wakeup(dev);
+>  	int ret = 0;
+>  
+> -	ret = dwc3_qcom_suspend(qcom);
+> +
+> +	ret = dwc3_qcom_suspend(qcom, wakeup);
+>  	if (!ret)
+>  		qcom->pm_suspended = true;
+>  
+> @@ -957,9 +959,10 @@ static int __maybe_unused dwc3_qcom_pm_suspend(struct device *dev)
+>  static int __maybe_unused dwc3_qcom_pm_resume(struct device *dev)
+>  {
+>  	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
+> +	bool wakeup = device_may_wakeup(dev);
+>  	int ret;
+>  
+> -	ret = dwc3_qcom_resume(qcom);
+> +	ret = dwc3_qcom_resume(qcom, wakeup);
+>  	if (!ret)
+>  		qcom->pm_suspended = false;
+>  
+> @@ -970,14 +973,14 @@ static int __maybe_unused dwc3_qcom_runtime_suspend(struct device *dev)
+>  {
+>  	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
+>  
+> -	return dwc3_qcom_suspend(qcom);
+> +	return dwc3_qcom_suspend(qcom, true);
+>  }
+>  
+>  static int __maybe_unused dwc3_qcom_runtime_resume(struct device *dev)
+>  {
+>  	struct dwc3_qcom *qcom = dev_get_drvdata(dev);
+>  
+> -	return dwc3_qcom_resume(qcom);
+> +	return dwc3_qcom_resume(qcom, true);
+>  }
+>  
+>  static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
+> -- 
+> 2.35.1
+> 
 
-	ioctl(vhost_fd, VHOST_GET_FEATURES, &vhost_features);
-	vhost_features &= features;	/* Mask out unsupported features */
-	ioctl(vhost_fd, VHOST_SET_FEATURES, &vhost_features);
-
-The problem is that crosvm has negotiated VIRTIO_F_ACCESS_PLATFORM with
-the guest so that restricted DMA is used for the virtio devices. With
-e13a6915a03f, VIRTIO_F_ACCESS_PLATFORM is now advertised by
-VHOST_GET_FEATURES and so IOTLB is enabled by the sequence above.
-
-> For example, see QEMU's vhost-net device's vhost feature bit allowlist:
-> https://gitlab.com/qemu-project/qemu/-/blob/master/hw/net/vhost_net.c#L40
-
-I agree that changing crosvm to use an allowlist would fix the problem,
-I'm just questioning whether we should be changing userspace at all to
-resolve this issue.
-
-> The reason why the emulator (crosvm/QEMU/etc) must filter out feature
-> bits is that vhost devices are full VIRTIO devices. They are a subset
-> of a VIRTIO device and the emulator is responsible for the rest of the
-> device. Some features will require both vhost and emulator support.
-> Therefore it is incorrect to expect the device to work correctly if
-> the vhost feature bits are passed through to the guest.
-
-I think crosvm is trying to cater for this by masking out the features
-it doesn't know about.
-
-Will
+-- 
+மணிவண்ணன் சதாசிவம்

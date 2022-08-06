@@ -2,191 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86DB58B47F
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 10:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E0558B487
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 10:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbiHFIMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 04:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S241653AbiHFIRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 04:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiHFIM1 (ORCPT
+        with ESMTP id S229647AbiHFIRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 04:12:27 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9D1DF0D
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 01:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=3l/KxdlC5ECTHLfEYr3776uNDKuaqbR7whmW5K5ctqs=; b=z+TVL1+1wnQO5mswo5rS8SFvoz
-        jAym3/RSXw6aXeN14e7mLnawaLGQ3exth9P5nTdN+QEN4cMIQ4+KA4/fGnYDcbG8ZJqArm1WV0jJC
-        5GKNxMnn7gj1M+JhTQ5CCAOCQziFK3uUebmHQOmME/03XHsB+Jq6tCX3NKX4KN6xUHhGoSJaUPj3O
-        QjmNlfAhxvrqw2D3OzJWVVvbeMunfbWe+XjFM4rNgDd0bBTCTC03g+7RPmmUzpPZILcaZ/nQLwAgW
-        s3w7regju64TrZMzHRwYejQSoo/XTNHnN80uX2TNOR4ripFUhrXRpjNyP58umzGpeQoBwAUp4LpPv
-        ZErZ+50w==;
-Received: from [2001:4bb8:192:6d54:4997:d9fe:27ec:4c3c] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oKEv3-006PBN-FA; Sat, 06 Aug 2022 08:12:25 +0000
-Date:   Sat, 6 Aug 2022 10:12:23 +0200
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
-Subject: [GIT PULL] dma-mapping updates for the kernel formetly known as 5.20
-Message-ID: <Yu4iZzP92/f/lNEx@infradead.org>
+        Sat, 6 Aug 2022 04:17:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C04E13F86
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 01:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659773863;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QUhhyhwWziHPf4owDIioKjw2klBpNCGgWh43vGMAw90=;
+        b=BBa5UUBoTzCGZvCIjvPW7kP2dE/dAg/tM17ZabRf00hDc9u0JNb9NsVL+8MDZI2ujLTsrS
+        34bmNz+YklS6CyuKoD9AY/3Z+p1XugkHnNxRvAMJLCyh6U5eSiK51b0RfEoOhTS2QuUV3a
+        rLxBqKDyZtNp0+9TeeyvRGKju7uOcGA=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-5c_aF9d4ODG1VXfCo0nG_g-1; Sat, 06 Aug 2022 04:17:42 -0400
+X-MC-Unique: 5c_aF9d4ODG1VXfCo0nG_g-1
+Received: by mail-qk1-f197.google.com with SMTP id de4-20020a05620a370400b006a9711bd9f8so3772282qkb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 01:17:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=QUhhyhwWziHPf4owDIioKjw2klBpNCGgWh43vGMAw90=;
+        b=l/P01yi/D1cYFmyIpZiCmsIGZ0bMHPy0jIXmGyNfpB6ypbOor6VllBJ6u4FTIORAh0
+         99m7LeI+BZdgSjFF4QztdGY9gh9tEDF6qFJvZ22eV8VC9nDQDfATbkY3DijJsiA21wBg
+         1uYFjWhc2Npjl5Jb5k1xyZ4jRJDxmQagwoAoPDnoGAvdxB/ejCMpnaD7zhuUcsCwvAmL
+         A7jnGhVqhGnJJPg+WMaOLdrkjD0SiUH0c+2+MV2Ad4MHCqgxsuo2yU3W0kE5uYKhNU9Z
+         AurhkE93sZVFzZcJLx0OWumFSZLTna8FUWL2Aw3lfGvBoNq9qBW1Z0vVXdKSMoFh4w1u
+         XHSA==
+X-Gm-Message-State: ACgBeo12rzF9SB8TjBU/Ydwe3J/y1YR4MPfDdOjSeEvxRQvasmja/qBP
+        FFB1bxDnHBkDUfE/XP+fpftJmdNE4o4hFQaFkD1x3LZmOrWo8uQONjeCshxpAmqFryEafbOjnvA
+        Bav1GdwA4JmziWgJX5WpU+oWY
+X-Received: by 2002:a05:622a:d5:b0:31e:eb65:e832 with SMTP id p21-20020a05622a00d500b0031eeb65e832mr9059528qtw.92.1659773862204;
+        Sat, 06 Aug 2022 01:17:42 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7tYxINyBqtVppCff7bDw/5gEb1ZvpfEu6NMMMRX3xBGvdOSDUK2l2oCDIf8Yd83eFnoOADtA==
+X-Received: by 2002:a05:622a:d5:b0:31e:eb65:e832 with SMTP id p21-20020a05622a00d500b0031eeb65e832mr9059511qtw.92.1659773861963;
+        Sat, 06 Aug 2022 01:17:41 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
+        by smtp.gmail.com with ESMTPSA id u4-20020a05620a430400b006b5988b2ca8sm4658290qko.40.2022.08.06.01.17.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 01:17:40 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 10:17:32 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>, mst@redhat.com,
+        jasowang@redhat.com
+Cc:     Will Deacon <will@kernel.org>, stefanha@redhat.com,
+        ascull@google.com, maz@kernel.org, keirf@google.com,
+        jiyong@google.com, kernel-team@android.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
+Subject: Re: IOTLB support for vhost/vsock breaks crosvm on Android
+Message-ID: <20220806081732.a553jsoe2sfwghjg@sgarzare-redhat>
+References: <20220805181105.GA29848@willie-the-truck>
+ <CAHk-=wip-Lju3ZdNwknS6ouyw+nKXeRSnhqVyNo8WSEdk-BfGw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHk-=wip-Lju3ZdNwknS6ouyw+nKXeRSnhqVyNo8WSEdk-BfGw@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
+Hi Linus,
 
-  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+On Fri, Aug 05, 2022 at 03:57:08PM -0700, Linus Torvalds wrote:
+>On Fri, Aug 5, 2022 at 11:11 AM Will Deacon <will@kernel.org> wrote:
+>>
+>> [tl;dr a change from ~18 months ago breaks Android userspace and I don't
+>>  know what to do about it]
+>
+>Augh.
+>
+>I had hoped that android being "closer" to upstream would have meant
+>that somebody actually tests android with upstream kernels. People
+>occasionally talk about it, but apparently it's not actually done.
+>
+>Or maybe it's done onl;y with a very limited android user space.
+>
+>The whole "we notice that something that happened 18 months ago broke
+>our environment" is kind of broken.
+>
+>> After some digging, we narrowed this change in behaviour down to
+>> e13a6915a03f ("vhost/vsock: add IOTLB API support") and further digging
+>> reveals that the infamous VIRTIO_F_ACCESS_PLATFORM feature flag is to
+>> blame. Indeed, our tests once again pass if we revert that patch (there's
+>> a trivial conflict with the later addition of VIRTIO_VSOCK_F_SEQPACKET
+>> but otherwise it reverts cleanly).
+>
+>I have to say, this smells for *so* many reasons.
+>
+>Why is "IOMMU support" called "VIRTIO_F_ACCESS_PLATFORM"?
+>
+>That seems insane, but seems fundamental in that commit e13a6915a03f
+>("vhost/vsock: add IOTLB API support")
+>
+>This code
+>
+>        if ((features & (1ULL << VIRTIO_F_ACCESS_PLATFORM))) {
+>                if (vhost_init_device_iotlb(&vsock->dev, true))
+>                        goto err;
+>        }
+>
+>just makes me go "What?"  It makes no sense. Why isn't that feature
+>called something-something-IOTLB?
 
-are available in the Git repository at:
+I honestly don't know the reason for the name but 
+VIRTIO_F_ACCESS_PLATFORM comes from the virtio specification:
+   https://docs.oasis-open.org/virtio/virtio/v1.2/cs01/virtio-v1.2-cs01.html#x1-6600006
 
-  git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-5.20-2022-08-06
+   VIRTIO_F_ACCESS_PLATFORM(33)
+      This feature indicates that the device can be used on a platform
+      where device access to data in memory is limited and/or translated.
+      E.g. this is the case if the device can be located behind an IOMMU
+      that translates bus addresses from the device into physical
+      addresses in memory, if the device can be limited to only access
+      certain memory addresses or if special commands such as a cache
+      flush can be needed to synchronise data in memory with the device.
+      Whether accesses are actually limited or translated is described by
+      platform-specific means. If this feature bit is set to 0, then the
+      device has same access to memory addresses supplied to it as the
+      driver has. In particular, the device will always use physical
+      addresses matching addresses used by the driver (typically meaning
+      physical addresses used by the CPU) and not translated further, and
+      can access any address supplied to it by the driver. When clear,
+      this overrides any platform-specific description of whether device
+      access is limited or translated in any way, e.g. whether an IOMMU
+      may be present.
 
-for you to fetch changes up to 5c850d31880e00f063fa2a3746ba212c4bcc510f:
+>
+>Can we please just split that flag into two, and have that odd
+>"platform access" be one bit, and the "enable iommu" be an entirely
+>different bit?
 
-  swiotlb: fix passing local variable to debugfs_create_ulong() (2022-07-28 07:23:30 -0700)
+IIUC the problem here is that the VMM does the translation and then for 
+the device there is actually no need to translate, so this feature 
+should not be negotiated by crosvm and vhost-vsock, but just between 
+guest's driver and crosvm.
 
-----------------------------------------------------------------
-dma-mapping updates
+Perhaps the confusion is that we use VIRTIO_F_ACCESS_PLATFORM both 
+between guest and VMM and between VMM and vhost device.
 
- - convert arm32 to the common dma-direct code (Arnd Bergmann, Robin Murphy,
-   Christoph Hellwig)
- - restructure the PCIe peer to peer mapping support (Logan Gunthorpe)
- - allow the IOMMU code to communicate an optional DMA mapping length
-   and use that in scsi and libata (John Garry)
- - split the global swiotlb lock (Tianyu Lan)
- - various fixes and cleanup (Chao Gao, Dan Carpenter, Dongli Zhang,
-   Lukas Bulwahn, Robin Murphy)
+In fact, prior to commit e13a6915a03f ("vhost/vsock: add IOTLB API 
+support"), vhost-vsock did not work when a VMM (e.g., QEMU) tried to 
+negotiate translation with the device: 
+https://bugzilla.redhat.com/show_bug.cgi?id=1894101
 
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      ARM: sa1100/assabet: move dmabounce hack to ohci driver
+The simplest solution is that crosvm doesn't negotiate 
+VIRTIO_F_ACCESS_PLATFORM with the vhost-vsock device if it doesn't want 
+to use translation and send messages to set it.
 
-Chao Gao (3):
-      swiotlb: remove unused fields in io_tlb_mem
-      swiotlb: consolidate rounding up default_nslabs
-      swiotlb: ensure a segment doesn't cross the area boundary
+In fact before commit e13a6915a03f ("vhost/vsock: add IOTLB API 
+support") this feature was not exposed by the vhost-vsock device, so it 
+was never negotiated. Now crosvm is enabling a new feature (not masking 
+guest-negotiated features) so I don't think it's a break in user space, 
+if the user space enable it.
 
-Christoph Hellwig (7):
-      ARM/dma-mapping: remove dmabounce
-      ARM/dma-mapping: mark various dma-mapping routines static in dma-mapping.c
-      ARM/dma-mapping: remove the unused virt_to_dma helper
-      ARM/dma-mapping: use dma_to_phys/phys_to_dma in the dma-mapping code
-      ARM/dma-mapping: use the generic versions of dma_to_phys/phys_to_dma by default
-      ARM/dma-mapping: use dma-direct unconditionally
-      swiotlb: move struct io_tlb_slot to swiotlb.c
+I tried to explain what I understood when I made the change, Michael and 
+Jason surely can add more information.
 
-Dan Carpenter (1):
-      swiotlb: fix use after free on error handling path
+Thanks,
+Stefano
 
-Dongli Zhang (4):
-      swiotlb: remove the unused swiotlb_force declaration
-      swiotlb: remove a useless return in swiotlb_init
-      x86/swiotlb: fix param usage in boot-options.rst
-      swiotlb: panic if nslabs is too small
-
-John Garry (7):
-      dma-mapping: add dma_opt_mapping_size()
-      dma-iommu: add iommu_dma_opt_mapping_size()
-      scsi: core: cap shost max_sectors according to DMA limits only once
-      scsi: sd: allow max_sectors be capped at DMA optimal size limit
-      scsi: scsi_transport_sas: cap shost opt_sectors according to DMA optimal limit
-      ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors
-      scsi: sd: Add a comment about limiting max_sectors to shost optimal limit
-
-Logan Gunthorpe (14):
-      lib/scatterlist: add flag for indicating P2PDMA segments in an SGL
-      PCI/P2PDMA: Attempt to set map_type if it has not been set
-      PCI/P2PDMA: Introduce helpers for dma_map_sg implementations
-      dma-mapping: allow EREMOTEIO return code for P2PDMA transfers
-      dma-direct: support PCI P2PDMA pages in dma-direct map_sg
-      dma-mapping: add flags to dma_map_ops to indicate PCI P2PDMA support
-      iommu: Explicitly skip bus address marked segments in __iommu_map_sg()
-      iommu/dma: support PCI P2PDMA pages in dma-iommu map_sg
-      nvme-pci: check DMA ops when indicating support for PCI P2PDMA
-      nvme-pci: convert to using dma_map_sgtable()
-      RDMA/core: introduce ib_dma_pci_p2p_dma_supported()
-      RDMA/rw: drop pci_p2pdma_[un]map_sg()
-      PCI/P2PDMA: Remove pci_p2pdma_[un]map_sg()
-      dma-mapping: reformat comment to suppress htmldoc warning
-
-Lukas Bulwahn (1):
-      dma-mapping: update comment after dmabounce removal
-
-Robin Murphy (4):
-      ARM/dma-mapping: drop .dma_supported for IOMMU ops
-      ARM/dma-mapping: consolidate IOMMU ops callbacks
-      ARM/dma-mapping: merge IOMMU ops
-      swiotlb: fail map correctly with failed io_tlb_default_mem
-
-Tianyu Lan (3):
-      swiotlb: split up the global swiotlb lock
-      swiotlb: clean up some coding style and minor issues
-      swiotlb: fix passing local variable to debugfs_create_ulong()
-
- Documentation/admin-guide/kernel-parameters.txt    |   5 +-
- Documentation/core-api/dma-api.rst                 |  14 +
- Documentation/x86/x86_64/boot-options.rst          |   8 +-
- arch/arm/Kconfig                                   |   5 +-
- arch/arm/common/Kconfig                            |   6 +-
- arch/arm/common/Makefile                           |   1 -
- arch/arm/common/dmabounce.c                        | 582 ------------------
- arch/arm/common/sa1111.c                           |  64 --
- arch/arm/include/asm/device.h                      |   3 -
- arch/arm/include/asm/dma-direct.h                  |  49 +-
- arch/arm/include/asm/dma-mapping.h                 | 128 ----
- arch/arm/include/asm/memory.h                      |   2 -
- arch/arm/mach-footbridge/Kconfig                   |   1 +
- arch/arm/mach-footbridge/common.c                  |  19 +-
- arch/arm/mach-footbridge/include/mach/dma-direct.h |   8 +
- arch/arm/mach-footbridge/include/mach/memory.h     |   4 -
- arch/arm/mach-highbank/highbank.c                  |   2 +-
- arch/arm/mach-mvebu/coherency.c                    |   2 +-
- arch/arm/mm/dma-mapping.c                          | 652 +++------------------
- drivers/ata/libata-scsi.c                          |   1 +
- drivers/infiniband/core/rw.c                       |  45 +-
- drivers/iommu/dma-iommu.c                          | 105 +++-
- drivers/iommu/iommu.c                              |   4 +
- drivers/iommu/iova.c                               |   5 +
- drivers/nvme/host/core.c                           |   3 +-
- drivers/nvme/host/nvme.h                           |   2 +-
- drivers/nvme/host/pci.c                            |  81 ++-
- drivers/nvme/target/rdma.c                         |   2 +-
- drivers/pci/Kconfig                                |   5 +
- drivers/pci/p2pdma.c                               |  93 +--
- drivers/scsi/hosts.c                               |   5 +
- drivers/scsi/scsi_lib.c                            |   4 -
- drivers/scsi/scsi_transport_sas.c                  |   6 +
- drivers/scsi/sd.c                                  |   7 +
- drivers/usb/core/hcd.c                             |  17 +-
- drivers/usb/host/ohci-sa1111.c                     |  25 +
- include/linux/dma-map-ops.h                        |  64 ++
- include/linux/dma-mapping.h                        |  10 +
- include/linux/iova.h                               |   2 +
- include/linux/pci-p2pdma.h                         |  27 -
- include/linux/scatterlist.h                        |  69 +++
- include/linux/swiotlb.h                            |  17 +-
- include/rdma/ib_verbs.h                            |  11 +
- include/scsi/scsi_host.h                           |   1 +
- kernel/dma/direct.c                                |  43 +-
- kernel/dma/direct.h                                |   8 +-
- kernel/dma/mapping.c                               |  47 +-
- kernel/dma/swiotlb.c                               | 263 +++++++--
- 48 files changed, 833 insertions(+), 1694 deletions(-)
- delete mode 100644 arch/arm/common/dmabounce.c
- delete mode 100644 arch/arm/include/asm/dma-mapping.h
- create mode 100644 arch/arm/mach-footbridge/include/mach/dma-direct.h

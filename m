@@ -2,154 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF85E58B39E
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 05:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D24458B3A4
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 06:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241470AbiHFDxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 23:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S238531AbiHFEC5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 6 Aug 2022 00:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbiHFDxs (ORCPT
+        with ESMTP id S229619AbiHFECy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 23:53:48 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA491409F;
-        Fri,  5 Aug 2022 20:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659758026; x=1691294026;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EOrwo1+w2rYt40oWYg7x/pWgKGfaH9b92Nt/uY+i8tA=;
-  b=Xw+ycoQwGTg32EQO2VtRJPJJKhRtLeZq9Gw44IV0faylS1PystKP9+fY
-   mLOpiAixN2PTU6/Pswu6F0Gq/SckK2AVoEttexSvlIb4guB5jarkp1DQm
-   RiFvfhAgwsvnV35e0FWu79apcmv/HdUhYyeFErCpXczTzexP2HstoOHgn
-   ChhFWElpR3nbLgncRina45IkaAkwfIshAc7mtFljiRtkjQqAET0ad2OCP
-   mDX7RdIlwJpGsXzo1nku8MEPycjARYuWH5b6+Uq39oUMH3qSukrQK+nBi
-   MKEX+9KeCAALwEBFovJDKFjMxl1uBfhCptGN+qxjer3whIz/F0Wn9FHRI
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="270110861"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="270110861"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 20:53:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="746063365"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Aug 2022 20:53:42 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKAsg-000Jzj-0A;
-        Sat, 06 Aug 2022 03:53:42 +0000
-Date:   Sat, 6 Aug 2022 11:53:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alistair Francis <alistair@alistair23.me>,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, shawnguo@kernel.org, alistair23@gmail.com,
-        robh+dt@kernel.org, linus.walleij@linaro.org,
-        s.hauer@pengutronix.de, andreas@kemnade.info,
-        krzysztof.kozlowski+dt@linaro.org, rydberg@bitmath.org,
-        dmitry.torokhov@gmail.com,
-        Alistair Francis <alistair@alistair23.me>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        =?iso-8859-1?Q?Myl=E8ne?= Josserand 
-        <mylene.josserand@bootlin.com>, Peter Geis <pgwipeout@gmail.com>
-Subject: Re: [PATCH v8 1/4] Input: Add driver for Cypress Generation 5
- touchscreen
-Message-ID: <202208061128.pfj2DRWO-lkp@intel.com>
-References: <20220802125827.34509-2-alistair@alistair23.me>
+        Sat, 6 Aug 2022 00:02:54 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 05 Aug 2022 21:02:53 PDT
+Received: from lvs-smtpgate1.nz.fh-koeln.de (lvs-smtpgate1.nz.FH-Koeln.DE [139.6.1.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A987813D28
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 21:02:53 -0700 (PDT)
+Message-Id: <178efe$25k5a6@smtp.intranet.fh-koeln.de>
+X-IPAS-Result: =?us-ascii?q?A2D//wB/5u1i/9LeBotaHAEBASsLBgEBBAQBAQIBAQcBA?=
+ =?us-ascii?q?RWBTwIBGggBgRYCAQEBAUwBAQEBgROBLAEBK4ROg0+ITyODIAGBKYJ1ixaBY?=
+ =?us-ascii?q?wUCgiuMWQsBAQEBAQEBAQEJEgIlCQQBAYUEAVMBAQEBB4QfJjcGDgECBAEBA?=
+ =?us-ascii?q?QEDAgMBAQEBAQEDAQEIAQEBAQYEgRyFLzkNXwEBAYEMNAEBAYQQAQEBBgEBA?=
+ =?us-ascii?q?StrIAIZDQJJFkcBAQEBgkZFAQEBgiUBATMTojuHYYExgQGCKYEmAYELgikFg?=
+ =?us-ascii?q?nKBFyoCAQEBAQEBh22QXIEPAQKFGB0TglIEmCkCAho4AzQRHjcLA10ICRcSI?=
+ =?us-ascii?q?AIEERoLBgMWPgkCBA4DQAgNAxEEAw8YCRIIEAQGAzEMJQsDFAwBBgMGBQMBA?=
+ =?us-ascii?q?xsDFAMFJAcDHA8jDQ0EHx0DAwUlAwICGwcCAgMCBhUGAgJOOQgECAQrJA8FA?=
+ =?us-ascii?q?gcvBQQvAh4EBQYRCAIWAgYEBAQEFgIQCAIIJxcHEzMZAQVZEAkhHAkfEAUGE?=
+ =?us-ascii?q?wMgbwVFDygzNTwrHxsKYCcLKicEFQMEBAMCBhMDAyICEC4xAxUGKRMSLQkqd?=
+ =?us-ascii?q?QkCAyJuAwMEKC4DCUAHCSYsPQUFRz4PlnmCEIE4AjCHC41Cg2UFilagWwcDg?=
+ =?us-ascii?q?1GBRAKTfowogkaSdA4EkX0JhW+EdowSp1iBd4F/cIFuCSWBG1EZD5ISil90A?=
+ =?us-ascii?q?jkCBgEKAQEDCYxlgQqBGAEB?=
+IronPort-Data: A9a23:kNypR605IRyzeO/dI/bD5ZF3kn2cJEfYwER7XKvMYLTBsI5bp2FTz
+ TYXW2+AOqyMZGHyet8jOdvn/EIBvpSBmNdmTVdr3Hw8FHgiRegppDi6wuUcGwvIc6UvmWo+t
+ 512huHodZxyFDmEzvuUGuCJhWFm0q2VTabLBufBOyRgLSdpUy5JZShLwobVv6Yx6TSHK1LV0
+ T/Ni5CHULOV82YcGn4Z7auFtCRusJza0N/PlgVjDRzjlAa2e0g9VPrzF4noR5fLatU88tqBe
+ gr25OrRElU1X/saIojNfr7TKiXmS1NJVOSEoiI+t6OK2nCuqsGuu0o2HKJ0VKtZt9mGt/dg+
+ ORV68KPcAEoAonWsdgQYxpXLxgraMWq+JefSZS+mem65BSbXSCq3e1oSk82eI4f9+JxR21Dn
+ RAaAGlWP1bdwbjsmvThE7EEascLdaEHOKsas3pjwDfLDPtgXY3fX6HHzdRRmi0qwMtJGJ4yY
+ uJGMmI2NkmdO3WjPH8qDrIFkMyahELBWA1063/Kv4k2vCvMmVkZPL/FaoOOI4faFK25hH2wq
+ mvA/mn9RBodMsCW4TqC7nelh+uJliT+MKoZHaex8/NvikCa2mEWARwSfUqyof6+zEW5Xrp3I
+ EUO8y8jqKIv/VCmS9D8WzW3pXeFulgXXN84O+Yz8giIx6/e/g+FC20NTzppaNs6scY3QXoh0
+ Vrht9LlCDhkt+S9SXWB876VqXW5Pi19BWsDYzIUCAgI+d/upKktgR/VCNVuCqi4ipvyAz6Y6
+ y+DqjAzgbpVy4gj16Kn+FnGh3SnoZ2hZhY4+kORGEqk6A1jbYKoboDu7kLUhd5YJoGfXB/H+
+ lAelsSe5fxIBpaI/ASIQaNLWpmq6uyDPTmahkRgd7Es+T3rvTiLcoVApj1zTG91dIBCUTvoZ
+ lLPowRX5Y8VMHbCRfYrPN3tW511l/alTI+/DKuRN59BY4Q0bwKB8GRjYEeR2yXymU40nKcwf
+ 5OaWcarEXMTCKAhxz2zL88M1qIxwyk/wUvTQoz+xhWjl7GZYRa9UqodKFyUcqU166aNoQP9+
+ dJCOsuN0AkZW+r7CgHT7I0eGlADN2QgGZfwpMF/dumfJwNnHCcqDPq56bAofo1hluJPn+3F+
+ nW6ck9f1F/2hHmBIgKPAlhsYbn1XJt7qXM+NAQjJUyp0HVlaoGqqq0FH7M4dLM99eFni/ExV
+ +MEcMioAvNTTz3G/3IWapyVhJRnXBusm0SUOEKYjCMXZ8Q6HVaQopn6Zg2q+DgISCS38Mg5r
+ rmmkA/WKXYee+h8JOHHWMO3kQ2OhH4cpMZodnfFEtpcRHy5peCGNBfNYu8Lz9AkcEuel2XEi
+ lnPXX/0tsGQ+95voYahabSs8db1Q7oW8l9yQjGz0FqgCcXN1kaOqWOqeM2PeTfSUm6cFE6KO
+ L0LkK+U3BEvulFQr4o0KbZqy6972Nb0u6daxwBlFR32g7WX5lBIeyfuMTFn7PEl+1OgkVLet
+ 4Lm0oAy1U+1EM3kCkUNAwEuc/6O0/oZ8hGLs6lkfx+mvnQupebdOam3A/VqoHMDRFeSGNx+q
+ drNROZMt1PXZucCbYfW3nEFrQxg0FRdCvl47fn2/7MHeiJxkwobOsyNYsMHyJ2CdslXOUknO
+ Xeag7DZjLRBwEXZdXcvBxDwMRl12vwzVdEj5AFqGmllbfKc3qBthE0Aq2RpJumXpz0eu99O1
+ qFQHxUdDc2zE/1A3aCvg0jE99l9OSCk
+IronPort-HdrOrdr: A9a23:5CeYvK0wtCOCoOLOpOK2oAqjBKUkLtp133Aq2lEZdPSdGvb1qy
+ nIppkmPH7P4wr5N0tBpTntAsi9qBDnn6KdiLN5VYtKOjOW21dB6epZnO7fKlbbdBEWmNQy6U
+ 4aSdkdNOHN
+X-IronPort-Anti-Spam-Filtered: true
+THK-HEADER: Antispam--identified_spam--outgoing_filter
+Received: from p222210.vpn-dyn.fh-koeln.de (HELO MAC15F3.vpn.fh-koeln.de) ([139.6.222.210])
+  by smtp.intranet.fh-koeln.de with ESMTP/TLS/DHE-RSA-AES128-SHA; 06 Aug 2022 06:01:46 +0200
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802125827.34509-2-alistair@alistair23.me>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Charity Donation
+To:     You <mackenzie.tuttle@ca.rr.com>
+From:   "MacKenzie Scott" <mackenzie.tuttle@ca.rr.com>
+Date:   Sat, 06 Aug 2022 05:01:43 +0100
+Reply-To: mackenzie-tuttle@californiamail.com
+X-Priority: 1 (High)
+Sensitivity: Company-Confidential
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alistair,
+Hi,
+  My name is MacKenzie Scott Tuttle; I'm a philanthropist and founder of one of the largest private foundations in the world. I'm on a mission to give it all away as I believe in ‘giving while living.’ I always had the idea that never changed in my mind — that wealth should be used to help each other, which has made me decide to donate to you. Kindly acknowledge this message and I will get back to you with more details.
 
-Thank you for the patch! Perhaps something to improve:
+Visit the web page to know more about me: https://www.nytimes.com/2022/04/10/business/mackenzie-scott-charity.html
 
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on shawnguo/for-next linus/master v5.19 next-20220805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Francis/Add-support-for-the-Cypress-cyttsp5/20220802-210032
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20220806/202208061128.pfj2DRWO-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/9c372983ef0b8eb7ad48c025a156f80943269af7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alistair-Francis/Add-support-for-the-Cypress-cyttsp5/20220802-210032
-        git checkout 9c372983ef0b8eb7ad48c025a156f80943269af7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/input/touchscreen/cyttsp5.c: In function 'cyttsp5_handle_irq':
->> drivers/input/touchscreen/cyttsp5.c:254:31: warning: array subscript 'int[0]' is partly outside array bounds of 'u8[1]' {aka 'unsigned char[1]'} [-Warray-bounds]
-     254 |         for (nbyte = 0, *axis = 0; nbyte < size; nbyte++)
-         |                         ~~~~~~^~~
-   drivers/input/touchscreen/cyttsp5.c:333:12: note: while referencing 'num_cur_tch'
-     333 |         u8 num_cur_tch;
-         |            ^~~~~~~~~~~
-   drivers/input/touchscreen/cyttsp5.c:257:15: warning: array subscript 'int[0]' is partly outside array bounds of 'u8[1]' {aka 'unsigned char[1]'} [-Warray-bounds]
-     257 |         *axis &= max - 1;
-         |               ^~
-   drivers/input/touchscreen/cyttsp5.c:333:12: note: while referencing 'num_cur_tch'
-     333 |         u8 num_cur_tch;
-         |            ^~~~~~~~~~~
-   drivers/input/touchscreen/cyttsp5.c:257:15: warning: array subscript 'int[0]' is partly outside array bounds of 'u8[1]' {aka 'unsigned char[1]'} [-Warray-bounds]
-     257 |         *axis &= max - 1;
-         |         ~~~~~~^~~~~~~~~~
-   drivers/input/touchscreen/cyttsp5.c:333:12: note: while referencing 'num_cur_tch'
-     333 |         u8 num_cur_tch;
-         |            ^~~~~~~~~~~
-   drivers/input/touchscreen/cyttsp5.c:255:23: warning: array subscript 'int[0]' is partly outside array bounds of 'u8[1]' {aka 'unsigned char[1]'} [-Warray-bounds]
-     255 |                 *axis += ((xy_data[nbyte] >> bofs) << (nbyte * 8));
-         |                       ^~
-   drivers/input/touchscreen/cyttsp5.c:333:12: note: while referencing 'num_cur_tch'
-     333 |         u8 num_cur_tch;
-         |            ^~~~~~~~~~~
-   drivers/input/touchscreen/cyttsp5.c:255:23: warning: array subscript 'int[0]' is partly outside array bounds of 'u8[1]' {aka 'unsigned char[1]'} [-Warray-bounds]
-     255 |                 *axis += ((xy_data[nbyte] >> bofs) << (nbyte * 8));
-         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/touchscreen/cyttsp5.c:333:12: note: while referencing 'num_cur_tch'
-     333 |         u8 num_cur_tch;
-         |            ^~~~~~~~~~~
-
-
-vim +254 drivers/input/touchscreen/cyttsp5.c
-
-   248	
-   249	static void cyttsp5_get_touch_axis(int *axis, int size, int max, u8 *xy_data,
-   250					   int bofs)
-   251	{
-   252		int nbyte;
-   253	
- > 254		for (nbyte = 0, *axis = 0; nbyte < size; nbyte++)
-   255			*axis += ((xy_data[nbyte] >> bofs) << (nbyte * 8));
-   256	
-   257		*axis &= max - 1;
-   258	}
-   259	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+MacKenzie Scott Tuttle.

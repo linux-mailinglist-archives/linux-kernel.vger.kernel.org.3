@@ -2,46 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB4958B455
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 09:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1812558B458
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 09:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241711AbiHFHx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 03:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S241703AbiHFHzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 03:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241639AbiHFHx5 (ORCPT
+        with ESMTP id S241722AbiHFHzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 03:53:57 -0400
-Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6467612AF1
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 00:53:53 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id KEd3oFnAvsfCIKEd3oQT3U; Sat, 06 Aug 2022 09:53:51 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 06 Aug 2022 09:53:51 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <7c03dd48-7e44-11a8-1855-74313874aee7@wanadoo.fr>
-Date:   Sat, 6 Aug 2022 09:53:49 +0200
+        Sat, 6 Aug 2022 03:55:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E68B12D06;
+        Sat,  6 Aug 2022 00:55:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 227FB60BFC;
+        Sat,  6 Aug 2022 07:55:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E69EC433C1;
+        Sat,  6 Aug 2022 07:55:30 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: [PATCH V8 0/4] mm/sparse-vmemmap: Generalise helpers and enable for LoongArch
+Date:   Sat,  6 Aug 2022 15:55:22 +0800
+Message-Id: <20220806075526.1735954-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] driver core: Define dev_err_probe() as __cold
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     tglx@linutronix.de, jgg@ziepe.ca, ira.weiny@intel.com,
-        dan.j.williams@intel.com, andriy.shevchenko@linux.intel.com,
-        wonchung@google.com, list@mail.com, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <0d4391f85d916508dba096caf132b0a973b08800.1659768386.git.christophe.jaillet@wanadoo.fr>
- <Yu4URNSoKRiNWmyj@kroah.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <Yu4URNSoKRiNWmyj@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,55 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 06/08/2022 à 09:12, Greg KH a écrit :
-> On Sat, Aug 06, 2022 at 08:49:23AM +0200, Christophe JAILLET wrote:
->> Give a hint to the compiler that dev_err_probe() is used for error
->> handling. So calling paths are unlikely.
->>
->> >From gcc documentation:
->> 	The paths leading to calls of cold functions within code are marked
->> 	as unlikely by the branch prediction mechanism.
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->>   include/linux/device.h | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/include/linux/device.h b/include/linux/device.h
->> index 424b55df0272..4ac16bde9bf7 100644
->> --- a/include/linux/device.h
->> +++ b/include/linux/device.h
->> @@ -1093,7 +1093,7 @@ void device_links_supplier_sync_state_pause(void);
->>   void device_links_supplier_sync_state_resume(void);
->>   
->>   extern __printf(3, 4)
->> -int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
->> +int __cold dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-> 
-> As the probe() path is by default "slow", does this actually help
-> anything?  I never recommend using any sort of manual likely/unlikely
-> hints unless the results can be seen, otherwise the compiler and CPU
-> almost always do a better job over time.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+This series is in order to enable sparse-vmemmap for LoongArch. But
+LoongArch cannot use generic helpers directly because MIPS&LoongArch
+need to call pgd_init()/pud_init()/pmd_init() when populating page
+tables. So we adjust the prototypes of p?d_init() to make generic
+helpers can call them, then enable sparse-vmemmap with generic helpers,
+and to be further, generalise vmemmap_populate_hugepages() for ARM64,
+X86 and LoongArch.
 
-Based on a few tests, the generated code is different.
-But it is hard to compare if it looks better or not because many things 
-are shuffled.
+V1 -> V2:
+Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
 
-My point is that the proposed change is easy and that the hint "should 
-always be correct in this particular case".
-Also _dev_err() and co. functions are already annotated with __cold.
+V2 -> V3:
+1, Change the Signed-off-by order of author and committer;
+2, Update commit message about the build error on LoongArch.
 
-But honestly, I agree with your POV.
+V3 -> V4:
+Change pmd to pmdp for ARM64 for consistency.
 
-Sometimes the resulting .o is slightly smaller, sometimes slightly bigger.
+V4 -> V5:
+Add a detailed comment for no-fallback in the altmap case.
 
-So, unless s.o. else cares, let leave it as is, timing of probe does not 
-really matter anyway.
+V5 -> V6:
+1, Fix build error for NIOS2;
+2, Fix build error for allnoconfig;
+3, Update comment for no-fallback in the altmap case.
 
+V6 -> V7:
+Fix build warnings of "no previous prototype".
 
-CJ
+V7 -> V8:
+Fix build error for MIPS pud_init().
+
+Huacai Chen and Feiyang Chen(4):
+ MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init().
+ LoongArch: Add sparse memory vmemmap support.
+ mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
+ LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn> 
+---
+ arch/arm64/mm/mmu.c                    | 53 ++++++--------------
+ arch/loongarch/Kconfig                 |  2 +
+ arch/loongarch/include/asm/pgalloc.h   | 13 +----
+ arch/loongarch/include/asm/pgtable.h   | 13 +++--
+ arch/loongarch/include/asm/sparsemem.h |  8 +++
+ arch/loongarch/kernel/numa.c           |  4 +-
+ arch/loongarch/mm/init.c               | 44 +++++++++++++++-
+ arch/loongarch/mm/pgtable.c            | 23 +++++----
+ arch/mips/include/asm/pgalloc.h        |  8 +--
+ arch/mips/include/asm/pgtable-64.h     |  8 +--
+ arch/mips/kvm/mmu.c                    |  3 +-
+ arch/mips/mm/pgtable-32.c              | 10 ++--
+ arch/mips/mm/pgtable-64.c              | 18 ++++---
+ arch/mips/mm/pgtable.c                 |  2 +-
+ arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
+ include/linux/mm.h                     |  8 +++
+ include/linux/page-flags.h             |  1 +
+ mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
+ 18 files changed, 222 insertions(+), 152 deletions(-)
+--
+2.27.0
+

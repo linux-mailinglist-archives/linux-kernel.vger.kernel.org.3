@@ -2,275 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6FE58B501
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 12:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6562C58B505
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 12:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiHFKRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 06:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S236132AbiHFKXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 06:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiHFKQ7 (ORCPT
+        with ESMTP id S229671AbiHFKW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 06:16:59 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF8312D06;
-        Sat,  6 Aug 2022 03:16:58 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 3540E32000F9;
-        Sat,  6 Aug 2022 06:16:55 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 06 Aug 2022 06:16:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1659781014; x=1659867414; bh=Hqmot6k+wA
-        5/nwdZH9VuaMpObSSqlmQv9gNrzpjhSK4=; b=YFoI1RWKkGjGhTL3onfIc8VPJk
-        oY8r4/Ihui2/dgFY1eeJbm1XzBf/o6UxTIz2jCXKny+brRJqJKHdvBtcwLcquUBK
-        KnG7IiwcJJbExuGSTttM6hIXgGuW/eDx0EaQvxxiBbrD5+co866w84ylhcGVEUGw
-        Qiw5U46Sehzz5SO4JOFg0q4vQ6FsKJ900mw7dtiRCfeee6+f23DmClIgJ7v8AQRB
-        5mue0noSusX0zRKfW9eYyTa8RUrkKNii8v0uoVCPys4c0hgISNY+S+W5U09OW8Gl
-        MzTLFlM+vnWpbPROTktxFsVXwLu/UOOuBLZRVmSN/MyFLJLJeMxQl5MYhhUw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1659781014; x=1659867414; bh=Hqmot6k+wA5/nwdZH9VuaMpObSSq
-        lmQv9gNrzpjhSK4=; b=1Q9Be8r/Rw2JCt04nmGrZ3TTjfba5xgU3jk13Dqgw85M
-        iaKPzV0gChnDA3T+f8welpx71wbclv/gT51o4GH81LSfkKeSwOvgh4k05H0zRE2u
-        dwrj/PXq+lfwAZTpOkf+47wNAecqGmDlS4fJe9PCf1rqmKUwxoIoEcp3BdDYDSSp
-        SD0JNLfEu10J8gpwR61ytvTKBHW1bBFdKMkyvz9LlqQcwyXIxlHK1qD1jOjR3mP1
-        ooIbnmSRUaKGUAf7IGm8dfh4jQqpCngdXo6v6458A7NRsDsAYHKK1s6LLlpFEs8y
-        9jR99ZS6ajFCaAU8pxrh+HK7zN+1YGoCdlnAdxqN3A==
-X-ME-Sender: <xms:lj_uYkiqdnKUmFYRzqo_H_dI9getdQiZCGxAs9NYDgtB6O40ENn_Sw>
-    <xme:lj_uYtBM2Quswj1doPbVzMQ5FfkkImzvzmASKhh4SimauGwBPieNLbM51wcp2cqkM
-    0fn1_1y-FupDKHYURM>
-X-ME-Received: <xmr:lj_uYsHsqG0s6RnqgcI_EsL9a9YMnMctDvDE1t93n1ruPhWoIeMh4O4qh1pzISdJCwmSmw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeffedgvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhuffvvefkjghfofggtgesthdtredtredtvdenucfhrhhomhepnfhukhgv
-    ucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnh
-    epvddvgeeltdehfeeijefgveegfeeihfdtveetfeetudfhvedtfeeltefhteegledunecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvse
-    hljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:lj_uYlSgcVoJFJ6XcUXif_8MAzgjB8BxPMHgGMb3VopcSl86rDsHiA>
-    <xmx:lj_uYhyAIHoSCNJbI6utVTZYqZ6EkG6xjKUBsboLmhf3PzFUHfbcdw>
-    <xmx:lj_uYj5QphXwbKmlp8hWXMubA1k4bXSqoyko5ZfnS9O918CHqRY6YQ>
-    <xmx:lj_uYs_0mJLLoLIXbo_PlfhgNseK1PiF0Zx2gmGFbfSYBdT12zyEdw>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 6 Aug 2022 06:16:50 -0400 (EDT)
-Date:   Sat, 06 Aug 2022 22:16:35 +1200
-From:   Luke Jones <luke@ljones.dev>
-Subject: Re: [PATCH 1/5] asus-wmi: Add basic support for TUF laptop keyboard
- RGB
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Message-Id: <N7V6GR.XFSPFYLCEU9X2@ljones.dev>
-In-Reply-To: <CAHp75Ve-oo=pGkpD10kbOVtrYtzQLscFq9HO0-Y5a6M_fpXDNw@mail.gmail.com>
-References: <20220805081909.10962-1-luke@ljones.dev>
-        <20220805081909.10962-2-luke@ljones.dev>
-        <CAHp75Ve-oo=pGkpD10kbOVtrYtzQLscFq9HO0-Y5a6M_fpXDNw@mail.gmail.com>
-X-Mailer: geary/40.0
+        Sat, 6 Aug 2022 06:22:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F413A13D58
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 03:22:57 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oKGxJ-0002Wp-Ve; Sat, 06 Aug 2022 12:22:54 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oKGxF-0024dX-NW; Sat, 06 Aug 2022 12:22:52 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oKGxH-009uYH-Br; Sat, 06 Aug 2022 12:22:51 +0200
+Date:   Sat, 6 Aug 2022 12:22:48 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha --subject-prefix=PATCH v3 
+        <jude.onyenegecha@sifive.com>
+Subject: Re: [PATCH 8/8] pwm: dwc: add PWM bit unset in get_state call
+Message-ID: <20220806102248.66htxhfia4irpx5t@pengutronix.de>
+References: <20220805165033.140958-1-ben.dooks@sifive.com>
+ <20220805165033.140958-9-ben.dooks@sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="u5pk4sbymvf2ijox"
+Content-Disposition: inline
+In-Reply-To: <20220805165033.140958-9-ben.dooks@sifive.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy, thanks for the feedback:
 
-On Sat, Aug 6 2022 at 11:44:33 +0200, Andy Shevchenko 
-<andy.shevchenko@gmail.com> wrote:
-> On Fri, Aug 5, 2022 at 10:20 AM Luke D. Jones <luke@ljones.dev> wrote:
->> 
->>  Adds support for TUF laptop RGB control via the multicolor LED API.
->> 
->>  As this is the base essentials for adjusting the RGB, it sets the
-> 
-> these are
-> ...or...
-> essential
-> 
->>  default mode of the keyboard to static. This overwrites the booted
->>  state of the keyboard.
-> 
-> ...
-> 
->>   #include <linux/leds.h>
->>  +#include <linux/led-class-multicolor.h>
-> 
-> Not sure about the ordering ('-' vs. 's') in locale C.
-> 
+--u5pk4sbymvf2ijox
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I used hid-playstation.c as a reference and followed that ordering.
+Hello,
 
-> ...
-> 
->>  +static int tuf_rgb_brightness_set(struct led_classdev *cdev,
->>  +       enum led_brightness brightness)
->>  +{
->>  +       u8 r, g, b;
->>  +       int err;
->>  +       u32 ret;
-> 
->>  +
->>  +       struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(cdev);
-> 
-> No need to put blank lines in the definition block. Also it would be
-> better to move the longest line to be first.
+On Fri, Aug 05, 2022 at 05:50:33PM +0100, Ben Dooks wrote:
+> If we are not in PWM mode, then the output is technically a 50%
+> output based on a single timer instead of the high-low based on
+> the two counters. Add a check for the PWM mode in dwc_pwm_get_state()
+> and if DWC_TIM_CTRL_PWM is not set, then return a 50% cycle.
+>=20
+> This may only be an issue on initialisation, as the rest of the
+> code currently assumes we're always going to have the extended
+> PWM mode using two counters.
+>=20
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+> ---
+>  drivers/pwm/pwm-dwc.c | 34 +++++++++++++++++++++++-----------
+>  1 file changed, 23 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
+> index 5edfb8f8acbf..49e666be7afd 100644
+> --- a/drivers/pwm/pwm-dwc.c
+> +++ b/drivers/pwm/pwm-dwc.c
+> @@ -171,23 +171,35 @@ static void dwc_pwm_get_state(struct pwm_chip *chip=
+, struct pwm_device *pwm,
+>  {
+>  	struct dwc_pwm *dwc =3D to_dwc_pwm(chip);
+>  	u64 duty, period;
+> +	u32 ctrl, ld, ld2;
+> =20
+>  	pm_runtime_get_sync(chip->dev);
+> =20
+> -	state->enabled =3D !!(dwc_pwm_readl(dwc,
+> -				DWC_TIM_CTRL(pwm->hwpwm)) & DWC_TIM_CTRL_EN);
+> +	ctrl =3D dwc_pwm_readl(dwc, DWC_TIM_CTRL(pwm->hwpwm));
+> +	ld =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(pwm->hwpwm));
+> +	ld2 =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(pwm->hwpwm));
+> =20
+> -	duty =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(pwm->hwpwm));
+> -	duty +=3D 1;
+> -	duty *=3D dwc->clk_ns;
+> -	state->duty_cycle =3D duty;
+> +	state->enabled =3D !!(ctrl & DWC_TIM_CTRL_EN);
+> =20
+> -	period =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(pwm->hwpwm));
+> -	period +=3D 1;
+> -	period *=3D dwc->clk_ns;
+> -	period +=3D duty;
+> -	state->period =3D period;
+> +	/* If we're not in PWM, technically the output is a 50-50
 
-Okay cool. Done.
+Huh, I expected checkpatch to warn about that. AFAIK the /* is supposed
+to be on a line for itself?!
 
-> 
->>  +       led_mc_calc_color_components(mc_cdev, brightness);
->>  +       r = mc_cdev->subled_info[0].brightness;
->>  +       g = mc_cdev->subled_info[1].brightness;
->>  +       b = mc_cdev->subled_info[2].brightness;
->>  +
->>  +       /* Writing out requires some defaults. This will overwrite 
->> boot mode */
->>  +       err = asus_wmi_evaluate_method3(ASUS_WMI_METHODID_DEVS, 
->> ASUS_WMI_DEVID_TUF_RGB_MODE,
->>  +                       1 | 0 | (r << 16) | (g << 24), (b) | 0, 
->> &ret);
-> 
-> What the point in those ' | 0'  additions?
+> +	 * based on the timer load-count only.
+> +	 */
+> +	if (ctrl & DWC_TIM_CTRL_PWM) {
+> +		duty =3D ld;
+> +		duty +=3D 1;
+> +		duty *=3D dwc->clk_ns;
 
-They were place-holders in testing that I forgot to change in the 
-second patch which adds mode configuration :(
+I would prefer to write that as:
 
-Should be "save | (mode << 8) | (r << 16) | (g << 24), (b) | (speed << 
-8), &ret);", two bytes.
+	duty =3D (ld + 1) * dwc->clk_ns;
 
-> 
->>  +       if (err) {
->>  +               pr_err("Unable to set TUF RGB data?\n");
-> 
-> Why not dev_err() ?
+given that todays compilers are clever enough to optimize that just fine
+and this version is better readable for humans.
 
-I didn't know about it? Is there an example or doc on its use?
+> +
+> +		period =3D ld2;
+> +		period +=3D 1;
+> +		period *=3D dwc->clk_ns;
+> +		period +=3D duty;
+> +	} else {
+> +		duty =3D (ld + 1) * dwc->clk_ns;
+> +		period =3D duty * 2;
+> +	}
+> =20
+> +	state->period =3D period;
+> +	state->duty_cycle =3D duty;
+>  	state->polarity =3D PWM_POLARITY_INVERSED;
+> =20
+>  	pm_runtime_put_sync(chip->dev);
+> --=20
+> 2.35.1
 
-> 
->>  +               return err;
->>  +       }
->>  +       return 0;
-> 
-> return err;
+I'm marking all patches in this series as "changes requested" even
+though not all patches were commented. I assume that you continue to
+care for all of them for the next revision. Please make sure to pass -v4
+to git format-patch (or git send-email) then.
 
-Something like this then?
+Best regards
+Uwe
 
-if (err) {
-	pr_err("Unable to set TUF RGB data?\n");
-}
-return err;
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-If so, done.
+--u5pk4sbymvf2ijox
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
->>  +}
-> 
-> ...
-> 
->>  +       if (asus_wmi_dev_is_present(asus, 
->> ASUS_WMI_DEVID_TUF_RGB_MODE)) {
->>  +               struct led_classdev_mc *mc_cdev;
->>  +               struct mc_subled *mc_led_info;
->>  +               u8 brightness = 127;
-> 
->>  +               mc_cdev = &asus->keyboard_rgb_mode.dev;
-> 
-> Join this with the definition above. It's fine if it's a bit longer
-> than 80 characters.
+-----BEGIN PGP SIGNATURE-----
 
-Done.
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLuQPUACgkQwfwUeK3K
+7AkR4gf7B9DBt7Mv4iKarUbP2G34tW5Z9GSdvjrFJw4QvIL/0gcLeKCbH+X1Qnki
+3hAZJquao//+vfAmfx29dn1GPtKmoqTUbWMqvSGOgmiTBDG3zosHo5k7F247veo3
+irIJCmSIvHkCgFN3WOyi47+hOxs5NWvq21N26nJrZ8cr2WyGsJADcyCCuGxT9H+T
+tuU1aaMFCoyZ3q+pM36vFjX3lZNaEXzGkWCeKsG91dZHxcLz6ZfgV2XC/ntyVlkK
+whKv2eWtdBBTfiFJc7SB6Mu21EnMBg7TojWmhS/UGrhYk298cn6Uy5Z5V06o9XMs
+IzYv87bOB0hsnAbqXJM9dktqkwxdyQ==
+=knzw
+-----END PGP SIGNATURE-----
 
-> 
->>  +               /*
->>  +                * asus::kbd_backlight still controls a base 
->> 3-level backlight and when
->>  +                * it is on 0, the RGB is not visible at all. RGB 
->> should be treated as
->>  +                * an additional step.
->>  +                */
->>  +               mc_cdev->led_cdev.name = 
->> "asus::multicolour::kbd_backlight";
->>  +               mc_cdev->led_cdev.flags = LED_CORE_SUSPENDRESUME | 
->> LED_RETAIN_AT_SHUTDOWN;
->>  +               mc_cdev->led_cdev.brightness_set_blocking = 
->> tuf_rgb_brightness_set;
->>  +               mc_cdev->led_cdev.brightness_get = 
->> tuf_rgb_brightness_get;
->>  +
->>  +               /* Let the multicolour LED own the info */
->>  +               mc_led_info = devm_kmalloc_array(
->>  +                       &asus->platform_device->dev,
-> 
-> With a temporary variable you may make this one line shorter and 
-> nicer looking
-> 
->   struct device *dev = &asus->platform_device->dev;
-> 
-
-Done.
-
->>  +                       3,
->>  +                       sizeof(*mc_led_info),
->>  +                       GFP_KERNEL | __GFP_ZERO);
->>  +
->>  +               if (!mc_led_info)
->>  +                       return -ENOMEM;
->>  +
->>  +               mc_led_info[0].color_index = LED_COLOR_ID_RED;
->>  +               mc_led_info[1].color_index = LED_COLOR_ID_GREEN;
->>  +               mc_led_info[2].color_index = LED_COLOR_ID_BLUE;
->>  +
->>  +               /*
->>  +                * It's not possible to get last set data from 
->> device so set defaults
->>  +                * to make it safe for a user to change either RGB 
->> or modes. We don't
->>  +                * write these defaults to the device because they 
->> will overwrite a
->>  +                * users last saved boot setting (in NVRAM).
->>  +                */
->>  +               mc_cdev->led_cdev.brightness = brightness;
->>  +               mc_cdev->led_cdev.max_brightness = brightness;
->>  +               mc_led_info[0].intensity = brightness;
->>  +               mc_led_info[0].brightness = 
->> mc_cdev->led_cdev.brightness;
->>  +               mc_led_info[1].brightness = 
->> mc_cdev->led_cdev.brightness;
->>  +               mc_led_info[2].brightness = 
->> mc_cdev->led_cdev.brightness;
->>  +               led_mc_calc_color_components(mc_cdev, brightness);
->>  +
->>  +               mc_cdev->subled_info = mc_led_info;
->>  +               mc_cdev->num_colors = 3;
->>  +
->>  +               rv = 
->> led_classdev_multicolor_register(&asus->platform_device->dev, 
->> mc_cdev);
-> 
-> This also becomes shorter.
-
-Done.
-
-> 
->>  +       }
-> 
-> --
-> With Best Regards,
-> Andy Shevchenko
-
-
+--u5pk4sbymvf2ijox--

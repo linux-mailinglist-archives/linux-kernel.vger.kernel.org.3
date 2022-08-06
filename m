@@ -2,140 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1960A58B598
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 14:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7182E58B59E
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 14:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231901AbiHFMk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 08:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S231504AbiHFMqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 08:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiHFMky (ORCPT
+        with ESMTP id S230192AbiHFMqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 08:40:54 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD66637C;
-        Sat,  6 Aug 2022 05:40:52 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id bh13so4785906pgb.4;
-        Sat, 06 Aug 2022 05:40:52 -0700 (PDT)
+        Sat, 6 Aug 2022 08:46:45 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0233411A2D
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 05:46:44 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id g5so7417702ybg.11
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 05:46:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=o6pt3V1ha9yMo8oPh0RhSV7A5lQkFUBOGwSJxIjKq5Y=;
-        b=K3zZNGyQzBOJGo9GHJ77B64dvtlpK4HGVReHiflBNDRpOjaH5sqOdA8CSpHY5CKTyf
-         jMxciE0uAHt180KJ/Y+huKoZL4LmZDsa6WkKOyCwoxB/ThJX4uVJEg7ZTShFI/az0Ar2
-         z7gP6VTnSFHOO3nyj7PfGi5h2pn3jkcI30MOA4gJBLa6ZPkeSr1jNi+ni+/957EXpVKE
-         8cMH0A3oIzRK5Ii74+i2xFTbbdfg/VV4lJGKX03EHlP6Q0ikAumdp8EVEn0EXa//V+ro
-         7vXPHclNzVW+zRBDjtu+d19HsGrRLP2TD974QnRupiahEXDmXn0SLRi8PGivCy1jVQMg
-         wXwg==
+        d=kylehuey.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=wfqUsEzEiCCBgQ5jNGeT7/KH0IY7yOeXOJ/dkTqWA2E=;
+        b=XUzM0spOXwRLkQOziA2UxUAINcsO0ir6CtCUIe6xr++pqfWJn8GnXtG6SI1PcVC7+e
+         S5NZfq/F6tgWrkzRSBaAXW6FMWk/Ks42dDiabekOY3evqB1IbYsq3yDgijLZYEg79p+J
+         M9P4qGNDnT5wBts4YFs3ZYPXRrV8XJ4xORgxfhfPrMNY0mvePF61jh6ab/3vsSw92neZ
+         IE3cdgDq3NEZf4PM3qOxTy9DW1WtzhE7AuoY8F1pqJAvyplWARP7IsslQql19eUQP4e/
+         fXoSqpnJKKQ3x7wjg33HwV0UbmNWY9WXBE/sj+1cGai4czrGd980h+H0h6t/Zdsebap3
+         1jhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=o6pt3V1ha9yMo8oPh0RhSV7A5lQkFUBOGwSJxIjKq5Y=;
-        b=MuBhcaN1sy6pV/Eqib90wu6mq4X9exrknzIt6r/5Lboiv/kWeTUoRcoyQwzic31Lrt
-         +hRxKMynQUo2hhRN/6CmIG6Q97xtJnLfdhkSOCy+zhFgryoJjiNATBV5PhpOI/y/J7Ye
-         5n+FvHt3dfM0oH/Nyb+IVKk8dKxsM+kQ0TcjziQig4ZbZTRhpcoBh1pgYI/MPxec4A4e
-         iNAKydSf1obiV6qHyXlNqWhlnd9zQ3ZOATd/Iz4JL9+/vQFSUU0GrIly5DKUDuUEaj2K
-         TDjGcvflPA8yKlCSFvtRQ1QJul0OJ6/b0+bHp/3kjTpmC8XRNxmvNWOW4CAmn7hx9C2K
-         8fxw==
-X-Gm-Message-State: ACgBeo3sRzCO6lBRQ0AuiwzbcMO4UVNsNYzN068b67bvwKA1jAT2fWWl
-        JrbkAnNyrVe+HlHRTN1MmHA=
-X-Google-Smtp-Source: AA6agR4HVXRr5ozE4MZULCJYLmm+yzEtIzOb6rNsc6/YEix1fRqJBoSHmvvrRwFlh1pZPSou+4rtrw==
-X-Received: by 2002:a63:d555:0:b0:41b:ca49:54c3 with SMTP id v21-20020a63d555000000b0041bca4954c3mr9091265pgi.360.1659789652285;
-        Sat, 06 Aug 2022 05:40:52 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-10.three.co.id. [180.214.232.10])
-        by smtp.gmail.com with ESMTPSA id r19-20020a634413000000b0040c9df2b060sm3072702pga.30.2022.08.06.05.40.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 05:40:51 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 80D7A103B77; Sat,  6 Aug 2022 19:40:46 +0700 (WIB)
-Date:   Sat, 6 Aug 2022 19:40:46 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jim Cromie <jim.cromie@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, jbaron@akamai.com,
-        gregkh@linuxfoundation.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, daniel.vetter@ffwll.ch,
-        seanpaul@chromium.org, robdclark@gmail.com,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v5 19/33] doc-dyndbg: edit dynamic-debug-howto for
- brevity, audience
-Message-ID: <Yu5hTr6qcLwiPRNp@debian.me>
-References: <20220805215355.3509287-1-jim.cromie@gmail.com>
- <20220805215355.3509287-20-jim.cromie@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=wfqUsEzEiCCBgQ5jNGeT7/KH0IY7yOeXOJ/dkTqWA2E=;
+        b=xEKFE75119hk8K1ZD/64uV6Z5VunYnvDlOamDiBpg8rmhOHO5LwxLo7vM9QCqqGwti
+         p9wvbV+1eEjfTK180CETY8lM9p0XVcL4EjaqZYOwejZXw56nAsZV2fNMHJwK5igIdDJF
+         3PQXBkg1JhaJeBAa2Vd2yEET9KtqMx4k+3ZYtGrvTfit8xOQgxFmCrouO3Q4dQovGkXi
+         DjH8CxfUe727vHY/ESWRiLwzjzXsXMaKZLB46gw7KPAoOHJ8M26ZeceahhjwNP+VVlW/
+         7B+qSjDe6lFJppPyKjEzJpWoM2rFbxt4RDvxz8YT7HqzWLABVQl1++Q/RXgZJ0evYG3/
+         flwA==
+X-Gm-Message-State: ACgBeo1QUO0hGGrT4MoPM+7VqcPzdEZnac7pHaPGGpi/v32I7Zw9aypN
+        jrXvJYWLXqylalVZAvdOdiMO2EAlqX0vzUlSZqNX/O5QpkWCuA==
+X-Google-Smtp-Source: AA6agR5sPY+i3aLX+Y6bOJOLsdhWTGZgQPCbuGjmcgjrqhCFfgIgIcCsirSpV2eSlJoNvXsUCDfixkAhackVlC/35vE=
+X-Received: by 2002:a25:6ed5:0:b0:669:8b84:bb57 with SMTP id
+ j204-20020a256ed5000000b006698b84bb57mr8511440ybc.227.1659790003139; Sat, 06
+ Aug 2022 05:46:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-        protocol="application/pgp-signature"; boundary="zCnbKQzWNc0slIHJ"
-Content-Disposition: inline
-In-Reply-To: <20220805215355.3509287-20-jim.cromie@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220805230158.39378-1-khuey@kylehuey.com> <20220805230158.39378-2-khuey@kylehuey.com>
+ <Yu4rzf9XI6NzHwne@gmail.com>
+In-Reply-To: <Yu4rzf9XI6NzHwne@gmail.com>
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Sat, 6 Aug 2022 05:46:31 -0700
+Message-ID: <CAP045ApfwwoJOxJhaNVY-LpzBis5b8NYiPwz4nEtERf_tJbcKA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] selftests/vm/pkeys: Add a regression test for
+ setting PKRU through ptrace
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "Robert O'Callahan" <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Aug 6, 2022 at 1:52 AM Ingo Molnar <mingo@kernel.org> wrote:
+>
+>
+> * Kyle Huey <me@kylehuey.com> wrote:
+>
+> > From: Kyle Huey <me@kylehuey.com>
+> >
+> > This tests PTRACE_SETREGSET with NT_X86_XSTATE modifying PKRU directly and
+> > removing the PKRU bit from XSTATE_BV.
+> >
+> > Signed-off-by: Kyle Huey <me@kylehuey.com>
+> > ---
+> >  tools/testing/selftests/vm/pkey-x86.h        | 12 +++
+> >  tools/testing/selftests/vm/protection_keys.c | 88 +++++++++++++++++++-
+> >  2 files changed, 98 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
+> > index b078ce9c6d2a..72c14cd3ddc7 100644
+> > --- a/tools/testing/selftests/vm/pkey-x86.h
+> > +++ b/tools/testing/selftests/vm/pkey-x86.h
+> > @@ -104,6 +104,18 @@ static inline int cpu_has_pkeys(void)
+> >       return 1;
+> >  }
+> >
+> > +static inline int cpu_max_xsave_size(void)
+> > +{
+> > +     unsigned long XSTATE_CPUID = 0xd;
+> > +     unsigned int eax;
+> > +     unsigned int ebx;
+> > +     unsigned int ecx;
+> > +     unsigned int edx;
+> > +
+> > +     __cpuid_count(XSTATE_CPUID, 0, eax, ebx, ecx, edx);
+> > +     return ecx;
+> > +}
+> > +
+> >  static inline u32 pkey_bit_position(int pkey)
+> >  {
+> >       return pkey * PKEY_BITS_PER_PKEY;
+> > diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+> > index 291bc1e07842..27759d3ed9cd 100644
+> > --- a/tools/testing/selftests/vm/protection_keys.c
+> > +++ b/tools/testing/selftests/vm/protection_keys.c
+> > @@ -18,12 +18,13 @@
+> >   *   do a plain mprotect() to a mprotect_pkey() area and make sure the pkey sticks
+> >   *
+> >   * Compile like this:
+> > - *   gcc      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
+> > - *   gcc -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
+> > + *   gcc -mxsave      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
+> > + *   gcc -mxsave -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
+> >   */
+> >  #define _GNU_SOURCE
+> >  #define __SANE_USERSPACE_TYPES__
+> >  #include <errno.h>
+> > +#include <linux/elf.h>
+> >  #include <linux/futex.h>
+> >  #include <time.h>
+> >  #include <sys/time.h>
+> > @@ -1550,6 +1551,86 @@ void test_implicit_mprotect_exec_only_memory(int *ptr, u16 pkey)
+> >       do_not_expect_pkey_fault("plain read on recently PROT_EXEC area");
+> >  }
+> >
+> > +#if defined(__i386__) || defined(__x86_64__)
+> > +void test_ptrace_modifies_pkru(int *ptr, u16 pkey)
+> > +{
+> > +     pid_t child;
+> > +     int status, ret;
+> > +     int pkey_offset = pkey_reg_xstate_offset();
+> > +     size_t xsave_size = cpu_max_xsave_size();
+> > +     void *xsave;
+> > +     u32 *pkey_register;
+> > +     u64 *xstate_bv;
+> > +     struct iovec iov;
+> > +
+> > +     child = fork();
+> > +     pkey_assert(child >= 0);
+> > +     dprintf3("[%d] fork() ret: %d\n", getpid(), child);
+> > +     if (!child) {
+> > +             u32 pkey_register = read_pkey_reg();
+> > +
+> > +             ptrace(PTRACE_TRACEME, 0, 0, 0);
+> > +             raise(SIGSTOP);
+> > +
+> > +             /*
+> > +              * need __read_pkey_reg() version so we do not do shadow_pkey_reg
+> > +              * checking
+> > +              */
+> > +             if (pkey_register == __read_pkey_reg())
+> > +                     exit(1);
+> > +
+> > +             raise(SIGSTOP);
+> > +
+> > +             exit(__read_pkey_reg());
+> > +     }
+> > +
+> > +     pkey_assert(child == waitpid(child, &status, 0));
+> > +     dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
+> > +     pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
+> > +
+> > +     xsave = (void *)malloc(xsave_size);
+> > +     pkey_assert(xsave > 0);
+> > +
+> > +     iov.iov_base = xsave;
+> > +     iov.iov_len = xsave_size;
+> > +     ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
+> > +     pkey_assert(ret == 0);
+> > +
+> > +     pkey_register = (u32 *)(xsave + pkey_offset);
+> > +     pkey_assert(*pkey_register == read_pkey_reg());
+> > +
+> > +     *pkey_register = !read_pkey_reg();
+> > +
+> > +     ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
+> > +     pkey_assert(ret == 0);
+> > +
+> > +     ret = ptrace(PTRACE_CONT, child, 0, 0);
+> > +     pkey_assert(ret == 0);
+> > +
+> > +     pkey_assert(child == waitpid(child, &status, 0));
+> > +     dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
+> > +     pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
+> > +
+> > +     ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
+> > +     pkey_assert(ret == 0);
+> > +
+> > +     xstate_bv = (u64 *)(xsave + 512);
+> > +     *xstate_bv &= ~(1 << 9);
+> > +
+> > +     ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
+> > +     pkey_assert(ret == 0);
+> > +
+> > +     ret = ptrace(PTRACE_CONT, child, 0, 0);
+> > +     pkey_assert(ret == 0);
+> > +
+> > +     pkey_assert(child == waitpid(child, &status, 0));
+> > +     dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
+> > +     pkey_assert(WIFEXITED(status));
+> > +     pkey_assert(WEXITSTATUS(status) == 0);
+> > +     free(xsave);
+>
+> LGTM.
+>
+> May I ask for a bit more in terms of testing the ABI: writing some
+> non-trivial (not all-zero and not all-ones) value into the PKRU register,
+> forcing the child task to go through a FPU save/restore context switch
+> and then reading it back and verifying the value, or something like that?
 
---zCnbKQzWNc0slIHJ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Can you elaborate a bit on what you mean here? I'm not sure what "a
+FPU save/restore context switch" is. The XSTATE (and everything else)
+will be saved/restored at the ptrace stops (for the raise(SIGSTOP)s)
+already.
 
-On Fri, Aug 05, 2022 at 03:53:41PM -0600, Jim Cromie wrote:
-> Rework/modernize docs:
->=20
->  - use /proc/dynamic_debug/control in examples
->    its *always* there (when dyndbg is config'd), even when <debugfs> is n=
-ot.
->    drop <debugfs> talk, its a distraction here.
->=20
->  - alias ddcmd=3D'echo $* > /proc/dynamic_debug/control
->    focus on args: declutter, hide boilerplate, make pwd independent.
->=20
->  - swap sections: Viewing before Controlling. control file as Catalog.
->=20
->  - focus on use by a system administrator
->    add an alias to make examples more readable
->    drop grep-101 lessons, admins know this.
->=20
->  - use init/main.c as 1st example, thread it thru doc where useful.
->    everybodys kernel boots, runs these.
->=20
->  - add *prdbg* api section
->    to the bottom of the file, its for developers more than admins.
->    move list of api functions there.
->=20
->  - simplify - drop extra words, phrases, sentences.
->=20
->  - add "decorator" flags line to unify "prefix", trim fmlt descriptions
->=20
-> CC: linux-doc@vger.kernel.org
-> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
->=20
+- Kyle
 
-The documentation LGTM (no new warnings).
-
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---zCnbKQzWNc0slIHJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTsebsWCPCpxY9T92n/R0PGQ3AzwAUCYu5hNQAKCRD/R0PGQ3Az
-wGuzAYDy/O8VqIX4dB6ItFwNHJm1rs7Qg4OuYgYbKFvhP69MPdWx64MR4soFNSUx
-y/x/+HABgNTyMUR8QKMtJnT6K443IFX7iqf6bs05/IbT4PqLQjZXkpc+PQBWALvU
-6LjFercp5g==
-=Aeer
------END PGP SIGNATURE-----
-
---zCnbKQzWNc0slIHJ--
+> Thanks,
+>
+>         Ingo

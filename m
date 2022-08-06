@@ -2,43 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B60C58B844
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 22:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72AD58B845
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 22:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbiHFUnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 16:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S233006AbiHFUqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 16:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiHFUnf (ORCPT
+        with ESMTP id S229740AbiHFUqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 16:43:35 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1209FD1;
-        Sat,  6 Aug 2022 13:43:33 -0700 (PDT)
-Received: from [192.168.1.101] (abxh187.neoplus.adsl.tpnet.pl [83.9.1.187])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C4A453F713;
-        Sat,  6 Aug 2022 22:43:28 +0200 (CEST)
-Message-ID: <55e88968-69f6-30f1-048b-6fa6a0c26909@somainline.org>
-Date:   Sat, 6 Aug 2022 22:43:27 +0200
+        Sat, 6 Aug 2022 16:46:20 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EF160F5
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 13:46:19 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id pm17so5637152pjb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 13:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=YzqtcGqN0L2rq2pswMCoulyCAGZdtTSnYYDw0hYySOY=;
+        b=Wn3k+xAUHbBzpeyRCFdNVhuaPNjc3Bil1+782KGI48yqMIUwUmq2ao9OEfA0MLBq/l
+         Zi1FWKWmW2OmGbZidlaRGSdD41TOciU4lfXMfIU65o4Km3ih5OMQ+RSoveCBr1MAgcQc
+         DlLu27kKVk6ugm18RL/KCSxoMi1t3u8naTkMI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=YzqtcGqN0L2rq2pswMCoulyCAGZdtTSnYYDw0hYySOY=;
+        b=JUZDdwSOI/PapogEkp+qsw7vWjY5m5bd8WfQzlsTmzXNxgTx23Itd1N63Z6Bzg+RCL
+         IceuupTDZwhfYOEzM9R7auneqBmU67XpYEr1WwZ/Hm1EFaKBNqY4Mq2PxcbS9kk8A3j1
+         OL5VuNpEZOgGLqVZs9EiiGVnfEARxi5zP9atVhOxzb2BcJf4445TpvGbvNMA/DjCsJm2
+         RB0n5u5tYMGR2cXWfZrkF/MS2CIzWypGJXe3ORTVWRcem1Nvyk5rs0gV3Z5MoXkarcxM
+         W/vNSM4yJdq7iIwfGp4h7myIKbb05S+fmbt9Fc4/U3K35Z9TfceRI17XhVefc23zje9V
+         zvzQ==
+X-Gm-Message-State: ACgBeo3Q4vWiTytVLpzfjSxAHSMH8d8a87Y2oXpX4i9PhFIk7sL1gVS/
+        rwgF2Tp4NdGQZlmeEf59s4I7rg==
+X-Google-Smtp-Source: AA6agR52kGQIUMo1Zs7sRS09nHLKeqqWiI3gxI135mtBjyQIcpintCGliKMhlBJbs/F9/md7fC+I0g==
+X-Received: by 2002:a17:902:d651:b0:16b:f55e:c626 with SMTP id y17-20020a170902d65100b0016bf55ec626mr12631018plh.78.1659818778882;
+        Sat, 06 Aug 2022 13:46:18 -0700 (PDT)
+Received: from chromium.org ([2620:15c:7c:200:43d8:ac7e:8aab:d91e])
+        by smtp.gmail.com with ESMTPSA id n16-20020a170902e55000b0016d5626af4fsm5610020plf.21.2022.08.06.13.46.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 13:46:18 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 13:46:16 -0700
+From:   Jack Rosenthal <jrosenth@chromium.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Julius Werner <jwerner@chromium.org>
+Subject: Re: [PATCH v7] firmware: google: Implement cbmem in sysfs driver
+Message-ID: <Yu7TGDYTyzFLoVe4@chromium.org>
+References: <YuuBrUmiRYoaSmPw@google.com>
+ <20220804142856.306032-1-jrosenth@chromium.org>
+ <CAE-0n51UcauP1ojoskV9_2+CFPoJrs08jGHVPCZdSA_oXX1zUw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] soc: qcom: rpmhpd: Use highest corner until sync_state
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <20220806155035.968340-1-bjorn.andersson@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220806155035.968340-1-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE-0n51UcauP1ojoskV9_2+CFPoJrs08jGHVPCZdSA_oXX1zUw@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,109 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-08-04 at 15:59 -0500, Stephen Boyd wrote:
+> I suspect this won't work because the driver can be unbound, and thus
+> the mapping can be destroyed by devm, but then the kobject and sysfs
+> file like 'mem' can be held by userspace after the driver is unbound.
+> Userspace access after that time will try to read/write unmapped memory.
 
+When the driver is unbound, read()/write() will return -ENODEV, and
+mmap() isn't supported.
 
-On 6.08.2022 17:50, Bjorn Andersson wrote:
-> In some cases the hardware that the bootloader has left configured
-> depends on RPMH power domains for their operation up until the point
-> where the related Linux device driver probes and can inherit that
-> configuration, or power down the hardware gracefully.
-> 
-> Unfortunately as Linux probes the releavant drivers in sequence there
-> are periods during the Linux boot flow where either the genpd refcount
-> will reach 0, or worse where the active performance_state votes does not
-> meet the requirements of the state that the hardware was left in.
-> 
-> One specific example of this is during boot of e.g. SM8150/SC8180X,
-> where the display clock controller probes, without any particular
-> performance state needs (to access its registers). This will drop the
-> MMCX rail to MIN_SVS, which isn't sufficient to sustain the clock rates
-> that the later probing MDP is configured to. This results in an
-> unrecoverable system state.
-> 
-> Handle both these cases by keeping the RPMH power-domais that are
-> referenced voted for highest state, until sync_state indicates that all
-> devices referencing the RPMH power-domain driver has been probed.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-Must have been fun to debug..
+> Why not make this in the bus driver (coreboot-table.c)? In fact, most
+> things could probably be created there instead of in a 'driver' that
+> really isn't doing much 'driving' at all.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+In v8, I moved the coreboot_kobj to coreboot-table.c.  I imagine in the
+future we could move some of the other things (e.g., "vpd") under this
+object for consistency.  So now the structure is:
 
-Konrad
->  drivers/soc/qcom/rpmhpd.c | 35 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 34 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-> index 092f6ab09acf..494bb6c75ed7 100644
-> --- a/drivers/soc/qcom/rpmhpd.c
-> +++ b/drivers/soc/qcom/rpmhpd.c
-> @@ -39,6 +39,7 @@
->   * @res_name:		Resource name used for cmd-db lookup
->   * @addr:		Resource address as looped up using resource name from
->   *			cmd-db
-> + * @state_synced:       Indicator that sync_state has been invoked for the rpmhpd resource
->   */
->  struct rpmhpd {
->  	struct device	*dev;
-> @@ -54,6 +55,7 @@ struct rpmhpd {
->  	bool		enabled;
->  	const char	*res_name;
->  	u32		addr;
-> +	bool		state_synced;
->  };
->  
->  struct rpmhpd_desc {
-> @@ -493,7 +495,13 @@ static int rpmhpd_aggregate_corner(struct rpmhpd *pd, unsigned int corner)
->  	unsigned int this_active_corner = 0, this_sleep_corner = 0;
->  	unsigned int peer_active_corner = 0, peer_sleep_corner = 0;
->  
-> -	to_active_sleep(pd, corner, &this_active_corner, &this_sleep_corner);
-> +	if (pd->state_synced) {
-> +		to_active_sleep(pd, corner, &this_active_corner, &this_sleep_corner);
-> +	} else {
-> +		/* Clamp to highest corner if sync_state hasn't happened */
-> +		this_active_corner = pd->level_count - 1;
-> +		this_sleep_corner = pd->level_count - 1;
-> +	}
->  
->  	if (peer && peer->enabled)
->  		to_active_sleep(peer, peer->corner, &peer_active_corner,
-> @@ -708,11 +716,36 @@ static int rpmhpd_probe(struct platform_device *pdev)
->  	return of_genpd_add_provider_onecell(pdev->dev.of_node, data);
->  }
->  
-> +static void rpmhpd_sync_state(struct device *dev)
-> +{
-> +	const struct rpmhpd_desc *desc = of_device_get_match_data(dev);
-> +	struct rpmhpd **rpmhpds = desc->rpmhpds;
-> +	unsigned int corner;
-> +	struct rpmhpd *pd;
-> +	unsigned int i;
-> +
-> +	mutex_lock(&rpmhpd_lock);
-> +	for (i = 0; i < desc->num_pds; i++) {
-> +		pd = rpmhpds[i];
-> +		if (!pd)
-> +			continue;
-> +
-> +		pd->state_synced = true;
-> +		if (pd->enabled)
-> +			corner = max(pd->corner, pd->enable_corner);
-> +		else
-> +			corner = 0;
-> +		rpmhpd_aggregate_corner(pd, corner);
-> +	}
-> +	mutex_unlock(&rpmhpd_lock);
-> +}
-> +
->  static struct platform_driver rpmhpd_driver = {
->  	.driver = {
->  		.name = "qcom-rpmhpd",
->  		.of_match_table = rpmhpd_match_table,
->  		.suppress_bind_attrs = true,
-> +		.sync_state = rpmhpd_sync_state,
->  	},
->  	.probe = rpmhpd_probe,
->  };
+   /sys/firmware/coreboot/cbmem/<id>/...

@@ -2,180 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6562C58B505
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 12:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A0C58B507
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 12:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236132AbiHFKXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 06:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
+        id S241645AbiHFKZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 06:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiHFKW6 (ORCPT
+        with ESMTP id S229671AbiHFKZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 06:22:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F413A13D58
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 03:22:57 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oKGxJ-0002Wp-Ve; Sat, 06 Aug 2022 12:22:54 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oKGxF-0024dX-NW; Sat, 06 Aug 2022 12:22:52 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oKGxH-009uYH-Br; Sat, 06 Aug 2022 12:22:51 +0200
-Date:   Sat, 6 Aug 2022 12:22:48 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha --subject-prefix=PATCH v3 
-        <jude.onyenegecha@sifive.com>
-Subject: Re: [PATCH 8/8] pwm: dwc: add PWM bit unset in get_state call
-Message-ID: <20220806102248.66htxhfia4irpx5t@pengutronix.de>
-References: <20220805165033.140958-1-ben.dooks@sifive.com>
- <20220805165033.140958-9-ben.dooks@sifive.com>
+        Sat, 6 Aug 2022 06:25:10 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9463213D58;
+        Sat,  6 Aug 2022 03:25:08 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 11B3541247;
+        Sat,  6 Aug 2022 10:25:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:message-id:subject:subject:from:from:date:date
+        :received:received:received:received; s=mta-01; t=1659781505; x=
+        1661595906; bh=Q4UWjyW+pixLaTW0W0cgN8BYm6mgWJyHbqebGfcoTtI=; b=t
+        Ny1n/wsWp0odKmQJc24E0YNR0AY2kmaYsYwsoi8zA5TorIaOo77F0gw+ItkH8+mk
+        5h2wKlEyPR70B+hD+wjB1E/a53ItEm/vgwBJrbY0yMElplIf4XqpGofTjofLCVUk
+        O8WZ0nB6+XPhnnD0deUMlAWvAx//Po/EUwBItKK9ZE=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zOgZf4FZOzVM; Sat,  6 Aug 2022 13:25:05 +0300 (MSK)
+Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id AAA4541246;
+        Sat,  6 Aug 2022 13:25:01 +0300 (MSK)
+Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
+ T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Sat, 6 Aug 2022 13:25:01 +0300
+Received: from yadro.com (10.178.119.167) by T-EXCH-09.corp.yadro.com
+ (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Sat, 6 Aug 2022
+ 13:24:59 +0300
+Date:   Sat, 6 Aug 2022 13:24:59 +0300
+From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
+To:     <ojeda@kernel.org>
+CC:     <alex.gaynor@gmail.com>, <ark.email@gmail.com>,
+        <bjorn3_gh@protonmail.com>, <bobo1239@web.de>,
+        <bonifaido@gmail.com>, <boqun.feng@gmail.com>,
+        <davidgow@google.com>, <dev@niklasmohrin.de>,
+        <dsosnowski@dsosnowski.pl>, <foxhlchen@gmail.com>,
+        <gary@garyguo.net>, <geofft@ldpreload.com>,
+        <gregkh@linuxfoundation.org>, <jarkko@kernel.org>,
+        <john.m.baublitz@gmail.com>, <leseulartichaut@gmail.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <m.falkowski@samsung.com>, <me@kloenk.de>, <milan@mdaverde.com>,
+        <mjmouse9999@gmail.com>, <patches@lists.linux.dev>,
+        <rust-for-linux@vger.kernel.org>, <thesven73@gmail.com>,
+        <torvalds@linux-foundation.org>, <viktor@v-gar.de>,
+        <wedsonaf@google.com>
+Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
+Message-ID: <Yu5Bex9zU6KJpcEm@yadro.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u5pk4sbymvf2ijox"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220805165033.140958-9-ben.dooks@sifive.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220805154231.31257-13-ojeda@kernel.org>
+X-Originating-IP: [10.178.119.167]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-09.corp.yadro.com (172.17.11.59)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---u5pk4sbymvf2ijox
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Fri, Aug 05, 2022 at 05:50:33PM +0100, Ben Dooks wrote:
-> If we are not in PWM mode, then the output is technically a 50%
-> output based on a single timer instead of the high-low based on
-> the two counters. Add a check for the PWM mode in dwc_pwm_get_state()
-> and if DWC_TIM_CTRL_PWM is not set, then return a 50% cycle.
->=20
-> This may only be an issue on initialisation, as the rest of the
-> code currently assumes we're always going to have the extended
-> PWM mode using two counters.
->=20
-> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> ---
->  drivers/pwm/pwm-dwc.c | 34 +++++++++++++++++++++++-----------
->  1 file changed, 23 insertions(+), 11 deletions(-)
->=20
-> diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
-> index 5edfb8f8acbf..49e666be7afd 100644
-> --- a/drivers/pwm/pwm-dwc.c
-> +++ b/drivers/pwm/pwm-dwc.c
-> @@ -171,23 +171,35 @@ static void dwc_pwm_get_state(struct pwm_chip *chip=
-, struct pwm_device *pwm,
->  {
->  	struct dwc_pwm *dwc =3D to_dwc_pwm(chip);
->  	u64 duty, period;
-> +	u32 ctrl, ld, ld2;
-> =20
->  	pm_runtime_get_sync(chip->dev);
-> =20
-> -	state->enabled =3D !!(dwc_pwm_readl(dwc,
-> -				DWC_TIM_CTRL(pwm->hwpwm)) & DWC_TIM_CTRL_EN);
-> +	ctrl =3D dwc_pwm_readl(dwc, DWC_TIM_CTRL(pwm->hwpwm));
-> +	ld =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(pwm->hwpwm));
-> +	ld2 =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(pwm->hwpwm));
-> =20
-> -	duty =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(pwm->hwpwm));
-> -	duty +=3D 1;
-> -	duty *=3D dwc->clk_ns;
-> -	state->duty_cycle =3D duty;
-> +	state->enabled =3D !!(ctrl & DWC_TIM_CTRL_EN);
-> =20
-> -	period =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(pwm->hwpwm));
-> -	period +=3D 1;
-> -	period *=3D dwc->clk_ns;
-> -	period +=3D duty;
-> -	state->period =3D period;
-> +	/* If we're not in PWM, technically the output is a 50-50
-
-Huh, I expected checkpatch to warn about that. AFAIK the /* is supposed
-to be on a line for itself?!
-
-> +	 * based on the timer load-count only.
-> +	 */
-> +	if (ctrl & DWC_TIM_CTRL_PWM) {
-> +		duty =3D ld;
-> +		duty +=3D 1;
-> +		duty *=3D dwc->clk_ns;
-
-I would prefer to write that as:
-
-	duty =3D (ld + 1) * dwc->clk_ns;
-
-given that todays compilers are clever enough to optimize that just fine
-and this version is better readable for humans.
-
+> +unsafe impl GlobalAlloc for KernelAllocator {
+> +    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
+> +        // `krealloc()` is used instead of `kmalloc()` because the latter is
+> +        // an inline function and cannot be bound to as a result.
+> +        unsafe { bindings::krealloc(ptr::null(), layout.size(), bindings::GFP_KERNEL) as *mut u8 }
+> +    }
 > +
-> +		period =3D ld2;
-> +		period +=3D 1;
-> +		period *=3D dwc->clk_ns;
-> +		period +=3D duty;
-> +	} else {
-> +		duty =3D (ld + 1) * dwc->clk_ns;
-> +		period =3D duty * 2;
-> +	}
-> =20
-> +	state->period =3D period;
-> +	state->duty_cycle =3D duty;
->  	state->polarity =3D PWM_POLARITY_INVERSED;
-> =20
->  	pm_runtime_put_sync(chip->dev);
-> --=20
-> 2.35.1
+> +    unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
+> +        unsafe {
+> +            bindings::kfree(ptr as *const core::ffi::c_void);
+> +        }
+> +    }
+> +}
 
-I'm marking all patches in this series as "changes requested" even
-though not all patches were commented. I assume that you continue to
-care for all of them for the next revision. Please make sure to pass -v4
-to git format-patch (or git send-email) then.
+I sense possible problems here. It's common for a kernel code to pass
+flags during memory allocations.
 
-Best regards
-Uwe
+For example:
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+  struct bio *bio;
 
---u5pk4sbymvf2ijox
-Content-Type: application/pgp-signature; name="signature.asc"
+  for (...) {
+        bio = bio_alloc_bioset(bdev, nr_vecs, opf, GFP_NOIO, bs);
+        if (!bio)
+        	return -ENOMEM;
+  }
 
------BEGIN PGP SIGNATURE-----
+Without GFP_NOIO we can run into a deadlock, because the kernel will try
+give us free memory by flushing the dirty pages and we need the memory
+to actually do it and boom, deadlock.
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLuQPUACgkQwfwUeK3K
-7AkR4gf7B9DBt7Mv4iKarUbP2G34tW5Z9GSdvjrFJw4QvIL/0gcLeKCbH+X1Qnki
-3hAZJquao//+vfAmfx29dn1GPtKmoqTUbWMqvSGOgmiTBDG3zosHo5k7F247veo3
-irIJCmSIvHkCgFN3WOyi47+hOxs5NWvq21N26nJrZ8cr2WyGsJADcyCCuGxT9H+T
-tuU1aaMFCoyZ3q+pM36vFjX3lZNaEXzGkWCeKsG91dZHxcLz6ZfgV2XC/ntyVlkK
-whKv2eWtdBBTfiFJc7SB6Mu21EnMBg7TojWmhS/UGrhYk298cn6Uy5Z5V06o9XMs
-IzYv87bOB0hsnAbqXJM9dktqkwxdyQ==
-=knzw
------END PGP SIGNATURE-----
+Or we can be allocating some structs under spinlock (yeah, that happens too):
 
---u5pk4sbymvf2ijox--
+  struct efc_vport *vport;
+
+  spin_lock_irqsave(...);
+  vport = kzalloc(sizeof(*vport), GFP_ATOMIC);
+  if (!vport) {
+  	spin_unlock_irqrestore(...);
+  	return NULL;
+  }
+  spin_unlock(...);
+
+Same can (and probably will) happen to e.g. Vec elements. So some form
+of flags passing should be supported in try_* variants:
+
+  let mut vec = Vec::try_new(GFP_ATOMIC)?;
+
+  vec.try_push(GFP_ATOMIC, 1)?;
+  vec.try_push(GFP_ATOMIC, 2)?;
+  vec.try_push(GFP_ATOMIC, 3)?;

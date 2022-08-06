@@ -2,68 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED21658B81B
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 22:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0D458B819
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 22:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbiHFUH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 16:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
+        id S233242AbiHFUHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 16:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbiHFUHw (ORCPT
+        with ESMTP id S231546AbiHFUH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 16:07:52 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA344E035;
-        Sat,  6 Aug 2022 13:07:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1659816462;
-        bh=JttCySagazOt1SPXCXmT9G72op/evmxRiYdJphWoCNE=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=JPPs5R97yZLhiCJoHhnWY3uIOMYdlnAKnWpVXOwCdRQkE/RP3H1dwCmBW3WD76/0s
-         +wyEyFl3JlRhKbYqq5Cu4OwrWUY1T35LyesAEogLq5L2JhLltJKipdnDqigHzl5scI
-         pZou6A3zUAYz7U345WsuQH8WhCcHZ2zsXNkXXsPY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ls3530 ([92.116.170.46]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRTNF-1o6LkJ0ZeP-00NVC9; Sat, 06
- Aug 2022 22:07:42 +0200
-Date:   Sat, 6 Aug 2022 22:06:49 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     Zheyu Ma <zheyuma97@gmail.com>,
-        Uwe =?iso-8859-15?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [GIT PULL] fbdev updates & fixes for v5.20-rc1
-Message-ID: <Yu7J2Yj6UyAiE2Ne@ls3530>
+        Sat, 6 Aug 2022 16:07:28 -0400
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D81DE0F6
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 13:07:27 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id KQ4xoJ2tYsfCIKQ4xoRKcu; Sat, 06 Aug 2022 22:07:26 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 06 Aug 2022 22:07:26 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-mtd@lists.infradead.org
+Subject: [PATCH] mtd: Fix a typo in a comment
+Date:   Sat,  6 Aug 2022 22:07:22 +0200
+Message-Id: <de1b1134f056ea7563bb0a9bb2f66ede1475728d.1659816434.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:7s9Da4UCIDfa/Q9sjHw2hJhx20+r87Q8QQJKmc8kJezq0A+t6L2
- EtdvQlNtQkcIh+Th10pNNuPWrQDCtlSJdB/mdgrZHT+PSsRjnzEc8wk17NINIeahY90FMj6
- Tpv4tJUTVHpPVRG1gZsfilGKJWCN3aEm1WcRbwLMd89Fix1ccaPcNKem31BohLWQj8suudC
- Y5+b8pD/7A+iX0Q6bU6lA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9j0S/gy0o4w=:Q2TIczuQTWp3wJpyKPSxFN
- kduprlC31bdB30wYEBQ7NBx6S8/Lqcf/CjdjhOtxHNCR9mc45M95GSsu7ohhei7w+CzQV4lbg
- heiA/Ed1R9bYx3NqIusvKxW8SzFlPqkwRtpwpA52TNGgJJqBFFvHeAmMvbNiwK4vgEhq7/HpC
- wqIfq26V/4WqVuAspdXJyZZcJANkrwiyoLReT/9OMRvboEh01i/9r7qgxFSPkBwfAmCBpaC2Z
- CyI7mrHU5saTdnifqDpwnY1W5MsU3y/xDcCTS09AQRph6xBnCCwnHlO50TkaRxuUFwFBPvNXj
- yZBaI0vX3uEhBAF5gv2sG74j4Z4Yx0xm1jQiI5Iy/mqRA+w8rdXhffQSgOKnqcAVzhwcP4Uz7
- r7egN7oqMCiiwqSX9nW1ICK1EkvbNCqumFa/XOMeXzZkfN/YcL9barfQOnHQ5ZjGHDi6Jy6mF
- NuxEjoJERfCgeRSDmbK0m3Jy9pjj0wzc+oXyZrqIjp5fBHnMu5BvHotNLItJi1afRN3Dpa7dv
- bDWL3m8JeDjsLmfs1YDo3K9i1lYKplyXArW/8BclwNNb5H2LCwgjUqOnW2k9mTSLYeo8t3lbM
- xakuQdjVrHEMwpdHznpo9pGlgf/CmC0OqyOxrtTzqShCinlkIQa+wZcZgVb31dKmG7mgo9HYH
- TbjEBjx/ZHPU6qzw7eqMh+t/0kGVnaYtG4+hyqhSuIKN+10B+Yr3qgrSySMU+4lnCZfBHyKJF
- PK4EV6x/0NHe8Oj0AM2FL++fGbbYnKUhU20XPdwg1eLJrQvhNDZhwKOqlWLH7H5Pc9EqPt7UU
- cYaUIelZHwQPDUAPFpqTPYHp7wRPFW9jqizY+URsvgCkbBbM+ZWCzPfLb1Y9ftn/v6QHgnDEP
- djCgl8RvgzBtbAgco6G3GpZvrdDjVjAzVin2sINp32y5OXxc0M4qwZN7WqTHSoRLWCWpzVAAa
- gQgow8lvZ/o+4ErllCG0xUIc3jTD4+jgJoSYsK0wJ6emEUaoN6d4N6kNlG2qTjw0tKJNiJBrF
- 0iSOw9MiDzZDoS5btqXKOP5+5VXvYm0o66UYpIj7yjpez9ZOBSrwLjsVFn5XcmKEf3PvNLQGW
- 16qc+m9uvre66w5aXAlBAqn+jX7wW6nd3AmwRYavsFmIZlOH0Ub5FAPfg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,101 +44,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d2=
-8:
+o and t are swapped.
+s/mtdpsotre/mtdpstore/
 
-  Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/mtd/mtdpstore.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-are available in the Git repository at:
+diff --git a/drivers/mtd/mtdpstore.c b/drivers/mtd/mtdpstore.c
+index e13d42c0acb0..7ac8ac901306 100644
+--- a/drivers/mtd/mtdpstore.c
++++ b/drivers/mtd/mtdpstore.c
+@@ -401,7 +401,7 @@ static void mtdpstore_notify_add(struct mtd_info *mtd)
+ 	/*
+ 	 * kmsg_size must be aligned to 4096 Bytes, which is limited by
+ 	 * psblk. The default value of kmsg_size is 64KB. If kmsg_size
+-	 * is larger than erasesize, some errors will occur since mtdpsotre
++	 * is larger than erasesize, some errors will occur since mtdpstore
+ 	 * is designed on it.
+ 	 */
+ 	if (mtd->erasesize < info->kmsg_size) {
+-- 
+2.34.1
 
-  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git ta=
-gs/for-5.20/fbdev-1
-
-for you to fetch changes up to 6ba592fa014f21f35a8ee8da4ca7b95a018f13e8:
-
-  video: fbdev: s3fb: Check the size of screen before memset_io() (2022-08=
--05 18:44:59 +0200)
-
-=2D---------------------------------------------------------------
-fbdev fixes and updates for kernel v5.20-rc1
-
-The two major changes in this patchset corrects VGA modes, color
-handling and various other smaller fixes in the Atari framebuffer (by
-Geert Uytterhoeven), and devm_* conversion, platform data fixes and
-header cleanups in the imxfb driver (by Uwe Kleine-K=F6nig).
-
-Other small patches clean up code in sa1100fb, cirrusfb and omapfb,
-fix a refcount leak in amba-clcd (by Liang He), and adds parameter
-checks to arkfb, i740fb, vt8623fb and s3fb (by Zheyu Ma).
-
-=2D---------------------------------------------------------------
-Geert Uytterhoeven (14):
-      video: fbdev: amiga: Simplify amifb_pan_display()
-      video: fbdev: sa1100fb: Remove unused sa1100fb_setup()
-      video: fbdev: cirrusfb: Make cirrusfb_zorro_unregister() static
-      video: fbdev: Make *fb_setup() and *fb_init() static
-      video: fbdev: atari: Simplify atafb_pan_display()
-      video: fbdev: atari: Remove bogus FB_VMODE_YWRAP flags
-      video: fbdev: atari: Fix inverse handling
-      video: fbdev: atari: Fix ext_setcolreg()
-      video: fbdev: atari: Remove unneeded casts from void *
-      video: fbdev: atari: Remove unneeded casts to void *
-      video: fbdev: atari: Fix TT High video mode vertical refresh
-      video: fbdev: atari: Fix VGA modes
-      video: fbdev: atari: Remove unused definitions and variables
-      video: fbdev: atari: Remove backward bug-compatibility
-
-Helge Deller (1):
-      video: fbdev: omapfb: Unexport omap*_update_window_async()
-
-Liang He (1):
-      video: fbdev: amba-clcd: Fix refcount leak bugs
-
-Rustam Subkhankulov (1):
-      video: fbdev: sis: fix typos in SiS_GetModeID()
-
-Uwe Kleine-K=F6nig (4):
-      video: fbdev: imxfb: Drop platform data support
-      video: fbdev: imxfb: Drop unused symbols from header
-      video: fbdev: imxfb: Fold <linux/platform_data/video-imxfb.h> into o=
-nly user
-      video: fbdev: imxfb: Convert request_mem_region + ioremap to devm_io=
-remap_resource
-
-Yang Yingliang (1):
-      video: fbdev: imxfb: fix return value check in imxfb_probe()
-
-Zheyu Ma (5):
-      video: fbdev: arkfb: Fix a divide-by-zero bug in ark_set_pixclock()
-      video: fbdev: i740fb: Check the argument of i740_calc_vclk()
-      video: fbdev: vt8623fb: Check the size of screen before memset_io()
-      video: fbdev: arkfb: Check the size of screen before memset_io()
-      video: fbdev: s3fb: Check the size of screen before memset_io()
-
- Documentation/m68k/kernel-options.rst     |   4 +-
- MAINTAINERS                               |   1 -
- drivers/video/fbdev/68328fb.c             |   7 +-
- drivers/video/fbdev/amba-clcd.c           |  24 ++++--
- drivers/video/fbdev/amifb.c               |  15 +---
- drivers/video/fbdev/arkfb.c               |   9 +-
- drivers/video/fbdev/atafb.c               | 103 +++++++----------------
- drivers/video/fbdev/cirrusfb.c            |   2 +-
- drivers/video/fbdev/dnfb.c                |   2 +-
- drivers/video/fbdev/fm2fb.c               |   4 +-
- drivers/video/fbdev/hpfb.c                |   4 +-
- drivers/video/fbdev/i740fb.c              |   9 +-
- drivers/video/fbdev/imxfb.c               | 134 +++++++++++--------------=
------
- drivers/video/fbdev/omap/hwa742.c         |   3 +-
- drivers/video/fbdev/omap/omapfb.h         |   9 --
- drivers/video/fbdev/omap/omapfb_main.c    |   3 +-
- drivers/video/fbdev/q40fb.c               |   2 +-
- drivers/video/fbdev/s3fb.c                |   2 +
- drivers/video/fbdev/sa1100fb.c            |  41 ---------
- drivers/video/fbdev/sis/init.c            |   4 +-
- drivers/video/fbdev/skeletonfb.c          |   6 +-
- drivers/video/fbdev/valkyriefb.c          |  10 +--
- drivers/video/fbdev/vt8623fb.c            |   2 +
- include/linux/platform_data/video-imxfb.h |  70 ----------------
- 24 files changed, 136 insertions(+), 334 deletions(-)
- delete mode 100644 include/linux/platform_data/video-imxfb.h

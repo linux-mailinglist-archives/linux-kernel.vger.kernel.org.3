@@ -2,91 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8226358B3A5
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 06:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 130A158B3E3
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 06:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241607AbiHFEDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 00:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S238653AbiHFEou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 00:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241461AbiHFEDF (ORCPT
+        with ESMTP id S237883AbiHFEos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 00:03:05 -0400
-Received: from out28-74.mail.aliyun.com (out28-74.mail.aliyun.com [115.124.28.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643A214014;
-        Fri,  5 Aug 2022 21:03:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08715575|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.154924-0.00444291-0.840633;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.OnDAFCd_1659758542;
-Received: from 192.168.220.136(mailfrom:michael@allwinnertech.com fp:SMTPD_---.OnDAFCd_1659758542)
-          by smtp.aliyun-inc.com;
-          Sat, 06 Aug 2022 12:02:25 +0800
-Message-ID: <ff062259-3c94-ddd2-4376-53b4cbd25e7d@allwinnertech.com>
-Date:   Sat, 6 Aug 2022 12:02:22 +0800
+        Sat, 6 Aug 2022 00:44:48 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D539112D2B
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 21:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659761086; x=1691297086;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YSo0e+cy946lYNx88cm/n5vNylBvX6pDpA82KHK3da8=;
+  b=fGU8E4HJr9o02hAdgsgDbADqV0GwXjvTCA/iylQqamwoaSVW5o6XlStk
+   Z8jF4nnWlbSHqjBriyvicsI55BwDNFZlYt0PPQdrtkb3zggQqTPC4G5nq
+   9QvQUx0KogfUVB3/eDR3bG0IJ9PiyNY30bSI67sYnKVe//yrr+7YZW7n0
+   f3kPxrf2i6yL/qbdwNjywKCrHh8XYvbxyw6xpUI9pXAmc/LuJkCMtVpBg
+   Jlz0hy/0TEa5U2H97r64ZK7fJkGIO7ZqenlimK32wupzjRFebj+SXcg/o
+   xc7YpCVxTNMLspRMP39N040nHTk2bt8//pUcsQ5i0QQHkpFziee2JOXTh
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="291114130"
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="291114130"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 21:44:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="579738861"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 05 Aug 2022 21:44:44 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKBg4-000K2l-0l;
+        Sat, 06 Aug 2022 04:44:44 +0000
+Date:   Sat, 6 Aug 2022 12:44:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: drivers/md/raid10.c:2647:60: sparse: sparse: incorrect type in
+ argument 5 (different base types)
+Message-ID: <202208061258.jAwlaAXe-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] ext4: fix error when itable blocks is greater than
- s_itb_per_group
-Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>, Lukas Czerner <lczerner@redhat.com>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com
-References: <20220802021029.16046-1-michael@allwinnertech.com>
- <20220803071859.elywnni2yfol4bea@fedora> <Yussl4uRWAAO3TtT@mit.edu>
-From:   Michael Wu <michael@allwinnertech.com>
-In-Reply-To: <Yussl4uRWAAO3TtT@mit.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/4/2022 10:19 AM, Theodore Ts'o wrote:
-> On Wed, Aug 03, 2022 at 09:18:59AM +0200, Lukas Czerner wrote:
->>
->> Hi Michael,
->>
->> mke2fs is making sure that we completely fill the inote table blocks.
->> This is a corrupted image and so AFAICT ext4 is doing the right thing
->> here. There does not seem to be a problem to fix, unless you can somehow
->> trick mke2fs to make a file system like this.
-> 
-> Several years ago, android was shipping a bogus/busted
-> reimeplementation of mke2fs, reportedly because a certain founder of
-> Android (cough, Andy Rubin, cough) was alergic to the GPL.  ("The
-> problem with GPL in embedded systems [such as smartphones and tablets]
-> is that it's viral...")  This bogus reimplementation would create file
-> systems where the number of inodes per block group was a multiple of 4
-> instead of 8.  But, it was under the BSD license, so it was all good!   :-/
-> 
-> This bogus reimplementation of mkfs would, 50% of the time, create
-> busted file systems which couldn't be fixed, if they got corrupted, by
-> e2fsck.  This is because e2fsprogs' allocation bitmap code assumes
-> that you can back the bitarray into a single contiguous memory block
-> --- and this doesn't work if the number of inodes per block group is
-> not a multiple of 8.  If the file system got corrupted, the only
-> recourse was to wipe the user partition and the user would lose any
-> data that wasn't backed up to the cloud.
-> 
-> This has since been fixed for quite some time, but if there is some
-> low-end Android manufacturer is using an ancient version of AOSP, this
-> could be happening even in 2022 --- but that doesn't mean we need to
-> support such broken file systems.  As far as I'm concerned the only
-> way to make valid Android ext4 system images is the combination of
-> mke2fs and e2fsdroid, which is what modern versions of AOSP do.
-> 
->      	       	     	     	    	     	- Ted
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6614a3c3164a5df2b54abb0b3559f51041cf705b
+commit: 4ce4c73f662bdb0ae5bfb058bc7ec6f6829ca078 md/core: Combine two sync_page_io() arguments
+date:   3 weeks ago
+config: alpha-randconfig-s042-20220804 (https://download.01.org/0day-ci/archive/20220806/202208061258.jAwlaAXe-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4ce4c73f662bdb0ae5bfb058bc7ec6f6829ca078
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4ce4c73f662bdb0ae5bfb058bc7ec6f6829ca078
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash .// drivers/ kernel/
 
-Dear Ted & Lukas,
-Thanks for your clarification. I did several tests, turned outs Ted was 
-right. I'm clear now.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/md/raid10.c:1946:37: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:1946:37: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:1946:37: sparse:    struct md_rdev *
+   drivers/md/raid10.c:4919:33: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:4919:33: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:4919:33: sparse:    struct md_rdev *
+   drivers/md/raid10.c:4922:33: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:4922:33: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:4922:33: sparse:    struct md_rdev *
+   drivers/md/raid10.c:5011:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:5011:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:5011:32: sparse:    struct md_rdev *
+   drivers/md/raid10.c:5014:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:5014:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:5014:32: sparse:    struct md_rdev *
+   drivers/md/raid10.c:759:24: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:759:24: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:759:24: sparse:    struct md_rdev *
+   drivers/md/raid10.c:762:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:762:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:762:32: sparse:    struct md_rdev *
+   drivers/md/raid10.c:1139:30: sparse: sparse: incorrect type in initializer (different base types) @@     expected int const op @@     got restricted blk_opf_t enum req_op @@
+   drivers/md/raid10.c:1139:30: sparse:     expected int const op
+   drivers/md/raid10.c:1139:30: sparse:     got restricted blk_opf_t enum req_op
+   drivers/md/raid10.c:1140:52: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long const do_sync @@     got restricted blk_opf_t @@
+   drivers/md/raid10.c:1140:52: sparse:     expected unsigned long const do_sync
+   drivers/md/raid10.c:1140:52: sparse:     got restricted blk_opf_t
+   drivers/md/raid10.c:1165:28: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:1165:28: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:1165:28: sparse:    struct md_rdev *
+   drivers/md/raid10.c:1233:30: sparse: sparse: incorrect type in initializer (different base types) @@     expected int const op @@     got restricted blk_opf_t enum req_op @@
+   drivers/md/raid10.c:1234:52: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long const do_sync @@     got restricted blk_opf_t @@
+   drivers/md/raid10.c:1235:51: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned long const do_fua @@     got restricted blk_opf_t @@
+   drivers/md/raid10.c:1263:32: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted blk_opf_t enum req_op op @@     got int const op @@
+   drivers/md/raid10.c:1263:44: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted blk_opf_t [usertype] op_flags @@     got unsigned long @@
+   drivers/md/raid10.c:1303:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:1303:40: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:1303:40: sparse:    struct md_rdev *
+   drivers/md/raid10.c:1304:41: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:1304:41: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:1304:41: sparse:    struct md_rdev *
+   drivers/md/raid10.c:1434:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:1434:40: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:1434:40: sparse:    struct md_rdev *
+   drivers/md/raid10.c:1435:41: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:1435:41: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:1435:41: sparse:    struct md_rdev *
+   drivers/md/raid10.c:1744:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:1744:40: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:1744:40: sparse:    struct md_rdev *
+   drivers/md/raid10.c:1745:41: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:1745:41: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:1745:41: sparse:    struct md_rdev *
+   drivers/md/raid10.c:1913:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:1913:40: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:1913:40: sparse:    struct md_rdev *
+   drivers/md/raid10.c:2142:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:2142:25: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:2142:25: sparse:    struct md_rdev *
+   drivers/md/raid10.c:2156:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:2156:17: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:2156:17: sparse:    struct md_rdev *
+>> drivers/md/raid10.c:2647:60: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected restricted blk_opf_t [usertype] opf @@     got int rw @@
+   drivers/md/raid10.c:2716:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:2716:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:2716:32: sparse:    struct md_rdev *
+   drivers/md/raid10.c:2769:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:2769:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:2769:32: sparse:    struct md_rdev *
+   drivers/md/raid10.c:2803:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:2803:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:2803:32: sparse:    struct md_rdev *
+   drivers/md/raid10.c:3313:49: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:3313:49: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:3313:49: sparse:    struct md_rdev *
+   drivers/md/raid10.c:3388:33: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:3388:33: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:3388:33: sparse:    struct md_rdev *
+   drivers/md/raid10.c:3389:36: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:3389:36: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:3389:36: sparse:    struct md_rdev *
+   drivers/md/raid10.c:3459:56: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:3459:56: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:3459:56: sparse:    struct md_rdev *
+   drivers/md/raid10.c:3476:41: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:3476:41: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:3476:41: sparse:    struct md_rdev *
+   drivers/md/raid10.c:3679:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:3679:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:3679:32: sparse:    struct md_rdev *
+   drivers/md/raid10.c:3709:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:3709:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:3709:32: sparse:    struct md_rdev *
+   drivers/md/raid10.c:4452:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:4452:40: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:4452:40: sparse:    struct md_rdev *
+   drivers/md/raid10.c:4468:40: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:4468:40: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:4468:40: sparse:    struct md_rdev *
+   drivers/md/raid10.c:5096:48: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:5096:48: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:5096:48: sparse:    struct md_rdev *
+   drivers/md/raid10.c:5192:48: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:5192:48: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:5192:48: sparse:    struct md_rdev *
+   drivers/md/raid10.c:5195:32: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/md/raid10.c:5195:32: sparse:    struct md_rdev [noderef] __rcu *
+   drivers/md/raid10.c:5195:32: sparse:    struct md_rdev *
+
+vim +2647 drivers/md/raid10.c
+
+  2637	
+  2638	static int r10_sync_page_io(struct md_rdev *rdev, sector_t sector,
+  2639				    int sectors, struct page *page, int rw)
+  2640	{
+  2641		sector_t first_bad;
+  2642		int bad_sectors;
+  2643	
+  2644		if (is_badblock(rdev, sector, sectors, &first_bad, &bad_sectors)
+  2645		    && (rw == READ || test_bit(WriteErrorSeen, &rdev->flags)))
+  2646			return -1;
+> 2647		if (sync_page_io(rdev, sector, sectors << 9, page, rw, false))
+  2648			/* success */
+  2649			return 1;
+  2650		if (rw == WRITE) {
+  2651			set_bit(WriteErrorSeen, &rdev->flags);
+  2652			if (!test_and_set_bit(WantReplacement, &rdev->flags))
+  2653				set_bit(MD_RECOVERY_NEEDED,
+  2654					&rdev->mddev->recovery);
+  2655		}
+  2656		/* need to record an error - either for the block or the device */
+  2657		if (!rdev_set_badblocks(rdev, sector, sectors, 0))
+  2658			md_error(rdev->mddev, rdev);
+  2659		return 0;
+  2660	}
+  2661	
 
 -- 
-Regards,
-Michael Wu
+0-DAY CI Kernel Test Service
+https://01.org/lkp

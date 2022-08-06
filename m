@@ -2,60 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6F358B5D4
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF29C58B601
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbiHFOJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 10:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
+        id S229998AbiHFOPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 10:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiHFOJA (ORCPT
+        with ESMTP id S230261AbiHFOPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 10:09:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC69111A1B
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 07:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659794939; x=1691330939;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Wy9tQj2vVx6PdmRmRCDoXdkzsYBBuX6j+8FMZufhnWg=;
-  b=UdZfXoK/FsIS3KpWEcHb+XS8B7irsFZXnJAUFjI0JJJdNVkE4X7AE96M
-   KWhmcngMYuwGlob2+zbRoRf7DWZiF9PkmESLc5Qmvj6HTXZSuuedL88wJ
-   DUw3T1s/ZmtZJEAQTcSS9ZZTdTwvH5oFmvuFj87bS4iNLeQzxtB+cojXk
-   6MdlSl+m7CxEBkNsGOQqOjW4Aoed5EZau6HSrd3dPyfMf2uaSeR4RzX7T
-   GCWdrnpZSaTI9vuiisZ5q5QqTaysCyymwRalvPLM57SlODpGXj2JdrEWM
-   SX6Hvl91Onv0mvMeyCJ4+mSi0Az7Fo6oBdL0qZGGfL6poQe+dp5fJRjkW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="289126975"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="289126975"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 07:08:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="579820314"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Aug 2022 07:08:58 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKKU5-000KQB-1h;
-        Sat, 06 Aug 2022 14:08:57 +0000
-Date:   Sat, 6 Aug 2022 22:08:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Janne Grunau <j@jannau.net>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 11/21]
- drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
- prototype for 'spihid_get_data'
-Message-ID: <202208062244.g28920ao-lkp@intel.com>
+        Sat, 6 Aug 2022 10:15:48 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED87065C2
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 07:15:46 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id f11so4898911pgj.7
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 07:15:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=AdmoEx+WmT67i1BIIL03YLuO83QgajHTg/kt7epiFgg=;
+        b=VrZJ2jGiKcVNK94TZNAGg/tkmL38wNQtqKf1THHLxvabAuue0RgYwgLjqMlPwYJPwr
+         deDcuS/h4N+T+kUZ1zX+bKB6wUO8FseklOntC5piKZ2TBQXA+rDUSkYQyJamrMZ4szC4
+         keWYVLrynR5M35re6QSxMrHFCuncmrp+JoLVjK2k2SlTzRYqJIcchVo36wfjSnctADoa
+         xXLnAGuLJhUVz/NhozC9XK+6Sziz3RJNO+6pYDcF657f5KRrEJqe5hKTQOf/q3sInf4L
+         AQ9TNGqMj0SVJBi/kJN4Q0FY4CvxGad5RLpwYq1a9DhRtI7QM/E3yk58J1ji5u9WyHP5
+         KSLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=AdmoEx+WmT67i1BIIL03YLuO83QgajHTg/kt7epiFgg=;
+        b=EqtACU8IKlMh+8w+MotPIPjMZ4CC6rooRcp63LKw2zAXAbTglU7y4XHV1GxXTZuoT6
+         LuSdXbThhIZsDLr7XA8Tar9wZVoBYxlRlOZrQe9LSHSFE3LdQUGlEeT5N488yKxiLsP4
+         Bl65fEit/uoR6hSDUkIwno6sc5X9s65CE2uS6t8ZdWBiHPNkOQ/0LEtSSfEuC40YXGPR
+         cpaNLHgOp5a49DGdbMjpa/71cNXC6d7GWLkocRSeyiibL8XkXaZi/Bhq53tbqEv9Dtj9
+         eWrlmdOInyCweVAcLAaRGBC4BO7pQHzPT8+DZQ7M3ROZcNZQkzKUYeZNyc0FPs8rri2A
+         kquQ==
+X-Gm-Message-State: ACgBeo132VWc4Jx7fL5KTuFUb5gS8dQgt+ZYpwsSdbSlRekgIcwFpbu+
+        uaAKCZNaLUNuNznXuN8SYAvX
+X-Google-Smtp-Source: AA6agR53FZGAkMJLYJQ36JfX/HuotRuqldhgQsqY+teYfZJBmLRHMgEFBpkrxL9w0zZ1OKME5h++eQ==
+X-Received: by 2002:a63:560e:0:b0:41c:590a:62ed with SMTP id k14-20020a63560e000000b0041c590a62edmr9686308pgb.250.1659795346368;
+        Sat, 06 Aug 2022 07:15:46 -0700 (PDT)
+Received: from thinkpad ([117.202.188.20])
+        by smtp.gmail.com with ESMTPSA id z10-20020a6553ca000000b0041c1965dd96sm3207803pgr.27.2022.08.06.07.15.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 07:15:45 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 19:45:36 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 3/9] usb: dwc3: qcom: fix gadget-only builds
+Message-ID: <20220806141536.GD14384@thinkpad>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-4-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220804151001.23612-4-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,61 +87,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   740efddf69b264d6439f9cf124d36acab812dd39
-commit: 80d39405629267931171cbca14121b266e8d9152 [11/21] WIP: HID: transport: spi: add Apple SPI transport
-config: parisc64-allyesconfig (https://download.01.org/0day-ci/archive/20220806/202208062244.g28920ao-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/80d39405629267931171cbca14121b266e8d9152
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 80d39405629267931171cbca14121b266e8d9152
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/hid/ drivers/net/ethernet/aquantia/atlantic/ sound/soc/codecs/
+On Thu, Aug 04, 2022 at 05:09:55PM +0200, Johan Hovold wrote:
+> A recent change added a dependency to the USB host stack and broke
+> gadget-only builds of the driver.
+> 
+> Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> --`-
+> 
+> Changes in v2
+>  - new patch
+> 
+>  drivers/usb/dwc3/dwc3-qcom.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index be2e3dd36440..e9364141661b 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -310,8 +310,11 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+>  	 * currently supports only 1 port per controller. So
+>  	 * this is sufficient.
+>  	 */
+> +#ifdef CONFIG_USB
+>  	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+> -
+> +#else
+> +	udev = NULL;
+> +#endif
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Perhaps the check should be moved to the caller instead? This function still
+references "usb_hcd" struct and I don't think that's intended for gadget only
+mode.
 
-All warnings (new ones prefixed by >>):
+Thanks,
+Mani
 
->> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for 'spihid_get_data' [-Wmissing-prototypes]
-     259 | struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-         |                      ^~~~~~~~~~~~~~~
---
->> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for 'spihid_apple_of_power_on' [-Wmissing-prototypes]
-      24 | int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for 'spihid_apple_of_power_off' [-Wmissing-prototypes]
-      40 | int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
-      50 | int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
-      59 | int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
-
-   258	
- > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   260	{
-   261		switch (idev->id) {
-   262		case SPIHID_DEVICE_ID_KBD:
-   263			return container_of(idev, struct spihid_apple, kbd);
-   264		case SPIHID_DEVICE_ID_TP:
-   265			return container_of(idev, struct spihid_apple, tp);
-   266		default:
-   267			return NULL;
-   268		}
-   269	}
-   270	
+>  	if (!udev)
+>  		return USB_SPEED_UNKNOWN;
+>  
+> -- 
+> 2.35.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+மணிவண்ணன் சதாசிவம்

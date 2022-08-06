@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEF758B56C
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 14:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3AA58B56D
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 14:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiHFMZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 08:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S231365AbiHFM1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 08:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiHFMZ5 (ORCPT
+        with ESMTP id S229797AbiHFM1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 08:25:57 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464152613
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 05:25:57 -0700 (PDT)
+        Sat, 6 Aug 2022 08:27:13 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F17C11143
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 05:27:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659788757; x=1691324757;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=g7psvbIbxejckfZseovXpRiOXtpRWvckpSLypWUTg7M=;
-  b=Gd6OaO8X+d4dHPhEeO+X2nR2g1UfLJq/I5C0Jpb3nHPhqew8ra0aSzcs
-   i1uc+5WZj4LHXwIdi2FcJKC8k97qBpjkMZKkDGXdg5Ans5tV4E47qf42f
-   RRNFUUFGJ8J1RuvUHHf6oGNzLzD+bR4QRT8ZW7qGilx7xJubGGZniwTNZ
-   ET4R6KjAFXw0GyczSppEb5o8upFmgkBHKzmOnjyms2SQyYkf0z3NKRPpI
-   0KVp/sqUl7HZsNWsXq+P24XeaCCpWYUiDPnpnw9rTbA0z3On3mguKh0bU
-   S5AXIqwulKKLsiZI75ZgQBbCMRg+JMPuR49O9g2BZYy/co7pRmnrDIhVi
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="376658333"
+  t=1659788833; x=1691324833;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kggDSyps8TO2AFz5L6p7Om5TDm4C37TCEL5uj7zwCpE=;
+  b=Ys7xJe1VM9g1p4FkoJynyXsacnPsRlhK5Gj+Cw493LHQEihBW6GKI5qh
+   7ENZCePb2mI3W43B34aesVIE4x2MnOSwqdIr1ikD62IYa1TqLNCdcbcqs
+   AAqVlGuG//u29e8h4viXeBwWp530UXl4ZJvrxLI1E7HfpyWbqmwGJaekU
+   cudXsSriGwHbRB4wPWFCpDqvr5NKIFK03MeOm7dkx66zHvG/Kp/QflL1J
+   XKSHOp+CQiGh0S82xU3cjeEFfLuOWojdd803SpmiA8UBNkj0oHMYdeKRB
+   sV+7w/bjiQezUj9bD1TxdcTdkpfhMRUGAMnhM4CZ5tdEoFFI/LF7+b/MN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="289121860"
 X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="376658333"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 05:25:57 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="289121860"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 05:27:13 -0700
 X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="636786267"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 06 Aug 2022 05:25:55 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKIsN-000KLx-0P;
-        Sat, 06 Aug 2022 12:25:55 +0000
-Date:   Sat, 6 Aug 2022 20:25:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Subject: [intel-tdx:guest-hardening-rebased 16/23]
- arch/x86/coco/tdx/tdx.c:531:15: warning: no previous prototype for
- 'tdx_mmio_readq'
-Message-ID: <202208062038.xHmGD2TI-lkp@intel.com>
+   d="scan'208";a="632329018"
+Received: from twinkler-lnx.jer.intel.com ([10.12.87.143])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 05:27:09 -0700
+From:   Tomas Winkler <tomas.winkler@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>
+Subject: [PATCH v7 00/15] GSC support for XeHP SDV and DG2
+Date:   Sat,  6 Aug 2022 15:26:21 +0300
+Message-Id: <20220806122636.43068-1-tomas.winkler@intel.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,46 +65,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest-hardening-rebased
-head:   c170462888e1dab8e3e80c1c6e3708dd473ad1ed
-commit: 733588efac52121a59664e2dbd04edfdd9fdb580 [16/23] x86/tdx: Enable direct iomap MMIO optimizations
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220806/202208062038.xHmGD2TI-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/733588efac52121a59664e2dbd04edfdd9fdb580
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-hardening-rebased
-        git checkout 733588efac52121a59664e2dbd04edfdd9fdb580
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
+Add GSC support for XeHP SDV and DG2 platforms.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The series includes changes for the mei driver:
+- add ability to use polling instead of interrupts
+- add ability to use extended timeouts
+- setup extended operational memory for GSC
 
-All warnings (new ones prefixed by >>):
+The series includes changes for the i915 driver:
+- allocate extended operational memory for GSC
+- GSC on XeHP SDV offsets and definitions
 
-   arch/x86/coco/tdx/tdx.c:298:14: warning: no previous prototype for 'tdx_write_msr' [-Wmissing-prototypes]
-     298 | void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
-         |              ^~~~~~~~~~~~~
->> arch/x86/coco/tdx/tdx.c:531:15: warning: no previous prototype for 'tdx_mmio_readq' [-Wmissing-prototypes]
-     531 | unsigned long tdx_mmio_readq(void __iomem* addr)
-         |               ^~~~~~~~~~~~~~
+This patch set should be merged via gfx tree as
+the auxiliary device belongs there.
+Greg, your ACK is required for the drives/misc/mei code base,
+please review the patches.
 
 
-vim +/tdx_mmio_readq +531 arch/x86/coco/tdx/tdx.c
+V2: rebase over merged DG1 series and DG2 enablement patch,
+    fix commit messages
 
-   530	
- > 531	unsigned long tdx_mmio_readq(void __iomem* addr)
-   532	{
-   533		unsigned long val;
-   534	
-   535		if (tdx_virt_mmio(8, false, (unsigned long)addr, &val))
-   536			return 0xffffffffffffffff;
-   537		return val;
-   538	}
-   539	
+V3: rebase over latest tip
+
+V4: add missed changelog in pxp dbugfs patch
+
+V5: rebase over latest tip
+    fix changelog in pxp dbugfs patch
+    put HAX patch last to the ease of merging
+    reorder patches in the series
+
+V6: change prefix from 'drm/i915/gsc:' to 'mei' in patch:
+        mei: add slow_fw flag to the mei auxiliary device
+    Address following checkpatch warnings:
+        CHECK:PREFER_KERNEL_TYPES: Prefer kernel type 'u32' over 'uint32_t'
+        FILE: drivers/misc/mei/mkhi.h:54:
+        +	uint32_t flags; 
+        
+        -:51: CHECK:UNNECESSARY_PARENTHESES: Unnecessary parentheses around 'cldev->bus->pxp_mode != MEI_DEV_PXP_INIT'
+        #51: FILE: drivers/misc/mei/bus-fixup.c:257:
+        +	if (!cldev->bus->fw_f_fw_ver_supported &&
+        +	    (cldev->bus->pxp_mode != MEI_DEV_PXP_INIT)
+    
+    Remove some spurious code formatting changes in:
+    drm/i915/gsc: allocate extended operational memory in LMEM
+
+V7: Add new patch to add kdoc for mei_aux_device structure.
+    Rename slow_fw to slow_firmware flag.
+    Use drm_dbg/err() functions instead of dev_dbg/err() in i195
+    codebase.
+
+
+Alexander Usyskin (4):
+  drm/i915/gsc: add slow_firmware flag to the gsc device definition
+  drm/i915/gsc: add GSC XeHP SDV platform definition
+  mei: gsc: wait for reset thread on stop
+  mei: extend timeouts on slow devices.
+
+Daniele Ceraolo Spurio (1):
+  HAX: drm/i915: force INTEL_MEI_GSC on for CI
+
+Tomas Winkler (7):
+  mei: add kdoc for struct mei_aux_device
+  mei: add slow_firmware flag to the mei auxiliary device
+  mei: gsc: use polling instead of interrupts
+  mei: mkhi: add memory ready command
+  mei: gsc: setup gsc extended operational memory
+  mei: debugfs: add pxp mode to devstate in debugfs
+  drm/i915/gsc: allocate extended operational memory in LMEM
+
+Vitaly Lubart (3):
+  drm/i915/gsc: skip irq initialization if using polling
+  mei: bus: export common mkhi definitions into a separate header
+  mei: gsc: add transition to PXP mode in resume flow
+
+ drivers/gpu/drm/i915/Kconfig.debug  |   1 +
+ drivers/gpu/drm/i915/gt/intel_gsc.c | 118 +++++++++++++++++++++++++---
+ drivers/gpu/drm/i915/gt/intel_gsc.h |   3 +
+ drivers/misc/mei/bus-fixup.c        | 104 ++++++++++++++++--------
+ drivers/misc/mei/client.c           |  14 ++--
+ drivers/misc/mei/debugfs.c          |  17 ++++
+ drivers/misc/mei/gsc-me.c           |  77 +++++++++++++++---
+ drivers/misc/mei/hbm.c              |  12 +--
+ drivers/misc/mei/hw-me-regs.h       |   7 ++
+ drivers/misc/mei/hw-me.c            | 116 ++++++++++++++++++++++-----
+ drivers/misc/mei/hw-me.h            |  14 +++-
+ drivers/misc/mei/hw-txe.c           |   2 +-
+ drivers/misc/mei/hw.h               |   5 ++
+ drivers/misc/mei/init.c             |  21 ++++-
+ drivers/misc/mei/main.c             |   2 +-
+ drivers/misc/mei/mei_dev.h          |  26 ++++++
+ drivers/misc/mei/mkhi.h             |  57 ++++++++++++++
+ drivers/misc/mei/pci-me.c           |   2 +-
+ include/linux/mei_aux.h             |  12 +++
+ 19 files changed, 519 insertions(+), 91 deletions(-)
+ create mode 100644 drivers/misc/mei/mkhi.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+

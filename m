@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709EB58B5C7
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 15:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A8958B5CE
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 15:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231371AbiHFNwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 09:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S231564AbiHFN6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 09:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiHFNwN (ORCPT
+        with ESMTP id S230018AbiHFN6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 09:52:13 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8621EE35
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 06:52:09 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id u133so4485913pfc.10
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 06:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=RSxdi8xvKopT4hYxNJXBxrYk0uMobA98LNnzcb7HFVY=;
-        b=L+iEfobGTIaZdBDTSWhiVWJAZiZ8J3cHBW5T7IMiYfbYWN6pMGIpn4ibaosnyacFo8
-         lj56/jZr80p2dQSxieT0G8Nu44GDc5SNf06Ky1AEO0wJzgBKSC7Amd37CgGErQazzyXN
-         GJBkiXSMD8sjCFwt6TtJC+149MEsZy7JQojiPyp3ZDmLHjZWaQvirxTScxBsFBLddSYS
-         0Zc+2XXYAUr0oEZbd0kzYuPjrrv7FWgr7XzvGAog+cmJImXnYKRHeqAsn/M0qtb8fICr
-         lsnsFFfNysyxqWMiEiXtDmSrUwZPfOIQUcsWh/s0M3HuYdkhqaI8vM6d+l7e0KMP74LN
-         yofw==
+        Sat, 6 Aug 2022 09:58:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA9D010FF6
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 06:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659794298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=M1VZLFzbc3QEJrqC5cuqzOWpSyIBVvFdj+5LhLu6pv4=;
+        b=inktaNs7sD1gd4Wz4QEaKDFJCQGxnyXzvOzu3GH4oE6Z89zzN63rL1TpLEwEEIXUIRErtV
+        rCs9m19dlRzciOeBLxnGPE71RQESrK0CcuyyT41WW1Y/PYSH8PJB0wdCH484b9OVIgeFDb
+        Wv5shHh16O2E6nOTpMfxuQvQ1PtLvSk=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-638-Rj806vHCP9mSP4sNMvawcQ-1; Sat, 06 Aug 2022 09:58:17 -0400
+X-MC-Unique: Rj806vHCP9mSP4sNMvawcQ-1
+Received: by mail-pf1-f199.google.com with SMTP id k9-20020aa79729000000b0052d4dd3e2aeso2523703pfg.0
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 06:58:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=RSxdi8xvKopT4hYxNJXBxrYk0uMobA98LNnzcb7HFVY=;
-        b=CA/yHxCynKxpP+t/g9iTuiy47V95btaxu4kCkexxMU9ji1E7CP9KQHYCw+yrHr+sux
-         wivFM301oIXSN1sRdt7WLzAVwL1uesO16vFZk/zf8BOFReXaU4/G2CjAOjKw9RoAnOBE
-         CUd3La/YjMYLjGxQPrhlhhXlQ7bcAr98Bl3FIA0BwM/aVgYHwm/u9dXvah4ZY3Aq291U
-         8WCvnhXKkHSp8kVFu+Z2+8bWiXuypFC0ZKOOdtpWdxKdE32wT7E3BxuIQi3o3r2mKClJ
-         1/SQTHYxyYcZonlpWeAWVNFfP3FBA8hCTDfmzQQ0ZHoHOoK8JDaYRrctDXE0DFCTyx0a
-         0cew==
-X-Gm-Message-State: ACgBeo30Qh7PR7w7ByC79PwHbW1TxJQqQNZd2y4/SvEwsHjPX5FzoVIv
-        SViW78blnAl7kENVsnVPMvtK
-X-Google-Smtp-Source: AA6agR4llsfdiV0e9G+rpfDan2dDPwXhlGV/pR1ZWerFm73wdHeBTQAbJhZg+U3ergp2R/NH+VAzlg==
-X-Received: by 2002:a05:6a00:21c8:b0:52b:ffc0:15e7 with SMTP id t8-20020a056a0021c800b0052bffc015e7mr11353080pfj.29.1659793929300;
-        Sat, 06 Aug 2022 06:52:09 -0700 (PDT)
-Received: from thinkpad ([117.202.188.20])
-        by smtp.gmail.com with ESMTPSA id u11-20020a17090341cb00b0016be14a776asm4965153ple.286.2022.08.06.06.52.02
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=M1VZLFzbc3QEJrqC5cuqzOWpSyIBVvFdj+5LhLu6pv4=;
+        b=NWIqywnapsP+1t7KCJd4D6YibawIAhbhR1NCVS441zlL9XXVlBLiUi34/l5iC7lvON
+         JmiESnkuGbOHiuVpYazxpHRRJ8U6+vXNcPgeeAoEEJtREdi8xtxPsSBqL6wZNHh6KKEL
+         ra7UCIEyRzJiz2Aido4NG6iYADnN+/r6mMNoOiLqib3GZEkPYWxqIprPBHEdX4Q8Sht2
+         UEbp2Lkx32IR7/N/eQevGpCiWvh07mFzeORJpsbXU+awvh685WznPPlbqghbPUobvVyp
+         MYuW7RJ4mf/ymwyjFoouX5BMQ2FEh4ObrsejC8lq/anTvqJ5n0ipAopDex9uJ34mqCX2
+         QISQ==
+X-Gm-Message-State: ACgBeo2vVhAh1oNCiqAETePhCNQhL490lq1yZsfKa5nUG0O9pHSzMVXO
+        XasmeWr6taFA+qJW65TKcdPBcPwknrSkYvGI7/8Mu4NHGX7S71a+LJNl8UwKKSYgGdo5UdX4ide
+        tGf9yt4trBz9XFfnBTHFQ0njc
+X-Received: by 2002:a65:56ca:0:b0:41c:b7f6:78d7 with SMTP id w10-20020a6556ca000000b0041cb7f678d7mr9535490pgs.414.1659794296252;
+        Sat, 06 Aug 2022 06:58:16 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4zkTYFuwP5/8wgbQSavTGBbDM7tgh5zCuFh2N5fVlb4s0KISmvWWClJ/x6ktAl5IiVZ+OlLA==
+X-Received: by 2002:a65:56ca:0:b0:41c:b7f6:78d7 with SMTP id w10-20020a6556ca000000b0041cb7f678d7mr9535479pgs.414.1659794295968;
+        Sat, 06 Aug 2022 06:58:15 -0700 (PDT)
+Received: from xps13.. ([240d:1a:c0d:9f00:4f2f:926a:23dd:8588])
+        by smtp.gmail.com with ESMTPSA id h12-20020a17090ac38c00b001f4fb21c11asm4871544pjt.21.2022.08.06.06.58.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 06:52:08 -0700 (PDT)
-Date:   Sat, 6 Aug 2022 19:22:00 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/9] Revert "usb: dwc3: qcom: Keep power domain on to
- retain controller status"
-Message-ID: <20220806135200.GC14384@thinkpad>
-References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-3-johan+linaro@kernel.org>
+        Sat, 06 Aug 2022 06:58:15 -0700 (PDT)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Shigeru Yoshida <syoshida@redhat.com>
+Subject: [PATCH] selftests/proc: Add support for vsyscall=xonly
+Date:   Sat,  6 Aug 2022 22:57:49 +0900
+Message-Id: <20220806135749.47168-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220804151001.23612-3-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,101 +75,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 05:09:54PM +0200, Johan Hovold wrote:
-> This reverts commit d9be8d5c5b032e5383ff5c404ff4155e9c705429.
-> 
-> Generic power-domain flags must be set before the power-domain is
-> initialised and must specifically not be modified by drivers for devices
-> that happen to be in the domain.
-> 
-> To make sure that USB power-domains are left enabled during system
-> suspend when a device in the domain is in the wakeup path, the
-> GENPD_FLAG_ACTIVE_WAKEUP flag should instead be set for the domain
-> unconditionally when it is registered.
-> 
-> Note that this also avoids keeping power-domains on during suspend when
-> wakeup has not been enabled (e.g. through sysfs).
-> 
-> For the runtime PM case, making sure that the PHYs are not suspended and
-> that they are in the same domain as the controller prevents the domain
-> from being suspended. If there are cases where this is not possible or
-> desirable, the genpd implementation may need to be extended.
-> 
-> Fixes: d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller status")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+There are 3 vsyscall modes: emulate, xonly, and none.  proc-pid-vm
+detects the existence of the vsyscall with memory load on the vsyscall
+page.
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+This works for emulate and none vsyscall modes, but fails for xonly
+because read permission is omitted with xonly vsyscall page, and it
+results in the following error:
 
-Thanks,
-Mani
+  # ./proc-pid-vm
+  proc-pid-vm: proc-pid-vm.c:328: main: Assertion `rv == len' failed.
+  Aborted (core dumped)
 
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 28 +++++++---------------------
->  1 file changed, 7 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index c5e482f53e9d..be2e3dd36440 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -17,7 +17,6 @@
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/phy/phy.h>
-> -#include <linux/pm_domain.h>
->  #include <linux/usb/of.h>
->  #include <linux/reset.h>
->  #include <linux/iopoll.h>
-> @@ -757,13 +756,12 @@ dwc3_qcom_create_urs_usb_platdev(struct device *dev)
->  
->  static int dwc3_qcom_probe(struct platform_device *pdev)
->  {
-> -	struct device_node *np = pdev->dev.of_node;
-> -	struct device *dev = &pdev->dev;
-> -	struct dwc3_qcom *qcom;
-> -	struct resource	*res, *parent_res = NULL;
-> -	int ret, i;
-> -	bool ignore_pipe_clk;
-> -	struct generic_pm_domain *genpd;
-> +	struct device_node	*np = pdev->dev.of_node;
-> +	struct device		*dev = &pdev->dev;
-> +	struct dwc3_qcom	*qcom;
-> +	struct resource		*res, *parent_res = NULL;
-> +	int			ret, i;
-> +	bool			ignore_pipe_clk;
->  
->  	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
->  	if (!qcom)
-> @@ -772,8 +770,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	platform_set_drvdata(pdev, qcom);
->  	qcom->dev = &pdev->dev;
->  
-> -	genpd = pd_to_genpd(qcom->dev->pm_domain);
-> -
->  	if (has_acpi_companion(dev)) {
->  		qcom->acpi_pdata = acpi_device_get_match_data(dev);
->  		if (!qcom->acpi_pdata) {
-> @@ -881,17 +877,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto interconnect_exit;
->  
-> -	if (device_can_wakeup(&qcom->dwc3->dev)) {
-> -		/*
-> -		 * Setting GENPD_FLAG_ALWAYS_ON flag takes care of keeping
-> -		 * genpd on in both runtime suspend and system suspend cases.
-> -		 */
-> -		genpd->flags |= GENPD_FLAG_ALWAYS_ON;
-> -		device_init_wakeup(&pdev->dev, true);
-> -	} else {
-> -		genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
-> -	}
-> -
-> +	device_init_wakeup(&pdev->dev, 1);
->  	qcom->is_suspended = false;
->  	pm_runtime_set_active(dev);
->  	pm_runtime_enable(dev);
-> -- 
-> 2.35.1
-> 
+This patch fixes this issue with introducing the following rule:
 
+  1. vsyscall mode is emulate if it can load memory
+  2. vsyscall mode is xonly if it can call gettimeofday() on vsyscall
+  3. vsyscall mode is node otherwise
+
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+---
+ tools/testing/selftests/proc/proc-pid-vm.c | 77 ++++++++++++++++++----
+ 1 file changed, 65 insertions(+), 12 deletions(-)
+
+diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
+index 28604c9f805c..dffd263beef3 100644
+--- a/tools/testing/selftests/proc/proc-pid-vm.c
++++ b/tools/testing/selftests/proc/proc-pid-vm.c
+@@ -211,10 +211,16 @@ static int make_exe(const uint8_t *payload, size_t len)
+ }
+ #endif
+ 
+-static bool g_vsyscall = false;
+-
+-static const char str_vsyscall[] =
+-"ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
++static enum { EMULATE, XONLY, NONE } g_vsyscall_mode;
++
++static const char * const str_vsyscall[] = {
++	/* emulate */
++	"ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n",
++	/* xonly */
++	"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n",
++	/* none */
++	"",
++};
+ 
+ #ifdef __x86_64__
+ static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
+@@ -225,7 +231,33 @@ static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
+ /*
+  * vsyscall page can't be unmapped, probe it with memory load.
+  */
+-static void vsyscall(void)
++static bool vsyscall_emulate(void)
++{
++	*(volatile int *)0xffffffffff600000UL;
++	return true;
++}
++
++/*
++ * vsyscall page can't be unmapped, probe it with calling gettimeofday().
++ */
++static bool vsyscall_xonly(void)
++{
++	int ret;
++	struct timeval tv;
++	int (*f)(struct timeval *tv, struct timezone *tz);
++
++	/* Try to call gettimeofday() on vsyscall*/
++	f = (void *)0xffffffffff600000UL;
++	ret = f(&tv, NULL);
++	if (ret < 0) {
++		fprintf(stderr, "gettimeofday() on vsyscall, ret %d\n", ret);
++		return false;
++	}
++
++	return true;
++}
++
++static bool vsyscall_test(bool (*test)(void))
+ {
+ 	pid_t pid;
+ 	int wstatus;
+@@ -246,13 +278,27 @@ static void vsyscall(void)
+ 		act.sa_sigaction = sigaction_SIGSEGV;
+ 		(void)sigaction(SIGSEGV, &act, NULL);
+ 
+-		*(volatile int *)0xffffffffff600000UL;
++		if (!test())
++			exit(1);
++
+ 		exit(0);
+ 	}
+ 	waitpid(pid, &wstatus, 0);
+ 	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 0) {
+-		g_vsyscall = true;
++		return true;
+ 	}
++
++	return false;
++}
++
++static void vsyscall(void)
++{
++	if (vsyscall_test(vsyscall_emulate))
++		g_vsyscall_mode = EMULATE;
++	else if (vsyscall_test(vsyscall_xonly))
++		g_vsyscall_mode = XONLY;
++	else
++		g_vsyscall_mode = NONE;
+ }
+ 
+ int main(void)
+@@ -314,11 +360,14 @@ int main(void)
+ 
+ 	/* Test /proc/$PID/maps */
+ 	{
+-		const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
++		size_t len = strlen(buf0);
+ 		char buf[256];
+ 		ssize_t rv;
+ 		int fd;
+ 
++		if (g_vsyscall_mode != NONE)
++			len += strlen(str_vsyscall[g_vsyscall_mode]);
++
+ 		snprintf(buf, sizeof(buf), "/proc/%u/maps", pid);
+ 		fd = open(buf, O_RDONLY);
+ 		if (fd == -1) {
+@@ -327,8 +376,10 @@ int main(void)
+ 		rv = read(fd, buf, sizeof(buf));
+ 		assert(rv == len);
+ 		assert(memcmp(buf, buf0, strlen(buf0)) == 0);
+-		if (g_vsyscall) {
+-			assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
++		if (g_vsyscall_mode != NONE) {
++			assert(memcmp(buf + strlen(buf0),
++				      str_vsyscall[g_vsyscall_mode],
++				      strlen(str_vsyscall[g_vsyscall_mode])) == 0);
+ 		}
+ 	}
+ 
+@@ -374,8 +425,10 @@ int main(void)
+ 			assert(memmem(buf, rv, S[i], strlen(S[i])));
+ 		}
+ 
+-		if (g_vsyscall) {
+-			assert(memmem(buf, rv, str_vsyscall, strlen(str_vsyscall)));
++		if (g_vsyscall_mode != NONE) {
++			assert(memmem(buf, rv,
++				      str_vsyscall[g_vsyscall_mode],
++				      strlen(str_vsyscall[g_vsyscall_mode])));
+ 		}
+ 	}
+ 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.37.1
+

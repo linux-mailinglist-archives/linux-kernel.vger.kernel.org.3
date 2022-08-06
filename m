@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17AB058B812
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 21:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED21658B81B
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 22:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbiHFT7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 15:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
+        id S233562AbiHFUH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 16:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiHFT7K (ORCPT
+        with ESMTP id S233295AbiHFUHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 15:59:10 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9741E261E
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 12:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659815949; x=1691351949;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w5GY8CwInFXHmEYdXYfEg/5ag7UdS10Qg7uRwbGFNKw=;
-  b=WKTTFBXYwiXR/DrQE9wsEiHIB1uRGOvxvns5FBymmT2EO6jbDY6eCqpC
-   jsHsRcF0b+h9Sql6Fztu+HWTax8Mg+8ZdXsOU7lXJYYcPJQfVDFb1gYh9
-   QZxXHy50vuNcpvjZ0v77bBISQQy1FkRbG97jG3hdOlzjz0vqWZQDjPfDT
-   sUQewL82pKNcgzn689tN/uHfeyOo8EB2fI1VJ8jkt9WEjxFyFxbCq4yuK
-   TigwXnxFP1TVrwWqoY+nXeIc4nSOTkb6Yb2Quy1skCFmRzx7OnmYZxWH8
-   eyNVUKqjm1y+RaXE3w3zCAIYd/ClFBMEA6IE4oT0sMOes63lfYzcrfS0U
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="290397083"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="290397083"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 12:59:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="780070424"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 06 Aug 2022 12:59:07 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKPww-000KdV-1u;
-        Sat, 06 Aug 2022 19:59:06 +0000
-Date:   Sun, 7 Aug 2022 03:58:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-5.10.y 499/7421]
- arch/powerpc/kernel/smp.c:1380:7: error: variable 'ret' set but not used
-Message-ID: <202208070359.y2vvIVNR-lkp@intel.com>
+        Sat, 6 Aug 2022 16:07:52 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA344E035;
+        Sat,  6 Aug 2022 13:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1659816462;
+        bh=JttCySagazOt1SPXCXmT9G72op/evmxRiYdJphWoCNE=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=JPPs5R97yZLhiCJoHhnWY3uIOMYdlnAKnWpVXOwCdRQkE/RP3H1dwCmBW3WD76/0s
+         +wyEyFl3JlRhKbYqq5Cu4OwrWUY1T35LyesAEogLq5L2JhLltJKipdnDqigHzl5scI
+         pZou6A3zUAYz7U345WsuQH8WhCcHZ2zsXNkXXsPY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.170.46]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRTNF-1o6LkJ0ZeP-00NVC9; Sat, 06
+ Aug 2022 22:07:42 +0200
+Date:   Sat, 6 Aug 2022 22:06:49 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Zheyu Ma <zheyuma97@gmail.com>,
+        Uwe =?iso-8859-15?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [GIT PULL] fbdev updates & fixes for v5.20-rc1
+Message-ID: <Yu7J2Yj6UyAiE2Ne@ls3530>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7s9Da4UCIDfa/Q9sjHw2hJhx20+r87Q8QQJKmc8kJezq0A+t6L2
+ EtdvQlNtQkcIh+Th10pNNuPWrQDCtlSJdB/mdgrZHT+PSsRjnzEc8wk17NINIeahY90FMj6
+ Tpv4tJUTVHpPVRG1gZsfilGKJWCN3aEm1WcRbwLMd89Fix1ccaPcNKem31BohLWQj8suudC
+ Y5+b8pD/7A+iX0Q6bU6lA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9j0S/gy0o4w=:Q2TIczuQTWp3wJpyKPSxFN
+ kduprlC31bdB30wYEBQ7NBx6S8/Lqcf/CjdjhOtxHNCR9mc45M95GSsu7ohhei7w+CzQV4lbg
+ heiA/Ed1R9bYx3NqIusvKxW8SzFlPqkwRtpwpA52TNGgJJqBFFvHeAmMvbNiwK4vgEhq7/HpC
+ wqIfq26V/4WqVuAspdXJyZZcJANkrwiyoLReT/9OMRvboEh01i/9r7qgxFSPkBwfAmCBpaC2Z
+ CyI7mrHU5saTdnifqDpwnY1W5MsU3y/xDcCTS09AQRph6xBnCCwnHlO50TkaRxuUFwFBPvNXj
+ yZBaI0vX3uEhBAF5gv2sG74j4Z4Yx0xm1jQiI5Iy/mqRA+w8rdXhffQSgOKnqcAVzhwcP4Uz7
+ r7egN7oqMCiiwqSX9nW1ICK1EkvbNCqumFa/XOMeXzZkfN/YcL9barfQOnHQ5ZjGHDi6Jy6mF
+ NuxEjoJERfCgeRSDmbK0m3Jy9pjj0wzc+oXyZrqIjp5fBHnMu5BvHotNLItJi1afRN3Dpa7dv
+ bDWL3m8JeDjsLmfs1YDo3K9i1lYKplyXArW/8BclwNNb5H2LCwgjUqOnW2k9mTSLYeo8t3lbM
+ xakuQdjVrHEMwpdHznpo9pGlgf/CmC0OqyOxrtTzqShCinlkIQa+wZcZgVb31dKmG7mgo9HYH
+ TbjEBjx/ZHPU6qzw7eqMh+t/0kGVnaYtG4+hyqhSuIKN+10B+Yr3qgrSySMU+4lnCZfBHyKJF
+ PK4EV6x/0NHe8Oj0AM2FL++fGbbYnKUhU20XPdwg1eLJrQvhNDZhwKOqlWLH7H5Pc9EqPt7UU
+ cYaUIelZHwQPDUAPFpqTPYHp7wRPFW9jqizY+URsvgCkbBbM+ZWCzPfLb1Y9ftn/v6QHgnDEP
+ djCgl8RvgzBtbAgco6G3GpZvrdDjVjAzVin2sINp32y5OXxc0M4qwZN7WqTHSoRLWCWpzVAAa
+ gQgow8lvZ/o+4ErllCG0xUIc3jTD4+jgJoSYsK0wJ6emEUaoN6d4N6kNlG2qTjw0tKJNiJBrF
+ 0iSOw9MiDzZDoS5btqXKOP5+5VXvYm0o66UYpIj7yjpez9ZOBSrwLjsVFn5XcmKEf3PvNLQGW
+ 16qc+m9uvre66w5aXAlBAqn+jX7wW6nd3AmwRYavsFmIZlOH0Ub5FAPfg==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,103 +72,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srikar,
+The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d2=
+8:
 
-FYI, the error/warning still remains.
+  Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   4fd9cb57a3f5e611efde7772643134385de3a5a6
-commit: e91077cf1780108dc586cedf1d19f65b44fa3870 [499/7421] powerpc/smp: Update cpu_core_map on all PowerPc systems
-config: powerpc-randconfig-r002-20220807 (https://download.01.org/0day-ci/archive/20220807/202208070359.y2vvIVNR-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=e91077cf1780108dc586cedf1d19f65b44fa3870
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout e91077cf1780108dc586cedf1d19f65b44fa3870
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
+are available in the Git repository at:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git ta=
+gs/for-5.20/fbdev-1
 
-All errors (new ones prefixed by >>):
+for you to fetch changes up to 6ba592fa014f21f35a8ee8da4ca7b95a018f13e8:
 
->> arch/powerpc/kernel/smp.c:1380:7: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
-           bool ret;
-                ^
-   1 error generated.
+  video: fbdev: s3fb: Check the size of screen before memset_io() (2022-08=
+-05 18:44:59 +0200)
 
+=2D---------------------------------------------------------------
+fbdev fixes and updates for kernel v5.20-rc1
 
-vim +/ret +1380 arch/powerpc/kernel/smp.c
+The two major changes in this patchset corrects VGA modes, color
+handling and various other smaller fixes in the Atari framebuffer (by
+Geert Uytterhoeven), and devm_* conversion, platform data fixes and
+header cleanups in the imxfb driver (by Uwe Kleine-K=F6nig).
 
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1373  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1374  static void add_cpu_to_masks(int cpu)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1375  {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1376  	struct cpumask *(*submask_fn)(int) = cpu_sibling_mask;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1377  	int first_thread = cpu_first_thread_sibling(cpu);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1378  	int chip_id = cpu_to_chip_id(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1379  	cpumask_var_t mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15 @1380  	bool ret;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1381  	int i;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1382  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1383  	/*
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1384  	 * This CPU will not be in the online mask yet so we need to manually
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1385  	 * add it to it's own thread sibling mask.
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1386  	 */
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1387  	cpumask_set_cpu(cpu, cpu_sibling_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1388  	cpumask_set_cpu(cpu, cpu_core_mask(cpu));
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1389  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1390  	for (i = first_thread; i < first_thread + threads_per_core; i++)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1391  		if (cpu_online(i))
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1392  			set_cpus_related(i, cpu, cpu_sibling_mask);
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1393  
-425752c63b6f3f Gautham R. Shenoy 2018-10-11  1394  	add_cpu_to_smallcore_masks(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1395  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1396  	/* In CPU-hotplug path, hence use GFP_ATOMIC */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1397  	ret = alloc_cpumask_var_node(&mask, GFP_ATOMIC, cpu_to_node(cpu));
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1398  	update_mask_by_l2(cpu, &mask);
-2a636a56d2d396 Oliver O'Halloran 2017-06-29  1399  
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1400  	if (has_coregroup_support())
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1401  		update_coregroup_mask(cpu, &mask);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1402  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1403  	if (shared_caches)
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1404  		submask_fn = cpu_l2_cache_mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1405  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1406  	/* Update core_mask with all the CPUs that are part of submask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1407  	or_cpumasks_related(cpu, cpu, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1408  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1409  	/* Skip all CPUs already part of current CPU core mask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1410  	cpumask_andnot(mask, cpu_online_mask, cpu_core_mask(cpu));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1411  
-e91077cf178010 Srikar Dronamraju 2021-08-26  1412  	/* If chip_id is -1; limit the cpu_core_mask to within DIE*/
-e91077cf178010 Srikar Dronamraju 2021-08-26  1413  	if (chip_id == -1)
-e91077cf178010 Srikar Dronamraju 2021-08-26  1414  		cpumask_and(mask, mask, cpu_cpu_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1415  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1416  	for_each_cpu(i, mask) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1417  		if (chip_id == cpu_to_chip_id(i)) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1418  			or_cpumasks_related(cpu, i, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1419  			cpumask_andnot(mask, mask, submask_fn(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1420  		} else {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1421  			cpumask_andnot(mask, mask, cpu_core_mask(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1422  		}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1423  	}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1424  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1425  	free_cpumask_var(mask);
-a8a5356cd511db Paul Mackerras    2013-08-12  1426  }
-a8a5356cd511db Paul Mackerras    2013-08-12  1427  
+Other small patches clean up code in sa1100fb, cirrusfb and omapfb,
+fix a refcount leak in amba-clcd (by Liang He), and adds parameter
+checks to arkfb, i740fb, vt8623fb and s3fb (by Zheyu Ma).
 
-:::::: The code at line 1380 was first introduced by commit
-:::::: bf6476152a0a084038b12b9d770e32717f54a6ab powerpc/smp: Reintroduce cpu_core_mask
+=2D---------------------------------------------------------------
+Geert Uytterhoeven (14):
+      video: fbdev: amiga: Simplify amifb_pan_display()
+      video: fbdev: sa1100fb: Remove unused sa1100fb_setup()
+      video: fbdev: cirrusfb: Make cirrusfb_zorro_unregister() static
+      video: fbdev: Make *fb_setup() and *fb_init() static
+      video: fbdev: atari: Simplify atafb_pan_display()
+      video: fbdev: atari: Remove bogus FB_VMODE_YWRAP flags
+      video: fbdev: atari: Fix inverse handling
+      video: fbdev: atari: Fix ext_setcolreg()
+      video: fbdev: atari: Remove unneeded casts from void *
+      video: fbdev: atari: Remove unneeded casts to void *
+      video: fbdev: atari: Fix TT High video mode vertical refresh
+      video: fbdev: atari: Fix VGA modes
+      video: fbdev: atari: Remove unused definitions and variables
+      video: fbdev: atari: Remove backward bug-compatibility
 
-:::::: TO: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Helge Deller (1):
+      video: fbdev: omapfb: Unexport omap*_update_window_async()
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Liang He (1):
+      video: fbdev: amba-clcd: Fix refcount leak bugs
+
+Rustam Subkhankulov (1):
+      video: fbdev: sis: fix typos in SiS_GetModeID()
+
+Uwe Kleine-K=F6nig (4):
+      video: fbdev: imxfb: Drop platform data support
+      video: fbdev: imxfb: Drop unused symbols from header
+      video: fbdev: imxfb: Fold <linux/platform_data/video-imxfb.h> into o=
+nly user
+      video: fbdev: imxfb: Convert request_mem_region + ioremap to devm_io=
+remap_resource
+
+Yang Yingliang (1):
+      video: fbdev: imxfb: fix return value check in imxfb_probe()
+
+Zheyu Ma (5):
+      video: fbdev: arkfb: Fix a divide-by-zero bug in ark_set_pixclock()
+      video: fbdev: i740fb: Check the argument of i740_calc_vclk()
+      video: fbdev: vt8623fb: Check the size of screen before memset_io()
+      video: fbdev: arkfb: Check the size of screen before memset_io()
+      video: fbdev: s3fb: Check the size of screen before memset_io()
+
+ Documentation/m68k/kernel-options.rst     |   4 +-
+ MAINTAINERS                               |   1 -
+ drivers/video/fbdev/68328fb.c             |   7 +-
+ drivers/video/fbdev/amba-clcd.c           |  24 ++++--
+ drivers/video/fbdev/amifb.c               |  15 +---
+ drivers/video/fbdev/arkfb.c               |   9 +-
+ drivers/video/fbdev/atafb.c               | 103 +++++++----------------
+ drivers/video/fbdev/cirrusfb.c            |   2 +-
+ drivers/video/fbdev/dnfb.c                |   2 +-
+ drivers/video/fbdev/fm2fb.c               |   4 +-
+ drivers/video/fbdev/hpfb.c                |   4 +-
+ drivers/video/fbdev/i740fb.c              |   9 +-
+ drivers/video/fbdev/imxfb.c               | 134 +++++++++++--------------=
+-----
+ drivers/video/fbdev/omap/hwa742.c         |   3 +-
+ drivers/video/fbdev/omap/omapfb.h         |   9 --
+ drivers/video/fbdev/omap/omapfb_main.c    |   3 +-
+ drivers/video/fbdev/q40fb.c               |   2 +-
+ drivers/video/fbdev/s3fb.c                |   2 +
+ drivers/video/fbdev/sa1100fb.c            |  41 ---------
+ drivers/video/fbdev/sis/init.c            |   4 +-
+ drivers/video/fbdev/skeletonfb.c          |   6 +-
+ drivers/video/fbdev/valkyriefb.c          |  10 +--
+ drivers/video/fbdev/vt8623fb.c            |   2 +
+ include/linux/platform_data/video-imxfb.h |  70 ----------------
+ 24 files changed, 136 insertions(+), 334 deletions(-)
+ delete mode 100644 include/linux/platform_data/video-imxfb.h

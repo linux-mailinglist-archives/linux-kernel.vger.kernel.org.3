@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A3D58B509
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 12:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BE258B50B
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 12:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241756AbiHFK1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 06:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
+        id S241822AbiHFK2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 06:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiHFK1n (ORCPT
+        with ESMTP id S229671AbiHFK21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 06:27:43 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E161D48;
-        Sat,  6 Aug 2022 03:27:42 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id ff27so899701qtb.11;
-        Sat, 06 Aug 2022 03:27:42 -0700 (PDT)
+        Sat, 6 Aug 2022 06:28:27 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD17613D7B;
+        Sat,  6 Aug 2022 03:28:26 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id a2so3497220qkk.2;
+        Sat, 06 Aug 2022 03:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=ojb/oCXcMsye9R9CinrRz1U1Kdh/Eo0FGrLI1wf3hRo=;
-        b=SV9w6rFrbzPtMv1R31cJ+GUPMfFRCHJfmfKJfTTLpDBrrc9VyEQzzVRPflpihdbzEj
-         uuByrltYXixKsW3PTMi6EMVcyb7lHjvWCeQtGvrASfgy+v+AHOFOZ4AyaH5Zbn1WgrdV
-         K60/iSExTU6QqGdoGHSzjL5ZKQnFDbDM6UhWYqOz4AK5PHPJTZ7IXX9SwUxMctPnUjdw
-         qaXQ0H4ilY38hPwoJS6Kbgl1d33Dfkv20OgFtpj8GzAqj+cxWggyrR3d30CO9chzrcfC
-         OTeWai6Hwm0IrlUEl+4vsrZgdzrF0sRVFAZud4easlHzbz1+JXiwgRTS6DjGxf5AXWZs
-         LPqA==
+        bh=QMTcefpNaXq/ZeFIs0rURWC/eH5FulURuyF9pjeQIKg=;
+        b=kx3fQWqCCzxht1ZQEWMZw6KT8jK3aN+7imhz+wkAU1ufYm39mo8PbvVff4cuYmqyN2
+         ljJ5Ll6/+wM5aBjPml+X61OOQBxumKeWliDdzQhnBk0YBlE4tQIWJ4L5OgLSEqv7b/vj
+         W4TpOGSHDYzRueAZI1dZtODFDqSs9NYwGbKeH2vGuQjffmNU7Nu8yqNeAsM+XkZOD2px
+         31eTK87fGhOCwSAE+tJ8viqtIGzAS48ydY2PihiwTFCZa88gU/19B8/HsqQTBx+vB5yN
+         bZXgIDceh1s/DbrMzR8/LNeHgBmX76FBYRNaGcx5qwXfwID8P6sNjO8a2xyKBSvoftFa
+         pKSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=ojb/oCXcMsye9R9CinrRz1U1Kdh/Eo0FGrLI1wf3hRo=;
-        b=14rf70KfUUlyCL7OYWhsI/vWxEDPZZAfgeb93kEs7Db1sGCkF5a6O2su2XBNZ7GXEC
-         Ne1CUg+XzVROqzN8OMWrNnooMTfAbO5Rf1qzCgd39X1EDDeh/BDkve8O90w9FyqKenqa
-         BTH5y8GZ0GOsBko0mA9xHQY8zKUxgGQhQ1fmz4YUKEyI2uEIaXLinMo0q9aeuyYrdUsa
-         jpcTE4H+oZUISKc8zJgzijV/UFbtOrrU5hLB9SR9A6luLMouLc4tvcFuNMq/ykcq8OnW
-         ejSOJ0VDOYQ2QASj8L3lbMkJvgaeq9TgHvcAww0zMTKI+oPpTLCAP0+NQ0wKkmBQIzLB
-         70Dw==
-X-Gm-Message-State: ACgBeo0IF0tIrODXCsKLzuWKe5CZ95XDwQLUVw0tX+mEr5mGWggqSBVL
-        ji2ZyeHBoEmP1sPMESqtVwDqkHCKLSLvcjPemXY=
-X-Google-Smtp-Source: AA6agR4vEs3/3l/nfiwRbEmkE4Jpc/Nx5vNokQLkPB8Gtj1j6m0KOpDZ/VI2B5cAjbZwWY2Z43LTsKF4dTXKQ6Ohpu4=
-X-Received: by 2002:ac8:5784:0:b0:31f:24e:93f5 with SMTP id
- v4-20020ac85784000000b0031f024e93f5mr9170257qta.429.1659781661197; Sat, 06
- Aug 2022 03:27:41 -0700 (PDT)
+        bh=QMTcefpNaXq/ZeFIs0rURWC/eH5FulURuyF9pjeQIKg=;
+        b=GUhYbluI3u6Y47z3IUsVcKzb1noqJ1Mvq7JadZNcCEVKmNkuTNTW0LD1IRn6ns49Ut
+         PjJDfXKohaj3mGPMWw8XeOEcmXJN1ri9izr3dKR+W+6brAAd8pJA7EhRgTBmoE0A6O8l
+         +qganPBraWA5b+/kNDs/KsoUxxy+GbbvXgkt4Ww7+ffsmNWvxdX+8YpP2akxiWqHwYFY
+         tohOu00WIHSpKFRmwGYojdrZJgqW7u9oQL7uusaP5uwhKcRWNyJHq0b/5H7G0pKKL8gZ
+         ZpWyWChKPxwtmwKRybhPlhrCbf2Y/TPxdfrnww7QhiagPQ8ENXcU2EcZmt1qbsO0cBrq
+         LNOQ==
+X-Gm-Message-State: ACgBeo2r1ye86t9gxQoiEbtk4gS7eAe/xABIywAyrlHklpLP+js2lxXq
+        O8rr8JBLnRQ9ROSELVzoPgLExisjg2axIFVKMkQ=
+X-Google-Smtp-Source: AA6agR4Vo+KLnsEFQ2f5AtjEGGpM0ivIbO4OzSxPRY6LZS6Vrg+qaW7a5WIcasBoQG/CZhVC1u4sgwffrC/YSM/cQNI=
+X-Received: by 2002:a05:620a:8018:b0:6b6:5df:977 with SMTP id
+ ee24-20020a05620a801800b006b605df0977mr7902043qkb.320.1659781705909; Sat, 06
+ Aug 2022 03:28:25 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220805081909.10962-1-luke@ljones.dev> <20220805081909.10962-2-luke@ljones.dev>
- <CAHp75Ve-oo=pGkpD10kbOVtrYtzQLscFq9HO0-Y5a6M_fpXDNw@mail.gmail.com> <N7V6GR.XFSPFYLCEU9X2@ljones.dev>
-In-Reply-To: <N7V6GR.XFSPFYLCEU9X2@ljones.dev>
+ <CAHp75Ve-oo=pGkpD10kbOVtrYtzQLscFq9HO0-Y5a6M_fpXDNw@mail.gmail.com>
+ <N7V6GR.XFSPFYLCEU9X2@ljones.dev> <CAHp75VfGSpYsX_bAebtU3TbjzAK7fmYioJB88X8p3NG5BDA2+g@mail.gmail.com>
+In-Reply-To: <CAHp75VfGSpYsX_bAebtU3TbjzAK7fmYioJB88X8p3NG5BDA2+g@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 6 Aug 2022 12:27:04 +0200
-Message-ID: <CAHp75VfGSpYsX_bAebtU3TbjzAK7fmYioJB88X8p3NG5BDA2+g@mail.gmail.com>
+Date:   Sat, 6 Aug 2022 12:27:48 +0200
+Message-ID: <CAHp75VenmsaB+iwqSUgr0YsFKjY-CgSiVpp7OgxK8Vqai=gL+g@mail.gmail.com>
 Subject: Re: [PATCH 1/5] asus-wmi: Add basic support for TUF laptop keyboard RGB
 To:     Luke Jones <luke@ljones.dev>
 Cc:     Hans de Goede <hdegoede@redhat.com>,
@@ -69,63 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 6, 2022 at 12:16 PM Luke Jones <luke@ljones.dev> wrote:
-> On Sat, Aug 6 2022 at 11:44:33 +0200, Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Fri, Aug 5, 2022 at 10:20 AM Luke D. Jones <luke@ljones.dev> wrote:
+On Sat, Aug 6, 2022 at 12:27 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Sat, Aug 6, 2022 at 12:16 PM Luke Jones <luke@ljones.dev> wrote:
+> > On Sat, Aug 6 2022 at 11:44:33 +0200, Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Fri, Aug 5, 2022 at 10:20 AM Luke D. Jones <luke@ljones.dev> wrote:
 
 ...
 
-> >>   #include <linux/leds.h>
-> >>  +#include <linux/led-class-multicolor.h>
+> > >>   #include <linux/leds.h>
+> > >>  +#include <linux/led-class-multicolor.h>
+> > >
+> > > Not sure about the ordering ('-' vs. 's') in locale C.
 > >
-> > Not sure about the ordering ('-' vs. 's') in locale C.
+> > I used hid-playstation.c as a reference and followed that ordering.
 >
-> I used hid-playstation.c as a reference and followed that ordering.
-
-Try something like this:
-
-  LC_ALL=c sort
-
-for these two lines and see if the ordering is the same.
-
-...
-
-> >>  +       if (err) {
-> >>  +               pr_err("Unable to set TUF RGB data?\n");
-> >
-> > Why not dev_err() ?
+> Try something like this:
 >
-> I didn't know about it? Is there an example or doc on its use?
+>   LC_ALL=c sort
 
-Thousands of examples in the kernel source tree. The point is if you
-have a device (instance) available, use it for messaging.
+Should be, of course,
 
-> >>  +               return err;
-> >>  +       }
-> >>  +       return 0;
-> >
-> > return err;
->
-> Something like this then?
->
-> if (err) {
->         pr_err("Unable to set TUF RGB data?\n");
-> }
-> return err;
->
-> If so, done.
+  LC_ALL=C sort
 
-No parentheses. Have you run checkpatch.pl?
-
-Something like
-
-  if (err)
-    dev_err(...);
-
-  return err;
-
-> >>  +}
+> for these two lines and see if the ordering is the same.
 
 -- 
 With Best Regards,

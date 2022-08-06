@@ -2,117 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7793758B4BA
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 11:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D4C58B4BB
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 11:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241718AbiHFJLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 05:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
+        id S238561AbiHFJLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 05:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiHFJLQ (ORCPT
+        with ESMTP id S230013AbiHFJLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 05:11:16 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C326C11444;
-        Sat,  6 Aug 2022 02:11:15 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id v1so3391459qkg.11;
-        Sat, 06 Aug 2022 02:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=OyNhF+/iNDq42RbrxdI9AZGi2xTvjwS+AGArGbGORH8=;
-        b=qmuSA/QiSnTOrBjeVeODx0lTDUD3Zt6ogtSPcxLot5MpTTao6J7qfkOctGuvz8pBOX
-         tRarzLwW5KZHtYOdrUNjEHtj7kVnXLD3N1MkeFzTYcTNOUZ0lC6vRb0pOhwBt3pK9LcU
-         MecGzNEnR5wYWSz7G2XOqGO773tWC5O88bo7h93bf1Sst3oVS5nizFb2hEjpbZyco2Y+
-         afDOPvCTfWg5WZ0/qSQPA18D4B8QCXjD9r62WyTPwTTAUtatKnPocO/SMToMCWUQYOo5
-         x01UlWrPtRbF9IX2MixH230wfNtsBJtrkcqhZ8LngzZ9TVwuGaEMh6QtI94zKVZrTUWK
-         9j5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=OyNhF+/iNDq42RbrxdI9AZGi2xTvjwS+AGArGbGORH8=;
-        b=oldTWf4MXpvNmongzRQtdVVCFqQXpGGBAW/nTOOFoN+9r+YEFpRp39cbGKeVOD7iel
-         qGqtFyozjV94RHhuuYNcXIy6e3gBgn32ODgzBqYW6NOqzwo1sxa5QljcYL9sqe9ULB8X
-         C3vXlzo/uuLP+lTi+2+PbY0L1By3cnNzL+sXS16fM4QUyfHT19BW8kCZ1/WYtkUUvsCN
-         5G8K7zIg5nbTkR+Gnlv2MHkQeWdaDIDXNffDb+BARQfjljaQCWr7xcG9mKF5teCiFFFx
-         s9CohSYKnUk1S1Ns+7/kduW/nglZgOELCoPz9KPKVHn3lsG0xWEJTT8KiH/A8yjb5vwu
-         tZuw==
-X-Gm-Message-State: ACgBeo3MAQs4BlgoUROVOfnNXXnyukJ/H7PsirmV8pmGLI09d93DZ+fh
-        ENIwcqIlEBzRWlkpR9F2zbSbXAKwtwWFNMDSvpgWZskbTwI=
-X-Google-Smtp-Source: AA6agR5ecdGULw8hkfvDEGFbkfLs8QFQMgthdPBCmTg7FkGoOHmAJp3VJdgjUkoaiu2vm9E0y/8PzDmSt+ICssAXSls=
-X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
- s13-20020a05620a254d00b006ab84b825ebmr7911507qko.383.1659777074815; Sat, 06
- Aug 2022 02:11:14 -0700 (PDT)
+        Sat, 6 Aug 2022 05:11:33 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB3E16583
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 02:11:31 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b986e329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:986e:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EABCE1EC064A;
+        Sat,  6 Aug 2022 11:11:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1659777085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=K/JEm6qsqObxv5k42BECF3rRNZFaVIF4KqwrFKnMaTk=;
+        b=XUEJgqyqcfRJVUKXij21BB7HfTe+CT2HIFR7YHWoac0g6o0m/9Mxr1yniLLpJ1x+NuUD8x
+        UEBPe9/wfWtWgVinboUYy/5nmBvx/wDfh0QpUcYlmxGBBHf41t1lm8Sa+qT/EsPv4FCzJh
+        Ufd9ifoHtmKkvU1ZTpi2CgwYvhTx5Zs=
+Date:   Sat, 6 Aug 2022 11:11:20 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>, ira.weiny@intel.com,
+        Rik van Riel <riel@surriel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 5/5] x86/entry: Store CPU info on exception entry
+Message-ID: <Yu4wON0MRGH7h5Jv@zn.tnic>
+References: <20220805173009.3128098-1-ira.weiny@intel.com>
+ <20220805173009.3128098-6-ira.weiny@intel.com>
+ <5d62c1d0-7425-d5bb-ecb5-1dc3b4d7d245@intel.com>
+ <Yu4t0jkpIY4grgxL@gmail.com>
 MIME-Version: 1.0
-References: <20220805081909.10962-1-luke@ljones.dev>
-In-Reply-To: <20220805081909.10962-1-luke@ljones.dev>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 6 Aug 2022 11:10:37 +0200
-Message-ID: <CAHp75Vd4iEGkAE1Ds_Zyqi0P+gQbOyqvGoJctpOHNmMD7cUG0g@mail.gmail.com>
-Subject: Re: [PATCH 0/5] asus-wmi: Add support for RGB keyboards
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yu4t0jkpIY4grgxL@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 10:20 AM Luke D. Jones <luke@ljones.dev> wrote:
->
-> This is a patch series to add RGB support for ASUS laptops.
-> The laptops with this RGB tend to be the TUF series of gamer laptops.
->
-> The first step is initial bringup of support using the multicolor LED API.
->
-> These types of keyboards implement a slightly more complex interface than
-> just RGB control however - they also have modes with can be static LED,
-> blinking, rainbow, color cycles, and more. They also have some custom
-> animations that can play depending on device state, such as suspended
-> playing a fancy colour cycle, or playing a "wave" animation.
->
-> Two of the patches add support for these features.
->
-> The last patch adds documentation in:
-> Documentation/ABI/testing/sysfs-platform-asus-wmi
->
-> Some notes:
->
-> - this patch series obsoletes the previous RGB patches by myself
->
-> - it is not possible to add attribute groups to multicolor LED as
->   they get overwritten by `led_multicolor_groups` in
->   `led_classdev_multicolor_register_ext`.
->
-> - the methods for RGB control do not provide a way to fetch exisiting
->   state, so these methods are WO.
->
-> - There is an existing `asus::kbd_backlight`, this provides a 4-step
->   brightness to the RGB (off,low,med,high) individually to multicolor.
->   I was unsure of the effect of adding a similar path so have used the
->   `asus::multicolour::kbd_backlight` name to be clear about purpose.
->   If the `asus::kbd_backlight` is off, then no RGB is shown at all.\
->
-> I'm hopeful that this patch series addresses all previous feedback related
-> to the obsoleted patches.
+On Sat, Aug 06, 2022 at 11:01:06AM +0200, Ingo Molnar wrote:
+> It's still 2 instructions more than what we had before, while the 
+> fault-time CPU number is only needed infrequently AFAICS.
 
-There are so many patches and versioning of all of this is completely
-broken. You really have to clean up the mess and realize what version
-of this is. To me it looks like this series is v5 or so of the
-previously sent patch(es). Also you missed the changelog between
-versions so we can see what you have done from vX to vX+1 for the
-whole range (1 ... X+1).
+With the amount of logical cores ever increasing and how CPU packages
+(nodes, L3 sharing, you name it) get more and more complex topology,
+I'd say the 2 insns to show the CPU number in every exception is a good
+thing to do.
+
+Arguably, we probably should've even done it already...
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,117 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25C258B7AA
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 20:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D2D58B7AB
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 20:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbiHFSV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 14:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
+        id S234208AbiHFSWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 14:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241657AbiHFSVk (ORCPT
+        with ESMTP id S234017AbiHFSWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 14:21:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74D1E25;
-        Sat,  6 Aug 2022 11:21:05 -0700 (PDT)
+        Sat, 6 Aug 2022 14:22:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0412FA
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 11:22:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42BC461221;
-        Sat,  6 Aug 2022 18:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271BAC433C1;
-        Sat,  6 Aug 2022 18:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659810064;
-        bh=orcjVHFk4lFBov1ujUSmqLHsLoO2iIvfGgGHJHlIh7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FWMhuXFJSleNWQKkiPFl4VU6fLgJgg6NLKSQrAlEY/EFTQ9ut+LINlEq4+P8A76ir
-         IvyBzut+gNS7PLgDqedD3Lom2EzymAV2djRK1XpPyawrVNmOacohakfCykPAhI8xbb
-         Y8SnjOMZWNinwDaIqEUVGkxQlmlIciOCeYQ/r4VeVn/N/FXRdtUd3W1fJGX7qUfjvG
-         eSMWVoal7Q1bqcQbqRZCy3pbAPd90fAtGG81LEqp8ofNdOI3Y9onRrpPZEvacpHvDJ
-         Hl38QHCxXBh3JLj/eY20OJYs7ADgNsiFMtAyfyJW2Ne2V3Pii9H1HZAHJJLRXJACXZ
-         dDFGHS6h1Yfdw==
-Date:   Sat, 6 Aug 2022 21:21:01 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Matthew Garrett <mgarrett@aurora.tech>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0E9AB80835
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 18:22:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03DCC433D6;
+        Sat,  6 Aug 2022 18:22:04 +0000 (UTC)
+Date:   Sat, 6 Aug 2022 14:22:03 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH 00/10] Encrypted Hibernation
-Message-ID: <Yu6xDf9ejxHbLyJ6@kernel.org>
-References: <20220504232102.469959-1-evgreen@chromium.org>
- <20220506160807.GA1060@bug>
- <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
- <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
- <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
- <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
- <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
- <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com>
- <YusZ8gD/LjiAXadR@kernel.org>
- <CAE=gft6LaNZLTK72n_Z7an0VA1FxxFFgGk6rmUF_Jvf=JinG3A@mail.gmail.com>
+        Andreas Schwab <schwab@suse.de>,
+        jianchunfu <jianchunfu@cmss.chinamobile.com>
+Subject: Re: [GIT PULL] rtla: Updates for 5.20/6.0
+Message-ID: <20220806142203.3c133322@gandalf.local.home>
+In-Reply-To: <CAHk-=wj3zXDnXUHb-EKAkk74GUixO8ojUZMt-rkTsXSxALpi_g@mail.gmail.com>
+References: <20220803104936.7df810fd@gandalf.local.home>
+        <CAHk-=wh+e1qcCnEYJ3JRDVLNCYbJ=0u+Ts5bOYZnY3mX_k-hFA@mail.gmail.com>
+        <20220805124701.4b44195d@gandalf.local.home>
+        <12638499-5079-95b0-7861-fb06ef3d2522@kernel.org>
+        <CAHk-=wj3zXDnXUHb-EKAkk74GUixO8ojUZMt-rkTsXSxALpi_g@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE=gft6LaNZLTK72n_Z7an0VA1FxxFFgGk6rmUF_Jvf=JinG3A@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 02:55:35PM -0700, Evan Green wrote:
-> On Wed, Aug 3, 2022 at 5:59 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Tue, Aug 02, 2022 at 11:36:43AM -0700, Matthew Garrett wrote:
-> > > On Mon, Aug 1, 2022 at 3:33 PM Evan Green <evgreen@chromium.org> wrote:
-> > >
-> > > > One more bump here, as we'd really love to get encrypted hibernation
-> > > > to a form upstream would accept if at all possible. We were
-> > > > considering landing this in our Chrome OS tree for now, then coming
-> > > > back in a couple months with a "we've been baking this ourselves and
-> > > > it's going so great, oooh yeah". I'm not sure if upstream would find
-> > > > that compelling or not. But in any case, some guidance towards making
-> > > > this more upstream friendly would be well appreciated.
-> > > >
-> > > > One thing I realized in attempting to pick this myself is that the
-> > > > trusted key blob format has moved to ASN.1. So I should really move
-> > > > the creation ticket to the new ASN.1 format (if I can figure out the
-> > > > right OID for that piece), which would allow me to drop a lot of the
-> > > > ugly stuff in tpm2_unpack_blob(). Maybe if I get no other comments
-> > > > I'll work on that and resend.
-> > >
-> > > I've been revamping my TPM-backed verified hibernation implementation
-> > > based on this work, so I'd definitely be enthusiastic about it being
-> > > mergeable.
-> >
-> > BTW, is it tested with QEMU + swtpm?
+On Sat, 6 Aug 2022 08:52:29 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> For extra bonus points, if you can state all missing packages in one
+> go (instead of "oops you don't have Xyz" followed by install of Xyz,
+> followed by "Oops, now you don't have Abc") that would be nice too.
 > 
-> For myself, so far I've been testing on a recent Intel Chromebook. The
-> H1 (aka cr50) security chip on modern chromebooks implements a subset
-> [1] of TPM2.0, and is exposed through the standard TPM APIs in the
-> kernel. I can make sure to test on Qemu as well, is there anything in
-> particular I should look out for?
+> But at this point the fundamental problem with incomprehensible error
+> messages is long gone, so it's not a big deal and not worth lots of
+> effort. More of a "if it's easy enough.."
 
-I was just thinking what I could use for testing
+With the below patch, it will show the warnings for both libtraceevent and
+libtracefs if they are not installed:
 
-BR, Jarkko
+ $ make
+********************************************
+** NOTICE: libtraceevent version 1.5 or higher not found
+**
+** Consider installing the latest libtraceevent from your
+** distribution, e.g., 'dnf install libtraceevent-devel' on Fedora,
+** or from source:
+**
+**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/
+**
+********************************************
+********************************************
+** NOTICE: libtracefs version 1.3 or higher not found
+**
+** Consider installing the latest libtracefs from your
+** distribution, e.g., 'dnf install libtracefs-devel' on Fedora,
+** or from source:
+**
+**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
+**
+********************************************
+Makefile:106: *** Please add the necessary dependencies.  Stop.
+
+-- Steve
+
+diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+index 1bea2d16d4c1..a8c89b5b8fa5 100644
+--- a/tools/tracing/rtla/Makefile
++++ b/tools/tracing/rtla/Makefile
+@@ -61,15 +61,19 @@ endif
+ LIBTRACEEVENT_MIN_VERSION = 1.5
+ LIBTRACEFS_MIN_VERSION = 1.3
+ 
++.PHONY:	all warnings
++all:	warnings rtla
++
+ TEST_LIBTRACEEVENT = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEEVENT_MIN_VERSION) libtraceevent > /dev/null 2>&1 || echo n")
+ ifeq ("$(TEST_LIBTRACEEVENT)", "n")
++WARNINGS += warning_traceevent
+ .PHONY: warning_traceevent
+ warning_traceevent:
+ 	@echo "********************************************"
+ 	@echo "** NOTICE: libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher not found"
+ 	@echo "**"
+ 	@echo "** Consider installing the latest libtraceevent from your"
+-	@echo "** distribution, e.g., 'dnf install libtraceevent' on Fedora,"
++	@echo "** distribution, e.g., 'dnf install libtraceevent-devel' on Fedora,"
+ 	@echo "** or from source:"
+ 	@echo "**"
+ 	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ "
+@@ -80,12 +84,13 @@ endif
+ TEST_LIBTRACEFS = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEFS_MIN_VERSION) libtracefs > /dev/null 2>&1 || echo n")
+ ifeq ("$(TEST_LIBTRACEFS)", "n")
+ .PHONY: warning_tracefs
++WARNINGS += warning_tracefs
+ warning_tracefs:
+ 	@echo "********************************************"
+ 	@echo "** NOTICE: libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher not found"
+ 	@echo "**"
+ 	@echo "** Consider installing the latest libtracefs from your"
+-	@echo "** distribution, e.g., 'dnf install libtracefs' on Fedora,"
++	@echo "** distribution, e.g., 'dnf install libtracefs-devel' on Fedora,"
+ 	@echo "** or from source:"
+ 	@echo "**"
+ 	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ "
+@@ -93,8 +98,12 @@ warning_tracefs:
+ 	@echo "********************************************"
+ endif
+ 
+-.PHONY:	all
+-all:	rtla
++ifneq ("$(WARNINGS)", "")
++ERROR_OUT = $(error Please add the necessary dependencies)
++endif
++
++warnings: $(WARNINGS)
++	$(ERROR_OUT)
+ 
+ rtla: $(OBJ)
+ 	$(CC) -o rtla $(LDFLAGS) $(OBJ) $(LIBS)

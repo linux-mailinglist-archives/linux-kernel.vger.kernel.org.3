@@ -2,91 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8B558B583
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 14:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1960A58B598
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 14:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbiHFMcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 08:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
+        id S231901AbiHFMk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 08:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiHFMcw (ORCPT
+        with ESMTP id S229853AbiHFMky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 08:32:52 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CEA3BD
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 05:32:51 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id k29-20020a9d701d000000b0061c99652493so3533513otj.8
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 05:32:51 -0700 (PDT)
+        Sat, 6 Aug 2022 08:40:54 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD66637C;
+        Sat,  6 Aug 2022 05:40:52 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id bh13so4785906pgb.4;
+        Sat, 06 Aug 2022 05:40:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=pf5w2nSThK6HvjxZrN1hYdPc9sFZGsfLSeUOEfSqm2h/2zTm6ffbUqpS2lSCRnIy/5
-         fAbqeuFBJEGHvoBnpbB0hOB7nbHsTGYD1sFyLC1yniODVlDROb2w2xakEUwIOyuzD8Wx
-         st50gcMLtcgsFPt0kaim1Z88VNtL25zJdLhLhW3bcAAWWSMQAnHeLFT0+yxf/iZRDm8d
-         m99V2y1TWvP7GrxOMC0hS2vNbYyZuwGOjJQ48RtGw8vdoLiT1DE86Ge3Sn214XFsoaW9
-         KWOGpMsRD1mGpxdjClEMD6UpJt8C0qkScKgtHbj/MJv881OVCn7RSkV0I4NN6iGoiS+O
-         JBVA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=o6pt3V1ha9yMo8oPh0RhSV7A5lQkFUBOGwSJxIjKq5Y=;
+        b=K3zZNGyQzBOJGo9GHJ77B64dvtlpK4HGVReHiflBNDRpOjaH5sqOdA8CSpHY5CKTyf
+         jMxciE0uAHt180KJ/Y+huKoZL4LmZDsa6WkKOyCwoxB/ThJX4uVJEg7ZTShFI/az0Ar2
+         z7gP6VTnSFHOO3nyj7PfGi5h2pn3jkcI30MOA4gJBLa6ZPkeSr1jNi+ni+/957EXpVKE
+         8cMH0A3oIzRK5Ii74+i2xFTbbdfg/VV4lJGKX03EHlP6Q0ikAumdp8EVEn0EXa//V+ro
+         7vXPHclNzVW+zRBDjtu+d19HsGrRLP2TD974QnRupiahEXDmXn0SLRi8PGivCy1jVQMg
+         wXwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=KlYdk/ZjzYqJbmYCCEYrmFNc0cqix/YMeMGPPiEuH9dwxr6yY6DIzfepZBGR0X8KcK
-         2nmcNebEnI+RhODnx+MRdeXuCl05lQG9LmpRqqIyRkOFwp9HrI2Njjs16CVJ8OF2qK7V
-         1ksq4xfB1+blFV+JUcnkKlWZ7gHvwouxfacw4hLyjPJxvuNd1Yb4mS44VaDrcoyIG4a9
-         LOJ4P4KJ2t1jeOOfgTJg8u6FC76tZDHmppNGVPO4QEiks3r5tq3xnGGcSIyZb0Bz8DWh
-         6rt+5kt1YiJZhkWhGohTEfkgBdqTDHhVnwsvfAGuq/g5WymG3c0igcrj8u9h0/XRahiJ
-         FGbA==
-X-Gm-Message-State: ACgBeo0ev8nb5pv9BaP/St4FAeOHaCoVcQcdnKxdj2aHun3pOcy5uLRQ
-        YrN9Gc9QvbI+xuERGEh1irZ5326u435jd777ix4=
-X-Google-Smtp-Source: AA6agR5nZh63flQnDDUBSDKuBx0eGlWMhPLVfjg9cCSnWNT1iCWgBbYgEQuitnGhlTmBk4jzTipaFRTOTePWxIaREQA=
-X-Received: by 2002:a9d:7cc4:0:b0:61c:acaa:1c67 with SMTP id
- r4-20020a9d7cc4000000b0061cacaa1c67mr4261768otn.311.1659789170322; Sat, 06
- Aug 2022 05:32:50 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=o6pt3V1ha9yMo8oPh0RhSV7A5lQkFUBOGwSJxIjKq5Y=;
+        b=MuBhcaN1sy6pV/Eqib90wu6mq4X9exrknzIt6r/5Lboiv/kWeTUoRcoyQwzic31Lrt
+         +hRxKMynQUo2hhRN/6CmIG6Q97xtJnLfdhkSOCy+zhFgryoJjiNATBV5PhpOI/y/J7Ye
+         5n+FvHt3dfM0oH/Nyb+IVKk8dKxsM+kQ0TcjziQig4ZbZTRhpcoBh1pgYI/MPxec4A4e
+         iNAKydSf1obiV6qHyXlNqWhlnd9zQ3ZOATd/Iz4JL9+/vQFSUU0GrIly5DKUDuUEaj2K
+         TDjGcvflPA8yKlCSFvtRQ1QJul0OJ6/b0+bHp/3kjTpmC8XRNxmvNWOW4CAmn7hx9C2K
+         8fxw==
+X-Gm-Message-State: ACgBeo3sRzCO6lBRQ0AuiwzbcMO4UVNsNYzN068b67bvwKA1jAT2fWWl
+        JrbkAnNyrVe+HlHRTN1MmHA=
+X-Google-Smtp-Source: AA6agR4HVXRr5ozE4MZULCJYLmm+yzEtIzOb6rNsc6/YEix1fRqJBoSHmvvrRwFlh1pZPSou+4rtrw==
+X-Received: by 2002:a63:d555:0:b0:41b:ca49:54c3 with SMTP id v21-20020a63d555000000b0041bca4954c3mr9091265pgi.360.1659789652285;
+        Sat, 06 Aug 2022 05:40:52 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-10.three.co.id. [180.214.232.10])
+        by smtp.gmail.com with ESMTPSA id r19-20020a634413000000b0040c9df2b060sm3072702pga.30.2022.08.06.05.40.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 05:40:51 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 80D7A103B77; Sat,  6 Aug 2022 19:40:46 +0700 (WIB)
+Date:   Sat, 6 Aug 2022 19:40:46 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Jim Cromie <jim.cromie@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, jbaron@akamai.com,
+        gregkh@linuxfoundation.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, daniel.vetter@ffwll.ch,
+        seanpaul@chromium.org, robdclark@gmail.com,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 19/33] doc-dyndbg: edit dynamic-debug-howto for
+ brevity, audience
+Message-ID: <Yu5hTr6qcLwiPRNp@debian.me>
+References: <20220805215355.3509287-1-jim.cromie@gmail.com>
+ <20220805215355.3509287-20-jim.cromie@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6830:43:b0:61c:bb08:ec2 with HTTP; Sat, 6 Aug 2022
- 05:32:49 -0700 (PDT)
-Reply-To: buffettwarrenusa@gmail.com
-In-Reply-To: <CAOMgKwfycMuFzV-==0NA1oOkS-d07NGdBXF6Ub719iTtjiqhrQ@mail.gmail.com>
-References: <CAOMgKwdhbfnnsaFmbo-Z44pbPtQkmAy_YNO_CJ9es6psXVg8uw@mail.gmail.com>
- <CAOMgKwfycMuFzV-==0NA1oOkS-d07NGdBXF6Ub719iTtjiqhrQ@mail.gmail.com>
-From:   Warren Buffett <cissedjibril300@gmail.com>
-Date:   Sat, 6 Aug 2022 05:32:49 -0700
-Message-ID: <CAOMgKweK_KDGWFLMeLGETuyH6KrqdKEQGqW_+YeNCED7D=fTBg@mail.gmail.com>
-Subject: Fwd: I was wondering if you received my email a couple of Days ago?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4995]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cissedjibril300[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cissedjibril300[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:343 listed in]
-        [list.dnswl.org]
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: multipart/signed; micalg=pgp-sha384;
+        protocol="application/pgp-signature"; boundary="zCnbKQzWNc0slIHJ"
+Content-Disposition: inline
+In-Reply-To: <20220805215355.3509287-20-jim.cromie@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -94,3 +82,60 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--zCnbKQzWNc0slIHJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Aug 05, 2022 at 03:53:41PM -0600, Jim Cromie wrote:
+> Rework/modernize docs:
+>=20
+>  - use /proc/dynamic_debug/control in examples
+>    its *always* there (when dyndbg is config'd), even when <debugfs> is n=
+ot.
+>    drop <debugfs> talk, its a distraction here.
+>=20
+>  - alias ddcmd=3D'echo $* > /proc/dynamic_debug/control
+>    focus on args: declutter, hide boilerplate, make pwd independent.
+>=20
+>  - swap sections: Viewing before Controlling. control file as Catalog.
+>=20
+>  - focus on use by a system administrator
+>    add an alias to make examples more readable
+>    drop grep-101 lessons, admins know this.
+>=20
+>  - use init/main.c as 1st example, thread it thru doc where useful.
+>    everybodys kernel boots, runs these.
+>=20
+>  - add *prdbg* api section
+>    to the bottom of the file, its for developers more than admins.
+>    move list of api functions there.
+>=20
+>  - simplify - drop extra words, phrases, sentences.
+>=20
+>  - add "decorator" flags line to unify "prefix", trim fmlt descriptions
+>=20
+> CC: linux-doc@vger.kernel.org
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+>=20
+
+The documentation LGTM (no new warnings).
+
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--zCnbKQzWNc0slIHJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTsebsWCPCpxY9T92n/R0PGQ3AzwAUCYu5hNQAKCRD/R0PGQ3Az
+wGuzAYDy/O8VqIX4dB6ItFwNHJm1rs7Qg4OuYgYbKFvhP69MPdWx64MR4soFNSUx
+y/x/+HABgNTyMUR8QKMtJnT6K443IFX7iqf6bs05/IbT4PqLQjZXkpc+PQBWALvU
+6LjFercp5g==
+=Aeer
+-----END PGP SIGNATURE-----
+
+--zCnbKQzWNc0slIHJ--

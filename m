@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51B958B738
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 19:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95CD58B734
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 19:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbiHFRJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 13:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S232537AbiHFRCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 13:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiHFRJV (ORCPT
+        with ESMTP id S230255AbiHFRCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 13:09:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3137CE0E3;
-        Sat,  6 Aug 2022 10:09:20 -0700 (PDT)
+        Sat, 6 Aug 2022 13:02:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E9355A8;
+        Sat,  6 Aug 2022 10:02:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0B17B8055F;
-        Sat,  6 Aug 2022 17:09:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BBFDC433D6;
-        Sat,  6 Aug 2022 17:09:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D2D7611ED;
+        Sat,  6 Aug 2022 17:02:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ABCCC433C1;
+        Sat,  6 Aug 2022 17:02:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659805757;
-        bh=3IaGu2oBhS+OaZaEspVsjKtafiJKtrRdiWBzpL6AIN0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BNh2Cja2wey/saX8ZVQ33r/c1kMBgmxkH4if/QfP4pkTkcLXAqrAEJoKIy5bzXwfe
-         vl/TbXcA4rmRAWKnd38E7oUAwfg5WifMcIv90l4+PygLa3AG/1D9Bn3PNTexvCw+Hj
-         54aiizOHU5oUMuQxJWXS7Kp8VfBFjdboW8OqGMfXZa+54jr5s9xGoo/vPL8H/dGzeq
-         TVUqjmE1gCuIMw9pd9MDMXon9suo0lCggid/Vzvs5Z1pWJx733vAkOTDecB7wJ4YcR
-         SHgjzjxFtYmK9tVG5SKPlofSU09fhU035q1aW3Rpb5ShNyYdxXajr/DCvlRNN+m7Ov
-         HXySMQc0tKTIA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oKNJ2-0003Xr-CD; Sat, 06 Aug 2022 19:09:45 +0200
-Date:   Sat, 6 Aug 2022 19:09:44 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
+        s=k20201202; t=1659805352;
+        bh=065uU3xsQXc3K3lPrTGT6NFVQ52mQXrrPRYVEbifapE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TRdCuqPzo+OuUDezPf8bt7U2/rXipGVTXLwtvRvjE0zhqwkUcrmB4p2+jEd/hjfOX
+         Vp3YvlVFDjPRpMv+qVIQj8oyqpP4SLz0gIRxPmChEYjulDbO+WvvOXti1IZ7uzYLCx
+         dGBqU2cEyIbhtHarQaxEYdECfQ8xLf2WTEVeMz2rdctMf+UGyQdvdTtydi9WiHFVid
+         NphBW23AsUbwT2H6XkQl7QjvWMJ0sFxY8q7atnQSyUML9zvIYyutxsuoROi89NLZ9w
+         lQ0/tloxlxKMxPuJd3duJ/ZL1gsf9J9ms6tzWky4KEWF86QXm4RlJEKLnnYN7ddhxm
+         2VdH3qra+Tm6Q==
+Date:   Sat, 6 Aug 2022 18:12:52 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai.pt@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Potin Lai <potin.lai@quantatw.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 7/9] dt-bindings: usb: qcom,dwc3: add wakeup-source
- property
-Message-ID: <Yu6gWHt5BphADaNR@hovoldconsulting.com>
-References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-8-johan+linaro@kernel.org>
- <20220806150848.GH14384@thinkpad>
- <Yu6ZwePzzkl7tewV@hovoldconsulting.com>
- <20220806165238.GM14384@thinkpad>
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] iio: humidity: hdc100x: add manufacturer and
+ device ID check
+Message-ID: <20220806181252.7633f19d@jic23-huawei>
+In-Reply-To: <CAHp75VfOPgDbTdt1EXJ5+exGXCZeT9VdtcOUDt_g4fn20S2Qwg@mail.gmail.com>
+References: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
+        <20220728125435.3336618-3-potin.lai.pt@gmail.com>
+        <20220731130959.50826fc4@jic23-huawei>
+        <4ea235d1-46c1-87de-760f-dc4775007ae0@gmail.com>
+        <CAHp75VcZqTpmvVV=u4t=fdx=ffzksoWVDFZmq6Lfr6DrFrB2aA@mail.gmail.com>
+        <Yuf7UAVrIJCnO40X@heinlein.stwcx.org.github.beta.tailscale.net>
+        <CAHp75Vfe33oJAf1j27B-pTd84kX5JNPd+e16ygLYgZjCs=ZJfQ@mail.gmail.com>
+        <CAHp75VfOPgDbTdt1EXJ5+exGXCZeT9VdtcOUDt_g4fn20S2Qwg@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220806165238.GM14384@thinkpad>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -77,63 +70,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 06, 2022 at 10:22:38PM +0530, Manivannan Sadhasivam wrote:
-> On Sat, Aug 06, 2022 at 06:41:37PM +0200, Johan Hovold wrote:
-> > On Sat, Aug 06, 2022 at 08:38:48PM +0530, Manivannan Sadhasivam wrote:
-> > > On Thu, Aug 04, 2022 at 05:09:59PM +0200, Johan Hovold wrote:
-> > > > Add a wakeup-source property to the binding to describe whether the
-> > > > wakeup interrupts can wake the system from suspend.
-> > > > 
-> > > > Acked-by: Rob Herring <robh@kernel.org>
-> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > 
-> > > So this is based on the fact that Qcom glue wrapper is supplying the wakeup
-> > > interrupts. But isn't it possible that on other platform, the DWC IP can supply
-> > > wakeup interrupts?
-> > 
-> > Yeah, possibly, and that's why Rob suggested keeping the 'wakeup-source'
-> > property also in the core node.
-> > 
-> > > In the driver, the wakeup-source parsing has been moved to the Qcom glue driver.
-> > > But this contradicts with the binding.
-> > 
-> > That's irrelevant. The core driver does not implement wakeup support. It
-> > was just added as a hack for the Qualcomm driver, and you won't get
-> > wakeup-capability for other platforms by just parsing the property in
-> > the core driver.
-> > 
-> > When/if wakeup support for such a platform is added, then the core
-> > driver may need to look at the property again.
-> > 
+On Mon, 1 Aug 2022 18:30:16 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+
+> On Mon, Aug 1, 2022 at 6:26 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Mon, Aug 1, 2022 at 6:12 PM Patrick Williams <patrick@stwcx.xyz> wrote:  
+> > > On Mon, Aug 01, 2022 at 10:22:16AM +0200, Andy Shevchenko wrote:  
+> > > > On Mon, Aug 1, 2022 at 3:52 AM Potin Lai <potin.lai.pt@gmail.com> wrote:  
+> > > > > On 7/31/22 20:09, Jonathan Cameron wrote:
+> > > > > In our hardware board, we have "ti,hdc1080" as main source, and "silabs,si7020"
+> > > > > for 2nd source. This two chip are locate at same bus and same slave address,
+> > > > > and we want to use multiple compatibles to support both chips with single device
+> > > > > node in device tree.
+> > > > >
+> > > > > Ex:
+> > > > > compatible = "ti,hdc1099", "silabs,si7020";  
+> > > >
+> > > > This is simply broken DT, you must not put incompatible hardware on
+> > > > the same compatible string. DT is by definition the description of a
+> > > > certain platform. What you showed is a combination of incompatible
+> > > > chips in a single DT.  
+> > >
+> > > We were mistaken that this is the appropriate way to specify this
+> > > behavior, partially because it works as long as the probe functions
+> > > return an error the next matching driver from the compatible will probe.
+> > > It does seem that specifying two different compatibles like this would
+> > > violate the intention of the DT spec:
+> > >
+> > >     The property value consists of a concatenated list of null terminated
+> > >     strings, from most specific to most general. They allow a device to
+> > >     express its compatibility with a family of similar devices, potentially
+> > >     allowing a single device driver to match against several devices.
+> > >  
+> > > >  
+> > > > > In order to support this, I need to add ID checking mechanism into the current
+> > > > > hdc100x driver, so the si7020 chip will fail to probe with hdc100x driver
+> > > > > (because the ID checking is not failed), then success probe with si7020.
+> > > > >
+> > > > > Base on you explanation, it looks multiple compatibles is not suitable in this
+> > > > > case? Would you mind advise us what would be the better approach for our case?  
+> > > >
+> > > > If I may advise... fix your DT by dropping the wrong compatible item.  
+> > >
+> > > This doesn't really give any helpful advice.  
+> >
+> > Sorry to hear this, but it's the best and correct solution to your
+> > problem. Believe me, many Linux people will tell you the same.
+> >  
+> > > The reality is that these two chips are pin compatible and function
+> > > compatible but not driver compatible.  Boards have been manufactured
+> > > which are identical except for this chip replaced, due various to chip
+> > > shortages.
+> > >
+> > > Making probe fail so that the next 'compatible' is chosen sounds like it
+> > > isn't desired.  I'm pretty sure you can't have two DT entries for the
+> > > same i2c address, but with different 'compatible" properties, and even
+> > > if we did you'd still need probe to fail on one of them.
+> > >
+> > > Are there any other suggestions for being able to inform the kernel that
+> > > one of two chips might be present?  
 > 
-> My point is, the platform drivers are free to add "wakeup-source" property in
-> the DWC node. Then in that case, the DWC driver should handle the capability,
-> isn't it?
+> Btw, how would it be solved in ACPI is the playing status bits by
+> firmware, depending on the run-time detected environment (straps,
+> other means). So, you may fix it on bootloader / firmware level by
+> patching DTB with status okay / disabled. I believe in DTB is the
+> number, which can be easily binary patched.
+> 
 
-No, not really. They wouldn't violate the current binding, but it would
-arguably still be wrong to do so unless that platform actually supports
-wakeup without involvement from a glue layer.
+Indeed, it's common to have boot firmware prelinux modify the DT.
 
-Perhaps we should reconsider reverting the binding update adding this
-property to the core node and only add it selectively for the platforms
-for which is actually applies (if they even exist).
+That firmware can do probing if necessary to find out which device is present
+and by the time Linux loads the DT should be correct for the particular
+hardware.  Often this is done from a high level 'board ID' but nothing
+stops you doing it this case.
 
-> I know it is broken currently, but moving the wakeup parsing code is not
-> helping either.
+I've cc'd the device tree binding maintainers and list, who may be able
+to give you some useful pointers to examples of people doing this
+in their boot loaders etc.
 
-It's not even broken. It has never even been implemented.
+Thanks,
 
-Just because someone added a hack that should probably never have been
-merged in the first place, doesn't mean we should somehow pretend that
-we support it.
+Jonathan
 
-> And... I'm aware of the fact that the binding should describe the hardware and
-> not the limitation of the driver. So perhaps we should document it in the
-> driver as a TODO or something?
 
-I'd rather just revert the binding update to avoid having discussions
-like this. We don't even know if it's possible to support on any
-platform yet (and remember that none of this has even been in an rc
-release yet).
+> > I guess there is a gap in understanding what DT is. DT is the
+> > description of the *platform*. Changing any discrete component on the
+> > platform is changing the platform.  
+> 
+> 
 
-Johan

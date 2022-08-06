@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42DD58B6F2
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300F258B70E
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbiHFQfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 12:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
+        id S232989AbiHFQvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 12:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbiHFQfM (ORCPT
+        with ESMTP id S231678AbiHFQve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 12:35:12 -0400
+        Sat, 6 Aug 2022 12:51:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C260B11451;
-        Sat,  6 Aug 2022 09:35:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC8DDEAB;
+        Sat,  6 Aug 2022 09:51:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5619FB80022;
-        Sat,  6 Aug 2022 16:35:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB396C433C1;
-        Sat,  6 Aug 2022 16:34:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66711B8060E;
+        Sat,  6 Aug 2022 16:51:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A1FC433C1;
+        Sat,  6 Aug 2022 16:51:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659803700;
-        bh=o8ku1LqIPLZoCVCueo/vZQPcVuxTpLrbLUtyhua2psY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dDvgefIh3DrPi/2OYdCMYrIc1MOnrOKDVvKOauR0rkF2KjcYF00UK7eDd0Xr2Tta+
-         he0PoK8PZvIBlsJu3b3IS5ds3rahVgPaP6oOXs7r4ucGv4CghJ6sKxSGQ2Unbq6V/D
-         bh9tXgl8fVX7P1Lf00ak85FAlNoTkSRUAJgf43DMjikkX7LFnCKGbZj8kcOMxuggzC
-         GyIhIRdtBnqhG7Y62Hi8bKjiWSxHBGDHWarqJ8QGuropwEV3b6wYlKzODeY0TtXm6W
-         QYXIjUNy7KK/495Kn3J8ylYO6JRwzHw3fhcs7p4JMX2xtcYbwO3NbNHAHJ95LhiI9U
-         rh2igynmiAenw==
-Date:   Sat, 6 Aug 2022 17:45:20 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
+        s=k20201202; t=1659804691;
+        bh=VnrvTUGe1dNVc7jCq++HzAzCuD0PNW0MzC6BQG5Rie0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vLeitvsKx6r79fikRlCnosNLcf8K9LipyoCIFpBtEP3Qqpm2Zvw5IGzmvNKQPsGXh
+         fQTiU8aMGNwKqM+lHmg0Zgkxly4nHrNUtDLe+LDsZVl5ZIMWK0wW0FMnxgLzrgMZmO
+         mh51bz3Z0a2G17zjqFcpwa/BciVvT5bW8rWpnuzaxmg0hhkE3dnfRlNAoyD0BeoEfT
+         5a+CD0lqpjvmOYXNQLkmHug5QaIopA4inT1xCWUciau5ZwQuEkMDtrbnUckFyA73MO
+         HBzl3+Mlo+sMw/KvShy2YrywC0DTTxg9pZhUco0316sdtI5ryoDx5OmaO1ZcI+uE4s
+         pPHKlLl34NhuQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oKN1p-0003Uh-Rx; Sat, 06 Aug 2022 18:51:58 +0200
+Date:   Sat, 6 Aug 2022 18:51:57 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mranostay@ti.com, William Breathitt Gray <william.gray@linaro.org>
-Subject: Re: [PATCH v3 2/2] iio: time: capture-tiecap: capture driver
- support for ECAP
-Message-ID: <20220806174520.0d27476e@jic23-huawei>
-In-Reply-To: <11b7436b-5c31-671e-ba77-435fe8e3b767@baylibre.com>
-References: <20220728175124.468461-1-jpanis@baylibre.com>
-        <20220728175124.468461-3-jpanis@baylibre.com>
-        <20220731164116.30e91f34@jic23-huawei>
-        <11b7436b-5c31-671e-ba77-435fe8e3b767@baylibre.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 3/9] usb: dwc3: qcom: fix gadget-only builds
+Message-ID: <Yu6cLSRcSEDZ24lY@hovoldconsulting.com>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-4-johan+linaro@kernel.org>
+ <20220806141536.GD14384@thinkpad>
+ <Yu6RBQNSatiwu1WV@hovoldconsulting.com>
+ <20220806164250.GK14384@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220806164250.GK14384@thinkpad>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,226 +76,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 1 Aug 2022 16:08:02 +0200
-Julien Panis <jpanis@baylibre.com> wrote:
-
-> On 31/07/2022 17:41, Jonathan Cameron wrote:
-> > On Thu, 28 Jul 2022 19:51:24 +0200
-> > Julien Panis <jpanis@baylibre.com> wrote:
-> >  
-> >> ECAP hardware on AM62x SoC supports capture feature. It can be used
-> >> to timestamp events (falling/rising edges) detected on signal input pin.
-> >>
-> >> This commit adds capture driver support for ECAP hardware on AM62x SoC.
-> >>
-> >> In the ECAP hardware, capture pin can also be configured to be in
-> >> PWM mode. Current implementation only supports capture operating mode.
-> >> Hardware also supports timebase sync between multiple instances, but
-> >> this driver supports simple independent capture functionality.
-> >>
-> >> Signed-off-by: Julien Panis <jpanis@baylibre.com>  
-> > Hi Julien,
-> >
-> > So this isn't the first ecap driver we've had proposed, but the previous
-> > one was a few years ago and never reached v2.
-> > https://lore.kernel.org/all/20200818153614.6438-1-dts86@cornell.edu/
-> >
-> > Honestly I can't remember much about it, but maybe the discussion around
-> > that will be worth a reread.  
+On Sat, Aug 06, 2022 at 10:12:50PM +0530, Manivannan Sadhasivam wrote:
+> On Sat, Aug 06, 2022 at 06:04:21PM +0200, Johan Hovold wrote:
+> > On Sat, Aug 06, 2022 at 07:45:36PM +0530, Manivannan Sadhasivam wrote:
+> > > On Thu, Aug 04, 2022 at 05:09:55PM +0200, Johan Hovold wrote:
+> > > > A recent change added a dependency to the USB host stack and broke
+> > > > gadget-only builds of the driver.
+> > > > 
+> > > > Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+> > > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > > --`-
+> > > > 
+> > > > Changes in v2
+> > > >  - new patch
+> > > > 
+> > > >  drivers/usb/dwc3/dwc3-qcom.c | 5 ++++-
+> > > >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > > > index be2e3dd36440..e9364141661b 100644
+> > > > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > > > @@ -310,8 +310,11 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+> > > >  	 * currently supports only 1 port per controller. So
+> > > >  	 * this is sufficient.
+> > > >  	 */
+> > > > +#ifdef CONFIG_USB
+> > > >  	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+> > > > -
+> > > > +#else
+> > > > +	udev = NULL;
+> > > > +#endif
+> > > 
+> > > Perhaps the check should be moved to the caller instead? This function still
+> > > references "usb_hcd" struct and I don't think that's intended for gadget only
+> > > mode.
+> > 
+> > That wouldn't help with the build failure, which is what this patch is
+> > addressing.
+> > 
 > 
-> Hi Jonathan, thank you for your review.
+> I should've put it clearly. You should guard the entire function and not just
+> usb_hub_find_child(). This way it becomes clear that this whole function depends
+> on the USB host functionality. Like,
 > 
-> I read the discussion about previous attempt, before submitting this 
-> patch. There were
-> interesting comments indeed.
-> 
-> But in this previous attempt, only one-shot pulses were handled 
-> (moreover, global IRQ flag
-> was not cleared, so I'm not sure that IRQ could be raised more than once).
+> #ifdef CONFIG_USB
+> static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+> {
+> ...
+> }
+> #elif
+> static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+> {
+> 	return USB_SPEED_UNKNOWN
+> }
+> #endif
 
-:)
+Yeah, that's what Krishna suggested but I wanted to keep the ifdeffery
+minimal when fixing the build failure (we generally try to avoid adding
+stub functions to implementation files).
 
-> 
-> However, ECAP can be used to make time measurements for any type of 
-> "square waveform".
-> That's why I tried to make this event mode configurable. Besides, using 
-> a continuous mode allows
-> handling much more signal types (not only single pulses).
+Non-host mode was clearly never considered when adding the function in
+question as the code blows up otherwise regardless of whether CONFIG_USB
+is enabled or not (and a later patch in the series addresses that).
 
-Makes sense.
+But I'll revisit this too in a couple of weeks.
 
-> 
-> >
-> > The use of ABI here is unusual. So I'd definitely like to see some documentation
-> > probably as a file in the main kernel documentation to explain what the interface
-> > is an how that relates to what is being captured.  
-> 
-> OK, I will add some userspace documentation.
-> 
-> >
-> > First thing to note here is the channel type of IIO_INDEX is now not actually
-> > used any more because we moved all the relevant drivers over to the counter
-> > subsystem (and we failed to mark it deprecated).  
-> 
-> I evaluated this counter subsystem before starting development. Counting 
-> events is not "a priori"
-> the goal when using ECAP.
-> 
-> Nevertheless, maybe "counter_push_event" function could do the job. If I 
-> use counter API :
-> # Option 1 : CAP1/2/3/4 registers could be seen as 4 channels of the 
-> same counter...
-> but there are not channels, there are just sequential timestamps 
-> actually. So I'm afraid this leads
-> to misunderstanding for the user.
-> Moreover, the user will have to read several entries (counts 1/2/3/4) to 
-> gather timestamps from
-> the same input signal, which is not very convenient.
-> # Option 2 : Either CAP 1/2/3/4 events could be gathered in a single 
-> channel...but then it will not
-> be possible to configure their polarity (rising/falling edge) 
-> individually (unless I did
-> not understand well counter framework documentation).
-> 
-> So, even with counter framework, it will lead to some diverted use of 
-> the framwork, since ECAP
-> is a very specific hardware that do not fit 100% counter philosophy.
-> 
-> I admit that ECAP do not fit 100% IIO philosophy either.
+Thanks for reviewing.
 
-Understood.  +CC William to see if we can form a consensus on how
-at least which subsystem to hammer this into :)
-
-> 
-> Maybe misc API would be more relevant actually. Any opinion about it 
-> will be welcome. :-)
-
-It's possible we'll fall back to misc, but if at all possible it would
-be better to make whatever extensions are necessary to a subsystem so that
-other similar devices end up with a home in the long run.
-
-Key here is definitely documentation!
-
-> 
-> >
-> > Anyhow, I've reviewed below, but need docs to discuss this in depth.  In particular
-> > the mix of buffers and events interfaces is unlikely to be an acceptable path
-> > forwards.  
-> 
-> OK, I will consider alternatives.
-> 
-> >
-> > Jonathan
-A quick process comment.  If you agree with something in a review
-no need to say that. Just delete the relevant code block from your reply.
-Only need to discuss the other stuff!   Reviewers read a lot of email
-so cutting down the volume makes them less grumpy :)
-
-> >  
-> >> + * struct ecap_iio_data - IIO device data
-> >> + * @ev_idx:  event index (0 to 3 for CAP1 to CAP4)  
-> > That's a long way from standard ABI.  
-> 
-> OK, I will consider alternatives.
-
-We might to make new ABI though.   Need to discuss that against
-a description rather than finding it buried deep in code.
-One possibility is that we have an events only IIO device
-as perhaps this fits better int he events interface (the
-timestamp part is problematic though).
-> 
-> >  
-> >> + * @ev_time: falling/rising edge timestamp
-> >> + *
-
-...
-
-...
-
-> >> +static irqreturn_t ecap_iio_isr(int irq, void *dev_id)
-> >> +{
-> >> +	struct iio_dev *indio_dev = dev_id;
-> >> +	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-> >> +	struct ecap_iio_data *ecap_data = &ecap_dev->data;
-> >> +	unsigned int clr = 0;
-> >> +	unsigned int flg;
-> >> +	unsigned int cap_time;
-> >> +	int i;
-> >> +
-> >> +	regmap_read(ecap_dev->regmap, ECAP_ECINT_EN_FLG_REG, &flg);
-> >> +
-> >> +	for (i = 0 ; i < ECAP_NB_CEVT ; i++) {
-> >> +		if (flg & ECAP_CEVT_FLG_BIT(i)) {
-> >> +			if (i < ECAP_NB_CAP) {
-> >> +				/*
-> >> +				 * Input signal edge detected
-> >> +				 * time_ns = 10^9 * time_cycles / clk_rate
-> >> +				 */
-> >> +				ecap_data->ev_idx = i;
-> >> +				regmap_read(ecap_dev->regmap, ECAP_CAP_REG(i), &cap_time);
-> >> +				ecap_data->ev_time = cap_time * NSEC_PER_SEC;
-> >> +				do_div(ecap_data->ev_time, ecap_dev->clk_rate);  
-> > Is there any attempt to align that timestamp with the iio clock used for software timestamps?  
-> 
-> No, this is not my goal. I just need to log hardware timestamp.
-> But I am not sure that I fully understand what you mean (?).
-
-IIO timestamps are meant to be useful for aligning multiple data sources. As such, where
-we have hardware timestamps we normally attempt to apply a calibration to them so that they
-map into the time base of the clocks used for IIO software timestamps.
-
-If that's not possible then we need to think how to indicate to userspace that these
-particular timestamps have a different meaning.
-
-> 
-> >> +			} else {
-> >> +				/* Counter overflow */
-> >> +				ecap_data->ev_idx = ECAP_OVF_VAL;
-> >> +				ecap_data->ev_time = 0;  
-> > Don't push it if you've lost data.  
-> 
-> This is not a lost data.
-
-> That was intentional (equivalent in counter subsystem would be 
-> COUNTER_EVENT_OVERFLOW).
-> For a long duration signal, user will be aware that counter overflow 
-> occurred (this can avoid misleading
-> consecutive timestamp interpretations).
-Handle that in software.  I assume the hardware is sensible enough to provide
-a mechanism to notify you about a single overflow? (so that you don't get a
-double overflow without knowing about it?)
-
-If so, use a software counter of larger size and have that not overflow.
-Typically a 64 bit counter will do fine for this for much longer than the
-device is likely to be running (unless this thing has very high clock rates).
-
-> Do you confirm that I should not push it ? Or maybe just explaining this 
-> overflow better ?
-
-It's not something userspace should ever need to know about.  We have
-he equivalent for Performance Monitoring Units (drivers/perf)
-There devices generally provide an overflow interrupt to allow us to
-keep track of how many overflows have occurred and hence out a timestamp
-that doesn't overflow often enough to matter.
-
-> 
-> >  
-> >> +			}
-> >> +			iio_push_to_buffers(indio_dev, ecap_data);
-> >> +
-> >> +			clr |= ECAP_CEVT_CLR_BIT(i);
-> >> +		}
-> >> +	}
-> >> +
-> >> +	clr |= ECAP_INT_CLR_BIT;
-> >> +	regmap_update_bits(ecap_dev->regmap, ECAP_ECINT_CLR_FRC_REG, ECAP_CEVT_CLR_MASK, clr);
-> >> +
-> >> +	return IRQ_HANDLED;
-> >> +}
-
-
-Thanks,
-
-Jonathan
-
-
+Johan

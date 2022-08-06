@@ -2,98 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0084858B80F
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 21:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2914058B815
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 21:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbiHFT4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 15:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
+        id S233962AbiHFT5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 15:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233670AbiHFT4O (ORCPT
+        with ESMTP id S233680AbiHFT4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 15:56:14 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E97261E
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 12:56:07 -0700 (PDT)
-Received: from dslb-188-097-043-167.188.097.pools.vodafone-ip.de ([188.97.43.167] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1oKPtw-0004Tu-NG; Sat, 06 Aug 2022 21:56:00 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 13/13] staging: r8188eu: simplify _InitNormalChipTwoOutEpPriority
-Date:   Sat,  6 Aug 2022 21:55:40 +0200
-Message-Id: <20220806195540.777390-14-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220806195540.777390-1-martin@kaiser.cx>
-References: <20220806195540.777390-1-martin@kaiser.cx>
+        Sat, 6 Aug 2022 15:56:32 -0400
+Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A93C12ADA
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 12:56:16 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id KPuAob2sMGDTnKPuAobw3d; Sat, 06 Aug 2022 21:56:14 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 06 Aug 2022 21:56:14 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        kvm@vger.kernel.org
+Subject: [PATCH] vfio/fsl-mc: Fix a typo in a comment
+Date:   Sat,  6 Aug 2022 21:56:13 +0200
+Message-Id: <2b65bf8d2b4d940cafbafcede07c23c35f042f5a.1659815764.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify the _InitNormalChipTwoOutEpPriority function, now that we have
-only one configuration for the queues.
+L and S are swapped/
+s/VFIO_FLS_MC/VFIO_FSL_MC/
 
-Remove the variables which are constant. Keep only those settings that
-depend on wifi_spec.
-
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/staging/r8188eu/hal/usb_halinit.c | 23 +++++++----------------
- 1 file changed, 7 insertions(+), 16 deletions(-)
+All the dev_ logging functions in the file have the "VFIO_FSL_MC: "
+prefix.
+As they are dev_ function, the driver should already be displayed.
 
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index fc4d25b835d3..e1d56370a471 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -228,26 +228,17 @@ static void _InitNormalChipRegPriority(struct adapter *Adapter, u16 beQ,
- static void _InitNormalChipTwoOutEpPriority(struct adapter *Adapter)
- {
- 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
--	u16 beQ, bkQ, viQ, voQ, mgtQ, hiQ;
--	u16 valueHi = QUEUE_HIGH;
--	u16 valueLow = QUEUE_NORMAL;
-+	u16 bkQ, voQ;
+So, does it make sense or could they be all removed?
+---
+ drivers/vfio/fsl-mc/vfio_fsl_mc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/vfio/fsl-mc/vfio_fsl_mc.c b/drivers/vfio/fsl-mc/vfio_fsl_mc.c
+index 3feff729f3ce..66d01db1d240 100644
+--- a/drivers/vfio/fsl-mc/vfio_fsl_mc.c
++++ b/drivers/vfio/fsl-mc/vfio_fsl_mc.c
+@@ -110,7 +110,7 @@ static void vfio_fsl_mc_close_device(struct vfio_device *core_vdev)
  
- 	if (!pregistrypriv->wifi_spec) {
--		beQ	= valueLow;
--		bkQ	= valueLow;
--		viQ	= valueHi;
--		voQ	= valueHi;
--		mgtQ	= valueHi;
--		hiQ	= valueHi;
-+		bkQ	= QUEUE_NORMAL;
-+		voQ	= QUEUE_HIGH;
- 	} else {/* for WMM ,CONFIG_OUT_EP_WIFI_MODE */
--		beQ	= valueLow;
--		bkQ	= valueHi;
--		viQ	= valueHi;
--		voQ	= valueLow;
--		mgtQ	= valueHi;
--		hiQ	= valueHi;
-+		bkQ	= QUEUE_HIGH;
-+		voQ	= QUEUE_NORMAL;
- 	}
--	_InitNormalChipRegPriority(Adapter, beQ, bkQ, viQ, voQ, mgtQ, hiQ);
-+	_InitNormalChipRegPriority(Adapter, QUEUE_NORMAL, bkQ, QUEUE_HIGH,
-+				   voQ, QUEUE_HIGH, QUEUE_HIGH);
- }
+ 	if (WARN_ON(ret))
+ 		dev_warn(&mc_cont->dev,
+-			 "VFIO_FLS_MC: reset device has failed (%d)\n", ret);
++			 "VFIO_FSL_MC: reset device has failed (%d)\n", ret);
  
- static void _InitNormalChipThreeOutEpPriority(struct adapter *Adapter)
+ 	vfio_fsl_mc_irqs_cleanup(vdev);
+ 
 -- 
-2.30.2
+2.34.1
 

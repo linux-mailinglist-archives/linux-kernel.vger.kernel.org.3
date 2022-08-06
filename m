@@ -2,36 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BF758B41E
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 08:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A61D58B427
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 09:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241715AbiHFGta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 02:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        id S233059AbiHFHFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 03:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239508AbiHFGt3 (ORCPT
+        with ESMTP id S230465AbiHFHF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 02:49:29 -0400
-Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D593C14D32
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 23:49:27 -0700 (PDT)
+        Sat, 6 Aug 2022 03:05:28 -0400
+Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8A2F5B2
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 00:05:25 -0700 (PDT)
 Received: from pop-os.home ([90.11.190.129])
         by smtp.orange.fr with ESMTPA
-        id KDcioEFnQiBgAKDcioqrut; Sat, 06 Aug 2022 08:49:26 +0200
+        id KDsAokBsU9RnzKDsAo3rnw; Sat, 06 Aug 2022 09:05:23 +0200
 X-ME-Helo: pop-os.home
 X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 06 Aug 2022 08:49:26 +0200
+X-ME-Date: Sat, 06 Aug 2022 09:05:23 +0200
 X-ME-IP: 90.11.190.129
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     gregkh@linuxfoundation.org, tglx@linutronix.de, jgg@ziepe.ca,
-        ira.weiny@intel.com, dan.j.williams@intel.com,
-        andriy.shevchenko@linux.intel.com, wonchung@google.com
-Cc:     list@mail.com, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] driver core: Define dev_err_probe() as __cold
-Date:   Sat,  6 Aug 2022 08:49:23 +0200
-Message-Id: <0d4391f85d916508dba096caf132b0a973b08800.1659768386.git.christophe.jaillet@wanadoo.fr>
+To:     Daniel Scally <djrscally@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: [PATCH] media: ov5693: Simplify some error message
+Date:   Sat,  6 Aug 2022 09:05:21 +0200
+Message-Id: <2937ae40c2043cff0eee238877da9656475b18df.1659769500.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -44,31 +46,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Give a hint to the compiler that dev_err_probe() is used for error
-handling. So calling paths are unlikely.
+dev_err_probe() already prints the error code in a human readable way, so
+there is no need to duplicate it as a numerical value at the end of the
+message.
 
-From gcc documentation:
-	The paths leading to calls of cold functions within code are marked
-	as unlikely by the branch prediction mechanism.
-
+Fixes: 89aef879cb53 ("media: i2c: Add support for ov5693 sensor")
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- include/linux/device.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sometimes, some people complain that dev_err_probe() calls should be
+limited to probe functions and functions called from probe.
 
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 424b55df0272..4ac16bde9bf7 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -1093,7 +1093,7 @@ void device_links_supplier_sync_state_pause(void);
- void device_links_supplier_sync_state_resume(void);
+So maybe this should be converted to a plain dev_err().
+
+Personally I don't fully agree. dev_err_probe() also has the advantage of
+not being a macro and avoids some inlining.
+So it can help to prevent the filling of the instruction cache of the
+processor with things unlikely to be needed.
+---
+ drivers/media/i2c/ov5693.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
+index 82a9b2de7735..8cf9516b6d57 100644
+--- a/drivers/media/i2c/ov5693.c
++++ b/drivers/media/i2c/ov5693.c
+@@ -403,8 +403,8 @@ static int ov5693_read_reg(struct ov5693_device *ov5693, u32 addr, u32 *value)
+ 	ret = i2c_transfer(client->adapter, msg, 2);
+ 	if (ret < 0)
+ 		return dev_err_probe(&client->dev, ret,
+-				     "Failed to read register 0x%04x: %d\n",
+-				     addr & OV5693_REG_ADDR_MASK, ret);
++				     "Failed to read register 0x%04x\n",
++				     addr & OV5693_REG_ADDR_MASK);
  
- extern __printf(3, 4)
--int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-+int __cold dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
- 
- /* Create alias, so I can be autoloaded. */
- #define MODULE_ALIAS_CHARDEV(major,minor) \
+ 	*value = 0;
+ 	for (i = 0; i < len; ++i) {
 -- 
 2.34.1
 

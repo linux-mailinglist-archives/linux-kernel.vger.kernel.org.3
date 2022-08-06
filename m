@@ -2,110 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8C758B437
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 09:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1EB58B446
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 09:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239381AbiHFHg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 03:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S241387AbiHFHnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 03:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiHFHg5 (ORCPT
+        with ESMTP id S230465AbiHFHm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 03:36:57 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E18D4E
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 00:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659771416; x=1691307416;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kbS4+7kvZDvL7ji3aktMd6UfvwS44cAG4xhoAYXX6Eo=;
-  b=JBBm865FZzsSmgApoUYUmQ6G6mEt35+rStcZcUWz1UzJJqbVic1rW+HN
-   x7oSOXvp/FkOKzhQLcvTLIb8VWrPRLYBpYR/tvx4wVgbOuOKAIsg+B1QM
-   0xrH7GIZWkUd9hNygLGqCy7sN+vPOXtIa7a1IVPTpZbII/QFg7F6W/St+
-   tXGWtH8NkUdh511BdArvEg8/gtpd1GvxrpaMEJcbq6G4EIcQeANw+7Odi
-   G4zVa6nLDS2rKqcYI2/s6EH1s5/BvtPjlBXoFiXEUH5lOazWKVUhtzFdf
-   6HEjUafNQCV6ub40Y6zk7zAfQFW20pCTq8JomlxLSP8CfIhW58xybZ6Cu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="270121750"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="270121750"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 00:36:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="579761869"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Aug 2022 00:36:49 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKEMa-000KAR-1Q;
-        Sat, 06 Aug 2022 07:36:48 +0000
-Date:   Sat, 6 Aug 2022 15:36:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [intel-tdx:guest-hardening-rebased 11/23]
- arch/x86/coco/tdx/tdx.c:297:14: sparse: sparse: symbol 'tdx_write_msr' was
- not declared. Should it be static?
-Message-ID: <202208061521.03fT4xpR-lkp@intel.com>
+        Sat, 6 Aug 2022 03:42:59 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F45E11C2F;
+        Sat,  6 Aug 2022 00:42:58 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-f2a4c51c45so5174081fac.9;
+        Sat, 06 Aug 2022 00:42:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc;
+        bh=gm6PmfQDJQW4sYrDMxD1XhD+bbbCc7CPLvJKQ3d/YUA=;
+        b=nFm1VC3KyZqoM35PVnjJC5DxKdZC/EAxOULMCkmgYku12hNJHse9r+tilI7arpzEI4
+         XW97kv8vll6g9DavYdBDgqRnNBRDL5yoybYUkKV3EHcWgQuIPYAB/oloj/iQ0zi7yb3Y
+         WMMQouJ1RhfTC7fIVyC62peTSHMRy2+kCc8LwI3VcFZXNTrzzOzfzTYM+ey6LorLSthb
+         IUQyUyJckZLyM7pLYM6HIey4/wiUGMNNMDObIG368NpCK+JKxCcJ8GaJz+DGN9gmmQj2
+         OPJmjl6rYMFFrwu7kmHHhIeYtk9PrTAlgYnzyfSrHH9nZPab8827rKeJuGC7LxAHrCdi
+         cfeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=gm6PmfQDJQW4sYrDMxD1XhD+bbbCc7CPLvJKQ3d/YUA=;
+        b=e1Fs6S7TW/Wz116a/IeOmyqcJ7BQWS+1zvIfkXn/UH8Km94V9EinW+Yu9NLbiFiL5c
+         zKvg8MRNH+eYhserSWjVg6l2VXkrAe7u28awrz5lSdR4T7AouxBbZwDqEqQn3Z8tkcjO
+         2+Z8d88V02LKhuSS2MbiJUWCNbb98JGot6Hfevw871pxN4cJKvCtI6nsFB6xvA8H58t0
+         /nzdPqK5hYqJBNRI4U1/ctGqC73671qcjTQ4ACVHYB5NBYi0QOSN9yCYs/wTx5QZtL9W
+         D/nfI7lvDYbQyEDtMeQl4SGUUDFerYm/ggCRr0x2G65ObjVbujCaSTKrQkDzJ7koBMso
+         nHow==
+X-Gm-Message-State: ACgBeo3QKWmX/QLFSTIvSPnNUdzWpi1kAyW0ri4ZTW3UKkTUuVr26xcm
+        7VYCqYTDQ3KJkMs8vYAxJcdijOcMmE4mmry+T8s=
+X-Google-Smtp-Source: AA6agR4Fo8ujc5fByWI5kgVAIAetbTwWMAh1ItZ7I2D+tLRyfv7bllpf/VDAeBxjnxalm+DuFixLfNMQF1TzufN+u/k=
+X-Received: by 2002:a05:6870:c0d3:b0:10e:cb75:2e62 with SMTP id
+ e19-20020a056870c0d300b0010ecb752e62mr8180863oad.128.1659771777435; Sat, 06
+ Aug 2022 00:42:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
+ <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com>
+ <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com>
+ <CA+icZUWiYYQbAav7VxVsT0ikqCeLckym08Au8oSeyYjvJHcNbg@mail.gmail.com>
+ <CA+icZUUOQcc4uiVbv+tJzPr_ED7e4tD0u9tC8mcn2BRe3sdPAg@mail.gmail.com>
+ <CAHk-=wiOrXUr0wqHL+hfkzGg_+b7UvtLeB=59KsX8W939bTY-A@mail.gmail.com>
+ <CA+icZUUma1B8KFWF-ed9sjXH4QpCRZ+B2pON3uAFkTUs77tMzw@mail.gmail.com>
+ <20220609192308.GB10732@1wt.eu> <CAHk-=wimC_B+nCJrXwuvWULz6ycFFmRMT1Uc+PeM5wJdma_VFw@mail.gmail.com>
+ <CA+icZUUCOoE8x3Js=DYEjgyV_rz-T-M7gPZdFQu7tsKcUoA0hg@mail.gmail.com> <20220622183747.mhhlfr6aufbkyhag@alap3.anarazel.de>
+In-Reply-To: <20220622183747.mhhlfr6aufbkyhag@alap3.anarazel.de>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 6 Aug 2022 09:42:21 +0200
+Message-ID: <CA+icZUWjnaHKmofKdGgSo3b6wuNOR_Oj=C+gU3GW9fHViYwVpQ@mail.gmail.com>
+Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
+ and OpenSSL v3.0.x
+To:     Andres Freund <andres@anarazel.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Willy Tarreau <w@1wt.eu>, Kees Cook <keescook@chromium.org>,
+        keyrings@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Stephane Eranian <eranian@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest-hardening-rebased
-head:   c170462888e1dab8e3e80c1c6e3708dd473ad1ed
-commit: d1a7216a37f68b347a3622a0c8498134d5cb8970 [11/23] x86/tdx: Use direct paravirt call for wrmsrl
-config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220806/202208061521.03fT4xpR-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel/tdx/commit/d1a7216a37f68b347a3622a0c8498134d5cb8970
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-hardening-rebased
-        git checkout d1a7216a37f68b347a3622a0c8498134d5cb8970
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
+> FWIW, these deprecation warnings also cause perf to fail to detect libcry=
+pto:
+>
+> test-libcrypto.c: In function =E2=80=98main=E2=80=99:
+> test-libcrypto.c:11:9: error: =E2=80=98MD5_Init=E2=80=99 is deprecated: S=
+ince OpenSSL 3.0 [-Werror=3Ddeprecated-declarations]
+>    11 |         MD5_Init(&context);
+>       |         ^~~~~~~~
+> In file included from test-libcrypto.c:3:
+> ...
+> cc1: all warnings being treated as errors
+>
+>
+> Perhaps it's worth applying this fix a bit more broadly?
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Just FYI:
 
-sparse warnings: (new ones prefixed by >>)
->> arch/x86/coco/tdx/tdx.c:297:14: sparse: sparse: symbol 'tdx_write_msr' was not declared. Should it be static?
+"perf build: Suppress openssl v3 deprecation warnings in libcrypto feature =
+test"
 
-vim +/tdx_write_msr +297 arch/x86/coco/tdx/tdx.c
+Included in git-pull request (pending) in [2].
 
-   296	
- > 297	void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
-   298	{
-   299		struct tdx_hypercall_args args = {
-   300			.r10 = TDX_HYPERCALL_STANDARD,
-   301			.r11 = hcall_func(EXIT_REASON_MSR_WRITE),
-   302			.r12 = msr,
-   303			.r13 = (u64)high << 32 | low,
-   304		};
-   305	
-   306		if (tdx_fast_tdcall_path_msr(msr))
-   307			__tdx_hypercall(&args, 0);
-   308		else
-   309			native_write_msr(msr, low, high);
-   310	}
-   311	
+-Sedat-
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?=
+h=3Dperf-tools-for-v6.0-2022-08-04&id=3D10fef869a58e37ec649b61eddab545f2da5=
+7a79b
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tag/?h=
+=3Dperf-tools-for-v6.0-2022-08-04

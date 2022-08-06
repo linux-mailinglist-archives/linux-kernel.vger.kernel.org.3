@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E012F58B7FE
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 21:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F77958B80C
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 21:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbiHFTng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 15:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
+        id S232417AbiHFTz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 15:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbiHFTne (ORCPT
+        with ESMTP id S229774AbiHFTzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 15:43:34 -0400
+        Sat, 6 Aug 2022 15:55:55 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15073892
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 12:43:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A7F261E
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 12:55:54 -0700 (PDT)
 Received: from dslb-188-097-043-167.188.097.pools.vodafone-ip.de ([188.97.43.167] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1oKPhj-0004Ne-Tu; Sat, 06 Aug 2022 21:43:23 +0200
+        id 1oKPtk-0004Tu-QR; Sat, 06 Aug 2022 21:55:48 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH] staging: r8188eu: txpktbuf_bndy does not depend on wifi_spec
-Date:   Sat,  6 Aug 2022 21:43:04 +0200
-Message-Id: <20220806194304.777059-1-martin@kaiser.cx>
+Subject: [PATCH 00/13] staging: r8188eu: simplify endpoint configuration
+Date:   Sat,  6 Aug 2022 21:55:27 +0200
+Message-Id: <20220806195540.777390-1-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -43,70 +43,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the if clause that sets txpktbuf_bndy. Both branches set the same
-value.
+This series contains cleanups for rtl8188eu_interface_configure and the
+functions that it calls. I tried to fix the error handling and to
+summarize small functions and common code.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/hal/usb_halinit.c      | 12 ++----------
- drivers/staging/r8188eu/include/rtl8188e_hal.h |  6 ------
- 2 files changed, 2 insertions(+), 16 deletions(-)
+Martin Kaiser (13):
+  staging: r8188eu: Hal_MappingOutPipe should return an int
+  staging: r8188eu: process HalUsbSetQueuePipeMapping8188EUsb's return
+    value
+  staging: r8188eu: merge two small functions
+  staging: r8188eu: move endpoint init functions to usb_halinit.c
+  staging: r8188eu: summarize endpoint-related settings
+  staging: r8188eu: remove OutEpNumber
+  staging: r8188eu: remove comments about endpoint mapping
+  staging: r8188eu: summarize common Queue2Pipe settings
+  staging: r8188eu: simplify three_out_pipe
+  staging: r8188eu: simplify two_out_pipe
+  staging: r8188eu: remove _InitNormalChipOneOutEpPriority
+  staging: r8188eu: we always use HQ and NQ for two endpoints
+  staging: r8188eu: simplify _InitNormalChipTwoOutEpPriority
 
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index efb529bb4c8a..8b36fb56076e 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -567,7 +567,6 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
- {
- 	u8 value8 = 0;
- 	u16  value16;
--	u8 txpktbuf_bndy;
- 	u32 status = _SUCCESS;
- 	int res;
- 	struct hal_data_8188e *haldata = &Adapter->haldata;
-@@ -600,13 +599,6 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
- 	/*  HW GPIO pin. Before PHY_RFConfig8192C. */
- 	/*  2010/08/26 MH If Efuse does not support sective suspend then disable the function. */
- 
--	if (!pregistrypriv->wifi_spec) {
--		txpktbuf_bndy = TX_PAGE_BOUNDARY_88E;
--	} else {
--		/*  for WMM */
--		txpktbuf_bndy = WMM_NORMAL_TX_PAGE_BOUNDARY_88E;
--	}
--
- 	_InitQueueReservedPage(Adapter);
- 	_InitQueuePriority(Adapter);
- 	_InitPageBoundary(Adapter);
-@@ -647,9 +639,9 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
- 	if (status == _FAIL)
- 		goto exit;
- 
--	_InitTxBufferBoundary(Adapter, txpktbuf_bndy);
-+	_InitTxBufferBoundary(Adapter, TX_PAGE_BOUNDARY_88E);
- 
--	status =  InitLLTTable(Adapter, txpktbuf_bndy);
-+	status =  InitLLTTable(Adapter, TX_PAGE_BOUNDARY_88E);
- 	if (status == _FAIL)
- 		goto exit;
- 
-diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-index 5cd62b216720..fdc187f4deaa 100644
---- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
-+++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-@@ -51,12 +51,6 @@
- 
- #define TX_PAGE_BOUNDARY_88E (TX_TOTAL_PAGE_NUMBER_88E + 1)
- 
--/* Note: For Normal Chip Setting ,modify later */
--#define WMM_NORMAL_TX_TOTAL_PAGE_NUMBER			\
--	TX_TOTAL_PAGE_NUMBER_88E  /* 0xA9 , 0xb0=>176=>22k */
--#define WMM_NORMAL_TX_PAGE_BOUNDARY_88E			\
--	(WMM_NORMAL_TX_TOTAL_PAGE_NUMBER + 1) /* 0xA9 */
--
- #include "HalVerDef.h"
- #include "hal_com.h"
- 
+ drivers/staging/r8188eu/hal/hal_com.c         | 110 -------------
+ drivers/staging/r8188eu/hal/usb_halinit.c     | 152 ++++++++----------
+ drivers/staging/r8188eu/include/hal_com.h     |   2 -
+ drivers/staging/r8188eu/include/hal_intf.h    |   2 +-
+ .../staging/r8188eu/include/rtl8188e_hal.h    |   1 -
+ drivers/staging/r8188eu/os_dep/usb_intf.c     |   4 +-
+ 6 files changed, 75 insertions(+), 196 deletions(-)
+
 -- 
 2.30.2
 

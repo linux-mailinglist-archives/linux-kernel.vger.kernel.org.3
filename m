@@ -2,42 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300F258B70E
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358CF58B716
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbiHFQvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 12:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
+        id S232420AbiHFQww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 12:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbiHFQve (ORCPT
+        with ESMTP id S232360AbiHFQwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 12:51:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC8DDEAB;
-        Sat,  6 Aug 2022 09:51:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66711B8060E;
-        Sat,  6 Aug 2022 16:51:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A1FC433C1;
-        Sat,  6 Aug 2022 16:51:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659804691;
-        bh=VnrvTUGe1dNVc7jCq++HzAzCuD0PNW0MzC6BQG5Rie0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vLeitvsKx6r79fikRlCnosNLcf8K9LipyoCIFpBtEP3Qqpm2Zvw5IGzmvNKQPsGXh
-         fQTiU8aMGNwKqM+lHmg0Zgkxly4nHrNUtDLe+LDsZVl5ZIMWK0wW0FMnxgLzrgMZmO
-         mh51bz3Z0a2G17zjqFcpwa/BciVvT5bW8rWpnuzaxmg0hhkE3dnfRlNAoyD0BeoEfT
-         5a+CD0lqpjvmOYXNQLkmHug5QaIopA4inT1xCWUciau5ZwQuEkMDtrbnUckFyA73MO
-         HBzl3+Mlo+sMw/KvShy2YrywC0DTTxg9pZhUco0316sdtI5ryoDx5OmaO1ZcI+uE4s
-         pPHKlLl34NhuQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oKN1p-0003Uh-Rx; Sat, 06 Aug 2022 18:51:58 +0200
-Date:   Sat, 6 Aug 2022 18:51:57 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+        Sat, 6 Aug 2022 12:52:50 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3C3DEAC
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 09:52:48 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso10933067pjq.0
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 09:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=tbINJ7QsOYoYb8ZFX+exoUH6wh4ff1wK54fBzhvpouw=;
+        b=JOLyQbC/YMjp6EweqOCx5ld/GN+PK4jwMP0XxvuVyYh9wO2unrHYuKJF32mfYXhGV6
+         F0WYdaUb9qRQjhplg92+CUn3PP6MCZuDcMUXJvXJOfXDb6QIyELTbxDl9FuJCr5UiAol
+         h8gW2GFN+ikLlDIYzwq5jlVhbZdxOwqBKSmrNKjeVpVctmFPUwkYw4dfiNqMQeX3Jso/
+         +fI8v5+eIyaYd45EsqVtHuP3xFVt4fiZdmj7d3CACYAjvxdymM0aTyLY0F7c6VEZZnG4
+         pQ7A5reXVmP8cMlHc8ch57dHzBzfAugQyLfDx0DZKi+NuY1WzXQKCLEDkj0m7DRKdfHZ
+         HDtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=tbINJ7QsOYoYb8ZFX+exoUH6wh4ff1wK54fBzhvpouw=;
+        b=OjFRHozzXUYYA3pF1MChQ2oirP5gaeYVzslaOQufiA5u9VuzO4vmRJ9GDA/iDbr/Rq
+         n/vRsAoUrydc1gzeO2B+ee6u68XoJX0xFiUEKlZXeaMD/FKZdzxlAPftcMJhQkq/u+ek
+         JcRGvblBRC1uo8Gs6lDxg24aqMt4/rG165zbebynJCw8Uq7ETcng8pqYVQCYU4xjqHEB
+         EjnxXSzWna1z7PPNSCz6+fXmZstNi9jCI/lTLKO9hwuZ1Kieak+w2IpBGay4JgKVZndU
+         pN6reL0esqdz60hiP8dioRSV0XvM4BidNaJXXh0D6UyVNq/NpM3Hfx43DZ+9g9RZv4bz
+         WzOA==
+X-Gm-Message-State: ACgBeo3xpW4Gy30IPnvpNlvoF3YsaWjaJ6/bzyYc8gMj70MCbuPIxXRd
+        0CDuGnWh3emu5w7YgI0jHdHm
+X-Google-Smtp-Source: AA6agR49CnysaV2RsOmCz8D4Gvyz4ZIECUCvGu6eXfolX5aecwTuqZ6ew8l7Y094y5DPffBRTAE4yw==
+X-Received: by 2002:a17:902:8d8a:b0:16f:21fb:b97a with SMTP id v10-20020a1709028d8a00b0016f21fbb97amr11712794plo.160.1659804768082;
+        Sat, 06 Aug 2022 09:52:48 -0700 (PDT)
+Received: from thinkpad ([117.202.188.20])
+        by smtp.gmail.com with ESMTPSA id u14-20020a62790e000000b0052d78e73e6asm5189736pfc.184.2022.08.06.09.52.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 09:52:47 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 22:22:38 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
 Cc:     Johan Hovold <johan+linaro@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>,
@@ -54,21 +68,22 @@ Cc:     Johan Hovold <johan+linaro@kernel.org>,
         quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 3/9] usb: dwc3: qcom: fix gadget-only builds
-Message-ID: <Yu6cLSRcSEDZ24lY@hovoldconsulting.com>
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 7/9] dt-bindings: usb: qcom,dwc3: add wakeup-source
+ property
+Message-ID: <20220806165238.GM14384@thinkpad>
 References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-4-johan+linaro@kernel.org>
- <20220806141536.GD14384@thinkpad>
- <Yu6RBQNSatiwu1WV@hovoldconsulting.com>
- <20220806164250.GK14384@thinkpad>
+ <20220804151001.23612-8-johan+linaro@kernel.org>
+ <20220806150848.GH14384@thinkpad>
+ <Yu6ZwePzzkl7tewV@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220806164250.GK14384@thinkpad>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yu6ZwePzzkl7tewV@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,73 +91,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 06, 2022 at 10:12:50PM +0530, Manivannan Sadhasivam wrote:
-> On Sat, Aug 06, 2022 at 06:04:21PM +0200, Johan Hovold wrote:
-> > On Sat, Aug 06, 2022 at 07:45:36PM +0530, Manivannan Sadhasivam wrote:
-> > > On Thu, Aug 04, 2022 at 05:09:55PM +0200, Johan Hovold wrote:
-> > > > A recent change added a dependency to the USB host stack and broke
-> > > > gadget-only builds of the driver.
-> > > > 
-> > > > Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> > > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > > --`-
-> > > > 
-> > > > Changes in v2
-> > > >  - new patch
-> > > > 
-> > > >  drivers/usb/dwc3/dwc3-qcom.c | 5 ++++-
-> > > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > > > index be2e3dd36440..e9364141661b 100644
-> > > > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > > > @@ -310,8 +310,11 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
-> > > >  	 * currently supports only 1 port per controller. So
-> > > >  	 * this is sufficient.
-> > > >  	 */
-> > > > +#ifdef CONFIG_USB
-> > > >  	udev = usb_hub_find_child(hcd->self.root_hub, 1);
-> > > > -
-> > > > +#else
-> > > > +	udev = NULL;
-> > > > +#endif
+On Sat, Aug 06, 2022 at 06:41:37PM +0200, Johan Hovold wrote:
+> On Sat, Aug 06, 2022 at 08:38:48PM +0530, Manivannan Sadhasivam wrote:
+> > On Thu, Aug 04, 2022 at 05:09:59PM +0200, Johan Hovold wrote:
+> > > Add a wakeup-source property to the binding to describe whether the
+> > > wakeup interrupts can wake the system from suspend.
 > > > 
-> > > Perhaps the check should be moved to the caller instead? This function still
-> > > references "usb_hcd" struct and I don't think that's intended for gadget only
-> > > mode.
+> > > Acked-by: Rob Herring <robh@kernel.org>
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > > 
-> > That wouldn't help with the build failure, which is what this patch is
-> > addressing.
-> > 
+> > So this is based on the fact that Qcom glue wrapper is supplying the wakeup
+> > interrupts. But isn't it possible that on other platform, the DWC IP can supply
+> > wakeup interrupts?
 > 
-> I should've put it clearly. You should guard the entire function and not just
-> usb_hub_find_child(). This way it becomes clear that this whole function depends
-> on the USB host functionality. Like,
+> Yeah, possibly, and that's why Rob suggested keeping the 'wakeup-source'
+> property also in the core node.
 > 
-> #ifdef CONFIG_USB
-> static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
-> {
-> ...
-> }
-> #elif
-> static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
-> {
-> 	return USB_SPEED_UNKNOWN
-> }
-> #endif
+> > In the driver, the wakeup-source parsing has been moved to the Qcom glue driver.
+> > But this contradicts with the binding.
+> 
+> That's irrelevant. The core driver does not implement wakeup support. It
+> was just added as a hack for the Qualcomm driver, and you won't get
+> wakeup-capability for other platforms by just parsing the property in
+> the core driver.
+> 
+> When/if wakeup support for such a platform is added, then the core
+> driver may need to look at the property again.
+> 
 
-Yeah, that's what Krishna suggested but I wanted to keep the ifdeffery
-minimal when fixing the build failure (we generally try to avoid adding
-stub functions to implementation files).
+My point is, the platform drivers are free to add "wakeup-source" property in
+the DWC node. Then in that case, the DWC driver should handle the capability,
+isn't it?
 
-Non-host mode was clearly never considered when adding the function in
-question as the code blows up otherwise regardless of whether CONFIG_USB
-is enabled or not (and a later patch in the series addresses that).
+I know it is broken currently, but moving the wakeup parsing code is not
+helping either.
 
-But I'll revisit this too in a couple of weeks.
+And... I'm aware of the fact that the binding should describe the hardware and
+not the limitation of the driver. So perhaps we should document it in the
+driver as a TODO or something?
 
-Thanks for reviewing.
+Thanks,
+Mani
 
-Johan
+> Johan
+
+-- 
+மணிவண்ணன் சதாசிவம்

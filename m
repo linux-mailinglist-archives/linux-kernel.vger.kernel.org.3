@@ -2,150 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B53258B606
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF5158B60A
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiHFOTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 10:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S231718AbiHFOVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 10:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiHFOTB (ORCPT
+        with ESMTP id S229945AbiHFOVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 10:19:01 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB20B11A22
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 07:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659795540; x=1691331540;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lGFG+m2rPaOrC3XzWp68OGLkCRMQUX6JRII3iBPY3NM=;
-  b=gVzWWSMcozPGGablHnz6N6bPbRtFGrxWlkLkOrPmMqP0vb+/7X6MM9uw
-   d7/xlSFIvJTEpI6DJ6usqJflzpR0qWK3qqICl0J8+nHifwCgMDmI+/qy8
-   aDwkiAqO0aOAqjsgeUG0sl2eJY6wvWIvvjB4oVWs3isDwW0eYx6RkZgDK
-   qoTarhyXu6dhOiMUKiE/0utXyMZ6K8zMGE0tEfMW158AAgXxMARwpNxAC
-   TWgl700CcutyJXUBZ24rCg3PwkN3q6+T2gYqiFNMduhqOAKxXy6A/7yP7
-   HFkyYg4nVJd7cJQqI3k/emAa4242rxl01MzerIkZqEedeumbvFPPeN2IY
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="291597615"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="291597615"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 07:19:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="931545793"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Aug 2022 07:18:58 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKKdl-000KQq-2h;
-        Sat, 06 Aug 2022 14:18:57 +0000
-Date:   Sat, 6 Aug 2022 22:18:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [hverkuil-media-tree:for-v5.21b 12/13]
- drivers/media/platform/nxp/dw100/dw100.c:382:25: warning: variable 'dh' set
- but not used
-Message-ID: <202208062217.dM0Br18Z-lkp@intel.com>
+        Sat, 6 Aug 2022 10:21:09 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78485BE1B;
+        Sat,  6 Aug 2022 07:21:08 -0700 (PDT)
+Received: from [192.168.10.23] (unknown [39.46.64.186])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 37C456601B6F;
+        Sat,  6 Aug 2022 15:21:02 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659795666;
+        bh=DdYokYyNOQKr/29EyYNDz69mki37RBqdEUsJqKiFd9I=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=DniTRkWDOsrlXo9E9ST1J0pc09lSLBYynlpfLEtf7lzCVOtEv24smPYjOwG1HKFiA
+         5SwPizXCqJPojliBkk1nBbZYlDOMjcVeX3huZe8sVwoKGMyUP9PWkDRCfoGkpQyRIb
+         EyFhl0kQyZSFFgUnuVfjdfFw0B382hVsu0JWP9pcfccjDCPlMLMyYT66j4Wo+TPn5L
+         zfVKTMpQNBlGuYY8Rw9HceVYI1YEYU/grGx0MU4z1pLuJ2odVzX/1muErkGPGDq0AL
+         9GSjh9e5pUd0cCv6jsOe+3YIWG4iSQkSc+OstW0jvUx6Vy5fGSM93pu/DB+iCRvv92
+         /G5y+V4u+NQQw==
+Message-ID: <1b3298b3-13b5-fbbb-bc8e-f3d0af726d71@collabora.com>
+Date:   Sat, 6 Aug 2022 19:20:58 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     usama.anjum@collabora.com, andrealmeid@riseup.net,
+        melissa.srw@gmail.com, siqueirajordao@riseup.net,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] kunit: Introduce KUNIT_EXPECT_MEMEQ and
+ KUNIT_EXPECT_MEMNEQ macros
+Content-Language: en-US
+To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        davidgow@google.com, Daniel Latypov <dlatypov@google.com>,
+        airlied@linux.ie, daniel@ffwll.ch, davem@davemloft.net,
+        kuba@kernel.org, jose.exposito89@gmail.com, javierm@redhat.com
+References: <20220803215855.258704-1-mairacanal@riseup.net>
+ <20220803215855.258704-2-mairacanal@riseup.net>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220803215855.258704-2-mairacanal@riseup.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.21b
-head:   ac27e33a9e4dd1487bde072493d9303358af0507
-commit: b92bfb7b8350160895d0ea34a98831ed4f01af1d [12/13] media: dw100: Add i.MX8MP dw100 dewarper driver
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220806/202208062217.dM0Br18Z-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree for-v5.21b
-        git checkout b92bfb7b8350160895d0ea34a98831ed4f01af1d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/media/platform/nxp/dw100/
+On 8/4/22 2:58 AM, Maíra Canal wrote:
+> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_EQ
+> or KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp
+> function, such as:
+>     KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+> 
+> Although this usage produces correct results for the test cases, when
+> the expectation fails, the error message is not very helpful,
+> indicating only the return of the memcmp function.
+> 
+> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
+> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a specified size.
+> In case of expectation failure, those macros print the hex dump of the
+> memory blocks, making it easier to debug test failures for memory blocks.
+> 
+> That said, the expectation
+> 
+>     KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+> 
+> would translate to the expectation
+> 
+>     KUNIT_EXPECT_MEMEQ(test, foo, bar, size);
+> 
+> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/media/platform/nxp/dw100/dw100.c: In function 'dw100_ctrl_dewarping_map_init':
->> drivers/media/platform/nxp/dw100/dw100.c:382:25: warning: variable 'dh' set but not used [-Wunused-but-set-variable]
-     382 |         u32 sw, sh, dw, dh, mw, mh, idx;
-         |                         ^~
->> drivers/media/platform/nxp/dw100/dw100.c:382:21: warning: variable 'dw' set but not used [-Wunused-but-set-variable]
-     382 |         u32 sw, sh, dw, dh, mw, mh, idx;
-         |                     ^~
-
-
-vim +/dh +382 drivers/media/platform/nxp/dw100/dw100.c
-
-   363	
-   364	/*
-   365	 * Initialize the dewarping map with an identity mapping.
-   366	 *
-   367	 * A 16 pixels cell size grid is mapped on the destination image.
-   368	 * The last cells width/height might be lesser than 16 if the destination image
-   369	 * width/height is not divisible by 16. This dewarping grid map specifies the
-   370	 * source image pixel location (x, y) on each grid intersection point.
-   371	 * Bilinear interpolation is used to compute inner cell points locations.
-   372	 *
-   373	 * The coordinates are saved in UQ12.4 fixed point format.
-   374	 */
-   375	static void dw100_ctrl_dewarping_map_init(const struct v4l2_ctrl *ctrl,
-   376						  u32 from_idx, u32 elems,
-   377						  union v4l2_ctrl_ptr ptr)
-   378	{
-   379		struct dw100_ctx *ctx =
-   380			container_of(ctrl->handler, struct dw100_ctx, hdl);
-   381	
- > 382		u32 sw, sh, dw, dh, mw, mh, idx;
-   383		u16 qx, qy, qdx, qdy, qsh, qsw;
-   384		u32 *map = ctrl->p_cur.p_u32;
-   385	
-   386		sw = ctx->q_data[DW100_QUEUE_SRC].pix_fmt.width;
-   387		dw = ctx->q_data[DW100_QUEUE_DST].pix_fmt.width;
-   388		sh = ctx->q_data[DW100_QUEUE_SRC].pix_fmt.height;
-   389		dh = ctx->q_data[DW100_QUEUE_DST].pix_fmt.height;
-   390	
-   391		mw = ctrl->dims[0];
-   392		mh = ctrl->dims[1];
-   393	
-   394		qsw = dw100_map_convert_to_uq12_4(sw);
-   395		qsh = dw100_map_convert_to_uq12_4(sh);
-   396		qdx = qsw / (mw - 1);
-   397		qdy = qsh / (mh - 1);
-   398	
-   399		ctx->map_width = mw;
-   400		ctx->map_height = mh;
-   401		ctx->map_size = mh * mw * sizeof(u32);
-   402	
-   403		for (idx = from_idx; idx < elems; idx++) {
-   404			qy = min_t(u32, (idx / mw) * qdy, qsh);
-   405			qx = min_t(u32, (idx % mw) * qdx, qsw);
-   406			map[idx] = dw100_map_format_coordinates(qx, qy);
-   407		}
-   408	
-   409		ctx->user_map_is_set = false;
-   410	}
-   411	
+> ---
+> v1 -> v2:
+> - Change "determinated" to "specified" (Daniel Latypov).
+> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to make
+> it easier for users to infer the right size unit (Daniel Latypov).
+> - Mark the different bytes on the failure message with a <> (Daniel Latypov).
+> 
+> v2 -> v3:
+> - Make the bytes aligned at output.
+> - Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Daniel Latypov).
+> - Line up the trailing \ at macros using tabs (Daniel Latypov).
+> - Line up the params to the functions (Daniel Latypov).
+> ---
+>  include/kunit/assert.h | 34 +++++++++++++++++++
+>  include/kunit/test.h   | 76 ++++++++++++++++++++++++++++++++++++++++++
+>  lib/kunit/assert.c     | 56 +++++++++++++++++++++++++++++++
+>  3 files changed, 166 insertions(+)
+> 
+> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+> index 4b52e12c2ae8..4b817a8eb619 100644
+> --- a/include/kunit/assert.h
+> +++ b/include/kunit/assert.h
+> @@ -256,4 +256,38 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+> 				    const struct va_format *message,
+> 				    struct string_stream *stream);
+> 
+> +#define KUNIT_INIT_MEM_ASSERT_STRUCT(text_, left_val, right_val, size_)   \
+> +	{                                                                 \
+> +		.assert = { .format = kunit_mem_assert_format },          \
+> +		.text = text_,                                            \
+> +		.left_value = left_val,                                   \
+> +		.right_value = right_val, .size = size_,                  \
+> +	}
+> +
+> +/**
+> + * struct kunit_mem_assert - An expectation/assertion that compares two
+> + *	memory blocks.
+> + * @assert: The parent of this type.
+> + * @text: Holds the textual representations of the operands and comparator.
+> + * @left_value: The actual evaluated value of the expression in the left slot.
+> + * @right_value: The actual evaluated value of the expression in the right slot.
+> + * @size: Size of the memory block analysed in bytes.
+> + *
+> + * Represents an expectation/assertion that compares two memory blocks. For
+> + * example, to expect that the first three bytes of foo is equal to the
+> + * first three bytes of bar, you can use the expectation
+> + * KUNIT_EXPECT_MEMEQ(test, foo, bar, 3);
+> + */
+> +struct kunit_mem_assert {
+> +	struct kunit_assert assert;
+> +	const struct kunit_binary_assert_text *text;
+> +	const void *left_value;
+> +	const void *right_value;
+> +	const size_t size;
+> +};
+> +
+> +void kunit_mem_assert_format(const struct kunit_assert *assert,
+> +			     const struct va_format *message,
+> +			     struct string_stream *stream);
+> +
+>  #endif /*  _KUNIT_ASSERT_H */
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 8ffcd7de9607..02eeaff1c58e 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -684,6 +684,36 @@ do {									       \
+> 			##__VA_ARGS__);					       \
+>  } while (0)
+> 
+> +#define KUNIT_MEM_ASSERTION(test,					       \
+> +			    assert_type,				       \
+> +			    left,					       \
+> +			    op,						       \
+> +			    right,					       \
+> +			    size,					       \
+> +			    fmt,					       \
+> +			    ...)					       \
+> +do {									       \
+> +	const void *__left = (left);					       \
+> +	const void *__right = (right);					       \
+> +	const size_t __size = (size);					       \
+> +	static const struct kunit_binary_assert_text __text = {		       \
+> +		.operation = #op,					       \
+> +		.left_text = #left,					       \
+> +		.right_text = #right,					       \
+> +	};								       \
+> +									       \
+> +	KUNIT_ASSERTION(test,						       \
+> +			assert_type,					       \
+> +			memcmp(__left, __right, __size) op 0,		       \
+> +			kunit_mem_assert,				       \
+> +			KUNIT_INIT_MEM_ASSERT_STRUCT(&__text,		       \
+> +						     __left,		       \
+> +						     __right,		       \
+> +						     __size),		       \
+> +			fmt,						       \
+> +			##__VA_ARGS__);					       \
+> +} while (0)
+> +
+>  #define KUNIT_PTR_NOT_ERR_OR_NULL_MSG_ASSERTION(test,			       \
+> 						assert_type,		       \
+> 						ptr,			       \
+> @@ -952,6 +982,52 @@ do {									       \
+> 				   fmt,					       \
+> 				   ##__VA_ARGS__)
+> 
+> +/**
+> + * KUNIT_EXPECT_MEMEQ() - Expects that the first @size bytes of @left and @right are equal.
+> + * @test: The test context object.
+> + * @left: An arbitrary expression that evaluates to the specified size.
+> + * @right: An arbitrary expression that evaluates to the specified size.
+> + * @size: Number of bytes compared.
+> + *
+> + * Sets an expectation that the values that @left and @right evaluate to are
+> + * equal. This is semantically equivalent to
+> + * KUNIT_EXPECT_TRUE(@test, !memcmp((@left), (@right), (@size))). See
+> + * KUNIT_EXPECT_TRUE() for more information.
+> + */
+> +#define KUNIT_EXPECT_MEMEQ(test, left, right, size) \
+> +	KUNIT_EXPECT_MEMEQ_MSG(test, left, right, size, NULL)
+> +
+> +#define KUNIT_EXPECT_MEMEQ_MSG(test, left, right, size, fmt, ...)	       \
+> +	KUNIT_MEM_ASSERTION(test,					       \
+> +			    KUNIT_EXPECTATION,				       \
+> +			    left, ==, right,				       \
+> +			    size,					       \
+> +			    fmt,					       \
+> +			    ##__VA_ARGS__)
+> +
+> +/**
+> + * KUNIT_EXPECT_MEMNEQ() - Expects that the first @size bytes of @left and @right are not equal.
+> + * @test: The test context object.
+> + * @left: An arbitrary expression that evaluates to the specified size.
+> + * @right: An arbitrary expression that evaluates to the specified size.
+> + * @size: Number of bytes compared.
+> + *
+> + * Sets an expectation that the values that @left and @right evaluate to are
+> + * not equal. This is semantically equivalent to
+> + * KUNIT_EXPECT_TRUE(@test, memcmp((@left), (@right), (@size))). See
+> + * KUNIT_EXPECT_TRUE() for more information.
+> + */
+> +#define KUNIT_EXPECT_MEMNEQ(test, left, right, size) \
+> +	KUNIT_EXPECT_MEMNEQ_MSG(test, left, right, size, NULL)
+> +
+> +#define KUNIT_EXPECT_MEMNEQ_MSG(test, left, right, size, fmt, ...)	       \
+> +	KUNIT_MEM_ASSERTION(test,					       \
+> +			    KUNIT_EXPECTATION,				       \
+> +			    left, !=, right,				       \
+> +			    size,					       \
+> +			    fmt,					       \
+> +			    ##__VA_ARGS__)
+> +
+>  /**
+>   * KUNIT_EXPECT_NULL() - Expects that @ptr is null.
+>   * @test: The test context object.
+> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+> index d00d6d181ee8..c346a8d7fa6e 100644
+> --- a/lib/kunit/assert.c
+> +++ b/lib/kunit/assert.c
+> @@ -204,3 +204,59 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+> 	kunit_assert_print_msg(message, stream);
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
+> +
+> +/* Adds a hexdump of a buffer to a string_stream comparing it with
+> + * a second buffer. The different bytes are marked with <>.
+> + */
+> +static void kunit_assert_hexdump(struct string_stream *stream,
+> +				 const void *buf,
+> +				 const void *compared_buf,
+> +				 const size_t len)
+> +{
+> +	size_t i;
+> +	const u8 *buf1 = buf;
+> +	const u8 *buf2 = compared_buf;
+> +
+> +	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT);
+> +
+> +	for (i = 0; i < len; ++i) {
+> +		if (!(i % 16) && i)
+> +			string_stream_add(stream, "\n" KUNIT_SUBSUBTEST_INDENT);
+> +
+> +		if (buf1[i] != buf2[i])
+> +			string_stream_add(stream, "<%02x>", buf1[i]);
+> +		else
+> +			string_stream_add(stream, " %02x ", buf1[i]);
+> +	}
+> +}
+> +
+> +void kunit_mem_assert_format(const struct kunit_assert *assert,
+> +			     const struct va_format *message,
+> +			     struct string_stream *stream)
+> +{
+> +	struct kunit_mem_assert *mem_assert;
+> +
+> +	mem_assert = container_of(assert, struct kunit_mem_assert,
+> +				  assert);
+> +
+> +	string_stream_add(stream,
+> +			  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
+> +			  mem_assert->text->left_text,
+> +			  mem_assert->text->operation,
+> +			  mem_assert->text->right_text);
+> +
+> +	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
+> +			  mem_assert->text->left_text);
+> +	kunit_assert_hexdump(stream, mem_assert->left_value,
+> +			     mem_assert->right_value, mem_assert->size);
+> +
+> +	string_stream_add(stream, "\n");
+> +
+> +	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
+> +			  mem_assert->text->right_text);
+> +	kunit_assert_hexdump(stream, mem_assert->right_value,
+> +			     mem_assert->left_value, mem_assert->size);
+> +
+> +	kunit_assert_print_msg(message, stream);
+> +}
+> +EXPORT_SYMBOL_GPL(kunit_mem_assert_format);
+> --
+> 2.37.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Muhammad Usama Anjum

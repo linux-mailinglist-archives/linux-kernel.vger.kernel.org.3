@@ -2,146 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA5C58B678
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 17:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A042858B67D
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 17:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbiHFP0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 11:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S232259AbiHFPbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 11:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbiHFP0u (ORCPT
+        with ESMTP id S232621AbiHFPat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 11:26:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3BBFD2B;
-        Sat,  6 Aug 2022 08:26:49 -0700 (PDT)
-Received: from [192.168.10.23] (unknown [39.46.64.186])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2DBC66601B6F;
-        Sat,  6 Aug 2022 16:26:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659799607;
-        bh=HdwNEzS966/lk5zR+dVV1aaOS5MuoSUELdjHQTmX1ck=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=HDDak1UXe3vv3h6kbHJQw7nwZjtGvmIT5Eswp61Mt56xLYkr35C+q+Rxh6u6G/emW
-         M+MX2oNqsYx//x0KRiMj6Y5LMa9eWduO6ou/m2yP1QodLjmPMEedsmwlZxCIeidodn
-         q8IC1H462Z/ZmRDBNSbwcpTV1D1+lNaao+Ffoqj/pPqOOF2HG0zJXAXYcCL6CMF5pG
-         J/1ln4sQOyT1cAfYtvrG73OTbkjpmInT9pkughxsjq6wk4SQ2rR+dqmjSUJKl+cQHG
-         Kbhkoo0M61HxjGHIKuV60hsv9Wmu7xVLA0B3LI2xVuZbETd7FhktzCbV5CtcBRTkUX
-         E6ALLlo/Nz/wQ==
-Message-ID: <55c8de7e-a6e8-fc79-794d-53536ad7a65d@collabora.com>
-Date:   Sat, 6 Aug 2022 20:26:38 +0500
+        Sat, 6 Aug 2022 11:30:49 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540B555A2;
+        Sat,  6 Aug 2022 08:30:49 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so3980089pjm.3;
+        Sat, 06 Aug 2022 08:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=+8arIIWrqLYF/o3BEvXU2VnFDak7xMmBm9io4/J2ydI=;
+        b=Ei+DYk+axtzU+BsRniNAiMAkkb0ZXgiTjBI8VqSG611UFdINc+MlQhnEVtNYjJlQdb
+         OkNRP+jjyfPpd0XIn62pU7JMG+1INaX0sXfoQKbu0d5g9AETw4/vlba29Yd34j/f9aIK
+         GnFVNucw1/Gz6D6FojjYQRM4RBmiTZWqR70nMmmeYmnmLOzm3qIxwTeBlEb58zw3rMF8
+         9v94OiE7CAxqaScpZKQs6KKMX8N+hoxrc9I7UsSbxtEJ6NhXwCud+c/MPok6PIqTDuKa
+         ntwENK78I8HVUOoNjJ1Y91XKP6F2BCwr5Zz/7enZto6IPJ7Xk8SBJ+p3GVnHGpsuxwMr
+         HOEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=+8arIIWrqLYF/o3BEvXU2VnFDak7xMmBm9io4/J2ydI=;
+        b=gKZLNw7YpD5yeUasHq8BGvKdx45rdToGugVnnJosV1LKvoe9VYvj6Z1CW5YhiI+ZR5
+         2KewuoFEaaRvLb4XA2fWPQBByeZesYuyIbuQgHBGAuuo3bszykfojw5vjXc/5Ugj3JJN
+         eGCbQ3scE3kfiNx2rbst7cTx7FIv+GbqDHBLmmBh9idCMnMJ3mEz0Fv4QuVEd9+o9ek2
+         /mEZCXXlWCj+GbqxzG/+KNYtRs9Zcz2kNCbdUiReIZ0kP3jj5BGXPCjeAREdY252tSnB
+         7jMXT1lbioe6QEYNOTtsYaQ2dXEKngfMSAF5pf14B46X+f5O04d8NJ8StRWhe5Ryeme3
+         Rxsw==
+X-Gm-Message-State: ACgBeo0o/olTXSER7Laigr58myOG6gHmPi8bsXXfdspaDooaShilSCDp
+        K74A0dIdap/hMTh7k4nhfdo=
+X-Google-Smtp-Source: AA6agR7NIZM93vzbTHouHPWJnZ0SIrIbtXc1bim8cgHbTimcvtQtks17T5gmw59L6J2OUwMSeVcfYQ==
+X-Received: by 2002:a17:90b:17c5:b0:1f4:f55d:24f3 with SMTP id me5-20020a17090b17c500b001f4f55d24f3mr12870531pjb.109.1659799848776;
+        Sat, 06 Aug 2022 08:30:48 -0700 (PDT)
+Received: from localhost.localdomain (ec2-13-113-80-70.ap-northeast-1.compute.amazonaws.com. [13.113.80.70])
+        by smtp.gmail.com with ESMTPSA id ds23-20020a17090b08d700b001f3162e4e55sm4867886pjb.35.2022.08.06.08.30.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 08:30:48 -0700 (PDT)
+From:   Zhang Boyang <zhangboyang.id@gmail.com>
+To:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        linux-block@vger.kernel.org
+Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Jan Kara <jack@suse.cz>, Ming Lei <ming.lei@redhat.com>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2 0/1] loop: introduce LO_FLAGS_NO_DEALLOC
+Date:   Sat,  6 Aug 2022 23:30:21 +0800
+Message-Id: <20220806153022.83748-1-zhangboyang.id@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     usama.anjum@collabora.com, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v2] selftests/net: Refactor xfrm_fill_key() to use array
- of structs
-Content-Language: en-US
-To:     Gautam Menghani <gautammenghani201@gmail.com>,
-        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org
-References: <20220803032312.3939-1-gautammenghani201@gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220803032312.3939-1-gautammenghani201@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/3/22 8:23 AM, Gautam Menghani wrote:
-> A TODO in net/ipsec.c asks to refactor the code in xfrm_fill_key() to
-> use set/map to avoid manually comparing each algorithm with the "name" 
-> parameter passed to the function as an argument. This patch refactors 
-> the code to create an array of structs where each struct contains the 
-> algorithm name and its corresponding key length.
-> 
-> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
-> ---
-> changes in v2:
-> 1. Fix the compilation warnings for struct and variable declaration
-> 
->  tools/testing/selftests/net/ipsec.c | 108 +++++++++++++---------------
->  1 file changed, 49 insertions(+), 59 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
-> index cc10c10c5ed9..4a0eeb5b71d2 100644
-> --- a/tools/testing/selftests/net/ipsec.c
-> +++ b/tools/testing/selftests/net/ipsec.c
-> @@ -58,6 +58,8 @@
->  #define VETH_FMT	"ktst-%d"
->  #define VETH_LEN	12
->  
-> +#define XFRM_ALGO_NR_KEYS 29
-> +
->  static int nsfd_parent	= -1;
->  static int nsfd_childa	= -1;
->  static int nsfd_childb	= -1;
-> @@ -75,6 +77,46 @@ const unsigned int ping_timeout		= 300;
->  const unsigned int ping_count		= 100;
->  const unsigned int ping_success		= 80;
->  
-> +struct xfrm_key_entry {
-> +	char algo_name[35];
-> +	int key_len;
-> +};
-> +
-> +struct xfrm_key_entry xfrm_key_entries[XFRM_ALGO_NR_KEYS];
-There seems no need to fill up xfrm_key_entries at run time. Please fill
-them at compile time.
+Hi,
 
-struct xfrm_key_entry xfrm_key_entries[] = {
-	{"digest_null", 0},
-	{"ecb(cipher_null)", 0},
-	...
-};
+This patch gives userspace ability to prevent underlying file of loop
+device to be sparse. Currently, if loop device is 'trimmed'
+(BLKDISCARD), then underlying file will always become sparse and disk
+space freed. This behaviour is good for thin provisioning but not good
+for preallocated disk images. This patch introduces LO_FLAGS_NO_DEALLOC
+flag, which will write zeroes to underlying file instead of punching
+holes when BLKDISCARD is requested. Thus reducing file fragmentation of
+preallocated disk images and improve performance.
 
-> +
-> +static void init_xfrm_algo_keys(void)
-> +{
-> +	xfrm_key_entries[0] = (struct xfrm_key_entry) {"digest_null", 0};
-> +	xfrm_key_entries[1] = (struct xfrm_key_entry) {"ecb(cipher_null)", 0};
-> +	xfrm_key_entries[2] = (struct xfrm_key_entry) {"cbc(des)", 64};
-> +	xfrm_key_entries[3] = (struct xfrm_key_entry) {"hmac(md5)", 128};
-> +	xfrm_key_entries[4] = (struct xfrm_key_entry) {"cmac(aes)", 128};
-> +	xfrm_key_entries[5] = (struct xfrm_key_entry) {"xcbc(aes)", 128};
-> +	xfrm_key_entries[6] = (struct xfrm_key_entry) {"cbc(cast5)", 128};
-> +	xfrm_key_entries[7] = (struct xfrm_key_entry) {"cbc(serpent)", 128};
-> +	xfrm_key_entries[8] = (struct xfrm_key_entry) {"hmac(sha1)", 160};
-> +	xfrm_key_entries[9] = (struct xfrm_key_entry) {"hmac(rmd160)", 160};
-> +	xfrm_key_entries[10] = (struct xfrm_key_entry) {"cbc(des3_ede)", 192};
-> +	xfrm_key_entries[11] = (struct xfrm_key_entry) {"hmac(sha256)", 256};
-> +	xfrm_key_entries[12] = (struct xfrm_key_entry) {"cbc(aes)", 256};
-> +	xfrm_key_entries[13] = (struct xfrm_key_entry) {"cbc(camellia)", 256};
-> +	xfrm_key_entries[14] = (struct xfrm_key_entry) {"cbc(twofish)", 256};
-> +	xfrm_key_entries[15] = (struct xfrm_key_entry) {"rfc3686(ctr(aes))", 288};
-> +	xfrm_key_entries[16] = (struct xfrm_key_entry) {"hmac(sha384)", 384};
-> +	xfrm_key_entries[17] = (struct xfrm_key_entry) {"cbc(blowfish)", 448};
-> +	xfrm_key_entries[18] = (struct xfrm_key_entry) {"hmac(sha512)", 512};
-> +	xfrm_key_entries[19] = (struct xfrm_key_entry) {"rfc4106(gcm(aes))-128", 160};
-> +	xfrm_key_entries[20] = (struct xfrm_key_entry) {"rfc4543(gcm(aes))-128", 160};
-> +	xfrm_key_entries[21] = (struct xfrm_key_entry) {"rfc4309(ccm(aes))-128", 152};
-> +	xfrm_key_entries[22] = (struct xfrm_key_entry) {"rfc4106(gcm(aes))-192", 224};
-> +	xfrm_key_entries[23] = (struct xfrm_key_entry) {"rfc4543(gcm(aes))-192", 224};
-> +	xfrm_key_entries[24] = (struct xfrm_key_entry) {"rfc4309(ccm(aes))-192", 216};
-> +	xfrm_key_entries[25] = (struct xfrm_key_entry) {"rfc4106(gcm(aes))-256", 288};
-> +	xfrm_key_entries[26] = (struct xfrm_key_entry) {"rfc4543(gcm(aes))-256", 288};
-> +	xfrm_key_entries[27] = (struct xfrm_key_entry) {"rfc4309(ccm(aes))-256", 280};
-> +	xfrm_key_entries[28] = (struct xfrm_key_entry) {"rfc7539(chacha20,poly1305)-128", 0};
-> +}
+I will also submit patches to util-linux to provide userspace support if
+this patch is merged.
 
--- 
-Muhammad Usama Anjum
+Changes in V1->V2:
+Renamed NODEALLOC to NO_DEALLOC, to avoid confusion between NO_DEALLOC
+and NODE_ALLOC. Suggested by Jens Axboe.
+
+Best Regards,
+Zhang Boyang 
+
+

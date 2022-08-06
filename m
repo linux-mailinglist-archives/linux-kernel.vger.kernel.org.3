@@ -2,161 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95CD58B734
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 19:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EBC58B748
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 19:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232537AbiHFRCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 13:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
+        id S232360AbiHFRaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 13:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiHFRCe (ORCPT
+        with ESMTP id S231597AbiHFRaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 13:02:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E9355A8;
-        Sat,  6 Aug 2022 10:02:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D2D7611ED;
-        Sat,  6 Aug 2022 17:02:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ABCCC433C1;
-        Sat,  6 Aug 2022 17:02:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659805352;
-        bh=065uU3xsQXc3K3lPrTGT6NFVQ52mQXrrPRYVEbifapE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TRdCuqPzo+OuUDezPf8bt7U2/rXipGVTXLwtvRvjE0zhqwkUcrmB4p2+jEd/hjfOX
-         Vp3YvlVFDjPRpMv+qVIQj8oyqpP4SLz0gIRxPmChEYjulDbO+WvvOXti1IZ7uzYLCx
-         dGBqU2cEyIbhtHarQaxEYdECfQ8xLf2WTEVeMz2rdctMf+UGyQdvdTtydi9WiHFVid
-         NphBW23AsUbwT2H6XkQl7QjvWMJ0sFxY8q7atnQSyUML9zvIYyutxsuoROi89NLZ9w
-         lQ0/tloxlxKMxPuJd3duJ/ZL1gsf9J9ms6tzWky4KEWF86QXm4RlJEKLnnYN7ddhxm
-         2VdH3qra+Tm6Q==
-Date:   Sat, 6 Aug 2022 18:12:52 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai.pt@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Potin Lai <potin.lai@quantatw.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] iio: humidity: hdc100x: add manufacturer and
- device ID check
-Message-ID: <20220806181252.7633f19d@jic23-huawei>
-In-Reply-To: <CAHp75VfOPgDbTdt1EXJ5+exGXCZeT9VdtcOUDt_g4fn20S2Qwg@mail.gmail.com>
-References: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
-        <20220728125435.3336618-3-potin.lai.pt@gmail.com>
-        <20220731130959.50826fc4@jic23-huawei>
-        <4ea235d1-46c1-87de-760f-dc4775007ae0@gmail.com>
-        <CAHp75VcZqTpmvVV=u4t=fdx=ffzksoWVDFZmq6Lfr6DrFrB2aA@mail.gmail.com>
-        <Yuf7UAVrIJCnO40X@heinlein.stwcx.org.github.beta.tailscale.net>
-        <CAHp75Vfe33oJAf1j27B-pTd84kX5JNPd+e16ygLYgZjCs=ZJfQ@mail.gmail.com>
-        <CAHp75VfOPgDbTdt1EXJ5+exGXCZeT9VdtcOUDt_g4fn20S2Qwg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 6 Aug 2022 13:30:21 -0400
+X-Greylist: delayed 156990 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 06 Aug 2022 10:30:19 PDT
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44A76370
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 10:30:19 -0700 (PDT)
+Date:   Sat, 06 Aug 2022 17:30:04 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1659807016; x=1660066216;
+        bh=vmIAc6IeQ/s610io59ZSvNdz2SA0u99rz7mT5BOM5/8=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=MG7gKhgZ6kH4kolU5cTpxe7UUWmOZcQfTZf1x45NVYdqxoxq+I7SE1O8beS1caVqC
+         kVT9scIrHdVX1JH0PpjU8drbOPWk2D0oghadiOAiQVYJrnP9vx9mMLXTN7HAkmZMdG
+         sfR9VayYokK1+/+R8wx0Ma+XOT2aaPV7eEcXWHA32XqDdEKibbaVhvRjTKCxgjwGZZ
+         TFphmxJNV5ITWyyBZEmd3snn2HZys/XISCNT+z1l6ZjwPq7utjuNgL/VUCmFF6jkd/
+         7HxNLUYMeJ+EFyGbZ6VBcIu1aaSlINOUTKuu4JIQJ48X2W/PExsWUTXRF8PrtqpEeL
+         r5HrSmyI+s5OA==
+To:     "Luke D. Jones" <luke@ljones.dev>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Subject: Re: [PATCH 1/5] asus-wmi: Add basic support for TUF laptop keyboard RGB
+Message-ID: <06B-xdz9pdNnj8DeXMMmdUi9Z7NAmQd3mFSHALyKMARSKZmal3FTLvXYKeF7SX_h78ko8RCpbC3t9wUanK6T2nNz1sYVtrSSGEcsfWAxtXY=@protonmail.com>
+In-Reply-To: <20220805081909.10962-2-luke@ljones.dev>
+References: <20220805081909.10962-1-luke@ljones.dev> <20220805081909.10962-2-luke@ljones.dev>
+Feedback-ID: 20568564:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 1 Aug 2022 18:30:16 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-
-> On Mon, Aug 1, 2022 at 6:26 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Mon, Aug 1, 2022 at 6:12 PM Patrick Williams <patrick@stwcx.xyz> wrote:  
-> > > On Mon, Aug 01, 2022 at 10:22:16AM +0200, Andy Shevchenko wrote:  
-> > > > On Mon, Aug 1, 2022 at 3:52 AM Potin Lai <potin.lai.pt@gmail.com> wrote:  
-> > > > > On 7/31/22 20:09, Jonathan Cameron wrote:
-> > > > > In our hardware board, we have "ti,hdc1080" as main source, and "silabs,si7020"
-> > > > > for 2nd source. This two chip are locate at same bus and same slave address,
-> > > > > and we want to use multiple compatibles to support both chips with single device
-> > > > > node in device tree.
-> > > > >
-> > > > > Ex:
-> > > > > compatible = "ti,hdc1099", "silabs,si7020";  
-> > > >
-> > > > This is simply broken DT, you must not put incompatible hardware on
-> > > > the same compatible string. DT is by definition the description of a
-> > > > certain platform. What you showed is a combination of incompatible
-> > > > chips in a single DT.  
-> > >
-> > > We were mistaken that this is the appropriate way to specify this
-> > > behavior, partially because it works as long as the probe functions
-> > > return an error the next matching driver from the compatible will probe.
-> > > It does seem that specifying two different compatibles like this would
-> > > violate the intention of the DT spec:
-> > >
-> > >     The property value consists of a concatenated list of null terminated
-> > >     strings, from most specific to most general. They allow a device to
-> > >     express its compatibility with a family of similar devices, potentially
-> > >     allowing a single device driver to match against several devices.
-> > >  
-> > > >  
-> > > > > In order to support this, I need to add ID checking mechanism into the current
-> > > > > hdc100x driver, so the si7020 chip will fail to probe with hdc100x driver
-> > > > > (because the ID checking is not failed), then success probe with si7020.
-> > > > >
-> > > > > Base on you explanation, it looks multiple compatibles is not suitable in this
-> > > > > case? Would you mind advise us what would be the better approach for our case?  
-> > > >
-> > > > If I may advise... fix your DT by dropping the wrong compatible item.  
-> > >
-> > > This doesn't really give any helpful advice.  
-> >
-> > Sorry to hear this, but it's the best and correct solution to your
-> > problem. Believe me, many Linux people will tell you the same.
-> >  
-> > > The reality is that these two chips are pin compatible and function
-> > > compatible but not driver compatible.  Boards have been manufactured
-> > > which are identical except for this chip replaced, due various to chip
-> > > shortages.
-> > >
-> > > Making probe fail so that the next 'compatible' is chosen sounds like it
-> > > isn't desired.  I'm pretty sure you can't have two DT entries for the
-> > > same i2c address, but with different 'compatible" properties, and even
-> > > if we did you'd still need probe to fail on one of them.
-> > >
-> > > Are there any other suggestions for being able to inform the kernel that
-> > > one of two chips might be present?  
-> 
-> Btw, how would it be solved in ACPI is the playing status bits by
-> firmware, depending on the run-time detected environment (straps,
-> other means). So, you may fix it on bootloader / firmware level by
-> patching DTB with status okay / disabled. I believe in DTB is the
-> number, which can be easily binary patched.
-> 
-
-Indeed, it's common to have boot firmware prelinux modify the DT.
-
-That firmware can do probing if necessary to find out which device is present
-and by the time Linux loads the DT should be correct for the particular
-hardware.  Often this is done from a high level 'board ID' but nothing
-stops you doing it this case.
-
-I've cc'd the device tree binding maintainers and list, who may be able
-to give you some useful pointers to examples of people doing this
-in their boot loaders etc.
-
-Thanks,
-
-Jonathan
+Hi
 
 
-> > I guess there is a gap in understanding what DT is. DT is the
-> > description of the *platform*. Changing any discrete component on the
-> > platform is changing the platform.  
-> 
-> 
+2022. augusztus 5., p=C3=A9ntek 10:19 keltez=C3=A9ssel, Luke D. Jones <luke=
+@ljones.dev> =C3=ADrta:
 
+> Adds support for TUF laptop RGB control via the multicolor LED API.
+>
+> As this is the base essentials for adjusting the RGB, it sets the
+> default mode of the keyboard to static. This overwrites the booted
+> state of the keyboard.
+>
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+> ---
+>  drivers/platform/x86/asus-wmi.c            | 89 ++++++++++++++++++++++
+>  include/linux/platform_data/x86/asus-wmi.h |  3 +
+>  2 files changed, 92 insertions(+)
+>
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-=
+wmi.c
+> index 0e7fbed8a50d..33384e3321bb 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/input/sparse-keymap.h>
+>  #include <linux/kernel.h>
+>  #include <linux/leds.h>
+> +#include <linux/led-class-multicolor.h>
+>  #include <linux/module.h>
+>  #include <linux/pci.h>
+>  #include <linux/pci_hotplug.h>
+> @@ -190,6 +191,11 @@ struct fan_curve_data {
+>  =09u8 percents[FAN_CURVE_POINTS];
+>  };
+>
+> +struct keyboard_rgb_led {
+> +=09struct led_classdev_mc dev;
+> +=09struct mc_subled subled_info[3]; /* r g b */
+> +};
+> +
+>  struct asus_wmi {
+>  =09int dsts_id;
+>  =09int spec;
+> @@ -234,6 +240,9 @@ struct asus_wmi {
+>  =09bool dgpu_disable_available;
+>  =09bool dgpu_disable;
+>
+> +=09bool keyboard_rgb_mode_available;
+
+I think this variable could be introduced in the next patch, it is not used=
+ in this one.
+
+
+> +=09struct keyboard_rgb_led keyboard_rgb_mode;
+> +
+>  =09bool throttle_thermal_policy_available;
+>  =09u8 throttle_thermal_policy_mode;
+>
+> @@ -1028,6 +1037,35 @@ static enum led_brightness lightbar_led_get(struct=
+ led_classdev *led_cdev)
+>  =09return result & ASUS_WMI_DSTS_LIGHTBAR_MASK;
+>  }
+>
+> +static int tuf_rgb_brightness_set(struct led_classdev *cdev,
+> +=09enum led_brightness brightness)
+> +{
+> +=09u8 r, g, b;
+> +=09int err;
+> +=09u32 ret;
+> +
+> +=09struct led_classdev_mc *mc_cdev =3D lcdev_to_mccdev(cdev);
+> +
+> +=09led_mc_calc_color_components(mc_cdev, brightness);
+> +=09r =3D mc_cdev->subled_info[0].brightness;
+> +=09g =3D mc_cdev->subled_info[1].brightness;
+> +=09b =3D mc_cdev->subled_info[2].brightness;
+> +
+> +=09/* Writing out requires some defaults. This will overwrite boot mode =
+*/
+> +=09err =3D asus_wmi_evaluate_method3(ASUS_WMI_METHODID_DEVS, ASUS_WMI_DE=
+VID_TUF_RGB_MODE,
+> +=09=09=091 | 0 | (r << 16) | (g << 24), (b) | 0, &ret);
+> +=09if (err) {
+> +=09=09pr_err("Unable to set TUF RGB data?\n");
+> +=09=09return err;
+> +=09}
+> +=09return 0;
+> +}
+> +
+> +static enum led_brightness tuf_rgb_brightness_get(struct led_classdev *c=
+dev)
+> +{
+> +=09return cdev->brightness;
+> +}
+
+If you can't query the brightness from the hardware, I think you can leave
+`led_classdev::brightness_get` to be `NULL`. This callback is only used fro=
+m
+`led_update_brightness()` as far as I can see.
+
+
+> +
+>  static void asus_wmi_led_exit(struct asus_wmi *asus)
+>  {
+>  =09led_classdev_unregister(&asus->kbd_led);
+> @@ -1105,6 +1143,57 @@ static int asus_wmi_led_init(struct asus_wmi *asus=
+)
+>  =09=09=09=09=09   &asus->lightbar_led);
+>  =09}
+>
+> +=09if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_MODE)) {
+> +=09=09struct led_classdev_mc *mc_cdev;
+> +=09=09struct mc_subled *mc_led_info;
+> +=09=09u8 brightness =3D 127;
+> +
+> +=09=09mc_cdev =3D &asus->keyboard_rgb_mode.dev;
+> +
+> +=09=09/*
+> +=09=09 * asus::kbd_backlight still controls a base 3-level backlight and=
+ when
+> +=09=09 * it is on 0, the RGB is not visible at all. RGB should be treate=
+d as
+> +=09=09 * an additional step.
+> +=09=09 */
+> +=09=09mc_cdev->led_cdev.name =3D "asus::multicolour::kbd_backlight";
+> +=09=09mc_cdev->led_cdev.flags =3D LED_CORE_SUSPENDRESUME | LED_RETAIN_AT=
+_SHUTDOWN;
+> +=09=09mc_cdev->led_cdev.brightness_set_blocking =3D tuf_rgb_brightness_s=
+et;
+> +=09=09mc_cdev->led_cdev.brightness_get =3D tuf_rgb_brightness_get;
+> +
+> +=09=09/* Let the multicolour LED own the info */
+> +=09=09mc_led_info =3D devm_kmalloc_array(
+> +=09=09=09&asus->platform_device->dev,
+> +=09=09=093,
+> +=09=09=09sizeof(*mc_led_info),
+> +=09=09=09GFP_KERNEL | __GFP_ZERO);
+> +
+
+I am a bit confused as to why dynamic allocation is needed here. Haven't yo=
+u
+already "allocated" the storage in `keyboard_rgb_led::subled_info`?
+
+
+> +=09=09if (!mc_led_info)
+> +=09=09=09return -ENOMEM;
+> +
+> +=09=09mc_led_info[0].color_index =3D LED_COLOR_ID_RED;
+> +=09=09mc_led_info[1].color_index =3D LED_COLOR_ID_GREEN;
+> +=09=09mc_led_info[2].color_index =3D LED_COLOR_ID_BLUE;
+> +
+> +=09=09/*
+> +=09=09 * It's not possible to get last set data from device so set defau=
+lts
+> +=09=09 * to make it safe for a user to change either RGB or modes. We do=
+n't
+> +=09=09 * write these defaults to the device because they will overwrite =
+a
+> +=09=09 * users last saved boot setting (in NVRAM).
+> +=09=09 */
+> +=09=09mc_cdev->led_cdev.brightness =3D brightness;
+> +=09=09mc_cdev->led_cdev.max_brightness =3D brightness;
+> +=09=09mc_led_info[0].intensity =3D brightness;
+> +=09=09mc_led_info[0].brightness =3D mc_cdev->led_cdev.brightness;
+> +=09=09mc_led_info[1].brightness =3D mc_cdev->led_cdev.brightness;
+> +=09=09mc_led_info[2].brightness =3D mc_cdev->led_cdev.brightness;
+> +=09=09led_mc_calc_color_components(mc_cdev, brightness);
+> +
+> +=09=09mc_cdev->subled_info =3D mc_led_info;
+> +=09=09mc_cdev->num_colors =3D 3;
+
+`led_mc_calc_color_components()` uses `led_classdev_mc::num_colors`, so I t=
+hink
+it needs to be set before calling it. But that function sets the subled bri=
+ghtness
+based on the intensity, so it will overwrite the brightness values that hav=
+e just
+been set.
+
+
+> +
+> +=09=09rv =3D led_classdev_multicolor_register(&asus->platform_device->de=
+v, mc_cdev);
+> +=09}
+> +
+>  error:
+>  =09if (rv)
+>  =09=09asus_wmi_led_exit(asus);
+> diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/p=
+latform_data/x86/asus-wmi.h
+> index a571b47ff362..d63c9945a17d 100644
+> --- a/include/linux/platform_data/x86/asus-wmi.h
+> +++ b/include/linux/platform_data/x86/asus-wmi.h
+> @@ -98,6 +98,9 @@
+>  /* dgpu on/off */
+>  #define ASUS_WMI_DEVID_DGPU=09=090x00090020
+>
+> +/* TUF laptop RGB control */
+> +#define ASUS_WMI_DEVID_TUF_RGB_MODE=090x00100056
+> +
+>  /* DSTS masks */
+>  #define ASUS_WMI_DSTS_STATUS_BIT=090x00000001
+>  #define ASUS_WMI_DSTS_UNKNOWN_BIT=090x00000002
+> --
+> 2.37.1
+>
+>
+
+
+Regards,
+Barnab=C3=A1s P=C5=91cze

@@ -2,169 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D90558B870
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 23:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597F958B875
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 23:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233616AbiHFV2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 17:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        id S233378AbiHFViR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 17:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbiHFV2o (ORCPT
+        with ESMTP id S229740AbiHFViP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 17:28:44 -0400
-Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3742F5A8
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 14:28:41 -0700 (PDT)
-Date:   Sat, 06 Aug 2022 21:28:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1659821319; x=1660080519;
-        bh=3t+gm/btLHdYkkZ3NYKAbKt5z6sF6HBJyqJOtSUuQ1s=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=ZDLi9yFLqFvPl8PXPH6W+mA7LQJriDtwjhXbPycmo6Z7qDf3glJxf5Y0bQSGsM+ai
-         EjqAqQGqzewMZ3DawEPtRqCOBesJmxc83bP2ftBsX8264xcac5LDHI9pRS0OSeeyw8
-         eLe32FYpgQzfxQcG+eSwutmgHgVWA5LWNWEOA2/4=
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Reply-To: Caleb Connolly <caleb@connolly.tech>
-Subject: Re: [PATCH] soc: qcom: rpmhpd: Use highest corner until sync_state
-Message-ID: <151c8978-1fa8-6b21-8544-baf5abb45241@connolly.tech>
-In-Reply-To: <20220806155035.968340-1-bjorn.andersson@linaro.org>
-References: <20220806155035.968340-1-bjorn.andersson@linaro.org>
-Feedback-ID: 10753939:user:proton
+        Sat, 6 Aug 2022 17:38:15 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE53FB1CB;
+        Sat,  6 Aug 2022 14:38:13 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id o1so4166653qkg.9;
+        Sat, 06 Aug 2022 14:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=MfKNCdoirxc2xo2dJ2ZnrKHYVycXxfrXH8JNH8fm1Y8=;
+        b=YBzle4Bzk8bMM2eG1wG0QftAx91m2KHC2NzsZY+bkn3ddnh1U940M/jxSnYcV7UjIc
+         pKdr3JCm6dxKjr9Hb2YoyGGOlso4bztjd2UILk6zq6O2FGtlS2u6FlMhyadpHXVi+OQ4
+         VLFnXJt0xdQYzrfMfNi5GuvEG+2nm5LIWyd/WwVe/+vURptktX6hP5gZ+kqvBnq5GW/x
+         uOYMEySPd9JJ4EjR9eel8ie2TJuDeTQgonSosqk441GIXY39IMjaq9ezX4siGpJPGaNe
+         dumUqe4+XqL9xkAHhTVD7Bi6ZhQIocYnNbNY/wY9R8aWANkblzYAgHFibHzxlMWRpxl6
+         C9vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=MfKNCdoirxc2xo2dJ2ZnrKHYVycXxfrXH8JNH8fm1Y8=;
+        b=jhXM5SpUEo1eSYdwewxz8vqPPgQxhOtjLvk2RQ9XT9GeovHojp1n8IyQhoWaoDt351
+         NtFkS1z8g9qheIUKE14Z81XNPmrjf/+qQSIV4EMzYCoGYkiniaxgrSVXmggwBtGIzxWG
+         0ig8eQpBDnnFvtH/Mj/FUGC79hnEDLtp0XPC+iceRWD9Wd9L5uOzN6rXhtmfbBy0zcZ1
+         dIjmLThx4kmW0zhugu+YCSgfQEBxFTOlsUBOxlUVjktITgacOobFYRiFQ+IfNQjTnsvJ
+         ketooLWNvWJdU4KyJVMx2JbcC3DO7GnQzi/ios7D9k2wPtuBMJduQfF4itSX+fvQAt2k
+         2Xhg==
+X-Gm-Message-State: ACgBeo3rPao2uXUDYvenAs/rDHa+mMWQbEiQmDPj36DVQZAO7IEcw+QD
+        PX9Hg1x/2sUV7resEc7qTaNHSevmmAo3RY6VfL8=
+X-Google-Smtp-Source: AA6agR56Da74aJjiF+4nLUKRTvJqjbVZJG6Bbd44zgX3ASwhuBBjAStAwYDAMCCSp6ij5AOPtil/tLlaj2OWYcKKILA=
+X-Received: by 2002:a05:620a:8018:b0:6b6:5df:977 with SMTP id
+ ee24-20020a05620a801800b006b605df0977mr9477710qkb.320.1659821892589; Sat, 06
+ Aug 2022 14:38:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220806163255.10404-1-markuss.broks@gmail.com> <20220806163255.10404-4-markuss.broks@gmail.com>
+In-Reply-To: <20220806163255.10404-4-markuss.broks@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 6 Aug 2022 23:37:35 +0200
+Message-ID: <CAHp75VcMgFQJoFC68GCTej--44+iFWXEpjh2Q7O0XbHk588OCw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] efi: earlycon: Add support for generic
+ framebuffers and move to console subsystem
+To:     Markuss Broks <markuss.broks@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Aug 6, 2022 at 6:38 PM Markuss Broks <markuss.broks@gmail.com> wrote:
+>
+> Add early console support for generic linear framebuffer devices.
+> This driver supports probing from cmdline early parameters
+> or from the device-tree using information in simple-framebuffer node.
+> The EFI functionality should be retained in whole.
+> The driver was disabled on ARM because of a bug in early_ioremap
 
+We refer to functions like func().
 
-On 06/08/2022 16:50, Bjorn Andersson wrote:
-> In some cases the hardware that the bootloader has left configured
-> depends on RPMH power domains for their operation up until the point
-> where the related Linux device driver probes and can inherit that
-> configuration, or power down the hardware gracefully.
->
-> Unfortunately as Linux probes the releavant drivers in sequence there
-> are periods during the Linux boot flow where either the genpd refcount
-> will reach 0, or worse where the active performance_state votes does not
-> meet the requirements of the state that the hardware was left in.
->
-> One specific example of this is during boot of e.g. SM8150/SC8180X,
-> where the display clock controller probes, without any particular
-> performance state needs (to access its registers). This will drop the
-> MMCX rail to MIN_SVS, which isn't sufficient to sustain the clock rates
-> that the later probing MDP is configured to. This results in an
-> unrecoverable system state.
-Hi Bjorn,
+> implementation on ARM and on IA64 because of lack of early_memremap_prot.
 
-Seems like my sm8150 device dies before getting this far, bah!
+Ditto.
 
->
-> Handle both these cases by keeping the RPMH power-domais that are
-> referenced voted for highest state, until sync_state indicates that all
-> devices referencing the RPMH power-domain driver has been probed.
->
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Caleb Connolly <caleb@connolly.tech>
-> ---
->   drivers/soc/qcom/rpmhpd.c | 35 ++++++++++++++++++++++++++++++++++-
->   1 file changed, 34 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-> index 092f6ab09acf..494bb6c75ed7 100644
-> --- a/drivers/soc/qcom/rpmhpd.c
-> +++ b/drivers/soc/qcom/rpmhpd.c
-> @@ -39,6 +39,7 @@
->    * @res_name:=09=09Resource name used for cmd-db lookup
->    * @addr:=09=09Resource address as looped up using resource name from
->    *=09=09=09cmd-db
-> + * @state_synced:       Indicator that sync_state has been invoked for t=
-he rpmhpd resource
->    */
->   struct rpmhpd {
->   =09struct device=09*dev;
-> @@ -54,6 +55,7 @@ struct rpmhpd {
->   =09bool=09=09enabled;
->   =09const char=09*res_name;
->   =09u32=09=09addr;
-> +=09bool=09=09state_synced;
->   };
->
->   struct rpmhpd_desc {
-> @@ -493,7 +495,13 @@ static int rpmhpd_aggregate_corner(struct rpmhpd *pd=
-, unsigned int corner)
->   =09unsigned int this_active_corner =3D 0, this_sleep_corner =3D 0;
->   =09unsigned int peer_active_corner =3D 0, peer_sleep_corner =3D 0;
->
-> -=09to_active_sleep(pd, corner, &this_active_corner, &this_sleep_corner);
-> +=09if (pd->state_synced) {
-> +=09=09to_active_sleep(pd, corner, &this_active_corner, &this_sleep_corne=
-r);
-> +=09} else {
-> +=09=09/* Clamp to highest corner if sync_state hasn't happened */
-> +=09=09this_active_corner =3D pd->level_count - 1;
-> +=09=09this_sleep_corner =3D pd->level_count - 1;
-> +=09}
->
->   =09if (peer && peer->enabled)
->   =09=09to_active_sleep(peer, peer->corner, &peer_active_corner,
-> @@ -708,11 +716,36 @@ static int rpmhpd_probe(struct platform_device *pde=
-v)
->   =09return of_genpd_add_provider_onecell(pdev->dev.of_node, data);
->   }
->
-> +static void rpmhpd_sync_state(struct device *dev)
+...
+
+> +#include <asm/early_ioremap.h>
+
+Can it be placed after linux/* ones?
+
+> +#include <linux/console.h>
+> +#include <linux/efi.h>
+> +#include <linux/font.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mm.h>
+> +#include <linux/of.h>
+> +#include <linux/of_fdt.h>
+> +#include <linux/serial_core.h>
+> +#include <linux/screen_info.h>
+
+...
+
+> +static int __init simplefb_earlycon_remap_fb(void)
 > +{
-> +=09const struct rpmhpd_desc *desc =3D of_device_get_match_data(dev);
-> +=09struct rpmhpd **rpmhpds =3D desc->rpmhpds;
-> +=09unsigned int corner;
-> +=09struct rpmhpd *pd;
-> +=09unsigned int i;
+> +       unsigned long mapping;
+
++ Blank line.
+
+> +       /* bail if there is no bootconsole or it has been disabled already */
+> +       if (!earlycon_console || !(earlycon_console->flags & CON_ENABLED))
+> +               return 0;
 > +
-> +=09mutex_lock(&rpmhpd_lock);
-> +=09for (i =3D 0; i < desc->num_pds; i++) {
-> +=09=09pd =3D rpmhpds[i];
-> +=09=09if (!pd)
-> +=09=09=09continue;
+> +       if (region_intersects(info.phys_base, info.size,
+> +                             IORESOURCE_SYSTEM_RAM, IORES_DESC_NONE) == REGION_INTERSECTS)
+> +               mapping = MEMREMAP_WB;
+> +       else
+> +               mapping = MEMREMAP_WC;
+
+> +       info.virt_base = memremap(info.phys_base, info.size, mapping);
 > +
-> +=09=09pd->state_synced =3D true;
-> +=09=09if (pd->enabled)
-> +=09=09=09corner =3D max(pd->corner, pd->enable_corner);
-> +=09=09else
-> +=09=09=09corner =3D 0;
-> +=09=09rpmhpd_aggregate_corner(pd, corner);
-> +=09}
-> +=09mutex_unlock(&rpmhpd_lock);
+> +       return info.virt_base ? 0 : -ENOMEM;
+
+Easier to read the standard pattern:
+
+  if (!info.virt_base)
+    return -ENOMEM;
+
+  return 0;
+
 > +}
+
+...
+
+> +static void simplefb_earlycon_write_char(u8 *dst, unsigned char c, unsigned int h)
+> +{
+> +       const u8 *src;
+> +       int m, n, bytes;
+> +       u8 x;
 > +
->   static struct platform_driver rpmhpd_driver =3D {
->   =09.driver =3D {
->   =09=09.name =3D "qcom-rpmhpd",
->   =09=09.of_match_table =3D rpmhpd_match_table,
->   =09=09.suppress_bind_attrs =3D true,
-> +=09=09.sync_state =3D rpmhpd_sync_state,
->   =09},
->   =09.probe =3D rpmhpd_probe,
->   };
-> --
-> 2.35.1
->
+> +       bytes = BITS_TO_BYTES(font->width);
+> +       src = font->data + c * font->height * bytes + h * bytes;
+> +
+> +       for (m = 0; m < font->width; m++) {
+> +               n = m % 8;
+> +               x = *(src + m / 8);
 
---
-Kind Regards,
-Caleb
+I would write it as
 
+  x = src[m / 8];
+
+> +               if ((x >> (7 - n)) & 1)
+
+> +                       memset(dst, 0xff, (info.depth / 8));
+
+Too many parentheses.
+
+> +               else
+> +                       memset(dst, 0, (info.depth / 8));
+
+Ditto.
+
+> +               dst += (info.depth / 8);
+
+Ditto.
+
+> +       }
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko

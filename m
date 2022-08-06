@@ -2,37 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6CD58B496
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 10:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5914D58B497
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 10:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbiHFIeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 04:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
+        id S229493AbiHFIhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 04:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiHFIee (ORCPT
+        with ESMTP id S239360AbiHFIhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 04:34:34 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C646EE0C;
-        Sat,  6 Aug 2022 01:34:32 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oKFGR-0004hW-00; Sat, 06 Aug 2022 10:34:31 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 5B07AC01C5; Sat,  6 Aug 2022 10:34:23 +0200 (CEST)
-Date:   Sat, 6 Aug 2022 10:34:23 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v6.0-rc1
-Message-ID: <20220806083423.GA3635@alpha.franken.de>
+        Sat, 6 Aug 2022 04:37:19 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4164115A26
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 01:37:18 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id p18so4473982plr.8
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 01:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ENYPjO+7DVwUTj8vFxUFRI0wdfEhcNOTkydmeMf0tRM=;
+        b=yeNmY0mVpj+jW2O/eYyihs0v1xwAeVRFVZXTVBR05gTY5Ka/v+/28aqOTJ6abY83e4
+         ZHgA/Z/GhyS/cPQV0vVm2gu4kP553m+YpGT3TQ0gGVBs2kpUxgaAzAiRxZKjUUFg8YN+
+         kgIcgNmRi+T5YYr7QAoKy4MVPDcYSHWqA4IEF2dCrYfXIc2m2zp32rr8yEYdzf3qKkn3
+         jvCyBRLuWatPWYvIyOJSw1h7WHMnmGC/36ENPfLqlNWVnnSZ31uAeHxbT7OFzWkfGyDi
+         1s3EkkQ314/Lc9n51szTl0u5MHymD7jM/hD0heZgX0tyMKIoWE1EmgKqlnpZS9oK2Wzq
+         B3Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ENYPjO+7DVwUTj8vFxUFRI0wdfEhcNOTkydmeMf0tRM=;
+        b=17sfrHVCfazOIXgKHyXuTXawz7yjFae710OM6RFGqgvxpbZfvW+yJ+EbRKfpq09R4P
+         EOqi0nMzOXsNePeCjETSwHRMpxPRh2rCHL2vAJoIldD3nlJVHMQfHzcQZkJ3yAA9w+Qd
+         qQYRNR8BNr1picbD7RcdWj11F62lScLYDfUBda6NdlWQCOOHMpH3HwYIfvMlA1CCdpfu
+         PpARqkcEebSg/aJhRCWFghg1OZsg3pgByLGlORzQ+kKvTOsDaTn1cI/w+cngDjCxByKT
+         d1ciqXiiPRPXFZmZNNFGBQC0nM7xVyj7OTQcWXMapmfnsebxdPZOlOgVkb7c1iYqVpao
+         ewqA==
+X-Gm-Message-State: ACgBeo0pDPUQ1qQchb0RSIXuu1ZXtUaALcHKOzZDcysDCQlTEzTX6O3C
+        KX4ScvmQxQJsvJAF8fVW+4/+FA==
+X-Google-Smtp-Source: AA6agR6CFVl1SfPVNSJVYdmGmPCzH4vLE0c9kh3k91EUOEh3sOr2FpZH31nDd1G0Kr+nHQipfxA73w==
+X-Received: by 2002:a17:903:2113:b0:16f:6ee:65f2 with SMTP id o19-20020a170903211300b0016f06ee65f2mr10324209ple.76.1659775037417;
+        Sat, 06 Aug 2022 01:37:17 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (173.242.120.104.16clouds.com. [173.242.120.104])
+        by smtp.gmail.com with ESMTPSA id u6-20020a17090341c600b0016be596c8afsm4373966ple.282.2022.08.06.01.37.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 01:37:16 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 16:37:12 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     carsten.haitzler@foss.arm.com
+Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: Re: [PATCH v5 01/14] perf test: Refactor shell tests allowing subdirs
+Message-ID: <20220806083712.GA124146@leoy-ThinkPad-X240s>
+References: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
+ <20220728145256.2985298-2-carsten.haitzler@foss.arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220728145256.2985298-2-carsten.haitzler@foss.arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,228 +73,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 88084a3df1672e131ddc1b4e39eeacfd39864acf:
+On Thu, Jul 28, 2022 at 03:52:43PM +0100, carsten.haitzler@foss.arm.com wrote:
 
-  Linux 5.19-rc5 (2022-07-03 15:39:28 -0700)
+[...]
 
-are available in the Git repository at:
+> +int list_script_max_width(void)
+> +{
+> +	list_script_files(); /* Ensure we have scanned all scriptd */
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.0
+s/scriptd/scripts/
 
-for you to fetch changes up to 74de14fe05dd6b151d73cb0c73c8ec874cbdcde6:
+> +	return files_max_width;
+> +}
 
-  MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0 (2022-08-04 15:57:32 +0200)
+[...]
 
-----------------------------------------------------------------
-added support for Netgear WNR3500L v2
-removed support for VR41xx SoC and platforms based on it
-cleanups and fixes
+>  struct shell_test {
+>  	const char *dir;
+>  	const char *file;
+> @@ -385,33 +302,17 @@ static int shell_test__run(struct test_suite *test, int subdir __maybe_unused)
+>  static int run_shell_tests(int argc, const char *argv[], int i, int width,
+>  				struct intlist *skiplist)
+>  {
+> -	struct dirent **entlist;
+> -	struct dirent *ent;
+> -	int n_dirs, e;
+> -	char path_dir[PATH_MAX];
+> -	struct shell_test st = {
+> -		.dir = shell_tests__dir(path_dir, sizeof(path_dir)),
+> -	};
+> -
+> -	if (st.dir == NULL)
+> -		return -1;
+> +	struct shell_test st;
+> +	const struct script_file *files, *file;
+>  
+> -	n_dirs = scandir(st.dir, &entlist, NULL, alphasort);
+> -	if (n_dirs == -1) {
+> -		pr_err("failed to open shell test directory: %s\n",
+> -			st.dir);
+> -		return -1;
+> -	}
+> -
+> -	for_each_shell_test(entlist, n_dirs, st.dir, ent) {
+> +	files = list_script_files();
+> +	if (!files)
+> +		return 0;
+> +	for (file = files; file->dir; file++) {
+>  		int curr = i++;
+> -		char desc[256];
+>  		struct test_case test_cases[] = {
+>  			{
+> -				.desc = shell_test__description(desc,
+> -								sizeof(desc),
+> -								st.dir,
+> -								ent->d_name),
+> +				.desc = file->desc,
+>  				.run_case = shell_test__run,
+>  			},
+>  			{ .name = NULL, }
+> @@ -421,12 +322,13 @@ static int run_shell_tests(int argc, const char *argv[], int i, int width,
+>  			.test_cases = test_cases,
+>  			.priv = &st,
+>  		};
+> +		st.dir = file->dir;
+>  
+>  		if (test_suite.desc == NULL ||
+>  		    !perf_test__matches(test_suite.desc, curr, argc, argv))
+>  			continue;
+>  
+> -		st.file = ent->d_name;
+> +		st.file = file->file;
 
-----------------------------------------------------------------
-Alexander Sverdlin (2):
-      MIPS: Introduce CAVIUM_RESERVE32 Kconfig option
-      Revert "MIPS: octeon: Remove vestiges of CONFIG_CAVIUM_RESERVE32"
+I am just wandering if we can remove "st" in this function, finally I
+found you are right, the "st" (struct shell_test) will be used in the
+function shell_test__run(), so let's keep as it is.
 
-Alexandre Belloni (1):
-      MIPS: mscc: ocelot: enable FDMA usage
+>  		pr_info("%3d: %-*s:", i, width, test_suite.desc);
+>  
+>  		if (intlist__find(skiplist, i)) {
+> @@ -436,10 +338,6 @@ static int run_shell_tests(int argc, const char *argv[], int i, int width,
+>  
+>  		test_and_print(&test_suite, 0);
+>  	}
+> -
+> -	for (e = 0; e < n_dirs; e++)
+> -		zfree(&entlist[e]);
+> -	free(entlist);
+>  	return 0;
+>  }
+>  
+> @@ -448,7 +346,7 @@ static int __cmd_test(int argc, const char *argv[], struct intlist *skiplist)
+>  	struct test_suite *t;
+>  	unsigned int j, k;
+>  	int i = 0;
+> -	int width = shell_tests__max_desc_width();
+> +	int width = list_script_max_width();
+>  
+>  	for_each_test(j, k, t) {
+>  		int len = strlen(test_description(t, -1));
+> @@ -529,36 +427,22 @@ static int __cmd_test(int argc, const char *argv[], struct intlist *skiplist)
+>  
+>  static int perf_test__list_shell(int argc, const char **argv, int i)
+>  {
+> -	struct dirent **entlist;
+> -	struct dirent *ent;
+> -	int n_dirs, e;
+> -	char path_dir[PATH_MAX];
+> -	const char *path = shell_tests__dir(path_dir, sizeof(path_dir));
+> -
+> -	if (path == NULL)
+> -		return -1;
+> +	const struct script_file *files, *file;
+>  
+> -	n_dirs = scandir(path, &entlist, NULL, alphasort);
+> -	if (n_dirs == -1)
+> -		return -1;
+> -
+> -	for_each_shell_test(entlist, n_dirs, path, ent) {
+> +	files = list_script_files();
+> +	if (!files)
+> +		return 0;
+> +	for (file = files; file->dir; file++) {
+>  		int curr = i++;
+> -		char bf[256];
+>  		struct test_suite t = {
+> -			.desc = shell_test__description(bf, sizeof(bf), path, ent->d_name),
+> +			.desc = file->desc
+>  		};
+>  
+>  		if (!perf_test__matches(t.desc, curr, argc, argv))
+>  			continue;
+>  
+>  		pr_info("%3d: %s\n", i, t.desc);
+> -
+>  	}
+> -
+> -	for (e = 0; e < n_dirs; e++)
+> -		zfree(&entlist[e]);
+> -	free(entlist);
+>  	return 0;
+>  }
 
-Christophe JAILLET (2):
-      MIPS: math-emu: Use the bitmap API to allocate bitmaps
-      MIPS: mm: Use the bitmap API to allocate bitmaps
+Except a minor typo, the patch looks good to me, it's a good
+refactoring and enhancement for shell script testing.
 
-Colin Ian King (1):
-      MIPS: PCI: Remove leading space in info message, rename pci
+I reviewed the change one by one line, at least I cannot find any logic
+error.
 
-Florian Fainelli (6):
-      MIPS: vdso: Utilize __pa() for gic_pfn
-      MIPS: Make phys_to_virt utilize __va()
-      MIPS: BCM47XX: Add support for Netgear WNR3500L v2
-      MIPS: Fixed __debug_virt_addr_valid()
-      MIPS: CFE: Add cfe_die()
-      MIPS: BMIPS: Utilize cfe_die() for invalid DTB
+With typo fixing:
 
-Huacai Chen (1):
-      MIPS: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
 
-Jason Wang (1):
-      MIPS: Fix comment typo
+I'd leave this patch for maintainers to review it.  Just a caveat, given
+it's a big patch, as Carsten replied it's good that take the patch as a
+total new code for searching shell scripts, this would be easier for
+understanding the change.
 
-Jiang Jian (1):
-      MIPS: Alchemy: devboards: Remove duplicate 'the' in two places.
-
-Krzysztof Kozlowski (2):
-      MIPS: dts: correct gpio-keys names and properties
-      MIPS: dts: align gpio-key node names with dtschema
-
-Liang He (1):
-      mips: cavium-octeon: Fix missing of_node_put() in octeon2_usb_clocks_start
-
-Lukas Bulwahn (1):
-      MAINTAINERS: add include/dt-bindings/mips to MIPS
-
-Nathan Chancellor (1):
-      MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
-
-Randy Dunlap (1):
-      MIPS: msi-octeon: eliminate kernel-doc warnings
-
-Thomas Bogendoerfer (1):
-      MIPS: Remove VR41xx support
-
-Tiezhu Yang (1):
-      MIPS: Loongson64: Fix section mismatch warning
-
-Uwe Kleine-König (1):
-      mips: sgi-ip22: Drop redundant check from .remove()
-
-Zhang Jiaming (1):
-      MIPS: Fix some typos
-
- MAINTAINERS                                        |   1 +
- arch/mips/Kbuild.platforms                         |   1 -
- arch/mips/Kconfig                                  |  24 +-
- arch/mips/Makefile                                 |   1 -
- arch/mips/alchemy/devboards/pm.c                   |   2 +-
- arch/mips/bcm47xx/board.c                          |   2 +
- arch/mips/bcm47xx/buttons.c                        |  10 +
- arch/mips/bcm47xx/leds.c                           |  11 +
- arch/mips/bcm47xx/prom.c                           |   2 +-
- arch/mips/bcm47xx/workarounds.c                    |   1 +
- arch/mips/bmips/setup.c                            |  14 +-
- arch/mips/boot/dts/img/pistachio_marduk.dts        |   4 +-
- arch/mips/boot/dts/ingenic/ci20.dts                |   2 +-
- arch/mips/boot/dts/ingenic/gcw0.dts                |  31 +-
- arch/mips/boot/dts/ingenic/rs90.dts                |  18 +-
- arch/mips/boot/dts/mscc/ocelot.dtsi                |   9 +-
- arch/mips/boot/dts/pic32/pic32mzda_sk.dts          |   9 +-
- arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts   |   6 +-
- arch/mips/boot/dts/qca/ar9331_dpt_module.dts       |   4 +-
- arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts     |   6 +-
- arch/mips/boot/dts/qca/ar9331_omega.dts            |   4 +-
- .../dts/qca/ar9331_openembed_som9331_board.dts     |   4 +-
- arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts        |   8 +-
- .../dts/ralink/gardena_smart_gateway_mt7688.dts    |   2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts |   2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts |   2 +-
- arch/mips/cavium-octeon/Kconfig                    |  12 +
- arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c |  21 +-
- .../cavium-octeon/executive/cvmx-helper-board.c    |   4 +-
- arch/mips/cavium-octeon/octeon-platform.c          |   3 +-
- arch/mips/cavium-octeon/setup.c                    |  38 +-
- arch/mips/configs/capcella_defconfig               |  91 ---
- arch/mips/configs/e55_defconfig                    |  37 --
- arch/mips/configs/mpc30x_defconfig                 |  53 --
- arch/mips/configs/tb0219_defconfig                 |  76 ---
- arch/mips/configs/tb0226_defconfig                 |  71 --
- arch/mips/configs/tb0287_defconfig                 |  84 ---
- arch/mips/configs/workpad_defconfig                |  67 --
- arch/mips/fw/cfe/cfe_api.c                         |  68 +-
- arch/mips/include/asm/cpu-type.h                   |  11 -
- arch/mips/include/asm/cpu.h                        |   3 +-
- arch/mips/include/asm/fw/cfe/cfe_api.h             |   2 +
- arch/mips/include/asm/io.h                         |   2 +-
- arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h |   1 +
- arch/mips/include/asm/mach-vr41xx/irq.h            |   9 -
- arch/mips/include/asm/mipsregs.h                   |  14 -
- arch/mips/include/asm/octeon/cvmx-helper-board.h   |  12 +-
- arch/mips/include/asm/pgtable-32.h                 |   5 -
- arch/mips/include/asm/pgtable-64.h                 |   5 -
- arch/mips/include/asm/vermagic.h                   |   2 -
- arch/mips/include/asm/vr41xx/capcella.h            |  30 -
- arch/mips/include/asm/vr41xx/giu.h                 |  41 --
- arch/mips/include/asm/vr41xx/irq.h                 |  97 ---
- arch/mips/include/asm/vr41xx/mpc30x.h              |  24 -
- arch/mips/include/asm/vr41xx/pci.h                 |  77 ---
- arch/mips/include/asm/vr41xx/siu.h                 |  45 --
- arch/mips/include/asm/vr41xx/tb0219.h              |  29 -
- arch/mips/include/asm/vr41xx/tb0226.h              |  30 -
- arch/mips/include/asm/vr41xx/tb0287.h              |  30 -
- arch/mips/include/asm/vr41xx/vr41xx.h              | 148 -----
- arch/mips/kernel/cpu-probe.c                       |  40 --
- arch/mips/kernel/proc.c                            |   2 +-
- arch/mips/kernel/vdso.c                            |   2 +-
- arch/mips/lib/dump_tlb.c                           |   8 -
- arch/mips/loongson64/numa.c                        |   1 -
- arch/mips/math-emu/dsemul.c                        |   9 +-
- arch/mips/mm/c-r4k.c                               |  44 --
- arch/mips/mm/context.c                             |   5 +-
- arch/mips/mm/physaddr.c                            |  14 +-
- arch/mips/mm/tlbex.c                               |  39 +-
- arch/mips/pci/Makefile                             |   6 -
- arch/mips/pci/fixup-capcella.c                     |  37 --
- arch/mips/pci/fixup-lemote2f.c                     |   2 +-
- arch/mips/pci/fixup-mpc30x.c                       |  36 --
- arch/mips/pci/fixup-tb0219.c                       |  38 --
- arch/mips/pci/fixup-tb0226.c                       |  73 ---
- arch/mips/pci/fixup-tb0287.c                       |  52 --
- arch/mips/pci/msi-octeon.c                         |  16 +-
- arch/mips/pci/ops-vr41xx.c                         | 113 ----
- arch/mips/pci/pci-vr41xx.c                         | 309 ---------
- arch/mips/pci/pci-vr41xx.h                         | 141 ----
- arch/mips/sgi-ip22/ip22-gio.c                      |   2 +-
- arch/mips/vr41xx/Kconfig                           | 104 ---
- arch/mips/vr41xx/Makefile                          |   5 -
- arch/mips/vr41xx/Platform                          |  29 -
- arch/mips/vr41xx/casio-e55/Makefile                |   6 -
- arch/mips/vr41xx/casio-e55/setup.c                 |  27 -
- arch/mips/vr41xx/common/Makefile                   |   6 -
- arch/mips/vr41xx/common/bcu.c                      | 210 ------
- arch/mips/vr41xx/common/cmu.c                      | 242 -------
- arch/mips/vr41xx/common/giu.c                      | 110 ----
- arch/mips/vr41xx/common/icu.c                      | 714 ---------------------
- arch/mips/vr41xx/common/init.c                     |  60 --
- arch/mips/vr41xx/common/irq.c                      | 106 ---
- arch/mips/vr41xx/common/pmu.c                      | 123 ----
- arch/mips/vr41xx/common/rtc.c                      | 105 ---
- arch/mips/vr41xx/common/siu.c                      | 142 ----
- arch/mips/vr41xx/common/type.c                     |  11 -
- arch/mips/vr41xx/ibm-workpad/Makefile              |   6 -
- arch/mips/vr41xx/ibm-workpad/setup.c               |  27 -
- 100 files changed, 259 insertions(+), 4185 deletions(-)
- delete mode 100644 arch/mips/configs/capcella_defconfig
- delete mode 100644 arch/mips/configs/e55_defconfig
- delete mode 100644 arch/mips/configs/mpc30x_defconfig
- delete mode 100644 arch/mips/configs/tb0219_defconfig
- delete mode 100644 arch/mips/configs/tb0226_defconfig
- delete mode 100644 arch/mips/configs/tb0287_defconfig
- delete mode 100644 arch/mips/configs/workpad_defconfig
- delete mode 100644 arch/mips/include/asm/mach-vr41xx/irq.h
- delete mode 100644 arch/mips/include/asm/vr41xx/capcella.h
- delete mode 100644 arch/mips/include/asm/vr41xx/giu.h
- delete mode 100644 arch/mips/include/asm/vr41xx/irq.h
- delete mode 100644 arch/mips/include/asm/vr41xx/mpc30x.h
- delete mode 100644 arch/mips/include/asm/vr41xx/pci.h
- delete mode 100644 arch/mips/include/asm/vr41xx/siu.h
- delete mode 100644 arch/mips/include/asm/vr41xx/tb0219.h
- delete mode 100644 arch/mips/include/asm/vr41xx/tb0226.h
- delete mode 100644 arch/mips/include/asm/vr41xx/tb0287.h
- delete mode 100644 arch/mips/include/asm/vr41xx/vr41xx.h
- delete mode 100644 arch/mips/pci/fixup-capcella.c
- delete mode 100644 arch/mips/pci/fixup-mpc30x.c
- delete mode 100644 arch/mips/pci/fixup-tb0219.c
- delete mode 100644 arch/mips/pci/fixup-tb0226.c
- delete mode 100644 arch/mips/pci/fixup-tb0287.c
- delete mode 100644 arch/mips/pci/ops-vr41xx.c
- delete mode 100644 arch/mips/pci/pci-vr41xx.c
- delete mode 100644 arch/mips/pci/pci-vr41xx.h
- delete mode 100644 arch/mips/vr41xx/Kconfig
- delete mode 100644 arch/mips/vr41xx/Makefile
- delete mode 100644 arch/mips/vr41xx/Platform
- delete mode 100644 arch/mips/vr41xx/casio-e55/Makefile
- delete mode 100644 arch/mips/vr41xx/casio-e55/setup.c
- delete mode 100644 arch/mips/vr41xx/common/Makefile
- delete mode 100644 arch/mips/vr41xx/common/bcu.c
- delete mode 100644 arch/mips/vr41xx/common/cmu.c
- delete mode 100644 arch/mips/vr41xx/common/giu.c
- delete mode 100644 arch/mips/vr41xx/common/icu.c
- delete mode 100644 arch/mips/vr41xx/common/init.c
- delete mode 100644 arch/mips/vr41xx/common/irq.c
- delete mode 100644 arch/mips/vr41xx/common/pmu.c
- delete mode 100644 arch/mips/vr41xx/common/rtc.c
- delete mode 100644 arch/mips/vr41xx/common/siu.c
- delete mode 100644 arch/mips/vr41xx/common/type.c
- delete mode 100644 arch/mips/vr41xx/ibm-workpad/Makefile
- delete mode 100644 arch/mips/vr41xx/ibm-workpad/setup.c
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Thanks,
+Leo

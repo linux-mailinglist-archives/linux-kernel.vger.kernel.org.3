@@ -2,155 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D505358B642
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D2458B644
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 17:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbiHFO60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 10:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S230443AbiHFPBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 11:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbiHFO6W (ORCPT
+        with ESMTP id S230291AbiHFPBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 10:58:22 -0400
-Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [IPv6:2a01:4f8:a0:821d::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73B821276A;
-        Sat,  6 Aug 2022 07:58:20 -0700 (PDT)
-Received: from [192.168.1.12] (unknown [81.178.197.238])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id ACF94140200;
-        Sat,  6 Aug 2022 14:58:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
-        s=donut; t=1659797898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nBZVMbltsIkBFwLkxDGMWLniH6iU/Y6FiotIXQVhv88=;
-        b=qQES6BnccUYz1+rLG4Jicvck/nD41hk2Rr3ChLx+HhqRP0j6mP5zTz2QuSOzIu99suIcUH
-        qqaJVFS16kDTb959tGrs/CAbsN4Qz3A6JgxZsCKsRTuc0YN3K+ejeBOuFYCYfS5U1aQZeo
-        BURzjBRl7KqYt40esDRhDMqlnl716nI=
-Message-ID: <eb4327d0-b31b-b6ea-e0d3-d5cff3508f39@postmarketos.org>
-Date:   Sat, 6 Aug 2022 15:58:17 +0100
+        Sat, 6 Aug 2022 11:01:02 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E1610544;
+        Sat,  6 Aug 2022 08:01:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659798061; x=1691334061;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N2n+7pfk025Ahr8LJDCTmAQFqmwhe72MJrkRgL4kXiA=;
+  b=cW7PQaYtLuTS3uBUEaO7RZ7yzjjcs+ITEHrTDwo4Acslkql1xBBVJKxn
+   sQraZRLvvBDuLnQyX1DX5R+PhCnmGVAOSW0DqkW904jWaJUmeOumYpafv
+   2E2O+e6OJtvJA3kU1ZRBR2UQMkaP6p3PZAJ7ovma0ln8AGMu0nNSFExdP
+   wXEY4qLcxDOSo+S8ukwBE6G7svSm+nvHPKA65f/Hv5wDYhr2YDLgOhnnW
+   VjWE5I0Ci3NbvOeFG6UJ15lHsTqgShvpMKXAd/VumirVdOi/EwkYuYduc
+   ZM5wocmaNQ7Gl7vBDHqe0u5Nl5iOBfa1WH+tMh73e6seDay5tVtqbt/PZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="352097014"
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="352097014"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 08:01:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="600649427"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 06 Aug 2022 08:00:59 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKLIQ-000KSl-2q;
+        Sat, 06 Aug 2022 15:00:58 +0000
+Date:   Sat, 6 Aug 2022 23:00:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v1 1/1] leds: bcm6358: Get rid of custom
+ led_init_default_state_get()
+Message-ID: <202208062208.6mgNYMMy-lkp@intel.com>
+References: <20220802212542.7153-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add initial support for
- Pine64 PinePhone Pro
-Content-Language: en-US
-To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de
-Cc:     megi@xff.cz, martijn@brixit.nl, ayufan@ayufan.eu,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220805234411.303055-1-tom@tom-fitzhenry.me.uk>
- <20220805234411.303055-4-tom@tom-fitzhenry.me.uk>
- <f9cbc047-f30f-e711-3213-56fcbb7bbc8a@postmarketos.org>
- <9a168a20-1fd1-5d73-1d33-bd2f054d60d7@tom-fitzhenry.me.uk>
-From:   Caleb Connolly <kc@postmarketos.org>
-In-Reply-To: <9a168a20-1fd1-5d73-1d33-bd2f054d60d7@tom-fitzhenry.me.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802212542.7153-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andy,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on pavel-leds/for-next]
+[also build test ERROR on linus/master v5.19 next-20220805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-bcm6358-Get-rid-of-custom-led_init_default_state_get/20220803-053220
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
+config: parisc-randconfig-r014-20220801 (https://download.01.org/0day-ci/archive/20220806/202208062208.6mgNYMMy-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ad3083d8ac0e2beb10b75a7d87085911b4f6139a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/leds-bcm6358-Get-rid-of-custom-led_init_default_state_get/20220803-053220
+        git checkout ad3083d8ac0e2beb10b75a7d87085911b4f6139a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/leds/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/leds/leds-bcm6358.c: In function 'bcm6358_led':
+>> drivers/leds/leds-bcm6358.c:116:17: error: implicit declaration of function 'led_init_default_state_get'; did you mean 'led_get_default_pattern'? [-Werror=implicit-function-declaration]
+     116 |         state = led_init_default_state_get(init_data.fwnode);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                 led_get_default_pattern
+   cc1: some warnings being treated as errors
 
 
-On 06/08/2022 03:37, Tom Fitzhenry wrote:
-> On 6/8/22 12:10, Caleb Connolly wrote:
->> I was surprised to see this series, and this patch especially.
->> An almost ready to submit version of this patch with considerably more 
->> functionality has been sat around for a while but unfortunately never sent [1].
-> 
-> Firstly, thank you for your review!
-> 
-> I'm not sure why that other patch series has never been submitted. It was 
-> prepared 3 months ago (unbeknownst to me, at the time of v1), but since then has 
-> not been submitted.
-> 
-> I would feel uncomfortable submitting that patch series, since I am not familiar 
-> with parts of the full DT. In time I intend to be, but for now I think we'd 
-> benefit from having a base DT mainlined, on top of which we can iterate and 
-> parallelise.
-> 
->> According to the link below (and my own knowledge of PPP development) Kamil is 
->> the original author of this patch, both Kamil and Martijn created the initial 
->> version of the devicetree. Given that you're using their work as a base, 
->> Kamil's authorship should be respected in the patch you submit.
-> 
-> I agree authorship is important, and thus Kamil, Martijn and Megi are listed as 
-> Co-developed-by in this patch.
-To be clear, by authorship I mean literally the author of the patch, the 
-previous patch in this series was created by Samuel and you left his authorship 
-intact - it has "From: Samuel Dionne-Riel <samuel@dionne-riel.com>" at the top, 
-so when a maintainer picks it up and it ends up in Linux, anyone looking at it 
-will see that he was the author of the patch.
+vim +116 drivers/leds/leds-bcm6358.c
 
-This patch is from you, there is no From: tag overriding it, and the diffstat in 
-your cover letter shows you as the author. Whilst you have obviously made some 
-heavy changes to this patch, it isn't your original work as you state yourself 
-in the commit message. Authorship should be attributed to Kamil as they are the 
-author of the earliest version of this patch we have.
-> 
->> Their original patch [2] contained SoBs from them and Martijn, those are both 
->> missing below. Both of their signed-off-by tags should be added before this 
->> patch hits the mailing list, and the same for Ondrej. The order also seems 
->> wrong (Ondrej should be last before you).
-> 
-> Yes, this patch's acceptance is blocked until all Co-developed-by authors 
-> (Kamil, Martjin, Megi) provide their Signed-off-by to this patch.
-You should obtain SoBs from Co-developers /before/ sending this patch upstream, 
-this indicates that everyone is on board and that the patch has some sensible 
-history. The mailing list isn't the place to ask your co-developers to sign off 
-a patch after you've made extensive changes to it.
+    93	
+    94	static int bcm6358_led(struct device *dev, struct device_node *nc, u32 reg,
+    95			       void __iomem *mem, spinlock_t *lock)
+    96	{
+    97		struct led_init_data init_data = {};
+    98		struct bcm6358_led *led;
+    99		enum led_default_state state;
+   100		unsigned long val;
+   101		int rc;
+   102	
+   103		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
+   104		if (!led)
+   105			return -ENOMEM;
+   106	
+   107		led->pin = reg;
+   108		led->mem = mem;
+   109		led->lock = lock;
+   110	
+   111		if (of_property_read_bool(nc, "active-low"))
+   112			led->active_low = true;
+   113	
+   114		init_data.fwnode = of_fwnode_handle(nc);
+   115	
+ > 116		state = led_init_default_state_get(init_data.fwnode);
+   117		switch (state) {
+   118		case LEDS_DEFSTATE_ON:
+   119			led->cdev.brightness = LED_FULL;
+   120			break;
+   121		case LEDS_DEFSTATE_KEEP:
+   122			val = bcm6358_led_read(led->mem + BCM6358_REG_MODE);
+   123			val &= BIT(led->pin);
+   124			if ((led->active_low && !val) || (!led->active_low && val))
+   125				led->cdev.brightness = LED_FULL;
+   126			else
+   127				led->cdev.brightness = LED_OFF;
+   128			break;
+   129		default:
+   130			led->cdev.brightness = LED_OFF;
+   131		}
+   132	
+   133		bcm6358_led_set(&led->cdev, led->cdev.brightness);
+   134	
+   135		led->cdev.brightness_set = bcm6358_led_set;
+   136	
+   137		rc = devm_led_classdev_register_ext(dev, &led->cdev, &init_data);
+   138		if (rc < 0)
+   139			return rc;
+   140	
+   141		dev_dbg(dev, "registered LED %s\n", led->cdev.name);
+   142	
+   143		return 0;
+   144	}
+   145	
 
-I missed the following points in my original email:
-
-Please read the documentation on modifying patches [1] as it applies here, and 
-add a comment before your SoB explaining your changes, something like
-
-[tom: strip down to minimal booting DT for initial support]
-
-This way the history of the patch is preserved properly for anyone looking back 
-at it in the future. In a similar vein, replace the external git links with 
-links to exact commits so they don't degrade over time.
-> 
->> Support for the volume keys, accelerometer, magnetometer, GPIO LEDs, 
->> touchscreen, modem codec and audio support are all missing here, but they're 
->> included in the patches you referenced. In their current state (see Martijn's 
->> commit [1] or my 5.19 rebase [3]) the DT for these components has been worked 
->> on by several people, tested by the larger user community, and are already 
->> supported in mainline. It seems strange not to include them and just leads to 
->> a bunch of extra busywork to add them back later. It's easy enough to drop any 
->> of these nodes during review if they become an issue.
-> 
-> To keep this patch series light and easy-to-review, I'd be keen to keep it as
-fwiw, a few extra nodes now is a lot easier to review than a bunch of individual 
-small patches later. But yes, better to get this done in some form than not at all.
-> small as possible for now. This DT is >18 months old out-of-tree (across 
-> multiple repos), so I think this minimal DT being mainlined is an improvement 
-> over the status quo.
-definitely, it'll be nice to start to see some upstream story for the famed 
-"linux phone" ;)
-
-[1]: https://www.kernel.org/doc/html/latest/maintainer/modifying-patches.html
-> 
-> The existing work that the community has done will still be useful, albeit in 
-> future patch series. This DT just allows that future work to be done 
-> iteratively, and in parallel.
-> 
->> With that being said, I've left some feedback below, with it addressed and the 
->> authorship/SoB situation sorted out:
->>
->> Reviewed-by: Caleb Connolly <kc@postmarketos.org>
-> 
-> Thank you for your comments, I appreciate your review! I will ensure v3 
-> addresses those.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

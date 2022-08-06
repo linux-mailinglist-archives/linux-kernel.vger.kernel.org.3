@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B44358B408
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 08:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57ED158B40B
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 08:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiHFGNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 02:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
+        id S241693AbiHFGPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 02:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241522AbiHFGNv (ORCPT
+        with ESMTP id S241522AbiHFGPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 02:13:51 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3543A20BCA
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 23:13:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659766431; x=1691302431;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rnGoIqlgHnpHyW30pzBJBZ0XkdzXtBv1kgOaR1Ujoh4=;
-  b=CHPbNqd7mFAFAUdpDz0xfUxfauRgyE+fGQ7D1a7Ho3HsYfUDBQrN1fGC
-   cex8i/iDT4BAYh4zAWdcsUj2yZbzjhUzJzcvfjpgKMNR03R/Nl5f0MN3H
-   sN/kriNbdrDKM1A0kSUaOAu9AdNjSDw/chkM0yoSiZio+7oclvMY4ozVT
-   XUxz6nBTHxQbR/3i/QG5I9C+Z4rrbuPtVtRVISinzKFFTNJooAMdtE6YA
-   2DaJqfAjYzU4AeL5LHe9swTrL2+3v6UCCdp4JLlSqlX6Y3m3SG3yH1gCJ
-   JPYIGcPXWLZnoeDKYm20Mi+IWL27utCXvQyISySSxyAJyAc9HHGH/MoNP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="376638238"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="376638238"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 23:13:50 -0700
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="671926830"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 23:13:49 -0700
-Received: by lahna (sSMTP sendmail emulation); Sat, 06 Aug 2022 09:13:46 +0300
-Date:   Sat, 6 Aug 2022 09:13:46 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Brad Campbell <lists2009@fnarfbargle.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Apple Thunderbolt Display chaining
-Message-ID: <Yu4Gmkous7asng6h@lahna>
-References: <YkrqL/wnACNVOpSi@lahna>
- <ae336e2d-8e7c-9167-ab3d-8d642cd4fb2c@fnarfbargle.com>
- <Yk2qMt568oEeTj8H@lahna>
- <49183e52-2e73-b32f-11ad-6036b1040d7c@fnarfbargle.com>
- <Yuz/Q3MTVIhCZU+0@lahna>
- <f5c8b9f0-0d6d-c6db-ae0b-894acb58d078@fnarfbargle.com>
- <Yu0UuOVGeIv/U+jU@lahna>
- <d484d7e5-f1aa-1096-e6fb-bbf16ce28699@fnarfbargle.com>
- <Yu0nWro4xXURbSX6@lahna>
- <87c1a001-ef79-6390-dfe2-06d2850f6e84@fnarfbargle.com>
+        Sat, 6 Aug 2022 02:15:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4ADB876;
+        Fri,  5 Aug 2022 23:15:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AD30C22DAA;
+        Sat,  6 Aug 2022 06:15:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659766525; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6LdsyvuXMMZOLuygs1F92G2+lRCOO62r6mwZEfdkrTo=;
+        b=pu3VbbdlryDl5EeEMYkwJS4IKZPG3Ozb0Wq/V3VgyL5FLU0veWsnHM9fKjOrGqIDeae7JJ
+        emBxNPKntZ3ZIBJ9I0Zk7ngWaqyrJpXuCAcdSp2SapoS6155cLJc+OFRVB0DybquufloyA
+        dcG8AAoHT3ra+Ks6N6dacqAZBrcmrKA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659766525;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6LdsyvuXMMZOLuygs1F92G2+lRCOO62r6mwZEfdkrTo=;
+        b=+kSryS+BLiGHuA7lxqDgBP0MfepawUrBu6c0l64YSuRWxz7hUL6tbUyqIExdqaMPwRWfRZ
+        xsKknj3n6+Gx1iCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7383613ADE;
+        Sat,  6 Aug 2022 06:15:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id F+FYGv0G7mKmSgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Sat, 06 Aug 2022 06:15:25 +0000
+Date:   Sat, 6 Aug 2022 08:15:24 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     linux-watchdog@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH v2] watchdog: wdat_wdt: Set the min and max timeout values
+ properly
+Message-ID: <20220806081524.5636461a@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87c1a001-ef79-6390-dfe2-06d2850f6e84@fnarfbargle.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,51 +72,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Brad,
+The wdat_wdt driver is misusing the min_hw_heartbeat_ms field. This
+field should only be used when the hardware watchdog device should not
+be pinged more frequently than a specific period. The ACPI WDAT
+"Minimum Count" field, on the other hand, specifies the minimum
+timeout value that can be set. This corresponds to the min_timeout
+field in Linux's watchdog infrastructure.
 
-On Fri, Aug 05, 2022 at 10:43:54PM +0800, Brad Campbell wrote:
-> On 5/8/22 22:21, Mika Westerberg wrote:
-> 
-> > They are pretty standard so I suspect myself the display side of things.
-> > Not sure if it is possible (I think it is from sysfs /sys/class/drm/*)
-> > to disable the tunneled DP connections and see if that makes it not
-> > hang. Alternatively you can try to comment out the call to
-> > tb_tunnel_dp() from the driver. Let me know if you want me to make hack
-> > patch that does it for you.
-> > 
-> 
-> I used this :
-> 
-> iff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-> index 9a3214fb5038..eae7523af78b 100644
-> --- a/drivers/thunderbolt/tb.c
-> +++ b/drivers/thunderbolt/tb.c
-> @@ -865,7 +865,7 @@ static void tb_tunnel_dp(struct tb *tb)
->         struct tb_cm *tcm = tb_priv(tb);
->         struct tb_port *port, *in, *out;
->         struct tb_tunnel *tunnel;
-> -
-> +       return;
->         if (!tb_acpi_may_tunnel_dp()) {
->                 tb_dbg(tb, "DP tunneling disabled, not creating tunnel\n");
->                 return;
-> 
-> I'm now using Linus GIT head. No change in behaviour really.
-> 
-> No tunnels were created. None of the TB displays light up in Linux or BIOS. System still locks
-> up on reboot and the first time I attempted to compose this reply it locked up hard before I
-> had a chance to finish it because I attempted to verify the devices were present with an lspci -tv.
-> 
-> If I do an lspci -tv after the module load, it locks hard instantly and reproducibly.
+Setting min_hw_heartbeat_ms instead can cause pings to the hardware
+to be delayed when there is no reason for that, eventually leading to
+unexpected firing of the watchdog timer (and thus unexpected reboot).
 
-Okay, let's try to deal with one issue at the time so first the hang
-that appears after the OS is booted up. Do you still have the
-"pcie_port_pm=off" in the kernel command line? The hang that happens
-afterwards sounds exactly like that the runtime PM would kick in but the
-parameter should prevent that from happening. Since you are connecting
-Thunderbolt 1 devices there is really no PM we can do for them at all
-and the TBT driver should block it too.
+I'm also changing max_hw_heartbeat_ms to max_timeout for symmetry,
+although the use of this one isn't fundamentally wrong, but there is
+also no reason to enable the software-driven ping mechanism for the
+wdat_wdt driver.
 
-Is it possible to narrow this down to a single device connected and then
-get me the full dmesg output (with CONFIG_PCI_DEBUG=y) and output of
-'sudo lspci -vv'?
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Fixes: 058dfc767008 ("ACPI / watchdog: Add support for WDAT hardware watchdog")
+Reviewed-by! Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+Changes since v1:
+ * Fix a stupid typo which broke the build. Apparently I shouldn't be
+   sending out patches after midnight, sorry.
+
+ drivers/watchdog/wdat_wdt.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+--- linux-5.18.orig/drivers/watchdog/wdat_wdt.c	2022-07-27 07:32:33.336928967 +0200
++++ linux-5.18/drivers/watchdog/wdat_wdt.c	2022-08-06 08:09:49.235935543 +0200
+@@ -342,8 +342,8 @@ static int wdat_wdt_probe(struct platfor
+ 		return -EINVAL;
+ 
+ 	wdat->period = tbl->timer_period;
+-	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
+-	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
++	wdat->wdd.min_timeout = DIV_ROUND_UP(wdat->period * tbl->min_count, 1000);
++	wdat->wdd.max_timeout = wdat->period * tbl->max_count / 1000;
+ 	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
+ 	wdat->wdd.info = &wdat_wdt_info;
+ 	wdat->wdd.ops = &wdat_wdt_ops;
+@@ -450,8 +450,8 @@ static int wdat_wdt_probe(struct platfor
+ 	 * watchdog properly after it has opened the device. In some cases
+ 	 * the BIOS default is too short and causes immediate reboot.
+ 	 */
+-	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
+-	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
++	if (timeout < wdat->wdd.min_timeout ||
++	    timeout > wdat->wdd.max_timeout) {
+ 		dev_warn(dev, "Invalid timeout %d given, using %d\n",
+ 			 timeout, WDAT_DEFAULT_TIMEOUT);
+ 		timeout = WDAT_DEFAULT_TIMEOUT;
+
+
+-- 
+Jean Delvare
+SUSE L3 Support

@@ -2,85 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358CF58B716
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F3058B719
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbiHFQww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 12:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        id S232593AbiHFQzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 12:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbiHFQwu (ORCPT
+        with ESMTP id S232209AbiHFQzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 12:52:50 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3C3DEAC
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 09:52:48 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso10933067pjq.0
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 09:52:48 -0700 (PDT)
+        Sat, 6 Aug 2022 12:55:04 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4470DEAC
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 09:55:00 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id d7so5085772pgc.13
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 09:55:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=tbINJ7QsOYoYb8ZFX+exoUH6wh4ff1wK54fBzhvpouw=;
-        b=JOLyQbC/YMjp6EweqOCx5ld/GN+PK4jwMP0XxvuVyYh9wO2unrHYuKJF32mfYXhGV6
-         F0WYdaUb9qRQjhplg92+CUn3PP6MCZuDcMUXJvXJOfXDb6QIyELTbxDl9FuJCr5UiAol
-         h8gW2GFN+ikLlDIYzwq5jlVhbZdxOwqBKSmrNKjeVpVctmFPUwkYw4dfiNqMQeX3Jso/
-         +fI8v5+eIyaYd45EsqVtHuP3xFVt4fiZdmj7d3CACYAjvxdymM0aTyLY0F7c6VEZZnG4
-         pQ7A5reXVmP8cMlHc8ch57dHzBzfAugQyLfDx0DZKi+NuY1WzXQKCLEDkj0m7DRKdfHZ
-         HDtw==
+        bh=6kl7q7xc9eWBDn7eSvFOAeEGxRVc5lkSfi9seiIDDOo=;
+        b=SSSICNOijizu3VgA2cp0Zu3CkKA63vyYcTEjLa6TmRxSWG+BbbTXd5a+nCYUUv5+1U
+         q4Wfi57XQ9pa5kBeGIzt4kyuhvaAaZhoOYlGzrzRweF0+2u3PuqQS7Ji7MqKP+XkolYw
+         ujEJj38McwZT2Y/9fTBvYP6un+Ff5MHgICClZ6zAEQB3BhL3D4AORF1O4TVqTb9uIssi
+         TOCanlsNtRmmIcNaEhJ2n97c7kflqd62knyEXN88pK1mTkurfotzP/EeUvZsgEcuu1Mv
+         1Fj4edAyQnSeR2df2N9k+CBTztqFKfZcb4s8Dzfh7s5eaL8QtaybU8sWt4hYg6PCldjm
+         XI+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=tbINJ7QsOYoYb8ZFX+exoUH6wh4ff1wK54fBzhvpouw=;
-        b=OjFRHozzXUYYA3pF1MChQ2oirP5gaeYVzslaOQufiA5u9VuzO4vmRJ9GDA/iDbr/Rq
-         n/vRsAoUrydc1gzeO2B+ee6u68XoJX0xFiUEKlZXeaMD/FKZdzxlAPftcMJhQkq/u+ek
-         JcRGvblBRC1uo8Gs6lDxg24aqMt4/rG165zbebynJCw8Uq7ETcng8pqYVQCYU4xjqHEB
-         EjnxXSzWna1z7PPNSCz6+fXmZstNi9jCI/lTLKO9hwuZ1Kieak+w2IpBGay4JgKVZndU
-         pN6reL0esqdz60hiP8dioRSV0XvM4BidNaJXXh0D6UyVNq/NpM3Hfx43DZ+9g9RZv4bz
-         WzOA==
-X-Gm-Message-State: ACgBeo3xpW4Gy30IPnvpNlvoF3YsaWjaJ6/bzyYc8gMj70MCbuPIxXRd
-        0CDuGnWh3emu5w7YgI0jHdHm
-X-Google-Smtp-Source: AA6agR49CnysaV2RsOmCz8D4Gvyz4ZIECUCvGu6eXfolX5aecwTuqZ6ew8l7Y094y5DPffBRTAE4yw==
-X-Received: by 2002:a17:902:8d8a:b0:16f:21fb:b97a with SMTP id v10-20020a1709028d8a00b0016f21fbb97amr11712794plo.160.1659804768082;
-        Sat, 06 Aug 2022 09:52:48 -0700 (PDT)
+        bh=6kl7q7xc9eWBDn7eSvFOAeEGxRVc5lkSfi9seiIDDOo=;
+        b=MIzxvcccvNCG97BcyjukGiIn86ZJxYEEuT6ppD0wp2OFd0imItWR0zU7lMttFPeh8f
+         UA9TuysYTtkhBOURHw06OZ3laEHg0cdFQkG8i3cDoamvus4MVYuQpG0FjCE+XgxhGyPd
+         tFP8mdgze2WwMudxuIY91OHii/lSYYcUW0bglYjxf/cIqoPuFxdDRM7m7IXpxP+DUx0r
+         e2Kr5aLYoLKNOZHOJrSdVjG1AkYT6R7xmXIsTIjDkbFKrFGXPFBkhaidhEMxwgrQRd9h
+         ds99BxsUhiMDZvFjN+eFPWomfnxlLFYEfDT7WKbUwnMzLfSERdFHT7bU30R5AT686LXf
+         8fQA==
+X-Gm-Message-State: ACgBeo1jl92mxKuqbVObBpj+2iaRu3pctFrbn/7LLRreaWldnYoXGE94
+        XEVAhNX9ca517QVBWAu59l1u
+X-Google-Smtp-Source: AA6agR69j4iV21JddRa7nC+LXwgxSzVR8cWPGvpoCcsw7dnZsGuGUA1R4m+eqci+hWfi1FR2yLkVtg==
+X-Received: by 2002:a05:6a00:1505:b0:52e:7bec:63e7 with SMTP id q5-20020a056a00150500b0052e7bec63e7mr11568423pfu.37.1659804900303;
+        Sat, 06 Aug 2022 09:55:00 -0700 (PDT)
 Received: from thinkpad ([117.202.188.20])
-        by smtp.gmail.com with ESMTPSA id u14-20020a62790e000000b0052d78e73e6asm5189736pfc.184.2022.08.06.09.52.40
+        by smtp.gmail.com with ESMTPSA id o13-20020a17090a420d00b001f260b1954bsm4988804pjg.13.2022.08.06.09.54.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 09:52:47 -0700 (PDT)
-Date:   Sat, 6 Aug 2022 22:22:38 +0530
+        Sat, 06 Aug 2022 09:54:59 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 22:24:54 +0530
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 7/9] dt-bindings: usb: qcom,dwc3: add wakeup-source
- property
-Message-ID: <20220806165238.GM14384@thinkpad>
-References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-8-johan+linaro@kernel.org>
- <20220806150848.GH14384@thinkpad>
- <Yu6ZwePzzkl7tewV@hovoldconsulting.com>
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] arm64: dts: qcom: sc8280xp-crd: disable touchscreen
+ pull-up
+Message-ID: <20220806165454.GN14384@thinkpad>
+References: <20220805092317.4985-1-johan+linaro@kernel.org>
+ <20220805092317.4985-2-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yu6ZwePzzkl7tewV@hovoldconsulting.com>
+In-Reply-To: <20220805092317.4985-2-johan+linaro@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -91,49 +79,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 06, 2022 at 06:41:37PM +0200, Johan Hovold wrote:
-> On Sat, Aug 06, 2022 at 08:38:48PM +0530, Manivannan Sadhasivam wrote:
-> > On Thu, Aug 04, 2022 at 05:09:59PM +0200, Johan Hovold wrote:
-> > > Add a wakeup-source property to the binding to describe whether the
-> > > wakeup interrupts can wake the system from suspend.
-> > > 
-> > > Acked-by: Rob Herring <robh@kernel.org>
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > 
-> > So this is based on the fact that Qcom glue wrapper is supplying the wakeup
-> > interrupts. But isn't it possible that on other platform, the DWC IP can supply
-> > wakeup interrupts?
+On Fri, Aug 05, 2022 at 11:23:11AM +0200, Johan Hovold wrote:
+> The touchscreen interrupt line has an external pull-up so disable the
+> internal one as is done for the keyboard and touchpad.
 > 
-> Yeah, possibly, and that's why Rob suggested keeping the 'wakeup-source'
-> property also in the core node.
-> 
-> > In the driver, the wakeup-source parsing has been moved to the Qcom glue driver.
-> > But this contradicts with the binding.
-> 
-> That's irrelevant. The core driver does not implement wakeup support. It
-> was just added as a hack for the Qualcomm driver, and you won't get
-> wakeup-capability for other platforms by just parsing the property in
-> the core driver.
-> 
-> When/if wakeup support for such a platform is added, then the core
-> driver may need to look at the property again.
-> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-My point is, the platform drivers are free to add "wakeup-source" property in
-the DWC node. Then in that case, the DWC driver should handle the capability,
-isn't it?
-
-I know it is broken currently, but moving the wakeup parsing code is not
-helping either.
-
-And... I'm aware of the fact that the binding should describe the hardware and
-not the limitation of the driver. So perhaps we should document it in the
-driver as a TODO or something?
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
 Thanks,
 Mani
 
-> Johan
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> index 6792e88b2c6c..47192e9cf7a4 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> @@ -405,7 +405,7 @@ ts0_default: ts0-default-state {
+>  		int-n {
+>  			pins = "gpio175";
+>  			function = "gpio";
+> -			bias-pull-up;
+> +			bias-disable;
+>  		};
+>  
+>  		reset-n {
+> -- 
+> 2.35.1
+> 
 
 -- 
 மணிவண்ணன் சதாசிவம்

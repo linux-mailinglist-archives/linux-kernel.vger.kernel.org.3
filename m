@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A8958B5CE
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 15:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE9558B5CB
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 15:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbiHFN6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 09:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S231378AbiHFN6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 09:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiHFN6V (ORCPT
+        with ESMTP id S230018AbiHFN6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 09:58:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA9D010FF6
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 06:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659794298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=M1VZLFzbc3QEJrqC5cuqzOWpSyIBVvFdj+5LhLu6pv4=;
-        b=inktaNs7sD1gd4Wz4QEaKDFJCQGxnyXzvOzu3GH4oE6Z89zzN63rL1TpLEwEEIXUIRErtV
-        rCs9m19dlRzciOeBLxnGPE71RQESrK0CcuyyT41WW1Y/PYSH8PJB0wdCH484b9OVIgeFDb
-        Wv5shHh16O2E6nOTpMfxuQvQ1PtLvSk=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-Rj806vHCP9mSP4sNMvawcQ-1; Sat, 06 Aug 2022 09:58:17 -0400
-X-MC-Unique: Rj806vHCP9mSP4sNMvawcQ-1
-Received: by mail-pf1-f199.google.com with SMTP id k9-20020aa79729000000b0052d4dd3e2aeso2523703pfg.0
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 06:58:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=M1VZLFzbc3QEJrqC5cuqzOWpSyIBVvFdj+5LhLu6pv4=;
-        b=NWIqywnapsP+1t7KCJd4D6YibawIAhbhR1NCVS441zlL9XXVlBLiUi34/l5iC7lvON
-         JmiESnkuGbOHiuVpYazxpHRRJ8U6+vXNcPgeeAoEEJtREdi8xtxPsSBqL6wZNHh6KKEL
-         ra7UCIEyRzJiz2Aido4NG6iYADnN+/r6mMNoOiLqib3GZEkPYWxqIprPBHEdX4Q8Sht2
-         UEbp2Lkx32IR7/N/eQevGpCiWvh07mFzeORJpsbXU+awvh685WznPPlbqghbPUobvVyp
-         MYuW7RJ4mf/ymwyjFoouX5BMQ2FEh4ObrsejC8lq/anTvqJ5n0ipAopDex9uJ34mqCX2
-         QISQ==
-X-Gm-Message-State: ACgBeo2vVhAh1oNCiqAETePhCNQhL490lq1yZsfKa5nUG0O9pHSzMVXO
-        XasmeWr6taFA+qJW65TKcdPBcPwknrSkYvGI7/8Mu4NHGX7S71a+LJNl8UwKKSYgGdo5UdX4ide
-        tGf9yt4trBz9XFfnBTHFQ0njc
-X-Received: by 2002:a65:56ca:0:b0:41c:b7f6:78d7 with SMTP id w10-20020a6556ca000000b0041cb7f678d7mr9535490pgs.414.1659794296252;
-        Sat, 06 Aug 2022 06:58:16 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4zkTYFuwP5/8wgbQSavTGBbDM7tgh5zCuFh2N5fVlb4s0KISmvWWClJ/x6ktAl5IiVZ+OlLA==
-X-Received: by 2002:a65:56ca:0:b0:41c:b7f6:78d7 with SMTP id w10-20020a6556ca000000b0041cb7f678d7mr9535479pgs.414.1659794295968;
-        Sat, 06 Aug 2022 06:58:15 -0700 (PDT)
-Received: from xps13.. ([240d:1a:c0d:9f00:4f2f:926a:23dd:8588])
-        by smtp.gmail.com with ESMTPSA id h12-20020a17090ac38c00b001f4fb21c11asm4871544pjt.21.2022.08.06.06.58.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 06:58:15 -0700 (PDT)
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shigeru Yoshida <syoshida@redhat.com>
-Subject: [PATCH] selftests/proc: Add support for vsyscall=xonly
-Date:   Sat,  6 Aug 2022 22:57:49 +0900
-Message-Id: <20220806135749.47168-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.37.1
+        Sat, 6 Aug 2022 09:58:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FB410FC3;
+        Sat,  6 Aug 2022 06:58:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 838F6B8068F;
+        Sat,  6 Aug 2022 13:58:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99664C433D6;
+        Sat,  6 Aug 2022 13:58:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659794289;
+        bh=CLAku9OxZB+wAiKP6hS1ulXo84boQr4PJwDDM0jjDZ0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bTkxT/hRoxSSXIMfNZP0dO4FMnWfvPegCIB0yD0g+iuYTl9WgGUPYM4y/1rq73nal
+         xKmiL5YrvnjgzEcZl0u4OIIOLXvGQ9wPqlAmL/ajj/WeSAEtTp23NWUDtavAkyVOMZ
+         BQAYqNh+Oe3RIbe7AEqEbU0XYJ4rUU2TNX3brcPhs0aILXVlgDWmburvX47HcqIhI7
+         7h2FCkJAx+QZaFOSAJZHZUTUQUQ38mYbWPYYUvqC/0V7RJ+wgb1h7ItLQSCuSLDc2Q
+         xjNv/fIAIGlLFbJs8iLUiOMVhCOVwcfZE/BkshEQDDcUv17i2gcT3r2F86QfUL4uKb
+         3VDk+hCloYKpw==
+Date:   Sat, 6 Aug 2022 15:08:27 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/9] Improve MCP3911 driver
+Message-ID: <20220806150827.1b28db62@jic23-huawei>
+In-Reply-To: <YueEg0tmKpc4kdLO@gmail.com>
+References: <20220722130726.7627-1-marcus.folkesson@gmail.com>
+        <20220731174112.072345e3@jic23-huawei>
+        <YueEg0tmKpc4kdLO@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,161 +62,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are 3 vsyscall modes: emulate, xonly, and none.  proc-pid-vm
-detects the existence of the vsyscall with memory load on the vsyscall
-page.
+On Mon, 1 Aug 2022 09:45:07 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-This works for emulate and none vsyscall modes, but fails for xonly
-because read permission is omitted with xonly vsyscall page, and it
-results in the following error:
+> On Sun, Jul 31, 2022 at 05:41:12PM +0100, Jonathan Cameron wrote:
+> > On Fri, 22 Jul 2022 15:07:17 +0200
+> > Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+> >   
+> > > Hi,
+> > > 
+> > > This patch series intend to fix bugs and improve functionality of the
+> > > MCP3911 driver.
+> > > The main features added are
+> > > - Support for buffers
+> > > - Interrupt driven readings
+> > > - Support for oversampling ratio
+> > > - Support for set scale values (Gain)
+> > > 
+> > > Among the bug fixes, there are changes in the formula for calculate raw
+> > > value and a fix for mismatch in the devicetree property.
+> > > 
+> > > Another general improvement for the driver is to use managed resources
+> > > for all allocated resources.
+> > >   
+> > Hi Marcus,
+> > 
+> > The first 3 fixes look good to me.  Do you want me to pick those up to
+> > go in after rc1 via my togreg-fixes branch?  The side effect of doing
+> > that is it'll be a little while before they are upstream in the branch
+> > I'll want to pick the rest of the series on top of.
+> > 
+> > So it's a trade off between getting fixes in as soon as possible and
+> > slowing down other improvements a little.  
+> 
+> Both ways works for me.
+> I guess it is preferable to get the fixes in as soon as possible?
+> 
+> If so, do you want me to rebase the series on your togreg-fixes branch
+> or wait to send v5 until the patches are upstream?
+> 
+> Or simply keep sending the whole series?
 
-  # ./proc-pid-vm
-  proc-pid-vm: proc-pid-vm.c:328: main: Assertion `rv == len' failed.
-  Aborted (core dumped)
+For now resend the whole series. I don't want to pick anything up onto the fixes-togreg
+branch until rc1 (as good time to get it to a more recent base).  So I'll sit on these
+for another week anyway.
 
-This patch fixes this issue with introducing the following rule:
+Thanks,
 
-  1. vsyscall mode is emulate if it can load memory
-  2. vsyscall mode is xonly if it can call gettimeofday() on vsyscall
-  3. vsyscall mode is node otherwise
 
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
- tools/testing/selftests/proc/proc-pid-vm.c | 77 ++++++++++++++++++----
- 1 file changed, 65 insertions(+), 12 deletions(-)
+Jonathan
 
-diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
-index 28604c9f805c..dffd263beef3 100644
---- a/tools/testing/selftests/proc/proc-pid-vm.c
-+++ b/tools/testing/selftests/proc/proc-pid-vm.c
-@@ -211,10 +211,16 @@ static int make_exe(const uint8_t *payload, size_t len)
- }
- #endif
- 
--static bool g_vsyscall = false;
--
--static const char str_vsyscall[] =
--"ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
-+static enum { EMULATE, XONLY, NONE } g_vsyscall_mode;
-+
-+static const char * const str_vsyscall[] = {
-+	/* emulate */
-+	"ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n",
-+	/* xonly */
-+	"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n",
-+	/* none */
-+	"",
-+};
- 
- #ifdef __x86_64__
- static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
-@@ -225,7 +231,33 @@ static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
- /*
-  * vsyscall page can't be unmapped, probe it with memory load.
-  */
--static void vsyscall(void)
-+static bool vsyscall_emulate(void)
-+{
-+	*(volatile int *)0xffffffffff600000UL;
-+	return true;
-+}
-+
-+/*
-+ * vsyscall page can't be unmapped, probe it with calling gettimeofday().
-+ */
-+static bool vsyscall_xonly(void)
-+{
-+	int ret;
-+	struct timeval tv;
-+	int (*f)(struct timeval *tv, struct timezone *tz);
-+
-+	/* Try to call gettimeofday() on vsyscall*/
-+	f = (void *)0xffffffffff600000UL;
-+	ret = f(&tv, NULL);
-+	if (ret < 0) {
-+		fprintf(stderr, "gettimeofday() on vsyscall, ret %d\n", ret);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+static bool vsyscall_test(bool (*test)(void))
- {
- 	pid_t pid;
- 	int wstatus;
-@@ -246,13 +278,27 @@ static void vsyscall(void)
- 		act.sa_sigaction = sigaction_SIGSEGV;
- 		(void)sigaction(SIGSEGV, &act, NULL);
- 
--		*(volatile int *)0xffffffffff600000UL;
-+		if (!test())
-+			exit(1);
-+
- 		exit(0);
- 	}
- 	waitpid(pid, &wstatus, 0);
- 	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 0) {
--		g_vsyscall = true;
-+		return true;
- 	}
-+
-+	return false;
-+}
-+
-+static void vsyscall(void)
-+{
-+	if (vsyscall_test(vsyscall_emulate))
-+		g_vsyscall_mode = EMULATE;
-+	else if (vsyscall_test(vsyscall_xonly))
-+		g_vsyscall_mode = XONLY;
-+	else
-+		g_vsyscall_mode = NONE;
- }
- 
- int main(void)
-@@ -314,11 +360,14 @@ int main(void)
- 
- 	/* Test /proc/$PID/maps */
- 	{
--		const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
-+		size_t len = strlen(buf0);
- 		char buf[256];
- 		ssize_t rv;
- 		int fd;
- 
-+		if (g_vsyscall_mode != NONE)
-+			len += strlen(str_vsyscall[g_vsyscall_mode]);
-+
- 		snprintf(buf, sizeof(buf), "/proc/%u/maps", pid);
- 		fd = open(buf, O_RDONLY);
- 		if (fd == -1) {
-@@ -327,8 +376,10 @@ int main(void)
- 		rv = read(fd, buf, sizeof(buf));
- 		assert(rv == len);
- 		assert(memcmp(buf, buf0, strlen(buf0)) == 0);
--		if (g_vsyscall) {
--			assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
-+		if (g_vsyscall_mode != NONE) {
-+			assert(memcmp(buf + strlen(buf0),
-+				      str_vsyscall[g_vsyscall_mode],
-+				      strlen(str_vsyscall[g_vsyscall_mode])) == 0);
- 		}
- 	}
- 
-@@ -374,8 +425,10 @@ int main(void)
- 			assert(memmem(buf, rv, S[i], strlen(S[i])));
- 		}
- 
--		if (g_vsyscall) {
--			assert(memmem(buf, rv, str_vsyscall, strlen(str_vsyscall)));
-+		if (g_vsyscall_mode != NONE) {
-+			assert(memmem(buf, rv,
-+				      str_vsyscall[g_vsyscall_mode],
-+				      strlen(str_vsyscall[g_vsyscall_mode])));
- 		}
- 	}
- 
--- 
-2.37.1
+> 
+> Thanks,
+> Marcus Folkesson
+> 
+> > 
+> > Jonathan
+> >   
 

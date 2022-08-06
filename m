@@ -2,140 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D0E58B86D
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 23:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D90558B870
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 23:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbiHFVXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 17:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
+        id S233616AbiHFV2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 17:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbiHFVXb (ORCPT
+        with ESMTP id S232397AbiHFV2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 17:23:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E4EF59C;
-        Sat,  6 Aug 2022 14:23:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659821008; x=1691357008;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Y/ekvDK9lfRgpxrLz1N34iu6xjYZHHBgk3QqU8GADcA=;
-  b=ObA13w7BRjtU4X86UJXmupe7mhxn7zjm6v2ev7zJyHcDQ1DQ1cj+rGAA
-   BmMP64NLkhFlo5AwaVk3CGgxziP3nGcvVVg2iFp+xudYdH95mKuUCCLIv
-   ioXTIf/l28MqWWGfRngTL+mi5VSdk1ypHjjEykWFId9281WRO022QqOn2
-   XRUSosjqVnqsUgsww76Z5o3KQN0tzeNhwAL2uiiCxOzUmOonhxVl/o2PX
-   ivoROelEemPJE6OONffGX6m00J3jKmUkaRbyqUzJku+EnaXmgpneKUKvM
-   wAMqoaUH51uPbY1JvW2d38Bw0kquKAIKqfx/CSyKEs2n6y024qEeEMfxt
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="290400604"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="290400604"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 14:23:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="663426672"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Aug 2022 14:23:26 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 12665347; Sun,  7 Aug 2022 00:23:38 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: [PATCH v1 4/4] pwm: sysfs: Utilize an array for polarity strings
-Date:   Sun,  7 Aug 2022 00:23:31 +0300
-Message-Id: <20220806212331.40086-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220806212331.40086-1-andriy.shevchenko@linux.intel.com>
-References: <20220806212331.40086-1-andriy.shevchenko@linux.intel.com>
+        Sat, 6 Aug 2022 17:28:44 -0400
+Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3742F5A8
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 14:28:41 -0700 (PDT)
+Date:   Sat, 06 Aug 2022 21:28:34 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1659821319; x=1660080519;
+        bh=3t+gm/btLHdYkkZ3NYKAbKt5z6sF6HBJyqJOtSUuQ1s=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=ZDLi9yFLqFvPl8PXPH6W+mA7LQJriDtwjhXbPycmo6Z7qDf3glJxf5Y0bQSGsM+ai
+         EjqAqQGqzewMZ3DawEPtRqCOBesJmxc83bP2ftBsX8264xcac5LDHI9pRS0OSeeyw8
+         eLe32FYpgQzfxQcG+eSwutmgHgVWA5LWNWEOA2/4=
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Reply-To: Caleb Connolly <caleb@connolly.tech>
+Subject: Re: [PATCH] soc: qcom: rpmhpd: Use highest corner until sync_state
+Message-ID: <151c8978-1fa8-6b21-8544-baf5abb45241@connolly.tech>
+In-Reply-To: <20220806155035.968340-1-bjorn.andersson@linaro.org>
+References: <20220806155035.968340-1-bjorn.andersson@linaro.org>
+Feedback-ID: 10753939:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Code is smaller and looks nicer if we combine polarity strings into an array.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pwm/sysfs.c | 32 ++++++++++++--------------------
- 1 file changed, 12 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/pwm/sysfs.c b/drivers/pwm/sysfs.c
-index 767c4b19afb1..1bbc5286b7c6 100644
---- a/drivers/pwm/sysfs.c
-+++ b/drivers/pwm/sysfs.c
-@@ -151,27 +151,23 @@ static ssize_t enable_store(struct device *child,
- 	return ret ? : size;
- }
- 
-+static const char * const polarity_strings[] = {
-+	[PWM_POLARITY_NORMAL]	= "normal",
-+	[PWM_POLARITY_INVERSED]	= "inversed",
-+};
-+
- static ssize_t polarity_show(struct device *child,
- 			     struct device_attribute *attr,
- 			     char *buf)
- {
- 	const struct pwm_device *pwm = child_to_pwm_device(child);
--	const char *polarity = "unknown";
- 	struct pwm_state state;
- 
- 	pwm_get_state(pwm, &state);
-+	if (state.polarity < 0 || state.polarity >= ARRAY_SIZE(polarity_strings))
-+		return sysfs_emit(buf, "unknown\n");
- 
--	switch (state.polarity) {
--	case PWM_POLARITY_NORMAL:
--		polarity = "normal";
--		break;
--
--	case PWM_POLARITY_INVERSED:
--		polarity = "inversed";
--		break;
--	}
--
--	return sysfs_emit(buf, "%s\n", polarity);
-+	return sysfs_emit(buf, "%s\n", polarity_strings[state.polarity]);
- }
- 
- static ssize_t polarity_store(struct device *child,
-@@ -180,20 +176,16 @@ static ssize_t polarity_store(struct device *child,
- {
- 	struct pwm_export *export = child_to_pwm_export(child);
- 	struct pwm_device *pwm = export->pwm;
--	enum pwm_polarity polarity;
- 	struct pwm_state state;
- 	int ret;
- 
--	if (sysfs_streq(buf, "normal"))
--		polarity = PWM_POLARITY_NORMAL;
--	else if (sysfs_streq(buf, "inversed"))
--		polarity = PWM_POLARITY_INVERSED;
--	else
--		return -EINVAL;
-+	ret = sysfs_match_string(polarity_strings, buf);
-+	if (ret < 0)
-+		return ret;
- 
- 	mutex_lock(&export->lock);
- 	pwm_get_state(pwm, &state);
--	state.polarity = polarity;
-+	state.polarity = ret;
- 	ret = pwm_apply_state(pwm, &state);
- 	mutex_unlock(&export->lock);
- 
--- 
-2.35.1
+On 06/08/2022 16:50, Bjorn Andersson wrote:
+> In some cases the hardware that the bootloader has left configured
+> depends on RPMH power domains for their operation up until the point
+> where the related Linux device driver probes and can inherit that
+> configuration, or power down the hardware gracefully.
+>
+> Unfortunately as Linux probes the releavant drivers in sequence there
+> are periods during the Linux boot flow where either the genpd refcount
+> will reach 0, or worse where the active performance_state votes does not
+> meet the requirements of the state that the hardware was left in.
+>
+> One specific example of this is during boot of e.g. SM8150/SC8180X,
+> where the display clock controller probes, without any particular
+> performance state needs (to access its registers). This will drop the
+> MMCX rail to MIN_SVS, which isn't sufficient to sustain the clock rates
+> that the later probing MDP is configured to. This results in an
+> unrecoverable system state.
+Hi Bjorn,
+
+Seems like my sm8150 device dies before getting this far, bah!
+
+>
+> Handle both these cases by keeping the RPMH power-domais that are
+> referenced voted for highest state, until sync_state indicates that all
+> devices referencing the RPMH power-domain driver has been probed.
+>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Caleb Connolly <caleb@connolly.tech>
+> ---
+>   drivers/soc/qcom/rpmhpd.c | 35 ++++++++++++++++++++++++++++++++++-
+>   1 file changed, 34 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
+> index 092f6ab09acf..494bb6c75ed7 100644
+> --- a/drivers/soc/qcom/rpmhpd.c
+> +++ b/drivers/soc/qcom/rpmhpd.c
+> @@ -39,6 +39,7 @@
+>    * @res_name:=09=09Resource name used for cmd-db lookup
+>    * @addr:=09=09Resource address as looped up using resource name from
+>    *=09=09=09cmd-db
+> + * @state_synced:       Indicator that sync_state has been invoked for t=
+he rpmhpd resource
+>    */
+>   struct rpmhpd {
+>   =09struct device=09*dev;
+> @@ -54,6 +55,7 @@ struct rpmhpd {
+>   =09bool=09=09enabled;
+>   =09const char=09*res_name;
+>   =09u32=09=09addr;
+> +=09bool=09=09state_synced;
+>   };
+>
+>   struct rpmhpd_desc {
+> @@ -493,7 +495,13 @@ static int rpmhpd_aggregate_corner(struct rpmhpd *pd=
+, unsigned int corner)
+>   =09unsigned int this_active_corner =3D 0, this_sleep_corner =3D 0;
+>   =09unsigned int peer_active_corner =3D 0, peer_sleep_corner =3D 0;
+>
+> -=09to_active_sleep(pd, corner, &this_active_corner, &this_sleep_corner);
+> +=09if (pd->state_synced) {
+> +=09=09to_active_sleep(pd, corner, &this_active_corner, &this_sleep_corne=
+r);
+> +=09} else {
+> +=09=09/* Clamp to highest corner if sync_state hasn't happened */
+> +=09=09this_active_corner =3D pd->level_count - 1;
+> +=09=09this_sleep_corner =3D pd->level_count - 1;
+> +=09}
+>
+>   =09if (peer && peer->enabled)
+>   =09=09to_active_sleep(peer, peer->corner, &peer_active_corner,
+> @@ -708,11 +716,36 @@ static int rpmhpd_probe(struct platform_device *pde=
+v)
+>   =09return of_genpd_add_provider_onecell(pdev->dev.of_node, data);
+>   }
+>
+> +static void rpmhpd_sync_state(struct device *dev)
+> +{
+> +=09const struct rpmhpd_desc *desc =3D of_device_get_match_data(dev);
+> +=09struct rpmhpd **rpmhpds =3D desc->rpmhpds;
+> +=09unsigned int corner;
+> +=09struct rpmhpd *pd;
+> +=09unsigned int i;
+> +
+> +=09mutex_lock(&rpmhpd_lock);
+> +=09for (i =3D 0; i < desc->num_pds; i++) {
+> +=09=09pd =3D rpmhpds[i];
+> +=09=09if (!pd)
+> +=09=09=09continue;
+> +
+> +=09=09pd->state_synced =3D true;
+> +=09=09if (pd->enabled)
+> +=09=09=09corner =3D max(pd->corner, pd->enable_corner);
+> +=09=09else
+> +=09=09=09corner =3D 0;
+> +=09=09rpmhpd_aggregate_corner(pd, corner);
+> +=09}
+> +=09mutex_unlock(&rpmhpd_lock);
+> +}
+> +
+>   static struct platform_driver rpmhpd_driver =3D {
+>   =09.driver =3D {
+>   =09=09.name =3D "qcom-rpmhpd",
+>   =09=09.of_match_table =3D rpmhpd_match_table,
+>   =09=09.suppress_bind_attrs =3D true,
+> +=09=09.sync_state =3D rpmhpd_sync_state,
+>   =09},
+>   =09.probe =3D rpmhpd_probe,
+>   };
+> --
+> 2.35.1
+>
+
+--
+Kind Regards,
+Caleb
 

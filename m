@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749A358B7F7
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 21:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7A958B7FB
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 21:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232929AbiHFTkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 15:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59242 "EHLO
+        id S232143AbiHFTmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 15:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbiHFTkO (ORCPT
+        with ESMTP id S232267AbiHFTmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 15:40:14 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2042640
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 12:40:13 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id a89so7071163edf.5
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 12:40:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=tOIk9T3mrJJ6IuQUCBUTAzpxYi7UFUGbDAWnXcWZxT0=;
-        b=ePpuRMrAKZw1DYzxtcv62TLH7DJlO326HoiUxhmUAzA0zfgGb9NwLIsmbLIB9w4L4t
-         ZXCv3JltfSSLzfVDQ9mawK0U1XXajiwv0n1F9aZrD2MWbobLvwCn2dQOKWhc8634emfq
-         xfx/Bf9l0Lc+eo4FmcJeKFU/GH/mTNAF1yLWs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=tOIk9T3mrJJ6IuQUCBUTAzpxYi7UFUGbDAWnXcWZxT0=;
-        b=QYAkZNOpzTfq2wdWjGtnKzAuqxnmk9v9/8WNZ2KctqVsgSK702DFWpxgPsuaESxk6T
-         gfWBUFI31NDPh91HPfbgyY0V6AFqOFXjOpWiJECvBrULu3GPGDIvLfavXmV5pgF1AiQd
-         ogzTYeF4drI6KwgOrkGQP+JBCN+FGFEsUKow0sdCLGcImQI1Ae32NBzh4Bo0tdDlkd59
-         wwgYydPJ26Q6Zkd/bdGVuoU+dO3EdcVAfV1NKMadZZk0CXQVhQaUic8CwCeRsrISB/FF
-         MQOEuKiXDaTsYsmF3f973OOTm3eN0tK7optkqY9hPCLlTreIGJthhreDl9GXY3lZy8r4
-         GDew==
-X-Gm-Message-State: ACgBeo3L06sIPbD2MrIUYUWaA1nR/v5p5gzwx9wYVRbYp68tkNnngt+Y
-        kOj0u4c7Afp+6t/Yea52YwH2IAelySOGrIIT
-X-Google-Smtp-Source: AA6agR7/+UmZZXcajqdbc7djnchqUdxlr2mQ46xAZqvUUypDTP8qbitXWWIkp8sntzKzxaRDp0QWdA==
-X-Received: by 2002:a05:6402:294c:b0:43a:91a9:a691 with SMTP id ed12-20020a056402294c00b0043a91a9a691mr12146844edb.182.1659814811909;
-        Sat, 06 Aug 2022 12:40:11 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id g20-20020aa7d1d4000000b0043e8334f762sm1893183edp.65.2022.08.06.12.40.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Aug 2022 12:40:11 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id n4so4892821wrp.10
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 12:40:11 -0700 (PDT)
-X-Received: by 2002:a5d:6dae:0:b0:220:8005:7dff with SMTP id
- u14-20020a5d6dae000000b0022080057dffmr6988390wrs.442.1659814811001; Sat, 06
- Aug 2022 12:40:11 -0700 (PDT)
+        Sat, 6 Aug 2022 15:42:39 -0400
+Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96953B4B7
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 12:42:38 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id KPgyot1A2sKAkKPgyouG6I; Sat, 06 Aug 2022 21:42:36 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 06 Aug 2022 21:42:36 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-btrfs@vger.kernel.org
+Subject: [PATCH] btrfs: qgroup: Fix a typo in a comment
+Date:   Sat,  6 Aug 2022 21:42:34 +0200
+Message-Id: <c81a4f359ff8a1443168b9c308dcd621ba24e5c5.1659814948.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <YuzlAT7RW1U36+ap@8bytes.org>
-In-Reply-To: <YuzlAT7RW1U36+ap@8bytes.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 6 Aug 2022 12:39:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whs5CR5FRZP_HUksrr9wX6=Rai-S_XTUFJN7jwB5wKN-Q@mail.gmail.com>
-Message-ID: <CAHk-=whs5CR5FRZP_HUksrr9wX6=Rai-S_XTUFJN7jwB5wKN-Q@mail.gmail.com>
-Subject: Re: [git pull] IOMMU Updates for Linux v5.20
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 2:38 AM Joerg Roedel <joro@8bytes.org> wrote:
->
-> IOMMU Updates for Linux v5.20/v6.0:
+Add a missing 'r'.
+s/qgoup/qgroup/
 
-I'm currently bisecting a boot failure on my desktop, and it's gone
-into the iommu code.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ fs/btrfs/qgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm assuming it's the 64-bit thing, but I'll bisect further to make sure.
+diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
+index db723c0026bd..6d6eebaed730 100644
+--- a/fs/btrfs/qgroup.c
++++ b/fs/btrfs/qgroup.c
+@@ -275,7 +275,7 @@ static int __add_relation_rb(struct btrfs_qgroup *member, struct btrfs_qgroup *p
+ }
+ 
+ /*
+- * Add relation specified by two qgoup ids.
++ * Add relation specified by two qgroup ids.
+  *
+  * Must be called with qgroup_lock held.
+  *
+-- 
+2.34.1
 
-If it is, it will be reverted as hopelessly optimistic.
-
-              Linus

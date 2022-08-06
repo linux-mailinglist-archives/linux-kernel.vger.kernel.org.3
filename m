@@ -2,194 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597F958B875
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 23:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A846B58B87A
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 23:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233378AbiHFViR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 17:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60214 "EHLO
+        id S233688AbiHFVsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 17:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiHFViP (ORCPT
+        with ESMTP id S229740AbiHFVsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 17:38:15 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE53FB1CB;
-        Sat,  6 Aug 2022 14:38:13 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id o1so4166653qkg.9;
-        Sat, 06 Aug 2022 14:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=MfKNCdoirxc2xo2dJ2ZnrKHYVycXxfrXH8JNH8fm1Y8=;
-        b=YBzle4Bzk8bMM2eG1wG0QftAx91m2KHC2NzsZY+bkn3ddnh1U940M/jxSnYcV7UjIc
-         pKdr3JCm6dxKjr9Hb2YoyGGOlso4bztjd2UILk6zq6O2FGtlS2u6FlMhyadpHXVi+OQ4
-         VLFnXJt0xdQYzrfMfNi5GuvEG+2nm5LIWyd/WwVe/+vURptktX6hP5gZ+kqvBnq5GW/x
-         uOYMEySPd9JJ4EjR9eel8ie2TJuDeTQgonSosqk441GIXY39IMjaq9ezX4siGpJPGaNe
-         dumUqe4+XqL9xkAHhTVD7Bi6ZhQIocYnNbNY/wY9R8aWANkblzYAgHFibHzxlMWRpxl6
-         C9vw==
+        Sat, 6 Aug 2022 17:48:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1913EA1AA
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 14:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659822484;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G/Yc0SN4MCdHWQQL7Yeq1p7bShR2bu8cCKLfrIoQmUw=;
+        b=dFEvbBZ5fEIbMZOpUcKkK54nD+fKyZxwc7kwUT7CdLUnUDInrnYrFLvCHnGisbtbpFnpr9
+        IjXps1SkM81VLUGmvRu0puuaz4XX9bSgB3YoK+QQEA6Ll7HfSJmuL1DnAeh2g0mjYJlYUG
+        5hfK0liq4x1q8+OWy4xYM+KAIYR228I=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-WnzqmN3GMfy0w6COqY0qMg-1; Sat, 06 Aug 2022 17:48:03 -0400
+X-MC-Unique: WnzqmN3GMfy0w6COqY0qMg-1
+Received: by mail-lf1-f70.google.com with SMTP id e10-20020a19674a000000b0047f8d95f43cso1164047lfj.0
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 14:48:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=MfKNCdoirxc2xo2dJ2ZnrKHYVycXxfrXH8JNH8fm1Y8=;
-        b=jhXM5SpUEo1eSYdwewxz8vqPPgQxhOtjLvk2RQ9XT9GeovHojp1n8IyQhoWaoDt351
-         NtFkS1z8g9qheIUKE14Z81XNPmrjf/+qQSIV4EMzYCoGYkiniaxgrSVXmggwBtGIzxWG
-         0ig8eQpBDnnFvtH/Mj/FUGC79hnEDLtp0XPC+iceRWD9Wd9L5uOzN6rXhtmfbBy0zcZ1
-         dIjmLThx4kmW0zhugu+YCSgfQEBxFTOlsUBOxlUVjktITgacOobFYRiFQ+IfNQjTnsvJ
-         ketooLWNvWJdU4KyJVMx2JbcC3DO7GnQzi/ios7D9k2wPtuBMJduQfF4itSX+fvQAt2k
-         2Xhg==
-X-Gm-Message-State: ACgBeo3rPao2uXUDYvenAs/rDHa+mMWQbEiQmDPj36DVQZAO7IEcw+QD
-        PX9Hg1x/2sUV7resEc7qTaNHSevmmAo3RY6VfL8=
-X-Google-Smtp-Source: AA6agR56Da74aJjiF+4nLUKRTvJqjbVZJG6Bbd44zgX3ASwhuBBjAStAwYDAMCCSp6ij5AOPtil/tLlaj2OWYcKKILA=
-X-Received: by 2002:a05:620a:8018:b0:6b6:5df:977 with SMTP id
- ee24-20020a05620a801800b006b605df0977mr9477710qkb.320.1659821892589; Sat, 06
- Aug 2022 14:38:12 -0700 (PDT)
+        bh=G/Yc0SN4MCdHWQQL7Yeq1p7bShR2bu8cCKLfrIoQmUw=;
+        b=a1AOV9TVQhkHgfYcvFC8R6urY3kOczLU8bgZ0NjkQAgApdjvKqzFPFb49UnvJfzVap
+         qf4R0EqHzGUmeQl+d/8u3WfMVkIo4Gpemq1alqHH2f3ypod1oAlrt1qYTsof3hO12Bla
+         Rwr3xs0bBusUlxyo97DdV24dI1Vl0QMJL1kK3TLu06nBRTjpeFnfHCGshP4LUt0GkjXx
+         i5wfqaqlYy+REQbm4LUeqbi+P1ZUkLRWtF32OFyQFHSDUEnAeXWkDbXhDhdabGgZAQDf
+         dG9BUj8yg94guCopL/kvEEUDuWbv7l90IobWZ1Q0nbKBAWjBUAgjBner5WH5lVja0EAC
+         NPLw==
+X-Gm-Message-State: ACgBeo0f6+YPGJdsLN1lji8acFVZLY1UoeP206Q6bErtkeyzbtVbDuOo
+        0MWCdS6btL8NDFQvkWWu2e33NYYpfs8ryTEKyrAojFXsO55pzgX2E9KL8KVu0vBmTaIMAcavtUo
+        vyxlWMHTr4Rx3eUa1w0OU+DSoTF+uzruhgDt3LOxc
+X-Received: by 2002:a2e:96c1:0:b0:258:e8ec:3889 with SMTP id d1-20020a2e96c1000000b00258e8ec3889mr3830100ljj.6.1659822482061;
+        Sat, 06 Aug 2022 14:48:02 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4Bq+qQub/hc9Zw+AFp/9p2wRrQxN4NisZClKldO2MHMROZVH32qxdSbMaJa+L5k/npjjS1q4gBM/6yk6Y4QVk=
+X-Received: by 2002:a2e:96c1:0:b0:258:e8ec:3889 with SMTP id
+ d1-20020a2e96c1000000b00258e8ec3889mr3830084ljj.6.1659822481766; Sat, 06 Aug
+ 2022 14:48:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220806163255.10404-1-markuss.broks@gmail.com> <20220806163255.10404-4-markuss.broks@gmail.com>
-In-Reply-To: <20220806163255.10404-4-markuss.broks@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 6 Aug 2022 23:37:35 +0200
-Message-ID: <CAHp75VcMgFQJoFC68GCTej--44+iFWXEpjh2Q7O0XbHk588OCw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] efi: earlycon: Add support for generic
- framebuffers and move to console subsystem
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Wei Ming Chen <jj251510319013@gmail.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
+References: <20220805181105.GA29848@willie-the-truck> <20220806074828.zwzgn5gj47gjx5og@sgarzare-redhat>
+ <20220806094239.GA30268@willie-the-truck> <CAD60JZMbbkwFHqCm_iCrOrKgRLBUMkDQfuJ=Q1T-sZt59eTBrw@mail.gmail.com>
+ <20220806143443.GA30658@willie-the-truck>
+In-Reply-To: <20220806143443.GA30658@willie-the-truck>
+From:   Stefan Hajnoczi <shajnocz@redhat.com>
+Date:   Sat, 6 Aug 2022 17:47:50 -0400
+Message-ID: <CAD60JZOwho3D-_gXZTT3aYSgo04Pd=VrM7QyJbgfp8PYqzOvgw@mail.gmail.com>
+Subject: Re: IOTLB support for vhost/vsock breaks crosvm on Android
+To:     Will Deacon <will@kernel.org>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        torvalds@linux-foundation.org, ascull@google.com, maz@kernel.org,
+        keirf@google.com, jiyong@google.com, kernel-team@android.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 6, 2022 at 6:38 PM Markuss Broks <markuss.broks@gmail.com> wrote:
+On Sat, Aug 6, 2022 at 10:35 AM Will Deacon <will@kernel.org> wrote:
 >
-> Add early console support for generic linear framebuffer devices.
-> This driver supports probing from cmdline early parameters
-> or from the device-tree using information in simple-framebuffer node.
-> The EFI functionality should be retained in whole.
-> The driver was disabled on ARM because of a bug in early_ioremap
+> On Sat, Aug 06, 2022 at 06:52:15AM -0400, Stefan Hajnoczi wrote:
+> > On Sat, Aug 6, 2022 at 5:50 AM Will Deacon <will@kernel.org> wrote:
+> > > On Sat, Aug 06, 2022 at 09:48:28AM +0200, Stefano Garzarella wrote:
+> > > > On Fri, Aug 05, 2022 at 07:11:06PM +0100, Will Deacon wrote:
+> > > > If the VMM implements the translation feature, it is right in my opinion
+> > > > that it does not enable the feature for the vhost device. Otherwise, if it
+> > > > wants the vhost device to do the translation, enable the feature and send
+> > > > the IOTLB messages to set the translation.
+> > > >
+> > > > QEMU for example masks features when not required or supported.
+> > > > crosvm should negotiate only the features it supports.
+> > > >
+> > > > @Michael and @Jason can correct me, but if a vhost device negotiates
+> > > > VIRTIO_F_ACCESS_PLATFORM, then it expects the VMM to send IOTLB messages to
+> > > > set the translation.
+> > >
+> > > As above, the issue is that vhost now unconditionally advertises this in
+> > > VHOST_GET_FEATURES and so a VMM with no knowledge of IOTLB can end up
+> > > enabling it by accident.
+> >
+> > Unconditionally exposing all vhost feature bits to the guest is
+> > incorrect. The emulator must filter out only the feature bits that it
+> > supports.
+>
+> I've evidently done a bad job of explaining this, sorry.
+>
+> crosvm _does_ filter the feature bits which it passes to vhost. It takes the
+> feature set which it has negotiated with the guest and then takes the
+> intersection of this set with the set of features which vhost advertises.
+> The result is what is passed to VHOST_SET_FEATURES. I included the rust
+> for this in my initial mail, but in C it might look something like:
+>
+>         u64 features = negotiate_features_with_guest(dev);
+>
+>         ioctl(vhost_fd, VHOST_GET_FEATURES, &vhost_features);
+>         vhost_features &= features;     /* Mask out unsupported features */
+>         ioctl(vhost_fd, VHOST_SET_FEATURES, &vhost_features);
 
-We refer to functions like func().
+This is unrelated to the current issue, but this code looks wrong.
+VHOST_GET_FEATURES must be called before negotiating with the guest.
+The device features must be restricted by vhost before advertising
+them to the guest. For example, if a new crosvm binary runs on an old
+kernel then feature bits crosvm negotiated with the guest may not be
+supported by the vhost kernel module and the device is broken.
 
-> implementation on ARM and on IA64 because of lack of early_memremap_prot.
+> The problem is that crosvm has negotiated VIRTIO_F_ACCESS_PLATFORM with
+> the guest so that restricted DMA is used for the virtio devices. With
+> e13a6915a03f, VIRTIO_F_ACCESS_PLATFORM is now advertised by
+> VHOST_GET_FEATURES and so IOTLB is enabled by the sequence above.
+>
+> > For example, see QEMU's vhost-net device's vhost feature bit allowlist:
+> > https://gitlab.com/qemu-project/qemu/-/blob/master/hw/net/vhost_net.c#L40
+>
+> I agree that changing crosvm to use an allowlist would fix the problem,
+> I'm just questioning whether we should be changing userspace at all to
+> resolve this issue.
+>
+> > The reason why the emulator (crosvm/QEMU/etc) must filter out feature
+> > bits is that vhost devices are full VIRTIO devices. They are a subset
+> > of a VIRTIO device and the emulator is responsible for the rest of the
+> > device. Some features will require both vhost and emulator support.
+> > Therefore it is incorrect to expect the device to work correctly if
+> > the vhost feature bits are passed through to the guest.
+>
+> I think crosvm is trying to cater for this by masking out the features
+> it doesn't know about.
 
-Ditto.
+Can you point to the guest driver code for restricted DMA? It's
+unclear to me what the guest drivers are doing and whether that is
+VIRTIO spec compliant. Is the driver compliant with VIRTIO 1.2 "6.1
+Driver Requirements: Reserved Feature Bits":
 
-...
+  A driver SHOULD accept VIRTIO_F_ACCESS_PLATFORM if it is offered,
+and it MUST then either disable the IOMMU or configure the IOMMU to
+translate bus addresses passed to the device into physical addresses
+in memory. If VIRTIO_F_ACCESS_PLATFORM is not offered, then a driver
+MUST pass only physical addresses to the device.
 
-> +#include <asm/early_ioremap.h>
+Stefan
 
-Can it be placed after linux/* ones?
-
-> +#include <linux/console.h>
-> +#include <linux/efi.h>
-> +#include <linux/font.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mm.h>
-> +#include <linux/of.h>
-> +#include <linux/of_fdt.h>
-> +#include <linux/serial_core.h>
-> +#include <linux/screen_info.h>
-
-...
-
-> +static int __init simplefb_earlycon_remap_fb(void)
-> +{
-> +       unsigned long mapping;
-
-+ Blank line.
-
-> +       /* bail if there is no bootconsole or it has been disabled already */
-> +       if (!earlycon_console || !(earlycon_console->flags & CON_ENABLED))
-> +               return 0;
-> +
-> +       if (region_intersects(info.phys_base, info.size,
-> +                             IORESOURCE_SYSTEM_RAM, IORES_DESC_NONE) == REGION_INTERSECTS)
-> +               mapping = MEMREMAP_WB;
-> +       else
-> +               mapping = MEMREMAP_WC;
-
-> +       info.virt_base = memremap(info.phys_base, info.size, mapping);
-> +
-> +       return info.virt_base ? 0 : -ENOMEM;
-
-Easier to read the standard pattern:
-
-  if (!info.virt_base)
-    return -ENOMEM;
-
-  return 0;
-
-> +}
-
-...
-
-> +static void simplefb_earlycon_write_char(u8 *dst, unsigned char c, unsigned int h)
-> +{
-> +       const u8 *src;
-> +       int m, n, bytes;
-> +       u8 x;
-> +
-> +       bytes = BITS_TO_BYTES(font->width);
-> +       src = font->data + c * font->height * bytes + h * bytes;
-> +
-> +       for (m = 0; m < font->width; m++) {
-> +               n = m % 8;
-> +               x = *(src + m / 8);
-
-I would write it as
-
-  x = src[m / 8];
-
-> +               if ((x >> (7 - n)) & 1)
-
-> +                       memset(dst, 0xff, (info.depth / 8));
-
-Too many parentheses.
-
-> +               else
-> +                       memset(dst, 0, (info.depth / 8));
-
-Ditto.
-
-> +               dst += (info.depth / 8);
-
-Ditto.
-
-> +       }
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko

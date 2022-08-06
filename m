@@ -2,92 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D24458B3A4
+	by mail.lfdr.de (Postfix) with ESMTP id 8226358B3A5
 	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 06:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238531AbiHFEC5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 6 Aug 2022 00:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S241607AbiHFEDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 00:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiHFECy (ORCPT
+        with ESMTP id S241461AbiHFEDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 00:02:54 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 05 Aug 2022 21:02:53 PDT
-Received: from lvs-smtpgate1.nz.fh-koeln.de (lvs-smtpgate1.nz.FH-Koeln.DE [139.6.1.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A987813D28
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 21:02:53 -0700 (PDT)
-Message-Id: <178efe$25k5a6@smtp.intranet.fh-koeln.de>
-X-IPAS-Result: =?us-ascii?q?A2D//wB/5u1i/9LeBotaHAEBASsLBgEBBAQBAQIBAQcBA?=
- =?us-ascii?q?RWBTwIBGggBgRYCAQEBAUwBAQEBgROBLAEBK4ROg0+ITyODIAGBKYJ1ixaBY?=
- =?us-ascii?q?wUCgiuMWQsBAQEBAQEBAQEJEgIlCQQBAYUEAVMBAQEBB4QfJjcGDgECBAEBA?=
- =?us-ascii?q?QEDAgMBAQEBAQEDAQEIAQEBAQYEgRyFLzkNXwEBAYEMNAEBAYQQAQEBBgEBA?=
- =?us-ascii?q?StrIAIZDQJJFkcBAQEBgkZFAQEBgiUBATMTojuHYYExgQGCKYEmAYELgikFg?=
- =?us-ascii?q?nKBFyoCAQEBAQEBh22QXIEPAQKFGB0TglIEmCkCAho4AzQRHjcLA10ICRcSI?=
- =?us-ascii?q?AIEERoLBgMWPgkCBA4DQAgNAxEEAw8YCRIIEAQGAzEMJQsDFAwBBgMGBQMBA?=
- =?us-ascii?q?xsDFAMFJAcDHA8jDQ0EHx0DAwUlAwICGwcCAgMCBhUGAgJOOQgECAQrJA8FA?=
- =?us-ascii?q?gcvBQQvAh4EBQYRCAIWAgYEBAQEFgIQCAIIJxcHEzMZAQVZEAkhHAkfEAUGE?=
- =?us-ascii?q?wMgbwVFDygzNTwrHxsKYCcLKicEFQMEBAMCBhMDAyICEC4xAxUGKRMSLQkqd?=
- =?us-ascii?q?QkCAyJuAwMEKC4DCUAHCSYsPQUFRz4PlnmCEIE4AjCHC41Cg2UFilagWwcDg?=
- =?us-ascii?q?1GBRAKTfowogkaSdA4EkX0JhW+EdowSp1iBd4F/cIFuCSWBG1EZD5ISil90A?=
- =?us-ascii?q?jkCBgEKAQEDCYxlgQqBGAEB?=
-IronPort-Data: A9a23:kNypR605IRyzeO/dI/bD5ZF3kn2cJEfYwER7XKvMYLTBsI5bp2FTz
- TYXW2+AOqyMZGHyet8jOdvn/EIBvpSBmNdmTVdr3Hw8FHgiRegppDi6wuUcGwvIc6UvmWo+t
- 512huHodZxyFDmEzvuUGuCJhWFm0q2VTabLBufBOyRgLSdpUy5JZShLwobVv6Yx6TSHK1LV0
- T/Ni5CHULOV82YcGn4Z7auFtCRusJza0N/PlgVjDRzjlAa2e0g9VPrzF4noR5fLatU88tqBe
- gr25OrRElU1X/saIojNfr7TKiXmS1NJVOSEoiI+t6OK2nCuqsGuu0o2HKJ0VKtZt9mGt/dg+
- ORV68KPcAEoAonWsdgQYxpXLxgraMWq+JefSZS+mem65BSbXSCq3e1oSk82eI4f9+JxR21Dn
- RAaAGlWP1bdwbjsmvThE7EEascLdaEHOKsas3pjwDfLDPtgXY3fX6HHzdRRmi0qwMtJGJ4yY
- uJGMmI2NkmdO3WjPH8qDrIFkMyahELBWA1063/Kv4k2vCvMmVkZPL/FaoOOI4faFK25hH2wq
- mvA/mn9RBodMsCW4TqC7nelh+uJliT+MKoZHaex8/NvikCa2mEWARwSfUqyof6+zEW5Xrp3I
- EUO8y8jqKIv/VCmS9D8WzW3pXeFulgXXN84O+Yz8giIx6/e/g+FC20NTzppaNs6scY3QXoh0
- Vrht9LlCDhkt+S9SXWB876VqXW5Pi19BWsDYzIUCAgI+d/upKktgR/VCNVuCqi4ipvyAz6Y6
- y+DqjAzgbpVy4gj16Kn+FnGh3SnoZ2hZhY4+kORGEqk6A1jbYKoboDu7kLUhd5YJoGfXB/H+
- lAelsSe5fxIBpaI/ASIQaNLWpmq6uyDPTmahkRgd7Es+T3rvTiLcoVApj1zTG91dIBCUTvoZ
- lLPowRX5Y8VMHbCRfYrPN3tW511l/alTI+/DKuRN59BY4Q0bwKB8GRjYEeR2yXymU40nKcwf
- 5OaWcarEXMTCKAhxz2zL88M1qIxwyk/wUvTQoz+xhWjl7GZYRa9UqodKFyUcqU166aNoQP9+
- dJCOsuN0AkZW+r7CgHT7I0eGlADN2QgGZfwpMF/dumfJwNnHCcqDPq56bAofo1hluJPn+3F+
- nW6ck9f1F/2hHmBIgKPAlhsYbn1XJt7qXM+NAQjJUyp0HVlaoGqqq0FH7M4dLM99eFni/ExV
- +MEcMioAvNTTz3G/3IWapyVhJRnXBusm0SUOEKYjCMXZ8Q6HVaQopn6Zg2q+DgISCS38Mg5r
- rmmkA/WKXYee+h8JOHHWMO3kQ2OhH4cpMZodnfFEtpcRHy5peCGNBfNYu8Lz9AkcEuel2XEi
- lnPXX/0tsGQ+95voYahabSs8db1Q7oW8l9yQjGz0FqgCcXN1kaOqWOqeM2PeTfSUm6cFE6KO
- L0LkK+U3BEvulFQr4o0KbZqy6972Nb0u6daxwBlFR32g7WX5lBIeyfuMTFn7PEl+1OgkVLet
- 4Lm0oAy1U+1EM3kCkUNAwEuc/6O0/oZ8hGLs6lkfx+mvnQupebdOam3A/VqoHMDRFeSGNx+q
- drNROZMt1PXZucCbYfW3nEFrQxg0FRdCvl47fn2/7MHeiJxkwobOsyNYsMHyJ2CdslXOUknO
- Xeag7DZjLRBwEXZdXcvBxDwMRl12vwzVdEj5AFqGmllbfKc3qBthE0Aq2RpJumXpz0eu99O1
- qFQHxUdDc2zE/1A3aCvg0jE99l9OSCk
-IronPort-HdrOrdr: A9a23:5CeYvK0wtCOCoOLOpOK2oAqjBKUkLtp133Aq2lEZdPSdGvb1qy
- nIppkmPH7P4wr5N0tBpTntAsi9qBDnn6KdiLN5VYtKOjOW21dB6epZnO7fKlbbdBEWmNQy6U
- 4aSdkdNOHN
-X-IronPort-Anti-Spam-Filtered: true
-THK-HEADER: Antispam--identified_spam--outgoing_filter
-Received: from p222210.vpn-dyn.fh-koeln.de (HELO MAC15F3.vpn.fh-koeln.de) ([139.6.222.210])
-  by smtp.intranet.fh-koeln.de with ESMTP/TLS/DHE-RSA-AES128-SHA; 06 Aug 2022 06:01:46 +0200
-Content-Type: text/plain; charset="utf-8"
+        Sat, 6 Aug 2022 00:03:05 -0400
+Received: from out28-74.mail.aliyun.com (out28-74.mail.aliyun.com [115.124.28.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643A214014;
+        Fri,  5 Aug 2022 21:03:00 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08715575|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.154924-0.00444291-0.840633;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.OnDAFCd_1659758542;
+Received: from 192.168.220.136(mailfrom:michael@allwinnertech.com fp:SMTPD_---.OnDAFCd_1659758542)
+          by smtp.aliyun-inc.com;
+          Sat, 06 Aug 2022 12:02:25 +0800
+Message-ID: <ff062259-3c94-ddd2-4376-53b4cbd25e7d@allwinnertech.com>
+Date:   Sat, 6 Aug 2022 12:02:22 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Charity Donation
-To:     You <mackenzie.tuttle@ca.rr.com>
-From:   "MacKenzie Scott" <mackenzie.tuttle@ca.rr.com>
-Date:   Sat, 06 Aug 2022 05:01:43 +0100
-Reply-To: mackenzie-tuttle@californiamail.com
-X-Priority: 1 (High)
-Sensitivity: Company-Confidential
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] ext4: fix error when itable blocks is greater than
+ s_itb_per_group
+Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>, Lukas Czerner <lczerner@redhat.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com
+References: <20220802021029.16046-1-michael@allwinnertech.com>
+ <20220803071859.elywnni2yfol4bea@fedora> <Yussl4uRWAAO3TtT@mit.edu>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <Yussl4uRWAAO3TtT@mit.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-  My name is MacKenzie Scott Tuttle; I'm a philanthropist and founder of one of the largest private foundations in the world. I'm on a mission to give it all away as I believe in ‘giving while living.’ I always had the idea that never changed in my mind — that wealth should be used to help each other, which has made me decide to donate to you. Kindly acknowledge this message and I will get back to you with more details.
+On 8/4/2022 10:19 AM, Theodore Ts'o wrote:
+> On Wed, Aug 03, 2022 at 09:18:59AM +0200, Lukas Czerner wrote:
+>>
+>> Hi Michael,
+>>
+>> mke2fs is making sure that we completely fill the inote table blocks.
+>> This is a corrupted image and so AFAICT ext4 is doing the right thing
+>> here. There does not seem to be a problem to fix, unless you can somehow
+>> trick mke2fs to make a file system like this.
+> 
+> Several years ago, android was shipping a bogus/busted
+> reimeplementation of mke2fs, reportedly because a certain founder of
+> Android (cough, Andy Rubin, cough) was alergic to the GPL.  ("The
+> problem with GPL in embedded systems [such as smartphones and tablets]
+> is that it's viral...")  This bogus reimplementation would create file
+> systems where the number of inodes per block group was a multiple of 4
+> instead of 8.  But, it was under the BSD license, so it was all good!   :-/
+> 
+> This bogus reimplementation of mkfs would, 50% of the time, create
+> busted file systems which couldn't be fixed, if they got corrupted, by
+> e2fsck.  This is because e2fsprogs' allocation bitmap code assumes
+> that you can back the bitarray into a single contiguous memory block
+> --- and this doesn't work if the number of inodes per block group is
+> not a multiple of 8.  If the file system got corrupted, the only
+> recourse was to wipe the user partition and the user would lose any
+> data that wasn't backed up to the cloud.
+> 
+> This has since been fixed for quite some time, but if there is some
+> low-end Android manufacturer is using an ancient version of AOSP, this
+> could be happening even in 2022 --- but that doesn't mean we need to
+> support such broken file systems.  As far as I'm concerned the only
+> way to make valid Android ext4 system images is the combination of
+> mke2fs and e2fsdroid, which is what modern versions of AOSP do.
+> 
+>      	       	     	     	    	     	- Ted
 
-Visit the web page to know more about me: https://www.nytimes.com/2022/04/10/business/mackenzie-scott-charity.html
+Dear Ted & Lukas,
+Thanks for your clarification. I did several tests, turned outs Ted was 
+right. I'm clear now.
 
+-- 
 Regards,
-MacKenzie Scott Tuttle.
+Michael Wu

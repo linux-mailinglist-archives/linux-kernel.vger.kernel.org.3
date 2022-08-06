@@ -2,281 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC38758B712
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 18:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D7258B73B
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 19:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233850AbiHFQvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 12:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S233790AbiHFRLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 13:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbiHFQvh (ORCPT
+        with ESMTP id S229639AbiHFRK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 12:51:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD1EDEAB;
-        Sat,  6 Aug 2022 09:51:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C02BB807E5;
-        Sat,  6 Aug 2022 16:51:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB00C4347C;
-        Sat,  6 Aug 2022 16:51:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659804693;
-        bh=Oh2K/3bcZIMdXmQON7AZPIv0AYx4m5BoaE07zhj6VoM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FcY5wVauh6a1++B+RZiyOB3YKli8kMdbrXs3RlHdwnVq1Bq7NDrcu/ZxBe/Fca1mW
-         gV5FfxzqYf2tmuZz7OAIDqynIrKuNKyNPsVsWEehV8qXiIClGYVyhaL7mrSEXuoKbb
-         zEd36DmWaDYG1/inQ7AXrTQZdaBc3unsO6faURZ5UyvMJ6MRRnyAuzo5lV+Tv/VTK4
-         4+1oeW33fSYkw2/HF6UTUGqFQl8116/sX0elcFdO0nNL1AhF3bCpEMzOALV6lAD6AU
-         +3m3v75Jh6PI4Kw8q7UIBtYvpLjYTB/v/UC65kZvW4dGnfayS709MWfNNsnxb/PrRO
-         QUBvhnqlimrSw==
-Date:   Sat, 6 Aug 2022 18:01:53 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mranostay@ti.com, William Breathitt Gray <william.gray@linaro.org>
-Subject: Re: [PATCH v3 2/2] iio: time: capture-tiecap: capture driver
- support for ECAP
-Message-ID: <20220806180153.1eb22591@jic23-huawei>
-In-Reply-To: <98d17617-72b5-6330-d4f5-1bece928ceab@baylibre.com>
-References: <20220728175124.468461-1-jpanis@baylibre.com>
-        <20220728175124.468461-3-jpanis@baylibre.com>
-        <20220731164116.30e91f34@jic23-huawei>
-        <11b7436b-5c31-671e-ba77-435fe8e3b767@baylibre.com>
-        <98d17617-72b5-6330-d4f5-1bece928ceab@baylibre.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 6 Aug 2022 13:10:58 -0400
+X-Greylist: delayed 397 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 06 Aug 2022 10:10:55 PDT
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CF6F5A2;
+        Sat,  6 Aug 2022 10:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1659805455; bh=q4ABFkCbSH96OqX58TPcyYOM49oSlhTNadDmH/B85F4=;
+        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+        b=sEFTyfKX9sQOeJMwWcvpgLUSFDljZ4ZPhLANt4SFBBEQqj87NkeVwlM3T2HiBtHRN
+         po+JJ1bGn0sgZJQRCbb5JiPM/DLzfsYWlZODKmrZsfDwGNABshy/90xETXAstplq2T
+         9kDvdPATIMER9wVtfGZYYGAaLhO76/wzTIj9Sm/Q=
+Date:   Sat, 6 Aug 2022 19:04:14 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Caleb Connolly <kc@postmarketos.org>
+Cc:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        martijn@brixit.nl, ayufan@ayufan.eu, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add initial support for
+ Pine64 PinePhone Pro
+Message-ID: <20220806170414.qogs4ad2mooluxie@core>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        martijn@brixit.nl, ayufan@ayufan.eu, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20220805234411.303055-1-tom@tom-fitzhenry.me.uk>
+ <20220805234411.303055-4-tom@tom-fitzhenry.me.uk>
+ <f9cbc047-f30f-e711-3213-56fcbb7bbc8a@postmarketos.org>
+ <9a168a20-1fd1-5d73-1d33-bd2f054d60d7@tom-fitzhenry.me.uk>
+ <eb4327d0-b31b-b6ea-e0d3-d5cff3508f39@postmarketos.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <eb4327d0-b31b-b6ea-e0d3-d5cff3508f39@postmarketos.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 Aug 2022 15:28:09 +0200
-Julien Panis <jpanis@baylibre.com> wrote:
+Hi Caleb and Tom,
 
-> On 01/08/2022 16:08, Julien Panis wrote:
-> >
-> >
-> > On 31/07/2022 17:41, Jonathan Cameron wrote: =20
-> >> On Thu, 28 Jul 2022 19:51:24 +0200
-> >> Julien Panis <jpanis@baylibre.com> wrote:
-> >> =20
-> >>> ECAP hardware on AM62x SoC supports capture feature. It can be used
-> >>> to timestamp events (falling/rising edges) detected on signal input=20
-> >>> pin.
-> >>>
-> >>> This commit adds capture driver support for ECAP hardware on AM62x So=
-C.
-> >>>
-> >>> In the ECAP hardware, capture pin can also be configured to be in
-> >>> PWM mode. Current implementation only supports capture operating mode.
-> >>> Hardware also supports timebase sync between multiple instances, but
-> >>> this driver supports simple independent capture functionality.
-> >>>
-> >>> Signed-off-by: Julien Panis <jpanis@baylibre.com> =20
-> >> Hi Julien,
-> >>
-> >> So this isn't the first ecap driver we've had proposed, but the previo=
-us
-> >> one was a few years ago and never reached v2.
-> >> https://lore.kernel.org/all/20200818153614.6438-1-dts86@cornell.edu/
-> >>
-> >> Honestly I can't remember much about it, but maybe the discussion arou=
-nd
-> >> that will be worth a reread. =20
-> >
-> > Hi Jonathan, thank you for your review.
-> >
-> > I read the discussion about previous attempt, before submitting this=20
-> > patch. There were
-> > interesting comments indeed.
-> >
-> > But in this previous attempt, only one-shot pulses were handled=20
-> > (moreover, global IRQ flag
-> > was not cleared, so I'm not sure that IRQ could be raised more than=20
-> > once).
-> >
-> > However, ECAP can be used to make time measurements for any type of=20
-> > "square waveform".
-> > That's why I tried to make this event mode configurable. Besides,=20
-> > using a continuous mode allows
-> > handling much more signal types (not only single pulses).
-> > =20
-> >>
-> >> The use of ABI here is unusual. So I'd definitely like to see some=20
-> >> documentation
-> >> probably as a file in the main kernel documentation to explain what=20
-> >> the interface
-> >> is an how that relates to what is being captured. =20
-> >
-> > OK, I will add some userspace documentation.
-> > =20
-> >>
-> >> First thing to note here is the channel type of IIO_INDEX is now not=20
-> >> actually
-> >> used any more because we moved all the relevant drivers over to the=20
-> >> counter
-> >> subsystem (and we failed to mark it deprecated). =20
-> >
-> > I evaluated this counter subsystem before starting development.=20
-> > Counting events is not "a priori"
-> > the goal when using ECAP.
-> >
-> > Nevertheless, maybe "counter_push_event" function could do the job. If=
-=20
-> > I use counter API :
-> > # Option 1 : CAP1/2/3/4 registers could be seen as 4 channels of the=20
-> > same counter...
-> > but there are not channels, there are just sequential timestamps=20
-> > actually. So I'm afraid this leads
-> > to misunderstanding for the user.
-> > Moreover, the user will have to read several entries (counts 1/2/3/4)=20
-> > to gather timestamps from
-> > the same input signal, which is not very convenient.
-> > # Option 2 : Either CAP 1/2/3/4 events could be gathered in a single=20
-> > channel...but then it will not
-> > be possible to configure their polarity (rising/falling edge)=20
-> > individually (unless I did
-> > not understand well counter framework documentation).
-> >
-> > So, even with counter framework, it will lead to some diverted use of=20
-> > the framwork, since ECAP
-> > is a very specific hardware that do not fit 100% counter philosophy.
-> >
-> > I admit that ECAP do not fit 100% IIO philosophy either.
-> >
-> > Maybe misc API would be more relevant actually. Any opinion about it=20
-> > will be welcome. :-) =20
->=20
-> [Answering my own mail]
->=20
-> I got a closer look at counter framework. It is not suitable at all for=20
-> ECAP. Initially, I thought that
-> "counter_push_event" function could be used, but the only timestamp=20
-> handled by this function
-> is a software timestamp. I strongly doubt that counter framework=20
-> maintainer would accept
-> some modification here to support hardware timestamp : a patch rejection=
-=20
-> would be
-> legitimate, since a counter is dedicated to "event counting". Whereas=20
-> ECAP is dedicated to
-> "event timestamping".
-+CC William. =20
+more below.
 
-one thing to note is that a hardware timestamp is just a freerunning
-counter.  As such, you can capture it alongside other data in a similar
-fashion to any mutliple counter acquisition (which is the same as we
-will be doing with this in IIO anyway).
+On Sat, Aug 06, 2022 at 03:58:17PM +0100, Caleb Connolly wrote:
+> On 06/08/2022 03:37, Tom Fitzhenry wrote:
+> > On 6/8/22 12:10, Caleb Connolly wrote:
+> > > According to the link below (and my own knowledge of PPP
+> > > development) Kamil is the original author of this patch, both Kamil
+> > > and Martijn created the initial version of the devicetree. Given
+> > > that you're using their work as a base, Kamil's authorship should be
+> > > respected in the patch you submit.
+> > 
+> > I agree authorship is important, and thus Kamil, Martijn and Megi are
+> > listed as Co-developed-by in this patch.
+> To be clear, by authorship I mean literally the author of the patch, the
+> previous patch in this series was created by Samuel and you left his
+> authorship intact - it has "From: Samuel Dionne-Riel
+> <samuel@dionne-riel.com>" at the top, so when a maintainer picks it up and
+> it ends up in Linux, anyone looking at it will see that he was the author of
+> the patch.
+> 
+> This patch is from you, there is no From: tag overriding it, and the
+> diffstat in your cover letter shows you as the author. Whilst you have
+> obviously made some heavy changes to this patch, it isn't your original work
+> as you state yourself in the commit message. Authorship should be attributed
+> to Kamil as they are the author of the earliest version of this patch we
+> have.
+> > 
+> > > Their original patch [2] contained SoBs from them and Martijn, those
+> > > are both missing below. Both of their signed-off-by tags should be
+> > > added before this patch hits the mailing list, and the same for
+> > > Ondrej. The order also seems wrong (Ondrej should be last before
+> > > you).
+> > 
+> > Yes, this patch's acceptance is blocked until all Co-developed-by
+> > authors (Kamil, Martjin, Megi) provide their Signed-off-by to this
+> > patch.
+> You should obtain SoBs from Co-developers /before/ sending this patch
+> upstream, this indicates that everyone is on board and that the patch has
+> some sensible history. The mailing list isn't the place to ask your
+> co-developers to sign off a patch after you've made extensive changes to it.
 
->=20
-> Beside, ECAP has 4 timestamp registers but they are used to capture=20
-> timestamps for a
-> single input pin (only 1 channel). In ECAP context, 'index X" is used to=
-=20
-> identify CAP X
-> (used to capture event X detected on a single pin, with X =3D 0/1/2/3/0..=
-.).
-> In counter framework, "index X" is used to identify channel X (among=20
-> several pins).
-> So, the word "index" has not the same meaning in counter framework than=20
-> in ECAP device.
-> Somehow, this ECAP index (0/1/2/3 for CAP1/2/3/4 registers) must be=20
-> logged with timestamp
-> because it is an important part of signal info for the user (raw=20
-> consecutive timestamps
-> are not enough).
->=20
-> So, here is my proposal for my next version :
-> (1) Replace IIO_INDEX by IIO_COUNT channel (already used in=20
-> "stm32-timer-trigger.c" driver)
+Looks like there's some confusion here, that I may have added to at some
+point by a bit of patch squashing, and some SoB tag creativity. ;)
 
-IIO_COUNT might work, but don't use that driver as a basis. It's a leftover
-that was complex to clean up that no one has had the time to do yet.
+Let me try to clear it up a bit, since it's my squashed patch this discussion
+and this submission is based around. Patch [2] you're linking to is not an
+original patch by Martijn or Kamil.
 
-We want to be careful that any meaning we assign to ABI via this driver
-doesn't cause legacy problems.
+It's just a squashed bunch of patches that I took from a secret repo that Kamil
+shared with me once upon a time, so that I can help with kernel development and
+camera support for Pinephone Pro about a year ago, when it was still a secret
+thing.
 
-> # In ECAP documentation, the word "index" is not used. The word used to=20
-> speak about this
-> 0->1->2->3->0 sequenced counter is "Mod4 counter".
-> (2) Configure event mode with 4 sysfs entries (to remove the mix of=20
-> buffers and events interfaces)
-> # User will see 4 files (1 file for each CAP timestamp) named=20
-> "falling_edge_active_0/1/2/3".
-> Writing 1 will select falling edge/ Writing 0 will select rising edge.
+*AFAIK*, original patches in the secret repo were never published by authors,
+but only through my squashed patch from my kernel tree. All the prior work seems
+to be either in unlisted git repos, or in login gated git repos.
 
-Naming should reflect the channel to which it applies. So add a prefix to
-that. Maybe in_countX_falling_edge_active etc (I'm not sure how this
-would fit together as a whole ABI however).
+So hereby I give my Signed-off-by: Ondrej Jriman <megi@xff.cz> for the patch
+[2] this submission by Tom was developed from, stating that to the best of my
+knowledge:
 
-A few questions / comments that might help me get my head around this.
+1) Original author is Martijn Braam and "Fuzhou Rockchip Electronics Co., Ltd".
+   Kamil Trzciński extended the Martijn's original DT with some things that are
+   mostly stripped off in this submission, other than a few oneliners and the
+   gpio power key node. I also have maybe one or two lines in this submission.
+2) Original work was published under MIT or GPL2.0+
+3) Original work is missing copyright header from Rockchip and any SoB on the
+   patches. I have added the SoB for Martijn/Kamil myself without asking them.
+   Sorry for that. And I guess this is the source of some confusion here, too.
 
-There isn't a direct association between a wire and a channel in IIO.
-We have various derived channels.  It's more about measuring 'one thing'.
+That should cover the requirement b) of "Developer’s Certificate of Origin 1.1"
+which should be all that's necessary.
 
-So we could treat these various signals as aspects of a given thing.
-Perhaps simply as events (though the interface for those assumes a common
-timestamp basis with the host OS).  In that case we'd have 4 events
-and every time one fired we'd push an even across to userspace.
+So now that we have all the needed SoB for the base patch, and Tom already has
+SoB for his modifications, all the Co-developed-by are in place, and copyright
+notices from original authors are untouched in the code, except for Rockchip,
+the way forward should be to re-add missing:
 
-Or we treat them as 4 aspects in a 'scan'.  That means we only get
-data once all enabled 'edges' are seen, as we push them all together
-as 4 channels.  Those channels contain the 4 timestamps from one
-sequence of 0,1,2,3.  Either could be abstract counts, or could be
-4 timestamps.
+  Copyright (c) 2021 Fuzhou Rockchip Electronics Co., Ltd
 
-I'm not really sure which approach would work out better.
+to the code and add my SoB to the commit message. That should make the
+provenance of this code clear and properly accounted for.
 
-Rule of thumb. IIO events are for asynchronous things like threshold crossi=
-ng
-detections.  Arguably your detections here are in that category, but because
-they happen, 0,1,2,3,0,1,2,3 etc they also look like channel scans - where
-we normally pretend they are simultaneous measurements of different signals.
-They are rarely actually simultaneous as normally there is a mux involved
-somewhere and they channels are sampled sequentially and when a scan is fin=
-ished
-the hardware may well immediately start on the next one.
+SoB from Martijn would be nice to have, just to reassure about the Rockchip
+copyright, which I assume authored the Android factory kernel code/DT. But I'm
+presonally quite sure this code is MIT/GPL2.0+, regardless.
+
+------
+
+If you want more details, then here is the original patch series from the secret
+repo: https://megous.com/git/linux/log/?h=ayufan-secret/pinephone-pro
+
+Martijn's original patch as taken over by Kamil is
+https://megous.com/git/linux/commit/?h=ayufan-secret/pinephone-pro&id=9f1a4867c21a9fa88177bd0903bdc1d82e213310
+It has Martijn's copyright and is published under GPL2.0+ OR MIT. This is the
+earliest available code this all is based on.
+
+It will sure have some history, too, given that almost all of rk818 node content
+matches the decompiled Android factory image's device tree to the
+T and that's like 50% of the code in this submission. :) That's where my guess
+that the original patch is missing Rockchip's copyright is comming from.
+
+Android DT was never published in code form for all I know. I guess that's what
+we get for requiring DT be licensed under MIT license. Some Rockchip engineer
+likely wrote half of this submission. Rockchip copyright is thus probably
+missing from the patch. Decompiled DT here: https://megous.com/dl/tmp/01_dtbdump_rockchip,android.dts
+
+Kamil seems to have these changes in this submission:
+
+https://megous.com/git/linux/commit/?h=ayufan-secret/pinephone-pro&id=30976b1d8b7c7958474bd54fc86db79ba11d7a17
+https://megous.com/git/linux/commit/?h=ayufan-secret/pinephone-pro&id=28b33d187f6b8dd672115e69a19d8d9a6725c834
+https://megous.com/git/linux/commit/?h=ayufan-secret/pinephone-pro&id=083d7b514a7ac0e97a18bf4012259f4d9fa37733
+https://megous.com/git/linux/commit/?h=ayufan-secret/pinephone-pro&id=bbc9ca6051500baf28296908d92286ff1c4087e0
+(just the power key part)
+
+kind regards,
+	Ondrej
 
 
+> I missed the following points in my original email:
+> 
+> Please read the documentation on modifying patches [1] as it applies here,
+> and add a comment before your SoB explaining your changes, something like
+> 
+> [tom: strip down to minimal booting DT for initial support]
 
->=20
-> Would it be an acceptable alternative for you, Jonathan ? Would either=20
-> (1) and/or (2) be a "no-go" ?
+These rules are for subsystem maintainers. At least it says so on top.
 
-It may take us a few more iterations to come to a conclusion and even if
-the counter subsystem is looking unlikely I'd still like William's input
-on this even if it ends up in IIO.  He spent quite some time hammering
-odd devices into IIO before there was a counter subsystem.
-
-Thanks,
-
-Jonathan
-
->=20
-> > =20
-> >>
-> >> Anyhow, I've reviewed below, but need docs to discuss this in depth.=
-=C2=A0=20
-> >> In particular
-> >> the mix of buffers and events interfaces is unlikely to be an=20
-> >> acceptable path
-> >> forwards. =20
-> >
-> > OK, I will consider alternatives.
-> > =20
-> >>
-> >> Jonathan =20
->=20
+> This way the history of the patch is preserved properly for anyone looking
+> back at it in the future. In a similar vein, replace the external git links
+> with links to exact commits so they don't degrade over time.
 

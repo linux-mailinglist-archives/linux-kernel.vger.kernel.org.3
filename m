@@ -2,138 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFB458B339
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 03:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DA858B33B
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 03:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241561AbiHFBb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 21:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
+        id S241525AbiHFBio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 21:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiHFBbX (ORCPT
+        with ESMTP id S231234AbiHFBil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 21:31:23 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D13113D70
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 18:31:22 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id a17-20020a056e0208b100b002dc52b51d98so2729378ilt.0
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 18:31:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=kViDafhpg8RBdwcxqN1yEho5G75K5q5OgcgtEcZ2P5E=;
-        b=kdzrnZwqgJ+bMZUUe3AApaUBb0HKQe+nuLyFL7Pkn+0Sb2unh78HX0VeGMm8+3H8Ks
-         En0MhfWpNzlaudRg2e0kqBF9/zpjm9owC7lebJcQ9qIN27Ru/QuywZfMYz4aVGst3tGI
-         dorrkaRDbIoDh+GZfarvPdgGVrc0DY1iksSFMaRfkd4dhenJqEPQZP80e7V8h9ahgNpG
-         2aHA0cFmJ4NAmTpBIPCbCi97Z+LpRZe+a7IHJUjK/H/VC0Fk0zCRllqh7AQfUUFSn5l0
-         1skhaVu0SNSpb/ROisITCOej0Pg6KMczdsndWh6jdrS7nPtBCMF7Dt75dTDFaUM6w6mP
-         3GTQ==
-X-Gm-Message-State: ACgBeo2jQkTm0YYlcmSW6+b7gor7Nh9r47q6eF9An7QV4fphC/yRAL0V
-        HyN8GaR9/FabMP5TQGaNXT95PI8UR/jw0Rdu+ji0TS1pK/vl
-X-Google-Smtp-Source: AA6agR4PyWBvzx+pnDuyDZdmqbDJCCBqB9HliMHsJLBlR1jrIG0SkFjxCnO1JpVviUuVhH9YcNUR/i93hh4S1b8T3wQsPc/B9NCC
+        Fri, 5 Aug 2022 21:38:41 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F7C165A0
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 18:38:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659749920; x=1691285920;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2JE82YWhTETfeHvicg+XTHdJlZYo4b/MLUAXfW/W12I=;
+  b=NS5yb5b5kmVytckyK3j8AlCP376Bg9RrAA8H10k9ZNQIWR8rFcAzhs6n
+   HtDn4kBSgR8EtgNvbxMmzCJhFEe7sT4xRW2Wpf6nucUXb+ngEXXxudyxg
+   ICkLMvEYOTYsCsnACvQyBDUmJY48m6T+SVSlOhU6Fk6QJKjMYIFfn+1fz
+   vpCOqE9trqzxzcfY7J48CbCjSAJ4HxhyTC9OGgkqjL34p1oU4upkznhwG
+   5YZXDyGaBKUqje4Au2X1uK8ebOHf27LBt9OFG12dPt9An7PVD2FKilxDj
+   BAuufZBFErVzFL1P4S2oyDal5/5MyJz9eQc15C+hk2s6++vynnb/Ykl4F
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="316222783"
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="316222783"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 18:38:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="931426844"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 05 Aug 2022 18:38:38 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oK8ly-000JuB-1A;
+        Sat, 06 Aug 2022 01:38:38 +0000
+Date:   Sat, 6 Aug 2022 09:38:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Andi Kleen <ak@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: [intel-tdx:guest-filter 5/28] arch/x86/coco/tdx/filter.c:25:22:
+ sparse: sparse: symbol 'pci_allow_ids' was not declared. Should it be
+ static?
+Message-ID: <202208060939.EJYpA76v-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3f0a:b0:342:7bf2:ee19 with SMTP id
- ck10-20020a0566383f0a00b003427bf2ee19mr4103797jab.192.1659749481543; Fri, 05
- Aug 2022 18:31:21 -0700 (PDT)
-Date:   Fri, 05 Aug 2022 18:31:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004387dc05e5888ae5@google.com>
-Subject: [syzbot] KASAN: invalid-access Read in copy_page
-From:   syzbot <syzbot+c2c79c6d6eddc5262b77@syzkaller.appspotmail.com>
-To:     andreyknvl@gmail.com, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tongtiangen@huawei.com,
-        vincenzo.frascino@arm.com, wangkefeng.wang@huawei.com,
-        will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://github.com/intel/tdx.git guest-filter
+head:   375752c8e70e119e0d481b9e1d835f70087c846c
+commit: dc7d40b6d7c8fa942bdc8d7da9203f68a3288ee2 [5/28] x86/tdx: Add device filter support for x86 TDX guest platform
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220806/202208060939.EJYpA76v-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel/tdx/commit/dc7d40b6d7c8fa942bdc8d7da9203f68a3288ee2
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-filter
+        git checkout dc7d40b6d7c8fa942bdc8d7da9203f68a3288ee2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
 
-syzbot found the following issue on:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-HEAD commit:    9e2f40233670 Merge tag 'x86_sgx_for_v6.0-2022-08-03.1' of ..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16181cbc080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=886e7348b2982e4d
-dashboard link: https://syzkaller.appspot.com/bug?extid=c2c79c6d6eddc5262b77
-compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+sparse warnings: (new ones prefixed by >>)
+>> arch/x86/coco/tdx/filter.c:25:22: sparse: sparse: symbol 'pci_allow_ids' was not declared. Should it be static?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+vim +/pci_allow_ids +25 arch/x86/coco/tdx/filter.c
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c2c79c6d6eddc5262b77@syzkaller.appspotmail.com
+    16	
+    17	/*
+    18	 * Allow list for PCI bus
+    19	 *
+    20	 * NOTE: Device ID is duplicated here. But for small list
+    21	 * of devices, it is easier to maintain the duplicated list
+    22	 * here verses exporting the device ID table from the driver
+    23	 * and use it.
+    24	 */
+  > 25	struct pci_device_id pci_allow_ids[] = {
+    26		{ PCI_DEVICE(PCI_VENDOR_ID_REDHAT_QUMRANET, VIRTIO_TRANS_ID_NET) },
+    27		{ PCI_DEVICE(PCI_VENDOR_ID_REDHAT_QUMRANET, VIRTIO_TRANS_ID_BLOCK) },
+    28		{ PCI_DEVICE(PCI_VENDOR_ID_REDHAT_QUMRANET, VIRTIO_TRANS_ID_CONSOLE) },
+    29		{ PCI_DEVICE(PCI_VENDOR_ID_REDHAT_QUMRANET, VIRTIO_TRANS_ID_9P) },
+    30		{ PCI_DEVICE(PCI_VENDOR_ID_REDHAT_QUMRANET, VIRTIO1_ID_NET) },
+    31		{ PCI_DEVICE(PCI_VENDOR_ID_REDHAT_QUMRANET, VIRTIO1_ID_BLOCK) },
+    32		{ PCI_DEVICE(PCI_VENDOR_ID_REDHAT_QUMRANET, VIRTIO1_ID_CONSOLE) },
+    33		{ PCI_DEVICE(PCI_VENDOR_ID_REDHAT_QUMRANET, VIRTIO1_ID_9P) },
+    34		{ 0, },
+    35	};
+    36	
 
-==================================================================
-BUG: KASAN: invalid-access in copy_page+0x10/0xd0 arch/arm64/lib/copy_page.S:26
-Read at addr f5ff000017f2e000 by task syz-executor.1/2218
-Pointer tag: [f5], memory tag: [f2]
-
-CPU: 1 PID: 2218 Comm: syz-executor.1 Not tainted 5.19.0-syzkaller-10532-g9e2f40233670 #0
-Hardware name: linux,dummy-virt (DT)
-Call trace:
- dump_backtrace.part.0+0xcc/0xe0 arch/arm64/kernel/stacktrace.c:182
- dump_backtrace arch/arm64/kernel/stacktrace.c:188 [inline]
- show_stack+0x18/0x5c arch/arm64/kernel/stacktrace.c:189
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x68/0x84 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:313 [inline]
- print_report+0xfc/0x5f0 mm/kasan/report.c:429
- kasan_report+0x8c/0xb0 mm/kasan/report.c:491
- __do_kernel_fault+0x104/0x1c0 arch/arm64/mm/fault.c:319
- do_bad_area arch/arm64/mm/fault.c:469 [inline]
- do_tag_check_fault+0x78/0x90 arch/arm64/mm/fault.c:738
- do_mem_abort+0x48/0xa0 arch/arm64/mm/fault.c:814
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:366
- el1h_64_sync_handler+0xb0/0xd0 arch/arm64/kernel/entry-common.c:417
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
- copy_page+0x10/0xd0 arch/arm64/lib/copy_page.S:26
- copy_user_highpage+0x18/0x4c arch/arm64/mm/copypage.c:34
- __wp_page_copy_user mm/memory.c:2848 [inline]
- wp_page_copy+0xa0/0x790 mm/memory.c:3109
- do_wp_page+0x150/0x6a4 mm/memory.c:3471
- handle_pte_fault mm/memory.c:4925 [inline]
- __handle_mm_fault+0x6c4/0xf84 mm/memory.c:5046
- handle_mm_fault+0xe8/0x25c mm/memory.c:5144
- __do_page_fault arch/arm64/mm/fault.c:502 [inline]
- do_page_fault+0x140/0x3b0 arch/arm64/mm/fault.c:602
- do_mem_abort+0x48/0xa0 arch/arm64/mm/fault.c:814
- el0_da+0x48/0xbc arch/arm64/kernel/entry-common.c:502
- el0t_64_sync_handler+0x134/0x1b0 arch/arm64/kernel/entry-common.c:645
- el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
-
-The buggy address belongs to the physical page:
-page:000000003e6672be refcount:3 mapcount:2 mapping:0000000000000000 index:0xffffffffe pfn:0x57f2e
-memcg:fbff00001ded8000
-anon flags: 0x1ffc2800208001c(uptodate|dirty|lru|swapbacked|arch_2|node=0|zone=0|lastcpupid=0x7ff|kasantag=0xa)
-raw: 01ffc2800208001c fffffc00004f91c8 fcff00001d1b1000 f1ff00000510b231
-raw: 0000000ffffffffe 0000000000000000 0000000300000001 fbff00001ded8000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff000017f2de00: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
- ffff000017f2df00: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
->ffff000017f2e000: f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2
-                   ^
- ffff000017f2e100: f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2
- ffff000017f2e200: f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2 f2
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

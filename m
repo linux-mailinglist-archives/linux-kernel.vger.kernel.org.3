@@ -2,108 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD6A58B540
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 13:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1158258B542
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 13:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiHFLm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 07:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S230415AbiHFLo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 07:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiHFLms (ORCPT
+        with ESMTP id S229846AbiHFLo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 07:42:48 -0400
-Received: from mailgate.osadl.org (mailgate.osadl.org [IPv6:2001:a60:9266:ffff:62:245:132:113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8539913E15
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 04:42:46 -0700 (PDT)
-Received: from localmail.osadl.org (localmail.osadl.org [192.168.115.248])
-        by mailgate.osadl.org (Postfix) with ESMTP id DC2D7300C5A;
-        Sat,  6 Aug 2022 13:33:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=osadl.org; s=default;
-        t=1659785619; bh=QWnGpkn0KjPYyzuZJV5wYqLgFxdPZTLFrmKe2mahP3E=;
-        h=Date:From:To:Cc:Subject:References:From;
-        b=Aax0HAlsRqLaUzhaIjZvVkcaA0QQCdAEbu2HPQ7wt1Dx3cAWRN2jGmNOl4tQlnYO8
-         HXMMpqn75TokctR44dnifnuY+61Y3SMiV/GKnHYhOcDllwSm4GG6Tv2anHAV4VQuvE
-         G54un5STu0Z595/HAON31gAw+55V9r5LgdyDYtAU=
-Received: from localhost (localhost [127.0.0.1])
-        by localmail.osadl.org (Postfix) with ESMTP id A91DD8C2D74;
-        Sat,  6 Aug 2022 13:33:35 +0200 (CEST)
-Received: from localmail.osadl.org ([127.0.0.1])
-        by localhost (localmail.osadl.org [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id d12xIJorxhyZ; Sat,  6 Aug 2022 13:33:34 +0200 (CEST)
-Received: from rack0slot6s.osadl.org (rack0slot6s.osadl.org [192.168.114.6])
-        by localmail.osadl.org (Postfix) with ESMTP id 559B49CC7DF;
-        Sat,  6 Aug 2022 13:33:33 +0200 (CEST)
-Received: from rack0slot6s.osadl.org (localhost [127.0.0.1])
-        by rack0slot6s.osadl.org (8.17.1/8.15.2) with ESMTP id 276BXYle4095582;
-        Sat, 6 Aug 2022 13:33:34 +0200
-Received: (from root@localhost)
-        by rack0slot6s.osadl.org (8.17.1/8.17.1/Submit) id 276BXYgW4095581;
-        Sat, 6 Aug 2022 13:33:34 +0200
-Message-ID: <20220806113334.349537884@osadl.org>
-User-Agent: quilt/0.66
-Date:   Sat, 06 Aug 2022 13:31:26 +0200
-From:   Alexander Baehr <abaehr@osadl.org>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] Add parport support for Asix device 99100
-References: <20220806113124.608017725@osadl.org>
+        Sat, 6 Aug 2022 07:44:57 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CEC13E14
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 04:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659786296; x=1691322296;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uEj/h0R6IiIlAM1BTd6/UibngxFPKnawYsG+NfnMzgQ=;
+  b=ULsFUYSSZsKUsHEU2uEk+GBfRnRfh2pzXPbjOodGGpiQxjspM5yYiuR2
+   Gu2JE4fkhvFcXYDClHvl8sDGkiokXi03Tvo6Z2orho3iGkQL+Mdwq5rr+
+   +SdKYMG6DUOUw5Oob7fpUtmLDdKoI0rXOuNT5jFbhQybXK5GodqKjXJuZ
+   4GyTrKBStGTFAKQ1Bbyt1PJaQnP8FwTYpAPJKrDgPEk2C27vsVakcdVUm
+   YM8/44Lf9Z36ZbreFiVMp4ifKNkhx1ctIgg8RrKbCnFY57M2Yz8Ecdwx7
+   0ij3jdJpunB6SxoyDrFERvpaBDiTlOcaf3MkoLkteO7TkEQfKbl5YaGY/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="277286749"
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="277286749"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 04:44:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="931524689"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Aug 2022 04:44:54 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKIEg-000KJs-0I;
+        Sat, 06 Aug 2022 11:44:54 +0000
+Date:   Sat, 6 Aug 2022 19:43:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [intel-tdx:guest-hardening-rebased 19/23]
+ arch/x86/coco/tdx/tdx-tests.c:66:12: sparse: sparse: symbol
+ 'kvm_unit_test_debug_init' was not declared. Should it be static?
+Message-ID: <202208061952.z7f1PgpF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Virus-Scanned: clamav-milter 0.103.6 at mailgate
-X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For some reason, Asix decided to produce a parallel port that is fully
-compatible with Netmos device 9900, but named it 99100. It obviously has
-another vendor ID, but the device ID is the same. This patch adds the 
-required settings and was successfully tested with the Asix device. 
+tree:   https://github.com/intel/tdx.git guest-hardening-rebased
+head:   c170462888e1dab8e3e80c1c6e3708dd473ad1ed
+commit: bb5af2b7a84ef8343b56bd2c1c90461635b32bd2 [19/23] x86/tdx-tests: Add a port of a kvm unit test
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220806/202208061952.z7f1PgpF-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel/tdx/commit/bb5af2b7a84ef8343b56bd2c1c90461635b32bd2
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-hardening-rebased
+        git checkout bb5af2b7a84ef8343b56bd2c1c90461635b32bd2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
 
-Signed-off-by: Alexander Baehr <abaehr@osadl.org>
----
- drivers/parport/parport_pc.c |    4 ++++
- include/linux/pci_ids.h      |    3 +++
- 2 files changed, 7 insertions(+)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Index: linux/drivers/parport/parport_pc.c
-===================================================================
---- linux.orig/drivers/parport/parport_pc.c
-+++ linux/drivers/parport/parport_pc.c
-@@ -2612,6 +2612,7 @@ enum parport_pc_pci_cards {
- 	netmos_9815,
- 	netmos_9901,
- 	netmos_9865,
-+	asix_ax99100,
- 	quatech_sppxp100,
- 	wch_ch382l,
- };
-@@ -2766,6 +2767,9 @@ static const struct pci_device_id parpor
- 	  0xA000, 0x1000, 0, 0, netmos_9865 },
- 	{ PCI_VENDOR_ID_NETMOS, PCI_DEVICE_ID_NETMOS_9865,
- 	  0xA000, 0x2000, 0, 0, netmos_9865 },
-+	/* Asix AX99100 Parallel port PCIExpressCard */
-+	{ PCI_VENDOR_ID_ASIX, PCI_DEVICE_ID_AX99100,
-+	  0xA000, 0x2000, 0, 0, netmos_9900 },
- 	/* Quatech SPPXP-100 Parallel port PCI ExpressCard */
- 	{ PCI_VENDOR_ID_QUATECH, PCI_DEVICE_ID_QUATECH_SPPXP_100,
- 	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, quatech_sppxp100 },
-Index: linux/include/linux/pci_ids.h
-===================================================================
---- linux.orig/include/linux/pci_ids.h
-+++ linux/include/linux/pci_ids.h
-@@ -3108,4 +3108,7 @@
- 
- #define PCI_VENDOR_ID_NCUBE		0x10ff
- 
-+#define PCI_VENDOR_ID_ASIX		0x125b
-+#define PCI_DEVICE_ID_AX99100		0x9100
-+
- #endif /* _LINUX_PCI_IDS_H */
+sparse warnings: (new ones prefixed by >>)
+>> arch/x86/coco/tdx/tdx-tests.c:66:12: sparse: sparse: symbol 'kvm_unit_test_debug_init' was not declared. Should it be static?
 
+vim +/kvm_unit_test_debug_init +66 arch/x86/coco/tdx/tdx-tests.c
+
+    65	
+  > 66	int __init kvm_unit_test_debug_init(void)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

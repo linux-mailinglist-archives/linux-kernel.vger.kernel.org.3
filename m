@@ -2,123 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6829A58B4E5
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 12:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC1E58B4E7
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 12:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238073AbiHFKBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 06:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
+        id S230162AbiHFKBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 06:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiHFKA5 (ORCPT
+        with ESMTP id S241827AbiHFKBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 06:00:57 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1157155A8;
-        Sat,  6 Aug 2022 03:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659780056; x=1691316056;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DArrsJl+igQhfiejk3LBgfFW4Irk33+l5lRq4yjeRtA=;
-  b=EDUnbtVZjxmb/o8UZs2ufBDLxQLWKM9Zq5rwg5rqeDyycaLDhkcPVcm3
-   FzJToJny9MVymesJhCV6QnHQlBSYgw3+HhDpYPX2X0Xd4N3dAFVmUFNa4
-   oJ+X5c9zTt8h3Xprzuu8L7+RlZ89NnXitrIc6BlUOCOQDC1c7s8iskOFI
-   ZjvoqINjBbxF6i482MtWFvadGER64oLqq8Evp1emaja7DQ1rVgQ4bH1GM
-   1GG5eoDkFta6isP6XXJZcxtU8V04k5b7EgE5xaZ99MgGyIWCtZLMVL0ty
-   +o/UYla4ccd4NgMcZsOj6OaZxRut/ZUwqrB7Vi+DyXQNtj/Jy7tjeFowZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="273404064"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="273404064"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 03:00:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="746113166"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Aug 2022 03:00:52 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKGc0-000KG7-0R;
-        Sat, 06 Aug 2022 10:00:52 +0000
-Date:   Sat, 6 Aug 2022 18:00:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ben Dooks <ben.dooks@sifive.com>, linux-pwm@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha --subject-prefix=PATCH v3 
-        <jude.onyenegecha@sifive.com>, Ben Dooks <ben.dooks@sifive.com>
-Subject: Re: [PATCH 4/8] pwm: dwc: add of/platform support
-Message-ID: <202208061741.ALGAZYcD-lkp@intel.com>
-References: <20220805165033.140958-5-ben.dooks@sifive.com>
+        Sat, 6 Aug 2022 06:01:25 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088F7E0DB;
+        Sat,  6 Aug 2022 03:01:23 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id u8so3355010qvv.1;
+        Sat, 06 Aug 2022 03:01:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=tcz+EOVdYcZHlsH9SYESaKQOcLwMzzj4cFiUQj/3xW0=;
+        b=FCdFFjbMwMg/s6HFx790Az8w4ZCawOEL2oYxgHvlY9jWlQcfHubH99eC+GJTYsl0LZ
+         F05lEQ0OFoM4ii6D0TT1dQIeoaLxS2qNN2BntpYQ5ogfLlatZHWZgevmDmA+hCqod7HB
+         URI/PYi/Y2w0LZd/jYCGttSgkv4GyaTFcJyoyOHAY6W0DKjLCWaISBQbU4pUEd4R7HOk
+         8HB6dWygBdxYUGkAgmdeb5uH1ObJ4ULsPqC3ShK1CRTkU+MEFJVWe/yVIQv1kibjAaKc
+         4Xj8KZ2nur6QTsDH/e+DFATKdcIaCom0515NVDQhm7YUlrRcoe308JZ1uGTi9x7WPIyC
+         w2KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=tcz+EOVdYcZHlsH9SYESaKQOcLwMzzj4cFiUQj/3xW0=;
+        b=F0F4himsn4DLpxA+DDgMph1k3u6nvPv6kh3sIwAmYE9Imo7FBn/xlR5d3dEk0a7817
+         nbWbA0RrEQbb7HxaiITORynrnW+l1HGVmbGJxF71qtKi33klJ5lbgR1mPKphittxsrR9
+         VfXoz2KVzTU6akzRgyBko2c9s/X3RLUuOaMWEliKbcbNnkC0vEVVAJp24abgE5jIS3T7
+         Q+t1BqVnnE4z/RjIkb42kPzJAfpxlaVIMIIKBo5Oa83FK0wGb0Thhcryord3MTDVKEBj
+         OmzM7Kjy31UzTWAWWo2V3J1lmmONdyFLC0CPyCRGMdvTxM+b/aLiL6HP10OtYPbeWZXS
+         Dslw==
+X-Gm-Message-State: ACgBeo1Ww3sfkxSqg4t8/pGIoASVoSIUnZD1t9VM5fCpjo23TnPsHT9r
+        ODT0kxgVCxoH09KpFgpn9lPPTy8Z35nUXVA0RyVvPNJ14Ak=
+X-Google-Smtp-Source: AA6agR5ckULAzwFTpSVX0pVkuHp1yODSlueiPs99bynLj2TckkE8xVP4bBDXAHLyhsn/1oLtaG/Uj0v73o4+n+nV9lA=
+X-Received: by 2002:ad4:5baf:0:b0:476:6a9e:b5e1 with SMTP id
+ 15-20020ad45baf000000b004766a9eb5e1mr8933644qvq.64.1659780082142; Sat, 06 Aug
+ 2022 03:01:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220805165033.140958-5-ben.dooks@sifive.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220805081909.10962-1-luke@ljones.dev> <20220805081909.10962-5-luke@ljones.dev>
+In-Reply-To: <20220805081909.10962-5-luke@ljones.dev>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 6 Aug 2022 12:00:45 +0200
+Message-ID: <CAHp75Vdb3bs05iXccrb+Hp=VR-yVAifaY00JruH8i2Sv0QxGAA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] asus-wmi: Document many of the undocumented API
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ben,
+On Fri, Aug 5, 2022 at 10:21 AM Luke D. Jones <luke@ljones.dev> wrote:
+>
 
-I love your patch! Yet something to improve:
+Missed commit message.
 
-[auto build test ERROR on thierry-reding-pwm/for-next]
-[also build test ERROR on linus/master v5.19 next-20220805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ben-Dooks/dt-bindings-pwm-Document-Synopsys-DesignWare-snps-pwm-dw-apb-timers-pwm2/20220806-015142
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220806/202208061741.ALGAZYcD-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3bd100d711908b7d16a2c4793b4f5b597acb8d7f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ben-Dooks/dt-bindings-pwm-Document-Synopsys-DesignWare-snps-pwm-dw-apb-timers-pwm2/20220806-015142
-        git checkout 3bd100d711908b7d16a2c4793b4f5b597acb8d7f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/
+...
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> +Date:          Dec 2022
 
-All errors (new ones prefixed by >>):
+I would be more optimistic here...
 
->> drivers/pwm/pwm-dwc.c:321:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   module_pci_driver(dwc_pwm_driver);
-   ^
-   int
->> drivers/pwm/pwm-dwc.c:321:19: error: a parameter list without types is only allowed in a function definition
-   module_pci_driver(dwc_pwm_driver);
-                     ^
-   2 errors generated.
+> +KernelVersion: 5.17
 
+...and definitely this is the wrong version. I would suggest 6.0.
 
-vim +/int +321 drivers/pwm/pwm-dwc.c
+Both comments are applicable for other similar cases.
 
-1ed2b3fca64516 Jarkko Nikula 2020-10-02  320  
-1ed2b3fca64516 Jarkko Nikula 2020-10-02 @321  module_pci_driver(dwc_pwm_driver);
-1ed2b3fca64516 Jarkko Nikula 2020-10-02  322  
-
+In case you are documenting new and old APIs, split this to two
+patches with different dates and kernel versions. And commit messages
+should be different.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With Best Regards,
+Andy Shevchenko

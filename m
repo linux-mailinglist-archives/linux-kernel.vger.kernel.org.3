@@ -2,137 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED5558B467
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 10:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F75258B47C
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 10:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241773AbiHFIBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 04:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S241776AbiHFIKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 04:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241765AbiHFIAx (ORCPT
+        with ESMTP id S238543AbiHFIKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 04:00:53 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1CC13DE0
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 01:00:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659772852; x=1691308852;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4Zv7ihRb6MPbOwGcHXJSCwSYvqqp+/GBKhT9/Fo058Y=;
-  b=KF8iyVXL8eBhNALO8eoFK8kOcKndePe5jfPbUuZ8AS+lGQjXunoEU3IN
-   Bu1IbuGrDH4g2J5wxEb4GQ8XjEB0WV6Q9iw4oE4E8+RIC2diZ3EQz2MnY
-   d3BZlAjT/m9G8Xd4/XRJ9IvTLsAK5S+V1oNw8IcjynCfm5ipCfL5Wi8H+
-   n3EPJti7u1KF1PdguhMNMNjr9wOlcPuHaUdT67US6LvVQYToFPzU7ur7w
-   hDDg50tHatorFDoQ6a4on+R1w/XlvxR8ic0jZBCPo/Wd2zm6UGdiWkmfu
-   YqV9ia6hqXSufeBkq2PG61miWZK516mgJg54ozyAWmRd2HmjVhqc3Hz7N
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="352073042"
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="352073042"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 01:00:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="730232329"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 06 Aug 2022 01:00:49 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKEjp-000KBZ-0Y;
-        Sat, 06 Aug 2022 08:00:49 +0000
-Date:   Sat, 6 Aug 2022 16:00:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jth@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: fs/zonefs/./trace.h:22:1: sparse: sparse: cast to restricted
- blk_opf_t
-Message-ID: <202208061533.YBqXyzHm-lkp@intel.com>
+        Sat, 6 Aug 2022 04:10:17 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C86F5FD1;
+        Sat,  6 Aug 2022 01:10:14 -0700 (PDT)
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxbyPdIe5ixooIAA--.1165S2;
+        Sat, 06 Aug 2022 16:10:06 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Arnd Bergmann <arnd@arndb.de>, hejinyang@loongson.cn,
+        tangyouling@loongson.cn, zhangqing@loongson.cn
+Subject: [PATCH v4 0/4] Add unwinder support
+Date:   Sat,  6 Aug 2022 16:10:01 +0800
+Message-Id: <20220806081005.332-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxbyPdIe5ixooIAA--.1165S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF4UJFWkCw4rZw1DWrWUXFb_yoW5XryrpF
+        ZrCrnxGr4DGrySvFnxtw18urn5Jr4kGrW2qa9FyryrCF4aqa47ZrnYvF1DZ3WDJ3yrJry0
+        qFn5G3s0ga1UtaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1U
+        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUP-B_UUUUU=
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6614a3c3164a5df2b54abb0b3559f51041cf705b
-commit: e46b5970496705127f9ae494c66e0242773097e8 fs/zonefs: Use the enum req_op type for tracing request operations
-date:   3 weeks ago
-config: arm64-randconfig-s052-20220804 (https://download.01.org/0day-ci/archive/20220806/202208061533.YBqXyzHm-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e46b5970496705127f9ae494c66e0242773097e8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e46b5970496705127f9ae494c66e0242773097e8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash fs/zonefs/
+This series in order to add stacktrace support, Some upcoming features require
+these changes, like trace, divide unwinder into guess unwinder and prologue
+unwinder is to add new unwinders in the future.
+eg:unwinder_frame, unwinder_orc .etc.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Three stages when we do unwind,
+  1) unwind_start(), the prapare of unwinding, fill unwind_state.
+  2) unwind_done(), judge whether the unwind process is finished or not.
+  3) unwind_next_frame(), unwind the next frame.
 
-sparse warnings: (new ones prefixed by >>)
-   fs/zonefs/super.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, fs/zonefs/trace.h):
->> fs/zonefs/./trace.h:22:1: sparse: sparse: cast to restricted blk_opf_t
->> fs/zonefs/./trace.h:22:1: sparse: sparse: cast to restricted blk_opf_t
->> fs/zonefs/./trace.h:22:1: sparse: sparse: restricted blk_opf_t degrades to integer
->> fs/zonefs/./trace.h:22:1: sparse: sparse: restricted blk_opf_t degrades to integer
-   fs/zonefs/super.c: note: in included file (through arch/arm64/include/asm/smp.h, include/linux/smp.h, arch/arm64/include/asm/arch_timer.h, ...):
-   arch/arm64/include/asm/percpu.h:127:1: sparse: sparse: cast truncates bits from constant value (ffffffff becomes ff)
-   arch/arm64/include/asm/percpu.h:127:1: sparse: sparse: cast truncates bits from constant value (ffffffff becomes ffff)
-   arch/arm64/include/asm/percpu.h:127:1: sparse: sparse: cast truncates bits from constant value (ffffffff becomes ff)
-   arch/arm64/include/asm/percpu.h:127:1: sparse: sparse: cast truncates bits from constant value (ffffffff becomes ffff)
+you can test them by:
+  1) echo t > /proc/sysrq-trigger
+  2) cat /proc/*/stack
+  3) ftrace: function graph
+  4) uprobe: echo 1 > ./options/userstacktrace
 
-vim +22 fs/zonefs/./trace.h
+Changes from v1 to v2:
 
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  21  
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27 @22  TRACE_EVENT(zonefs_zone_mgmt,
-ff07a02e9e8e64 Bart Van Assche    2022-07-14  23  	    TP_PROTO(struct inode *inode, enum req_op op),
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  24  	    TP_ARGS(inode, op),
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  25  	    TP_STRUCT__entry(
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  26  			     __field(dev_t, dev)
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  27  			     __field(ino_t, ino)
-e46b5970496705 Bart Van Assche    2022-07-14  28  			     __field(enum req_op, op)
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  29  			     __field(sector_t, sector)
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  30  			     __field(sector_t, nr_sectors)
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  31  	    ),
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  32  	    TP_fast_assign(
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  33  			   __entry->dev = inode->i_sb->s_dev;
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  34  			   __entry->ino = inode->i_ino;
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  35  			   __entry->op = op;
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  36  			   __entry->sector = ZONEFS_I(inode)->i_zsector;
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  37  			   __entry->nr_sectors =
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  38  				   ZONEFS_I(inode)->i_zone_size >> SECTOR_SHIFT;
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  39  	    ),
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  40  	    TP_printk("bdev=(%d,%d), ino=%lu op=%s, sector=%llu, nr_sectors=%llu",
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  41  		      show_dev(__entry->dev), (unsigned long)__entry->ino,
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  42  		      blk_op_str(__entry->op), __entry->sector,
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  43  		      __entry->nr_sectors
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  44  	    )
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  45  );
-62ab1aadcccd03 Johannes Thumshirn 2021-01-27  46  
+- Add the judgment of the offset value of ra in the prologue.
+  (Suggested by Youling).
+- Create an inline function to check the sign bit, which is convenient
+  for extending other types of immediates.  (Suggested by Jinyang).
+- Fix sparse warning :
+    arch/loongarch/include/asm/uaccess.h:232:32: sparse: sparse: incorrect
+    type in argument 2 (different address spaces) @@     expected void const
+    *from @@     got void const [noderef] __user *from @@
+- Add USER_STACKTRACE support as a series.
 
-:::::: The code at line 22 was first introduced by commit
-:::::: 62ab1aadcccd037a7ced4ed99b4d46d2b4190183 zonefs: add tracepoints for file operations
+Changes from v2 to v3:
 
-:::::: TO: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-:::::: CC: Damien Le Moal <damien.lemoal@wdc.com>
+- Move unwind_start definition and use location, remove #ifdef in unwind_state
+  and use type instead of enable. (Suggested by Huacai).
+- Separated fixes for uaccess.h. (Suggested by Huacai).
+
+Changes from v3 to v4:
+
+- Add get wchan implement. (Suggested by Huacai).
+
+Qing Zhang (4):
+  LoongArch: Add guess unwinder support
+  LoongArch: Add prologue unwinder support
+  LoongArch: Add stacktrace and get_wchan support
+  LoongArch: Add USER_STACKTRACE support
+
+ arch/loongarch/Kconfig                  |   6 +
+ arch/loongarch/Kconfig.debug            |  28 ++++
+ arch/loongarch/include/asm/inst.h       |  52 +++++++
+ arch/loongarch/include/asm/processor.h  |   9 ++
+ arch/loongarch/include/asm/stacktrace.h |  22 +++
+ arch/loongarch/include/asm/switch_to.h  |  14 +-
+ arch/loongarch/include/asm/unwind.h     |  47 +++++++
+ arch/loongarch/kernel/Makefile          |   4 +
+ arch/loongarch/kernel/asm-offsets.c     |   2 +
+ arch/loongarch/kernel/process.c         |  91 ++++++++++++-
+ arch/loongarch/kernel/stacktrace.c      |  78 +++++++++++
+ arch/loongarch/kernel/switch.S          |   2 +
+ arch/loongarch/kernel/traps.c           |  24 ++--
+ arch/loongarch/kernel/unwind_guess.c    |  67 +++++++++
+ arch/loongarch/kernel/unwind_prologue.c | 173 ++++++++++++++++++++++++
+ 15 files changed, 602 insertions(+), 17 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/unwind.h
+ create mode 100644 arch/loongarch/kernel/stacktrace.c
+ create mode 100644 arch/loongarch/kernel/unwind_guess.c
+ create mode 100644 arch/loongarch/kernel/unwind_prologue.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.20.1
+

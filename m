@@ -2,74 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F72158B38A
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 05:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD3D58B391
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 05:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241638AbiHFDe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 23:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
+        id S241524AbiHFDly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 23:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241413AbiHFDeu (ORCPT
+        with ESMTP id S236885AbiHFDlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 23:34:50 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64D21A072
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 20:34:48 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id f192so3741639pfa.9
-        for <linux-kernel@vger.kernel.org>; Fri, 05 Aug 2022 20:34:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=veTkeUGSJq9jMSOq4JnTF8x9RpEtNY0/cp/aCVznyBY=;
-        b=IRgcX2QBJmTmSAKUtZ0uQNVBj7qlsfOun1GCR49m3iaW7fWTNGm+5+nXVRLmh/NJEg
-         DHdK4Q/rM0186FUA+qD/PAudlZ57QKpqe5TEtCy3l7cathatehpmOcYsRRp31tbEQ3P9
-         MPW6F9v28NTleDQJU0cbpVje+NFBoAVCQzFUa4of65BFkcar/5/5xDXJXV8rB3Yl/5r7
-         av+3F4XY9d8M5aNP7uuuxFr3IQzmQfSpBG2sKVb2PiFw0Fa8kef6DOZcxv7QXeGIYm3w
-         qB1gr7zBKojfHyH5H1VxoRMDBBUuQ34tDcp4aLaZ6QjIdHMjGAynKKlbYvXjVdFr86zy
-         3uYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=veTkeUGSJq9jMSOq4JnTF8x9RpEtNY0/cp/aCVznyBY=;
-        b=pjHMmvEV9i61pfndEoN/9tsThM9SCJ+AnBT3E6XCH4R09i+YUWzNYRaY/y/gnOc38f
-         HiJZFy0QsX+tT8IZAyL5FjhJrBpOLE50CHw5NdyDDqyjpQ9ADvO5EfqSB/f13n0Z/p8c
-         nmhLTSKrzsMzjGjBF1z0/bT3fGr9/G6rtf8oOb7urqYe4hmBKAbjd6MQBhPJpZl8v11z
-         dLgVyHJFxL+vKZxnMVJF5BmW8pPD/6AMI9zRAwhi4l+qvHI9XulpI0LOiQ4iq4EERTFi
-         6dTnnKPuPuPqrfxAMV7wJ7RfG2PmeZkxVNb6wcMZVOdbqGREMDal0KtqpLopdjylVuYM
-         V+6A==
-X-Gm-Message-State: ACgBeo1ab5+it7iOwOIrkQuy/rUhKfZG4kJW/J1se/uDVuK6X6+sdF6z
-        DL4vo+uFd2tzAs4tC6ISorT0Gg==
-X-Google-Smtp-Source: AA6agR7fDAyrYuGF7xqBwFwu6zL+LJDQGsjlG2R05LyVt0bWfwRFhrFmtGs+L82WEzACNPjV9NFbAA==
-X-Received: by 2002:a63:5626:0:b0:41b:576d:6f33 with SMTP id k38-20020a635626000000b0041b576d6f33mr8191745pgb.131.1659756888125;
-        Fri, 05 Aug 2022 20:34:48 -0700 (PDT)
-Received: from localhost (ec2-18-144-7-244.us-west-1.compute.amazonaws.com. [18.144.7.244])
-        by smtp.gmail.com with ESMTPSA id e14-20020a17090301ce00b0016dc26c7d30sm3882135plh.164.2022.08.05.20.34.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 20:34:47 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ian Rogers <irogers@google.com>,
+        Fri, 5 Aug 2022 23:41:47 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040A3B1D6;
+        Fri,  5 Aug 2022 20:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659757307; x=1691293307;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bxuIsQ3vSf1Kyabb4SQPd1SdGjo2Pj/GTdgl6KVSO0k=;
+  b=MjPLNXtlF3h6L3pWKbB81QXZb+rglfue/Wo6M9SeOz7fPflaPSgFDD14
+   TRoGJa2ksj8pNE8RZu4jcw25hvMxj1kMYSaOcDomX45VLsVxodeLpG+uH
+   9N/qiLNqn8yEMKyyof6QNXu2VBenbv8F3mqQC4CHC62EaZzdUNz1CJzUT
+   aFh+nJoWdMYQfrwZxwHSRxB+R2nIaPm/EtRxFGN50Qsw42KIYMu9asaRi
+   99tKmm2w1ofqt5nVzjyvZmEXcVJ0xAf4g+KCmWHgglWXPigM4OwGKmazD
+   ThUfShU7kOrsIijsIpAS2B2nf/5I6R4RBiE5IR25/h7nkbICsD61Z23uQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="376630299"
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="376630299"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 20:41:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="746062001"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Aug 2022 20:41:42 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKAh3-000Jz6-29;
+        Sat, 06 Aug 2022 03:41:41 +0000
+Date:   Sat, 6 Aug 2022 11:41:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH 2/2] perf test: Introduce script for java symbol testing
-Date:   Sat,  6 Aug 2022 11:34:34 +0800
-Message-Id: <20220806033434.121908-3-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220806033434.121908-1-leo.yan@linaro.org>
-References: <20220806033434.121908-1-leo.yan@linaro.org>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     kbuild-all@lists.01.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: Re: [PATCH V7 1/4] MIPS&LoongArch&NIOS2: Adjust prototypes of
+ p?d_init()
+Message-ID: <202208061111.tJqmWcij-lkp@intel.com>
+References: <20220802100513.1303717-2-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802100513.1303717-2-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,90 +81,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit introduces a script for testing java symbols.
+Hi Huacai,
 
-The test records for java program, inject samples with JIT samples, then
-check specific words "Interpreter" and "jdk.internal" in the report, the
-test will pass if these two symbols are detected.
+Thank you for the patch! Perhaps something to improve:
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- tools/perf/tests/shell/test_java_symbol.sh | 66 ++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100755 tools/perf/tests/shell/test_java_symbol.sh
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on kvm/queue arm64/for-next/core linus/master v5.19 next-20220805]
+[cannot apply to akpm-mm/mm-everything tip/x86/mm]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/tools/perf/tests/shell/test_java_symbol.sh b/tools/perf/tests/shell/test_java_symbol.sh
-new file mode 100755
-index 000000000000..45d42a9fdca5
---- /dev/null
-+++ b/tools/perf/tests/shell/test_java_symbol.sh
-@@ -0,0 +1,66 @@
-+#!/bin/bash
-+# Test java symbol
-+
-+# SPDX-License-Identifier: GPL-2.0
-+# Leo Yan <leo.yan@linaro.org>, 2022
-+
-+PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-+PERF_INJ_DATA=$(mktemp /tmp/__perf_test.perf.data.inj.XXXXX)
-+
-+cleanup_files()
-+{
-+	echo "Cleaning up files..."
-+	rm -f ${PERF_DATA}
-+	rm -f ${PERF_INJ_DATA}
-+}
-+
-+trap cleanup_files exit term int
-+
-+if [ -e "$PWD/tools/perf/libperf-jvmti.so" ]; then
-+	LIBJVMTI=$PWD/tools/perf/libperf-jvmti.so
-+elif [ -e "$PWD/libperf-jvmti.so" ]; then
-+	LIBJVMTI=$PWD/libperf-jvmti.so
-+elif [ -e "$PREFIX/lib64/libperf-jvmti.so" ]; then
-+	LIBJVMTI=$PREFIX/lib64/libperf-jvmti.so
-+elif [ -e "$PREFIX/lib/libperf-jvmti.so" ]; then
-+	LIBJVMTI=$PREFIX/lib/libperf-jvmti.so
-+else
-+	echo "Fail to find libperf-jvmti.so"
-+	exit 1
-+fi
-+
-+cat <<EOF | perf record -k 1 -o $PERF_DATA jshell -s -J-agentpath:$LIBJVMTI
-+int fib(int x) {
-+	return x > 1 ? fib(x - 2) + fib(x - 1) : 1;
-+}
-+
-+int q = 0;
-+
-+for (int i = 0; i < 10; i++)
-+	q += fib(i);
-+
-+System.out.println(q);
-+EOF
-+
-+if [ $? -ne 0 ]; then
-+	echo "Fail to record for java program"
-+	exit 1
-+fi
-+
-+if ! perf inject -i $PERF_DATA -o $PERF_INJ_DATA -j; then
-+	echo "Fail to inject samples"
-+	exit 1
-+fi
-+
-+# Below is an example of the instruction samples reporting:
-+#   8.18%  jshell           jitted-50116-29.so    [.] Interpreter
-+#   0.75%  Thread-1         jitted-83602-1670.so  [.] jdk.internal.jimage.BasicImageReader.getString(int)
-+perf report --stdio -i ${PERF_INJ_DATA} 2>&1 | \
-+	egrep " +[0-9]+\.[0-9]+% .* (Interpreter|jdk\.internal).*" > /dev/null 2>&1
-+
-+if [ $? -ne 0 ]; then
-+	echo "Fail to find java symbols"
-+	exit 1
-+fi
-+
-+exit 0
+url:    https://github.com/intel-lab-lkp/linux/commits/Huacai-Chen/mm-sparse-vmemmap-Generalise-helpers-and-enable-for-LoongArch/20220802-180930
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: mips-buildonly-randconfig-r001-20220805 (https://download.01.org/0day-ci/archive/20220806/202208061111.tJqmWcij-lkp@intel.com/config)
+compiler: mips64el-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/284d2afe87bf580321065fb587ffb8ed5a1d0874
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Huacai-Chen/mm-sparse-vmemmap-Generalise-helpers-and-enable-for-LoongArch/20220802-180930
+        git checkout 284d2afe87bf580321065fb587ffb8ed5a1d0874
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/mm/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/mips/mm/init.c:42:
+   arch/mips/include/asm/pgalloc.h: In function 'pud_alloc_one':
+>> arch/mips/include/asm/pgalloc.h:96:26: warning: passing argument 1 of 'pud_init' makes pointer from integer without a cast [-Wint-conversion]
+      96 |                 pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
+         |                          ^~~~~~~~~~~~~~~~~~
+         |                          |
+         |                          long unsigned int
+   In file included from arch/mips/include/asm/pgtable.h:17,
+                    from include/linux/pgtable.h:6,
+                    from include/linux/mm.h:29,
+                    from include/linux/pagemap.h:8,
+                    from arch/mips/mm/init.c:21:
+   arch/mips/include/asm/pgtable-64.h:329:28: note: expected 'void *' but argument is of type 'long unsigned int'
+     329 | extern void pud_init(void *addr);
+         |                      ~~~~~~^~~~
+   arch/mips/include/asm/pgalloc.h:96:17: error: too many arguments to function 'pud_init'
+      96 |                 pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
+         |                 ^~~~~~~~
+   arch/mips/include/asm/pgtable-64.h:329:13: note: declared here
+     329 | extern void pud_init(void *addr);
+         |             ^~~~~~~~
+   arch/mips/mm/init.c: At top level:
+   arch/mips/mm/init.c:60:6: warning: no previous prototype for 'setup_zero_pages' [-Wmissing-prototypes]
+      60 | void setup_zero_pages(void)
+         |      ^~~~~~~~~~~~~~~~
+--
+   In file included from arch/mips/mm/pgtable.c:9:
+   arch/mips/include/asm/pgalloc.h: In function 'pud_alloc_one':
+>> arch/mips/include/asm/pgalloc.h:96:26: warning: passing argument 1 of 'pud_init' makes pointer from integer without a cast [-Wint-conversion]
+      96 |                 pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
+         |                          ^~~~~~~~~~~~~~~~~~
+         |                          |
+         |                          long unsigned int
+   In file included from arch/mips/include/asm/pgtable.h:17,
+                    from include/linux/pgtable.h:6,
+                    from include/linux/mm.h:29,
+                    from arch/mips/mm/pgtable.c:7:
+   arch/mips/include/asm/pgtable-64.h:329:28: note: expected 'void *' but argument is of type 'long unsigned int'
+     329 | extern void pud_init(void *addr);
+         |                      ~~~~~~^~~~
+   arch/mips/include/asm/pgalloc.h:96:17: error: too many arguments to function 'pud_init'
+      96 |                 pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
+         |                 ^~~~~~~~
+   arch/mips/include/asm/pgtable-64.h:329:13: note: declared here
+     329 | extern void pud_init(void *addr);
+         |             ^~~~~~~~
+
+
+vim +/pud_init +96 arch/mips/include/asm/pgalloc.h
+
+3377e227af441a Alex Belits  2017-02-16  89  
+3377e227af441a Alex Belits  2017-02-16  90  static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+3377e227af441a Alex Belits  2017-02-16  91  {
+3377e227af441a Alex Belits  2017-02-16  92  	pud_t *pud;
+3377e227af441a Alex Belits  2017-02-16  93  
+473738eb78c3e3 Michal Hocko 2017-07-12  94  	pud = (pud_t *) __get_free_pages(GFP_KERNEL, PUD_ORDER);
+3377e227af441a Alex Belits  2017-02-16  95  	if (pud)
+3377e227af441a Alex Belits  2017-02-16 @96  		pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
+3377e227af441a Alex Belits  2017-02-16  97  	return pud;
+3377e227af441a Alex Belits  2017-02-16  98  }
+3377e227af441a Alex Belits  2017-02-16  99  
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

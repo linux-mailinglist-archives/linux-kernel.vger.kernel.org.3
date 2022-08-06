@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D45158B639
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC95358B633
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbiHFOv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 10:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
+        id S231322AbiHFOpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 10:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiHFOv5 (ORCPT
+        with ESMTP id S230082AbiHFOpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 10:51:57 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FC4101CB
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 07:51:55 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id p8so4952997plq.13
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 07:51:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=ZHZGZq6h+lUo2eCrK9NN33tawRm/nou4eWvVvyVV5/g=;
-        b=IBJCY8eQMmxSsTRzXC8fUR9mMTETadx7Dc7FFAwqZFyNrLd21rO/zwCCeRr3O4SsXU
-         rRPG0BDeoL5+W0aNiX5rhkC+XKA8YS4/LZr5KxNs/6ngYmStUJPywy459UgvTwoTUCq8
-         K3YDkmWP3h8cTknXLO8Ns0Sc9LPkFzKLyVYxZqRQtXVBBOdEegG5EtUs2PLPAUlPbRZy
-         5FYEtkqxHT7QPWyUy3n7AsLfsjhjEI6FeqD2b1IUy4RmvjgaXdSnj8Vy/MWW4nJaITNY
-         V3gfPD17xAHYLTAZ/0ihbLyddkJmNk7nChXr9zWbZf8dEOgL04rXZMclXiHMrHn50kB9
-         8lWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=ZHZGZq6h+lUo2eCrK9NN33tawRm/nou4eWvVvyVV5/g=;
-        b=zpL54+KuA0JOiEY3nxgdja5w1o7KfXEoG7ui6lagZapWloTQZ0zbbaVp3FzCT7cRUv
-         SsTS4rjMgEx4EnKuTyjR7Jo+L7TUJOW1Ma07tHzMkcPUWP5NSOEXJtWeGpA/wbficcmA
-         7oWUsIFaJJ6JxuGjFxDjgmyXgQmmc49+h1NED6PE8n+uu6eNAbo3zGGYu99iFSC9hxUn
-         JqAso7F66o+CWf29PNs572H/gYiqDyZszfFCrI5lRnV5REiNaMEoRZbwz+x50fiRkKlh
-         9EIcIO9fpXzXbeLOIFe9ekY+gXAAuRD2vLj7Tj8kEOb3TbPdD6uz9UeET4ZQeqb2if3e
-         At4Q==
-X-Gm-Message-State: ACgBeo1Vxx6iXgzXHlHmmKuxa3wVdM1mXg4lp6+PhpYpZs3takFEUJ+p
-        Uv4+Dnt5DQMloEP9vBxCZLWDag==
-X-Google-Smtp-Source: AA6agR5tB1lfDWW5CK6g4gZATc2POoUrGVodj3DAFSvqGlbMXd9oczcdSfywNEA6LKlI4avxeOne+w==
-X-Received: by 2002:a17:902:bd08:b0:16d:4230:cb45 with SMTP id p8-20020a170902bd0800b0016d4230cb45mr11344547pls.59.1659797514464;
-        Sat, 06 Aug 2022 07:51:54 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id o187-20020a625ac4000000b0052ef9556f47sm1527411pfb.40.2022.08.06.07.51.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Aug 2022 07:51:53 -0700 (PDT)
-Message-ID: <026c2c04-aec2-0a8c-ed96-f31ae0918b2e@kernel.dk>
-Date:   Sat, 6 Aug 2022 08:51:52 -0600
+        Sat, 6 Aug 2022 10:45:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54ECE020;
+        Sat,  6 Aug 2022 07:45:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 604776109A;
+        Sat,  6 Aug 2022 14:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B8DC433D6;
+        Sat,  6 Aug 2022 14:45:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659797104;
+        bh=jEFWSRkjcPJjtn2ZeKa0q1VbeEaRotlPyr2tjOftR/U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HBhEvfP/RFNqVewgkGusiDopy4wrLQ5mCcD9MCDGHLlu0B+XCFh5lJGW1AToL36DL
+         8YncidWabZftcLcAtfHGvVohfZhPkmOZhlcVic2AyhiKBsrAvEQyPpkud5LpPCr1wK
+         tfWJ31ShtFJOzzWM5gPLfEefNtUfJZ8pqb2n3LZCMixdlV0amtn4EMUVDuOVxhrLBP
+         8JFOoYD3aNc42ObiJG3Pj5C5acBPwH84guQq61bx5n1Gh9GlhdWiWSDJUr+ziRTcDN
+         fA9Mj+nnCGo5J7YWePP+kf3w0Sb6o8lsgBqupY/8OPiycxJoaBX42ijXdnpwItFafi
+         RDV9F9z47hmkA==
+Date:   Sat, 6 Aug 2022 15:55:23 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
+ driver
+Message-ID: <20220806155523.37c3e587@jic23-huawei>
+In-Reply-To: <20220803191621.tzrmndkygfe7nlpx@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220803131132.19630-1-ddrokosov@sberdevices.ru>
+        <20220803131132.19630-3-ddrokosov@sberdevices.ru>
+        <CAHp75VcVuC6yVoB1kycCOfqMa=JfCtbe3WYSK5qndtYcJy3vpg@mail.gmail.com>
+        <20220803191621.tzrmndkygfe7nlpx@CAB-WSD-L081021.sigma.sbrf.ru>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH RESEND 1/1] loop: introduce LO_FLAGS_NODEALLOC
-Content-Language: en-US
-To:     Zhang Boyang <zhangboyang.id@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org
-Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Jan Kara <jack@suse.cz>, Ming Lei <ming.lei@redhat.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org
-References: <20220806114943.8754-1-zhangboyang.id@gmail.com>
- <20220806114943.8754-2-zhangboyang.id@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220806114943.8754-2-zhangboyang.id@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/6/22 5:49 AM, Zhang Boyang wrote:
-> Previously, for file-backed loop devices, REQ_OP_DISCARD and
-> REQ_OP_WRITE_ZEROES (without REQ_NOUNMAP) are implemented using
-> fallocate(FALLOC_FL_PUNCH_HOLE), which will cause the underlying file to
-> be sparse and disk space freed. The users have no choice to prevent this
-> this from happening.
+
 > 
-> This patch introduces LO_FLAGS_NODEALLOC. With this flag set,
-> REQ_OP_DISCARD and REQ_OP_WRITE_ZEROES are forced to use
-> fallocate(FALLOC_FL_ZERO_RANGE). The disk space of underlying file is
-> kept allocated. This is useful if users, for example, want to use a
-> preallocated file as the backing file.
+> [...]
+> 
+> > > +               return dev_err_probe(dev, err, "cannot enable push-pull int\n");  
+> > 
+> > interrupt  
+> 
+> It will be more ugly due 80 symbols restriction.
 
-Just in terms of readability, I would prefer if NO_DEALLOC is used
-consistently rather than NODEALLOC. The latter reads more like
-node-alloc to me.
+These days we let that stretch a little for cases like these.
 
--- 
-Jens Axboe
+> 
+> > > +       indio_dev->modes = 0; /* setup buffered mode later */  
+> > 
+> > Why explicit assignment to 0? Doesn't kzalloc() do it for you?  
+> 
+> kzalloc() will do it for me, of course. Previously, I initialized modes to
+> INDIO_DIRECT_MODE to just provide default value for that. Jonathan
+> suggested to replace it with 0. 
 
+I did?  I wonder what I was smoking that day. 
+Should be set to INDIO_DIRECT_MODE as you had it previously.
+
+(From what I recall it will work either way but we have in the past had
+core code that checked this and may do again in the future so drivers should
+still be setting it to specify they provide sysfs interfaces to directly read
+the channels).
+
+> I can remove this line at all, no problem.
+> I just thought, it's more readable.

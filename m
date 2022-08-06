@@ -2,57 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABF458B60D
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D425258B61A
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 16:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbiHFOWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 10:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S231829AbiHFOdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 10:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiHFOWE (ORCPT
+        with ESMTP id S231772AbiHFOdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 10:22:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BBF11A24;
-        Sat,  6 Aug 2022 07:22:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6D0BB8069B;
-        Sat,  6 Aug 2022 14:22:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF4BC433C1;
-        Sat,  6 Aug 2022 14:21:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659795721;
-        bh=HkNJnYcSEBuJ4YsCeTCaPqJ4cCK2gNOMXnFH8NjrmH0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Qy1WpG6PIF54IANVnlB+23sKM3kIajnUro+RKcUEVUV1gEXILZDV31FoOoCDcXvTc
-         tp/AOvvbzBjMt5Rl+WO3nmvS2QyQoEK11FjVAoU5u/LjB9hm1eB2SD/4FD9FFdu9A9
-         SOw6I58b3/lSO6Qf9qmdgUI1Q+FCYiTxLtIz8gFc/mgTkoGUrBuZHLK3hGTK2EybY1
-         TvU33TpKC105ejP1MXT5mRh/B6QTa3EmTtNdXZz5Ok1eErivLSQ0FaD5JMrrvrEwtM
-         G65nAu0r2mPOJKsp89T5+aWtZ71njz/uuclqwTBOxB3w2rju9HFrJxWIASRInsMwzt
-         FE6iY6YnZzcrw==
-Date:   Sat, 6 Aug 2022 15:32:21 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Sat, 6 Aug 2022 10:33:22 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5267E0CE
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 07:33:20 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so3897839pjm.3
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 07:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=hZsvYReDneXNRGD9Ri34paDQng4soD5qGv+2z4J+I+w=;
+        b=BdBZ4Li3Y94+2gVjZ+pujBDNmGjjbCDMKXkFvYwiTEb8Ix5BRMQdNPuQ1P5WpuVGvo
+         T+le9Aa3wkjezzc0VqshtWfp/4eGgMu5P9NNyT4ZbEs9yXueWZB1lN1sNXQfJpoQ8+DW
+         pzwBzVsdOYf+gjRfbjNVV/jqoMmq6d1Rnsevf5FE7PDVIrHoMrume6P+gyY/1o5lzitr
+         rkOcHK7xrr6sOrTP5LxKKkepkeSpc6OLDEs2pNETIMP+Z0gFDqkcz3z9hhTfeFiTuzHN
+         KJBXn38JJu+tu1+RL02y8qxRzMIgWtRJ4GpOtWnue/5E/ZGyZH6J9rJpZRQRdbG49ybj
+         /7Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=hZsvYReDneXNRGD9Ri34paDQng4soD5qGv+2z4J+I+w=;
+        b=tAivCS8LaGgGhZchjtJTryKN2CHFi/9LLi2YyiNAbhztKF98jo/JZ77RPPdXyjci2A
+         6FXQ+nkni19/ADgWUgTphWw6m6nSgvYSG/faCJDgOXY02sVvuSyuOYaonvvwlDnKNR0D
+         PMWc8CfvEwnie/IdUEONrHf3OVc83eg3nBT6MD2KChbQKNbxQCViOcLZItehzfAyjeXw
+         9UGxOFXU5rL6eHGn15cpQUF2rBTOwQKbP9ZnwYIxUsgwRIIWBtur3qdJ/jMQ9iPL/9uC
+         LUEuR8sLioJ1+d0eW8ONB1NzwRFEx+zfhi0QWjLiBmHzJtiPC98AWIXK5vT6Gx5EhMB7
+         S7oQ==
+X-Gm-Message-State: ACgBeo20dPc5TguCQAFLk7UeEF6h2EvX6DWyiA0T73mNd1c/YghhtCy6
+        Sepyx9g8Pru3KmvGP7B0EpSf
+X-Google-Smtp-Source: AA6agR7biwjrZH3fe7nViG6ekyA+bwZh0nAc43cXMOLRCFfNZu4KhPzA4sp8F60devRIaLBglDCOug==
+X-Received: by 2002:a17:902:e94f:b0:16d:847b:3343 with SMTP id b15-20020a170902e94f00b0016d847b3343mr11470880pll.103.1659796400131;
+        Sat, 06 Aug 2022 07:33:20 -0700 (PDT)
+Received: from thinkpad ([117.202.188.20])
+        by smtp.gmail.com with ESMTPSA id 134-20020a62198c000000b0052ab764fa78sm5048238pfz.185.2022.08.06.07.33.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 07:33:19 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 20:03:11 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: iio: gyroscope: bosch,bmg160: correct
- number of pins
-Message-ID: <20220806153221.1a90bd28@jic23-huawei>
-In-Reply-To: <20220805075503.16983-1-krzysztof.kozlowski@linaro.org>
-References: <20220805075503.16983-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 4/9] usb: dwc3: qcom: fix use-after-free on runtime-PM
+ wakeup
+Message-ID: <20220806143311.GE14384@thinkpad>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-5-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220804151001.23612-5-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,66 +88,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  5 Aug 2022 09:55:03 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-
-> BMG160 has two interrupt pins to which interrupts can be freely mapped.
-> Correct the schema to express such case and fix warnings like:
+On Thu, Aug 04, 2022 at 05:09:56PM +0200, Johan Hovold wrote:
+> The Qualcomm dwc3 runtime-PM implementation checks the xhci
+> platform-device pointer in the wakeup-interrupt handler to determine
+> whether the controller is in host mode and if so triggers a resume.
 > 
->   qcom/msm8916-alcatel-idol347.dtb: gyroscope@68: interrupts: [[97, 1], [98, 1]] is too long
+> After a role switch in OTG mode the xhci platform-device would have been
+> freed and the next wakeup from runtime suspend would access the freed
+> memory.
 > 
-> However the basic issue still persists - the interrupts should come in a
-> defined order.
+> Note that role switching is executed from a freezable workqueue, which
+> guarantees that the pointer is stable during suspend.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Also note that runtime PM has been broken since commit 2664deb09306
+> ("usb: dwc3: qcom: Honor wakeup enabled/disabled state"), which
+> incidentally also prevents this issue from being triggered.
 > 
-> ---
-> 
-> Changes since v1:
-> 1. Accept also INT2 as one interrupt (Jonathan).
+> Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+> Cc: stable@vger.kernel.org      # 4.18
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-This doesn't work. If we are going to support either interrupt, at the very least
-we need to require interrupt-names if the first one isn't INT1.  So your fix
-is right but not enough.
+It'd be good to mention the introduction of dwc3_qcom_is_host() function.
+Initially I thought it is used in a single place, but going through the rest of
+the patches reveals that it is used later on.
 
-Driver may ignore interrupt-names for now (would be good to have a sanity check in driver
-though so the driver explicitly checks for INT2 and doesn't use the interrupt if
-it is INT2 - support for that being for a future 'feature' addition).
-
-A hacky solution would be to require the first one to always be INT1 but that
-gives us no (backwards compatible) path forwards if someone does have a board
-where only INT2 is wired.
-
-So minimum change I think will be to provide interrupt-names allowing any of
-INT1 (default if not specified)
-INT1, INT2
-INT2
-
-and your fix below.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
 Thanks,
-
-Jonathan
-
-
+Mani
 
 > ---
->  .../devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml         | 2 ++
->  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml b/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml
-> index b6bbc312a7cf..1414ba9977c1 100644
-> --- a/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml
-> +++ b/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml
-> @@ -24,8 +24,10 @@ properties:
+> Changes in v2
+>  - new patch
+> 
+>  drivers/usb/dwc3/dwc3-qcom.c | 14 +++++++++++++-
+>  drivers/usb/dwc3/host.c      |  1 +
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index e9364141661b..6884026b9fad 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -298,6 +298,14 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+>  	icc_put(qcom->icc_path_apps);
+>  }
 >  
->    interrupts:
->      minItems: 1
-> +    maxItems: 2
->      description:
->        Should be configured with type IRQ_TYPE_EDGE_RISING.
-> +      If two interrupts are provided, expected order is INT1 and INT2.
+> +/* Only usable in contexts where the role can not change. */
+> +static bool dwc3_qcom_is_host(struct dwc3_qcom *qcom)
+> +{
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> +
+> +	return dwc->xhci;
+> +}
+> +
+>  static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+>  {
+>  	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> @@ -460,7 +468,11 @@ static irqreturn_t qcom_dwc3_resume_irq(int irq, void *data)
+>  	if (qcom->pm_suspended)
+>  		return IRQ_HANDLED;
 >  
->  required:
->    - compatible
+> -	if (dwc->xhci)
+> +	/*
+> +	 * This is safe as role switching is done from a freezable workqueue
+> +	 * and the wakeup interrupts are disabled as part of resume.
+> +	 */
+> +	if (dwc3_qcom_is_host(qcom))
+>  		pm_runtime_resume(&dwc->xhci->dev);
+>  
+>  	return IRQ_HANDLED;
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index f56c30cf151e..f6f13e7f1ba1 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -135,4 +135,5 @@ int dwc3_host_init(struct dwc3 *dwc)
+>  void dwc3_host_exit(struct dwc3 *dwc)
+>  {
+>  	platform_device_unregister(dwc->xhci);
+> +	dwc->xhci = NULL;
+>  }
+> -- 
+> 2.35.1
+> 
 
+-- 
+மணிவண்ணன் சதாசிவம்

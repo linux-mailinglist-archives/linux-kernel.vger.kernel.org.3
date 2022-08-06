@@ -2,130 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A0C58B507
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 12:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A3D58B509
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 12:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241645AbiHFKZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 06:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S241756AbiHFK1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 06:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiHFKZK (ORCPT
+        with ESMTP id S229671AbiHFK1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 06:25:10 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9463213D58;
-        Sat,  6 Aug 2022 03:25:08 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 11B3541247;
-        Sat,  6 Aug 2022 10:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:message-id:subject:subject:from:from:date:date
-        :received:received:received:received; s=mta-01; t=1659781505; x=
-        1661595906; bh=Q4UWjyW+pixLaTW0W0cgN8BYm6mgWJyHbqebGfcoTtI=; b=t
-        Ny1n/wsWp0odKmQJc24E0YNR0AY2kmaYsYwsoi8zA5TorIaOo77F0gw+ItkH8+mk
-        5h2wKlEyPR70B+hD+wjB1E/a53ItEm/vgwBJrbY0yMElplIf4XqpGofTjofLCVUk
-        O8WZ0nB6+XPhnnD0deUMlAWvAx//Po/EUwBItKK9ZE=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zOgZf4FZOzVM; Sat,  6 Aug 2022 13:25:05 +0300 (MSK)
-Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id AAA4541246;
-        Sat,  6 Aug 2022 13:25:01 +0300 (MSK)
-Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
- T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Sat, 6 Aug 2022 13:25:01 +0300
-Received: from yadro.com (10.178.119.167) by T-EXCH-09.corp.yadro.com
- (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Sat, 6 Aug 2022
- 13:24:59 +0300
-Date:   Sat, 6 Aug 2022 13:24:59 +0300
-From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
-To:     <ojeda@kernel.org>
-CC:     <alex.gaynor@gmail.com>, <ark.email@gmail.com>,
-        <bjorn3_gh@protonmail.com>, <bobo1239@web.de>,
-        <bonifaido@gmail.com>, <boqun.feng@gmail.com>,
-        <davidgow@google.com>, <dev@niklasmohrin.de>,
-        <dsosnowski@dsosnowski.pl>, <foxhlchen@gmail.com>,
-        <gary@garyguo.net>, <geofft@ldpreload.com>,
-        <gregkh@linuxfoundation.org>, <jarkko@kernel.org>,
-        <john.m.baublitz@gmail.com>, <leseulartichaut@gmail.com>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <m.falkowski@samsung.com>, <me@kloenk.de>, <milan@mdaverde.com>,
-        <mjmouse9999@gmail.com>, <patches@lists.linux.dev>,
-        <rust-for-linux@vger.kernel.org>, <thesven73@gmail.com>,
-        <torvalds@linux-foundation.org>, <viktor@v-gar.de>,
-        <wedsonaf@google.com>
-Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
-Message-ID: <Yu5Bex9zU6KJpcEm@yadro.com>
+        Sat, 6 Aug 2022 06:27:43 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E161D48;
+        Sat,  6 Aug 2022 03:27:42 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id ff27so899701qtb.11;
+        Sat, 06 Aug 2022 03:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ojb/oCXcMsye9R9CinrRz1U1Kdh/Eo0FGrLI1wf3hRo=;
+        b=SV9w6rFrbzPtMv1R31cJ+GUPMfFRCHJfmfKJfTTLpDBrrc9VyEQzzVRPflpihdbzEj
+         uuByrltYXixKsW3PTMi6EMVcyb7lHjvWCeQtGvrASfgy+v+AHOFOZ4AyaH5Zbn1WgrdV
+         K60/iSExTU6QqGdoGHSzjL5ZKQnFDbDM6UhWYqOz4AK5PHPJTZ7IXX9SwUxMctPnUjdw
+         qaXQ0H4ilY38hPwoJS6Kbgl1d33Dfkv20OgFtpj8GzAqj+cxWggyrR3d30CO9chzrcfC
+         OTeWai6Hwm0IrlUEl+4vsrZgdzrF0sRVFAZud4easlHzbz1+JXiwgRTS6DjGxf5AXWZs
+         LPqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ojb/oCXcMsye9R9CinrRz1U1Kdh/Eo0FGrLI1wf3hRo=;
+        b=14rf70KfUUlyCL7OYWhsI/vWxEDPZZAfgeb93kEs7Db1sGCkF5a6O2su2XBNZ7GXEC
+         Ne1CUg+XzVROqzN8OMWrNnooMTfAbO5Rf1qzCgd39X1EDDeh/BDkve8O90w9FyqKenqa
+         BTH5y8GZ0GOsBko0mA9xHQY8zKUxgGQhQ1fmz4YUKEyI2uEIaXLinMo0q9aeuyYrdUsa
+         jpcTE4H+oZUISKc8zJgzijV/UFbtOrrU5hLB9SR9A6luLMouLc4tvcFuNMq/ykcq8OnW
+         ejSOJ0VDOYQ2QASj8L3lbMkJvgaeq9TgHvcAww0zMTKI+oPpTLCAP0+NQ0wKkmBQIzLB
+         70Dw==
+X-Gm-Message-State: ACgBeo0IF0tIrODXCsKLzuWKe5CZ95XDwQLUVw0tX+mEr5mGWggqSBVL
+        ji2ZyeHBoEmP1sPMESqtVwDqkHCKLSLvcjPemXY=
+X-Google-Smtp-Source: AA6agR4vEs3/3l/nfiwRbEmkE4Jpc/Nx5vNokQLkPB8Gtj1j6m0KOpDZ/VI2B5cAjbZwWY2Z43LTsKF4dTXKQ6Ohpu4=
+X-Received: by 2002:ac8:5784:0:b0:31f:24e:93f5 with SMTP id
+ v4-20020ac85784000000b0031f024e93f5mr9170257qta.429.1659781661197; Sat, 06
+ Aug 2022 03:27:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220805154231.31257-13-ojeda@kernel.org>
-X-Originating-IP: [10.178.119.167]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-09.corp.yadro.com (172.17.11.59)
+References: <20220805081909.10962-1-luke@ljones.dev> <20220805081909.10962-2-luke@ljones.dev>
+ <CAHp75Ve-oo=pGkpD10kbOVtrYtzQLscFq9HO0-Y5a6M_fpXDNw@mail.gmail.com> <N7V6GR.XFSPFYLCEU9X2@ljones.dev>
+In-Reply-To: <N7V6GR.XFSPFYLCEU9X2@ljones.dev>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 6 Aug 2022 12:27:04 +0200
+Message-ID: <CAHp75VfGSpYsX_bAebtU3TbjzAK7fmYioJB88X8p3NG5BDA2+g@mail.gmail.com>
+Subject: Re: [PATCH 1/5] asus-wmi: Add basic support for TUF laptop keyboard RGB
+To:     Luke Jones <luke@ljones.dev>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +unsafe impl GlobalAlloc for KernelAllocator {
-> +    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-> +        // `krealloc()` is used instead of `kmalloc()` because the latter is
-> +        // an inline function and cannot be bound to as a result.
-> +        unsafe { bindings::krealloc(ptr::null(), layout.size(), bindings::GFP_KERNEL) as *mut u8 }
-> +    }
-> +
-> +    unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
-> +        unsafe {
-> +            bindings::kfree(ptr as *const core::ffi::c_void);
-> +        }
-> +    }
-> +}
+On Sat, Aug 6, 2022 at 12:16 PM Luke Jones <luke@ljones.dev> wrote:
+> On Sat, Aug 6 2022 at 11:44:33 +0200, Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Fri, Aug 5, 2022 at 10:20 AM Luke D. Jones <luke@ljones.dev> wrote:
 
-I sense possible problems here. It's common for a kernel code to pass
-flags during memory allocations.
+...
 
-For example:
+> >>   #include <linux/leds.h>
+> >>  +#include <linux/led-class-multicolor.h>
+> >
+> > Not sure about the ordering ('-' vs. 's') in locale C.
+>
+> I used hid-playstation.c as a reference and followed that ordering.
 
-  struct bio *bio;
+Try something like this:
 
-  for (...) {
-        bio = bio_alloc_bioset(bdev, nr_vecs, opf, GFP_NOIO, bs);
-        if (!bio)
-        	return -ENOMEM;
-  }
+  LC_ALL=c sort
 
-Without GFP_NOIO we can run into a deadlock, because the kernel will try
-give us free memory by flushing the dirty pages and we need the memory
-to actually do it and boom, deadlock.
+for these two lines and see if the ordering is the same.
 
-Or we can be allocating some structs under spinlock (yeah, that happens too):
+...
 
-  struct efc_vport *vport;
+> >>  +       if (err) {
+> >>  +               pr_err("Unable to set TUF RGB data?\n");
+> >
+> > Why not dev_err() ?
+>
+> I didn't know about it? Is there an example or doc on its use?
 
-  spin_lock_irqsave(...);
-  vport = kzalloc(sizeof(*vport), GFP_ATOMIC);
-  if (!vport) {
-  	spin_unlock_irqrestore(...);
-  	return NULL;
-  }
-  spin_unlock(...);
+Thousands of examples in the kernel source tree. The point is if you
+have a device (instance) available, use it for messaging.
 
-Same can (and probably will) happen to e.g. Vec elements. So some form
-of flags passing should be supported in try_* variants:
+> >>  +               return err;
+> >>  +       }
+> >>  +       return 0;
+> >
+> > return err;
+>
+> Something like this then?
+>
+> if (err) {
+>         pr_err("Unable to set TUF RGB data?\n");
+> }
+> return err;
+>
+> If so, done.
 
-  let mut vec = Vec::try_new(GFP_ATOMIC)?;
+No parentheses. Have you run checkpatch.pl?
 
-  vec.try_push(GFP_ATOMIC, 1)?;
-  vec.try_push(GFP_ATOMIC, 2)?;
-  vec.try_push(GFP_ATOMIC, 3)?;
+Something like
+
+  if (err)
+    dev_err(...);
+
+  return err;
+
+> >>  +}
+
+-- 
+With Best Regards,
+Andy Shevchenko

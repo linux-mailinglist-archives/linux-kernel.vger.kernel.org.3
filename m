@@ -2,122 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF2258B30B
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 02:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5D058B314
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 02:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241450AbiHFA0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 5 Aug 2022 20:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
+        id S241443AbiHFArm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 5 Aug 2022 20:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241414AbiHFA0l (ORCPT
+        with ESMTP id S229710AbiHFArk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 5 Aug 2022 20:26:41 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D59186DA;
-        Fri,  5 Aug 2022 17:26:40 -0700 (PDT)
+        Fri, 5 Aug 2022 20:47:40 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693C15D0FC
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 17:47:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659745600; x=1691281600;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V7WkwMRtvzgnOUB9B91sjg30DJM30XVkzNMiGpG+Zm0=;
-  b=ULgoFTKVmGhyhdZx8POJGHTYZ7kiJVgoQV2Ob8+bb5o6DpRZV+eYEFr7
-   9Tmu9ciY9+9k+gDgpQ8ANZV2SZiXXdjIFkF0bfeUm4YygxtrFBMxJNdeS
-   FTWHKijPJsuzf/B2dSxB1fw8ycIPfNmnSUXb6pf8qMPmg8zVfaUlTQbLV
-   u792zqwihyLto6GbnLoVDRwEgJ6GgqKX4uHe+UPsUWw+HfPYtXkBeeCe0
-   xVIenC5fGb4r+i8hoXSfCrmjQA0WqAa8pqsCQHs0Vvsx0/QLoX2GGkF9G
-   JRytBVrAr8bWL5t2PUkupjbWlX9UYUqdUDAC4RGpCP6h26rkeq07Xy5JW
+  t=1659746859; x=1691282859;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=glszrEwl1OKsvGBXpAoV4Py+FHvDx8VXlMQ5ubeaEiI=;
+  b=Dh71o/Cw0kF1z8T2W6/FLpAwxohgXVkYOXvkAsbgJuBIJPySFor3SKh4
+   vFqEXsi9hO/rNxmjC4XlPDrFIkVig/zlS4FKqQfhOM9LxNRFdLe/MCKn4
+   H5prFepUmJZl5Cv3ES+13GnfOHxVgdO2jGZcUZxKC7aqiXTJ/QcLc9FEQ
+   xEKxjDkEvsgEuH+zOIGW7PtQHrmR55pJ/6idNNj4vULI+V/TyNCBDFv9K
+   dCHphDwgxnJMw02utxuPlczBvln1AbNIEfO1epys1M9PftwKqmjWIrY+i
+   5y6LFocz1xDlvbnI+ycUOh3Dd3TRNVF1Ah8ZGoYSp3ULfrC8TyaFSsZCI
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="273368296"
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="289080877"
 X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="273368296"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 17:26:40 -0700
+   d="scan'208";a="289080877"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 17:47:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="636673589"
+   d="scan'208";a="931417763"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 05 Aug 2022 17:26:36 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 05 Aug 2022 17:47:37 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oK7eG-000Jqf-0r;
-        Sat, 06 Aug 2022 00:26:36 +0000
-Date:   Sat, 6 Aug 2022 08:26:30 +0800
+        id 1oK7ya-000Jrt-3B;
+        Sat, 06 Aug 2022 00:47:36 +0000
+Date:   Sat, 6 Aug 2022 08:46:54 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Ben Dooks <ben.dooks@sifive.com>, linux-pwm@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha --subject-prefix=PATCH v3 
-        <jude.onyenegecha@sifive.com>, Ben Dooks <ben.dooks@sifive.com>
-Subject: Re: [PATCH 4/8] pwm: dwc: add of/platform support
-Message-ID: <202208060853.DyMRfoge-lkp@intel.com>
-References: <20220805165033.140958-5-ben.dooks@sifive.com>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: arch/arm64/net/bpf_jit_comp.c:1683:16: sparse: sparse: incorrect
+ type in assignment (different base types)
+Message-ID: <202208060800.EiP6qXW9-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805165033.140958-5-ben.dooks@sifive.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ben,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on thierry-reding-pwm/for-next]
-[also build test WARNING on linus/master v5.19 next-20220805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ben-Dooks/dt-bindings-pwm-Document-Synopsys-DesignWare-snps-pwm-dw-apb-timers-pwm2/20220806-015142
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git for-next
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220806/202208060853.DyMRfoge-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   74cae210a335d159f2eb822e261adee905b6951a
+commit: efc9909fdce00a827a37609628223cd45bf95d0b bpf, arm64: Add bpf trampoline for arm64
+date:   4 weeks ago
+config: arm64-randconfig-s051-20220805 (https://download.01.org/0day-ci/archive/20220806/202208060800.EiP6qXW9-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3bd100d711908b7d16a2c4793b4f5b597acb8d7f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ben-Dooks/dt-bindings-pwm-Document-Synopsys-DesignWare-snps-pwm-dw-apb-timers-pwm2/20220806-015142
-        git checkout 3bd100d711908b7d16a2c4793b4f5b597acb8d7f
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=efc9909fdce00a827a37609628223cd45bf95d0b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout efc9909fdce00a827a37609628223cd45bf95d0b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/pwm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/net/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm64/net/bpf_jit_comp.c:1683:16: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] *branch @@     got restricted __le32 [usertype] * @@
+   arch/arm64/net/bpf_jit_comp.c:1683:16: sparse:     expected unsigned int [usertype] *branch
+   arch/arm64/net/bpf_jit_comp.c:1683:16: sparse:     got restricted __le32 [usertype] *
+>> arch/arm64/net/bpf_jit_comp.c:1699:52: sparse: sparse: subtraction of different types can't work (different base types)
+>> arch/arm64/net/bpf_jit_comp.c:1733:29: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] * @@     got restricted __le32 [usertype] * @@
+   arch/arm64/net/bpf_jit_comp.c:1733:29: sparse:     expected unsigned int [usertype] *
+   arch/arm64/net/bpf_jit_comp.c:1733:29: sparse:     got restricted __le32 [usertype] *
+   arch/arm64/net/bpf_jit_comp.c:1917:52: sparse: sparse: subtraction of different types can't work (different base types)
 
->> drivers/pwm/pwm-dwc.c:321:1: warning: data definition has no type or storage class
-     321 | module_pci_driver(dwc_pwm_driver);
-         | ^~~~~~~~~~~~~~~~~
-   drivers/pwm/pwm-dwc.c:321:1: error: type defaults to 'int' in declaration of 'module_pci_driver' [-Werror=implicit-int]
->> drivers/pwm/pwm-dwc.c:321:1: warning: parameter names (without types) in function declaration
-   drivers/pwm/pwm-dwc.c:311:26: warning: 'dwc_pwm_driver' defined but not used [-Wunused-variable]
-     311 | static struct pci_driver dwc_pwm_driver = {
-         |                          ^~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+vim +1683 arch/arm64/net/bpf_jit_comp.c
 
-
-vim +321 drivers/pwm/pwm-dwc.c
-
-1ed2b3fca64516 Jarkko Nikula 2020-10-02  320  
-1ed2b3fca64516 Jarkko Nikula 2020-10-02 @321  module_pci_driver(dwc_pwm_driver);
-1ed2b3fca64516 Jarkko Nikula 2020-10-02  322  
+  1640	
+  1641	static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+  1642				    int args_off, int retval_off, int run_ctx_off,
+  1643				    bool save_ret)
+  1644	{
+  1645		u32 *branch;
+  1646		u64 enter_prog;
+  1647		u64 exit_prog;
+  1648		struct bpf_prog *p = l->link.prog;
+  1649		int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+  1650	
+  1651		if (p->aux->sleepable) {
+  1652			enter_prog = (u64)__bpf_prog_enter_sleepable;
+  1653			exit_prog = (u64)__bpf_prog_exit_sleepable;
+  1654		} else {
+  1655			enter_prog = (u64)__bpf_prog_enter;
+  1656			exit_prog = (u64)__bpf_prog_exit;
+  1657		}
+  1658	
+  1659		if (l->cookie == 0) {
+  1660			/* if cookie is zero, one instruction is enough to store it */
+  1661			emit(A64_STR64I(A64_ZR, A64_SP, run_ctx_off + cookie_off), ctx);
+  1662		} else {
+  1663			emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
+  1664			emit(A64_STR64I(A64_R(10), A64_SP, run_ctx_off + cookie_off),
+  1665			     ctx);
+  1666		}
+  1667	
+  1668		/* save p to callee saved register x19 to avoid loading p with mov_i64
+  1669		 * each time.
+  1670		 */
+  1671		emit_addr_mov_i64(A64_R(19), (const u64)p, ctx);
+  1672	
+  1673		/* arg1: prog */
+  1674		emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
+  1675		/* arg2: &run_ctx */
+  1676		emit(A64_ADD_I(1, A64_R(1), A64_SP, run_ctx_off), ctx);
+  1677	
+  1678		emit_call(enter_prog, ctx);
+  1679	
+  1680		/* if (__bpf_prog_enter(prog) == 0)
+  1681		 *         goto skip_exec_of_prog;
+  1682		 */
+> 1683		branch = ctx->image + ctx->idx;
+  1684		emit(A64_NOP, ctx);
+  1685	
+  1686		/* save return value to callee saved register x20 */
+  1687		emit(A64_MOV(1, A64_R(20), A64_R(0)), ctx);
+  1688	
+  1689		emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
+  1690		if (!p->jited)
+  1691			emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
+  1692	
+  1693		emit_call((const u64)p->bpf_func, ctx);
+  1694	
+  1695		if (save_ret)
+  1696			emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
+  1697	
+  1698		if (ctx->image) {
+> 1699			int offset = &ctx->image[ctx->idx] - branch;
+  1700			*branch = A64_CBZ(1, A64_R(0), offset);
+  1701		}
+  1702	
+  1703		/* arg1: prog */
+  1704		emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
+  1705		/* arg2: start time */
+  1706		emit(A64_MOV(1, A64_R(1), A64_R(20)), ctx);
+  1707		/* arg3: &run_ctx */
+  1708		emit(A64_ADD_I(1, A64_R(2), A64_SP, run_ctx_off), ctx);
+  1709	
+  1710		emit_call(exit_prog, ctx);
+  1711	}
+  1712	
+  1713	static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+  1714				       int args_off, int retval_off, int run_ctx_off,
+  1715				       u32 **branches)
+  1716	{
+  1717		int i;
+  1718	
+  1719		/* The first fmod_ret program will receive a garbage return value.
+  1720		 * Set this to 0 to avoid confusing the program.
+  1721		 */
+  1722		emit(A64_STR64I(A64_ZR, A64_SP, retval_off), ctx);
+  1723		for (i = 0; i < tl->nr_links; i++) {
+  1724			invoke_bpf_prog(ctx, tl->links[i], args_off, retval_off,
+  1725					run_ctx_off, true);
+  1726			/* if (*(u64 *)(sp + retval_off) !=  0)
+  1727			 *	goto do_fexit;
+  1728			 */
+  1729			emit(A64_LDR64I(A64_R(10), A64_SP, retval_off), ctx);
+  1730			/* Save the location of branch, and generate a nop.
+  1731			 * This nop will be replaced with a cbnz later.
+  1732			 */
+> 1733			branches[i] = ctx->image + ctx->idx;
+  1734			emit(A64_NOP, ctx);
+  1735		}
+  1736	}
+  1737	
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8324D58B44B
-	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 09:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B6358B44D
+	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 09:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241742AbiHFHpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 03:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S241637AbiHFHqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 03:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241672AbiHFHo6 (ORCPT
+        with ESMTP id S229928AbiHFHqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 03:44:58 -0400
-Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A9911C35
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 00:44:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1659771858; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=ZhewqxYZXZ+4d92N7/6+E+8roDitfj9snck27koQpePAE3WFuk9MjvSwIGz6eWGCFsV02NvYCyXgHjlcFYzpshrM4HYwvhhVFUEknCgVLTEyUrktXLIGER38MjWFJt4+UKcfvW/AQOzj2uYhK+wNJLTdvfB9NkK0w+PTsFa4FNU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1659771858; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=CciC0JA+1Sl6P741HLOLO7oPE18KzPzTWUnJ9g4NcCY=; 
-        b=cThpGGll9oucn4GJNKQsynEm1XnwpouK/xSplDvh7EmGcmv1JQV1HiDQYNz1ZyKZF9/qgn0BLQvGxm4z1cPHh3yr4nThvtfxGzQNXC7Mp80DVRyKbCj/uO00qnfCIvwnYQPm/T6c0GvGRLUYueBru+KgtpLIi58OMt2Iq1eVe+E=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659771858;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=CciC0JA+1Sl6P741HLOLO7oPE18KzPzTWUnJ9g4NcCY=;
-        b=JM4WjGJ0hHN4JfmzzT4r8K6mAuU1dym79SIEZ/Y2OH3I+04GYX6u2zRwNNXlbves
-        kQPJPG2nNPGEzXxrjpAKzpRvNKOc6foAddrDlVhbZngJ8XzVHTBEYCXhRKsbRLe+RlJ
-        X+0l+Ky/Qt8f+EO+ucwhV9nwa+gC5+HS/vz8ZQJ0=
-Received: from localhost.localdomain (43.250.158.93 [43.250.158.93]) by mx.zoho.in
-        with SMTPS id 165977185695375.74638919740744; Sat, 6 Aug 2022 13:14:16 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Message-ID: <ef1791b7f1b5207d9ffae053d8641c9a634a25ea.1659771577.git.code@siddh.me>
-Subject: [PATCH v2 2/2] kernel/watch_queue: NULL the dangling *pipe, and use it for clear check
-Date:   Sat,  6 Aug 2022 13:13:42 +0530
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1659771577.git.code@siddh.me>
-References: <cover.1659771577.git.code@siddh.me>
+        Sat, 6 Aug 2022 03:46:51 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFA5D42
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 00:46:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659772011; x=1691308011;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wTQnJDHa7NVFV9BzFv/7Qw9ptKj4CDus58bEqb2NO9o=;
+  b=E0ALF8PWbfdNeEywxi4ZaPSpV/0bncvRMI1ibZE79Y3why4wcR0wkaBB
+   w0oyUcthvVkXCE8+gX6CXPWjKCQjA5jPesb3GhHWq+yRRu9Kl675l9/VG
+   NqQjPwJZ6PTe1zp/xrR72hwDVtFNzCpYbsNs4nzqXNjpeaRQeqTlu7YE/
+   cl3MRDymu1gLJZVjpX76Jttmiyp3hTWkBJS/Y2yVRf+7QDY12ff/NHGir
+   vdYhS74J+WWn6WBwV+27e8WK4BDbbf/WEBetNNvNXGRLtUfAbaqcBnPLa
+   bqhhiVvT5+yQSOS/oIVHxM63Svm5lOlfmr3xQdrW6yx/Pxx/WlA2nG1sT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="290356882"
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="290356882"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 00:46:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="632281540"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 06 Aug 2022 00:46:49 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKEWG-000KAl-24;
+        Sat, 06 Aug 2022 07:46:48 +0000
+Date:   Sat, 6 Aug 2022 15:46:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Terrell <terrelln@fb.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: ERROR: modpost: "__ld_r13_to_r24_ret" [lib/zstd/zstd_decompress.ko]
+ undefined!
+Message-ID: <202208061532.tbOIA2BA-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,94 +62,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NULL the dangling pipe reference while clearing watch_queue.
+Hi Nick,
 
-If not done, a reference to a freed pipe remains in the watch_queue,
-as this function is called before freeing a pipe in free_pipe_info()
-(see line 834 of fs/pipe.c).
+FYI, the error/warning still remains.
 
-The sole use of wqueue->defunct is for checking if the watch queue has
-been cleared, but wqueue->pipe is also NULLed while clearing.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6614a3c3164a5df2b54abb0b3559f51041cf705b
+commit: 7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8 lib: zstd: Don't add -O3 to cflags
+date:   9 months ago
+config: arc-randconfig-r043-20220806 (https://download.01.org/0day-ci/archive/20220806/202208061532.tbOIA2BA-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-Thus, wqueue->defunct is superfluous, as wqueue->pipe can be checked
-for NULL. Hence, the former can be removed.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
----
- include/linux/watch_queue.h |  4 +---
- kernel/watch_queue.c        | 12 ++++++------
- 2 files changed, 7 insertions(+), 9 deletions(-)
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-diff --git a/include/linux/watch_queue.h b/include/linux/watch_queue.h
-index 7f8b1f15634b..d72ad82a4435 100644
---- a/include/linux/watch_queue.h
-+++ b/include/linux/watch_queue.h
-@@ -55,7 +55,7 @@ struct watch_filter {
-  *
-  * @rcu: RCU head
-  * @filter: Filter to use on watches
-- * @pipe: The pipe we're using as a buffer
-+ * @pipe: The pipe we're using as a buffer, NULL when queue is cleared/clo=
-sed
-  * @watches: Contributory watches
-  * @notes: Preallocated notifications
-  * @notes_bitmap: Allocation bitmap for notes
-@@ -63,7 +63,6 @@ struct watch_filter {
-  * @lock: To serialize accesses and removes
-  * @nr_notes: Number of notes
-  * @nr_pages: Number of pages in notes[]
-- * @defunct: True when queues closed
-  */
- struct watch_queue {
- =09struct rcu_head=09=09rcu;
-@@ -76,7 +75,6 @@ struct watch_queue {
- =09spinlock_t=09=09lock;
- =09unsigned int=09=09nr_notes;
- =09unsigned int=09=09nr_pages;
--=09bool=09=09=09defunct;
- };
-=20
- /**
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index a6f9bdd956c3..a70ddfd622ee 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -43,7 +43,7 @@ MODULE_LICENSE("GPL");
- static inline bool lock_wqueue(struct watch_queue *wqueue)
- {
- =09spin_lock_bh(&wqueue->lock);
--=09if (unlikely(wqueue->defunct)) {
-+=09if (unlikely(!wqueue->pipe)) {
- =09=09spin_unlock_bh(&wqueue->lock);
- =09=09return false;
- =09}
-@@ -105,9 +105,6 @@ static bool post_one_notification(struct watch_queue *w=
-queue,
- =09unsigned int head, tail, mask, note, offset, len;
- =09bool done =3D false;
-=20
--=09if (!pipe)
--=09=09return false;
--
- =09spin_lock_irq(&pipe->rd_wait.lock);
-=20
- =09mask =3D pipe->ring_size - 1;
-@@ -603,8 +600,11 @@ void watch_queue_clear(struct watch_queue *wqueue)
- =09rcu_read_lock();
- =09spin_lock_bh(&wqueue->lock);
-=20
--=09/* Prevent new notifications from being stored. */
--=09wqueue->defunct =3D true;
-+=09/*
-+=09 * This pipe will get freed by the caller free_pipe_info().
-+=09 * Removing this reference also prevents new notifications.
-+=09 */
-+=09wqueue->pipe =3D NULL;
-=20
- =09while (!hlist_empty(&wqueue->watches)) {
- =09=09watch =3D hlist_entry(wqueue->watches.first, struct watch, queue_nod=
-e);
---=20
-2.35.1
+ERROR: modpost: "__st_r13_to_r20" [lib/zstd/zstd_decompress.ko] undefined!
+ERROR: modpost: "__ld_r13_to_r22" [lib/zstd/zstd_decompress.ko] undefined!
+ERROR: modpost: "__ld_r13_to_r20_ret" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__ld_r13_to_r24_ret" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__st_r13_to_r23" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__st_r13_to_r19" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__ld_r13_to_r17_ret" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__st_r13_to_r24" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__ld_r13_to_r22_ret" [lib/zstd/zstd_decompress.ko] undefined!
+>> ERROR: modpost: "__ld_r13_to_r19_ret" [lib/zstd/zstd_decompress.ko] undefined!
+WARNING: modpost: suppressed 3 unresolved symbol warnings because there were too many)
 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

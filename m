@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C446458B409
+	by mail.lfdr.de (Postfix) with ESMTP id 3B44358B408
 	for <lists+linux-kernel@lfdr.de>; Sat,  6 Aug 2022 08:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241655AbiHFGNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 02:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
+        id S230369AbiHFGNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 02:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiHFGNu (ORCPT
+        with ESMTP id S241522AbiHFGNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 02:13:50 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC2B20BCA
-        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 23:13:50 -0700 (PDT)
+        Sat, 6 Aug 2022 02:13:51 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3543A20BCA
+        for <linux-kernel@vger.kernel.org>; Fri,  5 Aug 2022 23:13:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659766430; x=1691302430;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7ogGMYMg7jBlHDowggTQVb4JBiyykT3hE4hToiyk4z0=;
-  b=Q+zHdt6llfkO95y06qwzHXMfJtQ/nUZKaC+e6l3B023bCUSGMUk+mYY/
-   1Lx6HNa56ESwEiE0dV7NPnAFEV5pSA2Hu7mQfoydcTVg6CiDSTddFm6TT
-   7bS6+iHz0832m8YmFvYIeY2U1gwYja1poiy1yJZ8u2ogiF9EDDwtMkhOt
-   zh2JtCPiMi2D9GzCziRxj94eqEZrp3/+CepFeb0kQQrxep3UDo4NJnvtA
-   p1NM3wwyR8KsnfH9pYp9huqhwmEJQ3tqOHP/rQoMxOUmDWyQLkufSBLDs
-   EV9SUGP4p6vKNpJgyQeEXVqvNCnT7lM4LI8tt1vI5JERkeSPxUosvQtux
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="277268769"
+  t=1659766431; x=1691302431;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rnGoIqlgHnpHyW30pzBJBZ0XkdzXtBv1kgOaR1Ujoh4=;
+  b=CHPbNqd7mFAFAUdpDz0xfUxfauRgyE+fGQ7D1a7Ho3HsYfUDBQrN1fGC
+   cex8i/iDT4BAYh4zAWdcsUj2yZbzjhUzJzcvfjpgKMNR03R/Nl5f0MN3H
+   sN/kriNbdrDKM1A0kSUaOAu9AdNjSDw/chkM0yoSiZio+7oclvMY4ozVT
+   XUxz6nBTHxQbR/3i/QG5I9C+Z4rrbuPtVtRVISinzKFFTNJooAMdtE6YA
+   2DaJqfAjYzU4AeL5LHe9swTrL2+3v6UCCdp4JLlSqlX6Y3m3SG3yH1gCJ
+   JPYIGcPXWLZnoeDKYm20Mi+IWL27utCXvQyISySSxyAJyAc9HHGH/MoNP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="376638238"
 X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="277268769"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 23:13:48 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="376638238"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 23:13:50 -0700
 X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
-   d="scan'208";a="579750218"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 05 Aug 2022 23:13:47 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKD4E-000K6f-1g;
-        Sat, 06 Aug 2022 06:13:46 +0000
-Date:   Sat, 6 Aug 2022 14:13:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qin Jian <qinjian@cqplus1.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: kismet: WARNING: unmet direct dependencies detected for
- SERIAL_SUNPLUS_CONSOLE when selected by SOC_SP7021
-Message-ID: <202208061424.imoOUdLA-lkp@intel.com>
+   d="scan'208";a="671926830"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 23:13:49 -0700
+Received: by lahna (sSMTP sendmail emulation); Sat, 06 Aug 2022 09:13:46 +0300
+Date:   Sat, 6 Aug 2022 09:13:46 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Brad Campbell <lists2009@fnarfbargle.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Apple Thunderbolt Display chaining
+Message-ID: <Yu4Gmkous7asng6h@lahna>
+References: <YkrqL/wnACNVOpSi@lahna>
+ <ae336e2d-8e7c-9167-ab3d-8d642cd4fb2c@fnarfbargle.com>
+ <Yk2qMt568oEeTj8H@lahna>
+ <49183e52-2e73-b32f-11ad-6036b1040d7c@fnarfbargle.com>
+ <Yuz/Q3MTVIhCZU+0@lahna>
+ <f5c8b9f0-0d6d-c6db-ae0b-894acb58d078@fnarfbargle.com>
+ <Yu0UuOVGeIv/U+jU@lahna>
+ <d484d7e5-f1aa-1096-e6fb-bbf16ce28699@fnarfbargle.com>
+ <Yu0nWro4xXURbSX6@lahna>
+ <87c1a001-ef79-6390-dfe2-06d2850f6e84@fnarfbargle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87c1a001-ef79-6390-dfe2-06d2850f6e84@fnarfbargle.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6614a3c3164a5df2b54abb0b3559f51041cf705b
-commit: 0aa94eea8d955c82014e5368a843da93f1dc58f8 ARM: sunplus: Add initial support for Sunplus SP7021 SoC
-date:   4 weeks ago
-config: arm-kismet-CONFIG_SERIAL_SUNPLUS_CONSOLE-CONFIG_SOC_SP7021-0-0 (https://download.01.org/0day-ci/archive/20220806/202208061424.imoOUdLA-lkp@intel.com/config)
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0aa94eea8d955c82014e5368a843da93f1dc58f8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0aa94eea8d955c82014e5368a843da93f1dc58f8
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_SERIAL_SUNPLUS_CONSOLE --selectors CONFIG_SOC_SP7021 -a=arm
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=arm olddefconfig
+Hi Brad,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Fri, Aug 05, 2022 at 10:43:54PM +0800, Brad Campbell wrote:
+> On 5/8/22 22:21, Mika Westerberg wrote:
+> 
+> > They are pretty standard so I suspect myself the display side of things.
+> > Not sure if it is possible (I think it is from sysfs /sys/class/drm/*)
+> > to disable the tunneled DP connections and see if that makes it not
+> > hang. Alternatively you can try to comment out the call to
+> > tb_tunnel_dp() from the driver. Let me know if you want me to make hack
+> > patch that does it for you.
+> > 
+> 
+> I used this :
+> 
+> iff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+> index 9a3214fb5038..eae7523af78b 100644
+> --- a/drivers/thunderbolt/tb.c
+> +++ b/drivers/thunderbolt/tb.c
+> @@ -865,7 +865,7 @@ static void tb_tunnel_dp(struct tb *tb)
+>         struct tb_cm *tcm = tb_priv(tb);
+>         struct tb_port *port, *in, *out;
+>         struct tb_tunnel *tunnel;
+> -
+> +       return;
+>         if (!tb_acpi_may_tunnel_dp()) {
+>                 tb_dbg(tb, "DP tunneling disabled, not creating tunnel\n");
+>                 return;
+> 
+> I'm now using Linus GIT head. No change in behaviour really.
+> 
+> No tunnels were created. None of the TB displays light up in Linux or BIOS. System still locks
+> up on reboot and the first time I attempted to compose this reply it locked up hard before I
+> had a chance to finish it because I attempted to verify the devices were present with an lspci -tv.
+> 
+> If I do an lspci -tv after the module load, it locks hard instantly and reproducibly.
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS_CONSOLE when selected by SOC_SP7021
-   
-   WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS
-     Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && (ARCH_SUNPLUS [=y] || COMPILE_TEST [=n])
-     Selected by [y]:
-     - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
-   
-   WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS_CONSOLE
-     Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && SERIAL_SUNPLUS [=y]
-     Selected by [y]:
-     - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
+Okay, let's try to deal with one issue at the time so first the hang
+that appears after the OS is booted up. Do you still have the
+"pcie_port_pm=off" in the kernel command line? The hang that happens
+afterwards sounds exactly like that the runtime PM would kick in but the
+parameter should prevent that from happening. Since you are connecting
+Thunderbolt 1 devices there is really no PM we can do for them at all
+and the TBT driver should block it too.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Is it possible to narrow this down to a single device connected and then
+get me the full dmesg output (with CONFIG_PCI_DEBUG=y) and output of
+'sudo lspci -vv'?

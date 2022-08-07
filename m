@@ -2,84 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AD358B9AA
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 07:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F0958B9AD
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 07:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiHGFRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 01:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
+        id S232634AbiHGFVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 01:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiHGFRm (ORCPT
+        with ESMTP id S232336AbiHGFVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 01:17:42 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96D5E0DF
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 22:17:41 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id b4so6126974pji.4
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 22:17:41 -0700 (PDT)
+        Sun, 7 Aug 2022 01:21:46 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7567D101E3
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 22:21:44 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 92-20020a17090a09e500b001d917022847so2884903pjo.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 22:21:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/M40Lir0c3unLFM3oH2uK5N2/5ZEFQr2Skfy+gX1t/U=;
-        b=KPa5EHbxec7dPBJyLKuuOBy2dcOFjef0WqKoi6IaYpXsd7sdYVQ6Wr9sI6F+9kSaRc
-         Mq74iqKc93IhmZzCuW7QcPyGnJLqENWiLTgrDPLKfE4aLXkYylagFwdJ9AumUPXM2ucD
-         4tcsb5gX/Svz16b7fYggGScSQqGitFbJ6PiewhJ18aAnVchzwWQvdppBPLivoJtqg+NB
-         SlCI6nvSjkT3kAPGr3CPJiTe5e77vkm59LRpt2FdKKpbJQyvbiLG2+sFBBaHZQU5gtd2
-         /+f2Eu43Aye+MqiSpHFEk7SgwwGAfqUbMvJNZvJFNs/N34EWaditc3RWGNF2Pu08qMHU
-         lJCA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:reply-to:from:to:cc;
+        bh=wL7mrEXqfR7JkKlCwq5zI7WLd3+pttvpM4+bm7PFSkk=;
+        b=td44USCIMowH+HhS9q4p7b7/tjImuqz7RNoC0QYh04RMX07eZiQS8YRYR7zeU+rLgz
+         RvODkyy+D7SheD20nDz23JU1C7BzyfcEQrLpSysAdSFhswD3w3/M2w1GTSJ3LrzEkXlB
+         YyE0KJtBKwONeVVeGX8q2bK9ny+rmvxOlorvE+1mfG6X+SmR/n5lFbZkXSk6CsY5Kftd
+         Fe64lRNEUqfgcakMisE2hVtTY6hx3bmy7ozzBApT5RvxvUq6/uNIrmLQ7eqUQ5ZZLx4n
+         Kbyf5DktrFs5AUiSYBiO6eb3ejVGVcwiC5DFjSQ1ibbL58hXM8GELyHN8SJXYCbentqr
+         TmKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/M40Lir0c3unLFM3oH2uK5N2/5ZEFQr2Skfy+gX1t/U=;
-        b=4g9sRMoJOP1DnFGYbdLtXzuO0M/562/3iGgP4m9Ne5nZna0VFkVR/zMp+c5WZflIUT
-         PXJLFikq+39rtzLUMxCcekJX2M90MvtDbQW7rFv6UZ2BwXNRfdC4/HyDSTawFQ6Pc3Vj
-         2kiq56N9FYDnHDJ57bTYrryvLqXPOLVHVoVEeMW7G7t2bvbcOVTLy594lmHx2I7Neo/f
-         LLcy6QouBEqhluQxKy9lI5GZMMbxZ2qUWZMbeUVC2AyX6xk5/vSZux7wgQhd9J6l+H0p
-         X2YPwzxLI/x8N/VUoI7OwyC4xKgkp8JbYZPXY5s2iQYNowB5CxLw1mt7Uk1doONaKc5D
-         Bvng==
-X-Gm-Message-State: ACgBeo1Rqon+q11sQBbnongvvcn8cXbOXkmIO/7qkT0+EbY1i7r1UmnC
-        9ec2erWJ2bpreSFteAyDCEzxig==
-X-Google-Smtp-Source: AA6agR6NsU64wnmBKtMCQ71dQuf9D7EHh46eTrnAKTS/AgPHAL00p3DQabpZDAS1UBQG1dlBfMfwvw==
-X-Received: by 2002:a17:90b:394:b0:1f5:90a1:acf0 with SMTP id ga20-20020a17090b039400b001f590a1acf0mr9593429pjb.40.1659849461339;
-        Sat, 06 Aug 2022 22:17:41 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (173.242.120.104.16clouds.com. [173.242.120.104])
-        by smtp.gmail.com with ESMTPSA id s18-20020a170902c65200b0016d738d5dbbsm5860632pls.97.2022.08.06.22.17.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 22:17:40 -0700 (PDT)
-Date:   Sun, 7 Aug 2022 13:17:37 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     carsten.haitzler@foss.arm.com
-Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Subject: Re: [PATCH v5 10/14] perf test: Add thread loop test shell scripts
-Message-ID: <20220807051737.GH34254@leoy-ThinkPad-X240s>
-References: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
- <20220728145256.2985298-11-carsten.haitzler@foss.arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220728145256.2985298-11-carsten.haitzler@foss.arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:reply-to
+         :x-gm-message-state:from:to:cc;
+        bh=wL7mrEXqfR7JkKlCwq5zI7WLd3+pttvpM4+bm7PFSkk=;
+        b=IPOCYdmMDKm8R+FvTrj6UG8rjFJqcgvnYmlt0CHccHbc/ZcPLsijYJWM42v3ZOqavf
+         36VceofUob+GG2gatmdH+BkqZ+ARXkItslqKM+lxLpB7EvUpHXFb2WGt+P70onaB1Bbn
+         CvV1RpCHP2JgZ+BIj5NMB5VimnAl0jLXcp8SZ7mho+GVplSyRhAf3dDClDMrYyBm4WgE
+         kZq1PUKhNx0oXUe3DZLKBLiRBzHzMyrMG2SW1p77HkU/9pqYCNSo1iMy5KsdjBhXBqOu
+         UQtF4MmSb1mnq/Fux/qpvaZyDTkTzIC3rYv+/igBEQBcrhy2t4qEj8zg4ErV/qzel+jj
+         SB+w==
+X-Gm-Message-State: ACgBeo1usB526equkyR38YJtSG2XoZKz80JFrKdmwhlQLCrqQE1x1wEp
+        sVSGB6dUEHeYnhqFuuDabTTwXdli+64B
+X-Google-Smtp-Source: AA6agR5UG0ecnpmdzg3o3T19ioM2IbaTT48m4kmAqOm4YlBYWxq0i/H8i61rClkn0qQ1NnwNF6YNxg/TcGAd
+X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
+ (user=mizhang job=sendgmr) by 2002:a17:90b:1941:b0:1f3:2636:895 with SMTP id
+ nk1-20020a17090b194100b001f326360895mr15333323pjb.26.1659849704025; Sat, 06
+ Aug 2022 22:21:44 -0700 (PDT)
+Reply-To: Mingwei Zhang <mizhang@google.com>
+Date:   Sun,  7 Aug 2022 05:21:41 +0000
+Message-Id: <20220807052141.69186-1-mizhang@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH] KVM: x86/mmu: rename trace function name for asynchronous
+ page fault
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 03:52:52PM +0100, carsten.haitzler@foss.arm.com wrote:
-> From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
-> 
-> Add a script to drive the thread loop test that gathers data so
-> it passes a minimum bar (in this case do we get any perf context data
-> for every thread).
-> 
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+Rename the tracepoint function from trace_kvm_async_pf_doublefault() to
+trace_kvm_async_pf_repeated_fault() to make it clear, since double fault
+has nothing to do with this trace function.
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Asynchronous Page Fault (APF) is an artifact generated by KVM when it
+cannot find a physical page to satisfy an EPT violation. KVM uses APF to
+tell the guest OS to do something else such as scheduling other guest
+processes to make forward progress. However, when another guest process
+also touches a previously APFed page, KVM halts the vCPU instead of
+generating a repeated APF to avoid wasting cycles.
+
+Double fault (#DF) clearly has a different meaning and a different
+consequence when triggered. #DF requires two nested contributory exceptions
+instead of two page faults faulting at the same address. A prevous bug on
+APF indicates that it may trigger a double fault in the guest [1] and
+clearly this trace function has nothing to do with it. So rename this
+function should be a valid choice.
+
+No functional change intended.
+
+[1] https://www.spinics.net/lists/kvm/msg214957.html
+
+Signed-off-by: Mingwei Zhang <mizhang@google.com>
+---
+ arch/x86/kvm/mmu/mmu.c     | 2 +-
+ include/trace/events/kvm.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 06ac8c7cef67..0004ec68fc5c 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -4164,7 +4164,7 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ 	if (!fault->prefetch && kvm_can_do_async_pf(vcpu)) {
+ 		trace_kvm_try_async_get_page(fault->addr, fault->gfn);
+ 		if (kvm_find_async_pf_gfn(vcpu, fault->gfn)) {
+-			trace_kvm_async_pf_doublefault(fault->addr, fault->gfn);
++			trace_kvm_async_pf_repeated_fault(fault->addr, fault->gfn);
+ 			kvm_make_request(KVM_REQ_APF_HALT, vcpu);
+ 			return RET_PF_RETRY;
+ 		} else if (kvm_arch_setup_async_pf(vcpu, fault->addr, fault->gfn)) {
+diff --git a/include/trace/events/kvm.h b/include/trace/events/kvm.h
+index 37e1e1a2d67d..3bd31ea23fee 100644
+--- a/include/trace/events/kvm.h
++++ b/include/trace/events/kvm.h
+@@ -282,7 +282,7 @@ DEFINE_EVENT(kvm_async_get_page_class, kvm_try_async_get_page,
+ 	TP_ARGS(gva, gfn)
+ );
+ 
+-DEFINE_EVENT(kvm_async_get_page_class, kvm_async_pf_doublefault,
++DEFINE_EVENT(kvm_async_get_page_class, kvm_async_pf_repeated_fault,
+ 
+ 	TP_PROTO(u64 gva, u64 gfn),
+ 
+
+base-commit: 1612c382ffbdf1f673caec76502b1c00e6d35363
+-- 
+2.37.1.559.g78731f0fdb-goog
+

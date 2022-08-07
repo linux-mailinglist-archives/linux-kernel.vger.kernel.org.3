@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B626F58BDF5
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 00:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AACCF58BE0B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 00:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235353AbiHGWhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 18:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S231808AbiHGWlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 18:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232183AbiHGWhK (ORCPT
+        with ESMTP id S242416AbiHGWkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 18:37:10 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5B0262A
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 15:30:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659911459; x=1691447459;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ksSulHuho9W6i4hx0e/C1ZaHWldsvExDJG9sI01Dlo0=;
-  b=adoUosCvGe7nB2D8VdHspOe6Rl+fTzCOmvBndxt3AiuUT5TvtmAPSHvx
-   vYCcJWD9VVO3iiX7LEHSNVKqEDQuCFO2nNyovqNRSWNvMc7MxdtH+PFfp
-   oIRicBOZPuGubjU/je2tIp10eMkljBbTiT5J68jpAI/G/4lE/1b3y/WV3
-   Pk1o0uyTCVVhlktPf60wlWd++32Fr6aYZqvqICZLecRikBO7lJNmP6csb
-   2X25A8yswAnUj4UJhTXJ14C0byx8zg+zQwx6wzbzMqsoeI5giuYXceG7N
-   gUakCw7axa4LAzW0Uu0l6mSxFgZQeXyODoMEbcxMwtLsn+YOb/55rJVvf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="290476672"
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="290476672"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 15:30:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="554696648"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Aug 2022 15:30:57 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKonQ-000Lj3-1B;
-        Sun, 07 Aug 2022 22:30:56 +0000
-Date:   Mon, 8 Aug 2022 06:30:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc:     kbuild-all@lists.01.org, Chao Yu <yuchao0@huawei.com>,
-        Chao Yu <chao@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [chao:feature/dax 8/10] fs/f2fs/file.c:1107:22: warning: assignment
- to 'struct page *' from 'int' makes pointer from integer without a cast
-Message-ID: <202208080625.gFSUHC8I-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sun, 7 Aug 2022 18:40:47 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCE8BCA8;
+        Sun,  7 Aug 2022 15:33:54 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id i84so5894083ioa.6;
+        Sun, 07 Aug 2022 15:33:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc;
+        bh=3eZwuAFmjc+ZRz+NnpymNnE5U9avZ4uyAs/hATKVDy0=;
+        b=VVmtLY/XQAxuXiitQ8f1y8BbVrThiqW11AABbhdsD1qr5DY1V1F2f54fpkYlCfy6Yf
+         61vpM4RHGIDl7qAEyIurGi6tBjlVpQtbI+txyqyC23+60+2fv83RaOPnOwsNCYw4kXU0
+         Si3mmtl0mMk6o7Ewftm8pYBoDIYoZ5xHjYqOqTJ4VeeEm/rntzw8j39fbgLAxQbEQ9qW
+         0eD0GBqhJCfY8YV+1BC8kCBt0P4Y6NwTbKYYJoC4Vq7QmAeAIR96ND3u6OxKfP3TTfJg
+         aXxR57TVHEdGWyf6xOAnOYYVlkw+BTSfCFgQi/3eFtjKXtDel+AyCu4a906KJt92tSfA
+         WpuA==
+X-Gm-Message-State: ACgBeo1yhOsNATS144hj/v56E+jLOUbQ1T8IZAa330fIVSzsk+z8RPlZ
+        AXbsE+co6gHfN/ZvDIapQQ==
+X-Google-Smtp-Source: AA6agR6CbM74O42J1P5fVI6paXKlRrzL+WE41cDa93XM13rQjSONQDHjl6WY3uvZKT/x8peMjJNypg==
+X-Received: by 2002:a6b:cd4f:0:b0:675:b0bf:d999 with SMTP id d76-20020a6bcd4f000000b00675b0bfd999mr6358562iog.193.1659911633211;
+        Sun, 07 Aug 2022 15:33:53 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id o9-20020a022209000000b0033f7e44904fsm4473076jao.134.2022.08.07.15.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 15:33:52 -0700 (PDT)
+Received: (nullmailer pid 2326179 invoked by uid 1000);
+        Sun, 07 Aug 2022 22:33:51 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     u.kleine-koenig@pengutronix.de,
+        William Salmon <william.salmon@sifive.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Jude Onyenegecha --subject-prefix=PATCH v3 
+        <jude.onyenegecha@sifive.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com
+In-Reply-To: <20220805165033.140958-2-ben.dooks@sifive.com>
+References: <20220805165033.140958-1-ben.dooks@sifive.com> <20220805165033.140958-2-ben.dooks@sifive.com>
+Subject: Re: [PATCH 1/8] dt-bindings: pwm: Document Synopsys DesignWare snps,pwm-dw-apb-timers-pwm2
+Date:   Sun, 07 Aug 2022 16:33:51 -0600
+Message-Id: <1659911631.163349.2326178.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,67 +68,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
-head:   42f73c9b2a369f724de6c1df5acb0bbde2688e35
-commit: 59714a25c71315156f6ba8d49b3173915d6943cc [8/10] f2fs: handle layout changes to pinned DAX mappings
-config: arm-randconfig-r001-20220807 (https://download.01.org/0day-ci/archive/20220808/202208080625.gFSUHC8I-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=59714a25c71315156f6ba8d49b3173915d6943cc
-        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
-        git fetch --no-tags chao feature/dax
-        git checkout 59714a25c71315156f6ba8d49b3173915d6943cc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/f2fs/
+On Fri, 05 Aug 2022 17:50:26 +0100, Ben Dooks wrote:
+> Add documentation for the bindings for Synopsys' DesignWare PWM block
+> as we will be adding DT/platform support to the Linux driver soon.
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+> ---
+> v3:
+>  - add description and example
+>  - merge the snps,pwm-number into this patch
+>  - rename snps,pwm to snps,dw-apb-timers-pwm2
+> v2:
+>  - fix #pwm-cells to be 3
+>  - fix indentation and ordering issues
+> ---
+>  .../bindings/pwm/snps,dw-apb-timers-pwm2.yaml | 66 +++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-All warnings (new ones prefixed by >>):
+yamllint warnings/errors:
 
-   fs/f2fs/file.c: In function 'f2fs_file_mmap':
-   fs/f2fs/file.c:585:14: error: implicit declaration of function 'daxdev_mapping_supported' [-Werror=implicit-function-declaration]
-     585 |         if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/file.c: In function 'f2fs_break_layouts':
-   fs/f2fs/file.c:1107:24: error: implicit declaration of function 'dax_layout_busy_page' [-Werror=implicit-function-declaration]
-    1107 |                 page = dax_layout_busy_page(inode->i_mapping);
-         |                        ^~~~~~~~~~~~~~~~~~~~
->> fs/f2fs/file.c:1107:22: warning: assignment to 'struct page *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-    1107 |                 page = dax_layout_busy_page(inode->i_mapping);
-         |                      ^
-   cc1: some warnings being treated as errors
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/pwm/snps,dw-apb-timers-pwm2.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.example.dtb: pwm@180000: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml
 
+doc reference errors (make refcheckdocs):
 
-vim +1107 fs/f2fs/file.c
+See https://patchwork.ozlabs.org/patch/
 
-  1097	
-  1098	int f2fs_break_layouts(struct inode *inode)
-  1099	{
-  1100		struct page *page;
-  1101		int error;
-  1102	
-  1103		if (WARN_ON_ONCE(!rwsem_is_locked(&inode->i_mapping->invalidate_lock)))
-  1104			return -EINVAL;
-  1105	
-  1106		do {
-> 1107			page = dax_layout_busy_page(inode->i_mapping);
-  1108			if (!page)
-  1109				return 0;
-  1110	
-  1111			error = ___wait_var_event(&page->_refcount,
-  1112					atomic_read(&page->_refcount) == 1,
-  1113					TASK_INTERRUPTIBLE, 0, 0,
-  1114					f2fs_wait_dax_page(inode));
-  1115		} while (error == 0);
-  1116	
-  1117		return error;
-  1118	}
-  1119	
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

@@ -2,129 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF3F58BC0A
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 19:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CED358BC0D
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 19:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234452AbiHGRet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 13:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
+        id S234594AbiHGRfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 13:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiHGRer (ORCPT
+        with ESMTP id S234537AbiHGRe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 13:34:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2380559A
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 10:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659893686; x=1691429686;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PJb6sgcaW6XwsPmmIIc5VDGbnksrZ6P+StXKyk0O5vk=;
-  b=MLJnGOQucGr4lxonCBhtLYaZcPDzJBnzASRsRb0gdw6UdTFIB9X/5oSq
-   XXOitkNUcI35F9YKgkGwUxLHlu1eqPNcJbyedalHPARONqpmY2gFLSJwO
-   wUS4ipTCKFJ/L99FA6ai7pgSpia3+mtOb4l4uppdbluKKd3RInWJs2fxI
-   iUGw7feIUGb+yS0QnyHuv14vm8H46jY/ZpRfqiACJfd/M+C4JKZoE3Pi7
-   KCYX9NyUk280pSI8jhAzrtwUyS78cfU7oIoetFPKINstNeiytTSko310c
-   fWpsgyF2RZstd5XlvyNBDrSBJ142DfuArz3Vb8lEYSbnvviX4nbtyD3lJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="291682653"
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="291682653"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 10:34:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="672215752"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Aug 2022 10:34:44 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKkAm-000LWL-0C;
-        Sun, 07 Aug 2022 17:34:44 +0000
-Date:   Mon, 8 Aug 2022 01:33:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH 20/28] mfd: arizona: Remove #ifdef guards for PM related
- functions
-Message-ID: <202208080141.UIoxRyzL-lkp@intel.com>
-References: <20220807145247.46107-21-paul@crapouillou.net>
+        Sun, 7 Aug 2022 13:34:57 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98ECC635A;
+        Sun,  7 Aug 2022 10:34:56 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id r5so5475077iod.10;
+        Sun, 07 Aug 2022 10:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=ebSansuG1dM32cBeaxqS/xJR386PAhX2TqDBltDbYA0=;
+        b=RUQNJK6tqS5T1bZdee8NL5VCrHbaG80eWOWXdcFFrSe44BpRDKGh1lnEwrrOoRpevf
+         jpUve3kC2pLTburmAILtsZebV296sV2FJplWj5VQ8g/AnNWfifOZY/p8nB6wJ8m2KgF0
+         nt3IlBKCjlKhWUPiU5NEQgyieVXz512JAuss88fQGlHN/6+IkfA2iYjVT6vS/taagA5y
+         0PQ97v1SsxYZoC8FzOTg1eCCGKojsv4TQ8zZaTgtbvTc49D01NePxu9zb3BZiDzn0vv0
+         SWWtLlnuijg60QCXirOw8O747tKZzJRRMRU+IMSWdHm4I5s2sFmnQ7Lweh8sV0Bw7htY
+         l/1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=ebSansuG1dM32cBeaxqS/xJR386PAhX2TqDBltDbYA0=;
+        b=k/HNj/7RxfW9hb//eHn6vV4EKSAVZLXlheIR9h0oUIp7vPwrbubBvzCgQyf8El0rdx
+         OGvcl6p7h/9bA8MX5LcBmWSzLV3/ODbl81OThQfGMIjdnw8juw3kdY1s0wIm33oAthDG
+         xjY0CvHsqe9SD5si3Cj1p0HkwcYf+E8hrIfG0Hl1TJh8DwWFQf8qtOv1CVI5djuGtHLT
+         vnW1AmfH33NuWHTOJkKjCvM9sBOPywoHDQwq8+FiJOoj418WwjYnqE2/+hUGy2ISp5Bg
+         dZM0ciSUr7Zf5c+W1jRs0jA9sJRvzossMK90UreUv78jJ2yzqz9MJcwfBOADlIl0E4Kz
+         S3gQ==
+X-Gm-Message-State: ACgBeo0EYPc8V0SJdRX0nCXj6b/ZPwO9FB5/ouAeG0K8VPerHRkOePgv
+        dfHHLdI/huekf+P3qSEhYBCPi5F8is+1wKrkGe0=
+X-Google-Smtp-Source: AA6agR4Ai5Z/khVGaA4G7OD9pwZxQ9HDtx/AEB5Nd/iE32heOVLrtJlKTJGTh9HtkFf5hDY+xv4BofsqpXHg6cHL2PI=
+X-Received: by 2002:a05:6638:2642:b0:33f:5172:e77 with SMTP id
+ n2-20020a056638264200b0033f51720e77mr6758593jat.85.1659893695847; Sun, 07 Aug
+ 2022 10:34:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220807145247.46107-21-paul@crapouillou.net>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220729170744.1301044-1-robdclark@gmail.com> <20220729170744.1301044-2-robdclark@gmail.com>
+ <3d2083aa-fc6c-6875-3daf-e5abe45fb762@gmail.com> <CAF6AEGvKdM3vyCvBZK=ZcdGmak7tsrP1b8ANyyaMjVfNDViqyw@mail.gmail.com>
+ <973de2f8-75e4-d4c7-a13a-c541a6cf7c77@amd.com>
+In-Reply-To: <973de2f8-75e4-d4c7-a13a-c541a6cf7c77@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Sun, 7 Aug 2022 10:35:22 -0700
+Message-ID: <CAF6AEGuhQT6A_jh8kLWh5xMoUGc1osdewyBk-8NoprtWOHseaQ@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] [PATCH 1/3] dma-buf: Add ioctl to query mmap info
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Sun, Aug 7, 2022 at 10:14 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 07.08.22 um 19:02 schrieb Rob Clark:
+> > On Sun, Aug 7, 2022 at 9:09 AM Christian K=C3=B6nig
+> > <ckoenig.leichtzumerken@gmail.com> wrote:
+> >> Am 29.07.22 um 19:07 schrieb Rob Clark:
+> >>> From: Rob Clark <robdclark@chromium.org>
+> >>>
+> >>> This is a fairly narrowly focused interface, providing a way for a VM=
+M
+> >>> in userspace to tell the guest kernel what pgprot settings to use whe=
+n
+> >>> mapping a buffer to guest userspace.
+> >>>
+> >>> For buffers that get mapped into guest userspace, virglrenderer retur=
+ns
+> >>> a dma-buf fd to the VMM (crosvm or qemu).
+> >> Wow, wait a second. Who is giving whom the DMA-buf fd here?
+> > Not sure I understand the question.. the dma-buf fd could come from
+> > EGL_MESA_image_dma_buf_export, gbm, or similar.
+> >
+> >> My last status was that this design was illegal and couldn't be
+> >> implemented because it requires internal knowledge only the exporting
+> >> driver can have.
+> > This ioctl provides that information from the exporting driver so that
+> > a VMM doesn't have to make assumptions ;-)
+>
+> And exactly that was NAKed the last time it came up. Only the exporting
+> driver is allowed to mmap() the DMA-buf into the guest.
 
-I love your patch! Yet something to improve:
+except the exporting driver is in the host ;-)
 
-[auto build test ERROR on v5.19]
-[cannot apply to lee-mfd/for-mfd-next linus/master next-20220805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> This way you also don't need to transport any caching information anywher=
+e.
+>
+> > Currently crosvm assumes if (drivername =3D=3D "i915") then it is a cac=
+hed
+> > mapping, otherwise it is wc.  I'm trying to find a way to fix this.
+> > Suggestions welcome, but because of how mapping to a guest VM works, a
+> > VMM is a somewhat special case where this information is needed in
+> > userspace.
+>
+> Ok that leaves me completely puzzled. How does that work in the first pla=
+ce?
+>
+> In other words how does the mapping into the guest page tables happen?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/mfd-Remove-ifdef-guards-for-PM-functions/20220807-225947
-base:    3d7cb6b04c3f3115719235cc6866b10326de34cd
-config: hexagon-randconfig-r013-20220807 (https://download.01.org/0day-ci/archive/20220808/202208080141.UIoxRyzL-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/03342844cafff973ffa39ce471f64a76c4d87b06
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paul-Cercueil/mfd-Remove-ifdef-guards-for-PM-functions/20220807-225947
-        git checkout 03342844cafff973ffa39ce471f64a76c4d87b06
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/
+There are multiple levels to this, but in short mapping to guest
+userspace happens via drm/virtio (aka "virtio_gpu" or "virtgpu"), the
+cache attributes are set via "map_info" attribute returned from the
+host VMM (host userspace, hence the need for this ioctl).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+In the host, the host kernel driver mmaps to host userspace (VMM).
+Here the exporting driver is performing the mmap with correct cache
+attributes.  The VMM uses KVM to map these pages into the guest so
+they appear as physical pages to the guest kernel.  The guest kernel
+(virtgpu) in turn maps them to guest userspace.
 
-All errors (new ones prefixed by >>):
+BR,
+-R
 
->> drivers/mfd/arizona-core.c:788:25: error: static declaration of 'arizona_pm_ops' follows non-static declaration
-   const struct dev_pm_ops arizona_pm_ops = {
-                           ^
-   drivers/mfd/arizona.h:29:32: note: previous declaration is here
-   extern const struct dev_pm_ops arizona_pm_ops;
-                                  ^
-   1 error generated.
-
-
-vim +/arizona_pm_ops +788 drivers/mfd/arizona-core.c
-
-dc781d0e10fca2 Mark Brown     2013-01-27  784  
-03342844cafff9 Paul Cercueil  2022-08-07  785  #ifndef CONFIG_PM
-03342844cafff9 Paul Cercueil  2022-08-07  786  static __maybe_unused
-03342844cafff9 Paul Cercueil  2022-08-07  787  #endif
-3cc72986947501 Mark Brown     2012-06-19 @788  const struct dev_pm_ops arizona_pm_ops = {
-03342844cafff9 Paul Cercueil  2022-08-07  789  	RUNTIME_PM_OPS(arizona_runtime_suspend,
-3cc72986947501 Mark Brown     2012-06-19  790  		       arizona_runtime_resume,
-3cc72986947501 Mark Brown     2012-06-19  791  		       NULL)
-03342844cafff9 Paul Cercueil  2022-08-07  792  	SYSTEM_SLEEP_PM_OPS(arizona_suspend, arizona_resume)
-03342844cafff9 Paul Cercueil  2022-08-07  793  	NOIRQ_SYSTEM_SLEEP_PM_OPS(arizona_suspend_noirq,
-3612b27cfb4a07 Charles Keepax 2016-08-30  794  				  arizona_resume_noirq)
-3cc72986947501 Mark Brown     2012-06-19  795  };
-03342844cafff9 Paul Cercueil  2022-08-07  796  #ifdef CONFIG_PM
-3cc72986947501 Mark Brown     2012-06-19  797  EXPORT_SYMBOL_GPL(arizona_pm_ops);
-03342844cafff9 Paul Cercueil  2022-08-07  798  #endif
-3cc72986947501 Mark Brown     2012-06-19  799  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> Regards,
+> Christian.
+>
+> >
+> > BR,
+> > -R
+> >
+> >> @Daniel has anything changed on that is or my status still valid?
+> >>
+> >> Regards,
+> >> Christian.
+> >>
+> >>>     In addition to mapping the
+> >>> pages into the guest VM, it needs to report to drm/virtio in the gues=
+t
+> >>> the cache settings to use for guest userspace.  In particular, on som=
+e
+> >>> architectures, creating aliased mappings with different cache attribu=
+tes
+> >>> is frowned upon, so it is important that the guest mappings have the
+> >>> same cache attributes as any potential host mappings.
+> >>>
+> >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>> ---
+> >>>    drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
+> >>>    include/linux/dma-buf.h      |  7 +++++++
+> >>>    include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
+> >>>    3 files changed, 61 insertions(+)
+> >>>
+> >>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> >>> index 32f55640890c..d02d6c2a3b49 100644
+> >>> --- a/drivers/dma-buf/dma-buf.c
+> >>> +++ b/drivers/dma-buf/dma-buf.c
+> >>> @@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dma=
+buf, const char __user *buf)
+> >>>        return 0;
+> >>>    }
+> >>>
+> >>> +static long dma_buf_info(struct dma_buf *dmabuf, const void __user *=
+uarg)
+> >>> +{
+> >>> +     struct dma_buf_info arg;
+> >>> +
+> >>> +     if (copy_from_user(&arg, uarg, sizeof(arg)))
+> >>> +             return -EFAULT;
+> >>> +
+> >>> +     switch (arg.param) {
+> >>> +     case DMA_BUF_INFO_VM_PROT:
+> >>> +             if (!dmabuf->ops->mmap_info)
+> >>> +                     return -ENOSYS;
+> >>> +             arg.value =3D dmabuf->ops->mmap_info(dmabuf);
+> >>> +             break;
+> >>> +     default:
+> >>> +             return -EINVAL;
+> >>> +     }
+> >>> +
+> >>> +     if (copy_to_user(uarg, &arg, sizeof(arg)))
+> >>> +             return -EFAULT;
+> >>> +
+> >>> +     return 0;
+> >>> +}
+> >>> +
+> >>>    static long dma_buf_ioctl(struct file *file,
+> >>>                          unsigned int cmd, unsigned long arg)
+> >>>    {
+> >>> @@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
+> >>>        case DMA_BUF_SET_NAME_B:
+> >>>                return dma_buf_set_name(dmabuf, (const char __user *)a=
+rg);
+> >>>
+> >>> +     case DMA_BUF_IOCTL_INFO:
+> >>> +             return dma_buf_info(dmabuf, (const void __user *)arg);
+> >>> +
+> >>>        default:
+> >>>                return -ENOTTY;
+> >>>        }
+> >>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> >>> index 71731796c8c3..6f4de64a5937 100644
+> >>> --- a/include/linux/dma-buf.h
+> >>> +++ b/include/linux/dma-buf.h
+> >>> @@ -283,6 +283,13 @@ struct dma_buf_ops {
+> >>>         */
+> >>>        int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
+> >>>
+> >>> +     /**
+> >>> +      * @mmap_info:
+> >>> +      *
+> >>> +      * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PR=
+OT.
+> >>> +      */
+> >>> +     int (*mmap_info)(struct dma_buf *);
+> >>> +
+> >>>        int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+> >>>        void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+> >>>    };
+> >>> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-bu=
+f.h
+> >>> index b1523cb8ab30..a41adac0f46a 100644
+> >>> --- a/include/uapi/linux/dma-buf.h
+> >>> +++ b/include/uapi/linux/dma-buf.h
+> >>> @@ -85,6 +85,32 @@ struct dma_buf_sync {
+> >>>
+> >>>    #define DMA_BUF_NAME_LEN    32
+> >>>
+> >>> +
+> >>> +/**
+> >>> + * struct dma_buf_info - Query info about the buffer.
+> >>> + */
+> >>> +struct dma_buf_info {
+> >>> +
+> >>> +#define DMA_BUF_INFO_VM_PROT      1
+> >>> +#  define DMA_BUF_VM_PROT_WC      0
+> >>> +#  define DMA_BUF_VM_PROT_CACHED  1
+> >>> +
+> >>> +     /**
+> >>> +      * @param: Which param to query
+> >>> +      *
+> >>> +      * DMA_BUF_INFO_BM_PROT:
+> >>> +      *     Query the access permissions of userspace mmap's of this=
+ buffer.
+> >>> +      *     Returns one of DMA_BUF_VM_PROT_x
+> >>> +      */
+> >>> +     __u32 param;
+> >>> +     __u32 pad;
+> >>> +
+> >>> +     /**
+> >>> +      * @value: Return value of the query.
+> >>> +      */
+> >>> +     __u64 value;
+> >>> +};
+> >>> +
+> >>>    #define DMA_BUF_BASE                'b'
+> >>>    #define DMA_BUF_IOCTL_SYNC  _IOW(DMA_BUF_BASE, 0, struct dma_buf_s=
+ync)
+> >>>
+> >>> @@ -95,4 +121,6 @@ struct dma_buf_sync {
+> >>>    #define DMA_BUF_SET_NAME_A  _IOW(DMA_BUF_BASE, 1, __u32)
+> >>>    #define DMA_BUF_SET_NAME_B  _IOW(DMA_BUF_BASE, 1, __u64)
+> >>>
+> >>> +#define DMA_BUF_IOCTL_INFO   _IOWR(DMA_BUF_BASE, 2, struct dma_buf_i=
+nfo)
+> >>> +
+> >>>    #endif
+>

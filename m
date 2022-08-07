@@ -2,159 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E3A58BC4D
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 20:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C9758BC4E
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 20:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234432AbiHGSQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 14:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S235427AbiHGSQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 14:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234777AbiHGSPt (ORCPT
+        with ESMTP id S235069AbiHGSPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 14:15:49 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5236964D9
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 11:15:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659896148; x=1691432148;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SzlJQkY7FhUA15heqPBSFMQ71M01/eJ0bitLZcONHA0=;
-  b=K9wDDw9Obkisr4ETK2zPSoRZIcOjVDFpV6DpZFnc/vJ8OW/bic0p8I/O
-   /dJoAHfrRjuY7zWQauaIC3EJuYDcNwrARu1Cc7UbdzVSTyCNdGQ7z022q
-   NGvdRdVq3PCyZCidV/ecskyxasEHaItX92M2M6i5hStExAkDmpLcLHHoF
-   vMZNXUOr8PAJw54YQN0w1pEm+hO3wXsWPVEFszo1KrcJHPkMAFp4oD9SB
-   /hY1O/cxrR99gJS9DwTPMorGS9Ou5G8lzhTkN+TkFIVZclN6OvRydAv3x
-   lQapAhtUXU7OBTR4Y0MwmGH+IIMzBv5A6HGNY9X8xyzl4vGkgYdreZuiy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="288019381"
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="288019381"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 11:15:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="849836383"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Aug 2022 11:15:46 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKkoT-000LY1-15;
-        Sun, 07 Aug 2022 18:15:45 +0000
-Date:   Mon, 8 Aug 2022 02:15:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 25/28] mfd: stmfx: Remove #ifdef guards for PM related
- functions
-Message-ID: <202208080225.Hm01SP8r-lkp@intel.com>
-References: <20220807145247.46107-26-paul@crapouillou.net>
+        Sun, 7 Aug 2022 14:15:53 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7285C6545
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 11:15:52 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id m4so12905612ejr.3
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 11:15:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=4cI0C+edHqjQmmO/rArIoU+PLyf7AYRNI0KFouoRxco=;
+        b=IlfguZNw5DsBKd9GOuXRcdMC7d9SV4iqU8oonFayH7IONPciQZHwTvQ6U20Srh6qrJ
+         CBUVrWEI7CKWO2bUYVI9BFWA3sNVHNPuFXUOJf3NHFTIr9V14yO431vmfzpXb9rPYBiz
+         Gue4DSMa+YgGZCdFHPy7TJscjag8Kzx0F4F+L0SIIjSTb2vRkqR6IJCPy9e4xeTNYpwA
+         cAWXEZolY09u+DzHn9/xcki2HXsZ1zV8tZPLMrL3WjehP+RIxiFo5kigyLGxzqrXihVT
+         z3WzUg1j4fe7ZPh9Vx2XZZE1pwjoUiAWh6qBI6x9j/v3W/K9oX7yf6eeasnkojvxgl/5
+         KAZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=4cI0C+edHqjQmmO/rArIoU+PLyf7AYRNI0KFouoRxco=;
+        b=HB0ap3y7xB415/gVJqJJSQz5BtVElzmnQGGlnGaLObe99u07+BZtRkzipoBtY6Xd+6
+         XJoXM5p2EHZCBzfrOo19Nm/DTNEqvk5v1Wtqz5Pdl5XgZU0J6QvnatUGQNIioSbkxK/E
+         y8yGVenRMX8AcsrT9iCJU8CBNY5lRcqrcmUyNwHpyF027CSdcMo9Ytqa1y6ea7YB41nV
+         ZmUZ0ULLF9jd+OwKUjz4MgorS/e5gfa41Krkmyz+ntqU47PXHI4OTBLMKJyjOWF3wtqG
+         i3CCeRICR+cg4bkSRdmg/4a7vyocjW4ZwEPYT8amC1Wv9FkHApRLsTLu51i1scgXdviO
+         wY1A==
+X-Gm-Message-State: ACgBeo2XHtWiAUULl/7+nSMTZ4DCLLq9KoY6I9Bp0T3+Esuzvcv/Zss+
+        9YmpmRD5zx2eHXMaQsvsHDE=
+X-Google-Smtp-Source: AA6agR5fa5mdkH83cIh2tWtL6RDyjFhuXdTLQnxKV+zSOJHJFHFkOKTz9VflpshhYcnDb6xlUPX82A==
+X-Received: by 2002:a17:907:7388:b0:731:e57:dea3 with SMTP id er8-20020a170907738800b007310e57dea3mr7244985ejc.640.1659896151018;
+        Sun, 07 Aug 2022 11:15:51 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb84.dynamic.kabel-deutschland.de. [95.90.187.132])
+        by smtp.gmail.com with ESMTPSA id b7-20020a17090630c700b0072b92daef1csm4157441ejb.146.2022.08.07.11.15.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 11:15:50 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 3/5] staging: r8188eu: make rtw_handle_tkip_mic_err() static
+Date:   Sun,  7 Aug 2022 20:15:36 +0200
+Message-Id: <20220807181538.8499-4-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220807181538.8499-1-straube.linux@gmail.com>
+References: <20220807181538.8499-1-straube.linux@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220807145247.46107-26-paul@crapouillou.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+The function rtw_handle_tkip_mic_err() is only used in rtw_recv.c.
+Make it static.
 
-I love your patch! Yet something to improve:
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_recv.c      | 36 ++++++++++++++++++++
+ drivers/staging/r8188eu/include/recv_osdep.h |  2 --
+ drivers/staging/r8188eu/os_dep/recv_linux.c  | 36 --------------------
+ 3 files changed, 36 insertions(+), 38 deletions(-)
 
-[auto build test ERROR on v5.19]
-[cannot apply to lee-mfd/for-mfd-next linus/master next-20220805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/mfd-Remove-ifdef-guards-for-PM-functions/20220807-225947
-base:    3d7cb6b04c3f3115719235cc6866b10326de34cd
-config: hexagon-randconfig-r013-20220807 (https://download.01.org/0day-ci/archive/20220808/202208080225.Hm01SP8r-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5a39bd52d549e3f3be743fb336dd710eac75055d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paul-Cercueil/mfd-Remove-ifdef-guards-for-PM-functions/20220807-225947
-        git checkout 5a39bd52d549e3f3be743fb336dd710eac75055d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mfd/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/mfd/stmfx.c:485:18: error: no member named 'bkp_sysctrl' in 'struct stmfx'
-                                 &stmfx->bkp_sysctrl, sizeof(stmfx->bkp_sysctrl));
-                                  ~~~~~  ^
-   drivers/mfd/stmfx.c:485:45: error: no member named 'bkp_sysctrl' in 'struct stmfx'
-                                 &stmfx->bkp_sysctrl, sizeof(stmfx->bkp_sysctrl));
-                                                             ~~~~~  ^
->> drivers/mfd/stmfx.c:490:18: error: no member named 'bkp_irqoutpin' in 'struct stmfx'
-                                 &stmfx->bkp_irqoutpin,
-                                  ~~~~~  ^
-   drivers/mfd/stmfx.c:491:24: error: no member named 'bkp_irqoutpin' in 'struct stmfx'
-                                 sizeof(stmfx->bkp_irqoutpin));
-                                        ~~~~~  ^
-   drivers/mfd/stmfx.c:525:19: error: no member named 'bkp_sysctrl' in 'struct stmfx'
-                                  &stmfx->bkp_sysctrl, sizeof(stmfx->bkp_sysctrl));
-                                   ~~~~~  ^
-   drivers/mfd/stmfx.c:525:46: error: no member named 'bkp_sysctrl' in 'struct stmfx'
-                                  &stmfx->bkp_sysctrl, sizeof(stmfx->bkp_sysctrl));
-                                                              ~~~~~  ^
-   drivers/mfd/stmfx.c:530:19: error: no member named 'bkp_irqoutpin' in 'struct stmfx'
-                                  &stmfx->bkp_irqoutpin,
-                                   ~~~~~  ^
-   drivers/mfd/stmfx.c:531:25: error: no member named 'bkp_irqoutpin' in 'struct stmfx'
-                                  sizeof(stmfx->bkp_irqoutpin));
-                                         ~~~~~  ^
-   8 errors generated.
-
-
-vim +485 drivers/mfd/stmfx.c
-
-06252ade915665 Amelie Delaunay 2019-05-09  478  
-06252ade915665 Amelie Delaunay 2019-05-09  479  static int stmfx_suspend(struct device *dev)
-06252ade915665 Amelie Delaunay 2019-05-09  480  {
-06252ade915665 Amelie Delaunay 2019-05-09  481  	struct stmfx *stmfx = dev_get_drvdata(dev);
-06252ade915665 Amelie Delaunay 2019-05-09  482  	int ret;
-06252ade915665 Amelie Delaunay 2019-05-09  483  
-06252ade915665 Amelie Delaunay 2019-05-09  484  	ret = regmap_raw_read(stmfx->map, STMFX_REG_SYS_CTRL,
-06252ade915665 Amelie Delaunay 2019-05-09 @485  			      &stmfx->bkp_sysctrl, sizeof(stmfx->bkp_sysctrl));
-06252ade915665 Amelie Delaunay 2019-05-09  486  	if (ret)
-06252ade915665 Amelie Delaunay 2019-05-09  487  		return ret;
-06252ade915665 Amelie Delaunay 2019-05-09  488  
-06252ade915665 Amelie Delaunay 2019-05-09  489  	ret = regmap_raw_read(stmfx->map, STMFX_REG_IRQ_OUT_PIN,
-06252ade915665 Amelie Delaunay 2019-05-09 @490  			      &stmfx->bkp_irqoutpin,
-06252ade915665 Amelie Delaunay 2019-05-09  491  			      sizeof(stmfx->bkp_irqoutpin));
-06252ade915665 Amelie Delaunay 2019-05-09  492  	if (ret)
-06252ade915665 Amelie Delaunay 2019-05-09  493  		return ret;
-06252ade915665 Amelie Delaunay 2019-05-09  494  
-97eda5dcc2cde5 Amelie Delaunay 2020-04-22  495  	disable_irq(stmfx->irq);
-97eda5dcc2cde5 Amelie Delaunay 2020-04-22  496  
-06252ade915665 Amelie Delaunay 2019-05-09  497  	if (stmfx->vdd)
-06252ade915665 Amelie Delaunay 2019-05-09  498  		return regulator_disable(stmfx->vdd);
-06252ade915665 Amelie Delaunay 2019-05-09  499  
-06252ade915665 Amelie Delaunay 2019-05-09  500  	return 0;
-06252ade915665 Amelie Delaunay 2019-05-09  501  }
-06252ade915665 Amelie Delaunay 2019-05-09  502  
-
+diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+index 5de4e13b4b17..8f2b131eb767 100644
+--- a/drivers/staging/r8188eu/core/rtw_recv.c
++++ b/drivers/staging/r8188eu/core/rtw_recv.c
+@@ -327,6 +327,42 @@ u32 rtw_free_uc_swdec_pending_queue(struct adapter *adapter)
+ 	return cnt;
+ }
+ 
++static void rtw_handle_tkip_mic_err(struct adapter *padapter, u8 bgroup)
++{
++	union iwreq_data wrqu;
++	struct iw_michaelmicfailure ev;
++	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
++	struct security_priv *psecuritypriv = &padapter->securitypriv;
++	u32 cur_time = 0;
++
++	if (psecuritypriv->last_mic_err_time == 0) {
++		psecuritypriv->last_mic_err_time = jiffies;
++	} else {
++		cur_time = jiffies;
++
++		if (cur_time - psecuritypriv->last_mic_err_time < 60 * HZ) {
++			psecuritypriv->btkip_countermeasure = true;
++			psecuritypriv->last_mic_err_time = 0;
++			psecuritypriv->btkip_countermeasure_time = cur_time;
++		} else {
++			psecuritypriv->last_mic_err_time = jiffies;
++		}
++	}
++
++	memset(&ev, 0x00, sizeof(ev));
++	if (bgroup)
++		ev.flags |= IW_MICFAILURE_GROUP;
++	else
++		ev.flags |= IW_MICFAILURE_PAIRWISE;
++
++	ev.src_addr.sa_family = ARPHRD_ETHER;
++	memcpy(ev.src_addr.sa_data, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
++	memset(&wrqu, 0x00, sizeof(wrqu));
++	wrqu.data.length = sizeof(ev);
++	wireless_send_event(padapter->pnetdev, IWEVMICHAELMICFAILURE,
++			    &wrqu, (char *)&ev);
++}
++
+ static int recvframe_chkmic(struct adapter *adapter,  struct recv_frame *precvframe)
+ {
+ 	int	i, res = _SUCCESS;
+diff --git a/drivers/staging/r8188eu/include/recv_osdep.h b/drivers/staging/r8188eu/include/recv_osdep.h
+index 51dc287f263c..135fbb24fcbb 100644
+--- a/drivers/staging/r8188eu/include/recv_osdep.h
++++ b/drivers/staging/r8188eu/include/recv_osdep.h
+@@ -14,8 +14,6 @@ s32  rtw_recv_entry(struct recv_frame *precv_frame);
+ int rtw_recv_indicatepkt(struct adapter *adapter, struct recv_frame *recv_frame);
+ void rtw_recv_returnpacket(struct  net_device *cnxt, struct sk_buff *retpkt);
+ 
+-void rtw_handle_tkip_mic_err(struct adapter *padapter, u8 bgroup);
+-
+ int rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter);
+ void rtw_free_recv_priv(struct recv_priv *precvpriv);
+ 
+diff --git a/drivers/staging/r8188eu/os_dep/recv_linux.c b/drivers/staging/r8188eu/os_dep/recv_linux.c
+index c180f0e4dd3c..08dfe4482b8e 100644
+--- a/drivers/staging/r8188eu/os_dep/recv_linux.c
++++ b/drivers/staging/r8188eu/os_dep/recv_linux.c
+@@ -12,42 +12,6 @@
+ #include "../include/osdep_intf.h"
+ #include "../include/usb_ops.h"
+ 
+-void rtw_handle_tkip_mic_err(struct adapter *padapter, u8 bgroup)
+-{
+-	union iwreq_data wrqu;
+-	struct iw_michaelmicfailure    ev;
+-	struct mlme_priv *pmlmepriv  = &padapter->mlmepriv;
+-	struct security_priv	*psecuritypriv = &padapter->securitypriv;
+-	u32 cur_time = 0;
+-
+-	if (psecuritypriv->last_mic_err_time == 0) {
+-		psecuritypriv->last_mic_err_time = jiffies;
+-	} else {
+-		cur_time = jiffies;
+-
+-		if (cur_time - psecuritypriv->last_mic_err_time < 60 * HZ) {
+-			psecuritypriv->btkip_countermeasure = true;
+-			psecuritypriv->last_mic_err_time = 0;
+-			psecuritypriv->btkip_countermeasure_time = cur_time;
+-		} else {
+-			psecuritypriv->last_mic_err_time = jiffies;
+-		}
+-	}
+-
+-	memset(&ev, 0x00, sizeof(ev));
+-	if (bgroup)
+-		ev.flags |= IW_MICFAILURE_GROUP;
+-	else
+-		ev.flags |= IW_MICFAILURE_PAIRWISE;
+-
+-	ev.src_addr.sa_family = ARPHRD_ETHER;
+-	memcpy(ev.src_addr.sa_data, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
+-	memset(&wrqu, 0x00, sizeof(wrqu));
+-	wrqu.data.length = sizeof(ev);
+-	wireless_send_event(padapter->pnetdev, IWEVMICHAELMICFAILURE,
+-			    &wrqu, (char *)&ev);
+-}
+-
+ int rtw_recv_indicatepkt(struct adapter *padapter,
+ 			 struct recv_frame *precv_frame)
+ {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+

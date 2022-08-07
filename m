@@ -2,189 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A3358BA72
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 11:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D20A58BA74
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 11:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbiHGJkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 05:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
+        id S233961AbiHGJkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 05:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbiHGJkc (ORCPT
+        with ESMTP id S233809AbiHGJkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 05:40:32 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B18355A0
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 02:40:31 -0700 (PDT)
+        Sun, 7 Aug 2022 05:40:47 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C6162F0;
+        Sun,  7 Aug 2022 02:40:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659865231; x=1691401231;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=89hCtPbI40w4jNVs2PRH7P+86yvqMEqbKLF4cKjJQkE=;
-  b=DW5Kfg946MVFEIcp8C2ovzJKwCyzJAuWzCmgjFZ779u5PAovBVw2XugF
-   ma6Nt2Y5s8qM94Wbly5+AMkjS2zkE8iweUlKOLNZUnUMmeCEqWhxOMMAj
-   jzQ9AHFkFdw2p4gksMxTk/CT5LjYPuUoNK/qMIOKZwrqr1yWjcIxpEfcC
-   VZrBPpLLCSxKVkTgll43fyslt0ZHsF8uurwIOv0CuaDxz7pCSv+KEh2j9
-   7uZnuPZanT2LQpeR3a3OGrL5Z49rsyqkEyuS8kw50Q/2GP+X+EIsviZJe
-   pQKs/I/tE2p/3hRQMqL8498znQWyQMJFCR+YI1NRLwrK0aVDg0WzfNy5S
+  t=1659865241; x=1691401241;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ImgjE4x9iGWz4Eh3hMhl6NN5VLUdjlgb6XpSKzzuwuA=;
+  b=DTigo1pU81HcaITWTU3TZOWUTyqXd4hD3G7wiD5NuwINspJuQH6FZT79
+   KW4UwsdxRTImC8oa9u7nq6in4kEFzP4dGmH5rx5uynfVsSu7gAOK1NnP/
+   iakUxHkzP9GOwk8kZ7KgIHVL1NwjoTO2os/dXKwH95NJ1rRwbUbkr8NM4
+   SI/pSnF+i/Fv1w504jlN4Of2+h28emjJ1JQxzHqHhCHGgVmKZLjuWsWO6
+   sx9XoQH2gQslModVRpPwCS0jafJCPgbxrBa7YoN/Cl1F++eO4u3FsGQGE
+   cv62R/S4hHhzAPPxGYAW7ouBzipWxXTFdraamrjA9RCdDg3SsigQcM5E/
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="273473345"
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="290433512"
 X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="273473345"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 02:40:30 -0700
+   d="scan'208";a="290433512"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 02:40:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="931702114"
+   d="scan'208";a="636962364"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Aug 2022 02:40:29 -0700
+  by orsmga001.jf.intel.com with ESMTP; 07 Aug 2022 02:40:29 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oKclo-000LCf-22;
+        id 1oKclo-000LCh-25;
         Sun, 07 Aug 2022 09:40:28 +0000
-Date:   Sun, 7 Aug 2022 17:40:25 +0800
+Date:   Sun, 7 Aug 2022 17:40:27 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: drivers/gpu/drm/tinydrm/core/tinydrm-pipe.c:147:5: warning: no
- previous prototype for 'tinydrm_display_pipe_init'
-Message-ID: <202208071706.bgRl6mce-lkp@intel.com>
+To:     Szuying Chen <chensiying21@gmail.com>, andreas.noever@gmail.com,
+        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Yd_Tseng@asmedia.com.tw, Richard_Hsu@asmedia.com.tw,
+        Chloe_Chen@asmedia.com.tw
+Subject: Re: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
+Message-ID: <202208071758.wZC5VHIZ-lkp@intel.com>
+References: <20220805092224.2536-1-Chloe_Chen@asmedia.com.tw>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220805092224.2536-1-Chloe_Chen@asmedia.com.tw>
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1612c382ffbdf1f673caec76502b1c00e6d35363
-commit: 96f2a9aef5987340d367ab7497ae972a55e6f71c drm/tinydrm: tinydrm_display_pipe_init() don't use tinydrm_device
-date:   3 years, 6 months ago
-config: parisc-randconfig-r022-20220805 (https://download.01.org/0day-ci/archive/20220807/202208071706.bgRl6mce-lkp@intel.com/config)
-compiler: hppa64-linux-gcc (GCC) 12.1.0
+Hi Szuying,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.19 next-20220805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Szuying-Chen/thunderbolt-thunderbolt-add-vendor-s-NVM-formats/20220805-172732
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b2a88c212e652e94f1e4b635910972ac57ba4e97
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220807/202208071758.wZC5VHIZ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=96f2a9aef5987340d367ab7497ae972a55e6f71c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 96f2a9aef5987340d367ab7497ae972a55e6f71c
+        # https://github.com/intel-lab-lkp/linux/commit/cc64350d27db3b30e5ceef2b5d6a3c48b9a4d989
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Szuying-Chen/thunderbolt-thunderbolt-add-vendor-s-NVM-formats/20220805-172732
+        git checkout cc64350d27db3b30e5ceef2b5d6a3c48b9a4d989
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/thunderbolt/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function `.LC4':
->> (.data.rel.ro+0x8): undefined reference to `iosapic_serial_irq'
---
-   In file included from arch/parisc/include/asm/io.h:6,
-                    from include/linux/fb.h:17,
-                    from include/drm/drm_crtc.h:31,
-                    from include/drm/drm_atomic_helper.h:31,
-                    from drivers/gpu/drm/tinydrm/core/tinydrm-pipe.c:10:
-   include/asm-generic/pgtable.h: In function 'pte_clear_not_present_full':
-   arch/parisc/include/asm/pgtable.h:60:23: warning: variable 'old_pte' set but not used [-Wunused-but-set-variable]
-      60 |                 pte_t old_pte;                                  \
-         |                       ^~~~~~~
-   arch/parisc/include/asm/pgtable.h:289:34: note: in expansion of macro 'set_pte_at'
-     289 | #define pte_clear(mm, addr, xp)  set_pte_at(mm, addr, xp, __pte(0))
-         |                                  ^~~~~~~~~~
-   include/asm-generic/pgtable.h:201:9: note: in expansion of macro 'pte_clear'
-     201 |         pte_clear(mm, address, ptep);
-         |         ^~~~~~~~~
-   include/asm-generic/pgtable.h: In function '__ptep_modify_prot_commit':
-   arch/parisc/include/asm/pgtable.h:60:23: warning: variable 'old_pte' set but not used [-Wunused-but-set-variable]
-      60 |                 pte_t old_pte;                                  \
-         |                       ^~~~~~~
-   include/asm-generic/pgtable.h:629:9: note: in expansion of macro 'set_pte_at'
-     629 |         set_pte_at(mm, addr, ptep, pte);
-         |         ^~~~~~~~~~
-   drivers/gpu/drm/tinydrm/core/tinydrm-pipe.c: At top level:
-   drivers/gpu/drm/tinydrm/core/tinydrm-pipe.c:85:1: warning: no previous prototype for 'tinydrm_connector_create' [-Wmissing-prototypes]
-      85 | tinydrm_connector_create(struct drm_device *drm,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/tinydrm/core/tinydrm-pipe.c:147:5: warning: no previous prototype for 'tinydrm_display_pipe_init' [-Wmissing-prototypes]
-     147 | int tinydrm_display_pipe_init(struct drm_device *drm,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thunderbolt/nvm.c:75:3: error: expected expression
+                   struct tb_nvm *nvm;
+                   ^
+   drivers/thunderbolt/nvm.c:79:3: error: use of undeclared identifier 'nvm'
+                   nvm = tb_nvm_alloc(&sw->dev);
+                   ^
+   drivers/thunderbolt/nvm.c:80:14: error: use of undeclared identifier 'nvm'
+                   if (IS_ERR(nvm)) {
+                              ^
+   drivers/thunderbolt/nvm.c:81:18: error: use of undeclared identifier 'nvm'
+                           ret = PTR_ERR(nvm);
+                                         ^
+   drivers/thunderbolt/nvm.c:89:3: error: use of undeclared identifier 'nvm'
+                   nvm->vendor.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+                   ^
+   drivers/thunderbolt/nvm.c:94:3: error: use of undeclared identifier 'nvm'
+                   nvm->vendor.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
+                   ^
+   drivers/thunderbolt/nvm.c:95:3: error: use of undeclared identifier 'nvm'
+                   nvm->vendor.version = (u8)(val >> 0x10);
+                   ^
+   drivers/thunderbolt/nvm.c:97:27: error: use of undeclared identifier 'nvm'
+                   ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
+                                           ^
+   drivers/thunderbolt/nvm.c:101:31: error: use of undeclared identifier 'nvm'
+                   ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
+                                               ^
+   drivers/thunderbolt/nvm.c:105:13: error: use of undeclared identifier 'nvm'
+                   sw->nvm = nvm;
+                             ^
+   drivers/thunderbolt/nvm.c:109:3: error: expected expression
+                   unsigned int image_size;
+                   ^
+   drivers/thunderbolt/nvm.c:116:3: error: use of undeclared identifier 'image_size'
+                   image_size = sw->nvm->buf_data_size;
+                   ^
+   drivers/thunderbolt/nvm.c:117:7: error: use of undeclared identifier 'image_size'; did you mean 'page_size'?
+                   if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
+                       ^~~~~~~~~~
+                       page_size
+   include/linux/mm.h:927:29: note: 'page_size' declared here
+   static inline unsigned long page_size(struct page *page)
+                               ^
+   drivers/thunderbolt/nvm.c:117:36: error: use of undeclared identifier 'image_size'; did you mean 'page_size'?
+                   if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
+                                                    ^~~~~~~~~~
+                                                    page_size
+   include/linux/mm.h:927:29: note: 'page_size' declared here
+   static inline unsigned long page_size(struct page *page)
+                               ^
+   drivers/thunderbolt/nvm.c:121:43: error: use of undeclared identifier 'image_size'; did you mean 'page_size'?
+                   ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
+                                                           ^~~~~~~~~~
+                                                           page_size
+   include/linux/mm.h:927:29: note: 'page_size' declared here
+   static inline unsigned long page_size(struct page *page)
+                               ^
+>> drivers/thunderbolt/nvm.c:76:7: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                   u32 val;
+                       ^
+   1 warning and 15 errors generated.
 
 
-vim +/tinydrm_display_pipe_init +147 drivers/gpu/drm/tinydrm/core/tinydrm-pipe.c
+vim +76 drivers/thunderbolt/nvm.c
 
-    83	
-    84	struct drm_connector *
-  > 85	tinydrm_connector_create(struct drm_device *drm,
-    86				 const struct drm_display_mode *mode,
-    87				 int connector_type)
-    88	{
-    89		struct tinydrm_connector *tconn;
-    90		struct drm_connector *connector;
-    91		int ret;
-    92	
-    93		tconn = kzalloc(sizeof(*tconn), GFP_KERNEL);
-    94		if (!tconn)
-    95			return ERR_PTR(-ENOMEM);
-    96	
-    97		drm_mode_copy(&tconn->mode, mode);
-    98		connector = &tconn->base;
-    99	
-   100		drm_connector_helper_add(connector, &tinydrm_connector_hfuncs);
-   101		ret = drm_connector_init(drm, connector, &tinydrm_connector_funcs,
-   102					 connector_type);
-   103		if (ret) {
-   104			kfree(tconn);
-   105			return ERR_PTR(ret);
-   106		}
+    62	
+    63	static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+    64	{
+    65		int ret = 0;
+    66	
+    67		switch (handle) {
+    68		case 0:
+    69			if (sw->no_nvm_upgrade)
+    70				sw->no_nvm_upgrade = false;
+    71	
+    72			break;
+    73	
+    74		case 1:
+    75			struct tb_nvm *nvm;
+  > 76			u32 val;
+    77			u32 nvm_size;
+    78	
+    79			nvm = tb_nvm_alloc(&sw->dev);
+    80			if (IS_ERR(nvm)) {
+    81				ret = PTR_ERR(nvm);
+    82				break;
+    83			}
+    84	
+    85			ret = usb4_switch_nvm_read(sw, NVM_Date, &val, sizeof(val));
+    86			if (ret)
+    87				break;
+    88	
+    89			nvm->vendor.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+    90			ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, sizeof(val));
+    91			if (ret)
+    92				break;
+    93	
+    94			nvm->vendor.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
+    95			nvm->vendor.version = (u8)(val >> 0x10);
+    96			nvm_size = SZ_512K;
+    97			ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
+    98			if (ret)
+    99				break;
+   100	
+   101			ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
+   102			if (ret)
+   103				break;
+   104	
+   105			sw->nvm = nvm;
+   106			break;
    107	
-   108		connector->status = connector_status_connected;
-   109	
-   110		return connector;
-   111	}
-   112	
-   113	static int tinydrm_rotate_mode(struct drm_display_mode *mode,
-   114				       unsigned int rotation)
-   115	{
-   116		if (rotation == 0 || rotation == 180) {
-   117			return 0;
-   118		} else if (rotation == 90 || rotation == 270) {
-   119			swap(mode->hdisplay, mode->vdisplay);
-   120			swap(mode->hsync_start, mode->vsync_start);
-   121			swap(mode->hsync_end, mode->vsync_end);
-   122			swap(mode->htotal, mode->vtotal);
-   123			swap(mode->width_mm, mode->height_mm);
-   124			return 0;
-   125		} else {
-   126			return -EINVAL;
-   127		}
-   128	}
-   129	
-   130	/**
-   131	 * tinydrm_display_pipe_init - Initialize display pipe
-   132	 * @drm: DRM device
-   133	 * @pipe: Display pipe
-   134	 * @funcs: Display pipe functions
-   135	 * @connector_type: Connector type
-   136	 * @formats: Array of supported formats (DRM_FORMAT\_\*)
-   137	 * @format_count: Number of elements in @formats
-   138	 * @mode: Supported mode
-   139	 * @rotation: Initial @mode rotation in degrees Counter Clock Wise
-   140	 *
-   141	 * This function sets up a &drm_simple_display_pipe with a &drm_connector that
-   142	 * has one fixed &drm_display_mode which is rotated according to @rotation.
-   143	 *
-   144	 * Returns:
-   145	 * Zero on success, negative error code on failure.
-   146	 */
- > 147	int tinydrm_display_pipe_init(struct drm_device *drm,
+   108		case 2:
+   109			unsigned int image_size;
+   110			const u8 *buf = sw->nvm->buf;
+   111	
+   112			if (!buf) {
+   113				ret = -EINVAL;
+   114				break;
+   115			}
+   116			image_size = sw->nvm->buf_data_size;
+   117			if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
+   118				ret = -EINVAL;
+   119				break;
+   120			}
+   121			ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
+   122			if (!ret)
+   123				sw->nvm->flushed = true;
+   124	
+   125			break;
+   126	
+   127		default:
+   128			break;
+   129		}
+   130	
+   131		if ((handle == 1) && (ret != 0))
+   132			tb_nvm_free(sw->nvm);
+   133	
+   134		return ret;
+   135	}
+   136	
 
 -- 
 0-DAY CI Kernel Test Service

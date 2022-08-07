@@ -2,95 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B433658BC7B
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 20:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DF258BC91
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 20:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234717AbiHGSg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 14:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S235661AbiHGSqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 14:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbiHGSg5 (ORCPT
+        with ESMTP id S235640AbiHGSqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 14:36:57 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D1C5F9B;
-        Sun,  7 Aug 2022 11:36:56 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id f30so6009989pfq.4;
-        Sun, 07 Aug 2022 11:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=byyZWet2uDAgpm9su06EHwBJ5r0AF/TLaVTFyMqG220=;
-        b=gHNMX3AW4gx9Q5o9memn1/6nOXP8sNuy4W5CoybCw9zddo45lJ2aMPtq+PhyKT/KuO
-         LkaC5EX1y5UrDIqUn43ZmjT23GB1MZ37GPiE2JzjFQvh/gDzzAsigBsj1SI29ZI697AD
-         3hhXx2NWBS9B6JBLG0OP82844LTlkF+ZoEGLcJpxtlTiOXl56fEL9kbY2fpMhv1l/Lno
-         8DeS1NjJjbCDu4zYxOazhvpqF1+HP/4NYoL2iXPeHHLRH5aRMdnT6DKF5UQSsen+hbg2
-         eS7Z8Z/QUI9j4mwoDwAR62j7lTv4VeqQQT2/RCTKhjJyKCRCYlUcwGdrvFpfYteFZ1wT
-         W6aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=byyZWet2uDAgpm9su06EHwBJ5r0AF/TLaVTFyMqG220=;
-        b=w3KjFHXNOx1cYVBGm9tU9bioHOH4fYWDqbIH+yNoFaWl9IPguRi/i30EfInbu98hoF
-         P1txQly5UrSDWXyYoFxhic0Lhlh9VMbdZ1cQCHpGANEPaXOMmXPzqH9BhBmRk16nHmkY
-         ynSFsqYmAqF1oiT9rTHvp5Zmi5R1cEXbVX1gaCbsinAMeY33rnYPYh4FqObzLxCVgIOo
-         SGzOBkW/mxedhfzlnTBePL9nknse3n1pL84qlsGd/TGJSMWomJ3sBB37NuD+MZPjfoA1
-         8RRkYyCTyhpJwGFGtpUl7s26xGaE5XzlRDQxI3lpZtODpXGzGcH22hlQBew9cYy3Np6M
-         dVcA==
-X-Gm-Message-State: ACgBeo2qhxldYEhYIdgnytOsDLt/hGKmzoRU82jFtWmTx7eloezx+pKx
-        fyxMlRMJz4v8AyYnOVWfJ/M=
-X-Google-Smtp-Source: AA6agR5lVztS2dNmZQsbKu/VztBJ5mARir9FsqTaNwsZ1MatyOuKuV1pW8IylNiwPWAQ0puMtVpwdw==
-X-Received: by 2002:a05:6a00:b41:b0:52f:59dc:75 with SMTP id p1-20020a056a000b4100b0052f59dc0075mr1356394pfo.33.1659897415891;
-        Sun, 07 Aug 2022 11:36:55 -0700 (PDT)
-Received: from localhost.localdomain ([122.161.52.254])
-        by smtp.gmail.com with ESMTPSA id u6-20020a17090341c600b0016be596c8afsm6908361ple.282.2022.08.07.11.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 11:36:55 -0700 (PDT)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: ls1021a: Use generic node name for DMA
-Date:   Mon,  8 Aug 2022 00:06:45 +0530
-Message-Id: <20220807183646.5641-1-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 7 Aug 2022 14:46:51 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C77365F3
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 11:46:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659898010; x=1691434010;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=48ZM6HWH5zYVKkU5Oy/JRtAGxqcrvYcVde5TJQbKhgQ=;
+  b=SGFjbuaqpUQ89K+MVwLk1ToRvJyGnwz5eSln/LrQ0x8v1/aPs+k08X63
+   Hesn6VoZT8n779EZeo2kBYfFLhppshPtL2IVm4Y4+WNmm2Yq8ySPR+V05
+   rWhXkCNC5P0DrmHztwwJiZbENYdiyWv9d4+Mw0Y7wPoEXvgiRlf3AETnq
+   PUFkluqD2qVG8ynp++fuDg+SQa39K1x21+TIMKS7rnrex2kqGTNX48JHl
+   6UVG6caKBSxt2CHVDG/SCLW9mtJrE9rEIsVOLxKYdbN91z1d1UEukDWPp
+   Zn4drRU5VDTnO3vJFYg1bPDbcddzX+rIzlaA+FbNZLT+IK4bMneRLn7yr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="291232292"
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="291232292"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 11:46:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="672225523"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Aug 2022 11:46:48 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKlIV-000LZb-1b;
+        Sun, 07 Aug 2022 18:46:47 +0000
+Date:   Mon, 8 Aug 2022 02:46:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jean-Francois Bortolotti <jeff@borto.fr>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/120-spmi 1/4]
+ drivers/spmi/spmi-apple-controller.c:81 spmi_read_cmd() warn: inconsistent
+ indenting
+Message-ID: <202208080200.DoRX2CoQ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DT spec expects generic DMA controller node name as "dma-controller" to
-enable validations.
+tree:   https://github.com/AsahiLinux/linux bits/120-spmi
+head:   0324791a3cdc3e93df57f6293e2cfaaadc264aeb
+commit: 69860806b247b72cc354ca35ea147c2d1538ea85 [1/4] spmi: add a first basic spmi driver for Apple SoC
+config: xtensa-randconfig-m031-20220803 (https://download.01.org/0day-ci/archive/20220808/202208080200.DoRX2CoQ-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
 
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
----
- arch/arm/boot/dts/ls1021a.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/arch/arm/boot/dts/ls1021a.dtsi b/arch/arm/boot/dts/ls1021a.dtsi
-index fa761620f073..7c5510e34494 100644
---- a/arch/arm/boot/dts/ls1021a.dtsi
-+++ b/arch/arm/boot/dts/ls1021a.dtsi
-@@ -647,7 +647,7 @@ sai2: sai@2b60000 {
- 			status = "disabled";
- 		};
- 
--		edma0: edma@2c00000 {
-+		edma0: dma-controller@2c00000 {
- 			#dma-cells = <2>;
- 			compatible = "fsl,vf610-edma";
- 			reg = <0x0 0x2c00000 0x0 0x10000>,
+New smatch warnings:
+drivers/spmi/spmi-apple-controller.c:81 spmi_read_cmd() warn: inconsistent indenting
+drivers/spmi/spmi-apple-controller.c:97 spmi_write_cmd() warn: inconsistent indenting
+
+Old smatch warnings:
+drivers/spmi/spmi-apple-controller.c:83 spmi_read_cmd() warn: inconsistent indenting
+drivers/spmi/spmi-apple-controller.c:86 spmi_read_cmd() warn: inconsistent indenting
+drivers/spmi/spmi-apple-controller.c:90 spmi_read_cmd() warn: inconsistent indenting
+
+vim +81 drivers/spmi/spmi-apple-controller.c
+
+    47	
+    48	static int spmi_read_cmd(struct spmi_controller *ctrl,
+    49				 u8 opc, u8 slave_id, u16 slave_addr, u8 *__buf, size_t bc)
+    50	{
+    51		struct apple_spmi *spmi;
+    52		u32 spmi_cmd = opc|slave_id<<8|slave_addr<<16|(bc-1)|(1<<15);
+    53		u32 rsp;
+    54		volatile u32 status;
+    55		size_t len_to_read;
+    56		u8 i;
+    57	
+    58		spmi = spmi_controller_get_drvdata(ctrl);
+    59	
+    60		write_reg(spmi_cmd, spmi, SPMI_CMD_REG);
+    61	
+    62		/* Wait for Rx FIFO to have something */
+    63		/* Quite ugly msleep, need to find a better way to do it */
+    64		i=0;
+    65		do {
+    66			status=read_reg(spmi, SPMI_STATUS_REG);
+    67			msleep(10);
+    68			i+=1;
+    69		} while ((status & SPMI_RX_FIFO_EMPTY) && i<5);
+    70	
+    71		if(i>=5){
+    72			dev_err(&ctrl->dev,"spmi_read_cmd:took to long to get the status");
+    73			return -1;
+    74		}
+    75	
+    76		/* Read SPMI reply status */
+    77		rsp=read_reg(spmi, SPMI_RSP_REG);
+    78	
+    79		len_to_read = 0;
+    80		/* Read SPMI data reply */
+  > 81	    while (!( status & SPMI_RX_FIFO_EMPTY ) && (len_to_read < bc )) {
+    82	        rsp=read_reg(spmi, SPMI_RSP_REG);
+    83			i=0;
+    84			while ((len_to_read<bc)&&(i<4)) {
+    85				__buf[len_to_read++]=((0xff<<(8*i))&rsp)>>(8*i);
+    86				 i+=1;
+    87			}
+    88		}
+    89	
+    90		return 0;
+    91	}
+    92	
+    93	static int spmi_write_cmd(struct spmi_controller *ctrl,
+    94				  u8 opc, u8 slave_id, u16 slave_addr, const u8 *__buf, size_t bc)
+    95	{
+    96	    struct apple_spmi *spmi;
+  > 97		u32 spmi_cmd = opc|slave_id<<8|slave_addr<<16|(bc-1)|(1<<15);
+    98		volatile u32 rsp;
+    99		size_t i=0,j;
+   100	
+   101		spmi = spmi_controller_get_drvdata(ctrl);
+   102	
+   103		write_reg(spmi_cmd, spmi, SPMI_CMD_REG);
+   104	
+   105		while (i<bc) {
+   106			j=0;
+   107			spmi_cmd=0;
+   108			while ((j<4)&(i<bc)) {
+   109				spmi_cmd |= __buf[i++]<<(j++*8);
+   110			}
+   111			write_reg(spmi_cmd, spmi, SPMI_CMD_REG);
+   112		}
+   113	
+   114		/* Read SPMI reply status */
+   115		/* do we need this while loop ?
+   116			if yes what for ? */
+   117		do {
+   118			rsp=read_reg(spmi, SPMI_RSP_REG);
+   119		} while (rsp==0);
+   120	
+   121		return 0;
+   122	}
+   123	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

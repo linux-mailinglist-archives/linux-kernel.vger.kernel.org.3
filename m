@@ -2,38 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522F858BA94
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 12:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EC058BA97
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 12:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233686AbiHGKks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 06:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
+        id S233755AbiHGKoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 06:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbiHGKkr (ORCPT
+        with ESMTP id S232071AbiHGKoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 06:40:47 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C840F22E;
-        Sun,  7 Aug 2022 03:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1659868838; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=q0iCh5uIlcUWx769Xlap9uF9I3kZ/wVQv4SF/RfY30c=;
-        b=jBkPtZmLIjOBQMs6R/bHNoG+8VDe3eBGaXRXxMv6asYSibty24L+lnLis1EcqP/zcfRIe2
-        FAGlSVF8hsCld/vFy2zfLy30CHt3IsA1rbO5t9Bs6qvj3z8drKnZ+F8PGXF8lzNBXZ14W7
-        TqJ9hq7bBfhZIP1T3O1ht2HBU8VAQp4=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH] leds: max8997: Don't error if there is no pdata
-Date:   Sun,  7 Aug 2022 12:40:27 +0200
-Message-Id: <20220807104027.10808-1-paul@crapouillou.net>
+        Sun, 7 Aug 2022 06:44:32 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5FBCE1C
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 03:44:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659869071; x=1691405071;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cO4wM4WNsZqpeCfcK/CC2HQNcgpZNb0M9sjhJ040lnY=;
+  b=dAaoTYh6CSnGaiZEy0e3DmocHOULLRQsjQ0njZ7TGIoxWXOX7gSPgWf5
+   BZeDi7/4BEWRVru3eURS4Jj8Aab9iTkuonrand+CSGkpklWwVCEfvfK2l
+   RVHqUMbeTUseyHtbm+lvOUylZtFaFkOV41iVJc/UVEeTfA/9syYNgz3jR
+   zbDcSp1M5Zi3o7yUGQ06XlLa+Q4LLjtmIdU+7OLWB/7JyO+Uf3BQEIPl+
+   uNkUaAN15fUmVs5AUYxXoyYsoesGh9RNXEU7Aqs0CPTkyW3OPUoLVdmo+
+   rAlJSmp0AQU0A+jALdXyUQ80hkkXFP/ncmyfulOQQYVHRHMzFyhmzGy0W
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="291203219"
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="291203219"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 03:44:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="663562523"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Aug 2022 03:44:30 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKdll-000LEX-1x;
+        Sun, 07 Aug 2022 10:44:29 +0000
+Date:   Sun, 7 Aug 2022 18:43:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: net/bluetooth/hci_conn.c:800:5-12: WARNING: kzalloc should be used
+ for d, instead of kmalloc/memset
+Message-ID: <202208071815.IxeJjCaT-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,38 +61,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver will works just fine if no platform data was supplied.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1612c382ffbdf1f673caec76502b1c00e6d35363
+commit: eca0ae4aea66914515e5e3098ea051b518ee5316 Bluetooth: Add initial implementation of BIS connections
+date:   2 weeks ago
+config: alpha-randconfig-c042-20220805 (https://download.01.org/0day-ci/archive/20220807/202208071815.IxeJjCaT-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/leds/leds-max8997.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/leds/leds-max8997.c b/drivers/leds/leds-max8997.c
-index c0bddb33888d..c8d7f55c9dec 100644
---- a/drivers/leds/leds-max8997.c
-+++ b/drivers/leds/leds-max8997.c
-@@ -238,11 +238,6 @@ static int max8997_led_probe(struct platform_device *pdev)
- 	char name[20];
- 	int ret = 0;
- 
--	if (pdata == NULL) {
--		dev_err(&pdev->dev, "no platform data\n");
--		return -ENODEV;
--	}
--
- 	led = devm_kzalloc(&pdev->dev, sizeof(*led), GFP_KERNEL);
- 	if (led == NULL)
- 		return -ENOMEM;
-@@ -258,7 +253,7 @@ static int max8997_led_probe(struct platform_device *pdev)
- 	led->iodev = iodev;
- 
- 	/* initialize mode and brightness according to platform_data */
--	if (pdata->led_pdata) {
-+	if (pdata && pdata->led_pdata) {
- 		u8 mode = 0, brightness = 0;
- 
- 		mode = pdata->led_pdata->mode[led->id];
+cocci warnings: (new ones prefixed by >>)
+>> net/bluetooth/hci_conn.c:800:5-12: WARNING: kzalloc should be used for d, instead of kmalloc/memset
+   net/bluetooth/hci_conn.c:763:5-12: WARNING: kzalloc should be used for d, instead of kmalloc/memset
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

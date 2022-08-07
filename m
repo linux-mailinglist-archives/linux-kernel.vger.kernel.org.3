@@ -2,96 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A3A58BAC1
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 14:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0922158BAC7
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 14:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbiHGMDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 08:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S233998AbiHGMLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 08:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbiHGMDA (ORCPT
+        with ESMTP id S233412AbiHGMLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 08:03:00 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CE4BF4B;
-        Sun,  7 Aug 2022 05:02:58 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M0ydT1Mp0z4x1J;
-        Sun,  7 Aug 2022 22:02:53 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1659873773;
-        bh=Q1lRgU4YZaTZwaMMtMZs3R16yzS3InZ4D3mBFloYCW8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D4zlPiwrX1ONKunBbnD2L2+kekAT4ouRWWTJnN0yRk9PbJD3tXqmKu3wugVmNSpQo
-         0QIlmF4O9aTO/8NTgvzwWpJVhvpwWn0N94C6mdOEnrD1Ol1RFytIj39CT/oBlSKqIJ
-         csrvt0NPiaMkhRUyj4223bqT/lH2jRfz3929ZM9yKxh3/Q9WViLX2Xyz8bZIxQUuTv
-         vwJkBhutPzas5bYlBotSpDyDI03DCVyCQAmPy7m/TUCxAx6zcb/7/9VuACULd4b2ea
-         AdkrhDylowrWBS02fNEH4yoVAgj5bYGtXXP/z72R/khNDP97tABTQCe0HzwNxxTUg5
-         ub+/Unv7eyuEg==
-Date:   Sun, 7 Aug 2022 22:02:40 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Jul 28
-Message-ID: <20220807220240.7ccec5de@canb.auug.org.au>
-In-Reply-To: <YugAzWWl++ArhhPS@sirena.org.uk>
-References: <20220728210236.76654a0e@canb.auug.org.au>
-        <YugAzWWl++ArhhPS@sirena.org.uk>
+        Sun, 7 Aug 2022 08:11:43 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9702BF50;
+        Sun,  7 Aug 2022 05:11:42 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id v1so4771711qkg.11;
+        Sun, 07 Aug 2022 05:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc;
+        bh=zQGkdKu5K+mMGtINb8IUwXhsmEcLqR+snZ46Vc8nWxk=;
+        b=X8rltdjmNBHQeJgcjT5qKvzBk79eACG1asdlFesZiy6mpB7LeCJF7SKsbdbpwbbRGU
+         L5JPWtm6ii7OHXAzUWdcpmbBkfv9U6p1dxIbRbxH0ypFHqyTDdp5hx+UgzNqLvo3kt/q
+         id4+yVLZ6A9XqLg4LE5kn5bB6eCDMWaXeK5W4IwzFhzV310nTnhLk4m1lBrYmCz5n3Ye
+         ewSU1EmiL4x5YlqhdlFo7BTHk3sBl9jJj3NmnOirRC5pG9IBweefeZw3NBV6JpUoKHCY
+         sPLKEk8/am2VcYKbwolANziEuKRbNbGGRN+bvhbPgQL9e+Mum1TwIOeuzII7ALtG4bfd
+         yzNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc;
+        bh=zQGkdKu5K+mMGtINb8IUwXhsmEcLqR+snZ46Vc8nWxk=;
+        b=YZNc9sascoXrx+qZZYc/chycZEqYqBcoxnf5kcRCpFqtUVS5hcGlQA2pr/NbyEmXVC
+         WwlWuL1fOC3U6bcUO5KnrxrMFoYwhmqVv4Hc7m826pC0GdkjflLbH8Sj6t5bu36ueILS
+         BkukxnMRTj5G9hWwfC7CJyX3O0X28pXBuA1KE9eugexP0YwnYdqbNccni/aWUVWXjvj5
+         1/yZPOq0t9qUBObjZiDVU2dSpFbHyUdJ9YOK6fEey1Dv4tc8XgO4XEsNdmqnuXJedgLx
+         7kQc3BbPfQvGOwCRQR38vgdT+QQhiz98Yx5utOdSlwKm0ehmpTjh57e8YP4pyqXf5Pic
+         LofA==
+X-Gm-Message-State: ACgBeo2AufVBSRETOvYB6zPFG47a8PSc9JzWVxM/ZhWoMD5ox0LoYM36
+        HTE6ZA4eFBfJWDtFc4Jg5g==
+X-Google-Smtp-Source: AA6agR6tyvVQVxivjpXI2f1/rmVg+DidYfAL1meKadBKrz4FxbrEPGrSK2B9b9rWSowTqapwQ782xQ==
+X-Received: by 2002:a05:620a:460c:b0:6b8:fbfd:b963 with SMTP id br12-20020a05620a460c00b006b8fbfdb963mr11002856qkb.140.1659874301700;
+        Sun, 07 Aug 2022 05:11:41 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id y8-20020a37f608000000b006b66510f4f7sm6896108qkj.6.2022.08.07.05.11.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 05:11:41 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:18ee:4123:89ce:5c5d])
+        by serve.minyard.net (Postfix) with ESMTPSA id B96051800FA;
+        Sun,  7 Aug 2022 12:11:39 +0000 (UTC)
+Date:   Sun, 7 Aug 2022 07:11:38 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2] dt-binding: ipmi: add fallback to npcm845 compatible
+Message-ID: <20220807121138.GL3834@minyard.net>
+Reply-To: minyard@acm.org
+References: <20220804181800.235368-1-tmaimon77@gmail.com>
+ <20220805115827.GG3834@minyard.net>
+ <CAP6Zq1gfvEpUF-TKhA8EdJqBtwaVvJR3qxtn=8Li4swHB6sDYQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bTzDA883p2=0b2fGhwAZ6yF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP6Zq1gfvEpUF-TKhA8EdJqBtwaVvJR3qxtn=8Li4swHB6sDYQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/bTzDA883p2=0b2fGhwAZ6yF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Aug 07, 2022 at 11:03:56AM +0300, Tomer Maimon wrote:
+> Hi Corey,
+> 
+> Thanks for your comment.
+> 
+> On Fri, 5 Aug 2022 at 14:58, Corey Minyard <minyard@acm.org> wrote:
+> >
+> > On Thu, Aug 04, 2022 at 09:18:00PM +0300, Tomer Maimon wrote:
+> > > Add to npcm845 KCS compatible string a fallback to npcm750 KCS compatible
+> > > string becuase NPCM845 and NPCM750 BMCs are using identical KCS modules.
+> > >
+> > > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt b/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> > > index cbc10a68ddef..4fda76e63396 100644
+> > > --- a/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> > > +++ b/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> > > @@ -7,7 +7,7 @@ used to perform in-band IPMI communication with their host.
+> > >  Required properties:
+> > >  - compatible : should be one of
+> > >      "nuvoton,npcm750-kcs-bmc"
+> > > -    "nuvoton,npcm845-kcs-bmc"
+> > > +    "nuvoton,npcm845-kcs-bmc", "nuvoton,npcm750-kcs-bmc"
+> >
+> > This is just wrong.  The compatible is supposed to identify the device,
+> > not the board the device is on.  I think compatible here should be
+> > "npcm7xx-kcs-bmc", and just use that everywhere.  It's fine if that is
+> > used on a board named npcm845.
+> The NPCM8XX is not a board, The Nuvoton NPCM8XX is a fourth-generation
+> BMC SoC device family.
 
-Hi Mark,
+Ok, but same principle applies.
 
-On Mon, 1 Aug 2022 17:35:25 +0100 Mark Brown <broonie@kernel.org> wrote:
->
-> On Thu, Jul 28, 2022 at 09:02:36PM +1000, Stephen Rothwell wrote:
->=20
-> > News: the next linux-next release will be on Monday Aug 8th. =20
->=20
-> I didn't notice this last week, I'll try to provide coverage for the
-> remainder of this week, hopefully the merge window should help this go
-> smoothly but no guarantees.
+If the device is exactly the same, then you would only use one of the
+"npcm7xx-kcs-bmc" and put that in both device trees.  You can use
+"nuvoton,npcm750-kcs-bmc", it's really not that important.  Or even
+"nuvoton,npcm-kcs-bmc"
 
-Thanks for throwing yourself on the grenade again :-)  I hope it wasn't
-too onerous.  I was supposed to be absent in the second half of the
-merge window.
+If the device has a minor difference that can be expressed in a 
+parameter, then create a parameter for it.
 
-I will be back on board tomorrow.
---=20
-Cheers,
-Stephen Rothwell
+If the device has enough differences that a parameter or two doesn't
+cover it, then you put either nuvoton,npcm750-kcs-bmc or
+nuvoton,npcm750-kcs-bmc in the device tree.  Not both.  Then you need
+two entries in the of_device_id array and you use the data field or
+something to express the difference.
 
---Sig_/bTzDA883p2=0b2fGhwAZ6yF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Since there appears to be no difference, just put
+"nuvoton,npcm750-kcs-bmc" in the npcm845 and I will drop the patch
+adding all this.  Then a patch can be added saying it applies to both
+the 7xx and 8xx series of BMC SOCs.  If you want to change the name,
+then a patch will be needed for that, but then you will need multiple
+entries in your device tree, but you would not document it as such, as
+there would only be one that applies for this kernel.
 
------BEGIN PGP SIGNATURE-----
+I'm pretty sure the only reason to have muliple compatible entries in a
+device tree is to cover multiple kernels where the name changed.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLvqeEACgkQAVBC80lX
-0Gzslwf/Tr8tNna7kN5ZPxAUzclXGjJPBzUO/jNKWVZSJYaIrItenosyi1TH+sXD
-0sHIxOCL5MW1tlu+LHeAY9fAMfk9JsXpODmvLvxflOikRQvHW7uxJlS5SBbyf37N
-DbpcnmDcmNRxb+gomOFMPupLgivN39nfZRjnPjB1mnluL2Z+rVF+2ouNF+lus5si
-w9tglT/bz9rP6dZHA98wGpfDShigiQkPLXTRTk+tz15Fe6ba9HsrVDjJ43vmVGnD
-p8GHmt+RkSDGiydUu6xd5NrcLqHGRJZa6qf48dxk3xdHKXgSGv0LfeNRAF/pLQc/
-ioCUIQ/BazUe/05f8U0aLsFJp/9/ow==
-=zbG1
------END PGP SIGNATURE-----
+-corey
 
---Sig_/bTzDA883p2=0b2fGhwAZ6yF--
+> >
+> > -corey
+> >
+> > >  - interrupts : interrupt generated by the controller
+> > >  - kcs_chan : The KCS channel number in the controller
+> > >
+> > > --
+> > > 2.33.0
+> > >
+> 
+> Best regards,
+> 
+> Tomer

@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76C458BB69
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3D458BB6C
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235000AbiHGOzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 10:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S235156AbiHGOzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 10:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234614AbiHGOyo (ORCPT
+        with ESMTP id S234877AbiHGOyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 10:54:44 -0400
+        Sun, 7 Aug 2022 10:54:51 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51716A46C
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:54:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6A4AE6F;
+        Sun,  7 Aug 2022 07:54:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
         s=mail; t=1659883985; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vu38q2fvxbTDWC0Wp85qSUryAadcgeU2L9z5MeFAmEE=;
-        b=gKv68bx0OS3N05Kvtmy5FDstSL1q6tmbiq5HDr/fldBMh7m90J6PaAKUkFuar4Gt2JpW2h
-        znj4QS8S/8eg5O8cDqTmKyuVla9x5XnmUapr56FpXte+qlig14vVLEw6YT+KtIxc72kHhd
-        CN9mN+cxvGrfQ/ubH7LQ4mKN788Flaw=
+        bh=KhmQUAzyoS18HNqAM0H6H0gTiYDcgAB/NWukYcltpUA=;
+        b=1tOBlgKh4w4cx6ZIBgNfPJksLmLV5DvkuOE1hCKxCnxkMQAujeBLnwvvA+n4acrS5KiUkW
+        0PeQtmaSKxTd3onupHJXmHEwcmK/gmXighvkvPBasrd4HsPCswl0zUrWE6j1khLzvcx5c/
+        3HWZpVgpZo+YOTpnj5iCIDvwSX2JJlA=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 12/28] mfd: mcp-sa11x0: Remove #ifdef guards for PM related functions
-Date:   Sun,  7 Aug 2022 16:52:31 +0200
-Message-Id: <20220807145247.46107-13-paul@crapouillou.net>
+Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 13/28] mfd: sec: Remove #ifdef guards for PM related functions
+Date:   Sun,  7 Aug 2022 16:52:32 +0200
+Message-Id: <20220807145247.46107-14-paul@crapouillou.net>
 In-Reply-To: <20220807145247.46107-1-paul@crapouillou.net>
 References: <20220807145247.46107-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -43,10 +46,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new pm_sleep_ptr() macro to handle the .suspend/.resume
-callbacks.
+Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
+to handle the .suspend/.resume callbacks.
 
-This macro allow the suspend and resume functions to be automatically
+These macros allow the suspend and resume functions to be automatically
 dropped by the compiler when CONFIG_SUSPEND is disabled, without having
 to use #ifdef guards.
 
@@ -55,49 +58,43 @@ independently of any Kconfig option, and thanks to that bugs and
 regressions are easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc: linux-samsung-soc@vger.kernel.org
 ---
- drivers/mfd/mcp-sa11x0.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/mfd/sec-core.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mfd/mcp-sa11x0.c b/drivers/mfd/mcp-sa11x0.c
-index 4629dff187cd..1c9831b78cf9 100644
---- a/drivers/mfd/mcp-sa11x0.c
-+++ b/drivers/mfd/mcp-sa11x0.c
-@@ -255,7 +255,6 @@ static int mcp_sa11x0_remove(struct platform_device *dev)
- 	return 0;
+diff --git a/drivers/mfd/sec-core.c b/drivers/mfd/sec-core.c
+index 1fb29c45f5cf..a467de2b2fea 100644
+--- a/drivers/mfd/sec-core.c
++++ b/drivers/mfd/sec-core.c
+@@ -455,7 +455,6 @@ static void sec_pmic_shutdown(struct i2c_client *i2c)
+ 	regmap_update_bits(sec_pmic->regmap_pmic, reg, mask, 0);
  }
  
 -#ifdef CONFIG_PM_SLEEP
- static int mcp_sa11x0_suspend(struct device *dev)
+ static int sec_pmic_suspend(struct device *dev)
  {
- 	struct mcp_sa11x0 *m = priv(dev_get_drvdata(dev));
-@@ -277,17 +276,14 @@ static int mcp_sa11x0_resume(struct device *dev)
+ 	struct i2c_client *i2c = to_i2c_client(dev);
+@@ -488,14 +487,14 @@ static int sec_pmic_resume(struct device *dev)
  
  	return 0;
  }
--#endif
+-#endif /* CONFIG_PM_SLEEP */
  
- static const struct dev_pm_ops mcp_sa11x0_pm_ops = {
--#ifdef CONFIG_PM_SLEEP
- 	.suspend = mcp_sa11x0_suspend,
- 	.freeze = mcp_sa11x0_suspend,
- 	.poweroff = mcp_sa11x0_suspend,
- 	.resume_noirq = mcp_sa11x0_resume,
- 	.thaw_noirq = mcp_sa11x0_resume,
- 	.restore_noirq = mcp_sa11x0_resume,
--#endif
- };
+-static SIMPLE_DEV_PM_OPS(sec_pmic_pm_ops, sec_pmic_suspend, sec_pmic_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(sec_pmic_pm_ops,
++				sec_pmic_suspend, sec_pmic_resume);
  
- static struct platform_driver mcp_sa11x0_driver = {
-@@ -295,7 +291,7 @@ static struct platform_driver mcp_sa11x0_driver = {
- 	.remove		= mcp_sa11x0_remove,
- 	.driver		= {
- 		.name	= DRIVER_NAME,
--		.pm	= &mcp_sa11x0_pm_ops,
-+		.pm	= pm_sleep_ptr(&mcp_sa11x0_pm_ops),
+ static struct i2c_driver sec_pmic_driver = {
+ 	.driver = {
+ 		   .name = "sec_pmic",
+-		   .pm = &sec_pmic_pm_ops,
++		   .pm = pm_sleep_ptr(&sec_pmic_pm_ops),
+ 		   .of_match_table = sec_dt_match,
  	},
- };
- 
+ 	.probe = sec_pmic_probe,
 -- 
 2.35.1
 

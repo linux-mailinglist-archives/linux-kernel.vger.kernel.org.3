@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8135D58B9F7
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 09:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8B958B9F8
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 09:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbiHGHD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 03:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
+        id S232702AbiHGHGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 03:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiHGHDZ (ORCPT
+        with ESMTP id S229834AbiHGHG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 03:03:25 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A036CB4AA
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 00:03:23 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso11856742pjq.0
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 00:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=x+iMDw0qKe6RHEuPETZpue6kAENbMIIQKSaYtBYAQzA=;
-        b=SQ75zpJSQWcOJJDGsxk4ausLX/51y2eWGi5l6OhUKRh6/4ldgK1mt7L5lgDYGa7tKp
-         eLudkKiP9uPAicvG+e2ZeRSUr1sE8ypip+ZmNw1XUy93xHrVJP98Kg5HVib6AG65UlS0
-         /PYZ/TBu5afrNFxJpCWl0c8rDm2VhNMXX3bNsYj5d5e+tIlMMrey1yO6d/h0Xduai4xj
-         6yYr49JbVR4M95t/4j6KUVrIYgWGtqsw6W5SKeigXisqy6duUzyTWyz7dtzjvyqLCsht
-         Vxin6cNY6w1WBF3BJqCszN0b1dEnBpYihaRQ9l/XjhKULjd8XdU/DKlwPlb2bGOMOxMp
-         UuSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=x+iMDw0qKe6RHEuPETZpue6kAENbMIIQKSaYtBYAQzA=;
-        b=Du17mhE5IoN5LQpQu5GB/rTnS8diMNodnDqg/ifBu5etnvRpgvQpT9j7chab7sV8w0
-         o2SmrQVzSVn8ejbhmDAiwHqa4t+pZ+jxMLq7oHes0H1ibAEvl6BIbPhTunRnKTl8927o
-         AeM1upzMJr6eNPf/QnFa9DoqjuCtd7YvF+510+uiAUhuJD/v1PLew0TL/C7FriX/FIsJ
-         L9BhVmTqR225s9bdTt94jIXe1obyzQkQfFvnOoIz49DajxqmFtwh3K7rg6/U1ozDSu3N
-         TroA4INCgDqJNAvx4K64XCBMzXtOqqWwTV++1VddKyGzXDlfzsezG7acg2Zg2kMy0brr
-         PqeQ==
-X-Gm-Message-State: ACgBeo1mloFh0D5+WigpbvQ4/6cFcPt6UOWt8eDcsWLTBWV/8jfPX/f0
-        tDMmV1oCXT8WRto/ENC/OOnUzfjqlrwF9h6d
-X-Google-Smtp-Source: AA6agR5K629yn81urisLcxb1q+P5VJuBmaWVueOmV1JY8+RR7VGt94/r6DGFZNbTtCnEIaLiQfY3TA==
-X-Received: by 2002:a17:902:da86:b0:16f:93f:15a7 with SMTP id j6-20020a170902da8600b0016f093f15a7mr13846310plx.52.1659855802890;
-        Sun, 07 Aug 2022 00:03:22 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (173.242.120.104.16clouds.com. [173.242.120.104])
-        by smtp.gmail.com with ESMTPSA id v68-20020a626147000000b0052f39a877d8sm392006pfb.65.2022.08.07.00.03.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 00:03:22 -0700 (PDT)
-Date:   Sun, 7 Aug 2022 15:03:18 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     carsten.haitzler@foss.arm.com
-Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Subject: Re: [PATCH v5 14/14] perf test: Add relevant documentation about
- CoreSight testing
-Message-ID: <20220807070318.GL34254@leoy-ThinkPad-X240s>
-References: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
- <20220728145256.2985298-15-carsten.haitzler@foss.arm.com>
+        Sun, 7 Aug 2022 03:06:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C53AE5D
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 00:06:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659855987; x=1691391987;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6kmX7fCTXVT5lmnL9SnPqcTbya+lTv5yq3tYdStAUAA=;
+  b=h/NzcTAVpPwUCDuHJ6Jj6S08hcjT4CqkRz8Rm8SNyXmF/1BZwNy5Q4/C
+   jsBGPfakn9A/xQvi2EI6UZjRWDy1E/YcGmpVnbGQ0m/zzB0HIMWZ+kqaC
+   l1KMqO6xdhmU3sXa4VtkGYgl46AcxfmEp4PKvdp1iZ+jIaoy7Nyvoqa+I
+   Jlc6qtv+7lWgZgc6GWj0UDtyVi4wAdfwql/uXTJsBe/yMqf7szqC4/JET
+   hJUeliiNQBC1eCh5jbQDDjdNce1gOQfqhHSfRg1do59JJj+CjkJqSK9lW
+   lQHPMafd2nAhWrB21EphkY7XszVBtj2uOnnkXwlt33j8Ss1r3pNFSNO0F
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="289175452"
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="289175452"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 00:06:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="672126302"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Aug 2022 00:06:24 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKaMh-000L4n-27;
+        Sun, 07 Aug 2022 07:06:23 +0000
+Date:   Sun, 7 Aug 2022 15:05:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
+        broonie@kernel.org, alsa-devel@alsa-project.org
+Cc:     kbuild-all@lists.01.org, vsujithkumar.reddy@amd.com,
+        Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, ssabakar@amd.com,
+        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] ASoC: amd: acp: Add TDM support for acp i2s stream
+Message-ID: <202208071454.7YeHuTDb-lkp@intel.com>
+References: <20220805060420.813053-1-venkataprasad.potturu@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220728145256.2985298-15-carsten.haitzler@foss.arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220805060420.813053-1-venkataprasad.potturu@amd.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,216 +72,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 03:52:56PM +0100, carsten.haitzler@foss.arm.com wrote:
-> From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
-> 
-> Add/improve documentation helping people get started with CoreSight and
-> perf as well as describe the testing and how it works.
-> 
-> Cc: linux-doc@vger.kernel.org
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
-> ---
->  .../trace/coresight/coresight-perf.rst        | 160 ++++++++++++++++++
->  tools/perf/Documentation/arm-coresight.txt    |   5 +
->  2 files changed, 165 insertions(+)
->  create mode 100644 Documentation/trace/coresight/coresight-perf.rst
->  create mode 100644 tools/perf/Documentation/arm-coresight.txt
-> 
-> diff --git a/Documentation/trace/coresight/coresight-perf.rst b/Documentation/trace/coresight/coresight-perf.rst
-> new file mode 100644
-> index 000000000000..401a097aea4b
-> --- /dev/null
-> +++ b/Documentation/trace/coresight/coresight-perf.rst
-> @@ -0,0 +1,160 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +================
-> +CoreSight - Perf
-> +================
-> +
-> +    :Author:   Carsten Haitzler <carsten.haitzler@arm.com>
-> +    :Date:     June 29th, 2022
-> +
-> +Perf is able to locally access CoreSight trace data and store it to the
-> +output perf data files. This data can then be later decoded to give the
-> +instructions that were traced for debugging or profiling purposes. You
-> +can log such data with a perf record command like::
-> +
-> +   perf record -e cs_etm//u testbinary
-> +
-> +This would run some test binary (testbinary) until it exits and record
-> +a perf.data trace file. That file would have AUX sections if CoreSight
-> +is working correctly. You can dump the content of this file as
-> +readable text with a command like::
-> +
-> +   perf report --stdio --dump -i perf.data
-> +
-> +You should find some sections of this file have AUX data blocks like::
-> +
-> +   0x1e78 [0x30]: PERF_RECORD_AUXTRACE size: 0x11dd0  offset: 0  ref: 0x1b614fc1061b0ad1  idx: 0  tid: 531230  cpu: -1
-> +
-> +   . ... CoreSight ETM Trace data: size 73168 bytes
-> +           Idx:0; ID:10;   I_ASYNC : Alignment Synchronisation.
-> +             Idx:12; ID:10;  I_TRACE_INFO : Trace Info.; INFO=0x0 { CC.0 }
-> +             Idx:17; ID:10;  I_ADDR_L_64IS0 : Address, Long, 64 bit, IS0.; Addr=0x0000000000000000;
-> +             Idx:26; ID:10;  I_TRACE_ON : Trace On.
-> +             Idx:27; ID:10;  I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 bit, IS0.; Addr=0x0000FFFFB6069140; Ctxt: AArch64,EL0, NS;
-> +             Idx:38; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
-> +             Idx:39; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
-> +             Idx:40; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
-> +             Idx:41; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEN
-> +             ...
-> +
-> +If you see these above, then your system is tracing CoreSight data
-> +correctly.
-> +
-> +To compile perf with CoreSight support in the tools/perf directory do::
-> +
-> +    make CORESIGHT=1
-> +
-> +This requires OpenCSD to build. You may install distribution packages
-> +for the support such as libopencsd and libopencsd-dev or download it
-> +and build yourself. Upstream OpenCSD is located at:
-> +
-> +  https://github.com/Linaro/OpenCSD
-> +
-> +For complete information on building perf with CoreSight support and
-> +more extensive usage look at:
-> +
-> +  https://github.com/Linaro/OpenCSD/blob/master/HOWTO.md
-> +
-> +
-> +Kernel CoreSight Support
-> +------------------------
-> +
-> +You will also want CoreSight support enabled in your kernel config.
-> +Ensure it is enabled with::
-> +
-> +   CONFIG_CORESIGHT=y
-> +
-> +There are various other CoreSight options you probably also want
-> +enabled like::
-> +
-> +   CONFIG_CORESIGHT_LINKS_AND_SINKS=y
-> +   CONFIG_CORESIGHT_LINK_AND_SINK_TMC=y
-> +   CONFIG_CORESIGHT_CATU=y
-> +   CONFIG_CORESIGHT_SINK_TPIU=y
-> +   CONFIG_CORESIGHT_SINK_ETBV10=y
-> +   CONFIG_CORESIGHT_SOURCE_ETM4X=y
-> +   CONFIG_CORESIGHT_STM=y
-> +   CONFIG_CORESIGHT_CPU_DEBUG=y
+Hi Venkata,
 
-So far CORESIGHT_STM and CORESIGHT_CPU_DEBUG are irrelevant with perf
-recording.  Perf only creates path from source (ETM) to sink (TMC-ETR
-or TMC-ETF), so it's good to drop them.
+Thank you for the patch! Yet something to improve:
 
-> +   CONFIG_CORESIGHT_CTI=y
-> +   CONFIG_CORESIGHT_CTI_INTEGRATION_REGS=y
-> +
-> +Please refer to the kernel configuration help for more information.
-> +
-> +Perf test - Verify kernel and userspace perf CoreSight work
-> +-----------------------------------------------------------
-> +
-> +When you run perf test, it will do a lot of self tests. Some of those
-> +tests will cover CoreSight (only if enabled and on ARM64). You
-> +generally would run perf test from the tools/perf directory in the
-> +kernel tree. Some tests will check some internal perf support like:
-> +
-> +   Check Arm CoreSight trace data recording and synthesized samples
-> +   Check Arm SPE trace data recording and synthesized samples
-> +
-> +Some others will actually use perf record and some test binaries that
-> +are in tests/shell/coresight and will collect traces to ensure a
-> +minimum level of functionality is met. The scripts that launch these
-> +tests are in the same directory. These will all look like:
-> +
-> +   CoreSight / ASM Pure Loop
-> +   CoreSight / Memcpy 16k 10 Threads
-> +   CoreSight / Thread Loop 10 Threads - Check TID
-> +   etc.
-> +
-> +These perf record tests will not run if the tool binaries do not exist
-> +in tests/shell/coresight/*/ and will be skipped. If you do not have
-> +CoreSight support in hardware then either do not build perf with
-> +CoreSight support or remove these binaries in order to not have these
-> +tests fail and have them skip instead.
-> +
-> +These tests will log historical results in the current working
-> +directory (e.g. tools/perf) and will be named stats-\*.csv like:
-> +
-> +   stats-asm_pure_loop-out.csv
-> +   stats-memcpy_thread-16k_10.csv
-> +   ...
-> +
-> +These statistic files log some aspects of the AUX data sections in
-> +the perf data output counting some numbers of certain encodings (a
-> +good way to know that it's working in a very simple way). One problem
-> +with CoreSight is that given a large enough amount of data needing to
-> +be logged, some of it can be lost due to the processor not waking up
-> +in time to read out all the data from buffers etc.. You will notice
-> +that the amount of data collected can vary a lot per run of perf test.
-> +If you wish to see how this changes over time, simply run perf test
-> +multiple times and all these csv files will have more and more data
-> +appended to it that you can later examine, graph and otherwise use to
-> +figure out if things have become worse or better.
-> +
-> +This means sometimes these tests fail as they don't capture all the
-> +data needed. This is about tracking quality and amount of data
-> +produced over time and to see when changes to the Linux kernel improve
-> +quality of traces.
-> +
-> +Be aware that some of these tests take quite a while to run, specifically
-> +in processing the perf data file and dumping contents to then examine what
-> +is inside.
-> +
-> +You can change where these csv logs are stored by setting the
-> +PERF_TEST_CORESIGHT_STATDIR environment variable before running perf
-> +test like::
-> +
-> +   export PERF_TEST_CORESIGHT_STATDIR=/var/tmp
-> +   perf test
-> +
-> +They will also store resulting perf output data in the current
-> +directory for later inspection like::
-> +
-> +   perf-asm_pure_loop-out.data
-> +   perf-memcpy_thread-16k_10.data
-> +   ...
-> +
-> +You can alter where the perf data files are stored by setting the
-> +PERF_TEST_CORESIGHT_DATADIR environment variable such as::
-> +
-> +   PERF_TEST_CORESIGHT_DATADIR=/var/tmp
-> +   perf test
-> +
-> +You may wish to set these above environment variables if you whish to
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on linus/master next-20220805]
+[cannot apply to v5.19]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-s/whish/wish/
+url:    https://github.com/intel-lab-lkp/linux/commits/Venkata-Prasad-Potturu/ASoC-amd-acp-Add-TDM-support-for-acp-i2s-stream/20220805-140248
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220807/202208071454.7YeHuTDb-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/c603f9570621784501d7ce7f5099be37983cb810
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Venkata-Prasad-Potturu/ASoC-amd-acp-Add-TDM-support-for-acp-i2s-stream/20220805-140248
+        git checkout c603f9570621784501d7ce7f5099be37983cb810
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/
 
-> +keep the output of tests outside of the current working directory for
-> +longer term storage and examination.
-> diff --git a/tools/perf/Documentation/arm-coresight.txt b/tools/perf/Documentation/arm-coresight.txt
-> new file mode 100644
-> index 000000000000..c117fc50a2a9
-> --- /dev/null
-> +++ b/tools/perf/Documentation/arm-coresight.txt
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-You could see we have a document perf-arm-spe.txt, for alignment it's
-good to rename this file as perf-arm-coresight.txt.
+All errors (new ones prefixed by >>):
 
-The rest of this patch is good for me, with addressing the above minor
-comments:
-
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
+   sound/soc/amd/acp/acp-i2s.c: In function 'acp_i2s_set_tdm_slot':
+>> sound/soc/amd/acp/acp-i2s.c:74:29: error: 'struct acp_dev_data' has no member named 'acp_lock'
+      74 |         spin_lock_irq(&adata->acp_lock);
+         |                             ^~
+   In file included from include/linux/kernel.h:21,
+                    from arch/x86/include/asm/percpu.h:27,
+                    from arch/x86/include/asm/current.h:6,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/platform_device.h:13,
+                    from sound/soc/amd/acp/acp-i2s.c:15:
+   sound/soc/amd/acp/acp-i2s.c:75:43: error: 'struct acp_dev_data' has no member named 'stream_list'
+      75 |         list_for_each_entry(stream, &adata->stream_list, list) {
+         |                                           ^~
+   include/linux/container_of.h:18:33: note: in definition of macro 'container_of'
+      18 |         void *__mptr = (void *)(ptr);                                   \
+         |                                 ^~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
+         |                    ^~~~~~~~~~~~~~~~
+   sound/soc/amd/acp/acp-i2s.c:75:9: note: in expansion of macro 'list_for_each_entry'
+      75 |         list_for_each_entry(stream, &adata->stream_list, list) {
+         |         ^~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/bits.h:22,
+                    from include/linux/ratelimit_types.h:5,
+                    from include/linux/ratelimit.h:5,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/platform_device.h:13,
+                    from sound/soc/amd/acp/acp-i2s.c:15:
+   sound/soc/amd/acp/acp-i2s.c:75:43: error: 'struct acp_dev_data' has no member named 'stream_list'
+      75 |         list_for_each_entry(stream, &adata->stream_list, list) {
+         |                                           ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
+         |                    ^~~~~~~~~~~~~~~~
+   sound/soc/amd/acp/acp-i2s.c:75:9: note: in expansion of macro 'list_for_each_entry'
+      75 |         list_for_each_entry(stream, &adata->stream_list, list) {
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/container_of.h:19:54: error: 'struct acp_stream' has no member named 'list'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                                                      ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
+         |                    ^~~~~~~~~~~~~~~~
+   sound/soc/amd/acp/acp-i2s.c:75:9: note: in expansion of macro 'list_for_each_entry'
+      75 |         list_for_each_entry(stream, &adata->stream_list, list) {
+         |         ^~~~~~~~~~~~~~~~~~~
+   sound/soc/amd/acp/acp-i2s.c:75:43: error: 'struct acp_dev_data' has no member named 'stream_list'
+      75 |         list_for_each_entry(stream, &adata->stream_list, list) {
+         |                                           ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:20:23: note: in expansion of macro '__same_type'
+      20 |                       __same_type(*(ptr), void),                        \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
 
 
-> @@ -0,0 +1,5 @@
-> +Arm CoreSight Support
-> +=====================
-> +
-> +For full documentation, see Documentation/trace/coresight/coresight-perf.rst
-> +in the kernel tree.
-> -- 
-> 2.32.0
-> 
+vim +74 sound/soc/amd/acp/acp-i2s.c
+
+    47	
+    48	static int acp_i2s_set_tdm_slot(struct snd_soc_dai *dai, u32 tx_mask, u32 rx_mask,
+    49					int slots, int slot_width)
+    50	{
+    51		struct device *dev = dai->component->dev;
+    52		struct acp_dev_data *adata = snd_soc_dai_get_drvdata(dai);
+    53		struct acp_stream *stream;
+    54		int slot_len;
+    55	
+    56		switch (slot_width) {
+    57		case SLOT_WIDTH_8:
+    58			slot_len = 8;
+    59			break;
+    60		case SLOT_WIDTH_16:
+    61			slot_len = 16;
+    62			break;
+    63		case SLOT_WIDTH_24:
+    64			slot_len = 24;
+    65			break;
+    66		case SLOT_WIDTH_32:
+    67			slot_len = 0;
+    68			break;
+    69		default:
+    70			dev_err(dev, "Unsupported bitdepth %d\n", slot_width);
+    71			return -EINVAL;
+    72		}
+    73	
+  > 74		spin_lock_irq(&adata->acp_lock);
+    75		list_for_each_entry(stream, &adata->stream_list, list) {
+    76			if (tx_mask && stream->dir == SNDRV_PCM_STREAM_PLAYBACK)
+    77				adata->tdm_tx_fmt[stream->dai_id - 1] =
+    78						FRM_LEN | (slots << 15) | (slot_len << 18);
+    79			else if (rx_mask && stream->dir == SNDRV_PCM_STREAM_CAPTURE)
+    80				adata->tdm_rx_fmt[stream->dai_id - 1] =
+    81						FRM_LEN | (slots << 15) | (slot_len << 18);
+    82		}
+    83		spin_unlock_irq(&adata->acp_lock);
+    84		return 0;
+    85	}
+    86	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

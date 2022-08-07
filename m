@@ -2,151 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A39758B8C3
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 02:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCEE58B8C7
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 02:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiHGAfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 20:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S232680AbiHGAtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 20:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiHGAfU (ORCPT
+        with ESMTP id S232431AbiHGAth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 20:35:20 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0481D1104
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 17:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659832519; x=1691368519;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=STCbwZNb5UGm90udlfBYFsCDdSn9eb84CgNg/J+DXRs=;
-  b=ArYPYT1mmUlk8yvJ0zXZP5VgpqDMQxqVnVZm13vChGIRaxH1Jd6mylQ2
-   VolI4m12olCG1Na4dh7RR64vbREc2H3gr5y2yXMObotwXizuaU3KrSTwn
-   IM7Fe9PnDXEJeKQiZlwvZufek8agP1qswvvCOj4HlpyFlAqPDfcZgEk8u
-   5s2GRt90+pQnPFe3jL20p8vv3cjEJ7jYxKK8jI2ToaxF7d/DvnawzK5+B
-   Py4bvx3Qn7RnntC0Cwjc7G0NZIvWLcsvD4hgvpKhXCJ5nxbd6X7S/vWzf
-   xPfdIE6mT7rJAwFQ4ndhfD5p1qO1FITnlpeXJOEfGW9gdQAi79pl+Bf+f
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="291174894"
-X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="291174894"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 17:35:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="579907700"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Aug 2022 17:35:16 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKUGA-000Ko5-0E;
-        Sun, 07 Aug 2022 00:35:14 +0000
-Date:   Sun, 7 Aug 2022 08:35:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Akeem G Abodunrin <akeem.g.abodunrin@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
-        Priyanka Dandamudi <priyanka.dandamudi@intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>
-Subject: drivers/gpu/drm/i915/gt/intel_region_lmem.c:70:23: error: result of
- comparison of constant 4294967296 with expression of type 'resource_size_t'
- (aka 'unsigned int') is always false
-Message-ID: <202208070818.09hru8ga-lkp@intel.com>
+        Sat, 6 Aug 2022 20:49:37 -0400
+Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1634E01D;
+        Sat,  6 Aug 2022 17:49:35 -0700 (PDT)
+Received: from grover.sesame ([133.106.62.9]) (authenticated)
+        by conuserg-09.nifty.com with ESMTP id 2770mJ2l003955;
+        Sun, 7 Aug 2022 09:48:19 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 2770mJ2l003955
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1659833300;
+        bh=Bw/XbE6HWw29rVtZscyI7nO0jB5sZzJbaSCrdVk4scY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=x558DUGsMf5z9xEL1+Z9IIUzXCl8xCR1gI0YcaZBhO/ZvtBjx4pY4r9MTu93VDzus
+         GAQZYjqo36v0pUACG2v0qqqARKd0kibvH+RcDG0QzcDdGjPeEdm6ivhsxjotSuJ64j
+         eCX2UvlrXi7uKbIlFdBQA7ArdqEkyHcx83d5KeJ7/iSwQjamSJpkxochcjVPNYLJRn
+         fHfiSCsC5bpUic638mQ+8TLMej+iizVrIgONT6YK3QQ0dcNcBKn/e1/48KglNAJb+L
+         /nf8E391qu6TCs2iJjS0VmSdrT65eQkL8WAK8sBkuWhHO1nJgkHSq4cttmBNaht1Ae
+         VD4+u2RmOIp+w==
+X-Nifty-SrcIP: [133.106.62.9]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Rob Herring <robh@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kbuild: remove the target in signal traps when interrupted
+Date:   Sun,  7 Aug 2022 09:48:09 +0900
+Message-Id: <20220807004809.69076-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Akeem,
+When receiving some signal, GNU Make automatically deletes the target if
+it has already been changed by the interrupted recipe.
 
-FYI, the error/warning still remains.
+If the target is possibly incomplete due to interruption, it must be
+deleted so that it will be remade from scratch on the next run of make.
+Otherwise, the target would remain corrupted permanently because its
+timestamp had already been updated.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4d1044fcb996e8de9b9ab392f4a767890e45202d
-commit: a91d1a17cd341548fd9535e33c331a2756acdfae drm/i915: Add support for LMEM PCIe resizable bar
-date:   3 weeks ago
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220807/202208070818.09hru8ga-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a91d1a17cd341548fd9535e33c331a2756acdfae
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a91d1a17cd341548fd9535e33c331a2756acdfae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Thanks to this behavior of Make, you can stop the build any time by
+pressing Ctrl-C, and just run 'make' to resume it.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Kbuild also relies on this feature, but it is equivalently important
+for any build systems that make decisions based on timestamps (if you
+want to support stop/resume reliably).
 
-All errors (new ones prefixed by >>):
+However, this does not always work as claimed; Make immediately dies
+with Ctrl-C if its stderr goes into a pipe.
 
->> drivers/gpu/drm/i915/gt/intel_region_lmem.c:70:23: error: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-                       root_res->start > 0x100000000ull)
-                       ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   1 error generated.
+  [Test Makefile]
+
+    foo:
+            echo hello > $@
+            sleep 3
+            echo world >> $@
+
+  [Test Result]
+
+    $ make                         # hit Ctrl-C
+    echo hello > foo
+    sleep 3
+    ^Cmake: *** Deleting file 'foo'
+    make: *** [Makefile:3: foo] Interrupt
+
+    $ make 2>&1 | cat              # hit Ctrl-C
+    echo hello > foo
+    sleep 3
+    ^C$                            # 'foo' is often left-over
+
+The reason is because SIGINT is sent to the entire process group.
+In this example, SIGINT kills 'cat', and 'make' writes the message to
+the closed pipe, then dies with SIGPIPE.
+
+A typical bad scenario (as reported by [1], [2]) is to save build log
+by using the 'tee' command:
+
+    $ make 2>&1 | tee log
+
+Again, this can be problematic for any build systems based on Make, so
+I hope it will be fixed in GNU Make. The maintainer of GNU Make stated
+this is a long-standing issue and difficult to fix [3]. It has not been
+fixed yet as of writing.
+
+So, we cannot rely on Make cleaning the target. We can do it by
+ourselves, in signal traps.
+
+As far as I understand, Make takes care of SIGHUP, SIGINT, SIGQUIT, and
+SITERM for the target removal. I added the traps for them, and also for
+SIGPIPE just in case cmd_* rule prints something to stdout or stderr
+(but I did not observe an actual case where SIGPIPE was triggered).
+
+[Note 1]
+
+The trap handler might be worth explaining.
+
+    rm -f $@; trap - $(sig); kill -s $(sig) $$
+
+This lets the shell kill itself by the signal it caught, so the parent
+process can tell the child has exited on the signal. Generally, this is
+a proper manner for handling signals, in case the calling program (like
+Bash) may monitor WIFSIGNALED() and WTERMSIG() for WCE (Wait and
+Cooperative Exit) [4] although this may not be a big deal here because
+GNU Make handles SIGHUP, SIGINT, SIGQUIT in WUE (Wait and Unconditional
+Exit) and SIGTERM in IUE (Immediate Unconditional Exit).
+
+[Note 2]
+
+Reverting 392885ee82d3 ("kbuild: let fixdep directly write to .*.cmd
+files") would directly address [1], but it only saves if_changed_dep.
+As reported in [2], all commands that use redirection can potentially
+leave an empty (i.e. broken) target.
+
+[Note 3]
+
+Another (even safer) approach might be to always write to a temporary
+file, and rename it to $@ at the end of the recipe.
+
+   <command>  > $(tmp-target)
+   mv $(tmp-target) $@
+
+It would require a lot of Makefile changes, and result in ugly code,
+so I did not take it.
+
+[Note 4]
+
+A little more thoughts about a pattern rule with multiple targets (or
+a grouped target).
+
+    %.x %.y: %.z
+            <recipe>
+
+When interrupted, GNU Make deletes both %.x and %.y, while this solution
+only deletes $@. Probably, this is not a big deal. The next run of make
+will execute the rule again to create $@ along with the other files.
+
+[1]: https://lore.kernel.org/all/YLeot94yAaM4xbMY@gmail.com/
+[2]: https://lore.kernel.org/all/20220510221333.2770571-1-robh@kernel.org/
+[3]: https://lists.gnu.org/archive/html/help-make/2021-06/msg00001.html
+[4]: https://www.cons.org/cracauer/sigint.html
+
+Reported-by: Ingo Molnar <mingo@kernel.org>
+Reported-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+If you are happy to help test this patch, that will be appreciated.
+
+Without applying this patch,
+
+    $ make -j<nr-proc> 2>&1 | tee log
+
+Then, you will see an error reported in [1].
+You may need to repeat it dozen of times to reproduce it.
+The more CPU cores you have, the easier you will get the error.
+
+Apply this patch, and repeat the same.
+You will no longer see that error (hopefully).
 
 
-vim +70 drivers/gpu/drm/i915/gt/intel_region_lmem.c
+ scripts/Kbuild.include | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-    46	
-    47	#define LMEM_BAR_NUM 2
-    48	static void i915_resize_lmem_bar(struct drm_i915_private *i915, resource_size_t lmem_size)
-    49	{
-    50		struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
-    51		struct pci_bus *root = pdev->bus;
-    52		struct resource *root_res;
-    53		resource_size_t rebar_size;
-    54		u32 pci_cmd;
-    55		int i;
-    56	
-    57		rebar_size = roundup_pow_of_two(pci_resource_len(pdev, LMEM_BAR_NUM));
-    58	
-    59		if (rebar_size != roundup_pow_of_two(lmem_size))
-    60			rebar_size = lmem_size;
-    61		else
-    62			return;
-    63	
-    64		/* Find out if root bus contains 64bit memory addressing */
-    65		while (root->parent)
-    66			root = root->parent;
-    67	
-    68		pci_bus_for_each_resource(root, root_res, i) {
-    69			if (root_res && root_res->flags & (IORESOURCE_MEM | IORESOURCE_MEM_64) &&
-  > 70			    root_res->start > 0x100000000ull)
-    71				break;
-    72		}
-    73	
-    74		/* pci_resize_resource will fail anyways */
-    75		if (!root_res) {
-    76			drm_info(&i915->drm, "Can't resize LMEM BAR - platform support is missing\n");
-    77			return;
-    78		}
-    79	
-    80		/* First disable PCI memory decoding references */
-    81		pci_read_config_dword(pdev, PCI_COMMAND, &pci_cmd);
-    82		pci_write_config_dword(pdev, PCI_COMMAND,
-    83				       pci_cmd & ~PCI_COMMAND_MEMORY);
-    84	
-    85		_resize_bar(i915, LMEM_BAR_NUM, rebar_size);
-    86	
-    87		pci_assign_unassigned_bus_resources(pdev->bus);
-    88		pci_write_config_dword(pdev, PCI_COMMAND, pci_cmd);
-    89	}
-    90	
-
+diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+index ece44b735061..9432a7f33186 100644
+--- a/scripts/Kbuild.include
++++ b/scripts/Kbuild.include
+@@ -100,8 +100,29 @@ echo-cmd = $(if $($(quiet)cmd_$(1)),\
+  quiet_redirect :=
+ silent_redirect := exec >/dev/null;
+ 
++# Delete the target on interruption
++#
++# GNU Make automatically deletes the target if it has already been changed by
++# the interrupted recipe. So, you can safely stop the build by Ctrl-C (Make
++# will delete incomplete targets), and resume it later.
++#
++# However, this does not work when the stderr is piped to another program, like
++#  $ make >&2 | tee log
++# Make dies with SIGPIPE before cleaning the targets.
++#
++# To address it, we cleans the target in signal traps.
++#
++# Make deletes the target when it catches SIGHUP, SIGINT, SIGQUIT, SIGTERM.
++# So, we cover them, and also SIGPIPE just in case.
++#
++# Of course, this is unneeded for phony targets.
++delete-on-interrupt = \
++	$(if $(filter-out $(PHONY), $@), \
++		$(foreach sig, HUP INT QUIT TERM PIPE, \
++			trap 'rm -f $@; trap - $(sig); kill -s $(sig) $$$$' $(sig);))
++
+ # printing commands
+-cmd = @set -e; $(echo-cmd) $($(quiet)redirect) $(cmd_$(1))
++cmd = @set -e; $(echo-cmd) $($(quiet)redirect) $(delete-on-interrupt) $(cmd_$(1))
+ 
+ ###
+ # if_changed      - execute command if any prerequisite is newer than
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

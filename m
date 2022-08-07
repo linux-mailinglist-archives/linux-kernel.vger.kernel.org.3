@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F5358B907
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 04:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64AA258B913
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 05:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbiHGCLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 22:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S230041AbiHGDa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 23:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiHGCLS (ORCPT
+        with ESMTP id S229436AbiHGDaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 22:11:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C933A446
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 19:11:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659838275;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v4CNgJJIcoMkC9vrZjaMgTGVZv0Sy/rv5ilzH4CCfrc=;
-        b=XM4bTcoq1A931Zxnh1F13bd0jxWUHyHnR6fiq+GbYZBO/Tx8Ka/nIrnjoRetQT+P9JfA5K
-        cthyKB4EWllDsfHqtNW2r+jY8PvD4swV/88kYKo1ub6CHumgasm9lNF626UKb5OwvRBAxA
-        46ISh9q8vobFfZpgcgKDaP/6odHqquI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-452-oYMJ3l63PWGF6orAWnvEaQ-1; Sat, 06 Aug 2022 22:11:12 -0400
-X-MC-Unique: oYMJ3l63PWGF6orAWnvEaQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BAB3E3C025C2;
-        Sun,  7 Aug 2022 02:11:11 +0000 (UTC)
-Received: from localhost (ovpn-12-55.pek2.redhat.com [10.72.12.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B0D212026D4C;
-        Sun,  7 Aug 2022 02:11:10 +0000 (UTC)
-Date:   Sun, 7 Aug 2022 10:11:05 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, hch@infradead.org,
-        wangkefeng.wang@huawei.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 02/11] mm: ioremap: fixup the physical address
-Message-ID: <20220807021105.GD416711@MiWiFi-R3L-srv>
-References: <20220801144029.57829-1-bhe@redhat.com>
- <20220801144029.57829-3-bhe@redhat.com>
- <YuvthDzuPlAwD/LA@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        Sat, 6 Aug 2022 23:30:24 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4190D2615
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 20:30:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659843021; x=1691379021;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I2LCYOkYtfHQG0nS+xMf7u5aOmP1SGgbzvD7ghCox/0=;
+  b=aDw+A8HL0dGTYCxtr5a7aAgTySJ8Q73OX9/DyhDrbxApeLW3mhV30yMM
+   8vIN1FYvxeQosKc+bX4cjr/FFLUrQOYHvZD9V9qwbcalcb9rMHoIpzPOk
+   gzkXY3L++nsvyFSZUfte3aHxPJkXMk/hlAXCrmq55ph1unP47H558CsNS
+   n91Il0f6ZWv7CVo5daHVjbcAU5gK9CaIBm7YF+e70L5KIqnNElY/MKWdA
+   tW107SL9rjeuFheQfb0Hq/TYd/Gqs29xM29cye7PUL87/PhIGQfzjvDzq
+   uaHHatgkySim1mZlCmr0CgeW2Rat9caTXVcVrxGLUUJMHFx5ctqwlB7wi
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="354407317"
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="354407317"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 20:30:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="849720720"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 06 Aug 2022 20:30:18 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKWzZ-000KvF-38;
+        Sun, 07 Aug 2022 03:30:17 +0000
+Date:   Sun, 7 Aug 2022 11:29:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Pirko <jiri@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_devlink_locking 27/32] arc-elf-ld:
+ dev.c:undefined reference to `devlink_port_type_clear'
+Message-ID: <202208071108.o0uvW2kW-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuvthDzuPlAwD/LA@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,89 +61,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/04/22 at 06:02pm, Alexander Gordeev wrote:
-> On Mon, Aug 01, 2022 at 10:40:20PM +0800, Baoquan He wrote:
-> > This is a preparation patch, no functionality change.
-> 
-> There is, please see below.
-> 
-> > @@ -3,11 +3,17 @@
-> >  #include <linux/mm.h>
-> >  #include <linux/io.h>
-> >  
-> > -void __iomem *ioremap_allowed(phys_addr_t phys_addr, size_t size, unsigned long prot)
-> > +void __iomem *
-> > +ioremap_allowed(phys_addr_t *paddr, size_t size, unsigned long *prot_val)
-> >  {
-> > -	unsigned long last_addr = phys_addr + size - 1;
-> > +	unsigned long last_addr, offset, phys_addr = *paddr;
-> >  	int ret = -EINVAL;
-> >  
-> > +	offset = phys_addr & (~PAGE_MASK);
-> > +	phys_addr -= offset;
-> 
-> FWIW, phys_addr &= PAGE_MASK looks much more usual.
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_devlink_locking
+head:   f5ed8076238d620b1c6b4fd87fef0c8fececdc5e
+commit: 55707d417479fd2114328559a30128d4ef56d6fe [27/32] net: devlink: use SET_NETDEV_DEVLINK_PORT to set devlink_port link to netdev
+config: arc-axs103_smp_defconfig (https://download.01.org/0day-ci/archive/20220807/202208071108.o0uvW2kW-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jpirko/linux_mlxsw/commit/55707d417479fd2114328559a30128d4ef56d6fe
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_devlink_locking
+        git checkout 55707d417479fd2114328559a30128d4ef56d6fe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-Sure, will change.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> > @@ -11,13 +11,20 @@
-> >  #include <linux/io.h>
-> >  #include <linux/export.h>
-> >  
-> > -void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> > +void __iomem *ioremap_prot(phys_addr_t paddr, size_t size,
-> >  			   unsigned long prot)
-> >  {
-> >  	unsigned long offset, vaddr;
-> > -	phys_addr_t last_addr;
-> > +	phys_addr_t last_addr, phys_addr = paddr;
-> >  	struct vm_struct *area;
-> >  	void __iomem *base;
-> > +	unsigned long prot_val = prot;
-> 
-> Why prot_val is needed?
+All errors (new ones prefixed by >>):
 
-I will remove it and pass &prot to ioremap_allowed(). I could think too
-much when I made change here. Thanks.
+   arc-elf-ld: net/core/dev.o: in function `unregister_netdevice_many':
+   dev.c:(.text+0x6468): undefined reference to `devlink_port_type_clear'
+>> arc-elf-ld: dev.c:(.text+0x6468): undefined reference to `devlink_port_type_clear'
+   arc-elf-ld: net/core/dev.o: in function `register_netdevice':
+   dev.c:(.text+0xd00c): undefined reference to `devlink_port_type_eth_set'
+>> arc-elf-ld: dev.c:(.text+0xd00c): undefined reference to `devlink_port_type_eth_set'
 
-> 
-> > +	base = ioremap_allowed(&phys_addr, size, &prot_val);
-> > +	if (IS_ERR(base))
-> > +		return NULL;
-> > +	else if (base)
-> > +		return base;
-> 
-> By moving ioremap_allowed() here you allow it to be called
-> before the wrap-around check, including architectures that
-> do not do fixups.
-
-Yes, just as you say.
-
-> 
-> And now ioremap_allowed() semantics, prototype and name turn
-> less than obvious. Why not introduce a separate fixup callback?
-
-I can do that, while a little worried if too many hooks introduced.
-I will introduce another fixup hook in v2 if no other suggestion or
-concern. Thanks.
-
-
-> 
-> >  	/* Disallow wrap-around or zero size */
-> >  	last_addr = phys_addr + size - 1;
-> > @@ -29,12 +36,6 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> >  	phys_addr -= offset;
-> >  	size = PAGE_ALIGN(size + offset);
-> >  
-> > -	base = ioremap_allowed(phys_addr, size, prot);
-> > -	if (IS_ERR(base))
-> > -		return NULL;
-> > -	else if (base)
-> > -		return base;
-> > -
-> >  	area = get_vm_area_caller(size, VM_IOREMAP,
-> >  			__builtin_return_address(0));
-> >  	if (!area)
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

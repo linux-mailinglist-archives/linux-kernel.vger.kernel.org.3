@@ -2,248 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD75E58BA83
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 12:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFB958BA84
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 12:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232940AbiHGKCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 06:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S233769AbiHGKCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 06:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiHGKCd (ORCPT
+        with ESMTP id S233517AbiHGKCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 06:02:33 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B5EDF59
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 03:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659866551; x=1691402551;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IuIdGOacDOjX/TgR8fpp9vCWnE+6zB8HHER3QqfM7cA=;
-  b=B7Puxis3KbdMPMArS0pp3aXByPdIJ2QglKOMYAAxkMglWfSHakEtJJag
-   vQ93axup+WlmYHrndJGWQATBsafKnSYUKz+FImrbxhb/vHg3bYKiUOdJ/
-   +5bBi8tmlwOPK8HS184eUtpPRujvKsKTJPwOqoZx9/YvJdn77lUNiUiO9
-   Gfs1z/oiWpHbnTP27TOJjOWN/2RQzMyIA+xHY5/cQFnr4r4ZAAwahswmK
-   J06BUZ9lMm/jp9GCcjJ9Al6aPlo+W2Su0pziRg/qBlx5BDVpsmnRicIke
-   zJztY6BhHQ0Jig5kUIbJpKN8W+3PJGjgJDfOT2MSiFlJdMJFGjWarlvzw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="270201326"
-X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="270201326"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 03:02:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="746314996"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Aug 2022 03:02:29 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKd76-000LD3-2V;
-        Sun, 07 Aug 2022 10:02:28 +0000
-Date:   Sun, 7 Aug 2022 18:02:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, akpm@linux-foundation.org, hannes@cmpxchg.org
-Cc:     kbuild-all@lists.01.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-Subject: Re: [PATCH] mm/vmscan: define macros for refaults in struct lruvec
-Message-ID: <202208071759.nIRUnjYn-lkp@intel.com>
-References: <20220802071012.1648335-1-yang.yang29@zte.com.cn>
+        Sun, 7 Aug 2022 06:02:46 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672A3DFD1
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 03:02:45 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b16so8222230edd.4
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 03:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cOMKjLtoyfKfKLxS4Utjtr9dyLLaLulKlhk3hE0DmS0=;
+        b=SvHZelym3M8h5d4I8LnI9IigeiJ5fxXK0h4MSizcvxM1ST7hESwq9X/OQPUu2qkP4H
+         vgjQn3elUiZHrOZX1TFTmGh2OduAPtzz4NauDn0Odh5mqSIX9yDiGpKvqgPihtbyr0Gz
+         GLPjhsY9NMHd7+DF7uXgX2TZ7Dh3qKyLhHbvioLHl9yl4K7jLKp0qfOnvc1V06eYhF4J
+         HyOfta1XjxAnFFPXHtaOcYf+bT9+by60O2bcu6N5BEoEBnmeA33C5uOcJS+XNoJVcGDi
+         DvNTI7A7TyXErT1CSmfSXgto0IULwxCXUBYLIzmxiF4KClcl2syTo1yv6Q4P7s3bAYsO
+         Bmeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=cOMKjLtoyfKfKLxS4Utjtr9dyLLaLulKlhk3hE0DmS0=;
+        b=Fh1iHuGoQv9dgnjMTvH/WZOktKw4mWSyWdFm6sqnzpqBMGGMvtIAV6iyLxKKh7hodc
+         /g/pi8UT4cUCkfbk4ZW0mSto70L2Z72l+Fy6P3Sy4+cz2ryVJouRtdy6yd9YCbbZa9u7
+         SsNW3pQwL+FXtTs2cTTZJca60xv2YaJFxoQJH4lJaYqOvQrxSudXzjpKmAcv41KstrIm
+         zoSOd2H/iN75icfqjGV7axdwtmFvh8cNvKzEIKCXJXvGhc3MwL4j4wORQWYMA9nHsUyx
+         aCuleVdO5X9X/YD92Ox30ZVauqf7+5hs7dwroIBI4xqGE39vKX8+LEoaynOMtTaeeeuo
+         bRdA==
+X-Gm-Message-State: ACgBeo1hGB4nCRob5z0XbX+yHhSHpiOpAilMGY6YEz483NXvzjik/Foq
+        ilNeHcCJcC6qLkEjeSmgEJsjE8Jggyo=
+X-Google-Smtp-Source: AA6agR6v0Dg8Br3XJc/D+EFjZEJ4rlNWWS9b2emJaNfilzI17ugo0Ajj2vD6bQo4T/WxoCN/g9I2cA==
+X-Received: by 2002:a05:6402:278d:b0:43d:cf90:c91a with SMTP id b13-20020a056402278d00b0043dcf90c91amr14049571ede.186.1659866564016;
+        Sun, 07 Aug 2022 03:02:44 -0700 (PDT)
+Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
+        by smtp.gmail.com with ESMTPSA id os8-20020a170906af6800b0073092b543c3sm3696561ejb.141.2022.08.07.03.02.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 03:02:43 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sun, 7 Aug 2022 12:02:41 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Dave Hansen <dave.hansen@intel.com>, ira.weiny@intel.com,
+        Rik van Riel <riel@surriel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 5/5] x86/entry: Store CPU info on exception entry
+Message-ID: <Yu+Nwbn4CZUmyD14@gmail.com>
+References: <20220805173009.3128098-1-ira.weiny@intel.com>
+ <20220805173009.3128098-6-ira.weiny@intel.com>
+ <5d62c1d0-7425-d5bb-ecb5-1dc3b4d7d245@intel.com>
+ <Yu4t0jkpIY4grgxL@gmail.com>
+ <Yu4wON0MRGH7h5Jv@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802071012.1648335-1-yang.yang29@zte.com.cn>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Yu4wON0MRGH7h5Jv@zn.tnic>
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-Thank you for the patch! Yet something to improve:
+* Borislav Petkov <bp@alien8.de> wrote:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+> On Sat, Aug 06, 2022 at 11:01:06AM +0200, Ingo Molnar wrote:
+> > It's still 2 instructions more than what we had before, while the 
+> > fault-time CPU number is only needed infrequently AFAICS.
+> 
+> With the amount of logical cores ever increasing and how CPU packages
+> (nodes, L3 sharing, you name it) get more and more complex topology,
+> I'd say the 2 insns to show the CPU number in every exception is a good
+> thing to do.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-vmscan-define-macros-for-refaults-in-struct-lruvec/20220802-151054
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220807/202208071759.nIRUnjYn-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/cb852a4d1456d03ec22ce56b90e321d14c853bb7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-vmscan-define-macros-for-refaults-in-struct-lruvec/20220802-151054
-        git checkout cb852a4d1456d03ec22ce56b90e321d14c853bb7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+We can show it - I'm arguing against extracting it too early, which costs 
+us 2 instructions in the exception fast path - while in 99.999999999% of 
+the cases we don't use that field at all ...
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> Arguably, we probably should've even done it already...
 
-All errors (new ones prefixed by >>):
+Yeah, so I'm not against Rik's patch that prints the CPU number - that's 
+indeed useful and I'd like to see it merged.
 
-   In file included from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/swait.h:5,
-                    from include/linux/completion.h:12,
-                    from fs/nfs/delegation.c:10:
-   fs/nfs/delegation.c: In function 'nfs_inode_set_delegation':
->> include/linux/nfs_fs.h:623:58: error: 'NFSDBG_1' undeclared (first use in this function); did you mean 'NFSDBG_ALL'?
-     623 | #  define ifdebug(fac)          if (unlikely(nfs_debug & NFSDBG_##fac))
-         |                                                          ^~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/sunrpc/debug.h:39:9: note: in expansion of macro 'ifdebug'
-      39 |         ifdebug(fac)                                                    \
-         |         ^~~~~~~
-   fs/nfs/delegation.c:476:17: note: in expansion of macro 'dfprintk'
-     476 |                 dfprintk(FILE, "%s: server %s handed out "
-         |                 ^~~~~~~~
-   include/linux/nfs_fs.h:623:58: note: each undeclared identifier is reported only once for each function it appears in
-     623 | #  define ifdebug(fac)          if (unlikely(nfs_debug & NFSDBG_##fac))
-         |                                                          ^~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/sunrpc/debug.h:39:9: note: in expansion of macro 'ifdebug'
-      39 |         ifdebug(fac)                                                    \
-         |         ^~~~~~~
-   fs/nfs/delegation.c:476:17: note: in expansion of macro 'dfprintk'
-     476 |                 dfprintk(FILE, "%s: server %s handed out "
-         |                 ^~~~~~~~
---
-   In file included from include/linux/export.h:33,
-                    from include/linux/linkage.h:7,
-                    from arch/x86/include/asm/cache.h:5,
-                    from include/linux/cache.h:6,
-                    from include/linux/time.h:5,
-                    from include/linux/compat.h:10,
-                    from fs/nfs/dir.c:21:
-   fs/nfs/dir.c: In function 'nfs_opendir':
->> include/linux/nfs_fs.h:623:58: error: 'NFSDBG_1' undeclared (first use in this function); did you mean 'NFSDBG_ALL'?
-     623 | #  define ifdebug(fac)          if (unlikely(nfs_debug & NFSDBG_##fac))
-         |                                                          ^~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/sunrpc/debug.h:39:9: note: in expansion of macro 'ifdebug'
-      39 |         ifdebug(fac)                                                    \
-         |         ^~~~~~~
-   fs/nfs/dir.c:116:9: note: in expansion of macro 'dfprintk'
-     116 |         dfprintk(FILE, "NFS: open dir(%pD2)\n", filp);
-         |         ^~~~~~~~
-   include/linux/nfs_fs.h:623:58: note: each undeclared identifier is reported only once for each function it appears in
-     623 | #  define ifdebug(fac)          if (unlikely(nfs_debug & NFSDBG_##fac))
-         |                                                          ^~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/sunrpc/debug.h:39:9: note: in expansion of macro 'ifdebug'
-      39 |         ifdebug(fac)                                                    \
-         |         ^~~~~~~
-   fs/nfs/dir.c:116:9: note: in expansion of macro 'dfprintk'
-     116 |         dfprintk(FILE, "NFS: open dir(%pD2)\n", filp);
-         |         ^~~~~~~~
-   fs/nfs/dir.c: In function 'nfs_readdir':
->> include/linux/nfs_fs.h:623:58: error: 'NFSDBG_1' undeclared (first use in this function); did you mean 'NFSDBG_ALL'?
-     623 | #  define ifdebug(fac)          if (unlikely(nfs_debug & NFSDBG_##fac))
-         |                                                          ^~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/sunrpc/debug.h:39:9: note: in expansion of macro 'ifdebug'
-      39 |         ifdebug(fac)                                                    \
-         |         ^~~~~~~
-   fs/nfs/dir.c:1220:9: note: in expansion of macro 'dfprintk'
-    1220 |         dfprintk(FILE, "NFS: readdir(%pD2) starting at cookie %llu\n",
-         |         ^~~~~~~~
-   fs/nfs/dir.c: In function 'nfs_llseek_dir':
->> include/linux/nfs_fs.h:623:58: error: 'NFSDBG_1' undeclared (first use in this function); did you mean 'NFSDBG_ALL'?
-     623 | #  define ifdebug(fac)          if (unlikely(nfs_debug & NFSDBG_##fac))
-         |                                                          ^~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/sunrpc/debug.h:39:9: note: in expansion of macro 'ifdebug'
-      39 |         ifdebug(fac)                                                    \
-         |         ^~~~~~~
-   fs/nfs/dir.c:1316:9: note: in expansion of macro 'dfprintk'
-    1316 |         dfprintk(FILE, "NFS: llseek dir(%pD2, %lld, %d)\n",
-         |         ^~~~~~~~
-   fs/nfs/dir.c: In function 'nfs_fsync_dir':
->> include/linux/nfs_fs.h:623:58: error: 'NFSDBG_1' undeclared (first use in this function); did you mean 'NFSDBG_ALL'?
-     623 | #  define ifdebug(fac)          if (unlikely(nfs_debug & NFSDBG_##fac))
-         |                                                          ^~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/sunrpc/debug.h:39:9: note: in expansion of macro 'ifdebug'
-      39 |         ifdebug(fac)                                                    \
-         |         ^~~~~~~
-   fs/nfs/dir.c:1360:9: note: in expansion of macro 'dfprintk'
-    1360 |         dfprintk(FILE, "NFS: fsync dir(%pD2) datasync %d\n", filp, datasync);
-         |         ^~~~~~~~
---
-   In file included from arch/x86/include/asm/current.h:5,
-                    from include/linux/sched.h:12,
-                    from fs/nfs/direct.c:43:
-   fs/nfs/direct.c: In function 'nfs_file_direct_read':
->> include/linux/nfs_fs.h:623:58: error: 'NFSDBG_1' undeclared (first use in this function); did you mean 'NFSDBG_ALL'?
-     623 | #  define ifdebug(fac)          if (unlikely(nfs_debug & NFSDBG_##fac))
-         |                                                          ^~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/sunrpc/debug.h:39:9: note: in expansion of macro 'ifdebug'
-      39 |         ifdebug(fac)                                                    \
-         |         ^~~~~~~
-   fs/nfs/direct.c:453:9: note: in expansion of macro 'dfprintk'
-     453 |         dfprintk(FILE, "NFS: direct read(%pD2, %zd@%Ld)\n",
-         |         ^~~~~~~~
-   include/linux/nfs_fs.h:623:58: note: each undeclared identifier is reported only once for each function it appears in
-     623 | #  define ifdebug(fac)          if (unlikely(nfs_debug & NFSDBG_##fac))
-         |                                                          ^~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/sunrpc/debug.h:39:9: note: in expansion of macro 'ifdebug'
-      39 |         ifdebug(fac)                                                    \
-         |         ^~~~~~~
-   fs/nfs/direct.c:453:9: note: in expansion of macro 'dfprintk'
-     453 |         dfprintk(FILE, "NFS: direct read(%pD2, %zd@%Ld)\n",
-         |         ^~~~~~~~
-   fs/nfs/direct.c: In function 'nfs_file_direct_write':
->> include/linux/nfs_fs.h:623:58: error: 'NFSDBG_1' undeclared (first use in this function); did you mean 'NFSDBG_ALL'?
-     623 | #  define ifdebug(fac)          if (unlikely(nfs_debug & NFSDBG_##fac))
-         |                                                          ^~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/sunrpc/debug.h:39:9: note: in expansion of macro 'ifdebug'
-      39 |         ifdebug(fac)                                                    \
-         |         ^~~~~~~
-   fs/nfs/direct.c:909:9: note: in expansion of macro 'dfprintk'
-     909 |         dfprintk(FILE, "NFS: direct write(%pD2, %zd@%Ld)\n",
-         |         ^~~~~~~~
+I'm arguing against extracting the CPU so early as to impact the exception 
+fast path.
 
+Thanks,
 
-vim +623 include/linux/nfs_fs.h
-
-^1da177e4c3f41 Linus Torvalds 2005-04-16  619  
-4dc2eaecd4cf06 Benny Halevy   2006-12-20  620  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  621  # undef ifdebug
-^1da177e4c3f41 Linus Torvalds 2005-04-16  622  # ifdef NFS_DEBUG
-^1da177e4c3f41 Linus Torvalds 2005-04-16 @623  #  define ifdebug(fac)		if (unlikely(nfs_debug & NFSDBG_##fac))
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+	Ingo

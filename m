@@ -2,77 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A8C58B8E7
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 03:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCB258B8F0
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 03:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiHGBdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 6 Aug 2022 21:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S233986AbiHGBiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 6 Aug 2022 21:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiHGBdm (ORCPT
+        with ESMTP id S229551AbiHGBiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 6 Aug 2022 21:33:42 -0400
-Received: from mail.rv.npu.gov.ua (mail.rv.npu.gov.ua [85.159.5.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8251EBCAF;
-        Sat,  6 Aug 2022 18:33:40 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rv.npu.gov.ua (Postfix) with ESMTP id 0116A40B8322;
-        Sun,  7 Aug 2022 04:32:23 +0300 (EEST)
-Received: from mail.rv.npu.gov.ua ([127.0.0.1])
-        by localhost (mail.rv.npu.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 4YUwXEInqnEU; Sun,  7 Aug 2022 04:32:22 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rv.npu.gov.ua (Postfix) with ESMTP id 7C98A40B8324;
-        Sun,  7 Aug 2022 04:32:22 +0300 (EEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rv.npu.gov.ua 7C98A40B8324
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rv.npu.gov.ua;
-        s=D9C6921A-69F2-11EB-967E-80F8358BD1FC; t=1659835942;
-        bh=rXKZG/8bQHY28IslpDmB9+1lxzhBpWrTxjnUDTFW+HM=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=WuDSoxTAWzAkKf8lux3jO/AAtmuqoCmF1TGcp4z5L/AW21REZHlR+U49wxYDzSfqP
-         Yeq6e+/HvtVUW2M/AxvK/8dJGXGBNN7OztaYj4pJZalJr1yWLex13W3gNZDcqmEKbb
-         WUlHIDVY+MT2DRt9mc2gQn1+NbaDjT7/8Xrd3QjP1E+fajJ1/os25g65DHb0zlIehY
-         hd9PmPp9n35IooM/SQoWaHeFxRT0cuPKOr1xd7b3at+sh8tBGxynbfnPuI7Umu7vq5
-         AjI9kL1YD+4zm5DUh2Nby0K1/BLq9QOJ3E2sWCIfQ5ZvxGzCiFVjQDM0VLKUfz9WAS
-         R2D7DzATZDjYQ==
-X-Virus-Scanned: amavisd-new at rv.npu.gov.ua
-Received: from mail.rv.npu.gov.ua ([127.0.0.1])
-        by localhost (mail.rv.npu.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id jpLyS-ABn2Wh; Sun,  7 Aug 2022 04:32:22 +0300 (EEST)
-Received: from DESKTOP-CJHK18M.home (gateway [101.19.1.22])
-        by mail.rv.npu.gov.ua (Postfix) with ESMTPSA id D04D140BE1F1;
-        Sun,  7 Aug 2022 04:32:19 +0300 (EEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        Sat, 6 Aug 2022 21:38:18 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0376CE20
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 18:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659836297; x=1691372297;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YySptm9eHwLOULKxhkT5qY8blC2abY0x9RnAb49Vm64=;
+  b=HFxKdcczwInDHqUuyTFTOKszrTE2wfyBMkMxdDjUBUXZupbV9CTYRUQT
+   aFVQlC+2t39WRKJzOzUkMt7+ovI43xZLgvF4H5757LhdKZ3/4gJKium3n
+   JpbIV3DQi/vy7c3es3v+vdbfy7FHVmQYp3g8enLcIq42PMWTB9TjJp/US
+   Ho7Zu7g3lXC8qsL9nGRxzjLDflLsHub+YrVJ5MlXDM2XzefuZOyLgjmD3
+   FXkSSsdKX+WEgTbTlmhT2MKW5YYxhqYIKihxHd1b93OnafZguiD5vCWKx
+   sFesrSfamlVuqZWFH2DPsFvf/nBONu1C8L29w4j1lOPFzOXonCnB9z6gg
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="270788371"
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="270788371"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2022 18:38:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
+   d="scan'208";a="931636923"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Aug 2022 18:38:15 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKVF9-000KqP-0n;
+        Sun, 07 Aug 2022 01:38:15 +0000
+Date:   Sun, 7 Aug 2022 09:37:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: [ammarfaizi2-block:tglx/devel/depthtracking 57/59] <inline
+ asm>:24:23: error: expected register here
+Message-ID: <202208070914.tWhVc55X-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re:
-To:     Recipients <kt@rv.npu.gov.ua>
-From:   "MacKenzie Scott" <kt@rv.npu.gov.ua>
-Date:   Sun, 07 Aug 2022 09:32:37 +0800
-Reply-To: mackenziescott@reservasgoldenwayki.com
-Message-Id: <20220807013219.D04D140BE1F1@mail.rv.npu.gov.ua>
-X-Spam-Status: No, score=2.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOTS_OF_MONEY,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, =
+tree:   https://github.com/ammarfaizi2/linux-block tglx/devel/depthtracking
+head:   b518e558c49324fa002255761d2a7324ba31f7b5
+commit: cb5c190267562764025e25c3e726ae511003b0a0 [57/59] x86/ftrace: Make it call depth tracking aware
+config: x86_64-randconfig-a002-20220801 (https://download.01.org/0day-ci/archive/20220807/202208070914.tWhVc55X-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/cb5c190267562764025e25c3e726ae511003b0a0
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block tglx/devel/depthtracking
+        git checkout cb5c190267562764025e25c3e726ae511003b0a0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-                          =
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'm MacKenzie Scott Ex-wife of Amazon CEO and founder, I'm donating $ 4 bil=
-lion Dollars to charities, individuals, colleges across the Globe from Scot=
-t's foundation, to provide immediate support to people suffering economical=
-ly from COVID-19 pandemic and you're one of the lucky winners, i have a don=
-ation grant worth $100,800,000.00 Dollars for you, you can contact me for m=
-ore information if you're interested.
+All errors (new ones prefixed by >>):
 
-Regards,
-MacKenzie Scott.
+>> <inline asm>:24:23: error: expected register here
+           sarq $5, PER_CPU_VAR(pcpu_hot + 16);
+                                ^
+   1 error generated.
+--
+>> <inline asm>:24:23: error: expected register here
+           sarq $5, PER_CPU_VAR(pcpu_hot + 16);
+                                ^
+   <inline asm>:56:23: error: expected register here
+           sarq $5, PER_CPU_VAR(pcpu_hot + 16);
+                                ^
+   2 errors generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

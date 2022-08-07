@@ -2,114 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0352258BBDF
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 18:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CBA58BBE3
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 18:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233827AbiHGQmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 12:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S233928AbiHGQpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 12:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiHGQmp (ORCPT
+        with ESMTP id S233410AbiHGQp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 12:42:45 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCAC2BD2
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 09:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659890565; x=1691426565;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m7UDkbcSJofd2FzwIFR35QKztaXGo8SNOzvGgY8tgg4=;
-  b=bKXaZDfTHOIIVCufO4QPcFDJ3efM+lKS25ueG2xhtrNta6vm2d8QjoDr
-   pXqXms1UKJBm/B7w1BjcOjy44A81zkXj1yLsRyfb5WrYwDOrCsuSfLOE6
-   HzPNmi5gbwzJeyy3xHZMHPP+6oWSeHn4DNw4dVaSYkVwawA3Rr3LdE5ME
-   PKi+3AG7leEG851o/BFvfcHzAqQ8AfHFI/kHwLaKUqxnZbxTG9a84kVW1
-   d8/9aDWbh5DEHFZ4qzVfjIceiGZTkfEYC4tDNLYyKXhZgiVYBvcnMzH+T
-   pKVBA5qbze7dxqA7NVl21JqdPDHCVWwhK7B4Kfsz47kC7jn3p+/UdcAqa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="270835801"
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="270835801"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 09:42:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="707165521"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Aug 2022 09:42:42 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKjMP-000LTg-2a;
-        Sun, 07 Aug 2022 16:42:41 +0000
-Date:   Mon, 8 Aug 2022 00:42:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 26/28] mfd: stmpe: Remove #ifdef guards for PM related
- functions
-Message-ID: <202208080002.oJGJBzP5-lkp@intel.com>
-References: <20220807145247.46107-27-paul@crapouillou.net>
+        Sun, 7 Aug 2022 12:45:29 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E99B3897
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 09:45:27 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id j8so12646956ejx.9
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 09:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=2PGRnV5Y4dd0AnjAyFuQDf1h6O5fn8Zc/uUHPAUm+NI=;
+        b=YTdmANKJVa5XOjtTiYdXOz+UpK7W2lg+6xzggLPWy1aVGc0PSzaU0FfbggFIMoe3j3
+         a4P5kaxXhGpHYCGP+FVZosVM2o5lRc6NMQmxc+yY9t/Lbi/El9cLdJs5z7+guGzRyhaL
+         q3ZNdIA/KgGGoNNK4ClGkp9BO8iy4ra69yMkA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=2PGRnV5Y4dd0AnjAyFuQDf1h6O5fn8Zc/uUHPAUm+NI=;
+        b=AsEp8RKy4R2+ME8cvpkbwKJDEh2v4iR8gKa4wA/RsTj96+rsrx3FW94SN4G1IUVAPj
+         1e6VqqCi7z9pjPO35su+6iJswotQ1M7VwpTpn9N3y+SjuqwL4E8uEWwaZ7Sw+venbA1/
+         gLFpUClzl/ZvzZAf3PN/vippGhgnTPpAznK+vdDAVdsx9C2MvGQkz/cAa7nFTQshUZhe
+         5fzJi4RjJgsMuTOfDbYAgXrUubGCsRW617d45gO/Q+HdaXtuZhBVdWS0YWZpMin9D4Hz
+         xx7JsRzmfuTIVCz4yb+jzDn0e5ydeTYguUaqNGul/bBhj6xR3k7b2Oefma8qdXG4KumA
+         NDxg==
+X-Gm-Message-State: ACgBeo1HK2WR+8Zs//giNDDeeauA5F2u9c2DgwBz2FfhjGDSsUPfYdb/
+        NMyjwMfCKzkbe8szBLUWVGgwrio0fMd9yxsQ
+X-Google-Smtp-Source: AA6agR6xJsIcu74blZGAEgMDmSF+yFdQbkRoc/uJQ1oXqlyblNYUx4hZOl/UPLo6VKIrmrUlWDYqkQ==
+X-Received: by 2002:a17:906:7955:b0:72f:5c1f:1816 with SMTP id l21-20020a170906795500b0072f5c1f1816mr11492680ejo.396.1659890725706;
+        Sun, 07 Aug 2022 09:45:25 -0700 (PDT)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id 20-20020a170906311400b0072b8fbc9be1sm3931182ejx.187.2022.08.07.09.45.24
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Aug 2022 09:45:25 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id az6-20020a05600c600600b003a530cebbe3so1439451wmb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 09:45:24 -0700 (PDT)
+X-Received: by 2002:a1c:2582:0:b0:3a5:1453:ca55 with SMTP id
+ l124-20020a1c2582000000b003a51453ca55mr9611614wml.68.1659890724521; Sun, 07
+ Aug 2022 09:45:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220807145247.46107-27-paul@crapouillou.net>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220730022529.497941-1-linux@roeck-us.net> <Yu+OzWv2JDbI89mW@gmail.com>
+In-Reply-To: <Yu+OzWv2JDbI89mW@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 7 Aug 2022 09:45:08 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiGO=pfxyW6E7HdxCnRwWOF_STL=z7yUNwZK__DrV1WmQ@mail.gmail.com>
+Message-ID: <CAHk-=wiGO=pfxyW6E7HdxCnRwWOF_STL=z7yUNwZK__DrV1WmQ@mail.gmail.com>
+Subject: Re: [GIT PULL] hwmon updates for v5.20
+To:     Ingo Molnar <mingo@kernel.org>, Kees Cook <keescook@chromium.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+Added Kees - this *looks* like it's a compiler bug.
 
-I love your patch! Perhaps something to improve:
+On Sun, Aug 7, 2022 at 3:07 AM Ingo Molnar <mingo@kernel.org> wrote:
+>
+> Just a quick build regression report, i386 allmodconfig fails to build du=
+e
+> to a 'string overread' compiler warning in drivers/hwmon/lm90.o:
 
-[auto build test WARNING on v5.19]
-[cannot apply to lee-mfd/for-mfd-next linus/master next-20220805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I tried to see it here with gcc-12.1, but it's not triggering, so it's
+presumably compiler-dependent.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/mfd-Remove-ifdef-guards-for-PM-functions/20220807-225947
-base:    3d7cb6b04c3f3115719235cc6866b10326de34cd
-config: openrisc-randconfig-r015-20220807 (https://download.01.org/0day-ci/archive/20220808/202208080002.oJGJBzP5-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e94df3ff809e588320625b95a2ef6485965ddc02
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paul-Cercueil/mfd-Remove-ifdef-guards-for-PM-functions/20220807-225947
-        git checkout e94df3ff809e588320625b95a2ef6485965ddc02
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/mfd/
+Which compiler is it?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+>       inlined from =E2=80=98lm90_detect=E2=80=99 at drivers/hwmon/lm90.c:=
+2550:2:
+> warning: =E2=80=98__builtin_strlen=E2=80=99 reading 1 or more bytes from =
+a region of size 0 [-Wstringop-overread]
 
-All warnings (new ones prefixed by >>):
+Normally it's easier to see what triggers it, but here it's just that
 
->> drivers/mfd/stmpe.c:1531:1: warning: 'static' is not at beginning of declaration [-Wold-style-declaration]
-    1531 | const EXPORT_GPL_SIMPLE_DEV_PM_OPS(stmpe_dev_pm_ops,
-         | ^~~~~
+        strlcpy(info->type, name, I2C_NAME_SIZE);
 
+so it's either just the compiler being confused (we've seen that
+before), or it's one of the
 
-vim +/static +1531 drivers/mfd/stmpe.c
+                name =3D lm90_detect_xyz(client, chip_id, config1, convrate=
+);
 
-  1530	
-> 1531	const EXPORT_GPL_SIMPLE_DEV_PM_OPS(stmpe_dev_pm_ops,
+calls in the case statement above that returns something that gcc then
+thinks is bad.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+However, from an admittedly quick look, all those functions simply
+seem to return either NULL or a simple constant string.
+
+Which makes me think "oh, it's gcc being confused by the fortification
+code again".
+
+Kees? Do you see anything I don't?
+
+I get the feeling that we should just disable
+-Werror=3Dstringop-overread and/or FORTIFY_SOURCE for that
+compiler/architecture combination if it's just gcc causing bogus
+errors.
+
+              Linus

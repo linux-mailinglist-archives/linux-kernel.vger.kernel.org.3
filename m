@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8041C58BCC2
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 21:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB2358BCC7
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 21:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235332AbiHGTlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 15:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
+        id S235529AbiHGTpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 15:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiHGTlB (ORCPT
+        with ESMTP id S229898AbiHGTpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 15:41:01 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEC5E92
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 12:40:59 -0700 (PDT)
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MGi6m-1o896Y43og-00Dpxq for <linux-kernel@vger.kernel.org>; Sun, 07 Aug
- 2022 21:40:57 +0200
-Received: by mail-wr1-f53.google.com with SMTP id z17so8731011wrq.4
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 12:40:56 -0700 (PDT)
-X-Gm-Message-State: ACgBeo22RNdZ42wszkC27qGBo3Sy2cTSMXYo8GfFrM9bG57mREiZFbEa
-        lYv1BfE87RIzlR/ItkymIZPgy/rqZ/Bp5/qlqd4=
-X-Google-Smtp-Source: AA6agR6hxd+c6uxIaU58pn/ju2/Kpl1hrPDOtejwBjDN9MsDwixXKlT0pf81lWjwhwXW39QULBi5Dg6hl/EgSri8ztI=
-X-Received: by 2002:a05:6000:18a2:b0:221:7d32:e6a5 with SMTP id
- b2-20020a05600018a200b002217d32e6a5mr5774325wri.278.1659901256671; Sun, 07
- Aug 2022 12:40:56 -0700 (PDT)
+        Sun, 7 Aug 2022 15:45:04 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88F86595;
+        Sun,  7 Aug 2022 12:45:01 -0700 (PDT)
+Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MF39M-1o9npk0ViK-00FQaf; Sun, 07 Aug 2022 21:45:00 +0200
+Received: by mail-wr1-f43.google.com with SMTP id j15so8756237wrr.2;
+        Sun, 07 Aug 2022 12:45:00 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0A+KoRx3q3Wp/u2DQDlVnMtbPEDHPR7gb4N4F5390/sXawfe4c
+        ecdat8i37xRFnJ/V8EEZVv8QTP+orA2unLgOGfE=
+X-Google-Smtp-Source: AA6agR7WvYipqruEUqI3FozO1bMoMLoFg3gTNr1wJxvZ4oY3kYpws83YatqbI24HkVKiWoEkfQMs1s6P8NVFSqcphg4=
+X-Received: by 2002:adf:f5c7:0:b0:220:6871:de96 with SMTP id
+ k7-20020adff5c7000000b002206871de96mr9685215wrp.516.1659901499836; Sun, 07
+ Aug 2022 12:44:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220807172839.12359-1-rdunlap@infradead.org>
-In-Reply-To: <20220807172839.12359-1-rdunlap@infradead.org>
+References: <20220807172854.12971-1-rdunlap@infradead.org>
+In-Reply-To: <20220807172854.12971-1-rdunlap@infradead.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 7 Aug 2022 21:40:40 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0s0y9jbw4EFsLM2-unSNuHfqoVcuq_NuO9fTsjN4cWiQ@mail.gmail.com>
-Message-ID: <CAK8P3a0s0y9jbw4EFsLM2-unSNuHfqoVcuq_NuO9fTsjN4cWiQ@mail.gmail.com>
-Subject: Re: [PATCH] riscv: compat: make __ARCH_WANT_COMPAT_FADVISE64_64 conditional
+Date:   Sun, 7 Aug 2022 21:44:43 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0FR2ySLXAMGR1ZmaAQMbVwB4MFBPvBw4py_pbgtQSfgA@mail.gmail.com>
+Message-ID: <CAK8P3a0FR2ySLXAMGR1ZmaAQMbVwB4MFBPvBw4py_pbgtQSfgA@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic: unistd.h: make 'compat_sys_fadvise64_64' conditional
 To:     Randy Dunlap <rdunlap@infradead.org>
 Cc:     linux-kernel@vger.kernel.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
+        linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:sskGhZymZLq596VAq0Ls91taS6W+Uy3tGn68M7RgHYbi0zAmyFP
- fye+pU4qbibEqXUIFseBHte2YcQFFJ2LNqD6718Kt6vxXPtbDcm+CsLdtcrGaGsoGEKjSxx
- 9mMHzzpBPSe8T+WZ32lZ+twgPq8PBJ14KykzRwIhqc03GTqoJLhUv+Jt3/1D14LLcacPiX7
- vC9dm0mqDrIBEaC47j8mA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:STyyRf0E044=:I6io82aJ53+HCiiFSbmKne
- noqZOxSoLafajRTfe5tMJNrI5Be/VB1IcI2SM529j61IorWPD0vj5xYNnzql3+0rXZ329h3VA
- vP0eRvNSa6g4hSnyDWe3FLk9ghT2IBg8yZ9YbS+gurZxTjKm2pUeTLeSrWwRMS2uiDmAHBrRm
- 8XAtXd8xC+VFSdpEfBKLljxQjdeCkEHVSX8bOXiLdF9RPBQ4sVsILt1gykGixmOr3FPriMhuX
- oVwiMTXVGLTGZpqXlRWcPKCxJkyg/ZWUxhLZkQ0TpPik+55kQapYT1c1CXs9kR7evRvzWJRUy
- VMEbclj1RSiay7Ps8nr4i9w5D63BJYU5WBAogD+2/GRd7Hj/z3LXVcUxDJl897NMM9KO2DhnK
- tjxzhkkJWRKsAKhRB/CPXnd20WZGNyQ953qzPLyoDp2JIuYIhHol/oBkJ0tFZjVYP3qokzOB/
- ZbDANerwK6Q8sxoa4rqWCKk2kDc0siqGKJXTS2Ca+mDJ5+EVKOhgAKnCDh4rvWMDEshCF+/JN
- iYLvE2ftThSRLXp5aTDOMwGLW3thJO5vfdlIuPTQ3hQ0LN6HGZ2Ha5KDtquyLGwAmMQVu4rVw
- kQY1lcVe7TTyMGm8mAr568PM2xGeHqaxkZCIqkSAkVxEdRohBqFtCKImfvfgbvS1mlNbHJ+Nc
- vNbTOkQoHMt0TVj+Aa6jIRYLHnfjxXhCWh+sH/GzXJjpVb6TpsPg0qPd/2W+uu4ZMrrtpygYl
- 0NnnKEtkvKYb9Epz1t924jdawNLhBW4z/snAKA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Provags-ID: V03:K1:4scA+1HwMxDmsAX+s/8yE08CJcWhocK0NJmrHYrCpksk6iGwgOD
+ 5axZLbkneWAJ20I64jSecMw8LlnWyOKmpoAlvnvyMb2gK1b3niEqIGieJk+v7d1VBlfSyi1
+ S+W8DyS6RYG/D/NhQqqbYxjNvvAhvBNmiXf82gxk6zjPlI414jB04P276Mk+PQ3mF2+7keB
+ CyojIQ+S4qxh0c91zlh3g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ND8riM6tqxA=:4nk58cscHxwtirsnEDOI9t
+ xYH46FZr912/XmSU4u+4YMibpTlCFm8NdT1jV+zu9980mNgQLU5LHQ5Gwsh2s726LMbIzXiSB
+ bGvSr9tW/ryZ5Szn3giGKms0gAaYGUMEuLXgLfWKFLaSHhZJMKf/dl3DOwKMR9kkekDOxJhmq
+ MpLTRWnR8tEpqX6BYPrfBsknsjWAt/lyOU2sLUP8zLtwkFsD3+3E4xIWPSe1etI4dOxHy9za2
+ ydAuiPtE8Bm+3XTNSJhqbjxIhh2DAeFGYxE0mLphgsRoUIYGGPYZFTm39VvPrxWMFF/tH7iOi
+ +0G+Lu+qGAaG4k02v6hHceBf/KMPGar12BlrisXvr7kkd2lsVbBF0J8zm6GdrKY38Pg/O2zUu
+ QuPLXWRFP34L3qWCTxg4UzD0Rik1770NpWsVnflyh7RnDLrtqyklX8Avwy7SWzFf2h9WPo9oX
+ 3j/9tt6ASjJUY9/aWAMxqVpBlDnoqPjP+EZF8S5fBXPGF/tcpkNKZTb2P9MLOm/Dcl0yLEKnp
+ tiG9zPBF8RmsT13dTHVSolDWTFIntAwaygaPLIIVSc83eg4twgJ0UIeHrL5DaSw7XY+wuPjYn
+ lRuKq4AwpUm05YNert8dUglAcmZNpY617zw+DI0MCT3xXBvLKBfy7VirnjDRjRxfp/dNOTH2B
+ cQeLD2sNjHsaa4oj41Lk7+0QLj+tPeaaFUqPIcMdZ2tw+l8/WwrqF8PhYGe5px7mESyCmggTb
+ ZFhUNKcJFWOBN7ykDIe/PBOh1wcat2oIKnIirWHlb5ppOl2I3p5FSURiqRC1TLPxGL8c97XmC
+ l1ISFFjcVN8Ler/MELOYlGEPhntDCu9X38QbLlO+nvA/x+kIsIqLJzHQMpVI4VSgOaiUMRNQB
+ mMaHpfZB6WCcreMVv+6w==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,41 +72,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sun, Aug 7, 2022 at 7:28 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> When CONFIG_ADVISE_SYSCALLS is not set/enabled and CONFIG_COMPAT is
-> set/enabled, the riscv compat_syscall_table references
-> 'compat_sys_fadvise64_64', which is not defined:
+> Don't require 'compat_sys_fadvise64_64' when
+> __ARCH_WANT_COMPAT_FADVISE64_64 is not set.
 >
-> riscv64-linux-ld: arch/riscv/kernel/compat_syscall_table.o:(.rodata+0x6f8):
-> undefined reference to `compat_sys_fadvise64_64'
+> Fixes this build error when CONFIG_ADVISE_SYSCALLS is not set:
 >
-> Only set __ARCH_WANT_COMPAT_FADVISE64_64 when CONFIG_ADVISE_SYSCALLS
-> is set.
+> include/uapi/asm-generic/unistd.h:649:49: error: 'compat_sys_fadvise64_64' undeclared here (not in a function); did you mean 'ksys_fadvise64_64'?
+>   649 | __SC_COMP(__NR3264_fadvise64, sys_fadvise64_64, compat_sys_fadvise64_64)
+> arch/riscv/kernel/compat_syscall_table.c:12:42: note: in definition of macro '__SYSCALL'
+>    12 | #define __SYSCALL(nr, call)      [nr] = (call),
+> include/uapi/asm-generic/unistd.h:649:1: note: in expansion of macro '__SC_COMP'
+>   649 | __SC_COMP(__NR3264_fadvise64, sys_fadvise64_64, compat_sys_fadvise64_64)
 >
-> Fixes: 59c10c52f573 ("riscv: compat: syscall: Add compat_sys_call_table implementation")
 > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 > Cc: Paul Walmsley <paul.walmsley@sifive.com>
 > Cc: Palmer Dabbelt <palmer@dabbelt.com>
 > Cc: Albert Ou <aou@eecs.berkeley.edu>
 > Cc: linux-riscv@lists.infradead.org
-> Cc: Guo Ren <guoren@kernel.org>
 > Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: linux-arch@vger.kernel.org
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-mm@kvack.org
 > ---
->  arch/riscv/include/asm/unistd.h |    2 ++
+>  include/uapi/asm-generic/unistd.h |    2 ++
 >  1 file changed, 2 insertions(+)
 >
-> --- a/arch/riscv/include/asm/unistd.h
-> +++ b/arch/riscv/include/asm/unistd.h
-> @@ -18,8 +18,10 @@
->  #define __ARCH_WANT_COMPAT_PWRITE64
->  #define __ARCH_WANT_COMPAT_SYNC_FILE_RANGE
->  #define __ARCH_WANT_COMPAT_READAHEAD
-> +#ifdef CONFIG_ADVISE_SYSCALLS
->  #define __ARCH_WANT_COMPAT_FADVISE64_64
->  #endif
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@ -645,8 +645,10 @@ __SC_COMP(__NR_execve, sys_execve, compa
+>  #define __NR3264_mmap 222
+>  __SC_3264(__NR3264_mmap, sys_mmap2, sys_mmap)
+>  /* mm/fadvise.c */
+> +#ifdef __ARCH_WANT_COMPAT_FADVISE64_64
+>  #define __NR3264_fadvise64 223
+>  __SC_COMP(__NR3264_fadvise64, sys_fadvise64_64, compat_sys_fadvise64_64)
 > +#endif
+>
 
-I think it's better to add this to kernel/sys_ni.c next to
-COND_SYSCALL(fadvise64_64), to make it more consistent
-with the other conditionally enabled syscalls.
+This does not work: __ARCH_WANT_COMPAT_FADVISE64_64 is defined in
+arch/riscv/include/asm/unistd.h, which is not a UAPI header. By making the line
+conditional on this, user space no longer sees the macro definition.
 
-        Arnd
+It looks like you also drop the native definition on all architectures other
+than riscv here. What we probably want is to just make all the
+declarations in include/linux/compat.h unconditional and not have them
+depend on architecture specific macros. Some of these may have
+incompatible prototypes depending on the architecture, but if we run
+into those, I would suggest we just give them unique names.
+
+       Arnd

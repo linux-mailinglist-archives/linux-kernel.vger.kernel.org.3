@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A3058BB7B
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E9A58BB7C
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235169AbiHGO5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 10:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
+        id S234752AbiHGO5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 10:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235335AbiHGO5D (ORCPT
+        with ESMTP id S234743AbiHGO5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 10:57:03 -0400
+        Sun, 7 Aug 2022 10:57:14 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C16B857
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:56:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A25B86B
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:56:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
         s=mail; t=1659883989; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0c3a2/qF6KMNUu4+OEl7LBzPeW/O+IuR41ANjZXV6gA=;
-        b=gEVfKW6UDfL26RCFk1Cf2TaBbBC/3e8QGdDpLsY8V6/ys5hhYbGuOUpmSPGvsPii3UgSxu
-        dO+9KxfL1jQDYLxN+eGf9i2nHzjY3l6/PGZlInHtIJf5M21vWCgjIM/21JTv+e2N/yu5Ws
-        1dykgSE0gXVA4tncq32qyQ/YJovN5g0=
+        bh=HXAu1XJSjG1R6eydkrP6zVuUiYRS2CkOzAvRMGBTLfE=;
+        b=AkHEscQwOGdm1+nXFH9oCx96DvkWzOQdGjZmGTPshn5wmWOf7S+Aq4rv1xyGPFTot6tDNq
+        oYqq0YhwH6dLc1RBeH8QHA4v+OmhEmO7jQjdw/coWRlpvLBRUH016DdZrS2u80WJF5u5No
+        XHQpF4m/4lzvTXNnjvbMp8vKhhbEOZA=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee.jones@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 27/28] mfd: tc3589x: Remove #ifdef guards for PM related functions
-Date:   Sun,  7 Aug 2022 16:52:46 +0200
-Message-Id: <20220807145247.46107-28-paul@crapouillou.net>
+Subject: [PATCH 28/28] mfd: tc6393xb: Remove #ifdef guards for PM related functions
+Date:   Sun,  7 Aug 2022 16:52:47 +0200
+Message-Id: <20220807145247.46107-29-paul@crapouillou.net>
 In-Reply-To: <20220807145247.46107-1-paul@crapouillou.net>
 References: <20220807145247.46107-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -43,10 +43,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
-to handle the .suspend/.resume callbacks.
+Use the new pm_sleep_ptr() macro to handle the .suspend/.resume
+callbacks.
 
-These macros allow the suspend and resume functions to be automatically
+This macro allow the suspend and resume functions to be automatically
 dropped by the compiler when CONFIG_SUSPEND is disabled, without having
 to use #ifdef guards.
 
@@ -56,42 +56,40 @@ regressions are easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/mfd/tc3589x.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/mfd/tc6393xb.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/mfd/tc3589x.c b/drivers/mfd/tc3589x.c
-index 13583cdb93b6..ab7e0f6f5489 100644
---- a/drivers/mfd/tc3589x.c
-+++ b/drivers/mfd/tc3589x.c
-@@ -438,7 +438,6 @@ static int tc3589x_remove(struct i2c_client *client)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int tc3589x_suspend(struct device *dev)
- {
- 	struct tc3589x *tc3589x = dev_get_drvdata(dev);
-@@ -466,9 +465,9 @@ static int tc3589x_resume(struct device *dev)
- 
+diff --git a/drivers/mfd/tc6393xb.c b/drivers/mfd/tc6393xb.c
+index 0be5731685b4..9e1ecd92902c 100644
+--- a/drivers/mfd/tc6393xb.c
++++ b/drivers/mfd/tc6393xb.c
+@@ -814,7 +814,6 @@ static int tc6393xb_remove(struct platform_device *dev)
  	return ret;
  }
+ 
+-#ifdef CONFIG_PM
+ static int tc6393xb_suspend(struct platform_device *dev, pm_message_t state)
+ {
+ 	struct tc6393xb_platform_data *tcpd = dev_get_platdata(&dev->dev);
+@@ -877,16 +876,12 @@ static int tc6393xb_resume(struct platform_device *dev)
+ 
+ 	return 0;
+ }
+-#else
+-#define tc6393xb_suspend NULL
+-#define tc6393xb_resume NULL
 -#endif
  
--static SIMPLE_DEV_PM_OPS(tc3589x_dev_pm_ops, tc3589x_suspend, tc3589x_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(tc3589x_dev_pm_ops,
-+				tc3589x_suspend, tc3589x_resume);
+ static struct platform_driver tc6393xb_driver = {
+ 	.probe = tc6393xb_probe,
+ 	.remove = tc6393xb_remove,
+-	.suspend = tc6393xb_suspend,
+-	.resume = tc6393xb_resume,
++	.suspend = pm_sleep_ptr(tc6393xb_suspend),
++	.resume = pm_sleep_ptr(tc6393xb_resume),
  
- static const struct i2c_device_id tc3589x_id[] = {
- 	{ "tc35890", TC3589X_TC35890 },
-@@ -485,7 +484,7 @@ MODULE_DEVICE_TABLE(i2c, tc3589x_id);
- static struct i2c_driver tc3589x_driver = {
  	.driver = {
- 		.name	= "tc3589x",
--		.pm	= &tc3589x_dev_pm_ops,
-+		.pm	= pm_sleep_ptr(&tc3589x_dev_pm_ops),
- 		.of_match_table = of_match_ptr(tc3589x_match),
- 	},
- 	.probe		= tc3589x_probe,
+ 		.name = "tc6393xb",
 -- 
 2.35.1
 

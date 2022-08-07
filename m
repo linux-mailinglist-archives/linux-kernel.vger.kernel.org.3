@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5615858BBCC
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 18:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4B358BBD1
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 18:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234675AbiHGQId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 12:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        id S234705AbiHGQJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 12:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234574AbiHGQIb (ORCPT
+        with ESMTP id S233135AbiHGQJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 12:08:31 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8F531A;
-        Sun,  7 Aug 2022 09:08:30 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id 130so6179247pfv.13;
-        Sun, 07 Aug 2022 09:08:30 -0700 (PDT)
+        Sun, 7 Aug 2022 12:09:42 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FF0A462;
+        Sun,  7 Aug 2022 09:09:40 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id m4so12634642ejr.3;
+        Sun, 07 Aug 2022 09:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=9lYXINAlxxMxWSbvsI8AJB5wGlCbPGWBgmb6qoY0xm4=;
-        b=IH48HU+yBYTwc9qdZzvzUxgNlNeks30xd71AMuY3ez+dGWeGXnBepsiQpvwtEH5rSW
-         lDYUOwdbEzdASRdPaLs2kUMdmKtWIdgjUAtr2W00kYAXlndCaFvef9O2DYYqAJwUE+Rv
-         XOJJbQHJdWSn+/uV6CD8rlRSKVLruFZCD8ounOaJPF+lEeL9t0B1G7vCu1zCQ5FI6aC8
-         RCsve2l7jsFutTZaFqrR8KqLjfhp83QYl+hZq68Tn9TyMSLvo5lOGJCxcZWTs9Pfc1UU
-         iCNgeXquOLsLkcv9e/ciGDBH6JF7yDGsmdwK1IK5HieLrSPy12u2WKJ4vLr5vfO+fmx9
-         SB3g==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=kfa6rkgDz6nn/pdEUYBNKDa4YqJiKITb3f8OdRtzvmk=;
+        b=COXRpdfLeS6/eF9rAZR77z4MCuaK1+JKWGBD5kceZ0kJ4DchZJT725v+jCGmSJ2imB
+         y4LN5N4cEput2dmnjPpZCBYcshfj1bs6YZZGHxlscSVTNzWVaENtU7E4kmIpbVVltmxT
+         aQR3xi0sFHgRyzSUKNZpdZSBzbY1h2hGdEnQL8xZFEG5MuIqRLMHqwmsW4LTGQAJbbqR
+         AMgWQCf4vme8WZ6+QAduQY1FuWKGKZdhHldfKg9FgkriLIxratMMFGJYpcQyxffBS5lV
+         klJLgyjrydzzporrpp+caJV3uKT77YXMDjWuOvl1b7gggzDYCfyawoTvo8nU4h4lU114
+         y/Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=9lYXINAlxxMxWSbvsI8AJB5wGlCbPGWBgmb6qoY0xm4=;
-        b=HRQZwyfE4rhI4dyZ7YxO61XDDalfW5qMNP4DcM/fb0KvyaiSUT1ZKUQiqNrk/BzmKh
-         ACU34efP+ypBL+eN+zsaGcnKXrfMouydVe1zwKUhvtWb8O0ffeqr1svZgh65m/JhJ4uA
-         9H1gVssfhIyhcFymQXS3XsBDYeVuJRk3o/HiEhXZK12DR889frWMf3BCI2fXmnXXgLu9
-         lS7WBissS1i68QaRSPMjxyiDUvX92qLg7KfyK67hMTHAtqYmQBiprdI/H6vYT9o2YWvr
-         BDR+/WLfQRj9Kn5b1mn4H1kcKzyhvnqwxOZqKij8LZ7426sBiCxeJKTYACeSUrr/a3XS
-         Id8w==
-X-Gm-Message-State: ACgBeo110errbWEgkMG4Ee9xriw0hG+bP92Zh0Ori/y0QotwAFgzDnzG
-        2tJal0F86gUibzVO1osztcPZ2km8BW4=
-X-Google-Smtp-Source: AA6agR56DsDoQD7dIlG0cvuCFwpuPtU4SPqqFkEziNS2V0+r1vJoPi5RRMirTbA0oKKqpwuk/ACe0A==
-X-Received: by 2002:a63:6e81:0:b0:419:f7b1:4b12 with SMTP id j123-20020a636e81000000b00419f7b14b12mr12551127pgc.406.1659888510120;
-        Sun, 07 Aug 2022 09:08:30 -0700 (PDT)
-Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
-        by smtp.gmail.com with ESMTPSA id g2-20020a1709026b4200b0016db51ca7dfsm6881539plt.15.2022.08.07.09.08.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 09:08:29 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 2/2] drm/msm/rd: Fix FIFO-full deadlock
-Date:   Sun,  7 Aug 2022 09:09:01 -0700
-Message-Id: <20220807160901.2353471-2-robdclark@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220807160901.2353471-1-robdclark@gmail.com>
-References: <20220807160901.2353471-1-robdclark@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=kfa6rkgDz6nn/pdEUYBNKDa4YqJiKITb3f8OdRtzvmk=;
+        b=mmL5Uwo8IHjIIhQyb35F2Bsk8RXQUM3BjB3oOWffmNmv2JD11dKjapFRx64utFFLXV
+         Dzl/tonlBQAhhp1t2UEnTmIRaDsk53gB8y3QCFpLma2+y9sW7Kbrl3Dmt0ec+bcJ+z7o
+         xE+e3pchfhxFg3/dBiWzb/YLoKJD4qoR8jluXzcC6HmuYCa4EHhM2Q3AzGVLRNxDZsot
+         0AtKUtsB8uBV/cSgQe3FfvLkVOg66sc0UfoNzIL4ihlbBXXG1s0bntGlcod67fXLqu24
+         yfzwUIDkHxgvXz86FimiUNsqMH2VG1zE+YyJvund+bVANQwbyQ4Na8LoqcfoWRCbSe84
+         fTcA==
+X-Gm-Message-State: ACgBeo0xPQKTJ08HfLx3+JHneskU6+Ur7m0u44ts5h/Z6BkJZCh6qUjt
+        72HO/VyNeLWrRy7lE9GRntk=
+X-Google-Smtp-Source: AA6agR63DksStqDlJzPXUBqN0Z2rFKAzOT4xKMjjaRhnc3EuWCBYaX7QAw6Iot6h6qj8HoZIIlqggw==
+X-Received: by 2002:a17:907:6d15:b0:730:da23:5b5c with SMTP id sa21-20020a1709076d1500b00730da235b5cmr10391598ejc.325.1659888579044;
+        Sun, 07 Aug 2022 09:09:39 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1256:79a0:f019:ef7b:173c:a9d2? ([2a02:908:1256:79a0:f019:ef7b:173c:a9d2])
+        by smtp.gmail.com with ESMTPSA id gj6-20020a170907740600b0072b31307a79sm3984470ejc.60.2022.08.07.09.09.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Aug 2022 09:09:38 -0700 (PDT)
+Message-ID: <3d2083aa-fc6c-6875-3daf-e5abe45fb762@gmail.com>
+Date:   Sun, 7 Aug 2022 18:09:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [Linaro-mm-sig] [PATCH 1/3] dma-buf: Add ioctl to query mmap info
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220729170744.1301044-1-robdclark@gmail.com>
+ <20220729170744.1301044-2-robdclark@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20220729170744.1301044-2-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,32 +85,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+Am 29.07.22 um 19:07 schrieb Rob Clark:
+> From: Rob Clark <robdclark@chromium.org>
+>
+> This is a fairly narrowly focused interface, providing a way for a VMM
+> in userspace to tell the guest kernel what pgprot settings to use when
+> mapping a buffer to guest userspace.
+>
+> For buffers that get mapped into guest userspace, virglrenderer returns
+> a dma-buf fd to the VMM (crosvm or qemu).
 
-If the previous thing cat'ing $debugfs/rd left the FIFO full, then
-subsequent open could deadlock in rd_write() (because open is blocked,
-not giving a chance for read() to consume any data in the FIFO).  Also
-it is generally a good idea to clear out old data from the FIFO.
+Wow, wait a second. Who is giving whom the DMA-buf fd here?
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_rd.c | 3 +++
- 1 file changed, 3 insertions(+)
+My last status was that this design was illegal and couldn't be 
+implemented because it requires internal knowledge only the exporting 
+driver can have.
 
-diff --git a/drivers/gpu/drm/msm/msm_rd.c b/drivers/gpu/drm/msm/msm_rd.c
-index a92ffde53f0b..db2f847c8535 100644
---- a/drivers/gpu/drm/msm/msm_rd.c
-+++ b/drivers/gpu/drm/msm/msm_rd.c
-@@ -196,6 +196,9 @@ static int rd_open(struct inode *inode, struct file *file)
- 	file->private_data = rd;
- 	rd->open = true;
- 
-+	/* Reset fifo to clear any previously unread data: */
-+	rd->fifo.head = rd->fifo.tail = 0;
-+
- 	/* the parsing tools need to know gpu-id to know which
- 	 * register database to load.
- 	 *
--- 
-2.36.1
+@Daniel has anything changed on that is or my status still valid?
+
+Regards,
+Christian.
+
+>    In addition to mapping the
+> pages into the guest VM, it needs to report to drm/virtio in the guest
+> the cache settings to use for guest userspace.  In particular, on some
+> architectures, creating aliased mappings with different cache attributes
+> is frowned upon, so it is important that the guest mappings have the
+> same cache attributes as any potential host mappings.
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>   drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
+>   include/linux/dma-buf.h      |  7 +++++++
+>   include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
+>   3 files changed, 61 insertions(+)
+>
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 32f55640890c..d02d6c2a3b49 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
+>   	return 0;
+>   }
+>   
+> +static long dma_buf_info(struct dma_buf *dmabuf, const void __user *uarg)
+> +{
+> +	struct dma_buf_info arg;
+> +
+> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
+> +		return -EFAULT;
+> +
+> +	switch (arg.param) {
+> +	case DMA_BUF_INFO_VM_PROT:
+> +		if (!dmabuf->ops->mmap_info)
+> +			return -ENOSYS;
+> +		arg.value = dmabuf->ops->mmap_info(dmabuf);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (copy_to_user(uarg, &arg, sizeof(arg)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+>   static long dma_buf_ioctl(struct file *file,
+>   			  unsigned int cmd, unsigned long arg)
+>   {
+> @@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
+>   	case DMA_BUF_SET_NAME_B:
+>   		return dma_buf_set_name(dmabuf, (const char __user *)arg);
+>   
+> +	case DMA_BUF_IOCTL_INFO:
+> +		return dma_buf_info(dmabuf, (const void __user *)arg);
+> +
+>   	default:
+>   		return -ENOTTY;
+>   	}
+> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> index 71731796c8c3..6f4de64a5937 100644
+> --- a/include/linux/dma-buf.h
+> +++ b/include/linux/dma-buf.h
+> @@ -283,6 +283,13 @@ struct dma_buf_ops {
+>   	 */
+>   	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
+>   
+> +	/**
+> +	 * @mmap_info:
+> +	 *
+> +	 * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PROT.
+> +	 */
+> +	int (*mmap_info)(struct dma_buf *);
+> +
+>   	int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+>   	void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+>   };
+> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
+> index b1523cb8ab30..a41adac0f46a 100644
+> --- a/include/uapi/linux/dma-buf.h
+> +++ b/include/uapi/linux/dma-buf.h
+> @@ -85,6 +85,32 @@ struct dma_buf_sync {
+>   
+>   #define DMA_BUF_NAME_LEN	32
+>   
+> +
+> +/**
+> + * struct dma_buf_info - Query info about the buffer.
+> + */
+> +struct dma_buf_info {
+> +
+> +#define DMA_BUF_INFO_VM_PROT      1
+> +#  define DMA_BUF_VM_PROT_WC      0
+> +#  define DMA_BUF_VM_PROT_CACHED  1
+> +
+> +	/**
+> +	 * @param: Which param to query
+> +	 *
+> +	 * DMA_BUF_INFO_BM_PROT:
+> +	 *     Query the access permissions of userspace mmap's of this buffer.
+> +	 *     Returns one of DMA_BUF_VM_PROT_x
+> +	 */
+> +	__u32 param;
+> +	__u32 pad;
+> +
+> +	/**
+> +	 * @value: Return value of the query.
+> +	 */
+> +	__u64 value;
+> +};
+> +
+>   #define DMA_BUF_BASE		'b'
+>   #define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
+>   
+> @@ -95,4 +121,6 @@ struct dma_buf_sync {
+>   #define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, __u32)
+>   #define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, __u64)
+>   
+> +#define DMA_BUF_IOCTL_INFO	_IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
+> +
+>   #endif
 

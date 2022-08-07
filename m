@@ -2,216 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7687C58BAF5
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 15:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E3058BAEC
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 15:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbiHGNRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 09:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
+        id S234215AbiHGNIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 09:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiHGNRd (ORCPT
+        with ESMTP id S229760AbiHGNI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 09:17:33 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D89B63F6;
-        Sun,  7 Aug 2022 06:17:30 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id s11so8442656edd.13;
-        Sun, 07 Aug 2022 06:17:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zfLHI7kFYa9QqzX7jm3Dg9uXF+tlKoVCc88jlw3/8KQ=;
-        b=oVLItqJws2allNf5cNYLRsBjpe4cMJxw3wyvlDesdNvOtva6JdH5tYs8uRlvw4kbJf
-         f29NtFqbkJAaD9UsgZjDLKxdWapHtuAln4azG0nl8ztNN1gkZ8kIw+8rFK29tU9eBmz6
-         W8oo8bG35OMlBkaYqz0LxIdR8eKBp1LXSJWux1OL7okrr5raclBeI/kQUSHMsQ0KQScC
-         0Jv6XvjOwhq9YbNcxMbRCNxe4zCaVjMu5XtDrub+b+YzvtttjbLuLrAZOZ7PzqBUZdWK
-         XKzdmUTV36KAp0XdGGBlKH25zyd8llkWxncXcdz/E+s2Nnve4UaWm4Qh7AnnjwyEei2J
-         cKbQ==
+        Sun, 7 Aug 2022 09:08:28 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90D0632B
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 06:08:25 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id z2-20020a056e02088200b002dc4022c15fso4942741ils.11
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 06:08:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zfLHI7kFYa9QqzX7jm3Dg9uXF+tlKoVCc88jlw3/8KQ=;
-        b=6dOywnvAyO+cW3sGENnyAhTLs4G1s1PEzXugQyqPnsoCUn8xVPigjVveA5b+1etVkd
-         RHBKhTLOsUTMBpCgk0fHos5lH9D2+1EdewQPOgXBahfWat4U45snyXU/RDCnBECr62+o
-         aWL8NSYVjYDtC67Dndmyvcejuy3rcUk7eDkw6P5Bvgs7wOyjQg2s/6X98n+OELV4vFmM
-         tWKStA7MH0V44T3Max3lX/5D4nmnGWH2Et1/RoRgSrZku9ufLsTgAPuZj4mEe5bo+mUR
-         PPYvUQqSBgtYICSgsOKiDzGXlB4k123/g/fjIJlna34pA7DObSqfoBSiDHQ/VjBpAMdK
-         QmoQ==
-X-Gm-Message-State: ACgBeo3OgVxoHKEbzA7JujCK4nUEitLh33cpzqhiwQ3+oUvsQqs4NfmQ
-        mzxiwkVJO+YGAw2QayFXpM4=
-X-Google-Smtp-Source: AA6agR4onaAEfG8SYXpc3i+szZ7HPi7aOmntQ9idJByRZWNmdzi8I27IsQWkDZ0PFTl66W32C/s4qQ==
-X-Received: by 2002:a05:6402:378a:b0:431:6d8d:9023 with SMTP id et10-20020a056402378a00b004316d8d9023mr14512494edb.98.1659878248925;
-        Sun, 07 Aug 2022 06:17:28 -0700 (PDT)
-Received: from Ansuel-xps. (host-87-20-249-30.retail.telecomitalia.it. [87.20.249.30])
-        by smtp.gmail.com with ESMTPSA id a4-20020a1709063a4400b006fe8c831632sm3786523ejf.73.2022.08.07.06.17.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 06:17:28 -0700 (PDT)
-Message-ID: <62efbb68.170a0220.88a00.8207@mx.google.com>
-X-Google-Original-Message-ID: <Yu+3UG8OqWPaHB55@Ansuel-xps.>
-Date:   Sun, 7 Aug 2022 15:00:00 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] ARM: dts: qcom: ipq8064: add v2 dtsi variant
-References: <20220718161826.4943-1-ansuelsmth@gmail.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=vnV7cRg3Tne8wd1q+sHQ0TMC7i9eytqxDhJim1J4PTk=;
+        b=Y/66lldPOtUANfRfbG54IetUwkJ3PJaxWs6auGNwN90bxjW899xMHA04LIOu7c3VTp
+         4f2DSueab7j4kzsj+HTLI2aaoZ91ygLVRVHm4p5HWXQPnTlZAYc2/CrYbGH/MnJevGz0
+         0dl+3WH8HB6T12w/3iD5Utv19tDIt0hW+fxYneez6CgmvVT2tSxmxwJANex3HNf0RFuD
+         CfsXz7zCb/cmHPrlwy98BV1xA2T9lqDyeQP9EPArPjZTe9uXl+lkQcC4iTUGryL4yM8W
+         dtemJjioLFvCr5S3IbbuY/Stbe+7NUgvX75fKR3YKqx3aD0uRNVlUrhH4iRi3Z4BDJth
+         vRSA==
+X-Gm-Message-State: ACgBeo3O059VuFG2pBs662uHEmbYPcLJxV4afYDetC6mV/00mFL9pGM3
+        PzwKQmBVSVG4ZGNuukLTs0n00f0rwk+ut1neAHiDLS7avlSS
+X-Google-Smtp-Source: AA6agR6whLfcV4UNv9AyPfLUwXg8drboA+u/W1C+Ck6IN9btxeb1lHo5HZoxcp8lDr2MnbD/siGrvT+zeI+92sxDdRM/szahmWZE
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718161826.4943-1-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1694:b0:342:f3b4:1518 with SMTP id
+ f20-20020a056638169400b00342f3b41518mr1186838jat.0.1659877705062; Sun, 07 Aug
+ 2022 06:08:25 -0700 (PDT)
+Date:   Sun, 07 Aug 2022 06:08:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fb20b605e5a66457@google.com>
+Subject: [syzbot] possible deadlock in ext4_xattr_get
+From:   syzbot <syzbot+62120febbd1ee3c3c860@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 06:18:24PM +0200, Christian Marangi wrote:
-> Add ipq8064-v2.0 dtsi variant that differ from original ipq8064 SoC for
-> some additional pcie, sata and usb configuration values, additional
-> reserved memory and serial output.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Hello,
 
-Any news for this?
+syzbot found the following issue on:
 
-> ---
->  .../boot/dts/qcom-ipq8064-v2.0-smb208.dtsi    | 37 ++++++++++
->  arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi      | 69 +++++++++++++++++++
->  2 files changed, 106 insertions(+)
->  create mode 100644 arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi
->  create mode 100644 arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
-> 
-> diff --git a/arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi b/arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi
-> new file mode 100644
-> index 000000000000..0442580b22de
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi
-> @@ -0,0 +1,37 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "qcom-ipq8064-v2.0.dtsi"
-> +
-> +&rpm {
-> +	smb208_regulators: regulators {
-> +		compatible = "qcom,rpm-smb208-regulators";
-> +
-> +		smb208_s1a: s1a {
-> +			regulator-min-microvolt = <1050000>;
-> +			regulator-max-microvolt = <1150000>;
-> +
-> +			qcom,switch-mode-frequency = <1200000>;
-> +		};
-> +
-> +		smb208_s1b: s1b {
-> +			regulator-min-microvolt = <1050000>;
-> +			regulator-max-microvolt = <1150000>;
-> +
-> +			qcom,switch-mode-frequency = <1200000>;
-> +		};
-> +
-> +		smb208_s2a: s2a {
-> +			regulator-min-microvolt = < 800000>;
-> +			regulator-max-microvolt = <1250000>;
-> +
-> +			qcom,switch-mode-frequency = <1200000>;
-> +		};
-> +
-> +		smb208_s2b: s2b {
-> +			regulator-min-microvolt = < 800000>;
-> +			regulator-max-microvolt = <1250000>;
-> +
-> +			qcom,switch-mode-frequency = <1200000>;
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi b/arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
-> new file mode 100644
-> index 000000000000..2f117d576daf
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
-> @@ -0,0 +1,69 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "qcom-ipq8064.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. IPQ8064-v2.0";
-> +
-> +	aliases {
-> +		serial0 = &gsbi4_serial;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	reserved-memory {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		rsvd@41200000 {
-> +			reg = <0x41200000 0x300000>;
-> +			no-map;
-> +		};
-> +	};
-> +};
-> +
-> +&gsbi4 {
-> +	qcom,mode = <GSBI_PROT_I2C_UART>;
-> +	status = "okay";
-> +
-> +	serial@16340000 {
-> +		status = "okay";
-> +	};
-> +	/*
-> +	 * The i2c device on gsbi4 should not be enabled.
-> +	 * On ipq806x designs gsbi4 i2c is meant for exclusive
-> +	 * RPM usage. Turning this on in kernel manifests as
-> +	 * i2c failure for the RPM.
-> +	 */
-> +};
-> +
-> +&pcie0 {
-> +	compatible = "qcom,pcie-ipq8064-v2";
-> +};
-> +
-> +&pcie1 {
-> +	compatible = "qcom,pcie-ipq8064-v2";
-> +};
-> +
-> +&pcie2 {
-> +	compatible = "qcom,pcie-ipq8064-v2";
-> +};
-> +
-> +&sata {
-> +	ports-implemented = <0x1>;
-> +};
-> +
-> +&ss_phy_0 {
-> +	qcom,rx-eq = <2>;
-> +	qcom,tx-deamp_3_5db = <32>;
-> +	qcom,mpll = <5>;
-> +};
-> +
-> +&ss_phy_1 {
-> +	qcom,rx-eq = <2>;
-> +	qcom,tx-deamp_3_5db = <32>;
-> +	qcom,mpll = <5>;
-> +};
-> -- 
-> 2.36.1
-> 
+HEAD commit:    cb71b93c2dc3 Add linux-next specific files for 20220628
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10bdcf3c080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
+dashboard link: https://syzkaller.appspot.com/bug?extid=62120febbd1ee3c3c860
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10256c61080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f3c832080000
 
--- 
-	Ansuel
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12420fe2080000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11420fe2080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16420fe2080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+62120febbd1ee3c3c860@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 512
+EXT4-fs (loop0): mounted filesystem without journal. Quota mode: none.
+======================================================
+WARNING: possible circular locking dependency detected
+5.19.0-rc4-next-20220628-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor246/3601 is trying to acquire lock:
+ffff888075af28e8 (&ei->xattr_sem){++++}-{3:3}, at: ext4_xattr_get+0x14e/0xa10 fs/ext4/xattr.c:650
+
+but task is already holding lock:
+ffff888075af2c20 (&ea_inode->i_rwsem#9/1){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:761 [inline]
+ffff888075af2c20 (&ea_inode->i_rwsem#9/1){+.+.}-{3:3}, at: chown_common+0x364/0x710 fs/open.c:727
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&ea_inode->i_rwsem#9/1){+.+.}-{3:3}:
+       down_write+0x90/0x150 kernel/locking/rwsem.c:1542
+       inode_lock include/linux/fs.h:761 [inline]
+       ext4_xattr_inode_create fs/ext4/xattr.c:1445 [inline]
+       ext4_xattr_inode_lookup_create fs/ext4/xattr.c:1528 [inline]
+       ext4_xattr_set_entry+0x2ab3/0x3850 fs/ext4/xattr.c:1656
+       ext4_xattr_ibody_set+0x78/0x2b0 fs/ext4/xattr.c:2209
+       ext4_xattr_set_handle+0x964/0x1500 fs/ext4/xattr.c:2366
+       ext4_xattr_set+0x13a/0x340 fs/ext4/xattr.c:2479
+       __vfs_setxattr+0x115/0x180 fs/xattr.c:182
+       __vfs_setxattr_noperm+0x125/0x5f0 fs/xattr.c:216
+       __vfs_setxattr_locked+0x1cf/0x260 fs/xattr.c:277
+       vfs_setxattr+0x13f/0x330 fs/xattr.c:303
+       setxattr+0x146/0x160 fs/xattr.c:611
+       path_setxattr+0x197/0x1c0 fs/xattr.c:630
+       __do_sys_setxattr fs/xattr.c:646 [inline]
+       __se_sys_setxattr fs/xattr.c:642 [inline]
+       __x64_sys_setxattr+0xc0/0x160 fs/xattr.c:642
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+-> #0 (&ei->xattr_sem){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
+       lock_acquire kernel/locking/lockdep.c:5665 [inline]
+       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+       down_read+0x98/0x440 kernel/locking/rwsem.c:1489
+       ext4_xattr_get+0x14e/0xa10 fs/ext4/xattr.c:650
+       __vfs_getxattr+0xd9/0x140 fs/xattr.c:401
+       cap_inode_need_killpriv+0x3c/0x60 security/commoncap.c:301
+       security_inode_need_killpriv+0x40/0x90 security/security.c:1420
+       notify_change+0x6e7/0x1440 fs/attr.c:351
+       chown_common+0x61b/0x710 fs/open.c:734
+       do_fchownat+0x126/0x1e0 fs/open.c:765
+       __do_sys_fchownat fs/open.c:780 [inline]
+       __se_sys_fchownat fs/open.c:777 [inline]
+       __x64_sys_fchownat+0xba/0x150 fs/open.c:777
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&ea_inode->i_rwsem#9/1);
+                               lock(&ei->xattr_sem);
+                               lock(&ea_inode->i_rwsem#9/1);
+  lock(&ei->xattr_sem);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor246/3601:
+ #0: ffff88801d65e460 (sb_writers#4){.+.+}-{0:0}, at: do_fchownat+0x101/0x1e0 fs/open.c:762
+ #1: ffff888075af2c20 (&ea_inode->i_rwsem#9/1){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:761 [inline]
+ #1: ffff888075af2c20 (&ea_inode->i_rwsem#9/1){+.+.}-{3:3}, at: chown_common+0x364/0x710 fs/open.c:727
+
+stack backtrace:
+CPU: 0 PID: 3601 Comm: syz-executor246 Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5665 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+ down_read+0x98/0x440 kernel/locking/rwsem.c:1489
+ ext4_xattr_get+0x14e/0xa10 fs/ext4/xattr.c:650
+ __vfs_getxattr+0xd9/0x140 fs/xattr.c:401
+ cap_inode_need_killpriv+0x3c/0x60 security/commoncap.c:301
+ security_inode_need_killpriv+0x40/0x90 security/security.c:1420
+ notify_change+0x6e7/0x1440 fs/attr.c:351
+ chown_common+0x61b/0x710 fs/open.c:734
+ do_fchownat+0x126/0x1e0 fs/open.c:765
+ __do_sys_fchownat fs/open.c:780 [inline]
+ __se_sys_fchownat fs/open.c:777 [inline]
+ __x64_sys_fchownat+0xba/0x150 fs/open.c:777
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7ff813f7d0e9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc815d6a78 EFLAGS: 00000246 ORIG_RAX: 0000000000000104
+RAX: ffffffffffffffda RBX: 
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

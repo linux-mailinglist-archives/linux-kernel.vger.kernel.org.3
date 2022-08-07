@@ -2,122 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB2358BCC7
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 21:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6346A58BCC9
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 21:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235529AbiHGTpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 15:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
+        id S230359AbiHGTsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 15:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiHGTpE (ORCPT
+        with ESMTP id S229565AbiHGTrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 15:45:04 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88F86595;
-        Sun,  7 Aug 2022 12:45:01 -0700 (PDT)
-Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MF39M-1o9npk0ViK-00FQaf; Sun, 07 Aug 2022 21:45:00 +0200
-Received: by mail-wr1-f43.google.com with SMTP id j15so8756237wrr.2;
-        Sun, 07 Aug 2022 12:45:00 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0A+KoRx3q3Wp/u2DQDlVnMtbPEDHPR7gb4N4F5390/sXawfe4c
-        ecdat8i37xRFnJ/V8EEZVv8QTP+orA2unLgOGfE=
-X-Google-Smtp-Source: AA6agR7WvYipqruEUqI3FozO1bMoMLoFg3gTNr1wJxvZ4oY3kYpws83YatqbI24HkVKiWoEkfQMs1s6P8NVFSqcphg4=
-X-Received: by 2002:adf:f5c7:0:b0:220:6871:de96 with SMTP id
- k7-20020adff5c7000000b002206871de96mr9685215wrp.516.1659901499836; Sun, 07
- Aug 2022 12:44:59 -0700 (PDT)
+        Sun, 7 Aug 2022 15:47:55 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA8165B8
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 12:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659901673; x=1691437673;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=btpsCi3r5MjWmQ8FJVEppOP9hNjmR/QuiUANjVE5Qyc=;
+  b=PfwwUvYhadBO+WNdMHQScnjcxIs1QBxeeVNzdIBz/osbC7el6NZormPn
+   rxJSjOCa2Ji8IHB5Hnlu+qhGC7V4yMPSgUWF4wSmCF/abNp0tTy/VmWsc
+   vEJtfcd+PG5EfGxJfkKfZ2iX1/OXongLASHEupj9gjG0PJ1jfswK11sLW
+   ECeOB+qYx5BEZ283iLPPUYIt8fjMjfBGQcrBjUUSJtTVJQPBB7MrWaY/u
+   4MAhNj3j60aZMSLgQ3YStXV+toI83ksaOfnJuJ71rbktHLeWASK9VOUKq
+   kP/wVajO1X+vkFWt46dQX0Z7OdgDePLKo/P2wfIbRM7KLn1S1ucs9OZwo
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="288024632"
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="288024632"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 12:47:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="632619907"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Aug 2022 12:47:51 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKmFb-000Lcn-02;
+        Sun, 07 Aug 2022 19:47:51 +0000
+Date:   Mon, 8 Aug 2022 03:47:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc:     kbuild-all@lists.01.org, Chao Yu <yuchao0@huawei.com>,
+        Chao Yu <chao@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [chao:feature/dax 1/10] fs/f2fs/super.c:1635:9: error: implicit
+ declaration of function 'fs_put_dax'
+Message-ID: <202208080337.Chy4GFmX-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220807172854.12971-1-rdunlap@infradead.org>
-In-Reply-To: <20220807172854.12971-1-rdunlap@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 7 Aug 2022 21:44:43 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0FR2ySLXAMGR1ZmaAQMbVwB4MFBPvBw4py_pbgtQSfgA@mail.gmail.com>
-Message-ID: <CAK8P3a0FR2ySLXAMGR1ZmaAQMbVwB4MFBPvBw4py_pbgtQSfgA@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic: unistd.h: make 'compat_sys_fadvise64_64' conditional
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:4scA+1HwMxDmsAX+s/8yE08CJcWhocK0NJmrHYrCpksk6iGwgOD
- 5axZLbkneWAJ20I64jSecMw8LlnWyOKmpoAlvnvyMb2gK1b3niEqIGieJk+v7d1VBlfSyi1
- S+W8DyS6RYG/D/NhQqqbYxjNvvAhvBNmiXf82gxk6zjPlI414jB04P276Mk+PQ3mF2+7keB
- CyojIQ+S4qxh0c91zlh3g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ND8riM6tqxA=:4nk58cscHxwtirsnEDOI9t
- xYH46FZr912/XmSU4u+4YMibpTlCFm8NdT1jV+zu9980mNgQLU5LHQ5Gwsh2s726LMbIzXiSB
- bGvSr9tW/ryZ5Szn3giGKms0gAaYGUMEuLXgLfWKFLaSHhZJMKf/dl3DOwKMR9kkekDOxJhmq
- MpLTRWnR8tEpqX6BYPrfBsknsjWAt/lyOU2sLUP8zLtwkFsD3+3E4xIWPSe1etI4dOxHy9za2
- ydAuiPtE8Bm+3XTNSJhqbjxIhh2DAeFGYxE0mLphgsRoUIYGGPYZFTm39VvPrxWMFF/tH7iOi
- +0G+Lu+qGAaG4k02v6hHceBf/KMPGar12BlrisXvr7kkd2lsVbBF0J8zm6GdrKY38Pg/O2zUu
- QuPLXWRFP34L3qWCTxg4UzD0Rik1770NpWsVnflyh7RnDLrtqyklX8Avwy7SWzFf2h9WPo9oX
- 3j/9tt6ASjJUY9/aWAMxqVpBlDnoqPjP+EZF8S5fBXPGF/tcpkNKZTb2P9MLOm/Dcl0yLEKnp
- tiG9zPBF8RmsT13dTHVSolDWTFIntAwaygaPLIIVSc83eg4twgJ0UIeHrL5DaSw7XY+wuPjYn
- lRuKq4AwpUm05YNert8dUglAcmZNpY617zw+DI0MCT3xXBvLKBfy7VirnjDRjRxfp/dNOTH2B
- cQeLD2sNjHsaa4oj41Lk7+0QLj+tPeaaFUqPIcMdZ2tw+l8/WwrqF8PhYGe5px7mESyCmggTb
- ZFhUNKcJFWOBN7ykDIe/PBOh1wcat2oIKnIirWHlb5ppOl2I3p5FSURiqRC1TLPxGL8c97XmC
- l1ISFFjcVN8Ler/MELOYlGEPhntDCu9X38QbLlO+nvA/x+kIsIqLJzHQMpVI4VSgOaiUMRNQB
- mMaHpfZB6WCcreMVv+6w==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 7, 2022 at 7:28 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Don't require 'compat_sys_fadvise64_64' when
-> __ARCH_WANT_COMPAT_FADVISE64_64 is not set.
->
-> Fixes this build error when CONFIG_ADVISE_SYSCALLS is not set:
->
-> include/uapi/asm-generic/unistd.h:649:49: error: 'compat_sys_fadvise64_64' undeclared here (not in a function); did you mean 'ksys_fadvise64_64'?
->   649 | __SC_COMP(__NR3264_fadvise64, sys_fadvise64_64, compat_sys_fadvise64_64)
-> arch/riscv/kernel/compat_syscall_table.c:12:42: note: in definition of macro '__SYSCALL'
->    12 | #define __SYSCALL(nr, call)      [nr] = (call),
-> include/uapi/asm-generic/unistd.h:649:1: note: in expansion of macro '__SC_COMP'
->   649 | __SC_COMP(__NR3264_fadvise64, sys_fadvise64_64, compat_sys_fadvise64_64)
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: linux-riscv@lists.infradead.org
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: linux-arch@vger.kernel.org
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-mm@kvack.org
-> ---
->  include/uapi/asm-generic/unistd.h |    2 ++
->  1 file changed, 2 insertions(+)
->
-> --- a/include/uapi/asm-generic/unistd.h
-> +++ b/include/uapi/asm-generic/unistd.h
-> @@ -645,8 +645,10 @@ __SC_COMP(__NR_execve, sys_execve, compa
->  #define __NR3264_mmap 222
->  __SC_3264(__NR3264_mmap, sys_mmap2, sys_mmap)
->  /* mm/fadvise.c */
-> +#ifdef __ARCH_WANT_COMPAT_FADVISE64_64
->  #define __NR3264_fadvise64 223
->  __SC_COMP(__NR3264_fadvise64, sys_fadvise64_64, compat_sys_fadvise64_64)
-> +#endif
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
+head:   42f73c9b2a369f724de6c1df5acb0bbde2688e35
+commit: 7df0eb556b0ee20e66872600b62542a7f39d444c [1/10] f2fs: support iomap operation
+config: arm-randconfig-r001-20220807 (https://download.01.org/0day-ci/archive/20220808/202208080337.Chy4GFmX-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=7df0eb556b0ee20e66872600b62542a7f39d444c
+        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
+        git fetch --no-tags chao feature/dax
+        git checkout 7df0eb556b0ee20e66872600b62542a7f39d444c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/
 
-This does not work: __ARCH_WANT_COMPAT_FADVISE64_64 is defined in
-arch/riscv/include/asm/unistd.h, which is not a UAPI header. By making the line
-conditional on this, user space no longer sees the macro definition.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-It looks like you also drop the native definition on all architectures other
-than riscv here. What we probably want is to just make all the
-declarations in include/linux/compat.h unconditional and not have them
-depend on architecture specific macros. Some of these may have
-incompatible prototypes depending on the architecture, but if we run
-into those, I would suggest we just give them unique names.
+All errors (new ones prefixed by >>):
 
-       Arnd
+   fs/f2fs/super.c: In function 'f2fs_put_super':
+>> fs/f2fs/super.c:1635:9: error: implicit declaration of function 'fs_put_dax' [-Werror=implicit-function-declaration]
+    1635 |         fs_put_dax(sbi->s_daxdev);
+         |         ^~~~~~~~~~
+   fs/f2fs/super.c: In function 'f2fs_fill_super':
+>> fs/f2fs/super.c:4037:25: error: implicit declaration of function 'fs_dax_get_by_bdev'; did you mean 'blkdev_get_by_dev'? [-Werror=implicit-function-declaration]
+    4037 |         sbi->s_daxdev = fs_dax_get_by_bdev(sb->s_bdev, &sbi->s_dax_part_off);
+         |                         ^~~~~~~~~~~~~~~~~~
+         |                         blkdev_get_by_dev
+   fs/f2fs/super.c:4037:23: warning: assignment to 'struct dax_device *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    4037 |         sbi->s_daxdev = fs_dax_get_by_bdev(sb->s_bdev, &sbi->s_dax_part_off);
+         |                       ^
+   cc1: some warnings being treated as errors
+
+
+vim +/fs_put_dax +1635 fs/f2fs/super.c
+
+  1531	
+  1532	static void f2fs_put_super(struct super_block *sb)
+  1533	{
+  1534		struct f2fs_sb_info *sbi = F2FS_SB(sb);
+  1535		int i;
+  1536		bool dropped;
+  1537	
+  1538		/* unregister procfs/sysfs entries in advance to avoid race case */
+  1539		f2fs_unregister_sysfs(sbi);
+  1540	
+  1541		f2fs_quota_off_umount(sb);
+  1542	
+  1543		/* prevent remaining shrinker jobs */
+  1544		mutex_lock(&sbi->umount_mutex);
+  1545	
+  1546		/*
+  1547		 * flush all issued checkpoints and stop checkpoint issue thread.
+  1548		 * after then, all checkpoints should be done by each process context.
+  1549		 */
+  1550		f2fs_stop_ckpt_thread(sbi);
+  1551	
+  1552		/*
+  1553		 * We don't need to do checkpoint when superblock is clean.
+  1554		 * But, the previous checkpoint was not done by umount, it needs to do
+  1555		 * clean checkpoint again.
+  1556		 */
+  1557		if ((is_sbi_flag_set(sbi, SBI_IS_DIRTY) ||
+  1558				!is_set_ckpt_flags(sbi, CP_UMOUNT_FLAG))) {
+  1559			struct cp_control cpc = {
+  1560				.reason = CP_UMOUNT,
+  1561			};
+  1562			f2fs_write_checkpoint(sbi, &cpc);
+  1563		}
+  1564	
+  1565		/* be sure to wait for any on-going discard commands */
+  1566		dropped = f2fs_issue_discard_timeout(sbi);
+  1567	
+  1568		if ((f2fs_hw_support_discard(sbi) || f2fs_hw_should_discard(sbi)) &&
+  1569						!sbi->discard_blks && !dropped) {
+  1570			struct cp_control cpc = {
+  1571				.reason = CP_UMOUNT | CP_TRIMMED,
+  1572			};
+  1573			f2fs_write_checkpoint(sbi, &cpc);
+  1574		}
+  1575	
+  1576		/*
+  1577		 * normally superblock is clean, so we need to release this.
+  1578		 * In addition, EIO will skip do checkpoint, we need this as well.
+  1579		 */
+  1580		f2fs_release_ino_entry(sbi, true);
+  1581	
+  1582		f2fs_leave_shrinker(sbi);
+  1583		mutex_unlock(&sbi->umount_mutex);
+  1584	
+  1585		/* our cp_error case, we can wait for any writeback page */
+  1586		f2fs_flush_merged_writes(sbi);
+  1587	
+  1588		f2fs_wait_on_all_pages(sbi, F2FS_WB_CP_DATA);
+  1589	
+  1590		f2fs_bug_on(sbi, sbi->fsync_node_num);
+  1591	
+  1592		f2fs_destroy_compress_inode(sbi);
+  1593	
+  1594		iput(sbi->node_inode);
+  1595		sbi->node_inode = NULL;
+  1596	
+  1597		iput(sbi->meta_inode);
+  1598		sbi->meta_inode = NULL;
+  1599	
+  1600		/*
+  1601		 * iput() can update stat information, if f2fs_write_checkpoint()
+  1602		 * above failed with error.
+  1603		 */
+  1604		f2fs_destroy_stats(sbi);
+  1605	
+  1606		/* destroy f2fs internal modules */
+  1607		f2fs_destroy_node_manager(sbi);
+  1608		f2fs_destroy_segment_manager(sbi);
+  1609	
+  1610		f2fs_destroy_post_read_wq(sbi);
+  1611	
+  1612		kvfree(sbi->ckpt);
+  1613	
+  1614		sb->s_fs_info = NULL;
+  1615		if (sbi->s_chksum_driver)
+  1616			crypto_free_shash(sbi->s_chksum_driver);
+  1617		kfree(sbi->raw_super);
+  1618	
+  1619		destroy_device_list(sbi);
+  1620		f2fs_destroy_page_array_cache(sbi);
+  1621		f2fs_destroy_xattr_caches(sbi);
+  1622		mempool_destroy(sbi->write_io_dummy);
+  1623	#ifdef CONFIG_QUOTA
+  1624		for (i = 0; i < MAXQUOTAS; i++)
+  1625			kfree(F2FS_OPTION(sbi).s_qf_names[i]);
+  1626	#endif
+  1627		fscrypt_free_dummy_policy(&F2FS_OPTION(sbi).dummy_enc_policy);
+  1628		destroy_percpu_info(sbi);
+  1629		f2fs_destroy_iostat(sbi);
+  1630		for (i = 0; i < NR_PAGE_TYPE; i++)
+  1631			kvfree(sbi->write_io[i]);
+  1632	#if IS_ENABLED(CONFIG_UNICODE)
+  1633		utf8_unload(sb->s_encoding);
+  1634	#endif
+> 1635		fs_put_dax(sbi->s_daxdev);
+  1636		kfree(sbi);
+  1637	}
+  1638	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

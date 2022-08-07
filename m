@@ -2,120 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CBA58BBE3
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 18:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3BD58BBE7
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 18:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233928AbiHGQpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 12:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
+        id S234096AbiHGQxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 12:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiHGQp3 (ORCPT
+        with ESMTP id S230010AbiHGQxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 12:45:29 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E99B3897
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 09:45:27 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id j8so12646956ejx.9
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 09:45:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=2PGRnV5Y4dd0AnjAyFuQDf1h6O5fn8Zc/uUHPAUm+NI=;
-        b=YTdmANKJVa5XOjtTiYdXOz+UpK7W2lg+6xzggLPWy1aVGc0PSzaU0FfbggFIMoe3j3
-         a4P5kaxXhGpHYCGP+FVZosVM2o5lRc6NMQmxc+yY9t/Lbi/El9cLdJs5z7+guGzRyhaL
-         q3ZNdIA/KgGGoNNK4ClGkp9BO8iy4ra69yMkA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=2PGRnV5Y4dd0AnjAyFuQDf1h6O5fn8Zc/uUHPAUm+NI=;
-        b=AsEp8RKy4R2+ME8cvpkbwKJDEh2v4iR8gKa4wA/RsTj96+rsrx3FW94SN4G1IUVAPj
-         1e6VqqCi7z9pjPO35su+6iJswotQ1M7VwpTpn9N3y+SjuqwL4E8uEWwaZ7Sw+venbA1/
-         gLFpUClzl/ZvzZAf3PN/vippGhgnTPpAznK+vdDAVdsx9C2MvGQkz/cAa7nFTQshUZhe
-         5fzJi4RjJgsMuTOfDbYAgXrUubGCsRW617d45gO/Q+HdaXtuZhBVdWS0YWZpMin9D4Hz
-         xx7JsRzmfuTIVCz4yb+jzDn0e5ydeTYguUaqNGul/bBhj6xR3k7b2Oefma8qdXG4KumA
-         NDxg==
-X-Gm-Message-State: ACgBeo1HK2WR+8Zs//giNDDeeauA5F2u9c2DgwBz2FfhjGDSsUPfYdb/
-        NMyjwMfCKzkbe8szBLUWVGgwrio0fMd9yxsQ
-X-Google-Smtp-Source: AA6agR6xJsIcu74blZGAEgMDmSF+yFdQbkRoc/uJQ1oXqlyblNYUx4hZOl/UPLo6VKIrmrUlWDYqkQ==
-X-Received: by 2002:a17:906:7955:b0:72f:5c1f:1816 with SMTP id l21-20020a170906795500b0072f5c1f1816mr11492680ejo.396.1659890725706;
-        Sun, 07 Aug 2022 09:45:25 -0700 (PDT)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id 20-20020a170906311400b0072b8fbc9be1sm3931182ejx.187.2022.08.07.09.45.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Aug 2022 09:45:25 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id az6-20020a05600c600600b003a530cebbe3so1439451wmb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 09:45:24 -0700 (PDT)
-X-Received: by 2002:a1c:2582:0:b0:3a5:1453:ca55 with SMTP id
- l124-20020a1c2582000000b003a51453ca55mr9611614wml.68.1659890724521; Sun, 07
- Aug 2022 09:45:24 -0700 (PDT)
+        Sun, 7 Aug 2022 12:53:03 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2084.outbound.protection.outlook.com [40.107.212.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA275646C;
+        Sun,  7 Aug 2022 09:53:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=epafqHjY6JIidHyJ9vxARqcnhsFK7TO2llMJqiuFJj+QzuqkXpkXGV8SOLrs5sap0OzcfwLlcApX0tW8iBn+VxQ7EIr9J1p+JRt8HnzFnicSre9p2HWzhulqLyxm4ddVe/P9hewQzM6exM/DCNXIHD30hs767MAqomJdTn+0kTTHIiZionwH+nQLJ1HpexOj9bCzjwpAoyM4fJ8Ye+XIquxCPn8ZbjTXI6mvDY9UX2lrMBWcm5yGfT4o62cK4Kh9HrtnkIm0rpat7ClSK5KDOJ0zfwSC2ktdcBhLQ/IpoYrIRlhvu4VUprWhxgNsP/ZeKUF4ZTS0uY+doL1FZ/3D3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FTAnNSC7aa8xhLV/vDwSlSyLG5tCJ0hF90bXdNP/k/4=;
+ b=GLayaGoVbIPbs1Eayw+y9TEY5HSXjL/3IsanLl78Azz71J+Bt8kNVzuQuisQVk1s0QaSumbshYy3EFqNAv8tYzm67XivcUPuwBHmPsCvohEVJKaGI2bZo6xlZk4z+KnvaX0Ly7O9QS0uooKl08niuEQALYJDQKh3z8XG/Pb3jdaI6nd0/L8KLPWt4p3RTD52q4p8My0/gnjJs18wAKKQxhYb1HnKK4lfD50T32nKYRjzXFMDF+LFHbM4SqVBxF2bTgq6vKIEEkJTpusWr54LPVuUNyG4kupKXZXIoFAynVznixop9oeyByqHXnWEpvcsq3V63ex7V5Ff4SNXuif/XA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FTAnNSC7aa8xhLV/vDwSlSyLG5tCJ0hF90bXdNP/k/4=;
+ b=fHL/+xq6f2tr13tinvwKnAZrjCq219jEkqyBaT8R3akzzRdTT6y2PFmXdj7Yi/Y14SRslDedVSPyHgGYcbdDajLyTmmWJ+0m7B3c1brolMG1FrH1yv8FJU2pyHrkgMNK2lP+PZw8uc0y4soKVGYxvw2S3W86lYlidVPUJZkoMwo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BN6PR12MB1729.namprd12.prod.outlook.com (2603:10b6:404:108::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Sun, 7 Aug
+ 2022 16:52:58 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.019; Sun, 7 Aug 2022
+ 16:52:58 +0000
+Message-ID: <c7cb225b-7f21-8d9a-773b-efc655e6332c@amd.com>
+Date:   Sun, 7 Aug 2022 18:52:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] drm/gem: Fix GEM handle release errors
+Content-Language: en-US
+To:     Jeffy Chen <jeffy.chen@rock-chips.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Andy Yan <andy.yan@rock-chips.com>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-media@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
+References: <20220803083237.3701-1-jeffy.chen@rock-chips.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220803083237.3701-1-jeffy.chen@rock-chips.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR06CA0117.eurprd06.prod.outlook.com
+ (2603:10a6:20b:465::32) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-References: <20220730022529.497941-1-linux@roeck-us.net> <Yu+OzWv2JDbI89mW@gmail.com>
-In-Reply-To: <Yu+OzWv2JDbI89mW@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 7 Aug 2022 09:45:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiGO=pfxyW6E7HdxCnRwWOF_STL=z7yUNwZK__DrV1WmQ@mail.gmail.com>
-Message-ID: <CAHk-=wiGO=pfxyW6E7HdxCnRwWOF_STL=z7yUNwZK__DrV1WmQ@mail.gmail.com>
-Subject: Re: [GIT PULL] hwmon updates for v5.20
-To:     Ingo Molnar <mingo@kernel.org>, Kees Cook <keescook@chromium.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 32287421-1f99-4e15-7908-08da78954820
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1729:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tAqpQpr7GbrnAGDyDlLAnk7niUttxRzIv3r5o3CF6zom1wU6VZ1bjghq7UOJTS5A/rkXgB/B1zbrUCWXEY6l9txzUMPkq0UpcYGROpydD+PEBSuQdDbGz3fYWYlQ4FwSSOQq/bG6BFydw9vVY+PdKrnwMt9eylCHWwu2wgn9nCOAyJbqe0n8GZq168sz72onn6KACyvjJRzLSLmPVPMZMa8y9D9xOigPqd5Dt7LKyoHqUJM2K+6qT+Ak8Sc0aT6Re8nnJRPAacqenBp+9p424z0QLq3NuXegy1vvzmcXaclm9KfxcunA7ei4vvDuEiIGrublYCJS4NGtK1O4z0B4mDO5El1/SL0ob7ZzX8LD0J98Qk1XPqfjLTlG5DOcxuqF8QDBye7cVCa0j6sPTvu1SepVSnBkdMMK7mWEcx4x5iqpqgCBW9szsz3UL+5qK3XKX1EJ3kn6a0LAglUQQf8XpjSqZ5V9jxO0xzmARBQrpjgzpIa62nzF/Ja95oUW4JkcpiiisISG9mp6FbaOzuc2Vt4Y0Xqo979OER6OmKqSkOlI25dCMwhuZtNcVXuH47geun+VccTsJzqwdTDxg1B4KtMe5OJb3GcKrIk1jsedgeNxV57ejkqOVUw34RKQv/jkTZ+S8+cQeiJImH5wEATcMgBxYv27QWlm/XSXVvZ3cjVFgjSfIF7JGG4n05QxgXXd4xf57Y0X3W7hh0oR+qQPKW2seQMpRanx2G9PbHei5otytt5c3/HFkFumyfuJLEg1nsVNXDqdJdxvMRHlMEqQ4OS2OKfi5RV8sCQlHW1CefA9Mjp8bpe+GDRMlRn1wIciA93nxTTvN+r6fXgUES7Bn8+C6UFGZXE7or5bCMPshYU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(376002)(346002)(39860400002)(86362001)(31696002)(2616005)(186003)(6506007)(6666004)(2906002)(6512007)(38100700002)(83380400001)(316002)(4326008)(7416002)(8936002)(8676002)(36756003)(31686004)(66946007)(66556008)(66476007)(41300700001)(6486002)(966005)(5660300002)(478600001)(54906003)(110136005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SmF5UFhVazd5UGhxOXRsZDhxRXVTU2xpbGtCcm5hR1YxZTNiOGdkaXBFcThn?=
+ =?utf-8?B?bUJrSHN1UWVRTkVVWlJSMURKNm8xdGJPck9uY2Jzd3BpQk1pclRlRGJ1bnA1?=
+ =?utf-8?B?N1ZQNElZWkNJaVVqNDFCdU1yTVVqb09ocm05U0VQNFdhR2hLZGpJNThYMzNo?=
+ =?utf-8?B?a0lOUXh6L0xITGFKQlVQQU10d29Rd3lGZWFOSTVsRjRrZ2xQUThFVmtWUHNx?=
+ =?utf-8?B?TEVYRzFoSzludWFpdFhjUkphbVFQczY1RVBDcGhBUjJFdCtzemYyUE81M1Np?=
+ =?utf-8?B?bkg5MngwVXpLSFhIOFcwOUd1STJ6d1l1RFJNcU53eEFFUXlXeVNTbDAwRmZK?=
+ =?utf-8?B?Rll6U2Q5ZVZnaTFJVElrNUVVd0d5eHIxbUpDNS90WDNLMkhCc1MwL0xrblJG?=
+ =?utf-8?B?a2grOEF4eS9rWkhTS1p0ampNNVJ6cDlJMENkU1pGSWVWVkRCUUdyby9mZzBn?=
+ =?utf-8?B?Z0pKSDBNS0NJQXozak5DV1RBWFhjWlZjaElEc0ZKUjZrRkhPc3hzZzFETDBw?=
+ =?utf-8?B?bWdjU2g3MjAxK0FxeDFEVXhuZjN4bmRsTldoNzdMNDBOd2JLWi9TUzI0d3ZN?=
+ =?utf-8?B?VHh0MmtwcGd6ckVFY2hyVTRLanZRTG54VnNMcjVrNVdkYlRNTFcrM2RTbnVq?=
+ =?utf-8?B?T2VlYXNITmhIU2ZBZUtuZGFlZCtEcjNoQkVJL3YxOXRoR0lTVmd5bHFTVzBn?=
+ =?utf-8?B?bzJpc3diWGxhT2VXSGZyQ1hoNXMrQko0RDhFSjFYaUJrKzluRUV5b3hDZy9D?=
+ =?utf-8?B?RHk5Uno1bDRVUnNsQlZSUWdPenJUR2lsRTMvMU9sUDZOM2dYL0M0T2FnMnQw?=
+ =?utf-8?B?NzQxVVBlMGZNT1E4V1lCclAxY0x5YWEwY1ZlVC9FdHJxUXVXQUM0M0pTaDNm?=
+ =?utf-8?B?d1BNS2pKYVE5eWtvdFNuMXA3VVp5Q215NmNXRFgycEpuaFFxTmRQUENCSlgz?=
+ =?utf-8?B?T09HR3I0bU5ySTBhZHlzWlVCWkZNcWFXMUYzdVQrV0U5L3dCa2xrUmxpaVdn?=
+ =?utf-8?B?clJmSVRzMUtYNTFDSi9tZHRiWFpxak5ucFJSbkhlZmlpRWpoTUtpRVN5ZUJi?=
+ =?utf-8?B?OTVwQmdLWlUxbUlxdENQSHBqWGdvcTc1eVRJdTNyTXQ2dkJyQTgyNDdzU1Vy?=
+ =?utf-8?B?MjM3WFZoVnk5L2RGUDBEMjI3Rkt3aWdYYjVDa1d6UVNIc3FpeDllNkxRaW5v?=
+ =?utf-8?B?Q2dyMmhsaGt5R2xsUkJFcFk5cWRWckl6em9ySWFHdWU2Mjgzckg0T1h6TWJX?=
+ =?utf-8?B?cE5MRVN5cEI5M1lQdWp4RFFYdWlIYTh5T25qN2NpekgzVlFmSEVNVmdzaTJ3?=
+ =?utf-8?B?bWord3ZhUnFaSVhQRGVvYXoyNHIvQnlHZnE0Q2JrSUNISU1RNzVaYlAzbFZa?=
+ =?utf-8?B?SkJoMDM0R1phU1Y3b1dYY20xc1FXbjh5NlZTRytHVmYrSWVMYnA5Mi9NNVo1?=
+ =?utf-8?B?OCtTQTJMSXFaenpoOXZOM3lhOGlKQzk0NkpZT1A0dzdHQ3RvUXc3aFJvOUVX?=
+ =?utf-8?B?TExqcldWeUJtaDNaNm5Yby9ja0tvR2g4Uzl1OEtYcUpEd0Q1RjdUU2ZkSm1X?=
+ =?utf-8?B?aGU4Z2M5TjM3YzJUSnFuU0tXWHlTSlhGNGpudkhvVkw0RlJHQzBZbVZuMy9r?=
+ =?utf-8?B?dWVNTm5zTXBmTVZXNENqZGkrR01vdG9JdDNmWkc5bjdHeUNtNU1pVkUwdVpD?=
+ =?utf-8?B?VFh4aXp6b0ZvdFpWRDdXSEhhdlh1bjdUYWdtbCtWWkpDVG8rVEQxeTNycU9n?=
+ =?utf-8?B?VkEwdy9EQXRHQlFDTE16QzAwK3VIY2V3aGRSbjkwNUhQTTBXTTRsN0Y0b2Iy?=
+ =?utf-8?B?ZUI0cWtNK3FTZEV2THFrSjRKV3FPV09nMmVPdXUzajIrSjBvOXNWWU9rSzJk?=
+ =?utf-8?B?bmZZbXE4ZGRlcXh2YUppWnB6UmJUTDRIOGtUYkd5SGJVK0tRTEcxZUhBRUlL?=
+ =?utf-8?B?WkV2dkdicjUyZTlVaTBQR1EwbGdic2g5S2RuVG5LVmZIM29VdHlRODVLZlBZ?=
+ =?utf-8?B?VGprT2U5bFFueTJnUEhuV05XR0MzbjBzcUFhQ21laFVrbHh2YzdBaGFBUFN4?=
+ =?utf-8?B?L3o1QmV2cVJxMnh5V3lVckF2M2RNZFFXNzRNL3ovODZta2NSclVlOVA2aXha?=
+ =?utf-8?B?YkhId251ZEdlMmxkZGZ6R29QTXJXRFlmUU5lSEtjWEVwOVBFTkR3SjZselZC?=
+ =?utf-8?Q?Zf7rDunt/qWzAxeL2eKeLNdoQKpGqN0HZJ1tcCZi85pC?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32287421-1f99-4e15-7908-08da78954820
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2022 16:52:58.3300
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0C8F1VPpx3DZXr8u+a5Zz2V7xffO0ILYHH+fKRpUf4BnPrnlpCJSESV4vpqbyw3b
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1729
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added Kees - this *looks* like it's a compiler bug.
-
-On Sun, Aug 7, 2022 at 3:07 AM Ingo Molnar <mingo@kernel.org> wrote:
+Am 03.08.22 um 10:32 schrieb Jeffy Chen:
+> Currently we are assuming a one to one mapping between dmabuf and handle
+> when releasing GEM handles.
 >
-> Just a quick build regression report, i386 allmodconfig fails to build du=
-e
-> to a 'string overread' compiler warning in drivers/hwmon/lm90.o:
+> But that is not always true, since we would create extra handles for the
+> GEM obj in cases like gem_open() and getfb{,2}().
+>
+> A similar issue was reported at:
+> https://lore.kernel.org/all/20211105083308.392156-1-jay.xu@rock-chips.com/
+>
+> Another problem is that the drm_gem_remove_prime_handles() now only
+> remove handle to the exported dmabuf (gem_obj->dma_buf), so the imported
+> ones would leak:
+> WARNING: CPU: 2 PID: 236 at drivers/gpu/drm/drm_prime.c:228 drm_prime_destroy_file_private+0x18/0x24
+>
+> Let's fix these by using handle to find the exact map to remove.
 
-I tried to see it here with gcc-12.1, but it's not triggering, so it's
-presumably compiler-dependent.
+Well we are clearly something missing here. As far as I can see the 
+current code is correct.
 
-Which compiler is it?
+Creating multiple GEM handles for the same DMA-buf is possible, but illegal.
 
->       inlined from =E2=80=98lm90_detect=E2=80=99 at drivers/hwmon/lm90.c:=
-2550:2:
-> warning: =E2=80=98__builtin_strlen=E2=80=99 reading 1 or more bytes from =
-a region of size 0 [-Wstringop-overread]
+In other words when a GEM handle is exported as DMA-buf and imported 
+again you should intentionally always get the same handle.
 
-Normally it's easier to see what triggers it, but here it's just that
+So this is pretty much a clear NAK to this patch since it shouldn't be 
+necessary or something is seriously broken somewhere else.
 
-        strlcpy(info->type, name, I2C_NAME_SIZE);
+Regards,
+Christian.
 
-so it's either just the compiler being confused (we've seen that
-before), or it's one of the
+>
+> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+> ---
+>
+> Changes in v2:
+> Fix a typo of rbtree.
+>
+>   drivers/gpu/drm/drm_gem.c      | 17 +----------------
+>   drivers/gpu/drm/drm_internal.h |  4 ++--
+>   drivers/gpu/drm/drm_prime.c    | 20 ++++++++++++--------
+>   3 files changed, 15 insertions(+), 26 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+> index eb0c2d041f13..ed39da383570 100644
+> --- a/drivers/gpu/drm/drm_gem.c
+> +++ b/drivers/gpu/drm/drm_gem.c
+> @@ -168,21 +168,6 @@ void drm_gem_private_object_init(struct drm_device *dev,
+>   }
+>   EXPORT_SYMBOL(drm_gem_private_object_init);
+>   
+> -static void
+> -drm_gem_remove_prime_handles(struct drm_gem_object *obj, struct drm_file *filp)
+> -{
+> -	/*
+> -	 * Note: obj->dma_buf can't disappear as long as we still hold a
+> -	 * handle reference in obj->handle_count.
+> -	 */
+> -	mutex_lock(&filp->prime.lock);
+> -	if (obj->dma_buf) {
+> -		drm_prime_remove_buf_handle_locked(&filp->prime,
+> -						   obj->dma_buf);
+> -	}
+> -	mutex_unlock(&filp->prime.lock);
+> -}
+> -
+>   /**
+>    * drm_gem_object_handle_free - release resources bound to userspace handles
+>    * @obj: GEM object to clean up.
+> @@ -253,7 +238,7 @@ drm_gem_object_release_handle(int id, void *ptr, void *data)
+>   	if (obj->funcs->close)
+>   		obj->funcs->close(obj, file_priv);
+>   
+> -	drm_gem_remove_prime_handles(obj, file_priv);
+> +	drm_prime_remove_buf_handle(&file_priv->prime, id);
+>   	drm_vma_node_revoke(&obj->vma_node, file_priv);
+>   
+>   	drm_gem_object_handle_put_unlocked(obj);
+> diff --git a/drivers/gpu/drm/drm_internal.h b/drivers/gpu/drm/drm_internal.h
+> index 1fbbc19f1ac0..7bb98e6a446d 100644
+> --- a/drivers/gpu/drm/drm_internal.h
+> +++ b/drivers/gpu/drm/drm_internal.h
+> @@ -74,8 +74,8 @@ int drm_prime_fd_to_handle_ioctl(struct drm_device *dev, void *data,
+>   
+>   void drm_prime_init_file_private(struct drm_prime_file_private *prime_fpriv);
+>   void drm_prime_destroy_file_private(struct drm_prime_file_private *prime_fpriv);
+> -void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private *prime_fpriv,
+> -					struct dma_buf *dma_buf);
+> +void drm_prime_remove_buf_handle(struct drm_prime_file_private *prime_fpriv,
+> +				 uint32_t handle);
+>   
+>   /* drm_drv.c */
+>   struct drm_minor *drm_minor_acquire(unsigned int minor_id);
+> diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+> index e3f09f18110c..bd5366b16381 100644
+> --- a/drivers/gpu/drm/drm_prime.c
+> +++ b/drivers/gpu/drm/drm_prime.c
+> @@ -190,29 +190,33 @@ static int drm_prime_lookup_buf_handle(struct drm_prime_file_private *prime_fpri
+>   	return -ENOENT;
+>   }
+>   
+> -void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private *prime_fpriv,
+> -					struct dma_buf *dma_buf)
+> +void drm_prime_remove_buf_handle(struct drm_prime_file_private *prime_fpriv,
+> +				 uint32_t handle)
+>   {
+>   	struct rb_node *rb;
+>   
+> -	rb = prime_fpriv->dmabufs.rb_node;
+> +	mutex_lock(&prime_fpriv->lock);
+> +
+> +	rb = prime_fpriv->handles.rb_node;
+>   	while (rb) {
+>   		struct drm_prime_member *member;
+>   
+> -		member = rb_entry(rb, struct drm_prime_member, dmabuf_rb);
+> -		if (member->dma_buf == dma_buf) {
+> +		member = rb_entry(rb, struct drm_prime_member, handle_rb);
+> +		if (member->handle == handle) {
+>   			rb_erase(&member->handle_rb, &prime_fpriv->handles);
+>   			rb_erase(&member->dmabuf_rb, &prime_fpriv->dmabufs);
+>   
+> -			dma_buf_put(dma_buf);
+> +			dma_buf_put(member->dma_buf);
+>   			kfree(member);
+> -			return;
+> -		} else if (member->dma_buf < dma_buf) {
+> +			break;
+> +		} else if (member->handle < handle) {
+>   			rb = rb->rb_right;
+>   		} else {
+>   			rb = rb->rb_left;
+>   		}
+>   	}
+> +
+> +	mutex_unlock(&prime_fpriv->lock);
+>   }
+>   
+>   void drm_prime_init_file_private(struct drm_prime_file_private *prime_fpriv)
 
-                name =3D lm90_detect_xyz(client, chip_id, config1, convrate=
-);
-
-calls in the case statement above that returns something that gcc then
-thinks is bad.
-
-However, from an admittedly quick look, all those functions simply
-seem to return either NULL or a simple constant string.
-
-Which makes me think "oh, it's gcc being confused by the fortification
-code again".
-
-Kees? Do you see anything I don't?
-
-I get the feeling that we should just disable
--Werror=3Dstringop-overread and/or FORTIFY_SOURCE for that
-compiler/architecture combination if it's just gcc causing bogus
-errors.
-
-              Linus

@@ -2,146 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F2C58BC4F
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 20:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E3A58BC4D
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 20:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235180AbiHGSQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 14:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
+        id S234432AbiHGSQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 14:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbiHGSPy (ORCPT
+        with ESMTP id S234777AbiHGSPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 14:15:54 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D3D64D9
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 11:15:51 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id tl27so12921465ejc.1
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 11:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CLsK8zyKuvk6BZGE5Y5TZ/KuheYdgzde52aWp1HCe2w=;
-        b=MpOFy8JsXjXRXS7sUnFo5CZ6bZkjGKKDTIi4APUpbGeKaADxOHoOC3kaMh13qO8QG7
-         Fc04oiFT8VcUOVpUSZZm4XEBZOQxiSJ9dhJElra03xtqLCfZj8OURZ+aGlb69XDWqR7T
-         bGpKfmZpB5zrHswcxdEZ5Si3eGRsvpoECsLtZLCWAgKuqgIkF2CphDgijfApwdCr65i/
-         5RLwNyJJsLEn2gydgKY91VESc7vWBtKgxei1NII27BcXRXry0PAr7iLXEjhoLBc3p6An
-         CqnBeicTShzFJ5vVnZPcd6aC6pLwaUj2DwqmmGJLuHtDuuMNsW+AJBOrX+0DO2EEq6iA
-         19qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CLsK8zyKuvk6BZGE5Y5TZ/KuheYdgzde52aWp1HCe2w=;
-        b=yrmsk+/N0Qbfykv0m2jWoxF7EYi8B/aowEekPZNxr2T4QxfA15LI1tWbhv63uXqFmE
-         tcychbXYaTo2weamUSi3X6xYgRr9btO8t4AsSjFNbLYveVUnWkekTYkBsgJ9gUBjEvdi
-         YKkOZBwqzIpnGDwelZnNlRv0LJsmSpguGEqeMrQADIc2B0Mt7/mwibPVxzCXRhLfPunY
-         gaigYiPlNYjmEv5sZ07ZeIObVrm4jHh5oMH35xui41CxoUdnZBSeiBf5+7eQ5sPkhEsv
-         1Qwpwr2LWODuLn94hX4ZnBb0m9iR1yh44ooJeCb+ES4773iEOh+BkLTlNg84KaalDuvw
-         XAQw==
-X-Gm-Message-State: ACgBeo2W4QFLL1ZeMlwSGIEgSBiWgiYXmG1UKoaS1LT7pqDm7QBcmWn4
-        R5fiMdiFNjPNo894OsmGddQ=
-X-Google-Smtp-Source: AA6agR6/OjEybgEzJ3bZozk1S++gsbuswCKK5JOUkRVcNEwOYtezdZ1ebHHrHAzuDdrYtS9ms0uwYw==
-X-Received: by 2002:a17:907:6e88:b0:730:e16e:b760 with SMTP id sh8-20020a1709076e8800b00730e16eb760mr10353049ejc.5.1659896150263;
-        Sun, 07 Aug 2022 11:15:50 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb84.dynamic.kabel-deutschland.de. [95.90.187.132])
-        by smtp.gmail.com with ESMTPSA id b7-20020a17090630c700b0072b92daef1csm4157441ejb.146.2022.08.07.11.15.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 11:15:50 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 2/5] staging: r8188eu: merge rtw_os_recvbuf_resource_alloc() into rtw_recv.c
-Date:   Sun,  7 Aug 2022 20:15:35 +0200
-Message-Id: <20220807181538.8499-3-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220807181538.8499-1-straube.linux@gmail.com>
-References: <20220807181538.8499-1-straube.linux@gmail.com>
+        Sun, 7 Aug 2022 14:15:49 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5236964D9
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 11:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659896148; x=1691432148;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SzlJQkY7FhUA15heqPBSFMQ71M01/eJ0bitLZcONHA0=;
+  b=K9wDDw9Obkisr4ETK2zPSoRZIcOjVDFpV6DpZFnc/vJ8OW/bic0p8I/O
+   /dJoAHfrRjuY7zWQauaIC3EJuYDcNwrARu1Cc7UbdzVSTyCNdGQ7z022q
+   NGvdRdVq3PCyZCidV/ecskyxasEHaItX92M2M6i5hStExAkDmpLcLHHoF
+   vMZNXUOr8PAJw54YQN0w1pEm+hO3wXsWPVEFszo1KrcJHPkMAFp4oD9SB
+   /hY1O/cxrR99gJS9DwTPMorGS9Ou5G8lzhTkN+TkFIVZclN6OvRydAv3x
+   lQapAhtUXU7OBTR4Y0MwmGH+IIMzBv5A6HGNY9X8xyzl4vGkgYdreZuiy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="288019381"
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="288019381"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 11:15:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="849836383"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Aug 2022 11:15:46 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKkoT-000LY1-15;
+        Sun, 07 Aug 2022 18:15:45 +0000
+Date:   Mon, 8 Aug 2022 02:15:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 25/28] mfd: stmfx: Remove #ifdef guards for PM related
+ functions
+Message-ID: <202208080225.Hm01SP8r-lkp@intel.com>
+References: <20220807145247.46107-26-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220807145247.46107-26-paul@crapouillou.net>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Merge the functionality of the function rtw_os_recvbuf_resource_alloc()
-into rtl8188eu_init_recv_priv(). Merging the functionality instead of
-just making the function static improves readability and we have one
-function less to care about when converting the uses of _FAIL/_SUCCESS
-to normal kernel error code logic.
+Hi Paul,
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_recv.c      |  8 ++++++--
- drivers/staging/r8188eu/include/recv_osdep.h |  2 --
- drivers/staging/r8188eu/os_dep/recv_linux.c  | 14 --------------
- 3 files changed, 6 insertions(+), 18 deletions(-)
+I love your patch! Yet something to improve:
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 7a97c090f297..5de4e13b4b17 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -62,9 +62,13 @@ static int rtl8188eu_init_recv_priv(struct adapter *padapter)
- 	precvbuf = (struct recv_buf *)precvpriv->precv_buf;
- 
- 	for (i = 0; i < NR_RECVBUFF; i++) {
--		res = rtw_os_recvbuf_resource_alloc(padapter, precvbuf);
--		if (res == _FAIL)
-+		precvbuf->pskb = NULL;
-+		precvbuf->reuse = false;
-+		precvbuf->purb = usb_alloc_urb(0, GFP_KERNEL);
-+		if (!precvbuf->purb) {
-+			res = _FAIL;
- 			break;
-+		}
- 		precvbuf->adapter = padapter;
- 		precvbuf++;
- 	}
-diff --git a/drivers/staging/r8188eu/include/recv_osdep.h b/drivers/staging/r8188eu/include/recv_osdep.h
-index b9dc32c20cfd..51dc287f263c 100644
---- a/drivers/staging/r8188eu/include/recv_osdep.h
-+++ b/drivers/staging/r8188eu/include/recv_osdep.h
-@@ -19,8 +19,6 @@ void rtw_handle_tkip_mic_err(struct adapter *padapter, u8 bgroup);
- int rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter);
- void rtw_free_recv_priv(struct recv_priv *precvpriv);
- 
--int rtw_os_recvbuf_resource_alloc(struct adapter *adapt, struct recv_buf *buf);
--
- void rtw_init_recv_timer(struct recv_reorder_ctrl *preorder_ctrl);
- int _netdev_open(struct net_device *pnetdev);
- int netdev_open(struct net_device *pnetdev);
-diff --git a/drivers/staging/r8188eu/os_dep/recv_linux.c b/drivers/staging/r8188eu/os_dep/recv_linux.c
-index abdb42ab649b..c180f0e4dd3c 100644
---- a/drivers/staging/r8188eu/os_dep/recv_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/recv_linux.c
-@@ -12,20 +12,6 @@
- #include "../include/osdep_intf.h"
- #include "../include/usb_ops.h"
- 
--/* alloc os related resource in struct recv_buf */
--int rtw_os_recvbuf_resource_alloc(struct adapter *padapter,
--		struct recv_buf *precvbuf)
--{
--	int res = _SUCCESS;
--
--	precvbuf->purb = usb_alloc_urb(0, GFP_KERNEL);
--	if (!precvbuf->purb)
--		res = _FAIL;
--	precvbuf->pskb = NULL;
--	precvbuf->reuse = false;
--	return res;
--}
--
- void rtw_handle_tkip_mic_err(struct adapter *padapter, u8 bgroup)
- {
- 	union iwreq_data wrqu;
+[auto build test ERROR on v5.19]
+[cannot apply to lee-mfd/for-mfd-next linus/master next-20220805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/mfd-Remove-ifdef-guards-for-PM-functions/20220807-225947
+base:    3d7cb6b04c3f3115719235cc6866b10326de34cd
+config: hexagon-randconfig-r013-20220807 (https://download.01.org/0day-ci/archive/20220808/202208080225.Hm01SP8r-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5a39bd52d549e3f3be743fb336dd710eac75055d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Paul-Cercueil/mfd-Remove-ifdef-guards-for-PM-functions/20220807-225947
+        git checkout 5a39bd52d549e3f3be743fb336dd710eac75055d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mfd/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/mfd/stmfx.c:485:18: error: no member named 'bkp_sysctrl' in 'struct stmfx'
+                                 &stmfx->bkp_sysctrl, sizeof(stmfx->bkp_sysctrl));
+                                  ~~~~~  ^
+   drivers/mfd/stmfx.c:485:45: error: no member named 'bkp_sysctrl' in 'struct stmfx'
+                                 &stmfx->bkp_sysctrl, sizeof(stmfx->bkp_sysctrl));
+                                                             ~~~~~  ^
+>> drivers/mfd/stmfx.c:490:18: error: no member named 'bkp_irqoutpin' in 'struct stmfx'
+                                 &stmfx->bkp_irqoutpin,
+                                  ~~~~~  ^
+   drivers/mfd/stmfx.c:491:24: error: no member named 'bkp_irqoutpin' in 'struct stmfx'
+                                 sizeof(stmfx->bkp_irqoutpin));
+                                        ~~~~~  ^
+   drivers/mfd/stmfx.c:525:19: error: no member named 'bkp_sysctrl' in 'struct stmfx'
+                                  &stmfx->bkp_sysctrl, sizeof(stmfx->bkp_sysctrl));
+                                   ~~~~~  ^
+   drivers/mfd/stmfx.c:525:46: error: no member named 'bkp_sysctrl' in 'struct stmfx'
+                                  &stmfx->bkp_sysctrl, sizeof(stmfx->bkp_sysctrl));
+                                                              ~~~~~  ^
+   drivers/mfd/stmfx.c:530:19: error: no member named 'bkp_irqoutpin' in 'struct stmfx'
+                                  &stmfx->bkp_irqoutpin,
+                                   ~~~~~  ^
+   drivers/mfd/stmfx.c:531:25: error: no member named 'bkp_irqoutpin' in 'struct stmfx'
+                                  sizeof(stmfx->bkp_irqoutpin));
+                                         ~~~~~  ^
+   8 errors generated.
+
+
+vim +485 drivers/mfd/stmfx.c
+
+06252ade915665 Amelie Delaunay 2019-05-09  478  
+06252ade915665 Amelie Delaunay 2019-05-09  479  static int stmfx_suspend(struct device *dev)
+06252ade915665 Amelie Delaunay 2019-05-09  480  {
+06252ade915665 Amelie Delaunay 2019-05-09  481  	struct stmfx *stmfx = dev_get_drvdata(dev);
+06252ade915665 Amelie Delaunay 2019-05-09  482  	int ret;
+06252ade915665 Amelie Delaunay 2019-05-09  483  
+06252ade915665 Amelie Delaunay 2019-05-09  484  	ret = regmap_raw_read(stmfx->map, STMFX_REG_SYS_CTRL,
+06252ade915665 Amelie Delaunay 2019-05-09 @485  			      &stmfx->bkp_sysctrl, sizeof(stmfx->bkp_sysctrl));
+06252ade915665 Amelie Delaunay 2019-05-09  486  	if (ret)
+06252ade915665 Amelie Delaunay 2019-05-09  487  		return ret;
+06252ade915665 Amelie Delaunay 2019-05-09  488  
+06252ade915665 Amelie Delaunay 2019-05-09  489  	ret = regmap_raw_read(stmfx->map, STMFX_REG_IRQ_OUT_PIN,
+06252ade915665 Amelie Delaunay 2019-05-09 @490  			      &stmfx->bkp_irqoutpin,
+06252ade915665 Amelie Delaunay 2019-05-09  491  			      sizeof(stmfx->bkp_irqoutpin));
+06252ade915665 Amelie Delaunay 2019-05-09  492  	if (ret)
+06252ade915665 Amelie Delaunay 2019-05-09  493  		return ret;
+06252ade915665 Amelie Delaunay 2019-05-09  494  
+97eda5dcc2cde5 Amelie Delaunay 2020-04-22  495  	disable_irq(stmfx->irq);
+97eda5dcc2cde5 Amelie Delaunay 2020-04-22  496  
+06252ade915665 Amelie Delaunay 2019-05-09  497  	if (stmfx->vdd)
+06252ade915665 Amelie Delaunay 2019-05-09  498  		return regulator_disable(stmfx->vdd);
+06252ade915665 Amelie Delaunay 2019-05-09  499  
+06252ade915665 Amelie Delaunay 2019-05-09  500  	return 0;
+06252ade915665 Amelie Delaunay 2019-05-09  501  }
+06252ade915665 Amelie Delaunay 2019-05-09  502  
+
 -- 
-2.37.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

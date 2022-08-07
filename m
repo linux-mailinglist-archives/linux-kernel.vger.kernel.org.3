@@ -2,35 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D939158BB70
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B6A58BB71
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234841AbiHGOzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 10:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        id S234683AbiHGO4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 10:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235011AbiHGOzX (ORCPT
+        with ESMTP id S235356AbiHGOzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 10:55:23 -0400
+        Sun, 7 Aug 2022 10:55:43 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1246175
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:55:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F20B495
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
         s=mail; t=1659883986; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ILGkOjBbxQ6/oFH45I21cYP8YppPBAHJarOOSD0Anzg=;
-        b=Ji1TNYdO9uNnL434iMBgQ4dfjBePw83p7ofilPXqQDHIk2QLiuxO7nc4TE6PwAXFV2Byv9
-        XghPAVeetYDznix7FhwviD9hrKvbSIFo7mAgqISjj+xl6YGzsVf/H8VF33MYRo9dlC0CWr
-        asywwHCFzR8/Bq9QtsuuqmP9e2It1fc=
+        bh=v1ZU+nsSpk1Q/xY16OKp9UDZMSHWzUMwic9ChJQcafM=;
+        b=Scuasrp36cjvgyC/DDzU3KWW8gBSUZj+MZ06wEJjlypHmaoujxjZtYjse3X/Jj0PSNcRsL
+        W1kWrb3V4FxHfVoyhB2WBMQ1QsQhBOOYkuOxw+HjkmB8mZnnTGSmDjoqlzD6zuzY8sK9Ol
+        G7mCgdrp0Mj87ZPHZNwFSgiV1+Fk89M=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        patches@opensource.cirrus.com
-Subject: [PATCH 17/28] mfd: wm8994: Remove #ifdef guards for PM related functions
-Date:   Sun,  7 Aug 2022 16:52:36 +0200
-Message-Id: <20220807145247.46107-18-paul@crapouillou.net>
+Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 18/28] mfd: max77620: Remove #ifdef guards for PM related functions
+Date:   Sun,  7 Aug 2022 16:52:37 +0200
+Message-Id: <20220807145247.46107-19-paul@crapouillou.net>
 In-Reply-To: <20220807145247.46107-1-paul@crapouillou.net>
 References: <20220807145247.46107-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -44,65 +43,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new RUNTIME_PM_OPS() and pm_ptr() macros to handle the
-.runtime_suspend/.runtime_resume callbacks.
+Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
+to handle the .suspend/.resume callbacks.
 
 These macros allow the suspend and resume functions to be automatically
-dropped by the compiler when CONFIG_PM is disabled, without having
+dropped by the compiler when CONFIG_SUSPEND is disabled, without having
 to use #ifdef guards.
 
 The advantage is then that these functions are now always compiled
 independently of any Kconfig option, and thanks to that bugs and
 regressions are easier to catch.
 
-Note that this driver should probably use the new
-DEFINE_RUNTIME_DEV_PM_OPS() macro instead, which will provide
-.suspend/.resume callbacks, pointing to pm_runtime_force_suspend() and
-pm_runtime_force_resume() respectively; unless those callbacks really
-aren't needed.
-
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Cc: patches@opensource.cirrus.com
 ---
- drivers/mfd/wm8994-core.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/mfd/max77620.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/mfd/wm8994-core.c b/drivers/mfd/wm8994-core.c
-index 7b1d270722ba..a27a13b5ae1e 100644
---- a/drivers/mfd/wm8994-core.c
-+++ b/drivers/mfd/wm8994-core.c
-@@ -110,7 +110,6 @@ static const char *wm8958_main_supplies[] = {
- 	"SPKVDD2",
- };
+diff --git a/drivers/mfd/max77620.c b/drivers/mfd/max77620.c
+index fec2096474ad..e8ee4b132fb7 100644
+--- a/drivers/mfd/max77620.c
++++ b/drivers/mfd/max77620.c
+@@ -574,7 +574,6 @@ static int max77620_probe(struct i2c_client *client,
+ 	return 0;
+ }
  
--#ifdef CONFIG_PM
- static int wm8994_suspend(struct device *dev)
+-#ifdef CONFIG_PM_SLEEP
+ static int max77620_set_fps_period(struct max77620_chip *chip,
+ 				   int fps_id, int time_period)
  {
- 	struct wm8994 *wm8994 = dev_get_drvdata(dev);
-@@ -213,7 +212,6 @@ static int wm8994_resume(struct device *dev)
+@@ -681,7 +680,6 @@ static int max77620_i2c_resume(struct device *dev)
  
- 	return ret;
+ 	return 0;
  }
 -#endif
  
- #ifdef CONFIG_REGULATOR
- static int wm8994_ldo_in_use(struct wm8994_pdata *pdata, int ldo)
-@@ -676,13 +674,13 @@ static const struct i2c_device_id wm8994_i2c_id[] = {
- MODULE_DEVICE_TABLE(i2c, wm8994_i2c_id);
- 
- static const struct dev_pm_ops wm8994_pm_ops = {
--	SET_RUNTIME_PM_OPS(wm8994_suspend, wm8994_resume, NULL)
-+	RUNTIME_PM_OPS(wm8994_suspend, wm8994_resume, NULL)
+ static const struct i2c_device_id max77620_id[] = {
+ 	{"max77620", MAX77620},
+@@ -690,14 +688,13 @@ static const struct i2c_device_id max77620_id[] = {
+ 	{},
  };
  
- static struct i2c_driver wm8994_i2c_driver = {
+-static const struct dev_pm_ops max77620_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(max77620_i2c_suspend, max77620_i2c_resume)
+-};
++static DEFINE_SIMPLE_DEV_PM_OPS(max77620_pm_ops,
++				max77620_i2c_suspend, max77620_i2c_resume);
+ 
+ static struct i2c_driver max77620_driver = {
  	.driver = {
- 		.name = "wm8994",
--		.pm = &wm8994_pm_ops,
-+		.pm = pm_ptr(&wm8994_pm_ops),
- 		.of_match_table = wm8994_of_match,
+ 		.name = "max77620",
+-		.pm = &max77620_pm_ops,
++		.pm = pm_sleep_ptr(&max77620_pm_ops),
  	},
- 	.probe = wm8994_i2c_probe,
+ 	.probe = max77620_probe,
+ 	.id_table = max77620_id,
 -- 
 2.35.1
 

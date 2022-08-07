@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8B958BB64
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB63658BB65
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbiHGOyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 10:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S234526AbiHGOyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 10:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234605AbiHGOy2 (ORCPT
+        with ESMTP id S234671AbiHGOyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 10:54:28 -0400
+        Sun, 7 Aug 2022 10:54:36 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236D2A44F
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:54:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C361BAE44
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:54:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
         s=mail; t=1659883984; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zivyqjaFb3lN9q7sTz12f3Tu+aS6HnGvY6D+6Lvk5sU=;
-        b=nq/Ds5o++VNAL8NNvIP0YMstGy8lfFtXMEs+XR8eCrK3x3wkEWr98v1l9BwFeqbdRZ51Wu
-        XyJIFrP3KF08UXCY2MUba7HhM1FCWlw4lXGM8WR4lJ2KyIepn1vzi8LzCfch8AvCs+hWTa
-        BXgQPwHvObAmZvlOTeYl2txj2mGwD3c=
+        bh=m0jy5GL2jcyHt/0fssuM/k0AGfDYo0++8BhJmUjKUqw=;
+        b=W0OW4Y7Rq/zb41lyviUJVHp6eOn8he7byoIwKRvgzbY/vwA8uP2kvdolTc1BD70N1Bgo/K
+        miJFfo0O34am+a6bFBVV9wmqzNap87T9GiQJSvqXwl0GoF6kYeTlp/zNGfeuID7xluaHOY
+        CB8cmMryySVV3+aqAwZyA3v/Hq0E46Q=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 10/28] mfd: 88pm860x: Remove #ifdef guards for PM related functions
-Date:   Sun,  7 Aug 2022 16:52:29 +0200
-Message-Id: <20220807145247.46107-11-paul@crapouillou.net>
+Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Andy Shevchenko <andy@kernel.org>
+Subject: [PATCH 11/28] mfd: intel_soc_pmic: Remove #ifdef guards for PM related functions
+Date:   Sun,  7 Aug 2022 16:52:30 +0200
+Message-Id: <20220807145247.46107-12-paul@crapouillou.net>
 In-Reply-To: <20220807145247.46107-1-paul@crapouillou.net>
 References: <20220807145247.46107-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -55,42 +56,78 @@ independently of any Kconfig option, and thanks to that bugs and
 regressions are easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Cc: Andy Shevchenko <andy@kernel.org>
 ---
- drivers/mfd/88pm860x-core.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/mfd/intel_soc_pmic_bxtwc.c | 7 +++----
+ drivers/mfd/intel_soc_pmic_core.c  | 8 +++-----
+ 2 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/mfd/88pm860x-core.c b/drivers/mfd/88pm860x-core.c
-index b1e829ea909b..b698eb59041e 100644
---- a/drivers/mfd/88pm860x-core.c
-+++ b/drivers/mfd/88pm860x-core.c
-@@ -1213,7 +1213,6 @@ static int pm860x_remove(struct i2c_client *client)
- 	return 0;
+diff --git a/drivers/mfd/intel_soc_pmic_bxtwc.c b/drivers/mfd/intel_soc_pmic_bxtwc.c
+index bc069c4daa60..7110d91f7ace 100644
+--- a/drivers/mfd/intel_soc_pmic_bxtwc.c
++++ b/drivers/mfd/intel_soc_pmic_bxtwc.c
+@@ -586,7 +586,6 @@ static void bxtwc_shutdown(struct platform_device *pdev)
+ 	disable_irq(pmic->irq);
  }
  
 -#ifdef CONFIG_PM_SLEEP
- static int pm860x_suspend(struct device *dev)
+ static int bxtwc_suspend(struct device *dev)
  {
- 	struct i2c_client *client = to_i2c_client(dev);
-@@ -1233,9 +1232,8 @@ static int pm860x_resume(struct device *dev)
- 		disable_irq_wake(chip->core_irq);
+ 	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
+@@ -603,8 +602,8 @@ static int bxtwc_resume(struct device *dev)
+ 	enable_irq(pmic->irq);
+ 	return 0;
+ }
+-#endif
+-static SIMPLE_DEV_PM_OPS(bxtwc_pm_ops, bxtwc_suspend, bxtwc_resume);
++
++static DEFINE_SIMPLE_DEV_PM_OPS(bxtwc_pm_ops, bxtwc_suspend, bxtwc_resume);
+ 
+ static const struct acpi_device_id bxtwc_acpi_ids[] = {
+ 	{ "INT34D3", },
+@@ -618,7 +617,7 @@ static struct platform_driver bxtwc_driver = {
+ 	.shutdown = bxtwc_shutdown,
+ 	.driver	= {
+ 		.name	= "BXTWC PMIC",
+-		.pm     = &bxtwc_pm_ops,
++		.pm     = pm_sleep_ptr(&bxtwc_pm_ops),
+ 		.acpi_match_table = ACPI_PTR(bxtwc_acpi_ids),
+ 	},
+ };
+diff --git a/drivers/mfd/intel_soc_pmic_core.c b/drivers/mfd/intel_soc_pmic_core.c
+index 5e8c94e008ed..96303aa87bc1 100644
+--- a/drivers/mfd/intel_soc_pmic_core.c
++++ b/drivers/mfd/intel_soc_pmic_core.c
+@@ -104,7 +104,6 @@ static void intel_soc_pmic_shutdown(struct i2c_client *i2c)
+ 	return;
+ }
+ 
+-#if defined(CONFIG_PM_SLEEP)
+ static int intel_soc_pmic_suspend(struct device *dev)
+ {
+ 	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
+@@ -122,10 +121,9 @@ static int intel_soc_pmic_resume(struct device *dev)
+ 
  	return 0;
  }
 -#endif
  
--static SIMPLE_DEV_PM_OPS(pm860x_pm_ops, pm860x_suspend, pm860x_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(pm860x_pm_ops, pm860x_suspend, pm860x_resume);
+-static SIMPLE_DEV_PM_OPS(intel_soc_pmic_pm_ops, intel_soc_pmic_suspend,
+-			 intel_soc_pmic_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(intel_soc_pmic_pm_ops, intel_soc_pmic_suspend,
++				intel_soc_pmic_resume);
  
- static const struct i2c_device_id pm860x_id_table[] = {
- 	{ "88PM860x", 0 },
-@@ -1252,7 +1250,7 @@ MODULE_DEVICE_TABLE(of, pm860x_dt_ids);
- static struct i2c_driver pm860x_driver = {
- 	.driver	= {
- 		.name	= "88PM860x",
--		.pm     = &pm860x_pm_ops,
-+		.pm     = pm_sleep_ptr(&pm860x_pm_ops),
- 		.of_match_table	= pm860x_dt_ids,
+ static const struct i2c_device_id intel_soc_pmic_i2c_id[] = {
+ 	{ }
+@@ -143,7 +141,7 @@ MODULE_DEVICE_TABLE(acpi, intel_soc_pmic_acpi_match);
+ static struct i2c_driver intel_soc_pmic_i2c_driver = {
+ 	.driver = {
+ 		.name = "intel_soc_pmic_i2c",
+-		.pm = &intel_soc_pmic_pm_ops,
++		.pm = pm_sleep_ptr(&intel_soc_pmic_pm_ops),
+ 		.acpi_match_table = ACPI_PTR(intel_soc_pmic_acpi_match),
  	},
- 	.probe_new	= pm860x_probe,
+ 	.probe = intel_soc_pmic_i2c_probe,
 -- 
 2.35.1
 

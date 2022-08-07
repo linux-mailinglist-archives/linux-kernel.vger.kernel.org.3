@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEA558BB6E
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED9C58BB6F
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235216AbiHGOzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 10:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        id S234614AbiHGOzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 10:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234803AbiHGOzH (ORCPT
+        with ESMTP id S234906AbiHGOzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 10:55:07 -0400
+        Sun, 7 Aug 2022 10:55:15 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A2FB1CB
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:55:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F68D9B
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
         s=mail; t=1659883986; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H0eCKU4RK3zKJNHbgkID62SWdcosUW+2jUir4hogae8=;
-        b=aJmRmK2w5BLZGzZBETjaYxstdi2UYIJkMB1R/qe7fIgTHf2ljcx+hLTOWDQIsGfLuuh+Td
-        ZQuW+n62FrsWnvwP45jiTQM12hRQZYq5Nt2HNn4myxBPdEc8NzEK7qiariJ7555L5kXzMZ
-        9ZMjRKb3jQoOPprVApIjO3E6ko7P8Go=
+        bh=43gAJLh+NO1r8Oyt6XxRvPraTLloEC1o3eOKZ6oy6Nw=;
+        b=B6zlrFb7+LpdkfI9xxOJzHOPp4YViGVmXNLrD9rJ/0ymSiIj5Ktqo+x3WsbaFV/NPbu+F7
+        h2jn5hzwWW0QT7/PYPNmVB9TcRSNfYnrcATDi+JmCeyPTvDAi/httHT1jztz+NJByHM4AA
+        2l0ou23paU4aIaHhNr9m0c/oddll5sQ=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee.jones@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 15/28] mfd: tc6387xb: Remove #ifdef guards for PM related functions
-Date:   Sun,  7 Aug 2022 16:52:34 +0200
-Message-Id: <20220807145247.46107-16-paul@crapouillou.net>
+Subject: [PATCH 16/28] mfd: tps6586x: Remove #ifdef guards for PM related functions
+Date:   Sun,  7 Aug 2022 16:52:35 +0200
+Message-Id: <20220807145247.46107-17-paul@crapouillou.net>
 In-Reply-To: <20220807145247.46107-1-paul@crapouillou.net>
 References: <20220807145247.46107-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -43,10 +43,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new pm_sleep_ptr() macro to handle the .suspend/.resume
-callbacks.
+Use the new pm_sleep_ptr() macro to handle the .irq_set_wake() callback.
 
-This macro allow the suspend and resume functions to be automatically
+This macro allows the mt6397_irq_set_wake() function to be automatically
 dropped by the compiler when CONFIG_SUSPEND is disabled, without having
 to use #ifdef guards.
 
@@ -56,43 +55,38 @@ regressions are easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/mfd/tc6387xb.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ drivers/mfd/tps6586x.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/mfd/tc6387xb.c b/drivers/mfd/tc6387xb.c
-index e846e4d26b6e..5392da6ba7b0 100644
---- a/drivers/mfd/tc6387xb.c
-+++ b/drivers/mfd/tc6387xb.c
-@@ -40,7 +40,6 @@ static const struct resource tc6387xb_mmc_resources[] = {
+diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
+index c9303d3d6602..fd57c3974615 100644
+--- a/drivers/mfd/tps6586x.c
++++ b/drivers/mfd/tps6586x.c
+@@ -269,15 +269,11 @@ static void tps6586x_irq_sync_unlock(struct irq_data *data)
+ 	mutex_unlock(&tps6586x->irq_lock);
+ }
  
- /*--------------------------------------------------------------------------*/
- 
--#ifdef CONFIG_PM
- static int tc6387xb_suspend(struct platform_device *dev, pm_message_t state)
+-#ifdef CONFIG_PM_SLEEP
+ static int tps6586x_irq_set_wake(struct irq_data *irq_data, unsigned int on)
  {
- 	struct tc6387xb *tc6387xb = platform_get_drvdata(dev);
-@@ -67,10 +66,6 @@ static int tc6387xb_resume(struct platform_device *dev)
- 
- 	return 0;
+ 	struct tps6586x *tps6586x = irq_data_get_irq_chip_data(irq_data);
+ 	return irq_set_irq_wake(tps6586x->irq, on);
  }
 -#else
--#define tc6387xb_suspend  NULL
--#define tc6387xb_resume   NULL
+-#define tps6586x_irq_set_wake NULL
 -#endif
  
- /*--------------------------------------------------------------------------*/
- 
-@@ -220,8 +215,8 @@ static struct platform_driver tc6387xb_platform_driver = {
- 	},
- 	.probe		= tc6387xb_probe,
- 	.remove		= tc6387xb_remove,
--	.suspend        = tc6387xb_suspend,
--	.resume         = tc6387xb_resume,
-+	.suspend        = pm_sleep_ptr(tc6387xb_suspend),
-+	.resume         = pm_sleep_ptr(tc6387xb_resume),
+ static struct irq_chip tps6586x_irq_chip = {
+ 	.name = "tps6586x",
+@@ -285,7 +281,7 @@ static struct irq_chip tps6586x_irq_chip = {
+ 	.irq_bus_sync_unlock = tps6586x_irq_sync_unlock,
+ 	.irq_disable = tps6586x_irq_disable,
+ 	.irq_enable = tps6586x_irq_enable,
+-	.irq_set_wake = tps6586x_irq_set_wake,
++	.irq_set_wake = pm_sleep_ptr(tps6586x_irq_set_wake),
  };
  
- module_platform_driver(tc6387xb_platform_driver);
+ static int tps6586x_irq_map(struct irq_domain *h, unsigned int virq,
 -- 
 2.35.1
 

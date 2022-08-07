@@ -2,158 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA84B58BE11
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 00:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00D958BE18
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 00:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236010AbiHGWnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 18:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
+        id S230118AbiHGWxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 18:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235536AbiHGWm6 (ORCPT
+        with ESMTP id S229530AbiHGWxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 18:42:58 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87631150
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 15:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659912058; x=1691448058;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yIJWjqpQC2u3xCkCJHtdqFgJMqnShtDrw8ImGeZFfF0=;
-  b=DhngCNiN2zTuPaznfg06ZY4OyD11b51cJcWvxHRJCGu+dEOVZTtG/LtH
-   7ftBP/AsiAz0ee53VS0ctJ+MKkvMkhLNtNpvJIBl77xNr8C94YInOCtNw
-   94ZVgqfFAiH2pQ1tqboBpwbNZ41XmcW9dcK2IEQbwEBgqfz/QNwB4koYv
-   62+eVIVxyaEv3n8BS4z9D3X+WXYQ6hUK4nT9gSlwscyVv6Pi9ZQvAWJcp
-   noeEIibFK+f1mInmjOuqLj5G4d3H0YEKjKqmmlIVUl8jjSqOgbDT55kLU
-   RDdajyv0TOEeTX6+vNiAYHI8d0H/tDcVnwaEHqzJC9HyCjql4v/bwr5IZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="354467628"
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="354467628"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 15:40:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="580114296"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Aug 2022 15:40:57 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKox6-000LjI-2T;
-        Sun, 07 Aug 2022 22:40:56 +0000
-Date:   Mon, 08 Aug 2022 06:40:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- a20dc5e7b11c5345bc5552c80085184c4459f6a5
-Message-ID: <62f03f65.cwnLgvxIrWJLwDTc%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 7 Aug 2022 18:53:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A048E21A5;
+        Sun,  7 Aug 2022 15:53:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8624BB80D7F;
+        Sun,  7 Aug 2022 22:53:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7DAEC433D6;
+        Sun,  7 Aug 2022 22:53:15 +0000 (UTC)
+Date:   Sun, 7 Aug 2022 18:53:13 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     corbet@lwn.net, mingo@redhat.com, shuah@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC tracing 1/4] tracing: predicate matching trigger crashes
+ for > 8-byte arrays
+Message-ID: <20220807185220.6aaa0593@rorschach.local.home>
+In-Reply-To: <1659910883-18223-2-git-send-email-alan.maguire@oracle.com>
+References: <1659910883-18223-1-git-send-email-alan.maguire@oracle.com>
+        <1659910883-18223-2-git-send-email-alan.maguire@oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: a20dc5e7b11c5345bc5552c80085184c4459f6a5  Merge branch into tip/master: 'x86/platform'
+On Sun,  7 Aug 2022 23:21:20 +0100
+Alan Maguire <alan.maguire@oracle.com> wrote:
 
-elapsed time: 716m
+> The following (wrong) use of tracepoint filtering was enough to trigger
+> a null-pointer dereference crash:
+> 
+> 	cd /sys/kernel/debug/tracing
+> 	echo "saddr_v6 == 0x0100007f" > tcp/tcp_receive_reset/filter
+> 	echo 1 > tcp/tcp_receive_reset/enable
+> 	wget https://localhost
+> 
+> This works fine if saddr - a 4-byte array representing the source address -
+> is used instead.
+> 
 
-configs tested: 76
-configs skipped: 2
+The patch series is a new feature so it would need to go into the next
+merge window. But this patch looks to be a bug fix, so I'll pull this
+one in separately, and tag it for stable.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
 
-gcc tested configs:
-um                             i386_defconfig
-powerpc                           allnoconfig
-i386                          randconfig-a001
-um                           x86_64_defconfig
-i386                          randconfig-a003
-arc                  randconfig-r043-20220807
-i386                                defconfig
-s390                 randconfig-r044-20220807
-x86_64                              defconfig
-i386                          randconfig-a005
-x86_64                    rhel-8.3-kselftests
-x86_64                        randconfig-a013
-i386                          randconfig-a014
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a011
-x86_64                         rhel-8.3-kunit
-i386                             allyesconfig
-x86_64                           rhel-8.3-kvm
-riscv                randconfig-r042-20220807
-x86_64                           rhel-8.3-syz
-csky                              allnoconfig
-x86_64                               rhel-8.3
-i386                          randconfig-a012
-x86_64                        randconfig-a004
-i386                          randconfig-a016
-arc                               allnoconfig
-x86_64                        randconfig-a015
-x86_64                        randconfig-a002
-alpha                             allnoconfig
-sh                               allmodconfig
-riscv                             allnoconfig
-x86_64                           allyesconfig
-alpha                            alldefconfig
-arm                                 defconfig
-m68k                             allyesconfig
-m68k                        m5407c3_defconfig
-x86_64                        randconfig-a006
-alpha                            allyesconfig
-m68k                             allmodconfig
-powerpc                     stx_gp3_defconfig
-mips                             allyesconfig
-arc                              allyesconfig
-powerpc                          allmodconfig
-sh                          rsk7264_defconfig
-sparc64                          alldefconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-arm                        mini2440_defconfig
-sparc                            alldefconfig
-mips                         cobalt_defconfig
-loongarch                 loongson3_defconfig
-arm                            xcep_defconfig
-arm                           stm32_defconfig
-mips                      maltasmvp_defconfig
-powerpc                      chrp32_defconfig
+-- Steve
 
-clang tested configs:
-i386                          randconfig-a002
-hexagon              randconfig-r041-20220807
-i386                          randconfig-a004
-i386                          randconfig-a013
-hexagon              randconfig-r045-20220807
-i386                          randconfig-a006
-i386                          randconfig-a011
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a015
-x86_64                        randconfig-a014
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-arm                     am200epdkit_defconfig
-x86_64                        randconfig-a003
-arm                        mvebu_v5_defconfig
-arm                       spear13xx_defconfig
-arm                         mv78xx0_defconfig
-arm                          ep93xx_defconfig
-arm                              alldefconfig
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Fix is to handle case where we encounter an unexpected size.
+> 
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  kernel/trace/trace_events_filter.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+> index 4b1057ab9d96..65e01c8d48d9 100644
+> --- a/kernel/trace/trace_events_filter.c
+> +++ b/kernel/trace/trace_events_filter.c
+> @@ -1490,6 +1490,11 @@ static int parse_pred(const char *str, void *data,
+>  		else {
+>  			pred->fn = select_comparison_fn(pred->op, field->size,
+>  							field->is_signed);
+> +			if (!pred->fn) {
+> +				parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP,
+> +					    pos + i);
+> +				goto err_free;
+> +			}
+>  			if (pred->op == OP_NE)
+>  				pred->not = 1;
+>  		}
+

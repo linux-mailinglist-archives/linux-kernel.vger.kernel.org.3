@@ -2,237 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E288C58BC09
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 19:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF3F58BC0A
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 19:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233831AbiHGReP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 13:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S234452AbiHGRet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 13:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiHGReM (ORCPT
+        with ESMTP id S229501AbiHGRer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 13:34:12 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0046F559A
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 10:34:10 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31e7ca45091so61663607b3.3
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 10:34:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=aS6EBaNIN10+OZPUpR/4ogKAkoJ9rFIL98FCoXlnNSA=;
-        b=XpLWeHmLSgilVTC/YVDJdenSdO9VgEXau1/zbqRnkcJxD/8EfTAnvBvtediAfBDduT
-         yCm30ilSyBucIjn2Mi1MvxCG+jlUqTrB5qyK3AUFwqvaMyAqde4A3I265GlRWFIXINCP
-         TPdJKp96tRb7p/cuTGjalES/FKWxaCpZdLftBKK/a4AHpG/wgikOIFWOcy72yQRxVi8S
-         QoiQizprHh0nnRIovr8RqCM+6QlzZlw40e1oO9C9MRg0lgbttWi0LCqtcsPXTolLCD3j
-         855X9875RDQl75VEJ5hHCk5GqYr3V2eaLjOcPL21BC0b6vzBiGf4A5U1aW8gCItyNapE
-         YZDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=aS6EBaNIN10+OZPUpR/4ogKAkoJ9rFIL98FCoXlnNSA=;
-        b=d6wFfZe9QvgqIxNOqUMdH8+grsJw7GJP1gdq7H+krais9jyWMB8VU3aUZi3cup17nJ
-         4wKa935Mh+l7c0xsr+N/4J0LdjUSqk0fFXB5k902GWuVivD8FgQOgxqaYuMfzw5ajSSK
-         jE57FACYzudUzIByVhXg8iKTwLFBPDvfMTH/Ahlrt4tKAtL3WCZEPrf2/tj8HzY/b/KM
-         H26v3g/elK8WIJi+yALLdS31uoJ5U2mWFY7Ly6AgH4R7RW6xqynFviXllOq9DoHpyMPn
-         8hcYuEiZclhoLMawlycwQJFZGLqpgYksmTZaciDnTOB7IFeBDatf1ahxjrU8QlfjEsqa
-         8Jkw==
-X-Gm-Message-State: ACgBeo2Q70vHNd4r/6ZHqdHqdgzCUraAdusAWsdJRtrQGw3S1aIMYHqR
-        W3Fzr42Ks/Hnaf3ZDJ2EOLp8/LKqasJBVOHES5yxcQ==
-X-Google-Smtp-Source: AA6agR6MFeUG2On+7vQSONsbltpXDjqOVg5KhQR92T7QmMYljWwNRhhzj3YFZU8Dlaejm2j4GyGExjq1payzBN1lTaA=
-X-Received: by 2002:a0d:c7c3:0:b0:31e:9622:c4f6 with SMTP id
- j186-20020a0dc7c3000000b0031e9622c4f6mr14640035ywd.144.1659893650000; Sun, 07
- Aug 2022 10:34:10 -0700 (PDT)
+        Sun, 7 Aug 2022 13:34:47 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2380559A
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 10:34:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659893686; x=1691429686;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PJb6sgcaW6XwsPmmIIc5VDGbnksrZ6P+StXKyk0O5vk=;
+  b=MLJnGOQucGr4lxonCBhtLYaZcPDzJBnzASRsRb0gdw6UdTFIB9X/5oSq
+   XXOitkNUcI35F9YKgkGwUxLHlu1eqPNcJbyedalHPARONqpmY2gFLSJwO
+   wUS4ipTCKFJ/L99FA6ai7pgSpia3+mtOb4l4uppdbluKKd3RInWJs2fxI
+   iUGw7feIUGb+yS0QnyHuv14vm8H46jY/ZpRfqiACJfd/M+C4JKZoE3Pi7
+   KCYX9NyUk280pSI8jhAzrtwUyS78cfU7oIoetFPKINstNeiytTSko310c
+   fWpsgyF2RZstd5XlvyNBDrSBJ142DfuArz3Vb8lEYSbnvviX4nbtyD3lJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="291682653"
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="291682653"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 10:34:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="672215752"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Aug 2022 10:34:44 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKkAm-000LWL-0C;
+        Sun, 07 Aug 2022 17:34:44 +0000
+Date:   Mon, 8 Aug 2022 01:33:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH 20/28] mfd: arizona: Remove #ifdef guards for PM related
+ functions
+Message-ID: <202208080141.UIoxRyzL-lkp@intel.com>
+References: <20220807145247.46107-21-paul@crapouillou.net>
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-5-glider@google.com>
- <CANpmjNN28k3B1-nX=gtdJxZ4MS=bF+CuPG1EFp5fC2TDQUU=4Q@mail.gmail.com>
-In-Reply-To: <CANpmjNN28k3B1-nX=gtdJxZ4MS=bF+CuPG1EFp5fC2TDQUU=4Q@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Sun, 7 Aug 2022 19:33:33 +0200
-Message-ID: <CAG_fn=UQ2g9KjixL4Hsbw04r75VB2bp_X7F3RzE4twDro+Xi_Q@mail.gmail.com>
-Subject: Re: [PATCH v4 04/45] x86: asm: instrument usercopy in get_user() and __put_user_size()
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220807145247.46107-21-paul@crapouillou.net>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 12:13 PM Marco Elver <elver@google.com> wrote:
->
-> On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrot=
-e:
-> >
-> > Use hooks from instrumented.h to notify bug detection tools about
-> > usercopy events in get_user() and put_user_size().
-> >
-> > It's still unclear how to instrument put_user(), which assumes that
-> > instrumentation code doesn't clobber RAX.
->
-> do_put_user_call() has a comment about KASAN clobbering %ax, doesn't
-> this also apply to KMSAN? If not, could we have a <asm/instrumented.h>
-> that provides helpers to push registers on the stack and pop them back
-> on return?
+Hi Paul,
 
-In fact, yes, it is rather simple to not clobber %ax.
-A more important aspect of instrumenting get_user()/put_user() is to
-always evaluate `x` and `ptr` only once, because sometimes these
-macros get called like `put_user(v, sp++)`.
-I might have confused the effects of evaluating sp++ twice with some
-register clobbering.
+I love your patch! Yet something to improve:
 
-> Also it seems the test robot complained about this patch.
-Will fix in v5.
->
-> > Signed-off-by: Alexander Potapenko <glider@google.com>
-> > ---
-> > Link: https://linux-review.googlesource.com/id/Ia9f12bfe5832623250e20f1=
-859fdf5cc485a2fce
-> > ---
-> >  arch/x86/include/asm/uaccess.h | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uacc=
-ess.h
-> > index 913e593a3b45f..1a8b5a234474f 100644
-> > --- a/arch/x86/include/asm/uaccess.h
-> > +++ b/arch/x86/include/asm/uaccess.h
-> > @@ -5,6 +5,7 @@
-> >   * User space memory access functions
-> >   */
-> >  #include <linux/compiler.h>
-> > +#include <linux/instrumented.h>
-> >  #include <linux/kasan-checks.h>
-> >  #include <linux/string.h>
-> >  #include <asm/asm.h>
-> > @@ -99,11 +100,13 @@ extern int __get_user_bad(void);
-> >         int __ret_gu;                                                  =
- \
-> >         register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);           =
- \
-> >         __chk_user_ptr(ptr);                                           =
- \
-> > +       instrument_copy_from_user_before((void *)&(x), ptr, sizeof(*(pt=
-r))); \
-> >         asm volatile("call __" #fn "_%P4"                              =
- \
-> >                      : "=3Da" (__ret_gu), "=3Dr" (__val_gu),           =
-     \
-> >                         ASM_CALL_CONSTRAINT                            =
- \
-> >                      : "0" (ptr), "i" (sizeof(*(ptr))));               =
- \
-> >         (x) =3D (__force __typeof__(*(ptr))) __val_gu;                 =
-   \
-> > +       instrument_copy_from_user_after((void *)&(x), ptr, sizeof(*(ptr=
-)), 0); \
-> >         __builtin_expect(__ret_gu, 0);                                 =
- \
-> >  })
-> >
-> > @@ -248,7 +251,9 @@ extern void __put_user_nocheck_8(void);
-> >
-> >  #define __put_user_size(x, ptr, size, label)                          =
- \
-> >  do {                                                                  =
- \
-> > +       __typeof__(*(ptr)) __pus_val =3D x;                            =
-   \
-> >         __chk_user_ptr(ptr);                                           =
- \
-> > +       instrument_copy_to_user(ptr, &(__pus_val), size);              =
- \
-> >         switch (size) {                                                =
- \
-> >         case 1:                                                        =
- \
-> >                 __put_user_goto(x, ptr, "b", "iq", label);             =
- \
-> > @@ -286,6 +291,7 @@ do {                                               =
-                         \
-> >  #define __get_user_size(x, ptr, size, label)                          =
- \
-> >  do {                                                                  =
- \
-> >         __chk_user_ptr(ptr);                                           =
- \
-> > +       instrument_copy_from_user_before((void *)&(x), ptr, size);     =
- \
-> >         switch (size) {                                                =
- \
-> >         case 1: {                                                      =
- \
-> >                 unsigned char x_u8__;                                  =
- \
-> > @@ -305,6 +311,7 @@ do {                                               =
-                         \
-> >         default:                                                       =
- \
-> >                 (x) =3D __get_user_bad();                              =
-   \
-> >         }                                                              =
- \
-> > +       instrument_copy_from_user_after((void *)&(x), ptr, size, 0);   =
- \
-> >  } while (0)
-> >
-> >  #define __get_user_asm(x, addr, itype, ltype, label)                  =
- \
-> > --
-> > 2.37.0.rc0.161.g10f37bed90-goog
-> >
+[auto build test ERROR on v5.19]
+[cannot apply to lee-mfd/for-mfd-next linus/master next-20220805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/mfd-Remove-ifdef-guards-for-PM-functions/20220807-225947
+base:    3d7cb6b04c3f3115719235cc6866b10326de34cd
+config: hexagon-randconfig-r013-20220807 (https://download.01.org/0day-ci/archive/20220808/202208080141.UIoxRyzL-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/03342844cafff973ffa39ce471f64a76c4d87b06
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Paul-Cercueil/mfd-Remove-ifdef-guards-for-PM-functions/20220807-225947
+        git checkout 03342844cafff973ffa39ce471f64a76c4d87b06
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/mfd/arizona-core.c:788:25: error: static declaration of 'arizona_pm_ops' follows non-static declaration
+   const struct dev_pm_ops arizona_pm_ops = {
+                           ^
+   drivers/mfd/arizona.h:29:32: note: previous declaration is here
+   extern const struct dev_pm_ops arizona_pm_ops;
+                                  ^
+   1 error generated.
 
 
+vim +/arizona_pm_ops +788 drivers/mfd/arizona-core.c
 
---=20
-Alexander Potapenko
-Software Engineer
+dc781d0e10fca2 Mark Brown     2013-01-27  784  
+03342844cafff9 Paul Cercueil  2022-08-07  785  #ifndef CONFIG_PM
+03342844cafff9 Paul Cercueil  2022-08-07  786  static __maybe_unused
+03342844cafff9 Paul Cercueil  2022-08-07  787  #endif
+3cc72986947501 Mark Brown     2012-06-19 @788  const struct dev_pm_ops arizona_pm_ops = {
+03342844cafff9 Paul Cercueil  2022-08-07  789  	RUNTIME_PM_OPS(arizona_runtime_suspend,
+3cc72986947501 Mark Brown     2012-06-19  790  		       arizona_runtime_resume,
+3cc72986947501 Mark Brown     2012-06-19  791  		       NULL)
+03342844cafff9 Paul Cercueil  2022-08-07  792  	SYSTEM_SLEEP_PM_OPS(arizona_suspend, arizona_resume)
+03342844cafff9 Paul Cercueil  2022-08-07  793  	NOIRQ_SYSTEM_SLEEP_PM_OPS(arizona_suspend_noirq,
+3612b27cfb4a07 Charles Keepax 2016-08-30  794  				  arizona_resume_noirq)
+3cc72986947501 Mark Brown     2012-06-19  795  };
+03342844cafff9 Paul Cercueil  2022-08-07  796  #ifdef CONFIG_PM
+3cc72986947501 Mark Brown     2012-06-19  797  EXPORT_SYMBOL_GPL(arizona_pm_ops);
+03342844cafff9 Paul Cercueil  2022-08-07  798  #endif
+3cc72986947501 Mark Brown     2012-06-19  799  
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

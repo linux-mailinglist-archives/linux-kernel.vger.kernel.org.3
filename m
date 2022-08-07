@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9B858B962
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 06:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A26258B963
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 06:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiHGEfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 00:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S231139AbiHGEf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 00:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiHGEfO (ORCPT
+        with ESMTP id S229553AbiHGEfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 00:35:14 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7172F1B1
-        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 21:35:13 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id x23so5909681pll.7
-        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 21:35:13 -0700 (PDT)
+        Sun, 7 Aug 2022 00:35:55 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80097D8D
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 21:35:54 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso11688760pjo.1
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 21:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Stge8ij00ak/lu/+zv2sql6FgjCXn7x2g+8N+A6jXAo=;
-        b=qvDhVQ6TJRd1C1ouWtzwzHxKSh90MkOwKvRqlZqFpgO0luBVQSus02sT1ws1F5oRy9
-         OI9/yRPwsR6Lfawewc7s+apgHvD1wI7HsRBzouZBneXhRgZPWwRF1qL+f0Chpzf4d1nk
-         pcepDErdQ4FdZy5qCGTEL1qxgUN8DGrT2CuThdDAUaQhAUkRyYsve8zqB1K6Jb/dUeqA
-         3vKFSaYaBqDDWJBSIT0uYDDEVH8+1X/myWvDWz6PSIk6O0mPoz/kPBcnDFfMfqmQRuum
-         SBsiSsTR4rS+LZu8W+fnw2X6LX0hteNJYM0Ln5khYgQFZZe6WdkjmRA/o/sCG2r4gDYE
-         mgqg==
+        bh=h4nnY59EMBk7Vbsg6XGkS0rwuqzJdzd8MKjcgWUzP+8=;
+        b=M4dqnlArayrChH5qI+Oig2iZXR7mHgAZPOZ5w3rlrzdKqGjmWxAwkSZff2ilHZQEwD
+         ajKnWvg0KNUyBzuU6fL+8YGQ/+Bahry4QbfeksYiAdLtxi8wkNblDKSYQwQEcbcZ7kym
+         htiPOiIvHckU4bTVUdfMg34NGvFFvorWQFEBAV6duekbJBNA4jAXOJWVzQrM6TfGPVoB
+         1fCY6SNzUtIRHGboJ/xtNlCteENfYj3XdZ0Hi6b3QeEHLEbVy5N/IKYdh9YgQJJI8ve9
+         haOV6CwYCgWSpaNgcCfNFLsLs3StLafDA9bSQb4aRzO57xZpvWiDg/2uARPoLkeYKFQg
+         Jnbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Stge8ij00ak/lu/+zv2sql6FgjCXn7x2g+8N+A6jXAo=;
-        b=oZM0j+btwd+SSWUC/uqzOSOdetj/ygtc0iS2/rdczRA5BADA7x5YIK/egQ3+EYj6GU
-         dcsoqLSQwmmgB8BrbeESsZ2dc4i54ub1QItj1XmgFAC1ujTGyQVqcHjof0i5Solx9o9B
-         1CaYOawPnGyl4vDhVyWAQ87d00o7ED7mw3t66+qNh7vLmZgGKEmY2IXOBkqg9nrO8z8I
-         B+Oz/rNRx4gVv34kXOMWzbzVfEfP0IuQcWvxG23/uC+GXo1KzY0nv+2Mb40wEsfnaLXU
-         IPXkaQ1fOMct9PkTkmt9h0wiZWr9fOzRprEgLOLR+C/bdy3+XLDjzZj7f4PyK9DcrAcU
-         06mQ==
-X-Gm-Message-State: ACgBeo35XiaWGpfzTGS/6zPBArggdJR1OwlyqlP0NOBscQjwy7X8K3uH
-        /gz1VIrFd9wo6zZfDNCSnMr3TA==
-X-Google-Smtp-Source: AA6agR6PvYHJPx63cx/TWBSIzUDKEHuEneqcgqwfRXdhc+m5SJaEhC7MNTdbMjOwgp5EGfmyVmS7JA==
-X-Received: by 2002:a17:90a:9383:b0:1f4:fd59:7e47 with SMTP id q3-20020a17090a938300b001f4fd597e47mr15352310pjo.172.1659846912638;
-        Sat, 06 Aug 2022 21:35:12 -0700 (PDT)
+        bh=h4nnY59EMBk7Vbsg6XGkS0rwuqzJdzd8MKjcgWUzP+8=;
+        b=UTMLAcfRZFNdHFW2XuJtW10IRwvE8UPRxLu1OZtd9TIFo5o1FYo+77uCJRK15bFSYy
+         JqMSiZmrI9cAIcJZ+ZzjqOuFvEazlnm7G1GAsqX/GwMaubXsaz4aBpM1p3RjQ6OaezQZ
+         4J3zvrSSrKEgHBfJXu0ItJFy7atHNqwqPSbMQYlWiL4PPYMJoNZyO7gD5s1OKSsv8/Bx
+         9dwV49nGnBYzKQX9FcJoAqtWLByRVanLACKfy3W75XfGpEaeFgt73QWZEJAstP6AUmSn
+         DDG2IV+ekfB1S6ZtWCwWNO6C7MZnhrf5bsPOznjo5avgbJnAUT7BtgVL6FRKExivKRVN
+         1K1w==
+X-Gm-Message-State: ACgBeo3o6pLeoYo+EgCW6DKpXtQk773uzCgvj4JcAnsku+HNoCRa9ZKz
+        KezTmF+kgi9h9tse8ozOK9Locg==
+X-Google-Smtp-Source: AA6agR7rF8i0IBibxw/xOWw/BoNBmptk/PkVbM8sl992XSIGGkjXkSZd5tZ4P12j0wrfN6WwV+g3RA==
+X-Received: by 2002:a17:90b:1c82:b0:1ee:eb41:b141 with SMTP id oo2-20020a17090b1c8200b001eeeb41b141mr15266089pjb.143.1659846953959;
+        Sat, 06 Aug 2022 21:35:53 -0700 (PDT)
 Received: from leoy-ThinkPad-X240s (173.242.120.104.16clouds.com. [173.242.120.104])
-        by smtp.gmail.com with ESMTPSA id g14-20020aa79dce000000b0052d51acf115sm5894801pfq.157.2022.08.06.21.35.10
+        by smtp.gmail.com with ESMTPSA id p2-20020a170903248200b001635b86a790sm5862957plw.44.2022.08.06.21.35.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 21:35:12 -0700 (PDT)
-Date:   Sun, 7 Aug 2022 12:35:08 +0800
+        Sat, 06 Aug 2022 21:35:53 -0700 (PDT)
+Date:   Sun, 7 Aug 2022 12:35:49 +0800
 From:   Leo Yan <leo.yan@linaro.org>
 To:     carsten.haitzler@foss.arm.com
 Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
         suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
         mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
         acme@kernel.org
-Subject: Re: [PATCH v5 05/14] perf test: Add asm pureloop test shell script
-Message-ID: <20220807043508.GD34254@leoy-ThinkPad-X240s>
+Subject: Re: [PATCH v5 06/14] perf test: Add git ignore for perf data
+ generated by the CoreSight tests
+Message-ID: <20220807043549.GE34254@leoy-ThinkPad-X240s>
 References: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
- <20220728145256.2985298-6-carsten.haitzler@foss.arm.com>
+ <20220728145256.2985298-7-carsten.haitzler@foss.arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220728145256.2985298-6-carsten.haitzler@foss.arm.com>
+In-Reply-To: <20220728145256.2985298-7-carsten.haitzler@foss.arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -73,12 +74,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 03:52:47PM +0100, carsten.haitzler@foss.arm.com wrote:
+On Thu, Jul 28, 2022 at 03:52:48PM +0100, carsten.haitzler@foss.arm.com wrote:
 > From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
 > 
-> Add a script to drive the asm pureloop test for arm64/CoreSight that
-> gathers data so it passes a minimum bar for amount and quality of
-> content that we extract from the kernel's perf support.
+> Ignore perf output data files generated by perf tests for cleaner
+> git status.
 > 
 > Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 

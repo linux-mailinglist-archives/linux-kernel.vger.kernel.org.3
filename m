@@ -2,134 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D892D58BAA6
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 13:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4855158BAA7
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 13:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbiHGLXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 07:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
+        id S233245AbiHGL0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 07:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiHGLXk (ORCPT
+        with ESMTP id S231282AbiHGL0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 07:23:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6662B7FC
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 04:23:39 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oKeNa-0006Yh-P9; Sun, 07 Aug 2022 13:23:34 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oKeNX-002HmP-7G; Sun, 07 Aug 2022 13:23:33 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oKeNY-00A8KA-O6; Sun, 07 Aug 2022 13:23:32 +0200
-Date:   Sun, 7 Aug 2022 13:23:32 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH v1 4/4] pwm: sysfs: Utilize an array for polarity strings
-Message-ID: <20220807112332.ku5c447ou22f364w@pengutronix.de>
-References: <20220806212331.40086-1-andriy.shevchenko@linux.intel.com>
- <20220806212331.40086-4-andriy.shevchenko@linux.intel.com>
+        Sun, 7 Aug 2022 07:26:02 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1697E65DD
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 04:26:01 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10ea9ef5838so7671374fac.3
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 04:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=NklgaVD/JirOYzcQ7dn+KLLpgqBlqBMUxzkjreU6H5k=;
+        b=UxYGCm5oJdhgjmJ66RMS5phlQQcjc5W1hXheDuhQUWMPovajhDuDjgDJBO9RbK1J63
+         4iupZf6/0gGcG5aaHf7440SDf7+nc9DHnuxgMgTPR6dZDwgMeEyDcJVxWvrq68xK2+fm
+         2kUQdsVggqW9y0yitsH4OiB9p1F32qfa6OKgoBcW4aK7qRZnbh4uUG4+vP+Lz+AD1x4z
+         TfIigJfzOz6qdCM2/WUdDG/EFebhu3eZsZje6iL3fgOTRn6Q+O8bIEyaJ1LxiKkcWSWU
+         uAjeqDEkbe11iPT5OGLstxNR1zvhzDF+QxrmUNGsbE0po3G63Po+LXYlIi6tKMhFcVYO
+         TXiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=NklgaVD/JirOYzcQ7dn+KLLpgqBlqBMUxzkjreU6H5k=;
+        b=sKedXPlz9XuaiZy6CWuh5Wq8h5+TxXmLIRsL8HBPmzGlW9nKVLG1L3k9afN4iza553
+         bMHSR6PPm67eUQvKQAzMiBn/NFI2lsAu0oAvLqHJTTzYaPGYem/mB9mdUwwj3HtG0W2n
+         Gmg8q/JZF8k6JmO7EYIRFkHsSyEuq8mXpbprpqmVrzqFHzW5exrlEMVdxzWnAKv5TMSF
+         ipuTOZ2EywhLxHAtDBFmqK5mqV5zqKZ1yYdS4ZHW01jTgcUgmAE9VQRbwG91HPExOXiA
+         G0eydqE409jMr3I6CZsNQ/e2e6WopkLNOnff3kS2QyfL5aXEMb3xFVEWolUQZGS/avWk
+         9zrA==
+X-Gm-Message-State: ACgBeo04Nbv2WXguoFqBFGswKyhtWJRJKvanvX62BP2s3jvJpBbGwNC/
+        8TRcy2xfL6VbroaPgRQBB8j2UyUMNZ7J8QHH5Tg=
+X-Google-Smtp-Source: AA6agR4MHpE2nKZq3Tyr8CXocv1IV6OJHhsOalnlygC+TOspXizARVPJUuOxWDHo1NUpxmFK1I33vPkSNJk9N1YjqCg=
+X-Received: by 2002:a05:6870:9193:b0:10d:130e:e57c with SMTP id
+ b19-20020a056870919300b0010d130ee57cmr9781618oaf.286.1659871560243; Sun, 07
+ Aug 2022 04:26:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ufc46rnrxz5yzjdy"
-Content-Disposition: inline
-In-Reply-To: <20220806212331.40086-4-andriy.shevchenko@linux.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
+ <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
+ <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com>
+ <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
+ <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
+ <YuvctaLwRi+z0Gw4@nvidia.com> <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
+ <Yuxi1eRHPN36Or+1@nvidia.com> <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
+In-Reply-To: <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
+From:   Oded Gabbay <oded.gabbay@gmail.com>
+Date:   Sun, 7 Aug 2022 14:25:33 +0300
+Message-ID: <CAFCwf107tLxHKxkPqSRsOHVVp5s2tDEFOOy2oDZUz_KGmv-rDg@mail.gmail.com>
+Subject: Re: New subsystem for acceleration devices
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Aug 7, 2022 at 9:43 AM Oded Gabbay <oded.gabbay@gmail.com> wrote:
+>
+> On Fri, Aug 5, 2022 at 3:22 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >
+> > On Thu, Aug 04, 2022 at 08:48:28PM +0300, Oded Gabbay wrote:
+> >
+> > > > The flip is true of DRM - DRM is pretty general. I bet I could
+> > > > implement an RDMA device under DRM - but that doesn't mean it should
+> > > > be done.
+> > > >
+> > > > My biggest concern is that this subsystem not turn into a back door
+> > > > for a bunch of abuse of kernel APIs going forward. Though things
+> > > > are
+> > >
+> > > How do you suggest to make sure it won't happen ?
+> >
+> > Well, if you launch the subsystem then it is your job to make sure it
+> > doesn't happen - or endure the complaints :)
+> Understood, I'll make sure there is no room for complaints.
+> >
+> > Accelerators have this nasty tendancy to become co-designed with their
+> > SOCs in nasty intricate ways and then there is a desire to punch
+> > through all the inconvenient layers to make it go faster.
+> >
+> > > > better now, we still see this in DRM where expediency or performance
+> > > > justifies hacky shortcuts instead of good in-kernel architecture. At
+> > > > least DRM has reliable and experienced review these days.
+> > > Definitely. DRM has some parts that are really well written. For
+> > > example, the whole char device handling with sysfs/debugfs and managed
+> > > resources code.
+> >
+> > Arguably this should all be common code in the driver core/etc - what
+> > value is a subsystem adding beyond that besides using it properly?
+>
+> I mainly see two things here:
+>
+> 1. If there is a subsystem which is responsible for creating and
+> exposing the device character files, then there should be some code
+> that connects between each device driver to that subsystem.
+> i.e. There should be functions that each driver should call from its
+> probe and release callback functions.
+>
+> Those functions should take care of the following:
+> - Create metadata for the device, the device's minor(s) and the
+> driver's ioctls table and driver's callback for file operations (both
+> are common for all the driver's devices). Save all that metadata with
+> proper locking.
+> - Create the device char files themselves and supply file operations
+> that will be called per each open/close/mmap/etc.
+> - Keep track of all these objects' lifetime in regard to the device
+> driver's lifetime, with proper handling for release.
+> - Add common handling and entries of sysfs/debugfs for these devices
+> with the ability for each device driver to add their own unique
+> entries.
+>
+> 2. I think that you underestimate (due to your experience) the "using
+> it properly" part... It is not so easy to do this properly for
+> inexperienced kernel people. If we provide all the code I mentioned
+> above, the device driver writer doesn't need to be aware of all these
+> kernel APIs.
+>
+Two more points I thought of as examples for added value to be done in
+common code:
+1. Common code for handling dma-buf. Very similar to what was added a
+year ago to rdma. This can be accompanied by a common ioctl to export
+and import a dma-buf.
+2. Common code to handle drivers that want to allow a single user at a
+time to run open the device char file.
 
---ufc46rnrxz5yzjdy
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Oded
 
-Hello Andy,
 
-On Sun, Aug 07, 2022 at 12:23:31AM +0300, Andy Shevchenko wrote:
-> Code is smaller and looks nicer if we combine polarity strings into an ar=
-ray.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/pwm/sysfs.c | 32 ++++++++++++--------------------
->  1 file changed, 12 insertions(+), 20 deletions(-)
->=20
-> diff --git a/drivers/pwm/sysfs.c b/drivers/pwm/sysfs.c
-> index 767c4b19afb1..1bbc5286b7c6 100644
-> --- a/drivers/pwm/sysfs.c
-> +++ b/drivers/pwm/sysfs.c
-> @@ -151,27 +151,23 @@ static ssize_t enable_store(struct device *child,
->  	return ret ? : size;
->  }
-> =20
-> +static const char * const polarity_strings[] =3D {
-
-I like having function and variable prefixes, so I'd prefer this to be
-called pwm_polarity_strings[]. (Side note: The device show and store
-callbacks obviously don't have a prefix either because DEVICE_ATTR_RW et
-al force the functions to be called "${name}_show" and "${name}_store".
-I considered already a few times to introduce something like
-
-	#define __ATTR_NS_RW_MODE(_name, _ns,_mode) {                           \
-		.attr   =3D { .name =3D __stringify(_name),                         \
-			    .mode =3D VERIFY_OCTAL_PERMISSIONS(_mode) },          \
-		.show   =3D _ns ## _ ## _name ## _show,                           \
-		.store  =3D _ns ## _ ## _name ## _store,                          \
-	}
-
-	#define DEVICE_ATTR_NS_RW(_name, _ns) \
-		struct device_attribute _ns ## _dev_attr_ ## _name =3D __ATTR_NS_RW_MODE(=
-_name, _ns, 0600)
-
-To allow the functions to have a name space. Never came around to do
-that though.)
-
-> +	[PWM_POLARITY_NORMAL]	=3D "normal",
-> +	[PWM_POLARITY_INVERSED]	=3D "inversed",
-
-I slightly prefer to not align the =3D in such definitions. Using a single
-plain space before =3D is already used in the definiton of pwm_class in
-the same file.
-
-Otherwise the patch looks fine.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ufc46rnrxz5yzjdy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLvoLEACgkQwfwUeK3K
-7AklEAf/Vo801CPG+QKQ1kvDz9xnKZg0qJyG5ltbIS00e8Sh5YfdvP5/XBOO/zII
-Ml0WjMT4hJzWAM3L14R2ngr9JMz2eFR1284c/XMJfZKUKvq5L6gV8lI8n85h+o/9
-cC2sts/YfAaG3FdjpDpaUA3x7YUlsl6Ubp13LN72xBm8TENezG9FZcs2NVBdHGYg
-qZhickB30W5dVtszev0psOtQcw9m/eadEYWDCLKgDZoxPph6piePc8MriGh3xLDN
-NpVyA+8BNvkgJ/vdgENWQF9QD+5KmomnbJqHJYI8ySejiNAdQ3/h9XqbSaqAX3X5
-tF5XJWJkPG1SBfRUY6VyZ+Mzo9u1Fg==
-=92eN
------END PGP SIGNATURE-----
-
---ufc46rnrxz5yzjdy--
+> >
+> > It would be nice to at least identify something that could obviously
+> > be common, like some kind of enumeration and metadata kind of stuff
+> > (think like ethtool, devlink, rdma tool, nvemctl etc)
+> Definitely. I think we can have at least one ioctl that will be common
+> to all drivers from the start.
+> A kind of information retrieval ioctl. There are many information
+> points that I'm sure are common to most accelerators. We have an
+> extensive information ioctl in the habanalabs driver and most of the
+> information there is not habana specific imo.
+> >
+> > > I think that it is clear from my previous email what I intended to
+> > > provide. A clean, simple framework for devices to register with, get
+> > > services for the most basic stuff such as device char handling,
+> > > sysfs/debugfs.
+> >
+> > This should all be trivially done by any driver using the core codes,
+> > if you see gaps I'd ask why not improve the core code?
+> >
+> > > Later on, add more simple stuff such as memory manager
+> > > and uapi for memory handling. I guess someone can say all that exists
+> > > in drm, but like I said it exists in other subsystems as well.
+> >
+> > This makes sense to me, all accelerators need a way to set a memory
+> > map, but on the other hand we are doing some very nifty stuff in this
+> > area with iommufd and it might be very interesting to just have the
+> > accelerator driver link to that API instead of building yet another
+> > copy of pin_user_pages() code.. Especially with PASID likely becoming
+> > part of any accelerator toolkit.
+> Here I disagree with you. First of all, there are many relatively
+> simple accelerators, especially in edge, where PASID is really not
+> relevant.
+> Second, even for the more sophisticated PCIe/CXL-based ones, PASID is
+> not mandatory and I suspect that it won't be in 100% of those devices.
+> But definitely that should be an alternative to the "classic" way of
+> handling dma'able memory (pin_user_pages()).
+> >
+> > > I want to be perfectly honest and say there is nothing special here
+> > > for AI. It's actually the opposite, it is a generic framework for
+> > > compute only. Think of it as an easier path to upstream if you just
+> > > want to do compute acceleration. Maybe in the future it will be more,
+> > > but I can't predict the future.
+> >
+> > I can't either, and to be clear I'm only questioning the merit of a
+> > "subsystem" eg with a struct class, rigerous uAPI, etc.
+> >
+> > The idea that these kinds of accel drivers deserve specialized review
+> > makes sense to me, even if they remain as unorganized char
+> > devices. Just understand that is what you are signing up for :)
+> I understand. That's why I'm taking all your points very seriously.
+> This is not a decision that should be taken lightly and I want to be
+> sure most agree this is the correct way forward.
+> My next step is to talk to Dave about it in-depth. In his other email
+> he wrote some interesting ideas which I want to discuss with him.
+>
+> Maybe this is something that should be discussed in the kernel summit ?
+>
+> >
+> > Jason

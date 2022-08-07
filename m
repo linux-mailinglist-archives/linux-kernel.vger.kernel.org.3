@@ -2,65 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACCF58BE0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 00:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9AA58BE10
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 00:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbiHGWlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 18:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
+        id S233719AbiHGWmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 18:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242416AbiHGWkr (ORCPT
+        with ESMTP id S234117AbiHGWm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 18:40:47 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCE8BCA8;
-        Sun,  7 Aug 2022 15:33:54 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id i84so5894083ioa.6;
-        Sun, 07 Aug 2022 15:33:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=3eZwuAFmjc+ZRz+NnpymNnE5U9avZ4uyAs/hATKVDy0=;
-        b=VVmtLY/XQAxuXiitQ8f1y8BbVrThiqW11AABbhdsD1qr5DY1V1F2f54fpkYlCfy6Yf
-         61vpM4RHGIDl7qAEyIurGi6tBjlVpQtbI+txyqyC23+60+2fv83RaOPnOwsNCYw4kXU0
-         Si3mmtl0mMk6o7Ewftm8pYBoDIYoZ5xHjYqOqTJ4VeeEm/rntzw8j39fbgLAxQbEQ9qW
-         0eD0GBqhJCfY8YV+1BC8kCBt0P4Y6NwTbKYYJoC4Vq7QmAeAIR96ND3u6OxKfP3TTfJg
-         aXxR57TVHEdGWyf6xOAnOYYVlkw+BTSfCFgQi/3eFtjKXtDel+AyCu4a906KJt92tSfA
-         WpuA==
-X-Gm-Message-State: ACgBeo1yhOsNATS144hj/v56E+jLOUbQ1T8IZAa330fIVSzsk+z8RPlZ
-        AXbsE+co6gHfN/ZvDIapQQ==
-X-Google-Smtp-Source: AA6agR6CbM74O42J1P5fVI6paXKlRrzL+WE41cDa93XM13rQjSONQDHjl6WY3uvZKT/x8peMjJNypg==
-X-Received: by 2002:a6b:cd4f:0:b0:675:b0bf:d999 with SMTP id d76-20020a6bcd4f000000b00675b0bfd999mr6358562iog.193.1659911633211;
-        Sun, 07 Aug 2022 15:33:53 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o9-20020a022209000000b0033f7e44904fsm4473076jao.134.2022.08.07.15.33.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 15:33:52 -0700 (PDT)
-Received: (nullmailer pid 2326179 invoked by uid 1000);
-        Sun, 07 Aug 2022 22:33:51 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     u.kleine-koenig@pengutronix.de,
-        William Salmon <william.salmon@sifive.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Jude Onyenegecha --subject-prefix=PATCH v3 
-        <jude.onyenegecha@sifive.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com
-In-Reply-To: <20220805165033.140958-2-ben.dooks@sifive.com>
-References: <20220805165033.140958-1-ben.dooks@sifive.com> <20220805165033.140958-2-ben.dooks@sifive.com>
-Subject: Re: [PATCH 1/8] dt-bindings: pwm: Document Synopsys DesignWare snps,pwm-dw-apb-timers-pwm2
-Date:   Sun, 07 Aug 2022 16:33:51 -0600
-Message-Id: <1659911631.163349.2326178.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Sun, 7 Aug 2022 18:42:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7F726E3;
+        Sun,  7 Aug 2022 15:39:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=dLjSYAzCh4IBJ/gcod+IKEbUhjWe/9Of5cFDsSCQDGI=; b=310JJornQDy4RnuqU1FkM3sUOA
+        RlpcAU9IwdVoQQ6mrP19n3L198KdGW6/P0D0oi2Dq85A9mbT0Ncxs4iD7+2BKF0ElO+d111fORGqn
+        yhhSpdqxIK/H+MwbQlBidthWbBvcOyT7ldcjddq7blgvwm1YfhVVriwRCUhj8UlSeXcEPF3INm5yt
+        ESo4Cw2KMzmgTE3idAITUEbr2mKi6N4gBLcXlgm4bVITxZZ5y8/IaAOpMUo4mhFccmGDW5BNoAmvg
+        2dkUlCebB8v2ZsivvfmmVIIqtgyIbvyYUIV61nw17r54FMDO06+MHv3DGrgUfn7vDTuGujDTaJXGH
+        hl62BVig==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oKovI-003VFb-9Q; Sun, 07 Aug 2022 22:39:04 +0000
+Message-ID: <3a4dad85-1102-1bab-c0af-a2c6827663b1@infradead.org>
+Date:   Sun, 7 Aug 2022 15:39:01 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] asm-generic: unistd.h: make 'compat_sys_fadvise64_64'
+ conditional
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+References: <20220807172854.12971-1-rdunlap@infradead.org>
+ <CAK8P3a0FR2ySLXAMGR1ZmaAQMbVwB4MFBPvBw4py_pbgtQSfgA@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAK8P3a0FR2ySLXAMGR1ZmaAQMbVwB4MFBPvBw4py_pbgtQSfgA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,48 +59,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 05 Aug 2022 17:50:26 +0100, Ben Dooks wrote:
-> Add documentation for the bindings for Synopsys' DesignWare PWM block
-> as we will be adding DT/platform support to the Linux driver soon.
+Hi Arnd,
+
+On 8/7/22 12:44, Arnd Bergmann wrote:
+> On Sun, Aug 7, 2022 at 7:28 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>> Don't require 'compat_sys_fadvise64_64' when
+>> __ARCH_WANT_COMPAT_FADVISE64_64 is not set.
+>>
+>> Fixes this build error when CONFIG_ADVISE_SYSCALLS is not set:
+>>
+>> include/uapi/asm-generic/unistd.h:649:49: error: 'compat_sys_fadvise64_64' undeclared here (not in a function); did you mean 'ksys_fadvise64_64'?
+>>   649 | __SC_COMP(__NR3264_fadvise64, sys_fadvise64_64, compat_sys_fadvise64_64)
+>> arch/riscv/kernel/compat_syscall_table.c:12:42: note: in definition of macro '__SYSCALL'
+>>    12 | #define __SYSCALL(nr, call)      [nr] = (call),
+>> include/uapi/asm-generic/unistd.h:649:1: note: in expansion of macro '__SC_COMP'
+>>   649 | __SC_COMP(__NR3264_fadvise64, sys_fadvise64_64, compat_sys_fadvise64_64)
+>>
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+>> Cc: Albert Ou <aou@eecs.berkeley.edu>
+>> Cc: linux-riscv@lists.infradead.org
+>> Cc: Arnd Bergmann <arnd@arndb.de>
+>> Cc: linux-arch@vger.kernel.org
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: linux-mm@kvack.org
+>> ---
+>>  include/uapi/asm-generic/unistd.h |    2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> --- a/include/uapi/asm-generic/unistd.h
+>> +++ b/include/uapi/asm-generic/unistd.h
+>> @@ -645,8 +645,10 @@ __SC_COMP(__NR_execve, sys_execve, compa
+>>  #define __NR3264_mmap 222
+>>  __SC_3264(__NR3264_mmap, sys_mmap2, sys_mmap)
+>>  /* mm/fadvise.c */
+>> +#ifdef __ARCH_WANT_COMPAT_FADVISE64_64
+>>  #define __NR3264_fadvise64 223
+>>  __SC_COMP(__NR3264_fadvise64, sys_fadvise64_64, compat_sys_fadvise64_64)
+>> +#endif
+>>
 > 
-> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> ---
-> v3:
->  - add description and example
->  - merge the snps,pwm-number into this patch
->  - rename snps,pwm to snps,dw-apb-timers-pwm2
-> v2:
->  - fix #pwm-cells to be 3
->  - fix indentation and ordering issues
-> ---
->  .../bindings/pwm/snps,dw-apb-timers-pwm2.yaml | 66 +++++++++++++++++++
->  1 file changed, 66 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml
+> This does not work: __ARCH_WANT_COMPAT_FADVISE64_64 is defined in
+> arch/riscv/include/asm/unistd.h, which is not a UAPI header. By making the line
+> conditional on this, user space no longer sees the macro definition.
 > 
+> It looks like you also drop the native definition on all architectures other
+> than riscv here. What we probably want is to just make all the
+> declarations in include/linux/compat.h unconditional and not have them
+> depend on architecture specific macros. Some of these may have
+> incompatible prototypes depending on the architecture, but if we run
+> into those, I would suggest we just give them unique names.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks for the comments.
 
-yamllint warnings/errors:
+With the other patch to kernel/sys_ni.c, this one is no longer needed,
+although I can look into making more entries in <linux/compat.h>
+unconditional. That would also mean adding them to kernel/sys_ni.c, right?
+(if not already there)
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/pwm/snps,dw-apb-timers-pwm2.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.example.dtb: pwm@180000: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+-- 
+~Randy

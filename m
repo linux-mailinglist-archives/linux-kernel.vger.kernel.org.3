@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 902E558BB77
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E844858BB78
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbiHGO5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 10:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S235345AbiHGO5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 10:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbiHGO4a (ORCPT
+        with ESMTP id S235066AbiHGO4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 10:56:30 -0400
+        Sun, 7 Aug 2022 10:56:32 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050B1B1EB
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:56:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2535EB1FA
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:56:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
         s=mail; t=1659883988; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LDstWh8ONHhQiaISt3lPcKYc1wUzyQ3iFEhG0tcL52Y=;
-        b=ny6l/qwaMOdLtlBwngP9cEdL9zEkAxXXaEYjrvuFx4gvI14iwSce1EeGZsvtGiCAkGc0hz
-        Jacblh3nCtaKHQ65klSErWes6V8rxo1XWxjgMbCrbS7P0WdeaRsMZQD0gRrbo8RpK9Xn7H
-        jfxbZnUnvvukQ+qzvsOdFh35mIDP2y0=
+        bh=k+c3KkknlLtwUBDEYtG1+TT7sAqGqh7aGNoFQtGPxwY=;
+        b=LgE+N5Y8fnH6/Eby5wJnHx3/lB0wa8IBVwI7LmvEz9hJwlzNEZSf+IOOlx++OIWNiHgZqq
+        JV1QCdVCezRgKWNQzI8hBVrFp+HRjKvQOmbpQ0gwOudUQp/goGTQprr9IEUL+ii+V9d85K
+        XrHtlNr6EhWv7jiql6PwM+orprfsutw=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 23/28] mfd: motorola-cpcap: Remove #ifdef guards for PM related functions
-Date:   Sun,  7 Aug 2022 16:52:42 +0200
-Message-Id: <20220807145247.46107-24-paul@crapouillou.net>
+Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Subject: [PATCH 24/28] mfd: sprd-sc27xx: Remove #ifdef guards for PM related functions
+Date:   Sun,  7 Aug 2022 16:52:43 +0200
+Message-Id: <20220807145247.46107-25-paul@crapouillou.net>
 In-Reply-To: <20220807145247.46107-1-paul@crapouillou.net>
 References: <20220807145247.46107-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -55,42 +58,46 @@ independently of any Kconfig option, and thanks to that bugs and
 regressions are easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Cc: Orson Zhai <orsonzhai@gmail.com>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Chunyan Zhang <zhang.lyra@gmail.com>
 ---
- drivers/mfd/motorola-cpcap.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/mfd/sprd-sc27xx-spi.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mfd/motorola-cpcap.c b/drivers/mfd/motorola-cpcap.c
-index 265464b5d7cc..ae8930eff72d 100644
---- a/drivers/mfd/motorola-cpcap.c
-+++ b/drivers/mfd/motorola-cpcap.c
-@@ -221,7 +221,6 @@ static const struct regmap_config cpcap_regmap_config = {
- 	.val_format_endian = REGMAP_ENDIAN_LITTLE,
- };
+diff --git a/drivers/mfd/sprd-sc27xx-spi.c b/drivers/mfd/sprd-sc27xx-spi.c
+index d05a47c5187f..ea68d73e5d1c 100644
+--- a/drivers/mfd/sprd-sc27xx-spi.c
++++ b/drivers/mfd/sprd-sc27xx-spi.c
+@@ -215,7 +215,6 @@ static int sprd_pmic_probe(struct spi_device *spi)
+ 	return 0;
+ }
  
 -#ifdef CONFIG_PM_SLEEP
- static int cpcap_suspend(struct device *dev)
+ static int sprd_pmic_suspend(struct device *dev)
  {
- 	struct spi_device *spi = to_spi_device(dev);
-@@ -239,9 +238,8 @@ static int cpcap_resume(struct device *dev)
+ 	struct sprd_pmic *ddata = dev_get_drvdata(dev);
+@@ -235,9 +234,9 @@ static int sprd_pmic_resume(struct device *dev)
  
  	return 0;
  }
 -#endif
  
--static SIMPLE_DEV_PM_OPS(cpcap_pm, cpcap_suspend, cpcap_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(cpcap_pm, cpcap_suspend, cpcap_resume);
+-static SIMPLE_DEV_PM_OPS(sprd_pmic_pm_ops, sprd_pmic_suspend, sprd_pmic_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(sprd_pmic_pm_ops,
++				sprd_pmic_suspend, sprd_pmic_resume);
  
- static const struct mfd_cell cpcap_mfd_devices[] = {
- 	{
-@@ -346,7 +344,7 @@ static struct spi_driver cpcap_driver = {
+ static const struct of_device_id sprd_pmic_match[] = {
+ 	{ .compatible = "sprd,sc2730", .data = &sc2730_data },
+@@ -257,7 +256,7 @@ static struct spi_driver sprd_pmic_driver = {
  	.driver = {
- 		.name = "cpcap-core",
- 		.of_match_table = cpcap_of_match,
--		.pm = &cpcap_pm,
-+		.pm = pm_sleep_ptr(&cpcap_pm),
+ 		.name = "sc27xx-pmic",
+ 		.of_match_table = sprd_pmic_match,
+-		.pm = &sprd_pmic_pm_ops,
++		.pm = pm_sleep_ptr(&sprd_pmic_pm_ops),
  	},
- 	.probe = cpcap_probe,
- 	.id_table = cpcap_spi_ids,
+ 	.probe = sprd_pmic_probe,
+ 	.id_table = sprd_pmic_spi_ids,
 -- 
 2.35.1
 

@@ -2,228 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4B358BBD1
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 18:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C240858BBE1
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 18:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234705AbiHGQJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 12:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S234538AbiHGQmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 12:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbiHGQJm (ORCPT
+        with ESMTP id S233178AbiHGQmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 12:09:42 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FF0A462;
-        Sun,  7 Aug 2022 09:09:40 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id m4so12634642ejr.3;
-        Sun, 07 Aug 2022 09:09:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=kfa6rkgDz6nn/pdEUYBNKDa4YqJiKITb3f8OdRtzvmk=;
-        b=COXRpdfLeS6/eF9rAZR77z4MCuaK1+JKWGBD5kceZ0kJ4DchZJT725v+jCGmSJ2imB
-         y4LN5N4cEput2dmnjPpZCBYcshfj1bs6YZZGHxlscSVTNzWVaENtU7E4kmIpbVVltmxT
-         aQR3xi0sFHgRyzSUKNZpdZSBzbY1h2hGdEnQL8xZFEG5MuIqRLMHqwmsW4LTGQAJbbqR
-         AMgWQCf4vme8WZ6+QAduQY1FuWKGKZdhHldfKg9FgkriLIxratMMFGJYpcQyxffBS5lV
-         klJLgyjrydzzporrpp+caJV3uKT77YXMDjWuOvl1b7gggzDYCfyawoTvo8nU4h4lU114
-         y/Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=kfa6rkgDz6nn/pdEUYBNKDa4YqJiKITb3f8OdRtzvmk=;
-        b=mmL5Uwo8IHjIIhQyb35F2Bsk8RXQUM3BjB3oOWffmNmv2JD11dKjapFRx64utFFLXV
-         Dzl/tonlBQAhhp1t2UEnTmIRaDsk53gB8y3QCFpLma2+y9sW7Kbrl3Dmt0ec+bcJ+z7o
-         xE+e3pchfhxFg3/dBiWzb/YLoKJD4qoR8jluXzcC6HmuYCa4EHhM2Q3AzGVLRNxDZsot
-         0AtKUtsB8uBV/cSgQe3FfvLkVOg66sc0UfoNzIL4ihlbBXXG1s0bntGlcod67fXLqu24
-         yfzwUIDkHxgvXz86FimiUNsqMH2VG1zE+YyJvund+bVANQwbyQ4Na8LoqcfoWRCbSe84
-         fTcA==
-X-Gm-Message-State: ACgBeo0xPQKTJ08HfLx3+JHneskU6+Ur7m0u44ts5h/Z6BkJZCh6qUjt
-        72HO/VyNeLWrRy7lE9GRntk=
-X-Google-Smtp-Source: AA6agR63DksStqDlJzPXUBqN0Z2rFKAzOT4xKMjjaRhnc3EuWCBYaX7QAw6Iot6h6qj8HoZIIlqggw==
-X-Received: by 2002:a17:907:6d15:b0:730:da23:5b5c with SMTP id sa21-20020a1709076d1500b00730da235b5cmr10391598ejc.325.1659888579044;
-        Sun, 07 Aug 2022 09:09:39 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:f019:ef7b:173c:a9d2? ([2a02:908:1256:79a0:f019:ef7b:173c:a9d2])
-        by smtp.gmail.com with ESMTPSA id gj6-20020a170907740600b0072b31307a79sm3984470ejc.60.2022.08.07.09.09.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Aug 2022 09:09:38 -0700 (PDT)
-Message-ID: <3d2083aa-fc6c-6875-3daf-e5abe45fb762@gmail.com>
-Date:   Sun, 7 Aug 2022 18:09:36 +0200
+        Sun, 7 Aug 2022 12:42:47 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BFA2BD2;
+        Sun,  7 Aug 2022 09:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659890566; x=1691426566;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6OhnfoBiaZTWht7GA1P70bu9k1nEE2U220KaOY5t++U=;
+  b=I+o538DMnKwBE6TRfOH7N995fVGxZRqG81pSE3MSrDFyM8rJKLJ8CrfX
+   oPj/QfXZU5zOsuozFx/2HEja7oKUlRGzfwfZPz7FURPq3VO5ILy6HiHEY
+   tCwSeHyIBcnKzklF/+tM6H88Gi1gNu96SGXweeGOg5sTJzCcspa/rdWAG
+   Vhve+CA8kTE+eSYSvaCp6q53dstmF3yzRw7ODPT579P/3F3/dn+msn23U
+   S02uOUYlBzWVc3RfxHuFJbaGJMnzMPV/xk8u81DCFstlVS8IlK0i64QHg
+   ij6nUA2w/dZy7HZA38s+jp2ql3ps5mIH7azv6psC4hbbNwaeRaeOlYqpa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="352174740"
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="352174740"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 09:42:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="693502765"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Aug 2022 09:42:42 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKjMP-000LTb-2U;
+        Sun, 07 Aug 2022 16:42:41 +0000
+Date:   Mon, 8 Aug 2022 00:41:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li Jinlin <lijinlin3@huawei.com>, lduncan@suse.com,
+        cleech@redhat.com, michael.christie@oracle.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, mark.mielke@gmail.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linfeilong@huawei.com,
+        liuzhiqiang26@huawei.com
+Subject: Re: [PATCH] scsi: iscsi: iscsi_tcp: Fix null-ptr-deref while calling
+ getpeername()
+Message-ID: <202208080020.xQk6IIBw-lkp@intel.com>
+References: <20220802101939.3972556-1-lijinlin3@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [Linaro-mm-sig] [PATCH 1/3] dma-buf: Add ioctl to query mmap info
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220729170744.1301044-1-robdclark@gmail.com>
- <20220729170744.1301044-2-robdclark@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20220729170744.1301044-2-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802101939.3972556-1-lijinlin3@huawei.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 29.07.22 um 19:07 schrieb Rob Clark:
-> From: Rob Clark <robdclark@chromium.org>
->
-> This is a fairly narrowly focused interface, providing a way for a VMM
-> in userspace to tell the guest kernel what pgprot settings to use when
-> mapping a buffer to guest userspace.
->
-> For buffers that get mapped into guest userspace, virglrenderer returns
-> a dma-buf fd to the VMM (crosvm or qemu).
+Hi Li,
 
-Wow, wait a second. Who is giving whom the DMA-buf fd here?
+Thank you for the patch! Yet something to improve:
 
-My last status was that this design was illegal and couldn't be 
-implemented because it requires internal knowledge only the exporting 
-driver can have.
+[auto build test ERROR on mkp-scsi/for-next]
+[also build test ERROR on jejb-scsi/for-next linus/master v5.19 next-20220805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-@Daniel has anything changed on that is or my status still valid?
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Jinlin/scsi-iscsi-iscsi_tcp-Fix-null-ptr-deref-while-calling-getpeername/20220802-173945
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+config: x86_64-randconfig-r033-20220801 (https://download.01.org/0day-ci/archive/20220808/202208080020.xQk6IIBw-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ccc367df3fdba07b24eeda721ca928cce50f40d2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Li-Jinlin/scsi-iscsi-iscsi_tcp-Fix-null-ptr-deref-while-calling-getpeername/20220802-173945
+        git checkout ccc367df3fdba07b24eeda721ca928cce50f40d2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/
 
-Regards,
-Christian.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->    In addition to mapping the
-> pages into the guest VM, it needs to report to drm/virtio in the guest
-> the cache settings to use for guest userspace.  In particular, on some
-> architectures, creating aliased mappings with different cache attributes
-> is frowned upon, so it is important that the guest mappings have the
-> same cache attributes as any potential host mappings.
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->   drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
->   include/linux/dma-buf.h      |  7 +++++++
->   include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
->   3 files changed, 61 insertions(+)
->
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index 32f55640890c..d02d6c2a3b49 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
->   	return 0;
->   }
->   
-> +static long dma_buf_info(struct dma_buf *dmabuf, const void __user *uarg)
-> +{
-> +	struct dma_buf_info arg;
-> +
-> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
-> +		return -EFAULT;
-> +
-> +	switch (arg.param) {
-> +	case DMA_BUF_INFO_VM_PROT:
-> +		if (!dmabuf->ops->mmap_info)
-> +			return -ENOSYS;
-> +		arg.value = dmabuf->ops->mmap_info(dmabuf);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (copy_to_user(uarg, &arg, sizeof(arg)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
->   static long dma_buf_ioctl(struct file *file,
->   			  unsigned int cmd, unsigned long arg)
->   {
-> @@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
->   	case DMA_BUF_SET_NAME_B:
->   		return dma_buf_set_name(dmabuf, (const char __user *)arg);
->   
-> +	case DMA_BUF_IOCTL_INFO:
-> +		return dma_buf_info(dmabuf, (const void __user *)arg);
-> +
->   	default:
->   		return -ENOTTY;
->   	}
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index 71731796c8c3..6f4de64a5937 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -283,6 +283,13 @@ struct dma_buf_ops {
->   	 */
->   	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
->   
-> +	/**
-> +	 * @mmap_info:
-> +	 *
-> +	 * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PROT.
-> +	 */
-> +	int (*mmap_info)(struct dma_buf *);
-> +
->   	int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
->   	void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
->   };
-> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
-> index b1523cb8ab30..a41adac0f46a 100644
-> --- a/include/uapi/linux/dma-buf.h
-> +++ b/include/uapi/linux/dma-buf.h
-> @@ -85,6 +85,32 @@ struct dma_buf_sync {
->   
->   #define DMA_BUF_NAME_LEN	32
->   
-> +
-> +/**
-> + * struct dma_buf_info - Query info about the buffer.
-> + */
-> +struct dma_buf_info {
-> +
-> +#define DMA_BUF_INFO_VM_PROT      1
-> +#  define DMA_BUF_VM_PROT_WC      0
-> +#  define DMA_BUF_VM_PROT_CACHED  1
-> +
-> +	/**
-> +	 * @param: Which param to query
-> +	 *
-> +	 * DMA_BUF_INFO_BM_PROT:
-> +	 *     Query the access permissions of userspace mmap's of this buffer.
-> +	 *     Returns one of DMA_BUF_VM_PROT_x
-> +	 */
-> +	__u32 param;
-> +	__u32 pad;
-> +
-> +	/**
-> +	 * @value: Return value of the query.
-> +	 */
-> +	__u64 value;
-> +};
-> +
->   #define DMA_BUF_BASE		'b'
->   #define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
->   
-> @@ -95,4 +121,6 @@ struct dma_buf_sync {
->   #define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, __u32)
->   #define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, __u64)
->   
-> +#define DMA_BUF_IOCTL_INFO	_IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
-> +
->   #endif
+All errors (new ones prefixed by >>):
 
+>> drivers/scsi/iscsi_tcp.c:798:8: error: incompatible pointer to integer conversion passing 'struct file *' to parameter of type 'unsigned int' [-Wint-conversion]
+                   fget(sock->file);
+                        ^~~~~~~~~~
+   include/linux/file.h:48:39: note: passing argument to parameter 'fd' here
+   extern struct file *fget(unsigned int fd);
+                                         ^
+   drivers/scsi/iscsi_tcp.c:852:8: error: incompatible pointer to integer conversion passing 'struct file *' to parameter of type 'unsigned int' [-Wint-conversion]
+                   fget(sock->file);
+                        ^~~~~~~~~~
+   include/linux/file.h:48:39: note: passing argument to parameter 'fd' here
+   extern struct file *fget(unsigned int fd);
+                                         ^
+   2 errors generated.
+
+
+vim +798 drivers/scsi/iscsi_tcp.c
+
+   777	
+   778	static int iscsi_sw_tcp_conn_get_param(struct iscsi_cls_conn *cls_conn,
+   779					       enum iscsi_param param, char *buf)
+   780	{
+   781		struct iscsi_conn *conn = cls_conn->dd_data;
+   782		struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
+   783		struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
+   784		struct sockaddr_in6 addr;
+   785		struct socket *sock;
+   786		int rc;
+   787	
+   788		switch(param) {
+   789		case ISCSI_PARAM_CONN_PORT:
+   790		case ISCSI_PARAM_CONN_ADDRESS:
+   791		case ISCSI_PARAM_LOCAL_PORT:
+   792			spin_lock_bh(&conn->session->frwd_lock);
+   793			if (!tcp_sw_conn || !tcp_sw_conn->sock) {
+   794				spin_unlock_bh(&conn->session->frwd_lock);
+   795				return -ENOTCONN;
+   796			}
+   797			sock = tcp_sw_conn->sock;
+ > 798			fget(sock->file);
+   799			spin_unlock_bh(&conn->session->frwd_lock);
+   800	
+   801			if (param == ISCSI_PARAM_LOCAL_PORT)
+   802				rc = kernel_getsockname(sock,
+   803							(struct sockaddr *)&addr);
+   804			else
+   805				rc = kernel_getpeername(sock,
+   806							(struct sockaddr *)&addr);
+   807			spin_lock_bh(&conn->session->frwd_lock);
+   808			sockfd_put(sock);
+   809			spin_unlock_bh(&conn->session->frwd_lock);
+   810			if (rc < 0)
+   811				return rc;
+   812	
+   813			return iscsi_conn_get_addr_param((struct sockaddr_storage *)
+   814							 &addr, param, buf);
+   815		default:
+   816			return iscsi_conn_get_param(cls_conn, param, buf);
+   817		}
+   818	
+   819		return 0;
+   820	}
+   821	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

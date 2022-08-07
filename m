@@ -2,134 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7990458BBA5
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 17:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D7358BBA8
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 17:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234973AbiHGPou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 11:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
+        id S235008AbiHGPql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 11:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234605AbiHGPor (ORCPT
+        with ESMTP id S229616AbiHGPqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 11:44:47 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28736546
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 08:44:46 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id 17so6536950plj.10
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 08:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc;
-        bh=sEWroSP5zB4LvyUigg1CpthwDBkI2FfyMg4MRduTBcc=;
-        b=ArNhfPo2gtrRcFzbgbUUN6hfCSVMaHdjl49JJ0ChYL55kMWBh9Dc29zrpVi2f5FCEc
-         UXdtVHu1SCP/6qIoCsCci5OsWtXVCQ2bDSl9ca1sPVfdabmsF1M8yesQ6vDGwTGWCGDf
-         JxylR/jzxfgRNaUhu2oahDfkqWAxa/ThxGw7qRIyixWIDrGZpPo+BaYAp5wvM8GhOarJ
-         6gvlknkk9cJDqdcNEFKrc0fnu0vkGuCO0jzKBx3ERWYS9ebjMurK2SrGLRlwOdufHrbh
-         9bbdYasJHI5Cr1/6lEzFE4WM/B7rF6yrn1QKHM4igtRl5/d23++epcORpephEFBZs88B
-         nH9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc;
-        bh=sEWroSP5zB4LvyUigg1CpthwDBkI2FfyMg4MRduTBcc=;
-        b=xasAdsDSB755Ea4SoNxHLv40WWdTSSMa66TCJ+2wM6OrLDgPZiLBww9X/cS9o/hN9w
-         agBIPfS418Z9+nzre1Eiy99aFzhnPgAwXxHw0hvmtHJBPFaaVijphLxroSiUskLmidAN
-         1xsADLtBujzwbTDBfZNpo2U0whkZ2oXyIz1/fU3OxoKTFSpi2YROnZ0k6cX19SX/16yP
-         4oESME2UcGB0P+wrWEzq0/2j1WZGsiYNiZBh51xKWDBHBX/WQ9rmnRTnurbuWcZ57dGL
-         08dPhXPL0Xm3He8xG3U+oj7IppZKk41mQD57zPLBKzmwRruijy8BdllxQypqjbIP8pib
-         hJ2w==
-X-Gm-Message-State: ACgBeo1ZAhfTVZ4dumFvbWqWQe824ALOULVpc3owKiyfQ2I7Hj+lB9/p
-        0X071v/fMvsFOLG1Z/ZN0JQmpOYiB0U4vQ==
-X-Google-Smtp-Source: AA6agR41ofA7h5HbCueofia2RsCDqXdYTNJIs2PIBro9kl6Wq0wsFr4zBZMmKLm8U48qbDc6in47Uw==
-X-Received: by 2002:a17:902:ce09:b0:16b:ec52:760b with SMTP id k9-20020a170902ce0900b0016bec52760bmr15031094plg.155.1659887086157;
-        Sun, 07 Aug 2022 08:44:46 -0700 (PDT)
-Received: from haolee.io ([2600:3c01::f03c:91ff:fe02:b162])
-        by smtp.gmail.com with ESMTPSA id h2-20020a17090a470200b001f319e9b9e5sm8873860pjg.16.2022.08.07.08.44.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 08:44:45 -0700 (PDT)
-Date:   Sun, 7 Aug 2022 15:44:42 +0000
-From:   Hao Lee <haolee.swjtu@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     david@redhat.com, yang.shi@linux.alibaba.com, hannes@cmpxchg.org,
-        haolee.swjtu@gmail.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v2] mm: add DEVICE_ZONE to FOR_ALL_ZONES
-Message-ID: <20220807154442.GA18167@haolee.io>
+        Sun, 7 Aug 2022 11:46:39 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBC095AC;
+        Sun,  7 Aug 2022 08:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QTm0Fa5NeO4gV5vsXv44jv3ky+1FUP2v92+IAnY2Isk=; b=ZfGufmrMNpOaMMyfdbmknIovK0
+        9A5ObDAO9/kVZt1QjWBzJY3Q5sGqgh8UyJfw7KQdIsFchs3Si5FjA7eQcSCo71vIV8fzSTuBpos5/
+        NOCpj/xDga4jklJZ6Lgzz8epXtBC4P6bQfRPlPAYAdU9Cp2CuyIFnlkGYjAz3KmloqV65NScgB0Ju
+        TjetD1WQmN1+2iD4Khd9Ije00UbMDoRdQWt3mnIgZQgPooY75UmIiVZipdhv4IfTIojgTwiRpCSKh
+        cBpFqFREyvjGzwNZhn7R2QUuxnXXbqIjxRNXOqh19IC1a7TrE/r+H/TTqGAX6SO61pBm/FROU7Fg3
+        B21CCzSw==;
+Received: from [187.56.70.103] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oKiU1-0011yy-S9; Sun, 07 Aug 2022 17:46:29 +0200
+Message-ID: <ff7a314e-c9f9-bb28-7a33-0a884188c530@igalia.com>
+Date:   Sun, 7 Aug 2022 12:46:03 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 08/13] tracing: Improve panic/die notifiers
+Content-Language: en-US
+To:     kexec@lists.infradead.org, rostedt@goodmis.org,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     pmladek@suse.com, bhe@redhat.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, senozhatsky@chromium.org,
+        stern@rowland.harvard.edu, tglx@linutronix.de, vgoyal@redhat.com,
+        vkuznets@redhat.com, will@kernel.org, akpm@linux-foundation.org
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-9-gpiccoli@igalia.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220719195325.402745-9-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FOR_ALL_ZONES should be consistent with enum zone_type. Otherwise,
-__count_zid_vm_events have the potential to add count to wrong
-item when zid is ZONE_DEVICE.
+On 19/07/2022 16:53, Guilherme G. Piccoli wrote:
+> Currently the tracing dump_on_oops feature is implemented
+> through separate notifiers, one for die/oops and the other
+> for panic - given they have the same functionality, let's
+> unify them.
+> 
+> Also improve the function comment and change the priority of
+> the notifier to make it execute earlier, avoiding showing useless
+> trace data (like the callback names for the other notifiers);
+> finally, we also removed an unnecessary header inclusion.
+> 
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
+> ---
+> 
+> V2:
+> - Different approach; instead of using IDs to distinguish die and
+> panic events, rely on address comparison like other notifiers do
+> and as per Petr's suggestion;
+> 
+> - Removed ACK from Steven since the code changed.
+> 
+>  kernel/trace/trace.c | 55 ++++++++++++++++++++++----------------------
+>  1 file changed, 27 insertions(+), 28 deletions(-)
+> [...]
 
-Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
----
- include/linux/vm_event_item.h | 15 +++++++++++----
- mm/vmstat.c                   |  9 ++++++++-
- 2 files changed, 19 insertions(+), 5 deletions(-)
+Hi Sergei / Steve, do you think this version is good now, after your
+last round of reviews?
 
-diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
-index 404024486fa5..f3fc36cd2276 100644
---- a/include/linux/vm_event_item.h
-+++ b/include/linux/vm_event_item.h
-@@ -20,12 +20,19 @@
- #define HIGHMEM_ZONE(xx)
- #endif
- 
--#define FOR_ALL_ZONES(xx) DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, HIGHMEM_ZONE(xx) xx##_MOVABLE
-+#ifdef CONFIG_ZONE_DEVICE
-+#define DEVICE_ZONE(xx) xx##_DEVICE,
-+#else
-+#define DEVICE_ZONE(xx)
-+#endif
-+
-+#define FOR_ALL_ZONES(xx) DMA_ZONE(xx) DMA32_ZONE(xx) xx##_NORMAL, \
-+	HIGHMEM_ZONE(xx) xx##_MOVABLE, DEVICE_ZONE(xx)
- 
- enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
--		FOR_ALL_ZONES(PGALLOC),
--		FOR_ALL_ZONES(ALLOCSTALL),
--		FOR_ALL_ZONES(PGSCAN_SKIP),
-+		FOR_ALL_ZONES(PGALLOC)
-+		FOR_ALL_ZONES(ALLOCSTALL)
-+		FOR_ALL_ZONES(PGSCAN_SKIP)
- 		PGFREE, PGACTIVATE, PGDEACTIVATE, PGLAZYFREE,
- 		PGFAULT, PGMAJFAULT,
- 		PGLAZYFREED,
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index 373d2730fcf2..90af9a8572f5 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -1168,8 +1168,15 @@ int fragmentation_index(struct zone *zone, unsigned int order)
- #define TEXT_FOR_HIGHMEM(xx)
- #endif
- 
-+#ifdef CONFIG_ZONE_DEVICE
-+#define TEXT_FOR_DEVICE(xx) xx "_device",
-+#else
-+#define TEXT_FOR_DEVICE(xx)
-+#endif
-+
- #define TEXTS_FOR_ZONES(xx) TEXT_FOR_DMA(xx) TEXT_FOR_DMA32(xx) xx "_normal", \
--					TEXT_FOR_HIGHMEM(xx) xx "_movable",
-+					TEXT_FOR_HIGHMEM(xx) xx "_movable", \
-+					TEXT_FOR_DEVICE(xx)
- 
- const char * const vmstat_text[] = {
- 	/* enum zone_stat_item counters */
--- 
-2.18.2
+Thanks,
 
+
+Guilherme

@@ -2,160 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44D858BA25
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 10:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982F758BA28
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 10:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233801AbiHGIBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 04:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
+        id S233980AbiHGIEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 04:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiHGIB2 (ORCPT
+        with ESMTP id S231464AbiHGIEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 04:01:28 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51287675
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 01:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659859287; x=1691395287;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=b7xHvxaitYuSv1rLqi8dZ9A5eMxVNiB4vL3lO5eQq00=;
-  b=dF4FrZZkFo7djTOEwnu1d7Efs6TTvmvRhRntW/Vcqt11qQwZn0Caaddq
-   MuRWc2cKPvvAnloc1mA6KjzRYFdKf9Uet6cKz+w2Rg6aZ7w87yECvMqYK
-   VH25Hd4M7veyHYrk6r+V30WlXDtk1jE+n1jlbnag20TKzF0LmeIlOi/t8
-   TF/aQ9vEhVnRkPgoMYrq7bPCwoM8gHybqxT/C4ZoMpiiL0RuiQVQX1TzQ
-   T+4k0XgAcj0q842Y6O95yaLkU6a2KjdyaxalH7ITD8HmZWfGL6kUvFyxe
-   h3feU9SYNVZ4HhdmvCz1fHZQpC57/sz7Y1RMHm8Rseoku8glfKiywjXcJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10431"; a="352144879"
-X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="352144879"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 01:01:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,219,1654585200"; 
-   d="scan'208";a="931687194"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Aug 2022 01:01:25 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKbDx-000L81-18;
-        Sun, 07 Aug 2022 08:01:25 +0000
-Date:   Sun, 07 Aug 2022 16:00:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- f6f499f09cc094d56f1af5e69ea480f27c02f150
-Message-ID: <62ef7136.HDrlTINftlEpEchX%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 7 Aug 2022 04:04:10 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B4C7675;
+        Sun,  7 Aug 2022 01:04:09 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id t1so8780868lft.8;
+        Sun, 07 Aug 2022 01:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=wbqZPNw/u0ToigexI/dsHqI9t2TLFKvEVIsy4UYz3Ss=;
+        b=VElqQMAMXX99FoV8nlqKtzEJcGD8mpU+7/rYkO+65ivGoQyQjaXngsiYjHQBoD2Sv/
+         7elgVO6r2jhr6v4N457dHkz5GNx9UdCTnPBcpUqKF1vKbP3K7vnUaKeT5QHHlI3RtWDv
+         tj1j82fLZj/gYpDdNVDFNhdjWdh74l04KVuGPf4+V+eDewuDCUigkvmSrIeY1jLcpoi4
+         Wb3DEeu1BhgzD2T42LTUlddDzGXMyW1LNWTj4LlNtM3tqBMcm0HPGLqYEMDyNftvMLk8
+         TLaBxIyWQIf7mVXsq+xucxwxkIezH79blD4mAJexaqSfoZ/DvwfFcUzNP+xaiF8EMIbz
+         XLiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=wbqZPNw/u0ToigexI/dsHqI9t2TLFKvEVIsy4UYz3Ss=;
+        b=yUuYbq4qVbx8ec5DFRkRK7le5bqIZyI9Jf5ZQ8Ast11v1xPJ0qPvXhfgpW1bU5+jwT
+         sw83Ued6pK+G2K5nnbqx47+OVYN+KQz1CoWhR8bJlpi/GXOzDpW36I+3lrhif4t7XcsM
+         7ar7i5kZXvEA4H9OpbW8ChtPMEsoGxxri0tobBTRfcN8pVkyj/5ZaDZJv8c3SkMe6tBt
+         CFVVW3x0rlIyxZtL8n/Y8+El6MiRSVZnjbsDdZnN2LuakKfIaVtLUfxveg9kRKHKpN6K
+         8nt2G18J454adycf85gRkoJWcYLJ7yp06DjZnpHCnZy7+KAfuTQdllJbkJkAjWgN4qgU
+         yheA==
+X-Gm-Message-State: ACgBeo1wpHsLV42SNErE8egFrKjVO8MSiDOLxXWOav9EH8ff8VNo5gCp
+        49drCnKV4/T2q9BH5D4v6rd3D0Tw3lpi4B5Fzv72T4lwPs0=
+X-Google-Smtp-Source: AA6agR6/Luobxrd0WQHX+M2Qy7TUyQeaPAkewCJqh7H//v0Br55Yb45xKGi5pP/UQUv04JEO08mkbT0IYoxDieGNVyw=
+X-Received: by 2002:a05:6512:692:b0:48a:f5fb:188c with SMTP id
+ t18-20020a056512069200b0048af5fb188cmr4991596lfe.111.1659859447556; Sun, 07
+ Aug 2022 01:04:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220804181800.235368-1-tmaimon77@gmail.com> <20220805115827.GG3834@minyard.net>
+In-Reply-To: <20220805115827.GG3834@minyard.net>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Sun, 7 Aug 2022 11:03:56 +0300
+Message-ID: <CAP6Zq1gfvEpUF-TKhA8EdJqBtwaVvJR3qxtn=8Li4swHB6sDYQ@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-binding: ipmi: add fallback to npcm845 compatible
+To:     minyard@acm.org
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: f6f499f09cc094d56f1af5e69ea480f27c02f150  Merge branch into tip/master: 'x86/mm'
+Hi Corey,
 
-elapsed time: 770m
+Thanks for your comment.
 
-configs tested: 78
-configs skipped: 3
+On Fri, 5 Aug 2022 at 14:58, Corey Minyard <minyard@acm.org> wrote:
+>
+> On Thu, Aug 04, 2022 at 09:18:00PM +0300, Tomer Maimon wrote:
+> > Add to npcm845 KCS compatible string a fallback to npcm750 KCS compatible
+> > string becuase NPCM845 and NPCM750 BMCs are using identical KCS modules.
+> >
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt b/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> > index cbc10a68ddef..4fda76e63396 100644
+> > --- a/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> > +++ b/Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt
+> > @@ -7,7 +7,7 @@ used to perform in-band IPMI communication with their host.
+> >  Required properties:
+> >  - compatible : should be one of
+> >      "nuvoton,npcm750-kcs-bmc"
+> > -    "nuvoton,npcm845-kcs-bmc"
+> > +    "nuvoton,npcm845-kcs-bmc", "nuvoton,npcm750-kcs-bmc"
+>
+> This is just wrong.  The compatible is supposed to identify the device,
+> not the board the device is on.  I think compatible here should be
+> "npcm7xx-kcs-bmc", and just use that everywhere.  It's fine if that is
+> used on a board named npcm845.
+The NPCM8XX is not a board, The Nuvoton NPCM8XX is a fourth-generation
+BMC SoC device family.
+>
+> -corey
+>
+> >  - interrupts : interrupt generated by the controller
+> >  - kcs_chan : The KCS channel number in the controller
+> >
+> > --
+> > 2.33.0
+> >
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Best regards,
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                                defconfig
-i386                          randconfig-a001
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                             allyesconfig
-i386                          randconfig-a003
-x86_64                              defconfig
-x86_64                        randconfig-a015
-i386                          randconfig-a005
-powerpc                           allnoconfig
-x86_64                    rhel-8.3-kselftests
-mips                             allyesconfig
-x86_64                        randconfig-a002
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-arc                              allyesconfig
-alpha                            allyesconfig
-x86_64                           allyesconfig
-m68k                             allyesconfig
-sh                               allmodconfig
-arc                               allnoconfig
-x86_64                        randconfig-a004
-alpha                             allnoconfig
-m68k                             allmodconfig
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a006
-arm                                 defconfig
-x86_64                           rhel-8.3-kvm
-riscv                             allnoconfig
-arm                              allyesconfig
-i386                          randconfig-a014
-arc                  randconfig-r043-20220807
-csky                              allnoconfig
-i386                          randconfig-a012
-arm64                            allyesconfig
-i386                          randconfig-a016
-s390                 randconfig-r044-20220807
-ia64                             allmodconfig
-riscv                randconfig-r042-20220807
-arm                         lubbock_defconfig
-m68k                          sun3x_defconfig
-arm                           sama5_defconfig
-xtensa                          iss_defconfig
-arm                           h3600_defconfig
-arm                         at91_dt_defconfig
-m68k                                defconfig
-sh                         microdev_defconfig
-mips                  decstation_64_defconfig
-arm                          lpd270_defconfig
-openrisc                         alldefconfig
-arm                        keystone_defconfig
-arm                         lpc18xx_defconfig
-ia64                          tiger_defconfig
-powerpc                 mpc85xx_cds_defconfig
-m68k                       m5275evb_defconfig
-sh                             shx3_defconfig
-i386                          randconfig-c001
-powerpc                          allmodconfig
-
-clang tested configs:
-i386                          randconfig-a002
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-x86_64                        randconfig-a005
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r041-20220807
-hexagon              randconfig-r045-20220807
-powerpc                 mpc8272_ads_defconfig
-powerpc                 mpc8315_rdb_defconfig
-powerpc                    socrates_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Tomer

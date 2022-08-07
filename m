@@ -2,127 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267F358BCEA
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 22:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0A058BCEF
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 22:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiHGU27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 16:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
+        id S233195AbiHGUok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 16:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiHGU24 (ORCPT
+        with ESMTP id S229507AbiHGUoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 16:28:56 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED24564C4
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 13:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659904135; x=1691440135;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jJY85f0xRbhXpvvmezXbIZ2pZOB5s6SJ0cH5JblyMKI=;
-  b=JWPdiJRFRZ0Bqu9LxDacuY92c5xtjl46dDFqJgQzXYo4FWGR64SUh7IK
-   K0m/HCu2Mc5N9fJyhncyP+0EGxDt+Jctfm00Ggh3qL6t9wRRidDvFnxHI
-   cjpb5LGOeeTnhN8EjNbVTONhTiqF/YQboCCdLw8wQdOw/SrAPDoZELFSD
-   VAstTiFmFX+dDgjpmzpebZW11wOSlrH1YBdbqttsH1NocI8ZpOxkxFtAo
-   8hyq1owwNrHSzRRk0Jnz2IMs/9S948JurhC3Vwd5cuKVOtZIGOFle1n69
-   47suZXTNfNQhi19iV1LaaIEt/lT7BCrrS08xrlBlWnIgPknKPxgYBGfCh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="352187140"
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="352187140"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 13:28:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="693532585"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Aug 2022 13:28:53 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKmtJ-000Lel-0a;
-        Sun, 07 Aug 2022 20:28:53 +0000
-Date:   Mon, 8 Aug 2022 04:28:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [chao:feature/dax 8/10] fs/f2fs/file.c:1107:10: error: call to
- undeclared function 'dax_layout_busy_page'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202208080435.GfrxXKZ0-lkp@intel.com>
+        Sun, 7 Aug 2022 16:44:38 -0400
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8550B62E6;
+        Sun,  7 Aug 2022 13:44:37 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id l4so8799049wrm.13;
+        Sun, 07 Aug 2022 13:44:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=PR3j4bog8pPMOjA9orzRxcsnCEIbbXpovcv+p87CHi4=;
+        b=OH21hVGzWusfdyaZjo5YaXtZflDRXzE2AYWMoPVtax3YmOCW4SFPBZSFzAP7Y5b2tZ
+         0+8reXgNh/eXmf0tz6HqDbynyFds8pIWpH5hJBD7yBK0b+nycibcry9VHpQ/cJqTB5SY
+         h4v5FIOQfeQ3Tp3nhYpajGjOZTw/yGG0tEYKshlLQw0edRvIPVPMM86T4ZGNjAPtz/1x
+         NtOApFqC6T8acyAa9KbvD5JMMpeA+bIa69t21EGBBYIi9HZachWI0SVDSeTls44F2Wkx
+         TNT0CaLmGDeBpWNpuAd2+3Vy8wmkahgwS/VFjmSsEvXarwYIAEMlvXGeKb+yikANjqRb
+         7l9w==
+X-Gm-Message-State: ACgBeo3pLSmCrFODYTKu2toJVoB5frNnz34pygBj0syTcPBLZVpFu9Vf
+        Pf/Lub+fpHS4rmAaFcN6AYKdr4vzOVc=
+X-Google-Smtp-Source: AA6agR484PVx2gjGv91YCXEUs4vjgAODNVSeUDoaQ6sgiJv+n3uJDFEBGN8/l1lS0V7VLWvi406drw==
+X-Received: by 2002:adf:fb43:0:b0:21a:22eb:da43 with SMTP id c3-20020adffb43000000b0021a22ebda43mr9491379wrs.347.1659905075751;
+        Sun, 07 Aug 2022 13:44:35 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id b4-20020adff904000000b0021e9fafa601sm9707536wrr.22.2022.08.07.13.44.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 13:44:35 -0700 (PDT)
+Date:   Sun, 7 Aug 2022 20:44:33 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+        sthemmin@microsoft.com, Michael Kelley <mikelley@microsoft.com>
+Subject: [GIT PULL] Hyper-V next patches
+Message-ID: <20220807204433.k4lcpmfbradclnnq@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
-head:   42f73c9b2a369f724de6c1df5acb0bbde2688e35
-commit: 59714a25c71315156f6ba8d49b3173915d6943cc [8/10] f2fs: handle layout changes to pinned DAX mappings
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220808/202208080435.GfrxXKZ0-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=59714a25c71315156f6ba8d49b3173915d6943cc
-        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
-        git fetch --no-tags chao feature/dax
-        git checkout 59714a25c71315156f6ba8d49b3173915d6943cc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/f2fs/
+Hi Linus
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
 
-All errors (new ones prefixed by >>):
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
 
-   fs/f2fs/file.c:585:7: error: call to undeclared function 'daxdev_mapping_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
-                ^
->> fs/f2fs/file.c:1107:10: error: call to undeclared function 'dax_layout_busy_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   page = dax_layout_busy_page(inode->i_mapping);
-                          ^
->> fs/f2fs/file.c:1107:8: error: incompatible integer to pointer conversion assigning to 'struct page *' from 'int' [-Wint-conversion]
-                   page = dax_layout_busy_page(inode->i_mapping);
-                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
+are available in the Git repository at:
 
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-next-signed-20220807
 
-vim +/dax_layout_busy_page +1107 fs/f2fs/file.c
+for you to fetch changes up to d180e0a1be6cea2b7436fadbd1c96aecdf3c46c7:
 
-  1097	
-  1098	int f2fs_break_layouts(struct inode *inode)
-  1099	{
-  1100		struct page *page;
-  1101		int error;
-  1102	
-  1103		if (WARN_ON_ONCE(!rwsem_is_locked(&inode->i_mapping->invalidate_lock)))
-  1104			return -EINVAL;
-  1105	
-  1106		do {
-> 1107			page = dax_layout_busy_page(inode->i_mapping);
-  1108			if (!page)
-  1109				return 0;
-  1110	
-  1111			error = ___wait_var_event(&page->_refcount,
-  1112					atomic_read(&page->_refcount) == 1,
-  1113					TASK_INTERRUPTIBLE, 0, 0,
-  1114					f2fs_wait_dax_page(inode));
-  1115		} while (error == 0);
-  1116	
-  1117		return error;
-  1118	}
-  1119	
+  Drivers: hv: Create debugfs file with hyper-v balloon usage information (2022-07-18 11:19:02 +0000)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+----------------------------------------------------------------
+hyperv-next 20220807
+
+A few miscellaneous patches. There is no large patch series for this
+merge window.
+
+Their subject lines are self-explanatory so I don't bother summarizing
+them.
+----------------------------------------------------------------
+Alexander Atanasov (1):
+      Drivers: hv: Create debugfs file with hyper-v balloon usage information
+
+Samuel Holland (1):
+      PCI: hv: Take a const cpumask in hv_compose_msi_req_get_cpu()
+
+Saurabh Sengar (1):
+      drm/hyperv : Removing the restruction of VRAM allocation with PCI bar size
+
+Shradha Gupta (1):
+      Drivers: hv: vm_bus: Handle vmbus rescind calls after vmbus is suspended
+
+ drivers/gpu/drm/hyperv/hyperv_drm_drv.c |  74 +----------------
+ drivers/hv/connection.c                 |  11 +++
+ drivers/hv/hv_balloon.c                 | 135 ++++++++++++++++++++++++++++++--
+ drivers/hv/hyperv_vmbus.h               |   7 ++
+ drivers/hv/vmbus_drv.c                  |  27 +++++--
+ drivers/pci/controller/pci-hyperv.c     |   2 +-
+ 6 files changed, 170 insertions(+), 86 deletions(-)

@@ -2,108 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E130458BCBB
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 21:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451B458BCBC
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 21:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234819AbiHGT0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 15:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S234924AbiHGT14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 15:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiHGT0d (ORCPT
+        with ESMTP id S229898AbiHGT1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 15:26:33 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66796449
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 12:26:32 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id w15so7914170ljw.1
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 12:26:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=+aPYZ+xKL0i5ycXMj6AArLzK0rM2ShOpuYnXfGdJc2A=;
-        b=Ojo5fn0b12MQiyP6uFpm2Fdfc279ZBjBnEcxwT9cWTNG9+rHJqZl/f3A81yxHR7nx6
-         BUuzqixOB+WNbt+3JTo3rPLNVdBv0GU/l+Z47Fs3Ti5rOfNyGfCDzbWT2Asldatwx6Xg
-         s/AOCkMCG6VnNZqSzss0K2hxgP0iqoRjUzN9pKgdMqKzGwRaj3rftjueLuWatgQGPIyj
-         NuPOHvtJ0xojryON/0K0KxRYKx85JrtJBB13yaVP5CuvNibxeGmfKGDRvEJ20VgAm46u
-         erHQCwIaF93dMc8yCZePdNYNrrtPysw/uCYAaYawdQ/Dj4/Ful3+Bwf6fgIzK4BNAh80
-         874g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=+aPYZ+xKL0i5ycXMj6AArLzK0rM2ShOpuYnXfGdJc2A=;
-        b=EpCcpyepCzdm51KyPlCOGKck6LDk+lOd7zbAeW8VkVSf1yTLwqqFLXLxtN5HHVXQDs
-         AjtohQho1WrAtTuSu9vpPVoR9p5Rdr7irA/U0V8LXcO0nF4+YxE2Fw0rKqkxbfMFTOpn
-         1+PRM7/kGswW9nt9sdnavJR9i5zliWzsCsZRs+UUkgzoiDzqlEaek6ekETogDu5carzn
-         2Nv5GSnoG+IBrVWr4TrBudLD3hkvgJmvMRtFEqAlmSYlIZi0MXeZVAQFcFwNMbpSsY4b
-         NyMjsSQX/FVQo+sFH1SxAG6cncBh4XNd0lT8niXSeSCTrsmFxCiOFAFxtOq/3eRPijbX
-         PGFA==
-X-Gm-Message-State: ACgBeo213FhWbdbq7/ge+tYPYPUZCfMYyacgrr1a4sxJi+AOhhf3WA3Z
-        NQ2Xt1/m1GnOoewyS9rpuGcqCBsQZ0z0Y9Wln4Q=
-X-Google-Smtp-Source: AA6agR6jXI/lFEHfporn2w5yL1TB9zTHM7X4JLoLcUpYED5wCKz8pjFeFgwDmgbznlOOx1b9r0ouxbJXCuzivyPb/dE=
-X-Received: by 2002:a2e:98d4:0:b0:25e:5508:ef96 with SMTP id
- s20-20020a2e98d4000000b0025e5508ef96mr5142573ljj.435.1659900390878; Sun, 07
- Aug 2022 12:26:30 -0700 (PDT)
+        Sun, 7 Aug 2022 15:27:53 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494F86477
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 12:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659900472; x=1691436472;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yLahnk8gUpB4eMz6x+NA8cMGlMGLWdheAl+Yb3xVhr4=;
+  b=WHEr8RYPlmsrXMJtefrYSzU5+tItLh24zgwRpc02C8IWbcYfeqNK//Qj
+   DWpGFER9Z+XaZ+fsH1HB2QLPoP8yF71gzZHRTd8Ml7IjoTPxg0pk/l/d/
+   MX/9OQ9K9ROsV2v2Uqtk34qAWgitPO8UoET8a0GX2J7jkyqTJI42TiVNw
+   oyCV4lMVXt9pzuWIbSsIdr9IG/ZCLU5v/PiynpbzsS/gMgpqm9lefOj3b
+   gjbBaXKq2JN66ED6a05n8xh7MJzDScSVwY7oLlgEFWSZCtLa1ob9gOHa8
+   l7HQIhRd6JvuA5AeI7fmt9HOt+G3+VcFgJV/D/Vfn6B/ywTYnu+PEQyDm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="291688916"
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="291688916"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 12:27:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="746399315"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Aug 2022 12:27:50 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKlwD-000Lb3-2H;
+        Sun, 07 Aug 2022 19:27:49 +0000
+Date:   Mon, 8 Aug 2022 03:27:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [chao:feature/dax 4/10] fs/f2fs/file.c:585:7: error: call to
+ undeclared function 'daxdev_mapping_supported'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202208080315.WUak48sf-lkp@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a2e:a80f:0:0:0:0:0 with HTTP; Sun, 7 Aug 2022 12:26:29 -0700 (PDT)
-Reply-To: rebeccaleezhang1@citromail.hu
-From:   Rebecca Zhang <theophilusosamede16@gmail.com>
-Date:   Sun, 7 Aug 2022 12:26:29 -0700
-Message-ID: <CAE8sdstobC-9YCxadna_tACkhtgT7Wi4i9X7bjRUHJaQqWr-pA@mail.gmail.com>
-Subject: Reply back
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:22b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5001]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [theophilusosamede16[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [theophilusosamede16[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [rebeccaleezhang1[at]citromail.hu]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello dear
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
+head:   42f73c9b2a369f724de6c1df5acb0bbde2688e35
+commit: ceea248a26ac122204ddad5c76b55ff37fbc06b9 [4/10] f2fs: support dax page fault
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220808/202208080315.WUak48sf-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=ceea248a26ac122204ddad5c76b55ff37fbc06b9
+        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
+        git fetch --no-tags chao feature/dax
+        git checkout ceea248a26ac122204ddad5c76b55ff37fbc06b9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/f2fs/
 
-I hope you are fine, My name is Rebecca Zhang I have some funds for
-investment but presently I have a health problem so can you help me
-invest the funds.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Contact me on this email directly so I can give you more details: (
-rebeccaleezhang@citromail.hu   )
+All errors (new ones prefixed by >>):
 
-Hoping to receive your reply soon.
+>> fs/f2fs/file.c:585:7: error: call to undeclared function 'daxdev_mapping_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
+                ^
+   1 error generated.
 
-Regards,
 
-Rebecca Zhang
+vim +/daxdev_mapping_supported +585 fs/f2fs/file.c
+
+   570	
+   571	static int f2fs_file_mmap(struct file *file, struct vm_area_struct *vma)
+   572	{
+   573		struct inode *inode = file_inode(file);
+   574	
+   575		if (unlikely(f2fs_cp_error(F2FS_I_SB(inode))))
+   576			return -EIO;
+   577	
+   578		if (!f2fs_is_compress_backend_ready(inode))
+   579			return -EOPNOTSUPP;
+   580	
+   581		/*
+   582		 * We don't support synchronous mappings for non-DAX files and
+   583		 * for DAX files if underneath dax_device is not synchronous.
+   584		 */
+ > 585		if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
+   586			return -EOPNOTSUPP;
+   587	
+   588		file_accessed(file);
+   589	
+   590		if (IS_DAX(inode)) {
+   591			vma->vm_ops = &f2fs_dax_vm_ops;
+   592			vma->vm_flags |= VM_HUGEPAGE;
+   593		} else {
+   594			vma->vm_ops = &f2fs_file_vm_ops;
+   595		}
+   596	
+   597		set_inode_flag(inode, FI_MMAP_FILE);
+   598		return 0;
+   599	}
+   600	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

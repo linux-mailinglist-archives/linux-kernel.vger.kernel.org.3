@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2292D58BB8C
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 17:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D7B58BB8F
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 17:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbiHGPSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 11:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        id S234766AbiHGPT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 11:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiHGPSk (ORCPT
+        with ESMTP id S229531AbiHGPT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 11:18:40 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D148762E9
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 08:18:39 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so5534636pjm.3
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 08:18:39 -0700 (PDT)
+        Sun, 7 Aug 2022 11:19:26 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F816330
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 08:19:25 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id pm17so6725304pjb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 08:19:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=f4puBzIh+2fwMzCLxOTv6T0TgB7OLw32VLd1/PfG9h4=;
-        b=Xo2bBbXbHiiU45ogFCXtsMLy4vyVdoXrSALkxLIL+3dE/LtOUa6Ifp5Ctwh3TQHJCX
-         jL5nJg6qehl6itnqY1KuVzmnSlb7HJDZRpxIRRHI7nTklnpOFiV9Sa2R/hNi9vfJsEL/
-         1J7zK+6WrLXpoHAjP3/G0yEAhn+WOm2KkLc87ZVr59KZUnxfJxqCS52Np87/LYMWPWzL
-         KFqU7VnykHsbf/9Or0FhVNNIYKo0Qsu+JiWwb8+9mC4DsQrAEWfo3Z33RWtg2a0h+8lW
-         pUzpNQ7VefZsF8awcIpIsUZxvUAQjHSec9wPUKDXVh4LDJUOdsUuB1GSYtloQfaJxd8k
-         fsBg==
+        bh=zyNvPVLyDDezqApjjesRSa+r/dJCUOj2kajhngA3cEY=;
+        b=U1bLegysO3V+UCL2Q54RveB3Zmszqfc0p7d8TnVIoFVUi56Vpez2mRTa+v2j+P5y3u
+         FDZpSlP3cwxlPCGK69D0zHt6FXMbXB1PQp15Df8Uy4GhQcv60ccRun3Bp37q7O88QV+O
+         3MxWO2/INsFhAMJe4D8xLEKIOzhZAmAR0mw4ytUgrYosb8RVbtKvE0e/DF1J2ssMvIwf
+         40V2n4VkFTNKNdrCZvykHqZYbQtNBGJQhT4cZTTp9lWLV2doNl0ICHk7qtrEClPnZBHu
+         QiTFR9WdpGOuF48Heck1Wa+tbhR3oRHPMxZcsachgwtZrW6s+zprqb415HNH9Rs4tXgN
+         RrrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=f4puBzIh+2fwMzCLxOTv6T0TgB7OLw32VLd1/PfG9h4=;
-        b=xe8O6BlyAZQuXTsmTpltTAqZNhPD0gQapFCrowPxmSB2M31mbkcu74B5112e+eJdMz
-         MX28WlROsPYtDoN0xLyBn9vgpLTJ7bT3pvtUpaX2dkPscnkNMvjNQzn3BnFehNaCu85O
-         U6GIgfCNRKm3JpSHIhOy2vMuNcuuuw7gLAF9Y3JPtGmaCrtUVwzpq5P6o99rrNhzUnfb
-         em6DdgC8hrNkvN2uMRwKyy+jWaoFUJe66UZBQZ00lnfnwvBIuigpGyF7anC541O2ZXMA
-         ekT5daAglYSOKNDyHhKObwbB4sPqZ32tqEFPrGr6BWCTBL1gQvZvs7JzAbfFevt9otLx
-         1GTw==
-X-Gm-Message-State: ACgBeo0lpm8BB7hXXClSRjrwD88SYqjjdwEhLh+IaUzbET/CUnjM2A3o
-        GiDnYfrJ81JT6Y2F1wY6ya78NO+EKl1bHM4SQmE=
-X-Google-Smtp-Source: AA6agR4PFCXFKZrCtmfoK84ZXQbSdSPehRwO/1j1O+1rs8YRj/5TQLKlQPdqQjGJOlFULLPiVfyceQ==
-X-Received: by 2002:a17:90a:ead3:b0:1f3:366d:5005 with SMTP id ev19-20020a17090aead300b001f3366d5005mr25537234pjb.1.1659885519228;
-        Sun, 07 Aug 2022 08:18:39 -0700 (PDT)
+        bh=zyNvPVLyDDezqApjjesRSa+r/dJCUOj2kajhngA3cEY=;
+        b=o4OkWl7K1edzKIcekukO45TOeyYVa1FPRG4CaLMD1YjctatcoBDyQ/VjjyAEuz3W5z
+         OSktUljtHHhtt+HqzMf+kO3JBopgL/oTOdg0lXXbJcy5qLHNtXLBFkv/uVbkrF/hhYx4
+         87EvW++W7FeRk0W3gBLbv2hDEmut2+I5fc4TZcXjlGS6jRi9r8FH3dT8UMB6xKEUaevW
+         bNUZ6m783mMmiQbfjXPJLAQ54fXw20ebCcs14hn118+dB/86Bo85CEAf/3okhU5vE9Ol
+         gKfHfs0RHeKEwr0I6eeLdfbzaFeElB7VVdrn98RNNb1igollPTJq0NRrOJyZuu1O0H4P
+         lHOQ==
+X-Gm-Message-State: ACgBeo0oNoeopWSJBbdUitk+txfzd9R4CNcu21B5viLmr+vV8bz0zAZj
+        MAEvg2NJ0H+elzMafe/iHA0=
+X-Google-Smtp-Source: AA6agR7NaNGx7oh8UfVl/gJPXMF8S/ck7dQr+6sm2ZO2jLPtgn/jhzjqKke4TQ/u+C49TpqkTp7n4A==
+X-Received: by 2002:a17:903:2015:b0:16e:db59:f65d with SMTP id s21-20020a170903201500b0016edb59f65dmr15152394pla.106.1659885565459;
+        Sun, 07 Aug 2022 08:19:25 -0700 (PDT)
 Received: from localhost.localdomain ([113.88.93.147])
-        by smtp.gmail.com with ESMTPSA id b2-20020a170902d50200b0016b90620910sm6867626plg.71.2022.08.07.08.18.34
+        by smtp.gmail.com with ESMTPSA id t188-20020a6281c5000000b0052acb753b8bsm6692577pfd.158.2022.08.07.08.19.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 08:18:38 -0700 (PDT)
+        Sun, 07 Aug 2022 08:19:24 -0700 (PDT)
 From:   Puyou Lu <puyou.lu@gmail.com>
 Cc:     Puyou Lu <puyou.lu@gmail.com>, Petr Mladek <pmladek@suse.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Phil Auld <pauld@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        John Ogness <john.ogness@linutronix.de>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
         Xiaoming Ni <nixiaoming@huawei.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] watchdog: enable watchdog only when watchdog_thresh != 0
-Date:   Sun,  7 Aug 2022 23:17:55 +0800
-Message-Id: <20220807151757.18466-1-puyou.lu@gmail.com>
+Subject: [PATCH 2/2] watchdog: don't enable watchdog if user disabled it
+Date:   Sun,  7 Aug 2022 23:18:44 +0800
+Message-Id: <20220807151845.18597-1-puyou.lu@gmail.com>
 X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -72,58 +71,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can simplify the check of watchdog_thresh, as watchdog_thresh
-shouldn't be zero for both nmi and soft watchdog.
+Take a check of watchdog_enabled before reconfigure/enable watchdog.
 
 Signed-off-by: Puyou Lu <puyou.lu@gmail.com>
 ---
- kernel/watchdog.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ kernel/watchdog.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 8e61f21e7e33..bed1fe7ecaea 100644
+index bed1fe7ecaea..791765c9bece 100644
 --- a/kernel/watchdog.c
 +++ b/kernel/watchdog.c
-@@ -144,7 +144,7 @@ void __weak watchdog_nmi_start(void) { }
- static void lockup_detector_update_enable(void)
- {
- 	watchdog_enabled = 0;
--	if (!watchdog_user_enabled)
-+	if (!(watchdog_user_enabled && watchdog_thresh))
- 		return;
- 	if (nmi_watchdog_available && nmi_watchdog_user_enabled)
- 		watchdog_enabled |= NMI_WATCHDOG_ENABLED;
-@@ -306,7 +306,7 @@ static int is_softlockup(unsigned long touch_ts,
- 			 unsigned long period_ts,
- 			 unsigned long now)
- {
--	if ((watchdog_enabled & SOFT_WATCHDOG_ENABLED) && watchdog_thresh){
-+	if (watchdog_enabled & SOFT_WATCHDOG_ENABLED) {
- 		/* Warn about unreasonable delays. */
- 		if (time_after(now, period_ts + get_softlockup_thresh()))
- 			return now - touch_ts;
-@@ -543,9 +543,10 @@ static void __lockup_detector_reconfigure(void)
- 	watchdog_nmi_stop();
+@@ -454,6 +454,9 @@ static void watchdog_enable(unsigned int cpu)
  
- 	softlockup_stop_all();
+ 	WARN_ON_ONCE(cpu != smp_processor_id());
+ 
++	if (!watchdog_enabled)
++		return;
 +
+ 	init_completion(done);
+ 	complete(done);
+ 
+@@ -546,6 +549,10 @@ static void __lockup_detector_reconfigure(void)
+ 
  	set_sample_period();
  	lockup_detector_update_enable();
--	if (watchdog_enabled && watchdog_thresh)
-+	if (watchdog_enabled & SOFT_WATCHDOG_ENABLED)
++
++	if (!watchdog_enabled)
++		return;
++
+ 	if (watchdog_enabled & SOFT_WATCHDOG_ENABLED)
  		softlockup_start_all();
  
- 	watchdog_nmi_start();
-@@ -575,8 +576,7 @@ static __init void lockup_detector_setup(void)
- 	 */
+@@ -591,6 +598,10 @@ static void __lockup_detector_reconfigure(void)
+ 	cpus_read_lock();
+ 	watchdog_nmi_stop();
  	lockup_detector_update_enable();
- 
--	if (!IS_ENABLED(CONFIG_SYSCTL) &&
--	    !(watchdog_enabled && watchdog_thresh))
-+	if (!IS_ENABLED(CONFIG_SYSCTL) && !watchdog_enabled)
- 		return;
- 
- 	mutex_lock(&watchdog_mutex);
++
++	if (!watchdog_enabled)
++		return;
++
+ 	watchdog_nmi_start();
+ 	cpus_read_unlock();
+ }
 -- 
 2.17.1
 

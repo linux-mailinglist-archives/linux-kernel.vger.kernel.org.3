@@ -2,208 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4855158BAA7
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 13:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AD158BAAB
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 13:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbiHGL0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 07:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
+        id S233590AbiHGLhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 07:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiHGL0C (ORCPT
+        with ESMTP id S232726AbiHGLhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 07:26:02 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1697E65DD
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 04:26:01 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10ea9ef5838so7671374fac.3
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 04:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=NklgaVD/JirOYzcQ7dn+KLLpgqBlqBMUxzkjreU6H5k=;
-        b=UxYGCm5oJdhgjmJ66RMS5phlQQcjc5W1hXheDuhQUWMPovajhDuDjgDJBO9RbK1J63
-         4iupZf6/0gGcG5aaHf7440SDf7+nc9DHnuxgMgTPR6dZDwgMeEyDcJVxWvrq68xK2+fm
-         2kUQdsVggqW9y0yitsH4OiB9p1F32qfa6OKgoBcW4aK7qRZnbh4uUG4+vP+Lz+AD1x4z
-         TfIigJfzOz6qdCM2/WUdDG/EFebhu3eZsZje6iL3fgOTRn6Q+O8bIEyaJ1LxiKkcWSWU
-         uAjeqDEkbe11iPT5OGLstxNR1zvhzDF+QxrmUNGsbE0po3G63Po+LXYlIi6tKMhFcVYO
-         TXiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=NklgaVD/JirOYzcQ7dn+KLLpgqBlqBMUxzkjreU6H5k=;
-        b=sKedXPlz9XuaiZy6CWuh5Wq8h5+TxXmLIRsL8HBPmzGlW9nKVLG1L3k9afN4iza553
-         bMHSR6PPm67eUQvKQAzMiBn/NFI2lsAu0oAvLqHJTTzYaPGYem/mB9mdUwwj3HtG0W2n
-         Gmg8q/JZF8k6JmO7EYIRFkHsSyEuq8mXpbprpqmVrzqFHzW5exrlEMVdxzWnAKv5TMSF
-         ipuTOZ2EywhLxHAtDBFmqK5mqV5zqKZ1yYdS4ZHW01jTgcUgmAE9VQRbwG91HPExOXiA
-         G0eydqE409jMr3I6CZsNQ/e2e6WopkLNOnff3kS2QyfL5aXEMb3xFVEWolUQZGS/avWk
-         9zrA==
-X-Gm-Message-State: ACgBeo04Nbv2WXguoFqBFGswKyhtWJRJKvanvX62BP2s3jvJpBbGwNC/
-        8TRcy2xfL6VbroaPgRQBB8j2UyUMNZ7J8QHH5Tg=
-X-Google-Smtp-Source: AA6agR4MHpE2nKZq3Tyr8CXocv1IV6OJHhsOalnlygC+TOspXizARVPJUuOxWDHo1NUpxmFK1I33vPkSNJk9N1YjqCg=
-X-Received: by 2002:a05:6870:9193:b0:10d:130e:e57c with SMTP id
- b19-20020a056870919300b0010d130ee57cmr9781618oaf.286.1659871560243; Sun, 07
- Aug 2022 04:26:00 -0700 (PDT)
+        Sun, 7 Aug 2022 07:37:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86E8C6560
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 04:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659872252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=o1EMRzMlY6/eJQLdXyI2BRTqKZiVN5D0fmDyLdtZOXU=;
+        b=b3JThSPMkHHXNsOZY7tBUZWHAbPuWnB2y2wGKmL/FMUXUKA1DrE84clZvabCY5s3MIU+i+
+        46kATKNobflH3so7n3QGsf1HFq24N3msFoZielTvuNkCKBIuKPliq/D7Jg7dCUITRXYNGS
+        nLCjp3IZ/U70utGxmbAVLIowHGN7U50=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-BMw6k7YDOjC-6Vds6LUy8g-1; Sun, 07 Aug 2022 07:37:27 -0400
+X-MC-Unique: BMw6k7YDOjC-6Vds6LUy8g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1588F3C021AD;
+        Sun,  7 Aug 2022 11:37:26 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E3AFB403D0E2;
+        Sun,  7 Aug 2022 11:37:24 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 277BbOAm030983;
+        Sun, 7 Aug 2022 07:37:24 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 277BbMZf030978;
+        Sun, 7 Aug 2022 07:37:23 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Sun, 7 Aug 2022 07:37:22 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH v5] add barriers to buffer functions
+In-Reply-To: <YuyNE5c06WStxQ2z@casper.infradead.org>
+Message-ID: <alpine.LRH.2.02.2208070732160.30857@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
+ <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com> <YuflGG60pHiXp2z/@casper.infradead.org> <alpine.LRH.2.02.2208011040190.27101@file01.intranet.prod.int.rdu2.redhat.com>
+ <YuyNE5c06WStxQ2z@casper.infradead.org>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-References: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
- <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
- <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com>
- <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
- <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
- <YuvctaLwRi+z0Gw4@nvidia.com> <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
- <Yuxi1eRHPN36Or+1@nvidia.com> <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
-In-Reply-To: <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
-From:   Oded Gabbay <oded.gabbay@gmail.com>
-Date:   Sun, 7 Aug 2022 14:25:33 +0300
-Message-ID: <CAFCwf107tLxHKxkPqSRsOHVVp5s2tDEFOOy2oDZUz_KGmv-rDg@mail.gmail.com>
-Subject: Re: New subsystem for acceleration devices
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 7, 2022 at 9:43 AM Oded Gabbay <oded.gabbay@gmail.com> wrote:
->
-> On Fri, Aug 5, 2022 at 3:22 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >
-> > On Thu, Aug 04, 2022 at 08:48:28PM +0300, Oded Gabbay wrote:
-> >
-> > > > The flip is true of DRM - DRM is pretty general. I bet I could
-> > > > implement an RDMA device under DRM - but that doesn't mean it should
-> > > > be done.
-> > > >
-> > > > My biggest concern is that this subsystem not turn into a back door
-> > > > for a bunch of abuse of kernel APIs going forward. Though things
-> > > > are
-> > >
-> > > How do you suggest to make sure it won't happen ?
-> >
-> > Well, if you launch the subsystem then it is your job to make sure it
-> > doesn't happen - or endure the complaints :)
-> Understood, I'll make sure there is no room for complaints.
-> >
-> > Accelerators have this nasty tendancy to become co-designed with their
-> > SOCs in nasty intricate ways and then there is a desire to punch
-> > through all the inconvenient layers to make it go faster.
-> >
-> > > > better now, we still see this in DRM where expediency or performance
-> > > > justifies hacky shortcuts instead of good in-kernel architecture. At
-> > > > least DRM has reliable and experienced review these days.
-> > > Definitely. DRM has some parts that are really well written. For
-> > > example, the whole char device handling with sysfs/debugfs and managed
-> > > resources code.
-> >
-> > Arguably this should all be common code in the driver core/etc - what
-> > value is a subsystem adding beyond that besides using it properly?
->
-> I mainly see two things here:
->
-> 1. If there is a subsystem which is responsible for creating and
-> exposing the device character files, then there should be some code
-> that connects between each device driver to that subsystem.
-> i.e. There should be functions that each driver should call from its
-> probe and release callback functions.
->
-> Those functions should take care of the following:
-> - Create metadata for the device, the device's minor(s) and the
-> driver's ioctls table and driver's callback for file operations (both
-> are common for all the driver's devices). Save all that metadata with
-> proper locking.
-> - Create the device char files themselves and supply file operations
-> that will be called per each open/close/mmap/etc.
-> - Keep track of all these objects' lifetime in regard to the device
-> driver's lifetime, with proper handling for release.
-> - Add common handling and entries of sysfs/debugfs for these devices
-> with the ability for each device driver to add their own unique
-> entries.
->
-> 2. I think that you underestimate (due to your experience) the "using
-> it properly" part... It is not so easy to do this properly for
-> inexperienced kernel people. If we provide all the code I mentioned
-> above, the device driver writer doesn't need to be aware of all these
-> kernel APIs.
->
-Two more points I thought of as examples for added value to be done in
-common code:
-1. Common code for handling dma-buf. Very similar to what was added a
-year ago to rdma. This can be accompanied by a common ioctl to export
-and import a dma-buf.
-2. Common code to handle drivers that want to allow a single user at a
-time to run open the device char file.
-
-Oded
 
 
-> >
-> > It would be nice to at least identify something that could obviously
-> > be common, like some kind of enumeration and metadata kind of stuff
-> > (think like ethtool, devlink, rdma tool, nvemctl etc)
-> Definitely. I think we can have at least one ioctl that will be common
-> to all drivers from the start.
-> A kind of information retrieval ioctl. There are many information
-> points that I'm sure are common to most accelerators. We have an
-> extensive information ioctl in the habanalabs driver and most of the
-> information there is not habana specific imo.
-> >
-> > > I think that it is clear from my previous email what I intended to
-> > > provide. A clean, simple framework for devices to register with, get
-> > > services for the most basic stuff such as device char handling,
-> > > sysfs/debugfs.
-> >
-> > This should all be trivially done by any driver using the core codes,
-> > if you see gaps I'd ask why not improve the core code?
-> >
-> > > Later on, add more simple stuff such as memory manager
-> > > and uapi for memory handling. I guess someone can say all that exists
-> > > in drm, but like I said it exists in other subsystems as well.
-> >
-> > This makes sense to me, all accelerators need a way to set a memory
-> > map, but on the other hand we are doing some very nifty stuff in this
-> > area with iommufd and it might be very interesting to just have the
-> > accelerator driver link to that API instead of building yet another
-> > copy of pin_user_pages() code.. Especially with PASID likely becoming
-> > part of any accelerator toolkit.
-> Here I disagree with you. First of all, there are many relatively
-> simple accelerators, especially in edge, where PASID is really not
-> relevant.
-> Second, even for the more sophisticated PCIe/CXL-based ones, PASID is
-> not mandatory and I suspect that it won't be in 100% of those devices.
-> But definitely that should be an alternative to the "classic" way of
-> handling dma'able memory (pin_user_pages()).
-> >
-> > > I want to be perfectly honest and say there is nothing special here
-> > > for AI. It's actually the opposite, it is a generic framework for
-> > > compute only. Think of it as an easier path to upstream if you just
-> > > want to do compute acceleration. Maybe in the future it will be more,
-> > > but I can't predict the future.
-> >
-> > I can't either, and to be clear I'm only questioning the merit of a
-> > "subsystem" eg with a struct class, rigerous uAPI, etc.
-> >
-> > The idea that these kinds of accel drivers deserve specialized review
-> > makes sense to me, even if they remain as unorganized char
-> > devices. Just understand that is what you are signing up for :)
-> I understand. That's why I'm taking all your points very seriously.
-> This is not a decision that should be taken lightly and I want to be
-> sure most agree this is the correct way forward.
-> My next step is to talk to Dave about it in-depth. In his other email
-> he wrote some interesting ideas which I want to discuss with him.
->
-> Maybe this is something that should be discussed in the kernel summit ?
->
-> >
-> > Jason
+On Fri, 5 Aug 2022, Matthew Wilcox wrote:
+
+> On Mon, Aug 01, 2022 at 11:01:40AM -0400, Mikulas Patocka wrote:
+> > 
+> > In most cases, the buffer is set uptodate while it is locked, so that 
+> > there is no race on the uptodate flag (the race exists on the locked 
+> > flag). Are there any cases where the uptodate flag is modified on unlocked 
+> > buffer, so that it needs special treatment too?
+> 
+> I think you misunderstand the purpose of locked/uptodate.  At least
+> for pages, the lock flag does not order access to the data in the page.
+> Indeed, the contents of the page can be changed while you hold the lock.
+> But the uptodate flag does order access to the data.  At the point where
+> you can observe the uptodate flag set, you know the contents of the page
+> have been completely read from storage.  And you don't need to hold the
+> lock to check the uptodate flag.  So this is wrong:
+> 
+> 	buffer_lock()
+> 	*data = 0x12345678;
+> 	buffer_set_uptodate_not_ordered()
+> 	buffer_unlock_ordered()
+> 
+> because a reader can do:
+> 
+> 	while (!buffer_test_uptodate()) {
+> 		buffer_lock();
+> 		buffer_unlock();
+> 	}
+> 	x = *data;
+> 
+> and get x != 0x12345678 because the compiler can move the
+> buffer_set_uptodate_not_ordered() before the store to *data.
+
+Thanks for explanation. Would you like this patch?
+
+
+
+From: Mikulas Patocka <mpatocks@redhat.com>
+
+Let's have a look at this piece of code in __bread_slow:
+	get_bh(bh);
+	bh->b_end_io = end_buffer_read_sync;
+	submit_bh(REQ_OP_READ, 0, bh);
+	wait_on_buffer(bh);
+	if (buffer_uptodate(bh))
+		return bh;
+Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
+Consequently, if someone calls sb_bread and then reads the buffer data,
+the read of buffer data may be executed before wait_on_buffer(bh) on
+architectures with weak memory ordering and it may return invalid data.
+
+Fix this bug by adding a write memory barrier to set_buffer_uptodate and a
+read memory barrier to buffer_uptodate (in the same way as
+folio_test_uptodate and folio_mark_uptodate).
+
+We also add a barrier to buffer_locked - it pairs with a barrier in
+unlock_buffer.
+
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Cc: stable@vger.kernel.org
+
+Index: linux-2.6/include/linux/buffer_head.h
+===================================================================
+--- linux-2.6.orig/include/linux/buffer_head.h
++++ linux-2.6/include/linux/buffer_head.h
+@@ -117,10 +117,8 @@ static __always_inline int test_clear_bu
+  * of the form "mark_buffer_foo()".  These are higher-level functions which
+  * do something in addition to setting a b_state bit.
+  */
+-BUFFER_FNS(Uptodate, uptodate)
+ BUFFER_FNS(Dirty, dirty)
+ TAS_BUFFER_FNS(Dirty, dirty)
+-BUFFER_FNS(Lock, locked)
+ BUFFER_FNS(Req, req)
+ TAS_BUFFER_FNS(Req, req)
+ BUFFER_FNS(Mapped, mapped)
+@@ -135,6 +133,49 @@ BUFFER_FNS(Meta, meta)
+ BUFFER_FNS(Prio, prio)
+ BUFFER_FNS(Defer_Completion, defer_completion)
+ 
++static __always_inline void set_buffer_uptodate(struct buffer_head *bh)
++{
++	/*
++	 * make it consistent with folio_mark_uptodate
++	 * pairs with smp_acquire__after_ctrl_dep in buffer_uptodate
++	 */
++	smp_wmb();
++	set_bit(BH_Uptodate, &bh->b_state);
++}
++
++static __always_inline void clear_buffer_uptodate(struct buffer_head *bh)
++{
++	clear_bit(BH_Uptodate, &bh->b_state);
++}
++
++static __always_inline int buffer_uptodate(const struct buffer_head *bh)
++{
++	bool ret = test_bit(BH_Uptodate, &bh->b_state);
++	/*
++	 * make it consistent with folio_test_uptodate
++	 * pairs with smp_wmb in set_buffer_uptodate
++	 */
++	if (ret)
++		smp_acquire__after_ctrl_dep();
++	return ret;
++}
++
++static __always_inline void set_buffer_locked(struct buffer_head *bh)
++{
++	set_bit(BH_Lock, &bh->b_state);
++}
++
++static __always_inline int buffer_locked(const struct buffer_head *bh)
++{
++	bool ret = test_bit(BH_Lock, &bh->b_state);
++	/*
++	 * pairs with smp_mb__after_atomic in unlock_buffer
++	 */
++	if (!ret)
++		smp_acquire__after_ctrl_dep();
++	return ret;
++}
++
+ #define bh_offset(bh)		((unsigned long)(bh)->b_data & ~PAGE_MASK)
+ 
+ /* If we *know* page->private refers to buffer_heads */
+

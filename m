@@ -2,71 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C67358BAD6
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 14:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF0658BADC
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 14:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234147AbiHGM1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 08:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S234100AbiHGMlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 08:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234100AbiHGM1T (ORCPT
+        with ESMTP id S233952AbiHGMlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 08:27:19 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D18BC9D;
-        Sun,  7 Aug 2022 05:27:18 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o3so6344409ple.5;
-        Sun, 07 Aug 2022 05:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=wBAib5lIj4PJUGlyk4iTQzVyGIBH+CGO5pPhuP30EHg=;
-        b=PUDC2IIQRPWZaLKg5j4NoAxtZknUO2RQ6OMTliQSBQMejjRC+zIRVOJeg4Btkhr8Wu
-         D1HdkwGaRwMZKIliT9FFNPoeP6fH/2YUmn//XW+aMqyfysjjEtd/eGJCJ+gUxftGB69S
-         m61KXZ+a60W8DzNnmZ92B/yxxd2cyzgvkinnbS9UFYl8Iuj6FMQs3DE0AdgX6N+qXjsK
-         N7xRTrNTuABf6/nyt1sslsdAR+LNorR0xanYA8DdL9tESqkM4HSN70uV21CH7e49Nt4r
-         iXNHVnY4mrFRHf2v8V0vNmu/bNPFgPK+/Yzdh3t+qLzoI0R3gtGgUnETUu85Nswk1h9N
-         ogEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=wBAib5lIj4PJUGlyk4iTQzVyGIBH+CGO5pPhuP30EHg=;
-        b=jnrO2k1TlTPsGLkVSojg3i5/xqhfCxnCMXPyuefYSbKiHYLzhs8EQj3JA4L790dMSu
-         qKKCaDIcgi7ok8pPRq4L4R8Gyhu/S0/DzZDMC0offaWbJY8TSRcT6PRA9nYmaI6Kjbv4
-         mOQPAhgTnNmnAKdnLyPiHj+b4pZxXNdV7EFrGj8bSjKVZ+6kzP+l4D6GP0cA6X79lby5
-         v4EWFoDMG/3dBVAwhzdSFgNF8B3zfRe0OIg6+jdqMaheziVTaRsknzGufxGPEAKSiyF/
-         zUi6mXptuqb1Ptk/r5dJvuakpza/PCWzxqqH/yCsYf4vcTidcZ2Z99Io9OMgyDK03MI8
-         oTPQ==
-X-Gm-Message-State: ACgBeo2cWb3R/TtSU5xJ+ym5BwD3Fh7SjzYWAyQK3nYfYEj71Imdk3E0
-        y3p7565yNmr2JAohNbH97BY=
-X-Google-Smtp-Source: AA6agR5LeRELmDiZAAxgS+mUHslGi2AL4mX/OT6YLOWhzCNtQm7Fn4niAptlu1/dzlAi7G4z0T5D4Q==
-X-Received: by 2002:a17:90b:1894:b0:1f5:1041:a4ed with SMTP id mn20-20020a17090b189400b001f51041a4edmr16358767pjb.125.1659875237512;
-        Sun, 07 Aug 2022 05:27:17 -0700 (PDT)
-Received: from Redmi-G.localdomain ([112.0.190.111])
-        by smtp.googlemail.com with ESMTPSA id n7-20020a170902e54700b0016c16648213sm6716709plf.20.2022.08.07.05.27.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 05:27:16 -0700 (PDT)
-From:   Molly Sophia <mollysophia379@gmail.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Molly Sophia <mollysophia379@gmail.com>
-Subject: [PATCH 2/2] pinctrl: qcom: sc8180x: Fix wrong pin numbers
-Date:   Sun,  7 Aug 2022 20:26:45 +0800
-Message-Id: <20220807122645.13830-3-mollysophia379@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220807122645.13830-1-mollysophia379@gmail.com>
-References: <20220807122645.13830-1-mollysophia379@gmail.com>
+        Sun, 7 Aug 2022 08:41:09 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666D964C2;
+        Sun,  7 Aug 2022 05:41:05 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id A29D01C0001; Sun,  7 Aug 2022 14:41:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1659876062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wFPzsWZvNJjf3xigQNfBO1OUrJFu0sYZpOtVGcvmNyI=;
+        b=gqLNXkePnHe/K7gYCo/14jojVP3/pQNZl9OW5+UUnmZeNyk7MGTIi8K4kmu2C6fpz+Ny3z
+        GHeQVFeppILDhqVtB8D7pscHzOUwszgoOmYxR5toaXCMYNhKHHawJa74BbVKFzdTL5wL0H
+        a/HzLCiWm1tsAfUMGgFLj7JHws/0Tjo=
+Date:   Sun, 7 Aug 2022 14:41:02 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Luke Jones <luke@ljones.dev>
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] asus-wmi: Add support for TUF laptop keyboard states
+Message-ID: <20220807124102.GA32221@duo.ucw.cz>
+References: <20220805081909.10962-1-luke@ljones.dev>
+ <20220805081909.10962-4-luke@ljones.dev>
+ <20220805120859.GB20036@duo.ucw.cz>
+ <ZTI8GR.GMVLPPJWYEO53@ljones.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="oyUTqETQ0mS9luUI"
+Content-Disposition: inline
+In-Reply-To: <ZTI8GR.GMVLPPJWYEO53@ljones.dev>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,34 +52,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pin numbers for UFS_RESET and SDC2_* are not
-consistent in the pinctrl driver for sc8180x.
-So fix it.
 
-Signed-off-by: Molly Sophia <mollysophia379@gmail.com>
----
- drivers/pinctrl/qcom/pinctrl-sc8180x.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+--oyUTqETQ0mS9luUI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-sc8180x.c b/drivers/pinctrl/qcom/pinctrl-sc8180x.c
-index b4bf009fe23e..704a99d2f93c 100644
---- a/drivers/pinctrl/qcom/pinctrl-sc8180x.c
-+++ b/drivers/pinctrl/qcom/pinctrl-sc8180x.c
-@@ -530,10 +530,10 @@ DECLARE_MSM_GPIO_PINS(187);
- DECLARE_MSM_GPIO_PINS(188);
- DECLARE_MSM_GPIO_PINS(189);
- 
--static const unsigned int sdc2_clk_pins[] = { 190 };
--static const unsigned int sdc2_cmd_pins[] = { 191 };
--static const unsigned int sdc2_data_pins[] = { 192 };
--static const unsigned int ufs_reset_pins[] = { 193 };
-+static const unsigned int ufs_reset_pins[] = { 190 };
-+static const unsigned int sdc2_clk_pins[] = { 191 };
-+static const unsigned int sdc2_cmd_pins[] = { 192 };
-+static const unsigned int sdc2_data_pins[] = { 193 };
- 
- enum sc8180x_functions {
- 	msm_mux_adsp_ext,
--- 
-2.25.1
+Hi!
 
+> I'm sorry but can you direct me to a source file or other that shows use =
+of
+> "pattern trigger". I don't know what this means or what to look for. From
+> your response it seems I should certainly be using it.
+
+Trigger is at drivers/leds/trigger/ledtrig-pattern.c , you'd want to
+do something similar to drivers/leds/rgb/leds-qcom-lpg.c .
+
+> I've finished with all the feedback I've received so far, and this is the
+> last piece.
+
+Actually... you may want to submit version without patterns at
+first. It will be easier to review.
+
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--oyUTqETQ0mS9luUI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYu+y3gAKCRAw5/Bqldv6
+8pvsAJ4yN0Qm5NRqNExZoBRtdHXPWcMD4gCgwOm4s4MRF5KY2Mms/Bp6hCZs9FY=
+=fpCX
+-----END PGP SIGNATURE-----
+
+--oyUTqETQ0mS9luUI--

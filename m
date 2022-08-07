@@ -2,158 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371D658BE2C
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 01:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C7058BE4E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 01:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbiHGXDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 19:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S231411AbiHGXaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 19:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbiHGXDh (ORCPT
+        with ESMTP id S229556AbiHGXaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 19:03:37 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D54272E;
-        Sun,  7 Aug 2022 16:03:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M1FHk5r7gz4x1V;
-        Mon,  8 Aug 2022 09:03:30 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1659913411;
-        bh=deIIrGbv7K4SrmJVHFIN2GWBwvoBOtE8G6gHJ47b13Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cCKiuvIsQx/H2E6g8iA4hZ5HYowA0X6lG+sLGZaQoq3AxlqHHpldC58m+YN8d6kGv
-         YWMZz2u64ZBWNw2pDSVxpK2oQPBFzxEN9TBQVpOS/7ZZLIyfseixgBkZ3tOWcj+oou
-         dVUkn0fOlA4wxpgG9QhUZIJLYfR8TXoKtqQlbOAxAqThVZpWRZTgAVXPnbWCSflH2z
-         q+rf/AH75cVsT2ixNyhU+d88nwoy1jIpi7VnT4VrfEIXDsBv6RVBYub6z3lADr7ZB9
-         HXSiD7t89erO0DZn47b8Kqz9sVbbyMewvD4WtbZDIICbxbnm2WO3UQWefCkERMW9xq
-         3Ct3tmTk++2Gw==
-Date:   Mon, 8 Aug 2022 09:03:29 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the loongarch tree
-Message-ID: <20220808090329.4763fe7b@canb.auug.org.au>
+        Sun, 7 Aug 2022 19:30:21 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C4BE99
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 16:30:16 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id r22so4769144pgm.5
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 16:30:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=qbL2Ymxz5e7KekDdLOCsw8SbD8/sAmLdT/zwTpI/iMs=;
+        b=R5iWcoAJGfltcXw8d6iMH8EJQIedF26xa3nF2pmcTBWV6ZAtwiGpdJkc3ESIMqS+r6
+         tYPg8LqY9DG4M3pRYvgfAvNGX5cvpMSLvMlnyoTTbAd1toInkrjCfGwuWSvDbmgmRjSE
+         fL4+HzBnyQUMI44qpxiPIx/42OSGfnvkxEyG0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=qbL2Ymxz5e7KekDdLOCsw8SbD8/sAmLdT/zwTpI/iMs=;
+        b=6dvJN5jogG9vfwGwYuhRNUirPtCLUMcwoCOm1ZmvVa1bdmM8J2cbauLL0v/1amc59B
+         v1NhiPzElWDvsbuKMbnoOt1nVoRKaK409T5YMb4ANqShLsnznzGsrxneS0BgDv0n5XSz
+         zyF1G5eMOv6UVBmOPFL0f23SPq2OYM70LLsoptf2XvJh1faAI73+r6FOW3XabzXj/B9M
+         aA198yLPA5gVAKQoj0zA0X4YywDg7yJ46x0ELWWxaTtYUrcBp+tneXTWxPSpOU9LcssM
+         qsCLBFaPDd7Gvv4y4RWbfOUoYyO+Rdqmdy8c4vQ4uw5lwhsmyXmQbDvvwPzAv6o8XDag
+         lc6w==
+X-Gm-Message-State: ACgBeo2C+bR/uSN0kJ/IrzIbTJx6pmA2ig48IcTbdm2mwuMAcPazrZ0m
+        53yDmiXB1ogW7HA/Lw76dNQ+OQ==
+X-Google-Smtp-Source: AA6agR6sadHb5Wxix/DeyrpnxhLihE5ZhtxH5f6V2cbNJj5GTJgIb+1mvG9rSxRjJPfew0QXv55+NQ==
+X-Received: by 2002:a65:6949:0:b0:41c:cb9d:3d1f with SMTP id w9-20020a656949000000b0041ccb9d3d1fmr13462189pgq.334.1659915016477;
+        Sun, 07 Aug 2022 16:30:16 -0700 (PDT)
+Received: from google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170903230600b0016efc27ca98sm7127955plh.169.2022.08.07.16.30.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 16:30:15 -0700 (PDT)
+From:   Daniil Lunev <dlunev@chromium.org>
+X-Google-Original-From: Daniil Lunev <dlunev@google.com>
+Date:   Mon, 8 Aug 2022 09:30:07 +1000
+To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>
+Cc:     James@vger.kernel.org, E.J.Bottomley@vger.kernel.org,
+        jejb@linux.vnet.ibm.com, Martin@vger.kernel.org,
+        K.Petersen@vger.kernel.org, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bean@vger.kernel.org, Huo@vger.kernel.org, beanhuo@micron.com
+Subject: Re: [PATCH] scsi: ufs-bsg: Remove ufs_bsg_get_query_desc_size
+ function
+Message-ID: <YvBK/8yeohLhu2Za@google.com>
+References: <1655727966-31584-1-git-send-email-Arthur.Simchaev@wdc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xMg937Pe5A4B9ZU8inwozAA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1655727966-31584-1-git-send-email-Arthur.Simchaev@wdc.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/xMg937Pe5A4B9ZU8inwozAA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jun 20, 2022 at 03:26:06PM +0300, Arthur Simchaev wrote:
+> The bsg driver allows user space to send device management commands.
+> As such, it is often used by field application engineers to debug various problems,
+> and as a test bed for new features as well.
+> 
+> Let's not bound ourself to hard coded descriptor sizes, as the new
+> Descriptors that supports new features are not defined yet.
+Can you clarify what you mean "hard-coded"? The descriptor size is initialized
+as QUERY_DESC_MAX_SIZE, and updated in `ufshcd_update_desc_length`, which is
+called with the actual size upon finishing `ufshcd_read_desc_param`.
 
-Hi all,
+The function you are removing - `ufs_bsg_get_query_desc_size` - doesn't seem to
+reject requests on incompatible size, only to restrict the size of the query.
+The way the code is written - if I read it right - will lead to truncation of
+the response if the size of the requested response is less than the actual
+descriptor size, but otherwise you should get full descriptor back.
 
-After merging the loongarch tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Can you provide a specific example where you see the problem to arise?
 
-drivers/acpi/tables.c: In function 'acpi_table_print_madt_entry':
-drivers/acpi/tables.c:213:14: error: 'ACPI_MADT_TYPE_CORE_PIC' undeclared (=
-first use in this function); did you mean 'ACPI_MADT_TYPE_IO_SAPIC'?
-  213 |         case ACPI_MADT_TYPE_CORE_PIC:
-      |              ^~~~~~~~~~~~~~~~~~~~~~~
-      |              ACPI_MADT_TYPE_IO_SAPIC
-drivers/acpi/tables.c:213:14: note: each undeclared identifier is reported =
-only once for each function it appears in
-In file included from include/linux/printk.h:573,
-                 from include/linux/kernel.h:29,
-                 from drivers/acpi/tables.c:13:
-drivers/acpi/tables.c:218:35: error: invalid use of undefined type 'struct =
-acpi_madt_core_pic'
-  218 |                                  p->processor_id, p->core_id,
-      |                                   ^~
-include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynam=
-ic_func_call'
-  134 |                 func(&id, ##__VA_ARGS__);               \
-      |                             ^~~~~~~~~~~
-include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_=
-func_call'
-  162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
-      |         ^~~~~~~~~~~~~~~~~~
-include/linux/printk.h:588:9: note: in expansion of macro 'dynamic_pr_debug'
-  588 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~~~~~
-drivers/acpi/tables.c:217:25: note: in expansion of macro 'pr_debug'
-  217 |                         pr_debug("CORE PIC (processor_id[0x%02x] co=
-re_id[0x%02x] %s)\n",
-      |                         ^~~~~~~~
-drivers/acpi/tables.c:218:52: error: invalid use of undefined type 'struct =
-acpi_madt_core_pic'
-  218 |                                  p->processor_id, p->core_id,
-      |                                                    ^~
-include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynam=
-ic_func_call'
-  134 |                 func(&id, ##__VA_ARGS__);               \
-      |                             ^~~~~~~~~~~
-include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_=
-func_call'
-  162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
-      |         ^~~~~~~~~~~~~~~~~~
-include/linux/printk.h:588:9: note: in expansion of macro 'dynamic_pr_debug'
-  588 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~~~~~
-drivers/acpi/tables.c:217:25: note: in expansion of macro 'pr_debug'
-  217 |                         pr_debug("CORE PIC (processor_id[0x%02x] co=
-re_id[0x%02x] %s)\n",
-      |                         ^~~~~~~~
-drivers/acpi/tables.c:219:36: error: invalid use of undefined type 'struct =
-acpi_madt_core_pic'
-  219 |                                  (p->flags & ACPI_MADT_ENABLED) ? "=
-enabled" : "disabled");
-      |                                    ^~
-include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynam=
-ic_func_call'
-  134 |                 func(&id, ##__VA_ARGS__);               \
-      |                             ^~~~~~~~~~~
-include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_=
-func_call'
-  162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
-      |         ^~~~~~~~~~~~~~~~~~
-include/linux/printk.h:588:9: note: in expansion of macro 'dynamic_pr_debug'
-  588 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~~~~~
-drivers/acpi/tables.c:217:25: note: in expansion of macro 'pr_debug'
-  217 |                         pr_debug("CORE PIC (processor_id[0x%02x] co=
-re_id[0x%02x] %s)\n",
-      |                         ^~~~~~~~
-
-Caused by commit
-
-  0541f3fad39f ("LoongArch: Parse MADT to get multi-processor information")
-
-I have used the loongarch tree from next-20220805 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/xMg937Pe5A4B9ZU8inwozAA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLwRMEACgkQAVBC80lX
-0GziRQf+LRFtr5r3LjPKzZdBmx37B6AfeGfhPY38ZEtPH4d1SuLtUPokH0OknCmf
-iDHswfHovM9YexldmY5QbKjNOwuI7drpz+IcrAf4/6Z+t0lAhdhBdSuRoHwQ3NOA
-QPCG3bOSWtSuBIJD18cQwwp0az8kmu3eCbcfAN4cOBQLtRyKAsfIYg52CRSmWwkS
-zqppbNAt8SQ3ArsZGOuZ7CPZeLJO63QSEvp2R76xPD5HJa9oZzWVJf8q0++tRk+a
-xRxBxcZDPKzvA4x8ZmyONQ66ZtsQ/wBrn7vmETGIuVOz7phW7c9fw8Qbo5J5tvTn
-r6uWFF0rIkBCLU7XJxaGn0EjqmQegw==
-=k26G
------END PGP SIGNATURE-----
-
---Sig_/xMg937Pe5A4B9ZU8inwozAA--
+Thanks,
+Daniil

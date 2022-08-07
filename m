@@ -2,134 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D8F58BCDD
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 22:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BCCD58BCE4
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 22:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiHGUTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 16:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
+        id S231393AbiHGUZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 16:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiHGUTB (ORCPT
+        with ESMTP id S230386AbiHGUZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 16:19:01 -0400
-Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4108614D
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 13:18:59 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id Kmjfo2a6aEkSDKmjfoUec8; Sun, 07 Aug 2022 22:18:57 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 07 Aug 2022 22:18:57 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Harsha Priya <harshapriya.n@intel.com>,
-        "Subhransu S. Prusty" <subhransu.s.prusty@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sriram Periyasamy <sriramx.periyasamy@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        alsa-devel@alsa-project.org
-Subject: [PATCH] ASoC: Intel: kbl_rt5663_max98927: Simplify clk_get() usage
-Date:   Sun,  7 Aug 2022 22:18:54 +0200
-Message-Id: <55e59c4792d64ff6336fcaa85ec15590553e9d63.1659903516.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 7 Aug 2022 16:25:57 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB5364C4;
+        Sun,  7 Aug 2022 13:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659903953; x=1691439953;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=eQ5vUTIVjFaJOW49JpDtCqaTs+jr2jaJBCrYgnxt4dI=;
+  b=N5EVe6SWkfIjMBYqNx9tkukCc/lPhO+mzjPh/cSqxKf4hP1wa5WrfskT
+   AA0Sc2CNxrgSaTwnShlmB/AEXz7WnnpKDF0QkO7Ska/ltxnXJDC9dCjO/
+   EwQz28V+6HG7DZeWgrs6LNtdDtBgySnPcZBvCE74AS9LZUaHdLhFu+5qs
+   M=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 07 Aug 2022 13:25:52 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 13:25:52 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 7 Aug 2022 13:25:51 -0700
+Received: from [10.216.42.249] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 7 Aug 2022
+ 13:25:48 -0700
+Message-ID: <62afe47a-1a50-80ef-400d-8c238f1cb332@quicinc.com>
+Date:   Mon, 8 Aug 2022 01:55:45 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [Freedreno] [PATCH 1/3] dma-buf: Add ioctl to query mmap info
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
+CC:     Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        <freedreno@lists.freedesktop.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+References: <20220729170744.1301044-1-robdclark@gmail.com>
+ <20220729170744.1301044-2-robdclark@gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20220729170744.1301044-2-robdclark@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If clk_get() returns -ENOENT, there is no need to defer the driver, -ENOENT
-will be returned the same for each retries.
-So, return the error code directly instead of -EPROBE_DEFER.
+On 7/29/2022 10:37 PM, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+>
+> This is a fairly narrowly focused interface, providing a way for a VMM
+> in userspace to tell the guest kernel what pgprot settings to use when
+> mapping a buffer to guest userspace.
+>
+> For buffers that get mapped into guest userspace, virglrenderer returns
+> a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
+> pages into the guest VM, it needs to report to drm/virtio in the guest
+> the cache settings to use for guest userspace.  In particular, on some
+> architectures, creating aliased mappings with different cache attributes
+> is frowned upon, so it is important that the guest mappings have the
+> same cache attributes as any potential host mappings.
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>   drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
+>   include/linux/dma-buf.h      |  7 +++++++
+>   include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
+>   3 files changed, 61 insertions(+)
+>
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 32f55640890c..d02d6c2a3b49 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
+>   	return 0;
+>   }
+>   
+> +static long dma_buf_info(struct dma_buf *dmabuf, const void __user *uarg)
+> +{
+> +	struct dma_buf_info arg;
+> +
+> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
+> +		return -EFAULT;
+> +
+> +	switch (arg.param) {
+> +	case DMA_BUF_INFO_VM_PROT:
+> +		if (!dmabuf->ops->mmap_info)
+> +			return -ENOSYS;
+> +		arg.value = dmabuf->ops->mmap_info(dmabuf);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (copy_to_user(uarg, &arg, sizeof(arg)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+>   static long dma_buf_ioctl(struct file *file,
+>   			  unsigned int cmd, unsigned long arg)
+>   {
+> @@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
+>   	case DMA_BUF_SET_NAME_B:
+>   		return dma_buf_set_name(dmabuf, (const char __user *)arg);
+>   
+> +	case DMA_BUF_IOCTL_INFO:
+> +		return dma_buf_info(dmabuf, (const void __user *)arg);
+> +
+>   	default:
+>   		return -ENOTTY;
+>   	}
+> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> index 71731796c8c3..6f4de64a5937 100644
+> --- a/include/linux/dma-buf.h
+> +++ b/include/linux/dma-buf.h
+> @@ -283,6 +283,13 @@ struct dma_buf_ops {
+>   	 */
+>   	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
+>   
+> +	/**
+> +	 * @mmap_info:
+> +	 *
+> +	 * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PROT.
+> +	 */
+> +	int (*mmap_info)(struct dma_buf *);
+> +
+>   	int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+>   	void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+>   };
+> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
+> index b1523cb8ab30..a41adac0f46a 100644
+> --- a/include/uapi/linux/dma-buf.h
+> +++ b/include/uapi/linux/dma-buf.h
+> @@ -85,6 +85,32 @@ struct dma_buf_sync {
+>   
+>   #define DMA_BUF_NAME_LEN	32
+>   
+> +
+> +/**
+> + * struct dma_buf_info - Query info about the buffer.
+> + */
+> +struct dma_buf_info {
+> +
+> +#define DMA_BUF_INFO_VM_PROT      1
+> +#  define DMA_BUF_VM_PROT_WC      0
+> +#  define DMA_BUF_VM_PROT_CACHED  1
+> +
+> +	/**
+> +	 * @param: Which param to query
+> +	 *
+> +	 * DMA_BUF_INFO_BM_PROT:
+Is there a typo here? BM -> VM ?
 
-Remove this special case and use dev_err_probe() to simplify code. It will
-also be less verbose if the clk is really deferred.
-
-Fixes: f7f61e08fe58 ("ASoC: Intel: kbl: Enable mclk and ssp sclk early")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This is based on my understanding of clk_get().
-Review with care.
-
-Not sure the Fixes tag is needed. The patch does not fix anything.
-If devm_clk_get() returns -ENOENT, it will just loop several time until
-the framework gives up.
-If it returns -EPROBE_DEFER, this case is already handled by the
-"return ret;"
-
-So this patch should be a no-op, just a clean-up.
----
- sound/soc/intel/boards/kbl_rt5663_max98927.c | 31 ++++----------------
- 1 file changed, 6 insertions(+), 25 deletions(-)
-
-diff --git a/sound/soc/intel/boards/kbl_rt5663_max98927.c b/sound/soc/intel/boards/kbl_rt5663_max98927.c
-index 2d4224c5b152..07b00af2fa3c 100644
---- a/sound/soc/intel/boards/kbl_rt5663_max98927.c
-+++ b/sound/soc/intel/boards/kbl_rt5663_max98927.c
-@@ -989,7 +989,6 @@ static int kabylake_audio_probe(struct platform_device *pdev)
- {
- 	struct kbl_rt5663_private *ctx;
- 	struct snd_soc_acpi_mach *mach;
--	int ret;
- 
- 	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
- 	if (!ctx)
-@@ -1009,32 +1008,14 @@ static int kabylake_audio_probe(struct platform_device *pdev)
- 			&constraints_dmic_2ch : &constraints_dmic_channels;
- 
- 	ctx->mclk = devm_clk_get(&pdev->dev, "ssp1_mclk");
--	if (IS_ERR(ctx->mclk)) {
--		ret = PTR_ERR(ctx->mclk);
--		if (ret == -ENOENT) {
--			dev_info(&pdev->dev,
--				"Failed to get ssp1_sclk, defer probe\n");
--			return -EPROBE_DEFER;
--		}
--
--		dev_err(&pdev->dev, "Failed to get ssp1_mclk with err:%d\n",
--								ret);
--		return ret;
--	}
-+	if (IS_ERR(ctx->mclk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(ctx->mclk),
-+				     "Failed to get ssp1_mclk\n");
- 
- 	ctx->sclk = devm_clk_get(&pdev->dev, "ssp1_sclk");
--	if (IS_ERR(ctx->sclk)) {
--		ret = PTR_ERR(ctx->sclk);
--		if (ret == -ENOENT) {
--			dev_info(&pdev->dev,
--				"Failed to get ssp1_sclk, defer probe\n");
--			return -EPROBE_DEFER;
--		}
--
--		dev_err(&pdev->dev, "Failed to get ssp1_sclk with err:%d\n",
--								ret);
--		return ret;
--	}
-+	if (IS_ERR(ctx->sclk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(ctx->sclk),
-+				     "Failed to get ssp1_sclk\n");
- 
- 	return devm_snd_soc_register_card(&pdev->dev, kabylake_audio_card);
- }
--- 
-2.34.1
+-Akhil.
+> +	 *     Query the access permissions of userspace mmap's of this buffer.
+> +	 *     Returns one of DMA_BUF_VM_PROT_x
+> +	 */
+> +	__u32 param;
+> +	__u32 pad;
+> +
+> +	/**
+> +	 * @value: Return value of the query.
+> +	 */
+> +	__u64 value;
+> +};
+> +
+>   #define DMA_BUF_BASE		'b'
+>   #define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
+>   
+> @@ -95,4 +121,6 @@ struct dma_buf_sync {
+>   #define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, __u32)
+>   #define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, __u64)
+>   
+> +#define DMA_BUF_IOCTL_INFO	_IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
+> +
+>   #endif
 

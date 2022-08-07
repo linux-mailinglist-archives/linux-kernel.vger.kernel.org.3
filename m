@@ -2,87 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A7E58B9A7
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 07:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4AD358B9AA
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 07:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232521AbiHGFOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 01:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S231655AbiHGFRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 01:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiHGFOk (ORCPT
+        with ESMTP id S229503AbiHGFRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 01:14:40 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715BFEE0C;
-        Sat,  6 Aug 2022 22:14:38 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id k19so200595qkj.7;
-        Sat, 06 Aug 2022 22:14:38 -0700 (PDT)
+        Sun, 7 Aug 2022 01:17:42 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96D5E0DF
+        for <linux-kernel@vger.kernel.org>; Sat,  6 Aug 2022 22:17:41 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id b4so6126974pji.4
+        for <linux-kernel@vger.kernel.org>; Sat, 06 Aug 2022 22:17:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=V8UVz/JJ92x87N8mDUF2jufqQ9issBtcACsOaWjPvSc=;
-        b=ku9Y4zOjklrVKKJ0eLvuf615qLNYTXZrj3Oje2fyPBp4NVmplmO+zhYlG5+W9rrGjD
-         5cUBpouVPMEQWNLJx4RNd43EVSZQiIS8M0ohJuyq46fJXgphAxfBLgZXnoMew0EOvkU1
-         oQg31GgWTEJ1SbGb0tsAhUE2pE8TGGJyejaasjY5feIq2QhDWVwVE8aDu8Qo52p5ZmGj
-         hl265fsLMWHdAfXPnlWpk1zOkpC08t4KbAr2DZ7RDEffPPUcNO1PNd/X9oB4FkiOPRT0
-         JtyUft3GX1jVT7BXEXYReioZSCVvn8ZRBMNvV7cb+ANuVu5SiDaMIfYXlglRt/ylPG4l
-         xfVg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/M40Lir0c3unLFM3oH2uK5N2/5ZEFQr2Skfy+gX1t/U=;
+        b=KPa5EHbxec7dPBJyLKuuOBy2dcOFjef0WqKoi6IaYpXsd7sdYVQ6Wr9sI6F+9kSaRc
+         Mq74iqKc93IhmZzCuW7QcPyGnJLqENWiLTgrDPLKfE4aLXkYylagFwdJ9AumUPXM2ucD
+         4tcsb5gX/Svz16b7fYggGScSQqGitFbJ6PiewhJ18aAnVchzwWQvdppBPLivoJtqg+NB
+         SlCI6nvSjkT3kAPGr3CPJiTe5e77vkm59LRpt2FdKKpbJQyvbiLG2+sFBBaHZQU5gtd2
+         /+f2Eu43Aye+MqiSpHFEk7SgwwGAfqUbMvJNZvJFNs/N34EWaditc3RWGNF2Pu08qMHU
+         lJCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=V8UVz/JJ92x87N8mDUF2jufqQ9issBtcACsOaWjPvSc=;
-        b=OEyYPfbaXuaZ7HeudF4LL6yLtaF9Q0fz9uY4T/wkYTqfsSETQpijuJfq40TXUVTa/7
-         eY5NBkRZsoEmDBceWxwfxlcIzs4GjC7pu8aLiQE9Vbf7hgtxDr+dKKGTDB+ahJZRJCJI
-         68pD1hhQ/qBj4yg9qE8/DZV4RzAKGzFBgM+lOEIWUSxvQynnESN9vnZfmDbSuAVmIHh3
-         1Y2GX5nzQS+ovvaWeEwY4n/wf7Ef9qkLE8FzgiW9La+vtDcHwyZvtMJ2Eqsbzd5GoXkg
-         khPV+p5w6naIa8ptBG905BLwn8vbinCtj3SnDE8e+X6eW2SIn/vZNIbmVSNX8UVVPJgd
-         rVVg==
-X-Gm-Message-State: ACgBeo2j+L88QiXY7cHnJrxkbrx+0g9fy4jkM8qHw8tZMZP39NLPaA5C
-        i2dZKCsYfbBOE5euMa/ODpU=
-X-Google-Smtp-Source: AA6agR5E+alD9yxHjHQl1ufq23nIMjuxNubS2qqDr9pcYwmxxFwjncl8ZKY+QtEEjAGTS8+77CtUVw==
-X-Received: by 2002:a05:620a:170d:b0:6b8:fd9c:da91 with SMTP id az13-20020a05620a170d00b006b8fd9cda91mr9873421qkb.683.1659849277505;
-        Sat, 06 Aug 2022 22:14:37 -0700 (PDT)
-Received: from localhost ([2601:c4:c432:d7:b6be:7200:aee8:de91])
-        by smtp.gmail.com with ESMTPSA id k19-20020ae9f113000000b006b5e50057basm6441461qkg.95.2022.08.06.22.14.36
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/M40Lir0c3unLFM3oH2uK5N2/5ZEFQr2Skfy+gX1t/U=;
+        b=4g9sRMoJOP1DnFGYbdLtXzuO0M/562/3iGgP4m9Ne5nZna0VFkVR/zMp+c5WZflIUT
+         PXJLFikq+39rtzLUMxCcekJX2M90MvtDbQW7rFv6UZ2BwXNRfdC4/HyDSTawFQ6Pc3Vj
+         2kiq56N9FYDnHDJ57bTYrryvLqXPOLVHVoVEeMW7G7t2bvbcOVTLy594lmHx2I7Neo/f
+         LLcy6QouBEqhluQxKy9lI5GZMMbxZ2qUWZMbeUVC2AyX6xk5/vSZux7wgQhd9J6l+H0p
+         X2YPwzxLI/x8N/VUoI7OwyC4xKgkp8JbYZPXY5s2iQYNowB5CxLw1mt7Uk1doONaKc5D
+         Bvng==
+X-Gm-Message-State: ACgBeo1Rqon+q11sQBbnongvvcn8cXbOXkmIO/7qkT0+EbY1i7r1UmnC
+        9ec2erWJ2bpreSFteAyDCEzxig==
+X-Google-Smtp-Source: AA6agR6NsU64wnmBKtMCQ71dQuf9D7EHh46eTrnAKTS/AgPHAL00p3DQabpZDAS1UBQG1dlBfMfwvw==
+X-Received: by 2002:a17:90b:394:b0:1f5:90a1:acf0 with SMTP id ga20-20020a17090b039400b001f590a1acf0mr9593429pjb.40.1659849461339;
+        Sat, 06 Aug 2022 22:17:41 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (173.242.120.104.16clouds.com. [173.242.120.104])
+        by smtp.gmail.com with ESMTPSA id s18-20020a170902c65200b0016d738d5dbbsm5860632pls.97.2022.08.06.22.17.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Aug 2022 22:14:37 -0700 (PDT)
-Date:   Sat, 6 Aug 2022 22:14:36 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     yury.norov@gmail.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sander Vanheule <sander@svanheule.net>,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [GIT PULL] MM updates for 5.20-rc1
-Message-ID: <Yu9KPCxGYUUROdlC@yury-laptop>
+        Sat, 06 Aug 2022 22:17:40 -0700 (PDT)
+Date:   Sun, 7 Aug 2022 13:17:37 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     carsten.haitzler@foss.arm.com
+Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: Re: [PATCH v5 10/14] perf test: Add thread loop test shell scripts
+Message-ID: <20220807051737.GH34254@leoy-ThinkPad-X240s>
+References: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
+ <20220728145256.2985298-11-carsten.haitzler@foss.arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220728145256.2985298-11-carsten.haitzler@foss.arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On Thu, Jul 28, 2022 at 03:52:52PM +0100, carsten.haitzler@foss.arm.com wrote:
+> From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
+> 
+> Add a script to drive the thread loop test that gathers data so
+> it passes a minimum bar (in this case do we get any perf context data
+> for every thread).
+> 
+> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 
-> Sander Vanheule (5):
->       x86/cacheinfo: move shared cache map definitions
->       cpumask: add UP optimised for_each_*_cpu versions
->       cpumask: Fix invalid uniprocessor mask assumption
->       lib/test: introduce cpumask KUnit test suite
->       cpumask: update cpumask_next_wrap() signature
-
-I think, Sander has a new version for this:
-
-https://lore.kernel.org/all/YuV1J7Zt+NzkrWeV@yury-laptop/T/#ma2d7613315f331fac83d8bd5ae22ef740945569ao
-
-Thanks,
-Yury
+Reviewed-by: Leo Yan <leo.yan@linaro.org>

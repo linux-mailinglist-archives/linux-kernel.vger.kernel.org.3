@@ -2,140 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D6658BC9F
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 20:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B4E58BCA7
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 21:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235078AbiHGS44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 14:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S230175AbiHGTJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 15:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiHGS4v (ORCPT
+        with ESMTP id S229468AbiHGTJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 14:56:51 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F0C312
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 11:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659898610; x=1691434610;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tWrtA4T8qNcOu8PTNbooLAgNkzghaGHaHb/uPU2HktA=;
-  b=PCvqBEBR8kfMysIRK1x7PiwJPurk9CrXOwrI5vC6sXfyQu44DJREFxZh
-   VrYamgNKt64+a6mwf+XWcbj4RJqiDkdrkNSvVeItrbcPrfncEEcbeBf42
-   ycga2I+2OGV4gyqMcfL4lgsBPRmVqIZjuyWR8WChFLUBc8hDrYPilnSa0
-   zoSBPadgpaRzAiBiy5+rUhTMqJnobf7oYpV8ScMhbhzp3OKfYAjQNrWvr
-   f02eG+u9c2jWJeMjBTBLYpgjcVfQ2NvjYOh/uqpYs6dH37dfnqSl0gzbL
-   oQYqlTLobEjwp/QNgd74B+YuZUJoxgKEfpGVbXoA+RFhOHzRxycSXvMkd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="316361325"
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="316361325"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 11:56:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="632611454"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Aug 2022 11:56:48 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oKlSC-000La9-0l;
-        Sun, 07 Aug 2022 18:56:48 +0000
-Date:   Mon, 8 Aug 2022 02:56:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: include/linux/compiler_types.h:319:45: error: call to
- '__compiletime_assert_241' declared with attribute error: BUILD_BUG_ON
- failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
-Message-ID: <202208080248.tURG1JkJ-lkp@intel.com>
+        Sun, 7 Aug 2022 15:09:43 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E61643A;
+        Sun,  7 Aug 2022 12:09:42 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id x64so5635875iof.1;
+        Sun, 07 Aug 2022 12:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=mL5GgcWfstWeGYJhJ68nNeLCVdUqveKpU3sfQrU4jS8=;
+        b=dvGrmV5h9eO2wJVSL0XJhv1Gt/WJj0w//G0Gg6m1x9dhjd2Q8sgsgXxLilTvQN8kxr
+         h6CR9GvgcqTRcdkfBgffcRaIH/mUkuoagRRMaMIoJjUK28IcYqSO4/je/HSI+etgG/w6
+         coSfq8qxu+SHXlikM01+KZPY5AeJFgKaYfbCOuwMAd32iCOCxnRzU+woX4yklkY56Zv+
+         T1+zdls2pLhfKINUz+g2kRI8IAgQslnLcPdll1vXs+QDV3IYbkNuthh6VkfKbfJ61eNt
+         gCblRM3ng5kDS398+lAO461ZV/3nOe6RIVogM37JCukLRUorWdrIKXKsM3jcZBMFgflG
+         gMJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=mL5GgcWfstWeGYJhJ68nNeLCVdUqveKpU3sfQrU4jS8=;
+        b=H2bx08IoZIEKxF646J1dMDDog0jrmETWbu9DDzmoeTuFAGpeHdH/7EPr/DkfwsWlcO
+         D/YhuYQzg1NII1C6hYn7dMg6maNz/IcXtqiJ3DR1cg2IswjIByHw7h9Xq1LOoh8web4S
+         eQc9LwxDjlcXxtcSDlMn8Zjys/pP964IRrjIhs7VrDbRLQ8l1c4GF0k3yFdMFlt9id0/
+         vRKFjZ0HfxhIF+B9G1tAkMwy0ie9wblVxlVWLtTqdhFo4qxY6phMPhswc6ueDFvDAhmw
+         ugdTbztQ4xIx5ZZfkKyDoEHBJEIXIo4x9JCHU/Pm1aMKWf9pef7JJlecVX3yzAdpT66L
+         3otg==
+X-Gm-Message-State: ACgBeo3qOUjAWkvgiO9AsL8QbdnyexkuwOWwwUQNxbETqFBSDUC5spxG
+        +xNWQbLQ+05uEqR6icpYpiRX/8OAXi1TtEit3Vc=
+X-Google-Smtp-Source: AA6agR4/h1SXw70tF50lChS9ED9MW5RLqXWMAX8bbOCiqDbjN0hp6NCcgS07c7xUttCKzfkifIBj3euZP66AmPA80ww=
+X-Received: by 2002:a05:6638:2642:b0:33f:5172:e77 with SMTP id
+ n2-20020a056638264200b0033f51720e77mr6852089jat.85.1659899382051; Sun, 07 Aug
+ 2022 12:09:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220729170744.1301044-1-robdclark@gmail.com> <20220729170744.1301044-2-robdclark@gmail.com>
+ <3d2083aa-fc6c-6875-3daf-e5abe45fb762@gmail.com> <CAF6AEGvKdM3vyCvBZK=ZcdGmak7tsrP1b8ANyyaMjVfNDViqyw@mail.gmail.com>
+ <973de2f8-75e4-d4c7-a13a-c541a6cf7c77@amd.com> <CAF6AEGuhQT6A_jh8kLWh5xMoUGc1osdewyBk-8NoprtWOHseaQ@mail.gmail.com>
+ <2fc74efe-220f-b57a-e804-7d2b3880d14f@gmail.com> <CAF6AEGv9H+fSFKPNqwPxYUjkgj05AimpXbp-p_JL8nKLnzON=w@mail.gmail.com>
+ <e2423bd7-ef73-8d43-c661-a19c80ad1a26@gmail.com>
+In-Reply-To: <e2423bd7-ef73-8d43-c661-a19c80ad1a26@gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Sun, 7 Aug 2022 12:10:08 -0700
+Message-ID: <CAF6AEGsoYaXe2+qug_TfT99KXuXh9Ez2L2HjQZroE6c6GSW4SQ@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] [PATCH 1/3] dma-buf: Add ioctl to query mmap info
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Sun, Aug 7, 2022 at 11:05 AM Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
+>
+> Am 07.08.22 um 19:56 schrieb Rob Clark:
+> > On Sun, Aug 7, 2022 at 10:38 AM Christian K=C3=B6nig
+> > <ckoenig.leichtzumerken@gmail.com> wrote:
+> >> [SNIP]
+> >> And exactly that was declared completely illegal the last time it came
+> >> up on the mailing list.
+> >>
+> >> Daniel implemented a whole bunch of patches into the DMA-buf layer to
+> >> make it impossible for KVM to do this.
+> > This issue isn't really with KVM, it is not making any CPU mappings
+> > itself.  KVM is just making the pages available to the guest.
+>
+> Well I can only repeat myself: This is strictly illegal.
+>
+> Please try this approach with CONFIG_DMABUF_DEBUG set. I'm pretty sure
+> you will immediately run into a crash.
+>
+> See this here as well
+> https://elixir.bootlin.com/linux/v5.19/source/drivers/dma-buf/dma-buf.c#L=
+653
+>
+> Daniel intentionally added code to mangle the page pointers to make it
+> impossible for KVM to do this.
 
-FYI, the error/warning still remains.
+I don't believe KVM is using the sg table, so this isn't going to stop
+anything ;-)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1612c382ffbdf1f673caec76502b1c00e6d35363
-commit: 39cac191ff37939544af80d5d2af6b870fd94c9b arc/mm/highmem: Use generic kmap atomic implementation
-date:   1 year, 9 months ago
-config: arc-randconfig-r003-20220801 (https://download.01.org/0day-ci/archive/20220808/202208080248.tURG1JkJ-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=39cac191ff37939544af80d5d2af6b870fd94c9b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 39cac191ff37939544af80d5d2af6b870fd94c9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/mm/
+> If the virtio/virtgpu UAPI was build around the idea that this is
+> possible then it is most likely fundamental broken.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+How else can you envision mmap'ing to guest userspace working?  The
+guest kernel is the one that controls the guest userspace pagetables,
+not the host kernel.  I guess your complaint is about VMs in general,
+but unfortunately I don't think you'll convince the rest of the
+industry to abandon VMs ;-)
 
-All errors (new ones prefixed by >>):
+But more seriously, let's take a step back here.. what scenarios are
+you seeing this being problematic for?  Then we can see how to come up
+with solutions.  The current situation of host userspace VMM just
+guessing isn't great.  And sticking our heads in the sand and
+pretending VMs don't exist isn't great.  So what can we do?  I can
+instead add a msm ioctl to return this info and solve the problem even
+more narrowly for a single platform.  But then the problem still
+remains on other platforms.
 
-   In file included from <command-line>:
-   arch/arc/mm/highmem.c: In function 'kmap_init':
->> include/linux/compiler_types.h:319:45: error: call to '__compiletime_assert_241' declared with attribute error: BUILD_BUG_ON failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
-     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:300:25: note: in definition of macro '__compiletime_assert'
-     300 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:319:9: note: in expansion of macro '_compiletime_assert'
-     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/arc/mm/highmem.c:69:9: note: in expansion of macro 'BUILD_BUG_ON'
-      69 |         BUILD_BUG_ON(FIX_KMAP_SLOTS > PTRS_PER_PTE);
-         |         ^~~~~~~~~~~~
+Slightly implicit in this is that mapping dma-bufs to the guest won't
+work for anything that requires DMA_BUF_IOCTL_SYNC for coherency.. we
+could add a possible return value for DMA_BUF_INFO_VM_PROT indicating
+that the buffer does not support mapping to guest or CPU access
+without DMA_BUF_IOCTL_SYNC.  Then at least the VMM can fail gracefully
+instead of subtly.
 
-
-vim +/__compiletime_assert_241 +319 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  306  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  307  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  318  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @319  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  320  
-
-:::::: The code at line 319 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+BR,
+-R

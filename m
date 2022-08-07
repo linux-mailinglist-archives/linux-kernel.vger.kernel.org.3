@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935BE58BE1B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 00:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416D358BE22
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 01:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbiHGW5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 18:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
+        id S231674AbiHGXBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 19:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiHGW5G (ORCPT
+        with ESMTP id S229542AbiHGXBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 18:57:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 458152634
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 15:57:05 -0700 (PDT)
+        Sun, 7 Aug 2022 19:01:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77153EA2
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 16:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659913024;
+        s=mimecast20190719; t=1659913261;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=DRG3kxi36PNmVinjdItykZfWEJs1QIH2+MUoMsMB+M0=;
-        b=LTmyR3cThuKtgkMgp9HiJdX4j0nr5jymPxJf6yy2Rpw/E2xCrE5q1LfSsaXygS5LvAwB22
-        uaw58RhoizljZzALDueoT/3PRuZEBLs0DYVu8Lay7M9NexFX96lvsp5aQ10I6xOYuJ1lQv
-        cWfbge9oOAjIrhICuSDLMpxDuMYyNLo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Wk/43vXNo+gPgeJbUofxRngA+x+b00pdU9F/OSmIEJg=;
+        b=d4Haw93S6P+Ob9vovI0K6YtUK1YMS9QUndcebBQFJuXycWL4zFfmnmZ5m8I6RT0bag5vZQ
+        SnI/ujRH5rTCulYGcc7eXwvBo9hZjkm4q1ytuL05Xn444tD5aS5CEPl0AjMfI1fHoY9Gc8
+        sEMiIhQ5I+isPuw1QKQUui1aC7JxJkM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-4OoprNGdPoGA_fmSGI6BRg-1; Sun, 07 Aug 2022 18:57:03 -0400
-X-MC-Unique: 4OoprNGdPoGA_fmSGI6BRg-1
-Received: by mail-wm1-f72.google.com with SMTP id v130-20020a1cac88000000b003a4f057ed9fso3945275wme.7
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 15:57:02 -0700 (PDT)
+ us-mta-125-234xcwE8Nde2N2twiLK1gA-1; Sun, 07 Aug 2022 19:00:59 -0400
+X-MC-Unique: 234xcwE8Nde2N2twiLK1gA-1
+Received: by mail-wm1-f71.google.com with SMTP id y3-20020a1c4b03000000b003a537ef75c7so168359wma.3
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 16:00:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=DRG3kxi36PNmVinjdItykZfWEJs1QIH2+MUoMsMB+M0=;
-        b=ihUnBoPYLB6rJfhZJ1jx2jbaRpHVD+HWnMTYSV4ouFLV4RpeTH3kzzpeLJNvo1vKDm
-         HddFkMsyjtZepE25Fa6OT5DeNuKyWvlCtAkYhL8fQ7lMvLCZFXAGkbjg+q5FevI6VjcS
-         k6ms89aPxGTkjOUBRi8HF/fnnFnvLdAVpgHMXC8/lEkK66dEjdlzEPfDnBkTCNFkK7kS
-         FyQ6yjB21ua2Ul2rXKc+ScuvFbGfA7N9gVfXpMb1MYkLe1vmNigg+edc3Ihr+ncGnsaR
-         8b3BYGa5B4xTp8MQ0Oz7xyidZC3V3HjGYMNTuEYeA0VdcJvBxhk/71wd0yGzSsofJe2F
-         km+g==
-X-Gm-Message-State: ACgBeo30zSM7iK629LPZ5ndwtH2xpTO7ncw7YqvnpJ3i+nIqYpYSKVF/
-        hnhgESvh9d0pU7no0kmg/UQ+hS0Lrrei+Y/Hr7M2dt5DSToY0ir7I+AB9kDvwAR8hT7Xsptr2Gk
-        B3G1xraE5lK+UsEhXW5UBYRKL
-X-Received: by 2002:adf:dfca:0:b0:21f:c93:5c36 with SMTP id q10-20020adfdfca000000b0021f0c935c36mr9565188wrn.41.1659913021921;
-        Sun, 07 Aug 2022 15:57:01 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4DQBpZdhf0pAyeZfbLu4dv8LJ5Uprgoh7hJXP8hoIGau82PS3zKRDTJ/sqZNm7PtU1kq2lQA==
-X-Received: by 2002:adf:dfca:0:b0:21f:c93:5c36 with SMTP id q10-20020adfdfca000000b0021f0c935c36mr9565176wrn.41.1659913021591;
-        Sun, 07 Aug 2022 15:57:01 -0700 (PDT)
+        bh=Wk/43vXNo+gPgeJbUofxRngA+x+b00pdU9F/OSmIEJg=;
+        b=AM03/xhdEXlTYFqrTq3tKmvdKYJCfAewdlp1iEZSy+rpxUkMyeg3MRb/6DK/lN0I4W
+         4RdHkfA5Xq5/YZfhAVVLC0m5T+ZPi+pEFgQoE7TTV7CyFwrSIbnM4e46MgqrJu06IG04
+         DwcLUgrNoZBZof5r4EoM23Ba5kGyg+HQR0O1ZPAyEaKTxkXQugUWtwvqUzj0Z12rZUhL
+         4CYn21bK0QdVAGFx2UrJQCcSbmnsWNwBpgrEsRKAqcaut6D2Uc77vt40YJrIBbV//4c4
+         05gryxHfzbZD/IeV9HbFaKhZFYexqEPB5pwAh1saDj20HBpjBDlTrpXgIto0Xzp8t5QN
+         NTIw==
+X-Gm-Message-State: ACgBeo2A4VFGyk3MDcKtn5BhWuaI7NwxJQHaCvAQGgRfr6TgnO5j8kDB
+        FqFzzsiMjGbAKTKP+KMzdSv/E7Wr52X+PuCWxMwIvp7ykSGfWYs4J+qNDlvEa0Bwa4Ied4Opcjo
+        YCXDRt/zA3dC5NjuDpGIjJo/w
+X-Received: by 2002:adf:e111:0:b0:21d:665e:2fa5 with SMTP id t17-20020adfe111000000b0021d665e2fa5mr10319212wrz.652.1659913258513;
+        Sun, 07 Aug 2022 16:00:58 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR77jXqn3s6KfigLdRwFaDgPm/WuGZ/eUbqehSUKychxT4mkfEwdiEmUEE/nolidYa5kAcIEuw==
+X-Received: by 2002:adf:e111:0:b0:21d:665e:2fa5 with SMTP id t17-20020adfe111000000b0021d665e2fa5mr10319205wrz.652.1659913258316;
+        Sun, 07 Aug 2022 16:00:58 -0700 (PDT)
 Received: from redhat.com ([2.52.21.123])
-        by smtp.gmail.com with ESMTPSA id w11-20020a1cf60b000000b003a5260b8392sm4523962wmc.23.2022.08.07.15.56.59
+        by smtp.gmail.com with ESMTPSA id u7-20020a05600c210700b003a3561d4f3fsm916915wml.43.2022.08.07.16.00.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 15:57:01 -0700 (PDT)
-Date:   Sun, 7 Aug 2022 18:56:57 -0400
+        Sun, 07 Aug 2022 16:00:57 -0700 (PDT)
+Date:   Sun, 7 Aug 2022 19:00:54 -0400
 From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     Igor Skalkin <Igor.Skalkin@opensynergy.com>
 Cc:     Jason Wang <jasowang@redhat.com>,
         virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio-mmio: Introduce virtio_mmio hotplug
-Message-ID: <20220807185612-mutt-send-email-mst@kernel.org>
-References: <20220807215226.36507-1-Igor.Skalkin@opensynergy.com>
+        linux-kernel@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org
+Subject: Re: [PATCH] virtio_bt: Fix alignment in configuration struct
+Message-ID: <20220807185846-mutt-send-email-mst@kernel.org>
+References: <20220807221152.38948-1-Igor.Skalkin@opensynergy.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220807215226.36507-1-Igor.Skalkin@opensynergy.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220807221152.38948-1-Igor.Skalkin@opensynergy.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,117 +81,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 07, 2022 at 11:52:26PM +0200, Igor Skalkin wrote:
-> From: Igor Skalkin <igor.skalkin@opensynergy.com>
+On Mon, Aug 08, 2022 at 12:11:52AM +0200, Igor Skalkin wrote:
+> According to specification [1], "For the device-specific configuration
+> space, the driver MUST use 8 bit wide accesses for 8 bit wide fields,
+> 16 bit wide and aligned accesses for 16 bit wide fields and 32 bit wide
+> and aligned accesses for 32 and 64 bit wide fields.".
 > 
-> While the virtio device is not yet running, the virtual machine manager
-> advertises the device with device_id set to 0.
-> During virtio mmio probing, the device_id is checked, and if it is 0,
-> the rest of the probing function is deferred until the interrupt arrives.
+> Current version of the configuration structure:
 > 
-> Signed-off-by: Igor Skalkin <igor.skalkin@opensynergy.com>
+>     struct virtio_bt_config {
+>         __u8  type;
+>         __u16 vendor;
+>         __u16 msft_opcode;
+>     } __attribute__((packed));
+> 
+> has both 16bit fields non-aligned.
+> 
+> This commit fixes it.
+> 
+> [1] https://docs.oasis-open.org/virtio/virtio/v1.1/virtio-v1.1.pdf
+> 
+> Signed-off-by: Igor Skalkin <Igor.Skalkin@opensynergy.com>
 
-Given this is clearly an extension to host/guest ABI, please
-propose this on the virtio TC mailing list.
+This is all true enough, but the problem is
+1. changing uapi like this can't be done, will break userspace
+2. the driver has more issues and no one seems to want to
+   maintain it. 
+I posted a patch "Bluetooth: virtio_bt: mark broken" and intend
+to merge it for this release.
 
 
 > ---
-> In our setup, we have a Linux host running virtio devices and virtualised
-> Linux/Android Guest[s] running virtio drivers.
-> Situation "the guest OS calls the probe() function for the virtio driver,
-> but the virtio device has not yet started in the host OS." keeps happening.
-> Also, some devices need to be hot-plugged later instead of starting during
-> system sturtup.
+>  include/uapi/linux/virtio_bt.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Probing of the guest virtio drivers should be deferred until the host device
-> has started.
-> ---
->  drivers/virtio/virtio_mmio.c | 58 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 58 insertions(+)
-> 
-> diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-> index 083ff1eb743d..c2e28a8faaaa 100644
-> --- a/drivers/virtio/virtio_mmio.c
-> +++ b/drivers/virtio/virtio_mmio.c
-> @@ -91,6 +91,8 @@ struct virtio_mmio_device {
->  	/* a list of queues so we can dispatch IRQs */
->  	spinlock_t lock;
->  	struct list_head virtqueues;
-> +
-> +	struct work_struct hotplug_work;
+> diff --git a/include/uapi/linux/virtio_bt.h b/include/uapi/linux/virtio_bt.h
+> index a7bd48daa9a9..adc03709cc4f 100644
+> --- a/include/uapi/linux/virtio_bt.h
+> +++ b/include/uapi/linux/virtio_bt.h
+> @@ -23,9 +23,9 @@ enum virtio_bt_config_vendor {
 >  };
 >  
->  struct virtio_mmio_vq_info {
-> @@ -592,6 +594,43 @@ static void virtio_mmio_release_dev(struct device *_d)
+>  struct virtio_bt_config {
+> -	__u8  type;
+>  	__u16 vendor;
+>  	__u16 msft_opcode;
+> +	__u8  type;
+>  } __attribute__((packed));
 >  
->  /* Platform device */
->  
-> +static irqreturn_t hotplug_interrupt(int irq, void *opaque)
-> +{
-> +	struct virtio_mmio_device *vm_dev = opaque;
-> +
-> +	if (readl(vm_dev->base + VIRTIO_MMIO_DEVICE_ID))
-> +		schedule_work(&vm_dev->hotplug_work);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int virtio_mmio_request_irq(irq_handler_t handler,
-> +				   struct virtio_mmio_device *vm_dev)
-> +{
-> +	int err;
-> +
-> +	err = request_irq(platform_get_irq(vm_dev->pdev, 0), handler,
-> +			  IRQF_SHARED, dev_name(&vm_dev->pdev->dev), vm_dev);
-> +	if (err)
-> +		dev_err(&vm_dev->pdev->dev, "request_irq(%s) returns %d\n",
-> +			dev_name(&vm_dev->pdev->dev), err);
-> +
-> +	return err;
-> +}
-> +
-> +static int finish_probe(struct virtio_mmio_device *vm_dev);
-> +static void virtio_mmio_hotplug_work(struct work_struct *hotplug_work)
-> +{
-> +	struct virtio_mmio_device *vm_dev =
-> +		container_of(hotplug_work, struct virtio_mmio_device,
-> +			    hotplug_work);
-> +
-> +	free_irq(platform_get_irq(vm_dev->pdev, 0), vm_dev);
-> +
-> +	if (finish_probe(vm_dev))
-> +		virtio_mmio_request_irq(hotplug_interrupt, vm_dev);
-> +}
-> +
->  static int virtio_mmio_probe(struct platform_device *pdev)
->  {
->  	struct virtio_mmio_device *vm_dev;
-> @@ -628,6 +667,25 @@ static int virtio_mmio_probe(struct platform_device *pdev)
->  		return -ENXIO;
->  	}
->  
-> +	vm_dev->vdev.id.device = readl(vm_dev->base + VIRTIO_MMIO_DEVICE_ID);
-> +	if (!vm_dev->vdev.id.device) {
-> +		rc = virtio_mmio_request_irq(hotplug_interrupt, vm_dev);
-> +		if (rc)
-> +			return rc;
-> +
-> +		INIT_WORK(&vm_dev->hotplug_work, virtio_mmio_hotplug_work);
-> +
-> +		return 0;
-> +	}
-> +
-> +	return finish_probe(vm_dev);
-> +}
-> +
-> +static int finish_probe(struct virtio_mmio_device *vm_dev)
-> +{
-> +	struct platform_device *pdev = vm_dev->pdev;
-> +	int rc;
-> +
->  	vm_dev->vdev.id.device = readl(vm_dev->base + VIRTIO_MMIO_DEVICE_ID);
->  	if (vm_dev->vdev.id.device == 0) {
->  		/*
+>  #endif /* _UAPI_LINUX_VIRTIO_BT_H */
 > -- 
-> 2.37.1
+> 2.34.1
 

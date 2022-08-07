@@ -2,52 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E3058BAEC
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 15:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CD358BAEF
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 15:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbiHGNIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 09:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
+        id S234239AbiHGNO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 09:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiHGNI2 (ORCPT
+        with ESMTP id S232691AbiHGNO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 09:08:28 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90D0632B
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 06:08:25 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id z2-20020a056e02088200b002dc4022c15fso4942741ils.11
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 06:08:25 -0700 (PDT)
+        Sun, 7 Aug 2022 09:14:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16F0464F4
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 06:14:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659878092;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xE1ql9r1WlnpphQLIhOk9A5gTFrWDcEvErV3HfUz44Q=;
+        b=GoYHbnsC85pX43NXb6iH/rxLeJG0PycIu4I4Mzrzc/I99vvmNYcyLbl2Wmlo68yEK6BvSs
+        pnmWlcu8jRl4cx2U7Tzlr4WzYTxdhoZrq3DpPVP1t1Ftue72DAUKGPJSWpDwuCUPnv50gn
+        nj3u7jE0LK05DRfpPtYhy8hIGSEU7i0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-486-E7SY9LaJMkqLFOf6PAyjaw-1; Sun, 07 Aug 2022 09:14:51 -0400
+X-MC-Unique: E7SY9LaJMkqLFOf6PAyjaw-1
+Received: by mail-wm1-f72.google.com with SMTP id r10-20020a05600c284a00b003a2ff6c9d6aso6930546wmb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 06:14:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=vnV7cRg3Tne8wd1q+sHQ0TMC7i9eytqxDhJim1J4PTk=;
-        b=Y/66lldPOtUANfRfbG54IetUwkJ3PJaxWs6auGNwN90bxjW899xMHA04LIOu7c3VTp
-         4f2DSueab7j4kzsj+HTLI2aaoZ91ygLVRVHm4p5HWXQPnTlZAYc2/CrYbGH/MnJevGz0
-         0dl+3WH8HB6T12w/3iD5Utv19tDIt0hW+fxYneez6CgmvVT2tSxmxwJANex3HNf0RFuD
-         CfsXz7zCb/cmHPrlwy98BV1xA2T9lqDyeQP9EPArPjZTe9uXl+lkQcC4iTUGryL4yM8W
-         dtemJjioLFvCr5S3IbbuY/Stbe+7NUgvX75fKR3YKqx3aD0uRNVlUrhH4iRi3Z4BDJth
-         vRSA==
-X-Gm-Message-State: ACgBeo3O059VuFG2pBs662uHEmbYPcLJxV4afYDetC6mV/00mFL9pGM3
-        PzwKQmBVSVG4ZGNuukLTs0n00f0rwk+ut1neAHiDLS7avlSS
-X-Google-Smtp-Source: AA6agR6whLfcV4UNv9AyPfLUwXg8drboA+u/W1C+Ck6IN9btxeb1lHo5HZoxcp8lDr2MnbD/siGrvT+zeI+92sxDdRM/szahmWZE
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=xE1ql9r1WlnpphQLIhOk9A5gTFrWDcEvErV3HfUz44Q=;
+        b=KfhybFdqCDKP5vTtM6eVmiFETlM+mqQJvxxbc42NPWxOzRqPOnO56P5vbY0R27s3UN
+         2WKX2RebKmdjlr53tKeyGScj6kTjFP0Yze/NMawTQGdvhXUjENAdhTvy3SzEHyKH83M3
+         BOjJjZXF/RXYW0EVZQ59FIoTndELQ5tMpmQ3Gs0MiZilJ0c64S+hsvrGNJI7m0XFUt2i
+         xm/4tG2Eug2/C2d1VqZV3/lyxEp3kNH32EVUF6bF+LOvJ+6m01xQTp3Fx+mC5GCbOqat
+         SMvvx/UakbRx0+CFb5mKJFnygrSH3lZXD/Uz0nWruNbttVJQofBtM4yN3OBLEXfJHNzZ
+         Z/8A==
+X-Gm-Message-State: ACgBeo3oRV66C0hhYx3ivPV4VYGkpuvZPsfx2DmP/+xVf46jQCzESr9L
+        l0QTfSI6Th6Z9cI1UBpu1Ms3cyJG1o4NjqG0CJ57r1nbEO4+uYJ+iQoNZW6skMMz+P84iZ+x06H
+        ZjPt5j5y0W2W0lItwdzxNiww9
+X-Received: by 2002:a7b:cb55:0:b0:3a5:41a:829c with SMTP id v21-20020a7bcb55000000b003a5041a829cmr12476232wmj.153.1659878090317;
+        Sun, 07 Aug 2022 06:14:50 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7XPmSXHx0uphBUati04hlAT8Kv454CdlO9eCJMcNZrnnQufGNHHbsrZu1If3gI3BrvRzX2yQ==
+X-Received: by 2002:a7b:cb55:0:b0:3a5:41a:829c with SMTP id v21-20020a7bcb55000000b003a5041a829cmr12476216wmj.153.1659878090075;
+        Sun, 07 Aug 2022 06:14:50 -0700 (PDT)
+Received: from redhat.com ([2.52.21.123])
+        by smtp.gmail.com with ESMTPSA id ba5-20020a0560001c0500b0021efc75914esm9570153wrb.79.2022.08.07.06.14.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 06:14:49 -0700 (PDT)
+Date:   Sun, 7 Aug 2022 09:14:43 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     stefanha@redhat.com, jasowang@redhat.com,
+        torvalds@linux-foundation.org, ascull@google.com, maz@kernel.org,
+        keirf@google.com, jiyong@google.com, kernel-team@android.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
+Subject: Re: IOTLB support for vhost/vsock breaks crosvm on Android
+Message-ID: <20220807042408-mutt-send-email-mst@kernel.org>
+References: <20220805181105.GA29848@willie-the-truck>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1694:b0:342:f3b4:1518 with SMTP id
- f20-20020a056638169400b00342f3b41518mr1186838jat.0.1659877705062; Sun, 07 Aug
- 2022 06:08:25 -0700 (PDT)
-Date:   Sun, 07 Aug 2022 06:08:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fb20b605e5a66457@google.com>
-Subject: [syzbot] possible deadlock in ext4_xattr_get
-From:   syzbot <syzbot+62120febbd1ee3c3c860@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805181105.GA29848@willie-the-truck>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,149 +79,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Will, thanks very much for the analysis and the writeup!
 
-syzbot found the following issue on:
+On Fri, Aug 05, 2022 at 07:11:06PM +0100, Will Deacon wrote:
+> So how should we fix this? One possibility is for us to hack crosvm to
+> clear the VIRTIO_F_ACCESS_PLATFORM flag when setting the vhost features,
+> but others here have reasonably pointed out that they didn't expect a
+> kernel change to break userspace. On the flip side, the offending commit
+> in the kernel isn't exactly new (it's from the end of 2020!) and so it's
+> likely that others (e.g. QEMU) are using this feature.
 
-HEAD commit:    cb71b93c2dc3 Add linux-next specific files for 20220628
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=10bdcf3c080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=62120febbd1ee3c3c860
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10256c61080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f3c832080000
+Exactly, that's the problem.
 
-Bisection is inconclusive: the issue happens on the oldest tested release.
+vhost is reusing the virtio bits and it's only natural that
+what you are doing would happen.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12420fe2080000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11420fe2080000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16420fe2080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+62120febbd1ee3c3c860@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 512
-EXT4-fs (loop0): mounted filesystem without journal. Quota mode: none.
-======================================================
-WARNING: possible circular locking dependency detected
-5.19.0-rc4-next-20220628-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor246/3601 is trying to acquire lock:
-ffff888075af28e8 (&ei->xattr_sem){++++}-{3:3}, at: ext4_xattr_get+0x14e/0xa10 fs/ext4/xattr.c:650
-
-but task is already holding lock:
-ffff888075af2c20 (&ea_inode->i_rwsem#9/1){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:761 [inline]
-ffff888075af2c20 (&ea_inode->i_rwsem#9/1){+.+.}-{3:3}, at: chown_common+0x364/0x710 fs/open.c:727
-
-which lock already depends on the new lock.
+To be precise, this is what we expected people to do (and what QEMU does):
 
 
-the existing dependency chain (in reverse order) is:
+#define QEMU_VHOST_FEATURES ((1 << VIRTIO_F_VERSION_1) |
+			     (1 << VIRTIO_NET_F_RX_MRG) | .... )
 
--> #1 (&ea_inode->i_rwsem#9/1){+.+.}-{3:3}:
-       down_write+0x90/0x150 kernel/locking/rwsem.c:1542
-       inode_lock include/linux/fs.h:761 [inline]
-       ext4_xattr_inode_create fs/ext4/xattr.c:1445 [inline]
-       ext4_xattr_inode_lookup_create fs/ext4/xattr.c:1528 [inline]
-       ext4_xattr_set_entry+0x2ab3/0x3850 fs/ext4/xattr.c:1656
-       ext4_xattr_ibody_set+0x78/0x2b0 fs/ext4/xattr.c:2209
-       ext4_xattr_set_handle+0x964/0x1500 fs/ext4/xattr.c:2366
-       ext4_xattr_set+0x13a/0x340 fs/ext4/xattr.c:2479
-       __vfs_setxattr+0x115/0x180 fs/xattr.c:182
-       __vfs_setxattr_noperm+0x125/0x5f0 fs/xattr.c:216
-       __vfs_setxattr_locked+0x1cf/0x260 fs/xattr.c:277
-       vfs_setxattr+0x13f/0x330 fs/xattr.c:303
-       setxattr+0x146/0x160 fs/xattr.c:611
-       path_setxattr+0x197/0x1c0 fs/xattr.c:630
-       __do_sys_setxattr fs/xattr.c:646 [inline]
-       __se_sys_setxattr fs/xattr.c:642 [inline]
-       __x64_sys_setxattr+0xc0/0x160 fs/xattr.c:642
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
--> #0 (&ei->xattr_sem){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
-       lock_acquire kernel/locking/lockdep.c:5665 [inline]
-       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
-       down_read+0x98/0x440 kernel/locking/rwsem.c:1489
-       ext4_xattr_get+0x14e/0xa10 fs/ext4/xattr.c:650
-       __vfs_getxattr+0xd9/0x140 fs/xattr.c:401
-       cap_inode_need_killpriv+0x3c/0x60 security/commoncap.c:301
-       security_inode_need_killpriv+0x40/0x90 security/security.c:1420
-       notify_change+0x6e7/0x1440 fs/attr.c:351
-       chown_common+0x61b/0x710 fs/open.c:734
-       do_fchownat+0x126/0x1e0 fs/open.c:765
-       __do_sys_fchownat fs/open.c:780 [inline]
-       __se_sys_fchownat fs/open.c:777 [inline]
-       __x64_sys_fchownat+0xba/0x150 fs/open.c:777
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&ea_inode->i_rwsem#9/1);
-                               lock(&ei->xattr_sem);
-                               lock(&ea_inode->i_rwsem#9/1);
-  lock(&ei->xattr_sem);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor246/3601:
- #0: ffff88801d65e460 (sb_writers#4){.+.+}-{0:0}, at: do_fchownat+0x101/0x1e0 fs/open.c:762
- #1: ffff888075af2c20 (&ea_inode->i_rwsem#9/1){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:761 [inline]
- #1: ffff888075af2c20 (&ea_inode->i_rwsem#9/1){+.+.}-{3:3}, at: chown_common+0x364/0x710 fs/open.c:727
-
-stack backtrace:
-CPU: 0 PID: 3601 Comm: syz-executor246 Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add kernel/locking/lockdep.c:3214 [inline]
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
- lock_acquire kernel/locking/lockdep.c:5665 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
- down_read+0x98/0x440 kernel/locking/rwsem.c:1489
- ext4_xattr_get+0x14e/0xa10 fs/ext4/xattr.c:650
- __vfs_getxattr+0xd9/0x140 fs/xattr.c:401
- cap_inode_need_killpriv+0x3c/0x60 security/commoncap.c:301
- security_inode_need_killpriv+0x40/0x90 security/security.c:1420
- notify_change+0x6e7/0x1440 fs/attr.c:351
- chown_common+0x61b/0x710 fs/open.c:734
- do_fchownat+0x126/0x1e0 fs/open.c:765
- __do_sys_fchownat fs/open.c:780 [inline]
- __se_sys_fchownat fs/open.c:777 [inline]
- __x64_sys_fchownat+0xba/0x150 fs/open.c:777
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7ff813f7d0e9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc815d6a78 EFLAGS: 00000246 ORIG_RAX: 0000000000000104
-RAX: ffffffffffffffda RBX: 
+VHOST_GET_FEATURES(... &host_features);
+host_features &= QEMU_VHOST_FEATURES
+VHOST_SET_FEATURES(host_features & guest_features)
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Here QEMU_VHOST_FEATURES are the bits userspace knows about.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Our assumption was that whatever userspace enables, it
+knows what the effect on vhost is going to be.
+
+But yes, I understand absolutely how someone would instead just use the
+guest features. It is unfortunate that we did not catch this in time.
+
+
+In hindsight, we should have just created vhost level macros
+instead of reusing virtio ones. Would address the concern
+about naming: PLATFORM_ACCESS makes sense for the
+guest since there it means "whatever access rules platform has",
+but for vhost a better name would be VHOST_F_IOTLB.
+We should have also taken greater pains to document what
+we expect userspace to do. I remember now how I thought about something
+like this but after coding this up in QEMU I forgot to document this :(
+Also, I suspect given the history the GET/SET features ioctl and burned
+wrt extending it and we have to use a new when we add new features.
+All this we can do going forward.
+
+
+But what can we do about the specific issue?
+I am not 100% sure since as Will points out, QEMU and other
+userspace already rely on the current behaviour.
+
+Looking at QEMU specifically, it always sends some translations at
+startup, this in order to handle device rings.
+
+So, *maybe* we can get away with assuming that if no IOTLB ioctl was
+ever invoked then this userspace does not know about IOTLB and
+translation should ignore IOTLB completely.
+
+I am a bit nervous about breaking some *other* userspace which actually
+wants device to be blocked from accessing memory until IOTLB
+has been setup. If we get it wrong we are making guest
+and possibly even host vulnerable.
+And of course just revering is not an option either since there
+are now whole stacks depending on the feature.
+
+Will I'd like your input on whether you feel a hack in the kernel
+is justified here.
+
+Also yes, I think it's a good idea to change crosvm anyway.  While the
+work around I describe might make sense upstream I don't think it's a
+reasonable thing to do in stable kernels.
+I think I'll prepare a patch documenting the legal vhost features
+as a 1st step even though crosvm is rust so it's not importing
+the header directly, right?
+
+-- 
+MST
+

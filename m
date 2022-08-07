@@ -2,103 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0A058BCEF
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 22:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF1E58BCF3
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 22:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbiHGUok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 16:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S233364AbiHGU4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 16:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHGUoi (ORCPT
+        with ESMTP id S229507AbiHGU4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 16:44:38 -0400
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8550B62E6;
-        Sun,  7 Aug 2022 13:44:37 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id l4so8799049wrm.13;
-        Sun, 07 Aug 2022 13:44:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=PR3j4bog8pPMOjA9orzRxcsnCEIbbXpovcv+p87CHi4=;
-        b=OH21hVGzWusfdyaZjo5YaXtZflDRXzE2AYWMoPVtax3YmOCW4SFPBZSFzAP7Y5b2tZ
-         0+8reXgNh/eXmf0tz6HqDbynyFds8pIWpH5hJBD7yBK0b+nycibcry9VHpQ/cJqTB5SY
-         h4v5FIOQfeQ3Tp3nhYpajGjOZTw/yGG0tEYKshlLQw0edRvIPVPMM86T4ZGNjAPtz/1x
-         NtOApFqC6T8acyAa9KbvD5JMMpeA+bIa69t21EGBBYIi9HZachWI0SVDSeTls44F2Wkx
-         TNT0CaLmGDeBpWNpuAd2+3Vy8wmkahgwS/VFjmSsEvXarwYIAEMlvXGeKb+yikANjqRb
-         7l9w==
-X-Gm-Message-State: ACgBeo3pLSmCrFODYTKu2toJVoB5frNnz34pygBj0syTcPBLZVpFu9Vf
-        Pf/Lub+fpHS4rmAaFcN6AYKdr4vzOVc=
-X-Google-Smtp-Source: AA6agR484PVx2gjGv91YCXEUs4vjgAODNVSeUDoaQ6sgiJv+n3uJDFEBGN8/l1lS0V7VLWvi406drw==
-X-Received: by 2002:adf:fb43:0:b0:21a:22eb:da43 with SMTP id c3-20020adffb43000000b0021a22ebda43mr9491379wrs.347.1659905075751;
-        Sun, 07 Aug 2022 13:44:35 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id b4-20020adff904000000b0021e9fafa601sm9707536wrr.22.2022.08.07.13.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 13:44:35 -0700 (PDT)
-Date:   Sun, 7 Aug 2022 20:44:33 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-        sthemmin@microsoft.com, Michael Kelley <mikelley@microsoft.com>
-Subject: [GIT PULL] Hyper-V next patches
-Message-ID: <20220807204433.k4lcpmfbradclnnq@liuwe-devbox-debian-v2>
+        Sun, 7 Aug 2022 16:56:05 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EF66561
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 13:56:03 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id KnJYoMqN4sL0zKnJYoI6XJ; Sun, 07 Aug 2022 22:56:01 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 07 Aug 2022 22:56:01 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH] soc/tegra: pmc: Use devm_clk_get_optional()
+Date:   Sun,  7 Aug 2022 22:55:59 +0200
+Message-Id: <4d2e518fc75dd3053ec4afcc36e13a0a6f75884e.1659905735.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus
+Use devm_clk_get_optional() instead of hand writing it.
 
-The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
+While at it, use dev_err_probe() to further simplify the code. This is also
+less verbose if clk_get() returns -EPROBE_DEFER.
 
-  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/soc/tegra/pmc.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-are available in the Git repository at:
+diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
+index 6a4b8f7e7948..016762f88fff 100644
+--- a/drivers/soc/tegra/pmc.c
++++ b/drivers/soc/tegra/pmc.c
+@@ -2885,17 +2885,10 @@ static int tegra_pmc_probe(struct platform_device *pdev)
+ 		pmc->scratch = base;
+ 	}
+ 
+-	pmc->clk = devm_clk_get(&pdev->dev, "pclk");
+-	if (IS_ERR(pmc->clk)) {
+-		err = PTR_ERR(pmc->clk);
+-
+-		if (err != -ENOENT) {
+-			dev_err(&pdev->dev, "failed to get pclk: %d\n", err);
+-			return err;
+-		}
+-
+-		pmc->clk = NULL;
+-	}
++	pmc->clk = devm_clk_get_optional(&pdev->dev, "pclk");
++	if (IS_ERR(pmc->clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(pmc->clk),
++				     "failed to get pclk\n");
+ 
+ 	/*
+ 	 * PMC should be last resort for restarting since it soft-resets
+-- 
+2.34.1
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-next-signed-20220807
-
-for you to fetch changes up to d180e0a1be6cea2b7436fadbd1c96aecdf3c46c7:
-
-  Drivers: hv: Create debugfs file with hyper-v balloon usage information (2022-07-18 11:19:02 +0000)
-
-----------------------------------------------------------------
-hyperv-next 20220807
-
-A few miscellaneous patches. There is no large patch series for this
-merge window.
-
-Their subject lines are self-explanatory so I don't bother summarizing
-them.
-----------------------------------------------------------------
-Alexander Atanasov (1):
-      Drivers: hv: Create debugfs file with hyper-v balloon usage information
-
-Samuel Holland (1):
-      PCI: hv: Take a const cpumask in hv_compose_msi_req_get_cpu()
-
-Saurabh Sengar (1):
-      drm/hyperv : Removing the restruction of VRAM allocation with PCI bar size
-
-Shradha Gupta (1):
-      Drivers: hv: vm_bus: Handle vmbus rescind calls after vmbus is suspended
-
- drivers/gpu/drm/hyperv/hyperv_drm_drv.c |  74 +----------------
- drivers/hv/connection.c                 |  11 +++
- drivers/hv/hv_balloon.c                 | 135 ++++++++++++++++++++++++++++++--
- drivers/hv/hyperv_vmbus.h               |   7 ++
- drivers/hv/vmbus_drv.c                  |  27 +++++--
- drivers/pci/controller/pci-hyperv.c     |   2 +-
- 6 files changed, 170 insertions(+), 86 deletions(-)

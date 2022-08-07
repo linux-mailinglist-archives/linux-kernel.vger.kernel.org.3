@@ -2,291 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3792C58BC14
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 19:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E500358BC18
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 19:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234679AbiHGRiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 13:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
+        id S234694AbiHGRot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 13:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiHGRiR (ORCPT
+        with ESMTP id S229501AbiHGRor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 13:38:17 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0871BD;
-        Sun,  7 Aug 2022 10:38:16 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a7so12832829ejp.2;
-        Sun, 07 Aug 2022 10:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=AgdBOmzjWEHkV7rEo+KUxlFzWKgAveUFyWtzbLgYCE4=;
-        b=H6x1G3E8YlQ7qZcLon5c36k6rvHgNPnHCfXDb79aFWTxoHFetm1MxwrOqlofZGnEbu
-         6O298fcYKrrAI4Zj8RcrbZMC7xIa1DWtVUgjF45eeXolcrBaGxsyUpOTPxvKK5SAVCYe
-         hMqM0l4rigjWrBBvl7iaqpHLYLNeAJQQm8S88f+AIHkH4OR9B5KomncKOc74q3sPGVSi
-         v8mMc+NIhKfLTUPBnK3xu23YFggdnYcel4NnbMFjIfgIysII7OXKD3gfDv8Pk8CVG5lr
-         wZJB8X3wehYz953PkjbB6bO6l4rUdt4MXjXZhZ+h45KtqNfgofYkxyUYH2BXvv/68/xz
-         4d3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=AgdBOmzjWEHkV7rEo+KUxlFzWKgAveUFyWtzbLgYCE4=;
-        b=p7W8166HS6jUiwWLQZcmN5d4yyVVCfQxFoQNx2WsgBDGRqg/uPDfalm6bzw/VdRdx4
-         LGjTOLdJNOM0D6tSvoEautF3Y2d4siwCHSTtBbEbckf3HgdoiIBanXzMCOK0bzvP6p2a
-         7Cn4D3aXxyKePslieeygUATTKQDlhc6unSDRB0Iq9/VBFc0cgiCr53Ve+3Qj+aYknO14
-         z/JSAfiYJaKft1Y159DKT+tW84oxQGGaThEfz5aRt+wAdRD8AwWh2SHQIoAytKmGWjqH
-         iOg++0DyHdEZqEd7enR1CRxBkIKfFElVSiU15UEsGSJ8vSq8/WQ/o/vDwAUcwUFquBgW
-         ZPjw==
-X-Gm-Message-State: ACgBeo2ugt8MO3GOde9E/oUOQ3y7TsWbtPoC9hPemBXqAdSn0FRmKKZq
-        B7hrJWwPoJltU3/lSkhssOI=
-X-Google-Smtp-Source: AA6agR4NqIfQVCLi7yaL0plDEd9R+3QXOrkjTbmC4IFeD/Z6uIkIYJmphiUY+nclKk/Pwmey+JCedQ==
-X-Received: by 2002:a17:906:93f0:b0:730:6d4e:970c with SMTP id yl16-20020a17090693f000b007306d4e970cmr11648327ejb.188.1659893894955;
-        Sun, 07 Aug 2022 10:38:14 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:f019:ef7b:173c:a9d2? ([2a02:908:1256:79a0:f019:ef7b:173c:a9d2])
-        by smtp.gmail.com with ESMTPSA id dc3-20020a170906c7c300b0073093eaf53esm3964625ejb.131.2022.08.07.10.38.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Aug 2022 10:38:14 -0700 (PDT)
-Message-ID: <2fc74efe-220f-b57a-e804-7d2b3880d14f@gmail.com>
-Date:   Sun, 7 Aug 2022 19:38:13 +0200
+        Sun, 7 Aug 2022 13:44:47 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A2D641E
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 10:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659894286; x=1691430286;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Of1H8E/U61jRpqPKdtnfJXl+a7rqeT0VYcmCIGZ+rsY=;
+  b=jX2fwWyO81/D8qt24za9SQ4zM45a7h3FQgUiKPzpBfgeST/lZ0aFjTfP
+   Sbl5R2M8J8hM7ga6Q7NUe5LXgDMZAIKxlWWZ3A+bsJuTIwYMo3fj6s26r
+   7lyp9J1J4YOxvORlNgRbrAr97jL1xtTaMphueLjLmX1Dj0TZNnjTeY/Om
+   aljgHujBR5gc80DLhhc6RiRVvguTkIOVbcv6xunvO2waKMNSWBZnwu2U6
+   tN7/lGVPgDj4k+jFEXjJREtpL8YwWJStOeLwldz4O3OlP2PxepvveRG7L
+   KSqOXtn2vSo5lpOD4H2DyJ/Ex1tKi9bKYwOznAWhHLY/Zw5vkRsd1pSC6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="352178317"
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="352178317"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 10:44:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
+   d="scan'208";a="554653513"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 Aug 2022 10:44:44 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKkKS-000LWX-0c;
+        Sun, 07 Aug 2022 17:44:44 +0000
+Date:   Mon, 8 Aug 2022 01:44:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [rmk-arm:sa1100 15/51] arch/arm/mach-pxa/mainstone.c:576:30: error:
+ no member named 'gpio_power' in 'struct pxamci_platform_data'
+Message-ID: <202208080158.4UtkKbCT-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [Linaro-mm-sig] [PATCH 1/3] dma-buf: Add ioctl to query mmap info
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220729170744.1301044-1-robdclark@gmail.com>
- <20220729170744.1301044-2-robdclark@gmail.com>
- <3d2083aa-fc6c-6875-3daf-e5abe45fb762@gmail.com>
- <CAF6AEGvKdM3vyCvBZK=ZcdGmak7tsrP1b8ANyyaMjVfNDViqyw@mail.gmail.com>
- <973de2f8-75e4-d4c7-a13a-c541a6cf7c77@amd.com>
- <CAF6AEGuhQT6A_jh8kLWh5xMoUGc1osdewyBk-8NoprtWOHseaQ@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <CAF6AEGuhQT6A_jh8kLWh5xMoUGc1osdewyBk-8NoprtWOHseaQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 07.08.22 um 19:35 schrieb Rob Clark:
-> On Sun, Aug 7, 2022 at 10:14 AM Christian König
-> <christian.koenig@amd.com> wrote:
->> Am 07.08.22 um 19:02 schrieb Rob Clark:
->>> On Sun, Aug 7, 2022 at 9:09 AM Christian König
->>> <ckoenig.leichtzumerken@gmail.com> wrote:
->>>> Am 29.07.22 um 19:07 schrieb Rob Clark:
->>>>> From: Rob Clark <robdclark@chromium.org>
->>>>>
->>>>> This is a fairly narrowly focused interface, providing a way for a VMM
->>>>> in userspace to tell the guest kernel what pgprot settings to use when
->>>>> mapping a buffer to guest userspace.
->>>>>
->>>>> For buffers that get mapped into guest userspace, virglrenderer returns
->>>>> a dma-buf fd to the VMM (crosvm or qemu).
->>>> Wow, wait a second. Who is giving whom the DMA-buf fd here?
->>> Not sure I understand the question.. the dma-buf fd could come from
->>> EGL_MESA_image_dma_buf_export, gbm, or similar.
->>>
->>>> My last status was that this design was illegal and couldn't be
->>>> implemented because it requires internal knowledge only the exporting
->>>> driver can have.
->>> This ioctl provides that information from the exporting driver so that
->>> a VMM doesn't have to make assumptions ;-)
->> And exactly that was NAKed the last time it came up. Only the exporting
->> driver is allowed to mmap() the DMA-buf into the guest.
-> except the exporting driver is in the host ;-)
->
->> This way you also don't need to transport any caching information anywhere.
->>
->>> Currently crosvm assumes if (drivername == "i915") then it is a cached
->>> mapping, otherwise it is wc.  I'm trying to find a way to fix this.
->>> Suggestions welcome, but because of how mapping to a guest VM works, a
->>> VMM is a somewhat special case where this information is needed in
->>> userspace.
->> Ok that leaves me completely puzzled. How does that work in the first place?
->>
->> In other words how does the mapping into the guest page tables happen?
-> There are multiple levels to this, but in short mapping to guest
-> userspace happens via drm/virtio (aka "virtio_gpu" or "virtgpu"), the
-> cache attributes are set via "map_info" attribute returned from the
-> host VMM (host userspace, hence the need for this ioctl).
->
-> In the host, the host kernel driver mmaps to host userspace (VMM).
-> Here the exporting driver is performing the mmap with correct cache
-> attributes.
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm sa1100
+head:   2e73962c8797ccdf52841ea3065779839ac60e0e
+commit: fc2311141ceca0b658cdeb4e8f5eaad322aa54b5 [15/51] ARM: pxa/mainstone: convert mainstone IrDA to use gpiod APIs
+config: arm-mainstone_defconfig (https://download.01.org/0day-ci/archive/20220808/202208080158.4UtkKbCT-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+        git fetch --no-tags rmk-arm sa1100
+        git checkout fc2311141ceca0b658cdeb4e8f5eaad322aa54b5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-> The VMM uses KVM to map these pages into the guest so
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-And exactly that was declared completely illegal the last time it came 
-up on the mailing list.
+All errors (new ones prefixed by >>):
 
-Daniel implemented a whole bunch of patches into the DMA-buf layer to 
-make it impossible for KVM to do this.
+>> arch/arm/mach-pxa/mainstone.c:576:30: error: no member named 'gpio_power' in 'struct pxamci_platform_data'
+           mainstone_mci_platform_data.gpio_power = mst_mscwr1->base + 11;
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   1 error generated.
 
-I have absolutely no idea why that is now a topic again and why anybody 
-is still using this approach.
 
-@Daniel can you clarify.
+vim +576 arch/arm/mach-pxa/mainstone.c
 
-Thanks,
-Christian.
+   555	
+   556	static void __init mainstone_init(void)
+   557	{
+   558		int SW7 = 0;  /* FIXME: get from SCR (Mst doc section 3.2.1.1) */
+   559	
+   560		pxa2xx_mfp_config(ARRAY_AND_SIZE(mainstone_pin_config));
+   561	
+   562		/* Register board control register(s) as GPIOs */
+   563		gpio_reg_init(NULL, (void __iomem *)&MST_PCMCIA0, -1, 11,
+   564			      "mst-pcmcia0", MST_PCMCIA_INPUTS, 0, NULL,
+   565			      NULL, mst_pcmcia0_irqs);
+   566		gpio_reg_init(NULL, (void __iomem *)&MST_PCMCIA1, -1, 11,
+   567			      "mst-pcmcia1", MST_PCMCIA_INPUTS, 0, NULL,
+   568			      NULL, mst_pcmcia1_irqs);
+   569		gpiod_add_lookup_table(&mainstone_pcmcia_gpio_table);
+   570		gpiod_add_lookup_table(&mainstone_wm97xx_gpio_table);
+   571	
+   572		mst_mscwr1 = gpio_reg_init(NULL, (void __iomem *)&MST_MSCWR1, -1, 16,
+   573					   "mst-mscwr1", 0, 0, NULL, NULL, NULL);
+   574		gpiod_add_lookup_table(&mainstone_ficp_gpio_table);
+   575		/* MCI power on = MST_MSCWR1_MMC_ON */
+ > 576		mainstone_mci_platform_data.gpio_power = mst_mscwr1->base + 11;
+   577	
+   578		pxa_set_ffuart_info(NULL);
+   579		pxa_set_btuart_info(NULL);
+   580		pxa_set_stuart_info(NULL);
+   581	
+   582		mst_flash_data[0].width = (__raw_readl(BOOT_DEF) & 1) ? 2 : 4;
+   583		mst_flash_data[1].width = 4;
+   584	
+   585		/* Compensate for SW7 which swaps the flash banks */
+   586		mst_flash_data[SW7].name = "processor-flash";
+   587		mst_flash_data[SW7 ^ 1].name = "mainboard-flash";
+   588	
+   589		printk(KERN_NOTICE "Mainstone configured to boot from %s\n",
+   590		       mst_flash_data[0].name);
+   591	
+   592		/* system bus arbiter setting
+   593		 * - Core_Park
+   594		 * - LCD_wt:DMA_wt:CORE_Wt = 2:3:4
+   595		 */
+   596		ARB_CNTRL = ARB_CORE_PARK | 0x234;
+   597	
+   598		platform_add_devices(platform_devices, ARRAY_SIZE(platform_devices));
+   599	
+   600		/* reading Mainstone's "Virtual Configuration Register"
+   601		   might be handy to select LCD type here */
+   602		if (0)
+   603			mainstone_pxafb_info.modes = &toshiba_ltm04c380k_mode;
+   604		else
+   605			mainstone_pxafb_info.modes = &toshiba_ltm035a776c_mode;
+   606	
+   607		pxa_set_fb_info(NULL, &mainstone_pxafb_info);
+   608		mainstone_backlight_register();
+   609	
+   610		pxa_set_mci_info(&mainstone_mci_platform_data);
+   611		pxa_set_ficp_info(&mainstone_ficp_platform_data);
+   612		pxa_set_ohci_info(&mainstone_ohci_platform_data);
+   613		pxa_set_i2c_info(NULL);
+   614		pxa_set_ac97_info(&mst_audio_ops);
+   615	
+   616		mainstone_init_keypad();
+   617	}
+   618	
 
-> they appear as physical pages to the guest kernel.  The guest kernel
-> (virtgpu) in turn maps them to guest userspace.
->
-> BR,
-> -R
->
->> Regards,
->> Christian.
->>
->>> BR,
->>> -R
->>>
->>>> @Daniel has anything changed on that is or my status still valid?
->>>>
->>>> Regards,
->>>> Christian.
->>>>
->>>>>      In addition to mapping the
->>>>> pages into the guest VM, it needs to report to drm/virtio in the guest
->>>>> the cache settings to use for guest userspace.  In particular, on some
->>>>> architectures, creating aliased mappings with different cache attributes
->>>>> is frowned upon, so it is important that the guest mappings have the
->>>>> same cache attributes as any potential host mappings.
->>>>>
->>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
->>>>> ---
->>>>>     drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
->>>>>     include/linux/dma-buf.h      |  7 +++++++
->>>>>     include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
->>>>>     3 files changed, 61 insertions(+)
->>>>>
->>>>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
->>>>> index 32f55640890c..d02d6c2a3b49 100644
->>>>> --- a/drivers/dma-buf/dma-buf.c
->>>>> +++ b/drivers/dma-buf/dma-buf.c
->>>>> @@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
->>>>>         return 0;
->>>>>     }
->>>>>
->>>>> +static long dma_buf_info(struct dma_buf *dmabuf, const void __user *uarg)
->>>>> +{
->>>>> +     struct dma_buf_info arg;
->>>>> +
->>>>> +     if (copy_from_user(&arg, uarg, sizeof(arg)))
->>>>> +             return -EFAULT;
->>>>> +
->>>>> +     switch (arg.param) {
->>>>> +     case DMA_BUF_INFO_VM_PROT:
->>>>> +             if (!dmabuf->ops->mmap_info)
->>>>> +                     return -ENOSYS;
->>>>> +             arg.value = dmabuf->ops->mmap_info(dmabuf);
->>>>> +             break;
->>>>> +     default:
->>>>> +             return -EINVAL;
->>>>> +     }
->>>>> +
->>>>> +     if (copy_to_user(uarg, &arg, sizeof(arg)))
->>>>> +             return -EFAULT;
->>>>> +
->>>>> +     return 0;
->>>>> +}
->>>>> +
->>>>>     static long dma_buf_ioctl(struct file *file,
->>>>>                           unsigned int cmd, unsigned long arg)
->>>>>     {
->>>>> @@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
->>>>>         case DMA_BUF_SET_NAME_B:
->>>>>                 return dma_buf_set_name(dmabuf, (const char __user *)arg);
->>>>>
->>>>> +     case DMA_BUF_IOCTL_INFO:
->>>>> +             return dma_buf_info(dmabuf, (const void __user *)arg);
->>>>> +
->>>>>         default:
->>>>>                 return -ENOTTY;
->>>>>         }
->>>>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
->>>>> index 71731796c8c3..6f4de64a5937 100644
->>>>> --- a/include/linux/dma-buf.h
->>>>> +++ b/include/linux/dma-buf.h
->>>>> @@ -283,6 +283,13 @@ struct dma_buf_ops {
->>>>>          */
->>>>>         int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
->>>>>
->>>>> +     /**
->>>>> +      * @mmap_info:
->>>>> +      *
->>>>> +      * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PROT.
->>>>> +      */
->>>>> +     int (*mmap_info)(struct dma_buf *);
->>>>> +
->>>>>         int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
->>>>>         void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
->>>>>     };
->>>>> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
->>>>> index b1523cb8ab30..a41adac0f46a 100644
->>>>> --- a/include/uapi/linux/dma-buf.h
->>>>> +++ b/include/uapi/linux/dma-buf.h
->>>>> @@ -85,6 +85,32 @@ struct dma_buf_sync {
->>>>>
->>>>>     #define DMA_BUF_NAME_LEN    32
->>>>>
->>>>> +
->>>>> +/**
->>>>> + * struct dma_buf_info - Query info about the buffer.
->>>>> + */
->>>>> +struct dma_buf_info {
->>>>> +
->>>>> +#define DMA_BUF_INFO_VM_PROT      1
->>>>> +#  define DMA_BUF_VM_PROT_WC      0
->>>>> +#  define DMA_BUF_VM_PROT_CACHED  1
->>>>> +
->>>>> +     /**
->>>>> +      * @param: Which param to query
->>>>> +      *
->>>>> +      * DMA_BUF_INFO_BM_PROT:
->>>>> +      *     Query the access permissions of userspace mmap's of this buffer.
->>>>> +      *     Returns one of DMA_BUF_VM_PROT_x
->>>>> +      */
->>>>> +     __u32 param;
->>>>> +     __u32 pad;
->>>>> +
->>>>> +     /**
->>>>> +      * @value: Return value of the query.
->>>>> +      */
->>>>> +     __u64 value;
->>>>> +};
->>>>> +
->>>>>     #define DMA_BUF_BASE                'b'
->>>>>     #define DMA_BUF_IOCTL_SYNC  _IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
->>>>>
->>>>> @@ -95,4 +121,6 @@ struct dma_buf_sync {
->>>>>     #define DMA_BUF_SET_NAME_A  _IOW(DMA_BUF_BASE, 1, __u32)
->>>>>     #define DMA_BUF_SET_NAME_B  _IOW(DMA_BUF_BASE, 1, __u64)
->>>>>
->>>>> +#define DMA_BUF_IOCTL_INFO   _IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
->>>>> +
->>>>>     #endif
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

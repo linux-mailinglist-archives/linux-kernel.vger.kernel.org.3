@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342CB58BB75
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E3F58BB76
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 16:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234559AbiHGO4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 10:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S235379AbiHGO5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 10:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235287AbiHGO4R (ORCPT
+        with ESMTP id S235067AbiHGO41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 10:56:17 -0400
+        Sun, 7 Aug 2022 10:56:27 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C23A47C
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:55:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2353DAE51
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 07:56:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
         s=mail; t=1659883987; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p1xoIsiO7mQSSvaA/WgywtyIwuifGHhfOG3YY3mgLLc=;
-        b=oGu8CiFg58CaOHxTaXzqPVAqIwT9IwuIZ0Ucuuu7eY1pMbYCUAy9YU+vDnw07EHcIG/7AJ
-        NttHBOJ8IlB3FdjWybop7Com0I8eLnFy1CUfE/q7+dEGvUNCx3aFvSOYhp0pTrLDZxMRJh
-        YVnWxv4BdaB0N7/eSaO1dlrBbtdgdkw=
+        bh=qDrJzPRAk8lMfS/cEwJyVSOCOy6jdbYLWB99CWyQXbk=;
+        b=QOqQky0wTCphsemEEWufVQdHEk2UlgA3ErIhZoRwtwIzlisaQ3g7YCvGaHRPVCgRByMk5r
+        5V6XlP/dpUFpWDLsybqcg3DgMuDzaG3vOlpit8WnWcgTgI54ztYR5pXZkdav95DNTWffl6
+        tv7NCgFbWuW2hGvW2Sjz1296sX6Esbs=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee.jones@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH 21/28] mfd: max14577: Remove #ifdef guards for PM related functions
-Date:   Sun,  7 Aug 2022 16:52:40 +0200
-Message-Id: <20220807145247.46107-22-paul@crapouillou.net>
+Subject: [PATCH 22/28] mfd: max77686: Remove #ifdef guards for PM related functions
+Date:   Sun,  7 Aug 2022 16:52:41 +0200
+Message-Id: <20220807145247.46107-23-paul@crapouillou.net>
 In-Reply-To: <20220807145247.46107-1-paul@crapouillou.net>
 References: <20220807145247.46107-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -62,38 +62,38 @@ Cc: Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 ---
- drivers/mfd/max14577.c | 6 ++----
+ drivers/mfd/max77686.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mfd/max14577.c b/drivers/mfd/max14577.c
-index 6c487fa14e9c..9de29a8070c7 100644
---- a/drivers/mfd/max14577.c
-+++ b/drivers/mfd/max14577.c
-@@ -482,7 +482,6 @@ static const struct i2c_device_id max14577_i2c_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, max14577_i2c_id);
+diff --git a/drivers/mfd/max77686.c b/drivers/mfd/max77686.c
+index 2ac64277fb84..f8e863f3fc95 100644
+--- a/drivers/mfd/max77686.c
++++ b/drivers/mfd/max77686.c
+@@ -226,7 +226,6 @@ static int max77686_i2c_probe(struct i2c_client *i2c)
+ 	return 0;
+ }
  
 -#ifdef CONFIG_PM_SLEEP
- static int max14577_suspend(struct device *dev)
+ static int max77686_suspend(struct device *dev)
  {
  	struct i2c_client *i2c = to_i2c_client(dev);
-@@ -515,14 +514,13 @@ static int max14577_resume(struct device *dev)
+@@ -261,14 +260,13 @@ static int max77686_resume(struct device *dev)
  
  	return 0;
  }
 -#endif /* CONFIG_PM_SLEEP */
  
--static SIMPLE_DEV_PM_OPS(max14577_pm, max14577_suspend, max14577_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(max14577_pm, max14577_suspend, max14577_resume);
+-static SIMPLE_DEV_PM_OPS(max77686_pm, max77686_suspend, max77686_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(max77686_pm, max77686_suspend, max77686_resume);
  
- static struct i2c_driver max14577_i2c_driver = {
+ static struct i2c_driver max77686_i2c_driver = {
  	.driver = {
- 		.name = "max14577",
--		.pm = &max14577_pm,
-+		.pm = pm_sleep_ptr(&max14577_pm),
- 		.of_match_table = max14577_dt_match,
+ 		   .name = "max77686",
+-		   .pm = &max77686_pm,
++		   .pm = pm_sleep_ptr(&max77686_pm),
+ 		   .of_match_table = max77686_pmic_dt_match,
  	},
- 	.probe = max14577_i2c_probe,
+ 	.probe_new = max77686_i2c_probe,
 -- 
 2.35.1
 

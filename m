@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6346A58BCC9
+	by mail.lfdr.de (Postfix) with ESMTP id ABA7F58BCCA
 	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 21:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbiHGTsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 15:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
+        id S229722AbiHGTr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 15:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiHGTrz (ORCPT
+        with ESMTP id S229532AbiHGTry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 15:47:55 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA8165B8
+        Sun, 7 Aug 2022 15:47:54 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFB06275
         for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 12:47:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1659901673; x=1691437673;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=btpsCi3r5MjWmQ8FJVEppOP9hNjmR/QuiUANjVE5Qyc=;
-  b=PfwwUvYhadBO+WNdMHQScnjcxIs1QBxeeVNzdIBz/osbC7el6NZormPn
-   rxJSjOCa2Ji8IHB5Hnlu+qhGC7V4yMPSgUWF4wSmCF/abNp0tTy/VmWsc
-   vEJtfcd+PG5EfGxJfkKfZ2iX1/OXongLASHEupj9gjG0PJ1jfswK11sLW
-   ECeOB+qYx5BEZ283iLPPUYIt8fjMjfBGQcrBjUUSJtTVJQPBB7MrWaY/u
-   4MAhNj3j60aZMSLgQ3YStXV+toI83ksaOfnJuJ71rbktHLeWASK9VOUKq
-   kP/wVajO1X+vkFWt46dQX0Z7OdgDePLKo/P2wfIbRM7KLn1S1ucs9OZwo
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="288024632"
+  bh=d/xvYp1VCehjRNvJUzLG6cF0D0kPjM+Ficqfi1Bv4GE=;
+  b=fQZf1Z5MHJZW1EiYxaRmDvQ6Rjg0YoQOMhmQyr/RXoDVvtK/w7+n7Gfo
+   RKg6glxp5L9eXjJqWnxetzlrrL9pfnM0RlnoE0h7yVvoZ/6dFOxurK/Gl
+   gTJkna573W2qZO+WWnofXPOTzENGu8S+g4qDJe4TMu/XSdOa2ZrO5QMIJ
+   lJZMFsW/ylRXa8+tUnresX7bmj54fXM9nMb6gjhaS3AWDFn4QfjV/hfqk
+   qvXO0n0E/qpZE9xWCYNDfykrJHEkbypHXxdUiOlt4pM2tFy7KMbKt/b5l
+   JdQNgR1mX7voiNZAVQub4dJLP63Wd3nCCPOgV2FUOfzlLvWXWe3HCl1Gz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="316364387"
 X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="288024632"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 12:47:53 -0700
+   d="scan'208";a="316364387"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 12:47:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,220,1654585200"; 
-   d="scan'208";a="632619907"
+   d="scan'208";a="931789785"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Aug 2022 12:47:51 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 07 Aug 2022 12:47:51 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oKmFb-000Lcn-02;
+        id 1oKmFb-000Lcq-0L;
         Sun, 07 Aug 2022 19:47:51 +0000
-Date:   Mon, 8 Aug 2022 03:47:39 +0800
+Date:   Mon, 8 Aug 2022 03:47:41 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
 Cc:     kbuild-all@lists.01.org, Chao Yu <yuchao0@huawei.com>,
         Chao Yu <chao@kernel.org>, linux-kernel@vger.kernel.org
 Subject: [chao:feature/dax 1/10] fs/f2fs/super.c:1635:9: error: implicit
  declaration of function 'fs_put_dax'
-Message-ID: <202208080337.Chy4GFmX-lkp@intel.com>
+Message-ID: <202208080338.veD16BFU-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,18 +65,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
 head:   42f73c9b2a369f724de6c1df5acb0bbde2688e35
 commit: 7df0eb556b0ee20e66872600b62542a7f39d444c [1/10] f2fs: support iomap operation
-config: arm-randconfig-r001-20220807 (https://download.01.org/0day-ci/archive/20220808/202208080337.Chy4GFmX-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220808/202208080338.veD16BFU-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
         # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=7df0eb556b0ee20e66872600b62542a7f39d444c
         git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
         git fetch --no-tags chao feature/dax
         git checkout 7df0eb556b0ee20e66872600b62542a7f39d444c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>

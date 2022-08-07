@@ -2,100 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A66058BBB3
-	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 17:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD82358BBB5
+	for <lists+linux-kernel@lfdr.de>; Sun,  7 Aug 2022 17:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234082AbiHGPvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 11:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        id S231206AbiHGP4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 11:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiHGPvL (ORCPT
+        with ESMTP id S229616AbiHGP4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 11:51:11 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD871007
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 08:51:09 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id w6so4990736qkf.3
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 08:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=nkv33rM5bmdNEyiokQITMMenNJf0ZK/C1WG5jagJWl8=;
-        b=qQTSaug/8ns4P1eNLWB3vLIRlvgIjNsNn1T76yNxmZUBo452XSihwv41+ExCQ48wig
-         Z6de0hXvxexf02fVsyCAYaow7BwxEW+rCyGWgoOo06UOfnkvQ25ttE+PXLWiF/S2Olrb
-         wI31+OEPtAtMDwHFBTfRUdVUjCVTrQRtcvou/jAkbjs6+Oll834xThEt1TGzTPVUKpLe
-         PxaU3pxNxX/TCvVhIAGnNjkMGseWYKsCvcrC/YxabKTzMNrpv5HrFv8GAHiD/iBTjtkk
-         K7XO875uYauESJTnhUCYmtsHLxeuNRZME0JEl1l1vXux3BPTsbbX82XyJklsiv0hiv1n
-         aOjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=nkv33rM5bmdNEyiokQITMMenNJf0ZK/C1WG5jagJWl8=;
-        b=WLl0cFBPUG5xKJld61qfqBibFStxQ0xMozO550Cm0lE1RGDDUHOgyNqXba69Sc3qO/
-         Y03FASkhs+CNCrcG0q5r/uL9sQ6XbE9O9zZhsds3CXbcTwiTrMj1QXWcGHKqBz7nH8pu
-         t6Q4nvIFKHSCCHTsDxM9cnI3tRjSf1+829vg8q0p3PKEFE5oKKRG3D4pqjW3ZYYvWbaj
-         +miBgEMncvkXfFvdw+XHhR4ienuqrpn3PXzYki9NaN850bSRnhYcnbtG/bFL7vgTsNJK
-         OX6xt4SHZjsxeC+TlGo6wqr5XH/umKqa88NbciYUr688gYRurwR8MljjA6ydurYOMrnH
-         eyQA==
-X-Gm-Message-State: ACgBeo3XVE3byL6E3ycSlkoLAcicr5HofI1rMZM4HRjxVxkxtEYDqeIc
-        tcL+XxhVhPz/VGIzCXCa74jU07Yi9kSBmmnYVC0=
-X-Google-Smtp-Source: AA6agR4pGvsasAQ2KVI6Zutq7/PZAbeJ4HpBX9gPPTSAJRHldpPcV+2NToynZ6OF4+IWYrAS8bNDWbFu0uqWeiLNrEc=
-X-Received: by 2002:a05:620a:2809:b0:6b6:5908:316e with SMTP id
- f9-20020a05620a280900b006b65908316emr11927322qkp.734.1659887469022; Sun, 07
- Aug 2022 08:51:09 -0700 (PDT)
+        Sun, 7 Aug 2022 11:56:12 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A274A64F7;
+        Sun,  7 Aug 2022 08:56:09 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1659887760t21is6qe
+Received: from localhost.localdomain ( [182.148.15.41])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 07 Aug 2022 23:55:50 +0800 (CST)
+X-QQ-SSF: 0100000000200040B000B00A0000000
+X-QQ-FEAT: 8eavv92r+Yk86VBS8z+mamh7NMEuMvA6ldeTh4eDuX8TkXKUdq+Xsv0/DRfgz
+        jeL1o0TI1Hp7NmkgYxOK9xcKkskwF0KGZypLwvB9bTBuHrbv9VwiH40EzqkYhQgolm1lSmj
+        4DiiSU7/1L4U06nweWfhdkx+u662T3AUI3KUqmRYr3bkHj9fju6/Uc0CEDFSwhSTRsiOUUJ
+        9K2EDRFWBflULmEh3JlYvbCbK9d1+rdWzTTikS+0tTDP9CZ2p7191pBsXPmgEWlE16oXvmV
+        TgT0zPwB7hXX0I3l1xOEZrFPzI7dCt1t9uWHIkDn/bi2VBCLnDPF+SfHFbXU60aQ1FzwBDv
+        GR2pLIRB85/Uett3wK8Fu/ys/vjwyt/2eDcvaY+Bo7ExokuRhMKd1mjXzLbOA==
+X-QQ-GoodBg: 0
+From:   shaomin Deng <dengshaomin@cdjrlc.com>
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     mark.rutland@arm.com, shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: [PATCH] perf tools: Fix typo in comments
+Date:   Sun,  7 Aug 2022 11:55:49 -0400
+Message-Id: <20220807155549.30953-1-dengshaomin@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220807145247.46107-1-paul@crapouillou.net> <20220807145247.46107-12-paul@crapouillou.net>
-In-Reply-To: <20220807145247.46107-12-paul@crapouillou.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 7 Aug 2022 17:50:32 +0200
-Message-ID: <CAHp75Vf1jfgshfw1ymXu9AHrNy1SUmVRDvDLUYbYKFSrhQq44A@mail.gmail.com>
-Subject: Re: [PATCH 11/28] mfd: intel_soc_pmic: Remove #ifdef guards for PM
- related functions
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 7, 2022 at 4:53 PM Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
-> to handle the .suspend/.resume callbacks.
->
-> These macros allow the suspend and resume functions to be automatically
-> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
-> to use #ifdef guards.
->
-> The advantage is then that these functions are now always compiled
+Delete the repeated word "to" in comments.
 
-is that
+Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
+---
+ tools/perf/util/events_stats.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> independently of any Kconfig option, and thanks to that bugs and
-> regressions are easier to catch.
-
-...
-
->  drivers/mfd/intel_soc_pmic_bxtwc.c | 7 +++----
->  drivers/mfd/intel_soc_pmic_core.c  | 8 +++-----
-
-1. These are two different drivers, the patch needs to be split.
-2. The Broxton Whiskey Cove should have a similar change. Which base
-have you used for your patch? Please, rebase on top of for-mfd-next.
-3. The PMIC core actually is Crystal Cove driver and I have a pending
-series for that and I guess you know about it. Have you seen what have
-been done there?
-
+diff --git a/tools/perf/util/events_stats.h b/tools/perf/util/events_stats.h
+index 1b0006092265..040ab9d0a803 100644
+--- a/tools/perf/util/events_stats.h
++++ b/tools/perf/util/events_stats.h
+@@ -22,7 +22,7 @@
+  *
+  * The total_period is needed because by default auto-freq is used, so
+  * multiplying nr_events[PERF_EVENT_SAMPLE] by a frequency isn't possible to get
+- * the total number of low level events, it is necessary to to sum all struct
++ * the total number of low level events, it is necessary to sum all struct
+  * perf_record_sample.period and stash the result in total_period.
+  */
+ struct events_stats {
 -- 
-With Best Regards,
-Andy Shevchenko
+2.35.1
+

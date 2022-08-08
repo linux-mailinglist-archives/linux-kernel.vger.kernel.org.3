@@ -2,181 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFEF58C4CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9358858C4D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236542AbiHHIRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 04:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S242146AbiHHISv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 04:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237712AbiHHIRK (ORCPT
+        with ESMTP id S236621AbiHHISt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 04:17:10 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8747A267F;
-        Mon,  8 Aug 2022 01:17:09 -0700 (PDT)
+        Mon, 8 Aug 2022 04:18:49 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566B9267F;
+        Mon,  8 Aug 2022 01:18:48 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id x23so7888244pll.7;
+        Mon, 08 Aug 2022 01:18:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659946629; x=1691482629;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XEwyJaMYWmG1kFpxR2EWSp3UqCWqh9T4pWQdKWnLsD4=;
-  b=lL2RP7wm2s2EfGRA3AKdcMgasKjOzQkX5gRJVw25DhvkoUOx3vnMZukd
-   UfSbB70Z98zo+oR5tR7APtVC5IkzDzt5KUC26x00C1z0CRo/oze0erQ+I
-   5+Gxx6SUNPyIOWXhAiPTrNNUT3+Ci7U5fb+y/GBHp5gp92u6L5GH2y1x0
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 Aug 2022 01:17:09 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 01:17:08 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 8 Aug 2022 01:17:08 -0700
-Received: from [10.79.136.17] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 8 Aug 2022
- 01:17:05 -0700
-Message-ID: <cb0c6fbd-bf5c-b5ce-b4c5-8a605836204d@quicinc.com>
-Date:   Mon, 8 Aug 2022 13:47:02 +0530
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:from:to:cc;
+        bh=5LjMqByM7vvwZtELlPB5xQD7bNCOa2lqSCCWh1FxuAA=;
+        b=pKsnzGI9Spop34QTQpFON3tD84DGCvyFfXY70pFt3dK1Za2i09kc+aMjbhl6zcBxlQ
+         T24yZd9pX4XfjwaAMg86UGaf4AAEZq3D4CaO51+W3A4nDHamZgDgB6UJIgVDH4p1suUi
+         RCd3iiDQs7nkPSD8F+gKOJCRoylzgLI+HtpZ3XuKoh3rrNIQbm6BZOs8eiX+AEe3UhFc
+         WW3ut2SzH7+Qe4lFTmqWlrbLuKB5+e3Dzm0aN+ILiKRTA+1A72quVuBvTIwaeAxRDTrv
+         FOTSomdKt6d71uaoKirbPOOiKRvZk3qDa/iM9vHhJ49MkjpfVfK/ohlEP2svNg9lqev/
+         SIVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:x-gm-message-state:from:to:cc;
+        bh=5LjMqByM7vvwZtELlPB5xQD7bNCOa2lqSCCWh1FxuAA=;
+        b=6Cjic48VFv0eimOLzozJteSjQ/aMIbp7W3v6gW6eG8Ss6fAx7xWthOr0C0itAfziNU
+         O9/RevT64AduwwvZ2aV/rVPLNZgBIB/KpPYDOFl7CliCc//e7J2+VgtoQ6FAtZPHDZsL
+         hrBvFX+Dne2hnfxZR/ZVGYHNKT8Kn8g/sM4aCnLvXPiE8vbDCwH8Zj7Td8frQFpwX9yS
+         AEdReCo6UwX/qjtRnlKuD0WMPeJac7N9dunWNndfCRzN1jDP4uXBagNIppyTvRTFS23A
+         FW55CT+bCiIml/iI+REUiub9xB3xv9NvcnxH2MAr9xm7GymNZz67lv/eQ2oQT1ET1/J4
+         03gw==
+X-Gm-Message-State: ACgBeo0QkvgwhiNWfSLahG3lJ8KV3qFlC8IUV/Rp1memW9kPoQTxCdV6
+        BCQP+ncFxzRIyIkvdSJqdnY=
+X-Google-Smtp-Source: AA6agR64pPKqeA8WdkrXC8H955tWOFthuZo8FAjltWLeuOeoA1junU0tnTzj1ABhCZ1w1j8LCsIk6Q==
+X-Received: by 2002:a17:902:aa48:b0:16f:1364:788b with SMTP id c8-20020a170902aa4800b0016f1364788bmr18043489plr.109.1659946727633;
+        Mon, 08 Aug 2022 01:18:47 -0700 (PDT)
+Received: from localhost (220-135-95-34.hinet-ip.hinet.net. [220.135.95.34])
+        by smtp.gmail.com with ESMTPSA id s16-20020a632150000000b0041d003f8f16sm5592910pgm.87.2022.08.08.01.18.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 01:18:46 -0700 (PDT)
+Sender: AceLan Kao <acelan@gmail.com>
+From:   AceLan Kao <acelan.kao@canonical.com>
+To:     Igor Russkikh <irusskikh@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dmitrii Tarakanov <Dmitrii.Tarakanov@aquantia.com>,
+        Alexander Loktionov <Alexander.Loktionov@aquantia.com>,
+        David VomLehn <vomlehn@texas.net>,
+        Dmitry Bezrukov <Dmitry.Bezrukov@aquantia.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sudarsana Reddy Kalluru <skalluru@marvell.com>
+Subject: [PATCH v3] net: atlantic: fix aq_vec index out of range error
+Date:   Mon,  8 Aug 2022 16:18:45 +0800
+Message-Id: <20220808081845.42005-1-acelan.kao@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] soc: qcom: rpmhpd: Use highest corner until sync_state
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-References: <20220806155035.968340-1-bjorn.andersson@linaro.org>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <20220806155035.968340-1-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
 
-On 8/6/2022 9:20 PM, Bjorn Andersson wrote:
-> In some cases the hardware that the bootloader has left configured
-> depends on RPMH power domains for their operation up until the point
-> where the related Linux device driver probes and can inherit that
-> configuration, or power down the hardware gracefully.
-> 
-> Unfortunately as Linux probes the releavant drivers in sequence there
-> are periods during the Linux boot flow where either the genpd refcount
-> will reach 0, or worse where the active performance_state votes does not
-> meet the requirements of the state that the hardware was left in.
-> 
-> One specific example of this is during boot of e.g. SM8150/SC8180X,
-> where the display clock controller probes, without any particular
-> performance state needs (to access its registers). This will drop the
-> MMCX rail to MIN_SVS, which isn't sufficient to sustain the clock rates
-> that the later probing MDP is configured to. This results in an
-> unrecoverable system state.
-> 
-> Handle both these cases by keeping the RPMH power-domais that are
-> referenced voted for highest state, until sync_state indicates that all
-> devices referencing the RPMH power-domain driver has been probed.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->   drivers/soc/qcom/rpmhpd.c | 35 ++++++++++++++++++++++++++++++++++-
->   1 file changed, 34 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-> index 092f6ab09acf..494bb6c75ed7 100644
-> --- a/drivers/soc/qcom/rpmhpd.c
-> +++ b/drivers/soc/qcom/rpmhpd.c
-> @@ -39,6 +39,7 @@
->    * @res_name:		Resource name used for cmd-db lookup
->    * @addr:		Resource address as looped up using resource name from
->    *			cmd-db
-> + * @state_synced:       Indicator that sync_state has been invoked for the rpmhpd resource
->    */
->   struct rpmhpd {
->   	struct device	*dev;
-> @@ -54,6 +55,7 @@ struct rpmhpd {
->   	bool		enabled;
->   	const char	*res_name;
->   	u32		addr;
-> +	bool		state_synced;
->   };
->   
->   struct rpmhpd_desc {
-> @@ -493,7 +495,13 @@ static int rpmhpd_aggregate_corner(struct rpmhpd *pd, unsigned int corner)
->   	unsigned int this_active_corner = 0, this_sleep_corner = 0;
->   	unsigned int peer_active_corner = 0, peer_sleep_corner = 0;
->   
-> -	to_active_sleep(pd, corner, &this_active_corner, &this_sleep_corner);
-> +	if (pd->state_synced) {
-> +		to_active_sleep(pd, corner, &this_active_corner, &this_sleep_corner);
-> +	} else {
-> +		/* Clamp to highest corner if sync_state hasn't happened */
-> +		this_active_corner = pd->level_count - 1;
-> +		this_sleep_corner = pd->level_count - 1;
-> +	}
->   
->   	if (peer && peer->enabled)
->   		to_active_sleep(peer, peer->corner, &peer_active_corner,
-> @@ -708,11 +716,36 @@ static int rpmhpd_probe(struct platform_device *pdev)
->   	return of_genpd_add_provider_onecell(pdev->dev.of_node, data);
->   }
->   
-> +static void rpmhpd_sync_state(struct device *dev)
-> +{
-> +	const struct rpmhpd_desc *desc = of_device_get_match_data(dev);
-> +	struct rpmhpd **rpmhpds = desc->rpmhpds;
-> +	unsigned int corner;
-> +	struct rpmhpd *pd;
-> +	unsigned int i;
-> +
-> +	mutex_lock(&rpmhpd_lock);
-> +	for (i = 0; i < desc->num_pds; i++) {
-> +		pd = rpmhpds[i];
-> +		if (!pd)
-> +			continue;
-> +
-> +		pd->state_synced = true;
-[]
+The final update statement of the for loop exceeds the array range, the
+dereference of self->aq_vec[i] is not checked and then leads to the
+index out of range error.
+Also fixed this kind of coding style in other for loop.
 
-> +		if (pd->enabled)
-> +			corner = max(pd->corner, pd->enable_corner);
-> +		else
-> +			corner = 0;
-> +		rpmhpd_aggregate_corner(pd, corner);
+[   97.937604] UBSAN: array-index-out-of-bounds in drivers/net/ethernet/aquantia/atlantic/aq_nic.c:1404:48
+[   97.937607] index 8 is out of range for type 'aq_vec_s *[8]'
+[   97.937608] CPU: 38 PID: 3767 Comm: kworker/u256:18 Not tainted 5.19.0+ #2
+[   97.937610] Hardware name: Dell Inc. Precision 7865 Tower/, BIOS 1.0.0 06/12/2022
+[   97.937611] Workqueue: events_unbound async_run_entry_fn
+[   97.937616] Call Trace:
+[   97.937617]  <TASK>
+[   97.937619]  dump_stack_lvl+0x49/0x63
+[   97.937624]  dump_stack+0x10/0x16
+[   97.937626]  ubsan_epilogue+0x9/0x3f
+[   97.937627]  __ubsan_handle_out_of_bounds.cold+0x44/0x49
+[   97.937629]  ? __scm_send+0x348/0x440
+[   97.937632]  ? aq_vec_stop+0x72/0x80 [atlantic]
+[   97.937639]  aq_nic_stop+0x1b6/0x1c0 [atlantic]
+[   97.937644]  aq_suspend_common+0x88/0x90 [atlantic]
+[   97.937648]  aq_pm_suspend_poweroff+0xe/0x20 [atlantic]
+[   97.937653]  pci_pm_suspend+0x7e/0x1a0
+[   97.937655]  ? pci_pm_suspend_noirq+0x2b0/0x2b0
+[   97.937657]  dpm_run_callback+0x54/0x190
+[   97.937660]  __device_suspend+0x14c/0x4d0
+[   97.937661]  async_suspend+0x23/0x70
+[   97.937663]  async_run_entry_fn+0x33/0x120
+[   97.937664]  process_one_work+0x21f/0x3f0
+[   97.937666]  worker_thread+0x4a/0x3c0
+[   97.937668]  ? process_one_work+0x3f0/0x3f0
+[   97.937669]  kthread+0xf0/0x120
+[   97.937671]  ? kthread_complete_and_exit+0x20/0x20
+[   97.937672]  ret_from_fork+0x22/0x30
+[   97.937676]  </TASK>
 
-can't this be
-		if (pd->enabled) {
-			corner = max(pd->corner, pd->enable_corner);
-			rpmhpd_aggregate_corner(pd, corner);
-		}
+v2. fixed "warning: variable 'aq_vec' set but not used"
 
-also, we do check for return value of rpmhpd_aggregate_corner() but I guess
-here there isn't much different we would do even if there is an error?
-			
-> +	}
-> +	mutex_unlock(&rpmhpd_lock);
-> +}
-> +
->   static struct platform_driver rpmhpd_driver = {
->   	.driver = {
->   		.name = "qcom-rpmhpd",
->   		.of_match_table = rpmhpd_match_table,
->   		.suppress_bind_attrs = true,
-> +		.sync_state = rpmhpd_sync_state,
->   	},
->   	.probe = rpmhpd_probe,
->   };
+v3. simplified a for loop
+
+Fixes: 97bde5c4f909 ("net: ethernet: aquantia: Support for NIC-specific code")
+Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+---
+ .../net/ethernet/aquantia/atlantic/aq_nic.c   | 21 +++++++------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+index e11cc29d3264..06508eebb585 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+@@ -265,12 +265,10 @@ static void aq_nic_service_timer_cb(struct timer_list *t)
+ static void aq_nic_polling_timer_cb(struct timer_list *t)
+ {
+ 	struct aq_nic_s *self = from_timer(self, t, polling_timer);
+-	struct aq_vec_s *aq_vec = NULL;
+ 	unsigned int i = 0U;
+ 
+-	for (i = 0U, aq_vec = self->aq_vec[0];
+-		self->aq_vecs > i; ++i, aq_vec = self->aq_vec[i])
+-		aq_vec_isr(i, (void *)aq_vec);
++	for (i = 0U; self->aq_vecs > i; ++i)
++		aq_vec_isr(i, (void *)self->aq_vec[i]);
+ 
+ 	mod_timer(&self->polling_timer, jiffies +
+ 		  AQ_CFG_POLLING_TIMER_INTERVAL);
+@@ -1014,7 +1012,6 @@ int aq_nic_get_regs_count(struct aq_nic_s *self)
+ 
+ u64 *aq_nic_get_stats(struct aq_nic_s *self, u64 *data)
+ {
+-	struct aq_vec_s *aq_vec = NULL;
+ 	struct aq_stats_s *stats;
+ 	unsigned int count = 0U;
+ 	unsigned int i = 0U;
+@@ -1064,11 +1061,11 @@ u64 *aq_nic_get_stats(struct aq_nic_s *self, u64 *data)
+ 	data += i;
+ 
+ 	for (tc = 0U; tc < self->aq_nic_cfg.tcs; tc++) {
+-		for (i = 0U, aq_vec = self->aq_vec[0];
+-		     aq_vec && self->aq_vecs > i;
+-		     ++i, aq_vec = self->aq_vec[i]) {
++		for (i = 0U; self->aq_vecs > i; ++i) {
++			if (!self->aq_vec[i])
++				break;
+ 			data += count;
+-			count = aq_vec_get_sw_stats(aq_vec, tc, data);
++			count = aq_vec_get_sw_stats(self->aq_vec[i], tc, data);
+ 		}
+ 	}
+ 
+@@ -1382,7 +1379,6 @@ int aq_nic_set_loopback(struct aq_nic_s *self)
+ 
+ int aq_nic_stop(struct aq_nic_s *self)
+ {
+-	struct aq_vec_s *aq_vec = NULL;
+ 	unsigned int i = 0U;
+ 
+ 	netif_tx_disable(self->ndev);
+@@ -1400,9 +1396,8 @@ int aq_nic_stop(struct aq_nic_s *self)
+ 
+ 	aq_ptp_irq_free(self);
+ 
+-	for (i = 0U, aq_vec = self->aq_vec[0];
+-		self->aq_vecs > i; ++i, aq_vec = self->aq_vec[i])
+-		aq_vec_stop(aq_vec);
++	for (i = 0U; self->aq_vecs > i; ++i)
++		aq_vec_stop(self->aq_vec[i]);
+ 
+ 	aq_ptp_ring_stop(self);
+ 
+-- 
+2.25.1
+

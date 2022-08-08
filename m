@@ -2,61 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D2E58C4AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617FF58C4AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242247AbiHHIHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 04:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S242215AbiHHIH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 04:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242148AbiHHIH2 (ORCPT
+        with ESMTP id S242124AbiHHIGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 04:07:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B87E0AB
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 01:07:09 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oKxmW-0001rc-Jk; Mon, 08 Aug 2022 10:06:36 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id CCFD4C45CB;
-        Mon,  8 Aug 2022 08:06:34 +0000 (UTC)
-Date:   Mon, 8 Aug 2022 10:06:32 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Fedor Pchelkin <pchelkin@ispras.ru>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH v2] can: j1939: Replace WARN_ON_ONCE with
- netdev_warn_once() in j1939_sk_queue_activate_next_locked()
-Message-ID: <20220808080632.vyl3zcchyyuwmpvn@pengutronix.de>
-References: <20220729142634.GD10850@pengutronix.de>
- <20220729143655.1108297-1-pchelkin@ispras.ru>
+        Mon, 8 Aug 2022 04:06:48 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AAB13E95
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 01:06:46 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id z12so9922754wrs.9
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 01:06:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=E/imfulZV4VdZtp3bNUda6W+x0wKRPhCeOXH1Jx2YFs=;
+        b=I9Dy394DwMUv0jhqSz9hSemGy+gBaP30VkiwCE7ceUSC72qxAn67nIyIUiGEqo6/fv
+         y0uWxk9C/m8Uq4tGhu7rCyTJ54S+WIK5QTUZtO1Zg8r8pxPeL6qKi1Fnms4bKZWCowuT
+         2dNKWWjGq/o3j4t32mnvULsIsRie6LDQqs6wKMOGLnzM10N5gBsMUFr1bcLltzf4SNLb
+         UlkNDxs5OafuxS5hqNmeUD7+nWVQ+uTIVBqgxPzqF5cJaGFkfiMEgMph1BihcAAWbstu
+         O4Vd68eOMKG14aJqosUHsh3XE/UrFakxELbHAchZ+asFXwPtmnK83K8PvFjQkc21ZAxg
+         4FHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=E/imfulZV4VdZtp3bNUda6W+x0wKRPhCeOXH1Jx2YFs=;
+        b=w4btPfQirgO9/cmXiOXVTxvHLj3NNydbZtrbuepW6rZyNkZ10K3wUTyTA1CRWnFbxJ
+         t3Nr82K08uhuFvk4k9wmU1qfQL9duyYV6Or8+Lro5nUV/1x1AZMC4Afr484oaq56W/qf
+         hwpxiCINXLz0nw/ky+f+HDsK2Gz1YmsYCsaZu26QDCYLuK4IumueO5hgeEbhiWys+gzf
+         +cU2ajfqr/0URQRU6/cobyjWikak9JN89rrYVwWwQZZ7KtuWPpwGEoUz+FHw4Qtouq0J
+         /WRh++6Q0kBpPppXYxF4W/rNLfRgsdiLlP+mdDox+pWqbPcwx5wF/j/tjuXGdU3NtuKU
+         5rzg==
+X-Gm-Message-State: ACgBeo0P8oM6pxmMXgcnMOqhEDa5A3Hu/s/diEfcmy1kjyZeyXUTden3
+        cw/aVbE1KGGx6NeT38oSY1Cu1Q==
+X-Google-Smtp-Source: AA6agR5T/J2nGgk3gPquXIqNudB0uPwmFf3dtFSu0n8k3nmvHueFCOFrc+G44I7JHZaFuunNHWTrsg==
+X-Received: by 2002:a5d:52cb:0:b0:21a:3cc5:f5f4 with SMTP id r11-20020a5d52cb000000b0021a3cc5f5f4mr10890723wrv.367.1659946005328;
+        Mon, 08 Aug 2022 01:06:45 -0700 (PDT)
+Received: from [10.35.5.6] ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id d15-20020adfe84f000000b00220628ef654sm10505163wrn.24.2022.08.08.01.06.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 01:06:44 -0700 (PDT)
+Message-ID: <b78e07bc-70ca-6ddd-5b80-2f6865d242ec@sifive.com>
+Date:   Mon, 8 Aug 2022 09:06:44 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vreaklujen3bcdlb"
-Content-Disposition: inline
-In-Reply-To: <20220729143655.1108297-1-pchelkin@ispras.ru>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: DesignWare PWM support for device-tree probing
+Content-Language: en-GB
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha --subject-prefix=PATCH v3 
+        <jude.onyenegecha@sifive.com>, Lee Jones <lee@kernel.org>
+References: <20220805165033.140958-1-ben.dooks@sifive.com>
+ <YvDCwOPLoSdxorhZ@google.com> <YvDDHUJdBRSRjbRh@google.com>
+From:   Ben Dooks <ben.dooks@sifive.com>
+In-Reply-To: <YvDDHUJdBRSRjbRh@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,51 +83,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08/08/2022 09:02, Lee Jones wrote:
+> On Mon, 08 Aug 2022, Lee Jones wrote:
+> 
+>> On Fri, 05 Aug 2022, Ben Dooks wrote:
+>>
+>>> This series is tidying up and adding device-tree support for the
+>>> DesignWare DW-APB-timers block.
+>>>
+>>> Changes:
+>>>
+>>> v3:
+>>> - change the compatible name
+>>> - squash down pwm count patch
+>>> - fixup patch naming
+>>>
+>>> v2:
+>>> - fix #pwm-cells count to be 3
+>>> - fix indetation
+>>> - merge the two clock patches
+>>> - add HAS_IOMEM as a config dependency
+>>
+>> Can you use the front-cover option provided by Git please Ben?
+> 
+> git format-patch --cover-letter ...
 
---vreaklujen3bcdlb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 29.07.2022 17:36:55, Fedor Pchelkin wrote:
-> We should warn user-space that it is doing something wrong when trying to
-> activate sessions with identical parameters but WARN_ON_ONCE macro can not
-> be used here as it serves a different purpose.
->=20
-> So it would be good to replace it with netdev_warn_once() message.
->=20
-> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
->=20
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-
-Nitpick: You should add your S-o-b below every other tag line.
-
-Added to linux-can with fixed indention.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---vreaklujen3bcdlb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLwxAYACgkQrX5LkNig
-012K0Af8D7wJmhikOyLYznZKn3Xobpfdif03hgTMbZKUK699it7FpxPLKtpz0glA
-DELYBddvKZ4yLmQftWG4LaFSxNSOW+NRitUqdtTaW5sKxQdmarVony6BWKSy/XsF
-upWRctkPBgXey/H3voaqQR3auOkvMnPnbigeNWCFZhEtezrpAwbXqqGKISV1tQrA
-pajNlRwD1nvzY2ZiX87RxmWarWt6doeXaeiwfLGPK2vn7s4SZM1WGz1NlarA3AwX
-E4ixgmPVXB81mXLKq9Na3XffQTW9oWZMahOOEcvq+IkpH1y3iR14TzazUskRXQ35
-fLiK17VYB3DUE95M9duhJzH8XQ2bIw==
-=5Wqw
------END PGP SIGNATURE-----
-
---vreaklujen3bcdlb--
+I thought git-send-email --compose did that.

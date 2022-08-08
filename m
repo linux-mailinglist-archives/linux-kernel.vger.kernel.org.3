@@ -2,89 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2745D58CE33
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 21:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F7958CE32
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 21:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236816AbiHHTBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 15:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S233696AbiHHTAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 15:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244112AbiHHTAf (ORCPT
+        with ESMTP id S244118AbiHHTA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 15:00:35 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33ED39C
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 12:00:33 -0700 (PDT)
-Received: from [IPV6:2601:646:8600:40c0:425:cd56:6750:e1bf] ([IPv6:2601:646:8600:40c0:425:cd56:6750:e1bf])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 278IxxCq011416
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Mon, 8 Aug 2022 11:59:59 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 278IxxCq011416
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022080501; t=1659985200;
-        bh=xT4zVgVYZD2M2KKjxqc9/0tArQ9kU5/YMmYbg8guPiQ=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=fcVx8/9GZWVJJZB8jJQ5SSeYdgryT41UC9o/a+CYvwzhZeFyr9nrs6sws4vURRld5
-         aBBZzrq76iXK6TdbWxiK3m2CPqWU+ZpFW+1K6pAg6LnQiH8dO8e9MGCZcpY40ganRT
-         1Fc02rz5qygc22XiwhWIXziz+59cc53QZtDRbvMBIiQJgc4I3YE/LJOFy9zETQ75oi
-         mzn6pdgeBoBsLqqNgLpDOPMlJ9/SW0jt1V5pIHJH5l9vDk8NS1VsUqPwW5SnLe7V9S
-         Bm0+Aw3RmH6MN9ZxK4V25zKwdPfh8X04E9zXl+I8kEExUVxNStGUFNSdHzKcnZZEOH
-         FvL4xGSduJPQA==
-Message-ID: <09d75b16-841b-0eaa-eff6-66673c7c019b@zytor.com>
-Date:   Mon, 8 Aug 2022 11:59:54 -0700
+        Mon, 8 Aug 2022 15:00:29 -0400
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C50C204;
+        Mon,  8 Aug 2022 12:00:28 -0700 (PDT)
+Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1oL7zA-0007FO-AO;
+        Mon, 08 Aug 2022 15:00:20 -0400
+Date:   Mon, 8 Aug 2022 15:00:19 -0400
+From:   Rik van Riel <riel@surriel.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, kernel-team@fb.com,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>
+Subject: [PATCH v5]  livepatch: fix race between fork and KLP transition
+Message-ID: <20220808150019.03d6a67b@imladris.surriel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH] x86/acrn: Improve ACRN hypercalls
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Uros Bizjak <ubizjak@gmail.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20220804180358.32944-1-ubizjak@gmail.com>
- <91ccae0b-6135-6163-f59b-4e99624090a5@intel.com>
- <CAFULd4YRzEXL1+cvBPT1hmfq=ZLwtrexHt+vDABnA2QMiVMBpg@mail.gmail.com>
- <6c516a7c-ac97-e0b1-b056-06a17d1b7420@intel.com>
-Content-Language: en-US
-In-Reply-To: <6c516a7c-ac97-e0b1-b056-06a17d1b7420@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On August 4, 2022 12:03:56 PM PDT, Dave Hansen <dave.hansen@intel.com> 
-wrote:
->On 8/4/22 11:56, Uros Bizjak wrote:
->> The %r8 is not preserved across function calls, so your statement
->> above is correct. But as long as there is no function call *between*
->> the variable definition and the assembly, the approach with the local
->> register variable works without any problems. It is even something GCC
->> itself has used in its library for years.
->
->I'm glad it's workout out for GCC.  But, the kernel is not GCC.  I
->specifically asked for the ACRN code to be the way that it is today and
->your argument is not making me reconsider it in the slightest.
->
->So, thanks for the patch, but I don't think we should apply it.
+The KLP transition code depends on the TIF_PATCH_PENDING and
+the task->patch_state to stay in sync. On a normal (forward)
+transition, TIF_PATCH_PENDING will be set on every task in
+the system, while on a reverse transition (after a failed
+forward one) first TIF_PATCH_PENDING will be cleared from
+every task, followed by it being set on tasks that need to
+be transitioned back to the original code.
 
-Well, this is universally used, so it isn't going to break. x86 is kind 
-of unique in that it often doesn't need it, because it has predicates 
-for so many of the specific registers, but even x86 needs it for 
-inlining system calls in glibc, for example.
+However, the fork code copies over the TIF_PATCH_PENDING flag
+from the parent to the child early on, in dup_task_struct and
+setup_thread_stack. Much later, klp_copy_process will set
+child->patch_state to match that of the parent.
 
-There is a way to do it right, which is to wrap the assignments (which 
-don't have to be the declarations, but customarily are) and asm() 
-statements in a block (e.g. an inline function, but can also just be a 
-plain old statement block.)
+However, the parent's patch_state may have been changed by KLP loading
+or unloading since it was initially copied over into the child.
+
+This results in the KLP code occasionally hitting this warning in
+klp_complete_transition:
+
+        for_each_process_thread(g, task) {
+                WARN_ON_ONCE(test_tsk_thread_flag(task, TIF_PATCH_PENDING));
+                task->patch_state = KLP_UNDEFINED;
+        }
+
+Set, or clear, the TIF_PATCH_PENDING flag in the child task
+depending on whether or not it is needed at the time
+klp_copy_process is called, at a point in copy_process where the
+tasklist_lock is held exclusively, preventing races with the KLP
+code.
+
+The KLP code does have a few places where the state is changed
+without the tasklist_lock held, but those should not cause
+problems because klp_update_patch_state(current) cannot be
+called while the current task is in the middle of fork,
+klp_check_and_switch_task() which is called under the pi_lock,
+which prevents rescheduling, and manipulation of the patch
+state of idle tasks, which do not fork.
+
+This should prevent this warning from triggering again in the
+future, and close the race for both normal and reverse transitions.
+
+Signed-off-by: Rik van Riel <riel@surriel.com>
+Reported-by: Breno Leitao <leitao@debian.org>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Fixes: d83a7cb375ee ("livepatch: change to a per-task consistency model")
+Cc: stable@kernel.org
+---
+v5: incorporate changelog suggestions by Petr (thank you)
+
+ kernel/livepatch/transition.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index 5d03a2ad1066..30187b1d8275 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -610,9 +610,23 @@ void klp_reverse_transition(void)
+ /* Called from copy_process() during fork */
+ void klp_copy_process(struct task_struct *child)
+ {
+-	child->patch_state = current->patch_state;
+ 
+-	/* TIF_PATCH_PENDING gets copied in setup_thread_stack() */
++	/*
++	 * The parent process may have gone through a KLP transition since
++	 * the thread flag was copied in setup_thread_stack earlier. Bring
++	 * the task flag up to date with the parent here.
++	 *
++	 * The operation is serialized against all klp_*_transition()
++	 * operations by the tasklist_lock. The only exception is
++	 * klp_update_patch_state(current), but we cannot race with
++	 * that because we are current.
++	 */
++	if (test_tsk_thread_flag(current, TIF_PATCH_PENDING))
++		set_tsk_thread_flag(child, TIF_PATCH_PENDING);
++	else
++		clear_tsk_thread_flag(child, TIF_PATCH_PENDING);
++
++	child->patch_state = current->patch_state;
+ }
+ 
+ /*
+-- 
+2.37.1
 
 

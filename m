@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FD358C41E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F51A58C425
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233832AbiHHHgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 03:36:24 -0400
+        id S237892AbiHHHhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 03:37:05 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239287AbiHHHgK (ORCPT
+        with ESMTP id S237875AbiHHHgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 03:36:10 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BB012756;
-        Mon,  8 Aug 2022 00:35:55 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id l4so9823290wrm.13;
-        Mon, 08 Aug 2022 00:35:54 -0700 (PDT)
+        Mon, 8 Aug 2022 03:36:45 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DD313E0B;
+        Mon,  8 Aug 2022 00:36:32 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id z17so9869200wrq.4;
+        Mon, 08 Aug 2022 00:36:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=nxDN09Ygs/+kfgUzrdcRt7MgfF4b0EgoFDM0Fa3eds0=;
-        b=fSaFrLk2IbdELb3DX0cj67xgMPIBbv5anGQCYCuDZuSPCC8Vc3DO1fr/RK30CEslz8
-         /nh6SVHvBehnPo/h8SxGdXMrvktLJjm0i9uaUAggn4UMnD23Ck/voqPzqR0eMT8gNQmD
-         HAqKXrU3Eo4Ul4TNcniTyu4sDYQL1rZbARwW6UqxcGEOb5xmea8LKJeCZLiigIXh/0cR
-         iMGlbAEOJ3tJ6mgpGYcsmkbcLYgvSRAbIih+n7UPjD9tBWNobu68hB1vLYzoxSfsgW7e
-         0E57RUqRWicutxbhts8rMbGt6bJYpzsrnVMtXQmcoavfn2gIl/KPhIy0cmqJRyeS6bVS
-         7DnA==
+        bh=uYRvhWIir+9vFNPEGPmYjeZmzQyaVDNo9OS1sri7zLc=;
+        b=WqAfVIb7d+vMtao0BB28J6WxkgIjKclg9mdmpH5aZx3Kbx2WGVsa8sbi0/oJHTe7RS
+         ApmPnAvfGYjJlkNxBXhdVEM0wlG7ch+K35lQwnEn+r+MsgfkPJpi7xVqvppnyhBWL1ws
+         KzespaNbR2z1GqSzTEbqjpDv7bFBYewsqNLmN910NtK+FjjBoNRohCqOEd5A2Au/RYVz
+         Q5LnmtJuRlMezVJQZlaAykFyJ8fmcHCMAxLGDkoQt9bkDLTmfwN9Mpj0xRS2gEyX7rbi
+         vDtU0QoxEvO/iX9tcwwaeLM+1iD3hXz+cVirs51necmmWb6EoMAyFHW45Cf1GMmvrOEn
+         BGfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=nxDN09Ygs/+kfgUzrdcRt7MgfF4b0EgoFDM0Fa3eds0=;
-        b=JSF1DE0F3bE46UOOuiobWqQ9HJx1xnVvtXNDUDNM2gNIRHSMG/QxJnu+sPKI5UZiNM
-         nf6d4Y2/3YTIR1AXmecUimZmxPgM/kUD/NHlNgu86l0wOOqoeTumnxXhbtLBBG+xxRfW
-         +VyOb2FGzJXCgAQlDj40qlvlRP1WA4dapt+TA2d7pxCzeuNLreX1EFaxoD+2QS3q5DU2
-         mE1s/gUqMOzh1xlnUkLkXWa8lepGVTGzbcTcvqcP+ZTSxRpzR727wVG8bPEwZjAGg7XA
-         LRpOPpKFe4ALq9MPoICRWO99VX8NaMC6pLfcs55z/XZYq+n9Q/LjrYZu4rfBRg4uUkiP
-         rjaw==
-X-Gm-Message-State: ACgBeo1s013i8o9IBErzfBSyPy8pVi/oWMBOuYtc7BknmR+feuipGk2S
-        JMneLctqmw872bv9V++O5FM=
-X-Google-Smtp-Source: AA6agR5mGRuDHhUkHchb3IT2ypFG1OYigw+UxvXFL1K879qmHnFTV3ZzHKQt1xjfrcbptY45dcqv0A==
-X-Received: by 2002:a05:6000:888:b0:21f:bc6:cc12 with SMTP id ca8-20020a056000088800b0021f0bc6cc12mr10813775wrb.90.1659944153225;
-        Mon, 08 Aug 2022 00:35:53 -0700 (PDT)
+        bh=uYRvhWIir+9vFNPEGPmYjeZmzQyaVDNo9OS1sri7zLc=;
+        b=yegv6PWwiQCZSvslnKnE1qwa8UkxztdShwsr6DRJBJSKEWXirmSnrBC/JUbLWRJXQS
+         Pai9jMByGrbsb7avcsrWD2ICBL0giZAx1ZROIrwUHohIrUJf0mGei2wXSuJ2aXsn+LkU
+         +esS/oJJwkts7BDGavlzixTeguCA7GamzvaU+0T7s0vdbogG0zvNksOKy0WHZRM4iZJK
+         Nnkd5JCBLsSRzztYS43cECp9ObW0zWUjzZ4DHumrzfBIkBTtGOg2KB5zYGJMDs++w6vf
+         OSNmiakQeEi+8LHjKLdyQKZQP0Bsd/jrfftrcP8xxxsQyBS6wqREVjkRHASGpJB3xyPx
+         LzbQ==
+X-Gm-Message-State: ACgBeo2HbPVmv2P1ixMIVkPUGqmuuDEY9AuEU+scvruji+VDyWvi50gN
+        +G8PPTNWNckZoYlHH+K7Kic=
+X-Google-Smtp-Source: AA6agR4gUjE6BeupG0r1l4Gy97xRsQ+e6XUf2b5okBU3JGXpFjzcvbfvD/oMHaQUm3CDBEMc3EXE1Q==
+X-Received: by 2002:adf:d4c2:0:b0:21e:ddf3:8b14 with SMTP id w2-20020adfd4c2000000b0021eddf38b14mr10932162wrk.355.1659944191138;
+        Mon, 08 Aug 2022 00:36:31 -0700 (PDT)
 Received: from localhost.localdomain ([105.235.133.111])
-        by smtp.gmail.com with ESMTPSA id cc11-20020a5d5c0b000000b002205ffe88edsm8333364wrb.31.2022.08.08.00.35.51
+        by smtp.gmail.com with ESMTPSA id cc11-20020a5d5c0b000000b002205ffe88edsm8333364wrb.31.2022.08.08.00.36.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 00:35:52 -0700 (PDT)
+        Mon, 08 Aug 2022 00:36:30 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Sebastian Reichel <sre@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/8] arm64: dts: qcom: pmi8996: Add SMBCHG
-Date:   Mon,  8 Aug 2022 08:34:54 +0100
-Message-Id: <20220808073459.396278-4-y.oudjana@protonmail.com>
+Subject: [PATCH 5/8] arm64: dts: qcom: msm8996-xiaomi-*: Enable SMBCHG
+Date:   Mon,  8 Aug 2022 08:34:56 +0100
+Message-Id: <20220808073459.396278-6-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220808073459.396278-1-y.oudjana@protonmail.com>
 References: <20220808073459.396278-1-y.oudjana@protonmail.com>
@@ -82,27 +82,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-The SMBCHG block on PMI8996 is slightly different from the one
-on PMI8994, making a different compatible string required.
-Change the label and compatible of pmi8994_smbchg to match PMI8996.
+Enable pmi8994_smbchg, and set usb-psy-name in dwc3 to point
+to its USB charge path supply, allowing it to configure
+the input current limit when plugged into a SDP.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- arch/arm64/boot/dts/qcom/pmi8996.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/pmi8996.dtsi b/arch/arm64/boot/dts/qcom/pmi8996.dtsi
-index 31b47209e261..ea8d86d12bb8 100644
---- a/arch/arm64/boot/dts/qcom/pmi8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pmi8996.dtsi
-@@ -13,3 +13,7 @@
- / {
- 	qcom,pmic-id = <0x20009 0x10013 0 0>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
+index 022ecbcd965a..a18c9a9baacf 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
+@@ -304,6 +304,12 @@ &pm8994_resin {
+ 	linux,code = <KEY_VOLUMEDOWN>;
  };
+ 
++&pmi8994_smbchg {
++	status = "okay";
 +
-+pmi8996_smbchg: &pmi8994_smbchg {
-+	compatible = "qcom,pmi8996-smbchg";
++	monitored-battery = <&battery>;
 +};
++
+ &slpi_pil {
+ 	status = "okay";
+ 
+@@ -324,6 +330,8 @@ &usb3_dwc3 {
+ 	phys = <&hsusb_phy1>;
+ 	phy-names = "usb2-phy";
+ 
++	usb-psy-name = "qcom-smbchg-usb";
++
+ 	maximum-speed = "high-speed";
+ 	snps,is-utmi-l1-suspend;
+ 	snps,usb2-gadget-lpm-disable;
 -- 
 2.37.1
 

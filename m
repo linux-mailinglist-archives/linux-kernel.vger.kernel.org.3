@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D8658C1D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7784C58C1D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244044AbiHHCnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
+        id S244166AbiHHCoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242120AbiHHClk (ORCPT
+        with ESMTP id S242209AbiHHClk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 7 Aug 2022 22:41:40 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FBE25C4;
-        Sun,  7 Aug 2022 19:41:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216CC25E4
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 19:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=fiLWB7FlMZG/t3/6at/lVnmuLuXlP9ApBxUL44LLPGI=; b=cV+xsr2dJdusY7y0TkSTgMXeQ0
-        hiXR1lQDTb0NZ1r+yPBc/SHwfmocssIf1OWmy7KfHT0zQhxNolb+CBN8mJ+rzcAqxTB7d0jZGxCc2
-        yeAO0NPrLksriSMv1Tjv55L/P1iTRnYT5eiymmpzFFtIySvuDh8xaUuVSOvQEysBDxEG4gsGiX8JT
-        jg74xcTcIF/+GQvexqGnUqjhudrIrBlSuElsRc7yjmn8k1PmBb+p1vf0Hd5N+gDURFOfDjVagZeYF
-        hZRpk2vdiPL6Ynyd65sLsSPz/ef0ZmpeorlTJZGkIhOw6f+X7tXAd41fClIw1bUShUYqzghpwigEL
-        Z25ohh/A==;
+        bh=JSiABMMZnULesSHXbODZXbNdNrS+sWlJ8WR8yu48vGY=; b=R+fJeXfM+C7UzxYJOIbPtnhJZN
+        ZFVd2X7tbiIrV3eQ+rjj9m0N85640VYmeYs0YCyQT8oTrXtm5P7wkAQ+W8xxRQUAfmbU9FccnA1lE
+        +pf9VZUG0TAk9uZysyl2+JyAI/2JX50RSZDsMeFoJspbcYgJytqXk7D27TyyA3B+29V6S/QCmHUQX
+        /5lVcoZ2gVykipqHm3UWr7u/5l7YqVcU1HNZC8zlsYKcb4c4xhh+mVj2zqzE3FkN2Bj4qSWbMNXf6
+        cTLiGoAeF6E3+KTxB1NLTNpmw48EMBhf+q5XVGeuYbRGaJBXGEfqiMPch1+k89PhMvVMrv8AqZW8K
+        KsTEv3Tw==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oKshy-00DVSX-Gm; Mon, 08 Aug 2022 02:41:34 +0000
+        id 1oKshy-00DVSZ-Iz; Mon, 08 Aug 2022 02:41:34 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-kernel@vger.kernel.org, pmladek@suse.com,
         Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-tegra@vger.kernel.org
-Subject: [PATCH v5 23/32] clk: tegra: bpmp: Convert to printbuf
-Date:   Mon,  8 Aug 2022 03:41:19 +0100
-Message-Id: <20220808024128.3219082-24-willy@infradead.org>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        nvdimm@lists.linux.dev
+Subject: [PATCH v5 24/32] tools/testing/nvdimm: Convert to printbuf
+Date:   Mon,  8 Aug 2022 03:41:20 +0100
+Message-Id: <20220808024128.3219082-25-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220808024128.3219082-1-willy@infradead.org>
 References: <20220808024128.3219082-1-willy@infradead.org>
@@ -51,86 +53,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@gmail.com>
 
-This converts from seq_buf to printbuf, which is similar but heap
-allocates the string buffer.
-
-Previously in this code the string buffer was allocated on the stack;
-this means we've added a new potential memory allocation failure. This
-is fine though since it's only for a dev_printk() message.
-
-Memory allocation context: printbuf doesn't take gfp flags, instead we
-prefer the new memalloc_no*_(save|restore) interfaces to be used. Here
-the surrounding code is already allocating with GFP_KERNEL, so
-everything is fine.
+This converts from seq_buf to printbuf. Here we're using printbuf with
+an external buffer, meaning it's a direct conversion.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-Cc: linux-tegra@vger.kernel.org
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: nvdimm@lists.linux.dev
 ---
- drivers/clk/tegra/clk-bpmp.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ tools/testing/nvdimm/test/ndtest.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-bpmp.c b/drivers/clk/tegra/clk-bpmp.c
-index 3748a39dae7c..7e3b48ed9d45 100644
---- a/drivers/clk/tegra/clk-bpmp.c
-+++ b/drivers/clk/tegra/clk-bpmp.c
-@@ -5,7 +5,7 @@
- 
- #include <linux/clk-provider.h>
- #include <linux/device.h>
+diff --git a/tools/testing/nvdimm/test/ndtest.c b/tools/testing/nvdimm/test/ndtest.c
+index 4d1a947367f9..a2097955dace 100644
+--- a/tools/testing/nvdimm/test/ndtest.c
++++ b/tools/testing/nvdimm/test/ndtest.c
+@@ -12,7 +12,7 @@
+ #include <linux/ndctl.h>
+ #include <nd-core.h>
+ #include <linux/printk.h>
 -#include <linux/seq_buf.h>
 +#include <linux/printbuf.h>
- #include <linux/slab.h>
  
- #include <soc/tegra/bpmp.h>
-@@ -365,39 +365,38 @@ static void tegra_bpmp_clk_info_dump(struct tegra_bpmp *bpmp,
- 				     const struct tegra_bpmp_clk_info *info)
+ #include "../watermark.h"
+ #include "nfit_test.h"
+@@ -740,32 +740,30 @@ static ssize_t flags_show(struct device *dev,
  {
- 	const char *prefix = "";
--	struct seq_buf buf;
-+	struct printbuf buf = PRINTBUF;
- 	unsigned int i;
--	char flags[64];
+ 	struct nvdimm *nvdimm = to_nvdimm(dev);
+ 	struct ndtest_dimm *dimm = nvdimm_provider_data(nvdimm);
+-	struct seq_buf s;
++	struct printbuf s = PRINTBUF_EXTERN(buf, PAGE_SIZE);
+ 	u64 flags;
+ 
+ 	flags = dimm->flags;
+ 
+-	seq_buf_init(&s, buf, PAGE_SIZE);
+ 	if (flags & PAPR_PMEM_UNARMED_MASK)
+-		seq_buf_printf(&s, "not_armed ");
++		prt_printf(&s, "not_armed ");
+ 
+ 	if (flags & PAPR_PMEM_BAD_SHUTDOWN_MASK)
+-		seq_buf_printf(&s, "flush_fail ");
++		prt_printf(&s, "flush_fail ");
+ 
+ 	if (flags & PAPR_PMEM_BAD_RESTORE_MASK)
+-		seq_buf_printf(&s, "restore_fail ");
++		prt_printf(&s, "restore_fail ");
+ 
+ 	if (flags & PAPR_PMEM_SAVE_MASK)
+-		seq_buf_printf(&s, "save_fail ");
++		prt_printf(&s, "save_fail ");
+ 
+ 	if (flags & PAPR_PMEM_SMART_EVENT_MASK)
+-		seq_buf_printf(&s, "smart_notify ");
++		prt_printf(&s, "smart_notify ");
+ 
++	if (printbuf_written(&s))
++		prt_printf(&s, "\n");
+ 
+-	if (seq_buf_used(&s))
+-		seq_buf_printf(&s, "\n");
 -
--	seq_buf_init(&buf, flags, sizeof(flags));
- 
- 	if (info->flags)
--		seq_buf_printf(&buf, "(");
-+		prt_printf(&buf, "(");
- 
- 	if (info->flags & TEGRA_BPMP_CLK_HAS_MUX) {
--		seq_buf_printf(&buf, "%smux", prefix);
-+		prt_printf(&buf, "%smux", prefix);
- 		prefix = ", ";
- 	}
- 
- 	if ((info->flags & TEGRA_BPMP_CLK_HAS_SET_RATE) == 0) {
--		seq_buf_printf(&buf, "%sfixed", prefix);
-+		prt_printf(&buf, "%sfixed", prefix);
- 		prefix = ", ";
- 	}
- 
- 	if (info->flags & TEGRA_BPMP_CLK_IS_ROOT) {
--		seq_buf_printf(&buf, "%sroot", prefix);
-+		prt_printf(&buf, "%sroot", prefix);
- 		prefix = ", ";
- 	}
- 
- 	if (info->flags)
--		seq_buf_printf(&buf, ")");
-+		prt_printf(&buf, ")");
- 
- 	dev_printk(level, bpmp->dev, "%03u: %s\n", info->id, info->name);
--	dev_printk(level, bpmp->dev, "  flags: %lx %s\n", info->flags, flags);
-+	dev_printk(level, bpmp->dev, "  flags: %lx %s\n", info->flags, printbuf_str(&buf));
- 	dev_printk(level, bpmp->dev, "  parents: %u\n", info->num_parents);
- 
- 	for (i = 0; i < info->num_parents; i++)
- 		dev_printk(level, bpmp->dev, "    %03u\n", info->parents[i]);
-+
-+	printbuf_exit(&buf);
+-	return seq_buf_used(&s);
++	return printbuf_written(&s);
  }
+ static DEVICE_ATTR_RO(flags);
  
- static int tegra_bpmp_probe_clocks(struct tegra_bpmp *bpmp,
 -- 
 2.35.1
 

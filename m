@@ -2,89 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378C158C250
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 06:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D3258C289
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 06:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233328AbiHHEV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 00:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
+        id S234168AbiHHE1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 00:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbiHHEVZ (ORCPT
+        with ESMTP id S231720AbiHHE1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 00:21:25 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66385B1CB
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 21:21:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M1NLV5jykz4x1J;
-        Mon,  8 Aug 2022 14:21:22 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1659932483;
-        bh=3LvqyDOrzDOSiQKTVH1+ZHRlUn2RfICwbDETaZllK60=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SygUvfld9Q8kIO7eSyqpNM/QXOzDdRcVVhoHyma39rzdD19oBb4ZTPOofWUmFiNMe
-         SyMx27ulk+ayo1jp+g8mdDzfCsDJsOazufyg03fNMtxCEZNELQxLY7whW4Jx+CJ6Dz
-         S0Wxa0vTn7TThrGT2SN4nyoran5XV6VvPuvPa4QgdiRvFypjRR1oQtzZAvCgS365P/
-         jp7KwWjQjRWm0in5XDJWTMtajVeEj/rgEd9Ngd7EnXoL1oaCe6vLpvrP0LCrKQm8uo
-         s4iq5mxrgiK69WwqDh0p1XWS+vv8FrmzWKZ3sO5CWW1dhl/zVjWD7iN83n57wIu7V6
-         aYmc+klrH95Mw==
-Date:   Mon, 8 Aug 2022 14:21:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] Bitmap patches for v6.0-rc1
-Message-ID: <20220808142121.6d62a431@canb.auug.org.au>
-In-Reply-To: <CAHk-=wjbFrPfKA5DOnPXvn_0hTmSw2oTXPKxtDoC5v12McW2DQ@mail.gmail.com>
-References: <20220805022940.1637978-1-yury.norov@gmail.com>
-        <165991968404.10077.6220067519297859381.pr-tracker-bot@kernel.org>
-        <CAHk-=wjbFrPfKA5DOnPXvn_0hTmSw2oTXPKxtDoC5v12McW2DQ@mail.gmail.com>
+        Mon, 8 Aug 2022 00:27:07 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D72DF8C;
+        Sun,  7 Aug 2022 21:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659932826; x=1691468826;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=itU/psrTDiBxpg2uoXCJ31PzFcxLSRp3phhgRkOS+/4=;
+  b=WfyII6hbq1dS+B/xVwIiSQVn8bSwvFambfwdknSfDSnkgs/QferMJxRu
+   ylC4n03V0kwWBH6+Zp1LvnENid20bB2I5704CEkZBFRqqcmo9Yol3cSkF
+   x28a7jH5JtY/ekNsRilqv3banmZTLZ8WqCTEn0CvcPwRID9DuKpnjFM/x
+   U4HLCG5WtN4s/Y9DomdECJC3fOqkUdCkJDKsnJBpv9RJAzFdKedToqbqG
+   5PsaWEH1j5Qz4lRCJQzvHTCg+bq5ro5+fXz5q27gXqiNaOidjCf9X+Upm
+   wIynE62wXfSAQobiVYMmvU59jvRZ+uNA2jTuSv2+zLVbDcQSzmrdyRydV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="316404407"
+X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
+   d="scan'208";a="316404407"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 21:27:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
+   d="scan'208";a="554761975"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 Aug 2022 21:27:05 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKuM4-000Lsf-1P;
+        Mon, 08 Aug 2022 04:27:04 +0000
+Date:   Mon, 8 Aug 2022 12:26:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lin Ma <linma@zju.edu.cn>, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Lin Ma <linma@zju.edu.cn>
+Subject: Re: [PATCH v0] media: dvbdev: adopts refcnt to avoid UAF
+Message-ID: <202208081225.fgMVwVrN-lkp@intel.com>
+References: <20220807145952.10368-1-linma@zju.edu.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EbV7=aXdO4+ZCHhh9PJlfz9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220807145952.10368-1-linma@zju.edu.cn>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/EbV7=aXdO4+ZCHhh9PJlfz9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Lin,
 
-Hi Linus,
+Thank you for the patch! Perhaps something to improve:
 
-On Sun, 7 Aug 2022 17:57:35 -0700 Linus Torvalds <torvalds@linux-foundation=
-.org> wrote:
->
-> But hopefully people never noticed, because nobody sane is looking at
-> my tree on a Sunday evening.
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linus/master v5.19 next-20220805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Well, for some of us it is Monday already :-)  I did not notice though.
+url:    https://github.com/intel-lab-lkp/linux/commits/Lin-Ma/media-dvbdev-adopts-refcnt-to-avoid-UAF/20220807-230449
+base:   git://linuxtv.org/media_tree.git master
+reproduce: make htmldocs
 
---=20
-Cheers,
-Stephen Rothwell
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
---Sig_/EbV7=aXdO4+ZCHhh9PJlfz9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+All warnings (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+>> include/media/dvbdev.h:203: warning: expecting prototype for dvb_device_get(). Prototype was for dvb_device_put() instead
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLwj0EACgkQAVBC80lX
-0GxGMggAmZ8cLAztLtAQMTx1susTnOVLO0c/ViSAKbpwJFXRNLHuu5RdC/59EIbZ
-YmC+IvecMD1HC1EEOuMZ791p4hJZ7rkmiJpinbovyLZJus+388nz3NgJwDhHUWf6
-YklH5tBh/PE+ZQL4smjonz8JsoZziQ+MAA6HVSWQROuodewqnqlp7Xf/ZwoTV4vu
-FDAuu8Il1hX1Vzz3jzr74sXA902opTiwNPSyDpYMDqYB71UvW8ByHy5VALkY+Y6o
-MOamys3X4Q24qEB7RVhuebZLBS6PJJ0m2LB+x5h07nicWCGo4q+JZluF1PnzAT6+
-LkKHwTntkOylJhSY2/sMzr8zkvH18w==
-=k4e6
------END PGP SIGNATURE-----
+vim +203 include/media/dvbdev.h
 
---Sig_/EbV7=aXdO4+ZCHhh9PJlfz9--
+   187	
+   188		void *priv;
+ > 189	};
+   190	
+   191	/**
+   192	 * dvb_device_get - Increase dvb_device reference
+   193	 *
+   194	 * @dvbdev:	pointer to struct dvb_device
+   195	 */
+   196	struct dvb_device *dvb_device_get(struct dvb_device *dvbdev);
+   197	
+   198	/**
+   199	 * dvb_device_get - Decrease dvb_device reference
+   200	 *
+   201	 * @dvbdev:	pointer to struct dvb_device
+   202	 */
+ > 203	void dvb_device_put(struct dvb_device *dvbdev);
+   204	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

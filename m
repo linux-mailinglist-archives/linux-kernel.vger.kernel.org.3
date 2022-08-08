@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A9B58C4A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D2E58C4AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242234AbiHHIGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 04:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S242247AbiHHIHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 04:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242127AbiHHIGh (ORCPT
+        with ESMTP id S242148AbiHHIH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 04:06:37 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A1513E31;
-        Mon,  8 Aug 2022 01:06:32 -0700 (PDT)
-Received: from mail-ej1-f44.google.com ([209.85.218.44]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MhDAi-1nhnXw2dfO-00eMfS; Mon, 08 Aug 2022 10:06:30 +0200
-Received: by mail-ej1-f44.google.com with SMTP id i14so15135687ejg.6;
-        Mon, 08 Aug 2022 01:06:30 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3UGsnb/Cf1u8vbQV80/jTX1Ci2F1wdjEwgUbXDxlFpJr2bVtV0
-        ZteI2hmDi/5e4u4zePRVGDNxv/iiC//lW++2/Fk=
-X-Google-Smtp-Source: AA6agR4GgGd8n+xBtHZRIIZDSb3raNbv0NcwwkrbkWgSf6AjnZq/RmNzizI0Ihs+/xXm5AI+HvVE+1WgmC6BUZ+FEN4=
-X-Received: by 2002:a17:906:9b08:b0:730:5d3c:4b1b with SMTP id
- eo8-20020a1709069b0800b007305d3c4b1bmr13057897ejc.606.1659945990183; Mon, 08
- Aug 2022 01:06:30 -0700 (PDT)
+        Mon, 8 Aug 2022 04:07:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B87E0AB
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 01:07:09 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oKxmW-0001rc-Jk; Mon, 08 Aug 2022 10:06:36 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CCFD4C45CB;
+        Mon,  8 Aug 2022 08:06:34 +0000 (UTC)
+Date:   Mon, 8 Aug 2022 10:06:32 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        ldv-project@linuxtesting.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v2] can: j1939: Replace WARN_ON_ONCE with
+ netdev_warn_once() in j1939_sk_queue_activate_next_locked()
+Message-ID: <20220808080632.vyl3zcchyyuwmpvn@pengutronix.de>
+References: <20220729142634.GD10850@pengutronix.de>
+ <20220729143655.1108297-1-pchelkin@ispras.ru>
 MIME-Version: 1.0
-References: <20220807172854.12971-1-rdunlap@infradead.org> <CAK8P3a0FR2ySLXAMGR1ZmaAQMbVwB4MFBPvBw4py_pbgtQSfgA@mail.gmail.com>
- <3a4dad85-1102-1bab-c0af-a2c6827663b1@infradead.org>
-In-Reply-To: <3a4dad85-1102-1bab-c0af-a2c6827663b1@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 8 Aug 2022 10:06:14 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a140FFhCvrOXbCtYKCW6BR6tEz6uy8Wqd0aG3DdHiZSXg@mail.gmail.com>
-Message-ID: <CAK8P3a140FFhCvrOXbCtYKCW6BR6tEz6uy8Wqd0aG3DdHiZSXg@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic: unistd.h: make 'compat_sys_fadvise64_64' conditional
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:SGFtsLq8mQqaxrYQ4ycxf177BwA7aQP8CEn1L9f7FQvcOijnEq4
- HfrsKAOzmxmbR5MC9oyM87M7eGM/SAAspq8glgbZiHqUDRk5pm34bFgEuBiMhoE+R8OxDJf
- fS9InY7VFDSTsVMh5jD5FcKAFdLcgfMGrgM8ojlP9Y/yLoH6VVXhMWKvyjA7cA7vhdALiMx
- 12qWk7VnVUTUU102ltPJQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:REE8JLPm/rU=:waUH4FsaX+ZreVMH/o9cqG
- 4xX546mhgANnfQjSTRqaXa5tX4Nu0wRKWDk5KMr7P0XHjJiXFQvrGgX7wtpgpQIpw7aHDkaAN
- QX7HGd50e9P+tJnn4QYrEke6cqMgjpSK1Ei57vXmenSGiwouGh2hojdjU9gxRRVnYktBRekd4
- GM+Q1SPTKpv9iYacH/Ba46Pzi1C82TikSKHHv+dUW2FagYI9Q8eo6HZQlqGVXu1T/e6c5YW5L
- LYEzJzYUKoPaCSOyG0Ev1zIdFHodLdV3kSljrhHMhiASNHp+IVro5RrG7GrU+C+Saf4+vRyTQ
- +552O/BbGtT/s/uHNBld4heQ9WBROMEd3aPvqYSFdTo3GydMzE3ZcCPFsEMljHpQB0Vx6iM7q
- voqOvW5Sge8l2xrFQYzB3CjR65YNnP8jH2xlkzRo9BbuETAihdWxlxGgBINeKMj9O1Px6rDwK
- SknTkzd21wzFaoNJHPGHnBH6dB8y7PaaknQ9/rGKGsOq/XeryczhSeU8PpQcXis5oXCOLGBgC
- BBgvFXAjB0xMnkH7D3O1Dxfm30fc7BXrIpHTeG0L6X7HQ01QIvs96kM4DmXs9XLjpSRtbk4eb
- 42PUpc9LxPnEdlYLzqqUYoZJg3aB7yYoJejtexHCmHrTcdG6LomnAnq57n7XQC7hX4M7BXG6j
- k2atACizrau8d8bJw2OaTIAp2pvJRTuN2VLRKLLQ/b5v68YLjBzR8Mhs0hdYOm/UFBMzUjLQM
- ms1TbrZ8DbRI+7el5UWXCwY9uRW7mFumeVUjDTLnUnH2sxqqrR/IlLaqFYMxP07P0/LPfTAfb
- ub+asjAL0ncxz/2ugAtpzkgrMU+4eCLkOXItvGytus3zOMlgcuGtY3H+VwQ8Vc+XVIZ+fS5V0
- fdRGoixc14txamgpLsMg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vreaklujen3bcdlb"
+Content-Disposition: inline
+In-Reply-To: <20220729143655.1108297-1-pchelkin@ispras.ru>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 12:39 AM Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 8/7/22 12:44, Arnd Bergmann wrote:
-> > On Sun, Aug 7, 2022 at 7:28 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> >>
-> >
-> > This does not work: __ARCH_WANT_COMPAT_FADVISE64_64 is defined in
-> > arch/riscv/include/asm/unistd.h, which is not a UAPI header. By making the line
-> > conditional on this, user space no longer sees the macro definition.
-> >
-> > It looks like you also drop the native definition on all architectures other
-> > than riscv here. What we probably want is to just make all the
-> > declarations in include/linux/compat.h unconditional and not have them
-> > depend on architecture specific macros. Some of these may have
-> > incompatible prototypes depending on the architecture, but if we run
-> > into those, I would suggest we just give them unique names.
->
-> Thanks for the comments.
->
-> With the other patch to kernel/sys_ni.c, this one is no longer needed,
 
-Ok.
+--vreaklujen3bcdlb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> although I can look into making more entries in <linux/compat.h>
-> unconditional.
+On 29.07.2022 17:36:55, Fedor Pchelkin wrote:
+> We should warn user-space that it is doing something wrong when trying to
+> activate sessions with identical parameters but WARN_ON_ONCE macro can not
+> be used here as it serves a different purpose.
+>=20
+> So it would be good to replace it with netdev_warn_once() message.
+>=20
+> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+>=20
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-This would be a nice cleanup, but it does involve making sure that
-all prototypes are compatible with the implementation on each
-architecture. I think we should definitely do this, it's just not as
-simple as removing each #ifdef in linux/compat.h and linux/syscall.h
+Nitpick: You should add your S-o-b below every other tag line.
 
-> That would also mean adding them to kernel/sys_ni.c, right?
-> (if not already there)
+Added to linux-can with fixed indention.
 
-That part should be completely independent. If the entry in
-kernel/sys_ni.c is missing, that causes a link failure, while an
-incorrect #ifdef would cause a compile-time error for the missing
-prototype.
+Marc
 
-         Arnd
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--vreaklujen3bcdlb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLwxAYACgkQrX5LkNig
+012K0Af8D7wJmhikOyLYznZKn3Xobpfdif03hgTMbZKUK699it7FpxPLKtpz0glA
+DELYBddvKZ4yLmQftWG4LaFSxNSOW+NRitUqdtTaW5sKxQdmarVony6BWKSy/XsF
+upWRctkPBgXey/H3voaqQR3auOkvMnPnbigeNWCFZhEtezrpAwbXqqGKISV1tQrA
+pajNlRwD1nvzY2ZiX87RxmWarWt6doeXaeiwfLGPK2vn7s4SZM1WGz1NlarA3AwX
+E4ixgmPVXB81mXLKq9Na3XffQTW9oWZMahOOEcvq+IkpH1y3iR14TzazUskRXQ35
+fLiK17VYB3DUE95M9duhJzH8XQ2bIw==
+=5Wqw
+-----END PGP SIGNATURE-----
+
+--vreaklujen3bcdlb--

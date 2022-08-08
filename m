@@ -2,87 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CB058CB40
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B33758CB44
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243761AbiHHPZo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 8 Aug 2022 11:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
+        id S243700AbiHHP0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 11:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243700AbiHHPZg (ORCPT
+        with ESMTP id S243061AbiHHP0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:25:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9966013F24
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 08:25:35 -0700 (PDT)
+        Mon, 8 Aug 2022 11:26:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E672914005;
+        Mon,  8 Aug 2022 08:26:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3692560FF1
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 15:25:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05558C433D6;
-        Mon,  8 Aug 2022 15:25:33 +0000 (UTC)
-Date:   Mon, 8 Aug 2022 11:25:35 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH v5 31/32] tracing: Convert to printbuf
-Message-ID: <20220808112535.0c74afc4@gandalf.local.home>
-In-Reply-To: <55e6e42f-b3ea-d9d0-4611-f13b3b88acab@gmail.com>
-References: <20220808024128.3219082-1-willy@infradead.org>
-        <20220808024128.3219082-32-willy@infradead.org>
-        <20220807225113.6a74b481@gandalf.local.home>
-        <8e1df054-062f-63c9-16b4-38143f3e7983@gmail.com>
-        <20220808093750.4dd24af2@gandalf.local.home>
-        <55e6e42f-b3ea-d9d0-4611-f13b3b88acab@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CBE8B80E26;
+        Mon,  8 Aug 2022 15:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5E23C433D6;
+        Mon,  8 Aug 2022 15:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659972406;
+        bh=QVa4BfBV7lo527XdkUKxpdBKV3SSO4B9ggVsxDseAa4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DB4SmNrxCqdztrrLn4+ufvycDeBeLRrfL0+xLwT4ASz/nm5dHRteRaEbBRNIa3kQM
+         4dj1wxE+Ic9ZqgyLgZEGS72UCULcniMnRaVa+vMdUqQOz1O42TqhrCzEEDiokhgFQb
+         +ktK7QnRL5Kci/32aGkLmp+ApYcrBtlehxhq98u8=
+Date:   Mon, 8 Aug 2022 17:26:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Evan Green <evgreen@chromium.org>, linux-efi@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        Petr Mladek <pmladek@suse.com>, kexec@lists.infradead.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, mikelley@microsoft.com,
+        hidehiro.kawai.ez@hitachi.com, jgross@suse.com,
+        john.ogness@linutronix.de, Kees Cook <keescook@chromium.org>,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>
+Subject: Re: [PATCH v2 03/13] firmware: google: Test spinlock on panic path
+ to avoid lockups
+Message-ID: <YvErMyM8FNjeDeiW@kroah.com>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-4-gpiccoli@igalia.com>
+ <CAE=gft71vH+P3iAFXC0bLu0M2x2V4uJGWc82Xa+246ECuUdT-w@mail.gmail.com>
+ <019ae735-3d69-cb4e-c003-b83cc8cd76f8@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <019ae735-3d69-cb4e-c003-b83cc8cd76f8@igalia.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 8 Aug 2022 11:15:31 -0400
-Kent Overstreet <kent.overstreet@gmail.com> wrote:
-
-> > This change is likely to cause subtle regressions for no benefit to the
-> > tracing subsystem. Hence, when it comes to risk vs reward, I see none.  
+On Mon, Aug 08, 2022 at 12:14:30PM -0300, Guilherme G. Piccoli wrote:
+> On 08/08/2022 02:07, Evan Green wrote:
+> > On Tue, Jul 19, 2022 at 12:55 PM Guilherme G. Piccoli
+> > <gpiccoli@igalia.com> wrote:
+> >>
+> >> Currently the gsmi driver registers a panic notifier as well as
+> >> reboot and die notifiers. The callbacks registered are called in
+> >> atomic and very limited context - for instance, panic disables
+> >> preemption and local IRQs, also all secondary CPUs (not executing
+> >> the panic path) are shutdown.
+> >>
+> >> With that said, taking a spinlock in this scenario is a dangerous
+> >> invitation for lockup scenarios. So, fix that by checking if the
+> >> spinlock is free to acquire in the panic notifier callback - if not,
+> >> bail-out and avoid a potential hang.
+> >>
+> >> Fixes: 74c5b31c6618 ("driver: Google EFI SMI")
+> >> Cc: Ard Biesheuvel <ardb@kernel.org>
+> >> Cc: David Gow <davidgow@google.com>
+> >> Cc: Evan Green <evgreen@chromium.org>
+> >> Cc: Julius Werner <jwerner@chromium.org>
+> >> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> > 
+> > Reviewed-by: Evan Green <evgreen@chromium.org>
 > 
-> It sounds like you're saying you don't have time to maintain your 
-> subsystem..? Is there anyone else actively co-maintaining tracing? Part 
-> of our jobs is bringing new people in and training them (and not 
-> providing a hostile work environment so they'll want to), maybe 
-> something to think about.
-
-No, it sounds like there's nothing here I need. Why do I need to review any
-code that is not going to improve my subsystem?
-
+> Thanks a bunch Evan!
 > 
-> I'm also not seeing the likelihood of subtle regressions - this isn't my 
-> first kernel refactoring and not _nearly_ the biggest or the most 
-> invasive. There's definitely some stuff in the tracing code code that is 
-> a bit on the unorthodox side, but nothing too crazy. The code's been in 
-> my tree for ages where I use tracing on a daily basis, and it passes 
-> your test suite (and there was just one bug that made it through to be 
-> caught by the tests, as I mentioned in the cover letter).
-> 
-> Anyways, if you've got specific, actionable concerns, I'll be happy to 
-> take a look. Otherwise... ¯\_(ツ)_/¯
+> Ard / Greg, do you think you could get this patch through your -next (or
+> -fixes) trees? Not sure which tree is the most common for picking GSMI
+> stuff.
 
-Like I said. I don't see the improvement. I hate changes for changes sake
-alone. If there was a real improvement to the system, then I would make the
-time to look at it. But currently, the only thing I get is that you want
-this code in. And that's not a high enough bar.
+Picking out an individual patch from a series with as many responses and
+threads like this one is quite difficult.
 
-As I stated before, and have given talks about. Changes are pulled into
-Linux, they are never pushed.
+Just resend this as a stand-alone patch if you want it applied
+stand-alone as our tools want to apply a whole patch series at once.
 
--- Steve
+> I'm trying to get these fixes merged individually in their trees to not
+> stall the whole series and increase the burden of re-submitting.
+
+The burden is on the submitter, not the maintainer as we have more
+submitters than reviewers/maintainers.
+
+thanks,
+
+greg k-h

@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F13258C307
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 07:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391FD58C30C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 07:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbiHHFsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 01:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S235634AbiHHFvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 01:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232197AbiHHFsf (ORCPT
+        with ESMTP id S232197AbiHHFvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 01:48:35 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A62E021
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 22:48:34 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id y23so8672287ljh.12
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 22:48:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TIrX4wWXL580Px5dbJvNkxZzeOiOFCFrMMchxJeQOuc=;
-        b=mcCGdEJw9FZO09QjyXA3m+8wD3T/6Y89yKVLedeKOubWMRU/LPtKJd6fJ77dbRN+QR
-         KHjjOAhWzkCbcK+GlhZw6dL7tBML5AF7lyxVO7+0HWrgI6j6nNZV+Nd2a8x3xoiY44nN
-         JsdxiOXzGdvdmUCrA/hMeXqHADt5KWN1YKRFnCsPh0C4CId0lVa7+X986G1Cd4RU2I2k
-         8D5GVvX92MomUdGIW+FGEH8WEXuPamwDXA81Hhr4kGWorLP0HxNZY99sEr2HAzpqLvNG
-         OI1USvtYrmb9+anJ2GkQ3jsFNjbMs2jg5SYdVQj0lzLnn5EEkNTKmZF3TaoSerYrNPq8
-         Tsdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TIrX4wWXL580Px5dbJvNkxZzeOiOFCFrMMchxJeQOuc=;
-        b=JPjfuohe8/DbSN7KsA0PBOWj5hNqRr8qNUz5qX03jtFHe8l92GfEEKXFdz7RhOU7Yc
-         wi8zWOw7wKboYoI9c1MYuZ4noN24ED7a54OP8yw3bcLLFhzYb1tZZPH0ixxnaQXuoCK5
-         RAAhuAa81isRtHS5zdvEJ5yAlNRSl2+EDmxp7lmNZ+419KvRwhuFMRGAFROxYpzF956U
-         GwcZM91gb8/tRV85/Ndi/DjQFWn1SeYT5QZiCVqxi8UCMf/2b+t8Pa/HXFpzSX3Ole1a
-         OyahGgS21TPuBhYH5+XB8iaVjmlI8L5uOYwP68idRtwUuDJWGiroosSg87sK8Gb0vRAI
-         Rn8Q==
-X-Gm-Message-State: ACgBeo3IfWt7IhXTimlej5FgjqSiapbJdZwKChnyPh+EiNyzKCelFn28
-        hOOMXqTq4x7G4gnImIj4xVnbww==
-X-Google-Smtp-Source: AA6agR4D73BAD0Z2IFCuLGIV7lIs9avpDSjJShxV5xwzLtAZ/p5aGAKVpEuPbZH4/3qaaedUJJFyIA==
-X-Received: by 2002:a2e:9609:0:b0:25e:5937:300b with SMTP id v9-20020a2e9609000000b0025e5937300bmr5100502ljh.494.1659937713238;
-        Sun, 07 Aug 2022 22:48:33 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id k11-20020ac24f0b000000b0048b969ab510sm807825lfr.27.2022.08.07.22.48.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Aug 2022 22:48:32 -0700 (PDT)
-Message-ID: <1ab7b38d-e356-6cb8-f101-9499eb34e026@linaro.org>
-Date:   Mon, 8 Aug 2022 07:48:31 +0200
+        Mon, 8 Aug 2022 01:51:03 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A50C257;
+        Sun,  7 Aug 2022 22:51:00 -0700 (PDT)
+X-UUID: 59e4d564d1024e14b9a34b3e7c4b76aa-20220808
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=a1HzzRePzEuTmzevPoaY0WG9Aj+DqmyLMfY/ojomtGo=;
+        b=a7oqFG552aqjGlQmAGDXO1URGvnXUNT0B49ukGGLFfxJMHF3WFzB09kob+sWfB9daDdKWTKpvPG17MS0GP+K0WUONZFt5XTgcuLMFyvaJnDEMq/4+gqRle4tT0A2AzDfmAoouj+U3C9afXJOe+eMYY7DZjZ2W9ydNkgjaAL1ogI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:b74202e5-6be2-4a35-8a52-e8461a03fb6d,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:f7b9099c-da39-4e3b-a854-56c7d2111b46,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 59e4d564d1024e14b9a34b3e7c4b76aa-20220808
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1620236941; Mon, 08 Aug 2022 13:50:56 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 8 Aug 2022 13:50:55 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 8 Aug 2022 13:50:54 +0800
+Message-ID: <d88ee153da3e881d273862667eae0fdc80af08bc.camel@mediatek.com>
+Subject: Re: [PATCH v16 3/8] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 8 Aug 2022 13:50:54 +0800
+In-Reply-To: <20220805101459.3386-4-rex-bc.chen@mediatek.com>
+References: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
+         <20220805101459.3386-4-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] dt-bindings: iio: gyroscope: bosch,bmg160: correct
- number of pins
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220805075503.16983-1-krzysztof.kozlowski@linaro.org>
- <20220806153221.1a90bd28@jic23-huawei>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220806153221.1a90bd28@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,46 +75,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/08/2022 16:32, Jonathan Cameron wrote:
-> On Fri,  5 Aug 2022 09:55:03 +0200
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> BMG160 has two interrupt pins to which interrupts can be freely mapped.
->> Correct the schema to express such case and fix warnings like:
->>
->>   qcom/msm8916-alcatel-idol347.dtb: gyroscope@68: interrupts: [[97, 1], [98, 1]] is too long
->>
->> However the basic issue still persists - the interrupts should come in a
->> defined order.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Changes since v1:
->> 1. Accept also INT2 as one interrupt (Jonathan).
-> 
-> This doesn't work. If we are going to support either interrupt, at the very least
-> we need to require interrupt-names if the first one isn't INT1.  So your fix
-> is right but not enough.
-> 
-> Driver may ignore interrupt-names for now (would be good to have a sanity check in driver
-> though so the driver explicitly checks for INT2 and doesn't use the interrupt if
-> it is INT2 - support for that being for a future 'feature' addition).
-> 
-> A hacky solution would be to require the first one to always be INT1 but that
-> gives us no (backwards compatible) path forwards if someone does have a board
-> where only INT2 is wired.
-> 
-> So minimum change I think will be to provide interrupt-names allowing any of
-> INT1 (default if not specified)
-> INT1, INT2
-> INT2
+Hi, Bo-Chen:
 
-This is exactly what my fix is doing. What else do you need?
-interrupt-names is just a helper which anyway driver does not use, so
-enforcing it now does not change much.
+On Fri, 2022-08-05 at 18:14 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
 
+[snip]
 
-Best regards,
-Krzysztof
+> +#define MTK_DP_ENC0_P0_3038			(ENC0_OFFSET + 0x38)
+> +#define VIDEO_SOURCE_SEL_DP_ENC0_P0_MASK	BIT(11)
+> +#define VIDEO_SOURCE_SEL_DP_ENC0_P0_SHIFT	(BIT(0) | BIT(1) |
+> BIT(3))
+
+It's not necessary to define a symbol for shift because it's trivial
+that we understand it's a shift.
+
+> +
+> +#define MTK_DP_ENC0_P0_303C			(ENC0_OFFSET + 0x3C)
+> +#define SRAM_START_READ_THRD_DP_ENC0_P0_MASK	GENMASK(5, 0)
+> +#define SRAM_START_READ_THRD_DP_ENC0_P0_SHIFT	0
+
+Ditto.
+
+> +#define VIDEO_COLOR_DEPTH_DP_ENC0_P0_MASK	GENMASK(10, 8)
+> +#define VIDEO_COLOR_DEPTH_DP_ENC0_P0_SHIFT	BIT(3)
+
+Ditto.
+
+Regards,
+CK
+
+> +
+> 
+

@@ -2,134 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B8B58BE9B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 02:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F94958BE9C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 02:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236028AbiHHA5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 20:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S236293AbiHHA57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 20:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234573AbiHHA5E (ORCPT
+        with ESMTP id S237304AbiHHA5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 20:57:04 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D783B49A
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 17:57:04 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso7674710pjd.3
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 17:57:04 -0700 (PDT)
+        Sun, 7 Aug 2022 20:57:54 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7998CB49D
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 17:57:53 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id m4so13880435ejr.3
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 17:57:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=trpRXvmFHTWKEanKbEL3EOrwzaz4Qg86JnLq2qjjATg=;
-        b=k8q8F3O9itdWzfGswqCnLbH3LdJQWsxB24a5mOHYuuxQo4sIU6+andY8QM5Romn1Tf
-         ++EIfoJuUbWsLq69dTxSQrE9pZQhuUQBYMbTtTe6lX2ebQPqeD3ONbzqxcs++qUrn/Dx
-         duTwaBE/5Z0Ncp1xOw4Y7pIyMHpr9E1EbwTR7nelCBgemPer8luqneXgKcjhAhYi2wQK
-         ZuVVkG41t2FQy017FfOB2W832CXfE1K3WiTKh5zjZhOtI6TjGZzI/nqEGy6tgrz7KTBV
-         RHTeqyhKdHWlQNWafCqxzhLqPC0yzFED6kT5ICVy/xCDFSEIABShcN9WO4yigZUWlpzt
-         LzoQ==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=VeszcK8oCz3d8oKPlworSPbe4m2/3lvPCiLBHwanhw0=;
+        b=UfYTyUZmKEWmkJ4WunCAM/RDH8pomwbt4YmpSrfd+t6cRWWaj+8iZyLhRbNXyAhVBV
+         ZpePpL67zCCM+OzEimr28ZvCNezQMiV8V2M43Hy3NwGD2sB7blRXDMjR75wUDLoFnQaT
+         3UjJkfvujr4b3jiJWdPpo8ORlW3NgLKiI9zKw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=trpRXvmFHTWKEanKbEL3EOrwzaz4Qg86JnLq2qjjATg=;
-        b=n8LlLdpn//3nxz6NOxc4UFatfKYsvTugF1j1in8bWNlOJVYBby/Cm0QLG7a28y1GYw
-         3awv5X4+90OQ1nQ5bvyV3JGZdoy44yo2CMwBIHAjojKlb95Fi3bYUYDvqses8Yv3B5mB
-         lp4lSoiVPU45GgdQrNB1yf1s0iDAfdBQTPqSdZDIDNSzjpKCe10yAkuv1aIFjAi1rv1d
-         t+TjQjyF40TmKuEXlOM83wf0UffTvjmRJG9E76oEbkpPYcGSg4FsJcgW6J6Ae/JvfHJ6
-         h+aLihZrBwuCMMVUP2CnL5i7h9BWeZwYtPRU3p/JkO+iDzFDJ2ACFvgTeGHPSo3zSKpj
-         intw==
-X-Gm-Message-State: ACgBeo2lDCqQoUGLkchTQMZiPdFPNFrhbwF5Dy4f/lTrhloA3YRRObhl
-        S9we8jcTEfmoqxofqT+5+c0=
-X-Google-Smtp-Source: AA6agR5hq4HQHbrJUnjOtFv65LhemxGljkUyYobdG4D3SofKLFGEyz007HLPQPxDOwbHNY25IQFWhw==
-X-Received: by 2002:a17:90b:4b89:b0:1f5:68b:b14e with SMTP id lr9-20020a17090b4b8900b001f5068bb14emr27524755pjb.30.1659920223538;
-        Sun, 07 Aug 2022 17:57:03 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id j13-20020a170902da8d00b001709aea1516sm2278564plx.276.2022.08.07.17.57.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 17:57:02 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: yang.yang29@zte.com.cn
-To:     akpm@linux-foundation.org, hannes@cmpxchg.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: [PATCH v2] mm/vmscan: define macros for refaults in struct lruvec
-Date:   Mon,  8 Aug 2022 00:56:45 +0000
-Message-Id: <20220808005644.1721066-1-yang.yang29@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=VeszcK8oCz3d8oKPlworSPbe4m2/3lvPCiLBHwanhw0=;
+        b=bUSnIHDwBxa53ZB/qjHwbN12vuYGqa4AS13G4huFQ9U5MklumYkHVKQR7EqMEhC6CZ
+         DRqITpeAYrUJZiaywMod5z9/fanQrHckOLsw8iMi2QJqbpbiIZ8GlsyBM++sa/is2blJ
+         1whBr4whUQqelo0lbFARHBbxdxf8Yvcmk6TSL5izh5tkthOfXJlDiCX2m2jKgAwooReL
+         6NhQEjOTZAKcj+boHT3QxIjt8uOf0EQYKrTmijIh/2QgiNXYHhrt/PQeM4Ig7gnjKcJg
+         EGvWZY50W8aeQx69fUUttxs2uYM0Oc3J4MluEX8VygBkO4FFSPWrGoCOR5hPvSz2Kleh
+         fhzA==
+X-Gm-Message-State: ACgBeo25zSUO8FqOoV47Z7ePSo1IryWvmewL5CNOD5hS8eRlmr+8ZS+I
+        WG2ZJjJQ0h8N6ZQicve6nTwS6u/ec9SOvSR0
+X-Google-Smtp-Source: AA6agR4JRpQ7ocnPqjQS5dLnxKL/+QW2jqluum0EhVO7Emax/xv2iSKpn2zv/EV31nLYZV6KTmcNbQ==
+X-Received: by 2002:a17:907:1611:b0:72b:53cd:ce2 with SMTP id hb17-20020a170907161100b0072b53cd0ce2mr12566069ejc.124.1659920271864;
+        Sun, 07 Aug 2022 17:57:51 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id d3-20020a170906040300b0073043ff06dfsm4250772eja.163.2022.08.07.17.57.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Aug 2022 17:57:51 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id j1so9257419wrw.1
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 17:57:51 -0700 (PDT)
+X-Received: by 2002:a5d:638b:0:b0:220:6e1a:8794 with SMTP id
+ p11-20020a5d638b000000b002206e1a8794mr10194614wru.193.1659920271018; Sun, 07
+ Aug 2022 17:57:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <20220805022940.1637978-1-yury.norov@gmail.com> <165991968404.10077.6220067519297859381.pr-tracker-bot@kernel.org>
+In-Reply-To: <165991968404.10077.6220067519297859381.pr-tracker-bot@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 7 Aug 2022 17:57:35 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjbFrPfKA5DOnPXvn_0hTmSw2oTXPKxtDoC5v12McW2DQ@mail.gmail.com>
+Message-ID: <CAHk-=wjbFrPfKA5DOnPXvn_0hTmSw2oTXPKxtDoC5v12McW2DQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Bitmap patches for v6.0-rc1
+To:     pr-tracker-bot@kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com.cn>
+On Sun, Aug 7, 2022 at 5:48 PM <pr-tracker-bot@kernel.org> wrote:
+>
+> https://git.kernel.org/torvalds/c/1ab9250751ee91b0ca7bee887894fccfd44ff26a
 
-The magic number 0 and 1 are used in several places in vmscan.c.
-Define macros for them to improve code readability.
+Oh Christ, and then after all that, I pushed out the wrong merge tree
+that didn't have the final fix committed.
 
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
----
-Change for v2:
- - fix compile error when CONFIG_NFSD is y
----
- include/linux/mmzone.h | 2 ++
- mm/vmscan.c            | 8 ++++----
- 2 files changed, 6 insertions(+), 4 deletions(-)
+I've done a force-push and hope nobody saw that wrong head.
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index e24b40c52468..8f571dc7c524 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -306,6 +306,8 @@ static inline bool is_active_lru(enum lru_list lru)
- 	return (lru == LRU_ACTIVE_ANON || lru == LRU_ACTIVE_FILE);
- }
- 
-+#define WORKINGSET_ANON 0
-+#define WORKINGSET_FILE 1
- #define ANON_AND_FILE 2
- 
- enum lruvec_flags {
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index b2b1431352dc..428f8fa60331 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -3230,7 +3230,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
- 
- 		refaults = lruvec_page_state(target_lruvec,
- 				WORKINGSET_ACTIVATE_ANON);
--		if (refaults != target_lruvec->refaults[0] ||
-+		if (refaults != target_lruvec->refaults[WORKINGSET_ANON] ||
- 			inactive_is_low(target_lruvec, LRU_INACTIVE_ANON))
- 			sc->may_deactivate |= DEACTIVATE_ANON;
- 		else
-@@ -3243,7 +3243,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
- 		 */
- 		refaults = lruvec_page_state(target_lruvec,
- 				WORKINGSET_ACTIVATE_FILE);
--		if (refaults != target_lruvec->refaults[1] ||
-+		if (refaults != target_lruvec->refaults[WORKINGSET_FILE] ||
- 		    inactive_is_low(target_lruvec, LRU_INACTIVE_FILE))
- 			sc->may_deactivate |= DEACTIVATE_FILE;
- 		else
-@@ -3559,9 +3559,9 @@ static void snapshot_refaults(struct mem_cgroup *target_memcg, pg_data_t *pgdat)
- 
- 	target_lruvec = mem_cgroup_lruvec(target_memcg, pgdat);
- 	refaults = lruvec_page_state(target_lruvec, WORKINGSET_ACTIVATE_ANON);
--	target_lruvec->refaults[0] = refaults;
-+	target_lruvec->refaults[WORKINGSET_ANON] = refaults;
- 	refaults = lruvec_page_state(target_lruvec, WORKINGSET_ACTIVATE_FILE);
--	target_lruvec->refaults[1] = refaults;
-+	target_lruvec->refaults[WORKINGSET_FILE] = refaults;
- }
- 
- /*
--- 
-2.25.1
+This was even more painful than it needed to be with that
+self-inflicted unforced error.
 
+But hopefully people never noticed, because nobody sane is looking at
+my tree on a Sunday evening.
+
+            Linus

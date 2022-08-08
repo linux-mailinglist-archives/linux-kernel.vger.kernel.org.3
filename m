@@ -2,173 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD57958CB6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E91C58CB76
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242796AbiHHPnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 11:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S243233AbiHHPpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 11:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235852AbiHHPm7 (ORCPT
+        with ESMTP id S238062AbiHHPpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:42:59 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0010D1E8;
-        Mon,  8 Aug 2022 08:42:57 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oL4u1-000GLV-Pr; Mon, 08 Aug 2022 17:42:49 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oL4u1-000SiB-FQ; Mon, 08 Aug 2022 17:42:49 +0200
-Subject: Re: Fwd: [PATCH bpf] bpf: Do more tight ALU bounds tracking
-To:     Kuee k1r0a <liulin063@gmail.com>, haoluo@google.com
-Cc:     Alexei Starovoitov <ast@kernel.org>, john.fastabend@gmail.com,
-        Andrii Nakryiko <andrii@kernel.org>, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        jolsa@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CA+khW7iknv0hcn-D2tRt8HFseUnyTV7BwpohQHtEyctbA1k27w@mail.gmail.com>
- <20220729224254.1798-1-liulin063@gmail.com>
- <CA+khW7iLeSZPweZEz_tfP+LRtpvZbfvstZWgUbNrEDK-Ntxyxw@mail.gmail.com>
- <ccafa637-d986-b4e3-73e0-03721a940ce1@iogearbox.net>
- <CANdZH3U7axKg6zDY+iswF2d1fBYY1Xo2jeVsbgMYMoJfd1AYJg@mail.gmail.com>
- <CANdZH3V64LdfYpWrX9teQQU8LGj10_ecXpupRfnyKQ47gvtOoQ@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <9f954e67-67fc-e3b9-d810-22bfea95d2aa@iogearbox.net>
-Date:   Mon, 8 Aug 2022 17:42:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 8 Aug 2022 11:45:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4981E8
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 08:45:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AE7C61012
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 15:45:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98397C43145
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 15:45:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659973503;
+        bh=0+M//WFj4QufhDanyiSvlllCgJP3lcJFBIdND72VH8c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FhbrpMMaW2VUB25O64jvPFojr9qmr2z94jzXHOwlQcZjFoOeD+MqjEAnArO/n1t4v
+         3e69NiO/Rw3splQ8Vi6UGj4ihHsI/STjI4gQ4tiNRgENmj/aDlU2hw0Py6Xb4HsRPM
+         AMFoPYG9njomAJGUXzxlgvy5s+HP6+xorvEPjhWNLoLO1EAHl2b2nrEk5XweEf5XmQ
+         MOh42c1f9tfg5dUf/0H9aiKilYkN+zRoHI2F3RU2x1QgBwERXyhA7AWr2kW89Mp2KV
+         EQ0pQwlqVJwr4zQ9HjC2JHvhw5uKq7O0/UbNgchFQQvnU4FZ/OiMxaPQZoTeAAQ5jy
+         lB8X0UGSzZTcA==
+Received: by mail-ua1-f42.google.com with SMTP id b4so3646065uaw.11
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 08:45:03 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3ZBMeKovryMfQIi+raIPrNY6psBB9xhrmZMQIvIvp7aUhBbP9j
+        UMLE095btxtHL1s/oxagZPH8gqeoHK4m0YxLAw==
+X-Google-Smtp-Source: AA6agR6mVFjC5VBa80Aifh09hljy1mvccPoQFLhpS0jUnBD7z5E4KFhe92+/ImOsfK5s/YfuXt9X9tMfwqH2jC4zR10=
+X-Received: by 2002:ab0:2505:0:b0:384:cc62:9a75 with SMTP id
+ j5-20020ab02505000000b00384cc629a75mr7586379uan.36.1659973502267; Mon, 08 Aug
+ 2022 08:45:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CANdZH3V64LdfYpWrX9teQQU8LGj10_ecXpupRfnyKQ47gvtOoQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26621/Mon Aug  8 09:52:38 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220721181747.1640-1-eric.devolder@oracle.com>
+ <20220721181747.1640-2-eric.devolder@oracle.com> <YvCCOY+mRshu1tHi@MiWiFi-R3L-srv>
+ <52d40562-ee6f-bb89-6d21-2d6baf67053d@oracle.com>
+In-Reply-To: <52d40562-ee6f-bb89-6d21-2d6baf67053d@oracle.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 8 Aug 2022 09:44:51 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLXGSPzCDUD6sD-CsziPw0PWxSTocNfxnwOGR_-ALos9w@mail.gmail.com>
+Message-ID: <CAL_JsqLXGSPzCDUD6sD-CsziPw0PWxSTocNfxnwOGR_-ALos9w@mail.gmail.com>
+Subject: Re: [PATCH v10 1/8] crash: introduce arch/*/asm/crash.h
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     Baoquan He <bhe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, kexec@lists.infradead.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Thomas Lendacky <thomas.lendacky@amd.com>, efault@gmx.de,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        sourabhjain@linux.ibm.com,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/8/22 5:14 PM, Kuee k1r0a wrote:
-> ---------- Forwarded message ---------
-> From: Kuee k1r0a <liulin063@gmail.com>
-> Date: Mon, Aug 8, 2022 at 11:11 PM
-> Subject: Re: [PATCH bpf] bpf: Do more tight ALU bounds tracking
-> To: Daniel Borkmann <daniel@iogearbox.net>
-> 
-> 
-> On Mon, Aug 8, 2022 at 9:25 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>
->> On 7/30/22 12:48 AM, Hao Luo wrote:
->>> On Fri, Jul 29, 2022 at 3:43 PM Youlin Li <liulin063@gmail.com> wrote:
->>>>
->>>> In adjust_scalar_min_max_vals(), let 32bit bounds learn from 64bit bounds
->>>> to get more tight bounds tracking. Similar operation can be found in
->>>> reg_set_min_max().
->>>>
->>>> Also, we can now fold reg_bounds_sync() into zext_32_to_64().
->>>>
->>>> Before:
->>>>
->>>>       func#0 @0
->>>>       0: R1=ctx(off=0,imm=0) R10=fp0
->>>>       0: (b7) r0 = 0                        ; R0_w=0
->>>>       1: (b7) r1 = 0                        ; R1_w=0
->>>>       2: (87) r1 = -r1                      ; R1_w=scalar()
->>>>       3: (87) r1 = -r1                      ; R1_w=scalar()
->>>>       4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
->>>>       5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0xffffffff))  <--- [*]
->>>>       6: (95) exit
->>>>
->>>> It can be seen that even if the 64bit bounds is clear here, the 32bit
->>>> bounds is still in the state of 'UNKNOWN'.
->>>>
->>>> After:
->>>>
->>>>       func#0 @0
->>>>       0: R1=ctx(off=0,imm=0) R10=fp0
->>>>       0: (b7) r0 = 0                        ; R0_w=0
->>>>       1: (b7) r1 = 0                        ; R1_w=0
->>>>       2: (87) r1 = -r1                      ; R1_w=scalar()
->>>>       3: (87) r1 = -r1                      ; R1_w=scalar()
->>>>       4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
->>>>       5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0x3))  <--- [*]
->>>>       6: (95) exit
->>>>
->>>> Signed-off-by: Youlin Li <liulin063@gmail.com>
->>>
->>> Looks good to me. Thanks Youlin.
->>>
->>> Acked-by: Hao Luo <haoluo@google.com>
->>
->> Thanks Youlin! Looks like the patch breaks CI [0] e.g.:
->>
->>     #142/p bounds check after truncation of non-boundary-crossing range FAIL
->>     Failed to load prog 'Permission denied'!
->>     invalid access to map value, value_size=8 off=16777215 size=1
->>     R0 max value is outside of the allowed memory range
->>     verification time 296 usec
->>     stack depth 8
->>     processed 15 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
->>
->> Please take a look. Also it would be great to add a test_verifier selftest to
->> assert above case from commit log against future changes.
->>
->> Thanks,
->> Daniel
->>
->>     [0] https://github.com/kernel-patches/bpf/runs/7696324041?check_suite_focus=true
-> 
-> This test case fails because the 32bit boundary information is lost
-> after the 11th instruction is executed:
-> Before:
->      11: (07) r1 += 2147483647             ;
-> R1_w=scalar(umin=70866960383,umax=70866960638,var_off=(0x1000000000;
-> 0xffffffff),u32_min=2147483647,u32_max=-2147483394)
-> After:
->      11: (07) r1 += 2147483647             ;
-> R1_w=scalar(umin=70866960383,umax=70866960638,var_off=(0x1000000000;
-> 0xffffffff))
-> 
-> This may be because, in previous versions of the code, when
-> __reg_combine_64_into_32() was called, the 32bit boundary was
-> completely deduced from the 64bit boundary, so there was a call to
-> __mark_reg32_unbounded() in __reg_combine_64_into_32().
-> 
-> But now, before adjust_scalar_min_max_vals() calls
-> __reg_combine_64_into_32() , the 32bit bounds are already calculated
-> to some extent, and __mark_reg32_unbounded() will eliminate these
-> information.
-> 
-> Simply copying a code without __mark_reg32_unbounded() should work,
-> perhaps it would be more elegant to introduce a flag into
-> __reg_combine_64_into_32()?
-> 
-> Sorry for not completing the tests because I did not 'make selftests'
-> successfully, and uploaded the code that caused the error.
+On Mon, Aug 8, 2022 at 9:19 AM Eric DeVolder <eric.devolder@oracle.com> wrote:
+>
+>
+>
+> On 8/7/22 22:25, Baoquan He wrote:
+> > Hi Eric,
+> >
+> > On 07/21/22 at 02:17pm, Eric DeVolder wrote:
+> >> The use of __weak is being eliminated within kexec sources.
+> >> The technique uses macros mapped onto inline functions in
+> >> order to replace __weak.
+> >>
+> >> This patchset was using __weak and so in order to replace
+> >> __weak, this patch introduces arch/*/asm/crash.h, patterned
+> >> after how kexec is moving away from __weak and to the macro
+> >> definitions.
+> >
+> > Are you going to replace __weak in kexec of arll ARCHes? I don't see
+> > your point why all these empty header files are introduced. Wondering
+> > what's impacted if not adding these empty files?
+>
+> Hi Baoquan,
+> In this patchset, to file include/linux/crash_core.h I added the line #include <asm/crash.h>.
+> I patterned this after how include/linux/kexec.h does #include <asm/kexec.h>.
+>
+> For kexec, the items that were __weak are refactored into corresponding asm/kexec.h.
+>
+> I followed suit for crash __weak items. File crash_core.h now #include's asm/crash.h and
+> so that file needs to be present for every arch, else build failures ensue. It turns out
+> x86_64 already had this file.
+>
+> At this time, I was not planning on converting the other arch's __weak to asm/crash.h, but at least
+> with these empty files, the infrastructure is in place for when that does occur.
 
-Under tools/testing/selftests/bpf/, you can run test_progs and test_verifier
-through the vmtest script, e.g. `./vmtest.sh -- ./test_progs` should ease
-running it. The whole `make selftests` is not necessary given here we care
-about BPF, CI is running these where 2 failed and need investigation:
+asm-generic is the right location for default asm headers. I'm not
+really sure you even need them as you mainly seem to be using the
+header to enable a feature. That's normally done by the arch selecting
+a kconfig option. But as Borislav previously pointed out, you don't
+need a new option here if the arch must provide support when kexec and
+hotplug are enabled/supported.
 
-           test_progs: PASS
-  test_progs-no_alu32: FAIL (returned 1)
-            test_maps: PASS
-        test_verifier: FAIL (returned 1)
-
-Fwiw, for the test_verifier failure case at least, we should then adapt it
-in a separate commit with an analysis explaining why it is okay to alter the
-test; plus a 3rd commit adding new test cases as mentioned earlier.
-
-Thanks a lot, Kuee!
-Daniel
+Rob

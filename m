@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B412358C480
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425FF58C485
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241397AbiHHH5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 03:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
+        id S242044AbiHHH5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 03:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236762AbiHHH52 (ORCPT
+        with ESMTP id S242055AbiHHH5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 03:57:28 -0400
+        Mon, 8 Aug 2022 03:57:43 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AF413CFD
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 00:57:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C223613D39
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 00:57:42 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oKxd6-0008Ov-7v; Mon, 08 Aug 2022 09:56:52 +0200
+        id 1oKxdm-000065-Br; Mon, 08 Aug 2022 09:57:34 +0200
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 87AA1C45A6;
-        Mon,  8 Aug 2022 07:56:46 +0000 (UTC)
-Date:   Mon, 8 Aug 2022 09:56:45 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E59C9C45B4;
+        Mon,  8 Aug 2022 07:57:32 +0000 (UTC)
+Date:   Mon, 8 Aug 2022 09:57:32 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Fedor Pchelkin <pchelkin@ispras.ru>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Robin van der Gracht <robin@protonic.nl>,
-        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        "David S . Miller" <davem@davemloft.net>,
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: Re: [PATCH] can: j1939: fix memory leak of skbs
-Message-ID: <20220808075645.qtgwu64mjc2rxnuc@pengutronix.de>
-References: <20220805150216.66313-1-pchelkin@ispras.ru>
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] can: rcar_canfd: Use dev_err_probe() to simplify code
+ and better handle -EPROBE_DEFER
+Message-ID: <20220808075732.gue3p4d5lhsa4sse@pengutronix.de>
+References: <f5bf0b8f757bd3bc9b391094ece3548cc2f96456.1659858686.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hiqec7dmmpfnqmy6"
+        protocol="application/pgp-signature"; boundary="sbokewfw5xtt5aba"
 Content-Disposition: inline
-In-Reply-To: <20220805150216.66313-1-pchelkin@ispras.ru>
+In-Reply-To: <f5bf0b8f757bd3bc9b391094ece3548cc2f96456.1659858686.git.christophe.jaillet@wanadoo.fr>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -62,26 +60,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---hiqec7dmmpfnqmy6
+--sbokewfw5xtt5aba
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 05.08.2022 18:02:16, Fedor Pchelkin wrote:
-> We need to drop skb references taken in j1939_session_skb_queue() when
-> destroying a session in j1939_session_destroy(). Otherwise those skbs
-> would be lost.
+On 07.08.2022 09:52:11, Christophe JAILLET wrote:
+> devm_clk_get() can return -EPROBE_DEFER, so use dev_err_probe() instead of
+> dev_err() in order to be less verbose in the log.
 >=20
-> Link to Syzkaller info and repro: https://forge.ispras.ru/issues/11743.
+> This also saves a few LoC.
 >=20
-> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+> While at it, turn a "goto fail_dev;" at the beginning of the function into
+> a direct return in order to avoid mixing goto and return, which looks
+> spurious.
 >=20
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> Suggested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Added to can/master
+Added to can-next/testing.
 
 Thanks,
 Marc
@@ -92,19 +88,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---hiqec7dmmpfnqmy6
+--sbokewfw5xtt5aba
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLwwboACgkQrX5LkNig
-010SAgf8DcRHAVx/USEkzkATwto/JOfRALIMKu8UHkPr+0JyLricXyQYn4NPMUjg
-3dP3ZYZY3l5Pg5hCrto9W0T1tgn/9SxRR7ngIgqX46YNphbBgIr07DjWMOrB5Lv+
-YnrdkYgWfBH2rx1f6BJfF+9Dmur3vLomVG7IpwemLDeWa4azE2f9gRnJwHLBbfGX
-RuvaBIgA+F6qAMXdU9RZv8d4/NGlI3gHQdvzrmNIZA79NEIVZMQA3DrZroN/W8t1
-Hf/mJncv4eRYt38RcDoihu/CKEbS3C4gq2olzLN4xA1h+jUDJsDNdBHDHfd0w1fo
-/3KKaSQleo2KY+k8pFkGm3LivhmhQQ==
-=TBCJ
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLwweoACgkQrX5LkNig
+012yDgf/VDv2f0dcYbhTF4sZWOuz4JarIS/2huEEeU7inNy2gjqWXvlWV5WLDrSP
+FfZYXJWFl/RDOERfC0mi3AGHMghOA9WAkkXgZEpz/9edR3yF94TWvHmQkRIBYYvg
+wiRR4O6VaSRfbW+2bHf9aROEx5xczf+jszHmmlZcqQpM9oTUqOxZiwg2KKQVM9oL
+fM9orCR8kGetnbE6B0AsDf2HulQNWkjMqA+AiSM/QwxvG3XlvfCD/QG5/wGXns0s
+FTNEyP6sf9iNfhiFFquKEbxv9JBOEV6Tar9Q5Xs7M3w0dfwbVYOiZ0lTT8Hkt8q2
+hTvTcuS7m/0miL8xZvIBymTW7iz7Zg==
+=IjJ6
 -----END PGP SIGNATURE-----
 
---hiqec7dmmpfnqmy6--
+--sbokewfw5xtt5aba--

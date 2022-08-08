@@ -2,174 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ED558C79B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4C658C7B2
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242872AbiHHLgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 07:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S242896AbiHHLk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 07:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242865AbiHHLgs (ORCPT
+        with ESMTP id S242699AbiHHLkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 07:36:48 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BE064E9;
-        Mon,  8 Aug 2022 04:36:47 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id k14so5823669pfh.0;
-        Mon, 08 Aug 2022 04:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc;
-        bh=erKTfVF3Cl59nU6n/dHOnidiI7U0M5LXZbUHkQc61+g=;
-        b=BXHaXG6FNrVDOjCK0waYK/pc2lkH9GQMOsorfkEAltuRFICUZZAmN145Rjn/UNUkuw
-         P2ocQUaYYaXJ7unDPfVaiAd98yrv7jqyNt2oORiR4zKvE98k4XApf031K+kKdgKk5Y2A
-         Pe2goqGncc4LLERw/vS0/yCW8h0h9LhRkBqirR8vcWpExaB96NuGwYqDX9uLJ596Gay+
-         kxrYvqxao7TAqhi4Ts8f/c1un4AbOe6terro054PCZTD6Wl5vOsHF+VUJ/VkyVl7/mI/
-         B+3C8f8hJWddTcgbOZhecgL8G9odlAvShXHkh7EdI0gDDScvMWiLQ/FJ/XDDpRTsIC0O
-         +4YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc;
-        bh=erKTfVF3Cl59nU6n/dHOnidiI7U0M5LXZbUHkQc61+g=;
-        b=ROqS8+twt+Xy289FrD1dL1aLEy1/5CZ62cA09YpbpeLSYSNgSX+qb8UlM5Ja2G8Lel
-         8OeTso9Y+aMX+JnjK/t6+QZuVDrWjqlse1gL4MHYCPqBOpBMihDFDE26UMFl2n9gwocp
-         pmZN1TESdtWsj3BFx3Xs8yA3//XzMR2g75Tz/eY8p78BFqbdHKo/YYlPYJ+K1S85zwPa
-         0tyi0ZWjrxwa5SWZZv1VuxwO1l3ixlpELnk7X+99VfKLe+wMdGBgTED2mOmJLfxf8Ob3
-         EXiFZNqr502VsTszI/MYBLLQv1b6mBDrd6RUvu4VuD6/bIijOiVU9Q42bx5S1MBYWCae
-         vt8A==
-X-Gm-Message-State: ACgBeo3pLUBktQ079LCGz/aZlLrbx4Ji0JequAyB+YdgDnPCE0XQpbpa
-        6JvTbjKBG7TlyPC4wNwSkDU=
-X-Google-Smtp-Source: AA6agR4HtKbJ7eVsimEo3PkdAl37E3Cu1cGUZdUD1UTLtFrJDzw6dFZx3w2FuvME0TnZw7qpL3mpzQ==
-X-Received: by 2002:a05:6a00:1d26:b0:52b:fb6f:e44d with SMTP id a38-20020a056a001d2600b0052bfb6fe44dmr18157022pfx.6.1659958606510;
-        Mon, 08 Aug 2022 04:36:46 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w3-20020a170902e88300b0016a6caacaefsm8573966plg.103.2022.08.08.04.36.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 04:36:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5a1c9872-52b5-1f96-6931-801185b03fd4@roeck-us.net>
-Date:   Mon, 8 Aug 2022 04:36:42 -0700
+        Mon, 8 Aug 2022 07:40:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DD32BDA;
+        Mon,  8 Aug 2022 04:40:21 -0700 (PDT)
+Received: from localhost.localdomain (unknown [39.46.64.186])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 97B426601C27;
+        Mon,  8 Aug 2022 12:40:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659958819;
+        bh=NABXr45P299DN/2txxUii3Yn/eCVqoWtHDq/GPwndk8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fYNy0f8FvAj4A8hmcHbVxS54ZMzVune13gUjXYchzLFDeM8J1DXiX0lDjZRk+Mrmy
+         IQhdd8/szZQuCC5liBCRMmfbLoe7BPmUeS09pzNgfrG6AKJCjL9yfVhRltH9jFjiPo
+         zNe2bCa8SKNzq0tBbNQRQdKJLCYjgX8p579I/aIDGQ7Z65mbfk+oEcSdvvI2GH+wkz
+         7YfcT4TX+q0ZCOwV6THhCc6kBfeA9frLz0P5BWfGCsCtIphk04eAmkE655EwazKCfA
+         WnvyqcZ36bYDKRWjuy2wxaAlymAss+apyuseoJky4x3WpbkUlJnmhoqXUtFHt4jD5G
+         juicVl5T6jUhQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     Steven Noonan <steven@uplinklabs.net>, usama.anjum@collabora.com,
+        kernel@collabora.com
+Subject: [PATCH 1/3] x86/tsc: implement tsc=directsync for systems without IA32_TSC_ADJUST
+Date:   Mon,  8 Aug 2022 16:39:52 +0500
+Message-Id: <20220808113954.345579-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>, linux-watchdog@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-References: <20220806000706.3eeafc9c@endymion.delvare>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] watchdog: wdat_wdt: Set the min and max timeout values
- properly
-In-Reply-To: <20220806000706.3eeafc9c@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/5/22 15:07, Jean Delvare wrote:
-> The wdat_wdt driver is misusing the min_hw_heartbeat_ms field. This
-> field should only be used when the hardware watchdog device should not
-> be pinged more frequently than a specific period. The ACPI WDAT
-> "Minimum Count" field, on the other hand, specifies the minimum
-> timeout value that can be set. This corresponds to the min_timeout
-> field in Linux's watchdog infrastructure.
-> 
-> Setting min_hw_heartbeat_ms instead can cause pings to the hardware
-> to be delayed when there is no reason for that, eventually leading to
-> unexpected firing of the watchdog timer (and thus unexpected reboot).
-> 
-> I'm also changing max_hw_heartbeat_ms to max_timeout for symmetry,
-> although the use of this one isn't fundamentally wrong, but there is
-> also no reason to enable the software-driven ping mechanism for the
-> wdat_wdt driver.
-> 
+From: Steven Noonan <steven@uplinklabs.net>
 
-Normally I would reject this because it is not only unnecessary and
-unrelated to the problem at hand (remember: one logical change per patch),
-but it is hidden in an unrelated patch, it will only make life harder
-later on if/when full milli-second timeouts are introduced, and it may
-result in unexpected limitations on the maximum timeout. However, Mike
-accepted it, so who am I to complain.
+AMD processors don't implement any mechanism like Intel's
+IA32_TSC_ADJUST MSR to sync the TSC. Instead of just relying on the
+BIOS, TSC can be synced by calculating the difference and directly
+writing it to the TSC MSR.
 
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Fixes: 058dfc767008 ("ACPI / watchdog: Add support for WDAT hardware watchdog")
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc! Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> Untested, as I have no supported hardware at hand.
-> 
-> Note to the watchdog subsystem maintainers: I must say I find the
-> whole thing pretty confusing.
-> 
-> First of all, the name symmetry between min_hw_heartbeat_ms and
-> max_hw_heartbeat_ms, while these properties are completely unrelated,
-> is heavily misleading. max_hw_heartbeat_ms is really max_hw_timeout
-> and should be renamed to that IMHO, if we keep it at all.
-> 
+Add directsync flag to turn on the TSC sync when IA32_TSC_MSR isn't
+available. Attempt 1000 times or for 30 seconds before giving up.
 
-Variable names are hardly ever perfect. I resist renaming variables
-to avoid rename wars. Feel free to submit patches to improve the
-documentation if you like.
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ .../admin-guide/kernel-parameters.txt         |  4 +-
+ arch/x86/include/asm/tsc.h                    |  1 +
+ arch/x86/kernel/tsc.c                         |  3 ++
+ arch/x86/kernel/tsc_sync.c                    | 46 +++++++++++++++----
+ 4 files changed, 43 insertions(+), 11 deletions(-)
 
-> Secondly, the coexistence of max_timeout and max_hw_heartbeat_ms is
-> also making the code pretty hard to understand and get right.
-> Historically, max_timeout was already supposed to be the maximum
-> hardware timeout value. I don't understand why a new field with that
-> meaning was introduced, subsequently changing the original meaning of
-> max_timeout to become a software-only limit... but only if
-> max_hw_heartbeat_ms is set.
-> 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index db5de5f0b9d3..f0e6ea580e68 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6271,7 +6271,7 @@
+ 			If not specified, "default" is used. In this case,
+ 			the RNG's choice is left to each individual trust source.
+ 
+-	tsc=		Disable clocksource stability checks for TSC.
++	tsc=		Disable clocksource stability checks for TSC or sync the TSC.
+ 			Format: <string>
+ 			[x86] reliable: mark tsc clocksource as reliable, this
+ 			disables clocksource verification at runtime, as well
+@@ -6289,6 +6289,8 @@
+ 			in situations with strict latency requirements (where
+ 			interruptions from clocksource watchdog are not
+ 			acceptable).
++			[x86] directsync: attempt to sync the tsc via direct
++			writes if MSR_IA32_TSC_ADJUST isn't available
+ 
+ 	tsc_early_khz=  [X86] Skip early TSC calibration and use the given
+ 			value instead. Useful when the early TSC frequency discovery
+diff --git a/arch/x86/include/asm/tsc.h b/arch/x86/include/asm/tsc.h
+index fbdc3d951494..dc70909119e8 100644
+--- a/arch/x86/include/asm/tsc.h
++++ b/arch/x86/include/asm/tsc.h
+@@ -42,6 +42,7 @@ extern unsigned long native_calibrate_tsc(void);
+ extern unsigned long long native_sched_clock_from_tsc(u64 tsc);
+ 
+ extern int tsc_clocksource_reliable;
++extern int tsc_allow_direct_sync;
+ #ifdef CONFIG_X86_TSC
+ extern bool tsc_async_resets;
+ #else
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index cafacb2e58cc..6345af65a549 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -47,6 +47,7 @@ static unsigned int __initdata tsc_early_khz;
+ static DEFINE_STATIC_KEY_FALSE(__use_tsc);
+ 
+ int tsc_clocksource_reliable;
++int tsc_allow_direct_sync;
+ 
+ static u32 art_to_tsc_numerator;
+ static u32 art_to_tsc_denominator;
+@@ -303,6 +304,8 @@ static int __init tsc_setup(char *str)
+ 		mark_tsc_unstable("boot parameter");
+ 	if (!strcmp(str, "nowatchdog"))
+ 		no_tsc_watchdog = 1;
++	if (!strcmp(str, "directsync"))
++		tsc_allow_direct_sync = 1;
+ 	return 1;
+ }
+ 
+diff --git a/arch/x86/kernel/tsc_sync.c b/arch/x86/kernel/tsc_sync.c
+index 9452dc9664b5..2a855991f982 100644
+--- a/arch/x86/kernel/tsc_sync.c
++++ b/arch/x86/kernel/tsc_sync.c
+@@ -340,6 +340,8 @@ static cycles_t check_tsc_warp(unsigned int timeout)
+  */
+ static inline unsigned int loop_timeout(int cpu)
+ {
++	if (!boot_cpu_has(X86_FEATURE_TSC_ADJUST))
++		return 30;
+ 	return (cpumask_weight(topology_core_cpumask(cpu)) > 1) ? 2 : 20;
+ }
+ 
+@@ -360,13 +362,16 @@ void check_tsc_sync_source(int cpu)
+ 
+ 	/*
+ 	 * Set the maximum number of test runs to
+-	 *  1 if the CPU does not provide the TSC_ADJUST MSR
+-	 *  3 if the MSR is available, so the target can try to adjust
++	 *  3 if TSC_ADJUST MSR is available, so the target can try to adjust
++	 *  1000 if TSC MSR can be written to compensate
++	 *  1 if MSRs cannot be written
+ 	 */
+-	if (!boot_cpu_has(X86_FEATURE_TSC_ADJUST))
+-		atomic_set(&test_runs, 1);
+-	else
++	if (boot_cpu_has(X86_FEATURE_TSC_ADJUST))
+ 		atomic_set(&test_runs, 3);
++	else if (tsc_allow_direct_sync)
++		atomic_set(&test_runs, 1000);
++	else
++		atomic_set(&test_runs, 1);
+ retry:
+ 	/*
+ 	 * Wait for the target to start or to skip the test:
+@@ -434,6 +439,21 @@ void check_tsc_sync_source(int cpu)
+ 		goto retry;
+ }
+ 
++static inline cycles_t write_tsc_adjustment(cycles_t adjustment)
++{
++	cycles_t adjval, nextval;
++
++	rdmsrl(MSR_IA32_TSC, adjval);
++	adjval += adjustment;
++	wrmsrl(MSR_IA32_TSC, adjval);
++	rdmsrl(MSR_IA32_TSC, nextval);
++
++	/*
++	 * Estimated clock cycle overhead for wrmsr + rdmsr
++	 */
++	return nextval - adjval;
++}
++
+ /*
+  * Freshly booted CPUs call into this:
+  */
+@@ -441,7 +461,7 @@ void check_tsc_sync_target(void)
+ {
+ 	struct tsc_adjust *cur = this_cpu_ptr(&tsc_adjust);
+ 	unsigned int cpu = smp_processor_id();
+-	cycles_t cur_max_warp, gbl_max_warp;
++	cycles_t cur_max_warp, gbl_max_warp, est_overhead = 0;
+ 	int cpus = 2;
+ 
+ 	/* Also aborts if there is no TSC. */
+@@ -521,12 +541,18 @@ void check_tsc_sync_target(void)
+ 	 * value is used. In the worst case the adjustment needs to go
+ 	 * through a 3rd run for fine tuning.
+ 	 */
+-	cur->adjusted += cur_max_warp;
++	if (boot_cpu_has(X86_FEATURE_TSC_ADJUST)) {
++		cur->adjusted += cur_max_warp;
+ 
+-	pr_warn("TSC ADJUST compensate: CPU%u observed %lld warp. Adjust: %lld\n",
+-		cpu, cur_max_warp, cur->adjusted);
++		pr_warn("TSC ADJUST compensate: CPU%u observed %lld warp. Adjust: %lld\n",
++			cpu, cur_max_warp, cur->adjusted);
+ 
+-	wrmsrl(MSR_IA32_TSC_ADJUST, cur->adjusted);
++		wrmsrl(MSR_IA32_TSC_ADJUST, cur->adjusted);
++	} else {
++		pr_debug("TSC direct sync: CPU%u observed %lld warp. Overhead: %lld\n",
++			cpu, cur_max_warp, est_overhead);
++		est_overhead = write_tsc_adjustment(cur_max_warp + est_overhead);
++	}
+ 	goto retry;
+ 
+ }
+-- 
+2.30.2
 
-Code is hardly ever perfect. Feel free to submit patches to help
-improve understanding if you like.
-
-> To be honest, I'm not sold to the idea of a software-emulated
-> maximum timeout value above what the hardware can do, but if doing
-> that makes sense in certain situations, then I believe it should be
-> implemented as a boolean flag (named emulate_large_timeout, for
-> example) to complement max_timeout instead of a separate time value.
-> Is there a reason I'm missing, why it was not done that way?
-> 
-There are watchdogs with very low maximum timeout values, sometimes less than
-3 seconds. gpio-wdt is one example - some have a maximum value of 2.5 seconds.
-rzn1_wd is even more extreme with a maximum of 1 second. With such low values,
-accuracy is important, second-based limits are insufficient, and there is an
-actual need for software timeout handling on top of hardware.
-
-At the same time, there is actually a need to make timeouts milli-second based
-instead of second-based, for uses such as medical devices where timeouts need
-to be short and accurate. The only reason for not implementing this is that
-the proposals I have seen so far (including mine) were too messy for my liking,
-and I never had the time to clean it up. Reverting milli-second support would
-be the completely wrong direction.
-
-> Currently, a comment in watchdog.h claims that max_timeout is ignored
-> when max_hw_heartbeat_ms is set. However in watchdog_dev.c, sysfs
-> attribute max_timeout is created unconditionally, and
-> max_hw_heartbeat_ms doesn't have a sysfs attribute. So userspace has
-> no way to know if max_timeout is the hardware limit, or whether
-> software emulation will kick in for a specified timeout value. Also,
-> there is no complaint if both max_hw_heartbeat_ms and max_timeout
-> are set.
-> 
-As mentioned before, code is hardly ever perfect. Patches to improve the
-situation are welcome.
-
-Thanks,
-Guenter

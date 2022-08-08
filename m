@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C542458C15E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 03:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA6B58C15F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243785AbiHHB7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 21:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        id S243963AbiHHB75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 21:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243930AbiHHB4i (ORCPT
+        with ESMTP id S243970AbiHHB4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 21:56:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB10C10546;
-        Sun,  7 Aug 2022 18:40:01 -0700 (PDT)
+        Sun, 7 Aug 2022 21:56:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724D91CFDA;
+        Sun,  7 Aug 2022 18:40:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4356E60EF0;
-        Mon,  8 Aug 2022 01:40:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F88CC433D6;
-        Mon,  8 Aug 2022 01:39:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBC2B60EE6;
+        Mon,  8 Aug 2022 01:40:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 253E6C433C1;
+        Mon,  8 Aug 2022 01:40:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922800;
-        bh=nNnTUhqNU4YQbcijVe/pezvof71mJ2XPgaNef+hmOY0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nhy6XpyDlVxXDXooBBjMOnwy+h+16T23oqiwkJ6jkq78cZSIP4D1bvtKfU5o7F7Ap
-         uTP45z5Nw4bQ3QfTCOrZPgIlktIwTDMkYJjfwjKqP/M1T9Cgr3jXUsQPJSddjDuzSy
-         QvkTQ0mk5J0DpyY9AaA6+YgLKPYdyJ86fAFH1EoahA9LN6f2XraTVzvKKIigWzUe/r
-         DNFYrr/K3RbdMXkiGyguCFgFolplpc/z3fNP4aLB6mRQ/gVMqsnPCfxSX7J8QjnqcR
-         I3tp/zqQxb4dpc5a+hj2scNwb7Zc/CNKZk+gq2cT2H4qOYtfj+ODijZujbSuBmlXde
-         5Qcmj6AJR7eZg==
+        s=k20201202; t=1659922808;
+        bh=36mSMLfv648ocAbMyXAwIO6WQKD5SBFkJ4sGOVKXnYg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZlmbI3vtkM48FJyix42lpJbM6r9MoIyttD9w+yGPoEcIKw+mgag4k34G1X/8w5B1v
+         E/wAmuEtSoZc09v/PXHNQekuDmHtJ9R++e7gSAZNwuyKVfknX7U2ZBE57m+lWb5eGu
+         SEKOuIgPvSViXbwzOVW50g5IVWz2gmUu0DqHW4uUxWqaMJLaYEJ/T4gA1M2wqxLoLf
+         LxTLOVvhDE81htOjxEUtm1194H0YxrEZSXsXyqiSXxdjnL6z+Qeudh/Aet4HLFo7sM
+         TpiIhGdEE+08TgNzJesSTAF77lJDNYD6wk0T911gTrLTshnKe4vSUMyIYvrbZD0STF
+         ulkE5YXmVQmdg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 11/12] PM: hibernate: defer device probing when resuming from hibernation
-Date:   Sun,  7 Aug 2022 21:39:41 -0400
-Message-Id: <20220808013943.316907-11-sashal@kernel.org>
+Cc:     =?UTF-8?q?haibinzhang=20=28=E5=BC=A0=E6=B5=B7=E6=96=8C=29?= 
+        <haibinzhang@tencent.com>, hewenliang <hewenliang4@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        ardb@kernel.org, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.9 1/8] arm64: fix oops in concurrently setting insn_emulation sysctls
+Date:   Sun,  7 Aug 2022 21:39:56 -0400
+Message-Id: <20220808014005.317064-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013943.316907-1-sashal@kernel.org>
-References: <20220808013943.316907-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -59,104 +59,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: haibinzhang (张海斌) <haibinzhang@tencent.com>
 
-[ Upstream commit 8386c414e27caba8501119948e9551e52b527f59 ]
+[ Upstream commit af483947d472eccb79e42059276c4deed76f99a6 ]
 
-syzbot is reporting hung task at misc_open() [1], for there is a race
-window of AB-BA deadlock which involves probe_count variable. Currently
-wait_for_device_probe() from snapshot_open() from misc_open() can sleep
-forever with misc_mtx held if probe_count cannot become 0.
+emulation_proc_handler() changes table->data for proc_dointvec_minmax
+and can generate the following Oops if called concurrently with itself:
 
-When a device is probed by hub_event() work function, probe_count is
-incremented before the probe function starts, and probe_count is
-decremented after the probe function completed.
+ | Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+ | Internal error: Oops: 96000006 [#1] SMP
+ | Call trace:
+ | update_insn_emulation_mode+0xc0/0x148
+ | emulation_proc_handler+0x64/0xb8
+ | proc_sys_call_handler+0x9c/0xf8
+ | proc_sys_write+0x18/0x20
+ | __vfs_write+0x20/0x48
+ | vfs_write+0xe4/0x1d0
+ | ksys_write+0x70/0xf8
+ | __arm64_sys_write+0x20/0x28
+ | el0_svc_common.constprop.0+0x7c/0x1c0
+ | el0_svc_handler+0x2c/0xa0
+ | el0_svc+0x8/0x200
 
-There are three cases that can prevent probe_count from dropping to 0.
+To fix this issue, keep the table->data as &insn->current_mode and
+use container_of() to retrieve the insn pointer. Another mutex is
+used to protect against the current_mode update but not for retrieving
+insn_emulation as table->data is no longer changing.
 
-  (a) A device being probed stopped responding (i.e. broken/malicious
-      hardware).
-
-  (b) A process emulating a USB device using /dev/raw-gadget interface
-      stopped responding for some reason.
-
-  (c) New device probe requests keeps coming in before existing device
-      probe requests complete.
-
-The phenomenon syzbot is reporting is (b). A process which is holding
-system_transition_mutex and misc_mtx is waiting for probe_count to become
-0 inside wait_for_device_probe(), but the probe function which is called
- from hub_event() work function is waiting for the processes which are
-blocked at mutex_lock(&misc_mtx) to respond via /dev/raw-gadget interface.
-
-This patch mitigates (b) by deferring wait_for_device_probe() from
-snapshot_open() to snapshot_write() and snapshot_ioctl(). Please note that
-the possibility of (b) remains as long as any thread which is emulating a
-USB device via /dev/raw-gadget interface can be blocked by uninterruptible
-blocking operations (e.g. mutex_lock()).
-
-Please also note that (a) and (c) are not addressed. Regarding (c), we
-should change the code to wait for only one device which contains the
-image for resuming from hibernation. I don't know how to address (a), for
-use of timeout for wait_for_device_probe() might result in loss of user
-data in the image. Maybe we should require the userland to wait for the
-image device before opening /dev/snapshot interface.
-
-Link: https://syzkaller.appspot.com/bug?extid=358c9ab4c93da7b7238c [1]
-Reported-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Co-developed-by: hewenliang <hewenliang4@huawei.com>
+Signed-off-by: hewenliang <hewenliang4@huawei.com>
+Signed-off-by: Haibin Zhang <haibinzhang@tencent.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Link: https://lore.kernel.org/r/20220128090324.2727688-1-hewenliang4@huawei.com
+Link: https://lore.kernel.org/r/9A004C03-250B-46C5-BF39-782D7551B00E@tencent.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/power/user.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ arch/arm64/kernel/armv8_deprecated.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index 69017a569f30..add4653477fe 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -29,6 +29,7 @@
+diff --git a/arch/arm64/kernel/armv8_deprecated.c b/arch/arm64/kernel/armv8_deprecated.c
+index 49989207989a..89946ed1adb9 100644
+--- a/arch/arm64/kernel/armv8_deprecated.c
++++ b/arch/arm64/kernel/armv8_deprecated.c
+@@ -64,6 +64,7 @@ struct insn_emulation {
+ static LIST_HEAD(insn_emulation);
+ static int nr_insn_emulated __initdata;
+ static DEFINE_RAW_SPINLOCK(insn_emulation_lock);
++static DEFINE_MUTEX(insn_emulation_mutex);
  
- #include "power.h"
+ static void register_emulation_hooks(struct insn_emulation_ops *ops)
+ {
+@@ -209,10 +210,10 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
+ 				  loff_t *ppos)
+ {
+ 	int ret = 0;
+-	struct insn_emulation *insn = (struct insn_emulation *) table->data;
++	struct insn_emulation *insn = container_of(table->data, struct insn_emulation, current_mode);
+ 	enum insn_emulation_mode prev_mode = insn->current_mode;
  
-+static bool need_wait;
+-	table->data = &insn->current_mode;
++	mutex_lock(&insn_emulation_mutex);
+ 	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
  
- #define SNAPSHOT_MINOR	231
+ 	if (ret || !write || prev_mode == insn->current_mode)
+@@ -225,7 +226,7 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
+ 		update_insn_emulation_mode(insn, INSN_UNDEF);
+ 	}
+ ret:
+-	table->data = insn;
++	mutex_unlock(&insn_emulation_mutex);
+ 	return ret;
+ }
  
-@@ -82,7 +83,7 @@ static int snapshot_open(struct inode *inode, struct file *filp)
- 		 * Resuming.  We may need to wait for the image device to
- 		 * appear.
- 		 */
--		wait_for_device_probe();
-+		need_wait = true;
+@@ -255,7 +256,7 @@ static void __init register_insn_emulation_sysctl(struct ctl_table *table)
+ 		sysctl->maxlen = sizeof(int);
  
- 		data->swap = -1;
- 		data->mode = O_WRONLY;
-@@ -174,6 +175,11 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
- 	ssize_t res;
- 	loff_t pg_offp = *offp & ~PAGE_MASK;
- 
-+	if (need_wait) {
-+		wait_for_device_probe();
-+		need_wait = false;
-+	}
-+
- 	lock_system_sleep();
- 
- 	data = filp->private_data;
-@@ -209,6 +215,11 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
- 	loff_t size;
- 	sector_t offset;
- 
-+	if (need_wait) {
-+		wait_for_device_probe();
-+		need_wait = false;
-+	}
-+
- 	if (_IOC_TYPE(cmd) != SNAPSHOT_IOC_MAGIC)
- 		return -ENOTTY;
- 	if (_IOC_NR(cmd) > SNAPSHOT_IOC_MAXNR)
+ 		sysctl->procname = insn->ops->name;
+-		sysctl->data = insn;
++		sysctl->data = &insn->current_mode;
+ 		sysctl->extra1 = &insn->min;
+ 		sysctl->extra2 = &insn->max;
+ 		sysctl->proc_handler = emulation_proc_handler;
 -- 
 2.35.1
 

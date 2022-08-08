@@ -2,174 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C864B58CC14
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5F358CC16
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244007AbiHHQZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 12:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
+        id S244002AbiHHQ23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 12:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237665AbiHHQZ1 (ORCPT
+        with ESMTP id S237665AbiHHQ22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 12:25:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08435EBA
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:25:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659975925;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GBJ8/l6jgpOV8t0mdJlCv5sc7ShJ57oNHXIQuHMcQt4=;
-        b=RR1NHH2XNFEFYNyWWoVCfajrmBy/CLc7vxvZxNw5JcHkA6q/x/rwZgxWmQR2uY9xCwuWsz
-        3jiuQ2aXcs6lBcEQ5WVJazystKgW7AXrmtNs8DJXL76HQCwE2ZliOHd4IKLp8rm4IA/ET7
-        697oDd7CfXj11i4zxriWFerRxI08y98=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-oWhjDAG1OS-efZ-sL6af0A-1; Mon, 08 Aug 2022 12:25:23 -0400
-X-MC-Unique: oWhjDAG1OS-efZ-sL6af0A-1
-Received: by mail-wm1-f71.google.com with SMTP id c17-20020a7bc011000000b003a2bfaf8d3dso4930603wmb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 09:25:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=GBJ8/l6jgpOV8t0mdJlCv5sc7ShJ57oNHXIQuHMcQt4=;
-        b=cOpRu9JC0SNNF42QAY/VO9MX+DRTjycBJ2NfzUx28sjpsrWEnod0fhec1rbtBAjpju
-         Ny6XheQM6pLzNxHpwoLbEcgn8y0LZQpFHTYz+OjTYkXL8IFJLEWK06O4MltNL7aksUHf
-         XGdADcF8V3EP+FgW5JFATtPgW1dNy9vUz2Nec502BeoTaavUYxr70cxygN5fsA1fpqHQ
-         jdTnY7qLCf5UiJKOfQwwEzBrdyBE8cLZmY+t5+2UnQrP0tSP7h+zzvqNflEboEMZYIvb
-         ojkQ6PIb5TOu1j6R6fl7RJdfNqY1qi0yAaldaUq/uflmMeYqYWwG//fWoYRpssmJH7Hp
-         FpRQ==
-X-Gm-Message-State: ACgBeo0grK8Bxh7JPt25IUd3ZbGQjGbUayyyUApG3sXRcDsytaACzv22
-        KHh1YP5yDNm0qhINTmOLL/OfVc00h3r1KOEboYjxIU07OXmVY9vQEG9DAlKcZa0tor3VWj6cO0g
-        KrwZveEIlJBm6XVpormR2X3B4
-X-Received: by 2002:a05:6000:1a41:b0:20e:687f:1c3 with SMTP id t1-20020a0560001a4100b0020e687f01c3mr11602881wry.415.1659975922582;
-        Mon, 08 Aug 2022 09:25:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5BAckX9l8cHaxk/zqkDO693mHCwu095nPZhvHuFjfESQPSw4kK4Ra96V+4C7Y5PJPf+bRrUQ==
-X-Received: by 2002:a05:6000:1a41:b0:20e:687f:1c3 with SMTP id t1-20020a0560001a4100b0020e687f01c3mr11602869wry.415.1659975922271;
-        Mon, 08 Aug 2022 09:25:22 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f15:c300:d2ce:1fb5:2460:179a? (p200300d82f15c300d2ce1fb52460179a.dip0.t-ipconnect.de. [2003:d8:2f15:c300:d2ce:1fb5:2460:179a])
-        by smtp.gmail.com with ESMTPSA id e27-20020adfa45b000000b0021e519eba9bsm11790660wra.42.2022.08.08.09.25.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 09:25:21 -0700 (PDT)
-Message-ID: <8b317ac7-f80e-4aab-4ad1-4e19a1a0740f@redhat.com>
-Date:   Mon, 8 Aug 2022 18:25:21 +0200
+        Mon, 8 Aug 2022 12:28:28 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2070.outbound.protection.outlook.com [40.107.92.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADF426D9;
+        Mon,  8 Aug 2022 09:28:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RA1gmTxhG5A4ZCoX5Ids1yy1f9zYTadl1l3Uak6Xubl+rIWWj+cXrm/gPcxKg8W2r3ABLdE71J4c1GbZbR6f6T+5aHYd9vj1700wLIyjfcxSmogThJeNDkxhtZNh3186U513IbqxhV4Y75mdBhbN05ZdRMd0roKK1jkC8hn2GBssdyDtl3QGKK39HKZiS4wHwYk2M2dDIHiP8u2IsQKIfs1j4ZcKg4JCDYAdS8tnygh5End7W3TmRYaalCxj6yc9CngwRT4VoVbnUbnAJMAQXvl65/2x998Ro6/jPgsAEzlLJcAokEUp4NExsW3ZRvkb4AIZlw7dhv3+OAE61v5YNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2BqaHw7FXH7IftVfn9tw3S/F57TQQhKXkNKYEnKy2yw=;
+ b=HUzchIoXO75lJg3ORrZTf0rbtu1/bWDDTrfPP3oXYv4db6eRtyp8W9VqvUanc51tjm/tsuFVclqcULihhRgpDfWJARnQiKWTv+NG/Bh413+fBEgGTQmNgph3ytwyJqAQEWFPGYes0l0b8dd2yXqQv/Be5De1spz43OYfn87kXyJSqKRyrA0iw8IiLxeohMNfm7aWoGnJZ7Okv3BaHfdzLhXkSmLJQlTNfrLNnBWCee6Aba0MX31wQ4O2hfjKNokrvLla5PjIGksizoDquRn6GNWh2nXANBDoK/3fKMQsuT1AvBEem89HBfaOt0PuWftAfcK6b3p0RlHgfFnwQkWVVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2BqaHw7FXH7IftVfn9tw3S/F57TQQhKXkNKYEnKy2yw=;
+ b=oV+ikYVeDxRlklTVQ8i+bamCVsdmRP4/jthh9AgYLxbYEgeRPpv2GeCwFF09eSjs/8aSeVtrDnrK4AiFgg+9wb96lk4JX9PFoz9zInwMSi95kYAnJsKiWBrwjsBZPO4LtcPVpmCJ27A3Sum9qbf0DXf+KmI5+idaZ9UtBBdVDFE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+ by BY5PR03MB5153.namprd03.prod.outlook.com (2603:10b6:a03:22c::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.15; Mon, 8 Aug
+ 2022 16:28:24 +0000
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::c832:eea0:1883:a19c]) by DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::c832:eea0:1883:a19c%3]) with mapi id 15.20.5504.020; Mon, 8 Aug 2022
+ 16:28:24 +0000
+From:   Hsia-Jun Li <randy.li@synaptics.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, ezequiel@vanguardiasur.com.ar,
+        sakari.ailus@linux.intel.com, ribalda@chromium.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org, sebastian.hesselbarth@gmail.com,
+        jszhang@kernel.org, linux-arm-kernel@lists.infradead.org,
+        "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+Subject: [PATCH 0/2] Add pixel formats used in Synatpics SoC
+Date:   Tue,  9 Aug 2022 00:27:48 +0800
+Message-Id: <20220808162750.828001-1-randy.li@synaptics.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR05CA0043.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::18) To DM6PR03MB5196.namprd03.prod.outlook.com
+ (2603:10b6:5:24a::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Feiner <pfeiner@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20220805110329.80540-1-david@redhat.com>
- <20220805110329.80540-3-david@redhat.com> <Yu1dkZeBwv0SUQMq@xz-m1.local>
- <4f644ac5-c40b-32d4-3234-c1dac3d09f83@redhat.com>
- <YvE0OwsyQEL3K5Hm@xz-m1.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 2/2] mm/hugetlb: support write-faults in shared
- mappings
-In-Reply-To: <YvE0OwsyQEL3K5Hm@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 309287c8-0c5f-45bb-d618-08da795b0390
+X-MS-TrafficTypeDiagnostic: BY5PR03MB5153:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hWbPtkOb2X15ubjhEB5/XOEgh7NNvIHTWuGf0VH/V2a07Ao93bvR/o9VJ475oxQQTE5O3wSBN2p3aEfZ4jkDeXUUyO+6XbLGYXbvjVNu9TdnTGbZ/1HUudxeF7nY+p7YNPGEYf+RmWkulQA+NaAHgRMmKW6s0DbEBRU1J8oETaZenCm6gOsEZzlBRtUqtoz0kDQFr2cplZYPAkz4Rmj7+cEWgIQaUxyNg2C3mvicgBRIOuN7U34eWrBknJghpOEs2L32N8+pbyoB9lJ9dB9/sgOAP3EcY9HQ0dFeOokCOHUvyuhfvHvFzlF3wpZVByOLRw1k478gSof6UAaBvbWZxnOtn2jNDffQ9OOkSqF7cB1nATfzVR/cTj4Arv7Kdh8bfG7mPWtgchURQs/QqtcSV8DYhQOHeNO6uEeE6K3eTv38euJmQP0ecwtTa8oClALemNtlnH7gDVgv4mdxLykGgqbVcl6ZVO2tYMiZ5IHUyLtsWBIGHESf6PrShmiv7DJ7RIO4IrYcqya59rJX6l2NpjCe0vwSJLXNknPZOgvQec3jKS45Ze/+RanSn9fP/3D3PZ+6AaM42JwoX1joeP3tUD5J4ylCxP2B9zZS8Jv2YrQ55xygdad9EwSy5fCGICAlYz2wA16NHMx82q6BSgqNOMLYNykZqsoR8LJRaldTgKSH26R+HVN0UGFHFNbD76CxfQPJLcjkQ6+UfKmvDMtitDhFHHpMbq42ueXUzWNrJSw8Do2GavRwBXpWKTkYQGBL4+GFDsagHOM/2UvqAUSeT1pyjFobJZ3U/kBvTjBYzCbRXXHHKi9r9OrIdCdI8c8s5ArnJjwLp3zInkggHTIbng==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(376002)(346002)(39850400004)(396003)(66556008)(36756003)(86362001)(6916009)(66946007)(66476007)(8676002)(4326008)(5660300002)(966005)(6486002)(8936002)(478600001)(316002)(38100700002)(107886003)(38350700002)(6666004)(41300700001)(6506007)(52116002)(2906002)(7416002)(1076003)(26005)(2616005)(83380400001)(6512007)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d/i0NsJvckTbGcySGNlrk8vspNqUAKESoOLI/FlebW6Yq0w+e2j3GRgbXIL2?=
+ =?us-ascii?Q?Gvf/oYiSEK4mQaJwNs2eipCxTaL60BmHulIfslt4l6MQRIcysNLpopDoIeA7?=
+ =?us-ascii?Q?hn0h3sVlc8cLytZes4mRfId9qjh8Q/v+EQo2uhHao+k8LF/HXDQ6zk4ISLDn?=
+ =?us-ascii?Q?SfiISlne3KGFx77/YpBRR1trXA2EkFU2H/prYNpSooDWZEPCw/I7F+z343eQ?=
+ =?us-ascii?Q?tIGGPby3OlLt5PaSxQ3woBnzY6ysk6SLqnRAMg4FUykfRGpLSsWuFr63tdrb?=
+ =?us-ascii?Q?hORItr9lQDocdZXEZq9Nky/UUxeySJxgtLbsFlaJSzOtCz2X0qUo2Kz7lV3O?=
+ =?us-ascii?Q?F4DBzbPRC9sk7tc6gEgXr4ler+1LMg2coQfjfZYDQx4n1+WeMQxgCru5vluW?=
+ =?us-ascii?Q?TxDO5PB8KXrBazP5WbiNe6KfaAE4NjZCAWPx9HoP2kbq/UJEf2n9eZl7+o+c?=
+ =?us-ascii?Q?DYtQmKkWVs9xg+la2aS1p8w7SRIPimRec01nrPmU4/9BEYlkrozkhYZKdFUa?=
+ =?us-ascii?Q?ioKRclx9S/kGPDi5CBe6IQXd53ZWjQJcWD10KOEqZ9jpsLjP08s6uh8hUkrq?=
+ =?us-ascii?Q?X3NDwrvDiavS6PSg/sLuP8rl5iscbzOX48/EpT24IgLelX6rqUrL6Mpn38/t?=
+ =?us-ascii?Q?R5VRIbmp8OsFxyj+Ws2Sav36D42OSYHn4SGyBfAIGOHdmk8vFNuqrYcNz4zN?=
+ =?us-ascii?Q?mshChD+XEFzpaARC4qWjTuG19bdaqYAz3adw3+7+cUPnvrxGguf8B3mnNb+i?=
+ =?us-ascii?Q?OPpP4JDjpmPoXrXlcnknCgk3KadxMufEylmdZvfJCh0RpOcDhLnzzQLcZOnT?=
+ =?us-ascii?Q?5yWatnvWrqZZUst5IywfCUcyPqhKwaQAl8uXD2rviPH0P/Slrk7gGOAYYBRd?=
+ =?us-ascii?Q?K/FC8EWx/tT8XmBAKNBmCCDkIpmqAnNLocPENZmAU5fIQ/mmWgxFYma9bObV?=
+ =?us-ascii?Q?hNYISRS8EYpBB64vjx+r91sL+5o3VMJWVu1yWIi4RGQ29M7S0bXnP17sIWBo?=
+ =?us-ascii?Q?Mklqt7mOuqsFMLCWTHEpC3+GpWMCgkdAYcq17f+10ytGG5UK7KAYU7htc5VS?=
+ =?us-ascii?Q?n1OKKSncOKtBafQyW7DvznXeEMwv0aF93bz5XiFFaYlRfcrrhZJFdF0TSRX4?=
+ =?us-ascii?Q?FQq8DhdoD8hVo9nl/T8O/2C+i29KJbFUk2TAFyj9CAnmybQJJl6cnnHcn57j?=
+ =?us-ascii?Q?MyncEfCea/dlrGwy3GgvuvsUes6AaNyKkztajwtRchg8ZEgo4HQ13Ibnk2xD?=
+ =?us-ascii?Q?6u0A2Kufv0DSs+ykIUKG5Xgs7hUDg4TXFnNw8MirRYnQLnm3V07tcmW79aZY?=
+ =?us-ascii?Q?9KA6NujkVPh3QV5Ns/ut+zGcGiUDDEsFIt+OHrXXbF6N7IuG60IsAWg9pB6L?=
+ =?us-ascii?Q?3lKfZhrPvB+hy6lbHjUU6/eL6d7bv7kp7PfLiuXKsbvduHZRt0ZRV6T6Ts1J?=
+ =?us-ascii?Q?Zo+3uWtdu4P8juY1TUo6HiWZAVmH9Z91sr1+xc6e0vc4IIHWt3Fv324VlXo0?=
+ =?us-ascii?Q?5rahYP242xl9eWNT58otAQM5M+gtzLnn10a02w1ZgTY+JKdpJAUxZaoAHMfw?=
+ =?us-ascii?Q?VG7WZb8gGJP/H2Dz/byqBwOFhzRT8Kou4zxwF4Nq?=
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 309287c8-0c5f-45bb-d618-08da795b0390
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2022 16:28:23.9372
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uf2WFyT+mGQXSits8kNLi3ZMJGUxyUS26jDSaQxitck8QZC1E145lSNWK9Xxe31WbN/VcSrRoJFGQkaexwPGDA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR03MB5153
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> Relying on VM_SHARED to detect MAP_PRIVATE vs. MAP_SHARED is
->> unfortunately wrong.
->>
->> If you're curious, take a look at f83a275dbc5c ("mm: account for
->> MAP_SHARED mappings using VM_MAYSHARE and not VM_SHARED in hugetlbfs")
->> and mmap() code.
->>
->> Long story short: if the file is read-only, we only have VM_MAYSHARE but
->> not VM_SHARED (and consequently also not VM_MAYWRITE).
-> 
-> To ask in another way: if file is RO but mapped RW (mmap() will have
-> VM_SHARED cleared but VM_MAYSHARE set), then if we check VM_MAYSHARE here
-> won't we grant write bit errornously while we shouldn't? As the user
-> doesn't really have write permission to the file.
+From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
 
-Thus the VM_WRITE check. :)
+Those pixel formats are used in Synaptics's VideoSmart series SoCs,
+likes VS640, VS680.  I just disclose the pixel formats used in the video
+codecs and display pipeline this time. Actually any device with a MTR
+module could support those tiled and compressed pixel formats. The more
+detail about MTR module could be found in the first patch of this serial
+of mail.
 
-I wonder if we should just do it cleanly and introduce the maybe_mkwrite
-semantics here as well. Then there is no need for additional VM_WRITE
-checks and hugetlb will work just like !hugetlb.
+We may not be able to post any drivers here in a short time, the most of
+work in this platform is done in the Trusted Execution Environment and
+we didn't use the optee framework.
 
-Thoughts?
+Please notice that, the memory planes used for video codecs would be 5
+when the compression is invoked while it would be 4 for display, the
+extra planes in the video codecs is for the decoding internally usage,
+it can't append the luma or chroma buffer as many other drivers do,
+because this buffer could be only accessed by the video codecs itself,
+it requests a different memory security attributes. Any other reason is
+described in the v4l pixel formats's patch. I don't know whether a
+different numbers of memory planes between drm and v4l2 is acceptable.
 
-> 
->>
->>>
->>>> +		if (unshare)
->>>> +			return 0;
->>>
->>> Curious when will this happen especially if we switch to VM_SHARED above.
->>> Shouldn't "unshare" not happen at all on a shared region?
->>
->> FAULT_FLAG_UNSHARE is documented to behave like:
->>
->> "FAULT_FLAG_UNSHARE is ignored and treated like an ordinary read fault
->> when no existing R/O-mapped anonymous page is encountered."
->>
->> It should currently not happen. Focus on should ;)
-> 
-> OK. :)
-> 
-> Then does it also mean that it should be better to turn into
-> WARN_ON_ONCE()?  It's just that it looks like a valid path if without it.
+I only posted the compression fourcc for the v4l2, because it is really
+hard to put the uncompression version of pixel formats under the fourcc.
+I would be better that we could have something likes format modifers in
+drm here.
 
-Well, it should work (and we handle the !hugetlb path) like that as
-well. So I'd want to avoid WARN_ON_ONCE() at least for that check.
+https://synaptics.com/products/multimedia-solutions
 
+Hsia-Jun(Randy) Li (2):
+  drm/fourcc: Add Synaptics VideoSmart tiled modifiers
+  [WIP]: media: Add Synaptics compressed tiled format
 
-> 
->>
->>>
->>>> +		if (WARN_ON_ONCE(!(vma->vm_flags & VM_WRITE)))
->>>> +			return VM_FAULT_SIGSEGV;
->>>
->>> I had a feeling that you just want to double check we have write
->>> permission, but IIUC this should be checked far earlier or we'll have
->>> problem.  No strong opinion if so, but I'd suggest dropping this one,
->>> otherwise we could add tons of WARN_ON_ONCE() in anywhere in the page fault
->>> stack and they mostly won't trigger at all.
->>
->> Not quite. We usually (!hugetlb) have maybe_mkwrite() all over the
->> place. This is just an indication that we don't have maybe semantics
->> here. But as we also don't have it for hugetlb anon code below, maybe I
->> can just drop it. (or check it for both call paths)
-> 
-> Hmm, this reminded me to wonder how hugetlb handles FOLL_FORCE|FOLL_WRITE
-> on RO regions.
-> 
-> Maybe that check is needed, but however instead of warning and sigbus, we
-> need to handle it?
-
-We don't support FOLL_FORCE|FOLL_WRITE for hugetlb, but if we would,
-we'd need the maybe_mkwrite semantics.
-
-Fortunately I detest private hugetlb mappings / anon hugetlb pages and
-couldn't care less about debug access until it's actually a problem for
-someone :)
+ drivers/media/v4l2-core/v4l2-common.c |  1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c  |  2 ++
+ include/uapi/drm/drm_fourcc.h         | 49 +++++++++++++++++++++++++++
+ include/uapi/linux/videodev2.h        |  2 ++
+ 4 files changed, 54 insertions(+)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.17.1
 

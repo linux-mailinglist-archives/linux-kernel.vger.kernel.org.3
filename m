@@ -2,148 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E7958C811
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00CC58C814
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235545AbiHHMDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 08:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S229540AbiHHMEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 08:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiHHMDm (ORCPT
+        with ESMTP id S236379AbiHHMEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 08:03:42 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2916177
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:03:40 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id o3so4910774qkk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:03:40 -0700 (PDT)
+        Mon, 8 Aug 2022 08:04:35 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FFA11C31
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:04:34 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id v5so4700318wmj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:04:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ERavs2OZuaSZotSZxpUy6MvIXcD6G78fPlu5KuS1KfQ=;
-        b=qAGmUoMzYkkG51PGZWvUoHKzC2nH4OP0h46jDDHfdKVPj9c4FOhPoXserkrZ6Wkvk+
-         o61vsVsS67bNxw0NSRAOgr/8UGNxyBNAVCs5OKDTqIPe1e2GqkSGz6aOD8TONkiPBEoT
-         GO08RiMUZkOocK3KmaR4Pu6lMz/EUWBJsyguC6AHgeV/H7W1984eH8XtJFlpSsSvJj9O
-         N8DK7UGQGG+BwLAAeub2dcmRuoU6ND+LA7czafWoRKKB2s9SSRUF+q9lm5K4X0YNpJZn
-         kOZRYHe7LB9r1HM1tyLA8tS1OV+I28XEK94VU5LQf4oRQrm3GKdc6NYwGByaLXYNN6se
-         mp5A==
+        d=melexis.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=plnBWnVwXrE1lhxE5G1pC4DscYe+Aj6YcHEs3iVl5BA=;
+        b=epYC1saHxJBZkzzYKEtkae0XhMlNW/aWmXjFTyiuajUGHOH5oE9VpqewtvXMmYrwDc
+         c5G/p1xe/P8EEWbdZskA+FHo8Kaa++JVnNXFCGX9Wy55OFhsMY7TUrbHjsqmUUQP8SsR
+         sTZY8/VGmYPF0gdgFJ764riXGAF3p07Tzsl3h1BuhNftk6f/uxadx+f0pYYOGMOrATAy
+         AJbLK7x7XVArGMd/zShHShyCsWn6zWFdH8IzFSU2XzVWd3gDcBPhBIvy71rdXG0iAemb
+         Za3i72QIWN6qOUej/CDseah49peD6HxU5YolNjt4rigpRLU3BIKcP5Kh+fIxb+JxNba1
+         hJag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ERavs2OZuaSZotSZxpUy6MvIXcD6G78fPlu5KuS1KfQ=;
-        b=KVefmVI8CVjdNMhADpiZakyzcalCloymu4y371Why4l1F2+PZYZ0xo1BtmRSHdA8xC
-         MgnFZgsapon+H+UMIWnGOfyx2vB3vkEjatOUhxk+Rvki7TgN8NeC7wp1fh8lGLiDqCXF
-         nw4ELzCxGVS+ytsEje1YNnPm8qNXUzUaSMuLbQV4DmaT54Uhx00av9O08Fm7D6getMA0
-         nT19v8WCxoiMUccYTXhPee/4nWjCOjAr4sjNA4LcqmC5spJyx0pIyBir+vmwaojO7MVT
-         fDwQ8p7LxOdocfSKWXR93URPLRVfdwHokQ27i5flCd91jid8Z2jBylgmV8HsGbA5RGr0
-         JrRw==
-X-Gm-Message-State: ACgBeo0QUIzN4ZtnxSAFC/y9kTkidVnENacQflz+A31aAr3zfdBLd4Oo
-        k+/BnIosFJ7YwuvQg7Y2/XAGwwZMPxgm5McZ93E=
-X-Google-Smtp-Source: AA6agR4eZae+wfOdZpiOVUC2U4vaR2uH0zIZWXcwgiTo9eJyCqYtZqTotC7OsbVLPUZtEVc6WRL+rBMvmc7iXGc7jsg=
-X-Received: by 2002:a05:620a:288a:b0:6b8:fcfe:db02 with SMTP id
- j10-20020a05620a288a00b006b8fcfedb02mr13874753qkp.504.1659960219392; Mon, 08
- Aug 2022 05:03:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=plnBWnVwXrE1lhxE5G1pC4DscYe+Aj6YcHEs3iVl5BA=;
+        b=WfBChUQDGQxuE5hqDTL/CPeqitc0yyR3mGJJY3aAjCj4kQ9SejJs6t6IKg+SiyxOih
+         ztb60oovSV1LrWZybWv6HRCZVQvfgLSYQbfITVCuj3ge65wS2nopzZ1o0JL3J+hzpY7X
+         x8AxWJzlY9DXqv6B/HGzyg7c3ZbPnGgkwSpaT8WyZJ+HtH8MrNg2aD5Qd6Tn/+4OFxU/
+         UMSiPnATeoC5YNT5W0/7lQlBeG2hA5uVASL2qy5m9r8uOOAOlc1i6Mu5IS13E8RCpWbW
+         mM4/i/QRp+l4CtefSBtxoGbsNtZGpqAsUWElPbbnhp6+Yi5ByOvvHasxWeaAWe8FvJEt
+         iikA==
+X-Gm-Message-State: ACgBeo36Md6TWeLK7na2AAOKtH5wfVzFTwsi934UoeKOPAnnrKQkcBZO
+        go1P33kdzQy+LtlTmJtFl17qcQ==
+X-Google-Smtp-Source: AA6agR7JaoQKnBjEQaAhj5ksmilu1aeqBCtfchOYfNpkZrsQ+WH1he17WrY84Qy6dqTkGUPd+Jp11w==
+X-Received: by 2002:a05:600c:1e8a:b0:3a3:20fc:a651 with SMTP id be10-20020a05600c1e8a00b003a320fca651mr12632810wmb.39.1659960273119;
+        Mon, 08 Aug 2022 05:04:33 -0700 (PDT)
+Received: from localhost.localdomain (ptr-4xh0y3vuv1059rd6h4r.18120a2.ip6.access.telenet.be. [2a02:1810:a44c:8f00:cd22:c517:e143:e53b])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05600c19ca00b003a31fd05e0fsm35293317wmq.2.2022.08.08.05.04.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 05:04:32 -0700 (PDT)
+From:   Crt Mori <cmo@melexis.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Crt Mori <cmo@melexis.com>
+Subject: [PATCH v2 0/2] iio: temperature: mlx90632: Add supply regulator
+Date:   Mon,  8 Aug 2022 14:04:10 +0200
+Message-Id: <20220808120410.1543050-1-cmo@melexis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220808024128.3219082-1-willy@infradead.org> <20220808024128.3219082-3-willy@infradead.org>
-In-Reply-To: <20220808024128.3219082-3-willy@infradead.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 8 Aug 2022 14:03:02 +0200
-Message-ID: <CAHp75Vcua1dCZQ-ZvcAxkorfXzr6rmJO6=wVYLoomdMzLXDRtw@mail.gmail.com>
-Subject: Re: [PATCH v5 02/32] lib/string_helpers: Convert string_escape_mem()
- to printbuf
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 4:41 AM Matthew Wilcox (Oracle)
-<willy@infradead.org> wrote:
->
-> From: Kent Overstreet <kent.overstreet@gmail.com>
->
-> Like the upcoming vsprintf.c conversion, this converts string_escape_mem
-> to prt_escaped_string(), which uses and outputs to a printbuf, and makes
-> string_escape_mem() a smaller wrapper to support existing users.
->
-> The new printbuf helpers greatly simplify the code.
+Add supply regulator to the sensor as initial update before proper power
+management is presented. This will reduce the diff for the following
+patches.
 
-...
+Changes in v2:
 
->  struct device;
->  struct file;
->  struct task_struct;
-> +struct printbuf;
+ - Regulator voltage was removed as per comments from Jonathan Cameron
+   and Lars-Peter Clausen
+ - Style handling for the error reporting of the regulator DT binding
+   was adjusted
+ - NEW: Delay function was created and grouped together with call from
+   the reset command, to ensure consistency and reduce the amount of
+   code.
 
-Keep it ordered?
+Crt Mori (2):
+  iio: temperature: mlx90632 Add supply regulator to sensor
+  dt-bindings: iio: mlx90632 Add supply regulator documentation
 
-...
-
-> @@ -71,6 +74,7 @@ static inline int string_escape_mem_any_np(const char *src, size_t isz,
->         return string_escape_mem(src, isz, dst, osz, ESCAPE_ANY_NP, only);
->  }
->
-> +
->  static inline int string_escape_str(const char *src, char *dst, size_t sz,
->                 unsigned int flags, const char *only)
->  {
-
-Stray change.
-
-...
-
->                 if (!(is_append || in_dict) && is_dict &&
-> -                                         escape_passthrough(c, &p, end))
-> +                   escape_passthrough(out, c))
-
-That (a bit strange) indentation is on purpose. Can we keep it?
-
->                         continue;
-
-...
-
-Not sure if the below was in the original text, but maybe it makes
-sense to amend.
-
-> + * Description:
-> + * The process of escaping byte buffer includes several parts. They are applied
-
-a byte in the buffer (?)
-
-> + * in the following sequence.
-> + *
-> + *     1. The character is not matched to the one from @only string and thus
-> + *        must go as-is to the output.
-> + *     2. The character is matched to the printable and ASCII classes, if asked,
-> + *        and in case of match it passes through to the output.
-> + *     3. The character is matched to the printable or ASCII class, if asked,
-> + *        and in case of match it passes through to the output.
-> + *     4. The character is checked if it falls into the class given by @flags.
-> + *        %ESCAPE_OCTAL and %ESCAPE_HEX are going last since they cover any
-> + *        character. Note that they actually can't go together, otherwise
-> + *        %ESCAPE_HEX will be ignored.
-> + *
-> + * Caller must provide valid source and destination pointers. Be aware that
-> + * destination buffer will not be NULL-terminated, thus caller have to append
-
-the caller has
-
-> + * it if needs. The supported flags are::
-
-if needed.
+ .../iio/temperature/melexis,mlx90632.yaml     |  4 ++
+ drivers/iio/temperature/mlx90632.c            | 63 +++++++++++++++++--
+ 2 files changed, 62 insertions(+), 5 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.34.1
+

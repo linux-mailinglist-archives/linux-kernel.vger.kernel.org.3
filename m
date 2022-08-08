@@ -2,117 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3679558CB16
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B488558CB10
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243546AbiHHPPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 11:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
+        id S243464AbiHHPOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 11:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243008AbiHHPPR (ORCPT
+        with ESMTP id S243008AbiHHPOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:15:17 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57125B39;
-        Mon,  8 Aug 2022 08:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=8NeebcQIowJFvYNvYAuayRA5HrGpbu0y4rq77R8ZNew=; b=UkbTPpK3PkL/KNCksKY7NedBjm
-        eKGiMxQ4EDIlwc6yVThl6uDq8BNqa4i68qOQ2Qq5S90ePBFJodmONvOinj6rYRKU6GiWn/OWgq1Es
-        UIzqDDJemiX7jgCVd3GNHShRuixAW+yG8Oh+DqrjWqkwf8Py90cGVhk2xbcxCWicuz/ewTPJeLHxT
-        KjoC96tOXtJRhzyQkOrOz8StFqrRq+Uh/Pu/C6+u0nELLuErbjXiUorKj+4jNXJfclDHIn47M4+xG
-        zqeERGj2xybEfBqXzwIGK7cVMaWSp/uv9wMXfCaStJPbYwCSSyhl1n6XwAwA+F2AzoQY35Tq/eNZY
-        v+RLic4w==;
-Received: from [187.56.70.103] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oL4T6-002tRL-3C; Mon, 08 Aug 2022 17:15:00 +0200
-Message-ID: <019ae735-3d69-cb4e-c003-b83cc8cd76f8@igalia.com>
-Date:   Mon, 8 Aug 2022 12:14:30 -0300
+        Mon, 8 Aug 2022 11:14:44 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4E6CE31;
+        Mon,  8 Aug 2022 08:14:43 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id k12so14121329ybk.6;
+        Mon, 08 Aug 2022 08:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=3HgE3/632x1k0MtSqNgva1QuxG/bXv3/l3QcDRfIKGo=;
+        b=XTebna0ZoDS8BXAWbhYJ8X/NQdfNLDl8rBT4BSaT9Q6cMLwqTSKleWU89PoygN2tQW
+         b5iL8Oi/kDLhqiVjnW6dNMuQBZEMhdEn6KCNv2QOc/RgW6eWBtjK7zpfGyQmWxxxB2SE
+         jVZvi/QuLmGtFSTsc5B+sc8ADBjKNzAAXGAS/cCAvxa3YE9gr8nuzdtWJvj4Haact2X9
+         cty4N0/+bWQZd74geComDvXkKPx6ASFcKQPWMpys30x2IYrzS+OAWHvKVaCyPGlI7CDY
+         PYQ8OtyjZJ0zWmQjV6M7Z8fI/EFh4MPH1v2Lwkddxky0E5/g+hEnM10QfkuwHdJFSraP
+         zFgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3HgE3/632x1k0MtSqNgva1QuxG/bXv3/l3QcDRfIKGo=;
+        b=KQdyS22YXvBVUOi3L4I/Pc2urFyRUPftU9GVnYpE+wL5pF0GFw5KsX/5hyyMwehIYm
+         xE2i4l3NctPA0A/T65wwJjtHtsquENafTmm52tJAoldX+ql0WQzLAKTlvhN9YnWXHWCl
+         3bz4JTwzyKdatE/aYrMGM+i7hPTIuF0aqNXyOyOQXSI6uZ9acjgLzVtiK4NlNAZMURlM
+         ZY8kN6UbF19RzGQ1xZlHhxYChhxLUbLCNsTHwn+N1JnuGs78gF4y7mnWWBnwF7VDiVo6
+         EGjz5W86Ffu9JmtZr88ohxJM6Xx1UWa8eZAwm0dW1CdGwoSMQ3Q1xFB8mH1M74Q5YWKF
+         G18g==
+X-Gm-Message-State: ACgBeo32CLQpx/vXDCdA1jkmmYIWU39+yq1Qm1B21kkUvVid3eSU0381
+        Yx/iCzKgGwahm56dbOiJZwApvbYx3y1RB6cef3M=
+X-Google-Smtp-Source: AA6agR5z3JNzZdR3zqZcIVK6XyuUPGjHt5FNwaFhN95fS/yKOrV7McCa756y962mO6Srxn0/neTJA00KOw6h5AffB9w=
+X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
+ t15-20020a056902124f00b0066ee3da487emr17614676ybu.310.1659971682978; Mon, 08
+ Aug 2022 08:14:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 03/13] firmware: google: Test spinlock on panic path to
- avoid lockups
-Content-Language: en-US
-To:     Evan Green <evgreen@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-efi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
-        Petr Mladek <pmladek@suse.com>, kexec@lists.infradead.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, mikelley@microsoft.com,
-        hidehiro.kawai.ez@hitachi.com, jgross@suse.com,
-        john.ogness@linutronix.de, Kees Cook <keescook@chromium.org>,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
-        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
-        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
-        David Gow <davidgow@google.com>,
-        Julius Werner <jwerner@chromium.org>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-4-gpiccoli@igalia.com>
- <CAE=gft71vH+P3iAFXC0bLu0M2x2V4uJGWc82Xa+246ECuUdT-w@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAE=gft71vH+P3iAFXC0bLu0M2x2V4uJGWc82Xa+246ECuUdT-w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CA+khW7iknv0hcn-D2tRt8HFseUnyTV7BwpohQHtEyctbA1k27w@mail.gmail.com>
+ <20220729224254.1798-1-liulin063@gmail.com> <CA+khW7iLeSZPweZEz_tfP+LRtpvZbfvstZWgUbNrEDK-Ntxyxw@mail.gmail.com>
+ <ccafa637-d986-b4e3-73e0-03721a940ce1@iogearbox.net> <CANdZH3U7axKg6zDY+iswF2d1fBYY1Xo2jeVsbgMYMoJfd1AYJg@mail.gmail.com>
+In-Reply-To: <CANdZH3U7axKg6zDY+iswF2d1fBYY1Xo2jeVsbgMYMoJfd1AYJg@mail.gmail.com>
+From:   Kuee k1r0a <liulin063@gmail.com>
+Date:   Mon, 8 Aug 2022 23:14:31 +0800
+Message-ID: <CANdZH3V64LdfYpWrX9teQQU8LGj10_ecXpupRfnyKQ47gvtOoQ@mail.gmail.com>
+Subject: Fwd: [PATCH bpf] bpf: Do more tight ALU bounds tracking
+To:     haoluo@google.com
+Cc:     Alexei Starovoitov <ast@kernel.org>, john.fastabend@gmail.com,
+        Andrii Nakryiko <andrii@kernel.org>, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        jolsa@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/08/2022 02:07, Evan Green wrote:
-> On Tue, Jul 19, 2022 at 12:55 PM Guilherme G. Piccoli
-> <gpiccoli@igalia.com> wrote:
->>
->> Currently the gsmi driver registers a panic notifier as well as
->> reboot and die notifiers. The callbacks registered are called in
->> atomic and very limited context - for instance, panic disables
->> preemption and local IRQs, also all secondary CPUs (not executing
->> the panic path) are shutdown.
->>
->> With that said, taking a spinlock in this scenario is a dangerous
->> invitation for lockup scenarios. So, fix that by checking if the
->> spinlock is free to acquire in the panic notifier callback - if not,
->> bail-out and avoid a potential hang.
->>
->> Fixes: 74c5b31c6618 ("driver: Google EFI SMI")
->> Cc: Ard Biesheuvel <ardb@kernel.org>
->> Cc: David Gow <davidgow@google.com>
->> Cc: Evan Green <evgreen@chromium.org>
->> Cc: Julius Werner <jwerner@chromium.org>
->> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> 
-> Reviewed-by: Evan Green <evgreen@chromium.org>
-
-Thanks a bunch Evan!
-
-Ard / Greg, do you think you could get this patch through your -next (or
--fixes) trees? Not sure which tree is the most common for picking GSMI
-stuff.
-
-I'm trying to get these fixes merged individually in their trees to not
-stall the whole series and increase the burden of re-submitting.
-Thanks in advance,
+---------- Forwarded message ---------
+From: Kuee k1r0a <liulin063@gmail.com>
+Date: Mon, Aug 8, 2022 at 11:11 PM
+Subject: Re: [PATCH bpf] bpf: Do more tight ALU bounds tracking
+To: Daniel Borkmann <daniel@iogearbox.net>
 
 
-Guilherme
+On Mon, Aug 8, 2022 at 9:25 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 7/30/22 12:48 AM, Hao Luo wrote:
+> > On Fri, Jul 29, 2022 at 3:43 PM Youlin Li <liulin063@gmail.com> wrote:
+> >>
+> >> In adjust_scalar_min_max_vals(), let 32bit bounds learn from 64bit bounds
+> >> to get more tight bounds tracking. Similar operation can be found in
+> >> reg_set_min_max().
+> >>
+> >> Also, we can now fold reg_bounds_sync() into zext_32_to_64().
+> >>
+> >> Before:
+> >>
+> >>      func#0 @0
+> >>      0: R1=ctx(off=0,imm=0) R10=fp0
+> >>      0: (b7) r0 = 0                        ; R0_w=0
+> >>      1: (b7) r1 = 0                        ; R1_w=0
+> >>      2: (87) r1 = -r1                      ; R1_w=scalar()
+> >>      3: (87) r1 = -r1                      ; R1_w=scalar()
+> >>      4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
+> >>      5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0xffffffff))  <--- [*]
+> >>      6: (95) exit
+> >>
+> >> It can be seen that even if the 64bit bounds is clear here, the 32bit
+> >> bounds is still in the state of 'UNKNOWN'.
+> >>
+> >> After:
+> >>
+> >>      func#0 @0
+> >>      0: R1=ctx(off=0,imm=0) R10=fp0
+> >>      0: (b7) r0 = 0                        ; R0_w=0
+> >>      1: (b7) r1 = 0                        ; R1_w=0
+> >>      2: (87) r1 = -r1                      ; R1_w=scalar()
+> >>      3: (87) r1 = -r1                      ; R1_w=scalar()
+> >>      4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
+> >>      5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0x3))  <--- [*]
+> >>      6: (95) exit
+> >>
+> >> Signed-off-by: Youlin Li <liulin063@gmail.com>
+> >
+> > Looks good to me. Thanks Youlin.
+> >
+> > Acked-by: Hao Luo <haoluo@google.com>
+>
+> Thanks Youlin! Looks like the patch breaks CI [0] e.g.:
+>
+>    #142/p bounds check after truncation of non-boundary-crossing range FAIL
+>    Failed to load prog 'Permission denied'!
+>    invalid access to map value, value_size=8 off=16777215 size=1
+>    R0 max value is outside of the allowed memory range
+>    verification time 296 usec
+>    stack depth 8
+>    processed 15 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+>
+> Please take a look. Also it would be great to add a test_verifier selftest to
+> assert above case from commit log against future changes.
+>
+> Thanks,
+> Daniel
+>
+>    [0] https://github.com/kernel-patches/bpf/runs/7696324041?check_suite_focus=true
+
+This test case fails because the 32bit boundary information is lost
+after the 11th instruction is executed:
+Before:
+    11: (07) r1 += 2147483647             ;
+R1_w=scalar(umin=70866960383,umax=70866960638,var_off=(0x1000000000;
+0xffffffff),u32_min=2147483647,u32_max=-2147483394)
+After:
+    11: (07) r1 += 2147483647             ;
+R1_w=scalar(umin=70866960383,umax=70866960638,var_off=(0x1000000000;
+0xffffffff))
+
+This may be because, in previous versions of the code, when
+__reg_combine_64_into_32() was called, the 32bit boundary was
+completely deduced from the 64bit boundary, so there was a call to
+__mark_reg32_unbounded() in __reg_combine_64_into_32().
+
+But now, before adjust_scalar_min_max_vals() calls
+__reg_combine_64_into_32() , the 32bit bounds are already calculated
+to some extent, and __mark_reg32_unbounded() will eliminate these
+information.
+
+Simply copying a code without __mark_reg32_unbounded() should work,
+perhaps it would be more elegant to introduce a flag into
+__reg_combine_64_into_32()?
+
+Sorry for not completing the tests because I did not 'make selftests'
+successfully, and uploaded the code that caused the error.

@@ -2,334 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9280958CAE6
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BBF58CAE0
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243694AbiHHO6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 10:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
+        id S243341AbiHHO5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 10:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243542AbiHHO5l (ORCPT
+        with ESMTP id S243012AbiHHO5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 10:57:41 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3635613D19
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659970660; x=1691506660;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=smWZqXtuGrkZm9PWI4t1Ng9axLN7SJF3zgimxq/DvoY=;
-  b=jnVq964YeJsskxokORYCeVHyGtwWhbhwjQjcXigpJqF1kXQko7Rpoa03
-   vc83sQHSOeFJCm0wF08JbU5X7dVF/pfxej8Hcg8HofXbocHvNSdEzCyNz
-   PNgWS5h0LVbaYkTZn66vpkrEgw+PciRETGb3gxf/C9RJGIKZy2uEiFIgX
-   OFYgRQf7LM8lm+o4G+H9F38ha0op68K02lD03MZRUsoi1fjNdVhzFUu9P
-   fB8BUvzucvatr2ZU+OjyhOqqYnRkoU1B4FsQiaPBb7qERgLG6WceRjkGq
-   3hrFRK01t41he4+aMz+bqx3ypMI8rdg2d3w+31/bjjbpqUngSYCRxMrpQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="270996900"
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="270996900"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 07:57:39 -0700
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="663980524"
-Received: from ziqianlu-desk2.sh.intel.com ([10.238.2.76])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 07:57:38 -0700
-From:   Aaron Lu <aaron.lu@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [TEST NOT_FOR_MERGE 4/4] x86/mm/cpa: add a test interface to split direct map
-Date:   Mon,  8 Aug 2022 22:56:49 +0800
-Message-Id: <20220808145649.2261258-5-aaron.lu@intel.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220808145649.2261258-1-aaron.lu@intel.com>
-References: <20220808145649.2261258-1-aaron.lu@intel.com>
+        Mon, 8 Aug 2022 10:57:32 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475BDB1F6
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:57:30 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id 13so7362465plo.12
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 07:57:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xgqexFqNfWEI+vjZmxBXO3+TInw86fqMbwNyn542u8I=;
+        b=P3gxdnZNWJdVmBjp4eV03crxJ18dSpDU/aLVgSbmNM8Tupilkpyzu9uSGyQJs/k16w
+         7yMoHrtB0VmXA3bdSgMkiunX/fbjRrMyKFw7FEdIE3G0I47i2zXvAZm79w178CxSd0cy
+         91D9oFeZVqd4Lpmkg3qnSsRoB+bVB3BGiFsS+A7RTdSES/aGB8WGz0pToofcFE9dEjF6
+         sxtl35HMxEjK0HgDMAKmcHsKKyuCWXSAgwoBF6GrhfhozGCK2kf4953g5pSGIJp9+fTP
+         JCey2ob3ENOfDyZMOeFhwRrm10o82aTsEO/RGkF5xaNGAwfWJ3YJD4X731/HYbWaUK/o
+         BfiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xgqexFqNfWEI+vjZmxBXO3+TInw86fqMbwNyn542u8I=;
+        b=dnaaCOi4QJgOt2T7ULr5Copl1Yk2mNEMnmd6lniOZl/OycozVgwUD68NJRGKJykGEN
+         OdPvTev0Q+jU5FhJb9JqkdrbafWPRSW2OFXHTQbohN0FHW+7XslQqpY/fCc2886eAZej
+         F8Al7guCWMb1EMECRU0o/FBfU3MBLbHpK71PhQJVX0bl5zp4AKr5II4Nr9ybI9EhtYol
+         18OiGHY3QNKwBvHIclQkDXIeBRdoykLdglAP29Lh6DuygMVhiKTXbag9bla1RjFwg2BT
+         od+hBnRlIogF0B5o+YP354fw3dUOtky8CBo4JgBsF/iWZtA/+OvCd7F1L3BklmZpgz+d
+         4IJA==
+X-Gm-Message-State: ACgBeo36+fdj8FHL6Yi1yuYEsaDMnYO2+oATkQ4YrdO712/RTpgyw7TW
+        u4YUzUlZC/NiW/2S0P0QrglYvg==
+X-Google-Smtp-Source: AA6agR4BUfTZhyPXZwWUu79DD/Wzc9VniGVmZerobhOxABOMPLIfM6QawSyrqLdAHep8X0F4GWk8og==
+X-Received: by 2002:a17:90a:a401:b0:1f2:19a0:2874 with SMTP id y1-20020a17090aa40100b001f219a02874mr29683232pjp.146.1659970649774;
+        Mon, 08 Aug 2022 07:57:29 -0700 (PDT)
+Received: from [10.254.250.112] ([139.177.225.240])
+        by smtp.gmail.com with ESMTPSA id u13-20020a170902e80d00b0016cb873fe6fsm8926179plg.183.2022.08.08.07.57.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 07:57:29 -0700 (PDT)
+Message-ID: <616ed01f-3c4d-6c50-f5b7-096676dd9d1f@bytedance.com>
+Date:   Mon, 8 Aug 2022 22:57:24 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.0
+Subject: Re: [PATCH v4 7/9] sched/fair: allow changing cgroup of new forked
+ task
+Content-Language: en-US
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20220808125745.22566-1-zhouchengming@bytedance.com>
+ <20220808125745.22566-8-zhouchengming@bytedance.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220808125745.22566-8-zhouchengming@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To test this functionality, a debugfs interface is added:
-/sys/kernel/debug/x86/split_mapping
+On 2022/8/8 20:57, Chengming Zhou wrote:
+> commit 7dc603c9028e ("sched/fair: Fix PELT integrity for new tasks")
+> introduce a TASK_NEW state and an unnessary limitation that would fail
+> when changing cgroup of new forked task.
+> 
+> Because at that time, we can't handle task_change_group_fair() for new
+> forked fair task which hasn't been woken up by wake_up_new_task(),
+> which will cause detach on an unattached task sched_avg problem.
+> 
+> This patch delete this unnessary limitation by adding check before do
+> detach or attach in task_change_group_fair().
+> 
+> So cpu_cgrp_subsys.can_attach() has nothing to do for fair tasks,
+> only define it in #ifdef CONFIG_RT_GROUP_SCHED.
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> ---
+>  include/linux/sched.h |  5 ++---
+>  kernel/sched/core.c   | 30 +++++++-----------------------
+>  kernel/sched/fair.c   |  7 +++++++
+>  3 files changed, 16 insertions(+), 26 deletions(-)
+> 
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 88b8817b827d..b504e55bbf7a 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -95,10 +95,9 @@ struct task_group;
+>  #define TASK_WAKEKILL			0x0100
+>  #define TASK_WAKING			0x0200
+>  #define TASK_NOLOAD			0x0400
+> -#define TASK_NEW			0x0800
+>  /* RT specific auxilliary flag to mark RT lock waiters */
+> -#define TASK_RTLOCK_WAIT		0x1000
+> -#define TASK_STATE_MAX			0x2000
+> +#define TASK_RTLOCK_WAIT		0x0800
+> +#define TASK_STATE_MAX			0x1000
+>  
+>  /* Convenience macros for the sake of set_current_state: */
+>  #define TASK_KILLABLE			(TASK_WAKEKILL | TASK_UNINTERRUPTIBLE)
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index e74e79f783af..d5faa1700bd7 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4500,11 +4500,11 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
+>  {
+>  	__sched_fork(clone_flags, p);
+>  	/*
+> -	 * We mark the process as NEW here. This guarantees that
+> +	 * We mark the process as running here. This guarantees that
+>  	 * nobody will actually run it, and a signal or other external
+>  	 * event cannot wake it up and insert it on the runqueue either.
+>  	 */
+> -	p->__state = TASK_NEW;
+> +	p->__state = TASK_RUNNING;
+>  
+>  	/*
+>  	 * Make sure we do not leak PI boosting priority to the child.
+> @@ -4622,7 +4622,6 @@ void wake_up_new_task(struct task_struct *p)
+>  	struct rq *rq;
+>  
+>  	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
+> -	WRITE_ONCE(p->__state, TASK_RUNNING);
+>  #ifdef CONFIG_SMP
+>  	/*
+>  	 * Fork balancing, do it here and not earlier because:
+> @@ -10238,36 +10237,19 @@ static void cpu_cgroup_css_free(struct cgroup_subsys_state *css)
+>  	sched_unregister_group(tg);
+>  }
+>  
+> +#ifdef CONFIG_RT_GROUP_SCHED
+>  static int cpu_cgroup_can_attach(struct cgroup_taskset *tset)
+>  {
+>  	struct task_struct *task;
+>  	struct cgroup_subsys_state *css;
+> -	int ret = 0;
+>  
+>  	cgroup_taskset_for_each(task, css, tset) {
+> -#ifdef CONFIG_RT_GROUP_SCHED
+>  		if (!sched_rt_can_attach(css_tg(css), task))
+>  			return -EINVAL;
+> -#endif
+> -		/*
+> -		 * Serialize against wake_up_new_task() such that if it's
+> -		 * running, we're sure to observe its full state.
+> -		 */
+> -		raw_spin_lock_irq(&task->pi_lock);
+> -		/*
+> -		 * Avoid calling sched_move_task() before wake_up_new_task()
+> -		 * has happened. This would lead to problems with PELT, due to
+> -		 * move wanting to detach+attach while we're not attached yet.
+> -		 */
+> -		if (READ_ONCE(task->__state) == TASK_NEW)
+> -			ret = -EINVAL;
+> -		raw_spin_unlock_irq(&task->pi_lock);
+> -
+> -		if (ret)
+> -			break;
+>  	}
+> -	return ret;
+> +	return 0;
+>  }
+> +#endif
+>  
+>  static void cpu_cgroup_attach(struct cgroup_taskset *tset)
+>  {
+> @@ -11103,7 +11085,9 @@ struct cgroup_subsys cpu_cgrp_subsys = {
+>  	.css_released	= cpu_cgroup_css_released,
+>  	.css_free	= cpu_cgroup_css_free,
+>  	.css_extra_stat_show = cpu_extra_stat_show,
+> +#ifdef CONFIG_RT_GROUP_SCHED
+>  	.can_attach	= cpu_cgroup_can_attach,
+> +#endif
+>  	.attach		= cpu_cgroup_attach,
+>  	.legacy_cftypes	= cpu_legacy_files,
+>  	.dfl_cftypes	= cpu_files,
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 4bc76d95a99d..90aba33a3780 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -11669,6 +11669,13 @@ void init_cfs_rq(struct cfs_rq *cfs_rq)
+>  #ifdef CONFIG_FAIR_GROUP_SCHED
+>  static void task_change_group_fair(struct task_struct *p)
+>  {
+> +	/*
+> +	 * We couldn't detach or attach a forked task which
+> +	 * hasn't been woken up by wake_up_new_task().
+> +	 */
+> +	if (!p->on_rq && !se->sum_exec_runtime)
 
-There are three test modes.
-mode 0: allocate $page_nr pages and set each page's protection first
-to RO and X and then back to RW and NX. This is used to test multiple
-CPUs dealing with different address ranges.
-mode 1: allocate several pages and create $nr_cpu kthreads to
-simultaneously change those pages protection with a fixed pattern.
-This is used to test multiple CPUs dealing with the same address range.
-mode 2: same as mode 0 except using alloc_pages() instead of vmalloc()
-because vmalloc space is too small on x86_32/pae.
+should be: if (!p->on_rq && !p->se.sum_exec_runtime)
+sorry for my carelessness...
 
-On a x86_64 VM, I started mode0.sh and mode1.sh at the same time:
 
-mode0.sh:
-mode=0
-page_nr=200000
-nr_cpu=16
-
-function test_one()
-{
-	echo $mode $page_nr > /sys/kernel/debug/x86/split_mapping
-}
-
-while true; do
-	for i in `seq $nr_cpu`; do
-		test_one &
-	done
-	wait
-done
-
-mode1.sh:
-mode=1
-page_nr=1
-echo $mode $page_nr > /sys/kernel/debug/x86/split_mapping
-
-After 5 hours, no problem occured with some millions of splits and merges.
-
-For x86_32 and x86_pae, mode2 test is used and also no problem found.
-
-Signed-off-by: Aaron Lu <aaron.lu@intel.com>
----
- arch/x86/mm/pat/set_memory.c | 206 +++++++++++++++++++++++++++++++++++
- 1 file changed, 206 insertions(+)
-
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 1be9aab42c79..4deea4de73e7 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -20,6 +20,9 @@
- #include <linux/kernel.h>
- #include <linux/cc_platform.h>
- #include <linux/set_memory.h>
-+#include <linux/kthread.h>
-+#include <linux/delay.h>
-+#include <linux/random.h>
- 
- #include <asm/e820/api.h>
- #include <asm/processor.h>
-@@ -2556,6 +2559,209 @@ int __init kernel_unmap_pages_in_pgd(pgd_t *pgd, unsigned long address,
- 	return retval;
- }
- 
-+static int split_mapping_mode0_test(int page_nr)
-+{
-+	void **addr_buff;
-+	void *addr;
-+	int i, j;
-+
-+	addr_buff = kvmalloc(sizeof(void *) * page_nr, GFP_KERNEL);
-+	if (!addr_buff) {
-+		pr_err("addr_buff: no memory\n");
-+		return -ENOMEM;
-+	}
-+
-+	for (i = 0; i < page_nr; i++) {
-+		addr = vmalloc(PAGE_SIZE);
-+		if (!addr) {
-+			pr_err("no memory\n");
-+			break;
-+		}
-+
-+		set_memory_ro((unsigned long)addr, 1);
-+		set_memory_x((unsigned long)addr, 1);
-+
-+		addr_buff[i] = addr;
-+	}
-+
-+	for (j = 0; j < i; j++) {
-+		set_memory_nx((unsigned long)addr_buff[j], 1);
-+		set_memory_rw((unsigned long)addr_buff[j], 1);
-+		vfree(addr_buff[j]);
-+	}
-+
-+	kvfree(addr_buff);
-+
-+	return 0;
-+}
-+
-+struct split_mapping_mode1_data {
-+	unsigned long addr;
-+	int page_nr;
-+};
-+
-+static int split_mapping_set_prot(void *data)
-+{
-+	struct split_mapping_mode1_data *d = data;
-+	unsigned long addr = d->addr;
-+	int page_nr = d->page_nr;
-+	int m;
-+
-+	m = get_random_int() % 100;
-+	msleep(m);
-+
-+	while (!kthread_should_stop()) {
-+		set_memory_ro(addr, page_nr);
-+		set_memory_x(addr, page_nr);
-+		set_memory_rw(addr, page_nr);
-+		set_memory_nx(addr, page_nr);
-+		cond_resched();
-+	}
-+
-+	return 0;
-+}
-+
-+static int split_mapping_mode1_test(int page_nr)
-+{
-+	int nr_kthreads = num_online_cpus();
-+	struct split_mapping_mode1_data d;
-+	struct task_struct **kthreads;
-+	int i, j, ret;
-+	void *addr;
-+
-+	addr = vmalloc(PAGE_SIZE * page_nr);
-+	if (!addr)
-+		return -ENOMEM;
-+
-+	kthreads = kmalloc(nr_kthreads * sizeof(struct task_struct *), GFP_KERNEL);
-+	if (!kthreads) {
-+		vfree(addr);
-+		return -ENOMEM;
-+	}
-+
-+	d.addr = (unsigned long)addr;
-+	d.page_nr = page_nr;
-+	for (i = 0; i < nr_kthreads; i++) {
-+		kthreads[i] = kthread_run(split_mapping_set_prot, &d, "split_mappingd%d", i);
-+		if (IS_ERR(kthreads[i])) {
-+			for (j = 0; j < i; j++)
-+				kthread_stop(kthreads[j]);
-+			ret = PTR_ERR(kthreads[i]);
-+			goto out;
-+		}
-+	}
-+
-+	while (1) {
-+		if (signal_pending(current)) {
-+			for (i = 0; i < nr_kthreads; i++)
-+				kthread_stop(kthreads[i]);
-+			ret = 0;
-+			break;
-+		}
-+		msleep(1000);
-+	}
-+
-+out:
-+	kfree(kthreads);
-+	vfree(addr);
-+	return ret;
-+}
-+
-+static int split_mapping_mode2_test(int page_nr)
-+{
-+	struct page *p, *t;
-+	unsigned long addr;
-+	int i;
-+
-+	LIST_HEAD(head);
-+
-+	for (i = 0; i < page_nr; i++) {
-+		p = alloc_pages(GFP_KERNEL | GFP_DMA32, 0);
-+		if (!p) {
-+			pr_err("no memory\n");
-+			break;
-+		}
-+
-+		addr = (unsigned long)page_address(p);
-+		BUG_ON(!addr);
-+
-+		set_memory_ro(addr, 1);
-+		set_memory_x(addr, 1);
-+
-+		list_add(&p->lru, &head);
-+	}
-+
-+	list_for_each_entry_safe(p, t, &head, lru) {
-+		addr = (unsigned long)page_address(p);
-+		set_memory_nx(addr, 1);
-+		set_memory_rw(addr, 1);
-+
-+		list_del(&p->lru);
-+		__free_page(p);
-+	}
-+
-+	return 0;
-+}
-+static ssize_t split_mapping_write_file(struct file *file, const char __user *buf,
-+					size_t count, loff_t *ppos)
-+{
-+	unsigned int mode = 0, page_nr = 0;
-+	char buffer[64];
-+	int ret;
-+
-+	if (count > 64)
-+		return -EINVAL;
-+
-+	if (copy_from_user(buffer, buf, count))
-+		return -EFAULT;
-+	sscanf(buffer, "%u %u", &mode, &page_nr);
-+
-+	/*
-+	 * There are 3 test modes.
-+	 * mode 0: each thread allocates $page_nr pages and set each page's
-+	 *         protection first to RO and X and then back to RW and NX.
-+	 *         This is used to test multiple CPUs dealing with different
-+	 *         pages.
-+	 * mode 1: allocate several pages and create $nr_cpu kthreads to
-+	 *         simultaneously change those pages protection to a fixed
-+	 *         pattern. This is used to test multiple CPUs dealing with
-+	 *         some same page's protection.
-+	 * mode 2: like mode 0 but directly use alloc_pages() because vmalloc
-+	 *         area on x86_32 is too small, only 128M.
-+	 */
-+	if (mode > 2)
-+		return -EINVAL;
-+
-+	if (page_nr == 0)
-+		return -EINVAL;
-+
-+	if (mode == 0)
-+		ret = split_mapping_mode0_test(page_nr);
-+	else if (mode == 1)
-+		ret = split_mapping_mode1_test(page_nr);
-+	else
-+		ret = split_mapping_mode2_test(page_nr);
-+
-+	return ret ? ret : count;
-+}
-+
-+static const struct file_operations split_mapping_fops = {
-+	.write          = split_mapping_write_file,
-+};
-+
-+static int __init split_mapping_init(void)
-+{
-+	struct dentry *d = debugfs_create_file("split_mapping", S_IWUSR, arch_debugfs_dir, NULL,
-+			&split_mapping_fops);
-+	if (IS_ERR(d)) {
-+		pr_err("create split_mapping failed: %ld\n", PTR_ERR(d));
-+		return PTR_ERR(d);
-+	}
-+
-+	return 0;
-+}
-+late_initcall(split_mapping_init);
-+
- /*
-  * The testcases use internal knowledge of the implementation that shouldn't
-  * be exposed to the rest of the kernel. Include these directly here.
--- 
-2.37.1
-
+> +		return;
+> +
+>  	detach_task_cfs_rq(p);
+>  
+>  #ifdef CONFIG_SMP

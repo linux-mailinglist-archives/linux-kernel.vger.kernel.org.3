@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0B758C976
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAE358C97A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243336AbiHHNaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
+        id S243416AbiHHNbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242628AbiHHNaG (ORCPT
+        with ESMTP id S243341AbiHHNaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:30:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C75BC26;
-        Mon,  8 Aug 2022 06:30:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D5B06121F;
-        Mon,  8 Aug 2022 13:30:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B98EC433C1;
-        Mon,  8 Aug 2022 13:30:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659965404;
-        bh=a11PrFr0QU2TMyjEjHd+D+4ZCEi56EIcD/sVdbPA3TI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NuDhuwm/QcTsNh0is7t//3B9+WHiIeVx3ZPjdyJFyhaQIlDI9bkrYIfyqbntMFhS9
-         M1YTVKshagYN9BdY3hHlXibw4YOp61AipofX35bPepSo40/IN9bDHAS9t8aTLSNEoQ
-         /maE81f8ccwW5SFOO0BcZyUWwOqDhNurpW1QDIuxpYRHokbBZAzYF9UWSBZHIVaMnY
-         CEke5nKo+Ny0U0wWF8mx35fHbr4/w7cEXyCoHk+1J0j2n8mFj+Hh4JP8Gym42dBttp
-         2dpxkEUoBOJ5qyISKDmA9HpORWlZlvBQV8+POdgMOeVsi2Hl1yLSejntcmCQvTres3
-         H4UmlRnhvB2Kw==
-Date:   Mon, 8 Aug 2022 14:29:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     patrice.chotard@foss.st.com
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        christophe.kerello@foss.st.com, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/3] spi: stm32_qspi: Add transfer_one_message() spi
- callback
-Message-ID: <YvEP15/7KmQGyPgL@sirena.org.uk>
-References: <20220808074051.44736-1-patrice.chotard@foss.st.com>
- <20220808074051.44736-3-patrice.chotard@foss.st.com>
+        Mon, 8 Aug 2022 09:30:52 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56682C70;
+        Mon,  8 Aug 2022 06:30:51 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y141so8093222pfb.7;
+        Mon, 08 Aug 2022 06:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=/cwKw1oXK2BAcUZBUF1HGlwJN39sE5gD8XqZTYnWCZg=;
+        b=O8HGM/CeMJZUbrN9QYtc5puFOw69OoCjnsj+YVQ3CZSGm0Fvwt26dd/DtxV4JvMrCG
+         /EUEYfVm/fdmqjEi6aC2yslfCFN+QT+UGVRt6dDw3dQypyDHuyw7zDb7wpwqoJTeOqV+
+         f1qgrvRtmW9gFk12p0PwxEywL5rKRUKR9BS1O3dczs9/7rUAShXHEG3m3YedQnXkv7QD
+         wILcO3RdeZ3WeuGFMzXYOah/pmYH1cUTJtlqDDjkmHcnC7clnoBqFStbOLAIOXT2bhqG
+         pU7o0HXjqRQLubWcm0kTag9lPTJa1uKUc9m6GaKUaJu6zuB/1PpcDJeE5VXgfxzKUu+2
+         S5aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=/cwKw1oXK2BAcUZBUF1HGlwJN39sE5gD8XqZTYnWCZg=;
+        b=a2jYIhsk7Oc3PCuO6s/bAXfuXmNbgpNxvaKVe8oTx9QmYLAUfUC2GnoqEAhjfTrSMe
+         5GbaGTgsadm+dH6u8ngRldSxdLbKtC1Z1/GNrtazPd/N2P0cmmk+0EURl9SzPuFvmtg9
+         jNW8NK5V3h1vUsEuzqzDhLs7aaIZNYO5/nKUJWu1hjTv1N1chRzc6WCY6VDS0N/CBNbo
+         9COXCSiGnMNIgx9qjf0SxMZ0666i21Gq333TPJfZ5I+xQkTgT+6EpBmt1UejsZt9VYV2
+         8mlYLgTEelIFt8KHgb1efAXD8LC1J+B9oHDNgb4VZnZfmTjq4BpXFqreCvpu2lGqFQES
+         qStA==
+X-Gm-Message-State: ACgBeo0bECyGNVyDWbukrIBNfnIoAbDKWycJfQnCZuO2gAhmhpXqI6Ir
+        to3qVwyi3Pzuii1c+J+SRwg=
+X-Google-Smtp-Source: AA6agR5leQTGI3Gn3ICBtJwZcaOBSYYMxYgXEWbc/mQAjoNsb13pkDAcSWetVYSPKlW/WcBvsNVI5A==
+X-Received: by 2002:a65:604f:0:b0:41a:77fe:2bbe with SMTP id a15-20020a65604f000000b0041a77fe2bbemr15196528pgp.242.1659965450820;
+        Mon, 08 Aug 2022 06:30:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bg22-20020a17090b0d9600b001f10c959aa2sm8104487pjb.42.2022.08.08.06.30.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 06:30:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 8 Aug 2022 06:30:46 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     wim@linux-watchdog.org, arnd@arndb.de,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kelulanainsley@gmail.com, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] watchdog: sa1100: make variable sa1100dog_driver static
+Message-ID: <20220808133046.GA2347272@roeck-us.net>
+References: <20220802020819.1226454-1-sunliming@kylinos.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cLMWiIMhBnFRWQta"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220808074051.44736-3-patrice.chotard@foss.st.com>
-X-Cookie: Flee at once, all is discovered.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220802020819.1226454-1-sunliming@kylinos.cn>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 02, 2022 at 10:08:19AM +0800, sunliming wrote:
+> This symbol is not used outside of sa1100_wdt.c, so marks it static.
+> 
+> Fixes the following warning:
+> 
+> >> drivers/watchdog/sa1100_wdt.c:241:24: sparse: sparse: symbol 'sa1100dog_driver'
+> was not declared. Should it be static?
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
 
---cLMWiIMhBnFRWQta
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-On Mon, Aug 08, 2022 at 09:40:50AM +0200, patrice.chotard@foss.st.com wrote:
-
-> +	ret = pm_runtime_get_sync(qspi->dev);
-> +	if (ret < 0) {
-> +		pm_runtime_put_noidle(qspi->dev);
-> +		return ret;
-> +	}
-
-Use the core runtime PM, there should be no need to open code.
-
---cLMWiIMhBnFRWQta
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLxD9YACgkQJNaLcl1U
-h9B5sgf+In74ixHnCRZMTBmlDnGq0rbz2vl15eopttvjouYl8KTYKUmRnu8dfafd
-nscthycpSYVRecbPtNW3Q1PoEOg9x5iEwUtC7uEPmk2oWD/c2Ck2691Zd5aUA18r
-aOPa0BO3D/TPDhAwWfI6jPIcNbrPYksSL2yFSRogAeBhq3ze/USWI+6IOspS6IR9
-uvkG/XI2gA6b5CcJBXQsK40bZNX97y4QnKtzWLERmPDe3s+ljYTdJf0+djVVQg24
-Oi67dvkkT8FFu8Je4S/bStR8rNvksD40FnM7RYU7Z+200TzNcRd/NCBrfAx5xSuD
-BAaW4TcV9hF2egVdRVLL+xLtZR63Ew==
-=y3IU
------END PGP SIGNATURE-----
-
---cLMWiIMhBnFRWQta--
+> ---
+>  drivers/watchdog/sa1100_wdt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/sa1100_wdt.c b/drivers/watchdog/sa1100_wdt.c
+> index 2d0a06a158a8..82ac5d19f519 100644
+> --- a/drivers/watchdog/sa1100_wdt.c
+> +++ b/drivers/watchdog/sa1100_wdt.c
+> @@ -238,7 +238,7 @@ static int sa1100dog_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -struct platform_driver sa1100dog_driver = {
+> +static struct platform_driver sa1100dog_driver = {
+>  	.driver.name = "sa1100_wdt",
+>  	.probe	  = sa1100dog_probe,
+>  	.remove	  = sa1100dog_remove,
+> -- 
+> 2.25.1
+> 

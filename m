@@ -2,142 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489D458CCF5
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B506E58CCF6
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244241AbiHHRqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S244333AbiHHRqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244599AbiHHRqQ (ORCPT
+        with ESMTP id S243668AbiHHRqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:46:16 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34A7131
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:46:10 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id o3so9190855ple.5
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 10:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WT0gvMZYO/av++KMudc6Dk4HO66L8Urniksc21Z/06c=;
-        b=HqrXaad1rdwTwFVLqtIf2gsOjqqHSCtra1Op2I+Ip1+B6FPHxPEzwTFH7bXQwHcgET
-         670AgcycqxHJDRROfj5zyTe5NwQtZFhFxYR5FYTupki7enfM8YtWwCxJCV7/nQfmy4cJ
-         IxrZhtFvvcJ66LqIrfUAMfkK7CmlRw5Rv0KXw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WT0gvMZYO/av++KMudc6Dk4HO66L8Urniksc21Z/06c=;
-        b=LLydyCrnOPOnMJL5csXM1OcJzZp6oQpYDU+xfIbAkmUlu0Ssi6924FnJRMwWBjkFOQ
-         NkOJayzN+DaDmpTfJX7CdOVntyjnw8Hpz60QBVVSYVFvmyiT5Y7mKaA2tHlWwfnYRf7l
-         vzp4Y5HwZMk7dyDt44rYeCCerSd/gWfsyNZOjnlx3pGzXuXW06Tpnfjt8oenyVO2+LU+
-         fK8FV0qvNII24sO+wc7sg2/NMr4bkgl+KdpQudOqeVVVtYVN/42hqYwqO5FOez7shOPd
-         gLGedASk77dSq/2mBy5KU3pc8NjGcnM2FGBS9+JdizFdHAtLLyoPMiGPkKxFSoOpkmP2
-         6jaA==
-X-Gm-Message-State: ACgBeo2mCUfGZRkO1OdKnJzrzZhLTCNAG/zSmZU050eIE4YuLRG9vgu2
-        CF75aKofwhSYDq0PWq9KKD6AwA==
-X-Google-Smtp-Source: AA6agR55vq+x0LDDr8mxEbc8OnrHWhZtkoyD+AcW+LYABM9JFgkRs4j4RTu6F017ikC4JmT33xQogA==
-X-Received: by 2002:a17:90b:3c4c:b0:1f3:3d62:39e2 with SMTP id pm12-20020a17090b3c4c00b001f33d6239e2mr29906557pjb.88.1659980770387;
-        Mon, 08 Aug 2022 10:46:10 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d15-20020a17090ad98f00b001f200eabc65sm8394142pjv.41.2022.08.08.10.46.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 10:46:09 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 10:46:08 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     jeffxu@google.com
-Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mnissler@chromium.org, jannh@google.com,
-        Jeff Xu <jeffxu@chromium.org>, linux-hardening@vger.kernel.org,
-        Aleksa Sarai <cyphar@cyphar.com>, dev@opencontainers.org,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v2 0/5] mm/memfd: MFD_NOEXEC for memfd_create
-Message-ID: <202208081018.9C782F184C@keescook>
-References: <20220805222126.142525-1-jeffxu@google.com>
-MIME-Version: 1.0
+        Mon, 8 Aug 2022 13:46:32 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E6EC55
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:46:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MGoHl8y/Ky3YiUXMq1Q8AnMQG6K2F99m/+0QhKrruKUq+Cb8L0cHpU4Nnymau2lxnOjS5PE/AMXTCE/WzDX5o8YSGK9wKRvzum8I0xh127k0SgFfQ77WIGhy5F/AGpMYhPGNHF4PF2N8jGAiQMNe9Kp9KLpo77ckMVJ4BzgcQJOth3k3VSRunA/HJ3rx1mjSD7fPFMBuDTBpsKu0CVKNe4GO7eiN9MCnutCeDKeGJZqV6vn3Pm1TxBkIwFCbE9bDSCgk+K0H3unev7zTNd/8jkk/Kpte68HNLoUJ8EtEeSfj2F0rdcgjQfH7ANTFR9JcqL+VKt+RuZoeynVjn1hQcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=it83voNRN/dEQcPN1ubnKvr8602PLeTZ2Yso5E2zxwk=;
+ b=e7JxnfM38nCB+XPn/XJCCmCIe2jKMA85q/IWJ3BNYzJL5NYMXpXyz1WnVLk6k3bsF2cttOlme1Q6xNmN2FSTCUOpyOsDtfcGErAJgCTHWD6yjYw+hhEHPgtaIdCAcXzUDAt/4vamy/i+1BwDXqpwPiSSdI6dK6CDfgYPiFdF5c4z/udeuicneCyAdMRktmTHREfXMlWF7PvrEVcWRsojMGmXog4837EW+CHn01z05o1ct4lsW6Rr/qBN1ggpUK8qkqLRbJxmwOTHFPj5Yg/6raA2sPXWDJa8Dep9WoNi+uP7kEP/zHJsN009e1j/q+Biae7XI3Ie2H21jD1E65PwfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=it83voNRN/dEQcPN1ubnKvr8602PLeTZ2Yso5E2zxwk=;
+ b=HP7TvV5+IiIccYTu76YjMI6PPCrM+WgMOqFz42g3ldxFl+boT7PxP4ylw7uIUet+Ys/oYtVX/TUC75Ks3pD01setaq3xJgNbHoajWyQQs1R2F9rluj5tcHtzOWfLrvt4hnK9Wq83ocBRP6y/IFxta3dX7UMdSYpfr04NHqhKfZBaMgvmfGEClQKZc31XHnOCBNuoudPlj0p611Zjf3ppV5IEZb8i1YpDuLKPJrXpRkgjH1i4F4DZ2oCk3tHdykHzKbc6J6bZ32vlQ2fg4EunUSw8XAPgFpHhj4GNOkNO/ONqEGC8Iti2x0QvfYnw4VpjKH+EJaaPO++YfiEzecmh4A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by MWHPR12MB1839.namprd12.prod.outlook.com (2603:10b6:300:10b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Mon, 8 Aug
+ 2022 17:46:29 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::1a7:7daa:9230:1372]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::1a7:7daa:9230:1372%7]) with mapi id 15.20.5504.020; Mon, 8 Aug 2022
+ 17:46:28 +0000
+Date:   Mon, 8 Aug 2022 14:46:27 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Oded Gabbay <oded.gabbay@gmail.com>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Subject: Re: New subsystem for acceleration devices
+Message-ID: <YvFL8/g+xbrhLzEr@nvidia.com>
+References: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
+ <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
+ <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com>
+ <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
+ <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
+ <YuvctaLwRi+z0Gw4@nvidia.com>
+ <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
+ <Yuxi1eRHPN36Or+1@nvidia.com>
+ <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805222126.142525-1-jeffxu@google.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
+X-ClientProxiedBy: BL1PR13CA0180.namprd13.prod.outlook.com
+ (2603:10b6:208:2bd::35) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9a223d97-1ba9-42cf-4881-08da7965ebd9
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1839:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GpF4RhGMz1AEdHYzYJKN4eoF0bC1g+KoNKmQFUaAQ91wvQk1Y46XvyibgvTgAtcMfTr9bOZc37lQ3xHhLwgz4A/j68CA11RLKZ1yFQzgBok/6SpmmfWKIYBVruWm82jU4wOXAtywB6BBaYRntGG1E+Mev6fljshPPOTvKd5ZoiMksHUzkMTuzKrgLrGbOsmvgyoCNU0pw4bOs9+9KWYN5dkKppcMm2x+k6r3Zy9wMuVDG/FU5Q3mTX7brdsGlAYCDl/sCpfCmRaLVEUc+Nu+1bDl8qbto0sTOX5CJeg8dNwx2Z0cWoeIvqdFVn7GgaDm2QPjxsHEc0a/90aUBlOahEg9Csg1iuGYtowILpHLwunaGW1bMzEXWffS3P+xZWdlrpxftljXkRUk6NRIf+xeVjiQW1bTE9cYckjtUW5Q27HFOLs/BUcIcTHT1jJQyMycHGATxoLQPc15LqAKTrwBrgnmdqjf9gIIsIy+SOP10wbwywRM4FBMJyxYR/VhcFe2sHQ9hThLQVPKW03Pvfx5+XBBPYQW2kLar0ToRTwLF7xnZJeRAdFPEHMz3cImjD750+Ojlb5bS1LjqKxRZ03Om3D9M4PLNVBflycuY3N9+s73gzZFM+XsCeXBTO2J47yO7zdnh5kXkPmKMoyAYDsYK9Xg+8wYQJS9oKwXx/oGg1SbYlU+/V/mju7kSQyxXteZn/cgIR1mEKDe/DnHMwfhvUX+pQ/ZKh40s8GXINKY1IiGha2L9Vjw+zeeMx8hR1Aa
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(366004)(376002)(396003)(136003)(54906003)(5660300002)(8676002)(41300700001)(26005)(6916009)(2616005)(66476007)(478600001)(86362001)(36756003)(186003)(8936002)(316002)(66946007)(6506007)(6512007)(66556008)(4326008)(2906002)(38100700002)(83380400001)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4WsFmn0wqSDZp31SPRgHlkk6Vov18gz5MCXdXbJYI8qXU4VRPpcCPIo6shcm?=
+ =?us-ascii?Q?tCshUr96uk3f+hiNaX/V12nERhMWbos83oDmYOeGxxIK8OqOedofqqznu4gP?=
+ =?us-ascii?Q?D6qEYcop9Cz6lz7ZcdVMK2HfEltQrqlt+kpS7BKmjySihM9TXp+ZjsJe+VN6?=
+ =?us-ascii?Q?ZQyAsysxT1HqNtU/xPbFgnq3LXbA6AtL7SwNuQBn5EmRDcMYcxf1t3fg7yHV?=
+ =?us-ascii?Q?Jxoxm3G6SN8LdhArrRZVrFlbdavGvfkUs3tYymc0PdJKJIi3Ip95J3JBg7rc?=
+ =?us-ascii?Q?BKoGgw1nQFladsCAAVjJYNVdUbm0uYlFm8Oq7dPZrdMZFUhxQuB99A14cZ6D?=
+ =?us-ascii?Q?6np3VNfGG3v/XkFsHyCBGByNAvH0MYO952zVuMpj5tPbI641O9eLmzzMVK5q?=
+ =?us-ascii?Q?ucJAtTfTbi4Dj0RUE/1lR5kH1OYuSVsh6QezzJYjACbwnmQ/7fQYhmjYRQau?=
+ =?us-ascii?Q?T23Y1yd3GTKWbcB7UcfUVJkprReHLuYmy6NT7PAaQW7eB0QfCyxiOM5Nibc7?=
+ =?us-ascii?Q?1kqDG0zy9b7xKFNx0YWPnkp3Fr61npCgkTt4yKZSvzyoElLYQtPhtmV6bjkn?=
+ =?us-ascii?Q?ZN4uuG61jdHmKsIaRLl5W19yFujPfkyfcAH2FivTj9tn43yUg6ixEw8oY9C1?=
+ =?us-ascii?Q?1aIdDCzaXr+lq8XNb30bwUWybWa2tHsmsr9UE0zEBkpHlebJFJz7nAT05GUQ?=
+ =?us-ascii?Q?4PMhHfMrR7OcLZZLnDcZ+t7lo6ZRjNnHytFKF5dsyfHWJ+izVBUQE0OQr2Jg?=
+ =?us-ascii?Q?fDEoDq7GgYaXY1n03mifLEeYCMenYiZsaWIPpXA1xr4wG1mCyzKP2nmLnj+Z?=
+ =?us-ascii?Q?fk8AdZE1turYqUTi+p82OmBrOjYhXp7bwHCPcIfjHmlg9yl5yVqmDlIJVW0s?=
+ =?us-ascii?Q?MadV6/zbI2oXc/dEj73dfuNiOLegc55OP0yTFBnC7id5PWH3gglgFVlNMwhr?=
+ =?us-ascii?Q?nU/ovGZ66ZeY78IdrqVN9lESuhXldCnyTSoouy5CnsN3xasrr/Knt431hVmG?=
+ =?us-ascii?Q?Ak5qZ+IEwQlrY2SvzgAjzRD9VRqxZrmmWcftDsYR6J33BpDFs6m7cVkJNaJW?=
+ =?us-ascii?Q?y16p4Rth6OIFzO3iOrVBnG6twGNWKO40bYiB7xEyq5pH7281QWfanA2g74Jv?=
+ =?us-ascii?Q?wqwNyFXBZ+bEDc2DH4AtYvosoBbp++49qH84Edg6d106LnqdtAGidvE02q+L?=
+ =?us-ascii?Q?pw0MqSce9gSsmIlLn7tO45YxiUah13DPoI0ZXsQmlTZIFhxdp/rzVZszaDXy?=
+ =?us-ascii?Q?/euPTzrnTfCGWgzFU4NeFHvHMVfEzd7wehzK9V4h+k5ymU/j7/aezisVnt1X?=
+ =?us-ascii?Q?23qoE1SguKhonqklLSKfRkAtuLNzs4V7mgDlXAtoRrIX1u3XCMgpcZ8uW9EJ?=
+ =?us-ascii?Q?rv53t5ajZkULIEpNhp8oCPlCIRrUl7R6aJlJTfZk+2X9SsG2/7QQ2K76xkAV?=
+ =?us-ascii?Q?JfJCanZrApJ+9321WdIgg+TSg1drUGvNUqoDX0HuI3CBQKbwZV+OLPRGpU0I?=
+ =?us-ascii?Q?yyyLH0toqHiA1H1enPSKMFyOkXfPuqyIkMDz9JgNChca+JasPlquaYr9Tn0n?=
+ =?us-ascii?Q?Jvls9gpV/zXLX0miC/z7hsEakDMU8PFNI1ivnLVP?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a223d97-1ba9-42cf-4881-08da7965ebd9
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2022 17:46:28.3608
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7qqxNMXthWEbEyvtjyBOwr/uWAQYypKUDIT4V+EvXIEa27EPF3OMTJX0+/zu70m2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1839
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 10:21:21PM +0000, jeffxu@google.com wrote:
-> This v2 series MFD_NOEXEC, this series includes:
-> 1> address comments in V1
-> 2> add sysctl (vm.mfd_noexec) to change the default file permissions
->     of memfd_create to be non-executable.
+On Sun, Aug 07, 2022 at 09:43:40AM +0300, Oded Gabbay wrote:
+
+> 1. If there is a subsystem which is responsible for creating and
+> exposing the device character files, then there should be some code
+> that connects between each device driver to that subsystem.
+> i.e. There should be functions that each driver should call from its
+> probe and release callback functions.
 > 
-> Below are cover-level for v1:
+> Those functions should take care of the following:
+> - Create metadata for the device, the device's minor(s) and the
+> driver's ioctls table and driver's callback for file operations (both
+> are common for all the driver's devices). Save all that metadata with
+> proper locking.
+> - Create the device char files themselves and supply file operations
+> that will be called per each open/close/mmap/etc.
+> - Keep track of all these objects' lifetime in regard to the device
+> driver's lifetime, with proper handling for release.
+> - Add common handling and entries of sysfs/debugfs for these devices
+> with the ability for each device driver to add their own unique
+> entries.
 > 
-> The default file permissions on a memfd include execute bits, which
-> means that such a memfd can be filled with a executable and passed to
-> the exec() family of functions. This is undesirable on systems where all
-> code is verified and all filesystems are intended to be mounted noexec,
-> since an attacker may be able to use a memfd to load unverified code and
-> execute it.
+> 2. I think that you underestimate (due to your experience) the "using
+> it properly" part... It is not so easy to do this properly for
+> inexperienced kernel people. If we provide all the code I mentioned
+> above, the device driver writer doesn't need to be aware of all these
+> kernel APIs.
 
-I would absolutely like to see some kind of protection here. However,
-I'd like a more specific threat model. What are the cases where the X
-bit has been abused (e.g.[1])? What are the cases where the X bit is
-needed (e.g.[2])? With those in mind, it should be possible to draw
-a clear line between the two cases. (e.g. we need to avoid a confused
-deputy attack where an "unprivileged" user can pass an executable memfd
-to a "privileged" user. How those privileges are defined may matter a
-lot based on how memfds are being used. For example, can runc's use of
-executable memfds be distinguished from an attacker's?)
+This may be, but it still seems weird to me to justify a subsystem as
+"making existing APIs simpler so drivers don't mess them up". It
+suggests perhaps we need additional core API helpers?
 
-> Additionally, execution via memfd is a common way to avoid scrutiny for
-> malicious code, since it allows execution of a program without a file
-> ever appearing on disk. This attack vector is not totally mitigated with
-> this new flag, since the default memfd file permissions must remain
-> executable to avoid breaking existing legitimate uses, but it should be
-> possible to use other security mechanisms to prevent memfd_create calls
-> without MFD_NOEXEC on systems where it is known that executable memfds
-> are not necessary.
+> > It would be nice to at least identify something that could obviously
+> > be common, like some kind of enumeration and metadata kind of stuff
+> > (think like ethtool, devlink, rdma tool, nvemctl etc)
+> Definitely. I think we can have at least one ioctl that will be common
+> to all drivers from the start.
 
-This reminds me of dealing with non-executable stacks. There ended up
-being three states:
+Generally you don't want that as an ioctl because you have to open the
+device to execute it, there may be permissions issues for instance -
+or if you have a single-open-at-a-time model like VFIO, then it
+doesn't work well together.
 
-- requested to be executable (PT_GNU_STACK X)
-- requested to be non-executable (PT_GNU_STACK NX)
-- undefined (no PT_GNU_STACK)
+Usually this would be sysfs or netlink.
 
-The first two are clearly defined, but the third needed a lot of special
-handling. For a "safe by default" world, the third should be "NX", but
-old stuff depended on it being "X".
+> > This makes sense to me, all accelerators need a way to set a memory
+> > map, but on the other hand we are doing some very nifty stuff in this
+> > area with iommufd and it might be very interesting to just have the
+> > accelerator driver link to that API instead of building yet another
+> > copy of pin_user_pages() code.. Especially with PASID likely becoming
+> > part of any accelerator toolkit.
+>
+> Here I disagree with you. First of all, there are many relatively
+> simple accelerators, especially in edge, where PASID is really not
+> relevant.
+> Second, even for the more sophisticated PCIe/CXL-based ones, PASID is
+> not mandatory and I suspect that it won't be in 100% of those devices.
+> But definitely that should be an alternative to the "classic" way of
+> handling dma'able memory (pin_user_pages()).
 
-Here, we have a bit being present or not, so we only have a binary
-state. I'd much rather the default be NX (no bit set) instead of making
-every future (safe) user of memfd have to specify MFD_NOEXEC.
+My point was that iommufd can do the pinning for you and dump that
+result into a iommu based PASID, or it can do the pinning for you and
+allow the driver to translate it into its own page table format eg the
+ASID in the habana device.
 
-It's also easier on a filtering side to say "disallow memfd_create with
-MFD_EXEC", but how do we deal with the older software?
+We don't need to have map/unmap APIs to manage address spaces in every
+subsystem.
 
-If the default perms of memfd_create()'s exec bit is controlled by a
-sysctl and the sysctl is set to "leave it executable", how does a user
-create an NX memfd? (i.e. setting MFD_EXEC means "exec" and not setting
-it means "exec" also.) Are two bits needed? Seems wasteful.
-MFD_I_KNOW_HOW_TO_SET_EXEC | MFD_EXEC, etc...
+> Maybe this is something that should be discussed in the kernel summit ?
 
-For F_SEAL_EXEC, it seems this should imply F_SEAL_WRITE if forced
-executable to avoid WX mappings (i.e. provide W^X from the start).
+Maybe, I expect to be at LPC at least
 
--Kees
-
-[1] https://bugs.chromium.org/p/chromium/issues/list?q=type%3Dbug-security%20memfd%20escalation&can=1
-[2] https://lwn.net/Articles/781013/
-
--- 
-Kees Cook
+Jason 

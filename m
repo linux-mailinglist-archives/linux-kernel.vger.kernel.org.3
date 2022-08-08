@@ -2,136 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78D3158C98A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7B858C98F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242846AbiHHNdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S243338AbiHHNeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236127AbiHHNdV (ORCPT
+        with ESMTP id S242958AbiHHNeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:33:21 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AF760D0;
-        Mon,  8 Aug 2022 06:33:18 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id l24so7061320ion.13;
-        Mon, 08 Aug 2022 06:33:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc;
-        bh=gYGa7o0LFb+k6WKzPDuCuY6ek/qRblZnSJwsd7ilTIM=;
-        b=o2Dtu4FFj/pojz+rNpvnjks91j8WaiA5Okxru7Md2PSU80mxxJYUYOpAclzj8ddQIz
-         5NFVRozDYnUTzrSLT8Bjqddvv/0PRBSImB5zgDxEuA5iyDdEAjab3DFDrTOkK50R+JmG
-         iCbtj0QR7p24sE0brxbZhBUOyqkpZP04gqpYVUwbfrUnzmT5UwqU3C77sg8ys5q/+A/r
-         F5rFcAheCQnfjxrotV6NgID6yJPG6yGJxmnT7bu7aZQ/ZXdISNA+CTygjSUx4QoFOl4j
-         WjqC9iCZM+xMSsqwGVoK3rGOmxZZswYBx92hc891PZslmDOyXL4E+31gneLvC+ejerdy
-         Eysg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=gYGa7o0LFb+k6WKzPDuCuY6ek/qRblZnSJwsd7ilTIM=;
-        b=CE+PLx416LZp9A/K0tdMu+zdyPnSjwqUg5EKY4qnrKCyjHO8zvldTj4OeVWiea6nrB
-         wZeWJEZwGIOtBLrDFf+O84XVPT1qZXvKGapFygi4T7rchCN1+vbpoTnfZ0ATB5pLCITl
-         yvOxhBORO9xIAV93dvmRP02122eabaDMu1TboM3qG0jtz2s9vfZK5Hp/6NRZH3Ig5qEH
-         dvCTouyEbnV83tVeqYVBZRujoiImMMqvswg3sF3pyeQVu1z3Tu9sk52A92qiGQ0QCSI/
-         Zr6EbmgUWqfbw9FHGtqn12hrf/6BT4rxTtGBjdiDK5SOg6Moeum3yhABfKM4XTQjjTdK
-         FCuw==
-X-Gm-Message-State: ACgBeo1WNCPcys7sTcrxkR5pMkm9wUbSjhhYhPKhYyBek7TpeAkpxyJ3
-        TkEO/qI4yhAzVQs8rcSpVcSu316kKiqWNAZ9L8Y=
-X-Google-Smtp-Source: AA6agR6i6CFJfQodXIHpToqaudMJeJWTrZcXk27S/3V3aW2/9jfnIhdKHvJws1KMvd1aZSx5NfCXVVmYoRYMBndGvHk=
-X-Received: by 2002:a05:6638:3822:b0:342:a65d:ade3 with SMTP id
- i34-20020a056638382200b00342a65dade3mr8501595jav.206.1659965598160; Mon, 08
- Aug 2022 06:33:18 -0700 (PDT)
+        Mon, 8 Aug 2022 09:34:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB93E62EE;
+        Mon,  8 Aug 2022 06:34:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5732A61238;
+        Mon,  8 Aug 2022 13:34:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF151C433D7;
+        Mon,  8 Aug 2022 13:34:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659965654;
+        bh=LBRn0PznnW2ya4z0sPhw5JpQP8WyMUBJTDHeeK7woag=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PNifi5K7Jm7FwC1RVc1vW5qDVCs/ySS9i+m27qTGqtkfGcc4xz6VIhzlEmRxwe8Q3
+         nAg/U8GrgNY/rVdyJ2vsNi3bAeQMsMgP0GvmjvZLo/KRbG/B2c6prdd1fINYg9Q5/b
+         hljRnV2sqAH2kzmrBMezphZqMNo48qm5m+bxOb928n4i2+dSpwP0wyB/8/DSvMU0DJ
+         xa0/qRasW0LXk+hLUkfB7FH5h0xMIW9zV+/Vp65qzeTziTKSC4e63dc0JVZY392KAI
+         4ETCV+JK93RyZWT0usaBxXV+lnZGzZKSrr8jxKzKisF6MG69DNA0ff/uu6q62eWWBK
+         ommQpb0xEGG+Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oL2tW-0000vp-Iv; Mon, 08 Aug 2022 15:34:11 +0200
+Date:   Mon, 8 Aug 2022 15:34:10 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 3/9] usb: dwc3: qcom: fix gadget-only builds
+Message-ID: <YvEQ0hpTRvAPStHU@hovoldconsulting.com>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-4-johan+linaro@kernel.org>
+ <YvEKIJ+GujHt7XvT@kroah.com>
 MIME-Version: 1.0
-References: <20220808094623.387348-1-asavkov@redhat.com> <20220808094623.387348-2-asavkov@redhat.com>
- <CAP01T76dELOx8p_iky_Py_VcqDbQtaL-4d=zrFiCbFhMdVEmNA@mail.gmail.com> <YvEEXsdo/fCnoEFY@samus.usersys.redhat.com>
-In-Reply-To: <YvEEXsdo/fCnoEFY@samus.usersys.redhat.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Mon, 8 Aug 2022 15:32:39 +0200
-Message-ID: <CAP01T74kqdAeZbmnVA2uDRiB-8tjuWtdw-q_2V5fL6wQ==rTEA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] bpf: add destructive kfunc flag
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>,
-        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvEKIJ+GujHt7XvT@kroah.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 8 Aug 2022 at 14:41, Artem Savkov <asavkov@redhat.com> wrote:
->
-> On Mon, Aug 08, 2022 at 02:14:33PM +0200, Kumar Kartikeya Dwivedi wrote:
-> > On Mon, 8 Aug 2022 at 11:48, Artem Savkov <asavkov@redhat.com> wrote:
-> > >
-> > > Add KF_DESTRUCTIVE flag for destructive functions. Functions with this
-> > > flag set will require CAP_SYS_BOOT capabilities.
-> > >
-> > > Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> > > ---
-> > >  include/linux/btf.h   | 1 +
-> > >  kernel/bpf/verifier.c | 5 +++++
-> > >  2 files changed, 6 insertions(+)
-> > >
-> > > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > > index cdb376d53238..51a0961c84e3 100644
-> > > --- a/include/linux/btf.h
-> > > +++ b/include/linux/btf.h
-> > > @@ -49,6 +49,7 @@
-> > >   * for this case.
-> > >   */
-> > >  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer arguments */
-> > > +#define KF_DESTRUCTIVE  (1 << 5) /* kfunc performs destructive actions */
-> > >
-> >
-> > Please also document this flag in Documentation/bpf/kfuncs.rst.
->
-> Ok, will do.
->
-> > And maybe instead of KF_DESTRUCTIVE, it might be more apt to call this
-> > KF_CAP_SYS_BOOT. While it is true you had a destructive flag for
-> > programs being loaded earlier, so there was a mapping between the two
-> > UAPI and kfunc flags, what it has boiled down to is that this flag
-> > just requires CAP_SYS_BOOT (in addition to other capabilities) during
-> > load. So that name might express the intent a bit better. We might
-> > soon have similar flags encoding requirements of other capabilities on
-> > load.
-> >
-> > The flag rename is just a suggestion, up to you.
->
-> This makes sense right now, but if going forward we'll add stricter
-> signing requirements or other prerequisites we'll either have to rename
-> the flag back, or add those as separate flags. I guess the decision here
+On Mon, Aug 08, 2022 at 03:05:36PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Aug 04, 2022 at 05:09:55PM +0200, Johan Hovold wrote:
+> > A recent change added a dependency to the USB host stack and broke
+> > gadget-only builds of the driver.
+> > 
+> > Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> > 
+> > Changes in v2
+> >  - new patch
+> > 
+> >  drivers/usb/dwc3/dwc3-qcom.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > index be2e3dd36440..e9364141661b 100644
+> > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > @@ -310,8 +310,11 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+> >  	 * currently supports only 1 port per controller. So
+> >  	 * this is sufficient.
+> >  	 */
+> > +#ifdef CONFIG_USB
+> >  	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+> 
+> If a gadget driver needs this for some reason, then the #ifdef should be
+> put in a .h file, not in a .c file.
 
-IMO we should do that when the time comes, for now it should reflect
-the current state.
-To me this helper requiring cap_sys_boot is just like how some
-existing stable helpers are gated behind bpf_capable or
-perfmon_capable.
-When it requires that the program calling it be signed, we can revisit this.
+Yeah, if we're keeping this long-term then yes, and possibly also
+otherwise.
 
-> depends on whether some of non-destructive bpf programs might ever require
-> CAP_SYS_BOOT capabilities or not.
+> But step back a minute and ask why a host-config-only function is being
+> called when a device is in gadget-only mode?  This feels like a
+> design/logic issue in this file, NOT something to paper over with a
+> #ifdef in a .c file
 
-These are just internal kernel flags, so refactoring/renaming is not a
-big deal when it is needed. E.g. we've changed just how kfuncs are
-registered twice since the support was added not long ago :).
+We're not as I'm fixing that bug in later in the series. I should
+probably have put this one after that fix, but figured fixing the build
+was more important than a harder-to-hit NULL-deref due to non-host mode
+not being considered when the offending series was merged.
 
->
-> --
->  Artem
->
+> This implies that if this device is NOT in a host configuration, then
+> the suspend path of it is not configured properly at all, as why would
+> it be checking or caring about this at all if this is in gadget-only
+> mode?
+
+Right, so see path 6/9 which addresses this by only calling this hack
+when in host mode:
+
+	https://lore.kernel.org/all/20220804151001.23612-7-johan+linaro@kernel.org/
+
+> Something else is wrong here, let's fix the root problem please.  Maybe
+> this driver should just never be built in gadget-only mode, as it is
+> never intended to support that option?
+
+The problem is commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup
+interrupts during suspend"), which I considered simply reverting but as
+that breaks suspend completely on some boards I decided to try and fix
+it up while we work on a proper long-term solution (i.e. for how the
+dwc/xhci layers should be communicating to implement this).
+
+Remember that it took two years and 21 revisions to get to the state
+we're at now after you merged the wakeup series in June.
+
+Johan

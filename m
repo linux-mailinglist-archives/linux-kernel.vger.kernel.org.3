@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EDA58CCA9
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60EFE58CCAF
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236872AbiHHRY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S243008AbiHHRbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243226AbiHHRY4 (ORCPT
+        with ESMTP id S237606AbiHHRbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:24:56 -0400
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE020167EB
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:24:55 -0700 (PDT)
-Received: from imladris.surriel.com ([96.67.55.152])
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1oL6Ue-0008EX-LY;
-        Mon, 08 Aug 2022 13:24:44 -0400
-Message-ID: <06dc568d91979a3816af602a00884560cb5ec026.camel@surriel.com>
-Subject: Re: [RFC PATCH 5/5] x86/entry: Store CPU info on exception entry
-From:   Rik van Riel <riel@surriel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Date:   Mon, 08 Aug 2022 13:24:43 -0400
-In-Reply-To: <01768c70-a012-0d08-cfa5-a7a87ff0a19c@intel.com>
-References: <20220805173009.3128098-1-ira.weiny@intel.com>
-         <20220805173009.3128098-6-ira.weiny@intel.com>
-         <5d62c1d0-7425-d5bb-ecb5-1dc3b4d7d245@intel.com>
-         <Yu4t0jkpIY4grgxL@gmail.com> <Yu4wON0MRGH7h5Jv@zn.tnic>
-         <Yu+Nwbn4CZUmyD14@gmail.com> <Yu+VV8xFTYRh0D0a@zn.tnic>
-         <YvAaXet3sBg3mRDe@iweiny-desk3> <YvDtfKRyMGenRMU5@gmail.com>
-         <01768c70-a012-0d08-cfa5-a7a87ff0a19c@intel.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-zLfyIRf1FZ4PsR+JaPBx"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 8 Aug 2022 13:31:42 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB4AB7E3;
+        Mon,  8 Aug 2022 10:31:41 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id o15so14687408yba.10;
+        Mon, 08 Aug 2022 10:31:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=XE+n3oen5M0Y6e3hQHkhdlIj+r5EImjvF5ySJ/oi7Gg=;
+        b=btQfjJT5q/UhTdJ8cImqgtcGMUR6JpYlmbd+PJ7Vdr85OHB/kS030gZxm8D0LxJvl+
+         qhq8aO/Hdqn0koxNGSVyMpsbLrCALC+5ZmL3dYpdO3zkloX6Kg3vST7BbXGPtyrVA+aC
+         atDrv6OX2h47OJmiiwgtpM0Sty+gCXigpP/67V2wp4WnoTWPUJAjpZbjp4pShsZcjBgm
+         bHIsYVNkNlhBhxI0LJ7gHWs8RfRS4vh6R2TgEPtB/S9C3FQctiCQAy1NLOx4l7c4g5Ag
+         slOJg4WuGOLYy/3vuFEQKLi3K9lGh75y1def8PKFZ8GPzNOtqIHdrKq71cKW8NdLYmeF
+         nXTw==
+X-Gm-Message-State: ACgBeo2FreQ+yrb+LkCCwwz6WFa4GXErKu2YLpu9Qp+FXgaMu6IBDEaW
+        Kc874QK/xrqlfYSHuxrZ9U9p6V6Hbj00RRSLVVUwznyn
+X-Google-Smtp-Source: AA6agR5upNhWU3fVwvA09Is8RJUsteXtRxDRvkNznDvaCZ5QkgtNuY18SStQsaUE4RmZF5tr5yF2iU53FoXtCcjjfTE=
+X-Received: by 2002:a5b:40a:0:b0:677:a43b:dcd3 with SMTP id
+ m10-20020a5b040a000000b00677a43bdcd3mr16122549ybp.622.1659979901028; Mon, 08
+ Aug 2022 10:31:41 -0700 (PDT)
 MIME-Version: 1.0
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220802193503.3092-1-andriy.shevchenko@linux.intel.com> <f2685007-0331-aaea-bfbe-074a3680fc29@redhat.com>
+In-Reply-To: <f2685007-0331-aaea-bfbe-074a3680fc29@redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 8 Aug 2022 19:31:30 +0200
+Message-ID: <CAJZ5v0i7aqURUA3AOpssKCjucPpyys5-KKWgrujxNwxkg_x-+Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] ACPI: VIOT: Do not dereference fwnode in struct device
+To:     Eric Auger <eric.auger@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        iommu@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 3, 2022 at 12:03 PM Eric Auger <eric.auger@redhat.com> wrote:
+>
+> Hi Andy,
+>
+> On 8/2/22 21:35, Andy Shevchenko wrote:
+> > In order to make the underneath API easier to change in the future,
+> > prevent users from dereferencing fwnode from struct device.
+> > Instead, use the specific dev_fwnode() and device_match_fwnode()
+> > APIs for that.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Eric Auger <eric.auger@redhat.com>
 
---=-zLfyIRf1FZ4PsR+JaPBx
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-On Mon, 2022-08-08 at 09:16 -0700, Dave Hansen wrote:
-> On 8/8/22 04:03, Ingo Molnar wrote:
-> > > Again, I don't believe this is too much overhead but I don't want
-> > > people=20
-> > > to say it was not discussed.
-> > Is it necessary to do this, what are the alternatives, can this
-> > overhead be=20
-> > avoided?
->=20
-> I'm thinking that the whole racy smp_processor_id() thing wasn't so
-> bad
-> in the first place.
->=20
-
-FWIW, just grabbing the CPU number in show_signal_msg()
-appears to be good enough for our use.=C2=A0
-
-It will typically show >90% of the errors happening on the
-CPU core that went bad, which is more than enough to diagnose=C2=A0
-that a server has a hardware issue and should probably have
-the CPU repaired.
-
---=20
-All Rights Reversed.
-
---=-zLfyIRf1FZ4PsR+JaPBx
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmLxRtsACgkQznnekoTE
-3oPpIQf+M/woay+5/L9lVOq1s9YMpVHckK1DzaJLC9heGr3jDjMXrt9zJYouu2M9
-p46Sylwg7nU4zxMKPfV4NMIHd+kDYK73jmF41Ypnm5lbtk+Z6LA/qNElmTlWF3I2
-xZA1jpA5KarA+l/9vSdQyfcIJIo8xKxYDV8MLPEoX0EBZh5JA25rUH6dxPn3Rtjd
-0DR8namlwZpkkWiWOp3ZzaYFqh0azwQLnrB56hVjHU3ckKunY7nEmn70cWnV9+7d
-/RSpDNG5MBLs1SFWebF1oWzhbv4XqNMr4KpI6HDVTYw1PmX7uw/G1KzHE7H558Fk
-KAZc0I/0VuzunNoBWPSEgjfoUCURTw==
-=gGXL
------END PGP SIGNATURE-----
-
---=-zLfyIRf1FZ4PsR+JaPBx--
+> > ---
+> >  drivers/acpi/viot.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/acpi/viot.c b/drivers/acpi/viot.c
+> > index 647f11cf165d..6132092dab2a 100644
+> > --- a/drivers/acpi/viot.c
+> > +++ b/drivers/acpi/viot.c
+> > @@ -88,7 +88,7 @@ static int __init viot_get_pci_iommu_fwnode(struct viot_iommu *viommu,
+> >               return -ENODEV;
+> >       }
+> >
+> > -     fwnode = pdev->dev.fwnode;
+> > +     fwnode = dev_fwnode(&pdev->dev);
+> >       if (!fwnode) {
+> >               /*
+> >                * PCI devices aren't necessarily described by ACPI. Create a
+> > @@ -101,7 +101,7 @@ static int __init viot_get_pci_iommu_fwnode(struct viot_iommu *viommu,
+> >               }
+> >               set_primary_fwnode(&pdev->dev, fwnode);
+> >       }
+> > -     viommu->fwnode = pdev->dev.fwnode;
+> > +     viommu->fwnode = dev_fwnode(&pdev->dev);
+> >       pci_dev_put(pdev);
+> >       return 0;
+> >  }
+> > @@ -314,7 +314,7 @@ static int viot_dev_iommu_init(struct device *dev, struct viot_iommu *viommu,
+> >               return -ENODEV;
+> >
+> >       /* We're not translating ourself */
+> > -     if (viommu->fwnode == dev->fwnode)
+> > +     if (device_match_fwnode(dev, viommu->fwnode))
+> >               return -EINVAL;
+> >
+> >       ops = iommu_ops_from_fwnode(viommu->fwnode);
+>

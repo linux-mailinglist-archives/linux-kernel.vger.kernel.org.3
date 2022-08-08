@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01CC58C1CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5552F58C1C9
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244120AbiHHCnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
+        id S244137AbiHHCnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242536AbiHHClm (ORCPT
+        with ESMTP id S242602AbiHHClm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 7 Aug 2022 22:41:42 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C166521BA
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18E425F0
         for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 19:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=gLSmP0ezGtWML91IudXrNJu8Zj7NmJrDaiBCbrXz+LY=; b=MTuHy9VnQfrt2AB+/dowXbi0Xl
-        p/HsStgU1cVih1U6rA3n+lDtpLxkQnEfX/PJ9DCqQLl9dmaOeL+IMDfMclxATrkBqZTJk/yVL/+ym
-        Dvi5FrLyOGSBglGfyE/fmAK0psd/SAOf5CAfd3w9Z/A5ArMZft9EED/FgJU4F4LRVUfRe1SK5244n
-        UUvRaRG11eBhZWsSXwpHo+I6f5EiRjAR6j1EeEqIwctpKDo3WCeDhq3bvz33d4T13V9/H775it6jV
-        grcDXX65Gl6/qi6bkwITzFZo3MNtqHnXmRWWQyCYi+agf/UoME3pil5+McLv7ZUCHL3s2YoiV0fUN
-        XtBiz4Lw==;
+        bh=UMLp/z/zO9tVZ6IGymm87CLlbDOH1CSK9TxXY2OyJZw=; b=TV+mgKMyauh+4PXLlijjPCxJht
+        1olmilKT9KP1bAhpAgOESD5U+piHKmUsW9sv2+1YVm/vEmDIOPnO9TtpdgW83zVbFFEwDLAJxhrDx
+        r9NNAI/mkBYzZB48VkTUtbiiIhkzVNPjj7muCJ/vLu0oFfcn1wKcyA0yhZsZDHGbSHnHjGSc2W2UO
+        L9NbIbIiztxhQKBLKBomDBNb9S0n4N7omOOAtiTNh0y5sUKNZAqJPUNw1t6uNY/S5T/aPVf1SEe1t
+        58LI5yfvwU9aoV0DB1CWBUOpLgFHdrTykavF/D7+1MwmCLMyjzSJtK0nOQys0lowPHo0gbgCzJa9c
+        2vVLYrbA==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oKshy-00DVS2-56; Mon, 08 Aug 2022 02:41:34 +0000
+        id 1oKshy-00DVS4-7m; Mon, 08 Aug 2022 02:41:34 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-kernel@vger.kernel.org, pmladek@suse.com,
         Kent Overstreet <kent.overstreet@gmail.com>
 Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH v5 19/32] vsprintf: Refactor device_node_string, fwnode_string
-Date:   Mon,  8 Aug 2022 03:41:15 +0100
-Message-Id: <20220808024128.3219082-20-willy@infradead.org>
+Subject: [PATCH v5 20/32] vsprintf: Refactor hex_string, bitmap_string_list, bitmap_string
+Date:   Mon,  8 Aug 2022 03:41:16 +0100
+Message-Id: <20220808024128.3219082-21-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220808024128.3219082-1-willy@infradead.org>
 References: <20220808024128.3219082-1-willy@infradead.org>
@@ -51,178 +51,139 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@gmail.com>
 
- - eliminate on-stack buffer in device_node_string
- - eliminate unnecessary uses of printf_spec, lift format string
-   precision/field width to pointer()
+This patch cleans up printf_spec handling: these functions only use
+spec.field_width and they do not interpret it in the normal way -
+instead it's a number of bits/bytes passed in to print, so these
+functions are changed to take that parameter directly.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 Cc: Petr Mladek <pmladek@suse.com>
 Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 ---
- lib/vsprintf.c | 73 ++++++++++++++++++++------------------------------
- 1 file changed, 29 insertions(+), 44 deletions(-)
+ lib/vsprintf.c | 60 +++++++++++++++++++++++---------------------------
+ 1 file changed, 28 insertions(+), 32 deletions(-)
 
 diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 38d16aa79e56..06cfa06aa4ee 100644
+index 06cfa06aa4ee..0ff7d9fea6da 100644
 --- a/lib/vsprintf.c
 +++ b/lib/vsprintf.c
-@@ -1963,25 +1963,20 @@ void fwnode_full_name_string(struct printbuf *out,
+@@ -53,6 +53,7 @@
+ #include <asm/unaligned.h>
+ 
+ #include <linux/string_helpers.h>
++#include <linux/pretty-printers.h>
+ #include "kstrtox.h"
+ 
+ /* Disable pointer hashing if requested */
+@@ -1126,18 +1127,23 @@ void resource_string(struct printbuf *out, struct resource *res,
+ }
  
  static noinline_for_stack
- void device_node_string(struct printbuf *out, struct device_node *dn,
--			struct printf_spec spec, const char *fmt)
-+			const char *fmt)
+-void hex_string(struct printbuf *out, u8 *addr,
+-		struct printf_spec spec, const char *fmt)
++void hex_string(struct printbuf *out, const u8 *addr,
++		int len, const char *fmt)
  {
--	char tbuf[sizeof("xxxx") + 1];
- 	const char *p;
- 	int ret;
--	unsigned start = out->pos;
- 	struct property *prop;
- 	bool has_mult, pass;
+-	int i, len = 1;		/* if we pass '%ph[CDN]', field width remains
+-				   negative value, fallback to the default */
+ 	char separator;
  
--	struct printf_spec str_spec = spec;
--	str_spec.field_width = -1;
--
- 	if (fmt[0] != 'F')
--		return error_string_spec(out, "(%pO?)", spec);
-+		return error_string(out, "(%pO?)");
- 
- 	if (!IS_ENABLED(CONFIG_OF))
--		return error_string_spec(out, "(%pOF?)", spec);
-+		return error_string(out, "(%pOF?)");
- 
--	if (check_pointer_spec(out, dn, spec))
-+	if (check_pointer(out, dn))
+-	if (spec.field_width == 0)
+-		/* nothing to print */
++	/* nothing to print */
++	if (len == 0)
  		return;
  
- 	/* simple case without anything any more format specifiers */
-@@ -1990,7 +1985,6 @@ void device_node_string(struct printbuf *out, struct device_node *dn,
- 		fmt = "f";
- 
- 	for (pass = false; strspn(fmt,"fnpPFcC"); fmt++, pass = true) {
--		int precision;
- 		if (pass)
- 			prt_char(out, ':');
- 
-@@ -1998,43 +1992,41 @@ void device_node_string(struct printbuf *out, struct device_node *dn,
- 		case 'f':	/* full_name */
- 			fwnode_full_name_string(out, of_fwnode_handle(dn));
- 			break;
--		case 'n':	/* name */
--			p = fwnode_get_name(of_fwnode_handle(dn));
--			precision = str_spec.precision;
--			str_spec.precision = strchrnul(p, '@') - p;
--			string_spec(out, p, str_spec);
--			str_spec.precision = precision;
-+		case 'n': {	/* name */
-+			const char *name = fwnode_get_name(of_fwnode_handle(dn));
-+			unsigned len = strchrnul(name, '@') - name;
+-	if (check_pointer_spec(out, addr, spec))
++	/* if we pass '%ph[CDN]', field width remains
++	   negative value, fallback to the default */
++	if (len < 0)
++		len = 1;
 +
-+			prt_bytes(out, name, len);
- 			break;
-+		}
- 		case 'p':	/* phandle */
--			prt_u64(out, (unsigned int)dn->phandle);
-+			prt_u64(out, dn->phandle);
- 			break;
- 		case 'P':	/* path-spec */
- 			p = fwnode_get_name(of_fwnode_handle(dn));
- 			if (!p[1])
- 				p = "/";
--			string_spec(out, p, str_spec);
-+			string(out, p);
- 			break;
- 		case 'F':	/* flags */
--			tbuf[0] = of_node_check_flag(dn, OF_DYNAMIC) ? 'D' : '-';
--			tbuf[1] = of_node_check_flag(dn, OF_DETACHED) ? 'd' : '-';
--			tbuf[2] = of_node_check_flag(dn, OF_POPULATED) ? 'P' : '-';
--			tbuf[3] = of_node_check_flag(dn, OF_POPULATED_BUS) ? 'B' : '-';
--			tbuf[4] = 0;
--			string_nocheck(out, tbuf, str_spec);
-+			prt_char(out, of_node_check_flag(dn, OF_DYNAMIC) ? 'D' : '-');
-+			prt_char(out, of_node_check_flag(dn, OF_DETACHED) ? 'd' : '-');
-+			prt_char(out, of_node_check_flag(dn, OF_POPULATED) ? 'P' : '-');
-+			prt_char(out, of_node_check_flag(dn, OF_POPULATED_BUS) ? 'B' : '-');
- 			break;
- 		case 'c':	/* major compatible string_spec */
- 			ret = of_property_read_string(dn, "compatible", &p);
- 			if (!ret)
--				string_spec(out, p, str_spec);
-+				string(out, p);
- 			break;
- 		case 'C':	/* full compatible string_spec */
- 			has_mult = false;
- 			of_property_for_each_string(dn, "compatible", prop, p) {
- 				if (has_mult)
--					string_nocheck(out, ",", str_spec);
--				string_nocheck(out, "\"", str_spec);
--				string_spec(out, p, str_spec);
--				string_nocheck(out, "\"", str_spec);
-+					prt_char(out, ',');
-+				prt_char(out, '\"');
-+				string(out, p);
-+				prt_char(out, '\"');
++	len = min(len, 64);
++
++	if (check_pointer(out, addr))
+ 		return;
  
- 				has_mult = true;
- 			}
-@@ -2043,39 +2035,30 @@ void device_node_string(struct printbuf *out, struct device_node *dn,
- 			break;
- 		}
+ 	switch (fmt[1]) {
+@@ -1155,34 +1161,21 @@ void hex_string(struct printbuf *out, u8 *addr,
+ 		break;
  	}
+ 
+-	if (spec.field_width > 0)
+-		len = min_t(int, spec.field_width, 64);
 -
--	widen_string(out, out->pos - start, spec);
+-	for (i = 0; i < len; ++i) {
+-		__prt_char(out, hex_asc_hi(addr[i]));
+-		__prt_char(out, hex_asc_lo(addr[i]));
+-
+-		if (separator && i != len - 1)
+-			__prt_char(out, separator);
+-	}
+-
+-	printbuf_nul_terminate(out);
++	prt_hex_bytes(out, addr, len, 1, separator);
  }
  
  static noinline_for_stack
- void fwnode_string(struct printbuf *out,
- 		   struct fwnode_handle *fwnode,
+-void bitmap_string(struct printbuf *out, unsigned long *bitmap,
 -		   struct printf_spec spec, const char *fmt)
-+		   const char *fmt)
++void bitmap_string(struct printbuf *out, unsigned long *bitmap, int nr_bits)
  {
--	struct printf_spec str_spec = spec;
--	unsigned start = out->pos;
--
--	str_spec.field_width = -1;
--
- 	if (*fmt != 'w')
--		return error_string_spec(out, "(%pf?)", spec);
-+		return error_string(out, "(%pf?)");
++	struct printf_spec spec = { .flags = SMALL | ZEROPAD, .base = 16 };
+ 	const int CHUNKSZ = 32;
+-	int nr_bits = max_t(int, spec.field_width, 0);
+ 	int i, chunksz;
+ 	bool first = true;
  
--	if (check_pointer_spec(out, fwnode, spec))
-+	if (check_pointer(out, fwnode))
- 		return;
+-	if (check_pointer_spec(out, bitmap, spec))
+-		return;
++	nr_bits = max(nr_bits, 0);
  
- 	fmt++;
+-	/* reused to print numbers */
+-	spec = (struct printf_spec){ .flags = SMALL | ZEROPAD, .base = 16 };
++	if (check_pointer(out, bitmap))
++		return;
  
- 	switch (*fmt) {
- 	case 'P':	/* name */
--		string_spec(out, fwnode_get_name(fwnode), str_spec);
-+		string(out, fwnode_get_name(fwnode));
- 		break;
- 	case 'f':	/* full_name */
- 	default:
- 		fwnode_full_name_string(out, fwnode);
- 		break;
- 	}
--
--	widen_string(out, out->pos - start, spec);
- }
+ 	chunksz = nr_bits & (CHUNKSZ - 1);
+ 	if (chunksz == 0)
+@@ -1211,13 +1204,14 @@ void bitmap_string(struct printbuf *out, unsigned long *bitmap,
  
- int __init no_hash_pointers_enable(char *str)
-@@ -2313,9 +2296,11 @@ void pointer(struct printbuf *out, const char *fmt,
- 		flags_string(out, ptr, fmt);
+ static noinline_for_stack
+ void bitmap_list_string(struct printbuf *out, unsigned long *bitmap,
+-			struct printf_spec spec, const char *fmt)
++			int nr_bits)
+ {
+-	int nr_bits = max_t(int, spec.field_width, 0);
+ 	bool first = true;
+ 	int rbot, rtop;
+ 
+-	if (check_pointer_spec(out, bitmap, spec))
++	nr_bits = max(nr_bits, 0);
++
++	if (check_pointer(out, bitmap))
+ 		return ;
+ 
+ 	for_each_set_bitrange(rbot, rtop, bitmap, nr_bits) {
+@@ -2232,13 +2226,15 @@ void pointer(struct printbuf *out, const char *fmt,
+ 		resource_string(out, ptr, fmt[0] == 'R');
  		return do_width_precision(out, prev_pos, spec);
- 	case 'O':
--		return device_node_string(out, ptr, spec, fmt + 1);
-+		device_node_string(out, ptr, fmt + 1);
-+		return do_width_precision(out, prev_pos, spec);
- 	case 'f':
--		return fwnode_string(out, ptr, spec, fmt + 1);
-+		fwnode_string(out, ptr, fmt + 1);
-+		return do_width_precision(out, prev_pos, spec);
- 	case 'x':
- 		return pointer_string(out, ptr, spec);
- 	case 'e':
+ 	case 'h':
+-		return hex_string(out, ptr, spec, fmt);
++		/* Uses field_width but _not_ as field size */
++		return hex_string(out, ptr, spec.field_width, fmt);
+ 	case 'b':
++		/* Uses field_width but _not_ as field size */
+ 		switch (fmt[1]) {
+ 		case 'l':
+-			return bitmap_list_string(out, ptr, spec, fmt);
++			return bitmap_list_string(out, ptr, spec.field_width);
+ 		default:
+-			return bitmap_string(out, ptr, spec, fmt);
++			return bitmap_string(out, ptr, spec.field_width);
+ 		}
+ 	case 'M':			/* Colon separated: 00:01:02:03:04:05 */
+ 	case 'm':			/* Contiguous: 000102030405 */
 -- 
 2.35.1
 

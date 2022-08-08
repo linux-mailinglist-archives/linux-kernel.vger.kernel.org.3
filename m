@@ -2,90 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE2558C16B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBFC58C171
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243976AbiHHCDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S243502AbiHHCGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244090AbiHHB4z (ORCPT
+        with ESMTP id S244186AbiHHCF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 21:56:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F51B7D3;
-        Sun,  7 Aug 2022 18:40:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F76060EE6;
-        Mon,  8 Aug 2022 01:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A6EC433D6;
-        Mon,  8 Aug 2022 01:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922819;
-        bh=tvv5zKTRORCPg5nIx/6yTuFX5HiE0u44vXPAHIgH6PM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=haVs4VcWP9M2CfUTAHUzpoULTK7aSQfSmnEG/3ccS/lAaBt89AfLkNB7xoMlRpdwv
-         VcfuX3Zmtl3tuE2KWVum9WnWQcknQVsARnLbKjkvnYJVZ9qC4bQwDdgfszQMU0s5YG
-         0yDcpNOmx0dJ9b0IGS+3J9FdnBkyjS+ttazFUEDMPwg39MFpCYsmGk5X5MhahJSn+0
-         0bsNbTHxnOdqQ1yrbvpSku4AL74orv6OsGDTvQNjGy9IwtYKN8xynR/vDWHg0S3oa2
-         MSukhtWgdntFzNBbDp6bQ5RZaa7xiFMVIQxkkaSby/mSi942R+mWrRpBciexzMbwQb
-         1DAFl0tztPldA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Sasha Levin <sashal@kernel.org>,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        selinux@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 8/8] selinux: Add boundary check in put_entry()
-Date:   Sun,  7 Aug 2022 21:40:03 -0400
-Message-Id: <20220808014005.317064-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808014005.317064-1-sashal@kernel.org>
-References: <20220808014005.317064-1-sashal@kernel.org>
+        Sun, 7 Aug 2022 22:05:59 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024FB23BEE;
+        Sun,  7 Aug 2022 18:44:58 -0700 (PDT)
+X-UUID: bae7f31d648c4ee5b78a8c5d3a6cbacf-20220808
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=vLXRd+5n/C4jd/IFfhxdX0ToHitHv8rhm+XFVzvPlao=;
+        b=MnzB011Tt83VgoeBwOmDn86m/g1T9GZsCf5Kde4QW2ieJm0CIiTKCfD1tHm0S1IgXUdxYtSVRn0afn/KlEfJV7GBZ5Olm1pU/oALDrhsiCgrNs/eEqc9lvziomxRJ2NQMZjs9Iih9Satuy4pb4YpupI9GIGWdDxsfAETA7HjQiA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:93888e7b-8df3-45d1-b952-2be5b409b5fb,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:12,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:62
+X-CID-INFO: VERSION:1.1.8,REQID:93888e7b-8df3-45d1-b952-2be5b409b5fb,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:12,EDM:0,RT:0,SF:45,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:62
+X-CID-META: VersionHash:0f94e32,CLOUDID:7c65029c-da39-4e3b-a854-56c7d2111b46,C
+        OID:42f2a629ea52,Recheck:0,SF:28|17|19|48,TC:nil,Content:3,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: bae7f31d648c4ee5b78a8c5d3a6cbacf-20220808
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 947598297; Mon, 08 Aug 2022 09:44:27 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 8 Aug 2022 09:44:26 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 8 Aug 2022 09:44:25 +0800
+Message-ID: <1063819a7cf61e8654cf0f7f54dba115ec714209.camel@mediatek.com>
+Subject: Re: [PATCH v5 2/2] i2c: mediatek: add i2c compatible for MT8188
+From:   Qii Wang <qii.wang@mediatek.com>
+To:     <kewei.xu@mediatek.com>, <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <liguo.zhang@mediatek.com>, <caiyu.chen@mediatek.com>,
+        <housong.zhang@mediatek.com>, <yuhan.wei@mediatek.com>,
+        <ryan-jh.yu@mediatek.com>, <david-yh.chiu@mediatek.com>
+Date:   Mon, 8 Aug 2022 09:44:24 +0800
+In-Reply-To: <20220806100249.12375-2-kewei.xu@mediatek.com>
+References: <20220806100249.12375-1-kewei.xu@mediatek.com>
+         <20220806100249.12375-2-kewei.xu@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiu Jianfeng <xiujianfeng@huawei.com>
+On Sat, 2022-08-06 at 18:02 +0800, kewei.xu@mediatek.com wrote:
+> From: Kewei Xu <kewei.xu@mediatek.com>
+> 
+> Add i2c compatible for MT8188 and added mt_i2c_regs_v3[], since
+> MT8188 i2c OFFSET_SLAVE_ADDR register changed from 0x04 to 0x94.
+> 
+> Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
 
-[ Upstream commit 15ec76fb29be31df2bccb30fc09875274cba2776 ]
+Reviewed-by: Qii Wang <qii.wang@mediatek.com>
 
-Just like next_entry(), boundary check is necessary to prevent memory
-out-of-bound access.
-
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- security/selinux/ss/policydb.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/security/selinux/ss/policydb.h b/security/selinux/ss/policydb.h
-index 725d5945a97e..178d8804ecb1 100644
---- a/security/selinux/ss/policydb.h
-+++ b/security/selinux/ss/policydb.h
-@@ -349,6 +349,8 @@ static inline int put_entry(const void *buf, size_t bytes, int num, struct polic
- {
- 	size_t len = bytes * num;
- 
-+	if (len > fp->len)
-+		return -EINVAL;
- 	memcpy(fp->data, buf, len);
- 	fp->data += len;
- 	fp->len -= len;
--- 
-2.35.1
+> ---
+> v5: modify the order of mt_i2c_regs_v3[] members and add Reviewed-by
+> owner.
+> v4: no changes
+> V3: no changes
+> V2: added mt_i2c_regs_v3[] to replace slave_addr_version.
+> ---
+>  drivers/i2c/busses/i2c-mt65xx.c | 43
+> +++++++++++++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-mt65xx.c
+> b/drivers/i2c/busses/i2c-mt65xx.c
+> index 8e6985354fd5..bd8abba3d1c9 100644
+> --- a/drivers/i2c/busses/i2c-mt65xx.c
+> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+> @@ -229,6 +229,35 @@ static const u16 mt_i2c_regs_v2[] = {
+>  	[OFFSET_DCM_EN] = 0xf88,
+>  };
+>  
 

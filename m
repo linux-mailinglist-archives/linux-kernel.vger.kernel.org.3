@@ -2,220 +2,571 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5ED58CA21
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB6058CA26
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242251AbiHHOHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 10:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
+        id S243270AbiHHOIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 10:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237227AbiHHOHl (ORCPT
+        with ESMTP id S243228AbiHHOIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 10:07:41 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C18F2655
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:07:40 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id j7so11061862wrh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 07:07:40 -0700 (PDT)
+        Mon, 8 Aug 2022 10:08:11 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F38F5B2
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:08:09 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 21so13814412ybf.4
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 07:08:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=semihalf.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8uj4c1kjurHbYX6/YjiMD1Fb+tFC84nmGWjnRASCB5M=;
-        b=IFumVuj4KgRc2VjcqRUmBZdn9ZFwr4Xb5El7OQuHLcycXIdwKKj/Pb4vclzOtUgILY
-         EgDcg8axeRvvv4cIEmo23p7SNXvrvUCTFElQfFL+T9IQKiLgJQOLweFdKxE9lz/Ofluw
-         XFL+86u3EgSQj+RQfBYdWWsqAWrGXechIKAWqInLjZr568pPwarcHGbPty72mlzXG26B
-         psVia66zGA+GaMN5r5N70HTCo5qRf+4nHrlaupCMqBC2CeRUx7Xw1BPQCxQQQ6fCi8QQ
-         fLxTmMtpzeM7V//80CRqaP0jeBcU+2kkjU89uYWymt9znmAvs7DJbwlEwRiWLSCyyKKy
-         fBUQ==
+         :cc:content-transfer-encoding;
+        bh=UNmEjIVRvBEWw0tRkkl5BO0yA5HgWRI9cTMGOBASDfk=;
+        b=m0t5q4XiK6/ClYcfRyQwgZeYoar3EYax76OQa+cjcjYxDQVqX25Cf3sQ7duu7o6Zw6
+         W6ikL9MP7LLWnIPniWQAOOg+7gJbXw+PZDW5ZG4KJ4RuXwKFl3XZ16DNExITYZCq1VEp
+         u4fyROrDLjUH/tstz0PFNXzt4Byo8e0AGVksu/W3ldw3WdCLc67p9TFieK9iGQCNyW8F
+         dktXQpEEpkzoaQY81uI7JFM1xsiaiKXsR9y5L/98xwZR3GgwCvbXt3uGdPlfiK4+k8QS
+         iFYpOfZcKZYTeSYWuR5ynDjJlR+KeneXiMPapZ8AJYbupbG98jQ0fEcIkn3IXhLxOoVI
+         a+ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8uj4c1kjurHbYX6/YjiMD1Fb+tFC84nmGWjnRASCB5M=;
-        b=W15D8cjeXmiM/bInwrKCq8BZTObyxCHrMiNTavAZExbooN+2bsIKhF2GxBjDgMdVxk
-         gBv6/zb9hd8hYvHbY98QPBkXWIhhcrpIqmj4WauR2Rvp5MvbYVOMG1eG2vLcJAekBdCU
-         c6oozcKtmO/m/X8KBV+1tOY9Fffa7vrAxu7JU33AG9eU68Nqq0sfm0n7YMGpPzi2zgpi
-         Rw1e6YAx4CQN/v8wqNt5/CGyESF3V2WKPMFMInUrayuoVK1NHjvDZN46RB/GGSlZSkJ2
-         x/KDatjpQE6G+GYwgro9zL2RpMswNOlU8xDprT06OStLg180CwcAqgB0iGkij7mIvbyW
-         m/Rg==
-X-Gm-Message-State: ACgBeo2gzV5lrfWBGTh9ag3VFOQZUoO9gqmNQcCc0eohnw9i8hMVvHA/
-        vYlNmgpQ1XyHpL3jq/qGLnqb1vyEt0g/3qF6KFbkZ21Ty8s=
-X-Google-Smtp-Source: AA6agR7qHSjoWclSIH2OF+FbjF9AiI4tjVrnrPviRYKn0a3fWScTIOdMZ4ixk/uJ+A3X02dELe2nvI+WyEJ06uersyU=
-X-Received: by 2002:a5d:5a82:0:b0:21e:2899:60bd with SMTP id
- bp2-20020a5d5a82000000b0021e289960bdmr11117769wrb.80.1659967658759; Mon, 08
- Aug 2022 07:07:38 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=UNmEjIVRvBEWw0tRkkl5BO0yA5HgWRI9cTMGOBASDfk=;
+        b=NoEtjQxT8zsSg6/7BS3W3dKkNMnKhz6qfDX3yNuPBTE2sDioi58+BBrIYbQfrrkSCf
+         p3D1nkaYGsEHMozW61pV9Idq8iDQFWw4foS8RPz3pP2FNY81G15MUUPa/Yg4pN0Vh7PA
+         PT2/qVWnx8UA5RpAAAv4t7hs7QXhkccOZ1h7E+hmk96rgMkVppAk5c991L6tM7s2tC2J
+         BCSztA4UeCKru5gnfDZ+oRG+0r4JWNVaGQwQgPw+8UKaGMtTx8tVfcVUbfoLxkMbSOyr
+         kqK3GlnoEwc45H6xYG3jrN4PAKl1zoKY0vBnegaI04k6F8NYF9w0VAuwQu0WUnJnRJMa
+         rJsg==
+X-Gm-Message-State: ACgBeo2H58a/xKYSaKgc49fonBmmpYwB3eQAJt95Hqz9LTxzPZg6FK5F
+        HU0T57EjyVKN0Db1+wVXsIhpLaQ25h1lP98XkzF71Q==
+X-Google-Smtp-Source: AA6agR42c5X9WiPoQL9EMf9LkWkVb5ywiSNSXzSSp0XtuhI1yYY5/n+jzxb/iNe5TAcT5cImh6yfRYQ4qUTf77HBtfw=
+X-Received: by 2002:a25:250:0:b0:673:e6c5:27bf with SMTP id
+ 77-20020a250250000000b00673e6c527bfmr16582565ybc.258.1659967687999; Mon, 08
+ Aug 2022 07:08:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220802162811.39216-1-hannes@cmpxchg.org> <CAJD7tkYv3XohX6gpuwU64wh1pedrr+uFSUAD14sftThbZ1Vsuw@mail.gmail.com>
-In-Reply-To: <CAJD7tkYv3XohX6gpuwU64wh1pedrr+uFSUAD14sftThbZ1Vsuw@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 8 Aug 2022 07:07:02 -0700
-Message-ID: <CAJD7tkZ72zkqmB5-RghCF+pN09SFZSA56cx4ds7s2aRdDcdjRw@mail.gmail.com>
-Subject: Re: [PATCH] mm: vmscan: fix extreme overreclaim and swap floods
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Linux-MM <linux-mm@kvack.org>,
+References: <20220722174212.GA1911979@bhelgaas> <86522aa5-2855-0f73-ddb2-a2b50b2fd1b7@nvidia.com>
+ <CACK8Z6FSr_ztkZ5+ULjHiDZ5L9qR=Ewtq1ZuDofzvJX=mW5WAQ@mail.gmail.com>
+ <CAFJ_xbpYrtFrt-hEd7M0jqyH7R9pOKA9884sgMvV2RZXycj7hA@mail.gmail.com>
+ <CAFJ_xbqyxJ591DgC=xQEzokip6i_j0mex5SDTBrwkOe=-8bikg@mail.gmail.com>
+ <8b36f97c-0cc4-3f4a-3b5b-49ad5786d9e9@nvidia.com> <CAFJ_xbr5NjoV1jC3P93N4UgooUuNdCRnrX7HuK=xLtPM5y7EjA@mail.gmail.com>
+ <d3228b1f-8d12-bfab-4cba-6d93a6869f20@nvidia.com>
+In-Reply-To: <d3228b1f-8d12-bfab-4cba-6d93a6869f20@nvidia.com>
+From:   Lukasz Majczak <lma@semihalf.com>
+Date:   Mon, 8 Aug 2022 16:07:56 +0200
+Message-ID: <CAFJ_xboyQyEaDeQ+pZH_YqN52-ALGNqzmmzeyNt6X_Cz-c1w9Q@mail.gmail.com>
+Subject: Re: [PATCH V2] PCI/ASPM: Save/restore L1SS Capability for suspend/resume
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     Rajat Jain <rajatja@google.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Ben Chuang <benchuanggli@gmail.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, refactormyself@gmail.com, kw@linux.com,
+        kenny@panix.com, treding@nvidia.com, jonathanh@nvidia.com,
+        abhsahu@nvidia.com, sagupta@nvidia.com, linux-pci@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 6:54 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+=C5=9Br., 3 sie 2022 o 14:55 Vidya Sagar <vidyas@nvidia.com> napisa=C5=82(a=
+):
 >
-> On Tue, Aug 2, 2022 at 9:28 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> >
-> > During proactive reclaim, we sometimes observe severe overreclaim,
-> > with several thousand times more pages reclaimed than requested.
-> >
-> > This trace was obtained from shrink_lruvec() during such an instance:
-> >
-> >     prio:0 anon_cost:1141521 file_cost:7767
-> >     nr_reclaimed:4387406 nr_to_reclaim:1047 (or_factor:4190)
-> >     nr=[7161123 345 578 1111]
-> >
-> > While he reclaimer requested 4M, vmscan reclaimed close to 16G, most
-> > of it by swapping. These requests take over a minute, during which the
-> > write() to memory.reclaim is unkillably stuck inside the kernel.
-> >
-> > Digging into the source, this is caused by the proportional reclaim
-> > bailout logic. This code tries to resolve a fundamental conflict: to
-> > reclaim roughly what was requested, while also aging all LRUs fairly
-> > and in accordance to their size, swappiness, refault rates etc. The
-> > way it attempts fairness is that once the reclaim goal has been
-> > reached, it stops scanning the LRUs with the smaller remaining scan
-> > targets, and adjusts the remainder of the bigger LRUs according to how
-> > much of the smaller LRUs was scanned. It then finishes scanning that
-> > remainder regardless of the reclaim goal.
-> >
-> > This works fine if priority levels are low and the LRU lists are
-> > comparable in size. However, in this instance, the cgroup that is
-> > targeted by proactive reclaim has almost no files left - they've
-> > already been squeezed out by proactive reclaim earlier - and the
-> > remaining anon pages are hot. Anon rotations cause the priority level
-> > to drop to 0, which results in reclaim targeting all of anon (a lot)
-> > and all of file (almost nothing). By the time reclaim decides to bail,
-> > it has scanned most or all of the file target, and therefor must also
-> > scan most or all of the enormous anon target. This target is thousands
-> > of times larger than the reclaim goal, thus causing the overreclaim.
-> >
-> > The bailout code hasn't changed in years, why is this failing now?
-> > The most likely explanations are two other recent changes in anon
-> > reclaim:
-> >
-> > 1. Before the series starting with commit 5df741963d52 ("mm: fix LRU
-> >    balancing effect of new transparent huge pages"), the VM was
-> >    overall relatively reluctant to swap at all, even if swap was
-> >    configured. This means the LRU balancing code didn't come into play
-> >    as often as it does now, and mostly in high pressure situations
-> >    where pronounced swap activity wouldn't be as surprising.
-> >
-> > 2. For historic reasons, shrink_lruvec() loops on the scan targets of
-> >    all LRU lists except the active anon one, meaning it would bail if
-> >    the only remaining pages to scan were active anon - even if there
-> >    were a lot of them.
-> >
-> >    Before the series starting with commit ccc5dc67340c ("mm/vmscan:
-> >    make active/inactive ratio as 1:1 for anon lru"), most anon pages
-> >    would live on the active LRU; the inactive one would contain only a
-> >    handful of preselected reclaim candidates. After the series, anon
-> >    gets aged similarly to file, and the inactive list is the default
-> >    for new anon pages as well, making it often the much bigger list.
-> >
-> >    As a result, the VM is now more likely to actually finish large
-> >    anon targets than before.
-> >
-> > Change the code such that only one SWAP_CLUSTER_MAX-sized nudge toward
-> > the larger LRU lists is made before bailing out on a met reclaim goal.
-> >
-> > This fixes the extreme overreclaim problem.
-> >
-> > Fairness is more subtle and harder to evaluate. No obvious misbehavior
-> > was observed on the test workload, in any case. Conceptually, fairness
-> > should primarily be a cumulative effect from regular, lower priority
-> > scans. Once the VM is in trouble and needs to escalate scan targets to
-> > make forward progress, fairness needs to take a backseat. This is also
-> > acknowledged by the myriad exceptions in get_scan_count(). This patch
-> > makes fairness decrease gradually, as it keeps fairness work static
-> > over increasing priority levels with growing scan targets. This should
-> > make more sense - although we may have to re-visit the exact values.
-> >
-> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > ---
-> >  mm/vmscan.c | 10 ++++------
-> >  1 file changed, 4 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index f7d9a683e3a7..1cc0c6666787 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -2897,8 +2897,8 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
-> >         enum lru_list lru;
-> >         unsigned long nr_reclaimed = 0;
-> >         unsigned long nr_to_reclaim = sc->nr_to_reclaim;
-> > +       bool proportional_reclaim;
-> >         struct blk_plug plug;
-> > -       bool scan_adjusted;
-> >
-> >         get_scan_count(lruvec, sc, nr);
-> >
-> > @@ -2916,8 +2916,8 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
-> >          * abort proportional reclaim if either the file or anon lru has already
-> >          * dropped to zero at the first pass.
-> >          */
-> > -       scan_adjusted = (!cgroup_reclaim(sc) && !current_is_kswapd() &&
-> > -                        sc->priority == DEF_PRIORITY);
-> > +       proportional_reclaim = (!cgroup_reclaim(sc) && !current_is_kswapd() &&
-> > +                               sc->priority == DEF_PRIORITY);
-> >
-> >         blk_start_plug(&plug);
-> >         while (nr[LRU_INACTIVE_ANON] || nr[LRU_ACTIVE_FILE] ||
-> > @@ -2937,7 +2937,7 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
-> >
-> >                 cond_resched();
-> >
-> > -               if (nr_reclaimed < nr_to_reclaim || scan_adjusted)
-> > +               if (nr_reclaimed < nr_to_reclaim || proportional_reclaim)
-> >                         continue;
-> >
-> >                 /*
-> > @@ -2988,8 +2988,6 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
-> >                 nr_scanned = targets[lru] - nr[lru];
-> >                 nr[lru] = targets[lru] * (100 - percentage) / 100;
-> >                 nr[lru] -= min(nr[lru], nr_scanned);
-> > -
-> > -               scan_adjusted = true;
+> Thanks Lukasz for the logs.
+> I still that the L1SS capability in the root port (00:14.0) disappeared
+> after resume.
+> I still don't understand how this patch can make the capability register
+> itself disappear. Honestly, I still see this as a HW issue.
+> Bjorn, could you please throw some light on this?
 >
-> Thanks for the great analysis of the problem!
+> Thanks,
+> Vidya Sagar
 >
-> I have a question here. This fixes the overreclaim problem for
-> proactive reclaim (and most other scenarios), but what about the case
-> where proportional_reclaim (aka scan_adjusted) is set before we start
-> shrinking lrus: global direct reclaim on DEF_PRIORITY? If we hit a
-> memcg that has very few file pages and a ton of anon pages in this
-> scenario (or vice versa), wouldn't we still overreclaim and possibly
-> stall unnecessarily? or am I missing something here?
+> On 8/3/2022 5:34 PM, Lukasz Majczak wrote:
+> > External email: Use caution opening links or attachments
+> >
+> >
+> > pt., 29 lip 2022 o 16:36 Vidya Sagar <vidyas@nvidia.com> napisa=C5=82(a=
+):
+> >>
+> >> Hi Lukasz,
+> >> Thanks for sharing your observations.
+> >>
+> >> Could you please also share the output of 'sudo lspci -vvvv' before an=
+d
+> >> after suspend-resume cycle with the latest linux-next?
+> >> Do we still see the L1SS capabilities getting disappeared post resume?
+> >>
+> >> Thanks,
+> >> Vidya Sagar
+> >>
+> >> On 7/29/2022 3:09 PM, Lukasz Majczak wrote:
+> >>> External email: Use caution opening links or attachments
+> >>>
+> >>>
+> >>> wt., 26 lip 2022 o 09:20 Lukasz Majczak <lma@semihalf.com> napisa=C5=
+=82(a):
+> >>>>
+> >>>> wt., 26 lip 2022 o 00:51 Rajat Jain <rajatja@google.com> napisa=C5=
+=82(a):
+> >>>>>
+> >>>>> Hello,
+> >>>>>
+> >>>>> On Sat, Jul 23, 2022 at 10:03 AM Vidya Sagar <vidyas@nvidia.com> wr=
+ote:
+> >>>>>>
+> >>>>>> Agree with Bjorn's observations.
+> >>>>>> The fact that the L1SS capability registers themselves disappeared=
+ in
+> >>>>>> the root port post resume indicates that there seems to be somethi=
+ng
+> >>>>>> wrong with the BIOS itself.
+> >>>>>> Could you please check from that perspective?
+> >>>>>
+> >>>>> ChromeOS Intel platforms use S0ix (suspend-to-idle) for suspend. Th=
+is
+> >>>>> is a shallower sleep state that preserves more state than, for e.g.=
+ S3
+> >>>>> (suspend-to-RAM). When we use S0ix, then BIOS does not come in pict=
+ure
+> >>>>> at all. i.e. after the kernel runs its suspend routines, it just pu=
+ts
+> >>>>> the CPU into S0ix state. So I do not think there is a BIOS angle to
+> >>>>> this.
+> >>>>>
+> >>>>>
+> >>>>>>
+> >>>>>> Thanks,
+> >>>>>> Vidya Sagar
+> >>>>>>
+> >>>>>>
+> >>>>>> On 7/22/2022 11:12 PM, Bjorn Helgaas wrote:
+> >>>>>>> External email: Use caution opening links or attachments
+> >>>>>>>
+> >>>>>>>
+> >>>>>>> On Fri, Jul 22, 2022 at 11:41:14AM +0200, Lukasz Majczak wrote:
+> >>>>>>>> pt., 22 lip 2022 o 09:31 Kai-Heng Feng <kai.heng.feng@canonical.=
+com> napisa=C5=82(a):
+> >>>>>>>>> On Fri, Jul 15, 2022 at 6:38 PM Ben Chuang <benchuanggli@gmail.=
+com> wrote:
+> >>>>>>>>>> On Tue, Jul 5, 2022 at 2:00 PM Vidya Sagar <vidyas@nvidia.com>=
+ wrote:
+> >>>>>>>>>>>
+> >>>>>>>>>>> Previously ASPM L1 Substates control registers (CTL1 and CTL2=
+) weren't
+> >>>>>>>>>>> saved and restored during suspend/resume leading to L1 Substa=
+tes
+> >>>>>>>>>>> configuration being lost post-resume.
+> >>>>>>>>>>>
+> >>>>>>>>>>> Save the L1 Substates control registers so that the configura=
+tion is
+> >>>>>>>>>>> retained post-resume.
+> >>>>>>>>>>>
+> >>>>>>>>>>> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> >>>>>>>>>>> Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
+> >>>>>>>>>>
+> >>>>>>>>>> Hi Vidya,
+> >>>>>>>>>>
+> >>>>>>>>>> I tested this patch on kernel v5.19-rc6.
+> >>>>>>>>>> The test device is GL9755 card reader controller on Intel i5-1=
+0210U RVP.
+> >>>>>>>>>> This patch can restore L1SS after suspend/resume.
+> >>>>>>>>>>
+> >>>>>>>>>> The test results are as follows:
+> >>>>>>>>>>
+> >>>>>>>>>> After Boot:
+> >>>>>>>>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+> >>>>>>>>>>            Capabilities: [110 v1] L1 PM Substates
+> >>>>>>>>>>                    L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1=
+.2+
+> >>>>>>>>>> ASPM_L1.1+ L1_PM_Substates+
+> >>>>>>>>>>                              PortCommonModeRestoreTime=3D255us
+> >>>>>>>>>> PortTPowerOnTime=3D3100us
+> >>>>>>>>>>                    L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L=
+1.2+ ASPM_L1.1+
+> >>>>>>>>>>                               T_CommonMode=3D0us LTR1.2_Thresh=
+old=3D3145728ns
+> >>>>>>>>>>                    L1SubCtl2: T_PwrOn=3D3100us
+> >>>>>>>>>>
+> >>>>>>>>>>
+> >>>>>>>>>> After suspend/resume without this patch.
+> >>>>>>>>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+> >>>>>>>>>>            Capabilities: [110 v1] L1 PM Substates
+> >>>>>>>>>>                    L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1=
+.2+
+> >>>>>>>>>> ASPM_L1.1+ L1_PM_Substates+
+> >>>>>>>>>>                              PortCommonModeRestoreTime=3D255us
+> >>>>>>>>>> PortTPowerOnTime=3D3100us
+> >>>>>>>>>>                    L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L=
+1.2- ASPM_L1.1-
+> >>>>>>>>>>                               T_CommonMode=3D0us LTR1.2_Thresh=
+old=3D0ns
+> >>>>>>>>>>                    L1SubCtl2: T_PwrOn=3D10us
+> >>>>>>>>>>
+> >>>>>>>>>>
+> >>>>>>>>>> After suspend/resume with this patch.
+> >>>>>>>>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+> >>>>>>>>>>            Capabilities: [110 v1] L1 PM Substates
+> >>>>>>>>>>                    L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1=
+.2+
+> >>>>>>>>>> ASPM_L1.1+ L1_PM_Substates+
+> >>>>>>>>>>                              PortCommonModeRestoreTime=3D255us
+> >>>>>>>>>> PortTPowerOnTime=3D3100us
+> >>>>>>>>>>                    L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L=
+1.2+ ASPM_L1.1+
+> >>>>>>>>>>                               T_CommonMode=3D0us LTR1.2_Thresh=
+old=3D3145728ns
+> >>>>>>>>>>                    L1SubCtl2: T_PwrOn=3D3100us
+> >>>>>>>>>>
+> >>>>>>>>>>
+> >>>>>>>>>> Tested-by: Ben Chuang <benchuanggli@gmail.com>
+> >>>>>>>>>
+> >>>>>>>>> Forgot to add mine:
+> >>>>>>>>> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> >>>>>>>>>
+> >>>>>>>>>>
+> >>>>>>>>>> Best regards,
+> >>>>>>>>>> Ben Chuang
+> >>>>>>>>>>
+> >>>>>>>>>>
+> >>>>>>>>>>> ---
+> >>>>>>>>>>> Hi,
+> >>>>>>>>>>> Kenneth R. Crudup <kenny@panix.com>, Could you please verify =
+this patch
+> >>>>>>>>>>> on your laptop (Dell XPS 13) one last time?
+> >>>>>>>>>>> IMHO, the regression observed on your laptop with an old vers=
+ion of the patch
+> >>>>>>>>>>> could be due to a buggy old version BIOS in the laptop.
+> >>>>>>>>>>>
+> >>>>>>>>>>> Thanks,
+> >>>>>>>>>>> Vidya Sagar
+> >>>>>>>>>>>
+> >>>>>>>>>>>     drivers/pci/pci.c       |  7 +++++++
+> >>>>>>>>>>>     drivers/pci/pci.h       |  4 ++++
+> >>>>>>>>>>>     drivers/pci/pcie/aspm.c | 44 ++++++++++++++++++++++++++++=
++++++++++++++
+> >>>>>>>>>>>     3 files changed, 55 insertions(+)
+> >>>>>>>>>>>
+> >>>>>>>>>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> >>>>>>>>>>> index cfaf40a540a8..aca05880aaa3 100644
+> >>>>>>>>>>> --- a/drivers/pci/pci.c
+> >>>>>>>>>>> +++ b/drivers/pci/pci.c
+> >>>>>>>>>>> @@ -1667,6 +1667,7 @@ int pci_save_state(struct pci_dev *dev)
+> >>>>>>>>>>>                    return i;
+> >>>>>>>>>>>
+> >>>>>>>>>>>            pci_save_ltr_state(dev);
+> >>>>>>>>>>> +       pci_save_aspm_l1ss_state(dev);
+> >>>>>>>>>>>            pci_save_dpc_state(dev);
+> >>>>>>>>>>>            pci_save_aer_state(dev);
+> >>>>>>>>>>>            pci_save_ptm_state(dev);
+> >>>>>>>>>>> @@ -1773,6 +1774,7 @@ void pci_restore_state(struct pci_dev *=
+dev)
+> >>>>>>>>>>>             * LTR itself (in the PCIe capability).
+> >>>>>>>>>>>             */
+> >>>>>>>>>>>            pci_restore_ltr_state(dev);
+> >>>>>>>>>>> +       pci_restore_aspm_l1ss_state(dev);
+> >>>>>>>>>>>
+> >>>>>>>>>>>            pci_restore_pcie_state(dev);
+> >>>>>>>>>>>            pci_restore_pasid_state(dev);
+> >>>>>>>>>>> @@ -3489,6 +3491,11 @@ void pci_allocate_cap_save_buffers(str=
+uct pci_dev *dev)
+> >>>>>>>>>>>            if (error)
+> >>>>>>>>>>>                    pci_err(dev, "unable to allocate suspend b=
+uffer for LTR\n");
+> >>>>>>>>>>>
+> >>>>>>>>>>> +       error =3D pci_add_ext_cap_save_buffer(dev, PCI_EXT_CA=
+P_ID_L1SS,
+> >>>>>>>>>>> +                                           2 * sizeof(u32));
+> >>>>>>>>>>> +       if (error)
+> >>>>>>>>>>> +               pci_err(dev, "unable to allocate suspend buff=
+er for ASPM-L1SS\n");
+> >>>>>>>>>>> +
+> >>>>>>>>>>>            pci_allocate_vc_save_buffers(dev);
+> >>>>>>>>>>>     }
+> >>>>>>>>>>>
+> >>>>>>>>>>> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> >>>>>>>>>>> index e10cdec6c56e..92d8c92662a4 100644
+> >>>>>>>>>>> --- a/drivers/pci/pci.h
+> >>>>>>>>>>> +++ b/drivers/pci/pci.h
+> >>>>>>>>>>> @@ -562,11 +562,15 @@ void pcie_aspm_init_link_state(struct p=
+ci_dev *pdev);
+> >>>>>>>>>>>     void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+> >>>>>>>>>>>     void pcie_aspm_pm_state_change(struct pci_dev *pdev);
+> >>>>>>>>>>>     void pcie_aspm_powersave_config_link(struct pci_dev *pdev=
+);
+> >>>>>>>>>>> +void pci_save_aspm_l1ss_state(struct pci_dev *dev);
+> >>>>>>>>>>> +void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
+> >>>>>>>>>>>     #else
+> >>>>>>>>>>>     static inline void pcie_aspm_init_link_state(struct pci_d=
+ev *pdev) { }
+> >>>>>>>>>>>     static inline void pcie_aspm_exit_link_state(struct pci_d=
+ev *pdev) { }
+> >>>>>>>>>>>     static inline void pcie_aspm_pm_state_change(struct pci_d=
+ev *pdev) { }
+> >>>>>>>>>>>     static inline void pcie_aspm_powersave_config_link(struct=
+ pci_dev *pdev) { }
+> >>>>>>>>>>> +static inline void pci_save_aspm_l1ss_state(struct pci_dev *=
+dev) { }
+> >>>>>>>>>>> +static inline void pci_restore_aspm_l1ss_state(struct pci_de=
+v *dev) { }
+> >>>>>>>>>>>     #endif
+> >>>>>>>>>>>
+> >>>>>>>>>>>     #ifdef CONFIG_PCIE_ECRC
+> >>>>>>>>>>> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.=
+c
+> >>>>>>>>>>> index a96b7424c9bc..2c29fdd20059 100644
+> >>>>>>>>>>> --- a/drivers/pci/pcie/aspm.c
+> >>>>>>>>>>> +++ b/drivers/pci/pcie/aspm.c
+> >>>>>>>>>>> @@ -726,6 +726,50 @@ static void pcie_config_aspm_l1ss(struct=
+ pcie_link_state *link, u32 state)
+> >>>>>>>>>>>                                    PCI_L1SS_CTL1_L1SS_MASK, v=
+al);
+> >>>>>>>>>>>     }
+> >>>>>>>>>>>
+> >>>>>>>>>>> +void pci_save_aspm_l1ss_state(struct pci_dev *dev)
+> >>>>>>>>>>> +{
+> >>>>>>>>>>> +       int aspm_l1ss;
+> >>>>>>>>>>> +       struct pci_cap_saved_state *save_state;
+> >>>>>>>>>>> +       u32 *cap;
+> >>>>>>>>>>> +
+> >>>>>>>>>>> +       if (!pci_is_pcie(dev))
+> >>>>>>>>>>> +               return;
+> >>>>>>>>>>> +
+> >>>>>>>>>>> +       aspm_l1ss =3D pci_find_ext_capability(dev, PCI_EXT_CA=
+P_ID_L1SS);
+> >>>>>>>>>>> +       if (!aspm_l1ss)
+> >>>>>>>>>>> +               return;
+> >>>>>>>>>>> +
+> >>>>>>>>>>> +       save_state =3D pci_find_saved_ext_cap(dev, PCI_EXT_CA=
+P_ID_L1SS);
+> >>>>>>>>>>> +       if (!save_state)
+> >>>>>>>>>>> +               return;
+> >>>>>>>>>>> +
+> >>>>>>>>>>> +       cap =3D (u32 *)&save_state->cap.data[0];
+> >>>>>>>>>>> +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2,=
+ cap++);
+> >>>>>>>>>>> +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1,=
+ cap++);
+> >>>>>>>>>>> +}
+> >>>>>>>>>>> +
+> >>>>>>>>>>> +void pci_restore_aspm_l1ss_state(struct pci_dev *dev)
+> >>>>>>>>>>> +{
+> >>>>>>>>>>> +       int aspm_l1ss;
+> >>>>>>>>>>> +       struct pci_cap_saved_state *save_state;
+> >>>>>>>>>>> +       u32 *cap;
+> >>>>>>>>>>> +
+> >>>>>>>>>>> +       if (!pci_is_pcie(dev))
+> >>>>>>>>>>> +               return;
+> >>>>>>>>>>> +
+> >>>>>>>>>>> +       aspm_l1ss =3D pci_find_ext_capability(dev, PCI_EXT_CA=
+P_ID_L1SS);
+> >>>>>>>>>>> +       if (!aspm_l1ss)
+> >>>>>>>>>>> +               return;
+> >>>>>>>>>>> +
+> >>>>>>>>>>> +       save_state =3D pci_find_saved_ext_cap(dev, PCI_EXT_CA=
+P_ID_L1SS);
+> >>>>>>>>>>> +       if (!save_state)
+> >>>>>>>>>>> +               return;
+> >>>>>>>>>>> +
+> >>>>>>>>>>> +       cap =3D (u32 *)&save_state->cap.data[0];
+> >>>>>>>>>>> +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2=
+, *cap++);
+> >>>>>>>>>>> +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1=
+, *cap++);
+> >>>>>>>>>>> +}
+> >>>>>>>>>>> +
+> >>>>>>>>>>>     static void pcie_config_aspm_dev(struct pci_dev *pdev, u3=
+2 val)
+> >>>>>>>>>>>     {
+> >>>>>>>>>>>            pcie_capability_clear_and_set_word(pdev, PCI_EXP_L=
+NKCTL,
+> >>>>>>>>>>> --
+> >>>>>>>>>>> 2.17.1
+> >>>>>>>>>>>
+> >>>>>>>>
+> >>>>>>>> Hi,
+> >>>>>>>>
+> >>>>>>>> With this patch (and also mentioned
+> >>>>>>>> https://lore.kernel.org/all/20220509073639.2048236-1-kai.heng.fe=
+ng@canonical.com/)
+> >>>>>>>> applied on 5.10 (chromeos-5.10) I am observing problems after
+> >>>>>>>> suspend/resume with my WiFi card - it looks like whole communica=
+tion
+> >>>>>>>> via PCI fails. Attaching logs (dmesg, lspci -vvv before suspend/=
+resume
+> >>>>>>>> and after) https://gist.github.com/semihalf-majczak-lukasz/fb36d=
+fa2eff22911109dfb91ab0fc0e3
+> >>>>>>>>
+> >>>>>>>> I played a little bit with this code and it looks like the
+> >>>>>>>> pci_write_config_dword() to the PCI_L1SS_CTL1 breaks it (don't k=
+now
+> >>>>>>>> why, not a PCI expert).
+> >>>>>>>
+> >>>>>>> Thanks a lot for testing this!  I'm not quite sure what to make o=
+f the
+> >>>>>>> results since v5.10 is fairly old (Dec 2020) and I don't know wha=
+t
+> >>>>>>> other changes are in chromeos-5.10.
+> >>>>>
+> >>>>> Lukasz: I assume you are running this on Atlas and are seeing this =
+bug
+> >>>>> when uprev'ving it to 5.10 kernel. Can you please try it on a newer
+> >>>>> Intel platform that have the latest upstream kernel running already
+> >>>>> and see if this can be reproduced there too?
+> >>>>> Note that the wifi PCI device is different on newer Intel platforms=
+,
+> >>>>> but platform design is similar enough that I suspect we should see
+> >>>>> similar bug on those too. The other option is to try the latest
+> >>>>> ustream kernel on Atlas. Perhaps if we just care about wifi (and
+> >>>>> ignore bringing up the graphics stack and GUI), it may come up
+> >>>>> sufficiently enough to try this patch?
+> >>>>>
+> >>>>> Thanks,
+> >>>>>
+> >>>>> Rajat
+> >>>>>
+> >>>>>
+> >>>>>>>
+> >>>>>>> Random observations, no analysis below.  This from your dmesg
+> >>>>>>> certainly looks like PCI reads failing and returning ~0:
+> >>>>>>>
+> >>>>>>>      Timeout waiting for hardware access (CSR_GP_CNTRL 0xffffffff=
+)
+> >>>>>>>      iwlwifi 0000:01:00.0: 00000000: ffffffff ffffffff ffffffff f=
+fffffff ffffffff ffffffff ffffffff ffffffff
+> >>>>>>>      iwlwifi 0000:01:00.0: Device gone - attempting removal
+> >>>>>>>      Hardware became unavailable upon resume. This could be a sof=
+tware issue prior to suspend or a hardware issue.
+> >>>>>>>
+> >>>>>>> And then we re-enumerate 01:00.0 and it looks like it may have be=
+en
+> >>>>>>> reset (BAR is 0):
+> >>>>>>>
+> >>>>>>>      pci 0000:01:00.0: [8086:095a] type 00 class 0x028000
+> >>>>>>>      pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00001fff 64bit=
+]
+> >>>>>>>
+> >>>>>>> lspci diffs from before/after suspend:
+> >>>>>>>
+> >>>>>>>       00:14.0 PCI bridge: Intel Corporation Celeron N3350/Pentium=
+ N4200/Atom E3900 Series PCI Express Port B #1 (rev fb) (prog-if 00 [Normal=
+ decode])
+> >>>>>>>         Bus: primary=3D00, secondary=3D01, subordinate=3D01, sec-=
+latency=3D64
+> >>>>>>>      -               DevSta: CorrErr- NonFatalErr+ FatalErr- Unsu=
+pReq+ AuxPwr+ TransPend-
+> >>>>>>>      +               DevSta: CorrErr+ NonFatalErr- FatalErr- Unsu=
+pReq- AuxPwr+ TransPend-
+> >>>>>>>      -               LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disab=
+led- CommClk+
+> >>>>>>>      +               LnkCtl: ASPM Disabled; RCB 64 bytes, Disable=
+d- CommClk+
+> >>>>>>>      -               LnkSta2: Current De-emphasis Level: -6dB, Eq=
+ualizationComplete- EqualizationPhase1-
+> >>>>>>>      +               LnkSta2: Current De-emphasis Level: -3.5dB, =
+EqualizationComplete- EqualizationPhase1-
+> >>>>>>>      -       Capabilities: [150 v0] Null
+> >>>>>>>      -       Capabilities: [200 v1] L1 PM Substates
+> >>>>>>>      -               L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.=
+2+ ASPM_L1.1+ L1_PM_Substates+
+> >>>>>>>      -                         PortCommonModeRestoreTime=3D40us P=
+ortTPowerOnTime=3D10us
+> >>>>>>>      -               L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1=
+.2+ ASPM_L1.1+
+> >>>>>>>      -                          T_CommonMode=3D40us LTR1.2_Thresh=
+old=3D98304ns
+> >>>>>>>      -               L1SubCtl2: T_PwrOn=3D60us
+> >>>>>>>
+> >>>>>>> The DevSta differences might be BIOS bugs, probably not relevant.
+> >>>>>>> Interesting that ASPM is disabled, maybe didn't get enabled after
+> >>>>>>> re-enumerating 01:00.0?  Strange that the L1 PM Substates capabil=
+ity
+> >>>>>>> disappeared.
+> >>>>>>>
+> >>>>>>>       01:00.0 Network controller: Intel Corporation Wireless 7265=
+ (rev 59)
+> >>>>>>>                      LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disab=
+led- CommClk+
+> >>>>>>>      -                       ExtSynch- ClockPM+ AutWidDis- BWInt-=
+ AutBWInt-
+> >>>>>>>      +                       ExtSynch- ClockPM- AutWidDis- BWInt-=
+ AutBWInt-
+> >>>>>>>              Capabilities: [154 v1] L1 PM Substates
+> >>>>>>>                      L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.=
+2+ ASPM_L1.1+ L1_PM_Substates+
+> >>>>>>>                                PortCommonModeRestoreTime=3D30us P=
+ortTPowerOnTime=3D60us
+> >>>>>>>      -               L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1=
+.2+ ASPM_L1.1+
+> >>>>>>>      -                          T_CommonMode=3D0us LTR1.2_Thresho=
+ld=3D98304ns
+> >>>>>>>      +               L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1=
+.2- ASPM_L1.1-
+> >>>>>>>      +                          T_CommonMode=3D0us LTR1.2_Thresho=
+ld=3D0ns
+> >>>>>>>
+> >>>>>>> Dmesg claimed we reconfigured common clock config.  Maybe ASPM di=
+dn't
+> >>>>>>> get reinitialized after re-enumeration?  Looks like we didn't res=
+tore
+> >>>>>>> L1SubCtl1.
+> >>>>>>>
+> >>>>>>> Bjorn
+> >>>>>>>
+> >>>>
+> >>>> Hi,
+> >>>>
+> >>>> Thank you all for the response and input! As Rajat mentioned I'm usi=
+ng
+> >>>> chromebook - but not Atlas (Amberlake) - in this case it is Babymega
+> >>>> (Apollolake)  - I will try to load most recent kernel and give it a
+> >>>> try once again.
+> >>>>
+> >>>> Best regards,
+> >>>> Lukasz
+> >>>
+> >>> Hi,
+> >>>
+> >>>    I have applied this patch on top of v5.19-rc7 (chromeos) and I'm
+> >>> still getting same results:
+> >>> https://gist.github.com/semihalf-majczak-lukasz/4b716704c21a3758d6711=
+b2030ea34b9
+> >>>
+> >>> Best regards,
+> >>> Lukasz
+> >>>
+> > Hi Vidya,
+> >
+> > Sorry for the long delay, I have retested your patch on top of
+> > linux-next/master (next-20220802) - the results for my device remain
+> > the same.
+> > Here are the logs (lspci -vvv before suspend, lspci -vvv after resume a=
+nd dmesg)
+> > https://gist.github.com/semihalf-majczak-lukasz/c7bfd811359f23278034056=
+a8002b3ef
+> > Let me know if you need any more logs and/or tests.
+> >
+> > Best regards,
+> > Lukasz
+> >
+Hi Vidya,
 
-Never mind :) In this scenario we will keep iterating the LRUs anyway,
-we don't attempt to make the scanning proportional. I guess the new
-name (proportional_reclaim) confused me :)
+After your last email, I've re-tested my setup and (without your
+patch)  the capability register also disappears - so it looks there is
+- in fact - some problem in my setup and your patch just brings it to
+the top as after resume tries to write to a register that is no longer
+present. I'm very sorry for the confusion here and I've not notice
+that at the very beginning.
 
->
-> >         }
-> >         blk_finish_plug(&plug);
-> >         sc->nr_reclaimed += nr_reclaimed;
-> > --
-> > 2.37.1
-> >
-> >
+Best regards,
+Lukasz

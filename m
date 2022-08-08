@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE93858CC06
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B27C58CC0A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243635AbiHHQTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 12:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        id S243318AbiHHQXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 12:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237349AbiHHQTp (ORCPT
+        with ESMTP id S233288AbiHHQW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 12:19:45 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4C213D31
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:19:43 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id h22so6866105qta.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 09:19:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=TMxAwwBuDIuNTxYXTvn6eaPztP+oVubZ7rDA0wooS+Q=;
-        b=II9WETClrsRAiCDqhnZmFzp1dBw++qogq2DHDbZTVQ6u1MGeIW8LBDr6DuqzJJbmRr
-         fEa9bgZTFe1Kl6rpEnyKMRbAEoMxDKm3NQawfMCiPvmDEdM+KYjh3aXWnr/aEIoyfEZf
-         lUL6JxZrVrn+VMSQLB1m6LOptKn/U10O5EBdvS3QAcWV1iWuFI2eNgKcEXFCg4i2rVBd
-         N/m4/qaF2eY3Da+9tut1Aa6ZwxQ/+bOziUg7Zu5Gio9/kPI+CbZPjCVAPe7vAyZp1UBc
-         2nYLWSozLq4iYAtFvyRW5fIevEWig+KzhDxt1Ct7RFKrZkVxVwO9miw6IE2U0/Rez0z0
-         IX5Q==
+        Mon, 8 Aug 2022 12:22:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E6A2BF43
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659975777;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZIIp+4XezCD9XhW5KqD0Wp8O30CPtOvkN45ZhL43/sI=;
+        b=XALp+5LereVFP9Vs+rpO2DZM+WYXOMWdX9fVffHH63I+CDMUzejFV9bi1jSc3yU+4bp4ZR
+        p1BXiPCDIYTAJrW/40eZBn/C8SZ8h+yKmjjxNkNVFHQSsIycYilAlaE+uyY0lIfy3Lr3G+
+        Adg6Hi5CU7x63rh/4qdyVtYw675wvBU=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-7QO9wq0rON6R0h_yf4b2aA-1; Mon, 08 Aug 2022 12:21:49 -0400
+X-MC-Unique: 7QO9wq0rON6R0h_yf4b2aA-1
+Received: by mail-qt1-f197.google.com with SMTP id cc11-20020a05622a410b00b0033a100489c4so7204312qtb.20
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 09:21:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=TMxAwwBuDIuNTxYXTvn6eaPztP+oVubZ7rDA0wooS+Q=;
-        b=K7RxN955l9B7+Tk+IITtYTNGZn6LETb7TojlK95hTybjb0StmLLs00dUXmYOoOeFTw
-         qzOQFR46HW9DkRWvaFilcHfnGVZCsR2Rr1S5YBUUJmJ9K56XDfPR2mij2mEnBPfJRrxO
-         1QCxj3aXhlkPpCdOncXL+jVnOaV1/gN3OvvdgPgLS/tMPrBSxXKhrhsfmhpq4N/ykGxk
-         wh/M3ZKtrYHfKc1ka+RyYz+NZR9ECiIZzxzukAk2vxdjZ9qf6zRaO3t3kq/Yd51awRbU
-         klGJILeVGqnblZfRhLS9V4TabGMd3sWyyv0oKSXjruMm+RHeZ8Indtkyhf48LrUGyFTs
-         17AQ==
-X-Gm-Message-State: ACgBeo01655E2J4ZeEeHCG0JNxq3A1WUmHadj/oSJvK4q/6XJMrbTnki
-        L4RhJUaJPx5worcDHxVsf+qGfQ==
-X-Google-Smtp-Source: AA6agR7XpylISJIhNtARrNWh9HAl2hX/LKk2L4+LIK4bFsg8V4DIyTe58ZP2EqdcKK84EuzKnCkQ9w==
-X-Received: by 2002:ac8:5ad0:0:b0:342:fc73:2aa4 with SMTP id d16-20020ac85ad0000000b00342fc732aa4mr3071075qtd.207.1659975582802;
-        Mon, 08 Aug 2022 09:19:42 -0700 (PDT)
-Received: from fedora ([23.82.142.208])
-        by smtp.gmail.com with ESMTPSA id y1-20020a05620a44c100b006b8c575ce27sm4105856qkp.109.2022.08.08.09.19.40
+        bh=ZIIp+4XezCD9XhW5KqD0Wp8O30CPtOvkN45ZhL43/sI=;
+        b=vlPqLzWgXSO1iolKQZaL72PG3eDCeYyuMaEjkK0LvPJWE9gpDV5AxSzVtgW4I0tVsT
+         hpS1haOpaWT6Vf9cXZkqGvI/WgGdVFre0TkD8QbuaPML/TuFA5wVY7lylH7XffhtPQBQ
+         QLetyCxGLYPH7baWPVPRgg8+YUvJidvp8LlHUGLisO1n2EaAmPa0cA6PLuKS4GmMIDVX
+         fFc+yFjA7rTSqCJFchfP9IN4/n6SOZ2lbmbx8AaGlmbruB+uF/on7Rlw5w07v6HsERvg
+         YJZWw34Zu/jhpmlq47vi+7i8/vYucbMMk6+SQcHv5iscBEpsMmfu1hZOkcXMB3/8YU2C
+         BmSg==
+X-Gm-Message-State: ACgBeo01Z9Xv17ZiuenypA69bHAfdqZ5/vyG4rPB5fFylnw3XkoObha9
+        EX0i0tOCaOp9sD5pH77mKJmheAjjU5toEA1Pq1IJ1PtAvk5UqPAWsH2iCi9ZMh39x7cceI2PvZQ
+        5OHsI+Ka/MrgMJBmaizG06AjH
+X-Received: by 2002:a05:6214:1a07:b0:474:6e80:e1e5 with SMTP id fh7-20020a0562141a0700b004746e80e1e5mr16175792qvb.41.1659975708180;
+        Mon, 08 Aug 2022 09:21:48 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR41H7/KMP6Xrg1+Qu9F5FmU0wuX9R7Ho2OYrizYTxWmBseWvAaRaDU+zCJVlnCznfO7XvDdLA==
+X-Received: by 2002:a05:6214:1a07:b0:474:6e80:e1e5 with SMTP id fh7-20020a0562141a0700b004746e80e1e5mr16175773qvb.41.1659975707871;
+        Mon, 08 Aug 2022 09:21:47 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id bk14-20020a05620a1a0e00b006b967397192sm1079804qkb.69.2022.08.08.09.21.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 09:19:41 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 12:19:39 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lars@metafoo.de,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mranostay@ti.com
-Subject: Re: [PATCH v3 2/2] iio: time: capture-tiecap: capture driver support
- for ECAP
-Message-ID: <YvE3m+jLPuLvXXdS@fedora>
-References: <20220728175124.468461-1-jpanis@baylibre.com>
- <20220728175124.468461-3-jpanis@baylibre.com>
- <20220731164116.30e91f34@jic23-huawei>
- <11b7436b-5c31-671e-ba77-435fe8e3b767@baylibre.com>
- <98d17617-72b5-6330-d4f5-1bece928ceab@baylibre.com>
- <YvBZQsiAm6f3yxME@fedora>
- <d47c842b-579d-b119-73f9-e8c95984b30b@baylibre.com>
+        Mon, 08 Aug 2022 09:21:47 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 09:21:46 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>, Wen Jin <wen.jin@intel.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/1] iommu/vt-d: Fix kdump kernels boot failure with
+ scalable mode
+Message-ID: <20220808162146.jrykclf5ez4o7j2t@cantor>
+References: <20220808034612.1691470-1-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6X5vf6Fz1F42Rx02"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d47c842b-579d-b119-73f9-e8c95984b30b@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220808034612.1691470-1-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,191 +80,266 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Aug 08, 2022 at 11:46:12AM +0800, Lu Baolu wrote:
+> The translation table copying code for kdump kernels is currently based
+> on the extended root/context entry formats of ECS mode defined in older
+> VT-d v2.5, and doesn't handle the scalable mode formats. This causes
+> the kexec capture kernel boot failure with DMAR faults if the IOMMU was
+> enabled in scalable mode by the previous kernel.
+> 
+> The ECS mode has already been deprecated by the VT-d spec since v3.0 and
+> Intel IOMMU driver doesn't support this mode as there's no real hardware
+> implementation. Hence this converts ECS checking in copying table code
+> into scalable mode.
+> 
+> The existing copying code consumes a bit in the context entry as a mark
+> of copied entry. This marker needs to work for the old format as well as
+> for extended context entries. It's hard to find such a bit for both
+> legacy and scalable mode context entries. This replaces it with a per-
+> IOMMU bitmap.
+> 
+> Fixes: 7373a8cc38197 ("iommu/vt-d: Setup context and enable RID2PASID support")
+> Cc: stable@vger.kernel.org
+> Reported-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> Tested-by: Wen Jin <wen.jin@intel.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
 
---6X5vf6Fz1F42Rx02
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I did a quick test last night, and it was able to harvest the vmcore,
+and boot back up. Before you mentioned part of the issue being that it
+couldn't get to the PGTT field in the pasid table entry. Was that not
+the case, or is it looking at the old kernel pasid dir entries and
+table entries through the pasid dir pointer in the copied context
+entry?
 
-On Mon, Aug 08, 2022 at 10:58:22AM +0200, Julien Panis wrote:
-> On 08/08/2022 02:30, William Breathitt Gray wrote:
-> > Hi Julien,
-> >=20
-> > I've taken a cursory look over the TI ECAP reference guide and your
-> > descriptions in this thread. I think a device driver for this would fit
-> > better in the Counter subsystem than IIO.
-> >=20
-> > First I want to correct a minor misunderstanding: the "timestamp"
-> > member of struct counter_event is simply a way to identify Counter
-> > events on the system as a way of grouping multiple Counter watches. In
-> > other words, the "timestamp" member here represents when a Counter event
-> > was detected by the system, not when an event was logged on the counter
-> > device hardware. Instead, hardware timestamps such as the CAPx registers
-> > would be provided by the "value" member of struct counter_event.
-> >=20
-> > Now, I have a few ideas for how we could expose the timestamps using a
-> > Counter device driver, but first I want to make sure I understand
-> > correctly what's happening in this device. If I understand correctly, we
-> > have the following device components:
-> >=20
-> > * CTR: 32-bit counter timer
-> > * Mod4: 2-bit counter
-> > * CAP1-CAP4: four 32-bit registers, each indepedently store a timestamp
-> > * ECAP: input signal providing event trigger edges
-> >=20
-> > Four edge polarities are configured corresponding to each CAPx register,
-> > yet the input signal is still the same single ECAP pin. The event that
-> > is fired is instead determined by the Mod4 counter: when Mod4 is 0 and
-> > the edge of ECAP matches the polarity configured for CAP1 then an event
-> > is triggered which saves the current CTR value to CAP1 and increments
-> > Mod4 to 1, etc.
-> >=20
-> > Is my understanding of how this device behaves correct?
->=20
-> Hi William. Thank you for your help.
-> Yes, your understanding of how this device behaves is correct.
->=20
-> >=20
-> > If so, then one possible way to represent this device in the Counter
-> > sysfs tree is something like this:
-> >=20
-> > * CTR: /sys/bus/counter/devices/counterX/count0/count
-> > * Mod4: /sys/bus/counter/devices/counterX/count1/count
-> > * CAP1: /sys/bus/counter/devices/counterX/count1/cap1
-> > * CAP2: /sys/bus/counter/devices/counterX/count1/cap2
-> > * CAP3: /sys/bus/counter/devices/counterX/count1/cap3
-> > * CAP4: /sys/bus/counter/devices/counterX/count1/cap4
-> > * ECAP: /sys/bus/counter/devices/counterX/signal0/signal
-> > * polarity1: /sys/bus/counter/devices/counterX/signal0/cap1_polarity
-> > * polarity2: /sys/bus/counter/devices/counterX/signal0/cap2_polarity
-> > * polarity3: /sys/bus/counter/devices/counterX/signal0/cap3_polarity
-> > * polarity4: /sys/bus/counter/devices/counterX/signal0/cap4_polarity
-> >=20
-> > This is just a tentative arrangement (you could also include "enable"
-> > attributes as well), but it should give you an idea of how it could be
-> > organized.
-> >=20
-> > In your driver, you could then use counter_push_event() whenever you get
-> > an event triggered. In userspace, your application will add Counter
-> > watches for the CAPx registers they want. When an event triggers,
-> > userspace can then received all four CAP register values at the same
-> > time via the respective /dev/counterX character device node.
-> >=20
-> > Would this design work for your needs?
->=20
-> Yes, that would work for my needs.
-> The "how" is not fully clear to me yet, since I never used counter
-> subsystem. But the
-> best way to understand better how it works is probably to start working w=
-ith
-> it. :-)
-> So, next patch version will be based on counter subsystem.
+Regards,
+Jerry
 
-The Counter subsystem is relatively nascent so the number of existing
-Counter device drivers to study is unfortunately sparse. If you
-encounter any trouble along the way as you work on this, please don't
-hestitate to reach out and I'll be happy to answer any questions you may
-have. That said, here are some more hints that can help guide you. :-)
+>  drivers/iommu/intel/iommu.h   | 17 ++++++--
+>  drivers/iommu/intel/debugfs.c |  3 +-
+>  drivers/iommu/intel/iommu.c   | 76 +++++++++--------------------------
+>  3 files changed, 35 insertions(+), 61 deletions(-)
+> 
+> diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+> index fae45bbb0c7f..e9b851c42575 100644
+> --- a/drivers/iommu/intel/iommu.h
+> +++ b/drivers/iommu/intel/iommu.h
+> @@ -197,7 +197,6 @@
+>  #define ecap_dis(e)		(((e) >> 27) & 0x1)
+>  #define ecap_nest(e)		(((e) >> 26) & 0x1)
+>  #define ecap_mts(e)		(((e) >> 25) & 0x1)
+> -#define ecap_ecs(e)		(((e) >> 24) & 0x1)
+>  #define ecap_iotlb_offset(e) 	((((e) >> 8) & 0x3ff) * 16)
+>  #define ecap_max_iotlb_offset(e) (ecap_iotlb_offset(e) + 16)
+>  #define ecap_coherent(e)	((e) & 0x1)
+> @@ -265,7 +264,6 @@
+>  #define DMA_GSTS_CFIS (((u32)1) << 23)
+>  
+>  /* DMA_RTADDR_REG */
+> -#define DMA_RTADDR_RTT (((u64)1) << 11)
+>  #define DMA_RTADDR_SMT (((u64)1) << 10)
+>  
+>  /* CCMD_REG */
+> @@ -579,6 +577,7 @@ struct intel_iommu {
+>  
+>  #ifdef CONFIG_INTEL_IOMMU
+>  	unsigned long 	*domain_ids; /* bitmap of domains */
+> +	unsigned long	*copied_tables; /* bitmap of copied tables */
+>  	spinlock_t	lock; /* protect context, domain ids */
+>  	struct root_entry *root_entry; /* virtual address */
+>  
+> @@ -701,6 +700,19 @@ static inline int nr_pte_to_next_page(struct dma_pte *pte)
+>  		(struct dma_pte *)ALIGN((unsigned long)pte, VTD_PAGE_SIZE) - pte;
+>  }
+>  
+> +static inline bool context_copied(struct intel_iommu *iommu, u8 bus, u8 devfn)
+> +{
+> +	if (!iommu->copied_tables)
+> +		return false;
+> +
+> +	return test_bit(((long)bus << 8) | devfn, iommu->copied_tables);
+> +}
+> +
+> +static inline bool context_present(struct context_entry *context)
+> +{
+> +	return (context->lo & 1);
+> +}
+> +
+>  extern struct dmar_drhd_unit * dmar_find_matched_drhd_unit(struct pci_dev *dev);
+>  
+>  extern int dmar_enable_qi(struct intel_iommu *iommu);
+> @@ -784,7 +796,6 @@ static inline void intel_iommu_debugfs_init(void) {}
+>  #endif /* CONFIG_INTEL_IOMMU_DEBUGFS */
+>  
+>  extern const struct attribute_group *intel_iommu_groups[];
+> -bool context_present(struct context_entry *context);
+>  struct context_entry *iommu_context_addr(struct intel_iommu *iommu, u8 bus,
+>  					 u8 devfn, int alloc);
+>  
+> diff --git a/drivers/iommu/intel/debugfs.c b/drivers/iommu/intel/debugfs.c
+> index 1f925285104e..f4fd249daad9 100644
+> --- a/drivers/iommu/intel/debugfs.c
+> +++ b/drivers/iommu/intel/debugfs.c
+> @@ -241,7 +241,8 @@ static void ctx_tbl_walk(struct seq_file *m, struct intel_iommu *iommu, u16 bus)
+>  		if (!context)
+>  			return;
+>  
+> -		if (!context_present(context))
+> +		if (!context_present(context) ||
+> +		    context_copied(iommu, bus, devfn))
+>  			continue;
+>  
+>  		tbl_wlk.bus = bus;
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 7cca030a508e..889ad2c9a7b9 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -163,38 +163,6 @@ static phys_addr_t root_entry_uctp(struct root_entry *re)
+>  	return re->hi & VTD_PAGE_MASK;
+>  }
+>  
+> -static inline void context_clear_pasid_enable(struct context_entry *context)
+> -{
+> -	context->lo &= ~(1ULL << 11);
+> -}
+> -
+> -static inline bool context_pasid_enabled(struct context_entry *context)
+> -{
+> -	return !!(context->lo & (1ULL << 11));
+> -}
+> -
+> -static inline void context_set_copied(struct context_entry *context)
+> -{
+> -	context->hi |= (1ull << 3);
+> -}
+> -
+> -static inline bool context_copied(struct context_entry *context)
+> -{
+> -	return !!(context->hi & (1ULL << 3));
+> -}
+> -
+> -static inline bool __context_present(struct context_entry *context)
+> -{
+> -	return (context->lo & 1);
+> -}
+> -
+> -bool context_present(struct context_entry *context)
+> -{
+> -	return context_pasid_enabled(context) ?
+> -	     __context_present(context) :
+> -	     __context_present(context) && !context_copied(context);
+> -}
+> -
+>  static inline void context_set_present(struct context_entry *context)
+>  {
+>  	context->lo |= 1;
+> @@ -764,7 +732,8 @@ static int device_context_mapped(struct intel_iommu *iommu, u8 bus, u8 devfn)
+>  	spin_lock(&iommu->lock);
+>  	context = iommu_context_addr(iommu, bus, devfn, 0);
+>  	if (context)
+> -		ret = context_present(context);
+> +		ret = context_present(context) &&
+> +				!context_copied(iommu, bus, devfn);
+>  	spin_unlock(&iommu->lock);
+>  	return ret;
+>  }
+> @@ -1688,6 +1657,11 @@ static void free_dmar_iommu(struct intel_iommu *iommu)
+>  		iommu->domain_ids = NULL;
+>  	}
+>  
+> +	if (iommu->copied_tables) {
+> +		bitmap_free(iommu->copied_tables);
+> +		iommu->copied_tables = NULL;
+> +	}
+> +
+>  	/* free context mapping */
+>  	free_context_table(iommu);
+>  
+> @@ -1913,7 +1887,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+>  		goto out_unlock;
+>  
+>  	ret = 0;
+> -	if (context_present(context))
+> +	if (context_present(context) && !context_copied(iommu, bus, devfn))
+>  		goto out_unlock;
+>  
+>  	/*
+> @@ -1925,7 +1899,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+>  	 * in-flight DMA will exist, and we don't need to worry anymore
+>  	 * hereafter.
+>  	 */
+> -	if (context_copied(context)) {
+> +	if (context_copied(iommu, bus, devfn)) {
+>  		u16 did_old = context_domain_id(context);
+>  
+>  		if (did_old < cap_ndoms(iommu->cap)) {
+> @@ -1936,6 +1910,8 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+>  			iommu->flush.flush_iotlb(iommu, did_old, 0, 0,
+>  						 DMA_TLB_DSI_FLUSH);
+>  		}
+> +
+> +		clear_bit(((long)bus << 8) | devfn, iommu->copied_tables);
+>  	}
+>  
+>  	context_clear_entry(context);
+> @@ -2684,32 +2660,14 @@ static int copy_context_table(struct intel_iommu *iommu,
+>  		/* Now copy the context entry */
+>  		memcpy(&ce, old_ce + idx, sizeof(ce));
+>  
+> -		if (!__context_present(&ce))
+> +		if (!context_present(&ce))
+>  			continue;
+>  
+>  		did = context_domain_id(&ce);
+>  		if (did >= 0 && did < cap_ndoms(iommu->cap))
+>  			set_bit(did, iommu->domain_ids);
+>  
+> -		/*
+> -		 * We need a marker for copied context entries. This
+> -		 * marker needs to work for the old format as well as
+> -		 * for extended context entries.
+> -		 *
+> -		 * Bit 67 of the context entry is used. In the old
+> -		 * format this bit is available to software, in the
+> -		 * extended format it is the PGE bit, but PGE is ignored
+> -		 * by HW if PASIDs are disabled (and thus still
+> -		 * available).
+> -		 *
+> -		 * So disable PASIDs first and then mark the entry
+> -		 * copied. This means that we don't copy PASID
+> -		 * translations from the old kernel, but this is fine as
+> -		 * faults there are not fatal.
+> -		 */
+> -		context_clear_pasid_enable(&ce);
+> -		context_set_copied(&ce);
+> -
+> +		set_bit(((long)bus << 8) | devfn, iommu->copied_tables);
+>  		new_ce[idx] = ce;
+>  	}
+>  
+> @@ -2735,8 +2693,8 @@ static int copy_translation_tables(struct intel_iommu *iommu)
+>  	bool new_ext, ext;
+>  
+>  	rtaddr_reg = dmar_readq(iommu->reg + DMAR_RTADDR_REG);
+> -	ext        = !!(rtaddr_reg & DMA_RTADDR_RTT);
+> -	new_ext    = !!ecap_ecs(iommu->ecap);
+> +	ext        = !!(rtaddr_reg & DMA_RTADDR_SMT);
+> +	new_ext    = !!ecap_smts(iommu->ecap);
+>  
+>  	/*
+>  	 * The RTT bit can only be changed when translation is disabled,
+> @@ -2747,6 +2705,10 @@ static int copy_translation_tables(struct intel_iommu *iommu)
+>  	if (new_ext != ext)
+>  		return -EINVAL;
+>  
+> +	iommu->copied_tables = bitmap_zalloc(BIT_ULL(16), GFP_KERNEL);
+> +	if (!iommu->copied_tables)
+> +		return -ENOMEM;
+> +
+>  	old_rt_phys = rtaddr_reg & VTD_PAGE_MASK;
+>  	if (!old_rt_phys)
+>  		return -EINVAL;
+> -- 
+> 2.25.1
+> 
 
-Although we've been using CAPx to refer to these registers, in the
-context of sysfs it'll be better to call the attributes "capture1",
-"capture2", etc.; that will make their use as capture buffers more
-obvious. Furthermore, despite my previous example, I think it's better
-to have these exist underneath the CTR hierarchy rather than Mod4
-because they are captures of the CTR value:
-
-* CTR: /sys/bus/counter/devices/counterX/count0/count
-* CAP1: /sys/bus/counter/devices/counterX/count0/capture1
-* CAP2: /sys/bus/counter/devices/counterX/count0/capture2
-* CAP3: /sys/bus/counter/devices/counterX/count0/capture3
-* CAP4: /sys/bus/counter/devices/counterX/count0/capture4
-
-In your device driver, you would define a struct counter_count to
-represent CTR. In this struct counter_count there is an "ext" member
-where you provide an array of struct count_comp. Each CAPx will have a
-corresponding struct count_comp; it'll look something like this::
-
-        static struct counter_comp ctr_count_ext[] =3D {
-                COUNTER_COMP_COUNT_U64("capture1", cap1_read, NULL),
-                COUNTER_COMP_COUNT_U64("capture2", cap2_read, NULL),
-                COUNTER_COMP_COUNT_U64("capture3", cap3_read, NULL),
-                COUNTER_COMP_COUNT_U64("capture4", cap4_read, NULL),
-        };
-
-As you already know, counter_push_event() lets you push Counter events
-in your interrupt handler. I recommend introducing a new event type
-under enum counter_event_type in the include/uapi/linux/counter.h header
-file; something like COUNTER_EVENT_CAPTURE should be descriptive enough.
-
-The "channel" member of struct counter_watch refers to Counter event
-channels; The purpose here is to allow us to support concurrent events
-of the same type (e.g. two COUNTER_EVENT_OVERFLOW but for different
-Counts). If I understand the TI ECAP device correctly, we'll be getting
-a COUNTER_EVENT_CAPTURE event whenever a CAPx register is updated with a
-new capture. It's up to you if you want to group them under the same
-channel or separate channels for each CAPx; you would just pass the
-channel in counter_push_event() to indicate which COUNTER_EVENT_CAPTURE
-event is being handled.
-
-Finally, you can take a look at tools/counter/counter_example.c as an
-example userspace application. The interesting bits for you are
-COUNTER_ADD_WATCH_IOCTL/COUNTER_ENABLE_EVENTS_IOCTL ioctl calls and
-reading the event data out of the queue. You will need to first define
-an array of struct counter_watch indicating that you want to watch the
-"capture" attributes of the CTR count; something like this (assuming
-event channel 0)::
-
-        /* assuming capture attributes are under the count0 directory */
-        #define CAPTURE_WATCH(_id, _channel) \
-        { \
-                .component.type =3D COUNTER_COMPONENT_EXTENSION, \
-                .component.scope =3D COUNTER_SCOPE_COUNT, \
-                .component.parent =3D 0, \
-                .component.id =3D _id, \
-                .event =3D COUNTER_EVENT_CAPTURE, \
-                .channel =3D _channel, \
-        }
-        /* get id from respective "captureX_component_id" attributes */
-        static struct counter_watch watches[4] =3D {
-                CAPTURE_WATCH(42, 0),
-                CAPTURE_WATCH(43, 0),
-                CAPTURE_WATCH(44, 0),
-                CAPTURE_WATCH(45, 0),
-        };
-
-Later you add the watches, enable events, and finally read the event
-data as it arrives::
-
-	struct counter_event event_data[4];
-       =20
-        ioctl(fd, COUNTER_ADD_WATCH_IOCTL, &watches[0]);
-        ioctl(fd, COUNTER_ADD_WATCH_IOCTL, &watches[1]);
-        ioctl(fd, COUNTER_ADD_WATCH_IOCTL, &watches[2]);
-        ioctl(fd, COUNTER_ADD_WATCH_IOCTL, &watches[3]);
-	ioctl(fd, COUNTER_ENABLE_EVENTS_IOCTL);
-       =20
-	for (;;) {
-	        read(fd, event_data, sizeof(event_data));
-		printf("cap1: %llu", event_data[0].value);
-		printf("cap2: %llu", event_data[1].value);
-		printf("cap3: %llu", event_data[2].value);
-		printf("cap4: %llu", event_data[3].value);
-	}
-
-If you want to keep track of channel, you can take a look under the
-event_data[i].watch.channel member.
-
-William Breathitt Gray
-
---6X5vf6Fz1F42Rx02
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYvE3mwAKCRC1SFbKvhIj
-K/WxAP0RwkJd1BCye6EEjgg5pbBwk0uqoySGkHk/jt05NIx7nQD9Hl45FUL/NSy1
-vPrsUe9n5lcrJ4pR8w+USLnvPkCfJQ8=
-=Swu5
------END PGP SIGNATURE-----
-
---6X5vf6Fz1F42Rx02--

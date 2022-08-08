@@ -2,115 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D2358C992
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7295A58C994
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243323AbiHHNfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S243298AbiHHNhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243349AbiHHNfn (ORCPT
+        with ESMTP id S233640AbiHHNhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:35:43 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF0DBC1E;
-        Mon,  8 Aug 2022 06:35:41 -0700 (PDT)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oL2uv-00017f-1Q; Mon, 08 Aug 2022 15:35:37 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oL2uu-000SMb-N5; Mon, 08 Aug 2022 15:35:36 +0200
-Subject: Re: [PATCH v3 0/8] tools: fix compilation failure caused by
- init_disassemble_info API changes
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Cc:     Andres Freund <andres@anarazel.de>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Ben Hutchings <benh@debian.org>
-References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
- <20220801013834.156015-1-andres@anarazel.de> <YufK0qnvVWCAFGEH@kernel.org>
- <ce9140c7-dd4b-0c4e-db7c-d25022cfe739@isovalent.com>
- <YugVTQ7CoqXRTNBY@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <988ee9d1-7bf5-b4c1-db6f-9195e82c8cb3@iogearbox.net>
-Date:   Mon, 8 Aug 2022 15:35:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 8 Aug 2022 09:37:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69482BC36
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:37:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06A2F61234
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 13:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF7B0C433C1;
+        Mon,  8 Aug 2022 13:37:48 +0000 (UTC)
+Date:   Mon, 8 Aug 2022 09:37:50 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH v5 31/32] tracing: Convert to printbuf
+Message-ID: <20220808093750.4dd24af2@gandalf.local.home>
+In-Reply-To: <8e1df054-062f-63c9-16b4-38143f3e7983@gmail.com>
+References: <20220808024128.3219082-1-willy@infradead.org>
+        <20220808024128.3219082-32-willy@infradead.org>
+        <20220807225113.6a74b481@gandalf.local.home>
+        <8e1df054-062f-63c9-16b4-38143f3e7983@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <YugVTQ7CoqXRTNBY@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26621/Mon Aug  8 09:52:38 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/1/22 8:02 PM, Arnaldo Carvalho de Melo wrote:
-> Em Mon, Aug 01, 2022 at 04:15:19PM +0100, Quentin Monnet escreveu:
->> On 01/08/2022 13:45, Arnaldo Carvalho de Melo wrote:
->>> Em Sun, Jul 31, 2022 at 06:38:26PM -0700, Andres Freund escreveu:
->>>> binutils changed the signature of init_disassemble_info(), which now causes
->>>> compilation failures for tools/{perf,bpf} on e.g. debian unstable. Relevant
->>>> binutils commit:
->>>> https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
->>>>
->>>> I first fixed this without introducing the compat header, as suggested by
->>>> Quentin, but I thought the amount of repeated boilerplate was a bit too
->>>> much. So instead I introduced a compat header to wrap the API changes. Even
->>>> tools/bpf/bpftool/jit_disasm.c, which needs its own callbacks for json, imo
->>>> looks nicer this way.
->>>>
->>>> I'm not regular contributor, so it very well might be my procedures are a
->>>> bit off...
->>>>
->>>> I am not sure I added the right [number of] people to CC?
->>>
->>> I think its ok
->>>   
->>>> WRT the feature test: Not sure what the point of the -DPACKAGE='"perf"' is,
->>>
->>> I think its related to libbfd, and it comes from a long time ago, trying
->>> to find the cset adding that...
->>>
->>>> nor why tools/perf/Makefile.config sets some LDFLAGS/CFLAGS that are also
->>>> in feature/Makefile and why -ldl isn't needed in the other places. But...
->>>>
->>>> V2:
->>>> - split patches further, so that tools/bpf and tools/perf part are entirely
->>>>    separate
->>>
->>> Cool, thanks, I'll process the first 4 patches, then at some point the
->>> bpftool bits can be merged, alternatively I can process those as well if
->>> the bpftool maintainers are ok with it.
->>>
->>> I'll just wait a bit to see if Jiri and others have something to say.
->>>
->>> - Arnaldo
->>
->> Thanks for this work! For the series:
->>
->> Acked-by: Quentin Monnet <quentin@isovalent.com>
->>
->> For what it's worth, it would make sense to me that these patches remain
->> together (so, through Arnaldo's tree), given that both the perf and
->> bpftool parts depend on dis-asm-compat.h being available.
-> 
-> Ok, so I'm tentatively adding it to my local tree to do some tests, if
-> someone disagrees, please holler.
+On Sun, 7 Aug 2022 23:32:01 -0400
+Kent Overstreet <kent.overstreet@gmail.com> wrote:
 
-Ack, sgtm. Please route these fixes via your tree. Thanks Arnaldo!
+> > Please remove the two tracing patches and the deletion of the seq_buf from
+> > the series.  
+> 
+> Well, that's not really an option, as Christoph already (rightly) 
+> pointed out.
+
+These are the last patches of the series. There's no dependency on them.
+You should be able to simply drop them. If others find that these patches
+are worth their while then by all means, let them have them.
+
+> 
+> If you've got actual engineering concerns that you'd care to articulate 
+> I'd (still) like to try to work with you - otherwise, I don't think this 
+> is something I can accommodate you on.
+
+Here's my technical reason. These are non trivial changes that are replacing
+code that has been stable for 8 years that the tracing infrastructure
+highly depends on. I do not have the time to sit down and review this code
+as it is not a priority. My time is extremely limited (as my wife keeps
+complaining to me about, as I'm not spending enough time with the family).
+
+This change is likely to cause subtle regressions for no benefit to the
+tracing subsystem. Hence, when it comes to risk vs reward, I see none.
+
+I'm not NACKing the series, just the changes to the tracing subsystem.
+
+When this code is mature enough, I may reconsider my stance on this.
+
+-- Steve

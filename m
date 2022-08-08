@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CF658C630
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A8058C631
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242431AbiHHKQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 06:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S242589AbiHHKQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 06:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242233AbiHHKQY (ORCPT
+        with ESMTP id S242362AbiHHKQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 06:16:24 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E794101D2
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 03:16:22 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id u1so11975049lfq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 03:16:22 -0700 (PDT)
+        Mon, 8 Aug 2022 06:16:25 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27B7FD2E
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 03:16:23 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id x25so9293162ljm.5
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 03:16:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JWyHWpRZ1Kh32AMhlQIk7pyHBxJVf8IzTt5zqpwObhY=;
-        b=MrROKyLJJ83f3Rr2mGc49Yse06wHtSB+UZ/fdnVkIROrdgd6G5U0BHv6wZCH0y/ELG
-         AJ/m/Z/4Q7nc+d7bJBHuSjCXT9hyjQr6FsJpynKeTu7fw5UTIUgWnyB4ROV6D1v5kGxH
-         vKTPX90RZrqPKvjtOl/EiKG71FvteMwCGWYOobnquUOQm8jIHa9oCCfQu+PvxlH5NrCW
-         iwRFPN/ePSPg8LUGx4iyC/fG14Oske8ipp/nAcCYTlFCM7MokuuK008QWNlC2JyW29WO
-         FHjxT9M+nzbkNOPuHVaA9LMMz6lcaIpnRfAwa8DyvaqiF6QwEl9fAi1PbdzqmFR0fH97
-         EVPg==
+        bh=9X5+OY9C1JUS8+hnV0IE5pgrose61H6CK2ZponbGyzQ=;
+        b=EyfrmTnrDXlotODXx82gzFKRsGHHudSI5dBZz7dEPF+vwq5g/VpTEuVygENJLc9MYg
+         jkSzsUqmuwtDhKuwCelC1wSm+xTxwXILTvPepVU6oZGefnUrElS8baaEtmnDnDQelyth
+         kjoaoE4KmDDWxs28HadN8/MTqZUymyqjEe5+pzFlwYiog9sjBbIXIB3cKPIl+9fXoQvR
+         3oyL9iT6JED3JMHn+WN9TMBRDonmkG8Jz6/HxVrmDIpNQMZIAeHoH7AYU8UPAQE2A15b
+         0bH5uQiYftr4gt5wYQdr4Czjg73qkzDl/cmud2Ei+QHhZv5KxwRk0brHHV875fnsp3qk
+         DQmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JWyHWpRZ1Kh32AMhlQIk7pyHBxJVf8IzTt5zqpwObhY=;
-        b=EwdwjRMcu5yT2KMjXgxuzUDOdjRRNF18soshY7hMBBtoR51COUtHbsWGDvxFGIY9Un
-         kWoqcJqCyKYP4E+DMPnYXbfq0kntFB2bJodV5wKYYSl+X21Y9jloz530K7APC15wA9Zp
-         UFkVYqe7hPjVgH5Fn/cIZhvAZT4BeNuM3YsryjdQTep4SKfDjUdLXkCSlXf54XcMM+iK
-         6NruQ0OgrQrUYPx9aTj1czNnTkVEwjtr4i292iIsndQ7LK76wxkW2ewQ/ljyN8Rp654Y
-         IvLmMW7vGRegQevTdD1F6NydSLSvOS6MLO/F+IqfYOuilMTS56ShM8tm+P3XIe7uxLdD
-         l0lA==
-X-Gm-Message-State: ACgBeo09GoJ63hG0+Z56I5fm2DSXhCWzYky6hsF1JgfHXy+SD+lePNYO
-        EiJjR2TpjFRnNTeqOWK5H7TzNA==
-X-Google-Smtp-Source: AA6agR7cfm64Y6GBFeSO18v6MzV1E5WMXn0USHffiVixm1IpLgTYtoCxMdxCHJ8TpfOA7GHPubr/eg==
-X-Received: by 2002:a05:6512:2349:b0:48c:ee14:7fc with SMTP id p9-20020a056512234900b0048cee1407fcmr1125838lfu.71.1659953780871;
-        Mon, 08 Aug 2022 03:16:20 -0700 (PDT)
+        bh=9X5+OY9C1JUS8+hnV0IE5pgrose61H6CK2ZponbGyzQ=;
+        b=UyftzAGxALFsG76gswpo6FX6DZHwbvXZzRn4QLU1hqsTCPMbs7PauX9xN02gBCWYUn
+         xUc9J0499uYG43K6t9lPScrzI57YgDbzMg4n0gSWIS7tzi9qpt+VhSQ/leHbHth3VvVf
+         H9ErNwussiWgI8weg+pqrDl5Ye6R2L41ds5cQ0sfhI8KQJxmEKUKitxUbjARvIrJ0Kkg
+         S1rNKwmMenv0xfZFZVia8OdFhDlCr/zjxRclgDLqz452OpDs9bXh861V0tgQucXDj6co
+         0MDkWddCMovMXtykoKVdB0oNL3ulP/FVDY249sLENujnzBopMlnb2UZ05+7jLewW1kbP
+         WhGw==
+X-Gm-Message-State: ACgBeo1JBg29FNnJmroR5zEIljx8sUnjZKSjV0GXUbEBJ0pCTe1SdMgd
+        Udm5pWFUX3ZenZ25KcWnF5eqdw==
+X-Google-Smtp-Source: AA6agR4tttRe6G0iEjjBNa15w2EGKbZLas/+/O7VoRN7jyC3KSWWrfglGpmZ0iCybcN82fFC9txRag==
+X-Received: by 2002:a2e:9e17:0:b0:25d:78d8:407f with SMTP id e23-20020a2e9e17000000b0025d78d8407fmr5948114ljk.433.1659953782159;
+        Mon, 08 Aug 2022 03:16:22 -0700 (PDT)
 Received: from localhost.localdomain ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056512070200b0048b193f677dsm1377489lfs.178.2022.08.08.03.16.19
+        by smtp.gmail.com with ESMTPSA id b2-20020a056512070200b0048b193f677dsm1377489lfs.178.2022.08.08.03.16.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 03:16:20 -0700 (PDT)
+        Mon, 08 Aug 2022 03:16:21 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Lee Jones <lee@kernel.org>, linux-samsung-soc@vger.kernel.org,
@@ -62,9 +62,9 @@ To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
-Subject: [PATCH 2/3] MAINTAINERS: pwm-fan: Drop Bartlomiej Zolnierkiewicz
-Date:   Mon,  8 Aug 2022 13:15:25 +0300
-Message-Id: <20220808101526.46556-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/3] dt-bindings: display: simple-framebuffer: Drop Bartlomiej Zolnierkiewicz
+Date:   Mon,  8 Aug 2022 13:15:26 +0300
+Message-Id: <20220808101526.46556-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220808101526.46556-1-krzysztof.kozlowski@linaro.org>
 References: <20220808101526.46556-1-krzysztof.kozlowski@linaro.org>
@@ -92,28 +92,21 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 I assume that if other change was preferred, there was quite enough of
 time to send a patch for this. :)
 ---
- MAINTAINERS | 8 --------
- 1 file changed, 8 deletions(-)
+ .../devicetree/bindings/display/simple-framebuffer.yaml          | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 423c81f8ba61..4832b317fe05 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16529,14 +16529,6 @@ T:	git git://linuxtv.org/media_tree.git
- F:	drivers/media/usb/pwc/*
- F:	include/trace/events/pwc.h
+diff --git a/Documentation/devicetree/bindings/display/simple-framebuffer.yaml b/Documentation/devicetree/bindings/display/simple-framebuffer.yaml
+index 27ba4323d221..1f905d85dd9c 100644
+--- a/Documentation/devicetree/bindings/display/simple-framebuffer.yaml
++++ b/Documentation/devicetree/bindings/display/simple-framebuffer.yaml
+@@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Simple Framebuffer Device Tree Bindings
  
--PWM FAN DRIVER
--M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
--L:	linux-hwmon@vger.kernel.org
--S:	Supported
--F:	Documentation/devicetree/bindings/hwmon/pwm-fan.txt
--F:	Documentation/hwmon/pwm-fan.rst
--F:	drivers/hwmon/pwm-fan.c
--
- PWM IR Transmitter
- M:	Sean Young <sean@mess.org>
- L:	linux-media@vger.kernel.org
+ maintainers:
+-  - Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+   - Hans de Goede <hdegoede@redhat.com>
+ 
+ description: |+
 -- 
 2.34.1
 

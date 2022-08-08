@@ -2,151 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D970C58C2C5
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 07:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C4758C2C9
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 07:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbiHHFWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 01:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
+        id S233775AbiHHFYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 01:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiHHFWE (ORCPT
+        with ESMTP id S230460AbiHHFYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 01:22:04 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901D3AE51;
-        Sun,  7 Aug 2022 22:22:02 -0700 (PDT)
-X-UUID: d9445aa5bd2d4b018e3d6b324b5af82e-20220808
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=hQFOClsoBFUo+S5UAAJFv6gCUWt7W/fTQiotWmpTraQ=;
-        b=hi4t5vLDn89nDFsJpoIkAnqReudoLKapkZaWWOdpmx/pmaDu+bswgEZbJAHU7BnExL6rf42bDuLsHTHtADRV5JxDKbfhWbcKmY0IaKS+yaUUmfORjVkHcogys6m0vj9VoPZkuGOAnpp84rFFxetFt2Yc5oSPIpm8TRvXyUwzer8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.9,REQID:ff16173d-2816-48e2-99db-879f28142fea,OB:0,LO
-        B:30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release
-        _Ham,ACTION:release,TS:45
-X-CID-INFO: VERSION:1.1.9,REQID:ff16173d-2816-48e2-99db-879f28142fea,OB:0,LOB:
-        30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_H
-        am,ACTION:release,TS:45
-X-CID-META: VersionHash:3d8acc9,CLOUDID:434bfc48-f57f-4088-93dd-066979cdb4e6,C
-        OID:76cc9ae0fa5d,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: d9445aa5bd2d4b018e3d6b324b5af82e-20220808
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1586861012; Mon, 08 Aug 2022 13:21:57 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 8 Aug 2022 13:21:55 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 8 Aug 2022 13:21:55 +0800
-Message-ID: <150988eef41cac1e1c4b422cf1ad65c10309f472.camel@mediatek.com>
-Subject: Re: [PATCH v16 3/8] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 8 Aug 2022 13:21:55 +0800
-In-Reply-To: <20220805101459.3386-4-rex-bc.chen@mediatek.com>
-References: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
-         <20220805101459.3386-4-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 8 Aug 2022 01:24:07 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3065AE67
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 22:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659936245; x=1691472245;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=A8AMhdzyFGyzF5sZZ4XtrkVx5HlQTxNClfG8v5ChcdM=;
+  b=jd3Uc8l2vqpdGQQtzW5sIlLY32T6i95ngl9BD3jOvrwFdBK3W+y/eZjK
+   RkgsCxI4vtfjeUntTvhQBSj7Mt+TbtiQnEyd/TB8KzUCzf9BLv2MhEUbP
+   1urXz+GzX6SZ+vjQL93Cu6fcv4lfyACV4sy0Tm6moKoi+fNUaI+0a88zj
+   foZqTZlYlf0J5khhd6PYvXv/KVOIZITd3g1AGXh9WlyGqg+dVWHdmPY0L
+   2qTLy2ikV0ih/Vr9p4LE9FXwCJe6Xi+2wNyi8QHztBvq5qNAvjF6gtA9C
+   RxwJ+8Q1PiHRp6ITmlF+/dPQCFXQ7pdZxinruPQrjHfJ/iRCeUFSDdvqV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="277436011"
+X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
+   d="scan'208";a="277436011"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 22:24:03 -0700
+X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
+   d="scan'208";a="931896888"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 22:24:00 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Konstantin Khlebnikov <khlebnikov@openvz.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2] mm/smaps: Don't access young/dirty bit if pte unpresent
+References: <20220805160003.58929-1-peterx@redhat.com>
+Date:   Mon, 08 Aug 2022 13:23:46 +0800
+In-Reply-To: <20220805160003.58929-1-peterx@redhat.com> (Peter Xu's message of
+        "Fri, 5 Aug 2022 12:00:03 -0400")
+Message-ID: <87wnbjgvfh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+Peter Xu <peterx@redhat.com> writes:
 
-On Fri, 2022-08-05 at 18:14 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> Tested-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
+> These bits should only be valid when the ptes are present.  Introducing two
+> booleans for it and set it to false when !pte_present() for both pte and
+> pmd accountings.
+>
+> The bug is found during code reading and no real world issue reported, but
+> logically such an error can cause incorrect readings for either smaps or
+> smaps_rollup output on quite a few fields.
+>
+> For example, it could cause over-estimate on values like Shared_Dirty,
+> Private_Dirty, Referenced.  Or it could also cause under-estimate on values
+> like LazyFree, Shared_Clean, Private_Clean.
+>
+> Cc: Konstantin Khlebnikov <khlebnikov@openvz.org>
+> Cc: Huang Ying <ying.huang@intel.com>
+> Fixes: b1d4d9e0cbd0 ("proc/smaps: carefully handle migration entries")
+> Fixes: c94b6923fa0a ("/proc/PID/smaps: Add PMD migration entry parsing")
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Reviewed-by: Yang Shi <shy828301@gmail.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+
+LGTM, Thanks!
+
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+
 > ---
-
-[snip]
-
-> +
-> +static void mtk_dp_hpd_sink_event(struct mtk_dp *mtk_dp)
-> +{
-> +	ssize_t ret;
-> +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
-> +	u32 link_status_reg = DP_LANE0_1_STATUS;
-> +
-> +	ret = drm_dp_dpcd_read(&mtk_dp->aux, link_status_reg,
-> link_status,
-> +			       sizeof(link_status));
-> +	if (!ret) {
-> +		drm_err(mtk_dp->drm_dev, "Read link status failed\n");
-> +		return;
-> +	}
-> +
-> +	if (!drm_dp_channel_eq_ok(link_status, mtk_dp-
-> >train_info.lane_count)) {
-> +		drm_err(mtk_dp->drm_dev, "Channel EQ failed\n");
-> +		return;
-> +	}
-> +
-> +	if (link_status[1] & DP_REMOTE_CONTROL_COMMAND_PENDING)
-
-I does not see any other DP driver process
-DP_REMOTE_CONTROL_COMMAND_PENDING, why mtk dp driver process it? If
-this is an advanced function, separate this to an independent patch.
-
-Regards,
-CK
-
-> +		drm_dp_dpcd_writeb(&mtk_dp->aux,
-> DP_DEVICE_SERVICE_IRQ_VECTOR,
-> +				   DP_REMOTE_CONTROL_COMMAND_PENDING);
-> +}
-> +
-> 
-
+>  fs/proc/task_mmu.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 9913f3be9fd2..d56c65f98d00 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -527,10 +527,12 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+>  	struct vm_area_struct *vma = walk->vma;
+>  	bool locked = !!(vma->vm_flags & VM_LOCKED);
+>  	struct page *page = NULL;
+> -	bool migration = false;
+> +	bool migration = false, young = false, dirty = false;
+>  
+>  	if (pte_present(*pte)) {
+>  		page = vm_normal_page(vma, addr, *pte);
+> +		young = pte_young(*pte);
+> +		dirty = pte_dirty(*pte);
+>  	} else if (is_swap_pte(*pte)) {
+>  		swp_entry_t swpent = pte_to_swp_entry(*pte);
+>  
+> @@ -560,8 +562,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+>  	if (!page)
+>  		return;
+>  
+> -	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte),
+> -		      locked, migration);
+> +	smaps_account(mss, page, false, young, dirty, locked, migration);
+>  }
+>  
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> @@ -572,11 +573,13 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+>  	struct vm_area_struct *vma = walk->vma;
+>  	bool locked = !!(vma->vm_flags & VM_LOCKED);
+>  	struct page *page = NULL;
+> -	bool migration = false;
+> +	bool migration = false, young = false, dirty = false;
+>  
+>  	if (pmd_present(*pmd)) {
+>  		/* FOLL_DUMP will return -EFAULT on huge zero page */
+>  		page = follow_trans_huge_pmd(vma, addr, pmd, FOLL_DUMP);
+> +		young = pmd_young(*pmd);
+> +		dirty = pmd_dirty(*pmd);
+>  	} else if (unlikely(thp_migration_supported() && is_swap_pmd(*pmd))) {
+>  		swp_entry_t entry = pmd_to_swp_entry(*pmd);
+>  
+> @@ -596,8 +599,7 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+>  	else
+>  		mss->file_thp += HPAGE_PMD_SIZE;
+>  
+> -	smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd),
+> -		      locked, migration);
+> +	smaps_account(mss, page, true, young, dirty, locked, migration);
+>  }
+>  #else
+>  static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,

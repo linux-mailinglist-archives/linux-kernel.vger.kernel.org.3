@@ -2,109 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D099F58C3E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8305558C3EC
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235055AbiHHHYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 03:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34178 "EHLO
+        id S235280AbiHHHZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 03:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbiHHHYU (ORCPT
+        with ESMTP id S235172AbiHHHZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 03:24:20 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2CD10DD;
-        Mon,  8 Aug 2022 00:24:15 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8BCC25C010C;
-        Mon,  8 Aug 2022 03:24:13 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 08 Aug 2022 03:24:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1659943453; x=1660029853; bh=cfXKwT2L2W
-        iIMULrPjrMghFNOd45gLJ8rGZDCFh9GPU=; b=Yxus/l2iuHs/pwJkTM5C2gwHgL
-        UrFT8YFfm0lEgdIxeujotqg9e211oeMqw1iTPt5eHJtNmiPbXkSMkhP/M/d0xfi6
-        32BnX5MwKINQ299Z8EjoTH6Qo3uzAL0yQNp+CL4BbmnNFAOXgHIViwQ5gzHIOoFX
-        rF7EnTDAwwNOaHb84ds/aatwnUJbYCz195mKMxTNc5lYvYPoQ5WRYjUIGb5vrzPR
-        ApqgH/sU3iRE1hWJNfsTenoVwRKCK7Su48oHa5v5j9d9Uhe78DsDb/T75T9+ex+i
-        HHL0mcmZmUCZ4Nm+Qh30R5dDDMtRNwrhZJc48gwZNfBUfGOdh22iID48qFmg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1659943453; x=
-        1660029853; bh=cfXKwT2L2WiIMULrPjrMghFNOd45gLJ8rGZDCFh9GPU=; b=C
-        rxpsC7Yb13DKjBueJjjiYgKO9XsT4cFdLaILTPN9er+gboMsVHqfCnn75oteoJ+S
-        o/vx5xd+du0zwxLCdEypAheFShKgLZnt+JDEv+f6oa72sctaqGXwK/2zYcONNon6
-        j6Wx2iaq7KFZu95Saeyodpd0OjEL1F6LZl9vf0milcS83keP3RQZrZdL8Gw+/5yT
-        Y4yEXkbeH/BtHDIQX7d26knJtwWbtL5HZQYxP5cRhSK4qTLrvrsjfQIkMPAa9o3m
-        kARXmoETQ8437f9GxYStnZ5/wLSruPIhWZbFpelZHkC+P53UtSTWQWHRCuRtTO/4
-        fqXn/kXl9z3IiifxQceOA==
-X-ME-Sender: <xms:HLrwYgB62IxBquFN-LI7ebW5i4FFdTztOfuh0HaW8NSspyWZpEjPuw>
-    <xme:HLrwYigOvjW2NutFojZXfH8WkDUJjggmUe3GFBbDziAH37yE1U9TL0ISfLfKQ9DaW
-    IC2kqxmqmCljPQDkw>
-X-ME-Received: <xmr:HLrwYjlP5FbLSr5uzkG5xcYlRZ8aWT0Qn_Mc8M2aRIdWxzsTyILkPAqt3ww7LZQTk6ZzRTWtfrHNS4Ppx2Vn4tVk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefjedguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepvfho
-    mhcuhfhithiihhgvnhhrhicuoehtohhmsehtohhmqdhfihhtiihhvghnrhihrdhmvgdruh
-    hkqeenucggtffrrghtthgvrhhnpedvgeehhefhtdffuddvtddvhfdtudeuhfejhfetvdeg
-    teelfeduheejfefgtdekieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepthhomhesthhomhdq
-    fhhithiihhgvnhhrhidrmhgvrdhukh
-X-ME-Proxy: <xmx:HLrwYmxd0tnTDdadZDzkGmBfDKfDMsTa--QtOxp2g_Sf5pmicu5WTg>
-    <xmx:HLrwYlSTVMIk-abDMxsck8i9-PWeQDPDlSQYUn8mKDKLeVkXPp6Rdw>
-    <xmx:HLrwYhbPtuQaSXKNA5d6fjfQhWw6Z7kzi2QeGU_hCZ6yLJ5q42VUVQ>
-    <xmx:HbrwYhqO5YY-HidK0Q7p-sb0UFfuB3VhDqvkkKDlxA43D4sOz_Zvdg>
-Feedback-ID: iefc945ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 8 Aug 2022 03:24:09 -0400 (EDT)
-Message-ID: <88cea6f0-c76a-a1e6-48bf-1c0598df4df6@tom-fitzhenry.me.uk>
-Date:   Mon, 8 Aug 2022 17:24:06 +1000
+        Mon, 8 Aug 2022 03:25:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6256B5F67;
+        Mon,  8 Aug 2022 00:25:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1469DB80E07;
+        Mon,  8 Aug 2022 07:25:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A72B4C433D7;
+        Mon,  8 Aug 2022 07:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659943534;
+        bh=LF418aOF6Ob6gloAT5R9P5nGzwV/BElbsYz712Z9b+8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JtNueuqYf47ZpkR8iO5Hx8j1ADO1GsQb8zHJvgVgI513m2MGuJw4ICPXZyGW4RBOL
+         pWm+ea6nK9QIeY4l86sxSct1m85YBXoNBpWQPNXnszk6pyACVicRqPuUvwKN9bZhnt
+         UPQbHhMZm+B/wjrNIePRJ0jobF9NtYmEK+yCouhlSK+N1huJTLUm0RxAaKJ+FodRV5
+         vU7axRg11SRfM3RjtwVNbwqgIaVLTiMn/gcc66lV1WuGL8SmUPR6fn+92gqDVWyQVt
+         acLu4UHi7fuRCwjo6ulMpdj6SYgn/i7qRaMyiVfFQ9gvtZYIwplPmb9QYPAnLKrmid
+         sc39tF4ITwltA==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-10ee900cce0so9643620fac.5;
+        Mon, 08 Aug 2022 00:25:34 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0/4KFQZCMK8DkfOqFiILn8A5Z78pf12hzCCWP4mktBk7ddZCyn
+        i317M4Qa2ukZjKDZNe5vx1+jdqHXfVMnNO/ur7g=
+X-Google-Smtp-Source: AA6agR5eZRG38OuD86wzH2bZz2iWtGbDbq644XdywLdTekdRUdLjfEHttbFMfTkjfxb6umk6Ro+3bDaMVFrI4DYWnCw=
+X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
+ ba22-20020a056870c59600b001016409ae62mr11378931oab.112.1659943533771; Mon, 08
+ Aug 2022 00:25:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add initial support for
- Pine64 PinePhone Pro
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Caleb Connolly <kc@postmarketos.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de
-Cc:     megi@xff.cz, martijn@brixit.nl, ayufan@ayufan.eu,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220805234411.303055-1-tom@tom-fitzhenry.me.uk>
- <20220805234411.303055-4-tom@tom-fitzhenry.me.uk>
- <f9cbc047-f30f-e711-3213-56fcbb7bbc8a@postmarketos.org>
- <9a168a20-1fd1-5d73-1d33-bd2f054d60d7@tom-fitzhenry.me.uk>
- <cf320916-c88b-0c4a-7515-24318f1b85b2@linaro.org>
-Content-Language: en-US
-From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-In-Reply-To: <cf320916-c88b-0c4a-7515-24318f1b85b2@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220808071318.3335746-1-guoren@kernel.org>
+In-Reply-To: <20220808071318.3335746-1-guoren@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 8 Aug 2022 15:25:21 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQLjBnAaouDBWzuWfj5MnMVvHdkO-iKnBDv5jWZ6U-TPw@mail.gmail.com>
+Message-ID: <CAJF2gTQLjBnAaouDBWzuWfj5MnMVvHdkO-iKnBDv5jWZ6U-TPw@mail.gmail.com>
+Subject: Re: [PATCH V9 00/15] arch: Add qspinlock support and atomic cleanup
+To:     palmer@rivosinc.com, heiko@sntech.de, hch@infradead.org,
+        arnd@arndb.de, peterz@infradead.org, will@kernel.org,
+        boqun.feng@gmail.com, longman@redhat.com, shorne@gmail.com,
+        conor.dooley@microchip.com
+Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/8/22 16:38, Krzysztof Kozlowski wrote:
->> I agree authorship is important, and thus Kamil, Martijn and Megi are
->> listed as Co-developed-by in this patch.
-> 
-> But you miss their SoB... Without them you should not send it. It does
-> not pass checkpatch, does it?
+Sorry, here is the Changelog:
 
-Sorry, my bad. I see 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html 
-lists to use checkpatch. I had read this but had since forgotten. I will 
-ensure future patches pass checkpatch.
+Changes in V9:
+ - Fixup xchg16 compile warning
+ - Keep ticket-lock the same semantic with qspinlock
+ - Remove unused xchg32 and xchg64
+ - Forbid arch_cmpxchg64 for 32-bit
+ - Add openrisc qspinlock support
+
+Changes in V8:
+ - Coding convention ticket fixup
+ - Move combo spinlock into riscv and simply asm-generic/spinlock.h
+ - Fixup xchg16 with wrong return value
+ - Add csky qspinlock
+ - Add combo & qspinlock & ticket-lock comparison
+ - Clean up unnecessary riscv acquire and release definitions
+ - Enable ARCH_INLINE_READ*/WRITE*/SPIN* for riscv & csky
+
+Changes in V7:
+ - Add combo spinlock (ticket & queued) support
+ - Rename ticket_spinlock.h
+ - Remove unnecessary atomic_read in ticket_spin_value_unlocked
+
+Changes in V6:
+ - Fixup Clang compile problem Reported-by: kernel test robot
+   <lkp@intel.com>
+ - Cleanup asm-generic/spinlock.h
+ - Remove changelog in patch main comment part, suggested by
+   Conor.Dooley@microchip.com
+ - Remove "default y if NUMA" in Kconfig
+
+Changes in V5:
+ - Update comment with RISC-V forward guarantee feature.
+ - Back to V3 direction and optimize asm code.
+
+Changes in V4:
+ - Remove custom sub-word xchg implementation
+ - Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32 in locking/qspinlock
+
+Changes in V3:
+ - Coding convention by Peter Zijlstra's advices
+
+Changes in V2:
+ - Coding convention in cmpxchg.h
+ - Re-implement short xchg
+ - Remove char & cmpxchg implementations
+
+
+
+On Mon, Aug 8, 2022 at 3:14 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> In this series:
+>  - Cleanup generic ticket-lock code, (Using smp_mb__after_spinlock as RCsc)
+>  - Add qspinlock and combo-lock for riscv
+>  - Add qspinlock to openrisc
+>  - Use generic header in csky
+>  - Optimize cmpxchg & atomic code
+>
+> Enable qspinlock and meet the requirements mentioned in a8ad07e5240c9
+> ("asm-generic: qspinlock: Indicate the use of mixed-size atomics").
+>
+> RISC-V LR/SC pairs could provide a strong/weak forward guarantee that
+> depends on micro-architecture. And RISC-V ISA spec has given out
+> several limitations to let hardware support strict forward guarantee
+> (RISC-V User ISA - 8.3 Eventual Success of Store-Conditional
+> Instructions).
+>
+> eg:
+> Some riscv hardware such as BOOMv3 & XiangShan could provide strict &
+> strong forward guarantee (The cache line would be kept in an exclusive
+> state for Backoff cycles, and only this core's interrupt could break
+> the LR/SC pair).
+> Qemu riscv give a weak forward guarantee by wrong implementation
+> currently [1].
+>
+> So we Add combo spinlock (ticket & queued) support for riscv. Thus different
+> kinds of memory model micro-arch processors could use the same Image
+>
+> The first try of qspinlock for riscv was made in 2019.1 [2].
+>
+> [1] https://github.com/qemu/qemu/blob/master/target/riscv/insn_trans/trans_rva.c.inc
+> [2] https://lore.kernel.org/linux-riscv/20190211043829.30096-1-michaeljclark@mac.com/#r
+>
+> Guo Ren (15):
+>   asm-generic: ticket-lock: Remove unnecessary atomic_read
+>   asm-generic: ticket-lock: Use the same struct definitions with qspinlock
+>   asm-generic: ticket-lock: Move into ticket_spinlock.h
+>   asm-generic: ticket-lock: Keep ticket-lock the same semantic with qspinlock
+>   asm-generic: spinlock: Add queued spinlock support in common header
+>   riscv: atomic: Clean up unnecessary acquire and release definitions
+>   riscv: cmpxchg: Remove xchg32 and xchg64
+>   riscv: cmpxchg: Forbid arch_cmpxchg64 for 32-bit
+>   riscv: cmpxchg: Optimize cmpxchg64
+>   riscv: Enable ARCH_INLINE_READ*/WRITE*/SPIN*
+>   riscv: Add qspinlock support
+>   riscv: Add combo spinlock support
+>   openrisc: cmpxchg: Cleanup unnecessary codes
+>   openrisc: Move from ticket-lock to qspinlock
+>   csky: spinlock: Use the generic header files
+>
+>  arch/csky/include/asm/Kbuild           |   2 +
+>  arch/csky/include/asm/spinlock.h       |  12 --
+>  arch/csky/include/asm/spinlock_types.h |   9 --
+>  arch/openrisc/Kconfig                  |   1 +
+>  arch/openrisc/include/asm/Kbuild       |   2 +
+>  arch/openrisc/include/asm/cmpxchg.h    | 192 ++++++++++---------------
+>  arch/riscv/Kconfig                     |  49 +++++++
+>  arch/riscv/include/asm/Kbuild          |   3 +-
+>  arch/riscv/include/asm/atomic.h        |  19 ---
+>  arch/riscv/include/asm/cmpxchg.h       | 177 +++++++----------------
+>  arch/riscv/include/asm/spinlock.h      |  77 ++++++++++
+>  arch/riscv/kernel/setup.c              |  22 +++
+>  include/asm-generic/spinlock.h         |  94 ++----------
+>  include/asm-generic/spinlock_types.h   |  12 +-
+>  include/asm-generic/ticket_spinlock.h  |  93 ++++++++++++
+>  15 files changed, 384 insertions(+), 380 deletions(-)
+>  delete mode 100644 arch/csky/include/asm/spinlock.h
+>  delete mode 100644 arch/csky/include/asm/spinlock_types.h
+>  create mode 100644 arch/riscv/include/asm/spinlock.h
+>  create mode 100644 include/asm-generic/ticket_spinlock.h
+>
+> --
+> 2.36.1
+>
+
+
+-- 
+Best Regards
+ Guo Ren

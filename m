@@ -2,198 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B506E58CCF6
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A1458CD08
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244333AbiHHRqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
+        id S243793AbiHHRt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243668AbiHHRqc (ORCPT
+        with ESMTP id S244190AbiHHRtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:46:32 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E6EC55
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:46:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MGoHl8y/Ky3YiUXMq1Q8AnMQG6K2F99m/+0QhKrruKUq+Cb8L0cHpU4Nnymau2lxnOjS5PE/AMXTCE/WzDX5o8YSGK9wKRvzum8I0xh127k0SgFfQ77WIGhy5F/AGpMYhPGNHF4PF2N8jGAiQMNe9Kp9KLpo77ckMVJ4BzgcQJOth3k3VSRunA/HJ3rx1mjSD7fPFMBuDTBpsKu0CVKNe4GO7eiN9MCnutCeDKeGJZqV6vn3Pm1TxBkIwFCbE9bDSCgk+K0H3unev7zTNd/8jkk/Kpte68HNLoUJ8EtEeSfj2F0rdcgjQfH7ANTFR9JcqL+VKt+RuZoeynVjn1hQcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=it83voNRN/dEQcPN1ubnKvr8602PLeTZ2Yso5E2zxwk=;
- b=e7JxnfM38nCB+XPn/XJCCmCIe2jKMA85q/IWJ3BNYzJL5NYMXpXyz1WnVLk6k3bsF2cttOlme1Q6xNmN2FSTCUOpyOsDtfcGErAJgCTHWD6yjYw+hhEHPgtaIdCAcXzUDAt/4vamy/i+1BwDXqpwPiSSdI6dK6CDfgYPiFdF5c4z/udeuicneCyAdMRktmTHREfXMlWF7PvrEVcWRsojMGmXog4837EW+CHn01z05o1ct4lsW6Rr/qBN1ggpUK8qkqLRbJxmwOTHFPj5Yg/6raA2sPXWDJa8Dep9WoNi+uP7kEP/zHJsN009e1j/q+Biae7XI3Ie2H21jD1E65PwfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=it83voNRN/dEQcPN1ubnKvr8602PLeTZ2Yso5E2zxwk=;
- b=HP7TvV5+IiIccYTu76YjMI6PPCrM+WgMOqFz42g3ldxFl+boT7PxP4ylw7uIUet+Ys/oYtVX/TUC75Ks3pD01setaq3xJgNbHoajWyQQs1R2F9rluj5tcHtzOWfLrvt4hnK9Wq83ocBRP6y/IFxta3dX7UMdSYpfr04NHqhKfZBaMgvmfGEClQKZc31XHnOCBNuoudPlj0p611Zjf3ppV5IEZb8i1YpDuLKPJrXpRkgjH1i4F4DZ2oCk3tHdykHzKbc6J6bZ32vlQ2fg4EunUSw8XAPgFpHhj4GNOkNO/ONqEGC8Iti2x0QvfYnw4VpjKH+EJaaPO++YfiEzecmh4A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MWHPR12MB1839.namprd12.prod.outlook.com (2603:10b6:300:10b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Mon, 8 Aug
- 2022 17:46:29 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::1a7:7daa:9230:1372]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::1a7:7daa:9230:1372%7]) with mapi id 15.20.5504.020; Mon, 8 Aug 2022
- 17:46:28 +0000
-Date:   Mon, 8 Aug 2022 14:46:27 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Oded Gabbay <oded.gabbay@gmail.com>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Subject: Re: New subsystem for acceleration devices
-Message-ID: <YvFL8/g+xbrhLzEr@nvidia.com>
-References: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
- <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
- <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com>
- <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
- <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
- <YuvctaLwRi+z0Gw4@nvidia.com>
- <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
- <Yuxi1eRHPN36Or+1@nvidia.com>
- <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
-X-ClientProxiedBy: BL1PR13CA0180.namprd13.prod.outlook.com
- (2603:10b6:208:2bd::35) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 8 Aug 2022 13:49:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF6C192BF
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:48:53 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oL6rz-0000Q7-JR; Mon, 08 Aug 2022 19:48:51 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oL6rq-002Xvr-7w; Mon, 08 Aug 2022 19:48:44 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oL6rr-00APNG-QM; Mon, 08 Aug 2022 19:48:43 +0200
+Date:   Mon, 8 Aug 2022 19:48:42 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     "m.shams" <m.shams@samsung.com>
+Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com
+Subject: Re: [PATCH] pwm: removes period check from pwm_apply_state()
+Message-ID: <20220808174842.jiato34jzqstchdn@pengutronix.de>
+References: <CGME20220805102056epcas5p29f22d42c854bebe6d0301b56094cf3ea@epcas5p2.samsung.com>
+ <20220805101125.47955-1-m.shams@samsung.com>
+ <20220805155509.edqwxcvyoqfic4pn@pengutronix.de>
+ <019701d8ab31$94c86d60$be594820$@samsung.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9a223d97-1ba9-42cf-4881-08da7965ebd9
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1839:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GpF4RhGMz1AEdHYzYJKN4eoF0bC1g+KoNKmQFUaAQ91wvQk1Y46XvyibgvTgAtcMfTr9bOZc37lQ3xHhLwgz4A/j68CA11RLKZ1yFQzgBok/6SpmmfWKIYBVruWm82jU4wOXAtywB6BBaYRntGG1E+Mev6fljshPPOTvKd5ZoiMksHUzkMTuzKrgLrGbOsmvgyoCNU0pw4bOs9+9KWYN5dkKppcMm2x+k6r3Zy9wMuVDG/FU5Q3mTX7brdsGlAYCDl/sCpfCmRaLVEUc+Nu+1bDl8qbto0sTOX5CJeg8dNwx2Z0cWoeIvqdFVn7GgaDm2QPjxsHEc0a/90aUBlOahEg9Csg1iuGYtowILpHLwunaGW1bMzEXWffS3P+xZWdlrpxftljXkRUk6NRIf+xeVjiQW1bTE9cYckjtUW5Q27HFOLs/BUcIcTHT1jJQyMycHGATxoLQPc15LqAKTrwBrgnmdqjf9gIIsIy+SOP10wbwywRM4FBMJyxYR/VhcFe2sHQ9hThLQVPKW03Pvfx5+XBBPYQW2kLar0ToRTwLF7xnZJeRAdFPEHMz3cImjD750+Ojlb5bS1LjqKxRZ03Om3D9M4PLNVBflycuY3N9+s73gzZFM+XsCeXBTO2J47yO7zdnh5kXkPmKMoyAYDsYK9Xg+8wYQJS9oKwXx/oGg1SbYlU+/V/mju7kSQyxXteZn/cgIR1mEKDe/DnHMwfhvUX+pQ/ZKh40s8GXINKY1IiGha2L9Vjw+zeeMx8hR1Aa
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(366004)(376002)(396003)(136003)(54906003)(5660300002)(8676002)(41300700001)(26005)(6916009)(2616005)(66476007)(478600001)(86362001)(36756003)(186003)(8936002)(316002)(66946007)(6506007)(6512007)(66556008)(4326008)(2906002)(38100700002)(83380400001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4WsFmn0wqSDZp31SPRgHlkk6Vov18gz5MCXdXbJYI8qXU4VRPpcCPIo6shcm?=
- =?us-ascii?Q?tCshUr96uk3f+hiNaX/V12nERhMWbos83oDmYOeGxxIK8OqOedofqqznu4gP?=
- =?us-ascii?Q?D6qEYcop9Cz6lz7ZcdVMK2HfEltQrqlt+kpS7BKmjySihM9TXp+ZjsJe+VN6?=
- =?us-ascii?Q?ZQyAsysxT1HqNtU/xPbFgnq3LXbA6AtL7SwNuQBn5EmRDcMYcxf1t3fg7yHV?=
- =?us-ascii?Q?Jxoxm3G6SN8LdhArrRZVrFlbdavGvfkUs3tYymc0PdJKJIi3Ip95J3JBg7rc?=
- =?us-ascii?Q?BKoGgw1nQFladsCAAVjJYNVdUbm0uYlFm8Oq7dPZrdMZFUhxQuB99A14cZ6D?=
- =?us-ascii?Q?6np3VNfGG3v/XkFsHyCBGByNAvH0MYO952zVuMpj5tPbI641O9eLmzzMVK5q?=
- =?us-ascii?Q?ucJAtTfTbi4Dj0RUE/1lR5kH1OYuSVsh6QezzJYjACbwnmQ/7fQYhmjYRQau?=
- =?us-ascii?Q?T23Y1yd3GTKWbcB7UcfUVJkprReHLuYmy6NT7PAaQW7eB0QfCyxiOM5Nibc7?=
- =?us-ascii?Q?1kqDG0zy9b7xKFNx0YWPnkp3Fr61npCgkTt4yKZSvzyoElLYQtPhtmV6bjkn?=
- =?us-ascii?Q?ZN4uuG61jdHmKsIaRLl5W19yFujPfkyfcAH2FivTj9tn43yUg6ixEw8oY9C1?=
- =?us-ascii?Q?1aIdDCzaXr+lq8XNb30bwUWybWa2tHsmsr9UE0zEBkpHlebJFJz7nAT05GUQ?=
- =?us-ascii?Q?4PMhHfMrR7OcLZZLnDcZ+t7lo6ZRjNnHytFKF5dsyfHWJ+izVBUQE0OQr2Jg?=
- =?us-ascii?Q?fDEoDq7GgYaXY1n03mifLEeYCMenYiZsaWIPpXA1xr4wG1mCyzKP2nmLnj+Z?=
- =?us-ascii?Q?fk8AdZE1turYqUTi+p82OmBrOjYhXp7bwHCPcIfjHmlg9yl5yVqmDlIJVW0s?=
- =?us-ascii?Q?MadV6/zbI2oXc/dEj73dfuNiOLegc55OP0yTFBnC7id5PWH3gglgFVlNMwhr?=
- =?us-ascii?Q?nU/ovGZ66ZeY78IdrqVN9lESuhXldCnyTSoouy5CnsN3xasrr/Knt431hVmG?=
- =?us-ascii?Q?Ak5qZ+IEwQlrY2SvzgAjzRD9VRqxZrmmWcftDsYR6J33BpDFs6m7cVkJNaJW?=
- =?us-ascii?Q?y16p4Rth6OIFzO3iOrVBnG6twGNWKO40bYiB7xEyq5pH7281QWfanA2g74Jv?=
- =?us-ascii?Q?wqwNyFXBZ+bEDc2DH4AtYvosoBbp++49qH84Edg6d106LnqdtAGidvE02q+L?=
- =?us-ascii?Q?pw0MqSce9gSsmIlLn7tO45YxiUah13DPoI0ZXsQmlTZIFhxdp/rzVZszaDXy?=
- =?us-ascii?Q?/euPTzrnTfCGWgzFU4NeFHvHMVfEzd7wehzK9V4h+k5ymU/j7/aezisVnt1X?=
- =?us-ascii?Q?23qoE1SguKhonqklLSKfRkAtuLNzs4V7mgDlXAtoRrIX1u3XCMgpcZ8uW9EJ?=
- =?us-ascii?Q?rv53t5ajZkULIEpNhp8oCPlCIRrUl7R6aJlJTfZk+2X9SsG2/7QQ2K76xkAV?=
- =?us-ascii?Q?JfJCanZrApJ+9321WdIgg+TSg1drUGvNUqoDX0HuI3CBQKbwZV+OLPRGpU0I?=
- =?us-ascii?Q?yyyLH0toqHiA1H1enPSKMFyOkXfPuqyIkMDz9JgNChca+JasPlquaYr9Tn0n?=
- =?us-ascii?Q?Jvls9gpV/zXLX0miC/z7hsEakDMU8PFNI1ivnLVP?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a223d97-1ba9-42cf-4881-08da7965ebd9
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2022 17:46:28.3608
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7qqxNMXthWEbEyvtjyBOwr/uWAQYypKUDIT4V+EvXIEa27EPF3OMTJX0+/zu70m2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1839
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h3ccmj6mewpavh5f"
+Content-Disposition: inline
+In-Reply-To: <019701d8ab31$94c86d60$be594820$@samsung.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 07, 2022 at 09:43:40AM +0300, Oded Gabbay wrote:
 
-> 1. If there is a subsystem which is responsible for creating and
-> exposing the device character files, then there should be some code
-> that connects between each device driver to that subsystem.
-> i.e. There should be functions that each driver should call from its
-> probe and release callback functions.
-> 
-> Those functions should take care of the following:
-> - Create metadata for the device, the device's minor(s) and the
-> driver's ioctls table and driver's callback for file operations (both
-> are common for all the driver's devices). Save all that metadata with
-> proper locking.
-> - Create the device char files themselves and supply file operations
-> that will be called per each open/close/mmap/etc.
-> - Keep track of all these objects' lifetime in regard to the device
-> driver's lifetime, with proper handling for release.
-> - Add common handling and entries of sysfs/debugfs for these devices
-> with the ability for each device driver to add their own unique
-> entries.
-> 
-> 2. I think that you underestimate (due to your experience) the "using
-> it properly" part... It is not so easy to do this properly for
-> inexperienced kernel people. If we provide all the code I mentioned
-> above, the device driver writer doesn't need to be aware of all these
-> kernel APIs.
+--h3ccmj6mewpavh5f
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This may be, but it still seems weird to me to justify a subsystem as
-"making existing APIs simpler so drivers don't mess them up". It
-suggests perhaps we need additional core API helpers?
+Hello,
 
-> > It would be nice to at least identify something that could obviously
-> > be common, like some kind of enumeration and metadata kind of stuff
-> > (think like ethtool, devlink, rdma tool, nvemctl etc)
-> Definitely. I think we can have at least one ioctl that will be common
-> to all drivers from the start.
+I fixed up the quoting for you in this mail. Please fix your mailer to
+not break quotes, this is quite annoying. (Looking at the headers of
+your mail you're using Outlook. Then your only viable option is to
+switch to a saner client.)
 
-Generally you don't want that as an ioctl because you have to open the
-device to execute it, there may be permissions issues for instance -
-or if you have a single-open-at-a-time model like VFIO, then it
-doesn't work well together.
+On Mon, Aug 08, 2022 at 07:47:03PM +0530, m.shams wrote:
+> On Fri, Aug 05, 2022 at 03:41:25PM +0530, Tamseel Shams wrote:
+> > > There may be situation when PWM is exported using sysfs, but at that=
+=20
+> > > point PWM period is not set. At this situation if we issue a system=
+=20
+> > > suspend, it calls pwm_class_suspend which in turn calls=20
+> > > pwm_apply_state, where PWM period value is checked which returns an=
+=20
+> > > invalid argument error casuing Kernel to panic. So, check for PWM=20
+> > > period value is removed so as to fix the kernel panic observed during=
+=20
+> > > suspend.
+> >
+> > This looks and sounds wrong. One thing I would accept is:
+> >
+> > diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+> > index 0e042410f6b9..075bbcdad6c1 100644
+> > --- a/drivers/pwm/core.c
+> > +++ b/drivers/pwm/core.c
+> > @@ -557,8 +557,8 @@ int pwm_apply_state(struct pwm_device *pwm, const s=
+truct pwm_state *state)
+> > 	 */
+> > 	might_sleep();
+> >=20
+> > -	if (!pwm || !state || !state->period ||
+> > -	    state->duty_cycle > state->period)
+> > +	if (!pwm || !state || state->enabled && (!state->period ||
+> > +	    state->duty_cycle > state->period))
+> >  		return -EINVAL;
+> >=20
+> > 	chip =3D pwm->chip;
+> >
+> > That is, don't refuse calling pwm_apply_state() for state->period =3D 0=
+ and
+> > even state->duty_cycle > state->period if the > > PWM is not enabled.
+>=20
+> By this do you mean doing it following way?
+>=20
+> if (!pwm || !state || (pwm && !state->period) ||
+> 	    (pwm && state->duty_cycle > state->period))
+> 		return -EINVAL;
 
-Usually this would be sysfs or netlink.
+No. Your expression is logically equivalent to what we already have. I
+meant:
 
-> > This makes sense to me, all accelerators need a way to set a memory
-> > map, but on the other hand we are doing some very nifty stuff in this
-> > area with iommufd and it might be very interesting to just have the
-> > accelerator driver link to that API instead of building yet another
-> > copy of pin_user_pages() code.. Especially with PASID likely becoming
-> > part of any accelerator toolkit.
->
-> Here I disagree with you. First of all, there are many relatively
-> simple accelerators, especially in edge, where PASID is really not
-> relevant.
-> Second, even for the more sophisticated PCIe/CXL-based ones, PASID is
-> not mandatory and I suspect that it won't be in 100% of those devices.
-> But definitely that should be an alternative to the "classic" way of
-> handling dma'able memory (pin_user_pages()).
+	if (!pwm || !state || state->enabled && (!state->period ||
+	    state->duty_cycle > state->period))
+		return -EINVAL;
 
-My point was that iommufd can do the pinning for you and dump that
-result into a iommu based PASID, or it can do the pinning for you and
-allow the driver to translate it into its own page table format eg the
-ASID in the habana device.
+Learning to read diffs (maybe Outlook scrambled the view for you, too?)
+is a nice capability you should master.
 
-We don't need to have map/unmap APIs to manage address spaces in every
-subsystem.
+> > But anyhow, even without that the kernel should not panic. So I ask you
+> > to research and provide some more info about > > the problem. (Which
+> > hardware does it affect? Where does it panic? ...)
+>=20
+> Observing Kernel panic in exynos SoC when we issue system suspend. Follow=
+ing
+> is the snippet of error:
+>=20
+> # echo mem > /sys/power/state
+> [   29.224784] 010: Kernel panic - not syncing: pwm pwmchip0:
+> dpm_run_callback failure
+> [   29.240134] 010: Call trace:
+> [   29.242993] 010:  dump_backtrace+0x0/0x1b8
+> [   29.247067] 010:  show_stack+0x24/0x30
+> [   29.250793] 010:  dump_stack+0xb8/0x114
+> [   29.254606] 010:  panic+0x180/0x398
+> [   29.258073] 010:  dpm_run_callback+0x270/0x278
+> [   29.262493] 010:  __device_suspend+0x15c/0x628
+> [   29.266913] 010:  dpm_suspend+0x124/0x3b0
+> [   29.270899] 010:  dpm_suspend_start+0xa0/0xa8
+> [   29.275233] 010:  suspend_devices_and_enter+0x110/0x968
+> [   29.280433] 010:  pm_suspend+0x308/0x3d8
+> [   29.284333] 010:  state_store+0x8c/0x110
+> [   29.288233] 010:  kobj_attr_store+0x14/0x28
+> [   29.292393] 010:  sysfs_kf_write+0x5c/0x78
+> [   29.296466] 010:  kernfs_fop_write+0x10c/0x220
+> [   29.300886] 010:  __vfs_write+0x48/0x90
+> [   29.304699] 010:  vfs_write+0xb8/0x1c0
+> [   29.308426] 010:  ksys_write+0x74/0x100
+> [   29.312240] 010:  __arm64_sys_write+0x24/0x30
+> [   29.316573] 010:  el0_svc_handler+0x110/0x1b8
+> [   29.320906] 010:  el0_svc+0x8/0x1bc
+> [   29.324374] 010: SMP: stopping secondary CPUs
+> [   29.328711] 010: Kernel Offset: disabled
+> [   29.332607] 010: CPU features: 0x0002,00006008
+> [   29.337026] 010: Memory Limit: none
+> [   29.343949] 010: Rebooting in 1 seconds..
+> [   30.344539] 010: Disabling non-boot CPUs ...
 
-> Maybe this is something that should be discussed in the kernel summit ?
+Just locking at that and starring at drivers/base/power/main.c for a
+while doesn't make this clearer to me. Are you using a mainline kernel?
+Which version?
 
-Maybe, I expect to be at LPC at least
+Best regards
+Uwe
 
-Jason 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--h3ccmj6mewpavh5f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLxTHcACgkQwfwUeK3K
+7AnRqwf/T0HURo/59d7Says04pIjzt0PFI9frzTB4sYkj4zbhpAUei2YGxqVR4qt
+F83CgOS25CQ9neDBa8QHf1I30ZgzTV3iWslBI8za3QCQ692DYFYsJzebbue9atvY
+u3qBPG3nV53RUy1GX35GbQlwyp5b95RXSbj/E7guahQmy/QcYSaeC8tIGC2tXrdo
+eVK/FYy8IFP0+zkwyQpmOZiT++ANsmnfnQRn9A3IUWa+nGDztGdfFAdnW7ximUDF
+obRGY2SXHHdASGtmk3SHKkSJRgHFv5O2Zw4GNRinkMdC/6mp2ZgEIYf1Zl89qu8I
+RB3MGLWNnPzXAt+9Cr1TqYZCrDegYA==
+=VMIQ
+-----END PGP SIGNATURE-----
+
+--h3ccmj6mewpavh5f--

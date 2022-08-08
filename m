@@ -2,102 +2,487 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E7A58C611
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2ED58C61D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241995AbiHHKGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 06:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
+        id S235004AbiHHKNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 06:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242343AbiHHKGl (ORCPT
+        with ESMTP id S233453AbiHHKNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 06:06:41 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A234F1181F
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 03:06:39 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id u6so3915647ljk.8
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 03:06:39 -0700 (PDT)
+        Mon, 8 Aug 2022 06:13:30 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF11DE5
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 03:13:27 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id gk3so15654440ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 03:13:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xExDiNzjvGBll5feAm0Ok3SGRkY16fJNcNgVa/ZsGBE=;
-        b=ZxzB+3TWHIpp03eJsvBmQF0soM6WE6/h9mOuVY5YwaywLSb++ifpadlqFMqHLoQaWx
-         sd4ONtxOcsopifncmI2Ob5Ii7MaB0UzQ2nvrBnM5fL8oprx9Zvd5AQfCNCZthMvWYW0d
-         IgEJWdSolyp6SzIF+nkf2EIKNczi0NXQvvVdoDIy0Z4wD/R/bZSlGYm69PA2A4x2Kj/E
-         OeKgayfIH1adOpZX6HJzhxqMh18jzlthAFJri6eqc2LPh60JjwVW8n2KRn/ghZwADE+r
-         +0DXNiMlhgdkRL9uslU9r2Hwu0bLWbSLNQVoFtdS7AjwuXqhOOxU8eAocBdsm9otb9/v
-         o3QA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=pVs9Is7odQ3WzU+SLvPQvDhBo62OjeLjgoGnygCY5zs=;
+        b=k3QBUwDqffPCZ08ePgVlvPz3NmxmgECmrXLDF/F27mivNGStIpor53DAoJHVLGHlEj
+         6aWAfvimSWjs7NE9l/0uewhoZRgoSU6QaoezveDxQOiLdRTCXAR5jEoXFxv2D1YUAsLl
+         xrRat/DMRZBaRL8AO3hqtNR+dlrhEU+8gaWbaYMweNwhd6wzPrP82UJAYMIc8aC4WCiH
+         uwWLYi/27EpJ+XI4zTB/ZaC2JVX+sKeOLgJzv+iAIQcOA6qonkze0nCFsPPuqiG/IYjR
+         7ljWANiMxEEkakJ+0IyVWtgogB7BKS2ZjXkPaua2qy8mHUA7EY7jDeWTPZHxANrjqT+A
+         nfcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xExDiNzjvGBll5feAm0Ok3SGRkY16fJNcNgVa/ZsGBE=;
-        b=g5a9BysyCaGVBL8gwPYwYA8vAoJSDftWS4cCGFk3kYHbPIxdkt8QATDJekMumg2Z0H
-         lQTYVLk2F99OQ4tEQj8WNbot8znKAHSNwTy07njCvfKk/y+mZNB7C1P4bWKrnS/mCzr8
-         cl3F+gidWqo31QUqGsiOFD4ouynk4oGCH508i/uJc7b83wl3966Qf/bx2A+Yni4gdGK7
-         5Pya4FPNjiQB5bLXPD2vX3DuS1cZLbtDCy6fYttT7eTPyRK43JwKMKW2mshhVRS2IJge
-         rWxesM3W4YprwxXXbxDSRpwymXfr563BClZzLtE2T9LYtYiGBkF3ajk4iKYuasDznOlT
-         8pIA==
-X-Gm-Message-State: ACgBeo2zoTur4Cwy0+QCcA7pnl1zATrWq2tqp2HS1ojUrZf01KrwjYe9
-        S8n4FQ5AXIhN5awgi0x/Nqqabw==
-X-Google-Smtp-Source: AA6agR5BilwKjCFIxYE12w0n9Stop3c/u3GrsZnVpvJ4nwU3UWR/eGrc0BlOKb0oG0HRjnEIaetx0g==
-X-Received: by 2002:a2e:b949:0:b0:25e:795e:fb11 with SMTP id 9-20020a2eb949000000b0025e795efb11mr4806867ljs.163.1659953198069;
-        Mon, 08 Aug 2022 03:06:38 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id u11-20020a2eb80b000000b0025e434e1e6bsm1325095ljo.31.2022.08.08.03.06.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 03:06:37 -0700 (PDT)
-Message-ID: <b0cb8e8b-8793-a781-77d8-a56cadbb7696@linaro.org>
-Date:   Mon, 8 Aug 2022 13:06:35 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=pVs9Is7odQ3WzU+SLvPQvDhBo62OjeLjgoGnygCY5zs=;
+        b=vfv50xnUx1N6qrTNKRvguV6zcgeT5CIvxukNZlFF06s3Sei0Ag2xYXq37z1rcgNn1y
+         XZtuyG8wPhJpHT3hocbGgyl/e1QA9cPvrytnmzT1H9cYphHKzQpTGhteKkVtRchn4Qqc
+         hV3QNfrj2kedlegVMS8mUwCljqGVAzNvGwqbkGfQXJ7Kv00YP4qhJWj3Rvk/L3HFyUvJ
+         5ggYBzxMnrBr+Jpem87y6b0IYq5hm9aKu86NK5gtTNsXcEmxV3ABugd4KX23YzPYH63i
+         4FP8RP3RoS4Ls1E8PVxEocC45JJfMr5Nn/Ays0zmI06MX5pmIalIs6oN+tXKGcn5V6wo
+         AWAQ==
+X-Gm-Message-State: ACgBeo1sX5Hsf4E+CLj3ibuqj/fEVbWF9MEj07eXLN0/rWrGzmoiDaMh
+        ToDgxkw1bolLlyUPaxk6srmX+fWLIreZBcDkVbQ=
+X-Google-Smtp-Source: AA6agR6c9iksX4aFJvbqgXAPY/uh8iEGCG3zN9Ge+zdXSD/IoZ0V/qqgwGW9Kx++VvzPOg1NNaLkBMWbKDpP3TOjUgA=
+X-Received: by 2002:a17:906:9b09:b0:730:9480:9729 with SMTP id
+ eo9-20020a1709069b0900b0073094809729mr13399061ejc.588.1659953605481; Mon, 08
+ Aug 2022 03:13:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 21/28] mfd: max14577: Remove #ifdef guards for PM related
- functions
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-References: <20220807145247.46107-1-paul@crapouillou.net>
- <20220807145247.46107-22-paul@crapouillou.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220807145247.46107-22-paul@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220804093829.42kdelp7u4r743nv@pengutronix.de>
+ <CAPY8ntBovVq1HVt_UneDF8OB9KBdEBv52o=4BCTmf9VpiODxVg@mail.gmail.com>
+ <20220804125152.idyzetjqkjzgbbm2@pengutronix.de> <CAPY8ntAatYvbf5ehfsj4qcSDC=sODeN1Cj0vDjn6p0M=k320NA@mail.gmail.com>
+ <CAHCN7x+DkJgGvMLnYBXscSMDmTCeaHeJKK6T9eLUm+rXSx=NQA@mail.gmail.com>
+ <OS0PR01MB592206843B43BC93F4F699FC869E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CAHCN7x+UAk1wPTOj7EFUXkRY3b3BPXTT6SqD4A7sJO87ZpHgFg@mail.gmail.com>
+ <CAHCN7xJ4TWpLmD_WRrEXoHWy52MEfUL-_R5x=kF-1JC0_C8Q1Q@mail.gmail.com>
+ <CAHCN7x+y9zrfs_wtptFNQW3+hcF2aeuqZY7xFs+gcGJNv334oQ@mail.gmail.com>
+ <CAHCN7xLMD2hh8FqFY_pw7-P0RP2wG-7Yf+7y1NAfYxY36r3bGw@mail.gmail.com> <20220808085437.44rrs6e44ibgztld@pengutronix.de>
+In-Reply-To: <20220808085437.44rrs6e44ibgztld@pengutronix.de>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 8 Aug 2022 05:13:14 -0500
+Message-ID: <CAHCN7xJwp1rJ-CpE7FvBgQb-NmVmOEQQFP8KoL=tjE85CEYzbA@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        "robert.chiras@nxp.com" <robert.chiras@nxp.com>,
+        "laurentiu.palcu@nxp.com" <laurentiu.palcu@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/08/2022 17:52, Paul Cercueil wrote:
-> Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
-> to handle the .suspend/.resume callbacks.
-> 
-> These macros allow the suspend and resume functions to be automatically
-> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
-> to use #ifdef guards.
-> 
-> The advantage is then that these functions are now always compiled
-> independently of any Kconfig option, and thanks to that bugs and
-> regressions are easier to catch.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+On Mon, Aug 8, 2022 at 3:54 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
+>
+> On 22-08-07, Adam Ford wrote:
+> > On Fri, Aug 5, 2022 at 4:05 PM Adam Ford <aford173@gmail.com> wrote:
+> > >
+> > > On Fri, Aug 5, 2022 at 7:56 AM Adam Ford <aford173@gmail.com> wrote:
+> > > >
+> > > > On Fri, Aug 5, 2022 at 5:55 AM Adam Ford <aford173@gmail.com> wrote:
+> > > > >
+> > > > > On Fri, Aug 5, 2022 at 3:44 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > > > > >
+> > > > > > Hi Adam and all,
+> > > > > >
+> > > > > > > Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+> > > > > > >
+> > > > > > > On Thu, Aug 4, 2022 at 9:52 AM Dave Stevenson
+> > > > > > > <dave.stevenson@raspberrypi.com> wrote:
+> > > > > > > >
+> > > > > > > > On Thu, 4 Aug 2022 at 13:51, Marco Felsch <m.felsch@pengutronix.de>
+> > > > > > > wrote:
+> > > > > > > > >
+> > > > > > > > > Hi Dave,
+> > > > > > > > >
+> > > > > > > > > On 22-08-04, Dave Stevenson wrote:
+> > > > > > > > > > Hi Marco
+> > > > > > > > > >
+> > > > > > > > > > On Thu, 4 Aug 2022 at 10:38, Marco Felsch
+> > > > > > > <m.felsch@pengutronix.de> wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > Hi Dave, Adam,
+> > > > > > > > > > >
+> > > > > > > > > > > On 22-08-03, Dave Stevenson wrote:
+> > > > > > > > > > > > Hi Adam
+> > > > > > > > > > > >
+> > > > > > > > > > > > On Wed, 3 Aug 2022 at 12:03, Adam Ford <aford173@gmail.com>
+> > > > > > > wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > ...
+> > > > > > > > > > >
+> > > > > > > > > > > > > > Did managed to get access to the ADV7535 programming
+> > > > > > > > > > > > > > guide? This is the black box here. Let me check if I can
+> > > > > > > > > > > > > > provide you a link with our repo so you can test our
+> > > > > > > current DSIM state if you want.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > I do have access to the programming guide, but it's under
+> > > > > > > > > > > > > NDA, but I'll try to answer questions if I can.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Not meaning to butt in, but I have datasheets for ADV7533 and
+> > > > > > > > > > > > 7535 from previously looking at these chips.
+> > > > > > > > > > >
+> > > > > > > > > > > Thanks for stepping into :)
+> > > > > > > > > > >
+> > > > > > > > > > > > Mine fairly plainly states:
+> > > > > > > > > > > > "The DSI receiver input supports DSI video mode operation
+> > > > > > > > > > > > only, and specifically, only supports nonburst mode with sync
+> > > > > > > pulses".
+> > > > > > > > > > >
+> > > > > > > > > > > I've read this also, and we are working in nonburst mode with
+> > > > > > > > > > > sync pulses. I have no access to an MIPI-DSI analyzer therefore
+> > > > > > > > > > > I can't verify it.
+> > > > > > > > > > >
+> > > > > > > > > > > > Non-burst mode meaning that the DSI pixel rate MUST be the
+> > > > > > > > > > > > same as the HDMI pixel rate.
+> > > > > > > > > > >
+> > > > > > > > > > > On DSI side you don't have a pixel-clock instead there is bit-
+> > > > > > > clock.
+> > > > > > > > > >
+> > > > > > > > > > You have an effective pixel clock, with a fixed conversion for the
+> > > > > > > > > > configuration.
+> > > > > > > > > >
+> > > > > > > > > > DSI bit-clock * number of lanes / bits_per_pixel = pixel rate.
+> > > > > > > > > > 891Mbit/s * 4 lanes / 24bpp = 148.5 Mpixels/s
+> > > > > > > > >
+> > > > > > > > > Okay, I just checked the bandwidth which must equal.
+> > > > > > > > >
+> > > > > > > > > > As noted elsewhere, the DSI is DDR, so the clock lane itself is
+> > > > > > > > > > only running at 891 / 2 = 445.5MHz.
+> > > > > > > > > >
+> > > > > > > > > > > > Section 6.1.1 "DSI Input Modes" of
+> > > > > > > > > > > > adv7533_hardware_user_s_guide is even more explicit about the
+> > > > > > > > > > > > requirement of DSI timing matching
+> > > > > > > > > > >
+> > > > > > > > > > > Is it possible to share the key points of the requirements?
+> > > > > > > > > >
+> > > > > > > > > > "Specifically the ADV7533 supports the Non-Burst Mode with syncs.
+> > > > > > > > > > This mode requires real time data generation as a pulse packet
+> > > > > > > > > > received becomes a pulse generated. Therefore this mode requires a
+> > > > > > > > > > continuous stream of data with correct video timing to avoid any
+> > > > > > > > > > visual artifacts."
+> > > > > > > > > >
+> > > > > > > > > > LP mode is supported on data lanes. Clock lane must remain in HS
+> > > > > > > mode.
+> > > > > > > > > >
+> > > > > > > > > > "... the goal is to accurately convey DPI-type timing over DSI.
+> > > > > > > > > > This includes matching DPI pixel-transmission rates, and widths of
+> > > > > > > > > > timing events."
+> > > > > > > > >
+> > > > > > > > > Thanks for sharing.
+> > > > > > > > >
+> > > > > > > > > > > > The NXP kernel switching down to an hs_clk of 445.5MHz would
+> > > > > > > > > > > > therefore be correct for 720p operation.
+> > > > > > > > > > >
+> > > > > > > > > > > It should be absolute no difference if you work on 891MHz with 2
+> > > > > > > > > > > lanes or on 445.5 MHz with 4 lanes. What must be ensured is that
+> > > > > > > > > > > you need the minimum required bandwidth which is roughly:
+> > > > > > > > > > > 1280*720*24*60 = 1.327 GBps.
+> > > > > > > > > >
+> > > > > > > > > > Has someone changed the number of lanes in use? I'd missed that if
+> > > > > > > > > > so, but I'll agree that 891MHz over 2 lanes should work for
+> > > > > > > 720p60.
+> > > > > > > > >
+> > > > > > > > > The ADV driver is changing it autom. but this logic is somehow odd
+> > > > > > > > > and there was already a approach to stop the driver doing this.
+> > > > > > > >
+> > > > > > > > I'd missed that bit in the driver where it appears to drop to 3 lanes
+> > > > > > > > for pixel clock < 80000 via a mipi_dsi_detach and _attach. Quirky, but
+> > > > > > > > probably the only way it can be achieved in the current framework.
+> > > > > > > >
+> > > > > > > > > To sync up: we have two problems:
+> > > > > > > > >   1) The 720P mode with static DSI host configuration isn't working
+> > > > > > > > >      without hacks.
+> > > > > > > > >   2) The DSI link frequency should changed as soon as required
+> > > > > > > > >      automatically. So we can provide all modes.
+> > > > > > > > >
+> > > > > > > > > I would concentrate on problem 1 first before moving on to the 2nd.
+> > > > > > > >
+> > > > > > > > If you change your link frequency, it may be worth trying a lower
+> > > > > > > > resolution again such as 720x480 @ 60fps on 2 lanes. (720480@60 on 4
+> > > > > > > > lanes is again listed as mandatory for using the timing generator).
+> > > >
+> > > > Marco,
+> > > >
+> > > > Looking through the DSIM driver that NXP uses, it appears that they
+> > > > have a few special cases where they intentionally manipulate the DSIM
+> > > > under certain conditions:
+> > > >
+> > > > /* '1280x720@60Hz' mode with 2 data lanes
+> > > > * requires special fine tuning for DPHY
+> > > > * TIMING config according to the tests.
+> > > > */
+> > > >
+> > > > There is also a separate one for the 4-lane mode:
+> > > >
+> > > > /* workaround for CEA standard mode "1280x720@60" "1920x1080p24"
+> > > > * display on 4 data lanes with Non-burst with sync
+> > > > * pulse DSI mode, since use the standard horizontal
+> > > > * timings cannot display correctly. And this code
+> > > > * cannot be put into the dsim Bridge's mode_fixup,
+> > > > * since the DSI device lane number change always
+> > > > * happens after that.
+> > > > */
+> > > >
+> > > > And lastly, they address issues with 3-lane mode:
+> > > >
+> > > > /* TODO: DSIM 3 lanes has some display issue, so
+> > > > * avoid 3 lanes enable, and force data lanes to
+> > > > * be 2.
+> > > > */
+> > > >
+> > > > Since the ADV is trying to adjust the lanes to 3 when running at 720p,
+> > > > it could be part of the reason you need to jump to 2-lane mode.
+> > > >
+> > > > > > > >
+> > > > > > > > > > I have just noted that 720p59.94 at 24bpp on 4 lanes is listed as
+> > > > > > > > > > one of the modes that is mandatory to use the timing generator
+> > > > > > > > > > (reg 0x27 bit 7 = 1). On 2 lanes it is not required.
+> > > > > > > > > > I don't know why it's referencing the 1000/1001 pixel clock rates
+> > > > > > > > > > and not the base one, as it's only a base clock change with the
+> > > > > > > > > > same timing (74.176MHz clock instead of 74.25MHz).
+> > > > > > > > >
+> > > > > > > > > Interesting! I would like to know how the HDMI block gets fetched by
+> > > > > > > > > the DSI block and how the timing-generator can influence this in
+> > > > > > > > > good/bad way. So that we know what DSI settings (freq, lanes) are
+> > > > > > > sufficient.
+> > > > > > > > >
+> > > > > > > > > > > > If you do program the manual DSI divider register to allow a
+> > > > > > > > > > > > DSI pixel rate of 148.5MHz vs HDMI pixel rate of 74.25MHz,
+> > > > > > > > > > > > you'd be relying on
+> > > > > > > > > > >
+> > > > > > > > > > > There is no such DSI pixel rate to be precise, we only have a
+> > > > > > > > > > > DSI bit clock/rate.
+> > > > > > > > > > >
+> > > > > > > > > > > > the ADV753x having at least a half-line FIFO between DSI rx
+> > > > > > > > > > > > and HDMI tx to compensate for the differing data rates. I see
+> > > > > > > > > > > > no reference to such, and I'd be surprised if it was more than
+> > > > > > > > > > > > a half dozen pixels to compensate for the jitter in the cases
+> > > > > > > > > > > > where the internal timing generator is mandatory due to
+> > > > > > > fractional bytes.
+> > > > > > > > > > >
+> > > > > > > > > > > This is interesting and would proofs our assumption that the
+> > > > > > > > > > > device don't have a FIFO :)
+> > > > > > > > > > >
+> > > > > > > > > > > Our assumptions (we don't have the datasheet/programming
+> > > > > > > manual):
+> > > > > > > > > > >   - HDMI part is fetching 3 bytes per HDMI pixclk
+> > > > > > > > > > >   - Ratio between dsi-clk and hdmi-pixelclk must be 3 so the DSI
+> > > > > > > and
+> > > > > > > > > > >     HDMI are in sync. So from bandwidth pov there are no
+> > > > > > > differences
+> > > > > > > > > > >     between:
+> > > > > > > > > > >       - HDMI: 74.25 MHz * 24 Bit  = 1782.0 MBit/s
+> > > > > > > > > > >       - DSI:    891 MHz * 2 lanes = 1782.0 MBit/s (dsi-clock:
+> > > > > > > 445.5 )
+> > > > > > > > > > >       - DSI:  445.5 MHz * 4 lanes = 1782.0 MBit/s (dsi-clock:
+> > > > > > > > > > > 222.75)
+> > > > > > > > > > >
+> > > > > > > > > > >     But the ratio is different and therefore the faster clocking
+> > > > > > > option
+> > > > > > > > > > >     let something 'overflow'.
+> > > > > > > > > >
+> > > > > > > > > > I'll agree that all looks consistent.
+> > > > > > > > > >
+> > > > > > > > > > > Anyway, but all this means that Adam should configure the
+> > > > > > > > > > > burst-clock-rate to 445.5 and set the lanes to 4. But this
+> > > > > > > > > > > doesn't work either and now we are back on my initial statement
+> > > > > > > > > > > -> the driver needs some attention.
+> > > > > > > > > >
+> > > > > > > > > > Things always need attention :-)
+> > > > > > > > >
+> > > > > > > > > ^^
+> > > > > > > > >
+> > > > > > > > > > I suspect that it's the use of the timing generator that is the
+> > > > > > > issue.
+> > > > > > > > > > The programming guide does recommend using it for all modes, so
+> > > > > > > > > > that would be a sensible first step.
+> > > > > > > > >
+> > > > > > > > > But I tested it without the timing-generator too. Can you or Adam
+> > > > > > > > > verify the timing-generator diable logic?
+> > > > > > > >
+> > > > > > > > Sorry, running without the use of the timing generator is the issue.
+> > > > > > > > It is mandatory in some modes, but supported in all modes. Always
+> > > > > > > > using it should therefore avoid not using it in one of the mandatory
+> > > > > > > > modes (the list looks a little arbitrary).
+> > >
+> > > I tested running various modes with the timing generator disable on an
+> > > NXP kernel with functional video, and some of the video modes stopped
+> > > operating or became blurry.  With the generator on, it appeared to
+> > > make the issues go away, so I think it should be left on.
+> > >
+> > > > > > > >
+> > > > > > > > > > I will say that we had a number of issues getting this chip to do
+> > > > > > > > > > anything, and it generally seemed happier on 2 or 3 lanes instead
+> > > > > > > > > > of 4. Suffice to say that we abandoned trying to use it, despite
+> > > > > > > > > > some assistance from ADI.
+> > > > > > > > >
+> > > > > > > > > Even more interessting, what is your alternative to this chip?
+> > > > > > > >
+> > > > > > > > BCM2711 which supported dual HDMI natively.
+> > > > > > > > Our investigation of ADV7535 was when trying to build what became
+> > > > > > > > Pi400 using BCM2710/BCM2837 (only has a single HDMI output). Whilst I
+> > > > > > > > do have the prototype, the ADV was wired up weirdly with I2C so I
+> > > > > > > > never really got it running with Linux.
+> > > > > > >
+> > > > > > > I think I have convinced myself that the DSIM is working good enough to
+> > > > > > > match that of the NXP.
+> > > > > > >
+> > > > > > > I've gone through and made a list of the register differences between a
+> > > > > > > working display using NXP's kernel and the non-working display.  I've
+> > > > > > > identified a small handful of registers on both the CEC bank of
+> > > > > > > registers and main set of registers.
+> > > > > > >
+> > > > > > > I noticed that the working NXP version doesn't rescale the number of
+> > > > > > > lanes based on the clock rate, and it stays fixed at 4 lanes.
+> > > > > >
+> > > > > > Does it mean theoretically rescale of lanes is not required??
+> > > > >
+> > > > > On the custom kernel from NXP, I can sync at 720p at 4-lanes.
+> > > > > Unfortunately, I haven't yet been able to replicate all the register
+> > > > > settings between my working version at 720p and my non-working
+> > > > > version, and I still have yet to sync at 720p using the mainline
+> > > > > adv7535 driver.  I am still wrokong on it.
+> > > > >
+> > > > > > At least 2 platforms can work with fixed 4 lanes@720p.
+> > > >
+> > > > Based on what I'm seeing for this NXP platform, it almost seems like
+> > > > the DSI transmitter should make the determination on whether or not to
+> > > > scale the number of lanes instead of having the ADV7373 do it.  Since
+> > > > their custom kernel is able to do 720p in 4-lane mode with this part,
+> > > > it doesn't seem unreasonable to me.
+> > >
+> > > I did a bunch of comparisons between registers for both the ADV7535
+> > > and the DSIM, and it appears that the video information is somehow
+> > > different between the working NXP kernel and non-working one.
+> > >
+> > > The two main differences are around the values of htotal  hfp.  Both
+> > > the DSIM and the ADV7535 are using different values for htotal and the
+> > > hfp between the kernels.  I am wondering if there is a bug in the 5.19
+> > > driver which is fetching wrong info or somehow the data isn't being
+> > > calculated properly because both the DSIM and the ADV timings match
+> > > each other, but don't match the working kernel.
+> > >
+> > >
+> > > 720p Working on NXP:
+> > >
+> > > [   24.657957] sec_mipi_dsim_set_main_mode: vmode->hfront_porch 112 ->
+> > > hfp_wc = 78
+> > > [   24.665284] sec_mipi_dsim_set_main_mode: vmode->hsync_len 40 -> hsa_wc = 24
+> > > [   24.681496] adv7511_dsi_config_timing_gen: htotal 1652
+> > > [   24.691372] adv7511_dsi_config_timing_gen: hfp 112
+> > >
+> > > 720p Not working:
+> > >
+> > > [  106.424404] samsung_dsim_set_display_mode: vfp = 5
+> > > [  106.429216] samsung_dsim_set_display_mode: bfp = 20
+> > > [  106.441777] sec_mipi_dsim_set_main_mode: vmode->hfront_porch 110 ->
+> > > hfp_wc = 77
+> > > [  106.449221] sec_mipi_dsim_set_main_mode: vmode->hsync_len 40 -> hsa_wc = 24
+> > > [  106.456314] LCD size = 1280x720
+> > > [  106.470115] adv7511_dsi_config_timing_gen: htotal = 1650
+> > > [  106.480707] adv7511_dsi_config_timing_gen: hfp = 110
+> > >
+> >
+> > After spending more time than I care to admit, I think I have a
+> > working solution to the DSIM + ADV7535, but the vast majority of the
+> > changes I had to do were revolving around samsung_dsim_set_phy_ctrl.
+> > I have an LVDS bridge based on the ti,sn65dsi83.  With some
+> > suggestions from Marek V, I replaced the fixed-clock solution with a
+> > dynamic one based on the attached bridge's requested clocks.
+> >
+> > With those changes, I have the following resolutions working on the
+> > ADV7535 (with almost no chages to the ADV code) ane one that's nearly
+> > working:
+> >
+> > Working:
+> >
+> > 1080p@60
+> > 1080p@50
+> > 720p@50
+> > 800x600-75
+> > 720x576
+> >
+> > Partially Working:
+> > 720p@60 (hsync appears off, rounding error?)
+> >
+> > This driver appears to be using a fixed frequency and the
+> > corresponding fixed frequency in the DPHY settings. If the clock
+> > changes, the samsung_dsim_set_phy_ctrl needs to adjust accordingly.
+> > NXP lists a 2-lane operation mode for 720 as needing some additional
+> > adjustments because the calculations don't quite line up, but due to
+> > the other changes I made, I didn't investigate 2-lane very much.
+> >
+> > In order to switch resolutions, I had to lock the adv7535 in 4-lane
+> > mode with a minor patch to the adv driver, because the DSIM doesn't
+> > appear to operate in 3-lane mode (like the adv7511 wants to do) and
+> > the DSIM seemed to be unhappy about the connections and
+> > disconnections.  I also made some changes to the PMS calibration for
+> > the PLL which allowed me to lower the phy clock a bit.
+> >
+> > The rest of the changes I did were attempting to port the dsim dphy
+> > frequency tables from NXP's kernel.  If anyone from NXP or Samsung has
+> > the formula for how to determine some of the values for the DPHY, I'd
+> > like to replace the look-up table [1] with a formula.
+> >
+> > Once I have my code changes cleaned up, I'll push them to a github and
+> > share the info.
+> >
+> > [1] - https://source.codeaurora.org/external/imx/linux-imx/tree/include/drm/bridge/sec_mipi_dsim.h?h=lf-5.15.y
+>
+> Hi Adam,
+>
+> thanks for your work and sharing. Did you tested our current solution
+> since we think that we understood the DSIM porches? As I said in the
+> very beginning of this discussion, NXP took some porch values we really
+> don't understand and I don't think they do either. NXP tweaked the
+> values somehow so the chip is producing at least the most wanted
+> resolutions.
 
-With dropped Bartlomiej:
+I am using the porch calculator that Jagan's driver used + a bunch of
+stuff to address a variety of clock rates and their corresponding DPHY
+settings.  I did notice that the porches were different from NXP's,
+but for the resolutions I listed, I didn't have to tweak them myself.
+I have a tweaking hack for 720x480, but it's purely on the DSIM side,
+and I haven't had to hack the ADV driver (other than to keep it from
+switching from 4-lanes).    I am not convinced the ADV7535 is a bad
+part, but I am convinced there is more to the DSIM than their TRM
+documents state.  My changes to the DSIM driver also fixed my LVDS
+bridge issue, so I feel like I am headed in the right direction.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I was planning on reviewing your porch calculator and generating some
+sort of adjustment, but I'd like to keep it on the DSIM side so as not
+to impact or break the ADV7535 for others.
 
+I am guessing that the NXP tweaks were potentially to address areas
+where the algorithm where it was compensating for the horizontal
+timings where it does some math to recalculate what the timings should
+be and there may have been sound rounding errors, but it's just a
+guess.
 
-Best regards,
-Krzysztof
+adam
+
+>
+> Regards,
+>   Marco

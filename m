@@ -2,152 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D42E58CD6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9176A58CD72
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244204AbiHHSPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 14:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
+        id S229519AbiHHSQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 14:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiHHSPC (ORCPT
+        with ESMTP id S243043AbiHHSQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 14:15:02 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2345012AB3;
-        Mon,  8 Aug 2022 11:15:01 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id gk3so18026456ejb.8;
-        Mon, 08 Aug 2022 11:15:01 -0700 (PDT)
+        Mon, 8 Aug 2022 14:16:00 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6CAB7FD
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 11:15:58 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id b21-20020a05600c4e1500b003a32bc8612fso4850694wmq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 11:15:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TPx8e2WZ5x3O6RzJ0FBYuElFwi40nMqF3zJj8LRx/uM=;
-        b=AeoyWAKH3SpNET04KSZr8c4od/fZuq6fXzbg3b1+sLGHGviz0lzCv3VWkC12aoxiPb
-         YdyiIsZHoLrernC7n0pQkfXj5fw+W3TRfZ0qDDTEqH9oC1YfxHjZ5v0Ot5CXdjAEhb70
-         QmTja47co3PpiIoksu2rXu22OhMF+T1Tc1kr5ThVNtkFRh3grGc0y/LApFcJccd3SZrx
-         C4SRsj2UW05KGXhdLOMuWrviH/qo0WQzwklDw5v8kLtgJ+4g5kA9CKm3vAQHlNPjhJ5E
-         QhOZNVra0D6NXhVMPlqpL9jIJOxywliKOWzTZ6y9L8nMS3nI53uIPTsnKapK832aN3bY
-         6U9w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=N0YWcYm3d7mIGu9NuVyOkucoriM5WUeBmD8ZP+rQP0U=;
+        b=GNylwCkzpQPatgX5rPWJnN8jA0fAp7fl0T68smMCOTL2q71loAf7XfEteoIaBmcRv1
+         mfJBioIs443o8R2EWXBQnTd8ahubQJv4gtY5ed6Yg05di6WrDgsc82ABIibKnLrsVeDB
+         6Ph0iUVMnlkr0E8i5C9fnnNMnyZ4C8rRvbig8HeSYoO6zCbC1mav91xASl32E47l2Ift
+         APXm4hSXxH/YhmlxEZuhTMc8ikP+bNjpdVG4HsBpRYPi54ARygvBblMxZ0/vNjaFnkda
+         KJPrVNyEtvq5NaSQECMtLq+R1jNK/kcigZ6n4lWQ/XYZysUr6zFLJHHwP5sFQsnLw8V2
+         woSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TPx8e2WZ5x3O6RzJ0FBYuElFwi40nMqF3zJj8LRx/uM=;
-        b=NhtqnTytynVhfYIMBcdNkmnuEYIUh2QRk9oCToLkDNBKju2pjm/Eky5sVeMF2cPADz
-         yBsoGif1JKnOCXkJ3sBSCJ9lb+jM7vcf9CUnA2vheMoRHzzGHBrGgnssVbYEFFklXwV5
-         Bqr6+uTOlBke+UDMqH1kkYG1DEk7gaLztw+PIowsZo7myMXS+AGbZhkj9h4hdCjcGSFF
-         LHfMtFEL6HEOu1tGXs282cu8loM1oN6RB4vcW9dtO5Ochpcnc9sigZLjakJ6ropjAp+5
-         Gvyxdf4Pk5/jZf8slC9s0MqxbYiJ+ydnbATXXAkWxjByqEUSmOqr47jvkUCZPKknRW3p
-         l0Hw==
-X-Gm-Message-State: ACgBeo1wouW4Ufp4VemMRVrGp3jCbfs2NVcIwAfwmlK+f8YXgdF7cbj3
-        F0eZ3eAuMr+qs6hOgMNO3wETRaA0+bXWwnTtJsrzqDjHi+0=
-X-Google-Smtp-Source: AA6agR5h3XhlvNoxhWzOgR+EtkZun8KF7u+zK+88U74khRnQcS1xjgGa4EMWaBY/RgQDnu4R4P0prGvyQa09K/CkQ/Y=
-X-Received: by 2002:a17:907:8687:b0:730:7c7b:b9ce with SMTP id
- qa7-20020a170907868700b007307c7bb9cemr14127780ejc.656.1659982499687; Mon, 08
- Aug 2022 11:14:59 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=N0YWcYm3d7mIGu9NuVyOkucoriM5WUeBmD8ZP+rQP0U=;
+        b=JISuybl6DPrlwKLpJz2YpxOdAnJzvr5utf9lpHwoLpOOp7KJWSCusKAYNh0K86mbs3
+         b4G7510cL25s1gbsV95OG+9xdoabObHm2nYANL2uDwrvcO7npexrnbEzhl/3XA294wsm
+         RWcLiQExOQr4Wbz3/dp0BN+BANn+1Ybt0iMFVrLFufvvUD1fiS9H1bfX86COGD2hJtQ9
+         80C7St8Sin2mEdDxClXditNRUBOIEZvEywHOonNEEMFWe3X/Eo8ZjFN52Fv3DPomqWiu
+         qlt0ebxazbyJHxksNeaY/AUEMX9v8jm8+xTKOpzFZY0N9Vms7gxJBVIGNMYP/44f62Xp
+         Hz3A==
+X-Gm-Message-State: ACgBeo0idgexZ7XfDkb9t+zLg18p1nly9k9qrRlu/xKoMG/ztqckn4xO
+        MavT/Y4s+61z9qQKmYh/TcYU/w==
+X-Google-Smtp-Source: AA6agR7uIQNJY/KUYJyYbtaFZH5Jo6FalM2qfD+ZEMKEFb9WGSQbnUNbsKVFgfhra3Ne+RxO12aLHA==
+X-Received: by 2002:a05:600c:3d17:b0:3a3:2bc8:6132 with SMTP id bh23-20020a05600c3d1700b003a32bc86132mr13427684wmb.24.1659982557094;
+        Mon, 08 Aug 2022 11:15:57 -0700 (PDT)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id u7-20020a05600c210700b003a3561d4f3fsm3188184wml.43.2022.08.08.11.15.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 11:15:55 -0700 (PDT)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] clk: samsung: exynos850: Add CMUs needed for SysMMU
+Date:   Mon,  8 Aug 2022 21:15:55 +0300
+Message-Id: <20220808181555.10333-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220808155341.2479054-1-void@manifault.com>
-In-Reply-To: <20220808155341.2479054-1-void@manifault.com>
-From:   Joanne Koong <joannelkoong@gmail.com>
-Date:   Mon, 8 Aug 2022 11:14:48 -0700
-Message-ID: <CAJnrk1YL1N371vkRDx9E6_OU2GwCj4sVzasBdjmYNUBuzygF_g@mail.gmail.com>
-Subject: Re: [PATCH 1/5] bpf: Clear callee saved regs after updating REG0
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        linux-kernel@vger.kernel.org, Kernel-team@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 8:53 AM David Vernet <void@manifault.com> wrote:
->
-> In the verifier, we currently reset all of the registers containing caller
-> saved args before updating the callee's return register (REG0). In a
-> follow-on patch, we will need to be able to be able to inspect the caller
-> saved registers when updating REG0 to determine if a dynptr that's passed
-> to a helper function was allocated by a helper, or allocated by a program.
->
-> This patch therefore updates check_helper_call() to clear the caller saved
-> regs after updating REG0.
->
-Overall lgtm
+This patch series implements some missing Exynos850 clock domains. Right
+now those are mainly required for SysMMU clocks, although of course
+there is a lot of other clocks generated by those CMUs.
 
-There's a patch [0] that finds + stores the ref obj id before the
-caller saved regs get reset, which would make this patch not needed.
-That hasn't been merged in yet though and I think there's pros for
-either approach.
+Exynos850 has next SysMMU instances:
+  - SYSMMU_AUD
+  - SYSMMU_DPU
+  - SYSMMU_IS0
+  - SYSMMU_IS1
+  - SYSMMU_MFCMSCL
 
-In the one where we find + store the ref obj id before any caller
-saved regs get reset, the pro is that getting the dynptr metadata (eg
-ref obj id and in the near future, the dynptr type as well) earlier
-will be useful (eg when we add skb/xdp dynptrs [1], we'll need to know
-the type of the dynptr in order to determine whether to set the return
-reg as PTR_TO_PACKET). In this patch, the pro is that the logic is a
-lot more obvious to readers that the ref obj id for the dynptr gets
-found and set in order to store it in the return reg's ref obj id.
+As CMU_DPU is already implemented, that leaves CMU_AUD, CMU_IS and
+CMU_MFCMSCL to be implemented, which is done in this series:
+  - CMU_AUD: audio clocks
+  - CMU_IS: camera clocks (Image Signal Processing)
+  - CMU_MFCMSCL: multi-format codec and scaler clocks
 
-I personally lean more towards the approach in [0] because I think
-that ends up being cleaner for future extensibility, but I don't feel
-strongly about it and would be happy going with this approach as well
+Sam Protsenko (7):
+  dt-bindings: clock: Add bindings for Exynos850 CMU_AUD
+  dt-bindings: clock: Add bindings for Exynos850 CMU_IS
+  dt-bindings: clock: Add bindings for Exynos850 CMU_MFCMSCL
+  clk: samsung: exynos850: Style fixes
+  clk: samsung: exynos850: Implement CMU_AUD domain
+  clk: samsung: exynos850: Implement CMU_IS domain
+  clk: samsung: exynos850: Implement CMU_MFCMSCL domain
 
-[0] https://lore.kernel.org/bpf/20220722175807.4038317-1-joannelkoong@gmail.com/#t
+ .../clock/samsung,exynos850-clock.yaml        |  69 ++
+ drivers/clk/samsung/clk-exynos850.c           | 682 +++++++++++++++++-
+ include/dt-bindings/clock/exynos850.h         | 136 +++-
+ 3 files changed, 883 insertions(+), 4 deletions(-)
 
-[1] https://lore.kernel.org/bpf/20220726184706.954822-1-joannelkoong@gmail.com/T/#t
+-- 
+2.30.2
 
-> Signed-off-by: David Vernet <void@manifault.com>
-> ---
->  kernel/bpf/verifier.c | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 096fdac70165..938ba1536249 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -7348,11 +7348,9 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->         if (err)
->                 return err;
->
-> -       /* reset caller saved regs */
-> -       for (i = 0; i < CALLER_SAVED_REGS; i++) {
-> -               mark_reg_not_init(env, regs, caller_saved[i]);
-> -               check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
-> -       }
-> +       /* reset return reg */
-> +       mark_reg_not_init(env, regs, BPF_REG_0);
-> +       check_reg_arg(env, BPF_REG_0, DST_OP_NO_MARK);
->
->         /* helper call returns 64-bit value. */
->         regs[BPF_REG_0].subreg_def = DEF_NOT_SUBREG;
-> @@ -7488,6 +7486,13 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->                 regs[BPF_REG_0].ref_obj_id = dynptr_id;
->         }
->
-> +       /* reset remaining caller saved regs */
-> +       BUILD_BUG_ON(caller_saved[0] != BPF_REG_0);
-
-nit: caller_saved is a read-only const, so I don't think this line is needed
-
-> +       for (i = 1; i < CALLER_SAVED_REGS; i++) {
-
-nit: maybe "for i = BPF_REG_1" ?
-
-> +               mark_reg_not_init(env, regs, caller_saved[i]);
-> +               check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
-> +       }
-> +
->         do_refine_retval_range(regs, fn->ret_type, func_id, &meta);
->
->         err = check_map_func_compatibility(env, meta.map_ptr, func_id);
-> --
-> 2.30.2
->

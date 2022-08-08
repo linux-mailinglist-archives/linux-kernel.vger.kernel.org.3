@@ -2,106 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2240C58CE88
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 21:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8943158CE8B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 21:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244300AbiHHT0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 15:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
+        id S244366AbiHHT15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 15:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiHHT0P (ORCPT
+        with ESMTP id S229765AbiHHT1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 15:26:15 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23268A186;
-        Mon,  8 Aug 2022 12:26:14 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:40090)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oL8OC-001noO-Bu; Mon, 08 Aug 2022 13:26:12 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:47070 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oL8OB-00HYY7-HW; Mon, 08 Aug 2022 13:26:11 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com
-References: <20220801180146.1157914-1-fred@cloudflare.com>
-        <87les7cq03.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
-        <87wnbia7jh.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
-Date:   Mon, 08 Aug 2022 14:26:04 -0500
-In-Reply-To: <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
-        (Paul Moore's message of "Mon, 8 Aug 2022 15:16:16 -0400")
-Message-ID: <877d3ia65v.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 8 Aug 2022 15:27:55 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C0C1A04D
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 12:27:54 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-328303afa6eso91061267b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 12:27:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=KBxnTL7K25Hs8Wv1cjszwJQN73tLNnDr4U0ROfrziZM=;
+        b=bmhDQvAoVXlswYykpII5N+dpGoKRhyIPQd6917OIYRgTBKCDiocZ8hBciok/W8LUze
+         EIjX5hN3yiimne61Nb3aTNlb9nBZQmslL5TCM0d1LA7i2zQ/H/4aTTagUPnTlBHd7NNH
+         jp49XCAYeppQJH6DZPAkhkhwaPCdGbr5LzxpBy1SPKkfFCpwOrhcOT7IXsuqUQ7ZkHXk
+         2EN9b/GFRVyKWz6SZA4dRgUqR4NSQvsXiltm/yl8BfV5WDZTRhGGdA6KVukBUihgBOyH
+         55C0EgVneBrxf/TZZbWXKThHVk8W/icGPUW+SM47rOw7socQV2WRJvnbyYLErUkfE5Gt
+         l21w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=KBxnTL7K25Hs8Wv1cjszwJQN73tLNnDr4U0ROfrziZM=;
+        b=7heupSlUVPZQLTHLQYSTY87ddYNPfUxs0wdwsIt4/QO502sZY9taLLFrbKwkPaLNUo
+         Wa3mRyMmPEd1OxaZ0uCFpnCfugBCTiB8ididFT9GmhlObQ4s82yjopuVMBL30T9/HXP8
+         Yp9zLDXOMy+8oRToQ13BatjGJUF/inLdckevAlk20No/0BU2y35SfyZ21X5taeRKL7Yq
+         tv70wyEssKKa2ecuUwW8+6ojJWNDhKHkV6A6V9mmJdHSdXFzP+6meUZMrhzfea8XG3eR
+         fjCMv9Tqr9A+/mkIf9w6e3EoC0Tr/brxU1hEMZggP527ra0vL2ZvUkL1C5sJioAfzS0l
+         YZtA==
+X-Gm-Message-State: ACgBeo0ZohycFTvPPjBoNgHsaE9c0SNXbz/5xI1v6w8MtDZwjW1HI1qm
+        XLTvgcW+1JbwTtqe++bo9nFoLy8VcK6hOUTq1FB69Q==
+X-Google-Smtp-Source: AA6agR4CqP2bI2zng0Vr3lzhitvUH2Let9QUGzmufNUJrDlFIezoBA22p9QF8TCyK0rnYyUKBgURyaJWteXCXsvKjg8=
+X-Received: by 2002:a0d:da41:0:b0:329:91e7:fd06 with SMTP id
+ c62-20020a0dda41000000b0032991e7fd06mr10086726ywe.436.1659986873539; Mon, 08
+ Aug 2022 12:27:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oL8OB-00HYY7-HW;;;mid=<877d3ia65v.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+z7lTpSBDaB94moY7v76QqS9bgdJh4/0Y=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <cover.1655761627.git.ashish.kalra@amd.com> <d325cb5d7961f015400999dda7ee8e08e4ca2ec6.1655761627.git.ashish.kalra@amd.com>
+ <YukZFKpAO5o5MLA1@kernel.org>
+In-Reply-To: <YukZFKpAO5o5MLA1@kernel.org>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Mon, 8 Aug 2022 12:27:42 -0700
+Message-ID: <CAAH4kHazh_S4zTLimL3Bch7yo3zL2wv86j=w3f2n74O-joWLQQ@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 17/49] crypto: ccp: Add the SNP_{SET,GET}_EXT_CONFIG
+ command
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Ashish Kalra <Ashish.Kalra@amd.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:X86 KVM CPUs" <kvm@vger.kernel.org>,
+        linux-coco@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-crypto@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>, hpa@zytor.com,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, vkuznets@redhat.com,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        slp@redhat.com, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        srinivas.pandruvada@linux.intel.com,
+        David Rientjes <rientjes@google.com>, dovmurik@linux.ibm.com,
+        tobin@ibm.com, Borislav Petkov <bp@alien8.de>,
+        "Roth, Michael" <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>, tony.luck@intel.com,
+        Marc Orr <marcorr@google.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>, dgilbert@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Paul Moore <paul@paul-moore.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 287 ms - load_scoreonly_sql: 0.02 (0.0%),
-        signal_user_changed: 3.9 (1.4%), b_tie_ro: 2.7 (0.9%), parse: 0.64
-        (0.2%), extract_message_metadata: 8 (2.7%), get_uri_detail_list: 0.68
-        (0.2%), tests_pri_-1000: 10 (3.5%), tests_pri_-950: 0.98 (0.3%),
-        tests_pri_-900: 0.84 (0.3%), tests_pri_-90: 67 (23.3%), check_bayes:
-        66 (22.9%), b_tokenize: 5.0 (1.7%), b_tok_get_all: 6 (2.2%),
-        b_comp_prob: 1.46 (0.5%), b_tok_touch_all: 50 (17.6%), b_finish: 0.65
-        (0.2%), tests_pri_0: 184 (64.3%), check_dkim_signature: 0.38 (0.1%),
-        check_dkim_adsp: 1.63 (0.6%), poll_dns_idle: 0.39 (0.1%),
-        tests_pri_10: 1.73 (0.6%), tests_pri_500: 7 (2.5%), rewrite_mail: 0.00
-        (0.0%)
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul Moore <paul@paul-moore.com> writes:
+To preface, I don't want to delay this patch set, only have the
+conversation at the most appropriate place.
 
->> I did provide constructive feedback.  My feedback to his problem
->> was to address the real problem of bugs in the kernel.
 >
-> We've heard from several people who have use cases which require
-> adding LSM-level access controls and observability to user namespace
-> creation.  This is the problem we are trying to solve here; if you do
-> not like the approach proposed in this patchset please suggest another
-> implementation that allows LSMs visibility into user namespace
-> creation.
+> > The SEV-SNP firmware provides the SNP_CONFIG command used to set the
+> > system-wide configuration value for SNP guests. The information includes
+> > the TCB version string to be reported in guest attestation reports.
+>
 
-Please stop, ignoring my feedback, not detailing what problem or
-problems you are actually trying to be solved, and threatening to merge
-code into files that I maintain that has the express purpose of breaking
-my users.
+The system-wide aspect of this makes me wonder if we can also have a
+VM instance-specific extension. This is important for the use case
+that we may see secure boot variables included in the launch
+measurement, making offline signing of the UEFI image impossible. We
+can't sign the cross-product of all UEFI builds and every user's EFI
+variables. We'd like to include an instance-specific certificate that
+specifies the platform-endorsed golden measurement of the UEFI.
 
-You just artificially constrained the problems, so that no other
-solution is acceptable.  On that basis alone I am object to this whole
-approach to steam roll over me and my code.
+An alternative that doesn't require a change to the kernel is to just
+make this certificate fetchable from a FAMILY_ID-keyed, predetermined
+URL prefix + IMAGE_ID + '.crt', but this requires a download (and
+continuous hosting) to do something as routine as collecting an
+attestation report. It's up to the upstream community to determine if
+that is an acceptable cost to keep the complexity of a certificate
+table merge operation out of the kernel.
 
-Eric
+The SNP API specification gives an interpretation to the data blob
+here as a table of GUID/offset pairs followed by data blobs that
+presumably are at the appropriate offsets into the data pages. The
+spec allows for the host to add any number of GUID/offset pairs it
+wants, with 3 specific GUIDs recommended for the AMD PSP certificate
+chain.
 
+The snp_guest_ext_guest_request function in ccp is what passes back
+the certificate data that was previously stored, so I'm wondering if
+it can take an extra (pointer,len) pair of VM instance certificate
+data to merge with the host certificate data before returning to the
+guest. The new required length is the sum total of both the header
+certs and instance certs. The operation to copy the data is no longer
+a memcpy but a header merge that tracks the offset shifts caused by a
+larger header and other certificates in the remaining data pages.
+
+I can propose my own patch on top of this v6 patch set that adds a KVM
+ioctl like KVM_{GET,SET}_INSTANCE_SNP_EXT_CONFIG and then pass along
+the stored certificate blob in the request call. I'd prefer to have
+the design agreed upon upfront though.
+
+-- 
+-Dionna Glaze, PhD (she/her)

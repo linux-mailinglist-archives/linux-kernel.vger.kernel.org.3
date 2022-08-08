@@ -2,181 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0562058CF8B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 23:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A49058CF8D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 23:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244286AbiHHVPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 17:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
+        id S243812AbiHHVRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 17:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236304AbiHHVPd (ORCPT
+        with ESMTP id S238069AbiHHVRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 17:15:33 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5385C18B0C
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 14:15:31 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id h4so641023qtj.11
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 14:15:31 -0700 (PDT)
+        Mon, 8 Aug 2022 17:17:44 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A061AF3A
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 14:17:42 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id a11so5380197wmq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 14:17:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=VWKYbqcm/zkrBcBzoLS3ZTYJbY0tUU+EcrNkjCdj7S0=;
-        b=nGmDOiCn314TP/pVmtD+j8Y5FoAnmN4zBDQEpRs8YX5r/QVGn4HP2B+1LR+VyvxONJ
-         TOr5lOBgRXsybaArJDbacDDtsfiSAw+TE4YhFcLgUp5zroer9zcXfyiINiAwkWLUmyPL
-         1AwWAFp6tf+RsQxqegsRmhbTEgcxE12zyjK0w=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=xT3U7Fcq666IjZnpP4Hd9cAsdG9vkr6FYDlzUI0n/OE=;
+        b=ECongWXKH2gwPuWgmxYdr6guRMPl4jAF8wszWyuDEt5/3rpg1VhdodvEh3b0QBJjMu
+         jGuXiG3uAJrZY2JzewgWe+wqpjTOPR5nMCDJUoBHV71Wu31SoMOUZSGcUU+V/BgGTuoy
+         iVb6OREEZ4TfbdQdQqMHPScwgu2CXEsFtz4WSM90RaGHcMVscynjwcqz6Pyx/I7NK/TI
+         zT/kzTU86DoKMKXH5cCVDZiAL1O5h6QNpKCMMH9MPqLwM/TjTMEnWa0yh1zmJ4LaADHI
+         kzYBPFYPlmtlKKcbEVAmF6tKXgF52bwvvAz7j8ELzRCOEsd+XYWyWY7oGbauIVyZh6Hv
+         UCgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=VWKYbqcm/zkrBcBzoLS3ZTYJbY0tUU+EcrNkjCdj7S0=;
-        b=lJEIMvpnSJ1czwnLX9mqHsEcifo36X0QfZHdm84UJuu2XlPZtUZsp2WnrYIcfGVqBt
-         I5e02EP7oRye2VelspyV72VppzVNxhUF29NgBiCVew4IyCVbYqN/guheVPP8BpcRxefs
-         1GkWp/sRzuOLqGgLwQSqbIOgi3KugAHpmpL0sPKCWA9bPgB/nsroi05ORD9ysfgV65My
-         ZdJ2CCNJgrdUSwGXYarYB3Yp8SQqs/GgjQkrYOEgfV4kv4cAdcvA3SjacTbMdHa68B7m
-         WdLloyEim808suaPGI8TE2aqg1pVthM2ndQgsUG8XFaYfBanRoLuK4G4ko2QUwczIXRE
-         7Kbw==
-X-Gm-Message-State: ACgBeo28BPzsStEnRJk0iR3RnDiLCqSvM9UOsUJ5uJ/qcZ9K4IZjNbtA
-        FUW57qA/KGum1Oln3IkyPCEIZ2aHNRFC7Slvy5CS3Q==
-X-Google-Smtp-Source: AA6agR5sewPOGNHWjiSoW/6wGiHTZHHUJSKNA99Rq4EnGsi95IuluLbvqgw4PQh3p9Eb9KFLiVh1/uETXfrsHPJ9Mms=
-X-Received: by 2002:a05:622a:190a:b0:342:f8d9:b1dc with SMTP id
- w10-20020a05622a190a00b00342f8d9b1dcmr5914468qtc.656.1659993330432; Mon, 08
- Aug 2022 14:15:30 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=xT3U7Fcq666IjZnpP4Hd9cAsdG9vkr6FYDlzUI0n/OE=;
+        b=hnFWNCl8G58qdEMZx1Y14fD/I0VUbkb1UUC6tep2cUXDkK0xmsY5ko/0SyE/IVAbvL
+         nICp0jBxaMGRuUEkITH2QVCRS0ysf9U6EXckr+3pOgH4A7ZQcOAFa2jZnnmVhHd09a8q
+         lA6G8kwxh8+VtaPGTphk3+48GgdOUEQpZ2k+JaC5WTblcf0D+UuTtUHQUSOJUqBlDcdi
+         o7/9FwNFpi7dP3VFClHlrlM0sZwY6lzqxaFy3uZVWV7UIBc+BqqE3MGcapZ7p9+MZgqg
+         NZQYTTZsIma2JEQ4pCjgnOnJvR7+1zr2sOu3bL473QZI6dQNBbt+DetoBfLPus/o9sC6
+         p1Xg==
+X-Gm-Message-State: ACgBeo0FHA6Wf74ZGkGynPHy3RCbLpBAu2lCfbSpYxH1la0KfiuM+ydO
+        J8tb4zOk3CJM661sQpwSk7nPUg==
+X-Google-Smtp-Source: AA6agR4jZ2+M0qSdbkYF7IST0XVTX3X/Zm/eeDM106HX5oBGSVSsAfRVMOsrJ4HYtT1spomRLZEnUg==
+X-Received: by 2002:a05:600c:1ca0:b0:3a5:3703:2a97 with SMTP id k32-20020a05600c1ca000b003a537032a97mr6409480wms.23.1659993461134;
+        Mon, 08 Aug 2022 14:17:41 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id o6-20020a05600c4fc600b003a32490c95dsm20358062wmq.35.2022.08.08.14.17.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 14:17:39 -0700 (PDT)
+Message-ID: <fb14ae2a-9702-1041-ae84-34d37835e839@linaro.org>
+Date:   Mon, 8 Aug 2022 23:17:38 +0200
 MIME-Version: 1.0
-References: <20220808110315.1.I5a39052e33f6f3c7406f53b0304a32ccf9f340fa@changeid>
- <CABBYNZJf_6SmRD0tUUUfxfpZOksL-=5jLN8+5c4cZcQB6J-xbg@mail.gmail.com>
-In-Reply-To: <CABBYNZJf_6SmRD0tUUUfxfpZOksL-=5jLN8+5c4cZcQB6J-xbg@mail.gmail.com>
-From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date:   Mon, 8 Aug 2022 14:15:19 -0700
-Message-ID: <CANFp7mW_OBb3rc-6tpYvAPA8f=J_tRN+HJc875Dyr3HjzDAQ8A@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: Ignore cmd_timeout with HCI_USER_CHANNEL
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Abhishek Pandit-Subedi <abhishekpandit@google.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/4] thermal/of: Return -ENODEV instead of -EINVAL if
+ registration fails
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     rafael@kernel.org, dan.carpenter@oracle.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+References: <20220808180915.446053-1-daniel.lezcano@linaro.org>
+ <20220808180915.446053-2-daniel.lezcano@linaro.org>
+ <f8008f05-4e4d-e21f-2e40-e234930ee86e@roeck-us.net>
+ <d676c6533e11ac357a8aaca4ba216b6d@walle.cc>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <d676c6533e11ac357a8aaca4ba216b6d@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 1:31 PM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
->
-> Hi Abhishek,
->
-> On Mon, Aug 8, 2022 at 11:04 AM Abhishek Pandit-Subedi
-> <abhishekpandit@google.com> wrote:
-> >
-> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> >
-> > When using HCI_USER_CHANNEL, hci traffic is expected to be handled by
-> > userspace entirely. However, it is still possible (and sometimes
-> > desirable) to be able to send commands to the controller directly. In
-> > such cases, the kernel command timeout shouldn't do any error handling.
-> >
-> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> > ---
-> > This was tested by running a userchannel stack and sending commands via
-> > hcitool cmd on an Intel AX200 controller. Without this change, each
-> > command sent via hcitool would result in hci_cmd_timeout being called
-> > and after 5 commands, the controller would reset.
-> >
-> > Hcitool continues working here because it marks the socket as
-> > promiscuous and gets a copy of all traffic while the socket is open (and
-> > does filtering in userspace).
->
-> There is something not quite right here, if you have a controller
-> using user_channel (addr.hci_channel = HCI_CHANNEL_USER) it probably
-> shouldn't even accept to be opened again by the likes of hcitool which
-> uses HCI_CHANNEL_RAW as it can cause conflicts. If you really need a
-> test tool that does send the command while in HCI_CHANNEL_USER then it
-> must be send on that mode but I wouldn't do it with hcitool anyway as
-> that is deprecated and this exercise seem to revolve to a entire stack
-> on top of HCI_USER_CHANNEL then you shall use tools of that stack and
-> mix with BlueZ userspace tools.
+On 08/08/2022 21:05, Michael Walle wrote:
+> Am 2022-08-08 20:35, schrieb Guenter Roeck:
+>> On 8/8/22 11:09, Daniel Lezcano wrote:
+>>> The previous version of the OF code was returning -ENODEV if no
+>>> thermal zones description was found or if the lookup of the sensor in
+>>> the thermal zones was not found.
+>>>
+>>> The backend drivers are expecting this return value as an information
+>>> about skipping the sensor initialization and considered as normal.
+>>>
+>>> Fix the return value by replacing -EINVAL by -ENODEV
+>>>
+>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>> ---
+>>>   drivers/thermal/thermal_of.c | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+>>> index 368eb58e97cf..4210c18ef7b2 100644
+>>> --- a/drivers/thermal/thermal_of.c
+>>> +++ b/drivers/thermal/thermal_of.c
+>>> @@ -329,7 +329,7 @@ static struct device_node 
+>>> *of_thermal_zone_find(struct device_node *sensor, int
+>>>       np = of_find_node_by_name(NULL, "thermal-zones");
+>>>       if (!np) {
+>>>           pr_err("Unable to find thermal zones description\n");
+>>
+>> I really don't like that error message: People will see it (and complain)
+>> whenever a sensor registers and there is no thermal zone, even though 
+>> that
+>> is perfectly normal (see description above).
+> 
+> I can second that, and there actually two error messages:
+> 
+> [    6.156983] thermal_sys: Unable to find thermal zones description
+> [    6.163125] thermal_sys: Failed to find thermal zone for hwmon id=0
 
-Our goal is eventually consistent with that aim (not having multiple
-users to the socket when using HCI_CHANNEL_USER).
+Yeah, I can check:
 
-In the interim however, we have existing tooling that expects to be
-able to write raw hci to the controller, get responses and not expect
-any crashes (Intel Wireless Reporting Tools for example). hcitool is
-just an easy test tool here and the real behavior being tested is RAW
-channel injections not triggering the cmd timeout.
+np = of_thermal_zone_find(sensor, id);
 
->
-> > Tested on Chromebook with 5.4 kernel with patch (and applied cleanly on
-> > bluetooth-next).
-> >
-> >  net/bluetooth/hci_core.c | 26 +++++++++++++++++---------
-> >  1 file changed, 17 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> > index b3a5a3cc9372..c9a15f6633f7 100644
-> > --- a/net/bluetooth/hci_core.c
-> > +++ b/net/bluetooth/hci_core.c
-> > @@ -1481,17 +1481,25 @@ static void hci_cmd_timeout(struct work_struct *work)
-> >         struct hci_dev *hdev = container_of(work, struct hci_dev,
-> >                                             cmd_timer.work);
-> >
-> > -       if (hdev->sent_cmd) {
-> > -               struct hci_command_hdr *sent = (void *) hdev->sent_cmd->data;
-> > -               u16 opcode = __le16_to_cpu(sent->opcode);
-> > +       /* Don't trigger the timeout behavior if it happens while we're in
-> > +        * userchannel mode. Userspace is responsible for handling any command
-> > +        * timeouts.
-> > +        */
-> > +       if (!(hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
-> > +             test_bit(HCI_UP, &hdev->flags))) {
-> > +               if (hdev->sent_cmd) {
-> > +                       struct hci_command_hdr *sent =
-> > +                               (void *)hdev->sent_cmd->data;
-> > +                       u16 opcode = __le16_to_cpu(sent->opcode);
-> >
-> > -               bt_dev_err(hdev, "command 0x%4.4x tx timeout", opcode);
-> > -       } else {
-> > -               bt_dev_err(hdev, "command tx timeout");
-> > -       }
-> > +                       bt_dev_err(hdev, "command 0x%4.4x tx timeout", opcode);
-> > +               } else {
-> > +                       bt_dev_err(hdev, "command tx timeout");
-> > +               }
-> >
-> > -       if (hdev->cmd_timeout)
-> > -               hdev->cmd_timeout(hdev);
-> > +               if (hdev->cmd_timeout)
-> > +                       hdev->cmd_timeout(hdev);
-> > +       }
->
-> I wonder why hci_cmd_timeout is even active if the controller is in
-> HCI_USER_CHANNEL mode, that sounds like a bug already.
+And print the error if PTR_ERR(np) != ENODEV, otherwise silently return.
 
-This gets scheduled in hci_cmd_work. I tried not scheduling
-hci_cmd_timeout in the first place but that caused the event stream to
-hang (I think because subsequent tx work wasn't being scheduled). I
-didn't dive very deep here and fix looked complex for a scenario that
-we will migrate away from.
 
->
-> >         atomic_set(&hdev->cmd_cnt, 1);
-> >         queue_work(hdev->workqueue, &hdev->cmd_work);
-> > --
-> > 2.37.1.559.g78731f0fdb-goog
-> >
->
->
-> --
-> Luiz Augusto von Dentz
+> On the sl28 board with the qoriq_thermal driver:
+> [    1.917940] thermal_sys: Failed to find thermal zone for tmu id=2
+> [    1.929231] thermal_sys: Failed to find thermal zone for tmu id=3
+> [    1.940519] thermal_sys: Failed to find thermal zone for tmu id=4
+> [    1.951814] thermal_sys: Failed to find thermal zone for tmu id=5
+> [    1.963109] thermal_sys: Failed to find thermal zone for tmu id=6
+> [    1.974399] thermal_sys: Failed to find thermal zone for tmu id=7
+> [    1.985690] thermal_sys: Failed to find thermal zone for tmu id=8
+> [    1.996980] thermal_sys: Failed to find thermal zone for tmu id=9
+> [    2.008274] thermal_sys: Failed to find thermal zone for tmu id=10
+> [    2.019656] thermal_sys: Failed to find thermal zone for tmu id=11
+> [    2.031037] thermal_sys: Failed to find thermal zone for tmu id=12
+> [    2.048942] thermal_sys: Failed to find thermal zone for tmu id=13
+> [    2.060320] thermal_sys: Failed to find thermal zone for tmu id=14
+> [    2.071700] thermal_sys: Failed to find thermal zone for tmu id=15
+> 
+> Btw. the driver seems to always register 16 sensors regardless how
+> many the actual hardware has (or rather: are described in the DT).
+
+Yes, it may be nicer to rely on the compatible string to figure out the 
+sensors of the platform and call with full knowledge the registering 
+function. But anyway ...
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

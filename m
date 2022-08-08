@@ -2,158 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7173D58C715
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3477B58C716
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237524AbiHHLCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 07:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S242414AbiHHLCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 07:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbiHHLCI (ORCPT
+        with ESMTP id S242137AbiHHLCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 07:02:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF60B55B8
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659956526;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 8 Aug 2022 07:02:16 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B2913D23
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1659956525; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dqSC8Z4HeQqm883ffB+WsfLf65IQJEdZYAKuOt873gg=;
-        b=V5YqgD51quakaI+m6FGh71cy9/Wf9Pp/sgmrZafpgiGbe8sIYc6HK6lyO4zvBFVHdn/Jra
-        GpdO4B7fE0a1lqHjQW5mFgwvbqov4wbr2k0vOjjA73LhOrBCmiq2WyrDRhWHf/Tvrw+M52
-        eWUHbJpiiHDCFO83btklU1BGY2cX2YM=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-76-HZVnpXDOOqqipIJ92gqxjg-1; Mon, 08 Aug 2022 07:02:05 -0400
-X-MC-Unique: HZVnpXDOOqqipIJ92gqxjg-1
-Received: by mail-qt1-f197.google.com with SMTP id ew4-20020a05622a514400b00342eed9a57bso3590918qtb.21
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 04:02:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=dqSC8Z4HeQqm883ffB+WsfLf65IQJEdZYAKuOt873gg=;
-        b=0CmSZcX+KSWWXeFNeXbrOvDk5RbmYMohkY3Jcee6R87HkFo0mSj4qYx9LLXvJpA9hc
-         fI9JcMCkYjAbCOBUOnkw/vLjqLKTkVNLkNVXwyx3wW7Acy8qSI+7p6zhWyo32MuCdh/M
-         64WlineRItO/i9JjFydA04284Re/lL2TYpc7HV+FB6pDLSc9TLFvL6i1dn0tA4Uf2WGP
-         mYCIKl1BQBcKz86if8F8StQC/KD1PZlBZoPTSzU89osMD0IguV2+Ee5V55DaOQHTGSsC
-         Tg8puZHxbUjGvAWFIPrZvkxdQyRTkytfOxYTNJpO5ZPv98ardU2OVNwFQjOkTdSgKrhN
-         IMOw==
-X-Gm-Message-State: ACgBeo16gkb67/zE0OlRb6YiuSBtAWBYzJKFttonOX+vPPpaiEUA4/Gg
-        10FI0unzSFeZLzaCyGxq+nTYklKxZVbv54MpTHFUrA12hdkEtNNPd+X2b+I2zLO6B7ARS0qLq09
-        fk7AfKwMj0LWY2IlCFP7VfGsN
-X-Received: by 2002:a05:6214:20e8:b0:47a:e5b6:bcb3 with SMTP id 8-20020a05621420e800b0047ae5b6bcb3mr7619241qvk.38.1659956524321;
-        Mon, 08 Aug 2022 04:02:04 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5af4E0jk6+7t6mFWBjWuptUfkOlYxy4pZL8QV5ftEnM5OWH42lAy5tmEXpZlpzsK0Juazm5g==
-X-Received: by 2002:a05:6214:20e8:b0:47a:e5b6:bcb3 with SMTP id 8-20020a05621420e800b0047ae5b6bcb3mr7619210qvk.38.1659956524067;
-        Mon, 08 Aug 2022 04:02:04 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id u12-20020a05620a454c00b006b928ba8989sm885511qkp.23.2022.08.08.04.01.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 04:02:03 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 13:01:53 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v3 8/9] vmci/vsock: check SO_RCVLOWAT before wake up
- reader
-Message-ID: <20220808110153.fkxwwqbbqxz7wvgw@sgarzare-redhat>
-References: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
- <5b7e133e-f8e1-1f71-9a3c-ac0265cffb63@sberdevices.ru>
+        bh=XydORn22ib0yibyOs7vrLltEam/bWaIMu8HK47joC6A=;
+        b=PP8cVzp+jFUOosVyI8pmg8ckcwyvodHX5n8/w1g+s2T56AgW53ETLx65stWEj4O/fEIJIk
+        zxWgvq3D8qcdmxcXPX5H76CH4NOeTEkj0QuVQcjDZKjLSU2mWysfcbdQ5JfJBlPNhKCqIj
+        9TpjOkMFxkJbUjM4RgkblpOiJLXZNA8=
+Date:   Mon, 08 Aug 2022 13:01:58 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 20/28] mfd: arizona: Remove #ifdef guards for PM related
+ functions
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+Message-Id: <ANMAGR.U803VAFDNZVL@crapouillou.net>
+In-Reply-To: <2c5c063b-da58-1f6f-5422-1ada3dabb90a@opensource.cirrus.com>
+References: <20220807145247.46107-1-paul@crapouillou.net>
+        <20220807145247.46107-21-paul@crapouillou.net>
+        <94394206-a018-27b0-5a21-97976fc4a3bc@opensource.cirrus.com>
+        <T2KAGR.KY35O6CZFRQ83@crapouillou.net>
+        <2c5c063b-da58-1f6f-5422-1ada3dabb90a@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <5b7e133e-f8e1-1f71-9a3c-ac0265cffb63@sberdevices.ru>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 02:05:52PM +0000, Arseniy Krasnov wrote:
->This adds extra condition to wake up data reader: do it only when number
->of readable bytes >= SO_RCVLOWAT. Otherwise, there is no sense to kick
->user,because it will wait until SO_RCVLOWAT bytes will be dequeued.
 
-Ditto as previous patch.
 
-@Bryan, @Vishnu, plaese, can you review/ack also this patch?
+Le lun., ao=FBt 8 2022 at 11:43:31 +0100, Richard Fitzgerald=20
+<rf@opensource.cirrus.com> a =E9crit :
+> On 08/08/2022 11:06, Paul Cercueil wrote:
+>> Hi Richard,
+>>=20
+>> Le lun., ao=FBt 8 2022 at 10:53:54 +0100, Richard Fitzgerald=20
+>> =7F<rf@opensource.cirrus.com> a =E9crit :
+>>> On 07/08/2022 15:52, Paul Cercueil wrote:
+>>>> Only export the arizona_pm_ops if CONFIG_PM is set, but leave the
+>>>> suspend/resume functions (and related code) outside #ifdef guards.
+>>>>=20
+>>>> If CONFIG_PM is not set, the arizona_pm_ops will be defined as
+>>>> "static __maybe_unused", and the structure plus all the callbacks=20
+>>>> will
+>>>> be automatically dropped by the compiler.
+>>>>=20
+>>>> The advantage is then that these functions are now always compiled
+>>>> independently of any Kconfig option, and thanks to that bugs and
+>>>> regressions are easier to catch.
+>>>>=20
+>>>> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>>> Cc: patches@opensource.cirrus.com
+>>>> ---
+>>>>   drivers/mfd/arizona-core.c | 21 +++++++++++----------
+>>>>   drivers/mfd/arizona-i2c.c  |  2 +-
+>>>>   drivers/mfd/arizona-spi.c  |  2 +-
+>>>>   3 files changed, 13 insertions(+), 12 deletions(-)
+>>>>=20
+>>>> diff --git a/drivers/mfd/arizona-core.c=20
+>>>> b/drivers/mfd/arizona-core.c
+>>>> index cbf1dd90b70d..c1acc9521f83 100644
+>>>> --- a/drivers/mfd/arizona-core.c
+>>>> +++ b/drivers/mfd/arizona-core.c
+>>>> @@ -480,7 +480,6 @@ static int wm5102_clear_write_sequencer(struct=20
+>>>> =7F=7F=7Farizona *arizona)
+>>>>       return 0;
+>>>>   }
+>>>>   =7F-#ifdef CONFIG_PM
+>>>>   static int arizona_isolate_dcvdd(struct arizona *arizona)
+>>>=20
+>>> __maybe_unused?
+>>=20
+>> No need. The symbols are always referenced.
+>>=20
+>>>>   {
+>>>>       int ret;
+>>>> @@ -742,9 +741,7 @@ static int arizona_runtime_suspend(struct=20
+>>>> device =7F=7F=7F*dev)
+>>>=20
+>>> __maybe_unused?
+>>>=20
+>>>>   =7F      return 0;
+>>>>   }
+>>>> -#endif
+>>>>   =7F-#ifdef CONFIG_PM_SLEEP
+>>>>   static int arizona_suspend(struct device *dev)
+>>>=20
+>>> __maybe_unused?
+>>>=20
+>>>>   {
+>>>>       struct arizona *arizona =3D dev_get_drvdata(dev);
+>>>> @@ -784,17 +781,21 @@ static int arizona_resume(struct device *dev)
+>>>=20
+>>> __maybe_unused?
+>>>=20
+>>>>   =7F      return 0;
+>>>>   }
+>>>> -#endif
+>>>>   =7F+#ifndef CONFIG_PM
+>>>> +static __maybe_unused
+>>>> +#endif
+>>>=20
+>>> No need to ifdef a __maybe_unused.
+>>=20
+>> Yes, it is needed, because the symbol is conditionally exported. If
+>=20
+> Why conditionally export it?
+>=20
+>> !CONFIG_PM, we want the compiler to discard the dev_pm_ops
+>  and all the
+>> callbacks, hence the "static __maybe_unused". That's the same trick=20
+>> used > in _EXPORT_DEV_PM_OPS().
+>>=20
+>> (note that this patch is broken as it does not change the struct=20
+>> name, =7Fin the !PM case, which causes conflicts with the .h. I'll fix=20
+>> in v2)
+>>=20
+>>>>   const struct dev_pm_ops arizona_pm_ops =3D {
+>>>> -    SET_RUNTIME_PM_OPS(arizona_runtime_suspend,
+>>>> -               arizona_runtime_resume,
+>>>> -               NULL)
+>>>> -    SET_SYSTEM_SLEEP_PM_OPS(arizona_suspend, arizona_resume)
+>>>> -    SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(arizona_suspend_noirq,
+>>>> -                      arizona_resume_noirq)
+>>>> +    RUNTIME_PM_OPS(arizona_runtime_suspend,
+>>>> +               arizona_runtime_resume,
+>>>> +               NULL)
+>>>> +    SYSTEM_SLEEP_PM_OPS(arizona_suspend, arizona_resume)
+>>>> +    NOIRQ_SYSTEM_SLEEP_PM_OPS(arizona_suspend_noirq,
+>>>> +                  arizona_resume_noirq)
+>>>>   };
+>>>> +#ifdef CONFIG_PM
+>>>>   EXPORT_SYMBOL_GPL(arizona_pm_ops);
+>>>> +#endif
+>>>=20
+>>> This ifdeffing is ugly. Why must the structure only be exported if
+>>> CONFIG_PM is set?
+>>=20
+>> So that all the PM code is garbage-collected by the compiler if=20
+>> !CONFIG_PM.
+>=20
+> The functions will be dropped if they are not referenced. That doesn't
+> answer why the struct must not be exported.
+>=20
+> What is the aim of omitting the struct export?
 
-Thanks,
-Stefano
+The functions are always referenced by the dev_pm_ops structure.=20
+Omitting the struct export means that the struct can now be a "static=20
+__maybe_unused" symbol in the !CONFIG_PM case, and everything related=20
+to PM will be automatically removed by the compiler.
 
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/vmci_transport_notify.c        | 2 +-
-> net/vmw_vsock/vmci_transport_notify_qstate.c | 4 ++--
-> 2 files changed, 3 insertions(+), 3 deletions(-)
->
->diff --git a/net/vmw_vsock/vmci_transport_notify.c b/net/vmw_vsock/vmci_transport_notify.c
->index 852097e2b9e6..7c3a7db134b2 100644
->--- a/net/vmw_vsock/vmci_transport_notify.c
->+++ b/net/vmw_vsock/vmci_transport_notify.c
->@@ -307,7 +307,7 @@ vmci_transport_handle_wrote(struct sock *sk,
-> 	struct vsock_sock *vsk = vsock_sk(sk);
-> 	PKT_FIELD(vsk, sent_waiting_read) = false;
-> #endif
->-	sk->sk_data_ready(sk);
->+	vsock_data_ready(sk);
-> }
->
-> static void vmci_transport_notify_pkt_socket_init(struct sock *sk)
->diff --git a/net/vmw_vsock/vmci_transport_notify_qstate.c b/net/vmw_vsock/vmci_transport_notify_qstate.c
->index 12f0cb8fe998..e96a88d850a8 100644
->--- a/net/vmw_vsock/vmci_transport_notify_qstate.c
->+++ b/net/vmw_vsock/vmci_transport_notify_qstate.c
->@@ -84,7 +84,7 @@ vmci_transport_handle_wrote(struct sock *sk,
-> 			    bool bottom_half,
-> 			    struct sockaddr_vm *dst, struct sockaddr_vm *src)
-> {
->-	sk->sk_data_ready(sk);
->+	vsock_data_ready(sk);
-> }
->
-> static void vsock_block_update_write_window(struct sock *sk)
->@@ -282,7 +282,7 @@ vmci_transport_notify_pkt_recv_post_dequeue(
-> 		/* See the comment in
-> 		 * vmci_transport_notify_pkt_send_post_enqueue().
-> 		 */
->-		sk->sk_data_ready(sk);
->+		vsock_data_ready(sk);
-> 	}
->
-> 	return err;
->-- 
->2.25.1
+Otherwise, the symbol is exported as usual. The symbol being=20
+conditionally exported is not a problem - the struct is always=20
+referenced (as it should be) using the pm_sleep_ptr() or pm_ptr()=20
+macros.
+
+This is basically what EXPORT_SIMPLE_DEV_PM_OPS() does by the way.
+
+Cheers,
+-Paul
+
+>>=20
+>> Ideally I would use something like EXPORT_SIMPLE_DEV_PM_OPS() which=20
+>> =7Fwould make the patch much cleaner, but it doesn't support noirq=20
+>> =7Fcallbacks - and that's why I suggested in the cover letter that=20
+>> maybe a =7Fnew PM macro can be added if this patch is deemed too messy.
+>>=20
+>> Cheers,
+>> -Paul
+>>=20
+>>>>   =7F  #ifdef CONFIG_OF
+>>>>   static int arizona_of_get_core_pdata(struct arizona *arizona)
+>>>> diff --git a/drivers/mfd/arizona-i2c.c b/drivers/mfd/arizona-i2c.c
+>>>> index 6d83e6b9a692..8799d9183bee 100644
+>>>> --- a/drivers/mfd/arizona-i2c.c
+>>>> +++ b/drivers/mfd/arizona-i2c.c
+>>>> @@ -119,7 +119,7 @@ static const struct of_device_id=20
+>>>> =7F=7F=7Farizona_i2c_of_match[] =3D {
+>>>>   static struct i2c_driver arizona_i2c_driver =3D {
+>>>>       .driver =3D {
+>>>>           .name    =3D "arizona",
+>>>> -        .pm    =3D &arizona_pm_ops,
+>>>> +        .pm    =3D pm_ptr(&arizona_pm_ops),
+>>>>           .of_match_table    =3D of_match_ptr(arizona_i2c_of_match),
+>>>>       },
+>>>>       .probe        =3D arizona_i2c_probe,
+>>>> diff --git a/drivers/mfd/arizona-spi.c b/drivers/mfd/arizona-spi.c
+>>>> index 941b0267d09d..da05b966d48c 100644
+>>>> --- a/drivers/mfd/arizona-spi.c
+>>>> +++ b/drivers/mfd/arizona-spi.c
+>>>> @@ -282,7 +282,7 @@ static const struct of_device_id=20
+>>>> =7F=7F=7Farizona_spi_of_match[] =3D {
+>>>>   static struct spi_driver arizona_spi_driver =3D {
+>>>>       .driver =3D {
+>>>>           .name    =3D "arizona",
+>>>> -        .pm    =3D &arizona_pm_ops,
+>>>> +        .pm    =3D pm_ptr(&arizona_pm_ops),
+>>>>           .of_match_table    =3D of_match_ptr(arizona_spi_of_match),
+>>>>           .acpi_match_table =3D ACPI_PTR(arizona_acpi_match),
+>>>>       },
+>>=20
+>>=20
+
 

@@ -2,167 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF21258CEB0
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 21:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26C258CEB6
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 21:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237506AbiHHToW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 15:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
+        id S233914AbiHHTse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 15:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiHHToT (ORCPT
+        with ESMTP id S229516AbiHHTs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 15:44:19 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2059.outbound.protection.outlook.com [40.107.93.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31FB17ABE;
-        Mon,  8 Aug 2022 12:44:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XzKQAEzTAjqJ2DOueHflz0hami9E/n+hd5pX3QSsedW8aFKRddYPpB4I59sdp0wvJrD42K+OwiJd3UzMT0XtbZMb2vjXxICK2zwf/XRo6JLya9V/lJiApEf4q9zTo5HjF3qxPEZZNBgcUiyMxYaHXuuqXIaA+awGRhIgpdXzFA73V+K9HjxFDAigFnC5o1pXopKV2ZzzbVMe3oCMsh4+ODWLXL5Mhi/w73uqGvSq/Pz0eQ/dw7/dpEZuP/Amg8d9loxeJaY79X6Jre1Q6e1fPwF1LoUDEivSG6tPf+ZP/c+GwHSmPqTNwL2UYr8vjI5cHpUicSHdY9759pjX+qZ+6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MBhuH0jGyk9jpeT2o/SU7pVqC2oVdcU7EVIEAJB2PxU=;
- b=NR0MUoZjUVYUTcWqm+LUrkdlHfEDDAQqMkAJbOFRMDsjxtCCyrai7tvLXHidXX4eDRQAykVyMumbBqn0gaiY5jmmUHoM7rmKBpfff0Ftqc9oLa0YTOGipx9LkUdtYIB6E8Sh/1rvKeYTjBrw4jeDO+hNdLFwo0JlyhR7WhX9iqjCpxxGYe4d1ZgTzRtiiK1XSxLTc5tNUOcLfSrAJQsNO7NGCge3lNn29Kon2RElAkZHAZWUHYIpLnPOh+fFnnQeFT6Nz6Kpoay6qUdh5uO4whhe1U/K09DehSEE52EAA1v1WvLACMkH+tSUGLjGjlbOGuxDEjsF62j5xFto5auMrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MBhuH0jGyk9jpeT2o/SU7pVqC2oVdcU7EVIEAJB2PxU=;
- b=MuwMOWjtbRevv89R0EttV7xunkkxZcfluBJ1GOlo+2ObJmY5L8api4B9pJK9e2N1EZaEN3OsbYa+XnkxooOQYzrKIm2AIjQc6MD4JQZCBt+FoVBM5YUL2XcfNDfSvtlWRN5VNNMkq50fir1qYY6J4nWgs1UCikKh7Uyk8LUkSYM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by PH0PR12MB5499.namprd12.prod.outlook.com (2603:10b6:510:d5::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Mon, 8 Aug
- 2022 19:44:16 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.020; Mon, 8 Aug 2022
- 19:44:16 +0000
-Message-ID: <1b917e43-a2a8-15c6-3c91-17a445f22a66@amd.com>
-Date:   Mon, 8 Aug 2022 21:44:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH RFC] dma-buf: To check DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT
- status on debug
-Content-Language: en-US
-To:     Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Luben.Tuikov@amd.com, Alexander.Deucher@amd.com,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
-References: <20220804121938.622630-1-Arvind.Yadav@amd.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220804121938.622630-1-Arvind.Yadav@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0156.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::17) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 8 Aug 2022 15:48:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05AE1DFA3
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 12:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659988105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/GndbpOdEsWW3Ey1GFStHOY4x2/TccVmhX9gHCE2e40=;
+        b=JlLA8A8wRI5NBNEzep4QtN4NBJNHoTc0tdOTSs0LEiBH8pP4jv2U+PSRN9yOvqZylQoRqz
+        frFt05By9AJzIearXbGrJGRmFJMSeG7s5+aYDPQqC9cp/K+RcmzeatXLcTQTPc4OHu9dEK
+        DOaMumfe2+vxg5rs5BLeZsWJoT3JN1A=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-116-I3NLYgTqO6OR8QwojzGW5g-1; Mon, 08 Aug 2022 15:48:23 -0400
+X-MC-Unique: I3NLYgTqO6OR8QwojzGW5g-1
+Received: by mail-wm1-f69.google.com with SMTP id n30-20020a05600c501e00b003a3264465ebso1140wmr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 12:48:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=/GndbpOdEsWW3Ey1GFStHOY4x2/TccVmhX9gHCE2e40=;
+        b=HYl/NRV+Ao0VGVd/9j2f/a++QMlCf4oi81gQnEd9jcfXriK5wvudYYfRuI8wvpbBpm
+         f3ghQicwBpouu+B7bLfNpKoXq/u5DgVScJXyngVVJN1ncctgKtd3vX3nkwnA5XjihC6K
+         0OiMw0LGHyHQVF5768Xs1+a0CXa837JCqxQcqlD818eY9c3ze6QxVvo6ykxm3hYWlvWl
+         BP9sDh4Jgo2z/IBLYSRpBWwXHJhgnYpq775QPMpCnD5WLz72ZOqxgC4HDU+fS9Chr46Z
+         bpj4iXoDvStTE/o0vdcB+1GQuCes4BNzJsa5lgCWRnmKDJ27cZNUQvfDkSUUX5fLEggC
+         5D8A==
+X-Gm-Message-State: ACgBeo3DclUEqS6A4vH0WVguFIGYTn3M74sgmKi8s7LdMOrDdHk8ec4R
+        PY9aFVDCQnO7hjEWY7IR3tIhzXxwxVA6Eq6vOThbF0AIIUeqPsn0QaHb7hTys+YvzhNz5fE47CS
+        cUCFFkGwlpvSbls2lkH0pipY=
+X-Received: by 2002:a05:6000:178c:b0:222:f8ec:9977 with SMTP id e12-20020a056000178c00b00222f8ec9977mr2529254wrg.509.1659988102503;
+        Mon, 08 Aug 2022 12:48:22 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4wJ7LojV6ap4KmTRyk0CU1xjQumbUrwh2+AS35G9oakKYiRb2GBRHD9y266OQuShj0T3ykkw==
+X-Received: by 2002:a05:6000:178c:b0:222:f8ec:9977 with SMTP id e12-20020a056000178c00b00222f8ec9977mr2529246wrg.509.1659988102279;
+        Mon, 08 Aug 2022 12:48:22 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id t5-20020adff605000000b0021e5f32ade7sm11911544wrp.68.2022.08.08.12.48.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 12:48:21 -0700 (PDT)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     frederic@kernel.org, mtosatti@redhat.com
+Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
+        peterz@infradead.org, pauld@redhat.com, neelx@redhat.com,
+        oleksandr@natalenko.name, atomlin@atomlin.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v6 0/2] tick/sched: Ensure quiet_vmstat() is called when the idle tick was stopped too
+Date:   Mon,  8 Aug 2022 20:48:18 +0100
+Message-Id: <20220808194820.676246-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: aeaabec3-bd69-4823-dfe5-08da79766080
-X-MS-TrafficTypeDiagnostic: PH0PR12MB5499:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oeQMR/MsZ82cqVoM2EOd6BaEVMfX3WATO8pm5wYjsx9X7RxvfoPfgQbGAmegbF5nGuGfSAOsva7M6idVCbYN+8AcDentgjDxoQ8qbJZ+DMAkjNs/pnS6b6uSp1U7/kJkJydNxGyei6XdtZsKjPAkMugiGUEtwzK5lzqJ1bct+KI/8JZlSn2MV3Nqm6yNNDbq/w9ZnGC9739UZsrFj6GrXgVSEsoH3kA36xKSqCbtSyrdwO13jdgTSrzaWowjHT11tr/M+vJdTFke2fw3ujbYc9t6VuIYS08dmbw8y6HuW3dUqdfij6zpHPBwgmgj8z7HO7Ew/CkyJBz7LG1LZL+kjAsxMrTyROTIWnDTComhuOBBf7k2b51Ss2ZQTUUZWKsrefYODnuZPaiLfUs12daItxPthu38gpoDgujIZsZTqbRCA2vU/C8ISGEB5oDDxs6a6r5/gl0flfFqmyg3aKLXJ0kGvxccrTn18KnE+NB8r0h3nXhUGrcGd3kZL3KIHCb95Jmwc1FrEIqbw7CmuG53LN3J5k2Gnh+TQ2PdJ9EtNEhowAX2dRTqF5veIXNsmhMQ/3jrqy4rS3i/7YpF0AJiM6HMf+t7X2ng0GOb7nQq5lcEjZAGs8+dk/DdCgtpiCDCVsy9Vfd7g4nv7X8cRl/wheeZPvB/W5GoPe2QcY5XX1irkER/8y7dkly6qDueJiIhhyQC3gsAdwn8yIMf4BKaJzcVmvMLUJkYBX+EyDEz2Wva9AlJAiUutObWkutgEu/ncKMw9Ju46p3ginYWXkhaKGbGuHPcYWYvg7zc15D5qeIkmgcN3ReSq1gWRdt//ouldbmyj33Clmra9f41x10MM4h8YtGC9gFfPvUFH18wPnw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(396003)(39860400002)(366004)(346002)(31686004)(66556008)(66476007)(36756003)(8676002)(66946007)(6486002)(186003)(316002)(86362001)(8936002)(31696002)(478600001)(5660300002)(2906002)(83380400001)(6506007)(921005)(6512007)(41300700001)(6666004)(38100700002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SjRrSHRudUx5QU9HVzFxTytjaWI5cEhYVUlZSVZVdVNEeUc0U0srTmo4VFhw?=
- =?utf-8?B?bE05NzBBTVkwZWU1bjZjditCSTNqUTNBTDJEdjlSR01IQzZyQVRwZW5JUW1T?=
- =?utf-8?B?SURWeUtzL3F0MHN2dXZvR2ZHK2RvNml5Qk5aSG9sU1FRVGM1NUt2NDFNT3hD?=
- =?utf-8?B?MWZvRGFmeldnNmtudXR0M1lkbE9VZjZMbVJuZWJpNXNiWEFXSDJmaUlISDZs?=
- =?utf-8?B?dEViOTRvVG9Fd005aXNaTnF6bDh5L2d5a3VTdjBra2hMbTM4cjJ3d1QxMzRJ?=
- =?utf-8?B?NmtBNlBJWUlJcWY4V21sTWljbS8wWDltNEQ3eEVnWHZsa3UrOGszSDFpcnVC?=
- =?utf-8?B?enFWS3FHR3hGUjEzOTZyQzlBcjZFZWdrQTRYTTFjVWoxZ1FET0NVdjk5b2pp?=
- =?utf-8?B?M0JTb241MTdnUTBVSXpVWnJ2dno5bVFjYVJCaGFiMFppcS9JZzQ3dHg3Z0Rq?=
- =?utf-8?B?VC9BSmFIUVRQclErVEc3MnpqUWowWC9BZ3VicGhWdThCZXVSa3RHYXVTeFRM?=
- =?utf-8?B?aUNoSzFJc1dzd0d5M1A1YTRBTkRxd1RxdFR6c05GWXNRNWNUQjNxeURKSFN3?=
- =?utf-8?B?WEFQQTF0WjRkYlMwYTFDWEtOci9vdkI3N3BTVnU4ZjZmQXpYMSswaDNOTC82?=
- =?utf-8?B?a3NTa2pjZUVtbkptbUJzUmR3UHJYWWN4dUFJaXFvck1kdFNwb1ZjbjNSaDZy?=
- =?utf-8?B?ZEtoZkhUeW1Nc0lKblM1ZVdjMDhPbkFaQ1R6ZUhVWGs0ZGk2SDJiVGR4Vldm?=
- =?utf-8?B?Z21HUUZTQ0l1NytQamRUekhQcWtUdUZPbFRKTUlSalh3SW5DRjE1Y3NUV016?=
- =?utf-8?B?bnV1Ni9mK1AvQUo2K0hrT0JJZHRJQUtwTjcxRWZYQUhhUHFIK2hiMWNTd3FX?=
- =?utf-8?B?S1hJOGRyRUJJMEl2WFFneHcxcWlmZ2hpMURBd0c3bTg3YXR2ZXFSbkNFYnoz?=
- =?utf-8?B?OUtxWE9sZC9Nb1M0cElUbi9GaDRtQ0tDWnNiZW9SazY5VzNlMDE4RVd4b1o0?=
- =?utf-8?B?a2txL3hnL0JvZndMSDg1ZENpVS91VllNbEpOMU96OE5WcENtVkk2c2JZSnlm?=
- =?utf-8?B?N25MVmNLT1lWTHg0UjRIczl4ZUsrajkvbG5SUHNZL1puVDBmNkVNZ0czWjEr?=
- =?utf-8?B?TnR1aXZCKy9JdEZYeklyZElTNGNpNUt3U0p0emIrQzVCVUF1RGNyTno2c25Q?=
- =?utf-8?B?RHMyWmlEMVc1RURsd2ZYaVY5Tk5YeGdKSHNEUXlzYUhkRHV6OVZwWW9MMmFX?=
- =?utf-8?B?TnRKSkoybndLV010eG5VOHJjd3FJSzhSSFpmQTZlVnFuQnlxMFptWU1vcXQ5?=
- =?utf-8?B?WStBcFBvd1lQWnVlWldKY21EbHBkNlFQcEJKcEJlTy9GUlNQdTRDdVM0K2kx?=
- =?utf-8?B?Vk80a1dXcEw0UnU1eStwOWR4V0dxSkZ2TC9QVDNQbTI1SEVxZEpaREh2VGtJ?=
- =?utf-8?B?WjVsNHVFK2VBUFMzZUMrNktzNDZHaUltT1dxZ0VrczBaUWVCZHh2K3VXRGdz?=
- =?utf-8?B?NWQ4RWpzcUtmQjgrWlF5NUlaOTQzVzA0Z2xzbWZQZ0VrV2g5ZS9vdWhxQnlm?=
- =?utf-8?B?cFdCWEtqMUVOY1ZiYmgzamcvQUhxK0RmYWFTSS9lWjVRUTF1MVpNNlpoLzU0?=
- =?utf-8?B?bnJ0SDFubWVSa2F4RHBXT3ZLaDRwbDd0YkhTeXJkTDVLTTJVSUhycDQ5TUFk?=
- =?utf-8?B?TkpJRC91OGNHaHY0ZXlmRkJ5eGdxWFdTcUVtVEwwaGtvRUZMeldjNzdXWHJG?=
- =?utf-8?B?cGdSN2VTQ096UEFta2RRM2R2dkpRT0diQUxkZ3dVV1JMZGY0QmVBY0EzdHBm?=
- =?utf-8?B?MmVwSXFHdEYvSTZTbGpManJQSjVpc1FMMUlxSXFtRFI3WGpmWDhyWDMvU0NJ?=
- =?utf-8?B?NEJvdHMxMDVUVTdsTFVJRC9va3VVN29UaS96VGZjNUd0bGdwMGp6cGtERWVx?=
- =?utf-8?B?L2FMMWdMbFU1NWJVMG1BZ0tRbHR1SWpEOXNYZUJONFhwUkd5dG5WSEtWS21M?=
- =?utf-8?B?MEU0Ym1Qd1NoZ3pmTUw5WlRXc3gwaEN0Z2ROd0NpcU9obHlKS2ladjBPNXhG?=
- =?utf-8?B?UUxkbFhVaGZPRDZlSWdFV21PclN6ZmlWNzJLMzN4RnNSTE5YZG1sSEVrU1FW?=
- =?utf-8?B?VjdHa2xnSm1WUjVCRDBvQTJUSmRVaC8rUDhSZi83QTNYNUFZSGUyVnZab09R?=
- =?utf-8?Q?egYV66YfrHZI6jH9bMOZTWA+NV9BcwffW1rpk9hX7wFS?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aeaabec3-bd69-4823-dfe5-08da79766080
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2022 19:44:16.1475
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M3sHxepC5W2X3HilLbz2neTKl3drihwVuHZBz26JSbl/ncCXawDO7/fJy9qNchMo
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5499
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Frederic and Marcelo,
+
+I have incorporated an idea from Marcelo's patch [1] where a CPU-specific
+variable is used to indicate if a vmstat differential/or imbalance is
+present for a given CPU. So, at the appropriate time, vmstat processing can
+be initiated. The hope is that this particular approach is "cheaper" when
+compared to need_update() - used currently; in the context of nohz_full and
+the scheduling-clock tick being stopped, we would now with this patch,
+check if a CPU-specific vmstat imbalance is present before exiting
+user-mode (see tick_nohz_user_enter_prepare()).
+
+This trivial test program [2] was used to determine the somewhat impact
+under vanilla and with the proposed changes; mlock(2) and munlock(2) was
+used solely to modify vmstat item 'NR_MLOCK'. The following is an average
+count of CPU-cycles across the aforementioned system calls and the idle
+loop, respectively. I believe these results are negligible:
+
+	  Modified		   |  		Vanilla
+                                   |
+  cycles per syscall: 7399         | 	cycles per syscall: 4150
+  cycles per idle loop: 141048     |	cycles per idle loop: 144730
+                                   |
 
 
-Am 04.08.22 um 14:19 schrieb Arvind Yadav:
-> If core DMA-buf framework forgets to call dma_fence_enable_signaling()
-> before calling the dma_fence_is_signaled(). To handle this scenario on
-> debug kernel the DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT needs to be checked
-> before checking the actual signaling status.
->
-> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
-> ---
->   include/linux/dma-fence.h | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-> index 775cdc0b4f24..7c95c8d5e5f5 100644
-> --- a/include/linux/dma-fence.h
-> +++ b/include/linux/dma-fence.h
-> @@ -428,6 +428,10 @@ dma_fence_is_signaled_locked(struct dma_fence *fence)
->   static inline bool
->   dma_fence_is_signaled(struct dma_fence *fence)
->   {
-> +#ifdef CONFIG_DEBUG_FS
-> +	if (test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
-> +		return true;
+Any feedback would be appreciated. Thanks.
 
-The logic is just inverted. The test should be !test_bit(...) return false;
+Changes since v5 [3]:
 
-And please give that some testing as well.
+ - Introduced __tick_nohz_user_enter_prepare()
+ - Switched to EXPORT_SYMBOL_GPL()
 
-Regards,
-Christian.
+Changes since v4 [4]:
 
-> +#endif
->   	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->   		return true;
->   
+ - Moved vmstat_dirty specific changes into a separate patch
+   (Marcelo Tosatti)
+
+Changes since v3 [5]:
+
+ - Used EXPORT_SYMBOL() on tick_nohz_user_enter_prepare()
+ - Replaced need_update()
+ - Introduced CPU-specific variable namely vmstat_dirty
+   and mark_vmstat_dirty()
+
+[1]: https://lore.kernel.org/lkml/20220204173554.763888172@fedora.localdomain/
+[2]: https://pastebin.com/8AtzSAuK
+[3]: https://lore.kernel.org/lkml/20220801234258.134609-1-atomlin@redhat.com/
+[4]: https://lore.kernel.org/lkml/20220621172207.1501641-1-atomlin@redhat.com/
+[5]: https://lore.kernel.org/lkml/20220422193647.3808657-1-atomlin@redhat.com/
+
+
+Aaron Tomlin (2):
+  mm/vmstat: Use per cpu variable to track a vmstat discrepancy
+  tick/sched: Ensure quiet_vmstat() is called when the idle tick was
+    stopped too
+
+ include/linux/tick.h     |  5 +++--
+ kernel/time/tick-sched.c | 19 ++++++++++++++++-
+ mm/vmstat.c              | 46 +++++++++++++---------------------------
+ 3 files changed, 36 insertions(+), 34 deletions(-)
+
+-- 
+2.37.1
 

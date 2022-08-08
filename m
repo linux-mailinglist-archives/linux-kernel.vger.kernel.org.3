@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7290E58CBD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BC558CBE1
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243856AbiHHQJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 12:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
+        id S243904AbiHHQKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 12:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiHHQJM (ORCPT
+        with ESMTP id S243879AbiHHQKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 12:09:12 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F3395A2
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:09:11 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h13so11440890wrf.6
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 09:09:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=1j1W+jwjlydXylfAN7wpF5bOMiQax+aF2MTXqW4pg5s=;
-        b=qNejLJRiDTNpCdVsOFHfCf/GLSlCuHt9wSCUA7uysQ/2lXSuWeMMXfEkLYXtMaGV3q
-         QUmyO8ST6N5MjszBXQGDQsnanTjsge5x23GsWPkLac1oEmQX3JYNAnhVtpFtdACbw0/r
-         bqCWaVTEgmyakZBQ+425zTFB3tlTaEvrU0rwPD0XTqn+fc9uGpoQMgrugRhUUun4/GJt
-         dh9oq8CzpHV6wEpz6VGTMYJZlHhGZNXCNUJfhiMNZg9eQxkfC8SZBrlq0ogds8WSbmiu
-         qkGBhu4tpIZTFU93ubzWE3b+Sr4LBUsnzQ7uJ+thc9hTY5hUDXBoySyLL6GjbffMxIHD
-         G2Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=1j1W+jwjlydXylfAN7wpF5bOMiQax+aF2MTXqW4pg5s=;
-        b=QAD8gQwh+JhdllPnBzW5B0dEbGim0m244pvQAjk9nZ4RBPR/PbkEAwdwqlbRpgUapO
-         SikedaYXuabU+WX/9wdT+ieHbeDC7+GyKNUFbu9pNHS0Po67/pa2YDExKLCoHDndIChm
-         A/lK5s34ORMgRJtUCkQ+0PG9jBjPJpJDTKcta05GSB5UnTPipNTYW0YGIUynI3gU0JrG
-         EOkgso9rhSS5A/N3Im8sN5SqWErNpIgfBH6x1KWvvyENYscEUTFqg/+PmEZ3QaRwQNpi
-         84aZLoUoXqs7QqmBts2bHLfFOGSvvDb/2rGOAK2TZ9QFxTMfadVtpVYQY73vIJ9uQwhh
-         C4mA==
-X-Gm-Message-State: ACgBeo1MpmdJThrAGSCeL9IyMdfiW1wt0T7KI3/zFeQqgL4tFIT9AA9y
-        TRAElMn6yIg3ZvZtLXlqlIEPww==
-X-Google-Smtp-Source: AA6agR7+clLNvmARTUi1eYzg5BQ+RkCedYI9Cl3aVyX1SjWyU2NWzZ79gjS/vTOTHa1B0bWaLsGMXw==
-X-Received: by 2002:a05:6000:1283:b0:21f:168f:4796 with SMTP id f3-20020a056000128300b0021f168f4796mr12633402wrx.615.1659974950110;
-        Mon, 08 Aug 2022 09:09:10 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g6-20020a05600c4ec600b003a3199c243bsm26058217wmq.0.2022.08.08.09.09.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 09:09:09 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 17:09:08 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Andy Shevchenko <andy@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v3 01/10] mfd: intel_soc_pmic: Fix an error handling path
- in intel_soc_pmic_i2c_probe()
-Message-ID: <YvE1JPtSxGOT/21d@google.com>
-References: <20220801114211.36267-1-andriy.shevchenko@linux.intel.com>
+        Mon, 8 Aug 2022 12:10:09 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5403115828;
+        Mon,  8 Aug 2022 09:10:08 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 278CCwwb015734;
+        Mon, 8 Aug 2022 18:09:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=x3NJSzf6vrhocflx9JNFnZ5iqH3k6ZuksvSVGkGyX08=;
+ b=y9wNcQLrVxBALNMpBmPsn1Swn8u4UKcjgIZO8rq+dlbKG4dS7jSnOn8jT6O5Nd7DSWGC
+ 5dCBiXbE0t7/gaP2aLvfEL9knkoxhoV+Bx09RGv00qCIsy7dWOiY5OMp50FzxpXT0KJJ
+ tLpw2eczpsce1N5N53DCiyivH99Qpb7PEwX4z0HHjPf+Dmsu9AH/CIiTF3bEPD/SkYi0
+ kuUSD6cnKJ7YlAtBFHk7ZcKNTqqFJMqebzksxNNJE1RHxDHX9mFvywwFhDnDeW763G6J
+ WlelOpEwfi0XxOLnfcb3lraF07+uZbs5Tdxga3lpmXJ2Xd53tr62K9Nv+CEYSxZU7QFk aA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hsf6gkm81-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Aug 2022 18:09:54 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 541EA10002A;
+        Mon,  8 Aug 2022 18:09:53 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4F2DA257ABB;
+        Mon,  8 Aug 2022 18:09:53 +0200 (CEST)
+Received: from [10.201.21.72] (10.75.127.118) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 8 Aug
+ 2022 18:09:52 +0200
+Message-ID: <bbe8f91e-35f4-fe80-4b6e-25d21a6547fc@foss.st.com>
+Date:   Mon, 8 Aug 2022 18:09:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801114211.36267-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] spi: stm32_qspi: Add transfer_one_message() spi
+ callback
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <devicetree@vger.kernel.org>
+References: <20220808074051.44736-1-patrice.chotard@foss.st.com>
+ <20220808074051.44736-3-patrice.chotard@foss.st.com>
+ <YvEP15/7KmQGyPgL@sirena.org.uk>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <YvEP15/7KmQGyPgL@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.118]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-08_10,2022-08-08_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 01 Aug 2022, Andy Shevchenko wrote:
+Hi Mark
 
-> From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On 8/8/22 15:29, Mark Brown wrote:
+> On Mon, Aug 08, 2022 at 09:40:50AM +0200, patrice.chotard@foss.st.com wrote:
 > 
-> The commit in Fixes: has added a pwm_add_table() call in the probe() and
-> a pwm_remove_table() call in the remove(), but forget to update the error
-> handling path of the probe.
+>> +	ret = pm_runtime_get_sync(qspi->dev);
+>> +	if (ret < 0) {
+>> +		pm_runtime_put_noidle(qspi->dev);
+>> +		return ret;
+>> +	}
 > 
-> Add the missing pwm_remove_table() call.
-> 
-> Fixes: a3aa9a93df9f ("mfd: intel_soc_pmic_core: ADD PWM lookup table for CRC PMIC based PWM")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-> 
-> v3: added tag (Hans)
-> v2: new patch
-> 
->  drivers/mfd/intel_soc_pmic_core.c | 1 +
->  1 file changed, 1 insertion(+)
+> Use the core runtime PM, there should be no need to open code.
 
-Applied, thanks.
+Right, i will use pm_runtime_resume_and_get() instead.
 
--- 
-DEPRECATED: Please use lee@kernel.org
+Thanks
+Patrice

@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6C258CDDE
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B3458CDE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244539AbiHHSnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 14:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        id S244589AbiHHSnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 14:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244484AbiHHSmd (ORCPT
+        with ESMTP id S244487AbiHHSmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 8 Aug 2022 14:42:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F472653;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D615E2701;
         Mon,  8 Aug 2022 11:42:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1253FB81058;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D63DB8105C;
         Mon,  8 Aug 2022 18:42:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7452C433B5;
-        Mon,  8 Aug 2022 18:42:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 477BAC43470;
+        Mon,  8 Aug 2022 18:42:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659984126;
-        bh=IcKbQrEu8fvCNUssOuYB2qG3dSNG44WeXb5EOxESOXo=;
+        s=k20201202; t=1659984127;
+        bh=KeIN5c5eJicTt4ZSqt38/T8RFk02LjWpJQlaqnhmTXw=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ckHnJveum2Ldsm5QWQhqpuo+/b6Nh0AT/z3NysNuoRtBvZlkT2Uklcj3t5XO2/59L
-         rzcEfAXG44fg5GnAk2pxgNF7cFKZ/kDNTCkY1aGYjqBnCI2ekRFNye8rdG38H4K29z
-         PMtfsps1PYtqU/7QD3MRVzY7o75SokmkGWCj27Cb2v64sk1XFsh8Q0h7MqARo0UJ0c
-         pGxj2ISfqsn5AoV1mIaMRyZBmpvR6ySkxFoOMnmS3XoAjyw2IiFVIezSS5+/RLRrzN
-         qVcT/rUnGjn7Z++/TfLCNTjzFcgLd/4GPuta+3JTP3rMzw65QMOp3fzwfubgEAqkWQ
-         CE36fyfei0E6w==
+        b=mtXPrdwpAre9stBP9ex1j75nAfFaDxoWkMTbGlzqEQLp4qwr3bQ5XQGLi808oXVAD
+         nfFfb4U0PSIzmZVYsGuIvcjG2Oqtgkl/06mY7TzYb8ymjmwIftT89/qqfA+4Px10Xb
+         mZYW8xO6idIaDBkoCvd2phM1xJEaw9VyjNFS5p8qQm9Thn0zWG6wtMhj6gIQU89mPh
+         PwOg/bkXPGYumkxyXh2G4qKi4HA+ToNaMiCPCR0gIN31LcB97+Xxv57zeBNkPcogO1
+         e55kiYUSp342yiCUiqAi0qAWgEYWfIzJglvS1saeBfKP798uMZT4cSJuElk1zlxnbZ
+         1gXiuvOLz85AA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6D3DC43140;
-        Mon,  8 Aug 2022 18:42:06 +0000 (UTC)
-Subject: Re: [GIT PULL] LEDs changes for v5.20-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 36B0EC43140;
+        Mon,  8 Aug 2022 18:42:07 +0000 (UTC)
+Subject: Re: [GIT PULL] fuse update for 6.0
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220808135201.GA22949@duo.ucw.cz>
-References: <20220808135201.GA22949@duo.ucw.cz>
-X-PR-Tracked-List-Id: <linux-leds.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220808135201.GA22949@duo.ucw.cz>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/ tags/leds-5.20-rc1
-X-PR-Tracked-Commit-Id: 38ba0bb291aacd92d8eaa4a1aa8b63ce4286e797
+In-Reply-To: <YvEDEKQSOaDaFiWb@miu.piliscsaba.redhat.com>
+References: <YvEDEKQSOaDaFiWb@miu.piliscsaba.redhat.com>
+X-PR-Tracked-List-Id: <linux-fsdevel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YvEDEKQSOaDaFiWb@miu.piliscsaba.redhat.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git tags/fuse-update-6.0
+X-PR-Tracked-Commit-Id: 247861c325c2e4f5ad3c2f9a77ab9d85d15cbcfc
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c8a684e2e110376c58f0bfa30fb3855d1e319670
-Message-Id: <165998412667.757.10353759158812252195.pr-tracker-bot@kernel.org>
-Date:   Mon, 08 Aug 2022 18:42:06 +0000
-To:     Pavel Machek <pavel@ucw.cz>
+X-PR-Merge-Commit-Id: 2bd5d41e0e9d8e423a0bd446ee174584c8a495fe
+Message-Id: <165998412721.757.16076021346842560131.pr-tracker-bot@kernel.org>
+Date:   Mon, 08 Aug 2022 18:42:07 +0000
+To:     Miklos Szeredi <miklos@szeredi.hu>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        jacek.anaszewski@gmail.com, linux-leds@vger.kernel.org
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 8 Aug 2022 15:52:01 +0200:
+The pull request you sent on Mon, 8 Aug 2022 14:35:28 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/ tags/leds-5.20-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git tags/fuse-update-6.0
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c8a684e2e110376c58f0bfa30fb3855d1e319670
+https://git.kernel.org/torvalds/c/2bd5d41e0e9d8e423a0bd446ee174584c8a495fe
 
 Thank you!
 

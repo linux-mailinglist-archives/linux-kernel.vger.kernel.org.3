@@ -2,124 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD2C58C4B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D93A58C4C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241925AbiHHIKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 04:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
+        id S242098AbiHHIMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 04:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242052AbiHHIKk (ORCPT
+        with ESMTP id S235829AbiHHIMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 04:10:40 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3052711A3F
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 01:10:38 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 202so1150125pgc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 01:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=61wTd6iB1lutkPoWBA+yNb5GJiX4LQ0YZJHDvzEfwJo=;
-        b=rYf8fWuSN/mCGpRIDR8FhDoVZlKtDJhkYAdROcl+ijtu5VN5vqTbOkZjPrVMf53rBi
-         ul4xuoXnAnwGC3tG+B1tgq1xqO09Ku/8U6W5mxyEc0w4kQfJ5CvE1qXCH7vCDUnFh5JV
-         u/GaONj0Ji6aVghQWWK3hK/iD2oerRnBt5Y/kKZr3nUlgVb8CSOkFyeNDtfMKR9QV5fj
-         DUZJdY5wUdhTIoZRChlmjDMU7aWZILR8bnv8lBoxFuu9qebl7/nicPEEauKAURUbEXTh
-         BYQTzw7BCZkFzoasBXZpzJ6seOYy+Tr8D+MUQZTgIsl8/cTP4ynXniJth6hVrCv0Tgii
-         x78A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=61wTd6iB1lutkPoWBA+yNb5GJiX4LQ0YZJHDvzEfwJo=;
-        b=bXrxTf+VYvsfr+1OSysTospIZ0q1bhbgM1HiPS2YuI76vtOvMh0SWu4oBGM3Y4nWaV
-         92BULO5L1bUnVYGuTRWdQCYnzyKUc2URxOLtSCql+FZ1H1xMfXFww4hHs8tXEUC1bA/8
-         mqc4zw08Qhyr/+k9ZjsZ3Mj5OPd+5ayMNQWfDSazcWQNxkSxZuT4wXSuUlOvBOhTOxPn
-         6NGxEXfmro1oLIxxcnzreJ322JSLi9Vg/B3wMmwWOGaRcQv4Zuq1m4rsyIQdUrcKtfFf
-         ISGqreYIXUPETAurnel+FvnaAIu9HZqA+FKEzvyh8XTMB14xZwjMMAacbxU9pL/plIIq
-         822w==
-X-Gm-Message-State: ACgBeo2idcl6BXaQP8Vjy2PBogSM10Ol6AOxgkhKU68VCI/mys37tbO4
-        vNVRrF/rkwfhcalIxRyRMhxK
-X-Google-Smtp-Source: AA6agR7erfXbt9N0hJC1f6BSSrFufGw7URJVj+V609D1DFTG1vKqT9PN+25+gpi+NpxGg3Eu6DkF6Q==
-X-Received: by 2002:a65:6b8a:0:b0:3db:7dc5:fec2 with SMTP id d10-20020a656b8a000000b003db7dc5fec2mr14133518pgw.223.1659946237660;
-        Mon, 08 Aug 2022 01:10:37 -0700 (PDT)
-Received: from thinkpad ([117.193.212.254])
-        by smtp.gmail.com with ESMTPSA id bd15-20020a656e0f000000b0041d2966a0cdsm4303833pgb.23.2022.08.08.01.10.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 01:10:37 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 13:40:31 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] arm64: dts: qcom: sc8280xp: disallow regulator mode
- switches
-Message-ID: <20220808081031.GC7601@thinkpad>
-References: <20220803121942.30236-1-johan+linaro@kernel.org>
+        Mon, 8 Aug 2022 04:12:05 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CCD610FE0;
+        Mon,  8 Aug 2022 01:12:03 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.12.77.33])
+        by mail-app2 (Coremail) with SMTP id by_KCgC3v_c6xfBiCvV1Ag--.31789S4;
+        Mon, 08 Aug 2022 16:11:38 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v0] idb: Add rtnl_lock to avoid data race
+Date:   Mon,  8 Aug 2022 16:10:50 +0800
+Message-Id: <20220808081050.25229-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220803121942.30236-1-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: by_KCgC3v_c6xfBiCvV1Ag--.31789S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF1rJr1kWFWDtF18Wr1DGFg_yoW8Ww4kpF
+        s8GryxKr10qF47WaykJ3W8AFyYga1qy34rG3W7uw4ruan8JryjvrWUKFyrZ34FkrWru39I
+        vr4Yvw4fAFyDArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 02:19:39PM +0200, Johan Hovold wrote:
-> A recent change in a USB/DP PHY driver that started specifying regulator
-> loads caused the regulators that were also shared with the PCIe and USB
-> PHYs to be put in low-power mode, something which broke PCIe and USB on
-> sa8295p-adp.
-> 
-> As was discussed in the following thread:
-> 
-> 	https://lore.kernel.org/all/YtkrDcjTGhpaU1e0@hovoldconsulting.com
-> 
-> regulators should generally not be allowed to switch to low-power mode
-> unless some of the consumers can actually support an idle mode.
-> 
-> This series disables mode-switching for all regulators on sc8280xp-crd,
-> sc8280xp-lenovo-thinkpad-x13s and sa8295p-adp except for the ones used
-> by the UFS controllers which do support an idle mode.
-> 
+The commit c23d92b80e0b ("igb: Teardown SR-IOV before
+unregister_netdev()") places the unregister_netdev() call after the
+igb_disable_sriov() call to avoid functionality issue.
 
-For the series,
+However, it introduces several race conditions when detaching a device.
+For example, when .remove() is called, the below interleaving leads to
+use-after-free.
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+ (FREE from device detaching)      |   (USE from netdev core)
+igb_remove                         |  igb_ndo_get_vf_config
+ igb_disable_sriov                 |  vf >= adapter->vfs_allocated_count?
+  kfree(adapter->vf_data)          |
+  adapter->vfs_allocated_count = 0 |
+                                   |    memcpy(... adapter->vf_data[vf]
 
-Thanks,
-Mani
+In short, there are data races between read and write of
+adapter->vfs_allocated_count. To fix this, we can add a new lock to
+protect members in adapter object. However, we cau use the existing
+rtnl_lock just as other drivers do. (See how dpaa2_eth_disconnect_mac is
+protected in dpaa2_eth_remove function). This patch adopts similar
+fixes.
 
-> Johan
-> 
-> 
-> Johan Hovold (3):
->   arm64: dts: qcom: sc8280xp-crd: disallow regulator mode switches
->   arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: disallow regulator
->     mode switches
->   arm64: dts: qcom: sa8295p-adp: disallow regulator mode switches
-> 
->  arch/arm64/boot/dts/qcom/sa8295p-adp.dts              | 11 -----------
->  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts             |  9 ---------
->  .../boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts   | 10 ----------
->  3 files changed, 30 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
+Fixes: c23d92b80e0b ("igb: Teardown SR-IOV before unregister_netdev()")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+ drivers/net/ethernet/intel/igb/igb_main.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index d8b836a85cc3..e86ea4de05f8 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -3814,7 +3814,9 @@ static void igb_remove(struct pci_dev *pdev)
+ 	igb_release_hw_control(adapter);
+ 
+ #ifdef CONFIG_PCI_IOV
++	rtnl_lock();
+ 	igb_disable_sriov(pdev);
++	rtnl_unlock();
+ #endif
+ 
+ 	unregister_netdev(netdev);
 -- 
-மணிவண்ணன் சதாசிவம்
+2.36.1
+

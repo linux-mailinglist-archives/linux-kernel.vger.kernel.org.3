@@ -2,125 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C2958CC74
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84D958CC76
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238084AbiHHRAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
+        id S237879AbiHHRBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiHHRAL (ORCPT
+        with ESMTP id S229516AbiHHRBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:00:11 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54E012AC5;
-        Mon,  8 Aug 2022 10:00:10 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id f65so9070069pgc.12;
-        Mon, 08 Aug 2022 10:00:10 -0700 (PDT)
+        Mon, 8 Aug 2022 13:01:04 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E3D12D3C
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:01:02 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id d4so5184341ilc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 10:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=pFXf4ENRECsOAmoiHh0T/+VEFMiRgcffxnFkrnsYLEo=;
-        b=RTK/PkxTJPZMsyYcFGiisEcaTkBui67WMrsSD1Qf5CJ9f5ubOiWHKAVrr9R+q6LabK
-         rqO9TYwt/bXEMHPKEU+yH6Apu9jYk12hU+MjQtWFSDRHk/NmikXM2gtqJ42IBYbMxnLy
-         WU2uCgcHHBuKDaQjsWI5WDGSF11mKQvHqwVYMOrzofZy8WuMT3OOciM+It3UhaYHzYzi
-         JwuJKXmz2FmHeDOLHbf20z217rXBEPlk9Qa8cLONnxS1D6s37OrocVBxqkk5F6HcQqDJ
-         3MknxANPTIch4oAJ1y/fm260Y5y9iFAG5yvKZl0QURDnGskq6rLDUGOYTfrcnCyXGBsH
-         ckmA==
+        d=csp-edu.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=+dJtRlmFjt91K9tF3wZ5b+WYiCa7+aYk2YzrQB9nc/4=;
+        b=sKG1tRb9wl6bKoNiuIS35OYXXdkOJ0X8XjeORGEnfVb/XUHTmKA2Fav2Kb1WruerUH
+         2d/zTSw7GvqRwQOG0tYXh8lZuoiPsmYXosjKNiW8WJR3V/445UzxVPvr85vDw75FW/l6
+         Xwn4btdNh90enwMgeHxTM0LkG7webzfC8CsSKuMv57Aq9kUz9gOg8TcMFvsd/j2fbaNr
+         HtCtiomms0SWv7uC8HUnQYwHG6imSYVF5cphwDXuPIDRhClxsPAbFIEbndLA7iEVCci/
+         0l3L8kz3R4yiawJoprvdICLOnOkeQrF1SHrkbhSfY7cMq805JBEd4iIECh5KtMAwuxVq
+         tXfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=pFXf4ENRECsOAmoiHh0T/+VEFMiRgcffxnFkrnsYLEo=;
-        b=O1Y7Vod6zcrsNXitHFkRwRFjQTxZDAb5OnQt1IiSTd3Nk1OpYRwhBoIUhRYEoVvdTc
-         G1cdr501/acKMQlBHWwb+cAmTGJJ4QTQWkoVkIsfLIgL7MWhdadaQT/NZDavAFpoUrYY
-         vSGu0fNSpBYfLhMfFNgOXs6wor8ql3DbqiAJph7xHVcdkD/QsMMkzSc3ShItBmYRL62E
-         r/CW7cqcxtfGy8qOD5jZ1izo2WEAx4sUWRit0sCZw+crYu33Lkgp+i5t1zY2COpSYXuw
-         LH+CfwOovDHPIluWpcyF9ynKfTQ0ALRxYlsBnepa1yeg+PbqV4qiNOU7/TKc3QBfJyi0
-         li5Q==
-X-Gm-Message-State: ACgBeo21wm4lzsOAtmcEWHbpYzijNpOIHID9qUSv+65168rvrVP59Opi
-        XdA6cyatqIuygh3CG6NTOFmneH8/vg5F/g==
-X-Google-Smtp-Source: AA6agR4l43+kMCG5UtmpxzCSuWUBw63mYch9j9LRqRAxZPZOxH3F43GIVe9q/wPSDbVatXnV1opRiQ==
-X-Received: by 2002:a05:6a00:986:b0:52d:8c68:7b4 with SMTP id u6-20020a056a00098600b0052d8c6807b4mr19202996pfg.35.1659978010072;
-        Mon, 08 Aug 2022 10:00:10 -0700 (PDT)
-Received: from Mahakal ([2401:4900:36ab:9d3a:cf26:15dd:368e:8685])
-        by smtp.gmail.com with ESMTPSA id n7-20020a170902e54700b0016c16648213sm9282117plf.20.2022.08.08.10.00.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Aug 2022 10:00:09 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 22:30:02 +0530
-From:   "<Vishal Badole>" <badolevishal1116@gmail.com>
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "inux-clk@vger.kernel.org" <inux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chinmoyghosh2001@gmail.com" <chinmoyghosh2001@gmail.com>,
-        "mintupatel89@gmail.com" <mintupatel89@gmail.com>,
-        "vimal.kumar32@gmail.com" <vimal.kumar32@gmail.com>
-Subject: Re: [PATCH] Common clock: =?utf-8?B?4oCL?= =?utf-8?B?4oCLVG8=?= list
- active consumers of clocks
-Message-ID: <20220808170001.GB5239@Mahakal>
-References: <CAEXpiVQihEadxsNodarz2-wxSAipfpzEaA8zKpnozszC+weYTQ@mail.gmail.com>
- <20220610194013.DD39DC34114@smtp.kernel.org>
- <20220622170219.GA6978@Mahakal>
- <20220624010550.582BBC341C7@smtp.kernel.org>
- <20220626182517.GA26001@Mahakal>
- <MW5PR84MB1842824E0F57D0EC46381B09AB9D9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=+dJtRlmFjt91K9tF3wZ5b+WYiCa7+aYk2YzrQB9nc/4=;
+        b=Qg4cMKOXnOYijxv6I01l5t/MfuZjgpBqYk61k3IhEljK0bTKscfYDvZWhkXgA0FtLw
+         qNBv6OcrJO0Il/HOjDVcqrrh5dPlClnK22LDp5py8kddC+46UJLRdeATwHhxANesauP7
+         Xy5inYUG8xKBmsnOZRcI77/yOLMeM/pSBre2KLLr2LHeOti7bp335xIB0FCoMrZARJuM
+         Yw8EW+6wh+0qtca2cx07M7IBTaRr4OXuG10/9IYBzhudfBmwvi0zKTisGjQJPbgJ48LV
+         3nzXkuieOxqO6xtrCBNGK6DIljGyMNhgzuFCESPsnT9cpr2DclC50vk5b8T09kS6kE5t
+         YI2Q==
+X-Gm-Message-State: ACgBeo0FEWH5/2dCvaOx3afKE4+ooHDVbSiLeiSkzitDLETiUKyfuyEQ
+        IqJgMZS8R5dk5gr+CTzxiLSgLw==
+X-Google-Smtp-Source: AA6agR7WppV+RrWFuGSA7HHyqYMM1k2sgffgvpE/yI/hlGkpL+0PkCOwcxTzuwERpVONAk1THiXP+g==
+X-Received: by 2002:a05:6e02:178d:b0:2de:a00d:d06c with SMTP id y13-20020a056e02178d00b002dea00dd06cmr8946772ilu.142.1659978061392;
+        Mon, 08 Aug 2022 10:01:01 -0700 (PDT)
+Received: from kernel-dev-1 (75-168-113-69.mpls.qwest.net. [75.168.113.69])
+        by smtp.gmail.com with ESMTPSA id u68-20020a022347000000b00339c3906b08sm5406500jau.177.2022.08.08.10.01.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 10:01:01 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 12:00:59 -0500
+From:   Coleman Dietsch <dietschc@csp.edu>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2 2/2] KVM: x86/xen: Stop Xen timer before changing the
+ IRQ vector
+Message-ID: <YvFBS04HIDTpnca8@kernel-dev-1>
+References: <20220729184640.244969-1-dietschc@csp.edu>
+ <20220729184640.244969-3-dietschc@csp.edu>
+ <Yu1mZyJeYf/0/LP+@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <MW5PR84MB1842824E0F57D0EC46381B09AB9D9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <Yu1mZyJeYf/0/LP+@google.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_MISSP_FREEMAIL,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 10:49:17PM +0000, Elliott, Robert (Servers) wrote:
+On Fri, Aug 05, 2022 at 06:50:15PM +0000, Sean Christopherson wrote:
+> On Fri, Jul 29, 2022, Coleman Dietsch wrote:
+> > This moves the stop xen timer call outside of the previously unreachable
 > 
+> Please avoid "This", "This patch", etc... and describe what the change is, not
+> what the patch is.
 > 
-> > -----Original Message-----
-> > From: <Vishal Badole> <badolevishal1116@gmail.com>
-> > Sent: Sunday, June 26, 2022 1:25 PM
-> > To: Stephen Boyd <sboyd@kernel.org>; mturquette@baylibre.com; inux-
-> > clk@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Cc: chinmoyghosh2001@gmail.com; mintupatel89@gmail.com;
-> > vimal.kumar32@gmail.com
-> > Subject: Re: [PATCH] Common clock: ​​To list active consumers of clocks
+> > if else statement as well as making sure that the timer is stopped first
+> > before changing IRQ vector. Code was streamlined a bit also.
+> 
+> Generally speaking, don't describe the literal code changes, e.g. write the changelog
+> as if you were describing the bug and the fix to someone in a verbal conversation.
+> 
+
+Understood.
+
+> > This was contributing to the ODEBUG bug in kvm_xen_vcpu_set_attr crash that
+> > was discovered by syzbot.
+> 
+> That's not proper justification as it doesn't explain why this patch is needed
+> even after fixing the immedate cause of the ODEBUG splat.
+> 
+>   Stop Xen's timer (if it's running) prior to changing the vector and
+>   potentially (re)starting the timer.  Changing the vector while the timer
+>   is still running can result in KVM injecting a garbage event, e.g.
+>   vm_xen_inject_timer_irqs() could see a non-zero xen.timer_pending from
+>   a previous timer but inject the new xen.timer_virq.
+> 
+
+Thanks for helping clarify this Sean.
+
+> > ODEBUG: init active (active state 0)
+> > object type: hrtimer hint: xen_timer_callbac0
+> > RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:502
+> > Call Trace:
+> > __debug_object_init
+> > debug_hrtimer_init
+> > debug_init
+> > hrtimer_init
+> > kvm_xen_init_timer
+> > kvm_xen_vcpu_set_attr
+> > kvm_arch_vcpu_ioctl
+> > kvm_vcpu_ioctl
+> > vfs_ioctl
 > > 
-> ...
-> > We will remove above prints in the revised patch. We are facing
-> > indentation issue whle printing consumer in summary
-> > as given below
-> >                                  enable  prepare  protect                            duty  hardware            per-user
-> >   clock                          count    count    count        rateccuracy phase  cycle    enable  consumer   count
-> >   clk_mcasp0_fixed                   0        0        0           24576000     0  50000         Y   
-> >   deviceless        0
 > 
+> Fixes: 536395260582 ("KVM: x86/xen: handle PV timers oneshot mode")
+> Cc: stable@vger.kernel.org
 > 
-> Consider making the kernel output simple, greppable, and parseable (e.g.,
-> comma-separated fields, one entry per line, no multi-line column headers)
-> and let a userspace tool do the fancy formatting.
+> > Link: https://syzkaller.appspot.com/bug?id=8234a9dfd3aafbf092cc5a7cd9842e3ebc45fc42
+> > Reported-by: syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
+> > Signed-off-by: Coleman Dietsch <dietschc@csp.edu>
+> > ---
+> >  arch/x86/kvm/xen.c | 37 ++++++++++++++++++-------------------
+> >  1 file changed, 18 insertions(+), 19 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+> > index 2dd0f72a62f2..f612fac0e379 100644
+> > --- a/arch/x86/kvm/xen.c
+> > +++ b/arch/x86/kvm/xen.c
+> > @@ -707,27 +707,26 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+> >  		break;
+> >  
+> >  	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
+> > -		if (data->u.timer.port) {
+> > -			if (data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
+> > -				r = -EINVAL;
+> > -				break;
+> > -			}
+> > -			vcpu->arch.xen.timer_virq = data->u.timer.port;
+> > -
+> > -			/* Check for existing timer */
+> > -			if (!vcpu->arch.xen.timer.function)
+> > -				kvm_xen_init_timer(vcpu);
+> > -
+> > -			/* Restart the timer if it's set */
+> > -			if (data->u.timer.expires_ns)
+> > -				kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
+> > -						    data->u.timer.expires_ns -
+> > -						    get_kvmclock_ns(vcpu->kvm));
+> > -		} else if (kvm_xen_timer_enabled(vcpu)) {
+> > -			kvm_xen_stop_timer(vcpu);
+> > -			vcpu->arch.xen.timer_virq = 0;
+> > +		if (data->u.timer.port &&
+> > +		    data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
+> > +			r = -EINVAL;
+> > +			break;
+> >  		}
+> >  
+> > +		/* Check for existing timer */
+> > +		if (!vcpu->arch.xen.timer.function)
+> > +			kvm_xen_init_timer(vcpu);
+> > +
+> > +		/* Stop the timer (if it's running) before changing the vector */
+> > +		kvm_xen_stop_timer(vcpu);
+> > +		vcpu->arch.xen.timer_virq = data->u.timer.port;
+> > +
+> > +		/* Restart the timer if it's set */
 > 
+> The "if it's set" part is stale, maybe this?
 > 
+> 		/* Start the timer if the new value has a valid vector+expiry. */
 > 
->
-Hi Robert,
-We have raised another patch for the same. Please find the below link
-for reference:
 
-https://www.spinics.net/lists/kernel/msg4459705.html
+Agreed, I'll clean that comment up a bit.
 
-Regards,
-Vishal
-
+> > +		if (data->u.timer.port && data->u.timer.expires_ns)
+> > +			kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
+> > +					    data->u.timer.expires_ns -
+> > +					    get_kvmclock_ns(vcpu->kvm));
+> > +
+> >  		r = 0;
+> >  		break;
+> >  
+> > -- 
+> > 2.34.1
+> > 

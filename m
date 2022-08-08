@@ -2,43 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF5558CB1C
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E3758CB1D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243741AbiHHPQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 11:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S243622AbiHHPQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 11:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbiHHPQX (ORCPT
+        with ESMTP id S243680AbiHHPQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:16:23 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF90D10AF
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 08:16:20 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1659971776t7o87n9q
-Received: from harry-jrlc.. ( [182.148.14.53])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 08 Aug 2022 23:16:04 +0800 (CST)
-X-QQ-SSF: 0100000000200030C000B00A0000020
-X-QQ-FEAT: UMQM+3VOEYugTYxy/3qdT57U6306eboGSBKchY3c73RC8lnbSZlOKCEKqEclc
-        jV/py7hub2sQJWCnoXXvzfaFFLTBUbh9IAOK2pd5wtUyH9zzv1bhuo0D21O7KntCw9ZFn53
-        jklnRje3+CUta8Y11yQTac2yt5RfsEd2+YWs//bQmb3xTus4MdevmfZ/6mm2Yb70LQzXJky
-        psIwCzQF6UGTKa3mSYHFp7P8MN1Kxx8FIoKClXOaellsoFwz/k6kTjWmTWAggBSN7yu9e4M
-        6YUMJK8X6+9eLRAD6Ap+WZ+WM5vZRcRMpUsmrkeRM/9ryaexdzvZlNKoZQ+C91kIwbUB+XN
-        gCLgcLqw40crkSAaIVca+5AfvpW48LfwnyXxoRjmJ/MYYFFEo12Pi0zxh5UAA==
-X-QQ-GoodBg: 0
-From:   Xin Gao <gaoxin@cdjrlc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Xin Gao <gaoxin@cdjrlc.com>
-Subject: [PATCH] KVM: x86/mmu: Variable type completion
-Date:   Mon,  8 Aug 2022 23:16:02 +0800
-Message-Id: <20220808151602.59140-1-gaoxin@cdjrlc.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        Mon, 8 Aug 2022 11:16:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6FA25ED
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 08:16:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8A6160F93
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 15:16:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BAF1C433D6;
+        Mon,  8 Aug 2022 15:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659971780;
+        bh=jzrdwy4VW9jDkWVs0c1LdJKlGarw0U4LtOtrDpSB4NI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Q084Xb0h1l9kjbMnt08JRKkuZnK6NA+xeW9dwcXNmjitnW7L6iX2Jze81l6tOycI8
+         rtLmio5F1Hg915B+AYk9HGPFyLTF1NQUUn5DEkr9qRaVI/vn4R5KwhSMjPGJBg5lWS
+         6XcWxaqxuAJBskS1Lp6y1akQx4+llTWzUCKF/gEDXG5a6wSLbMAkMSEi5jbmi2dC68
+         XBWUV40sB8Ri1ZiBbW2X0kFSk6B/vLagtRuEfEoVHsTq0oN/uc2izbvyd9ROZT1NEM
+         DGX9H/UDckDUgTrSDIt3B4GFdGTTlWIJFXra9D8Ky1V8K6k5JmWd8BS35SsJ3ZtFls
+         l5kW+ghOTEDTQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oL4UL-001iGg-PI;
+        Mon, 08 Aug 2022 16:16:17 +0100
+Date:   Mon, 08 Aug 2022 16:16:17 +0100
+Message-ID: <877d3iwyta.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, chenhuacai@loongson.cn,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] irqchip/loongarch: Fix irq_domain_alloc_fwnode() abuse
+In-Reply-To: <d0b93546-eb2e-029e-5124-144fa10b41d3@loongson.cn>
+References: <20220808105020.2689757-1-maz@kernel.org>
+        <d0b93546-eb2e-029e-5124-144fa10b41d3@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, linux-kernel@vger.kernel.org, chenhuacai@loongson.cn, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,44 +67,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'unsigned int' is better than 'unsigned', which has several changes.
+Hi Jianmin,
 
-Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
----
- tools/lib/traceevent/plugins/plugin_kvm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Mon, 08 Aug 2022 13:05:27 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> Hi, Marc
+> 
+> Yes, I think that's right. Thanks for your patch to fix them.
 
-diff --git a/tools/lib/traceevent/plugins/plugin_kvm.c b/tools/lib/traceevent/plugins/plugin_kvm.c
-index 9ce7b4b68e3f..068d4b8cfdd3 100644
---- a/tools/lib/traceevent/plugins/plugin_kvm.c
-+++ b/tools/lib/traceevent/plugins/plugin_kvm.c
-@@ -225,7 +225,7 @@ static struct str_values svm_exit_reasons[] = {
- };
- 
- static struct isa_exit_reasons {
--	unsigned isa;
-+	unsigned int isa;
- 	struct str_values *strings;
- } isa_exit_reasons[] = {
- 	{ .isa = 1, .strings = vmx_exit_reasons },
-@@ -233,7 +233,7 @@ static struct isa_exit_reasons {
- 	{ }
- };
- 
--static const char *find_exit_reason(unsigned isa, int val)
-+static const char *find_exit_reason(unsigned int isa, int val)
- {
- 	struct str_values *strings = NULL;
- 	int i;
-@@ -358,7 +358,7 @@ static int kvm_nested_vmexit_handler(struct trace_seq *s, struct tep_record *rec
- }
- 
- union kvm_mmu_page_role {
--	unsigned word;
-+	unsigned int word;
- 	struct {
- 		unsigned level:4;
- 		unsigned cr4_pae:1;
+Thanks for having a look. Is that an Acked-by? A Reviewed-by? Or just
+a comment?
+
+Thanks,
+
+	M.
+
 -- 
-2.30.2
-
+Without deviation from the norm, progress is not possible.

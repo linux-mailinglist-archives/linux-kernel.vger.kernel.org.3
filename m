@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BC558CBE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A133C58CBE0
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243904AbiHHQKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 12:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S243892AbiHHQKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 12:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243879AbiHHQKJ (ORCPT
+        with ESMTP id S243316AbiHHQKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 8 Aug 2022 12:10:09 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5403115828;
-        Mon,  8 Aug 2022 09:10:08 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 278CCwwb015734;
-        Mon, 8 Aug 2022 18:09:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=x3NJSzf6vrhocflx9JNFnZ5iqH3k6ZuksvSVGkGyX08=;
- b=y9wNcQLrVxBALNMpBmPsn1Swn8u4UKcjgIZO8rq+dlbKG4dS7jSnOn8jT6O5Nd7DSWGC
- 5dCBiXbE0t7/gaP2aLvfEL9knkoxhoV+Bx09RGv00qCIsy7dWOiY5OMp50FzxpXT0KJJ
- tLpw2eczpsce1N5N53DCiyivH99Qpb7PEwX4z0HHjPf+Dmsu9AH/CIiTF3bEPD/SkYi0
- kuUSD6cnKJ7YlAtBFHk7ZcKNTqqFJMqebzksxNNJE1RHxDHX9mFvywwFhDnDeW763G6J
- WlelOpEwfi0XxOLnfcb3lraF07+uZbs5Tdxga3lpmXJ2Xd53tr62K9Nv+CEYSxZU7QFk aA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hsf6gkm81-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Aug 2022 18:09:54 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 541EA10002A;
-        Mon,  8 Aug 2022 18:09:53 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4F2DA257ABB;
-        Mon,  8 Aug 2022 18:09:53 +0200 (CEST)
-Received: from [10.201.21.72] (10.75.127.118) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 8 Aug
- 2022 18:09:52 +0200
-Message-ID: <bbe8f91e-35f4-fe80-4b6e-25d21a6547fc@foss.st.com>
-Date:   Mon, 8 Aug 2022 18:09:51 +0200
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12F641580D
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:10:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659975007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k2rVxCQ9cERJ9mXQXAN4OFCiUy0IwjBElfQJb084200=;
+        b=gIRvVmFUqMn4qjjeB1KIItfSGTqGU6XpId1sIIeqNcCh9OIMq7fsePZ2uM2Q/xB43VwTJt
+        HMZAGAzYkEJaORFdznC7Oy01rNUHscFpR41xwMdS1vPD1sWqU+f8g+UgpqkvWdIOiZ3p5N
+        4XPq9VIFC7Le2WmQ0ENDrGCgVTi4DSM=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-526-H0QaD-jlPIad752LSb2Rhw-1; Mon, 08 Aug 2022 12:10:06 -0400
+X-MC-Unique: H0QaD-jlPIad752LSb2Rhw-1
+Received: by mail-il1-f199.google.com with SMTP id f5-20020a056e020b4500b002df180f0997so6926951ilu.21
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 09:10:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=k2rVxCQ9cERJ9mXQXAN4OFCiUy0IwjBElfQJb084200=;
+        b=KR89qEJZ1wOK4N0GqYGBe3jD1fRgeMJLZgbwo8jeLDyQ0mUUt1jdUAD2+IXfdNTXgq
+         XFyHn5PZtzBEVcTRmHbCaUKQYzHCZJHyrg4qB8W/oHwwedkVZXoM3pB/TR/EdzUreeHx
+         vCAwIdZgMwRVLrNrzguO8pp7R8vaxEbT/WOAwHNf1oZ9Yxo+UM7HJl3BjUXE+SoxFX0i
+         1ZcwY05yhiiu8nJZi/AD9ib9Mrb/qSvUq82AEPL5oLgorCe/JPr0dJU/PH3FEhLbO7S2
+         3gJLbVcZ5LfrI75CdpxDGsuEXtbYl/CQNwn3Bap81naaaMbhGZCQIma5PT0BzgJD0Auq
+         gKug==
+X-Gm-Message-State: ACgBeo2uvBn4OMBr6+uCQGDEg0g4Hhd/jKMevqVbImWOTdNYE8MpiwJq
+        WjEkZQrt5Kp6b2Fe1MEDIZQCcv4IECm/7RfjaNSE3b4zo4YnLq0gScNbIJRZDUj7MWyCK0U2qQV
+        GMmjKHrUIi9wvMufyJVOjo6yj
+X-Received: by 2002:a05:6e02:1c8d:b0:2df:72a9:ffcc with SMTP id w13-20020a056e021c8d00b002df72a9ffccmr8511695ill.189.1659975005366;
+        Mon, 08 Aug 2022 09:10:05 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7M1kTZV0NW8ZsPJx7vif6CuH8zsDVFp6bLmx9V6FX7OFY7lFm4pqiWPcbvha02rSsJfqTNtg==
+X-Received: by 2002:a05:6e02:1c8d:b0:2df:72a9:ffcc with SMTP id w13-20020a056e021c8d00b002df72a9ffccmr8511686ill.189.1659975005142;
+        Mon, 08 Aug 2022 09:10:05 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id n16-20020a056602341000b00684f4b808ffsm13634ioz.39.2022.08.08.09.10.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 09:10:04 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 12:10:02 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Feiner <pfeiner@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] mm/hugetlb: fix hugetlb not supporting
+ write-notify
+Message-ID: <YvE1WsGKkGjyx1FU@xz-m1.local>
+References: <20220805110329.80540-1-david@redhat.com>
+ <20220805110329.80540-2-david@redhat.com>
+ <Yu1eCsMqa641zj5C@xz-m1.local>
+ <Yu1gHnpKRZBhSTZB@monkey>
+ <c2a3b903-099c-4b79-6923-8b288d404c51@redhat.com>
+ <Yu1ie559zt8VvDc1@monkey>
+ <73050e64-e40f-0c94-be96-316d1e8d5f3b@redhat.com>
+ <Yu2CI4wGLHCjMSWm@monkey>
+ <Yu2kK6s8m8NLDjuV@xz-m1.local>
+ <Yu2o5DUncFywbPFS@monkey>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] spi: stm32_qspi: Add transfer_one_message() spi
- callback
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        <devicetree@vger.kernel.org>
-References: <20220808074051.44736-1-patrice.chotard@foss.st.com>
- <20220808074051.44736-3-patrice.chotard@foss.st.com>
- <YvEP15/7KmQGyPgL@sirena.org.uk>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <YvEP15/7KmQGyPgL@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.118]
-X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-08_10,2022-08-08_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yu2o5DUncFywbPFS@monkey>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark
-
-On 8/8/22 15:29, Mark Brown wrote:
-> On Mon, Aug 08, 2022 at 09:40:50AM +0200, patrice.chotard@foss.st.com wrote:
+On Fri, Aug 05, 2022 at 04:33:56PM -0700, Mike Kravetz wrote:
+> It looks like vma_soft_dirty_enabled is recent and not in any stable
+> trees (or even 5.19).
 > 
->> +	ret = pm_runtime_get_sync(qspi->dev);
->> +	if (ret < 0) {
->> +		pm_runtime_put_noidle(qspi->dev);
->> +		return ret;
->> +	}
+> Yes, I did start working on hugetlb softdirty support in the past.
+> https://lore.kernel.org/lkml/20210211000322.159437-1-mike.kravetz@oracle.com/
 > 
-> Use the core runtime PM, there should be no need to open code.
+> Unfortunately, it got preempted by other things.  I will try to move it up
+> the priority list.
 
-Right, i will use pm_runtime_resume_and_get() instead.
+Thanks, Mike.
 
-Thanks
-Patrice
+It'll also makes sense to forbid it if it may take time to finish, so we
+don't need to push ourselves.
+
+-- 
+Peter Xu
+

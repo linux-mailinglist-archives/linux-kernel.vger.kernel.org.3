@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803D658C9FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E3958CA01
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243380AbiHHN6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S243466AbiHHN7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243255AbiHHN6U (ORCPT
+        with ESMTP id S243455AbiHHN7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:58:20 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E278F59B;
-        Mon,  8 Aug 2022 06:58:08 -0700 (PDT)
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M1d7x4nrXz6H76d;
-        Mon,  8 Aug 2022 21:58:05 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 8 Aug 2022 15:58:06 +0200
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 8 Aug
- 2022 14:58:05 +0100
-Date:   Mon, 8 Aug 2022 14:58:04 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Tim Harvey" <tharvey@gateworks.com>,
-        Robert Jones <rjones@gateworks.com>,
-        "Lee Jones" <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Ricardo Rivera-Matos" <r-rivera-matos@ti.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH 2/5] dt-bindings: iio: Drop Bogdan Pricop
-Message-ID: <20220808145804.000026ae@huawei.com>
-In-Reply-To: <20220808104712.54315-3-krzysztof.kozlowski@linaro.org>
-References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
-        <20220808104712.54315-3-krzysztof.kozlowski@linaro.org>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+        Mon, 8 Aug 2022 09:59:12 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EF7DED6
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:59:11 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id h13so11009413wrf.6
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 06:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=LMUrhQrfiazbp1+WduUu1OPzJNVOemyvbYl+U+OIrQA=;
+        b=jBu62PF/tUWL/YrWEvjA4mYpyhYXEV1CmXTK/t1SNkbBFG6KqWZ0AXFfyg4/OaqDQ4
+         biIcke3LxQCWc8HndILqQYbQxbnXwDrOe0+HAe7Z+YoTWPZXrDjoMyxRO6Q+tO26sUek
+         3iuLM0zPF7wgJzFL6RZ3z+y7j/HEJ5IJjdR9oGJURC8gOXMvGxrSsnUnJYZUUwAhYtqP
+         CmjsMZpP1NnVJWW4rLtrNq6JPBeP38pSLHMWeLedHbb26aBDkc1R8kw9BsXXstPa3Tjn
+         QnbJH5VJwxAZ53/6/p3c45wlO6IYuuxwA0nv5n2umveNBpfuDLvw+NGe32UE+6pVnsNR
+         xWYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=LMUrhQrfiazbp1+WduUu1OPzJNVOemyvbYl+U+OIrQA=;
+        b=f9w6fqMCtGxvcpNzAzyIt4z55Z6rfvui48eI09NfnsiEleRWkMCVUtpDgi7n/I7LaR
+         eOd3A0GEKCmufR9hn1wptJEKznnYu2OMWEORwUqBkpqaB2RJ632mb0rfIGriUwmJLWcO
+         BGc3qAZ5wI4XSnlsfsW6bL0QKIkw2kSiFFmWJyS2PYANoBMIE1Kt0IlcKifNd1Fhkcae
+         pzej94yW/jOj+g1fkFcfR+fp+yFmETfrJrpxK4cua3toFBtzNi+xMPy7JWpF/ssU7xLS
+         8HeuSX4YlHdxMzIsUYnKc/JHA5DFG2JGiwbZnZEJo3jlroGzETwEyACpvtgXzfFpcaik
+         /Zeg==
+X-Gm-Message-State: ACgBeo0j+1hEACbySYspN1m+10sE2nmxwBsEm09GWo5Hah4Q0LBSTxHS
+        VtPwdKKh0bTpwA6yobTFYHAnqHKnJ9/vNw==
+X-Google-Smtp-Source: AA6agR7tXMx4qgGGuiLfei7yeLsSXhcWm5ubfmdNUGRSoERWmfV0d+nBCXQlUvGEOS4E4fjlC68BKA==
+X-Received: by 2002:a5d:47a1:0:b0:221:7e3b:b3b4 with SMTP id 1-20020a5d47a1000000b002217e3bb3b4mr7328479wrb.694.1659967149834;
+        Mon, 08 Aug 2022 06:59:09 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id z11-20020a5d44cb000000b00220688d445esm13505210wrr.117.2022.08.08.06.59.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 06:59:09 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 14:59:07 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v1 1/1] mfd: intel-lpss: Provide an SSP type to the SPI
+ driver
+Message-ID: <YvEWq4zYC5xNPcGy@google.com>
+References: <20220702211903.9093-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220702211903.9093-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  8 Aug 2022 13:47:09 +0300
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Sun, 03 Jul 2022, Andy Shevchenko wrote:
 
-> Emails to Bogdan Pricop bounce ("550 5.4.1 Recipient address rejected:
-> Access denied. AS(201806281)").
+> The SPI driver wants to know the exact type of the controller.
+> Provide this information to it. This is a complementary part to
+> the previously updated intel-lpss-acpi.c.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml b/Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml
-> index 54955f03df93..ae5ce60987fe 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/ti,adc108s102.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Texas Instruments ADC108S102 and ADC128S102
->  
->  maintainers:
-> -  - Bogdan Pricop <bogdan.pricop@emutex.com>
-> +  - Jonathan Cameron <jic23@kernel.org>
->  
->  description: |
->    Family of 8 channel, 10/12 bit, SPI, single ended ADCs.
+> Note that this patch depends on earlier sent [1].
+> [1]: https://lore.kernel.org/lkml/20220628223047.34301-1-andriy.shevchenko@linux.intel.com/
+> 
+>  drivers/mfd/intel-lpss-pci.c | 141 +++++++++++++++++++++++------------
+>  1 file changed, 95 insertions(+), 46 deletions(-)
 
+Applied, thanks.
+
+--
+DEPRECATED: Please use lee@kernel.org

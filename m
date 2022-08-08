@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3F958CBEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB12858CBED
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243923AbiHHQNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 12:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
+        id S243927AbiHHQNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 12:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243415AbiHHQNb (ORCPT
+        with ESMTP id S243918AbiHHQNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 12:13:31 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DDCFE4
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:13:30 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id z12so11432407wrs.9
+        Mon, 8 Aug 2022 12:13:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C072FE4
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659975212;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KLGbq2su7y8qF0iuV3H8NZV3RgfNkEtVGQYGB91WtLc=;
+        b=TQ2R7dT4VBMJmCdV61D2RTvdF11aS7doEekN8OGhQpF0M7bv8H98DGLObTEvqzAAstaLKI
+        A+3V9dfyYBUnYCHPMg7/N2+YQbQ6UaYrfF3Q3A3qzLeKPj22g9ZDRVLLzE0EbG4y8bcVHL
+        2etiOmEWD+9xpW1BXcg7IFFuOr5Rr7M=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-RkhGubxHOOKCfTYxfXMerg-1; Mon, 08 Aug 2022 12:13:31 -0400
+X-MC-Unique: RkhGubxHOOKCfTYxfXMerg-1
+Received: by mail-ej1-f72.google.com with SMTP id gs35-20020a1709072d2300b00730e14fd76eso2550313ejc.15
         for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 09:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=e2k9+csC2s9E3w26N33toJ1//qjvjqrNHy08urbha/g=;
-        b=CkyJF3d7E71SXMCKJRZGqw69Q+ZIZAvqhu0nU3sz0a5TH4xUIzYcNW7WIF7ohVOxj1
-         0j2pKtzdy0/yKtak3FULjUKcIEuH51Y4wus6KYZod26LrCXWsm4XLL5/PARPuKKB4Egs
-         EKY5ZvJO8R9u6Q9VYGdPU/suxvT/hbPw3P6/b8tTlmOD+IGczb3fv+N/GoTzye5Isumi
-         4KHW+ttKTMrJPTTtdkHBQ/S2DLZpNv80CZ8/MENyijKEKYKePCEqB9auF3uJ0KLDO88m
-         UJ1zm761MYRwgZZuAsZNI0n28rL2KZpNVon8CO8EBNUz2RU8U/E7b3lIW3ezPh0XAe64
-         iMLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=e2k9+csC2s9E3w26N33toJ1//qjvjqrNHy08urbha/g=;
-        b=SqzDrUg+qalVPKuUKtK7lyLk8BqtBHF7id1smaFEeZo6k7rM/QWsqhbyqqo9vuz3kX
-         hLZBbrpo1kA/l+C2r00kIdLMIJxdrUo4+R+fzbXRCXKfOj3MMeuXrplSv7pD3q9YAG17
-         Z29ntc3zIO+cZKX0ksJucQFONaFxaw/yygHKdGgS/1lcl0cBBAQ99/itCrwZx+Y91VWo
-         8dKkpkQ1XMLpIVpwViLZTcjUkB4vESaFn/6MpI4dG4sFX/0zNYq70goE9/zrEy7l1j8A
-         Dyi58OAkGUXm4JbyHlPD9J4oHHTEI64+jL3FK47UUxfjAqtLc6+yXCCHCXu7k+LA/b4r
-         I3gw==
-X-Gm-Message-State: ACgBeo1ZoJho+b6S6dePx2oRLQu3hulAOfbqr9yWw1qTRls/RTRhgddG
-        GeMUdJXPs2UvXkAMaMnMV0ps6+sw19w+Og==
-X-Google-Smtp-Source: AA6agR4t26LyRQ4Z47o/xW5Uop606M9KgBpQe8HaaB5R05j7wbsrTP1D4IMJ55FPKINTyhvMsq+fBw==
-X-Received: by 2002:adf:f1d0:0:b0:21e:c8e1:e82f with SMTP id z16-20020adff1d0000000b0021ec8e1e82fmr11809330wro.635.1659975209012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=KLGbq2su7y8qF0iuV3H8NZV3RgfNkEtVGQYGB91WtLc=;
+        b=IGBSpuQdRcTuwlirRhW7iGnmdakUXE+xztiQTUWwnShaRWslO3XstYj/+LTEOjo/Xx
+         0aZIhv2FpclFtL4NsjivDXqDbVYcSw5pnPM8GdO4O4Npq5vy8y8BHvxdypLRYEYWOBWG
+         uyPEQpUvJ75j/MC/FLuNN1Ws1+mREXyLFxG26UcbcbtO60oZnLEKd6035NPlvzF9zNWy
+         Wb4mFdukP/W/BHlaRmkP+VnLr9UMFZErI9/CICCRoZ1Wfkvyr9bl9euQbEXsL799MDya
+         zuIAyINhluD4NaIfZ4odsUd+mx/C6Td+Vtgw++cMRBeC0ATIJNQvufzK3Dr0/Od9x/j2
+         xsfA==
+X-Gm-Message-State: ACgBeo0HZLjRz0fjtIdsmIBHX39L0zGCFcTA9CZJ3yqLfaTO+vgS+O2H
+        CToOJCXIAXSiR+RjuzhB/j0PsBftlyInx8ISb38vK7i00o2JABD2gDrH/AoV4qMXdOWzkO5by2C
+        lw9AwjtNYt4Fz+e7wZTeCa5X5
+X-Received: by 2002:a05:6402:378f:b0:43a:d3f5:79f2 with SMTP id et15-20020a056402378f00b0043ad3f579f2mr18616704edb.338.1659975210018;
+        Mon, 08 Aug 2022 09:13:30 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5Kc6OlGYcnsyhPFkY4Wweec7H/qFBO8/QI44ngY3ug7LVyYtJhYC0p05uXc2jIPASVP4zWTg==
+X-Received: by 2002:a05:6402:378f:b0:43a:d3f5:79f2 with SMTP id et15-20020a056402378f00b0043ad3f579f2mr18616692edb.338.1659975209877;
         Mon, 08 Aug 2022 09:13:29 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id bg21-20020a05600c3c9500b003a4efb794d7sm16424743wmb.36.2022.08.08.09.13.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id k5-20020a17090632c500b0072b1cb2818csm11634ejk.158.2022.08.08.09.13.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Mon, 08 Aug 2022 09:13:28 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 17:13:26 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v3 07/10] mfd: intel_soc_pmic_crc: Drop redundant
- ACPI_PTR() and ifdeffery
-Message-ID: <YvE2JkKdVA7cpE07@google.com>
-References: <20220801114211.36267-1-andriy.shevchenko@linux.intel.com>
- <20220801114211.36267-7-andriy.shevchenko@linux.intel.com>
+Message-ID: <23e2630c-2328-40cd-836b-f3b619ff6a4b@redhat.com>
+Date:   Mon, 8 Aug 2022 18:13:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801114211.36267-7-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/2] asus-wmi: Adjust tablet/lidflip handling to use
+ enum
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Luke D. Jones" <luke@ljones.dev>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220808031132.10075-1-luke@ljones.dev>
+ <20220808031132.10075-2-luke@ljones.dev>
+ <CAHp75Vds+DmQdeuSM7ixtZiX60jg83CWveFZNcQoQ=QyiqcvUw@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75Vds+DmQdeuSM7ixtZiX60jg83CWveFZNcQoQ=QyiqcvUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 01 Aug 2022, Andy Shevchenko wrote:
+Hi,
 
-> The driver depends on ACPI, ACPI_PTR() resolution is always the same.
-> Otherwise a compiler may produce a warning.
+On 8/8/22 17:48, Andy Shevchenko wrote:
+> On Mon, Aug 8, 2022 at 5:12 AM Luke D. Jones <luke@ljones.dev> wrote:
+>>
+>> Due to multiple types of tablet/lidflip, the existing code for
+>> handlign these events is refactored to use an enum for each type.
 > 
-> That said, the rule of thumb either ugly ifdeffery with ACPI_PTR or
-> none should be used in a driver.
+> handling
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Tested-by: Hans de Goede <hdegoede@redhat.com>
-> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> ---
+> Can you run a spell checker for your commit messages?
 > 
-> v3: no changes
-> v2: added tags and rebased on top of new patch 1
+> ...
 > 
->  drivers/mfd/Kconfig              | 4 ++--
->  drivers/mfd/intel_soc_pmic_crc.c | 6 ++----
->  2 files changed, 4 insertions(+), 6 deletions(-)
+> To the switch-cases, please add a "default" case to each of them.
 
-Applied, thanks.
+The switch-cases are on an enum type, so adding a default is
+not necessary and adding one will actually loose the useful
+compiler warning about unhandled enum values.
 
--- 
-DEPRECATED: Please use lee@kernel.org
+Regards,
+
+Hans
+

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D4258C8E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEA358C8E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243249AbiHHM7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 08:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S243192AbiHHM71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 08:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243155AbiHHM6u (ORCPT
+        with ESMTP id S243201AbiHHM6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 08:58:50 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26D2FD0A
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:58:37 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id z187so7994497pfb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:58:37 -0700 (PDT)
+        Mon, 8 Aug 2022 08:58:55 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D1FE03B
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:58:42 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id y1so2859457plb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:58:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0S4/uQg7L4l7ka3/Aeqj7n7hkrnKAJNq6+H/S+7bfUs=;
-        b=TtKbF2yVWmPUjJZAKRkNmDD2Rx3GAjkV5oDtXp/5pqozM7Yt4zKH1NdY8OUn+ytGAG
-         Zf5n2QIsAlBGD762sAXWh+BwQ26kuv41OF6+//UrSZNKBjpkhQfQPJmTIRkaLyowiNMv
-         laT+ky+EunvlCBfcrkMd5J05galqhlY9S7FL5IMFj8gL8VkrMTC3xfgBVxwyIrdIFQfy
-         oR7xBXokgV2/CHcm3mUJCgtfLSSN6vtg7CA7K0WMyqMj/ugv8/G3lnZzNiZLBXbdPLFB
-         SItmorAtTPJHTp6vEBs95yK+TDAwctBYomAMDNXXHPvkGRixIQpa557BSf71vZueAalQ
-         NmHg==
+        bh=jpsF7ETAikN9eZ5FGIx/2HtxGomhcrX08v3cHOIgq4s=;
+        b=bI8LP6BjxCL0bqdcccNqSD2f8AhFDRwqb8ulXK2KG669BulvbmqdNcAW8e9JRKBVJp
+         7IAzBihMZf5bvJyOiGRZpA9XlxbOqpHTVOQeXTNazLdsby7PUNxZUsdbZKAC/97xXZoP
+         NVvx1+TmQtD9DL+c7ekvZxVFeZZi1U+UdHJr5kCDu2S5jf2zedoEQKHj22pN6uHJzRfm
+         e03GymSbax+9EEOv9iRi4o6LeVnXVLaIdhBaW0zaiwyi1aOqM2aqYQaNtwoXyt4xHfDn
+         9mO4/IGz0RhrRWNXvJRKBT4F5st0PXGXGJQGOJuiTEZuimgRh6kw1z9xk08/xHoFjfIX
+         Skhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0S4/uQg7L4l7ka3/Aeqj7n7hkrnKAJNq6+H/S+7bfUs=;
-        b=o4I65brbenL2MJIDb0Fs3mJenA4pfiCIYobWlDeJHYt7jQLZ3NllCagXWgJKJA/tZS
-         zn4adMK15S/sMWkKMVrbkdfLvwr5jVO8fQ6l87UrHfiEi2raIxbTQAlTxoUBF8s8wknE
-         FpFnN1BXzbQ4Z/gA5mzVcygFZvGK7Hca6d1aYf1NC0/PTuA5Nu5nYO5kouHMqwXFmOEE
-         p/o3hPDGC5nMf7ifUFujACS3X/iB7aFNqTp1erkwi6Y3T1iFLzkP9qtmN+gOI8lr0V8i
-         rbPuStwVRr2Z1ZbqWmrkM+YqHL11Wt1yZOs+/WZ5v0wswBLYqIamtz9/jbVdtsARXx3u
-         GAGQ==
-X-Gm-Message-State: ACgBeo3o0H4W3egqet8/6lPOMSMpPbTpmjSNy2K3qtkOFL+urV94vWL9
-        +gImgC2d/K5f20R497X3YoAQug==
-X-Google-Smtp-Source: AA6agR5XJ94BdTwgi+yCsDLTSQQxveikvUrql5X8ZTtWNAoRismFWu9BP/Ixul6SqvEMtWOsjoI21g==
-X-Received: by 2002:a65:5683:0:b0:41c:b103:6037 with SMTP id v3-20020a655683000000b0041cb1036037mr15169870pgs.367.1659963517359;
-        Mon, 08 Aug 2022 05:58:37 -0700 (PDT)
+        bh=jpsF7ETAikN9eZ5FGIx/2HtxGomhcrX08v3cHOIgq4s=;
+        b=5WVOG4lIkPQAmSokcqirKXO1GuK98dR5t8Nyln3gOOHSI+82K9m2lIR9IjvJyUtiTM
+         KbpbrV+sV2GqByNHcRaDKDJneiIS6EP6tksGPshorYtNgl/NKLNMi4Pnn/JGjVuWaM1z
+         W2Ckf3JdGOMbxT7IcyjrVIjXRhG15f6HxES5+406R5fLOkCPsMAxW74kTge9DHGLNViQ
+         8PWzyAISDEbatkb6Hy9I3YIupeEOHEOQtXe3vJETH0inGIyN+wDM+0YlNw9ZCBxbIgc3
+         BA4tNWyoK+8PGhCLilV6xPFvfHcPLxi487fHOL5jjFluiS0Hn6pkyk9kVl01RN/1Tym8
+         Zp6w==
+X-Gm-Message-State: ACgBeo3MsSepstgB2BMMPcbGzTkld3RTZ9Mc88KvDNNxpaQrsBYfw27z
+        CJnYp3YrruyxqJRUicJyHr1xCg==
+X-Google-Smtp-Source: AA6agR5U+DoK1A/N8tpDIReBu2dxP1u9In+jBYtvXn28w9TMCnLUT1a9B5QDKh1X1paQua4SwjcJcg==
+X-Received: by 2002:a17:903:2301:b0:16e:f916:22b4 with SMTP id d1-20020a170903230100b0016ef91622b4mr18259293plh.52.1659963521803;
+        Mon, 08 Aug 2022 05:58:41 -0700 (PDT)
 Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.240])
-        by smtp.gmail.com with ESMTPSA id d14-20020a17090ae28e00b001f4ebd47ae7sm8057722pjz.54.2022.08.08.05.58.32
+        by smtp.gmail.com with ESMTPSA id d14-20020a17090ae28e00b001f4ebd47ae7sm8057722pjz.54.2022.08.08.05.58.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 05:58:36 -0700 (PDT)
+        Mon, 08 Aug 2022 05:58:41 -0700 (PDT)
 From:   Chengming Zhou <zhouchengming@bytedance.com>
 To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
         rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com
 Cc:     linux-kernel@vger.kernel.org,
         Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v4 8/9] sched/fair: defer task sched_avg attach to enqueue_entity()
-Date:   Mon,  8 Aug 2022 20:57:44 +0800
-Message-Id: <20220808125745.22566-9-zhouchengming@bytedance.com>
+Subject: [PATCH v4 9/9] sched/fair: don't init util/runnable_avg for !fair task
+Date:   Mon,  8 Aug 2022 20:57:45 +0800
+Message-Id: <20220808125745.22566-10-zhouchengming@bytedance.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220808125745.22566-1-zhouchengming@bytedance.com>
 References: <20220808125745.22566-1-zhouchengming@bytedance.com>
@@ -71,48 +71,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When wake_up_new_task(), we would use post_init_entity_util_avg()
-to init util_avg/runnable_avg based on cpu's util_avg at that time,
-then attach task sched_avg to cfs_rq.
+post_init_entity_util_avg() init task util_avg according to the cpu util_avg
+at the time of fork, which will decay when switched_to_fair() some time later,
+we'd better to not set them at all in the case of !fair task.
 
-Since enqueue_entity() would always attach any unattached task entity,
-so we can defer this work to enqueue_entity().
-
-post_init_entity_util_avg(p)
-  attach_entity_cfs_rq()  --> (1)
-activate_task(rq, p)
-  enqueue_task() := enqueue_task_fair()
-  enqueue_entity()
-    update_load_avg(cfs_rq, se, UPDATE_TG | DO_ATTACH)
-      if (!se->avg.last_update_time && (flags & DO_ATTACH))
-        attach_entity_load_avg()  --> (2)
-
-This patch defer attach from (1) to (2)
-
+Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
 Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 ---
- kernel/sched/fair.c | 4 ----
- 1 file changed, 4 deletions(-)
+ kernel/sched/fair.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 90aba33a3780..2063e30b2a8f 100644
+index 2063e30b2a8f..082174cb0e47 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -799,8 +799,6 @@ void init_entity_runnable_average(struct sched_entity *se)
- 	/* when this task enqueue'ed, it will contribute to its cfs_rq's load_avg */
- }
+@@ -833,20 +833,6 @@ void post_init_entity_util_avg(struct task_struct *p)
+ 	long cpu_scale = arch_scale_cpu_capacity(cpu_of(rq_of(cfs_rq)));
+ 	long cap = (long)(cpu_scale - cfs_rq->avg.util_avg) / 2;
  
--static void attach_entity_cfs_rq(struct sched_entity *se);
+-	if (cap > 0) {
+-		if (cfs_rq->avg.util_avg != 0) {
+-			sa->util_avg  = cfs_rq->avg.util_avg * se->load.weight;
+-			sa->util_avg /= (cfs_rq->avg.load_avg + 1);
 -
- /*
-  * With new tasks being created, their initial util_avgs are extrapolated
-  * based on the cfs_rq's current util_avg:
-@@ -863,8 +861,6 @@ void post_init_entity_util_avg(struct task_struct *p)
+-			if (sa->util_avg > cap)
+-				sa->util_avg = cap;
+-		} else {
+-			sa->util_avg = cap;
+-		}
+-	}
+-
+-	sa->runnable_avg = sa->util_avg;
+-
+ 	if (p->sched_class != &fair_sched_class) {
+ 		/*
+ 		 * For !fair tasks do:
+@@ -861,6 +847,20 @@ void post_init_entity_util_avg(struct task_struct *p)
  		se->avg.last_update_time = cfs_rq_clock_pelt(cfs_rq);
  		return;
  	}
--
--	attach_entity_cfs_rq(se);
++
++	if (cap > 0) {
++		if (cfs_rq->avg.util_avg != 0) {
++			sa->util_avg  = cfs_rq->avg.util_avg * se->load.weight;
++			sa->util_avg /= (cfs_rq->avg.load_avg + 1);
++
++			if (sa->util_avg > cap)
++				sa->util_avg = cap;
++		} else {
++			sa->util_avg = cap;
++		}
++	}
++
++	sa->runnable_avg = sa->util_avg;
  }
  
  #else /* !CONFIG_SMP */

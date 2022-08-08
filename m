@@ -2,149 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CCE58C870
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E9B58C875
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242216AbiHHMhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 08:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
+        id S242715AbiHHMix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 08:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232981AbiHHMhS (ORCPT
+        with ESMTP id S242531AbiHHMiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 08:37:18 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56086AE60;
-        Mon,  8 Aug 2022 05:37:17 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id r14so9677838ljp.2;
-        Mon, 08 Aug 2022 05:37:17 -0700 (PDT)
+        Mon, 8 Aug 2022 08:38:50 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05788BC14
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:38:49 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id u6so4310605ljk.8
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:38:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=/MHU6eLy/HH6PnrXo470+5XMlsFXh1eKam/uKQ3OWjc=;
-        b=HkQQdjli/MeTyeCv25A1kZqw2Jlhf/xncGOTm1Zf1lUG9Z9b3QQZoMgcxLY8SXqGXE
-         FbUvss9tHtCdiJV/n3LVpTLfJAwkbFceRlTNVsuFFqwqvLEocIRfXn+6eHTD9i/lv8T3
-         AnOoK1232oW+myjAPuIicLPqwRNFEHJIx1bdCFKS4xpDT6d0xWea7WDxj/USi8Wd1+no
-         xigweofxVveM5eV3qF8JPM8cdd0a8VacQXZFCCn4CDIyd81IpzNLPtm7L0gnkXfiLLFL
-         bAwhanXLSZIIj4+JsEXC2i3SnkPFHZJMrGGT9JRFV1hsBZQwxMqjvxaRPJ+SKrJKqWLp
-         Z5dg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FyiESZhu+E7/BKkttGblDxWjWxD0N7svGStIMfixe6g=;
+        b=rLJ0lyBvsw3HLGnfXzsGvHgYH/J3/z1+3o1/9nl4S8ccnWoz9hcIevwZQK1JZ/sNe/
+         L7XKYtQHQPNtFZ684HAhXRWZLmtyQdrge8SXmwUFa7GPh+uwxN7RQ4JM7T4MXd32dy6n
+         2HfNMu24H91FXmB/CO6RqWVR3Jqv0FKbhIY5si9CtwtgmxbydI4d5a3gO9eRABgJ/eec
+         7tdpV5648hEW6iaDB56qq4iAltVqAOZJ0tVWtD798rY1a41kugkBOtul0GtK3w3g39Cw
+         bJKcEbUBXxqrr8X8verT4ayW3dGC/U09kTVTi/HyAeQ6UHSXYozojmeFFQWbsszFVp/m
+         Lqxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=/MHU6eLy/HH6PnrXo470+5XMlsFXh1eKam/uKQ3OWjc=;
-        b=zQcN9ipzQWAvQ3kSgzHLnldQDrqP/pk998pBY5znEJO0y7B6sRzKfYt1ntytXJcAOF
-         ngLIiFO0gYLO+6aU/FfoRB4j3AG8YBdw8WqnUxEKhqGQQzr0mLmnnBfdfJUirfWKvLpJ
-         JGTXUxh9JBiprwCw5PFRFkCxc6J7IB6g3HZw6AxDssE2cgWLgx9uzTRK5bO8aD2LIbXT
-         jnMemHMcgVYAUQ3bztUjHL7i9ak17qbVU/QoW5I5SxW7uAUPA2Dy5bbW4VxEgXbGeswB
-         qevqlGHxynWwx5v+A06NQ8ZSO4H8EYDpVYTdgqUtQsW4zqhSwYYyJb7RsQFNDxt5Oni+
-         t/8w==
-X-Gm-Message-State: ACgBeo2hOgdbWODeMRXvDeYH1ximzOCC1TpwghwX+/byFo+n/rD4Tsma
-        Ouv5QgvJrzGQEGjp39qRzTHdTCmEFkzl3SBSkTI=
-X-Google-Smtp-Source: AA6agR4P6+xqLLUlvUc10ZcbpYNlFzVZlJtwU0GcE5Si/ptz/l8bCeFHrGn1AoXJnqEDX06IAjMPe59mA03TWafJAHM=
-X-Received: by 2002:a05:651c:2d0:b0:25e:6c94:59d5 with SMTP id
- f16-20020a05651c02d000b0025e6c9459d5mr6055592ljo.488.1659962235606; Mon, 08
- Aug 2022 05:37:15 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FyiESZhu+E7/BKkttGblDxWjWxD0N7svGStIMfixe6g=;
+        b=TUmYk0/uWHma5dN3qo9mB4r0UKYPUraS/lyZhXjZb09cIg2sc5xSEh9jssUe4l6Jum
+         8cFisxCYW/dXLE9c3D9cb0P92cxVeSX/Ndpm6KSSCbxIwwAHRx2JiKuU7WJcYSBjunj3
+         4npT5P61fue9iAt1o47iKSQyzOptJd/39oMN5u+CbJ6ckvejIAKIN9clZOGV6oojMEjO
+         DyZ0wmca7OkDdD9gahfeACMMI5WMNbUrOQBgMJh0YtihVrns6+Dy+Ixu2nEtvKDQTJjx
+         wRw2hVraKA6eUx3SJqoO769bj5Gymfx1s/HXkbWgKkgwgiU0q79zArbYcUURIh4zcN1Q
+         fACg==
+X-Gm-Message-State: ACgBeo2keVgZQHjSu2reYwkZ5+GUZ+fp157fvY8FJ+zeaxRDBsCbRbPe
+        jjqxEPW7Na4hiDU5GjI3hwTrEw==
+X-Google-Smtp-Source: AA6agR6+cdKmIIcwQHHvzpEfmXs0vtGDVCqzuNhHpAMqsPQSHhxfdUwkHa1upr8sME3uKXz3Y+fCRg==
+X-Received: by 2002:a2e:921a:0:b0:25e:b171:1f39 with SMTP id k26-20020a2e921a000000b0025eb1711f39mr4235389ljg.3.1659962327354;
+        Mon, 08 Aug 2022 05:38:47 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id 19-20020ac24853000000b0048b0176bac6sm1420342lfy.93.2022.08.08.05.38.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 05:38:46 -0700 (PDT)
+Message-ID: <937b6737-5d55-2185-a4bc-7535fa6da85c@linaro.org>
+Date:   Mon, 8 Aug 2022 15:38:45 +0300
 MIME-Version: 1.0
-References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com>
- <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com>
- <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
- <20220723030226.8E43CC341C6@smtp.kernel.org> <CAP6Zq1gUvMFG9BNObVNLpVgbMRpV7e--HFxknP8kvL4nGk8Hsw@mail.gmail.com>
- <20220729225603.12528C433D6@smtp.kernel.org> <CAP6Zq1hOxG+2X-qTbvPkrVHQ5zf04GO21m1n328Jiqgzns2CMA@mail.gmail.com>
- <20220804200549.60512C433C1@smtp.kernel.org>
-In-Reply-To: <20220804200549.60512C433C1@smtp.kernel.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Mon, 8 Aug 2022 15:37:04 +0300
-Message-ID: <CAP6Zq1j2r9df0CpT7pi32JuVLQBDjt7cCK7LmDJehtufG8M4-Q@mail.gmail.com>
-Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Olof Johansson <olof@lixom.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thomas G leixner <tglx@linutronix.de>,
-        Patrick Venture <venture@google.com>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Nancy Yuen <yuenn@google.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        SERIAL DRIVERS <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3] dt-binding: ipmi: add fallback to npcm845 compatible
+Content-Language: en-US
+To:     minyard@acm.org
+Cc:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, jic23@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        openbmc@lists.ozlabs.org, openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220808075452.115907-1-tmaimon77@gmail.com>
+ <da83671e-08b9-2d68-e5d3-d9b09c105bb4@linaro.org>
+ <20220808122652.GO3834@minyard.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220808122652.GO3834@minyard.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On 08/08/2022 15:26, Corey Minyard wrote:
+> On Mon, Aug 08, 2022 at 11:11:16AM +0300, Krzysztof Kozlowski wrote:
+>> On 08/08/2022 09:54, Tomer Maimon wrote:
+>>> Add to npcm845 KCS compatible string a fallback to npcm750 KCS compatible
+>>> string becuase NPCM845 and NPCM750 BMCs are using identical KCS modules.
+>>>
+>>> Fixes: 84261749e58a ("dt-bindings: ipmi: Add npcm845 compatible")
+>>> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+>>
+>>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Ok, I think I understand how this is supposed to work.  It's not
+> altogether clear from the device tree documentation.  It says in
+> Documentation/devicetree/bindings/writing-bindings.rst:
+> 
+> - DO make 'compatible' properties specific. DON'T use wildcards in compatible
+>   strings. DO use fallback compatibles when devices are the same as or a subset
+>   of prior implementations. DO add new compatibles in case there are new
+>   features or bugs.
 
-Thanks for your reply.
+This documentation is short, so it explains what should be done, not
+exactly why it should be done. If we wanted "why" this would not be set
+of 4 sentences but twice more...
 
-On Thu, 4 Aug 2022 at 23:05, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Tomer Maimon (2022-08-04 07:01:30)
-> > On Sat, 30 Jul 2022 at 01:56, Stephen Boyd <sboyd@kernel.org> wrote:
-> > >
-> > > Because it is jumbled in some range?
-> > Yes.
-> > >
-> > > >
-> > > > I do see a way to combine the clock and the reset driver, the NPCM
-> > > > reset driver is serving other NPCM BMC's.
-> > > > Should we use regmap to handle the clock registers instead of ioremap?
-> > >
-> > > Sure? Using regmap or not looks like a parallel discussion. How does it
-> > > help use platform APIs?
-> > I mean to use regmap API instead of platform API for handing the clock
-> > and reset registers.
-> > the regmap API gives only one user access to R/W (lock).
-> > I will be happy to get more suggestions, on how should we solve this situation.
-> >
->
-> Using platform APIs means using platform_*() functions, not of_*()
-> functions, which are open-firmware/DT related. Regmap can be used to
-> operate on registers mapped as __iomem, which is different from platform
-> APIs.
-I will use platform_get_resource() and devm_ioremap_resource()
-functions in the next version.
+> 
+> AFAICT, there are no new features or bugs, just a new SOC with the same
+> device.  In general usage I have seen, you would just use the same
+> compatible.  
 
->
-> Is having a lock even necessary? Do the reset and clk controls live
-You are right,  lock use is not necessary.
-> within a shared register where we would need to prevent one driver from
-> accessing that register at the same time as the other?
-reset and clk drivers are living fine with shared registers, we don't
-need to handle the register access between the clk and the reset
-drivers.
+Most of the usages are like shown here. There are several other cases.
+It's the same with poor or good code - you will always find both patterns.
+
+> However, if I understand this, that last sentence should say:
+> 
+>   DO add new compatibles in case there is a new version of hardware with
+>   the possibility of new features and/or bugs.
+> 
+> Also, the term "specific" is, ironically, vague.  Specific to what?
+
+To me it is rather clear. Specific as in first meanings of the word (1,
+3, 4 and 5):
+https://en.wiktionary.org/wiki/specific
+
+nuvoton,npcm7xx-kcs-bmc would not be definite (allows more meanings),
+unique (in terms of devices it expresses), distinctive (as two different
+devices use the same) or serving to identify one thing (again - two SoCs).
+
+What other meaning do you think of?
+
+> 
+> It would be nice to have something added to "Typical cases and caveats"
+> that says:
+> 
+> - If you are writing a binding for a new device that is the same as, or
+>   a superset of another existing device, add a new specific compatible
+>   for the new device followed by a compatible for the existing device.
+>   That way, if the device has new bugs or new specific features are
+>   added, you can add workarounds without modifying the device tree.
+> 
+> Anyway, I have added this to my tree with your ack.
+
+Fantastic, thanks!
+
 
 Best regards,
-
-Tomer
+Krzysztof

@@ -2,56 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1170C58D037
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 00:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BF658D035
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 00:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244853AbiHHWhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 18:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
+        id S244580AbiHHWhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 18:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244574AbiHHWhK (ORCPT
+        with ESMTP id S244562AbiHHWhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 18:37:10 -0400
+        Mon, 8 Aug 2022 18:37:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5FED5B;
-        Mon,  8 Aug 2022 15:37:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE6AF70;
+        Mon,  8 Aug 2022 15:37:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6826B60FF6;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C06C60FB6;
+        Mon,  8 Aug 2022 22:37:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 901E9C433D6;
         Mon,  8 Aug 2022 22:37:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8A1EC433C1;
-        Mon,  8 Aug 2022 22:37:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659998228;
-        bh=z2JFBfmXjunm+Gu2CL+BYn0OqR7OLi5A3qX9UH0YlzI=;
+        s=k20201202; t=1659998229;
+        bh=DzGGQGZW/kLxy+WTWci9KBQcrRgZgES2QKi4Du3Cxo4=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=f9SGqSxPdRIteumH4pwehUhdSmiZB4hLDMqOQkijr05Dn+LahXRvqxukFhTBI+1ZP
-         5+He9F6jxOYSDwIV4dslPoUhQ+P5jBuHoz9sN4OsLlahvo6K5SIBGWsPH77qjMzkxg
-         sfNisYb7Vnymv2pkcXe9IEDgfMMLOK9GcMhwTAgk89G2v+pXH5AAyuUCjakNJdKpn0
-         qF80V6HNhvK5Y4cHxVTd4fPaFpllMdNxUF5mHsW415NRE2ZwS4tngp2LG9yax4id7Y
-         tqBY36QQyv0o3lyi7X5CTNvxFt+1rEOyoIJuPGG1kJzwDlb/Beest9UuhB0wSB9iB6
-         50WXsvyTkPcvw==
+        b=uDgIePwrTWfM2rWWmiMDCi5nSBRZQwbhnpUugvU2i5OEg8N1nopOvK8HuO/kri8Jj
+         LJkOpprl951RE07lHNPZ1XOurGroG4vn3GtJObwxXXbCfFs8GkLEhuIfOC6tA+w6mC
+         3ukvl/ZkiPSpZ+ykLYIfIWHm3ok5sHrEnBJ8Y6dvf7BLRctKQnFFZ8SYny4cqQDWWR
+         BpL1KGV64EtNNyPXenJMaG/d0HGUFmTOhQE9EGcIma9RCJ92hIBeDN9vlNVg9bKiAy
+         aTQpm5EETuVKq8Xh/lirgpf8/lTuRvO+4EOWMNoy1pyuPjLE8fXxwJQVhvZB2Q4ecJ
+         rcshoNLn8WFhQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B913DC43142;
-        Mon,  8 Aug 2022 22:37:08 +0000 (UTC)
-Subject: Re: [GIT PULL] More thermal control updates for v5.20-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7E162C43140;
+        Mon,  8 Aug 2022 22:37:09 +0000 (UTC)
+Subject: Re: [GIT PULL] rpmsg updates for v5.20
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0iTeVEHGZZeo+qBSgKENY7E-jp0MEu30Barm=yYjnYMxA@mail.gmail.com>
-References: <CAJZ5v0iTeVEHGZZeo+qBSgKENY7E-jp0MEu30Barm=yYjnYMxA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0iTeVEHGZZeo+qBSgKENY7E-jp0MEu30Barm=yYjnYMxA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-5.20-rc1-2
-X-PR-Tracked-Commit-Id: 7f0169cde0ced2e2b7bdf3dcedcf8c71efc6afc0
+In-Reply-To: <20220808182325.2104359-1-bjorn.andersson@linaro.org>
+References: <20220808182325.2104359-1-bjorn.andersson@linaro.org>
+X-PR-Tracked-List-Id: <linux-remoteproc.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220808182325.2104359-1-bjorn.andersson@linaro.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v5.20
+X-PR-Tracked-Commit-Id: 7113ac825371c17c15e2d0be79d850e5e16d3328
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 033c88d58b66a5bf61a9a4f0029c4fb771f0555e
-Message-Id: <165999822875.1400.17392658230653193656.pr-tracker-bot@kernel.org>
-Date:   Mon, 08 Aug 2022 22:37:08 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
+X-PR-Merge-Commit-Id: c72687614b3627b3ea55d8d169e31cac70f56f3e
+Message-Id: <165999822951.1400.6022886464783317425.pr-tracker-bot@kernel.org>
+Date:   Mon, 08 Aug 2022 22:37:09 +0000
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Saud Farooqui <farooqui_saud@hotmail.com>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,12 +71,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 8 Aug 2022 20:11:59 +0200:
+The pull request you sent on Mon,  8 Aug 2022 13:23:25 -0500:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-5.20-rc1-2
+> https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v5.20
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/033c88d58b66a5bf61a9a4f0029c4fb771f0555e
+https://git.kernel.org/torvalds/c/c72687614b3627b3ea55d8d169e31cac70f56f3e
 
 Thank you!
 

@@ -2,223 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F7458CFF5
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 23:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBB958CFF7
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 23:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244478AbiHHV4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 17:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
+        id S244531AbiHHV4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 17:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236051AbiHHV4i (ORCPT
+        with ESMTP id S244476AbiHHV4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 17:56:38 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591F818D
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 14:56:36 -0700 (PDT)
+        Mon, 8 Aug 2022 17:56:40 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA9E1AF08;
+        Mon,  8 Aug 2022 14:56:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659995796; x=1691531796;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BnJokY09lT4LD22YU6LskLmEYancGP7NeFWMQhwH/PQ=;
-  b=hFtOCY3CUtmbD0gR5bPd7Uvc95lxheaU4oBccXyvAGE1vcHrqprGCQqY
-   BCKVzqevMBuKnLCKds4gQTlm493sEyrCvp5fiEM3PWa1BN+z8xkJJzrDr
-   zHlDpdoTbRalCuv/1XvNf1ro9m84oRSFe21u87g6pHcyh5EERk/Cs+RAM
-   HUYytwsb63qrrUu3+Frs72cMHLgfhipErec4DsiTXHCLAYwG6XhBrizoU
-   Vs1PvYfU2tbvidb6O9Scx+rZfxpQ8CqB+vgEGHwjW97eVftyBjWkEwXht
-   jHEGwwrLSKBzbbl1lxggZHFryDjFTegKadubi/s53iIyeijSyb3qFIhJx
+  t=1659995799; x=1691531799;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vJtYOJwOompnBj4Aqh2odHAundgfNzupycshZfydTio=;
+  b=G160lznxSwOZ01Z4fYtfY+RAGNTVqLCZQFS5xxAUx6Akc9SJiJN1+xEp
+   xFHCfRdQjT3rdf5XxqLUZockUhzF5x7Qfq9nEsKcgEzYS++1y5O5Qy+vj
+   XZQiZXyIGO2v1gpc1aCnJV2prATbfLEY1PR0pktOx+kJAjPlWYNOeahK4
+   L2++CDFoTTekyshNwmArbBAFoLzx8HCXKMarY8p3AHpS8A7HoSb1FFp5O
+   kqX23B2N4cPhAUTz506x4I8tQqH0weEgGASY1AzZbFwquTEJcW+lMlxv6
+   64liKb14Dtz3ylRbd2a8DHzK92ur1i0Mu3sY7KD8iucnMZ4WfaHdea7p4
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="273749073"
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="289456662"
 X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="273749073"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 14:56:36 -0700
+   d="scan'208";a="289456662"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 14:56:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="580534161"
+   d="scan'208";a="637473248"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Aug 2022 14:56:34 -0700
+  by orsmga001.jf.intel.com with ESMTP; 08 Aug 2022 14:56:34 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oLAjh-000MYj-3C;
-        Mon, 08 Aug 2022 21:56:33 +0000
-Date:   Tue, 9 Aug 2022 05:55:56 +0800
+        id 1oLAji-000MYl-02;
+        Mon, 08 Aug 2022 21:56:34 +0000
+Date:   Tue, 9 Aug 2022 05:55:57 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/powerpc/platforms/52xx/mpc52xx_pm.c:133:9: sparse: sparse:
- incorrect type in argument 1 (different address spaces)
-Message-ID: <202208090505.55iG35ny-lkp@intel.com>
+To:     David Vernet <void@manifault.com>, bpf@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
+        joannelkoong@gmail.com, linux-kernel@vger.kernel.org,
+        Kernel-team@fb.com
+Subject: Re: [PATCH 3/5] bpf: Add bpf_user_ringbuf_drain() helper
+Message-ID: <202208090505.me3WqXOM-lkp@intel.com>
+References: <20220808155341.2479054-3-void@manifault.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220808155341.2479054-3-void@manifault.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c8a684e2e110376c58f0bfa30fb3855d1e319670
-commit: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
-date:   6 months ago
-config: powerpc-randconfig-s031-20220808 (https://download.01.org/0day-ci/archive/20220809/202208090505.55iG35ny-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce:
+Hi David,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on bpf-next/master]
+[also build test WARNING on bpf/master linus/master next-20220808]
+[cannot apply to v5.19]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Clear-callee-saved-regs-after-updating-REG0/20220808-235558
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220809/202208090505.me3WqXOM-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f68f2ff91512c199ec24883001245912afc17873
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f68f2ff91512c199ec24883001245912afc17873
+        # https://github.com/intel-lab-lkp/linux/commit/70db51b231aeddaa6eecd19afeeebef610ae2686
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Vernet/bpf-Clear-callee-saved-regs-after-updating-REG0/20220808-235558
+        git checkout 70db51b231aeddaa6eecd19afeeebef610ae2686
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/52xx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-sparse warnings: (new ones prefixed by >>)
->> arch/powerpc/platforms/52xx/mpc52xx_pm.c:133:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [assigned] [toplevel] sram @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:133:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:133:9: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] sram
->> arch/powerpc/platforms/52xx/mpc52xx_pm.c:133:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [assigned] [toplevel] sram @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:133:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:133:9: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] sram
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:133:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [assigned] [toplevel] sram @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:133:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:133:9: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] sram
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:136:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [assigned] [toplevel] sram @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:136:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:136:9: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] sram
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:136:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [assigned] [toplevel] sram @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:136:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:136:9: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] sram
->> arch/powerpc/platforms/52xx/mpc52xx_pm.c:136:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *static [assigned] [toplevel] sram @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:136:9: sparse:     expected void *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:136:9: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] sram
->> arch/powerpc/platforms/52xx/mpc52xx_pm.c:155:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *irq_0x500 @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:155:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:155:9: sparse:     got void [noderef] __iomem *irq_0x500
->> arch/powerpc/platforms/52xx/mpc52xx_pm.c:155:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *irq_0x500 @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:155:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:155:9: sparse:     got void [noderef] __iomem *irq_0x500
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:155:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *irq_0x500 @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:155:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:155:9: sparse:     got void [noderef] __iomem *irq_0x500
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:156:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *irq_0x500 @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:156:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:156:9: sparse:     got void [noderef] __iomem *irq_0x500
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:156:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *irq_0x500 @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:156:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:156:9: sparse:     got void [noderef] __iomem *irq_0x500
->> arch/powerpc/platforms/52xx/mpc52xx_pm.c:156:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *irq_0x500 @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:156:9: sparse:     expected void *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:156:9: sparse:     got void [noderef] __iomem *irq_0x500
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:163:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *irq_0x500 @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:163:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:163:9: sparse:     got void [noderef] __iomem *irq_0x500
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:163:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *irq_0x500 @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:163:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:163:9: sparse:     got void [noderef] __iomem *irq_0x500
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:163:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *irq_0x500 @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:163:9: sparse:     expected void *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:163:9: sparse:     got void [noderef] __iomem *irq_0x500
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:176:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [assigned] [toplevel] sram @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:176:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:176:9: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] sram
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:176:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [assigned] [toplevel] sram @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:176:9: sparse:     expected void const *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:176:9: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] sram
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:176:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *static [assigned] [toplevel] sram @@
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:176:9: sparse:     expected void *
-   arch/powerpc/platforms/52xx/mpc52xx_pm.c:176:9: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] sram
+All warnings (new ones prefixed by >>):
 
-vim +133 arch/powerpc/platforms/52xx/mpc52xx_pm.c
+   kernel/bpf/ringbuf.c: In function '__bpf_user_ringbuf_poll':
+>> kernel/bpf/ringbuf.c:653:15: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     653 |         hdr = (u32 *)((uintptr_t)rb->data + (cons_pos & rb->mask));
+         |               ^
+   kernel/bpf/ringbuf.c:682:19: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     682 |         *sample = (void *)((uintptr_t)rb->data +
+         |                   ^
+   kernel/bpf/ringbuf.c: In function '____bpf_user_ringbuf_drain':
+>> kernel/bpf/ringbuf.c:736:40: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     736 |                         ret = callback((u64)&dynptr,
+         |                                        ^
 
-2e1ee1f76684c5 Domen Puncer 2007-05-07  112  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  113  int mpc52xx_pm_enter(suspend_state_t state)
-2e1ee1f76684c5 Domen Puncer 2007-05-07  114  {
-2e1ee1f76684c5 Domen Puncer 2007-05-07  115  	u32 clk_enables;
-2e1ee1f76684c5 Domen Puncer 2007-05-07  116  	u32 msr, hid0;
-2e1ee1f76684c5 Domen Puncer 2007-05-07  117  	u32 intr_main_mask;
-d3e0e02804a5f4 Domen Puncer 2007-07-09  118  	void __iomem * irq_0x500 = (void __iomem *)CONFIG_KERNEL_START + 0x500;
-2e1ee1f76684c5 Domen Puncer 2007-05-07  119  	unsigned long irq_0x500_stop = (unsigned long)irq_0x500 + mpc52xx_ds_cached_size;
-741c5640a15a23 Kees Cook    2018-07-02  120  	char saved_0x500[0x600-0x500];
-741c5640a15a23 Kees Cook    2018-07-02  121  
-741c5640a15a23 Kees Cook    2018-07-02  122  	if (WARN_ON(mpc52xx_ds_cached_size > sizeof(saved_0x500)))
-741c5640a15a23 Kees Cook    2018-07-02  123  		return -ENOMEM;
-2e1ee1f76684c5 Domen Puncer 2007-05-07  124  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  125  	/* disable all interrupts in PIC */
-2e1ee1f76684c5 Domen Puncer 2007-05-07  126  	intr_main_mask = in_be32(&intr->main_mask);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  127  	out_be32(&intr->main_mask, intr_main_mask | 0x1ffff);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  128  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  129  	/* don't let DEC expire any time soon */
-2e1ee1f76684c5 Domen Puncer 2007-05-07  130  	mtspr(SPRN_DEC, 0x7fffffff);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  131  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  132  	/* save SRAM */
-2e1ee1f76684c5 Domen Puncer 2007-05-07 @133  	memcpy(saved_sram, sram, sram_size);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  134  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  135  	/* copy low level suspend code to sram */
-2e1ee1f76684c5 Domen Puncer 2007-05-07 @136  	memcpy(sram, mpc52xx_ds_sram, mpc52xx_ds_sram_size);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  137  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  138  	out_8(&cdm->ccs_sleep_enable, 1);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  139  	out_8(&cdm->osc_sleep_enable, 1);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  140  	out_8(&cdm->ccs_qreq_test, 1);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  141  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  142  	/* disable all but SDRAM and bestcomm (SRAM) clocks */
-2e1ee1f76684c5 Domen Puncer 2007-05-07  143  	clk_enables = in_be32(&cdm->clk_enables);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  144  	out_be32(&cdm->clk_enables, clk_enables & 0x00088000);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  145  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  146  	/* disable power management */
-2e1ee1f76684c5 Domen Puncer 2007-05-07  147  	msr = mfmsr();
-2e1ee1f76684c5 Domen Puncer 2007-05-07  148  	mtmsr(msr & ~MSR_POW);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  149  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  150  	/* enable sleep mode, disable others */
-2e1ee1f76684c5 Domen Puncer 2007-05-07  151  	hid0 = mfspr(SPRN_HID0);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  152  	mtspr(SPRN_HID0, (hid0 & ~(HID0_DOZE | HID0_NAP | HID0_DPM)) | HID0_SLEEP);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  153  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  154  	/* save original, copy our irq handler, flush from dcache and invalidate icache */
-2e1ee1f76684c5 Domen Puncer 2007-05-07 @155  	memcpy(saved_0x500, irq_0x500, mpc52xx_ds_cached_size);
-2e1ee1f76684c5 Domen Puncer 2007-05-07 @156  	memcpy(irq_0x500, mpc52xx_ds_cached, mpc52xx_ds_cached_size);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  157  	flush_icache_range((unsigned long)irq_0x500, irq_0x500_stop);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  158  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  159  	/* call low-level sleep code */
-2e1ee1f76684c5 Domen Puncer 2007-05-07  160  	mpc52xx_deep_sleep(sram, sdram, cdm, intr);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  161  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  162  	/* restore original irq handler */
-2e1ee1f76684c5 Domen Puncer 2007-05-07  163  	memcpy(irq_0x500, saved_0x500, mpc52xx_ds_cached_size);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  164  	flush_icache_range((unsigned long)irq_0x500, irq_0x500_stop);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  165  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  166  	/* restore old power mode */
-2e1ee1f76684c5 Domen Puncer 2007-05-07  167  	mtmsr(msr & ~MSR_POW);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  168  	mtspr(SPRN_HID0, hid0);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  169  	mtmsr(msr);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  170  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  171  	out_be32(&cdm->clk_enables, clk_enables);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  172  	out_8(&cdm->ccs_sleep_enable, 0);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  173  	out_8(&cdm->osc_sleep_enable, 0);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  174  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  175  	/* restore SRAM */
-2e1ee1f76684c5 Domen Puncer 2007-05-07  176  	memcpy(sram, saved_sram, sram_size);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  177  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  178  	/* reenable interrupts in PIC */
-2e1ee1f76684c5 Domen Puncer 2007-05-07  179  	out_be32(&intr->main_mask, intr_main_mask);
-2e1ee1f76684c5 Domen Puncer 2007-05-07  180  
-2e1ee1f76684c5 Domen Puncer 2007-05-07  181  	return 0;
-2e1ee1f76684c5 Domen Puncer 2007-05-07  182  }
-2e1ee1f76684c5 Domen Puncer 2007-05-07  183  
 
-:::::: The code at line 133 was first introduced by commit
-:::::: 2e1ee1f76684c5d4dd8e5a08cbf22d57f88769ed [POWERPC] mpc52xx suspend to deep-sleep
+vim +653 kernel/bpf/ringbuf.c
 
-:::::: TO: Domen Puncer <domen.puncer@telargo.com>
-:::::: CC: Paul Mackerras <paulus@samba.org>
+   626	
+   627	static int __bpf_user_ringbuf_poll(struct bpf_ringbuf *rb, void **sample,
+   628					   u32 *size)
+   629	{
+   630		unsigned long cons_pos, prod_pos;
+   631		u32 sample_len, total_len;
+   632		u32 *hdr;
+   633		int err;
+   634		int busy = 0;
+   635	
+   636		/* If another consumer is already consuming a sample, wait for them to
+   637		 * finish.
+   638		 */
+   639		if (!atomic_try_cmpxchg(&rb->busy, &busy, 1))
+   640			return -EBUSY;
+   641	
+   642		/* Synchronizes with smp_store_release() in user-space. */
+   643		prod_pos = smp_load_acquire(&rb->producer_pos);
+   644		/* Synchronizes with smp_store_release() in
+   645		 * __bpf_user_ringbuf_sample_release().
+   646		 */
+   647		cons_pos = smp_load_acquire(&rb->consumer_pos);
+   648		if (cons_pos >= prod_pos) {
+   649			atomic_set(&rb->busy, 0);
+   650			return -ENODATA;
+   651		}
+   652	
+ > 653		hdr = (u32 *)((uintptr_t)rb->data + (cons_pos & rb->mask));
+   654		sample_len = *hdr;
+   655	
+   656		/* Check that the sample can fit into a dynptr. */
+   657		err = bpf_dynptr_check_size(sample_len);
+   658		if (err) {
+   659			atomic_set(&rb->busy, 0);
+   660			return err;
+   661		}
+   662	
+   663		/* Check that the sample fits within the region advertised by the
+   664		 * consumer position.
+   665		 */
+   666		total_len = sample_len + BPF_RINGBUF_HDR_SZ;
+   667		if (total_len > prod_pos - cons_pos) {
+   668			atomic_set(&rb->busy, 0);
+   669			return -E2BIG;
+   670		}
+   671	
+   672		/* Check that the sample fits within the data region of the ring buffer.
+   673		 */
+   674		if (total_len > rb->mask + 1) {
+   675			atomic_set(&rb->busy, 0);
+   676			return -E2BIG;
+   677		}
+   678	
+   679		/* consumer_pos is updated when the sample is released.
+   680		 */
+   681	
+   682		*sample = (void *)((uintptr_t)rb->data +
+   683				   ((cons_pos + BPF_RINGBUF_HDR_SZ) & rb->mask));
+   684		*size = sample_len;
+   685	
+   686		return 0;
+   687	}
+   688	
+   689	static void
+   690	__bpf_user_ringbuf_sample_release(struct bpf_ringbuf *rb, size_t size,
+   691					  u64 flags)
+   692	{
+   693	
+   694	
+   695		/* To release the ringbuffer, just increment the producer position to
+   696		 * signal that a new sample can be consumed. The busy bit is cleared by
+   697		 * userspace when posting a new sample to the ringbuffer.
+   698		 */
+   699		smp_store_release(&rb->consumer_pos, rb->consumer_pos + size +
+   700				  BPF_RINGBUF_HDR_SZ);
+   701	
+   702		if (flags & BPF_RB_FORCE_WAKEUP || !(flags & BPF_RB_NO_WAKEUP))
+   703			irq_work_queue(&rb->work);
+   704	
+   705		atomic_set(&rb->busy, 0);
+   706	}
+   707	
+   708	BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
+   709		   void *, callback_fn, void *, callback_ctx, u64, flags)
+   710	{
+   711		struct bpf_ringbuf *rb;
+   712		long num_samples = 0, ret = 0;
+   713		int err;
+   714		bpf_callback_t callback = (bpf_callback_t)callback_fn;
+   715		u64 wakeup_flags = BPF_RB_NO_WAKEUP | BPF_RB_FORCE_WAKEUP;
+   716	
+   717		if (unlikely(flags & ~wakeup_flags))
+   718			return -EINVAL;
+   719	
+   720		/* The two wakeup flags are mutually exclusive. */
+   721		if (unlikely((flags & wakeup_flags) == wakeup_flags))
+   722			return -EINVAL;
+   723	
+   724		rb = container_of(map, struct bpf_ringbuf_map, map)->rb;
+   725		do {
+   726			u32 size;
+   727			void *sample;
+   728	
+   729			err = __bpf_user_ringbuf_poll(rb, &sample, &size);
+   730	
+   731			if (!err) {
+   732				struct bpf_dynptr_kern dynptr;
+   733	
+   734				bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL,
+   735						0, size);
+ > 736				ret = callback((u64)&dynptr,
+   737						(u64)(uintptr_t)callback_ctx, 0, 0, 0);
+   738	
+   739				__bpf_user_ringbuf_sample_release(rb, size, flags);
+   740				num_samples++;
+   741			}
+   742		} while (err == 0 && num_samples < 4096 && ret == 0);
+   743	
+   744		return num_samples;
+   745	}
+   746	
 
 -- 
 0-DAY CI Kernel Test Service

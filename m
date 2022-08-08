@@ -2,136 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB6958CDB4
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F4F58CDB6
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238100AbiHHSfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 14:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
+        id S243783AbiHHSfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 14:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236781AbiHHSf1 (ORCPT
+        with ESMTP id S243847AbiHHSfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 14:35:27 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4FD1139
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 11:35:26 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id d6-20020a056e020be600b002dcc7977592so7056370ilu.17
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 11:35:26 -0700 (PDT)
+        Mon, 8 Aug 2022 14:35:45 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9549319017;
+        Mon,  8 Aug 2022 11:35:40 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id 17so9284539plj.10;
+        Mon, 08 Aug 2022 11:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=VRsJ5NxAJUTObRnu0STgTqrEsSyrkh56jQcFDpSdYLg=;
+        b=FxxZjJ8oQvdsv9pJWERvXsha8LQFjHDMsfFjdIOUahPlkLe61mYqIA8+eATGUGhkfp
+         LauqaUKQrN6ReajdXP9VkjL85Bl70x3aRHqIAzEYcSQ7AV4Ifp4xjjqIA6C5Gw07ceJn
+         PQwXCRqZM6by5F8fH14G63p9BgW1+modF0hp2RldEfcS8bKQ0UluZsO5cuRLAZWCCmzT
+         vR5GvVUX+fePlQvN0r1ts8KHNNXPcNpZYvS5MLKy1VNPklEsAWG+LImH6slT01GIoa9M
+         NfUBWrSz9fNdsTn05uy3JIc5NzsX9u7thgunJP58rcDcHAUvD41+VO/Bxo/pWpPWCvu/
+         SXuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=ogaPJSHpPjbMUvj6KD5YIrjyZ1VPcpx2+/D7i1DP9RY=;
-        b=xiU4LW/AkY8t94i1/0HEDD/ly6FzI4eoMWWJBmLt1gBsEXqixfBhrdOrKmkNETIxAr
-         OqNbt2osfveJDObBfCZAl76CPX22V0XgnVVTW3ecBXXIA9Sx+yGmVbaJjub/cX4xer3/
-         GYneXHugw3qfBszJiUExjekUagA7b7XiAqIXTP7xQneveAgrKdQDvS5xQxrzzWDvLTPI
-         fW2CpfS1YLwL8eNq+wqfpWFbiBg86qLrCwZnfYa/pqSJQyi/CtwmUlpffI8lATjt3OWY
-         lcTOf1i8mH1PWKb6lx79k/NQgsQBdJ0wEuavxMbD2IhiFmgvrF82hnTpwmiBWOiv+Zk1
-         F0+g==
-X-Gm-Message-State: ACgBeo1kQR7NW2Drg2h51vgyAM9z6SYJD6moCH2c5SoxisBQCo8APus0
-        hZxCoGjuf6ofish366f9nJI07x47IEC9BsIgzxUPqB5545k2
-X-Google-Smtp-Source: AA6agR6MsYsBxoMw+TyGgl9Bu4S0Z6Upv7JHcK3PUkLYZQeQ/nB3cZrk/E4RYLrDVirutxCWNaPmg7hRRMFMiWj37IgW/ejikviN
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=VRsJ5NxAJUTObRnu0STgTqrEsSyrkh56jQcFDpSdYLg=;
+        b=iI3P4JI/CmTGpTKHfqtlFuRVK8dWAVSBR7qWdmUkWOiJE5UwQE11b5VksH3m4LKnGr
+         ab6sPpISDfdxMiC4U1By/8CZJ2yX9JkRwqCBL0qoOdqQi1nBFHwy3bsw5Z3myEXuRmHx
+         dfpZcMN28TEOOf+UEqZSfbOiqpEEFerR3sAB+KitX8+kbk0/Y7p1Ekdq18aRlmZnEDa4
+         F4BrfT5WzPloOp3x+jf1e0zYfOoZIdPXhbU+rS/8KGPfFYbDMAKAR6GuCS3ledttP93b
+         yuLDCzNVHqzE9QqtgBIZlFjP/AVpWWUqitny/Q9iF/rLapSKViRV/+9aBel6bsnIZflY
+         KU5A==
+X-Gm-Message-State: ACgBeo2JLhMN8e7LfJvMHr5ojxLGWOpEWbpxSbSEz0Ojgax4j5FCzisF
+        JzlO5mgoKnKfEitnr/MuksI=
+X-Google-Smtp-Source: AA6agR5GSXzMaUAWWXG3gaZFLT4fp5ypBd72er4YLrFmBaZ0TRXWbThMmHTJABY0hk1InGVhYPm/SA==
+X-Received: by 2002:a17:902:ced2:b0:16e:e19b:c5c9 with SMTP id d18-20020a170902ced200b0016ee19bc5c9mr20656422plg.136.1659983739031;
+        Mon, 08 Aug 2022 11:35:39 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bf8-20020a170902b90800b001709e3c750dsm3797669plb.194.2022.08.08.11.35.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 11:35:36 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f8008f05-4e4d-e21f-2e40-e234930ee86e@roeck-us.net>
+Date:   Mon, 8 Aug 2022 11:35:34 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a6b:640a:0:b0:684:b422:eaa with SMTP id
- t10-20020a6b640a000000b00684b4220eaamr2299464iog.205.1659983725580; Mon, 08
- Aug 2022 11:35:25 -0700 (PDT)
-Date:   Mon, 08 Aug 2022 11:35:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004bda3505e5bf143e@google.com>
-Subject: [syzbot] WARNING: locking bug in vtime_task_switch_generic
-From:   syzbot <syzbot+0d5283dca94c28f7d52d@syzkaller.appspotmail.com>
-To:     andreyknvl@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
-        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/4] thermal/of: Return -ENODEV instead of -EINVAL if
+ registration fails
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     michael@walle.cc, dan.carpenter@oracle.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+References: <20220808180915.446053-1-daniel.lezcano@linaro.org>
+ <20220808180915.446053-2-daniel.lezcano@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220808180915.446053-2-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 8/8/22 11:09, Daniel Lezcano wrote:
+> The previous version of the OF code was returning -ENODEV if no
+> thermal zones description was found or if the lookup of the sensor in
+> the thermal zones was not found.
+> 
+> The backend drivers are expecting this return value as an information
+> about skipping the sensor initialization and considered as normal.
+> 
+> Fix the return value by replacing -EINVAL by -ENODEV
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   drivers/thermal/thermal_of.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 368eb58e97cf..4210c18ef7b2 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -329,7 +329,7 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
+>   	np = of_find_node_by_name(NULL, "thermal-zones");
+>   	if (!np) {
+>   		pr_err("Unable to find thermal zones description\n");
 
-syzbot found the following issue on:
+I really don't like that error message: People will see it (and complain)
+whenever a sensor registers and there is no thermal zone, even though that
+is perfectly normal (see description above).
 
-HEAD commit:    8288c99fc263 usb: misc: onboard_usb_hub: Remove duplicated..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=14679fb1080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6749cc6053521b55
-dashboard link: https://syzkaller.appspot.com/bug?extid=0d5283dca94c28f7d52d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Guenter
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> -		return ERR_PTR(-EINVAL);
+> +		return ERR_PTR(-ENODEV);
+>   	}
+>   
+>   	/*
+> @@ -368,7 +368,7 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
+>   			}
+>   		}
+>   	}
+> -	tz = ERR_PTR(-EINVAL);
+> +	tz = ERR_PTR(-ENODEV);
+>   out:
+>   	of_node_put(np);
+>   	return tz;
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0d5283dca94c28f7d52d@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(chain_key != INITIAL_CHAIN_KEY)
-WARNING: CPU: 0 PID: 3855 at kernel/locking/lockdep.c:5031 __lock_acquire+0x1a0f/0x5660 kernel/locking/lockdep.c:5031
-Modules linked in:
-CPU: 0 PID: 3855 Comm: syz-executor.2 Not tainted 5.19.0-rc7-syzkaller-00199-g8288c99fc263 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:__lock_acquire+0x1a0f/0x5660 kernel/locking/lockdep.c:5031
-Code: d2 0f 85 d4 28 00 00 44 8b 35 55 f2 b3 07 45 85 f6 0f 85 32 f4 ff ff 48 c7 c6 40 cc 47 86 48 c7 c7 e0 9b 47 86 e8 ac 94 96 04 <0f> 0b e9 1b f4 ff ff 48 c7 c2 00 96 91 8b 48 b8 00 00 00 00 00 fc
-RSP: 0018:ffffc900016cf858 EFLAGS: 00010082
-RAX: 0000000000000000 RBX: 000000000000002c RCX: 0000000000000000
-RDX: ffff888110643900 RSI: ffffffff812c21e8 RDI: fffff520002d9efd
-RBP: ffff88811064431a R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000002 R11: 0000000000000001 R12: ffff8881106442f8
-R13: ffff888110643900 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f1c31d7f700(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f5c285b4d60 CR3: 00000001104c6000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire kernel/locking/lockdep.c:5665 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
- do_write_seqcount_begin_nested include/linux/seqlock.h:516 [inline]
- do_write_seqcount_begin include/linux/seqlock.h:541 [inline]
- vtime_task_switch_generic+0xb5/0x5a0 kernel/sched/cputime.c:768
- vtime_task_switch include/linux/vtime.h:95 [inline]
- finish_task_switch.isra.0+0x4e3/0xa10 kernel/sched/core.c:5020
- context_switch kernel/sched/core.c:5149 [inline]
- __schedule+0x947/0x2630 kernel/sched/core.c:6458
- schedule+0xd2/0x1f0 kernel/sched/core.c:6530
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1911
- ___down_common kernel/locking/semaphore.c:225 [inline]
- __down_common+0x363/0x770 kernel/locking/semaphore.c:246
- down_interruptible+0x7b/0xa0 kernel/locking/semaphore.c:87
- raw_event_queue_fetch drivers/usb/gadget/legacy/raw_gadget.c:99 [inline]
- raw_ioctl_event_fetch drivers/usb/gadget/legacy/raw_gadget.c:588 [inline]
- raw_ioctl+0x1010/0x2780 drivers/usb/gadget/legacy/raw_gadget.c:1256
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1c32608fc7
-Code: 3c 1c 48 f7 d8 49 39 c4 72 b8 e8 34 54 02 00 85 c0 78 bd 48 83 c4 08 4c 89 e0 5b 41 5c c3 0f 1f 44 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f1c31d7d098 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f1c31d7e110 RCX: 00007f1c32608fc7
-RDX: 00007f1c31d7e110 RSI: 0000000080085502 RDI: 0000000000000003
-RBP: 0000000000000003 R08: 000000000000ffff R09: 000000000000000b
-R10: 00007f1c31d7d140 R11: 0000000000000246 R12: 0000000800000000
-R13: 0000000000000000 R14: 0000000020000000 R15: 00007f1c3266ecd5
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

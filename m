@@ -2,35 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB1658CCE7
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F8F58CCE9
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244311AbiHHRoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
+        id S243876AbiHHRoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244315AbiHHRna (ORCPT
+        with ESMTP id S235567AbiHHRnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:43:30 -0400
+        Mon, 8 Aug 2022 13:43:37 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DABBCA
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:43:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9F717E0D
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:43:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1659980503; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1659980504; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DbwQc0Ju19xD2mWEaWAqDllFKFW7biQlR2zUxZczCrM=;
-        b=G9DCQXebRw8jJ0alZ2d+6uTEOO0b3CzWVkoP+3R1hF5Gj57g+7nP+63NlGzKN5LhjtciYK
-        Lguq/EZR4+mnjzyHyKBoRBaE4OweRVERJa3hIvcTm3SSyb7cFZYJHK+W6jjITiTxVVZltN
-        gtf4Y1VMmTG/YRTD6ThaMviH5LyZAfg=
+        bh=4kZIVuuKKO+sS/oNnpnJC3ag5t6waBzISKhOioOsnm4=;
+        b=dcV7nTb2v4GfByhH2Zck6ifngQ987cv/AmVNxvD7h8UHDHwCT0qLNBWJ6dv3N44zBSRTS2
+        2KJl9GGvr8hVyK5F7udILXA1JbdftHHCaNwXK37evov1L6yT9fOj38n3SLgVENUcZalCFA
+        hExwxYRJMEBrtR60FAaHZymRiG1BNbs=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Andy Shevchenko <andy@kernel.org>
-Subject: [PATCH v2 12/30] mfd: intel_soc_pmic: Remove #ifdef guards for PM related functions
-Date:   Mon,  8 Aug 2022 19:40:49 +0200
-Message-Id: <20220808174107.38676-13-paul@crapouillou.net>
+Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 13/30] mfd: mcp-sa11x0: Remove #ifdef guards for PM related functions
+Date:   Mon,  8 Aug 2022 19:40:50 +0200
+Message-Id: <20220808174107.38676-14-paul@crapouillou.net>
 In-Reply-To: <20220808174107.38676-1-paul@crapouillou.net>
 References: <20220808174107.38676-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -44,10 +43,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
-to handle the .suspend/.resume callbacks.
+Use the new pm_sleep_ptr() macro to handle the .suspend/.resume
+callbacks.
 
-These macros allow the suspend and resume functions to be automatically
+This macro allow the suspend and resume functions to be automatically
 dropped by the compiler when CONFIG_SUSPEND is disabled, without having
 to use #ifdef guards.
 
@@ -57,45 +56,48 @@ regressions are subsequently easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
-Cc: Andy Shevchenko <andy@kernel.org>
+ drivers/mfd/mcp-sa11x0.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
- drivers/mfd/intel_soc_pmic_core.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/mfd/intel_soc_pmic_core.c b/drivers/mfd/intel_soc_pmic_core.c
-index 5e8c94e008ed..96303aa87bc1 100644
---- a/drivers/mfd/intel_soc_pmic_core.c
-+++ b/drivers/mfd/intel_soc_pmic_core.c
-@@ -104,7 +104,6 @@ static void intel_soc_pmic_shutdown(struct i2c_client *i2c)
- 	return;
+diff --git a/drivers/mfd/mcp-sa11x0.c b/drivers/mfd/mcp-sa11x0.c
+index 4629dff187cd..1c9831b78cf9 100644
+--- a/drivers/mfd/mcp-sa11x0.c
++++ b/drivers/mfd/mcp-sa11x0.c
+@@ -255,7 +255,6 @@ static int mcp_sa11x0_remove(struct platform_device *dev)
+ 	return 0;
  }
  
--#if defined(CONFIG_PM_SLEEP)
- static int intel_soc_pmic_suspend(struct device *dev)
+-#ifdef CONFIG_PM_SLEEP
+ static int mcp_sa11x0_suspend(struct device *dev)
  {
- 	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
-@@ -122,10 +121,9 @@ static int intel_soc_pmic_resume(struct device *dev)
+ 	struct mcp_sa11x0 *m = priv(dev_get_drvdata(dev));
+@@ -277,17 +276,14 @@ static int mcp_sa11x0_resume(struct device *dev)
  
  	return 0;
  }
 -#endif
  
--static SIMPLE_DEV_PM_OPS(intel_soc_pmic_pm_ops, intel_soc_pmic_suspend,
--			 intel_soc_pmic_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(intel_soc_pmic_pm_ops, intel_soc_pmic_suspend,
-+				intel_soc_pmic_resume);
+ static const struct dev_pm_ops mcp_sa11x0_pm_ops = {
+-#ifdef CONFIG_PM_SLEEP
+ 	.suspend = mcp_sa11x0_suspend,
+ 	.freeze = mcp_sa11x0_suspend,
+ 	.poweroff = mcp_sa11x0_suspend,
+ 	.resume_noirq = mcp_sa11x0_resume,
+ 	.thaw_noirq = mcp_sa11x0_resume,
+ 	.restore_noirq = mcp_sa11x0_resume,
+-#endif
+ };
  
- static const struct i2c_device_id intel_soc_pmic_i2c_id[] = {
- 	{ }
-@@ -143,7 +141,7 @@ MODULE_DEVICE_TABLE(acpi, intel_soc_pmic_acpi_match);
- static struct i2c_driver intel_soc_pmic_i2c_driver = {
- 	.driver = {
- 		.name = "intel_soc_pmic_i2c",
--		.pm = &intel_soc_pmic_pm_ops,
-+		.pm = pm_sleep_ptr(&intel_soc_pmic_pm_ops),
- 		.acpi_match_table = ACPI_PTR(intel_soc_pmic_acpi_match),
+ static struct platform_driver mcp_sa11x0_driver = {
+@@ -295,7 +291,7 @@ static struct platform_driver mcp_sa11x0_driver = {
+ 	.remove		= mcp_sa11x0_remove,
+ 	.driver		= {
+ 		.name	= DRIVER_NAME,
+-		.pm	= &mcp_sa11x0_pm_ops,
++		.pm	= pm_sleep_ptr(&mcp_sa11x0_pm_ops),
  	},
- 	.probe = intel_soc_pmic_i2c_probe,
+ };
+ 
 -- 
 2.35.1
 

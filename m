@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD6858BF66
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 03:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6432358BF67
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 03:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242607AbiHHBir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 21:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S242133AbiHHBix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 21:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242374AbiHHBhh (ORCPT
+        with ESMTP id S242445AbiHHBiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 21:37:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4A2E01B;
-        Sun,  7 Aug 2022 18:33:48 -0700 (PDT)
+        Sun, 7 Aug 2022 21:38:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CB0E099;
+        Sun,  7 Aug 2022 18:33:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 826EA60DF4;
-        Mon,  8 Aug 2022 01:33:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A011BC43470;
-        Mon,  8 Aug 2022 01:33:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B242760DE1;
+        Mon,  8 Aug 2022 01:33:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E787C433C1;
+        Mon,  8 Aug 2022 01:33:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922427;
-        bh=qD8iqtAHW8h3e52RnPcjZiRtkyWciAJc3DN0Ssk+n1s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DnNhBepP2Rh4UqV8MUCk4dToM1ovhFpCWxRWopgmKi0/+6CJ1+pxbi8Zaad1ck6sQ
-         Hvn1E58lqiCqJ9aBwKBA0+mch6e/Hx/Wgw+CE3AEaW4zgPDLncRX3xiJTiYpTOohqk
-         HWUumwBI+8cKpp+vGgaqJlx06uqMaKgemdgUoy+8u/0ImPL0G/gApr+htbxXViRjgP
-         AHtHBtK9mAZfbWkUrN8X8sxttmqwbaSEAR3MfpBqvlTRHQO0xU/osa94rq0l2601Zl
-         MJtpJvtcVyhBYhWoOiXnPj3vfuCFGthB07cjg0rCu9jnPuJeBoEyojbfE8v8XRtacT
-         gabfDl+2xyFbA==
+        s=k20201202; t=1659922434;
+        bh=FWv5uPftX5X9X1NDJjuD0spInpQjykRjrgL+U5sBl1E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pX9BDYyxAd9JvU3xGyU8/uD6k6j5BWYhBt05dKlW7RIHIRsWH3f7D+TTU7KRBnvhP
+         LciVozSZy+dEp3b+MvKFaFhJvskcIIKSyrOIT84XJUodTMgrC9AHz3GG+Kwm6ICSKH
+         yd8QuSBWwQo4P4d2deSCopN2C23jI/NHG+KmBMRQlFAWXftLrcPMcupvmVcVXtx4xv
+         eLSB8/dZXLsYyAvFy9YHL47Eo9DCH+x+m1KrHJxTBeQdPCClTSBDuZIOJCNBqudk/i
+         GxUDs9g4++KROBZFDiKFXU/NV4xaUw3TtkV+OZjpwF9YOQpFrKEI0NbIAhuglX6INd
+         VXfGHGXskQAog==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Bruno Goncalves <bgoncalv@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org
-Subject: [PATCH AUTOSEL 5.19 58/58] wait: Fix __wait_event_hrtimeout for RT/DL tasks
-Date:   Sun,  7 Aug 2022 21:31:16 -0400
-Message-Id: <20220808013118.313965-58-sashal@kernel.org>
+Cc:     Wyes Karny <wyes.karny@amd.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        daniel.lezcano@linaro.org, corbet@lwn.net, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        peterz@infradead.org, chang.seok.bae@intel.com,
+        ebiederm@xmission.com, zhengqi.arch@bytedance.com,
+        linux-pm@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 01/53] x86: Handle idle=nomwait cmdline properly for x86_idle
+Date:   Sun,  7 Aug 2022 21:32:56 -0400
+Message-Id: <20220808013350.314757-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013118.313965-1-sashal@kernel.org>
-References: <20220808013118.313965-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,60 +61,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juri Lelli <juri.lelli@redhat.com>
+From: Wyes Karny <wyes.karny@amd.com>
 
-[ Upstream commit cceeeb6a6d02e7b9a74ddd27a3225013b34174aa ]
+[ Upstream commit 8bcedb4ce04750e1ccc9a6b6433387f6a9166a56 ]
 
-Changes to hrtimer mode (potentially made by __hrtimer_init_sleeper on
-PREEMPT_RT) are not visible to hrtimer_start_range_ns, thus not
-accounted for by hrtimer_start_expires call paths. In particular,
-__wait_event_hrtimeout suffers from this problem as we have, for
-example:
+When kernel is booted with idle=nomwait do not use MWAIT as the
+default idle state.
 
-fs/aio.c::read_events
-  wait_event_interruptible_hrtimeout
-    __wait_event_hrtimeout
-      hrtimer_init_sleeper_on_stack <- this might "mode |= HRTIMER_MODE_HARD"
-                                       on RT if task runs at RT/DL priority
-        hrtimer_start_range_ns
-          WARN_ON_ONCE(!(mode & HRTIMER_MODE_HARD) ^ !timer->is_hard)
-          fires since the latter doesn't see the change of mode done by
-          init_sleeper
+If the user boots the kernel with idle=nomwait, it is a clear
+direction to not use mwait as the default idle state.
+However, the current code does not take this into consideration
+while selecting the default idle state on x86.
 
-Fix it by making __wait_event_hrtimeout call hrtimer_sleeper_start_expires,
-which is aware of the special RT/DL case, instead of hrtimer_start_range_ns.
+Fix it by checking for the idle=nomwait boot option in
+prefer_mwait_c1_over_halt().
 
-Reported-by: Bruno Goncalves <bgoncalv@redhat.com>
-Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-Link: https://lore.kernel.org/r/20220627095051.42470-1-juri.lelli@redhat.com
+Also update the documentation around idle=nomwait appropriately.
+
+[ dhansen: tweak commit message ]
+
+Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Link: https://lkml.kernel.org/r/fdc2dc2d0a1bc21c2f53d989ea2d2ee3ccbc0dbe.1654538381.git-series.wyes.karny@amd.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/wait.h | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ Documentation/admin-guide/pm/cpuidle.rst | 15 +++++++++------
+ arch/x86/kernel/process.c                |  9 ++++++---
+ 2 files changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/wait.h b/include/linux/wait.h
-index 851e07da2583..58cfbf81447c 100644
---- a/include/linux/wait.h
-+++ b/include/linux/wait.h
-@@ -544,10 +544,11 @@ do {										\
- 										\
- 	hrtimer_init_sleeper_on_stack(&__t, CLOCK_MONOTONIC,			\
- 				      HRTIMER_MODE_REL);			\
--	if ((timeout) != KTIME_MAX)						\
--		hrtimer_start_range_ns(&__t.timer, timeout,			\
--				       current->timer_slack_ns,			\
--				       HRTIMER_MODE_REL);			\
-+	if ((timeout) != KTIME_MAX) {						\
-+		hrtimer_set_expires_range_ns(&__t.timer, timeout,		\
-+					current->timer_slack_ns);		\
-+		hrtimer_sleeper_start_expires(&__t, HRTIMER_MODE_REL);		\
-+	}									\
- 										\
- 	__ret = ___wait_event(wq_head, condition, state, 0, 0,			\
- 		if (!__t.task) {						\
+diff --git a/Documentation/admin-guide/pm/cpuidle.rst b/Documentation/admin-guide/pm/cpuidle.rst
+index aec2cd2aaea7..19754beb5a4e 100644
+--- a/Documentation/admin-guide/pm/cpuidle.rst
++++ b/Documentation/admin-guide/pm/cpuidle.rst
+@@ -612,8 +612,8 @@ the ``menu`` governor to be used on the systems that use the ``ladder`` governor
+ by default this way, for example.
+ 
+ The other kernel command line parameters controlling CPU idle time management
+-described below are only relevant for the *x86* architecture and some of
+-them affect Intel processors only.
++described below are only relevant for the *x86* architecture and references
++to ``intel_idle`` affect Intel processors only.
+ 
+ The *x86* architecture support code recognizes three kernel command line
+ options related to CPU idle time management: ``idle=poll``, ``idle=halt``,
+@@ -635,10 +635,13 @@ idle, so it very well may hurt single-thread computations performance as well as
+ energy-efficiency.  Thus using it for performance reasons may not be a good idea
+ at all.]
+ 
+-The ``idle=nomwait`` option disables the ``intel_idle`` driver and causes
+-``acpi_idle`` to be used (as long as all of the information needed by it is
+-there in the system's ACPI tables), but it is not allowed to use the
+-``MWAIT`` instruction of the CPUs to ask the hardware to enter idle states.
++The ``idle=nomwait`` option prevents the use of ``MWAIT`` instruction of
++the CPU to enter idle states. When this option is used, the ``acpi_idle``
++driver will use the ``HLT`` instruction instead of ``MWAIT``. On systems
++running Intel processors, this option disables the ``intel_idle`` driver
++and forces the use of the ``acpi_idle`` driver instead. Note that in either
++case, ``acpi_idle`` driver will function only if all the information needed
++by it is in the system's ACPI tables.
+ 
+ In addition to the architecture-level kernel command line options affecting CPU
+ idle time management, there are parameters affecting individual ``CPUIdle``
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index 622dc3673c37..8011536ba5c4 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -824,6 +824,10 @@ static void amd_e400_idle(void)
+  */
+ static int prefer_mwait_c1_over_halt(const struct cpuinfo_x86 *c)
+ {
++	/* User has disallowed the use of MWAIT. Fallback to HALT */
++	if (boot_option_idle_override == IDLE_NOMWAIT)
++		return 0;
++
+ 	if (c->x86_vendor != X86_VENDOR_INTEL)
+ 		return 0;
+ 
+@@ -932,9 +936,8 @@ static int __init idle_setup(char *str)
+ 	} else if (!strcmp(str, "nomwait")) {
+ 		/*
+ 		 * If the boot option of "idle=nomwait" is added,
+-		 * it means that mwait will be disabled for CPU C2/C3
+-		 * states. In such case it won't touch the variable
+-		 * of boot_option_idle_override.
++		 * it means that mwait will be disabled for CPU C1/C2/C3
++		 * states.
+ 		 */
+ 		boot_option_idle_override = IDLE_NOMWAIT;
+ 	} else
 -- 
 2.35.1
 

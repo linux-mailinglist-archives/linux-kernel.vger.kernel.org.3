@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E051758C477
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641FB58C47A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241980AbiHHHzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 03:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
+        id S242010AbiHHH5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 03:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241993AbiHHHzq (ORCPT
+        with ESMTP id S237465AbiHHH4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 03:55:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65EBF5FB5
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 00:55:45 -0700 (PDT)
+        Mon, 8 Aug 2022 03:56:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA3E6647D
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 00:56:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659945344;
+        s=mimecast20190719; t=1659945413;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=oC/JLDjGvWP0iiaK2n12rCrZ705odT+KLXUuwmVFqrk=;
-        b=XkPX2y3Di7PAF3CR4a1kFonl7N7m0o+1Pxif16pMeZ+I6NxqsuLf680g9EF+pZ1Op72i8W
-        arYLHLD0o3UvdjHkWbtAgXrNA4YuJ4HJtC6LFSP8lk0Y/Jou7MKQk2BOX4Ye1FdRxjateN
-        GYQ5wRbPht4AII1jBMM7/u93wgRBvMM=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=AufWZZEcgThI2xBgpMKruzYOgK1FWSrmvzjD3Nvo93Q=;
+        b=eXrpzcFNeKJyXiMp/MNVkHl1qDSMsi6nmvvDa8TeGkCZfVN2KwfoEBeRuS9TG+vAuXeBAr
+        xyXUacIJxHu854n1Q3WLMREY3GHLA2UoO9m88PIOi8AEmJBcFhH5fiDK4cz5WK2gZ00UEW
+        I93HBcLngCm7Opp8p+6iY58BxK00gFM=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-b9sHc5AcP-iTIB-lpSkyww-1; Mon, 08 Aug 2022 03:55:43 -0400
-X-MC-Unique: b9sHc5AcP-iTIB-lpSkyww-1
-Received: by mail-qv1-f69.google.com with SMTP id cv14-20020ad44d8e000000b004760bec67a8so4071939qvb.14
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 00:55:43 -0700 (PDT)
+ us-mta-541-RT4HmJZpPVqaUHQdBSZTRQ-1; Mon, 08 Aug 2022 03:56:50 -0400
+X-MC-Unique: RT4HmJZpPVqaUHQdBSZTRQ-1
+Received: by mail-qv1-f72.google.com with SMTP id nm18-20020a0562143b1200b0047b33c1e57eso1567643qvb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 00:56:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=oC/JLDjGvWP0iiaK2n12rCrZ705odT+KLXUuwmVFqrk=;
-        b=u+BqovN3Vj8NhCSBptmircRzewfbKqErrJyGjsO+jKNvy1eW0t/xaQVX7p/VYmxUKQ
-         jMPCD890s9/cyVDKMe/v+dEFv1GcKOj42pdxIW4GG4PKhnhPHL/+AEVwW2ndfYRRTNdP
-         NrfZ85g8TjF7u6EkX188D1T/6SMgdH4izHXyrmxQSge6z9S/AQazalayRCnL76HBQFyx
-         ahQ7ywS2mHHEhvbv7EN+cIVhYOwcli1fuqC9eZtQH5bNr8Z6b0lTz3UGuW57Rzqwlid0
-         Ty9T7yPWiTEoh/0032BTZqeTJ2cHA7y3htJ2woMdzmrnLeg6tuOQBRJGUZaDCQru6otg
-         Gsqw==
-X-Gm-Message-State: ACgBeo0b6eS3eOIi+WQgztydmn//tawyEkLQfk1bi7rA5zpFlAJo1gvh
-        ZAjhGC7v3L0jUHyhLRRX0mP8S4prZ/ky2H4A72Xpt2kXKNuCqTP23E1minIGo2c0njsN+f2Uqte
-        WyuXUvpolwUk8yF7QHjQmGMC7
-X-Received: by 2002:a05:620a:1706:b0:6b9:234:f735 with SMTP id az6-20020a05620a170600b006b90234f735mr13305788qkb.623.1659945342748;
-        Mon, 08 Aug 2022 00:55:42 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7iWdzerRsas1XKbzpMRoloSe+T09VDPfGvxnYWtJ3xP4fybH8ZIzd+8wJd6v36LUCEu/kjSA==
-X-Received: by 2002:a05:620a:1706:b0:6b9:234:f735 with SMTP id az6-20020a05620a170600b006b90234f735mr13305776qkb.623.1659945342506;
-        Mon, 08 Aug 2022 00:55:42 -0700 (PDT)
+        bh=AufWZZEcgThI2xBgpMKruzYOgK1FWSrmvzjD3Nvo93Q=;
+        b=Le/pIC09Z2U0dDDm8L0yw2bNMTMZPncbFh+WE4/tGvXAI9AeCWRr6C/m/WyFdBEb93
+         QMQ4aJJ4RhMf1TzWlOHA2R8xRJ0tPhir7GJWSh4BvRc+zgKFqV/aQUep8NZQDIX6Djz+
+         U1+oEbYNQZ+SCohO0FrML7cggljQMscbXL0/G7A3QRNoQ2l/vd/5XaS4y/VA2b8W2IRl
+         u53XVzTobkJYMlIgbgYOm3NNbAn15ahW87TPfxkIqPEtd8CtO1khVzr+85R7AaNOmj85
+         BEhK0LRZVfnDXIUnmwoARQcAmpKjAHwdcScwqWNcrD81opS9EVw8xJClkvnjJRxrHrap
+         bksg==
+X-Gm-Message-State: ACgBeo1IgScem1s+fEXlG3q2idms+0FcO5tk37C8pC0XXc4CSbP2AqJp
+        kzV3/nNssCvlzMKuJZG3gY0G3hid61itmsjwBiCI8IvNm/oaiH6z3ZoE/aCheV42MlTAzZ/wRIF
+        XlteCCOdSWVdSVM3KH8XJtUft
+X-Received: by 2002:a05:620a:2b8b:b0:6b9:43ca:4a6 with SMTP id dz11-20020a05620a2b8b00b006b943ca04a6mr3566713qkb.346.1659945409702;
+        Mon, 08 Aug 2022 00:56:49 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5AHQLL6/c6cBtSoanSesmnPrpZdXyxLWrWNaQRi8fOEBNqs018hbyfcdBhlapIkl42VoQl4w==
+X-Received: by 2002:a05:620a:2b8b:b0:6b9:43ca:4a6 with SMTP id dz11-20020a05620a2b8b00b006b943ca04a6mr3566697qkb.346.1659945409523;
+        Mon, 08 Aug 2022 00:56:49 -0700 (PDT)
 Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id w20-20020a05620a0e9400b006b8f8e9bd00sm8365097qkm.5.2022.08.08.00.55.39
+        by smtp.gmail.com with ESMTPSA id b16-20020a05622a021000b0031eddc83560sm7421933qtx.90.2022.08.08.00.56.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 00:55:41 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 09:55:33 +0200
+        Mon, 08 Aug 2022 00:56:48 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 09:56:40 +0200
 From:   Stefano Garzarella <sgarzare@redhat.com>
 To:     Peilin Ye <yepeilin.cs@gmail.com>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -67,17 +67,18 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Andy King <acking@vmware.com>,
         virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2 1/2] vsock: Fix memory leak in vsock_connect()
-Message-ID: <20220808075533.p7pczlnixb2phrun@sgarzare-redhat>
-References: <20220804020925.32167-1-yepeilin.cs@gmail.com>
- <a02c6e7e3135473d254ac97abc603d963ba8f716.1659862577.git.peilin.ye@bytedance.com>
+Subject: Re: [PATCH net v2 2/2] vsock: Set socket state back to
+ SS_UNCONNECTED in vsock_connect_timeout()
+Message-ID: <20220808075640.5it462iozqgecxih@sgarzare-redhat>
+References: <a02c6e7e3135473d254ac97abc603d963ba8f716.1659862577.git.peilin.ye@bytedance.com>
+ <5cf1337b4f6e82bc0a4eb0bef422a53dcc9d584a.1659862577.git.peilin.ye@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <a02c6e7e3135473d254ac97abc603d963ba8f716.1659862577.git.peilin.ye@bytedance.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <5cf1337b4f6e82bc0a4eb0bef422a53dcc9d584a.1659862577.git.peilin.ye@bytedance.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,108 +86,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 07, 2022 at 02:00:11AM -0700, Peilin Ye wrote:
+On Sun, Aug 07, 2022 at 02:00:46AM -0700, Peilin Ye wrote:
 >From: Peilin Ye <peilin.ye@bytedance.com>
 >
->An O_NONBLOCK vsock_connect() request may try to reschedule
->@connect_work.  Imagine the following sequence of vsock_connect()
->requests:
+>Imagine two non-blocking vsock_connect() requests on the same socket.
+>The first request schedules @connect_work, and after it times out,
+>vsock_connect_timeout() sets *sock* state back to TCP_CLOSE, but keeps
+>*socket* state as SS_CONNECTING.
 >
->  1. The 1st, non-blocking request schedules @connect_work, which will
->     expire after 200 jiffies.  Socket state is now SS_CONNECTING;
+>Later, the second request returns -EALREADY, meaning the socket "already
+>has a pending connection in progress", even if the first request has
+>already timed out.
 >
->  2. Later, the 2nd, blocking request gets interrupted by a signal after
->     a few jiffies while waiting for the connection to be established.
->     Socket state is back to SS_UNCONNECTED, but @connect_work is still
->     pending, and will expire after 100 jiffies.
+>As suggested by Stefano, fix it by setting *socket* state back to
+>SS_UNCONNECTED, so that the second request will return -ETIMEDOUT.
 >
->  3. Now, the 3rd, non-blocking request tries to schedule @connect_work
->     again.  Since @connect_work is already scheduled,
->     schedule_delayed_work() silently returns.  sock_hold() is called
->     twice, but sock_put() will only be called once in
->     vsock_connect_timeout(), causing a memory leak reported by syzbot:
->
->  BUG: memory leak
->  unreferenced object 0xffff88810ea56a40 (size 1232):
->    comm "syz-executor756", pid 3604, jiffies 4294947681 (age 12.350s)
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->      28 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  (..@............
->    backtrace:
->      [<ffffffff837c830e>] sk_prot_alloc+0x3e/0x1b0 net/core/sock.c:1930
->      [<ffffffff837cbe22>] sk_alloc+0x32/0x2e0 net/core/sock.c:1989
->      [<ffffffff842ccf68>] __vsock_create.constprop.0+0x38/0x320 net/vmw_vsock/af_vsock.c:734
->      [<ffffffff842ce8f1>] vsock_create+0xc1/0x2d0 net/vmw_vsock/af_vsock.c:2203
->      [<ffffffff837c0cbb>] __sock_create+0x1ab/0x2b0 net/socket.c:1468
->      [<ffffffff837c3acf>] sock_create net/socket.c:1519 [inline]
->      [<ffffffff837c3acf>] __sys_socket+0x6f/0x140 net/socket.c:1561
->      [<ffffffff837c3bba>] __do_sys_socket net/socket.c:1570 [inline]
->      [<ffffffff837c3bba>] __se_sys_socket net/socket.c:1568 [inline]
->      [<ffffffff837c3bba>] __x64_sys_socket+0x1a/0x20 net/socket.c:1568
->      [<ffffffff84512815>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->      [<ffffffff84512815>] do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
->      [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
->  <...>
->
->Use mod_delayed_work() instead: if @connect_work is already scheduled,
->reschedule it, and undo sock_hold() to keep the reference count
->balanced.
->
->Reported-and-tested-by: syzbot+b03f55bf128f9a38f064@syzkaller.appspotmail.com
+>Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
 >Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
->Co-developed-by: Stefano Garzarella <sgarzare@redhat.com>
->Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 >Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
 >---
->change since v1:
->  - merged with Stefano's patch [1]
->
->[1] https://gitlab.com/sgarzarella/linux/-/commit/2d0f0b9cbbb30d58fdcbca7c1a857fd8f3110d61
->
->Hi Stefano,
->
->About the Fixes: tag, [2] introduced @connect_work, but all it did was
->breaking @dwork into two and moving some INIT_DELAYED_WORK()'s, so I don't
->think [2] introduced this memory leak?
->
->Since [2] has already been backported to 4.9 and 4.14, I think we can
->Fixes: commit d021c344051a ("VSOCK: Introduce VM Sockets"), too, to make
->backporting easier?
+>(new patch in v2)
 
-Yep, I think it should be fine!
-
->
->[2] commit 455f05ecd2b2 ("vsock: split dwork to avoid reinitializations")
->
->Thanks,
->Peilin Ye
->
-> net/vmw_vsock/af_vsock.c | 8 +++++++-
-> 1 file changed, 7 insertions(+), 1 deletion(-)
->
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index f04abf662ec6..fe14f6cbca22 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -1391,7 +1391,13 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
-> 			 * timeout fires.
-> 			 */
-> 			sock_hold(sk);
->-			schedule_delayed_work(&vsk->connect_work, timeout);
->+
->+			/* If the timeout function is already scheduled,
->+			 * reschedule it, then ungrab the socket refcount to
->+			 * keep it balanced.
->+			 */
->+			if (mod_delayed_work(system_wq, &vsk->connect_work, timeout))
-                             ^
-Checkpatch warns here about line lenght.
-If you have to re-send, please split it.
-
-Anyway, the patch LGTM:
+Thanks for sending this :-)
 
 Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-
-Thanks,
-Stefano
 

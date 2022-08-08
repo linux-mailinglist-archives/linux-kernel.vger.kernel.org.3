@@ -2,237 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F4758C292
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 06:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F1758C29E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 06:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233724AbiHHEhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 00:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
+        id S234396AbiHHEsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 00:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiHHEg6 (ORCPT
+        with ESMTP id S232177AbiHHEsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 00:36:58 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABE6E080;
-        Sun,  7 Aug 2022 21:36:56 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9556F5C0050;
-        Mon,  8 Aug 2022 00:36:55 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 08 Aug 2022 00:36:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1659933415; x=1660019815; bh=Mg
-        PBlGd5BtUlpGQ2YqBK168ygkBuCDq43MlfqUaLHhM=; b=BzWrAgtmHqouBGl6f+
-        Eww44+9BibmdMp5f4XznYF3vF7VEUgZh3xADQ+ogqPuzHaWJAGJsuawqSH7ENq+a
-        CWUM5FfEfKsK/6i+luqNRNZpRxVaRFcyb6oLDBgHvPbBdkhWMZahil2/ItKc52Pu
-        X1ZvUfxQoQoJItXQhHgq7aQkJZXTibzcD5IQtF/VRFLApxZ2+o4EA22j6FjAX785
-        XUA7lAvolF2NiLQw4N6ekWnO59qWKSlz2xVL63fUboh7hWBhtQKZSP3US9aqWsPH
-        GoHNW3/inZGUQIdGFSRg6PvqVGZYxS1Sw6xAacNzNE403axgbefo1FdHRkE5YFa2
-        KC6g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1659933415; x=1660019815; bh=MgPBlGd5BtUlp
-        GQ2YqBK168ygkBuCDq43MlfqUaLHhM=; b=GHcVcSVm5VT1y2v/V1qZbCfQpMr2c
-        umc38fcWXOKg5eDWs9AdcipxWSEhqu/KjQwU2PO5fqD0OmDl+YS+uiN/UzMP+Y5x
-        7qeIHngsIBz82JTGU+SNx0hGvcFBLr1tNSy1Vr35JzqTm5WvSCZ/+r78aiuKalmk
-        7+pGSxIX5Rymj4C6h1VJDtH/HxWjVknB77ePYDpSe/6jl0LgWWOlJ/BL8iJ1XeMs
-        /g9AOjrzaAmq3d0A8X6azcPvMp23OKuv/M9Gfs4inKN3/mKcAhjZUvrb60xHdKPh
-        xTsOQNm0yEvZzIOQb3r8dPkNHG4/3+IdTWPDe1E3uaJVX282wPAIiIRHw==
-X-ME-Sender: <xms:55LwYsW01FDCvKl9mBYJoNwvn9QezB8hOZvi_v_99kl5fkjbsQpdlw>
-    <xme:55LwYgkSjEhdd4h_R_iIy0OPwrDA86s4w2VCwmperWpbqTHgaXCpY0gbeLO7mT3WX
-    _yEZMqhQkmSZpDuNkQ>
-X-ME-Received: <xmr:55LwYgYchCF2ykNJH34nf6kr_V4ZQpLEzsHAU4m0pjws-hx1xspW3BBtSkmZ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefjedgkeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
-    jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:55LwYrW-2ETTdqE4tQNqK45plalUsXN6iWVoZMN5pl1_Ap1OPPsACg>
-    <xmx:55LwYmmVvwxeR95CXr69l95Ok2xkOEfbVdBQ0g9aYoFiyookrgzqIQ>
-    <xmx:55LwYgeQgdncxJtjmKtw-S2K2BfiLgcyF7M7Zo1C3ImTQTaCFZ818Q>
-    <xmx:55LwYryGdi4JdtCsmViACLvRqFzqGV0hVg0RQmsdSH3se-LnT90uyg>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 8 Aug 2022 00:36:53 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     hdegoede@redhat.com
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 2/2] asus-wmi: Support the GPU fan on TUF laptops
-Date:   Mon,  8 Aug 2022 16:36:43 +1200
-Message-Id: <20220808043643.1571932-2-luke@ljones.dev>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220808043643.1571932-1-luke@ljones.dev>
-References: <20220808043643.1571932-1-luke@ljones.dev>
+        Mon, 8 Aug 2022 00:48:08 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB41F5F74;
+        Sun,  7 Aug 2022 21:48:06 -0700 (PDT)
+X-UUID: cac1e6bf6c934e52bb808befa3072591-20220808
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=J5GbJ91e8X3YtX3xXH8tAPXytmP3O2IQ15CfuTz/yzs=;
+        b=c3OgPbChHFw4p6ZyGlYD2uC0MuRyj5R3gH50j5Ac9WTgTThXGsDvcQBtoX0sG+Pd8YvdNm30CoRnSgc2MPl8URnu6SUg1dw8YVggqkgyiV7X9gl0CnKe1wQdPdZuOFHcBVyYn7FpdMqAmuPlrhhe0/w57dCeEO5p4Jz5mtnKF6Y=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:4469bdfd-28f5-4bc5-9a34-af31b40eb282,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:4e3e089c-da39-4e3b-a854-56c7d2111b46,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: cac1e6bf6c934e52bb808befa3072591-20220808
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1624936309; Mon, 08 Aug 2022 12:48:03 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 8 Aug 2022 12:48:01 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 8 Aug 2022 12:48:01 +0800
+Message-ID: <759311a0e40401c3c0f230e700b00878daf81a87.camel@mediatek.com>
+Subject: Re: [PATCH v16 3/8] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 8 Aug 2022 12:48:01 +0800
+In-Reply-To: <20220805101459.3386-4-rex-bc.chen@mediatek.com>
+References: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
+         <20220805101459.3386-4-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for TUF laptops which have the ability to control
-the GPU fan. This will show as a second fan in hwmon, and has
-the ability to run run as boost (fullspeed), or auto.
+Hi. Bo-Chen:
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- drivers/platform/x86/asus-wmi.c            | 71 ++++++++++++++++++++++
- include/linux/platform_data/x86/asus-wmi.h |  1 +
- 2 files changed, 72 insertions(+)
+On Fri, 2022-08-05 at 18:14 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
 
-diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index ac06fec0565c..2a74e468591a 100644
---- a/drivers/platform/x86/asus-wmi.c
-+++ b/drivers/platform/x86/asus-wmi.c
-@@ -221,7 +221,9 @@ struct asus_wmi {
- 	struct asus_rfkill uwb;
- 
- 	enum fan_type fan_type;
-+	enum fan_type gpu_fan_type;
- 	int fan_pwm_mode;
-+	int gpu_fan_pwm_mode;
- 	int agfn_pwm;
- 
- 	bool fan_boost_mode_available;
-@@ -1757,6 +1759,18 @@ static int asus_fan_set_auto(struct asus_wmi *asus)
- 		return -ENXIO;
- 	}
- 
-+	/*
-+	 * Modern models like G713 also have GPU fan control. This is not AGFN.
-+	 */
-+	if (asus->gpu_fan_type == FAN_TYPE_SPEC83) {
-+		status = asus_wmi_set_devstate(ASUS_WMI_DEVID_GPU_FAN_CTRL,
-+					       0, &retval);
-+		if (status)
-+			return status;
-+
-+		if (retval != 1)
-+			return -EIO;
-+	}
- 
- 	return 0;
- }
-@@ -1959,9 +1973,57 @@ static ssize_t asus_hwmon_temp1(struct device *dev,
- 		       deci_kelvin_to_millicelsius(value & 0xFFFF));
- }
- 
-+/* GPU fan on modern ROG laptops */
-+static ssize_t pwm2_enable_show(struct device *dev,
-+				struct device_attribute *attr,
-+				char *buf)
-+{
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+
-+	return sprintf(buf, "%d\n", asus->gpu_fan_pwm_mode);
-+}
-+
-+static ssize_t pwm2_enable_store(struct device *dev,
-+				 struct device_attribute *attr,
-+				 const char *buf, size_t count)
-+{
-+	struct asus_wmi *asus = dev_get_drvdata(dev);
-+	int state;
-+	int value;
-+	int ret;
-+	u32 retval;
-+
-+	ret = kstrtouint(buf, 10, &state);
-+	if (ret)
-+		return ret;
-+
-+	switch (state) { /* standard documented hwmon values */
-+	case ASUS_FAN_CTRL_FULLSPEED:
-+		value = 1;
-+		break;
-+	case ASUS_FAN_CTRL_AUTO:
-+		value = 0;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	ret = asus_wmi_set_devstate(ASUS_WMI_DEVID_GPU_FAN_CTRL,
-+				    value, &retval);
-+	if (ret)
-+		return ret;
-+
-+	if (retval != 1)
-+		return -EIO;
-+
-+	asus->gpu_fan_pwm_mode = state;
-+	return count;
-+}
-+
- /* Fan1 */
- static DEVICE_ATTR_RW(pwm1);
- static DEVICE_ATTR_RW(pwm1_enable);
-+static DEVICE_ATTR_RW(pwm2_enable);
- static DEVICE_ATTR_RO(fan1_input);
- static DEVICE_ATTR_RO(fan1_label);
- 
-@@ -1971,6 +2033,7 @@ static DEVICE_ATTR(temp1_input, S_IRUGO, asus_hwmon_temp1, NULL);
- static struct attribute *hwmon_attributes[] = {
- 	&dev_attr_pwm1.attr,
- 	&dev_attr_pwm1_enable.attr,
-+	&dev_attr_pwm2_enable.attr,
- 	&dev_attr_fan1_input.attr,
- 	&dev_attr_fan1_label.attr,
- 
-@@ -1993,6 +2056,9 @@ static umode_t asus_hwmon_sysfs_is_visible(struct kobject *kobj,
- 	    || attr == &dev_attr_pwm1_enable.attr) {
- 		if (asus->fan_type == FAN_TYPE_NONE)
- 			return 0;
-+	} else if (attr == &dev_attr_pwm2_enable.attr) {
-+		if (asus->gpu_fan_type == FAN_TYPE_NONE)
-+			return 0;
- 	} else if (attr == &dev_attr_temp1_input.attr) {
- 		int err = asus_wmi_get_devstate(asus,
- 						ASUS_WMI_DEVID_THERMAL_CTRL,
-@@ -2035,6 +2101,7 @@ static int asus_wmi_hwmon_init(struct asus_wmi *asus)
- 
- static int asus_wmi_fan_init(struct asus_wmi *asus)
- {
-+	asus->gpu_fan_type = FAN_TYPE_NONE;
- 	asus->fan_type = FAN_TYPE_NONE;
- 	asus->agfn_pwm = -1;
- 
-@@ -2043,6 +2110,10 @@ static int asus_wmi_fan_init(struct asus_wmi *asus)
- 	else if (asus_wmi_has_agfn_fan(asus))
- 		asus->fan_type = FAN_TYPE_AGFN;
- 
-+	/*  Modern models like G713 also have GPU fan control */
-+	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_FAN_CTRL))
-+		asus->gpu_fan_type = FAN_TYPE_SPEC83;
-+
- 	if (asus->fan_type == FAN_TYPE_NONE)
- 		return -ENODEV;
- 
-diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index a571b47ff362..bcffb77371be 100644
---- a/include/linux/platform_data/x86/asus-wmi.h
-+++ b/include/linux/platform_data/x86/asus-wmi.h
-@@ -77,6 +77,7 @@
- #define ASUS_WMI_DEVID_THERMAL_CTRL	0x00110011
- #define ASUS_WMI_DEVID_FAN_CTRL		0x00110012 /* deprecated */
- #define ASUS_WMI_DEVID_CPU_FAN_CTRL	0x00110013
-+#define ASUS_WMI_DEVID_GPU_FAN_CTRL	0x00110014
- #define ASUS_WMI_DEVID_CPU_FAN_CURVE	0x00110024
- #define ASUS_WMI_DEVID_GPU_FAN_CURVE	0x00110025
- 
--- 
-2.37.1
+[snip]
+
+> +
+> +static int mtk_dp_parse_capabilities(struct mtk_dp *mtk_dp)
+> +{
+> +	u8 val;
+> +	ssize_t ret;
+> +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
+> +
+> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER,
+> DP_SET_POWER_D0);
+> +	usleep_range(2000, 5000);
+> +
+> +	drm_dp_read_dpcd_caps(&mtk_dp->aux, mtk_dp->rx_cap);
+> +
+> +	train_info->link_rate = min_t(int, mtk_dp->max_linkrate,
+> +				      drm_dp_max_link_rate(mtk_dp-
+> >rx_cap));
+> +	train_info->lane_count = min_t(int, mtk_dp->max_lanes,
+> +				       drm_dp_max_lane_count(mtk_dp-
+> >rx_cap));
+> +
+> +	train_info->tps3 = drm_dp_tps3_supported(mtk_dp->rx_cap);
+> +	train_info->tps4 = drm_dp_tps4_supported(mtk_dp->rx_cap);
+
+You could drop tps3, tps4 and add channel_eq_pattern like this:
+
+if (drm_dp_tps4_supported(mtk_dp->rx_cap))
+	train_info->channel_eq_pattern = DP_TRAINING_PATTERN_4;
+else if (drm_dp_tps4_supported(mtk_dp->rx_cap))
+	train_info->channel_eq_pattern = DP_TRAINING_PATTERN_3;
+else
+	train_info->channel_eq_pattern = DP_TRAINING_PATTERN_2;
+
+Regards,
+CK
+
+> +
+> +	train_info->sink_ssc = drm_dp_max_downspread(mtk_dp->rx_cap);
+> +
+> +	ret = drm_dp_dpcd_readb(&mtk_dp->aux, DP_MSTM_CAP, &val);
+> +	if (ret < 1) {
+> +		drm_err(mtk_dp->drm_dev, "Read mstm cap failed\n");
+> +		return ret == 0 ? -EIO : ret;
+> +	}
+> +
+> +	if (val & DP_MST_CAP) {
+> +		/* Clear DP_DEVICE_SERVICE_IRQ_VECTOR_ESI0 */
+> +		ret = drm_dp_dpcd_readb(&mtk_dp->aux,
+> +					DP_DEVICE_SERVICE_IRQ_VECTOR_ES
+> I0,
+> +					&val);
+> +		if (ret < 1) {
+> +			drm_err(mtk_dp->drm_dev, "Read irq vector
+> failed\n");
+> +			return ret == 0 ? -EIO : ret;
+> +		}
+> +
+> +		if (val)
+> +			drm_dp_dpcd_writeb(&mtk_dp->aux,
+> +					   DP_DEVICE_SERVICE_IRQ_VECTOR
+> _ESI0,
+> +					   val);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
 

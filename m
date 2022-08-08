@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B7858C66C
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9B458C671
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242444AbiHHKab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 06:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        id S242620AbiHHKbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 06:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242026AbiHHKaZ (ORCPT
+        with ESMTP id S242409AbiHHKbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 06:30:25 -0400
+        Mon, 8 Aug 2022 06:31:12 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79B1A13F53
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 03:30:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9C72F5
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 03:31:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659954623;
+        s=mimecast20190719; t=1659954669;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=GcMiTNAh1hTDrL+vg0EvQccfaH3LEJ6CT3JlnBgaxfg=;
-        b=YFqQh7jt32bdhrRTURvsMgO/RlI+NgvsrBznXdaQQloplX0kK3AnlNv/R/eXyyXBJadaop
-        P/8Qj5Zj2uBY36kh6iowH3TjEt3o7QkExUuCNlXvj+D5SyJeBwitU/DHXfPqksFXodbVZM
-        fxZAZ43Ypizptvbs7Bm97cDAZfvEqO0=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=XvPrsjTvSRvoKVmqojs3rSzxL2OS329sfzMWHSZ4M50=;
+        b=GFAql5z2TIeA62I7XleLC58YPAvWmz/Ry9NkxxGtsUryxC9et8iswVJzPzmzxm2CdKXZpk
+        BtMt7FF0zNBJy2SEhm3aYzssAdWhUnvzuaT0g/ZNbnlmCDBLyJuzsTZIVSra8JJ0SUuA9b
+        +OHcdyYhf/EyVFDg9Widi9ZMuEuZC5g=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-7V6oLOB9NIacXNH6zi5AgA-1; Mon, 08 Aug 2022 06:30:22 -0400
-X-MC-Unique: 7V6oLOB9NIacXNH6zi5AgA-1
-Received: by mail-qt1-f199.google.com with SMTP id fy18-20020a05622a5a1200b0033e5b56f031so6527423qtb.15
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 03:30:22 -0700 (PDT)
+ us-mta-663-jemyhmxeND-yTDDtS_0Aog-1; Mon, 08 Aug 2022 06:31:08 -0400
+X-MC-Unique: jemyhmxeND-yTDDtS_0Aog-1
+Received: by mail-qt1-f198.google.com with SMTP id h13-20020ac87d4d000000b00342f6c363afso2439048qtb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 03:31:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=GcMiTNAh1hTDrL+vg0EvQccfaH3LEJ6CT3JlnBgaxfg=;
-        b=b4tt/mIh6DreV1p8LCOvw1gzZyHNOcsCk/20+FMteUrN081xQFmd9ZgXuluIEfepQo
-         RZ4k1JoUx228zCz4LLmBIwHVXIAcyDZ63SZ32mYoKVmhZbxz8PaiCanRrRVU9FcHRYwW
-         YyUIqdE+Nvm9OnwhIXz1FCkIW1Bast77MNzEgNfQTtJxKyjBws82u+6w3D0y6byzN+I0
-         t07QTV1c+Nn/HOFHpgieyQpgfIl5JJc/BnGiMF6Xaljg22fpO69+tkAVrWm4Vpyr3NLL
-         Y+hawz8IpVYCmVfcy0u07T+cB2m42GH40VXqV4LiseTBE0XVJ2w2IpblpTHwV2/54s5M
-         LYyA==
-X-Gm-Message-State: ACgBeo0p+87kaHWtzfQ1QAKmE18CSejjviM4ERRcHz8q0j5bCVV2CFRA
-        xPNqq7msieJodNt84labaHnAp8QTJrM4hyioDmYLlmZ7ytm2ko58JKzQXEsZCHLqAV8qf/qjsu4
-        aAEwxF6SQvFwHoYObi/wvhAMS
-X-Received: by 2002:a37:2f03:0:b0:6b5:f8d9:7eab with SMTP id v3-20020a372f03000000b006b5f8d97eabmr13681288qkh.79.1659954622002;
-        Mon, 08 Aug 2022 03:30:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4XGLj1VfcJFS+ebiNnab2ZLX5E3Tf208Zo5b4se2GNkoL41B1DWrzqhZGDT4lGv++JCSXVQA==
-X-Received: by 2002:a37:2f03:0:b0:6b5:f8d9:7eab with SMTP id v3-20020a372f03000000b006b5f8d97eabmr13681272qkh.79.1659954621774;
-        Mon, 08 Aug 2022 03:30:21 -0700 (PDT)
+        bh=XvPrsjTvSRvoKVmqojs3rSzxL2OS329sfzMWHSZ4M50=;
+        b=tQ56R3qnEsKyDYP1+qPJRO1iwEQqQo22FC9yFj/aSaHmGtbLo1UdRtnEbOWM7YcnFh
+         dVlxjkkQ0bf8UoN+L+dvGYtv0Fw2mb3mraHFVTqN6LHOtFKJVoQRyNtZIChH/MTXnyh+
+         oCzZHPjYpiMUA97bVZoQ9SNN40yfjsbUzhhzVcC4bIiZx00ddXRKSXoqFAy7Z3kLrTfS
+         fVx6eHvltpP/RJ+vr/blnU7XON4mmkyA/Wr1PHFnj/FQ0/V3/uCH4Fbix0f1B/kVicpc
+         obRWbE/8REhu5eYt+ZrP6mqIRv0C1OwM0HkxHuTJRKhP2eAl3tipRFkgJoW1B2dTrAh8
+         kttA==
+X-Gm-Message-State: ACgBeo0dwscSLY86BEeriuQ6yTdM3Ngr0Da7UCQBW534YG380JvuAxOz
+        Wo4gdQ1czFkNbotL+G3HJExcZ8/3NGRF0PFwmfZoADRH9WKhujsMXQRdQJp6sZZ4iPqqVzWc1nV
+        3VQD+CmpEzL0R+Qvb6WFLJiul
+X-Received: by 2002:a37:8a44:0:b0:6b5:f371:a183 with SMTP id m65-20020a378a44000000b006b5f371a183mr13302346qkd.492.1659954668397;
+        Mon, 08 Aug 2022 03:31:08 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6/yFs0KjeGd8bKDfXwYhjua9yB0wwXzaxZKsQn6plBoppBAz4IclCsn96TyP1BAgwx2AsEgg==
+X-Received: by 2002:a37:8a44:0:b0:6b5:f371:a183 with SMTP id m65-20020a378a44000000b006b5f371a183mr13302320qkd.492.1659954668196;
+        Mon, 08 Aug 2022 03:31:08 -0700 (PDT)
 Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id g6-20020ac80706000000b0034068f9d8fcsm7431142qth.20.2022.08.08.03.30.17
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a454c00b006b928ba8989sm844240qkp.23.2022.08.08.03.31.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 03:30:21 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 12:30:11 +0200
+        Mon, 08 Aug 2022 03:31:07 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 12:31:01 +0200
 From:   Stefano Garzarella <sgarzare@redhat.com>
 To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -78,18 +78,17 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v3 1/9] vsock: SO_RCVLOWAT transport set callback
-Message-ID: <CAGxU2F513N+0sB0fEz4EF7+NeELhW9w9Rk6hh5K7QQO+eXRymA@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 2/9] hv_sock: disable SO_RCVLOWAT support
+Message-ID: <20220808103101.iknoveb7vgsrkxp6@sgarzare-redhat>
 References: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
- <45822644-8e37-1625-5944-63fd5fc20dd3@sberdevices.ru>
- <20220808102335.nkviqobpgcmcaqhn@sgarzare-redhat>
+ <58f53bef-62f4-fd63-472c-dcd158439b09@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220808102335.nkviqobpgcmcaqhn@sgarzare-redhat>
+In-Reply-To: <58f53bef-62f4-fd63-472c-dcd158439b09@sberdevices.ru>
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,103 +96,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 12:23 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+On Wed, Aug 03, 2022 at 01:53:23PM +0000, Arseniy Krasnov wrote:
+>For Hyper-V it is quiet difficult to support this socket option,due to
+>transport internals, so disable it.
 >
-> On Wed, Aug 03, 2022 at 01:51:05PM +0000, Arseniy Krasnov wrote:
-> >This adds transport specific callback for SO_RCVLOWAT, because in some
-> >transports it may be difficult to know current available number of bytes
-> >ready to read. Thus, when SO_RCVLOWAT is set, transport may reject it.
-> >
-> >Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> >---
-> > include/net/af_vsock.h   |  1 +
-> > net/vmw_vsock/af_vsock.c | 25 +++++++++++++++++++++++++
-> > 2 files changed, 26 insertions(+)
-> >
-> >diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
-> >index f742e50207fb..eae5874bae35 100644
-> >--- a/include/net/af_vsock.h
-> >+++ b/include/net/af_vsock.h
-> >@@ -134,6 +134,7 @@ struct vsock_transport {
-> >       u64 (*stream_rcvhiwat)(struct vsock_sock *);
-> >       bool (*stream_is_active)(struct vsock_sock *);
-> >       bool (*stream_allow)(u32 cid, u32 port);
-> >+      int (*set_rcvlowat)(struct vsock_sock *, int);
->
-> checkpatch suggests to add identifier names. For some we put them in,
-> for others we didn't, but I suggest putting them in for the new ones
-> because I think it's clearer too.
->
-> WARNING: function definition argument 'struct vsock_sock *' should also
-> have an identifier name
-> #25: FILE: include/net/af_vsock.h:137:
-> +       int (*set_rcvlowat)(struct vsock_sock *, int);
->
-> WARNING: function definition argument 'int' should also have an identifier name
-> #25: FILE: include/net/af_vsock.h:137:
-> +       int (*set_rcvlowat)(struct vsock_sock *, int);
->
-> total: 0 errors, 2 warnings, 0 checks, 44 lines checked
->
-> >
-> >       /* SEQ_PACKET. */
-> >       ssize_t (*seqpacket_dequeue)(struct vsock_sock *vsk, struct msghdr *msg,
-> >diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-> >index f04abf662ec6..016ad5ff78b7 100644
-> >--- a/net/vmw_vsock/af_vsock.c
-> >+++ b/net/vmw_vsock/af_vsock.c
-> >@@ -2129,6 +2129,30 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
-> >       return err;
-> > }
-> >
-> >+static int vsock_set_rcvlowat(struct sock *sk, int val)
-> >+{
-> >+      const struct vsock_transport *transport;
-> >+      struct vsock_sock *vsk;
-> >+      int err = 0;
-> >+
-> >+      vsk = vsock_sk(sk);
-> >+
-> >+      if (val > vsk->buffer_size)
-> >+              return -EINVAL;
-> >+
-> >+      transport = vsk->transport;
-> >+
-> >+      if (!transport)
-> >+              return -EOPNOTSUPP;
->
-> I don't know whether it is better in this case to write it in
-> sk->sk_rcvlowat, maybe we can return EOPNOTSUPP only when the trasport
-> is assigned and set_rcvlowat is not defined. This is because usually the
-> options are set just after creation, when the transport is practically
-> unassigned.
->
-> I mean something like this:
->
->          if (transport) {
->                  if (transport->set_rcvlowat)
->                          return transport->set_rcvlowat(vsk, val);
->                  else
->                          return -EOPNOTSUPP;
->          }
->
->          WRITE_ONCE(sk->sk_rcvlowat, val ? : 1);
->
->          return 0;
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>Reviewed-by: Dexuan Cui <decui@microsoft.com>
+>---
+> net/vmw_vsock/hyperv_transport.c | 7 +++++++
+> 1 file changed, 7 insertions(+)
 
-Since hv_sock implements `set_rcvlowat` to return EOPNOTSUPP. maybe we 
-can just do the following:
-
-        if (transport && transport->set_rcvlowat)
-                return transport->set_rcvlowat(vsk, val);
-
-        WRITE_ONCE(sk->sk_rcvlowat, val ? : 1);
-        return 0;
-
-That is, the default behavior is to set sk->sk_rcvlowat, but for 
-transports that want a different behavior, they need to define 
-set_rcvlowat() (like hv_sock).
-
-Thanks,
-Stefano
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 

@@ -2,159 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280AC58CDE5
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFFA58CDD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244092AbiHHSnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 14:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S244320AbiHHSm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 14:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244504AbiHHSmn (ORCPT
+        with ESMTP id S244409AbiHHSmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 14:42:43 -0400
-Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475762BD6;
-        Mon,  8 Aug 2022 11:42:27 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; bh=waso6o/gLxP4dp0Ks9iZGKqqKBgpprYF0f4RtQrgunc=;
- c=relaxed/relaxed; d=matoro.tk;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
- i=@matoro.tk; s=20220801; t=1659984140; v=1; x=1660416140;
- b=tS3+PeZ4x7UIaxySNasrF1pt1JK67oV1k+KCwDmj0FfmR+DyxGPbcI2X7WphaJre39bKKqwz
- JHHhwd6oLizdTJV6NgyrpczO3SD7XlTVqVcnL6cgqepe3shMYX7p62lg0YJ6woTbii34nsJDrD5
- eOQoNKpWsC53wCBzs6RWIliLnoZmrzDF3JWHVVJDnFd8fcDROSqJysd8cEFjOeQbsIfBr4UHFBo
- LIQy4Rrjwa83VBWrL5SQaq0DqHvDe/Ljgv3Fmr5cHjFz38Ijno+QJLZKzG49ext/5lgxMr5AteD
- bBy4oL/zOHYQqabEVQRyF+3ckZnlOKc3Nt9lK0PCScNiCt6vE7LmS1AFo4TOTbcC8GCyJ1mOe14
- VmlPBMQGYi704VFuiifiMn3fuqXfLG/U0ibbkiv+VbNlq+vnrPV4vjOgRCpxukWJRM+uqWw0fju
- qFWmXfnvr2a7HOd3mDkz82Jj0hGCt0ES+LIDJLNXT8XTHqr6I+0gT/QFTQepnTUSJGzNyga1vR7
- jhNBDKOx0VrX50J+vk9fA/Y6/LWH4b0FxNTTEbGYOpnU/xx8XgzcCC7CAH97X/9xFvExnep1m1R
- Db3PJZUJz6muhm1tsfdIvwbp0q3k3TOos2YGryFxa8NKfJudNsdYTachK2NbyBSBwpZHWAFH/+b
- SAD76p7mvNE=
-Received: by matoro.tk (envelope-sender
- <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id d390d774; Mon, 08 Aug
- 2022 14:42:20 -0400
+        Mon, 8 Aug 2022 14:42:08 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27C71929D
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 11:41:39 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id h125so11308759oif.8
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 11:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=+jov4sDK8fqguLcdGEtCS3PX7Z+/XUaiZu5mjGAoBwc=;
+        b=jQh0ZktlrsGJDfa5sjbq2FHvzf4mdvXfFgJm/+h4G+SV2anYSa8bfoSW0x4cZ+a3Aw
+         l0RRwnm4nakH4bXp8NL0oOLZJ9X2/pY+yndrdlsPeLyxZh/ViMnKFbDOXVx/nMOZ3cKv
+         ceY+U9j3d8UqgTT7Mwyo4gRiFfM9J+QRO6t5Cg1dbWKXaphwir4V2MbeP/89G33WRA+N
+         gelXSFx7JFODRcl3YrPC8cGsN7ItGYTyrXZ575oNF0+odf1LDKxLLKGQ4X6GPFW3SZHF
+         m/3Y2Lopfg0cwERPa5gJWPnQOWwBWBvQIG6zrBuR4751Tjv+mDN+PExBB8PTuQP+jw75
+         MChA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=+jov4sDK8fqguLcdGEtCS3PX7Z+/XUaiZu5mjGAoBwc=;
+        b=CRY+LH40ZsiRQNuTWES272Ow3jIKUGL+kIVpGamvynBd5Vb1rhm9cybPPfLFGh3wRz
+         bB+wtRZpZS75Su7CM9v+RCZf+vBwE4govUl5FaIpxHg/R8hZmR9m1jo3fr/AA3MqkePS
+         NXTN0j8boxmb8zjnJTSFOqLxwVIGpWHx+AwsW/8nsyVIW0dSo0x/253AUb8RM++OiQgx
+         9HvkQlEHaJ4Ud3M3N4RwHO3lh2MlMOBKQ63kIa+AlViJpwEW9hDJnquLyre4hAyWAPdU
+         SiBXVX2EocWQ1Swy1RPvOpMCw6eSkfrbDQHVdFG7NzfcdisAGY5MOZ2RAeiLglEhQWv3
+         vwfw==
+X-Gm-Message-State: ACgBeo2GN84qq/5fWg89z36cOPEIbUFFhhP4y4gQz8ah6vogA8ba9Eea
+        YB5fT17qoOJThfOfgIcOOYnS1g==
+X-Google-Smtp-Source: AA6agR5bJmLFgnGWaH7lWQ9cZrofG2bX3oeGvmJg+5K1A0TzfoRbCFeR6iE+6t9h5yKMa98pNuVKGQ==
+X-Received: by 2002:a05:6808:2114:b0:343:665:d54e with SMTP id r20-20020a056808211400b003430665d54emr1187227oiw.71.1659984099106;
+        Mon, 08 Aug 2022 11:41:39 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id y12-20020a4a650c000000b00440ed1f8c45sm2295292ooc.43.2022.08.08.11.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 11:41:38 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 11:44:18 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh@kernel.org, pavel@ucw.cz, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] dt-bindings: leds: Describe optional 'reg' property used
+ for Qualcomm LPG nodes
+Message-ID: <YvFZgr1RRq6tYaVC@ripper>
+References: <20220721195502.1525214-1-bhupesh.sharma@linaro.org>
+ <CAA8EJppGS38aP7gyd1c3kNgraAVJDoqUef2cDfZpu2aL_iwW0g@mail.gmail.com>
 MIME-Version: 1.0
-Date:   Mon, 08 Aug 2022 14:42:20 -0400
-From:   matoro <matoro_mailinglist_kernel@matoro.tk>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-In-Reply-To: <CAK7LNATa1fdwQsuC3LOkzhr1SaR6ipJqe1b0fAC1pk3LX9wDhA@mail.gmail.com>
-References: <20220513113930.10488-1-masahiroy@kernel.org>
- <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
- <2c496d24174e63b27ec047f383df6700@matoro.tk>
- <CAK7LNASWKhj0tZK6jA1PsYje+idTjzdbYa9avyGeakVScj843A@mail.gmail.com>
- <38a9853e59db8946999316ce3a6b4621@matoro.tk>
- <CAK7LNATa1fdwQsuC3LOkzhr1SaR6ipJqe1b0fAC1pk3LX9wDhA@mail.gmail.com>
-Message-ID: <d4f30a7313f1ff43d0c919fc556f08fe@matoro.tk>
-X-Sender: matoro_mailinglist_kernel@matoro.tk
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJppGS38aP7gyd1c3kNgraAVJDoqUef2cDfZpu2aL_iwW0g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-That patch doesn't apply to the v5.19 stable tag, so I just manually 
-edited and it worked perfect!  Thank you!!
+On Thu 21 Jul 13:19 PDT 2022, Dmitry Baryshkov wrote:
 
-Sorry I didn't mention that warning - I did see it, but it still showed 
-up even on the old kernel, so I thought it was irrelevant.  Much 
-appreciated!
-
--------- Original Message --------
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups 
-(modpost, LTO, MODULE_REL_CRCS, export.h)
-Date: 2022-08-08 13:36
- From: Masahiro Yamada <masahiroy@kernel.org>
-To: matoro <matoro_mailinglist_kernel@matoro.tk>
-
-On Mon, Aug 8, 2022 at 10:27 PM matoro
-<matoro_mailinglist_kernel@matoro.tk> wrote:
+> On Thu, 21 Jul 2022 at 22:55, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+> >
+> > As Bjorn noted in [1], it is useful to describe the optional
+> > 'reg' property for Qualcomm LPG nodes as it is used in
+> > some Qualcomm dts files.
 > 
-> I have real hardware for all these arches in my collection.  I use it
-> for testing the latest kernel and toolchains on as many of the
-> less-popular arches as possible, exactly to find issues like this one 
-> :)
+> I don't think this is correct. LPG block maps to several regions, so
+> using just one of them in reg doesn't look correct.
 > 
-> Specifically we support all of these in Gentoo.  To double-check this
-> wasn't a config issue, I asked another user who also runs sparc to try
-> building 5.19 with his config (not copying mine), and he observed the
-> same problem.  You can reach us in #gentoo-sparc on Libera.
+
+I agree, but I also like the uniformity of having unit addresses for the
+devices on the spmi buses.
+
+> > This fixes the following 'make dtbs_check' error reported for
+> > pm8350c & sc8280xp pwm nodes:
+> >
+> > arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dtb:
+> >  pwm@e800: 'reg' does not match any of the regexes:
+> >  '^led@[0-9a-f]$', 'pinctrl-[0-9]+'
 > 
-> As for testing, I make all this hardware available on an as-needed
-> basis.  So if you can't or don't want to fiddle with qemu, just let me
-> know (email or IRC, same username on Libera), and I will get you direct
-> access to my hardware.  Thanks!!
+> I'd prefer to follow the existing schema and to drop the region from
+> those files.
+> 
 
+I'm fine either way, but we have more of these nodes, so I would like to
+hear from the DT maintainers on the direction to take. All nodes on the
+spmi bus has an (at least one) address, so it would be accurate to state
+this in the node.
 
-I found the root cause.
+It does however not seem like devicetree@, nor Krzysztof is Cc'ed on
+this patch, so I've added them...
 
-When I build the sparc kernel, I see a warning
+Regards,
+Bjorn
 
-WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation
-failed, symbol will not be versioned.
-
-
-Then, modpost missed to write out the entry.
-
-With the following patch, you will be able to load the module.
-
-I will send a patch with a proper commit log tomorrow. I need some sleep 
-now.
-
-
-
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 29474cee10b1..337bd36a890a 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -2206,13 +2206,11 @@ static void add_exported_symbols(struct buffer
-*buf, struct module *mod)
-         /* record CRCs for exported symbols */
-         buf_printf(buf, "\n");
-         list_for_each_entry(sym, &mod->exported_symbols, list) {
--               if (!sym->crc_valid) {
-+               if (!sym->crc_valid)
-                         warn("EXPORT symbol \"%s\" [%s%s] version
-generation failed, symbol will not be versioned.\n"
-                              "Is \"%s\" prototyped in
-<asm/asm-prototypes.h>?\n",
-                              sym->name, mod->name, mod->is_vmlinux ? "" 
-: ".ko",
-                              sym->name);
--                       continue;
--               }
-
-                 buf_printf(buf, "SYMBOL_CRC(%s, 0x%08x, \"%s\");\n",
-                            sym->name, sym->crc, sym->is_gpl_only ? 
-"_gpl" : "");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+> >
+> > [1]. https://lore.kernel.org/linux-arm-msm/Ytg3tIaL5h5b9ewH@builder.lan/
+> >
+> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Cc: robh@kernel.org
+> > Cc: pavel@ucw.cz
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> > index fe336fa16518..f394ab7a757b 100644
+> > --- a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> > +++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> > @@ -27,6 +27,9 @@ properties:
+> >        - qcom,pmi8994-lpg
+> >        - qcom,pmi8998-lpg
+> >
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> >    "#pwm-cells":
+> >      const: 2
+> >
+> > --
+> > 2.35.3
+> >
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry

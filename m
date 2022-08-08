@@ -2,157 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8C258CD16
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5F658CD1E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243998AbiHHRzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
+        id S244089AbiHHR41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238087AbiHHRzb (ORCPT
+        with ESMTP id S243945AbiHHR4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:55:31 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2073.outbound.protection.outlook.com [40.107.101.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47D362F8
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:55:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kql/kc3C/HIQAQjWGr+B5VsaUo4SsS6Yk+VMecbYb6/wVA5CGOqR4mJNBWdFW7jBskS1NJNb+9WgNRfUc4G0hG8SPd94YGwhtKfEm/ud6pMjJwV+t9bx7MCL0oa0N4gIUWv5ZvkPm889TspEm0dW4I7NF/8/kuQnwvCZtCe6+NuP4lmV4TRdArzSlhpwaSaLwtdv6syOVVf8+Kr6tMWX4wVTxrzvxlq/TK5Nmfae7xuo43CnRoS84B+y0D0RVTlTxbnalJGITUPjgi3RlDW2arNN9Qe1MpVDIYGBm7IMf/5MO1tPaq+KiSw0WwqfIsFnsTdJmdJYs0qF3HdfYs6wxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LvTuLlqZpTdfz6++n2TgcdsYiuU98HQgWIMUUuCaa7I=;
- b=QrY+hvBRODRyxpBpBdUAZ1QQV6tGMq5TUwQkFGbUJRQGAzf4oPgzp2TMd0KA+fKLQQKNGSV9L8slXmMZfM3uOPOkeCTn92DQIQ8FSLyO5wc5kpwSCoVxvfqCEJvmRWF5Xd/YhCeuZxgy7BtwcpQFesjAA0LGEhyFHETYC6rrjotwuuEAv0tXcL26uuV74QroD+y+C1nxy/c212OYBiwEFR9xcO7VtFUiD8jqKKlYd+uvQ/GCPGobzNQbS0piH691Ld+82/7E9GfZ2/BvNOp6RIDLemI+9BSrj+lxB5HYDcT4zmRZa8EGMGOJiKb7DBijY5uCjI7sHSvDhIXRJpJZpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LvTuLlqZpTdfz6++n2TgcdsYiuU98HQgWIMUUuCaa7I=;
- b=g/hDSMpHqg5SpR82BHz4Wq83e39MVozIvKliMl5EKLZfMpTiIB5Df6Q9Hbyy31qG/Ag6oxqv3wCoRnATjwfWCtGkbmPAPbzNu1JQEGAE0uxMgOfOAgkgxxyr95phojW1YpnAPAFkcPgpeKvEBr9quFDrIRJZPfoica7vjpVm7zC2G7BWcT7qbP0/yQHC9G4xFdKoXrMMsKFdUNx5vq5Ng8Vlv2vTo1lwoOG8/yCQe/PG1azRhOT/jB5zd45Wk+FLiuFi3allyjaT6DMF0Qqs9zGq4B2K+7e4TEnYumZHq1DBh47YaVMt+og1+/TNrBmQYl3/JOW2YvOElKUKcLTFlA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM5PR12MB4679.namprd12.prod.outlook.com (2603:10b6:4:a2::37) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.18; Mon, 8 Aug
- 2022 17:55:29 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::1a7:7daa:9230:1372]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::1a7:7daa:9230:1372%7]) with mapi id 15.20.5504.020; Mon, 8 Aug 2022
- 17:55:29 +0000
-Date:   Mon, 8 Aug 2022 14:55:28 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Oded Gabbay <oded.gabbay@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Subject: Re: New subsystem for acceleration devices
-Message-ID: <YvFOEPdC9r8QBH11@nvidia.com>
-References: <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
- <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com>
- <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
- <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
- <YuvctaLwRi+z0Gw4@nvidia.com>
- <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
- <Yuxi1eRHPN36Or+1@nvidia.com>
- <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
- <CAFCwf107tLxHKxkPqSRsOHVVp5s2tDEFOOy2oDZUz_KGmv-rDg@mail.gmail.com>
- <YvCozvgodIY19LSr@kroah.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvCozvgodIY19LSr@kroah.com>
-X-ClientProxiedBy: BL0PR02CA0024.namprd02.prod.outlook.com
- (2603:10b6:207:3c::37) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fbff7d45-2677-4b30-bcc7-08da79672e1e
-X-MS-TrafficTypeDiagnostic: DM5PR12MB4679:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xHFz3CrcWKal28yjZ1EdBGH8WAvF6g9SzYvSXOg58so23ZCZI1z4NvvgJE6RjqmzZWoaSrMzlENkTLiJYhhuMlgdLEUgzs+kN+vwlxuqZLyXEn8upXamy/BWI1xX/IIo8fxgR3zly+4EcBY7CnXbgx3D9nQXENhn/UrFz9m4GIR9LHCBQTmJnuRaGcf7UJAWBof9hZdmVoqZ8xW9vZtxOzV4PmCHj3/lJ1QwX+zA4POwf/sPrh0A7wG4BN82frKJwOsgqgIkKD8zc89li3F8XXnL+j4JUa8YLAXsPRxGpAU9z5zxxpckb9/+q8xKuLASJWLgE4kE3tbrPKswuAoiWm7FFUex/wQ5R7ZIOxDXqnoX/tsb1Zq8Hn7UJhBcyAxvLAO1bpqOYGPxjoeSbTxlOOaE/eUUwh101BHXNNIhV0SxJtSfTONekmCS0MpDN23+cDUAx3kdjZpkHN3nP6bDWMe8ajpupBJmMUCorsqs+CkBMfxHElJ9nc6zewn4AAc25dyuYFhiDmWIK+z6v1ba6PJIhvHVKNDhCQC0EqD0OFoBkxAKAAnK25Wa6mawSi0aoSuXPkOREMtVVcx8fdAet98MzlRhADcL93ZRGwtz+8UNzh37XTIwMmOWwywQMPpCweSkjKLqi444vJSN5vGEzd3HvK/X/oRJDZENd7+F0oZDFlZhAfmINBBDLCuMJvvW22ixRS+ibIHIFzdkalbmyYZcK1eK0OPrq8dcn/B+2Bg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(396003)(136003)(376002)(346002)(66556008)(5660300002)(66946007)(478600001)(66476007)(4326008)(316002)(54906003)(6916009)(8676002)(86362001)(36756003)(6486002)(8936002)(2906002)(83380400001)(38100700002)(6506007)(41300700001)(6512007)(26005)(186003)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WNHAsvAbbO6AxzW6DGoDugeaqLsaLfHkhSELErAaLHg8xdAhx/CtID1HAvsG?=
- =?us-ascii?Q?oNrHhD0lSC+uMmUjh1qQS8shZackS2Sd9K/4lxCReRUpVWy7MZ7UlZU5Byqe?=
- =?us-ascii?Q?zP89Yq+qVH9KAxqK1cEVgzZbmoMhtRChi+FLTTBEYlyndgRZHK2YfArkFBy+?=
- =?us-ascii?Q?ZSTOapqr1Umi49lrt0O5gxch0UFqiCXBySY8R1cg8N05bm5XTDHEhGgjYx/r?=
- =?us-ascii?Q?6kN8HoccTUR6S9fWgJBzMtP+Bbeajy8ljWi52Rrhvj8qO63eRDv70STRSoPj?=
- =?us-ascii?Q?ydx3XIusr3x5ykUIFlNUWz/9wy92afUumlHQQmiyooQQefG8NDe5Wjda7sJZ?=
- =?us-ascii?Q?hxV0aCnQxIwyu+KQ//6Pw7h4zhcyX8KFT3ec/6kWBGYDXnbNmRFPSn8CLs5t?=
- =?us-ascii?Q?Vauczrif0jLsn5M7cRYK1702gONDXb8Dn2ZJhRxEgfCdz555xkGYyA+VgPA9?=
- =?us-ascii?Q?eQcyzX5XOijyW4o5B8IbtZwaxM7JT6wXFtOndgtbb6f7Um46FjGaEawpjtOK?=
- =?us-ascii?Q?pVG7kE5at4WdLMWjgA3t114hIHBl8zOzFrSuG7fjdr88xtMvAywSwf9JdWCV?=
- =?us-ascii?Q?ZrTJTZaMT3SUR5mUXjCEhtBe9ZDst6eDk+VTwPyEMPOyZ14aj1dF8wMJRcxx?=
- =?us-ascii?Q?bfROhEQTT8ESPQXRGN7lMOuqAmNylp9x7pdzLC12HnGBm7Ps7D+fl/yAa5Pu?=
- =?us-ascii?Q?HvdTZfLwCfTBOP0b/kThmzfe54n4QHwViNm3gm+k6/UoRn7GrSg2Qo0ixOL9?=
- =?us-ascii?Q?F2cxaFUiou4G7A6ppS/hMNPPwnNa3Styl7xhZzP3F+Fi8+837LkYwY9ZbbLM?=
- =?us-ascii?Q?X+rlewVaufEYQvFf1TzVPCE+SgK7UZxCCYJYbGeOa3geSKc3iOrImwV6n3Hd?=
- =?us-ascii?Q?cSnA9tJtd1gpynkljBrLfB0iDuHp1ME6esdZ2/vNUGPrGNkLIvdaLvtmFR29?=
- =?us-ascii?Q?94OEEKAoyPs59fQ7dmFNoDdIso0zgmEUDlDwJgoBFCIkF10r3Z0Yrnaos2cG?=
- =?us-ascii?Q?r+SYAinwojVGqQQgW2TPs34CFe8VKLrTwN/2Gh/QiowSydXL9JKU72QyP08S?=
- =?us-ascii?Q?122GyD/j/0yjEmNE2wL8vFnDFgMNre9PS/YPISXyvP2IGWPc3ttWAvkJ+7Ei?=
- =?us-ascii?Q?KNUDqIrU3Mvh6lAazj0a/X7ONHzZObkM9PZbAOcAQq0XsjDH3BuVL5sz7CYu?=
- =?us-ascii?Q?rCgxtBXBoUCdA170QAgpDQppw2ZxaiyLyXT7yu5rw8JBssukqOnzlLkT3UaM?=
- =?us-ascii?Q?MrbXhHYoLj9q/wPYyF6/7ANyJqtZVT3B3m01Oi/MU16Tm8LWMyhEihme25p8?=
- =?us-ascii?Q?8fIgnNekWCTG9gEZgOxrrMlwjZDRYsUkDhh2INlRBfdlobzBZGEhdmurEbQ8?=
- =?us-ascii?Q?KOqXSkObUf8zBYvCokZZhHp9u3n/ckRCOoG7MR+jrhVyFJK8HeMnOLBHgdGo?=
- =?us-ascii?Q?bAdO71RM8m83ECSf/p4drZM2iW2V42xDik3SXv0XWKj8rrPeC9deMZB9L+o9?=
- =?us-ascii?Q?qq1rkPLEwtKUa0kg+F/aabhSv2+Pmq+ozBUwfPvljrJ6vuHt3fcPCee5NiRS?=
- =?us-ascii?Q?GOAtMasbm+tlv6ciOcnJ8lvP5Xb4Ly+IUH3b53bF?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbff7d45-2677-4b30-bcc7-08da79672e1e
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2022 17:55:29.0267
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MQItklN0/FBhiIlAZlEfvBSAvW2taMqc3HeoEoco9ghUulvf/Shy9/wCQj09Fmmw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB4679
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Mon, 8 Aug 2022 13:56:23 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C9D6322
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:56:21 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f3959ba41so83229627b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 10:56:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=Cc9MnKZgg+ibpM+8ko+H6oPbsb5pSszzVfc8aWAiJho=;
+        b=CuZZbvD5Zahb/IdAJlGMq6TjrBJztj0YEMjFy1GDqtnvIuRgcS3v68E3duGOAKy9ZI
+         G8RZ8aO4qjpoPamGGTX/yXwZtJYZA9tE2+zu1lpZzgJxyGqaROdcTNy6KDYH/gn8GlBl
+         OK9P5YQmRNSF8mnTNiXxrL6tZMZBYYI43OYaNzyUfaJ8SbRAZ1NY5BdMWxwJQ8KOXh7g
+         vLGH9Rt8pKH/LbwuCSLIvldly2jpYP8B1ol4S0ku18YHUYKAvixREO0RHydd6liWSMOF
+         nO8BjEvRkW65PhcVRIInf5oIayFp0HeIrIGy890JIh4JKojBBx6cUnqO6hlVkr6N5mlG
+         +v1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=Cc9MnKZgg+ibpM+8ko+H6oPbsb5pSszzVfc8aWAiJho=;
+        b=SxiUfLEST8ktGCF0aNz8Py8+w7O8IPkpeU19Pgs0f3ymDoHSqsFanpJV8BC2YpKIZD
+         7Hd+FZb4hOCKKHdZk9ob25IvFCgDKbA0uexQyPGQazR7rr1zH+rsmqcSTxu8124tWfu8
+         FdV54RTqHto32WopTt0g3cRSfode7dnv+3q7JnSQeSmjaSd1kHN6Zh2oms7lOeoIKU1f
+         Lu0nkR4p71eKBVbFGWHKsE71RLbhc72f57g1NZj0BOvIbmkoZiNPanzM3/AyevAK5dux
+         BEZLvadRrVM1eXFDmVTl+0ygQ0iy7cZyIAQGmDNGCblAfWFaKe+Hv5tftJJdoXAiW+Ct
+         tR6w==
+X-Gm-Message-State: ACgBeo0T+fK+LLj4M37c5oj+5QBj4jXyB4xhThnYPQ/JiUyHDEOJ9TCH
+        DblkC+uo1Q10dU84GZCtWGXlDD2PRLlSz4uyV0Ai
+X-Google-Smtp-Source: AA6agR5ZeAOTjT1MgizrsRrqipaGPwGw1lTbPlW+A4euRXqJ+TiAsxPXTDq8OQCto6H+3SZ+teGzadIyEt2uvg0SCG6F
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:7a2a:3bb5:f3a0:3bbc])
+ (user=axelrasmussen job=sendgmr) by 2002:a81:5946:0:b0:31f:4ec0:17af with
+ SMTP id n67-20020a815946000000b0031f4ec017afmr19660191ywb.217.1659981380782;
+ Mon, 08 Aug 2022 10:56:20 -0700 (PDT)
+Date:   Mon,  8 Aug 2022 10:56:09 -0700
+Message-Id: <20220808175614.3885028-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH v5 0/5] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 08:10:22AM +0200, Greg Kroah-Hartman wrote:
-> On Sun, Aug 07, 2022 at 02:25:33PM +0300, Oded Gabbay wrote:
-> > 2. Common code to handle drivers that want to allow a single user at a
-> > time to run open the device char file.
-> 
-> Note, that's an impossible request, and one that the kernel should never
-> worry about, so don't even try it.  Think about userspace doing an call
-> to dup() on an open char file descriptor and then passing that off
-> somewhere else.
+This series is based on torvalds/master.
 
-Oded is talking about a model like VFIO has where the HW has a limited
-number of concurrent state registers - lets say in this case the ASID
-translation mapping the accelerator into DMA.
+The series is split up like so:
+- Patch 1 is a simple fixup which we should take in any case (even by itself).
+- Patches 2-5 add the feature, configurable selftest support, and docs.
 
-Each 'struct file' that is created owns one of those HW state
-registers, and each struct file is completely isolated from all
-others. eg someone controlling the accelerator through struct file A
-cannot access memory mapped into the accelerator through struct file
-B.
+Why not ...?
+============
 
-So, the number of struct files that can be created is capped at the
-number of HW state registers the device can support (eg one for
-Habana).
+- Why not /proc/[pid]/userfaultfd? Two main points (additional discussion [1]):
 
-This is different from the number of FDs pointing at the struct file.
-Userpsace can open a HW state and point a lot of FDs at it, that is
-userspace's problem. From a kernel view they all share one struct file
-and thus one HW state.
+    - /proc/[pid]/* files are all owned by the user/group of the process, and
+      they don't really support chmod/chown. So, without extending procfs it
+      doesn't solve the problem this series is trying to solve.
 
-Jason
+    - The main argument *for* this was to support creating UFFDs for remote
+      processes. But, that use case clearly calls for CAP_SYS_PTRACE, so to
+      support this we could just use the UFFD syscall as-is.
+
+- Why not use a syscall? Access to syscalls is generally controlled by
+  capabilities. We don't have a capability which is used for userfaultfd access
+  without also granting more / other permissions as well, and adding a new
+  capability was rejected [2].
+
+    - It's possible a LSM could be used to control access instead, but I have
+      some concerns. I don't think this approach would be as easy to use,
+      particularly if we were to try to solve this with something heavyweight
+      like SELinux. Maybe we could pursue adding a new LSM specifically for
+      this user case, but it may be too narrow of a case to justify that.
+
+Changelog
+=========
+
+v4->v5:
+  - Call userfaultfd_syscall_allowed() directly in the syscall, so we don't
+    have to plumb a flag into new_userfaultfd(). [Nadav]
+  - Refactored run_vmtests.sh to loop over UFFD test mods. [Nadav]
+  - Reworded cover letter.
+  - Picked up some Acked-by's.
+
+v3->v4:
+  - Picked up an Acked-by on 5/5.
+  - Updated cover letter to cover "why not ...".
+  - Refactored userfaultfd_allowed() into userfaultfd_syscall_allowed(). [Peter]
+  - Removed obsolete comment from a previous version. [Peter]
+  - Refactored userfaultfd_open() in selftest. [Peter]
+  - Reworded admin-guide documentation. [Mike, Peter]
+  - Squashed 2 commits adding /dev/userfaultfd to selftest and making selftest
+    configurable. [Peter]
+  - Added "syscall" test modifier (the default behavior) to selftest. [Peter]
+
+v2->v3:
+  - Rebased onto linux-next/akpm-base, in order to be based on top of the
+    run_vmtests.sh refactor which was merged previously.
+  - Picked up some Reviewed-by's.
+  - Fixed ioctl definition (_IO instead of _IOWR), and stopped using
+    compat_ptr_ioctl since it is unneeded for ioctls which don't take a pointer.
+  - Removed the "handle_kernel_faults" bool, simplifying the code. The result is
+    logically equivalent, but simpler.
+  - Fixed userfaultfd selftest so it returns KSFT_SKIP appropriately.
+  - Reworded documentation per Shuah's feedback on v2.
+  - Improved example usage for userfaultfd selftest.
+
+v1->v2:
+  - Add documentation update.
+  - Test *both* userfaultfd(2) and /dev/userfaultfd via the selftest.
+
+[1]: https://patchwork.kernel.org/project/linux-mm/cover/20220719195628.3415852-1-axelrasmussen@google.com/
+[2]: https://lore.kernel.org/lkml/686276b9-4530-2045-6bd8-170e5943abe4@schaufler-ca.com/T/
+
+Axel Rasmussen (5):
+  selftests: vm: add hugetlb_shared userfaultfd test to run_vmtests.sh
+  userfaultfd: add /dev/userfaultfd for fine grained access control
+  userfaultfd: selftests: modify selftest to use /dev/userfaultfd
+  userfaultfd: update documentation to describe /dev/userfaultfd
+  selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
+
+ Documentation/admin-guide/mm/userfaultfd.rst | 41 ++++++++++-
+ Documentation/admin-guide/sysctl/vm.rst      |  3 +
+ fs/userfaultfd.c                             | 73 +++++++++++++++-----
+ include/uapi/linux/userfaultfd.h             |  4 ++
+ tools/testing/selftests/vm/run_vmtests.sh    | 15 ++--
+ tools/testing/selftests/vm/userfaultfd.c     | 69 +++++++++++++++---
+ 6 files changed, 172 insertions(+), 33 deletions(-)
+
+--
+2.37.1.559.g78731f0fdb-goog
+

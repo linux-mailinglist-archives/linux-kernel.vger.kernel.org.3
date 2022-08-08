@@ -2,113 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05ABD58C8A5
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECD458C8D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242806AbiHHMxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 08:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S237628AbiHHM6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 08:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242986AbiHHMxa (ORCPT
+        with ESMTP id S231727AbiHHM6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 08:53:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A20DF05;
-        Mon,  8 Aug 2022 05:53:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D68611B1;
-        Mon,  8 Aug 2022 12:53:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0DBC433C1;
-        Mon,  8 Aug 2022 12:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659963208;
-        bh=BmIftkQ0BzMbYotXaR2i1XOZ3mRUNcoQMmDFYPC3egk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=it47u2D7EoHexGB/oK8cSgI70d1TB6ZsbijH1HlcDoPkhIJDbi0ft6HozazrLV81w
-         PAwjUsSiUuMqF/Fu2EPsUdMsFK4GmXI5j4sCJLUI4trb62OR1aBXgBX5LUlNDgEkB1
-         FDBbBETMuJBrldDoLXN+4tunfy3AM0TNyhf+Dw2pTpWjhrcW0fqVa6eMyNeu0yB7mr
-         uTLM9VwEIX0weCL1hUyqJpdREBd7+AvuvN4sxoisIJm6mJ/f7TlYDDWa9fOXuQllLB
-         WRx9XgVp2uPb/S1ho98dr1kGk+zna+Ign4CWeMco0eQ4jYOPLvztVdU90pTOM6Yloc
-         dRzNXRM+Hjoug==
-From:   Will Deacon <will@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>, stable@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH][for-stable] arm64: set UXN on swapper page tables
-Date:   Mon,  8 Aug 2022 13:53:21 +0100
-Message-Id: <20220808125321.32598-1-will@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        Mon, 8 Aug 2022 08:58:01 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F9E38B8
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:58:00 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id w11-20020a17090a380b00b001f73f75a1feso3610851pjb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:58:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lGPU+wctzKbLuWapUDBug/SpNMZRxyCn/TpZiuTYAJE=;
+        b=OfrmKEYnuwzM6XZirbZkKp9HH8tDVALUXBoIE6QbOOFK6UZVyZnUNfX2PSnRBtwsf6
+         ZMvX7xm1lKMkEBI/qQy0UGasVfDoo9SHqRqsUJD10xUmRxp+S3CfEzZ962vuSAX7d4rK
+         rYUnged7NUKeJFv9QSWcAtEdIMhEV25lNwcjB3Ku4iWYE3/BbVo6ded1L8lFZDCw4aBI
+         MAO53BSF8j6VP5Vv3NhOhIvI7FyEaenN1zartttlnfeRsiFP93W5+tloRd8OzBf10pHT
+         Hwj5ZeS34yb+7L1Yu3B89bzhZGN6ZQBC14OGShWAiu4N8QXxaM64tM7degzJ58hBF0He
+         5W4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lGPU+wctzKbLuWapUDBug/SpNMZRxyCn/TpZiuTYAJE=;
+        b=la+1HNSn3EOaXhBtMex7T5UiIZQbUQ/o087ufgFbwaY4QUF4lhfigFYoPN426yumUI
+         BQqGiDmWmX/aqqNGxow6zlNAfjkbs+p13dUCtQHjo4ZEOKDZ0GYF8Ou0iB95zQrrJ6P5
+         935HZqqknQx6ZNv5zSnaW7ryBKEoiWVK6BdVTRi2I8twlUbZyAkwPxDdWHb96eVC/QN5
+         HAmOa2Z/57F5JkkeIB5usgv0EfC0ValrJxSSMLedTIrDzxBTkxL9Ni/BOAMFy70u+5IO
+         ADAHT7SIvyge/KULruhInbL4JU03sTi0qYGb1tlHnJnmFwYqLbFUE/aC7aaxqyAyUFbT
+         JZKA==
+X-Gm-Message-State: ACgBeo0VvDtD8Gap94cVJbe6J1NC9d7k+rnOqBlo9l9XSVTLaEZZzPPF
+        4K79fJ+T+HNnvS0h/lINfQ6TpQ==
+X-Google-Smtp-Source: AA6agR47YHThcz+J3aSAEh05Fn9E8cu9+8GCiQp2FG5lg029OVW7ePocDc1cmTyK7qAfWBqDQ5Ke9w==
+X-Received: by 2002:a17:902:b207:b0:16f:2349:6116 with SMTP id t7-20020a170902b20700b0016f23496116mr18491428plr.80.1659963479613;
+        Mon, 08 Aug 2022 05:57:59 -0700 (PDT)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.240])
+        by smtp.gmail.com with ESMTPSA id d14-20020a17090ae28e00b001f4ebd47ae7sm8057722pjz.54.2022.08.08.05.57.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 05:57:59 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v4 0/9] sched/fair: task load tracking optimization and cleanup
+Date:   Mon,  8 Aug 2022 20:57:36 +0800
+Message-Id: <20220808125745.22566-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Collingbourne <pcc@google.com>
+Hi all,
 
-[ This issue was fixed upstream by accident in c3cee924bd85 ("arm64:
-  head: cover entire kernel image in initial ID map") as part of a
-  large refactoring of the arm64 boot flow. This simple fix is therefore
-  preferred for -stable backporting ]
+This patch series is optimization and cleanup for task load tracking when
+task migrate CPU/cgroup or switched_from/to_fair(), based on tip/sched/core.
 
-On a system that implements FEAT_EPAN, read/write access to the idmap
-is denied because UXN is not set on the swapper PTEs. As a result,
-idmap_kpti_install_ng_mappings panics the kernel when accessing
-__idmap_kpti_flag. Fix it by setting UXN on these PTEs.
+There are three types of detach/attach_entity_load_avg (except fork and exit)
+for a fair task:
+1. task migrate CPU (on_rq migrate or wake_up migrate)
+2. task migrate cgroup (detach and attach)
+3. task switched_from/to_fair (detach later attach)
 
-Fixes: 18107f8a2df6 ("arm64: Support execute-only permissions with Enhanced PAN")
-Cc: <stable@vger.kernel.org> # 5.15
-Link: https://linux-review.googlesource.com/id/Ic452fa4b4f74753e54f71e61027e7222a0fae1b1
-Signed-off-by: Peter Collingbourne <pcc@google.com>
-Acked-by: Will Deacon <will@kernel.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Link: https://lore.kernel.org/r/20220719234909.1398992-1-pcc@google.com
-Signed-off-by: Will Deacon <will@kernel.org>
----
- arch/arm64/include/asm/kernel-pgtable.h | 4 ++--
- arch/arm64/kernel/head.S                | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+patch 1-3 cleanup the task change cgroup case by remove cpu_cgrp_subsys->fork(),
+since we already do the same thing in sched_cgroup_fork().
 
-diff --git a/arch/arm64/include/asm/kernel-pgtable.h b/arch/arm64/include/asm/kernel-pgtable.h
-index 96dc0f7da258..a971d462f531 100644
---- a/arch/arm64/include/asm/kernel-pgtable.h
-+++ b/arch/arm64/include/asm/kernel-pgtable.h
-@@ -103,8 +103,8 @@
- /*
-  * Initial memory map attributes.
-  */
--#define SWAPPER_PTE_FLAGS	(PTE_TYPE_PAGE | PTE_AF | PTE_SHARED)
--#define SWAPPER_PMD_FLAGS	(PMD_TYPE_SECT | PMD_SECT_AF | PMD_SECT_S)
-+#define SWAPPER_PTE_FLAGS	(PTE_TYPE_PAGE | PTE_AF | PTE_SHARED | PTE_UXN)
-+#define SWAPPER_PMD_FLAGS	(PMD_TYPE_SECT | PMD_SECT_AF | PMD_SECT_S | PMD_SECT_UXN)
- 
- #if ARM64_KERNEL_USES_PMD_MAPS
- #define SWAPPER_MM_MMUFLAGS	(PMD_ATTRINDX(MT_NORMAL) | SWAPPER_PMD_FLAGS)
-diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-index 6a98f1a38c29..8a93a0a7489b 100644
---- a/arch/arm64/kernel/head.S
-+++ b/arch/arm64/kernel/head.S
-@@ -285,7 +285,7 @@ SYM_FUNC_START_LOCAL(__create_page_tables)
- 	subs	x1, x1, #64
- 	b.ne	1b
- 
--	mov	x7, SWAPPER_MM_MMUFLAGS
-+	mov_q	x7, SWAPPER_MM_MMUFLAGS
- 
- 	/*
- 	 * Create the identity mapping.
+patch 5/9 optimize the task migrate CPU case by combine detach into dequeue.
+
+patch 6/9 fix another detach on unattached task case which has been woken up
+by try_to_wake_up() but is waiting for actually being woken up by
+sched_ttwu_pending().
+
+patch 7/9 remove unnecessary limitation that we would fail when change
+cgroup of forked task which hasn't been woken up by wake_up_new_task().
+
+patch 8-9 optimize post_init_entity_util_avg() for fair task and skip
+setting util_avg and runnable_avg for !fair task at the fork time.
+
+Thanks!
+
+Changes in v4:
+ - Drop detach/attach_entity_cfs_rq() refactor patch in the last version.
+ - Move new forked task check to task_change_group_fair().
+
+Changes in v3:
+ - One big change is this series don't freeze PELT sum/avg values to be
+   used as initial values when re-entering fair any more, since these
+   PELT values become much less relevant.
+ - Reorder patches and collect tags from Vincent and Dietmar. Thanks!
+ - Fix detach on unattached task which has been woken up by try_to_wake_up()
+   but is waiting for actually being woken up by sched_ttwu_pending().
+ - Delete TASK_NEW which limit forked task from changing cgroup.
+ - Don't init util_avg and runnable_avg for !fair taks at fork time.
+
+Changes in v2:
+ - split task se depth maintenance into a separate patch3, suggested
+   by Peter.
+ - reorder patch6-7 before patch8-9, since we need update_load_avg()
+   to do conditional attach/detach to avoid corner cases like twice
+   attach problem.
+
+Chengming Zhou (9):
+  sched/fair: maintain task se depth in set_task_rq()
+  sched/fair: remove redundant cpu_cgrp_subsys->fork()
+  sched/fair: reset sched_avg last_update_time before set_task_rq()
+  sched/fair: update comments in enqueue/dequeue_entity()
+  sched/fair: combine detach into dequeue when migrating task
+  sched/fair: fix another detach on unattached task corner case
+  sched/fair: allow changing cgroup of new forked task
+  sched/fair: defer task sched_avg attach to enqueue_entity()
+  sched/fair: don't init util/runnable_avg for !fair task
+
+ include/linux/sched.h |   5 +-
+ kernel/sched/core.c   |  57 ++--------
+ kernel/sched/fair.c   | 234 ++++++++++++++++++++----------------------
+ kernel/sched/sched.h  |   6 +-
+ 4 files changed, 124 insertions(+), 178 deletions(-)
+
 -- 
-2.37.1.559.g78731f0fdb-goog
+2.36.1
 

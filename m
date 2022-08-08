@@ -2,102 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D7B58CC9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FDB58CC9B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242531AbiHHRT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
+        id S237155AbiHHRTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237846AbiHHRTN (ORCPT
+        with ESMTP id S233696AbiHHRTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:19:13 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C2D15FEF
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:19:11 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id v2so4997662lfi.6
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 10:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=KbpI7aX4OJn+9ta7EZh2prJEXa1vTXGHPmj5GWJjFZo=;
-        b=zlnytlGmuMZ+psy1MdlUiNxuXSiE8ZCQ3Gv5Frvlh8cCNKqt2vz3RyTbRK256z5CKX
-         ZiuNuhAA8KA12Bt3I+BbNroQ91a8BPiMqx26a8cX96K41jkiGVK44WiqKCvPLcROB+9h
-         RMY9cVTGaADY3Uew5DmA0cBp4ZUot3wxoLoTqCOQpZLlYII++6Brua3pyU1+ydwOM6IJ
-         BUIgerP4Y+W2XoSWVc4fw9+o932Bj9skOfT3gBECuXD55/9/WtQgc5G5Avryql3RS6ZX
-         KJKJOgYLQ3PSDLNrWyUjEk0LQY6DhY4+0EDzjqUJLHD/X7Z4ysu2yu2jnnBvISNlVRJd
-         fEIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=KbpI7aX4OJn+9ta7EZh2prJEXa1vTXGHPmj5GWJjFZo=;
-        b=42qchAxvDf2/FZ1XfJDy9bPRLrQi7Ve6vKdK9pnDZG563xNNB5jFVxFjeBg6HmLko/
-         wUK1Dg0qxp1wArS1EZZDtnqCbdOfjWU11K4ZRPpa4b00EJ6lLFOjSikfzPN1Ge8QAJk/
-         fu8QLcRiT/09B36vmE+uJXCL9jJG15xNJw2PtrR/4AzdztAqdazmFjkgbhVFmmf6yO/q
-         dVPxJkNRZjURw9ihLHXTzB4zoNmFVHlQx7vc2l0QmmG7qQlszcEvQrQs/gL4OEgEagVW
-         ZKxIuLbNnDZTz6vg/jsks3MJgeG2dxrv/sISx1t3umU9ko/xyC1A4cTj1Ubcds9j9Mv8
-         vcew==
-X-Gm-Message-State: ACgBeo1X9oKCEFTGVMJ0N3UtuCgKpDoBFgjf5YLDudqnhtrFGbZI35gx
-        c0Y5Ph/O//34prpDcowQuvmkogMATQfDHL3gGO20kA==
-X-Google-Smtp-Source: AA6agR60RUwt3/4FZq6vv68Rd14ohShJ+6I1vuQ8pNpdWDWPZ27+sATnt0BnfGxwaXqeGnKcTp+CfCCKh4dFy7ZrKgQ=
-X-Received: by 2002:a05:6512:2306:b0:48b:26f3:91b1 with SMTP id
- o6-20020a056512230600b0048b26f391b1mr6621555lfu.11.1659979150181; Mon, 08 Aug
- 2022 10:19:10 -0700 (PDT)
+        Mon, 8 Aug 2022 13:19:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AA19582
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659979146; x=1691515146;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=2M0Gift2bIkEpuyV+QSRuLQemKZWmk9fMTillQXnu7w=;
+  b=lyp0WK5eVHA1Bc/+2z2HPhiAxCht6nNTMytXntYgiPLGgFM4s/1cUMwC
+   AAqjQJ6T7T6l3NJr3TyBEyyr6EgpQUqvHc81Atulehtv0vPP5Yl+N2LrQ
+   Aux7GZ2KNKI8RRW65Z1E7mhw6QbEBkmSXc4Bwi2bIt5KCOw+/qIPDtKkS
+   GI4tmLH6TmEohBwc23uY+2eKkDEmcTmF71HPkzCCS/MMHxAwKxeTXJqeE
+   k/82s80Dr1JTgW82rt+uB+adE3zvlTNwzwkdvdUQX4+iyUjHODB4JeCWA
+   e68zmqocTwIS15E1Zl0rAwV/RMaQyFoeL7f41cLgoQbZPgxVdOAw7eQ4K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="291885080"
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="291885080"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 10:19:05 -0700
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="664048967"
+Received: from ograu-mobl.ger.corp.intel.com (HELO localhost) ([10.252.63.143])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 10:19:03 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Matthieu CHARETTE <matthieu.charette@gmail.com>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org, tzimmermann@suse.de,
+        airlied@linux.ie, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, andrealmeid@igalia.com
+Subject: Re: [PATCH] drm: Fix EDID firmware load on resume
+In-Reply-To: <PDYAGR.ODW3J0YFOA5G3@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <202207172035.mtErdlaw-lkp@intel.com>
+ <20220727074152.43059-1-matthieu.charette@gmail.com>
+ <87wnbqen2f.fsf@intel.com> <PDYAGR.ODW3J0YFOA5G3@gmail.com>
+Date:   Mon, 08 Aug 2022 20:19:01 +0300
+Message-ID: <87edxqodq2.fsf@intel.com>
 MIME-Version: 1.0
-References: <20220726200739.30017-1-semen.protsenko@linaro.org>
-In-Reply-To: <20220726200739.30017-1-semen.protsenko@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Mon, 8 Aug 2022 20:18:58 +0300
-Message-ID: <CAPLW+4kG9V03edHFXWJumuK+tmWiiwF5B7d2O6+Mb_XmfBY5Jw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] iommu/exynos: Add fault handling on SysMMU v7
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        David Virag <virag.david003@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 at 23:07, Sam Protsenko <semen.protsenko@linaro.org> wrote:
+On Mon, 08 Aug 2022, Matthieu CHARETTE <matthieu.charette@gmail.com> wrote:
+> Sorry, What do you mean?
+
+You cache with one name at connector init time, but the name specified
+using drm.edid_firmware may be changed whenever, to cause the next EDID
+read to use a different EDID firmware.
+
+BR,
+Jani.
+
+
 >
-> Exynos IOMMU driver implements fault handling for SysMMU v1..v5. But the
-> abstraction currently used is not suited for SysMMU v7, as it has quite
-> different fault related register set.
+> Matthieu
 >
-> This patch series reworks the mentioned fault handling abstraction and
-> adds fault handling support for SysMMU v7.
->
-> Sam Protsenko (2):
->   iommu/exynos: Abstract getting the fault info
->   iommu/exynos: Implement fault handling on SysMMU v7
->
->  drivers/iommu/exynos-iommu.c | 208 ++++++++++++++++++++++++-----------
->  1 file changed, 143 insertions(+), 65 deletions(-)
->
-> --
-> 2.30.2
+> On Tue, Aug 2 2022 at 05:29:12 PM +0300, Jani Nikula 
+> <jani.nikula@linux.intel.com> wrote:
+>> On Wed, 27 Jul 2022, Matthieu CHARETTE <matthieu.charette@gmail.com 
+>> <mailto:matthieu.charette@gmail.com>> wrote:
+>>>  Loading an EDID using drm.edid_firmware parameter makes resume to 
+>>> fail
+>>>  after firmware cache is being cleaned. This is because edid_load() 
+>>> use a
+>>>  temporary device to request the firmware. This cause the EDID 
+>>> firmware
+>>>  not to be cached from suspend. And, requesting the EDID firmware 
+>>> return
+>>>  an error during resume.
+>>>  So the request_firmware() call should use a permanent device for 
+>>> each
+>>>  connector. Also, we should cache the EDID even if no monitor is
+>>>  connected, in case it's plugged while suspended.
+>> 
+>> AFAICT this breaks changing drm.edid_firmware runtime.
+>> 
+>> BR,
+>> Jani.
+>> 
+>>> 
+>>>  Link: <https://gitlab.freedesktop.org/drm/amd/-/issues/2061>
+>>>  Signed-off-by: Matthieu CHARETTE <matthieu.charette@gmail.com 
+>>> <mailto:matthieu.charette@gmail.com>>
+>>>  ---
+>>>   drivers/gpu/drm/drm_connector.c |  9 ++++
+>>>   drivers/gpu/drm/drm_edid_load.c | 81 
+>>> ++++++++++++++++++++++++++++-----
+>>>   include/drm/drm_connector.h     | 12 +++++
+>>>   include/drm/drm_edid.h          |  3 ++
+>>>   4 files changed, 94 insertions(+), 11 deletions(-)
+>>> 
+>>>  diff --git a/drivers/gpu/drm/drm_connector.c 
+>>> b/drivers/gpu/drm/drm_connector.c
+>>>  index 1c48d162c77e..e8819ebf1c4b 100644
+>>>  --- a/drivers/gpu/drm/drm_connector.c
+>>>  +++ b/drivers/gpu/drm/drm_connector.c
+>>>  @@ -31,6 +31,7 @@
+>>>   #include <drm/drm_privacy_screen_consumer.h>
+>>>   #include <drm/drm_sysfs.h>
+>>> 
+>>>  +#include <linux/platform_device.h>
+>>>   #include <linux/uaccess.h>
+>>> 
+>>>   #include "drm_crtc_internal.h"
+>>>  @@ -289,6 +290,9 @@ int drm_connector_init(struct drm_device *dev,
+>>> 
+>>>   	drm_connector_get_cmdline_mode(connector);
+>>> 
+>>>  +	connector->edid_load_pdev = NULL;
+>>>  +	drm_cache_edid_firmware(connector);
+>>>  +
+>>>   	/* We should add connectors at the end to avoid upsetting the 
+>>> connector
+>>>   	 * index too much.
+>>>   	 */
+>>>  @@ -473,6 +477,11 @@ void drm_connector_cleanup(struct 
+>>> drm_connector *connector)
+>>>   		connector->tile_group = NULL;
+>>>   	}
+>>> 
+>>>  +	if (connector->edid_load_pdev) {
+>>>  +		platform_device_unregister(connector->edid_load_pdev);
+>>>  +		connector->edid_load_pdev = NULL;
+>>>  +	}
+>>>  +
+>>>   	list_for_each_entry_safe(mode, t, &connector->probed_modes, head)
+>>>   		drm_mode_remove(connector, mode);
+>>> 
+>>>  diff --git a/drivers/gpu/drm/drm_edid_load.c 
+>>> b/drivers/gpu/drm/drm_edid_load.c
+>>>  index 37d8ba3ddb46..5a82be9917ec 100644
+>>>  --- a/drivers/gpu/drm/drm_edid_load.c
+>>>  +++ b/drivers/gpu/drm/drm_edid_load.c
+>>>  @@ -167,6 +167,19 @@ static int edid_size(const u8 *edid, int 
+>>> data_size)
+>>>   	return (edid[0x7e] + 1) * EDID_LENGTH;
+>>>   }
+>>> 
+>>>  +static struct platform_device *edid_pdev(const char 
+>>> *connector_name)
+>>>  +{
+>>>  +	struct platform_device *pdev = 
+>>> platform_device_register_simple(connector_name, -1, NULL, 0);
+>>>  +
+>>>  +	if (IS_ERR(pdev)) {
+>>>  +		DRM_ERROR("Failed to register EDID firmware platform device "
+>>>  +			"for connector \"%s\"\n", connector_name);
+>>>  +		return ERR_CAST(pdev);
+>>>  +	}
+>>>  +
+>>>  +	return pdev;
+>>>  +}
+>>>  +
+>>>   static void *edid_load(struct drm_connector *connector, const char 
+>>> *name,
+>>>   			const char *connector_name)
+>>>   {
+>>>  @@ -182,18 +195,17 @@ static void *edid_load(struct drm_connector 
+>>> *connector, const char *name,
+>>>   		fwdata = generic_edid[builtin];
+>>>   		fwsize = sizeof(generic_edid[builtin]);
+>>>   	} else {
+>>>  -		struct platform_device *pdev;
+>>>  +		struct platform_device *pdev = connector->edid_load_pdev;
+>>>   		int err;
+>>> 
+>>>  -		pdev = platform_device_register_simple(connector_name, -1, NULL, 
+>>> 0);
+>>>  -		if (IS_ERR(pdev)) {
+>>>  -			DRM_ERROR("Failed to register EDID firmware platform device "
+>>>  -				  "for connector \"%s\"\n", connector_name);
+>>>  -			return ERR_CAST(pdev);
+>>>  +		if (WARN_ON(!pdev)) {
+>>>  +			pdev = edid_pdev(connector_name);
+>>>  +			if (IS_ERR(pdev))
+>>>  +				return ERR_CAST(pdev);
+>>>  +			connector->edid_load_pdev = pdev;
+>>>   		}
+>>> 
+>>>   		err = request_firmware(&fw, name, &pdev->dev);
+>>>  -		platform_device_unregister(pdev);
+>>>   		if (err) {
+>>>   			DRM_ERROR("Requesting EDID firmware \"%s\" failed (err=%d)\n",
+>>>   				  name, err);
+>>>  @@ -263,11 +275,9 @@ static void *edid_load(struct drm_connector 
+>>> *connector, const char *name,
+>>>   	return edid;
+>>>   }
+>>> 
+>>>  -struct edid *drm_load_edid_firmware(struct drm_connector 
+>>> *connector)
+>>>  +static char *edid_name(const char *connector_name)
+>>>   {
+>>>  -	const char *connector_name = connector->name;
+>>>   	char *edidname, *last, *colon, *fwstr, *edidstr, *fallback = NULL;
+>>>  -	struct edid *edid;
+>>> 
+>>>   	if (edid_firmware[0] == '\0')
+>>>   		return ERR_PTR(-ENOENT);
+>>>  @@ -310,8 +320,57 @@ struct edid *drm_load_edid_firmware(struct 
+>>> drm_connector *connector)
+>>>   	if (*last == '\n')
+>>>   		*last = '\0';
+>>> 
+>>>  -	edid = edid_load(connector, edidname, connector_name);
+>>>  +	edidname = kstrdup(edidname, GFP_KERNEL);
+>>>  +	if (!edidname) {
+>>>  +		kfree(fwstr);
+>>>  +		return ERR_PTR(-ENOMEM);
+>>>  +	}
+>>>  +
+>>>   	kfree(fwstr);
+>>>  +	return edidname;
+>>>  +}
+>>>  +
+>>>  +void drm_cache_edid_firmware(struct drm_connector *connector)
+>>>  +{
+>>>  +	const char *connector_name = connector->name;
+>>>  +	const char *edidname = edid_name(connector_name);
+>>>  +	struct platform_device *pdev;
+>>>  +	int err;
+>>>  +
+>>>  +	if (IS_ERR(edidname))
+>>>  +		return;
+>>>  +
+>>>  +	if (match_string(generic_edid_name, GENERIC_EDIDS, edidname) >= 
+>>> 0) {
+>>>  +		kfree(edidname);
+>>>  +		return;
+>>>  +	}
+>>>  +
+>>>  +	pdev = edid_pdev(connector_name);
+>>>  +	if (IS_ERR(pdev)) {
+>>>  +		kfree(edidname);
+>>>  +		return;
+>>>  +	}
+>>>  +	connector->edid_load_pdev = pdev;
+>>>  +
+>>>  +	err = firmware_request_cache(&pdev->dev, edidname);
+>>>  +	if (err)
+>>>  +		DRM_ERROR("Requesting EDID firmware cache \"%s\" failed 
+>>> (err=%d)\n",
+>>>  +			edidname, err);
+>>>  +
+>>>  +	kfree(edidname);
+>>>  +}
+>>>  +
+>>>  +struct edid *drm_load_edid_firmware(struct drm_connector 
+>>> *connector)
+>>>  +{
+>>>  +	const char *connector_name = connector->name;
+>>>  +	const char *edidname = edid_name(connector_name);
+>>>  +	struct edid *edid;
+>>>  +
+>>>  +	if (IS_ERR(edidname))
+>>>  +		return ERR_CAST(edidname);
+>>>  +
+>>>  +	edid = edid_load(connector, edidname, connector_name);
+>>>  +	kfree(edidname);
+>>> 
+>>>   	return edid;
+>>>   }
+>>>  diff --git a/include/drm/drm_connector.h 
+>>> b/include/drm/drm_connector.h
+>>>  index 3ac4bf87f257..47c84741517e 100644
+>>>  --- a/include/drm/drm_connector.h
+>>>  +++ b/include/drm/drm_connector.h
+>>>  @@ -1573,6 +1573,18 @@ struct drm_connector {
+>>>   	 */
+>>>   	struct i2c_adapter *ddc;
+>>> 
+>>>  +	/**
+>>>  +	 * @edid_load_pdev: Platform device for loading EDID via firmware.
+>>>  +	 *
+>>>  +	 * The platform device is registered in drm_connector_init() in 
+>>> case a
+>>>  +	 * custom EDID firmware is used with `edid_firmware` parameter. 
+>>> Otherwise,
+>>>  +	 * it is set to NULL.
+>>>  +	 *
+>>>  +	 * Platform device is unregistered in drm_connector_cleanup() if 
+>>> it
+>>>  +	 * is not NULL.
+>>>  +	 */
+>>>  +	struct platform_device *edid_load_pdev;
+>>>  +
+>>>   	/**
+>>>   	 * @null_edid_counter: track sinks that give us all zeros for the 
+>>> EDID.
+>>>   	 * Needed to workaround some HW bugs where we get all 0s
+>>>  diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
+>>>  index b2756753370b..e907c928a35d 100644
+>>>  --- a/include/drm/drm_edid.h
+>>>  +++ b/include/drm/drm_edid.h
+>>>  @@ -378,10 +378,13 @@ int drm_av_sync_delay(struct drm_connector 
+>>> *connector,
+>>>   		      const struct drm_display_mode *mode);
+>>> 
+>>>   #ifdef CONFIG_DRM_LOAD_EDID_FIRMWARE
+>>>  +void drm_cache_edid_firmware(struct drm_connector *connector);
+>>>   struct edid *drm_load_edid_firmware(struct drm_connector 
+>>> *connector);
+>>>   int __drm_set_edid_firmware_path(const char *path);
+>>>   int __drm_get_edid_firmware_path(char *buf, size_t bufsize);
+>>>   #else
+>>>  +inline void
+>>>  +drm_cache_edid_firmware(struct drm_connector *connector);
+>>>   static inline struct edid *
+>>>   drm_load_edid_firmware(struct drm_connector *connector)
+>>>   {
+>> 
+>> --
+>> Jani Nikula, Intel Open Source Graphics Center
 >
 
-Hi Marek,
-
-Can you please review and test this series? I only have my E850 (which
-has VM-capable SysMMU register layout). So it would be nice to check
-if it works fine with non-VM SysMMU v7 and older versions.
-
-Thanks!
+-- 
+Jani Nikula, Intel Open Source Graphics Center

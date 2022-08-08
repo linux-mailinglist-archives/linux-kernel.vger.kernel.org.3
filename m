@@ -2,193 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9839D58C5B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 11:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26D058C5BC
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 11:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235886AbiHHJgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 05:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S242475AbiHHJj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 05:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242015AbiHHJgi (ORCPT
+        with ESMTP id S232190AbiHHJjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 05:36:38 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2084.outbound.protection.outlook.com [40.107.223.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4177113CF6;
-        Mon,  8 Aug 2022 02:36:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=auVUfxgwFfmksCwWLgHTvL1Gw5mShAI/V6ME2vwwYjczLURvrcy3nWVozAdsGkh9HVdJCus4TJcnRP7D9VRyo2/sq5louy3jpLiQ2ySHpu/lc3eD59rQYonn3WFcwDdDXEwSoDKYcqFqh09U0x+DtzfkNUoxPiEmG2ru/KMx+T0779IX9o8gwLtcRTmciW9DEQojqowac0ZDSdnmVfJDuAnGp7ERkrtnLDTD9pE+pt4eI0Fbf8Yy1KK8LFyyZcfvWgXiUpPUNuJgofJkkIlJ8fPgXdtI3FX1/Fr5YvuCrP0kZNQkNomAyymenrQAe2ScL5wbpebMDoZQ/64E1SBQ/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+AyUIF4Ddn5kz44BlCi6k+h+S44Ue3UbgnaeHiyMV7o=;
- b=BGZjVj2Hi1izfYcHsseBP0w0yq5Zcbi2R0QQFm4ziREI0YbKkZxjs/fAmMdjNIjHIXNppxXMOqMkBd9BGR4TfDPjxnQ/2Ne8CswAOaqYKzN3T7QkTeuSXu432dM+J+J34VR1uuV7MphF105C/KuTst/G2mctnOIOTOBkbent4jTaYJ/lHAg9IZ+ek04iBOZ5XhGjK1g0GgLTbIxb5VlmoMP4UXhwdURFFGL+pVnLxJbgfk5doDaRnfWEhZf9BDHCRQpT/lP3bVTu0ZOFHn43M3WULH0CAtOxg68n3udHPTK12Ikt7dPbgpoqQqDKkHZp1WgH8a5IcrcAu3HaJRmpDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=tw.synaptics.com; dmarc=pass action=none
- header.from=tw.synaptics.com; dkim=pass header.d=tw.synaptics.com; arc=none
+        Mon, 8 Aug 2022 05:39:54 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AE613D5B
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 02:39:53 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id c17so11851445lfb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 02:39:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+AyUIF4Ddn5kz44BlCi6k+h+S44Ue3UbgnaeHiyMV7o=;
- b=M5h+BfocHX0HkoyO0qMxDUibbKIR0mIaoO55ukBx2Twe+/SabD4v2mwt7xEhH/6qtE5gxB97jFK6lE/0/Rzkc1Xhmct2KDk0s+stSHrX4rYdKd+TXQNHUXud11aR6M/YZ+/YIQCAR8YfxG+ILPmy5m3MYtrS/CJQagzCA3w0y9M=
-Received: from PH0PR03MB5848.namprd03.prod.outlook.com (2603:10b6:510:30::19)
- by MN2PR03MB5245.namprd03.prod.outlook.com (2603:10b6:208:1e6::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Mon, 8 Aug
- 2022 09:36:34 +0000
-Received: from PH0PR03MB5848.namprd03.prod.outlook.com
- ([fe80::60b1:a766:c174:65ca]) by PH0PR03MB5848.namprd03.prod.outlook.com
- ([fe80::60b1:a766:c174:65ca%8]) with mapi id 15.20.5504.020; Mon, 8 Aug 2022
- 09:36:34 +0000
-From:   Marge Yang <Marge.Yang@tw.synaptics.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        margeyang <marge.yang@synaptics.corp-partner.google.com>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        Marge Yang <Marge.Yang@tw.synaptics.com>
-CC:     "derek.cheng@tw.synaptcs.com" <derek.cheng@tw.synaptcs.com>,
-        Vincent Huang <Vincent.huang@tw.synaptics.com>
-Subject: RE: [PATCH] HID: HID-rmi - ignore to rmi_hid_read_block after system
- resumes.
-Thread-Topic: [PATCH] HID: HID-rmi - ignore to rmi_hid_read_block after system
- resumes.
-Thread-Index: AQHYqwZUXeo8/uu+vUqrcpU3ezQMya2kuP4AgAABZ5A=
-Date:   Mon, 8 Aug 2022 09:36:34 +0000
-Message-ID: <PH0PR03MB5848811A9EC856635CD1E519A3639@PH0PR03MB5848.namprd03.prod.outlook.com>
-References: <1659949639-3127-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
- <7507e07a-5094-f129-b75a-69cc32147543@redhat.com>
-In-Reply-To: <7507e07a-5094-f129-b75a-69cc32147543@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcbXlhbmdcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5ZTM1Ylxtc2dzXG1zZy05NGE2Y2JhYS0xNmZkLTExZWQtODJkNS1mODU5NzE0OTljZGNcYW1lLXRlc3RcOTRhNmNiYWItMTZmZC0xMWVkLTgyZDUtZjg1OTcxNDk5Y2RjYm9keS50eHQiIHN6PSIzMzQ5IiB0PSIxMzMwNDQyNDk5MDU4MDU4MTUiIGg9InF5VHYzRzF5S1NSakxtWkRYT2J6S1hWZndMZz0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
-x-dg-rorf: true
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=tw.synaptics.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 794849b6-6c5b-45de-202c-08da79217bc5
-x-ms-traffictypediagnostic: MN2PR03MB5245:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: oL6qsr3t+o8d5RG0sexmkL/P00yyl/trYTZSnX/pb/n9LVkuQGvrAu5gLFfV5dbWvw7Y4StKs+xQm81FAFGrTVvsWuL33Btp6kvmTZEeINVEwaIex5i44MRgGVChyTF7haT7XqDu0oEr7QsnghwKw2MXAAyv0a6GWQBv8ZFy3FA/i9B3jMlCZ3aBw/4ei3L0qd9IdgZT0Wz9uEdrKP4zRHHzpApKU6ZqAZonH07SGtaGhkXFXwiXymv0JjIGdHPT1XTS2G6YzWerogJUtWfg/EuomF9g935D5H0jKv/tC4d/LN5dWQsUTpkTio75kqo5q1E+js3DOfuYOhaGpoMwoT/nxINr0LHLWvfKpkAIUGv83dUOz6PqLpQ2x1ekwGjg+0KnI6oriSUQNPUqcXwW+IYSkQwzXRj7N5CsSqGX2eJcGBKFzv0GmC9yetO/L4VRmzSOBAiXYX9pIK46oa1dwd2tvBsW401OxLTY/b+SKfqdJvvzGUqqYSx6/+Me414qZwvPG1G2bHZZVBAzR3r9SrSzWcEqb24wq8RCLnSFAGLNiSTXki6ol5FqBANbYRKgC1XPby0cPBj4nh8Hx52jMZJM4QV9tJRcVDyOh4oibftAdZfPUOobvggG4TJua6K6gxAJk7QT5fVNsBIqavUupHc0bnCfXwiaVYb+RiHUtOmSf74vbchFQ2g2iR5Wq26wvn/V5LtOoNDu9YTPzJX5QMLiDG0X7xwxDs+BAfwssuVWirNseOJrQtG2UgjEG+DAE9S4QLRJav0Cilsf9F8f+/T5/HynI+vzlRRA2CfssWD2eHDl0djzlXj5IXJ2fH7W
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB5848.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(346002)(39860400002)(366004)(376002)(6506007)(41300700001)(53546011)(9686003)(26005)(7696005)(86362001)(5660300002)(71200400001)(52536014)(8936002)(478600001)(2906002)(33656002)(83380400001)(55016003)(107886003)(38070700005)(38100700002)(122000001)(186003)(8676002)(66446008)(4326008)(316002)(64756008)(110136005)(66556008)(66476007)(54906003)(76116006)(66946007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ekIyZmQwMHI3dFM5UVRPV3Y1N1U1WFZlbVdIR0JDWExlNFpaOENYOWdZVzRK?=
- =?utf-8?B?UFJYRXpvYUJVMlFvajRSNExKQURwR2lkSUdQS1RzOFh4blVyUFNsaE5ZeFBL?=
- =?utf-8?B?dEJ6VXA1bjk5Z05JeWRPQ20wbXdkOE80UElNSnJTdXR4eE5jUUkvMWNqVEZ5?=
- =?utf-8?B?SFBQUkxMajdkZU5YNkdXdkEzRmRDKy9GVDdWc0NIRDcrT0JLSDhIWXo5aVNV?=
- =?utf-8?B?ek1qa0VEL3NHdjJQeHRmM010WDVKN3psekNhQTcxTE52eFJqYit4SUtKM0o1?=
- =?utf-8?B?UGtYTjhDNXZYSGZKVjEwU09nd01reStuVDJGdXhpMVdjMEtySXp1WUxPbEJQ?=
- =?utf-8?B?Mlgza0NPUHRiZkgvQnZaSTVXVzhTNzVVQzZLL21jN1lJamplR3I2RERRZUVw?=
- =?utf-8?B?dkxtMHlnN0pDTmtjMjBIbWVzUjBYOHdQR1RJRjFtaDdVakJORWV2aDJhTGdF?=
- =?utf-8?B?VExHcCtQbytjNFBNV1JDamJvZll0aVJyZDl0Ri9YcU9MTG1sdW0waFFHeWhw?=
- =?utf-8?B?eHhHZS9LZ050aUUyZXY1eDFrUFJvSjBFNk54VDcxRXg4ZGR6Y3FRdmJHcFlm?=
- =?utf-8?B?SzVJSm9qMDdmMGpvOGpHUmMvYkF5SW1GQ3BnR1FZYTI3R0JCSWVBRml6K1VR?=
- =?utf-8?B?UjkvdVBzWHYzTFVmUU15RVU1and3TWRNY1RTTWJncGRiWWRaN29aSEx4MlBB?=
- =?utf-8?B?V0V4enc1c1FrVCt5SHJpaWVJanpONkVSeE1VaWg5c21jbEFydHNobWlrdGNG?=
- =?utf-8?B?T3M3dzFLQWpPYkE3M1hsVG5HUW9odlRzeG1SS3dCYklaOVhybVNXZmpMNEIz?=
- =?utf-8?B?Tk0rSEIxVk10WjNXSGw4NW82bWowSVdPbCtVKzZ5YUhtaEpKUktPRmJsR2Vh?=
- =?utf-8?B?ZTMzclpxcWdnMFk0bTRHUFBweHNsY2hiNXV1dENKVTVEOTQraWFIYTZMUHFL?=
- =?utf-8?B?dnVjcWgyQUwybWV5MkwrM3VPT1pMMVFMSVhFSFVGdUFQSGhBaGdhQXZtR3pH?=
- =?utf-8?B?N2dmWWg4MGd1TmRRekp2aWNJN3VjcHA3ZUdmdnpTWmFvSHhac1NraGR0OWRn?=
- =?utf-8?B?bTJsU2Rkam13MXVPdFNDK0srMFp5VWxtQ1Ixakh2eU0zTUFyYXhzWmtsUm1w?=
- =?utf-8?B?T0JscXlGUHFzdWVidmpCdW1BMzlBbnlBdURiOG56QkZyRk9LL3lVRDVvUjNO?=
- =?utf-8?B?OUhQRWxFQ1RhU1R5dmJncDdTNmRUYTgyR1ZrU2pFSVdqYzdCVEltU2NYWHg3?=
- =?utf-8?B?VUV4WFZlL1B3cm5lTTA4L3ZTSDlKeUowWWxjY0YzWVh3M2dmdlQyVnR4YkZG?=
- =?utf-8?B?Qm84NHdRTHpsUGk5YVZiZHBaL3lYcmt1NzZZTEx6TnNLV0JJV2YrdDNmeS9N?=
- =?utf-8?B?cjQrQWlnOXByNnE5TjAyQWYxYktnTWVGcEtuZldzTk9YYzFja0cvTTlmY3hs?=
- =?utf-8?B?ZEFOeGpKaWFxTzR1bUpXZWlFMlgzdnREUkpPbko4YStYbGNFSkVuY3ltMEdj?=
- =?utf-8?B?NGdiNUgxemdLajdMM0QwTkJUN2pGbmI2anhxNldQQ0w2NmNXVWRNcktsY2d1?=
- =?utf-8?B?OEQ2NzljRXl6d3M0SjNsTS9BaG80MzlNVkZvd0lSNFJ5cks4aHY1Umx5RUFR?=
- =?utf-8?B?RzNaaS9uWE1MNTFReXlxbFdOMU9wc2lydWdKUGpCL3VqNXNOa3BIUnhGM1p0?=
- =?utf-8?B?VHJqU3h0U040MFh4Vm9ITnVzcmV4eGZaTkFVT0w2cTZqT0l3Z25zUHovWGdQ?=
- =?utf-8?B?RXorL28rTk9KNlJubmhEZTZXTnRLTk9iSjJ2VFRyNmdaS0IxUi9SR2R3L2lY?=
- =?utf-8?B?OGVyWmtXR3dUQlVmVVBqanIzVXBYQTl4ZEFBYnl5RHk5NDA3TmV2TWovKzBo?=
- =?utf-8?B?YVFqMnNXQXJTUnlIc0ZGVXFVTFpvdFYvbTVRZGkrdTZoTjdnU25TTVd3U0Rp?=
- =?utf-8?B?d0dHV0FwUTA0WGVpT1BkQ3ZGOHJyVmd1MEcwUm03YUFCWG02T0paeHJNbTBq?=
- =?utf-8?B?Rjh1dlhucEgyZDJzWEJ0NVlmeVFPZ3hoTDEzZjVabzZLenJncDBWeEYvL0pI?=
- =?utf-8?B?alZmWmdCeW12ZUpObTVWVFhCelFTTGMrZ3pYNGNuWFB0a09vdktuMFNWQ2JN?=
- =?utf-8?Q?ZSA0vDa3BlE6ZaTShG3zzTi2Q?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4wW9IqhKPya86Ne3kZ8W5Px3+wqvxjBbUcrSQT3T4dg=;
+        b=a5yopIAy9kR8vRJlLjjVB/b3JFrdKEiOl1LXNHsZWQEZQ7CtXgLbcICnqWkKujmAHq
+         05o71oKxa2k5A8j4aprmUr1Hn8fDaXrN17Fg1uQqkR0t9B5BTvqn+NDqrBBNwrRoryT5
+         QKxsu+DhijXkvc7zcjvSo3DRYx55VKV0GjEuj+WN/zhy4DUmJ1fugfy76JOBIqLhLXDf
+         eefrS1NRbOkn+/n89qggUJgaoM2l+J8eW7LSxfBlftFachh1Q2Bex4+atnGJzY2VBr/6
+         7DWMADSq7fqayAs/E0ugrAQzMoUwXfSdyhbVBu6VFlYbM7XCXqQgaM38nSzDaIFX5uop
+         DBPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4wW9IqhKPya86Ne3kZ8W5Px3+wqvxjBbUcrSQT3T4dg=;
+        b=KdgNwrn3w3tWtd1TI6zsqQsbyJZDnheoDj1mx72gaWz1I6WjI+uB62QXvJVyjOIuMQ
+         liH9lRipRVCJZN7g3yROA0GL0vjGm5hxX++PpCFhwvMaASKsJA7q5NheWRqZEe244Kse
+         t71CVI/TdEGRGezy/27RNhAlNlaX737VQ/rgETOI7j/72DbmDyBYHRnGzmRNrfZx8o0G
+         TE6PyCx/JpWFvWXHy+nT3Noih6O54bgiJB5VSHfnbO1B0wsM1xNbputlVKMSVGrwh3Jc
+         /EcjaUriT0jLXfNJKiyPl76feJgQT5ovAlGZP4l9RlqtTVDZwJbxHvmN/W4gUy2RhanV
+         yGlA==
+X-Gm-Message-State: ACgBeo1PUW++Tl0f6QfRi9wQVg6VRrAGCgjMQnkumSeskSfrnTjfyXoW
+        Z3+F2Kf+BWgagjHZLuMDdc5L83Xw4LiTkGVyWSi7pLfZBjA=
+X-Google-Smtp-Source: AA6agR4ZIXhQ+P2OA/QwwL6nwJo/rXDB5NYw54d5gwukVqnFl6OKzfVoJx3e7bcWtiTw76Xm6p3TWOMIgWGYm+W3wf4=
+X-Received: by 2002:ac2:4e4f:0:b0:48c:e6b6:9d7e with SMTP id
+ f15-20020ac24e4f000000b0048ce6b69d7emr1509155lfr.128.1659951591486; Mon, 08
+ Aug 2022 02:39:51 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: tw.synaptics.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB5848.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 794849b6-6c5b-45de-202c-08da79217bc5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2022 09:36:34.3275
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ccIPk7zA5U3LA+d8r1pvBDecwiS2KC36t90Jx/NrgW1xqwVlkTOfgaba1QGfKNsfuqpHSYT8Jk0Bq95VWOuakg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR03MB5245
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1659939208-22454-1-git-send-email-zhaoyang.huang@unisoc.com> <cb20ece8-3053-1b6c-5820-08663e5c1acc@bytedance.com>
+In-Reply-To: <cb20ece8-3053-1b6c-5820-08663e5c1acc@bytedance.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Mon, 8 Aug 2022 17:39:39 +0800
+Message-ID: <CAGWkznEFEiV4xchHCKTh39zKbpgGR_vSZw_R1KgTiEDaQ6E-Rg@mail.gmail.com>
+Subject: Re: [RFC PATCH] psi: introduce PSI UNINTERRUPTIBLE
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>, xuewen.yan@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSGFucywNCglGb3IgU3luYXB0aWNzIEZXIGRlc2lnbiwgdGhlIGludGVycnVwdCBHUElPIHdp
-bGwgYmUgcHVsbGVkIGRvd24gYWZ0ZXIgUk1JIGRyaXZlciByZWFkcyB0aGlzIGNvbW1hbmQoUmVw
-b3J0IElEOjB4MEEpLg0KIkRhcmsgcmVzdW1lIiB0ZXN0IGNhc2Ugb24gQ2hyb21lYm9vayBkZXZp
-Y2Ugd2lsbCBkZXRlY3QgYW5vdGhlciBpbnRlcnJ1cHQgKG5vdCBmaW5nZXIgZGF0YSkgZHVyaW5n
-IHRoZSBwcm9jZXNzIG9mIHJlc3VtZSBmdW5jdGlvbi4NCiJEYXJrIHJlc3VtZSIgdGVzdCBjYXNl
-IHdpbGwgZmFpbC4NCkhlbmNlLCB0aGlzIGlzc3VlIHNob3VsZCBoYXBwZW4gb24gUk1JIG1vZGUg
-b2YgYWxsIFN5bmFwdGljcyBkZXZpY2VzDQoNClRoYW5rcw0KTWFyZ2UgWWFuZw0KDQotLS0tLU9y
-aWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogSGFucyBkZSBHb2VkZSA8aGRlZ29lZGVAcmVkaGF0
-LmNvbT4gDQpTZW50OiBNb25kYXksIEF1Z3VzdCA4LCAyMDIyIDU6MTYgUE0NClRvOiBtYXJnZXlh
-bmcgPG1hcmdlLnlhbmdAc3luYXB0aWNzLmNvcnAtcGFydG5lci5nb29nbGUuY29tPjsgZG1pdHJ5
-LnRvcm9raG92QGdtYWlsLmNvbTsgbGludXgtaW5wdXRAdmdlci5rZXJuZWwub3JnOyBsaW51eC1r
-ZXJuZWxAdmdlci5rZXJuZWwub3JnOyBiZW5qYW1pbi50aXNzb2lyZXNAcmVkaGF0LmNvbQ0KQ2M6
-IE1hcmdlIFlhbmcgPE1hcmdlLllhbmdAdHcuc3luYXB0aWNzLmNvbT47IGRlcmVrLmNoZW5nQHR3
-LnN5bmFwdGNzLmNvbTsgVmluY2VudCBIdWFuZyA8VmluY2VudC5odWFuZ0B0dy5zeW5hcHRpY3Mu
-Y29tPg0KU3ViamVjdDogUmU6IFtQQVRDSF0gSElEOiBISUQtcm1pIC0gaWdub3JlIHRvIHJtaV9o
-aWRfcmVhZF9ibG9jayBhZnRlciBzeXN0ZW0gcmVzdW1lcy4NCg0KQ0FVVElPTjogRW1haWwgb3Jp
-Z2luYXRlZCBleHRlcm5hbGx5LCBkbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50
-cyB1bmxlc3MgeW91IHJlY29nbml6ZSB0aGUgc2VuZGVyIGFuZCBrbm93IHRoZSBjb250ZW50IGlz
-IHNhZmUuDQoNCg0KSGksDQoNCk9uIDgvOC8yMiAxMTowNywgbWFyZ2V5YW5nIHdyb3RlOg0KPiBG
-cm9tOiBNYXJnZSBZYW5nIDxtYXJnZS55YW5nQHN5bmFwdGljcy5jb3JwLXBhcnRuZXIuZ29vZ2xl
-LmNvbT4NCj4NCj4gVGhlIGludGVycnVwdCBHUElPIHdpbGwgYmUgcHVsbGVkIGRvd24gb25jZSBh
-ZnRlciBSTUkgZHJpdmVyIHJlYWRzIA0KPiB0aGlzIGNvbW1hbmQoUmVwb3J0IElEOjB4MEEpLg0K
-PiBJdCB3aWxsIGNhdXNlICJEYXJrIHJlc3VtZSB0ZXN0IGZhaWwiIGZvciBjaHJvbWVib29rIGRl
-dmljZS4NCj4gSGVuY2UsIFRQIGRyaXZlciB3aWxsIGlnbm9yZSBybWlfaGlkX3JlYWRfYmxvY2sg
-ZnVuY3Rpb24gb25jZSBhZnRlciANCj4gc3lzdGVtIHJlc3VtZXMuDQoNClRoaXMgc291bmRzIGxp
-a2UgaXQgaXMgYW4gaXNzdWUgaW4gb25lIHNwZWNpZmljIHRvdWNocGFkIG1vZGVsLCB5ZXQgeW91
-IGFyZSBjaGFuZ2luZyB0aGUgY29kZSB0byBpZ25vcmUgdGhlIGZpcnN0IHJlYWRibG9jayBjYWxs
-IG9uIHJlc3VtZSBvbiAqYWxsKiBtb2RlbHMgPw0KDQpSZWdhcmRzLA0KDQpIYW5zDQoNCg0KPg0K
-PiBTaWduZWQtb2ZmLWJ5OiBNYXJnZSANCj4gWWFuZzxtYXJnZS55YW5nQHN5bmFwdGljcy5jb3Jw
-LXBhcnRuZXIuZ29vZ2xlLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL2hpZC9oaWQtcm1pLmMgfCAx
-NiArKysrKysrKysrKysrLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgMTMgaW5zZXJ0aW9ucygrKSwg
-MyBkZWxldGlvbnMoLSkNCj4NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaGlkL2hpZC1ybWkuYyBi
-L2RyaXZlcnMvaGlkL2hpZC1ybWkuYyBpbmRleCANCj4gMzExZWVlNTk5Y2U5Li4yMzZhMzhiZmNm
-OWEgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvaGlkL2hpZC1ybWkuYw0KPiArKysgYi9kcml2ZXJz
-L2hpZC9oaWQtcm1pLmMNCj4gQEAgLTEwMSw3ICsxMDEsNyBAQCBzdHJ1Y3Qgcm1pX2RhdGEgew0K
-PiAgfTsNCj4NCj4gICNkZWZpbmUgUk1JX1BBR0UoYWRkcikgKCgoYWRkcikgPj4gOCkgJiAweGZm
-KQ0KPiAtDQo+ICtpbnQgaWdub3Jlb25jZTsNCj4gIHN0YXRpYyBpbnQgcm1pX3dyaXRlX3JlcG9y
-dChzdHJ1Y3QgaGlkX2RldmljZSAqaGRldiwgdTggKnJlcG9ydCwgaW50IA0KPiBsZW4pOw0KPg0K
-PiAgLyoqDQo+IEBAIC0yMDMsNyArMjAzLDEzIEBAIHN0YXRpYyBpbnQgcm1pX2hpZF9yZWFkX2Js
-b2NrKHN0cnVjdCBybWlfdHJhbnNwb3J0X2RldiAqeHBvcnQsIHUxNiBhZGRyLA0KPiAgICAgICAg
-ICAgICAgIGlmIChyZXQgPCAwKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgZ290byBleGl0Ow0K
-PiAgICAgICB9DQo+IC0NCj4gKyAgICAgaWYgKGlnbm9yZW9uY2UgPT0gMSkgew0KPiArICAgICAg
-ICAgICAgIGRldl9lcnIoJmhkZXYtPmRldiwNCj4gKyAgICAgICAgICAgICAgICAgICAgICJpZ25v
-cmVvbmNlICglZClcbiIsDQo+ICsgICAgICAgICAgICAgICAgICAgICBpZ25vcmVvbmNlKTsNCj4g
-KyAgICAgICAgICAgICBpZ25vcmVvbmNlID0gMDsNCj4gKyAgICAgICAgICAgICBnb3RvIGV4aXQ7
-DQo+ICsgICAgIH0NCj4gICAgICAgZm9yIChyZXRyaWVzID0gNTsgcmV0cmllcyA+IDA7IHJldHJp
-ZXMtLSkgew0KPiAgICAgICAgICAgICAgIGRhdGEtPndyaXRlUmVwb3J0WzBdID0gUk1JX1JFQURf
-QUREUl9SRVBPUlRfSUQ7DQo+ICAgICAgICAgICAgICAgZGF0YS0+d3JpdGVSZXBvcnRbMV0gPSAw
-OyAvKiBvbGQgMSBieXRlIHJlYWQgY291bnQgKi8gQEAgDQo+IC00NjgsOCArNDc0LDEyIEBAIHN0
-YXRpYyBpbnQgcm1pX3Bvc3RfcmVzdW1lKHN0cnVjdCBoaWRfZGV2aWNlICpoZGV2KQ0KPiAgICAg
-ICByZXQgPSBoaWRfaHdfb3BlbihoZGV2KTsNCj4gICAgICAgaWYgKHJldCkNCj4gICAgICAgICAg
-ICAgICByZXR1cm4gcmV0Ow0KPiAtDQo+ICsgICAgIC8vIEF2b2lkIHRvIHJlYWQgcm1pX2hpZF9y
-ZWFkX2Jsb2NrIG9uY2UgYWZ0ZXIgc3lzdGVtIHJlc3VtZXMuDQo+ICsgICAgIC8vIFRoZSBpbnRl
-cnJ1cHQgd2lsbCBiZSBwdWxsZWQgZG93bg0KPiArICAgICAvLyBhZnRlciBSTUkgUmVhZCBjb21t
-YW5kKFJlcG9ydCBJRDoweDBBKS4NCj4gKyAgICAgaWdub3Jlb25jZSA9IDE7DQo+ICAgICAgIHJl
-dCA9IHJtaV9yZXNldF9hdHRuX21vZGUoaGRldik7DQo+ICsgICAgIGlnbm9yZW9uY2UgPSAwOw0K
-PiAgICAgICBpZiAocmV0KQ0KPiAgICAgICAgICAgICAgIGdvdG8gb3V0Ow0KPg0KDQo=
+On Mon, Aug 8, 2022 at 5:12 PM Chengming Zhou
+<zhouchengming@bytedance.com> wrote:
+>
+> On 2022/8/8 14:13, zhaoyang.huang wrote:
+> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >
+> > Uninterruptible sleep has not been monitored as an important system status yet.
+> > Imagin that a set of psi triggers are created for monitoring a special group, while
+> > get nothing high for none of the pressures, which could be the processes within
+> > are stock in some given resources and turn to be UN status. Introduce PSI_UN as
+> > a sub-type among PSI system here.
+>
+> Hello,
+>
+> The problem is that not all TASK_UNINTERRUPTIBLE task means stalled on some
+> shared resource, like many schedule_timeout() paths.
+Thanks for heads up. The aim is to distinguish where the processes go
+(on or off cpu? waiting for anything?). It could be deemed as PSI_MEM
+like property which is not a precise running time for memory things.
+Furthermore, we do have method to make it be precise.
+>
+> Thanks.
+>
+> >
+> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > ---
+> >  include/linux/psi_types.h | 11 ++++++++---
+> >  kernel/sched/psi.c        | 10 ++++++++++
+> >  kernel/sched/stats.h      |  6 +++++-
+> >  3 files changed, 23 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> > index c7fe7c0..8cc1979 100644
+> > --- a/include/linux/psi_types.h
+> > +++ b/include/linux/psi_types.h
+> > @@ -15,6 +15,7 @@ enum psi_task_count {
+> >       NR_IOWAIT,
+> >       NR_MEMSTALL,
+> >       NR_RUNNING,
+> > +     NR_UNINTERRUPTIBLE,
+> >       /*
+> >        * This can't have values other than 0 or 1 and could be
+> >        * implemented as a bit flag. But for now we still have room
+> > @@ -32,7 +33,7 @@ enum psi_task_count {
+> >        * threads and memstall ones.
+> >        */
+> >       NR_MEMSTALL_RUNNING,
+> > -     NR_PSI_TASK_COUNTS = 5,
+> > +     NR_PSI_TASK_COUNTS = 6,
+> >  };
+> >
+> >  /* Task state bitmasks */
+> > @@ -41,13 +42,15 @@ enum psi_task_count {
+> >  #define TSK_RUNNING  (1 << NR_RUNNING)
+> >  #define TSK_ONCPU    (1 << NR_ONCPU)
+> >  #define TSK_MEMSTALL_RUNNING (1 << NR_MEMSTALL_RUNNING)
+> > +#define TSK_UNINTERRUPTIBLE  (1 << NR_UNINTERRUPTIBLE)
+> >
+> >  /* Resources that workloads could be stalled on */
+> >  enum psi_res {
+> >       PSI_IO,
+> >       PSI_MEM,
+> >       PSI_CPU,
+> > -     NR_PSI_RESOURCES = 3,
+> > +     PSI_UN,
+> > +     NR_PSI_RESOURCES = 4,
+> >  };
+> >
+> >  /*
+> > @@ -63,9 +66,11 @@ enum psi_states {
+> >       PSI_MEM_FULL,
+> >       PSI_CPU_SOME,
+> >       PSI_CPU_FULL,
+> > +     PSI_UN_SOME,
+> > +     PSI_UN_FULL,
+> >       /* Only per-CPU, to weigh the CPU in the global average: */
+> >       PSI_NONIDLE,
+> > -     NR_PSI_STATES = 7,
+> > +     NR_PSI_STATES = 9,
+> >  };
+> >
+> >  enum psi_aggregators {
+> > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> > index a337f3e..a37b4a4 100644
+> > --- a/kernel/sched/psi.c
+> > +++ b/kernel/sched/psi.c
+> > @@ -231,6 +231,10 @@ static bool test_state(unsigned int *tasks, enum psi_states state)
+> >               return unlikely(tasks[NR_RUNNING] > tasks[NR_ONCPU]);
+> >       case PSI_CPU_FULL:
+> >               return unlikely(tasks[NR_RUNNING] && !tasks[NR_ONCPU]);
+> > +     case PSI_UN_SOME:
+> > +             return unlikely(tasks[NR_UNINTERRUPTIBLE]);
+> > +     case PSI_UN_FULL:
+> > +             return unlikely(tasks[NR_UNINTERRUPTIBLE] && !tasks[NR_RUNNING]);
+> >       case PSI_NONIDLE:
+> >               return tasks[NR_IOWAIT] || tasks[NR_MEMSTALL] ||
+> >                       tasks[NR_RUNNING];
+> > @@ -683,6 +687,12 @@ static void record_times(struct psi_group_cpu *groupc, u64 now)
+> >                       groupc->times[PSI_CPU_FULL] += delta;
+> >       }
+> >
+> > +     if (groupc->state_mask & (1 << PSI_UN_SOME)) {
+> > +             groupc->times[PSI_UN_SOME] += delta;
+> > +             if (groupc->state_mask & (1 << PSI_UN_FULL))
+> > +                     groupc->times[PSI_UN_FULL] += delta;
+> > +     }
+> > +
+> >       if (groupc->state_mask & (1 << PSI_NONIDLE))
+> >               groupc->times[PSI_NONIDLE] += delta;
+> >  }
+> > diff --git a/kernel/sched/stats.h b/kernel/sched/stats.h
+> > index baa839c..bf98829 100644
+> > --- a/kernel/sched/stats.h
+> > +++ b/kernel/sched/stats.h
+> > @@ -132,6 +132,7 @@ static inline void psi_enqueue(struct task_struct *p, bool wakeup)
+> >               if (p->in_iowait)
+> >                       clear |= TSK_IOWAIT;
+> >       }
+> > +     clear |= TSK_UNINTERRUPTIBLE;
+> >
+> >       psi_task_change(p, clear, set);
+> >  }
+> > @@ -139,6 +140,7 @@ static inline void psi_enqueue(struct task_struct *p, bool wakeup)
+> >  static inline void psi_dequeue(struct task_struct *p, bool sleep)
+> >  {
+> >       int clear = TSK_RUNNING;
+> > +     int set = 0;
+> >
+> >       if (static_branch_likely(&psi_disabled))
+> >               return;
+> > @@ -154,8 +156,10 @@ static inline void psi_dequeue(struct task_struct *p, bool sleep)
+> >
+> >       if (p->in_memstall)
+> >               clear |= (TSK_MEMSTALL | TSK_MEMSTALL_RUNNING);
+> > +     if (READ_ONCE(p->__state) & TASK_UNINTERRUPTIBLE)
+> > +             set = TSK_UNINTERRUPTIBLE;
+> >
+> > -     psi_task_change(p, clear, 0);
+> > +     psi_task_change(p, clear, set);
+> >  }
+> >
+> >  static inline void psi_ttwu_dequeue(struct task_struct *p)

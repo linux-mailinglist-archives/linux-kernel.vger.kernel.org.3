@@ -2,119 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C62958CD13
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F7E58CD15
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243980AbiHHRxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        id S243952AbiHHRzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243182AbiHHRxi (ORCPT
+        with ESMTP id S238378AbiHHRzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:53:38 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4629EE0D2
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659981217; x=1691517217;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pCSf7Mc7k6Nuf0lZb47S6l5lfVrSvLoi02wCOJWZfD0=;
-  b=QooamlocAA1YlJ4rXUJLzJvw0qu0U2ckOj0SWW28zmsD5kYL6qmeqFIL
-   NuYgJ8L+ADaZO94o/PJHzBOrGQhvjoBhqhWsibaulV+WUAZRlBxY7HDrK
-   QWrRtH7MPlQbZLvJynK1A/UmJAzY9VreLUGc3QgfC3nvuTddaAj/IekwZ
-   T9ZM0nyKgaaQrsYQSysZwyJk1yyuKOWjmFhqMBV8uHCKrtBZjfM9uGFIG
-   XHBbp4N0SV+GtLHb9MbC1KqMc37Czeecx/oiIIVXy6fMTtn7MOqW3yOVF
-   OVWH8Q4mii9iaWY2yvUQp0vCj3hUiRoUXeFseV1YR87CsEcHmzXCml8f6
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="288220614"
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="288220614"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 10:53:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="746730717"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Aug 2022 10:53:31 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oL6wU-000MSX-2S;
-        Mon, 08 Aug 2022 17:53:30 +0000
-Date:   Tue, 9 Aug 2022 01:53:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bean Huo <beanhuo@micron.com>
-Subject: drivers/ufs/host/tc-dwc-g210-pltfrm.c:36:34: warning:
- 'tc_dwc_g210_pltfm_match' defined but not used
-Message-ID: <202208090144.eBgN7MG1-lkp@intel.com>
+        Mon, 8 Aug 2022 13:55:22 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7AC2AD8
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:55:21 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id g12so8739125pfb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 10:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=AndoNn3ZwU210Wyi4m1ND/gRkTyAXTkRJXpmCYwRvFw=;
+        b=g9xPtgh547zk5MwKl46YtVJiNoFDxPx4x0UHsV2NxBq/1/kYGR0GF4tK4DYPbojuA8
+         daNUon1xOn8Mv480K3NFJswZ912sYvgi2mnZZFAqhEMD7JX+ZHFHs96HUVm9fzlOtzVk
+         5N4SxAufszUQoDWljaB5vCyhvBakDLF10ljicwYByztg4clRSY1tk/Jx+qVQdfaV10/I
+         lLpK5xwLUkZZESlOLIBBC/Y2TxDSxppZ1ZILsDs+iIGds24EAScbR6Btf1f0NCCSHLO2
+         z4PxEN+iX7MLq+1O1lzMYwPl8HAXrhUl2x5IimgWyT5njfAgVrNrnrpELbsK/CFPnpUM
+         sBrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=AndoNn3ZwU210Wyi4m1ND/gRkTyAXTkRJXpmCYwRvFw=;
+        b=nM6F2Wc/SWEKvlmOp5u5fPRAWX2UJNwYWD0B8qI1PhKb0401i5bG81KiJl9L813nnA
+         GxrHyskrgyKmoSRzxzmCBnPG/G+YDL3AimqbbpV7JDLYjejcgPtcSPfWPvHeeYrT8+UK
+         f1795P+Sg/j5cpRPRveUBym6N5cXm7yTO+1LOXwInHONziJDJjKi9o/nidPVjhJAh1AV
+         c5fiF5Mfmx3+zTlhx8epwTB6kPIu9U+IJYFNq40/ebe91xvW3Cg+mNYD6/K2dCJ/1bZ8
+         KSGXVm8fOJuCM5mCJAtvI7WJeNWQ821ggc5geq0rlMsvO3lu8WXtrTr1WL9UOqMYBblT
+         ceZA==
+X-Gm-Message-State: ACgBeo1xaBiDy09Osl5DX3J7MJgh3u7peT+eZ3oLx2qqo1klx4rMsXF6
+        7INlmb9SW59Z9ULX1eEmcaOeA4zWngzO61CNNmFEWK7y
+X-Google-Smtp-Source: AA6agR69l6hhr5+S/alatCxRuN+mF4m1wb9zS3xgny6HPi8iNz7In9pgSV2YtPnfjHV5McH4/7hPj2lQ4s+p7m8oi64=
+X-Received: by 2002:a65:5503:0:b0:41b:bbdc:9a5d with SMTP id
+ f3-20020a655503000000b0041bbbdc9a5dmr15953418pgr.587.1659981321257; Mon, 08
+ Aug 2022 10:55:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220805184016.2926168-1-alexlzhu@fb.com> <Yu1mcD6Jp4fCVEMi@casper.infradead.org>
+ <0b16dbac6444bfcdfbeb4df4280354839bfe1a8f.camel@fb.com> <Yu1uabedm+NYnnAj@casper.infradead.org>
+ <CA8C72B6-E509-4FB0-BEAA-C4368EB7A419@fb.com>
+In-Reply-To: <CA8C72B6-E509-4FB0-BEAA-C4368EB7A419@fb.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 8 Aug 2022 10:55:09 -0700
+Message-ID: <CAHbLzkp27aP4JYLPLzv2vtyzVe63bkhuZhw1jnxTF1Buvt4rew@mail.gmail.com>
+Subject: Re: [PATCH v3] mm: add thp_utilization metrics to /proc/thp_utilization
+To:     "Alex Zhu (Kernel)" <alexlzhu@fb.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, Rik van Riel <riel@fb.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bart,
+On Fri, Aug 5, 2022 at 12:52 PM Alex Zhu (Kernel) <alexlzhu@fb.com> wrote:
+>
+>
+> >
+> > Ah!  So when that exists, this interface tells us "how well" we're doin=
+g.
+> >
+>
+> Yes, exactly.
+> >
+> > Yeah, debugfs seems like a better place.  And I'd love to see the shrin=
+ker
+> > code.  Before you mentioned that I was having all kinds of peculiar
+> > feelings about this code.  For example, suppose you have incredibly hot
+> > 256kB of data, but the other 1792kB of data are never touched ... that
+> > could cause us to do entirely the wrong thing and break up this THP.
+> > Having it as a shrinker makes sense because the hot 256kB will keep the
+> > THP from reaching the end of the list and being reclaimed.
+>
+> Sounds good, I=E2=80=99ll move this to debugfs then. Will follow up with =
+the shrinker code
+> in another patch. The shrinker relies on this scanning thread to figure o=
+ut which
+> THPs to reclaim.
 
-First bad commit (maybe != root cause):
+I'm wondering whether you could reuse the THP deferred split shrinker
+or not. It is already memcg aware.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4e23eeebb2e57f5a28b36221aa776b5a1122dde5
-commit: dd11376b9f1b73aca3f8c6eb541486bbb6996f05 scsi: ufs: Split the drivers/scsi/ufs directory
-date:   3 months ago
-config: i386-buildonly-randconfig-r001-20220808 (https://download.01.org/0day-ci/archive/20220809/202208090144.eBgN7MG1-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd11376b9f1b73aca3f8c6eb541486bbb6996f05
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dd11376b9f1b73aca3f8c6eb541486bbb6996f05
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ufs/host/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/ufs/host/tc-dwc-g210-pltfrm.c:36:34: warning: 'tc_dwc_g210_pltfm_match' defined but not used [-Wunused-const-variable=]
-      36 | static const struct of_device_id tc_dwc_g210_pltfm_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/tc_dwc_g210_pltfm_match +36 drivers/ufs/host/tc-dwc-g210-pltfrm.c
-
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  35  
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11 @36  static const struct of_device_id tc_dwc_g210_pltfm_match[] = {
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  37  	{
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  38  		.compatible = "snps,g210-tc-6.00-20bit",
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  39  		.data = &tc_dwc_g210_20bit_pltfm_hba_vops,
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  40  	},
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  41  	{
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  42  		.compatible = "snps,g210-tc-6.00-40bit",
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  43  		.data = &tc_dwc_g210_40bit_pltfm_hba_vops,
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  44  	},
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  45  	{ },
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  46  };
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  47  MODULE_DEVICE_TABLE(of, tc_dwc_g210_pltfm_match);
-fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  48  
-
-:::::: The code at line 36 was first introduced by commit
-:::::: fc040a3fc47cad038f774275ea61fe6d5b57d7cc ufs: add TC G210 platform driver
-
-:::::: TO: Joao Pinto <Joao.Pinto@synopsys.com>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> What are your thoughts regarding integrating this with DAMON?

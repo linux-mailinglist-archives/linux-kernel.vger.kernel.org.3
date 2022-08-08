@@ -2,93 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7DA58CBE4
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B077C58CBE6
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243896AbiHHQKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 12:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
+        id S243619AbiHHQMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 12:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235075AbiHHQKv (ORCPT
+        with ESMTP id S231475AbiHHQMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 12:10:51 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94E0D81
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:10:50 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id h186-20020a1c21c3000000b003a5360f218fso753163wmh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 09:10:50 -0700 (PDT)
+        Mon, 8 Aug 2022 12:12:10 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301B630C;
+        Mon,  8 Aug 2022 09:12:09 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id l5so404642qtv.4;
+        Mon, 08 Aug 2022 09:12:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=p1YH5n40SEE/etNSWqSsoqBjsQgCRMOB5bj39jCUx08=;
-        b=ktbNScHrzb23fN63eS/CPz/yswpYD18tFUJ1HLFw+7FW4j76rWkGOKPjH71f6lJks8
-         RmB8fC8tUXmwDctAbz/ju7t3e4rUvj0/4Fi1b1gZzJgQ7FAbwQ3hqPVeVEuvVlBKdVpK
-         R2z2eAnnejRIE2arOEVk2VxEm7E0H2bON+kYTueKrxrus+utx0wrwMNIT0l1bPVfX4Gx
-         gNlgdtS3RaHphva/afGLMgGur0I2O6xhHKIRIG8Az1xWICRz+fMRlV0J7yAaQ5zUOUfo
-         A9CMLPgKvA3D+qOhtPf0wW1eirXP/CQgIpBKUgGO/3ED18e0WdMldHlbIHYU9VjaJt9i
-         9NBg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=gILE/DsFTOP8PS0Yp1nF3NCvuUGJhqQFgsUGLdHXvV8=;
+        b=jUFe1axofvyCb6gyzxGTtNwHyegk3CnDZMId+aHrAzoNtF8INilsWQPC+STOs1HddK
+         CzGUhG3kK4Dx9QqZ3NWbGmnk2O0HnxRnwHI+Iefs6ZnQhZL9TA/eC3fJeL1Sc8Y6s5wa
+         VAGzRa91ONRrsOdJKwke1gkVMBSwwhhKVOcrydQpj6d5WUi1PyRrd3zZwygESwtCuYce
+         7wqY9ogPv6DbLCNf/yhkPX8W5wdp3bWLoHN6XrXwCv/L3aaZJdGrYyb64m5wkksTl0fS
+         9fXNC/2rpvGtEIElZQsiJt4tqf2Qt4cQZT30fa+E6XOWmRGlE3MzpqvKixvzhy2ljIXx
+         Z6Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=p1YH5n40SEE/etNSWqSsoqBjsQgCRMOB5bj39jCUx08=;
-        b=pgS4qRtBueBtRgFFkgMUQx/QXfpGMLTK08iQ/ny36SKgHELKzKuK5pLM/UsR+ZogTp
-         bjyx/eAhAXZvfOHk9r3X5ZeAlX0oHf7NKkSFzYhs8Qnp+MVcZ5WXWyyv705USnACcZ1l
-         7zjY8DXoHJa6Hf00KhkaJbrGTTHgjFbCLi94n8jxAIBGfY2ZFHItsneRPaG0Iaq7/zDr
-         yTDrY+zV//n5ijUhWzJevL192r3f+f3aEF6YT/sMFb15CBJtTFqEY1ACq8cudELAePha
-         /9TqwL8wXY7oNGk6rrLltXK9VpxCtA4tV1DAyiWue3s3jJgSDbIcKfIMaynLgTUMHrNg
-         Mn7A==
-X-Gm-Message-State: ACgBeo0IGlIKuN2sYQ9ScUg5CJcd1mzD9YTk7WWxMaOTRKoVQdMmFXnL
-        yqt8R/H7ksRlQbRcFT9rTxwF/Q==
-X-Google-Smtp-Source: AA6agR6HP25WhYd9eFWj1UVQWM/PYlEUeiB2/Jn/1BDnlK8FA4uPuNTq5CeLTasT7fpcTkUap0be3A==
-X-Received: by 2002:a05:600c:58e:b0:3a5:2c3:5e17 with SMTP id o14-20020a05600c058e00b003a502c35e17mr16033206wmd.200.1659975049494;
-        Mon, 08 Aug 2022 09:10:49 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id h14-20020a5d430e000000b002217540b222sm9197883wrq.58.2022.08.08.09.10.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 09:10:48 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 17:10:47 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v3 03/10] mfd: intel_soc_pmic: Move non-Intel Makefile
- entries to their own group
-Message-ID: <YvE1h+MXHwsYoBQ2@google.com>
-References: <20220801114211.36267-1-andriy.shevchenko@linux.intel.com>
- <20220801114211.36267-3-andriy.shevchenko@linux.intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=gILE/DsFTOP8PS0Yp1nF3NCvuUGJhqQFgsUGLdHXvV8=;
+        b=acjBgEV211m4J1YzW27A4eBQH+Nx9wM3zGHdBFMlihKt4mIFL2sml+hub79WVjwRhr
+         YOSj/OlVXc+Xb+8O0KtwDZukVmmUtz8uPA3vx0YLUpaKXmad1bokMFIM010NaeobCvzK
+         Y+5IdGvQcyWREy+y7ZYsGec5bEDT+SFIKF/Lb7f/qZjfUWbXrIxBmbtwmG7yE94cqCMo
+         +kY6Fvo2fycQQyI2YzcpLwFvCqCu75r+QlHNNqm6aIYnKQtBVlEcXHutZ8QZ9IegVEyd
+         GsWwwoLt3FaIvNvOI3/4mhHYtrI9m+qCtQTuZgrlxo0r5R+4k9Tbr2jvOnFPI/wBB48t
+         5afA==
+X-Gm-Message-State: ACgBeo2v3gxOnrHcLMJBK9K2ZNbk+aQQw3Lw5Orkvyfma64Ey7W5IKuy
+        MyL1JXLH7pWo/XRwMwCTfQ9gV1ei3EkIE1HwFHU=
+X-Google-Smtp-Source: AA6agR6YMGbmSGWrM3mvE3XFN1H+euyfs1mFLCcKBtY7QVRDfF162WRcbFP1i1/j4WhE6bRQtesrXDtrrJbcldYNPn4=
+X-Received: by 2002:ac8:7fd1:0:b0:31e:e9c0:c071 with SMTP id
+ b17-20020ac87fd1000000b0031ee9c0c071mr16765824qtk.481.1659975128238; Mon, 08
+ Aug 2022 09:12:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801114211.36267-3-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+References: <20220808030420.8633-1-luke@ljones.dev> <20220808030420.8633-5-luke@ljones.dev>
+In-Reply-To: <20220808030420.8633-5-luke@ljones.dev>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 8 Aug 2022 18:11:32 +0200
+Message-ID: <CAHp75VdJyukGnJkhjPiB7wMxS5aQkVfMwVVhqAxA6DppyH3HLQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] asus-wmi: Document previously added attributes
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 01 Aug 2022, Andy Shevchenko wrote:
+On Mon, Aug 8, 2022 at 5:09 AM Luke D. Jones <luke@ljones.dev> wrote:
+>
+> Documents some previously added attributes:
+> - dgpu_disable
+> - egpu_enable
+> - panel_od
+> - keyboard_rgb_mode
+> - keyboard_rgb_state
 
-> It looks like a random position for couple of Makefile entries that are
-> disrupting Intel PMIC group. Move them to their own group.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Tested-by: Hans de Goede <hdegoede@redhat.com>
-> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> ---
-> 
-> v3: no changes
-> v2: added tags and rebased on top of new patch 1
-> 
->  drivers/mfd/Makefile | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+...
 
-Applied, thanks.
+> +What:          /sys/devices/platform/<platform>/dgpu_disable
+> +Date:          Aug 2022
+> +KernelVersion: 5.17
+> +Contact:       "Luke Jones" <luke@ljones.dev>
+> +Description:
+> +               Disable discrete GPU:
+> +                       * 0 - Enable dGPU,
+> +                       * 1 - Disable dGPU,
+> +
+> +What:          /sys/devices/platform/<platform>/egpu_enable
+> +Date:          Aug 2022
+> +KernelVersion: 5.17
+> +Contact:       "Luke Jones" <luke@ljones.dev>
+> +Description:
+> +               Enable the external GPU paired with ROG X-Flow laptops.
+> +               Toggling this setting will also trigger ACPI to disable the dGPU:
+> +                       * 0 - Disable,
+> +                       * 1 - Enable,
+> +
+> +What:          /sys/devices/platform/<platform>/panel_od
+> +Date:          Aug 2022
+> +KernelVersion: 5.17
+> +Contact:       "Luke Jones" <luke@ljones.dev>
+> +Description:
+> +               Enable an LCD response-time boost to reduce or remove ghosting:
+> +                       * 0 - Disable,
+> +                       * 1 - Enable,
+
+These should be in  separate patch(es) with the corresponding Fixes
+tags. (The latter may not be so important, though. I leave it to Hans
+to decide)
+
+...
+
+> +What:          /sys/devices/platform/<platform>/keyboard_rgb_mode
+> +Date:          Aug 2022
+> +KernelVersion: 6.0
+
+These should go separately. Dunno if it should be a separate
+documentation change for the both, or should it be split and
+reattached to the respective patches from the series. Up to Hans.
+
+> +Contact:       "Luke Jones" <luke@ljones.dev>
+> +Description:
+> +               Set some RGB keyboard modes and features (write-only).
+> +
+> +               The accepted input is "save mode speed", where "n n n" options
+> +               are:
+> +                       * save - 0 or 1, if 0 then settings are not retained on boot
+> +                       * mode - 0 to 12, each is an RGB such as static, rainbow, pulse.
+> +                                       Not all keyboards accept every mode.
+> +                       * speed - 0, 1, 2, equal to low, medium, high.
+> +                                       Only applies to certain modes.
+> +
+> +What:          /sys/devices/platform/<platform>/keyboard_rgb_state
+> +Date:          Aug 2022
+> +KernelVersion: 6.0
+> +Contact:       "Luke Jones" <luke@ljones.dev>
+> +Description:
+> +               Set some RGB keyboard power states (write-only).
+> +
+> +               The accepted input is "boot awake sleep keyboard", where "n n n n n"
+> +               options are:
+> +                       * save - 0 or 1, if 0 then settings are not retained on boot
+> +                       * boot - 0 or 1, controls if a boot animation is shown
+> +                       * awake - 0 or 1, controls if the keyboard LED are on during awake
+> +                       * sleep - 0 or 1, controls if a suspended animation is shown.
+> +                                               This is only active if the AC is connected.
+> +                       * keyboard - 0 or 1, unknown what effect this really has
+
 
 -- 
-DEPRECATED: Please use lee@kernel.org
+With Best Regards,
+Andy Shevchenko

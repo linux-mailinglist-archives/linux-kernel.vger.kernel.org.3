@@ -2,80 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F405C58BEB0
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 03:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B4658BEB5
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 03:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241820AbiHHB2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 21:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
+        id S241834AbiHHBb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 21:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiHHB2o (ORCPT
+        with ESMTP id S229637AbiHHBbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 21:28:44 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C0F2AFE;
-        Sun,  7 Aug 2022 18:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659922123; x=1691458123;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   in-reply-to;
-  bh=st6LjRLZeNJRrMDZN58ZGP4OS0SXLS7Z3FGsNNKPEH0=;
-  b=k2I10/+KMa9StfWJqKb9A3ueMcdvVV61hGVQLypgYr7lNCM/v7a38QPD
-   7WMr6DN91Fs1qm4d6GdC8ZHen8OJfnMe1thQMjm7Qvga5QlAbXxdvO4AX
-   xRTAuV16LxryXUZMvLoQ0WRXRt8WYPQFpFjOEuun/2thkhWBhwpv8bEts
-   g1jPa26/u5gY9lSJISOl4w4+UO6CIt/C/gJplh0/Z+JEO2ga6STL+fqi3
-   qdI5vumyVJLW//M3JDjrZuusTt1AyxMyj7yvpCXjx9ZQwRsIzw7tt8+9x
-   v2aulUWY/Sa715jZDApPWyAL2YG7OvAYAwOwZHONg7ve/JQ53UO5544VF
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="290487476"
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="290487476"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 18:28:42 -0700
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="931844646"
-Received: from rongch2-desk.sh.intel.com (HELO localhost) ([10.239.159.175])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 18:28:36 -0700
-Date:   Mon, 8 Aug 2022 09:28:34 +0800
-From:   kernel test robot <rong.a.chen@intel.com>
-To:     Markuss Broks <markuss.broks@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Wei Ming Chen <jj251510319013@gmail.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Tony Lindgren <tony@atomide.com>, linux-doc@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 1/3] drivers: serial: earlycon: Correct argument name
-Message-ID: <YvBmwgtARNuKTIgB@rongch2-desk2>
+        Sun, 7 Aug 2022 21:31:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAA155A0;
+        Sun,  7 Aug 2022 18:31:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF23460DD9;
+        Mon,  8 Aug 2022 01:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241ABC433D6;
+        Mon,  8 Aug 2022 01:31:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659922283;
+        bh=OoS7fDsTLFt5o448KvE98tJDqMqP3yvI9Hoy2tKilo0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eczPGk22yTy+GcoZuD8DggejnOb+6UgD3T+HrzjSgoAF6Radcb3Bsd9IAZ3RggFCY
+         f0/muVUe6uN+YYLHCOJucFD914ucK/a/DDIMT94UVroLmafSDzvT5BlWVeCU8976hA
+         Ep6yyx5i6+IqcwJB5mJNnQFqZxkWLxZnteiAMKRzvCo9cmP2ISew9HbyIr7PZwldrl
+         n9kzq8fBmLXZiVJcqBg0wnFfQa1gL9TI9m7lN33TvhPyffrOyzsaI0Ccpyfl8AYLo9
+         tvizyBq1GErmJ3e3UWv1AFwIke/irf0kYE0BLW+EBmrrEIznXt/A4h/9Mh/nRt0q63
+         Ba/9AoMdtAi8A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Wyes Karny <wyes.karny@amd.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        daniel.lezcano@linaro.org, corbet@lwn.net, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        peterz@infradead.org, chang.seok.bae@intel.com,
+        ebiederm@xmission.com, zhengqi.arch@bytedance.com,
+        linux-pm@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 01/58] x86: Handle idle=nomwait cmdline properly for x86_idle
+Date:   Sun,  7 Aug 2022 21:30:19 -0400
+Message-Id: <20220808013118.313965-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220806163255.10404-2-markuss.broks@gmail.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,127 +61,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Markuss,
+From: Wyes Karny <wyes.karny@amd.com>
 
-I love your patch! Yet something to improve:
+[ Upstream commit 8bcedb4ce04750e1ccc9a6b6433387f6a9166a56 ]
 
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on efi/next staging/staging-testing usb/usb-testing linus/master v5.19 next-20220805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+When kernel is booted with idle=nomwait do not use MWAIT as the
+default idle state.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Markuss-Broks/Add-generic-framebuffer-support-to-EFI-earlycon-driver/20220807-003646
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220807/202208071111.oWn8uZfx-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/dedd7c138e9492439eeda05fa75a18bf19883a08
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Markuss-Broks/Add-generic-framebuffer-support-to-EFI-earlycon-driver/20220807-003646
-        git checkout dedd7c138e9492439eeda05fa75a18bf19883a08
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+If the user boots the kernel with idle=nomwait, it is a clear
+direction to not use mwait as the default idle state.
+However, the current code does not take this into consideration
+while selecting the default idle state on x86.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Fix it by checking for the idle=nomwait boot option in
+prefer_mwait_c1_over_halt().
 
-All errors (new ones prefixed by >>):
+Also update the documentation around idle=nomwait appropriately.
 
->> drivers/tty/serial/earlycon.c:246:12: error: conflicting types for 'of_setup_earlycon'
-   int __init of_setup_earlycon(const struct earlycon_id *match,
-              ^
-   include/linux/serial_core.h:708:12: note: previous declaration is here
-   extern int of_setup_earlycon(const struct earlycon_id *match,
-              ^
-   1 error generated.
+[ dhansen: tweak commit message ]
 
+Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Link: https://lkml.kernel.org/r/fdc2dc2d0a1bc21c2f53d989ea2d2ee3ccbc0dbe.1654538381.git-series.wyes.karny@amd.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ Documentation/admin-guide/pm/cpuidle.rst | 15 +++++++++------
+ arch/x86/kernel/process.c                |  9 ++++++---
+ 2 files changed, 15 insertions(+), 9 deletions(-)
 
-vim +/of_setup_earlycon +246 drivers/tty/serial/earlycon.c
-
-8477614d9f7c5c Peter Hurley       2016-01-16  245  
-c90fe9c0394b06 Peter Hurley       2016-01-16 @246  int __init of_setup_earlycon(const struct earlycon_id *match,
-dedd7c138e9492 Markuss Broks      2022-08-06  247  			     int offset,
-4d118c9a866590 Peter Hurley       2016-01-16  248  			     const char *options)
-b0b6abd34c1b50 Rob Herring        2014-03-27  249  {
-b0b6abd34c1b50 Rob Herring        2014-03-27  250  	int err;
-b0b6abd34c1b50 Rob Herring        2014-03-27  251  	struct uart_port *port = &early_console_dev.port;
-088da2a17619cf Peter Hurley       2016-01-16  252  	const __be32 *val;
-088da2a17619cf Peter Hurley       2016-01-16  253  	bool big_endian;
-c90fe9c0394b06 Peter Hurley       2016-01-16  254  	u64 addr;
-b0b6abd34c1b50 Rob Herring        2014-03-27  255  
-65e20e8cbbccaf Michael Walle      2022-06-28  256  	if (early_con.flags & CON_ENABLED)
-65e20e8cbbccaf Michael Walle      2022-06-28  257  		return -EALREADY;
-65e20e8cbbccaf Michael Walle      2022-06-28  258  
-e1dd3bef6d03c9 Geert Uytterhoeven 2015-11-27  259  	spin_lock_init(&port->lock);
-b0b6abd34c1b50 Rob Herring        2014-03-27  260  	port->iotype = UPIO_MEM;
-dedd7c138e9492 Markuss Broks      2022-08-06  261  	addr = of_flat_dt_translate_address(offset);
-c90fe9c0394b06 Peter Hurley       2016-01-16  262  	if (addr == OF_BAD_ADDR) {
-c90fe9c0394b06 Peter Hurley       2016-01-16  263  		pr_warn("[%s] bad address\n", match->name);
-c90fe9c0394b06 Peter Hurley       2016-01-16  264  		return -ENXIO;
-c90fe9c0394b06 Peter Hurley       2016-01-16  265  	}
-b0b6abd34c1b50 Rob Herring        2014-03-27  266  	port->mapbase = addr;
-b0b6abd34c1b50 Rob Herring        2014-03-27  267  
-dedd7c138e9492 Markuss Broks      2022-08-06  268  	val = of_get_flat_dt_prop(offset, "reg-offset", NULL);
-088da2a17619cf Peter Hurley       2016-01-16  269  	if (val)
-088da2a17619cf Peter Hurley       2016-01-16  270  		port->mapbase += be32_to_cpu(*val);
-1f66dd36bb1843 Greentime Hu       2018-02-13  271  	port->membase = earlycon_map(port->mapbase, SZ_4K);
-1f66dd36bb1843 Greentime Hu       2018-02-13  272  
-dedd7c138e9492 Markuss Broks      2022-08-06  273  	val = of_get_flat_dt_prop(offset, "reg-shift", NULL);
-088da2a17619cf Peter Hurley       2016-01-16  274  	if (val)
-088da2a17619cf Peter Hurley       2016-01-16  275  		port->regshift = be32_to_cpu(*val);
-dedd7c138e9492 Markuss Broks      2022-08-06  276  	big_endian = of_get_flat_dt_prop(offset, "big-endian", NULL) != NULL ||
-088da2a17619cf Peter Hurley       2016-01-16  277  		(IS_ENABLED(CONFIG_CPU_BIG_ENDIAN) &&
-dedd7c138e9492 Markuss Broks      2022-08-06  278  		 of_get_flat_dt_prop(offset, "native-endian", NULL) != NULL);
-dedd7c138e9492 Markuss Broks      2022-08-06  279  	val = of_get_flat_dt_prop(offset, "reg-io-width", NULL);
-088da2a17619cf Peter Hurley       2016-01-16  280  	if (val) {
-088da2a17619cf Peter Hurley       2016-01-16  281  		switch (be32_to_cpu(*val)) {
-088da2a17619cf Peter Hurley       2016-01-16  282  		case 1:
-088da2a17619cf Peter Hurley       2016-01-16  283  			port->iotype = UPIO_MEM;
-088da2a17619cf Peter Hurley       2016-01-16  284  			break;
-088da2a17619cf Peter Hurley       2016-01-16  285  		case 2:
-088da2a17619cf Peter Hurley       2016-01-16  286  			port->iotype = UPIO_MEM16;
-088da2a17619cf Peter Hurley       2016-01-16  287  			break;
-088da2a17619cf Peter Hurley       2016-01-16  288  		case 4:
-088da2a17619cf Peter Hurley       2016-01-16  289  			port->iotype = (big_endian) ? UPIO_MEM32BE : UPIO_MEM32;
-088da2a17619cf Peter Hurley       2016-01-16  290  			break;
-088da2a17619cf Peter Hurley       2016-01-16  291  		default:
-088da2a17619cf Peter Hurley       2016-01-16  292  			pr_warn("[%s] unsupported reg-io-width\n", match->name);
-088da2a17619cf Peter Hurley       2016-01-16  293  			return -EINVAL;
-088da2a17619cf Peter Hurley       2016-01-16  294  		}
-088da2a17619cf Peter Hurley       2016-01-16  295  	}
-088da2a17619cf Peter Hurley       2016-01-16  296  
-dedd7c138e9492 Markuss Broks      2022-08-06  297  	val = of_get_flat_dt_prop(offset, "current-speed", NULL);
-31cb9a8575ca04 Eugeniy Paltsev    2017-08-21  298  	if (val)
-31cb9a8575ca04 Eugeniy Paltsev    2017-08-21  299  		early_console_dev.baud = be32_to_cpu(*val);
-31cb9a8575ca04 Eugeniy Paltsev    2017-08-21  300  
-dedd7c138e9492 Markuss Broks      2022-08-06  301  	val = of_get_flat_dt_prop(offset, "clock-frequency", NULL);
-814453adea7d08 Michal Simek       2018-04-10  302  	if (val)
-814453adea7d08 Michal Simek       2018-04-10  303  		port->uartclk = be32_to_cpu(*val);
-814453adea7d08 Michal Simek       2018-04-10  304  
-4d118c9a866590 Peter Hurley       2016-01-16  305  	if (options) {
-31cb9a8575ca04 Eugeniy Paltsev    2017-08-21  306  		early_console_dev.baud = simple_strtoul(options, NULL, 0);
-4d118c9a866590 Peter Hurley       2016-01-16  307  		strlcpy(early_console_dev.options, options,
-4d118c9a866590 Peter Hurley       2016-01-16  308  			sizeof(early_console_dev.options));
-4d118c9a866590 Peter Hurley       2016-01-16  309  	}
-05d961320ba624 Peter Hurley       2016-01-16  310  	earlycon_init(&early_console_dev, match->name);
-4d118c9a866590 Peter Hurley       2016-01-16  311  	err = match->setup(&early_console_dev, options);
-f28295cc8ce14b Hsin-Yi Wang       2020-09-15  312  	earlycon_print_info(&early_console_dev);
-b0b6abd34c1b50 Rob Herring        2014-03-27  313  	if (err < 0)
-b0b6abd34c1b50 Rob Herring        2014-03-27  314  		return err;
-b0b6abd34c1b50 Rob Herring        2014-03-27  315  	if (!early_console_dev.con->write)
-b0b6abd34c1b50 Rob Herring        2014-03-27  316  		return -ENODEV;
-b0b6abd34c1b50 Rob Herring        2014-03-27  317  
-b0b6abd34c1b50 Rob Herring        2014-03-27  318  
-b0b6abd34c1b50 Rob Herring        2014-03-27  319  	register_console(early_console_dev.con);
-b0b6abd34c1b50 Rob Herring        2014-03-27  320  	return 0;
-b0b6abd34c1b50 Rob Herring        2014-03-27  321  }
-8477614d9f7c5c Peter Hurley       2016-01-16  322  
-
+diff --git a/Documentation/admin-guide/pm/cpuidle.rst b/Documentation/admin-guide/pm/cpuidle.rst
+index aec2cd2aaea7..19754beb5a4e 100644
+--- a/Documentation/admin-guide/pm/cpuidle.rst
++++ b/Documentation/admin-guide/pm/cpuidle.rst
+@@ -612,8 +612,8 @@ the ``menu`` governor to be used on the systems that use the ``ladder`` governor
+ by default this way, for example.
+ 
+ The other kernel command line parameters controlling CPU idle time management
+-described below are only relevant for the *x86* architecture and some of
+-them affect Intel processors only.
++described below are only relevant for the *x86* architecture and references
++to ``intel_idle`` affect Intel processors only.
+ 
+ The *x86* architecture support code recognizes three kernel command line
+ options related to CPU idle time management: ``idle=poll``, ``idle=halt``,
+@@ -635,10 +635,13 @@ idle, so it very well may hurt single-thread computations performance as well as
+ energy-efficiency.  Thus using it for performance reasons may not be a good idea
+ at all.]
+ 
+-The ``idle=nomwait`` option disables the ``intel_idle`` driver and causes
+-``acpi_idle`` to be used (as long as all of the information needed by it is
+-there in the system's ACPI tables), but it is not allowed to use the
+-``MWAIT`` instruction of the CPUs to ask the hardware to enter idle states.
++The ``idle=nomwait`` option prevents the use of ``MWAIT`` instruction of
++the CPU to enter idle states. When this option is used, the ``acpi_idle``
++driver will use the ``HLT`` instruction instead of ``MWAIT``. On systems
++running Intel processors, this option disables the ``intel_idle`` driver
++and forces the use of the ``acpi_idle`` driver instead. Note that in either
++case, ``acpi_idle`` driver will function only if all the information needed
++by it is in the system's ACPI tables.
+ 
+ In addition to the architecture-level kernel command line options affecting CPU
+ idle time management, there are parameters affecting individual ``CPUIdle``
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index d456ce21c255..9346c95e8879 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -821,6 +821,10 @@ static void amd_e400_idle(void)
+  */
+ static int prefer_mwait_c1_over_halt(const struct cpuinfo_x86 *c)
+ {
++	/* User has disallowed the use of MWAIT. Fallback to HALT */
++	if (boot_option_idle_override == IDLE_NOMWAIT)
++		return 0;
++
+ 	if (c->x86_vendor != X86_VENDOR_INTEL)
+ 		return 0;
+ 
+@@ -932,9 +936,8 @@ static int __init idle_setup(char *str)
+ 	} else if (!strcmp(str, "nomwait")) {
+ 		/*
+ 		 * If the boot option of "idle=nomwait" is added,
+-		 * it means that mwait will be disabled for CPU C2/C3
+-		 * states. In such case it won't touch the variable
+-		 * of boot_option_idle_override.
++		 * it means that mwait will be disabled for CPU C1/C2/C3
++		 * states.
+ 		 */
+ 		boot_option_idle_override = IDLE_NOMWAIT;
+ 	} else
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
 

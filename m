@@ -2,188 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A6B58CD65
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C74558CD67
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244190AbiHHSKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 14:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S244048AbiHHSMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 14:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244187AbiHHSKH (ORCPT
+        with ESMTP id S230062AbiHHSMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 14:10:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F2518E3D;
-        Mon,  8 Aug 2022 11:10:04 -0700 (PDT)
-Date:   Mon, 08 Aug 2022 18:10:00 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659982202;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N7z+ZjaWxPvCiQRvG6ZSOFuETI932HC3F70oLn3aAjo=;
-        b=WPYXn4oAhpLXCvQoQVFZCF8uSLzkBSd5lCotnjg4yBEmn029tdzYW+jwAEeBM9gl+WdgzJ
-        WQT5RVWT8O5LR71BfHtXCYW8+7O5UnM8mnlZR+6/QdKTGpa18pXUWm4AQJpkyM/3OFEB3G
-        snUv7ZAwBj87SO32T2EorE3r5oR4lUQY3AySne8wsS3P2EjXz3VIV+QbEk4CCPuta0HOrn
-        g18Z8WNHpt3RR0ovbpFkrIMxxJ+zl+Lt8Sp+yA32jU/vv0BKxZ/CzLVS62HB/IH4HeQM1a
-        xy7ygpIxwffVbQIKhRgqyTAQ6cUx5mDyEtg4U9rhP7CConPf9uS8wbTTt3flMA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659982202;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N7z+ZjaWxPvCiQRvG6ZSOFuETI932HC3F70oLn3aAjo=;
-        b=1a1Nx19Wa22n89pQR0QGD9NSDAQl7B/dAnpWS/cZ4LJMHmyAQ0ikIrXdu+DBFEpZ/igVUe
-        ZIBectNd7Y67NUCg==
-From:   "tip-bot2 for Kim Phillips" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/bugs: Enable STIBP for IBPB mitigated RETBleed
-Cc:     Kim Phillips <kim.phillips@amd.com>, Borislav Petkov <bp@suse.de>,
-        stable@vger.kernel.org, #@tip-bot2.tec.linutronix.de,
-        5.10@tip-bot2.tec.linutronix.de, 5.15@tip-bot2.tec.linutronix.de,
-        5.19@tip-bot2.tec.linutronix.de, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220804192201.439596-1-kim.phillips@amd.com>
-References: <20220804192201.439596-1-kim.phillips@amd.com>
+        Mon, 8 Aug 2022 14:12:13 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2779E12AB3;
+        Mon,  8 Aug 2022 11:12:12 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 21so14908257ybf.4;
+        Mon, 08 Aug 2022 11:12:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=/XHnQoPocPD1a+UnGHJ/9LJiW0L14KZ4B77UdMr6VZw=;
+        b=sP+bxYE0OzPRL5B3OGUYDf3qKflzLSyRBedXSPhMvreUbU699YeMKCURPfFRuyfweD
+         bdTmPQ0r3LcnnYD9wYgT/gpu7O4LYHco1wu3ze42WB9CJJhF9GxBRE8Kfz9i2yokei8e
+         JeNNvAWWOX73/OPvEPl4TobBhqld6VoEGONBen0SFHjMmiZ2pByl7PIVMzvtkvi+JNto
+         BgB2wgM1hl847wnaeYg70Uz3PvCM5tDwdcFEtK3dBk7I++P2S7AW2hy7lYsVgPr0JF8Y
+         NBjAS/mITufdDIKCjqgWb/s7DYbYd/Mr5k4RSBLg5KGxZ0sXc8gS8CvFGVAn5jXXi4fg
+         gGww==
+X-Gm-Message-State: ACgBeo1qrhDtObB+dtZt/Ph11Yx5InEOb5e2O8UqHniIzUpJwsms8/Gs
+        +LcMtDNQ3z5mLYBWCIRtBbeeML9a84Bk/uo9078=
+X-Google-Smtp-Source: AA6agR4H1H7WBo4EV9Tg7G3C9OGsDnETofLMg/OU7ZpAttHQ9aGjHDaj1q03AN3BQxR3GOdd60H1sGvdcIpQwUiymko=
+X-Received: by 2002:a5b:202:0:b0:66f:aab4:9c95 with SMTP id
+ z2-20020a5b0202000000b0066faab49c95mr17629644ybl.81.1659982331328; Mon, 08
+ Aug 2022 11:12:11 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <165998220075.15455.8105823437964757898.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 8 Aug 2022 20:11:59 +0200
+Message-ID: <CAJZ5v0iTeVEHGZZeo+qBSgKENY7E-jp0MEu30Barm=yYjnYMxA@mail.gmail.com>
+Subject: [GIT PULL] More thermal control updates for v5.20-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Hi Linus,
 
-Commit-ID:     e6cfcdda8cbe81eaf821c897369a65fec987b404
-Gitweb:        https://git.kernel.org/tip/e6cfcdda8cbe81eaf821c897369a65fec987b404
-Author:        Kim Phillips <kim.phillips@amd.com>
-AuthorDate:    Mon, 08 Aug 2022 09:32:33 -05:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 08 Aug 2022 19:12:17 +02:00
+Please pull from the tag
 
-x86/bugs: Enable STIBP for IBPB mitigated RETBleed
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-5.20-rc1-2
 
-AMD's "Technical Guidance for Mitigating Branch Type Confusion,
-Rev. 1.0 2022-07-12" whitepaper, under section 6.1.2 "IBPB On
-Privileged Mode Entry / SMT Safety" says:
+with top-most commit 7f0169cde0ced2e2b7bdf3dcedcf8c71efc6afc0
 
-  Similar to the Jmp2Ret mitigation, if the code on the sibling thread
-  cannot be trusted, software should set STIBP to 1 or disable SMT to
-  ensure SMT safety when using this mitigation.
+ Merge branches 'thermal-core' and 'thermal-tools'
 
-So, like already being done for retbleed=unret, and now also for
-retbleed=ibpb, force STIBP on machines that have it, and report its SMT
-vulnerability status accordingly.
+on top of commit c1dbe9a1c86da098a29dcdca1a67b65e2de7ec3a
 
- [ bp: Remove the "we" and remove "[AMD]" applicability parameter which
-   doesn't work here. ]
+ Merge tag 'thermal-5.20-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
 
-Fixes: 3ebc17006888 ("x86/bugs: Add retbleed=ibpb")
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: stable@vger.kernel.org # 5.10, 5.15, 5.19
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=206537
-Link: https://lore.kernel.org/r/20220804192201.439596-1-kim.phillips@amd.com
----
- Documentation/admin-guide/kernel-parameters.txt | 29 +++++++++++-----
- arch/x86/kernel/cpu/bugs.c                      | 10 +++---
- 2 files changed, 27 insertions(+), 12 deletions(-)
+to receive more thermal control updates for 5.20-rc1.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 5e9147f..523b196 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5209,20 +5209,33 @@
- 			Speculative Code Execution with Return Instructions)
- 			vulnerability.
- 
-+			AMD-based UNRET and IBPB mitigations alone do not stop
-+			sibling threads from influencing the predictions of other
-+			sibling threads. For that reason, STIBP is used on pro-
-+			cessors that support it, and mitigate SMT on processors
-+			that don't.
-+
- 			off          - no mitigation
- 			auto         - automatically select a migitation
- 			auto,nosmt   - automatically select a mitigation,
- 				       disabling SMT if necessary for
- 				       the full mitigation (only on Zen1
- 				       and older without STIBP).
--			ibpb	     - mitigate short speculation windows on
--				       basic block boundaries too. Safe, highest
--				       perf impact.
--			unret        - force enable untrained return thunks,
--				       only effective on AMD f15h-f17h
--				       based systems.
--			unret,nosmt  - like unret, will disable SMT when STIBP
--			               is not available.
-+			ibpb         - On AMD, mitigate short speculation
-+				       windows on basic block boundaries too.
-+				       Safe, highest perf impact. It also
-+				       enables STIBP if present. Not suitable
-+				       on Intel.
-+			ibpb,nosmt   - Like "ibpb" above but will disable SMT
-+				       when STIBP is not available. This is
-+				       the alternative for systems which do not
-+				       have STIBP.
-+			unret        - Force enable untrained return thunks,
-+				       only effective on AMD f15h-f17h based
-+				       systems.
-+			unret,nosmt  - Like unret, but will disable SMT when STIBP
-+				       is not available. This is the alternative for
-+				       systems which do not have STIBP.
- 
- 			Selecting 'auto' will choose a mitigation method at run
- 			time according to the CPU.
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 6761668..d50686c 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -152,7 +152,7 @@ void __init check_bugs(void)
- 	/*
- 	 * spectre_v2_user_select_mitigation() relies on the state set by
- 	 * retbleed_select_mitigation(); specifically the STIBP selection is
--	 * forced for UNRET.
-+	 * forced for UNRET or IBPB.
- 	 */
- 	spectre_v2_user_select_mitigation();
- 	ssb_select_mitigation();
-@@ -1179,7 +1179,8 @@ spectre_v2_user_select_mitigation(void)
- 	    boot_cpu_has(X86_FEATURE_AMD_STIBP_ALWAYS_ON))
- 		mode = SPECTRE_V2_USER_STRICT_PREFERRED;
- 
--	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
-+	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
-+	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
- 		if (mode != SPECTRE_V2_USER_STRICT &&
- 		    mode != SPECTRE_V2_USER_STRICT_PREFERRED)
- 			pr_info("Selecting STIBP always-on mode to complement retbleed mitigation\n");
-@@ -2320,10 +2321,11 @@ static ssize_t srbds_show_state(char *buf)
- 
- static ssize_t retbleed_show_state(char *buf)
- {
--	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
-+	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
-+	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
- 	    if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
- 		boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
--		    return sprintf(buf, "Vulnerable: untrained return thunk on non-Zen uarch\n");
-+		    return sprintf(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
- 
- 	    return sprintf(buf, "%s; SMT %s\n",
- 			   retbleed_strings[retbleed_mitigation],
+These fix an error code path issue leading to a NULL pointer
+dereference going forward, drop Kconfig dependencies that are
+not needed any more after recent changes, add CPU IDs for new
+chips to a driver and fix up the tmon utility.
+
+Specifics:
+
+ - Fix NULL pointer dereference in the thermal sysfs interface that
+   results from an error code path mishandling (Rafael Wysocki).
+
+ - Drop COMPILE_TEST dependency that's not needed any more from two
+   thermal Kconfig entries (Jean Delvare).
+
+ - Make the Intel TCC cooling driver support Alder Lake-N and Raptor
+   Lake-P (Sumeet Pawnikar).
+
+ - Fix possible path truncations in the tmon utility (Florian Fainelli).
+
+Thanks!
+
+
+---------------
+
+Florian Fainelli (1):
+      tools/thermal: Fix possible path truncations
+
+Jean Delvare (1):
+      thermal: Drop obsolete dependency on COMPILE_TEST
+
+Rafael J. Wysocki (1):
+      thermal: sysfs: Fix cooling_device_stats_setup() error code path
+
+Sumeet Pawnikar (1):
+      thermal: intel: Add TCC cooling support for Alder Lake-N and Raptor Lake-P
+
+---------------
+
+ drivers/thermal/Kconfig                   |  4 ++--
+ drivers/thermal/intel/intel_tcc_cooling.c |  2 ++
+ drivers/thermal/thermal_sysfs.c           | 10 +++++++---
+ tools/thermal/tmon/sysfs.c                | 24 +++++++++++++-----------
+ 4 files changed, 24 insertions(+), 16 deletions(-)

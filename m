@@ -2,188 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D04358C58A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 11:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD7458C58C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 11:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242298AbiHHJ3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 05:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S242364AbiHHJaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 05:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbiHHJ3g (ORCPT
+        with ESMTP id S235886AbiHHJaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 05:29:36 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2056.outbound.protection.outlook.com [40.107.223.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6693613FAD
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 02:29:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hwolzdgNqannMZh2+rAga4q38vyhqJAg3/rsDbJ999U2V2As1mJ5IOvhGGrAqjHtvmoQSv/9uQRsiZ3CKYqLrBKjZtIyrc62P3THPTQ37PjYjX0c2xpySMOsbD6fI0+cV2cAhDjqGTbMlFClq4pasWChU/OaGbT0rdbznF614CTN8KLtCwELMLBc8IMjK0tVdsvwEndZK7K7ISLQ7nOobZdpk0aNXmpa4/DUXQXxxtCAb/1BkZYGx/HZIbDlZNsGuuCzDZAlsXy4G3InsWQAcOna9DqLgI+Z8cBEh1GNyh/NnrdjoRsm7HvJ/zGRmIWfIktiMLoQalz+ULa1VarY8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EC8Dk56csW+/D9IAyE36BUXV3oi3nX+YD7G4MjPQ30E=;
- b=AkNVfWpR+VdQZ6lVXmAhHzMa2DaDI2rotIOFr4w/UAIffU4V2dAtHY4118QTHUpRNfJQaG3O6mLkv/pKshsGEcsev/z2TnLcJDYo38VVrgyBFpJHjnzMP5ETJ08awvRwsMzxEA3CaPo04bl5cvdxhsSuYIdi+4x6re6dReL5T+cslT/FXUL7m2Ayl1PmWVxk0Osf8c+Mk2W4UKmdibfULWropytnh8BC5SZHFAzU6AhBNeuf4ZShZjPVPrqVgFNpjYseA2rIxXeLdl18xm2U2WurIFtgu3/O013ZbY/G/ImD431j1SjajVAnGn3BA7UNqYthD7JVMcVO8xeFIPfUqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EC8Dk56csW+/D9IAyE36BUXV3oi3nX+YD7G4MjPQ30E=;
- b=VMCZDI9C04KbMPhQQbze3zN2XjOH28MrNiGUJG0aQqt5qagcdfsP7/aUlXlNq24S5QEZpn7ZCc1TyWmpjzZdj3kT13wE7+JE2Pri7TpxM8GRPr9uavOwIKe882DqkZK0W3uOBKcb9TjOJpos884Gv8uyT7IeZfWNU6U2vOdJrH0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by BYAPR12MB2839.namprd12.prod.outlook.com (2603:10b6:a03:72::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Mon, 8 Aug
- 2022 09:29:28 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::7d11:1ba2:dab0:bae3]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::7d11:1ba2:dab0:bae3%6]) with mapi id 15.20.5504.020; Mon, 8 Aug 2022
- 09:29:28 +0000
-Message-ID: <deaffe26-d164-cf59-5847-f80ee4437dff@amd.com>
-Date:   Mon, 8 Aug 2022 14:59:15 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [BUG] perf/x86/intel/pebs: PEBS timestamps overwritten
-Content-Language: en-US
-To:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        Stephane Eranian <eranian@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Liang, Kan" <kan.liang@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, andreas.kogler.0x@gmail.com,
-        LKML <linux-kernel@vger.kernel.org>, ravi.bangoria@amd.com
-References: <CABPqkBTqQaaYH+ySu3reLm5i+X6P4BsqKycp8NBOP1gW3ZV4QA@mail.gmail.com>
- <4fdaeb87-7f0a-78e0-2952-3035a3776198@linux.intel.com>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <4fdaeb87-7f0a-78e0-2952-3035a3776198@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0120.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:96::15) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Mon, 8 Aug 2022 05:30:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA3BABC4
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 02:30:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659951013;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yt7NR2eGA5LoFPxjX/rSv4RMe6uZ/HTujjGSsAea94s=;
+        b=YLTxSQH9am3YHE+LtDO+NOnvxo+5yK/SOzVLehXSaNQ3mnDKlpcYcFK6zm8FQMrr8lV2If
+        oqKqpVB5b336yPnfIlzyTQvv6ehPVJIfT1ocaVCR7fbOxkPP3JVclqbs9/XIcBgNGjSk51
+        FXJG8d+s8MImLBBqZmf51YQVEwfOtJs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-131-u9Xr8zsjPUqQ1b4Pvi8qOg-1; Mon, 08 Aug 2022 05:30:07 -0400
+X-MC-Unique: u9Xr8zsjPUqQ1b4Pvi8qOg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3ED01C006A8;
+        Mon,  8 Aug 2022 09:30:06 +0000 (UTC)
+Received: from localhost (ovpn-12-221.pek2.redhat.com [10.72.12.221])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B9EDA1121314;
+        Mon,  8 Aug 2022 09:30:05 +0000 (UTC)
+Date:   Mon, 8 Aug 2022 17:30:02 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v10 4/8] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <YvDXmmCBXWAFkehc@MiWiFi-R3L-srv>
+References: <20220721181747.1640-1-eric.devolder@oracle.com>
+ <20220721181747.1640-5-eric.devolder@oracle.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 688ae933-c37e-4125-ebf7-08da79207da3
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2839:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cAsMAbbNtNcq5zAWthDtk18yLSqGIQ1pfEQCAvNeawlHqMpz2VgK/Kq1t50K087Vkrl4xTGJTie+ctN/UOp+ofVWE2uy5ElessRxGQ8LEb5YhIsVnCizWMYRIDQfGryVhy0pw2/4lJQIE4q8mEv79ZcE1TBfJypHO2utMctHRGE6T83PVtkxOofh+pVJ1fbdVqShMjMaPRlh5sPaFEGERr1B3qTZMHT7tyV7yTx8fhc59uM1nn9M4KyOwV+XDj42d9d7SAJCCuOL5+AkHgdnqTbx4p/+9x3jkgp75Kr+JYZWx9AxhHG7JgiyvioUb3zKzwAqNCeira7FPUWLLr4ZE1BJ3ZoyWyw9p3kEEJgh6+RFN2kOfX1d6/DMsMeOt2HD8Q1YIzC2wh1SG9IwWWqx5cwfFtXbdW+dk6YwTr09VHtfqLX7w47580I92UyqzsIXJLMFWeGduIrnvuQN9zKDD6m9mahtRCmHEbewkosWECuuWPiPaa3+vazAPuEyenMLzCiPF3wQxuDYWOA1vRjqBGddekOaZlIj2D/o3fuEwIvhcyJAKFDJQQhSbU6HRS3zfxl9iTPBJieDuEljiD+ho9cbidirX9eTfuO+IH6WkGoRdDq74aDuj0tPzPi7x6agG8pymE62TFZodofxW3lDUbByhfvuAfdeB6S32byD4kOSRw4qh3QLMQNJE3q51b8IuJlciO6I40oFSCi1qUtDKXeG/lmHBOjcaO/c8jee7YXxKEDSYRtzy/WaOd/0YlbGyRYc9m5uO890rgv9PZ0L9aGBCRQstzViCESssA5a0+T0afC+u37vLzldb/PIR0sOE4mmfZaGV+8dffa36k12oA3hDKlrYPK+aXB/wIDyXRQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(366004)(136003)(346002)(39860400002)(186003)(2616005)(53546011)(5660300002)(478600001)(6486002)(966005)(66556008)(66476007)(66946007)(6506007)(26005)(8676002)(6512007)(31696002)(86362001)(36756003)(31686004)(6666004)(41300700001)(44832011)(83380400001)(2906002)(54906003)(4326008)(8936002)(316002)(110136005)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWlTckF0TWt6OTNkclVYeDFoQk45czFBcGI4dVphMDNBS0RXb25XU3BuS1Nh?=
- =?utf-8?B?clBUK0Y4RVAzTGQvWmdJc0k0bUtuUDBjRm1XK3dkZVhEZml4L1EvdnBjL1Bo?=
- =?utf-8?B?RXplRlpBdzBGNUdDRE5XSWFTUlBRK2o4ejlPelN4QTJ4UmtGWXBZb1BhWFZr?=
- =?utf-8?B?dXBJVi9EVHcyeTUvbkRCY3VSbUJyVVF1cG1JN1hSUnBYMm1lQTBKZ2hsbTFH?=
- =?utf-8?B?VUlWbGtwdlczWjk0c2JnWmwzTmJoc0dycnpXYW9XWkF5d0VVeXdrSzU0RXhx?=
- =?utf-8?B?V2pweVVaNlYzTENER1dLTVFYbGo1K3dJdUZud0w4WW1VUkFtMzBCd1kralo3?=
- =?utf-8?B?SVVTN0N6VWIwc2wyaGREZmdBVFNmYmFBQVhSbkRkbmNXVTBUTS91NUk0b0Zz?=
- =?utf-8?B?MzhicDhMQmFad3lPdlNMZnRvTTV2d3NRVWQxUWtuK0gvNHQ0SmVhSnZkQWVW?=
- =?utf-8?B?WUF3TVlHQmRlcklhdUtZNnBEOERhUk5QM1pQWEVRaTUycTFKay9YbEVRMG5B?=
- =?utf-8?B?N21uMXJ1MHZJaVJia1VRVzE0NXhOclZxTzBCbVQwc0tyTHE1TXZaR0dNSWtP?=
- =?utf-8?B?VTkzK1Fjb3FaTyttdHhxNFdYejRiZXdyN2t6NnlZeW5rM1ZIVmZnNG5JOFlw?=
- =?utf-8?B?Njg0c1JsY1RlS3gxZ1VzVmtndlA2aDFNSWhTbkRaNmJ0WUxPQ1N4NUV2cVFy?=
- =?utf-8?B?Ky84bEVOTUNqS3FsUFlveGMzYjVpb0hxcDdhYUp1VkhoUmxXamo1aDJKd3Vm?=
- =?utf-8?B?Q3Y0V01meSs1dDBKdDVlQlNMUjRpWWZVMUdaQWh4MVlLR0J4c29zZVVnaVow?=
- =?utf-8?B?TzN2SUZMRmMrTFRtblo4dFl5c1NtTHhGVlBEcllvQ0tldVBtanZvSkFzcTBr?=
- =?utf-8?B?QTRwMG9xNG1nd2NxYlZJV2xRaUhINjlPVlkxRHJEOHpPUWlVOEdTVXpqVWIv?=
- =?utf-8?B?akZ2NHAyclEreGhKaDExSy8wZWEwK1p4R1R6dEd6REJyYXNOclhFa2pSNnl0?=
- =?utf-8?B?RTd0bHVxMXFwbHUweG9RWEhwdk1IZDQ4cElzTUhMcHFnNVVweFNtc2FtRmVt?=
- =?utf-8?B?S1N6WHl0c3ZDN3NuZEF3Y2cxTWYvMVVFalczdi9HNGFrakYxRjVlWEdqUldx?=
- =?utf-8?B?eHVhYS9KaS9SekpIY25aMUxCWDRHaFhCaWhxOVQ0eTNBV2tQelc0Q0lHMThu?=
- =?utf-8?B?V21aWXBtd2VIMEFwaWtKMFJrdUdIUVh6dVlSY1VwNmxZMjRhR2Eza2ZoV2Q2?=
- =?utf-8?B?dUM4WjVpYklMdGJLWjZJYkJ5SHk2Y2Ywa2pFTEdwT3BuVC8vYytPa004MklZ?=
- =?utf-8?B?ZytSWEUyMTk0cmNvaU1vVWFoNzJLa1NJUit2VTdQL0NnME5SR0JhZDNJNTBN?=
- =?utf-8?B?NjBNQWwyK08xcFV4STkxK01McDRCNFNMeWFkTjJseWxpeVZKUXc0NW1saVhL?=
- =?utf-8?B?ZnJmNitSRkg0QnYrQU8yVys3UXR5ZnM0eTBCTnBRTWdoZFIrRG91VHhXRkdQ?=
- =?utf-8?B?QWZPbElGVjZrK3QwTm9EaHZiQ09CRmFxMEJNNEFxb2tZSkRYMzB5SGtzVCth?=
- =?utf-8?B?RnhOWTZYRmRPTGVVYmswL3hBOHY0YXppQ1FWNEt6VDhQTDZvZCttWVFpRGlI?=
- =?utf-8?B?YlZTSVJwbmg3N091ellucUR0OXZHdm9GTEZ0THdBa1hucEcxRXFmVi81L1VP?=
- =?utf-8?B?ekVWVDBnYUR1MkpnT3ovaVp2WU0rbE9xbWVuMDUwSXorQUdESlNLNldSdnEy?=
- =?utf-8?B?SkVuaFNRSnRNK2gzaU8yVWEzZkVKV3VlMTlMekQ0VUtMT3oyRG1BNTJBelBy?=
- =?utf-8?B?SGZNMUc3MStMNVgxbFMzU2RNTDV6eDRIOGZLTW5ibEo2c3FNNEUrd3kwZUo2?=
- =?utf-8?B?TEVodFViZTN1eVpOUGdlSm5UWjV4OEpaSjF1T3lLQ2lpdzVKY29ENFVTKzRy?=
- =?utf-8?B?RzhlRzVuUnBucm5oaGNvc3ZCM2pOMGxRNzhhdSt1RWdEYm5CUzB6Y05zc0Nx?=
- =?utf-8?B?bkgyajcrc0R4bVVxV3d1OXFCQWpsbVM2TzF6K3BieWM0SkZad1FiY2FmdmJN?=
- =?utf-8?B?WW5RZDZhWEp1MDRRcFgycGpCZFZWU1Z3UHZINDN5VU1XcUk4U3pZU0wxOXZo?=
- =?utf-8?Q?4WapjGycGFhbOw9t3Ar6DQDuR?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 688ae933-c37e-4125-ebf7-08da79207da3
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2022 09:29:28.3436
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ElZ7r3LdZ/BV7IZtTlbCjn5tCggxNffS8Y9kW1+blGJQK2YGMk2Wj77e8kb3v/mze8itECQ1eM9DLmqkEHlfmw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2839
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721181747.1640-5-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05-Aug-22 7:06 PM, Liang, Kan wrote:
+On 07/21/22 at 02:17pm, Eric DeVolder wrote:
+> CPU and memory change notifications are received in order to
+> regenerate the elfcorehdr.
 > 
+> To support cpu hotplug, a callback is registered to capture the
+> CPUHP_AP_ONLINE_DYN online and offline events via
+> cpuhp_setup_state_nocalls().
 > 
-> On 2022-08-05 6:49 a.m., Stephane Eranian wrote:
->> Hi,
->>
->> I was alerted by an internal user that the PEBS TSC-based timestamps
->> do not appear
->> correctly in the final perf.data output file from perf record.
->>
->> After some investigation, I came to the conclusion that indeed the
->> data->time field setup
->> by PEBS in the setup_pebs_fixed_sample_data() is later overwritten by
->> perf_events generic
->> code in perf_prepare_sample(). There is an ordering problem here.
->>
->> Looking around we found that this problem had been uncovered back in
->> May 2020 and a
->> patch had been posted then:
->> https://lore.kernel.org/lkml/e754b625-bf14-8f5f-bd1a-71d774057005@gmail.com/T/
->>
->> However this patch was never commented upon or committed.
->>
->> The problem is still present in the upstream code today.
->>
->> 1. perf_sample_data_init()
->> 2. setup_pebs_fixed_sample_data(): data->time =
->> native_sched_clock_from_tsc(pebs->tsc);
->> 3. perf_prepare_sample(): data->time = perf_event_clock(event);
->>
->> The patch from 2020 (Andreas Kogler) fixes the problem by making the
->> assignment in 3.
->> conditioned to the value of data->time being 0. Andreas also suggested
->> an alternative which
->> would break up the call to perf_event_ouput() like this is done in the
->> BTS code allowing
->> the prepare_sample() call to be made before PEBS samples are
->> extracted. That would
->> generate some code duplication. Although this approach appears more
->> robust, the one
->> issue I see is that prepare_sample may need data that would be filled
->> by PEBS and
->> therefore it would  need to be called afterwards.
->>
->> Any better ideas?
+> To support memory hotplug, a notifier is registered to capture the
+> MEM_ONLINE and MEM_OFFLINE events via register_memory_notifier().
 > 
-> I think Andreas's patch is the most straightforward and simplest patch
-> to fix the issue. But, if I recall correctly, Peter prefers to minimize
-> the cachelines touched by the perf_sample_data_init(). So initializing
-> the data->time in the perf_sample_data_init() seems break the rule.
+> The cpu callback and memory notifiers call handle_hotplug_event()
+> which performs needed tasks and then dispatches the event to the
+> architecture specific arch_crash_handle_hotplug_event(). During the
+> process, the kexec_mutex is held.
 > 
-> I think HW will provide more and more such kind of precise information.
-> Maybe we can use a flag variable to track whether the information is
-> already provided to avoid the overwritten.
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> ---
+>  include/linux/crash_core.h |  24 ++++++++
+>  include/linux/kexec.h      |   7 +++
+>  kernel/crash_core.c        | 118 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 149 insertions(+)
+> 
+> diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
+> index cb0f1916fbf5..c9705b6872e7 100644
+> --- a/include/linux/crash_core.h
+> +++ b/include/linux/crash_core.h
+> @@ -86,4 +86,28 @@ int parse_crashkernel_high(char *cmdline, unsigned long long system_ram,
+>  int parse_crashkernel_low(char *cmdline, unsigned long long system_ram,
+>  		unsigned long long *crash_size, unsigned long long *crash_base);
+>  
+> +#define KEXEC_CRASH_HP_REMOVE_CPU		0
+> +#define KEXEC_CRASH_HP_ADD_CPU			1
+> +#define KEXEC_CRASH_HP_REMOVE_MEMORY	2
+> +#define KEXEC_CRASH_HP_ADD_MEMORY		3
+> +#define KEXEC_CRASH_HP_INVALID_CPU		-1U
+> +
+> +struct kimage;
+> +#ifndef arch_map_crash_pages
+> +static inline void *arch_map_crash_pages(unsigned long paddr,
+> +		unsigned long size)
+> +{
+> +	return NULL;
+> +}
+> +#endif
+> +#ifndef arch_unmap_crash_pages
+> +static inline void arch_unmap_crash_pages(void **ptr) { }
+> +#endif
+> +#ifndef arch_crash_handle_hotplug_event
+> +static inline void arch_crash_handle_hotplug_event(struct kimage *image,
+> +		unsigned int hp_action, unsigned int cpu)
+> +{
+> +}
+> +#endif
+> +
+>  #endif /* LINUX_CRASH_CORE_H */
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 5f4969cf3f4e..7694aa77b92b 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -340,6 +340,13 @@ struct kimage {
+>  	struct purgatory_info purgatory_info;
+>  #endif
+>  
+> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+> +	bool hotplug_event;
+> +	unsigned int offlinecpu;
+> +	bool elfcorehdr_index_valid;
+> +	int elfcorehdr_index;
+> +#endif
+> +
+>  #ifdef CONFIG_IMA_KEXEC
+>  	/* Virtual address of IMA measurement buffer for kexec syscall */
+>  	void *ima_buffer;
+> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+> index 212d4dad0ec7..154ef532d45a 100644
+> --- a/kernel/crash_core.c
+> +++ b/kernel/crash_core.c
+> @@ -10,12 +10,16 @@
+>  #include <linux/utsname.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/kexec.h>
+> +#include <linux/memory.h>
+> +#include <linux/cpuhotplug.h>
+>  
+>  #include <asm/page.h>
+>  #include <asm/sections.h>
+>  
+>  #include <crypto/sha1.h>
+>  
+> +#include "kexec_internal.h"
+> +
+>  /* vmcoreinfo stuff */
+>  unsigned char *vmcoreinfo_data;
+>  size_t vmcoreinfo_size;
+> @@ -587,3 +591,117 @@ static int __init crash_save_vmcoreinfo_init(void)
+>  }
+>  
+>  subsys_initcall(crash_save_vmcoreinfo_init);
+> +
+> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+> +static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
+> +{
+> +	/* Obtain lock while changing crash information */
+> +	mutex_lock(&kexec_mutex);
+> +
+> +	/* Check kdump is loaded */
+> +	if (kexec_crash_image) {
+> +		struct kimage *image = kexec_crash_image;
+> +
+> +		pr_debug("crash hp: hp_action %u, cpu %u", hp_action, cpu);
 
-fwiw, we had similar quirks in the past. For ex: __PERF_SAMPLE_CALLCHAIN_EARLY
+We don't need to check if it's cpu hotplug action here? Then for mem
+hotplug actions, we also get:
+                "crash hp: hp_action 2, cpu 0"
+That cpu 0 will be confusing. And you forgot the line break.
 
-Thanks,
-Ravi
+Can we do like this:
+		pr_debug("crash hp: hp_action %u ", hp_action);
+		if (hp_action == KEXEC_CRASH_HP_REMOVE_CPU ||
+		    hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
+			pr_debug("cpu %u \n", cpu);
+
+Other than this, the patch looks good to me.
+
+> +
+> +		/*
+> +		 * When the struct kimage is alloced, it is wiped to zero, so
+> +		 * the elfcorehdr_index_valid defaults to false. Find the
+> +		 * segment containing the elfcorehdr, if not already found.
+> +		 * This works for both the kexec_load and kexec_file_load paths.
+> +		 */
+> +		if (!image->elfcorehdr_index_valid) {
+> +			unsigned char *ptr;
+> +			unsigned long mem, memsz;
+> +			unsigned int n;
+> +
+> +			for (n = 0; n < image->nr_segments; n++) {
+> +				mem = image->segment[n].mem;
+> +				memsz = image->segment[n].memsz;
+> +				ptr = arch_map_crash_pages(mem, memsz);
+> +				if (ptr) {
+> +					/* The segment containing elfcorehdr */
+> +					if (memcmp(ptr, ELFMAG, SELFMAG) == 0) {
+> +						image->elfcorehdr_index = (int)n;
+> +						image->elfcorehdr_index_valid = true;
+> +					}
+> +				}
+> +				arch_unmap_crash_pages((void **)&ptr);
+> +			}
+> +		}
+> +
+> +		if (!image->elfcorehdr_index_valid) {
+> +			pr_err("crash hp: unable to locate elfcorehdr segment");
+> +			goto out;
+> +		}
+> +
+> +		/* Needed in order for the segments to be updated */
+> +		arch_kexec_unprotect_crashkres();
+> +
+> +		/* Flag to differentiate between normal load and hotplug */
+> +		image->hotplug_event = true;
+> +
+> +		/* Now invoke arch-specific update handler */
+> +		arch_crash_handle_hotplug_event(image, hp_action, cpu);
+> +
+> +		/* No longer handling a hotplug event */
+> +		image->hotplug_event = false;
+> +
+> +		/* Change back to read-only */
+> +		arch_kexec_protect_crashkres();
+> +	}
+> +
+> +out:
+> +	/* Release lock now that update complete */
+> +	mutex_unlock(&kexec_mutex);
+> +}
+> +
+> +static int crash_memhp_notifier(struct notifier_block *nb, unsigned long val, void *v)
+> +{
+> +	switch (val) {
+> +	case MEM_ONLINE:
+> +		handle_hotplug_event(KEXEC_CRASH_HP_ADD_MEMORY, 0);
+> +		break;
+> +
+> +	case MEM_OFFLINE:
+> +		handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_MEMORY, 0);
+> +		break;
+> +	}
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static struct notifier_block crash_memhp_nb = {
+> +	.notifier_call = crash_memhp_notifier,
+> +	.priority = 0
+> +};
+> +
+> +static int crash_cpuhp_online(unsigned int cpu)
+> +{
+> +	handle_hotplug_event(KEXEC_CRASH_HP_ADD_CPU, cpu);
+> +	return 0;
+> +}
+> +
+> +static int crash_cpuhp_offline(unsigned int cpu)
+> +{
+> +	handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_CPU, cpu);
+> +	return 0;
+> +}
+> +
+> +static int __init crash_hotplug_init(void)
+> +{
+> +	int result = 0;
+> +
+> +	if (IS_ENABLED(CONFIG_MEMORY_HOTPLUG))
+> +		register_memory_notifier(&crash_memhp_nb);
+> +
+> +	if (IS_ENABLED(CONFIG_HOTPLUG_CPU))
+> +		result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+> +						   "crash/cpuhp",
+> +						   crash_cpuhp_online,
+> +						   crash_cpuhp_offline);
+> +
+> +	return result;
+> +}
+> +
+> +subsys_initcall(crash_hotplug_init);
+> +#endif
+> -- 
+> 2.31.1
+> 
+

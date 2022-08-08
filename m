@@ -2,107 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAE358C97A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AB658C97C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243416AbiHHNbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S237124AbiHHNbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243341AbiHHNaw (ORCPT
+        with ESMTP id S235935AbiHHNbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:30:52 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56682C70;
-        Mon,  8 Aug 2022 06:30:51 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y141so8093222pfb.7;
-        Mon, 08 Aug 2022 06:30:51 -0700 (PDT)
+        Mon, 8 Aug 2022 09:31:19 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08EAF78
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:31:17 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id j7so10938746wrh.3
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 06:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=/cwKw1oXK2BAcUZBUF1HGlwJN39sE5gD8XqZTYnWCZg=;
-        b=O8HGM/CeMJZUbrN9QYtc5puFOw69OoCjnsj+YVQ3CZSGm0Fvwt26dd/DtxV4JvMrCG
-         /EUEYfVm/fdmqjEi6aC2yslfCFN+QT+UGVRt6dDw3dQypyDHuyw7zDb7wpwqoJTeOqV+
-         f1qgrvRtmW9gFk12p0PwxEywL5rKRUKR9BS1O3dczs9/7rUAShXHEG3m3YedQnXkv7QD
-         wILcO3RdeZ3WeuGFMzXYOah/pmYH1cUTJtlqDDjkmHcnC7clnoBqFStbOLAIOXT2bhqG
-         pU7o0HXjqRQLubWcm0kTag9lPTJa1uKUc9m6GaKUaJu6zuB/1PpcDJeE5VXgfxzKUu+2
-         S5aQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=GiRVWjLaeTq4bwRmFmvvoFT6ftmqIf6M/URaB1Ctnzg=;
+        b=szcVgf8m8WJvtE5gnipsM5vQKf7KCnLNPJ+u3VKMuEykYIiygVOa7aSIO8GXu6dxin
+         C9cN1pT2M7tkqSxLTQ7dEVCI+bTDkIQrvmBHhlH226szPJbK9TDVm0cj3w+hAEBYDeuS
+         kuN5fmrWuU9jX9u2cSYdFmZAH0Q9zg90ZB+Y2Q0O5czLc0IhrJBHqzUIDRrvqxeMobzp
+         MWC5M/IEaW4beCNYx7AAe2phe0YPGi3kmWCiDtoq4wZ+O9nQ0hSFGvM9w0a3Z6C1+eES
+         3NaGqGOTUmlTtOOk/S6l+yQq5g25tDsdg1dnKXql0r7ZtwkTqNQ3fL1uypK6EeT6xGAv
+         YU2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=/cwKw1oXK2BAcUZBUF1HGlwJN39sE5gD8XqZTYnWCZg=;
-        b=a2jYIhsk7Oc3PCuO6s/bAXfuXmNbgpNxvaKVe8oTx9QmYLAUfUC2GnoqEAhjfTrSMe
-         5GbaGTgsadm+dH6u8ngRldSxdLbKtC1Z1/GNrtazPd/N2P0cmmk+0EURl9SzPuFvmtg9
-         jNW8NK5V3h1vUsEuzqzDhLs7aaIZNYO5/nKUJWu1hjTv1N1chRzc6WCY6VDS0N/CBNbo
-         9COXCSiGnMNIgx9qjf0SxMZ0666i21Gq333TPJfZ5I+xQkTgT+6EpBmt1UejsZt9VYV2
-         8mlYLgTEelIFt8KHgb1efAXD8LC1J+B9oHDNgb4VZnZfmTjq4BpXFqreCvpu2lGqFQES
-         qStA==
-X-Gm-Message-State: ACgBeo0bECyGNVyDWbukrIBNfnIoAbDKWycJfQnCZuO2gAhmhpXqI6Ir
-        to3qVwyi3Pzuii1c+J+SRwg=
-X-Google-Smtp-Source: AA6agR5leQTGI3Gn3ICBtJwZcaOBSYYMxYgXEWbc/mQAjoNsb13pkDAcSWetVYSPKlW/WcBvsNVI5A==
-X-Received: by 2002:a65:604f:0:b0:41a:77fe:2bbe with SMTP id a15-20020a65604f000000b0041a77fe2bbemr15196528pgp.242.1659965450820;
-        Mon, 08 Aug 2022 06:30:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bg22-20020a17090b0d9600b001f10c959aa2sm8104487pjb.42.2022.08.08.06.30.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 06:30:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 8 Aug 2022 06:30:46 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     wim@linux-watchdog.org, arnd@arndb.de,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kelulanainsley@gmail.com, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] watchdog: sa1100: make variable sa1100dog_driver static
-Message-ID: <20220808133046.GA2347272@roeck-us.net>
-References: <20220802020819.1226454-1-sunliming@kylinos.cn>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=GiRVWjLaeTq4bwRmFmvvoFT6ftmqIf6M/URaB1Ctnzg=;
+        b=ArtyFmXdiI6wuZdLPcW+WyxkS8tIjpvvY8kkEJALrolEe3ynIgA6k5kVNdpPMRnvyr
+         W/VV8+Q+RW/4fxu3KaXVwWlyJ/SWJCWRKJfQmkjsiSfODspQULkSSn5KnT3KtT6rPHis
+         /qR7qmhxQfxarRVDBKYxwULn1bHWPd7EOx6l7jx+wYrjhjYKmRTN7zBVRcBDvJfXvyM4
+         XXNQUcEU2g8dZj0D91RhKw40S5DqaU+5UcKVoMbXMX6v0ofqcBLGcsZgG8CfHerL2Qyc
+         BU1s2X8ExgyY6aeANcr8Y442E1vWrC3a/aaz+T6khwEv0Iui6srrV76nMad13qbsGJ9X
+         3vvQ==
+X-Gm-Message-State: ACgBeo1j0RlahcNzOXezH6wxbjnkdVAMvaxchtbTSZGnJT6EqgGdSVwZ
+        WllLNqSaErEyZwH8kXS0uRsdgQ==
+X-Google-Smtp-Source: AA6agR4tDfsDfFt7qIu/1NfPJKT5E3XCnPORK+fkpaRYUHopQtyUadTGtAorGFjCYlZOJaI9Q1zrMA==
+X-Received: by 2002:adf:ee09:0:b0:21e:f4e4:aa68 with SMTP id y9-20020adfee09000000b0021ef4e4aa68mr11486799wrn.324.1659965476379;
+        Mon, 08 Aug 2022 06:31:16 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:5a02:3ab6:cc02:eb4e? ([2a05:6e02:1041:c10:5a02:3ab6:cc02:eb4e])
+        by smtp.googlemail.com with ESMTPSA id j1-20020a056000124100b0021d221daccfsm11516170wrx.78.2022.08.08.06.31.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 06:31:15 -0700 (PDT)
+Message-ID: <24be0922-74a5-456e-411b-b1c6e7924f99@linaro.org>
+Date:   Mon, 8 Aug 2022 15:31:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802020819.1226454-1-sunliming@kylinos.cn>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 00/33] New thermal OF code
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
+        anarsoul@gmail.com, baolin.wang7@gmail.com,
+        bjorn.andersson@linaro.org, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, digetx@gmail.com,
+        f.fainelli@gmail.com, glaroque@baylibre.com,
+        hayashi.kunihiko@socionext.com, heiko@sntech.de, j-keerthy@ti.com,
+        jonathanh@nvidia.com, khilman@baylibre.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, matthias.bgg@gmail.com,
+        mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
+        miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
+        rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220808094216.928018-1-michael@walle.cc>
+ <cd4fef23-15b3-15ab-8125-91860bd83315@linaro.org>
+ <8a979d0fcab90f4d5ffee95f322c5ace@walle.cc>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <8a979d0fcab90f4d5ffee95f322c5ace@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 10:08:19AM +0800, sunliming wrote:
-> This symbol is not used outside of sa1100_wdt.c, so marks it static.
+On 08/08/2022 15:24, Michael Walle wrote:
+> Hi Daniel,
 > 
-> Fixes the following warning:
+> Am 2022-08-08 15:09, schrieb Daniel Lezcano:
+>> Does this fix solves this first issue ?
+>>
+>> https://lore.kernel.org/all/YvDzovkMCQecPDjz@kili/
 > 
-> >> drivers/watchdog/sa1100_wdt.c:241:24: sparse: sparse: symbol 'sa1100dog_driver'
-> was not declared. Should it be static?
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> Unfortunately not, it is still the same:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Ok, thanks for testing
 
-> ---
->  drivers/watchdog/sa1100_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/sa1100_wdt.c b/drivers/watchdog/sa1100_wdt.c
-> index 2d0a06a158a8..82ac5d19f519 100644
-> --- a/drivers/watchdog/sa1100_wdt.c
-> +++ b/drivers/watchdog/sa1100_wdt.c
-> @@ -238,7 +238,7 @@ static int sa1100dog_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -struct platform_driver sa1100dog_driver = {
-> +static struct platform_driver sa1100dog_driver = {
->  	.driver.name = "sa1100_wdt",
->  	.probe	  = sa1100dog_probe,
->  	.remove	  = sa1100dog_remove,
-> -- 
-> 2.25.1
+> [    1.915140] thermal_sys: Failed to find thermal zone for tmu id=2
+> [    1.921279] qoriq_thermal 1f80000.tmu: Failed to register sensors
+> [    1.927395] qoriq_thermal: probe of 1f80000.tmu failed with error -22
+> [    1.934189] Unable to handle kernel paging request at virtual address 
+> 01adadadadadad88
+> [    1.942146] Mem abort info:
+> [    1.944948]   ESR = 0x0000000096000004
+> [    1.948708]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    1.954042]   SET = 0, FnV = 0
+> [    1.957107]   EA = 0, S1PTW = 0
+> [    1.960253]   FSC = 0x04: level 0 translation fault
+> [    1.965147] Data abort info:
+> [    1.968030]   ISV = 0, ISS = 0x00000004
+> [    1.971878]   CM = 0, WnR = 0
+> [    1.974852] [01adadadadadad88] address between user and kernel 
+> address ranges
+> [    1.982016] Internal error: Oops: 96000004 [#1] SMP
+> [    1.986907] Modules linked in:
+> [    1.989969] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 
+> 5.19.0-next-20220808-00080-g1c46f44502e0 #1697
+> [    1.999135] Hardware name: Kontron KBox A-230-LS (DT)
+> [    2.004199] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS 
+> BTYPE=--)
+> [    2.011185] pc : kfree+0x5c/0x3c0
+> [    2.014516] lr : devm_thermal_of_zone_release+0x38/0x60
+> [    2.019761] sp : ffff80000a22bad0
+> [    2.023081] x29: ffff80000a22bad0 x28: 0000000000000000 x27: 
+> ffff800009960464
+> [    2.030245] x26: ffff800009a16960 x25: 0000000000000006 x24: 
+> ffff800009f09a40
+> [    2.037407] x23: ffff800009ab9008 x22: ffff800008d0eea8 x21: 
+> 01adadadadadad80
+> [    2.044569] x20: 6b6b6b6b6b6b6b6b x19: ffff00200232b800 x18: 
+> 00000000fffffffb
+> [    2.051731] x17: ffff800008d0eea0 x16: ffff800008d07d44 x15: 
+> ffff800008d0d154
+> [    2.056647] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+> [    2.058893] x14: ffff800008d0cddc x13: ffff8000088d1c2c x12: 
+> ffff8000088d5034
+> [    2.072597] x11: ffff8000088d46d4 x10: 0000000000000000 x9 : 
+> ffff800008d0eea8
+> [    2.079759] x8 : ffff002000b1a158 x7 : bbbbbbbbbbbbbbbb x6 : 
+> ffff80000a0f53b8
+> [    2.086921] x5 : ffff80000a22b960 x4 : 0000000000000000 x3 : 
+> 0000000000000000
+> [    2.094082] x2 : fffffc0000000000 x1 : ffff002000838040 x0 : 
+> 01adb1adadadad80
+> [    2.101244] Call trace:
+> [    2.103692]  kfree+0x5c/0x3c0
+> [    2.106666]  devm_thermal_of_zone_release+0x38/0x60
+> [    2.111561]  release_nodes+0x64/0xd0
+> [    2.115146]  devres_release_all+0xbc/0x350
+> [    2.119253]  device_unbind_cleanup+0x20/0x70
+> [    2.123536]  really_probe+0x1a0/0x2e4
+> [    2.127208]  __driver_probe_device+0x80/0xec
+> [    2.131490]  driver_probe_device+0x44/0x130
+> [    2.135685]  __driver_attach+0x104/0x1b4
+> [    2.139619]  bus_for_each_dev+0x7c/0xe0
+> [    2.143465]  driver_attach+0x30/0x40
+> [    2.147048]  bus_add_driver+0x160/0x210
+> [    2.150894]  driver_register+0x84/0x140
+> [    2.154741]  __platform_driver_register+0x34/0x40
+> [    2.159461]  qoriq_tmu_init+0x28/0x34
+> [    2.163133]  do_one_initcall+0x50/0x250
+> [    2.166979]  kernel_init_freeable+0x278/0x31c
+> [    2.171349]  kernel_init+0x30/0x140
+> [    2.174847]  ret_from_fork+0x10/0x20
+> [    2.178433] Code: b25657e2 d34cfc00 d37ae400 8b020015 (f94006a1)
+> [    2.184546] ---[ end trace 0000000000000000 ]---
+> [    2.189188] Kernel panic - not syncing: Attempted to kill init! 
+> exitcode=0x0000000b
+> [    2.196869] SMP: stopping secondary CPUs
+> [    2.200803] Kernel Offset: disabled
+> [    2.204296] CPU features: 0x2000,0800f021,00001086
+> [    2.209100] Memory Limit: none
+> [    2.212158] ---[ end Kernel panic - not syncing: Attempted to kill 
+> init! exitcode=0x0000000b ]---
 > 
+> -michael
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

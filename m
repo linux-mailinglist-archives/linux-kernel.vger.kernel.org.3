@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D893958C7B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB7E58C7B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242929AbiHHLkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 07:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S242963AbiHHLkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 07:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242918AbiHHLkY (ORCPT
+        with ESMTP id S242930AbiHHLk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 07:40:24 -0400
+        Mon, 8 Aug 2022 07:40:29 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FB26140;
-        Mon,  8 Aug 2022 04:40:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCAA5F5F;
+        Mon,  8 Aug 2022 04:40:27 -0700 (PDT)
 Received: from localhost.localdomain (unknown [39.46.64.186])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 201816601C24;
-        Mon,  8 Aug 2022 12:40:19 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6F42F6601C28;
+        Mon,  8 Aug 2022 12:40:23 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659958823;
-        bh=vPB21bP63a3cyzTnyqBlMpssVAO3NSTN7hNkLuHypu8=;
+        s=mail; t=1659958826;
+        bh=Mz0RDPA7p3Dfvp3I4U1fgB3B0KKGWXSWNIX3BZgcrBw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JoTNVl91VFXUdCtI2GOBG1i5U5F4Odv6afy0ICI4ZpimvFRHIU8MOOyCfk+QxWATd
-         60quu7bvRpPir6ji6B7NSeUjYM4fH/Pwd374OqsDOZd8tfglu27WLUvmNVU9x9D9RI
-         NrLPV5Buo7crkpryzibFHHNTF1Z1Z2Ej9DPhqyZzlNjJtVdgwC3luA2wCSRmJ2jbNu
-         khMB9pY4cQWszlWCEKAxhr89RM26k3yO+mwyXAE5Gthggb7XC3cKhxnciy4FisRkpv
-         iA2eLzFONPU3sGUojQnFUyZ/Fv8lVRyIP15DxRf/PZWEOP7WpbpUJ8BElhlwXLrej3
-         HO4mwjn4Jmpmw==
+        b=kzWwD1wcxrwuIt0Octlu4Ol2iu4SmNmMWwgoYoRkmqZF9DCWk0SljRkPp4fvTD/e5
+         4DaopepsJDHllgckmzAn8MVF8Ep2BL/vI0ssgZD0ho41Pu906GWA2ceZvvFdDRMBM4
+         NGaksFFVLjyBZgcHDmA8NFkzlgv0fXoznA7IN5aQMHlxp/cSVVZJoBRM1+yUXOQXBg
+         t1zQ21gD5f0Q9p+nAif9g8EgKGhbOO2L+URXd7jo16LH8CXFn4KzZoYMrdcah9Pi1A
+         sGsBKCZ6GL/h7Kcn4PXAnxgswwvTVefHu0IzVltTS/9JfVF6eHqFgMb+GLo9LYGaWz
+         jhSZksmzqyDxw==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -43,9 +43,9 @@ To:     Jonathan Corbet <corbet@lwn.net>,
         linux-kernel@vger.kernel.org (open list)
 Cc:     Steven Noonan <steven@uplinklabs.net>, usama.anjum@collabora.com,
         kernel@collabora.com
-Subject: [PATCH 2/3] x86: touch clocksource watchdog after syncing TSCs
-Date:   Mon,  8 Aug 2022 16:39:53 +0500
-Message-Id: <20220808113954.345579-2-usama.anjum@collabora.com>
+Subject: [PATCH 3/3] x86/tsc: don't check for random warps if using direct sync
+Date:   Mon,  8 Aug 2022 16:39:54 +0500
+Message-Id: <20220808113954.345579-3-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220808113954.345579-1-usama.anjum@collabora.com>
 References: <20220808113954.345579-1-usama.anjum@collabora.com>
@@ -62,44 +62,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Steven Noonan <steven@uplinklabs.net>
 
-Update watchdog after syncing the TSCs of all the CPUs. This is needed
-to avoid getting TSC clocksource marked as unstable after syncing them.
+There's some overhead in writing and reading MSR_IA32_TSC. We try to
+account for it. But sometimes overhead gets under or over estimated.
+When we retry syncing, it sees the clock "go backwards". Hence,
+ignore random wrap if using direct sync.
 
 Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- arch/x86/kernel/smpboot.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/kernel/tsc_sync.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index f24227bc3220..4b3a03004a1f 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -56,6 +56,7 @@
- #include <linux/numa.h>
- #include <linux/pgtable.h>
- #include <linux/overflow.h>
-+#include <linux/clocksource.h>
+diff --git a/arch/x86/kernel/tsc_sync.c b/arch/x86/kernel/tsc_sync.c
+index 2a855991f982..1fc751212a0e 100644
+--- a/arch/x86/kernel/tsc_sync.c
++++ b/arch/x86/kernel/tsc_sync.c
+@@ -405,7 +405,7 @@ void check_tsc_sync_source(int cpu)
+ 		pr_debug("TSC synchronization [CPU#%d -> CPU#%d]: passed\n",
+ 			smp_processor_id(), cpu);
  
- #include <asm/acpi.h>
- #include <asm/desc.h>
-@@ -1444,6 +1445,7 @@ void arch_thaw_secondary_cpus_begin(void)
+-	} else if (atomic_dec_and_test(&test_runs) || random_warps) {
++	} else if (atomic_dec_and_test(&test_runs) || (random_warps && !tsc_allow_direct_sync)) {
+ 		/* Force it to 0 if random warps brought us here */
+ 		atomic_set(&test_runs, 0);
  
- void arch_thaw_secondary_cpus_end(void)
- {
-+	clocksource_touch_watchdog();
- 	mtrr_aps_init();
- }
- 
-@@ -1477,6 +1479,8 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
- {
- 	pr_debug("Boot done\n");
- 
-+	clocksource_touch_watchdog();
-+
- 	calculate_max_logical_packages();
- 
- 	/* XXX for now assume numa-in-package and hybrid don't overlap */
 -- 
 2.30.2
 

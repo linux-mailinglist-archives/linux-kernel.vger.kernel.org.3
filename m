@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E788658C93E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7318758C93F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237926AbiHHNRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        id S243168AbiHHNSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236127AbiHHNRp (ORCPT
+        with ESMTP id S242800AbiHHNSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:17:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A836A5FE8
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659964661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=F3isuR0jQPqF+YB0HX0DbKwI7eUCGW/G7ScBjYwrfKU=;
-        b=YEtd8SccRz3RUn6HV5yl5KBN9kpGYRcGwyWAnhVovNSURVWw1A30r46qrjEMrSHtfeUzES
-        vfaVC+YSgpFt939tGrPTRXivxnuZj+Z+whSknAhXSWv9EQrTHJ9/RsR3voCjofZUEUlkxU
-        WfWtedYq63LOqVB23Lo+EMHnaTTV+qc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-270-2sQI0B1CMFqk3ENTj3BrcQ-1; Mon, 08 Aug 2022 09:17:37 -0400
-X-MC-Unique: 2sQI0B1CMFqk3ENTj3BrcQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 8 Aug 2022 09:18:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEF25FA9
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:18:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3E19485A58C;
-        Mon,  8 Aug 2022 13:17:37 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E1279457F;
-        Mon,  8 Aug 2022 13:17:36 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     linux-fsdevel@vger.kernel.org
-cc:     dhowells@redhat.com, Ian Kent <raven@themaw.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC][PATCH] uapi: Remove the inclusion of linux/mount.h from uapi/linux/fs.h
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C7F2B80DDC
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 13:18:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57CEC433D6;
+        Mon,  8 Aug 2022 13:18:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659964706;
+        bh=7ITSBOVxNweF/3UEZBBcK5iG7lD0gHbItZ1uzm6dKz0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HAE75cZqjRgqMhAJavN7FjlBm0fw/yHDDeWZsoEVMlWkOyA59V1X/+RK11lE0KaZF
+         SPCphRlxD15wqCrKm2SrNiYfukRfB1WVQ0QdP5uf+Wbwdhej8KOmBFoMtr8aZokOhE
+         IuDXzzFqEN3Qym6K0/s1xigP9hxlZ6YaSMEOmUsDHMW0xhsntFLfBC6QthgVb3jtko
+         yVRa0BEZpDwgOIhmjHSGcw01fRjKPFd2A8WMbl4lRS2Tu8yx+FXcYtwxlMkUrOK8Ug
+         boK5QJPro+Lnh2qUlDqPR8b5YF/8L71zk7O8J5qcrYwDSwT+UbUtScCBq1PBlQu33W
+         HXh7bCobBiYSg==
+Date:   Mon, 8 Aug 2022 14:18:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v1 5/5] regmap: mmio: Introduce IO accessors that can
+ talk to IO port
+Message-ID: <YvENHSRQuwAzfQJW@sirena.org.uk>
+References: <20220805205321.19452-1-andriy.shevchenko@linux.intel.com>
+ <20220805205321.19452-5-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <163409.1659964655.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 08 Aug 2022 14:17:35 +0100
-Message-ID: <163410.1659964655@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="i9XU/Qm8+P/E2d47"
+Content-Disposition: inline
+In-Reply-To: <20220805205321.19452-5-andriy.shevchenko@linux.intel.com>
+X-Cookie: Are we running light with overbyte?
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,55 +60,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-We're seeing issues in autofs and xfstests whereby linux/mount.h (the UAPI
-version) as included indirectly by linux/fs.h is conflicting with
-sys/mount.h (there's a struct and an enum).
+--i9XU/Qm8+P/E2d47
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Would it be possible to just remove the #include from linux/fs.h (as patch
-below) and rely on those hopefully few things that need mount flags that d=
-on't
-use the glibc header for them working around it by configuration?
+On Fri, Aug 05, 2022 at 11:53:21PM +0300, Andy Shevchenko wrote:
 
-David
----
-uapi: Remove the inclusion of linux/mount.h from uapi/linux/fs.h
-    =
+> Currently regmap MMIO is inconsistent with IO accessors. I.e.
+> the Big Endian counterparts are using ioreadXXbe() / iowriteXXbe()
+> which are not clean implementations of readXXbe(). Besides that
+> some users may use regmap MMIO for IO ports, and this can be done
+> by assigning ioreadXX()/iowriteXX() and their Big Endian counterparts
+> to the regmap context.
 
-Remove the inclusion of <linux/mount.h> from uapi/linux/fs.h as it
-interferes with definitions in sys/mount.h - but linux/fs.h is needed by
-various things where mount flags and structs are not.
+Have you validated that nothing is relying on whatever the problem is
+with using the io versions?
 
-Note that this will likely have the side effect of causing some build
-failures.
+> That said, reimplement current Big Endian MMIO accessors by replacing
+> ioread()/iowrite() with respective read()/write() and swab() calls.
+> While at it, add IO port support with a corresponding flag added.
 
-Reported-by: Ian Kent <raven@themaw.net>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Alexander Viro <viro@zeniv.linux.org.uk>
-cc: Christian Brauner <christian@brauner.io>
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-api@vger.kernel.org
----
- include/uapi/linux/fs.h |    5 -----
- 1 file changed, 5 deletions(-)
+This should be a separate patch.
 
-diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
-index bdf7b404b3e7..7a2597ac59ed 100644
---- a/include/uapi/linux/fs.h
-+++ b/include/uapi/linux/fs.h
-@@ -17,11 +17,6 @@
- #include <linux/fscrypt.h>
- #endif
- =
+> +			if (config->io_port) {
+> +				ctx->reg_read = regmap_mmio_ioread8;
+> +				ctx->reg_write = regmap_mmio_iowrite8;
+> +			} else if (config->use_relaxed_mmio) {
 
--/* Use of MS_* flags within the kernel is restricted to core mount(2) cod=
-e. */
--#if !defined(__KERNEL__)
--#include <linux/mount.h>
--#endif
--
- /*
-  * It's silly to have NR_OPEN bigger than NR_FILE, but you can change
-  * the file limit at runtime and only root can increase the per-process
+If these options are mutually exclusive we should validate that they are
+not simultaneously set.
 
+--i9XU/Qm8+P/E2d47
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLxDRwACgkQJNaLcl1U
+h9Cbcwf/Trad6vAcRYZP6BRpxuYj5WEIyFGx1k4EjxZRS0vbTYZAnyWY3H7OkYsq
+BwmhYJQQrMT3ApfBnRIs+ZK+1XfSXIqCBO9hyBgf+ph8srUT3P2OeNVNTyCTj1vo
+royXM6mSaKN/mxl+lVXYH2K2BR05jbWSiwYYMQMp7MflMMZBQlIiLTbW0gbfqDOR
+HkYVneNc/ZA4mcRPdgfmNZyu1jLk9vfqHTRATHe4S6vzCvsllTYe62nmII1qWdgz
+ztilIFFEaQSmvZUrMH58ZtXk1UR0zO7KJzY3ja3UvyUHds+21wtyZqW87wz0+ZZV
+bXAewon/H7CcGW7DlrHmZCCFMUZEFg==
+=y+ks
+-----END PGP SIGNATURE-----
+
+--i9XU/Qm8+P/E2d47--

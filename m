@@ -2,215 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A677858C88F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6144258C890
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242957AbiHHMqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 08:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        id S236379AbiHHMqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 08:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235645AbiHHMp7 (ORCPT
+        with ESMTP id S235645AbiHHMqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 08:45:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86E43D8C
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659962757;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bIkebALpaCzzfrhDIO+eiB2cWrwHJfvl0+w6H8aCeL4=;
-        b=EdXW0FF4JjeuO0Ej4xVDjjq/v3j87qBmjgQSvTtYWfdyeeNUhaU/vRAxDi5pgL1+w70wt8
-        DXC0CjtgUpfn2bixxrw3eVqt4+Z3G9nckJupPYpcFm90qMXK0aGzZDwQD46wUr/3pT32fN
-        IcFQIiZO4iBnHVbW1toMFA2j1Q07l9E=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-656-K-tcVbbeMvadQcWCfNjAXw-1; Mon, 08 Aug 2022 08:45:56 -0400
-X-MC-Unique: K-tcVbbeMvadQcWCfNjAXw-1
-Received: by mail-wm1-f70.google.com with SMTP id r5-20020a1c4405000000b003a534ec2570so1490043wma.7
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:45:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=bIkebALpaCzzfrhDIO+eiB2cWrwHJfvl0+w6H8aCeL4=;
-        b=jZ0dC+bKmDpTZw/DxEx0lR4Cvh7JYAQBeRrPxNe+U2Zck2sH3CJ1IhHINwoTBYR20Y
-         WAklq6X/c6rDKrEx0hqDeVv5B6K5B2CHEKN00GO1FSuoH/4t8hkpTCMp6olXwTXA+oyc
-         8nhmWGCtZeAUG1uHewCnUia2s9Twz2ivK+Ye5MEVaFXug9CnhpFEuZiAVby1jW4KJDrq
-         lwLiFB5uxeI1bQDVm5vQi33nkvGZ9oGf4NvjLSRljIZupPiS5Gss4QvE+cgbZ0zxlAzc
-         1MrkdECkN1XGNAURqI3SW/LqU3fwmjv7eD2Nrn7odTFObIJJ/4t65UTrc+p8BPSyiA8x
-         AmvA==
-X-Gm-Message-State: ACgBeo3YOcnN7WonQN1TMKA2X+Y9QSm8YukS/sQKOZUWwgVnKFWSQs9T
-        rfknZ5IfbgUlKQAKxlAZ0Yb0K6s+OCekLphlxDcEW3qbS/TOo62QBAnCJ9uMkjRSWdFknIXnMCt
-        jePq1tAiodhABb6BXFSVYom4z
-X-Received: by 2002:adf:edc1:0:b0:21d:7157:f4aa with SMTP id v1-20020adfedc1000000b0021d7157f4aamr11472384wro.454.1659962755060;
-        Mon, 08 Aug 2022 05:45:55 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7y23sTRwxFjBB3chjfhaxjBgzCe4ggCoRLOu7gMl1oiH8Vh+fKGZgk7NrsdFQfO8IwywQBsg==
-X-Received: by 2002:adf:edc1:0:b0:21d:7157:f4aa with SMTP id v1-20020adfedc1000000b0021d7157f4aamr11472372wro.454.1659962754783;
-        Mon, 08 Aug 2022 05:45:54 -0700 (PDT)
-Received: from redhat.com ([2.52.21.123])
-        by smtp.gmail.com with ESMTPSA id m8-20020a5d56c8000000b00222d4dfcdffsm1715765wrw.87.2022.08.08.05.45.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 05:45:53 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 08:45:48 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     stefanha@redhat.com, jasowang@redhat.com,
-        torvalds@linux-foundation.org, ascull@google.com, maz@kernel.org,
-        keirf@google.com, jiyong@google.com, kernel-team@android.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        crosvm-dev@chromium.org
-Subject: Re: IOTLB support for vhost/vsock breaks crosvm on Android
-Message-ID: <20220808083958-mutt-send-email-mst@kernel.org>
-References: <20220805181105.GA29848@willie-the-truck>
- <20220807042408-mutt-send-email-mst@kernel.org>
- <20220808101850.GA31984@willie-the-truck>
+        Mon, 8 Aug 2022 08:46:50 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17DDB89
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659962809; x=1691498809;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1QQN37SW5TKRIe0Qa5jVXRJ+/zLpgMiFHSZHCPN/xUA=;
+  b=TNx9wTjWCG6RAcqxOIe/bJFiQVMebCxxJ9McUvkTCDWNgb0ixsoA9yVH
+   ygk71sSU3NqJqX9JEt+rZA9JKl9Fmh4sfW/fPCzVp5pYn1eBDTfRwEfh1
+   OBBL4dDrz5qIPsXhWUwNhlTwCS2M/uSKcPT1/+WBrxCrfTAXK400AJm31
+   fhmHPNOiyH7RM+14KUJXiPzu7Ke3Hah3xJn28lNapX8Qai45PYPZ7rtV9
+   QW71upv63lqrbeFjd3wew5ui1RfYHbh1vIPobTNF2k6zXnPT5lECB2yIH
+   D7tlzTzMWWnMW+7HB35Z0Nr3rYi9fC4YbprOwD7vj6LCP0zWe/tWyfF80
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="288146392"
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="288146392"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 05:46:49 -0700
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="604352508"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 05:46:47 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 08 Aug 2022 15:46:44 +0300
+Date:   Mon, 8 Aug 2022 15:46:44 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Brad Campbell <lists2009@fnarfbargle.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Apple Thunderbolt Display chaining
+Message-ID: <YvEFtPF7SBIwNG/o@lahna>
+References: <f5c8b9f0-0d6d-c6db-ae0b-894acb58d078@fnarfbargle.com>
+ <Yu0UuOVGeIv/U+jU@lahna>
+ <d484d7e5-f1aa-1096-e6fb-bbf16ce28699@fnarfbargle.com>
+ <Yu0nWro4xXURbSX6@lahna>
+ <87c1a001-ef79-6390-dfe2-06d2850f6e84@fnarfbargle.com>
+ <Yu4Gmkous7asng6h@lahna>
+ <42e81a8e-e393-7a69-7339-a020ebb57935@fnarfbargle.com>
+ <YvDcudE5BRtZAtfM@lahna>
+ <a1db1454-63b6-7c39-bbf6-53e53bbd36e6@fnarfbargle.com>
+ <5474e599-057a-ec0f-b469-560644155907@fnarfbargle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220808101850.GA31984@willie-the-truck>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5474e599-057a-ec0f-b469-560644155907@fnarfbargle.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 11:18:50AM +0100, Will Deacon wrote:
-> Hi Michael,
+On Mon, Aug 08, 2022 at 08:25:56PM +0800, Brad Campbell wrote:
+> root@bkd:/sys/bus/pci/devices/0000:31:04.0# modprobe thunderbolt
+> root@bkd:/sys/bus/pci/devices/0000:31:04.0# time cat config | hexdump
 > 
-> On Sun, Aug 07, 2022 at 09:14:43AM -0400, Michael S. Tsirkin wrote:
-> > Will, thanks very much for the analysis and the writeup!
+> <slowdown/lockup/reboot>
 > 
-> No problem, and thanks for following up.
-> 
-> > On Fri, Aug 05, 2022 at 07:11:06PM +0100, Will Deacon wrote:
-> > > So how should we fix this? One possibility is for us to hack crosvm to
-> > > clear the VIRTIO_F_ACCESS_PLATFORM flag when setting the vhost features,
-> > > but others here have reasonably pointed out that they didn't expect a
-> > > kernel change to break userspace. On the flip side, the offending commit
-> > > in the kernel isn't exactly new (it's from the end of 2020!) and so it's
-> > > likely that others (e.g. QEMU) are using this feature.
-> > 
-> > Exactly, that's the problem.
-> > 
-> > vhost is reusing the virtio bits and it's only natural that
-> > what you are doing would happen.
-> > 
-> > To be precise, this is what we expected people to do (and what QEMU does):
-> > 
-> > 
-> > #define QEMU_VHOST_FEATURES ((1 << VIRTIO_F_VERSION_1) |
-> > 			     (1 << VIRTIO_NET_F_RX_MRG) | .... )
-> > 
-> > VHOST_GET_FEATURES(... &host_features);
-> > host_features &= QEMU_VHOST_FEATURES
-> > VHOST_SET_FEATURES(host_features & guest_features)
-> > 
-> > 
-> > Here QEMU_VHOST_FEATURES are the bits userspace knows about.
-> > 
-> > Our assumption was that whatever userspace enables, it
-> > knows what the effect on vhost is going to be.
-> > 
-> > But yes, I understand absolutely how someone would instead just use the
-> > guest features. It is unfortunate that we did not catch this in time.
-> > 
-> > 
-> > In hindsight, we should have just created vhost level macros
-> > instead of reusing virtio ones. Would address the concern
-> > about naming: PLATFORM_ACCESS makes sense for the
-> > guest since there it means "whatever access rules platform has",
-> > but for vhost a better name would be VHOST_F_IOTLB.
-> > We should have also taken greater pains to document what
-> > we expect userspace to do. I remember now how I thought about something
-> > like this but after coding this up in QEMU I forgot to document this :(
-> > Also, I suspect given the history the GET/SET features ioctl and burned
-> > wrt extending it and we have to use a new when we add new features.
-> > All this we can do going forward.
-> 
-> Makes sense. The crosvm developers are also pretty friendly in my
-> experience, so I'm sure they wouldn't mind being involved in discussions
-> around any future ABI extensions. Just be aware that they _very_ recently
-> moved their mailing lists, so I think it lives here now:
-> 
-> https://groups.google.com/a/chromium.org/g/crosvm-dev
-> 
-> > But what can we do about the specific issue?
-> > I am not 100% sure since as Will points out, QEMU and other
-> > userspace already rely on the current behaviour.
-> > 
-> > Looking at QEMU specifically, it always sends some translations at
-> > startup, this in order to handle device rings.
-> > 
-> > So, *maybe* we can get away with assuming that if no IOTLB ioctl was
-> > ever invoked then this userspace does not know about IOTLB and
-> > translation should ignore IOTLB completely.
-> 
-> There was a similar suggestion from Stefano:
-> 
-> https://lore.kernel.org/r/20220806105225.crkui6nw53kbm5ge@sgarzare-redhat
-> 
-> about spotting the backend ioctl for IOTLB and using that to enable
-> the negotiation of F_ACCESS_PLATFORM. Would that work for qemu?
+> This on the serial console : 
+> [  160.248275] ACPI: bus type thunderbolt registered
+> [  160.253386] thunderbolt 0000:05:00.0: enabling device (0000 -> 0002)
+> [  160.872438] thunderbolt 0-3: new device found, vendor=0x1 device=0x8002
+> [  160.879398] thunderbolt 0-3: Apple, Inc. Thunderbolt Display
+> [  161.436984] thunderbolt 0-303: new device found, vendor=0x1 device=0x8002
+> [  161.444108] thunderbolt 0-303: Apple, Inc. Thunderbolt Display
+> [  165.324982] hrtimer: interrupt took 604007930 ns
+> [  169.744439] xhci_hcd 0000:28:00.0: Unable to change power state from D3hot to D0, device inaccessible
+> [  223.912783] rcu: INFO: rcu_preempt self-detected stall on CPU
+> [  229.741463] rcu:     9-....: (126 ticks this GP) idle=0d44/1/0x4000000000000000 softirq=1935/1935 fqs=76
+> [  237.593512]  (t=7349 jiffies g=1537 q=264 ncpus=12)
+> [  242.425503] NMI backtrace for cpu 9
+> [  244.640203] CPU: 9 PID: 57 Comm: ksoftirqd/9 Tainted: G           O       5.19.0+ #57
+> [  251.082940] Hardware name: Gigabyte Technology Co., Ltd. B550 VISION D-P/B550 VISION D-P, BIOS F15d 07/20/2022
+> [  258.532330] Call Trace:
+> [  260.545693]  <IRQ>
+> [  262.156386]  dump_stack_lvl+0x34/0x44
+> [  264.985085]  nmi_cpu_backtrace.cold+0x30/0x70
+> [  268.800445]  ? lapic_can_unplug_cpu+0x90/0x90
+> [  273.028459]  nmi_trig
 
-Hmm I would worry that this disables the feature for old QEMU :(
+Yeah, the link (PCIe tunnel) seems not to be functional and that causes
+the hang. In addition to what I asked in my previous email, let's block
+runtime PM from xHCI too in drivers/usb/host/xhci-pci.c::xhci_pci_quirks():
 
+Comment out this block:
 
-> > I am a bit nervous about breaking some *other* userspace which actually
-> > wants device to be blocked from accessing memory until IOTLB
-> > has been setup. If we get it wrong we are making guest
-> > and possibly even host vulnerable.
-> > And of course just revering is not an option either since there
-> > are now whole stacks depending on the feature.
-> 
-> Absolutely, I'm not seriously suggesting the revert. I just did it locally
-> to confirm the issue I was seeing.
-> 
-> > Will I'd like your input on whether you feel a hack in the kernel
-> > is justified here.
-> 
-> If we can come up with something that we have confidence in and won't be a
-> pig to maintain, then I think we should do it, but otherwise we can go ahead
-> and change crosvm to mask out this feature flag on the vhost side for now.
-> We mainly wanted to raise the issue to illustrate that this flag continues
-> to attract problems in the hope that it might inform further usage and/or
-> spec work in this area.
-> 
-> In any case, I'm happy to test any kernel patches with our setup if you
-> want to give it a shot.
-
-Thanks!
-I'm a bit concerned that the trick I proposed changes the configuration
-where iotlb was not set up from "access to memory not allowed" to
-"access to all memory allowed". This just might have security
-implications if some application assumed the former.
-And the one Stefano proposed disables IOTLB for old QEMU versions.
-
-
-
-> > Also yes, I think it's a good idea to change crosvm anyway.  While the
-> > work around I describe might make sense upstream I don't think it's a
-> > reasonable thing to do in stable kernels.
-> > I think I'll prepare a patch documenting the legal vhost features
-> > as a 1st step even though crosvm is rust so it's not importing
-> > the header directly, right?
-> 
-> Documentation is a good idea regardless, so thanks for that. Even though
-> crosvm has its own bindings for the vhost ioctl()s, the documentation
-> can be reference or duplicated once it's available in the kernel headers.
-> 
-> Will
-
-So for crosvm change, I will post the documentation change and
-you guys can discuss?
-
--- 
-MST
-
+        if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
+            (pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_4C_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_LP_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_2C_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_4C_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_2C_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI ||
+             pdev->device == PCI_DEVICE_ID_INTEL_METEOR_LAKE_XHCI))
+                xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;

@@ -2,142 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7B858C98F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D2358C992
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243338AbiHHNeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S243323AbiHHNfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242958AbiHHNeQ (ORCPT
+        with ESMTP id S243349AbiHHNfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:34:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB93E62EE;
-        Mon,  8 Aug 2022 06:34:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5732A61238;
-        Mon,  8 Aug 2022 13:34:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF151C433D7;
-        Mon,  8 Aug 2022 13:34:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659965654;
-        bh=LBRn0PznnW2ya4z0sPhw5JpQP8WyMUBJTDHeeK7woag=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PNifi5K7Jm7FwC1RVc1vW5qDVCs/ySS9i+m27qTGqtkfGcc4xz6VIhzlEmRxwe8Q3
-         nAg/U8GrgNY/rVdyJ2vsNi3bAeQMsMgP0GvmjvZLo/KRbG/B2c6prdd1fINYg9Q5/b
-         hljRnV2sqAH2kzmrBMezphZqMNo48qm5m+bxOb928n4i2+dSpwP0wyB/8/DSvMU0DJ
-         xa0/qRasW0LXk+hLUkfB7FH5h0xMIW9zV+/Vp65qzeTziTKSC4e63dc0JVZY392KAI
-         4ETCV+JK93RyZWT0usaBxXV+lnZGzZKSrr8jxKzKisF6MG69DNA0ff/uu6q62eWWBK
-         ommQpb0xEGG+Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oL2tW-0000vp-Iv; Mon, 08 Aug 2022 15:34:11 +0200
-Date:   Mon, 8 Aug 2022 15:34:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 3/9] usb: dwc3: qcom: fix gadget-only builds
-Message-ID: <YvEQ0hpTRvAPStHU@hovoldconsulting.com>
-References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-4-johan+linaro@kernel.org>
- <YvEKIJ+GujHt7XvT@kroah.com>
+        Mon, 8 Aug 2022 09:35:43 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF0DBC1E;
+        Mon,  8 Aug 2022 06:35:41 -0700 (PDT)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oL2uv-00017f-1Q; Mon, 08 Aug 2022 15:35:37 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oL2uu-000SMb-N5; Mon, 08 Aug 2022 15:35:36 +0200
+Subject: Re: [PATCH v3 0/8] tools: fix compilation failure caused by
+ init_disassemble_info API changes
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Cc:     Andres Freund <andres@anarazel.de>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Ben Hutchings <benh@debian.org>
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+ <20220801013834.156015-1-andres@anarazel.de> <YufK0qnvVWCAFGEH@kernel.org>
+ <ce9140c7-dd4b-0c4e-db7c-d25022cfe739@isovalent.com>
+ <YugVTQ7CoqXRTNBY@kernel.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <988ee9d1-7bf5-b4c1-db6f-9195e82c8cb3@iogearbox.net>
+Date:   Mon, 8 Aug 2022 15:35:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvEKIJ+GujHt7XvT@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YugVTQ7CoqXRTNBY@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26621/Mon Aug  8 09:52:38 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 03:05:36PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Aug 04, 2022 at 05:09:55PM +0200, Johan Hovold wrote:
-> > A recent change added a dependency to the USB host stack and broke
-> > gadget-only builds of the driver.
-> > 
-> > Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> > 
-> > Changes in v2
-> >  - new patch
-> > 
-> >  drivers/usb/dwc3/dwc3-qcom.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > index be2e3dd36440..e9364141661b 100644
-> > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > @@ -310,8 +310,11 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
-> >  	 * currently supports only 1 port per controller. So
-> >  	 * this is sufficient.
-> >  	 */
-> > +#ifdef CONFIG_USB
-> >  	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+On 8/1/22 8:02 PM, Arnaldo Carvalho de Melo wrote:
+> Em Mon, Aug 01, 2022 at 04:15:19PM +0100, Quentin Monnet escreveu:
+>> On 01/08/2022 13:45, Arnaldo Carvalho de Melo wrote:
+>>> Em Sun, Jul 31, 2022 at 06:38:26PM -0700, Andres Freund escreveu:
+>>>> binutils changed the signature of init_disassemble_info(), which now causes
+>>>> compilation failures for tools/{perf,bpf} on e.g. debian unstable. Relevant
+>>>> binutils commit:
+>>>> https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
+>>>>
+>>>> I first fixed this without introducing the compat header, as suggested by
+>>>> Quentin, but I thought the amount of repeated boilerplate was a bit too
+>>>> much. So instead I introduced a compat header to wrap the API changes. Even
+>>>> tools/bpf/bpftool/jit_disasm.c, which needs its own callbacks for json, imo
+>>>> looks nicer this way.
+>>>>
+>>>> I'm not regular contributor, so it very well might be my procedures are a
+>>>> bit off...
+>>>>
+>>>> I am not sure I added the right [number of] people to CC?
+>>>
+>>> I think its ok
+>>>   
+>>>> WRT the feature test: Not sure what the point of the -DPACKAGE='"perf"' is,
+>>>
+>>> I think its related to libbfd, and it comes from a long time ago, trying
+>>> to find the cset adding that...
+>>>
+>>>> nor why tools/perf/Makefile.config sets some LDFLAGS/CFLAGS that are also
+>>>> in feature/Makefile and why -ldl isn't needed in the other places. But...
+>>>>
+>>>> V2:
+>>>> - split patches further, so that tools/bpf and tools/perf part are entirely
+>>>>    separate
+>>>
+>>> Cool, thanks, I'll process the first 4 patches, then at some point the
+>>> bpftool bits can be merged, alternatively I can process those as well if
+>>> the bpftool maintainers are ok with it.
+>>>
+>>> I'll just wait a bit to see if Jiri and others have something to say.
+>>>
+>>> - Arnaldo
+>>
+>> Thanks for this work! For the series:
+>>
+>> Acked-by: Quentin Monnet <quentin@isovalent.com>
+>>
+>> For what it's worth, it would make sense to me that these patches remain
+>> together (so, through Arnaldo's tree), given that both the perf and
+>> bpftool parts depend on dis-asm-compat.h being available.
 > 
-> If a gadget driver needs this for some reason, then the #ifdef should be
-> put in a .h file, not in a .c file.
+> Ok, so I'm tentatively adding it to my local tree to do some tests, if
+> someone disagrees, please holler.
 
-Yeah, if we're keeping this long-term then yes, and possibly also
-otherwise.
-
-> But step back a minute and ask why a host-config-only function is being
-> called when a device is in gadget-only mode?  This feels like a
-> design/logic issue in this file, NOT something to paper over with a
-> #ifdef in a .c file
-
-We're not as I'm fixing that bug in later in the series. I should
-probably have put this one after that fix, but figured fixing the build
-was more important than a harder-to-hit NULL-deref due to non-host mode
-not being considered when the offending series was merged.
-
-> This implies that if this device is NOT in a host configuration, then
-> the suspend path of it is not configured properly at all, as why would
-> it be checking or caring about this at all if this is in gadget-only
-> mode?
-
-Right, so see path 6/9 which addresses this by only calling this hack
-when in host mode:
-
-	https://lore.kernel.org/all/20220804151001.23612-7-johan+linaro@kernel.org/
-
-> Something else is wrong here, let's fix the root problem please.  Maybe
-> this driver should just never be built in gadget-only mode, as it is
-> never intended to support that option?
-
-The problem is commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup
-interrupts during suspend"), which I considered simply reverting but as
-that breaks suspend completely on some boards I decided to try and fix
-it up while we work on a proper long-term solution (i.e. for how the
-dwc/xhci layers should be communicating to implement this).
-
-Remember that it took two years and 21 revisions to get to the state
-we're at now after you merged the wakeup series in June.
-
-Johan
+Ack, sgtm. Please route these fixes via your tree. Thanks Arnaldo!

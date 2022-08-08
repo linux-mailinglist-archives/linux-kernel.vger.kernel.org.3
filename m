@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD6558CCE0
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D26D58CCE1
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244306AbiHHRmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S244104AbiHHRnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244131AbiHHRmg (ORCPT
+        with ESMTP id S244291AbiHHRmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:42:36 -0400
+        Mon, 8 Aug 2022 13:42:45 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39D32A9
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:42:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E296277
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:42:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1659980501; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1659980502; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=a32yNu2Eeu11C00fM1RqTufFXXGAOLPmqPKGVg+1zOs=;
-        b=kH2LBJKhm6tcdcJBIlG8g5kNvhfNi45IRBZPUJAInTHthfga70L1fXL1b4yljNqL0vUJS5
-        +nP9qpyjYe6CBoyKMwNz4FV2fuSFe1yOuFC1+f9XpOJrkfleST+wiyVMBUu4AuQj63KU2w
-        8nkdkvWrLnZa6cCXr9O/lMz87AFGDGQ=
+        bh=+FBECTcdeQLfSp5bHcYAa/1zAvqLKLLp0tQ+VpGze+A=;
+        b=OXQCBo5FXH3fsXQ9+jXS+adX5jJl+ptBHGO+bKbqmuBed2aNPbhhG+XfoBUGT8AStcGh/m
+        8N6GjMmv+7Lx+6RmNMie2G30HNSqNVG94+Cy+v7zNJknFf3YEO63iSiAvSzPLKLm4WGFei
+        OMtKwTQWAo3e8MluzcOTDgAIGnDoSGM=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 05/30] mfd: max8925-i2c: Remove #ifdef guards for PM related functions
-Date:   Mon,  8 Aug 2022 19:40:42 +0200
-Message-Id: <20220808174107.38676-6-paul@crapouillou.net>
+Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 06/30] mfd: mt6397-irq: Remove #ifdef guards for PM related functions
+Date:   Mon,  8 Aug 2022 19:40:43 +0200
+Message-Id: <20220808174107.38676-7-paul@crapouillou.net>
 In-Reply-To: <20220808174107.38676-1-paul@crapouillou.net>
 References: <20220808174107.38676-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -43,10 +46,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
-to handle the .suspend/.resume callbacks.
+Use the new pm_sleep_ptr() macro to handle the .irq_set_wake() callback.
 
-These macros allow the suspend and resume functions to be automatically
+This macro allows the mt6397_irq_set_wake() function to be automatically
 dropped by the compiler when CONFIG_SUSPEND is disabled, without having
 to use #ifdef guards.
 
@@ -56,42 +58,44 @@ regressions are subsequently easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/mfd/max8925-i2c.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
 
-diff --git a/drivers/mfd/max8925-i2c.c b/drivers/mfd/max8925-i2c.c
-index 114e905bef25..649310b5bb3e 100644
---- a/drivers/mfd/max8925-i2c.c
-+++ b/drivers/mfd/max8925-i2c.c
-@@ -208,7 +208,6 @@ static int max8925_remove(struct i2c_client *client)
- 	return 0;
+ drivers/mfd/mt6397-irq.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/mfd/mt6397-irq.c b/drivers/mfd/mt6397-irq.c
+index eff53fed8fe7..72f923e47752 100644
+--- a/drivers/mfd/mt6397-irq.c
++++ b/drivers/mfd/mt6397-irq.c
+@@ -54,7 +54,6 @@ static void mt6397_irq_enable(struct irq_data *data)
+ 	mt6397->irq_masks_cur[reg] |= BIT(shift);
  }
  
 -#ifdef CONFIG_PM_SLEEP
- static int max8925_suspend(struct device *dev)
+ static int mt6397_irq_set_wake(struct irq_data *irq_data, unsigned int on)
  {
- 	struct i2c_client *client = to_i2c_client(dev);
-@@ -228,9 +227,9 @@ static int max8925_resume(struct device *dev)
- 		disable_irq_wake(chip->core_irq);
+ 	struct mt6397_chip *mt6397 = irq_data_get_irq_chip_data(irq_data);
+@@ -68,9 +67,6 @@ static int mt6397_irq_set_wake(struct irq_data *irq_data, unsigned int on)
+ 
  	return 0;
  }
+-#else
+-#define mt6397_irq_set_wake NULL
 -#endif
  
--static SIMPLE_DEV_PM_OPS(max8925_pm_ops, max8925_suspend, max8925_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(max8925_pm_ops,
-+				max8925_suspend, max8925_resume);
+ static struct irq_chip mt6397_irq_chip = {
+ 	.name = "mt6397-irq",
+@@ -78,7 +74,7 @@ static struct irq_chip mt6397_irq_chip = {
+ 	.irq_bus_sync_unlock = mt6397_irq_sync_unlock,
+ 	.irq_enable = mt6397_irq_enable,
+ 	.irq_disable = mt6397_irq_disable,
+-	.irq_set_wake = mt6397_irq_set_wake,
++	.irq_set_wake = pm_sleep_ptr(mt6397_irq_set_wake),
+ };
  
- static const struct of_device_id max8925_dt_ids[] = {
- 	{ .compatible = "maxim,max8925", },
-@@ -240,7 +239,7 @@ static const struct of_device_id max8925_dt_ids[] = {
- static struct i2c_driver max8925_driver = {
- 	.driver	= {
- 		.name	= "max8925",
--		.pm     = &max8925_pm_ops,
-+		.pm     = pm_sleep_ptr(&max8925_pm_ops),
- 		.of_match_table = max8925_dt_ids,
- 	},
- 	.probe		= max8925_probe,
+ static void mt6397_irq_handle_reg(struct mt6397_chip *mt6397, int reg,
 -- 
 2.35.1
 

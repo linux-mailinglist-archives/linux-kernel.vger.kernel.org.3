@@ -2,133 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987C058C4E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839D458C4F2
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242040AbiHHI0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 04:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S233011AbiHHIfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 04:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234579AbiHHI0J (ORCPT
+        with ESMTP id S230127AbiHHIfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 04:26:09 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D429013DC3;
-        Mon,  8 Aug 2022 01:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659947168; x=1691483168;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=S7l5bOv75xq9WZMQTHeMEtmjY57N4uEDm/lTmVv1lN0=;
-  b=hvvO9egxTe9xLBWMLJTNNxBREHzjZLwWqFumL99vAbq3qePSmc3hStU0
-   BqqG3XC50U25x4zAYnf+khULNdul1/fzfJrvzXrk55SQbFObUGwFYPkN0
-   EPROOpxJVF77zY1VZfpz+bjwdA8S3WgSyHn1QolsWnmLJzFMWGfsJaOeu
-   vx0ptHwLbn8qSz9g1m7d5461MooCNHixQC7XPlp0/ZKoWJfB7dxRcVBy0
-   TlfDJsFbw1XJdVAaxs/t/+u853O54NX0qhhGk+f4U6B76OdQYKaJj6TLM
-   0wDAyhh6P7kifrMWN+Ep60cnQ+gVJxKq9/eTgcm1MbBA6hYDXqOlMgPfp
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="277467210"
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="277467210"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 01:26:08 -0700
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="663843203"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.62.171])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 01:26:06 -0700
-Message-ID: <2b720211-a472-19ac-a281-9284e9d63e03@intel.com>
-Date:   Mon, 8 Aug 2022 11:26:06 +0300
+        Mon, 8 Aug 2022 04:35:20 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48735263D;
+        Mon,  8 Aug 2022 01:35:18 -0700 (PDT)
+X-UUID: e00517e4fe0c42c5a04c3cb478211a06-20220808
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=H1gH13JIdDwMN199QhmpDW0yWKPk/chPlNXobtyICTY=;
+        b=SPMsn3u410SY/PNOGAwVFmZknwYkIS1bxwfPQDcF/nL8jbhHvXARFes1EoMOvqtc2hv6BpP8yWtSKR2f1VFFrLywsPTovgtrJx+FFcqH8sNFtC2uUfQNMAGIRa23JNsRY0mQV1CxppQMIYMvRwLULA5ZyRQtyK/zXgzmy/i+rVo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:abfee422-2053-4124-b0f4-d4c54eb7abf0,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:133135ae-9535-44a6-aa9b-7f62b79b6ff6,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: e00517e4fe0c42c5a04c3cb478211a06-20220808
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1657741834; Mon, 08 Aug 2022 16:35:12 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 8 Aug 2022 16:35:11 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 8 Aug 2022 16:35:11 +0800
+Message-ID: <63920b2ae09e8f82a9b866cd01ddb63b958fb4e8.camel@mediatek.com>
+Subject: Re: [PATCH] usb: common: usb-conn-gpio: Simplify some error message
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Date:   Mon, 8 Aug 2022 16:35:11 +0800
+In-Reply-To: <7705a9dff8e097070c492d6f4f8aafaaa890f049.1659763173.git.christophe.jaillet@wanadoo.fr>
+References: <7705a9dff8e097070c492d6f4f8aafaaa890f049.1659763173.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2] mmc: sdhci-of-dwcmshc: add ACPI match data for
- BlueField-3 SoC
-Content-Language: en-US
-To:     Liming Sun <limings@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        David Woods <davwoods@nvidia.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <3a50873fdbf69f4a95b931a5d05cade04c1dacd0.1659099154.git.limings@nvidia.com>
- <20220807205630.251939-1-limings@nvidia.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220807205630.251939-1-limings@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/08/22 23:56, Liming Sun wrote:
-> Commit 08f3dff799d43 introduces the of_device_get_match_data()
-> checking for some chip but breaks the BlueField-3 firmware which
-> uses ACPI instead. This commit adds the ACPI match data and
-> quirks/quirks2 to re-enable the support of BlueField-3 SoC.
+On Sat, 2022-08-06 at 07:19 +0200, Christophe JAILLET wrote:
+> dev_err_probe() already prints the error code in a human readable
+> way, so
+> there is no need to duplicate it as a numerical value at the end of
+> the
+> message.
 > 
-> Reviewed-by: David Woods <davwoods@nvidia.com>
-> Signed-off-by: Liming Sun <limings@nvidia.com>
-
-Please re-base this patch because it does not apply to
-latest mmc "next" branch.
-
+> Fixes: ddaf0d6dc467 ("usb: common: usb-conn-gpio: use dev_err_probe()
+> to print log")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
-> v1->v2:
->     Fixes an acpi warning
->     Reported-by: kernel test robot <lkp@intel.com>
-> v1: Initial version.
-> ---
->  drivers/mmc/host/sdhci-of-dwcmshc.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
+>  drivers/usb/common/usb-conn-gpio.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> index bac874ab0b33..a0c73ddaaaa4 100644
-> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
-> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> @@ -279,6 +279,15 @@ static const struct sdhci_pltfm_data sdhci_dwcmshc_pdata = {
->  	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
->  };
+> diff --git a/drivers/usb/common/usb-conn-gpio.c
+> b/drivers/usb/common/usb-conn-gpio.c
+> index b39c9f1c375d..44c5127175b7 100644
+> --- a/drivers/usb/common/usb-conn-gpio.c
+> +++ b/drivers/usb/common/usb-conn-gpio.c
+> @@ -208,10 +208,9 @@ static int usb_conn_probe(struct platform_device
+> *pdev)
+>  	if (PTR_ERR(info->vbus) == -ENODEV)
+>  		info->vbus = NULL;
 >  
-> +#ifdef CONFIG_ACPI
-> +static const struct sdhci_pltfm_data sdhci_dwcmshc_bf3_pdata = {
-> +	.ops = &sdhci_dwcmshc_ops,
-> +	.quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN,
-> +	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
-> +		   SDHCI_QUIRK2_ACMD23_BROKEN,
-> +};
-> +#endif
-> +
->  static const struct sdhci_pltfm_data sdhci_dwcmshc_rk3568_pdata = {
->  	.ops = &sdhci_dwcmshc_rk3568_ops,
->  	.quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN |
-> @@ -336,7 +345,10 @@ MODULE_DEVICE_TABLE(of, sdhci_dwcmshc_dt_ids);
+> -	if (IS_ERR(info->vbus)) {
+> -		ret = PTR_ERR(info->vbus);
+> -		return dev_err_probe(dev, ret, "failed to get vbus
+> :%d\n", ret);
+> -	}
+> +	if (IS_ERR(info->vbus))
+> +		return dev_err_probe(dev, PTR_ERR(info->vbus),
+> +				     "failed to get vbus\n");
+How about putting dev_err_probe() in a single line? it doesn't exceed
+100 chars.
+
 >  
->  #ifdef CONFIG_ACPI
->  static const struct acpi_device_id sdhci_dwcmshc_acpi_ids[] = {
-> -	{ .id = "MLNXBF30" },
-> +	{
-> +		.id = "MLNXBF30",
-> +		.driver_data = (kernel_ulong_t)&sdhci_dwcmshc_bf3_pdata,
-> +	},
->  	{}
->  };
->  #endif
-> @@ -352,7 +364,7 @@ static int dwcmshc_probe(struct platform_device *pdev)
->  	int err;
->  	u32 extra;
->  
-> -	pltfm_data = of_device_get_match_data(&pdev->dev);
-> +	pltfm_data = device_get_match_data(&pdev->dev);
->  	if (!pltfm_data) {
->  		dev_err(&pdev->dev, "Error: No device match data found\n");
->  		return -ENODEV;
+>  	info->role_sw = usb_role_switch_get(dev);
+>  	if (IS_ERR(info->role_sw))
 

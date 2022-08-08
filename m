@@ -2,202 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 544CD58CCF3
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3E258CCE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244199AbiHHRqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
+        id S244339AbiHHRoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244191AbiHHRqO (ORCPT
+        with ESMTP id S244343AbiHHRnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:46:14 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4519A2A9
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1659980508; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nm3hS48ke9l6IizQfggjexVF2N4X4ZQswbOsOcQR18c=;
-        b=ndX241lw+3mwUm/BWixhAzeXUaBmrRmvRlBKREEyk1S9Hr2pH8i9mJGXxQ12vMw+RhiXap
-        DboZ42ocoL3gDU9MLUeyv1ngZTR87WPrt6gmg89VjeEfL8CAQoXfMcFO10GDey0PSHGEKi
-        G05x+auvzUK2FewhjGXj2ZZrGm1978A=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 30/30] mfd: intel-lpss: Remove #ifdef guards for PM related functions
-Date:   Mon,  8 Aug 2022 19:41:07 +0200
-Message-Id: <20220808174107.38676-31-paul@crapouillou.net>
-In-Reply-To: <20220808174107.38676-1-paul@crapouillou.net>
-References: <20220808174107.38676-1-paul@crapouillou.net>
+        Mon, 8 Aug 2022 13:43:35 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC355B51
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659980614; x=1691516614;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=eZHz5AZts8pa+4dAgLDzj+RDlAzwOdbJVrXvXp0Rcms=;
+  b=WfL43eYuI3KWCs5hUgkt+oYHtcri+hAusIikoE4nQd7hW7eQOSV/U/zl
+   aIj4HPf0AZ1kGVWpxjrcZBReISUp5iIsiBfAdgZ1Y4jN0XKJTwkPTv8/j
+   Lc8A/t04jO9AthfJItzKuBXslRCm/SGsRnuXtpv//wIjYE5qFdp8pJReS
+   OJl/amiW7l6A4OouBVNwKyvdOdpiIaPD+lftPTIiY7L2TdGb+NRbHbFR/
+   vWXh11Gn+wx6fE/wPL+hGAo9KkOqKEgW+EdVB5bPz5y8vp95zOsPsKEb0
+   EPKjnFYoj5yJ/0bkIZVFHHv5IoLhT9S/aWTrtiId5wMb3RIJNM+connEI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="273703180"
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="273703180"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 10:43:34 -0700
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="604452861"
+Received: from sankarka-mobl1.amr.corp.intel.com (HELO [10.212.251.15]) ([10.212.251.15])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 10:43:34 -0700
+Message-ID: <b929e415-def2-b47b-fd1e-57877a98c2ad@intel.com>
+Date:   Mon, 8 Aug 2022 10:43:35 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 1/5] entry: Pass pt_regs to
+ irqentry_exit_cond_resched()
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>, Ira Weiny <ira.weiny@intel.com>
+Cc:     Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+References: <20220805173009.3128098-1-ira.weiny@intel.com>
+ <20220805173009.3128098-2-ira.weiny@intel.com> <YvDnkALyHl77R/Ug@zn.tnic>
+ <YvFJGxU0k492npYT@iweiny-desk3> <YvFKHaRdOkg5RHtv@zn.tnic>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <YvFKHaRdOkg5RHtv@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new EXPORT_GPL_DEV_PM_OPS() and pm_sleep_ptr() / pm_ptr() macros
-to handle the PM callbacks.
+On 8/8/22 10:38, Borislav Petkov wrote:
+> On Mon, Aug 08, 2022 at 10:34:19AM -0700, Ira Weiny wrote:
+>> I thought about that but generally have been steered away from using bool
+>> arguments like this.
+> The reason being?
 
-These macros allow the PM functions to be automatically dropped by the
-compiler when CONFIG_SUSPEND is disabled, without having to use #ifdef
-guards.
+Might have been me.  Function calls that look like this:
 
-This has the advantage of always compiling these functions in,
-independently of any Kconfig option. Thanks to that, bugs and other
-regressions are subsequently easier to catch.
+	foo(&ptr, false, true, false, true, 1, 0);
 
-Note that instead of exporting two dev_pm_ops structures containing the
-exact same data, one in intel-lpss-acpi.c and one in intel-lpss-pci.c,
-we export one single dev_pm_ops structure from intel-lpss.c using the
-EXPORT_GP_DEV_PM_OPS() macro, which is then referenced from the -acpi.c
-and -pci.c files.
+are incomprehensible.  A true/false is effectively a magic number here
+and you have to go looking at the code implementing 'foo()' or at least
+the declaration hoping that the variable names help (if the declaration
+has variable names).
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/mfd/intel-lpss-acpi.c |  4 +---
- drivers/mfd/intel-lpss-pci.c  |  4 +---
- drivers/mfd/intel-lpss.c      | 15 +++++++++------
- drivers/mfd/intel-lpss.h      | 28 +---------------------------
- 4 files changed, 12 insertions(+), 39 deletions(-)
+I think I've encouraged Ira to do something like this instead:
 
-diff --git a/drivers/mfd/intel-lpss-acpi.c b/drivers/mfd/intel-lpss-acpi.c
-index a143c8dca2d9..1d46a7aa1c61 100644
---- a/drivers/mfd/intel-lpss-acpi.c
-+++ b/drivers/mfd/intel-lpss-acpi.c
-@@ -203,15 +203,13 @@ static int intel_lpss_acpi_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static INTEL_LPSS_PM_OPS(intel_lpss_acpi_pm_ops);
--
- static struct platform_driver intel_lpss_acpi_driver = {
- 	.probe = intel_lpss_acpi_probe,
- 	.remove = intel_lpss_acpi_remove,
- 	.driver = {
- 		.name = "intel-lpss",
- 		.acpi_match_table = intel_lpss_acpi_ids,
--		.pm = &intel_lpss_acpi_pm_ops,
-+		.pm = pm_ptr(&intel_lpss_pm_ops),
- 	},
- };
- 
-diff --git a/drivers/mfd/intel-lpss-pci.c b/drivers/mfd/intel-lpss-pci.c
-index bb08b7a73fe1..25f34cf05432 100644
---- a/drivers/mfd/intel-lpss-pci.c
-+++ b/drivers/mfd/intel-lpss-pci.c
-@@ -71,8 +71,6 @@ static void intel_lpss_pci_remove(struct pci_dev *pdev)
- 	intel_lpss_remove(&pdev->dev);
- }
- 
--static INTEL_LPSS_PM_OPS(intel_lpss_pci_pm_ops);
--
- static const struct intel_lpss_platform_info spt_info = {
- 	.clk_rate = 120000000,
- };
-@@ -507,7 +505,7 @@ static struct pci_driver intel_lpss_pci_driver = {
- 	.probe = intel_lpss_pci_probe,
- 	.remove = intel_lpss_pci_remove,
- 	.driver = {
--		.pm = &intel_lpss_pci_pm_ops,
-+		.pm = pm_ptr(&intel_lpss_pm_ops),
- 	},
- };
- 
-diff --git a/drivers/mfd/intel-lpss.c b/drivers/mfd/intel-lpss.c
-index cfbee2cfba6b..9cdd0b52f8d8 100644
---- a/drivers/mfd/intel-lpss.c
-+++ b/drivers/mfd/intel-lpss.c
-@@ -468,7 +468,7 @@ static int resume_lpss_device(struct device *dev, void *data)
- 	return 0;
- }
- 
--int intel_lpss_prepare(struct device *dev)
-+static int intel_lpss_prepare(struct device *dev)
- {
- 	/*
- 	 * Resume both child devices before entering system sleep. This
-@@ -477,9 +477,8 @@ int intel_lpss_prepare(struct device *dev)
- 	device_for_each_child_reverse(dev, NULL, resume_lpss_device);
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(intel_lpss_prepare);
- 
--int intel_lpss_suspend(struct device *dev)
-+static int intel_lpss_suspend(struct device *dev)
- {
- 	struct intel_lpss *lpss = dev_get_drvdata(dev);
- 	unsigned int i;
-@@ -498,9 +497,8 @@ int intel_lpss_suspend(struct device *dev)
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(intel_lpss_suspend);
- 
--int intel_lpss_resume(struct device *dev)
-+static int intel_lpss_resume(struct device *dev)
- {
- 	struct intel_lpss *lpss = dev_get_drvdata(dev);
- 	unsigned int i;
-@@ -513,7 +511,12 @@ int intel_lpss_resume(struct device *dev)
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(intel_lpss_resume);
-+
-+EXPORT_GPL_DEV_PM_OPS(intel_lpss_pm_ops) = {
-+	.prepare = pm_sleep_ptr(intel_lpss_prepare),
-+	LATE_SYSTEM_SLEEP_PM_OPS(intel_lpss_suspend, intel_lpss_resume)
-+	RUNTIME_PM_OPS(intel_lpss_suspend, intel_lpss_resume, NULL)
-+};
- 
- static int __init intel_lpss_init(void)
- {
-diff --git a/drivers/mfd/intel-lpss.h b/drivers/mfd/intel-lpss.h
-index 062ce95b68b9..c1d72b117ed5 100644
---- a/drivers/mfd/intel-lpss.h
-+++ b/drivers/mfd/intel-lpss.h
-@@ -30,32 +30,6 @@ int intel_lpss_probe(struct device *dev,
- 		     const struct intel_lpss_platform_info *info);
- void intel_lpss_remove(struct device *dev);
- 
--#ifdef CONFIG_PM
--int intel_lpss_prepare(struct device *dev);
--int intel_lpss_suspend(struct device *dev);
--int intel_lpss_resume(struct device *dev);
--
--#ifdef CONFIG_PM_SLEEP
--#define INTEL_LPSS_SLEEP_PM_OPS			\
--	.prepare = intel_lpss_prepare,		\
--	SET_LATE_SYSTEM_SLEEP_PM_OPS(intel_lpss_suspend, intel_lpss_resume)
--#else
--#define INTEL_LPSS_SLEEP_PM_OPS
--#endif
--
--#define INTEL_LPSS_RUNTIME_PM_OPS		\
--	.runtime_suspend = intel_lpss_suspend,	\
--	.runtime_resume = intel_lpss_resume,
--
--#else /* !CONFIG_PM */
--#define INTEL_LPSS_SLEEP_PM_OPS
--#define INTEL_LPSS_RUNTIME_PM_OPS
--#endif /* CONFIG_PM */
--
--#define INTEL_LPSS_PM_OPS(name)			\
--const struct dev_pm_ops name = {		\
--	INTEL_LPSS_SLEEP_PM_OPS			\
--	INTEL_LPSS_RUNTIME_PM_OPS		\
--}
-+extern const struct dev_pm_ops intel_lpss_pm_ops;
- 
- #endif /* __MFD_INTEL_LPSS_H */
--- 
-2.35.1
+enum foo_mode {
+	MODE_BAR,
+	MODE_BAZ
+}
 
+where the call ends up looking like:
+
+	foo(&ptr, MODE_BAR);
+
+which is much more self-documenting.

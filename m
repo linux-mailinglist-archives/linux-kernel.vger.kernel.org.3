@@ -2,63 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E21B58C48F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC27958C494
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237258AbiHHIDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 04:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
+        id S238267AbiHHIET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 04:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiHHIDg (ORCPT
+        with ESMTP id S231496AbiHHIER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 04:03:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFCE13D73
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 01:03:35 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oKxjI-00013K-AU; Mon, 08 Aug 2022 10:03:16 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 45B26C45C4;
-        Mon,  8 Aug 2022 08:03:12 +0000 (UTC)
-Date:   Mon, 8 Aug 2022 10:03:10 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH] MAINTAINERS: add PolarFire SoC dt bindings
-Message-ID: <20220808080310.ets2zqhgjbymajkx@pengutronix.de>
-References: <20220805134908.749935-1-conor.dooley@microchip.com>
+        Mon, 8 Aug 2022 04:04:17 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17C413D3F;
+        Mon,  8 Aug 2022 01:04:09 -0700 (PDT)
+X-UUID: 5e3ad97a77e34191ada0152c7f724a11-20220808
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=rLpQA2HDs6HPyBnCtsxUkBeWCCaY6SEoWDsQLMWSn6E=;
+        b=VnyxvmC2wet1tG9LzRfZZB/QlP00LMJ4f5KHU7soY0SXhxZa3CTGSAkr/N0l7AFxty0mLRFXdX94h9iew3sRF3XSmAhoKSjH49JVsJTu2NX0RGYF2XC/KYfzSO0JkafFHGvfkhzYxXzsdtM1kw45mqlQU12YdHinxe/x8DxZXAU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:d35900d0-85e1-4926-9341-baac68d5a81f,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:f8d90d9c-da39-4e3b-a854-56c7d2111b46,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 5e3ad97a77e34191ada0152c7f724a11-20220808
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1122278036; Mon, 08 Aug 2022 16:04:03 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 8 Aug 2022 16:04:01 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 8 Aug 2022 16:04:01 +0800
+Message-ID: <575181dc6cdd1fcf391e840c0fcd5722b954a457.camel@mediatek.com>
+Subject: Re: [PATCH v16 3/8] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 8 Aug 2022 16:04:01 +0800
+In-Reply-To: <20220805101459.3386-4-rex-bc.chen@mediatek.com>
+References: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
+         <20220805101459.3386-4-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="akuyayyjxuecv7hz"
-Content-Disposition: inline
-In-Reply-To: <20220805134908.749935-1-conor.dooley@microchip.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,55 +75,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Bo-Chen:
 
---akuyayyjxuecv7hz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 05.08.2022 14:49:09, Conor Dooley wrote:
-> So far when I added bindings for the platform I never added them to
-> our MAINTAINERS entry. No time like the present to improve the coverage.
->=20
-> Suggested-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+On Fri, 2022-08-05 at 18:14 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
 > ---
-> I have another maintainers change queued, I'll send this via soc along
-> with it unless there are any objections.
->=20
-> CC: Mark Brown <broonie@kernel.org>
-> CC: Wolfram Sang <wsa@kernel.org>
-> CC: Thierry Reding <thierry.reding@gmail.com>
-> CC: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> CC: Jassi Brar <jassisinghbrar@gmail.com>
-> CC: Linus Walleij <linus.walleij@linaro.org>
-> CC: Bartosz Golaszewski <brgl@bgdev.pl>
-> CC: Wolfgang Grandegger <wg@grandegger.com>
-> CC: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for can
+[snip]
 
-Marc
+> +
+> +static enum drm_mode_status
+> +mtk_dp_bridge_mode_valid(struct drm_bridge *bridge,
+> +			 const struct drm_display_info *info,
+> +			 const struct drm_display_mode *mode)
+> +{
+> +	struct mtk_dp *mtk_dp = mtk_dp_from_bridge(bridge);
+> +	u32 rx_linkrate = (u32)mtk_dp->train_info.link_rate * 27000;
+> +	u32 bpp = info->color_formats & DRM_COLOR_FORMAT_YCBCR422 ? 16
+> : 24;
+> +
+> +	if (rx_linkrate * mtk_dp->train_info.lane_count < mode->clock *
+> bpp / 8)
+> +		return MODE_CLOCK_HIGH;
+> +
+> +	if (mode->clock > 600000)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+If the clock has pass the linkrate and land_count limitation, the clock
+would be OK because the linkrate and lane_count is trained. Why need to
+check 600000?
 
---akuyayyjxuecv7hz
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
+CK
 
------BEGIN PGP SIGNATURE-----
+> +		return MODE_CLOCK_HIGH;
+> +
+> +	return MODE_OK;
+> +}
+> +
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLwwzwACgkQrX5LkNig
-013l+wgApwvDL8b9qW0m6aPWs7WXpXGzFfqR5PZFh+o3IpIYaQurj3KbQ9S0rSRP
-iRq2vTbwdn/9aVMaiXRGm0ueJ0MJbZ4qLXQlUQ3ZCvC41Laobgm6AXaZwerwrINe
-sCQm+ruJUoVvf2I7zDEjYx1OaCrIS8slPOHXHnN2EZk+PqNzXuKy3BShRACjsAyw
-SKxCgmfoiKlSTM+nEw6QOmEkPKHf2Nz6aqmOeNNVZ7wocMU8jmwYdBMrK1X2fNpQ
-xXNUFTRALOW/CS/dLohurp5hpnBzzufYu/mO8hCDCfgSSdF25ZjzJWhYE3YdORTO
-11gCmKQ41hHEz92LOr94vyPPl0QfZg==
-=udbm
------END PGP SIGNATURE-----
-
---akuyayyjxuecv7hz--

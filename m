@@ -2,161 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BA858C908
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF6958C90B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243119AbiHHNIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S243163AbiHHNJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiHHNIX (ORCPT
+        with ESMTP id S229690AbiHHNJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:08:23 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F785FC3;
-        Mon,  8 Aug 2022 06:08:21 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id v2so3953756lfi.6;
-        Mon, 08 Aug 2022 06:08:21 -0700 (PDT)
+        Mon, 8 Aug 2022 09:09:24 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E10C5FC3
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:09:19 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id m22so6324031qkm.12
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 06:09:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=kuwKOcuHMSa3dQs4wZk02jLSCcVnoSCO8BTxrJsZ3Y4=;
-        b=IYwHZ8LA2fZ7gErBWUeZRWrXrXcZ6uS3hcMeDarJm6ToovrHlgcqqP/eWdXpacp202
-         xwIn6d7/Luovgbo/HgFzReARSGvhONTCDx3JdOr1llSLDhQvdWzfS1mN9sl34zCdZJNd
-         1DsRdBdoDF92Eradj/s/i375nOTe+T1T7Ep8I2/DuzbVE16Hxdl/6cIyXh02/TY/roNi
-         W/zIpQ6rXCnZTLS+TJPf7acziyb2sJboIX+OLKAvLwFm5y6kABAFEV2ync5FcUqoMnIa
-         kW9ueMp78HO9crFMJURQp9Zi7SAyTfOTP0Rqk41mQXUhVvc/gy/Z+cgBDOe27t6VLZM8
-         N+rQ==
+        bh=k1TjY5xnUjj1+/lGv63az2dDWuyn6OfPi4lM94OvKo0=;
+        b=ocX3tr6UAOXM+/EHhgRkxtM3sBtmGi/VrgUunTLQT51ax9Q1eLj3Do7ry4Vy400/m/
+         Wlcj7KVQWHLQT/lDEJY6TzG/1bYb0kSXJdOv0mh4tH5mhHB0tmO0Bby6cyW+FZ1IgGLk
+         wTZTyz58ArM1xsrs+cJCogjAb1aLEy86FJAlQmSdXQh6ff66VhqTgIJdP1IcXXLYpKlw
+         5SQTwjTvoeI7jUcS/8sHDYyQbA3Ty+2Xk8cmBn6WQV/nN8KBDgjSAcD3IQAZfr7r3k0/
+         Wb8cHfrFqbH9DV+ADZ2JE3cBtzRmzjWK2XC2k1iMmr2q9/biWR443vbwsAPVxCAYqGIh
+         +AQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=kuwKOcuHMSa3dQs4wZk02jLSCcVnoSCO8BTxrJsZ3Y4=;
-        b=FmtHphtqTPjVu33qb9c921RBQChXSsn/7LaG47eH4tZb9Rr5PUvAGrl9uHmlzdxQeJ
-         ok5/dGhGH6zBTgK9vpVyDAG+YpKAZFE49FEmasJq7sXWWTvPlXkmEa8tLgIx/qgpke9i
-         YcQhiAhqMpWOcLfAjCwEaPrxw42bEzTiy7W90Srhg4HzIxUdfqot7ffFs//Lsv9VfqYQ
-         FURJpSxVBsRq60ka0ysdxsYE5kM+MuKQ8lLPfZ4iLL5jLbN7I/9Ctw43CIQoGusENWB3
-         MCyJkcdn66FRLF2mefltlJeTVKJLXIsDoFVohJJBaflqffTT64LlnFlWsDToH+J6bPGh
-         GgvA==
-X-Gm-Message-State: ACgBeo27Su7+SjptgJdQb5t9yxO3s8q4HGnMX5WaM6X2y1swVNKR72jG
-        pzQTJz9Mw/6HxU+LwJ6Ev5TfUw/72sllrusMDlg=
-X-Google-Smtp-Source: AA6agR7S/N6SzCu6WvUjst8DGTx8TkblKLEFyaeVt8VBRNP4uVQsWXwmfnx40tW0I14GvvaFNjJgxmSK42sdlLgTy00=
-X-Received: by 2002:a05:6512:168b:b0:48a:9f4a:9d37 with SMTP id
- bu11-20020a056512168b00b0048a9f4a9d37mr6462916lfb.576.1659964100152; Mon, 08
- Aug 2022 06:08:20 -0700 (PDT)
+        bh=k1TjY5xnUjj1+/lGv63az2dDWuyn6OfPi4lM94OvKo0=;
+        b=04aWPKZOs3RUzNGa4hgzSkCjINqGhzQu4tEWyh7GYLl8NnaxpNYGPEnDvgjvN27Xq0
+         r4r++m+L4NOIFLI9F3XcCHKP4+8lgn9MS+FD4lMNMcew8cvpE6fsvDK/+qEmFDshjG4q
+         F0Ej5qA7C8FGEM9wbWAn/yPyGobEuyPiVYjZ0h+YjYt8p4IMLEImtZ48TBrI3S+q1zFQ
+         9fi+UUlFSgYGP6bn1nJ1DJv3aZHTNjyVEVrVzp7TBCeleSPYEMxOh4hsSAD/c836NM0w
+         ws/V5kvmtjdISdjVzns7EJ+/aAdJXJEROldIyhm7xRSIXbz0aa3cohOW6oeZuSYkAoU9
+         z40w==
+X-Gm-Message-State: ACgBeo3qZzL9Vm6lxQrla7U3z9w1mTnY+NZAlHlurgUQwOj7CPMfIls+
+        qMjRZBMil9M6abC+Zt6ikfK2vWlUEbSfKXCW6Y7lRpFFGWj7Ew==
+X-Google-Smtp-Source: AA6agR52jCYQmK91d+3J+37DS5UfX6aS2qv32j0yjdMuOGHhlM5SQAU4RO4uAaaZpEIP3vyPaOcx4dh6fMPqRsLNC+A=
+X-Received: by 2002:a05:620a:288a:b0:6b8:fcfe:db02 with SMTP id
+ j10-20020a05620a288a00b006b8fcfedb02mr14097277qkp.504.1659964158541; Mon, 08
+ Aug 2022 06:09:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com>
- <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com>
- <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
- <20220723030226.8E43CC341C6@smtp.kernel.org> <CAP6Zq1gUvMFG9BNObVNLpVgbMRpV7e--HFxknP8kvL4nGk8Hsw@mail.gmail.com>
- <20220729225603.12528C433D6@smtp.kernel.org> <CAP6Zq1hOxG+2X-qTbvPkrVHQ5zf04GO21m1n328Jiqgzns2CMA@mail.gmail.com>
- <20220804200549.60512C433C1@smtp.kernel.org> <CAP6Zq1j2r9df0CpT7pi32JuVLQBDjt7cCK7LmDJehtufG8M4-Q@mail.gmail.com>
-In-Reply-To: <CAP6Zq1j2r9df0CpT7pi32JuVLQBDjt7cCK7LmDJehtufG8M4-Q@mail.gmail.com>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Mon, 8 Aug 2022 16:08:08 +0300
-Message-ID: <CAP6Zq1ib==k_E3XaS2bZB3m=yn0B_3hL2XuaHe1UiyM670snoA@mail.gmail.com>
-Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Olof Johansson <olof@lixom.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thomas G leixner <tglx@linutronix.de>,
-        Patrick Venture <venture@google.com>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Nancy Yuen <yuenn@google.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        SERIAL DRIVERS <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20220808024128.3219082-1-willy@infradead.org> <20220808024128.3219082-6-willy@infradead.org>
+In-Reply-To: <20220808024128.3219082-6-willy@infradead.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 8 Aug 2022 15:08:41 +0200
+Message-ID: <CAHp75VfCLTMERQ7O01jA2ybRFAreeY3306A07M2rsR0Q+BH90g@mail.gmail.com>
+Subject: Re: [PATCH v5 05/32] lib/string_helpers: string_get_size() now
+ returns characters wrote
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andy Shevchenko <andy@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Mon, Aug 8, 2022 at 4:41 AM Matthew Wilcox (Oracle)
+<willy@infradead.org> wrote:
+>
+> From: Kent Overstreet <kent.overstreet@gmail.com>
+>
+> printbuf now needs to know the number of characters that would have been
+> written if the buffer was too small, like snprintf(); this changes
+> string_get_size() to return the the return value of snprintf().
 
-Sorry, just to make it clear.
+the the --> the
 
-On Mon, 8 Aug 2022 at 15:37, Tomer Maimon <tmaimon77@gmail.com> wrote:
->
-> Hi Stephen,
->
-> Thanks for your reply.
->
-> On Thu, 4 Aug 2022 at 23:05, Stephen Boyd <sboyd@kernel.org> wrote:
-> >
-> > Quoting Tomer Maimon (2022-08-04 07:01:30)
-> > > On Sat, 30 Jul 2022 at 01:56, Stephen Boyd <sboyd@kernel.org> wrote:
-> > > >
-> > > > Because it is jumbled in some range?
-> > > Yes.
-> > > >
-> > > > >
-> > > > > I do see a way to combine the clock and the reset driver, the NPCM
-> > > > > reset driver is serving other NPCM BMC's.
-> > > > > Should we use regmap to handle the clock registers instead of ioremap?
-> > > >
-> > > > Sure? Using regmap or not looks like a parallel discussion. How does it
-> > > > help use platform APIs?
-> > > I mean to use regmap API instead of platform API for handing the clock
-> > > and reset registers.
-> > > the regmap API gives only one user access to R/W (lock).
-> > > I will be happy to get more suggestions, on how should we solve this situation.
-> > >
-> >
-> > Using platform APIs means using platform_*() functions, not of_*()
-> > functions, which are open-firmware/DT related. Regmap can be used to
-> > operate on registers mapped as __iomem, which is different from platform
-> > APIs.
-> I will use platform_get_resource() and devm_ioremap_resource()
-> functions in the next version.
-I will use platform_get_resource() and ioremap() function next
-veriosn, is it fine?
->
-> >
-> > Is having a lock even necessary? Do the reset and clk controls live
-> You are right,  lock use is not necessary.
-> > within a shared register where we would need to prevent one driver from
-> > accessing that register at the same time as the other?
-> reset and clk drivers are living fine with shared registers, we don't
-> need to handle the register access between the clk and the reset
-> drivers.
->
-> Best regards,
->
-> Tomer
+Acked-by: Andy Shevchenko <andy@kernel.org>
 
-Best regards,
+> Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+> Cc: Andy Shevchenko <andy@kernel.org>
+> ---
+>  include/linux/string_helpers.h | 4 ++--
+>  lib/string_helpers.c           | 7 +++----
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/linux/string_helpers.h b/include/linux/string_helpers.h
+> index 67de398944e8..52e0f1d283b9 100644
+> --- a/include/linux/string_helpers.h
+> +++ b/include/linux/string_helpers.h
+> @@ -19,8 +19,8 @@ enum string_size_units {
+>         STRING_UNITS_2,         /* use binary powers of 2^10 */
+>  };
+>
+> -void string_get_size(u64 size, u64 blk_size, enum string_size_units units,
+> -                    char *buf, int len);
+> +int string_get_size(u64 size, u64 blk_size, enum string_size_units units,
+> +                   char *buf, int len);
+>
+>  #define UNESCAPE_SPACE         BIT(0)
+>  #define UNESCAPE_OCTAL         BIT(1)
+> diff --git a/lib/string_helpers.c b/lib/string_helpers.c
+> index 7be20bcc6137..d247bf945f16 100644
+> --- a/lib/string_helpers.c
+> +++ b/lib/string_helpers.c
+> @@ -33,8 +33,8 @@
+>   * at least 9 bytes and will always be zero terminated.
+>   *
+>   */
+> -void string_get_size(u64 size, u64 blk_size, const enum string_size_units units,
+> -                    char *buf, int len)
+> +int string_get_size(u64 size, u64 blk_size, const enum string_size_units units,
+> +                   char *buf, int len)
+>  {
+>         static const char *const units_10[] = {
+>                 "B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"
+> @@ -127,8 +127,7 @@ void string_get_size(u64 size, u64 blk_size, const enum string_size_units units,
+>         else
+>                 unit = units_str[units][i];
+>
+> -       snprintf(buf, len, "%u%s %s", (u32)size,
+> -                tmp, unit);
+> +       return snprintf(buf, len, "%u%s %s", (u32)size, tmp, unit);
+>  }
+>  EXPORT_SYMBOL(string_get_size);
+>
+> --
+> 2.35.1
+>
 
-Tomer
+
+-- 
+With Best Regards,
+Andy Shevchenko

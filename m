@@ -2,52 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE86058C7B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7EF358C7BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242971AbiHHLlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 07:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S242253AbiHHLma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 07:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243004AbiHHLk7 (ORCPT
+        with ESMTP id S232602AbiHHLm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 07:40:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E090BDED8
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:40:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E6576105C
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 11:40:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8480C433D6;
-        Mon,  8 Aug 2022 11:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659958853;
-        bh=ZTJIjiTBCyo5151EdtrsWqedhkYLw628G+bVuY7sHp8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cWAoCSmteTw95hEAq/qECXjivbV+MCkQ6I7Ort93Ec0SKckC+4bpYyJRuoQF550c/
-         ckZyTRaEe5hY0pB7ffmcM9uWy4kbm6FFk2/RHAKNnBTZdmo30POU+GSf5Fc3vOOHVV
-         vAfrKRBKA2mnrLsingVQfi2YymQh2EWqaB5z/UXg017W8yUjR9tqeG74OXrpdHlQ13
-         Ivd2/2oKvzzEIYfKxH/xntIcsMhxuYnIK8Rs+m+3Kyx6wWKV+q6TBGBHCMtNGqkyRu
-         iQI6PZ/yMjNtfDSrlqlK9p/pyNFT40xPNEazmEGUKSxCrDL/mFfq0DUT2DQMy2DwJu
-         KrGXNR4QvzHjw==
-Date:   Mon, 8 Aug 2022 12:40:49 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kevin Lu <luminlong@139.com>
-Cc:     linux-kernel@vger.kernel.org, shenghao-ding@ti.com, kevin-lu@ti.com
-Subject: Re: [PATCH v1 1/1] drivers: Modify some parts
-Message-ID: <YvD2QThICnW4873L@sirena.org.uk>
-References: <20220807034052.2314-1-luminlong@139.com>
- <20220807034052.2314-2-luminlong@139.com>
+        Mon, 8 Aug 2022 07:42:27 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F1513D47
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:42:26 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id x19so3984086lfq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 04:42:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=pL87Fqs9PTMJ304pFnGS1YWG0FPpYwtTQJEDWykJS1Y=;
+        b=hsC2y+8dl47fq/cyB5jqNdU+9t5zOkxnPhby5pK5ozIpOHz+vbhw8qEGoCKQ+ukChK
+         AdcXQFjnSZWDHmf5JqFjmd/wWvx9zeSY0qWc7LwvYhHO8B5f7dM1sXMDz56q3m2EMnj/
+         YPqxuihQZMbpJZbqAh+xJ077M/zyM67hcjjzvVJM1sqi1nSrnBf1CKAukDInEM1/ywDy
+         qMkEjz4aUbWQiKJ3plo73b0100VDwKvCNh2Mwl0/HX7vpg0v0vcoottO+FK4Hygdyxkr
+         cnytxlUKjEalMUKguRxakNA/XhmQirbAZXC+aa9gQforfnp7QLLElbPWuuc5egnpA/HT
+         Ir0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pL87Fqs9PTMJ304pFnGS1YWG0FPpYwtTQJEDWykJS1Y=;
+        b=IUMEktTzks6ryeft5KBKijt9uohqSndfC9jgJSe4B7QdipSXYdY9x+/cwDpDw2M/6J
+         TuK+QgyeHH5bT+sJwrHRkpECNRcYYsGoftIQkhk4hZL0Az7fu98kUCbpYWUyAURimhwm
+         wnzRAUwV88ZbcBTX6pN8g5ggu53WHLQDWytLg0vl9N+SfQsAy5W6TPDPFJEABU2a/9Oq
+         V36mE84QWcv09v0ImlNpLHbktedJJtlQNatop95lU2V3U3rZf1yhF5I48hyu9SlpaGhN
+         O3BGkyvbm9kyY5FOL25IAvDRN2u/Bu+Hz2x+Z72m2Rkgm5znyxfuQgScB0Ob82wGX/Hu
+         9trg==
+X-Gm-Message-State: ACgBeo0YKo3ZWBQ9Usx55xDWTcXp4lVG9S8CTymmU/XaFiPe8SLIK2Hk
+        D58raKccwxYIp8Qr5b9ywu1lTg==
+X-Google-Smtp-Source: AA6agR7uQY9shl0hp2+z5QHs2BFUW0aA/OjGjkksM04+e/jE05tULLxoVs/bZclB54fR84ZQE3wJ/Q==
+X-Received: by 2002:a05:6512:2622:b0:481:5b17:58e7 with SMTP id bt34-20020a056512262200b004815b1758e7mr6154823lfb.600.1659958944435;
+        Mon, 08 Aug 2022 04:42:24 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id h28-20020ac24d3c000000b0048b18700dddsm1401868lfk.106.2022.08.08.04.42.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 04:42:23 -0700 (PDT)
+Message-ID: <727e15b9-cc6a-5117-2c8f-3e78e9992565@linaro.org>
+Date:   Mon, 8 Aug 2022 14:42:21 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BM0yNN4hPVklAiUl"
-Content-Disposition: inline
-In-Reply-To: <20220807034052.2314-2-luminlong@139.com>
-X-Cookie: Are we running light with overbyte?
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add initial support for
+ Pine64 PinePhone Pro
+Content-Language: en-US
+To:     =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megi@xff.cz>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        martijn@brixit.nl, ayufan@ayufan.eu, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220805234411.303055-1-tom@tom-fitzhenry.me.uk>
+ <20220805234411.303055-4-tom@tom-fitzhenry.me.uk>
+ <6461a695-171a-b160-5406-b8ac31c5ba0e@linaro.org>
+ <20220808111225.pslgct22eltiakiv@core>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220808111225.pslgct22eltiakiv@core>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,93 +81,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08/08/2022 14:12, Ondřej Jirman wrote:
+> Hello,
+> 
+> On Mon, Aug 08, 2022 at 09:35:55AM +0300, Krzysztof Kozlowski wrote:
+>> On 06/08/2022 01:44, Tom Fitzhenry wrote:
+>>
+>> [...]
+>>
+>>> +
+>>> +	/* Power tree */
+>>> +	/* Root power source */
+>>> +	vcc_sysin: vcc-sysin {
+>>
+>> regulator-vcc-sysin
+> 
+> Interestingly, most DTS files in rockchip/ use a -regulator
+> suffix and none use regulator- prefix. And this is inconsistent
+> across the larger DTS tree, because outside of rockchip/ most
+> DTS use a prefix.
+> 
+> Checked by grep -R 'regulator.*{' | grep -v state-me
 
---BM0yNN4hPVklAiUl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Can be a suffix. Just pick one pattern.
 
-On Sun, Aug 07, 2022 at 11:40:52AM +0800, Kevin Lu wrote:
-
-> Add a new kcontrol for phase calib, remove unnecessary header file,
-> make code more comply with linux coding style
->=20
-> Signed-off-by: Kevin Lu <luminlong@139.com>
-> ---
->  tlv320adcx140.c | 114 ++++++++++++++++++++++++++++++++++++------------
->  tlv320adcx140.h |   7 +--
->  2 files changed, 90 insertions(+), 31 deletions(-)
-
-As covered in submitting-patches.rst your diff should be against the
-root of the kernel tree rather than files in a subdirectory, look at how
-other patches on the list are being formatted for examples of how things
-look.  If you use git format-patch to generate patches it should do the
-right thing for you.
-
-The fact that you're describing three different changes changes here
-suggests that this should be a patch series rather than a single patch,
-as covered in submitting-patches.rst this is the general style for Linux
-as it makes things much easier to review.  Each logical change should be
-a separate patch.
-
-> -// Copyright (C) 2020 Texas Instruments Incorporated - https://www.ti.co=
-m/
-> +// Copyright (C) 2020 - 2022 Texas Instruments Incorporated
-> +// - https://www.ti.com/
-> +/*
-> + * Author: Kevin Lu <kevin-lu@ti.com>
-> + *
-> + *  Features:-
-
-Please add the new bits to the header as C++ comments as well, this
-makes things look more intentional.
-
-> +static const char * const phase_calib_text[] =3D {
-> +	"Disable",
-> +	"Enable"
-> +};
-> +
-> +static const struct soc_enum phase_calib_enum[] =3D {
-> +	SOC_ENUM_SINGLE_EXT(ARRAY_SIZE(phase_calib_text), phase_calib_text),
-> +};
-
-This is an on/off switch, it should be a normal boolean control ending
-in Switch and taking 0 and 1 as valid values.
-
-> +static int adcx140_phase_calib_put(struct snd_kcontrol *pKcontrol,
-> +	struct snd_ctl_elem_value *pValue)
-> +{
-> +	struct snd_soc_component *codec
-> +		=3D snd_soc_kcontrol_component(pKcontrol);
-> +	struct adcx140_priv *adcx140 =3D snd_soc_component_get_drvdata(codec);
-> +
-> +	adcx140->phase_calib_on =3D pValue->value.integer.value[0];
-> +
-> +	return 0;
-
-The issues with use of hungarian notation and not generating events that
-were present previously remain.
-
-Please don't ignore review comments, people are generally making them
-for a reason and are likely to have the same concerns if issues remain
-unaddressed.  Having to repeat the same comments can get repetitive and
-make people question the value of time spent reviewing.  If you disagree
-with the review comments that's fine but you need to reply and discuss
-your concerns so that the reviewer can understand your decisions.
-
---BM0yNN4hPVklAiUl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLw9kAACgkQJNaLcl1U
-h9B3Iwf/Ze6SxEpjZi4bvFh+aPIm+ikx9nidgd+Gx8zo3pasn3M3+JMbe7RyXJaz
-M8QZ8xZhRjxtJ2Q50XZCUuhm3ovmD/WBqSUTqW/QL17m4PTqCJWBlqBoTsiuIVQM
-c7w9ZXbCGcTFNP7FMkm0ylHhvAQXCYsShxedPTAkoimZbNXzHNetU3ThMsZlc0gA
-Z/aYqwFptnaJGxfqUOvncV+UMsZymOF1UMe8cDToZkN1LblTqONwmc0AQON2B0wr
-RmWvZZ0YR0bNkoh1T2S/r2i5E8GkaFS3ZvdEeIjv2hdxxeaD8FhWxTnzrEfQA3Mz
-y6f7BpVfBGU17Bg1M0PE5G4ux5V/yA==
-=TJhU
------END PGP SIGNATURE-----
-
---BM0yNN4hPVklAiUl--
+Best regards,
+Krzysztof

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EF558CF36
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 22:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B0358CF37
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 22:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244421AbiHHUeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 16:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
+        id S244434AbiHHUeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 16:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244420AbiHHUd6 (ORCPT
+        with ESMTP id S244402AbiHHUeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 16:33:58 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA5D1ADA9
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 13:33:57 -0700 (PDT)
+        Mon, 8 Aug 2022 16:34:05 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF22E1AD8A
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 13:34:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659990837; x=1691526837;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xlZNRDzOg05HlsEGD1/D8QH0uUFUnQyLW1EOluncF6A=;
-  b=enWEAMbkIwLK9gMl9acrmdexiZQ4YNmhpw5XEs+frswz5H0XLNR+fXZs
-   imU8ww6OsELZB77X9dRZTPQI2ymVKe3Is3t2jTW+EjYoSyRIcNlL2slQV
-   9JsJeGqmhKXYFuq1mrsz0aoZj02ziBlcHZF6CwL15b2Cz3NM/K2JexyB8
-   EeFQ2UwvVRAR7F1SuXkjMdQZ2LqrNXPDfXVwE73dtMmUHkjYpaIrchlWb
-   dEsHd86OmI+cjIfNZTONvohKMCbEkFBFUxG/ulbVAPTGYs6UA+FaZxK1W
-   e/PfSRqw24fPkicISvYfYBc9VsOrGkJGmgao6aGzFDG7hORs+sTp/UWVE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="288250820"
+  t=1659990844; x=1691526844;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fYninJtK+P2j2m0xNhJZNPCXHwvPsRfJcZpXXbr/muk=;
+  b=Z5HSEAUPl7xn1WLNLc2M/w5q0Iqj25QBrTLVaH8IW15auUzPsIlUrbJH
+   xg0tuCW6fLYjYJR3NuuVSWFFae1dWaWPyM9OJXjb4w49JaYR0WPEcUA0v
+   ivLU1/4p/D31h7ht7Ap5kKr4CFbdYf7rKis5pyy4jb4Gl/nxtUypRDDI8
+   LMQM1XrhjCmtsFo9KqRRfbbSQdfuZUI+Mt+/Spp/f1/ZC/JgbuTq/mXx+
+   zvs6kDRDHmAfmbM+oOggLKukpsKOZ7htlJjpbtt4lgPjfIxu5NT13DEna
+   TO5gMF5TOQs3mZqtRPBP2y0JQ90JI4pFtahjDyaC8l3hx9bWgc5g0THoe
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="352414536"
 X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="288250820"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 13:33:57 -0700
+   d="scan'208";a="352414536"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 13:34:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="637451644"
+   d="scan'208";a="664126939"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 08 Aug 2022 13:33:55 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 08 Aug 2022 13:34:02 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2E5C4F7; Mon,  8 Aug 2022 23:34:06 +0300 (EEST)
+        id A8A61F7; Mon,  8 Aug 2022 23:34:14 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
@@ -48,14 +48,16 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH v2 0/4] regmap: mmio: Extending to support IO ports
-Date:   Mon,  8 Aug 2022 23:33:56 +0300
-Message-Id: <20220808203401.35153-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/4] regmap: mmio: Remove mmio_relaxed member from context
+Date:   Mon,  8 Aug 2022 23:33:57 +0300
+Message-Id: <20220808203401.35153-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220808203401.35153-1-andriy.shevchenko@linux.intel.com>
+References: <20220808203401.35153-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,24 +66,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently regmap MMIO doesn't support IO ports, while being inconsistent
-in used IO accessors. Fix the latter and extend framework with the
-former.
+There is no need to keep mmio_relaxed member in the context, it's
+onetime used during generation of the context. Remove it.
 
-Changelog v2:
-- dropped the first two patches (Mark)
-- split the last patch to two (Mark)
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/base/regmap/regmap-mmio.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-Andy Shevchenko (4):
-  regmap: mmio: Remove mmio_relaxed member from context
-  regmap: mmio: Get rid of broken 64-bit IO
-  regmap: mmio: Introduce IO accessors that can talk to IO port
-  regmap: mmio: Fix MMIO accessors to avoid talking to IO port
-
- drivers/base/regmap/regmap-mmio.c | 140 +++++++++++++++++++-----------
- include/linux/regmap.h            |   3 +
- 2 files changed, 91 insertions(+), 52 deletions(-)
-
+diff --git a/drivers/base/regmap/regmap-mmio.c b/drivers/base/regmap/regmap-mmio.c
+index 71f16be7e717..3a5c81e4ce84 100644
+--- a/drivers/base/regmap/regmap-mmio.c
++++ b/drivers/base/regmap/regmap-mmio.c
+@@ -16,7 +16,6 @@
+ struct regmap_mmio_context {
+ 	void __iomem *regs;
+ 	unsigned int val_bytes;
+-	bool relaxed_mmio;
+ 
+ 	bool attached_clk;
+ 	struct clk *clk;
+@@ -290,7 +289,6 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
+ 
+ 	ctx->regs = regs;
+ 	ctx->val_bytes = config->val_bits / 8;
+-	ctx->relaxed_mmio = config->use_relaxed_mmio;
+ 	ctx->clk = ERR_PTR(-ENODEV);
+ 
+ 	switch (regmap_get_val_endian(dev, &regmap_mmio, config)) {
+@@ -301,7 +299,7 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
+ #endif
+ 		switch (config->val_bits) {
+ 		case 8:
+-			if (ctx->relaxed_mmio) {
++			if (config->use_relaxed_mmio) {
+ 				ctx->reg_read = regmap_mmio_read8_relaxed;
+ 				ctx->reg_write = regmap_mmio_write8_relaxed;
+ 			} else {
+@@ -310,7 +308,7 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
+ 			}
+ 			break;
+ 		case 16:
+-			if (ctx->relaxed_mmio) {
++			if (config->use_relaxed_mmio) {
+ 				ctx->reg_read = regmap_mmio_read16le_relaxed;
+ 				ctx->reg_write = regmap_mmio_write16le_relaxed;
+ 			} else {
+@@ -319,7 +317,7 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
+ 			}
+ 			break;
+ 		case 32:
+-			if (ctx->relaxed_mmio) {
++			if (config->use_relaxed_mmio) {
+ 				ctx->reg_read = regmap_mmio_read32le_relaxed;
+ 				ctx->reg_write = regmap_mmio_write32le_relaxed;
+ 			} else {
+@@ -329,7 +327,7 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
+ 			break;
+ #ifdef CONFIG_64BIT
+ 		case 64:
+-			if (ctx->relaxed_mmio) {
++			if (config->use_relaxed_mmio) {
+ 				ctx->reg_read = regmap_mmio_read64le_relaxed;
+ 				ctx->reg_write = regmap_mmio_write64le_relaxed;
+ 			} else {
 -- 
 2.35.1
 

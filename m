@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA0B58C396
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 08:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB33E58C39B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbiHHG6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 02:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S235635AbiHHHAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 03:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiHHG6O (ORCPT
+        with ESMTP id S231720AbiHHHAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 02:58:14 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BB1DFA4;
-        Sun,  7 Aug 2022 23:58:12 -0700 (PDT)
-Received: from mail-ej1-f41.google.com ([209.85.218.41]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MBltK-1oFPsk4Ak0-00CDs0; Mon, 08 Aug 2022 08:58:11 +0200
-Received: by mail-ej1-f41.google.com with SMTP id m4so14885562ejr.3;
-        Sun, 07 Aug 2022 23:58:10 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0G6WOIKCURBtp87O3XkvPsiZpgt41U/qRK7ihkoXBWl5B/qc19
-        boPbYvPWWc47ipq2PhNOk8ifGqBQCAThJJ+x/RE=
-X-Google-Smtp-Source: AA6agR7+MNBPFkwjMYrs9F5cklCO3PmGk+NVWugFBet3Tm9GK726GURnSLhj9K8pZOtw7GOLS3S01sY9ymEq4UpWwag=
-X-Received: by 2002:a17:907:7395:b0:730:b636:2c89 with SMTP id
- er21-20020a170907739500b00730b6362c89mr12935429ejc.547.1659941890680; Sun, 07
- Aug 2022 23:58:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220807220934.5689-1-rdunlap@infradead.org>
-In-Reply-To: <20220807220934.5689-1-rdunlap@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 8 Aug 2022 08:57:54 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1-NxPazURDPdKYU0Het+pjL6E3BZMskjQD=aCU91Q=rw@mail.gmail.com>
-Message-ID: <CAK8P3a1-NxPazURDPdKYU0Het+pjL6E3BZMskjQD=aCU91Q=rw@mail.gmail.com>
-Subject: Re: [PATCH v2] kernel/sys_ni: add compat entry for fadvise64_64
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-api@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:gN4mlgAA3OCy7aqEGs782K2/DEXfr25l3XOGHgc9OTiys8FwtYb
- Q+0K0/GI86Tj4lOE1slCMfmr72Wy6/jewjOzRN4oBTdLRV6auT+pNh0M6ecqKbosjW5opl+
- p0ei0zGbzgJ1/73leOBKi14u2ywi1iAm+xAG7zvb/nEPPpOVFNmVHJii/qiFdt8SnHEOOr8
- LlMpjSw7ICHKakcXuVJkg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:x1lfxl0+L/s=:frpwqEAjA06OGFQxSa9p+G
- SaTKaPk3gRcHH+oK18vhvTCX1Tdf0YVo5ireZb21kWRgPBY6a/w91x3mILVzheKYUewkKxp92
- c/GBKT0+eXrrKPcFuSRElRXeJPHI9arVAMsnm5NvhTP9/AMu1PsMytPN0RknILfzlY+VA9HSw
- +0j97XZYTwDZlf/eu9Wnlidu4esKdsQU6RxCvM0mCrY3R09vwqNAElQW0WxCX185ZUl0slcQo
- soEiPlzkhDdbK4QgeUnCBGimZfJ8coc4SS239hom+aHP/i8aEwvv94B2ozk590UUixZFgG/x0
- Cb8bt14hD5P+gkxV+AlDWL0UmmChXe29nhvqIgr9EXty5q3oifV746uTPpaeLJiEaaYDh2Dlw
- 0L7qS2aScxWdFlXGrAK8srCrH2nhF3j5d6cg85TkuTn87fBMepJim1xSJr2Swg1L6Hyz29k6F
- VNZTisxlKITuUJMgdvBwsB9yF7ylc7k0qutwb0XTuM6xlvwDaPRguVZvu0DlNiDZyZ6dwmxVw
- tAabVZQKFM54YoPhuBx1PxiUbHp2cTQlOhy5onkHMA1bVv2YUFU/jR1hhXkqppEucUumu3xg7
- ZW4n5YG3eiejD4RW3yjLwGCfDFZpOpRHpz5+7jEvsh4e/78xXc2RJSCwEuc7XfzDSGgSJ4juZ
- TyPOKslL7Kxp0yBjTwtPkDzxqwxkGCucNEjiPp61w4xvw5SWzzZnQqWqcK5iwd/HfMF0N/8F7
- FXp+u7YDAojf/dNjGV0sfVQS3DIh+DyJcewVhw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 8 Aug 2022 03:00:05 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A78DFB7
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 00:00:03 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id i14so14873245ejg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 00:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc;
+        bh=2/N6mFP+TYpvLhr23ybFH/UP8B6EWzbXHA/jkbBuIoc=;
+        b=lkU29Ua428YWYVoXEMmDC0UaKbp+MGrvym2etqoPjNHVD2NL3tW0LF47PkXL04Ez3I
+         vvDnB0EtThz40r8LCfeh+Mi4sLOX5jf8l3WCEzdsZk29I34a9O4PwXXIdG1oZTobtiTS
+         Pr8yAIQcboCA7RWA0WoPC/lm1iMyf/gbxHMWKW/BfGmB15dsR2/tcpYYVI1egrVLe5QD
+         n4sJi1Cd7mLiUIbqcvP7KLtQx9ydpy1/5chSsTH6oupCLjJMhZSlmioLlr6BVSn6QEkW
+         RVhYK9yeeUKGculzGgFZU/b7kaWseSpXzQZagr+e3yArPV0ouWvwmyQdyF8oANNnxi7k
+         zzOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc;
+        bh=2/N6mFP+TYpvLhr23ybFH/UP8B6EWzbXHA/jkbBuIoc=;
+        b=LOOqJm+a/9iXqTBD2UDv3G3rOpfd+oAwdXamj+0cyMJ9o/OgcnAT/59v/sifZz+wBz
+         OzgY+TlZNSX00fqPM0Oi+bZL3ydfFjRY6+EHQKdU99LJMcO1R4fnPdAFU3ofgMa0Br2y
+         2dUOrN6phpgknlzD2kcr42cEChGtIG8domn0GNOrTl66jiuT0Y/+3ztjQzLIC6Mh7RHo
+         doHGyVv/l3JsfwPgOZ/04RXBvQ+jXIUzlDb5AUWzGoiQIGMbyXeCDmgpp8h1QVXKO8T6
+         EDxqpcGkZx1rqzygHz88+NoXVcHrKzzQ/FCOK1GIZhyrcZXuMOKCx9evfpOcIhekAYWS
+         l2eg==
+X-Gm-Message-State: ACgBeo0nse3KDaxnN+ZOG4QT/ykz5ViBfwowUaQcs7RD28bVeuqRvKY6
+        5S/qQ1VxqRIijSp9V+CDa012ZA==
+X-Google-Smtp-Source: AA6agR6hGuVY0jLoIpyBwpB68Ep5URWwiz9kxZGjZ1bEwFDjjVx2YCyxBdkT2y7+2dYKFcVRfMWxGg==
+X-Received: by 2002:a17:907:2721:b0:731:2aeb:7940 with SMTP id d1-20020a170907272100b007312aeb7940mr6385812ejl.448.1659942001700;
+        Mon, 08 Aug 2022 00:00:01 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id zk19-20020a17090733d300b0072aadbd48c7sm4512240ejb.84.2022.08.08.00.00.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 00:00:01 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 08 Aug 2022 08:59:59 +0200
+Message-Id: <CM0GBVEZHLBT.1V54N4FCEN7V6@otso>
+Cc:     "Robin Reckmann" <robin.reckmann@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>
+Subject: Re: [PATCH] i2c: qcom-geni: Fix GPI DMA buffer sync-back
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Robin Reckmann" <robin.reckmann@googlemail.com>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+        "Sumit Semwal" <sumit.semwal@linaro.org>,
+        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+X-Mailer: aerc 0.11.0
+References: <20220807140455.409417-1-robin.reckmann@gmail.com>
+In-Reply-To: <20220807140455.409417-1-robin.reckmann@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,21 +79,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 12:09 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> When CONFIG_ADVISE_SYSCALLS is not set/enabled and CONFIG_COMPAT is
-> set/enabled, the riscv compat_syscall_table references
-> 'compat_sys_fadvise64_64', which is not defined:
->
-> riscv64-linux-ld: arch/riscv/kernel/compat_syscall_table.o:(.rodata+0x6f8):
-> undefined reference to `compat_sys_fadvise64_64'
->
-> Add 'fadvise64_64' to kernel/sys_ni.c as a conditional COMPAT function
-> so that when CONFIG_ADVISE_SYSCALLS is not set, there is a fallback
-> function available.
->
-> Fixes: d3ac21cacc24 ("mm: Support compiling out madvise and fadvise")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Hi Robin,
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+On Sun Aug 7, 2022 at 4:04 PM CEST, Robin Reckmann wrote:
+> Fix i2c transfers using GPI DMA mode for all message types that do not se=
+t
+> the I2C_M_DMA_SAFE flag (e.g. SMBus "read byte").
+>
+> In this case a bounce buffer is returned by i2c_get_dma_safe_msg_buf(),
+> and it has to synced back to the message after the transfer is done.
+>
+> Add missing assignment of dma buffer in geni_i2c_gpi().
+>
+> Set xferred in i2c_put_dma_safe_msg_buf() to true in case of no error to
+> ensure the sync-back of this dma buffer to the message.
+>
+> Signed-off-by: Robin Reckmann <robin.reckmann@gmail.com>
+
+This makes I2C with GPI DMA work on sm6350/sm7725 fairphone-fp4!
+Thanks for fixing this!
+
+Tested-by: Luca Weiss <luca.weiss@fairphone.com>
+
+Regards
+Luca
+
+> ---
+>  drivers/i2c/busses/i2c-qcom-geni.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-=
+qcom-geni.c
+> index 6ac402ea58fb..d3541e94794e 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -484,12 +484,12 @@ static void geni_i2c_gpi_unmap(struct geni_i2c_dev =
+*gi2c, struct i2c_msg *msg,
+>  {
+>  	if (tx_buf) {
+>  		dma_unmap_single(gi2c->se.dev->parent, tx_addr, msg->len, DMA_TO_DEVIC=
+E);
+> -		i2c_put_dma_safe_msg_buf(tx_buf, msg, false);
+> +		i2c_put_dma_safe_msg_buf(tx_buf, msg, !gi2c->err);
+>  	}
+> =20
+>  	if (rx_buf) {
+>  		dma_unmap_single(gi2c->se.dev->parent, rx_addr, msg->len, DMA_FROM_DEV=
+ICE);
+> -		i2c_put_dma_safe_msg_buf(rx_buf, msg, false);
+> +		i2c_put_dma_safe_msg_buf(rx_buf, msg, !gi2c->err);
+>  	}
+>  }
+> =20
+> @@ -553,6 +553,7 @@ static int geni_i2c_gpi(struct geni_i2c_dev *gi2c, st=
+ruct i2c_msg *msg,
+>  	desc->callback_param =3D gi2c;
+> =20
+>  	dmaengine_submit(desc);
+> +	*buf =3D dma_buf;
+>  	*dma_addr_p =3D addr;
+> =20
+>  	return 0;
+> --=20
+> 2.25.1
+

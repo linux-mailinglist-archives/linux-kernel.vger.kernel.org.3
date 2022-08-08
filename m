@@ -2,141 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342AF58CED9
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 22:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DFE58CEE2
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 22:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243914AbiHHUHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 16:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
+        id S243784AbiHHUIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 16:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238466AbiHHUG5 (ORCPT
+        with ESMTP id S244000AbiHHUIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 16:06:57 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6F318B0B
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 13:06:55 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id z17so12064991wrq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 13:06:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0j4dwLC8wxMrSAowWiy7rSpW5tCFJnoA4YLc0AuNUGg=;
-        b=gld9078CrBQZkkr4yLFP8JyPjvlRn+4NpBrX7b60hIKWn28bkVbenIdUCbRuLNTTV0
-         1L/39r5DQ4UKsm46WbkBiD46ElgQhpGCrV3dL2IjRNVKWzoh4RcLMsGeUceFQUKOwfSS
-         lKuidI5W5eLJW4bvDU6NCAaZbpFulFWfNzi8pT0hS8wUhPwdVnzf53hNGbSb8efC0kW5
-         rAbRal6FivNDSIIFBYuhcY/SU+U3x4tV9f7yNkVkf0A8JI0x7IsYbZ2z7W64UW/k7roj
-         9D+5xVc9ZcwERLaDE3Stw31kBjsL/lFxJJhjsNTXENCu2Y/ZofRg5BFreVtm2omGqwjq
-         /cdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0j4dwLC8wxMrSAowWiy7rSpW5tCFJnoA4YLc0AuNUGg=;
-        b=woMvMmOvgS5bbDFHgXm48GllQcBwvkToTR+VWLJKqKfPkVB8gCloO2pMo1t/YAD1T2
-         DTNeGH80ynJqaUxzWZwXac+FPCrccMx6CWg4QfEDJRfn3XViyrKiGGoLZyCfKERtM9E6
-         XUhK+KGnmpg//9zAqTwJOBGWub5JjkuFuHezx/jHo0sj5Uw7BnR4zzuT4ASpM2fWLYGL
-         BrkX8omykZID6h/IJF1411t75gxZhJBEJjCsdBFFKYP+dOVYAvjBaZYTbL3pwaxcWQD7
-         7lQx4mLHRdJR0PeN7eApHeFZe0ZCm760AfdeSRIDtSfpI2uxRTuPT2tgldwYxU/SXIvn
-         x3CA==
-X-Gm-Message-State: ACgBeo35odpTtJdrKsd1jsWdwOV+tiwtQR+DDVLi1ro3p4xGUapgIDL+
-        IfYKD/IBMmYWbp+gd35lobVcPIZLIt4R+5WW/+QDBg==
-X-Google-Smtp-Source: AA6agR44E4ypoC5H9UBmr2E8FlvOT73br0ors/jVWYMC79q6xf+bqy0nmcGD1ZQ8O3weskn+aiRibfX/QNtndGD1TnE=
-X-Received: by 2002:a05:6000:1188:b0:220:6c20:fbf6 with SMTP id
- g8-20020a056000118800b002206c20fbf6mr12635954wrx.372.1659989213525; Mon, 08
- Aug 2022 13:06:53 -0700 (PDT)
+        Mon, 8 Aug 2022 16:08:42 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193FE1A38A;
+        Mon,  8 Aug 2022 13:08:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=mCH4Ky6LNxIz3EUvjmENi2wH/GDJf2ZQNALt04Jbl6M=; b=Zu/6NTWt6HC9WgZRwp7AyyegdH
+        5drn41sivwpGtYz6kAC95f3lS2NipoJZek9gryL+xL+bIOhZQVVESLK8PPl7TKrPAeJ92ra/YLMFk
+        x4AcVvZr2Nm366FdFHJOEJOLuYEWA3e/n7DHKG3xDlS11vB4N0oWXD+cBOSjtq7CZ/pE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oL92j-00CkuA-Uz; Mon, 08 Aug 2022 22:08:05 +0200
+Date:   Mon, 8 Aug 2022 22:08:05 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Andrew Davis <afd@ti.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Robert Jones <rjones@gateworks.com>,
+        Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-leds@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 5/5] dt-bindings: Drop Dan Murphy
+Message-ID: <YvFtJRJHToDrfpkN@lunn.ch>
+References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
+ <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
+ <43b3c497-97fd-29aa-a07b-bcd6413802c4@linaro.org>
+ <6ae15e00-36a4-09a8-112e-553ed8c5f4da@ti.com>
 MIME-Version: 1.0
-References: <20220628220938.3657876-1-yosryahmed@google.com>
- <20220628220938.3657876-2-yosryahmed@google.com> <YsdJPeVOqlj4cf2a@google.com>
- <CAJD7tkYE+pZdk=-psEP_Rq_1CmDjY7Go+s1LXm-ctryWvUdgLA@mail.gmail.com>
- <Ys3+UTTC4Qgbm7pQ@google.com> <CAJD7tkY91oiDWTj5FY2Upc5vabsjLk+CBMNzAepXLUdF_GS11w@mail.gmail.com>
-In-Reply-To: <CAJD7tkY91oiDWTj5FY2Upc5vabsjLk+CBMNzAepXLUdF_GS11w@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 8 Aug 2022 13:06:15 -0700
-Message-ID: <CAJD7tkbc+E7f+ENRazf0SO7C3gR2bHiN4B0F1oPn8Pa6juAVfg@mail.gmail.com>
-Subject: Re: [PATCH v6 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
- page table uses.
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Oliver Upton <oupton@google.com>, Huang@google.com,
-        Shaoqin <shaoqin.huang@intel.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6ae15e00-36a4-09a8-112e-553ed8c5f4da@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 11:26 AM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> On Tue, Jul 12, 2022 at 4:06 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Tue, Jul 12, 2022, Yosry Ahmed wrote:
-> > > Thanks for taking another look at this!
-> > >
-> > > On Thu, Jul 7, 2022 at 1:59 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > >
-> > > > On Tue, Jun 28, 2022, Yosry Ahmed wrote:
-> > > > > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> > > > > index aab70355d64f3..13190d298c986 100644
-> > > > > --- a/include/linux/mmzone.h
-> > > > > +++ b/include/linux/mmzone.h
-> > > > > @@ -216,6 +216,7 @@ enum node_stat_item {
-> > > > >       NR_KERNEL_SCS_KB,       /* measured in KiB */
-> > > > >  #endif
-> > > > >       NR_PAGETABLE,           /* used for pagetables */
-> > > > > +     NR_SECONDARY_PAGETABLE, /* secondary pagetables, e.g. kvm shadow pagetables */
-> > > >
-> > > > Nit, s/kvm/KVM, and drop the "shadow", which might be misinterpreted as saying KVM
-> > > > pagetables are only accounted when KVM is using shadow paging.  KVM's usage of "shadow"
-> > > > is messy, so I totally understand why you included it, but in this case it's unnecessary
-> > > > and potentially confusing.
-> > > >
-> > > > And finally, something that's not a nit.  Should this be wrapped with CONFIG_KVM
-> > > > (using IS_ENABLED() because KVM can be built as a module)?  That could be removed
-> > > > if another non-KVM secondary MMU user comes along, but until then, #ifdeffery for
-> > > > stats the depend on a single feature seems to be the status quo for this code.
-> > > >
-> > >
-> > > I will #ifdef the stat, but I will emphasize in the docs that is
-> > > currently *only* used for KVM so that it makes sense if users without
-> > > KVM don't see the stat at all. I will also remove the stat from
-> > > show_free_areas() in mm/page_alloc.c as it seems like none of the
-> > > #ifdefed stats show up there.
-> >
-> > It's might be worth getting someone from mm/ to weigh in before going through the
-> > trouble, my suggestion/question is based purely on the existing code.
->
-> Any mm folks with an opinion about this?
->
-> Any preference on whether we should wrap NR_SECONDARY_PAGETABLE stats
-> with #ifdef CONFIG_KVM for now as it is currently the only source for
-> this stat?
+> Either way, I have several of these parts and can support these. Feel free
+> to replace Dan's email with my email if that works better.
 
-Any input here?
+Please could you submit a patch to MAINTAINERS replacing Dan's name
+with your. I see lots of bounces from PHY driver patches because the
+get_maintainers script returns his address.
 
-Johannes, you have been involved in discussions in earlier versions of
-this series, any thoughts here?
+Thanks
+	Andrew

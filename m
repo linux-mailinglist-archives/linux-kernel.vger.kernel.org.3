@@ -2,175 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BF758C685
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5CF58C68A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242571AbiHHKgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 06:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
+        id S242588AbiHHKge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 06:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236047AbiHHKgQ (ORCPT
+        with ESMTP id S242576AbiHHKga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 06:36:16 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4705F54;
-        Mon,  8 Aug 2022 03:36:15 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bq11so12045978lfb.5;
-        Mon, 08 Aug 2022 03:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=GOY9zupAtO8m7NwOCJ2N5qzs5R1+JU0a+1359ZZ0XfQ=;
-        b=XbrMofQUvIiFzg6r0NnMAy7pY5aAeUrDka6vHJkoXXgrL3RnNFC2OZrho94X2SYS7D
-         03EG/ZSkkXq+9Z3DCMFk9j9l4CC3WXwzNO9uBkEhvLxjMlduj/ICgNCsPQSFV6PE0F0J
-         ry43FGpIzexk3RY9lLsTI7Nlv8rsKyTfM8YX9qePAY7/cvN9CiSG6fXiub71jvri2Gcj
-         HSFccu7wh2QSuWn2HWlm+aXP+ygdvxOhXVXmuVqaCDz0UGUFjBZxgrLJB2TRwWezpQ0H
-         SwgdqwgO8fylZJQS4ijcjvTaUMKiRc+RiyTSHJGZHb364kmLqx9fuCPN1ECc/noopDxt
-         /3qw==
+        Mon, 8 Aug 2022 06:36:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1581113F6E
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 03:36:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659954983;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zJ1tVOq7gmtva8bvG4/tC19zWSGUYjLfZNUM1FdlBcA=;
+        b=aq79ZUAN4Q/3jZSK73nD1tswjVjkp1gOUzTNxXoDmq1GDy6TNWv1Dj0XZocq3ZnovLw9Ai
+        Pdk/2DFZd8i1IC7zeq4ylI7E/nqFBIaSvhEFZqRd7KvQviwAHwb9JcDaKq0hY8tuqULzHf
+        bldLYrs1B8qK7Yba+GK7q1XqoxQll50=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-389-xRuWAwepOKSAgI1gmJZiYQ-1; Mon, 08 Aug 2022 06:36:22 -0400
+X-MC-Unique: xRuWAwepOKSAgI1gmJZiYQ-1
+Received: by mail-qv1-f72.google.com with SMTP id np4-20020a056214370400b00476809b9caeso4238370qvb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 03:36:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=GOY9zupAtO8m7NwOCJ2N5qzs5R1+JU0a+1359ZZ0XfQ=;
-        b=ICIJ0OPRC51pM4hOdmcx21dkQ6HWSFRrJdQpre2CdUkzZDGI2yM2FOP9gtO0oQiaRC
-         7N07kWAPfnZhtJUfMefrwx7DVoqG1YL2BTwH8zgNxbYy64kskGYwfhPNlgNpI7fhjK1A
-         gLBkddcjGtMmAeeQTPlNRG10rTJ9AgN1HeRbRrYukHvb7vVPNlSIUAaK8xcH0HwiigO/
-         M+m4OUhVr3ZMfD/eYIuverB40MZzREO+QQe+pb5r3ZV9S4dJh7rGXAQFcX+xwQpNCN4V
-         L53py2rNSFJAhL3LfGaxq/ZAxG+anp+d4DAu86lATKsCRv+o1V/v9gLFYLagnLOU/ryg
-         oeYg==
-X-Gm-Message-State: ACgBeo35TQutdBEb/aC8RZxij3XQjHZlzdQOd1Zxc2Uop1KR8MhpiY3P
-        xBjdZTIMrra7Wpy+LM09b6s=
-X-Google-Smtp-Source: AA6agR4XNILyDmhA4H93r36EStc4pdn2H4O+wBx1SYj6DQte+H+EQ4qnlK4lyFtM/wUGJPm7kNaj0Q==
-X-Received: by 2002:a05:6512:b2a:b0:48a:2aaf:2ad3 with SMTP id w42-20020a0565120b2a00b0048a2aaf2ad3mr6943885lfu.552.1659954973745;
-        Mon, 08 Aug 2022 03:36:13 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id b28-20020a19671c000000b0048afd0c496fsm1380504lfc.156.2022.08.08.03.36.12
+        bh=zJ1tVOq7gmtva8bvG4/tC19zWSGUYjLfZNUM1FdlBcA=;
+        b=ZUwnMlqI+DXTKoiltCxxPZGkElVCEkhVRgmy5G3LKIjaQGd/vxfd7M+3mjfWNupURP
+         c6dRjHM8XHwhNjdWFKQxNjf8sAR2aCS6yUtjokSKcWHBSi8fbZ1VqBr4mIbhM2qlCV6E
+         IQ2NYTh2oQ30jQdkVN24spQb956yatV70OayLQ1gkMw2vB+g7TSLJnV3L1CdMfm43xJX
+         IQJyZGU86P9f8UnvH6lt3W2QlFKmO7kTnUd6S4PnVPoCpiItfDupNeIS4OlEwsMkmXYz
+         gOOt5AbsAgT6zBk1Ux0SI8afVz9p8bm+ND9qv0M7hjfDAztwp1VNdH4H3uxutezk6LEh
+         uwXw==
+X-Gm-Message-State: ACgBeo3FOlOmO047nJL9+dtP16xhCc0BnY/lZoLqp2vBxNSwTG5HPUiQ
+        9YJ7+atKo/Fz90a/gIVPT63s3x7gI/dFCojcwr5m8mb0mKA9hgkHEWjlx++TaW71iGhvVD+bKSU
+        d5+RyGZtqrSq8dhrzjC1FKcdy
+X-Received: by 2002:a05:622a:180e:b0:31f:d9b:5d08 with SMTP id t14-20020a05622a180e00b0031f0d9b5d08mr14833995qtc.361.1659954982344;
+        Mon, 08 Aug 2022 03:36:22 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6F6gVFFx3Fov1l256Ik12Z9hgmB//giFTCFLHWESSv1E7Qcw4/dS8csL3oAtpxvwHPq8lSnw==
+X-Received: by 2002:a05:622a:180e:b0:31f:d9b:5d08 with SMTP id t14-20020a05622a180e00b0031f0d9b5d08mr14833976qtc.361.1659954982116;
+        Mon, 08 Aug 2022 03:36:22 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
+        by smtp.gmail.com with ESMTPSA id m22-20020ac866d6000000b0031f229d4427sm7582235qtp.96.2022.08.08.03.36.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 03:36:13 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 13:36:10 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 03/17] dt-bindings: PCI: dwc: Add phys/phy-names
- common properties
-Message-ID: <20220808103610.3mv3mzlbzlqz4itz@mobilestation>
-References: <20220728143427.13617-1-Sergey.Semin@baikalelectronics.ru>
- <20220728143427.13617-4-Sergey.Semin@baikalelectronics.ru>
- <20220801175636.GA1234403-robh@kernel.org>
+        Mon, 08 Aug 2022 03:36:21 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 12:36:11 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v3 4/9] vmci/vsock: use 'target' in notify_poll_in
+ callback
+Message-ID: <20220808103611.4ma4c5fpszrmstvx@sgarzare-redhat>
+References: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
+ <2e420c8e-9550-c8c5-588f-e13b79a057ff@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220801175636.GA1234403-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2e420c8e-9550-c8c5-588f-e13b79a057ff@sberdevices.ru>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 11:56:36AM -0600, Rob Herring wrote:
-> On Thu, Jul 28, 2022 at 05:34:13PM +0300, Serge Semin wrote:
-> > It's normal to have the DW PCIe RP/EP DT-nodes equipped with the explicit
-> > PHY phandle references. There can be up to 16 PHYs attach in accordance
-> > with the maximum number of supported PCIe lanes. Let's extend the common
-> > DW PCIe controller schema with the 'phys' and 'phy-names' properties
-> > definition. The PHY names are defined with the regexp pattern
-> > '^pcie([0-9]+|-?phy[0-9]*)?$' so to match the names currently supported by
-> > the DW PCIe platform drivers ("pcie": meson; "pciephy": qcom, imx6;
-> > "pcie-phy": uniphier, rockchip, spear13xx; "pcie": intel-gw; "pcie-phy%d":
-> > keystone, dra7xx; "pcie": histb, etc). Though the "pcie%d" format would
-> > the most preferable in this case.
-> 
+On Wed, Aug 03, 2022 at 01:57:54PM +0000, Arseniy Krasnov wrote:
+>This callback controls setting of POLLIN,POLLRDNORM output bits of poll()
+>syscall,but in some cases,it is incorrectly to set it, when socket has
+>at least 1 bytes of available data. Use 'target' which is already exists
+>and equal to sk_rcvlowat in this case.
 
-> No phy-names is my preference. Some string plus an index is utterly 
-> pointless. Oh well...
+Ditto as the previous patch.
+With that fixed:
 
-Mine too, but we have no choice in this case since the named
-PHY-properties support has already been advertised by the platform
-drivers. This patch just provides the bindings for them. Just note
-the string patterns have been designed in a way to match these bindings.
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-Anyway thanks for telling about the preferred option. Keeping that in
-mind I won't have doubts what approach to select for the new
-driver/bindings development.
+@Bryan, @Vishnu, if you're happy with this change, can you ack/review?
 
-> 
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Changelog v3:
-> > - This is a new patch unpinned from the next one:
-> >   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
-> >   by the Rob' request. (@Rob)
-> > ---
-> >  .../bindings/pci/snps,dw-pcie-common.yaml         | 15 +++++++++++++++
-> >  .../devicetree/bindings/pci/snps,dw-pcie-ep.yaml  |  3 +++
-> >  .../devicetree/bindings/pci/snps,dw-pcie.yaml     |  3 +++
-> >  3 files changed, 21 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> > index 3e992b653d12..627a5d6625ba 100644
-> > --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> > @@ -17,6 +17,21 @@ description:
-> >  select: false
-> >  
-> >  properties:
-> > +  phys:
-> > +    description:
-> > +      There can be up to the number of possible lanes PHYs specified.
-> 
+Thanks,
+Stefano
 
-> This needs something about being in order of lane number.
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> net/vmw_vsock/vmci_transport_notify.c        | 8 ++++----
+> net/vmw_vsock/vmci_transport_notify_qstate.c | 8 ++++----
+> 2 files changed, 8 insertions(+), 8 deletions(-)
+>
+>diff --git a/net/vmw_vsock/vmci_transport_notify.c b/net/vmw_vsock/vmci_transport_notify.c
+>index d69fc4b595ad..852097e2b9e6 100644
+>--- a/net/vmw_vsock/vmci_transport_notify.c
+>+++ b/net/vmw_vsock/vmci_transport_notify.c
+>@@ -340,12 +340,12 @@ vmci_transport_notify_pkt_poll_in(struct sock *sk,
+> {
+> 	struct vsock_sock *vsk = vsock_sk(sk);
+>
+>-	if (vsock_stream_has_data(vsk)) {
+>+	if (vsock_stream_has_data(vsk) >= target) {
+> 		*data_ready_now = true;
+> 	} else {
+>-		/* We can't read right now because there is nothing in the
+>-		 * queue. Ask for notifications when there is something to
+>-		 * read.
+>+		/* We can't read right now because there is not enough data
+>+		 * in the queue. Ask for notifications when there is something
+>+		 * to read.
+> 		 */
+> 		if (sk->sk_state == TCP_ESTABLISHED) {
+> 			if (!send_waiting_read(sk, 1))
+>diff --git a/net/vmw_vsock/vmci_transport_notify_qstate.c b/net/vmw_vsock/vmci_transport_notify_qstate.c
+>index 0f36d7c45db3..12f0cb8fe998 100644
+>--- a/net/vmw_vsock/vmci_transport_notify_qstate.c
+>+++ b/net/vmw_vsock/vmci_transport_notify_qstate.c
+>@@ -161,12 +161,12 @@ vmci_transport_notify_pkt_poll_in(struct sock *sk,
+> {
+> 	struct vsock_sock *vsk = vsock_sk(sk);
+>
+>-	if (vsock_stream_has_data(vsk)) {
+>+	if (vsock_stream_has_data(vsk) >= target) {
+> 		*data_ready_now = true;
+> 	} else {
+>-		/* We can't read right now because there is nothing in the
+>-		 * queue. Ask for notifications when there is something to
+>-		 * read.
+>+		/* We can't read right now because there is not enough data
+>+		 * in the queue. Ask for notifications when there is something
+>+		 * to read.
+> 		 */
+> 		if (sk->sk_state == TCP_ESTABLISHED)
+> 			vsock_block_update_write_window(sk);
+>-- 
+>2.25.1
 
-Ok.
-
-> 
-> > +      Obviously each specified PHY is supposed to be able to work in the
-> > +      PCIe mode with a speed implied by the DWC PCIe controller it is
-> > +      attached to.
-> > +    minItems: 1
-> > +    maxItems: 16
-> > +
-> > +  phy-names:
-> > +    minItems: 1
-> > +    maxItems: 16
-> > +    items:
-> > +      pattern: '^pcie([0-9]+|-?phy[0-9]*)?$'
-> 
-
-> Please comment here that pcie[0-9] is the preferred form.
-
-What about a bit more sophisticated update?
-phy-names:
-  minItems: 1
-  maxItems: 16
-  oneOf:
-    - items:
-        pattern: '^pcie[0-9]+$'
-    - deprecated: true
-      items:
-        pattern: '^pcie(-?phy[0-9]*)?$'
-
--Sergey
-
-> 
-> Rob

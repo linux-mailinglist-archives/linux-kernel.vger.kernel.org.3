@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860DD58C227
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 05:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C399558C228
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 05:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235834AbiHHDnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 23:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
+        id S236337AbiHHDnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 23:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiHHDnG (ORCPT
+        with ESMTP id S236042AbiHHDnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 23:43:06 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F19FCE0C;
-        Sun,  7 Aug 2022 20:43:03 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.12.77.33])
-        by mail-app4 (Coremail) with SMTP id cS_KCgBHv04qhvBiSHF2Ag--.32873S4;
-        Mon, 08 Aug 2022 11:42:34 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     michael.hennerich@analog.com, alex.aring@gmail.com,
-        stefan@datenfreihafen.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH v0] ieee802154/adf7242: defer destroy_workqueue call
-Date:   Mon,  8 Aug 2022 11:42:24 +0800
-Message-Id: <20220808034224.12642-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.36.1
+        Sun, 7 Aug 2022 23:43:35 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E04A10FC0
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 20:43:34 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id z2so9810917edc.1
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 20:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=GfscjxHAQtv8gD9StqSm6VdXQAQi0z2X3OY2YGX9LqI=;
+        b=NCwLziFNfJADYG+vMw2UXzJTxBGQiJ/w7g6cbKXTY2LRYybSETspUDxNm0e+G3fsaH
+         qe8d6P0dIjVqh4AnkBEw0m2bP0HE4LmNdhrpApJQzjGhgq3SKTtEgcg9FMIDMKifCsj9
+         huK6VjzcULwypY0jpYEf2tqxR3MRnKXNnBDtD663Ly2lxqVaEOhESIRbu9KADkiuixde
+         +8OQEi18WqUYug9cY6u3vYcCc0l4PHgyWMyIiV+ues2S5E8ujaTZ1WQNM6DLiS7p7d3a
+         Ya/Ck5npkB8Ggwk2ycXwLP5XL19ZXUHjeA+3XRwkz8WHuW3CTJKw45BXk/ZekAiEVaBb
+         NK6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=GfscjxHAQtv8gD9StqSm6VdXQAQi0z2X3OY2YGX9LqI=;
+        b=dputbD2nfYrUzLmHVZQT2CLGFjhPTTPR7l4T9FRX9/7D8oxorH3zvvip/QaIuZzTtQ
+         yGN+DGXbMmVHnEsmCLiG8usprvz/zi8Db6cKxJkl2iJlrEEDQTpFHkGDHYeC722XPH0y
+         //3qgHRbCOKdsHpUfO6oJm1qMWMv0OA79BaDokU9WjWECLIXPoG+tkwLBd2YAPdfAkLJ
+         2dnKm1IFojIqjJ2HHvkMlVjXyakkC7jRDJDecxYMT3Cx4uPEhRACrLRRbctYGSrIpNNL
+         5JvqU99bxMte6jtCzuL+r6iaLTXMtQ76YbdpWL29m9+s1JSgG5QsaVHh+QdvZ3xqg0yu
+         d4Hw==
+X-Gm-Message-State: ACgBeo2vnuIxWsriSIWIw5Rknw8ujHPRRo38q0jcqMRrWxfuzfRbrm3g
+        NeTVTIkzo6AoH1mOLVFnq6EF1jeutmUW0EecREQ=
+X-Google-Smtp-Source: AA6agR6omwbuI1b65St5mP13m6/9cVxc1uhU69I7Srhcp9lSFie2aQ0AWyayCuk01HlJEBaqQFJI9T4H/prZb01WjKs=
+X-Received: by 2002:aa7:d795:0:b0:43c:eb00:fc77 with SMTP id
+ s21-20020aa7d795000000b0043ceb00fc77mr15989416edq.284.1659930213126; Sun, 07
+ Aug 2022 20:43:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cS_KCgBHv04qhvBiSHF2Ag--.32873S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw4rJw1DWF4rur4kur1UAwb_yoW8Xw4DpF
-        WrZ345Cw40qr4UJw4FkF48XFyruan5t3y8u3W3Wwsavw1kXrnFyr1xCayjgryrGFW8ZFWS
-        vFn8tr15uwn8CrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Sun, 7 Aug 2022 22:43:21 -0500
+Message-ID: <CABb+yY2gc3bDOu8v0vCizsdrSr2BQxGW1tuvpBzjCrRr64e7MA@mail.gmail.com>
+Subject: [GIT PULL] Mailbox changes for v5.20
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a possible race condition (use-after-free) like below
+Hi Linus,
 
-  (FREE)                     |  (USE)
-  adf7242_remove             |  adf7242_channel
-   cancel_delayed_work_sync  |
-    destroy_workqueue (1)    |   adf7242_cmd_rx
-                             |    mod_delayed_work (2)
-                             |
+The following changes since commit e0dccc3b76fb35bb257b4118367a883073d7390e:
 
-The root cause for this race is that the upper layer (ieee802154) is
-unaware of this detaching event and the function adf7242_channel can
-be called without any checks.
+  Linux 5.19-rc8 (2022-07-24 13:26:27 -0700)
 
-To fix this, we can add a flag write at the beginning of adf7242_remove
-and add flag check in adf7242_channel. Or we can just defer the
-destructive operation like other commit 3e0588c291d6 ("hamradio: defer
-ax25 kfree after unregister_netdev") which let the
-ieee802154_unregister_hw() to handle the synchronization. This patch
-takes the second option.
+are available in the Git repository at:
 
-Fixes: 58e9683d1475 ("net: ieee802154: adf7242: Fix OCL calibration
-runs")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
----
- drivers/net/ieee802154/adf7242.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+  git://git.linaro.org/landing-teams/working/fujitsu/integration.git
+tags/mailbox-v5.20
 
-diff --git a/drivers/net/ieee802154/adf7242.c b/drivers/net/ieee802154/adf7242.c
-index 6afdf1622944..efcc45aef508 100644
---- a/drivers/net/ieee802154/adf7242.c
-+++ b/drivers/net/ieee802154/adf7242.c
-@@ -1310,10 +1310,11 @@ static void adf7242_remove(struct spi_device *spi)
- 
- 	debugfs_remove_recursive(lp->debugfs_root);
- 
-+	ieee802154_unregister_hw(lp->hw);
-+
- 	cancel_delayed_work_sync(&lp->work);
- 	destroy_workqueue(lp->wqueue);
--
--	ieee802154_unregister_hw(lp->hw);
-+
- 	mutex_destroy(&lp->bmux);
- 	ieee802154_free_hw(lp->hw);
- }
--- 
-2.36.1
+for you to fetch changes up to 8a8dc2b9596e6088522d30bc79306b834c681943:
 
+  mailbox: imx: clear pending interrupts (2022-08-03 09:48:13 -0500)
+
+----------------------------------------------------------------
+- mtk: use rx_callback instead of cmdq_task_cb.
+- qcom: add syscon const.
+add SM6375 compatible.
+- imx: enable RST channel.
+clear pending irqs
+
+----------------------------------------------------------------
+Bryan O'Donoghue (1):
+      dt-bindings: mailbox: qcom,apcs-kpss-global: Add syscon const
+for relevant entries
+
+Chun-Kuang Hu (1):
+      mailbox: mtk-cmdq: Remove proprietary cmdq_task_cb
+
+Konrad Dybcio (1):
+      dt-bindings: mailbox: qcom-ipcc: Add SM6375 compatible
+
+Peng Fan (3):
+      dt-bindings: mailbox: imx-mu: add RST channel
+      mailbox: imx: support RST channel
+      mailbox: imx: clear pending interrupts
+
+ .../devicetree/bindings/mailbox/fsl,mu.yaml        |  6 ++-
+ .../bindings/mailbox/qcom,apcs-kpss-global.yaml    | 46 ++++++++++++----------
+ .../devicetree/bindings/mailbox/qcom-ipcc.yaml     |  1 +
+ drivers/mailbox/imx-mailbox.c                      | 40 ++++++++++++++++---
+ drivers/mailbox/mtk-cmdq-mailbox.c                 | 11 ------
+ include/linux/mailbox/mtk-cmdq-mailbox.h           | 10 -----
+ 6 files changed, 64 insertions(+), 50 deletions(-)

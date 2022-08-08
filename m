@@ -2,54 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7318758C93F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D40158C947
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243168AbiHHNSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S243037AbiHHNTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242800AbiHHNSa (ORCPT
+        with ESMTP id S243259AbiHHNTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:18:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEF25FA9
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:18:28 -0700 (PDT)
+        Mon, 8 Aug 2022 09:19:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08E5617C;
+        Mon,  8 Aug 2022 06:19:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C7F2B80DDC
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 13:18:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57CEC433D6;
-        Mon,  8 Aug 2022 13:18:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CF6E61214;
+        Mon,  8 Aug 2022 13:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F938C433C1;
+        Mon,  8 Aug 2022 13:19:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659964706;
-        bh=7ITSBOVxNweF/3UEZBBcK5iG7lD0gHbItZ1uzm6dKz0=;
+        s=k20201202; t=1659964779;
+        bh=eQQG3w7iWYBgQ9L9vR2hhgfaLi4C3wIC0N0XBZUD6UE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HAE75cZqjRgqMhAJavN7FjlBm0fw/yHDDeWZsoEVMlWkOyA59V1X/+RK11lE0KaZF
-         SPCphRlxD15wqCrKm2SrNiYfukRfB1WVQ0QdP5uf+Wbwdhej8KOmBFoMtr8aZokOhE
-         IuDXzzFqEN3Qym6K0/s1xigP9hxlZ6YaSMEOmUsDHMW0xhsntFLfBC6QthgVb3jtko
-         yVRa0BEZpDwgOIhmjHSGcw01fRjKPFd2A8WMbl4lRS2Tu8yx+FXcYtwxlMkUrOK8Ug
-         boK5QJPro+Lnh2qUlDqPR8b5YF/8L71zk7O8J5qcrYwDSwT+UbUtScCBq1PBlQu33W
-         HXh7bCobBiYSg==
-Date:   Mon, 8 Aug 2022 14:18:21 +0100
+        b=UftdXnG9yQF3+pvKzjJvBCeqiOXZSUFohihYVej2PXb3/xiFG3Z6cOmvOK4ckeDvE
+         563QMLfc3HafHPMX6Rno/xPd7LFtf5DbGLqA+K8jsQipl7wsG0dXhGuGnSVGSr9Le0
+         b1PeFCLNF0ChWt1MwA1WHL4DcOCvCTCSF8AN2cxQSNQx2NDLvjKrmFX40alsHxoCHs
+         1vEKg/BKpo5y0cuWg+XtcetqGKvE4nVL7aB/12CRPAziXMko1tMNyCB+AhjQjxeoKk
+         xsj8jrt1ZX6Ga1Sikf5jLlnLiZJpc5RmxaMfrbjLHVfeeviQJRsh3aYkdqv0kisOHx
+         r31tSLiitOv2A==
+Date:   Mon, 8 Aug 2022 14:19:33 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v1 5/5] regmap: mmio: Introduce IO accessors that can
- talk to IO port
-Message-ID: <YvENHSRQuwAzfQJW@sirena.org.uk>
-References: <20220805205321.19452-1-andriy.shevchenko@linux.intel.com>
- <20220805205321.19452-5-andriy.shevchenko@linux.intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Harsha Priya <harshapriya.n@intel.com>,
+        "Subhransu S. Prusty" <subhransu.s.prusty@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sriram Periyasamy <sriramx.periyasamy@intel.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH] ASoC: Intel: kbl_rt5663_max98927: Simplify clk_get()
+ usage
+Message-ID: <YvENZULMLWkeaCzO@sirena.org.uk>
+References: <55e59c4792d64ff6336fcaa85ec15590553e9d63.1659903516.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i9XU/Qm8+P/E2d47"
+        protocol="application/pgp-signature"; boundary="h+2uZ44m+eEzN7zj"
 Content-Disposition: inline
-In-Reply-To: <20220805205321.19452-5-andriy.shevchenko@linux.intel.com>
-X-Cookie: Are we running light with overbyte?
+In-Reply-To: <55e59c4792d64ff6336fcaa85ec15590553e9d63.1659903516.git.christophe.jaillet@wanadoo.fr>
+X-Cookie: Flee at once, all is discovered.
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,49 +71,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---i9XU/Qm8+P/E2d47
+--h+2uZ44m+eEzN7zj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Aug 05, 2022 at 11:53:21PM +0300, Andy Shevchenko wrote:
+On Sun, Aug 07, 2022 at 10:18:54PM +0200, Christophe JAILLET wrote:
 
-> Currently regmap MMIO is inconsistent with IO accessors. I.e.
-> the Big Endian counterparts are using ioreadXXbe() / iowriteXXbe()
-> which are not clean implementations of readXXbe(). Besides that
-> some users may use regmap MMIO for IO ports, and this can be done
-> by assigning ioreadXX()/iowriteXX() and their Big Endian counterparts
-> to the regmap context.
+> Not sure the Fixes tag is needed. The patch does not fix anything.
 
-Have you validated that nothing is relying on whatever the problem is
-with using the io versions?
+You just answered your own question there...
 
-> That said, reimplement current Big Endian MMIO accessors by replacing
-> ioread()/iowrite() with respective read()/write() and swab() calls.
-> While at it, add IO port support with a corresponding flag added.
-
-This should be a separate patch.
-
-> +			if (config->io_port) {
-> +				ctx->reg_read = regmap_mmio_ioread8;
-> +				ctx->reg_write = regmap_mmio_iowrite8;
-> +			} else if (config->use_relaxed_mmio) {
-
-If these options are mutually exclusive we should validate that they are
-not simultaneously set.
-
---i9XU/Qm8+P/E2d47
+--h+2uZ44m+eEzN7zj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLxDRwACgkQJNaLcl1U
-h9Cbcwf/Trad6vAcRYZP6BRpxuYj5WEIyFGx1k4EjxZRS0vbTYZAnyWY3H7OkYsq
-BwmhYJQQrMT3ApfBnRIs+ZK+1XfSXIqCBO9hyBgf+ph8srUT3P2OeNVNTyCTj1vo
-royXM6mSaKN/mxl+lVXYH2K2BR05jbWSiwYYMQMp7MflMMZBQlIiLTbW0gbfqDOR
-HkYVneNc/ZA4mcRPdgfmNZyu1jLk9vfqHTRATHe4S6vzCvsllTYe62nmII1qWdgz
-ztilIFFEaQSmvZUrMH58ZtXk1UR0zO7KJzY3ja3UvyUHds+21wtyZqW87wz0+ZZV
-bXAewon/H7CcGW7DlrHmZCCFMUZEFg==
-=y+ks
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLxDWQACgkQJNaLcl1U
+h9AHtgf+NLieJb/NpzO1CTPoNd4n2HBmtAu3jtpeGHaJIGGbQtSKBrjJpibSPV5e
+4rDQjw2jC0NDP6aF66TIko2uT/53ELZXRszH/9+GTRkbgubnMPOymgnEJm7hulDY
+PFgqQLdYkEhiOvUpwFL1J6QrXntpP5hB6DTKr83J95QdgkAaXp1uAshxLZ/2vbh3
+2S9ruT+ROnnmLqkvlxdLEtOP9rYVLLoquDY+zTzWNhWhPC0jYcQNsgHsuHI9pKUm
+xJdE0s9zbEtuaeaPnxlGhwmXPI1Z5kCG9l44YVd/+6BhaUitCqzXe0Dp7Qe5ZFR0
+8W7LTCLphAQMB1vM65di6lrGZNOCTA==
+=1XmB
 -----END PGP SIGNATURE-----
 
---i9XU/Qm8+P/E2d47--
+--h+2uZ44m+eEzN7zj--

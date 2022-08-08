@@ -2,49 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3477B58C716
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A9658C717
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242414AbiHHLCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 07:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
+        id S242137AbiHHLDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 07:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242137AbiHHLCQ (ORCPT
+        with ESMTP id S231703AbiHHLD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 07:02:16 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B2913D23
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:02:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1659956525; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XydORn22ib0yibyOs7vrLltEam/bWaIMu8HK47joC6A=;
-        b=PP8cVzp+jFUOosVyI8pmg8ckcwyvodHX5n8/w1g+s2T56AgW53ETLx65stWEj4O/fEIJIk
-        zxWgvq3D8qcdmxcXPX5H76CH4NOeTEkj0QuVQcjDZKjLSU2mWysfcbdQ5JfJBlPNhKCqIj
-        9TpjOkMFxkJbUjM4RgkblpOiJLXZNA8=
-Date:   Mon, 08 Aug 2022 13:01:58 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 20/28] mfd: arizona: Remove #ifdef guards for PM related
- functions
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-Message-Id: <ANMAGR.U803VAFDNZVL@crapouillou.net>
-In-Reply-To: <2c5c063b-da58-1f6f-5422-1ada3dabb90a@opensource.cirrus.com>
-References: <20220807145247.46107-1-paul@crapouillou.net>
-        <20220807145247.46107-21-paul@crapouillou.net>
-        <94394206-a018-27b0-5a21-97976fc4a3bc@opensource.cirrus.com>
-        <T2KAGR.KY35O6CZFRQ83@crapouillou.net>
-        <2c5c063b-da58-1f6f-5422-1ada3dabb90a@opensource.cirrus.com>
+        Mon, 8 Aug 2022 07:03:29 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C341555B8
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:03:28 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id r4so10796380edi.8
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 04:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jE7rDzDJl54ngSeDSzix1uvFy6MwH/Sd6J9jXSbtUjE=;
+        b=jOeH74/bjd+f49sRgyezy7cILVoSDE6hWrGLBmU8FhuyWct9gaEdqyi62ahrDhXyUY
+         P+niYKnvQCnOJZluZ4D6WSbGqN/8Jin+1P4yZ6x+29OnP72ghuUx+NCI0zIMIMdpR2Q4
+         mBAK44TczmFLT8HMVzC4lWZu50/0UYVMXGEqy2KkgEInFjDEdHbyZ8SrwCgFXlXO1vbf
+         WLbhTMPeV7dg//pLx07m3PqeEwSQ7pBXucII4jxufMMjuJk73Pg2HcetCxHvPWHHREc+
+         4vuVvcUgWtmPPybvD76iwXqf0hZzZhuslcotwFRXhw/KEanZyvKBGPG6WgUdPn/uVWf3
+         5oHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=jE7rDzDJl54ngSeDSzix1uvFy6MwH/Sd6J9jXSbtUjE=;
+        b=BEo7sBkJ/YZAywBXd7un/wlHNvIq16y7NDA4Gt+aNnvdzgzZPqk19uIOQOR1Y9t7Kf
+         ExXoUYk8daq8nl2A+LSewNyNsDhfFsvzInyGyRN5Y3ZGDYKGn0LsKel+U+TCZLjFQIcu
+         iPIldqkgR+W+ZQQlxi7SlI2Qfd7jKJ8LwTfRQpxrWla38EdXiT5JMb/JkNlpBJBHPpPs
+         ZTL9kKz1LRrNzhAZhYBhdPSZOxxc24y5fprZSDRtTYr4AB739dSsfAwGNtHNaZVc9nvt
+         h3SO8wqnWpx8bt1eE20p7IVgm9vv6OzeH8w9Fu94BbfEFhoqvRiSaVnmJV//7fDuAtPd
+         whgQ==
+X-Gm-Message-State: ACgBeo01gTEAO6AUIuKzE0bdAMKh3EXLaPVmQCS5OdtjU7XksuqhIdI3
+        LIF7cbBnkeOex0xbyPW1IsQ=
+X-Google-Smtp-Source: AA6agR7hLYLbwUWRobu85SHEDU/sKF/rBIBgRcg6Hy0KWFYYDR55eB6dnwOsJ2K8zBJ2I2gLHarSQw==
+X-Received: by 2002:aa7:cc13:0:b0:43d:4c1:3806 with SMTP id q19-20020aa7cc13000000b0043d04c13806mr17121364edt.129.1659956607282;
+        Mon, 08 Aug 2022 04:03:27 -0700 (PDT)
+Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
+        by smtp.gmail.com with ESMTPSA id jw16-20020a170906e95000b00726298147b1sm4815522ejb.161.2022.08.08.04.03.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 04:03:26 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 8 Aug 2022 13:03:24 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Ira Weiny <ira.weiny@intel.com>, Andy Lutomirski <luto@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Rik van Riel <riel@surriel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 5/5] x86/entry: Store CPU info on exception entry
+Message-ID: <YvDtfKRyMGenRMU5@gmail.com>
+References: <20220805173009.3128098-1-ira.weiny@intel.com>
+ <20220805173009.3128098-6-ira.weiny@intel.com>
+ <5d62c1d0-7425-d5bb-ecb5-1dc3b4d7d245@intel.com>
+ <Yu4t0jkpIY4grgxL@gmail.com>
+ <Yu4wON0MRGH7h5Jv@zn.tnic>
+ <Yu+Nwbn4CZUmyD14@gmail.com>
+ <Yu+VV8xFTYRh0D0a@zn.tnic>
+ <YvAaXet3sBg3mRDe@iweiny-desk3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvAaXet3sBg3mRDe@iweiny-desk3>
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,178 +83,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+* Ira Weiny <ira.weiny@intel.com> wrote:
 
-Le lun., ao=FBt 8 2022 at 11:43:31 +0100, Richard Fitzgerald=20
-<rf@opensource.cirrus.com> a =E9crit :
-> On 08/08/2022 11:06, Paul Cercueil wrote:
->> Hi Richard,
->>=20
->> Le lun., ao=FBt 8 2022 at 10:53:54 +0100, Richard Fitzgerald=20
->> =7F<rf@opensource.cirrus.com> a =E9crit :
->>> On 07/08/2022 15:52, Paul Cercueil wrote:
->>>> Only export the arizona_pm_ops if CONFIG_PM is set, but leave the
->>>> suspend/resume functions (and related code) outside #ifdef guards.
->>>>=20
->>>> If CONFIG_PM is not set, the arizona_pm_ops will be defined as
->>>> "static __maybe_unused", and the structure plus all the callbacks=20
->>>> will
->>>> be automatically dropped by the compiler.
->>>>=20
->>>> The advantage is then that these functions are now always compiled
->>>> independently of any Kconfig option, and thanks to that bugs and
->>>> regressions are easier to catch.
->>>>=20
->>>> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>>> Cc: patches@opensource.cirrus.com
->>>> ---
->>>>   drivers/mfd/arizona-core.c | 21 +++++++++++----------
->>>>   drivers/mfd/arizona-i2c.c  |  2 +-
->>>>   drivers/mfd/arizona-spi.c  |  2 +-
->>>>   3 files changed, 13 insertions(+), 12 deletions(-)
->>>>=20
->>>> diff --git a/drivers/mfd/arizona-core.c=20
->>>> b/drivers/mfd/arizona-core.c
->>>> index cbf1dd90b70d..c1acc9521f83 100644
->>>> --- a/drivers/mfd/arizona-core.c
->>>> +++ b/drivers/mfd/arizona-core.c
->>>> @@ -480,7 +480,6 @@ static int wm5102_clear_write_sequencer(struct=20
->>>> =7F=7F=7Farizona *arizona)
->>>>       return 0;
->>>>   }
->>>>   =7F-#ifdef CONFIG_PM
->>>>   static int arizona_isolate_dcvdd(struct arizona *arizona)
->>>=20
->>> __maybe_unused?
->>=20
->> No need. The symbols are always referenced.
->>=20
->>>>   {
->>>>       int ret;
->>>> @@ -742,9 +741,7 @@ static int arizona_runtime_suspend(struct=20
->>>> device =7F=7F=7F*dev)
->>>=20
->>> __maybe_unused?
->>>=20
->>>>   =7F      return 0;
->>>>   }
->>>> -#endif
->>>>   =7F-#ifdef CONFIG_PM_SLEEP
->>>>   static int arizona_suspend(struct device *dev)
->>>=20
->>> __maybe_unused?
->>>=20
->>>>   {
->>>>       struct arizona *arizona =3D dev_get_drvdata(dev);
->>>> @@ -784,17 +781,21 @@ static int arizona_resume(struct device *dev)
->>>=20
->>> __maybe_unused?
->>>=20
->>>>   =7F      return 0;
->>>>   }
->>>> -#endif
->>>>   =7F+#ifndef CONFIG_PM
->>>> +static __maybe_unused
->>>> +#endif
->>>=20
->>> No need to ifdef a __maybe_unused.
->>=20
->> Yes, it is needed, because the symbol is conditionally exported. If
->=20
-> Why conditionally export it?
->=20
->> !CONFIG_PM, we want the compiler to discard the dev_pm_ops
->  and all the
->> callbacks, hence the "static __maybe_unused". That's the same trick=20
->> used > in _EXPORT_DEV_PM_OPS().
->>=20
->> (note that this patch is broken as it does not change the struct=20
->> name, =7Fin the !PM case, which causes conflicts with the .h. I'll fix=20
->> in v2)
->>=20
->>>>   const struct dev_pm_ops arizona_pm_ops =3D {
->>>> -    SET_RUNTIME_PM_OPS(arizona_runtime_suspend,
->>>> -               arizona_runtime_resume,
->>>> -               NULL)
->>>> -    SET_SYSTEM_SLEEP_PM_OPS(arizona_suspend, arizona_resume)
->>>> -    SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(arizona_suspend_noirq,
->>>> -                      arizona_resume_noirq)
->>>> +    RUNTIME_PM_OPS(arizona_runtime_suspend,
->>>> +               arizona_runtime_resume,
->>>> +               NULL)
->>>> +    SYSTEM_SLEEP_PM_OPS(arizona_suspend, arizona_resume)
->>>> +    NOIRQ_SYSTEM_SLEEP_PM_OPS(arizona_suspend_noirq,
->>>> +                  arizona_resume_noirq)
->>>>   };
->>>> +#ifdef CONFIG_PM
->>>>   EXPORT_SYMBOL_GPL(arizona_pm_ops);
->>>> +#endif
->>>=20
->>> This ifdeffing is ugly. Why must the structure only be exported if
->>> CONFIG_PM is set?
->>=20
->> So that all the PM code is garbage-collected by the compiler if=20
->> !CONFIG_PM.
->=20
-> The functions will be dropped if they are not referenced. That doesn't
-> answer why the struct must not be exported.
->=20
-> What is the aim of omitting the struct export?
+> On Sun, Aug 07, 2022 at 12:35:03PM +0200, Borislav Petkov wrote:
+> > On Sun, Aug 07, 2022 at 12:02:41PM +0200, Ingo Molnar wrote:
+> > > * Borislav Petkov <bp@alien8.de> wrote:
+> > > > With the amount of logical cores ever increasing and how CPU packages
+> > > > (nodes, L3 sharing, you name it) get more and more complex topology,
+> > > > I'd say the 2 insns to show the CPU number in every exception is a good
+> > > > thing to do.
+> > > 
+> > > We can show it - I'm arguing against extracting it too early, which costs
+> > 
+> > Not early - more correct. We can say which CPU executed the exception
+> > handler *exactly*. Not which CPU executed the exception handler *maybe*.
+> > 
+> > > us 2 instructions in the exception fast path
+> > 
+> > 2 insns? They don't matter at all. FWIW, they'll pull in the per-CPU
+> > cacheline earlier which should be a net win later, for code which does
+> > smp_processor_id().
 
-The functions are always referenced by the dev_pm_ops structure.=20
-Omitting the struct export means that the struct can now be a "static=20
-__maybe_unused" symbol in the !CONFIG_PM case, and everything related=20
-to PM will be automatically removed by the compiler.
+I'd like to hear what Andy Lutomirski thinks about the notion that
+"2 instructions don't matter at all" ...
 
-Otherwise, the symbol is exported as usual. The symbol being=20
-conditionally exported is not a problem - the struct is always=20
-referenced (as it should be) using the pm_sleep_ptr() or pm_ptr()=20
-macros.
+Especially since it's now 4 instructions:
 
-This is basically what EXPORT_SIMPLE_DEV_PM_OPS() does by the way.
+> I agree with Boris; however I feel that I have to mention that in patch 
+> 3/5 you also have 1 instruction on each of entry and exit to push the 
+> extra stack space.  So all told it would cost 4 instructions.
 
-Cheers,
--Paul
+... 4 instructions in the exception path is a non-trivial impact.
 
->>=20
->> Ideally I would use something like EXPORT_SIMPLE_DEV_PM_OPS() which=20
->> =7Fwould make the patch much cleaner, but it doesn't support noirq=20
->> =7Fcallbacks - and that's why I suggested in the cover letter that=20
->> maybe a =7Fnew PM macro can be added if this patch is deemed too messy.
->>=20
->> Cheers,
->> -Paul
->>=20
->>>>   =7F  #ifdef CONFIG_OF
->>>>   static int arizona_of_get_core_pdata(struct arizona *arizona)
->>>> diff --git a/drivers/mfd/arizona-i2c.c b/drivers/mfd/arizona-i2c.c
->>>> index 6d83e6b9a692..8799d9183bee 100644
->>>> --- a/drivers/mfd/arizona-i2c.c
->>>> +++ b/drivers/mfd/arizona-i2c.c
->>>> @@ -119,7 +119,7 @@ static const struct of_device_id=20
->>>> =7F=7F=7Farizona_i2c_of_match[] =3D {
->>>>   static struct i2c_driver arizona_i2c_driver =3D {
->>>>       .driver =3D {
->>>>           .name    =3D "arizona",
->>>> -        .pm    =3D &arizona_pm_ops,
->>>> +        .pm    =3D pm_ptr(&arizona_pm_ops),
->>>>           .of_match_table    =3D of_match_ptr(arizona_i2c_of_match),
->>>>       },
->>>>       .probe        =3D arizona_i2c_probe,
->>>> diff --git a/drivers/mfd/arizona-spi.c b/drivers/mfd/arizona-spi.c
->>>> index 941b0267d09d..da05b966d48c 100644
->>>> --- a/drivers/mfd/arizona-spi.c
->>>> +++ b/drivers/mfd/arizona-spi.c
->>>> @@ -282,7 +282,7 @@ static const struct of_device_id=20
->>>> =7F=7F=7Farizona_spi_of_match[] =3D {
->>>>   static struct spi_driver arizona_spi_driver =3D {
->>>>       .driver =3D {
->>>>           .name    =3D "arizona",
->>>> -        .pm    =3D &arizona_pm_ops,
->>>> +        .pm    =3D pm_ptr(&arizona_pm_ops),
->>>>           .of_match_table    =3D of_match_ptr(arizona_spi_of_match),
->>>>           .acpi_match_table =3D ACPI_PTR(arizona_acpi_match),
->>>>       },
->>=20
->>=20
+> Again, I don't believe this is too much overhead but I don't want people 
+> to say it was not discussed.
 
+Is it necessary to do this, what are the alternatives, can this overhead be 
+avoided?
 
+Thanks,
+
+	Ingo

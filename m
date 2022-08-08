@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7864658CCF8
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E2358CD02
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244330AbiHHRpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S244062AbiHHRsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243584AbiHHRpD (ORCPT
+        with ESMTP id S244194AbiHHRpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:45:03 -0400
+        Mon, 8 Aug 2022 13:45:25 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DC318386
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:44:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F04C1838E
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
         s=mail; t=1659980505; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p6dlhZlwLIf/lPMpMtYZKWAT+azhK3anbKwIEZa9zE8=;
-        b=03XgveK0GjWwg7BQolE/xInBECCiB5X73Pq+lyMDyzLNIzRwQuZK5O21iVGRuxYFTrYsum
-        mH050Rnq+FRWjRrvcrUNCNXWwbIG/VGpF9YTFXzgbIkoVsG7aKWrAqk1Qi+6QY6ykNNQzC
-        Lwfc3aAGkhecQkdduWaGToSZ1/vGXIQ=
+        bh=br301fRK+XR8bCfkYexTo4vtYjSJhFPTzOjfRomSgPs=;
+        b=p7yh+9eWJI7UY0EejzzKj7HkZluuYh9ATcRoH3ynVJfGPt8Ove9/e6jmWHVvyZ8IpSKQA9
+        jW2iETCu8sjeWELpz1ErTGDPBFUm+rjbajCYgvbKpFu2akbJiH35Sw0cZ7lhCAgW690uYz
+        DjGxzv0FPZ7wUCKj488Xy+0vWq7KdoQ=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee.jones@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 19/30] mfd: max77620: Remove #ifdef guards for PM related functions
-Date:   Mon,  8 Aug 2022 19:40:56 +0200
-Message-Id: <20220808174107.38676-20-paul@crapouillou.net>
+Subject: [PATCH v2 20/30] mfd: t7l66xb: Remove #ifdef guards for PM related functions
+Date:   Mon,  8 Aug 2022 19:40:57 +0200
+Message-Id: <20220808174107.38676-21-paul@crapouillou.net>
 In-Reply-To: <20220808174107.38676-1-paul@crapouillou.net>
 References: <20220808174107.38676-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -43,10 +43,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
-to handle the .suspend/.resume callbacks.
+Use the new pm_sleep_ptr() macro to handle the .suspend/.resume
+callbacks.
 
-These macros allow the suspend and resume functions to be automatically
+This macro allow the suspend and resume functions to be automatically
 dropped by the compiler when CONFIG_SUSPEND is disabled, without having
 to use #ifdef guards.
 
@@ -56,47 +56,43 @@ regressions are subsequently easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/mfd/max77620.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/mfd/t7l66xb.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/mfd/max77620.c b/drivers/mfd/max77620.c
-index a6661e07035b..42fa9c4b97aa 100644
---- a/drivers/mfd/max77620.c
-+++ b/drivers/mfd/max77620.c
-@@ -576,7 +576,6 @@ static int max77620_probe(struct i2c_client *client,
- 	return 0;
- }
+diff --git a/drivers/mfd/t7l66xb.c b/drivers/mfd/t7l66xb.c
+index 663ffd4b8570..1d9d1d38d068 100644
+--- a/drivers/mfd/t7l66xb.c
++++ b/drivers/mfd/t7l66xb.c
+@@ -257,7 +257,6 @@ static void t7l66xb_detach_irq(struct platform_device *dev)
  
--#ifdef CONFIG_PM_SLEEP
- static int max77620_set_fps_period(struct max77620_chip *chip,
- 				   int fps_id, int time_period)
+ /*--------------------------------------------------------------------------*/
+ 
+-#ifdef CONFIG_PM
+ static int t7l66xb_suspend(struct platform_device *dev, pm_message_t state)
  {
-@@ -683,7 +682,6 @@ static int max77620_i2c_resume(struct device *dev)
+ 	struct t7l66xb *t7l66xb = platform_get_drvdata(dev);
+@@ -288,10 +287,6 @@ static int t7l66xb_resume(struct platform_device *dev)
  
  	return 0;
  }
+-#else
+-#define t7l66xb_suspend NULL
+-#define t7l66xb_resume	NULL
 -#endif
  
- static const struct i2c_device_id max77620_id[] = {
- 	{"max77620", MAX77620},
-@@ -692,14 +690,13 @@ static const struct i2c_device_id max77620_id[] = {
- 	{},
- };
+ /*--------------------------------------------------------------------------*/
  
--static const struct dev_pm_ops max77620_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(max77620_i2c_suspend, max77620_i2c_resume)
--};
-+static DEFINE_SIMPLE_DEV_PM_OPS(max77620_pm_ops,
-+				max77620_i2c_suspend, max77620_i2c_resume);
- 
- static struct i2c_driver max77620_driver = {
+@@ -416,8 +411,8 @@ static struct platform_driver t7l66xb_platform_driver = {
  	.driver = {
- 		.name = "max77620",
--		.pm = &max77620_pm_ops,
-+		.pm = pm_sleep_ptr(&max77620_pm_ops),
+ 		.name	= "t7l66xb",
  	},
- 	.probe = max77620_probe,
- 	.id_table = max77620_id,
+-	.suspend	= t7l66xb_suspend,
+-	.resume		= t7l66xb_resume,
++	.suspend	= pm_sleep_ptr(t7l66xb_suspend),
++	.resume		= pm_sleep_ptr(t7l66xb_resume),
+ 	.probe		= t7l66xb_probe,
+ 	.remove		= t7l66xb_remove,
+ };
 -- 
 2.35.1
 

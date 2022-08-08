@@ -2,344 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B27C58CC0A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C778158CC09
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243318AbiHHQXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 12:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S238176AbiHHQWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 12:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233288AbiHHQW7 (ORCPT
+        with ESMTP id S234900AbiHHQVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 12:22:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E6A2BF43
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659975777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZIIp+4XezCD9XhW5KqD0Wp8O30CPtOvkN45ZhL43/sI=;
-        b=XALp+5LereVFP9Vs+rpO2DZM+WYXOMWdX9fVffHH63I+CDMUzejFV9bi1jSc3yU+4bp4ZR
-        p1BXiPCDIYTAJrW/40eZBn/C8SZ8h+yKmjjxNkNVFHQSsIycYilAlaE+uyY0lIfy3Lr3G+
-        Adg6Hi5CU7x63rh/4qdyVtYw675wvBU=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-7QO9wq0rON6R0h_yf4b2aA-1; Mon, 08 Aug 2022 12:21:49 -0400
-X-MC-Unique: 7QO9wq0rON6R0h_yf4b2aA-1
-Received: by mail-qt1-f197.google.com with SMTP id cc11-20020a05622a410b00b0033a100489c4so7204312qtb.20
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 09:21:48 -0700 (PDT)
+        Mon, 8 Aug 2022 12:21:52 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A89FBF47
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:21:52 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id u9so10875305oiv.12
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 09:21:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=p2x78/WQCLJNFEWzdhn4/Al1RTNZOb4LssUAtfBZhvs=;
+        b=AAAZZ1Iw8YeP0wqO2RfRde/TFeo905ofUrsQ98QWCjdVW7PvHgLceavQqaargorJi5
+         V0f3e8nU89wcsg9UZQG3IyMdPtWxOM7j78xHFLqT2y1Vyxm/4nfXPJya3asUn6o2mrin
+         Ea10T6hS4bhY7ulGiaIYPq4pW+uCYFHjHjBS7owcH/g3tbEAb/8jTiQ0Yq/Z625LW+V0
+         DfDfeGUg/TWY7CsM5tMVz1JcZp1c5KbrANe4vFWS5pson0cK2N443PJKoCTcYOz52UUG
+         OuV8HKqgOjwaB/XE+XI3Ck24vOW+Cg3s1Fx9sBmgChXqEIQqOHgh/7+ccDwRg772trKg
+         dLzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=ZIIp+4XezCD9XhW5KqD0Wp8O30CPtOvkN45ZhL43/sI=;
-        b=vlPqLzWgXSO1iolKQZaL72PG3eDCeYyuMaEjkK0LvPJWE9gpDV5AxSzVtgW4I0tVsT
-         hpS1haOpaWT6Vf9cXZkqGvI/WgGdVFre0TkD8QbuaPML/TuFA5wVY7lylH7XffhtPQBQ
-         QLetyCxGLYPH7baWPVPRgg8+YUvJidvp8LlHUGLisO1n2EaAmPa0cA6PLuKS4GmMIDVX
-         fFc+yFjA7rTSqCJFchfP9IN4/n6SOZ2lbmbx8AaGlmbruB+uF/on7Rlw5w07v6HsERvg
-         YJZWw34Zu/jhpmlq47vi+7i8/vYucbMMk6+SQcHv5iscBEpsMmfu1hZOkcXMB3/8YU2C
-         BmSg==
-X-Gm-Message-State: ACgBeo01Z9Xv17ZiuenypA69bHAfdqZ5/vyG4rPB5fFylnw3XkoObha9
-        EX0i0tOCaOp9sD5pH77mKJmheAjjU5toEA1Pq1IJ1PtAvk5UqPAWsH2iCi9ZMh39x7cceI2PvZQ
-        5OHsI+Ka/MrgMJBmaizG06AjH
-X-Received: by 2002:a05:6214:1a07:b0:474:6e80:e1e5 with SMTP id fh7-20020a0562141a0700b004746e80e1e5mr16175792qvb.41.1659975708180;
-        Mon, 08 Aug 2022 09:21:48 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR41H7/KMP6Xrg1+Qu9F5FmU0wuX9R7Ho2OYrizYTxWmBseWvAaRaDU+zCJVlnCznfO7XvDdLA==
-X-Received: by 2002:a05:6214:1a07:b0:474:6e80:e1e5 with SMTP id fh7-20020a0562141a0700b004746e80e1e5mr16175773qvb.41.1659975707871;
-        Mon, 08 Aug 2022 09:21:47 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id bk14-20020a05620a1a0e00b006b967397192sm1079804qkb.69.2022.08.08.09.21.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 09:21:47 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 09:21:46 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>, Wen Jin <wen.jin@intel.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] iommu/vt-d: Fix kdump kernels boot failure with
- scalable mode
-Message-ID: <20220808162146.jrykclf5ez4o7j2t@cantor>
-References: <20220808034612.1691470-1-baolu.lu@linux.intel.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=p2x78/WQCLJNFEWzdhn4/Al1RTNZOb4LssUAtfBZhvs=;
+        b=qmb2ym4l6Wx6R3/ntaFmNqsugdEAm1Gx0NGKCZWMf0xeiCUdXc4gx8oQj0YxhPtkur
+         Xou5x0h+ZZptGDDex1OiFdOi8uPVACJEWCgFTELfOsGkBQJ0hOl4hNHlFGfQpsIgiqN5
+         0H+YDB/eJcRzWOKLxkFRD2f0Rg2Fx0vZ4v3p+FRd1tz6+dSgsHP6fGV/18a9+mqEJz6G
+         fK9h4NGpLq4Tu7wHbbtZ4uwRpeOGZ+zxBDhgoo59OwtIdijbUJV9630oDg9GfxZYa8vK
+         Jzk+m70tm6XMF/EehSb9gG5ML+/yjRifC5UD6pbc+Ou1jf7deAX5Y3OB6a6rEygxSRE6
+         Kwlw==
+X-Gm-Message-State: ACgBeo0kVI2FKt9XpmG/xuTB+L+iwOQTwl6uIEmiStZlH+S4wc2q6Hra
+        GTMFbSXmM+E1CCnxQZ/gU1vZF32vr7TWEQFTiWY=
+X-Google-Smtp-Source: AA6agR4cuOf3RutstJ0+zVhqCYCGq0hFWo/ki77Y8HIRYADRnuwHDbHZPztdjOVdZDGIFRlsMW8wX+kFmv+F9V8LZkg=
+X-Received: by 2002:a05:6808:1a11:b0:343:1ae:87d2 with SMTP id
+ bk17-20020a0568081a1100b0034301ae87d2mr1184030oib.281.1659975711298; Mon, 08
+ Aug 2022 09:21:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220808034612.1691470-1-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6840:2ea4:b0:c87:9c8d:50c5 with HTTP; Mon, 8 Aug 2022
+ 09:21:48 -0700 (PDT)
+Reply-To: us.army.jameswalton1@gmail.com
+From:   Major James Walton <davidomega705@gmail.com>
+Date:   Mon, 8 Aug 2022 17:21:48 +0100
+Message-ID: <CAFh2NJcBYF=fK9eo32bF6=Cm1BK_27rgS-DVMrkxk4ygQ3HNLw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:232 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [us.army.jameswalton1[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [davidomega705[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [davidomega705[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 11:46:12AM +0800, Lu Baolu wrote:
-> The translation table copying code for kdump kernels is currently based
-> on the extended root/context entry formats of ECS mode defined in older
-> VT-d v2.5, and doesn't handle the scalable mode formats. This causes
-> the kexec capture kernel boot failure with DMAR faults if the IOMMU was
-> enabled in scalable mode by the previous kernel.
-> 
-> The ECS mode has already been deprecated by the VT-d spec since v3.0 and
-> Intel IOMMU driver doesn't support this mode as there's no real hardware
-> implementation. Hence this converts ECS checking in copying table code
-> into scalable mode.
-> 
-> The existing copying code consumes a bit in the context entry as a mark
-> of copied entry. This marker needs to work for the old format as well as
-> for extended context entries. It's hard to find such a bit for both
-> legacy and scalable mode context entries. This replaces it with a per-
-> IOMMU bitmap.
-> 
-> Fixes: 7373a8cc38197 ("iommu/vt-d: Setup context and enable RID2PASID support")
-> Cc: stable@vger.kernel.org
-> Reported-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> Tested-by: Wen Jin <wen.jin@intel.com>
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
+-- 
+Hello
 
-I did a quick test last night, and it was able to harvest the vmcore,
-and boot back up. Before you mentioned part of the issue being that it
-couldn't get to the PGTT field in the pasid table entry. Was that not
-the case, or is it looking at the old kernel pasid dir entries and
-table entries through the pasid dir pointer in the copied context
-entry?
+I am Major James Walton, currently serving with the 3rd Brigade
+Support Battalion in Syria.
+I have a proposal for you. Kindly reply for details. Reply to:
+us.army.jameswalton1@gmail.com
 
 Regards,
-Jerry
-
->  drivers/iommu/intel/iommu.h   | 17 ++++++--
->  drivers/iommu/intel/debugfs.c |  3 +-
->  drivers/iommu/intel/iommu.c   | 76 +++++++++--------------------------
->  3 files changed, 35 insertions(+), 61 deletions(-)
-> 
-> diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-> index fae45bbb0c7f..e9b851c42575 100644
-> --- a/drivers/iommu/intel/iommu.h
-> +++ b/drivers/iommu/intel/iommu.h
-> @@ -197,7 +197,6 @@
->  #define ecap_dis(e)		(((e) >> 27) & 0x1)
->  #define ecap_nest(e)		(((e) >> 26) & 0x1)
->  #define ecap_mts(e)		(((e) >> 25) & 0x1)
-> -#define ecap_ecs(e)		(((e) >> 24) & 0x1)
->  #define ecap_iotlb_offset(e) 	((((e) >> 8) & 0x3ff) * 16)
->  #define ecap_max_iotlb_offset(e) (ecap_iotlb_offset(e) + 16)
->  #define ecap_coherent(e)	((e) & 0x1)
-> @@ -265,7 +264,6 @@
->  #define DMA_GSTS_CFIS (((u32)1) << 23)
->  
->  /* DMA_RTADDR_REG */
-> -#define DMA_RTADDR_RTT (((u64)1) << 11)
->  #define DMA_RTADDR_SMT (((u64)1) << 10)
->  
->  /* CCMD_REG */
-> @@ -579,6 +577,7 @@ struct intel_iommu {
->  
->  #ifdef CONFIG_INTEL_IOMMU
->  	unsigned long 	*domain_ids; /* bitmap of domains */
-> +	unsigned long	*copied_tables; /* bitmap of copied tables */
->  	spinlock_t	lock; /* protect context, domain ids */
->  	struct root_entry *root_entry; /* virtual address */
->  
-> @@ -701,6 +700,19 @@ static inline int nr_pte_to_next_page(struct dma_pte *pte)
->  		(struct dma_pte *)ALIGN((unsigned long)pte, VTD_PAGE_SIZE) - pte;
->  }
->  
-> +static inline bool context_copied(struct intel_iommu *iommu, u8 bus, u8 devfn)
-> +{
-> +	if (!iommu->copied_tables)
-> +		return false;
-> +
-> +	return test_bit(((long)bus << 8) | devfn, iommu->copied_tables);
-> +}
-> +
-> +static inline bool context_present(struct context_entry *context)
-> +{
-> +	return (context->lo & 1);
-> +}
-> +
->  extern struct dmar_drhd_unit * dmar_find_matched_drhd_unit(struct pci_dev *dev);
->  
->  extern int dmar_enable_qi(struct intel_iommu *iommu);
-> @@ -784,7 +796,6 @@ static inline void intel_iommu_debugfs_init(void) {}
->  #endif /* CONFIG_INTEL_IOMMU_DEBUGFS */
->  
->  extern const struct attribute_group *intel_iommu_groups[];
-> -bool context_present(struct context_entry *context);
->  struct context_entry *iommu_context_addr(struct intel_iommu *iommu, u8 bus,
->  					 u8 devfn, int alloc);
->  
-> diff --git a/drivers/iommu/intel/debugfs.c b/drivers/iommu/intel/debugfs.c
-> index 1f925285104e..f4fd249daad9 100644
-> --- a/drivers/iommu/intel/debugfs.c
-> +++ b/drivers/iommu/intel/debugfs.c
-> @@ -241,7 +241,8 @@ static void ctx_tbl_walk(struct seq_file *m, struct intel_iommu *iommu, u16 bus)
->  		if (!context)
->  			return;
->  
-> -		if (!context_present(context))
-> +		if (!context_present(context) ||
-> +		    context_copied(iommu, bus, devfn))
->  			continue;
->  
->  		tbl_wlk.bus = bus;
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index 7cca030a508e..889ad2c9a7b9 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -163,38 +163,6 @@ static phys_addr_t root_entry_uctp(struct root_entry *re)
->  	return re->hi & VTD_PAGE_MASK;
->  }
->  
-> -static inline void context_clear_pasid_enable(struct context_entry *context)
-> -{
-> -	context->lo &= ~(1ULL << 11);
-> -}
-> -
-> -static inline bool context_pasid_enabled(struct context_entry *context)
-> -{
-> -	return !!(context->lo & (1ULL << 11));
-> -}
-> -
-> -static inline void context_set_copied(struct context_entry *context)
-> -{
-> -	context->hi |= (1ull << 3);
-> -}
-> -
-> -static inline bool context_copied(struct context_entry *context)
-> -{
-> -	return !!(context->hi & (1ULL << 3));
-> -}
-> -
-> -static inline bool __context_present(struct context_entry *context)
-> -{
-> -	return (context->lo & 1);
-> -}
-> -
-> -bool context_present(struct context_entry *context)
-> -{
-> -	return context_pasid_enabled(context) ?
-> -	     __context_present(context) :
-> -	     __context_present(context) && !context_copied(context);
-> -}
-> -
->  static inline void context_set_present(struct context_entry *context)
->  {
->  	context->lo |= 1;
-> @@ -764,7 +732,8 @@ static int device_context_mapped(struct intel_iommu *iommu, u8 bus, u8 devfn)
->  	spin_lock(&iommu->lock);
->  	context = iommu_context_addr(iommu, bus, devfn, 0);
->  	if (context)
-> -		ret = context_present(context);
-> +		ret = context_present(context) &&
-> +				!context_copied(iommu, bus, devfn);
->  	spin_unlock(&iommu->lock);
->  	return ret;
->  }
-> @@ -1688,6 +1657,11 @@ static void free_dmar_iommu(struct intel_iommu *iommu)
->  		iommu->domain_ids = NULL;
->  	}
->  
-> +	if (iommu->copied_tables) {
-> +		bitmap_free(iommu->copied_tables);
-> +		iommu->copied_tables = NULL;
-> +	}
-> +
->  	/* free context mapping */
->  	free_context_table(iommu);
->  
-> @@ -1913,7 +1887,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
->  		goto out_unlock;
->  
->  	ret = 0;
-> -	if (context_present(context))
-> +	if (context_present(context) && !context_copied(iommu, bus, devfn))
->  		goto out_unlock;
->  
->  	/*
-> @@ -1925,7 +1899,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
->  	 * in-flight DMA will exist, and we don't need to worry anymore
->  	 * hereafter.
->  	 */
-> -	if (context_copied(context)) {
-> +	if (context_copied(iommu, bus, devfn)) {
->  		u16 did_old = context_domain_id(context);
->  
->  		if (did_old < cap_ndoms(iommu->cap)) {
-> @@ -1936,6 +1910,8 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
->  			iommu->flush.flush_iotlb(iommu, did_old, 0, 0,
->  						 DMA_TLB_DSI_FLUSH);
->  		}
-> +
-> +		clear_bit(((long)bus << 8) | devfn, iommu->copied_tables);
->  	}
->  
->  	context_clear_entry(context);
-> @@ -2684,32 +2660,14 @@ static int copy_context_table(struct intel_iommu *iommu,
->  		/* Now copy the context entry */
->  		memcpy(&ce, old_ce + idx, sizeof(ce));
->  
-> -		if (!__context_present(&ce))
-> +		if (!context_present(&ce))
->  			continue;
->  
->  		did = context_domain_id(&ce);
->  		if (did >= 0 && did < cap_ndoms(iommu->cap))
->  			set_bit(did, iommu->domain_ids);
->  
-> -		/*
-> -		 * We need a marker for copied context entries. This
-> -		 * marker needs to work for the old format as well as
-> -		 * for extended context entries.
-> -		 *
-> -		 * Bit 67 of the context entry is used. In the old
-> -		 * format this bit is available to software, in the
-> -		 * extended format it is the PGE bit, but PGE is ignored
-> -		 * by HW if PASIDs are disabled (and thus still
-> -		 * available).
-> -		 *
-> -		 * So disable PASIDs first and then mark the entry
-> -		 * copied. This means that we don't copy PASID
-> -		 * translations from the old kernel, but this is fine as
-> -		 * faults there are not fatal.
-> -		 */
-> -		context_clear_pasid_enable(&ce);
-> -		context_set_copied(&ce);
-> -
-> +		set_bit(((long)bus << 8) | devfn, iommu->copied_tables);
->  		new_ce[idx] = ce;
->  	}
->  
-> @@ -2735,8 +2693,8 @@ static int copy_translation_tables(struct intel_iommu *iommu)
->  	bool new_ext, ext;
->  
->  	rtaddr_reg = dmar_readq(iommu->reg + DMAR_RTADDR_REG);
-> -	ext        = !!(rtaddr_reg & DMA_RTADDR_RTT);
-> -	new_ext    = !!ecap_ecs(iommu->ecap);
-> +	ext        = !!(rtaddr_reg & DMA_RTADDR_SMT);
-> +	new_ext    = !!ecap_smts(iommu->ecap);
->  
->  	/*
->  	 * The RTT bit can only be changed when translation is disabled,
-> @@ -2747,6 +2705,10 @@ static int copy_translation_tables(struct intel_iommu *iommu)
->  	if (new_ext != ext)
->  		return -EINVAL;
->  
-> +	iommu->copied_tables = bitmap_zalloc(BIT_ULL(16), GFP_KERNEL);
-> +	if (!iommu->copied_tables)
-> +		return -ENOMEM;
-> +
->  	old_rt_phys = rtaddr_reg & VTD_PAGE_MASK;
->  	if (!old_rt_phys)
->  		return -EINVAL;
-> -- 
-> 2.25.1
-> 
-
+Major James Walton.

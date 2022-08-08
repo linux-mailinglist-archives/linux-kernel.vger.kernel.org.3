@@ -2,112 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0382658CA69
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C72158CA6F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243603AbiHHOSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 10:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
+        id S243378AbiHHOUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 10:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243487AbiHHORy (ORCPT
+        with ESMTP id S238638AbiHHOUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 10:17:54 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0361F2651;
-        Mon,  8 Aug 2022 07:17:48 -0700 (PDT)
-Received: from booty.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id AD23A40020;
-        Mon,  8 Aug 2022 14:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1659968267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pyimITfYwt3DejxDZgcbCvqHq6RQhBlBuA0ezeFDKiY=;
-        b=NKVB+a7xZq38HyvuMUsGZ4uuCdObXTEDP7EACfzRBHTNybzlIdtguSWANv5Ge4gqM3NuP1
-        oaoXhG1Lh1T1aygrtWXyrgPSQuoE9x3EeQnTJLBqBTAmHqgOiugRaydA2HzE8EFdsklfGR
-        yCIZ2DvovWl0Nr7AcsfeIEs0mAn51X8M4yNr/jg0AuwNFEyXrmj3gvFYHe4KoujytEcLN0
-        vOUuhWRDcWElPzlqxDgk5RZlWlHdc+5KbpgbCe1rDNNb8q8tT3t+QZJpAYhS+Gq+T3qn1w
-        6Q5KF5a4v/frDZcTA+CzGUi+97XBlmbLXqlJQQkx3GKYXT97nl3ulrMi/xhT0A==
-From:   luca.ceresoli@bootlin.com
-To:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 9/9] docs: i2c: i2c-sysfs: fix hyperlinks
-Date:   Mon,  8 Aug 2022 16:17:08 +0200
-Message-Id: <20220808141708.1021103-10-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220808141708.1021103-1-luca.ceresoli@bootlin.com>
-References: <20220808141708.1021103-1-luca.ceresoli@bootlin.com>
+        Mon, 8 Aug 2022 10:20:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB3FD130
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:20:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659968429; x=1691504429;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1Gs2p+rzLbLqP9Oo2mEc2AFXerz6OxC0YE6EMDkcWwY=;
+  b=gvFIRjRGoHJZQCkRDHPVPWI/dHG/8hx1Qo4SDO6AFGc1A+KuKQtIQ1yk
+   ofxMbEsiTUDTwFEJpRocOQxsGlizkST9skvo4hAf5xiP2oDrOAUylFu+d
+   sSITJMLUOllUe0ZG8ch0ZzVfP4u8NGyp/AX9M0tkADVg2NX23omKF3+i8
+   0ZDWeNIv1VVg9yj1/OCMqIZQQOSgXBBIJJT03+qHYJPgYLngw1SJMbUNl
+   LPCEll/vqAw0j5id5W+6SE8mzuHD/ql+O6XSAaSzVoCSddNs9xTKbP8/K
+   cCawcGAjkZBUu49c9eaZuODRAEDDWKPeFEDBeZ6nYW2i4GjocwcYdQY+R
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="291838461"
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="291838461"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 07:20:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="663965956"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Aug 2022 07:20:25 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oL3cG-000MJt-31;
+        Mon, 08 Aug 2022 14:20:24 +0000
+Date:   Mon, 8 Aug 2022 22:19:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ben Skeggs <bskeggs@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dave Airlie <airlied@redhat.com>, Lyude Paul <lyude@redhat.com>
+Subject: drivers/gpu/drm/nouveau/nvkm/engine/disp/gv100.c:676:1: sparse:
+ sparse: symbol 'gv100_disp_core_mthd_base' was not declared. Should it be
+ static?
+Message-ID: <202208082250.FRtA3DVc-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4e23eeebb2e57f5a28b36221aa776b5a1122dde5
+commit: acbe9ecfb7fb14db868ddbeda8f43e623026316b drm/nouveau/disp: merge head/outp/ior code into chipset files
+date:   13 days ago
+config: alpha-randconfig-s031-20220807 (https://download.01.org/0day-ci/archive/20220808/202208082250.FRtA3DVc-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=acbe9ecfb7fb14db868ddbeda8f43e623026316b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout acbe9ecfb7fb14db868ddbeda8f43e623026316b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash drivers/gpu/drm/
 
-dts files cannot be linked conveniently, thus replace them with literal
-formatting.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The links to other rst pages are broken, fix them using the proper syntax.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/gpu/drm/nouveau/nvkm/engine/disp/gv100.c:676:1: sparse: sparse: symbol 'gv100_disp_core_mthd_base' was not declared. Should it be static?
 
-Fixes: 31df7195b100 ("Documentation: i2c: Add doc for I2C sysfs")
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- Documentation/i2c/i2c-sysfs.rst | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+vim +/gv100_disp_core_mthd_base +676 drivers/gpu/drm/nouveau/nvkm/engine/disp/gv100.c
 
-diff --git a/Documentation/i2c/i2c-sysfs.rst b/Documentation/i2c/i2c-sysfs.rst
-index d816a23b80f2..b6d31290fc4b 100644
---- a/Documentation/i2c/i2c-sysfs.rst
-+++ b/Documentation/i2c/i2c-sysfs.rst
-@@ -99,9 +99,7 @@ Caveat
- This may be a confusing part for people who only know about the physical I2C
- design of a board. It is actually possible to rename the I2C bus physical number
- to a different number in logical I2C bus level in Device Tree Source (DTS) under
--section ``aliases``. See
--`arch/arm/boot/dts/nuvoton-npcm730-gsj.dts
--<../../arch/arm/boot/dts/nuvoton-npcm730-gsj.dts>`_
-+section ``aliases``. See ``arch/arm/boot/dts/nuvoton-npcm730-gsj.dts``
- for an example of DTS file.
- 
- Best Practice: **(To kernel software developers)** It is better to keep the I2C
-@@ -289,8 +287,7 @@ MUX channel 0, and all the way to ``i2c-19`` for the MUX channel 3.
- The kernel software developer is able to pin the fanout MUX channels to a static
- logical I2C bus number in the DTS. This doc will not go through the details on
- how to implement this in DTS, but we can see an example in:
--`arch/arm/boot/dts/aspeed-bmc-facebook-wedge400.dts
--<../../arch/arm/boot/dts/aspeed-bmc-facebook-wedge400.dts>`_
-+``arch/arm/boot/dts/aspeed-bmc-facebook-wedge400.dts``
- 
- In the above example, there is an 8-channel I2C MUX at address 0x70 on physical
- I2C bus 2. The channel 2 of the MUX is defined as ``imux18`` in DTS,
-@@ -382,13 +379,9 @@ Sysfs for the I2C sensor device::
- 
- For more info on the Hwmon Sysfs, refer to the doc:
- 
--`Naming and data format standards for sysfs files
--<../hwmon/sysfs-interface.rst>`_
-+../hwmon/sysfs-interface.rst
- 
- Instantiate I2C Devices in I2C Sysfs
- ------------------------------------
- 
--Refer to the doc:
--
--`How to instantiate I2C devices, Method 4: Instantiate from user-space
--<instantiating-devices.rst#method-4-instantiate-from-user-space>`_
-+Refer to section "Method 4: Instantiate from user-space" of instantiating-devices.rst
+   632	
+   633	static const struct nvkm_disp_mthd_list
+   634	gv100_disp_core_mthd_head = {
+   635		.mthd = 0x0400,
+   636		.addr = 0x000400,
+   637		.data = {
+   638			{ 0x2000, 0x682000 },
+   639			{ 0x2004, 0x682004 },
+   640			{ 0x2008, 0x682008 },
+   641			{ 0x200c, 0x68200c },
+   642			{ 0x2014, 0x682014 },
+   643			{ 0x2018, 0x682018 },
+   644			{ 0x201c, 0x68201c },
+   645			{ 0x2020, 0x682020 },
+   646			{ 0x2028, 0x682028 },
+   647			{ 0x202c, 0x68202c },
+   648			{ 0x2030, 0x682030 },
+   649			{ 0x2038, 0x682038 },
+   650			{ 0x203c, 0x68203c },
+   651			{ 0x2048, 0x682048 },
+   652			{ 0x204c, 0x68204c },
+   653			{ 0x2050, 0x682050 },
+   654			{ 0x2054, 0x682054 },
+   655			{ 0x2058, 0x682058 },
+   656			{ 0x205c, 0x68205c },
+   657			{ 0x2060, 0x682060 },
+   658			{ 0x2064, 0x682064 },
+   659			{ 0x2068, 0x682068 },
+   660			{ 0x206c, 0x68206c },
+   661			{ 0x2070, 0x682070 },
+   662			{ 0x2074, 0x682074 },
+   663			{ 0x2078, 0x682078 },
+   664			{ 0x207c, 0x68207c },
+   665			{ 0x2080, 0x682080 },
+   666			{ 0x2088, 0x682088 },
+   667			{ 0x2090, 0x682090 },
+   668			{ 0x209c, 0x68209c },
+   669			{ 0x20a0, 0x6820a0 },
+   670			{ 0x20a4, 0x6820a4 },
+   671			{ 0x20a8, 0x6820a8 },
+   672			{ 0x20ac, 0x6820ac },
+   673			{ 0x2180, 0x682180 },
+   674			{ 0x2184, 0x682184 },
+   675			{ 0x218c, 0x68218c },
+ > 676			{ 0x2194, 0x682194 },
+   677			{ 0x2198, 0x682198 },
+   678			{ 0x219c, 0x68219c },
+   679			{ 0x21a0, 0x6821a0 },
+   680			{ 0x21a4, 0x6821a4 },
+   681			{ 0x2214, 0x682214 },
+   682			{ 0x2218, 0x682218 },
+   683			{}
+   684		}
+   685	};
+   686	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

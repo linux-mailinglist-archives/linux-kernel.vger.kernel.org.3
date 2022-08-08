@@ -2,196 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84D958CC76
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9315D58CC7D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237879AbiHHRBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
+        id S243204AbiHHREG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiHHRBE (ORCPT
+        with ESMTP id S233053AbiHHREB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:01:04 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E3D12D3C
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:01:02 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id d4so5184341ilc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 10:01:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=csp-edu.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=+dJtRlmFjt91K9tF3wZ5b+WYiCa7+aYk2YzrQB9nc/4=;
-        b=sKG1tRb9wl6bKoNiuIS35OYXXdkOJ0X8XjeORGEnfVb/XUHTmKA2Fav2Kb1WruerUH
-         2d/zTSw7GvqRwQOG0tYXh8lZuoiPsmYXosjKNiW8WJR3V/445UzxVPvr85vDw75FW/l6
-         Xwn4btdNh90enwMgeHxTM0LkG7webzfC8CsSKuMv57Aq9kUz9gOg8TcMFvsd/j2fbaNr
-         HtCtiomms0SWv7uC8HUnQYwHG6imSYVF5cphwDXuPIDRhClxsPAbFIEbndLA7iEVCci/
-         0l3L8kz3R4yiawJoprvdICLOnOkeQrF1SHrkbhSfY7cMq805JBEd4iIECh5KtMAwuxVq
-         tXfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=+dJtRlmFjt91K9tF3wZ5b+WYiCa7+aYk2YzrQB9nc/4=;
-        b=Qg4cMKOXnOYijxv6I01l5t/MfuZjgpBqYk61k3IhEljK0bTKscfYDvZWhkXgA0FtLw
-         qNBv6OcrJO0Il/HOjDVcqrrh5dPlClnK22LDp5py8kddC+46UJLRdeATwHhxANesauP7
-         Xy5inYUG8xKBmsnOZRcI77/yOLMeM/pSBre2KLLr2LHeOti7bp335xIB0FCoMrZARJuM
-         Yw8EW+6wh+0qtca2cx07M7IBTaRr4OXuG10/9IYBzhudfBmwvi0zKTisGjQJPbgJ48LV
-         3nzXkuieOxqO6xtrCBNGK6DIljGyMNhgzuFCESPsnT9cpr2DclC50vk5b8T09kS6kE5t
-         YI2Q==
-X-Gm-Message-State: ACgBeo0FEWH5/2dCvaOx3afKE4+ooHDVbSiLeiSkzitDLETiUKyfuyEQ
-        IqJgMZS8R5dk5gr+CTzxiLSgLw==
-X-Google-Smtp-Source: AA6agR7WppV+RrWFuGSA7HHyqYMM1k2sgffgvpE/yI/hlGkpL+0PkCOwcxTzuwERpVONAk1THiXP+g==
-X-Received: by 2002:a05:6e02:178d:b0:2de:a00d:d06c with SMTP id y13-20020a056e02178d00b002dea00dd06cmr8946772ilu.142.1659978061392;
-        Mon, 08 Aug 2022 10:01:01 -0700 (PDT)
-Received: from kernel-dev-1 (75-168-113-69.mpls.qwest.net. [75.168.113.69])
-        by smtp.gmail.com with ESMTPSA id u68-20020a022347000000b00339c3906b08sm5406500jau.177.2022.08.08.10.01.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 10:01:01 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 12:00:59 -0500
-From:   Coleman Dietsch <dietschc@csp.edu>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2 2/2] KVM: x86/xen: Stop Xen timer before changing the
- IRQ vector
-Message-ID: <YvFBS04HIDTpnca8@kernel-dev-1>
-References: <20220729184640.244969-1-dietschc@csp.edu>
- <20220729184640.244969-3-dietschc@csp.edu>
- <Yu1mZyJeYf/0/LP+@google.com>
+        Mon, 8 Aug 2022 13:04:01 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6BF13F20;
+        Mon,  8 Aug 2022 10:04:00 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 3D9CC52044D;
+        Mon,  8 Aug 2022 19:03:58 +0200 (CEST)
+Received: from vmlxhi-182 (10.72.92.119) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Mon, 8 Aug
+ 2022 19:03:57 +0200
+Date:   Mon, 8 Aug 2022 19:03:53 +0200
+From:   Michael Rodin <mrodin@de.adit-jv.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+CC:     Michael Rodin <mrodin@de.adit-jv.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>, <michael@rodin.online>,
+        <erosca@de.adit-jv.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: Re: [PATCH 1/3] media: videobuf2: Add a transfer error event
+Message-ID: <20220808170353.GA2536032@vmlxhi-182>
+References: <YqEO3/KekkZhVjW+@oden.dyn.berto.se>
+ <20220628180024.451258-1-mrodin@de.adit-jv.com>
+ <20220628180024.451258-2-mrodin@de.adit-jv.com>
+ <5e8c50cdc031bffd96b19929508f034d1263c8b7.camel@ndufresne.ca>
+ <20220715161346.GA1116690@vmlxhi-182>
+ <f035cdea-934c-3bd9-f685-47e5e9ff3f49@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <Yu1mZyJeYf/0/LP+@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f035cdea-934c-3bd9-f685-47e5e9ff3f49@xs4all.nl>
+X-Originating-IP: [10.72.92.119]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 06:50:15PM +0000, Sean Christopherson wrote:
-> On Fri, Jul 29, 2022, Coleman Dietsch wrote:
-> > This moves the stop xen timer call outside of the previously unreachable
-> 
-> Please avoid "This", "This patch", etc... and describe what the change is, not
-> what the patch is.
-> 
-> > if else statement as well as making sure that the timer is stopped first
-> > before changing IRQ vector. Code was streamlined a bit also.
-> 
-> Generally speaking, don't describe the literal code changes, e.g. write the changelog
-> as if you were describing the bug and the fix to someone in a verbal conversation.
-> 
+Hi Hans,
 
-Understood.
-
-> > This was contributing to the ODEBUG bug in kvm_xen_vcpu_set_attr crash that
-> > was discovered by syzbot.
+On Tue, Aug 02, 2022 at 11:32:03AM +0200, Hans Verkuil wrote:
+> Hi Michael,
 > 
-> That's not proper justification as it doesn't explain why this patch is needed
-> even after fixing the immedate cause of the ODEBUG splat.
-> 
->   Stop Xen's timer (if it's running) prior to changing the vector and
->   potentially (re)starting the timer.  Changing the vector while the timer
->   is still running can result in KVM injecting a garbage event, e.g.
->   vm_xen_inject_timer_irqs() could see a non-zero xen.timer_pending from
->   a previous timer but inject the new xen.timer_virq.
-> 
+> Apologies for the late reply...
 
-Thanks for helping clarify this Sean.
+Thank you very much for your feedback, very appreciated!
 
-> > ODEBUG: init active (active state 0)
-> > object type: hrtimer hint: xen_timer_callbac0
-> > RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:502
-> > Call Trace:
-> > __debug_object_init
-> > debug_hrtimer_init
-> > debug_init
-> > hrtimer_init
-> > kvm_xen_init_timer
-> > kvm_xen_vcpu_set_attr
-> > kvm_arch_vcpu_ioctl
-> > kvm_vcpu_ioctl
-> > vfs_ioctl
+> On 7/15/22 18:15, Michael Rodin wrote:
+> > Hi Nicolas,
+> > 
+> > On Mon, Jul 04, 2022 at 11:59:58AM -0400, Nicolas Dufresne wrote:
+> >> Hi Micheal,
+> >>
+> >> thanks for your work, I have some questions below ...
+> > 
+> > Thank you for your feedback!
+> > 
+> >> Le mardi 28 juin 2022 à 20:00 +0200, Michael Rodin a écrit :
+> >>> From: Niklas Söderlund <https://urldefense.proofpoint.com/v2/url?u=http-3A__niklas.soderlund-2Brenesas-40ragnatech.se&d=DwIFaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=sWsgk3pKkv5GeIDM2RZlPY8TjNFU2D0oBeOj6QNBadE&m=7ktiIpDjee6bMSPLXXR7KVvJ_y234VytWEydKF2TWEo&s=-GUWUbGDkkrTAXiF_75xnL13cn3HYL2r2ZN0XwlG41U&e=>
+> >>>
+> >>> Add a new V4L2_EVENT_XFER_ERROR event to signal if an error happens during
+> >>> video transfer.
+> >>>
+> >>> The use-case that sparked this new event is to signal to the video
+> >>> device driver that an error has happen on the CSI-2 bus from the CSI-2
+> >>> receiver subdevice.
+> >>>
+> >>> Signed-off-by: Niklas Söderlund <https://urldefense.proofpoint.com/v2/url?u=http-3A__niklas.soderlund-2Brenesas-40ragnatech.se&d=DwIFaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=sWsgk3pKkv5GeIDM2RZlPY8TjNFU2D0oBeOj6QNBadE&m=7ktiIpDjee6bMSPLXXR7KVvJ_y234VytWEydKF2TWEo&s=-GUWUbGDkkrTAXiF_75xnL13cn3HYL2r2ZN0XwlG41U&e=>
+> >>> [mrodin@de.adit-jv.com: adapted information what to do if this new event is received]
+> >>> Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
+> >>> ---
+> >>>  .../userspace-api/media/v4l/vidioc-dqevent.rst         | 10 ++++++++++
+> >>>  .../userspace-api/media/videodev2.h.rst.exceptions     |  1 +
+> >>>  include/uapi/linux/videodev2.h                         |  1 +
+> >>>  3 files changed, 12 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
+> >>> index 6eb40073c906..3cf0b4859784 100644
+> >>> --- a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
+> >>> +++ b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
+> >>> @@ -182,6 +182,16 @@ call.
+> >>>  	the regions changes. This event has a struct
+> >>>  	:c:type:`v4l2_event_motion_det`
+> >>>  	associated with it.
+> >>> +    * - ``V4L2_EVENT_XFER_ERROR``
+> >>
+> >> I'm not sure why this event is specific to XFER. Is there uses cases were a
+> >> future implementation would have both XFER and RECEIVER error ?
+> > 
+> > I am not sure whether I understand you correctly, do you mean that there is
+> > already a method to signal a receiver error? Or that we should name it
+> > V4L2_EVENT_RECEIVER_ERROR? I think that "transfer error" is a good name for
+> > this event, because it could be sent by receiver or by transmitter drivers,
+> > depending on their hardware error detection capabilities. We could have
+> > e.g. a video transmitter which can detect an error coupled with a video
+> > receiver which can not detect any errors.
+> > 
+> >>> +      - 7
+> >>> +      - This event is triggered when an transfer error is detected while
+> >>> +	streaming. For example if an error is detected on a video bus in
+> >>> +	the pipeline. If a driver receives this event from an upstream
+> >>> +	subdevice, it has to forward the event to userspace. The streaming
+> >>> +	application has to check if the transfer error is unrecoverable,
+> >>> +	i.e. no new buffers can be dequeued from the kernel after the
+> >>> +	expected time. If the error is unrecoverable, the streaming
+> >>> +	application should restart streaming if it wants to continue.
+> >>
+> >> The process to determine if an error is recoverable or not isn't clear to me. As
+> >> an application developer, I would not know what to do here. Recoverable error
+> >> already have a designed mechanism, it consist of marking done a buffer with the
+> >> flag V4L2_BUF_FLAG_ERROR. I would like to understand what the existing mechanism
+> >> needed to be replaced, and the placement should be documented.
+> > 
+> > "Recoverable" means in this context that kernel space continues to capture
+> > video buffers (which do not necessarily have the flag V4L2_BUF_FLAG_ERROR).
+> > So probably we should not say "recoverable" or "unrecoverable" in the
+> > context of this event to avoid confusion. V4L2_EVENT_XFER_ERROR just tells
+> > userspace that it should restart streaming if the buffer flow stops after
+> > this event. So would it be sufficient for an application developer if we
+> > drop all statements about "recoverability" from the event description?
+> 
+> Here you touch on the core problem of this patch: you are basically saying
+> that userspace has to 1) subscribe to this event, 2) poll for it, 3) if it
+> arrives start a timer, 4) if the timer triggers and no new buffers have been
+> received in the meantime, then 5) restart streaming.
+> 
+> So in other words, you are just too lazy to do this in the driver and want
+> to hand it off to userspace.
+> 
+> That's not how it works. Usually the driver will know if the error is
+> recoverable or not (i.e. if an HDMI receiver loses signal, that's definitely
+> unrecoverable, and it's something the driver can know and call vb2_queue_error).
+> 
+> If it is really unknown, then you indeed need some monitoring thread. And
+> that's fine. Even better if you can make some helper things in the V4L2 core.
+> 
+> But you can't just kick that to userspace IMHO. I can guarantee that almost
+> no userspace application will do this and it is really not the job of userspace
+> to deal with such issues.
+
+From my understanding this means that my previous patch [1] already went in
+the right direction by implementing a monitoring thread in rcar-vin. But on
+the other hand Niklas has pointed out that it's not good to have this in a
+driver [2]. Therefore it sounds like the only acceptable solution would be to
+move this monitoring thread to the V4L2/VB2 core, which would then monitor
+capture drivers for frame timeouts and maybe also notify userspace based
+on this. What do you think? If you already have a solution in mind, I would
+very appreciate if you could give me a few hints for an implementation!
+
+[1] https://lore.kernel.org/lkml/1652983210-1194-4-git-send-email-mrodin@de.adit-jv.com/
+[2] https://lore.kernel.org/lkml/YqEO3%2FKekkZhVjW+@oden.dyn.berto.se/
+
+> Regards,
+> 
+> 	Hans
+> 
+> > 
+> >> Nicolas
+> >>
+> >>>      * - ``V4L2_EVENT_PRIVATE_START``
+> >>>        - 0x08000000
+> >>>        - Base event number for driver-private events.
+> >>> diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> >>> index 9cbb7a0c354a..25bde61a1519 100644
+> >>> --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> >>> +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> >>> @@ -500,6 +500,7 @@ replace define V4L2_EVENT_CTRL event-type
+> >>>  replace define V4L2_EVENT_FRAME_SYNC event-type
+> >>>  replace define V4L2_EVENT_SOURCE_CHANGE event-type
+> >>>  replace define V4L2_EVENT_MOTION_DET event-type
+> >>> +replace define V4L2_EVENT_XFER_ERROR event-type
+> >>>  replace define V4L2_EVENT_PRIVATE_START event-type
+> >>>  
+> >>>  replace define V4L2_EVENT_CTRL_CH_VALUE ctrl-changes-flags
+> >>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> >>> index 5311ac4fde35..44db724d4541 100644
+> >>> --- a/include/uapi/linux/videodev2.h
+> >>> +++ b/include/uapi/linux/videodev2.h
+> >>> @@ -2385,6 +2385,7 @@ struct v4l2_streamparm {
+> >>>  #define V4L2_EVENT_FRAME_SYNC			4
+> >>>  #define V4L2_EVENT_SOURCE_CHANGE		5
+> >>>  #define V4L2_EVENT_MOTION_DET			6
+> >>> +#define V4L2_EVENT_XFER_ERROR			7
+> >>>  #define V4L2_EVENT_PRIVATE_START		0x08000000
+> >>>  
+> >>>  /* Payload for V4L2_EVENT_VSYNC */
+> >>
 > > 
 > 
-> Fixes: 536395260582 ("KVM: x86/xen: handle PV timers oneshot mode")
-> Cc: stable@vger.kernel.org
-> 
-> > Link: https://syzkaller.appspot.com/bug?id=8234a9dfd3aafbf092cc5a7cd9842e3ebc45fc42
-> > Reported-by: syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
-> > Signed-off-by: Coleman Dietsch <dietschc@csp.edu>
-> > ---
-> >  arch/x86/kvm/xen.c | 37 ++++++++++++++++++-------------------
-> >  1 file changed, 18 insertions(+), 19 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> > index 2dd0f72a62f2..f612fac0e379 100644
-> > --- a/arch/x86/kvm/xen.c
-> > +++ b/arch/x86/kvm/xen.c
-> > @@ -707,27 +707,26 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
-> >  		break;
-> >  
-> >  	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
-> > -		if (data->u.timer.port) {
-> > -			if (data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
-> > -				r = -EINVAL;
-> > -				break;
-> > -			}
-> > -			vcpu->arch.xen.timer_virq = data->u.timer.port;
-> > -
-> > -			/* Check for existing timer */
-> > -			if (!vcpu->arch.xen.timer.function)
-> > -				kvm_xen_init_timer(vcpu);
-> > -
-> > -			/* Restart the timer if it's set */
-> > -			if (data->u.timer.expires_ns)
-> > -				kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
-> > -						    data->u.timer.expires_ns -
-> > -						    get_kvmclock_ns(vcpu->kvm));
-> > -		} else if (kvm_xen_timer_enabled(vcpu)) {
-> > -			kvm_xen_stop_timer(vcpu);
-> > -			vcpu->arch.xen.timer_virq = 0;
-> > +		if (data->u.timer.port &&
-> > +		    data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
-> > +			r = -EINVAL;
-> > +			break;
-> >  		}
-> >  
-> > +		/* Check for existing timer */
-> > +		if (!vcpu->arch.xen.timer.function)
-> > +			kvm_xen_init_timer(vcpu);
-> > +
-> > +		/* Stop the timer (if it's running) before changing the vector */
-> > +		kvm_xen_stop_timer(vcpu);
-> > +		vcpu->arch.xen.timer_virq = data->u.timer.port;
-> > +
-> > +		/* Restart the timer if it's set */
-> 
-> The "if it's set" part is stale, maybe this?
-> 
-> 		/* Start the timer if the new value has a valid vector+expiry. */
-> 
 
-Agreed, I'll clean that comment up a bit.
-
-> > +		if (data->u.timer.port && data->u.timer.expires_ns)
-> > +			kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
-> > +					    data->u.timer.expires_ns -
-> > +					    get_kvmclock_ns(vcpu->kvm));
-> > +
-> >  		r = 0;
-> >  		break;
-> >  
-> > -- 
-> > 2.34.1
-> > 
+-- 
+Best Regards,
+Michael

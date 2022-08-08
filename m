@@ -2,94 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3E258CCE8
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A5858CCFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244339AbiHHRoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S236351AbiHHRrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244343AbiHHRnf (ORCPT
+        with ESMTP id S244557AbiHHRqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:43:35 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC355B51
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659980614; x=1691516614;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eZHz5AZts8pa+4dAgLDzj+RDlAzwOdbJVrXvXp0Rcms=;
-  b=WfL43eYuI3KWCs5hUgkt+oYHtcri+hAusIikoE4nQd7hW7eQOSV/U/zl
-   aIj4HPf0AZ1kGVWpxjrcZBReISUp5iIsiBfAdgZ1Y4jN0XKJTwkPTv8/j
-   Lc8A/t04jO9AthfJItzKuBXslRCm/SGsRnuXtpv//wIjYE5qFdp8pJReS
-   OJl/amiW7l6A4OouBVNwKyvdOdpiIaPD+lftPTIiY7L2TdGb+NRbHbFR/
-   vWXh11Gn+wx6fE/wPL+hGAo9KkOqKEgW+EdVB5bPz5y8vp95zOsPsKEb0
-   EPKjnFYoj5yJ/0bkIZVFHHv5IoLhT9S/aWTrtiId5wMb3RIJNM+connEI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="273703180"
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="273703180"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 10:43:34 -0700
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="604452861"
-Received: from sankarka-mobl1.amr.corp.intel.com (HELO [10.212.251.15]) ([10.212.251.15])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 10:43:34 -0700
-Message-ID: <b929e415-def2-b47b-fd1e-57877a98c2ad@intel.com>
-Date:   Mon, 8 Aug 2022 10:43:35 -0700
+        Mon, 8 Aug 2022 13:46:12 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98ACC18391;
+        Mon,  8 Aug 2022 10:45:40 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id a8so9445435pjg.5;
+        Mon, 08 Aug 2022 10:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=56amwkxBxRXvr+sAaZ6aOdlYxwoLvxM3ykitrGAaah8=;
+        b=a1ORMxvWpNX0kXnwXKBq7GyVGHtyasCj9mr5eiGioDbfg8bzRhhMa4+Yve6CnlCLMz
+         D18k1F3uMoGcb+kA0JV2I35sQPNPSe7IjqaBcI5pF6JvnRvdoTLZoaYLM4uBUv8OcFh1
+         LgblEaYB12PZxWbrOlUM6w1EGR5JErkVMA/++h6oi0a/hpFYxZkswB8zHRsyaCZ42wb2
+         B5d4fe59pfkX8ZC7WmjsfEmJBZa+SFnoZky6yf2WZowWYZsUCNEO1yHNRBP12XsNV1px
+         pcItye+E8CDXhwXh4rHlkqPXAGVdM2QHfTl+xZfO7NTNSEPTodUspE8UuJ/+PRmrrfKW
+         MAjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=56amwkxBxRXvr+sAaZ6aOdlYxwoLvxM3ykitrGAaah8=;
+        b=FhXxk50rcgKf0oQNQlo9FElXFZp/4XMQvrR3eJFA9nkyP20Fj1kF/2YtGQa4GHwNXb
+         oKEOtzD6hG2XbF9aVvTfhL7g8rBYtL/2CMXAO2SD8lJZMzZm9AAO1yq2LkLeKUxsOrUi
+         Z8jM1j+EFhLVal62AOPvyIMkmu8V9NAq7r57wCBRqa8uF2m+BcoDZHs6xQqfCVO8BrQG
+         aczVL8h1C3CHa+fu/WhIgwgP3sCdbeKuoyEajQOKKkhB710oB06Aa+Kldc+jnJoqyz3C
+         RGMRqQT/+iAi/UbzPLzEDekxfaix/InkIAjApa/CacyujI9iO3uYJ1CHLvxxeTqQDLh3
+         engA==
+X-Gm-Message-State: ACgBeo0WvPUbGPUmVMtHd3ofsvIojcu4ILmkR+2sZv1119JeiEEhqh6L
+        olVEj4jiuwI0CZFxMD1wDw==
+X-Google-Smtp-Source: AA6agR6LbEQBelXM0gcZPBphI3mlLlv/Oto+0IcXSWAxuNg1pWhe08gw7+wvsUwO7qJ/n+m5wwdHig==
+X-Received: by 2002:a17:902:da92:b0:16e:f2ee:b98a with SMTP id j18-20020a170902da9200b0016ef2eeb98amr19723760plx.154.1659980740077;
+        Mon, 08 Aug 2022 10:45:40 -0700 (PDT)
+Received: from bytedance ([74.199.177.246])
+        by smtp.gmail.com with ESMTPSA id g1-20020a17090a67c100b001f30f823145sm10945804pjm.55.2022.08.08.10.45.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 10:45:39 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 10:45:36 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        George Zhang <georgezhang@vmware.com>,
+        Dmitry Torokhov <dtor@vmware.com>,
+        Andy King <acking@vmware.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 1/2] vsock: Fix memory leak in vsock_connect()
+Message-ID: <20220808174536.GA19626@bytedance>
+References: <20220804020925.32167-1-yepeilin.cs@gmail.com>
+ <a02c6e7e3135473d254ac97abc603d963ba8f716.1659862577.git.peilin.ye@bytedance.com>
+ <20220808075533.p7pczlnixb2phrun@sgarzare-redhat>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 1/5] entry: Pass pt_regs to
- irqentry_exit_cond_resched()
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>, Ira Weiny <ira.weiny@intel.com>
-Cc:     Rik van Riel <riel@surriel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-References: <20220805173009.3128098-1-ira.weiny@intel.com>
- <20220805173009.3128098-2-ira.weiny@intel.com> <YvDnkALyHl77R/Ug@zn.tnic>
- <YvFJGxU0k492npYT@iweiny-desk3> <YvFKHaRdOkg5RHtv@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <YvFKHaRdOkg5RHtv@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220808075533.p7pczlnixb2phrun@sgarzare-redhat>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/8/22 10:38, Borislav Petkov wrote:
-> On Mon, Aug 08, 2022 at 10:34:19AM -0700, Ira Weiny wrote:
->> I thought about that but generally have been steered away from using bool
->> arguments like this.
-> The reason being?
+On Mon, Aug 08, 2022 at 09:55:33AM +0200, Stefano Garzarella wrote:
+> On Sun, Aug 07, 2022 at 02:00:11AM -0700, Peilin Ye wrote:
+> > net/vmw_vsock/af_vsock.c | 8 +++++++-
+> > 1 file changed, 7 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> > index f04abf662ec6..fe14f6cbca22 100644
+> > --- a/net/vmw_vsock/af_vsock.c
+> > +++ b/net/vmw_vsock/af_vsock.c
+> > @@ -1391,7 +1391,13 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+> > 			 * timeout fires.
+> > 			 */
+> > 			sock_hold(sk);
+> > -			schedule_delayed_work(&vsk->connect_work, timeout);
+> > +
+> > +			/* If the timeout function is already scheduled,
+> > +			 * reschedule it, then ungrab the socket refcount to
+> > +			 * keep it balanced.
+> > +			 */
+> > +			if (mod_delayed_work(system_wq, &vsk->connect_work, timeout))
+>                             ^
+> Checkpatch warns here about line lenght.
+> If you have to re-send, please split it.
 
-Might have been me.  Function calls that look like this:
+Oh, net-next HEAD's checkpatch --strict didn't complain, I didn't know
+Patchwork checks 80 columns.  I will send v3 soon.
 
-	foo(&ptr, false, true, false, true, 1, 0);
+> Anyway, the patch LGTM:
+> 
+> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-are incomprehensible.  A true/false is effectively a magic number here
-and you have to go looking at the code implementing 'foo()' or at least
-the declaration hoping that the variable names help (if the declaration
-has variable names).
+Thanks!
 
-I think I've encouraged Ira to do something like this instead:
+Peilin Ye
 
-enum foo_mode {
-	MODE_BAR,
-	MODE_BAZ
-}
-
-where the call ends up looking like:
-
-	foo(&ptr, MODE_BAR);
-
-which is much more self-documenting.

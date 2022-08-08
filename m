@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C7C58C16C
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0A958C16E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243994AbiHHCAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S244020AbiHHCAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243944AbiHHB4k (ORCPT
+        with ESMTP id S244054AbiHHB4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 21:56:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1022E1CB26;
-        Sun,  7 Aug 2022 18:40:06 -0700 (PDT)
+        Sun, 7 Aug 2022 21:56:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED411D8E;
+        Sun,  7 Aug 2022 18:40:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99AE1B80E05;
-        Mon,  8 Aug 2022 01:40:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86FDFC433D6;
-        Mon,  8 Aug 2022 01:40:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B6FEB80E12;
+        Mon,  8 Aug 2022 01:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 097CCC433C1;
+        Mon,  8 Aug 2022 01:40:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659922803;
-        bh=FPDq19YmQbyACbhIMdsFfnd/zvD9KE4s0mLFIVXUVOE=;
+        s=k20201202; t=1659922813;
+        bh=0ie/x+deJNmPPRkTSfSWjW9Y8KhstuhgEtIrW71RO70=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gm/PcT96YUtsx4iuP87h22UoAsFi4CSdKSvvxGBkUlM60J77eZ+6qdjRBrT93HAU7
-         UWMfYzV62XUbIbMQ4euPf706fEVQzW9B760grpjf7dcUtEaONSVClWP5nPl/bq0VZr
-         tk1KImjdS0SJuyp1XCrYNIrg6kW4AQiBzI7ygwQbdzF2FX/zVfJIlgYH+hwsPM3YuV
-         6G8gthH1WqystQIc2eUcb19kuGezd/vXTcbbL7ojrj5+jv/wN8RD3fIzoQGwHUoqrq
-         IhtKwRi7Cih0oibs7Edoxnv1o4/JzVGrBhdXbrq/z+3sd2N6WExqTGXkroePGNpIxb
-         3dtF5XqSue2rg==
+        b=AQ3/jfW8Md3lKWjSIcSAnDpwKdW5MvrpMB2Qv3cuu/3IiEomMHJnXur+pB8zIv78T
+         /zYT/qbZ5LH/mqjoi/TF+38k0gn2hGn0zKa91lSr4cXWQnew79tDwhsCIJIPfwBAaR
+         tauXcIaG/gMtisVTq0f0YCHzJ43LvQhuSnXaav4igu69jkdyH2eboShEsee5UnlFVd
+         ZaurasCSpr7XQRqscdrCcx1Btc77mzwaydEmrG5KPSHqUIajgTKgBkX2fw9GA0r3HB
+         iZendOVv1S81R3OiUXd9wSUOKteK56uVE8YHdJHxZehO63cqoGbRgMHHXWnvwHns7o
+         upoOQZU6u5KFw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Sasha Levin <sashal@kernel.org>,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        selinux@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 12/12] selinux: Add boundary check in put_entry()
-Date:   Sun,  7 Aug 2022 21:39:42 -0400
-Message-Id: <20220808013943.316907-12-sashal@kernel.org>
+Cc:     huhai <huhai@kylinos.cn>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 5/8] ACPI: LPSS: Fix missing check in register_device_clock()
+Date:   Sun,  7 Aug 2022 21:40:00 -0400
+Message-Id: <20220808014005.317064-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013943.316907-1-sashal@kernel.org>
-References: <20220808013943.316907-1-sashal@kernel.org>
+In-Reply-To: <20220808014005.317064-1-sashal@kernel.org>
+References: <20220808014005.317064-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,33 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiu Jianfeng <xiujianfeng@huawei.com>
+From: huhai <huhai@kylinos.cn>
 
-[ Upstream commit 15ec76fb29be31df2bccb30fc09875274cba2776 ]
+[ Upstream commit b4f1f61ed5928b1128e60e38d0dffa16966f06dc ]
 
-Just like next_entry(), boundary check is necessary to prevent memory
-out-of-bound access.
+register_device_clock() misses a check for platform_device_register_simple().
+Add a check to fix it.
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: huhai <huhai@kylinos.cn>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/selinux/ss/policydb.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/acpi/acpi_lpss.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/security/selinux/ss/policydb.h b/security/selinux/ss/policydb.h
-index 215f8f30ac5a..2a479785ebd4 100644
---- a/security/selinux/ss/policydb.h
-+++ b/security/selinux/ss/policydb.h
-@@ -360,6 +360,8 @@ static inline int put_entry(const void *buf, size_t bytes, int num, struct polic
- {
- 	size_t len = bytes * num;
+diff --git a/drivers/acpi/acpi_lpss.c b/drivers/acpi/acpi_lpss.c
+index a9158858f54c..6ca4b3dc11ca 100644
+--- a/drivers/acpi/acpi_lpss.c
++++ b/drivers/acpi/acpi_lpss.c
+@@ -330,6 +330,9 @@ static int register_device_clock(struct acpi_device *adev,
+ 	if (!lpss_clk_dev)
+ 		lpt_register_clock_device();
  
-+	if (len > fp->len)
-+		return -EINVAL;
- 	memcpy(fp->data, buf, len);
- 	fp->data += len;
- 	fp->len -= len;
++	if (IS_ERR(lpss_clk_dev))
++		return PTR_ERR(lpss_clk_dev);
++
+ 	clk_data = platform_get_drvdata(lpss_clk_dev);
+ 	if (!clk_data)
+ 		return -ENODEV;
 -- 
 2.35.1
 

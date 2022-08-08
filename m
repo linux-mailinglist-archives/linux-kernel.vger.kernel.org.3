@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A38558C889
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A677858C88F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242940AbiHHMpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 08:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
+        id S242957AbiHHMqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 08:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242166AbiHHMpE (ORCPT
+        with ESMTP id S235645AbiHHMp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 08:45:04 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F8ACE3A
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=eVaNvTPbtrqbti0QEgzFwYvEZyQFx7UXLCcnkU+Ng7E=; b=RSUfTgd18ifp4PFwxZ2PlyRRTx
-        R9OtWfmPNn19R3CYZDWBtFfvkoOpg9S5gcbM8c7Q3znVJr/P0CWlxdkl9vBC+RfhFUBh0H5aBUjA+
-        85tzWPvFxYHKU8NgvS4FuSd0WgrJZqmjzZIAvOAIl151lo0X9P2ua8vb5uzClBB34XiaEqVHcAzX3
-        cd78/FxpEtKJDF/GIbh3ymCEq/PSDjEzZ/JX4h9glSpnPD8bnBH5/MYzg1ZeRf/IziBemz+0F4tvl
-        OBCvCv6yOD3GkMMjOwkFY6Wzp3Mv8s+Ihw6upbwCSO9u7rPUHdD6zghUSnbRWHrbefPC7KhlScEkx
-        0a3lOlFQ==;
-Received: from [2a01:799:961:d200:fd91:af1e:9da7:f964] (port=64671)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oL27w-0003Ef-LB; Mon, 08 Aug 2022 14:45:00 +0200
-Message-ID: <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
-Date:   Mon, 8 Aug 2022 14:44:56 +0200
+        Mon, 8 Aug 2022 08:45:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86E43D8C
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:45:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659962757;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bIkebALpaCzzfrhDIO+eiB2cWrwHJfvl0+w6H8aCeL4=;
+        b=EdXW0FF4JjeuO0Ej4xVDjjq/v3j87qBmjgQSvTtYWfdyeeNUhaU/vRAxDi5pgL1+w70wt8
+        DXC0CjtgUpfn2bixxrw3eVqt4+Z3G9nckJupPYpcFm90qMXK0aGzZDwQD46wUr/3pT32fN
+        IcFQIiZO4iBnHVbW1toMFA2j1Q07l9E=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-656-K-tcVbbeMvadQcWCfNjAXw-1; Mon, 08 Aug 2022 08:45:56 -0400
+X-MC-Unique: K-tcVbbeMvadQcWCfNjAXw-1
+Received: by mail-wm1-f70.google.com with SMTP id r5-20020a1c4405000000b003a534ec2570so1490043wma.7
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:45:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=bIkebALpaCzzfrhDIO+eiB2cWrwHJfvl0+w6H8aCeL4=;
+        b=jZ0dC+bKmDpTZw/DxEx0lR4Cvh7JYAQBeRrPxNe+U2Zck2sH3CJ1IhHINwoTBYR20Y
+         WAklq6X/c6rDKrEx0hqDeVv5B6K5B2CHEKN00GO1FSuoH/4t8hkpTCMp6olXwTXA+oyc
+         8nhmWGCtZeAUG1uHewCnUia2s9Twz2ivK+Ye5MEVaFXug9CnhpFEuZiAVby1jW4KJDrq
+         lwLiFB5uxeI1bQDVm5vQi33nkvGZ9oGf4NvjLSRljIZupPiS5Gss4QvE+cgbZ0zxlAzc
+         1MrkdECkN1XGNAURqI3SW/LqU3fwmjv7eD2Nrn7odTFObIJJ/4t65UTrc+p8BPSyiA8x
+         AmvA==
+X-Gm-Message-State: ACgBeo3YOcnN7WonQN1TMKA2X+Y9QSm8YukS/sQKOZUWwgVnKFWSQs9T
+        rfknZ5IfbgUlKQAKxlAZ0Yb0K6s+OCekLphlxDcEW3qbS/TOo62QBAnCJ9uMkjRSWdFknIXnMCt
+        jePq1tAiodhABb6BXFSVYom4z
+X-Received: by 2002:adf:edc1:0:b0:21d:7157:f4aa with SMTP id v1-20020adfedc1000000b0021d7157f4aamr11472384wro.454.1659962755060;
+        Mon, 08 Aug 2022 05:45:55 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7y23sTRwxFjBB3chjfhaxjBgzCe4ggCoRLOu7gMl1oiH8Vh+fKGZgk7NrsdFQfO8IwywQBsg==
+X-Received: by 2002:adf:edc1:0:b0:21d:7157:f4aa with SMTP id v1-20020adfedc1000000b0021d7157f4aamr11472372wro.454.1659962754783;
+        Mon, 08 Aug 2022 05:45:54 -0700 (PDT)
+Received: from redhat.com ([2.52.21.123])
+        by smtp.gmail.com with ESMTPSA id m8-20020a5d56c8000000b00222d4dfcdffsm1715765wrw.87.2022.08.08.05.45.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 05:45:53 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 08:45:48 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     stefanha@redhat.com, jasowang@redhat.com,
+        torvalds@linux-foundation.org, ascull@google.com, maz@kernel.org,
+        keirf@google.com, jiyong@google.com, kernel-team@android.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        crosvm-dev@chromium.org
+Subject: Re: IOTLB support for vhost/vsock breaks crosvm on Android
+Message-ID: <20220808083958-mutt-send-email-mst@kernel.org>
+References: <20220805181105.GA29848@willie-the-truck>
+ <20220807042408-mutt-send-email-mst@kernel.org>
+ <20220808101850.GA31984@willie-the-truck>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220808101850.GA31984@willie-the-truck>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,208 +82,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 29.07.2022 18.34, skrev Maxime Ripard:
-> The TV mode property has been around for a while now to select and get the
-> current TV mode output on an analog TV connector.
+On Mon, Aug 08, 2022 at 11:18:50AM +0100, Will Deacon wrote:
+> Hi Michael,
 > 
-> Despite that property name being generic, its content isn't and has been
-> driver-specific which makes it hard to build any generic behaviour on top
-> of it, both in kernel and user-space.
+> On Sun, Aug 07, 2022 at 09:14:43AM -0400, Michael S. Tsirkin wrote:
+> > Will, thanks very much for the analysis and the writeup!
 > 
-> Let's create a new bitmask tv norm property, that can contain any of the
-> analog TV standards currently supported by kernel drivers. Each driver can
-> then pass in a bitmask of the modes it supports.
+> No problem, and thanks for following up.
 > 
-> We'll then be able to phase out the older tv mode property.
+> > On Fri, Aug 05, 2022 at 07:11:06PM +0100, Will Deacon wrote:
+> > > So how should we fix this? One possibility is for us to hack crosvm to
+> > > clear the VIRTIO_F_ACCESS_PLATFORM flag when setting the vhost features,
+> > > but others here have reasonably pointed out that they didn't expect a
+> > > kernel change to break userspace. On the flip side, the offending commit
+> > > in the kernel isn't exactly new (it's from the end of 2020!) and so it's
+> > > likely that others (e.g. QEMU) are using this feature.
+> > 
+> > Exactly, that's the problem.
+> > 
+> > vhost is reusing the virtio bits and it's only natural that
+> > what you are doing would happen.
+> > 
+> > To be precise, this is what we expected people to do (and what QEMU does):
+> > 
+> > 
+> > #define QEMU_VHOST_FEATURES ((1 << VIRTIO_F_VERSION_1) |
+> > 			     (1 << VIRTIO_NET_F_RX_MRG) | .... )
+> > 
+> > VHOST_GET_FEATURES(... &host_features);
+> > host_features &= QEMU_VHOST_FEATURES
+> > VHOST_SET_FEATURES(host_features & guest_features)
+> > 
+> > 
+> > Here QEMU_VHOST_FEATURES are the bits userspace knows about.
+> > 
+> > Our assumption was that whatever userspace enables, it
+> > knows what the effect on vhost is going to be.
+> > 
+> > But yes, I understand absolutely how someone would instead just use the
+> > guest features. It is unfortunate that we did not catch this in time.
+> > 
+> > 
+> > In hindsight, we should have just created vhost level macros
+> > instead of reusing virtio ones. Would address the concern
+> > about naming: PLATFORM_ACCESS makes sense for the
+> > guest since there it means "whatever access rules platform has",
+> > but for vhost a better name would be VHOST_F_IOTLB.
+> > We should have also taken greater pains to document what
+> > we expect userspace to do. I remember now how I thought about something
+> > like this but after coding this up in QEMU I forgot to document this :(
+> > Also, I suspect given the history the GET/SET features ioctl and burned
+> > wrt extending it and we have to use a new when we add new features.
+> > All this we can do going forward.
 > 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> Makes sense. The crosvm developers are also pretty friendly in my
+> experience, so I'm sure they wouldn't mind being involved in discussions
+> around any future ABI extensions. Just be aware that they _very_ recently
+> moved their mailing lists, so I think it lives here now:
 > 
-
-Please also update Documentation/gpu/kms-properties.csv
-
-Requirements for adding a new property is found in
-Documentation/gpu/drm-kms.rst
-
-> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
-> index c06d0639d552..d7ff6c644c2f 100644
-> --- a/drivers/gpu/drm/drm_atomic_uapi.c
-> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
-> @@ -700,6 +700,8 @@ static int drm_atomic_connector_set_property(struct drm_connector *connector,
->  		state->tv.margins.bottom = val;
->  	} else if (property == config->tv_mode_property) {
->  		state->tv.mode = val;
-> +	} else if (property == config->tv_norm_property) {
-> +		state->tv.norm = val;
->  	} else if (property == config->tv_brightness_property) {
->  		state->tv.brightness = val;
->  	} else if (property == config->tv_contrast_property) {
-> @@ -810,6 +812,8 @@ drm_atomic_connector_get_property(struct drm_connector *connector,
->  		*val = state->tv.margins.bottom;
->  	} else if (property == config->tv_mode_property) {
->  		*val = state->tv.mode;
-> +	} else if (property == config->tv_norm_property) {
-> +		*val = state->tv.norm;
->  	} else if (property == config->tv_brightness_property) {
->  		*val = state->tv.brightness;
->  	} else if (property == config->tv_contrast_property) {
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> index e3142c8142b3..68a4e47f85a9 100644
-> --- a/drivers/gpu/drm/drm_connector.c
-> +++ b/drivers/gpu/drm/drm_connector.c
-> @@ -1637,6 +1637,7 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_properties);
->  /**
->   * drm_mode_create_tv_properties - create TV specific connector properties
->   * @dev: DRM device
-> + * @supported_tv_norms: Bitmask of TV norms supported (See DRM_MODE_TV_NORM_*)
->   * @num_modes: number of different TV formats (modes) supported
->   * @modes: array of pointers to strings containing name of each format
->   *
-> @@ -1649,11 +1650,40 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_properties);
->   * 0 on success or a negative error code on failure.
->   */
->  int drm_mode_create_tv_properties(struct drm_device *dev,
-> +				  unsigned int supported_tv_norms,
->  				  unsigned int num_modes,
->  				  const char * const modes[])
->  {
-> +	static const struct drm_prop_enum_list tv_norm_values[] = {
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_443) - 1, "NTSC-443" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_J) - 1, "NTSC-J" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_M) - 1, "NTSC-M" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_60) - 1, "PAL-60" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_B) - 1, "PAL-B" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_D) - 1, "PAL-D" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_G) - 1, "PAL-G" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_H) - 1, "PAL-H" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_I) - 1, "PAL-I" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_M) - 1, "PAL-M" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_N) - 1, "PAL-N" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_NC) - 1, "PAL-Nc" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_60) - 1, "SECAM-60" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_B) - 1, "SECAM-B" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_D) - 1, "SECAM-D" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_G) - 1, "SECAM-G" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K) - 1, "SECAM-K" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K1) - 1, "SECAM-K1" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_L) - 1, "SECAM-L" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD480I) - 1, "hd480i" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD480P) - 1, "hd480p" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD576I) - 1, "hd576i" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD576P) - 1, "hd576p" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD720P) - 1, "hd720p" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD1080I) - 1, "hd1080i" },
-> +	};
->  	struct drm_property *tv_selector;
->  	struct drm_property *tv_subconnector;
-> +	struct drm_property *tv_norm;
->  	unsigned int i;
->  
->  	if (dev->mode_config.tv_select_subconnector_property)
-> @@ -1686,6 +1716,13 @@ int drm_mode_create_tv_properties(struct drm_device *dev,
->  	if (drm_mode_create_tv_margin_properties(dev))
->  		goto nomem;
->  
-> +	tv_norm = drm_property_create_bitmask(dev, 0, "tv norm",
-> +					   tv_norm_values, ARRAY_SIZE(tv_norm_values),
-> +					   supported_tv_norms);
-
-I expected this to be an enum, why a bitmask? Userspace can set multiple
-bits in a bitmask.
-
-Noralf.
-
-> +	if (!tv_norm)
-> +		goto nomem;
-> +	dev->mode_config.tv_norm_property = tv_norm;
-> +
->  	dev->mode_config.tv_mode_property =
->  		drm_property_create(dev, DRM_MODE_PROP_ENUM,
->  				    "mode", num_modes);
-> diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
-> index 4a788c1c9058..457529e5d857 100644
-> --- a/drivers/gpu/drm/vc4/vc4_vec.c
-> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
-> @@ -573,7 +573,9 @@ static int vc4_vec_bind(struct device *dev, struct device *master, void *data)
->  	struct vc4_vec *vec;
->  	int ret;
->  
-> -	ret = drm_mode_create_tv_properties(drm, ARRAY_SIZE(tv_mode_names),
-> +	ret = drm_mode_create_tv_properties(drm,
-> +					    0,
-> +					    ARRAY_SIZE(tv_mode_names),
->  					    tv_mode_names);
->  	if (ret)
->  		return ret;
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index 1e9996b33cc8..78275e68ff66 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -143,6 +143,32 @@ enum subpixel_order {
->  
->  };
->  
-> +#define DRM_MODE_TV_NORM_NTSC_443	(1 << 0)
-> +#define DRM_MODE_TV_NORM_NTSC_J		(1 << 1)
-> +#define DRM_MODE_TV_NORM_NTSC_M		(1 << 2)
-> +#define DRM_MODE_TV_NORM_PAL_60		(1 << 3)
-> +#define DRM_MODE_TV_NORM_PAL_B		(1 << 4)
-> +#define DRM_MODE_TV_NORM_PAL_D		(1 << 5)
-> +#define DRM_MODE_TV_NORM_PAL_G		(1 << 6)
-> +#define DRM_MODE_TV_NORM_PAL_H		(1 << 7)
-> +#define DRM_MODE_TV_NORM_PAL_I		(1 << 8)
-> +#define DRM_MODE_TV_NORM_PAL_M		(1 << 9)
-> +#define DRM_MODE_TV_NORM_PAL_N		(1 << 10)
-> +#define DRM_MODE_TV_NORM_PAL_NC		(1 << 11)
-> +#define DRM_MODE_TV_NORM_SECAM_60	(1 << 12)
-> +#define DRM_MODE_TV_NORM_SECAM_B	(1 << 13)
-> +#define DRM_MODE_TV_NORM_SECAM_D	(1 << 14)
-> +#define DRM_MODE_TV_NORM_SECAM_G	(1 << 15)
-> +#define DRM_MODE_TV_NORM_SECAM_K	(1 << 16)
-> +#define DRM_MODE_TV_NORM_SECAM_K1	(1 << 17)
-> +#define DRM_MODE_TV_NORM_SECAM_L	(1 << 18)
-> +#define DRM_MODE_TV_NORM_HD480I		(1 << 19)
-> +#define DRM_MODE_TV_NORM_HD480P		(1 << 20)
-> +#define DRM_MODE_TV_NORM_HD576I		(1 << 21)
-> +#define DRM_MODE_TV_NORM_HD576P		(1 << 22)
-> +#define DRM_MODE_TV_NORM_HD720P		(1 << 23)
-> +#define DRM_MODE_TV_NORM_HD1080I	(1 << 24)
-> +
->  /**
->   * struct drm_scrambling: sink's scrambling support.
->   */
-> @@ -687,6 +713,7 @@ struct drm_tv_connector_state {
->  	enum drm_mode_subconnector subconnector;
->  	struct drm_connector_tv_margins margins;
->  	unsigned int mode;
-> +	unsigned int norm;
->  	unsigned int brightness;
->  	unsigned int contrast;
->  	unsigned int flicker_reduction;
-> @@ -1779,6 +1806,7 @@ void drm_connector_attach_dp_subconnector_property(struct drm_connector *connect
->  
->  int drm_mode_create_tv_margin_properties(struct drm_device *dev);
->  int drm_mode_create_tv_properties(struct drm_device *dev,
-> +				  unsigned int supported_tv_norms,
->  				  unsigned int num_modes,
->  				  const char * const modes[]);
->  void drm_connector_attach_tv_margin_properties(struct drm_connector *conn);
-> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
-> index 6b5e01295348..d9e79def8b92 100644
-> --- a/include/drm/drm_mode_config.h
-> +++ b/include/drm/drm_mode_config.h
-> @@ -704,6 +704,12 @@ struct drm_mode_config {
->  	 */
->  	struct drm_property *dp_subconnector_property;
->  
-> +	/**
-> +	 * @tv_norm_property: Optional TV property to select the TV
-> +	 * standard output on the connector.
-> +	 */
-> +	struct drm_property *tv_norm_property;
-> +
->  	/**
->  	 * @tv_subconnector_property: Optional TV property to differentiate
->  	 * between different TV connector types.
+> https://groups.google.com/a/chromium.org/g/crosvm-dev
 > 
+> > But what can we do about the specific issue?
+> > I am not 100% sure since as Will points out, QEMU and other
+> > userspace already rely on the current behaviour.
+> > 
+> > Looking at QEMU specifically, it always sends some translations at
+> > startup, this in order to handle device rings.
+> > 
+> > So, *maybe* we can get away with assuming that if no IOTLB ioctl was
+> > ever invoked then this userspace does not know about IOTLB and
+> > translation should ignore IOTLB completely.
+> 
+> There was a similar suggestion from Stefano:
+> 
+> https://lore.kernel.org/r/20220806105225.crkui6nw53kbm5ge@sgarzare-redhat
+> 
+> about spotting the backend ioctl for IOTLB and using that to enable
+> the negotiation of F_ACCESS_PLATFORM. Would that work for qemu?
+
+Hmm I would worry that this disables the feature for old QEMU :(
+
+
+> > I am a bit nervous about breaking some *other* userspace which actually
+> > wants device to be blocked from accessing memory until IOTLB
+> > has been setup. If we get it wrong we are making guest
+> > and possibly even host vulnerable.
+> > And of course just revering is not an option either since there
+> > are now whole stacks depending on the feature.
+> 
+> Absolutely, I'm not seriously suggesting the revert. I just did it locally
+> to confirm the issue I was seeing.
+> 
+> > Will I'd like your input on whether you feel a hack in the kernel
+> > is justified here.
+> 
+> If we can come up with something that we have confidence in and won't be a
+> pig to maintain, then I think we should do it, but otherwise we can go ahead
+> and change crosvm to mask out this feature flag on the vhost side for now.
+> We mainly wanted to raise the issue to illustrate that this flag continues
+> to attract problems in the hope that it might inform further usage and/or
+> spec work in this area.
+> 
+> In any case, I'm happy to test any kernel patches with our setup if you
+> want to give it a shot.
+
+Thanks!
+I'm a bit concerned that the trick I proposed changes the configuration
+where iotlb was not set up from "access to memory not allowed" to
+"access to all memory allowed". This just might have security
+implications if some application assumed the former.
+And the one Stefano proposed disables IOTLB for old QEMU versions.
+
+
+
+> > Also yes, I think it's a good idea to change crosvm anyway.  While the
+> > work around I describe might make sense upstream I don't think it's a
+> > reasonable thing to do in stable kernels.
+> > I think I'll prepare a patch documenting the legal vhost features
+> > as a 1st step even though crosvm is rust so it's not importing
+> > the header directly, right?
+> 
+> Documentation is a good idea regardless, so thanks for that. Even though
+> crosvm has its own bindings for the vhost ioctl()s, the documentation
+> can be reference or duplicated once it's available in the kernel headers.
+> 
+> Will
+
+So for crosvm change, I will post the documentation change and
+you guys can discuss?
+
+-- 
+MST
+

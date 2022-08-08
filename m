@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4C358C1C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9028758C1CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243902AbiHHCma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S244129AbiHHCoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241965AbiHHClj (ORCPT
+        with ESMTP id S242185AbiHHClk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 22:41:39 -0400
+        Sun, 7 Aug 2022 22:41:40 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AF121BF;
-        Sun,  7 Aug 2022 19:41:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD8225E3
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 19:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=BvTU+A/nzuWUa8MQa4k7Sb4glYSL+iQXtzbWCaKztNY=; b=GLqkpcfBCrPO49rGo+VKNZFVZU
-        iFKYf5NbjDOjL4T7Ju6Az370rqSdPV+96FyYRNmhl3+vbhVxDgIqTUDNIHpSR0FIKJqXava9rSkkU
-        pYZE51oQzMU37HijszMPXEys7ubsnPoFDlFr0ye4g4iiyr5hg68zVpKt2/DItFlQoSTeSRUFcCfn7
-        g/d7u693Gyd85tSt6SxgEZlBJQT4Uz5NyD1OOtZzX+yNRjygMRX4DeZ75dfKkjj89tCiYU+Tvyce/
-        PQsKCLIC0R55T5USWY/OT4FdnaAKeF+ufewhzxYP142nkG/bFzidi4z+wsj209PGZ9DD7wjLzjgXr
-        HeAlwkHA==;
+        bh=O10e4f89X47Ind7IOvarTPJ2k5gxmqsKR8G7YqYX1Cg=; b=N7edtCxvgsKuafmwDdeWT0yPZ2
+        FB3MJMFhR12jcCZEHcTZcus9815lmWGogVyh8sutkUHiE0kE4vbmkm5R7nG8Xuu+aXml0uVTPcFtx
+        6mZXoP0+8H17Szl7f8trEwkAfnR4viPXlkZG9LqRSJIZPahVAkzKHT4AKMKBh64nc/3+QRWXIc9vU
+        /yC2B3mbwSyyiYsZDKNQu/BiAggV1x0aHDnMEsNLObEf+ayUJGRNKMcYcw1yI4m5aTWb5td/NZYID
+        uM3vCfk3ZZxbqa8+bULyt6g8e50Sc1lb1o7U1TdogvlEXSL6CizBYaKVCgIiq2DFoGGiieusYqp0X
+        LmjsFJ9A==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oKshy-00DVSh-QD; Mon, 08 Aug 2022 02:41:34 +0000
+        id 1oKshy-00DVSl-Sz; Mon, 08 Aug 2022 02:41:34 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-kernel@vger.kernel.org, pmladek@suse.com,
         Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-pci@vger.kernel.org
-Subject: [PATCH v5 27/32] PCI/P2PDMA: Convert to printbuf
-Date:   Mon,  8 Aug 2022 03:41:23 +0100
-Message-Id: <20220808024128.3219082-28-willy@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: [PATCH v5 28/32] tracing: trace_events_synth: Convert to printbuf
+Date:   Mon,  8 Aug 2022 03:41:24 +0100
+Message-Id: <20220808024128.3219082-29-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220808024128.3219082-1-willy@infradead.org>
 References: <20220808024128.3219082-1-willy@infradead.org>
@@ -51,91 +52,116 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@gmail.com>
 
-This converts from seq_buf to printbuf. We're using printbuf in external
-buffer mode, so it's a direct conversion, aside from some trivial
-refactoring in cpu_show_meltdown() to make the code more consistent.
+This converts from seq_buf to printbuf.
+
+This code was using seq_buf for building up dynamically allocated
+strings; the conversion uses printbuf's heap allocation functionality to
+simplify things (no longer need to calculate size of the output string).
+
+Also, alphabetize the #includes.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-Cc: linux-pci@vger.kernel.org
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ingo Molnar <mingo@redhat.com>
 ---
- drivers/pci/p2pdma.c | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+ kernel/trace/trace_events_synth.c | 51 ++++++++++---------------------
+ 1 file changed, 16 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-index 4496a7c5c478..8e29e7cabad3 100644
---- a/drivers/pci/p2pdma.c
-+++ b/drivers/pci/p2pdma.c
-@@ -18,7 +18,7 @@
- #include <linux/memremap.h>
- #include <linux/percpu-refcount.h>
- #include <linux/random.h>
--#include <linux/seq_buf.h>
+diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+index 5e8c07aef071..720c75429c8f 100644
+--- a/kernel/trace/trace_events_synth.c
++++ b/kernel/trace/trace_events_synth.c
+@@ -5,13 +5,14 @@
+  * Copyright (C) 2015, 2020 Tom Zanussi <tom.zanussi@linux.intel.com>
+  */
+ 
+-#include <linux/module.h>
+ #include <linux/kallsyms.h>
+-#include <linux/security.h>
++#include <linux/module.h>
+ #include <linux/mutex.h>
 +#include <linux/printbuf.h>
- #include <linux/xarray.h>
++#include <linux/rculist.h>
++#include <linux/security.h>
+ #include <linux/slab.h>
+ #include <linux/stacktrace.h>
+-#include <linux/rculist.h>
+ #include <linux/tracefs.h>
  
- struct pci_p2pdma {
-@@ -275,12 +275,9 @@ static int pci_bridge_has_acs_redir(struct pci_dev *pdev)
- 	return 0;
- }
+ /* for gfp flag names */
+@@ -611,7 +612,7 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
+ 	const char *prefix = NULL, *field_type = argv[0], *field_name, *array;
+ 	struct synth_field *field;
+ 	int len, ret = -ENOMEM;
+-	struct seq_buf s;
++	struct printbuf buf;
+ 	ssize_t size;
  
--static void seq_buf_print_bus_devfn(struct seq_buf *buf, struct pci_dev *pdev)
-+static void prt_bus_devfn(struct printbuf *buf, struct pci_dev *pdev)
- {
--	if (!buf)
--		return;
--
--	seq_buf_printf(buf, "%s;", pci_name(pdev));
-+	prt_printf(buf, "%s;", pci_name(pdev));
- }
- 
- static bool cpu_supports_p2pdma(void)
-@@ -454,13 +451,11 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
- 	struct pci_dev *a = provider, *b = client, *bb;
- 	bool acs_redirects = false;
- 	struct pci_p2pdma *p2pdma;
--	struct seq_buf acs_list;
- 	int acs_cnt = 0;
- 	int dist_a = 0;
- 	int dist_b = 0;
- 	char buf[128];
--
--	seq_buf_init(&acs_list, buf, sizeof(buf));
-+	struct printbuf acs_list = PRINTBUF_EXTERN(buf, sizeof(buf));
- 
- 	/*
- 	 * Note, we don't need to take references to devices returned by
-@@ -471,7 +466,7 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
- 		dist_b = 0;
- 
- 		if (pci_bridge_has_acs_redir(a)) {
--			seq_buf_print_bus_devfn(&acs_list, a);
-+			prt_bus_devfn(&acs_list, a);
- 			acs_cnt++;
- 		}
- 
-@@ -500,7 +495,7 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
- 			break;
- 
- 		if (pci_bridge_has_acs_redir(bb)) {
--			seq_buf_print_bus_devfn(&acs_list, bb);
-+			prt_bus_devfn(&acs_list, bb);
- 			acs_cnt++;
- 		}
- 
-@@ -515,11 +510,11 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
+ 	if (!strcmp(field_type, "unsigned")) {
+@@ -654,28 +655,16 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
+ 		goto free;
  	}
  
- 	if (verbose) {
--		acs_list.buffer[acs_list.len-1] = 0; /* drop final semicolon */
-+		acs_list.buf[acs_list.pos-1] = 0; /* drop final semicolon */
- 		pci_warn(client, "ACS redirect is set between the client and provider (%s)\n",
- 			 pci_name(provider));
- 		pci_warn(client, "to disable ACS redirect for this path, add the kernel parameter: pci=disable_acs_redir=%s\n",
--			 acs_list.buffer);
-+			 acs_list.buf);
- 	}
- 	acs_redirects = true;
+-	len = strlen(field_type) + 1;
+-
+-	if (array)
+-		len += strlen(array);
+-
+-	if (prefix)
+-		len += strlen(prefix);
+-
+-	field->type = kzalloc(len, GFP_KERNEL);
+-	if (!field->type)
+-		goto free;
+-
+-	seq_buf_init(&s, field->type, len);
++	buf = PRINTBUF;
+ 	if (prefix)
+-		seq_buf_puts(&s, prefix);
+-	seq_buf_puts(&s, field_type);
++		prt_str(&buf, prefix);
++	prt_str(&buf, field_type);
+ 	if (array)
+-		seq_buf_puts(&s, array);
+-	if (WARN_ON_ONCE(!seq_buf_buffer_left(&s)))
++		prt_str(&buf, array);
++	if (buf.allocation_failure)
+ 		goto free;
  
+-	s.buffer[s.len] = '\0';
++	field->type = buf.buf;
+ 
+ 	size = synth_field_size(field->type);
+ 	if (size < 0) {
+@@ -687,23 +676,15 @@ static struct synth_field *parse_synth_field(int argc, char **argv,
+ 		goto free;
+ 	} else if (size == 0) {
+ 		if (synth_field_is_string(field->type)) {
+-			char *type;
+-
+-			len = sizeof("__data_loc ") + strlen(field->type) + 1;
+-			type = kzalloc(len, GFP_KERNEL);
+-			if (!type)
+-				goto free;
+-
+-			seq_buf_init(&s, type, len);
+-			seq_buf_puts(&s, "__data_loc ");
+-			seq_buf_puts(&s, field->type);
++			buf = PRINTBUF;
++			prt_str(&buf, "__data_loc ");
++			prt_str(&buf, field->type);
+ 
+-			if (WARN_ON_ONCE(!seq_buf_buffer_left(&s)))
++			if (buf.allocation_failure)
+ 				goto free;
+-			s.buffer[s.len] = '\0';
+ 
+ 			kfree(field->type);
+-			field->type = type;
++			field->type = buf.buf;
+ 
+ 			field->is_dynamic = true;
+ 			size = sizeof(u64);
 -- 
 2.35.1
 

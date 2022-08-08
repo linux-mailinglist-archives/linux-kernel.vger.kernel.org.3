@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B97358C861
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E2458C86A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbiHHMbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 08:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
+        id S235724AbiHHMf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 08:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237852AbiHHMat (ORCPT
+        with ESMTP id S232981AbiHHMfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 08:30:49 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59947641E
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:30:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aTFI4YVbXZ6usAs6qmL4aqawvxutNGWZ+bPJxb56Zzs=; b=Zf4scpgkroyhRk+7M353lZ2dAj
-        GI38loaZk0z2PjpD8QJloqFrxZSPJOneXn9eX16cNTxVJ5l9a0+J+oFOqYDouS2eRMd3y6ll+d3mB
-        rRyYXnvzsxNqH3gcZv0WBmHarSLpw0zJ7Ho0DxrA0YLvB/QxyfzdE9j8dm1aHcccDbYD1vMStJ2EM
-        qF5qUJckHqLKEdcElFzosBjdoxzWrTFfDU8OOsFluME14BT6mElYm+e6uTugqAXcjEN34ji8HvUCl
-        8xJpumDOA98zo4Huk+fgh/sS8iHQt0PzCxyb4ev0Y822Zktqj2EBWABiwyFM2VRF1vlO/Z12wcnDo
-        rm0p7o2w==;
-Received: from [2a01:799:961:d200:fd91:af1e:9da7:f964] (port=64170)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oL1u9-0000q8-GR; Mon, 08 Aug 2022 14:30:45 +0200
-Message-ID: <6e47ce2d-25c7-7254-703d-2a1d3bb64373@tronnes.org>
-Date:   Mon, 8 Aug 2022 14:30:42 +0200
+        Mon, 8 Aug 2022 08:35:46 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7649E112F
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:35:40 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id a18-20020a05600c349200b003a30de68697so5889793wmq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=ES8OBBjivyd4YwLWvC24/nTpfKctkJfcHXHy4gAwKz4=;
+        b=azhTbFjAOaDdLUunh9ud/ShoY0nESsBFNiSkF1V6CD2vQN2a0prBlOaAgu+OwP+spT
+         nEf+NEbCzMoi9VLg+xTHKiKKy6it+BDqsHkM6C7I9VlVD9gkjvx/kLOfbupgHjKMIwHZ
+         L7EIZleuptwFPb5u4mgu4DL5lLAyrmnB4MHIU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=ES8OBBjivyd4YwLWvC24/nTpfKctkJfcHXHy4gAwKz4=;
+        b=gX/nzaBRYmQcj5/kK0pIb2RWl/64pUEK0ohPxH8Y8mfagOnp/YPxq0JPRXW5aZ2cGM
+         x3DcZEHwLUv2HJaQllB12lbksE0R5rt/NTkIpS3pEsvTPOde6pZJMlIJxRDL9NYg7s+a
+         gYXbQCv4vp3qZUj3NI38CQOxw52+SXk9s+c5wnB16YGDYWqr1DdHKYkst/+D9XU1mB3r
+         iZizrreYLc/kPn9UaZYXrHf5DSBZnp4E7W2cbO51Gi8nt+kkqv/an5oERROrKLh4ag8e
+         pZ7ds1pgFx91YQA4XuX99FtbWIfcd4wrr5yRtigmK2x2NK7PhVNEgk3fIizQfycYCQHr
+         CuKA==
+X-Gm-Message-State: ACgBeo24ueDvIFC2qWB2lgoSUAXQtoIES2999ZcvYh6ksuJoVSyxk1mp
+        EKfDlxjMutNGteBOMv+nN/iY16Q+oD/YKQ==
+X-Google-Smtp-Source: AA6agR4aB+rHDSxtj9RQJWsUQNP+h1Gj3kh3C5OYh5wbKdNrkj+EB+S0KQNintPSWYYszy/wvmIM/Q==
+X-Received: by 2002:a05:600c:4f95:b0:3a3:4612:6884 with SMTP id n21-20020a05600c4f9500b003a346126884mr17582239wmq.39.1659962139125;
+        Mon, 08 Aug 2022 05:35:39 -0700 (PDT)
+Received: from miu.piliscsaba.redhat.com (87-97-117-187.pool.digikabel.hu. [87.97.117.187])
+        by smtp.gmail.com with ESMTPSA id n18-20020a05600c501200b003a2d47d3051sm15192404wmr.41.2022.08.08.05.35.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 05:35:33 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 14:35:28 +0200
+From:   Miklos Szeredi <miklos@szeredi.hu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [GIT PULL] fuse update for 6.0
+Message-ID: <YvEDEKQSOaDaFiWb@miu.piliscsaba.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 03/35] drm/atomic: Add TV subconnector property to
- get/set_property
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-3-3d53ae722097@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v1-3-3d53ae722097@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,67 +63,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
+Please pull from:
 
-Den 29.07.2022 18.34, skrev Maxime Ripard:
-> The subconnector property was created by drm_mode_create_tv_properties(),
-> but wasn't exposed to the userspace through the generic
-> atomic_get/set_property implementation, and wasn't stored in any generic
-> state structure.
-> 
-> Let's solve this.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
+  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git tags/fuse-update-6.0
 
-I just realised that this and the select_subconnector property isn't
-used by any drivers. Do you plan to use them? Maybe they don't need to
-be wired up at all.
+- Fix an issue with reusing the bdi in case of block based filesystems
 
-Anyways, up to you:
+- Allow root (in init namespace) to access fuse filesystems in user
+  namespaces if expicitly enabled with a module param
 
-Reviewed-by: Noralf Trønnes <noralf@tronnes.org>
+- Misc fixes
 
-> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
-> index c74c78a28171..c06d0639d552 100644
-> --- a/drivers/gpu/drm/drm_atomic_uapi.c
-> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
-> @@ -688,6 +688,8 @@ static int drm_atomic_connector_set_property(struct drm_connector *connector,
->  		return -EINVAL;
->  	} else if (property == config->tv_select_subconnector_property) {
->  		state->tv.select_subconnector = val;
-> +	} else if (property == config->tv_subconnector_property) {
-> +		state->tv.subconnector = val;
->  	} else if (property == config->tv_left_margin_property) {
->  		state->tv.margins.left = val;
->  	} else if (property == config->tv_right_margin_property) {
-> @@ -796,6 +798,8 @@ drm_atomic_connector_get_property(struct drm_connector *connector,
->  			*val = connector->dpms;
->  	} else if (property == config->tv_select_subconnector_property) {
->  		*val = state->tv.select_subconnector;
-> +	} else if (property == config->tv_subconnector_property) {
-> +		*val = state->tv.subconnector;
->  	} else if (property == config->tv_left_margin_property) {
->  		*val = state->tv.margins.left;
->  	} else if (property == config->tv_right_margin_property) {
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index f8091edf9a33..1e9996b33cc8 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -672,6 +672,7 @@ struct drm_connector_tv_margins {
->  /**
->   * struct drm_tv_connector_state - TV connector related states
->   * @select_subconnector: selected subconnector
-> + * @subconnector: detected subconnector
->   * @margins: TV margins
->   * @mode: TV mode
->   * @brightness: brightness in percent
-> @@ -683,6 +684,7 @@ struct drm_connector_tv_margins {
->   */
->  struct drm_tv_connector_state {
->  	enum drm_mode_subconnector select_subconnector;
-> +	enum drm_mode_subconnector subconnector;
->  	struct drm_connector_tv_margins margins;
->  	unsigned int mode;
->  	unsigned int brightness;
-> 
+Thanks,
+Miklos
+
+---
+Daniil Lunev (2):
+      vfs: function to prevent re-use of block-device-based superblocks
+      fuse: retire block-device-based superblock on force unmount
+
+Dave Marchevsky (1):
+      fuse: Add module param for CAP_SYS_ADMIN access bypassing allow_other
+
+Deming Wang (2):
+      virtiofs: delete unused parameter for virtio_fs_cleanup_vqs
+      virtio_fs: Modify format for virtio_fs_direct_access
+
+Jeffle Xu (1):
+      fuse: avoid unnecessary spinlock bump
+
+Miklos Szeredi (4):
+      fuse: write inode in fuse_release()
+      fuse: fix deadlock between atomic O_TRUNC and page invalidation
+      fuse: limit nsec
+      fuse: ioctl: translate ENOSYS
+
+Xie Yongji (1):
+      fuse: Remove the control interface for virtio-fs
+
+---
+ Documentation/filesystems/fuse.rst | 29 +++++++++++++++++++++++-----
+ fs/fuse/control.c                  |  4 ++--
+ fs/fuse/dax.c                      |  2 +-
+ fs/fuse/dir.c                      | 16 +++++++++++++++-
+ fs/fuse/file.c                     | 39 +++++++++++++++++++++++++-------------
+ fs/fuse/inode.c                    | 16 ++++++++++++++--
+ fs/fuse/ioctl.c                    | 15 +++++++++++++--
+ fs/fuse/virtio_fs.c                |  9 ++++-----
+ fs/super.c                         | 33 ++++++++++++++++++++++++++++++--
+ include/linux/fs.h                 |  2 ++
+ 10 files changed, 132 insertions(+), 33 deletions(-)

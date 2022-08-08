@@ -2,194 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A9558CA78
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DD558CA7E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243573AbiHHOXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 10:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
+        id S237709AbiHHO0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 10:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243228AbiHHOXd (ORCPT
+        with ESMTP id S243635AbiHHOZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 10:23:33 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4F810FDD;
-        Mon,  8 Aug 2022 07:23:32 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id y10-20020a9d634a000000b006167f7ce0c5so6608462otk.0;
-        Mon, 08 Aug 2022 07:23:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc;
-        bh=c4sdWPDGZh2lpcz0JPsH1RxILtP+3NzhgDmzZEzhFwU=;
-        b=ZnLmow2wQ4sURptG6gn+2TtbvfsVwBPnjNh04IBl4k64MgxlFvSvUC+wp+vboN3FgO
-         ZyzRtpw9HTFDSJFU034ypntElaqBvXbVjdm6be2TRrV7uK16N99P1EchihnkRoKVliBv
-         8GPCh+Cfbd5UnCYx4nUQfWm3niPkbwQoKkNBKaNVXIw+u4CP7aMrxBGpmDm79s1VSoSA
-         UiPRyNaRR/wMj53t/PjOxllk2TJrO0AEUzOkw2dCBTrfbgVAfMHFdUe/xgp/HVbunerL
-         TOsm01vtfLxY0tyde5qMUJ1Q267z+JxC2cJNOEpgBI8FwHIQPZxY08ZWIUvoyhQxNAN4
-         Du/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc;
-        bh=c4sdWPDGZh2lpcz0JPsH1RxILtP+3NzhgDmzZEzhFwU=;
-        b=5wwcMJcdS+iRaMctNi2ttckacXt1wCH5N1K2V8/40KJtrX7V8m9tLH1lGnZtjSqaSk
-         TF2ykpMVvzZV4RDAa7yMMtB0Q83AV+zsvyE5wbXf1MA46idGg6lutDotjuFZRopLvmuW
-         nQwMYiQD0C1xbopcmpxtiRnlXBIrOIvw5WmoaanYRk84oJM9GtEvqo/fZGJChu5DpYPU
-         czZAMwqr9TX/nVfAGXxNLnpLBQ8ArHKmaXIDhDRLKBghpIoC8cN4VNJCnVniTRBB0oFb
-         TEEaCYBUdUPRD7YKdmDOg/qvCEf1SWXoJ/ivqFioyPpKgVbABu3G1t91+4TEO0OoN8kJ
-         NQDQ==
-X-Gm-Message-State: ACgBeo03smLK9vMs7cx2MKmIhjb0OvBXNsFvKhU2mF908/OeDIdHMopT
-        CXRGwV6bqNdNeu6cNPMoJw==
-X-Google-Smtp-Source: AA6agR5il2qTkCti/3qg75D5Tbky90Do0XQ9veQVqgQYxxPzZdL+FNKM8OV8jU27apltAUSE8fZdRA==
-X-Received: by 2002:a9d:73d0:0:b0:61c:8d31:6981 with SMTP id m16-20020a9d73d0000000b0061c8d316981mr7149505otk.99.1659968610070;
-        Mon, 08 Aug 2022 07:23:30 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.144.75])
-        by smtp.gmail.com with ESMTPSA id fo34-20020a0568709a2200b0010e47737471sm2295305oab.49.2022.08.08.07.23.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 07:23:29 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:3153:e085:df0f:abc2])
-        by serve.minyard.net (Postfix) with ESMTPSA id B79DE1800FA;
-        Mon,  8 Aug 2022 14:23:28 +0000 (UTC)
-Date:   Mon, 8 Aug 2022 09:23:27 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, jic23@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        openbmc@lists.ozlabs.org, openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3] dt-binding: ipmi: add fallback to npcm845 compatible
-Message-ID: <20220808142327.GR3834@minyard.net>
-Reply-To: minyard@acm.org
-References: <20220808075452.115907-1-tmaimon77@gmail.com>
- <da83671e-08b9-2d68-e5d3-d9b09c105bb4@linaro.org>
- <20220808122652.GO3834@minyard.net>
- <937b6737-5d55-2185-a4bc-7535fa6da85c@linaro.org>
+        Mon, 8 Aug 2022 10:25:55 -0400
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991722AC4;
+        Mon,  8 Aug 2022 07:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1659968749; bh=tQJR0APZve8GyPCYp1vfEqZlsyI/nEE7VyB1CAlKPeI=;
+        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+        b=f818sH6UcK1WUegmdhIZbwewDaHR1AEl0lKmQ29R9MWgjp6OrIEhLiAaQpyhNjYU5
+         DezgoSLvqLXib3CofzfF8KmS4fgK86zCENkh8uBmTjbx2SllWSEPjqYYi6SZRuG3vw
+         RJ9B4vZhWQz7Uk2MaAcrfN9mt6y9Qhqht6wCa8qI=
+Date:   Mon, 8 Aug 2022 16:25:49 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, martijn@brixit.nl, ayufan@ayufan.eu,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Samuel Dionne-Riel <samuel@dionne-riel.com>
+Subject: Re: [PATCH v2 1/3] arm64: dts: rockchip: Add RK3399-T opp
+Message-ID: <20220808142549.tdoc76vrcqcf2dxu@core>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        martijn@brixit.nl, ayufan@ayufan.eu, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Samuel Dionne-Riel <samuel@dionne-riel.com>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20220805234411.303055-1-tom@tom-fitzhenry.me.uk>
+ <20220805234411.303055-2-tom@tom-fitzhenry.me.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <937b6737-5d55-2185-a4bc-7535fa6da85c@linaro.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220805234411.303055-2-tom@tom-fitzhenry.me.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 03:38:45PM +0300, Krzysztof Kozlowski wrote:
-> On 08/08/2022 15:26, Corey Minyard wrote:
-> > On Mon, Aug 08, 2022 at 11:11:16AM +0300, Krzysztof Kozlowski wrote:
-> >> On 08/08/2022 09:54, Tomer Maimon wrote:
-> >>> Add to npcm845 KCS compatible string a fallback to npcm750 KCS compatible
-> >>> string becuase NPCM845 and NPCM750 BMCs are using identical KCS modules.
-> >>>
-> >>> Fixes: 84261749e58a ("dt-bindings: ipmi: Add npcm845 compatible")
-> >>> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> >>
-> >>
-> >> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > 
-> > Ok, I think I understand how this is supposed to work.  It's not
-> > altogether clear from the device tree documentation.  It says in
-> > Documentation/devicetree/bindings/writing-bindings.rst:
-> > 
-> > - DO make 'compatible' properties specific. DON'T use wildcards in compatible
-> >   strings. DO use fallback compatibles when devices are the same as or a subset
-> >   of prior implementations. DO add new compatibles in case there are new
-> >   features or bugs.
+Hi,
+
+On Sat, Aug 06, 2022 at 09:44:09AM +1000, Tom Fitzhenry wrote:
+> From: Samuel Dionne-Riel <samuel@dionne-riel.com>
 > 
-> This documentation is short, so it explains what should be done, not
-> exactly why it should be done. If we wanted "why" this would not be set
-> of 4 sentences but twice more...
+> These tables were derived from the regular RK3399 table, by dropping
+> entries exceeding recommended operating conditions from the datasheet,
+> and clamping the last exceeding value where it made sense.
+
+Do we really need to duplicate the whole OPP table of rk3399-opp.dtsi
+just to disable a few top opp## entries?
+
+This will make it more annoying to add PVTM/eFuse leakage based voltage
+selection support later on, because then there would have to be identical
+multi-level operating points across multiple files. And that sounds like
+a LOT of dupplication for little benefit.
+
+Also Pinephone Pro has RK3399S not -T. RK3399 seems to be RK3399 selected for
+low leakage (values I've seen from eFuses indicate the leakage is half that of
+RK3399 available in Pinebook Pro)
+
+I'd suggest just adding references to select operating point nodes that
+are "too much" and disabling them with status = "disabled". This
+can be done from the pinephone device tree file directly.
+
+Otherwise we'll eventually end up with several files containing
+something like this [1] and only differing in absence of some opp## nodes
+and not their actual useful content.
+
+[1] https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/boot/dts/rockchip/rk3399-opp.dtsi#L6
+
+kind regards,
+	o.
+
+> Signed-off-by: Samuel Dionne-Riel <samuel@dionne-riel.com>
+> ---
+>  .../arm64/boot/dts/rockchip/rk3399-t-opp.dtsi | 118 ++++++++++++++++++
+>  1 file changed, 118 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-t-opp.dtsi
 > 
-> > 
-> > AFAICT, there are no new features or bugs, just a new SOC with the same
-> > device.  In general usage I have seen, you would just use the same
-> > compatible.  
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-t-opp.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-t-opp.dtsi
+> new file mode 100644
+> index 0000000000000..ec153015d9d13
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-t-opp.dtsi
+> @@ -0,0 +1,118 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2016-2017 Fuzhou Rockchip Electronics Co., Ltd
+> + * Copyright (c) 2022 Samuel Dionne-Riel <samuel@dionne-riel.com>
+> + */
+> +
+> +/ {
+> +	cluster0_opp: opp-table-0 {
+> +		compatible = "operating-points-v2";
+> +		opp-shared;
+> +
+> +		opp00 {
+> +			opp-hz = /bits/ 64 <408000000>;
+> +			opp-microvolt = <825000 825000 925000>;
+> +			clock-latency-ns = <40000>;
+> +		};
+> +		opp01 {
+> +			opp-hz = /bits/ 64 <600000000>;
+> +			opp-microvolt = <825000 825000 925000>;
+> +		};
+> +		opp02 {
+> +			opp-hz = /bits/ 64 <816000000>;
+> +			opp-microvolt = <850000 850000 925000>;
+> +		};
+> +		opp03 {
+> +			opp-hz = /bits/ 64 <1008000000>;
+> +			opp-microvolt = <925000 925000 925000>;
+> +		};
+> +	};
+> +
+> +	cluster1_opp: opp-table-1 {
+> +		compatible = "operating-points-v2";
+> +		opp-shared;
+> +
+> +		opp00 {
+> +			opp-hz = /bits/ 64 <408000000>;
+> +			opp-microvolt = <825000 825000 1150000>;
+> +			clock-latency-ns = <40000>;
+> +		};
+> +		opp01 {
+> +			opp-hz = /bits/ 64 <600000000>;
+> +			opp-microvolt = <825000 825000 1150000>;
+> +		};
+> +		opp02 {
+> +			opp-hz = /bits/ 64 <816000000>;
+> +			opp-microvolt = <825000 825000 1150000>;
+> +		};
+> +		opp03 {
+> +			opp-hz = /bits/ 64 <1008000000>;
+> +			opp-microvolt = <875000 875000 1150000>;
+> +		};
+> +		opp04 {
+> +			opp-hz = /bits/ 64 <1200000000>;
+> +			opp-microvolt = <950000 950000 1150000>;
+> +		};
+> +		opp05 {
+> +			opp-hz = /bits/ 64 <1416000000>;
+> +			opp-microvolt = <1025000 1025000 1150000>;
+> +		};
+> +		opp06 {
+> +			opp-hz = /bits/ 64 <1500000000>;
+> +			opp-microvolt = <1100000 1100000 1150000>;
+> +		};
+> +	};
+> +
+> +	gpu_opp_table: opp-table-2 {
+> +		compatible = "operating-points-v2";
+> +
+> +		opp00 {
+> +			opp-hz = /bits/ 64 <200000000>;
+> +			opp-microvolt = <825000 825000 975000>;
+> +		};
+> +		opp01 {
+> +			opp-hz = /bits/ 64 <297000000>;
+> +			opp-microvolt = <825000 825000 975000>;
+> +		};
+> +		opp02 {
+> +			opp-hz = /bits/ 64 <400000000>;
+> +			opp-microvolt = <825000 825000 975000>;
+> +		};
+> +		opp03 {
+> +			opp-hz = /bits/ 64 <500000000>;
+> +			opp-microvolt = <875000 875000 975000>;
+> +		};
+> +		opp04 {
+> +			opp-hz = /bits/ 64 <600000000>;
+> +			opp-microvolt = <925000 925000 975000>;
+> +		};
+> +	};
+> +};
+> +
+> +&cpu_l0 {
+> +	operating-points-v2 = <&cluster0_opp>;
+> +};
+> +
+> +&cpu_l1 {
+> +	operating-points-v2 = <&cluster0_opp>;
+> +};
+> +
+> +&cpu_l2 {
+> +	operating-points-v2 = <&cluster0_opp>;
+> +};
+> +
+> +&cpu_l3 {
+> +	operating-points-v2 = <&cluster0_opp>;
+> +};
+> +
+> +&cpu_b0 {
+> +	operating-points-v2 = <&cluster1_opp>;
+> +};
+> +
+> +&cpu_b1 {
+> +	operating-points-v2 = <&cluster1_opp>;
+> +};
+> +
+> +&gpu {
+> +	operating-points-v2 = <&gpu_opp_table>;
+> +};
+> -- 
+> 2.37.1
 > 
-> Most of the usages are like shown here. There are several other cases.
-> It's the same with poor or good code - you will always find both patterns.
-
-It is true, but lack of specified good examples makes it hard for people
-like me to know what is right and wrong.
-
-> 
-> > However, if I understand this, that last sentence should say:
-> > 
-> >   DO add new compatibles in case there is a new version of hardware with
-> >   the possibility of new features and/or bugs.
-> > 
-> > Also, the term "specific" is, ironically, vague.  Specific to what?
-> 
-> To me it is rather clear. Specific as in first meanings of the word (1,
-> 3, 4 and 5):
-> https://en.wiktionary.org/wiki/specific
-
-Everything is always clear when you understand something :).
-The really hard part about technical documentation is forgetting what
-you know and approaching it from a newbie's context.
-
-> 
-> nuvoton,npcm7xx-kcs-bmc would not be definite (allows more meanings),
-> unique (in terms of devices it expresses), distinctive (as two different
-> devices use the same) or serving to identify one thing (again - two SoCs).
-> 
-> What other meaning do you think of?
-
-It is not the definition of specific that is vague, it is what
-"specific" applies to.  Is it specific to a SOC?  Specific to a board?
-Specific to a particular device implementation?  Specific to a rev of
-the silicon?
-
-I will say that when I read that sentence, it means nothing to me.
-If it said "DO make compatible properties as specific as possible to the
-particular hardware implementation of the device" that would have more
-meaning, but still leaves the reader wondering exactly how to do this.
-
-For instance, should I put board/rev specific compatibles in?  Would it
-be:
-
-   "mycompany,myboard-rev1-npcm845-kcs-bmc", "mycompany,myboard-npcm845-kcs-bmc",
-   "nuvoton,npcm845-revb-kcs-bmc", "nuvoton,npcm845-kcs-bmc",
-   "nuvoton,npcm750-kcs-bmc"
-
-That's about as specific as you can get with fallbacks for everything,
-but it is too specific?  How far do you go?  There might be wiring
-differences on specific board, maybe that makes a difference.
-
-That's where good (and identified bad) examples and rationale come in.
-Tell the user why something is being done and it's easier to understand
-what to do in different situations.  It's not a matter of number of
-sentences.  Just like code, shorter is not always better.
-
-Anyway, I have ranted for too long.  Thank you for clearing this up for
-me.
-
--corey
-
-> 
-> > 
-> > It would be nice to have something added to "Typical cases and caveats"
-> > that says:
-> > 
-> > - If you are writing a binding for a new device that is the same as, or
-> >   a superset of another existing device, add a new specific compatible
-> >   for the new device followed by a compatible for the existing device.
-> >   That way, if the device has new bugs or new specific features are
-> >   added, you can add workarounds without modifying the device tree.
-> > 
-> > Anyway, I have added this to my tree with your ack.
-> 
-> Fantastic, thanks!
-> 
-> 
-> Best regards,
-> Krzysztof

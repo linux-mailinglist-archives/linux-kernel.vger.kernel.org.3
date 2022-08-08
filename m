@@ -2,93 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FF958C763
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85ED258C764
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242505AbiHHLOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 07:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S237547AbiHHLQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 07:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242754AbiHHLO1 (ORCPT
+        with ESMTP id S231142AbiHHLQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 07:14:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6107C6449
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659957265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yY0JFPsIeaqtqI4iFArqAoOxJZBsLvWKUrWCsvYe/Bc=;
-        b=g5INBvX+6CvKAqjWw2DupmWSeLQhrfClfnREWRG+f5r64a4dVFAIFqEeJ71jRvItmTqlWz
-        6ZI1n/LaDmtHQij4QY0n6vdF46VILNDzhHeAaDasqvJtHMkfbh/va1a+2c2A9gNBgPwG8n
-        vQ7HYvUsRJIvtubc2cunhBPo7YpCmr4=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-279-81rcekkcPTGXxYg0unhmTg-1; Mon, 08 Aug 2022 07:14:24 -0400
-X-MC-Unique: 81rcekkcPTGXxYg0unhmTg-1
-Received: by mail-qk1-f199.google.com with SMTP id bs41-20020a05620a472900b006b8e84d6cddso7629035qkb.19
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 04:14:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=yY0JFPsIeaqtqI4iFArqAoOxJZBsLvWKUrWCsvYe/Bc=;
-        b=Sa6Y1hNfhfn23JSACwcJgQ+KUCBrfiVVC8/1JPeT26uqNjlghnJCcugsUrNGO0LRWj
-         J1pvHFIAZhxdxTsrXr9C0KJaj6dD72+KyGmOn8lEF1TWwXrjWTJCnFWhIDnMN1EtyVDC
-         TQWHkqreRxfykjYFzKVVUoRSDh8cQu6IkNygI8rlub3XoxdGk83lb2Y7ds6eYn+ED+IA
-         2NQmWzGyX2Dkr3iphDpxJ2If/k5OhATH8xmBvo0uH7cL+fSIvDFnE/RmfvrUVaOcWI5c
-         G8XDruE3Gbqz1Bfq+c+XrL15Xq1Txmx0aGZpxVAnKX1v6i6k/2XTK4PPNWGGMILaRoS2
-         I4gA==
-X-Gm-Message-State: ACgBeo0MKZCRqzXjVQEt5z9P0L4EJTXb4HdK4h/Jf3sO9CJDdwvJlcYT
-        ptwJh5rzjkTEAF+ORHUYEX++EhaWqDjdWmdajjzFcqa9mKqlEk5890WYnTvAcO0MhX74li1fXN3
-        7gpUZYYd4lqGlYtFjtx/C23mw
-X-Received: by 2002:a37:9602:0:b0:6b8:753c:729d with SMTP id y2-20020a379602000000b006b8753c729dmr13647127qkd.83.1659957263905;
-        Mon, 08 Aug 2022 04:14:23 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR639ZIMRG4InAc+BbR2p/NP4CtcHRuLRLUW7+Hgtww1NkwTDOVGrJ0yy9vLlJVxPTxPb1lKOQ==
-X-Received: by 2002:a37:9602:0:b0:6b8:753c:729d with SMTP id y2-20020a379602000000b006b8753c729dmr13647106qkd.83.1659957263654;
-        Mon, 08 Aug 2022 04:14:23 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id n1-20020ac86741000000b00342f932c47csm1906952qtp.46.2022.08.08.04.14.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 04:14:22 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 13:14:12 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v3 9/9] vsock_test: POLLIN + SO_RCVLOWAT test
-Message-ID: <20220808111412.iywihoyszvswomlb@sgarzare-redhat>
-References: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
- <1f50d595-cd37-ad61-f165-5632162dc682@sberdevices.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <1f50d595-cd37-ad61-f165-5632162dc682@sberdevices.ru>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Mon, 8 Aug 2022 07:16:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058C1DF2A
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:16:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 666996113C
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 11:16:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F34C433C1;
+        Mon,  8 Aug 2022 11:16:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659957388;
+        bh=vKDn3GWmkKu9N+Wul1D5RdteDfPxM2sCmCWBfALBO+E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JeWZGdVTMV7w4ru03NAonSPxtedMWljR6QeWLJIHBzQKicKd4w5ao996bbzOqqDvX
+         PNLIvNAAOvFt6q2DRwFiaazol+ohBsbTr1i5KEQ8Td8FQCs4ye/D5PNaPU8ZqeCTH7
+         8Kwm2MmuF8FV8V5UB8sekAQXUzUA41DN0sXPD9Nu5sgsy/Pw1VpT0iwsrBsNe2vrh4
+         Ki0Vfu9wg+iyJWI9MdlIEBRxIjSV1t+wV5Ht1Uor5tPSV86zUR4+64xuaPIZze6ShS
+         e9q6XSpI2mGYwGIZDtfa04XCWrsrFAZ59r1hcSWZGlANKOs7DWn0z2Or3RM5YoZOwS
+         BtnnicPCyrzoA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oL0kE-001eEB-F9;
+        Mon, 08 Aug 2022 12:16:26 +0100
+Date:   Mon, 08 Aug 2022 12:16:26 +0100
+Message-ID: <87bksvvvcl.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] irqchip: Select downstream irqchip drivers for LoongArch CPU
+In-Reply-To: <CAAhV-H43WQhdnn-QjEAu4gPVt9u7b5hfBXHM6jH2Tt08cBY0eg@mail.gmail.com>
+References: <20220808085319.3350111-1-chenhuacai@loongson.cn>
+        <87edxrvymh.wl-maz@kernel.org>
+        <CAAhV-H43WQhdnn-QjEAu4gPVt9u7b5hfBXHM6jH2Tt08cBY0eg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenhuacai@gmail.com, chenhuacai@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, jiaxun.yang@flygoat.com, lkp@intel.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,87 +72,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 02:07:58PM +0000, Arseniy Krasnov wrote:
->This adds test to check,that when poll() returns POLLIN,POLLRDNORM bits,
->next read call won't block.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/vsock_test.c | 107 +++++++++++++++++++++++++++++++
-> 1 file changed, 107 insertions(+)
->
->diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->index dc577461afc2..920dc5d5d979 100644
->--- a/tools/testing/vsock/vsock_test.c
->+++ b/tools/testing/vsock/vsock_test.c
->@@ -18,6 +18,7 @@
-> #include <sys/socket.h>
-> #include <time.h>
-> #include <sys/mman.h>
->+#include <poll.h>
->
-> #include "timeout.h"
-> #include "control.h"
->@@ -596,6 +597,107 @@ static void test_seqpacket_invalid_rec_buffer_server(const struct test_opts *opt
-> 	close(fd);
-> }
->
->+static void test_stream_poll_rcvlowat_server(const struct test_opts *opts)
->+{
->+#define RCVLOWAT_BUF_SIZE 128
->+	int fd;
->+	int i;
->+
->+	fd = vsock_stream_accept(VMADDR_CID_ANY, 1234, NULL);
->+	if (fd < 0) {
->+		perror("accept");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	/* Send 1 byte. */
->+	send_byte(fd, 1, 0);
->+
->+	control_writeln("SRVSENT");
->+
->+	/* Wait until client is ready to receive rest of data. */
->+	control_expectln("CLNSENT");
->+
->+	for (i = 0; i < RCVLOWAT_BUF_SIZE - 1; i++)
->+		send_byte(fd, 1, 0);
->+
->+	/* Keep socket in active state. */
->+	control_expectln("POLLDONE");
->+
->+	close(fd);
->+}
->+
->+static void test_stream_poll_rcvlowat_client(const struct test_opts *opts)
->+{
->+	unsigned long lowat_val = RCVLOWAT_BUF_SIZE;
->+	char buf[RCVLOWAT_BUF_SIZE];
->+	struct pollfd fds;
->+	ssize_t read_res;
->+	short poll_flags;
->+	int fd;
->+
->+	fd = vsock_stream_connect(opts->peer_cid, 1234);
->+	if (fd < 0) {
->+		perror("connect");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (setsockopt(fd, SOL_SOCKET, SO_RCVLOWAT,
->+			&lowat_val, sizeof(lowat_val))) {
+On Mon, 08 Aug 2022 12:06:23 +0100,
+Huacai Chen <chenhuacai@gmail.com> wrote:
+> 
+> Hi, Marc,
+> 
+> On Mon, Aug 8, 2022 at 6:05 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Mon, 08 Aug 2022 09:53:19 +0100,
+> > Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > >
+> > > LoongArch irqchips have a fixed hierarchy which currently can't be
+> > > described by ACPI tables, so upstream irqchip drivers call downstream
+> > > irqchip drivers' initialization directly. As a result, the top level
+> > > (CPU-level) irqchip driver should explicitly select downstream drivers
+> > > to avoid build errors.
+> > >
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > ---
+> > >  drivers/irqchip/Kconfig | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > >
+> > > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> > > index 66b9fa408bf2..2549daa859d6 100644
+> > > --- a/drivers/irqchip/Kconfig
+> > > +++ b/drivers/irqchip/Kconfig
+> > > @@ -561,6 +561,11 @@ config IRQ_LOONGARCH_CPU
+> > >       select GENERIC_IRQ_CHIP
+> > >       select IRQ_DOMAIN
+> > >       select GENERIC_IRQ_EFFECTIVE_AFF_MASK
+> > > +     select LOONGSON_LIOINTC
+> > > +     select LOONGSON_EIOINTC
+> > > +     select LOONGSON_PCH_PIC
+> > > +     select LOONGSON_PCH_MSI
+> > > +     select LOONGSON_PCH_LPC
+> >
+> > This triggers tons of pretty bad compilation and configuration issues,
+> > as PCI still isn't selectable, even in Linus' tree (see below). I'm
+> > guessing you still have local patches that hide this issue.
+> >
+> > Please test your patches on an upstream tree in the future.
+> I'm very sorry for that. I think this patch should be delayed after
+> 5.20-rc1, then PCI code will have been merged.
 
-A small checkpatch warning that you can fix since you have to resend:
-
-CHECK: Alignment should match open parenthesis
-#76: FILE: tools/testing/vsock/vsock_test.c:645:
-+	if (setsockopt(fd, SOL_SOCKET, SO_RCVLOWAT,
-+			&lowat_val, sizeof(lowat_val))) {
-
-total: 0 errors, 0 warnings, 1 checks, 125 lines checked
+Sure, I'm fine with that. However, I have seen the PCI pull request
+going in without any mention of the LoongArch support. Is it going via
+another tree?
 
 Thanks,
-Stefano
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

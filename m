@@ -2,86 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E689558CA98
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7C658CA9C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243590AbiHHOgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 10:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
+        id S243602AbiHHOgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 10:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243208AbiHHOgK (ORCPT
+        with ESMTP id S243464AbiHHOgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 10:36:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D34E65B5
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:36:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31FE0B80EB5
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 14:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67211C433C1;
-        Mon,  8 Aug 2022 14:36:06 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ATFrCsLj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659969364;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KwXotlNfJolIheziW9hCV8MLTEPJKC869xycZMSy26A=;
-        b=ATFrCsLjeIxwzBVATi/e9pHZkWoB1Tg6nZsY9YIwf5/QVM8JyKPrtS8vUmFY1Vt5fFfpp3
-        2UNjkRkYAIFzi9IA7nLtOD8lwybXpEbR33TJU8R55xd+zpCcQbxbmcvsmD++1hhjK3ZGWS
-        31XqT27Di8ZEJrUVQMyta7QscX49DO0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6aa68a4a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 8 Aug 2022 14:36:03 +0000 (UTC)
-Date:   Mon, 8 Aug 2022 16:36:00 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] RISC-V Patches for the 5.20 Merge Window, Part 1
-Message-ID: <YvEfUKp5MWt+nS3+@zx2c4.com>
-References: <mhng-1cbba637-6dd2-456a-859b-9d3f8be6bab7@palmer-mbp2014>
- <YvEeQrzuPIKiEh8m@zx2c4.com>
+        Mon, 8 Aug 2022 10:36:31 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F3711C00;
+        Mon,  8 Aug 2022 07:36:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659969390; x=1691505390;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=E3CTIu1dHRegj0jDNrfOOz23DeoBWwNuFjBgHHApUwk=;
+  b=AGY/ufwC9/xICfhkIohQzGlyKn7aV0q4RUFhTtlHRy5x+s03KFDZiDEl
+   XZw5oyIG2jIA6KWqjEgXZwRJixWJxtlT8IWEIUILHuQABs0ovQ8oft1SQ
+   OcyV86yk3xf8KyrUO3udjM+JtU2eMwYDC4E0l34R85fHXEA6sEK40mlK+
+   G2YChX/WrNZfxZqe0+0kA1tDzWoNbu3/7sL9ObE4beDqAdgi4IBr3M9Mj
+   8XoMWYQO3/t4otzGtdQn9EQM/s+Vn3d1nzDA33bRq9hk+qP8jrNf+2Cu9
+   5VTsQDV60wcCTPLzsYAYNWbBPX7YXa30CZAJ7SvtGP0x6cp20OeSrIIdb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="291385787"
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="291385787"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 07:36:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="932080631"
+Received: from mylly.fi.intel.com (HELO [10.237.72.177]) ([10.237.72.177])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Aug 2022 07:36:26 -0700
+Message-ID: <6ecdfca0-61fc-ad75-67d0-e49efc7b3f6d@linux.intel.com>
+Date:   Mon, 8 Aug 2022 17:36:25 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YvEeQrzuPIKiEh8m@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [PATCH 4/8] pwm: dwc: add of/platform support
+Content-Language: en-US
+To:     Ben Dooks <ben.dooks@sifive.com>, linux-pwm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha --subject-prefix=PATCH v3 
+        <jude.onyenegecha@sifive.com>
+References: <20220805165033.140958-1-ben.dooks@sifive.com>
+ <20220805165033.140958-5-ben.dooks@sifive.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20220805165033.140958-5-ben.dooks@sifive.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+Hi
 
-On Mon, Aug 08, 2022 at 04:31:30PM +0200, Jason A. Donenfeld wrote:
-> Hi Palmer,
+On 8/5/22 19:50, Ben Dooks wrote:
+> The dwc pwm controller can be used in non-PCI systems, so allow
+> either platform or OF based probing.
 > 
-> On Fri, Aug 05, 2022 at 04:36:38PM -0700, Palmer Dabbelt wrote:
-> > The following changes since commit 924cbb8cbe3460ea192e6243017ceb0ceb255b1b:
-> > 
-> >   riscv: Improve description for RISCV_ISA_SVPBMT Kconfig symbol (2022-06-16 15:47:39 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.20-mw0
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+> ---
+> v3:
+>   - changed compatible name
+> ---
+>   drivers/pwm/Kconfig   |  5 ++--
+>   drivers/pwm/pwm-dwc.c | 53 +++++++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 56 insertions(+), 2 deletions(-)
 > 
-> Just FYI, the WireGuard test suite over on build.wireguard.com no longer
-> boots for riscv32 after this merge. Investigating...
+...
 
-Ahh, looks like it's caused by 44c1e84a38a0 ("RISC-V: Add
-CONFIG_{NON,}PORTABLE"). I pushed a patch for it to
-https://git.zx2c4.com/wireguard-linux/commit/?id=99a1a96f1f80b68b0fb5156ff6bd3f0973cd1f4d
-to kick the CI, which should be green again shortly.
+> @@ -319,6 +320,58 @@ static struct pci_driver dwc_pwm_driver = {
+>   
+>   module_pci_driver(dwc_pwm_driver);
+...
+> +module_platform_driver(dwc_pwm_plat_driver);
+> +
 
-If you want, feel free to take that into your risc-v pull part 2,
-whenever you make that. Otherwise I'll eventually send it the long way
-through net.git.
+These module_X_driver() macros cannot coexist in the same module and 
+ideally the same kernel built should support probing both PCI and OF 
+based systems in runtime, i.e. putting those macros under #ifdef is not 
+ideal.
 
-Jason
+Usually this is solved either by common code has the platform device 
+probing (with or without the OF support) and the PCI part is in another 
+module which adds the platform device(s) or both platform and PCI device 
+code are in own modules and call common code.

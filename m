@@ -2,260 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB07B58CAC9
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9A458CAD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243194AbiHHOw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 10:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
+        id S243151AbiHHO4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 10:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243014AbiHHOwY (ORCPT
+        with ESMTP id S243209AbiHHO4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 10:52:24 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6510162D3
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1659970342; x=1691506342;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+hRULVcsPThYGQGUyQjR2EoH2hAsR5uZetymktPaNSk=;
-  b=CrJyiiiLQXltZqKNEqNIUrnnntKIqgeUQz2xJr9nAzm+/9GD68xhhZyo
-   ik2Wn9sZnQ3qWnKquu4YllbqCHQCU9+q8/fcY4ZvBEgCz9LXw+M7zsqPZ
-   HszAJvlWKjU4SgSfDz6oA4H2kvDFbCWzngtdK44FDHjUhbATUP2tgVKdg
-   ARV1kLToaxDjqaPcVo/lEcutn3H0DE1yk60yW0fXhop2Cno2SVl7E0ffk
-   QyxBj6TCmvZknrwDfsy7IzSaob3f2MLddrsv3XTrJj2y18mL0CwmexSeZ
-   mB9/+AsnmkfZ0ZhDPAintKSFBoEWNpmG+NYB15ZZx65ynFKV7qM6VvU4R
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,222,1654531200"; 
-   d="scan'208";a="213140936"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 08 Aug 2022 22:52:21 +0800
-IronPort-SDR: ANDXyX/bkF5/IBtwXcVDfSwvg/xxhkmxSKn3+mmnwNmdWs+oG3RkrehV4Y9QB96J9Le3wx0trd
- hD0H8JJHU3R0M7CrZZ8jSQVQRllmKyhXI8CeSlJ5AFLf9xNFLeksvF5WH+uhK+3eY6WbmGmsM1
- EM1BLKBtLzEzpNzyLMbtWbyHZCsBLKOX7YaYRcKNtuiBqB8wJpYBqs7TRPuDC4Z/XhyJyDp+jf
- A+YkgApAD8UcU2kHxLrFemjh7PcY8IqcPDgamJUCtcQSQpIr/RbDhCp1rIautbalo2WlBbWPIp
- zSMZ23lGcviq87x4zT1IC0kl
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Aug 2022 07:13:19 -0700
-IronPort-SDR: Kw/2fWHvrQFaEUMrwbIMCEGzeRLxAqwg2IeQvkCYnJ1T9+9Ugtwd3ahGIaJ7VOtWz0i4BqJ439
- Kegnr06SCEms7ZtuVvyMKvsu/c23vI1yuSoXEnn9jRBM5ABafw9bP3HoVglbDVThiEC5RG3EaJ
- j2C03da2bOdJM2RtqGC7V+sM85sQLBD5vc55xgxBJxXDqfrmIQhKuf2rZ1jSxwVwzc6zjSoG2a
- yC/D2+n/S/Sc2Y9bRT3sxAaWjx4FT9kTMO4zI10lrMPLTnFdVS/tYWoV2a9Jb5n6qKn9hxyBxM
- zJA=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Aug 2022 07:52:23 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M1fLY6gJLz1Rws4
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:52:21 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1659970340; x=1662562341; bh=+hRULVcsPThYGQGUyQjR2EoH2hAsR5uZety
-        mktPaNSk=; b=QVLKnAqxbwUeq6XlSWeaXPa/Fs4gW9h/Dit3SeZb35umTxLKy5E
-        71/PeWsN98be+qMKto826NzfTOXOg+qf011HDIrKNyszTQxxBWTpipSsaJgSv03E
-        VX0/dclLGEvK/EkP27/rlcZuuWjdPiOw9MlYCumldyTaQIFBEZro9RtYXcO+wrL2
-        ZBSMXogdmuwIz32ZzDmoMffoeInHAd9PEymCz7NDOO4rOepwLUH86FQVgthmcEUt
-        BcKO879XXWh95jOj6662SfuVw1NG/bA4UbdFk0J6J2EMnejEU9lBjS5Xefz3/RJJ
-        rlNjQFtftgmzdxZ7QBQhumpO1FuyMnNv2hA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 2sRM6sfkBLYm for <linux-kernel@vger.kernel.org>;
-        Mon,  8 Aug 2022 07:52:20 -0700 (PDT)
-Received: from [10.225.89.57] (gns5353.ad.shared [10.225.89.57])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M1fLW15Dyz1RtVk;
-        Mon,  8 Aug 2022 07:52:18 -0700 (PDT)
-Message-ID: <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
-Date:   Mon, 8 Aug 2022 07:52:17 -0700
+        Mon, 8 Aug 2022 10:56:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E9F7DEA3
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:56:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659970588;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q81adJEOTwFc/hg5uP+tJ9s7aedbQ4D0T6kDguRSfeM=;
+        b=bafJu1Q+hIRQnmx4tsWb0Cd3eEGxT8c8hdBvggZco2LaFTmBR4JXTog7H8BreOB0P2jJx4
+        ls1w7m3eJ7TogQq2PtjNShZXjyqqY9UPxl2e9ZzH1ygtfVuXlPGUwfgATC2TFgPAjy0ImA
+        FEuWBhgRD+H0N6a5RKlJb9vM5Bca7Qw=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-xFodAKb9OHCoi9CWOfoHLA-1; Mon, 08 Aug 2022 10:56:27 -0400
+X-MC-Unique: xFodAKb9OHCoi9CWOfoHLA-1
+Received: by mail-ed1-f72.google.com with SMTP id v19-20020a056402349300b0043d42b7ddefso5729196edc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 07:56:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Q81adJEOTwFc/hg5uP+tJ9s7aedbQ4D0T6kDguRSfeM=;
+        b=fJZErBGcPHwMT9PGqhuwedIo7wMivgdRPHd+c3fDiiEesHNbUeJxqA3PRNnYfsxnQm
+         z8eUs0pV4ZssaSOxaX3PrzwLt9In3CGuqw0kzPn4J5PsbEq0Sx4XWMK80QbnonDseSZz
+         9OC4fbCaWON8Q0JRKzXv4GAB6TLuJqCH3V0SCVA0qFQUD3rlkTV95HFqYibzSf2qXWsk
+         qncNAu8rtYRx3PGS2h3r+Nkl4leSgRBsvEg4AjzIwPZt3iAtc8D8jN6/L6ZTQzJVlDHs
+         9iq0LaHBEjga5MtIGFJtkbQmBKiFXEhJJqcAv6j2+xoQQ04M68MocuJVhmCh0HoafaEL
+         OsjQ==
+X-Gm-Message-State: ACgBeo0WRzQRsICVXZP4khgbkynNH3PC0oplsdYeqZYxcB5/jtcijJvT
+        084zoItzCP7xYZWOr+kG9b5pcY/qiKKFegvFNgCoTO+nGnI7BImN3IZXLETAscs04YFSx0r/t1Z
+        ESBk06gznhwX5VL6/M2mofkvi
+X-Received: by 2002:a17:907:6096:b0:72f:1d74:b71b with SMTP id ht22-20020a170907609600b0072f1d74b71bmr13975056ejc.272.1659970586180;
+        Mon, 08 Aug 2022 07:56:26 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6iE1RlTukWMvsEMA1thEekevbdE2HkKHb8PUGj3hcIsyNE8ALGkMyoQeJyjqpaCrXoUhlvEw==
+X-Received: by 2002:a17:907:6096:b0:72f:1d74:b71b with SMTP id ht22-20020a170907609600b0072f1d74b71bmr13975042ejc.272.1659970585913;
+        Mon, 08 Aug 2022 07:56:25 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id u19-20020aa7db93000000b0043bbb3535d6sm4656016edt.66.2022.08.08.07.56.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 07:56:25 -0700 (PDT)
+Message-ID: <67bf0109-0606-a44c-7a58-606101bdb52d@redhat.com>
+Date:   Mon, 8 Aug 2022 16:56:24 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
- regression
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 23/26] thermal/drivers/acerhdf: Use generic
+ thermal_zone_get_trip() function
 Content-Language: en-US
-To:     kernel test robot <oliver.sang@intel.com>,
-        John Garry <john.garry@huawei.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-ide@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
-        ying.huang@intel.com, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
-References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Kaestle <peter@piie.net>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER" 
+        <platform-driver-x86@vger.kernel.org>
+References: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
+ <20220805145729.2491611-24-daniel.lezcano@linaro.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220805145729.2491611-24-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/08/05 1:05, kernel test robot wrote:
->=20
->=20
-> Greeting,
->=20
-> FYI, we noticed a -15.0% regression of stress-ng.copy-file.ops_per_sec =
-due to commit:
->=20
->=20
-> commit: 0568e6122574dcc1aded2979cd0245038efe22b6 ("ata: libata-scsi: ca=
-p ata_device->max_sectors according to shost->max_sectors")
-> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
->=20
-> in testcase: stress-ng
-> on test machine: 96 threads 2 sockets Ice Lake with 256G memory
-> with following parameters:
->=20
-> 	nr_threads: 10%
-> 	disk: 1HDD
-> 	testtime: 60s
-> 	fs: f2fs
-> 	class: filesystem
-> 	test: copy-file
-> 	cpufreq_governor: performance
-> 	ucode: 0xb000280
+Hi,
 
-Without knowing what the device adapter is, hard to say where the problem=
- is. I
-suspect that with the patch applied, we may be ending up with a small def=
-ault
-max_sectors value, causing overhead due to more commands than necessary.
+On 8/5/22 16:57, Daniel Lezcano wrote:
+> The thermal framework gives the possibility to register the trip
+> points with the thermal zone. When that is done, no get_trip_* ops are
+> needed and they can be removed.
+> 
+> Convert ops content logic into generic trip points and register them with the
+> thermal zone.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Will check what I see with my test rig.
+Thanks, patch looks good to me, feel free to merge this
+through the thermal tree together with the rest of the series:
 
->=20
->=20
->=20
->=20
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
->=20
->=20
-> Details are as below:
-> -----------------------------------------------------------------------=
---------------------------->
->=20
->=20
-> To reproduce:
->=20
->         git clone https://github.com/intel/lkp-tests.git
->         cd lkp-tests
->         sudo bin/lkp install job.yaml           # job file is attached =
-in this email
->         bin/lkp split-job --compatible job.yaml # generate the yaml fil=
-e for lkp run
->         sudo bin/lkp run generated-yaml-file
->=20
->         # if come across any failure that blocks the test,
->         # please remove ~/.lkp and /lkp dir to run from a clean state.
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> class/compiler/cpufreq_governor/disk/fs/kconfig/nr_threads/rootfs/tbox_=
-group/test/testcase/testtime/ucode:
->   filesystem/gcc-11/performance/1HDD/f2fs/x86_64-rhel-8.3/10%/debian-11=
-.1-x86_64-20220510.cgz/lkp-icl-2sp1/copy-file/stress-ng/60s/0xb000280
->=20
-> commit:=20
->   4cbfca5f77 ("scsi: scsi_transport_sas: cap shost opt_sectors accordin=
-g to DMA optimal limit")
->   0568e61225 ("ata: libata-scsi: cap ata_device->max_sectors according =
-to shost->max_sectors")
->=20
-> 4cbfca5f7750520f 0568e6122574dcc1aded2979cd0=20
-> ---------------- ---------------------------=20
->          %stddev     %change         %stddev
->              \          |                \ =20
->       1627           -14.9%       1385        stress-ng.copy-file.ops
->      27.01           -15.0%      22.96        stress-ng.copy-file.ops_p=
-er_sec
->    8935079           -11.9%    7870629        stress-ng.time.file_syste=
-m_outputs
->      14.88 =C2=B1  5%     -31.8%      10.14 =C2=B1  3%  stress-ng.time.=
-percent_of_cpu_this_job_got
->      50912           -14.7%      43413        vmstat.io.bo
->      93.78            +1.4%      95.10        iostat.cpu.idle
->       3.89           -31.6%       2.66        iostat.cpu.iowait
->       4.01            -1.3        2.74        mpstat.cpu.all.iowait%
->       0.23 =C2=B1  9%      -0.1        0.17 =C2=B1 11%  mpstat.cpu.all.=
-sys%
->       1.66 =C2=B1 37%      -1.2        0.51 =C2=B1 55%  perf-profile.ca=
-lltrace.cycles-pp.f2fs_write_end.generic_perform_write.f2fs_buffered_writ=
-e_iter.f2fs_file_write_iter.do_iter_readv_writev
->       1.66 =C2=B1 37%      -1.1        0.59 =C2=B1 25%  perf-profile.ch=
-ildren.cycles-pp.f2fs_write_end
->       1.51 =C2=B1 40%      -1.1        0.45 =C2=B1 26%  perf-profile.ch=
-ildren.cycles-pp.f2fs_dirty_data_folio
->       1.21 =C2=B1 49%      -1.0        0.23 =C2=B1 33%  perf-profile.ch=
-ildren.cycles-pp.f2fs_update_dirty_folio
->       0.88 =C2=B1 56%      -0.8        0.04 =C2=B1111%  perf-profile.ch=
-ildren.cycles-pp.native_queued_spin_lock_slowpath
->       0.14 =C2=B1 26%      +0.1        0.25 =C2=B1 28%  perf-profile.ch=
-ildren.cycles-pp.page_cache_ra_unbounded
->       0.88 =C2=B1 56%      -0.8        0.04 =C2=B1112%  perf-profile.se=
-lf.cycles-pp.native_queued_spin_lock_slowpath
->    3164876 =C2=B1  9%     -20.2%    2524713 =C2=B1  7%  perf-stat.i.cac=
-he-misses
->  4.087e+08            -4.6%  3.899e+08        perf-stat.i.dTLB-loads
->     313050 =C2=B1 10%     -18.4%     255410 =C2=B1  6%  perf-stat.i.nod=
-e-loads
->     972573 =C2=B1  9%     -16.4%     812873 =C2=B1  6%  perf-stat.i.nod=
-e-stores
->    3114748 =C2=B1  9%     -20.2%    2484807 =C2=B1  7%  perf-stat.ps.ca=
-che-misses
->  4.022e+08            -4.6%  3.837e+08        perf-stat.ps.dTLB-loads
->     308178 =C2=B1 10%     -18.4%     251418 =C2=B1  6%  perf-stat.ps.no=
-de-loads
->     956996 =C2=B1  9%     -16.4%     799948 =C2=B1  6%  perf-stat.ps.no=
-de-stores
->     358486            -8.3%     328694        proc-vmstat.nr_active_fil=
-e
->    1121620           -11.9%     987816        proc-vmstat.nr_dirtied
->     179906            -6.7%     167912        proc-vmstat.nr_dirty
->    1151201            -1.7%    1131322        proc-vmstat.nr_file_pages
->     100181            +9.9%     110078 =C2=B1  2%  proc-vmstat.nr_inact=
-ive_file
->     846362           -14.6%     722471        proc-vmstat.nr_written
->     358486            -8.3%     328694        proc-vmstat.nr_zone_activ=
-e_file
->     100181            +9.9%     110078 =C2=B1  2%  proc-vmstat.nr_zone_=
-inactive_file
->     180668            -6.8%     168456        proc-vmstat.nr_zone_write=
-_pending
->     556469            -3.5%     536985        proc-vmstat.pgactivate
->    3385454           -14.6%    2889953        proc-vmstat.pgpgout
->=20
->=20
->=20
->=20
-> Disclaimer:
-> Results have been estimated based on internal Intel analysis and are pr=
-ovided
-> for informational purposes only. Any difference in system hardware or s=
-oftware
-> design or configuration may affect actual performance.
->=20
->=20
+Acked-by: Hans de Goede <hdegoede@redhat.com>
 
+Regards,
 
---=20
-Damien Le Moal
-Western Digital Research
+Hans
+
+> ---
+>  drivers/platform/x86/acerhdf.c | 73 ++++++++++++----------------------
+>  1 file changed, 26 insertions(+), 47 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
+> index 3463629f8764..cf757f3a1e6b 100644
+> --- a/drivers/platform/x86/acerhdf.c
+> +++ b/drivers/platform/x86/acerhdf.c
+> @@ -46,6 +46,8 @@
+>   * measured by the on-die thermal monitor are within 0 <= Tj <= 90. So,
+>   * assume 89°C is critical temperature.
+>   */
+> +#define ACERHDF_DEFAULT_TEMP_FANON 60000
+> +#define ACERHDF_DEFAULT_TEMP_FANOFF 53000
+>  #define ACERHDF_TEMP_CRIT 89000
+>  #define ACERHDF_FAN_OFF 0
+>  #define ACERHDF_FAN_AUTO 1
+> @@ -70,8 +72,8 @@ static int kernelmode;
+>  #endif
+>  
+>  static unsigned int interval = 10;
+> -static unsigned int fanon = 60000;
+> -static unsigned int fanoff = 53000;
+> +static unsigned int fanon = ACERHDF_DEFAULT_TEMP_FANON;
+> +static unsigned int fanoff = ACERHDF_DEFAULT_TEMP_FANOFF;
+>  static unsigned int verbose;
+>  static unsigned int list_supported;
+>  static unsigned int fanstate = ACERHDF_FAN_AUTO;
+> @@ -137,6 +139,15 @@ struct ctrl_settings {
+>  	int mcmd_enable;
+>  };
+>  
+> +static struct thermal_trip trips[] = {
+> +	[0] = { .temperature = ACERHDF_DEFAULT_TEMP_FANON,
+> +		.hysteresis = ACERHDF_DEFAULT_TEMP_FANON - ACERHDF_DEFAULT_TEMP_FANOFF,
+> +		.type = THERMAL_TRIP_ACTIVE },
+> +
+> +	[1] = { .temperature = ACERHDF_TEMP_CRIT,
+> +		.type = THERMAL_TRIP_CRITICAL }
+> +};
+> +
+>  static struct ctrl_settings ctrl_cfg __read_mostly;
+>  
+>  /* Register addresses and values for different BIOS versions */
+> @@ -326,6 +337,15 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
+>  		fanon = ACERHDF_MAX_FANON;
+>  	}
+>  
+> +	if (fanon < fanoff) {
+> +		pr_err("fanoff temperature (%d) is above fanon temperature (%d), clamping to %d\n",
+> +		       fanoff, fanon, fanon);
+> +		fanoff = fanon;
+> +	};
+> +	
+> +	trips[0].temperature = fanon;
+> +	trips[0].hysteresis  = fanon - fanoff;
+> +	
+>  	if (kernelmode && prev_interval != interval) {
+>  		if (interval > ACERHDF_MAX_INTERVAL) {
+>  			pr_err("interval too high, set to %d\n",
+> @@ -424,43 +444,6 @@ static int acerhdf_change_mode(struct thermal_zone_device *thermal,
+>  	return 0;
+>  }
+>  
+> -static int acerhdf_get_trip_type(struct thermal_zone_device *thermal, int trip,
+> -				 enum thermal_trip_type *type)
+> -{
+> -	if (trip == 0)
+> -		*type = THERMAL_TRIP_ACTIVE;
+> -	else if (trip == 1)
+> -		*type = THERMAL_TRIP_CRITICAL;
+> -	else
+> -		return -EINVAL;
+> -
+> -	return 0;
+> -}
+> -
+> -static int acerhdf_get_trip_hyst(struct thermal_zone_device *thermal, int trip,
+> -				 int *temp)
+> -{
+> -	if (trip != 0)
+> -		return -EINVAL;
+> -
+> -	*temp = fanon - fanoff;
+> -
+> -	return 0;
+> -}
+> -
+> -static int acerhdf_get_trip_temp(struct thermal_zone_device *thermal, int trip,
+> -				 int *temp)
+> -{
+> -	if (trip == 0)
+> -		*temp = fanon;
+> -	else if (trip == 1)
+> -		*temp = ACERHDF_TEMP_CRIT;
+> -	else
+> -		return -EINVAL;
+> -
+> -	return 0;
+> -}
+> -
+>  static int acerhdf_get_crit_temp(struct thermal_zone_device *thermal,
+>  				 int *temperature)
+>  {
+> @@ -474,13 +457,9 @@ static struct thermal_zone_device_ops acerhdf_dev_ops = {
+>  	.unbind = acerhdf_unbind,
+>  	.get_temp = acerhdf_get_ec_temp,
+>  	.change_mode = acerhdf_change_mode,
+> -	.get_trip_type = acerhdf_get_trip_type,
+> -	.get_trip_hyst = acerhdf_get_trip_hyst,
+> -	.get_trip_temp = acerhdf_get_trip_temp,
+>  	.get_crit_temp = acerhdf_get_crit_temp,
+>  };
+>  
+> -
+>  /*
+>   * cooling device callback functions
+>   * get maximal fan cooling state
+> @@ -710,10 +689,10 @@ static int __init acerhdf_register_thermal(void)
+>  	if (IS_ERR(cl_dev))
+>  		return -EINVAL;
+>  
+> -	thz_dev = thermal_zone_device_register("acerhdf", 2, 0, NULL,
+> -					      &acerhdf_dev_ops,
+> -					      &acerhdf_zone_params, 0,
+> -					      (kernelmode) ? interval*1000 : 0);
+> +	thz_dev = thermal_zone_device_register_with_trips("acerhdf", trips, ARRAY_SIZE(trips),
+> +							  0, NULL, &acerhdf_dev_ops,
+> +							  &acerhdf_zone_params, 0,
+> +							  (kernelmode) ? interval*1000 : 0);
+>  	if (IS_ERR(thz_dev))
+>  		return -EINVAL;
+>  
+

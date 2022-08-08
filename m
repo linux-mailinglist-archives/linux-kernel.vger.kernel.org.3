@@ -2,178 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6540E58C603
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971DD58C60A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237845AbiHHKCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 06:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        id S241930AbiHHKFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 06:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237246AbiHHKCn (ORCPT
+        with ESMTP id S237452AbiHHKFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 06:02:43 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AF6247
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 03:02:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dPTmr6DksH/FYWk7XNfOE8CuoZJ8gjtF9Wq0b4pYPW52MKy8uqXTRToUCpzWJIfKClbZ1I23vvQiqfayeqKx1iw8XY5De3R0FBRKzs/I+vAjfjyUKqnCgZnyEqlu9QKrwR4s4MUwc3nwdyP2u8L+r0i562ms0DL4PlYImoySNMzNSAQZCYChpX+B/Xdxm4wS+ZsbQypgnSoQ/WytgJ09WI57QK8VLywBtMLOC5jou0CECEj5sLuZPuqfj7yMnXrUpJvSdwvChw770yjqJsrUDh053NtN9OqDypcsqFCGfbz/T1DTvzkDfDVLFdiueXXdHrWrYvxQSQLoQSB84A8UUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UasBFavkM21Xx9KSaHRjvFjATsidym5Avw19r52yePw=;
- b=ogb2fk1VTnLoJtVjz8Yn1qID+X6GR3C/l/nxhyC/yZqZg1781EMcJt4LOmYXkEz2KBLCQPE0r0WNwp4PxSpen/lehS329ios1AVCP3x/V26wZ3VIHvX4AEMgvfQmq+bT5OmetjpPBUdF0byGIx1kiq4fmBvL+xcALdNRQnfYk87gpfXv5npL89xmyGKHRRm+A6VtimtN1N2NsCRAuRui5dJtQhlk0Yxdgr0i0n09DP2/EW36YjyCFVTo3u+3ORWB48GqZCkADgo6JAMXtesHxwEeilRFE62pGTNLLrGZiOGtNPUAL5VwVAH3xhsb3akhS/MgHCMbDZaR7U2i1ndMzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UasBFavkM21Xx9KSaHRjvFjATsidym5Avw19r52yePw=;
- b=SPbgL2PM0tPzxn5DdSgv7p1KHMuoZgW/sgWhpuszPGBNZJ3Db2SEwRv7klU7S9yC6RS5AtMfgmLr+Sqjn7NvXF85lWojfYOxMkVSw9iZC7SnxHi2tQQK/blJy/Fn6Ygq2VpuSUD6mfrW97SpywGOsmnIXJSWzQxNnl7XqCENoK4=
-Received: from CO6PR12MB5489.namprd12.prod.outlook.com (2603:10b6:303:139::18)
- by BL0PR12MB4705.namprd12.prod.outlook.com (2603:10b6:208:88::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Mon, 8 Aug
- 2022 10:02:29 +0000
-Received: from CO6PR12MB5489.namprd12.prod.outlook.com
- ([fe80::3931:6e19:485a:2c34]) by CO6PR12MB5489.namprd12.prod.outlook.com
- ([fe80::3931:6e19:485a:2c34%6]) with mapi id 15.20.5504.020; Mon, 8 Aug 2022
- 10:02:29 +0000
-From:   "Lin, Wayne" <Wayne.Lin@amd.com>
-To:     Lyude Paul <lyude@redhat.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-CC:     =?utf-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        "Zuo, Jerry" <Jerry.Zuo@amd.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sean Paul <sean@poorly.run>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
-        "Li, Roman" <Roman.Li@amd.com>, "Shih, Jude" <Jude.Shih@amd.com>,
-        Simon Ser <contact@emersion.fr>,
-        "Lakha, Bhawanpreet" <Bhawanpreet.Lakha@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Claudio Suarez <cssk@net-c.es>, "Chen, Ian" <Ian.Chen@amd.com>,
-        Colin Ian King <colin.king@intel.com>,
-        "Wu, Hersen" <hersenxs.wu@amd.com>,
-        "Liu, Wenjing" <Wenjing.Liu@amd.com>, "Lei, Jun" <Jun.Lei@amd.com>,
-        "Strauss, Michael" <Michael.Strauss@amd.com>,
-        "Ma, Leo" <Hanghong.Ma@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?utf-8?B?Sm9zw6kgUm9iZXJ0byBkZSBTb3V6YQ==?= <jose.souza@intel.com>,
-        He Ying <heying24@huawei.com>,
-        Anshuman Gupta <anshuman.gupta@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Ashutosh Dixit <ashutosh.dixit@intel.com>,
-        Juston Li <juston.li@intel.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Fernando Ramos <greenfoo@u92.eu>,
-        Luo Jiaxing <luojiaxing@huawei.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:INTEL DRM DRIVERS" <intel-gfx@lists.freedesktop.org>
-Subject: RE: [RESEND RFC 18/18] drm/display/dp_mst: Move all payload info into
- the atomic state
-Thread-Topic: [RESEND RFC 18/18] drm/display/dp_mst: Move all payload info
- into the atomic state
-Thread-Index: AQHYeqbgSVnUwi//gUS5WPmor4cgkq1votDQgC5W44CAByRbEA==
-Date:   Mon, 8 Aug 2022 10:02:29 +0000
-Message-ID: <CO6PR12MB54896ECA603462858C9AFBA2FC639@CO6PR12MB5489.namprd12.prod.outlook.com>
-References: <20220607192933.1333228-1-lyude@redhat.com>
-         <20220607192933.1333228-19-lyude@redhat.com>
-         <CO6PR12MB5489BAFF2DDCD67F8BDCD827FC819@CO6PR12MB5489.namprd12.prod.outlook.com>
- <848f35a693b26bfd15b3c6539eacd3e313dcd3a7.camel@redhat.com>
-In-Reply-To: <848f35a693b26bfd15b3c6539eacd3e313dcd3a7.camel@redhat.com>
-Accept-Language: en-US, zh-TW
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-08-08T10:02:26Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=26ebe980-aeba-438e-b1f9-1f561de6995d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5b8a4306-50c7-4934-08a2-08da79251aa8
-x-ms-traffictypediagnostic: BL0PR12MB4705:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6p2NMfxIJ+8X8nLn+N3zq+Zebx0h8tDhyEEdEcAWPfZ6SH2hC+OJZie8HN4Y0eeWkiLjL+2l/CSJlxzwHMWLWMEssvQPekaFkvirY4KeXurqAbie87MxD6gKfN+r2MImpeVesBHgx+zPut0ACOGBDJ+tHbw1QfAbHmGd/XfB5bSczi8KElYx7CWX3yRGVI+RAZaJlrgTjfkd9CpW9m2oUvQE7+Jn4NaWvo1IQhZCH3I/lYT5+5UBZ1uOBpPQmhjAMH7XzOWzgLXiWvs5025Fafe6f+yJDL/Yp+ANBuKS+ZZkTirecB7CJi+7r8elqhKv1QINhrmzJbnpPFU8PvHi9pRetYf6OO15DJ0CQ78iRGlsDF9TlaSzSm1YBD1DNfhqGEzHal1RZuK0xgMg5MpsXjwKlFhjGf/eT86Jx4Lan8bena6iTyLe+LZ5/T7Gtm0/SYb44fZlHQ6MMJ10ySrpj55YlQA+S2tSAeIQvTiKs/eeeP6RXsq8BEpsU5xIUP9dkD9TmCht3VsWQA0Iaz0GbfK7frolYwtdPKxM7g8SVoykNLPUtzNv5PGVhU1yx5JJFm+l27vfI316ke9AqxwaLjEzS2+HJ0dxekQH9b4vvpQKCyTDSzDN+3qufE3YVZKAFejeL+pvW8uBpLMNlKAnYNd2/qC8OkOX5flg9uMC9CAuw9GKAAwASzOc104s8nXH/6Dn+ceHBTrddyB0w+WV4TUrhBdsUaW9eNrpG6EqZTy0g7V0HVwNe53W0HBFv/UmDKqCGOBDh+AbCHbY86eOJ67hL+r4wFOlIR0xxGRi+RDP58q1jDOSHLkF7vSwk4bH
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5489.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(376002)(39860400002)(366004)(346002)(478600001)(2906002)(122000001)(83380400001)(33656002)(9686003)(26005)(186003)(66574015)(41300700001)(53546011)(6506007)(7696005)(55016003)(316002)(110136005)(38070700005)(8676002)(4326008)(66556008)(66946007)(76116006)(66446008)(66476007)(64756008)(38100700002)(8936002)(54906003)(52536014)(71200400001)(86362001)(5660300002)(7416002)(7406005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UlJQQkphS2JPQXpzOEU3K2txWFRvRmswSE5PV2hLdVZURnk0ZzIrMnZhR2Ra?=
- =?utf-8?B?SnhKSTZCTVptUEpZV0RXOUtQUG9KMVBUR2pwTjFyWkJZeGtTTTRwSTR5V0JX?=
- =?utf-8?B?b3pQVjMyajk0RG9MQUV0RTNHU1dDc3oxWWR3b1lNcWJuNitOK0NiNjhKQUdy?=
- =?utf-8?B?dEI4S2ZYdWRaZ0QvbG1tODNjZExzWXRoOUNBMFMraFluMWJLM0NYV1NlYjZo?=
- =?utf-8?B?QnozUSt1QWp3OUNaYWtrcFR5WmpJRlhydmxUQ2U2UlFpR0FqYUFaangxVFVU?=
- =?utf-8?B?TitoOUZrQXJ2SFJWbzh3VXlqU2h6VW9uL25xTWVud01KRnMxOG9jZDFkcFZZ?=
- =?utf-8?B?VEgzQ0djcnh1R080MzFndVhMbFhmM2VkK3hhTmNUN2s5dXNaNHZGZ2ZTMTlB?=
- =?utf-8?B?cUFSTjVIZk9JV21ZUFFCYVNDSHFEYUFDWGQ1M2ZrOXMwZFJDV3dIbGMzb1h3?=
- =?utf-8?B?cWZCZzl1YWluSm1uTjZjYW9xQ3RTY2F2alRPcUZRaGxJOGkxNitJQ2kyQzVt?=
- =?utf-8?B?RWZBUmxTR2t4eDJncVNaUGN1UXA2QnQ3Zmt5Z1AwWUpmQXlBdHhBeVY2bE1O?=
- =?utf-8?B?QzlhMnliOFllUHlmbkkyZHRZdEs5aUpIV0d6dCtOQUFpVXB1UU81ZjErY1VB?=
- =?utf-8?B?UkdCZTFGcG9vSnBqdUQzZjI4emVsTG9DWE56dWhyckl2WW9aRUJuQnZ6M04x?=
- =?utf-8?B?T3hTU29PYnV2cmpPSW1xQnJ2WnZZOTlEb2NicGhuMkpjeHBTM21KLzB6TEI2?=
- =?utf-8?B?SU1tbEw2VEFab3MwSGoxN1ptMTFITHA3UE9xVFFBWkhsNVhrT3NrWndrQ3Ni?=
- =?utf-8?B?Uk05R1djVFp5RE82WHZoMkkwcEg5RDJ1bnVDR3pPSUpnY211eDVQN0crSEN2?=
- =?utf-8?B?YkE0K01sSGhpeDdWMmFhMmp1dEljeUNhN1Y3Q0ptSlBKVi9TN0ttZkFQbWhp?=
- =?utf-8?B?QXpqNnJNTzQ0YU5tbXZnVFhySHRrY1pKVmlOWXBJay9NUU5xaFNjU3BrWVd1?=
- =?utf-8?B?b09WTVZETXpNY1pCdFQ0ckVsNk56QWIxdHZXQ1FGYkI5elNtSlNlR3lPTEw5?=
- =?utf-8?B?MGYxbitSYTk4cVBERWhiazNjcmNkWHRVMDhhdSt0WFFhOWpGSGphbEJEaUJT?=
- =?utf-8?B?ZjlBanNDS3QrOWdXVXkvakhhZGF5K05SWGliQ1JHQ2hBdWt5RlI2NVZIMU0z?=
- =?utf-8?B?amlRSVNaelZWVWxoZjVvMGRqZlM3M1hPNW03Z3QwWmtXNklHaWQwWVMrbnlG?=
- =?utf-8?B?Y3RRS0lyWXBIcENsTmVIc1hWdkh3UzBSYUkzODBsajg1c1NUcmJhS2lkSUVr?=
- =?utf-8?B?ZlI1V2dRUmd0TkNzNDE4TmtmbzBndXFwdGc5RUJONTVxMTlaU0F2UGFYN0lp?=
- =?utf-8?B?S2FnZmQ0MGRGeENZRENudldXRU1hUmNzK214RzI3R1BoUFJlMDJSRHhBaEU3?=
- =?utf-8?B?V0tWN2hJTFBPZ25VU3c4S3YvM09LK1gxcHQ0dDBiUlQ0YmYydGd5d0MyL2RF?=
- =?utf-8?B?THdTSEd0T00rejJxcWdCUXNPU1JLYlRmQzAwWkVkdk9wMmZhNkVOQ0JablJw?=
- =?utf-8?B?cHN1STRGcEdTSlRhdW5hU3hwakd6TDFaVWVYS3ZmeUtNZm5tRUlVSXVzZkJm?=
- =?utf-8?B?ZGhDQ3U3cDNEWkhUQlhhVTQ4eitzV09EakkvTUZOdW9oVC9IdHdhMkFDL25r?=
- =?utf-8?B?a1Myb0FsMmJlbzF0RVpBVFpoS0Nwc2NCcjQveUNsU0xXM3RYeWZ5TzVVbkxi?=
- =?utf-8?B?WGRITGczQWM5ZFBuNTNxT1ppUHRidDJDY1Vidjgyck5VaEJWZVM4T1RKeHBp?=
- =?utf-8?B?T2pTTWRmL2dSSXRhaGpveGZDZHFiZVRNWXFuTlNZWDM5SmUxeWp5Tlp0aEhE?=
- =?utf-8?B?eU5MNUNvOXpWOTl3YmI5NFZWZjk3UzRuR0pQeVk1NEdkVmhEQU1kM1d4OVJW?=
- =?utf-8?B?L3p6aXdLZ2Y3SS9JTThkQjlmYi9GUGRtamFMcytzNU5tdHpYb1hFUHhaTTYy?=
- =?utf-8?B?b0FtUUtUOE9HYUtiZHhtM2tTTHpReHkwdEhqK2Y1MTNWcGorLzJNMHRZWE83?=
- =?utf-8?B?N2RyeEtMK1JGdmVoUFVoYkcxNzVPU2YrcHBFRE5zdFFIRVJxWkk1T3RZT2xY?=
- =?utf-8?Q?s7lM=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 8 Aug 2022 06:05:41 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21248C35;
+        Mon,  8 Aug 2022 03:05:39 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id z16so10229240wrh.12;
+        Mon, 08 Aug 2022 03:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
+         :date:from:to:cc;
+        bh=nf6kbaFIPlN/MAI3WZhDRdpzeTbJE6jLVbPnorTzyvQ=;
+        b=FMekjcbSSizuzMYNtrrdEHelQEF4fdCYoDj8VzHps+HGdH1K5SjI8GblAobIJsmfcE
+         fcFBBgSIXF7urCR+8kDhx4NGJUUFuTuww17gfX4FY5RDwzH8gYYRxx7k9/p9rosE3g0n
+         Q/YjFNtPoihHY2ODkOJHoFQ1jGip7h6UT6tqYgbIca2O1sx4R+gAoWO7vz7JqbiMk5PQ
+         D3Ix2vIsMQPp7GErG208BkI2kx+mgzxObv+0Rj0pHHQhco1oxJa0qoRCEIm0/uY8lqfl
+         mBjDk7d+p/UoLfBzcgLnReloN1ibZnm2Z2VKqJm3aojyVY2mSjy3aGrpKO3wuTUe5k6G
+         CywQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
+         :date:x-gm-message-state:from:to:cc;
+        bh=nf6kbaFIPlN/MAI3WZhDRdpzeTbJE6jLVbPnorTzyvQ=;
+        b=y/GH3EMjPvg7O9BX39ZiuShyyXmhlAe9DabXhE6jdoqPgioLDoLav9otW3KKD+TUJB
+         f7J3MQi8IowLfYb2X4PIKnvwJpLrfrzjUdpEEWrr/kT9YfBQqSCo6U9qnIup8U4+2ewp
+         5zYT8xfZRjFa0uwlzq1DFSE/xr8y/h27/hmuB/HBlsoHJ7Ai/WXGCSeWzagMxy2hNnLo
+         L1wLXFCRBMV66PfHB0e24URPkvE12h/50jEZtGKQHnBOFtLZPGAssSVjoUtDFvq0WxHR
+         nlnQEiLoogUg4olJdwhJa22thQrl3mno2uOXc1bsyXy0g8Tvqc+IiC0U1219lAi3vBq/
+         tYMg==
+X-Gm-Message-State: ACgBeo2psYcgCwiAFwmQ6cJfMJZ9RV4tYZeQQmF3Lv50kOEzqodEfeOe
+        //K0DImd6joeLwEWmaGbgrg=
+X-Google-Smtp-Source: AA6agR6zkNJxSirAEHI3fbx5x+BtG4pUxbwGfTf0xTt2NTTOkOwGy4yH3BsYyhpaT7Kbqtru+y2Pgw==
+X-Received: by 2002:adf:d845:0:b0:21e:f89e:8864 with SMTP id k5-20020adfd845000000b0021ef89e8864mr10855054wrl.9.1659953137548;
+        Mon, 08 Aug 2022 03:05:37 -0700 (PDT)
+Received: from [192.168.187.232] ([105.235.133.28])
+        by smtp.gmail.com with ESMTPSA id x17-20020adfec11000000b0021ee0e233d9sm10821367wrn.96.2022.08.08.03.05.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 03:05:37 -0700 (PDT)
+Date:   Mon, 08 Aug 2022 11:05:16 +0100
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+Subject: Re: [PATCH 8/8] power: supply: Add driver for Qualcomm SMBCHG
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Alejandro Tafalla <atafalla@dnyon.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <S0KAGR.INJ75H9K5FWO1@gmail.com>
+In-Reply-To: <02243d57-d7aa-7aa9-4f95-24c417ff8c69@linaro.org>
+References: <20220808073459.396278-1-y.oudjana@protonmail.com>
+        <20220808073459.396278-9-y.oudjana@protonmail.com>
+        <02243d57-d7aa-7aa9-4f95-24c417ff8c69@linaro.org>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5489.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b8a4306-50c7-4934-08a2-08da79251aa8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2022 10:02:29.3692
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RYD0Iw1ousg4ijhY+rQrEZ7kPGHr6vjL5gG3DNdd66+WzRYRKB9C0EXZ0O0up71VrVpin7cisSjKOocI0o4e+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4705
+Content-Type: text/plain; charset=us-ascii; format=flowed
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -181,95 +81,817 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W1B1YmxpY10NCg0KDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTHl1
-ZGUgUGF1bCA8bHl1ZGVAcmVkaGF0LmNvbT4NCj4gU2VudDogVGh1cnNkYXksIEF1Z3VzdCA0LCAy
-MDIyIDQ6MjggQU0NCj4gVG86IExpbiwgV2F5bmUgPFdheW5lLkxpbkBhbWQuY29tPjsgZHJpLWRl
-dmVsQGxpc3RzLmZyZWVkZXNrdG9wLm9yZzsNCj4gbm91dmVhdUBsaXN0cy5mcmVlZGVza3RvcC5v
-cmc7IGFtZC1nZnhAbGlzdHMuZnJlZWRlc2t0b3Aub3JnDQo+IENjOiBWaWxsZSBTeXJqw6Rsw6Qg
-PHZpbGxlLnN5cmphbGFAbGludXguaW50ZWwuY29tPjsgWnVvLCBKZXJyeQ0KPiA8SmVycnkuWnVv
-QGFtZC5jb20+OyBKYW5pIE5pa3VsYSA8amFuaS5uaWt1bGFAaW50ZWwuY29tPjsgSW1yZSBEZWFr
-DQo+IDxpbXJlLmRlYWtAaW50ZWwuY29tPjsgRGFuaWVsIFZldHRlciA8ZGFuaWVsLnZldHRlckBm
-ZndsbC5jaD47IFNlYW4gUGF1bA0KPiA8c2VhbkBwb29ybHkucnVuPjsgV2VudGxhbmQsIEhhcnJ5
-IDxIYXJyeS5XZW50bGFuZEBhbWQuY29tPjsgTGksIFN1bg0KPiBwZW5nIChMZW8pIDxTdW5wZW5n
-LkxpQGFtZC5jb20+OyBTaXF1ZWlyYSwgUm9kcmlnbw0KPiA8Um9kcmlnby5TaXF1ZWlyYUBhbWQu
-Y29tPjsgRGV1Y2hlciwgQWxleGFuZGVyDQo+IDxBbGV4YW5kZXIuRGV1Y2hlckBhbWQuY29tPjsg
-S29lbmlnLCBDaHJpc3RpYW4NCj4gPENocmlzdGlhbi5Lb2VuaWdAYW1kLmNvbT47IFBhbiwgWGlu
-aHVpIDxYaW5odWkuUGFuQGFtZC5jb20+OyBEYXZpZA0KPiBBaXJsaWUgPGFpcmxpZWRAbGludXgu
-aWU+OyBEYW5pZWwgVmV0dGVyIDxkYW5pZWxAZmZ3bGwuY2g+OyBKYW5pIE5pa3VsYQ0KPiA8amFu
-aS5uaWt1bGFAbGludXguaW50ZWwuY29tPjsgSm9vbmFzIExhaHRpbmVuDQo+IDxqb29uYXMubGFo
-dGluZW5AbGludXguaW50ZWwuY29tPjsgUm9kcmlnbyBWaXZpIDxyb2RyaWdvLnZpdmlAaW50ZWwu
-Y29tPjsNCj4gVHZydGtvIFVyc3VsaW4gPHR2cnRrby51cnN1bGluQGxpbnV4LmludGVsLmNvbT47
-IEJlbiBTa2VnZ3MNCj4gPGJza2VnZ3NAcmVkaGF0LmNvbT47IEthcm9sIEhlcmJzdCA8a2hlcmJz
-dEByZWRoYXQuY29tPjsgS2F6bGF1c2thcywNCj4gTmljaG9sYXMgPE5pY2hvbGFzLkthemxhdXNr
-YXNAYW1kLmNvbT47IExpLCBSb21hbg0KPiA8Um9tYW4uTGlAYW1kLmNvbT47IFNoaWgsIEp1ZGUg
-PEp1ZGUuU2hpaEBhbWQuY29tPjsgU2ltb24gU2VyDQo+IDxjb250YWN0QGVtZXJzaW9uLmZyPjsg
-TGFraGEsIEJoYXdhbnByZWV0DQo+IDxCaGF3YW5wcmVldC5MYWtoYUBhbWQuY29tPjsgTWlraXRh
-IExpcHNraSA8bWlraXRhLmxpcHNraUBhbWQuY29tPjsNCj4gQ2xhdWRpbyBTdWFyZXogPGNzc2tA
-bmV0LWMuZXM+OyBDaGVuLCBJYW4gPElhbi5DaGVuQGFtZC5jb20+OyBDb2xpbiBJYW4NCj4gS2lu
-ZyA8Y29saW4ua2luZ0BpbnRlbC5jb20+OyBXdSwgSGVyc2VuIDxoZXJzZW54cy53dUBhbWQuY29t
-PjsgTGl1LA0KPiBXZW5qaW5nIDxXZW5qaW5nLkxpdUBhbWQuY29tPjsgTGVpLCBKdW4gPEp1bi5M
-ZWlAYW1kLmNvbT47IFN0cmF1c3MsDQo+IE1pY2hhZWwgPE1pY2hhZWwuU3RyYXVzc0BhbWQuY29t
-PjsgTWEsIExlbyA8SGFuZ2hvbmcuTWFAYW1kLmNvbT47DQo+IFRob21hcyBaaW1tZXJtYW5uIDx0
-emltbWVybWFubkBzdXNlLmRlPjsgSm9zw6kgUm9iZXJ0byBkZSBTb3V6YQ0KPiA8am9zZS5zb3V6
-YUBpbnRlbC5jb20+OyBIZSBZaW5nIDxoZXlpbmcyNEBodWF3ZWkuY29tPjsgQW5zaHVtYW4NCj4g
-R3VwdGEgPGFuc2h1bWFuLmd1cHRhQGludGVsLmNvbT47IEFuZGkgU2h5dGkNCj4gPGFuZGkuc2h5
-dGlAbGludXguaW50ZWwuY29tPjsgQXNodXRvc2ggRGl4aXQgPGFzaHV0b3NoLmRpeGl0QGludGVs
-LmNvbT47DQo+IEp1c3RvbiBMaSA8anVzdG9uLmxpQGludGVsLmNvbT47IFNlYW4gUGF1bCA8c2Vh
-bnBhdWxAY2hyb21pdW0ub3JnPjsNCj4gRmVybmFuZG8gUmFtb3MgPGdyZWVuZm9vQHU5Mi5ldT47
-IEx1byBKaWF4aW5nDQo+IDxsdW9qaWF4aW5nQGh1YXdlaS5jb20+OyBKYXZpZXIgTWFydGluZXog
-Q2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT47DQo+IG9wZW4gbGlzdCA8bGludXgta2VybmVs
-QHZnZXIua2VybmVsLm9yZz47IG9wZW4gbGlzdDpJTlRFTCBEUk0gRFJJVkVSUw0KPiA8aW50ZWwt
-Z2Z4QGxpc3RzLmZyZWVkZXNrdG9wLm9yZz4NCj4gU3ViamVjdDogUmU6IFtSRVNFTkQgUkZDIDE4
-LzE4XSBkcm0vZGlzcGxheS9kcF9tc3Q6IE1vdmUgYWxsIHBheWxvYWQgaW5mbw0KPiBpbnRvIHRo
-ZSBhdG9taWMgc3RhdGUNCj4gDQo+IE9uIFR1ZSwgMjAyMi0wNy0wNSBhdCAwOToxMCArMDAwMCwg
-TGluLCBXYXluZSB3cm90ZToNCj4gPiA+ICtzdHJ1Y3QgZHJtX2RwX21zdF9wb3J0Ow0KPiA+ID4g
-Kw0KPiA+ID4gwqAgLyogRFAgTVNUIHN0cmVhbSBhbGxvY2F0aW9uIChwYXlsb2FkIGJhbmR3aWR0
-aCBudW1iZXIpICovDQo+ID4gPiDCoCBzdHJ1Y3QgZGNfZHBfbXN0X3N0cmVhbV9hbGxvY2F0aW9u
-IHsNCj4gPiA+IMKgwqAgdWludDhfdCB2Y3BfaWQ7DQo+ID4gPiDCoMKgIC8qIG51bWJlciBvZiBz
-bG90cyByZXF1aXJlZCBmb3IgdGhlIERQIHN0cmVhbSBpbg0KPiA+ID4gwqDCoCAqIHRyYW5zcG9y
-dCBwYWNrZXQgKi8NCj4gPiA+IMKgwqAgdWludDhfdCBzbG90X2NvdW50Ow0KPiA+ID4gKyAvKiBU
-aGUgTVNUIHBvcnQgdGhpcyBpcyBvbiwgdGhpcyBpcyB1c2VkIHRvIGFzc29jaWF0ZSBEQyBNU1QN
-Cj4gPiA+ICsgcGF5bG9hZHMNCj4gPiA+IHdpdGggdGhlaXINCj4gPiA+ICsgKiByZXNwZWN0aXZl
-IERSTSBwYXlsb2FkcyBhbGxvY2F0aW9ucywgYW5kIGNhbiBiZSBpZ25vcmVkIG9uIG5vbi0NCj4g
-PiA+IExpbnV4Lg0KPiA+ID4gKyAqLw0KPiA+DQo+ID4gSXMgaXQgbmVjZXNzYXJ5IGZvciBhZGRp
-bmcgdGhpcyBuZXcgbWVtYmVyPyBTaW5jZSB0aGlzIGlzIGZvciBzZXR0aW5nDQo+ID4gdGhlIERD
-IEhXIGFuZCBub3QgcmVsYXRpbmcgdG8gZHJtLg0KPiANCj4gSSBkb24ndCBlbnRpcmVseSBrbm93
-LCBob25lc3RseS4gVGhlIHJlYXNvbnMgSSBkaWQgaXQ6DQo+IA0KPiAgKiBNYXBwaW5nIHRoaW5n
-cyBmcm9tIERSTSB0byBEQyBhbmQgZnJvbSBEQyB0byBEUk0gaXMgcmVhbGx5IGNvbmZ1c2luZyBm
-b3INCj4gICAgb3V0c2lkZSBjb250cmlidXRvcnMgbGlrZSBteXNlbGYsIHNvIGl0IHdhc24ndCBl
-dmVuIHJlYWxseSBjbGVhciB0byBtZSBpZg0KPiAgICB0aGVyZSB3YXMgYW5vdGhlciB3YXkgdG8g
-cmVjb25zdHJ1Y3QgdGhlIERSTSBjb250ZXh0IGZyb20gdGhlIHNwb3RzDQo+IHdoZXJlDQo+ICAg
-IHdlIGNhbGwgZnJvbSBEQyB1cCB0byBETSAobm90IGEgdHlwbywgc2VlIG5leHQgcG9pbnQpLg0K
-PiAgKiBUaGVzZSBEQyBzdHJ1Y3RzIGZvciBNU1QgYXJlIGFscmVhZHkgbGF5ZXIgbWl4aW5nIGFz
-IGZhciBhcyBJIGNhbiB0ZWxsLA0KPiAgICBqdXN0IG5vdCBpbiBhbiBpbW1lZGlhdGVseSBvYnZp
-b3VzIHdheS4gV2hpbGUgdGhpcyBzdHJ1Y3QgaXRzZWxmIGlzIGZvciBEQywNCj4gICAgdGhlcmUn
-cyBtdWx0aXBsZSBzcG90cyB3aGVyZSB3ZSBwYXNzIHRoZSBEQyBwYXlsb2FkIHN0cnVjdHMgZG93
-biBmcm9tDQo+IERNIHRvDQo+ICAgIERDLCB0aGVuIHBhc3MgdGhlbSBiYWNrIHVwIGZyb20gREMg
-dG8gRE0gYW5kIGhhdmUgdG8gZmlndXJlIG91dCBob3cgdG8NCj4gICAgcmVjb25zdHJ1Y3QgdGhl
-IERSTSBjb250ZXh0IHRoYXQgd2UgYWN0dWFsbHkgbmVlZCB0byB1c2UgdGhlIE1TVCBoZWxwZXJz
-DQo+ICAgIGZyb20gdGhhdC4gU28sIHRoYXQga2luZCBvZiBmdXJ0aGVyIGNvbXBsaWNhdGVzIHRo
-ZSBjb25mdXNpb24gb2Ygd2hlcmUNCj4gICAgbGF5ZXJzIHNob3VsZCBiZSBzZXBhcmF0ZWQuDQo+
-ICAqIEFzIGZhciBhcyBJJ20gYXdhcmUgd2l0aCBDIHRoZXJlIHNob3VsZG4ndCBiZSBhbnkgaXNz
-dWUgd2l0aCBhZGRpbmcgYQ0KPiAgICBwb2ludGVyIHRvIGEgc3RydWN0IHdob3NlIGNvbnRlbnRz
-IGFyZSB1bmRlZmluZWQuIElNSE8sIHRoaXMgaXMgYWxzbw0KPiAgICBwcmVmZXJhYmxlIHRvIGp1
-c3QgdXNpbmcgdm9pZCogYmVjYXVzZSB0aGVuIGF0IGxlYXN0IHlvdSBnZXQgc29tZSBoaW50IGFz
-DQo+ICAgIHRvIHRoZSBhY3R1YWwgdHlwZSBvZiB0aGUgZGF0YSBhbmQgYXZvaWQgdGhlIHBvc3Np
-YmlsaXR5IG9mIGNhc3RpbmcgaXQgdG8NCj4gICAgdGhlIHdyb25nIHR5cGUuIFNvIHRsO2RyLCBv
-biBhbnkgcGxhdGZvcm0gZXZlbiBvdXRzaWRlIG9mIExpbnV4IHdpdGggYQ0KPiAgICByZWFzb25h
-Ymx5IGNvbXBsaWFudCBjb21waWxlciB0aGlzIHNob3VsZCBzdGlsbCBidWlsZCBqdXN0IGZpbmUu
-IEl0J2xsIGV2ZW4NCj4gICAgZ2l2ZSB5b3UgdGhlIGFkZGVkIGJvbnVzIG9mIHdhcm5pbmcgcGVv
-cGxlIGlmIHRoZXkgdHJ5IHRvIGFjY2VzcyB0aGUNCj4gICAgY29udGVudHMgb2YgdGhpcyBtZW1i
-ZXIgaW4gREMgb24gbm9uLUxpbnV4IHBsYXRmb3Jtcy4gSWYgdm9pZCogaXMgcHJlZmVycmVkDQo+
-ICAgIHRob3VnaCBJJ20gZmluZSB3aXRoIHN3aXRjaGluZyBpdCB0byB0aGF0Lg0KPiANCj4gLS0N
-Cj4gQ2hlZXJzLCBMeXVkZSBQYXVsIChzaGUvaGVyKSBTb2Z0d2FyZSBFbmdpbmVlciBhdCBSZWQg
-SGF0DQoNCkhpIEx5dWRlLA0KDQpUaGFua3MgZm9yIHlvdXIgdGltZSENCkkgd2FzIHRoaW5raW5n
-IHRoYXQgb3VyIERDIGp1c3QgbWFpbmx5IHRha2VzIGNhcmUgb2YgSFcgcmVsYXRlZCBwcm9ncmFt
-bWluZy4gDQpTdHJ1Y3QgZGNfZHBfbXN0X3N0cmVhbV9hbGxvY2F0aW9uIGlzIG9ubHkgdXNlZCB0
-byBjb25zdHJ1Y3QgYSBjb3B5IG9mIHRoZSB2aXJ0dWFsIA0KY2hhbm5lbCBwYXlsb2FkIElEIGFu
-ZCBzbG90cyBjb3VudCBvZiBwYXlsb2FkIGFsbG9jYXRpb24gdGFibGUgZGV0ZXJtaW5lZCBieQ0K
-ZG0vZHJtLiBJRCBhbmQgc2xvdHMgYXJlIG9ubHkgdGhpbmdzIHJlcXVpcmVkIGZvciBwcm9ncmFt
-bWluZyBIVyByZWdpc3RlcnMuDQpJIHRoaW5rIHRoZXJlIHNob3VsZG4ndCBiZSBhbnkgc3BvdHMg
-dG8gdHJ5IHRvIGNvbnN0cnVjdCB0aGUgRFJNIGNvbnRleHQgZnJvbQ0KdGhpcyBkYyBzdHJ1Y3Qg
-c2luY2UgdGhlcmUgaXMgbm8gc3VjaCBjb25jZXB0IGluIEhXIGxldmVsLiBPdXIgSFcgc2hvdWxk
-IG9ubHkgDQp0YWtlIGNhcmUgb2YgbG9jYWwgRFAgbGluayBhbmQgaXQgZG9lc24ndCBoYXZlIG92
-ZXJhbGwgdG9wb2xvZ3kgaW5mby4NCg0KVGhhbmtzIQ0KDQpSZWdhcmRzLA0KV2F5bmU=
+
+On Mon, Aug 8 2022 at 11:55:02 +03:00:00, Krzysztof Kozlowski 
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 08/08/2022 10:34, Yassine Oudjana wrote:
+>>  From: Yassine Oudjana <y.oudjana@protonmail.com>
+>> 
+>>  Add a driver for the switch-mode battery charger found on
+>>  PMICs such as PMI8994. This block is referred to in the vendor
+>>  kernel[1] as smbcharger or SMBCHG. It has USB and DC inputs,
+>>  and can generate VBUS for USB OTG with a boost regulator.
+>>  It supports Qualcomm Quick Charge 2.0, and can operate along
+>>  with a parallel charger (SMB1357, or SMB1351 for added Quick
+>>  Charge 3.0 support) for improved efficiency at higher currents.
+>> 
+>>  At the moment, this driver supports charging off of the USB input
+>>  at 5V with input current limit up to 3A. It also includes support
+>>  for operating the OTG boost regulator as well as extcon
+>>  functionality, reporting states of USB and USB_HOST with VBUS and
+>>  charge port types.
+>> 
+>>  Co-developed-by: Alejandro Tafalla <atafalla@dnyon.com>
+>>  Signed-off-by: Alejandro Tafalla <atafalla@dnyon.com>
+>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>> 
+>>  [1] 
+>> https://github.com/android-linux-stable/msm-3.18/blob/kernel.lnx.3.18.r34-rel/drivers/power/qpnp-smbcharger.c
+>>  ---
+>>   MAINTAINERS                        |    2 +
+>>   drivers/power/supply/Kconfig       |   11 +
+>>   drivers/power/supply/Makefile      |    1 +
+>>   drivers/power/supply/qcom-smbchg.c | 1664 
+>> ++++++++++++++++++++++++++++
+>>   drivers/power/supply/qcom-smbchg.h |  428 +++++++
+>>   5 files changed, 2106 insertions(+)
+>>   create mode 100644 drivers/power/supply/qcom-smbchg.c
+>>   create mode 100644 drivers/power/supply/qcom-smbchg.h
+>> 
+>>  diff --git a/MAINTAINERS b/MAINTAINERS
+>>  index f6cf3a27d132..9b8693050890 100644
+>>  --- a/MAINTAINERS
+>>  +++ b/MAINTAINERS
+>>  @@ -16964,6 +16964,8 @@ L:	linux-pm@vger.kernel.org
+>>   L:	linux-arm-msm@vger.kernel.org
+>>   S:	Maintained
+>>   F:	Documentation/devicetree/bindings/power/supply/qcom,smbchg.yaml
+>>  +F:	drivers/power/supply/qcom-smbchg.c
+>>  +F:	drivers/power/supply/qcom-smbchg.h
+>> 
+>>   QUALCOMM TSENS THERMAL DRIVER
+>>   M:	Amit Kucheria <amitk@kernel.org>
+>>  diff --git a/drivers/power/supply/Kconfig 
+>> b/drivers/power/supply/Kconfig
+>>  index 1aa8323ad9f6..246bfc118d9f 100644
+>>  --- a/drivers/power/supply/Kconfig
+>>  +++ b/drivers/power/supply/Kconfig
+>>  @@ -633,6 +633,17 @@ config CHARGER_QCOM_SMBB
+>>   	  documentation for more detail.  The base name for this driver is
+>>   	  'pm8941_charger'.
+>> 
+>>  +config CHARGER_QCOM_SMBCHG
+>>  +	tristate "Qualcomm Switch-Mode Battery Charger"
+> 
+> As I mentioned in cover letter, this should be either squashed into
+> Caleb's work, merged into some common part or kept separate but with
+> clear explaining why it cannot be merged.
+> 
+> Some incomplete review follows:
+> 
+>>  +	depends on MFD_SPMI_PMIC || COMPILE_TEST
+>>  +	depends on OF
+>>  +	depends on EXTCON
+>>  +	depends on REGULATOR
+>>  +	select QCOM_PMIC_SEC_WRITE
+>>  +	help
+>>  +	  Say Y to include support for the Switch-Mode Battery Charger 
+>> block
+>>  +	  found in Qualcomm PMICs such as PMI8994.
+>>  +
+>>   config CHARGER_BQ2415X
+>>   	tristate "TI BQ2415x battery charger driver"
+>>   	depends on I2C
+>>  diff --git a/drivers/power/supply/Makefile 
+>> b/drivers/power/supply/Makefile
+>>  index 7f02f36aea55..7c2c037cd8b1 100644
+>>  --- a/drivers/power/supply/Makefile
+>>  +++ b/drivers/power/supply/Makefile
+>>  @@ -83,6 +83,7 @@ obj-$(CONFIG_CHARGER_MAX8998)	+= max8998_charger.o
+>>   obj-$(CONFIG_CHARGER_MP2629)	+= mp2629_charger.o
+>>   obj-$(CONFIG_CHARGER_MT6360)	+= mt6360_charger.o
+>>   obj-$(CONFIG_CHARGER_QCOM_SMBB)	+= qcom_smbb.o
+>>  +obj-$(CONFIG_CHARGER_QCOM_SMBCHG)	+= qcom-smbchg.o
+>>   obj-$(CONFIG_CHARGER_BQ2415X)	+= bq2415x_charger.o
+>>   obj-$(CONFIG_CHARGER_BQ24190)	+= bq24190_charger.o
+>>   obj-$(CONFIG_CHARGER_BQ24257)	+= bq24257_charger.o
+>>  diff --git a/drivers/power/supply/qcom-smbchg.c 
+>> b/drivers/power/supply/qcom-smbchg.c
+>>  new file mode 100644
+>>  index 000000000000..23a9667953c9
+>>  --- /dev/null
+>>  +++ b/drivers/power/supply/qcom-smbchg.c
+>>  @@ -0,0 +1,1664 @@
+>>  +// SPDX-License-Identifier: GPL-2.0-only
+> 
+> Several things look like based from original sources, so please retain
+> original copyright.
+
+Do I replace the existing copyright here with the original one, just 
+add it, or mention that this driver is based on downstream sources 
+(maybe putting a link as well) then add it?
+
+> 
+>>  +/*
+>>  + * Power supply driver for Qualcomm PMIC switch-mode battery 
+>> charger
+>>  + *
+>>  + * Copyright (c) 2021 Yassine Oudjana <y.oudjana@protonmail.com>
+>>  + * Copyright (c) 2021 Alejandro Tafalla <atafalla@dnyon.com>
+>>  + */
+>>  +
+>>  +#include <asm/unaligned.h>
+>>  +#include <linux/errno.h>
+>>  +#include <linux/extcon-provider.h>
+>>  +#include <linux/kernel.h>
+>>  +#include <linux/module.h>
+>>  +#include <linux/of.h>
+>>  +#include <linux/of_device.h>
+>>  +#include <linux/of_irq.h>
+>>  +#include <linux/interrupt.h>
+>>  +#include <linux/platform_device.h>
+>>  +#include <linux/power_supply.h>
+>>  +#include <linux/regmap.h>
+>>  +#include <linux/slab.h>
+>>  +#include <linux/reboot.h>
+>>  +#include <linux/regulator/driver.h>
+>>  +#include <linux/util_macros.h>
+>>  +#include <soc/qcom/pmic-sec-write.h>
+>>  +
+>>  +#include "qcom-smbchg.h"
+>>  +
+> 
+> 
+> (...)
+> 
+>>  +/**
+>>  + * @brief smbchg_otg_enable() - Enable OTG regulator
+>>  + *
+>>  + * @param rdev Pointer to regulator_dev
+>>  + * @return 0 on success, -errno on failure
+>>  + */
+>>  +static int smbchg_otg_enable(struct regulator_dev *rdev)
+>>  +{
+>>  +	struct smbchg_chip *chip = rdev_get_drvdata(rdev);
+>>  +	int ret;
+>>  +
+>>  +	dev_dbg(chip->dev, "Enabling OTG VBUS regulator");
+>>  +
+>>  +	ret = regmap_update_bits(chip->regmap,
+>>  +				 chip->base + SMBCHG_BAT_IF_CMD_CHG, OTG_EN_BIT,
+>>  +				 OTG_EN_BIT);
+>>  +	if (ret)
+>>  +		dev_err(chip->dev, "Failed to enable OTG regulator: %pe\n",
+>>  +			ERR_PTR(ret));
+>>  +
+>>  +	return ret;
+>>  +}
+>>  +
+>>  +/**
+>>  + * @brief smbchg_otg_disable() - Disable OTG regulator
+>>  + *
+>>  + * @param rdev Pointer to regulator_dev
+>>  + * @return 0 on success, -errno on failure
+>>  + */
+>>  +static int smbchg_otg_disable(struct regulator_dev *rdev)
+>>  +{
+>>  +	struct smbchg_chip *chip = rdev_get_drvdata(rdev);
+>>  +	int ret;
+>>  +
+>>  +	dev_dbg(chip->dev, "Disabling OTG VBUS regulator");
+> 
+> Here and in other places - no dbg messages replacing tracing. We have
+> tracing for that.
+
+Will look into it.
+
+> 
+>>  +
+>>  +	ret = regmap_update_bits(chip->regmap,
+>>  +				 chip->base + SMBCHG_BAT_IF_CMD_CHG, OTG_EN_BIT,
+>>  +				 0);
+>>  +	if (ret) {
+>>  +		dev_err(chip->dev, "Failed to disable OTG regulator: %pe\n",
+>>  +			ERR_PTR(ret));
+>>  +		return ret;
+>>  +	}
+>>  +
+>>  +	return 0;
+>>  +}
+>>  +
+> 
+> (...)
+> 
+>>  +static irqreturn_t smbchg_handle_charger_error(int irq, void *data)
+>>  +{
+>>  +	struct smbchg_chip *chip = data;
+>>  +
+>>  +	dev_err(chip->dev, "Charger error");
+>>  +
+>>  +	power_supply_changed(chip->usb_psy);
+>>  +
+>>  +	return IRQ_HANDLED;
+>>  +}
+>>  +
+>>  +static irqreturn_t smbchg_handle_p2f(int irq, void *data)
+>>  +{
+>>  +	struct smbchg_chip *chip = data;
+>>  +
+>>  +	dev_dbg(chip->dev, "Fast charging threshold reached");
+>>  +
+>>  +	power_supply_changed(chip->usb_psy);
+>>  +
+>>  +	return IRQ_HANDLED;
+> 
+> Several interrupts which are exactly the same... no, use one interrupt
+> handler for all such cases. Anyway I have some doubts about these 20 
+> or
+> more separate interrupt lines...
+
+This was to allow for printing different debug messages. I believe 
+there are interrupt status registers that can be used instead, so I 
+might try to use them to find out the specific event in a single 
+handler while adding tracing.
+
+> 
+>>  +}
+>>  +
+>>  +static irqreturn_t smbchg_handle_rechg(int irq, void *data)
+>>  +{
+>>  +	struct smbchg_chip *chip = data;
+>>  +
+>>  +	dev_dbg(chip->dev, "Recharge threshold reached");
+>>  +
+>>  +	/* Auto-recharge is enabled, nothing to do here */
+>>  +	return IRQ_HANDLED;
+>>  +}
+>>  +
+>>  +static irqreturn_t smbchg_handle_taper(int irq, void *data)
+>>  +{
+>>  +	struct smbchg_chip *chip = data;
+>>  +
+>>  +	dev_dbg(chip->dev, "Taper charging threshold reached");
+>>  +
+>>  +	power_supply_changed(chip->usb_psy);
+>>  +
+>>  +	return IRQ_HANDLED;
+>>  +}
+>>  +
+>>  +static irqreturn_t smbchg_handle_tcc(int irq, void *data)
+>>  +{
+>>  +	struct smbchg_chip *chip = data;
+>>  +
+>>  +	dev_dbg(chip->dev, "Termination current reached");
+>>  +
+>>  +	power_supply_changed(chip->usb_psy);
+>>  +
+>>  +	return IRQ_HANDLED;
+>>  +}
+>>  +
+>>  +static irqreturn_t smbchg_handle_batt_temp(int irq, void *data)
+>>  +{
+>>  +	struct smbchg_chip *chip = data;
+>>  +
+>>  +	power_supply_changed(chip->usb_psy);
+>>  +
+>>  +	return IRQ_HANDLED;
+>>  +}
+> 
+> (...)
+> 
+>>  +
+>>  +const struct smbchg_irq smbchg_irqs[] = {
+> 
+> You mix everywhere functions with static variables. All variables -
+> except platform_driver related go to the beginning of the file.
+
+They were grouped based on their topic (interrupt handling, power 
+supply properties, ...). Will rearrange them.
+
+> 
+>>  +	{ "chg-error", smbchg_handle_charger_error },
+>>  +	{ "chg-inhibit", NULL },
+>>  +	{ "chg-prechg-sft", NULL },
+>>  +	{ "chg-complete-chg-sft", NULL },
+>>  +	{ "chg-p2f-thr", smbchg_handle_p2f },
+>>  +	{ "chg-rechg-thr", smbchg_handle_rechg },
+>>  +	{ "chg-taper-thr", smbchg_handle_taper },
+>>  +	{ "chg-tcc-thr", smbchg_handle_tcc },
+>>  +	{ "batt-hot", smbchg_handle_batt_temp },
+>>  +	{ "batt-warm", smbchg_handle_batt_temp },
+>>  +	{ "batt-cold", smbchg_handle_batt_temp },
+>>  +	{ "batt-cool", smbchg_handle_batt_temp },
+>>  +	{ "batt-ov", NULL },
+>>  +	{ "batt-low", NULL },
+>>  +	{ "batt-missing", smbchg_handle_batt_presence },
+>>  +	{ "batt-term-missing", NULL },
+>>  +	{ "usbin-uv", NULL },
+>>  +	{ "usbin-ov", NULL },
+>>  +	{ "usbin-src-det", smbchg_handle_usb_source_detect },
+>>  +	{ "usbid-change", smbchg_handle_usbid_change },
+>>  +	{ "otg-fail", smbchg_handle_otg_fail },
+>>  +	{ "otg-oc", smbchg_handle_otg_oc },
+>>  +	{ "aicl-done", smbchg_handle_aicl_done },
+>>  +	{ "dcin-uv", NULL },
+>>  +	{ "dcin-ov", NULL },
+>>  +	{ "power-ok", NULL },
+>>  +	{ "temp-shutdown", smbchg_handle_temp_shutdown },
+>>  +	{ "wdog-timeout", NULL },
+>>  +	{ "flash-fail", NULL },
+>>  +	{ "otst2", NULL },
+>>  +	{ "otst3", NULL },
+>>  +};
+>>  +
+>>  +/**
+> 
+> (...)
+> 
+>>  +
+>>  +static int smbchg_probe(struct platform_device *pdev)
+>>  +{
+>>  +	struct smbchg_chip *chip;
+>>  +	struct regulator_config config = {};
+>>  +	struct power_supply_config supply_config = {};
+>>  +	int i, irq, ret;
+>>  +
+>>  +	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+>>  +	if (!chip)
+>>  +		return -ENOMEM;
+>>  +
+>>  +	chip->dev = &pdev->dev;
+>>  +
+>>  +	chip->regmap = dev_get_regmap(chip->dev->parent, NULL);
+>>  +	if (!chip->regmap) {
+>>  +		dev_err(chip->dev, "Failed to get regmap\n");
+>>  +		return -ENODEV;
+>>  +	}
+>>  +
+>>  +	ret = of_property_read_u32(chip->dev->of_node, "reg", 
+>> &chip->base);
+> 
+> First: device_xxx
+
+Okay.
+
+> Second: what if address is bigger than u32? Shouldn't this be
+> of_read_number or something similar in device_xxx API?
+
+The address wouldn't exceed sizeof(u16). Actually now I think I 
+should've used property_read_u16 instead. I couldn't find a device_* 
+equivalent of of_read_number (or at least not a direct one), are you 
+sure it exists?
+
+> 
+>>  +	if (ret) {
+>>  +		dev_err(chip->dev, "Failed to get base address: %pe\n",
+>>  +			ERR_PTR(ret));
+>>  +		return ret;
+>>  +	}
+>>  +
+>>  +	spin_lock_init(&chip->sec_access_lock);
+>>  +	INIT_WORK(&chip->otg_reset_work, smbchg_otg_reset_worker);
+>>  +
+>>  +	/* Initialize OTG regulator */
+>>  +	chip->otg_rdesc.id = -1;
+>>  +	chip->otg_rdesc.name = "otg-vbus";
+>>  +	chip->otg_rdesc.ops = &smbchg_otg_ops;
+>>  +	chip->otg_rdesc.owner = THIS_MODULE;
+>>  +	chip->otg_rdesc.type = REGULATOR_VOLTAGE;
+>>  +	chip->otg_rdesc.of_match = "otg-vbus";
+>>  +
+>>  +	config.dev = chip->dev;
+>>  +	config.driver_data = chip;
+>>  +
+>>  +	chip->otg_reg =
+>>  +		devm_regulator_register(chip->dev, &chip->otg_rdesc, &config);
+> 
+> This wrapping is difficult to read.
+
+This was done by clang-format. I don't mind changing it manually, but 
+shouldn't it be conforming to the linux code style if it was done 
+automatically following the .clang-format config file in the root of 
+the kernel tree?
+
+> 
+>>  +	if (IS_ERR(chip->otg_reg)) {
+>>  +		dev_err(chip->dev,
+>>  +			"Failed to register OTG VBUS regulator: %pe\n",
+>>  +			chip->otg_reg);
+>>  +		return PTR_ERR(chip->otg_reg);
+>>  +	}
+>>  +
+>>  +	chip->data = of_device_get_match_data(chip->dev);
+>>  +
+>>  +	supply_config.drv_data = chip;
+>>  +	supply_config.of_node = pdev->dev.of_node;
+>>  +	chip->usb_psy = devm_power_supply_register(
+> 
+> This wrapping is difficult to read.
+
+Ditto.
+
+> 
+>>  +		chip->dev, &smbchg_usb_psy_desc, &supply_config);
+>>  +	if (IS_ERR(chip->usb_psy)) {
+>>  +		dev_err(chip->dev, "Failed to register USB power supply: %pe\n",
+>>  +			chip->usb_psy);
+>>  +		return PTR_ERR(chip->usb_psy);
+>>  +	}
+>>  +
+>>  +	ret = power_supply_get_battery_info(chip->usb_psy, 
+>> &chip->batt_info);
+>>  +	if (ret) {
+>>  +		dev_err(chip->dev, "Failed to get battery info: %pe\n",
+>>  +			ERR_PTR(ret));
+>>  +		return ret;
+>>  +	}
+>>  +
+>>  +	if (chip->batt_info->voltage_max_design_uv == -EINVAL) {
+>>  +		dev_err(chip->dev,
+>>  +			"Battery info missing maximum design voltage\n");
+>>  +		return -EINVAL;
+>>  +	}
+>>  +
+>>  +	if (chip->batt_info->constant_charge_current_max_ua == -EINVAL) {
+>>  +		dev_err(chip->dev,
+>>  +			"Battery info missing maximum constant charge current\n");
+>>  +		return -EINVAL;
+>>  +	}
+>>  +
+>>  +	/* Initialize extcon */
+>>  +	chip->edev = devm_extcon_dev_allocate(chip->dev, 
+>> smbchg_extcon_cable);
+>>  +	if (IS_ERR(chip->edev)) {
+>>  +		dev_err(chip->dev, "Failed to allocate extcon device: %pe\n",
+>>  +			chip->edev);
+>>  +		return PTR_ERR(chip->edev);
+>>  +	}
+>>  +
+>>  +	ret = devm_extcon_dev_register(chip->dev, chip->edev);
+>>  +	if (ret) {
+>>  +		dev_err(chip->dev, "Failed to register extcon device: %pe\n",
+>>  +			ERR_PTR(ret));
+>>  +		return ret;
+>>  +	}
+>>  +
+>>  +	extcon_set_property_capability(chip->edev, EXTCON_USB,
+>>  +				       EXTCON_PROP_USB_VBUS);
+>>  +	extcon_set_property_capability(chip->edev, EXTCON_USB_HOST,
+>>  +				       EXTCON_PROP_USB_VBUS);
+>>  +
+>>  +	/* Initialize charger */
+>>  +	ret = smbchg_init(chip);
+>>  +	if (ret)
+>>  +		return ret;
+>>  +
+>>  +	/* Request IRQs */
+>>  +	for (i = 0; i < ARRAY_SIZE(smbchg_irqs); ++i) {
+>>  +		/* IRQ unused */
+>>  +		if (!smbchg_irqs[i].handler)
+>>  +			continue;
+>>  +
+>>  +		irq = of_irq_get_byname(pdev->dev.of_node, smbchg_irqs[i].name);
+>>  +		if (irq < 0) {
+>>  +			dev_err(chip->dev, "Failed to get %s IRQ: %pe\n",
+>>  +				smbchg_irqs[i].name, ERR_PTR(irq));
+>>  +			return irq;
+>>  +		}
+>>  +
+>>  +		ret = devm_request_threaded_irq(chip->dev, irq, NULL,
+>>  +						smbchg_irqs[i].handler,
+>>  +						IRQF_ONESHOT,
+>>  +						smbchg_irqs[i].name, chip);
+>>  +		if (ret) {
+>>  +			dev_err(chip->dev, "failed to request %s IRQ: %pe\n",
+>>  +				smbchg_irqs[i].name, ERR_PTR(irq));
+>>  +			return ret;
+>>  +		}
+>>  +	}
+>>  +
+>>  +	platform_set_drvdata(pdev, chip);
+>>  +
+>>  +	return 0;
+>>  +}
+>>  +
+>>  +static int smbchg_remove(struct platform_device *pdev)
+>>  +{
+>>  +	struct smbchg_chip *chip = platform_get_drvdata(pdev);
+>>  +
+>>  +	smbchg_usb_enable(chip, false);
+>>  +	smbchg_charging_enable(chip, false);
+>>  +
+>>  +	return 0;
+>>  +}
+>>  +
+>>  +static const struct of_device_id smbchg_id_table[] = {
+>>  +	{ .compatible = "qcom,pmi8994-smbchg", .data = 
+>> &smbchg_pmi8994_data },
+>>  +	{ .compatible = "qcom,pmi8996-smbchg", .data = 
+>> &smbchg_pmi8996_data },
+>>  +	{}
+>>  +};
+>>  +MODULE_DEVICE_TABLE(of, smbchg_id_table);
+>>  +
+>>  +static struct platform_driver smbchg_driver = {
+>>  +	.probe = smbchg_probe,
+>>  +	.remove = smbchg_remove,
+>>  +	.driver = {
+>>  +		.name = "qcom-smbchg",
+>>  +		.of_match_table = smbchg_id_table,
+>>  +	},
+>>  +};
+>>  +module_platform_driver(smbchg_driver);
+>>  +
+>>  +MODULE_AUTHOR("Yassine Oudjana <y.oudjana@protonmail.com>");
+>>  +MODULE_AUTHOR("Alejandro Tafalla <atafalla@dnyon.com>");
+>>  +MODULE_DESCRIPTION("Qualcomm PMIC switch-mode battery charger 
+>> driver");
+>>  +MODULE_LICENSE("GPL");
+>>  diff --git a/drivers/power/supply/qcom-smbchg.h 
+>> b/drivers/power/supply/qcom-smbchg.h
+>>  new file mode 100644
+>>  index 000000000000..06445e10b4db
+>>  --- /dev/null
+>>  +++ b/drivers/power/supply/qcom-smbchg.h
+>>  @@ -0,0 +1,428 @@
+>>  +/* SPDX-License-Identifier: GPL-2.0-only */
+>>  +
+>>  +/* Registers */
+>>  +/* CHGR */
+>>  +#define SMBCHG_CHGR_FV_STS			0x00c
+>>  +#define SMBCHG_CHGR_STS				0x00e
+>>  +#define SMBCHG_CHGR_RT_STS			0x010
+>>  +#define SMBCHG_CHGR_FCC_CFG			0x0f2
+>>  +#define SMBCHG_CHGR_FCC_CMP_CFG			0x0f3
+>>  +#define SMBCHG_CHGR_FV_CFG			0x0f4
+>>  +#define SMBCHG_CHGR_FV_CMP			0x0f5
+>>  +#define SMBCHG_CHGR_AFVC_CFG			0x0f6
+>>  +#define SMBCHG_CHGR_CHG_INHIB_CFG		0x0f7
+>>  +#define SMBCHG_CHGR_TCC_CFG			0x0f9
+>>  +#define SMBCHG_CHGR_CCMP_CFG			0x0fa
+>>  +#define SMBCHG_CHGR_CHGR_CFG1			0x0fb
+>>  +#define SMBCHG_CHGR_CHGR_CFG2			0x0fc
+>>  +#define SMBCHG_CHGR_SFT_CFG			0x0fd
+>>  +#define SMBCHG_CHGR_CFG				0x0ff
+>>  +
+>>  +/* OTG */
+>>  +#define SMBCHG_OTG_RT_STS			0x110
+>>  +#define SMBCHG_OTG_OTG_CFG			0x1f1
+>>  +#define SMBCHG_OTG_TRIM6			0x1f6
+>>  +#define SMBCHG_OTG_LOW_PWR_OPTIONS		0x1ff
+>>  +
+>>  +/* BAT-IF */
+>>  +#define SMBCHG_BAT_IF_BAT_PRES_STS		0x208
+>>  +#define SMBCHG_BAT_IF_RT_STS			0x210
+>>  +#define SMBCHG_BAT_IF_CMD_CHG			0x242
+>>  +#define SMBCHG_BAT_IF_CMD_CHG_LED		0x243
+>>  +#define SMBCHG_BAT_IF_BM_CFG			0x2f3
+>>  +#define SMBCHG_BAT_IF_BAT_IF_TRIM7		0x2f7
+>>  +#define SMBCHG_BAT_IF_BB_CLMP_SEL		0x2f8
+>>  +#define SMBCHG_BAT_IF_ZIN_ICL_PT		0x2fc
+>>  +#define SMBCHG_BAT_IF_ZIN_ICL_LV		0x2fd
+>>  +#define SMBCHG_BAT_IF_ZIN_ICL_HV		0x2fe
+>>  +
+>>  +/* USB-CHGPTH */
+>>  +#define SMBCHG_USB_CHGPTH_ICL_STS_1		0x307
+>>  +#define SMBCHG_USB_CHGPTH_PWR_PATH		0x308
+>>  +#define SMBCHG_USB_CHGPTH_ICL_STS_2		0x309
+>>  +#define SMBCHG_USB_CHGPTH_RID_STS		0x30b
+>>  +#define SMBCHG_USB_CHGPTH_USBIN_HVDCP_STS	0x30c
+>>  +#define SMBCHG_USB_CHGPTH_INPUT_STS		0x30d
+>>  +#define SMBCHG_USB_CHGPTH_USBID_MSB		0x30e
+>>  +#define SMBCHG_USB_CHGPTH_RT_STS		0x310
+>>  +#define SMBCHG_USB_CHGPTH_CMD_IL		0x340
+>>  +#define SMBCHG_USB_CHGPTH_CMD_APSD		0x341
+>>  +#define SMBCHG_USB_CHGPTH_CMD_HVDCP_1		0x342
+>>  +#define SMBCHG_USB_CHGPTH_CMD_HVDCP_2		0x343
+>>  +#define SMBCHG_USB_CHGPTH_USBIN_CHGR_CFG	0x3f1
+>>  +#define SMBCHG_USB_CHGPTH_IL_CFG		0x3f2
+>>  +#define SMBCHG_USB_CHGPTH_AICL_CFG		0x3f3
+>>  +#define SMBCHG_USB_CHGPTH_CFG			0x3f4
+>>  +#define SMBCHG_USB_CHGPTH_APSD_CFG		0x3f5
+>>  +#define SMBCHG_USB_CHGPTH_TR_RID		0x3fa
+>>  +#define SMBCHG_USB_CHGPTH_ICL_BUF_CONFIG	0x3fc
+>>  +#define SMBCHG_USB_CHGPTH_TR_8OR32B		0x3fe
+>>  +
+>>  +/* DC-CHGPTH */
+>>  +#define SMBCHG_DC_CHGPTH_RT_STS			0x410
+>>  +#define SMBCHG_DC_CHGPTH_IL_CFG			0x4f2
+>>  +#define SMBCHG_DC_CHGPTH_AICL_CFG		0x4f3
+>>  +#define SMBCHG_DC_CHGPTH_AICL_WL_SEL_CFG	0x4f5
+>>  +
+>>  +/* MISC */
+>>  +#define SMBCHG_MISC_REVISION1			0x600
+>>  +#define SMBCHG_MISC_IDEV_STS			0x608
+>>  +#define SMBCHG_MISC_RT_STS			0x610
+>>  +#define SMBCHG_MISC_TEST			0x6e2
+>>  +#define SMBCHG_MISC_NTC_VOUT_CFG		0x6f3
+>>  +#define SMBCHG_MISC_TRIM_OPT_15_8		0x6f5
+>>  +#define SMBCHG_MISC_TRIM_OPT_7_0		0x6f6
+>>  +#define SMBCHG_MISC_TRIM_14			0x6fe
+>>  +
+>>  +/* Bits */
+>>  +/* CHGR_STS bits */
+>>  +#define CHG_TYPE_MASK			GENMASK(2, 1)
+>>  +#define CHG_HOLD_OFF_BIT		BIT(3)\
+>>  +
+>>  +/* CHGR_FCC_CFG bits */
+>>  +#define FCC_MASK			GENMASK(4, 0)
+>>  +
+>>  +/* CHGR_RT_STS bits */
+>>  +#define CHG_INHIBIT_BIT			BIT(1)
+>>  +#define CHG_COMP_SFT_BIT		BIT(3)
+>>  +#define BAT_TCC_REACHED_BIT		BIT(7)
+>>  +
+>>  +/* CHGR_FV_CFG bits */
+>>  +#define FV_MASK				GENMASK(5, 0)
+>>  +
+>>  +/* CHGR_TCC_CFG bits */
+>>  +#define CHG_ITERM_MASK			GENMASK(2, 0)
+>>  +
+>>  +/* CHGR_CHGR_CFG1 bits */
+>>  +#define RECHG_THRESHOLD_SRC_BIT		BIT(1)
+>>  +#define TERM_I_SRC_BIT			BIT(2)
+>>  +
+>>  +/* CHGR_CHGR_CFG2 bits */
+>>  +#define CHARGER_INHIBIT_BIT		BIT(0)
+>>  +#define AUTO_RECHG_BIT			BIT(2)
+>>  +#define I_TERM_BIT			BIT(3)
+>>  +#define P2F_CHG_TRAN_BIT		BIT(5)
+>>  +#define CHG_EN_POLARITY_BIT		BIT(6)
+>>  +#define CHG_EN_SRC_BIT			BIT(7)
+>>  +
+>>  +/* CHGR_CFG bits */
+>>  +#define RCHG_LVL_BIT			BIT(0)
+>>  +
+>>  +/* BAT_IF_CMD_CHG bits */
+>>  +#define OTG_EN_BIT			BIT(0)
+>>  +#define CHG_EN_BIT			BIT(1)
+>>  +
+>>  +/* BAT_IF_RT_STS bits */
+>>  +#define HOT_BAT_HARD_BIT		BIT(0)
+>>  +#define HOT_BAT_SOFT_BIT		BIT(1)
+>>  +#define COLD_BAT_HARD_BIT		BIT(2)
+>>  +#define COLD_BAT_SOFT_BIT		BIT(3)
+>>  +#define BAT_OV_BIT			BIT(4)
+>>  +#define BAT_LOW_BIT			BIT(5)
+>>  +#define BAT_MISSING_BIT			BIT(6)
+>>  +#define BAT_TERM_MISSING_BIT		BIT(7)
+>>  +
+>>  +/* USB_CHGPTH_ICL_STS_1 bits */
+>>  +#define ICL_STS_MASK			GENMASK(4, 0)
+>>  +#define AICL_STS_BIT			BIT(5)
+>>  +#define AICL_SUSP_BIT			BIT(6)
+>>  +
+>>  +/* USB_CHGPTH_CFG bits */
+>>  +#define USB51AC_CTRL			BIT(1)
+>>  +#define USB51_COMMAND_POL		BIT(2)
+>>  +#define CFG_USB3P0_SEL_BIT		BIT(7)
+>>  +
+>>  +/* USB_CHGPTH_RT_STS bits */
+>>  +#define USBIN_OV_BIT			BIT(1)
+>>  +#define USBIN_SRC_DET_BIT		BIT(2)
+>>  +
+>>  +/* USB_CHGPTH_RID_STS bits */
+>>  +#define RID_MASK			GENMASK(3, 0)
+>>  +
+>>  +/* USB_CHGPTH_CMD_IL bits */
+>>  +#define USBIN_MODE_HC_BIT		BIT(0)
+>>  +#define USB51_MODE_BIT			BIT(1)
+>>  +#define ICL_OVERRIDE_BIT		BIT(2)
+>>  +#define USBIN_SUSPEND_BIT		BIT(4)
+>>  +
+>>  +/* USB_CHGPTH_IL_CFG bits */
+>>  +#define USBIN_INPUT_MASK		GENMASK(4, 0)
+>>  +
+>>  +/* USB_CHGPTH_AICL_CFG bits */
+>>  +#define USB_CHGPTH_AICL_EN		BIT(2)
+>>  +
+>>  +/* USB_CHGPTH_APSD_CFG bits */
+>>  +#define USB_CHGPTH_APSD_EN		BIT(0)
+>>  +
+>>  +/* MISC_IDEV_STS bits */
+>>  +#define FMB_STS_MASK			GENMASK(3, 0)
+>>  +
+>>  +/* MISC_TRIM_OPT_15_8 bits */
+>>  +#define AICL_RERUN_MASK			GENMASK(5, 4)
+>>  +#define AICL_RERUN_DC_BIT		BIT(4)
+>>  +#define AICL_RERUN_USB_BIT		BIT(5)
+>>  +
+>>  +/* Values */
+>>  +/* CHGR_STS values */
+>>  +#define CHG_TYPE_SHIFT			1
+>>  +#define BATT_NOT_CHG_VAL		0x0
+>>  +#define BATT_PRE_CHG_VAL		0x1
+>>  +#define BATT_FAST_CHG_VAL		0x2
+>>  +#define BATT_TAPER_CHG_VAL		0x3
+>>  +
+>>  +/* CHGR_CHGR_CFG1 values */
+>>  +#define	RCHG_SRC_ANA			0
+>>  +#define RCHG_SRC_FG			BIT(1)
+>>  +#define TERM_SRC_ANA			0
+>>  +#define TERM_SRC_FG			BIT(2)
+>>  +
+>>  +/* CHGR_CHGR_CFG2 values */
+>>  +#define CHG_INHIBIT_DIS			0
+>>  +#define CHG_INHIBIT_EN			BIT(0)
+>>  +#define AUTO_RCHG_EN			0
+>>  +#define AUTO_RCHG_DIS			BIT(2)
+>>  +#define CURRENT_TERM_EN			0
+>>  +#define CURRENT_TERM_DIS		BIT(3)
+>>  +#define PRE_FAST_AUTO			0
+>>  +#define PRE_FAST_CMD			BIT(5)
+>>  +#define CHG_EN_SRC_CMD			0
+>>  +#define CHG_EN_SRC_PIN			BIT(7)
+>>  +
+>>  +/* CHGR_CFG values */
+>>  +#define RCHG_THRESH_100MV		0
+>>  +#define RCHG_THRESH_200MV		BIT(0)
+>>  +
+>>  +/* USB_CHGPTH_INPUT_STS values */
+>>  +#define USBIN_9V			BIT(5)
+>>  +#define USBIN_UNREG			BIT(4)
+>>  +#define USBIN_LV			BIT(3)
+>>  +
+>>  +/* USB_CHGPTH_USBID_MSB values */
+>>  +#define USBID_GND_THRESHOLD		0x495
+>>  +
+>>  +/* USB_CHGPTH_CFG values */
+>>  +#define USB51_COMMAND_CONTROL		0
+>>  +#define USB51_PIN_CONTROL		BIT(1)
+>>  +#define USB51AC_COMMAND1_500		0
+>>  +#define USB51AC_COMMAND1_100		BIT(2)
+>>  +#define USB_2P0_SEL			0
+>>  +#define USB_3P0_SEL			BIT(7)
+>>  +
+>>  +/* MISC_IDEV_STS values */
+>>  +#define USB_TYPE_SDP_BIT		BIT(4)
+>>  +#define USB_TYPE_OTHER_BIT		BIT(5)
+>>  +#define USB_TYPE_DCP_BIT		BIT(6)
+>>  +#define USB_TYPE_CDP_BIT		BIT(7)
+>>  +
+>>  +/* Constant parameters */
+>>  +#define NUM_OTG_RESET_RETRIES		5
+>>  +#define OTG_RESET_DELAY_MS		20
+>>  +
+>>  +/*
+>>  + * These values can be indexed using a bitmask:
+>>  + * 0: USB 2.0/3.0
+>>  + * 1: Limited/full current
+>>  + */
+>>  +static const int smbchg_lc_ilim_options[] = {
+>>  +	[0b00] = 100000,
+>>  +	[0b01] = 150000,
+>>  +	[0b10] = 500000,
+>>  +	[0b11] = 900000
+>>  +};
+>>  +#define LC_ILIM_USB3_BIT		BIT(0)
+>>  +#define LC_ILIM_FULL_CURRENT_BIT	BIT(1)
+>>  +#define smbchg_lc_ilim(usb_3, full_current) 
+>> smbchg_lc_ilim_options[usb_3 | full_current << 1]
+>>  +
+>>  +struct smbchg_chip {
+>>  +	unsigned int base;
+>>  +	struct device *dev;
+>>  +	struct regmap *regmap;
+>>  +
+>>  +	struct power_supply_battery_info *batt_info;
+>>  +	struct power_supply *usb_psy;
+>>  +
+>>  +	struct regulator_desc otg_rdesc;
+>>  +	struct regulator_dev *otg_reg;
+>>  +	int otg_resets;
+>>  +
+>>  +	struct extcon_dev *edev;
+>>  +
+>>  +	spinlock_t sec_access_lock;
+>>  +	struct work_struct otg_reset_work;
+>>  +
+>>  +	const struct smbchg_data *data;
+>>  +};
+>>  +
+>>  +struct smbchg_irq {
+>>  +	const char *name;
+>>  +	irq_handler_t handler;
+>>  +};
+>>  +
+>>  +struct smbchg_data {
+>>  +	const int *iterm_table;
+>>  +	unsigned int iterm_table_len;
+>>  +	const int *ilim_table;
+>>  +	unsigned int ilim_table_len;
+>>  +
+>>  +	bool reset_otg_on_oc;
+>>  +};
+>>  +
+>>  +static const int smbchg_fv_table[] = {
+> 
+> No static data in headers.
+
+Understood.
+
+> 
+> Best regards,
+> Krzysztof
+
+

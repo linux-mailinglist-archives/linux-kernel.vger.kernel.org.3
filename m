@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CB358CA92
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B01458CA95
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243515AbiHHOdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 10:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S243327AbiHHOeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 10:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbiHHOdW (ORCPT
+        with ESMTP id S243325AbiHHOd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 10:33:22 -0400
+        Mon, 8 Aug 2022 10:33:58 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E751C11803
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:33:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C4C8E0D3
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:33:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659969199;
+        s=mimecast20190719; t=1659969236;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/1TLUgVlg2OyYCJ+DZaddQK6OMJhjwa3jOmWOJ1SScI=;
-        b=CzBnDYHg00fkiP2nI9ZM8nxuQ2k5bQifO1OU38JZukIHNr7dT8JPl3Nqt3vrQHkbdX89pM
-        JNkrB6Fgj2owiaHm967HNtHgqwU/FG/9hz525Wc7ZGdlt46RCpZx/DmKZM5hjf3IkkKMfU
-        c1VYEC/XLufh/AeV0XkQ3L8Pqt8x8y4=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vZrPp9M6+vQgqOZFpLy5S17BII/izqfOFe7C4MphlAA=;
+        b=VJmLqDJdox+zS2uCCbmz3BWBUVEtX6Xi5n9pYwUMacvk4eKDsXidHYm51DBFc1iJ7V7Ozb
+        Vnmkd3Dzx9zBH9ohVouCFNlRngV9rCVvPn90wHZOMlpUVHP4Ezh4adan/9QGvpVvI4off2
+        lyzNI/a4MJligSwzlriexnPFcseH7Pk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-551-kvogdGC4Oie-jdDllxR_fQ-1; Mon, 08 Aug 2022 10:33:18 -0400
-X-MC-Unique: kvogdGC4Oie-jdDllxR_fQ-1
-Received: by mail-lf1-f70.google.com with SMTP id y6-20020a196406000000b0048ae6ac68adso2218480lfb.21
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 07:33:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=/1TLUgVlg2OyYCJ+DZaddQK6OMJhjwa3jOmWOJ1SScI=;
-        b=LKkmVMTtNopRWg7YCb4ALEe0MMCAOLklr7F3NSAsfmoIi6TDHf6LFrtalgBQ8LF1Ze
-         GPqvIlEIBb2sc5morA3xMfY1PvJQLrOJwV4D8JrYjopTpdnjU25wM/s3cO+EahvQpHWB
-         Ri9hE8qjOKlrDpO1kYva2BIrpLlfLn7AdnreUupnGsIQtaNtXyXWouMDISwjZuEiw5xu
-         cr0SSi9PKAnQMJKqEtgxuQbYi/dTN+MjwquXi8ShF8iPAVhrYijfIFUSuwD8iKYvsudF
-         IxfI/1VUfqYC9WvwKj1Akdzh7GOcpQ5NhiY8q3efm+l+l8PlGSL1AEj3i8bZ8OfcgQq6
-         6uzQ==
-X-Gm-Message-State: ACgBeo3PkSQzuGWyn1VD4F60qZ10NQZkhGhIk6oCwxx1goWEOeZ2FWNK
-        iomCCZcNRKusQ9BFjb9CkNWnA8sfi2yHOnPfDfk8G3OFWoq9yfu+OltpvdNxWRsXouOzBNhYpFk
-        SqfnOGl0sqHCVgH/0Iq10AiFx0gWt9E9LAHRwLezI
-X-Received: by 2002:a05:6512:68a:b0:48b:9d3d:b19b with SMTP id t10-20020a056512068a00b0048b9d3db19bmr3474985lfe.174.1659969196984;
-        Mon, 08 Aug 2022 07:33:16 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR64B2Y+NvP5GJggrT7xDmjVOaBSl5qxOdsgKfM9DJRfPYV4TZXGTwlEJml+bcB9a8mUktIhhfJarGLbZfr6iPk=
-X-Received: by 2002:a05:6512:68a:b0:48b:9d3d:b19b with SMTP id
- t10-20020a056512068a00b0048b9d3db19bmr3474977lfe.174.1659969196714; Mon, 08
- Aug 2022 07:33:16 -0700 (PDT)
+ us-mta-73-Q4GmpSw3PZm0JNiAEKFwlQ-1; Mon, 08 Aug 2022 10:33:53 -0400
+X-MC-Unique: Q4GmpSw3PZm0JNiAEKFwlQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B75E738173C3;
+        Mon,  8 Aug 2022 14:33:52 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C997D2026D4C;
+        Mon,  8 Aug 2022 14:33:51 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] cifs: Remove {cifs,nfs}_fscache_release_page()
+From:   David Howells <dhowells@redhat.com>
+To:     willy@infradead.org
+Cc:     Jeff Layton <jlayton@redhat.com>,
+        Steve French <smfrench@gmail.com>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-fsdevel@vger.kernel.org,
+        dhowells@redhat.com, linux-kernel@vger.kernel.org
+Date:   Mon, 08 Aug 2022 15:33:51 +0100
+Message-ID: <165996923111.209242.10532553567023183407.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-References: <20220805181105.GA29848@willie-the-truck> <20220807042408-mutt-send-email-mst@kernel.org>
- <20220808101850.GA31984@willie-the-truck> <20220808083958-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220808083958-mutt-send-email-mst@kernel.org>
-From:   Stefan Hajnoczi <shajnocz@redhat.com>
-Date:   Mon, 8 Aug 2022 10:33:05 -0400
-Message-ID: <CAD60JZOWLU2U9EoUmG6kLHMUYv0j_y4V8TOzzyk=XHQJaG38mg@mail.gmail.com>
-Subject: Re: IOTLB support for vhost/vsock breaks crosvm on Android
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        torvalds@linux-foundation.org, ascull@google.com, maz@kernel.org,
-        keirf@google.com, jiyong@google.com, kernel-team@android.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        crosvm-dev@chromium.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -79,135 +65,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 8:46 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Mon, Aug 08, 2022 at 11:18:50AM +0100, Will Deacon wrote:
-> > Hi Michael,
-> >
-> > On Sun, Aug 07, 2022 at 09:14:43AM -0400, Michael S. Tsirkin wrote:
-> > > Will, thanks very much for the analysis and the writeup!
-> >
-> > No problem, and thanks for following up.
-> >
-> > > On Fri, Aug 05, 2022 at 07:11:06PM +0100, Will Deacon wrote:
-> > > > So how should we fix this? One possibility is for us to hack crosvm to
-> > > > clear the VIRTIO_F_ACCESS_PLATFORM flag when setting the vhost features,
-> > > > but others here have reasonably pointed out that they didn't expect a
-> > > > kernel change to break userspace. On the flip side, the offending commit
-> > > > in the kernel isn't exactly new (it's from the end of 2020!) and so it's
-> > > > likely that others (e.g. QEMU) are using this feature.
-> > >
-> > > Exactly, that's the problem.
-> > >
-> > > vhost is reusing the virtio bits and it's only natural that
-> > > what you are doing would happen.
-> > >
-> > > To be precise, this is what we expected people to do (and what QEMU does):
-> > >
-> > >
-> > > #define QEMU_VHOST_FEATURES ((1 << VIRTIO_F_VERSION_1) |
-> > >                          (1 << VIRTIO_NET_F_RX_MRG) | .... )
-> > >
-> > > VHOST_GET_FEATURES(... &host_features);
-> > > host_features &= QEMU_VHOST_FEATURES
-> > > VHOST_SET_FEATURES(host_features & guest_features)
-> > >
-> > >
-> > > Here QEMU_VHOST_FEATURES are the bits userspace knows about.
-> > >
-> > > Our assumption was that whatever userspace enables, it
-> > > knows what the effect on vhost is going to be.
-> > >
-> > > But yes, I understand absolutely how someone would instead just use the
-> > > guest features. It is unfortunate that we did not catch this in time.
-> > >
-> > >
-> > > In hindsight, we should have just created vhost level macros
-> > > instead of reusing virtio ones. Would address the concern
-> > > about naming: PLATFORM_ACCESS makes sense for the
-> > > guest since there it means "whatever access rules platform has",
-> > > but for vhost a better name would be VHOST_F_IOTLB.
-> > > We should have also taken greater pains to document what
-> > > we expect userspace to do. I remember now how I thought about something
-> > > like this but after coding this up in QEMU I forgot to document this :(
-> > > Also, I suspect given the history the GET/SET features ioctl and burned
-> > > wrt extending it and we have to use a new when we add new features.
-> > > All this we can do going forward.
-> >
-> > Makes sense. The crosvm developers are also pretty friendly in my
-> > experience, so I'm sure they wouldn't mind being involved in discussions
-> > around any future ABI extensions. Just be aware that they _very_ recently
-> > moved their mailing lists, so I think it lives here now:
-> >
-> > https://groups.google.com/a/chromium.org/g/crosvm-dev
-> >
-> > > But what can we do about the specific issue?
-> > > I am not 100% sure since as Will points out, QEMU and other
-> > > userspace already rely on the current behaviour.
-> > >
-> > > Looking at QEMU specifically, it always sends some translations at
-> > > startup, this in order to handle device rings.
-> > >
-> > > So, *maybe* we can get away with assuming that if no IOTLB ioctl was
-> > > ever invoked then this userspace does not know about IOTLB and
-> > > translation should ignore IOTLB completely.
-> >
-> > There was a similar suggestion from Stefano:
-> >
-> > https://lore.kernel.org/r/20220806105225.crkui6nw53kbm5ge@sgarzare-redhat
-> >
-> > about spotting the backend ioctl for IOTLB and using that to enable
-> > the negotiation of F_ACCESS_PLATFORM. Would that work for qemu?
->
-> Hmm I would worry that this disables the feature for old QEMU :(
->
->
-> > > I am a bit nervous about breaking some *other* userspace which actually
-> > > wants device to be blocked from accessing memory until IOTLB
-> > > has been setup. If we get it wrong we are making guest
-> > > and possibly even host vulnerable.
-> > > And of course just revering is not an option either since there
-> > > are now whole stacks depending on the feature.
-> >
-> > Absolutely, I'm not seriously suggesting the revert. I just did it locally
-> > to confirm the issue I was seeing.
-> >
-> > > Will I'd like your input on whether you feel a hack in the kernel
-> > > is justified here.
-> >
-> > If we can come up with something that we have confidence in and won't be a
-> > pig to maintain, then I think we should do it, but otherwise we can go ahead
-> > and change crosvm to mask out this feature flag on the vhost side for now.
-> > We mainly wanted to raise the issue to illustrate that this flag continues
-> > to attract problems in the hope that it might inform further usage and/or
-> > spec work in this area.
-> >
-> > In any case, I'm happy to test any kernel patches with our setup if you
-> > want to give it a shot.
->
-> Thanks!
-> I'm a bit concerned that the trick I proposed changes the configuration
-> where iotlb was not set up from "access to memory not allowed" to
-> "access to all memory allowed". This just might have security
-> implications if some application assumed the former.
-> And the one Stefano proposed disables IOTLB for old QEMU versions.
+Remove {cifs,nfs}_fscache_release_page() from fs/cifs/fscache.h.  This
+functionality got built directly into cifs_release_folio() and will
+hopefully be replaced with netfs_release_folio() at some point.
 
-Adding hacks to vhost in order to work around userspace applications
-that misunderstand the vhost model seems like a it will lead to
-problems.
+The "nfs_" version is a copy and paste error and should've been altered to
+read "cifs_".  That can also be removed.
 
-Userspace applications need to follow the vhost model: vhost is
-designed for virtqueue passthrough, but the rest of the vhost
-interface is not suitable for pass through. It's similar to how VFIO
-PCI passthrough needs to do a significant amount of stuff in userspace
-to emulate a PCI configuration space and it won't work properly if you
-pass through the physical PCI device's PCI configuration space.
+Reported-by: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Jeff Layton <jlayton@redhat.com>
+cc: Steve French <smfrench@gmail.com>
+cc: linux-cifs@vger.kernel.org
+cc: samba-technical@lists.samba.org
+cc: linux-fsdevel@vger.kernel.org
+---
 
-The emulator has to mediate between the guest device and vhost device
-because it still emulates the VIRTIO transport, configuration space,
-device lifecycle, etc even when all virtqueues are passed through.
+ fs/cifs/fscache.h |   16 ----------------
+ 1 file changed, 16 deletions(-)
 
-Let's document this for vhost and vDPA because it is not obvious.
+diff --git a/fs/cifs/fscache.h b/fs/cifs/fscache.h
+index aa3b941a5555..67b601041f0a 100644
+--- a/fs/cifs/fscache.h
++++ b/fs/cifs/fscache.h
+@@ -108,17 +108,6 @@ static inline void cifs_readpage_to_fscache(struct inode *inode,
+ 		__cifs_readpage_to_fscache(inode, page);
+ }
+ 
+-static inline int cifs_fscache_release_page(struct page *page, gfp_t gfp)
+-{
+-	if (PageFsCache(page)) {
+-		if (current_is_kswapd() || !(gfp & __GFP_FS))
+-			return false;
+-		wait_on_page_fscache(page);
+-		fscache_note_page_release(cifs_inode_cookie(page->mapping->host));
+-	}
+-	return true;
+-}
+-
+ #else /* CONFIG_CIFS_FSCACHE */
+ static inline
+ void cifs_fscache_fill_coherency(struct inode *inode,
+@@ -154,11 +143,6 @@ cifs_readpage_from_fscache(struct inode *inode, struct page *page)
+ static inline
+ void cifs_readpage_to_fscache(struct inode *inode, struct page *page) {}
+ 
+-static inline int nfs_fscache_release_page(struct page *page, gfp_t gfp)
+-{
+-	return true; /* May release page */
+-}
+-
+ #endif /* CONFIG_CIFS_FSCACHE */
+ 
+ #endif /* _CIFS_FSCACHE_H */
 
-Stefan
 

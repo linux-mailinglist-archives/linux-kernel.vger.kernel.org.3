@@ -2,146 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A476458C19A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CD658C1AA
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235747AbiHHC2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
+        id S233131AbiHHCfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbiHHC1q (ORCPT
+        with ESMTP id S231560AbiHHCfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 22:27:46 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F362C113C;
-        Sun,  7 Aug 2022 19:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659925256; x=1691461256;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DSFtjCvyVuLCouGH3nrkWmxv8xftzPQ8caPWxrxOie0=;
-  b=XsXC9nkmNYSfvEPNhcai2gJv+CWIZKLC8geiHxfdoIDg2lv4Ky4R8jfd
-   C92PxE4/NI17cgovv6euP4jdGKwND6aeqxuvOguwOrwQuNSCgKGJmV6bO
-   TCgliKyb2K3aQmMyL28il7v7IGCCaK9uQemqK/WYFxHVKsOkN4Z9aEIxT
-   6MemXxykAyEVPg4PzAuCFqhcv+CtZs3wn4cm41uRi/pZX/A6MTRXYoTRi
-   A7Z5sh9wp/Q4UP3pbRidPlf8/ThfsRkaW0GraC2hja+V8dYC7cGvwGFhw
-   sJDRXTjHQmUppS0gdmUZf3+9v4sCXsJNVfCakdrVvA+CLxqTuPr588DQM
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="290493847"
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="290493847"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 19:20:56 -0700
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="931854925"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 19:20:54 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Reduce the frequency of triggering irq-work for strict grace period
-Date:   Mon,  8 Aug 2022 10:26:26 +0800
-Message-Id: <20220808022626.12825-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 7 Aug 2022 22:35:23 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61094E97
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 19:35:22 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so7875510pjl.0
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 19:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:to:user-agent:mime-version
+         :date:message-id:from:to:cc;
+        bh=YVyLLvwQGdhapgIoA+Eca594bJs0oU8fzFb3turAlJs=;
+        b=FjeIgoQwYYz8soy4hb/Pvuu6IC1FAvAmrTdvkZcHPR6dbG5Wieg08dq+ax/Kag+Eu1
+         4C+RDxJ50ttxWd2qJ/tO0jNjH2Bvi3LLGDSDQ8RQdmTX230CrObXmpr6VHJQQg8RO+fE
+         8iVCPd6whLyuuJNEvdFdE3+xz1q51XMT+0OMnL/S9iL9tE1eR+M/t6VcGSKkopMDd2d5
+         UGonaJ6YqtBMi4qhUB0lcSMiieYpv8Xnh07bIvLP9AhAJqx5Jrpj5noIVSG0FzBnPBqA
+         1i2xlOlktNsJqgmCypTYkuBaCKSVKHicK/Ej3lgr5l/wJxKmQ5MWI0TfSikUF6Q0uWJL
+         2GFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc;
+        bh=YVyLLvwQGdhapgIoA+Eca594bJs0oU8fzFb3turAlJs=;
+        b=zvow78D+WjEALPlyAuZL6vsy0gx16MVn0ZRpFZod1YFDfeAXMB6Mw9DI3ZlaTMh2+I
+         6Do5DKcw+aM9c0tyUpi6Lgz4lsMCO2I0BOvq50M98EqrJXctAzB6eDt99Hu971/bVph8
+         oLU2OfyY64CRK08M4yG7gugg1I3yOITh6vVeWJa1YJIxOiVvylLj6RthCudnx8aoyhDR
+         tb3Ju4BChrkI+mRxtvc1dlXzmO8BZuBUinhgmPX9TebJ3mXb62SwcZUMEh5DL/AW+pYt
+         qptHh9YgYnYhGVBxD6oLu3gbCUl0bkd6YqmVNPYWQy1D5pSJNoPw9GZid4npzOdtYqZN
+         6E0A==
+X-Gm-Message-State: ACgBeo2PDAoSj5qujeO0uja8235yAiD6M5Kj+q2U0pd7thfqfJcDYelp
+        WGmkmIOBBtT/zOu/dd3KqIPd6hI8XGjJ95dU
+X-Google-Smtp-Source: AA6agR5sWn3v2VJIOv+7NJm6WaXZoDCNdZ2oUeCLT8vRUBa8N+W9rJ1ZtPXLAj1ny19FgU/p9rBNHg==
+X-Received: by 2002:a17:90a:b00b:b0:1f1:6023:dacd with SMTP id x11-20020a17090ab00b00b001f16023dacdmr26465699pjq.184.1659926121581;
+        Sun, 07 Aug 2022 19:35:21 -0700 (PDT)
+Received: from [10.211.55.4] ([143.92.127.224])
+        by smtp.gmail.com with ESMTPSA id k6-20020a17090ac50600b001f3126b104fsm6975046pjt.31.2022.08.07.19.35.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Aug 2022 19:35:21 -0700 (PDT)
+Message-ID: <61ecca29-2d01-af2d-3d18-62dad41c63b4@gmail.com>
+Date:   Mon, 8 Aug 2022 10:35:19 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+To:     linux-kernel@vger.kernel.org
+From:   "brookxu.cn@gmail.com" <brookxu.cn@gmail.com>
+Subject: Choose 5.10 LTS or 5.15 LTS
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For kernel built with PREEMPT_RCU=y and RCU_STRICT_GRACE_PERIOD=y,
-currently, the irq-work will be triggered by high frequency to make
-the scheduler re-evaluate and call hooks to check whether there are
-qs need to report when exit RCU read critical section in irq-disbaled
-context. however if there is no gp in progress, the irq-work trigger
-is meaningless.
-
-This commit reduced irq-work trigger frequency by check whether the
-current CPU is not experiencing qs or there is task that blocks
-the current grace period for RCU_STRICT_GRACE_PERIOD=y kernel.
-
-The test results are as follows:
-
-echo rcu_preempt_deferred_qs_handler > /sys/kernel/debug/tracing/set_ftrace_filter
-echo 1 > /sys/kernel/debug/tracing/function_profile_enabled
-insmod rcutorture.ko
-sleep 20
-rmmod rcutorture.ko
-echo 0 > /sys/kernel/debug/tracing/function_profile_enabled
-echo > /sys/kernel/debug/tracing/set_ftrace_filter
-
-head /sys/kernel/debug/tracing/trace_stat/function*
-
-original:
-
-==> /sys/kernel/debug/tracing/trace_stat/function0 <==
-  Function                               Hit    Time            Avg             s^2
-  --------                               ---    ----            ---             ---
-  rcu_preempt_deferred_qs_handle      838746    182650.3 us     0.217 us        0.004 us
-
-==> /sys/kernel/debug/tracing/trace_stat/function1 <==
-  Function                               Hit    Time            Avg             s^2
-  --------                               ---    ----            ---             ---
-  rcu_preempt_deferred_qs_handle      841768    191138.6 us     0.227 us        0.024 us
-
-==> /sys/kernel/debug/tracing/trace_stat/function2 <==
-  Function                               Hit    Time            Avg             s^2
-  --------                               ---    ----            ---             ---
-  rcu_preempt_deferred_qs_handle      828243    180455.6 us     0.217 us        0.004 us
-
-==> /sys/kernel/debug/tracing/trace_stat/function3 <==
-  Function                               Hit    Time            Avg             s^2
-  --------                               ---    ----            ---             ---
-  rcu_preempt_deferred_qs_handle      810258    189158.1 us     0.233 us        0.023 us
-
-apply patch:
-
-==> /sys/kernel/debug/tracing/trace_stat/function0 <==
-  Function                               Hit    Time            Avg             s^2
-  --------                               ---    ----            ---             ---
-  rcu_preempt_deferred_qs_handle      302373    67434.95 us     0.223 us        0.001 us
-
-==> /sys/kernel/debug/tracing/trace_stat/function1 <==
-  Function                               Hit    Time            Avg             s^2
-  --------                               ---    ----            ---             ---
-  rcu_preempt_deferred_qs_handle      307174    68398.34 us     0.222 us        0.002 us
-
-==> /sys/kernel/debug/tracing/trace_stat/function2 <==
-  Function                               Hit    Time            Avg             s^2
-  --------                               ---    ----            ---             ---
-  rcu_preempt_deferred_qs_handle      250910    56157.42 us     0.223 us        0.002 us
-
-==> /sys/kernel/debug/tracing/trace_stat/function3 <==
-  Function                               Hit    Time            Avg             s^2
-  --------                               ---    ----            ---             ---
-  rcu_preempt_deferred_qs_handle      279902    62644.64 us     0.223 us        0.003 us
-
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree_plugin.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index b76076014e12..1514909cf905 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -641,7 +641,8 @@ static void rcu_read_unlock_special(struct task_struct *t)
- 
- 		expboost = (t->rcu_blocked_node && READ_ONCE(t->rcu_blocked_node->exp_tasks)) ||
- 			   (rdp->grpmask & READ_ONCE(rnp->expmask)) ||
--			   IS_ENABLED(CONFIG_RCU_STRICT_GRACE_PERIOD) ||
-+			   (IS_ENABLED(CONFIG_RCU_STRICT_GRACE_PERIOD) &&
-+			   ((rdp->grpmask & READ_ONCE(rnp->qsmask)) || t->rcu_blocked_node)) ||
- 			   (IS_ENABLED(CONFIG_RCU_BOOST) && irqs_were_disabled &&
- 			    t->rcu_blocked_node);
- 		// Need to defer quiescent state until everything is enabled.
--- 
-2.25.1
+We want to choose an LTS kernel version to use for a few years. As we 
+know, the 5.10 LTS has a 6 years maintenance period with the help of 
+huawei. But the 5.15 LTS currently only has a two-year maintenance 
+period, and it may reach EOL next year. It is currently unclear whether 
+it will be extended. Coupled with the arrival of the 6.0 kernel, I am a 
+little worried that the maintenance of 5.15 will be reduced. Does anyone 
+have good suggestions, thank you.
 

@@ -2,121 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B01458CA95
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E689558CA98
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243327AbiHHOeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 10:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S243590AbiHHOgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 10:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243325AbiHHOd6 (ORCPT
+        with ESMTP id S243208AbiHHOgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 10:33:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C4C8E0D3
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659969236;
+        Mon, 8 Aug 2022 10:36:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D34E65B5
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:36:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31FE0B80EB5
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 14:36:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67211C433C1;
+        Mon,  8 Aug 2022 14:36:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ATFrCsLj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1659969364;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=vZrPp9M6+vQgqOZFpLy5S17BII/izqfOFe7C4MphlAA=;
-        b=VJmLqDJdox+zS2uCCbmz3BWBUVEtX6Xi5n9pYwUMacvk4eKDsXidHYm51DBFc1iJ7V7Ozb
-        Vnmkd3Dzx9zBH9ohVouCFNlRngV9rCVvPn90wHZOMlpUVHP4Ezh4adan/9QGvpVvI4off2
-        lyzNI/a4MJligSwzlriexnPFcseH7Pk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-73-Q4GmpSw3PZm0JNiAEKFwlQ-1; Mon, 08 Aug 2022 10:33:53 -0400
-X-MC-Unique: Q4GmpSw3PZm0JNiAEKFwlQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B75E738173C3;
-        Mon,  8 Aug 2022 14:33:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C997D2026D4C;
-        Mon,  8 Aug 2022 14:33:51 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] cifs: Remove {cifs,nfs}_fscache_release_page()
-From:   David Howells <dhowells@redhat.com>
-To:     willy@infradead.org
-Cc:     Jeff Layton <jlayton@redhat.com>,
-        Steve French <smfrench@gmail.com>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-fsdevel@vger.kernel.org,
-        dhowells@redhat.com, linux-kernel@vger.kernel.org
-Date:   Mon, 08 Aug 2022 15:33:51 +0100
-Message-ID: <165996923111.209242.10532553567023183407.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+         in-reply-to:in-reply-to:references:references;
+        bh=KwXotlNfJolIheziW9hCV8MLTEPJKC869xycZMSy26A=;
+        b=ATFrCsLjeIxwzBVATi/e9pHZkWoB1Tg6nZsY9YIwf5/QVM8JyKPrtS8vUmFY1Vt5fFfpp3
+        2UNjkRkYAIFzi9IA7nLtOD8lwybXpEbR33TJU8R55xd+zpCcQbxbmcvsmD++1hhjK3ZGWS
+        31XqT27Di8ZEJrUVQMyta7QscX49DO0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6aa68a4a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 8 Aug 2022 14:36:03 +0000 (UTC)
+Date:   Mon, 8 Aug 2022 16:36:00 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] RISC-V Patches for the 5.20 Merge Window, Part 1
+Message-ID: <YvEfUKp5MWt+nS3+@zx2c4.com>
+References: <mhng-1cbba637-6dd2-456a-859b-9d3f8be6bab7@palmer-mbp2014>
+ <YvEeQrzuPIKiEh8m@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YvEeQrzuPIKiEh8m@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove {cifs,nfs}_fscache_release_page() from fs/cifs/fscache.h.  This
-functionality got built directly into cifs_release_folio() and will
-hopefully be replaced with netfs_release_folio() at some point.
+Hi Palmer,
 
-The "nfs_" version is a copy and paste error and should've been altered to
-read "cifs_".  That can also be removed.
+On Mon, Aug 08, 2022 at 04:31:30PM +0200, Jason A. Donenfeld wrote:
+> Hi Palmer,
+> 
+> On Fri, Aug 05, 2022 at 04:36:38PM -0700, Palmer Dabbelt wrote:
+> > The following changes since commit 924cbb8cbe3460ea192e6243017ceb0ceb255b1b:
+> > 
+> >   riscv: Improve description for RISCV_ISA_SVPBMT Kconfig symbol (2022-06-16 15:47:39 -0700)
+> > 
+> > are available in the Git repository at:
+> > 
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.20-mw0
+> 
+> Just FYI, the WireGuard test suite over on build.wireguard.com no longer
+> boots for riscv32 after this merge. Investigating...
 
-Reported-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Jeff Layton <jlayton@redhat.com>
-cc: Steve French <smfrench@gmail.com>
-cc: linux-cifs@vger.kernel.org
-cc: samba-technical@lists.samba.org
-cc: linux-fsdevel@vger.kernel.org
----
+Ahh, looks like it's caused by 44c1e84a38a0 ("RISC-V: Add
+CONFIG_{NON,}PORTABLE"). I pushed a patch for it to
+https://git.zx2c4.com/wireguard-linux/commit/?id=99a1a96f1f80b68b0fb5156ff6bd3f0973cd1f4d
+to kick the CI, which should be green again shortly.
 
- fs/cifs/fscache.h |   16 ----------------
- 1 file changed, 16 deletions(-)
+If you want, feel free to take that into your risc-v pull part 2,
+whenever you make that. Otherwise I'll eventually send it the long way
+through net.git.
 
-diff --git a/fs/cifs/fscache.h b/fs/cifs/fscache.h
-index aa3b941a5555..67b601041f0a 100644
---- a/fs/cifs/fscache.h
-+++ b/fs/cifs/fscache.h
-@@ -108,17 +108,6 @@ static inline void cifs_readpage_to_fscache(struct inode *inode,
- 		__cifs_readpage_to_fscache(inode, page);
- }
- 
--static inline int cifs_fscache_release_page(struct page *page, gfp_t gfp)
--{
--	if (PageFsCache(page)) {
--		if (current_is_kswapd() || !(gfp & __GFP_FS))
--			return false;
--		wait_on_page_fscache(page);
--		fscache_note_page_release(cifs_inode_cookie(page->mapping->host));
--	}
--	return true;
--}
--
- #else /* CONFIG_CIFS_FSCACHE */
- static inline
- void cifs_fscache_fill_coherency(struct inode *inode,
-@@ -154,11 +143,6 @@ cifs_readpage_from_fscache(struct inode *inode, struct page *page)
- static inline
- void cifs_readpage_to_fscache(struct inode *inode, struct page *page) {}
- 
--static inline int nfs_fscache_release_page(struct page *page, gfp_t gfp)
--{
--	return true; /* May release page */
--}
--
- #endif /* CONFIG_CIFS_FSCACHE */
- 
- #endif /* _CIFS_FSCACHE_H */
-
-
+Jason

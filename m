@@ -2,167 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF62158CBB9
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4789958CBB6
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243839AbiHHP7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 11:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S243778AbiHHP7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 11:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243808AbiHHP7M (ORCPT
+        with ESMTP id S243674AbiHHP7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:59:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30C81580A;
-        Mon,  8 Aug 2022 08:59:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 486B9B80FE4;
-        Mon,  8 Aug 2022 15:59:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2583C4347C;
-        Mon,  8 Aug 2022 15:59:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659974348;
-        bh=CB8GEk6vrbmCRypZeJSBIKCFthK8v+Ye1fo/yFOFCnY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JJUUb6F6FbmPuI7Pkoevuis2N8VJzDGFDlKmrFe/6IkrTsAUyh3t3ozpYG3UAKuhU
-         uNwhOsP5EG9aAzcDWtTUrGmDK/t+8/6lOhdFtYh3tKV5SIbuutqyUvVK/I+3lXmyII
-         iG/UvtDPc28pCwT8Eq1tjhY2zwZbsXT3er4eMkSp8H9EOeC/knH1mEKc3SRnYYVm0S
-         0U8ZTlEF7TX/ol8IbXXPQ0IKzmIVJVHT110O+YmFbVqhQN8WaxR3U6wv/WJjks/epD
-         0wAF+rAcaL8OX4k1NyKymK8lXnm3ShISFWRt3l7A4WME1MA20h5/wAFy9GiCuy1uGG
-         Z/VSmi2j28bAw==
-Received: by mail-vs1-f41.google.com with SMTP id 67so1866546vsv.2;
-        Mon, 08 Aug 2022 08:59:08 -0700 (PDT)
-X-Gm-Message-State: ACgBeo35exy8iWdD5i4ilkZdgTzg9E4JFD4X6T6qwp9Wd0vyoNflo+me
-        XasIcaMlhLbQAqT23bmH1cp+UMdJEQCxx8IpFQ==
-X-Google-Smtp-Source: AA6agR7B/cC2PaD3jHCZZwdzxoo79bfvI7Uvngrp1T2ma4YJRXtUhqhJkTAenRqqzr9LWCVNQnoAnENr/fuMjInK2PE=
-X-Received: by 2002:a67:a246:0:b0:388:7e82:1d80 with SMTP id
- t6-20020a67a246000000b003887e821d80mr6508681vsh.26.1659974347774; Mon, 08 Aug
- 2022 08:59:07 -0700 (PDT)
+        Mon, 8 Aug 2022 11:59:05 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9769DB1DD;
+        Mon,  8 Aug 2022 08:59:04 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id o3so8943686ple.5;
+        Mon, 08 Aug 2022 08:59:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=NSzsSRoA3x7V34Qf7YygjvmGdHbbkY5XG2e9FxtKRAE=;
+        b=jI8e+uPapEGqAUy1JgeqBqOYo63Oo5xJOI7LrTqRx2Ew1gsG+G6C9SS/sBFfToV0mM
+         EmlYpmJpoph+iXIGgxNvde9PNyLCarB4smt2lvhH6Vy77uasb1SqgNynFr3TjuBjKvJY
+         zOC5cKpRwdSoW36YeTO8A3PvfogtGzG4HVQvjArObQnYv2t2nmbH6CkBEO8Xp8UFT/Kl
+         LoULlfG5vlYec387nr8PY6/nb90BUtISfY5ZHv/DbIlOyIN1TMyhoIYwfCOUuWbQjgLI
+         HnKgy5TUvOACIEbD4JtI0E1gQ5SvWHWTtGEH7glVWHY1Y1cE8Dw7Kp6NzfzhZb3+qqlI
+         Rvzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=NSzsSRoA3x7V34Qf7YygjvmGdHbbkY5XG2e9FxtKRAE=;
+        b=Yc1LgFFHdA2MYt8yR569FHqte4k40SwpuE5vlYpL1qqHPnGptqetu7zmMoe6XbiJCl
+         UbixrZ2EVtuI6gVTJgbpvn+kqMQx+4SgJ5uF7FgVQZypzmribYqFwSnOx9hvqNRqH9Je
+         nByF2mRSGHwwwCOgsMJrBzMyc2SCwxKY1kqWUA4kOKKezSIxY4+Bv6b1fPAxcrOsDHWQ
+         WFm1uAYZmRLq0wtkYHhLXyPKhcUZk1UufBSGUjw3l+i5BNDvDrn96jiIAauE1Kau+ixp
+         CuDG3a587zQPCt+MC1jaJ4HalxC9VGsemUEL1ykhKW/1iEN2UU9tfAC3QKArVxMlnzID
+         bevA==
+X-Gm-Message-State: ACgBeo11xix6rlQSnM4lejbhTiZVl/RqhacRnUqD+L5h2JoGHPHL4mGK
+        yw6CGafXUb4TptbQJmt2t6z+L7//rOM=
+X-Google-Smtp-Source: AA6agR6APHb10/imTPvDpI/LuSPi5sY18vx1Tjq0hxCnQNv0tkLpx7v9XkHOUGb5Y00RC43XEagHgg==
+X-Received: by 2002:a17:902:7007:b0:170:8d35:bafd with SMTP id y7-20020a170902700700b001708d35bafdmr10930280plk.51.1659974344106;
+        Mon, 08 Aug 2022 08:59:04 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id nn16-20020a17090b38d000b001efa35356besm11104120pjb.28.2022.08.08.08.59.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 08:59:03 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <120935c3-441b-eea4-4626-a3e322fef1dc@roeck-us.net>
+Date:   Mon, 8 Aug 2022 08:59:02 -0700
 MIME-Version: 1.0
-References: <20220728143427.13617-1-Sergey.Semin@baikalelectronics.ru>
- <20220728143427.13617-4-Sergey.Semin@baikalelectronics.ru>
- <20220801175636.GA1234403-robh@kernel.org> <20220808103610.3mv3mzlbzlqz4itz@mobilestation>
-In-Reply-To: <20220808103610.3mv3mzlbzlqz4itz@mobilestation>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 8 Aug 2022 09:58:56 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+1FX2YtaQjQfvLhBN60yvRM7VF-bxL7+O7jtK0d9XZBA@mail.gmail.com>
-Message-ID: <CAL_Jsq+1FX2YtaQjQfvLhBN60yvRM7VF-bxL7+O7jtK0d9XZBA@mail.gmail.com>
-Subject: Re: [PATCH v4 03/17] dt-bindings: PCI: dwc: Add phys/phy-names common properties
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        PCI <linux-pci@vger.kernel.org>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] watchdog: Fix typo in comments
+Content-Language: en-US
+To:     shaomin Deng <dengshaomin@cdjrlc.com>, wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220808154457.9879-1-dengshaomin@cdjrlc.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220808154457.9879-1-dengshaomin@cdjrlc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 4:36 AM Serge Semin <fancer.lancer@gmail.com> wrote:
->
-> On Mon, Aug 01, 2022 at 11:56:36AM -0600, Rob Herring wrote:
-> > On Thu, Jul 28, 2022 at 05:34:13PM +0300, Serge Semin wrote:
-> > > It's normal to have the DW PCIe RP/EP DT-nodes equipped with the explicit
-> > > PHY phandle references. There can be up to 16 PHYs attach in accordance
-> > > with the maximum number of supported PCIe lanes. Let's extend the common
-> > > DW PCIe controller schema with the 'phys' and 'phy-names' properties
-> > > definition. The PHY names are defined with the regexp pattern
-> > > '^pcie([0-9]+|-?phy[0-9]*)?$' so to match the names currently supported by
-> > > the DW PCIe platform drivers ("pcie": meson; "pciephy": qcom, imx6;
-> > > "pcie-phy": uniphier, rockchip, spear13xx; "pcie": intel-gw; "pcie-phy%d":
-> > > keystone, dra7xx; "pcie": histb, etc). Though the "pcie%d" format would
-> > > the most preferable in this case.
-> >
->
-> > No phy-names is my preference. Some string plus an index is utterly
-> > pointless. Oh well...
->
-> Mine too, but we have no choice in this case since the named
-> PHY-properties support has already been advertised by the platform
-> drivers. This patch just provides the bindings for them. Just note
-> the string patterns have been designed in a way to match these bindings.
->
-> Anyway thanks for telling about the preferred option. Keeping that in
-> mind I won't have doubts what approach to select for the new
-> driver/bindings development.
->
-> >
-> > >
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > >
-> > > ---
-> > >
-> > > Changelog v3:
-> > > - This is a new patch unpinned from the next one:
-> > >   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
-> > >   by the Rob' request. (@Rob)
-> > > ---
-> > >  .../bindings/pci/snps,dw-pcie-common.yaml         | 15 +++++++++++++++
-> > >  .../devicetree/bindings/pci/snps,dw-pcie-ep.yaml  |  3 +++
-> > >  .../devicetree/bindings/pci/snps,dw-pcie.yaml     |  3 +++
-> > >  3 files changed, 21 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> > > index 3e992b653d12..627a5d6625ba 100644
-> > > --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> > > +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> > > @@ -17,6 +17,21 @@ description:
-> > >  select: false
-> > >
-> > >  properties:
-> > > +  phys:
-> > > +    description:
-> > > +      There can be up to the number of possible lanes PHYs specified.
-> >
->
-> > This needs something about being in order of lane number.
->
-> Ok.
->
-> >
-> > > +      Obviously each specified PHY is supposed to be able to work in the
-> > > +      PCIe mode with a speed implied by the DWC PCIe controller it is
-> > > +      attached to.
-> > > +    minItems: 1
-> > > +    maxItems: 16
-> > > +
-> > > +  phy-names:
-> > > +    minItems: 1
-> > > +    maxItems: 16
-> > > +    items:
-> > > +      pattern: '^pcie([0-9]+|-?phy[0-9]*)?$'
-> >
->
-> > Please comment here that pcie[0-9] is the preferred form.
->
-> What about a bit more sophisticated update?
-> phy-names:
->   minItems: 1
->   maxItems: 16
->   oneOf:
->     - items:
->         pattern: '^pcie[0-9]+$'
->     - deprecated: true
->       items:
->         pattern: '^pcie(-?phy[0-9]*)?$'
+On 8/8/22 08:44, shaomin Deng wrote:
+> Delete the repeated word "we" in comments.
+> 
+> Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
 
-Sure.
+Please at least use a proper subject indicating the affected driver if you really
+have to make those cosmetic changes.
 
-Rob
+Guenter
+
+> ---
+>   drivers/watchdog/pc87413_wdt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
+> index 9f9a340427fc..14f37b3b903f 100644
+> --- a/drivers/watchdog/pc87413_wdt.c
+> +++ b/drivers/watchdog/pc87413_wdt.c
+> @@ -333,7 +333,7 @@ static int pc87413_status(void)
+>    *	@ppos: pointer to the position to write. No seeks allowed
+>    *
+>    *	A write to a watchdog device is defined as a keepalive signal. Any
+> - *	write of data will do, as we we don't define content meaning.
+> + *	write of data will do, as we don't define content meaning.
+>    */
+>   
+>   static ssize_t pc87413_write(struct file *file, const char __user *data,
+

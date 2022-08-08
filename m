@@ -2,120 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F88A58CD3F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D58558CDCB
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235925AbiHHSAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 14:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S244100AbiHHSlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 14:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiHHSAC (ORCPT
+        with ESMTP id S243986AbiHHSkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 14:00:02 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE4017A9A
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:59:59 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so9918737pjl.0
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 10:59:59 -0700 (PDT)
+        Mon, 8 Aug 2022 14:40:52 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04234F42;
+        Mon,  8 Aug 2022 11:40:51 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id a18-20020a05600c349200b003a30de68697so6253897wmq.0;
+        Mon, 08 Aug 2022 11:40:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc;
-        bh=hxCHtD0gO8RvEjmMgvObKSgjhrVeOCskJfVgBY9P5Ys=;
-        b=Po5YVO9LkStuglGPnIeU9tH1rUzpcRyw97vPaRamsdd1v2/Pgp9I+Jml094y16Mxk/
-         +AHELcEaO50YPB4vRLMBP8rYzcvn93Sj4smgBuPV7//N2pcoOQSp75UOHGACTW+mfGOu
-         1NU8Ol0wM+seyb3tMto2MguuaNUPUptyEsz1Vz9Grueo0hNFzE4+GvGRfpYTId1PH9Mq
-         5PyryyPu7j1sH1+mEdy8vNibt1N7syRUJPtjrHC8rg/rtenGx1oI4UqIhtMEH0yyc26G
-         fXjbsY2uIMSEyt3nr+FI+F0R1z8s8oaw+bpDQUmi18+8towG7PuakbowRC3a1qyIHa4Q
-         ywWw==
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gmT8KtUmsn+TaNIBb1OePApL9TIbtpSFIIniLRWsTsQ=;
+        b=euZGMJ56bzca6GT2+XUmhz+rlUCLuVvBEDXsASbLE0UCyN1gG1sDuJK6Kh+t9trtdO
+         gN4Te70FMFeLUopNloTbd6AGeEnzJeCJnybUwr1Rtj0tBR3A/bK9AxoXIIHYUsCKFDsV
+         gtSRz8dZhm+9p81hRQ+kvELE73eTs2sTaVXaSnOOz8b0viSlBN8I2G8EXURZBbcE0Z/p
+         UskrB0oqxPDLMSG2uUKCbY2Ax1fkBI6OOwnXuu06t9wbLoPKjI72UkxNJoMc54YQ3yoB
+         wuSvidt03X3nz1StjnyaEq5/6HzqLJTFeuwspCHhUfJ7ERlJLrxYflu/dzhgw5BMR9pY
+         xuMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc;
-        bh=hxCHtD0gO8RvEjmMgvObKSgjhrVeOCskJfVgBY9P5Ys=;
-        b=FS9y2eCuwbD9cHrN2/dJy2GiMuD1tpkrersmzwgxcSYS8wUjnxGKBgcFgigmH2fF3A
-         CCbGygjkceO2FrGXWEjV86uiU4U96asWLtjaly/JjgAEQW/gt731SP+OUAECbUwTiSHP
-         1ugIb9EVPqyPWgCgV3yzy74vwwZ/HRZ//0ptIk28iyfaD4HXapqWuT24jDEEg8oiQyS0
-         euQ8/H4XntsflQ3cpyJB2wvQXyfJIpDuPTyl0Cmy2i458UYdvr29c3nezfiVhzEN50EX
-         H9lAvCNb/TK79qvzpmaj3Wi3H7CRCvbM90fW9NJyVTbMi+mEWGv3gv3dJzOi0bUcux8t
-         M6eA==
-X-Gm-Message-State: ACgBeo1T9T9HPFcpRYS2r261TTDduSOrCtAtSw3qRvA0jnjtWrHxIw+w
-        td8528cld4r4WoBIuGupozo=
-X-Google-Smtp-Source: AA6agR52Hgyr/dKBRgfulVzs791jG32bTrE+okm/YW2FDnflpQiZQwA2EqLUVsSSTo5b3qsSBWAMyg==
-X-Received: by 2002:a17:902:ccc9:b0:16c:f878:163 with SMTP id z9-20020a170902ccc900b0016cf8780163mr19195293ple.170.1659981598507;
-        Mon, 08 Aug 2022 10:59:58 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:4d4b:1a9e:22cf:3f7e])
-        by smtp.gmail.com with ESMTPSA id f9-20020a170902684900b00170a6722c79sm3112587pln.247.2022.08.08.10.59.57
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gmT8KtUmsn+TaNIBb1OePApL9TIbtpSFIIniLRWsTsQ=;
+        b=i46XZhcryG9y4bMfFPoG58OT3v+qkxzwAwVRLmpiynTaxjDaLqepMElrxI5jPD8JEE
+         m1hGYnP7k4+Iu/ddo2QYvqjsS0MXBRQ1rOY8WF53ip6kenrs6plPHy+IjcAsgXZfG7a2
+         VX2DulNwuVgHcw1C9fbog+R7lMhOJkXQBSv28kF291ETBLUSVam7qQ6ATRjr8vEo+mUT
+         J/tNUQEGDfUWCQYzU7zkfmtO2t6GScExcKf9DoeehtoAvnenq4i9N+FbNO/JHXrSEngJ
+         Z7sFCUW7Dv3enFrwlHFciZHfu2EHQ1IrgUb9OfkNIk8kWsTuXvO98n2PWUwG8dfbTJi3
+         M6aw==
+X-Gm-Message-State: ACgBeo16e1mNSL0z3nC0Ktv0S3SbJOZwygRBysqp97BDgAp7Jwe/tW6a
+        5xoVQID/Jto+CG355EQcCzk=
+X-Google-Smtp-Source: AA6agR7jRfp0fGLQgEVqnMlQqqAoJHeztuk0nD64Kk/TD0TtyvcMEVirkAcNBQhuoaqivuvoXoB27g==
+X-Received: by 2002:a05:600c:2314:b0:3a5:180:a9f8 with SMTP id 20-20020a05600c231400b003a50180a9f8mr13298501wmo.163.1659984049091;
+        Mon, 08 Aug 2022 11:40:49 -0700 (PDT)
+Received: from Ansuel-xps. (host-87-20-249-30.retail.telecomitalia.it. [87.20.249.30])
+        by smtp.gmail.com with ESMTPSA id a18-20020a05600c349200b003a35ec4bf4fsm14607270wmq.20.2022.08.08.11.40.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 10:59:58 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] locking: Add __lockfunc to slow path functions
-Date:   Mon,  8 Aug 2022 10:59:56 -0700
-Message-Id: <20220808175956.592707-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+        Mon, 08 Aug 2022 11:40:48 -0700 (PDT)
+Message-ID: <62f158b0.050a0220.9281c.1da3@mx.google.com>
+X-Google-Original-Message-ID: <YvERLlqp6o9pa4Mh@Ansuel-xps.>
+Date:   Mon, 8 Aug 2022 15:35:42 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] ARM: dts: qcom: ipq8064: add v2 dtsi variant
+References: <20220718161826.4943-1-ansuelsmth@gmail.com>
+ <62efbb68.170a0220.88a00.8207@mx.google.com>
+ <3515103e-8663-1df9-a184-a383cc0d6aa9@somainline.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3515103e-8663-1df9-a184-a383cc0d6aa9@somainline.org>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So that we can skip the functions in the perf lock contention and other
-places like /proc/PID/wchan.
+On Mon, Aug 08, 2022 at 12:55:36PM +0200, Konrad Dybcio wrote:
+> 
+> 
+> On 7.08.2022 15:00, Christian Marangi wrote:
+> > On Mon, Jul 18, 2022 at 06:18:24PM +0200, Christian Marangi wrote:
+> >> Add ipq8064-v2.0 dtsi variant that differ from original ipq8064 SoC for
+> >> some additional pcie, sata and usb configuration values, additional
+> >> reserved memory and serial output.
+> >>
+> >> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > 
+> > Any news for this?Unless Qualcomm naming was different back then, you should simply merge
+> all of these changes into ipq8064.dtsi, as v1 is often the pre-production,
+> internal chip revision and only the last one (or the last and second-last)
+> are shipped in production devices.
+>
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- kernel/locking/qrwlock.c   | 4 ++--
- kernel/locking/qspinlock.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Mhh, this is not the case, there are dev board based on v1 and we also
+have some device based on v1 (that have some difference for pci and usb)
+One example is a Netgear r7500 where we have 2 revision one based on
+ipq8064-v1.0 and one based on ipq8064-v2.0.
 
-diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
-index 2e1600906c9f..d2ef312a8611 100644
---- a/kernel/locking/qrwlock.c
-+++ b/kernel/locking/qrwlock.c
-@@ -18,7 +18,7 @@
-  * queued_read_lock_slowpath - acquire read lock of a queued rwlock
-  * @lock: Pointer to queued rwlock structure
-  */
--void queued_read_lock_slowpath(struct qrwlock *lock)
-+void __lockfunc queued_read_lock_slowpath(struct qrwlock *lock)
- {
- 	/*
- 	 * Readers come here when they cannot get the lock without waiting
-@@ -63,7 +63,7 @@ EXPORT_SYMBOL(queued_read_lock_slowpath);
-  * queued_write_lock_slowpath - acquire write lock of a queued rwlock
-  * @lock : Pointer to queued rwlock structure
-  */
--void queued_write_lock_slowpath(struct qrwlock *lock)
-+void __lockfunc queued_write_lock_slowpath(struct qrwlock *lock)
- {
- 	int cnts;
- 
-diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index 65a9a10caa6f..2b23378775fe 100644
---- a/kernel/locking/qspinlock.c
-+++ b/kernel/locking/qspinlock.c
-@@ -313,7 +313,7 @@ static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
-  * contended             :    (*,x,y) +--> (*,0,0) ---> (*,0,1) -'  :
-  *   queue               :         ^--'                             :
-  */
--void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
-+void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- {
- 	struct mcs_spinlock *prev, *next, *node;
- 	u32 old, tail;
+> > 
+> >> ---
+> >>  .../boot/dts/qcom-ipq8064-v2.0-smb208.dtsi    | 37 ++++++++++
+> >>  arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi      | 69 +++++++++++++++++++
+> >>  2 files changed, 106 insertions(+)
+> >>  create mode 100644 arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi
+> >>  create mode 100644 arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
+> >>
+> >> diff --git a/arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi b/arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi
+> >> new file mode 100644
+> >> index 000000000000..0442580b22de
+> >> --- /dev/null
+> >> +++ b/arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi
+> >> @@ -0,0 +1,37 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +
+> >> +#include "qcom-ipq8064-v2.0.dtsi"
+> >> +
+> >> +&rpm {
+> >> +	smb208_regulators: regulators {
+> >> +		compatible = "qcom,rpm-smb208-regulators";
+> >> +
+> >> +		smb208_s1a: s1a {
+> >> +			regulator-min-microvolt = <1050000>;
+> >> +			regulator-max-microvolt = <1150000>;
+> >> +
+> >> +			qcom,switch-mode-frequency = <1200000>;
+> >> +		};
+> >> +
+> >> +		smb208_s1b: s1b {
+> >> +			regulator-min-microvolt = <1050000>;
+> >> +			regulator-max-microvolt = <1150000>;
+> >> +
+> >> +			qcom,switch-mode-frequency = <1200000>;
+> >> +		};
+> >> +
+> >> +		smb208_s2a: s2a {
+> >> +			regulator-min-microvolt = < 800000>;
+> >> +			regulator-max-microvolt = <1250000>;
+> >> +
+> >> +			qcom,switch-mode-frequency = <1200000>;
+> >> +		};
+> >> +
+> >> +		smb208_s2b: s2b {
+> >> +			regulator-min-microvolt = < 800000>;
+> >> +			regulator-max-microvolt = <1250000>;
+> >> +
+> >> +			qcom,switch-mode-frequency = <1200000>;
+> >> +		};
+> >> +	};
+> >> +};
+> >> diff --git a/arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi b/arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
+> >> new file mode 100644
+> >> index 000000000000..2f117d576daf
+> >> --- /dev/null
+> >> +++ b/arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
+> >> @@ -0,0 +1,69 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +
+> >> +#include "qcom-ipq8064.dtsi"
+> >> +
+> >> +/ {
+> >> +	model = "Qualcomm Technologies, Inc. IPQ8064-v2.0";
+> >> +
+> >> +	aliases {
+> >> +		serial0 = &gsbi4_serial;
+> >> +	};
+> >> +
+> >> +	chosen {
+> >> +		stdout-path = "serial0:115200n8";
+> >> +	};
+> >> +
+> >> +	reserved-memory {
+> >> +		#address-cells = <1>;
+> >> +		#size-cells = <1>;
+> >> +		ranges;
+> >> +
+> >> +		rsvd@41200000 {
+> >> +			reg = <0x41200000 0x300000>;
+> >> +			no-map;
+> >> +		};
+> >> +	};
+> >> +};
+> >> +
+> >> +&gsbi4 {
+> >> +	qcom,mode = <GSBI_PROT_I2C_UART>;
+> >> +	status = "okay";
+> >> +
+> >> +	serial@16340000 {
+> >> +		status = "okay";
+> >> +	};
+> >> +	/*
+> >> +	 * The i2c device on gsbi4 should not be enabled.
+> >> +	 * On ipq806x designs gsbi4 i2c is meant for exclusive
+> >> +	 * RPM usage. Turning this on in kernel manifests as
+> >> +	 * i2c failure for the RPM.
+> >> +	 */
+> >> +};
+> >> +
+> >> +&pcie0 {
+> >> +	compatible = "qcom,pcie-ipq8064-v2";
+> >> +};
+> >> +
+> >> +&pcie1 {
+> >> +	compatible = "qcom,pcie-ipq8064-v2";
+> >> +};
+> >> +
+> >> +&pcie2 {
+> >> +	compatible = "qcom,pcie-ipq8064-v2";
+> >> +};
+> >> +
+> >> +&sata {
+> >> +	ports-implemented = <0x1>;
+> >> +};
+> >> +
+> >> +&ss_phy_0 {
+> >> +	qcom,rx-eq = <2>;
+> >> +	qcom,tx-deamp_3_5db = <32>;
+> >> +	qcom,mpll = <5>;
+> >> +};
+> >> +
+> >> +&ss_phy_1 {
+> >> +	qcom,rx-eq = <2>;
+> >> +	qcom,tx-deamp_3_5db = <32>;
+> >> +	qcom,mpll = <5>;
+> >> +};
+> >> -- 
+> >> 2.36.1
+> >>
+> > 
+
 -- 
-2.37.1.559.g78731f0fdb-goog
-
+	Ansuel

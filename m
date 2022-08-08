@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD9958C2E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 07:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D8358C2E5
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 07:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235022AbiHHFc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 01:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
+        id S235087AbiHHFer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 01:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233256AbiHHFcY (ORCPT
+        with ESMTP id S232118AbiHHFep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 01:32:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D5D641F;
-        Sun,  7 Aug 2022 22:32:23 -0700 (PDT)
-From:   Kurt Kanzenbach <kurt@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659936741;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yXDllftD4QyDeHUS/2Bf32lao56WYMz9aqKNaMzbgow=;
-        b=l/5g3LBSyqvi5Gjq24ubCHcG7qabOObZZ8TLuSHVu2BIS/VvakzjFtEQzYJYQ0lDr+avMs
-        7ha3lBTXkBnoZ8oWULns3TlaqjljCBjGq+WL03HR0ADPqlEiEWZvI/x/SOW+FVa1UDqex7
-        QtPg0TFpK7O5ymQK226DLAuGBh9h9uc+2WvyRYBko+ntO6EUGXioGIjWrdL6ODchFkrPBA
-        1q38Gh9yFYqx3jzDx0SvzialxaNYXmqKisF81Dc9IuxkXl4ikfpPK3Dqt7uTDWyH9hdKZJ
-        iGZDBuriYVlgNQyTi3vtvqCbdOMerfu7sbWIqYzFg3d5Bkn0EBdaZXPSSYf9FA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659936741;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yXDllftD4QyDeHUS/2Bf32lao56WYMz9aqKNaMzbgow=;
-        b=E3qbUOAt5/fCLiyUb7VbZKltnLl6fdQbVp8zwrGHw4tcKTuoetrcDyMMnH9thcn2pMs8d8
-        Bcn/GPkyAKeOPQAA==
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gene Chen <gene_chen@richtek.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Eddie James <eajames@linux.ibm.com>,
-        Denis Osterland-Heim <Denis.Osterland@diehl.com>,
-        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v2 11/11] net: dsa: hellcreek: Get rid of custom
- led_init_default_state_get()
-In-Reply-To: <20220805154907.32263-12-andriy.shevchenko@linux.intel.com>
-References: <20220805154907.32263-1-andriy.shevchenko@linux.intel.com>
- <20220805154907.32263-12-andriy.shevchenko@linux.intel.com>
-Date:   Mon, 08 Aug 2022 07:32:19 +0200
-Message-ID: <87pmhbxpuk.fsf@kurt>
+        Mon, 8 Aug 2022 01:34:45 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078C0B1E1;
+        Sun,  7 Aug 2022 22:34:44 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id x10so7607761plb.3;
+        Sun, 07 Aug 2022 22:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=5mx8frCO4JQPtx0aeLxBWUqJKTGhhLdcJJ3zxZKM3Zk=;
+        b=YQBW1FSvXmRBogXKLCzsWMgyT72qpOhkuBPgIBecilYJReYB0ZRJ4191vT1J/R2r/m
+         XpWR4UJuAx6KeGzyIA6an7+j8uoQ2Kju+VoVFhXnTUzp6sSIGS8nON3OH0nmVptnUsFs
+         nfI6OUMWbHh55bhElQppAsnW68yKCOS5pJHNjv05AjR/RkWMekb6rOdNoE6JT/Ufn64Y
+         G1+Mnhuz/2faEpv91CM6l4QQ93YFnr+CCTpGqJFhyFKYnRqawJij5hKwc3/PHT7Mq/wG
+         kh2zo3LOmdkx+eOsKybLLkpVK7UHUMbRJBX8x1Y9rUXnAVy7XdOfn2OhN302Rw75Dgab
+         ROtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=5mx8frCO4JQPtx0aeLxBWUqJKTGhhLdcJJ3zxZKM3Zk=;
+        b=AG2MPhb5En+gDJMfo95R/rCSmuz8qByJeoDD1LYYYzbB43J7yQ6I55mwzt4bQUtx+I
+         mFLrALKhl9tYk3KTlGuZbLCgIRPurUsyI8frSOVUEnEtQPKNDw/VMWQZXGa2w4AWpKLg
+         UBl/CJ+rRL2mgBirKrJb4n/D6mS3mtyn9Bun8CMTpz2k9glEajaP9JUAKZjzuA9p7w5U
+         BiD1a7P8ETPwV51CLsJUT1P+CST8hVyEqjW+67m0vfR1XOzII7QHR3cFajINzgzTgZBM
+         0S+Q0CeSKv5Fg1K19x4WkEm4lFik+nX3rZ415JMDSWE04P44jpaFqx7napHSWlbq/ndM
+         cFIw==
+X-Gm-Message-State: ACgBeo1f43mbP0iUel3nD+7LmmDmthXDXqM09OavccQ+w4Nufacp3lof
+        Qq7g5FQPgXmn2HkMI3L31QI=
+X-Google-Smtp-Source: AA6agR4MUv5BhhH63BDimTTz91vaQdqo+mPL9JtPgeddDcU8hjwwuiFVfV1d1/LUGmfpwB5kgOYX/Q==
+X-Received: by 2002:a17:902:f551:b0:16e:d000:543b with SMTP id h17-20020a170902f55100b0016ed000543bmr16691749plf.22.1659936883497;
+        Sun, 07 Aug 2022 22:34:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w79-20020a627b52000000b0052c0a9234e0sm7876006pfc.11.2022.08.07.22.34.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 22:34:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 7 Aug 2022 22:34:41 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, Kees Cook <keescook@chromium.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] hwmon updates for v5.20
+Message-ID: <20220808053441.GA556090@roeck-us.net>
+References: <20220730022529.497941-1-linux@roeck-us.net>
+ <Yu+OzWv2JDbI89mW@gmail.com>
+ <CAHk-=wiGO=pfxyW6E7HdxCnRwWOF_STL=z7yUNwZK__DrV1WmQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiGO=pfxyW6E7HdxCnRwWOF_STL=z7yUNwZK__DrV1WmQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+On Sun, Aug 07, 2022 at 09:45:08AM -0700, Linus Torvalds wrote:
+> Added Kees - this *looks* like it's a compiler bug.
+> 
+> On Sun, Aug 7, 2022 at 3:07 AM Ingo Molnar <mingo@kernel.org> wrote:
+> >
+> > Just a quick build regression report, i386 allmodconfig fails to build due
+> > to a 'string overread' compiler warning in drivers/hwmon/lm90.o:
+> 
+> I tried to see it here with gcc-12.1, but it's not triggering, so it's
+> presumably compiler-dependent.
+> 
 
-On Fri Aug 05 2022, Andy Shevchenko wrote:
-> LED core provides a helper to parse default state from firmware node.
-> Use it instead of custom implementation.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+I don't see it with gcc 11.3. either, but I do indeed see the problem
+with gcc 11.2.
 
-Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
+The problem is in lm90_detect_nuvoton() which returns ERR_PTR(-ENODEV)
+instead of NULL on error. I'll send a patch.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks, and sorry for the problem.
 
------BEGIN PGP SIGNATURE-----
-
-iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmLwn+MTHGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgrNzEACnffyzXSC3y5NLX9wOxrvEQH/DTqkA
-DHNJ4NaHmLifJPoqkqY1sRe4pxQFV9KDhKMC+qThd8MRDy06JgCEFjbyeM5RqI5i
-V2OF0kF4iX9cZ9e6FE+Tw3usDLSMuTUZiFgQqGD4FfKExaa1ARa7e1ODhrlOcQm3
-qwv++kbeU/tao2jCnVdhiKfkT68fuBY9wnfRdul0bjiDv5x9olsrktbDvJTKCsC3
-kAF/cfOQBv6f1Q06OMr1wCskw1Je7dGFehq5FkjtZ5xWZoIPpLkV858nI4rfn+DO
-M6AxtrnZMr8KJAir4YhU1NDvYGSrL5wQv3nqc/NJoaeUkg8nj0wVqeXuIsgsznBC
-BkH0VJ0RHtENu6p4NKCJaGnjW5RNPDmZu8CeanDhtTDAnhkhnfhe8t1Y8+pTa2Lk
-mdaolZRJf7N+E/nKx9RiKkHh7goa5xrzVRHkIgYKwWb/Zu8z7I3uhhQiYfzVgC60
-Jpscye/KxPMt/bc82k3Rn5iUaqd64KKLuF0K0p/1zV7I0XbcYHK33M0IiI3cz8Vx
-xdMA1JoNz1zTR/SSgkjObfO2m/Xk+bUkk9LHjBONUhBrsK4UPcLlO3baUgVhk2vs
-+p4DC2UHEV3jzSH9G0cMJHhgJEej2hnp5qcp2Ij3F19ywVEbEmgSkTnZbUXu/rPh
-i4tkTsGrGWwQhg==
-=o6fN
------END PGP SIGNATURE-----
---=-=-=--
+Guenter

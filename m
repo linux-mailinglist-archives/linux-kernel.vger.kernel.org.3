@@ -2,79 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BE058C54B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 11:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579E058C54D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 11:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242142AbiHHJKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 05:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
+        id S242171AbiHHJLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 05:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiHHJKX (ORCPT
+        with ESMTP id S232755AbiHHJLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 05:10:23 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FF56585
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 02:10:22 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id z5so12691338yba.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 02:10:22 -0700 (PDT)
+        Mon, 8 Aug 2022 05:11:07 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECECCE30
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 02:11:05 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z6so4286142lfu.9
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 02:11:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=2ER2WW01ET2wH1WV2jGlyhputEhjwKA2tNpxchjmONE=;
-        b=BXONmG4NT7Ps0k3vlwo+5xQkbC0wR7bD23e2Idydv5gt4/tkSJ5iIaQb0wq3ab/A+a
-         aUL4zwLj5a1eyo3a+CLSLsCb3hAaSxhjIyJ1vgl5GpaYgi5OC2bqFCXv/cD6netBbbX6
-         Tx3nJqFmDlXHOgv/8N53WShK1xRedTz7YizG0EQ+d6+Zn54cQnePxEwSsvpJ9Bm2kAh6
-         rcy4zTsy5gz0KNlNIf7ZoxH4nRwifKu05WcmJrn6aJtL3dAK08hL8lPgIfWygcqSGBwi
-         VkO6uLjjD9F5LS5eaiWYQOwnj8jaKMC8wLjTgmKV972zelkc2S0ha0Lb+w+BtCW4FQGH
-         9qNw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=capmqUg3G2WGPZIJLVN0uL7EfqUKEp7KJ1xrI9gIScY=;
+        b=mkrFcP1IBKQ/4uTvXD8INz59IvBi/jIPA9T3Kb0PTch8u/9Hr3RKgGHHDtzGdBClqW
+         msaVM3Zg0f84JVBbl6vSlBST7PhqkSRuNuhYL6b8HVuDGCT5Rn0gn4M21+KDcmIYkabk
+         UeG2sWRVfOOgZHnIrfHG3uWb2m7T6K6Lc6KzHmiAfvSaIrwlwfqZTmpMKyEdGG6B9Vyy
+         X4PYwt00A7pjVoSJMTbEON9JYJgHOVkC+l3MkrdYgUk+LpQlg4wTi8BQmhO0/payfY94
+         HypMkBcl5QEMgkcgGywtuHThIbzc8k+bjflGldAG3nGhnGYneSCYpN58VSGWv2GI4h8Y
+         Lttw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=2ER2WW01ET2wH1WV2jGlyhputEhjwKA2tNpxchjmONE=;
-        b=yHI8ZUCJT/2fNpgPBT/s7owQiGHi+i4nU4OMrMWHs2unQsuherEHToLwziUnga4IjZ
-         m6K06PQHgdb9QalOu1C0SFLBYtsXNkuhHPHno+PFjh8h8wsRSN6+RNTiruh/DmG4r4I+
-         CIvKTcu+MXY+yhbuU9leSFrRUgLU9raceQtz65rs0AGuMmHDy6e3NhW6lne1viJmZKDK
-         cPrKlCyyG7YDKAy8QAIjWrC0zBO7yftTd0mAm+L0Zq1Zo0/6ZviwVqL8W+ueWXSdcStH
-         vjiIqoD4WgshIioAEbAiAnApQSx+rWfz+/A8ycP2giZyS5UMy9eahFUFjnT7JN4ogkWn
-         5etg==
-X-Gm-Message-State: ACgBeo3NRcWIk9k9Y+G0ca7aCxjhUCcexXnjOWbCEUjt/D0Ly4Bv8KGs
-        w4Aan3v8mcHtBVBoL0ijTv9vsw7HRM+KPrBYV6s=
-X-Google-Smtp-Source: AA6agR6ww8LBWAcj4WbUTZx9wZCglfi8vTK455s3Sjg/D48I0T3JlccLImfEudV5PbJMV3GB6lWP8FnqDqG6iWKcIFQ=
-X-Received: by 2002:a05:6902:690:b0:67b:af6b:bc92 with SMTP id
- i16-20020a056902069000b0067baf6bbc92mr9677412ybt.459.1659949821415; Mon, 08
- Aug 2022 02:10:21 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=capmqUg3G2WGPZIJLVN0uL7EfqUKEp7KJ1xrI9gIScY=;
+        b=W+eRzt+KKesj+1VjFdlEzZDaf0Z9r8uP/cc9H5nuOwVO2OZ2G84I16cw6naSi0JYhN
+         8USTZm57q/OgYVhcygO9gIWDpK0SewMw56hG1lOXTixP1me/ZiRAWCuUar74xqVbLrXU
+         EPCXDkAem+tcQRt2AoYaLYeaafiWzJCcWfIRwvteHgszNOb6lKuu9uI2yZ32rIpBc97d
+         PshTSocoL/orr29LBOaBYjBg64KjQcxJ/U+gwiUaZYuTX+RBnHvZPRzB13+F9JUIBfLl
+         dFPLDCjly5+J1pCBx9CkKJ3NikJn4Z512bETOvSrzps7kXfTolNqT1IbsHrTDcSiVwpa
+         hPvw==
+X-Gm-Message-State: ACgBeo1SLjgVhNIyObvs5VWFDQCpwy3Ni8eY0FoES54DM7cx4K6n9Z34
+        dZ7Qqnx/on2t6AgxwmjxQEZ1Br/mKU/K1H09
+X-Google-Smtp-Source: AA6agR5o3GE4sOi7zvF2niOzM96s9c5dBH+V9xgSaAGhu6wEDIByw9G0WGSzZNsuMtQYObK4wIc+Yg==
+X-Received: by 2002:a05:6512:12c7:b0:48b:37af:15d3 with SMTP id p7-20020a05651212c700b0048b37af15d3mr6714608lfg.290.1659949864073;
+        Mon, 08 Aug 2022 02:11:04 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id t16-20020a2e9d10000000b0025e6a598019sm1299772lji.131.2022.08.08.02.11.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 02:11:03 -0700 (PDT)
+Message-ID: <a625a1b4-6ecd-79d9-3d13-f42fd5b8275c@linaro.org>
+Date:   Mon, 8 Aug 2022 12:11:02 +0300
 MIME-Version: 1.0
-Received: by 2002:a05:7110:4a9c:b0:18e:7ed4:6c87 with HTTP; Mon, 8 Aug 2022
- 02:10:21 -0700 (PDT)
-Reply-To: Drlisawilliams919@gmail.com
-From:   Drlisawilliams <grahamkhudori@gmail.com>
-Date:   Mon, 8 Aug 2022 11:10:21 +0200
-Message-ID: <CAOPDNSG+QRY9xPP8WKYA6+BxbOe-x_QGsyRVE9MG-w8RHz5yVQ@mail.gmail.com>
-Subject: Hi Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 13/28] mfd: sec: Remove #ifdef guards for PM related
+ functions
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-samsung-soc@vger.kernel.org
+References: <20220807145247.46107-1-paul@crapouillou.net>
+ <20220807145247.46107-14-paul@crapouillou.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220807145247.46107-14-paul@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear,
+On 07/08/2022 17:52, Paul Cercueil wrote:
+> Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
+> to handle the .suspend/.resume callbacks.
+> 
+> These macros allow the suspend and resume functions to be automatically
+> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
+> to use #ifdef guards.
+> 
+> The advantage is then that these functions are now always compiled
+> independently of any Kconfig option, and thanks to that bugs and
+> regressions are easier to catch.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 
-My name is Dr Lisa Williams from the United States.I am a French and
-American nationality (dual) living in the U.S and sometimes in France
-for Work Purpose.
+The address does not work. Please don't add it to commit log.
 
-I hope you consider my friend request. I will share some of my pics
-and more details about myself when I get your response.
+> Cc: linux-samsung-soc@vger.kernel.org
 
-Thanks
-With love
-Lisa
+This is also not really needed in commit log... it's just a mailing list...
+
+I actually never understood why people want to add to commit log, so to
+something which will last 10 years, Cc-ing other folks, instead of
+adding such tags after '---'. Imagine 10 years from now:
+
+1. What's the point to be cced on this patch after 10 years instead of
+using maintainers file (the one in 10 years)? Why Cc-ing me in 10 years?
+If I am a maintainer of this driver in that time, I will be C-ced based
+on maintainers file. If I am not a maintainer in 10 years, why the heck
+cc-ing me based on some 10-year old commit? Just because I was a
+maintainer once, like 10 years ago?
+
+2. Or why cc-ing such people when backporting to stable?
+
+It's quite a lot of unnecessary emails which many of us won't actually
+handle later...
+
+I sincerely admit I was once also adding such Cc-tags. But that time my
+employer was counting lines-of-patch (including commit log)... crazy, right?
+
+
+> ---
+>  drivers/mfd/sec-core.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/mfd/sec-core.c b/drivers/mfd/sec-core.c
+> index 1fb29c45f5cf..a467de2b2fea 100644
+> --- a/drivers/mfd/sec-core.c
+> +++ b/drivers/mfd/sec-core.c
+> @@ -455,7 +455,6 @@ static void sec_pmic_shutdown(struct i2c_client *i2c)
+>  	regmap_update_bits(sec_pmic->regmap_pmic, reg, mask, 0);
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int sec_pmic_suspend(struct device *dev)
+
+Did you test W=1 with !CONFIG_PM_SLEEP? No warnings?
+
+
+Best regards,
+Krzysztof

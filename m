@@ -2,152 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F54358C8FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8CA58C901
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243115AbiHHNGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
+        id S243140AbiHHNHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243036AbiHHNGe (ORCPT
+        with ESMTP id S243119AbiHHNHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:06:34 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920BA60CE
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:06:32 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id kb8so16502705ejc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 06:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=bgQjFRSLa2xwB4CS5aSMut/Qn8ytzGfpdDtj3UKw97A=;
-        b=MYgq8XxOOEc57m/ecEPlAH4rjCGi/yR46Iins5wrCHU86d9lytN7WP72HojoDPX3dq
-         Pn5EjkJk6igW2D1f03WkODG6LKERiiQjVsY3JdOItAWf3U/+CXaQt9YYGKtkLos5pRsm
-         gBMPt4gRgq4lQyJmdjmEhlxFdWKGoDz40qaoEQGSdOHweB4ekEBiJWAhsIxlTNN07xbP
-         t8rmI51RNdlOLs7j0Kceu0IJl/ci8/C3mVBdg1P6q27SJgoAWmmtGFajJWx38wLd4dG6
-         JTUk4mj5NQ7ODWqG+rvoSxC6CiKBDBGPJmCXOsNde5/jrRvMgQfY/yIdrlGbdtNz4jUB
-         rHNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=bgQjFRSLa2xwB4CS5aSMut/Qn8ytzGfpdDtj3UKw97A=;
-        b=ig+jY6SnTamOlj1jWaTQoOyvMcYu2s0CczsZKyaeAiqcorkoYwW8VqnbpP1Z/FSHVG
-         xjFOviDtCTagHUKWJmCqEDm6HXXnWOBYjbwCw54JflSHuaTYBxHoo1nnRrC1t4um/BhE
-         UhAyyB9HpkUMFN3lYL3uhASclR/PR8Ogp0QyK4Mym9+5lp9zYnit8KPk03eGJCTbecHC
-         w2wFlBHgCb53zuMTdGxlLESmb6XaoHzTuF01BbnjH++dj0A51JTc6ACIBQdrdrYcSuYY
-         WaYlrY6p+gikG6H4aPnNx9kaJEanqS9WT+wvwuSx69EZ4P0TQV7Zen29bVyf4e7ywJvM
-         jEmQ==
-X-Gm-Message-State: ACgBeo0CGhOBFzG/nG3lqSNm6LYMFI9GEr1Li+i5Keho79oYw57X7Els
-        JDc1CBDD2n+wczNkN1jpg8sgb+iE6q6xtuld
-X-Google-Smtp-Source: AA6agR6IRBphtpl8tdKw635ZPdSwozJAE2arHfftpN0/aFI7GBrgP+PJ3/YMdxSY6WcHw92NXiiwUQ==
-X-Received: by 2002:a17:906:fc6:b0:72f:d080:416 with SMTP id c6-20020a1709060fc600b0072fd0800416mr13638743ejk.1.1659963990811;
-        Mon, 08 Aug 2022 06:06:30 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id cn15-20020a0564020caf00b0043ba0cf5dbasm4524616edb.2.2022.08.08.06.06.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 06:06:30 -0700 (PDT)
-Message-ID: <e011d195-e72f-d163-9f36-79b473a9466d@blackwall.org>
-Date:   Mon, 8 Aug 2022 16:06:29 +0300
+        Mon, 8 Aug 2022 09:07:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252886161;
+        Mon,  8 Aug 2022 06:07:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3F3DB80DDB;
+        Mon,  8 Aug 2022 13:07:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1739EC433C1;
+        Mon,  8 Aug 2022 13:07:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659964023;
+        bh=p2X0cwZgl+YlAJpq+psX9m/WwU/2a7JZIBgsy1xBAjM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yF8gouLsD4cDV0/1Y9HjbFYTYvbIU91B6IohV5ZazxLQUGZso04d8dr6E7zcQKNTt
+         rJyhNNuWy1ZIXgKdXB6p5S0wUl5pVEJXQiYFkQvytXpQEqGO0GmvbVHL6rijhdEyDZ
+         95bW41h7kRGrAzZ4h7hrPMS9kVK53JM9zj4mAlJw=
+Date:   Mon, 8 Aug 2022 15:07:00 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Andrey Strachuk <strochuk@ispras.ru>
+Subject: Re: [GIT PULL] USB / Thunderbolt driver changes for 6.0-rc1
+Message-ID: <YvEKdIRlBvSYe34C@kroah.com>
+References: <YuqB0tl2hjT3x7a4@kroah.com>
+ <YuqXtcaUPflINBd6@dev-arch.thelio-3990X>
+ <YuqZU/JJyMQJxva0@kroah.com>
+ <d0f1c9ae-91aa-2c52-b86a-f111908d6b22@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1] net:bonding:support balance-alb interface with vlan to
- bridge
-Content-Language: en-US
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-To:     Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
-        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huyd12@chinatelecom.cn
-References: <20220808094107.6150-1-sunshouxin@chinatelecom.cn>
- <278221fe-e836-9794-374f-0955cc10f8be@blackwall.org>
-In-Reply-To: <278221fe-e836-9794-374f-0955cc10f8be@blackwall.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d0f1c9ae-91aa-2c52-b86a-f111908d6b22@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/08/2022 15:44, Nikolay Aleksandrov wrote:
-> On 08/08/2022 12:41, Sun Shouxin wrote:
->> In my test, balance-alb bonding with two slaves eth0 and eth1,
->> and then Bond0.150 is created with vlan id attached bond0.
->> After adding bond0.150 into one linux bridge, I noted that Bond0,
->> bond0.150 and  bridge were assigned to the same MAC as eth0.
->> Once bond0.150 receives a packet whose dest IP is bridge's
->> and dest MAC is eth1's, the linux bridge cannot process it as expected.
->> The patch fix the issue, and diagram as below:
->>
->> eth1(mac:eth1_mac)--bond0(balance-alb,mac:eth0_mac)--eth0(mac:eth0_mac)
->>                       |
->>                    bond0.150(mac:eth0_mac)
->>                       |
->>                    bridge(ip:br_ip, mac:eth0_mac)--other port
->>
->> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
->> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
->> ---
->>  drivers/net/bonding/bond_alb.c | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
->> index 007d43e46dcb..0dea04f00f12 100644
->> --- a/drivers/net/bonding/bond_alb.c
->> +++ b/drivers/net/bonding/bond_alb.c
->> @@ -654,6 +654,7 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
->>  {
->>  	struct slave *tx_slave = NULL;
->>  	struct arp_pkt *arp;
->> +	struct net_device *dev;
+On Wed, Aug 03, 2022 at 09:26:55PM +0530, Krishna Kurapati PSSNV wrote:
 > 
-> reverse xmas tree order
+> On 8/3/2022 9:20 PM, Greg KH wrote:
+> > On Wed, Aug 03, 2022 at 08:43:49AM -0700, Nathan Chancellor wrote:
+> > > On Wed, Aug 03, 2022 at 04:10:26PM +0200, Greg KH wrote:
+> > > > Andrey Strachuk (1):
+> > > >        usb: cdns3: change place of 'priv_ep' assignment in cdns3_gadget_ep_dequeue(), cdns3_gadget_ep_enable()
+> > > For the record, this breaks allmodconfig with clang (I haven't seen a
+> > > formal report on it anywhere and this missed -next coverage because
+> > > Stephen is on vacation):
+> > > 
+> > >      drivers/usb/cdns3/cdns3-gadget.c:2290:11: error: variable 'priv_dev' is uninitialized when used here [-Werror,-Wuninitialized]
+> > >                      dev_dbg(priv_dev->dev, "usbss: invalid parameters\n");
+> > >                              ^~~~~~~~
+> > >      include/linux/dev_printk.h:155:18: note: expanded from macro 'dev_dbg'
+> > >              dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+> > >                              ^~~
+> > >      include/linux/dynamic_debug.h:167:7: note: expanded from macro 'dynamic_dev_dbg'
+> > >                              dev, fmt, ##__VA_ARGS__)
+> > >                              ^~~
+> > >      include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+> > >              __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+> > >                                                                  ^~~~~~~~~~~
+> > >      include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+> > >                      func(&id, ##__VA_ARGS__);               \
+> > >                                  ^~~~~~~~~~~
+> > >      drivers/usb/cdns3/cdns3-gadget.c:2278:31: note: initialize the variable 'priv_dev' to silence this warning
+> > >              struct cdns3_device *priv_dev;
+> > >                                          ^
+> > >                                          = NULL
+> > >      1 error generated.
+> > > 
+> > > I know you don't take patches during the merge window, so I guess we'll
+> > > just have to have x86_64 allmodconfig be broken with clang for -rc1? :/
+> > I can send fix-up patches that break the build before -rc1 if you have
+> > it.  Also you can send it and Linus can pick it up directly if it breaks
+> > his workflow.
+> > 
+> > Odd that this was never reported, 0-day didn't even say anything?
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> Hi Greg,
+>   On a similar note. There was another issue reported in which randconfig
+> for i386 build breaks as usb_hub_find_child API is not present as usbcore
+> isn't compiled in that config (CONFIG_USB isn't set).
+> Patch to fix has been pushed recently and is in review:
+> https://lore.kernel.org/linux-usb/1659337215-20421-1-git-send-email-quic_kriskura@quicinc.com/
 > 
->>  
->>  	if (!pskb_network_may_pull(skb, sizeof(*arp)))
->>  		return NULL;
->> @@ -665,6 +666,13 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
->>  	if (!bond_slave_has_mac_rx(bond, arp->mac_src))
->>  		return NULL;
->>  
->> +	dev = ip_dev_find(dev_net(bond->dev), arp->ip_src);
->> +	if (dev) {
->> +		if (netif_is_bridge_master(dev)) {
->> +			return NULL;
->> +		}
-> 
-> nit: the {} aren't needed
-> 
->> +	}
->> +
->>  	if (arp->op_code == htons(ARPOP_REPLY)) {
->>  		/* the arp must be sent on the selected rx channel */
->>  		tx_slave = rlb_choose_channel(skb, bond, arp);
-> 
-> Aside from the small cosmetic comments, have you tried adding the second mac address
-> as permanent in the bridge?
-> i.e.: 
-> $ bridge fdb add <eth1_mac> dev bond0.150 master permanent
-> 
-> That should fix your problem without any bonding hacks.
-> 
-> Cheers,
->  Nik
+> Would it be possible to pick it up in rc1 to make sure nothing breaks
+> further because of it.
+> I can respin patch if something is off in it.
 
-Ah, I just found your original submission and understood the problem better.
-The fix sounds good, as Jay explained there, but the commit message can use a bit
-more explanation of what exactly is wrong and why the bond shouldn't load balance
-these. :)
+See my comments to that patch, and Johan's attempt at it.  Something
+larger is broken here, let's not paper over the issue right now with a
+#ifdef in the .c file.  Fix it properly for 6.0-final.  Builds without
+CONFIG_USB and gadget-only mode enabled are rare but this can be fixed
+up after -rc1 is out, no rush right now.
 
-Anyway, nevermind my last comment.
+thanks,
 
-
+greg k-h

@@ -2,105 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D93A58C4C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F24A58C4BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242098AbiHHIMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 04:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S242088AbiHHIL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 04:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235829AbiHHIMF (ORCPT
+        with ESMTP id S242060AbiHHILU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 04:12:05 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CCD610FE0;
-        Mon,  8 Aug 2022 01:12:03 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.12.77.33])
-        by mail-app2 (Coremail) with SMTP id by_KCgC3v_c6xfBiCvV1Ag--.31789S4;
-        Mon, 08 Aug 2022 16:11:38 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH v0] idb: Add rtnl_lock to avoid data race
-Date:   Mon,  8 Aug 2022 16:10:50 +0800
-Message-Id: <20220808081050.25229-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.36.1
+        Mon, 8 Aug 2022 04:11:20 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FE610FE9
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 01:11:19 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d14so11490619lfl.13
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 01:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LHJDhYsv/Rim92S/FLUstvQVcHoVL1DwvCgvhFMIJQU=;
+        b=Po+JD5H4qJluYvs2Tmlpq493Ucl5fpb4S8tltzUbKWLlzYnEiaXX5qVYmZrJYq4qjD
+         EFGzPhrOizK2t9B4lE9hPGZXAG8w8DxJUiqgrkS8wEvW7gNVO7zjJvYt7sllloSty+e6
+         uCbMv3FYmM4UoQlXhmfF8EiREzHEni/+4tMnTfmDES7ESdgczr0MUj8WFCPUswV+p+H5
+         bFRsveOIOjy48Za84wbo7tw7m4HxyTwrE0bVB2zpG8eUWoMAlfh/cNVyg/wwarGr+hUI
+         7tge4rfDNlnah0y2s+4lxyeNK9stb/QwK7wcdr8swDlABzFGv17uDiGPdoQUpn3qI/IS
+         YvOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LHJDhYsv/Rim92S/FLUstvQVcHoVL1DwvCgvhFMIJQU=;
+        b=u677J75nTfykyb+rSvF5RoJlc0O7HoWkObzHNT4pGAkKiNhKlF4M+6tUpv+Y89hb/a
+         ypSAvwPNeUccgX7cDxlwOSYHZcO3WL2pR0kpoSKzK5B1ha0AryCC047aTzV270J3s6Ij
+         9h/SWfzLHyjTZO3rKNjacO+WQW5sEjmqd5E6IjmuXtzXFRHoB38xO2d3VeiyE881WX2V
+         FPfzoVxGAvH29HdqAWrKamF5CX5dF4HKY7E4lCMCSdcj2iTgCFrHbqVGMHdQ3Km3Aaom
+         aihn77dNhJRzQD3vCNJXILC/D7g4VgqJUHdHTuhIa4B4pVpoDj0RcgMAdeF83kAOfreS
+         gW6g==
+X-Gm-Message-State: ACgBeo38qUlPrsqcmb0SJKGy43mpPPfSU4bgGMWXr7o7fD+G0K72XRkG
+        pXZbqe2e8TWz/MeEQosmiFBHLQ==
+X-Google-Smtp-Source: AA6agR5xjV4h1UPMDBLzbNYDD1moY7ObuTURyWbiZuieFApJ57aRZHApeXAgEKvYt+fNNLR2yhJf2Q==
+X-Received: by 2002:a05:6512:32c5:b0:48b:fa9f:a98f with SMTP id f5-20020a05651232c500b0048bfa9fa98fmr2334042lfg.335.1659946278217;
+        Mon, 08 Aug 2022 01:11:18 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id k3-20020a2eb743000000b0025e48907929sm1293653ljo.23.2022.08.08.01.11.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 01:11:17 -0700 (PDT)
+Message-ID: <da83671e-08b9-2d68-e5d3-d9b09c105bb4@linaro.org>
+Date:   Mon, 8 Aug 2022 11:11:16 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: by_KCgC3v_c6xfBiCvV1Ag--.31789S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF1rJr1kWFWDtF18Wr1DGFg_yoW8Ww4kpF
-        s8GryxKr10qF47WaykJ3W8AFyYga1qy34rG3W7uw4ruan8JryjvrWUKFyrZ34FkrWru39I
-        vr4Yvw4fAFyDArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3] dt-binding: ipmi: add fallback to npcm845 compatible
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, jic23@kernel.org,
+        minyard@acm.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     openbmc@lists.ozlabs.org, openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220808075452.115907-1-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220808075452.115907-1-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit c23d92b80e0b ("igb: Teardown SR-IOV before
-unregister_netdev()") places the unregister_netdev() call after the
-igb_disable_sriov() call to avoid functionality issue.
+On 08/08/2022 09:54, Tomer Maimon wrote:
+> Add to npcm845 KCS compatible string a fallback to npcm750 KCS compatible
+> string becuase NPCM845 and NPCM750 BMCs are using identical KCS modules.
+> 
+> Fixes: 84261749e58a ("dt-bindings: ipmi: Add npcm845 compatible")
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 
-However, it introduces several race conditions when detaching a device.
-For example, when .remove() is called, the below interleaving leads to
-use-after-free.
 
- (FREE from device detaching)      |   (USE from netdev core)
-igb_remove                         |  igb_ndo_get_vf_config
- igb_disable_sriov                 |  vf >= adapter->vfs_allocated_count?
-  kfree(adapter->vf_data)          |
-  adapter->vfs_allocated_count = 0 |
-                                   |    memcpy(... adapter->vf_data[vf]
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-In short, there are data races between read and write of
-adapter->vfs_allocated_count. To fix this, we can add a new lock to
-protect members in adapter object. However, we cau use the existing
-rtnl_lock just as other drivers do. (See how dpaa2_eth_disconnect_mac is
-protected in dpaa2_eth_remove function). This patch adopts similar
-fixes.
 
-Fixes: c23d92b80e0b ("igb: Teardown SR-IOV before unregister_netdev()")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
----
- drivers/net/ethernet/intel/igb/igb_main.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index d8b836a85cc3..e86ea4de05f8 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -3814,7 +3814,9 @@ static void igb_remove(struct pci_dev *pdev)
- 	igb_release_hw_control(adapter);
- 
- #ifdef CONFIG_PCI_IOV
-+	rtnl_lock();
- 	igb_disable_sriov(pdev);
-+	rtnl_unlock();
- #endif
- 
- 	unregister_netdev(netdev);
--- 
-2.36.1
-
+Best regards,
+Krzysztof

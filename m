@@ -2,118 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF2758C384
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 08:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA0B58C396
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 08:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiHHGuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 02:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S229524AbiHHG6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 02:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiHHGuj (ORCPT
+        with ESMTP id S229688AbiHHG6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 02:50:39 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66BCDF3A
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 23:50:34 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id k26so14847408ejx.5
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 23:50:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NXFy/L+O5xnM71JLbyMm2nhzjOenjYylX2CI7hWvxRI=;
-        b=NbqL7OPKRd8KSSwMCPHh3EbqOgxTtixjGuNh3aKKF7E9MkRb6PUgJM/lZltuuUs4Xn
-         uQ6fi3rOV9BvFkReA42ejpaFumQ1JSjdqaQKE23upHD1unO1s6R7FMjRLi60wgz/ZCxq
-         sOy/fVx3MYIvr/riimQIR2ZWTnVDUloBmDiQDXQ8srfAS6h54iMyT9rlawn/aQ4fYEOd
-         yhspgHZ+nogX5AqUhljotXgPojLsOxbVcc8/Laig0x28eRJqnTjsPJE9Ri1q7sp9+kTp
-         sN2v8yeXy/0SYlRilzjZP8Gu9g4aDZ3QZACTKJUsyiV4eL/luZBJAC8heD2S1pY5xGfV
-         o5xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NXFy/L+O5xnM71JLbyMm2nhzjOenjYylX2CI7hWvxRI=;
-        b=KxTRyMH+H+qA2A4iAJR6ln9pTYJqI3ooDmk7DwCBnlgZqGYgYxivGDqqhi49eR9TAm
-         NM56jLbZFayRUOUWuKcyq7yzE99h70I2w8Wm44a+YfwYf/mKFjfFJb3T2bfbsFcij9ML
-         ftjliTarkDyZ0hkUZEa4U2BG2IZbVkfsBngii5qumYUsfr/cNJsuBuaVWG9bwdDmN4YD
-         IvWyvNjhcQezdBc+/s8DZIA7A0cq7N4+3nPxAp/c/FELL/EsdmiUogNAqOYgGvqfbIX/
-         yiInapp8yGp2IebhmRrtN8oIJLarwp23zqT+Cm0MB2f/TaI55guq7iDUNMi7S2Y7XuqQ
-         HPWA==
-X-Gm-Message-State: ACgBeo2rkTkRMYK9Dn74CSDSCDFUOWNg3s/XmhT1lVzSYEdjuZGIjk/x
-        wG8UFxFVj1qlm5Ul/CMnC7k=
-X-Google-Smtp-Source: AA6agR6+XdvuEaZal6me3MXp+qYOJmuitsFaydsUOBpYKUxIuPELn8Q/tHVmSQz6Zer7vsout9mFig==
-X-Received: by 2002:a17:906:c781:b0:726:c967:8d1b with SMTP id cw1-20020a170906c78100b00726c9678d1bmr12907535ejb.54.1659941433407;
-        Sun, 07 Aug 2022 23:50:33 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb84.dynamic.kabel-deutschland.de. [95.90.187.132])
-        by smtp.gmail.com with ESMTPSA id 16-20020a170906329000b007313a2575d2sm2259844ejw.104.2022.08.07.23.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Aug 2022 23:50:33 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH] staging: r8188eu: do not spam the kernel log
-Date:   Mon,  8 Aug 2022 08:50:23 +0200
-Message-Id: <20220808065023.3175-1-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Mon, 8 Aug 2022 02:58:14 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BB1DFA4;
+        Sun,  7 Aug 2022 23:58:12 -0700 (PDT)
+Received: from mail-ej1-f41.google.com ([209.85.218.41]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MBltK-1oFPsk4Ak0-00CDs0; Mon, 08 Aug 2022 08:58:11 +0200
+Received: by mail-ej1-f41.google.com with SMTP id m4so14885562ejr.3;
+        Sun, 07 Aug 2022 23:58:10 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0G6WOIKCURBtp87O3XkvPsiZpgt41U/qRK7ihkoXBWl5B/qc19
+        boPbYvPWWc47ipq2PhNOk8ifGqBQCAThJJ+x/RE=
+X-Google-Smtp-Source: AA6agR7+MNBPFkwjMYrs9F5cklCO3PmGk+NVWugFBet3Tm9GK726GURnSLhj9K8pZOtw7GOLS3S01sY9ymEq4UpWwag=
+X-Received: by 2002:a17:907:7395:b0:730:b636:2c89 with SMTP id
+ er21-20020a170907739500b00730b6362c89mr12935429ejc.547.1659941890680; Sun, 07
+ Aug 2022 23:58:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220807220934.5689-1-rdunlap@infradead.org>
+In-Reply-To: <20220807220934.5689-1-rdunlap@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 8 Aug 2022 08:57:54 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1-NxPazURDPdKYU0Het+pjL6E3BZMskjQD=aCU91Q=rw@mail.gmail.com>
+Message-ID: <CAK8P3a1-NxPazURDPdKYU0Het+pjL6E3BZMskjQD=aCU91Q=rw@mail.gmail.com>
+Subject: Re: [PATCH v2] kernel/sys_ni: add compat entry for fadvise64_64
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-api@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:gN4mlgAA3OCy7aqEGs782K2/DEXfr25l3XOGHgc9OTiys8FwtYb
+ Q+0K0/GI86Tj4lOE1slCMfmr72Wy6/jewjOzRN4oBTdLRV6auT+pNh0M6ecqKbosjW5opl+
+ p0ei0zGbzgJ1/73leOBKi14u2ywi1iAm+xAG7zvb/nEPPpOVFNmVHJii/qiFdt8SnHEOOr8
+ LlMpjSw7ICHKakcXuVJkg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:x1lfxl0+L/s=:frpwqEAjA06OGFQxSa9p+G
+ SaTKaPk3gRcHH+oK18vhvTCX1Tdf0YVo5ireZb21kWRgPBY6a/w91x3mILVzheKYUewkKxp92
+ c/GBKT0+eXrrKPcFuSRElRXeJPHI9arVAMsnm5NvhTP9/AMu1PsMytPN0RknILfzlY+VA9HSw
+ +0j97XZYTwDZlf/eu9Wnlidu4esKdsQU6RxCvM0mCrY3R09vwqNAElQW0WxCX185ZUl0slcQo
+ soEiPlzkhDdbK4QgeUnCBGimZfJ8coc4SS239hom+aHP/i8aEwvv94B2ozk590UUixZFgG/x0
+ Cb8bt14hD5P+gkxV+AlDWL0UmmChXe29nhvqIgr9EXty5q3oifV746uTPpaeLJiEaaYDh2Dlw
+ 0L7qS2aScxWdFlXGrAK8srCrH2nhF3j5d6cg85TkuTn87fBMepJim1xSJr2Swg1L6Hyz29k6F
+ VNZTisxlKITuUJMgdvBwsB9yF7ylc7k0qutwb0XTuM6xlvwDaPRguVZvu0DlNiDZyZ6dwmxVw
+ tAabVZQKFM54YoPhuBx1PxiUbHp2cTQlOhy5onkHMA1bVv2YUFU/jR1hhXkqppEucUumu3xg7
+ ZW4n5YG3eiejD4RW3yjLwGCfDFZpOpRHpz5+7jEvsh4e/78xXc2RJSCwEuc7XfzDSGgSJ4juZ
+ TyPOKslL7Kxp0yBjTwtPkDzxqwxkGCucNEjiPp61w4xvw5SWzzZnQqWqcK5iwd/HfMF0N/8F7
+ FXp+u7YDAojf/dNjGV0sfVQS3DIh+DyJcewVhw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drivers should not spam the kernel log if they work properly. Convert
-the functions Hal_EfuseParseIDCode88E() and _netdev_open() to use
-netdev_dbg() instead of pr_info() so that developers can still enable
-it if they want to see this information.
+On Mon, Aug 8, 2022 at 12:09 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> When CONFIG_ADVISE_SYSCALLS is not set/enabled and CONFIG_COMPAT is
+> set/enabled, the riscv compat_syscall_table references
+> 'compat_sys_fadvise64_64', which is not defined:
+>
+> riscv64-linux-ld: arch/riscv/kernel/compat_syscall_table.o:(.rodata+0x6f8):
+> undefined reference to `compat_sys_fadvise64_64'
+>
+> Add 'fadvise64_64' to kernel/sys_ni.c as a conditional COMPAT function
+> so that when CONFIG_ADVISE_SYSCALLS is not set, there is a fallback
+> function available.
+>
+> Fixes: d3ac21cacc24 ("mm: Support compiling out madvise and fadvise")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 3 ++-
- drivers/staging/r8188eu/os_dep/os_intfs.c       | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-index 5b8f1a912bbb..58a193334b91 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-@@ -688,6 +688,7 @@ Hal_EfuseParseIDCode88E(
- 	)
- {
- 	struct eeprom_priv *pEEPROM = &padapter->eeprompriv;
-+	struct net_device *netdev = padapter->pnetdev;
- 	u16			EEPROMId;
- 
- 	/*  Check 0x8129 again for making sure autoload status!! */
-@@ -699,7 +700,7 @@ Hal_EfuseParseIDCode88E(
- 		pEEPROM->bautoload_fail_flag = false;
- 	}
- 
--	pr_info("EEPROM ID = 0x%04x\n", EEPROMId);
-+	netdev_dbg(netdev, "EEPROM ID = 0x%04x\n", EEPROMId);
- }
- 
- static void Hal_ReadPowerValueFromPROM_8188E(struct txpowerinfo24g *pwrInfo24G, u8 *PROMContent, bool AutoLoadFail)
-diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
-index cac9553666e6..22e91657f3fb 100644
---- a/drivers/staging/r8188eu/os_dep/os_intfs.c
-+++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
-@@ -635,7 +635,7 @@ int _netdev_open(struct net_device *pnetdev)
- 		if (status == _FAIL)
- 			goto netdev_open_error;
- 
--		pr_info("MAC Address = %pM\n", pnetdev->dev_addr);
-+		netdev_dbg(pnetdev, "MAC Address = %pM\n", pnetdev->dev_addr);
- 
- 		status = rtw_start_drv_threads(padapter);
- 		if (status == _FAIL) {
--- 
-2.37.1
-
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

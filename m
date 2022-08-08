@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D40158C947
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E01758C94A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243037AbiHHNTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        id S243268AbiHHNV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243259AbiHHNTl (ORCPT
+        with ESMTP id S242399AbiHHNV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:19:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08E5617C;
-        Mon,  8 Aug 2022 06:19:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CF6E61214;
-        Mon,  8 Aug 2022 13:19:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F938C433C1;
-        Mon,  8 Aug 2022 13:19:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659964779;
-        bh=eQQG3w7iWYBgQ9L9vR2hhgfaLi4C3wIC0N0XBZUD6UE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UftdXnG9yQF3+pvKzjJvBCeqiOXZSUFohihYVej2PXb3/xiFG3Z6cOmvOK4ckeDvE
-         563QMLfc3HafHPMX6Rno/xPd7LFtf5DbGLqA+K8jsQipl7wsG0dXhGuGnSVGSr9Le0
-         b1PeFCLNF0ChWt1MwA1WHL4DcOCvCTCSF8AN2cxQSNQx2NDLvjKrmFX40alsHxoCHs
-         1vEKg/BKpo5y0cuWg+XtcetqGKvE4nVL7aB/12CRPAziXMko1tMNyCB+AhjQjxeoKk
-         xsj8jrt1ZX6Ga1Sikf5jLlnLiZJpc5RmxaMfrbjLHVfeeviQJRsh3aYkdqv0kisOHx
-         r31tSLiitOv2A==
-Date:   Mon, 8 Aug 2022 14:19:33 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Harsha Priya <harshapriya.n@intel.com>,
-        "Subhransu S. Prusty" <subhransu.s.prusty@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sriram Periyasamy <sriramx.periyasamy@intel.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH] ASoC: Intel: kbl_rt5663_max98927: Simplify clk_get()
- usage
-Message-ID: <YvENZULMLWkeaCzO@sirena.org.uk>
-References: <55e59c4792d64ff6336fcaa85ec15590553e9d63.1659903516.git.christophe.jaillet@wanadoo.fr>
+        Mon, 8 Aug 2022 09:21:26 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FC02BFB
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:21:24 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id j5-20020a056e02218500b002de1cf2347bso6442878ila.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 06:21:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=2fuXKFyY2jLEHj97y3vzUngcZESDHWQml2x/X1IOlDQ=;
+        b=7fuP6G63gnV1wx2kbOGNDJGfTxEgutjtmaus4e826xmS5NOBFdWFXNXbmhgGflyZVP
+         R4nJ3mjLP4gdto4pcH+XCQgfWC7tfbKhQpX+jnOhjsucm3ozGpg2cEKnwhYJdcgV88VK
+         cAfxl2dAD3YTZ0VO4f1jcVugGYtC1RxRMvsZP3Nau1DFtXmqqz93xlNlTaG9pmiubIEs
+         jKQ0iqGvYur/R+5npD9opRRwLRdvTVq0FDz1zXAJ2/Zst4jzwuh1NarBN0QZPPxz8/rf
+         FiQPBZ43qobNTOerwwaC9+MSGBwUdfxr5aD4SQJbQG4yxmmywdZVfeAUJZs3wbSfh9E3
+         ki/A==
+X-Gm-Message-State: ACgBeo1LLVG4nBfPRAoEp6UGoVMSRCIoF9oVyFKasUFDucQOor6nkE1+
+        SlkVwoUioPmdbvslm7TayJYj+nfnPejxI/BIjlwduyYMSFHC
+X-Google-Smtp-Source: AA6agR5xmHh9m5tQn7ICict6btzfu4Ake0f9T6RziJyStPtETo7Y+FSAOqdrFXe1lFwFUAf7y3oRbCdNwaMLmL7b5B0CCndIW9Oq
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h+2uZ44m+eEzN7zj"
-Content-Disposition: inline
-In-Reply-To: <55e59c4792d64ff6336fcaa85ec15590553e9d63.1659903516.git.christophe.jaillet@wanadoo.fr>
-X-Cookie: Flee at once, all is discovered.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:22c9:b0:341:56cf:c447 with SMTP id
+ j9-20020a05663822c900b0034156cfc447mr7741358jat.244.1659964884208; Mon, 08
+ Aug 2022 06:21:24 -0700 (PDT)
+Date:   Mon, 08 Aug 2022 06:21:24 -0700
+In-Reply-To: <0000000000008be58e05e5b5d971@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000434f7a05e5bab1ce@google.com>
+Subject: Re: [syzbot] INFO: trying to register non-static key in gsmld_write
+From:   syzbot <syzbot+cf155def4e717db68a12@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
---h+2uZ44m+eEzN7zj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+HEAD commit:    ca688bff68bc Add linux-next specific files for 20220808
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16c4c201080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4c20e006003cdecb
+dashboard link: https://syzkaller.appspot.com/bug?extid=cf155def4e717db68a12
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=151f2b46080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=143a3171080000
 
-On Sun, Aug 07, 2022 at 10:18:54PM +0200, Christophe JAILLET wrote:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cf155def4e717db68a12@syzkaller.appspotmail.com
 
-> Not sure the Fixes tag is needed. The patch does not fix anything.
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 0 PID: 3608 Comm: syz-executor156 Not tainted 5.19.0-next-20220808-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ assign_lock_key kernel/locking/lockdep.c:979 [inline]
+ register_lock_class+0xf1b/0x1120 kernel/locking/lockdep.c:1292
+ __lock_acquire+0x109/0x56d0 kernel/locking/lockdep.c:4932
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+ gsmld_write+0x5e/0x140 drivers/tty/n_gsm.c:3023
+ do_tty_write drivers/tty/tty_io.c:1024 [inline]
+ file_tty_write.constprop.0+0x499/0x8f0 drivers/tty/tty_io.c:1095
+ call_write_iter include/linux/fs.h:2192 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x9e9/0xdd0 fs/read_write.c:578
+ ksys_write+0x127/0x250 fs/read_write.c:631
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f80104e30c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f8010474268 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f801056b4d0 RCX: 00007f80104e30c9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 00007f8010539010 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f8010474280
+R13: 6d74702f7665642f R14: 00007f801047427c R15: 00007f801056b4d8
+ </TASK>
 
-You just answered your own question there...
-
---h+2uZ44m+eEzN7zj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLxDWQACgkQJNaLcl1U
-h9AHtgf+NLieJb/NpzO1CTPoNd4n2HBmtAu3jtpeGHaJIGGbQtSKBrjJpibSPV5e
-4rDQjw2jC0NDP6aF66TIko2uT/53ELZXRszH/9+GTRkbgubnMPOymgnEJm7hulDY
-PFgqQLdYkEhiOvUpwFL1J6QrXntpP5hB6DTKr83J95QdgkAaXp1uAshxLZ/2vbh3
-2S9ruT+ROnnmLqkvlxdLEtOP9rYVLLoquDY+zTzWNhWhPC0jYcQNsgHsuHI9pKUm
-xJdE0s9zbEtuaeaPnxlGhwmXPI1Z5kCG9l44YVd/+6BhaUitCqzXe0Dp7Qe5ZFR0
-8W7LTCLphAQMB1vM65di6lrGZNOCTA==
-=1XmB
------END PGP SIGNATURE-----
-
---h+2uZ44m+eEzN7zj--

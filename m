@@ -2,500 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F8F58C9D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B27B58C9DE
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243102AbiHHNz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
+        id S243210AbiHHN4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235823AbiHHNz0 (ORCPT
+        with ESMTP id S237479AbiHHN4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:55:26 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A105B97
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:55:24 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id b21-20020a05600c4e1500b003a32bc8612fso4529817wmq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 06:55:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=2KAEru83X/eg6nC6QUrdH5UrQzZjobP7SQajY4nyZcE=;
-        b=v6FlkCKmtFTv4HwcXleuRXjO+gyXDNFK9NPGGRfgjJlITlg/4A7aZ9gKIFbdl2Gw7f
-         2WRzp3Y903aCQKFzQoQc5gl2rNfxbMhmUwIHu99tewrlce8L5ia52DUep8UysSnBUyyj
-         OxPN5Q5oBr4BRGBuFOLIcbdDfxxoyIHgKwYaf0jW5dYia7vqa0y/xez8KmdQ+tUyixBs
-         5QNbetd1kFEEAs9ScTTyoNGkcnRmJxi3/xo99z+X1z3yRiOIqrtIoyJT3/2L5d614HLZ
-         EzljXz5OOkBKk6h8jIUN3TlqXbXY/P2+RDDmanRZPvPt2w3GLyMdGDqLH2dkbIcaKHq/
-         3SlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=2KAEru83X/eg6nC6QUrdH5UrQzZjobP7SQajY4nyZcE=;
-        b=zxBmRMQA826/lW5kkxG+LV230ipAK1EoX203dXnk3x5DtbMsmDZ6RiZ2V788fyFCMZ
-         j+i+QcyKHg7FnMNf/VdMJjBa/6y3D+gK1zK6X3kGQVrpRtzVTGtx9mC5icaMnbpQTsSp
-         fl/fIud2MAz7HKdEFW1yjFnBI25lu/tBBUmn7pr1/7Nuex3omNtmSTUNGbZKxzRBjgxQ
-         H67MtI+mDKxmO+tmeLaXswi3xOYEs9s9TXip4cLNSXxshvTJtrKNaeimKeOzS6awhpBY
-         CqU3gjAcpMmgqaVhjzPNwEu0jwV3CLPq4STHleikkJlOmbTaDFzB0sj4sNkGVQrtab2U
-         xwTA==
-X-Gm-Message-State: ACgBeo1XVKZ+MlQOtBb5Xdn/52GUAZvMWVUp7xGQRRFVaOTosMeJ6lUn
-        XKB7Gn3pkGwIPJOsPloOxzq2N9cuvD/lqw==
-X-Google-Smtp-Source: AA6agR6TMyVMTmkgwysLZynE7YDtYf9W78tzwvs6u7ICoPg1zR1chUYS30cluNaV/9MDiK0uveAOtw==
-X-Received: by 2002:a05:600c:2282:b0:3a5:502a:892b with SMTP id 2-20020a05600c228200b003a5502a892bmr658421wmf.101.1659966922918;
-        Mon, 08 Aug 2022 06:55:22 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id o41-20020a05600c512900b003a2e1883a27sm22428103wms.18.2022.08.08.06.55.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 06:55:22 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 14:55:20 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH v2 2/5] mfd: max597x: Add support for MAX5970 and MAX5978
-Message-ID: <YvEVyBwKFrOT1oFR@google.com>
-References: <20220707134141.1172300-1-Naresh.Solanki@9elements.com>
- <20220707134141.1172300-3-Naresh.Solanki@9elements.com>
+        Mon, 8 Aug 2022 09:56:15 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCA2D113;
+        Mon,  8 Aug 2022 06:56:12 -0700 (PDT)
+Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M1d5j361Yz6H74W;
+        Mon,  8 Aug 2022 21:56:09 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Mon, 8 Aug 2022 15:56:09 +0200
+Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 8 Aug
+ 2022 14:56:09 +0100
+Date:   Mon, 8 Aug 2022 14:56:08 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Tim Harvey" <tharvey@gateworks.com>,
+        Robert Jones <rjones@gateworks.com>,
+        "Lee Jones" <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        "Liam Girdwood" <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Ricardo Rivera-Matos" <r-rivera-matos@ti.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-fbdev@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH 5/5] dt-bindings: Drop Dan Murphy
+Message-ID: <20220808145608.00002bf8@huawei.com>
+In-Reply-To: <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
+References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
+        <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
+Organization: Huawei Technologies R&D (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220707134141.1172300-3-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.122.247.231]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 07 Jul 2022, Naresh Solanki wrote:
+On Mon,  8 Aug 2022 13:47:12 +0300
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Emails to Dan Murphy bounce ("550 Invalid recipient <dmurphy@ti.com>
+> (#5.1.1)").
 > 
-> Implement a regulator driver with IRQ support for fault management.
-> Written against documentation [1] and [2] and tested on real hardware.
-> 
-> Every channel has it's own regulator supply nammed 'vss1-supply' and
-
-Nit "its" and "supplies"
-
-> 'vss2-supply'. The regulator supply is used to determine the output
-> voltage, as the smart switch provides no output regulation.
-> The driver requires the 'shunt-resistor-micro-ohms' to be present in
-
-"property to be ..."
-
-> the devicetree to properly calculate current related values.
-
-Drop "the" and it's  "Device Tree"
-
-> You must specify compatible devictree layout:
-
-This doesn't need to be in the commit message.
-
-Save it for the documentation.
-
-> regulator@3a {
->         reg = <0x3a>;
->         vss1-supply = <&p3v3>;
->         compatible = "maxim,max5978";
-> 
->         ...
-> 
->         regulators {
->                 sw0_ref: SW0 {
->                         regulator-compatible = "SW0";
->                         shunt-resistor-micro-ohms = <12000>;
->                         ...
->                 }
->         }
-> }
-> 
-> 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
-> 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-
-What is the relationship between all of these people?
-
-What did each of them provide to the patch?
-
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  drivers/mfd/Kconfig         |  12 ++++
->  drivers/mfd/Makefile        |   2 +
->  drivers/mfd/max597x.c       | 109 ++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/max597x.h | 100 +++++++++++++++++++++++++++++++++
->  4 files changed, 223 insertions(+)
->  create mode 100644 drivers/mfd/max597x.c
->  create mode 100644 include/linux/mfd/max597x.h
+>  Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml     | 2 +-
+>  .../devicetree/bindings/leds/leds-class-multicolor.yaml         | 2 +-
+>  Documentation/devicetree/bindings/leds/leds-lp50xx.yaml         | 2 +-
+>  Documentation/devicetree/bindings/net/ti,dp83822.yaml           | 2 +-
+>  Documentation/devicetree/bindings/net/ti,dp83867.yaml           | 2 +-
+>  Documentation/devicetree/bindings/net/ti,dp83869.yaml           | 2 +-
+>  Documentation/devicetree/bindings/power/supply/bq2515x.yaml     | 1 -
+>  Documentation/devicetree/bindings/power/supply/bq25980.yaml     | 1 -
+>  Documentation/devicetree/bindings/sound/tas2562.yaml            | 2 +-
+>  Documentation/devicetree/bindings/sound/tlv320adcx140.yaml      | 2 +-
+>  10 files changed, 8 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 3b59456f5545..2422ae155118 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -253,6 +253,18 @@ config MFD_MADERA_SPI
->  	  Support for the Cirrus Logic Madera platform audio SoC
->  	  core functionality controlled via SPI.
+> diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
+> index 9f5e96439c01..8f50f0f719df 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Texas Instruments' ads124s08 and ads124s06 ADC chip
 >  
-> +config MFD_MAX597X
-> +	tristate "Maxim 597x power switch and monitor"
+>  maintainers:
+> -  - Dan Murphy <dmurphy@ti.com>
+> +  - Jonathan Cameron <jic23@kernel.org>
+For this one,
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Power Switch and Monitor
+(I'm fine with using my kernel.org address for bindings)
 
-> +	depends on I2C
-> +	depends on OF
-> +	select MFD_CORE
-> +	select REGMAP_I2C
-> +	help
-> +	  This driver controls a Maxim 5970/5978 switch via I2C bus.
-> +	  The MAX5970/5978 is a smart switch with no output regulation, but
-> +	  fault protection and voltage and current monitoring capabilities.
-> +	  Also it supports upto 4 indication leds.
-
-LEDs
-
-> +
->  config MFD_CS47L15
->  	bool "Cirrus Logic CS47L15"
->  	select PINCTRL_CS47L15
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 858cacf659d6..f5f46b86401f 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -95,6 +95,8 @@ obj-$(CONFIG_MFD_MADERA)	+= madera.o
->  obj-$(CONFIG_MFD_MADERA_I2C)	+= madera-i2c.o
->  obj-$(CONFIG_MFD_MADERA_SPI)	+= madera-spi.o
->  
-> +obj-$(CONFIG_MFD_MAX597X) += max597x.o
-
-Why don't you put it next to the existing MAX entries?
-
->  obj-$(CONFIG_TPS6105X)		+= tps6105x.o
->  obj-$(CONFIG_TPS65010)		+= tps65010.o
->  obj-$(CONFIG_TPS6507X)		+= tps6507x.o
-> diff --git a/drivers/mfd/max597x.c b/drivers/mfd/max597x.c
-> new file mode 100644
-> index 000000000000..b2450e64d3eb
-> --- /dev/null
-> +++ b/drivers/mfd/max597x.c
-> @@ -0,0 +1,109 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device driver for regulators in MAX5970 and MAX5978 IC
-
-This is not a regulator driver.
-
-Please state what the 2 devices are.
-
-> + * Copyright (c) 2022 9elements GmbH
-> + *
-> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/leds.h>
-> +#include <linux/module.h>
-> +#include <linux/io.h>
-> +#include <linux/of.h>
-> +#include <linux/i2c.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/regmap.h>
-> +#include <linux/regulator/driver.h>
-> +#include <linux/regulator/machine.h>
-> +#include <linux/regulator/of_regulator.h>
-> +#include <linux/version.h>
-> +#include <linux/mfd/max597x.h>
-
-Alphabetical.
-
-Also, are you sure *all* of these are needed?
-
-> +static const struct regmap_config max597x_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = MAX_REGISTERS,
-> +};
-> +
-> +static const struct mfd_cell max597x_devs[] = {
-
-max597x_cells
-
-> +	{
-> +	 .name = "max597x-regulator",
-> +	 },
-> +	{
-> +	 .name = "max597x-iio",
-> +	 },
-> +	{
-> +	 .name = "max597x-led",
-> +	 },
-
-Like this please:
-
-	{ .name = "max597x-regulator" },
-	{ .name = "max597x-iio" },
-	{ .name = "max597x-led" },
-
-> +};
-> +
-> +static int max597x_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
-> +{
-> +	struct max597x_data *max597x;
-
-"_ddata *ddata"
-
-> +	struct regmap *regmap;
-> +	enum max597x_chip_type chip = id->driver_data;
-> +
-> +	max597x =
-
-No break.
-
-> +	    devm_kzalloc(&i2c->dev, sizeof(struct max597x_data), GFP_KERNEL);
-
-sizeof(*ddata)
-
-'\n'
-
-> +	switch (chip) {
-> +	case MAX597x_TYPE_MAX5970:
-> +		max597x->num_switches = 2;
-> +		break;
-> +	case MAX597x_TYPE_MAX5978:
-> +		max597x->num_switches = 1;
-> +		break;
-> +	}
-
-Are you planning on expanding the information in .data?
-
-If not, why not put the number of switches in there instead?
-
-> +	regmap = devm_regmap_init_i2c(i2c, &max597x_regmap_config);
-> +	if (IS_ERR(regmap)) {
-> +		dev_err(&i2c->dev, "No regmap\n");
-
-Is that really what that means?
-
-"Failed to initialise regmap"
-
-> +		return -EINVAL;
-> +	}
-
-'\n'
-
-> +	max597x->regmap = regmap;
-
-Why not put the value straight into max597x->regmap instead of
-creating a local variable that's only used once?
-
-> +	max597x->irq = i2c->irq;
-> +	max597x->dev = &i2c->dev;
-
-What the reason for saving this?
-
-> +	i2c_set_clientdata(i2c, max597x);
-> +
-> +	return devm_mfd_add_devices(max597x->dev, PLATFORM_DEVID_AUTO,
-> +				    max597x_devs, ARRAY_SIZE(max597x_devs),
-> +				    NULL, 0, NULL);
-> +}
-> +
-> +static const struct i2c_device_id max597x_table[] = {
-> +	{.name = "max5970", MAX597x_TYPE_MAX5970},
-> +	{.name = "max5978", MAX597x_TYPE_MAX5978},
-
-Spaces after the { and before the } please.
-
-> +	{},
-> +};
-> +
-
-Remove this line.
-
-> +MODULE_DEVICE_TABLE(i2c, max597x_table);
-> +
-> +static const struct of_device_id max597x_of_match[] = {
-> +	{	.compatible = "maxim,max5970",
-
-Needs to be on the line below.
-
-> +		.data = (void *)MAX597x_TYPE_MAX5970
-> +	},
-> +	{	.compatible = "maxim,max5978",
-
-Line below.
-
-> +		.data = (void *)MAX597x_TYPE_MAX5978
-> +	},
-> +	{},
-> +};
-> +
-
-Remove.
-
-> +MODULE_DEVICE_TABLE(of, max597x_of_match);
-> +
-> +static struct i2c_driver max597x_driver = {
-> +	.id_table = max597x_table,
-> +	.driver = {
-> +		   .name = "max597x",
-> +		   .of_match_table = of_match_ptr(max597x_of_match),
-> +		   },
-
-Wrong tab spacing.  Should line up with the .driver.
-
-> +	.probe = max597x_probe,
-> +};
-> +
-
-Remove.
-
-> +module_i2c_driver(max597x_driver);
-> +
-> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-> +MODULE_DESCRIPTION("MAX5970_hot-swap controller driver");
-
-This is not a good description.
-
-> +MODULE_LICENSE("GPL v2");
-> diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max597x.h
-> new file mode 100644
-> index 000000000000..ac7e9c84d06c
-> --- /dev/null
-> +++ b/include/linux/mfd/max597x.h
-> @@ -0,0 +1,100 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Device driver for regulators in MAX5970 and MAX5978 IC
-
-As above.
-
-> + * Copyright (c) 2022 9elements GmbH
-> + *
-> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-> + */
-> +
-> +#ifndef _MAX597X_H
-> +#define _MAX597X_H
-
-MFD_
-
-> +#include <linux/regmap.h>
-
-device.h
-
-> +#define MAX5970_NUM_SWITCHES 2
-> +#define MAX5978_NUM_SWITCHES 1
-> +#define MAX597X_NUM_LEDS     4
-> +
-> +struct max597x_data {
-
-Place this at the bottom of the file.
-
-> +	struct device *dev;
-> +	int irq;
-> +	int num_switches;
-> +	struct regmap *regmap;
-
-> +	u32 irng[MAX5970_NUM_SWITCHES];
-> +	u32 mon_rng[MAX5970_NUM_SWITCHES];
-> +	u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
-
-Why are these here?
-
-> +};
-> +
-> +enum max597x_chip_type {
-> +	MAX597x_TYPE_MAX5978 = 1,
-> +	MAX597x_TYPE_MAX5970,
-> +};
-> +
-> +#define MAX5970_REG_CURRENT_L(ch)		(0x01 + (ch) * 4)
-> +#define MAX5970_REG_CURRENT_H(ch)		(0x00 + (ch) * 4)
-> +#define MAX5970_REG_VOLTAGE_L(ch)		(0x03 + (ch) * 4)
-> +#define MAX5970_REG_VOLTAGE_H(ch)		(0x02 + (ch) * 4)
-> +#define MAX5970_REG_MON_RANGE			0x18
-> +#define  MAX5970_MON_MASK			0x3
-> +#define  MAX5970_MON(reg, ch) \
-> +	(((reg) >> ((ch) * 2)) & MAX5970_MON_MASK)
-> +#define  MAX5970_MON_MAX_RANGE_UV		16000000
-> +
-> +#define MAX5970_REG_CH_UV_WARN_H(ch)		(0x1A + (ch) * 10)
-> +#define MAX5970_REG_CH_UV_WARN_L(ch)		(0x1B + (ch) * 10)
-> +#define MAX5970_REG_CH_UV_CRIT_H(ch)		(0x1C + (ch) * 10)
-> +#define MAX5970_REG_CH_UV_CRIT_L(ch)		(0x1D + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_WARN_H(ch)		(0x1E + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_WARN_L(ch)		(0x1F + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_CRIT_H(ch)		(0x20 + (ch) * 10)
-> +#define MAX5970_REG_CH_OV_CRIT_L(ch)		(0x21 + (ch) * 10)
-> +
-> +#define  MAX5970_VAL2REG_H(x)		(((x) >> 2) & 0xFF)
-> +#define  MAX5970_VAL2REG_L(x)		((x) & 0x3)
-> +
-> +#define MAX5970_REG_DAC_FAST(ch)	(0x2E + (ch))
-> +
-> +#define MAX5970_FAST2SLOW_RATIO		200
-> +
-> +#define MAX5970_REG_STATUS0		0x31
-> +#define  MAX5970_CB_IFAULTF(ch)		(1 << (ch))
-> +#define  MAX5970_CB_IFAULTS(ch)		(1 << ((ch) + 4))
-
-BIT()?
-
-Same for the macros below.
-
-> +#define MAX5970_REG_STATUS1		0x32
-> +#define  STATUS1_PROT_MASK		0x3
-> +#define  STATUS1_PROT(reg) \
-> +	(((reg) >> 6) & STATUS1_PROT_MASK)
-> +#define  STATUS1_PROT_SHUTDOWN		0
-> +#define  STATUS1_PROT_CLEAR_PG		1
-> +#define  STATUS1_PROT_ALERT_ONLY	2
-> +
-> +#define MAX5970_REG_STATUS2		0x33
-> +#define  MAX5970_IRNG_MASK		0x3
-> +#define  MAX5970_IRNG(reg, ch) \
-> +	(((reg) >> ((ch) * 2)) & MAX5970_IRNG_MASK)
-> +
-> +#define MAX5970_REG_STATUS3		0x34
-> +#define  MAX5970_STATUS3_ALERT		BIT(4)
-> +#define  MAX5970_STATUS3_PG(ch)		BIT(ch)
-> +
-> +#define MAX5970_REG_FAULT0		0x35
-> +#define  UV_STATUS_WARN(ch)		(1 << (ch))
-> +#define  UV_STATUS_CRIT(ch)		(1 << ((ch) + 4))
-> +
-> +#define MAX5970_REG_FAULT1		0x36
-> +#define  OV_STATUS_WARN(ch)		(1 << (ch))
-> +#define  OV_STATUS_CRIT(ch)		(1 << ((ch) + 4))
-> +
-> +#define MAX5970_REG_FAULT2		0x37
-> +#define  OC_STATUS_WARN(ch)		(1 << (ch))
-> +
-> +#define MAX5970_REG_CHXEN		0x3b
-> +#define  CHXEN(ch)			(3 << ((ch) * 2))
-> +
-> +#define MAX5970_REG_LED_FLASH		0x43
-> +
-> +#define MAX_REGISTERS			0x49
-> +#define ADC_MASK			0x3FF
-> +
-> +#endif				/* _MAX597X_H */
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

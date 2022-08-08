@@ -2,119 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C43C58C695
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F7858C69D
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242219AbiHHKi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 06:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S237604AbiHHKlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 06:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237547AbiHHKiW (ORCPT
+        with ESMTP id S232528AbiHHKlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 06:38:22 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46001A1B9;
-        Mon,  8 Aug 2022 03:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659955101; x=1691491101;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i0OaVs7vkKYWne9ZknDeoaUYlRMrkt/ldlaa0MEbAZA=;
-  b=DMS1YJRiaClfsW8aERSbM/kc24XQjpNEO/ZsVejHN6QxaEnqpIeBwene
-   1mNp1sqMzhhJbbzbzYiD+QpMSnw9HAx4gCfUDhNOGnc+/jTS6d70KFeX9
-   9sqdO0GXrJXfb4lONRWZAGetEYaAxGqWdiPPWxsTAjzK12QdJNPgW311d
-   tdNmZQiXcllX0+93M8fmBEK1H5TiuoAY2aBqNXcz8nJ1zWDTK/zgYbgOu
-   n8zYgw/EVPxU9O4VrK0hZrmN6Q9gxQ4x4yIm+lEXRbjBJkjCS8eOp3D3A
-   K96GBBPZB+PNoDBTlXVQDtVZ0izjWjKgegLzmmZerRrUAz6S5t/AVu0IS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="354559347"
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="354559347"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 03:38:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="746584608"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 08 Aug 2022 03:38:17 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 08 Aug 2022 13:38:16 +0300
-Date:   Mon, 8 Aug 2022 13:38:16 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Gene Chen <gene.chen.richtek@gmail.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        gene_chen@richtek.com, cy_huang@richtek.com
-Subject: Re: [PATCH v4 4/7] usb: typec: tcpci_rt1711h: Add initial phy setting
-Message-ID: <YvDnmP4bmAZkFgAD@kuha.fi.intel.com>
-References: <20220805071714.150882-1-gene.chen.richtek@gmail.com>
- <20220805071714.150882-5-gene.chen.richtek@gmail.com>
+        Mon, 8 Aug 2022 06:41:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36A206389
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 03:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659955270;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MJLPOegk0UFvhgGoFsMnh0SPzQgLjSOmQFmdJ12d4pE=;
+        b=UWkddwi3Zq/XNfSa+xv85keVZrx1gdpiiNkTXd6rV+wArpBrTaHBcs9b0DVf+v0zSXIUo4
+        WEQijwXliacx4ObLjNbT5mXUNcONOTVx7XnE/DbzU9YqFksHL1aYHVKPhkNzOOOJv4esI+
+        FU2WOzxnBJCwXEn4EbDNQddw/ZUeNE8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-246-Nc3ZIis2O86ADhrOetFMjw-1; Mon, 08 Aug 2022 06:41:07 -0400
+X-MC-Unique: Nc3ZIis2O86ADhrOetFMjw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4192A8041B5;
+        Mon,  8 Aug 2022 10:41:06 +0000 (UTC)
+Received: from localhost (ovpn-12-221.pek2.redhat.com [10.72.12.221])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 380041121314;
+        Mon,  8 Aug 2022 10:41:04 +0000 (UTC)
+Date:   Mon, 8 Aug 2022 18:41:01 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v10 7/8] crash: memory and cpu hotplug sysfs attributes
+Message-ID: <YvDoPTSkYo6dg+Di@MiWiFi-R3L-srv>
+References: <20220721181747.1640-1-eric.devolder@oracle.com>
+ <20220721181747.1640-8-eric.devolder@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805071714.150882-5-gene.chen.richtek@gmail.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220721181747.1640-8-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 03:17:10PM +0800, Gene Chen wrote:
-> From: Gene Chen <gene_chen@richtek.com>
+On 07/21/22 at 02:17pm, Eric DeVolder wrote:
+> This introduces the crash_hotplug attribute for memory and CPUs
+> for use by userspace.  This change directly facilitates the udev
+> rule for managing userspace re-loading of the crash kernel upon
+> hot un/plug changes.
 > 
-> Add initial phy setting about phy dicard retry,
-> rx filter deglitch time and BMC-encoded wait time
+> For memory, this changeset introduces the crash_hotplug attribute
+> to the /sys/devices/system/memory directory. For example:
 > 
-> Signed-off-by: Gene Chen <gene_chen@richtek.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>  # udevadm info --attribute-walk /sys/devices/system/memory/memory81
+>   looking at device '/devices/system/memory/memory81':
+>     KERNEL=="memory81"
+>     SUBSYSTEM=="memory"
+>     DRIVER==""
+>     ATTR{online}=="1"
+>     ATTR{phys_device}=="0"
+>     ATTR{phys_index}=="00000051"
+>     ATTR{removable}=="1"
+>     ATTR{state}=="online"
+>     ATTR{valid_zones}=="Movable"
+> 
+>   looking at parent device '/devices/system/memory':
+>     KERNELS=="memory"
+>     SUBSYSTEMS==""
+>     DRIVERS==""
+>     ATTRS{auto_online_blocks}=="offline"
+>     ATTRS{block_size_bytes}=="8000000"
+>     ATTRS{crash_hotplug}=="1"
+> 
+> For CPUs, this changeset introduces the crash_hotplug attribute
+> to the /sys/devices/system/cpu directory. For example:
+> 
+>  # udevadm info --attribute-walk /sys/devices/system/cpu/cpu0
+>   looking at device '/devices/system/cpu/cpu0':
+>     KERNEL=="cpu0"
+>     SUBSYSTEM=="cpu"
+>     DRIVER=="processor"
+>     ATTR{crash_notes}=="277c38600"
+>     ATTR{crash_notes_size}=="368"
+>     ATTR{online}=="1"
+> 
+>   looking at parent device '/devices/system/cpu':
+>     KERNELS=="cpu"
+>     SUBSYSTEMS==""
+>     DRIVERS==""
+>     ATTRS{crash_hotplug}=="1"
+>     ATTRS{isolated}==""
+>     ATTRS{kernel_max}=="8191"
+>     ATTRS{nohz_full}=="  (null)"
+>     ATTRS{offline}=="4-7"
+>     ATTRS{online}=="0-3"
+>     ATTRS{possible}=="0-7"
+>     ATTRS{present}=="0-3"
+> 
+> With these sysfs attributes in place, it is possible to efficiently
+> instruct the udev rule to skip crash kernel reloading.
+> 
+> For example, the following is the proposed udev rule change for RHEL
+> system 98-kexec.rules (as the first lines of the rule file):
+> 
+>  # The kernel handles updates to crash elfcorehdr for cpu and memory changes
+>  SUBSYSTEM=="cpu", ATTRS{crash_hotplug}=="1", GOTO="kdump_reload_end"
+>  SUBSYSTEM=="memory", ATTRS{crash_hotplug}=="1", GOTO="kdump_reload_end"
+> 
+> When examined in the context of 98-kexec.rules, the above change
+> tests if crash_hotplug is set, and if so, it skips the userspace
+> initiated unload-then-reload of the crash kernel.
+> 
+> Cpu and memory checks are separated in accordance with
+> CONFIG_HOTPLUG_CPU and CONFIG_MEMORY_HOTPLUG kernel config options.
+> If an architecture supports, for example, memory hotplug but not
+> CPU hotplug, then the /sys/devices/system/memory/crash_hotplug
+> attribute file is present, but the /sys/devices/system/cpu/crash_hotplug
+> attribute file will NOT be present. Thus the udev rule will skip
+> userspace processing of memory hot un/plug events, but the udev
+> rule will fail for CPU events, thus allowing userspace to process
+> cpu hot un/plug events (ie the unload-then-reload of the kdump
+> capture kernel).
+> 
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+LGTM,
+
+Acked-by: Baoquan He <bhe@redhat.com>
 
 > ---
->  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
+>  .../admin-guide/mm/memory-hotplug.rst          |  8 ++++++++
+>  Documentation/core-api/cpu_hotplug.rst         | 18 ++++++++++++++++++
+>  drivers/base/cpu.c                             | 14 ++++++++++++++
+>  drivers/base/memory.c                          | 13 +++++++++++++
+>  include/linux/crash_core.h                     |  6 ++++++
+>  5 files changed, 59 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> index fb19d7b..5c51d04 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> @@ -19,6 +19,9 @@
->  #define RT1711H_VID		0x29CF
->  #define RT1711H_PID		0x1711
->  
-> +#define RT1711H_PHYCTRL1	0x80
-> +#define RT1711H_PHYCTRL2	0x81
+> diff --git a/Documentation/admin-guide/mm/memory-hotplug.rst b/Documentation/admin-guide/mm/memory-hotplug.rst
+> index 0f56ecd8ac05..494d7a63c543 100644
+> --- a/Documentation/admin-guide/mm/memory-hotplug.rst
+> +++ b/Documentation/admin-guide/mm/memory-hotplug.rst
+> @@ -293,6 +293,14 @@ The following files are currently defined:
+>  		       Availability depends on the CONFIG_ARCH_MEMORY_PROBE
+>  		       kernel configuration option.
+>  ``uevent``	       read-write: generic udev file for device subsystems.
+> +``crash_hotplug``      read-only: when changes to the system memory map
+> +		       occur due to hot un/plug of memory, this file contains
+> +		       '1' if the kernel updates the kdump capture kernel memory
+> +		       map itself (via elfcorehdr), or '0' if userspace must update
+> +		       the kdump capture kernel memory map.
 > +
->  #define RT1711H_RTCTRL8		0x9B
+> +		       Availability depends on the CONFIG_MEMORY_HOTPLUG kernel
+> +		       configuration option.
+>  ====================== =========================================================
 >  
->  /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
-> @@ -106,8 +109,18 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
->  		return ret;
+>  .. note::
+> diff --git a/Documentation/core-api/cpu_hotplug.rst b/Documentation/core-api/cpu_hotplug.rst
+> index c6f4ba2fb32d..13e33d098645 100644
+> --- a/Documentation/core-api/cpu_hotplug.rst
+> +++ b/Documentation/core-api/cpu_hotplug.rst
+> @@ -750,6 +750,24 @@ will receive all events. A script like::
 >  
->  	/* dcSRC.DRP : 33% */
-> -	return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
-> +	ret = rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
-> +	if (ret < 0)
-> +		return ret;
+>  can process the event further.
+>  
+> +When changes to the CPUs in the system occur, the sysfs file
+> +/sys/devices/system/cpu/crash_hotplug contains '1' if the kernel
+> +updates the kdump capture kernel list of CPUs itself (via elfcorehdr),
+> +or '0' if userspace must update the kdump capture kernel list of CPUs.
 > +
-> +	/* Enable phy discard retry, retry count 7, rx filter deglitch 100 us */
-> +	ret = rt1711h_write8(chip, RT1711H_PHYCTRL1, 0xF1);
-> +	if (ret < 0)
-> +		return ret;
+> +The availability depends on the CONFIG_HOTPLUG_CPU kernel configuration
+> +option.
+> +
+> +To skip userspace processing of CPU hot un/plug events for kdump
+> +(ie the unload-then-reload to obtain a current list of CPUs), this sysfs
+> +file can be used in a udev rule as follows:
+> +
+> + SUBSYSTEM=="cpu", ATTRS{crash_hotplug}=="1", GOTO="kdump_reload_end"
+> +
+> +For a cpu hot un/plug event, if the architecture supports kernel updates
+> +of the elfcorehdr (which contains the list of CPUs), then the rule skips
+> +the unload-then-reload of the kdump capture kernel.
+> +
+>  Kernel Inline Documentations Reference
+>  ======================================
 >  
-> +	/* Decrease wait time of BMC-encoded 1 bit from 2.67us to 2.55us */
-> +	/* wait time : (val * .4167) us */
-> +	return rt1711h_write8(chip, RT1711H_PHYCTRL2, 62);
+> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> index 4c98849577d4..bd470236d9a2 100644
+> --- a/drivers/base/cpu.c
+> +++ b/drivers/base/cpu.c
+> @@ -293,6 +293,17 @@ static ssize_t print_cpus_nohz_full(struct device *dev,
+>  static DEVICE_ATTR(nohz_full, 0444, print_cpus_nohz_full, NULL);
+>  #endif
+>  
+> +#ifdef CONFIG_HOTPLUG_CPU
+> +#include <linux/crash_core.h>
+> +static ssize_t crash_hotplug_show(struct device *dev,
+> +				     struct device_attribute *attr,
+> +				     char *buf)
+> +{
+> +	return sprintf(buf, "%d\n", crash_hotplug_cpu_support());
+> +}
+> +static DEVICE_ATTR_ADMIN_RO(crash_hotplug);
+> +#endif
+> +
+>  static void cpu_device_release(struct device *dev)
+>  {
+>  	/*
+> @@ -469,6 +480,9 @@ static struct attribute *cpu_root_attrs[] = {
+>  #ifdef CONFIG_NO_HZ_FULL
+>  	&dev_attr_nohz_full.attr,
+>  #endif
+> +#ifdef CONFIG_HOTPLUG_CPU
+> +	&dev_attr_crash_hotplug.attr,
+> +#endif
+>  #ifdef CONFIG_GENERIC_CPU_AUTOPROBE
+>  	&dev_attr_modalias.attr,
+>  #endif
+> diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+> index bc60c9cd3230..63c1754a52b6 100644
+> --- a/drivers/base/memory.c
+> +++ b/drivers/base/memory.c
+> @@ -483,6 +483,16 @@ static ssize_t auto_online_blocks_store(struct device *dev,
+>  
+>  static DEVICE_ATTR_RW(auto_online_blocks);
+>  
+> +#ifdef CONFIG_MEMORY_HOTPLUG
+> +#include <linux/crash_core.h>
+> +static ssize_t crash_hotplug_show(struct device *dev,
+> +				       struct device_attribute *attr, char *buf)
+> +{
+> +	return sprintf(buf, "%d\n", crash_hotplug_memory_support());
+> +}
+> +static DEVICE_ATTR_RO(crash_hotplug);
+> +#endif
+> +
+>  /*
+>   * Some architectures will have custom drivers to do this, and
+>   * will not need to do it from userspace.  The fake hot-add code
+> @@ -887,6 +897,9 @@ static struct attribute *memory_root_attrs[] = {
+>  
+>  	&dev_attr_block_size_bytes.attr,
+>  	&dev_attr_auto_online_blocks.attr,
+> +#ifdef CONFIG_MEMORY_HOTPLUG
+> +	&dev_attr_crash_hotplug.attr,
+> +#endif
+>  	NULL
+>  };
+>  
+> diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
+> index c9705b6872e7..3964e9924ea5 100644
+> --- a/include/linux/crash_core.h
+> +++ b/include/linux/crash_core.h
+> @@ -109,5 +109,11 @@ static inline void arch_crash_handle_hotplug_event(struct kimage *image,
+>  {
 >  }
+>  #endif
+> +#ifndef crash_hotplug_cpu_support
+> +static inline int crash_hotplug_cpu_support(void) { return 0; }
+> +#endif
+> +#ifndef crash_hotplug_memory_support
+> +static inline int crash_hotplug_memory_support(void) { return 0; }
+> +#endif
 >  
->  static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata,
+>  #endif /* LINUX_CRASH_CORE_H */
 > -- 
-> 2.7.4
+> 2.31.1
+> 
 
--- 
-heikki

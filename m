@@ -2,89 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6CA58C37A
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 08:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF2758C384
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 08:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236962AbiHHGq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 02:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
+        id S234115AbiHHGuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 02:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236542AbiHHGqs (ORCPT
+        with ESMTP id S229688AbiHHGuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 02:46:48 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B38112772;
-        Sun,  7 Aug 2022 23:46:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1659941207; x=1691477207;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X47q7DThyrWu/kkT8n4MueOYo1D/I729fdsIdMKG9zk=;
-  b=p2iJVroYzdNxtGlyOgLFWbG3MpfJrHzHFm/IDtdfBhFEVvH+RwHeL+r/
-   DGVPL8ckkXB6II9kUdcn5fc/2q+sLRlMU/xi4+VcuEj6UX3aGbKnTw7xo
-   Gxbz8O6cakOUcZc7ecq023NL5/C3xsvPKopFfkQAp4UH+bwINEAAAlaHA
-   q5tnRW7yYaa4+IxdRSjFzoSiEpPEHXVAIFGjKUn135xurbxQbXTwJeNHd
-   YIs9NjY0rVpQlKlKMtlUUkFc6uhHx81n1KUcpvhmJzR/ZxGYpUoxgvyZp
-   lBpuXrNjConPIvA0fCgqV8mUQjX0LL8izsa7MCNyu8QKl5E5IhFo1rUfu
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="107987926"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Aug 2022 23:46:46 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Sun, 7 Aug 2022 23:46:46 -0700
-Received: from microchip-OptiPlex-5040.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.28 via Frontend Transport; Sun, 7 Aug 2022 23:46:42 -0700
-From:   Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor.dooley@microchip.com>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Valentina.FernandezAlanis@microchip.com>,
-        Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-Subject: [PATCH v4 4/4] MAINTAINERS: add qspi to Polarfire SoC entry
-Date:   Mon, 8 Aug 2022 12:16:03 +0530
-Message-ID: <20220808064603.1174906-5-nagasuresh.relli@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220808064603.1174906-1-nagasuresh.relli@microchip.com>
-References: <20220808064603.1174906-1-nagasuresh.relli@microchip.com>
+        Mon, 8 Aug 2022 02:50:39 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66BCDF3A
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 23:50:34 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id k26so14847408ejx.5
+        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 23:50:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NXFy/L+O5xnM71JLbyMm2nhzjOenjYylX2CI7hWvxRI=;
+        b=NbqL7OPKRd8KSSwMCPHh3EbqOgxTtixjGuNh3aKKF7E9MkRb6PUgJM/lZltuuUs4Xn
+         uQ6fi3rOV9BvFkReA42ejpaFumQ1JSjdqaQKE23upHD1unO1s6R7FMjRLi60wgz/ZCxq
+         sOy/fVx3MYIvr/riimQIR2ZWTnVDUloBmDiQDXQ8srfAS6h54iMyT9rlawn/aQ4fYEOd
+         yhspgHZ+nogX5AqUhljotXgPojLsOxbVcc8/Laig0x28eRJqnTjsPJE9Ri1q7sp9+kTp
+         sN2v8yeXy/0SYlRilzjZP8Gu9g4aDZ3QZACTKJUsyiV4eL/luZBJAC8heD2S1pY5xGfV
+         o5xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NXFy/L+O5xnM71JLbyMm2nhzjOenjYylX2CI7hWvxRI=;
+        b=KxTRyMH+H+qA2A4iAJR6ln9pTYJqI3ooDmk7DwCBnlgZqGYgYxivGDqqhi49eR9TAm
+         NM56jLbZFayRUOUWuKcyq7yzE99h70I2w8Wm44a+YfwYf/mKFjfFJb3T2bfbsFcij9ML
+         ftjliTarkDyZ0hkUZEa4U2BG2IZbVkfsBngii5qumYUsfr/cNJsuBuaVWG9bwdDmN4YD
+         IvWyvNjhcQezdBc+/s8DZIA7A0cq7N4+3nPxAp/c/FELL/EsdmiUogNAqOYgGvqfbIX/
+         yiInapp8yGp2IebhmRrtN8oIJLarwp23zqT+Cm0MB2f/TaI55guq7iDUNMi7S2Y7XuqQ
+         HPWA==
+X-Gm-Message-State: ACgBeo2rkTkRMYK9Dn74CSDSCDFUOWNg3s/XmhT1lVzSYEdjuZGIjk/x
+        wG8UFxFVj1qlm5Ul/CMnC7k=
+X-Google-Smtp-Source: AA6agR6+XdvuEaZal6me3MXp+qYOJmuitsFaydsUOBpYKUxIuPELn8Q/tHVmSQz6Zer7vsout9mFig==
+X-Received: by 2002:a17:906:c781:b0:726:c967:8d1b with SMTP id cw1-20020a170906c78100b00726c9678d1bmr12907535ejb.54.1659941433407;
+        Sun, 07 Aug 2022 23:50:33 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb84.dynamic.kabel-deutschland.de. [95.90.187.132])
+        by smtp.gmail.com with ESMTPSA id 16-20020a170906329000b007313a2575d2sm2259844ejw.104.2022.08.07.23.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 23:50:33 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH] staging: r8188eu: do not spam the kernel log
+Date:   Mon,  8 Aug 2022 08:50:23 +0200
+Message-Id: <20220808065023.3175-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the qspi driver to existing Polarfire SoC entry.
+Drivers should not spam the kernel log if they work properly. Convert
+the functions Hal_EfuseParseIDCode88E() and _netdev_open() to use
+netdev_dbg() instead of pr_info() so that developers can still enable
+it if they want to see this information.
 
-Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 3 ++-
+ drivers/staging/r8188eu/os_dep/os_intfs.c       | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 295ca16a415b..0329dca23fe2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17146,6 +17146,7 @@ S:	Supported
- F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
-+F:	drivers/spi/spi-microchip-core-qspi.c
- F:	drivers/spi/spi-microchip-core.c
- F:	include/soc/microchip/mpfs.h
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+index 5b8f1a912bbb..58a193334b91 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+@@ -688,6 +688,7 @@ Hal_EfuseParseIDCode88E(
+ 	)
+ {
+ 	struct eeprom_priv *pEEPROM = &padapter->eeprompriv;
++	struct net_device *netdev = padapter->pnetdev;
+ 	u16			EEPROMId;
  
+ 	/*  Check 0x8129 again for making sure autoload status!! */
+@@ -699,7 +700,7 @@ Hal_EfuseParseIDCode88E(
+ 		pEEPROM->bautoload_fail_flag = false;
+ 	}
+ 
+-	pr_info("EEPROM ID = 0x%04x\n", EEPROMId);
++	netdev_dbg(netdev, "EEPROM ID = 0x%04x\n", EEPROMId);
+ }
+ 
+ static void Hal_ReadPowerValueFromPROM_8188E(struct txpowerinfo24g *pwrInfo24G, u8 *PROMContent, bool AutoLoadFail)
+diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
+index cac9553666e6..22e91657f3fb 100644
+--- a/drivers/staging/r8188eu/os_dep/os_intfs.c
++++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
+@@ -635,7 +635,7 @@ int _netdev_open(struct net_device *pnetdev)
+ 		if (status == _FAIL)
+ 			goto netdev_open_error;
+ 
+-		pr_info("MAC Address = %pM\n", pnetdev->dev_addr);
++		netdev_dbg(pnetdev, "MAC Address = %pM\n", pnetdev->dev_addr);
+ 
+ 		status = rtw_start_drv_threads(padapter);
+ 		if (status == _FAIL) {
 -- 
-2.25.1
+2.37.1
 

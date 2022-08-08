@@ -2,334 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C0E58CBC3
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E7258CBC6
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 18:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237122AbiHHQBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 12:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
+        id S234936AbiHHQBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 12:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234936AbiHHQB1 (ORCPT
+        with ESMTP id S243283AbiHHQBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 12:01:27 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF83662C9;
-        Mon,  8 Aug 2022 09:01:23 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id t1so13324156lft.8;
-        Mon, 08 Aug 2022 09:01:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=KCdKLyqTlG066ZeCv0sxUfnd7G76kitH0w8aoKTryoM=;
-        b=jp0qgnDUPI7BW5eHgw72FGK682EZRUuUuW+EgnR3wMILOf2hpllet+t1y4BHGhQV1T
-         Vr5jnVYAghQBtgmos3IgDJnj8SmHIxCROLE9EaNToL/rSQ6eeK+2d5QnoMBLy/JSnUiv
-         YeIlheY/NIbVIAWZlYgh8uzq15wP4Of6PYYqjPkMex0sd+ESJO0d1pnVNBJHz5iWsGxA
-         OzU9NwlrWR/YJapZyyKgl2TI4l9L4DnycujDrarW2XgXiGxsMuiVPv6bCqqZvPnzuW6a
-         mQIDPHw9q8F2Lyut07DSu5y/IUICkZ01B62KNxuwCytS6H4VTB7IKScbh2GDPgddR9pd
-         t1ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=KCdKLyqTlG066ZeCv0sxUfnd7G76kitH0w8aoKTryoM=;
-        b=pb69KXaMKauvZbExQ+kJ+QbVHRf+KUwNZnnVQhMtpwV1ku3+0iBHsVW3LlhFaQzhdJ
-         FRcqnU4q3Dj0reeTESUyx/HylxUxNoxcFcLE6pNqnTu+jb0cAZehRJ89YvBkTQEbjwYi
-         9bfrB4ILJ2JVax/hTrqMIs1s/8g5vOwYBL3w8WczI63oMsMu2s9rWXpuVqmGVlxLe1G4
-         EFMgh5XHJZDPGhHPejrZEkABrgvdVmstcNA0Ptqc7tUg89oLhhDaiGb5PGBMHooNAZl0
-         pb2gXbs2RhSnhztqGdubai6+6QAIOLK71atlwTlZXe/X4GQQ9+JsJfMj6umDT0LUyKlM
-         pqYQ==
-X-Gm-Message-State: ACgBeo1EzVkzJrwRj6r1ZlNzn4vZVW7NrvmiEw4Z72X5hzlMU99t2sjZ
-        +vxcmfD6gqclpMvjNfYHaeJ6GnRZ3VgjwQ==
-X-Google-Smtp-Source: AA6agR5FDKBtyrihHH2mVl6B3sl2LWGnk1HLM3d2mWjViKW6hmPuwo4lBEvsQ8Y0fEAT8uZT6YhkRg==
-X-Received: by 2002:a05:6512:22d3:b0:48c:df73:d0a4 with SMTP id g19-20020a05651222d300b0048cdf73d0a4mr2471990lfu.584.1659974481912;
-        Mon, 08 Aug 2022 09:01:21 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id a10-20020a2eb54a000000b0025e4d1197bdsm1396484ljn.124.2022.08.08.09.01.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 09:01:21 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 19:01:18 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 12/17] dt-bindings: PCI: dwc: Add Baikal-T1 PCIe Root
- Port bindings
-Message-ID: <20220808160118.m5ka7o7gdhei2yzl@mobilestation>
-References: <20220728143427.13617-1-Sergey.Semin@baikalelectronics.ru>
- <20220728143427.13617-13-Sergey.Semin@baikalelectronics.ru>
- <20220801181311.GA1266390-robh@kernel.org>
+        Mon, 8 Aug 2022 12:01:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADEBC13F97
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 09:01:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659974494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=7pT5UbHsiY1LLtifq5MffoFG8hCa3QU5ajq1qvlO3Ug=;
+        b=Jj/PwG1dzX1HrCRd5IGpYt6mY3AKZU3OpaLBWcpmvLugcJ00G/65GEOEQPpw/T2n8y+HHJ
+        fZ2M4jJbXlmR//KeS6h9yN29FG92jA1RkdRy+h2oymluaj0cDw1mMddD0TYEjgeGeHFpnG
+        iRqQY07L6S4s7ibw1WeBoLSjZUA390I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-80-3mEvrRj8MAydhgbrNyi6nA-1; Mon, 08 Aug 2022 12:01:32 -0400
+X-MC-Unique: 3mEvrRj8MAydhgbrNyi6nA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8EE1D801585;
+        Mon,  8 Aug 2022 16:01:27 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.233])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B3457140EBE3;
+        Mon,  8 Aug 2022 16:01:25 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Gavin Shan <gshan@redhat.com>
+Subject: tools/testing/selftests/kvm/rseq_test and glibc 2.35
+Date:   Mon, 08 Aug 2022 18:01:23 +0200
+Message-ID: <875yj2n2r0.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801181311.GA1266390-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 12:13:11PM -0600, Rob Herring wrote:
-> On Thu, Jul 28, 2022 at 05:34:22PM +0300, Serge Semin wrote:
-> > Baikal-T1 SoC is equipped with DWC PCIe v4.60a Root Port controller, which
-> > link can be trained to work on up to Gen.3 speed over up to x4 lanes. The
-> > controller is supposed to be fed up with four clock sources: DBI
-> > peripheral clock, AXI application Tx/Rx clocks and external PHY/core
-> > reference clock generating the 100MHz signal. In addition to that the
-> > platform provide a way to reset each part of the controller:
-> > sticky/non-sticky bits, host controller core, PIPE interface, PCS/PHY and
-> > Hot/Power reset signal. The Root Port controller is equipped with multiple
-> > IRQ lines like MSI, system AER, PME, HP, Bandwidth change, Link
-> > equalization request and eDMA ones. The registers space is accessed over
-> > the DBI interface. There can be no more than four inbound or outbound iATU
-> > windows configured.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Changelog v2:
-> > - Rename 'syscon' property to 'baikal,bt1-syscon'.
-> > - Fix the 'compatible' property definition to being more specific about
-> >   what strings are supposed to be used. Due to that we had to add the
-> >   select property to evaluate the schema against the Baikal-T1 PCIe DT
-> >   nodes only.
-> > ---
-> >  .../bindings/pci/baikal,bt1-pcie.yaml         | 154 ++++++++++++++++++
-> >  1 file changed, 154 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> > new file mode 100644
-> > index 000000000000..23bd1d0aa5c5
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> > @@ -0,0 +1,154 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/pci/baikal,bt1-pcie.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Baikal-T1 PCIe Root Port Controller
-> > +
-> > +maintainers:
-> > +  - Serge Semin <fancer.lancer@gmail.com>
-> > +
-> > +description:
-> > +  Embedded into Baikal-T1 SoC Root Complex controller. It's based on the
-> > +  DWC RC PCIe v4.60a IP-core, which is configured to have just a single Root
-> > +  Port function and is capable of establishing the link up to Gen.3 speed
-> > +  on x4 lanes. It doesn't have embedded clock and reset control module, so
-> > +  the proper interface initialization is supposed to be performed by software.
-> > +
-> > +select:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        const: baikal,bt1-pcie
-> > +
-> > +  required:
-> > +    - compatible
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/pci/snps,dw-pcie.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - const: baikal,bt1-pcie
-> > +      - const: snps,dw-pcie-4.60a
-> > +      - const: snps,dw-pcie
-> 
+It has come to my attention that the KVM rseq test apparently needs to
+be ported to glibc 2.35.  The background is that on aarch64, rseq is the
+only way to get a practically useful sched_getcpu.  (There's no hidden
+per-task CPU state the vDSO could reveal as the CPU ID.)
 
-> Again, these fallbacks simply aren't useful.
+The main rseq tests have already been adjusted via:
 
-Ok. I give up. You are the boss. I'll drop them =)
+commit 233e667e1ae3e348686bd9dd0172e62a09d852e1
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Mon Jan 24 12:12:45 2022 -0500
 
-> 
-> > +
-> > +  reg:
-> > +    description:
-> > +      DBI, DBI2 and at least 4KB outbound iATU-capable region.
-> 
+    selftests/rseq: Uplift rseq selftests for compatibility with glibc-2.35
+    
+    glibc-2.35 (upcoming release date 2022-02-01) exposes the rseq per-thread
+    data in the TCB, accessible at an offset from the thread pointer, rather
+    than through an actual Thread-Local Storage (TLS) variable, as the
+    Linux kernel selftests initially expected.
+    
+    The __rseq_abi TLS and glibc-2.35's ABI for per-thread data cannot
+    actively coexist in a process, because the kernel supports only a single
+    rseq registration per thread.
+    
+    Here is the scheme introduced to ensure selftests can work both with an
+    older glibc and with glibc-2.35+:
+    
+    - librseq exposes its own "rseq_offset, rseq_size, rseq_flags" ABI.
+    
+    - librseq queries for glibc rseq ABI (__rseq_offset, __rseq_size,
+      __rseq_flags) using dlsym() in a librseq library constructor. If those
+      are found, copy their values into rseq_offset, rseq_size, and
+      rseq_flags.
+    
+    - Else, if those glibc symbols are not found, handle rseq registration
+      from librseq and use its own IE-model TLS to implement the rseq ABI
+      per-thread storage.
+    
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+    Link: https://lkml.kernel.org/r/20220124171253.22072-8-mathieu.desnoyers@efficios.com
 
-> 'iATU-capable region' means config space? That's not very clear.
+But I don't see a similar adjustment for
+tools/testing/selftests/kvm/rseq_test.c.  As an additional wrinkle,
+you'd have to start calling getcpu (glibc function or system call)
+because comparing rseq.cpu_id against sched_getcpu won't test anything
+anymore once glibc implements sched_getcpu using rseq.
 
-No 'iATU-capable region' means the region, which can be used as a
-source address for the iATU engine. In general it can be used for any
-accesses (IO, MEM, CFG). But the DW PCIe driver will indeed use it for
-the config-space accesses.
+We noticed this because our downstream glibc version, while based on
+2.34, enables rseq registration by default.  To facilitate coordination
+with rseq application usage, we also backported the __rseq_* ABI
+symbols, so the selftests could use that even in our downstream version.
+(We enable the glibc tunables downstream, but they are an optional
+glibc feature, so it's probably better in the long run to fix the kernel
+selftests rather than using the tunables as a workaround.)
 
-IMO the 'config' reg space is kind of virtual. Due to the outbound
-iATU capability the driver could use any free outbound iATU region it
-found instead.
+Thanks,
+Florian
 
-> 
-> > +    maxItems: 3
-> > +
-> > +  reg-names:
-> > +    minItems: 3
-> > +    maxItems: 3
-> > +    items:
-> > +      enum: [ dbi, dbi2, config ]
-> 
-
-> Define the order. Here, and the rest.
-
-Ok. I will, but please answer to my question, I asked you in the
-previous email thread:
-
-Serge Semin wrote:
-> Rob Herring wrote:
-> > ...
-> > Tell me why you need random order.
->
-> Because I don't see a need in constraining the order. If we get to set
-> the order requirement, then why do we need to have the "*-names"
-> property at all?
-> IMO having "reg" with max/minItems restriction plus generic
-> description and "reg-names" with possible values enumerated seems very
-> suitable pattern in this case. Don't you think?
-
-In addition to that what about optional names? How would you suggest
-to handle such case without the non-ordered pattern?
-
-> 
-> > +
-> > +  interrupts:
-> > +    description:
-> > +      MSI, AER, PME, Hot-plug, Link Bandwidth Management, Link Equalization
-> > +      request and eight Read/Write eDMA IRQ lines are available.
-> > +    maxItems: 14
-> > +
-> > +  interrupt-names:
-> > +    minItems: 14
-> > +    maxItems: 14
-> > +    items:
-> > +      oneOf:
-> > +        - pattern: '^dma[0-7]$'
-> > +        - enum: [ msi, aer, pme, hp, bw_mg, l_eq ]
-> > +
-> > +  clocks:
-> > +    description:
-> > +      DBI (attached to the APB bus), AXI-bus master and slave interfaces
-> > +      are fed up by the dedicated application clocks. A common reference
-> > +      clock signal is supposed to be attached to the corresponding Ref-pad
-> > +      of the SoC. It will be redistributed amongst the controller core
-> > +      sub-modules (pipe, core, aux, etc).
-> > +    minItems: 4
-> > +    maxItems: 4
-> > +
-> > +  clock-names:
-> > +    minItems: 4
-> > +    maxItems: 4
-> > +    items:
-> > +      enum: [ dbi, mstr, slv, ref ]
-> > +
-> > +  resets:
-> > +    description:
-> > +      A comprehensive controller reset logic is supposed to be implemented
-> > +      by software, so almost all the possible application and core reset
-> > +      signals are exposed via the system CCU module.
-> > +    minItems: 9
-> > +    maxItems: 9
-> > +
-> > +  reset-names:
-> > +    minItems: 9
-> > +    maxItems: 9
-> > +    items:
-> > +      enum: [ mstr, slv, pwr, hot, phy, core, pipe, sticky, non-sticky ]
-> > +
-> > +  baikal,bt1-syscon:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      Phandle to the Baikal-T1 System Controller DT node. It's required to
-> > +      access some additional PM, Reset-related and LTSSM signals.
-> > +
-> > +  num-lanes:
-> > +    maximum: 4
-> > +
-> > +  max-link-speed:
-> > +    maximum: 3
-> > +
-> 
-> > +  num-ob-windows:
-> > +    const: 4
-> > +
-> > +  num-ib-windows:
-> > +    const: 4
-> 
-
-> These are deprecated. Don't add them for a new binding.
-
-Ok.
-
--Sergey
-
-> 
-> 
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reg-names
-> > +  - interrupts
-> > +  - interrupt-names
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    pcie@1f052000 {
-> > +      compatible = "baikal,bt1-pcie", "snps,dw-pcie-4.60a", "snps,dw-pcie";
-> > +      device_type = "pci";
-> > +      reg = <0x1f052000 0x1000>, <0x1f053000 0x1000>, <0x1bdbf000 0x1000>;
-> > +      reg-names = "dbi", "dbi2", "config";
-> > +      #address-cells = <3>;
-> > +      #size-cells = <2>;
-> > +      ranges = <0x81000000 0 0x00000000 0x1bdb0000 0 0x00008000>,
-> > +               <0x82000000 0 0x20000000 0x08000000 0 0x13db0000>;
-> > +      bus-range = <0x0 0xff>;
-> > +
-> > +      interrupts = <0 80 4>, <0 81 4>, <0 82 4>, <0 83 4>,
-> > +                   <0 84 4>, <0 85 4>, <0 86 4>, <0 87 4>,
-> > +                   <0 88 4>, <0 89 4>, <0 90 4>, <0 91 4>,
-> > +                   <0 92 4>, <0 93 4>;
-> > +      interrupt-names = "dma0", "dma1", "dma2", "dma3", "dma4", "dma5", "dma6",
-> > +                        "dma7", "msi", "aer", "pme", "hp", "bw_mg", "l_eq";
-> > +
-> > +      clocks = <&ccu_sys 1>, <&ccu_axi 6>, <&ccu_axi 7>, <&clk_pcie>;
-> > +      clock-names = "dbi", "mstr", "slv", "ref";
-> > +
-> > +      resets = <&ccu_axi 6>, <&ccu_axi 7>, <&ccu_sys 7>, <&ccu_sys 10>,
-> > +               <&ccu_sys 4>, <&ccu_sys 6>, <&ccu_sys 5>, <&ccu_sys 8>,
-> > +               <&ccu_sys 9>;
-> > +      reset-names = "mstr", "slv", "pwr", "hot", "phy", "core", "pipe",
-> > +                    "sticky", "non-sticky";
-> > +
-> > +      reset-gpios = <&port0 0 1>;
-> > +
-> > +      num-lanes = <4>;
-> > +      max-link-speed = <3>;
-> > +    };
-> > +...
-> > -- 
-> > 2.35.1
-> > 
-> > 

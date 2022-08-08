@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC4358C1C5
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAACF58C1B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244095AbiHHCnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S243501AbiHHCmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242212AbiHHClk (ORCPT
+        with ESMTP id S241862AbiHHClj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 22:41:40 -0400
+        Sun, 7 Aug 2022 22:41:39 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0422D25D7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDCC25C7
         for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 19:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=Fm2ENERu942wdlKdXWdAvKqUsF1f7AoQiPFqKkHP5RY=; b=vhGp/28L7DmmiQH3DU9HTzlGN8
-        amyA6brqU+0ebuC4jkX2oK21cGjHBxJSEdtkmZJeWIqMXBTY7A2KK2yQjCe86ZXvXyWda9vcTEYmx
-        kPz6m5dWSLV7trRqrsmnu1A3aqhVkkD7dsntNbJRyn5CPZuRFe5GQUPX4fld/c5wTXpbg3K6Wzf5K
-        dQoUBa1Ln+1pxFbHG7EoxCIYfPZ2RJZo67SKgTu8gnTuG7aP8ViMspPFOlGYhK8C9TWBdZziP+y5R
-        2JRg1oFQaG+2rQjhsI5lVhy1pwdhOnce3SG2EFtESFKV24zboSir9F57zaMew8fbqF4Q36t8wVlao
-        6xbB51hw==;
+        bh=GVucidUOOwtQ2TJCPsgzEhLdwKKhX1FOI8GcU2GMl0g=; b=ISaWvnuqHzawQhPdc61l2Sxvkd
+        WpOlQVvan5xH10oxr1v4QtaDOYTBgKIdnjePj3WSsmntzoVv1cZeDWgjqY9gf1YVBSR0GRg47zQ9C
+        zNQOgZ3Pfx7iDHcwOroSP0crMagexUKgC5+fcakQ5ReQ98wNRNybzSv+B/Z8iZVI2y/ej2F0CHyod
+        MalFPsk0dE2SI+lJDsOQx8Gta0gcdVWEd9luP4qK2SdlFQIrwn6JVx1Ar2x51Y+J5Rryb9k6iISEm
+        YXr4cuPvSUtXF1nJVuZKJX9m081xfv6hWw/B+ty29iMyWhh7ex+QhBHUPjNS3BWkXQLwm6Ex8l4nz
+        G/ykCLUg==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oKshy-00DVSd-LB; Mon, 08 Aug 2022 02:41:34 +0000
+        id 1oKshy-00DVSf-OB; Mon, 08 Aug 2022 02:41:34 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-kernel@vger.kernel.org, pmladek@suse.com,
         Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v5 25/32] powerpc: Convert to printbuf
-Date:   Mon,  8 Aug 2022 03:41:21 +0100
-Message-Id: <20220808024128.3219082-26-willy@infradead.org>
+Cc:     x86@kernel.org
+Subject: [PATCH v5 26/32] x86/resctrl: Convert to printbuf
+Date:   Mon,  8 Aug 2022 03:41:22 +0100
+Message-Id: <20220808024128.3219082-27-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220808024128.3219082-1-willy@infradead.org>
 References: <20220808024128.3219082-1-willy@infradead.org>
@@ -56,307 +56,78 @@ buffer mode, so it's a direct conversion, aside from some trivial
 refactoring in cpu_show_meltdown() to make the code more consistent.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-Cc: linuxppc-dev@lists.ozlabs.org
+Cc: x86@kernel.org
 ---
- arch/powerpc/kernel/process.c             | 16 +++--
- arch/powerpc/kernel/security.c            | 75 ++++++++++-------------
- arch/powerpc/platforms/pseries/papr_scm.c | 34 +++++-----
- 3 files changed, 57 insertions(+), 68 deletions(-)
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
-index 0fbda89cd1bb..05654dbeb2c4 100644
---- a/arch/powerpc/kernel/process.c
-+++ b/arch/powerpc/kernel/process.c
-@@ -37,7 +37,7 @@
- #include <linux/hw_breakpoint.h>
- #include <linux/uaccess.h>
- #include <linux/pkeys.h>
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index f276aff521e8..50c12711a249 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -19,7 +19,7 @@
+ #include <linux/fs_parser.h>
+ #include <linux/sysfs.h>
+ #include <linux/kernfs.h>
 -#include <linux/seq_buf.h>
 +#include <linux/printbuf.h>
+ #include <linux/seq_file.h>
+ #include <linux/sched/signal.h>
+ #include <linux/sched/task.h>
+@@ -51,7 +51,7 @@ static struct kernfs_node *kn_mongrp;
+ /* Kernel fs node for "mon_data" directory under root */
+ static struct kernfs_node *kn_mondata;
  
- #include <asm/interrupt.h>
- #include <asm/io.h>
-@@ -1396,32 +1396,30 @@ void show_user_instructions(struct pt_regs *regs)
+-static struct seq_buf last_cmd_status;
++static struct printbuf last_cmd_status;
+ static char last_cmd_status_buf[512];
+ 
+ struct dentry *debugfs_resctrl;
+@@ -59,13 +59,13 @@ struct dentry *debugfs_resctrl;
+ void rdt_last_cmd_clear(void)
  {
- 	unsigned long pc;
- 	int n = NR_INSN_TO_PRINT;
--	struct seq_buf s;
- 	char buf[96]; /* enough for 8 times 9 + 2 chars */
-+	struct printbuf s = PRINTBUF_EXTERN(buf, sizeof(buf));
- 
- 	pc = regs->nip - (NR_INSN_TO_PRINT * 3 / 4 * sizeof(int));
- 
--	seq_buf_init(&s, buf, sizeof(buf));
--
- 	while (n) {
- 		int i;
- 
--		seq_buf_clear(&s);
-+		printbuf_reset(&s);
- 
- 		for (i = 0; i < 8 && n; i++, n--, pc += sizeof(int)) {
- 			int instr;
- 
- 			if (copy_from_user_nofault(&instr, (void __user *)pc,
- 					sizeof(instr))) {
--				seq_buf_printf(&s, "XXXXXXXX ");
-+				prt_printf(&s, "XXXXXXXX ");
- 				continue;
- 			}
--			seq_buf_printf(&s, regs->nip == pc ? "<%08x> " : "%08x ", instr);
-+			prt_printf(&s, regs->nip == pc ? "<%08x> " : "%08x ", instr);
- 		}
- 
--		if (!seq_buf_has_overflowed(&s))
-+		if (printbuf_remaining(&s))
- 			pr_info("%s[%d]: code: %s\n", current->comm,
--				current->pid, s.buffer);
-+				current->pid, s.buf);
- 	}
+ 	lockdep_assert_held(&rdtgroup_mutex);
+-	seq_buf_clear(&last_cmd_status);
++	printbuf_reset(&last_cmd_status);
  }
  
-diff --git a/arch/powerpc/kernel/security.c b/arch/powerpc/kernel/security.c
-index d96fd14bd7c9..b34de62e65ce 100644
---- a/arch/powerpc/kernel/security.c
-+++ b/arch/powerpc/kernel/security.c
-@@ -10,7 +10,7 @@
- #include <linux/memblock.h>
- #include <linux/nospec.h>
- #include <linux/prctl.h>
--#include <linux/seq_buf.h>
-+#include <linux/printbuf.h>
- #include <linux/debugfs.h>
- 
- #include <asm/asm-prototypes.h>
-@@ -144,31 +144,28 @@ void __init setup_spectre_v2(void)
- #ifdef CONFIG_PPC_BOOK3S_64
- ssize_t cpu_show_meltdown(struct device *dev, struct device_attribute *attr, char *buf)
+ void rdt_last_cmd_puts(const char *s)
  {
-+	struct printbuf s = PRINTBUF_EXTERN(buf, PAGE_SIZE);
- 	bool thread_priv;
- 
- 	thread_priv = security_ftr_enabled(SEC_FTR_L1D_THREAD_PRIV);
- 
- 	if (rfi_flush) {
--		struct seq_buf s;
--		seq_buf_init(&s, buf, PAGE_SIZE - 1);
- 
--		seq_buf_printf(&s, "Mitigation: RFI Flush");
-+		prt_printf(&s, "Mitigation: RFI Flush");
- 		if (thread_priv)
--			seq_buf_printf(&s, ", L1D private per thread");
--
--		seq_buf_printf(&s, "\n");
--
--		return s.len;
-+			prt_printf(&s, ", L1D private per thread");
-+
-+		prt_printf(&s, "\n");
-+	} else if (thread_priv) {
-+		prt_printf(&s, "Vulnerable: L1D private per thread\n");
-+	} else if (!security_ftr_enabled(SEC_FTR_L1D_FLUSH_HV) &&
-+		   !security_ftr_enabled(SEC_FTR_L1D_FLUSH_PR)) {
-+		prt_printf(&s, "Not affected\n");
-+	} else {
-+		prt_printf(&s, "Vulnerable\n");
- 	}
- 
--	if (thread_priv)
--		return sprintf(buf, "Vulnerable: L1D private per thread\n");
--
--	if (!security_ftr_enabled(SEC_FTR_L1D_FLUSH_HV) &&
--	    !security_ftr_enabled(SEC_FTR_L1D_FLUSH_PR))
--		return sprintf(buf, "Not affected\n");
--
--	return sprintf(buf, "Vulnerable\n");
-+	return printbuf_written(&s);
+ 	lockdep_assert_held(&rdtgroup_mutex);
+-	seq_buf_puts(&last_cmd_status, s);
++	prt_str(&last_cmd_status, s);
  }
  
- ssize_t cpu_show_l1tf(struct device *dev, struct device_attribute *attr, char *buf)
-@@ -179,70 +176,66 @@ ssize_t cpu_show_l1tf(struct device *dev, struct device_attribute *attr, char *b
+ void rdt_last_cmd_printf(const char *fmt, ...)
+@@ -74,7 +74,7 @@ void rdt_last_cmd_printf(const char *fmt, ...)
  
- ssize_t cpu_show_spectre_v1(struct device *dev, struct device_attribute *attr, char *buf)
- {
--	struct seq_buf s;
--
--	seq_buf_init(&s, buf, PAGE_SIZE - 1);
-+	struct printbuf s = PRINTBUF_EXTERN(buf, PAGE_SIZE);
- 
- 	if (security_ftr_enabled(SEC_FTR_BNDS_CHK_SPEC_BAR)) {
- 		if (barrier_nospec_enabled)
--			seq_buf_printf(&s, "Mitigation: __user pointer sanitization");
-+			prt_printf(&s, "Mitigation: __user pointer sanitization");
- 		else
--			seq_buf_printf(&s, "Vulnerable");
-+			prt_printf(&s, "Vulnerable");
- 
- 		if (security_ftr_enabled(SEC_FTR_SPEC_BAR_ORI31))
--			seq_buf_printf(&s, ", ori31 speculation barrier enabled");
-+			prt_printf(&s, ", ori31 speculation barrier enabled");
- 
--		seq_buf_printf(&s, "\n");
-+		prt_printf(&s, "\n");
- 	} else
--		seq_buf_printf(&s, "Not affected\n");
-+		prt_printf(&s, "Not affected\n");
- 
--	return s.len;
-+	return printbuf_written(&s);
+ 	va_start(ap, fmt);
+ 	lockdep_assert_held(&rdtgroup_mutex);
+-	seq_buf_vprintf(&last_cmd_status, fmt, ap);
++	prt_vprintf(&last_cmd_status, fmt, ap);
+ 	va_end(ap);
  }
  
- ssize_t cpu_show_spectre_v2(struct device *dev, struct device_attribute *attr, char *buf)
+@@ -833,7 +833,7 @@ static int rdt_last_cmd_status_show(struct kernfs_open_file *of,
+ 	int len;
+ 
+ 	mutex_lock(&rdtgroup_mutex);
+-	len = seq_buf_used(&last_cmd_status);
++	len = printbuf_written(&last_cmd_status);
+ 	if (len)
+ 		seq_printf(seq, "%.*s", len, last_cmd_status_buf);
+ 	else
+@@ -3248,8 +3248,8 @@ int __init rdtgroup_init(void)
  {
--	struct seq_buf s;
-+	struct printbuf s = PRINTBUF_EXTERN(buf, PAGE_SIZE);
- 	bool bcs, ccd;
+ 	int ret = 0;
  
--	seq_buf_init(&s, buf, PAGE_SIZE - 1);
--
- 	bcs = security_ftr_enabled(SEC_FTR_BCCTRL_SERIALISED);
- 	ccd = security_ftr_enabled(SEC_FTR_COUNT_CACHE_DISABLED);
+-	seq_buf_init(&last_cmd_status, last_cmd_status_buf,
+-		     sizeof(last_cmd_status_buf));
++	last_cmd_status = PRINTBUF_EXTERN(last_cmd_status_buf,
++					  sizeof(last_cmd_status_buf));
  
- 	if (bcs || ccd) {
--		seq_buf_printf(&s, "Mitigation: ");
-+		prt_printf(&s, "Mitigation: ");
- 
- 		if (bcs)
--			seq_buf_printf(&s, "Indirect branch serialisation (kernel only)");
-+			prt_printf(&s, "Indirect branch serialisation (kernel only)");
- 
- 		if (bcs && ccd)
--			seq_buf_printf(&s, ", ");
-+			prt_printf(&s, ", ");
- 
- 		if (ccd)
--			seq_buf_printf(&s, "Indirect branch cache disabled");
-+			prt_printf(&s, "Indirect branch cache disabled");
- 
- 	} else if (count_cache_flush_type != BRANCH_CACHE_FLUSH_NONE) {
--		seq_buf_printf(&s, "Mitigation: Software count cache flush");
-+		prt_printf(&s, "Mitigation: Software count cache flush");
- 
- 		if (count_cache_flush_type == BRANCH_CACHE_FLUSH_HW)
--			seq_buf_printf(&s, " (hardware accelerated)");
-+			prt_printf(&s, " (hardware accelerated)");
- 
- 	} else if (btb_flush_enabled) {
--		seq_buf_printf(&s, "Mitigation: Branch predictor state flush");
-+		prt_printf(&s, "Mitigation: Branch predictor state flush");
- 	} else {
--		seq_buf_printf(&s, "Vulnerable");
-+		prt_printf(&s, "Vulnerable");
- 	}
- 
- 	if (bcs || ccd || count_cache_flush_type != BRANCH_CACHE_FLUSH_NONE) {
- 		if (link_stack_flush_type != BRANCH_CACHE_FLUSH_NONE)
--			seq_buf_printf(&s, ", Software link stack flush");
-+			prt_printf(&s, ", Software link stack flush");
- 		if (link_stack_flush_type == BRANCH_CACHE_FLUSH_HW)
--			seq_buf_printf(&s, " (hardware accelerated)");
-+			prt_printf(&s, " (hardware accelerated)");
- 	}
- 
--	seq_buf_printf(&s, "\n");
-+	prt_printf(&s, "\n");
- 
--	return s.len;
-+	return printbuf_written(&s);
- }
- 
- #ifdef CONFIG_PPC_BOOK3S_64
-diff --git a/arch/powerpc/platforms/pseries/papr_scm.c b/arch/powerpc/platforms/pseries/papr_scm.c
-index 20f6ed813bff..a1fd25243c48 100644
---- a/arch/powerpc/platforms/pseries/papr_scm.c
-+++ b/arch/powerpc/platforms/pseries/papr_scm.c
-@@ -12,7 +12,7 @@
- #include <linux/libnvdimm.h>
- #include <linux/platform_device.h>
- #include <linux/delay.h>
--#include <linux/seq_buf.h>
-+#include <linux/printbuf.h>
- #include <linux/nd.h>
- 
- #include <asm/plpar_wrappers.h>
-@@ -1142,7 +1142,7 @@ static ssize_t perf_stats_show(struct device *dev,
- {
- 	int index;
- 	ssize_t rc;
--	struct seq_buf s;
-+	struct printbuf s = PRINTBUF_EXTERN(buf, PAGE_SIZE);
- 	struct papr_scm_perf_stat *stat;
- 	struct papr_scm_perf_stats *stats;
- 	struct nvdimm *dimm = to_nvdimm(dev);
-@@ -1165,18 +1165,17 @@ static ssize_t perf_stats_show(struct device *dev,
- 	 * values. Since stat_id is essentially a char string of
- 	 * 8 bytes, simply use the string format specifier to print it.
- 	 */
--	seq_buf_init(&s, buf, PAGE_SIZE);
- 	for (index = 0, stat = stats->scm_statistic;
- 	     index < be32_to_cpu(stats->num_statistics);
- 	     ++index, ++stat) {
--		seq_buf_printf(&s, "%.8s = 0x%016llX\n",
--			       stat->stat_id,
--			       be64_to_cpu(stat->stat_val));
-+		prt_printf(&s, "%.8s = 0x%016llX\n",
-+		       stat->stat_id,
-+		       be64_to_cpu(stat->stat_val));
- 	}
- 
- free_stats:
- 	kfree(stats);
--	return rc ? rc : (ssize_t)seq_buf_used(&s);
-+	return rc ?: printbuf_written(&s);
- }
- static DEVICE_ATTR_ADMIN_RO(perf_stats);
- 
-@@ -1185,7 +1184,7 @@ static ssize_t flags_show(struct device *dev,
- {
- 	struct nvdimm *dimm = to_nvdimm(dev);
- 	struct papr_scm_priv *p = nvdimm_provider_data(dimm);
--	struct seq_buf s;
-+	struct printbuf s = PRINTBUF_EXTERN(buf, PAGE_SIZE);
- 	u64 health;
- 	int rc;
- 
-@@ -1196,29 +1195,28 @@ static ssize_t flags_show(struct device *dev,
- 	/* Copy health_bitmap locally, check masks & update out buffer */
- 	health = READ_ONCE(p->health_bitmap);
- 
--	seq_buf_init(&s, buf, PAGE_SIZE);
- 	if (health & PAPR_PMEM_UNARMED_MASK)
--		seq_buf_printf(&s, "not_armed ");
-+		prt_printf(&s, "not_armed ");
- 
- 	if (health & PAPR_PMEM_BAD_SHUTDOWN_MASK)
--		seq_buf_printf(&s, "flush_fail ");
-+		prt_printf(&s, "flush_fail ");
- 
- 	if (health & PAPR_PMEM_BAD_RESTORE_MASK)
--		seq_buf_printf(&s, "restore_fail ");
-+		prt_printf(&s, "restore_fail ");
- 
- 	if (health & PAPR_PMEM_ENCRYPTED)
--		seq_buf_printf(&s, "encrypted ");
-+		prt_printf(&s, "encrypted ");
- 
- 	if (health & PAPR_PMEM_SMART_EVENT_MASK)
--		seq_buf_printf(&s, "smart_notify ");
-+		prt_printf(&s, "smart_notify ");
- 
- 	if (health & PAPR_PMEM_SCRUBBED_AND_LOCKED)
--		seq_buf_printf(&s, "scrubbed locked ");
-+		prt_printf(&s, "scrubbed locked ");
- 
--	if (seq_buf_used(&s))
--		seq_buf_printf(&s, "\n");
-+	if (printbuf_written(&s))
-+		prt_printf(&s, "\n");
- 
--	return seq_buf_used(&s);
-+	return printbuf_written(&s);
- }
- DEVICE_ATTR_RO(flags);
- 
+ 	ret = rdtgroup_setup_root();
+ 	if (ret)
 -- 
 2.35.1
 

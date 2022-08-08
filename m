@@ -2,197 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFAC58CDEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358E358CDED
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244158AbiHHSoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 14:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S244135AbiHHSov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 14:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244435AbiHHSo1 (ORCPT
+        with ESMTP id S244008AbiHHSop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 14:44:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF925265B;
-        Mon,  8 Aug 2022 11:44:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 8 Aug 2022 14:44:45 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163BDE2A;
+        Mon,  8 Aug 2022 11:44:42 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7A39B81058;
-        Mon,  8 Aug 2022 18:44:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D9BC433C1;
-        Mon,  8 Aug 2022 18:44:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659984261;
-        bh=hbJGcF+IG2fvzUySSr1IPyejzvrj6xXm7v4gRN1lYrs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u+txs3rFhjIN+no3sB/TDVQk10ANZd+pC4ygtaEcri67mBtb3GQ3mXgGilUGgEEGA
-         IRhiKjpBOUEortSUBl3D6/JB8cx4hLhTVj97fZ+OsMVdU7n+Z+TI0dSpPKo9kplso8
-         oOzWv5nBxh3O/WFEy4mJ0LXSyEmGA/3o8w5Vk/f+CjhflM2M5JkpNzb7EQrrGQgRSd
-         bS6mqvqN7h2J4kkCBXDOYzFbo/97YBBWzJu8Xoe1bk7ewYeB9CxPBHCy1lBEq0c0BH
-         Tj7SG6vfNwP9ks/SHVJuWS0REuKqgic/HihnJEpM3HAH5q6dEuN3KvGT+teZeTtaIe
-         gUXBdaFy0sUrQ==
-Received: by pali.im (Postfix)
-        id 45907F13; Mon,  8 Aug 2022 20:44:18 +0200 (CEST)
-Date:   Mon, 8 Aug 2022 20:44:18 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hajo Noerenberg <hajo-linux-bugzilla@noerenberg.de>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: mvebu: Dispose INTx irqs prior to removing INTx
- domain
-Message-ID: <20220808184418.brjntz26kalathig@pali>
-References: <20220709161858.15031-1-pali@kernel.org>
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 5D3E92224F;
+        Mon,  8 Aug 2022 20:44:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1659984280;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UWoNgvMdfqDAxbR6k/hHBv3FXqYhiHMlRj43gtM2Wcw=;
+        b=bBJKzXu97IPt0eYv7ORu6g2UXOatpq/MPbyJEG8Tstg1olVrBX0wK9mpmWmJw91ZRYx/vQ
+        CerKP74gDA9XIZGW5a9dI09fE4DuDa/O3H95vMfg3C77OJmJKuzvmUawwLHRPoXTSkXeZO
+        V8zAWU5eB+z8aG1zkDEoNs5mZ105dPc=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220709161858.15031-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 08 Aug 2022 20:44:40 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, dan.carpenter@oracle.com, linux@roeck-us.net,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH 4/4] thermal/of: Fix free after use in
+ thermal_of_unregister()
+In-Reply-To: <20220808180915.446053-4-daniel.lezcano@linaro.org>
+References: <20220808180915.446053-1-daniel.lezcano@linaro.org>
+ <20220808180915.446053-4-daniel.lezcano@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <2a4c16bd886dd5b4bbf5bb12fd3b2e05@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PING?
+Am 2022-08-08 20:09, schrieb Daniel Lezcano:
+> The thermal zone is freed after being unregistered. The release method
+> devm_thermal_zone_device_register() calls
+>   -> thermal_of_zone_device_unregister()
+> 
+> This one calls thermal_zone_device_unregister() which frees the
+> thermal zone. However, thermal_of_zone_device_unregister() does access
+> this freed pointer to free different resources allocated by the
+> thermal_of framework which is invalid.
+> 
+> It results in a kernel panic:
+> 
+> [    1.915140] thermal_sys: Failed to find thermal zone for tmu id=2
+> [    1.921279] qoriq_thermal 1f80000.tmu: Failed to register sensors
+> [    1.927395] qoriq_thermal: probe of 1f80000.tmu failed with error 
+> -22
+> [    1.934189] Unable to handle kernel paging request at virtual
+> address 01adadadadadad88
+> [    1.942146] Mem abort info:
+> [    1.944948]   ESR = 0x0000000096000004
+> [    1.948708]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    1.954042]   SET = 0, FnV = 0
+> [    1.957107]   EA = 0, S1PTW = 0
+> [    1.960253]   FSC = 0x04: level 0 translation fault
+> [    1.965147] Data abort info:
+> [    1.968030]   ISV = 0, ISS = 0x00000004
+> [    1.971878]   CM = 0, WnR = 0
+> [    1.974852] [01adadadadadad88] address between user and kernel 
+> address ranges
+> [    1.982016] Internal error: Oops: 96000004 [#1] SMP
+> [    1.986907] Modules linked in:
+> [    1.989969] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+> 5.19.0-next-20220808-00080-g1c46f44502e0 #1697
+> [    1.999135] Hardware name: Kontron KBox A-230-LS (DT)
+> [    2.004199] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS 
+> BTYPE=--)
+> [    2.011185] pc : kfree+0x5c/0x3c0
+> [    2.014516] lr : devm_thermal_of_zone_release+0x38/0x60
+> [    2.019761] sp : ffff80000a22bad0
+> [    2.023081] x29: ffff80000a22bad0 x28: 0000000000000000 x27: 
+> ffff800009960464
+> [    2.030245] x26: ffff800009a16960 x25: 0000000000000006 x24: 
+> ffff800009f09a40
+> [    2.037407] x23: ffff800009ab9008 x22: ffff800008d0eea8 x21: 
+> 01adadadadadad80
+> [    2.044569] x20: 6b6b6b6b6b6b6b6b x19: ffff00200232b800 x18: 
+> 00000000fffffffb
+> [    2.051731] x17: ffff800008d0eea0 x16: ffff800008d07d44 x15: 
+> ffff800008d0d154
+> [    2.056647] usb 1-1: new high-speed USB device number 2 using 
+> xhci-hcd
+> [    2.058893] x14: ffff800008d0cddc x13: ffff8000088d1c2c x12: 
+> ffff8000088d5034
+> [    2.072597] x11: ffff8000088d46d4 x10: 0000000000000000 x9 : 
+> ffff800008d0eea8
+> [    2.079759] x8 : ffff002000b1a158 x7 : bbbbbbbbbbbbbbbb x6 : 
+> ffff80000a0f53b8
+> [    2.086921] x5 : ffff80000a22b960 x4 : 0000000000000000 x3 : 
+> 0000000000000000
+> [    2.094082] x2 : fffffc0000000000 x1 : ffff002000838040 x0 : 
+> 01adb1adadadad80
+> [    2.101244] Call trace:
+> [    2.103692]  kfree+0x5c/0x3c0
+> [    2.106666]  devm_thermal_of_zone_release+0x38/0x60
+> [    2.111561]  release_nodes+0x64/0xd0
+> [    2.115146]  devres_release_all+0xbc/0x350
+> [    2.119253]  device_unbind_cleanup+0x20/0x70
+> [    2.123536]  really_probe+0x1a0/0x2e4
+> [    2.127208]  __driver_probe_device+0x80/0xec
+> [    2.131490]  driver_probe_device+0x44/0x130
+> [    2.135685]  __driver_attach+0x104/0x1b4
+> [    2.139619]  bus_for_each_dev+0x7c/0xe0
+> [    2.143465]  driver_attach+0x30/0x40
+> [    2.147048]  bus_add_driver+0x160/0x210
+> [    2.150894]  driver_register+0x84/0x140
+> [    2.154741]  __platform_driver_register+0x34/0x40
+> [    2.159461]  qoriq_tmu_init+0x28/0x34
+> [    2.163133]  do_one_initcall+0x50/0x250
+> [    2.166979]  kernel_init_freeable+0x278/0x31c
+> [    2.171349]  kernel_init+0x30/0x140
+> [    2.174847]  ret_from_fork+0x10/0x20
+> [    2.178433] Code: b25657e2 d34cfc00 d37ae400 8b020015 (f94006a1)
+> [    2.184546] ---[ end trace 0000000000000000 ]---
+> 
+> Store the allocated resource pointers before the thermal zone is free
+> and use them to release the resource after unregistering the thermal
+> zone.
+> 
+> Reported-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+> ---
+>  drivers/thermal/thermal_of.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_of.c 
+> b/drivers/thermal/thermal_of.c
+> index 4210c18ef7b2..91ffe8f90a2d 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -596,11 +596,15 @@ static int thermal_of_unbind(struct
+> thermal_zone_device *tz,
+>   */
+>  void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+>  {
+> +	struct thermal_trip *trips = tz->trips;
+> +	struct thermal_zone_params *tzp = tz->tzp;
+> +	struct thermal_zone_device_ops *ops = tz->ops;
+> +
 
-On Saturday 09 July 2022 18:18:58 Pali Rohár wrote:
-> Documentation for irq_domain_remove() says that all mapping within the
-> domain must be disposed prior to domain remove.
-> 
-> Currently INTx irqs are not disposed in pci-mvebu.c device unbind callback
-> which cause that kernel crashes after unloading driver and trying to read
-> /sys/kernel/debug/irq/irqs/<num> or /proc/interrupts.
-> 
-> Fixes: ec075262648f ("PCI: mvebu: Implement support for legacy INTx interrupts")
-> Reported-by: Hajo Noerenberg <hajo-linux-bugzilla@noerenberg.de>
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
-> Depends on patch:
-> https://lore.kernel.org/linux-pci/20220524122817.7199-1-pali@kernel.org/
-> 
-> Here is the captured kernel crash which happens without this patch:
-> 
-> $ cat /sys/kernel/debug/irq/irqs/64
-> [  301.571370] 8<--- cut here ---
-> [  301.574496] Unable to handle kernel paging request at virtual address 0a00002a
-> [  301.581736] [0a00002a] *pgd=00000000
-> [  301.585323] Internal error: Oops: 80000005 [#1] SMP ARM
-> [  301.590560] Modules linked in:
-> [  301.593621] CPU: 1 PID: 4641 Comm: cat Not tainted 5.16.0-rc1+ #192
-> [  301.599905] Hardware name: Marvell Armada 380/385 (Device Tree)
-> [  301.605836] PC is at 0xa00002a
-> [  301.608896] LR is at irq_debug_show+0x210/0x2d4
-> [  301.613440] pc : [<0a00002a>]    lr : [<c018ca40>]    psr: 200000b3
-> [  301.619721] sp : c797fdd8  ip : 0000000b  fp : 0a00002b
-> [  301.624957] r10: c0d9a364  r9 : 00000001  r8 : 00000000
-> [  301.630192] r7 : c18fee18  r6 : c0da2a74  r5 : c18fee00  r4 : c66ec050
-> [  301.636734] r3 : 00000001  r2 : c18fee18  r1 : 00000000  r0 : c66ec050
-> [  301.643275] Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA Thumb  Segment none
-> [  301.650689] Control: 10c5387d  Table: 0790c04a  DAC: 00000051
-> [  301.656446] Register r0 information: slab seq_file start c66ec050 pointer offset 0
-> [  301.664040] Register r1 information: NULL pointer
-> [  301.668755] Register r2 information: slab kmalloc-256 start c18fee00 pointer offset 24 size 256
-> [  301.677480] Register r3 information: non-paged memory
-> [  301.682543] Register r4 information: slab seq_file start c66ec050 pointer offset 0
-> [  301.690133] Register r5 information: slab kmalloc-256 start c18fee00 pointer offset 0 size 256
-> [  301.698770] Register r6 information: non-slab/vmalloc memory
-> [  301.704442] Register r7 information: slab kmalloc-256 start c18fee00 pointer offset 24 size 256
-> [  301.713165] Register r8 information: NULL pointer
-> [  301.717879] Register r9 information: non-paged memory
-> [  301.722941] Register r10 information: non-slab/vmalloc memory
-> [  301.728699] Register r11 information: non-paged memory
-> [  301.733848] Register r12 information: non-paged memory
-> [  301.738997] Process cat (pid: 4641, stack limit = 0xf591166e)
-> [  301.744756] Stack: (0xc797fdd8 to 0xc7980000)
-> [  301.749123] fdc0:                                                       0000000a 830d3f3e
-> [  301.757321] fde0: c1004f48 c0d9a374 c7a9cc10 c66ec050 00000000 c88af900 c797fe80 7ffff000
-> [  301.765518] fe00: 00400cc0 c66ec068 00000001 c02c5cb8 00000000 00000000 c66ec078 c797fe68
-> [  301.773715] fe20: c1cdf6c0 c7a9cc10 ffffffea c88af900 00000010 00000000 00000000 c88af900
-> [  301.781911] fe40: c1004f48 c797ff78 00001000 00004004 c03efcb8 c02c6100 00001000 00000000
-> [  301.790108] fe60: bec73e04 00001000 00000000 00000000 00001000 c797fe60 00000001 00000000
-> [  301.798304] fe80: c88af900 00000000 00000000 00000000 00000000 00000000 00000000 40040000
-> [  301.806501] fea0: 00000000 00000000 c1004f48 830d3f3e c88af900 c02c6018 c1c7a770 bec73e04
-> [  301.814697] fec0: 00001000 c797ff78 00000001 c03efd0c 00001000 c88af900 00000000 bec73e04
-> [  301.822894] fee0: c1004f48 c797ff78 00000001 c029c728 c887ca20 01100cca 0000004f 0045f000
-> [  301.831091] ff00: 00000254 c790c010 c790c010 00000000 00000000 00000000 c5f6117c eeece9b8
-> [  301.839288] ff20: 00000000 830d3f3e 00000000 c797ffb0 c79fc000 80000007 0045f5b8 00000254
-> [  301.847484] ff40: c79fc040 00000004 c887ca20 830d3f3e 00000000 c1004f48 c88af900 00000000
-> [  301.855681] ff60: 00000000 c88af900 bec73e04 00001000 00000000 c029cd68 00000000 00000000
-> [  301.863877] ff80: 00000000 830d3f3e 00000000 00000000 01000000 00000003 c0100284 c1b8abc0
-> [  301.872074] ffa0: 00000003 c0100060 00000000 00000000 00000003 bec73e04 00001000 00000000
-> [  301.880270] ffc0: 00000000 00000000 01000000 00000003 00000003 00000001 00000001 00000000
-> [  301.888468] ffe0: bec73d98 bec73d88 b6f81f88 b6f81410 60000010 00000003 00000000 00000000
-> [  301.896666] [<c018ca40>] (irq_debug_show) from [<c02c5cb8>] (seq_read_iter+0x1a4/0x504)
-> [  301.904700] [<c02c5cb8>] (seq_read_iter) from [<c02c6100>] (seq_read+0xe8/0x12c)
-> [  301.912117] [<c02c6100>] (seq_read) from [<c03efd0c>] (full_proxy_read+0x54/0x70)
-> [  301.919623] [<c03efd0c>] (full_proxy_read) from [<c029c728>] (vfs_read+0xa0/0x2c8)
-> [  301.927214] [<c029c728>] (vfs_read) from [<c029cd68>] (ksys_read+0x58/0xd0)
-> [  301.934195] [<c029cd68>] (ksys_read) from [<c0100060>] (ret_fast_syscall+0x0/0x54)
-> [  301.941785] Exception stack(0xc797ffa8 to 0xc797fff0)
-> [  301.946849] ffa0:                   00000000 00000000 00000003 bec73e04 00001000 00000000
-> [  301.955045] ffc0: 00000000 00000000 01000000 00000003 00000003 00000001 00000001 00000000
-> [  301.963241] ffe0: bec73d98 bec73d88 b6f81f88 b6f81410
-> [  301.968304] Code: bad PC value
-> [  301.971365] ---[ end trace fe25fd26d042b605 ]---
-> [  301.975992] Kernel panic - not syncing: Fatal exception
-> [  301.981229] CPU0: stopping
-> [  301.983946] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G      D           5.16.0-rc1+ #192
-> [  301.991884] Hardware name: Marvell Armada 380/385 (Device Tree)
-> [  301.997817] [<c010e120>] (unwind_backtrace) from [<c010a170>] (show_stack+0x10/0x14)
-> [  302.005587] [<c010a170>] (show_stack) from [<c0bbf108>] (dump_stack_lvl+0x40/0x4c)
-> [  302.013179] [<c0bbf108>] (dump_stack_lvl) from [<c010c3f8>] (do_handle_IPI+0xf4/0x128)
-> [  302.021117] [<c010c3f8>] (do_handle_IPI) from [<c010c444>] (ipi_handler+0x18/0x20)
-> [  302.028707] [<c010c444>] (ipi_handler) from [<c0185c5c>] (handle_percpu_devid_irq+0x78/0x124)
-> [  302.037256] [<c0185c5c>] (handle_percpu_devid_irq) from [<c017ffb8>] (generic_handle_domain_irq+0x44/0x88)
-> [  302.046938] [<c017ffb8>] (generic_handle_domain_irq) from [<c05f051c>] (gic_handle_irq+0x74/0x88)
-> [  302.055839] [<c05f051c>] (gic_handle_irq) from [<c0bc7ef8>] (generic_handle_arch_irq+0x34/0x44)
-> [  302.064564] [<c0bc7ef8>] (generic_handle_arch_irq) from [<c0100b10>] (__irq_svc+0x50/0x68)
-> [  302.072851] Exception stack(0xc1001f00 to 0xc1001f48)
-> [  302.077916] 1f00: 000d6830 00000000 00000001 c0116be0 c1004f90 c1004fd4 00000001 00000000
-> [  302.086114] 1f20: c1004f48 c0f5d2a8 c1009e80 00000000 00000000 c1001f50 c01076f4 c01076f8
-> [  302.094309] 1f40: 60000013 ffffffff
-> [  302.097804] [<c0100b10>] (__irq_svc) from [<c01076f8>] (arch_cpu_idle+0x38/0x3c)
-> [  302.105223] [<c01076f8>] (arch_cpu_idle) from [<c0bcf3a0>] (default_idle_call+0x1c/0x2c)
-> [  302.113338] [<c0bcf3a0>] (default_idle_call) from [<c015db34>] (do_idle+0x1c8/0x218)
-> [  302.121106] [<c015db34>] (do_idle) from [<c015de40>] (cpu_startup_entry+0x18/0x20)
-> [  302.128697] [<c015de40>] (cpu_startup_entry) from [<c0f00fec>] (start_kernel+0x650/0x694)
-> [  302.136901] Rebooting in 3 seconds..
-> ---
->  drivers/pci/controller/pci-mvebu.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> index 31f53a019b8f..951030052358 100644
-> --- a/drivers/pci/controller/pci-mvebu.c
-> +++ b/drivers/pci/controller/pci-mvebu.c
-> @@ -1713,8 +1713,15 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
->  		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
->  
->  		/* Remove IRQ domains. */
-> -		if (port->intx_irq_domain)
-> +		if (port->intx_irq_domain) {
-> +			int virq, j;
-> +			for (j = 0; j < PCI_NUM_INTX; j++) {
-> +				virq = irq_find_mapping(port->intx_irq_domain, j);
-> +				if (virq > 0)
-> +					irq_dispose_mapping(virq);
-> +			}
->  			irq_domain_remove(port->intx_irq_domain);
-> +		}
->  
->  		/* Free config space for emulated root bridge. */
->  		pci_bridge_emul_cleanup(&port->bridge);
-> -- 
-> 2.20.1
-> 
+git am shows a trailing whitespace here
+
+otherwise:
+Tested-by: Michael Walle <michael@walle.cc>
+
+(Yes, tested without the previous patches so the error actually happens 
+;))
+
+-michael
+>  	thermal_zone_device_disable(tz);
+>  	thermal_zone_device_unregister(tz);
+> -	kfree(tz->trips);
+> -	kfree(tz->tzp);
+> -	kfree(tz->ops);
+> +	kfree(trips);
+> +	kfree(tzp);
+> +	kfree(ops);
+>  }
+>  EXPORT_SYMBOL_GPL(thermal_of_zone_unregister);

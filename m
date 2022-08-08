@@ -2,64 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2E458C3FF
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F9058C403
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235617AbiHHHcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 03:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S236177AbiHHHdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 03:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiHHHcn (ORCPT
+        with ESMTP id S235717AbiHHHdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 03:32:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30E535F44
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 00:32:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659943961;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=e0Pdt2xyQSgvDtuP1BKITOaP+0NDsDLRpOu8MDfQmU8=;
-        b=UvAYMUP4MItJvlg0YuQSCg/IxboDkSLXBV/N110Pwzf+/mJ8xCAuHJB/LW0yqiley+Cmfu
-        tSKZ7dcE6BQSfFXOX1lL5bMIw4Qre9Rj/ebg82PHFu++j7moBtB8gMo9bjPYYvHhsAN4lr
-        Guv5t9+qTXpXZw6xFczfOE0r1bBmdgM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-plhta_mQPNSgiK0w6hRECQ-1; Mon, 08 Aug 2022 03:32:38 -0400
-X-MC-Unique: plhta_mQPNSgiK0w6hRECQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7910B8037B5;
-        Mon,  8 Aug 2022 07:32:37 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.193.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 70D9118ECC;
-        Mon,  8 Aug 2022 07:32:33 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove FOLL_COW
-Date:   Mon,  8 Aug 2022 09:32:32 +0200
-Message-Id: <20220808073232.8808-1-david@redhat.com>
+        Mon, 8 Aug 2022 03:33:24 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22ED616D
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 00:33:22 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id x2-20020a6bfe02000000b00682bffede8fso4095831ioh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 00:33:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=Ll8lnnKrxnKYgqNtsLbJ5AyFsT37/qiByMcezJF+Tp8=;
+        b=8AsOIzG7sOFow+u15xET0zFwCNDweM8I/MffktehBUHj5312znle4un90s9QpKit0/
+         iy9PqhIjRddLUnFNoPiuWQM4llAkws8kl3PcVxiUJgE5OAxtnEsEM+p7JuK2Xvzao3j1
+         43pnp33qUJ8tZQi78BZnbWEFaPFRa9JIfc0quuKkUDripQDhqhBynd2bdgxXk57FXXSR
+         O6ZEAvirIZvF5lTHnvzL0lC1xgzXzP2txjeQK0zxOkqSYAqi3XY5nVQBByqCk7jDnE/g
+         3OwJo7nCgZwUJHHOhZhF5u4ynFrNiFyYTDEt34akfb2fzi7m2fgsAXM2yQBvOSvsUmpI
+         RvKw==
+X-Gm-Message-State: ACgBeo1Vui2D+t9pGdQq3D8N3JzC/bOQ7cYKCRtc6/jMSh85dhE+Mvao
+        EiyfVi+KhDH6BWML76CTPcsjQVJxwtJctv0/rQLNLtk+3Quj
+X-Google-Smtp-Source: AA6agR7X7EF0brrvIfV6ih3crwSbgyrfOgS3AVWdmjC9l6xp95Z8Ej8L6Ug0C4bbX3GX0lzER6XVSk1PUKchtSLEIW0KdnGRNXZa
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:188c:b0:2e0:efaf:2d12 with SMTP id
+ o12-20020a056e02188c00b002e0efaf2d12mr2156064ilu.103.1659944002208; Mon, 08
+ Aug 2022 00:33:22 -0700 (PDT)
+Date:   Mon, 08 Aug 2022 00:33:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000994fbe05e5b5d4d9@google.com>
+Subject: [syzbot] possible deadlock in __jbd2_log_wait_for_space
+From:   syzbot <syzbot+fa1bbda326271b8808c9@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,287 +55,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ever since the Dirty COW (CVE-2016-5195) security issue happened, we know
-that FOLL_FORCE can be possibly dangerous, especially if there are races
-that can be exploited by user space.
+Hello,
 
-Right now, it would be sufficient to have some code that sets a PTE of
-a R/O-mapped shared page dirty, in order for it to erroneously become
-writable by FOLL_FORCE. The implications of setting a write-protected PTE
-dirty might not be immediately obvious to everyone.
+syzbot found the following issue on:
 
-And in fact ever since commit 9ae0f87d009c ("mm/shmem: unconditionally set
-pte dirty in mfill_atomic_install_pte"), we can use UFFDIO_CONTINUE to map
-a shmem page R/O while marking the pte dirty. This can be used by
-unprivileged user space to modify tmpfs/shmem file content even if the user
-does not have write permissions to the file -- Dirty COW restricted to
-tmpfs/shmem (CVE-2022-2590).
+HEAD commit:    ca688bff68bc Add linux-next specific files for 20220808
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1376e68e080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4c20e006003cdecb
+dashboard link: https://syzkaller.appspot.com/bug?extid=fa1bbda326271b8808c9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-To fix such security issues for good, the insight is that we really only
-need that fancy retry logic (FOLL_COW) for COW mappings that are not
-writable (!VM_WRITE). And in a COW mapping, we really only broke COW if
-we have an exclusive anonymous page mapped. If we have something else
-mapped, or the mapped anonymous page might be shared (!PageAnonExclusive),
-we have to trigger a write fault to break COW. If we don't find an
-exclusive anonymous page when we retry, we have to trigger COW breaking
-once again because something intervened.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Let's move away from this mandatory-retry + dirty handling and rely on
-our PageAnonExclusive() flag for making a similar decision, to use the
-same COW logic as in other kernel parts here as well. In case we stumble
-over a PTE in a COW mapping that does not map an exclusive anonymous page,
-COW was not properly broken and we have to trigger a fake write-fault to
-break COW.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fa1bbda326271b8808c9@syzkaller.appspotmail.com
 
-Just like we do in can_change_pte_writable() added via
-commit 64fe24a3e05e ("mm/mprotect: try avoiding write faults for exclusive
-anonymous pages when changing protection") and commit 76aefad628aa
-("mm/mprotect: fix soft-dirty check in can_change_pte_writable()"), take
-care of softdirty and uffd-wp manually.
+======================================================
+WARNING: possible circular locking dependency detected
+5.19.0-next-20220808-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor.4/19227 is trying to acquire lock:
+ffff8880272aa3f8 (&journal->j_checkpoint_mutex){+.+.}-{3:3}, at: __jbd2_log_wait_for_space+0x234/0x460 fs/jbd2/checkpoint.c:110
 
-For example, a write() via /proc/self/mem to a uffd-wp-protected range has
-to fail instead of silently granting write access and bypassing the
-userspace fault handler. Note that FOLL_FORCE is not only used for debug
-access, but also triggered by applications without debug intentions, for
-example, when pinning pages via RDMA.
+but task is already holding lock:
+ffff888076d40e08 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:761 [inline]
+ffff888076d40e08 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_dio_write_iter fs/ext4/file.c:510 [inline]
+ffff888076d40e08 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_file_write_iter+0xbea/0x1660 fs/ext4/file.c:677
 
-This fixes CVE-2022-2590. Note that only x86_64 and aarch64 are
-affected, because only those support CONFIG_HAVE_ARCH_USERFAULTFD_MINOR.
+which lock already depends on the new lock.
 
-Fortunately, FOLL_COW is no longer required to handle FOLL_FORCE. So
-let's just get rid of it.
 
-Note 1: We don't check for the PTE being dirty because it doesn't matter
-	for making a "was COWed" decision anymore, and whoever modifies the
-	page has to set the page dirty either way.
+the existing dependency chain (in reverse order) is:
 
-Note 2: Kernels before extended uffd-wp support and before
-	PageAnonExclusive (< 5.19) can simply revert the problematic
-	commit instead and be safe regarding UFFDIO_CONTINUE. A backport to
-	v5.19 requires minor adjustments due to lack of
-	vma_soft_dirty_enabled().
+-> #1 (&sb->s_type->i_mutex_key#8){++++}-{3:3}:
+       down_read+0x98/0x450 kernel/locking/rwsem.c:1499
+       inode_lock_shared include/linux/fs.h:771 [inline]
+       ext4_bmap+0x4e/0x460 fs/ext4/inode.c:3157
+       bmap+0xaa/0x120 fs/inode.c:1799
+       jbd2_journal_bmap+0xa8/0x180 fs/jbd2/journal.c:971
+       __jbd2_journal_erase fs/jbd2/journal.c:1784 [inline]
+       jbd2_journal_flush+0x84f/0xc00 fs/jbd2/journal.c:2490
+       ext4_ioctl_checkpoint fs/ext4/ioctl.c:1082 [inline]
+       __ext4_ioctl+0x28fd/0x4ab0 fs/ext4/ioctl.c:1586
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Fixes: 9ae0f87d009c ("mm/shmem: unconditionally set pte dirty in mfill_atomic_install_pte")
-Cc: <stable@vger.kernel.org> # 5.16+
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Axel Rasmussen <axelrasmussen@google.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: David Hildenbrand <david@redhat.com>
+-> #0 (&journal->j_checkpoint_mutex){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+       lock_acquire kernel/locking/lockdep.c:5666 [inline]
+       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       mutex_lock_io_nested+0x13f/0x1190 kernel/locking/mutex.c:833
+       __jbd2_log_wait_for_space+0x234/0x460 fs/jbd2/checkpoint.c:110
+       add_transaction_credits+0xa2d/0xb70 fs/jbd2/transaction.c:298
+       start_this_handle+0x3ae/0x14a0 fs/jbd2/transaction.c:422
+       jbd2__journal_start+0x38c/0x910 fs/jbd2/transaction.c:520
+       __ext4_journal_start_sb+0x3a3/0x490 fs/ext4/ext4_jbd2.c:105
+       __ext4_journal_start fs/ext4/ext4_jbd2.h:326 [inline]
+       ext4_handle_inode_extension+0x312/0x870 fs/ext4/file.c:325
+       ext4_dio_write_iter fs/ext4/file.c:573 [inline]
+       ext4_file_write_iter+0x12df/0x1660 fs/ext4/file.c:677
+       call_write_iter include/linux/fs.h:2192 [inline]
+       do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:729
+       do_iter_write+0x182/0x700 fs/read_write.c:855
+       vfs_iter_write+0x70/0xa0 fs/read_write.c:896
+       iter_file_splice_write+0x741/0xc90 fs/splice.c:686
+       do_splice_from fs/splice.c:764 [inline]
+       direct_splice_actor+0x110/0x180 fs/splice.c:931
+       splice_direct_to_actor+0x331/0x8a0 fs/splice.c:886
+       do_splice_direct+0x1a7/0x270 fs/splice.c:974
+       do_sendfile+0xb19/0x1270 fs/read_write.c:1249
+       __do_sys_sendfile64 fs/read_write.c:1317 [inline]
+       __se_sys_sendfile64 fs/read_write.c:1303 [inline]
+       __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1303
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&sb->s_type->i_mutex_key#8);
+                               lock(&journal->j_checkpoint_mutex);
+                               lock(&sb->s_type->i_mutex_key#8);
+  lock(&journal->j_checkpoint_mutex);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.4/19227:
+ #0: ffff88801c596460 (sb_writers#4){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1317 [inline]
+ #0: ffff88801c596460 (sb_writers#4){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1303 [inline]
+ #0: ffff88801c596460 (sb_writers#4){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1303
+ #1: ffff888076d40e08 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:761 [inline]
+ #1: ffff888076d40e08 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_dio_write_iter fs/ext4/file.c:510 [inline]
+ #1: ffff888076d40e08 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_file_write_iter+0xbea/0x1660 fs/ext4/file.c:677
+
+stack backtrace:
+CPU: 1 PID: 19227 Comm: syz-executor.4 Not tainted 5.19.0-next-20220808-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+ __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+ mutex_lock_io_nested+0x13f/0x1190 kernel/locking/mutex.c:833
+ __jbd2_log_wait_for_space+0x234/0x460 fs/jbd2/checkpoint.c:110
+ add_transaction_credits+0xa2d/0xb70 fs/jbd2/transaction.c:298
+ start_this_handle+0x3ae/0x14a0 fs/jbd2/transaction.c:422
+ jbd2__journal_start+0x38c/0x910 fs/jbd2/transaction.c:520
+ __ext4_journal_start_sb+0x3a3/0x490 fs/ext4/ext4_jbd2.c:105
+ __ext4_journal_start fs/ext4/ext4_jbd2.h:326 [inline]
+ ext4_handle_inode_extension+0x312/0x870 fs/ext4/file.c:325
+ ext4_dio_write_iter fs/ext4/file.c:573 [inline]
+ ext4_file_write_iter+0x12df/0x1660 fs/ext4/file.c:677
+ call_write_iter include/linux/fs.h:2192 [inline]
+ do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:729
+ do_iter_write+0x182/0x700 fs/read_write.c:855
+ vfs_iter_write+0x70/0xa0 fs/read_write.c:896
+ iter_file_splice_write+0x741/0xc90 fs/splice.c:686
+ do_splice_from fs/splice.c:764 [inline]
+ direct_splice_actor+0x110/0x180 fs/splice.c:931
+ splice_direct_to_actor+0x331/0x8a0 fs/splice.c:886
+ do_splice_direct+0x1a7/0x270 fs/splice.c:974
+ do_sendfile+0xb19/0x1270 fs/read_write.c:1249
+ __do_sys_sendfile64 fs/read_write.c:1317 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1303 [inline]
+ __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1303
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0ff2c89279
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0ff3d23168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007f0ff2d9bf80 RCX: 00007f0ff2c89279
+RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000004
+RBP: 00007f0ff2ce3189 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000f03b2900 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffcbe563eef R14: 00007f0ff3d23300 R15: 0000000000022000
+ </TASK>
+
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Against upstream from yesterday instead of v5.19 because I wanted to
-reference the mprotect commit IDs and can_change_pte_writable(), and I
-wanted to directly use vma_soft_dirty_enabled().
-
-I have a working reproducer that I'll post to oss-security in one week. Of
-course, that reproducer no longer triggers with that commit and my ptrace
-testing indicated that FOLL_FORCE seems to continue working as expected.
-
----
- include/linux/mm.h |  1 -
- mm/gup.c           | 62 +++++++++++++++++++++++++++++-----------------
- mm/huge_memory.c   | 45 +++++++++++++++++----------------
- 3 files changed, 63 insertions(+), 45 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 18e01474cf6b..2222ed598112 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2885,7 +2885,6 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
- #define FOLL_MIGRATION	0x400	/* wait for page to replace migration entry */
- #define FOLL_TRIED	0x800	/* a retry, previous pass started an IO */
- #define FOLL_REMOTE	0x2000	/* we are working on non-current tsk/mm */
--#define FOLL_COW	0x4000	/* internal GUP flag */
- #define FOLL_ANON	0x8000	/* don't do file mappings */
- #define FOLL_LONGTERM	0x10000	/* mapping lifetime is indefinite: see below */
- #define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
-diff --git a/mm/gup.c b/mm/gup.c
-index 732825157430..7a0b207f566f 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -478,14 +478,34 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
- 	return -EEXIST;
- }
- 
--/*
-- * FOLL_FORCE can write to even unwritable pte's, but only
-- * after we've gone through a COW cycle and they are dirty.
-- */
--static inline bool can_follow_write_pte(pte_t pte, unsigned int flags)
--{
--	return pte_write(pte) ||
--		((flags & FOLL_FORCE) && (flags & FOLL_COW) && pte_dirty(pte));
-+/* FOLL_FORCE can write to even unwritable PTEs in COW mappings. */
-+static inline bool can_follow_write_pte(pte_t pte, struct page *page,
-+					struct vm_area_struct *vma,
-+					unsigned int flags)
-+{
-+	if (pte_write(pte))
-+		return true;
-+	if (!(flags & FOLL_FORCE))
-+		return false;
-+
-+	/*
-+	 * See check_vma_flags(): only COW mappings need that special
-+	 * "force" handling when they lack VM_WRITE.
-+	 */
-+	if (vma->vm_flags & VM_WRITE)
-+		return false;
-+	VM_BUG_ON(!is_cow_mapping(vma->vm_flags));
-+
-+	/*
-+	 * See can_change_pte_writable(): we broke COW and could map the page
-+	 * writable if we have an exclusive anonymous page and a write-fault
-+	 * isn't require for other reasons.
-+	 */
-+	if (!page || !PageAnon(page) || !PageAnonExclusive(page))
-+		return false;
-+	if (vma_soft_dirty_enabled(vma) && !pte_soft_dirty(pte))
-+		return false;
-+	return !userfaultfd_pte_wp(vma, pte);
- }
- 
- static struct page *follow_page_pte(struct vm_area_struct *vma,
-@@ -528,12 +548,19 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
- 	}
- 	if ((flags & FOLL_NUMA) && pte_protnone(pte))
- 		goto no_page;
--	if ((flags & FOLL_WRITE) && !can_follow_write_pte(pte, flags)) {
--		pte_unmap_unlock(ptep, ptl);
--		return NULL;
--	}
- 
- 	page = vm_normal_page(vma, address, pte);
-+
-+	/*
-+	 * We only care about anon pages in can_follow_write_pte() and don't
-+	 * have to worry about pte_devmap() because they are never anon.
-+	 */
-+	if ((flags & FOLL_WRITE) &&
-+	    !can_follow_write_pte(pte, page, vma, flags)) {
-+		page = NULL;
-+		goto out;
-+	}
-+
- 	if (!page && pte_devmap(pte) && (flags & (FOLL_GET | FOLL_PIN))) {
- 		/*
- 		 * Only return device mapping pages in the FOLL_GET or FOLL_PIN
-@@ -986,17 +1013,6 @@ static int faultin_page(struct vm_area_struct *vma,
- 		return -EBUSY;
- 	}
- 
--	/*
--	 * The VM_FAULT_WRITE bit tells us that do_wp_page has broken COW when
--	 * necessary, even if maybe_mkwrite decided not to set pte_write. We
--	 * can thus safely do subsequent page lookups as if they were reads.
--	 * But only do so when looping for pte_write is futile: in some cases
--	 * userspace may also be wanting to write to the gotten user page,
--	 * which a read fault here might prevent (a readonly page might get
--	 * reCOWed by userspace write).
--	 */
--	if ((ret & VM_FAULT_WRITE) && !(vma->vm_flags & VM_WRITE))
--		*flags |= FOLL_COW;
- 	return 0;
- }
- 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 8a7c1b344abe..352b5220e95e 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1040,12 +1040,6 @@ struct page *follow_devmap_pmd(struct vm_area_struct *vma, unsigned long addr,
- 
- 	assert_spin_locked(pmd_lockptr(mm, pmd));
- 
--	/*
--	 * When we COW a devmap PMD entry, we split it into PTEs, so we should
--	 * not be in this function with `flags & FOLL_COW` set.
--	 */
--	WARN_ONCE(flags & FOLL_COW, "mm: In follow_devmap_pmd with FOLL_COW set");
--
- 	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
- 	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
- 			 (FOLL_PIN | FOLL_GET)))
-@@ -1395,14 +1389,23 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
- 	return VM_FAULT_FALLBACK;
- }
- 
--/*
-- * FOLL_FORCE can write to even unwritable pmd's, but only
-- * after we've gone through a COW cycle and they are dirty.
-- */
--static inline bool can_follow_write_pmd(pmd_t pmd, unsigned int flags)
-+/* See can_follow_write_pte() on FOLL_FORCE details. */
-+static inline bool can_follow_write_pmd(pmd_t pmd, struct page *page,
-+					struct vm_area_struct *vma,
-+					unsigned int flags)
- {
--	return pmd_write(pmd) ||
--	       ((flags & FOLL_FORCE) && (flags & FOLL_COW) && pmd_dirty(pmd));
-+	if (pmd_write(pmd))
-+		return true;
-+	if (!(flags & FOLL_FORCE))
-+		return false;
-+	if (vma->vm_flags & VM_WRITE)
-+		return false;
-+	VM_BUG_ON(!is_cow_mapping(vma->vm_flags));
-+	if (!page || !PageAnon(page) || !PageAnonExclusive(page))
-+		return false;
-+	if (vma_soft_dirty_enabled(vma) && !pmd_soft_dirty(pmd))
-+		return false;
-+	return !userfaultfd_huge_pmd_wp(vma, pmd);
- }
- 
- struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
-@@ -1411,12 +1414,16 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
- 				   unsigned int flags)
- {
- 	struct mm_struct *mm = vma->vm_mm;
--	struct page *page = NULL;
-+	struct page *page;
- 
- 	assert_spin_locked(pmd_lockptr(mm, pmd));
- 
--	if (flags & FOLL_WRITE && !can_follow_write_pmd(*pmd, flags))
--		goto out;
-+	page = pmd_page(*pmd);
-+	VM_BUG_ON_PAGE(!PageHead(page) && !is_zone_device_page(page), page);
-+
-+	if ((flags & FOLL_WRITE) &&
-+	    !can_follow_write_pmd(*pmd, page, vma, flags))
-+		return NULL;
- 
- 	/* Avoid dumping huge zero page */
- 	if ((flags & FOLL_DUMP) && is_huge_zero_pmd(*pmd))
-@@ -1424,10 +1431,7 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
- 
- 	/* Full NUMA hinting faults to serialise migration in fault paths */
- 	if ((flags & FOLL_NUMA) && pmd_protnone(*pmd))
--		goto out;
--
--	page = pmd_page(*pmd);
--	VM_BUG_ON_PAGE(!PageHead(page) && !is_zone_device_page(page), page);
-+		return NULL;
- 
- 	if (!pmd_write(*pmd) && gup_must_unshare(flags, page))
- 		return ERR_PTR(-EMLINK);
-@@ -1444,7 +1448,6 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
- 	page += (addr & ~HPAGE_PMD_MASK) >> PAGE_SHIFT;
- 	VM_BUG_ON_PAGE(!PageCompound(page) && !is_zone_device_page(page), page);
- 
--out:
- 	return page;
- }
- 
-
-base-commit: 1612c382ffbdf1f673caec76502b1c00e6d35363
--- 
-2.35.3
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056E058C512
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0A558C516
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235717AbiHHIxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 04:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S236790AbiHHIx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 04:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231861AbiHHIw6 (ORCPT
+        with ESMTP id S235395AbiHHIxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 04:52:58 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBD89FFB;
-        Mon,  8 Aug 2022 01:52:56 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id gj1so8223287pjb.0;
-        Mon, 08 Aug 2022 01:52:56 -0700 (PDT)
+        Mon, 8 Aug 2022 04:53:54 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8352D11471;
+        Mon,  8 Aug 2022 01:53:53 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id s2so6002463qtx.6;
+        Mon, 08 Aug 2022 01:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CM2guZb6Hn0pwfDRg7CFUO0ej/Lsp2LuT1wX5l0Jt8g=;
-        b=k45ypWaGJAvcx1jVTyF1lwQ5Ncs9Htz0s/AN7ToMcU1XIJo3Qj8955IS9iiUTMTg9o
-         hPISvzy2/4mtnH31tDJEpdrUjfSjwUkbg+EmNNR7VZCSj3soYoZvxgi8M/1gN3TaqMNY
-         c/l0OFymbBzRN3mC0ZUimIKWqKn9AzujwnbTo0ukJAYZ3Z0MZCuDgMLVqpjzGfEfvamb
-         Hdsq3xJ15UwDUNjcHBXiAWZYMY6wCp03poVljLyiAOAF9SadfAYj1DPuCVTEY6FxihIH
-         n9ywsfmXWU/wXp2FJY8rrBenCEkdBYjIm6y8eYVIBTXNMGRL3jGFqXmjMvyJVdfyfEiM
-         LSNQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=06U8E+kkdcGYHatHElwJVouvOAddvHNck0H9FBHDuRM=;
+        b=cVNY3ibkN6rkAC6vUeiJw+Wz4hBi1SAlgYndgWeTy7IRaMSpSj7dW4Hc4LZGDlyzEL
+         9PJdwUK3ir7hkZwrBE1BYCu/QT5EcnECF1xgblRESMpFJ6yGDdZAZIfzsUfUUqW+vsGP
+         JozX+u2h9rVyrfiT9rGTBp8Bl4abqGpRd688nJdh6Cd8FXfw+YOIa4VgbE++stO2s9+9
+         4cUpafXRx3pabUygbe9v+TCg3m9PJM5vxBkLh5rpYvQggbo9l48o3WNT123xH9ee+oXT
+         gYHa2sIqWORuizyGnYKYJ1vV1+AJWgmqyVDiV3nbrAOQXOX5lOKEGzEFRCGLy+FQQxV4
+         ygzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CM2guZb6Hn0pwfDRg7CFUO0ej/Lsp2LuT1wX5l0Jt8g=;
-        b=fNOpOA1xp50tG1gQg9R9WyR/smuBC7H42O8rEQY44x5XrluqIPUPReUep3D8GdWrq7
-         Xh4xyYzLQrKtIUsRE6KIGgbuO7cny3CeQvNuoSk8DKjPAc7E8/Un70fYSFokvNsH8SiV
-         yCr14KP9F+LUOS/mc19zzA4oGUqBsPKUdWxwur5lZUhCZXp2d0TZfqZoU7VSjFQEaDkC
-         XcMBZ6yHmittSDdAW9crFO61YJyCL9DRj8/Ad417Sdq6WHlkehM/zN97hJu8A1Z0Gty2
-         Zsu0zddcFbWDdYrvJbIm7l4A67tyPkHzAKRePO6zhN72gr+avX3FkkgMug/qLRvt2r5q
-         YDXA==
-X-Gm-Message-State: ACgBeo3IQpGowjJIZ3QM4b1CbrHvbVkskxHNgiQydjqsyyrHcPD4N5lX
-        Uwpqb/n/FyPlQUdAnPa6tiA=
-X-Google-Smtp-Source: AA6agR5HFR3R02lOfrMcBsBKgjA+us7p2/6lea3lBBqeCWq6Hpd/S9k2kAhbzLEohbBqWWcg6S9PCg==
-X-Received: by 2002:a17:902:848b:b0:16d:4c6b:bf00 with SMTP id c11-20020a170902848b00b0016d4c6bbf00mr17628923plo.58.1659948776412;
-        Mon, 08 Aug 2022 01:52:56 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id n15-20020a056a00212f00b0052deda6e3d2sm8260417pfj.98.2022.08.08.01.52.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 01:52:55 -0700 (PDT)
-Message-ID: <736e39fd-b068-80dd-b383-70e061e71bf5@gmail.com>
-Date:   Mon, 8 Aug 2022 17:52:52 +0900
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=06U8E+kkdcGYHatHElwJVouvOAddvHNck0H9FBHDuRM=;
+        b=sObTUnR742IEG8oGJSHZ8Qb3O01qeNvmeJrRffmgOFF5YDF40NOZCigBXEzlK0swmE
+         NuKfvcHIZT5E2wwgIQKK+eLIJOMzPr+kakIt8/5zCvXVe1ep6kiJYUH5sghNYGLWuzV5
+         vB790KC5drBrlQL64eE8MGYb20Yo6gA0KtSIFHq8xyjJdW/jIdmskJqn1gn4TfKIQNEB
+         3i6j5ae+LFUjv4JWw2C2R10QoOhdYjRh3U0vhN1VWvOUhl2AbCOyVyidCfMBok4cQ//4
+         ZKAM9sYo/CcT1uhUlpceFXr1VUNP+8hR93dPiKYNA8IjBS8qUg2GqwXr6tV0WEmHUBLa
+         NRhQ==
+X-Gm-Message-State: ACgBeo2bYbZoaanGpoGh+Cz3MR3kmfaN2gEIvSo6kwGmyrj0Bphob+E0
+        S3bUJJD4eNJz6UworgyPlmeWeO7t/AmwqsMLIG+FpnCbVcg=
+X-Google-Smtp-Source: AA6agR51GQFFuSSU9o+i/AhpVSNAnz90fs6SKyV+R/YBLIGJoACP5q0PpZpJUfmsq10ffbMgRSrmX+tO85pJ6ViVv2A=
+X-Received: by 2002:a05:622a:1105:b0:342:fb95:d7a with SMTP id
+ e5-20020a05622a110500b00342fb950d7amr1856144qty.61.1659948832601; Mon, 08 Aug
+ 2022 01:53:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: [PATCH v2 2/3] docs/conf.py: Respect env variable SPHINX_IMGMATH
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-doc@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-References: <c41cab17-afd6-bc99-56a1-e4e73b8c1ef6@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <c41cab17-afd6-bc99-56a1-e4e73b8c1ef6@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <cover.1659872590.git.ang.iglesiasg@gmail.com> <49086f5c1401d7d28ebf921a67b49f8403ddb16a.1659872590.git.ang.iglesiasg@gmail.com>
+In-Reply-To: <49086f5c1401d7d28ebf921a67b49f8403ddb16a.1659872590.git.ang.iglesiasg@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 8 Aug 2022 10:53:16 +0200
+Message-ID: <CAHp75Vfanb+tZe_D5_hPWn2BrOEkds9i7AZzD5Xc1M5a9GK6qg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] iio: pressure: bmp280: Fix alignment for DMA safety
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,61 +71,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some distros with coarse-grained packaging policy, dvipng is
-installed along with latex.  In such cases, math rendering will
-use imgmath by default.  It is possible to override the choice by
-specifying the option string of "-D html_math_renderer='mathjax'"
-to sphinx-build (Sphinx >= 1.8).
+On Sun, Aug 7, 2022 at 1:56 PM Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
+>
+> Adds DMA-safe buffers to driver data struct to store raw data from sensors
+>
+> The multiple buffers used thorough the driver share the same memory
+> allocated as part of the device data instance. The union containing
+> the buffers is aligned to allow safe usage with DMA operations, such
+> as regmap bulk read calls.
 
-To provide developers an easier-to-use knob, add code for an env
-variable "SPHINX_IMGMATH" which overrides the automatic choice
-of math renderer for html docs.
+...
 
-    SPHINX_IMGMATH=yes : Load imgmath even if dvipng is not found
-    SPHINX_IMGMATH=no  : Don't load imgmath (fall back to mathjax)
+>  #include <linux/completion.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/random.h>
 
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
-Changes since v1:
- - No logical changes.
- - Renames:
-     LOAD_IMGMATH -> SPHINX_IMGMATH (Mauro),
-     opt_load_imgmath -> env_sphinx_imgmath.
- - Acked-by from Mauro.
++ Blank line.
 
---
- Documentation/conf.py | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+> +#include <asm/unaligned.h>
 
-diff --git a/Documentation/conf.py b/Documentation/conf.py
-index 3ec1f845c839..0b8f20e8e22c 100644
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -128,8 +128,20 @@ autosectionlabel_maxdepth = 2
- # mathjax is the default math renderer since Sphinx 1.8.
- have_latex =  have_command('latex', '--version', 'pdfTeX')
- have_dvipng = have_command('dvipng', '--version', 'dvipng')
--load_imgmath = ((have_latex and have_dvipng)
--                or (major == 1 and minor < 8)
-+load_imgmath = have_latex and have_dvipng
-+
-+# Respect SPHINX_IMGMATH (for html docs only)
-+if 'SPHINX_IMGMATH' in os.environ:
-+    env_sphinx_imgmath = os.environ['SPHINX_IMGMATH']
-+    if 'yes' in env_sphinx_imgmath:
-+        load_imgmath = True
-+    elif 'no' in env_sphinx_imgmath:
-+        load_imgmath = False
-+    else: # otherwide, auto selection
-+        pass
-+
-+# Always load imgmath for Sphinx <1.8 or for epub docs
-+load_imgmath = (load_imgmath or (major == 1 and minor < 8)
-                 or 'epub' in sys.argv)
- 
- if load_imgmath:
+...
+
+> +       union {
+> +               /* sensor data buffer */
+> +               u8 data[3];
+> +               /* calibration data buffers */
+> +               __le16 bmp280_cal[BMP280_CONTIGUOUS_CALIB_REGS / 2];
+> +               __be16 bmp180_cal[BMP180_REG_CALIB_COUNT / 2];
+> +       } buf __aligned(IIO_DMA_MINALIGN);
+
+Hmm... And which field in the struct defines which of the buffers is being used?
+Also, do you need a non-anonymous union?
+
+>  };
+
+...
+
+> +       /* parse temperature calibration data */
+
+Be consistent! Check all your patches for the consistency (comments,
+other code style, etc).
+
+...
+
+> +       calib->H5 = sign_extend32(((get_unaligned_le16(data->buf.data) >> 4) & 0xfff), 11);
+
+(It's not directly related to this change, but good to ask)
+Are you going to change all those masks to use GENMASK()?
+
+...
+
+> +       struct bmp180_calib *calib = &data->calib.bmp180;
+>         int ret;
+>         int i;
+> -       struct bmp180_calib *calib = &data->calib.bmp180;
+
+Exactly my point given the previous patch, now you have a ping-pong
+style of changes: the introduced line in the series is being touched
+again in the very same series without any need.
+
+...
+
+>         u8 oss = data->oversampling_press;
+> +       int ret;
+
+Ditto.
+
 -- 
-2.25.1
-
-
+With Best Regards,
+Andy Shevchenko

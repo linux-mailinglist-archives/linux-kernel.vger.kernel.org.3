@@ -2,213 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8E358C8F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2E258C8F6
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242978AbiHHNED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S235594AbiHHNFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237483AbiHHNEA (ORCPT
+        with ESMTP id S243050AbiHHNFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:04:00 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5935F49;
-        Mon,  8 Aug 2022 06:03:58 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id i84so7009001ioa.6;
-        Mon, 08 Aug 2022 06:03:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ZvT8zFSaN4+LwwHuSYqMb23PG3MGFvgeXxhuTYLZpLA=;
-        b=bIV76remtNAYQAeCdeb3qJ3+b164qBdDrAh+RltF+dOCvtut76rYCFEeN05QWNkUuV
-         AoVR5s8C364z0ybC7ibjDVnQDDa4asxYupQ5SMfZiDM9z7fodmeKYug3z8bzjsmQ+3Q0
-         qoVud6QDZ7mOFNA9ESM5uAe9aFWlBDDNZvrbWyYB/qpn8LHm+33J2ADJwdmpnZZq2SW2
-         BGrRUXM5imEq8M5Kiman/R0HF9ju5F9Y9WoiHfQxom2ElQLBXRg6lBPQBHG3rly+3UYV
-         YSHbTbM5eTZT5Yhyfldvmq7YR1Hldk21TeWy52szjq0pmCwdvTf7O4OogCI1Lni7YdY3
-         dP7Q==
+        Mon, 8 Aug 2022 09:05:36 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76113BAE
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:05:35 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id n13-20020a056e02140d00b002dfa5464967so5123698ilo.19
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 06:05:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ZvT8zFSaN4+LwwHuSYqMb23PG3MGFvgeXxhuTYLZpLA=;
-        b=KKJEHmBg9crAMoF/IrRz7ST2T/45ccICfFkp64TkV++7ca44q7mAoxA2z2ktEiW/67
-         b7KEBWHCF2cKc3NUuLj42d0g5msPrLmSPI+xJ/DA3AUpKk1+UXPcjZj5AsH45FriyMqk
-         08xq1zToElnsuP8C54DOzfr7uukePgURbcopaWXa990oBg5cIoCYX3pJEa3Z/tYuDyFO
-         vsiT9OksQlVioNzpJtGinlESTs058G4NHRfrzeBbUbCjPWFOZYgeuom/WZKqqjx1mDCh
-         24una+xlkqYnyCZ4vaJfFgpFNjwXPQcl/ObdCtCxEI+aOeaJmPhM229N+tIsvAtz4/gU
-         t0rw==
-X-Gm-Message-State: ACgBeo055YTEggnR+GRaPZLYxuEVw+nuZj6lCkXsmlTw3llO0Thpdgv6
-        bbmvk5C6FKN6cKLWih8wjG2cSWYd+lB8ZpeZyw8=
-X-Google-Smtp-Source: AA6agR60DUrBizeFAOIl0MFBBFVK7rm5XRv8HCDKfsPieaM8O+nIy31LtUASY2Py2R3HzanJm6GnC6zPInf13BA0Rpo=
-X-Received: by 2002:a05:6638:f8f:b0:342:cb21:f6d6 with SMTP id
- h15-20020a0566380f8f00b00342cb21f6d6mr5560379jal.138.1659963837491; Mon, 08
- Aug 2022 06:03:57 -0700 (PDT)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=n6ROnGRPeHKbMDkjBCI+NrZj8XSZt/pq4k4SlgJSBxA=;
+        b=oBkHWZGuinfPGCcfM/i9XcyJaxuRcL2jONrA+02sJfD5uXYj/ESLM9DOdhH/T4/XPb
+         V/ZCIZdIAd7xAszAJl2fC7edyYRNgTdAt1wuTALwDgMWFo7063s+VGtJ+FNbZC5/Ur/j
+         c/t2suzvf1pTcaxFuenrolFddyrpYDcIiwR2cZa/1uiqCaPV99DxxrV3+Mm/xWbLW2mM
+         Mk2f3wfyMMssbAG7izW7la3yzySENHwAaTNf+U8h/3RCMDMGqRK8F2wePiYom6nev9Zc
+         CcueOoJyq5zBUVPjobPYFXwq2ceGTZs1LKdYk8HBn8AUkVgX79byyDBhvnWAuwMi4Sjg
+         j5PA==
+X-Gm-Message-State: ACgBeo1onVUR59I2VrBZdJVRhJIyTa10bxleo5McYVIiuOmpux151Lg8
+        exuECbXqOis+87oAwjvw1NVv8c8fCQFW4Ek+QSSgi1NSi9cB
+X-Google-Smtp-Source: AA6agR5woTsLLFreeMQmbnK4S0UNyNON4F4diygZs6lq/PrvL8V8SMhBoJr194h34ZCxT1n5sYnsoA5SGioiaEurNxK3ynQ1ebxr
 MIME-Version: 1.0
-References: <20220729170744.1301044-1-robdclark@gmail.com> <20220729170744.1301044-2-robdclark@gmail.com>
- <62afe47a-1a50-80ef-400d-8c238f1cb332@quicinc.com>
-In-Reply-To: <62afe47a-1a50-80ef-400d-8c238f1cb332@quicinc.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 8 Aug 2022 06:04:19 -0700
-Message-ID: <CAF6AEGuRnnjXN-sFeBkgF+ZiHQsABUEXBRLTO+jibHFk7RumSg@mail.gmail.com>
-Subject: Re: [Freedreno] [PATCH 1/3] dma-buf: Add ioctl to query mmap info
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>, freedreno@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
+X-Received: by 2002:a05:6602:168d:b0:67c:44c3:9ba5 with SMTP id
+ s13-20020a056602168d00b0067c44c39ba5mr7502643iow.190.1659963934890; Mon, 08
+ Aug 2022 06:05:34 -0700 (PDT)
+Date:   Mon, 08 Aug 2022 06:05:34 -0700
+In-Reply-To: <000000000000b7352e05e5b61f84@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ade42905e5ba78e0@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in gsmld_receive_buf
+From:   syzbot <syzbot+e3563f0c94e188366dbb@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 7, 2022 at 1:25 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
->
-> On 7/29/2022 10:37 PM, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > This is a fairly narrowly focused interface, providing a way for a VMM
-> > in userspace to tell the guest kernel what pgprot settings to use when
-> > mapping a buffer to guest userspace.
-> >
-> > For buffers that get mapped into guest userspace, virglrenderer returns
-> > a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
-> > pages into the guest VM, it needs to report to drm/virtio in the guest
-> > the cache settings to use for guest userspace.  In particular, on some
-> > architectures, creating aliased mappings with different cache attributes
-> > is frowned upon, so it is important that the guest mappings have the
-> > same cache attributes as any potential host mappings.
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >   drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
-> >   include/linux/dma-buf.h      |  7 +++++++
-> >   include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
-> >   3 files changed, 61 insertions(+)
-> >
-> > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> > index 32f55640890c..d02d6c2a3b49 100644
-> > --- a/drivers/dma-buf/dma-buf.c
-> > +++ b/drivers/dma-buf/dma-buf.c
-> > @@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
-> >       return 0;
-> >   }
-> >
-> > +static long dma_buf_info(struct dma_buf *dmabuf, const void __user *uarg)
-> > +{
-> > +     struct dma_buf_info arg;
-> > +
-> > +     if (copy_from_user(&arg, uarg, sizeof(arg)))
-> > +             return -EFAULT;
-> > +
-> > +     switch (arg.param) {
-> > +     case DMA_BUF_INFO_VM_PROT:
-> > +             if (!dmabuf->ops->mmap_info)
-> > +                     return -ENOSYS;
-> > +             arg.value = dmabuf->ops->mmap_info(dmabuf);
-> > +             break;
-> > +     default:
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     if (copy_to_user(uarg, &arg, sizeof(arg)))
-> > +             return -EFAULT;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >   static long dma_buf_ioctl(struct file *file,
-> >                         unsigned int cmd, unsigned long arg)
-> >   {
-> > @@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
-> >       case DMA_BUF_SET_NAME_B:
-> >               return dma_buf_set_name(dmabuf, (const char __user *)arg);
-> >
-> > +     case DMA_BUF_IOCTL_INFO:
-> > +             return dma_buf_info(dmabuf, (const void __user *)arg);
-> > +
-> >       default:
-> >               return -ENOTTY;
-> >       }
-> > diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> > index 71731796c8c3..6f4de64a5937 100644
-> > --- a/include/linux/dma-buf.h
-> > +++ b/include/linux/dma-buf.h
-> > @@ -283,6 +283,13 @@ struct dma_buf_ops {
-> >        */
-> >       int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
-> >
-> > +     /**
-> > +      * @mmap_info:
-> > +      *
-> > +      * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PROT.
-> > +      */
-> > +     int (*mmap_info)(struct dma_buf *);
-> > +
-> >       int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
-> >       void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
-> >   };
-> > diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
-> > index b1523cb8ab30..a41adac0f46a 100644
-> > --- a/include/uapi/linux/dma-buf.h
-> > +++ b/include/uapi/linux/dma-buf.h
-> > @@ -85,6 +85,32 @@ struct dma_buf_sync {
-> >
-> >   #define DMA_BUF_NAME_LEN    32
-> >
-> > +
-> > +/**
-> > + * struct dma_buf_info - Query info about the buffer.
-> > + */
-> > +struct dma_buf_info {
-> > +
-> > +#define DMA_BUF_INFO_VM_PROT      1
-> > +#  define DMA_BUF_VM_PROT_WC      0
-> > +#  define DMA_BUF_VM_PROT_CACHED  1
-> > +
-> > +     /**
-> > +      * @param: Which param to query
-> > +      *
-> > +      * DMA_BUF_INFO_BM_PROT:
-> Is there a typo here? BM -> VM ?
+syzbot has found a reproducer for the following issue on:
 
-yes, fixed locally
+HEAD commit:    ca688bff68bc Add linux-next specific files for 20220808
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14a27066080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4c20e006003cdecb
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3563f0c94e188366dbb
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=164eb3ca080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17327ce1080000
 
->
-> -Akhil.
-> > +      *     Query the access permissions of userspace mmap's of this buffer.
-> > +      *     Returns one of DMA_BUF_VM_PROT_x
-> > +      */
-> > +     __u32 param;
-> > +     __u32 pad;
-> > +
-> > +     /**
-> > +      * @value: Return value of the query.
-> > +      */
-> > +     __u64 value;
-> > +};
-> > +
-> >   #define DMA_BUF_BASE                'b'
-> >   #define DMA_BUF_IOCTL_SYNC  _IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
-> >
-> > @@ -95,4 +121,6 @@ struct dma_buf_sync {
-> >   #define DMA_BUF_SET_NAME_A  _IOW(DMA_BUF_BASE, 1, __u32)
-> >   #define DMA_BUF_SET_NAME_B  _IOW(DMA_BUF_BASE, 1, __u64)
-> >
-> > +#define DMA_BUF_IOCTL_INFO   _IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
-> > +
-> >   #endif
->
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e3563f0c94e188366dbb@syzkaller.appspotmail.com
+
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor instruction fetch in kernel mode
+#PF: error_code(0x0010) - not-present page
+PGD 74c90067 P4D 74c90067 PUD 74c53067 PMD 0 
+Oops: 0010 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3606 Comm: syz-executor237 Not tainted 5.19.0-next-20220808-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000387fcf0 EFLAGS: 00010202
+RAX: 0000000000000001 RBX: ffff88801bbdf000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff88801bbdf000
+RBP: ffffc9000387fda1 R08: 0000000000000001 R09: 0000000000000004
+R10: 0000000000000000 R11: 1ffffffff1ffa9ce R12: 0000000000000001
+R13: 0000000000000000 R14: ffffc9000387fd90 R15: dffffc0000000000
+FS:  0000555556e8d300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000001c7e0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ gsmld_receive_buf+0x1c2/0x2f0 drivers/tty/n_gsm.c:2861
+ tiocsti drivers/tty/tty_io.c:2293 [inline]
+ tty_ioctl+0xa75/0x15d0 drivers/tty/tty_io.c:2692
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f76c0e5eb59
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe9a4f7c48 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f76c0e5eb59
+RDX: 0000000020000040 RSI: 0000000000005412 RDI: 0000000000000004
+RBP: 00007f76c0e22d00 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f76c0e22d90
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+CR2: 0000000000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000387fcf0 EFLAGS: 00010202
+RAX: 0000000000000001 RBX: ffff88801bbdf000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff88801bbdf000
+RBP: ffffc9000387fda1 R08: 0000000000000001 R09: 0000000000000004
+R10: 0000000000000000 R11: 1ffffffff1ffa9ce R12: 0000000000000001
+R13: 0000000000000000 R14: ffffc9000387fd90 R15: dffffc0000000000
+FS:  0000555556e8d300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000001c7e0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+

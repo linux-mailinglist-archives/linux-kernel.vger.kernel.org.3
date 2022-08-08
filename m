@@ -2,126 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FB158CD34
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E058D58CD38
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 19:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244178AbiHHR5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 13:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        id S243997AbiHHR64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 13:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244038AbiHHR5B (ORCPT
+        with ESMTP id S235853AbiHHR6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:57:01 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A48617A9A
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:56:34 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f56f635a9so83302617b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 10:56:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=D9R60mZ4udMapF+NpFfSHyOa59OoX0uMh+RPjpQzj1Q=;
-        b=eNRxM030DKLOhrtL5bqYSMNughx6a2UFrcdYQNOMy2xGwEM8RIYbzDgO0Qr+cRrlG7
-         leQpFy4g/mdb/tV0YTxYoL1QksZqc0IxxJg0F3wxsSX1ccKSaYzblLNYO6keoTM8Req6
-         cajjuxZ1ZB7s1XMrbeIoJVspmPJzRx4I6ee+JExSGu3vzVquaX6zNwS1ls9m58bW6oRu
-         w2kL8A1B7NhrHkoLMksRCh7L7msDEXutktd6wE5DOs2Sfh1C/tAS+/lhZV9YGI6OI1HK
-         ZpwKo2QlPJonELBxUwyauzx1CTN7Nbn2HpJzaUwn7+t1OTlJI0M0LNoOhXINFzQgP+n9
-         Y/Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=D9R60mZ4udMapF+NpFfSHyOa59OoX0uMh+RPjpQzj1Q=;
-        b=ZzgHjmOQwLgw+FcQE1N/aRpFNAPigwfMwHtCHqhy8Pga+PJPhAe2oBc+ZLZv/DoGZK
-         gt+oJ0S1rgQA1l813TXAdBizVqovJBVcnqT310/IKYaYr4WmeghM9E1a0Ru3y2EtRIHM
-         cGkjGK2ncn5o7DWFvtZCBx9T/6QFrBTF6Yfn/z2TrsbgiIOebpZ69KtMYIgFtl79xGR7
-         AgbMR8KMXhn8Fs3zC8nh33lJWuuBLCp5ZEkknrprYS/BbnzjIvUJ8QxedcyPZ9ox+IdK
-         goCO70KbZ12aIB9HMpfBRJSegSCd813G7A1hWnDPYUzs6rr1ox+zpKun+bdcr0GhzPgA
-         fJ3g==
-X-Gm-Message-State: ACgBeo3On5pofhmRyAds4cjuy4p3X1pWzUm3mETZEJ3zxC6xCUs6VjcT
-        x1hCZkUXPOuX+QzfbaJa7dn7+kME9x/ldpMTxYhG
-X-Google-Smtp-Source: AA6agR5KTaywCydCwtykG2+H6b+nQdzztDWi7EZVgv5coCe9zqkxOlqe6qANypuRRJkuoUBTS0lz5yfLxOdFKFcdDmID
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:7a2a:3bb5:f3a0:3bbc])
- (user=axelrasmussen job=sendgmr) by 2002:a0d:e881:0:b0:31f:3bff:2224 with
- SMTP id r123-20020a0de881000000b0031f3bff2224mr19837540ywe.302.1659981393328;
- Mon, 08 Aug 2022 10:56:33 -0700 (PDT)
-Date:   Mon,  8 Aug 2022 10:56:14 -0700
-In-Reply-To: <20220808175614.3885028-1-axelrasmussen@google.com>
-Message-Id: <20220808175614.3885028-6-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20220808175614.3885028-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v5 5/5] selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Mon, 8 Aug 2022 13:58:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EB0217A93
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 10:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659981532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rKD32BoUZtJVmXJMy5BhMXR7sCS+Ype3RSG55JgauC4=;
+        b=ItO1Agfgd78BC7dyOVYHHj/aR0RSN4iARfV9yEEgRHCsH3KFXEubdGtyloOln5cvW3fQ2u
+        NyBY43TQI61T4/KBywlDL74CG7kzAmlaoyGaDyxJuiku4bH5sZjNqyAlffV+MV4aWJZmjZ
+        1L6OpCkIv7FwDOenIWp+qgWEfsBpEFQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-418-R9LkVXhoN4url2WW2DAw_A-1; Mon, 08 Aug 2022 13:58:49 -0400
+X-MC-Unique: R9LkVXhoN4url2WW2DAw_A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B4311019DE1;
+        Mon,  8 Aug 2022 17:58:48 +0000 (UTC)
+Received: from p1.luc.com (unknown [10.40.194.142])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B4410C15BA1;
+        Mon,  8 Aug 2022 17:58:46 +0000 (UTC)
+From:   Ivan Vecera <ivecera@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stefan Assmann <sassmann@kpanic.de>,
+        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net] iavf: Fix deadlock in initialization
+Date:   Mon,  8 Aug 2022 19:58:45 +0200
+Message-Id: <20220808175845.484968-1-ivecera@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This new mode was recently added to the userfaultfd selftest. We want to
-exercise both userfaultfd(2) as well as /dev/userfaultfd, so add both
-test cases to the script.
+Fix deadlock that occurs when iavf interface is a part of failover
+configuration.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Acked-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+1. Mutex crit_lock is taken at the beginning of iavf_watchdog_task()
+2. Function iavf_init_config_adapter() is called when adapter
+   state is __IAVF_INIT_CONFIG_ADAPTER
+3. iavf_init_config_adapter() calls register_netdevice() that emits
+   NETDEV_REGISTER event
+4. Notifier function failover_event() then calls
+   net_failover_slave_register() that calls dev_open()
+5. dev_open() calls iavf_open() that tries to take crit_lock in
+   end-less loop
+
+Stack trace:
+...
+[  790.251876]  usleep_range_state+0x5b/0x80
+[  790.252547]  iavf_open+0x37/0x1d0 [iavf]
+[  790.253139]  __dev_open+0xcd/0x160
+[  790.253699]  dev_open+0x47/0x90
+[  790.254323]  net_failover_slave_register+0x122/0x220 [net_failover]
+[  790.255213]  failover_slave_register.part.7+0xd2/0x180 [failover]
+[  790.256050]  failover_event+0x122/0x1ab [failover]
+[  790.256821]  notifier_call_chain+0x47/0x70
+[  790.257510]  register_netdevice+0x20f/0x550
+[  790.258263]  iavf_watchdog_task+0x7c8/0xea0 [iavf]
+[  790.259009]  process_one_work+0x1a7/0x360
+[  790.259705]  worker_thread+0x30/0x390
+
+To fix the situation we should check the current adapter state after
+first unsuccessful mutex_trylock() and return with -EBUSY if it is
+__IAVF_INIT_CONFIG_ADAPTER.
+
+Fixes: 226d528512cf ("iavf: fix locking of critical sections")
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
 ---
- tools/testing/selftests/vm/run_vmtests.sh | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index b8e7f6f38d64..e780e76c26b8 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -120,13 +120,16 @@ run_test ./gup_test -a
- # Dump pages 0, 19, and 4096, using pin_user_pages:
- run_test ./gup_test -ct -F 0x1 0 19 0x1000
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index 45d097a164ad..f9dcaadc7ea0 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -4085,8 +4085,17 @@ static int iavf_open(struct net_device *netdev)
+ 		return -EIO;
+ 	}
  
--run_test ./userfaultfd anon 20 16
--# Hugetlb tests require source and destination huge pages. Pass in half the
--# size ($half_ufd_size_MB), which is used for *each*.
--run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
--run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
--rm -f "$mnt"/uffd-test
--run_test ./userfaultfd shmem 20 16
-+uffd_mods=("" ":dev")
-+for mod in "${uffd_mods[@]}"; do
-+	run_test ./userfaultfd anon${mod} 20 16
-+	# Hugetlb tests require source and destination huge pages. Pass in half
-+	# the size ($half_ufd_size_MB), which is used for *each*.
-+	run_test ./userfaultfd hugetlb${mod} "$half_ufd_size_MB" 32
-+	run_test ./userfaultfd hugetlb_shared${mod} "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-+	rm -f "$mnt"/uffd-test
-+	run_test ./userfaultfd shmem${mod} 20 16
-+done
+-	while (!mutex_trylock(&adapter->crit_lock))
++	while (!mutex_trylock(&adapter->crit_lock)) {
++		/* If we are in __IAVF_INIT_CONFIG_ADAPTER state the crit_lock
++		 * is already taken and iavf_open is called from an upper
++		 * device's notifier reacting on NETDEV_REGISTER event.
++		 * We have to leave here to avoid dead lock.
++		 */
++		if (adapter->state == __IAVF_INIT_CONFIG_ADAPTER)
++			return -EBUSY;
++
+ 		usleep_range(500, 1000);
++	}
  
- #cleanup
- umount "$mnt"
+ 	if (adapter->state != __IAVF_DOWN) {
+ 		err = -EBUSY;
 -- 
-2.37.1.559.g78731f0fdb-goog
+2.35.1
 

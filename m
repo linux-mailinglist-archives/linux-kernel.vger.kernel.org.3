@@ -2,83 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9A458CAD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F6F58CADA
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243151AbiHHO4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 10:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
+        id S243365AbiHHO4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 10:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243209AbiHHO4d (ORCPT
+        with ESMTP id S243311AbiHHO4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 10:56:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E9F7DEA3
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659970588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q81adJEOTwFc/hg5uP+tJ9s7aedbQ4D0T6kDguRSfeM=;
-        b=bafJu1Q+hIRQnmx4tsWb0Cd3eEGxT8c8hdBvggZco2LaFTmBR4JXTog7H8BreOB0P2jJx4
-        ls1w7m3eJ7TogQq2PtjNShZXjyqqY9UPxl2e9ZzH1ygtfVuXlPGUwfgATC2TFgPAjy0ImA
-        FEuWBhgRD+H0N6a5RKlJb9vM5Bca7Qw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-xFodAKb9OHCoi9CWOfoHLA-1; Mon, 08 Aug 2022 10:56:27 -0400
-X-MC-Unique: xFodAKb9OHCoi9CWOfoHLA-1
-Received: by mail-ed1-f72.google.com with SMTP id v19-20020a056402349300b0043d42b7ddefso5729196edc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 07:56:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Q81adJEOTwFc/hg5uP+tJ9s7aedbQ4D0T6kDguRSfeM=;
-        b=fJZErBGcPHwMT9PGqhuwedIo7wMivgdRPHd+c3fDiiEesHNbUeJxqA3PRNnYfsxnQm
-         z8eUs0pV4ZssaSOxaX3PrzwLt9In3CGuqw0kzPn4J5PsbEq0Sx4XWMK80QbnonDseSZz
-         9OC4fbCaWON8Q0JRKzXv4GAB6TLuJqCH3V0SCVA0qFQUD3rlkTV95HFqYibzSf2qXWsk
-         qncNAu8rtYRx3PGS2h3r+Nkl4leSgRBsvEg4AjzIwPZt3iAtc8D8jN6/L6ZTQzJVlDHs
-         9iq0LaHBEjga5MtIGFJtkbQmBKiFXEhJJqcAv6j2+xoQQ04M68MocuJVhmCh0HoafaEL
-         OsjQ==
-X-Gm-Message-State: ACgBeo0WRzQRsICVXZP4khgbkynNH3PC0oplsdYeqZYxcB5/jtcijJvT
-        084zoItzCP7xYZWOr+kG9b5pcY/qiKKFegvFNgCoTO+nGnI7BImN3IZXLETAscs04YFSx0r/t1Z
-        ESBk06gznhwX5VL6/M2mofkvi
-X-Received: by 2002:a17:907:6096:b0:72f:1d74:b71b with SMTP id ht22-20020a170907609600b0072f1d74b71bmr13975056ejc.272.1659970586180;
-        Mon, 08 Aug 2022 07:56:26 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6iE1RlTukWMvsEMA1thEekevbdE2HkKHb8PUGj3hcIsyNE8ALGkMyoQeJyjqpaCrXoUhlvEw==
-X-Received: by 2002:a17:907:6096:b0:72f:1d74:b71b with SMTP id ht22-20020a170907609600b0072f1d74b71bmr13975042ejc.272.1659970585913;
-        Mon, 08 Aug 2022 07:56:25 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id u19-20020aa7db93000000b0043bbb3535d6sm4656016edt.66.2022.08.08.07.56.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 07:56:25 -0700 (PDT)
-Message-ID: <67bf0109-0606-a44c-7a58-606101bdb52d@redhat.com>
-Date:   Mon, 8 Aug 2022 16:56:24 +0200
-MIME-Version: 1.0
+        Mon, 8 Aug 2022 10:56:40 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2047.outbound.protection.outlook.com [40.107.212.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2ECFD37;
+        Mon,  8 Aug 2022 07:56:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DZmVBOAPMBVfjsI4aTy8N5233BBUZbjjXuGMFcftyIZ/p0Kn0qzCJfdPOrvOdlgVgva2hBFKA6bxI/s5X+BvKynvBI5XYEckSawennxwV7a7+TyRq1hBHGtss261vpaRR50703eohO8qAWjsLD6YyZykB1Edu2zOzsMfBANc0oknEAV8vWhSEnK0RwIIBiBadJXhvPasMG1nDKsa//IcnBtye/wdHWuQrv2gcECkFiRpoVPIe8w/mUrUTYKt5IuuW+5k/47Xrx7G3xjxs6r+pNjKY8EkpxYkTIsZOX/2TG2Ttp0k+ne7fJdSCt1m2iHZvC30bkqJlNLUCpM2a9wEtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FImUiauRan1/vCCS0N6zadguU15a4w13gzxd0Vo4vBw=;
+ b=bZpC1zPYHHoG+4wJ5I/hovUspzD0wzxUShC0N1BmtGPMUfqX9hRUyxUiG5/Q212HNO8jkZ4kkFjzj0nS3Ui/C3McKjxSuk1SqIZnwMg1VSbIxIcKTpr05IqoTpP7mSqP46psInlyFLUJvkVJTXemaresRO7GT/e+gr4VlVxSFY6UHqDeGr+i1mR4hECbhPceE82jmMbzPOUaoUoF+cG+XoYJtxEKXhENZqJMr2u2+p/FiuSA3YrChYTywqxiIApOo3lSxcBYUetpCRFLo+4ya+JIgTkN92RZVWN9YlN1aph7R54z/tJXbXZnEPwmP0VMkF9Y+uvKRVA5c9fqsMaVWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FImUiauRan1/vCCS0N6zadguU15a4w13gzxd0Vo4vBw=;
+ b=weecJoUIJTlC5NsviJI3Auuk6pfesu95NRh3JWJ2PTo3ZZBs4Juw/eeJB5L5Jh2T575Rf1EItyGOt9cOLweugrYHZib2GhLFMawTL5+woaFObPFM/HAuZnv7f9stcnAuO0KrkRqVHrR5hagr70+n/TZyC+udfKXCfAXIw7ht7Ms=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MN2PR12MB3648.namprd12.prod.outlook.com (2603:10b6:208:c1::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Mon, 8 Aug
+ 2022 14:56:34 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.020; Mon, 8 Aug 2022
+ 14:56:33 +0000
+Message-ID: <4e7448d2-7b26-e260-3d6c-7aa263a75250@amd.com>
+Date:   Mon, 8 Aug 2022 16:56:27 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1 23/26] thermal/drivers/acerhdf: Use generic
- thermal_zone_get_trip() function
+ Thunderbird/91.11.0
+Subject: Re: [Linaro-mm-sig] [PATCH 1/3] dma-buf: Add ioctl to query mmap info
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peter Kaestle <peter@piie.net>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER" 
-        <platform-driver-x86@vger.kernel.org>
-References: <20220805145729.2491611-1-daniel.lezcano@linaro.org>
- <20220805145729.2491611-24-daniel.lezcano@linaro.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220805145729.2491611-24-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220729170744.1301044-1-robdclark@gmail.com>
+ <20220729170744.1301044-2-robdclark@gmail.com>
+ <3d2083aa-fc6c-6875-3daf-e5abe45fb762@gmail.com>
+ <CAF6AEGvKdM3vyCvBZK=ZcdGmak7tsrP1b8ANyyaMjVfNDViqyw@mail.gmail.com>
+ <973de2f8-75e4-d4c7-a13a-c541a6cf7c77@amd.com>
+ <CAF6AEGuhQT6A_jh8kLWh5xMoUGc1osdewyBk-8NoprtWOHseaQ@mail.gmail.com>
+ <2fc74efe-220f-b57a-e804-7d2b3880d14f@gmail.com>
+ <CAF6AEGv9H+fSFKPNqwPxYUjkgj05AimpXbp-p_JL8nKLnzON=w@mail.gmail.com>
+ <e2423bd7-ef73-8d43-c661-a19c80ad1a26@gmail.com>
+ <CAF6AEGsoYaXe2+qug_TfT99KXuXh9Ez2L2HjQZroE6c6GSW4SQ@mail.gmail.com>
+ <e90caaaa-cae9-c6d1-bfb6-dc56aa559681@amd.com>
+ <CAF6AEGtWjtF7_uCYAH4uARVXgnOnX3DZ3KQahxTdAi_9Myvw0w@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CAF6AEGtWjtF7_uCYAH4uARVXgnOnX3DZ3KQahxTdAi_9Myvw0w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-ClientProxiedBy: AS9PR05CA0043.eurprd05.prod.outlook.com
+ (2603:10a6:20b:489::27) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 22ca7a8b-6b55-4f3f-4b20-08da794e2f5d
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3648:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ddnswpTD2CapEE9N7JLFNEO9R4EWtMPjkT6sviCpFaD8c0tj4E1OUYwOJMN/bBdL0Z7tgUgrCUceV53bYFPJpVWyL6uof9PjOb1xtxPGW4Omhk3+uL6/HWQVHiN65jyyksaZl2wE6f/m7WDb8iskMQvsDtJ6F9x6w6QctOrQYLRLswi092ke7Kq7s7/+BBxhOYQvXbCZfgde/cWs7LFSwZ6x4Er+hKRCmIcYa/+SHScljefXNc3VLpJ/mMNkno+o1ZsbA/XPeVHMmPeQicZ0mB8TG2EU9efHuiJt3BSDYEjoZujS8p3rYcoiok7dqVBzw7DXT9Hgz/9j7iGzG2ZjTq1Xb66ZPqZuUq3INyGiTxV0zs5VXRpb0dKwJcX5SbSC0lhXA9DedH7ro0qSQyBCw8CQpkVgAAFyJlIQ5qKJTbHsS68GYRKBN1R36fNcYHNrdORkryuPt5eo1fQO0j7iTLwFZuZufPNw9AeMTarQLkWeyi3RraJ31EKkHdLrcH7F1rVJvsZld46HnsUkdmEVCBCvd9rs8cCLCysP81SNcxM7KzJVzYEX+HMG/kIqp4iSTeM5MzsZDbANl5dR3O1ZgcYsBqS/+7kXrtztNqrBrPd+uKuqOcQ8lUoZVmq8gR54GaNfn+cpvCLjAT3NflzRg7GN8H711bxlOzJ3zG2RkAXEToH0jRjJmIp6h91NOZR/m4abJDHDshIMibVR4A4BTvpDJgNpkrG2A5/tnmPxYjDBZG2Ye4CVRix0tFST57xod0awXAVoCvI8CHMGzHi+V6wNM08EN4to9jTZD5yDHdj+PFpbffK+BdKlG47uT2DIpd2c59Ir83PG7UuapwINDQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(136003)(39860400002)(366004)(376002)(66946007)(66476007)(66556008)(8936002)(36756003)(7416002)(8676002)(4326008)(38100700002)(5660300002)(66574015)(478600001)(2616005)(186003)(6666004)(6506007)(41300700001)(6512007)(53546011)(2906002)(316002)(6916009)(54906003)(6486002)(83380400001)(31696002)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b1FWU1pma2RhOXlwbnphMlY3L3cwK20zWmZwTDVMdHBKaEdXNlYwSFdJTzFS?=
+ =?utf-8?B?dlBxbDd4b2F3RmFnbWl6QUQ3U1dDN1RneHVNSlRlRC81WEZ2aWl4ZG94YmJv?=
+ =?utf-8?B?SWxDb1g3SnlLSjZvNE5vWUZFbmlzcEZuVHczTFdaQld4Slgrb2VwZUZZazB5?=
+ =?utf-8?B?eVhlajRiM01maS91Tmtnb05jVDNqb283UHg5R3k0ei9LRFJJZ1hhbVZHRzdw?=
+ =?utf-8?B?NzFiYlAyaW9QYkdKMU9BWXBvSU9HSUdFeVVPWE9pUUx4elU1OVJjWWI0T2Za?=
+ =?utf-8?B?Mzh2em44L3F0MWtzNlc0YVc1TkdqQ2pKQWU1elQ1RW5DUGRDcThOajZKNndi?=
+ =?utf-8?B?MnJOUWtKd1pPVXF3cGEza0hDUVg5R1l2TnJrdmRtS1BIM3pjOTFWNDZYRWZk?=
+ =?utf-8?B?RFc5WnY0WnozakMvand3a2hzbUp3QkdIdHhkS3hEbTBaZm1mWkkvNy9YZFcv?=
+ =?utf-8?B?N1phVS9wdktQZ0RmWElBVTE3VFBtRXNlSHczTklNWWZiWTczM0g4b0JrTm1I?=
+ =?utf-8?B?WUNUSXl6MDRxQkt1ZkdFQzdVOTRLRXVTUUdJL3ZMVGE5djJtMUp0ckhMNHQ0?=
+ =?utf-8?B?c09keG9GSHR5ZTZkTXhvYVZiUFNudjFVSGhxOHlXV2FkRmhaYkp1S2lQSVdu?=
+ =?utf-8?B?NmpZeXBQcEFuTGRkZ00ycHRNTkxEL3J6S1VrNlZybXZwNXJBRGhVM2lMYlAw?=
+ =?utf-8?B?dnZSQm80WmM3aG13UGZiVy95bjM1T3RsYkp0SHZ4RHBkd1BYQ1pMUWUxOSti?=
+ =?utf-8?B?czlkZFlJMlBiSm1rcHZuaFRTY08rR2dKWUFNMm8vTGdPeENIR3JsL2dub2cy?=
+ =?utf-8?B?STNpSW9IeG9pb200MUZ0ZFRua3dFWlpUbW12UW5NY3o0am1sK0R4SnJWazlI?=
+ =?utf-8?B?b0pqbDJqUnVYTTNIL3ZJeUNXQlF6SG9sRVJ6d3BJU1FiMmJyM0JGendlQXJa?=
+ =?utf-8?B?bUJicGlGblpaQUNORzgrKy8vbm5TaHM4aGZzSHdjb0hrWDg2YXl2MXAxOUtr?=
+ =?utf-8?B?clArcG5BK2N1R3dNMUswTVBTTUc5SHphYnYrLytUNC9HVTNhZXJMSnh3L05M?=
+ =?utf-8?B?cUczWjJaY0JXZVdzVG1EUVZrc2ViL0k4eTJRNjBjaWQwNmcwdWdGbHBTODNZ?=
+ =?utf-8?B?Umdack9GM0FvUVlqV0l5Wm1GZ3A5OXdiYW1QUkRCQWNGdk9MV3p2SnRSWHB1?=
+ =?utf-8?B?NER6YTNuVGJUSDU1SEdhWEhhWUVuZ2tLaE5hV2xQL3FWMlNrak9jcmlLZnpL?=
+ =?utf-8?B?eHNFNmZrUWpFREZUdzlhVm5jWVBhMXBicGVPVkVRRFRmdjlXVndiYjFMZ3E2?=
+ =?utf-8?B?bC9zcmV1aFcrR0VEbm5ZU3NackxMRWdWcm9HbEVTM2U1UXZUZTRUeVp2dkVZ?=
+ =?utf-8?B?Zy9SWGtSUzg2WUVXOVVMUnBOM3piTFNQeDlCZnAxZ3pwNG9KbjJYYzBUVkpK?=
+ =?utf-8?B?a0JyS0tnQzVmdUZOSFVJVkNPNUhrYUJQZGdLR0phZWhFUnRrWWNhbTExRVJZ?=
+ =?utf-8?B?aVhYdWpIZCtYZ1FJYVZWL2RvOENnZHpEVjFWL0lzY09TNC8xY1ZWNWF2T3Z6?=
+ =?utf-8?B?bVpTK1ZqZStGczF3NWZGN0M3T3pYY1dVR1llMFp2UGJQQy9rSXFXUDYrTWVY?=
+ =?utf-8?B?Q3RUeEZkQmhQUVlQQzJUNHZ6TkdsYWxGdStxUzZaQXFBV3c1N1ZESmY2bEJp?=
+ =?utf-8?B?NnNlekxCeTc0K1dML2Mydkg1YUN4cnVPYkI1VlJxK0xNdzQyMzdzRUpXQzlC?=
+ =?utf-8?B?UnpZb1VpVGluUEN5amY1RWNJNkVwRVpyTVI5MkVnUUJEZWdXdUFJM1pVdUY3?=
+ =?utf-8?B?SjVjZDZhNGVvUUF1VTU2NEg5dm52WmMwSENFaDk3cC9wenhqS21wV3Jqd3pO?=
+ =?utf-8?B?dnNRbUpMVklpWFU0K0gwbHAyTzNJdVZjcGFsVVVmeUZnMjBLMklZV0hLZ1NL?=
+ =?utf-8?B?NnhuQURFd0hjTG5CTmYzNDBxZlNzdVVoR0MxM3pNeXcxa3lGenZ1Nzd4VURy?=
+ =?utf-8?B?Z2c4RVQvSWtLSWdaOUttZ0p4dDM2WlRvSjhPeHhTQlZTK1YxL1QxOHQ0MkR6?=
+ =?utf-8?B?NmhiaVdjM3NCQTRoQ0RnRklBa0dIMW9MT290MG1XaWcrOG84TVJIQ0F1d2l2?=
+ =?utf-8?B?SW1iUnpnWDBFN0ZhYksxWDhGNG9KU0lHaGladDZDYldNSDdaeW1ueThzalMx?=
+ =?utf-8?Q?3JAlHjlDU8CZypYNd/Rf4DS5Y0E9CkS50OLUmzNo+evE?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22ca7a8b-6b55-4f3f-4b20-08da794e2f5d
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2022 14:56:33.7118
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jEIgX52vsM+Xoa1RbgTKMUHwF9ecqUmzkF5GuuEmcJr8GkDcO5e+IbPVPwWCDunE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3648
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,158 +145,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Am 08.08.22 um 15:26 schrieb Rob Clark:
+> On Mon, Aug 8, 2022 at 4:22 AM Christian König <christian.koenig@amd.com> wrote:
+>
+> [SNIP]
+>>>> If the virtio/virtgpu UAPI was build around the idea that this is
+>>>> possible then it is most likely fundamental broken.
+>>> How else can you envision mmap'ing to guest userspace working?
+>> Well long story short: You can't.
+>>
+>> See userspace mappings are not persistent, but rather faulted in on
+>> demand. The exporter is responsible for setting those up to be able to
+>> add reverse tracking and so can invalidate those mappings when the
+>> backing store changes.
+> I think that is not actually a problem.  At least for how it works on
+> arm64 but I'm almost positive x86 is similar.. I'm not sure how else
+> you could virtualize mmu/iommu/etc in a way that didn't have horrible
+> performance.
+>
+> There are two levels of pagetable translation, the first controlled by
+> the host kernel, the second by the guest.  From the PoV of host
+> kernel, it is just memory mapped to userspace, getting faulted in on
+> demand, just as normal.  First the guest controlled translation
+> triggers a fault in the guest which sets up guest mapping.  And then
+> the second level of translation to translate from what guest sees as
+> PA (but host sees as VA) to actual PA triggers a fault in the host.
 
-On 8/5/22 16:57, Daniel Lezcano wrote:
-> The thermal framework gives the possibility to register the trip
-> points with the thermal zone. When that is done, no get_trip_* ops are
-> needed and they can be removed.
-> 
-> Convert ops content logic into generic trip points and register them with the
-> thermal zone.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Ok, that's calming.
 
-Thanks, patch looks good to me, feel free to merge this
-through the thermal tree together with the rest of the series:
+At least that's not the approach talked about the last time this came up 
+and it doesn't rip a massive security hole somewhere.
 
-Acked-by: Hans de Goede <hdegoede@redhat.com>
+The question is why is the guest then not using the caching attributes 
+setup by the host page tables when the translation is forwarded anyway?
 
-Regards,
+> [SNIP]
+> This is basically what happens, although via the two levels of pgtable
+> translation.  This patch provides the missing piece, the caching
+> attributes.
 
-Hans
+Yeah, but that won't work like this. See the backing store migrates all 
+the time and when it is backed by PCIe/VRAM/local memory you need to use 
+write combine while system memory is usually cached.
 
-> ---
->  drivers/platform/x86/acerhdf.c | 73 ++++++++++++----------------------
->  1 file changed, 26 insertions(+), 47 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-> index 3463629f8764..cf757f3a1e6b 100644
-> --- a/drivers/platform/x86/acerhdf.c
-> +++ b/drivers/platform/x86/acerhdf.c
-> @@ -46,6 +46,8 @@
->   * measured by the on-die thermal monitor are within 0 <= Tj <= 90. So,
->   * assume 89°C is critical temperature.
->   */
-> +#define ACERHDF_DEFAULT_TEMP_FANON 60000
-> +#define ACERHDF_DEFAULT_TEMP_FANOFF 53000
->  #define ACERHDF_TEMP_CRIT 89000
->  #define ACERHDF_FAN_OFF 0
->  #define ACERHDF_FAN_AUTO 1
-> @@ -70,8 +72,8 @@ static int kernelmode;
->  #endif
->  
->  static unsigned int interval = 10;
-> -static unsigned int fanon = 60000;
-> -static unsigned int fanoff = 53000;
-> +static unsigned int fanon = ACERHDF_DEFAULT_TEMP_FANON;
-> +static unsigned int fanoff = ACERHDF_DEFAULT_TEMP_FANOFF;
->  static unsigned int verbose;
->  static unsigned int list_supported;
->  static unsigned int fanstate = ACERHDF_FAN_AUTO;
-> @@ -137,6 +139,15 @@ struct ctrl_settings {
->  	int mcmd_enable;
->  };
->  
-> +static struct thermal_trip trips[] = {
-> +	[0] = { .temperature = ACERHDF_DEFAULT_TEMP_FANON,
-> +		.hysteresis = ACERHDF_DEFAULT_TEMP_FANON - ACERHDF_DEFAULT_TEMP_FANOFF,
-> +		.type = THERMAL_TRIP_ACTIVE },
-> +
-> +	[1] = { .temperature = ACERHDF_TEMP_CRIT,
-> +		.type = THERMAL_TRIP_CRITICAL }
-> +};
-> +
->  static struct ctrl_settings ctrl_cfg __read_mostly;
->  
->  /* Register addresses and values for different BIOS versions */
-> @@ -326,6 +337,15 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
->  		fanon = ACERHDF_MAX_FANON;
->  	}
->  
-> +	if (fanon < fanoff) {
-> +		pr_err("fanoff temperature (%d) is above fanon temperature (%d), clamping to %d\n",
-> +		       fanoff, fanon, fanon);
-> +		fanoff = fanon;
-> +	};
-> +	
-> +	trips[0].temperature = fanon;
-> +	trips[0].hysteresis  = fanon - fanoff;
-> +	
->  	if (kernelmode && prev_interval != interval) {
->  		if (interval > ACERHDF_MAX_INTERVAL) {
->  			pr_err("interval too high, set to %d\n",
-> @@ -424,43 +444,6 @@ static int acerhdf_change_mode(struct thermal_zone_device *thermal,
->  	return 0;
->  }
->  
-> -static int acerhdf_get_trip_type(struct thermal_zone_device *thermal, int trip,
-> -				 enum thermal_trip_type *type)
-> -{
-> -	if (trip == 0)
-> -		*type = THERMAL_TRIP_ACTIVE;
-> -	else if (trip == 1)
-> -		*type = THERMAL_TRIP_CRITICAL;
-> -	else
-> -		return -EINVAL;
-> -
-> -	return 0;
-> -}
-> -
-> -static int acerhdf_get_trip_hyst(struct thermal_zone_device *thermal, int trip,
-> -				 int *temp)
-> -{
-> -	if (trip != 0)
-> -		return -EINVAL;
-> -
-> -	*temp = fanon - fanoff;
-> -
-> -	return 0;
-> -}
-> -
-> -static int acerhdf_get_trip_temp(struct thermal_zone_device *thermal, int trip,
-> -				 int *temp)
-> -{
-> -	if (trip == 0)
-> -		*temp = fanon;
-> -	else if (trip == 1)
-> -		*temp = ACERHDF_TEMP_CRIT;
-> -	else
-> -		return -EINVAL;
-> -
-> -	return 0;
-> -}
-> -
->  static int acerhdf_get_crit_temp(struct thermal_zone_device *thermal,
->  				 int *temperature)
->  {
-> @@ -474,13 +457,9 @@ static struct thermal_zone_device_ops acerhdf_dev_ops = {
->  	.unbind = acerhdf_unbind,
->  	.get_temp = acerhdf_get_ec_temp,
->  	.change_mode = acerhdf_change_mode,
-> -	.get_trip_type = acerhdf_get_trip_type,
-> -	.get_trip_hyst = acerhdf_get_trip_hyst,
-> -	.get_trip_temp = acerhdf_get_trip_temp,
->  	.get_crit_temp = acerhdf_get_crit_temp,
->  };
->  
-> -
->  /*
->   * cooling device callback functions
->   * get maximal fan cooling state
-> @@ -710,10 +689,10 @@ static int __init acerhdf_register_thermal(void)
->  	if (IS_ERR(cl_dev))
->  		return -EINVAL;
->  
-> -	thz_dev = thermal_zone_device_register("acerhdf", 2, 0, NULL,
-> -					      &acerhdf_dev_ops,
-> -					      &acerhdf_zone_params, 0,
-> -					      (kernelmode) ? interval*1000 : 0);
-> +	thz_dev = thermal_zone_device_register_with_trips("acerhdf", trips, ARRAY_SIZE(trips),
-> +							  0, NULL, &acerhdf_dev_ops,
-> +							  &acerhdf_zone_params, 0,
-> +							  (kernelmode) ? interval*1000 : 0);
->  	if (IS_ERR(thz_dev))
->  		return -EINVAL;
->  
+>>       Because otherwise you can't accommodate that the exporter is
+>> changing those caching attributes.
+> Changing the attributes dynamically isn't going to work.. or at least
+> not easily.  If you had some sort of synchronous notification to host
+> userspace, it could trigger an irq to the guest, I suppose.  But it
+> would mean host kernel has to block waiting for host userspace to
+> interrupt the guest, then wait for guest vgpu process to be scheduled
+> and handle the irq.
+
+We basically change that on every page flip on APUs and that doesn't 
+sound like something fast.
+
+Thanks for the explanation how this works,
+Christian.
+
+>
+> At least in the case of msm, the cache attributes are static for the
+> life of the buffer, so this scenario isn't a problem.  AFAICT this
+> should work fine for at least all UMA hw.. I'm a bit less sure when it
+> comes to TTM, but shouldn't you at least be able to use worst-cache
+> cache attributes for buffers that are allowed to be mapped to guest?
+>
+> BR,
+> -R
+>
+>>> But more seriously, let's take a step back here.. what scenarios are
+>>> you seeing this being problematic for?  Then we can see how to come up
+>>> with solutions.  The current situation of host userspace VMM just
+>>> guessing isn't great.
+>> Well "isn't great" is a complete understatement. When KVM/virtio/virtgpu
+>> is doing what I guess they are doing here then that is a really major
+>> security hole.
+>>
+>>>     And sticking our heads in the sand and
+>>> pretending VMs don't exist isn't great.  So what can we do?  I can
+>>> instead add a msm ioctl to return this info and solve the problem even
+>>> more narrowly for a single platform.  But then the problem still
+>>> remains on other platforms.
+>> Well once more: This is *not* MSM specific, you just absolutely *can't
+>> do that* for any driver!
+>>
+>> I'm just really wondering what the heck is going on here, because all of
+>> this was discussed in lengthy before on the mailing list and very
+>> bluntly rejected.
+>>
+>> Either I'm missing something (that's certainly possible) or we have a
+>> strong case of somebody implementing something without thinking about
+>> all the consequences.
+>>
+>> Regards,
+>> Christian.
+>>
+>>
+>>> Slightly implicit in this is that mapping dma-bufs to the guest won't
+>>> work for anything that requires DMA_BUF_IOCTL_SYNC for coherency.. we
+>>> could add a possible return value for DMA_BUF_INFO_VM_PROT indicating
+>>> that the buffer does not support mapping to guest or CPU access
+>>> without DMA_BUF_IOCTL_SYNC.  Then at least the VMM can fail gracefully
+>>> instead of subtly.
+>>>
+>>> BR,
+>>> -R
 

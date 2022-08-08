@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAACF58C1B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4C358C1C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243501AbiHHCmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S243902AbiHHCma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241862AbiHHClj (ORCPT
+        with ESMTP id S241965AbiHHClj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 7 Aug 2022 22:41:39 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDCC25C7
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 19:41:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AF121BF;
+        Sun,  7 Aug 2022 19:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=GVucidUOOwtQ2TJCPsgzEhLdwKKhX1FOI8GcU2GMl0g=; b=ISaWvnuqHzawQhPdc61l2Sxvkd
-        WpOlQVvan5xH10oxr1v4QtaDOYTBgKIdnjePj3WSsmntzoVv1cZeDWgjqY9gf1YVBSR0GRg47zQ9C
-        zNQOgZ3Pfx7iDHcwOroSP0crMagexUKgC5+fcakQ5ReQ98wNRNybzSv+B/Z8iZVI2y/ej2F0CHyod
-        MalFPsk0dE2SI+lJDsOQx8Gta0gcdVWEd9luP4qK2SdlFQIrwn6JVx1Ar2x51Y+J5Rryb9k6iISEm
-        YXr4cuPvSUtXF1nJVuZKJX9m081xfv6hWw/B+ty29iMyWhh7ex+QhBHUPjNS3BWkXQLwm6Ex8l4nz
-        G/ykCLUg==;
+        bh=BvTU+A/nzuWUa8MQa4k7Sb4glYSL+iQXtzbWCaKztNY=; b=GLqkpcfBCrPO49rGo+VKNZFVZU
+        iFKYf5NbjDOjL4T7Ju6Az370rqSdPV+96FyYRNmhl3+vbhVxDgIqTUDNIHpSR0FIKJqXava9rSkkU
+        pYZE51oQzMU37HijszMPXEys7ubsnPoFDlFr0ye4g4iiyr5hg68zVpKt2/DItFlQoSTeSRUFcCfn7
+        g/d7u693Gyd85tSt6SxgEZlBJQT4Uz5NyD1OOtZzX+yNRjygMRX4DeZ75dfKkjj89tCiYU+Tvyce/
+        PQsKCLIC0R55T5USWY/OT4FdnaAKeF+ufewhzxYP142nkG/bFzidi4z+wsj209PGZ9DD7wjLzjgXr
+        HeAlwkHA==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oKshy-00DVSf-OB; Mon, 08 Aug 2022 02:41:34 +0000
+        id 1oKshy-00DVSh-QD; Mon, 08 Aug 2022 02:41:34 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-kernel@vger.kernel.org, pmladek@suse.com,
         Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     x86@kernel.org
-Subject: [PATCH v5 26/32] x86/resctrl: Convert to printbuf
-Date:   Mon,  8 Aug 2022 03:41:22 +0100
-Message-Id: <20220808024128.3219082-27-willy@infradead.org>
+Cc:     linux-pci@vger.kernel.org
+Subject: [PATCH v5 27/32] PCI/P2PDMA: Convert to printbuf
+Date:   Mon,  8 Aug 2022 03:41:23 +0100
+Message-Id: <20220808024128.3219082-28-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220808024128.3219082-1-willy@infradead.org>
 References: <20220808024128.3219082-1-willy@infradead.org>
@@ -56,78 +56,86 @@ buffer mode, so it's a direct conversion, aside from some trivial
 refactoring in cpu_show_meltdown() to make the code more consistent.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-Cc: x86@kernel.org
+Cc: linux-pci@vger.kernel.org
 ---
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/pci/p2pdma.c | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index f276aff521e8..50c12711a249 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -19,7 +19,7 @@
- #include <linux/fs_parser.h>
- #include <linux/sysfs.h>
- #include <linux/kernfs.h>
+diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
+index 4496a7c5c478..8e29e7cabad3 100644
+--- a/drivers/pci/p2pdma.c
++++ b/drivers/pci/p2pdma.c
+@@ -18,7 +18,7 @@
+ #include <linux/memremap.h>
+ #include <linux/percpu-refcount.h>
+ #include <linux/random.h>
 -#include <linux/seq_buf.h>
 +#include <linux/printbuf.h>
- #include <linux/seq_file.h>
- #include <linux/sched/signal.h>
- #include <linux/sched/task.h>
-@@ -51,7 +51,7 @@ static struct kernfs_node *kn_mongrp;
- /* Kernel fs node for "mon_data" directory under root */
- static struct kernfs_node *kn_mondata;
+ #include <linux/xarray.h>
  
--static struct seq_buf last_cmd_status;
-+static struct printbuf last_cmd_status;
- static char last_cmd_status_buf[512];
- 
- struct dentry *debugfs_resctrl;
-@@ -59,13 +59,13 @@ struct dentry *debugfs_resctrl;
- void rdt_last_cmd_clear(void)
- {
- 	lockdep_assert_held(&rdtgroup_mutex);
--	seq_buf_clear(&last_cmd_status);
-+	printbuf_reset(&last_cmd_status);
+ struct pci_p2pdma {
+@@ -275,12 +275,9 @@ static int pci_bridge_has_acs_redir(struct pci_dev *pdev)
+ 	return 0;
  }
  
- void rdt_last_cmd_puts(const char *s)
+-static void seq_buf_print_bus_devfn(struct seq_buf *buf, struct pci_dev *pdev)
++static void prt_bus_devfn(struct printbuf *buf, struct pci_dev *pdev)
  {
- 	lockdep_assert_held(&rdtgroup_mutex);
--	seq_buf_puts(&last_cmd_status, s);
-+	prt_str(&last_cmd_status, s);
+-	if (!buf)
+-		return;
+-
+-	seq_buf_printf(buf, "%s;", pci_name(pdev));
++	prt_printf(buf, "%s;", pci_name(pdev));
  }
  
- void rdt_last_cmd_printf(const char *fmt, ...)
-@@ -74,7 +74,7 @@ void rdt_last_cmd_printf(const char *fmt, ...)
+ static bool cpu_supports_p2pdma(void)
+@@ -454,13 +451,11 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
+ 	struct pci_dev *a = provider, *b = client, *bb;
+ 	bool acs_redirects = false;
+ 	struct pci_p2pdma *p2pdma;
+-	struct seq_buf acs_list;
+ 	int acs_cnt = 0;
+ 	int dist_a = 0;
+ 	int dist_b = 0;
+ 	char buf[128];
+-
+-	seq_buf_init(&acs_list, buf, sizeof(buf));
++	struct printbuf acs_list = PRINTBUF_EXTERN(buf, sizeof(buf));
  
- 	va_start(ap, fmt);
- 	lockdep_assert_held(&rdtgroup_mutex);
--	seq_buf_vprintf(&last_cmd_status, fmt, ap);
-+	prt_vprintf(&last_cmd_status, fmt, ap);
- 	va_end(ap);
- }
+ 	/*
+ 	 * Note, we don't need to take references to devices returned by
+@@ -471,7 +466,7 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
+ 		dist_b = 0;
  
-@@ -833,7 +833,7 @@ static int rdt_last_cmd_status_show(struct kernfs_open_file *of,
- 	int len;
+ 		if (pci_bridge_has_acs_redir(a)) {
+-			seq_buf_print_bus_devfn(&acs_list, a);
++			prt_bus_devfn(&acs_list, a);
+ 			acs_cnt++;
+ 		}
  
- 	mutex_lock(&rdtgroup_mutex);
--	len = seq_buf_used(&last_cmd_status);
-+	len = printbuf_written(&last_cmd_status);
- 	if (len)
- 		seq_printf(seq, "%.*s", len, last_cmd_status_buf);
- 	else
-@@ -3248,8 +3248,8 @@ int __init rdtgroup_init(void)
- {
- 	int ret = 0;
+@@ -500,7 +495,7 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
+ 			break;
  
--	seq_buf_init(&last_cmd_status, last_cmd_status_buf,
--		     sizeof(last_cmd_status_buf));
-+	last_cmd_status = PRINTBUF_EXTERN(last_cmd_status_buf,
-+					  sizeof(last_cmd_status_buf));
+ 		if (pci_bridge_has_acs_redir(bb)) {
+-			seq_buf_print_bus_devfn(&acs_list, bb);
++			prt_bus_devfn(&acs_list, bb);
+ 			acs_cnt++;
+ 		}
  
- 	ret = rdtgroup_setup_root();
- 	if (ret)
+@@ -515,11 +510,11 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
+ 	}
+ 
+ 	if (verbose) {
+-		acs_list.buffer[acs_list.len-1] = 0; /* drop final semicolon */
++		acs_list.buf[acs_list.pos-1] = 0; /* drop final semicolon */
+ 		pci_warn(client, "ACS redirect is set between the client and provider (%s)\n",
+ 			 pci_name(provider));
+ 		pci_warn(client, "to disable ACS redirect for this path, add the kernel parameter: pci=disable_acs_redir=%s\n",
+-			 acs_list.buffer);
++			 acs_list.buf);
+ 	}
+ 	acs_redirects = true;
+ 
 -- 
 2.35.1
 

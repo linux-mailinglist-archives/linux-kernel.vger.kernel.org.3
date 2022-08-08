@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF7858C84B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD40D58C84E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242557AbiHHMXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 08:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S242638AbiHHMZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 08:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbiHHMXu (ORCPT
+        with ESMTP id S242788AbiHHMZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 08:23:50 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF6263FD
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:23:49 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M1b0m6t4JzmVT1;
-        Mon,  8 Aug 2022 20:21:44 +0800 (CST)
-Received: from [10.67.109.51] (10.67.109.51) by canpemm500009.china.huawei.com
- (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 8 Aug
- 2022 20:23:47 +0800
-Message-ID: <7b2586c0-c380-c856-7d63-b7bff6f3a640@huawei.com>
-Date:   Mon, 8 Aug 2022 20:23:46 +0800
+        Mon, 8 Aug 2022 08:25:46 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45973634B
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:25:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=v49Gv+vvLdx2K8EmwF94ITIRDlwX8hbS7d3UiPb1pM0=; b=qr4XgPypiXoBj/EGs5WV0wPjUl
+        Nm//fZoqFvDP4KJ7stWC6EZH8lS3KZAVLRztAS215esJhmOH71vRxOoKydxK0vubFnolyzYbLf1Kd
+        erG+gveaYm54y+J6TWgEx9dUiwtGZy47rZRNgE5nvDfgF9OXZVLRxS6I+NPrV56XUhCl/xyT5JAaU
+        uvutKHw7fytMD/AA38WxKcsTuhzuxobpDTVjeAt6G4qtbKcK+XQOW8m1vfy7gMOxaP/mlEt/juiCN
+        iMsIr/HTF46es8F2dboXYr/sfQAFhCpLo+tlz1XFxfhK36YLld+PtctnTvDRLgA5MmsoiiMfnMzgy
+        Jekey9ZA==;
+Received: from [2a01:799:961:d200:fd91:af1e:9da7:f964] (port=64062)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oL1pF-0005Gv-RZ; Mon, 08 Aug 2022 14:25:41 +0200
+Message-ID: <633ff81a-8fe1-da85-1235-18d14aebf6b0@tronnes.org>
+Date:   Mon, 8 Aug 2022 14:25:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [Question] Reading /proc/stat has a time backward issue
-From:   "Lihua (lihua, ran)" <hucool.lihua@huawei.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "open list:SCHEDULER" <linux-kernel@vger.kernel.org>,
-        <frederic@kernel.org>
-References: <85d5087b-450c-351f-270d-c61303cf3187@huawei.com>
- <1f1f625a-148d-0398-f840-1f9b4e964189@huawei.com>
-In-Reply-To: <1f1f625a-148d-0398-f840-1f9b4e964189@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 01/35] drm/atomic-helper: Rename
+ drm_atomic_helper_connector_tv_reset to avoid ambiguity
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-1-3d53ae722097@cerno.tech>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v1-1-3d53ae722097@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.109.51]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping...
 
-Your suggestions are valuable, I don't have a good way to fix this.
 
-thanks all.
+Den 29.07.2022 18.34, skrev Maxime Ripard:
+> We currently have two sets of TV properties.
+> 
+> The first one is there to deal with analog TV properties, creating
+> properties such as the TV mode, subconnectors, saturation, hue and so on.
+> It's created by calling the drm_mode_create_tv_properties() function.
+> 
+> The second one is there to deal with properties that might be useful on a
+> TV, creating the overscan margins for example. It's created by calling the
+> drm_mode_create_tv_margin_properties().
+> 
+> However, we also have a drm_atomic_helper_connector_tv_reset() function
+> that will reset the TV margin properties to their default values, and thus
+> is supposed to be called for the latter set. This creates an ambiguity due
+> to the inconsistent naming.
+> 
+> We can thus rename the drm_atomic_helper_connector_tv_reset() function to
+> drm_atomic_helper_connector_tv_margins_reset() to remove that ambiguity
+> and hopefully make it more obvious.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
 
-在 2022/8/4 15:44, Lihua (lihua, ran) 写道:
-> ping...
-> 
-> Any good suggestions?
-> 
-> thanks all.
-> 
-> 在 2022/7/27 12:02, Lihua (lihua, ran) 写道:
->> Hi all,
->>
->> I found a problem that the statistical time goes backward, the value read first is 319, and the value read again is 318. As follows：
->> first：
->> cat /proc/stat |  grep cpu1
->> cpu1    319    0    496    41665    0    0    0    0    0    0
->> then：
->> cat /proc/stat |  grep cpu1
->> cpu1    318    0    497    41674    0    0    0    0    0    0
->>
->> Time goes back, which is counterintuitive.
->>
->> After debug this, I found that the problem is caused by the implementation of kcpustat_cpu_fetch_vtime. As follows：
->>
->>                                CPU0                                                                          CPU1
->> First:
->> show_stat():
->>      ->kcpustat_cpu_fetch()
->>          ->kcpustat_cpu_fetch_vtime()
->>              ->cpustat[CPUTIME_USER] = kcpustat_cpu(cpu) + vtime->utime + delta;              rq->curr is in user mod
->>               ---> When CPU1 rq->curr running on userspace, need add utime and delta
->>                                                                                               --->  rq->curr->vtime->utime is less than 1 tick
->> Then:
->> show_stat():
->>      ->kcpustat_cpu_fetch()
->>          ->kcpustat_cpu_fetch_vtime()
->>              ->cpustat[CPUTIME_USER] = kcpustat_cpu(cpu);                                     rq->curr is in kernel mod
->>              ---> When CPU1 rq->curr running on kernel space, just got kcpustat
->>
->> Because the values ​​of utime、 stime and delta are temporarily written to cpustat. Therefore, there are two problems  read from /proc/stat:
->> 1. There may be a regression phenomenon;
->> 2. When there are many tasks, the statistics are not accurate enough when utime and stime do not exceed one TICK.
->> The time goes back is counterintuitive, and I want to discuss whether there is a good solution without compromising performance.
->>
->> Thanks a lot.
+Reviewed-by: Noralf Trønnes <noralf@tronnes.org>

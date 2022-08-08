@@ -2,209 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C44D58CA8F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CB358CA92
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 16:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243345AbiHHOc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 10:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S243515AbiHHOdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 10:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbiHHOcz (ORCPT
+        with ESMTP id S231475AbiHHOdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 10:32:55 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2047.outbound.protection.outlook.com [40.107.100.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1EA65C2;
-        Mon,  8 Aug 2022 07:32:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kkOBCMd+kMVOPP/gA1nLRW7nc0tY/lpuQWh5viD09jfCB9cwybukACbCXdnI7Wgr1rxkeXxWqwmBMw9pg61bCpxqkiwk8azukwWnevwiUxSv6ovWydYNIPBQaz4o4oCl2FfR0SHxc9huDkU/8RMamkqDzoUw9Ibj9gnGhI0Nw9Gg7Sc6ZERzbGcQ+9VKEEqeLToR8CWMBuZ57Am9AVeupZfmkXgWO8exJYSTcLoSkbaL/TaeEW1rTvUl08hnn+mkOFpcccUf4W4hNH7ZK5ys2y+hGlb8u0a/Ot/2OUyOJZYUkVt6FWjr8Fj9J7QKsujNUkt6Ce2EYiiZku+aIvRonA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zrbpcEboXfNYdOm4QrGdRpnrUza2rkhM1uramB0oLzU=;
- b=BhYgmLfBbyvLrNETQL0Wo+bsOE0xwYRawpiAwhv+rTtU/OR6+eEbdXrQA3QocN6/aA9tOjZd6tI0vdRL1J4gsD/9JQVFxkfazImPsVHrjAIcbl9B/cThVKscICs54MUsJDZkrU5A3e/locymT21uG0U8qZ3XBU/TKM+I7o1s/gBU6ILBl3NwfDr0eBmqFAVYUdoJ1qOrrizPdrDdJ4GAoX0eukgCFfBQDxj/xxYsgSG8K1zakjhMAH88YAUaNo9ufXhUQYLpkjojhCXm3UenqjGKPOUKRJrka5eQmOSdPXVtahyENwhTW5cO6uk5NOZqZ+WFJZ60fq/rmtCvHo+B+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zrbpcEboXfNYdOm4QrGdRpnrUza2rkhM1uramB0oLzU=;
- b=1Sp7sSt0RnfIlNQK5gTSOju+NjVGCSJLMMV7cOxhMShdRZ4ReIwpfARkU+EboJoo30CsYGYInMY1Mvn8m3+/JO0CJ9DpQ3UurOZn/fWizzBdfx/If0PkNtXHUp039jGrVeV3QBY3gZhUjb3NgiEghba3tcE/UZewoinZtz7M9M4=
-Received: from BN0PR04CA0062.namprd04.prod.outlook.com (2603:10b6:408:ea::7)
- by BYAPR12MB3399.namprd12.prod.outlook.com (2603:10b6:a03:ad::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.15; Mon, 8 Aug
- 2022 14:32:51 +0000
-Received: from BN8NAM11FT065.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ea:cafe::56) by BN0PR04CA0062.outlook.office365.com
- (2603:10b6:408:ea::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16 via Frontend
- Transport; Mon, 8 Aug 2022 14:32:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT065.mail.protection.outlook.com (10.13.177.63) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5504.14 via Frontend Transport; Mon, 8 Aug 2022 14:32:50 +0000
-Received: from fritz.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 8 Aug
- 2022 09:32:48 -0500
-From:   Kim Phillips <kim.phillips@amd.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <andrew.cooper3@citrix.com>, <bp@alien8.de>, <bp@suse.de>,
-        <bpf@vger.kernel.org>, <jpoimboe@redhat.com>,
-        <kim.phillips@amd.com>, <linux-kernel@vger.kernel.org>,
-        <mingo@kernel.org>, <peterz@infradead.org>,
-        <thomas.lendacky@amd.com>, <x86@kernel.org>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v4] x86/bugs: Enable STIBP for IBPB mitigated RetBleed
-Date:   Mon, 8 Aug 2022 09:32:33 -0500
-Message-ID: <20220808143233.14211-1-kim.phillips@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <YvEcSGxAh9qbOxPH@kroah.com>
-References: <YvEcSGxAh9qbOxPH@kroah.com>
+        Mon, 8 Aug 2022 10:33:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E751C11803
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 07:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659969199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/1TLUgVlg2OyYCJ+DZaddQK6OMJhjwa3jOmWOJ1SScI=;
+        b=CzBnDYHg00fkiP2nI9ZM8nxuQ2k5bQifO1OU38JZukIHNr7dT8JPl3Nqt3vrQHkbdX89pM
+        JNkrB6Fgj2owiaHm967HNtHgqwU/FG/9hz525Wc7ZGdlt46RCpZx/DmKZM5hjf3IkkKMfU
+        c1VYEC/XLufh/AeV0XkQ3L8Pqt8x8y4=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-551-kvogdGC4Oie-jdDllxR_fQ-1; Mon, 08 Aug 2022 10:33:18 -0400
+X-MC-Unique: kvogdGC4Oie-jdDllxR_fQ-1
+Received: by mail-lf1-f70.google.com with SMTP id y6-20020a196406000000b0048ae6ac68adso2218480lfb.21
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 07:33:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/1TLUgVlg2OyYCJ+DZaddQK6OMJhjwa3jOmWOJ1SScI=;
+        b=LKkmVMTtNopRWg7YCb4ALEe0MMCAOLklr7F3NSAsfmoIi6TDHf6LFrtalgBQ8LF1Ze
+         GPqvIlEIBb2sc5morA3xMfY1PvJQLrOJwV4D8JrYjopTpdnjU25wM/s3cO+EahvQpHWB
+         Ri9hE8qjOKlrDpO1kYva2BIrpLlfLn7AdnreUupnGsIQtaNtXyXWouMDISwjZuEiw5xu
+         cr0SSi9PKAnQMJKqEtgxuQbYi/dTN+MjwquXi8ShF8iPAVhrYijfIFUSuwD8iKYvsudF
+         IxfI/1VUfqYC9WvwKj1Akdzh7GOcpQ5NhiY8q3efm+l+l8PlGSL1AEj3i8bZ8OfcgQq6
+         6uzQ==
+X-Gm-Message-State: ACgBeo3PkSQzuGWyn1VD4F60qZ10NQZkhGhIk6oCwxx1goWEOeZ2FWNK
+        iomCCZcNRKusQ9BFjb9CkNWnA8sfi2yHOnPfDfk8G3OFWoq9yfu+OltpvdNxWRsXouOzBNhYpFk
+        SqfnOGl0sqHCVgH/0Iq10AiFx0gWt9E9LAHRwLezI
+X-Received: by 2002:a05:6512:68a:b0:48b:9d3d:b19b with SMTP id t10-20020a056512068a00b0048b9d3db19bmr3474985lfe.174.1659969196984;
+        Mon, 08 Aug 2022 07:33:16 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR64B2Y+NvP5GJggrT7xDmjVOaBSl5qxOdsgKfM9DJRfPYV4TZXGTwlEJml+bcB9a8mUktIhhfJarGLbZfr6iPk=
+X-Received: by 2002:a05:6512:68a:b0:48b:9d3d:b19b with SMTP id
+ t10-20020a056512068a00b0048b9d3db19bmr3474977lfe.174.1659969196714; Mon, 08
+ Aug 2022 07:33:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 044f994f-4f58-41bc-c950-08da794adf4f
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3399:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KYePLO0XS3lUvfmzkDqiRT86hFbF8d1kqmHQZWO8ndfVKna9PVvCfxZax6ucD3VFh/vHjhGSc+RSgFdR5jw14SGGVt3JmCxeZZTvRI/ZaAwOserQgNTDVxHBU/GU0LptlRgSDZF2oVO4KJk/F8Ce1y8LXt59yO/ZgJlL+czbsPAULajSgciPpCfgN4uXYH7GfkLlFqBLw+h5pWj291UhRFDw7FIZ+JaYUK8x83V56/hTl5aTgJfLZAoeRIVN9Az06VfQA6PxtXZ9ye12TbO0jO3jp7KPGeM1to3pn1rN6VJQ+iB2CNCwfKtU0YOpK+Cr8iwrQhm2ApAxGgOdGXJYPYhI7Dchwnu5l8ah6ht0KjedsLPipvyCcpIE8qfjeqoZKHmd5gf9us1DxjWOkZPXR3LcrWv3dH54/dqNJvvxN0GbJvJe+lUdO8ygTSIQsS7ulOJWARogUQOcPtomXJZmXwuyolT+i4McmVafPf3uigbKq0wTwyslSoOF4lbXruJXjiFfp4D1eXx1eV9sUDenKJvGiC54eCociITrWVI5OdXn75VYnWCiKo73+xCywoyLuxMNS47dlANHwFONWHTNVqasvW3dQeJQ3Ksk4/yLNvcwTjRipvbT10iPgU18aXlyCE7/6s1DZKkOO1hHzMeblYFsqqUVgce2tXwjPvwh3ti9mXBxF28vn8xOlL1IEr2j3MDMF0xPrLqfapGzUjahmopksCnUnD55Wlmd4Exp795MBp5tV41gXhFpuJzc3oBG200BHdf9l2Vc5Rt0ars9xhhacsaa133ngAzT+MJLv/q1rVuAkwf7Du77oO0B/rntYCDD8t7tZrMfn95iG1MBjaoCF5Tyf+B88ROt44CzU9S9LF64kONc1C8GeIKR4D3N
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(39860400002)(396003)(36840700001)(40470700004)(46966006)(356005)(82740400003)(26005)(40480700001)(478600001)(1076003)(5660300002)(6666004)(2906002)(7696005)(36756003)(81166007)(41300700001)(82310400005)(86362001)(4326008)(44832011)(70206006)(966005)(70586007)(83380400001)(2616005)(8936002)(8676002)(7416002)(36860700001)(6916009)(54906003)(16526019)(40460700003)(336012)(316002)(426003)(47076005)(186003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2022 14:32:50.6810
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 044f994f-4f58-41bc-c950-08da794adf4f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT065.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3399
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220805181105.GA29848@willie-the-truck> <20220807042408-mutt-send-email-mst@kernel.org>
+ <20220808101850.GA31984@willie-the-truck> <20220808083958-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220808083958-mutt-send-email-mst@kernel.org>
+From:   Stefan Hajnoczi <shajnocz@redhat.com>
+Date:   Mon, 8 Aug 2022 10:33:05 -0400
+Message-ID: <CAD60JZOWLU2U9EoUmG6kLHMUYv0j_y4V8TOzzyk=XHQJaG38mg@mail.gmail.com>
+Subject: Re: IOTLB support for vhost/vsock breaks crosvm on Android
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        torvalds@linux-foundation.org, ascull@google.com, maz@kernel.org,
+        keirf@google.com, jiyong@google.com, kernel-team@android.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        crosvm-dev@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD's "Technical Guidance for Mitigating Branch Type Confusion,
-Rev. 1.0 2022-07-12" whitepaper, under section 6.1.2 "IBPB On
-Privileged Mode Entry / SMT Safety" says:
+On Mon, Aug 8, 2022 at 8:46 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Mon, Aug 08, 2022 at 11:18:50AM +0100, Will Deacon wrote:
+> > Hi Michael,
+> >
+> > On Sun, Aug 07, 2022 at 09:14:43AM -0400, Michael S. Tsirkin wrote:
+> > > Will, thanks very much for the analysis and the writeup!
+> >
+> > No problem, and thanks for following up.
+> >
+> > > On Fri, Aug 05, 2022 at 07:11:06PM +0100, Will Deacon wrote:
+> > > > So how should we fix this? One possibility is for us to hack crosvm to
+> > > > clear the VIRTIO_F_ACCESS_PLATFORM flag when setting the vhost features,
+> > > > but others here have reasonably pointed out that they didn't expect a
+> > > > kernel change to break userspace. On the flip side, the offending commit
+> > > > in the kernel isn't exactly new (it's from the end of 2020!) and so it's
+> > > > likely that others (e.g. QEMU) are using this feature.
+> > >
+> > > Exactly, that's the problem.
+> > >
+> > > vhost is reusing the virtio bits and it's only natural that
+> > > what you are doing would happen.
+> > >
+> > > To be precise, this is what we expected people to do (and what QEMU does):
+> > >
+> > >
+> > > #define QEMU_VHOST_FEATURES ((1 << VIRTIO_F_VERSION_1) |
+> > >                          (1 << VIRTIO_NET_F_RX_MRG) | .... )
+> > >
+> > > VHOST_GET_FEATURES(... &host_features);
+> > > host_features &= QEMU_VHOST_FEATURES
+> > > VHOST_SET_FEATURES(host_features & guest_features)
+> > >
+> > >
+> > > Here QEMU_VHOST_FEATURES are the bits userspace knows about.
+> > >
+> > > Our assumption was that whatever userspace enables, it
+> > > knows what the effect on vhost is going to be.
+> > >
+> > > But yes, I understand absolutely how someone would instead just use the
+> > > guest features. It is unfortunate that we did not catch this in time.
+> > >
+> > >
+> > > In hindsight, we should have just created vhost level macros
+> > > instead of reusing virtio ones. Would address the concern
+> > > about naming: PLATFORM_ACCESS makes sense for the
+> > > guest since there it means "whatever access rules platform has",
+> > > but for vhost a better name would be VHOST_F_IOTLB.
+> > > We should have also taken greater pains to document what
+> > > we expect userspace to do. I remember now how I thought about something
+> > > like this but after coding this up in QEMU I forgot to document this :(
+> > > Also, I suspect given the history the GET/SET features ioctl and burned
+> > > wrt extending it and we have to use a new when we add new features.
+> > > All this we can do going forward.
+> >
+> > Makes sense. The crosvm developers are also pretty friendly in my
+> > experience, so I'm sure they wouldn't mind being involved in discussions
+> > around any future ABI extensions. Just be aware that they _very_ recently
+> > moved their mailing lists, so I think it lives here now:
+> >
+> > https://groups.google.com/a/chromium.org/g/crosvm-dev
+> >
+> > > But what can we do about the specific issue?
+> > > I am not 100% sure since as Will points out, QEMU and other
+> > > userspace already rely on the current behaviour.
+> > >
+> > > Looking at QEMU specifically, it always sends some translations at
+> > > startup, this in order to handle device rings.
+> > >
+> > > So, *maybe* we can get away with assuming that if no IOTLB ioctl was
+> > > ever invoked then this userspace does not know about IOTLB and
+> > > translation should ignore IOTLB completely.
+> >
+> > There was a similar suggestion from Stefano:
+> >
+> > https://lore.kernel.org/r/20220806105225.crkui6nw53kbm5ge@sgarzare-redhat
+> >
+> > about spotting the backend ioctl for IOTLB and using that to enable
+> > the negotiation of F_ACCESS_PLATFORM. Would that work for qemu?
+>
+> Hmm I would worry that this disables the feature for old QEMU :(
+>
+>
+> > > I am a bit nervous about breaking some *other* userspace which actually
+> > > wants device to be blocked from accessing memory until IOTLB
+> > > has been setup. If we get it wrong we are making guest
+> > > and possibly even host vulnerable.
+> > > And of course just revering is not an option either since there
+> > > are now whole stacks depending on the feature.
+> >
+> > Absolutely, I'm not seriously suggesting the revert. I just did it locally
+> > to confirm the issue I was seeing.
+> >
+> > > Will I'd like your input on whether you feel a hack in the kernel
+> > > is justified here.
+> >
+> > If we can come up with something that we have confidence in and won't be a
+> > pig to maintain, then I think we should do it, but otherwise we can go ahead
+> > and change crosvm to mask out this feature flag on the vhost side for now.
+> > We mainly wanted to raise the issue to illustrate that this flag continues
+> > to attract problems in the hope that it might inform further usage and/or
+> > spec work in this area.
+> >
+> > In any case, I'm happy to test any kernel patches with our setup if you
+> > want to give it a shot.
+>
+> Thanks!
+> I'm a bit concerned that the trick I proposed changes the configuration
+> where iotlb was not set up from "access to memory not allowed" to
+> "access to all memory allowed". This just might have security
+> implications if some application assumed the former.
+> And the one Stefano proposed disables IOTLB for old QEMU versions.
 
-"Similar to the Jmp2Ret mitigation, if the code on the sibling thread
-cannot be trusted, software should set STIBP to 1 or disable SMT to
-ensure SMT safety when using this mitigation."
+Adding hacks to vhost in order to work around userspace applications
+that misunderstand the vhost model seems like a it will lead to
+problems.
 
-So, like already being done for retbleed=unret, the also for
-retbleed=ibpb, force STIBP on machines that have it, and report
-its SMT vulnerability status accordingly.
+Userspace applications need to follow the vhost model: vhost is
+designed for virtqueue passthrough, but the rest of the vhost
+interface is not suitable for pass through. It's similar to how VFIO
+PCI passthrough needs to do a significant amount of stuff in userspace
+to emulate a PCI configuration space and it won't work properly if you
+pass through the physical PCI device's PCI configuration space.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=206537
-Fixes: 3ebc17006888 ("x86/bugs: Add retbleed=ibpb")
-Cc: stable@vger.kernel.org # 5.10, 5.15, 5.19
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
----
-v4:  Cc: stable (Greg K-H)
-v3:  "unret and ibpb mitigations" -> "UNRET and IBPB mitigations" (Mingo)
-v2:  Justify and explain STIBP's role with IBPB (Boris)
+The emulator has to mediate between the guest device and vhost device
+because it still emulates the VIRTIO transport, configuration space,
+device lifecycle, etc even when all virtqueues are passed through.
 
- .../admin-guide/kernel-parameters.txt         | 20 ++++++++++++++-----
- arch/x86/kernel/cpu/bugs.c                    | 10 ++++++----
- 2 files changed, 21 insertions(+), 9 deletions(-)
+Let's document this for vhost and vDPA because it is not obvious.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index bab2b0bf5988..ed6a19ae0dd6 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5260,20 +5260,30 @@
- 			Speculative Code Execution with Return Instructions)
- 			vulnerability.
- 
-+			AMD-based UNRET and IBPB mitigations alone do not stop
-+			sibling threads influencing the predictions of other sibling
-+			threads.  For that reason, we use STIBP on processors
-+			that support it, and mitigate SMT on processors that don't.
-+
- 			off          - no mitigation
- 			auto         - automatically select a migitation
- 			auto,nosmt   - automatically select a mitigation,
- 				       disabling SMT if necessary for
- 				       the full mitigation (only on Zen1
- 				       and older without STIBP).
--			ibpb	     - mitigate short speculation windows on
-+			ibpb         - [AMD] Mitigate short speculation windows on
- 				       basic block boundaries too. Safe, highest
--				       perf impact.
--			unret        - force enable untrained return thunks,
-+				       perf impact. It also enables STIBP if
-+				       present.
-+			ibpb,nosmt   - [AMD] Like ibpb, but will disable SMT when STIBP
-+				       is not available. This is the alternative for
-+				       systems which do not have STIBP.
-+			unret        - [AMD] Force enable untrained return thunks,
- 				       only effective on AMD f15h-f17h
- 				       based systems.
--			unret,nosmt  - like unret, will disable SMT when STIBP
--			               is not available.
-+			unret,nosmt  - [AMD] Like unret, but will disable SMT when STIBP
-+				       is not available. This is the alternative for
-+				       systems which do not have STIBP.
- 
- 			Selecting 'auto' will choose a mitigation method at run
- 			time according to the CPU.
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 6761668100b9..d50686ca5870 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -152,7 +152,7 @@ void __init check_bugs(void)
- 	/*
- 	 * spectre_v2_user_select_mitigation() relies on the state set by
- 	 * retbleed_select_mitigation(); specifically the STIBP selection is
--	 * forced for UNRET.
-+	 * forced for UNRET or IBPB.
- 	 */
- 	spectre_v2_user_select_mitigation();
- 	ssb_select_mitigation();
-@@ -1179,7 +1179,8 @@ spectre_v2_user_select_mitigation(void)
- 	    boot_cpu_has(X86_FEATURE_AMD_STIBP_ALWAYS_ON))
- 		mode = SPECTRE_V2_USER_STRICT_PREFERRED;
- 
--	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
-+	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
-+	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
- 		if (mode != SPECTRE_V2_USER_STRICT &&
- 		    mode != SPECTRE_V2_USER_STRICT_PREFERRED)
- 			pr_info("Selecting STIBP always-on mode to complement retbleed mitigation\n");
-@@ -2320,10 +2321,11 @@ static ssize_t srbds_show_state(char *buf)
- 
- static ssize_t retbleed_show_state(char *buf)
- {
--	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
-+	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
-+	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
- 	    if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
- 		boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
--		    return sprintf(buf, "Vulnerable: untrained return thunk on non-Zen uarch\n");
-+		    return sprintf(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
- 
- 	    return sprintf(buf, "%s; SMT %s\n",
- 			   retbleed_strings[retbleed_mitigation],
--- 
-2.34.1
+Stefan
 

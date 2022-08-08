@@ -2,125 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A9658C717
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7F758C71A
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242137AbiHHLDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 07:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
+        id S242408AbiHHLE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 07:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231703AbiHHLD3 (ORCPT
+        with ESMTP id S237657AbiHHLEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 07:03:29 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C341555B8
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:03:28 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id r4so10796380edi.8
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 04:03:28 -0700 (PDT)
+        Mon, 8 Aug 2022 07:04:25 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C96EE094
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:04:24 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id 130so7748420pfv.13
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 04:04:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jE7rDzDJl54ngSeDSzix1uvFy6MwH/Sd6J9jXSbtUjE=;
-        b=jOeH74/bjd+f49sRgyezy7cILVoSDE6hWrGLBmU8FhuyWct9gaEdqyi62ahrDhXyUY
-         P+niYKnvQCnOJZluZ4D6WSbGqN/8Jin+1P4yZ6x+29OnP72ghuUx+NCI0zIMIMdpR2Q4
-         mBAK44TczmFLT8HMVzC4lWZu50/0UYVMXGEqy2KkgEInFjDEdHbyZ8SrwCgFXlXO1vbf
-         WLbhTMPeV7dg//pLx07m3PqeEwSQ7pBXucII4jxufMMjuJk73Pg2HcetCxHvPWHHREc+
-         4vuVvcUgWtmPPybvD76iwXqf0hZzZhuslcotwFRXhw/KEanZyvKBGPG6WgUdPn/uVWf3
-         5oHg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZuKaLhLa5tbyftaj2zqrE8vh2E3RCbHj+YPIfBePDGE=;
+        b=JAQoR2JLXXcFnQ+8VpKRcSa7MZKg44EUwQQjW+f+SUR7Y8Few/TDsJ9Ogq4yvpQkwW
+         8+B3YBQuZUiDJnBaB5UNAWggMNoZ5zgoDgeNyV5SWJhDp7xaX+a3KRoq2sdt5+pGHiJj
+         J2lXpcXgMUPbB1AC9mG57fI+Sxg38YAQJhb1DOd5BCeB9F7C40I8dXP1YsPOmieLh+oC
+         TSHR6XDNtwsjfy9f8dKalMpr+LlGpfkvb+jfGp7y1I7JyLeohHqLtXJ1fuyNgJ5n8XZR
+         wOvzJ5RUbwKdSolOiqm1o2NHdMgOAtOgCOcdsIUM5E6c85XAzgaTHhj3kM8MH6J13fKI
+         xeRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=jE7rDzDJl54ngSeDSzix1uvFy6MwH/Sd6J9jXSbtUjE=;
-        b=BEo7sBkJ/YZAywBXd7un/wlHNvIq16y7NDA4Gt+aNnvdzgzZPqk19uIOQOR1Y9t7Kf
-         ExXoUYk8daq8nl2A+LSewNyNsDhfFsvzInyGyRN5Y3ZGDYKGn0LsKel+U+TCZLjFQIcu
-         iPIldqkgR+W+ZQQlxi7SlI2Qfd7jKJ8LwTfRQpxrWla38EdXiT5JMb/JkNlpBJBHPpPs
-         ZTL9kKz1LRrNzhAZhYBhdPSZOxxc24y5fprZSDRtTYr4AB739dSsfAwGNtHNaZVc9nvt
-         h3SO8wqnWpx8bt1eE20p7IVgm9vv6OzeH8w9Fu94BbfEFhoqvRiSaVnmJV//7fDuAtPd
-         whgQ==
-X-Gm-Message-State: ACgBeo01gTEAO6AUIuKzE0bdAMKh3EXLaPVmQCS5OdtjU7XksuqhIdI3
-        LIF7cbBnkeOex0xbyPW1IsQ=
-X-Google-Smtp-Source: AA6agR7hLYLbwUWRobu85SHEDU/sKF/rBIBgRcg6Hy0KWFYYDR55eB6dnwOsJ2K8zBJ2I2gLHarSQw==
-X-Received: by 2002:aa7:cc13:0:b0:43d:4c1:3806 with SMTP id q19-20020aa7cc13000000b0043d04c13806mr17121364edt.129.1659956607282;
-        Mon, 08 Aug 2022 04:03:27 -0700 (PDT)
-Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
-        by smtp.gmail.com with ESMTPSA id jw16-20020a170906e95000b00726298147b1sm4815522ejb.161.2022.08.08.04.03.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZuKaLhLa5tbyftaj2zqrE8vh2E3RCbHj+YPIfBePDGE=;
+        b=GDwcBSyDs4IbRz9wV4wHcoHJbgVlBXwDOJuIPXxikuuzYHabC/T7nP32dxKWAuvC7a
+         CsOygkvpEGYxZgpIkDx7T+IIMTLRvPDLkdpTc1Tgt3MiRt270XwlY4NlPDZDmI5iv0B7
+         6JsNQ51fIxG0eT5RWvxiPX9z6UXu5yyzM5kAjgMKYWowHgpGg0DyRfbDWHfAujBCqAG/
+         JctJvimC2CoOhGlR3detZ55K019YijxWHasJybk7Svn4T4RpHPhiuJvPk8FuzepNQRhe
+         eN4pChaL/0lRbPXD9k+LmGZnrBGnV43spjvCrdf/kOwV41PLxWYivIisfedtkp9rGSC+
+         EPsw==
+X-Gm-Message-State: ACgBeo3bKSIQGwn4EY/EDFj8CgnLx/kkRuZ5XPuSeXKvM8jS0iZNeEM3
+        4F6j/IwheNfMRLM08tZU9TmXkQ==
+X-Google-Smtp-Source: AA6agR6zDPXQY3Pw1hQQ2D5P5qZ7Io4Bha6vxRoupYISbJY9B7ar2YM4dAemZajGV+OvlSLIWAZBog==
+X-Received: by 2002:a05:6a00:a08:b0:52b:fd6e:b198 with SMTP id p8-20020a056a000a0800b0052bfd6eb198mr18177801pfh.53.1659956663580;
+        Mon, 08 Aug 2022 04:04:23 -0700 (PDT)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.240])
+        by smtp.gmail.com with ESMTPSA id o12-20020aa7978c000000b0052dbad1ea2esm8393180pfp.6.2022.08.08.04.04.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 04:03:26 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 8 Aug 2022 13:03:24 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Ira Weiny <ira.weiny@intel.com>, Andy Lutomirski <luto@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Rik van Riel <riel@surriel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 5/5] x86/entry: Store CPU info on exception entry
-Message-ID: <YvDtfKRyMGenRMU5@gmail.com>
-References: <20220805173009.3128098-1-ira.weiny@intel.com>
- <20220805173009.3128098-6-ira.weiny@intel.com>
- <5d62c1d0-7425-d5bb-ecb5-1dc3b4d7d245@intel.com>
- <Yu4t0jkpIY4grgxL@gmail.com>
- <Yu4wON0MRGH7h5Jv@zn.tnic>
- <Yu+Nwbn4CZUmyD14@gmail.com>
- <Yu+VV8xFTYRh0D0a@zn.tnic>
- <YvAaXet3sBg3mRDe@iweiny-desk3>
+        Mon, 08 Aug 2022 04:04:22 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     hannes@cmpxchg.org, tj@kernel.org, corbet@lwn.net,
+        surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com
+Cc:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v2 00/10] sched/psi: some optimization and extension
+Date:   Mon,  8 Aug 2022 19:03:31 +0800
+Message-Id: <20220808110341.15799-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvAaXet3sBg3mRDe@iweiny-desk3>
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
-* Ira Weiny <ira.weiny@intel.com> wrote:
+This patch series are some optimization and extension for PSI, based on
+the tip/sched/core branch.
 
-> On Sun, Aug 07, 2022 at 12:35:03PM +0200, Borislav Petkov wrote:
-> > On Sun, Aug 07, 2022 at 12:02:41PM +0200, Ingo Molnar wrote:
-> > > * Borislav Petkov <bp@alien8.de> wrote:
-> > > > With the amount of logical cores ever increasing and how CPU packages
-> > > > (nodes, L3 sharing, you name it) get more and more complex topology,
-> > > > I'd say the 2 insns to show the CPU number in every exception is a good
-> > > > thing to do.
-> > > 
-> > > We can show it - I'm arguing against extracting it too early, which costs
-> > 
-> > Not early - more correct. We can say which CPU executed the exception
-> > handler *exactly*. Not which CPU executed the exception handler *maybe*.
-> > 
-> > > us 2 instructions in the exception fast path
-> > 
-> > 2 insns? They don't matter at all. FWIW, they'll pull in the per-CPU
-> > cacheline earlier which should be a net win later, for code which does
-> > smp_processor_id().
+patch 1/10 fix periodic aggregation shut off problem introduced by earlier
+commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups").
 
-I'd like to hear what Andy Lutomirski thinks about the notion that
-"2 instructions don't matter at all" ...
+patch 2/10 optimize task switch inside shared cgroups when in_memstall status
+of prev task and next task are different.
 
-Especially since it's now 4 instructions:
+patch 3-4 optimize and simplify PSI status tracking by don't change task
+psi_flags when migrate CPU/cgroup.
 
-> I agree with Boris; however I feel that I have to mention that in patch 
-> 3/5 you also have 1 instruction on each of entry and exit to push the 
-> extra stack space.  So all told it would cost 4 instructions.
+patch 7/10 remove NR_ONCPU task accounting to save 4 bytes in the first
+cacheline to be used by the following patch 8/10, which introduce new
+PSI resource PSI_IRQ to track IRQ/SOFTIRQ pressure stall information.
 
-... 4 instructions in the exception path is a non-trivial impact.
+patch 9/10 introduce a per-cgroup interface "cgroup.psi" to disable
+or re-enable PSI stats accounting in the cgroup level.
 
-> Again, I don't believe this is too much overhead but I don't want people 
-> to say it was not discussed.
+patch 10/10 cache parent psi_group in struct psi_group to speed up
+the hot iteration path.
 
-Is it necessary to do this, what are the alternatives, can this overhead be 
-avoided?
+Thanks!
 
-Thanks,
+Changes in v2:
+ - Add Acked-by tags from Johannes Weiner. Thanks for review!
+ - Fix periodic aggregation wakeup for common ancestors in
+   psi_task_switch().
+ - Add patch 7/10 from Johannes Weiner, which remove NR_ONCPU
+   task accounting to save 4 bytes in the first cacheline.
+ - Remove "psi_irq=" kernel cmdline parameter in last version.
+ - Add per-cgroup interface "cgroup.psi" to disable/re-enable
+   PSI stats accounting in the cgroup level.
 
-	Ingo
+Chengming Zhou (9):
+  sched/psi: fix periodic aggregation shut off
+  sched/psi: optimize task switch inside shared cgroups again
+  sched/psi: move private helpers to sched/stats.h
+  sched/psi: don't change task psi_flags when migrate CPU/group
+  sched/psi: don't create cgroup PSI files when psi_disabled
+  sched/psi: save percpu memory when !psi_cgroups_enabled
+  sched/psi: add PSI_IRQ to track IRQ/SOFTIRQ pressure
+  sched/psi: per-cgroup PSI stats disable/re-enable interface
+  sched/psi: cache parent psi_group to speed up groups iterate
+
+Johannes Weiner (1):
+  sched/psi: remove NR_ONCPU task accounting
+
+ Documentation/admin-guide/cgroup-v2.rst |  13 ++
+ include/linux/psi.h                     |   6 +-
+ include/linux/psi_types.h               |  25 +--
+ include/linux/sched.h                   |   3 -
+ kernel/cgroup/cgroup.c                  |  73 +++++++
+ kernel/sched/core.c                     |   2 +
+ kernel/sched/psi.c                      | 247 +++++++++++++++++-------
+ kernel/sched/stats.h                    |  60 +++---
+ 8 files changed, 313 insertions(+), 116 deletions(-)
+
+-- 
+2.36.1
+

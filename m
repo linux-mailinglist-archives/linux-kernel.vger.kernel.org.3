@@ -2,146 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 041B058CE4F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 21:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62D958CE57
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 21:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244269AbiHHTGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 15:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
+        id S244272AbiHHTJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 15:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236838AbiHHTGm (ORCPT
+        with ESMTP id S238225AbiHHTJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 15:06:42 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFCEB83
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 12:06:39 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id 68so1224002iou.2
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 12:06:39 -0700 (PDT)
+        Mon, 8 Aug 2022 15:09:18 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D11C19C1C
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 12:09:17 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-10dc1b16c12so11582396fac.6
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 12:09:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=csp-edu.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=uPXo6qTNTanbnXMgeNkm7mqY+PRHfhhWTf2LLd9dBGo=;
-        b=H4KzTYgNBlxoPeb/e0rP3AvidLHz6PPSSwBXGXIZ9j4s0sGC1E9Ws14T+f2fVVJV7T
-         qVq3wawMz+jNDS8J+hLv028q6pFE/4IMimwcbO51WBMmuvZb6UOmYMuCNEMo2/eTgkap
-         F95O0mxB1nqPcGsu263N0xzvReL1Kae+kVTjvKCy3uPlY/qdRopwolHK2jyADUs/lpaI
-         uNOJhgc8Gg1qqUz5PnaC3T+a3hJjE3OaPUHlguB8vXPF0dCW5hx1E+I/9WvnD8fwuetG
-         k2r8Ku1/Rig/oi6d6Fg5GpjXvDacO4EJRpO2+NEgm+3LDYrBdTgbjhb0sSXI11935FmY
-         mmag==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
+         :from:references:in-reply-to:mime-version:from:to:cc;
+        bh=4l9i4XlbJ+5mmKTKFgWECtlXoLq4GTjM56DrApQ3zMc=;
+        b=WXnldZ6iOBHOrddzUwoQRxgam/JBzwyx71/OjpN+S0nPQiCYjfVHsJak5hpqrKugdI
+         sz6jv8KOXTrlq54eF2VH5UdV7Ril0q3866QyHAGP7YLmCKcZCn4etUrQKuvkYj3xEFbR
+         IZrXnD+WpPDpLEeukyzKmLWA37sTIZb1PT660=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=uPXo6qTNTanbnXMgeNkm7mqY+PRHfhhWTf2LLd9dBGo=;
-        b=kyAW13gS1ECWZuUI5zDCB73SprndlT4hFyxhSt4dVraey6xcWh8M7XrLK3m/364AuB
-         BLPUbEUEN6qDdkn1hB3+RtA9pbGs60LFJgisAVyaBJRE4WdZzauzqV+g1HZL5ameAlip
-         rJ31QXpFf5VcgZKJOkLxEI3UOsrEp6fYhEmWo8Di04PaOAgtFBOonCuJib/KC76KzSP2
-         yDMJ59b9lVAcuWEDzHkpMJKcby/c/fcwzMe4jA6eDaIXxESVuYbQl41BjqqLWssPiicQ
-         +Fbj9n8FpPzTy2ssCrxUx2nwFuslfozksUEj0JzaVFuGj/8tv8xbhETeFfP+pVNA9ry7
-         sI7g==
-X-Gm-Message-State: ACgBeo2EzLagLHaIFNdi01ED9F7yNM0sxKTy9Bz9JuRY/X5GoFNeEXpi
-        cEeAZdyo7tKcrXvu9TAS2FRQSg==
-X-Google-Smtp-Source: AA6agR5v8DdlJpjjKMmnyxH00/6twNDvMMlSUi7EF0m/OpuY/fudEGo0kbPzrTu1a05jSdQNAVVc+Q==
-X-Received: by 2002:a05:6602:13d5:b0:67c:9149:fe0f with SMTP id o21-20020a05660213d500b0067c9149fe0fmr8404219iov.114.1659985598998;
-        Mon, 08 Aug 2022 12:06:38 -0700 (PDT)
-Received: from kernel-dev-1 (75-168-113-69.mpls.qwest.net. [75.168.113.69])
-        by smtp.gmail.com with ESMTPSA id q7-20020a05663810c700b003428c908a12sm5479715jad.32.2022.08.08.12.06.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 12:06:38 -0700 (PDT)
-From:   Coleman Dietsch <dietschc@csp.edu>
-To:     kvm@vger.kernel.org
-Cc:     Coleman Dietsch <dietschc@csp.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        stable@vger.kernel.org,
-        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
-Subject: [PATCH v3 2/2] KVM: x86/xen: Stop Xen timer before changing IRQ
-Date:   Mon,  8 Aug 2022 14:06:07 -0500
-Message-Id: <20220808190607.323899-3-dietschc@csp.edu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220808190607.323899-2-dietschc@csp.edu>
-References: <20220808190607.323899-2-dietschc@csp.edu>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
+         :from:references:in-reply-to:mime-version:x-gm-message-state:from:to
+         :cc;
+        bh=4l9i4XlbJ+5mmKTKFgWECtlXoLq4GTjM56DrApQ3zMc=;
+        b=qzM0/QiAMF2388zAJ71F8RdFbCn1cTxBuVLqCDAYVqNWxKhuS6Xy6j/NN5PTiPVe7l
+         UoTziLKj0UB09oI/fAe6VIKhOakJvFSfH38VMo5QIMYgfHTiqYjRCVRtuH6trzxmWlWs
+         pE5vRHeM9F2I9X4CI5C+EejzljTiwtM7OxUg7Drcoe2k9SDffiFIz8zOXzilqDFT9s5U
+         shaFQbMDYW3wdOtDHnS0zMSGG59wQTfuF+bFAObHvcgzvYNCZ8m3wCL33aflKgKKQQid
+         FhpKjHmS9zTXvKTSrbfmRNryhX9YWA2DPxGx/smDo+OM0CVRzlqI5mGVSL+OFv/WNMms
+         sWoA==
+X-Gm-Message-State: ACgBeo1Mv0Yda9B8yq+VJol7wMS2h44FgT2GaU7ZyYQEKcG3Ha4LVxhl
+        CBsREaUtWoOASrHd30+w9ORPJ+rfJolyCYNRsAVInA==
+X-Google-Smtp-Source: AA6agR5mBX/UZhs7o/pIA55lLsdbPNZPdEc7fmUEWwPyqYNUtxSkx623SBa9QmGpQH54M7wu3v9gLmG6aUnL+1cjbiU=
+X-Received: by 2002:a05:6870:9a17:b0:e9:3d1:f91a with SMTP id
+ fo23-20020a0568709a1700b000e903d1f91amr9076366oab.44.1659985756290; Mon, 08
+ Aug 2022 12:09:16 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 8 Aug 2022 14:09:15 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yuz2O+lZ5W7RviuA@google.com>
+References: <Yr6oLlmfWRkiAZG7@google.com> <Yr66ZZqEnBApHYMA@google.com>
+ <0481d3cc-4bb9-4969-0232-76ba57ff260d@quicinc.com> <YsLhxx+L3+GJDRyO@google.com>
+ <bcc5f059-b991-296a-bba6-9cb1236097f2@quicinc.com> <Ys1tYAO39LKzEAOE@google.com>
+ <dc737abb-041b-491a-14f1-a584f9e64a3d@quicinc.com> <CAE-0n528QaTtZFp=WAaHShegFRpKVN_67jQfUJTtsRPr6s--zA@mail.gmail.com>
+ <52039cd1-4390-7abb-d296-0eb7ac0c3b15@quicinc.com> <Yuz2O+lZ5W7RviuA@google.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 8 Aug 2022 14:09:15 -0500
+Message-ID: <CAE-0n507SLeYB7XVzGFk=RO6YjOPoGpux+_N2AyrmL354mQJ-g@mail.gmail.com>
+Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
+To:     Lee Jones <lee.jones@linaro.org>,
+        Satya Priya Kakitapalli <quic_c_skakit@quicinc.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com,
+        Lee Jones <lee@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stop Xen timer (if it's running) prior to changing the IRQ vector and
-potentially (re)starting the timer. Changing the IRQ vector while the
-timer is still running can result in KVM injecting a garbage event, e.g.
-vm_xen_inject_timer_irqs() could see a non-zero xen.timer_pending from
-a previous timer but inject the new xen.timer_virq.
+Quoting Lee Jones (2022-08-05 03:51:39)
+> On Tue, 02 Aug 2022, Satya Priya Kakitapalli (Temp) wrote:
+>
+> >
+> > On 7/27/2022 6:49 AM, Stephen Boyd wrote:
+> > > Quoting Satya Priya Kakitapalli (Temp) (2022-07-21 23:31:16)
+> > > >   =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 regulato=
+r-name =3D "pm8008_l6";
+> > > >   =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 };
+> > > >
+> > > >   =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 pm8008_l7: ldo7@4600 {
+> > > >   =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 reg =3D =
+<0x4600>;
+> > > >   =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 regulato=
+r-name =3D "pm8008_l7";
+> > > >   =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 };
+> > > >   =C2=A0=C2=A0 =C2=A0};
+> > > > };
+> > > >
+> > > >
+> > > > Stephen/Mark, Please do let me know if you are OK with this design.
+> > > >
+> > > I was happy with the previous version of the DT node. That had one no=
+de
+> > > for the "pm8008 chip", which is important because it really is one
+> > > package. Why isn't that possible to implement and also register i2c
+> > > devices on the i2c bus for the second address?
+>
+> If devices have different addresses, they should have their own nodes, no=
+?
 
-Fixes: 536395260582 ("KVM: x86/xen: handle PV timers oneshot mode")
-Cc: stable@vger.kernel.org
-Link: https://syzkaller.appspot.com/bug?id=8234a9dfd3aafbf092cc5a7cd9842e3ebc45fc42
-Reported-by: syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
-Signed-off-by: Coleman Dietsch <dietschc@csp.edu>
----
- arch/x86/kvm/xen.c | 35 +++++++++++++++++------------------
- 1 file changed, 17 insertions(+), 18 deletions(-)
+There are nodes for the devices at different addresses in the design we
+had settled on earlier.
 
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index 6e554041e862..280cb5dc7341 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -707,26 +707,25 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 		break;
- 
- 	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
--		if (data->u.timer.port) {
--			if (data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
--				r = -EINVAL;
--				break;
--			}
--			vcpu->arch.xen.timer_virq = data->u.timer.port;
--
--			if (!vcpu->arch.xen.timer.function)
--				kvm_xen_init_timer(vcpu);
--
--			/* Restart the timer if it's set */
--			if (data->u.timer.expires_ns)
--				kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
--						    data->u.timer.expires_ns -
--						    get_kvmclock_ns(vcpu->kvm));
--		} else if (kvm_xen_timer_enabled(vcpu)) {
--			kvm_xen_stop_timer(vcpu);
--			vcpu->arch.xen.timer_virq = 0;
-+		if (data->u.timer.port &&
-+		    data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
-+			r = -EINVAL;
-+			break;
- 		}
- 
-+		if (!vcpu->arch.xen.timer.function)
-+			kvm_xen_init_timer(vcpu);
-+
-+		/* Stop the timer (if it's running) before changing the vector */
-+		kvm_xen_stop_timer(vcpu);
-+		vcpu->arch.xen.timer_virq = data->u.timer.port;
-+
-+		/* Start the timer if the new value has a valid vector+expiry. */
-+		if (data->u.timer.port && data->u.timer.expires_ns)
-+			kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
-+					    data->u.timer.expires_ns -
-+					    get_kvmclock_ns(vcpu->kvm));
-+
- 		r = 0;
- 		break;
- 
--- 
-2.34.1
+        pm8008: pmic@8 {
+                compatible =3D "qcom,pm8008";
+                reg =3D <0x8>;
+                #address-cells =3D <2>;
+                #size-cells =3D <0>;
+                #interrupt-cells =3D <2>;
 
+                pm8008_l1: ldo1@1,4000 {
+                        compatible =3D "qcom,pm8008-regulator";
+                        reg =3D <0x1 0x4000>;
+                        regulator-name =3D "pm8008_ldo1";
+                };
+
+		...
+
+	};
+
+pmic@8 is the i2c device at i2c address 8. ldo1@1,4000 is the i2c device
+at address 9 (8 + 1) with control for ldo1 at register offset 0x4000.
+
+I think your concern is more about the fact that the regulator sub-nodes
+are platform device drivers instead of i2c device drivers. I'm not an
+i2c expert but from what I can tell we only describe one i2c address in
+DT and then do something like this to describe the other i2c addresses
+when one physical chip responds to multiple addresses on the i2c bus.
+See i2c_new_dummy_device() and i2c_new_ancillary_device() kerneldoc for
+slightly more background.
+
+It may need some modifications to the i2c core to make the regulator
+nodes into i2c devices. I suspect the qcom,pm8008 i2c driver needs to
+look at the 'reg' property and translate that to the parent node's reg
+property (8) plus the first cell (1) to determine the i2c device's final
+i2c address. Then the i2c core needs to register i2c devices that are
+bound to the lifetime of the "primary" i2c device (pmic@8). The driver
+for the regulator can parse the second cell of the reg property to
+determine the register offset within that i2c address to use to control
+the regulator. That would make it possible to create an i2c device for
+each regulator node, but I don't think that is correct because the
+second reg property isn't an i2c address, it's a register offset inside
+the i2c address.
+
+It sort of looks like we need to use i2c_new_ancillary_device() here. IF
+we did that the DT would look like this:
+
+        pm8008: pmic@8 {
+                compatible =3D "qcom,pm8008";
+                reg =3D <0x8>, <0x9>;
+		reg-names =3D "core", "regulators";
+                #address-cells =3D <2>;
+                #size-cells =3D <0>;
+                #interrupt-cells =3D <2>;
+
+                pm8008_l1: ldo1@1,4000 {
+                        compatible =3D "qcom,pm8008-regulator";
+                        reg =3D <0x1 0x4000>;
+                        regulator-name =3D "pm8008_ldo1";
+                };
+
+		...
+
+	};
+
+And a dummy i2c device would be created for i2c address 0x9 bound to the
+dummy i2c driver when we called i2c_new_ancillary_device() with
+"regulators" for the name. The binding of the dummy driver is preventing
+us from binding another i2c driver to the i2c address. Why can't we call
+i2c_new_client_device() but avoid binding a dummy driver to it like
+i2c_new_ancillary_device() does? If that can be done, then the single
+i2c device at 0x9 can be a pm8008-regulators (plural) device that probes
+a single i2c driver that parses the subnodes looking for regulator
+nodes.
+
+Note: There is really one i2c device at address 0x9, that corresponds to
+the regulators, but in DT we need to have one node per regulator so we
+can configure constraints.

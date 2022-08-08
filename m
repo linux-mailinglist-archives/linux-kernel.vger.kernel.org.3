@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEA958C1BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CBD58C1B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243715AbiHHCmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
+        id S243581AbiHHCl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235236AbiHHClj (ORCPT
+        with ESMTP id S235536AbiHHClj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 7 Aug 2022 22:41:39 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D61B219E
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 19:41:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE8621B4
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 19:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:
         Content-Type:Content-ID:Content-Description;
-        bh=1Pcy2nOf2MsuNc/qSkleQYM5fWNCLNN0ZDrbzvs8o90=; b=p9voLeBA7Kp4Z8voQNS9EXjJHV
-        U3ADUHQogvPAofuVJ/qm/dLNAbmj246qcrCf1oiYgK35a16Uw2N+C8PG9RdHiTldPNa8elQteEi1l
-        Y447ZNdS65FTNOb+tBFZSNbisoQPinpMqJGIz4lnbbYK1VYoQLV0a4qLwlCLregmCcdaCnQpTbz07
-        kVgtGnMjAPJh143A2jzNqYE+BdYwf047Htaz58Y6YpqK5gOgBZ+dVS7OolLTonbO45API93Xms7Je
-        usPRwridBb1TyhYyIXKYoeC6QO0QievEIU27pvIM3izvnGpMrjxZr2xuG1TiC3r9auYn1MMMM9uvh
-        +ZmRO/5A==;
+        bh=oEg9AsCOZDOluYzZVESlodsCM31B8LHTgFU/mz1O/dw=; b=immJNjPThnAPBDU9T21B8lJXu7
+        5qJsOClID5bGeO/98Rhe3D7yJlmZkx6zLOewvA5JdShAy9zRzYvu2AQUgZZiYzwhFhMdr3qocjlYG
+        9unXn04o6NqSqHTc46e6LfZ+eg3HdrEf9Wnj4dtzQ1g4FOve28IsxZNSHably9eTfAjOvTlndTbxT
+        K2df1ctq6jc+58HBj24GZMY1oFuBhlR2Xf4T0fG/KOLFCf2+2N7R3Bn64snoDjMSWqmdmFtLvBfTE
+        dHTxFZE/X+rKFYqQP5WJN5Pp4xG2z2Z0r5FrDQfghOzJyHXe5hrHWo6LEcwFCcVav6GIYrHDzYBkD
+        GtLZ+A+w==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oKshx-00DVRZ-41; Mon, 08 Aug 2022 02:41:33 +0000
+        id 1oKshx-00DVRc-6z; Mon, 08 Aug 2022 02:41:33 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-kernel@vger.kernel.org, pmladek@suse.com,
         Kent Overstreet <kent.overstreet@gmail.com>
-Subject: [PATCH v5 06/32] lib/printbuf: Heap allocation
-Date:   Mon,  8 Aug 2022 03:41:02 +0100
-Message-Id: <20220808024128.3219082-7-willy@infradead.org>
+Subject: [PATCH v5 07/32] lib/printbuf: Tabstops, indenting
+Date:   Mon,  8 Aug 2022 03:41:03 +0100
+Message-Id: <20220808024128.3219082-8-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220808024128.3219082-1-willy@infradead.org>
 References: <20220808024128.3219082-1-willy@infradead.org>
@@ -50,339 +50,238 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@gmail.com>
 
-This makes printbufs optionally heap allocated: a printbuf initialized
-with the PRINTBUF initializer will automatically heap allocate and
-resize as needed.
+This patch adds two new features to printbuf for structured formatting:
 
-Allocations are done with GFP_KERNEL: code should use e.g.
-memalloc_nofs_save()/restore() as needed. Since we do not currently have
-memalloc_nowait_save()/restore(), in contexts where it is not safe to
-block we provide the helpers
+ - Indent level: the indent level, as a number of spaces, may be
+   increased with pr_indent_add() and decreased with pr_indent_sub().
 
-  printbuf_atomic_inc()
-  printbuf_atomic_dec()
+   Subsequent lines, when started with pr_newline() (not "\n", although
+   that may change) will then be intended according to the current
+   indent level. This helps with pretty-printers that structure a large
+   amonut of data across multiple lines and multiple functions.
 
-When the atomic count is nonzero, memory allocations will be done with
-GFP_NOWAIT.
+ - Tabstops: Tabstops may be set by assigning to the printbuf->tabstops
+   array.
 
-On memory allocation failure, output will be truncated. Code that wishes
-to check for memory allocation failure (in contexts where we should
-return -ENOMEM) should check if printbuf->allocation_failure is set.
-Since printbufs are expected to be typically used for log messages and
-on a best effort basis, we don't return errors directly.
-
-Other helpers provided by this patch:
-
- - printbuf_make_room(buf, extra)
-   Reallocates if necessary to make room for @extra bytes (not including
-   terminating null).
-
- - printbuf_str(buf)
-   Returns a null terminated string equivalent to the contents of @buf.
-   If @buf was never allocated (or allocation failed), returns a
-   constant empty string.
-
- - printbuf_exit(buf)
-   Releases memory allocated by a printbuf.
+   Then, pr_tab() may be used to advance to the next tabstop, printing
+   as many spaces as required - leaving previous output left justified
+   to the previous tabstop. pr_tab_rjust() advances to the next tabstop
+   but inserts the spaces just after the previous tabstop - right
+   justifying the previously-outputted text to the next tabstop.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- include/linux/printbuf.h | 124 +++++++++++++++++++++++++++++++++------
- lib/Makefile             |   2 +-
- lib/printbuf.c           |  76 ++++++++++++++++++++++++
- 3 files changed, 184 insertions(+), 18 deletions(-)
- create mode 100644 lib/printbuf.c
+ include/linux/printbuf.h |  30 ++++++++++
+ lib/printbuf.c           | 125 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 155 insertions(+)
 
 diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
-index 1aa3331bf00b..71f631c49f4e 100644
+index 71f631c49f4e..c1a482b6c0a8 100644
 --- a/include/linux/printbuf.h
 +++ b/include/linux/printbuf.h
-@@ -4,19 +4,73 @@
- #ifndef _LINUX_PRINTBUF_H
- #define _LINUX_PRINTBUF_H
- 
--#include <linux/kernel.h>
--#include <linux/string.h>
--
- /*
-- * Printbufs: String buffer for outputting (printing) to, for vsnprintf
-+ * Printbufs: Simple strings for printing to, with optional heap allocation
+@@ -40,6 +40,23 @@
+  * memory allocation failure we usually don't want to bail out and unwind - we
+  * want to print what we've got, on a best-effort basis. But code that does want
+  * to return -ENOMEM may check printbuf.allocation_failure.
 + *
-+ * This code has provisions for use in userspace, to aid in making other code
-+ * portable between kernelspace and userspace.
++ * Indenting, tabstops:
 + *
-+ * Basic example:
-+ *   struct printbuf buf = PRINTBUF;
++ * To aid is writing multi-line pretty printers spread across multiple
++ * functions, printbufs track the current indent level.
 + *
-+ *   prt_printf(&buf, "foo=");
-+ *   foo_to_text(&buf, foo);
-+ *   printk("%s", buf.buf);
-+ *   printbuf_exit(&buf);
++ * printbuf_indent_push() and printbuf_indent_pop() increase and decrease the current indent
++ * level, respectively.
 + *
-+ * Or
-+ *   struct printbuf buf = PRINTBUF_EXTERN(char_buf, char_buf_size)
++ * To use tabstops, set printbuf->tabstops[]; they are in units of spaces, from
++ * start of line. Once set, prt_tab() will output spaces up to the next tabstop.
++ * prt_tab_rjust() will also advance the current line of text up to the next
++ * tabstop, but it does so by shifting text since the previous tabstop up to the
++ * next tabstop - right justifying it.
 + *
-+ * We can now write pretty printers instead of writing code that dumps
-+ * everything to the kernel log buffer, and then those pretty-printers can be
-+ * used by other code that outputs to kernel log, sysfs, debugfs, etc.
-+ *
-+ * Memory allocation: Outputing to a printbuf may allocate memory. This
-+ * allocation is done with GFP_KERNEL, by default: use the newer
-+ * memalloc_*_(save|restore) functions as needed.
-+ *
-+ * Since no equivalent yet exists for GFP_ATOMIC/GFP_NOWAIT, memory allocations
-+ * will be done with GFP_NOWAIT if printbuf->atomic is nonzero.
-+ *
-+ * It's allowed to grab the output buffer and free it later with kfree() instead
-+ * of using printbuf_exit(), if the user just needs a heap allocated string at
-+ * the end.
-+ *
-+ * Memory allocation failures: We don't return errors directly, because on
-+ * memory allocation failure we usually don't want to bail out and unwind - we
-+ * want to print what we've got, on a best-effort basis. But code that does want
-+ * to return -ENOMEM may check printbuf.allocation_failure.
++ * Make sure you use prt_newline() instead of \n in the format string for indent
++ * level and tabstops to work corretly.
   */
  
-+#include <linux/kernel.h>
-+#include <linux/string.h>
-+
- struct printbuf {
+ #include <linux/kernel.h>
+@@ -49,18 +66,29 @@ struct printbuf {
  	char			*buf;
  	unsigned		size;
  	unsigned		pos;
-+	/*
-+	 * If nonzero, allocations will be done with GFP_ATOMIC:
-+	 */
-+	u8			atomic;
-+	bool			allocation_failure:1;
-+	bool			heap_allocated:1;
++	unsigned		last_newline;
++	unsigned		last_field;
++	unsigned		indent;
+ 	/*
+ 	 * If nonzero, allocations will be done with GFP_ATOMIC:
+ 	 */
+ 	u8			atomic;
+ 	bool			allocation_failure:1;
+ 	bool			heap_allocated:1;
++	u8			tabstop;
++	u8			tabstops[4];
  };
  
-+int printbuf_make_room(struct printbuf *, unsigned);
-+const char *printbuf_str(const struct printbuf *);
-+void printbuf_exit(struct printbuf *);
-+
-+/* Initializer for a heap allocated printbuf: */
-+#define PRINTBUF ((struct printbuf) { .heap_allocated = true })
-+
-+/* Initializer a printbuf that points to an external buffer: */
-+#define PRINTBUF_EXTERN(_buf, _size)			\
-+((struct printbuf) {					\
-+	.buf	= _buf,					\
-+	.size	= _size,				\
-+})
-+
- /*
-  * Returns size remaining of output buffer:
-  */
-@@ -49,26 +103,36 @@ static inline bool printbuf_overflowed(struct printbuf *out)
+ int printbuf_make_room(struct printbuf *, unsigned);
+ const char *printbuf_str(const struct printbuf *);
+ void printbuf_exit(struct printbuf *);
  
- static inline void printbuf_nul_terminate(struct printbuf *out)
- {
-+	printbuf_make_room(out, 1);
++void prt_newline(struct printbuf *);
++void printbuf_indent_add(struct printbuf *, unsigned);
++void printbuf_indent_sub(struct printbuf *, unsigned);
++void prt_tab(struct printbuf *);
++void prt_tab_rjust(struct printbuf *);
 +
- 	if (out->pos < out->size)
- 		out->buf[out->pos] = 0;
- 	else if (out->size)
- 		out->buf[out->size - 1] = 0;
+ /* Initializer for a heap allocated printbuf: */
+ #define PRINTBUF ((struct printbuf) { .heap_allocated = true })
+ 
+@@ -191,6 +219,8 @@ static inline void printbuf_reset(struct printbuf *buf)
+ {
+ 	buf->pos		= 0;
+ 	buf->allocation_failure	= 0;
++	buf->indent		= 0;
++	buf->tabstop		= 0;
  }
  
--static inline void __prt_char(struct printbuf *out, char c)
-+/* Doesn't call printbuf_make_room(), doesn't nul terminate: */
-+static inline void __prt_char_reserved(struct printbuf *out, char c)
- {
- 	if (printbuf_remaining(out))
- 		out->buf[out->pos] = c;
- 	out->pos++;
- }
- 
-+/* Doesn't nul terminate: */
-+static inline void __prt_char(struct printbuf *out, char c)
-+{
-+	printbuf_make_room(out, 1);
-+	__prt_char_reserved(out, c);
-+}
-+
- static inline void prt_char(struct printbuf *out, char c)
- {
- 	__prt_char(out, c);
- 	printbuf_nul_terminate(out);
- }
- 
--static inline void __prt_chars(struct printbuf *out, char c, unsigned n)
-+static inline void __prt_chars_reserved(struct printbuf *out, char c, unsigned n)
- {
- 	unsigned i, can_print = min(n, printbuf_remaining(out));
- 
-@@ -79,13 +143,18 @@ static inline void __prt_chars(struct printbuf *out, char c, unsigned n)
- 
- static inline void prt_chars(struct printbuf *out, char c, unsigned n)
- {
--	__prt_chars(out, c, n);
-+	printbuf_make_room(out, n);
-+	__prt_chars_reserved(out, c, n);
- 	printbuf_nul_terminate(out);
- }
- 
- static inline void prt_bytes(struct printbuf *out, const void *b, unsigned n)
- {
--	unsigned i, can_print = min(n, printbuf_remaining(out));
-+	unsigned i, can_print;
-+
-+	printbuf_make_room(out, n);
-+
-+	can_print = min(n, printbuf_remaining(out));
- 
- 	for (i = 0; i < can_print; i++)
- 		out->buf[out->pos++] = ((char *) b)[i];
-@@ -101,22 +170,43 @@ static inline void prt_str(struct printbuf *out, const char *str)
- 
- static inline void prt_hex_byte(struct printbuf *out, u8 byte)
- {
--	__prt_char(out, hex_asc_hi(byte));
--	__prt_char(out, hex_asc_lo(byte));
-+	printbuf_make_room(out, 2);
-+	__prt_char_reserved(out, hex_asc_hi(byte));
-+	__prt_char_reserved(out, hex_asc_lo(byte));
- 	printbuf_nul_terminate(out);
- }
- 
- static inline void prt_hex_byte_upper(struct printbuf *out, u8 byte)
- {
--	__prt_char(out, hex_asc_upper_hi(byte));
--	__prt_char(out, hex_asc_upper_lo(byte));
-+	printbuf_make_room(out, 2);
-+	__prt_char_reserved(out, hex_asc_upper_hi(byte));
-+	__prt_char_reserved(out, hex_asc_upper_lo(byte));
- 	printbuf_nul_terminate(out);
- }
- 
--#define PRINTBUF_EXTERN(_buf, _size)			\
--((struct printbuf) {					\
--	.buf	= _buf,					\
--	.size	= _size,				\
--})
-+/**
-+ * printbuf_reset - re-use a printbuf without freeing and re-initializing it:
-+ */
-+static inline void printbuf_reset(struct printbuf *buf)
-+{
-+	buf->pos		= 0;
-+	buf->allocation_failure	= 0;
-+}
-+
-+/**
-+ * printbuf_atomic_inc - mark as entering an atomic section
-+ */
-+static inline void printbuf_atomic_inc(struct printbuf *buf)
-+{
-+	buf->atomic++;
-+}
-+
-+/**
-+ * printbuf_atomic_inc - mark as leaving an atomic section
-+ */
-+static inline void printbuf_atomic_dec(struct printbuf *buf)
-+{
-+	buf->atomic--;
-+}
- 
- #endif /* _LINUX_PRINTBUF_H */
-diff --git a/lib/Makefile b/lib/Makefile
-index 17e48da223e2..d44f8d03d66b 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -34,7 +34,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
- 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
- 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
- 	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
--	 buildid.o cpumask.o
-+	 buildid.o cpumask.o printbuf.o
- 
- lib-$(CONFIG_PRINTK) += dump_stack.o
- 
+ /**
 diff --git a/lib/printbuf.c b/lib/printbuf.c
-new file mode 100644
-index 000000000000..e3e5a791b244
---- /dev/null
+index e3e5a791b244..395c681e3acb 100644
+--- a/lib/printbuf.c
 +++ b/lib/printbuf.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: LGPL-2.1+
-+/* Copyright (C) 2022 Kent Overstreet */
-+
-+#ifdef __KERNEL__
-+#include <linux/export.h>
-+#include <linux/kernel.h>
-+#else
-+#define EXPORT_SYMBOL(x)
-+#endif
-+
-+#include <linux/err.h>
-+#include <linux/slab.h>
-+#include <linux/printbuf.h>
-+
-+int printbuf_make_room(struct printbuf *out, unsigned extra)
+@@ -12,6 +12,11 @@
+ #include <linux/slab.h>
+ #include <linux/printbuf.h>
+ 
++static inline size_t printbuf_linelen(struct printbuf *buf)
 +{
-+	unsigned new_size;
-+	char *buf;
-+
-+	if (!out->heap_allocated)
-+		return 0;
-+
-+	/* Reserved space for terminating nul: */
-+	extra += 1;
-+
-+	if (out->pos + extra < out->size)
-+		return 0;
-+
-+	new_size = roundup_pow_of_two(out->size + extra);
-+
-+	/*
-+	 * Note: output buffer must be freeable with kfree(), it's not required
-+	 * that the user use printbuf_exit().
-+	 */
-+	buf = krealloc(out->buf, new_size, !out->atomic ? GFP_KERNEL : GFP_NOWAIT);
-+
-+	if (!buf) {
-+		out->allocation_failure = true;
-+		return -ENOMEM;
-+	}
-+
-+	out->buf	= buf;
-+	out->size	= new_size;
-+	return 0;
++	return buf->pos - buf->last_newline;
 +}
-+EXPORT_SYMBOL(printbuf_make_room);
++
+ int printbuf_make_room(struct printbuf *out, unsigned extra)
+ {
+ 	unsigned new_size;
+@@ -74,3 +79,123 @@ void printbuf_exit(struct printbuf *buf)
+ 	}
+ }
+ EXPORT_SYMBOL(printbuf_exit);
++
++void prt_newline(struct printbuf *buf)
++{
++	unsigned i;
++
++	printbuf_make_room(buf, 1 + buf->indent);
++
++	__prt_char(buf, '\n');
++
++	buf->last_newline	= buf->pos;
++
++	for (i = 0; i < buf->indent; i++)
++		__prt_char(buf, ' ');
++
++	printbuf_nul_terminate(buf);
++
++	buf->last_field		= buf->pos;
++	buf->tabstop = 0;
++}
++EXPORT_SYMBOL(prt_newline);
 +
 +/**
-+ * printbuf_str - returns printbuf's buf as a C string, guaranteed to be null
-+ * terminated
++ * printbuf_indent_add - add to the current indent level
++ *
++ * @buf: printbuf to control
++ * @spaces: number of spaces to add to the current indent level
++ *
++ * Subsequent lines, and the current line if the output position is at the start
++ * of the current line, will be indented by @spaces more spaces.
 + */
-+const char *printbuf_str(const struct printbuf *buf)
++void printbuf_indent_add(struct printbuf *buf, unsigned spaces)
 +{
-+	/*
-+	 * If we've written to a printbuf then it's guaranteed to be a null
-+	 * terminated string - but if we haven't, then we might not have
-+	 * allocated a buffer at all:
-+	 */
-+	return buf->pos
-+		? buf->buf
-+		: "";
++	if (WARN_ON_ONCE(buf->indent + spaces < buf->indent))
++		spaces = 0;
++
++	buf->indent += spaces;
++	while (spaces--)
++		prt_char(buf, ' ');
 +}
-+EXPORT_SYMBOL(printbuf_str);
++EXPORT_SYMBOL(printbuf_indent_add);
 +
 +/**
-+ * printbuf_exit - exit a printbuf, freeing memory it owns and poisoning it
-+ * against accidental use.
++ * printbuf_indent_sub - subtract from the current indent level
++ *
++ * @buf: printbuf to control
++ * @spaces: number of spaces to subtract from the current indent level
++ *
++ * Subsequent lines, and the current line if the output position is at the start
++ * of the current line, will be indented by @spaces less spaces.
 + */
-+void printbuf_exit(struct printbuf *buf)
++void printbuf_indent_sub(struct printbuf *buf, unsigned spaces)
 +{
-+	if (buf->heap_allocated) {
-+		kfree(buf->buf);
-+		buf->buf = ERR_PTR(-EINTR); /* poison value */
++	if (WARN_ON_ONCE(spaces > buf->indent))
++		spaces = buf->indent;
++
++	if (buf->last_newline + buf->indent == buf->pos) {
++		buf->pos -= spaces;
++		printbuf_nul_terminate(buf);
 +	}
++	buf->indent -= spaces;
 +}
-+EXPORT_SYMBOL(printbuf_exit);
++EXPORT_SYMBOL(printbuf_indent_sub);
++
++/**
++ * prt_tab - Advance printbuf to the next tabstop
++ *
++ * @buf: printbuf to control
++ *
++ * Advance output to the next tabstop by printing spaces.
++ */
++void prt_tab(struct printbuf *out)
++{
++	int spaces = max_t(int, 0, out->tabstops[out->tabstop] - printbuf_linelen(out));
++
++	BUG_ON(out->tabstop > ARRAY_SIZE(out->tabstops));
++
++	prt_chars(out, ' ', spaces);
++
++	out->last_field = out->pos;
++	out->tabstop++;
++}
++EXPORT_SYMBOL(prt_tab);
++
++/**
++ * prt_tab_rjust - Advance printbuf to the next tabstop, right justifying
++ * previous output
++ *
++ * @buf: printbuf to control
++ *
++ * Advance output to the next tabstop by inserting spaces immediately after the
++ * previous tabstop, right justifying previously outputted text.
++ */
++void prt_tab_rjust(struct printbuf *buf)
++{
++	BUG_ON(buf->tabstop > ARRAY_SIZE(buf->tabstops));
++
++	if (printbuf_linelen(buf) < buf->tabstops[buf->tabstop]) {
++		unsigned move = buf->pos - buf->last_field;
++		unsigned shift = buf->tabstops[buf->tabstop] -
++			printbuf_linelen(buf);
++
++		printbuf_make_room(buf, shift);
++
++		if (buf->last_field + shift < buf->size)
++			memmove(buf->buf + buf->last_field + shift,
++				buf->buf + buf->last_field,
++				min(move, buf->size - 1 - buf->last_field - shift));
++
++		if (buf->last_field < buf->size)
++			memset(buf->buf + buf->last_field, ' ',
++			       min(shift, buf->size - buf->last_field));
++
++		buf->pos += shift;
++		printbuf_nul_terminate(buf);
++	}
++
++	buf->last_field = buf->pos;
++	buf->tabstop++;
++}
++EXPORT_SYMBOL(prt_tab_rjust);
 -- 
 2.35.1
 

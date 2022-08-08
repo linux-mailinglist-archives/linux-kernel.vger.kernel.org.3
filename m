@@ -2,224 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E92558CD69
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D42E58CD6B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 20:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244153AbiHHSOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 14:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
+        id S244204AbiHHSPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 14:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiHHSOK (ORCPT
+        with ESMTP id S230062AbiHHSPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 14:14:10 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B2212AB3;
-        Mon,  8 Aug 2022 11:14:09 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 21so14915636ybf.4;
-        Mon, 08 Aug 2022 11:14:09 -0700 (PDT)
+        Mon, 8 Aug 2022 14:15:02 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2345012AB3;
+        Mon,  8 Aug 2022 11:15:01 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gk3so18026456ejb.8;
+        Mon, 08 Aug 2022 11:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TPx8e2WZ5x3O6RzJ0FBYuElFwi40nMqF3zJj8LRx/uM=;
+        b=AeoyWAKH3SpNET04KSZr8c4od/fZuq6fXzbg3b1+sLGHGviz0lzCv3VWkC12aoxiPb
+         YdyiIsZHoLrernC7n0pQkfXj5fw+W3TRfZ0qDDTEqH9oC1YfxHjZ5v0Ot5CXdjAEhb70
+         QmTja47co3PpiIoksu2rXu22OhMF+T1Tc1kr5ThVNtkFRh3grGc0y/LApFcJccd3SZrx
+         C4SRsj2UW05KGXhdLOMuWrviH/qo0WQzwklDw5v8kLtgJ+4g5kA9CKm3vAQHlNPjhJ5E
+         QhOZNVra0D6NXhVMPlqpL9jIJOxywliKOWzTZ6y9L8nMS3nI53uIPTsnKapK832aN3bY
+         6U9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=bxKc2JOmfIjFCRLmMBmrpd74/LhQZNp0OlKLoUT/fsk=;
-        b=8ESokfa09TXXpz6BuzL/P9lmVkc/EOAag6lcYPRIq6Rt2xTVoth4++UJ/yOWqqClC3
-         dGxiZG3rIUnZzSCAdi3I3WBH3vf0zD3YVeIF+E4RybZGuJxC2BoZ4QUdF57Gkl8/QQjb
-         Ly2HbclCAcZVJPhU/ICAZzFjnmbidGRQcqjDKGB+wXKRp0NXwFkgTJV0mP16z1bKFamf
-         WfyhEMNHW7YeNsfHqJeotOBSo3dUKSAJ4FHV912tIMMcn/Y+0ombD/0Ow9rrMgEJSHqa
-         /wbZGM3wAzu+9SH0V35r7M0G+o7LJfpD3icLvkLWLVfRs38Fu4oXlIJpHSkMRpGdN3LF
-         FZ0w==
-X-Gm-Message-State: ACgBeo3h+yWNrAGUpnZiYvoFiOI8qWXpXDc90aIsgZUSnGxNmzo8JMsM
-        2dx6I5l+J7Tfd2202tCMsB+f6QhyDiE+fiqY+S+Q9UgVhgA=
-X-Google-Smtp-Source: AA6agR7fzj5iRdE+xPWoBxckcigsj+UMrQuSYoplDiNwQD/viRPhYFncrj4zJOharXWhllPRMViSCTGoqGYdkEtNsvI=
-X-Received: by 2002:a25:cc51:0:b0:676:ccba:875 with SMTP id
- l78-20020a25cc51000000b00676ccba0875mr17820260ybf.137.1659982448619; Mon, 08
- Aug 2022 11:14:08 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TPx8e2WZ5x3O6RzJ0FBYuElFwi40nMqF3zJj8LRx/uM=;
+        b=NhtqnTytynVhfYIMBcdNkmnuEYIUh2QRk9oCToLkDNBKju2pjm/Eky5sVeMF2cPADz
+         yBsoGif1JKnOCXkJ3sBSCJ9lb+jM7vcf9CUnA2vheMoRHzzGHBrGgnssVbYEFFklXwV5
+         Bqr6+uTOlBke+UDMqH1kkYG1DEk7gaLztw+PIowsZo7myMXS+AGbZhkj9h4hdCjcGSFF
+         LHfMtFEL6HEOu1tGXs282cu8loM1oN6RB4vcW9dtO5Ochpcnc9sigZLjakJ6ropjAp+5
+         Gvyxdf4Pk5/jZf8slC9s0MqxbYiJ+ydnbATXXAkWxjByqEUSmOqr47jvkUCZPKknRW3p
+         l0Hw==
+X-Gm-Message-State: ACgBeo1wouW4Ufp4VemMRVrGp3jCbfs2NVcIwAfwmlK+f8YXgdF7cbj3
+        F0eZ3eAuMr+qs6hOgMNO3wETRaA0+bXWwnTtJsrzqDjHi+0=
+X-Google-Smtp-Source: AA6agR5h3XhlvNoxhWzOgR+EtkZun8KF7u+zK+88U74khRnQcS1xjgGa4EMWaBY/RgQDnu4R4P0prGvyQa09K/CkQ/Y=
+X-Received: by 2002:a17:907:8687:b0:730:7c7b:b9ce with SMTP id
+ qa7-20020a170907868700b007307c7bb9cemr14127780ejc.656.1659982499687; Mon, 08
+ Aug 2022 11:14:59 -0700 (PDT)
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 8 Aug 2022 20:13:57 +0200
-Message-ID: <CAJZ5v0i8zu7SUgf2Bp3TZnxzHS_Oa9oQVKSN2rezDAisYdrWZQ@mail.gmail.com>
-Subject: [GIT PULL] More power management updates for v5.20-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220808155341.2479054-1-void@manifault.com>
+In-Reply-To: <20220808155341.2479054-1-void@manifault.com>
+From:   Joanne Koong <joannelkoong@gmail.com>
+Date:   Mon, 8 Aug 2022 11:14:48 -0700
+Message-ID: <CAJnrk1YL1N371vkRDx9E6_OU2GwCj4sVzasBdjmYNUBuzygF_g@mail.gmail.com>
+Subject: Re: [PATCH 1/5] bpf: Clear callee saved regs after updating REG0
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
+        linux-kernel@vger.kernel.org, Kernel-team@fb.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Aug 8, 2022 at 8:53 AM David Vernet <void@manifault.com> wrote:
+>
+> In the verifier, we currently reset all of the registers containing caller
+> saved args before updating the callee's return register (REG0). In a
+> follow-on patch, we will need to be able to be able to inspect the caller
+> saved registers when updating REG0 to determine if a dynptr that's passed
+> to a helper function was allocated by a helper, or allocated by a program.
+>
+> This patch therefore updates check_helper_call() to clear the caller saved
+> regs after updating REG0.
+>
+Overall lgtm
 
-Please pull from the tag
+There's a patch [0] that finds + stores the ref obj id before the
+caller saved regs get reset, which would make this patch not needed.
+That hasn't been merged in yet though and I think there's pros for
+either approach.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.20-rc1-2
+In the one where we find + store the ref obj id before any caller
+saved regs get reset, the pro is that getting the dynptr metadata (eg
+ref obj id and in the near future, the dynptr type as well) earlier
+will be useful (eg when we add skb/xdp dynptrs [1], we'll need to know
+the type of the dynptr in order to determine whether to set the return
+reg as PTR_TO_PACKET). In this patch, the pro is that the logic is a
+lot more obvious to readers that the ref obj id for the dynptr gets
+found and set in order to store it in the return reg's ref obj id.
 
-with top-most commit c3f834df191ac2e5e58c215b9110e7e19553100f
+I personally lean more towards the approach in [0] because I think
+that ends up being cleaner for future extensibility, but I don't feel
+strongly about it and would be happy going with this approach as well
 
- Merge branch 'pm-cpufreq'
+[0] https://lore.kernel.org/bpf/20220722175807.4038317-1-joannelkoong@gmail.com/#t
 
-on top of commit a771ea6413c00cf4af0570745f2e27084d7e2376
+[1] https://lore.kernel.org/bpf/20220726184706.954822-1-joannelkoong@gmail.com/T/#t
 
- Merge tag 'pm-5.20-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+> Signed-off-by: David Vernet <void@manifault.com>
+> ---
+>  kernel/bpf/verifier.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 096fdac70165..938ba1536249 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -7348,11 +7348,9 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+>         if (err)
+>                 return err;
+>
+> -       /* reset caller saved regs */
+> -       for (i = 0; i < CALLER_SAVED_REGS; i++) {
+> -               mark_reg_not_init(env, regs, caller_saved[i]);
+> -               check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
+> -       }
+> +       /* reset return reg */
+> +       mark_reg_not_init(env, regs, BPF_REG_0);
+> +       check_reg_arg(env, BPF_REG_0, DST_OP_NO_MARK);
+>
+>         /* helper call returns 64-bit value. */
+>         regs[BPF_REG_0].subreg_def = DEF_NOT_SUBREG;
+> @@ -7488,6 +7486,13 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+>                 regs[BPF_REG_0].ref_obj_id = dynptr_id;
+>         }
+>
+> +       /* reset remaining caller saved regs */
+> +       BUILD_BUG_ON(caller_saved[0] != BPF_REG_0);
 
-to receive more power management updates for 5.20-rc1.
+nit: caller_saved is a read-only const, so I don't think this line is needed
 
-These are ARM cpufreq updates and operating performance points (OPP)
-updates plus one cpuidle update adding a new trace point.
+> +       for (i = 1; i < CALLER_SAVED_REGS; i++) {
 
-Specifics:
+nit: maybe "for i = BPF_REG_1" ?
 
- - Fix return error code in mtk_cpu_dvfs_info_init (Yang Yingliang).
-
- - Minor cleanups and support for new boards for Qcom cpufreq drivers
-   (Bryan O'Donoghue, Konrad Dybcio, Pierre Gondois, and Yicong Yang).
-
- - Fix sparse warnings for Tegra cpufreq driver (Viresh Kumar).
-
- - Make dev_pm_opp_set_regulators() accept NULL terminated list (Viresh
-   Kumar).
-
- - Add dev_pm_opp_set_config() and friends and migrate other users and
-   helpers to using them (Viresh Kumar).
-
- - Add support for multiple clocks for a device (Viresh Kumar and
-   Krzysztof Kozlowski).
-
- - Configure resources before adding OPP table for Venus (Stanimir
-   Varbanov).
-
- - Keep reference count up for opp->np and opp_table->np while they are
-   still in use (Liang He).
-
- - Minor OPP cleanups (Viresh Kumar and Yang Li).
-
- - Add a trace event for cpuidle to track missed (too deep or too
-   shallow) wakeups (Kajetan Puchalski).
-
-Thanks!
-
-
----------------
-
-Bryan O'Donoghue (3):
-      dt-bindings: opp: opp-v2-kryo-cpu: Fix example binding checks
-      dt-bindings: opp: Add missing compat devices
-      dt-bindings: opp: Add msm8939 to the compatible list
-
-Kajetan Puchalski (1):
-      cpuidle: Add cpu_idle_miss trace event
-
-Konrad Dybcio (1):
-      dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM6375 compatible
-
-Krzysztof Kozlowski (1):
-      dt-bindings: opp: accept array of frequencies
-
-Liang He (2):
-      OPP: Don't drop opp_table->np reference while it is still in use
-      OPP: Don't drop opp->np reference while it is still in use
-
-Pierre Gondois (4):
-      cpufreq: qcom-hw: Reset cancel_throttle when policy is re-enabled
-      cpufreq: qcom-hw: Disable LMH irq when disabling policy
-      cpufreq: qcom-hw: Remove deprecated irq_set_affinity_hint() call
-      cpufreq: Change order of online() CB and policy->cpus modification
-
-Stanimir Varbanov (1):
-      venus: pm_helpers: Fix warning in OPP during probe
-
-Tang Bin (1):
-      opp: Fix error check in dev_pm_opp_attach_genpd()
-
-Viresh Kumar (38):
-      OPP: Fix typo in comment
-      OPP: Track if clock name is configured by platform
-      OPP: Make dev_pm_opp_set_regulators() accept NULL terminated list
-      OPP: Add dev_pm_opp_set_config() and friends
-      cpufreq: qcom-nvmem: Migrate to dev_pm_opp_set_config()
-      cpufreq: sti: Migrate to dev_pm_opp_set_config()
-      cpufreq: ti: Migrate to dev_pm_opp_set_config()
-      drm/lima: Migrate to dev_pm_opp_set_config()
-      soc/tegra: Add comment over devm_pm_opp_set_clkname()
-      soc/tegra: Migrate to dev_pm_opp_set_config()
-      OPP: Migrate set-regulators API to use set-config helpers
-      OPP: Migrate set-supported-hw API to use set-config helpers
-      OPP: Migrate set-clk-name API to use set-config helpers
-      OPP: Migrate set-opp-helper API to use set-config helpers
-      OPP: Migrate attach-genpd API to use set-config helpers
-      OPP: Migrate set-prop-name helper API to use set-config helpers
-      OPP: Add support for config_regulators() helper
-      OPP: Make _generic_set_opp_regulator() a config_regulators() interface
-      OPP: Add dev_pm_opp_get_supplies()
-      OPP: ti: Migrate to dev_pm_opp_set_config_regulators()
-      OPP: Remove custom OPP helper support
-      OPP: Remove dev_pm_opp_find_freq_ceil_by_volt()
-      OPP: Add generic key finding helpers and use them for freq APIs
-      OPP: Use generic key finding helpers for level key
-      OPP: Use generic key finding helpers for bandwidth key
-      OPP: Use consistent names for OPP table instances
-      OPP: Remove rate_not_available parameter to _opp_add()
-      OPP: Reuse _opp_compare_key() in _opp_add_static_v2()
-      OPP: Make dev_pm_opp_set_opp() independent of frequency
-      OPP: Allow multiple clocks for a device
-      OPP: Compare bandwidths for all paths in _opp_compare_key()
-      OPP: Add key specific assert() method to key finding helpers
-      OPP: Assert clk_count == 1 for single clk helpers
-      OPP: Provide a simple implementation to configure multiple clocks
-      OPP: Allow config_clks helper for single clk case
-      PM / devfreq: tegra30: Register config_clks helper
-      OPP: Remove dev{m}_pm_opp_of_add_table_noclk()
-      cpufreq: tegra194: Staticize struct tegra_cpufreq_soc instances
-
-Yang Li (1):
-      opp: Fix some kernel-doc comments
-
-Yang Yingliang (1):
-      cpufreq: mediatek: fix error return code in mtk_cpu_dvfs_info_init()
-
-Yicong Yang (1):
-      cpufreq: qcom-cpufreq-hw: use HZ_PER_KHZ macro in units.h
-
----------------
-
- .../bindings/cpufreq/cpufreq-qcom-hw.yaml          |    1 +
- .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml       |    7 +
- .../devicetree/bindings/opp/opp-v2-base.yaml       |   10 +
- .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   |   15 +
- drivers/cpufreq/cpufreq-dt.c                       |   19 +-
- drivers/cpufreq/cpufreq.c                          |    6 +-
- drivers/cpufreq/imx-cpufreq-dt.c                   |   12 +-
- drivers/cpufreq/mediatek-cpufreq.c                 |    1 +
- drivers/cpufreq/qcom-cpufreq-hw.c                  |   14 +-
- drivers/cpufreq/qcom-cpufreq-nvmem.c               |  109 +-
- drivers/cpufreq/sti-cpufreq.c                      |   27 +-
- drivers/cpufreq/sun50i-cpufreq-nvmem.c             |   31 +-
- drivers/cpufreq/tegra194-cpufreq.c                 |    4 +-
- drivers/cpufreq/tegra20-cpufreq.c                  |   12 +-
- drivers/cpufreq/ti-cpufreq.c                       |   42 +-
- drivers/cpuidle/cpuidle.c                          |    6 +-
- drivers/devfreq/exynos-bus.c                       |   21 +-
- drivers/devfreq/tegra30-devfreq.c                  |   22 +-
- drivers/gpu/drm/lima/lima_devfreq.c                |   12 +-
- drivers/gpu/drm/panfrost/panfrost_devfreq.c        |    3 +-
- drivers/gpu/drm/panfrost/panfrost_drv.c            |   15 +-
- drivers/media/platform/qcom/venus/pm_helpers.c     |   10 +-
- drivers/memory/tegra/tegra124-emc.c                |   11 +-
- drivers/opp/core.c                                 | 1577 ++++++++++----------
- drivers/opp/cpu.c                                  |   12 +-
- drivers/opp/debugfs.c                              |   27 +-
- drivers/opp/of.c                                   |  150 +-
- drivers/opp/opp.h                                  |   56 +-
- drivers/opp/ti-opp-supply.c                        |   77 +-
- drivers/soc/tegra/common.c                         |   49 +-
- drivers/soc/tegra/pmc.c                            |    4 +-
- include/linux/pm_opp.h                             |  322 ++--
- include/trace/events/power.h                       |   22 +
- 33 files changed, 1421 insertions(+), 1285 deletions(-)
+> +               mark_reg_not_init(env, regs, caller_saved[i]);
+> +               check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
+> +       }
+> +
+>         do_refine_retval_range(regs, fn->ret_type, func_id, &meta);
+>
+>         err = check_map_func_compatibility(env, meta.map_ptr, func_id);
+> --
+> 2.30.2
+>

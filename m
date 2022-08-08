@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37DF58C50B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EF658C50F
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiHHItr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 04:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
+        id S234798AbiHHIv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 04:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiHHItp (ORCPT
+        with ESMTP id S230127AbiHHIv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 04:49:45 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F096363;
-        Mon,  8 Aug 2022 01:49:40 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d16so7923805pll.11;
-        Mon, 08 Aug 2022 01:49:40 -0700 (PDT)
+        Mon, 8 Aug 2022 04:51:26 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A356664F8;
+        Mon,  8 Aug 2022 01:51:25 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id k14so5511888pfh.0;
+        Mon, 08 Aug 2022 01:51:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:from
-         :subject:to:cc:content-transfer-encoding;
-        bh=oFbfW+6eBoSd9lHzaSWXN4qCai+JIjJq05pd6OQMU5E=;
-        b=JxZrR1+OnBtNim0vw7zXSz+LUKhlwQmPhmpSfbr9kARInimgkF2VIQsY24jCyFjFGh
-         UhU4ixxym3zxmvc9BIOExrHt8b2qTigTSlOF0n4dOSmsqUQi6j0KDUmlJ7QsSmTo5CFx
-         qwY2ilpVj+Wywr4DWyabDX5NScuF4EdtjDTVjE4jViO4AOsNQOBxNfOst2C/8fGZLncM
-         /1ak/gDZ6qnMDjwxmZ9MwIC4FyQy3M7EVPUVOWzX5FaXzLAhcYAdANXV0Zuq2YN0rbw0
-         jOqF+6BL3RP7Nu1cefla25ldHZO1VK99NuoTkDJI0ZMC5Vztmq2ad4SiuQhyUQTKMhHx
-         MdOA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WdlmAhmTO50ldoDbQ+PZvnuCd0y6F9q0hDrlrfqFysM=;
+        b=RD12lbblj+F1PQng3Ub3L0sE30e2I3jWjsmmZ79NIPBE9kFjNx9gXOB29Jeku74YG8
+         imzdfxCUbd0yF8sMNrNr4g7J04jacHHaydcZBKO6jXBZUxW/G88NCXBk3lGLl84kchzJ
+         SkuCwuAZ4GnIrEzW3K3UQBfyQmQ9FnaDWRVTgLGSCIcKaq60J+37oSiNSL+pnqt91vfG
+         d1XbRDYf9HQSNTnWaHjZpMAylJ5UZ4049Ewxhlo0lSvmGZ7sGk90Wn5TMONp3RNfSZfW
+         I5wB5me29UDMTGPjnsTfeFYTemQAOowwYNPE45p5TUWoUVpz4d1t4IONJ0d9uEUp0rpD
+         8cCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:from:subject:to:cc:content-transfer-encoding;
-        bh=oFbfW+6eBoSd9lHzaSWXN4qCai+JIjJq05pd6OQMU5E=;
-        b=vp295VGEK8xuqG+BVBALut/hfa5vyqzESdOSH34b7y5fhWY+0A8941Y0UPIE1uGqWa
-         Ad+bBIDRfETeEWwm467ypDuw0kefyKLfatjsdL3U4FeX4N7hZEl4+Ci/I+4gg/1FIe12
-         8pHH+2M2mn/3SRT2RXXMmzcxSa2XFL3LxEcC6TCb6G0vrwU31uvj24xEUvF0oA5NMpiA
-         zrtsU1iVr8Vx6ptmep13zVSvMpx0sB0YvqvTlmuqcGnWWkW1sqoOhpvGzYiY2qd9lq1l
-         Iku3x3dSAUa8PXw9Zn6VjO0NdVFxCDVQ2WuTFgTFx/3LVOdPFCSQ+t5564ytqz26SDjt
-         3T+g==
-X-Gm-Message-State: ACgBeo2mXB5w16vZ6SKKBdKDZ0ThamcsOYx1pJVQ33AbIYO+G8cTLfc4
-        RSFwGTkGAn19si4tcNKqrWxWJIzlfQA=
-X-Google-Smtp-Source: AA6agR4sJC8tHznMpaiSUY2aqAw6/FBTROKgm+C906VThCVw97Nl+HlHp+apVkT7b7nQm4Id4V/cnQ==
-X-Received: by 2002:a17:90b:3d85:b0:1f7:6a32:3576 with SMTP id pq5-20020a17090b3d8500b001f76a323576mr286044pjb.187.1659948580241;
-        Mon, 08 Aug 2022 01:49:40 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WdlmAhmTO50ldoDbQ+PZvnuCd0y6F9q0hDrlrfqFysM=;
+        b=PhFfdu+w7hszuc6N/1vqFo22W6b4giegTzJqYcHmV8ilMwV2dXIcSlN8G3Wd4twOdS
+         DfzhnJmrkifPV/xIW9+P75s5/shXJqRTn5nLUtn+zuoWkLKzmp/PmnmPhM0PD2jqpU7B
+         vVx8lk/Ad3/VVyIc+mq7jLrC6X861B8EmNfQA8F5J0UMz6Wdf+Mu6nu3GS2zQQlJm4pG
+         /QkZPHedhMvjkrY9r4vJHjVVNDSwlTrwFbWPA+acf5JcvptfU9ekY9rVYHu7lsOQB9/e
+         H8fKMEvvdjEnWoD5/mpjtfUTZIFASwaea9XhbDCAfJQ97P6MxiQTVcTeuTAxU245E5MG
+         tKyA==
+X-Gm-Message-State: ACgBeo23Teah4pxA7WCeYOHUiRV/LS3y3QR7rrnWDGQ/QBEyEgM+6Ur5
+        7N47pttb3cLZEyQdMdUQcCe0U521HRE=
+X-Google-Smtp-Source: AA6agR4C6vFwlhnt+IadrXeMkWmhu1BEU/GZE+ZmqFPE0+5IkUy89guN4FbL46zPvkemFVCRhgtrGw==
+X-Received: by 2002:a65:6b94:0:b0:3fb:16f4:3620 with SMTP id d20-20020a656b94000000b003fb16f43620mr14774195pgw.464.1659948685117;
+        Mon, 08 Aug 2022 01:51:25 -0700 (PDT)
 Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id i11-20020a17090332cb00b0016d1b708729sm8200661plr.132.2022.08.08.01.49.38
+        by smtp.gmail.com with ESMTPSA id g6-20020a63fa46000000b0041c35462316sm5899853pgk.26.2022.08.08.01.51.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 01:49:39 -0700 (PDT)
-Message-ID: <c41cab17-afd6-bc99-56a1-e4e73b8c1ef6@gmail.com>
-Date:   Mon, 8 Aug 2022 17:49:36 +0900
+        Mon, 08 Aug 2022 01:51:24 -0700 (PDT)
+Message-ID: <a45f1aec-a2cb-0ef2-7100-378a5130c492@gmail.com>
+Date:   Mon, 8 Aug 2022 17:51:20 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
+Subject: [PATCH v2 1/3] docs/conf.py: Treat mathjax as fallback math renderer
 Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH v2 0/3] docs: conf.py: Reduce texlive dependency
 To:     Jonathan Corbet <corbet@lwn.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     linux-doc@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
+References: <c41cab17-afd6-bc99-56a1-e4e73b8c1ef6@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <c41cab17-afd6-bc99-56a1-e4e73b8c1ef6@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,111 +76,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Currently, math expressions using the "math::" directive or
+the ":math:" role of Sphinx need the imgmath extension for proper
+rendering in html and epub builds.
+imgmath requires dvipng (and latex).
+Otherwise, "make htmldocs" will complain of missing commands.
 
-This is v2 with the env variable of SPHINX_IMGMATH as suggested by
-Mauro.
+As a matter of fact, the mathjax extension is loaded by default since
+Sphinx v1.8 and it is good enough for html docs without any dependency
+on texlive packages.
 
-Changes since v1 [1]:
- - Patch 2/3: Rename LOAD_IMGMATH -> SPHINX_IMGMATH (Mauro).
- - For the series: Acked-bys from Mauro.
+Stop loading the imgmath extension for html docs unless requirements
+for imgmath are met.
 
-This was inspired from the discussion on the expected behavior of
-sphinx-pre-install [2].
+For epub docs, keep the same behavior of always loading imgmath.
 
-There was a mismatch between Mauro's intent and my expectation for
-the --no-pdf option of sphinx-pre-install.
-
-My thought was if I installed all the packages suggested from
-"./scripts/sphinx-pre-install --no-pdf", "make htmldocs" should run
-free of complaints of missing commands or packages.
-
-However, I got this warning when I tried the procedure on a debian-
-based container image:
-
-    WARNING: LaTeX command 'latex' cannot be run (needed for math display),
-    check the imgmath_latex setting
-
-, or:
-
-    WARNING: dvipng command 'dvipng' cannot be run (needed for math display),
-    check the imgmath_dvipng setting
-
-Mauro's response to my complaint was this:
-
-> The idea of using --no-pdf is to setup an environment without LaTeX,
-> meaning that math tags would only be partially parsed: basically, the
-> output would be html with LaTeX-like math expressions (at least last
-> time I tried).
-
-The mismatch can be resolved by using "mathjax" for math rendering
-and making "make htmldocs" be free of texlive packages.
-
-mathjax is the default math renderer since Sphinx 1.8.  It delegates
-math rendering to web browsers.  
-
-As Mauro has pointed out, "make epubdocs" requires imgmath.
-
-So this patch set treats mathjax as a fallback math renderer for html
-docs when imgmath requirements are not met.
-Existing systems which meet imgmath requirements are not affected by
-this change.
-
-Summary of math rendering in html:
-
-         dvipng, browser             before           after
-    ==========================  ===============  ================
-    dvipng                      imgmath (png)    <--
-    no divpng, with javascript  raw math:: code  mathjax
-    no dvipng, w/o javascript   raw math:: code  raw mathjax code
-
-Patch 1/3 adds code in conf.py so that for html docs, the imgmath
-extension will be loaded only when both latex and dvipng are available.
-For epub docs, imgmath will always be loaded (no change).
-
-Patch 2/3 adds code respecting a new env variable "SPHINX_IMGMATH" which
-will override the math renderer choice. This variable can be helpful
-on distros such as Arch linux, Mageia, etc. whose packaging policy is
-coarse-grained.
-
-E.g., to test math rendering by mathjax, run:
-    make SPHINX_IMGMATH=no htmldocs
-
-I mentioned in the thread of [2] that imgmath can generate scalable
-math images in SVG.
-
-My plan was to implement that option as well.  But during tests under
-Fedora/CentOS/openSUSE, I encountered a couple of warnings from dvisvgm.
-That would be regressions on existing systems which happen to have
-not-working dvisvgm along with working dvipng.  I'm thinking of adding
-the SVG option later if I can figure out the minimal requirement for
-dvisvgm under imgmath.
-
-Patch 3/3 is an independent change in the LaTeX preamble for pdf docs.
-Currently, xeCJK.sty provided for RHEL 9 (and its clones) is broken
-due to the lack of new dependency.  As a workaround, treat the absence
-of xeCJK.sty as the additional knob for skipping CJK contents.
-
-Note: Generated LaTeX sources will be the same regardless of existence
-of the "Noto Sans CJK SC" font and xeCJK.sty.
-
-[1] v1: https://lore.kernel.org/r/12d078f5-6995-b039-7076-bdb1f372a799@gmail.com/
-[2]: https://lore.kernel.org/r/3ba5a52e-cab6-05cf-a66e-adc58c467e1f@gmail.com/
-
-        Thanks, Akira
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+Changes sinve v1:
+ - Acked-by from Mauro
 
 --
-Akira Yokosawa (3):
-  docs/conf.py: Treat mathjax as fallback math renderer
-  docs/conf.py: Respect env variable SPHINX_IMGMATH
-  docs: kerneldoc-preamble: Test xeCJK.sty before loading
+ Documentation/conf.py | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
 
- Documentation/conf.py                       | 46 ++++++++++++++++++++-
- Documentation/sphinx/kerneldoc-preamble.sty | 22 +++++++---
- 2 files changed, 61 insertions(+), 7 deletions(-)
-
-
-base-commit: 339170d8d3da5685762619080263abb78700ab4c
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index 934727e23e0e..3ec1f845c839 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -15,6 +15,23 @@
+ import sys
+ import os
+ import sphinx
++from subprocess import check_output
++
++# helper
++# ------
++
++def have_command(cmd, ver_opt, str_in_ver):
++    """Run ```cmd`` with ``ver_opt`` and see if ``str_in_ver`` is found
++    or not.
++    """
++
++    try:
++        ver_str = check_output([cmd, ver_opt]).decode('utf-8', 'ignore')
++        have_cmd = str_in_ver in ver_str
++    except:
++        have_cmd = False
++
++    return have_cmd
+ 
+ # Get Sphinx version
+ major, minor, patch = sphinx.version_info[:3]
+@@ -106,7 +123,22 @@ else:
+ autosectionlabel_prefix_document = True
+ autosectionlabel_maxdepth = 2
+ 
+-extensions.append("sphinx.ext.imgmath")
++# Load math renderer:
++# For html builder, load imgmath only when its dependencies are met.
++# mathjax is the default math renderer since Sphinx 1.8.
++have_latex =  have_command('latex', '--version', 'pdfTeX')
++have_dvipng = have_command('dvipng', '--version', 'dvipng')
++load_imgmath = ((have_latex and have_dvipng)
++                or (major == 1 and minor < 8)
++                or 'epub' in sys.argv)
++
++if load_imgmath:
++    extensions.append("sphinx.ext.imgmath")
++    math_renderer = 'imgmath'
++else:
++    math_renderer = 'mathjax'
++
++sys.stderr.write("math_renderer: %s\n" % math_renderer)
+ 
+ # Add any paths that contain templates here, relative to this directory.
+ templates_path = ['_templates']
 -- 
 2.25.1
+
 

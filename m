@@ -2,100 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B46D58C231
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 05:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E33C58C235
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 05:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236882AbiHHDuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 23:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
+        id S237559AbiHHDvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 23:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236162AbiHHDu3 (ORCPT
+        with ESMTP id S235277AbiHHDve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 23:50:29 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5AD6256
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 20:50:28 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id w11-20020a17090a380b00b001f73f75a1feso2447554pjb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 07 Aug 2022 20:50:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc;
-        bh=D6rQxTD2B5xb7MSrRz5kk0UcBFzyprbH0T2X8tSwRkE=;
-        b=PYG9KLov6hjNFP3SqAlaFi1SgbPteI3DPD4lyke7w+purRgQOWU/ntyHUP/VpMfELT
-         1WTCLc6Urs0xvTmO58uBG0OPQp3r54V+L8h3UaRkd0tVgeqErY3BK09C3j7hNx9uO6ja
-         xyBKzXj+YWVqHCBb6ETr2C4V7Yr7Bvs7A6TVJ9TR4y6X6rSzQIuG69g9ZpzAesylokK6
-         NJu3Xg3M6opZH4aGNyowUpbBe88XZDLMUoDFvlyeaKNOfmWAatLX05BekMGcjYRVhtQ8
-         ee9fqzGWxn0W4FCb0NARfDDiPtd09FRCTXUxi8/yja2sAi3cbPf83uNzcn238m4IkS19
-         c5gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=D6rQxTD2B5xb7MSrRz5kk0UcBFzyprbH0T2X8tSwRkE=;
-        b=Pizy5svK1l94+OKVhOxKuUw651Q5rZiIAd9eRz78ciO528lfs3QBYekmMKqnoSMYkN
-         EqiNPakF2HLhhEGMvxqbNiN5f/WeZsgFgBkpjGcwL15t9C791eSe38dULasq4C7405Fs
-         9h2/co5CZLy5DoYP9D3mojq5rKjGCRRsXSyZh72zZDujDMwu/fQo4NXGbhNSoA6SD7wi
-         HiFNPDilNZhNbruGwViH9FiVe59paZI6/Icofjb/xOcoBF0pHSHejbp4PhvBMSAW63UN
-         iy/G5GXhDO+wFEEXMBKyU1nYmh8nIwp1yIkfSm93viWRXmv3iqkYBJOMOGDnYnWsRnhZ
-         G21A==
-X-Gm-Message-State: ACgBeo2rphyC4P63HK1mkrzciMxWf61XhLlCfFNZ/7gu48fb/opKl4Dn
-        rFun5oI9tOmN0DzvJ38RX7gaGcGv1SEKN/wHZWlabV5CtO8=
-X-Google-Smtp-Source: AA6agR5pukroDhDCxm0crjldWTMSyCqXFIdFB+DMfDIU53S9mhrzbBNXLtzXASzJ18doEE8nBmjflmiRjiZyBGd6cM0=
-X-Received: by 2002:a17:902:8644:b0:16b:ea77:a6cb with SMTP id
- y4-20020a170902864400b0016bea77a6cbmr17084007plt.59.1659930627519; Sun, 07
- Aug 2022 20:50:27 -0700 (PDT)
+        Sun, 7 Aug 2022 23:51:34 -0400
+Received: from mail-m11885.qiye.163.com (mail-m11885.qiye.163.com [115.236.118.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB0411817;
+        Sun,  7 Aug 2022 20:51:32 -0700 (PDT)
+Received: from [192.168.111.100] (unknown [58.22.7.114])
+        by mail-m11885.qiye.163.com (Hmail) with ESMTPA id 5A6DD4C04D5;
+        Mon,  8 Aug 2022 11:51:28 +0800 (CST)
+Message-ID: <7cd16264-fa84-7b50-f3ed-64f7f22dcef2@rock-chips.com>
+Date:   Mon, 8 Aug 2022 11:51:26 +0800
 MIME-Version: 1.0
-References: <CADDGra2dyKsd8cODUpJ0O3+kCKLzwSHf7QFsOkXVpv3Q2tmgnw@mail.gmail.com>
-In-Reply-To: <CADDGra2dyKsd8cODUpJ0O3+kCKLzwSHf7QFsOkXVpv3Q2tmgnw@mail.gmail.com>
-From:   Mahendra SP <mahendra.sp@gmail.com>
-Date:   Mon, 8 Aug 2022 09:20:16 +0530
-Message-ID: <CADDGra0Fm8k-SpaaoXDxu_cb7g3myxniMu1nKdHGRznv=n544A@mail.gmail.com>
-Subject: Re: TAHI IPv6 test failures on 4.19 LTS
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [PATCH v2] drm/gem: Fix GEM handle release errors
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Andy Yan <andy.yan@rock-chips.com>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-media@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
+References: <20220803083237.3701-1-jeffy.chen@rock-chips.com>
+ <c7cb225b-7f21-8d9a-773b-efc655e6332c@amd.com>
+From:   Chen Jeffy <jeffy.chen@rock-chips.com>
+In-Reply-To: <c7cb225b-7f21-8d9a-773b-efc655e6332c@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVkaGU9NVkNJHU5DSR9KGRgZSFUTARMWGhIXJB
+        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktITkhVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NS46LTo6Qj08HSkyQhILLFYV
+        IU8wFD9VSlVKTU5CQkhLTUNCSUpPVTMWGhIXVREeHR0CVRgTHhU7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFCTE1INwY+
+X-HM-Tid: 0a827b943d252eb9kusn5a6dd4c04d5
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Christian,
 
-Could you please help with inputs for this TAHI failures query ?
+Thanks for your reply, and sorry i didn't make it clear.
 
-Thanks
-Mahendra
+On 8/8 星期一 0:52, Christian König wrote:
+> Am 03.08.22 um 10:32 schrieb Jeffy Chen:
+>> Currently we are assuming a one to one mapping between dmabuf and handle
+>> when releasing GEM handles.
+>>
+>> But that is not always true, since we would create extra handles for the
+>> GEM obj in cases like gem_open() and getfb{,2}().
+>>
+>> A similar issue was reported at:
+>> https://lore.kernel.org/all/20211105083308.392156-1-jay.xu@rock-chips.com/
+>>
+>> Another problem is that the drm_gem_remove_prime_handles() now only
+>> remove handle to the exported dmabuf (gem_obj->dma_buf), so the imported
+>> ones would leak:
+>> WARNING: CPU: 2 PID: 236 at drivers/gpu/drm/drm_prime.c:228 
+>> drm_prime_destroy_file_private+0x18/0x24
+>>
+>> Let's fix these by using handle to find the exact map to remove.
+> 
+> Well we are clearly something missing here. As far as I can see the 
+> current code is correct.
+> 
+> Creating multiple GEM handles for the same DMA-buf is possible, but 
+> illegal. >
+> In other words when a GEM handle is exported as DMA-buf and imported 
+> again you should intentionally always get the same handle.
 
-On Fri, Aug 5, 2022 at 11:13 PM Mahendra SP <mahendra.sp@gmail.com> wrote:
->
-> Hi,
->
-> We are seeing a total 18 failures when TAHI IPv6 conformance test tool
-> is run against kernel version 4.19 ( specifically 4.19.29 )
->
-> Here are  the tests that are failing:
-> Section 1
-> 13 tests failed out of 54 tests <test numbers:
-> 16,17,42,43,44,45,46,47,48,49,50,51, 53>
->
-> Section 2
-> 1 test failed out of 236 tests <test number 138>
->
-> Section 5
-> 4 tests failed out of 25 tests <test numbers 12,17,20,24>
->
-> Is anyone else seeing similar kinds of failures ?
-> Could you please let me know if these are addressed in any of the
-> latest kernel versions?
-> If yes, please point me to commits/ fixed versions.
->
-> Please let me know if you need any additional information regarding
-> the above failures.
->
-> Thanks
-> Mahendra
+These issue are not about having handles for importing an exported 
+dma-buf case, but for having multiple handles to a GEM object(which 
+means having multiple handles to a dma-buf).
+
+I know the drm-prime is trying to make dma-buf and handle maps one to 
+one, but the drm-gem is allowing to create extra handles for a GEM 
+object, for example:
+drm_gem_open_ioctl -> drm_gem_handle_create_tail
+drm_mode_getfb2_ioctl -> drm_gem_handle_create
+drm_mode_getfb -> fb->funcs->create_handle
+
+So we are allowing GEM object to have multiple handles, and GEM object 
+could have at most one dma-buf, doesn't that means that dma-buf could 
+map to multiple handles?
+
+Or should we rewrite the GEM framework to limit GEM object with uniq handle?
+
+
+The other issue is that we are leaking dma-buf <-> handle map for the 
+imported dma-buf, since the drm_gem_remove_prime_handles doesn't take 
+care of obj->import_attach->dmabuf.
+
+But of cause this can be fixed in other way:
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -180,6 +180,9 @@ drm_gem_remove_prime_handles(struct drm_gem_object 
+*obj, struct drm_file *filp)
+                 drm_prime_remove_buf_handle_locked(&filp->prime,
+                                                    obj->dma_buf);
+         }
++       if (obj->import_attach)
++               drm_prime_remove_buf_handle_locked(&filp->prime,
++ 
+obj->import_attach->dmabuf);
+         mutex_unlock(&filp->prime.lock);
+  }
+
+
+> So this is pretty much a clear NAK to this patch since it shouldn't be 
+> necessary or something is seriously broken somewhere else.
+> 
+> Regards,
+> Christian.
+> 
+>>
+>> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+>> ---
+>>
+>> Changes in v2:
+>> Fix a typo of rbtree.
+>>
+>>   drivers/gpu/drm/drm_gem.c      | 17 +----------------
+>>   drivers/gpu/drm/drm_internal.h |  4 ++--
+>>   drivers/gpu/drm/drm_prime.c    | 20 ++++++++++++--------
+>>   3 files changed, 15 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+>> index eb0c2d041f13..ed39da383570 100644
+>> --- a/drivers/gpu/drm/drm_gem.c
+>> +++ b/drivers/gpu/drm/drm_gem.c
+>> @@ -168,21 +168,6 @@ void drm_gem_private_object_init(struct 
+>> drm_device *dev,
+>>   }
+>>   EXPORT_SYMBOL(drm_gem_private_object_init);
+>> -static void
+>> -drm_gem_remove_prime_handles(struct drm_gem_object *obj, struct 
+>> drm_file *filp)
+>> -{
+>> -    /*
+>> -     * Note: obj->dma_buf can't disappear as long as we still hold a
+>> -     * handle reference in obj->handle_count.
+>> -     */
+>> -    mutex_lock(&filp->prime.lock);
+>> -    if (obj->dma_buf) {
+>> -        drm_prime_remove_buf_handle_locked(&filp->prime,
+>> -                           obj->dma_buf);
+>> -    }
+>> -    mutex_unlock(&filp->prime.lock);
+>> -}
+>> -
+>>   /**
+>>    * drm_gem_object_handle_free - release resources bound to userspace 
+>> handles
+>>    * @obj: GEM object to clean up.
+>> @@ -253,7 +238,7 @@ drm_gem_object_release_handle(int id, void *ptr, 
+>> void *data)
+>>       if (obj->funcs->close)
+>>           obj->funcs->close(obj, file_priv);
+>> -    drm_gem_remove_prime_handles(obj, file_priv);
+>> +    drm_prime_remove_buf_handle(&file_priv->prime, id);
+>>       drm_vma_node_revoke(&obj->vma_node, file_priv);
+>>       drm_gem_object_handle_put_unlocked(obj);
+>> diff --git a/drivers/gpu/drm/drm_internal.h 
+>> b/drivers/gpu/drm/drm_internal.h
+>> index 1fbbc19f1ac0..7bb98e6a446d 100644
+>> --- a/drivers/gpu/drm/drm_internal.h
+>> +++ b/drivers/gpu/drm/drm_internal.h
+>> @@ -74,8 +74,8 @@ int drm_prime_fd_to_handle_ioctl(struct drm_device 
+>> *dev, void *data,
+>>   void drm_prime_init_file_private(struct drm_prime_file_private 
+>> *prime_fpriv);
+>>   void drm_prime_destroy_file_private(struct drm_prime_file_private 
+>> *prime_fpriv);
+>> -void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private 
+>> *prime_fpriv,
+>> -                    struct dma_buf *dma_buf);
+>> +void drm_prime_remove_buf_handle(struct drm_prime_file_private 
+>> *prime_fpriv,
+>> +                 uint32_t handle);
+>>   /* drm_drv.c */
+>>   struct drm_minor *drm_minor_acquire(unsigned int minor_id);
+>> diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+>> index e3f09f18110c..bd5366b16381 100644
+>> --- a/drivers/gpu/drm/drm_prime.c
+>> +++ b/drivers/gpu/drm/drm_prime.c
+>> @@ -190,29 +190,33 @@ static int drm_prime_lookup_buf_handle(struct 
+>> drm_prime_file_private *prime_fpri
+>>       return -ENOENT;
+>>   }
+>> -void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private 
+>> *prime_fpriv,
+>> -                    struct dma_buf *dma_buf)
+>> +void drm_prime_remove_buf_handle(struct drm_prime_file_private 
+>> *prime_fpriv,
+>> +                 uint32_t handle)
+>>   {
+>>       struct rb_node *rb;
+>> -    rb = prime_fpriv->dmabufs.rb_node;
+>> +    mutex_lock(&prime_fpriv->lock);
+>> +
+>> +    rb = prime_fpriv->handles.rb_node;
+>>       while (rb) {
+>>           struct drm_prime_member *member;
+>> -        member = rb_entry(rb, struct drm_prime_member, dmabuf_rb);
+>> -        if (member->dma_buf == dma_buf) {
+>> +        member = rb_entry(rb, struct drm_prime_member, handle_rb);
+>> +        if (member->handle == handle) {
+>>               rb_erase(&member->handle_rb, &prime_fpriv->handles);
+>>               rb_erase(&member->dmabuf_rb, &prime_fpriv->dmabufs);
+>> -            dma_buf_put(dma_buf);
+>> +            dma_buf_put(member->dma_buf);
+>>               kfree(member);
+>> -            return;
+>> -        } else if (member->dma_buf < dma_buf) {
+>> +            break;
+>> +        } else if (member->handle < handle) {
+>>               rb = rb->rb_right;
+>>           } else {
+>>               rb = rb->rb_left;
+>>           }
+>>       }
+>> +
+>> +    mutex_unlock(&prime_fpriv->lock);
+>>   }
+>>   void drm_prime_init_file_private(struct drm_prime_file_private 
+>> *prime_fpriv)
+> 
+> 
+

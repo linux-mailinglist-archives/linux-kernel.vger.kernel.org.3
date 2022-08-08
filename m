@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC4358CB3B
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9909058CB3E
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243645AbiHHPY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 11:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
+        id S243696AbiHHPYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 11:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243208AbiHHPY0 (ORCPT
+        with ESMTP id S243208AbiHHPYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:24:26 -0400
-Received: from bg5.exmail.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B8213FBD;
-        Mon,  8 Aug 2022 08:24:24 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1659972241t2ri8ov1
-Received: from localhost.localdomain ( [182.148.14.53])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 08 Aug 2022 23:23:55 +0800 (CST)
-X-QQ-SSF: 0100000000200040B000B00A0000000
-X-QQ-FEAT: RrZlkntZBfmuOfo8quMEwD3080NOsCahJQvomSWrjR200jqYM2uJS5tZj+9Fg
-        KGKjOOrRCW5yYFFchp6E4ft3Kf8SkjRNOUgBHG1jCaoAXcqKzzLxtxZGSNqjQIYVZvNKlvi
-        T9j8p99fynkmc3k1+Dom+vsyg1h8wLbnizYhZ6QuAyc2v/z6A7ozAlYPNwM48lxPgRGby7+
-        C8Dseij3302y5oY8UW8Qwck3y8NArut/ZrOZtFHsNmFGJ1yrbaEbvfMMYLaWFCD1Al/y7lV
-        SVkayiXQ9GSiiZrv/cCgXMVHhEn3WwulWCWTvh7mp20DOJdzhdB9chA5SFpuXm43zF2InJO
-        IGli3zczRyh2Z9HhzLR1EpHBqWNSoH3zmoiPohXLjVUfYhF+ok66t+i+DS+AiX5vIQwuFqk
-        LOBmYiVoP/E=
-X-QQ-GoodBg: 0
-From:   shaomin Deng <dengshaomin@cdjrlc.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] rtc: rs5c372: Fix typo in comments
-Date:   Mon,  8 Aug 2022 11:23:54 -0400
-Message-Id: <20220808152354.3641-1-dengshaomin@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 8 Aug 2022 11:24:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D1513FBD;
+        Mon,  8 Aug 2022 08:24:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E94AC60FF6;
+        Mon,  8 Aug 2022 15:24:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC12DC433C1;
+        Mon,  8 Aug 2022 15:24:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659972288;
+        bh=4XY3xBz5yQioCmLh6CZ+vJkSZt3r2PnoAwGejge7qto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y5IG8qBVtvxtRh2rTlcciIqRrsSdXOJaFyViVj5ViDq/7AyyODBFaPUbVe47hzupq
+         3dZ1lFTDEp6MO+e+qHgG0yT8IQ2mGBserPwm1JaFbvR8R8sT8E3ZKfukFo1SQYvVhU
+         Yl9o5i3xQiWT1atahADKUcmvOAtCEwZPJWDisG7c=
+Date:   Mon, 8 Aug 2022 17:24:45 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     shaomin Deng <dengshaomin@cdjrlc.com>
+Cc:     jirislaby@kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] serial: fsl_lpuart: Remove repeated word
+Message-ID: <YvEqvf6rk+nde6vT@kroah.com>
+References: <20220808151537.846-1-dengshaomin@cdjrlc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220808151537.846-1-dengshaomin@cdjrlc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,26 +51,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the repeated word "the" in comments.
+On Mon, Aug 08, 2022 at 11:15:37AM -0400, shaomin Deng wrote:
+> Remove the repeated word "as" in comments.
+> 
+> Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
 
-Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
----
- drivers/rtc/rtc-rs5c372.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Shouldn't this be "Shaomin Deng"?
 
-diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
-index cb15983383f5..8d551e15b91a 100644
---- a/drivers/rtc/rtc-rs5c372.c
-+++ b/drivers/rtc/rtc-rs5c372.c
-@@ -150,7 +150,7 @@ static int rs5c_get_regs(struct rs5c372 *rs5c)
- 	 * least 80219 chips; this works around that bug.
- 	 *
- 	 * The third method on the other hand doesn't work for the SMBus-only
--	 * configurations, so we use the the first method there, stripping off
-+	 * configurations, so we use the first method there, stripping off
- 	 * the extra register in the process.
- 	 */
- 	if (rs5c->smbus) {
--- 
-2.35.1
+thanks,
 
+greg k-h

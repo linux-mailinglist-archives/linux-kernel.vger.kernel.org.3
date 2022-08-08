@@ -2,112 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8C358C8FA
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F54358C8FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 15:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237151AbiHHNFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 09:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S243115AbiHHNGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 09:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243073AbiHHNFm (ORCPT
+        with ESMTP id S243036AbiHHNGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:05:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA5DBAE;
-        Mon,  8 Aug 2022 06:05:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB096B80DDE;
-        Mon,  8 Aug 2022 13:05:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF838C433C1;
-        Mon,  8 Aug 2022 13:05:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659963939;
-        bh=YopFz7vgFlUtdQVWfCGUYhY4nRi11uEOqzfp9ekNOZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ddotj7ibW0VfGX2PLydzyRMIVLUENRDo5GSFrTqRtFurJHsF+YqCLSaIzWijv5dBQ
-         ZYWlgM+95IjdUugnuiT7ojUfgExcacV1Yf2BzO5yI49/dKNX/VRRuKfXOaNnrpKO6p
-         t5fpLEUUuSTv3wSo2EI7HFaTMxJ56VLyC2v4XAFM=
-Date:   Mon, 8 Aug 2022 15:05:36 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 3/9] usb: dwc3: qcom: fix gadget-only builds
-Message-ID: <YvEKIJ+GujHt7XvT@kroah.com>
-References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-4-johan+linaro@kernel.org>
+        Mon, 8 Aug 2022 09:06:34 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920BA60CE
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:06:32 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id kb8so16502705ejc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 06:06:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=bgQjFRSLa2xwB4CS5aSMut/Qn8ytzGfpdDtj3UKw97A=;
+        b=MYgq8XxOOEc57m/ecEPlAH4rjCGi/yR46Iins5wrCHU86d9lytN7WP72HojoDPX3dq
+         Pn5EjkJk6igW2D1f03WkODG6LKERiiQjVsY3JdOItAWf3U/+CXaQt9YYGKtkLos5pRsm
+         gBMPt4gRgq4lQyJmdjmEhlxFdWKGoDz40qaoEQGSdOHweB4ekEBiJWAhsIxlTNN07xbP
+         t8rmI51RNdlOLs7j0Kceu0IJl/ci8/C3mVBdg1P6q27SJgoAWmmtGFajJWx38wLd4dG6
+         JTUk4mj5NQ7ODWqG+rvoSxC6CiKBDBGPJmCXOsNde5/jrRvMgQfY/yIdrlGbdtNz4jUB
+         rHNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=bgQjFRSLa2xwB4CS5aSMut/Qn8ytzGfpdDtj3UKw97A=;
+        b=ig+jY6SnTamOlj1jWaTQoOyvMcYu2s0CczsZKyaeAiqcorkoYwW8VqnbpP1Z/FSHVG
+         xjFOviDtCTagHUKWJmCqEDm6HXXnWOBYjbwCw54JflSHuaTYBxHoo1nnRrC1t4um/BhE
+         UhAyyB9HpkUMFN3lYL3uhASclR/PR8Ogp0QyK4Mym9+5lp9zYnit8KPk03eGJCTbecHC
+         w2wFlBHgCb53zuMTdGxlLESmb6XaoHzTuF01BbnjH++dj0A51JTc6ACIBQdrdrYcSuYY
+         WaYlrY6p+gikG6H4aPnNx9kaJEanqS9WT+wvwuSx69EZ4P0TQV7Zen29bVyf4e7ywJvM
+         jEmQ==
+X-Gm-Message-State: ACgBeo0CGhOBFzG/nG3lqSNm6LYMFI9GEr1Li+i5Keho79oYw57X7Els
+        JDc1CBDD2n+wczNkN1jpg8sgb+iE6q6xtuld
+X-Google-Smtp-Source: AA6agR6IRBphtpl8tdKw635ZPdSwozJAE2arHfftpN0/aFI7GBrgP+PJ3/YMdxSY6WcHw92NXiiwUQ==
+X-Received: by 2002:a17:906:fc6:b0:72f:d080:416 with SMTP id c6-20020a1709060fc600b0072fd0800416mr13638743ejk.1.1659963990811;
+        Mon, 08 Aug 2022 06:06:30 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id cn15-20020a0564020caf00b0043ba0cf5dbasm4524616edb.2.2022.08.08.06.06.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 06:06:30 -0700 (PDT)
+Message-ID: <e011d195-e72f-d163-9f36-79b473a9466d@blackwall.org>
+Date:   Mon, 8 Aug 2022 16:06:29 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804151001.23612-4-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1] net:bonding:support balance-alb interface with vlan to
+ bridge
+Content-Language: en-US
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+To:     Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
+        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyd12@chinatelecom.cn
+References: <20220808094107.6150-1-sunshouxin@chinatelecom.cn>
+ <278221fe-e836-9794-374f-0955cc10f8be@blackwall.org>
+In-Reply-To: <278221fe-e836-9794-374f-0955cc10f8be@blackwall.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 05:09:55PM +0200, Johan Hovold wrote:
-> A recent change added a dependency to the USB host stack and broke
-> gadget-only builds of the driver.
+On 08/08/2022 15:44, Nikolay Aleksandrov wrote:
+> On 08/08/2022 12:41, Sun Shouxin wrote:
+>> In my test, balance-alb bonding with two slaves eth0 and eth1,
+>> and then Bond0.150 is created with vlan id attached bond0.
+>> After adding bond0.150 into one linux bridge, I noted that Bond0,
+>> bond0.150 and  bridge were assigned to the same MAC as eth0.
+>> Once bond0.150 receives a packet whose dest IP is bridge's
+>> and dest MAC is eth1's, the linux bridge cannot process it as expected.
+>> The patch fix the issue, and diagram as below:
+>>
+>> eth1(mac:eth1_mac)--bond0(balance-alb,mac:eth0_mac)--eth0(mac:eth0_mac)
+>>                       |
+>>                    bond0.150(mac:eth0_mac)
+>>                       |
+>>                    bridge(ip:br_ip, mac:eth0_mac)--other port
+>>
+>> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+>> ---
+>>  drivers/net/bonding/bond_alb.c | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+>> index 007d43e46dcb..0dea04f00f12 100644
+>> --- a/drivers/net/bonding/bond_alb.c
+>> +++ b/drivers/net/bonding/bond_alb.c
+>> @@ -654,6 +654,7 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
+>>  {
+>>  	struct slave *tx_slave = NULL;
+>>  	struct arp_pkt *arp;
+>> +	struct net_device *dev;
 > 
-> Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
+> reverse xmas tree order
 > 
-> Changes in v2
->  - new patch
+>>  
+>>  	if (!pskb_network_may_pull(skb, sizeof(*arp)))
+>>  		return NULL;
+>> @@ -665,6 +666,13 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
+>>  	if (!bond_slave_has_mac_rx(bond, arp->mac_src))
+>>  		return NULL;
+>>  
+>> +	dev = ip_dev_find(dev_net(bond->dev), arp->ip_src);
+>> +	if (dev) {
+>> +		if (netif_is_bridge_master(dev)) {
+>> +			return NULL;
+>> +		}
 > 
->  drivers/usb/dwc3/dwc3-qcom.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> nit: the {} aren't needed
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index be2e3dd36440..e9364141661b 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -310,8 +310,11 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
->  	 * currently supports only 1 port per controller. So
->  	 * this is sufficient.
->  	 */
-> +#ifdef CONFIG_USB
->  	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+>> +	}
+>> +
+>>  	if (arp->op_code == htons(ARPOP_REPLY)) {
+>>  		/* the arp must be sent on the selected rx channel */
+>>  		tx_slave = rlb_choose_channel(skb, bond, arp);
+> 
+> Aside from the small cosmetic comments, have you tried adding the second mac address
+> as permanent in the bridge?
+> i.e.: 
+> $ bridge fdb add <eth1_mac> dev bond0.150 master permanent
+> 
+> That should fix your problem without any bonding hacks.
+> 
+> Cheers,
+>  Nik
 
-If a gadget driver needs this for some reason, then the #ifdef should be
-put in a .h file, not in a .c file.
+Ah, I just found your original submission and understood the problem better.
+The fix sounds good, as Jay explained there, but the commit message can use a bit
+more explanation of what exactly is wrong and why the bond shouldn't load balance
+these. :)
 
-But step back a minute and ask why a host-config-only function is being
-called when a device is in gadget-only mode?  This feels like a
-design/logic issue in this file, NOT something to paper over with a
-#ifdef in a .c file
+Anyway, nevermind my last comment.
 
-This implies that if this device is NOT in a host configuration, then
-the suspend path of it is not configured properly at all, as why would
-it be checking or caring about this at all if this is in gadget-only
-mode?
 
-Something else is wrong here, let's fix the root problem please.  Maybe
-this driver should just never be built in gadget-only mode, as it is
-never intended to support that option?
-
-thanks,
-
-greg k-h

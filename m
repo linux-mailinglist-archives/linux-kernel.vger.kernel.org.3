@@ -2,127 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2739258C832
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6266658C837
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236398AbiHHMOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 08:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        id S242405AbiHHMPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 08:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbiHHMOD (ORCPT
+        with ESMTP id S232482AbiHHMPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 08:14:03 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4C838BD
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:14:02 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id l22so10672798wrz.7
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:14:02 -0700 (PDT)
+        Mon, 8 Aug 2022 08:15:14 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3597C224;
+        Mon,  8 Aug 2022 05:15:12 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id v185so6890713ioe.11;
+        Mon, 08 Aug 2022 05:15:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=0E8nWSXeCZphwzspe4OOM++h3nyUvm9NUwYOHmO50IU=;
-        b=R3ZzXhNOmEo2C51jsQI5IGQLZiS8SsHGMvnMZQIHchJySVP8zLPKtIl75+/G+F5hfg
-         3AnczWhnwwGRmqPCIeqhLJZb3hZMWgr2TKNmRRIJ6UHHv8fqRu9oD3liDNti+bT7Fb7v
-         /ijyp0vvIHHIYV+pUJGAs1pmvA2qAFsDLigzHf5qKO9aktlUHAEgYdrsICdXk1+TD664
-         SUpiXZQ2UnTnI3emBdvbCjNdrS3N4MyQ/PJ9PvW9te08+j/88s0TjAsxePCySBZPoFYN
-         RjYDyGb9eavdLVlFbIXjxsJvggCgbB+geZOK/7p9jO/JBHwHIc2pN397PqA97gxxcYGr
-         K6iA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=2YSzkQhiCchQXC4uTAyjm5H8d8wMrxgvSk96QeBJ5DI=;
+        b=IIl/mHz9vy/gmAJl9cQKsBcA+W/Ola5CnvIUopRWAFcdUx8auOg1YxQiy4H7/VkjBr
+         a+8iUm0hIpXzG34eaK/RfevXAXR7CvWUIUiMoOLRPp6UVuglMPCelVvy/kebFSzWRHaz
+         pQQI3wdZbMnYgnc5TqUiN6a9zqNN11F+aSeqBS62wljctbppB2y8lhJ8pbzkVv7/S/fw
+         iPZgKyxSYwzNIEsqgHZxy0FOXvh4QUCjcdCl6a+A2l+f2tR+yt8Zzm1iG6HXjgPZSvv6
+         KW1jAOlmszeCHQNGzwAr1Ds5vprgABhaZog3fxOo6/NCiW0IeRVMaB191XMLuchbQ6J/
+         BuKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=0E8nWSXeCZphwzspe4OOM++h3nyUvm9NUwYOHmO50IU=;
-        b=06TqCUi3eRZgjQ1CCgv2zx0Ro0p+EGRY/xRq2JQz45iy6kXCaxBzOmtnGzH1IIHAra
-         0bjtV/P/UPAq1L2RId5aEQv+J7nxD6KwiVbyzXt21w8UBCom1OC53qD8CyQM5BAK6TAU
-         lSQlfq6NJ/tkxDq2FV9LYGDV5TWHJNyKdXLnAdRPscwK6ewrWPk9N1WkRYy7dEZMkiRg
-         A2u0Im2cIdQrMeFnMsKP1i0v/9S5tD3foO4bUZmqMOV/00s0io0q8pvNMF4YqfDc0f0G
-         5LQxgxuuxQ3v+VIMkVR/+hZ+QZAzyCXWT4D/0DenX+BzeekxLbCsTHQIseTZlREwryhn
-         k+Yw==
-X-Gm-Message-State: ACgBeo054A6rc2tjhFPQURzrmY6V5ZbRRfTCkgG0joEHQ+cNj1652lVd
-        6OQqrxuEoBwCYl3Mgns5NxXPZA==
-X-Google-Smtp-Source: AA6agR59HBaYvdNxcurG6DU2XNVy6pfIHmBWUUY+HMcMLhePYLHVCg7z2EUx4rzOJFkYt9HhDfdlrg==
-X-Received: by 2002:a05:6000:18a3:b0:21f:d6a4:1aec with SMTP id b3-20020a05600018a300b0021fd6a41aecmr11297534wri.468.1659960841070;
-        Mon, 08 Aug 2022 05:14:01 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id w11-20020a1cf60b000000b003a5260b8392sm6358643wmc.23.2022.08.08.05.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 05:14:00 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 13:13:58 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy@kernel.org>, Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH 11/28] mfd: intel_soc_pmic: Remove #ifdef guards for PM
- related functions
-Message-ID: <YvD+BjAhHOZ3/R8w@google.com>
-References: <20220807145247.46107-1-paul@crapouillou.net>
- <20220807145247.46107-12-paul@crapouillou.net>
- <CAHp75Vf1jfgshfw1ymXu9AHrNy1SUmVRDvDLUYbYKFSrhQq44A@mail.gmail.com>
- <RO59GR.D1GGMPYPNKQG2@crapouillou.net>
- <CAHp75VdJaJdpvGp5v-5r77RWpkGnx06J0x=Dmeyt=R8JGBDgYQ@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=2YSzkQhiCchQXC4uTAyjm5H8d8wMrxgvSk96QeBJ5DI=;
+        b=08/PuBEsE9J2OhslvG0EaV/1ZIhbk+LoV7KvUcLud3dnmURHQOOUSbcHwAHpyKT5jV
+         1O7IvrTX59PKsfreMBAIbGInI1hbibcxYpADrCSH3tdPDzxUdRKixPq8xz6xD5PCa3ct
+         yawXacqwysCKluL76wcwfzWAb6Nm+mt/LeWR9wCydMOo54EGlXOzouxQFTFtfol7o7U2
+         y5lDYWyJsS5TWjeXux4bokYuOWFbVRPS7nLa4drx7WsPTtr3Yo+9hRS6Wu4loYEhJmUu
+         l7xIYa+x75889VwQzHUH4p0lM1pj668VwGhJWhquhNp8NjcVYHWozxLG3Rb/kJw9qktO
+         8tDA==
+X-Gm-Message-State: ACgBeo3vFw+6Ii+XAYSjZl/5NcMdEW20GBZJ1LqsU0uFcO/w6Y/Uja90
+        u/98J7ADSWijUrZNfkeYmdt+OwgroCS92HbHzC+Z8RD+
+X-Google-Smtp-Source: AA6agR7J0UAM7xQChOLJtBq8rRGZRheEQu4MZidweMAk9sk5n1bHHfjpl5mVYdexgjqzykLhsz9nFgYJ1f3uNKB2cqM=
+X-Received: by 2002:a5d:9da5:0:b0:684:a92a:5855 with SMTP id
+ ay37-20020a5d9da5000000b00684a92a5855mr2008657iob.18.1659960911526; Mon, 08
+ Aug 2022 05:15:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VdJaJdpvGp5v-5r77RWpkGnx06J0x=Dmeyt=R8JGBDgYQ@mail.gmail.com>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+References: <20220808094623.387348-1-asavkov@redhat.com> <20220808094623.387348-2-asavkov@redhat.com>
+In-Reply-To: <20220808094623.387348-2-asavkov@redhat.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Mon, 8 Aug 2022 14:14:33 +0200
+Message-ID: <CAP01T76dELOx8p_iky_Py_VcqDbQtaL-4d=zrFiCbFhMdVEmNA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf: add destructive kfunc flag
+To:     Artem Savkov <asavkov@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Daniel Vacek <dvacek@redhat.com>,
+        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
+        Daniel Xu <dxu@dxuuu.xyz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 08 Aug 2022, Andy Shevchenko wrote:
+On Mon, 8 Aug 2022 at 11:48, Artem Savkov <asavkov@redhat.com> wrote:
+>
+> Add KF_DESTRUCTIVE flag for destructive functions. Functions with this
+> flag set will require CAP_SYS_BOOT capabilities.
+>
+> Signed-off-by: Artem Savkov <asavkov@redhat.com>
+> ---
+>  include/linux/btf.h   | 1 +
+>  kernel/bpf/verifier.c | 5 +++++
+>  2 files changed, 6 insertions(+)
+>
+> diff --git a/include/linux/btf.h b/include/linux/btf.h
+> index cdb376d53238..51a0961c84e3 100644
+> --- a/include/linux/btf.h
+> +++ b/include/linux/btf.h
+> @@ -49,6 +49,7 @@
+>   * for this case.
+>   */
+>  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer arguments */
+> +#define KF_DESTRUCTIVE  (1 << 5) /* kfunc performs destructive actions */
+>
 
-> On Sun, Aug 7, 2022 at 5:58 PM Paul Cercueil <paul@crapouillou.net> wrote:
-> > Le dim., août 7 2022 at 17:50:32 +0200, Andy Shevchenko
-> > <andy.shevchenko@gmail.com> a écrit :
-> > > On Sun, Aug 7, 2022 at 4:53 PM Paul Cercueil <paul@crapouillou.net>
-> > > wrote:
-> 
-> ...
-> 
-> > >>  The advantage is then that these functions are now always compiled
-> > >
-> > > is that
-> >
-> > I think that what I wrote is proper English.
-> 
-> Okay, Google just shows 100x times less the above form in comparison
-> to one w/o "then".
+Please also document this flag in Documentation/bpf/kfuncs.rst.
 
-> The advantage is then that these functions are now always compile
-> independently of any Kconfig option, and thanks to that bugs and
-> regressions are easier to catch.
+And maybe instead of KF_DESTRUCTIVE, it might be more apt to call this
+KF_CAP_SYS_BOOT. While it is true you had a destructive flag for
+programs being loaded earlier, so there was a mapping between the two
+UAPI and kfunc flags, what it has boiled down to is that this flag
+just requires CAP_SYS_BOOT (in addition to other capabilities) during
+load. So that name might express the intent a bit better. We might
+soon have similar flags encoding requirements of other capabilities on
+load.
 
- "This has the advantage of always compiling these functions in,
-  independently of any Kconfig option.  Thanks to that, bugs and other
-  regressions are subsequently easier to catch."
+The flag rename is just a suggestion, up to you.
 
-> > >>  independently of any Kconfig option, and thanks to that bugs and
-> > >>  regressions are easier to catch.
-> 
-> ...
-> 
-> > > 3. The PMIC core actually is Crystal Cove driver and I have a pending
-> > > series for that and I guess you know about it. Have you seen what have
-> > > been done there?
-> >
-> > No, I didn't know. I guess Lee can skip my patch 11/28 then.
-> 
-> I probably memorized the name of a guy, who sent a patch against this
-> driver a week ago or so, wrongly. Sorry for that.
-> 
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+>  struct btf;
+>  struct btf_member;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 096fdac70165..e52ca1631d3f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -7584,6 +7584,11 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>                         func_name);
+>                 return -EACCES;
+>         }
+> +       if (*kfunc_flags & KF_DESTRUCTIVE && !capable(CAP_SYS_BOOT)) {
+> +               verbose(env, "destructive kfunc calls require CAP_SYS_BOOT capabilities\n");
+> +               return -EACCES;
+> +       }
+> +
+>         acq = *kfunc_flags & KF_ACQUIRE;
+>
+>         /* Check the arguments */
+> --
+> 2.37.1
+>

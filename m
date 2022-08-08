@@ -2,91 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6061D58CF6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 22:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5E758CF73
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 22:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244466AbiHHUyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 16:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
+        id S244083AbiHHU52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 16:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244453AbiHHUyc (ORCPT
+        with ESMTP id S236488AbiHHU5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 16:54:32 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BB215FDB
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 13:54:31 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id e127so15469928yba.12
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 13:54:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=aTpTyem7hydQrdauCJI2WQMASMRymFSEwd0UcF/UCsE=;
-        b=XMP9oSMoQ90wtPcC/91xLp5SbJZA38a60hNa0NEz2TRR/auLCJsAO7NTaIfU8N1hN1
-         4hdX8eAxd+EJQbsm554CuEr3RU4y0QFOTWo+6HByymPBGVRWgfLzkC12nsDfo+MwbCFp
-         7UR8TdExmh6VrTcXylcMI/6zheq0oWhVfm8P0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=aTpTyem7hydQrdauCJI2WQMASMRymFSEwd0UcF/UCsE=;
-        b=6FetjwwkWucrSktbpTprVEqMjGb1otlPXhEsVa6bgHavqdSenk4E5lyTEP6YQIZ1NN
-         TzbmfsmgPCqEYd0bwNWnW02qI90PXKJzftb3VlBhNDK41YMj1Y/2Rf17s4sTA0fk4rtZ
-         ZWQVzu2ZUoBoLaztphGNOF5pPI+XqnILq2k8xcXxWubK4q673YAIu5ecyS4NdzGCpEm3
-         R5VSYujdfbJ0WSq54zfWbm4U/8P+JRS8cu/XtmSxQRF1wH7Q8CqMFyuMY5KkgbPdxvIh
-         CtivXwhdkphEAm77QfoOWsVY9Ca5TbJPHt61bntBbzoEE/7XmI3TpHDX/rCd55LOAaw2
-         F6Gg==
-X-Gm-Message-State: ACgBeo0OKDt0NpCUj8Yxq39j9N9v/m5WdR5ZNjkKVqHgbd+uqVx1B/OD
-        YLG4g3o1zJsic/yEJrnfbpw9gNHwUlTrvHDXQ42nJA==
-X-Google-Smtp-Source: AA6agR47bYiQ/YcerY6PgRCIknae0Vr9RwG714iEU/HdDhjsTL85y/os3T9qGlLDZdANpmzmh9gl56FBuqOx7pf/bDI=
-X-Received: by 2002:a25:7450:0:b0:67b:e79c:a1be with SMTP id
- p77-20020a257450000000b0067be79ca1bemr6570428ybc.196.1659992070709; Mon, 08
- Aug 2022 13:54:30 -0700 (PDT)
+        Mon, 8 Aug 2022 16:57:25 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D1B15FDE;
+        Mon,  8 Aug 2022 13:57:24 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98cb329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98cb:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6F33D1EC0324;
+        Mon,  8 Aug 2022 22:57:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1659992238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=p0Nu/U4H8SmixYd5feGWYPr4UgnChBbHs5iDPvH3yWI=;
+        b=ZqNVh2bzSe9ugQMduDliBm/D6gtyRvcD9lshalZwzblLAwOSiw++v3PvvFI5UTiDaKeB1C
+        hY0a1bfABftejmpxJ8DtII7t3CEF2oJ3elghXxJSnC28CdjWginuoRFpt6NtuXxP9fr+2q
+        Rv/CKyy7VpkanZnUc7QBhsqm3ogaCkk=
+Date:   Mon, 8 Aug 2022 22:57:11 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kani, Toshi" <toshi.kani@hpe.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jia He <justin.he@arm.com>, Len Brown <lenb@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>
+Subject: Re: [PATCH] ACPI: APEI: move edac_init ahead of ghes platform drv
+ register
+Message-ID: <YvF4p01WJGGUwIJC@zn.tnic>
+References: <20220805023200.154634-1-justin.he@arm.com>
+ <CAJZ5v0gUbKYaxRcZsYO6eq7vLgKdgfdLdoL_Hzmd6r-JczkVPg@mail.gmail.com>
+ <YvFX9vTilqMpsF9u@zn.tnic>
+ <PH7PR84MB1838379B8C2DF488DE729A9182639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-References: <20220805151551.1.Idd188ff3f9caddebc17ac357a13005f93333c21f@changeid>
-In-Reply-To: <20220805151551.1.Idd188ff3f9caddebc17ac357a13005f93333c21f@changeid>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Mon, 8 Aug 2022 13:54:19 -0700
-Message-ID: <CACeCKafDg3VE0C8ZELvoET==RtmSpOHxC5R4Fnxmyyt+XSF3tA@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec: Expose suspend_timeout in debugfs
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Rajat Jain <rajatja@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <PH7PR84MB1838379B8C2DF488DE729A9182639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
+On Mon, Aug 08, 2022 at 08:40:18PM +0000, Kani, Toshi wrote:
+> This allows ghes_edac_register() to run before edac_init(), and sets
+> edac_mc_owner to prevent chipset-specific edac driver
 
-On Fri, Aug 5, 2022 at 3:17 PM Evan Green <evgreen@chromium.org> wrote:
->
-> diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
-> index 0dbceee87a4b1a..530378bd4359dd 100644
-> --- a/drivers/platform/chrome/cros_ec_debugfs.c
-> +++ b/drivers/platform/chrome/cros_ec_debugfs.c
-> @@ -470,6 +470,9 @@ static int cros_ec_debugfs_probe(struct platform_device *pd)
->         debugfs_create_x32("last_resume_result", 0444, debug_info->dir,
->                            &ec->ec_dev->last_resume_result);
->
-> +       debugfs_create_u16("suspend_timeout", 0664, debug_info->dir,
-> +                          &ec->ec_dev->suspend_timeout);
+So this is the important part: how does it get decided which EDAC driver
+to load? The chipset-specific one or the FW glue one?
 
-Can we call this "suspend_timeout_ms" instead? That makes it clear what the
-units being used are.
+User, policy, etc?
 
-BR,
+-- 
+Regards/Gruss,
+    Boris.
 
-- Prashant
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,112 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD73D58CF82
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 23:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0562058CF8B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 23:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244152AbiHHVMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 17:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
+        id S244286AbiHHVPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 17:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236304AbiHHVMF (ORCPT
+        with ESMTP id S236304AbiHHVPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 17:12:05 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9099917AB0;
-        Mon,  8 Aug 2022 14:12:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659993124; x=1691529124;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZtSgYuDbaBj2/G6ilDZHPwxBLmBXYG5l1URDjs2uSy8=;
-  b=kFMPbR5TriyGjb3UWxUu5t/nDq33BTLkr0BKWbU34uFCFUqz6pEBGtuz
-   r0MtPcLD1mtY7HW3EzqEzrQXlJTefRPK4gm1sf7g6QaU1G1yA6SiDy+6+
-   k+VHGKQgWuPXXQovByTOKsyGF2eCf6CEARealBfIxWa+v0JZF3ZR1FbdO
-   aTOXwEnyhW+sw7UCHziDJd4dpgapkxLefd+bU8/RUc5zHPclf4dwk2D61
-   xYEdLqIQwWswRZW+MvKOR4bM0t+3nqbR20oTGdf9w8SG+jb60mSidB64C
-   5OQBskGD7+kji/UFLEjn460dr9P3uinxaknap6T8OV11fkpzM40QExQ+v
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="352420977"
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="352420977"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 14:11:51 -0700
-X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
-   d="scan'208";a="601225610"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 14:11:50 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id F16BD202EA;
-        Tue,  9 Aug 2022 00:11:47 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1oLA2n-004QVL-Ac; Tue, 09 Aug 2022 00:12:13 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-acpi@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
-        kernel test robot <oliver.sang@intel.com>
-Subject: [PATCH 1/1] ACPI: property: Fix error handling in acpi_init_properties()
-Date:   Tue,  9 Aug 2022 00:12:13 +0300
-Message-Id: <20220808211213.1055148-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 8 Aug 2022 17:15:33 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5385C18B0C
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 14:15:31 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id h4so641023qtj.11
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 14:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=VWKYbqcm/zkrBcBzoLS3ZTYJbY0tUU+EcrNkjCdj7S0=;
+        b=nGmDOiCn314TP/pVmtD+j8Y5FoAnmN4zBDQEpRs8YX5r/QVGn4HP2B+1LR+VyvxONJ
+         TOr5lOBgRXsybaArJDbacDDtsfiSAw+TE4YhFcLgUp5zroer9zcXfyiINiAwkWLUmyPL
+         1AwWAFp6tf+RsQxqegsRmhbTEgcxE12zyjK0w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=VWKYbqcm/zkrBcBzoLS3ZTYJbY0tUU+EcrNkjCdj7S0=;
+        b=lJEIMvpnSJ1czwnLX9mqHsEcifo36X0QfZHdm84UJuu2XlPZtUZsp2WnrYIcfGVqBt
+         I5e02EP7oRye2VelspyV72VppzVNxhUF29NgBiCVew4IyCVbYqN/guheVPP8BpcRxefs
+         1GkWp/sRzuOLqGgLwQSqbIOgi3KugAHpmpL0sPKCWA9bPgB/nsroi05ORD9ysfgV65My
+         ZdJ2CCNJgrdUSwGXYarYB3Yp8SQqs/GgjQkrYOEgfV4kv4cAdcvA3SjacTbMdHa68B7m
+         WdLloyEim808suaPGI8TE2aqg1pVthM2ndQgsUG8XFaYfBanRoLuK4G4ko2QUwczIXRE
+         7Kbw==
+X-Gm-Message-State: ACgBeo28BPzsStEnRJk0iR3RnDiLCqSvM9UOsUJ5uJ/qcZ9K4IZjNbtA
+        FUW57qA/KGum1Oln3IkyPCEIZ2aHNRFC7Slvy5CS3Q==
+X-Google-Smtp-Source: AA6agR5sewPOGNHWjiSoW/6wGiHTZHHUJSKNA99Rq4EnGsi95IuluLbvqgw4PQh3p9Eb9KFLiVh1/uETXfrsHPJ9Mms=
+X-Received: by 2002:a05:622a:190a:b0:342:f8d9:b1dc with SMTP id
+ w10-20020a05622a190a00b00342f8d9b1dcmr5914468qtc.656.1659993330432; Mon, 08
+ Aug 2022 14:15:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220808110315.1.I5a39052e33f6f3c7406f53b0304a32ccf9f340fa@changeid>
+ <CABBYNZJf_6SmRD0tUUUfxfpZOksL-=5jLN8+5c4cZcQB6J-xbg@mail.gmail.com>
+In-Reply-To: <CABBYNZJf_6SmRD0tUUUfxfpZOksL-=5jLN8+5c4cZcQB6J-xbg@mail.gmail.com>
+From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date:   Mon, 8 Aug 2022 14:15:19 -0700
+Message-ID: <CANFp7mW_OBb3rc-6tpYvAPA8f=J_tRN+HJc875Dyr3HjzDAQ8A@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: Ignore cmd_timeout with HCI_USER_CHANNEL
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Abhishek Pandit-Subedi <abhishekpandit@google.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-buf.pointer, memory for storing _DSD data and nodes, was released if either
-parsing properties or, as recently added, attaching data node tags failed.
-Alas, properties were still left pointing to this memory if parsing
-properties were successful but attaching data node tags failed.
+On Mon, Aug 8, 2022 at 1:31 PM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
+>
+> Hi Abhishek,
+>
+> On Mon, Aug 8, 2022 at 11:04 AM Abhishek Pandit-Subedi
+> <abhishekpandit@google.com> wrote:
+> >
+> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> >
+> > When using HCI_USER_CHANNEL, hci traffic is expected to be handled by
+> > userspace entirely. However, it is still possible (and sometimes
+> > desirable) to be able to send commands to the controller directly. In
+> > such cases, the kernel command timeout shouldn't do any error handling.
+> >
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > ---
+> > This was tested by running a userchannel stack and sending commands via
+> > hcitool cmd on an Intel AX200 controller. Without this change, each
+> > command sent via hcitool would result in hci_cmd_timeout being called
+> > and after 5 commands, the controller would reset.
+> >
+> > Hcitool continues working here because it marks the socket as
+> > promiscuous and gets a copy of all traffic while the socket is open (and
+> > does filtering in userspace).
+>
+> There is something not quite right here, if you have a controller
+> using user_channel (addr.hci_channel = HCI_CHANNEL_USER) it probably
+> shouldn't even accept to be opened again by the likes of hcitool which
+> uses HCI_CHANNEL_RAW as it can cause conflicts. If you really need a
+> test tool that does send the command while in HCI_CHANNEL_USER then it
+> must be send on that mode but I wouldn't do it with hcitool anyway as
+> that is deprecated and this exercise seem to revolve to a entire stack
+> on top of HCI_USER_CHANNEL then you shall use tools of that stack and
+> mix with BlueZ userspace tools.
 
-Fix this by separating error handling for the two, and leaving properties
-intact if data nodes cannot be tagged for a reason or another.
+Our goal is eventually consistent with that aim (not having multiple
+users to the socket when using HCI_CHANNEL_USER).
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Fixes: 1d52f10917a7 ("ACPI: property: Tie data nodes to acpi handles")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
-Hi Rafael,
+In the interim however, we have existing tooling that expects to be
+able to write raw hci to the controller, get responses and not expect
+any crashes (Intel Wireless Reporting Tools for example). hcitool is
+just an easy test tool here and the real behavior being tested is RAW
+channel injections not triggering the cmd timeout.
 
-This should fix the immediate problem. It needs to be figured out why data
-node tagging doesn't work sometimes but that can wait.
+>
+> > Tested on Chromebook with 5.4 kernel with patch (and applied cleanly on
+> > bluetooth-next).
+> >
+> >  net/bluetooth/hci_core.c | 26 +++++++++++++++++---------
+> >  1 file changed, 17 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> > index b3a5a3cc9372..c9a15f6633f7 100644
+> > --- a/net/bluetooth/hci_core.c
+> > +++ b/net/bluetooth/hci_core.c
+> > @@ -1481,17 +1481,25 @@ static void hci_cmd_timeout(struct work_struct *work)
+> >         struct hci_dev *hdev = container_of(work, struct hci_dev,
+> >                                             cmd_timer.work);
+> >
+> > -       if (hdev->sent_cmd) {
+> > -               struct hci_command_hdr *sent = (void *) hdev->sent_cmd->data;
+> > -               u16 opcode = __le16_to_cpu(sent->opcode);
+> > +       /* Don't trigger the timeout behavior if it happens while we're in
+> > +        * userchannel mode. Userspace is responsible for handling any command
+> > +        * timeouts.
+> > +        */
+> > +       if (!(hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
+> > +             test_bit(HCI_UP, &hdev->flags))) {
+> > +               if (hdev->sent_cmd) {
+> > +                       struct hci_command_hdr *sent =
+> > +                               (void *)hdev->sent_cmd->data;
+> > +                       u16 opcode = __le16_to_cpu(sent->opcode);
+> >
+> > -               bt_dev_err(hdev, "command 0x%4.4x tx timeout", opcode);
+> > -       } else {
+> > -               bt_dev_err(hdev, "command tx timeout");
+> > -       }
+> > +                       bt_dev_err(hdev, "command 0x%4.4x tx timeout", opcode);
+> > +               } else {
+> > +                       bt_dev_err(hdev, "command tx timeout");
+> > +               }
+> >
+> > -       if (hdev->cmd_timeout)
+> > -               hdev->cmd_timeout(hdev);
+> > +               if (hdev->cmd_timeout)
+> > +                       hdev->cmd_timeout(hdev);
+> > +       }
+>
+> I wonder why hci_cmd_timeout is even active if the controller is in
+> HCI_USER_CHANNEL mode, that sounds like a bug already.
 
- drivers/acpi/property.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+This gets scheduled in hci_cmd_work. I tried not scheduling
+hci_cmd_timeout in the first place but that caused the event stream to
+hang (I think because subsequent tx work wasn't being scheduled). I
+didn't dive very deep here and fix looked complex for a scenario that
+we will migrate away from.
 
-diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-index 9711482014a6..201a5a9b2671 100644
---- a/drivers/acpi/property.c
-+++ b/drivers/acpi/property.c
-@@ -566,13 +566,13 @@ void acpi_init_properties(struct acpi_device *adev)
- 					&adev->data, acpi_fwnode_handle(adev)))
- 		adev->data.pointer = buf.pointer;
- 
--	if (!adev->data.pointer ||
--	    !acpi_tie_nondev_subnodes(&adev->data)) {
--		acpi_untie_nondev_subnodes(&adev->data);
-+	if (!adev->data.pointer) {
- 		acpi_handle_debug(adev->handle, "Invalid _DSD data, skipping\n");
- 		ACPI_FREE(buf.pointer);
-+	} else {
-+		if (!acpi_tie_nondev_subnodes(&adev->data))
-+			acpi_untie_nondev_subnodes(&adev->data);
- 	}
--
-  out:
- 	if (acpi_of && !adev->flags.of_compatible_ok)
- 		acpi_handle_info(adev->handle,
--- 
-2.30.2
-
+>
+> >         atomic_set(&hdev->cmd_cnt, 1);
+> >         queue_work(hdev->workqueue, &hdev->cmd_work);
+> > --
+> > 2.37.1.559.g78731f0fdb-goog
+> >
+>
+>
+> --
+> Luiz Augusto von Dentz

@@ -2,180 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C45258CE82
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 21:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2240C58CE88
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 21:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244314AbiHHTXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 15:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
+        id S244300AbiHHT0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 15:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiHHTXg (ORCPT
+        with ESMTP id S229765AbiHHT0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 15:23:36 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1D4D113
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 12:23:35 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id y7-20020a056a00180700b0052d90ab2314so4176549pfa.10
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 12:23:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=GneeJVrYoG9YO7ZVBQ9roargUyo6x8eaPqj/O9PmIjg=;
-        b=PIX0Xvjp/psqCIpXyZsRobhPhs2TzYQFsuZPXBNMMWA8BM92Cy/2q7ct1X88kr8KGH
-         7LIjxxbb/p+4B57iyfmG3/1g2STyUV8l0cA6ebYrUMd1j6WJRqX2JMQD1XDpkkahk3qG
-         JLCAlmInzAt+Fs+Ei4agNnLT5ofyAUcrkKFQqn6cYS2hwelTRK5T52d0S0FsgGzpNPRK
-         kDWiZtcfulr+3H+X+KB2s7DBw0OZalFFLFGPbqMLqDLJgYHTys8ojtieKNAQdp43JmDP
-         ytwJ8+Pxm6pQzmDG9NYnQExVRIv/+2xdBwD3430MbtNNV9Fk+Ho2MGTYTgvnbryZF0un
-         Furg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=GneeJVrYoG9YO7ZVBQ9roargUyo6x8eaPqj/O9PmIjg=;
-        b=Bwv4g4N9uj4HVZPVUqK7hlTqEnOMG04xWbhu5ZmxbGjrVZ098D3RkdBVdQeOi53sF3
-         DjXLQmoTFX3qu6j13/hVsRu8/Okbes/oNEplWeG7YNLJRHAV8zSKDNziGnBj21nWh8Lv
-         Ld+cVhn1WbdjmiwtgzgQ2oSfBEpw9ClU+vMXmcodbW3ZI8F9LcQoBFZHO1xUmqx6Zw6L
-         2HAoz8r6wjPVqrUOk2WDV85aWEwR8N9AXejat328Z7FVPutJFHWxBTU8+VVnn02iNe2L
-         pawChBjZAE2fAnZ50Am2JcWbIqmf4T17urvTkMWtCN/GUdUFWo7pyhCSGP+/xROjCLa0
-         6mNQ==
-X-Gm-Message-State: ACgBeo3u6QYh1HBZLFQs2wEtk4MmoRXKEbcImzas9dM4kW4+EGEFtqTW
-        l6HD8kniBE+fhFxZ4RUpLgNovj0wqWA/RjAUye4=
-X-Google-Smtp-Source: AA6agR4dxq9DJfSTVilC1n/kp/hoTsSutuEiPmCPg8tP3fAN7B392n7C1mVY9NCskkWBahvtEWgLfkd8kE90hGAxxi4=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:88f6:faa7:16e5:a8d5])
- (user=ndesaulniers job=sendgmr) by 2002:a17:90b:384e:b0:1f5:6330:8294 with
- SMTP id nl14-20020a17090b384e00b001f563308294mr24331796pjb.35.1659986615163;
- Mon, 08 Aug 2022 12:23:35 -0700 (PDT)
-Date:   Mon,  8 Aug 2022 12:23:05 -0700
-Message-Id: <20220808192321.3490995-1-ndesaulniers@google.com>
-Mime-Version: 1.0
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1659986577; l=4052;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=S/N2aGgnwD6VqRx44sfulwh57Bc3dypr+izb3FyWnRA=;
- b=DZ081uVs3rB4foY4W8D7Zp7TalB8H+rUw3W1lvSVan42TCmLsWwfqDyPcdMFj6FGtFnehgoiDoQj
- EZFMwm3TDQsyViNCnY19yVp93g588Rf/YSlPlp1hF4CED/F/NB4x
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH] x86: assemble with -Wa,--noexecstack to avoid BFD 2.39 warning
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Nick Clifton <nickc@redhat.com>, Fangrui Song <maskray@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jens Axboe <axboe@kernel.dk>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nicolas Schier <n.schier@avm.de>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 8 Aug 2022 15:26:15 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23268A186;
+        Mon,  8 Aug 2022 12:26:14 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:40090)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oL8OC-001noO-Bu; Mon, 08 Aug 2022 13:26:12 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:47070 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oL8OB-00HYY7-HW; Mon, 08 Aug 2022 13:26:11 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
+References: <20220801180146.1157914-1-fred@cloudflare.com>
+        <87les7cq03.fsf@email.froward.int.ebiederm.org>
+        <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+        <87wnbia7jh.fsf@email.froward.int.ebiederm.org>
+        <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+Date:   Mon, 08 Aug 2022 14:26:04 -0500
+In-Reply-To: <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+        (Paul Moore's message of "Mon, 8 Aug 2022 15:16:16 -0400")
+Message-ID: <877d3ia65v.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1oL8OB-00HYY7-HW;;;mid=<877d3ia65v.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+z7lTpSBDaB94moY7v76QqS9bgdJh4/0Y=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Paul Moore <paul@paul-moore.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 287 ms - load_scoreonly_sql: 0.02 (0.0%),
+        signal_user_changed: 3.9 (1.4%), b_tie_ro: 2.7 (0.9%), parse: 0.64
+        (0.2%), extract_message_metadata: 8 (2.7%), get_uri_detail_list: 0.68
+        (0.2%), tests_pri_-1000: 10 (3.5%), tests_pri_-950: 0.98 (0.3%),
+        tests_pri_-900: 0.84 (0.3%), tests_pri_-90: 67 (23.3%), check_bayes:
+        66 (22.9%), b_tokenize: 5.0 (1.7%), b_tok_get_all: 6 (2.2%),
+        b_comp_prob: 1.46 (0.5%), b_tok_touch_all: 50 (17.6%), b_finish: 0.65
+        (0.2%), tests_pri_0: 184 (64.3%), check_dkim_signature: 0.38 (0.1%),
+        check_dkim_adsp: 1.63 (0.6%), poll_dns_idle: 0.39 (0.1%),
+        tests_pri_10: 1.73 (0.6%), tests_pri_500: 7 (2.5%), rewrite_mail: 0.00
+        (0.0%)
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Users of GNU ld (BFD) from binutils 2.39+ will observe multiple instance
-of a new warning when linking kernels in the form:
+Paul Moore <paul@paul-moore.com> writes:
 
-  ld: warning: arch/x86/realmode/rm/bioscall.o: missing .note.GNU-stack
-  section implies executable stack
-  ld: NOTE: This behaviour is deprecated and will be removed in a future
-  version of the linker
+>> I did provide constructive feedback.  My feedback to his problem
+>> was to address the real problem of bugs in the kernel.
+>
+> We've heard from several people who have use cases which require
+> adding LSM-level access controls and observability to user namespace
+> creation.  This is the problem we are trying to solve here; if you do
+> not like the approach proposed in this patchset please suggest another
+> implementation that allows LSMs visibility into user namespace
+> creation.
 
-The object files producing these all happen to be out of line assembler
-sources (*.S files).
+Please stop, ignoring my feedback, not detailing what problem or
+problems you are actually trying to be solved, and threatening to merge
+code into files that I maintain that has the express purpose of breaking
+my users.
 
-Generally, we would like to avoid the stack being executable. Because
-there could be a need for the stack to be executable, assembler sources
-have to opt-in to this security feature via explicit creation of the
-.note.GNU-stack feature (which compilers create by default) or command
-line flag --noexecstack.
+You just artificially constrained the problems, so that no other
+solution is acceptable.  On that basis alone I am object to this whole
+approach to steam roll over me and my code.
 
-Boot tested defconfig and i386_defconfig in QEMU. If any assembler
-sources do require executable stack, they can be built with
--Wa,--execstack, though the linker warning would have to be disabled. We
-might need to extend this more generally to the top level Makefile for
-all architectures, but I'm not equipped to test the result of such a
-change.
-
-LLVM's LLD linker defaults to -z noexecstack, so this flag isn't
-strictly necessary when linking with LLD, only BFD, but it doesn't hurt
-to be explicit here for all linkers IMO.
-
-Link: https://lore.kernel.org/linux-block/3af4127a-f453-4cf7-f133-a181cce06f73@kernel.dk/
-Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-Link: https://github.com/llvm/llvm-project/issues/57009
-Reported-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- arch/x86/Makefile                 | 2 ++
- arch/x86/boot/Makefile            | 2 +-
- arch/x86/boot/compressed/Makefile | 2 +-
- arch/x86/realmode/rm/Makefile     | 2 +-
- 4 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 7854685c5f25..571546775725 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -159,6 +159,8 @@ else
-         KBUILD_CFLAGS += -mcmodel=kernel
- endif
- 
-+KBUILD_AFLAGS	+= -Wa,--noexecstack
-+
- #
- # If the function graph tracer is used with mcount instead of fentry,
- # '-maccumulate-outgoing-args' is needed to prevent a GCC bug
-diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
-index b5aecb524a8a..d7f2130f2277 100644
---- a/arch/x86/boot/Makefile
-+++ b/arch/x86/boot/Makefile
-@@ -67,7 +67,7 @@ targets += cpustr.h
- # ---------------------------------------------------------------------------
- 
- KBUILD_CFLAGS	:= $(REALMODE_CFLAGS) -D_SETUP
--KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
-+KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__ -Wa,--noexecstack
- KBUILD_CFLAGS	+= $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
- KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
- GCOV_PROFILE := n
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 19e1905dcbf6..1587a21a132d 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -57,7 +57,7 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
- # that the compiler finds it even with out-of-tree builds (make O=/some/path).
- CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
- 
--KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
-+KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__ -Wa,--noexecstack
- GCOV_PROFILE := n
- UBSAN_SANITIZE :=n
- 
-diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Makefile
-index 83f1b6a56449..5f2fdafaa034 100644
---- a/arch/x86/realmode/rm/Makefile
-+++ b/arch/x86/realmode/rm/Makefile
-@@ -73,7 +73,7 @@ $(obj)/realmode.relocs: $(obj)/realmode.elf FORCE
- 
- KBUILD_CFLAGS	:= $(REALMODE_CFLAGS) -D_SETUP -D_WAKEUP \
- 		   -I$(srctree)/arch/x86/boot
--KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
-+KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__ -Wa,--noexecstack
- KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
- GCOV_PROFILE := n
- UBSAN_SANITIZE := n
--- 
-2.37.1.559.g78731f0fdb-goog
+Eric
 

@@ -2,37 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4494258C1B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F9858C1B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242760AbiHHClx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S242666AbiHHCln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234929AbiHHClj (ORCPT
+        with ESMTP id S231560AbiHHCli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 22:41:39 -0400
+        Sun, 7 Aug 2022 22:41:38 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AFE21A8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FD42183
         for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 19:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=0Phd27slBhf2oZB2+aKxZkfRmOzBSjVGNr+tezYnifU=; b=IadeLGs48NTANaTLlCZ9j21PjY
-        Y0NUj07GBC+dsXzPSMJvJNTKqJxhF4rHIoQGSKZNFvjxwVM7N8L745psCWispeSCSMJEWCv/BVAmT
-        XWKkYYEVEkH54k2fBQVjvq62LsJce73njhhAEa42aMBzpgEVUMtOsPCQglS/DDwgSuwYjABXnVKLd
-        qE0FpjqFOvJ3xoJLiunrfr4uMZW3y9em32+82YmR+2cBJ6b8iVI2E9xFLd07lXUfE9597xe9d+lQH
-        itWNTKFo8CYmqCCOtcm7GxT+xujybOqpzPBzB+c/H525KOiWrVEkiJJWwukssQXv+cdSYO3DNkIuq
-        oyvLOH+Q==;
+        bh=mymWwDkjjiHh/KYD2mfecqldcFEi+AVyZTL9MNt1bp8=; b=SIABDbFY5J2Gk7jbWFiO3p0ZNf
+        KnDzFa4aGU9xZH59qz/GileVMl4Avij+19/5gDJ6lrrNv/sQjQRHWSLCIZ0WjOXOA3yH3AhtTLyKG
+        ccuQ7CkkqScB3jIIIbsoITNIaXq2jb1/BUklPldKXS3rw4EKbUK86KlfxRAvfQk23SYDLO3tee9Sd
+        hPTmWgrM1J+UkjXBA68Sv1oKotYUtRN/WCdHJelLGVvsai8pnxtL4wvwAjtBCiKCiRnrcWwM1FQpt
+        QulsI4DSgAsSbmj5rhF9seHsZCehHE3Chl3qdUaEBo2Wva4w7ReuS72UaDg82PfrN6mstk+jgLfvd
+        9U/Z8H7w==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oKshx-00DVRe-98; Mon, 08 Aug 2022 02:41:33 +0000
+        id 1oKshx-00DVRg-Bg; Mon, 08 Aug 2022 02:41:33 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-kernel@vger.kernel.org, pmladek@suse.com,
         Kent Overstreet <kent.overstreet@gmail.com>
-Subject: [PATCH v5 08/32] lib/printbuf: Unit specifiers
-Date:   Mon,  8 Aug 2022 03:41:04 +0100
-Message-Id: <20220808024128.3219082-9-willy@infradead.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [PATCH v5 09/32] vsprintf: Improve number()
+Date:   Mon,  8 Aug 2022 03:41:05 +0100
+Message-Id: <20220808024128.3219082-10-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220808024128.3219082-1-willy@infradead.org>
 References: <20220808024128.3219082-1-willy@infradead.org>
@@ -50,143 +51,156 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@gmail.com>
 
-This adds options to printbuf for specifying whether units should be
-printed raw (default) or with human readable units, and for controlling
-whether human-readable units should be base 2 (default), or base 10.
-
-This also adds new helpers that obey these options:
-
- - pr_human_readable_u64
- - pr_human_readable_s64
-These obey printbuf->si_units
-
- - pr_units_u64
- - pr_units_s64
-These obey both printbuf-human_readable_units and printbuf->si_units
+This patch refactors number() to make it a bit clearer, and it also
+changes it to call printbuf_make_room() only once at the start, instead
+of in the printbuf output helpers.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 ---
- include/linux/printbuf.h | 15 +++++++++++
- lib/printbuf.c           | 57 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 72 insertions(+)
+ lib/vsprintf.c | 83 +++++++++++++++++++++++++-------------------------
+ 1 file changed, 41 insertions(+), 42 deletions(-)
 
-diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
-index c1a482b6c0a8..ebbc4a55fc04 100644
---- a/include/linux/printbuf.h
-+++ b/include/linux/printbuf.h
-@@ -57,11 +57,20 @@
-  *
-  * Make sure you use prt_newline() instead of \n in the format string for indent
-  * level and tabstops to work corretly.
-+ *
-+ * Output units: printbuf->units exists to tell pretty-printers how to output
-+ * numbers: a raw value (e.g. directly from a superblock field), as bytes, or as
-+ * human readable bytes. prt_units() obeys it.
-  */
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 52dac8519a0a..87adc528c6c7 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -457,93 +457,92 @@ void number(struct printbuf *out, unsigned long long num,
+ {
+ 	/* put_dec requires 2-byte alignment of the buffer. */
+ 	char tmp[3 * sizeof(num)] __aligned(2);
+-	char sign;
+-	char locase;
++	char sign = 0;
++	/* locase = 0 or 0x20. ORing digits or letters with 'locase'
++	 * produces same digits or (maybe lowercased) letters */
++	char locase = (spec.flags & SMALL);
+ 	int need_pfx = ((spec.flags & SPECIAL) && spec.base != 10);
+-	int i;
+ 	bool is_zero = num == 0LL;
+ 	int field_width = spec.field_width;
+ 	int precision = spec.precision;
++	int nr_digits = 0;
++	int output_bytes = 0;
  
- #include <linux/kernel.h>
- #include <linux/string.h>
+-	/* locase = 0 or 0x20. ORing digits or letters with 'locase'
+-	 * produces same digits or (maybe lowercased) letters */
+-	locase = (spec.flags & SMALL);
+ 	if (spec.flags & LEFT)
+ 		spec.flags &= ~ZEROPAD;
+-	sign = 0;
+ 	if (spec.flags & SIGN) {
+ 		if ((signed long long)num < 0) {
+ 			sign = '-';
+ 			num = -(signed long long)num;
+-			field_width--;
++			output_bytes++;
+ 		} else if (spec.flags & PLUS) {
+ 			sign = '+';
+-			field_width--;
++			output_bytes++;
+ 		} else if (spec.flags & SPACE) {
+ 			sign = ' ';
+-			field_width--;
++			output_bytes++;
+ 		}
+ 	}
+ 	if (need_pfx) {
+ 		if (spec.base == 16)
+-			field_width -= 2;
++			output_bytes += 2;
+ 		else if (!is_zero)
+-			field_width--;
++			output_bytes++;
+ 	}
  
-+enum printbuf_si {
-+	PRINTBUF_UNITS_2,	/* use binary powers of 2^10 */
-+	PRINTBUF_UNITS_10,	/* use powers of 10^3 (standard SI) */
-+};
+ 	/* generate full string in tmp[], in reverse order */
+-	i = 0;
+-	if (num < spec.base)
+-		tmp[i++] = hex_asc_upper[num] | locase;
+-	else if (spec.base != 10) { /* 8 or 16 */
++	if (spec.base == 10) {
++		nr_digits = put_dec(tmp, num) - tmp;
++	} else { /* 8 or 16 */
+ 		int mask = spec.base - 1;
+-		int shift = 3;
++		int shift = ilog2((unsigned) spec.base);
+ 
+-		if (spec.base == 16)
+-			shift = 4;
+ 		do {
+-			tmp[i++] = (hex_asc_upper[((unsigned char)num) & mask] | locase);
++			tmp[nr_digits++] = (hex_asc_upper[((unsigned char)num) & mask] | locase);
+ 			num >>= shift;
+ 		} while (num);
+-	} else { /* base 10 */
+-		i = put_dec(tmp, num) - tmp;
+ 	}
+ 
+ 	/* printing 100 using %2d gives "100", not "00" */
+-	if (i > precision)
+-		precision = i;
++	precision = max(nr_digits, precision);
++	output_bytes += precision;
++	field_width = max(0, field_width - output_bytes);
 +
- struct printbuf {
- 	char			*buf;
- 	unsigned		size;
-@@ -75,6 +84,8 @@ struct printbuf {
- 	u8			atomic;
- 	bool			allocation_failure:1;
- 	bool			heap_allocated:1;
-+	enum printbuf_si	si_units:1;
-+	bool			human_readable_units:1;
- 	u8			tabstop;
- 	u8			tabstops[4];
- };
-@@ -88,6 +99,10 @@ void printbuf_indent_add(struct printbuf *, unsigned);
- void printbuf_indent_sub(struct printbuf *, unsigned);
- void prt_tab(struct printbuf *);
- void prt_tab_rjust(struct printbuf *);
-+void prt_human_readable_u64(struct printbuf *, u64);
-+void prt_human_readable_s64(struct printbuf *, s64);
-+void prt_units_u64(struct printbuf *, u64);
-+void prt_units_s64(struct printbuf *, s64);
++	printbuf_make_room(out, field_width + output_bytes);
++
+ 	/* leading space padding */
+-	field_width = max(0, field_width - precision);
+ 	if (!(spec.flags & (ZEROPAD | LEFT)) && field_width) {
+-		__prt_chars(out, ' ', field_width);
++		__prt_chars_reserved(out, ' ', field_width);
+ 		field_width = 0;
+ 	}
++
+ 	/* sign */
+ 	if (sign)
+-		__prt_char(out, sign);
++		__prt_char_reserved(out, sign);
++
+ 	/* "0x" / "0" prefix */
+ 	if (need_pfx) {
+ 		if (spec.base == 16 || !is_zero)
+-			__prt_char(out, '0');
++			__prt_char_reserved(out, '0');
+ 		if (spec.base == 16)
+-			__prt_char(out, 'X' | locase);
++			__prt_char_reserved(out, 'X' | locase);
+ 	}
+-	/* zero or space padding */
+-	if (!(spec.flags & LEFT) && field_width) {
+-		char c = ' ' + (spec.flags & ZEROPAD);
  
- /* Initializer for a heap allocated printbuf: */
- #define PRINTBUF ((struct printbuf) { .heap_allocated = true })
-diff --git a/lib/printbuf.c b/lib/printbuf.c
-index 395c681e3acb..047470025748 100644
---- a/lib/printbuf.c
-+++ b/lib/printbuf.c
-@@ -10,6 +10,7 @@
+-		__prt_chars(out, c, field_width);
+-		field_width = 0;
+-	}
+-	/* hmm even more zero padding? */
+-	if (precision > i)
+-		__prt_chars(out, '0', precision - i);
++	/* zero padding */
++	if (!(spec.flags & LEFT) && field_width)
++		__prt_chars_reserved(out, '0', field_width);
++
++	/* zero padding from precision */
++	if (precision > nr_digits)
++		__prt_chars_reserved(out, '0', precision - nr_digits);
++
+ 	/* actual digits of result */
+-	while (--i >= 0)
+-		__prt_char(out, tmp[i]);
++	while (--nr_digits >= 0)
++		__prt_char_reserved(out, tmp[nr_digits]);
++
+ 	/* trailing space padding */
+-	if (field_width)
+-		__prt_chars(out, ' ', field_width);
++	if ((spec.flags & LEFT) && field_width)
++		__prt_chars_reserved(out, ' ', field_width);
  
- #include <linux/err.h>
- #include <linux/slab.h>
-+#include <linux/string_helpers.h>
- #include <linux/printbuf.h>
- 
- static inline size_t printbuf_linelen(struct printbuf *buf)
-@@ -199,3 +200,59 @@ void prt_tab_rjust(struct printbuf *buf)
- 	buf->tabstop++;
+ 	printbuf_nul_terminate(out);
  }
- EXPORT_SYMBOL(prt_tab_rjust);
-+
-+/**
-+ * prt_human_readable_u64 - Print out a u64 in human readable units
-+ *
-+ * Units of 2^10 (default) or 10^3 are controlled via @buf->si_units
-+ */
-+void prt_human_readable_u64(struct printbuf *buf, u64 v)
-+{
-+	printbuf_make_room(buf, 10);
-+	buf->pos += string_get_size(v, 1, !buf->si_units,
-+				    buf->buf + buf->pos,
-+				    printbuf_remaining_size(buf));
-+}
-+EXPORT_SYMBOL(prt_human_readable_u64);
-+
-+/**
-+ * prt_human_readable_s64 - Print out a s64 in human readable units
-+ *
-+ * Units of 2^10 (default) or 10^3 are controlled via @buf->si_units
-+ */
-+void prt_human_readable_s64(struct printbuf *buf, s64 v)
-+{
-+	if (v < 0)
-+		prt_char(buf, '-');
-+	prt_human_readable_u64(buf, abs(v));
-+}
-+EXPORT_SYMBOL(prt_human_readable_s64);
-+
-+/**
-+ * prt_units_u64 - Print out a u64 according to printbuf unit options
-+ *
-+ * Units are either raw (default), or human reabable units (controlled via
-+ * @buf->human_readable_units)
-+ */
-+void prt_units_u64(struct printbuf *out, u64 v)
-+{
-+	if (out->human_readable_units)
-+		prt_human_readable_u64(out, v);
-+	else
-+		prt_printf(out, "%llu", v);
-+}
-+EXPORT_SYMBOL(prt_units_u64);
-+
-+/**
-+ * prt_units_s64 - Print out a s64 according to printbuf unit options
-+ *
-+ * Units are either raw (default), or human reabable units (controlled via
-+ * @buf->human_readable_units)
-+ */
-+void prt_units_s64(struct printbuf *out, s64 v)
-+{
-+	if (v < 0)
-+		prt_char(out, '-');
-+	prt_units_u64(out, abs(v));
-+}
-+EXPORT_SYMBOL(prt_units_s64);
 -- 
 2.35.1
 

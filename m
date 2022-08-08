@@ -2,207 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E6858C44E
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940F658C452
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 09:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241828AbiHHHlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 03:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
+        id S241712AbiHHHnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 03:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241712AbiHHHl1 (ORCPT
+        with ESMTP id S235975AbiHHHnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 03:41:27 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4C612761;
-        Mon,  8 Aug 2022 00:41:25 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2787YniH021020;
-        Mon, 8 Aug 2022 09:41:03 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=qovgCI/rHlWBP9Q7xRWBKX4sBON8udJGHElHZMj6Q8E=;
- b=QhJwmSKEbPYVYuF5UbQlIHvTAFNX6FVdNgIFSaMKyxDRqIovev/N18j98wo1tbI79k5f
- pPEiL1/v5DMFsRsJv0AmSbsGdxJNo4G9HdtJpPhj6d2uO9YmnhmxADB6xQThUPTLUcjX
- IP/fW37UWLaAf8TrpfEJRavz9Aai6BjhvziuKzygqDYTUBmRHam8dq3UF95KsM3vrA4w
- pYcWq1AqJVYYFxT1HFp0Ak5JvFCMXztKBWdDAmu1Hjdg+jctJg98ANEgpwF3LxNggl0Z
- ZgWj2Nm7R3xLNi8bpM8+WTbhyhzvbwKlk31XAjulUvb3g46Mk4GFecGzJEP6sbGUZcxI Mg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hsdea156s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Aug 2022 09:41:03 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 10528100034;
-        Mon,  8 Aug 2022 09:41:00 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BA8252171E0;
-        Mon,  8 Aug 2022 09:41:00 +0200 (CEST)
-Received: from localhost (10.75.127.119) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 8 Aug
- 2022 09:41:00 +0200
-From:   <patrice.chotard@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        <patrice.chotard@foss.st.com>, <devicetree@vger.kernel.org>
-Subject: [PATCH 3/3] ARM: dts: stm32: Create separate pinmux for qspi cs pin in stm32mp15-pinctrl.dtsi
-Date:   Mon, 8 Aug 2022 09:40:51 +0200
-Message-ID: <20220808074051.44736-4-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220808074051.44736-1-patrice.chotard@foss.st.com>
-References: <20220808074051.44736-1-patrice.chotard@foss.st.com>
+        Mon, 8 Aug 2022 03:43:22 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D83CA188
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 00:43:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659944601; x=1691480601;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4t6SeN7/XT2pFdBjQy0fi/TXZap4WFnfdIgGKE3qzmw=;
+  b=K918MRwdgwUlxJre5FWrTHgIpabPj10U6uywgTj9tJQZjqjGCmHxwjWm
+   shXND25Y6EAXtk5hzmuJLoi7YU/kvwnwUbMhk617tiRUegeLXfl9Am5WA
+   556zq2Q5cQ0OngvOPF8mHUHEgMC8/q4zeOcBZrgD4CTeLSxj7X4EvZ9fb
+   n4ModmOZaFtqRz1baC/D2L0VndB7N2AIOYrxOU/yjYbtzCKrEh7Ijt/Wa
+   Q2jMrmAv6shTn0FelCgkbBb56Kk1Kiv/RcxGX0tgEqcHTQ3vosyydd4Xa
+   JBEd3C3rd1WXTpps2TDUcFRAnOurqZJcnKEs0bCH2WKi7lRkk0cKfBEVm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="277459351"
+X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
+   d="scan'208";a="277459351"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 00:43:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
+   d="scan'208";a="580239387"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 Aug 2022 00:43:17 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oKxPw-000M59-2q;
+        Mon, 08 Aug 2022 07:43:16 +0000
+Date:   Mon, 8 Aug 2022 15:42:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Manisha Chinthapally <manisha.chinthapally@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mchinth:sep_socwatch_linux_5_16 1/1]
+ drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse: sparse: incorrect
+ type in initializer (incompatible argument 2 (different address spaces))
+Message-ID: <202208081533.vgDU1Isu-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.119]
-X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-08_05,2022-08-05_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_16
+head:   4cbfca15a262729ae8557758b49226fe4769f582
+commit: 4cbfca15a262729ae8557758b49226fe4769f582 [1/1] Platform/x86 Updated SEP/SOCPERF drivers to latest version
+config: i386-randconfig-s003 (https://download.01.org/0day-ci/archive/20220808/202208081533.vgDU1Isu-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/mchinth/linux/commit/4cbfca15a262729ae8557758b49226fe4769f582
+        git remote add mchinth https://github.com/mchinth/linux
+        git fetch --no-tags mchinth sep_socwatch_linux_5_16
+        git checkout 4cbfca15a262729ae8557758b49226fe4769f582
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Create a separate pinmux for qspi chip select in stm32mp15-pinctrl.dtsi.
-In the case we want to use transfer_one() API to communicate with a SPI
-device, chip select signal must be driven individually.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 50 ++++++++++++++++--------
- arch/arm/boot/dts/stm32mp157c-ev1.dts    | 12 +++++-
- 2 files changed, 43 insertions(+), 19 deletions(-)
+sparse warnings: (new ones prefixed by >>)
+   drivers/platform/x86/socperf/socperfdrv.c:208:13: sparse: sparse: function 'SOCPERF_Read_Data3' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1175:13: sparse: sparse: function 'lwpmudrv_Stop_Mem' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1392:22: sparse: sparse: function 'socperf_Service_IOCTL' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1516:13: sparse: sparse: function 'socperf_Device_Control' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:1602:12: sparse: sparse: function 'SOCPERF_Abnormal_Terminate' with external linkage has definition
+   drivers/platform/x86/socperf/socperfdrv.c:104:22: sparse: sparse: symbol 'socperf_drv_version' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:105:5: sparse: sparse: symbol 'read_unc_ctr_info' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:106:10: sparse: sparse: symbol 'dispatch_uncore' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:108:14: sparse: sparse: symbol 'socperf_global_ec' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:109:14: sparse: sparse: symbol 'socperf_abnormal_terminate' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:110:11: sparse: sparse: symbol 'socperf_control' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:114:8: sparse: sparse: symbol 'socperf_pcb_size' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __user *ptr @@     got unsigned int [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     expected void const volatile [noderef] __user *ptr
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     got unsigned int [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *__ptr_pu @@     got unsigned int [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     expected void [noderef] __user *__ptr_pu
+   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     got unsigned int [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got void *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse:     got void *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got void *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse:     got void *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got unsigned int [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse:     got unsigned int [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1089:28: sparse: sparse: Using plain integer as NULL pointer
+   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got unsigned long long [usertype] * @@
+   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse:     got unsigned long long [usertype] *
+   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1175:13: sparse: sparse: symbol 'lwpmudrv_Stop_Mem' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
+   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse:     got char *[usertype] buf_usr_to_drv
+   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
+   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse:     got char *[usertype] buf_drv_to_usr
+   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *buf @@
+   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse:     expected void [noderef] __user *to
+   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse:     got char *buf
+   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char const * @@
+   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse:     got char const *
+   drivers/platform/x86/socperf/socperfdrv.c:1392:22: sparse: sparse: symbol 'socperf_Service_IOCTL' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got struct IOCTL_ARGS_NODE_S [usertype] *[usertype] @@
+   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse:     expected void const [noderef] __user *from
+   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse:     got struct IOCTL_ARGS_NODE_S [usertype] *[usertype]
+   drivers/platform/x86/socperf/socperfdrv.c:1516:13: sparse: sparse: symbol 'socperf_Device_Control' was not declared. Should it be static?
+   drivers/platform/x86/socperf/socperfdrv.c:1602:12: sparse: sparse: symbol 'SOCPERF_Abnormal_Terminate' was not declared. Should it be static?
+>> drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected int ( *read )( ... ) @@     got int ( * )( ... ) @@
+   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse:     expected int ( *read )( ... )
+   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse:     got int ( * )( ... )
+>> drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected int ( *write )( ... ) @@     got int ( * )( ... ) @@
+   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse:     expected int ( *write )( ... )
+   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse:     got int ( * )( ... )
 
-diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-index 6052243ad81c..ade4fab45f14 100644
---- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-@@ -1189,7 +1189,7 @@ pins {
- 	};
- 
- 	qspi_bk1_pins_a: qspi-bk1-0 {
--		pins1 {
-+		pins {
- 			pinmux = <STM32_PINMUX('F', 8, AF10)>, /* QSPI_BK1_IO0 */
- 				 <STM32_PINMUX('F', 9, AF10)>, /* QSPI_BK1_IO1 */
- 				 <STM32_PINMUX('F', 7, AF9)>, /* QSPI_BK1_IO2 */
-@@ -1198,12 +1198,6 @@ pins1 {
- 			drive-push-pull;
- 			slew-rate = <1>;
- 		};
--		pins2 {
--			pinmux = <STM32_PINMUX('B', 6, AF10)>; /* QSPI_BK1_NCS */
--			bias-pull-up;
--			drive-push-pull;
--			slew-rate = <1>;
--		};
- 	};
- 
- 	qspi_bk1_sleep_pins_a: qspi-bk1-sleep-0 {
-@@ -1211,13 +1205,12 @@ pins {
- 			pinmux = <STM32_PINMUX('F', 8, ANALOG)>, /* QSPI_BK1_IO0 */
- 				 <STM32_PINMUX('F', 9, ANALOG)>, /* QSPI_BK1_IO1 */
- 				 <STM32_PINMUX('F', 7, ANALOG)>, /* QSPI_BK1_IO2 */
--				 <STM32_PINMUX('F', 6, ANALOG)>, /* QSPI_BK1_IO3 */
--				 <STM32_PINMUX('B', 6, ANALOG)>; /* QSPI_BK1_NCS */
-+				 <STM32_PINMUX('F', 6, ANALOG)>; /* QSPI_BK1_IO3 */
- 		};
- 	};
- 
- 	qspi_bk2_pins_a: qspi-bk2-0 {
--		pins1 {
-+		pins {
- 			pinmux = <STM32_PINMUX('H', 2, AF9)>, /* QSPI_BK2_IO0 */
- 				 <STM32_PINMUX('H', 3, AF9)>, /* QSPI_BK2_IO1 */
- 				 <STM32_PINMUX('G', 10, AF11)>, /* QSPI_BK2_IO2 */
-@@ -1226,7 +1219,34 @@ pins1 {
- 			drive-push-pull;
- 			slew-rate = <1>;
- 		};
--		pins2 {
-+	};
-+
-+	qspi_bk2_sleep_pins_a: qspi-bk2-sleep-0 {
-+		pins {
-+			pinmux = <STM32_PINMUX('H', 2, ANALOG)>, /* QSPI_BK2_IO0 */
-+				 <STM32_PINMUX('H', 3, ANALOG)>, /* QSPI_BK2_IO1 */
-+				 <STM32_PINMUX('G', 10, ANALOG)>, /* QSPI_BK2_IO2 */
-+				 <STM32_PINMUX('G', 7, ANALOG)>; /* QSPI_BK2_IO3 */
-+		};
-+	};
-+
-+	qspi_cs1_pins_a: qspi-cs1-0 {
-+		pins {
-+			pinmux = <STM32_PINMUX('B', 6, AF10)>; /* QSPI_BK1_NCS */
-+			bias-pull-up;
-+			drive-push-pull;
-+			slew-rate = <1>;
-+		};
-+	};
-+
-+	qspi_cs1_sleep_pins_a: qspi-cs1-sleep-0 {
-+		pins {
-+			pinmux = <STM32_PINMUX('B', 6, ANALOG)>; /* QSPI_BK1_NCS */
-+		};
-+	};
-+
-+	qspi_cs2_pins_a: qspi-cs2-0 {
-+		pins {
- 			pinmux = <STM32_PINMUX('C', 0, AF10)>; /* QSPI_BK2_NCS */
- 			bias-pull-up;
- 			drive-push-pull;
-@@ -1234,13 +1254,9 @@ pins2 {
- 		};
- 	};
- 
--	qspi_bk2_sleep_pins_a: qspi-bk2-sleep-0 {
-+	qspi_cs2_sleep_pins_a: qspi-cs2-sleep-0 {
- 		pins {
--			pinmux = <STM32_PINMUX('H', 2, ANALOG)>, /* QSPI_BK2_IO0 */
--				 <STM32_PINMUX('H', 3, ANALOG)>, /* QSPI_BK2_IO1 */
--				 <STM32_PINMUX('G', 10, ANALOG)>, /* QSPI_BK2_IO2 */
--				 <STM32_PINMUX('G', 7, ANALOG)>, /* QSPI_BK2_IO3 */
--				 <STM32_PINMUX('C', 0, ANALOG)>; /* QSPI_BK2_NCS */
-+			pinmux = <STM32_PINMUX('C', 0, ANALOG)>; /* QSPI_BK2_NCS */
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-index d142dd30e16b..050c3c27a420 100644
---- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-@@ -255,8 +255,16 @@ &m_can1 {
- 
- &qspi {
- 	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&qspi_clk_pins_a &qspi_bk1_pins_a &qspi_bk2_pins_a>;
--	pinctrl-1 = <&qspi_clk_sleep_pins_a &qspi_bk1_sleep_pins_a &qspi_bk2_sleep_pins_a>;
-+	pinctrl-0 = <&qspi_clk_pins_a
-+		     &qspi_bk1_pins_a
-+		     &qspi_cs1_pins_a
-+		     &qspi_bk2_pins_a
-+		     &qspi_cs2_pins_a>;
-+	pinctrl-1 = <&qspi_clk_sleep_pins_a
-+		     &qspi_bk1_sleep_pins_a
-+		     &qspi_cs1_sleep_pins_a
-+		     &qspi_bk2_sleep_pins_a
-+		     &qspi_cs2_sleep_pins_a>;
- 	reg = <0x58003000 0x1000>, <0x70000000 0x4000000>;
- 	#address-cells = <1>;
- 	#size-cells = <0>;
+vim +1637 drivers/platform/x86/socperf/socperfdrv.c
+
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1619  
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1620  /*****************************************************************************************
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1621   *
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1622   *   Driver Entry / Exit functions that will be called on when the driver is loaded and
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1623   *   unloaded
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1624   *
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1625   ****************************************************************************************/
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1626  
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1627  /*
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1628   * Structure that declares the usual file access functions
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1629   * First one is for lwpmu_c, the control functions
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1630   */
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1631  static struct file_operations socperf_Fops = {
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1632  	.owner = THIS_MODULE,
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1633  	IOCTL_OP = socperf_Device_Control,
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1634  #if defined(CONFIG_COMPAT) && defined(DRV_EM64T)
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1635  	.compat_ioctl = socperf_Device_Control_Compat,
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1636  #endif
+f57492d07625ddd Manisha Chinthapally 2019-05-01 @1637  	.read = socperf_Read,
+f57492d07625ddd Manisha Chinthapally 2019-05-01 @1638  	.write = socperf_Write,
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1639  	.open = socperf_Open,
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1640  	.release = NULL,
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1641  	.llseek = NULL,
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1642  };
+f57492d07625ddd Manisha Chinthapally 2019-05-01  1643  
+
+:::::: The code at line 1637 was first introduced by commit
+:::::: f57492d07625dddac7920eccdb5be08c55ee16fa platform/x86: SOCPERF3 support for sep & socwatch
+
+:::::: TO: Manisha Chinthapally <manisha.chinthapally@intel.com>
+:::::: CC: Faycal Benmlih <faycal.benmlih@intel.com>
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

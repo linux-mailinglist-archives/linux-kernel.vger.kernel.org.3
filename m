@@ -2,113 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7755858C5E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 11:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CE858C5E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 11:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237320AbiHHJs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 05:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
+        id S241537AbiHHJtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 05:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiHHJs4 (ORCPT
+        with ESMTP id S236056AbiHHJtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 05:48:56 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3627711A17
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 02:48:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C2696206D3;
-        Mon,  8 Aug 2022 09:48:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659952133; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HT23advkXo54Tqy77hUt7Q6ZuPWTwdQqniPFu2Wc1NI=;
-        b=kR8xq+y1mXmd3ja9TrjwhcNhmjMopGVURnuWPtq8wHUcGSD3Cv6vIY0P3N6ed6N/RrScDG
-        zO/EVO3oCbwZz0ffTHYxTA/dGpNcwV8kBdAEmU75GJMd99nTjojxjq2+O5Tpvsg87mm/HQ
-        GUSs8gLUOB6U19dVmAL+aY/zfPUOa/s=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A3A7613A7C;
-        Mon,  8 Aug 2022 09:48:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WEYYJgXc8GIudwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 08 Aug 2022 09:48:53 +0000
-Date:   Mon, 8 Aug 2022 11:48:52 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, pmladek@suse.com,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: Re: [PATCH v5 22/32] mm/memcontrol.c: Convert to printbuf
-Message-ID: <YvDcBD7m1ZdQ/bd1@dhcp22.suse.cz>
-References: <20220808024128.3219082-1-willy@infradead.org>
- <20220808024128.3219082-23-willy@infradead.org>
+        Mon, 8 Aug 2022 05:49:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D44DA13D5E
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 02:49:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 349CCD6E;
+        Mon,  8 Aug 2022 02:49:35 -0700 (PDT)
+Received: from [10.57.14.160] (unknown [10.57.14.160])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7D0A33F70D;
+        Mon,  8 Aug 2022 02:49:32 -0700 (PDT)
+Message-ID: <baf39eb0-3115-eb25-9378-f4f99a0a00b3@arm.com>
+Date:   Mon, 8 Aug 2022 10:49:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220808024128.3219082-23-willy@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ARM: disable FDPIC ABI
+Content-Language: en-US
+To:     Ben Wolsieffer <ben.wolsieffer@hefring.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220801191721.1253291-1-Ben.Wolsieffer@hefring.com>
+From:   Vladimir Murzin <vladimir.murzin@arm.com>
+In-Reply-To: <20220801191721.1253291-1-Ben.Wolsieffer@hefring.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 08-08-22 03:41:18, Matthew Wilcox wrote:
-> From: Kent Overstreet <kent.overstreet@gmail.com>
+On 8/1/22 20:17, Ben Wolsieffer wrote:
+> When building with an arm-*-uclinuxfdpiceabi toolchain, the FDPIC ABI is
+> enabled by default but should not be used to build the kernel.
+> Therefore, pass -mno-fdpic if supported by the compiler.
 > 
-> This converts memory_stat_format() from seq_buf to printbuf. Printbuf is
-> simalar to seq_buf except that it heap allocates the string buffer:
-> here, we were already heap allocating the buffer with kmalloc() so the
-> conversion is trivial.
-
-The changelog probably needs an update because the oom path doesn't
-allocated and for somebody just reading this patch in isolation the
-PRINTBUF_EXTERN doesn't really seem very obvious.
-
-> Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-
-> -static void memory_stat_format(struct mem_cgroup *memcg, char *buf, int bufsize)
-> +static void memory_stat_format(struct printbuf *out, struct mem_cgroup *memcg)
->  {
-> -	struct seq_buf s;
->  	int i;
+> Signed-off-by: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
+> ---
+>  arch/arm/Makefile | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index c8e3633f5434..88be49b71d40 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -22,6 +22,9 @@ GZFLAGS		:=-9
+>  # Never generate .eh_frame
+>  KBUILD_CFLAGS	+= $(call cc-option,-fno-dwarf2-cfi-asm)
 >  
-> -	seq_buf_init(&s, buf, bufsize);
-> -
-
-When is the buffer cleared?
-
->  	/*
->  	 * Provide statistics on the state of the memory subsystem as
->  	 * well as cumulative event counters that show past behavior.
-[...]
->  #define K(x) ((x) << (PAGE_SHIFT-10))
-> @@ -1573,7 +1570,8 @@ void mem_cgroup_print_oom_context(struct mem_cgroup *memcg, struct task_struct *
->  void mem_cgroup_print_oom_meminfo(struct mem_cgroup *memcg)
->  {
->  	/* Use static buffer, for the caller is holding oom_lock. */
-> -	static char buf[PAGE_SIZE];
-> +	static char _buf[PAGE_SIZE];
-> +	struct printbuf buf = PRINTBUF_EXTERN(_buf, sizeof(_buf));
+> +# Disable FDPIC ABI
+> +KBUILD_CFLAGS	+= $(call cc-option,-mno-fdpic)
+> +
+>  # This should work on most of the modern platforms
+>  KBUILD_DEFCONFIG := multi_v7_defconfig
 >  
->  	lockdep_assert_held(&oom_lock);
 
-the buffer is static here!
+Without patch I'm getting
 
->  
--- 
-Michal Hocko
-SUSE Labs
+scripts/link-vmlinux.sh: line 52: 312779 Segmentation fault      (core dumped) ${ld} ${ldflags} -o ${output} ${wl}--whole-archive ${objs} ${wl}--no-whole-archive ${wl}--start-group ${libs} ${wl}--end-group $@ ${ldlibs}
+
+So, FWIW:
+
+Reviewed-by: Vladimir Murzin <vladimir.murzin@arm.com>
+Tested-by: Vladimir Murzin <vladimir.murzin@arm.com>
+
+Unless you get any other comments, please, drop it into RMK's patch system [1].
+ 
+[1] https://www.armlinux.org.uk/developer/patches/
+
+P.S. 
+Extra thanks for Buildroot patches, they were handy to build FDPIC toolchain and
+test the patch!
+
+Cheers
+Vladimir

@@ -2,40 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D424F58C1BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D8658C1D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 04:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244065AbiHHCmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 22:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
+        id S244044AbiHHCnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 22:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242235AbiHHClk (ORCPT
+        with ESMTP id S242120AbiHHClk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 7 Aug 2022 22:41:40 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7E125D8
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 19:41:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FBE25C4;
+        Sun,  7 Aug 2022 19:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=sneZ41lYORveEGJd86wLRINVdrJyNjdlMYzBcdpxZVM=; b=gHsZmUmooiEPQn2wHoC+85cXvp
-        uUArEgvwkwTMO/rXNRp0gPoodsCYZIIJnFcz75pPW3q8m5am8CL0NhvgxKYYAWrSAUeC73Z/lPkPs
-        h4I44dOOHdLqJhxSlBifUdptWyIeU2ZxgB6iQ2w6KaPpsCDck6HhMij6kmyazjOnSEUnr6L1jLqJ9
-        IQSY+w7Z78SL/f6kcz8Ncq7NPw6uus03Nhyd2oLnPCkQSrsFXKNAC18OUfix8lDia35iIoLoqh1t/
-        JQiFlo2Gw4YnT2v+AqHVv7w/+hdDHKX68rLMTNh95mc/ottWiYhO/BKQnzFBRUz3aJd0fiK6fsWFS
-        QQ+9YZWw==;
+        bh=fiLWB7FlMZG/t3/6at/lVnmuLuXlP9ApBxUL44LLPGI=; b=cV+xsr2dJdusY7y0TkSTgMXeQ0
+        hiXR1lQDTb0NZ1r+yPBc/SHwfmocssIf1OWmy7KfHT0zQhxNolb+CBN8mJ+rzcAqxTB7d0jZGxCc2
+        yeAO0NPrLksriSMv1Tjv55L/P1iTRnYT5eiymmpzFFtIySvuDh8xaUuVSOvQEysBDxEG4gsGiX8JT
+        jg74xcTcIF/+GQvexqGnUqjhudrIrBlSuElsRc7yjmn8k1PmBb+p1vf0Hd5N+gDURFOfDjVagZeYF
+        hZRpk2vdiPL6Ynyd65sLsSPz/ef0ZmpeorlTJZGkIhOw6f+X7tXAd41fClIw1bUShUYqzghpwigEL
+        Z25ohh/A==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oKshy-00DVSQ-CB; Mon, 08 Aug 2022 02:41:34 +0000
+        id 1oKshy-00DVSX-Gm; Mon, 08 Aug 2022 02:41:34 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-kernel@vger.kernel.org, pmladek@suse.com,
         Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH v5 22/32] mm/memcontrol.c: Convert to printbuf
-Date:   Mon,  8 Aug 2022 03:41:18 +0100
-Message-Id: <20220808024128.3219082-23-willy@infradead.org>
+Cc:     linux-tegra@vger.kernel.org
+Subject: [PATCH v5 23/32] clk: tegra: bpmp: Convert to printbuf
+Date:   Mon,  8 Aug 2022 03:41:19 +0100
+Message-Id: <20220808024128.3219082-24-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220808024128.3219082-1-willy@infradead.org>
 References: <20220808024128.3219082-1-willy@infradead.org>
@@ -53,135 +51,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@gmail.com>
 
-This converts memory_stat_format() from seq_buf to printbuf. Printbuf is
-simalar to seq_buf except that it heap allocates the string buffer:
-here, we were already heap allocating the buffer with kmalloc() so the
-conversion is trivial.
+This converts from seq_buf to printbuf, which is similar but heap
+allocates the string buffer.
+
+Previously in this code the string buffer was allocated on the stack;
+this means we've added a new potential memory allocation failure. This
+is fine though since it's only for a dev_printk() message.
+
+Memory allocation context: printbuf doesn't take gfp flags, instead we
+prefer the new memalloc_no*_(save|restore) interfaces to be used. Here
+the surrounding code is already allocating with GFP_KERNEL, so
+everything is fine.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: linux-tegra@vger.kernel.org
 ---
- mm/memcontrol.c | 54 ++++++++++++++++++++++++-------------------------
- 1 file changed, 27 insertions(+), 27 deletions(-)
+ drivers/clk/tegra/clk-bpmp.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index b69979c9ced5..54897e4ac4ef 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -62,7 +62,7 @@
- #include <linux/file.h>
- #include <linux/resume_user_mode.h>
- #include <linux/psi.h>
+diff --git a/drivers/clk/tegra/clk-bpmp.c b/drivers/clk/tegra/clk-bpmp.c
+index 3748a39dae7c..7e3b48ed9d45 100644
+--- a/drivers/clk/tegra/clk-bpmp.c
++++ b/drivers/clk/tegra/clk-bpmp.c
+@@ -5,7 +5,7 @@
+ 
+ #include <linux/clk-provider.h>
+ #include <linux/device.h>
 -#include <linux/seq_buf.h>
 +#include <linux/printbuf.h>
- #include "internal.h"
- #include <net/sock.h>
- #include <net/ip.h>
-@@ -1490,13 +1490,10 @@ static const unsigned int memcg_vm_event_stat[] = {
- #endif
- };
+ #include <linux/slab.h>
  
--static void memory_stat_format(struct mem_cgroup *memcg, char *buf, int bufsize)
-+static void memory_stat_format(struct printbuf *out, struct mem_cgroup *memcg)
+ #include <soc/tegra/bpmp.h>
+@@ -365,39 +365,38 @@ static void tegra_bpmp_clk_info_dump(struct tegra_bpmp *bpmp,
+ 				     const struct tegra_bpmp_clk_info *info)
  {
--	struct seq_buf s;
- 	int i;
- 
--	seq_buf_init(&s, buf, bufsize);
+ 	const char *prefix = "";
+-	struct seq_buf buf;
++	struct printbuf buf = PRINTBUF;
+ 	unsigned int i;
+-	char flags[64];
 -
- 	/*
- 	 * Provide statistics on the state of the memory subsystem as
- 	 * well as cumulative event counters that show past behavior.
-@@ -1513,30 +1510,30 @@ static void memory_stat_format(struct mem_cgroup *memcg, char *buf, int bufsize)
- 		u64 size;
+-	seq_buf_init(&buf, flags, sizeof(flags));
  
- 		size = memcg_page_state_output(memcg, memory_stats[i].idx);
--		seq_buf_printf(&s, "%s %llu\n", memory_stats[i].name, size);
-+		prt_printf(out, "%s %llu\n", memory_stats[i].name, size);
+ 	if (info->flags)
+-		seq_buf_printf(&buf, "(");
++		prt_printf(&buf, "(");
  
- 		if (unlikely(memory_stats[i].idx == NR_SLAB_UNRECLAIMABLE_B)) {
- 			size += memcg_page_state_output(memcg,
- 							NR_SLAB_RECLAIMABLE_B);
--			seq_buf_printf(&s, "slab %llu\n", size);
-+			prt_printf(out, "slab %llu\n", size);
- 		}
+ 	if (info->flags & TEGRA_BPMP_CLK_HAS_MUX) {
+-		seq_buf_printf(&buf, "%smux", prefix);
++		prt_printf(&buf, "%smux", prefix);
+ 		prefix = ", ";
  	}
  
- 	/* Accumulated memory events */
--	seq_buf_printf(&s, "pgscan %lu\n",
--		       memcg_events(memcg, PGSCAN_KSWAPD) +
--		       memcg_events(memcg, PGSCAN_DIRECT));
--	seq_buf_printf(&s, "pgsteal %lu\n",
--		       memcg_events(memcg, PGSTEAL_KSWAPD) +
--		       memcg_events(memcg, PGSTEAL_DIRECT));
-+	prt_printf(out, "pgscan %lu\n",
-+		   memcg_events(memcg, PGSCAN_KSWAPD) +
-+		   memcg_events(memcg, PGSCAN_DIRECT));
-+	prt_printf(out, "pgsteal %lu\n",
-+		   memcg_events(memcg, PGSTEAL_KSWAPD) +
-+		   memcg_events(memcg, PGSTEAL_DIRECT));
+ 	if ((info->flags & TEGRA_BPMP_CLK_HAS_SET_RATE) == 0) {
+-		seq_buf_printf(&buf, "%sfixed", prefix);
++		prt_printf(&buf, "%sfixed", prefix);
+ 		prefix = ", ";
+ 	}
  
- 	for (i = 0; i < ARRAY_SIZE(memcg_vm_event_stat); i++)
--		seq_buf_printf(&s, "%s %lu\n",
--			       vm_event_name(memcg_vm_event_stat[i]),
--			       memcg_events(memcg, memcg_vm_event_stat[i]));
-+		prt_printf(out, "%s %lu\n",
-+			   vm_event_name(memcg_vm_event_stat[i]),
-+			   memcg_events(memcg, memcg_vm_event_stat[i]));
+ 	if (info->flags & TEGRA_BPMP_CLK_IS_ROOT) {
+-		seq_buf_printf(&buf, "%sroot", prefix);
++		prt_printf(&buf, "%sroot", prefix);
+ 		prefix = ", ";
+ 	}
  
- 	/* The above should easily fit into one page */
--	WARN_ON_ONCE(seq_buf_has_overflowed(&s));
-+	WARN_ON_ONCE(!printbuf_remaining(out));
- }
+ 	if (info->flags)
+-		seq_buf_printf(&buf, ")");
++		prt_printf(&buf, ")");
  
- #define K(x) ((x) << (PAGE_SHIFT-10))
-@@ -1573,7 +1570,8 @@ void mem_cgroup_print_oom_context(struct mem_cgroup *memcg, struct task_struct *
- void mem_cgroup_print_oom_meminfo(struct mem_cgroup *memcg)
- {
- 	/* Use static buffer, for the caller is holding oom_lock. */
--	static char buf[PAGE_SIZE];
-+	static char _buf[PAGE_SIZE];
-+	struct printbuf buf = PRINTBUF_EXTERN(_buf, sizeof(_buf));
+ 	dev_printk(level, bpmp->dev, "%03u: %s\n", info->id, info->name);
+-	dev_printk(level, bpmp->dev, "  flags: %lx %s\n", info->flags, flags);
++	dev_printk(level, bpmp->dev, "  flags: %lx %s\n", info->flags, printbuf_str(&buf));
+ 	dev_printk(level, bpmp->dev, "  parents: %u\n", info->num_parents);
  
- 	lockdep_assert_held(&oom_lock);
- 
-@@ -1596,8 +1594,8 @@ void mem_cgroup_print_oom_meminfo(struct mem_cgroup *memcg)
- 	pr_info("Memory cgroup stats for ");
- 	pr_cont_cgroup_path(memcg->css.cgroup);
- 	pr_cont(":");
--	memory_stat_format(memcg, buf, sizeof(buf));
--	pr_info("%s", buf);
-+	memory_stat_format(&buf, memcg);
-+	pr_info("%s", buf.buf);
- }
- 
- /*
-@@ -6401,14 +6399,16 @@ static int memory_events_local_show(struct seq_file *m, void *v)
- static int memory_stat_show(struct seq_file *m, void *v)
- {
- 	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
--	char *buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
-+	struct printbuf buf = PRINTBUF;
-+	int ret;
- 
--	if (!buf)
--		return -ENOMEM;
--	memory_stat_format(memcg, buf, PAGE_SIZE);
--	seq_puts(m, buf);
--	kfree(buf);
--	return 0;
-+	memory_stat_format(&buf, memcg);
-+	ret = buf.allocation_failure ? -ENOMEM : 0;
-+	if (!ret)
-+		seq_puts(m, buf.buf);
+ 	for (i = 0; i < info->num_parents; i++)
+ 		dev_printk(level, bpmp->dev, "    %03u\n", info->parents[i]);
 +
 +	printbuf_exit(&buf);
-+	return ret;
  }
  
- #ifdef CONFIG_NUMA
+ static int tegra_bpmp_probe_clocks(struct tegra_bpmp *bpmp,
 -- 
 2.35.1
 

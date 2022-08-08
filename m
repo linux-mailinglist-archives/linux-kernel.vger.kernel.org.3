@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D89858C746
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0551E58C752
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 13:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242700AbiHHLIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 07:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S242745AbiHHLKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 07:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242378AbiHHLIK (ORCPT
+        with ESMTP id S242758AbiHHLKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 07:08:10 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02B6325
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:08:07 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id w15so9445871ljw.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 04:08:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=G5McPA5IZBMFjJ0FWkBGoduD3K8bZspnlviNAqde1yc=;
-        b=U/8GdIPAOfjfBSkPjG5qZxEpHYx+/y1PqJjkW7q9XPKi+rNH9/dxiBi1yihCy+h293
-         iNwxkcW7qy7LPeMGxSs5rHpkJQq5EwzuHdr+LCPHKjOeQ83rg8iKzV3zZarNThEsWH0w
-         CmC/o7Zp4FC1+BWdTxPiNp8JkSwzUoXh7tQIU56sUavV8iNgWPijx/uuF0xZaPPcxocb
-         /f7wX+tz8FQi5OrTmy4E+tsl100B6B6g7NsVYajrm5YYsymY0zrRboDLbi4cvxNVYAbc
-         0EoeM/cP8He8woq/BuYMI7uO1xTTlUTwupdPNkoU6aX4x7Uw/vfB35BO1qPupE6jKKH6
-         esHQ==
+        Mon, 8 Aug 2022 07:10:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9AF02117C
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 04:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659957040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hBe2fpdBGNWzcr6vXOzuBs2kJsMnU68Mt4pMY9LLh1w=;
+        b=AUQ8vh58bF6brXuQHf/VM/9ltM8yOUOyPqHvMak4v9ejm8LiCMWVByEedyq1yaQSYGx2VH
+        kCRIdm8mCbJLz99riM6fkhA3JDNbW915GxO9wNr76LLneTwR7Rae2m+Fn2nfEbYA2s9F6y
+        ppM8kI1v+KcyF2i0sbp+1+58RFY6/OQ=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-112-DRBrCSNRNfOJNJmsWSqz9Q-1; Mon, 08 Aug 2022 07:10:39 -0400
+X-MC-Unique: DRBrCSNRNfOJNJmsWSqz9Q-1
+Received: by mail-qt1-f200.google.com with SMTP id fy18-20020a05622a5a1200b0033e5b56f031so6578007qtb.15
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 04:10:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=G5McPA5IZBMFjJ0FWkBGoduD3K8bZspnlviNAqde1yc=;
-        b=KqtY6Ibfn1Bc3IbFChuxyus9sU/O/r6FZrFz3ZpSPO2V2khC3MwI2hKBhDK6ULkrw3
-         rSnrEzdjnRxnuDcabWQpEUyS5g1JBgLcCrb0+gFcY3mugxxMVe3CnKWHvIdZbV89e92Y
-         K1nqbdN5Kfiy5/xI2GcBpkt+KHLQM26D9pZ46HqFMtjid5BSVePpH9Q5OakmbILa4vRl
-         Wu11UNeelzChEqBi1vjLAlZhgVC3u6awHHlSTBfQqdY1cxHq32vXW0aEsn3/yulT9Ke/
-         jxfwwoxXW1CqRE7XWc4rso9z7qFAmSoCC7ColizttKA0FoTJ74u8poVbTwfQ5ZlQhUXC
-         9mpg==
-X-Gm-Message-State: ACgBeo0irlI/QB/JRF106jQfsO7AuQoRNI9g58BJ/4fDCN4ACgiVjPIT
-        rgQ2c4RLIN7rshEwiLWg1OHFTKCTxvQ5f6q8
-X-Google-Smtp-Source: AA6agR5I5A6dxgwMS+V5R6U4to3TDtNl7lNnpi0SFDGcuvZCIrUri2LyMgMT9eOhaBiYlWL8+eDong==
-X-Received: by 2002:a2e:2ac1:0:b0:25e:4b39:e3cb with SMTP id q184-20020a2e2ac1000000b0025e4b39e3cbmr5854240ljq.458.1659956886352;
-        Mon, 08 Aug 2022 04:08:06 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id t16-20020a2e9d10000000b0025e6a598019sm1338801lji.131.2022.08.08.04.08.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 04:08:05 -0700 (PDT)
-Message-ID: <43b3c497-97fd-29aa-a07b-bcd6413802c4@linaro.org>
-Date:   Mon, 8 Aug 2022 14:08:03 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 5/5] dt-bindings: Drop Dan Murphy
-Content-Language: en-US
-To:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Robert Jones <rjones@gateworks.com>,
-        Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=hBe2fpdBGNWzcr6vXOzuBs2kJsMnU68Mt4pMY9LLh1w=;
+        b=1v/i19HzSb/u/mCkP+xM0qM0bMjOmIKNQB+XIn2jvCYu5/gmHpxG9nZx6kBe5lr1ZS
+         1ef3b9fZtaqHk3ryZyagR8bTu8yOdP5yxypsn+GYqWizSm8ZgJwAgao5y/4zpyT/pPWu
+         MlJTuBup0Asx1c4KFSYrrZM+Gn7U3gCfjEi5N68tkAWallQBZjrQtyxt71JPM//9uttN
+         GB+dByb483UsJDsj0jHI+seJaNHUHNgqVbQjLqfg3eTcxMF60S1Xik5YDYnNb/2oieZp
+         58f9roslzirNSSvZpU/+sRnMUAEWgeSOyTZvKIeZRMLPIN9auboHghGiHMXNiEl41kUY
+         tCqQ==
+X-Gm-Message-State: ACgBeo2IFCHS90B1oFajkJxG6mwqjGw0VdfsMziDLIQi75TovD9tRtmF
+        a2xTd+/BKaklAqqETY0eVuS1RgDO1J3fr6N1WVL2PXLGESVs7yVc1N6WFbtVXM7+So6th+ZV1B3
+        Rhguq1CXT1biEDe/O51Fh5XeB
+X-Received: by 2002:a05:6214:5285:b0:474:69d7:c22b with SMTP id kj5-20020a056214528500b0047469d7c22bmr14912784qvb.97.1659957038980;
+        Mon, 08 Aug 2022 04:10:38 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4ujYB7ib/RGWCUpFI4MR2ymD2ume/U+w9j2VF/0+QfSm3zys9i5QUsO2JwnpbewhemYJWtSA==
+X-Received: by 2002:a05:6214:5285:b0:474:69d7:c22b with SMTP id kj5-20020a056214528500b0047469d7c22bmr14912769qvb.97.1659957038768;
+        Mon, 08 Aug 2022 04:10:38 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
+        by smtp.gmail.com with ESMTPSA id u3-20020a37ab03000000b006b46a78bc0fsm1093912qke.118.2022.08.08.04.10.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 04:10:38 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 13:10:27 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
- <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220808104712.54315-6-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v3 9/9] vsock_test: POLLIN + SO_RCVLOWAT test
+Message-ID: <20220808111027.nmreeuxa4jgn2e4t@sgarzare-redhat>
+References: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
+ <1f50d595-cd37-ad61-f165-5632162dc682@sberdevices.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <1f50d595-cd37-ad61-f165-5632162dc682@sberdevices.ru>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,27 +96,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/08/2022 13:47, Krzysztof Kozlowski wrote:
-> Emails to Dan Murphy bounce ("550 Invalid recipient <dmurphy@ti.com>
-> (#5.1.1)").
+On Wed, Aug 03, 2022 at 02:07:58PM +0000, Arseniy Krasnov wrote:
+>This adds test to check,that when poll() returns POLLIN,POLLRDNORM bits,
+>next read call won't block.
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> tools/testing/vsock/vsock_test.c | 107 +++++++++++++++++++++++++++++++
+> 1 file changed, 107 insertions(+)
+>
+>diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
+>index dc577461afc2..920dc5d5d979 100644
+>--- a/tools/testing/vsock/vsock_test.c
+>+++ b/tools/testing/vsock/vsock_test.c
+>@@ -18,6 +18,7 @@
+> #include <sys/socket.h>
+> #include <time.h>
+> #include <sys/mman.h>
+>+#include <poll.h>
+>
+> #include "timeout.h"
+> #include "control.h"
+>@@ -596,6 +597,107 @@ static void test_seqpacket_invalid_rec_buffer_server(const struct test_opts *opt
+> 	close(fd);
+> }
+>
+>+static void test_stream_poll_rcvlowat_server(const struct test_opts *opts)
+>+{
+>+#define RCVLOWAT_BUF_SIZE 128
 
+Since we use this macro on both server and client functions, I suggest 
+to move this define outside the function.
 
-(...)
+Other than that the test LGTM. I also ran it and everything is fine :-) 
+thanks for adding it!
 
->  description: |
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> index 4883527ab5c7..509a0667b04e 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> @@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: TI BQ25980 Flash Charger
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
->    - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-Ricardo's also bounces... Does it mean TI is not interested in
-maintaining mainline support for its drivers?
-
-Best regards,
-Krzysztof

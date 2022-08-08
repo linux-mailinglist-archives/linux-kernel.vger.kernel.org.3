@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E641D58C31F
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 08:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEECC58C324
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 08:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234089AbiHHGHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 02:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
+        id S235343AbiHHGKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 02:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiHHGHN (ORCPT
+        with ESMTP id S229524AbiHHGKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 02:07:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE0610B8
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 23:07:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 8 Aug 2022 02:10:08 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EE010B8
+        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 23:10:06 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32B15611CC
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 06:07:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E5FC433C1;
-        Mon,  8 Aug 2022 06:07:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659938831;
-        bh=BeJ/5CXgtTEWpJK23C0F6E+yUTy2LMEwm0F/7sKgZb8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TgQ3B5svGytonlkpnAQtF6NzuOZwdq006a15FQA6MiMkXmaGppGoUIptlzwmh4jS3
-         KLFmZo7418CeUNup627yaJYuxcVHpMXcYxJF6YL90DV0TRlKfEoxwLSOa1Hg7S4zew
-         +2adHrBxqK3iGff1S/5iIyhPnr62O6Rk9roodsHKUI/nNtaoelTj48rpNoUI41vYVa
-         rSbe5RyYxiUN/kYc0R7nQc6BKfmVMmKxfzPpwkdgK09PUcfYmzsYpuMGUzYSy/wsHX
-         SXkoNWoWzs3ktOTxUSpVN9cYiYN+zGUzvuon26hLEruKzg1iOhNVXShVrrYiV64VRo
-         jU8ZTV9EK7EJg==
-Date:   Mon, 8 Aug 2022 06:07:07 +0000
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Rajat Jain <rajatja@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] platform/chrome: cros_ec: Expose suspend_timeout in
- debugfs
-Message-ID: <YvCoC0T3ZhKzeYvB@google.com>
-References: <20220805151551.1.Idd188ff3f9caddebc17ac357a13005f93333c21f@changeid>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M1Qlw546Jz4x1J;
+        Mon,  8 Aug 2022 16:10:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1659939004;
+        bh=LZgjXTb9vBdbAEpHKe5L3j/y7J+RSnYI1mHQe+AyoFg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Bh24TTDigtLy4H5pm2qxg7DkRRnF/YGA7VkCTNuVmGXpnZPTI4DBbDdklj+39Uxs5
+         ZBgVGstaXRDTzJrl/wMJ4XPbWFhRbEagQA0wZbOPhhF56qBSRvPYMeD9zKXTvy2yP3
+         tiDGzP1Nsa/Y/3PSTAqum1qhc3SZLfGXr3Ef/oBrctgexpJ7W1DBUhxHfYGcKeNBWz
+         Nao+mxM/bTBiFKyCsfEfLIOdF7R+p2PH6Mnud2Jctz/TTtmgPSto6ywQqhNz6SLIwE
+         m2xoBpzjy6zH5Nu4K1dnEAnGb3XXno/slEgcqD7hfnX/yUgYfbhQAj11LR1ubtKM1f
+         kd6acTauwRZ0g==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] Bitmap patches for v6.0-rc1
+In-Reply-To: <CAHk-=whsgbpbVC_+V-dxuPbQCPV1eFQG00TrQvJcjYAXVHdswA@mail.gmail.com>
+References: <20220805022940.1637978-1-yury.norov@gmail.com>
+ <87edxtaol6.fsf@mpe.ellerman.id.au>
+ <CAHk-=whsgbpbVC_+V-dxuPbQCPV1eFQG00TrQvJcjYAXVHdswA@mail.gmail.com>
+Date:   Mon, 08 Aug 2022 16:10:01 +1000
+Message-ID: <874jyn9sg6.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220805151551.1.Idd188ff3f9caddebc17ac357a13005f93333c21f@changeid>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 03:17:17PM -0700, Evan Green wrote:
-> diff --git a/Documentation/ABI/testing/debugfs-cros-ec b/Documentation/ABI/testing/debugfs-cros-ec
-> index 1fe0add99a2a99..8e7e76e6481550 100644
-> --- a/Documentation/ABI/testing/debugfs-cros-ec
-> +++ b/Documentation/ABI/testing/debugfs-cros-ec
-> @@ -54,3 +54,25 @@ Description:
->  		this feature.
->  
->  		Output will be in the format: "0x%08x\n".
-> +
-> +What:		/sys/kernel/debug/<cros-ec-device>/suspend_timeout
-> +Date:		August 2022
-> +KernelVersion:	6.0
+Linus Torvalds <torvalds@linux-foundation.org> writes:
+> On Fri, Aug 5, 2022 at 11:11 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>>
+>> This pull request has a conflict with the random tree in some powerpc
+>> code.
+>
+> I noticed.
 
-The merge window is opened.  It's too late for the patch if the following
-outcome version is 6.0.
+Thanks. Your resolution looks fine and builds for me.
 
-> +Description:
-> +		Some ECs have a feature where they will track transitions to the
-> +		a hardware-controlled sleep line, such as Intel's SLP_S0 line,
-> +		in order to detect cases where a system failed to go into deep
-> +		sleep states. The suspend_timeout file controls the amount of
-> +		time in milliseconds the EC will wait before declaring a sleep
-> +		timeout event and attempting to wake the system.
-> +
-> +		Supply 0 to use the default value coded into EC firmware. Supply
-> +		65535 to disable the EC sleep failure detection mechanism.
+> And I tried to do a cross-compile, but with my update to F36 the
+> powerpc64 cross-tools seems to be very broken. I get lots of strange
+> errors like
+>
+>     Cannot find symbol for section 11: .text.kgdb_arch_pc.
+>
+> and I have no idea why.  I used to have a working cross-build
+> environment at one point, but now it just gives me lots of errors.
 
-Better to mention EC_HOST_SLEEP_TIMEOUT_INFINITE or [1] in the description.
-Or, it's not obvious from the patch that 65535 disables the mechanism. 
+If you just build defconfig rather than allmodconfig it should build
+cleanly.
 
-[1]: https://chromium.googlesource.com/chromiumos/platform/ec/+/refs/heads/main/power/host_sleep.c
+That's the "recordmcount" issue that's been going on for the last ~year.
+It's some bad interaction between recordmcount and weak symbols and
+newer versions of binutils.
+
+Naveen made an attempt to fix it, but the discussion with Steve fizzled
+out inconclusively.
+
+AIUI objtool doesn't have the same problem so hopefully we can switch to
+objtool soon and avoid the issue.
+
+cheers

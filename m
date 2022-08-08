@@ -2,117 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FA858C693
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C43C58C695
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 12:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237912AbiHHKiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 06:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
+        id S242219AbiHHKi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 06:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbiHHKiU (ORCPT
+        with ESMTP id S237547AbiHHKiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 06:38:20 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB72A1B9
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 03:38:19 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b98cb329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98cb:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DA9F11EC0380;
-        Mon,  8 Aug 2022 12:38:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1659955094;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ws//62ri8qZO1IOv5O1m08aPTxdUCdaAOH8YuEEjwkI=;
-        b=N1t5rTc28OfX4kk8V2CPYnXHczOZaWpeTnScBov7AfPb2HQBoPHSkCBsKHUg4eXD2uFfol
-        H6T0HFCgN66AbDpmmLFACvjYB5+OXkND0d5tut0HUWEeEMDnkQDZjCsym7lpxE/1UcEMqx
-        T4fdMnXPtqJCASg3WuomQtXXjWWymGc=
-Date:   Mon, 8 Aug 2022 12:38:08 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     ira.weiny@intel.com
-Cc:     Rik van Riel <riel@surriel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 1/5] entry: Pass pt_regs to
- irqentry_exit_cond_resched()
-Message-ID: <YvDnkALyHl77R/Ug@zn.tnic>
-References: <20220805173009.3128098-1-ira.weiny@intel.com>
- <20220805173009.3128098-2-ira.weiny@intel.com>
+        Mon, 8 Aug 2022 06:38:22 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46001A1B9;
+        Mon,  8 Aug 2022 03:38:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659955101; x=1691491101;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i0OaVs7vkKYWne9ZknDeoaUYlRMrkt/ldlaa0MEbAZA=;
+  b=DMS1YJRiaClfsW8aERSbM/kc24XQjpNEO/ZsVejHN6QxaEnqpIeBwene
+   1mNp1sqMzhhJbbzbzYiD+QpMSnw9HAx4gCfUDhNOGnc+/jTS6d70KFeX9
+   9sqdO0GXrJXfb4lONRWZAGetEYaAxGqWdiPPWxsTAjzK12QdJNPgW311d
+   tdNmZQiXcllX0+93M8fmBEK1H5TiuoAY2aBqNXcz8nJ1zWDTK/zgYbgOu
+   n8zYgw/EVPxU9O4VrK0hZrmN6Q9gxQ4x4yIm+lEXRbjBJkjCS8eOp3D3A
+   K96GBBPZB+PNoDBTlXVQDtVZ0izjWjKgegLzmmZerRrUAz6S5t/AVu0IS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="354559347"
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="354559347"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 03:38:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,222,1654585200"; 
+   d="scan'208";a="746584608"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 08 Aug 2022 03:38:17 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 08 Aug 2022 13:38:16 +0300
+Date:   Mon, 8 Aug 2022 13:38:16 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Gene Chen <gene.chen.richtek@gmail.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        gene_chen@richtek.com, cy_huang@richtek.com
+Subject: Re: [PATCH v4 4/7] usb: typec: tcpci_rt1711h: Add initial phy setting
+Message-ID: <YvDnmP4bmAZkFgAD@kuha.fi.intel.com>
+References: <20220805071714.150882-1-gene.chen.richtek@gmail.com>
+ <20220805071714.150882-5-gene.chen.richtek@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805173009.3128098-2-ira.weiny@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220805071714.150882-5-gene.chen.richtek@gmail.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 10:30:05AM -0700, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
+On Fri, Aug 05, 2022 at 03:17:10PM +0800, Gene Chen wrote:
+> From: Gene Chen <gene_chen@richtek.com>
 > 
-> Auxiliary pt_regs space needs to be manipulated by the generic
-> entry/exit code.
+> Add initial phy setting about phy dicard retry,
+> rx filter deglitch time and BMC-encoded wait time
 > 
-> Ideally irqentry_exit() would take care of handling any auxiliary
-> pt_regs on exit.  Unfortunately, irqentry_exit() is not the only exit
-> from exception path.  The call to irqentry_exit_cond_resched() from
-> xen_pv_evtchn_do_upcall() bypasses irqentry_exit().
-> 
-> Make irqentry_exit_cond_resched() symmetrical with irqentry_enter() by
-> passing pt_regs to it.  This makes irqentry_exit_cond_resched() capable
-> of handling auxiliary pt_regs in future patches.
-> 
-> Cc: Rik van Riel <riel@surriel.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
+> Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
-> Forward ported from PKS series:
-> 	https://lore.kernel.org/lkml/20220419170649.1022246-19-ira.weiny@intel.com/
-> ---
->  arch/arm64/include/asm/preempt.h |  2 +-
->  arch/arm64/kernel/entry-common.c |  4 ++--
->  arch/x86/entry/common.c          |  2 +-
->  include/linux/entry-common.h     | 17 ++++++++------
->  kernel/entry/common.c            | 13 +++++++----
->  kernel/sched/core.c              | 40 ++++++++++++++++----------------
->  6 files changed, 43 insertions(+), 35 deletions(-)
-
-Why all this churn?
-
-Why can't you add a parameter to irqentry_exit():
-
-  noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state, bool cond_resched);
-
-and then have all callers except xen_pv_evtchn_do_upcall() pass in false
-and this way have all exit paths end up in irqentry_exit()?
-
-And, ofc, move the true case which is the body of
-raw_irqentry_exit_cond_resched() to irqentry_exit() and then get rid of
-former.
-
-xen_pv_evtchn_do_upcall() will, ofc, do:
-
-        if (inhcall && !WARN_ON_ONCE(state.exit_rcu)) {
-                irqentry_exit(regs, state, true);
-                instrumentation_end();
-                restore_inhcall(inhcall);
-        } else {
-                instrumentation_end();
-                irqentry_exit(regs, state, false);
-
-Hmmm?
+>  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> index fb19d7b..5c51d04 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -19,6 +19,9 @@
+>  #define RT1711H_VID		0x29CF
+>  #define RT1711H_PID		0x1711
+>  
+> +#define RT1711H_PHYCTRL1	0x80
+> +#define RT1711H_PHYCTRL2	0x81
+> +
+>  #define RT1711H_RTCTRL8		0x9B
+>  
+>  /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
+> @@ -106,8 +109,18 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
+>  		return ret;
+>  
+>  	/* dcSRC.DRP : 33% */
+> -	return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
+> +	ret = rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Enable phy discard retry, retry count 7, rx filter deglitch 100 us */
+> +	ret = rt1711h_write8(chip, RT1711H_PHYCTRL1, 0xF1);
+> +	if (ret < 0)
+> +		return ret;
+>  
+> +	/* Decrease wait time of BMC-encoded 1 bit from 2.67us to 2.55us */
+> +	/* wait time : (val * .4167) us */
+> +	return rt1711h_write8(chip, RT1711H_PHYCTRL2, 62);
+>  }
+>  
+>  static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata,
+> -- 
+> 2.7.4
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+heikki

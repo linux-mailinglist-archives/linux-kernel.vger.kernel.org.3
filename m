@@ -2,75 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B8758C23D
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 05:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C033258C240
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 05:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233473AbiHHD5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 23:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
+        id S234125AbiHHD6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 23:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiHHD4x (ORCPT
+        with ESMTP id S230364AbiHHD6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 23:56:53 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05BA63B3;
-        Sun,  7 Aug 2022 20:56:44 -0700 (PDT)
-X-UUID: af5e956206154a859f2519af9cd0bb84-20220808
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=DhhuJpteKCARl6+29dVpGy2mE4S43byCxsk+XzHe+vI=;
-        b=ul9ivRcvxQmuJV8WSiZ17iKgyUD6ltfzZV4Wzbdhl9joLfGujiYOXO25c+wX/RnsTmRKcD0sHvfQAXzluTQPRBDr9F3K0mnDQDgbi0MZ0rB/k8unoFuIjCQ82Xil0rBXMnX2WNsYFGIKADg3w5MDowxMevW3J/1+CYA68WP6/ZM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:ae45cef8-719d-4c32-9673-62d4bfd5148f,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.8,REQID:ae45cef8-719d-4c32-9673-62d4bfd5148f,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:0f94e32,CLOUDID:6143fa48-f57f-4088-93dd-066979cdb4e6,C
-        OID:b4c7827d053a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: af5e956206154a859f2519af9cd0bb84-20220808
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 239268617; Mon, 08 Aug 2022 11:56:39 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 8 Aug 2022 11:56:38 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 8 Aug 2022 11:56:38 +0800
-Message-ID: <9b39b3cebd144083e770a8d44bb275b4297d8c21.camel@mediatek.com>
-Subject: Re: [PATCH v16 4/8] drm/mediatek: Add MT8195 External DisplayPort
- support
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 8 Aug 2022 11:56:38 +0800
-In-Reply-To: <20220805101459.3386-5-rex-bc.chen@mediatek.com>
-References: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
-         <20220805101459.3386-5-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 7 Aug 2022 23:58:42 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA7610FC9;
+        Sun,  7 Aug 2022 20:58:40 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M1Mmd5CM1zjX6Y;
+        Mon,  8 Aug 2022 11:55:29 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 8 Aug
+ 2022 11:58:38 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lkp@intel.com>
+CC:     <kbuild-all@lists.01.org>, Daniel Borkmann <daniel@iogearbox.net>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: [PATCH bpf] bpf, arm64: Fix bpf trampoline instruction endianness
+Date:   Mon, 8 Aug 2022 00:07:35 -0400
+Message-ID: <20220808040735.1232002-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,413 +47,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+The sparse tool complains as follows:
 
-On Fri, 2022-08-05 at 18:14 +0800, Bo-Chen Chen wrote:
-> From: Guillaume Ranquet <granquet@baylibre.com>
-> 
-> This patch adds External DisplayPort support to the mt8195 eDP
-> driver.
-> 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dp.c     | 190 +++++++++++++++++++++---
-> --
->  drivers/gpu/drm/mediatek/mtk_dp_reg.h |   4 +
->  2 files changed, 158 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c
-> b/drivers/gpu/drm/mediatek/mtk_dp.c
-> index 59fee814075b..00971ea2fadf 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-> @@ -77,6 +77,7 @@ struct mtk_dp {
->  	struct dp_cal_data cal_data;
->  	u8 max_lanes;
->  	u8 max_linkrate;
-> +	const struct mtk_dp_data *data;
->  
->  	struct drm_device *drm_dev;
->  	struct drm_bridge bridge;
-> @@ -96,6 +97,12 @@ struct mtk_dp {
->  	struct drm_connector *conn;
->  };
->  
-> +struct mtk_dp_data {
-> +	int bridge_type;
-> +	unsigned int smp_cmd;
-> +	unsigned int cali_data_fmt;
-> +};
-> +
->  static struct regmap_config mtk_dp_regmap_config = {
->  	.reg_bits = 32,
->  	.val_bits = 32,
-> @@ -347,6 +354,14 @@ static bool mtk_dp_plug_state(struct mtk_dp
-> *mtk_dp)
->  	return mtk_dp->train_info.cable_plugged_in;
->  }
->  
-> +static bool mtk_dp_plug_state_avoid_pulse(struct mtk_dp *mtk_dp)
-> +{
-> +	bool ret;
-> +
-> +	return !(readx_poll_timeout(mtk_dp_plug_state, mtk_dp, ret,
-> ret,
-> +				    4000, 7 * 4000));
-> +}
+arch/arm64/net/bpf_jit_comp.c:1684:16:
+	warning: incorrect type in assignment (different base types)
+arch/arm64/net/bpf_jit_comp.c:1684:16:
+	expected unsigned int [usertype] *branch
+arch/arm64/net/bpf_jit_comp.c:1684:16:
+	got restricted __le32 [usertype] *
+arch/arm64/net/bpf_jit_comp.c:1700:52:
+	error: subtraction of different types can't work (different base
+	types)
+arch/arm64/net/bpf_jit_comp.c:1734:29:
+	warning: incorrect type in assignment (different base types)
+arch/arm64/net/bpf_jit_comp.c:1734:29:
+	expected unsigned int [usertype] *
+arch/arm64/net/bpf_jit_comp.c:1734:29:
+	got restricted __le32 [usertype] *
+arch/arm64/net/bpf_jit_comp.c:1918:52:
+	error: subtraction of different types can't work (different base
+	types)
 
-Separate this to an independent patch which avoid pulse.
+This is because the variable branch in function invoke_bpf_prog and the
+variable branches in function prepare_trampoline are defined as type
+u32 *, which conflicts with ctx->image's type __le32 *, so sparse complains
+when assignment or arithmetic operation are performed on these two
+variables and ctx->image.
 
-> +
->  static void mtk_dp_aux_irq_clear(struct mtk_dp *mtk_dp)
->  {
->  	mtk_dp_write(mtk_dp, MTK_DP_AUX_P0_3640,
-> @@ -784,35 +799,73 @@ static void mtk_dp_get_calibration_data(struct
-> mtk_dp *mtk_dp)
->  		return;
->  	}
->  
-> -	cal_data->glb_bias_trim =
-> -		check_cal_data_valid(mtk_dp, 1, 0x1e,
-> -				     (buf[3] >> 27) & 0x1f, 0xf);
-> -	cal_data->clktx_impse =
-> -		check_cal_data_valid(mtk_dp, 1, 0xe,
-> -				     (buf[0] >> 9) & 0xf, 0x8);
-> -	cal_data->ln_tx_impsel_pmos[0] =
-> -		check_cal_data_valid(mtk_dp, 1, 0xe,
-> -				     (buf[2] >> 28) & 0xf, 0x8);
-> -	cal_data->ln_tx_impsel_nmos[0] =
-> -		check_cal_data_valid(mtk_dp, 1, 0xe,
-> -				     (buf[2] >> 24) & 0xf, 0x8);
-> -	cal_data->ln_tx_impsel_pmos[1] =
-> -		check_cal_data_valid(mtk_dp, 1, 0xe,
-> -				     (buf[2] >> 20) & 0xf, 0x8);
-> -	cal_data->ln_tx_impsel_nmos[1] =
-> -		check_cal_data_valid(mtk_dp, 1, 0xe,
-> -				     (buf[2] >> 16) & 0xf, 0x8);
-> -	cal_data->ln_tx_impsel_pmos[2] =
-> -		check_cal_data_valid(mtk_dp, 1, 0xe,
-> -				     (buf[2] >> 12) & 0xf, 0x8);
-> -	cal_data->ln_tx_impsel_nmos[2] =
-> -		check_cal_data_valid(mtk_dp, 1, 0xe,
-> -				     (buf[2] >> 8) & 0xf, 0x8);
-> -	cal_data->ln_tx_impsel_pmos[3] =
-> -		check_cal_data_valid(mtk_dp, 1, 0xe,
-> -				     (buf[2] >> 4) & 0xf, 0x8);
-> -	cal_data->ln_tx_impsel_nmos[3] =
-> -		check_cal_data_valid(mtk_dp, 1, 0xe, buf[2] & 0xf,
-> 0x8);
-> +	/*
-> +	 * To save the efuse bits, we place the calibration data for DP
-> and eDP
-> +	 * using method which could save the efuse bits. For this, the
-> efuse
-> +	 * orders of DP and eDP are different.
-> +	 */
-> +
-> +	if (mtk_dp->data->cali_data_fmt ==
-> MTK_DP_CALI_DATA_FMT_MT8195_EDP) {
+Since arm64 instructions are always little-endian, change the type of
+these two variables to __le32 * and call cpu_to_le32 to convert
+instruction to little-endian before writing it to memory.
 
-Separate this to an independent patch which support different
-cali_data_fmt.
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: efc9909fdce0 ("bpf, arm64: Add bpf trampoline for arm64")
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-> +		cal_data->glb_bias_trim =
-> +			check_cal_data_valid(mtk_dp, 1, 0x1e,
-> +					     (buf[3] >> 27) & 0x1f,
-> 0xf);
-> +		cal_data->clktx_impse =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[0] >> 9) & 0xf, 0x8);
-> +		cal_data->ln_tx_impsel_pmos[0] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[2] >> 28) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_nmos[0] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[2] >> 24) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_pmos[1] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[2] >> 20) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_nmos[1] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[2] >> 16) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_pmos[2] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[2] >> 12) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_nmos[2] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[2] >> 8) & 0xf, 0x8);
-> +		cal_data->ln_tx_impsel_pmos[3] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[2] >> 4) & 0xf, 0x8);
-> +		cal_data->ln_tx_impsel_nmos[3] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe, buf[2] &
-> 0xf, 0x8);
-> +	} else {
-> +		cal_data->glb_bias_trim =
-> +			check_cal_data_valid(mtk_dp, 1, 0x1e,
-> +					     (buf[0] >> 27) & 0x1f,
-> 0xf);
-> +		cal_data->clktx_impse =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[0] >> 13) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_pmos[0] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[1] >> 28) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_nmos[0] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[1] >> 24) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_pmos[1] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[1] >> 20) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_nmos[1] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[1] >> 16) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_pmos[2] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[1] >> 12) & 0xf,
-> 0x8);
-> +		cal_data->ln_tx_impsel_nmos[2] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[1] >> 8) & 0xf, 0x8);
-> +		cal_data->ln_tx_impsel_pmos[3] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe,
-> +					     (buf[1] >> 4) & 0xf, 0x8);
-> +		cal_data->ln_tx_impsel_nmos[3] =
-> +			check_cal_data_valid(mtk_dp, 1, 0xe, buf[1] &
-> 0xf, 0x8);
-> +	}
->  
->  	kfree(buf);
->  }
-> @@ -932,7 +985,7 @@ static void mtk_dp_video_mute(struct mtk_dp
-> *mtk_dp, bool enable)
->  			   VIDEO_MUTE_SEL_DP_ENC0_P0_MASK |
->  			   VIDEO_MUTE_SW_DP_ENC0_P0_MASK);
->  
-> -	mtk_dp_sip_atf_call(mtk_dp, MTK_DP_SIP_ATF_EDP_VIDEO_UNMUTE,
-> enable);
-> +	mtk_dp_sip_atf_call(mtk_dp, mtk_dp->data->smp_cmd, enable);
-
-Separate this to an independent patch which support different smp_cmd.
-
->  }
->  
->  static void mtk_dp_power_enable(struct mtk_dp *mtk_dp)
-> @@ -1232,6 +1285,9 @@ static int mtk_dp_parse_capabilities(struct
-> mtk_dp *mtk_dp)
->  	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER,
-> DP_SET_POWER_D0);
->  	usleep_range(2000, 5000);
->  
-> +	if (!mtk_dp_plug_state(mtk_dp))
-> +		return -ENODEV;
-> +
->  	drm_dp_read_dpcd_caps(&mtk_dp->aux, mtk_dp->rx_cap);
->  
->  	train_info->link_rate = min_t(int, mtk_dp->max_linkrate,
-> @@ -1283,6 +1339,9 @@ static int mtk_dp_train_start(struct mtk_dp
-> *mtk_dp)
->  	u8 train_limit;
->  	u8 max_link_rate;
->  
-> +	if (!mtk_dp_plug_state_avoid_pulse(mtk_dp))
-> +		return -ENODEV;
-> +
->  	link_rate = mtk_dp->rx_cap[1];
->  	lane_count = mtk_dp->rx_cap[2] & 0x1F;
->  
-> @@ -1457,9 +1516,20 @@ static irqreturn_t mtk_dp_hpd_event(int hpd,
-> void *dev)
->  	else
->  		train_info->cable_plugged_in = false;
->  
-> -	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
-> -			   DP_PWR_STATE_BANDGAP_TPLL_LANE,
-> -			   DP_PWR_STATE_MASK);
-> +	if (!train_info->cable_plugged_in) {
-> +		mtk_dp_video_mute(mtk_dp, true);
-> +
-> +		mtk_dp_initialize_priv_data(mtk_dp);
-> +		mtk_dp_set_idle_pattern(mtk_dp, true);
-> +
-> +		mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
-> +				   DP_PWR_STATE_BANDGAP_TPLL,
-> +				   DP_PWR_STATE_MASK);
-> +	} else {
-> +		mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
-> +				   DP_PWR_STATE_BANDGAP_TPLL_LANE,
-> +				   DP_PWR_STATE_MASK);
-> +	}
-
-Separate this to an independent patch.
-
->  
->  	return IRQ_HANDLED;
->  }
-> @@ -1503,6 +1573,21 @@ static int mtk_dp_dt_parse(struct mtk_dp
-> *mtk_dp,
->  	return 0;
->  }
->  
-> +static enum drm_connector_status mtk_dp_bdg_detect(struct drm_bridge
-> *bridge)
-> +{
-> +	struct mtk_dp *mtk_dp = mtk_dp_from_bridge(bridge);
-> +	enum drm_connector_status ret = connector_status_disconnected;
-> +	u8 sink_count = 0;
-> +
-> +	if (mtk_dp_plug_state_avoid_pulse(mtk_dp)) {
-> +		drm_dp_dpcd_readb(&mtk_dp->aux, DP_SINK_COUNT,
-> &sink_count);
-> +		if (DP_GET_SINK_COUNT(sink_count))
-> +			ret = connector_status_connected;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  static struct edid *mtk_dp_get_edid(struct drm_bridge *bridge,
->  				    struct drm_connector *connector)
->  {
-> @@ -1857,6 +1942,7 @@ static const struct drm_bridge_funcs
-> mtk_dp_bridge_funcs = {
->  	.atomic_disable = mtk_dp_bridge_atomic_disable,
->  	.mode_valid = mtk_dp_bridge_mode_valid,
->  	.get_edid = mtk_dp_get_edid,
-> +	.detect = mtk_dp_bdg_detect,
->  };
->  
->  static int mtk_dp_probe(struct platform_device *pdev)
-> @@ -1871,6 +1957,7 @@ static int mtk_dp_probe(struct platform_device
-> *pdev)
->  		return -ENOMEM;
->  
->  	mtk_dp->dev = dev;
-> +	mtk_dp->data = (struct mtk_dp_data
-> *)of_device_get_match_data(dev);
->  
->  	irq_num = platform_get_irq(pdev, 0);
->  	if (irq_num < 0)
-> @@ -1878,9 +1965,15 @@ static int mtk_dp_probe(struct platform_device
-> *pdev)
->  				     "failed to request dp irq
-> resource\n");
->  
->  	mtk_dp->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 
-> 1, 0);
-> -	if (IS_ERR(mtk_dp->next_bridge))
-> +	if (IS_ERR(mtk_dp->next_bridge) &&
-> +	    PTR_ERR(mtk_dp->next_bridge) == -ENODEV) {
-> +		dev_info(dev,
-> +			 "No panel connected in devicetree, continue as
-> external DP\n");
-> +		mtk_dp->next_bridge = NULL;
-
-Separate this to an independent patch.
-
-> +	} else if (IS_ERR(mtk_dp->next_bridge)) {
->  		return dev_err_probe(dev, PTR_ERR(mtk_dp->next_bridge),
->  				     "Failed to get bridge\n");
-> +	}
->  
->  	ret = mtk_dp_dt_parse(mtk_dp, pdev);
->  	if (ret)
-> @@ -1923,7 +2016,7 @@ static int mtk_dp_probe(struct platform_device
-> *pdev)
->  
->  	mtk_dp->bridge.ops =
->  		DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
-> DRM_BRIDGE_OP_HPD;
-> -	mtk_dp->bridge.type = DRM_MODE_CONNECTOR_eDP;
-> +	mtk_dp->bridge.type = mtk_dp->data->bridge_type;
-
-Separate this to an independent patch which add bridge_type to support
-multiple bridge type.
-
->  
->  	drm_bridge_add(&mtk_dp->bridge);
->  
-> @@ -1950,6 +2043,12 @@ static int mtk_dp_suspend(struct device *dev)
->  {
->  	struct mtk_dp *mtk_dp = dev_get_drvdata(dev);
->  
-> +	if (mtk_dp_plug_state(mtk_dp)) {
-> +		drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER,
-> DP_SET_POWER_D3);
-> +		/* Ensure the sink is off before shutting down power */
-> +		usleep_range(2000, 3000);
-> +	}
-
-Separate this to an independent patch which ensure the sink is off
-before shutting down power.
-
-> +
->  	mtk_dp_power_disable(mtk_dp);
->  
->  	mtk_dp_hwirq_enable(mtk_dp, false);
-> @@ -1981,8 +2080,27 @@ static int mtk_dp_resume(struct device *dev)
->  
->  static SIMPLE_DEV_PM_OPS(mtk_dp_pm_ops, mtk_dp_suspend,
-> mtk_dp_resume);
->  
-> +static const struct mtk_dp_data mt8195_edp_data = {
-> +	.bridge_type = DRM_MODE_CONNECTOR_eDP,
-> +	.smp_cmd = MTK_DP_SIP_ATF_EDP_VIDEO_UNMUTE,
-> +	.cali_data_fmt = MTK_DP_CALI_DATA_FMT_MT8195_EDP,
-> +};
-> +
-> +static const struct mtk_dp_data mt8195_dp_data = {
-> +	.bridge_type = DRM_MODE_CONNECTOR_DisplayPort,
-> +	.smp_cmd = MTK_DP_SIP_ATF_VIDEO_UNMUTE,
-> +	.cali_data_fmt = MTK_DP_CALI_DATA_FMT_MT8195_DP,
-> +};
-> +
->  static const struct of_device_id mtk_dp_of_match[] = {
-> -	{ .compatible = "mediatek,mt8195-edp-tx" },
-> +	{
-> +		.compatible = "mediatek,mt8195-edp-tx",
-> +		.data = &mt8195_edp_data,
-> +	},
-> +	{
-> +		.compatible = "mediatek,mt8195-dp-tx",
-> +		.data = &mt8195_dp_data,
-> +	},
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, mtk_dp_of_match);
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> b/drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> index 3676d71bd816..c12742adaa3c 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> @@ -14,6 +14,10 @@
->  #define SEC_OFFSET	0x4000
->  
->  #define MTK_DP_SIP_ATF_EDP_VIDEO_UNMUTE	(BIT(0) | BIT(5))
-> +#define MTK_DP_SIP_ATF_VIDEO_UNMUTE	BIT(5)
-> +
-> +#define MTK_DP_CALI_DATA_FMT_MT8195_EDP	0
-> +#define MTK_DP_CALI_DATA_FMT_MT8195_DP	1
-
-This is not register definition, so move to mtk_dp.c
-
-Regards,
-CK
-
->  
->  #define DP_PHY_GLB_BIAS_GEN_00		0
->  #define RG_XTP_GLB_BIAS_INTR_CTRL	GENMASK(20, 16)
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 7ca8779ae34f..29dc55da2476 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1643,7 +1643,7 @@ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+ 			    int args_off, int retval_off, int run_ctx_off,
+ 			    bool save_ret)
+ {
+-	u32 *branch;
++	__le32 *branch;
+ 	u64 enter_prog;
+ 	u64 exit_prog;
+ 	struct bpf_prog *p = l->link.prog;
+@@ -1698,7 +1698,7 @@ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+ 
+ 	if (ctx->image) {
+ 		int offset = &ctx->image[ctx->idx] - branch;
+-		*branch = A64_CBZ(1, A64_R(0), offset);
++		*branch = cpu_to_le32(A64_CBZ(1, A64_R(0), offset));
+ 	}
+ 
+ 	/* arg1: prog */
+@@ -1713,7 +1713,7 @@ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+ 
+ static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+ 			       int args_off, int retval_off, int run_ctx_off,
+-			       u32 **branches)
++			       __le32 **branches)
+ {
+ 	int i;
+ 
+@@ -1784,7 +1784,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+ 	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+ 	bool save_ret;
+-	u32 **branches = NULL;
++	__le32 **branches = NULL;
+ 
+ 	/* trampoline stack layout:
+ 	 *                  [ parent ip         ]
+@@ -1892,7 +1892,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 				flags & BPF_TRAMP_F_RET_FENTRY_RET);
+ 
+ 	if (fmod_ret->nr_links) {
+-		branches = kcalloc(fmod_ret->nr_links, sizeof(u32 *),
++		branches = kcalloc(fmod_ret->nr_links, sizeof(__le32 *),
+ 				   GFP_KERNEL);
+ 		if (!branches)
+ 			return -ENOMEM;
+@@ -1916,7 +1916,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	/* update the branches saved in invoke_bpf_mod_ret with cbnz */
+ 	for (i = 0; i < fmod_ret->nr_links && ctx->image != NULL; i++) {
+ 		int offset = &ctx->image[ctx->idx] - branches[i];
+-		*branches[i] = A64_CBNZ(1, A64_R(10), offset);
++		*branches[i] = cpu_to_le32(A64_CBNZ(1, A64_R(10), offset));
+ 	}
+ 
+ 	for (i = 0; i < fexit->nr_links; i++)
+-- 
+2.30.2
 

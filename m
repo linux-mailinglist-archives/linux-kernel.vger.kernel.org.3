@@ -2,62 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C4758C2C9
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 07:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890F858C2D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 07:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233775AbiHHFYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 01:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
+        id S235098AbiHHF2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 01:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiHHFYH (ORCPT
+        with ESMTP id S234969AbiHHF16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 01:24:07 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3065AE67
-        for <linux-kernel@vger.kernel.org>; Sun,  7 Aug 2022 22:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659936245; x=1691472245;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=A8AMhdzyFGyzF5sZZ4XtrkVx5HlQTxNClfG8v5ChcdM=;
-  b=jd3Uc8l2vqpdGQQtzW5sIlLY32T6i95ngl9BD3jOvrwFdBK3W+y/eZjK
-   RkgsCxI4vtfjeUntTvhQBSj7Mt+TbtiQnEyd/TB8KzUCzf9BLv2MhEUbP
-   1urXz+GzX6SZ+vjQL93Cu6fcv4lfyACV4sy0Tm6moKoi+fNUaI+0a88zj
-   foZqTZlYlf0J5khhd6PYvXv/KVOIZITd3g1AGXh9WlyGqg+dVWHdmPY0L
-   2qTLy2ikV0ih/Vr9p4LE9FXwCJe6Xi+2wNyi8QHztBvq5qNAvjF6gtA9C
-   RxwJ+8Q1PiHRp6ITmlF+/dPQCFXQ7pdZxinruPQrjHfJ/iRCeUFSDdvqV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="277436011"
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="277436011"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 22:24:03 -0700
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="931896888"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 22:24:00 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Konstantin Khlebnikov <khlebnikov@openvz.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v2] mm/smaps: Don't access young/dirty bit if pte unpresent
-References: <20220805160003.58929-1-peterx@redhat.com>
-Date:   Mon, 08 Aug 2022 13:23:46 +0800
-In-Reply-To: <20220805160003.58929-1-peterx@redhat.com> (Peter Xu's message of
-        "Fri, 5 Aug 2022 12:00:03 -0400")
-Message-ID: <87wnbjgvfh.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 8 Aug 2022 01:27:58 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2067.outbound.protection.outlook.com [40.107.92.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80109EE39;
+        Sun,  7 Aug 2022 22:27:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U+YCiIGHtPRwJwrN6ngTT4MvGrtziCtl80eB+gw+m4+VcPtMneaWRsebSkMp0809ET3CGcIv0r9Iia/PGdo4MFD4bgNMfHIOtULHvAoQ/AQD5qHQk2tsDAltnNzBRlnNhyHMDCcDsyzyvcv00Ef2EnE/0qO59DZDtoE9+8RbZ8VIOjJrs1iI3R37cKCJKXj0kdKDyPg8NRMWKcjLNmpdym38EdT5/RyqD2cSkCTMMEWMEN1Jqd4tWm5eVuupy2LZCRCLxT9LlSgrqhdkAvQNV4kCyyDbKCmj2xpxqlfg9V2Eq/Po+Ck3JFPO/LZ4a9zx9mb0nNBmFSMSOn9hhn0h3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vecqqKtJTuJrIxOYGwWPuDyc4axCHzdCS6gyTQOEWqg=;
+ b=Hu5wiVl+YfETdG/5ahCEaJ2fityXiJSD5Icne5uiOU/Hq86f0dkIDUSeW+ofw76Y8bVxDqbEj2HYE9/np0Q0w/kSdQF45zjV2x22ZauJLQhSKF+0ohdMVQnaQG77HcbqSDic718pxqYHBwfoDOfLe1J/gO6SX55hvqQQV6dtF8qXiRvhIV5sexsmdEPt2Anj7K1h2AU0ccW4FWZg66WnEvAbAGcQNCuncGn85/h/BKdVv44U7KkA/q1zau/OE3Xzu2MTILymufw+t+rzlCetgNzIEV4ZGO6O2CMz5SaWPSha7k/bdbOA6Vb5srJaTW4FZV+Mq39oXLbhnooQlx0rbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=renesas.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vecqqKtJTuJrIxOYGwWPuDyc4axCHzdCS6gyTQOEWqg=;
+ b=LOkzQbhfy13B+mStQG5SQmJDMWaoV4sWW14z+4LioFBdcWJtsQC+fzVzaa6vy8VZvVlSR98MYSfDqcdWUSfa7cXTo23y+nZu7QK2p1qXjXY68iTlQO1PfWiVvOUGygqnQVg1JF04ePlPWwHsejcqPe85spLrtY2AajN22EdD4rxJ4ez1bRGJCdqRIzVmKkzVWj5k7UymeuasNWzRPEDfNs8wXJNRkUjB3XbZ1gRGCEvUkb0IUF9rC8avM6qotyYB9YpeNs+3l4nH2LW87J/Nat6/fH1aYCsOfDo6YJ/X0i7K+oWuL+WdBwJR+vVIR8uGw6wyNjqAK4jqewgB7jIsqg==
+Received: from DM6PR06CA0019.namprd06.prod.outlook.com (2603:10b6:5:120::32)
+ by BL0PR12MB4883.namprd12.prod.outlook.com (2603:10b6:208:1c6::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.12; Mon, 8 Aug
+ 2022 05:27:43 +0000
+Received: from DM6NAM11FT057.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:120:cafe::73) by DM6PR06CA0019.outlook.office365.com
+ (2603:10b6:5:120::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.15 via Frontend
+ Transport; Mon, 8 Aug 2022 05:27:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.234) by
+ DM6NAM11FT057.mail.protection.outlook.com (10.13.172.252) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5504.14 via Frontend Transport; Mon, 8 Aug 2022 05:27:43 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 8 Aug
+ 2022 05:27:42 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Sun, 7 Aug 2022
+ 22:27:41 -0700
+Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.9)
+ with Microsoft SMTP Server id 15.2.986.26 via Frontend Transport; Sun, 7 Aug
+ 2022 22:27:38 -0700
+From:   Sameer Pujar <spujar@nvidia.com>
+To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <kuninori.morimoto.gx@renesas.com>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Sameer Pujar <spujar@nvidia.com>
+Subject: [PATCH v3 0/3] DT binding for sample format conversion
+Date:   Mon, 8 Aug 2022 10:57:29 +0530
+Message-ID: <1659936452-2254-1-git-send-email-spujar@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 531895a8-f1e3-4fd2-7cfa-08da78feb833
+X-MS-TrafficTypeDiagnostic: BL0PR12MB4883:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nhLLpfrTRlL/6jcL3BiyymA3ih3hx1LA0omJa5rKU70B2oNbIPitgY9Re+jY3juC7i5j01lcp7fbbfhpeSfZtAG22iPguIPOwbDOmctoW3tFTZ0BZi3c/JZlacBomSNsel8qHpazH7qGtF5G2SW2laZpArpayBB1sQg9iXX8wMTfpBabXFls7/+soucsyzL2l9ouNWvjoodL1ao/1xWH3iTVlkCMQ265SJPHsOs36FCySDM4fPR7VeTRZL3yGocSuYg6X9LKnh9wTFnDCfSC5vBnOoS1ANi+B//RRfQM6k9r0nm9isJPMEa/UVa70z03RIRzJ907SatISLmPWU5q3FEU7xBsgJJXUH305EkT8XUdjT7UJDkWqGe9IcFUn+PBDk0HMRNu/naSfTT8v6KIk1ObTjoetILtL4DV8IIci3zb6+U+7qJzVHCbWMk61etIZNj3mo7Xe56V6tpuLKHWpmP1NazBIcmMa06KgHZpy5+WtTGNb145hwXvARlFgw7banTxglX/5ISti/PUP2IAZ73p3zi70OVuSWBC+5RIHKRv6UKtMppksIKLOURT8sZc1NlTXIm+OnsxR7y4YeyW1lxEud7NEM4fW+DrO1M75wqEbysYYHgFRLhrQepawG0It92tu45/7s68TTHIRTkuEYYPvqPFx3c+OnSSdVGNd0SrrrNy8rBnajdhuOKeK6k4VvSbSSsvsCwWoXd6pvAEZd069S1/7WrOGgx5sdSV1yehfv4nXq4bsHpZ8be8ge0jW/txgbdL43WNX6wfpyepVnaBNhAAjMufWaUB5hKlGTduxZBqfi+WYMJBlMQ9Vrtk7Z1AZuIQin4d1iHejwCApQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(39860400002)(346002)(376002)(46966006)(36840700001)(40470700004)(70206006)(40480700001)(54906003)(40460700003)(316002)(70586007)(82740400003)(110136005)(7416002)(36756003)(81166007)(5660300002)(2616005)(8676002)(8936002)(107886003)(4326008)(356005)(47076005)(478600001)(426003)(86362001)(36860700001)(336012)(83380400001)(7696005)(186003)(2906002)(82310400005)(26005)(6666004)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2022 05:27:43.2504
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 531895a8-f1e3-4fd2-7cfa-08da78feb833
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT057.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4883
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,87 +102,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Xu <peterx@redhat.com> writes:
+DT binding properties are available to fixup rate and channel
+parameters of a DAI. This series extends this to sample format
+conversion as well. With this now DAI PCM parameters (channels,
+sample rate and sample format) can be fixed up as necessary in
+an audio path.
 
-> These bits should only be valid when the ptes are present.  Introducing two
-> booleans for it and set it to false when !pte_present() for both pte and
-> pmd accountings.
->
-> The bug is found during code reading and no real world issue reported, but
-> logically such an error can cause incorrect readings for either smaps or
-> smaps_rollup output on quite a few fields.
->
-> For example, it could cause over-estimate on values like Shared_Dirty,
-> Private_Dirty, Referenced.  Or it could also cause under-estimate on values
-> like LazyFree, Shared_Clean, Private_Clean.
->
-> Cc: Konstantin Khlebnikov <khlebnikov@openvz.org>
-> Cc: Huang Ying <ying.huang@intel.com>
-> Fixes: b1d4d9e0cbd0 ("proc/smaps: carefully handle migration entries")
-> Fixes: c94b6923fa0a ("/proc/PID/smaps: Add PMD migration entry parsing")
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> Reviewed-by: Yang Shi <shy828301@gmail.com>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+Changelog:
+==========
+  v2->v3:
+  -------
+    * Fix DT binding errors in simple-card.yaml
+    * Drop simple-card binding changes from the series since
+      there is no usage requirement. It can be extended later
+      when necessary.
+    * Use definitions instead of properties in the common schema
+      and re-use this in audio-graph related bindings.
 
-LGTM, Thanks!
+  v1->v2:
+  -------
+    * Move DAI params properties to a new schema and re-use this
+      for simple-card and audio-graph-card.
+    * Use string type for DAI format binding as suggested by
+      Krzysztof.
 
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 
-> ---
->  fs/proc/task_mmu.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 9913f3be9fd2..d56c65f98d00 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -527,10 +527,12 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
->  	struct vm_area_struct *vma = walk->vma;
->  	bool locked = !!(vma->vm_flags & VM_LOCKED);
->  	struct page *page = NULL;
-> -	bool migration = false;
-> +	bool migration = false, young = false, dirty = false;
->  
->  	if (pte_present(*pte)) {
->  		page = vm_normal_page(vma, addr, *pte);
-> +		young = pte_young(*pte);
-> +		dirty = pte_dirty(*pte);
->  	} else if (is_swap_pte(*pte)) {
->  		swp_entry_t swpent = pte_to_swp_entry(*pte);
->  
-> @@ -560,8 +562,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
->  	if (!page)
->  		return;
->  
-> -	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte),
-> -		      locked, migration);
-> +	smaps_account(mss, page, false, young, dirty, locked, migration);
->  }
->  
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> @@ -572,11 +573,13 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
->  	struct vm_area_struct *vma = walk->vma;
->  	bool locked = !!(vma->vm_flags & VM_LOCKED);
->  	struct page *page = NULL;
-> -	bool migration = false;
-> +	bool migration = false, young = false, dirty = false;
->  
->  	if (pmd_present(*pmd)) {
->  		/* FOLL_DUMP will return -EFAULT on huge zero page */
->  		page = follow_trans_huge_pmd(vma, addr, pmd, FOLL_DUMP);
-> +		young = pmd_young(*pmd);
-> +		dirty = pmd_dirty(*pmd);
->  	} else if (unlikely(thp_migration_supported() && is_swap_pmd(*pmd))) {
->  		swp_entry_t entry = pmd_to_swp_entry(*pmd);
->  
-> @@ -596,8 +599,7 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
->  	else
->  		mss->file_thp += HPAGE_PMD_SIZE;
->  
-> -	smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd),
-> -		      locked, migration);
-> +	smaps_account(mss, page, true, young, dirty, locked, migration);
->  }
->  #else
->  static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+Sameer Pujar (3):
+  ASoC: dt-bindings: Definitions for DAI params
+  ASoC: dt-bindings: Add sample format conversion
+  ASoC: simple-card-utils: Fixup DAI sample format
+
+ .../bindings/sound/audio-graph-port.yaml           | 17 ++++-----
+ .../devicetree/bindings/sound/audio-graph.yaml     |  9 ++---
+ .../devicetree/bindings/sound/dai-params.yaml      | 40 ++++++++++++++++++++++
+ include/sound/simple_card_utils.h                  |  1 +
+ sound/soc/generic/simple-card-utils.c              | 34 ++++++++++++++++++
+ 5 files changed, 89 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/dai-params.yaml
+
+-- 
+2.7.4
+

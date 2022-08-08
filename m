@@ -2,313 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF25858C233
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 05:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CF258C22C
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 05:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbiHHDvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 7 Aug 2022 23:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
+        id S236042AbiHHDr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 7 Aug 2022 23:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235277AbiHHDvU (ORCPT
+        with ESMTP id S234847AbiHHDrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 7 Aug 2022 23:51:20 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4996473;
-        Sun,  7 Aug 2022 20:51:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659930679; x=1691466679;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JvFoOsrKG4TH442GCX9qpNph6AZxckOT3phGGk6AHDY=;
-  b=NybsLSAq0i7My3oxKkAM5lkrqNrLWK2VwnjwIGWr/v8GZjYTecPaxDeH
-   3V/SCzDEjXIiQeOjimawJeHchQmnvVzejeuIGbRZp0yYWhCvBKmy77cEN
-   mJ7qMu0kMJM+lng44kleDHUe2g/FNtV1wfHVrlmA/HAhA1hp3C4YQuHXs
-   RBbJRIuLmrGHJ9DK3OfTpEYtHNHolij3RKQTcmlyGqt+PIq3U1iRN3yK4
-   MBisnjQWL4zEwU2DSQFBCGmDPrCgae5ey5IZE+/UWc8hlkgGhEPZiOdZQ
-   hoDyJhTBzIlILHqEhf+9eVSsw6r+Z3XsZzE0ZXuVE8V3pq9IiNA6hzCob
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10432"; a="270269598"
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="270269598"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2022 20:51:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,221,1654585200"; 
-   d="scan'208";a="632714196"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga008.jf.intel.com with ESMTP; 07 Aug 2022 20:51:15 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     iommu@lists.linux.dev
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Wen Jin <wen.jin@intel.com>, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>, stable@vger.kernel.org
-Subject: [PATCH 1/1] iommu/vt-d: Fix kdump kernels boot failure with scalable mode
-Date:   Mon,  8 Aug 2022 11:46:12 +0800
-Message-Id: <20220808034612.1691470-1-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 7 Aug 2022 23:47:24 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9632101C4;
+        Sun,  7 Aug 2022 20:47:23 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id u133so7059423pfc.10;
+        Sun, 07 Aug 2022 20:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=bKYnCu9pm/upzkFb2rqM0O6IeVnkl0xkaP6BrnNiWiw=;
+        b=YBJPrJESmEquNKfQZ/vBt+maelA+mPuN6dwEDskoVT3pmUQm9rt82jf9slr69uh/bW
+         yd8ybu1hVs9Q2EzvXD7x5TETl+3O+YP0ggKWgUfR007GhGwChqaOS2xGH4fI+yqJiW8I
+         I1QdHnAag4OwtDWP8oLSvwF7qvVE4CW7WdutJk8Z5D73s9+GpJw2LbCNm0F+4mRvsZ0I
+         xhWfA1W22N5cjAN7cVCsh+j8AO4fHnx+rPFhsMkibo4bAuPe+jjS6tjWJ3UkNEyhbA5L
+         dPiLu4ZpqPjLcOx63NJLYqFLgHyqE78U8XnsG/+kSz2lSr3NB6WLa9h7ldyhI0hyvC+0
+         Y3mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=bKYnCu9pm/upzkFb2rqM0O6IeVnkl0xkaP6BrnNiWiw=;
+        b=eMQvmjBYSttGSSKVW8Eo0ogD2+gD5ruODECEBdZ7DAyavwC4AymP4RH6pXmiBZzdCM
+         Nhb2lTFTH0DmE+T82FOPAHmQui7zbuNmB5X+qHOirYUAS0BAQy0qlQEJ7N/8T+jEm9BT
+         mT6mnTsvJMaZ+IgvjJbEEVtgVe2toYweX6iIFRk9+ToCgdbEcqTlqG7q5rJETKUkegwo
+         zoivuZCiO8PJNH3eXSWZU7xb3gNx7hIZDzl3GGvKbWKcq7xV3444nNyhFls3+UibLSJn
+         MO4R94p91nMo3/NRmUyHILN6W6SJFM72m8jrCxeRXKVuPnmrGgOo0NtGu35cWvbDPCAF
+         Vy6A==
+X-Gm-Message-State: ACgBeo11c7WHaE0/SJBaAYJo9VNJ9BSVGToR+M43Pw0HFiFPByfmyqt0
+        rDnX7SXsYUAXAJcgHG0e2a8=
+X-Google-Smtp-Source: AA6agR4ayOy784e0JdQQhr8OF5/PdVjLyE3beMJquor85LqMNJiE/j4nMyUQ7HIlGH8+sPBGBFsaUQ==
+X-Received: by 2002:a63:5148:0:b0:41d:6628:80a3 with SMTP id r8-20020a635148000000b0041d662880a3mr3957991pgl.359.1659930443309;
+        Sun, 07 Aug 2022 20:47:23 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-85.three.co.id. [180.214.232.85])
+        by smtp.gmail.com with ESMTPSA id d8-20020aa797a8000000b00528c8ed356dsm7565212pfq.96.2022.08.07.20.47.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Aug 2022 20:47:22 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 056671039EA; Mon,  8 Aug 2022 10:47:18 +0700 (WIB)
+Date:   Mon, 8 Aug 2022 10:47:18 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>
+Subject: Re: [PATCH v8 000/103] KVM TDX basic feature support
+Message-ID: <YvCHRuq8B69UMSuq@debian.me>
+References: <cover.1659854790.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha384;
+        protocol="application/pgp-signature"; boundary="mo0AN5RiRVHwqA1Y"
+Content-Disposition: inline
+In-Reply-To: <cover.1659854790.git.isaku.yamahata@intel.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The translation table copying code for kdump kernels is currently based
-on the extended root/context entry formats of ECS mode defined in older
-VT-d v2.5, and doesn't handle the scalable mode formats. This causes
-the kexec capture kernel boot failure with DMAR faults if the IOMMU was
-enabled in scalable mode by the previous kernel.
 
-The ECS mode has already been deprecated by the VT-d spec since v3.0 and
-Intel IOMMU driver doesn't support this mode as there's no real hardware
-implementation. Hence this converts ECS checking in copying table code
-into scalable mode.
+--mo0AN5RiRVHwqA1Y
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The existing copying code consumes a bit in the context entry as a mark
-of copied entry. This marker needs to work for the old format as well as
-for extended context entries. It's hard to find such a bit for both
-legacy and scalable mode context entries. This replaces it with a per-
-IOMMU bitmap.
+On Sun, Aug 07, 2022 at 03:00:45PM -0700, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>=20
+> KVM TDX basic feature support
+>=20
+> Hello.  This is v8 the patch series vof KVM TDX support.
+> This is based on v5.19-rc8 + kvm/queue branch + TDX HOST patch series.
+> The tree can be found at https://github.com/intel/tdx/tree/kvm-upstream
+> How to run/test: It's describe at https://github.com/intel/tdx/wiki/TDX-K=
+VM
+>=20
+> Major changes from v7:
+> - Use xarray to track whether GFN is private or shared. Drop SPTE_SHARED_=
+MASK.
+>   The complex state machine with SPTE_SHARED_MASK was ditched.
+> - Large page support is implemented. But will be posted as independent RF=
+C patch.
+> - fd-based private page v7 is integrated. This is mostly same to Chao's p=
+atches.
+>   It's in github.
+>=20
+> Thanks,
+> Isaku Yamahata
+>=20
 
-Fixes: 7373a8cc38197 ("iommu/vt-d: Setup context and enable RID2PASID support")
-Cc: stable@vger.kernel.org
-Reported-by: Jerry Snitselaar <jsnitsel@redhat.com>
-Tested-by: Wen Jin <wen.jin@intel.com>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- drivers/iommu/intel/iommu.h   | 17 ++++++--
- drivers/iommu/intel/debugfs.c |  3 +-
- drivers/iommu/intel/iommu.c   | 76 +++++++++--------------------------
- 3 files changed, 35 insertions(+), 61 deletions(-)
+Hi, thanks for the series.
 
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index fae45bbb0c7f..e9b851c42575 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -197,7 +197,6 @@
- #define ecap_dis(e)		(((e) >> 27) & 0x1)
- #define ecap_nest(e)		(((e) >> 26) & 0x1)
- #define ecap_mts(e)		(((e) >> 25) & 0x1)
--#define ecap_ecs(e)		(((e) >> 24) & 0x1)
- #define ecap_iotlb_offset(e) 	((((e) >> 8) & 0x3ff) * 16)
- #define ecap_max_iotlb_offset(e) (ecap_iotlb_offset(e) + 16)
- #define ecap_coherent(e)	((e) & 0x1)
-@@ -265,7 +264,6 @@
- #define DMA_GSTS_CFIS (((u32)1) << 23)
- 
- /* DMA_RTADDR_REG */
--#define DMA_RTADDR_RTT (((u64)1) << 11)
- #define DMA_RTADDR_SMT (((u64)1) << 10)
- 
- /* CCMD_REG */
-@@ -579,6 +577,7 @@ struct intel_iommu {
- 
- #ifdef CONFIG_INTEL_IOMMU
- 	unsigned long 	*domain_ids; /* bitmap of domains */
-+	unsigned long	*copied_tables; /* bitmap of copied tables */
- 	spinlock_t	lock; /* protect context, domain ids */
- 	struct root_entry *root_entry; /* virtual address */
- 
-@@ -701,6 +700,19 @@ static inline int nr_pte_to_next_page(struct dma_pte *pte)
- 		(struct dma_pte *)ALIGN((unsigned long)pte, VTD_PAGE_SIZE) - pte;
- }
- 
-+static inline bool context_copied(struct intel_iommu *iommu, u8 bus, u8 devfn)
-+{
-+	if (!iommu->copied_tables)
-+		return false;
-+
-+	return test_bit(((long)bus << 8) | devfn, iommu->copied_tables);
-+}
-+
-+static inline bool context_present(struct context_entry *context)
-+{
-+	return (context->lo & 1);
-+}
-+
- extern struct dmar_drhd_unit * dmar_find_matched_drhd_unit(struct pci_dev *dev);
- 
- extern int dmar_enable_qi(struct intel_iommu *iommu);
-@@ -784,7 +796,6 @@ static inline void intel_iommu_debugfs_init(void) {}
- #endif /* CONFIG_INTEL_IOMMU_DEBUGFS */
- 
- extern const struct attribute_group *intel_iommu_groups[];
--bool context_present(struct context_entry *context);
- struct context_entry *iommu_context_addr(struct intel_iommu *iommu, u8 bus,
- 					 u8 devfn, int alloc);
- 
-diff --git a/drivers/iommu/intel/debugfs.c b/drivers/iommu/intel/debugfs.c
-index 1f925285104e..f4fd249daad9 100644
---- a/drivers/iommu/intel/debugfs.c
-+++ b/drivers/iommu/intel/debugfs.c
-@@ -241,7 +241,8 @@ static void ctx_tbl_walk(struct seq_file *m, struct intel_iommu *iommu, u16 bus)
- 		if (!context)
- 			return;
- 
--		if (!context_present(context))
-+		if (!context_present(context) ||
-+		    context_copied(iommu, bus, devfn))
- 			continue;
- 
- 		tbl_wlk.bus = bus;
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 7cca030a508e..889ad2c9a7b9 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -163,38 +163,6 @@ static phys_addr_t root_entry_uctp(struct root_entry *re)
- 	return re->hi & VTD_PAGE_MASK;
- }
- 
--static inline void context_clear_pasid_enable(struct context_entry *context)
--{
--	context->lo &= ~(1ULL << 11);
--}
--
--static inline bool context_pasid_enabled(struct context_entry *context)
--{
--	return !!(context->lo & (1ULL << 11));
--}
--
--static inline void context_set_copied(struct context_entry *context)
--{
--	context->hi |= (1ull << 3);
--}
--
--static inline bool context_copied(struct context_entry *context)
--{
--	return !!(context->hi & (1ULL << 3));
--}
--
--static inline bool __context_present(struct context_entry *context)
--{
--	return (context->lo & 1);
--}
--
--bool context_present(struct context_entry *context)
--{
--	return context_pasid_enabled(context) ?
--	     __context_present(context) :
--	     __context_present(context) && !context_copied(context);
--}
--
- static inline void context_set_present(struct context_entry *context)
- {
- 	context->lo |= 1;
-@@ -764,7 +732,8 @@ static int device_context_mapped(struct intel_iommu *iommu, u8 bus, u8 devfn)
- 	spin_lock(&iommu->lock);
- 	context = iommu_context_addr(iommu, bus, devfn, 0);
- 	if (context)
--		ret = context_present(context);
-+		ret = context_present(context) &&
-+				!context_copied(iommu, bus, devfn);
- 	spin_unlock(&iommu->lock);
- 	return ret;
- }
-@@ -1688,6 +1657,11 @@ static void free_dmar_iommu(struct intel_iommu *iommu)
- 		iommu->domain_ids = NULL;
- 	}
- 
-+	if (iommu->copied_tables) {
-+		bitmap_free(iommu->copied_tables);
-+		iommu->copied_tables = NULL;
-+	}
-+
- 	/* free context mapping */
- 	free_context_table(iommu);
- 
-@@ -1913,7 +1887,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
- 		goto out_unlock;
- 
- 	ret = 0;
--	if (context_present(context))
-+	if (context_present(context) && !context_copied(iommu, bus, devfn))
- 		goto out_unlock;
- 
- 	/*
-@@ -1925,7 +1899,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
- 	 * in-flight DMA will exist, and we don't need to worry anymore
- 	 * hereafter.
- 	 */
--	if (context_copied(context)) {
-+	if (context_copied(iommu, bus, devfn)) {
- 		u16 did_old = context_domain_id(context);
- 
- 		if (did_old < cap_ndoms(iommu->cap)) {
-@@ -1936,6 +1910,8 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
- 			iommu->flush.flush_iotlb(iommu, did_old, 0, 0,
- 						 DMA_TLB_DSI_FLUSH);
- 		}
-+
-+		clear_bit(((long)bus << 8) | devfn, iommu->copied_tables);
- 	}
- 
- 	context_clear_entry(context);
-@@ -2684,32 +2660,14 @@ static int copy_context_table(struct intel_iommu *iommu,
- 		/* Now copy the context entry */
- 		memcpy(&ce, old_ce + idx, sizeof(ce));
- 
--		if (!__context_present(&ce))
-+		if (!context_present(&ce))
- 			continue;
- 
- 		did = context_domain_id(&ce);
- 		if (did >= 0 && did < cap_ndoms(iommu->cap))
- 			set_bit(did, iommu->domain_ids);
- 
--		/*
--		 * We need a marker for copied context entries. This
--		 * marker needs to work for the old format as well as
--		 * for extended context entries.
--		 *
--		 * Bit 67 of the context entry is used. In the old
--		 * format this bit is available to software, in the
--		 * extended format it is the PGE bit, but PGE is ignored
--		 * by HW if PASIDs are disabled (and thus still
--		 * available).
--		 *
--		 * So disable PASIDs first and then mark the entry
--		 * copied. This means that we don't copy PASID
--		 * translations from the old kernel, but this is fine as
--		 * faults there are not fatal.
--		 */
--		context_clear_pasid_enable(&ce);
--		context_set_copied(&ce);
--
-+		set_bit(((long)bus << 8) | devfn, iommu->copied_tables);
- 		new_ce[idx] = ce;
- 	}
- 
-@@ -2735,8 +2693,8 @@ static int copy_translation_tables(struct intel_iommu *iommu)
- 	bool new_ext, ext;
- 
- 	rtaddr_reg = dmar_readq(iommu->reg + DMAR_RTADDR_REG);
--	ext        = !!(rtaddr_reg & DMA_RTADDR_RTT);
--	new_ext    = !!ecap_ecs(iommu->ecap);
-+	ext        = !!(rtaddr_reg & DMA_RTADDR_SMT);
-+	new_ext    = !!ecap_smts(iommu->ecap);
- 
- 	/*
- 	 * The RTT bit can only be changed when translation is disabled,
-@@ -2747,6 +2705,10 @@ static int copy_translation_tables(struct intel_iommu *iommu)
- 	if (new_ext != ext)
- 		return -EINVAL;
- 
-+	iommu->copied_tables = bitmap_zalloc(BIT_ULL(16), GFP_KERNEL);
-+	if (!iommu->copied_tables)
-+		return -ENOMEM;
-+
- 	old_rt_phys = rtaddr_reg & VTD_PAGE_MASK;
- 	if (!old_rt_phys)
- 		return -EINVAL;
--- 
-2.25.1
+When building htmldocs, I found new warnings:
 
+Documentation/x86/tdx.rst:69: WARNING: Unexpected indentation.
+Documentation/x86/tdx.rst:70: WARNING: Block quote ends without a blank lin=
+e; unexpected unindent.
+Documentation/virt/kvm/tdx-tdp-mmu.rst: WARNING: document isn't included in=
+ any toctree
+
+I have applied the fixup (also with line blocks to code blocks conversion):
+
+diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/inde=
+x.rst
+index cdb8b43ce7970a..ff2db9ab428d3c 100644
+--- a/Documentation/virt/kvm/index.rst
++++ b/Documentation/virt/kvm/index.rst
+@@ -20,3 +20,4 @@ KVM
+    review-checklist
+=20
+    intel-tdx
++   tdx-tdp-mmu
+diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
+index 6c6b09ca6ba407..34f0b9e5ee5678 100644
+--- a/Documentation/x86/tdx.rst
++++ b/Documentation/x86/tdx.rst
+@@ -62,7 +62,7 @@ use it as 'metadata' for the TDX memory.  It also takes a=
+dditional CPU
+ time to initialize those metadata along with the TDX module itself.  Both
+ are not trivial.  Current kernel doesn't choose to always initialize the
+ TDX module during kernel boot, but provides a function tdx_init() to
+-allow the caller to initialize TDX when it truly wants to use TDX:
++allow the caller to initialize TDX when it truly wants to use TDX::
+=20
+         ret =3D tdx_init();
+         if (ret)
+@@ -79,20 +79,20 @@ caller.
+ User can consult dmesg to see the presence of the TDX module, and whether
+ it has been initialized.
+=20
+-If the TDX module is not loaded, dmesg shows below:
++If the TDX module is not loaded, dmesg shows below::
+=20
+-|  [..] tdx: TDX module is not loaded.
++  [..] tdx: TDX module is not loaded.
+=20
+ If the TDX module is initialized successfully, dmesg shows something
+-like below:
++like below::
+=20
+-|  [..] tdx: TDX module: vendor_id 0x8086, major_version 1, minor_version =
+0, build_date 20211209, build_num 160
+-|  [..] tdx: 65667 pages allocated for PAMT.
+-|  [..] tdx: TDX module initialized.
++  [..] tdx: TDX module: vendor_id 0x8086, major_version 1, minor_version 0=
+, build_date 20211209, build_num 160
++  [..] tdx: 65667 pages allocated for PAMT.
++  [..] tdx: TDX module initialized.
+=20
+-If the TDX module failed to initialize, dmesg shows below:
++If the TDX module failed to initialize, dmesg shows below::
+=20
+-|  [..] tdx: Failed to initialize TDX module.  Shut it down.
++  [..] tdx: Failed to initialize TDX module.  Shut it down.
+=20
+ TDX Interaction to Other Kernel Components
+ ------------------------------------------
+@@ -143,10 +143,10 @@ There are basically two memory hot-add cases that nee=
+d to be prevented:
+ ACPI memory hot-add and driver managed memory hot-add.  The kernel
+ rejectes the driver managed memory hot-add too when TDX is enabled by
+ BIOS.  For instance, dmesg shows below error when using kmem driver to
+-add a legacy PMEM as system RAM:
++add a legacy PMEM as system RAM::
+=20
+-|  [..] tdx: Unable to add memory [0x580000000, 0x600000000) on TDX enable=
+d platform.
+-|  [..] kmem dax0.0: mapping0: 0x580000000-0x5ffffffff memory add failed
++  [..] tdx: Unable to add memory [0x580000000, 0x600000000) on TDX enabled=
+ platform.
++  [..] kmem dax0.0: mapping0: 0x580000000-0x5ffffffff memory add failed
+=20
+ However, adding new memory to ZONE_DEVICE should not be prevented as
+ those pages are not managed by the page allocator.  Therefore,
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--mo0AN5RiRVHwqA1Y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTsebsWCPCpxY9T92n/R0PGQ3AzwAUCYvCHOwAKCRD/R0PGQ3Az
+wOKRAYDoUs/UsE1xGxTc3HJtDisFuUa8l2g1WXkFhZ3kO2GwJGXqaEalUVN8lVgc
+pGzwr4oBgKV92B34ny7L+15t9Rwif9EYIhvPAVr1DisL9rWois+XSFEDpx8C8i3Q
+fgB2HD60nw==
+=nHRq
+-----END PGP SIGNATURE-----
+
+--mo0AN5RiRVHwqA1Y--

@@ -2,143 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3F358C885
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A38558C889
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 14:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242916AbiHHMoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 08:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
+        id S242940AbiHHMpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 08:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242166AbiHHMoH (ORCPT
+        with ESMTP id S242166AbiHHMpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 08:44:07 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0927BF5D
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:44:05 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id a89so11152815edf.5
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 05:44:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=wjjnjFvciY1+o+kUZL5Zaq4vJtWZDjrE8n2gegOZ6HU=;
-        b=N/aHLmoXdwpj66yGEnvuwJloSEQ6Ay7aEbjOSDrwes8/JLZgyXuV9Yh9PSNd3gQ6op
-         L1TNHs9PjoMRIAhdoYnLXb7C2mlKOXXwTymFEfECc1CKfvr5MA2kMrIlzsZqLArRt5+E
-         5/QJ1rKQwx7qCZOMTmsqOy2Ku/WG83lriiYbQHRRQbjD+k68rgxRHJ4WQYzZZtU+55yz
-         fUNw5gZY+qsNgRlqqY822EwKUGqQh26yzq6TCx9MVz2Br4KhXirEsa5YrZb6HRgkutRy
-         qCp3qaYn2OE8kUQlW6IWYSmpIJ28LrWoqTttAIITzWcqkUdmapyrBu81Lg03PHKbaxZB
-         yihw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=wjjnjFvciY1+o+kUZL5Zaq4vJtWZDjrE8n2gegOZ6HU=;
-        b=uPhxHWwKA5GyDILbHsOT70BVixih2dYyiwESbvX28oeRegGYVljl5qboPeFDKjDcd8
-         fH7foZuYD9pTG3Jo05YryzoAqwYIPUEjGel1X2WBlxR15rRCDCrPd0LGlTzr2f3Pn9TB
-         tbbOZ7c5smfpVcUnMdz9hsoGNnPYYslKwTIyOnrj0RIzhQZbYDAZaNEroBOQLLmg3sL9
-         D/qztyHJExIYFUxrRH9f1oMfXExNkry6oXnBpdnI+XYxNK853giOCSRMO/PaBM38B2tV
-         Nyi/sFIxca7qamzH3lAGJfgckZbHHx+HwveESLX/cVhId7BnkIoojxy17TryxmVcICha
-         Edqw==
-X-Gm-Message-State: ACgBeo0GlRF/I59SjYUEOT6XIlxXF2g+hzw/Idm/FkWpAtV+oxU7/o6x
-        ijnM8RP0nrM9TwHsIRDdE+bJWw==
-X-Google-Smtp-Source: AA6agR6KQNAvZHEQWP2pezKnZH3wA4PFCt51flm1O6HdWtXGYFwYmV+flVbqSSWZmvGqvsWEHS19gA==
-X-Received: by 2002:a05:6402:3546:b0:43e:466c:d4ed with SMTP id f6-20020a056402354600b0043e466cd4edmr18031010edd.48.1659962644374;
-        Mon, 08 Aug 2022 05:44:04 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id ku10-20020a170907788a00b00726abf9a32bsm4944830ejc.138.2022.08.08.05.44.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 05:44:04 -0700 (PDT)
-Message-ID: <278221fe-e836-9794-374f-0955cc10f8be@blackwall.org>
-Date:   Mon, 8 Aug 2022 15:44:02 +0300
+        Mon, 8 Aug 2022 08:45:04 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F8ACE3A
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 05:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=eVaNvTPbtrqbti0QEgzFwYvEZyQFx7UXLCcnkU+Ng7E=; b=RSUfTgd18ifp4PFwxZ2PlyRRTx
+        R9OtWfmPNn19R3CYZDWBtFfvkoOpg9S5gcbM8c7Q3znVJr/P0CWlxdkl9vBC+RfhFUBh0H5aBUjA+
+        85tzWPvFxYHKU8NgvS4FuSd0WgrJZqmjzZIAvOAIl151lo0X9P2ua8vb5uzClBB34XiaEqVHcAzX3
+        cd78/FxpEtKJDF/GIbh3ymCEq/PSDjEzZ/JX4h9glSpnPD8bnBH5/MYzg1ZeRf/IziBemz+0F4tvl
+        OBCvCv6yOD3GkMMjOwkFY6Wzp3Mv8s+Ihw6upbwCSO9u7rPUHdD6zghUSnbRWHrbefPC7KhlScEkx
+        0a3lOlFQ==;
+Received: from [2a01:799:961:d200:fd91:af1e:9da7:f964] (port=64671)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oL27w-0003Ef-LB; Mon, 08 Aug 2022 14:45:00 +0200
+Message-ID: <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
+Date:   Mon, 8 Aug 2022 14:44:56 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1] net:bonding:support balance-alb interface with vlan to
- bridge
-Content-Language: en-US
-To:     Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
-        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huyd12@chinatelecom.cn
-References: <20220808094107.6150-1-sunshouxin@chinatelecom.cn>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220808094107.6150-1-sunshouxin@chinatelecom.cn>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/08/2022 12:41, Sun Shouxin wrote:
-> In my test, balance-alb bonding with two slaves eth0 and eth1,
-> and then Bond0.150 is created with vlan id attached bond0.
-> After adding bond0.150 into one linux bridge, I noted that Bond0,
-> bond0.150 and  bridge were assigned to the same MAC as eth0.
-> Once bond0.150 receives a packet whose dest IP is bridge's
-> and dest MAC is eth1's, the linux bridge cannot process it as expected.
-> The patch fix the issue, and diagram as below:
+
+
+Den 29.07.2022 18.34, skrev Maxime Ripard:
+> The TV mode property has been around for a while now to select and get the
+> current TV mode output on an analog TV connector.
 > 
-> eth1(mac:eth1_mac)--bond0(balance-alb,mac:eth0_mac)--eth0(mac:eth0_mac)
->                       |
->                    bond0.150(mac:eth0_mac)
->                       |
->                    bridge(ip:br_ip, mac:eth0_mac)--other port
+> Despite that property name being generic, its content isn't and has been
+> driver-specific which makes it hard to build any generic behaviour on top
+> of it, both in kernel and user-space.
 > 
-> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
-> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
-> ---
->  drivers/net/bonding/bond_alb.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> Let's create a new bitmask tv norm property, that can contain any of the
+> analog TV standards currently supported by kernel drivers. Each driver can
+> then pass in a bitmask of the modes it supports.
 > 
-> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
-> index 007d43e46dcb..0dea04f00f12 100644
-> --- a/drivers/net/bonding/bond_alb.c
-> +++ b/drivers/net/bonding/bond_alb.c
-> @@ -654,6 +654,7 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
+> We'll then be able to phase out the older tv mode property.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
+
+Please also update Documentation/gpu/kms-properties.csv
+
+Requirements for adding a new property is found in
+Documentation/gpu/drm-kms.rst
+
+> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
+> index c06d0639d552..d7ff6c644c2f 100644
+> --- a/drivers/gpu/drm/drm_atomic_uapi.c
+> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+> @@ -700,6 +700,8 @@ static int drm_atomic_connector_set_property(struct drm_connector *connector,
+>  		state->tv.margins.bottom = val;
+>  	} else if (property == config->tv_mode_property) {
+>  		state->tv.mode = val;
+> +	} else if (property == config->tv_norm_property) {
+> +		state->tv.norm = val;
+>  	} else if (property == config->tv_brightness_property) {
+>  		state->tv.brightness = val;
+>  	} else if (property == config->tv_contrast_property) {
+> @@ -810,6 +812,8 @@ drm_atomic_connector_get_property(struct drm_connector *connector,
+>  		*val = state->tv.margins.bottom;
+>  	} else if (property == config->tv_mode_property) {
+>  		*val = state->tv.mode;
+> +	} else if (property == config->tv_norm_property) {
+> +		*val = state->tv.norm;
+>  	} else if (property == config->tv_brightness_property) {
+>  		*val = state->tv.brightness;
+>  	} else if (property == config->tv_contrast_property) {
+> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+> index e3142c8142b3..68a4e47f85a9 100644
+> --- a/drivers/gpu/drm/drm_connector.c
+> +++ b/drivers/gpu/drm/drm_connector.c
+> @@ -1637,6 +1637,7 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_properties);
+>  /**
+>   * drm_mode_create_tv_properties - create TV specific connector properties
+>   * @dev: DRM device
+> + * @supported_tv_norms: Bitmask of TV norms supported (See DRM_MODE_TV_NORM_*)
+>   * @num_modes: number of different TV formats (modes) supported
+>   * @modes: array of pointers to strings containing name of each format
+>   *
+> @@ -1649,11 +1650,40 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_properties);
+>   * 0 on success or a negative error code on failure.
+>   */
+>  int drm_mode_create_tv_properties(struct drm_device *dev,
+> +				  unsigned int supported_tv_norms,
+>  				  unsigned int num_modes,
+>  				  const char * const modes[])
 >  {
->  	struct slave *tx_slave = NULL;
->  	struct arp_pkt *arp;
-> +	struct net_device *dev;
-
-reverse xmas tree order
-
+> +	static const struct drm_prop_enum_list tv_norm_values[] = {
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_443) - 1, "NTSC-443" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_J) - 1, "NTSC-J" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_M) - 1, "NTSC-M" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_60) - 1, "PAL-60" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_B) - 1, "PAL-B" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_D) - 1, "PAL-D" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_G) - 1, "PAL-G" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_H) - 1, "PAL-H" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_I) - 1, "PAL-I" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_M) - 1, "PAL-M" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_N) - 1, "PAL-N" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_NC) - 1, "PAL-Nc" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_60) - 1, "SECAM-60" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_B) - 1, "SECAM-B" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_D) - 1, "SECAM-D" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_G) - 1, "SECAM-G" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K) - 1, "SECAM-K" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K1) - 1, "SECAM-K1" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_L) - 1, "SECAM-L" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD480I) - 1, "hd480i" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD480P) - 1, "hd480p" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD576I) - 1, "hd576i" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD576P) - 1, "hd576p" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD720P) - 1, "hd720p" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD1080I) - 1, "hd1080i" },
+> +	};
+>  	struct drm_property *tv_selector;
+>  	struct drm_property *tv_subconnector;
+> +	struct drm_property *tv_norm;
+>  	unsigned int i;
 >  
->  	if (!pskb_network_may_pull(skb, sizeof(*arp)))
->  		return NULL;
-> @@ -665,6 +666,13 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
->  	if (!bond_slave_has_mac_rx(bond, arp->mac_src))
->  		return NULL;
+>  	if (dev->mode_config.tv_select_subconnector_property)
+> @@ -1686,6 +1716,13 @@ int drm_mode_create_tv_properties(struct drm_device *dev,
+>  	if (drm_mode_create_tv_margin_properties(dev))
+>  		goto nomem;
 >  
-> +	dev = ip_dev_find(dev_net(bond->dev), arp->ip_src);
-> +	if (dev) {
-> +		if (netif_is_bridge_master(dev)) {
-> +			return NULL;
-> +		}
+> +	tv_norm = drm_property_create_bitmask(dev, 0, "tv norm",
+> +					   tv_norm_values, ARRAY_SIZE(tv_norm_values),
+> +					   supported_tv_norms);
 
-nit: the {} aren't needed
+I expected this to be an enum, why a bitmask? Userspace can set multiple
+bits in a bitmask.
 
-> +	}
+Noralf.
+
+> +	if (!tv_norm)
+> +		goto nomem;
+> +	dev->mode_config.tv_norm_property = tv_norm;
 > +
->  	if (arp->op_code == htons(ARPOP_REPLY)) {
->  		/* the arp must be sent on the selected rx channel */
->  		tx_slave = rlb_choose_channel(skb, bond, arp);
-
-Aside from the small cosmetic comments, have you tried adding the second mac address
-as permanent in the bridge?
-i.e.: 
-$ bridge fdb add <eth1_mac> dev bond0.150 master permanent
-
-That should fix your problem without any bonding hacks.
-
-Cheers,
- Nik
-
-
+>  	dev->mode_config.tv_mode_property =
+>  		drm_property_create(dev, DRM_MODE_PROP_ENUM,
+>  				    "mode", num_modes);
+> diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
+> index 4a788c1c9058..457529e5d857 100644
+> --- a/drivers/gpu/drm/vc4/vc4_vec.c
+> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
+> @@ -573,7 +573,9 @@ static int vc4_vec_bind(struct device *dev, struct device *master, void *data)
+>  	struct vc4_vec *vec;
+>  	int ret;
+>  
+> -	ret = drm_mode_create_tv_properties(drm, ARRAY_SIZE(tv_mode_names),
+> +	ret = drm_mode_create_tv_properties(drm,
+> +					    0,
+> +					    ARRAY_SIZE(tv_mode_names),
+>  					    tv_mode_names);
+>  	if (ret)
+>  		return ret;
+> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+> index 1e9996b33cc8..78275e68ff66 100644
+> --- a/include/drm/drm_connector.h
+> +++ b/include/drm/drm_connector.h
+> @@ -143,6 +143,32 @@ enum subpixel_order {
+>  
+>  };
+>  
+> +#define DRM_MODE_TV_NORM_NTSC_443	(1 << 0)
+> +#define DRM_MODE_TV_NORM_NTSC_J		(1 << 1)
+> +#define DRM_MODE_TV_NORM_NTSC_M		(1 << 2)
+> +#define DRM_MODE_TV_NORM_PAL_60		(1 << 3)
+> +#define DRM_MODE_TV_NORM_PAL_B		(1 << 4)
+> +#define DRM_MODE_TV_NORM_PAL_D		(1 << 5)
+> +#define DRM_MODE_TV_NORM_PAL_G		(1 << 6)
+> +#define DRM_MODE_TV_NORM_PAL_H		(1 << 7)
+> +#define DRM_MODE_TV_NORM_PAL_I		(1 << 8)
+> +#define DRM_MODE_TV_NORM_PAL_M		(1 << 9)
+> +#define DRM_MODE_TV_NORM_PAL_N		(1 << 10)
+> +#define DRM_MODE_TV_NORM_PAL_NC		(1 << 11)
+> +#define DRM_MODE_TV_NORM_SECAM_60	(1 << 12)
+> +#define DRM_MODE_TV_NORM_SECAM_B	(1 << 13)
+> +#define DRM_MODE_TV_NORM_SECAM_D	(1 << 14)
+> +#define DRM_MODE_TV_NORM_SECAM_G	(1 << 15)
+> +#define DRM_MODE_TV_NORM_SECAM_K	(1 << 16)
+> +#define DRM_MODE_TV_NORM_SECAM_K1	(1 << 17)
+> +#define DRM_MODE_TV_NORM_SECAM_L	(1 << 18)
+> +#define DRM_MODE_TV_NORM_HD480I		(1 << 19)
+> +#define DRM_MODE_TV_NORM_HD480P		(1 << 20)
+> +#define DRM_MODE_TV_NORM_HD576I		(1 << 21)
+> +#define DRM_MODE_TV_NORM_HD576P		(1 << 22)
+> +#define DRM_MODE_TV_NORM_HD720P		(1 << 23)
+> +#define DRM_MODE_TV_NORM_HD1080I	(1 << 24)
+> +
+>  /**
+>   * struct drm_scrambling: sink's scrambling support.
+>   */
+> @@ -687,6 +713,7 @@ struct drm_tv_connector_state {
+>  	enum drm_mode_subconnector subconnector;
+>  	struct drm_connector_tv_margins margins;
+>  	unsigned int mode;
+> +	unsigned int norm;
+>  	unsigned int brightness;
+>  	unsigned int contrast;
+>  	unsigned int flicker_reduction;
+> @@ -1779,6 +1806,7 @@ void drm_connector_attach_dp_subconnector_property(struct drm_connector *connect
+>  
+>  int drm_mode_create_tv_margin_properties(struct drm_device *dev);
+>  int drm_mode_create_tv_properties(struct drm_device *dev,
+> +				  unsigned int supported_tv_norms,
+>  				  unsigned int num_modes,
+>  				  const char * const modes[]);
+>  void drm_connector_attach_tv_margin_properties(struct drm_connector *conn);
+> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
+> index 6b5e01295348..d9e79def8b92 100644
+> --- a/include/drm/drm_mode_config.h
+> +++ b/include/drm/drm_mode_config.h
+> @@ -704,6 +704,12 @@ struct drm_mode_config {
+>  	 */
+>  	struct drm_property *dp_subconnector_property;
+>  
+> +	/**
+> +	 * @tv_norm_property: Optional TV property to select the TV
+> +	 * standard output on the connector.
+> +	 */
+> +	struct drm_property *tv_norm_property;
+> +
+>  	/**
+>  	 * @tv_subconnector_property: Optional TV property to differentiate
+>  	 * between different TV connector types.
+> 

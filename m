@@ -2,177 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F46658C506
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37DF58C50B
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 10:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235903AbiHHImm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 04:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
+        id S234256AbiHHItr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 04:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234589AbiHHImk (ORCPT
+        with ESMTP id S230127AbiHHItp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 04:42:40 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CF6B858
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 01:42:37 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id u1so11656037lfq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 01:42:37 -0700 (PDT)
+        Mon, 8 Aug 2022 04:49:45 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F096363;
+        Mon,  8 Aug 2022 01:49:40 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d16so7923805pll.11;
+        Mon, 08 Aug 2022 01:49:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GH1RTNvYltddRQxOqOLKUQpIVt1WCGJQQLNGxCMK7OQ=;
-        b=mXenbGDo9bRNDtEOPVQu0RF4n4RJmJUOGuPf8+Ji11hejTu+YltiW7jOc6CacZZJ3K
-         ++onYF5D45cuwq7aFFBQCfBMe7f8UuGC1yfEIHcpuOvg46FLKm2Mg7gHjlyOTVE/A4pE
-         alfOdj2kJ3fCVsYAPVz2yUWMJDB2NqET8ZdUTsSSySW4l4pTWC6014VWjedDyySetJ/W
-         lXQgw3E4rhzQoiEA7W7bArsIOf/DqVCFaVYZMQusOCNtBLuZfgRG0uklvGuHNbDY1qvq
-         SNUCaw+HiyZ+XRfgMHSOFzrDMjIFgQxMgfAe+n4fMm4Y+lSj69hVecGr2984x6Nm1NDP
-         +c9A==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:from
+         :subject:to:cc:content-transfer-encoding;
+        bh=oFbfW+6eBoSd9lHzaSWXN4qCai+JIjJq05pd6OQMU5E=;
+        b=JxZrR1+OnBtNim0vw7zXSz+LUKhlwQmPhmpSfbr9kARInimgkF2VIQsY24jCyFjFGh
+         UhU4ixxym3zxmvc9BIOExrHt8b2qTigTSlOF0n4dOSmsqUQi6j0KDUmlJ7QsSmTo5CFx
+         qwY2ilpVj+Wywr4DWyabDX5NScuF4EdtjDTVjE4jViO4AOsNQOBxNfOst2C/8fGZLncM
+         /1ak/gDZ6qnMDjwxmZ9MwIC4FyQy3M7EVPUVOWzX5FaXzLAhcYAdANXV0Zuq2YN0rbw0
+         jOqF+6BL3RP7Nu1cefla25ldHZO1VK99NuoTkDJI0ZMC5Vztmq2ad4SiuQhyUQTKMhHx
+         MdOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GH1RTNvYltddRQxOqOLKUQpIVt1WCGJQQLNGxCMK7OQ=;
-        b=494YhXmnP9l1yNxLxRC9o3wUlqQJEqdNNtb84yI+7xfEU32GR/ghVpI4D1BqT8yLlT
-         yH+zqO0XUXrSsqvSIy8RBOBRlAApIxPfqMHgRWuzs4trXgoe6qpQPnvxJjGVNAR3nhu2
-         u8g6ml00TZjjTrIywCqwDKajnpwMZBPwxKyLvnQ35iAUwKOBxalHM1KPy0W0pC2ZcYhc
-         7Ems1UOKxFxDZZQN6udS3V1dlUPCxc1+5TiFLEYKQ4Fc1S45Mss2X8B0Vto4CGaYB90g
-         lmWNQgia+z8mpR9UiJfLo/RZahgAHgGKt/KpZ+zVfcyqB5640yEO9CbkUjZpcEnNVCYV
-         3a1A==
-X-Gm-Message-State: ACgBeo35zdZ9oT6f/V/2M0J0lSoXTmdEhYRdGAiEd4u7TeIHVhhsDzUd
-        HSwSVl853c6lICITlOYPeo+r8g==
-X-Google-Smtp-Source: AA6agR7uQdUhuZnAdiC5tKssODVVFuEx+vi//6BMEw7GMy7C6AlLLIZm1wj0fY3KlYnhtYrXSRrvvw==
-X-Received: by 2002:ac2:42ce:0:b0:48a:9d75:b733 with SMTP id n14-20020ac242ce000000b0048a9d75b733mr6480370lfl.510.1659948156065;
-        Mon, 08 Aug 2022 01:42:36 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id d23-20020a056512369700b0048b18d65998sm1352612lfs.38.2022.08.08.01.42.34
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:from:subject:to:cc:content-transfer-encoding;
+        bh=oFbfW+6eBoSd9lHzaSWXN4qCai+JIjJq05pd6OQMU5E=;
+        b=vp295VGEK8xuqG+BVBALut/hfa5vyqzESdOSH34b7y5fhWY+0A8941Y0UPIE1uGqWa
+         Ad+bBIDRfETeEWwm467ypDuw0kefyKLfatjsdL3U4FeX4N7hZEl4+Ci/I+4gg/1FIe12
+         8pHH+2M2mn/3SRT2RXXMmzcxSa2XFL3LxEcC6TCb6G0vrwU31uvj24xEUvF0oA5NMpiA
+         zrtsU1iVr8Vx6ptmep13zVSvMpx0sB0YvqvTlmuqcGnWWkW1sqoOhpvGzYiY2qd9lq1l
+         Iku3x3dSAUa8PXw9Zn6VjO0NdVFxCDVQ2WuTFgTFx/3LVOdPFCSQ+t5564ytqz26SDjt
+         3T+g==
+X-Gm-Message-State: ACgBeo2mXB5w16vZ6SKKBdKDZ0ThamcsOYx1pJVQ33AbIYO+G8cTLfc4
+        RSFwGTkGAn19si4tcNKqrWxWJIzlfQA=
+X-Google-Smtp-Source: AA6agR4sJC8tHznMpaiSUY2aqAw6/FBTROKgm+C906VThCVw97Nl+HlHp+apVkT7b7nQm4Id4V/cnQ==
+X-Received: by 2002:a17:90b:3d85:b0:1f7:6a32:3576 with SMTP id pq5-20020a17090b3d8500b001f76a323576mr286044pjb.187.1659948580241;
+        Mon, 08 Aug 2022 01:49:40 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id i11-20020a17090332cb00b0016d1b708729sm8200661plr.132.2022.08.08.01.49.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 01:42:35 -0700 (PDT)
-Message-ID: <dfaf7a35-25bb-8201-42bc-73ca280fcb69@linaro.org>
-Date:   Mon, 8 Aug 2022 11:42:34 +0300
+        Mon, 08 Aug 2022 01:49:39 -0700 (PDT)
+Message-ID: <c41cab17-afd6-bc99-56a1-e4e73b8c1ef6@gmail.com>
+Date:   Mon, 8 Aug 2022 17:49:36 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/8] dt-bindings: power: supply: Add DT schema for
- Qualcomm SMBCHG
+ Thunderbird/91.11.0
 Content-Language: en-US
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Alejandro Tafalla <atafalla@dnyon.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220808073459.396278-1-y.oudjana@protonmail.com>
- <20220808073459.396278-2-y.oudjana@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220808073459.396278-2-y.oudjana@protonmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: [PATCH v2 0/3] docs: conf.py: Reduce texlive dependency
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-doc@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/08/2022 10:34, Yassine Oudjana wrote:
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
-> 
-> Add DT schema for the switch-mode battery charger found on Qualcomm
-> PMICs such as PMI8994. Due to lack of documentation, some interrupt
-> descriptions might be inaccurate.
-> 
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> ---
->  .../bindings/power/supply/qcom,smbchg.yaml    | 205 ++++++++++++++++++
->  MAINTAINERS                                   |   8 +
->  2 files changed, 213 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,smbchg.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,smbchg.yaml b/Documentation/devicetree/bindings/power/supply/qcom,smbchg.yaml
-> new file mode 100644
-> index 000000000000..d825a9c10b3e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/qcom,smbchg.yaml
-> @@ -0,0 +1,205 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/qcom,smbchg.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PMIC Switch-Mode Battery Charger
-> +
-> +maintainers:
-> +  - Yassine Oudjana <y.oudjana@protonmail.com>
-> +  - Alejandro Tafalla <atafalla@dnyon.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pmi8994-smbchg
-> +      - qcom,pmi8996-smbchg
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  monitored-battery:
-> +    description: |
-> +      phandle of battery characteristics node.
-> +      The charger uses the following properties:
-> +      - charge-term-current-microamp
-> +      - constant-charge-current-max-microamp
-> +      - voltage-max-design-microvolt
-> +      The constant-charge-current-max-microamp and voltage-max-design-microvolt
-> +      properties must be set.
-> +      See Documentation/devicetree/bindings/power/supply/battery.yaml
-> +
-> +  interrupts:
-> +    items:
-> +      - description: Charger error
-> +      - description: Charger inhibited
-> +      - description: Charger precharge safety timer timeout
-> +      - description: Charger charge safety timer timeout
-> +      - description: Charger pre to fast charging switch threshold reached
-> +      - description: Charger recharge threshold reached
-> +      - description: Charger taper threshold reached
-> +      - description: Charger charge termination threshold reached
-> +      - description: Battery hot
-> +      - description: Battery warm
-> +      - description: Battery cold
-> +      - description: Battery cool
-> +      - description: Battery overvoltage
-> +      - description: Battery low
-> +      - description: Battery missing
-> +      - description: Battery thermistor missing # unconfirmed
-> +      - description: USB input undervolt
-> +      - description: USB input overvolt
-> +      - description: USB input source detected
-> +      - description: OTG regulator failure
-> +      - description: OTG regulator overcurrent
-> +      - description: Automatic input current limiting done
-> +      - description: USB ID pin changed
-> +      - description: DC input undervolt
-> +      - description: DC input overvolt
-> +      - description: Power OK
-> +      - description: Temperature shutdown
-> +      - description: Watchdog timeout
-> +      - description: Flash failure
-> +      - description: OTST2 # unknown
-> +      - description: OTST3 # unknown
+Hi,
 
-It seems you listed register interrupts, not physical pins. This should
-be interrupt lines.
+This is v2 with the env variable of SPHINX_IMGMATH as suggested by
+Mauro.
 
-Best regards,
-Krzysztof
+Changes since v1 [1]:
+ - Patch 2/3: Rename LOAD_IMGMATH -> SPHINX_IMGMATH (Mauro).
+ - For the series: Acked-bys from Mauro.
+
+This was inspired from the discussion on the expected behavior of
+sphinx-pre-install [2].
+
+There was a mismatch between Mauro's intent and my expectation for
+the --no-pdf option of sphinx-pre-install.
+
+My thought was if I installed all the packages suggested from
+"./scripts/sphinx-pre-install --no-pdf", "make htmldocs" should run
+free of complaints of missing commands or packages.
+
+However, I got this warning when I tried the procedure on a debian-
+based container image:
+
+    WARNING: LaTeX command 'latex' cannot be run (needed for math display),
+    check the imgmath_latex setting
+
+, or:
+
+    WARNING: dvipng command 'dvipng' cannot be run (needed for math display),
+    check the imgmath_dvipng setting
+
+Mauro's response to my complaint was this:
+
+> The idea of using --no-pdf is to setup an environment without LaTeX,
+> meaning that math tags would only be partially parsed: basically, the
+> output would be html with LaTeX-like math expressions (at least last
+> time I tried).
+
+The mismatch can be resolved by using "mathjax" for math rendering
+and making "make htmldocs" be free of texlive packages.
+
+mathjax is the default math renderer since Sphinx 1.8.  It delegates
+math rendering to web browsers.  
+
+As Mauro has pointed out, "make epubdocs" requires imgmath.
+
+So this patch set treats mathjax as a fallback math renderer for html
+docs when imgmath requirements are not met.
+Existing systems which meet imgmath requirements are not affected by
+this change.
+
+Summary of math rendering in html:
+
+         dvipng, browser             before           after
+    ==========================  ===============  ================
+    dvipng                      imgmath (png)    <--
+    no divpng, with javascript  raw math:: code  mathjax
+    no dvipng, w/o javascript   raw math:: code  raw mathjax code
+
+Patch 1/3 adds code in conf.py so that for html docs, the imgmath
+extension will be loaded only when both latex and dvipng are available.
+For epub docs, imgmath will always be loaded (no change).
+
+Patch 2/3 adds code respecting a new env variable "SPHINX_IMGMATH" which
+will override the math renderer choice. This variable can be helpful
+on distros such as Arch linux, Mageia, etc. whose packaging policy is
+coarse-grained.
+
+E.g., to test math rendering by mathjax, run:
+    make SPHINX_IMGMATH=no htmldocs
+
+I mentioned in the thread of [2] that imgmath can generate scalable
+math images in SVG.
+
+My plan was to implement that option as well.  But during tests under
+Fedora/CentOS/openSUSE, I encountered a couple of warnings from dvisvgm.
+That would be regressions on existing systems which happen to have
+not-working dvisvgm along with working dvipng.  I'm thinking of adding
+the SVG option later if I can figure out the minimal requirement for
+dvisvgm under imgmath.
+
+Patch 3/3 is an independent change in the LaTeX preamble for pdf docs.
+Currently, xeCJK.sty provided for RHEL 9 (and its clones) is broken
+due to the lack of new dependency.  As a workaround, treat the absence
+of xeCJK.sty as the additional knob for skipping CJK contents.
+
+Note: Generated LaTeX sources will be the same regardless of existence
+of the "Noto Sans CJK SC" font and xeCJK.sty.
+
+[1] v1: https://lore.kernel.org/r/12d078f5-6995-b039-7076-bdb1f372a799@gmail.com/
+[2]: https://lore.kernel.org/r/3ba5a52e-cab6-05cf-a66e-adc58c467e1f@gmail.com/
+
+        Thanks, Akira
+
+--
+Akira Yokosawa (3):
+  docs/conf.py: Treat mathjax as fallback math renderer
+  docs/conf.py: Respect env variable SPHINX_IMGMATH
+  docs: kerneldoc-preamble: Test xeCJK.sty before loading
+
+ Documentation/conf.py                       | 46 ++++++++++++++++++++-
+ Documentation/sphinx/kerneldoc-preamble.sty | 22 +++++++---
+ 2 files changed, 61 insertions(+), 7 deletions(-)
+
+
+base-commit: 339170d8d3da5685762619080263abb78700ab4c
+-- 
+2.25.1
+

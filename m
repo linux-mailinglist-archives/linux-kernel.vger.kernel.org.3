@@ -2,105 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F10D58CB93
-	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608E158CB95
+	for <lists+linux-kernel@lfdr.de>; Mon,  8 Aug 2022 17:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243409AbiHHPwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 11:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
+        id S243767AbiHHPxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 11:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiHHPws (ORCPT
+        with ESMTP id S230460AbiHHPxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:52:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334D0D8F
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 08:52:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1BCB61042
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 15:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB588C433C1;
-        Mon,  8 Aug 2022 15:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659973966;
-        bh=0waKzL6EJvmtz8J3afsiw+tMv5KbHV3THi6rTdS6HNg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BxuXK0GFGlbIp6x5gazvS1RMYv7Q0SBSySPNJwEVtYaq1E7y6jiPu38kPTm58fwme
-         Co91hsCiUOBvvNBsbLaaIhacdy1Dg4G3e7dvVr+pX9uCPJToiUba2Wr8x79Fjaoyzu
-         MTEX/DM/ClO4uP8LJMrmVQ70sxrZcVcs0XFCoL0I7r2vZQDArRqAndcELjXZjwhDSF
-         u/InyVCRSMU3DN8SW4oYu4bi7J4zsHbdQ6Dmtf6c230/9gGc9MKTzCzzO1F0uLaKt8
-         rxjZzXypk0WZAx4FIf26GG5eBbd8AhdKs1FoGaEPybR1dEC3w3AUgoq6T76Fvbpk/W
-         +qd2alBCjeUiw==
-Date:   Mon, 8 Aug 2022 16:52:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v1 1/5] regmap: mmio: Don't unprepare attached clock
-Message-ID: <YvExSVixNUpOivja@sirena.org.uk>
-References: <20220805205321.19452-1-andriy.shevchenko@linux.intel.com>
- <YvEKgkhRWCKtXdD4@sirena.org.uk>
- <CAHp75VeeZAgKdZhJffNouFh26rwGzmqGuJX7bcObSVV+dFS-tA@mail.gmail.com>
- <YvEUJ12TmgRaR4Ub@sirena.org.uk>
- <CAHp75Vd_wks4d4HyFQpWWUQO-DPj7bmm6e66LSZ3F0+O6fC6bw@mail.gmail.com>
+        Mon, 8 Aug 2022 11:53:00 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBA8D8F;
+        Mon,  8 Aug 2022 08:52:59 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id 17so6745779qky.8;
+        Mon, 08 Aug 2022 08:52:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=gIMeQqTxtshFeA9h8v+qBpYkzXb4o0KGIg6z7z9V00M=;
+        b=DKDxhcBQX5VrwI8FFNN5NYRjKyVVh54mcKewaJVKh2ikdchBJBLLlQ+nhtXEBaCOx7
+         VyZWUpcmyUAbQKFxJCgLk7p9XzYE6BHIhWlh5kBohjbN79EOcXQarbEcHUhe/PpIq82R
+         8EacxGU1pJXcNxaYgaXI7q7r82TFdjqzzKB2MDDHXix9lPJ0Eq9oixVewviQBy++qH3d
+         FN4o0dLeV2UJVczYhnsoDOm/+7X1W158uGOrq6OWcQ/j/0hcsV9cLI7uf6mVuC2hcf59
+         KIHROdE0mY1ZJiIX3KC/8tLwov9W7SnYAz2HzvkK2bvxZterMI1jYpUBhGyYinxo0A4l
+         0C+g==
+X-Gm-Message-State: ACgBeo0Q+7wytxFd0LSTyjBb6W9kQ7VkTyOAmlrrsCcq6o9B3+Ypf1XT
+        AOzOTxBoOvRarAbRVeDk/y8cdq3ouZaSwQ==
+X-Google-Smtp-Source: AA6agR6BMGU4ySAPY6pbbekaFaL3Qs4yrveyBD9hbrlQkHAUgEeouW1l86QjIC2cmH35phm2HSt5yw==
+X-Received: by 2002:ae9:f309:0:b0:6b5:bf22:f2e7 with SMTP id p9-20020ae9f309000000b006b5bf22f2e7mr14677973qkg.509.1659973978160;
+        Mon, 08 Aug 2022 08:52:58 -0700 (PDT)
+Received: from localhost (fwdproxy-ash-016.fbsv.net. [2a03:2880:20ff:10::face:b00c])
+        by smtp.gmail.com with ESMTPSA id v18-20020a05620a0f1200b006b60f5f53ccsm9891261qkl.25.2022.08.08.08.52.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 08:52:57 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, tj@kernel.org, joannelkoong@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] bpf: Add user-space-publisher ringbuffer map type
+Date:   Mon,  8 Aug 2022 08:52:43 -0700
+Message-Id: <20220808155248.2475981-1-void@manifault.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4f30vEVZ3LwvC9A3"
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vd_wks4d4HyFQpWWUQO-DPj7bmm6e66LSZ3F0+O6fC6bw@mail.gmail.com>
-X-Cookie: Flee at once, all is discovered.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch set defines a new map type, BPF_MAP_TYPE_USER_RINGBUF, which
+provides single-user-space-producer / single-kernel-consumer semantics over
+a ringbuffer.  Along with the new map type, a helper function called
+bpf_user_ringbuf_drain() is added which allows a BPF program to specify a
+callback with the following signature, to which samples are posted by the
+helper:
 
---4f30vEVZ3LwvC9A3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+void (struct bpf_dynptr *dynptr, void *context);
 
-On Mon, Aug 08, 2022 at 04:42:28PM +0200, Andy Shevchenko wrote:
-> On Mon, Aug 8, 2022 at 3:48 PM Mark Brown <broonie@kernel.org> wrote:
-> > On Mon, Aug 08, 2022 at 03:41:48PM +0200, Andy Shevchenko wrote:
-> > > On Mon, Aug 8, 2022 at 3:19 PM Mark Brown <broonie@kernel.org> wrote:
+The program can then use the bpf_dynptr_read() or bpf_dynptr_data() helper
+functions to safely read the sample from the dynptr. There are currently no
+helpers available to determine the size of the sample, but one could easily
+be added if required.
 
-> > > > regmap_mmio_attach_clk() prepares the clock that's passed in, we should
-> > > > undo that when detaching otherwise we're leaking a prepare (as we do in
-> > > > the explicit detach).
+On the user-space side, libbpf has been updated to export a new
+'struct ring_buffer_user' type, along with the following symbols:
 
-> > > Why do we allow the user to avoid explicit detach? What is the point
-> > > of having that API in the case we take care of it?
+struct ring_buffer_user *
+ring_buffer_user__new(int map_fd,
+                      const struct ring_buffer_user_opts *opts);
+void ring_buffer_user__free(struct ring_buffer_user *rb);
+void *ring_buffer_user__reserve(struct ring_buffer_user *rb, uint32_t size);
+void *ring_buffer_user__poll(struct ring_buffer_user *rb, uint32_t size,
+			     int timeout_ms);
+void ring_buffer_user__discard(struct ring_buffer_user *rb, void *sample);
+void ring_buffer_user__submit(struct ring_buffer_user *rb, void *sample);
 
-> > I think just for symmetry so it's obvious that error handling is
-> > happening if people want it to be.
+These symbols are exported for inclusion in libbpf version 1.0.0.
 
-> So, the only user of that API calls it explicitly. Should I rewrite a
-> commit message somehow?
+Note that one thing that is not included in this patch-set is the ability
+to kick the kernel from user-space to have it drain messages. The selftests
+included in this patch-set currently just use progs with syscall hooks to
+"kick" the kernel and have it drain samples from a user-producer
+ringbuffer, but being able to kick the kernel using some other mechanism
+that doesn't rely on such hooks would be very useful as well. I'm planning
+on adding this in a future patch-set.
 
-No.  Your commit would just introduce a bug.
+Signed-off-by: David Vernet <void@manifault.com>
+--
 
---4f30vEVZ3LwvC9A3
-Content-Type: application/pgp-signature; name="signature.asc"
+David Vernet (5):
+  bpf: Clear callee saved regs after updating REG0
+  bpf: Define new BPF_MAP_TYPE_USER_RINGBUF map type
+  bpf: Add bpf_user_ringbuf_drain() helper
+  bpf: Add libbpf logic for user-space ring buffer
+  selftests/bpf: Add selftests validating the user ringbuf
 
------BEGIN PGP SIGNATURE-----
+ include/linux/bpf.h                           |   6 +-
+ include/linux/bpf_types.h                     |   1 +
+ include/uapi/linux/bpf.h                      |   9 +
+ kernel/bpf/helpers.c                          |   2 +
+ kernel/bpf/ringbuf.c                          | 232 ++++++-
+ kernel/bpf/verifier.c                         |  73 ++-
+ tools/include/uapi/linux/bpf.h                |   9 +
+ tools/lib/bpf/libbpf.c                        |  11 +-
+ tools/lib/bpf/libbpf.h                        |  19 +
+ tools/lib/bpf/libbpf.map                      |   6 +
+ tools/lib/bpf/libbpf_probes.c                 |   1 +
+ tools/lib/bpf/ringbuf.c                       | 214 +++++++
+ .../selftests/bpf/prog_tests/user_ringbuf.c   | 592 ++++++++++++++++++
+ .../selftests/bpf/progs/user_ringbuf_fail.c   | 174 +++++
+ .../bpf/progs/user_ringbuf_success.c          | 227 +++++++
+ .../testing/selftests/bpf/test_user_ringbuf.h |  28 +
+ 16 files changed, 1579 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/user_ringbuf_success.c
+ create mode 100644 tools/testing/selftests/bpf/test_user_ringbuf.h
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLxMUgACgkQJNaLcl1U
-h9DQiwgAg+GOOT9iij73zrFpBk62fvrTLnJU0hZ2ReC/ZC0iOcszC5TeG59PSEI+
-CBcMzQCf66DxfBkcSUQwLudkbVIVR/datCpXIaGdTVSwPY+dVk4+IKFuvUTVtavk
-MMwzHgxbL27ScVFMaRQDB2Dues0ZcYNm9QPwvZVhIid368SD5jE/GxGJ+8ZYc35n
-D0Vwxz/knZ/x8pTDWBDj109BcahI4deKj8m6t0dc3dCqxIyEC/UkrOArCLUlCRcs
-yh/rJYoMcvzjd4AKpAziYlmQxx+rzUwjSsmfV4HA5WoV33tOVqcrgcIjSnHtVpDn
-/AGEyo2smz2UbMsTRlfqY9k8lqo89g==
-=NACF
------END PGP SIGNATURE-----
+-- 
+2.30.2
 
---4f30vEVZ3LwvC9A3--

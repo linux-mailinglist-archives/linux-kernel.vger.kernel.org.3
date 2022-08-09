@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB15858D591
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A46B58D592
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241001AbiHIImH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        id S240044AbiHIIma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240409AbiHIImE (ORCPT
+        with ESMTP id S230519AbiHIIm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:42:04 -0400
+        Tue, 9 Aug 2022 04:42:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4B421E3B
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:42:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311221EC78
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:42:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47025612DA
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 08:42:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F6DC433C1;
-        Tue,  9 Aug 2022 08:42:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C492D61314
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 08:42:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 398D8C433C1;
+        Tue,  9 Aug 2022 08:42:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660034522;
-        bh=tZ+wNzzLw6xNoTueASilmuzMxk2HqBkJZKa2hJ1gQdc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uJwnjmVh9Bj0q9dAB2ExLtX768RfNDZnX8CppEJZ1grULw+kCr+3z1QCo9wmpF+WS
-         zbuOx5fOUXxbroBVnBMh8gjJt+KoIZVgJiNDW0hWwCuTFPj5TSFz+ah3M+VpK2YS1Y
-         wN7I7zQjjyHYOwFVNj7LWc/rC7ylsBGzlCMcX38Wx93bF5Gy5ciyypo493TvztMB73
-         kKIFHwRNw83U2tjIEs7C+UZtlHSBaMZxpkFbYpCUlejNDaoRK4LwYAtIvz17dOtrSw
-         cZFuCJz6EeVgzrol1znc64uWb4LhHLyC5amF7I9+26Msgh9+8N97cbgPK97bTKQXuD
-         is+r2p64XnXow==
-Date:   Tue, 9 Aug 2022 09:41:57 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, wanghaibin.wang@huawei.com,
-        Shreyas K K <quic_shrekk@quicinc.com>
-Subject: Re: [PATCH] arm64: Fix match_list for erratum 1286807 on Arm
- Cortex-A76
-Message-ID: <20220809084157.GB776@willie-the-truck>
-References: <20220809043848.969-1-yuzenghui@huawei.com>
- <bbd76268ca1aa3badd32502cebb5c986@kernel.org>
+        s=k20201202; t=1660034545;
+        bh=zYaOTja4AIBD/WAKQ57pm5wPsgAuCtuZjUduy4rsppI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NEE2o3kJElgOO5kP4ieMEncdEyYu2gZlpT66wmKLnQurYorKcfwC+SnRfrkLvsp6C
+         mjWZScnGZLtaeCkDKx5lF5+UVSMKhpyM6Tywx5lv1CsbFacpEMpyCa+ubQoUkhKwMH
+         Ls/kWVR9bfp4TKXcR7kViO9tgYjud+TSul5DjVfbfXWWXvuog1+Lnh1vTtiLA3IKSN
+         ap/FaqWE/myBrcf3iFhpyaD0myrWJHm4VlefQ9yWSuQy8hjVcwdhJcp5i4VCKWHQi+
+         Y3q/z0QVYeqHNuE85g6LyqTL4AKQ1c3K+NfrtNJxJmvbCHy+J9zscleS1Aj2HYbwxR
+         FimJxna+angiA==
+Date:   Tue, 9 Aug 2022 10:42:00 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: fsl_elbc: Fix none ECC mode
+Message-ID: <20220809104200.3dca43ef@thinkpad>
+In-Reply-To: <20220707184328.3845-1-pali@kernel.org>
+References: <20220707184328.3845-1-pali@kernel.org>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bbd76268ca1aa3badd32502cebb5c986@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,56 +57,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 07:08:07AM +0100, Marc Zyngier wrote:
-> On 2022-08-09 05:38, Zenghui Yu wrote:
-> > Since commit 51f559d66527 ("arm64: Enable repeat tlbi workaround on
-> > KRYO4XX
-> > gold CPUs"), we failed to detect erratum 1286807 on Cortex-A76 because
-> > its
-> > entry in arm64_repeat_tlbi_list[] was accidently corrupted by this
-> > commit.
-> > 
-> > Fix this issue by creating a separate entry for Kryo4xx Gold.
-> > 
-> > Fixes: 51f559d66527 ("arm64: Enable repeat tlbi workaround on KRYO4XX
-> > gold CPUs")
-> > Cc: Shreyas K K <quic_shrekk@quicinc.com>
-> > Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
-> > ---
-> >  arch/arm64/kernel/cpu_errata.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/arch/arm64/kernel/cpu_errata.c
-> > b/arch/arm64/kernel/cpu_errata.c
-> > index 7e6289e709fc..0f7e9087d900 100644
-> > --- a/arch/arm64/kernel/cpu_errata.c
-> > +++ b/arch/arm64/kernel/cpu_errata.c
-> > @@ -208,6 +208,8 @@ static const struct arm64_cpu_capabilities
-> > arm64_repeat_tlbi_list[] = {
-> >  #ifdef CONFIG_ARM64_ERRATUM_1286807
-> >  	{
-> >  		ERRATA_MIDR_RANGE(MIDR_CORTEX_A76, 0, 0, 3, 0),
-> > +	},
-> > +	{
-> >  		/* Kryo4xx Gold (rcpe to rfpe) => (r0p0 to r3p0) */
-> >  		ERRATA_MIDR_RANGE(MIDR_QCOM_KRYO_4XX_GOLD, 0xc, 0xe, 0xf, 0xe),
-> >  	},
-> 
-> Ouch. It isn't the first time we end-up with this sort
-> of thing, and I wonder whether we should restructure
-> the ERRATA_MIDR_* macros to prevent this sort of
-> accidental override...
+On Thu,  7 Jul 2022 20:43:28 +0200
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
 
-Agreed. I think we may have gone a bit too far with the macros in
-cpu_errata.c and cpufeature.c. Although the files would be larger, I think
-it would be clearer if we removed some of the abstractions and forced this
-stuff to be spelled out each time.
+> Commit f6424c22aa36 ("mtd: rawnand: fsl_elbc: Make SW ECC work") added
+> support for specifying ECC mode via DTS and skipping autodetection.
+>=20
+> But it broke explicit specification of HW ECC mode in DTS as correct
+> settings for HW ECC mode are applied only when NONE mode or nothing was
+> specified in DTS file.
+>=20
+> Also it started aliasing NONE mode to be same as when ECC mode was not
+> specified and disallowed usage of ON_DIE mode.
+>=20
+> Fix all these issues. Use autodetection of ECC mode only in case when mode
+> was really not specified in DTS file by checking that ecc value is invali=
+d.
+> Set HW ECC settings either when HW ECC was specified in DTS or it was
+> autodetected. And do not fail when ON_DIE mode is set.
+>=20
+> Fixes: f6424c22aa36 ("mtd: rawnand: fsl_elbc: Make SW ECC work")
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
 
-> Anyway, thanks for spotting it!
-> 
-> Cc: stable@vger.kernel.org
-> Acked-by: Marc Zyngier <maz@kernel.org>
-
-I'll queue this as a fix at -rc1 along with any other fixes which come in.
-
-Will
+Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>

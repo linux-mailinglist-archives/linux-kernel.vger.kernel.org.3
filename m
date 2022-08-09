@@ -2,215 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F1A58D78E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078A458D788
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234943AbiHIKlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
+        id S242618AbiHIKlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242671AbiHIKlp (ORCPT
+        with ESMTP id S242608AbiHIKlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:41:45 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F3F240B0;
-        Tue,  9 Aug 2022 03:41:42 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4M28kq4Mkpz9sj9;
-        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bwunTC9zQdnT; Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4M28kq3KFwz9sTf;
-        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 618598B778;
-        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id OgfyrO3Jg3AT; Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.234.255])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1C0FF8B763;
-        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 279AfUiP098284
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 9 Aug 2022 12:41:30 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 279AfSLO098283;
-        Tue, 9 Aug 2022 12:41:28 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM),
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-kernel@vger.kernel.org (open list),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
-        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
-Subject: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-Date:   Tue,  9 Aug 2022 12:40:38 +0200
-Message-Id: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Tue, 9 Aug 2022 06:41:07 -0400
+Received: from ns3.fnarfbargle.com (ns3.fnarfbargle.com [103.4.19.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2CCC17
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:41:05 -0700 (PDT)
+Received: from [10.8.0.1] (helo=srv.home)
+        by ns3.fnarfbargle.com with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lists2009@fnarfbargle.com>)
+        id 1oLMfV-0004O1-TL; Tue, 09 Aug 2022 20:41:01 +1000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=fnarfbargle.com; s=mail; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=VlWXTgNoMVGqiY4nt93ukeUGdeILiI3ZgrA18aVvkpY=; b=VNK89+aTAQReF+KVCHp3m4K3M9
+        Z+WvrnfafKKY3ewwqx5BGqW9KHqjhx5ywpad/J57f6ViA+LG2TTlFUnIIrmTq6Jlarga5DhoZ0XNS
+        aGTu4F4kiqOhrh1gqla8fLaZLRBPUAqOwELnVUdIqZCr5GTIfmTGrytVak43wPgxFMkE=;
+Message-ID: <bcebdeb9-4f6a-e931-46f5-b9be899db9a4@fnarfbargle.com>
+Date:   Tue, 9 Aug 2022 18:40:54 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1660041632; l=4893; s=20211009; h=from:subject:message-id; bh=ejR9oy9Pzrb8cgNZizsVlepvN45Ei2h0wt6+agIKtnw=; b=iINNvBE7QtjOKvB5PfN++erBtPsIhPMmqt/Z3lpvNjlBik2I3AaHxITPd0hsvJrpISp2eGMVSXs7 k8V7YsxYANQW8OT/GDp2OZUhMBB4TXFze5pWuYa7YMXL3wOm+uOE
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Apple Thunderbolt Display chaining
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <d484d7e5-f1aa-1096-e6fb-bbf16ce28699@fnarfbargle.com>
+ <Yu0nWro4xXURbSX6@lahna>
+ <87c1a001-ef79-6390-dfe2-06d2850f6e84@fnarfbargle.com>
+ <Yu4Gmkous7asng6h@lahna>
+ <42e81a8e-e393-7a69-7339-a020ebb57935@fnarfbargle.com>
+ <YvDcudE5BRtZAtfM@lahna>
+ <a1db1454-63b6-7c39-bbf6-53e53bbd36e6@fnarfbargle.com>
+ <5474e599-057a-ec0f-b469-560644155907@fnarfbargle.com>
+ <YvEFtPF7SBIwNG/o@lahna>
+ <d234ea9b-9303-6088-0a9b-4de887a77bf4@fnarfbargle.com>
+ <YvI1lQh+C0SJiG73@lahna>
+From:   Brad Campbell <lists2009@fnarfbargle.com>
+In-Reply-To: <YvI1lQh+C0SJiG73@lahna>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the time being, the default maximum number of GPIOs is set to 512
-and can only get customised via an architecture specific
-CONFIG_ARCH_NR_GPIO.
+G'day Mika,
 
-The maximum number of GPIOs might be dependent on the number of
-interface boards and is somewhat independent of architecture.
 
-Allow the user to select that maximum number outside of any
-architecture configuration. To enable that, re-define a
-core CONFIG_ARCH_NR_GPIO for architectures which don't already
-define one. Guard it with a new hidden CONFIG_ARCH_HAS_NR_GPIO.
+On 9/8/22 18:23, Mika Westerberg wrote:
+> Hi,
+> 
+> On Mon, Aug 08, 2022 at 09:27:24PM +0800, Brad Campbell wrote:
+>> If I don't authorize the PCIe tunnels and just leave the DP enabled it
+>> works fine also.
+> 
+> But you say that it fails on boot when the driver discovers the tunnels,
+> right? So there is really nothing to authorize (they should be already
+> "authorized" by the boot firmware).
+> 
+> If I understand correctly this is how it reproduces (the simplest):
+> 
+>   1. Connect a single Apple TB1 display to the system
+>   2. Boot it up
+>   3. Wait a while and it hangs
+> 
+> If this is the case, then the driver certainly is not creating any
+> PCIe tunnels itself unless there is a bug somewhere.
+> 
+> An additional question, does it reproduce with either TB1 display
+> connected or just with specific TB1 display?
+> 
 
-Only two architectures will need CONFIG_ARCH_HAS_NR_GPIO: x86 and arm.
+No, I've not been clear enough, I'm sorry. I've re-read what I've written below and
+I'm still not sure I'm clear enough.
 
-On arm, do like x86 and set 512 as the default instead of 0, that
-allows simplifying the logic in asm-generic/gpio.h
+The firmware never sets anything up. 
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- Documentation/driver-api/gpio/legacy.rst |  2 +-
- arch/arm/Kconfig                         |  3 ++-
- arch/arm/include/asm/gpio.h              |  1 -
- arch/x86/Kconfig                         |  1 +
- drivers/gpio/Kconfig                     | 14 ++++++++++++++
- include/asm-generic/gpio.h               |  6 ------
- 6 files changed, 18 insertions(+), 9 deletions(-)
+When I cold boot the machine (from power on), the thunderbolt displays and tunnels
+remain dark until linux initializes the thunderbolt driver the first time. 
+ 
+If I compile the thunderbolt driver into the kernel, or let the initramfs load it
+the displays come up, all PCIe tunnels are established and everything works.
 
-diff --git a/Documentation/driver-api/gpio/legacy.rst b/Documentation/driver-api/gpio/legacy.rst
-index 9b12eeb89170..566b06a584cf 100644
---- a/Documentation/driver-api/gpio/legacy.rst
-+++ b/Documentation/driver-api/gpio/legacy.rst
-@@ -558,7 +558,7 @@ Platform Support
- To force-enable this framework, a platform's Kconfig will "select" GPIOLIB,
- else it is up to the user to configure support for GPIO.
- 
--It may also provide a custom value for ARCH_NR_GPIOS, so that it better
-+It may also provide a custom value for CONFIG_ARCH_NR_GPIO, so that it better
- reflects the number of GPIOs in actual use on that platform, without
- wasting static table space.  (It should count both built-in/SoC GPIOs and
- also ones on GPIO expanders.
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 53e6a1da9af5..e55b6560fe4f 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -14,6 +14,7 @@ config ARM
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
- 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-+	select ARCH_HAS_NR_GPIO
- 	select ARCH_HAS_PTE_SPECIAL if ARM_LPAE
- 	select ARCH_HAS_PHYS_TO_DMA
- 	select ARCH_HAS_SETUP_DMA_OPS
-@@ -1243,7 +1244,7 @@ config ARCH_NR_GPIO
- 	default 352 if ARCH_VT8500
- 	default 288 if ARCH_ROCKCHIP
- 	default 264 if MACH_H4700
--	default 0
-+	default 512
- 	help
- 	  Maximum number of GPIOs in the system.
- 
-diff --git a/arch/arm/include/asm/gpio.h b/arch/arm/include/asm/gpio.h
-index f3bb8a2bf788..4ebbb58f06ea 100644
---- a/arch/arm/include/asm/gpio.h
-+++ b/arch/arm/include/asm/gpio.h
-@@ -2,7 +2,6 @@
- #ifndef _ARCH_ARM_GPIO_H
- #define _ARCH_ARM_GPIO_H
- 
--/* Note: this may rely upon the value of ARCH_NR_GPIOS set in mach/gpio.h */
- #include <asm-generic/gpio.h>
- 
- /* The trivial gpiolib dispatchers */
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f9920f1341c8..a8c956abc21e 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -82,6 +82,7 @@ config X86
- 	select ARCH_HAS_MEM_ENCRYPT
- 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
- 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-+	select ARCH_HAS_NR_GPIO
- 	select ARCH_HAS_PMEM_API		if X86_64
- 	select ARCH_HAS_PTE_DEVMAP		if X86_64
- 	select ARCH_HAS_PTE_SPECIAL
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 0642f579196f..250b50ed44e1 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -11,6 +11,9 @@ config ARCH_HAVE_CUSTOM_GPIO_H
- 	  overriding the default implementations.  New uses of this are
- 	  strongly discouraged.
- 
-+config ARCH_HAS_NR_GPIO
-+	bool
-+
- menuconfig GPIOLIB
- 	bool "GPIO Support"
- 	help
-@@ -22,6 +25,17 @@ menuconfig GPIOLIB
- 
- if GPIOLIB
- 
-+config ARCH_NR_GPIO
-+	int "Maximum number of GPIOs" if EXPERT
-+	depends on !ARCH_HAS_NR_GPIO
-+	default 512
-+	help
-+	  This allows the user to select the maximum number of GPIOs the
-+	  kernel must support. When the architecture defines a number
-+	  through CONFIG_ARCH_NR_GPIO, that value is taken and the user
-+	  cannot change it. Otherwise it defaults to 512 and the user
-+	  can change it when CONFIG_EXPERT is set.
-+
- config GPIOLIB_FASTPATH_LIMIT
- 	int "Maximum number of GPIOs for fast path"
- 	range 32 512
-diff --git a/include/asm-generic/gpio.h b/include/asm-generic/gpio.h
-index aea9aee1f3e9..ee090f534ab8 100644
---- a/include/asm-generic/gpio.h
-+++ b/include/asm-generic/gpio.h
-@@ -24,13 +24,7 @@
-  * actually an estimate of a board-specific value.
-  */
- 
--#ifndef ARCH_NR_GPIOS
--#if defined(CONFIG_ARCH_NR_GPIO) && CONFIG_ARCH_NR_GPIO > 0
- #define ARCH_NR_GPIOS CONFIG_ARCH_NR_GPIO
--#else
--#define ARCH_NR_GPIOS		512
--#endif
--#endif
- 
- /*
-  * "valid" GPIO numbers are nonnegative and may be passed to
--- 
-2.37.1
+When I reboot the machine (reset button or warm boot), the firmware continues to
+do nothing and all the tunnels remain in place. The machine dies when the thunderbolt 
+driver is loaded for a second time.
 
+That might be a reset/warm boot with it compiled in or loaded from iniramfs.
+It may also be me loading it from the command line after booting with it as a
+module and blacklisted.
+
+The problem comes about when the thunderbolt module is loaded while the PCIe tunnels
+are already established.
+
+To reproduce in the easiest manner I compile the thunderbolt driver as a module and
+blacklist it. This prevents it from auto-loading.
+
+I cold boot the machine, let it boot completely then modprobe thunderbolt and authorize
+the tunnels. I then warm boot which lets the kernel detect and init the DP displays
+and detect/configure all the PCIe devices. The thunderbolt driver is not loaded.
+
+The machine comes up, all tunnels are established and all devices work.
+
+If I then modprobe the thunderbolt driver, things break.
+
+This is the hack in my boot script :
+
+# Spark up thunderbolt
+if [ -z "`grep notb /proc/cmdline`" -a -z "`lsusb | grep '05ac:9227'`" ] ; then
+	modprobe thunderbolt
+	sleep 1
+	echo 1 > /sys/bus/thunderbolt/devices/0-3/authorized
+	echo 1 > /sys/bus/thunderbolt/devices/0-303/authorized
+	reboot
+fi
+
+Regards,
+Brad

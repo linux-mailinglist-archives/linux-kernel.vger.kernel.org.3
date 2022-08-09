@@ -2,104 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0948D58E152
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDFD58E142
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343726AbiHIUqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 16:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
+        id S245370AbiHIUmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 16:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238239AbiHIUqo (ORCPT
+        with ESMTP id S242373AbiHIUmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 16:46:44 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349CEB97
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 13:46:43 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id z25so18620188lfr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=0Qy02k6+Ajv4Ag2mivoqOXtUuUF/P/EOzfJ1STVBz2M=;
-        b=CG4Dw1M9UdPqZpV8B0sI5Fkw+fAHw9yeykPb4+HjQ5x2t6jF4FoQ1T90PopQrzs3T7
-         BTLRToS9FGiKCaENH9YkBqYwuHt/P0qOdBwajxJreFpIUwgyaakUxHw2sm+eVOF3liYK
-         aYKET9RkISdjZA3h9TtIFRIhmNKbirx0ITCsk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=0Qy02k6+Ajv4Ag2mivoqOXtUuUF/P/EOzfJ1STVBz2M=;
-        b=LeVLueN8/HeFRelGpII5m8PzzgWBQB7Lv5XIFPW63rGcsfcGropGsG574tbcfonYtQ
-         UJMTWp/8u8etuDkaVR5iaNrQdKMXXVjgouppdEvvD8gJ9U5IKMCX9BW/49OXNkKViyyW
-         NKdRHg+Fc4vMuK6fx+3R+JcqCsBeANntP52/2N6buqCo0EhjeZckjcot2g12pxVZFSKL
-         K/pj5hOwkP0sDGF88KJWkLHLUYfk7ENeib0BwdEmWQtRLv1k39ppOLaX9YbfG3by5DZq
-         8/SM6go9j8UFsgKBvZgJdEPvbztZVE3w/YTetd5KWyciJ8kRriuvu8c0L9I30cEvOZGJ
-         SV7g==
-X-Gm-Message-State: ACgBeo0KVKsZiJadmBxsJWEL9uaTy3ZNlMB5qFVagwHuPBwsg33ulk9S
-        qfvD+R5DZr2zefZK5/yNOJAYddvA86vAfiqd7VU=
-X-Google-Smtp-Source: AA6agR7JjWw9nZFJy1DSoLmZI7g1AylCWclwADW4JhW1kzmAZPZtZinOl6yiLEgwaoTu9N0vWN+JNw==
-X-Received: by 2002:a05:6512:108f:b0:48b:3a92:a2c6 with SMTP id j15-20020a056512108f00b0048b3a92a2c6mr7343225lfg.123.1660078001302;
-        Tue, 09 Aug 2022 13:46:41 -0700 (PDT)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id q18-20020ac25292000000b0048ad80a6d07sm86674lfm.170.2022.08.09.13.46.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 13:46:40 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id x25so14169278ljm.5
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:46:40 -0700 (PDT)
-X-Received: by 2002:a5d:638b:0:b0:220:6e1a:8794 with SMTP id
- p11-20020a5d638b000000b002206e1a8794mr15548804wru.193.1660077527286; Tue, 09
- Aug 2022 13:38:47 -0700 (PDT)
+        Tue, 9 Aug 2022 16:42:03 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFB71EEE9;
+        Tue,  9 Aug 2022 13:42:01 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 279JWNlh003455;
+        Tue, 9 Aug 2022 20:41:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=B6mRnnWo1suxCrUqt9vYJL76ZNWbx4MAKXH9o83uMH4=;
+ b=Zb6FDQguQWg7SEqnZIH1DE08XintRdYM9K5zm2wuGDCfFPvLKxS/MomlIAAYLGStQh+0
+ 6Zt5tbo5n2JP10q/gfFZw61rGXR2PkTjoLAhYeffMhaSluSepwNXideiuxuDQUW4oRzf
+ wv46HeYGVgidDfvIdmyGD2IwA4KMgDrp5rGsagL/J1JMJQ7O0YNIT3o/5S6QBAevYLI0
+ mfi9K2RwNlgdeBYkDYGse8cFoP435SwGLaDcyUwNoz6MdsK9RliylKt5WG+rCDNq/vsj
+ CE1SIcXPmXEi/29WDgmGTObM8jqUEx/sNToGCQSPKNMsEgB8rgRrsw7s07hjUF/a/7Ny Vg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3huwu11vmc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 20:41:50 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 279KG6kn034724;
+        Tue, 9 Aug 2022 20:41:50 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3huwu11vkv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 20:41:50 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 279KLHWw031604;
+        Tue, 9 Aug 2022 20:41:49 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma03dal.us.ibm.com with ESMTP id 3huwvk8e1y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 20:41:49 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 279KfmGl3211808
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 9 Aug 2022 20:41:48 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D60128060;
+        Tue,  9 Aug 2022 20:41:48 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8704A2805A;
+        Tue,  9 Aug 2022 20:41:47 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.17.179])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  9 Aug 2022 20:41:47 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-input@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au,
+        wsa+renesas@sang-engineering.com, eajames@linux.ibm.com
+Subject: [PATCH v5 0/2] input: misc: Add IBM Operation Panel driver
+Date:   Tue,  9 Aug 2022 15:41:45 -0500
+Message-Id: <20220809204147.238132-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220808073232.8808-1-david@redhat.com> <CAHk-=wgsDOz5MfYYS9mE7PvFn4kLhTFdBwXvN6HCEsw1kvJnRQ@mail.gmail.com>
- <91e18a2f-c93d-00b8-7c1b-6d8493c3b2d5@redhat.com> <CAHk-=whg0ddey-LqFAPfZJDXHMjaHJNojAV3q17yvjc6W8QRvQ@mail.gmail.com>
- <c096cc82-60b4-9e75-06ad-156461292941@redhat.com> <CAHk-=wh1q7ZSWhDWOyqmVawqjq55sUVkn8ASjE_b2VOcE1vFaA@mail.gmail.com>
-In-Reply-To: <CAHk-=wh1q7ZSWhDWOyqmVawqjq55sUVkn8ASjE_b2VOcE1vFaA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 9 Aug 2022 13:38:30 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi_PfZ1_8pjMmRftiq1dshheTFnctEwRt8PZMGndCisdA@mail.gmail.com>
-Message-ID: <CAHk-=wi_PfZ1_8pjMmRftiq1dshheTFnctEwRt8PZMGndCisdA@mail.gmail.com>
-Subject: Re: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove FOLL_COW
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: runN4XRMR4H1nubwfbxbn8vqXbPlzAgJ
+X-Proofpoint-ORIG-GUID: R9ZzoPkD5prD5ZK_Yfz3HPqwssB-zDQu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-09_05,2022-08-09_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 clxscore=1011 phishscore=0
+ priorityscore=1501 mlxlogscore=999 bulkscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208090076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 1:30 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> And here we are, 30 years later, and it still does that, but it leaves
-> the VM_MAYSHARE flag so that /proc/<pid>/maps can show that it's a
-> shared mapping.
+This series adds support for input from the IBM Operation Panel, which is
+a simple controller with three buttons and an LCD display meant for
+interacting with a server. It's connected over I2C, typically to a service
+processor. This series only supports the input from the panel, in which the
+panel masters the I2C bus and sends data to the host system when someone
+presses a button on the controller.
 
-.. thinking about it, we end up still having some things that this helps.
+Changes since v4:
+ - Fix missing input include in dt binding resulting in make check failure
 
-For example, because we clear the VM_SHARED flags for read-only shared
-mappings, they don't end up going through mapping_{un}map_writable(),
-and don't update i_mmap_writable, and don't cause issues with
-mapping_deny_writable() or mapping_writably_mapped().
+Changes since v3:
+ - Document linux,keycodes property
+ - Use linux,keycodes property to map the buttons
+ - Put the checksumming in a seperate function
+ - Don't do unneccessary input_unregister calls
+ - Minor cleanup and add debug data to dev_dbg calls
 
-So it ends up actually having random small semantic details due to
-those almost three decades of history.
+Changes since v2:
+ - Add "additionalProperties: false" to dts doc
+ - Refactor switch statement in the input driver; check command size and call
+   the processing function within the STOP case
+ - Use a different definition name for Aspeed interrupt status mask
 
-I'm sure there are other odd pieces like that.
+Changes since v1:
+ - Redo DTS documentation example to use I2C_OWN_SLAVE_ADDRESS
+ - Reject commands received in the input driver that are too long
+ - Add a definition for the interrupt status mask in the Aspeed I2C driver
+ - Use I2C_OWN_SLAVE_ADDRESS for both dts additions
 
-                  Linus
+Eddie James (2):
+  dt-bindings: input: Add documentation for IBM Operation Panel
+  input: misc: Add IBM Operation Panel driver
+
+ .../bindings/input/ibm,op-panel.yaml          |  50 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/input/misc/Kconfig                    |  18 ++
+ drivers/input/misc/Makefile                   |   1 +
+ drivers/input/misc/ibm-panel.c                | 198 ++++++++++++++++++
+ 5 files changed, 274 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/ibm,op-panel.yaml
+ create mode 100644 drivers/input/misc/ibm-panel.c
+
+-- 
+2.31.1
+

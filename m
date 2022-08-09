@@ -2,98 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C58658E1C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7DC58E1C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiHIV2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 17:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S229745AbiHIV27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 17:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiHIV2N (ORCPT
+        with ESMTP id S229755AbiHIV2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 17:28:13 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CBE606AC
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:28:12 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id h28so11913555pfq.11
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 14:28:12 -0700 (PDT)
+        Tue, 9 Aug 2022 17:28:41 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC6061DAD
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:28:40 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-10dc1b16c12so15558791fac.6
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 14:28:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=JY9D8MD/ihrJJozLZGniZMqDUbj7IISkdDkiVGgSVlA=;
-        b=ZIuHud84ZtXedCzT7Pr+igolJJ5oQC93UOqQ51ntuXWbhbr1e91OANRUalKrZPYtpc
-         f1Ne3tCGqNyPWTQckJdLtCqJraU/AmN3zLYSJIfLFzL3UVMHrTZmP+9yAhK+/oRy7CtA
-         vpsmqhPLXbrCoQ8TfIA/+ttwE0d6C0+EYQysA=
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=E2PBH54C+fEWj4YcL87ROyWSx34hfirEMrXLjLTIjHY=;
+        b=VcdAZ1qkx3IguxUwgqH/l0H+AeyeSQu4I2Fr/0AJpfyK+PJknfx92gx0lk4UZCXbYZ
+         uVrJ8MXLGwFoh3cvj2ZVlLV0GFBwp1SqN3IqcYh9cbG9TmtFzUSuadZEaGcZ7Z6ri45b
+         dwWlaIKpSsgYrBOBtMEMj2Z3+WlPinFFCjntyYedv7u5I8PDqneUsI8uYKZUjDl/N5oM
+         xbV3faguNUsnkl2WntHchMfG+K8JfC8EI1M085tqIGFC1MNYn4+Vg3X7aNJKT2Ns2XKM
+         PWvud3h06pT8NTisYgqNYYA7+tJtwaOVx+2ER0lQMM3GnPsfxiKUw4+mblr0LxXvMhVT
+         9Pvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=JY9D8MD/ihrJJozLZGniZMqDUbj7IISkdDkiVGgSVlA=;
-        b=B1+KmxhUh+KQY1aOMVXcFojkFDAuLI8m1sZYybWsdwd8WfJHGigsi8N4R34KAFx+yR
-         60WGLq4MeSRv/ei+/DNQ4tgVF/gnI4nsgpH/8zI6R6Kk2rS+MnTqaFRfzwPsBPwsSgDH
-         7qOAkaBDpMQ7fn0MyP3YDBIJGg/SAejWbdwlO9xwus/mfDDaLNhV5Z8B7qh4t4aH/xQe
-         0STPS/QHqbn3c2ZxSBlLy78FsrEb6W710uW8XQ1ib9I04Z17Rh/sE/x3zsxhUA+TZFwP
-         /YXEiEQXBjkNN00htxN+WedTOeRcHDxRz3Bn+wf9Hj2QFsn6OKnUeoRpO90bnhP2YDHZ
-         k0Gg==
-X-Gm-Message-State: ACgBeo3+sNwjZquooZ6uzTxxDmQhewnCARi9lQxPsBfrNPPm0FBOIljl
-        AITkbV52QfICadyxBZ6hQvGiyw==
-X-Google-Smtp-Source: AA6agR5VYybnqM34uLEivFOpfRmCmRQjvS+GViCfNSaPuw3/IoUzIEHGJARl+EBPf4u2ccJlCi8oLQ==
-X-Received: by 2002:a05:6a00:804:b0:52f:43f9:b634 with SMTP id m4-20020a056a00080400b0052f43f9b634mr11293054pfk.62.1660080491539;
-        Tue, 09 Aug 2022 14:28:11 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:22ee:daf1:c9a1:a49])
-        by smtp.gmail.com with ESMTPSA id t4-20020a63eb04000000b003db7de758besm8447923pgh.5.2022.08.09.14.28.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 14:28:10 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] regulator: core: Fix missing error return from regulator_bulk_get()
-Date:   Tue,  9 Aug 2022 14:27:45 -0700
-Message-Id: <20220809142738.1.I91625242f137c707bb345c51c80c5ecee02eeff3@changeid>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=E2PBH54C+fEWj4YcL87ROyWSx34hfirEMrXLjLTIjHY=;
+        b=jDs+m8KPArNG04PCXVsIvVDmjPyRMY2ZAgZaY/JuUvtxerdHrJcApkj9a4OABQvpFS
+         SnfsSsf7NwW9WKQJYa5knHIuRrQYGR0Rsm2aSv3bMlbBEDLStEOsU3p3+epStNxXj8PU
+         0gd9H/ulPkvYbn6VWR46M7yXmeGO11mcgZEJd0ABjVNWGbVgyDhDaGfTq91Pr/2ZoYzM
+         T5xz9zOhvjkX567ipHcoNfWKlkGxxSxVQ33bH3I7E49M/17a8NdIK/Qmizz+RLVb68M6
+         BZm5IGrafMQkRWZDeXcyEtyPya/Z7DYOdLXQ25snpqDKJ+csASFiSHOQsqNCuckpDaSA
+         m+Ag==
+X-Gm-Message-State: ACgBeo06tYC8em4T94D501KqFzZYk8PgqXfMaK6BFBYa2+K3QBqnX4dm
+        EGxNr7+cdvO//zm5l4VvLy8E3B426u68dGF0RS5Nnp+FzqH3ew==
+X-Google-Smtp-Source: AA6agR5nVaQrbQtoSRq42cpyfctzYj4LBO73cbnhl5M+RycIG1O6U/KI9OCCAMM1gR2gUicj2h3WB+dJ24+D5E8MFas=
+X-Received: by 2002:a05:6870:3292:b0:10c:d1fa:2e70 with SMTP id
+ q18-20020a056870329200b0010cd1fa2e70mr177807oac.281.1660080519626; Tue, 09
+ Aug 2022 14:28:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Kallol Biswas <nucleodyne@gmail.com>
+Date:   Tue, 9 Aug 2022 14:28:29 -0700
+Message-ID: <CA+QbAV6YEN1h=T1H3-+1vg+DpSe8Uxzz2wH9u00GXe6L6TB-Uw@mail.gmail.com>
+Subject: mm/memory-failure: __get_any_page: unknown zero refcount
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 6eabfc018e8d ("regulator: core: Allow specifying an initial
-load w/ the bulk API") I changed the error handling but had a subtle
-that caused us to always return no error even if there was an
-error. Fix it.
+While running a memory RAS test on a new platform I encountered the
+following on the 5.10.117 kernel.
 
-Fixes: 6eabfc018e8d ("regulator: core: Allow specifying an initial load w/ the bulk API")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+__get_any_page: 0x77df: unknown zero refcount page type 7fffe000000000
 
- drivers/regulator/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The address 0x77df000 is in a system ram area:
+00100000-5c9c0017 : System RAM
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 7150b1d0159e..d8373cb04f90 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -4784,10 +4784,10 @@ int regulator_bulk_get(struct device *dev, int num_consumers,
- 		consumers[i].consumer = regulator_get(dev,
- 						      consumers[i].supply);
- 		if (IS_ERR(consumers[i].consumer)) {
--			consumers[i].consumer = NULL;
- 			ret = dev_err_probe(dev, PTR_ERR(consumers[i].consumer),
- 					    "Failed to get supply '%s'",
- 					    consumers[i].supply);
-+			consumers[i].consumer = NULL;
- 			goto err;
- 		}
- 
--- 
-2.37.1.559.g78731f0fdb-goog
+The page is not a huge page, not on the free buddy list and not in use.
 
+__get_any_page()
+..................
+ if (!get_hwpoison_page(p)) {
+    if (PageHuge(p)) {
+      pr_info("%s: %#lx free huge page\n", __func__, pfn);
+      ret = 0;
+    } else if (is_free_buddy_page(p)) {
+      pr_info("%s: %#lx free buddy page\n", __func__, pfn);
+      ret = 0;
+    } else if (page_count(p)) {
+      /* raced with allocation */
+      ret = -EBUSY;
+    } else {
+      pr_info("%s: %#lx: unknown zero refcount page type %lx\n",
+        __func__, pfn, p->flags);
+
+
+Sparse mem configs are set:
+cat /boot/config-5.10.117-2.el7.nutanix.20220304.1002776.x86_64 | grep -i sparse
+CONFIG_SPARSE_IRQ=y
+CONFIG_ARCH_SPARSEMEM_ENABLE=y
+CONFIG_ARCH_SPARSEMEM_DEFAULT=y
+CONFIG_SPARSEMEM_MANUAL=y
+CONFIG_SPARSEMEM=y
+CONFIG_SPARSEMEM_EXTREME=y
+CONFIG_SPARSEMEM_VMEMMAP_ENABLE=y
+CONFIG_SPARSEMEM_VMEMMAP=y
+CONFIG_MEMORY_HOTPLUG_SPARSE=y
+
+Can someone help understand why we have such a page in the system?
+What the purpose is.
+
+Thank you,
+Kallol

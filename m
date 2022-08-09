@@ -2,100 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2197D58DA05
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E766E58DA0A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244709AbiHIOBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 10:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        id S241048AbiHIOEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 10:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiHIOBT (ORCPT
+        with ESMTP id S230380AbiHIOEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 10:01:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4838F271A;
-        Tue,  9 Aug 2022 07:01:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9602DB8111F;
-        Tue,  9 Aug 2022 14:01:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D94DC433C1;
-        Tue,  9 Aug 2022 14:01:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660053672;
-        bh=u+a4xxI8QuroONub9HjlQCWDta7sG4zKmZv7pm4e4YQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BqCEXUMORsYoPmP0TX81BzFZY+JxVRuIDNIJDwJyMmP1ljzVK0zj3ajutrpW6JxP3
-         v9AcpNw3Jd+XSv3AcYY5JxJ3WjdLf8tylmnTHCMzBAJmuoWWNQ1wSz4uh8G+BcR7H7
-         qzp31MJLYX9n2DH5YKN3sMJDHK9WTvgZSceadpRZwuCsxLYct7IQX4R9GIMTt4h0iz
-         2Cmm0vkMz+q23/7NHrWRw9dtTkAY+pHpPQr/5h78SGZFNOdRetRdf5bA8m0gL5czd6
-         layPBfn/2nP/+JtU/3GNMs7icW9SY8QkXZO3IbCrXv5UdOOGZF0uXBSw38UVPIjojv
-         Kzn2k3i4UllqA==
-Date:   Tue, 9 Aug 2022 10:01:10 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Will Deacon <will@kernel.org>, catalin.marinas@arm.com,
-        bp@suse.de, Jason@zx2c4.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH AUTOSEL 5.19 05/58] arm64: kernel: drop unnecessary PoC
- cache clean+invalidate
-Message-ID: <YvJopiTwMaahZGIy@sashalap>
-References: <20220808013118.313965-1-sashal@kernel.org>
- <20220808013118.313965-5-sashal@kernel.org>
- <CAMj1kXGaOeDtFKCXwKo5Dt9DJneyS5fjnmoZZBmYeDZfYG6GiA@mail.gmail.com>
+        Tue, 9 Aug 2022 10:04:12 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3074BC37;
+        Tue,  9 Aug 2022 07:04:11 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id z16so14380780wrh.12;
+        Tue, 09 Aug 2022 07:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=DDKIcyj9Z0sGFhBonIYv1vMbP6zsZA0f1KiomNe+d78=;
+        b=CJhsWA91H6jWASh85FxrEygMLwuz8qmN2L1vaWzcLg93UW1J5b3gSXC2E0ceH+zCuy
+         BQ6W1OM0Q4vVt5DWLJWl5PutysBGcO1HYqclY+LZH9TeeADU9NhehEx/KCkbm+1+AAKJ
+         3iRxI6p5eroVoxMzjqF8xhHvTY7xSYBZ3P6gnXVhTXqGZ5EMAbw0GSQqxEbVP3vSpAVc
+         PmRA6dAX2zfVSRl5pzO5XOLet/K4wl7l8KX+OjuoYcHqMCZCjsx3hLa3a8b2bEAKP+KJ
+         upC3S34qpg/b3/3H2h7RrAVHxJ7vwotTA1PWgZq5IQGSKYH1FugVJJKYtdZCc1FHEWlB
+         8MXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=DDKIcyj9Z0sGFhBonIYv1vMbP6zsZA0f1KiomNe+d78=;
+        b=vvrz+WvDSXT0i8H8eGvR+9ehH39Jxa+BJmmgsIP6s9gTyXEJMJw/KDjxAFdUjOqntV
+         vrm36nCYPOxK33vZyjWZmK/P0jbYGbXB4Ry6Rto8eTShu28vr2jRUQcVfjJeY6HPetJp
+         nuWBhfgGHrfGlgcY8jUje/EF3eqiW5wGAKaoN2rr+GJcd94iVYtkVaiF5n4CDiCdoA4s
+         sfdfTQbPRWXZyw8FbxnYstbjZ5EskqzWPRFBXYNw2DLkKgDGPOzPp7x5Q5lqpbvgN7Pf
+         x2wysXAkcIfBsyLGBV+pNjMzQGu+CxMdySx2Q1+yMdaWs/YWOlUE6X28QWU+vwIhv0ss
+         CCTQ==
+X-Gm-Message-State: ACgBeo2q+FDvz+uF6eU9i0U8mjKG0asRzSB8dZjw9f6Nb57QCmeUISnT
+        zK87Tf+jM+H3IE+NSjsiwWM=
+X-Google-Smtp-Source: AA6agR58ORGm0OUkPlmNNA2FCN5hW5yDkabypPTKe4GvE5qlmbvzfHxtYgsz/SjlJ7S3yOpSpdejGw==
+X-Received: by 2002:a5d:5903:0:b0:221:9d43:961 with SMTP id v3-20020a5d5903000000b002219d430961mr9892794wrd.385.1660053850399;
+        Tue, 09 Aug 2022 07:04:10 -0700 (PDT)
+Received: from [192.168.0.104] ([77.126.166.31])
+        by smtp.gmail.com with ESMTPSA id c5-20020a5d4f05000000b002205a5de337sm13823218wru.102.2022.08.09.07.04.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 07:04:09 -0700 (PDT)
+Message-ID: <69829c71-d51c-b25f-2d74-5fdd231ed9e4@gmail.com>
+Date:   Tue, 9 Aug 2022 17:04:07 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGaOeDtFKCXwKo5Dt9DJneyS5fjnmoZZBmYeDZfYG6GiA@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH net-next V4 1/3] sched/topology: Add NUMA-based CPUs
+ spread API
+Content-Language: en-US
+To:     Valentin Schneider <vschneid@redhat.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220728191203.4055-1-tariqt@nvidia.com>
+ <20220728191203.4055-2-tariqt@nvidia.com>
+ <xhsmhedxvdikz.mognet@vschneid.remote.csb>
+ <df8b684d-ede6-7412-423d-51d57365e065@gmail.com>
+ <xhsmh35e5d9b4.mognet@vschneid.remote.csb>
+ <12fd25f9-96fb-d0e0-14ec-3f08c01a5a4b@gmail.com>
+ <xhsmhzggdbmv6.mognet@vschneid.remote.csb>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <xhsmhzggdbmv6.mognet@vschneid.remote.csb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 11:05:29AM +0200, Ard Biesheuvel wrote:
->On Mon, 8 Aug 2022 at 03:31, Sasha Levin <sashal@kernel.org> wrote:
->>
->> From: Ard Biesheuvel <ardb@kernel.org>
->>
->> [ Upstream commit 2e945851e26836c0f2d34be3763ddf55870e49fe ]
->>
->> Some early boot code runs before the virtual placement of the kernel is
->> finalized, and we used to go back to the very start and recreate the ID
->> map along with the page tables describing the virtual kernel mapping,
->> and this involved setting some global variables with the caches off.
->>
->> In order to ensure that global state created by the KASLR code is not
->> corrupted by the cache invalidation that occurs in that case, we needed
->> to clean those global variables to the PoC explicitly.
->>
->> This is no longer needed now that the ID map is created only once (and
->> the associated global variable updates are no longer repeated). So drop
->> the cache maintenance that is no longer necessary.
->>
->> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
->> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> Link: https://lore.kernel.org/r/20220624150651.1358849-9-ardb@kernel.org
->> Signed-off-by: Will Deacon <will@kernel.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->NAK
->
->This patch *must* *not* be backported. It will break the boot.
 
-Appologies for this one, this was a technical issue on my end and I owe
-a beer for yourself and few other folks that should have been filtered
-out.
 
-I'll drop all your patches from the AUTOSEL queue.
+On 8/9/2022 3:52 PM, Valentin Schneider wrote:
+> On 09/08/22 13:18, Tariq Toukan wrote:
+>> On 8/9/2022 1:02 PM, Valentin Schneider wrote:
+>>>
+>>> Are there cases where we can't figure this out in advance? From what I grok
+>>> out of the two callsites you patched, all vectors will be used unless some
+>>> error happens, so compressing the CPUs in a single cpumask seemed
+>>> sufficient.
+>>>
+>>
+>> All vectors will be initialized to support the maximum number of traffic
+>> rings. However, the actual number of traffic rings can be controlled and
+>> set to a lower number N_actual < N. In this case, we'll be using only
+>> N_actual instances and we want them to be the first/closest.
+> 
+> Ok, that makes sense, thank you.
+> 
+> In that case I wonder if we'd want a public-facing iterator for
+> sched_domains_numa_masks[%i][node], rather than copy a portion of
+> it. Something like the below (naming and implementation haven't been
+> thought about too much).
+> 
+>    const struct cpumask *sched_numa_level_mask(int node, int level)
+>    {
+>            struct cpumask ***masks = rcu_dereference(sched_domains_numa_masks);
+> 
+>            if (node >= nr_node_ids || level >= sched_domains_numa_levels)
+>                    return NULL;
+> 
+>            if (!masks)
+>                    return NULL;
+> 
+>            return masks[level][node];
+>    }
+>    EXPORT_SYMBOL_GPL(sched_numa_level_mask);
+> 
 
--- 
-Thanks,
-Sasha
+The above can be kept static, and expose only the foo() function below, 
+similar to my sched_cpus_set_spread().
+
+LGTM.
+How do you suggest to proceed?
+You want to formalize it? Or should I take it from here?
+
+
+>    #define for_each_numa_level_mask(node, lvl, mask)	    \
+>            for (mask = sched_numa_level_mask(node, lvl); mask;	\
+>                 mask = sched_numa_level_mask(node, ++lvl))
+> 
+>    void foo(int node, int cpus[], int ncpus)
+>    {
+>            const struct cpumask *mask;
+>            int lvl = 0;
+>            int i = 0;
+>            int cpu;
+> 
+>            rcu_read_lock();
+>            for_each_numa_level_mask(node, lvl, mask) {
+>                    for_each_cpu(cpu, mask) {
+>                            cpus[i] = cpu;
+>                            if (++i == ncpus)
+>                                    goto done;
+>                    }
+>            }
+>    done:
+>            rcu_read_unlock();
+>    }
+> 

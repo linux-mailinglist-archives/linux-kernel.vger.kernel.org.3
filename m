@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBE658D562
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8712658D568
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237116AbiHIIa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S238996AbiHIIcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236481AbiHIIax (ORCPT
+        with ESMTP id S236481AbiHIIcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:30:53 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A35212AFF;
-        Tue,  9 Aug 2022 01:30:52 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id r22so8361994pgm.5;
-        Tue, 09 Aug 2022 01:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Q4L5FOTMe4AJdJJMn6Pl0PtIME6CYddRd63dmOS6kRQ=;
-        b=YehJQcfbdLP1a3hj8YEzB5kB0Fo89XPMrfdI9hqQIQ3C5RiKO3DTShPd8MnAB0m7nW
-         pYz4R3GtB8B862AnFkYOZLWALW6YVklqRx0T4gW3f+QnBBDfC2YfklPzXhtOFyPGMMRP
-         kKQHtHiKWwHrAyW9cW5kQdjf2KYVknfJ4e5CvRTaaFb+CJJCjeW11CsWmWljbL0BVpQy
-         2Qq5oEDh/720VY31hW6YBk8+o3kWA+QzWPqwcdeSOdmlgtMGIp4f1Uil3l7ud4eaCBqk
-         FmLbzkzQfRSXsc8Y7vqpV1B5/de0Tqaw2YfkE+dB8nIdvcrtiezpFlgIUofAfglKNnyE
-         qfjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Q4L5FOTMe4AJdJJMn6Pl0PtIME6CYddRd63dmOS6kRQ=;
-        b=0ztFBiB5XNOCK5hh8omQ+0a2Uvoa/d4LntvcmkZpZI5Z61UGZLDHMHYRp/bRjb/cyV
-         s1MabU+pTh4XNHhe0HOZiuAXHIX0yABM/K+DOByGq81D3RSV+MVfTUPmcLA1ZIFbHpOq
-         dcnQSMPZHRcTb7vJDthaXPUahTwEzOBg5Ooh57K86/+QtsHPq2tSxlWVASjAv3967oJ7
-         60OcEhSEZSLPcEd0gGtsnjVQmIHllwViNbjAIBrQY3P8gVcsgZRj8/b/fgDdlBg88i8j
-         B/PmfFm/Hh+90oaWqBkYBujlPHDMCUwlGKpMkl2f2RVOKv47dAW1eLZN9W1mUuwN5L64
-         WcKw==
-X-Gm-Message-State: ACgBeo28m911zSORhnpGmS4xOs+pibjFpdTwV6WvrKq0TDv49KYT6P+n
-        TAe/EgdK8X+2w5kYtiAWrCg=
-X-Google-Smtp-Source: AA6agR40vlVtmWsCZ0vzwxc1xMptLC9rc82nSSYCshTc1G5a+IoniYvNLPNDWSRN15NcWfx3G8BhCQ==
-X-Received: by 2002:a05:6a00:1490:b0:52d:9ccb:bf96 with SMTP id v16-20020a056a00149000b0052d9ccbbf96mr21807639pfu.31.1660033851954;
-        Tue, 09 Aug 2022 01:30:51 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-42.three.co.id. [116.206.12.42])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b0016bcc35000asm10155043plg.302.2022.08.09.01.30.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 01:30:51 -0700 (PDT)
-Message-ID: <9046f8b3-2bd7-64c6-5da8-d1c4b935b1e9@gmail.com>
-Date:   Tue, 9 Aug 2022 15:30:46 +0700
+        Tue, 9 Aug 2022 04:32:47 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF6F1F619
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:32:45 -0700 (PDT)
+Received: from mail-ej1-f43.google.com ([209.85.218.43]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MhClw-1nhIp41hvW-00eLLm for <linux-kernel@vger.kernel.org>; Tue, 09 Aug
+ 2022 10:32:44 +0200
+Received: by mail-ej1-f43.google.com with SMTP id dc19so20876909ejb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 01:32:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0SUdbBO4Dx5cLdbJed7Ph9yRC7icTRVU6HyDFyCXruhFTTwM/U
+        VE6wEbCOkJfvXtHmDoDSGU7HKBjaPAEQZuhhL3Q=
+X-Google-Smtp-Source: AA6agR4TKFxtd5LiYcX73HbGF2u7VeVKCRTYtwOOZ8D2bVS25LcWy9weFOVCptPzjGX0tAq94ORtgLDqHbENdmCFPc8=
+X-Received: by 2002:a17:907:7395:b0:730:b636:2c89 with SMTP id
+ er21-20020a170907739500b00730b6362c89mr16431662ejc.547.1660033964094; Tue, 09
+ Aug 2022 01:32:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] Documentation: stable: Document alternative for referring
- upstream commit hash
-Content-Language: en-US
-To:     Salvatore Bonaccorso <carnil@debian.org>,
-        Jonathan Corbet <corbet@lwn.net>
+References: <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
+ <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
+ <YuvctaLwRi+z0Gw4@nvidia.com> <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
+ <Yuxi1eRHPN36Or+1@nvidia.com> <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
+ <CAFCwf107tLxHKxkPqSRsOHVVp5s2tDEFOOy2oDZUz_KGmv-rDg@mail.gmail.com>
+ <YvCozvgodIY19LSr@kroah.com> <YvFOEPdC9r8QBH11@nvidia.com>
+ <YvH9X5puer4jpzMX@kroah.com> <YvIU/wMdqFA1fYc6@infradead.org>
+In-Reply-To: <YvIU/wMdqFA1fYc6@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 9 Aug 2022 10:32:27 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3y2=FyzK4S6MRfZdrz=DdLat1ajdT_uPmN533mNYmF9w@mail.gmail.com>
+Message-ID: <CAK8P3a3y2=FyzK4S6MRfZdrz=DdLat1ajdT_uPmN533mNYmF9w@mail.gmail.com>
+Subject: Re: New subsystem for acceleration devices
+To:     Christoph Hellwig <hch@infradead.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220809045543.2049293-1-carnil@debian.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220809045543.2049293-1-carnil@debian.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:5E5bCciRIBKhYs8DONl/B/spZHbKI7r800+vqWgPu43CFVIOFTu
+ m2StS3+sqLXuHOo9PcuJi0uizp1xuIpFG6dXqa+rvxrDTcbOG/AEwhAXp88JqQZJjNj9cPJ
+ tzkRCQwdinppWbVwxCnUmCDiK+VcoDrrm6IyOYtVkQHW2BS03N5ddpARgSMgyJFJ23G1979
+ RT82PSVuQm1sorbhri/4w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IUbD/5MRfm0=:wORYGYWlIPTD4JBHNA62p+
+ 3os6aBT/RUwOOX/Z/Cw4P0+W8uGghbFBflZDNfEPPuUuRNhjKAbmidj85wPGOElfvXYBBSRHP
+ cwZ5e2zaX2NiWltTR7fr5VJPXeXfyl2GNZQWmITZIR4yfcF/D4DNyAhRbwRpnbRQkkyEmeWSR
+ Na5gpN7JO0SPG+z2gFwLtClkLcKw3CuTWFyKos354aJ2NJ/bdYXh4x0dqkbH56uJm1+13IE7R
+ qWKtcuTQzvH7YwXi+9a9QjIKUkE1pCuEgOOaHz8MXeBvLIKFI8Ic+EjTwbSgClD5Zr2FXs16d
+ 5Yuib6Ce2gPPGsFWEQDOF03A/6iU9kP2g+2142TUy0HBl+NTH3lD1JMDYZYY61rIrSIydNClV
+ wXTwwSiPyoTeyLOEjzBPJz3wlpkwHp8z821FGBPmA0gVvHYG9bcZ0v2vwOSnIzmZ953mnC3Ae
+ hoGb44NuJZmQ676y6ZZODnxwj/93555iAsP6aR9/4ovGAAmjfKJb7OaFOLYu6KSpc0Dkbf+nK
+ dWGbj5JrxKSimhWh40bHBekG8mIZXAJhe95Raw/J/mdEy45hdntpuBqXlUniOQgk8k5t1T2Ot
+ dzqGW+LtbaW9Oq0OjBdZaD8KZCXnPK5UXriiIrnTvfLi8rkN6HcJF6uavJ7Nfbv3+xpsZzjvE
+ PIrJ1e+i/5luDUZ2gKXtScXSzQjyQ1tT+rePW4N13p8YN6Q9sVEMNl4SS9LsXj/TRgoddudyr
+ wk5SH2HdSM849NVt5Yqd5yOoqBTXdwOVBABr/r6xxn1HuiHYYf9f8/UtfAw/iMmBcybChwLEa
+ hrxbkpV80wJZMu+eR84cHFHmBPCFZ9992mAYvsOM6jTE1CBjd83k/qodj1V7mWKLm2X7pgxtt
+ CN6Ahd7uQOvptwHNvYtQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 11:55, Salvatore Bonaccorso wrote:
-> @@ -97,6 +97,12 @@ text, like this:
->  
->      commit <sha1> upstream.
->  
-> +or alternatively:
-> +
-> +.. code-block:: none
-> +
-> +    [ Upstream commit <sha1> ]
-> +
+On Tue, Aug 9, 2022 at 10:04 AM Christoph Hellwig <hch@infradead.org> wrote:
+> On Tue, Aug 09, 2022 at 08:23:27AM +0200, Greg Kroah-Hartman wrote:
+> > > This is different from the number of FDs pointing at the struct file.
+> > > Userpsace can open a HW state and point a lot of FDs at it, that is
+> > > userspace's problem. From a kernel view they all share one struct file
+> > > and thus one HW state.
+> >
+> > Yes, that's fine, if that is what is happening here, I have no
+> > objection.
+>
+> It would be great if we could actually life that into a common
+> layer (chardev or vfs) given just how common this, and drivers tend
+> to get it wrong, do it suboptimal so often.
 
-Looks OK. Indeed Sasha uses the alternative style.
+Totally agreed.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+I think for devices with hardware MMU contexts you actually want to
+bind the context to a 'mm_struct', and then ensure that the context
+is only ever used from a process that shares this mm_struct,
+regardless of who else has access to the same file or inode.
 
--- 
-An old man doll... just what I always wanted! - Clara
+We did this in a somewhat hacky way in spufs a long time ago, and
+I would expect this to be solved more cleanly in drivers/gpu/drm, but
+I don't know where to look for that code.
+
+        Arnd

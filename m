@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6514058DE73
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A9158DE77
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345943AbiHISPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S1343735AbiHISSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345391AbiHISMl (ORCPT
+        with ESMTP id S1345603AbiHISOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:12:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C572C11E;
-        Tue,  9 Aug 2022 11:05:34 -0700 (PDT)
+        Tue, 9 Aug 2022 14:14:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91602C65A;
+        Tue,  9 Aug 2022 11:05:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE707B8171E;
-        Tue,  9 Aug 2022 18:05:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DDBAC4347C;
-        Tue,  9 Aug 2022 18:05:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14FD661199;
+        Tue,  9 Aug 2022 18:05:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24073C4347C;
+        Tue,  9 Aug 2022 18:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068333;
-        bh=IBCeAButYsRtNeRmHz0Nr8ebRIHdO/EQ3qn0BXhofwY=;
+        s=korg; t=1660068336;
+        bh=cAL7cSlopyAfoe9ePy3AVZXWDpqa/7WVl3RSZd8S3bI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LFx3fZAOYEr8n6dnq3aqpjE1+4dOHbDvqEVD62enCRrNG/9YETa4HfifbTznrUE68
-         S5raZac2Blan5but8El5NJALyxqpGec6xhTUCx/H0KsdNIB+UheKGFe/ZsVygXUMbM
-         b0Htx/KCzPqRmHWyBnByoVQG9LVhJI/fkiwsgltI=
+        b=vk0Ucg8OtVw49aA23NRbgSSpBldsQF1ew0xT1b3otzxxg2Kfbq97AAw71ZXfU60P0
+         +kvX/aAauTyD/OyC+CRy9JEeCtTCiuzVQCuPBoTHTBVprN99ptr1jK9DrDM6dVQx9S
+         1YY+zCrEBohj+mDlM/qejYZJ0JALoxDrQRoAZfwU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        stable@vger.kernel.org, Dmitry Klochkov <kdmitry556@gmail.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 12/30] KVM: selftests: Make hyperv_clock selftest more stable
-Date:   Tue,  9 Aug 2022 20:00:37 +0200
-Message-Id: <20220809175514.746631465@linuxfoundation.org>
+Subject: [PATCH 5.15 13/30] tools/kvm_stat: fix display of error when multiple processes are found
+Date:   Tue,  9 Aug 2022 20:00:38 +0200
+Message-Id: <20220809175514.781731540@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
 References: <20220809175514.276643253@linuxfoundation.org>
@@ -56,73 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Dmitry Klochkov <kdmitry556@gmail.com>
 
-[ Upstream commit eae260be3a0111a28fe95923e117a55dddec0384 ]
+[ Upstream commit 933b5f9f98da29af646b51b36a0753692908ef64 ]
 
-hyperv_clock doesn't always give a stable test result, especially with
-AMD CPUs. The test compares Hyper-V MSR clocksource (acquired either
-with rdmsr() from within the guest or KVM_GET_MSRS from the host)
-against rdtsc(). To increase the accuracy, increase the measured delay
-(done with nop loop) by two orders of magnitude and take the mean rdtsc()
-value before and after rdmsr()/KVM_GET_MSRS.
+Instead of printing an error message, kvm_stat script fails when we
+restrict statistics to a guest by its name and there are multiple guests
+with such name:
 
-Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
-Message-Id: <20220601144322.1968742-1-vkuznets@redhat.com>
+  # kvm_stat -g my_vm
+  Traceback (most recent call last):
+    File "/usr/bin/kvm_stat", line 1819, in <module>
+      main()
+    File "/usr/bin/kvm_stat", line 1779, in main
+      options = get_options()
+    File "/usr/bin/kvm_stat", line 1718, in get_options
+      options = argparser.parse_args()
+    File "/usr/lib64/python3.10/argparse.py", line 1825, in parse_args
+      args, argv = self.parse_known_args(args, namespace)
+    File "/usr/lib64/python3.10/argparse.py", line 1858, in parse_known_args
+      namespace, args = self._parse_known_args(args, namespace)
+    File "/usr/lib64/python3.10/argparse.py", line 2067, in _parse_known_args
+      start_index = consume_optional(start_index)
+    File "/usr/lib64/python3.10/argparse.py", line 2007, in consume_optional
+      take_action(action, args, option_string)
+    File "/usr/lib64/python3.10/argparse.py", line 1935, in take_action
+      action(self, namespace, argument_values, option_string)
+    File "/usr/bin/kvm_stat", line 1649, in __call__
+      ' to specify the desired pid'.format(" ".join(pids)))
+  TypeError: sequence item 0: expected str instance, int found
+
+To avoid this, it's needed to convert pids int values to strings before
+pass them to join().
+
+Signed-off-by: Dmitry Klochkov <kdmitry556@gmail.com>
+Message-Id: <20220614121141.160689-1-kdmitry556@gmail.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/x86_64/hyperv_clock.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ tools/kvm/kvm_stat/kvm_stat | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
-index e0b2bb1339b1..3330fb183c68 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
-@@ -44,7 +44,7 @@ static inline void nop_loop(void)
- {
- 	int i;
+diff --git a/tools/kvm/kvm_stat/kvm_stat b/tools/kvm/kvm_stat/kvm_stat
+index 5a5bd74f55bd..9c366b3a676d 100755
+--- a/tools/kvm/kvm_stat/kvm_stat
++++ b/tools/kvm/kvm_stat/kvm_stat
+@@ -1646,7 +1646,8 @@ Press any other key to refresh statistics immediately.
+                          .format(values))
+             if len(pids) > 1:
+                 sys.exit('Error: Multiple processes found (pids: {}). Use "-p"'
+-                         ' to specify the desired pid'.format(" ".join(pids)))
++                         ' to specify the desired pid'
++                         .format(" ".join(map(str, pids))))
+             namespace.pid = pids[0]
  
--	for (i = 0; i < 1000000; i++)
-+	for (i = 0; i < 100000000; i++)
- 		asm volatile("nop");
- }
- 
-@@ -56,12 +56,14 @@ static inline void check_tsc_msr_rdtsc(void)
- 	tsc_freq = rdmsr(HV_X64_MSR_TSC_FREQUENCY);
- 	GUEST_ASSERT(tsc_freq > 0);
- 
--	/* First, check MSR-based clocksource */
-+	/* For increased accuracy, take mean rdtsc() before and afrer rdmsr() */
- 	r1 = rdtsc();
- 	t1 = rdmsr(HV_X64_MSR_TIME_REF_COUNT);
-+	r1 = (r1 + rdtsc()) / 2;
- 	nop_loop();
- 	r2 = rdtsc();
- 	t2 = rdmsr(HV_X64_MSR_TIME_REF_COUNT);
-+	r2 = (r2 + rdtsc()) / 2;
- 
- 	GUEST_ASSERT(r2 > r1 && t2 > t1);
- 
-@@ -181,12 +183,14 @@ static void host_check_tsc_msr_rdtsc(struct kvm_vm *vm)
- 	tsc_freq = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TSC_FREQUENCY);
- 	TEST_ASSERT(tsc_freq > 0, "TSC frequency must be nonzero");
- 
--	/* First, check MSR-based clocksource */
-+	/* For increased accuracy, take mean rdtsc() before and afrer ioctl */
- 	r1 = rdtsc();
- 	t1 = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TIME_REF_COUNT);
-+	r1 = (r1 + rdtsc()) / 2;
- 	nop_loop();
- 	r2 = rdtsc();
- 	t2 = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TIME_REF_COUNT);
-+	r2 = (r2 + rdtsc()) / 2;
- 
- 	TEST_ASSERT(t2 > t1, "Time reference MSR is not monotonic (%ld <= %ld)", t1, t2);
- 
+     argparser = argparse.ArgumentParser(description=description_text,
 -- 
 2.35.1
 

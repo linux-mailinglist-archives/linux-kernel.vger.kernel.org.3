@@ -2,130 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBA558DD15
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5CB58DD1D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245051AbiHIRXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 13:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
+        id S245215AbiHIRYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 13:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245223AbiHIRXa (ORCPT
+        with ESMTP id S245169AbiHIRYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:23:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12BD8252A3
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 10:23:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660065801;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qPbho2+c8dAkqKWuFGRj6nlv+UYf9Vv/Uh5Ehbs5Rkg=;
-        b=grjxGmX0AEUPfeKVhVbxpJzzxYigzNjhq4kr4amc8iN+ub1dUOU84xcaIO8/hLyvaxoR1w
-        h+jOfqnoCjFc5BfU13m8cGyFTogApc19Mv5DdfeCeDqWv+xKaUzLtcoxXFI3qcz1K/s4KT
-        vXpXBgLfDVl0AUtEAlMPTRiaDBFGPa8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-319-8YK0xgFjP5S1HHOFkibRIw-1; Tue, 09 Aug 2022 13:23:17 -0400
-X-MC-Unique: 8YK0xgFjP5S1HHOFkibRIw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 184C63800C44;
-        Tue,  9 Aug 2022 17:23:17 +0000 (UTC)
-Received: from madcap2.tricolour.com (unknown [10.22.48.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C4523945D2;
-        Tue,  9 Aug 2022 17:23:15 +0000 (UTC)
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH v4 4/4] fanotify,audit: deliver fan_info as a hex-encoded string
-Date:   Tue,  9 Aug 2022 13:22:55 -0400
-Message-Id: <2d8159cec4392029dabfc39b55ac5fbd0faa9fbd.1659996830.git.rgb@redhat.com>
-In-Reply-To: <cover.1659996830.git.rgb@redhat.com>
-References: <cover.1659996830.git.rgb@redhat.com>
+        Tue, 9 Aug 2022 13:24:33 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B7D24F16;
+        Tue,  9 Aug 2022 10:24:31 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 279HNain087452;
+        Tue, 9 Aug 2022 12:23:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660065816;
+        bh=yoTLywAgULuoGNZ7bhMPPAJI7pF8iH6SRXoNXp+7tqc=;
+        h=Date:Subject:To:References:From:In-Reply-To;
+        b=cO9UAe5t4roY5qLiIXyCjkB36zTn0SxOf4FcLd2qtO3anq/O1V/4VwmhbHVZW30ay
+         w8ISC2zHsFuV4d2EKiYYLsk8yCnX7BE7LZu90EQTkg5akzd4KD8ZEtZu5wh2h1w0qC
+         xyagtjxtbOREyb1aXvRc/3Ax/AcONsv4GycAXbKM=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 279HNaZu058489
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 9 Aug 2022 12:23:36 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 9
+ Aug 2022 12:23:35 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 9 Aug 2022 12:23:35 -0500
+Received: from [10.250.34.173] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 279HNY6o035439;
+        Tue, 9 Aug 2022 12:23:34 -0500
+Message-ID: <2f5af424-4567-c843-d406-f67b53ec049d@ti.com>
+Date:   Tue, 9 Aug 2022 12:23:34 -0500
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 5/5] dt-bindings: Drop Dan Murphy and Ricardo
+ Rivera-Matos
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <linux-leds@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <alsa-devel@alsa-project.org>
+References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+ <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the only type of fanotify info that is defined is an audit
-rule number, but convert it to hex encoding to future-proof the field.
+On 8/9/22 11:27 AM, Krzysztof Kozlowski wrote:
+> Emails to Dan Murphy and Ricardo Rivera-Matos bounce ("550 Invalid
+> recipient").  Andrew Davis agreed to take over the bindings.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
 
-Sample record:
-  type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F
-
-Suggested-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
----
- kernel/auditsc.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index f000fec52360..0f747015c577 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2908,22 +2908,36 @@ void __audit_fanotify(u32 response, size_t len, char *buf)
- 
- 	if (!(len && buf)) {
- 		audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
--			  "resp=%u fan_type=0 fan_info=?", response);
-+			  "resp=%u fan_type=0 fan_info=3F", response); /* "?" */
- 		return;
- 	}
- 	while (c >= sizeof(struct fanotify_response_info_header)) {
-+		struct audit_context *ctx = audit_context();
-+		struct audit_buffer *ab;
-+
- 		friar = (struct fanotify_response_info_audit_rule *)buf;
- 		switch (friar->hdr.type) {
- 		case FAN_RESPONSE_INFO_AUDIT_RULE:
- 			if (friar->hdr.len < sizeof(*friar)) {
--				audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
--					  "resp=%u fan_type=%u fan_info=(incomplete)",
--					  response, friar->hdr.type);
-+				ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
-+				if (ab) {
-+					audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
-+							 response, friar->hdr.type);
-+#define INCOMPLETE "(incomplete)"
-+					audit_log_n_hex(ab, INCOMPLETE, sizeof(INCOMPLETE));
-+					audit_log_end(ab);
-+				}
- 				return;
- 			}
--			audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
--				  "resp=%u fan_type=%u fan_info=%u",
--				  response, friar->hdr.type, friar->audit_rule);
-+			ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
-+			if (ab) {
-+				audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
-+						 response, friar->hdr.type);
-+				audit_log_n_hex(ab, (char *)&friar->audit_rule,
-+						sizeof(friar->audit_rule));
-+				audit_log_end(ab);
-+
-+			}
- 		}
- 		c -= friar->hdr.len;
- 		ib += friar->hdr.len;
--- 
-2.27.0
-
+Acked-by: Andrew Davis <afd@ti.com>

@@ -2,103 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2764958E3DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE5B58E3E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiHIXvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 19:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        id S229607AbiHIXwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 19:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiHIXvq (ORCPT
+        with ESMTP id S229490AbiHIXwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 19:51:46 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBFB7C18F
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:51:45 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id bh13so12815876pgb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 16:51:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=t8QA2tksbD31DfrMNyQZwHcagOyGgK4LmqpD2Mjd3ks=;
-        b=FdBXj2iya/LVg+aZaZK6+vt3jeh2/o+1xHTSAXVuRM5bMpU8wwW6M5upnJSuoTJE3N
-         XdHyZLOBrtQwyPrE9HLYfWwXvCTDOSFz24i5FD1JcS+vb/n1nXURsCzKKDgd1ufCtCT3
-         x/rMTrgIYQ9DEqE4PrMRxNKB5XmsP3O3SbkEvnMEVdYrTllJ1Y1M3ml9RHVmHR/bO5Fi
-         dNbYbnt30yAwhsHyULeJm+S6UlpDwF2aDzokq2Dm6E0E2RFg/QzuZlkcUSz6K7NT9QlA
-         prBFtFUX2rpKlzwCSlprWGn939XugjuzyZ9Lw5w6G/u1FJOLP1HRIDnHRYlBtOXbXVwk
-         dKOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=t8QA2tksbD31DfrMNyQZwHcagOyGgK4LmqpD2Mjd3ks=;
-        b=M7Hv11ORsBXn6rp1kahl1ko7xclDrOdrvEB5YSYrEdozz2fPmRTtQiOpmLph+1hQ3j
-         5OCQ+7vgnm3gkCzXq5wlD57VGPHVBxB850HBT0ZxMipoZzF+ZlJ41PTVJ9JcDBZGxs71
-         +FpDniw0rxBDwkK1grNmChI2HMAauME3vObpGVF7LvIHLABGAzRe9PaIMjrJqBEWu89r
-         WM9/PMWTlnUhElX9UCmb6lBIsuzSiAARKpjhWgk/Mz4YRnJkuQ8q9UoHm13VUxMptdXW
-         0Wa6/+D8ypMw4nv+jJN5PE8L6YzvRCwkvBHJX4PhKk/wAB779r6Pho6+AHNMLVhCSjJs
-         sPVg==
-X-Gm-Message-State: ACgBeo3MBq/YMuAcun8XBrpRykyLstS+eT10cJ1V98yCMEXOUUsfey6C
-        TCIWB1m+gvhDDvPkigUzSKFgNA==
-X-Google-Smtp-Source: AA6agR7XZH+x6V6XY09gZfStY5OxSK0OFe/hNzxXbUIUUdwPBfyiUJKSdoFPrWHCD5oR1IWqJHaqCg==
-X-Received: by 2002:aa7:948b:0:b0:52e:e0cd:183a with SMTP id z11-20020aa7948b000000b0052ee0cd183amr18148655pfk.59.1660089105320;
-        Tue, 09 Aug 2022 16:51:45 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id g6-20020a1709026b4600b0016edb59f670sm11460869plt.6.2022.08.09.16.51.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 16:51:44 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 23:51:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Vipin Sharma <vipinsh@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KVM: x86/mmu: Make page tables for eager page splitting
- NUMA aware
-Message-ID: <YvLzDUjpJHmZtn0i@google.com>
-References: <20220801151928.270380-1-vipinsh@google.com>
- <YuhPT2drgqL+osLl@google.com>
- <YuhoJUoPBOu5eMz8@google.com>
- <YulRZ+uXFOE1y2dj@google.com>
- <YuldSf4T2j4rIrIo@google.com>
- <4ccbafb5-9157-ec73-c751-ec71164f8688@redhat.com>
- <Yul3A4CmaAHMui2Z@google.com>
- <cedcced0-b92c-07bd-ef2b-272ae58fdf40@redhat.com>
- <CAHVum0c=s8DH=p8zJcGzYDsfLY_qHEmvD1uF58h5WoUk6ZF8rQ@mail.gmail.com>
- <CALzav=ccxkAWk7ddqbJ_qPL2-=bXVZUEpWgwKpJ1oCtc_8w7WQ@mail.gmail.com>
+        Tue, 9 Aug 2022 19:52:06 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1FE56B91
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:52:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660089125; x=1691625125;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6PeZcZl8ncclrU5N8wDsFeDmo6sYSQctn4kR7UXIroE=;
+  b=YrvW4PapTBbxcwp8ShXnI/VRhmFlsYHT9ieNOtGvg2TaTx6r/KhM5xGG
+   ry42JvwKwpIUWM2Zo8afSIpdsW4Ysb6yMbJY2YrmNlASc0YF8qthQLus1
+   Dhv5D9nHcqucMNRJz6vrX+Og5z9L1rJAodMhcynO3TC2v50ekfMFn/99B
+   o8WoBsTairPiyQ5/S8ab/cOB326otDUVSVcaC8vstVXKJvDamJGgPuPCc
+   J44sSqRU6YMmSTr24ITYIvRZyW5qNkVd4dq+aKSWlrUYdsBP+vzeBenlT
+   +y7vPS73LhCovcdbNYMMSZwO5df+V2IsbIRrzO2pvRLivNJU67Rec31AG
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="352690637"
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="352690637"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 16:52:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="673082939"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Aug 2022 16:52:03 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLZ10-000NMD-2J;
+        Tue, 09 Aug 2022 23:52:02 +0000
+Date:   Wed, 10 Aug 2022 07:52:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/090-spi-hid 16/22] dockchannel.c:undefined
+ reference to `of_platform_device_destroy'
+Message-ID: <202208100711.oItJpGY7-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALzav=ccxkAWk7ddqbJ_qPL2-=bXVZUEpWgwKpJ1oCtc_8w7WQ@mail.gmail.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022, David Matlack wrote:
-> On Fri, Aug 5, 2022 at 4:30 PM Vipin Sharma <vipinsh@google.com> wrote:
-> > Approach B:
-> > Ask page from the specific node on fault path with option to fallback
-> > to the original cache and default task policy.
-> >
-> > This is what Sean's rough patch looks like.
-> 
-> This would definitely be a simpler approach but could increase the
-> amount of time a vCPU thread holds the MMU lock when handling a fault,
-> since KVM would start performing GFP_NOWAIT allocations under the
-> lock. So my preference would be to try the cache approach first and
-> see how complex it turns out to be.
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   cc847c79fbb5106249dcfd91aa041cce0116c897
+commit: ffeb65333caa066616ee70e0257035fe99cf4205 [16/22] soc: apple: Add DockChannel driver
+config: ia64-randconfig-r013-20220810 (https://download.01.org/0day-ci/archive/20220810/202208100711.oItJpGY7-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/ffeb65333caa066616ee70e0257035fe99cf4205
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout ffeb65333caa066616ee70e0257035fe99cf4205
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash
 
-Ya, as discussed off-list, I don't like my idea either :-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The pfn and thus node information is available before mmu_lock is acquired, so I
-don't see any reason to defer the allocation other than to reduce the memory
-footprint, and that's a solvable problem one way or another.
+All errors (new ones prefixed by >>):
+
+   ia64-linux-ld: drivers/soc/apple/dockchannel.o: in function `dockchannel_remove':
+>> dockchannel.c:(.text+0x881): undefined reference to `of_platform_device_destroy'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

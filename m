@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CDE58DD4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AD758DD48
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242624AbiHIRg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 13:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
+        id S245618AbiHIRgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 13:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245604AbiHIRgr (ORCPT
+        with ESMTP id S245152AbiHIRgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:36:47 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D76E252AA
+        Tue, 9 Aug 2022 13:36:46 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E62252B0
         for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 10:36:43 -0700 (PDT)
 Received: from terra.. (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 17A38308CE0;
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 915AC308CE1;
         Tue,  9 Aug 2022 19:36:41 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
         s=mail1707; t=1660066601;
@@ -28,21 +28,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=whJ8JdfyDmkVHTS7IW0UaNVlONqZJHPYMWt03zZsZbY=;
-        b=W1XMXk3a7QpeAH/rxCzm0kWh2//sPRluPe7v5CfdaSrXnrX+lMxZmRvAfLTR1eqfcyoV7T
-        KTW+7fbe1/m+QeOTMQSxPkXcOuqS8UShCBKVt7zaNfsIpts3lxLx9LAbhRcPIDjxuj8Fyq
-        dgalPf8VFX5WxDUaFpP4+SqlOLtgYSA4MX+Kmjo02wF+Cg67tcDfbu1xlSiolC/6EtGuk/
-        7rMBmjsCR7CMXFCWQCE4oDdZIgTtYKt1VI6wIbx9Bcl2lXWYNr6iMtqQfBO1g0Psbvdwgc
-        PGqxTiz++yUjtMMmWTbZdNV0+IGIDSnPgjOPg+2JpHnObbvTmQDnFax6G5gfnA==
+        bh=CdNsFW8BmdC6Xp+NKHPLPlR/rbAil8TvL/l8WLev1Qw=;
+        b=DhqZXpR5jsXxk6UUDCFNVVCXig9nbC2Iv2WJpgsfuhEF23sXrQdtdzFiHLHrpyyS2KK+6e
+        dpiPn/0E1qd7jw5Q+5qhH/56CuDGB41c766qRf9FSjrArRQGDqDTlkgxy7Z9Smj4D+Tk+f
+        +6vVzsrkxKVLxFAeH/JIK0sIGqLccXid39slzhcgF7KxfjdSC0779iGW/quothxnzSfkWF
+        BOzR9PbDMsLCFyaKAjHnAILxRAo/GpcUsVaanDmyxd6iashykT5WP7rSUGXpeXj5Afm5Lh
+        U/JZ3uTHRspJ1EqtvlexQe0iJbPXqVsXDXi+aS2dcyD2rNX2Puih31zM2lAnnQ==
 From:   Sander Vanheule <sander@svanheule.net>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Cc:     linux-kernel@vger.kernel.org,
         Sander Vanheule <sander@svanheule.net>
-Subject: [PATCH v1 2/3] lib/cpumask: add inline cpumask_next_wrap() for UP
-Date:   Tue,  9 Aug 2022 19:36:34 +0200
-Message-Id: <e2d40f6ab6758d11054c40272457d164f201d987.1660066581.git.sander@svanheule.net>
+Subject: [PATCH v1 3/3] lib/cpumask: drop always-true preprocessor guard
+Date:   Tue,  9 Aug 2022 19:36:35 +0200
+Message-Id: <37f6ddf22de46a81b07861682347fa2f25bb0c69.1660066581.git.sander@svanheule.net>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <cover.1660066581.git.sander@svanheule.net>
 References: <cover.1660066581.git.sander@svanheule.net>
@@ -58,73 +58,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the uniprocessor case, cpumask_next_wrap() can be simplified, as the
-number of valid argument combinations is limited:
-    - 'start' can only be 0
-    - 'n' can only be -1 or 0
+Since lib/cpumask.o is only built for CONFIG_SMP=y, NR_CPUS will always
+be greater than 1 at compile time.  This makes checking for that
+condition unnecesarry, so it can be dropped.
 
-The only valid CPU that can then be returned, if any, will be the first
-one set in the provided 'mask'.
-
-For NR_CPUS == 1, include/linux/cpumask.h now provides an inline
-definition of cpumask_next_wrap(), which will conflict with the one
-provided by lib/cpumask.c.  Make building of lib/cpumask.o again depend
-on CONFIG_SMP=y (i.e. NR_CPUS > 1) to avoid the re-definition.
-
-Suggested-by: Yury Norov <yury.norov@gmail.com>
 Signed-off-by: Sander Vanheule <sander@svanheule.net>
 ---
- include/linux/cpumask.h | 19 +++++++++++++++++++
- lib/Makefile            |  3 ++-
- 2 files changed, 21 insertions(+), 1 deletion(-)
+ lib/cpumask.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index d8c2a40f8beb..bd047864c7ac 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -262,7 +262,26 @@ unsigned int cpumask_next_and(int n, const struct cpumask *src1p,
- 		(cpu) = cpumask_next_zero((cpu), (mask)),	\
- 		(cpu) < nr_cpu_ids;)
+diff --git a/lib/cpumask.c b/lib/cpumask.c
+index 8baeb37e23d3..f0ae119be8c4 100644
+--- a/lib/cpumask.c
++++ b/lib/cpumask.c
+@@ -109,7 +109,6 @@ void __init free_bootmem_cpumask_var(cpumask_var_t mask)
+ }
+ #endif
  
-+#if NR_CPUS == 1
-+static inline
-+unsigned int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool wrap)
-+{
-+	cpumask_check(start);
-+	if (n != -1)
-+		cpumask_check(n);
-+
-+	/*
-+	 * Return the first available CPU when wrapping, or when starting before cpu0,
-+	 * since there is only one valid option.
-+	 */
-+	if (wrap && n >= 0)
-+		return nr_cpumask_bits;
-+
-+	return cpumask_first(mask);
-+}
-+#else
- unsigned int __pure cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool wrap);
-+#endif
- 
+-#if NR_CPUS > 1
  /**
-  * for_each_cpu_wrap - iterate over every cpu in a mask, starting at a specified location
-diff --git a/lib/Makefile b/lib/Makefile
-index c95212141928..5927d7fa0806 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -34,9 +34,10 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
- 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
- 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
- 	 nmi_backtrace.o win_minmax.o memcat_p.o \
--	 buildid.o cpumask.o
-+	 buildid.o
- 
- lib-$(CONFIG_PRINTK) += dump_stack.o
-+lib-$(CONFIG_SMP) += cpumask.o
- 
- lib-y	+= kobject.o klist.o
- obj-y	+= lockref.o
+  * cpumask_local_spread - select the i'th cpu with local numa cpu's first
+  * @i: index number
+@@ -197,4 +196,3 @@ unsigned int cpumask_any_distribute(const struct cpumask *srcp)
+ 	return next;
+ }
+ EXPORT_SYMBOL(cpumask_any_distribute);
+-#endif /* NR_CPUS */
 -- 
 2.37.1
 

@@ -2,198 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6685C58D96D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 346DC58D970
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243235AbiHINe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 09:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S243366AbiHINgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 09:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbiHINex (ORCPT
+        with ESMTP id S235660AbiHINf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 09:34:53 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B30E19036;
-        Tue,  9 Aug 2022 06:34:52 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 279DYLhX034492;
-        Tue, 9 Aug 2022 08:34:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1660052061;
-        bh=WWRi3nIHMWjo8QM+N+oh4W6m3/cOmkPPLuocntv/5zk=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=VWMHk/XNgY2rO0zT2BX/nivDMaBJmhuSTnhZrylpLQv4KlbeLYFVskfGUagMKlr63
-         DZk4IC78+VQWULAfyxokJxGDsMPqUU4XQuzyQG4FGJ7g+tZ5tQdDT+6BulkcltcBp4
-         uKRUBFkrJBprAwv0M3dI4e4/R2uYKGRe44FLJMv4=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 279DYLIO078605
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 9 Aug 2022 08:34:21 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 9
- Aug 2022 08:34:20 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 9 Aug 2022 08:34:20 -0500
-Received: from [10.250.235.49] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 279DYEgY080291;
-        Tue, 9 Aug 2022 08:34:15 -0500
-Message-ID: <dcd04013-7e58-d36a-b2c4-21c6270747c1@ti.com>
-Date:   Tue, 9 Aug 2022 19:04:14 +0530
+        Tue, 9 Aug 2022 09:35:58 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1311012;
+        Tue,  9 Aug 2022 06:35:57 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id f30so10424829pfq.4;
+        Tue, 09 Aug 2022 06:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=tGbfSymHJ+zxuolTJeDnvn9lzIe0OwQIg8yMo09fobQ=;
+        b=SxeL4oMkbs91TTe014uyXFykJHKU9/1Aqpcimyt1wM44ts92liZQyV7SlDhgr3S4TD
+         4tqUJDSFBxurNQ//KNNWEcpUWFLKMil/sDLu117bVFl8dzCGkiLgzCDrl3LaEp3WLKo/
+         Yi+lAQePzMSHce1/Z84t+jZSAkdYV3DZUR83zmajPd5kpaUFWP1tSXnm+dgqmp+sxhFg
+         atF6gAoXkwo29eggDTfjpWdS0pZNsvcTWXiCsfVAWqpp0wp32pNmAStakhn5SlxrcGBZ
+         lFu8N2T/x6si0XaYIh10+ZWBAOJa8gOnYDQeHIJ0YEM/pOhnTlUtBTpLkHADZwpl7JAm
+         IVUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=tGbfSymHJ+zxuolTJeDnvn9lzIe0OwQIg8yMo09fobQ=;
+        b=m0nXM9cHlyOtHL0EQ7FJxdghHYfD/HfjdwEdtxOOSBcWHeLmeZNl2ehP1Iw7VN/lTh
+         GDsI0tPe2utzypNUUf6aAzILRohVpRScm5Kn0wB9+MpVBmAiJs2GNvKxEkfbn1Qr/28B
+         kRUGliWlY0eq3c+DMnZJB4VcA/HQHz9Q4Vg4i1D5RAh1jiLEpIDeoTSPzrTbRwV9bGpQ
+         TNKhU6xxumGQUv2tYYVN7Fw2MLzfXPidCJWEvYOmBOCG4kQvnqk+Y83bnFWv7S9irXEp
+         qCgtM6FmkobD1FZYWh8D+FuPiuKmDBYkLDKEOH9dB4Q95JmZRcnJUzoIwgfqZRULTU6g
+         Yktg==
+X-Gm-Message-State: ACgBeo2kt8Os+EEA1AY8FkH146njKuDe3WIVDcYwjohxhE3NWMtcUupo
+        3FqniiD473HXiPtP8IzXb7/pAZehwRf1N6To
+X-Google-Smtp-Source: AA6agR5wNX9vgz02VMgAva9mLj9N6h5i0d3uDED1NVeMhsiRpwuS9Yh2L/wypOPOvWHpabpZMOnKWw==
+X-Received: by 2002:a63:d117:0:b0:41a:f0ee:f194 with SMTP id k23-20020a63d117000000b0041af0eef194mr18709156pgg.588.1660052157022;
+        Tue, 09 Aug 2022 06:35:57 -0700 (PDT)
+Received: from pipi-desktop.testerjoe ([101.88.11.237])
+        by smtp.gmail.com with ESMTPSA id g64-20020a625243000000b0052d6ad246a4sm10829525pfb.144.2022.08.09.06.35.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 06:35:56 -0700 (PDT)
+From:   Linjun Bao <meljbao@gmail.com>
+Cc:     meljbao@gmail.com, Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] igc: Remove _I_PHY_ID check for i225 devices
+Date:   Tue,  9 Aug 2022 21:35:01 +0800
+Message-Id: <20220809133502.37387-1-meljbao@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH 4/8] drm/tidss: Add support for Dual Link LVDS Bus Format
-Content-Language: en-US
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-CC:     Darren Etheridge <detheridge@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Krunal Bhargav <k-bhargav@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220719080845.22122-1-a-bhatia1@ti.com>
- <20220719080845.22122-5-a-bhatia1@ti.com>
- <f2909af1-be23-009b-ba71-34206f099473@ideasonboard.com>
- <ec8dce9b-51d6-a566-67bb-b76f6f3458d7@ideasonboard.com>
- <1f9de2d8-7507-bdc2-93c1-470c8e060586@ti.com>
- <b8fd1719-b0ec-495b-54f9-1d591ff8af9e@ideasonboard.com>
- <09682120-632a-1bfb-c0d7-034f5f076421@ti.com>
- <ff7448fd-e50c-1c6d-ad28-ea7e555cdd24@ideasonboard.com>
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <ff7448fd-e50c-1c6d-ad28-ea7e555cdd24@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+Source commit 7c496de538ee ("igc: Remove _I_PHY_ID checking"),
+remove _I_PHY_ID check for i225 device, since i225 devices only
+have one PHY vendor.
 
-On 09-Aug-22 15:21, Tomi Valkeinen wrote:
-> On 09/08/2022 12:06, Aradhya Bhatia wrote:
-> 
->>>> Even in DT, the dss port (for OLDI) connects to the panel port's
->>>> endpoint directly. Even in cases of dual link or cloning, it's only a
->>>> singular remote-to-endpoint connection between the (OLDI) VP and the
->>>> panel port. Hence the requirement of the properties in the earlier
->>>> patches of the series.
->>>
->>> Sorry, I don't follow. If you use cloning, you have two TX outputs, 
->>> going to two panels, right? So you need two panel DT nodes, and those 
->>> would connect to two OLDI TX ports in the DSS.
->>>  > Afaics the existing dual link bridge/panel drivers also use two ports
->>> for the connection, so to use the dual link you need two ports in the 
->>> DSS.
->>>
->>> I admit I'm not familiar with LVDS dual link, but it's not clear to 
->>> me how you see the dual OLDI TX being used with other drivers if you 
->>> have only one port. What kind of setups have you tested?
->>>
->> In the DTs, the OLDIs are not modeled at all. Since the DSS only has a
->> single VP for OLDI, the DT dss port (for OLDI) is connected to a single
->> simple-panel node for dual link, bypassing the OLDI TX in DT. I have
->> this same OLDI setup and have been testing on this.
-> 
-> A DSS VP is a DSS internal port, whereas a port node in the DT is an 
-> external port. There doesn't have to be a 1:1 match between those.
-> 
-> The port in the DT represents some kind of "connector" to the outside 
-> world, which is usually a collection of pins that provide a video bus.
-> 
-Okay, I now understand what you are saying. Indeed, I was mapping the
-DSS VP and DT DSS port as 1:1 in my mind, which should not be the case.
+Signed-off-by: Linjun Bao <meljbao@gmail.com>
+---
+ drivers/net/ethernet/intel/igc/igc_base.c | 10 +---------
+ drivers/net/ethernet/intel/igc/igc_main.c |  3 +--
+ drivers/net/ethernet/intel/igc/igc_phy.c  |  6 ++----
+ 3 files changed, 4 insertions(+), 15 deletions(-)
 
-> Here, as far as I can see, the DSS clearly has three external ports, two 
-> OLDI ports and one DPI port.
-> 
->> I do not have a cloning display setup with me, but I have seen DT DSS
->> port connected to one of 2 panel nodes while the other panel (remains as
->> a companion panel to the first) without any endpoint connections. Since,
->> the OLDI TXes (0 and 1), receive the same clocks and inputs from DSS
->> OLDI VP, this 'method' has worked too.
-> 
-> This, and using simple-panel for dual link with single port connection, 
-> sounds like a hack.
-> 
-> A practical example: TI's customer wants to use AM625 and THC63LVD1024 
-> bridge. How does it work? THC63LVD1024 driver uses two LVDS ports for 
-> input, both of which are used in dual-link mode.
-> 
-Right. There has to be 2 ports for OLDI in DSS, to be connected to 2
-ports of a single panel (dual link) or 2 ports of 2 panels (cloning).
+diff --git a/drivers/net/ethernet/intel/igc/igc_base.c b/drivers/net/ethernet/intel/igc/igc_base.c
+index db289bcce21d..d66429eb14a5 100644
+--- a/drivers/net/ethernet/intel/igc/igc_base.c
++++ b/drivers/net/ethernet/intel/igc/igc_base.c
+@@ -187,15 +187,7 @@ static s32 igc_init_phy_params_base(struct igc_hw *hw)
+ 
+ 	igc_check_for_copper_link(hw);
+ 
+-	/* Verify phy id and set remaining function pointers */
+-	switch (phy->id) {
+-	case I225_I_PHY_ID:
+-		phy->type	= igc_phy_i225;
+-		break;
+-	default:
+-		ret_val = -IGC_ERR_PHY;
+-		goto out;
+-	}
++	phy->type = igc_phy_i225;
+ 
+ out:
+ 	return ret_val;
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 9ba05d9aa8e0..b8297a63a7fd 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -2884,8 +2884,7 @@ bool igc_has_link(struct igc_adapter *adapter)
+ 		break;
+ 	}
+ 
+-	if (hw->mac.type == igc_i225 &&
+-	    hw->phy.id == I225_I_PHY_ID) {
++	if (hw->mac.type == igc_i225) {
+ 		if (!netif_carrier_ok(adapter->netdev)) {
+ 			adapter->flags &= ~IGC_FLAG_NEED_LINK_UPDATE;
+ 		} else if (!(adapter->flags & IGC_FLAG_NEED_LINK_UPDATE)) {
+diff --git a/drivers/net/ethernet/intel/igc/igc_phy.c b/drivers/net/ethernet/intel/igc/igc_phy.c
+index 6156c76d765f..1be112ce6774 100644
+--- a/drivers/net/ethernet/intel/igc/igc_phy.c
++++ b/drivers/net/ethernet/intel/igc/igc_phy.c
+@@ -235,8 +235,7 @@ static s32 igc_phy_setup_autoneg(struct igc_hw *hw)
+ 			return ret_val;
+ 	}
+ 
+-	if ((phy->autoneg_mask & ADVERTISE_2500_FULL) &&
+-	    hw->phy.id == I225_I_PHY_ID) {
++	if (phy->autoneg_mask & ADVERTISE_2500_FULL) {
+ 		/* Read the MULTI GBT AN Control Register - reg 7.32 */
+ 		ret_val = phy->ops.read_reg(hw, (STANDARD_AN_REG_MASK <<
+ 					    MMD_DEVADDR_SHIFT) |
+@@ -376,8 +375,7 @@ static s32 igc_phy_setup_autoneg(struct igc_hw *hw)
+ 		ret_val = phy->ops.write_reg(hw, PHY_1000T_CTRL,
+ 					     mii_1000t_ctrl_reg);
+ 
+-	if ((phy->autoneg_mask & ADVERTISE_2500_FULL) &&
+-	    hw->phy.id == I225_I_PHY_ID)
++	if (phy->autoneg_mask & ADVERTISE_2500_FULL)
+ 		ret_val = phy->ops.write_reg(hw,
+ 					     (STANDARD_AN_REG_MASK <<
+ 					     MMD_DEVADDR_SHIFT) |
+-- 
+2.25.1
 
->>>> The use of lvds helper functions does not seem feasible in this case,
->>>> because even they read DT properties to determine the dual link
->>>> connection and those properties need to be a part of a lvds bridge
->>>> device.
->>>
->>> Can you elaborate a bit more why the DRM helpers couldn't be used here?
->>>
->> The drm_of.c helpers use DT properties to ascertain the presence of a
->> dual-link connection. While there wasn't a specific helper to determine
->> dual-link or not, the drivers use the odd/even pixel order helper which
->> is based on the properties "dual-lvds-odd-pixels" and "dual-lvds-odd-
->> pixels". If either of the properties are absent, the helper returns an
->> error making the driver to use single link.
->>
->> These properties are LVDS specific, but they could not be added in the
->> DT because there is no OLDI TX DT node for our case.
-> 
-> If I'm not mistaken, those properties are in the port node, not the 
-> device node, and also, I believe those properties are on the sink side, 
-> so they wouldn't even be in the AM625 data. See, for example:
-> 
-> arch/arm64/boot/dts/renesas/r8a774c0-ek874-idk-2121wr.dts
-Yeah, they are indeed on the sink side. I was misunderstood about this.
-And the onus for properties is not on DSS nodes anymore.
-
-This probably is a different discussion, but since the sink is now
-responsible for those properties, these should get introduced in the
-panel-common bindings, right?
-
-The above example has a separate binding, but many dumb dual-link panels
-will require those properties in panel-common.
-
-> 
->>>> I have also been considering the idea of implementing a new device
->>>> driver for the OLDI TXes, not unlike the renesas' one. That way the
->>>> driver could have the properties and the lvds helper functions at their
->>>> disposal. I am just slightly unsure if that would allow space for any
->>>> conflicts because of the shared register space.
->>>
->>> No, I don't think new devices are needed here.
->> Okay...
->>
->> I am not quite sure I understand completely what you are recommending
->> the OLDI to be. It seems to me that you want the OLDI TXes to be modeled
->> as nodes, right? Wouldn't that automatically require some sort of
->> standalone driver arrangement for them? Or am I missing something
->> important here?
-> 
-> No, I'm only talking about the DT port nodes. At the moment the AM65x DT 
-> bindings doc says that there are two ports, port@0 for OLDI and port@1 
-> for DPI. I'm saying AM625 needs three ports.
-Agreed.
-
-Moreover, I will update the binding to reflect 3 ports for am625-dss.
-
-
-Regards
-Aradhya

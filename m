@@ -2,170 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3B058E38D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 696AE58E390
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiHIXFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 19:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
+        id S229622AbiHIXGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 19:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiHIXFp (ORCPT
+        with ESMTP id S229878AbiHIXGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 19:05:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC07B165B1
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660086343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YQQjxvyb8CLjve4FfHQqn1TrKDgNJT0ViQGm4zbKbG8=;
-        b=H3fcP2fPw9rZ8qh3eTghTXiLEAnTjy4Q+c850GeWFSGP8oksa31YZTr8QD/DWLaHbh91L7
-        I98C8rOEQvvj+MDxGlXyOltbDmDGMRHRKyz1ve8IMI067ragWHhYU0pqcm/GbJ0V6IUAXg
-        Y2acfKsEscOwSA1FnxREe3StQzc8Nm8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-624-Z4DTJHyIO2Kbdfdv2o53dg-1; Tue, 09 Aug 2022 19:05:39 -0400
-X-MC-Unique: Z4DTJHyIO2Kbdfdv2o53dg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C7E078117B0;
-        Tue,  9 Aug 2022 23:05:38 +0000 (UTC)
-Received: from [10.22.18.32] (unknown [10.22.18.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F910492C3B;
-        Tue,  9 Aug 2022 23:05:38 +0000 (UTC)
-Message-ID: <521f2fbe-3732-0829-3562-2b113eb7b7e4@redhat.com>
-Date:   Tue, 9 Aug 2022 19:05:37 -0400
+        Tue, 9 Aug 2022 19:06:14 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1C26D9FB
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:06:10 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso381140pjd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 16:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=0dif6Jvy3tqvIXoBURzewg07wJiLTaWlzuiD5tnehZE=;
+        b=jz+mkg4M3KX4TsHlSIFsNKZmwOPj2rmlji2B1M6p3UD/Pk0q2u/6+iy7IF7h04ED9Z
+         ooqEoj9iQZ6vEmtdTYX2RfWKfqUR8vqp/7Hws2yv1o+Su2MDPo4vAmU6/qV3i/1s/JgI
+         JQl2P9f8nFQ1AUjrL9O1hCsDgK5ybki/OmESI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=0dif6Jvy3tqvIXoBURzewg07wJiLTaWlzuiD5tnehZE=;
+        b=ys0UcS31aoWVKQ/OsrW2Wj5pCZibuDdHij+TJl9AdNJDxZLRge7bccRDhC2T8yQ0W6
+         Wb+vcmK7D/ZFDtVW4HtcaTWZVruG8YDWcQsjcgEajBJf9ZPZp6BG7X7wR5yp9RZ2jtzD
+         nyvZq8/FvbXJVuGHwj9I2AYTgaK8fnA/JXvLxNFOYcWyIwO5UeG0zHbQZxzRut+U76Oe
+         i7ZtpaSPDtu5VtiDI/vjLq7wv+a8ctL+YTU4e/FCLefzjmvWRIKZ+RaLVlJlyCrDCaNy
+         ZBguIxi3Z/t7zgQNb5g7bfdoRpc61D+WlBBoCh0XNg+EqVra0aFmwfTn05wbQPnUAFax
+         rQrA==
+X-Gm-Message-State: ACgBeo24jaIPM5DhKdcEWUqNOjSPkapNtHm63dW5f6OEg4pA/q4SmpfC
+        csDf7M1/rGvpDCnDzcgjg2O6nOaIcJtuSw==
+X-Google-Smtp-Source: AA6agR442dUhw5QL7LXbxeGzFGScs5Lz5Gi5+YphEzab6rEbuhYoI/m/XB94JOt77c/QK12r6H2xuQ==
+X-Received: by 2002:a17:903:1110:b0:16b:6968:1d08 with SMTP id n16-20020a170903111000b0016b69681d08mr25432123plh.3.1660086370284;
+        Tue, 09 Aug 2022 16:06:10 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i14-20020a17090a64ce00b001f2e20edd14sm118690pjm.45.2022.08.09.16.06.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 16:06:09 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 16:06:08 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     WeiXiong Liao <gmpy.liaowx@gmail.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>
+Subject: Re: Invalid pstore_blk use?
+Message-ID: <202208091600.D19DFF9C7D@keescook>
+References: <e97bc607-a913-dbbd-1965-b60d55d956b8@gmail.com>
+ <c5edaa34-6f85-c6a8-84f5-75413dc864ea@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mm/slab_common: Deleting kobject in kmem_cache_destroy()
- without holding slab_mutex/cpu_hotplug_lock
-Content-Language: en-US
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220809205901.76595-1-longman@redhat.com>
- <YvLe8sZ25KiASXT1@P9FQF9L96D.corp.robot.car>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YvLe8sZ25KiASXT1@P9FQF9L96D.corp.robot.car>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c5edaa34-6f85-c6a8-84f5-75413dc864ea@gmail.com>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 18:25, Roman Gushchin wrote:
-> On Tue, Aug 09, 2022 at 04:59:01PM -0400, Waiman Long wrote:
->> A circular locking problem is reported by lockdep due to the following
->> circular locking dependency.
->>
->>    +--> cpu_hotplug_lock --> slab_mutex --> kn->active#126 --+
->>    |                                                         |
->>    +---------------------------------------------------------+
->>
->> One way to break this circular locking chain is to avoid holding
->> cpu_hotplug_lock and slab_mutex while deleting the kobject in
->> sysfs_slab_unlink() which should be equivalent to doing a write_lock
->> and write_unlock pair of the kn->active virtual lock.
->>
->> Since the kobject structures are not protected by slab_mutex or the
->> cpu_hotplug_lock, we can certainly release those locks before doing
->> the delete operation.
->>
->> Move sysfs_slab_unlink() and sysfs_slab_release() to the newly
->> created kmem_cache_release() and call it outside the slab_mutex &
->> cpu_hotplug_lock critical sections.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   mm/slab_common.c | 48 +++++++++++++++++++++++++++++++-----------------
->>   1 file changed, 31 insertions(+), 17 deletions(-)
->>
->> diff --git a/mm/slab_common.c b/mm/slab_common.c
->> index 17996649cfe3..9274fb03563e 100644
->> --- a/mm/slab_common.c
->> +++ b/mm/slab_common.c
->> @@ -392,6 +392,30 @@ kmem_cache_create(const char *name, unsigned int size, unsigned int align,
->>   }
->>   EXPORT_SYMBOL(kmem_cache_create);
->>   
->> +#ifdef SLAB_SUPPORTS_SYSFS
->> +/*
->> + * For a given kmem_cache, kmem_cache_destroy() should only be called
->> + * once or there will be a use-after-free problem. The actual deletion
->> + * and release of the kobject does not need slab_mutex or cpu_hotplug_lock
->> + * protection. So they are now done without holding those locks.
->> + */
->> +static void kmem_cache_release(struct kmem_cache *s, bool workfn)
->> +{
->> +	if (!workfn)
->> +		sysfs_slab_unlink(s);
->> +
->> +	if (workfn || !(s->flags & SLAB_TYPESAFE_BY_RCU))
->> +		sysfs_slab_release(s);
->> +	else
->> +		schedule_work(&slab_caches_to_rcu_destroy_work);
->> +}
->> +#else
->> +static inline void kmem_cache_release(struct kmem_cache *s, bool workfn)
->> +{
->> +	slab_kmem_cache_release(s);
->> +}
->> +#endif
->> +
->>   static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
->>   {
->>   	LIST_HEAD(to_destroy);
->> @@ -418,11 +442,7 @@ static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
->>   	list_for_each_entry_safe(s, s2, &to_destroy, list) {
->>   		debugfs_slab_release(s);
->>   		kfence_shutdown_cache(s);
->> -#ifdef SLAB_SUPPORTS_SYSFS
->> -		sysfs_slab_release(s);
->> -#else
->> -		slab_kmem_cache_release(s);
->> -#endif
->> +		kmem_cache_release(s, true);
-> Hi Waiman!
->
-> As I understand, with SLAB_SUPPORTS_SYSFS kmem_cache_release() can effectively call
-> into itself: first it's called with workfn == false from shutdown_cache() and
-> then optionally it's scheduled to call itself from a work context with
-> workfn == true just to call sysfs_slab_release(). Is it right?
->
-> If !SLAB_SUPPORTS_SYSFS, shutdown_cache() optionally adds kmem_cache to the
-> slab_caches_to_rcu_destroy list and calls kmem_cache_release(s, false) ==
-> slab_kmem_cache_release(). How it's then removed from the list?
->
-> Overall the patch is a bit hard to follow (not like this code was easy to read
-> before, so can't blame the patch). But I wonder if it will make things simpler
-> to decouple kmem_cache_release(workfn == true) and kmem_cache_release(workfn == false)
-> into 2 different helpers? Or at least add a bold comment on how things are supposed
-> to work.
->
-> Thanks!
+On Tue, Aug 09, 2022 at 11:35:08AM -0700, Florian Fainelli wrote:
+> Hi Kees, WeiXiong,
+> 
+> On 7/14/22 20:49, Florian Fainelli wrote:
+> > Hi Kees, WeiXiong,
+> > 
+> > I am trying to make use of pstore_blk which is BTW exactly what I had
+> > been looking for to store panic/console logs onto an eMMC partition.
+> > 
+> > Using the 5.10 kernel plus:
+> > 
+> > 7e2e92e9861b Revert "mark pstore-blk as broken"
+> > 01c28bc8f389 pstore/blk: Use the normal block device I/O path
+> > 2a7507999638 pstore/blk: remove {un,}register_pstore_blk
+> > fef0b337cd25 pstore/zone: cap the maximum device size
+> > 
+> > or the android13-5.15 (at Merge 5.15.40 into android13-5.15) kernel with
+> > no changes and using:
+> > 
+> > mount -t pstore pstore /sys/fs/pstore
+> > modprobe pstore_blk blkdev=/dev/mmcblk1p9 best_effort=yes
+> > 
+> > upon triggering a crash with:
+> > 
+> > echo c > /proc/sysrq-trigger
+> > 
+> > and rebooting and remounting the pstore filesystem and loading
+> > pstore_blk, I only have:
+> > 
+> > # ls /sys/fs/pstore/
+> > console-pstore_blk-0
+> > 
+> > which contains the entire console log up to, but excluding the crash.
+> > The kernel does show that pstore_blk was used for all 3 types of kmsg,
+> > pmsg and console:
+> > 
+> > [   28.649514] pstore_zone: capping size to 128MiB
+> > [   28.712894] pstore_zone: registered pstore_blk as backend for
+> > kmsg(Oops) pmsg console
+> > [   28.721145] pstore: Using crash dump compression: deflate
+> > [   28.906253] printk: console [pstore_blk-1] enabled
+> > [   28.911229] pstore: Registered pstore_blk as persistent store backend
+> > [   28.917735] pstore_blk: attached pstore_blk:/dev/mmcblk1p9
+> > (134217728) (no dedicated panic_write!)
+> > 
+> > there is no automatic reboot upon panic, so I just tend to reboot after
+> > 2-3 seconds manually. The kernel is configured with the default
+> > CONFIG_PSTORE_* options.
+> > 
+> > Is the observed behavior a limitation of the best_effort mode? If so, do
+> > we have any plans to implementing a non-best effort mode for eMMC
+> > devices?
+> 
+> Any feedback on my email? I did try to get kernel panics to be dumped out to
 
-You are right. I agree that it can be hard to read. Simpler is always 
-better. Will post a v2 with the change suggested.
+Hi! Sorry I lost this email originally. :)
 
-Thanks,
-Longman
+> a dedicated /dev/mtdblock* partition for which there ought to be support for
+> mtd->panic_write, but it still did not work any better. Is there something
 
+With the mtdblock driver, do you still see:
+
+    pstore_blk: attached pstore_blk:/dev/... (no dedicated panic_write!)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+> obvious that I am missing which prevents kernel panics from being logged?
+
+Unfortunately it really depends on how the drivers are built. If the
+block layer is shut down during a panic, pstore_blk won't catch the
+panic. :(
+
+-- 
+Kees Cook

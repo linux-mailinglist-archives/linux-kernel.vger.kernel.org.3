@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0CF58E177
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DB458E183
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiHIVCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 17:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S229555AbiHIVGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 17:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiHIVCF (ORCPT
+        with ESMTP id S229949AbiHIVFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 17:02:05 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6B630559
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:02:01 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id h132so12462777pgc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 14:02:01 -0700 (PDT)
+        Tue, 9 Aug 2022 17:05:54 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14F8459A0
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:05:49 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10ec41637b3so15495967fac.4
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 14:05:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=Yzf75bRCQMALZ7m4QyOplsWHzkaKOssLSVH5NduHojs=;
-        b=iaJnB4GJfzpWMjIyS8fVo6WbhfcQyHDGbqXRw1MsNysR2Gq8DBanh4DoPd9AVVct8Y
-         mem25Qa23+gRT2Bp3v59SGyHZ48/quLw14+n8EDMhd4fn3lgqMA4tnpjOru0n334ckHk
-         G1jW3dgyczwvhOwkQPcJz1qPScp0tyjoKvXSwu2gt0to0a4xxt8LwFSnkrnyF/zA/58Z
-         0W+dx/lVk6OFugHrN+QPwEn+ZqCMPddsLzU5yvBoNrbG5tsQS6C21HLikTwfGM659Mol
-         z3MCD22qtYeFDSkTd9b2rWOX8WMpMvHJ0rIIDM6wb4gYqw0RbvxqaKIHPISMWwWb6a/u
-         twew==
+        bh=46DbGyQMRqNHGkxsacJCotXRTrnXUBQPUgKwQCTQR8k=;
+        b=hKJ9CRNm64FZ36uHItRlkf0idiXTuCMHIGEr6dAZWogMfifrszy0oFCa8H7K6Cah9D
+         55TjcK/iPn+BvOBQtb3mTI/51rUKzCQKkeAftF7q4oAP41j2EtShrtivvHKSpR5bfZer
+         kKomkfpi78zEBQWdUTGBQsWZoO1hLcqLrubVg3hbnYziSqG7Np8t99DOzJt15uvfu4DH
+         lIl3P/v4VaAuXaU2DVxn1GSS9n3BdSp8H0AaoYSW06MbcdfjeAjzYF6jJv0KLF0567nM
+         IvcbioXxyho8pz1HTFTb4zgU+MfEOO3JI1a95UB3T4VXsLIsG9LxbQS1K6baKYW1BMBZ
+         sV8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Yzf75bRCQMALZ7m4QyOplsWHzkaKOssLSVH5NduHojs=;
-        b=x32pXL+UrDHJMcHsT7mpnmQlgnO1gG5h3hBMRKwGrm6MZpi7DlIlJmb7axqDHknX/W
-         us1ZploFQIwE6qvbCyTyJmeYzxjU1g270bMSTfwRhLrXIwDwY8HmahscKNYN+Iwmt6pE
-         T5x7uPoVpGIFCptIki5xOl0FTKV3TUJAFagnpZxPTrI4oex9hKkJ93A+LaJqA9vxJg4G
-         DsQN2ohJ00jsu2LTuJW0302A0gTIaqLLnyV//1+c8y41qmB0qccyprI+vBAbANSsQg6m
-         tC4XP4jHd1WiO4xCpjuImoeIcm15/m+6Mj5lyCFhuxfGwyYJz5sQIh+1aFfTQVYj6LMq
-         6j0Q==
-X-Gm-Message-State: ACgBeo1PJwRovghNKHFb15edIK1q5aqgPSMs5srpab4MBuUvFDVksWd6
-        eKAekjwz90OsJ89UXxDSxfe45Q==
-X-Google-Smtp-Source: AA6agR5MGHH1DtyGdsvEYz+paDTJ51eeo/p/X0YDN79KqsoMoGKdlMLf+ffWE5F5dWWMG3QBLzn0kA==
-X-Received: by 2002:a05:6a00:1a44:b0:528:6af7:ff4a with SMTP id h4-20020a056a001a4400b005286af7ff4amr24911716pfv.78.1660078920159;
-        Tue, 09 Aug 2022 14:02:00 -0700 (PDT)
-Received: from google.com (238.76.127.34.bc.googleusercontent.com. [34.127.76.238])
-        by smtp.gmail.com with ESMTPSA id x25-20020aa79ad9000000b00528f9597fb3sm309872pfp.197.2022.08.09.14.01.59
+        bh=46DbGyQMRqNHGkxsacJCotXRTrnXUBQPUgKwQCTQR8k=;
+        b=tnhO7iuTK3PcMad5v/EPApBI/tuw3YNPkUDtDYISMzPtMeg1MGrROqfku5+kqURKGq
+         1ze+51qqmGaCGGqPVhFFgJQFUcHOxGwKwPpRONiGi4UK95pebdCcrB3NKJFFds7sMT2P
+         CTyHort+/A+27BfCxQuTA5ZnO+Xb6aLANM3PB93dB18MYoFxD9IPDybN6VS+Y1PYB23W
+         T/OVaz281d+dp2ep9gU35ddnIwPlC7AFu07XffKgkN9k35hZ4yDYJ5iB5919xTvR+GLw
+         v/NRLoZNycWmLpdVLjQ3IgPCPjeYb0wdPsNdaXjoofudndl6p0I2G0U1YUyjDdvi18rc
+         h9gQ==
+X-Gm-Message-State: ACgBeo3RmdKg38OvSXBUNPyO1lvYmqKjZ/yFgko5pboI4hqnpKOmr7xK
+        g5y3MH3tj6jsArg9LCJS7WWrJA==
+X-Google-Smtp-Source: AA6agR7/jfhQKdcyS9t/lnwAnJxheoLryGMKECjJwkUJ1IJiQ9e3xVupz1MV7wbT5OutnB3H7N+IWA==
+X-Received: by 2002:a05:6870:5818:b0:116:a478:7f6a with SMTP id r24-20020a056870581800b00116a4787f6amr170549oap.204.1660079148210;
+        Tue, 09 Aug 2022 14:05:48 -0700 (PDT)
+Received: from baldur ([2600:380:785a:7aa8:200:ff:fe00:0])
+        by smtp.gmail.com with ESMTPSA id s70-20020acaa949000000b0032e3cca8561sm214842oie.21.2022.08.09.14.05.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 14:01:59 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 21:01:55 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        syzbot <syzbot+a7b60a176ec13cafb793@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Martijn Coenen <maco@android.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Todd Kjos <tkjos@android.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>
-Subject: Re: [PATCH] binder_alloc: Add missing mmap_lock calls when using the
- VMA
-Message-ID: <YvLLQ/qasEJffdnn@google.com>
-References: <20220809160618.1052539-1-Liam.Howlett@oracle.com>
- <YvKsI5pMbgQ5Irup@google.com>
- <20220809190211.ew4taam2lcomramw@revolver>
+        Tue, 09 Aug 2022 14:05:47 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 16:05:43 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] clk/qcom: Support gdsc collapse polling using
+ 'reset' inteface
+Message-ID: <YvLMJ2yQRhBFp2y9@baldur>
+References: <1659172664-10345-1-git-send-email-quic_akhilpo@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220809190211.ew4taam2lcomramw@revolver>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1659172664-10345-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 07:02:17PM +0000, Liam Howlett wrote:
-> > 
-> > do we need to hold on to the lock while we loop through the pages here?
-> 
-> I think we do?  Holding this lock will ensure the pages don't go away, I
-> believe (looking at mm/rmap.c comments on locking at the top)?
-> 
-> In any case, this function is called from print_binder_proc_stats()
-> which looks to be a debugfs/debugging call so I thought safer would be
-> better than faster and with a potential race.
+On Sat 30 Jul 04:17 CDT 2022, Akhil P Oommen wrote:
 
-The pages are protected by alloc->mutex, so you could immediately
-release the mmap lock after binder_alloc_get_vma() call. I agree this
-is a debugging call so it would be nice to reduce contention.
+> 
+> Some clients like adreno gpu driver would like to ensure that its gdsc
+> is collapsed at hardware during a gpu reset sequence. This is because it
+> has a votable gdsc which could be ON due to a vote from another subsystem
+> like tz, hyp etc or due to an internal hardware signal. To allow
+> this, gpucc driver can expose an interface to the client driver using
+> reset framework. Using this the client driver can trigger a polling within
+> the gdsc driver.
+> 
+> This series is rebased on top of linus's master branch.
+> 
+> Related discussion: https://patchwork.freedesktop.org/patch/493144/
+> 
+
+Forgive me if I'm assuming too much, but isn't this an extension of:
+
+85a3d920d30a ("clk: qcom: Add a dummy enable function for GX gdsc")
+
+With the additional requirement that disable should really ensure that
+the GDSC is turned off?
+
+Regards,
+Bjorn
+
+> 
+> Akhil P Oommen (5):
+>   dt-bindings: clk: qcom: Support gpu cx gdsc reset
+>   clk: qcom: Allow custom reset ops
+>   clk: qcom: gpucc-sc7280: Add cx collapse reset support
+>   clk: qcom: gdsc: Add a reset op to poll gdsc collapse
+>   arm64: dts: qcom: sc7280: Add Reset support for gpu
+> 
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi          |  3 +++
+>  drivers/clk/qcom/gdsc.c                       | 23 +++++++++++++++++++----
+>  drivers/clk/qcom/gdsc.h                       |  7 +++++++
+>  drivers/clk/qcom/gpucc-sc7280.c               |  6 ++++++
+>  drivers/clk/qcom/reset.c                      |  6 ++++++
+>  drivers/clk/qcom/reset.h                      |  2 ++
+>  include/dt-bindings/clock/qcom,gpucc-sc7280.h |  3 +++
+>  7 files changed, 46 insertions(+), 4 deletions(-)
+> 
+> -- 
+> 2.7.4
+> 

@@ -2,56 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D4758D20A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 04:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E71958D20C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 04:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiHICdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 22:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S229664AbiHICg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 22:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiHICdt (ORCPT
+        with ESMTP id S232068AbiHICf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 22:33:49 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DA518E32;
-        Mon,  8 Aug 2022 19:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660012428; x=1691548428;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DcvovoVmdksGZwiTR1O+x3IyDAP+vKNhNIIHB5O4qlY=;
-  b=aGncczsdNhHTiFNVD1hCdACi/QIr/R+fJty7qOeBDrwle8r9Pc99g6Hb
-   UcmhKVhj/Gs/aurxBizzWB+ayqynnCyOZDnhdnSVNEkbGaIwIs8Zb2YcD
-   zk8AfcsJAXLyCqK3PGgMwHsyyt6BCW6jbv54E5XtBCzx7zyt8ik+rZQ0f
-   tZ8MQwajePoFNJN7uPmQvCQlzqdk0tzemH0EJXUN6Q8TnCRWoLDB28qyD
-   jA+FcjLaPSUU/x1Sdu6/MfCeFMBa5fOPDKKPXiDni1KYbXy2SaWns/97H
-   ojBAAKqj6BD9wQBM6eLk7PFpdnxBJkpLi0oyE6QAAoREX3ikKYi6sj6Yq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="290742538"
-X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="290742538"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 19:33:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="932311003"
-Received: from q.bj.intel.com ([10.238.154.102])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Aug 2022 19:33:46 -0700
-From:   shaoqin.huang@intel.com
-To:     linux-mm@kvack.org, willy@infradead.org
-Cc:     Shaoqin Huang <shaoqin.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] filemap: Convert page_endio() to use a folio
-Date:   Tue,  9 Aug 2022 10:32:56 +0800
-Message-Id: <20220809023256.178194-1-shaoqin.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 8 Aug 2022 22:35:57 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51540FD7
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 19:35:56 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 53A231E80D70;
+        Tue,  9 Aug 2022 10:34:13 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id RZ1XjhXY0toH; Tue,  9 Aug 2022 10:34:10 +0800 (CST)
+Received: from localhost.localdomain.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: xupengfei@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 7FBED1E80D0A;
+        Tue,  9 Aug 2022 10:34:10 +0800 (CST)
+From:   XU pengfei <xupengfei@nfschina.com>
+To:     verdun@hpe.com, nick.hawkins@hpe.com, daniel.lezcano@linaro.org,
+        tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, XU pengfei <xupengfei@nfschina.com>
+Subject: [PATCH 1/1] clocksource/drivers/timer-gxp: remove unnecessary (void*) conversions
+Date:   Tue,  9 Aug 2022 10:35:50 +0800
+Message-Id: <20220809023550.8624-1-xupengfei@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,53 +43,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaoqin Huang <shaoqin.huang@intel.com>
+remove unnecessary void* type casting.
 
-Replace three calls to compound_head() with one.
-
-Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
+Signed-off-by: XU pengfei <xupengfei@nfschina.com>
 ---
- mm/filemap.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/clocksource/timer-gxp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 15800334147b..cb740a6b7227 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -1633,24 +1633,26 @@ EXPORT_SYMBOL(folio_end_writeback);
-  */
- void page_endio(struct page *page, bool is_write, int err)
- {
-+	struct folio *folio = page_folio(page);
-+
- 	if (!is_write) {
- 		if (!err) {
--			SetPageUptodate(page);
-+			folio_mark_uptodate(folio);
- 		} else {
--			ClearPageUptodate(page);
--			SetPageError(page);
-+			folio_clear_uptodate(folio);
-+			folio_set_error(folio);
- 		}
--		unlock_page(page);
-+		folio_unlock(folio);
- 	} else {
- 		if (err) {
- 			struct address_space *mapping;
+diff --git a/drivers/clocksource/timer-gxp.c b/drivers/clocksource/timer-gxp.c
+index 8b38b3212388..c33c71c4425b 100644
+--- a/drivers/clocksource/timer-gxp.c
++++ b/drivers/clocksource/timer-gxp.c
+@@ -56,7 +56,7 @@ static int gxp_time_set_next_event(unsigned long event, struct clock_event_devic
  
--			SetPageError(page);
--			mapping = page_mapping(page);
-+			folio_set_error(folio);
-+			mapping = folio_mapping(folio);
- 			if (mapping)
- 				mapping_set_error(mapping, err);
- 		}
--		end_page_writeback(page);
-+		folio_end_writeback(folio);
- 	}
- }
- EXPORT_SYMBOL_GPL(page_endio);
+ static irqreturn_t gxp_timer_interrupt(int irq, void *dev_id)
+ {
+-	struct gxp_timer *timer = (struct gxp_timer *)dev_id;
++	struct gxp_timer *timer = dev_id;
+ 
+ 	if (!(readb_relaxed(timer->control) & MASK_TCS_TC))
+ 		return IRQ_NONE;
 -- 
-2.30.2
+2.18.2
 

@@ -2,129 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE07658D53A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E6358D538
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240515AbiHIIQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
+        id S240408AbiHIIP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240734AbiHIIPz (ORCPT
+        with ESMTP id S240713AbiHIIPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 9 Aug 2022 04:15:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D83B630E
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782942BC4
         for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:15:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660032953;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i/7QmR2udLKWU2FTMqK09JxCCe/ubs98ULH8N/JxdBc=;
-        b=XifCaS0SbLOYUuOpq+xWwg4lfjiVGIfkc+wg5xEPw8mjbe0Wsfzyo0mVJMBhGJi9JdVr5O
-        sXYeyvzYS7kd8UwE96tgDjLwIslXCTZVuuIQLtdZwh9uUG4h6lQQr8q1/EZe+9B/4sTKXX
-        g3rtZ4lGxdn48cmoXZolhTJkupFxwu4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-398-EPuRbwbYPHOR4jCl7CZRSA-1; Tue, 09 Aug 2022 04:15:52 -0400
-X-MC-Unique: EPuRbwbYPHOR4jCl7CZRSA-1
-Received: by mail-wm1-f71.google.com with SMTP id 9-20020a1c0209000000b003a53ae8015bso2512403wmc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 01:15:52 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id w15so12267461ljw.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 01:15:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=i4iQuVbI+9d0zd0b0jhQFCRBZoVGPueKM3RZjVMejCI=;
+        b=WcPB8C9Wpy4JKS+wa3ogqDTCTitNjB5xjbl3GVmJmBFnwN57erFosPTxu4Bghu9Gvd
+         hWhwv0ojAxwP6jOEiri1EAKImG5N+yBtIHLuRUkZsWEn/Kvf9pBA09AehAP7swtTHk+v
+         ryY8ZsTY+cFpzv51ckXN9xnCOKSC/oGHjvNmxHuVN+viA7vudsmpY2fHuPLz7u4RDKRE
+         cUC96d/urQdJGb+GvEkBG4k+GLTjVjZTrdI6N2UpgpMXTXulCXiOBuvcWVuzGogD+9fD
+         2vMoj/aE7Ony9MFMdKoVLyg5tsiVL8deafhCdTSszOFZkw5gnwqIsek0OyJonNc5F7kG
+         OSTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=i/7QmR2udLKWU2FTMqK09JxCCe/ubs98ULH8N/JxdBc=;
-        b=ERT+epwGheZP7KsDI3r19Im6Dw3Kd2duenD2s97+5S8uAOryR2P9EJ76CP5o0HC0np
-         SXABjZHl5ICbzP71CiOqAu8s60XBnDZ5Xqy9FeTe4FbkeilTQAdRkPn0Ba+LXTqeGLJl
-         oQYd1sNDSMdgIV2ta4W4sx7BsVbL2Z3dsNE/VF1uh2gM1ttjMqsB/9FGO8CJMv7mWPyG
-         FXivIovVifc4u/Nu4xNb99Ut0EkzqFpfRfSrFOQklIjTH+CKVRpZWkqwUFTWL/T2a7XS
-         rLd+r0VVePQwbvJz+CALYrBQxViRDltUlGOlDODJumRgQ4SgYYblGSsI1pn07JjMsBE9
-         Nx9g==
-X-Gm-Message-State: ACgBeo3irAmU+XdTFbH19Nwozs3TJZK4a7gUFio1an3ckSTciIUZHcnv
-        DpN2CMIaEmr87EKoL3R4WQtCnMetDB7eDfemISuVgikQeYOgMD3nLG/PXKeVfJ64g/tmSjzsRep
-        vqAz49HSLtrKnpkiLcTc58AZa
-X-Received: by 2002:a05:6000:711:b0:220:63a5:954c with SMTP id bs17-20020a056000071100b0022063a5954cmr13265926wrb.667.1660032951173;
-        Tue, 09 Aug 2022 01:15:51 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4RkwnzP+5IczJUCC+Wv0NDQRP6KkwukKaB7wh492u+icviVRyiUTFwWQT25QDFtg2eUkbyDA==
-X-Received: by 2002:a05:6000:711:b0:220:63a5:954c with SMTP id bs17-20020a056000071100b0022063a5954cmr13265917wrb.667.1660032950929;
-        Tue, 09 Aug 2022 01:15:50 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f15:c300:d2ce:1fb5:2460:179a? (p200300d82f15c300d2ce1fb52460179a.dip0.t-ipconnect.de. [2003:d8:2f15:c300:d2ce:1fb5:2460:179a])
-        by smtp.gmail.com with ESMTPSA id a5-20020adffb85000000b0021e45afa7b0sm12800466wrr.109.2022.08.09.01.15.50
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=i4iQuVbI+9d0zd0b0jhQFCRBZoVGPueKM3RZjVMejCI=;
+        b=C8pDzBshRhTmKYeqo/Eo9kJjNjamzGiKrzYQxqx1gDLpBpkdKb7wBNVUH+QO6AqKCU
+         F1jhwUFl6KIpyv6jv1eweY3qP5CMueiyHVPxpg2AQRSmmRfi1zmVIZ6lhfuqLeaEMBkx
+         k6eJNE5Xrn95lgWd/xNyUBe1FFjkxe3HcchMpOqDomG0xtG4iczTZav2F4Fwq4xKmPhS
+         zs1ugovR+c6eJHdPcbyIERNykHSNNVqgqDShCEnyzGMlFIhGZrjK9AEB/NAfPCzB5JWv
+         mmTjK6/bc2+ruLBbvmvyTQNWsE8onSwzx+Nvu0PkGt3J4eBIB/8VkdIJzGKN9jRweysW
+         tqOw==
+X-Gm-Message-State: ACgBeo1WxRtcmIDBXXOsnV22fNVx48sUU48fkKqJswIwegCGhXbswoBH
+        7uO7qmAUA6bkOCUNTOvFCXEbIg==
+X-Google-Smtp-Source: AA6agR6d09fbMfwW14RfB+trmeqi+0SytmqBmON06AUpmV6tqXMlZsMQJgE6vxkA86T2hfetncSzNA==
+X-Received: by 2002:a05:651c:92:b0:25f:f326:f2c1 with SMTP id 18-20020a05651c009200b0025ff326f2c1mr633512ljq.273.1660032952859;
+        Tue, 09 Aug 2022 01:15:52 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id k21-20020ac24f15000000b0048ae66976ffsm1672088lfr.47.2022.08.09.01.15.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 01:15:50 -0700 (PDT)
-Message-ID: <6504c796-513a-3785-22a8-a933de37bf96@redhat.com>
-Date:   Tue, 9 Aug 2022 10:15:49 +0200
+        Tue, 09 Aug 2022 01:15:51 -0700 (PDT)
+Message-ID: <8ce59940-f559-35cb-5f86-37399da166a1@linaro.org>
+Date:   Tue, 9 Aug 2022 11:15:49 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mm: re-allow pinning of zero pfns (again)
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/3] dt-bindings: sound: Add Apple MCA I2S transceiver
 Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>, alex.sierra@amd.com,
-        akpm@linux-foundation.org
-Cc:     hch@lst.de, Felix.Kuehling@amd.com, apopple@nvidia.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <166002010021.381133.11357879752637949308.stgit@omen>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <166002010021.381133.11357879752637949308.stgit@omen>
+To:     =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     asahi@lists.linux.dev, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220808224153.3634-1-povik+lin@cutebit.org>
+ <20220808224153.3634-2-povik+lin@cutebit.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220808224153.3634-2-povik+lin@cutebit.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.08.22 06:42, Alex Williamson wrote:
-> The below referenced commit makes the same error as 1c563432588d ("mm: fix
-> is_pinnable_page against a cma page"), re-interpreting the logic to exclude
-> pinning of the zero page, which breaks device assignment with vfio.
-> 
-> Link: https://lore.kernel.org/all/165490039431.944052.12458624139225785964.stgit@omen
-> Fixes: f25cbb7a95a2 ("mm: add zone device coherent type memory support")
-> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
-> ---
->  include/linux/mm.h |    5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 18e01474cf6b..772279ed7010 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1544,9 +1544,8 @@ static inline bool is_longterm_pinnable_page(struct page *page)
->  	if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
->  		return false;
->  #endif
-> -	return !(is_device_coherent_page(page) ||
-> -		 is_zone_movable_page(page) ||
-> -		 is_zero_pfn(page_to_pfn(page)));
-> +	return !(is_device_coherent_page(page) || is_zone_movable_page(page)) ||
-> +	       is_zero_pfn(page_to_pfn(page));
->  }
->  #else
->  static inline bool is_longterm_pinnable_page(struct page *page)
+On 09/08/2022 01:41, Martin Povišer wrote:
+> Add binding schema for MCA I2S transceiver found on Apple M1 and other
+> chips.
 
 
-:/ I guess the code was moved just at the time the old code was still in
-place, and when rebasing, the diff in the code was ignored.
+Thank you for your patch. There is something to discuss/improve.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+> +title: Apple MCA I2S transceiver
+> +
+> +description: |
+> +  MCA is an I2S transceiver peripheral found on M1 and other Apple chips. It is
+> +  composed of a number of identical clusters which can operate independently
+> +  or in an interlinked fashion. Up to 6 clusters have been seen on an MCA.
+> +
+> +maintainers:
+> +  - Martin Povišer <povik+lin@cutebit.org>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - apple,t8103-mca
+> +          - apple,t6000-mca
+
+How about alphabetical order?
+
+> +      - const: apple,mca
+> +
+> +  reg:
+> +    items:
+> +      - description: Register region of the MCA clusters proper
+> +      - description: Register region of the DMA glue and its FIFOs
+> +
+> +  interrupts:
+> +    minItems: 4
+> +    maxItems: 6
+> +    description:
+> +      One interrupt per each cluster
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  dmas:
+> +    minItems: 16
+> +    maxItems: 24
+> +    description:
+> +      DMA channels corresponding to the SERDES units in the peripheral. They are
+> +      listed in groups of four per cluster, and within the group they are given
+> +      as associated to the TXA, RXA, TXB, RXB units.
+> +
+> +  dma-names:
+> +    minItems: 16
+> +    maxItems: 24
+> +    items:
+> +      pattern: '^(tx|rx)[0-5][ab]$'
+
+Use consistent quotes (everywhere " or ').
+
+Describe the items because otherwise you allow any order. The list will
+be unfortunately quite long, but still readable enough.
 
 
-I have patches in the works that will properly break COW here to get
-anon pages instead of pinning the shared zeropage, which is questionable
-in COW mappings.
+> +    description: |
+> +      Names for the DMA channels: 'tx'/'rx', then cluster number, then 'a'/'b'
+> +      based on the associated SERDES unit.
+> +
+> +  clocks:
+> +    minItems: 4
+> +    maxItems: 6
+> +    description:
+> +      Clusters' input reference clock.
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    minItems: 5
+> +    maxItems: 7
+> +    description:
+> +      First a general power domain for register access, then the power
+> +      domains of individual clusters for their operation.
+> +
+> +  "#sound-dai-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - dmas
+> +  - dma-names
+> +  - clocks
+> +  - power-domains
+> +  - '#sound-dai-cells'
 
--- 
-Thanks,
+Use consistent quotes (everywhere " or ').
 
-David / dhildenb
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    mca: mca@9b600000 {
 
+You called it I2S transceiver but isn't it also actually I2S controller?
+If yes, then the node name should be probably "i2s".
+
+> +      compatible = "apple,t6000-mca", "apple,mca";
+> +      reg = <0x9b600000 0x10000>,
+> +            <0x9b200000 0x20000>;
+> +
+
+
+Best regards,
+Krzysztof

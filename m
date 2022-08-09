@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780C758DE17
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C854E58DE38
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343640AbiHISKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
+        id S1345255AbiHISMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345184AbiHISJo (ORCPT
+        with ESMTP id S1345881AbiHISLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:09:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F07826571;
-        Tue,  9 Aug 2022 11:03:58 -0700 (PDT)
+        Tue, 9 Aug 2022 14:11:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49522B609;
+        Tue,  9 Aug 2022 11:05:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73C506111F;
-        Tue,  9 Aug 2022 18:03:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B83C4347C;
-        Tue,  9 Aug 2022 18:03:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A77B61128;
+        Tue,  9 Aug 2022 18:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA8AC433B5;
+        Tue,  9 Aug 2022 18:05:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068236;
-        bh=+yBkKxD6Fievq4937hVDX7PlGohL809lfSjwCZPgX+M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kmPha5vEpJsd9+kn5+duIC1k2IB9m4cDk66KimfoXjZ6UI51OFIRyV6RBZ55+hFd+
-         lQAVFzmhXvv/FKVKP6ZBXmBVpTl1wVP2P9YiwhWxyjeVDWbbF9Lu3jTAU+ZMf4FJmn
-         Sbbm3WzsIwoTxUWqNQqLa1b7YGU0n1xIDejnzpC4=
+        s=korg; t=1660068303;
+        bh=DDZ+YnD7DNmS5Yg69LH1PkdeXC1sjevfhN81pm28Ha4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=0nskoBS8+RNA545eAHn4u7JBaVupmGyWZCnOJo9ILR6vQ27K/H6/i7+NmzDIPZn4h
+         41NTqyki1k3Ywnjfv40Xvn14XRYWRfM5yyaFmwQ3QP2IVfWFDD31wyRyuZKEbCmphN
+         e4bcWu7pGwE4aflQfvUPDEZRniKYc6011aV/zj1g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        George Kennedy <george.kennedy@oracle.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Fedor Pchelkin <pchelkin@ispras.ru>
-Subject: [PATCH 5.10 06/23] tun: avoid double free in tun_free_netdev
-Date:   Tue,  9 Aug 2022 20:00:24 +0200
-Message-Id: <20220809175513.106377185@linuxfoundation.org>
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.15 00/30] 5.15.60-rc1 review
+Date:   Tue,  9 Aug 2022 20:00:25 +0200
+Message-Id: <20220809175514.276643253@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175512.853274191@linuxfoundation.org>
-References: <20220809175512.853274191@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.60-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.15.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.15.60-rc1
+X-KernelTest-Deadline: 2022-08-11T17:55+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,241 +63,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: George Kennedy <george.kennedy@oracle.com>
+This is the start of the stable review cycle for the 5.15.60 release.
+There are 30 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit 158b515f703e75e7d68289bf4d98c664e1d632df upstream.
+Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
+Anything received after that time might be too late.
 
-Avoid double free in tun_free_netdev() by moving the
-dev->tstats and tun->security allocs to a new ndo_init routine
-(tun_net_init()) that will be called by register_netdevice().
-ndo_init is paired with the desctructor (tun_free_netdev()),
-so if there's an error in register_netdevice() the destructor
-will handle the frees.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.60-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+and the diffstat can be found below.
 
-BUG: KASAN: double-free or invalid-free in selinux_tun_dev_free_security+0x1a/0x20 security/selinux/hooks.c:5605
+thanks,
 
-CPU: 0 PID: 25750 Comm: syz-executor416 Not tainted 5.16.0-rc2-syzk #1
-Hardware name: Red Hat KVM, BIOS
-Call Trace:
-<TASK>
-__dump_stack lib/dump_stack.c:88 [inline]
-dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:106
-print_address_description.constprop.9+0x28/0x160 mm/kasan/report.c:247
-kasan_report_invalid_free+0x55/0x80 mm/kasan/report.c:372
-____kasan_slab_free mm/kasan/common.c:346 [inline]
-__kasan_slab_free+0x107/0x120 mm/kasan/common.c:374
-kasan_slab_free include/linux/kasan.h:235 [inline]
-slab_free_hook mm/slub.c:1723 [inline]
-slab_free_freelist_hook mm/slub.c:1749 [inline]
-slab_free mm/slub.c:3513 [inline]
-kfree+0xac/0x2d0 mm/slub.c:4561
-selinux_tun_dev_free_security+0x1a/0x20 security/selinux/hooks.c:5605
-security_tun_dev_free_security+0x4f/0x90 security/security.c:2342
-tun_free_netdev+0xe6/0x150 drivers/net/tun.c:2215
-netdev_run_todo+0x4df/0x840 net/core/dev.c:10627
-rtnl_unlock+0x13/0x20 net/core/rtnetlink.c:112
-__tun_chr_ioctl+0x80c/0x2870 drivers/net/tun.c:3302
-tun_chr_ioctl+0x2f/0x40 drivers/net/tun.c:3311
-vfs_ioctl fs/ioctl.c:51 [inline]
-__do_sys_ioctl fs/ioctl.c:874 [inline]
-__se_sys_ioctl fs/ioctl.c:860 [inline]
-__x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:860
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x44/0xae
+greg k-h
 
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: George Kennedy <george.kennedy@oracle.com>
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Link: https://lore.kernel.org/r/1639679132-19884-1-git-send-email-george.kennedy@oracle.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/tun.c |  114 +++++++++++++++++++++++++++---------------------------
- 1 file changed, 59 insertions(+), 55 deletions(-)
+-------------
+Pseudo-Shortlog of commits:
 
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -220,6 +220,9 @@ struct tun_struct {
- 	struct tun_prog __rcu *steering_prog;
- 	struct tun_prog __rcu *filter_prog;
- 	struct ethtool_link_ksettings link_ksettings;
-+	/* init args */
-+	struct file *file;
-+	struct ifreq *ifr;
- };
- 
- struct veth {
-@@ -227,6 +230,9 @@ struct veth {
- 	__be16 h_vlan_TCI;
- };
- 
-+static void tun_flow_init(struct tun_struct *tun);
-+static void tun_flow_uninit(struct tun_struct *tun);
-+
- static int tun_napi_receive(struct napi_struct *napi, int budget)
- {
- 	struct tun_file *tfile = container_of(napi, struct tun_file, napi);
-@@ -975,6 +981,49 @@ static int check_filter(struct tap_filte
- 
- static const struct ethtool_ops tun_ethtool_ops;
- 
-+static int tun_net_init(struct net_device *dev)
-+{
-+	struct tun_struct *tun = netdev_priv(dev);
-+	struct ifreq *ifr = tun->ifr;
-+	int err;
-+
-+	tun->pcpu_stats = netdev_alloc_pcpu_stats(struct tun_pcpu_stats);
-+	if (!tun->pcpu_stats)
-+		return -ENOMEM;
-+
-+	spin_lock_init(&tun->lock);
-+
-+	err = security_tun_dev_alloc_security(&tun->security);
-+	if (err < 0) {
-+		free_percpu(tun->pcpu_stats);
-+		return err;
-+	}
-+
-+	tun_flow_init(tun);
-+
-+	dev->hw_features = NETIF_F_SG | NETIF_F_FRAGLIST |
-+			   TUN_USER_FEATURES | NETIF_F_HW_VLAN_CTAG_TX |
-+			   NETIF_F_HW_VLAN_STAG_TX;
-+	dev->features = dev->hw_features | NETIF_F_LLTX;
-+	dev->vlan_features = dev->features &
-+			     ~(NETIF_F_HW_VLAN_CTAG_TX |
-+			       NETIF_F_HW_VLAN_STAG_TX);
-+
-+	tun->flags = (tun->flags & ~TUN_FEATURES) |
-+		      (ifr->ifr_flags & TUN_FEATURES);
-+
-+	INIT_LIST_HEAD(&tun->disabled);
-+	err = tun_attach(tun, tun->file, false, ifr->ifr_flags & IFF_NAPI,
-+			 ifr->ifr_flags & IFF_NAPI_FRAGS, false);
-+	if (err < 0) {
-+		tun_flow_uninit(tun);
-+		security_tun_dev_free_security(tun->security);
-+		free_percpu(tun->pcpu_stats);
-+		return err;
-+	}
-+	return 0;
-+}
-+
- /* Net device detach from fd. */
- static void tun_net_uninit(struct net_device *dev)
- {
-@@ -1216,6 +1265,7 @@ static int tun_net_change_carrier(struct
- }
- 
- static const struct net_device_ops tun_netdev_ops = {
-+	.ndo_init		= tun_net_init,
- 	.ndo_uninit		= tun_net_uninit,
- 	.ndo_open		= tun_net_open,
- 	.ndo_stop		= tun_net_close,
-@@ -1296,6 +1346,7 @@ static int tun_xdp_tx(struct net_device
- }
- 
- static const struct net_device_ops tap_netdev_ops = {
-+	.ndo_init		= tun_net_init,
- 	.ndo_uninit		= tun_net_uninit,
- 	.ndo_open		= tun_net_open,
- 	.ndo_stop		= tun_net_close,
-@@ -1336,7 +1387,7 @@ static void tun_flow_uninit(struct tun_s
- #define MAX_MTU 65535
- 
- /* Initialize net device. */
--static void tun_net_init(struct net_device *dev)
-+static void tun_net_initialize(struct net_device *dev)
- {
- 	struct tun_struct *tun = netdev_priv(dev);
- 
-@@ -2268,10 +2319,6 @@ static void tun_free_netdev(struct net_d
- 	BUG_ON(!(list_empty(&tun->disabled)));
- 
- 	free_percpu(tun->pcpu_stats);
--	/* We clear pcpu_stats so that tun_set_iff() can tell if
--	 * tun_free_netdev() has been called from register_netdevice().
--	 */
--	tun->pcpu_stats = NULL;
- 
- 	tun_flow_uninit(tun);
- 	security_tun_dev_free_security(tun->security);
-@@ -2784,41 +2831,16 @@ static int tun_set_iff(struct net *net,
- 		tun->rx_batched = 0;
- 		RCU_INIT_POINTER(tun->steering_prog, NULL);
- 
--		tun->pcpu_stats = netdev_alloc_pcpu_stats(struct tun_pcpu_stats);
--		if (!tun->pcpu_stats) {
--			err = -ENOMEM;
--			goto err_free_dev;
--		}
--
--		spin_lock_init(&tun->lock);
--
--		err = security_tun_dev_alloc_security(&tun->security);
--		if (err < 0)
--			goto err_free_stat;
--
--		tun_net_init(dev);
--		tun_flow_init(tun);
-+		tun->ifr = ifr;
-+		tun->file = file;
- 
--		dev->hw_features = NETIF_F_SG | NETIF_F_FRAGLIST |
--				   TUN_USER_FEATURES | NETIF_F_HW_VLAN_CTAG_TX |
--				   NETIF_F_HW_VLAN_STAG_TX;
--		dev->features = dev->hw_features | NETIF_F_LLTX;
--		dev->vlan_features = dev->features &
--				     ~(NETIF_F_HW_VLAN_CTAG_TX |
--				       NETIF_F_HW_VLAN_STAG_TX);
--
--		tun->flags = (tun->flags & ~TUN_FEATURES) |
--			      (ifr->ifr_flags & TUN_FEATURES);
--
--		INIT_LIST_HEAD(&tun->disabled);
--		err = tun_attach(tun, file, false, ifr->ifr_flags & IFF_NAPI,
--				 ifr->ifr_flags & IFF_NAPI_FRAGS, false);
--		if (err < 0)
--			goto err_free_flow;
-+		tun_net_initialize(dev);
- 
- 		err = register_netdevice(tun->dev);
--		if (err < 0)
--			goto err_detach;
-+		if (err < 0) {
-+			free_netdev(dev);
-+			return err;
-+		}
- 		/* free_netdev() won't check refcnt, to aovid race
- 		 * with dev_put() we need publish tun after registration.
- 		 */
-@@ -2835,24 +2857,6 @@ static int tun_set_iff(struct net *net,
- 
- 	strcpy(ifr->ifr_name, tun->dev->name);
- 	return 0;
--
--err_detach:
--	tun_detach_all(dev);
--	/* We are here because register_netdevice() has failed.
--	 * If register_netdevice() already called tun_free_netdev()
--	 * while dealing with the error, tun->pcpu_stats has been cleared.
--	 */
--	if (!tun->pcpu_stats)
--		goto err_free_dev;
--
--err_free_flow:
--	tun_flow_uninit(tun);
--	security_tun_dev_free_security(tun->security);
--err_free_stat:
--	free_percpu(tun->pcpu_stats);
--err_free_dev:
--	free_netdev(dev);
--	return err;
- }
- 
- static void tun_get_iff(struct tun_struct *tun, struct ifreq *ifr)
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.15.60-rc1
+
+Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+    x86/speculation: Add LFENCE to RSB fill sequence
+
+Daniel Sneddon <daniel.sneddon@linux.intel.com>
+    x86/speculation: Add RSB VM Exit protections
+
+Ning Qiang <sohu0106@126.com>
+    macintosh/adb: fix oob read in do_adb_query() function
+
+Hilda Wu <hildawu@realtek.com>
+    Bluetooth: btusb: Add Realtek RTL8852C support ID 0x13D3:0x3586
+
+Hilda Wu <hildawu@realtek.com>
+    Bluetooth: btusb: Add Realtek RTL8852C support ID 0x13D3:0x3587
+
+Hilda Wu <hildawu@realtek.com>
+    Bluetooth: btusb: Add Realtek RTL8852C support ID 0x0CB8:0xC558
+
+Hilda Wu <hildawu@realtek.com>
+    Bluetooth: btusb: Add Realtek RTL8852C support ID 0x04C5:0x1675
+
+Hilda Wu <hildawu@realtek.com>
+    Bluetooth: btusb: Add Realtek RTL8852C support ID 0x04CA:0x4007
+
+Aaron Ma <aaron.ma@canonical.com>
+    Bluetooth: btusb: Add support of IMC Networks PID 0x3568
+
+Ahmad Fatoum <a.fatoum@pengutronix.de>
+    dt-bindings: bluetooth: broadcom: Add BCM4349B1 DT binding
+
+Hakan Jansson <hakan.jansson@infineon.com>
+    Bluetooth: hci_bcm: Add DT compatible for CYW55572
+
+Ahmad Fatoum <a.fatoum@pengutronix.de>
+    Bluetooth: hci_bcm: Add BCM4349B1 variant
+
+Naohiro Aota <naohiro.aota@wdc.com>
+    btrfs: zoned: fix critical section of relocation inode writeback
+
+Naohiro Aota <naohiro.aota@wdc.com>
+    btrfs: zoned: prevent allocation from previous data relocation BG
+
+Peter Collingbourne <pcc@google.com>
+    arm64: set UXN on swapper page tables
+
+Mingwei Zhang <mizhang@google.com>
+    KVM: x86/svm: add __GFP_ACCOUNT to __sev_dbg_{en,de}crypt_user()
+
+Raghavendra Rao Ananta <rananta@google.com>
+    selftests: KVM: Handle compiler optimizations in ucall
+
+Dmitry Klochkov <kdmitry556@gmail.com>
+    tools/kvm_stat: fix display of error when multiple processes are found
+
+Vitaly Kuznetsov <vkuznets@redhat.com>
+    KVM: selftests: Make hyperv_clock selftest more stable
+
+Paolo Bonzini <pbonzini@redhat.com>
+    KVM: x86: do not set st->preempted when going back to user space
+
+Paolo Bonzini <pbonzini@redhat.com>
+    KVM: x86: do not report a vCPU as preempted outside instruction boundaries
+
+GUO Zihua <guozihua@huawei.com>
+    crypto: arm64/poly1305 - fix a read out-of-bound
+
+Tony Luck <tony.luck@intel.com>
+    ACPI: APEI: Better fix to avoid spamming the console with old error logs
+
+Werner Sembach <wse@tuxedocomputers.com>
+    ACPI: video: Shortening quirk list by identifying Clevo by board_name only
+
+Werner Sembach <wse@tuxedocomputers.com>
+    ACPI: video: Force backlight native for some TongFang devices
+
+Stéphane Graber <stgraber@ubuntu.com>
+    tools/vm/slabinfo: Handle files in debugfs
+
+Jan Kara <jack@suse.cz>
+    block: fix default IO priority handling again
+
+Jakub Sitnicki <jakub@cloudflare.com>
+    selftests/bpf: Check dst_port only on the client socket
+
+Jakub Sitnicki <jakub@cloudflare.com>
+    selftests/bpf: Extend verifier and bpf_sock tests for dst_port loads
+
+Ben Hutchings <ben@decadent.org.uk>
+    x86/speculation: Make all RETbleed mitigations 64-bit only
+
+
+-------------
+
+Diffstat:
+
+ Documentation/admin-guide/hw-vuln/spectre.rst      |  8 ++
+ .../bindings/net/broadcom-bluetooth.yaml           |  1 +
+ Makefile                                           |  4 +-
+ arch/arm64/crypto/poly1305-glue.c                  |  2 +-
+ arch/arm64/include/asm/kernel-pgtable.h            |  4 +-
+ arch/arm64/kernel/head.S                           |  2 +-
+ arch/x86/Kconfig                                   |  8 +-
+ arch/x86/include/asm/cpufeatures.h                 |  2 +
+ arch/x86/include/asm/kvm_host.h                    |  3 +
+ arch/x86/include/asm/msr-index.h                   |  4 +
+ arch/x86/include/asm/nospec-branch.h               | 21 +++++-
+ arch/x86/kernel/cpu/bugs.c                         | 86 ++++++++++++++++------
+ arch/x86/kernel/cpu/common.c                       | 12 ++-
+ arch/x86/kvm/svm/sev.c                             |  4 +-
+ arch/x86/kvm/svm/svm.c                             |  2 +
+ arch/x86/kvm/vmx/vmenter.S                         |  8 +-
+ arch/x86/kvm/vmx/vmx.c                             |  1 +
+ arch/x86/kvm/x86.c                                 | 48 +++++++++---
+ arch/x86/kvm/xen.h                                 |  6 +-
+ block/blk-ioc.c                                    |  1 +
+ block/ioprio.c                                     |  4 +-
+ drivers/acpi/apei/bert.c                           | 31 ++++++--
+ drivers/acpi/video_detect.c                        | 55 +++++++++-----
+ drivers/bluetooth/btbcm.c                          |  2 +
+ drivers/bluetooth/btusb.c                          | 15 ++++
+ drivers/bluetooth/hci_bcm.c                        |  2 +
+ drivers/macintosh/adb.c                            |  2 +-
+ fs/btrfs/block-group.h                             |  1 +
+ fs/btrfs/extent-tree.c                             | 20 ++++-
+ fs/btrfs/extent_io.c                               |  3 +-
+ fs/btrfs/inode.c                                   |  2 +
+ fs/btrfs/zoned.c                                   | 27 +++++++
+ fs/btrfs/zoned.h                                   |  5 ++
+ include/linux/ioprio.h                             |  2 +-
+ tools/arch/x86/include/asm/cpufeatures.h           |  1 +
+ tools/arch/x86/include/asm/msr-index.h             |  4 +
+ tools/include/uapi/linux/bpf.h                     |  3 +-
+ tools/kvm/kvm_stat/kvm_stat                        |  3 +-
+ .../testing/selftests/bpf/prog_tests/sock_fields.c | 58 ++++++++++-----
+ .../testing/selftests/bpf/progs/test_sock_fields.c | 45 +++++++++++
+ tools/testing/selftests/bpf/verifier/sock.c        | 81 +++++++++++++++++++-
+ tools/testing/selftests/kvm/lib/aarch64/ucall.c    |  9 +--
+ tools/testing/selftests/kvm/x86_64/hyperv_clock.c  | 10 ++-
+ tools/vm/slabinfo.c                                | 26 ++++++-
+ 44 files changed, 515 insertions(+), 123 deletions(-)
 
 

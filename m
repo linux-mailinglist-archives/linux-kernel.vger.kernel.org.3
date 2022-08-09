@@ -2,144 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB75758DE68
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1297958DE6E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345684AbiHISPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S1345746AbiHISP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346033AbiHISMN (ORCPT
+        with ESMTP id S1346050AbiHISMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:12:13 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FC2614D;
-        Tue,  9 Aug 2022 11:05:16 -0700 (PDT)
-Date:   Tue, 09 Aug 2022 18:04:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660068297;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pKrc8Gg3/X/0lWK8erZcRz5+UN0K7i+Xijnu+m+yDso=;
-        b=WudOYxv50CsLok2ERouZc5GaOj1CIdtq1sdIePudurb/sB2a/Nf7ReFYyIUFKdo1xeTK1P
-        njShlf8veSxuYyvu9obghQgG4JOrPKgRrfxpnwh5bqOCR1d4Hq6udvQSlE4lzhyG7XLemT
-        cOTrfSUV8Jh93PGDLeq6mm+LSV1vxulX862kTwclh2ZYdE0NhlBn24d8PrA3tE1HBLBZLG
-        QnorQ3E4lKe5UxFx1f1TGoPrAacvpO9OI8tkgZxn2hWbC2Bd3QE7P2Euwxm/xfoF38HIzz
-        oce9VVPDF/HUGFuYF4Zuh18cor0tpXxEL45x9sbQGRDzNtX3uU1pfoMyoTiZZg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660068297;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pKrc8Gg3/X/0lWK8erZcRz5+UN0K7i+Xijnu+m+yDso=;
-        b=1jbcd0+qRhJ/kENrLwUq/Ud/4Im5sxdbTclrAyZoxu68ev3xKFhAKlbg9LLS5bgHjB+Ias
-        RqZRKXHbQV9r9SBg==
-From:   "tip-bot2 for Youngmin Nam" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/urgent] time: Correct the prototype of
- ns_to_kernel_old_timeval and ns_to_timespec64
-Cc:     Youngmin Nam <youngmin.nam@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220712094715.2918823-1-youngmin.nam@samsung.com>
-References: <20220712094715.2918823-1-youngmin.nam@samsung.com>
-MIME-Version: 1.0
-Message-ID: <166006829573.15455.10106358361686609629.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 9 Aug 2022 14:12:15 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A191F2CB
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:05:18 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id h4so2564911qtj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:05:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=ojEQCV/0pE7IwI4Y8EDpXWBWiQ0oIulQ6mpfQVQvenk=;
+        b=0rGj0tb+d4WfgCzkddJDJ2zOaPyR0l4IA5p49/7h+TACbxmxk+7lZjPwXsCiTt4aeP
+         ZQnRaT9yR7vW8U/ExXn5iPlQvLp3G/dG/FZP60M8vhKMZx8BJfO2SKdnzMDWD+sQf+jx
+         irHjQYu3n3d6O7YvoewTLF6CLobE56pyV2Y+KARn3tMZvderIhPB+wPWjxABw7kRiGbO
+         KiYOGjkYVvCAc7QFFTDqjpwqYEWMo79p1ldeaktOGGH+I8z1m7/pNHfucdLdzrTQqILD
+         JEnPUltXEwqUjPwJ8r8COFlDc4tnkhgw33K6oRZLN+nxOW+m2vqoj9c1yg4LM/5eZg/I
+         ZLdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=ojEQCV/0pE7IwI4Y8EDpXWBWiQ0oIulQ6mpfQVQvenk=;
+        b=5TaWmujX0r5D2JPlJs/tGHBbWmjMYRtA6Lrgq+5zTFNfz/8+imh/YU1I72IvPHeO7X
+         P1GGutv89BBg8JThhJsNbNXB59VzpRNugAqKRc+ppciPmQAkVRK79veBR5vEJ7VW1MFF
+         1C33QmxJ0Mz8uS/YTzjSXIB6wXD615x5ypletC/uvgyb9qcHJvFu5CMEYQatA1xjPwBU
+         1HfRf91IMkojyjysTAjITliWOW3viReZcYhEDW+iht327i4KRQkMFud0UiFgPx5qcflO
+         fFdOpIIfMMX8nClcxYqwFnXfKAQJ17uE5hNXLHB2DUxDNElFckJi1N1sX5FWN53dTbCY
+         5NnA==
+X-Gm-Message-State: ACgBeo0oEMaafjk41C7jcXz899bUE8RqiP5lZstyARkeyYcudOVdtBTu
+        nN2JHLD0JIJnxpi8wUao/HijMg==
+X-Google-Smtp-Source: AA6agR4CTAGOJKkVFFQeQ+YGH1MKJckK/ePANF7t+WaHbsh7iCeQLChmX0ZJO5D1C2Fw1HpEyMZpAA==
+X-Received: by 2002:a05:622a:4c88:b0:33b:f61b:d17f with SMTP id ez8-20020a05622a4c8800b0033bf61bd17fmr21073735qtb.23.1660068315186;
+        Tue, 09 Aug 2022 11:05:15 -0700 (PDT)
+Received: from smtpclient.apple ([2600:1700:42f0:6600:b19b:cbb5:a678:767c])
+        by smtp.gmail.com with ESMTPSA id u33-20020a05622a19a100b00342e86b3bdasm8905881qtc.12.2022.08.09.11.05.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Aug 2022 11:05:14 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH 1/3] hfs: Unmap the page in the "fail_page" label
+From:   Viacheslav Dubeyko <slava@dubeyko.com>
+In-Reply-To: <20220809152004.9223-2-fmdefrancesco@gmail.com>
+Date:   Tue, 9 Aug 2022 11:05:03 -0700
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <79023F53-CAC5-4D88-B171-317B92A2EEE1@dubeyko.com>
+References: <20220809152004.9223-1-fmdefrancesco@gmail.com>
+ <20220809152004.9223-2-fmdefrancesco@gmail.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/urgent branch of tip:
 
-Commit-ID:     46dae32fe625a75f549c3a70edc77b778197bb05
-Gitweb:        https://git.kernel.org/tip/46dae32fe625a75f549c3a70edc77b778197bb05
-Author:        Youngmin Nam <youngmin.nam@samsung.com>
-AuthorDate:    Tue, 12 Jul 2022 18:47:15 +09:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Tue, 09 Aug 2022 20:02:13 +02:00
 
-time: Correct the prototype of ns_to_kernel_old_timeval and ns_to_timespec64
+> On Aug 9, 2022, at 8:20 AM, Fabio M. De Francesco =
+<fmdefrancesco@gmail.com> wrote:
+>=20
+> Several paths within hfs_btree_open() jump to the "fail_page" label
+> where put_page() is called while the page is still mapped.
+>=20
+> Call kunmap() to unmap the page soon before put_page().
+>=20
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+> fs/hfs/btree.c | 1 +
+> 1 file changed, 1 insertion(+)
+>=20
+> diff --git a/fs/hfs/btree.c b/fs/hfs/btree.c
+> index 19017d296173..56c6782436e9 100644
+> --- a/fs/hfs/btree.c
+> +++ b/fs/hfs/btree.c
+> @@ -124,6 +124,7 @@ struct hfs_btree *hfs_btree_open(struct =
+super_block *sb, u32 id, btree_keycmp ke
+> 	return tree;
+>=20
+> fail_page:
+> +	kunmap(page);
+> 	put_page(page);
+> free_inode:
+> 	tree->inode->i_mapping->a_ops =3D &hfs_aops;
+> --=20
+> 2.37.1
+>=20
 
-In ns_to_kernel_old_timeval() definition, the function argument is defined
-with const identifier in kernel/time/time.c, but the prototype in
-include/linux/time32.h looks different.
 
-- The function is defined in kernel/time/time.c as below:
-  struct __kernel_old_timeval ns_to_kernel_old_timeval(const s64 nsec)
+Looks good.
 
-- The function is decalared in include/linux/time32.h as below:
-  extern struct __kernel_old_timeval ns_to_kernel_old_timeval(s64 nsec);
+Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
 
-Because the variable of arithmethic types isn't modified in the calling scope,
-there's no need to mark arguments as const, which was already mentioned during 
-review (Link[1) of the original patch.
+Thanks,
+Slava.
 
-Likewise remove the "const" keyword in both definition and declaration of
-ns_to_timespec64() as requested by Arnd (Link[2]).
-
-Fixes: a84d1169164b ("y2038: Introduce struct __kernel_old_timeval")
-Signed-off-by: Youngmin Nam <youngmin.nam@samsung.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/all/20220712094715.2918823-1-youngmin.nam@samsung.com
-Link[1]: https://lore.kernel.org/all/20180310081123.thin6wphgk7tongy@gmail.com/
-Link[2]: https://lore.kernel.org/all/CAK8P3a3nknJgEDESGdJH91jMj6R_xydFqWASd8r5BbesdvMBgA@mail.gmail.com/
-
----
- include/linux/time64.h | 2 +-
- kernel/time/time.c     | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/time64.h b/include/linux/time64.h
-index 2fb8232..f1bcea8 100644
---- a/include/linux/time64.h
-+++ b/include/linux/time64.h
-@@ -145,7 +145,7 @@ static inline s64 timespec64_to_ns(const struct timespec64 *ts)
-  *
-  * Returns the timespec64 representation of the nsec parameter.
-  */
--extern struct timespec64 ns_to_timespec64(const s64 nsec);
-+extern struct timespec64 ns_to_timespec64(s64 nsec);
- 
- /**
-  * timespec64_add_ns - Adds nanoseconds to a timespec64
-diff --git a/kernel/time/time.c b/kernel/time/time.c
-index 29923b2..526257b 100644
---- a/kernel/time/time.c
-+++ b/kernel/time/time.c
-@@ -449,7 +449,7 @@ time64_t mktime64(const unsigned int year0, const unsigned int mon0,
- }
- EXPORT_SYMBOL(mktime64);
- 
--struct __kernel_old_timeval ns_to_kernel_old_timeval(const s64 nsec)
-+struct __kernel_old_timeval ns_to_kernel_old_timeval(s64 nsec)
- {
- 	struct timespec64 ts = ns_to_timespec64(nsec);
- 	struct __kernel_old_timeval tv;
-@@ -503,7 +503,7 @@ EXPORT_SYMBOL(set_normalized_timespec64);
-  *
-  * Returns the timespec64 representation of the nsec parameter.
-  */
--struct timespec64 ns_to_timespec64(const s64 nsec)
-+struct timespec64 ns_to_timespec64(s64 nsec)
- {
- 	struct timespec64 ts = { 0, 0 };
- 	s32 rem;

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CB758DE4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADCC58DE0A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245421AbiHISNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S1345139AbiHISJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345840AbiHISLt (ORCPT
+        with ESMTP id S1344236AbiHISI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:11:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6180626AF8;
-        Tue,  9 Aug 2022 11:05:01 -0700 (PDT)
+        Tue, 9 Aug 2022 14:08:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06CD2980F;
+        Tue,  9 Aug 2022 11:03:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BFDD6111F;
-        Tue,  9 Aug 2022 18:05:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ABF4C433D6;
-        Tue,  9 Aug 2022 18:04:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58C31B8171C;
+        Tue,  9 Aug 2022 18:03:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A486EC433D6;
+        Tue,  9 Aug 2022 18:03:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068300;
-        bh=UinAzkFxj+BLJyuf4XCMytJV/KED8ZQPD9DVBguyrlg=;
+        s=korg; t=1660068220;
+        bh=e+Sqdz09GdVHe1dlbhbcgQasCVxSYIYnh6jIqbIAANo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hbd8ggkKTjOXdzM2SOkIZk3yP2Kntl1O+MOXy0eKGLovkXMZfsKax1ienghKQcS56
-         k1NejTb1Ir3dcI7GgoL881P2PvVQ4+IIO/h5mcYUh4DUjLG8ZI6yZKVzTYjAoqC3Hm
-         SvlR4K+BVJIkkhTnmH521n+VnP6TxSNAPalsSMSQ=
+        b=w1KPWZdJ8g6rFaqjj4X1f0SjMdLwBBDRFuaUxBTiY+5OLRwpSdSdYDKtdiJH+xH0V
+         K0xcohnokrs+sYEmlFAqqWXNTMyOlZqFbi27D+YQ+EDzOXRGP4J1nrG66bT5ZX1z/w
+         BBVLm8z6X9HUmyjLTzMdJqKzlW9rglT2HQCDtlaI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH 5.15 05/30] tools/vm/slabinfo: Handle files in debugfs
-Date:   Tue,  9 Aug 2022 20:00:30 +0200
-Message-Id: <20220809175514.480552640@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Ning Qiang <sohu0106@126.com>,
+        Kees Cook <keescook@chromium.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.4 13/15] macintosh/adb: fix oob read in do_adb_query() function
+Date:   Tue,  9 Aug 2022 20:00:31 +0200
+Message-Id: <20220809175510.763868106@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
-References: <20220809175514.276643253@linuxfoundation.org>
+In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
+References: <20220809175510.312431319@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stéphane Graber <stgraber@ubuntu.com>
+From: Ning Qiang <sohu0106@126.com>
 
-commit 0c7e0d699ef1430d7f4cf12b4b1d097af58b5515 upstream.
+commit fd97e4ad6d3b0c9fce3bca8ea8e6969d9ce7423b upstream.
 
-Commit 64dd68497be76 relocated and renamed the alloc_calls and
-free_calls files from /sys/kernel/slab/NAME/*_calls over to
-/sys/kernel/debug/slab/NAME/*_calls but didn't update the slabinfo tool
-with the new location.
+In do_adb_query() function of drivers/macintosh/adb.c, req->data is copied
+form userland. The parameter "req->data[2]" is missing check, the array
+size of adb_handler[] is 16, so adb_handler[req->data[2]].original_address and
+adb_handler[req->data[2]].handler_id will lead to oob read.
 
-This change will now have slabinfo look at the new location (and filenames)
-with a fallback to the prior files.
-
-Fixes: 64dd68497be76 ("mm: slub: move sysfs slab alloc/free interfaces to debugfs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Stéphane Graber <stgraber@ubuntu.com>
-Tested-by: Stéphane Graber <stgraber@ubuntu.com>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Ning Qiang <sohu0106@126.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220713153734.2248-1-sohu0106@126.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/vm/slabinfo.c |   26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+ drivers/macintosh/adb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/vm/slabinfo.c
-+++ b/tools/vm/slabinfo.c
-@@ -233,6 +233,24 @@ static unsigned long read_slab_obj(struc
- 	return l;
- }
+--- a/drivers/macintosh/adb.c
++++ b/drivers/macintosh/adb.c
+@@ -647,7 +647,7 @@ do_adb_query(struct adb_request *req)
  
-+static unsigned long read_debug_slab_obj(struct slabinfo *s, const char *name)
-+{
-+	char x[128];
-+	FILE *f;
-+	size_t l;
-+
-+	snprintf(x, 128, "/sys/kernel/debug/slab/%s/%s", s->name, name);
-+	f = fopen(x, "r");
-+	if (!f) {
-+		buffer[0] = 0;
-+		l = 0;
-+	} else {
-+		l = fread(buffer, 1, sizeof(buffer), f);
-+		buffer[l] = 0;
-+		fclose(f);
-+	}
-+	return l;
-+}
- 
- /*
-  * Put a size string together
-@@ -409,14 +427,18 @@ static void show_tracking(struct slabinf
- {
- 	printf("\n%s: Kernel object allocation\n", s->name);
- 	printf("-----------------------------------------------------------------------\n");
--	if (read_slab_obj(s, "alloc_calls"))
-+	if (read_debug_slab_obj(s, "alloc_traces"))
-+		printf("%s", buffer);
-+	else if (read_slab_obj(s, "alloc_calls"))
- 		printf("%s", buffer);
- 	else
- 		printf("No Data\n");
- 
- 	printf("\n%s: Kernel object freeing\n", s->name);
- 	printf("------------------------------------------------------------------------\n");
--	if (read_slab_obj(s, "free_calls"))
-+	if (read_debug_slab_obj(s, "free_traces"))
-+		printf("%s", buffer);
-+	else if (read_slab_obj(s, "free_calls"))
- 		printf("%s", buffer);
- 	else
- 		printf("No Data\n");
+ 	switch(req->data[1]) {
+ 	case ADB_QUERY_GETDEVINFO:
+-		if (req->nbytes < 3)
++		if (req->nbytes < 3 || req->data[2] >= 16)
+ 			break;
+ 		mutex_lock(&adb_handler_mutex);
+ 		req->reply[0] = adb_handler[req->data[2]].original_address;
 
 

@@ -2,95 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4B158D165
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DAB58D168
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244725AbiHIAed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 20:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
+        id S244691AbiHIAgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 20:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiHIAea (ORCPT
+        with ESMTP id S229881AbiHIAg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 20:34:30 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B52319C13
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 17:34:29 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id q19so9473610pfg.8
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 17:34:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=6C9ArOHrYaAILM0KZ4kBvP+nUNIqPYA+uHHXGsdeawA=;
-        b=P7WoNvVpS3okL4YI3o5uz9544qztcUEr1d+LExJylyHYHQZklqf4z8S2h44Nc5Rqre
-         qNENlB9cRxxMXJSQLaVPA0ibUYmjuaUJxWHlEQg7XuwMMHiCKjfD800w6HWCWFW97jG/
-         ipFPUBO9QJxq33W2C+jnkG+6srCtqkLKyelalaRu86/MhVjtgfzdbu2VciP74lTDXia9
-         tcw8AMqrymPwqEMiio9pnZkOQSBjcxgOGJcbHeqKSwXLqqqiqfSq/J4xmKGbmk8N1IHN
-         DNkD36mh4S1SoQfCQvhfZ0UTfN6afTiLMOCwOk8MufKvKKOHJeMYrKKHKZ0GG2/hN1yX
-         s3pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=6C9ArOHrYaAILM0KZ4kBvP+nUNIqPYA+uHHXGsdeawA=;
-        b=quxWN8NA7V36behBmtUBZJ3mN84/GeyLFr40gb0ltQ7jKGJ0Q1K6dofppwg886/qNL
-         u4aiHN+Dcl9230SmErbmJkdOR/Ipbh7hrQhFfbOJ1tOuo66OSg/++sAHyCIJIe/QjmHO
-         Sun9jGFhVJoKnv1RjOdAbHrKAVwxo32il0B+q8g3DDz5/CCUfamQdCqtClPIlHi9QbBv
-         LCOSi+gzy5rI63d0On6Aa1Nc8e/oTs0cN1E95R2fFiiz2+ezvX9EUl+KqbWsI5ZpDvco
-         xzBfas77o5QWwDA8hdKBGJLLKmMfuUhE6mjxpzoU3TBEAarS4vgDBqg3TcrXE8SEaItr
-         eWWw==
-X-Gm-Message-State: ACgBeo0s2sS1nP/ZdZTpOfgvANIeOsZBA2zxC5LKD1olCZqpSF544Kek
-        24wai0e6ybrIO5h6t1ooJQLq2Q==
-X-Google-Smtp-Source: AA6agR4Gz5g5vG/l/tZyqtSjI3vc8zXtknoeHx9hIKW+yKI0a0eBaFzsrwCevFsok5EYWzWVjhoKBA==
-X-Received: by 2002:a63:ea11:0:b0:41d:9296:21e6 with SMTP id c17-20020a63ea11000000b0041d929621e6mr4696671pgi.603.1660005268964;
-        Mon, 08 Aug 2022 17:34:28 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o13-20020a17090a420d00b001f260b1954bsm8740402pjg.13.2022.08.08.17.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 17:34:28 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 00:34:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Coleman Dietsch <dietschc@csp.edu>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        stable@vger.kernel.org,
-        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
-Subject: Re: [PATCH v3 2/2] KVM: x86/xen: Stop Xen timer before changing IRQ
-Message-ID: <YvGrkII3Sgw/qTeo@google.com>
-References: <20220808190607.323899-2-dietschc@csp.edu>
- <20220808190607.323899-3-dietschc@csp.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220808190607.323899-3-dietschc@csp.edu>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 8 Aug 2022 20:36:29 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F34C12AB3
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 17:36:27 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 086515C0003;
+        Mon,  8 Aug 2022 20:36:25 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Mon, 08 Aug 2022 20:36:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660005385; x=1660091785; bh=zg8D05det1
+        7wHTcb1SQBJ3QqJGHDqgu5vFpaar6HYxg=; b=kHmVmqK+mbKwLRwLUD31etUwad
+        7t7bdNYlFth+90f6jokU/Dwkk8d2OpXixJ0L4T07exT2bBuRjb5eNl/PF1N0mbsb
+        F0wz7850K2Xp4+tMd8XxUYK5itbs//3OI1qObAP8MUwcPe5trKVKS5tILE2iI8Om
+        Mmmg6nClEuJBHPCddo7XUg/Sf1U77SCyD94HtGe+wOAIFvM7j5uJHONzqyU5CLNB
+        yUSImXIKeiYOzd54ow9iuLkEfB3W4cxdYMrXZsd79CmdOg9OhT43MWUVzfDYltLk
+        aPmynAktSYaFoFfbzPH9yltZr0urmV29G+EOzfXwG9h8Ojuj/1ynwfWiUzhQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660005385; x=1660091785; bh=zg8D05det17wHTcb1SQBJ3QqJGHD
+        qgu5vFpaar6HYxg=; b=SllE8aS4h2z9MxtoeAolX2GrOP8mOJu9k3Joa0F0axa4
+        E9dIyZSiMJI6DZVOHZuOkqTF5ADybN6kxMMcF4sXne7sNg5MnHdx822jX2ny+LSY
+        YgegNddAskWa3SlD/STYB51J3MzuVtKqoHjPburHAfnc8XoqO8ddaXCDOCU4YPt9
+        zkjKsfJ0sBp9f4QBj6D5xltsxCQhDTQYeyzjQl1FraeDIC/68x54KTzxRwIFvsvm
+        hE3klqEfsWRDxRjLGwp2E5vJqbP4G6T5KW7vsJOUOcn12zPuom1xz/dVvWkppoEx
+        rdMU7FIZow7f2UK2K/yk8nvuYJ4BrQov4XappP5GDA==
+X-ME-Sender: <xms:B6zxYuA27BcCXmQTkSEuf2mrsoI0NPBiOJud8u5LHS4t__jK8kWwiA>
+    <xme:B6zxYoi5VofS3XlBN4-F_8vBU05Yg3cVWhd7V7ddUvMg9IA0oPotMq3uSA2cauvxd
+    k95GqRJSQjNn5TgJQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefledgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
+    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
+    feetkeeiteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
+X-ME-Proxy: <xmx:B6zxYhmHXXuBsboX2cRurVAuaiOkb_HBam5SVfx0Tblsv6akdQvagw>
+    <xmx:B6zxYsxnIgwSXFqx0aLFgK1aO-RQrlS-oEvRn188GuFTB8MPJmxtkg>
+    <xmx:B6zxYjQ-O-iio_KERf8Ul5otTiwh9xSv1nJvflduAn3OjIkDYGEMQg>
+    <xmx:CazxYkIPI5XJ1Yl36JGA7ZG6m-RedNAn8CEXNM0rN-Dg-7Z-B1gi7w>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D26901700082; Mon,  8 Aug 2022 20:36:23 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-758-ge0d20a54e1-fm-20220729.001-ge0d20a54
+Mime-Version: 1.0
+Message-Id: <cd11b517-ae6c-4a67-9f43-74825812b00b@www.fastmail.com>
+In-Reply-To: <SEZPR06MB52695BDBE90ECE00DB2D9684F29D9@SEZPR06MB5269.apcprd06.prod.outlook.com>
+References: <20220516064900.30517-1-ryan_chen@aspeedtech.com>
+ <20220516064900.30517-3-ryan_chen@aspeedtech.com>
+ <5d863bc1-4f27-48b6-89ab-c3f02bc09057@www.fastmail.com>
+ <SEZPR06MB5269DFE2CF762B62846D315EF2999@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <4c4462a6-e950-48cb-b9ba-822909a86867@www.fastmail.com>
+ <SEZPR06MB52695BDBE90ECE00DB2D9684F29D9@SEZPR06MB5269.apcprd06.prod.outlook.com>
+Date:   Tue, 09 Aug 2022 10:04:37 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Ryan Chen" <ryan_chen@aspeedtech.com>,
+        "Joel Stanley" <joel@jms.id.au>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Cc:     BMC-SW <BMC-SW@aspeedtech.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: i2c-ast2600: Add bindings for AST2600 i2C
+ driver
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022, Coleman Dietsch wrote:
-> Stop Xen timer (if it's running) prior to changing the IRQ vector and
-> potentially (re)starting the timer. Changing the IRQ vector while the
-> timer is still running can result in KVM injecting a garbage event, e.g.
-> vm_xen_inject_timer_irqs() could see a non-zero xen.timer_pending from
-> a previous timer but inject the new xen.timer_virq.
-> 
-> Fixes: 536395260582 ("KVM: x86/xen: handle PV timers oneshot mode")
-> Cc: stable@vger.kernel.org
-> Link: https://syzkaller.appspot.com/bug?id=8234a9dfd3aafbf092cc5a7cd9842e3ebc45fc42
-> Reported-by: syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
-> Signed-off-by: Coleman Dietsch <dietschc@csp.edu>
-> ---
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+On Tue, 2 Aug 2022, at 18:34, Ryan Chen wrote:
+> Hello,
+>
+>> -----Original Message-----
+>> From: Andrew Jeffery <andrew@aj.id.au>
+>> Sent: Friday, July 29, 2022 11:13 AM
+>> To: Ryan Chen <ryan_chen@aspeedtech.com>; Joel Stanley <joel@jms.id.au>;
+>> Philipp Zabel <p.zabel@pengutronix.de>; linux-arm-kernel@lists.infradead.org;
+>> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org;
+>> openbmc@lists.ozlabs.org
+>> Cc: BMC-SW <BMC-SW@aspeedtech.com>
+>> Subject: Re: [PATCH v3 2/3] dt-bindings: i2c-ast2600: Add bindings for AST2600
+>> i2C driver
+>> 
+>> 
+>> 
+>> On Fri, 29 Jul 2022, at 12:33, Ryan Chen wrote:
+>> > Hello Andrew,
+>> >
+>> >> -----Original Message-----
+>> >> From: Andrew Jeffery <andrew@aj.id.au>
+>> >> Sent: Friday, July 29, 2022 10:29 AM
+>> >> To: Ryan Chen <ryan_chen@aspeedtech.com>; Joel Stanley
+>> >> <joel@jms.id.au>; Philipp Zabel <p.zabel@pengutronix.de>;
+>> >> linux-arm-kernel@lists.infradead.org;
+>> >> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org;
+>> >> openbmc@lists.ozlabs.org
+>> >> Cc: BMC-SW <BMC-SW@aspeedtech.com>
+>> >> Subject: Re: [PATCH v3 2/3] dt-bindings: i2c-ast2600: Add bindings
+>> >> for AST2600 i2C driver
+>> >>
+>> >> Hi Ryan,
+>> >>
+>> >> On Mon, 16 May 2022, at 16:18, ryan_chen wrote:
+>> >> > +    i2c0: i2c-bus@80 {
+>> >> > +      #address-cells = <1>;
+>> >> > +      #size-cells = <0>;
+>> >> > +      #interrupt-cells = <1>;
+>> >> > +      compatible = "aspeed,ast2600-i2c-bus";
+>> >>
+>> >> This isn't quite right with respect to your binding description above
+>> >> :)
+>> > Yes, the compatible need to be " aspeed,ast2600-i2c" is that your point ?
+>> 
+>> Yes, but only if we agree that we should have different compatibles for the
+>> different drivers. I'm not convinced about that yet.
+>> 
+>> I think it's enough to have different Kconfig symbols, and select the old driver
+>> in aspeed_g4_defconfig, and the new driver in aspeed_g5_defconfig. Won't
+>> that gives us the right outcome without requiring a new set of compatibles?
+>> 
+> The new driver in aspeed_g5_defconfig.
+
+Right, behind a new Kconfig option.
+
+> And different compatible string 
+> claim will
+> Load the new or legacy driver,
+
+I don't think we need this. It's enough to enable the new driver in the 
+defconfig (and possibly disable the config option for the old driver).
+
+> it should ok like the different 
+> generation SOC. Have 
+> different design.
+> Am I right?
+
+We have SoC-specific compatibles already, so the new driver can just 
+bind on the compatibles for the SoC revisions that have the new 
+register interface. The old driver just binds to the device in the SoCs 
+that have the old register interface.
+
+There's an overlap in support between the two drivers, but for people 
+who care about which implementation they use they can choose to exclude 
+that driver from their kernel config.
+
+None of this requires more compatibles be added.
+
+Does that help?
+
+Andrew

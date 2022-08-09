@@ -2,309 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5529858D1BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3A658D1C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbiHIB2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 21:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S230128AbiHIBeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 21:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiHIB2l (ORCPT
+        with ESMTP id S229464AbiHIBeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 21:28:41 -0400
-Received: from mail-m11885.qiye.163.com (mail-m11885.qiye.163.com [115.236.118.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3F112AF5;
-        Mon,  8 Aug 2022 18:28:40 -0700 (PDT)
-Received: from [192.168.111.100] (unknown [58.22.7.114])
-        by mail-m11885.qiye.163.com (Hmail) with ESMTPA id 613EC4C0545;
-        Tue,  9 Aug 2022 09:28:37 +0800 (CST)
-Message-ID: <cd806954-e94e-aec8-2b0c-4047da9a92ec@rock-chips.com>
-Date:   Tue, 9 Aug 2022 09:28:36 +0800
-MIME-Version: 1.0
+        Mon, 8 Aug 2022 21:34:15 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2073.outbound.protection.outlook.com [40.107.22.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACAB12D20;
+        Mon,  8 Aug 2022 18:34:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N+5nMWCIP/sMvWh0gK66UdXiqbKTHFzRvieduehw2r0wmmS3yjZeig9pzZkik0BnK/BCFTdf7jvV4wDM2TME38vt7JWbfZnFNnSvXu2etQmbYPoVgtzhUCj34b1hCA6RRSc0IMmBmZ2lEKIteYVYqphXnebSwcThKvEOQWoBRmgtSlUD4DIIVh1ZyVH3WviAjJk5EKcwr5rVq4UlkubMZVQBLKY6Z5frwsz99ezQVnKkt6ylQOk08ae+1GS5AR1uzLZypslOIVmCBePRjC5FTcChlYjToQ5XKOP9Cb+SDS9Zmoel5XPXSfwlBGlQEv/RXj7SqEzA5xlM7wzeaPbTsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b4+7kKtwrLmNhiqn5Sb5uHjxa6fPdDrhm3oP6CNkJXQ=;
+ b=Se2SufbC0LMs+AupKYKZaGZ5sOpgZayvI8rHfeTPU6JAYyxNWYtNPh/6eOxW/Q+tX0xTLldDInBbF7V7dpEm/56EamNbS2x66Mxv0iPqqghcATgZVl0lEkVxH1y29JwOUaTxB1Q05r8n//RhPX1TP7qQ55YE5BYL6ds69vl6iAS840NVTJxXgjCHt5cT01rpVFquByAVodIRxR/Ly4jwKZcizf/VZPBVh16EcmOiYttxy5vRlmi9/m/qgIL6OoWwrOItDrFFbQOAV2BSrVF4oBD3noxoJNG3UQUbVbHZO2zbQM3KirdFc93OlokpYt5qkguSbckkZigQRkzd4oESqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b4+7kKtwrLmNhiqn5Sb5uHjxa6fPdDrhm3oP6CNkJXQ=;
+ b=QuQIPAvur/z57snL77xigzG8zOkbQGSAfg2KuLakQpuTZctk2Mhdyq8vZ6F5h/nAHwQYPEEOKAMbMTz4q96s2eehrjZVqFj8fe/ruXBKaWMrOLJkpyr3OxzVJGOgNIj48C2gZYYIwAZ5axqY3xhaygxyR9RZmfwHqw++8MyfKfk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM0PR04MB6273.eurprd04.prod.outlook.com (2603:10a6:208:137::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.20; Tue, 9 Aug
+ 2022 01:34:10 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::3c6c:b7e6:a93d:d442%4]) with mapi id 15.20.5504.020; Tue, 9 Aug 2022
+ 01:34:10 +0000
+Message-ID: <5c8a815e-1f8c-3580-52c0-6a48edc7bc11@oss.nxp.com>
+Date:   Tue, 9 Aug 2022 09:33:56 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.1
-Subject: Re: [PATCH v2] drm/gem: Fix GEM handle release errors
+ Thunderbird/102.0
+Subject: Re: [PATCH V4 0/7] imx: blk-ctrl: Add interconnect for i.MX8MP
+From:   Peng Fan <peng.fan@oss.nxp.com>
+To:     djakov@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, abelvesa@kernel.org,
+        abailon@baylibre.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com
+Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
+References: <20220708085632.1918323-1-peng.fan@oss.nxp.com>
 Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Andy Yan <andy.yan@rock-chips.com>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        linux-media@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
-References: <20220803083237.3701-1-jeffy.chen@rock-chips.com>
- <c7cb225b-7f21-8d9a-773b-efc655e6332c@amd.com>
- <7cd16264-fa84-7b50-f3ed-64f7f22dcef2@rock-chips.com>
- <64bf4e4b-4e22-0ff0-5f92-76f603c04ec0@amd.com>
-From:   Chen Jeffy <jeffy.chen@rock-chips.com>
-In-Reply-To: <64bf4e4b-4e22-0ff0-5f92-76f603c04ec0@amd.com>
+In-Reply-To: <20220708085632.1918323-1-peng.fan@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVkaHR9MVkoZSE5CSkweT0lNHlUTARMWGhIXJB
-        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NEk6SDo4LT06Iy8ZCTIQSzkc
-        AggwCypVSlVKTU1LS0tDTkpDSUtJVTMWGhIXVREeHR0CVRgTHhU7CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFKSUhDTTcG
-X-HM-Tid: 0a828037d0932eb9kusn613ec4c0545
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR01CA0007.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::11) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f4b35141-87be-49b0-82c8-08da79a74236
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6273:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 07rP2HDJxGD8ZWxoIPnfAxp16d5HFZD3559ETes3Gsfuu3Y2koFjsoGolXRa60SKnW5hm1URg+x7nadsqHab8GCwbH42w50JAh2dgB5SfSIft291g0NWypXMoA4GjPkGGDZzXKKcr5TgYMTOutMoIumnYyjFSvcebbjpXmmtoH5WZeldga4xom8YSAVOyLef4zPSRU63N099Ze1L1yLKnYCHr+wUOPw0lvHpYRh4uYaMdNYp+0y3BukwQb5pXhrQ9s9/uwqBxSf5C3W5hs9b+E5cZXXlUPmnuIHCAMjygLCNb0QtAr5HGc+TgVls+X/UuzOcjnPI5o4tSMEzS87sIgPvTNW5xMhKjfomw4xxHrNdLULDsznpXmKISt5TX9A1n+TcBHxXqCjtbZwJZfFLcIl7Z6s0H4/+QFSNj+N33JgnLwoYAeS2VIS1e83nlqC3RbapJS6IGmXSPPEHEn3IMB2sM0s40pINTi3ty2O7wH517JKppW8XZhSEInkdxnxRis3EppJRBwOTiliDUorqllTMdiRbMaZdBncibYNQfOn3NBdJFP/ElJER/haVgWoRlDg50gd3uQgoaa4EwNDyQEBXPKwP42rqO4tefxdUYZgt4ybfSzoug2iWwTfVzFsJ1vxE+x/k0KHZ/MHkiAzYpfZtCCzXUnFQsZbfoLrwMLZtIf7/vIxMcW8J2ihsI6HhTJyuKMEK50QC+Qr8M3tXHH+zaBoIiV1J8DsBM46S4O7ugxeSq1Rp8M+hQ0IzFnRVSHuUUJPlzcInQOdiccU9ght2vtyMMaYuCwSS+NHFdo6oVC+dYlznNyP8axNg0FeZ1aiNOQDBqwa1fvoggfxZ92//ASlhsWaGDiJFgZtmoDO1xI+fyV9BoSexf1GhqrzH
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(136003)(346002)(396003)(39860400002)(52116002)(53546011)(2906002)(26005)(316002)(186003)(6512007)(41300700001)(6506007)(6666004)(86362001)(31686004)(2616005)(31696002)(6486002)(7416002)(44832011)(8936002)(66946007)(66476007)(66556008)(478600001)(5660300002)(921005)(4326008)(8676002)(38350700002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VDRIYTQxZkIvbng3L2lOeVl5L2tIeXQzUG16bFdTUGp6MFgvRWFuTXFiNUZO?=
+ =?utf-8?B?cmdiZHZuNS9FRTFIdGdocFZlSHN0QnJkSUloeWtCdFVpYWIyMmFNTEJmQ0tY?=
+ =?utf-8?B?ZCtiTjZuNnVRRGlWbDQveFh2RjI2WlJJTkcyNHJGSmlDNWNGaEpYRmdjbGpo?=
+ =?utf-8?B?VDJqS21IWnB0TElwWjJGRUdYaHp2eU1RTkVGeDJka3ZaaXNyZ2JSakx3VHk2?=
+ =?utf-8?B?aUFiZ28zWkRGTy8rN0FaS1NxQnIxRHY1RHltK3FOcnYvOFBlRm9Ed1VVZm9l?=
+ =?utf-8?B?TEhuem5kcVFGYWREVDZlaUJFeGV1SkFKU2M3dkVaclhBS2tyYzczc05veTlD?=
+ =?utf-8?B?ZGxQTkF6WVA4d0J5a2ZkVmdSSTR6bDFZc1J4cHJId2NRSytBM2NlNzR1YmU0?=
+ =?utf-8?B?TWJlMGk1M1E5U3p6V1ZiWXJFMFVpbyszZDRTMGU1SnNKWC9MRXNrM1JuOTZI?=
+ =?utf-8?B?cW1xQ3FGUHJ3YU1iM2dSVE5FOWo0OTZjRjl1VDVRd3B6S3Y2QnFFNjJyZ2tO?=
+ =?utf-8?B?MlQwZmN0K2hqRjdqQTJUOGdHbitSNFRtSlI5WVREMTJwVGlyUFZNM2lLWVV2?=
+ =?utf-8?B?SHUrSHBycG1hdEpQRkpMN1d4dE5DazFnL2xHNWs4QWFHUklmUklTakEzNk94?=
+ =?utf-8?B?dTJQSHVFZnhmKzhTVlBDaXdqdUd1SUFnNXlZYWdtRFN2b2pCbE1BMENjODM2?=
+ =?utf-8?B?SVlUdll5ODU2Qm5DOGZjOFMwNGthaW02S252SWl4VW9aUmZwTitnZEdPQ290?=
+ =?utf-8?B?WGpEQlpJWUYyVlBSU0ljejROMUdNSGRUNVhLKzZGOG16YVhpdTdQYVgvak1C?=
+ =?utf-8?B?NnhwcTJEcmZtNk9EMndXL2ZwVWNzT05BNUNnK0RCYU1ITEhHa2JwaExtWXZw?=
+ =?utf-8?B?MEFxSjdSWDc1TTVqdVdZeWk5TEUwMzd4TWZVZ1NtSHZNdERxck1xbW9LYys5?=
+ =?utf-8?B?dFJ1NjhIOGlZa3dRVzF4Nnc3YWh5a1Q3dEc2OXd3d05TRmNPUFFic1duWHli?=
+ =?utf-8?B?SElSNXR0eTkxN2JaR2ZiVThWTlduVnNGYkdsTVFXV0piKzRzZ0JqVW8yTjNx?=
+ =?utf-8?B?cFhGaER1b3pwVjNvLzB6OGlKNmJBaWUvdUkycnFLT2ZOU21UWE5tTXNRSjBY?=
+ =?utf-8?B?QjBwaWJ1MHplQnNSRFdLejVDWFZDaWxLaVlsRURqbXV6NmdtcmtKdHI1bThn?=
+ =?utf-8?B?U2JSZk5aajNLNDNZMG5rL2lldGJtcVl5TXQ5U3UzTjhYc3dYcUY0Z0dpN2RS?=
+ =?utf-8?B?ZjI1MDVaRkZNOHFsenlMeG9FTlpoNTArRUZ2WjlyZCtDOC9KK0JJNHZMSnoz?=
+ =?utf-8?B?eENlaVo1Smxib3BmQjlUZ1VzRVFxR0YrZjlNdWc2a2xvTEUybU0zUGhMTDNH?=
+ =?utf-8?B?YmJyTDB4RlUxOTlyQVMxTHk5YXY2WWQwcUR1S1pzRWQ5NmloR2hXdkRJc2dw?=
+ =?utf-8?B?TlBjMlI5WkxhMnhnVG15dE5MSEg0R1FEMTRlcjVKVHdDNkdpSE5IMkcwTHV6?=
+ =?utf-8?B?dVFTZU9sdlRsbDAwMG02eDI2TWsxd3Y2OEpNWXJzZFlHcGFNejlFVlV6bE16?=
+ =?utf-8?B?YjVjbEdPcFYySFNXSVZtTGRzQzFMYVgvaFNFM0orRmgybk40Nk9FSDRLZytI?=
+ =?utf-8?B?Ty80V3VFN3dSejdNQytwOCt6TktDNzQySWVDeFpZWFNuUkg2QXFlcWNGTWRO?=
+ =?utf-8?B?QmpiMS8wK1Q0bTMwMENKWitVczJIVDU2WXgyRGtnbU4yY25PYmpjRFJSWmF4?=
+ =?utf-8?B?ejlmRGhXMjFmMXI0WGFhV3JkNG1vMU50YndTVCsvTm0yU2JrYWdxcmF0WXVT?=
+ =?utf-8?B?SzFIZlp1NFJzVy94WkpBTmNUV1FPdzUza0wvdGlDL2hoTktlaVN6K09YZUow?=
+ =?utf-8?B?VC9FRlVETVVHSXozUWxveXRaT2lBUHkxTElyTWEvbkNPcVBRZHJYOUVGWWFC?=
+ =?utf-8?B?YU9mSFZrYWlMYmZST3htMUdlbHRzcjAwN3ZVa1Z0VzA5cTZEN0RxY1VmbTBE?=
+ =?utf-8?B?M0Q2SEczM2ZwUWN4blZNcWNnamFDY1ZqdWtJNWwrWDdoNE1HQjVQQUorWm5M?=
+ =?utf-8?B?czB5QUkrM0VpbmNkT2tkVHVHZUFyQmhkUzcyOWhGS0x4V1BRNVIwTnVCNUdY?=
+ =?utf-8?Q?1RMwD8CK62O4kKueLJHa4PQaS?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4b35141-87be-49b0-82c8-08da79a74236
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 01:34:10.7307
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: D94314QrCEMWXZIn/2yNWTohM+oZ3b2nzANmCZ6gcXYzn9ai0bjBT6Gm98ZpXPQmZa/H5WZc37rHSI9Es2LhzA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6273
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+Hi Shawn,
 
-On 8/9 星期二 2:03, Christian König wrote:
-> Hi Jeffy,
-> 
-> Am 08.08.22 um 05:51 schrieb Chen Jeffy:
->> Hi Christian,
->>
->> Thanks for your reply, and sorry i didn't make it clear.
->>
->> On 8/8 星期一 0:52, Christian König wrote:
->>> Am 03.08.22 um 10:32 schrieb Jeffy Chen:
->>>> Currently we are assuming a one to one mapping between dmabuf and 
->>>> handle
->>>> when releasing GEM handles.
->>>>
->>>> But that is not always true, since we would create extra handles for 
->>>> the
->>>> GEM obj in cases like gem_open() and getfb{,2}().
->>>>
->>>> A similar issue was reported at:
->>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20211105083308.392156-1-jay.xu%40rock-chips.com%2F&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7Cd7488e9f235041f7e84408da78f14882%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637955274964656400%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=9G2YbHcYUs1VQYyvjXwLzYawNw%2BP8i%2BjjPBSHx3r2yg%3D&amp;reserved=0
->>>>
->>>> Another problem is that the drm_gem_remove_prime_handles() now only
->>>> remove handle to the exported dmabuf (gem_obj->dma_buf), so the 
->>>> imported
->>>> ones would leak:
->>>> WARNING: CPU: 2 PID: 236 at drivers/gpu/drm/drm_prime.c:228 
->>>> drm_prime_destroy_file_private+0x18/0x24
->>>>
->>>> Let's fix these by using handle to find the exact map to remove.
->>>
->>> Well we are clearly something missing here. As far as I can see the 
->>> current code is correct.
->>>
->>> Creating multiple GEM handles for the same DMA-buf is possible, but 
->>> illegal. >
->>> In other words when a GEM handle is exported as DMA-buf and imported 
->>> again you should intentionally always get the same handle.
->>
->> These issue are not about having handles for importing an exported 
->> dma-buf case, but for having multiple handles to a GEM object(which 
->> means having multiple handles to a dma-buf).
->>
->> I know the drm-prime is trying to make dma-buf and handle maps one to 
->> one, but the drm-gem is allowing to create extra handles for a GEM 
->> object, for example:
->> drm_gem_open_ioctl -> drm_gem_handle_create_tail
->> drm_mode_getfb2_ioctl -> drm_gem_handle_create
->> drm_mode_getfb -> fb->funcs->create_handle
-> 
-> Yes, so far that's correct.
-> 
->>
->>
->> So we are allowing GEM object to have multiple handles, and GEM object 
->> could have at most one dma-buf, doesn't that means that dma-buf could 
->> map to multiple handles?
-> 
-> No, at least not for the same GEM file private. That's the reason why 
-> the rb is indexed by the dma_buf object and not the handle.
-> 
-> In other words the rb is so that you have exactly one handle for each 
-> dma_buf in each file private.
+Ping..
 
-I don't think so, because if user get multiple handles for the same GEM 
-obj and use drm_gem_prime_handle_to_fd() for those handles, the current 
-code would try to add multiple maps to rb:
-drm_prime_add_buf_handle(buf_1, hdl_1)
-drm_prime_add_buf_handle(buf_1, hdl_2)
-...
-drm_prime_add_buf_handle(buf_1, hdl_n)
+Thanks,
+Peng.
 
+On 7/8/2022 4:56 PM, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
->>
->> Or should we rewrite the GEM framework to limit GEM object with uniq 
->> handle?
+> V4:
+>   Because the header is not included when adding NoC node, the fsl,imx8mp.h
+>   needs be included in this patchset. So include it in patch 6
 > 
-> No, the extra handles are expected because when you call 
-> drm_mode_getfb*() and drm_gem_open_ioctl() the caller now owns the 
-> returned GEM handle.
+> V3:
+>   Move adding NoC node patch to i.MX8MP ICC driver patchset
+>   Per Lucas's comments, warn once when icc bulk get not return probe defer and continue.
 > 
->>
->> The other issue is that we are leaking dma-buf <-> handle map for the 
->> imported dma-buf, since the drm_gem_remove_prime_handles doesn't take 
->> care of obj->import_attach->dmabuf.
+> V2:
+>   Use a low bandwidth value instead INT_MAX
+>   Minor fix to move fsl,imx8mp.h out to dts patch, not driver patch
+>   Add A-b tag from DT maintainer
 > 
-> No, that's correct as well. obj->dma_buf is set even for imported 
-> DMA-buf objects. See drm_gem_prime_fd_to_handle().
-
-Well, that obj->dma_buf would be set in 
-drm_gem_prime_fd_to_handle(create new handle), and cleared when 
-releasing the latest handle(release handle).
-
-So it doesn't cover other handle creating path.
-
-For example, a imported dma buf:
-drm_gem_prime_fd_to_handle <-- we got a handle and obj->dma_buf and 
-obj->import_attach->dmabuf
-drm_gem_handle_delete <-- we lost that handle and obj->dma_buf cleared
-drm_gem_open_ioctl/or getfb* <-- we got a new handle and 
-obj->import_attach->dmabuf
-drm_gem_handle_delete <-- we lost that handle and obj->dma_buf is null, 
-which means rb leaks.
-
+> i.MX8MP NoC settings is invalid after related power domain up. So
+> need to set valid values after power domain up.
 > 
-> Regards,
-> Christian.
+> This patchset is to bind interconnect for each entry in blk ctrl.
 > 
->>
->> But of cause this can be fixed in other way:
->> +++ b/drivers/gpu/drm/drm_gem.c
->> @@ -180,6 +180,9 @@ drm_gem_remove_prime_handles(struct drm_gem_object 
->> *obj, struct drm_file *filp)
->> drm_prime_remove_buf_handle_locked(&filp->prime,
->> obj->dma_buf);
->>         }
->> +       if (obj->import_attach)
->> + drm_prime_remove_buf_handle_locked(&filp->prime,
->> + obj->import_attach->dmabuf);
->>         mutex_unlock(&filp->prime.lock);
->>  }
->>
->>
->>> So this is pretty much a clear NAK to this patch since it shouldn't 
->>> be necessary or something is seriously broken somewhere else.
->>>
->>> Regards,
->>> Christian.
->>>
->>>>
->>>> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
->>>> ---
->>>>
->>>> Changes in v2:
->>>> Fix a typo of rbtree.
->>>>
->>>>   drivers/gpu/drm/drm_gem.c      | 17 +----------------
->>>>   drivers/gpu/drm/drm_internal.h |  4 ++--
->>>>   drivers/gpu/drm/drm_prime.c    | 20 ++++++++++++--------
->>>>   3 files changed, 15 insertions(+), 26 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
->>>> index eb0c2d041f13..ed39da383570 100644
->>>> --- a/drivers/gpu/drm/drm_gem.c
->>>> +++ b/drivers/gpu/drm/drm_gem.c
->>>> @@ -168,21 +168,6 @@ void drm_gem_private_object_init(struct 
->>>> drm_device *dev,
->>>>   }
->>>>   EXPORT_SYMBOL(drm_gem_private_object_init);
->>>> -static void
->>>> -drm_gem_remove_prime_handles(struct drm_gem_object *obj, struct 
->>>> drm_file *filp)
->>>> -{
->>>> -    /*
->>>> -     * Note: obj->dma_buf can't disappear as long as we still hold a
->>>> -     * handle reference in obj->handle_count.
->>>> -     */
->>>> -    mutex_lock(&filp->prime.lock);
->>>> -    if (obj->dma_buf) {
->>>> - drm_prime_remove_buf_handle_locked(&filp->prime,
->>>> -                           obj->dma_buf);
->>>> -    }
->>>> -    mutex_unlock(&filp->prime.lock);
->>>> -}
->>>> -
->>>>   /**
->>>>    * drm_gem_object_handle_free - release resources bound to 
->>>> userspace handles
->>>>    * @obj: GEM object to clean up.
->>>> @@ -253,7 +238,7 @@ drm_gem_object_release_handle(int id, void *ptr, 
->>>> void *data)
->>>>       if (obj->funcs->close)
->>>>           obj->funcs->close(obj, file_priv);
->>>> -    drm_gem_remove_prime_handles(obj, file_priv);
->>>> +    drm_prime_remove_buf_handle(&file_priv->prime, id);
->>>>       drm_vma_node_revoke(&obj->vma_node, file_priv);
->>>>       drm_gem_object_handle_put_unlocked(obj);
->>>> diff --git a/drivers/gpu/drm/drm_internal.h 
->>>> b/drivers/gpu/drm/drm_internal.h
->>>> index 1fbbc19f1ac0..7bb98e6a446d 100644
->>>> --- a/drivers/gpu/drm/drm_internal.h
->>>> +++ b/drivers/gpu/drm/drm_internal.h
->>>> @@ -74,8 +74,8 @@ int drm_prime_fd_to_handle_ioctl(struct drm_device 
->>>> *dev, void *data,
->>>>   void drm_prime_init_file_private(struct drm_prime_file_private 
->>>> *prime_fpriv);
->>>>   void drm_prime_destroy_file_private(struct drm_prime_file_private 
->>>> *prime_fpriv);
->>>> -void drm_prime_remove_buf_handle_locked(struct 
->>>> drm_prime_file_private *prime_fpriv,
->>>> -                    struct dma_buf *dma_buf);
->>>> +void drm_prime_remove_buf_handle(struct drm_prime_file_private 
->>>> *prime_fpriv,
->>>> +                 uint32_t handle);
->>>>   /* drm_drv.c */
->>>>   struct drm_minor *drm_minor_acquire(unsigned int minor_id);
->>>> diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
->>>> index e3f09f18110c..bd5366b16381 100644
->>>> --- a/drivers/gpu/drm/drm_prime.c
->>>> +++ b/drivers/gpu/drm/drm_prime.c
->>>> @@ -190,29 +190,33 @@ static int drm_prime_lookup_buf_handle(struct 
->>>> drm_prime_file_private *prime_fpri
->>>>       return -ENOENT;
->>>>   }
->>>> -void drm_prime_remove_buf_handle_locked(struct 
->>>> drm_prime_file_private *prime_fpriv,
->>>> -                    struct dma_buf *dma_buf)
->>>> +void drm_prime_remove_buf_handle(struct drm_prime_file_private 
->>>> *prime_fpriv,
->>>> +                 uint32_t handle)
->>>>   {
->>>>       struct rb_node *rb;
->>>> -    rb = prime_fpriv->dmabufs.rb_node;
->>>> +    mutex_lock(&prime_fpriv->lock);
->>>> +
->>>> +    rb = prime_fpriv->handles.rb_node;
->>>>       while (rb) {
->>>>           struct drm_prime_member *member;
->>>> -        member = rb_entry(rb, struct drm_prime_member, dmabuf_rb);
->>>> -        if (member->dma_buf == dma_buf) {
->>>> +        member = rb_entry(rb, struct drm_prime_member, handle_rb);
->>>> +        if (member->handle == handle) {
->>>>               rb_erase(&member->handle_rb, &prime_fpriv->handles);
->>>>               rb_erase(&member->dmabuf_rb, &prime_fpriv->dmabufs);
->>>> -            dma_buf_put(dma_buf);
->>>> +            dma_buf_put(member->dma_buf);
->>>>               kfree(member);
->>>> -            return;
->>>> -        } else if (member->dma_buf < dma_buf) {
->>>> +            break;
->>>> +        } else if (member->handle < handle) {
->>>>               rb = rb->rb_right;
->>>>           } else {
->>>>               rb = rb->rb_left;
->>>>           }
->>>>       }
->>>> +
->>>> +    mutex_unlock(&prime_fpriv->lock);
->>>>   }
->>>>   void drm_prime_init_file_private(struct drm_prime_file_private 
->>>> *prime_fpriv)
->>>
->>>
->>
+> This patchset is not include DVFS DDRC feature.
 > 
+> Peng Fan (7):
+>    dt-bindings: soc: imx: add interconnect property for i.MX8MP media blk
+>      ctrl
+>    dt-bindings: soc: imx: add interconnect property for i.MX8MP hdmi blk
+>      ctrl
+>    dt-bindings: soc: imx: add interconnect property for i.MX8MP hsio blk
+>      ctrl
+>    soc: imx: add icc paths for i.MX8MP media blk ctrl
+>    soc: imx: add icc paths for i.MX8MP hsio/hdmi blk ctrl
+>    arm64: dts: imx8mp: add interconnects for media blk ctrl
+>    arm64: dts: imx8mp: add interconnect for hsio blk ctrl
 > 
-
+>   .../soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml     |  9 +++++
+>   .../soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml     | 10 +++++
+>   .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml    | 14 +++++++
+>   arch/arm64/boot/dts/freescale/imx8mp.dtsi     | 18 +++++++++
+>   drivers/soc/imx/imx8m-blk-ctrl.c              | 39 +++++++++++++++++++
+>   drivers/soc/imx/imx8mp-blk-ctrl.c             | 35 +++++++++++++++++
+>   6 files changed, 125 insertions(+)
+> 

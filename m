@@ -2,89 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925F058D8F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F229A58D8F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243242AbiHIMwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 08:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
+        id S243283AbiHIMxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 08:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243189AbiHIMwV (ORCPT
+        with ESMTP id S237532AbiHIMx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 08:52:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1585C12D28
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 05:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660049539;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rN2wh+nxvchYpu9hQV2LMnguLQFknovVkUYSriHC3N4=;
-        b=HU7ixmFA2mebYw7myBdXKitTUCT/i1ykFuUvgN+phs8FcjZr47CxT67YslMl/BdMwisdce
-        COlGB2fPBe1ayEHTQDaOekGeEqcDTIskKCJDO+QiXdcbrttk72muV3HWxURVgInKTXP8kz
-        3gYtJq+VOz3E4X8Kn3tzYmJknFRlA34=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-600-gnTNjytmMN6-PfyVA-8aqQ-1; Tue, 09 Aug 2022 08:52:17 -0400
-X-MC-Unique: gnTNjytmMN6-PfyVA-8aqQ-1
-Received: by mail-wm1-f69.google.com with SMTP id u12-20020a05600c034c00b003a5124600c5so2283254wmd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 05:52:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=rN2wh+nxvchYpu9hQV2LMnguLQFknovVkUYSriHC3N4=;
-        b=FWsH1rHulppjX8Fe5bxX374p04klhj35tv0Td6nEJprY9nRHapURKlpKBkanFO8bOh
-         Aqjy6HSMKtGiKzxNDNeC1AbcbXA4FC6bzWt9vcmUsq7oQMisTQZnYQjs9RXLvjCjcmiX
-         YzSB7rcW1Ea1KSbYAIQKppytMwvC17KsWkf30Y/oKTkpwqfciEjfn00RR0BWZvn8ZUuW
-         savrZLZvpjkAg4o623VOt5nZBCd0pJGOnPAqBt3T35N+6M56FwKllj6A7/0stkPvpIT5
-         gS2ObeNR3yLsEpYqZ0dPhgINWEDNljtGcEMY/qock/96036TA8kIFCbZokdACihqgD5/
-         sDAg==
-X-Gm-Message-State: ACgBeo3IjznnNFwWKReclMb2QZyPxk6Uo0qfkxBc8QbI/17Oc8192ISH
-        ygq+KGxzmXZcIcrS5p/6z4NBWW5Axg0u/5C0NponOzAvggVumBPySX8pvS1Ge1NLX6n6VFwCxXH
-        BwtTdo/JFToZsZkLs9AqOxKICSIyPzxQ9+bKfFRXZZ+cxXoE+4YdD3agUZSkpg2yHOjdWW3SwjU
-        mA
-X-Received: by 2002:a05:600c:4f95:b0:3a3:4612:6884 with SMTP id n21-20020a05600c4f9500b003a346126884mr20920895wmq.39.1660049535837;
-        Tue, 09 Aug 2022 05:52:15 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7ihYNMk3wUnk1Vjz3SciAXplfGwbOx1Fhv5ZIEp5DgY1Xxn8KAvJ/8UDHh4rGZ5kHX1j1UGg==
-X-Received: by 2002:a05:600c:4f95:b0:3a3:4612:6884 with SMTP id n21-20020a05600c4f9500b003a346126884mr20920870wmq.39.1660049535620;
-        Tue, 09 Aug 2022 05:52:15 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id 6-20020a1c1906000000b003a511e92abcsm17149747wmz.34.2022.08.09.05.52.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 05:52:14 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tariq Toukan <ttoukan.linux@gmail.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next V4 1/3] sched/topology: Add NUMA-based CPUs
- spread API
-In-Reply-To: <12fd25f9-96fb-d0e0-14ec-3f08c01a5a4b@gmail.com>
-References: <20220728191203.4055-1-tariqt@nvidia.com>
- <20220728191203.4055-2-tariqt@nvidia.com>
- <xhsmhedxvdikz.mognet@vschneid.remote.csb>
- <df8b684d-ede6-7412-423d-51d57365e065@gmail.com>
- <xhsmh35e5d9b4.mognet@vschneid.remote.csb>
- <12fd25f9-96fb-d0e0-14ec-3f08c01a5a4b@gmail.com>
-Date:   Tue, 09 Aug 2022 13:52:13 +0100
-Message-ID: <xhsmhzggdbmv6.mognet@vschneid.remote.csb>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 9 Aug 2022 08:53:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC786384;
+        Tue,  9 Aug 2022 05:53:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EB7DB811E1;
+        Tue,  9 Aug 2022 12:53:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30CD5C433D6;
+        Tue,  9 Aug 2022 12:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660049604;
+        bh=LLqG7+H14IiitLd96VdM9H7iLrjRXtZ3HcvgVfZR0Vc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mJO8g7rHDTdQKg0wezno75dagw+hr4oNbhz4R9+5LNmLqLo4os38nvxomTbxZo4zl
+         ZMlFop2cKLUY/TcCbDdEPVq9rju+5iNPOzeHpfqQKbuA32RiCeilaSd9xH0P9xUm+9
+         w1G1/yjlCdA4WLUiiojV4u+Qkvu1sotmbkCKdl3kRn6jgzpJ4cF21Vdh8VOrcMlknj
+         YsN65NNFfPERDiVF1uQVa/iu3G3y4VlrW1xO8AR3OuvqKviEE7dB7a+ipCNTpCKq6Z
+         tWKGzkx1LgJRh0pYLwhHGV7RIFcASKEDOSGHlh2bdCjkST/eJ1f5t0v5mx9b2l06h9
+         5qOhOAARYXuVQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oLOjZ-001ukl-T0;
+        Tue, 09 Aug 2022 13:53:22 +0100
+Date:   Tue, 09 Aug 2022 13:53:21 +0100
+Message-ID: <87y1vxvari.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH] LoongArch: Don't disable EIOINTC master core
+In-Reply-To: <CAAhV-H4ZCmenrPvzLCaZZn57NoiGpQfVGpXg42DE2JevF4Tf9w@mail.gmail.com>
+References: <20220809074522.2444672-1-chenhuacai@loongson.cn>
+        <874jylx0ad.wl-maz@kernel.org>
+        <CAAhV-H50HERxjrmfDkSaHAVY7Q_ufpZP-e+qdZWVd=qEuQVXBg@mail.gmail.com>
+        <871qtpwwem.wl-maz@kernel.org>
+        <CAAhV-H4ZCmenrPvzLCaZZn57NoiGpQfVGpXg42DE2JevF4Tf9w@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenhuacai@kernel.org, chenhuacai@loongson.cn, tglx@linutronix.de, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@xen0n.name, lixuefeng@loongson.cn, jiaxun.yang@flygoat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,61 +75,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/08/22 13:18, Tariq Toukan wrote:
-> On 8/9/2022 1:02 PM, Valentin Schneider wrote:
->>
->> Are there cases where we can't figure this out in advance? From what I grok
->> out of the two callsites you patched, all vectors will be used unless some
->> error happens, so compressing the CPUs in a single cpumask seemed
->> sufficient.
->>
->
-> All vectors will be initialized to support the maximum number of traffic
-> rings. However, the actual number of traffic rings can be controlled and
-> set to a lower number N_actual < N. In this case, we'll be using only
-> N_actual instances and we want them to be the first/closest.
+On Tue, 09 Aug 2022 11:39:15 +0100,
+Huacai Chen <chenhuacai@kernel.org> wrote:
+> 
+> Hi, Marc,
+> 
+> On Tue, Aug 9, 2022 at 6:20 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Tue, 09 Aug 2022 10:19:31 +0100,
+> > Huacai Chen <chenhuacai@kernel.org> wrote:
+> > >
+> > > Hi, Marc,
+> > >
+> > > On Tue, Aug 9, 2022 at 4:56 PM Marc Zyngier <maz@kernel.org> wrote:
+> > > >
+> > > > On Tue, 09 Aug 2022 08:45:22 +0100,
+> > > > Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > > >
+> > > > > This patch fix a CPU hotplug issue. The EIOINTC master core (the first
+> > > > > core of an EIOINTC node) should not be disabled at runtime, since it has
+> > > > > the responsibility of dispatching I/O interrupts.
+> > > > >
+> > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > > > ---
+> > > > >  arch/loongarch/kernel/smp.c            | 9 +++++++++
+> > > > >  drivers/irqchip/irq-loongson-eiointc.c | 5 +++++
+> > > > >  2 files changed, 14 insertions(+)
+> > > > >
+> > > > > diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> > > > > index 09743103d9b3..54901716f8de 100644
+> > > > > --- a/arch/loongarch/kernel/smp.c
+> > > > > +++ b/arch/loongarch/kernel/smp.c
+> > > > > @@ -242,9 +242,18 @@ void loongson3_smp_finish(void)
+> > > > >
+> > > > >  static bool io_master(int cpu)
+> > > > >  {
+> > > > > +     int i, node, master;
+> > > > > +
+> > > > >       if (cpu == 0)
+> > > > >               return true;
+> > > > >
+> > > > > +     for (i = 1; i < loongson_sysconf.nr_io_pics; i++) {
+> > > > > +             node = eiointc_get_node(i);
+> > > > > +             master = cpu_number_map(node * CORES_PER_EIO_NODE);
+> > > > > +             if (cpu == master)
+> > > > > +                     return true;
+> > > > > +     }
+> > > > > +
+> > > > >       return false;
+> > > > >  }
+> > > > >
+> > > > > diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> > > > > index 170dbc96c7d3..6c99a2ff95f5 100644
+> > > > > --- a/drivers/irqchip/irq-loongson-eiointc.c
+> > > > > +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> > > > > @@ -56,6 +56,11 @@ static void eiointc_enable(void)
+> > > > >       iocsr_write64(misc, LOONGARCH_IOCSR_MISC_FUNC);
+> > > > >  }
+> > > > >
+> > > > > +int eiointc_get_node(int id)
+> > > > > +{
+> > > > > +     return eiointc_priv[id]->node;
+> > > > > +}
+> > > > > +
+> > > > >  static int cpu_to_eio_node(int cpu)
+> > > > >  {
+> > > > >       return cpu_logical_map(cpu) / CORES_PER_EIO_NODE;
+> > > >
+> > > >
+> > > > I don't understand why it has to be this complex and make any use of
+> > > > the node number.
+> > > >
+> > > > As I understand it, CPU-0 in any EIOINTC block is a master. So all you
+> > > > need to find out is whether the CPU number is a multiple of
+> > > > CORES_PER_EIO_NODE.
+> > > CPU-0 in any EIOINTC block may be a master, but not absolutely be a
+> > > master to dispatch I/O interrupts. If there is no bridge under a
+> > > EIOINTC, then this EIOINTC doesn't handle I/O interrupts, and it can
+> > > be disabled at runtime.
+> >
+> > But that's not what your code is checking, is it? You're only
+> > reporting the node number, irrespective of whether there is anything
+> > behind the EIOINTC.
+> The return value of eiointc_get_node() means "this eio-node has a
+> downstream bridge, so the master core of this eio-node cannot be
+> disabled". :)
 
-Ok, that makes sense, thank you.
+So what is exactly the meaning of this node? All the EIOINTCs do have
+one (it is coming from ACPI, and taken at face value), so the node
+really is only a proxy for the CPU numbers that are attached to it,
+isn't it? Can you have cores without an EIOINTC?
 
-In that case I wonder if we'd want a public-facing iterator for
-sched_domains_numa_masks[%i][node], rather than copy a portion of
-it. Something like the below (naming and implementation haven't been
-thought about too much).
+Now, if this is relevant to the arch code, I'd rather you keep track
+of this directly in the arch code, because it looks really odd to peek
+at an irqchip data structure for something that the core code should
+have the first place.
 
-  const struct cpumask *sched_numa_level_mask(int node, int level)
-  {
-          struct cpumask ***masks = rcu_dereference(sched_domains_numa_masks);
+It also strikes me that this patch has *zero* effect, as nothing ever
+sets loongson_sysconf.nr_io_pics. Try this:
 
-          if (node >= nr_node_ids || level >= sched_domains_numa_levels)
-                  return NULL;
+diff --git a/arch/loongarch/include/asm/bootinfo.h b/arch/loongarch/include/asm/bootinfo.h
+index 9b8d49d9e61b..13e5e5e21ffd 100644
+--- a/arch/loongarch/include/asm/bootinfo.h
++++ b/arch/loongarch/include/asm/bootinfo.h
+@@ -28,7 +28,7 @@ struct loongson_board_info {
+ struct loongson_system_configuration {
+ 	int nr_cpus;
+ 	int nr_nodes;
+-	int nr_io_pics;
++//	int nr_io_pics;
+ 	int boot_cpu_id;
+ 	int cores_per_node;
+ 	int cores_per_package;
 
-          if (!masks)
-                  return NULL;
+and see that the kernel still compiles.
 
-          return masks[level][node];
-  }
-  EXPORT_SYMBOL_GPL(sched_numa_level_mask);
+	M.
 
-  #define for_each_numa_level_mask(node, lvl, mask)	    \
-          for (mask = sched_numa_level_mask(node, lvl); mask;	\
-               mask = sched_numa_level_mask(node, ++lvl))
-
-  void foo(int node, int cpus[], int ncpus)
-  {
-          const struct cpumask *mask;
-          int lvl = 0;
-          int i = 0;
-          int cpu;
-
-          rcu_read_lock();
-          for_each_numa_level_mask(node, lvl, mask) {
-                  for_each_cpu(cpu, mask) {
-                          cpus[i] = cpu;
-                          if (++i == ncpus)
-                                  goto done;
-                  }
-          }
-  done:
-          rcu_read_unlock();
-  }
-
+-- 
+Without deviation from the norm, progress is not possible.

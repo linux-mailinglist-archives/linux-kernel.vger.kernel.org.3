@@ -2,188 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84C358E009
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C106958E01C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245170AbiHITTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
+        id S1343523AbiHITWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348576AbiHITRE (ORCPT
+        with ESMTP id S1346493AbiHITU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:17:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB59D273;
-        Tue,  9 Aug 2022 12:10:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0FFDB817B1;
-        Tue,  9 Aug 2022 19:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061F5C433C1;
-        Tue,  9 Aug 2022 19:10:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660072255;
-        bh=oIx7E1aeFpBP7FxQJEeWu1a5qlcFfnMFvIQQUxlg6M0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TQAkD8W2D7pMBYvP1lYZ+lUMDwDfQd+tMvHVhr6sMgw9oPimMv8D1OrLvPRwz8//Q
-         bHo4HvbgQjR6fciYhl2dWmPioF69kHodJ5l9T8MtCBWqGcmRoxP+XEH6FhdeBNyITD
-         G0UoVNcoj3kHE3lNeS76yMBk7FabdOBIJ9JjlmoNdGad+U0OJIXe2Lom+8cnoNljUj
-         9i7eoqRYgL6PTx5k3jb20HKZ5vUHqXNCxL0NJHrGgepXX+w4yuvLogT954PJFKquOh
-         QcGJagV1mzB8auxH/PQ9tmnsjmTKs1Hk7lMAGXWNxJLE0cs4uYEgNd0/Kf06l7uAs3
-         kqREpt9+K+0IA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1CCDE4035A; Tue,  9 Aug 2022 16:10:52 -0300 (-03)
-Date:   Tue, 9 Aug 2022 16:10:52 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andres Freund <andres@anarazel.de>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, quentin@isovalent.com,
-        ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, peterz@infradead.org, mingo@redhat.com,
-        terrelln@fb.com, nathan@kernel.org, ndesaulniers@google.com,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
-Message-ID: <YvKxPJLGP1BdsGQ6@kernel.org>
-References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
- <20220719170555.2576993-4-roberto.sassu@huawei.com>
- <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
- <YvFW/kBL6YA3Tlnc@kernel.org>
- <YvJ6DbzBNsAgNZS4@kernel.org>
- <YvJ7awkCVBYaZ2dd@kernel.org>
- <20220809170034.hx7fyiosm3tfekwf@awork3.anarazel.de>
- <YvKvzkuUG78q/mkA@kernel.org>
+        Tue, 9 Aug 2022 15:20:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A3935FCF
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 12:20:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660072846;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H8h4Jng7BDnvUHW4yaisoTMe84LTGwEUPKezp1k3H30=;
+        b=J0kGOSKXC3bYfAiCQnGXAybxgW0RoKD4wECnKh1Y4qT7E7HY/yf8+uGohOAhCZYjNhVQ+g
+        HSs5D7esNxJIp4Bp++PIL9YVCz9qF4KgPu+N3u0ecqqA1dh/6HxnJ2hbPSFVyKqHEm3+3O
+        61LIAuLfsvkMkAreNxG1NOchDO2q1ws=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607-iSq3nYQkMkCs56pZPxQf6A-1; Tue, 09 Aug 2022 15:20:45 -0400
+X-MC-Unique: iSq3nYQkMkCs56pZPxQf6A-1
+Received: by mail-wm1-f71.google.com with SMTP id v64-20020a1cac43000000b003a4bea31b4dso10287183wme.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 12:20:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=H8h4Jng7BDnvUHW4yaisoTMe84LTGwEUPKezp1k3H30=;
+        b=10su4sryCDc/YFnAMQmL51pBejKgArueRfG5kY3t5vSJHjwICZ29pkFvTHPqaY2vi/
+         mMzeCf9kmz+tLQpYpSuuhVAvQ4dAapZMyovKKe2ugX+1dB16ZfYTlB67OcybKH1xxaov
+         z/dYIaTtzk4Mbd1xJdCa7OWas0VUhwy1Imhr7GfnoF2zB1Q4X9cU6lMGFwmfeiVCBtxj
+         nk5+Si/WB7GkgFMfNicor/KbwONgHYyGjQQD8GUkF9a+5QtKqGR/Z25mqAZ5B8F158hy
+         XbF1Q0RN8VMXkN5kG7zJG7lALTWvXOEVqB7ecw6npFvUWQWOfLr4zGx0w6TuepUr8ufW
+         mBzg==
+X-Gm-Message-State: ACgBeo1zzgtm4RwgrmVFyRPtfXAflfevbwDOOCizo0L3tvoJOPa3ZrUr
+        +z7KqAX3Cm0iF/N1Kt+Gjm41lnbPcbmPrLTGl0KWRrZ72k88a50LblkeaOn5J4x1s6DxhTNca0y
+        YC+Ldaa05Nr7we0d5aRbCqYV7
+X-Received: by 2002:a1c:ed05:0:b0:3a2:ebae:c5e7 with SMTP id l5-20020a1ced05000000b003a2ebaec5e7mr15509wmh.78.1660072844097;
+        Tue, 09 Aug 2022 12:20:44 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4LubkX0tuGA9aKXvqxL9u6Pg1ZLUrPaG3+BlBR8O2coLYRUWNXjx9DEti7PhyhEHYDH5631w==
+X-Received: by 2002:a1c:ed05:0:b0:3a2:ebae:c5e7 with SMTP id l5-20020a1ced05000000b003a2ebaec5e7mr15496wmh.78.1660072843868;
+        Tue, 09 Aug 2022 12:20:43 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:3700:aed2:a0f8:c270:7f30? (p200300cbc7053700aed2a0f8c2707f30.dip0.t-ipconnect.de. [2003:cb:c705:3700:aed2:a0f8:c270:7f30])
+        by smtp.gmail.com with ESMTPSA id q25-20020a1ce919000000b003a32251c3f0sm17052196wmc.33.2022.08.09.12.20.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 12:20:43 -0700 (PDT)
+Message-ID: <5593cbb7-eb29-82f0-490e-dd72ceafff9b@redhat.com>
+Date:   Tue, 9 Aug 2022 21:20:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YvKvzkuUG78q/mkA@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20220808073232.8808-1-david@redhat.com>
+ <CAHk-=wi81ujYGP0gmyy2kDke_ExL742Lo_hLepGjCa8mS81A7w@mail.gmail.com>
+ <YvKsBUuwLNlHwhnE@nvidia.com>
+ <CAHk-=wjh3wkhQWN8BHFUT6t52kfNMcRd+1JczD4Sgp_q11w8eA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove
+ FOLL_COW
+In-Reply-To: <CAHk-=wjh3wkhQWN8BHFUT6t52kfNMcRd+1JczD4Sgp_q11w8eA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Aug 09, 2022 at 04:04:46PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Aug 09, 2022 at 10:00:34AM -0700, Andres Freund escreveu:
-> > Hi,
-> > 
-> > On 2022-08-09 12:21:15 -0300, Arnaldo Carvalho de Melo wrote:
-> > > So I backtracked, the way it works needs further consideration with
-> > > regard to the patchkit from Andres, that is already upstream, so it
-> > > would be good for Roberto to take a look at what is in torvalds/master
-> > > now and see if we have to removed that styled thing from Andres.
-> > 
-> > Why would it have to be removed - seems to be fairly independent, leaving the
-> > line conflicts aside? Or do you just mean folding it into one-big-test? If so,
-> > that'd make sense, although I'm not sure how ready the infrastructure
+On 09.08.22 21:07, Linus Torvalds wrote:
+> On Tue, Aug 9, 2022 at 11:48 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+>>
+>> It is because of all this madness with COW.
 > 
-> So below is the 3rd patch in Roberto's patchkit adapted, I removed the
-> FEATURE_CHECK_LDFLAGS-disassembler-init-styled setting as we now
-> automatically try with multiple sets of libraries, as with
-> disassembler-four-args.
-
-The following also had to be done:
-
-⬢[acme@toolbox perf]$ git log --oneline -1
-aa119945023c4ee7 (HEAD) tools, build: Retry detection of bfd-related features
-⬢[acme@toolbox perf]$ git diff
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 928ebc355fb3f2d0..04b07ff8823487a0 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -253,7 +253,8 @@ $(OUTPUT)test-disassembler-four-args.bin:
-        $(BUILD_BFD) -lopcodes -liberty -lz
-
- $(OUTPUT)test-disassembler-init-styled.bin:
--       $(BUILD) -DPACKAGE='"perf"' -lbfd -lopcodes
-+       $(BUILD_BFD) -lopcodes || $(BUILD_BFD) -lopcodes -liberty || \
-+       $(BUILD_BFD) -lopcodes -liberty -lz
-
- $(OUTPUT)test-reallocarray.bin:
-        $(BUILD)
-⬢[acme@toolbox perf]$
- 
-> - Arnaldo
+> Yes, yes, but we have the proper long-term pinning now with
+> PG_anon_exclusive, and it actually gets the pinning right not just
+> over COW, but even over a fork - which that early write never did.
 > 
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index 23648ea54e8d3d2c..0661a1cf98556ed3 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -297,9 +297,6 @@ FEATURE_CHECK_LDFLAGS-libpython := $(PYTHON_EMBED_LDOPTS)
->  
->  FEATURE_CHECK_LDFLAGS-libaio = -lrt
->  
-> -FEATURE_CHECK_LDFLAGS-disassembler-four-args = -lbfd -lopcodes -ldl
-> -FEATURE_CHECK_LDFLAGS-disassembler-init-styled = -lbfd -lopcodes -ldl
-> -
->  CORE_CFLAGS += -fno-omit-frame-pointer
->  CORE_CFLAGS += -ggdb3
->  CORE_CFLAGS += -funwind-tables
-> @@ -329,8 +326,8 @@ ifneq ($(TCMALLOC),)
->  endif
->  
->  ifeq ($(FEATURES_DUMP),)
-> -# We will display at the end of this Makefile.config, using $(call feature_display_entries)
-> -# As we may retry some feature detection here, see the disassembler-four-args case, for instance
-> +# We will display at the end of this Makefile.config, using $(call feature_display_entries),
-> +# as we may retry some feature detection here.
->    FEATURE_DISPLAY_DEFERRED := 1
->  include $(srctree)/tools/build/Makefile.feature
->  else
-> @@ -924,13 +921,9 @@ ifndef NO_LIBBFD
->  
->      ifeq ($(feature-libbfd-liberty), 1)
->        EXTLIBS += -lbfd -lopcodes -liberty
-> -      FEATURE_CHECK_LDFLAGS-disassembler-four-args += -liberty -ldl
-> -      FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -ldl
->      else
->        ifeq ($(feature-libbfd-liberty-z), 1)
->          EXTLIBS += -lbfd -lopcodes -liberty -lz
-> -        FEATURE_CHECK_LDFLAGS-disassembler-four-args += -liberty -lz -ldl
-> -        FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -lz -ldl
->        endif
->      endif
->      $(call feature_check,disassembler-four-args)
-> @@ -1356,7 +1349,7 @@ endif
->  
->  # re-generate FEATURE-DUMP as we may have called feature_check, found out
->  # extra libraries to add to LDFLAGS of some other test and then redo those
-> -# tests, see the block about libbfd, disassembler-four-args, for instance.
-> +# tests.
->  $(shell rm -f $(FEATURE_DUMP_FILENAME))
->  $(foreach feat,$(FEATURE_TESTS),$(shell echo "$(call feature_assign,$(feat))" >> $(FEATURE_DUMP_FILENAME)))
->  
->  
-> > 
-> > FWIW, if I would have to maintain these, I'd probably change FEATURE_TESTS,
-> > FEATURE_DISPLAY into one-item-per-line to make conflicts less common and
-> > easier to resolve.
-> > 
-> > 
-> > > Andres, if you could take a look at Roberto's patchkit as well that
-> > > would be great.
-> > 
-> > I briefly scanned it, and the only real comment I have mirror's Quentin's,
-> > namely that it'd be nice to avoid displaying more tests that don't tell the
-> > user much.
-> > 
-> > Greetings,
-> > 
-> > Andres Freund
-> 
-> -- 
-> 
-> - Arnaldo
+> David, I thought all of that got properly merged? Is there something
+> still missing?
+
+The only thing to get R/O longterm pins in MAP_PRIVATE correct that's
+missing is that we have to break COW when taking a R/O longterm pin when
+*not* finding an anon page inside a private mapping. Regarding anon
+pages I am not aware of issues (due to PG_anon_exclusive).
+
+If anybody here wants to stare at a webpage, the following commit
+explains the rough idea for MAP_PRIVATE:
+
+https://github.com/davidhildenbrand/linux/commit/cd7989fb76d2513c86f01e6f7a74415eee5d3150
+
+Once we have that in place, we can mostly get rid of
+FOLL_FORCE|FOLL_WRITE for R/O longterm pins. There are some corner cases
+though that need some additional thought which i am still working on.
+FS-handled COW in MAP_SHARED mappings is just nasty (hello DAX).
+
+(the wrong use of FOLL_GET instead of FOLL_PIN for O_DIRECT and friends
+still persists, but that's a different thing to handle and it's only
+problematic with concurrent fork() IIRC)
 
 -- 
+Thanks,
 
-- Arnaldo
+David / dhildenb
+

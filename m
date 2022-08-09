@@ -2,241 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAE258D446
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C4158D449
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238458AbiHIHM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 03:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        id S238518AbiHIHNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 03:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237910AbiHIHMz (ORCPT
+        with ESMTP id S238685AbiHIHNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 03:12:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBFD1F617;
-        Tue,  9 Aug 2022 00:12:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 9 Aug 2022 03:13:19 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3E11F617
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 00:13:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 365A9B811B2;
-        Tue,  9 Aug 2022 07:12:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9DDEC433C1;
-        Tue,  9 Aug 2022 07:12:47 +0000 (UTC)
-Message-ID: <5d766333-fe91-fc12-16ee-1415983ba818@xs4all.nl>
-Date:   Tue, 9 Aug 2022 09:12:46 +0200
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E30FC34CD9;
+        Tue,  9 Aug 2022 07:13:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1660029196; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R9WK+PF0ETOz3VoM1ksRtxXg6EcKjbZyKCGgIJY3ihY=;
+        b=VrPX3cMOdwqnxqgWtgWGVCGqNFJ2Pj6KNnxc+fXlNJ3pKlMcTA6CVECUNPxjxRHtxPKLsi
+        8/BmJ8l2aiDdEpQYwujMfF85oi8/4XTryVexh62Q3Caq785NJH3/8BAsyhkH8MzxrLyfJI
+        qhI1xlnx4kxep5cMMK6VXQNq+U/iBqA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1660029196;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R9WK+PF0ETOz3VoM1ksRtxXg6EcKjbZyKCGgIJY3ihY=;
+        b=kKnaQhyJ2hN29wC5Xj0XqDrcccm4M0hLeTgV5Z2rFZstZW2n2rQXeHi8weYhyjDMNzS42Z
+        V9R7KDcyMc00RVCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C520E13A9D;
+        Tue,  9 Aug 2022 07:13:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kBZFLwwJ8mLTcAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 09 Aug 2022 07:13:16 +0000
+Message-ID: <bebcfa4a-7908-d8ba-3bff-ea7c2ee2d7a9@suse.de>
+Date:   Tue, 9 Aug 2022 09:13:16 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] media: videobuf2: Add a transfer error event
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH 3/4] drm/udl: Kill pending URBs at suspend and disconnect
+To:     Takashi Iwai <tiwai@suse.de>, dri-devel@lists.freedesktop.org
+Cc:     Dave Airlie <airlied@redhat.com>, Sean Paul <sean@poorly.run>,
+        linux-kernel@vger.kernel.org
+References: <20220804075826.27036-1-tiwai@suse.de>
+ <20220804075826.27036-4-tiwai@suse.de>
 Content-Language: en-US
-To:     Michael Rodin <mrodin@de.adit-jv.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, michael@rodin.online,
-        erosca@de.adit-jv.com,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-References: <YqEO3/KekkZhVjW+@oden.dyn.berto.se>
- <20220628180024.451258-1-mrodin@de.adit-jv.com>
- <20220628180024.451258-2-mrodin@de.adit-jv.com>
- <5e8c50cdc031bffd96b19929508f034d1263c8b7.camel@ndufresne.ca>
- <20220715161346.GA1116690@vmlxhi-182>
- <f035cdea-934c-3bd9-f685-47e5e9ff3f49@xs4all.nl>
- <20220808170353.GA2536032@vmlxhi-182>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220808170353.GA2536032@vmlxhi-182>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220804075826.27036-4-tiwai@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------6PVvEJazcpT2eX77No8hSGCQ"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------6PVvEJazcpT2eX77No8hSGCQ
+Content-Type: multipart/mixed; boundary="------------p5U70wzSTyvnHbBy1wMp7HQn";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Takashi Iwai <tiwai@suse.de>, dri-devel@lists.freedesktop.org
+Cc: Dave Airlie <airlied@redhat.com>, Sean Paul <sean@poorly.run>,
+ linux-kernel@vger.kernel.org
+Message-ID: <bebcfa4a-7908-d8ba-3bff-ea7c2ee2d7a9@suse.de>
+Subject: Re: [PATCH 3/4] drm/udl: Kill pending URBs at suspend and disconnect
+References: <20220804075826.27036-1-tiwai@suse.de>
+ <20220804075826.27036-4-tiwai@suse.de>
+In-Reply-To: <20220804075826.27036-4-tiwai@suse.de>
 
-On 08/08/2022 19:03, Michael Rodin wrote:
-> Hi Hans,
-> 
-> On Tue, Aug 02, 2022 at 11:32:03AM +0200, Hans Verkuil wrote:
->> Hi Michael,
->>
->> Apologies for the late reply...
-> 
-> Thank you very much for your feedback, very appreciated!
-> 
->> On 7/15/22 18:15, Michael Rodin wrote:
->>> Hi Nicolas,
->>>
->>> On Mon, Jul 04, 2022 at 11:59:58AM -0400, Nicolas Dufresne wrote:
->>>> Hi Micheal,
->>>>
->>>> thanks for your work, I have some questions below ...
->>>
->>> Thank you for your feedback!
->>>
->>>> Le mardi 28 juin 2022 à 20:00 +0200, Michael Rodin a écrit :
->>>>> From: Niklas Söderlund <https://urldefense.proofpoint.com/v2/url?u=http-3A__niklas.soderlund-2Brenesas-40ragnatech.se&d=DwIFaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=sWsgk3pKkv5GeIDM2RZlPY8TjNFU2D0oBeOj6QNBadE&m=7ktiIpDjee6bMSPLXXR7KVvJ_y234VytWEydKF2TWEo&s=-GUWUbGDkkrTAXiF_75xnL13cn3HYL2r2ZN0XwlG41U&e=>
->>>>>
->>>>> Add a new V4L2_EVENT_XFER_ERROR event to signal if an error happens during
->>>>> video transfer.
->>>>>
->>>>> The use-case that sparked this new event is to signal to the video
->>>>> device driver that an error has happen on the CSI-2 bus from the CSI-2
->>>>> receiver subdevice.
->>>>>
->>>>> Signed-off-by: Niklas Söderlund <https://urldefense.proofpoint.com/v2/url?u=http-3A__niklas.soderlund-2Brenesas-40ragnatech.se&d=DwIFaQ&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=sWsgk3pKkv5GeIDM2RZlPY8TjNFU2D0oBeOj6QNBadE&m=7ktiIpDjee6bMSPLXXR7KVvJ_y234VytWEydKF2TWEo&s=-GUWUbGDkkrTAXiF_75xnL13cn3HYL2r2ZN0XwlG41U&e=>
->>>>> [mrodin@de.adit-jv.com: adapted information what to do if this new event is received]
->>>>> Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
->>>>> ---
->>>>>  .../userspace-api/media/v4l/vidioc-dqevent.rst         | 10 ++++++++++
->>>>>  .../userspace-api/media/videodev2.h.rst.exceptions     |  1 +
->>>>>  include/uapi/linux/videodev2.h                         |  1 +
->>>>>  3 files changed, 12 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
->>>>> index 6eb40073c906..3cf0b4859784 100644
->>>>> --- a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
->>>>> +++ b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
->>>>> @@ -182,6 +182,16 @@ call.
->>>>>  	the regions changes. This event has a struct
->>>>>  	:c:type:`v4l2_event_motion_det`
->>>>>  	associated with it.
->>>>> +    * - ``V4L2_EVENT_XFER_ERROR``
->>>>
->>>> I'm not sure why this event is specific to XFER. Is there uses cases were a
->>>> future implementation would have both XFER and RECEIVER error ?
->>>
->>> I am not sure whether I understand you correctly, do you mean that there is
->>> already a method to signal a receiver error? Or that we should name it
->>> V4L2_EVENT_RECEIVER_ERROR? I think that "transfer error" is a good name for
->>> this event, because it could be sent by receiver or by transmitter drivers,
->>> depending on their hardware error detection capabilities. We could have
->>> e.g. a video transmitter which can detect an error coupled with a video
->>> receiver which can not detect any errors.
->>>
->>>>> +      - 7
->>>>> +      - This event is triggered when an transfer error is detected while
->>>>> +	streaming. For example if an error is detected on a video bus in
->>>>> +	the pipeline. If a driver receives this event from an upstream
->>>>> +	subdevice, it has to forward the event to userspace. The streaming
->>>>> +	application has to check if the transfer error is unrecoverable,
->>>>> +	i.e. no new buffers can be dequeued from the kernel after the
->>>>> +	expected time. If the error is unrecoverable, the streaming
->>>>> +	application should restart streaming if it wants to continue.
->>>>
->>>> The process to determine if an error is recoverable or not isn't clear to me. As
->>>> an application developer, I would not know what to do here. Recoverable error
->>>> already have a designed mechanism, it consist of marking done a buffer with the
->>>> flag V4L2_BUF_FLAG_ERROR. I would like to understand what the existing mechanism
->>>> needed to be replaced, and the placement should be documented.
->>>
->>> "Recoverable" means in this context that kernel space continues to capture
->>> video buffers (which do not necessarily have the flag V4L2_BUF_FLAG_ERROR).
->>> So probably we should not say "recoverable" or "unrecoverable" in the
->>> context of this event to avoid confusion. V4L2_EVENT_XFER_ERROR just tells
->>> userspace that it should restart streaming if the buffer flow stops after
->>> this event. So would it be sufficient for an application developer if we
->>> drop all statements about "recoverability" from the event description?
->>
->> Here you touch on the core problem of this patch: you are basically saying
->> that userspace has to 1) subscribe to this event, 2) poll for it, 3) if it
->> arrives start a timer, 4) if the timer triggers and no new buffers have been
->> received in the meantime, then 5) restart streaming.
->>
->> So in other words, you are just too lazy to do this in the driver and want
->> to hand it off to userspace.
->>
->> That's not how it works. Usually the driver will know if the error is
->> recoverable or not (i.e. if an HDMI receiver loses signal, that's definitely
->> unrecoverable, and it's something the driver can know and call vb2_queue_error).
->>
->> If it is really unknown, then you indeed need some monitoring thread. And
->> that's fine. Even better if you can make some helper things in the V4L2 core.
->>
->> But you can't just kick that to userspace IMHO. I can guarantee that almost
->> no userspace application will do this and it is really not the job of userspace
->> to deal with such issues.
-> 
-> From my understanding this means that my previous patch [1] already went in
-> the right direction by implementing a monitoring thread in rcar-vin. But on
-> the other hand Niklas has pointed out that it's not good to have this in a
-> driver [2]. Therefore it sounds like the only acceptable solution would be to
-> move this monitoring thread to the V4L2/VB2 core, which would then monitor
-> capture drivers for frame timeouts and maybe also notify userspace based
-> on this. What do you think? If you already have a solution in mind, I would
-> very appreciate if you could give me a few hints for an implementation!
-> 
-> [1] https://lore.kernel.org/lkml/1652983210-1194-4-git-send-email-mrodin@de.adit-jv.com/
-> [2] https://lore.kernel.org/lkml/YqEO3%2FKekkZhVjW+@oden.dyn.berto.se/
+--------------p5U70wzSTyvnHbBy1wMp7HQn
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Yes, [1] goes in the right direction. The V4L2_EVENT_XFER_ERROR addition can
-be dropped, since a call to vb2_queue_error() is sufficient for non-recoverable
-transfer errors.
+SGkNCg0KQW0gMDQuMDguMjIgdW0gMDk6NTggc2NocmllYiBUYWthc2hpIEl3YWk6DQo+IEF0
+IGJvdGggc3VzcGVuZCBhbmQgZGlzY29ubmVjdCwgd2Ugc2hvdWxkIHJhdGhlciBjYW5jZWwg
+dGhlIHBlbmRpbmcNCj4gVVJCcyBpbW1lZGlhdGVseS4gIEZvciB0aGUgc3VzcGVuZCBjYXNl
+LCB0aGUgZGlzcGxheSB3aWxsIGJlIHR1cm5lZA0KPiBvZmYsIHNvIGl0IG1ha2VzIG5vIHNl
+bnNlIHRvIHByb2Nlc3MgdGhlIHJlbmRlcmluZy4gIEFuZCBmb3IgdGhlDQo+IGRpc2Nvbm5l
+Y3QgY2FzZSwgdGhlIGRldmljZSBtYXkgYmUgbm8gbG9uZ2VyIGFjY2Vzc2libGUsIGhlbmNl
+IHdlDQo+IHNob3VsZG4ndCBkbyBhbnkgc3VibWlzc2lvbi4NCj4gDQo+IFRlc3RlZC1ieTog
+VGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQo+IFNpZ25lZC1vZmYt
+Ynk6IFRha2FzaGkgSXdhaSA8dGl3YWlAc3VzZS5kZT4NCj4gLS0tDQo+ICAgZHJpdmVycy9n
+cHUvZHJtL3VkbC91ZGxfZHJ2LmggICAgIHwgIDIgKysNCj4gICBkcml2ZXJzL2dwdS9kcm0v
+dWRsL3VkbF9tYWluLmMgICAgfCAyNSArKysrKysrKysrKysrKysrKysrKysrLS0tDQo+ICAg
+ZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfbW9kZXNldC5jIHwgIDIgKysNCj4gICAzIGZpbGVz
+IGNoYW5nZWQsIDI2IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZm
+IC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfZHJ2LmggYi9kcml2ZXJzL2dwdS9k
+cm0vdWRsL3VkbF9kcnYuaA0KPiBpbmRleCBmMDFlNTBjNWI3YjcuLjI4YWFmNzVkNzFjZiAx
+MDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfZHJ2LmgNCj4gKysrIGIv
+ZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfZHJ2LmgNCj4gQEAgLTM5LDYgKzM5LDcgQEAgc3Ry
+dWN0IHVyYl9ub2RlIHsNCj4gICANCj4gICBzdHJ1Y3QgdXJiX2xpc3Qgew0KPiAgIAlzdHJ1
+Y3QgbGlzdF9oZWFkIGxpc3Q7DQo+ICsJc3RydWN0IGxpc3RfaGVhZCBpbl9mbGlnaHQ7DQo+
+ICAgCXNwaW5sb2NrX3QgbG9jazsNCj4gICAJd2FpdF9xdWV1ZV9oZWFkX3Qgc2xlZXA7DQo+
+ICAgCWludCBhdmFpbGFibGU7DQo+IEBAIC04NCw2ICs4NSw3IEBAIHN0YXRpYyBpbmxpbmUg
+c3RydWN0IHVyYiAqdWRsX2dldF91cmIoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4gICAN
+Cj4gICBpbnQgdWRsX3N1Ym1pdF91cmIoc3RydWN0IGRybV9kZXZpY2UgKmRldiwgc3RydWN0
+IHVyYiAqdXJiLCBzaXplX3QgbGVuKTsNCj4gICBpbnQgdWRsX3N5bmNfcGVuZGluZ191cmJz
+KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYpOw0KPiArdm9pZCB1ZGxfa2lsbF9wZW5kaW5nX3Vy
+YnMoc3RydWN0IGRybV9kZXZpY2UgKmRldik7DQo+ICAgdm9pZCB1ZGxfdXJiX2NvbXBsZXRp
+b24oc3RydWN0IHVyYiAqdXJiKTsNCj4gICANCj4gICBpbnQgdWRsX2luaXQoc3RydWN0IHVk
+bF9kZXZpY2UgKnVkbCk7DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vdWRsL3Vk
+bF9tYWluLmMgYi9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMNCj4gaW5kZXggOTM2
+MTU2NDg0MTRiLi40NzIwNGI3ZWIxMGUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2Ry
+bS91ZGwvdWRsX21haW4uYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWlu
+LmMNCj4gQEAgLTEzNSw3ICsxMzUsNyBAQCB2b2lkIHVkbF91cmJfY29tcGxldGlvbihzdHJ1
+Y3QgdXJiICp1cmIpDQo+ICAgCXVyYi0+dHJhbnNmZXJfYnVmZmVyX2xlbmd0aCA9IHVkbC0+
+dXJicy5zaXplOyAvKiByZXNldCB0byBhY3R1YWwgKi8NCj4gICANCj4gICAJc3Bpbl9sb2Nr
+X2lycXNhdmUoJnVkbC0+dXJicy5sb2NrLCBmbGFncyk7DQo+IC0JbGlzdF9hZGRfdGFpbCgm
+dW5vZGUtPmVudHJ5LCAmdWRsLT51cmJzLmxpc3QpOw0KPiArCWxpc3RfbW92ZSgmdW5vZGUt
+PmVudHJ5LCAmdWRsLT51cmJzLmxpc3QpOw0KPiAgIAl1ZGwtPnVyYnMuYXZhaWxhYmxlKys7
+DQo+ICAgCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnVkbC0+dXJicy5sb2NrLCBmbGFncyk7
+DQo+ICAgDQo+IEBAIC0xODAsNiArMTgwLDcgQEAgc3RhdGljIGludCB1ZGxfYWxsb2NfdXJi
+X2xpc3Qoc3RydWN0IGRybV9kZXZpY2UgKmRldiwgaW50IGNvdW50LCBzaXplX3Qgc2l6ZSkN
+Cj4gICByZXRyeToNCj4gICAJdWRsLT51cmJzLnNpemUgPSBzaXplOw0KPiAgIAlJTklUX0xJ
+U1RfSEVBRCgmdWRsLT51cmJzLmxpc3QpOw0KPiArCUlOSVRfTElTVF9IRUFEKCZ1ZGwtPnVy
+YnMuaW5fZmxpZ2h0KTsNCj4gICANCj4gICAJaW5pdF93YWl0cXVldWVfaGVhZCgmdWRsLT51
+cmJzLnNsZWVwKTsNCj4gICAJdWRsLT51cmJzLmNvdW50ID0gMDsNCj4gQEAgLTI0Niw3ICsy
+NDcsNyBAQCBzdHJ1Y3QgdXJiICp1ZGxfZ2V0X3VyYl90aW1lb3V0KHN0cnVjdCBkcm1fZGV2
+aWNlICpkZXYsIGxvbmcgdGltZW91dCkNCj4gICAJfQ0KPiAgIA0KPiAgIAl1bm9kZSA9IGxp
+c3RfZmlyc3RfZW50cnkoJnVkbC0+dXJicy5saXN0LCBzdHJ1Y3QgdXJiX25vZGUsIGVudHJ5
+KTsNCj4gLQlsaXN0X2RlbF9pbml0KCZ1bm9kZS0+ZW50cnkpOw0KPiArCWxpc3RfbW92ZSgm
+dW5vZGUtPmVudHJ5LCAmdWRsLT51cmJzLmluX2ZsaWdodCk7DQo+ICAgCXVkbC0+dXJicy5h
+dmFpbGFibGUtLTsNCj4gICANCj4gICB1bmxvY2s6DQo+IEBAIC0yNzksNyArMjgwLDcgQEAg
+aW50IHVkbF9zeW5jX3BlbmRpbmdfdXJicyhzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KQ0KPiAg
+IAlzcGluX2xvY2tfaXJxKCZ1ZGwtPnVyYnMubG9jayk7DQo+ICAgCS8qIDIgc2Vjb25kcyBh
+cyBhIHNhbmUgdGltZW91dCAqLw0KPiAgIAlpZiAoIXdhaXRfZXZlbnRfbG9ja19pcnFfdGlt
+ZW91dCh1ZGwtPnVyYnMuc2xlZXAsDQo+IC0JCQkJCSB1ZGwtPnVyYnMuYXZhaWxhYmxlID09
+IHVkbC0+dXJicy5jb3VudCwNCj4gKwkJCQkJIGxpc3RfZW1wdHkoJnVkbC0+dXJicy5pbl9m
+bGlnaHQpLA0KPiAgIAkJCQkJIHVkbC0+dXJicy5sb2NrLA0KPiAgIAkJCQkJIG1zZWNzX3Rv
+X2ppZmZpZXMoMjAwMCkpKQ0KPiAgIAkJcmV0ID0gLUVUSU1FRE9VVDsNCj4gQEAgLTI4Nyw2
+ICsyODgsMjMgQEAgaW50IHVkbF9zeW5jX3BlbmRpbmdfdXJicyhzdHJ1Y3QgZHJtX2Rldmlj
+ZSAqZGV2KQ0KPiAgIAlyZXR1cm4gcmV0Ow0KPiAgIH0NCj4gICANCj4gKy8qIGtpbGwgcGVu
+ZGluZyBVUkJzICovDQo+ICt2b2lkIHVkbF9raWxsX3BlbmRpbmdfdXJicyhzdHJ1Y3QgZHJt
+X2RldmljZSAqZGV2KQ0KPiArew0KPiArCXN0cnVjdCB1ZGxfZGV2aWNlICp1ZGwgPSB0b191
+ZGwoZGV2KTsNCj4gKwlzdHJ1Y3QgdXJiX25vZGUgKnVub2RlOw0KPiArDQo+ICsJc3Bpbl9s
+b2NrX2lycSgmdWRsLT51cmJzLmxvY2spOw0KPiArCXdoaWxlICghbGlzdF9lbXB0eSgmdWRs
+LT51cmJzLmluX2ZsaWdodCkpIHsNCj4gKwkJdW5vZGUgPSBsaXN0X2ZpcnN0X2VudHJ5KCZ1
+ZGwtPnVyYnMuaW5fZmxpZ2h0LA0KPiArCQkJCQkgc3RydWN0IHVyYl9ub2RlLCBlbnRyeSk7
+DQo+ICsJCXNwaW5fdW5sb2NrX2lycSgmdWRsLT51cmJzLmxvY2spOw0KPiArCQl1c2Jfa2ls
+bF91cmIodW5vZGUtPnVyYik7DQo+ICsJCXNwaW5fbG9ja19pcnEoJnVkbC0+dXJicy5sb2Nr
+KTsNCj4gKwl9DQo+ICsJc3Bpbl91bmxvY2tfaXJxKCZ1ZGwtPnVyYnMubG9jayk7DQo+ICt9
+DQo+ICsNCj4gICBpbnQgdWRsX2luaXQoc3RydWN0IHVkbF9kZXZpY2UgKnVkbCkNCj4gICB7
+DQo+ICAgCXN0cnVjdCBkcm1fZGV2aWNlICpkZXYgPSAmdWRsLT5kcm07DQo+IEBAIC0zMzUs
+NiArMzUzLDcgQEAgaW50IHVkbF9kcm9wX3VzYihzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KQ0K
+PiAgIHsNCj4gICAJc3RydWN0IHVkbF9kZXZpY2UgKnVkbCA9IHRvX3VkbChkZXYpOw0KPiAg
+IA0KPiArCXVkbF9raWxsX3BlbmRpbmdfdXJicyhkZXYpOw0KPiAgIAl1ZGxfZnJlZV91cmJf
+bGlzdChkZXYpOw0KPiAgIAlwdXRfZGV2aWNlKHVkbC0+ZG1hZGV2KTsNCj4gICAJdWRsLT5k
+bWFkZXYgPSBOVUxMOw0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxf
+bW9kZXNldC5jIGIvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfbW9kZXNldC5jDQo+IGluZGV4
+IDUwMDI1NjA2YjZhZC4uMTY5MTEwZDhmYzJlIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dw
+dS9kcm0vdWRsL3VkbF9tb2Rlc2V0LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3VkbC91
+ZGxfbW9kZXNldC5jDQo+IEBAIC0zOTcsNiArMzk3LDggQEAgdWRsX3NpbXBsZV9kaXNwbGF5
+X3BpcGVfZGlzYWJsZShzdHJ1Y3QgZHJtX3NpbXBsZV9kaXNwbGF5X3BpcGUgKnBpcGUpDQo+
+ICAgCXN0cnVjdCB1cmIgKnVyYjsNCj4gICAJY2hhciAqYnVmOw0KPiAgIA0KPiArCXVkbF9r
+aWxsX3BlbmRpbmdfdXJicyhkZXYpOw0KPiArDQoNCkkgYWxyZWFkeSByZXZpZXdlZCB0aGUg
+cGF0Y2hzZXQsIGJ1dCBJIGhhdmUgYW5vdGhlciBjb21tZW50LiBJIHRoaW5rIHdlIA0Kc2hv
+dWxkIG9ubHkga2lsbCB1cmJzIGZyb20gd2l0aGluIHRoZSBzdXNwZW5kIGhhbmRsZXIuIFNh
+bWUgZm9yIHRoZSBjYWxsIA0KdG8gdGhlIFVSQi1zeW5jIGZ1bmN0aW9uIGluIHBhdGNoIDIu
+DQoNClRoaXMgZGlzYWJsZSBmdW5jdGlvbiBpcyBwYXJ0IG9mIHRoZSByZWd1bGFyIG1vZGVz
+ZXQgcGF0aC4gSXQncyBwcm9iYWJseSANCm5vdCBhcHByb3ByaWF0ZSB0byBvdXRyaWdodCBy
+ZW1vdmUgcGVuZGluZyBVUkJzIGhlcmUuIFRoaXMgY2FuIGxlYWQgdG8gDQpmYWlsZWQgbW9k
+ZXNldHMsIHdoaWNoIHdvdWxkIGhhdmUgc3VjY2VlZGVkIG90aGVyd2lzZS4NCg0KQmVzdCBy
+ZWdhcmRzDQpUaG9tYXMNCg0KPiAgIAl1cmIgPSB1ZGxfZ2V0X3VyYihkZXYpOw0KPiAgIAlp
+ZiAoIXVyYikNCj4gICAJCXJldHVybjsNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3Jh
+cGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFu
+eSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIg
+MzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-BTW, I think a timer might work better than a workqueue here: no need to cancel
-and reschedule the workqueue in interrupt context, instead the isr can just call
-mod_timer. Calling vb2_queue_error can be done from interrupt context as well,
-so that can safely be called from the timer function.
 
-I would not be opposed to keep this as driver-specific functionality: it's really
-not much code. But if you do want to add this to vb2, then that can be done, of
-course. I think vb2_queue needs a new field: watchdog_timeout. If 0, there is no
-watchdog running, if non-0 vb2 would start a timer after start_streaming (and
-stop it in stop_streaming), and a new vb2_watchdog_reset() is added that calls
-mod_timer and that the driver has to call from the interrupt.
+--------------p5U70wzSTyvnHbBy1wMp7HQn--
 
-Finally, the timer function would call vb2_queue_error().
+--------------6PVvEJazcpT2eX77No8hSGCQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Eventually, a vb2_queue op can be added as well (e.g. watchdog_timeout) to do
-driver specific stuff. It doesn't seem to be needed for rcar-vin, though.
+-----BEGIN PGP SIGNATURE-----
 
-Regards,
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLyCQwFAwAAAAAACgkQlh/E3EQov+CP
+TQ/+Ndhu1QNi2h4m/FL0sw8mHZcn7aAFgM/z+lnTPwzOoRlvj3+NDlMGGLeTPg21UqRLcevddCKG
+boVbrmmUkippN6ZWgvXfCxGVC73a1B7GbWjPoaO/hNYvZozMl20aeFLxY48G/3uMLUBn72NO2Tf7
+xzLSFt0mqTd0XLe/JNwgn5h5ZfIGrsKx9z8H3Fx49P1bMlN5nGreWM2dgjLELy/pN0NZvt7xqTgX
+QXItN35kHQ45T1f5tMKkE5jtNTbcKQ69qzXtXEH9HVG+znaMeejl6rRn0Qsem4/LFALg691bOmk0
+tvJEsgfPBDU4vS9BWzwGlJ8wiJLSXFQLF7hCEW2qqP/Oos1ubHjQIc/YXcRFsSzyVidHozG0KV6O
+1y44lu4D69Ba1mm1F+ZBLbgStjxxMWtOVLRP6S/5i9kxn5Z89IPhzHYcpnBdoM9rd9gTYhnZgaax
+Z7dSFY0Ipn9wGvPh97vlqxqCzMbqmcceZN8Ot0POvuA10ckashuL4puOkIIWJqJGZh+ZYDOJ7ZSu
+Pxi6M266a+4JhVj0knla5gA8YOg211Sg0REcysaXLRfRQVUytXDtAYAZbQorTcEcMSZI9B/i59kh
+pSTQ6eXawSOODROhIMeWrE1ZA62+UE85VMmMJ58gETI7JBvqZhY1l4/y6WWGJhg3l7v93BC7wfQY
+oog=
+=SVRx
+-----END PGP SIGNATURE-----
 
-	Hans
-
-> 
->> Regards,
->>
->> 	Hans
->>
->>>
->>>> Nicolas
->>>>
->>>>>      * - ``V4L2_EVENT_PRIVATE_START``
->>>>>        - 0x08000000
->>>>>        - Base event number for driver-private events.
->>>>> diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
->>>>> index 9cbb7a0c354a..25bde61a1519 100644
->>>>> --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
->>>>> +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
->>>>> @@ -500,6 +500,7 @@ replace define V4L2_EVENT_CTRL event-type
->>>>>  replace define V4L2_EVENT_FRAME_SYNC event-type
->>>>>  replace define V4L2_EVENT_SOURCE_CHANGE event-type
->>>>>  replace define V4L2_EVENT_MOTION_DET event-type
->>>>> +replace define V4L2_EVENT_XFER_ERROR event-type
->>>>>  replace define V4L2_EVENT_PRIVATE_START event-type
->>>>>  
->>>>>  replace define V4L2_EVENT_CTRL_CH_VALUE ctrl-changes-flags
->>>>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->>>>> index 5311ac4fde35..44db724d4541 100644
->>>>> --- a/include/uapi/linux/videodev2.h
->>>>> +++ b/include/uapi/linux/videodev2.h
->>>>> @@ -2385,6 +2385,7 @@ struct v4l2_streamparm {
->>>>>  #define V4L2_EVENT_FRAME_SYNC			4
->>>>>  #define V4L2_EVENT_SOURCE_CHANGE		5
->>>>>  #define V4L2_EVENT_MOTION_DET			6
->>>>> +#define V4L2_EVENT_XFER_ERROR			7
->>>>>  #define V4L2_EVENT_PRIVATE_START		0x08000000
->>>>>  
->>>>>  /* Payload for V4L2_EVENT_VSYNC */
->>>>
->>>
->>
-> 
+--------------6PVvEJazcpT2eX77No8hSGCQ--

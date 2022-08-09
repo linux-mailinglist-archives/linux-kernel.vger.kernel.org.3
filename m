@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E9E58DE74
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D557558DE72
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346002AbiHISP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S1345882AbiHISPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343688AbiHISNB (ORCPT
+        with ESMTP id S1345319AbiHISMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:13:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940072BB25;
-        Tue,  9 Aug 2022 11:05:35 -0700 (PDT)
+        Tue, 9 Aug 2022 14:12:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AA12C10F;
+        Tue,  9 Aug 2022 11:05:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B91A66113C;
-        Tue,  9 Aug 2022 18:05:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C065CC433D7;
-        Tue,  9 Aug 2022 18:05:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D1F7B816EC;
+        Tue,  9 Aug 2022 18:05:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85FB8C43141;
+        Tue,  9 Aug 2022 18:05:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068328;
-        bh=j3y7x8GsGU/kcL43icQAuSIg0dwz50tksU+02MZn9tY=;
+        s=korg; t=1660068330;
+        bh=7JuMXb46I3k4p+22YYaGhNRUrgtDA9PM5o70vGc8J40=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wdwgQX4kdheDpCCADXseu4u8dcSGzEY907/FtCrySa+3r5Xxdhz+AI54IildPgU8K
-         Ixp70ORA3eKBfdwY0wauun61bkkyih0EPCuUeCFCkpyhbrAZ0pqPs8VQOqmfKzT+2I
-         l81HbAlbQ08xwaWYhbFlSoprhl/W9EW83FJcmfiU=
+        b=SiatDWAnaYg3/JetnmGg6trzRZyM6UHpODZEh+iq4G/9o59M1Cjt8n8xHJslRIcjJ
+         +WJnhmip8j0MQRc+gLuHopAgXptkFUtVTHPhoa+0s+pLhhInR2lqYijze3CJpBqZFX
+         DGIgqcryPkRpI8stum46NRqTXv3pHD5aaaaoJ+dU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 10/30] KVM: x86: do not report a vCPU as preempted outside instruction boundaries
-Date:   Tue,  9 Aug 2022 20:00:35 +0200
-Message-Id: <20220809175514.673972015@linuxfoundation.org>
+Subject: [PATCH 5.15 11/30] KVM: x86: do not set st->preempted when going back to user space
+Date:   Tue,  9 Aug 2022 20:00:36 +0200
+Message-Id: <20220809175514.713107597@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
 References: <20220809175514.276643253@linuxfoundation.org>
@@ -57,131 +57,77 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Paolo Bonzini <pbonzini@redhat.com>
 
-[ Upstream commit 6cd88243c7e03845a450795e134b488fc2afb736 ]
+[ Upstream commit 54aa83c90198e68eee8b0850c749bc70efb548da ]
 
-If a vCPU is outside guest mode and is scheduled out, it might be in the
-process of making a memory access.  A problem occurs if another vCPU uses
-the PV TLB flush feature during the period when the vCPU is scheduled
-out, and a virtual address has already been translated but has not yet
-been accessed, because this is equivalent to using a stale TLB entry.
+Similar to the Xen path, only change the vCPU's reported state if the vCPU
+was actually preempted.  The reason for KVM's behavior is that for example
+optimistic spinning might not be a good idea if the guest is doing repeated
+exits to userspace; however, it is confusing and unlikely to make a difference,
+because well-tuned guests will hardly ever exit KVM_RUN in the first place.
 
-To avoid this, only report a vCPU as preempted if sure that the guest
-is at an instruction boundary.  A rescheduling request will be delivered
-to the host physical CPU as an external interrupt, so for simplicity
-consider any vmexit *not* instruction boundary except for external
-interrupts.
-
-It would in principle be okay to report the vCPU as preempted also
-if it is sleeping in kvm_vcpu_block(): a TLB flush IPI will incur the
-vmentry/vmexit overhead unnecessarily, and optimistic spinning is
-also unlikely to succeed.  However, leave it for later because right
-now kvm_vcpu_check_block() is doing memory accesses.  Even
-though the TLB flush issue only applies to virtual memory address,
-it's very much preferrable to be conservative.
-
-Reported-by: Jann Horn <jannh@google.com>
+Suggested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/kvm_host.h |  3 +++
- arch/x86/kvm/svm/svm.c          |  2 ++
- arch/x86/kvm/vmx/vmx.c          |  1 +
- arch/x86/kvm/x86.c              | 22 ++++++++++++++++++++++
- 4 files changed, 28 insertions(+)
+ arch/x86/kvm/x86.c | 26 ++++++++++++++------------
+ arch/x86/kvm/xen.h |  6 ++++--
+ 2 files changed, 18 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 49d814b2a341..a35f5e23fc2a 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -642,6 +642,7 @@ struct kvm_vcpu_arch {
- 	u64 ia32_misc_enable_msr;
- 	u64 smbase;
- 	u64 smi_count;
-+	bool at_instruction_boundary;
- 	bool tpr_access_reporting;
- 	bool xsaves_enabled;
- 	u64 ia32_xss;
-@@ -1271,6 +1272,8 @@ struct kvm_vcpu_stat {
- 	u64 nested_run;
- 	u64 directed_yield_attempted;
- 	u64 directed_yield_successful;
-+	u64 preemption_reported;
-+	u64 preemption_other;
- 	u64 guest_mode;
- };
- 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 26f2da1590ed..5b51156712f7 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4263,6 +4263,8 @@ static int svm_check_intercept(struct kvm_vcpu *vcpu,
- 
- static void svm_handle_exit_irqoff(struct kvm_vcpu *vcpu)
- {
-+	if (to_svm(vcpu)->vmcb->control.exit_code == SVM_EXIT_INTR)
-+		vcpu->arch.at_instruction_boundary = true;
- }
- 
- static void svm_sched_in(struct kvm_vcpu *vcpu, int cpu)
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index a236104fc743..359292767e17 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6471,6 +6471,7 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
- 		return;
- 
- 	handle_interrupt_nmi_irqoff(vcpu, gate_offset(desc));
-+	vcpu->arch.at_instruction_boundary = true;
- }
- 
- static void vmx_handle_exit_irqoff(struct kvm_vcpu *vcpu)
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index bd410926fda5..b2436796e03c 100644
+index b2436796e03c..8a6ee5d8adc7 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -277,6 +277,8 @@ const struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
- 	STATS_DESC_COUNTER(VCPU, nested_run),
- 	STATS_DESC_COUNTER(VCPU, directed_yield_attempted),
- 	STATS_DESC_COUNTER(VCPU, directed_yield_successful),
-+	STATS_DESC_COUNTER(VCPU, preemption_reported),
-+	STATS_DESC_COUNTER(VCPU, preemption_other),
- 	STATS_DESC_ICOUNTER(VCPU, guest_mode)
- };
+@@ -4415,19 +4415,21 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
+ {
+ 	int idx;
  
-@@ -4371,6 +4373,19 @@ static void kvm_steal_time_set_preempted(struct kvm_vcpu *vcpu)
- 	struct kvm_memslots *slots;
- 	static const u8 preempted = KVM_VCPU_PREEMPTED;
+-	if (vcpu->preempted && !vcpu->arch.guest_state_protected)
+-		vcpu->arch.preempted_in_kernel = !static_call(kvm_x86_get_cpl)(vcpu);
++	if (vcpu->preempted) {
++		if (!vcpu->arch.guest_state_protected)
++			vcpu->arch.preempted_in_kernel = !static_call(kvm_x86_get_cpl)(vcpu);
  
-+	/*
-+	 * The vCPU can be marked preempted if and only if the VM-Exit was on
-+	 * an instruction boundary and will not trigger guest emulation of any
-+	 * kind (see vcpu_run).  Vendor specific code controls (conservatively)
-+	 * when this is true, for example allowing the vCPU to be marked
-+	 * preempted if and only if the VM-Exit was due to a host interrupt.
-+	 */
-+	if (!vcpu->arch.at_instruction_boundary) {
-+		vcpu->stat.preemption_other++;
-+		return;
-+	}
-+
-+	vcpu->stat.preemption_reported++;
- 	if (!(vcpu->arch.st.msr_val & KVM_MSR_ENABLED))
- 		return;
- 
-@@ -9934,6 +9949,13 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
- 	vcpu->arch.l1tf_flush_l1d = true;
- 
- 	for (;;) {
+-	/*
+-	 * Take the srcu lock as memslots will be accessed to check the gfn
+-	 * cache generation against the memslots generation.
+-	 */
+-	idx = srcu_read_lock(&vcpu->kvm->srcu);
+-	if (kvm_xen_msr_enabled(vcpu->kvm))
+-		kvm_xen_runstate_set_preempted(vcpu);
+-	else
+-		kvm_steal_time_set_preempted(vcpu);
+-	srcu_read_unlock(&vcpu->kvm->srcu, idx);
 +		/*
-+		 * If another guest vCPU requests a PV TLB flush in the middle
-+		 * of instruction emulation, the rest of the emulation could
-+		 * use a stale page translation. Assume that any code after
-+		 * this point can start executing an instruction.
++		 * Take the srcu lock as memslots will be accessed to check the gfn
++		 * cache generation against the memslots generation.
 +		 */
-+		vcpu->arch.at_instruction_boundary = false;
- 		if (kvm_vcpu_running(vcpu)) {
- 			r = vcpu_enter_guest(vcpu);
- 		} else {
++		idx = srcu_read_lock(&vcpu->kvm->srcu);
++		if (kvm_xen_msr_enabled(vcpu->kvm))
++			kvm_xen_runstate_set_preempted(vcpu);
++		else
++			kvm_steal_time_set_preempted(vcpu);
++		srcu_read_unlock(&vcpu->kvm->srcu, idx);
++	}
+ 
+ 	static_call(kvm_x86_vcpu_put)(vcpu);
+ 	vcpu->arch.last_host_tsc = rdtsc();
+diff --git a/arch/x86/kvm/xen.h b/arch/x86/kvm/xen.h
+index cc0cf5f37450..a7693a286e40 100644
+--- a/arch/x86/kvm/xen.h
++++ b/arch/x86/kvm/xen.h
+@@ -97,8 +97,10 @@ static inline void kvm_xen_runstate_set_preempted(struct kvm_vcpu *vcpu)
+ 	 * behalf of the vCPU. Only if the VMM does actually block
+ 	 * does it need to enter RUNSTATE_blocked.
+ 	 */
+-	if (vcpu->preempted)
+-		kvm_xen_update_runstate_guest(vcpu, RUNSTATE_runnable);
++	if (WARN_ON_ONCE(!vcpu->preempted))
++		return;
++
++	kvm_xen_update_runstate_guest(vcpu, RUNSTATE_runnable);
+ }
+ 
+ /* 32-bit compatibility definitions, also used natively in 32-bit build */
 -- 
 2.35.1
 

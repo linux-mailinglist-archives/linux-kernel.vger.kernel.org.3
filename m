@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D17458DDFB
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7147C58DE50
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbiHISI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S1345452AbiHISNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344977AbiHISHs (ORCPT
+        with ESMTP id S1345792AbiHISLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:07:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCA02873B;
-        Tue,  9 Aug 2022 11:03:21 -0700 (PDT)
+        Tue, 9 Aug 2022 14:11:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434672B1A1;
+        Tue,  9 Aug 2022 11:04:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A99061083;
-        Tue,  9 Aug 2022 18:03:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87563C43470;
-        Tue,  9 Aug 2022 18:03:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7706961070;
+        Tue,  9 Aug 2022 18:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE977C433D6;
+        Tue,  9 Aug 2022 18:04:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068200;
-        bh=VD83UgiWufcDQMx6LODuf28lgLU0KcghxVGdBDnS4P0=;
+        s=korg; t=1660068289;
+        bh=S2xxbuptJ7V+bMWXdehtQv+Fi2QhUDp4XHIgVKjwTfM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fn5lRlwgI721pFN6J3ICkXDbZXwJu4GZViHqU0avlcxDprjZouMu2uZ7ib+A9wJZj
-         4I/sX5EU47iSRBot+hv4lhMguoHrHNE6OAY5Dy2ug2UnKKeP+qJF16nA67lpzsn1xu
-         w1c3QxGsgit+VnudGG8j9+iVrjzxE+uf4PKWu2Ko=
+        b=0VLQxqus1+xsRqbvBsMZdCcgE7DdY0MfB9ildAqe1u2t02MT39/eP8Lj0zBARpdfL
+         xpDxAlF0rYiX7OqjRunfdrCoNV3hzizIzy2wGMivvQzeqMOYCQ3azBqVHsxssGX6cS
+         d54PCbHwY/7bKjiu5TNH+kJ3ncC36JHFIdbeur+c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 5.4 07/15] bpf: Test_verifier, #70 error message updates for 32-bit right shift
-Date:   Tue,  9 Aug 2022 20:00:25 +0200
-Message-Id: <20220809175510.564956957@linuxfoundation.org>
+        stable@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.15 01/30] x86/speculation: Make all RETbleed mitigations 64-bit only
+Date:   Tue,  9 Aug 2022 20:00:26 +0200
+Message-Id: <20220809175514.322531397@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
-References: <20220809175510.312431319@linuxfoundation.org>
+In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
+References: <20220809175514.276643253@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,150 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Fastabend <john.fastabend@gmail.com>
+From: Ben Hutchings <ben@decadent.org.uk>
 
-commit aa131ed44ae1d76637f0dbec33cfcf9115af9bc3 upstream.
+commit b648ab487f31bc4c38941bc770ea97fe394304bb upstream.
 
-After changes to add update_reg_bounds after ALU ops and adding ALU32
-bounds tracking the error message is changed in the 32-bit right shift
-tests.
+The mitigations for RETBleed are currently ineffective on x86_32 since
+entry_32.S does not use the required macros.  However, for an x86_32
+target, the kconfig symbols for them are still enabled by default and
+/sys/devices/system/cpu/vulnerabilities/retbleed will wrongly report
+that mitigations are in place.
 
-Test "#70/u bounds check after 32-bit right shift with 64-bit input FAIL"
-now fails with,
+Make all of these symbols depend on X86_64, and only enable RETHUNK by
+default on X86_64.
 
-Unexpected error message!
-	EXP: R0 invalid mem access
-	RES: func#0 @0
-
-7: (b7) r1 = 2
-8: R0_w=map_value(id=0,off=0,ks=8,vs=8,imm=0) R1_w=invP2 R10=fp0 fp-8_w=mmmmmmmm
-8: (67) r1 <<= 31
-9: R0_w=map_value(id=0,off=0,ks=8,vs=8,imm=0) R1_w=invP4294967296 R10=fp0 fp-8_w=mmmmmmmm
-9: (74) w1 >>= 31
-10: R0_w=map_value(id=0,off=0,ks=8,vs=8,imm=0) R1_w=invP0 R10=fp0 fp-8_w=mmmmmmmm
-10: (14) w1 -= 2
-11: R0_w=map_value(id=0,off=0,ks=8,vs=8,imm=0) R1_w=invP4294967294 R10=fp0 fp-8_w=mmmmmmmm
-11: (0f) r0 += r1
-math between map_value pointer and 4294967294 is not allowed
-
-And test "#70/p bounds check after 32-bit right shift with 64-bit input
-FAIL" now fails with,
-
-Unexpected error message!
-	EXP: R0 invalid mem access
-	RES: func#0 @0
-
-7: (b7) r1 = 2
-8: R0_w=map_value(id=0,off=0,ks=8,vs=8,imm=0) R1_w=inv2 R10=fp0 fp-8_w=mmmmmmmm
-8: (67) r1 <<= 31
-9: R0_w=map_value(id=0,off=0,ks=8,vs=8,imm=0) R1_w=inv4294967296 R10=fp0 fp-8_w=mmmmmmmm
-9: (74) w1 >>= 31
-10: R0_w=map_value(id=0,off=0,ks=8,vs=8,imm=0) R1_w=inv0 R10=fp0 fp-8_w=mmmmmmmm
-10: (14) w1 -= 2
-11: R0_w=map_value(id=0,off=0,ks=8,vs=8,imm=0) R1_w=inv4294967294 R10=fp0 fp-8_w=mmmmmmmm
-11: (0f) r0 += r1
-last_idx 11 first_idx 0
-regs=2 stack=0 before 10: (14) w1 -= 2
-regs=2 stack=0 before 9: (74) w1 >>= 31
-regs=2 stack=0 before 8: (67) r1 <<= 31
-regs=2 stack=0 before 7: (b7) r1 = 2
-math between map_value pointer and 4294967294 is not allowed
-
-Before this series we did not trip the "math between map_value pointer..."
-error because check_reg_sane_offset is never called in
-adjust_ptr_min_max_vals(). Instead we have a register state that looks
-like this at line 11*,
-
-11: R0_w=map_value(id=0,off=0,ks=8,vs=8,
-                   smin_value=0,smax_value=0,
-                   umin_value=0,umax_value=0,
-                   var_off=(0x0; 0x0))
-    R1_w=invP(id=0,
-              smin_value=0,smax_value=4294967295,
-              umin_value=0,umax_value=4294967295,
-              var_off=(0xfffffffe; 0x0))
-    R10=fp(id=0,off=0,
-           smin_value=0,smax_value=0,
-           umin_value=0,umax_value=0,
-           var_off=(0x0; 0x0)) fp-8_w=mmmmmmmm
-11: (0f) r0 += r1
-
-In R1 'smin_val != smax_val' yet we have a tnum_const as seen
-by 'var_off(0xfffffffe; 0x0))' with a 0x0 mask. So we hit this check
-in adjust_ptr_min_max_vals()
-
- if ((known && (smin_val != smax_val || umin_val != umax_val)) ||
-      smin_val > smax_val || umin_val > umax_val) {
-       /* Taint dst register if offset had invalid bounds derived from
-        * e.g. dead branches.
-        */
-       __mark_reg_unknown(env, dst_reg);
-       return 0;
- }
-
-So we don't throw an error here and instead only throw an error
-later in the verification when the memory access is made.
-
-The root cause in verifier without alu32 bounds tracking is having
-'umin_value = 0' and 'umax_value = U64_MAX' from BPF_SUB which we set
-when 'umin_value < umax_val' here,
-
- if (dst_reg->umin_value < umax_val) {
-    /* Overflow possible, we know nothing */
-    dst_reg->umin_value = 0;
-    dst_reg->umax_value = U64_MAX;
- } else { ...}
-
-Later in adjust_calar_min_max_vals we previously did a
-coerce_reg_to_size() which will clamp the U64_MAX to U32_MAX by
-truncating to 32bits. But either way without a call to update_reg_bounds
-the less precise bounds tracking will fall out of the alu op
-verification.
-
-After latest changes we now exit adjust_scalar_min_max_vals with the
-more precise umin value, due to zero extension propogating bounds from
-alu32 bounds into alu64 bounds and then calling update_reg_bounds.
-This then causes the verifier to trigger an earlier error and we get
-the error in the output above.
-
-This patch updates tests to reflect new error message.
-
-* I have a local patch to print entire verifier state regardless if we
- believe it is a constant so we can get a full picture of the state.
- Usually if tnum_is_const() then bounds are also smin=smax, etc. but
- this is not always true and is a bit subtle. Being able to see these
- states helps understand dataflow imo. Let me know if we want something
- similar upstream.
-
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/158507161475.15666.3061518385241144063.stgit@john-Precision-5820-Tower
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Fixes: f43b9876e857 ("x86/retbleed: Add fine grained Kconfig knobs")
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/YtwSR3NNsWp1ohfV@decadent.org.uk
+[bwh: Backported to 5.10/5.15/5.18: adjust context]
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/bpf/verifier/bounds.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ arch/x86/Kconfig |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/tools/testing/selftests/bpf/verifier/bounds.c
-+++ b/tools/testing/selftests/bpf/verifier/bounds.c
-@@ -411,16 +411,14 @@
- 	BPF_ALU32_IMM(BPF_RSH, BPF_REG_1, 31),
- 	/* r1 = 0xffff'fffe (NOT 0!) */
- 	BPF_ALU32_IMM(BPF_SUB, BPF_REG_1, 2),
--	/* computes OOB pointer */
-+	/* error on computing OOB pointer */
- 	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1),
--	/* OOB access */
--	BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_0, 0),
- 	/* exit */
- 	BPF_MOV64_IMM(BPF_REG_0, 0),
- 	BPF_EXIT_INSN(),
- 	},
- 	.fixup_map_hash_8b = { 3 },
--	.errstr = "R0 invalid mem access",
-+	.errstr = "math between map_value pointer and 4294967294 is not allowed",
- 	.result = REJECT,
- },
- {
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2427,7 +2427,7 @@ config RETPOLINE
+ config RETHUNK
+ 	bool "Enable return-thunks"
+ 	depends on RETPOLINE && CC_HAS_RETURN_THUNK
+-	default y
++	default y if X86_64
+ 	help
+ 	  Compile the kernel with the return-thunks compiler option to guard
+ 	  against kernel-to-user data leaks by avoiding return speculation.
+@@ -2436,21 +2436,21 @@ config RETHUNK
+ 
+ config CPU_UNRET_ENTRY
+ 	bool "Enable UNRET on kernel entry"
+-	depends on CPU_SUP_AMD && RETHUNK
++	depends on CPU_SUP_AMD && RETHUNK && X86_64
+ 	default y
+ 	help
+ 	  Compile the kernel with support for the retbleed=unret mitigation.
+ 
+ config CPU_IBPB_ENTRY
+ 	bool "Enable IBPB on kernel entry"
+-	depends on CPU_SUP_AMD
++	depends on CPU_SUP_AMD && X86_64
+ 	default y
+ 	help
+ 	  Compile the kernel with support for the retbleed=ibpb mitigation.
+ 
+ config CPU_IBRS_ENTRY
+ 	bool "Enable IBRS on kernel entry"
+-	depends on CPU_SUP_INTEL
++	depends on CPU_SUP_INTEL && X86_64
+ 	default y
+ 	help
+ 	  Compile the kernel with support for the spectre_v2=ibrs mitigation.
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A130A58DE59
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3F158DE02
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345542AbiHISON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
+        id S1345022AbiHISJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345798AbiHISLp (ORCPT
+        with ESMTP id S1345019AbiHISIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:11:45 -0400
+        Tue, 9 Aug 2022 14:08:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2982AE3C;
-        Tue,  9 Aug 2022 11:04:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813482654A;
+        Tue,  9 Aug 2022 11:03:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91FE96109E;
-        Tue,  9 Aug 2022 18:04:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984A1C433C1;
-        Tue,  9 Aug 2022 18:04:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3473961117;
+        Tue,  9 Aug 2022 18:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E346C43140;
+        Tue,  9 Aug 2022 18:03:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068295;
-        bh=eTqp+mS2QGd6/HOEequo25/mWWN1lPw0MY+Bc27lKjU=;
+        s=korg; t=1660068209;
+        bh=LijSy99pzpSg1iIzbzqZJpsUfznU587YrJg1vozHGAU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xzuhbOllUMf+3TfGvj3qsbjSCcjsFmszE2J/Qh5aY0WpwX/ooF6dnViKXA2wxVmEO
-         IJJ+fZZerFZcyHdpNOvoVYjmejLWzepNsmf2EMqxYygN8uRKcJqJmCCqqirk5rnqs1
-         MVRz+qbjV6XTt0ajc9tbC6KocaBSLBgg9HrmXMGU=
+        b=Y2IFXe+wiLiLAG/FQ+SC8OGSHEq48QT5UfD9SjlcUUbdqhLZbb2UkWtLIaXlfXMZ4
+         7b0VTsWatDSG2/omx7w3qAh82QC5VBn05Pz8tO1frxZE3s37yJMiN4jsylYeriRTV/
+         X/ekL0ELDwUL6qRL2lwamaDreWOZehO0ei3VkOU8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 5.15 03/30] selftests/bpf: Check dst_port only on the client socket
+        stable@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 10/15] KVM: Dont null dereference ops->destroy
 Date:   Tue,  9 Aug 2022 20:00:28 +0200
-Message-Id: <20220809175514.383072069@linuxfoundation.org>
+Message-Id: <20220809175510.664673759@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
-References: <20220809175514.276643253@linuxfoundation.org>
+In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
+References: <20220809175510.312431319@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Alexey Kardashevskiy <aik@ozlabs.ru>
 
-commit 2d2202ba858c112b03f84d546e260c61425831a1 upstream.
+[ Upstream commit e8bc2427018826e02add7b0ed0fc625a60390ae5 ]
 
-cgroup_skb/egress programs which sock_fields test installs process packets
-flying in both directions, from the client to the server, and in reverse
-direction.
+A KVM device cleanup happens in either of two callbacks:
+1) destroy() which is called when the VM is being destroyed;
+2) release() which is called when a device fd is closed.
 
-Recently added dst_port check relies on the fact that destination
-port (remote peer port) of the socket which sends the packet is known ahead
-of time. This holds true only for the client socket, which connects to the
-known server port.
+Most KVM devices use 1) but Book3s's interrupt controller KVM devices
+(XICS, XIVE, XIVE-native) use 2) as they need to close and reopen during
+the machine execution. The error handling in kvm_ioctl_create_device()
+assumes destroy() is always defined which leads to NULL dereference as
+discovered by Syzkaller.
 
-Filter out any traffic that is not egressing from the client socket in the
-BPF program that tests reading the dst_port.
+This adds a checks for destroy!=NULL and adds a missing release().
 
-Fixes: 8f50f16ff39d ("selftests/bpf: Extend verifier and bpf_sock tests for dst_port loads")
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Link: https://lore.kernel.org/bpf/20220317113920.1068535-3-jakub@cloudflare.com
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This is not changing kvm_destroy_devices() as devices with defined
+release() should have been removed from the KVM devices list by then.
+
+Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_sock_fields.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ virt/kvm/kvm_main.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/tools/testing/selftests/bpf/progs/test_sock_fields.c
-+++ b/tools/testing/selftests/bpf/progs/test_sock_fields.c
-@@ -281,6 +281,10 @@ int read_sk_dst_port(struct __sk_buff *s
- 	if (!sk)
- 		RET_LOG();
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 287444e52ccf..4b445dddb798 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -3329,8 +3329,11 @@ static int kvm_ioctl_create_device(struct kvm *kvm,
+ 		kvm_put_kvm(kvm);
+ 		mutex_lock(&kvm->lock);
+ 		list_del(&dev->vm_node);
++		if (ops->release)
++			ops->release(dev);
+ 		mutex_unlock(&kvm->lock);
+-		ops->destroy(dev);
++		if (ops->destroy)
++			ops->destroy(dev);
+ 		return ret;
+ 	}
  
-+	/* Ignore everything but the SYN from the client socket */
-+	if (sk->state != BPF_TCP_SYN_SENT)
-+		return CG_OK;
-+
- 	if (!sk_dst_port__load_word(sk))
- 		RET_LOG();
- 	if (!sk_dst_port__load_half(sk))
+-- 
+2.35.1
+
 
 

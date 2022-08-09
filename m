@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD88D58D3AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9B458D3AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236963AbiHIGXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S237026AbiHIGXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 02:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbiHIGXV (ORCPT
+        with ESMTP id S237021AbiHIGXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:23:21 -0400
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 721801FCC8;
-        Mon,  8 Aug 2022 23:23:19 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.48:50634.2011200144
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-10.133.8.199 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id 1F5EF2800B9;
-        Tue,  9 Aug 2022 14:23:09 +0800 (CST)
-X-189-SAVE-TO-SEND: +sunshouxin@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id 1e91304342df415f95cdfdc294bf4188 for j.vosburgh@gmail.com;
-        Tue, 09 Aug 2022 14:23:15 CST
-X-Transaction-ID: 1e91304342df415f95cdfdc294bf4188
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
-To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        razor@blackwall.org, huyd12@chinatelecom.cn,
-        sunshouxin@chinatelecom.cn
-Subject: [PATCH v2] net:bonding:support balance-alb interface with vlan to bridge
-Date:   Mon,  8 Aug 2022 23:21:03 -0700
-Message-Id: <20220809062103.31213-1-sunshouxin@chinatelecom.cn>
-X-Mailer: git-send-email 2.27.0
+        Tue, 9 Aug 2022 02:23:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959911FCFC
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 23:23:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A2D2B811B8
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 06:23:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A67C4347C;
+        Tue,  9 Aug 2022 06:23:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660026211;
+        bh=r4gBsXWejMioOyU9kv7AqoaLFSBmsdp3u4zoSc5meJs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BEztx697rcbEZiFXoACdMEbb6LbyomvNJOqu1DzKUk8Z2VMo6BYyenk6YGf4f2yLi
+         sjubCbTVpCuZsqzIVGbVvvcNhSh6DC5u1bQg6a/D6/HSPpnCIjQsyl4PVisfcuD0r6
+         vy+nmLXW/3zlz8yODEdV/0oKdPA+Ya0LRx+64b5w=
+Date:   Tue, 9 Aug 2022 08:23:27 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Oded Gabbay <oded.gabbay@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Subject: Re: New subsystem for acceleration devices
+Message-ID: <YvH9X5puer4jpzMX@kroah.com>
+References: <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com>
+ <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
+ <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
+ <YuvctaLwRi+z0Gw4@nvidia.com>
+ <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
+ <Yuxi1eRHPN36Or+1@nvidia.com>
+ <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
+ <CAFCwf107tLxHKxkPqSRsOHVVp5s2tDEFOOy2oDZUz_KGmv-rDg@mail.gmail.com>
+ <YvCozvgodIY19LSr@kroah.com>
+ <YvFOEPdC9r8QBH11@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvFOEPdC9r8QBH11@nvidia.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In my test, balance-alb bonding with two slaves eth0 and eth1,
-and then Bond0.150 is created with vlan id attached bond0.
-After adding bond0.150 into one linux bridge, I noted that Bond0,
-bond0.150 and  bridge were assigned to the same MAC as eth0.
-Once bond0.150 receives a packet whose dest IP is bridge's
-and dest MAC is eth1's, the linux bridge will not match
-eth1's MAC entry in FDB, and not handle it as expected.
-The patch fix the issue, and diagram as below:
+On Mon, Aug 08, 2022 at 02:55:28PM -0300, Jason Gunthorpe wrote:
+> On Mon, Aug 08, 2022 at 08:10:22AM +0200, Greg Kroah-Hartman wrote:
+> > On Sun, Aug 07, 2022 at 02:25:33PM +0300, Oded Gabbay wrote:
+> > > 2. Common code to handle drivers that want to allow a single user at a
+> > > time to run open the device char file.
+> > 
+> > Note, that's an impossible request, and one that the kernel should never
+> > worry about, so don't even try it.  Think about userspace doing an call
+> > to dup() on an open char file descriptor and then passing that off
+> > somewhere else.
+> 
+> Oded is talking about a model like VFIO has where the HW has a limited
+> number of concurrent state registers - lets say in this case the ASID
+> translation mapping the accelerator into DMA.
 
-eth1(mac:eth1_mac)--bond0(balance-alb,mac:eth0_mac)--eth0(mac:eth0_mac)
-                      |
-                   bond0.150(mac:eth0_mac)
-                      |
-                   bridge(ip:br_ip, mac:eth0_mac)--other port
+Based on the number of drivers that I see submitted weekly that try to
+restrict their open call to just one user by using atomic variables or
+other tricks, I think my interpretation of this stands :)
 
-Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
-Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
----
+> Each 'struct file' that is created owns one of those HW state
+> registers, and each struct file is completely isolated from all
+> others. eg someone controlling the accelerator through struct file A
+> cannot access memory mapped into the accelerator through struct file
+> B.
+> 
+> So, the number of struct files that can be created is capped at the
+> number of HW state registers the device can support (eg one for
+> Habana).
+> 
+> This is different from the number of FDs pointing at the struct file.
+> Userpsace can open a HW state and point a lot of FDs at it, that is
+> userspace's problem. From a kernel view they all share one struct file
+> and thus one HW state.
 
-changelog:
-v1->v2:
-  -declare variabls in reverse xmas tree order
-  -delete {}
-  -add explanation in commit message
----
- drivers/net/bonding/bond_alb.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Yes, that's fine, if that is what is happening here, I have no
+objection.
 
-diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
-index 007d43e46dcb..60cb9a0225aa 100644
---- a/drivers/net/bonding/bond_alb.c
-+++ b/drivers/net/bonding/bond_alb.c
-@@ -653,6 +653,7 @@ static struct slave *rlb_choose_channel(struct sk_buff *skb,
- static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
- {
- 	struct slave *tx_slave = NULL;
-+	struct net_device *dev;
- 	struct arp_pkt *arp;
- 
- 	if (!pskb_network_may_pull(skb, sizeof(*arp)))
-@@ -665,6 +666,12 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
- 	if (!bond_slave_has_mac_rx(bond, arp->mac_src))
- 		return NULL;
- 
-+	dev = ip_dev_find(dev_net(bond->dev), arp->ip_src);
-+	if (dev) {
-+		if (netif_is_bridge_master(dev))
-+			return NULL;
-+	}
-+
- 	if (arp->op_code == htons(ARPOP_REPLY)) {
- 		/* the arp must be sent on the selected rx channel */
- 		tx_slave = rlb_choose_channel(skb, bond, arp);
--- 
-2.27.0
-
+greg k-h

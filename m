@@ -2,188 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC7F58DA46
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0919658DA56
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244267AbiHIO1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 10:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S240747AbiHIObb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 10:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbiHIO1F (ORCPT
+        with ESMTP id S229653AbiHIOb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 10:27:05 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D39F1158;
-        Tue,  9 Aug 2022 07:27:02 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso17828505pjo.1;
-        Tue, 09 Aug 2022 07:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=myMQ29sXeNGKfu1ttSzZslTbpCbGObPjlnHZzAdiED8=;
-        b=cU73e2KlV0JWEPg3mppjZ+VZxAKDCNNYI2zb+JrdlR+JhoMO7kNZcbr/wkCEESST6d
-         wZLKZcoyY9af/ed/PeV6JWenH3PW1Uz3Orx62/A+JrcSG69OWN6QX7UdSQXo8hItF7kB
-         lQuWyZFRVt1n2MO7LD5GJhTzGcxpQYvTug9MYJ25IZEZW8pAHu3eJ5hSOfYYSGZPfKUb
-         kNK68jShgbFFzNcNphd9Uixn/A5P374+GdUhaRiF6q5048BX06FEbY+rOWyoAWk6SIlX
-         ppkGYMWcf8knOax+10kvzD3u5JnqzMCIf1WduThj7HEfQ8jEkRerobOooXHzxoKMdgwc
-         DT0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=myMQ29sXeNGKfu1ttSzZslTbpCbGObPjlnHZzAdiED8=;
-        b=3KrkwzvupiJPNjccStjSlU/AU78cqUV0TvwJK2KsJcOoyHRi5/UboPbKVNFfEtUQ1p
-         EqOl+lztdSDPy23UPYkO7mVydNWwEPcZQ/7oXLDiRzPnsDJ+8K9wCkcKScpNQ0vCyFf9
-         0ZWc9oT8ZAB0a0wj0tGCvaWVAoKqsz9gTjSmCFsKuS8AReYQsJz+My0vjsi4JwgcFYVe
-         1BN+vLVEFTiDyOB5EdOh2K3HWTCuu4PQxmfMI+iLFWmQ0E+WNDQq2pm5yF6zSYLY14aN
-         VPW+dQlr2g4JerTTv8IzFejpptKTDZ9KjISCMtC8aLxDWqPzXCXauOqubNSjZ8D9t+M7
-         Xb7w==
-X-Gm-Message-State: ACgBeo3LKJzv51NO2qN5XrrqqQrV/trYDNwDRVbrpABIb7b3oNg3S1CA
-        qeZ1MWBjSed4dci1jbMrJq0=
-X-Google-Smtp-Source: AA6agR44VQ5PFlBtPXP2ee1qx/ZX0GXCbz5xd/x+6bwqyP8nG8bzxTC1P0Zc7WdKEx9U8kduE03spA==
-X-Received: by 2002:a17:90b:17c8:b0:1f5:31c:4d93 with SMTP id me8-20020a17090b17c800b001f5031c4d93mr35537148pjb.53.1660055221613;
-        Tue, 09 Aug 2022 07:27:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d10-20020a17090a6a4a00b001f021cdd73dsm12650487pjm.10.2022.08.09.07.26.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 07:27:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <158a15a8-8a70-abfc-fc69-c99e4a15861e@roeck-us.net>
-Date:   Tue, 9 Aug 2022 07:26:58 -0700
+        Tue, 9 Aug 2022 10:31:29 -0400
+Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00072.outbound.protection.outlook.com [40.107.0.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CC117ABF;
+        Tue,  9 Aug 2022 07:31:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U5vJiPjUUIyPR6jQ93/SPTAHMmOVAIaOvkqUlUx6YYxZscURiXcaPpoTGq5e44ekHRU8yJC+PB4HjqsjcoA9MpcvFEZmNGxy6azhymAIx28SS2xYpe0MTa4mfLmzXEqemjSfUb48nAK/jforiLV14EOHKCKG83JskwRCPBj5Oz8MoNfJvaBCC0QTh695oxpKn0sLg5a3EU+DOrWX1suwwatN/ZXa3O0ih68BPrIkcsvSnyLg/XizYjcaWJAXWYNAUblQBIr7uVQoz4cgVb/8z1q+OuGDRIxzrFtnRiiHimljEs2B9zHR1Ir8l/dZQDqmJf4lphkumc0axbrzDkEYoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wQvc2ULQJcVGYro4aQFHNI8CzrreUaMcRrqg6lorug0=;
+ b=Kk4qS36LNocA8WDMHnM0mR6GxulTXpJMnPQ70gdYaZjCyOk8lqHKQCpbjBkFUVZ2/w3zdfGco7qkB1E0uhFYYNkQhgeXKPywa1H1AdkByaKb91aHb4wk7FTeDsxttKWGjuvOw+DvsPVzxxTDyYu+wonvh9zmDClPwHZMxylKk/yLPL7bBhbbMb3Y4RbfPbS73qQ4kAzVvpGCXJIlcIbYJsStnV6Sy1F9n3ea8LfJXbRaVQADkFckeiEP69lCtUJT5AcgCqyiChmbzu2MGYsSYzrp0sKmevQXy1tJlL0F0QqynLs7ToGspxbhcWhXTRSnizcLlhiRwXlyj6llVtqYJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wQvc2ULQJcVGYro4aQFHNI8CzrreUaMcRrqg6lorug0=;
+ b=XDH3wrevLrrYRUehM8OXkTFC+hwj1UAgK/Q/x3N0P0FiM/Dum54VexjVFRo/KO6oQKFSiH1u/Hp8o1bf7KWjH20vpSgAZ4ut7EYt6gwaUvM8sZFLP8Bi3VnUVl1BoOgjkC4YGJaC3IRK5BUesdHnqj+NSo/TT8NNb7kBlNtx9EQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8274.eurprd04.prod.outlook.com (2603:10a6:20b:3e8::23)
+ by DB7PR04MB5226.eurprd04.prod.outlook.com (2603:10a6:10:21::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.20; Tue, 9 Aug
+ 2022 14:31:25 +0000
+Received: from AM9PR04MB8274.eurprd04.prod.outlook.com
+ ([fe80::747c:397f:a003:dbca]) by AM9PR04MB8274.eurprd04.prod.outlook.com
+ ([fe80::747c:397f:a003:dbca%5]) with mapi id 15.20.5525.010; Tue, 9 Aug 2022
+ 14:31:25 +0000
+From:   Shenwei Wang <shenwei.wang@nxp.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        imx@lists.linux.dev, Shenwei Wang <shenwei.wang@nxp.com>
+Subject: [PATCH v2 0/3] Add IMX8 SCU GPIO support
+Date:   Tue,  9 Aug 2022 09:31:02 -0500
+Message-Id: <20220809143105.17967-1-shenwei.wang@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0147.namprd03.prod.outlook.com
+ (2603:10b6:a03:33c::32) To AM9PR04MB8274.eurprd04.prod.outlook.com
+ (2603:10a6:20b:3e8::23)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 4/4] thermal/of: Fix free after use in
- thermal_of_unregister()
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     michael@walle.cc, dan.carpenter@oracle.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <20220809085629.509116-1-daniel.lezcano@linaro.org>
- <20220809085629.509116-4-daniel.lezcano@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220809085629.509116-4-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1138401b-19f8-476e-eafb-08da7a13d6d3
+X-MS-TrafficTypeDiagnostic: DB7PR04MB5226:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GpXwdkigEkjXL+MQVtoT+Pwi9KjRtRJgoDBWZ5ogHwPnHaeL1vKzsTRIy8j7NDCBSZW4o41emwhrIyAfQwI3Lf/MXJKnNthKk9Sb+isOIA8qfTV9TEJvDCbcNC+koODxPZC67quKixC+hwZGZRHbQm3yQfk/v67Cv1T5qra+PiKXzZqG1XRbu6X8lAk189XxU1efhSTMcB7rd3sCsRJiTo9dc3a+Y6d+UrX6DkYozrEDxWUp2Q69nc4uGp1NwWU/YSbSq0IVFw8PnaMEAwj4vETDV03zszw2TXpt8OslhVSLK9ymuJN62yjfblsEvLhIttmhHlZyLUqHGfeLO2xsrnZaWH1x1HIAb1GR7AePbkZif7MhjCsAksdzlCHDYkXu5a4CKMKxRNny93jZyipVyIKNOF/+2cqU/M8Hhy5tPY6Lm2y2qqBkuvPjRdquBSVmKzuGGaWEWJlHbh0xLkmdSLDPzYnPVnXdrVOwKimFkdsLiz1A0wstauzQPSDJPi2HpU7CRM0od2NRXOQeQMYNyCznwns031mKwY/WkSUFHgIJ4pLO8lz2yu83QmcMQD1WMh6ghjbFZqWzPi+8OhCIYlEh96vaQUo3/ImkFNTdVd3XvkBJwvox0aCVNHutSWH2IXGXlj+aaCWMbZ9dKnwfyeJVKOPDPztgRb2EZyuz7XgPtPMsFoAmsmTan2BFB8U1h6NIbo+oDg472cysJvpoDfvO0CR+dDXnihNZt14t97Aq0/mCENPfbEGRQAec27fzK7pFbeOAhMfnVtryM+kNgZXG7LoTXHnKFL9UdIPs+Fw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8274.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(39860400002)(376002)(346002)(6666004)(55236004)(2906002)(52116002)(26005)(6512007)(7416002)(6506007)(44832011)(8936002)(6486002)(41300700001)(478600001)(36756003)(86362001)(1076003)(2616005)(186003)(83380400001)(66946007)(5660300002)(6636002)(316002)(66556008)(66476007)(38350700002)(4326008)(8676002)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SBASzTJH/niyHkUEBbNdlCpfQzBkOrEy8rmKEa2J0MCpVKXE3u/aYRLZJMPl?=
+ =?us-ascii?Q?gDpGjNrCt/gZkd001XRBX/2xOuq5ZnX328XazdX5KToJIf9rErPkNo5OejnN?=
+ =?us-ascii?Q?fh703wDM7g4vcgW42C/+sQ021vGl4pCd9PeKsGnwAjiiRFNLryoCspsFvpYa?=
+ =?us-ascii?Q?DEC5LhLHc637JwWkTwpa4qGrb5fd3/leUBo/tGqAeHQMHI3ca2AjZHfujBcF?=
+ =?us-ascii?Q?TmikL5qVHyWlj1o6gcBJDPT16UmzTn+HnGxTE8SPoDv9NxD3SWH3+rrnZu0B?=
+ =?us-ascii?Q?9pNU9Atq0YIR49w4Ie5Lj44ABKpG25yu1urlgiID5MwqZ/Pvy74y7F5dacO8?=
+ =?us-ascii?Q?6rkyIAu5R/8MRkCtMYWFLJBOupM2QUr51qksIL5UfVs7H6hjwZyHYIUY8ufV?=
+ =?us-ascii?Q?RcaFVqph38Vw/WZWx5lfCxflappMJaDiOoiC3kbu0tac6roYr8fTtx7C0PDs?=
+ =?us-ascii?Q?tv71UOj0TgdxOg4htcGx2s5kqL/zRyvwiCit3GC1fo1aiLDJ+5qBFhyfGsnO?=
+ =?us-ascii?Q?UT09YNh8xfQe+lTI8tDV3VxXSqUsV2pcOB6jPnhtNJbVcZ2kvaVpVA0jym/t?=
+ =?us-ascii?Q?oZawcTcTM/MOmdT1O1Rl68b4yPxJPLu/T3YWzDQUYlga2xjE0BJYhQf+vxET?=
+ =?us-ascii?Q?ZqNN6MPN5kYWxKx4jzBDE+b3Rn+kFGjBEobu92wXPmxJX+voRPtxhUx9MFUl?=
+ =?us-ascii?Q?uLNbPZJwCLm2QJzcoXTqjXDx39zdl4Fe12ijtut3vvrcsVMJdU9UELkLyKTF?=
+ =?us-ascii?Q?XSolZcodcNXu8MGwprEAkpdbyZRXvPzISAl7YUD7t4B/w9ypHASwkmecZMxc?=
+ =?us-ascii?Q?9l0UsEc0D/IXMtaVH1C8NPAv+9bIv4Xyll2qvoE5EpsStPxsoJCY6BWdmTZ0?=
+ =?us-ascii?Q?VbASmaTU9oVHYumoFNy1Q2XYAXU1wr/Kn9UvF9y7HCQzQK+abUcNlM7mK+ce?=
+ =?us-ascii?Q?LZZNYftvBoUj7EaP55Y8eYgzuY6aNdi2htqluiF0ybYQ4HbImDmhOf4etaxd?=
+ =?us-ascii?Q?5R02uAa+KXUOlZSeXrQSsWqsjjugk9aptT0xq6qrDBIllN1/TPR5H5fpmi9s?=
+ =?us-ascii?Q?UIatoKG/XdSTfTcqkZCicYubtz0V3DUWHL2QCb20ZbruBqKFlfmeJ/ylewrQ?=
+ =?us-ascii?Q?BvTEnk2tqwPDxqckTfgGnmTn25qn/CJ/2OWHGktq6htn95m0S+ZIEDPOxXPz?=
+ =?us-ascii?Q?Qc3aGPo8xeXRHF1HKCTz68GgiHnoA7smQCeEjeBoYIkzJ148E76PnGL57kC/?=
+ =?us-ascii?Q?a5NglL3x2LMkM5f+XRFbwq/KNuQbfs4RiD+aLPhXPKi9n34v56tn3VTTv28V?=
+ =?us-ascii?Q?Fyu3VXCtDiqJBVDjsjKJ6weC+r/VEcMiFn1Dt8kD9m7SXbYtoZ83H8Mn2YHm?=
+ =?us-ascii?Q?mSzPY1ha3BU5KggMVTEZogWZoBo1ij3e8/Yxzh2Eq2vxOQK7lRyB7cdSGmfG?=
+ =?us-ascii?Q?K5Q8A8QWIKlP+uYZ/ALcWnp/6jty44QJ6kKBLd+1EhOT62ZQlpDMhEZiLdc7?=
+ =?us-ascii?Q?vQvTJ/wJ3ECmezDUeXO/AV7MkIOz1kBV+B/f7w1xAx6uvCMJv1Z/9PWVbWmG?=
+ =?us-ascii?Q?c5ecLfUM0yHBr/K5oG0oS5BIc00+53OA2MNqWEjv?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1138401b-19f8-476e-eafb-08da7a13d6d3
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8274.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 14:31:25.5881
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: v0L/Xzjj0ernuPV08ye/LjG1RNZAfS9VcvjG4VK6S3sv38zjGL6i7NgO0fx29/Y1DrNKKSbo925ONrTmHd2+6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5226
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 01:56, Daniel Lezcano wrote:
-> The thermal zone is freed after being unregistered. The release method
-> devm_thermal_zone_device_register() calls
->    -> thermal_of_zone_device_unregister()
-> 
-> This one calls thermal_zone_device_unregister() which frees the
-> thermal zone. However, thermal_of_zone_device_unregister() does access
-> this freed pointer to free different resources allocated by the
-> thermal_of framework which is invalid.
-> 
-> It results in a kernel panic:
-> 
-> [    1.915140] thermal_sys: Failed to find thermal zone for tmu id=2
-> [    1.921279] qoriq_thermal 1f80000.tmu: Failed to register sensors
-> [    1.927395] qoriq_thermal: probe of 1f80000.tmu failed with error -22
-> [    1.934189] Unable to handle kernel paging request at virtual address 01adadadadadad88
-> [    1.942146] Mem abort info:
-> [    1.944948]   ESR = 0x0000000096000004
-> [    1.948708]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [    1.954042]   SET = 0, FnV = 0
-> [    1.957107]   EA = 0, S1PTW = 0
-> [    1.960253]   FSC = 0x04: level 0 translation fault
-> [    1.965147] Data abort info:
-> [    1.968030]   ISV = 0, ISS = 0x00000004
-> [    1.971878]   CM = 0, WnR = 0
-> [    1.974852] [01adadadadadad88] address between user and kernel address ranges
-> [    1.982016] Internal error: Oops: 96000004 [#1] SMP
-> [    1.986907] Modules linked in:
-> [    1.989969] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-next-20220808-00080-g1c46f44502e0 #1697
-> [    1.999135] Hardware name: Kontron KBox A-230-LS (DT)
-> [    2.004199] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    2.011185] pc : kfree+0x5c/0x3c0
-> [    2.014516] lr : devm_thermal_of_zone_release+0x38/0x60
-> [    2.019761] sp : ffff80000a22bad0
-> [    2.023081] x29: ffff80000a22bad0 x28: 0000000000000000 x27: ffff800009960464
-> [    2.030245] x26: ffff800009a16960 x25: 0000000000000006 x24: ffff800009f09a40
-> [    2.037407] x23: ffff800009ab9008 x22: ffff800008d0eea8 x21: 01adadadadadad80
-> [    2.044569] x20: 6b6b6b6b6b6b6b6b x19: ffff00200232b800 x18: 00000000fffffffb
-> [    2.051731] x17: ffff800008d0eea0 x16: ffff800008d07d44 x15: ffff800008d0d154
-> [    2.056647] usb 1-1: new high-speed USB device number 2 using xhci-hcd
-> [    2.058893] x14: ffff800008d0cddc x13: ffff8000088d1c2c x12: ffff8000088d5034
-> [    2.072597] x11: ffff8000088d46d4 x10: 0000000000000000 x9 : ffff800008d0eea8
-> [    2.079759] x8 : ffff002000b1a158 x7 : bbbbbbbbbbbbbbbb x6 : ffff80000a0f53b8
-> [    2.086921] x5 : ffff80000a22b960 x4 : 0000000000000000 x3 : 0000000000000000
-> [    2.094082] x2 : fffffc0000000000 x1 : ffff002000838040 x0 : 01adb1adadadad80
-> [    2.101244] Call trace:
-> [    2.103692]  kfree+0x5c/0x3c0
-> [    2.106666]  devm_thermal_of_zone_release+0x38/0x60
-> [    2.111561]  release_nodes+0x64/0xd0
-> [    2.115146]  devres_release_all+0xbc/0x350
-> [    2.119253]  device_unbind_cleanup+0x20/0x70
-> [    2.123536]  really_probe+0x1a0/0x2e4
-> [    2.127208]  __driver_probe_device+0x80/0xec
-> [    2.131490]  driver_probe_device+0x44/0x130
-> [    2.135685]  __driver_attach+0x104/0x1b4
-> [    2.139619]  bus_for_each_dev+0x7c/0xe0
-> [    2.143465]  driver_attach+0x30/0x40
-> [    2.147048]  bus_add_driver+0x160/0x210
-> [    2.150894]  driver_register+0x84/0x140
-> [    2.154741]  __platform_driver_register+0x34/0x40
-> [    2.159461]  qoriq_tmu_init+0x28/0x34
-> [    2.163133]  do_one_initcall+0x50/0x250
-> [    2.166979]  kernel_init_freeable+0x278/0x31c
-> [    2.171349]  kernel_init+0x30/0x140
-> [    2.174847]  ret_from_fork+0x10/0x20
-> [    2.178433] Code: b25657e2 d34cfc00 d37ae400 8b020015 (f94006a1)
-> [    2.184546] ---[ end trace 0000000000000000 ]---
-> 
-> Store the allocated resource pointers before the thermal zone is free
-> and use them to release the resource after unregistering the thermal
-> zone.
-> 
-> Reported-by: Michael Walle <michael@walle.cc>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Tested-by: Michael Walle <michael@walle.cc>
+The system controller (SCU) is the central unit to manage the resources
+on i.MX8 platforms. The SCU firmware provides a set of APIs to access
+the GPIO PINs on the SCU domain.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+This patch series implements the standard GPIO driver over the SCU
+firmware APIs, so that the GPIOs on the SCU domain could be accessed
+like a local GPIO PINs.
 
-> ---
->   drivers/thermal/thermal_of.c | 10 +++++++---
->   1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 3effc729be4b..fd2fb84bf246 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -596,11 +596,15 @@ static int thermal_of_unbind(struct thermal_zone_device *tz,
->    */
->   void thermal_of_zone_unregister(struct thermal_zone_device *tz)
->   {
-> +	struct thermal_trip *trips = tz->trips;
-> +	struct thermal_zone_params *tzp = tz->tzp;
-> +	struct thermal_zone_device_ops *ops = tz->ops;
-> +
->   	thermal_zone_device_disable(tz);
->   	thermal_zone_device_unregister(tz);
-> -	kfree(tz->trips);
-> -	kfree(tz->tzp);
-> -	kfree(tz->ops);
-> +	kfree(trips);
-> +	kfree(tzp);
-> +	kfree(ops);
->   }
->   EXPORT_SYMBOL_GPL(thermal_of_zone_unregister);
->   
+Changes in V2:
+ - move the driver into the gpio directory per Krzysztof's feedback
+ - change the subnode description in file fsl,scu.yaml
+ - fix the dt_binding_check error
+
+Shenwei Wang (3):
+  dt-bindings: gpio: Add imx-scu gpio driver bindings
+  dt-bindings: firmware: imx: Add imx-scu gpio node
+  firmware: imx: add imx-scu GPIO driver
+
+ .../devicetree/bindings/firmware/fsl,scu.yaml |   5 +
+ .../bindings/gpio/fsl,imx8-scu-gpio.yaml      |  39 +++++
+ drivers/gpio/Kconfig                          |   4 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-imx-scu.c                   | 139 ++++++++++++++++++
+ 5 files changed, 188 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/gpio/fsl,imx8-scu-gpio.yaml
+ create mode 100644 drivers/gpio/gpio-imx-scu.c
+
+--
+2.25.1
 

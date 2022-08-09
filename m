@@ -2,105 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D65058E12D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C931258E132
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237907AbiHIUek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 16:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S236861AbiHIUgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 16:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234121AbiHIUeh (ORCPT
+        with ESMTP id S234285AbiHIUgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 16:34:37 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99E45F5A;
-        Tue,  9 Aug 2022 13:34:36 -0700 (PDT)
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oLVvr-000Dzr-DD; Tue, 09 Aug 2022 22:34:31 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oLVvr-000FAz-5k; Tue, 09 Aug 2022 22:34:31 +0200
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Fix vmtest.sh getopts
- optstring
-To:     =?UTF-8?Q?Daniel_M=c3=bcller?= <deso@posteo.net>,
-        Daniel Xu <dxu@dxuuu.xyz>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1660064925.git.dxu@dxuuu.xyz>
- <0f93b56198328b6b4da7b4cf4662d05c3edb5fd2.1660064925.git.dxu@dxuuu.xyz>
- <20220809181845.bkmrgogdgd3divfj@muellerd-fedora-PC2BDTX9>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <8bb12b0c-8581-94eb-2852-00586a5d5092@iogearbox.net>
-Date:   Tue, 9 Aug 2022 22:34:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 9 Aug 2022 16:36:11 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66805FD22
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 13:36:08 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id i12-20020a056e021d0c00b002df2d676974so9227492ila.5
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:36:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=Pg56kAYpQfG56aZiuYp7YP/gqknD1IM9tckOCxj0xcQ=;
+        b=oJ2lFQCAFirHTGRfZWrHBVJtSjarwsmnX3br9+R9c+WjsSJSdCAY5fjYhSLBWxUpzt
+         kbU/vWB12tW+7GrNpf1RQj29UoKya+LnK+XbplBfVN+qHIrR7IvTPgafc74VYfxpld6N
+         715NtKR9raoTFbCgstY5yrbqw5sGr5eqwuMyTnnMpQvvtEJDRMYydcEJCf3TGCve7xWv
+         tUXzbPGra989Xx8V0CWm/7MAXPRJ0oo7eqPvjxfLMIRv536QYb6flRvFAsTETbkeQqZK
+         tDV/ShvGw86cSR5NSHWFzJkvU14gFGg53sq2dHQMZRBQYrk3mISaOhSsXMb+oFRfNhcY
+         zC0Q==
+X-Gm-Message-State: ACgBeo09OM/jXUoM1NrZtruTI/FQYP3dnR8XK39VEt8p7tjaAP1h+VnN
+        +doSBg8Sg3YiPCQevK1Vv0QLtmisgDBOQj4I0j+ZiXvItzW/
+X-Google-Smtp-Source: AA6agR6PH1Ps9ZjWUANlwj1Lw7WNbFBJEqH2QjBf59vYRVkjhyrk8ZWnzmcpuKDNv+4ULjUHdNLSWsuMbJs2C/Bo5/KwWvSnVz9t
 MIME-Version: 1.0
-In-Reply-To: <20220809181845.bkmrgogdgd3divfj@muellerd-fedora-PC2BDTX9>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26622/Tue Aug  9 09:53:52 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:2147:b0:2de:f6e3:d970 with SMTP id
+ d7-20020a056e02214700b002def6e3d970mr11183980ilv.163.1660077367653; Tue, 09
+ Aug 2022 13:36:07 -0700 (PDT)
+Date:   Tue, 09 Aug 2022 13:36:07 -0700
+In-Reply-To: <20220809115352.2505-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cc7ce805e5d4e158@google.com>
+Subject: Re: [syzbot] WARNING in blk_mq_release
+From:   syzbot <syzbot+31c9594f6e43b9289b25@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 8:18 PM, Daniel Müller wrote:
-> On Tue, Aug 09, 2022 at 11:11:10AM -0600, Daniel Xu wrote:
->> Before, you could see the following errors:
->>
->> ```
->> $ ./vmtest.sh -j
->> ./vmtest.sh: option requires an argument -- j
->> ./vmtest.sh: line 357: OPTARG: unbound variable
->>
->> $ ./vmtest.sh -z
->> ./vmtest.sh: illegal option -- z
->> ./vmtest.sh: line 357: OPTARG: unbound variable
->> ```
->>
->> Fix by adding ':' as first character of optstring. Reason is that
->> getopts requires ':' as the first character for OPTARG to be set in the
->> `?` and `:` error cases.
->>
->> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
->> ---
->>   tools/testing/selftests/bpf/vmtest.sh | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
->> index 976ef7585b33..a29aa05ebb3e 100755
->> --- a/tools/testing/selftests/bpf/vmtest.sh
->> +++ b/tools/testing/selftests/bpf/vmtest.sh
->> @@ -333,7 +333,7 @@ main()
->>   	local exit_command="poweroff -f"
->>   	local debug_shell="no"
->>   
->> -	while getopts 'hskid:j:' opt; do
->> +	while getopts ':hskid:j:' opt; do
->>   		case ${opt} in
->>   		i)
->>   			update_image="yes"
-> 
-> I tested with this change and it worked fine for me. One thing to consider
-> pointing out more clearly in the description is that ':' as the first character
-> of the optstring switches getopts to silent mode. The desire to run in this mode
-> seems to have been there all along, as the script takes care of reporting
-> errors.
+Hello,
 
-I've added this description to the commit message as well for future reference
-while applying. Thanks everyone!
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> Acked-by: Daniel Müller <deso@posteo.net>
-> 
+Reported-and-tested-by: syzbot+31c9594f6e43b9289b25@syzkaller.appspotmail.com
 
+Tested on:
+
+commit:         200e340f Merge tag 'pull-work.dcache' of git://git.ker..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=11dbd371080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
+dashboard link: https://syzkaller.appspot.com/bug?extid=31c9594f6e43b9289b25
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14835cd1080000
+
+Note: testing is done by a robot and is best-effort only.

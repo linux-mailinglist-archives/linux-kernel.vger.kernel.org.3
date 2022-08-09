@@ -2,154 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BE958E3EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161DE58E3F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiHIX5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 19:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S229920AbiHIX5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 19:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiHIX4w (ORCPT
+        with ESMTP id S229869AbiHIX5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 19:56:52 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2098.outbound.protection.outlook.com [40.107.114.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA0680498
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:56:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LYjjJ23IxMtcKUrhK0OSXNQpbzOsudzUAq21urcsGMJQB9D7ITDwuqr2aAAJfaBwq5Nye9WBIK6roT2fYrJIr+aPQVdzMKbELoYSNq2sInRlvtGVj+rB0WxMbUuxgK5oHr8RRWqVYUCISVVY7u1Is2UTlIkHM1eNpxXPlwwyCsqWc98rMWtTUdBg0JW9paVHWAKytc/T3ckHZo/Q1ZPEk47/Jz1ufpgw+BYNEadFZqN67jwRfsNeCBXUDrl0dAsIbgqfnb3wGi35a/meR2EGm7xZwAY0SMK0NzkVsvAR83khZerh2FG0DUIMQcy862TzQg8J2K/aFWlKk/FqH4N7zQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rOosBtrXDEc2hnMY7h6BVqNCPWGQebK783p24L28IcA=;
- b=g3ptG/QzCo60fY5oAr5dFtEt6nYN9MDlqTJ9iCqr5dKzAoc6vNJ8PDQa5nCnV95heGqyKce3hy8OHJZk0b4Cggl2XZP9ix7KPp/BnmBH4OE8nWuPGeSeVp8Tay5PZ16bfzS1CHs2X0ZHfSdffMHv9aL+uwblxANcqB1wnDOLdoG5u/B35rOWuF0HpA60vUI3+zlAi1sKJXgK7k05yQbZwqN/41U4hXnEoAgJMNFQw6r1kZEU2Pl35xBILigfiU6sXS/+ddJuyvJTzE3yTeRblyVzZZEerypzlcvkjjPbvy+ntePW5Ld5cO35aWoNCPFVgJb2MygBJ2QL87hwFLiAyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rOosBtrXDEc2hnMY7h6BVqNCPWGQebK783p24L28IcA=;
- b=oLGAHhqxFyaDW2npj3+hwgru7AGBfDD2NHSqCc3H0r6bO+PqHHS7ZRrMEZ8Rag10wmFfpRmVN4ehYOe+6Vb6t7W/i4+lYjoVQ2Cmym2L1TkrSIJ9FqinOy2l4qZQk6wTa8UM9d7yzkImasz6AySTdzwdM8F96K8+KZPG2EtKdKE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com (2603:1096:604:194::10)
- by OSAPR01MB3905.jpnprd01.prod.outlook.com (2603:1096:604:5f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Tue, 9 Aug
- 2022 23:56:48 +0000
-Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com
- ([fe80::cf2:7a63:ffc5:5cfb]) by OS3PR01MB8426.jpnprd01.prod.outlook.com
- ([fe80::cf2:7a63:ffc5:5cfb%4]) with mapi id 15.20.5504.020; Tue, 9 Aug 2022
- 23:56:48 +0000
-Message-ID: <874jylots1.wl-kuninori.morimoto.gx@renesas.com>
-From:   Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Subject: [PATCH] ftrace: makes ops_references_rec() inline
-User-Agent: Wanderlust/2.15.9 Emacs/26.3 Mule/6.0
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Song Liu <song@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset=US-ASCII
-Date:   Tue, 9 Aug 2022 23:56:48 +0000
-X-ClientProxiedBy: TYWPR01CA0051.jpnprd01.prod.outlook.com
- (2603:1096:400:17f::7) To OS3PR01MB8426.jpnprd01.prod.outlook.com
- (2603:1096:604:194::10)
+        Tue, 9 Aug 2022 19:57:44 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB58380487
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:57:42 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id by6so6150005ljb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 16:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=ZbqTbaXWd/Bj5BMjd3dqX6jTh0Tp2n0ayotMyOw0NOs=;
+        b=pZyKrLhPvmleL69wqPqzryGUpBIZ+9IqLPQc896uhVbmWYsVj/54Sok/OUij48RenF
+         PymqGYujgef9tO++QpzqfCBFhPvQSrWUZmskgm3SA82+LEWTwNgXy8ei/YVAkMK6hlDB
+         DzfVKUcUI6DdCH/3dV1VQlgha+f5IPMiLJlGCTyifxOiShj6X5QVXOzodBlXDNgUiZiH
+         XOL8nI7TdqQFcS5gyzMQ4AtAXf1u1XB5K5vjZTKgTsN7LrKHlLMEEpkdoFYiZkm66gv1
+         JwXKGJsWvQnIvVOfQ0Sx85zgQgS3a7nXXDxAUuW3xfkHQvDYP9OIF84HCjlXFd5sffKC
+         IeBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc;
+        bh=ZbqTbaXWd/Bj5BMjd3dqX6jTh0Tp2n0ayotMyOw0NOs=;
+        b=IFsX0uz+5GUkkrC1Jo87KHDQ+q2A/Sgg7JJkAFInPEDHwhxzKawwT5rpS4fhe8R3Eg
+         8m8N3GWYN6ahZS+AIujVUnppLoMOBc2jeae9Kgycfuppp3Lm23tWQ0gq1ZE3ZiIZ1lUT
+         99m0pgAeYdH4T4Oh5oDxbH99LNX0afSOySJ/ZYSKJUxfqYIOtxyJTjJZ1xLZSY6xPVHy
+         m21PcT5obQLkQiEEGd0vMPvJsUVwwqcCiGNjfXTo39dYkBtUkXMhR8Wpd1IDWtKQzcdr
+         L0FLYvCigFlmwN0n9GjqN528WptmSgHpsnLHn4fK9ULj+XBxH3kdkQ7oXdW+1YYQ+QYv
+         hB5g==
+X-Gm-Message-State: ACgBeo1aPgOF+Vtwg07vC9CcRi3QpnbbX04gWZuyvibxuXKKJqc77t2n
+        BJ4S7Vd9vGPawbearr2Qm877Cg==
+X-Google-Smtp-Source: AA6agR4gSdzegAdFtDDPFuCu0UTkWoMQ1IVFDR0kvz4aVgObkpg1QuQHXTxC5gb+kaar6OrNVE2IPA==
+X-Received: by 2002:a2e:b750:0:b0:25e:71da:5baf with SMTP id k16-20020a2eb750000000b0025e71da5bafmr8268833ljo.166.1660089461060;
+        Tue, 09 Aug 2022 16:57:41 -0700 (PDT)
+Received: from ?IPv6:2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f? ([2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f])
+        by smtp.gmail.com with ESMTPSA id c5-20020a056512324500b0048abf3a550asm125471lfr.224.2022.08.09.16.57.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 16:57:40 -0700 (PDT)
+Subject: Re: [PATCH v2 3/5] KVM: irqfd: Postpone resamplefd notify for oneshot
+ interrupts
+To:     eric.auger@redhat.com, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Rong L Liu <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
+        Dmitry Torokhov <dtor@google.com>,
+        Marc Zyngier <maz@kernel.org>
+References: <20220805193919.1470653-1-dmy@semihalf.com>
+ <20220805193919.1470653-4-dmy@semihalf.com>
+ <56ab2bc2-378b-3ece-2d45-e0f484087aa7@redhat.com>
+From:   Dmytro Maluka <dmy@semihalf.com>
+Message-ID: <6ecd1bcc-0f5d-8183-615a-037a9670e136@semihalf.com>
+Date:   Wed, 10 Aug 2022 01:57:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 18640c26-5f31-449b-3d56-08da7a62d292
-X-MS-TrafficTypeDiagnostic: OSAPR01MB3905:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7OnaWBHa8OdC8+zSaYZSxlaZjGg5HSZ3kuqiI8N6czHn2qT7HoHyPWVmPqqL29IhhM4FfHLWNmpjduaheBvE140NRbRzbyeADUANpSY6Eo2u0EFel4erF13eIKtveZXDvstjcTOP4D39F1J3qKHRnDc68yOrD1SsSj6g7PvLjm50N3AqGCcbS31Bk8e0JRUtZSXM586FvKfxNbFV/O40G7IZWtuUs9lKaYLTw2x3Wwr8oF9BfW05ySXP6UXEKmPrNVu4NAyaaVsmzASRKxAb44PBtMUePYzUXdmF2cRfZRneDj48AHpzhsnZ0rB5VRsjUmHSgak/zqhilNNjSE4tU/M212rcwHW4so0JG5zoSUo4UBCwyig6+T4N9GpfxtdzJBZM1ZVtRPO4agO9/+52ZcE7/sppC18yzYydszc5qDXYPjhsG82ktkrf2biVoGiQFnhJxzt46Mec46gTMVmzmSAhujvayQ7p1KwD7vjwNs3BfE+ZwWnvEOGWLA6+WzTckhBKSgHF9TVNHbH5wF5h+ql39W+PIA1w8h2xcPZedytJRqgjALimq401O2R6F3s6D2gBumq7Clk/d6NRrJOegTCEK6xxnx1VeQnoS4O6AK0pp8r4dw8jXH3WQbajCyRf+6ZmwOuz6onF5GiJAOXcCWW4B+cbUVcKzgRvZ2MzVkAnrrIzcPQTmaUPWlC2eU0ozz1G0SkYj/n57ZNcj1RWDlGMkwrRO8ce3ryqbNFAApjjaO+PwvXtD1XPw79BcN5gNHTH3msuu2tC4jjUdmpAYYwCmJwHcVUh4avplUTDBGQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8426.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(376002)(396003)(366004)(346002)(6486002)(41300700001)(478600001)(2906002)(86362001)(36756003)(110136005)(316002)(38100700002)(6512007)(38350700002)(2616005)(83380400001)(6506007)(52116002)(26005)(186003)(8676002)(66476007)(8936002)(66556008)(66946007)(4326008)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?USpznFp518QyG3w/n5Elza336/2McKeogHC+DhGrlksCHPuLgF8wQWdTQKdO?=
- =?us-ascii?Q?fRB0ThaA0S2GzejpGNOJ+LeA7GhW/hIBQ1qDXVjYMpbaqujHPHkPq7osZqvZ?=
- =?us-ascii?Q?Fm9Jb7+8HtCGg38B3TprlFykHU9y/kahwtpIRCCUewTtIkpGdfsCk7xAYkM7?=
- =?us-ascii?Q?jIRdipeC95wwXcacSVbykPbrvbsi1B/l9B5xXeZOThX1CekEEpoDWtVa2eAD?=
- =?us-ascii?Q?/QFHOJkgHBC8e2Z8ZNhdhYWkH01rmmYoOegFLyNcuqUlbp7qOJAbUh2J47Y/?=
- =?us-ascii?Q?jUBpbwVLqZpQM4OMRESK/BaA7oEGavE0oaUkMVuzKV/+1aQ4hMxxtJYTUzTd?=
- =?us-ascii?Q?jyPgGMZvhUBmox13zgc/q5kQ1XxHsR8m7JE+FXRS7qdss/O2oKSXJYeUyxH2?=
- =?us-ascii?Q?PtceYE8g1GCaH+amS8fZ5aimrgMxCsZmqHEDTeel7V+XO4Nr9a9KZGlVzRFE?=
- =?us-ascii?Q?j5iVaPwbkj73AXKXFQs9V7ISsyVNGIsxjrKgapG3ajV/zCBzMB5ok6Ywp8BJ?=
- =?us-ascii?Q?XLVrt3WeEbRCP0ymcm59tl3tzHLL/+aE5Kl9seIWkMAuS3WJILimAgVgzW/Y?=
- =?us-ascii?Q?0U2sSOKvhtgjEPOPZAVNmWwqZFJcqdbxwdSoNx8YzUqlZYkXwYtv/4LIehY+?=
- =?us-ascii?Q?tXPRKM6hKn1SKZYTw5lqa6rP3TYxGd4ZscyuyHuDOCRdyI0i6F9sp64NFyVE?=
- =?us-ascii?Q?wS5KOtqFVfpbGQXszaTfq4ML1dlFgY4iQHoKzljJHyPSluHDd4i3aa3QTyAH?=
- =?us-ascii?Q?PgyW46J+bGEpb6ICM4TrzYJozQdSjAhR2coBCoUte308aVKkR2V88W78qgor?=
- =?us-ascii?Q?Ro7lHrXb95QDPL2emD587IKxw2LBdK/8714Wvh2H/0B35j74YH4WFzBrxAxw?=
- =?us-ascii?Q?Q2qdbBHhmzrN7oKW7wDWNa+9y3iAXzFI+j3UxEnBUhF1QTsfV2rwEXiKSHOc?=
- =?us-ascii?Q?dJAPZU+qfXhXh61nCB9prEsu20j3mdx0g0HP6PlGUr4vfISvHnDYjQEYtrH0?=
- =?us-ascii?Q?W9iGNWjvToSFQQFf3+C7Lf103WX9Rc3+6Hk3Gq9KzhNRFDnkhVj3JrVb3MZB?=
- =?us-ascii?Q?qLDRGGTQqfZhRmFD9IvIcaJ6Rq4QXu+hiao5iGJjN+UQ1IISGeAFolgMUJQZ?=
- =?us-ascii?Q?CJnd316kMLjfjk4QNlAGhoAS4EXInavuxx4veQ80OjzehmIQpebq+mmvn2Np?=
- =?us-ascii?Q?F0KNIEWyQ/orRJNuZKICeiCx5Au3EGm+T55NQoaETyaLDl3STNBmu0aItUJQ?=
- =?us-ascii?Q?e7YW41hYEVbeUsPv3v1d671q9lTvhMFszK4umsHOJAnhx88atfhWx3sYNwt/?=
- =?us-ascii?Q?n0bVY7uApianhM205QpDO3J/L182dImPU/dmibkpwUWBZRqrjNJxpDTthF6g?=
- =?us-ascii?Q?I46SuDnxFVn1RjxJhH2deaF5TNe4YQg6/9Au/GiBQIm+ivmDOmrmiUiVBaTa?=
- =?us-ascii?Q?d81Nnkqq2iEJixkjl6kW1+2IKjrhgcP2IpKCHDLZQS3RIUJ1ClRByexDkn4U?=
- =?us-ascii?Q?PSPazB0koaKh4VBz/X7kBFEHspR0knf0zSJhk79WsQ0Dr4q1wV3LFClbw8Uw?=
- =?us-ascii?Q?8Wugm0phFVAdEHJ0uayFwr3pw91GH1g0nfujiOnruL8Q1iuffcMW1VFKHKRc?=
- =?us-ascii?Q?sFupLz4NfVmHzNPmNwWQ+EQ=3D?=
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18640c26-5f31-449b-3d56-08da7a62d292
-X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8426.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 23:56:48.5935
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kWqMYvtXbdjT0Ex5xKmGaADgRzFDDRqlGJa0wBqLFqTvt4kuE/WI6SHWtl+5vO0tsTWkooQkFX2iOnEv0A/QUKqjc06e96mIRT4syvLDk+lw4hclvSIVIRBh9RXeFoEI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB3905
-X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <56ab2bc2-378b-3ece-2d45-e0f484087aa7@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/9/22 10:45 PM, Eric Auger wrote:
+> Hi Dmytro,
+> 
+> On 8/5/22 21:39, Dmytro Maluka wrote:
+>> The existing KVM mechanism for forwarding of level-triggered interrupts
+>> using resample eventfd doesn't work quite correctly in the case of
+>> interrupts that are handled in a Linux guest as oneshot interrupts
+>> (IRQF_ONESHOT). Such an interrupt is acked to the device in its
+>> threaded irq handler, i.e. later than it is acked to the interrupt
+>> controller (EOI at the end of hardirq), not earlier.
+>>
+>> Linux keeps such interrupt masked until its threaded handler finishes,
+>> to prevent the EOI from re-asserting an unacknowledged interrupt.
+>> However, with KVM + vfio (or whatever is listening on the resamplefd)
+>> we don't check that the interrupt is still masked in the guest at the
+>> moment of EOI. Resamplefd is notified regardless, so vfio prematurely
+>> unmasks the host physical IRQ, thus a new (unwanted) physical interrupt
+>> is generated in the host and queued for injection to the guest.
+>>
+>> The fact that the virtual IRQ is still masked doesn't prevent this new
+>> physical IRQ from being propagated to the guest, because:
+>>
+>> 1. It is not guaranteed that the vIRQ will remain masked by the time
+>>    when vfio signals the trigger eventfd.
+>> 2. KVM marks this IRQ as pending (e.g. setting its bit in the virtual
+>>    IRR register of IOAPIC on x86), so after the vIRQ is unmasked, this
+>>    new pending interrupt is injected by KVM to the guest anyway.
+>>
+>> There are observed at least 2 user-visible issues caused by those
+>> extra erroneous pending interrupts for oneshot irq in the guest:
+>>
+>> 1. System suspend aborted due to a pending wakeup interrupt from
+>>    ChromeOS EC (drivers/platform/chrome/cros_ec.c).
+>> 2. Annoying "invalid report id data" errors from ELAN0000 touchpad
+>>    (drivers/input/mouse/elan_i2c_core.c), flooding the guest dmesg
+>>    every time the touchpad is touched.
+>>
+>> This patch fixes the issue on x86 by checking if the interrupt is
+>> unmasked when we receive irq ack (EOI) and, in case if it's masked,
+>> postponing resamplefd notify until the guest unmasks it.
+>>
+>> It doesn't fix the issue for other archs yet, since it relies on KVM
+>> irq mask notifiers functionality which currently works only on x86.
+>> On other archs we can register mask notifiers but they are never called.
+>> So on other archs resampler->masked is always false, so the behavior is
+>> the same as before this patch.
+>>
+>> Link: https://lore.kernel.org/kvm/31420943-8c5f-125c-a5ee-d2fde2700083@semihalf.com/
+>> Suggested-by: Sean Christopherson <seanjc@google.com>
+>> Signed-off-by: Dmytro Maluka <dmy@semihalf.com>
+>> ---
+>>  include/linux/kvm_irqfd.h | 14 ++++++++++
+>>  virt/kvm/eventfd.c        | 56 +++++++++++++++++++++++++++++++++++----
+>>  2 files changed, 65 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/include/linux/kvm_irqfd.h b/include/linux/kvm_irqfd.h
+>> index dac047abdba7..01754a1abb9e 100644
+>> --- a/include/linux/kvm_irqfd.h
+>> +++ b/include/linux/kvm_irqfd.h
+>> @@ -19,6 +19,16 @@
+>>   * resamplefd.  All resamplers on the same gsi are de-asserted
+>>   * together, so we don't need to track the state of each individual
+>>   * user.  We can also therefore share the same irq source ID.
+>> + *
+>> + * A special case is when the interrupt is still masked at the moment
+>> + * an irq ack is received. That likely means that the interrupt has
+>> + * been acknowledged to the interrupt controller but not acknowledged
+>> + * to the device yet, e.g. it might be a Linux guest's threaded
+>> + * oneshot interrupt (IRQF_ONESHOT). In this case notifying through
+>> + * resamplefd is postponed until the guest unmasks the interrupt,
+>> + * which is detected through the irq mask notifier. This prevents
+>> + * erroneous extra interrupts caused by premature re-assert of an
+>> + * unacknowledged interrupt by the resamplefd listener.
+>>   */
+>>  struct kvm_kernel_irqfd_resampler {
+>>  	struct kvm *kvm;
+>> @@ -28,6 +38,10 @@ struct kvm_kernel_irqfd_resampler {
+>>  	 */
+>>  	struct list_head list;
+>>  	struct kvm_irq_ack_notifier notifier;
+>> +	struct kvm_irq_mask_notifier mask_notifier;
+>> +	bool masked;
+>> +	bool pending;
+>> +	spinlock_t lock;
+>>  	/*
+>>  	 * Entry in list of kvm->irqfd.resampler_list.  Use for sharing
+>>  	 * resamplers among irqfds on the same gsi.
+>> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
+>> index 3007d956b626..f98dcce3959c 100644
+>> --- a/virt/kvm/eventfd.c
+>> +++ b/virt/kvm/eventfd.c
+>> @@ -67,6 +67,7 @@ irqfd_resampler_ack(struct kvm_irq_ack_notifier *kian)
+>>  	struct kvm *kvm;
+>>  	struct kvm_kernel_irqfd *irqfd;
+>>  	int idx;
+>> +	bool notify = true;
+>>  
+>>  	resampler = container_of(kian,
+>>  			struct kvm_kernel_irqfd_resampler, notifier);
+>> @@ -75,13 +76,52 @@ irqfd_resampler_ack(struct kvm_irq_ack_notifier *kian)
+>>  	kvm_set_irq(kvm, KVM_IRQFD_RESAMPLE_IRQ_SOURCE_ID,
+>>  		    resampler->notifier.gsi, 0, false);
+>>  
+>> -	idx = srcu_read_lock(&kvm->irq_srcu);
+>> +	spin_lock(&resampler->lock);
+>> +	if (resampler->masked) {
+>> +		notify = false;
+>> +		resampler->pending = true;
+>> +	}
+>> +	spin_unlock(&resampler->lock);
+>> +
+>> +	if (notify) {
+>> +		idx = srcu_read_lock(&kvm->irq_srcu);
+>>  
+>> -	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
+>> -	    srcu_read_lock_held(&kvm->irq_srcu))
+>> -		eventfd_signal(irqfd->resamplefd, 1);
+>> +		list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
+>> +		    srcu_read_lock_held(&kvm->irq_srcu))
+>> +			eventfd_signal(irqfd->resamplefd, 1);
+> nit: you may introduce a helper for above code as the code is duplicated.
 
-commit 53cd885bc5c3e ("ftrace: Allow IPMODIFY and DIRECT ops on the
-same function") removes "inline" from ops_references_rec(),
-thus we will get below error if .config doesn't have CONFIG_MODULES.
+Ack.
 
-  CC      kernel/trace/ftrace.o
-${linux}/kernel/trace/ftrace.c:3149:1: error: 'ops_references_rec' \
-defined but not used [-Werror=unused-function]
- 3149 | ops_references_rec(struct ftrace_ops *ops, struct dyn_ftrace *rec)
-      | ^~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-make[2]: *** [${linux}/scripts/Makefile.build:249: kernel/trace/ftrace.o] error 1
-make[1]: *** [${linux}/scripts/Makefile.build:466: kernel/trace] error 2
-make: *** [/opt/disk_cd/morimoto/linux/Makefile:1843: kernel] error 2
-
-This patch adds "inline" again, and fixes the issue.
-
-Fixes:  53cd885bc5c3e ("ftrace: Allow IPMODIFY and DIRECT ops on the same function")
-CC: Song Liu <song@kernel.org>
-Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
----
- kernel/trace/ftrace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index bc921a3f7ea8..b52782857f97 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -3145,7 +3145,7 @@ ops_references_ip(struct ftrace_ops *ops, unsigned long ip)
-  * If the ops does not trace the current record function, skip it.
-  * If the ops ignores the function via notrace filter, skip it.
-  */
--static bool
-+static inline bool
- ops_references_rec(struct ftrace_ops *ops, struct dyn_ftrace *rec)
- {
- 	return ops_references_ip(ops, rec->ip);
--- 
-2.25.1
-
+>>  
+>> -	srcu_read_unlock(&kvm->irq_srcu, idx);
+>> +		srcu_read_unlock(&kvm->irq_srcu, idx);
+>> +	}
+>> +}
+>> +
+>> +static void irqfd_resampler_mask_notify(struct kvm_irq_mask_notifier *kimn,
+>> +					bool masked)
+>> +{
+>> +	struct kvm_kernel_irqfd_resampler *resampler;
+>> +	struct kvm *kvm;
+>> +	struct kvm_kernel_irqfd *irqfd;
+>> +	int idx;
+>> +	bool notify;
+>> +
+>> +	resampler = container_of(kimn,
+>> +			struct kvm_kernel_irqfd_resampler, mask_notifier);
+>> +	kvm = resampler->kvm;
+>> +
+>> +	spin_lock(&resampler->lock);
+>> +	notify = !masked && resampler->pending;
+>> +	resampler->masked = masked;
+>> +	resampler->pending = false;
+>> +	spin_unlock(&resampler->lock);
+>> +
+>> +	if (notify) {
+>> +		idx = srcu_read_lock(&kvm->irq_srcu);
+>> +
+>> +		list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
+>> +		    srcu_read_lock_held(&kvm->irq_srcu))
+>> +			eventfd_signal(irqfd->resamplefd, 1);
+>> +
+>> +		srcu_read_unlock(&kvm->irq_srcu, idx);
+>> +	}
+>>  }
+>>  
+>>  static void
+>> @@ -98,6 +138,8 @@ irqfd_resampler_shutdown(struct kvm_kernel_irqfd *irqfd)
+>>  	if (list_empty(&resampler->list)) {
+>>  		list_del(&resampler->link);
+>>  		kvm_unregister_irq_ack_notifier(kvm, &resampler->notifier);
+>> +		kvm_unregister_irq_mask_notifier(kvm, resampler->mask_notifier.irq,
+>> +						 &resampler->mask_notifier);
+>>  		kvm_set_irq(kvm, KVM_IRQFD_RESAMPLE_IRQ_SOURCE_ID,
+>>  			    resampler->notifier.gsi, 0, false);
+>>  		kfree(resampler);
+>> @@ -367,9 +409,13 @@ kvm_irqfd_assign(struct kvm *kvm, struct kvm_irqfd *args)
+>>  			INIT_LIST_HEAD(&resampler->list);
+>>  			resampler->notifier.gsi = irqfd->gsi;
+>>  			resampler->notifier.irq_acked = irqfd_resampler_ack;
+>> +			resampler->mask_notifier.func = irqfd_resampler_mask_notify;
+>> +			spin_lock_init(&resampler->lock);
+>>  			INIT_LIST_HEAD(&resampler->link);
+>>  
+>>  			list_add(&resampler->link, &kvm->irqfds.resampler_list);
+>> +			kvm_register_and_fire_irq_mask_notifier(kvm, irqfd->gsi,
+>> +								&resampler->mask_notifier);
+>>  			kvm_register_irq_ack_notifier(kvm,
+>>  						      &resampler->notifier);
+>>  			irqfd->resampler = resampler;
+> Adding Marc in CC
+> 
+> Thanks
+> 
+> Eric
+> 

@@ -2,179 +2,402 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870F658D234
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 05:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A3A58D236
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 05:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiHIDBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 23:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S231245AbiHIDEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 23:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbiHIDAj (ORCPT
+        with ESMTP id S229600AbiHIDEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 23:00:39 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72080318;
-        Mon,  8 Aug 2022 20:00:36 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.12.77.33])
-        by mail-app4 (Coremail) with SMTP id cS_KCgBHSMyuzfFizMKFAg--.41560S4;
-        Tue, 09 Aug 2022 10:59:59 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH v1] idb: Add lock to avoid data race
-Date:   Tue,  9 Aug 2022 10:59:53 +0800
-Message-Id: <20220809025953.2311-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.36.1
+        Mon, 8 Aug 2022 23:04:50 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD2C318
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 20:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660014288; x=1691550288;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=JOcCc0KYzx02fSk5EvG90qtDbizMYTOXE+s2cK++fHQ=;
+  b=fmmKnheUHfU+3PIZuHmw3rPYkZ4Qql6G0VvFaLP+z8BwBIjyZmpW9Rgx
+   JK7hsPyttu38JhxbL/abPRkuL3HATRzYCjly6i9j30e+zD2MnK9RAt4IP
+   BZBFZoCPM1kZsvddVfHq5/ekvUptsALFSJRqwKvX7h8DRv2fXlBADmiQ/
+   AQOokURF+OTOnt5ZFEwLgV05ipZ6Z+MNb6ZYrxsqjvPz1OZj/4T3i9cCK
+   W9zBBjZeyIVdZ6tIKAgzKbOzdrfyEFbpA/EKSSGcgRFFg9Fk82WIpXZR+
+   rE47BKr1ozwdcHj6zH4yZBPgmPCnFHEQhGy15a5ANhp8/UgB5LWNhNvbw
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="316667951"
+X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
+   d="scan'208";a="316667951"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 20:04:48 -0700
+X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
+   d="scan'208";a="580621843"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 20:04:44 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+Subject: Re: [PATCH v13 4/9] mm/demotion/dax/kmem: Set node's abstract
+ distance to MEMTIER_DEFAULT_DAX_ADISTANCE
+References: <20220808062601.836025-1-aneesh.kumar@linux.ibm.com>
+        <20220808062601.836025-5-aneesh.kumar@linux.ibm.com>
+Date:   Tue, 09 Aug 2022 11:04:41 +0800
+In-Reply-To: <20220808062601.836025-5-aneesh.kumar@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Mon, 8 Aug 2022 11:55:56 +0530")
+Message-ID: <87o7wuglrq.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cS_KCgBHSMyuzfFizMKFAg--.41560S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxur4xCr13XF48ZrykuF17ZFb_yoWrCFW7pF
-        4DX342yr10qF12qa9rXw48Ary3K3yrtrWfK3W5uw4F93Z8JryvqrWFyryYvFyrC393u3ZI
-        yryDuw4fZF1DAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit c23d92b80e0b ("igb: Teardown SR-IOV before
-unregister_netdev()") places the unregister_netdev() call after the
-igb_disable_sriov() call to avoid functionality issue.
+"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 
-However, it introduces several race conditions when detaching a device.
-For example, when .remove() is called, the below interleaving leads to
-use-after-free.
+> By default, all nodes are assigned to the default memory tier which
+> is the memory tier designated for nodes with DRAM
+>
+> Set dax kmem device node's tier to slower memory tier by assigning
+> abstract distance to MEMTIER_DEFAULT_DAX_ADISTANCE. Low-level drivers
+> like papr_scm or ACPI NFIT can initialize memory device type to a
+> more accurate value based on device tree details or HMAT.
 
- (FREE from device detaching)      |   (USE from netdev core)
-igb_remove                         |  igb_ndo_get_vf_config
- igb_disable_sriov                 |  vf >= adapter->vfs_allocated_count?
-  kfree(adapter->vf_data)          |
-  adapter->vfs_allocated_count = 0 |
-                                   |    memcpy(... adapter->vf_data[vf]
+I don't know how ACPI NFIT can help here.  Can you teach me?
 
-Moreover, just as commit 1e53834ce541 ("ixgbe: Add locking to
-prevent panic when setting sriov_numvfs to zero") shows. The
-igb_disable_sriov function also need to watch out the requests from VF
-driver.
+Per my understanding, we may use the information provided by ACPI SLIT
+or HMAT (or device tree via papr_scm) to create memory types.  Before
+that is implemented, we just create a memory type with default abstract
+distance.
 
-To this end, this commit first eliminates the data races from netdev
-core by using rtnl_lock (similar to commit 719479230893 ("dpaa2-eth: add
-MAC/PHY support through phylink")). And then adds a spinlock just as
-1d53834ce541 did.
+> If the
+> kernel doesn't find the memory type initialized, a default slower
+> memory type is assigned by the kmem driver.
+>
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> ---
+>  drivers/dax/kmem.c           | 40 ++++++++++++++++++-
+>  include/linux/memory-tiers.h | 26 ++++++++++++-
+>  mm/memory-tiers.c            | 74 +++++++++++++++++++++++++-----------
+>  3 files changed, 115 insertions(+), 25 deletions(-)
+>
+> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+> index a37622060fff..b5cb03307af8 100644
+> --- a/drivers/dax/kmem.c
+> +++ b/drivers/dax/kmem.c
+> @@ -11,9 +11,17 @@
+>  #include <linux/fs.h>
+>  #include <linux/mm.h>
+>  #include <linux/mman.h>
+> +#include <linux/memory-tiers.h>
+>  #include "dax-private.h"
+>  #include "bus.h"
+>  
+> +/*
+> + * Default abstract distance assigned to the NUMA node onlined
+> + * by DAX/kmem if the low level platform driver didn't initialize
+> + * one for this NUMA node.
+> + */
 
-Fixes: c23d92b80e0b ("igb: Teardown SR-IOV before unregister_netdev()")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
----
-V0 -> V1:  change title from "Add rtnl_lock" to "Add lock"
-           add additional spinlock as suggested by Jakub, according to
-           1e53834ce541 ("ixgbe: Add locking to prevent panic when setting
-           sriov_numvfs to zero")
+We have 2 choices here.
 
- drivers/net/ethernet/intel/igb/igb.h      |  2 ++
- drivers/net/ethernet/intel/igb/igb_main.c | 12 +++++++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+1. The low level drivers create memory types and set
+node_memory_types[].  We need a mechanism to coordinate among multiple
+drivers.  On x86, we have ACPI SLIT, HMAT.  And we have platform
+independent CXL defined CDAT.
 
-diff --git a/drivers/net/ethernet/intel/igb/igb.h b/drivers/net/ethernet/intel/igb/igb.h
-index 2d3daf022651..015b78144114 100644
---- a/drivers/net/ethernet/intel/igb/igb.h
-+++ b/drivers/net/ethernet/intel/igb/igb.h
-@@ -664,6 +664,8 @@ struct igb_adapter {
- 	struct igb_mac_addr *mac_table;
- 	struct vf_mac_filter vf_macs;
- 	struct vf_mac_filter *vf_mac_list;
-+	/* lock for VF resources */
-+	spinlock_t vfs_lock;
- };
- 
- /* flags controlling PTP/1588 function */
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index d8b836a85cc3..2796e81d2726 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -3637,6 +3637,7 @@ static int igb_disable_sriov(struct pci_dev *pdev)
- 	struct net_device *netdev = pci_get_drvdata(pdev);
- 	struct igb_adapter *adapter = netdev_priv(netdev);
- 	struct e1000_hw *hw = &adapter->hw;
-+	unsigned long flags;
- 
- 	/* reclaim resources allocated to VFs */
- 	if (adapter->vf_data) {
-@@ -3649,12 +3650,13 @@ static int igb_disable_sriov(struct pci_dev *pdev)
- 			pci_disable_sriov(pdev);
- 			msleep(500);
- 		}
--
-+		spin_lock_irqsave(&adapter->vfs_lock, flags);
- 		kfree(adapter->vf_mac_list);
- 		adapter->vf_mac_list = NULL;
- 		kfree(adapter->vf_data);
- 		adapter->vf_data = NULL;
- 		adapter->vfs_allocated_count = 0;
-+		spin_unlock_irqrestore(&adapter->vfs_lock, flags);
- 		wr32(E1000_IOVCTL, E1000_IOVCTL_REUSE_VFQ);
- 		wrfl();
- 		msleep(100);
-@@ -3814,7 +3816,9 @@ static void igb_remove(struct pci_dev *pdev)
- 	igb_release_hw_control(adapter);
- 
- #ifdef CONFIG_PCI_IOV
-+	rtnl_lock();
- 	igb_disable_sriov(pdev);
-+	rtnl_unlock();
- #endif
- 
- 	unregister_netdev(netdev);
-@@ -3974,6 +3978,9 @@ static int igb_sw_init(struct igb_adapter *adapter)
- 
- 	spin_lock_init(&adapter->nfc_lock);
- 	spin_lock_init(&adapter->stats64_lock);
-+
-+	/* init spinlock to avoid concurrency of VF resources */
-+	spin_lock_init(&adapter->vfs_lock);
- #ifdef CONFIG_PCI_IOV
- 	switch (hw->mac.type) {
- 	case e1000_82576:
-@@ -7958,8 +7965,10 @@ static void igb_rcv_msg_from_vf(struct igb_adapter *adapter, u32 vf)
- static void igb_msg_task(struct igb_adapter *adapter)
- {
- 	struct e1000_hw *hw = &adapter->hw;
-+	unsigned long flags;
- 	u32 vf;
- 
-+	spin_lock_irqsave(&adapter->vfs_lock, flags);
- 	for (vf = 0; vf < adapter->vfs_allocated_count; vf++) {
- 		/* process any reset requests */
- 		if (!igb_check_for_rst(hw, vf))
-@@ -7973,6 +7982,7 @@ static void igb_msg_task(struct igb_adapter *adapter)
- 		if (!igb_check_for_ack(hw, vf))
- 			igb_rcv_ack_from_vf(adapter, vf);
- 	}
-+	spin_unlock_irqrestore(&adapter->vfs_lock, flags);
- }
- 
- /**
--- 
-2.36.1
+2. The high level driver (such as dax/kmem.c) coordinate among multiple
+low level drivers.  For example, it may query CXL CDAT firstly, and use
+a notifier chain to query platform drivers with priority.
 
+Personally, I prefer choice 2.  We can discuss this later.  But can we
+make the comments more general to avoid to make decision now?
+
+> +#define MEMTIER_DEFAULT_DAX_ADISTANCE	(MEMTIER_ADISTANCE_DRAM * 2)
+> +
+>  /* Memory resource name used for add_memory_driver_managed(). */
+>  static const char *kmem_name;
+>  /* Set if any memory will remain added when the driver will be unloaded. */
+> @@ -41,6 +49,7 @@ struct dax_kmem_data {
+>  	struct resource *res[];
+>  };
+>  
+> +static struct memory_dev_type *dax_slowmem_type;
+
+I don't think "slowmem" make much sense here.  There may be even slower
+memory.  Just dax_mem_type or dax_kmem_type should be OK?
+
+>  static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  {
+>  	struct device *dev = &dev_dax->dev;
+> @@ -62,6 +71,8 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  		return -EINVAL;
+>  	}
+>  
+> +	init_node_memory_type(numa_node, dax_slowmem_type);
+> +
+
+I don't find error handling in this function.  Per my understanding, if
+memory hot-add fails, we need to call clear_node_memory_type().
+
+>  	for (i = 0; i < dev_dax->nr_range; i++) {
+>  		struct range range;
+>  
+> @@ -162,6 +173,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  static void dev_dax_kmem_remove(struct dev_dax *dev_dax)
+>  {
+>  	int i, success = 0;
+> +	int node = dev_dax->target_node;
+>  	struct device *dev = &dev_dax->dev;
+>  	struct dax_kmem_data *data = dev_get_drvdata(dev);
+>  
+> @@ -198,6 +210,14 @@ static void dev_dax_kmem_remove(struct dev_dax *dev_dax)
+>  		kfree(data->res_name);
+>  		kfree(data);
+>  		dev_set_drvdata(dev, NULL);
+> +		/*
+> +		 * Clear the memtype association on successful unplug.
+> +		 * If not, we have memory blocks left which can be
+> +		 * offlined/onlined later. We need to keep memory_dev_type
+> +		 * for that. This implies this reference will be around
+> +		 * till next reboot.
+> +		 */
+> +		clear_node_memory_type(node, dax_slowmem_type);
+>  	}
+>  }
+>  #else
+> @@ -228,9 +248,27 @@ static int __init dax_kmem_init(void)
+>  	if (!kmem_name)
+>  		return -ENOMEM;
+>  
+> +	dax_slowmem_type = kmalloc(sizeof(*dax_slowmem_type), GFP_KERNEL);
+> +	if (!dax_slowmem_type) {
+> +		rc = -ENOMEM;
+> +		goto kmem_name_free;
+> +	}
+> +	dax_slowmem_type->adistance = MEMTIER_DEFAULT_DAX_ADISTANCE;
+> +	INIT_LIST_HEAD(&dax_slowmem_type->tier_sibiling);
+> +	dax_slowmem_type->nodes  = NODE_MASK_NONE;
+> +	dax_slowmem_type->memtier = NULL;
+> +	kref_init(&dax_slowmem_type->kref);
+> +
+
+Here we initialize the kref to 1.  So in dax_kmem_exit() we should drop
+the last reference, otherwise we cannot free the memory type?
+
+>  	rc = dax_driver_register(&device_dax_kmem_driver);
+>  	if (rc)
+> -		kfree_const(kmem_name);
+> +		goto error_out;
+> +
+> +	return rc;
+> +
+> +error_out:
+> +	kfree(dax_slowmem_type);
+> +kmem_name_free:
+> +	kfree_const(kmem_name);
+>  	return rc;
+>  }
+>  
+> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+> index cc89876899a6..7bf6f47d581a 100644
+> --- a/include/linux/memory-tiers.h
+> +++ b/include/linux/memory-tiers.h
+> @@ -2,6 +2,8 @@
+>  #ifndef _LINUX_MEMORY_TIERS_H
+>  #define _LINUX_MEMORY_TIERS_H
+>  
+> +#include <linux/types.h>
+> +#include <linux/nodemask.h>
+>  /*
+>   * Each tier cover a abstrace distance chunk size of 128
+>   */
+> @@ -13,12 +15,34 @@
+>  #define MEMTIER_ADISTANCE_DRAM	(4 * MEMTIER_CHUNK_SIZE)
+>  #define MEMTIER_HOTPLUG_PRIO	100
+>  
+> +struct memory_tier;
+> +struct memory_dev_type {
+> +	/* list of memory types that are part of same tier as this type */
+> +	struct list_head tier_sibiling;
+> +	/* abstract distance for this specific memory type */
+> +	int adistance;
+> +	/* Nodes of same abstract distance */
+> +	nodemask_t nodes;
+> +	struct kref kref;
+> +	struct memory_tier *memtier;
+> +};
+> +
+>  #ifdef CONFIG_NUMA
+> -#include <linux/types.h>
+>  extern bool numa_demotion_enabled;
+> +void init_node_memory_type(int node, struct memory_dev_type *default_type);
+> +void clear_node_memory_type(int node, struct memory_dev_type *memtype);
+>  
+>  #else
+>  
+>  #define numa_demotion_enabled	false
+> +static inline void init_node_memory_type(int node, struct memory_dev_type *default_type)
+> +{
+> +
+> +}
+> +
+> +static inline void clear_node_memory_type(int node, struct memory_dev_type *memtype)
+> +{
+> +
+> +}
+>  #endif	/* CONFIG_NUMA */
+>  #endif  /* _LINUX_MEMORY_TIERS_H */
+> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+> index 2caa5ab446b8..e07dffb67567 100644
+> --- a/mm/memory-tiers.c
+> +++ b/mm/memory-tiers.c
+> @@ -1,6 +1,4 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -#include <linux/types.h>
+> -#include <linux/nodemask.h>
+>  #include <linux/slab.h>
+>  #include <linux/lockdep.h>
+>  #include <linux/sysfs.h>
+> @@ -21,26 +19,10 @@ struct memory_tier {
+>  	int adistance_start;
+>  };
+>  
+> -struct memory_dev_type {
+> -	/* list of memory types that are part of same tier as this type */
+> -	struct list_head tier_sibiling;
+> -	/* abstract distance for this specific memory type */
+> -	int adistance;
+> -	/* Nodes of same abstract distance */
+> -	nodemask_t nodes;
+> -	struct memory_tier *memtier;
+> -};
+> -
+>  static DEFINE_MUTEX(memory_tier_lock);
+>  static LIST_HEAD(memory_tiers);
+>  static struct memory_dev_type *node_memory_types[MAX_NUMNODES];
+> -/*
+> - * For now let's have 4 memory tier below default DRAM tier.
+> - */
+> -static struct memory_dev_type default_dram_type  = {
+> -	.adistance = MEMTIER_ADISTANCE_DRAM,
+> -	.tier_sibiling = LIST_HEAD_INIT(default_dram_type.tier_sibiling),
+> -};
+> +static struct memory_dev_type *default_dram_type;
+>  
+>  static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memtype)
+>  {
+> @@ -96,6 +78,14 @@ static struct memory_tier *__node_get_memory_tier(int node)
+>  	return NULL;
+>  }
+>  
+> +static inline void __init_node_memory_type(int node, struct memory_dev_type *default_type)
+> +{
+> +	if (!node_memory_types[node]) {
+> +		node_memory_types[node] = default_type;
+> +		kref_get(&default_type->kref);
+> +	}
+> +}
+> +
+>  static struct memory_tier *set_node_memory_tier(int node)
+>  {
+>  	struct memory_tier *memtier;
+> @@ -107,7 +97,7 @@ static struct memory_tier *set_node_memory_tier(int node)
+>  		return ERR_PTR(-EINVAL);
+>  
+>  	if (!node_memory_types[node])
+> -		node_memory_types[node] = &default_dram_type;
+> +		__init_node_memory_type(node, default_dram_type);
+>  
+>  	memtype = node_memory_types[node];
+>  	node_set(node, memtype->nodes);
+> @@ -143,6 +133,34 @@ static bool clear_node_memory_tier(int node)
+>  	return cleared;
+>  }
+>  
+> +void init_node_memory_type(int node, struct memory_dev_type *default_type)
+> +{
+> +
+> +	mutex_lock(&memory_tier_lock);
+> +	__init_node_memory_type(node, default_type);
+> +	mutex_unlock(&memory_tier_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(init_node_memory_type);
+> +
+> +static void release_memtype(struct kref *kref)
+> +{
+> +	struct memory_dev_type *memtype;
+> +
+> +	memtype = container_of(kref, struct memory_dev_type, kref);
+> +	kfree(memtype);
+> +}
+> +
+> +void clear_node_memory_type(int node, struct memory_dev_type *memtype)
+> +{
+> +	mutex_lock(&memory_tier_lock);
+> +	if (node_memory_types[node] == memtype) {
+> +		node_memory_types[node] = NULL;
+> +		kref_put(&memtype->kref, release_memtype);
+> +	}
+> +	mutex_unlock(&memory_tier_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(clear_node_memory_type);
+> +
+>  static int __meminit memtier_hotplug_callback(struct notifier_block *self,
+>  					      unsigned long action, void *_arg)
+>  {
+> @@ -176,17 +194,27 @@ static int __init memory_tier_init(void)
+>  	int node;
+>  	struct memory_tier *memtier;
+>  
+> +	default_dram_type = kmalloc(sizeof(*default_dram_type), GFP_KERNEL);
+> +	if (!default_dram_type)
+> +		panic("%s() failed to allocate default DRAM tier\n", __func__);
+> +
+>  	mutex_lock(&memory_tier_lock);
+> +
+> +	/* For now let's have 4 memory tier below default DRAM tier. */
+> +	default_dram_type->adistance = MEMTIER_ADISTANCE_DRAM;
+> +	INIT_LIST_HEAD(&default_dram_type->tier_sibiling);
+> +	default_dram_type->memtier = NULL;
+> +	kref_init(&default_dram_type->kref);
+
+It appears that we can define a function to initialize a memory type.
+
+>  	/* CPU only nodes are not part of memory tiers. */
+> -	default_dram_type.nodes = node_states[N_MEMORY];
+> +	default_dram_type->nodes = node_states[N_MEMORY];
+>  
+> -	memtier = find_create_memory_tier(&default_dram_type);
+> +	memtier = find_create_memory_tier(default_dram_type);
+>  	if (IS_ERR(memtier))
+>  		panic("%s() failed to register memory tier: %ld\n",
+>  		      __func__, PTR_ERR(memtier));
+>  
+>  	for_each_node_state(node, N_MEMORY)
+> -		node_memory_types[node] = &default_dram_type;
+> +		__init_node_memory_type(node, default_dram_type);
+>  
+>  	mutex_unlock(&memory_tier_lock);
+
+Best Regards,
+Huang, Ying

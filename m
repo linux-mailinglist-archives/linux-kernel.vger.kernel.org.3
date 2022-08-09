@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9300A58DE55
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B83558DE00
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343705AbiHISN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
+        id S1344997AbiHISIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343665AbiHISKG (ORCPT
+        with ESMTP id S1344994AbiHISIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:10:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A312A274;
-        Tue,  9 Aug 2022 11:04:02 -0700 (PDT)
+        Tue, 9 Aug 2022 14:08:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590E82613E;
+        Tue,  9 Aug 2022 11:03:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A882610AB;
-        Tue,  9 Aug 2022 18:04:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCEF8C4347C;
-        Tue,  9 Aug 2022 18:04:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D223F61093;
+        Tue,  9 Aug 2022 18:03:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEEBFC433D7;
+        Tue,  9 Aug 2022 18:03:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068242;
-        bh=BczoROFTk10AV+L3GqFxcAmhNea7BN0iCUC/7eVo740=;
+        s=korg; t=1660068206;
+        bh=YBvfBbszxwM2YDmgbdZdi1jQjeZ8yxndTPd1WQuhB0o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HCPgHYoes0heKijBlhj0hdJi/33j1UUVihXADVQaehZ0STG1LxFYgtiZsEBfH32Ur
-         ej25G0KwAHn+2/7OlmcMFlXBw4VjuNXyAk1TEHbAX9/T+FPvCZGa+jFsLvZHpYiz52
-         8Lx2yvRYxi33Z+SFs4/DwPiOO4z55Xxn86skff8w=
+        b=Xb8zW8XwVo+33TuKiGM5EnaCEojrjDi3AJ1QoUnmYFMy8KM9tc7JpvA8gHAuOdC+J
+         ek6JdUt6ApLvxYY7Ok7j/O3K6gXUQ+rc3J1/k6I9lqhkD5uGYNvJy1+7ssnUCXrwIC
+         pSMk3vL0X0YnLhBraZS9qOA85o6/6/pkC7+MNFQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Werner Sembach <wse@tuxedocomputers.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.10 08/23] ACPI: video: Shortening quirk list by identifying Clevo by board_name only
-Date:   Tue,  9 Aug 2022 20:00:26 +0200
-Message-Id: <20220809175513.171867514@linuxfoundation.org>
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 5.4 09/15] selftests/bpf: Fix "dubious pointer arithmetic" test
+Date:   Tue,  9 Aug 2022 20:00:27 +0200
+Message-Id: <20220809175510.632483620@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175512.853274191@linuxfoundation.org>
-References: <20220809175512.853274191@linuxfoundation.org>
+In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
+References: <20220809175510.312431319@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Werner Sembach <wse@tuxedocomputers.com>
+From: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-commit f0341e67b3782603737f7788e71bd3530012a4f4 upstream.
+commit 3615bdf6d9b19db12b1589861609b4f1c6a8d303 upstream.
 
-Taking a recent change in the i8042 quirklist to this one: Clevo
-board_names are somewhat unique, and if not: The generic Board_-/Sys_Vendor
-string "Notebook" doesn't help much anyway. So identifying the devices just
-by the board_name helps keeping the list significantly shorter and might
-even hit more devices requiring the fix.
+The verifier trace changed following a bugfix. After checking the 64-bit
+sign, only the upper bit mask is known, not bit 31. Update the test
+accordingly.
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Fixes: c844d22fe0c0 ("ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU")
-Cc: All applicable <stable@vger.kernel.org>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/video_detect.c |   34 ----------------------------------
- 1 file changed, 34 deletions(-)
+ tools/testing/selftests/bpf/test_align.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/acpi/video_detect.c
-+++ b/drivers/acpi/video_detect.c
-@@ -424,23 +424,6 @@ static const struct dmi_system_id video_
- 	.callback = video_detect_force_native,
- 	.ident = "Clevo NL5xRU",
- 	.matches = {
--		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
--		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
--		},
--	},
--	{
--	.callback = video_detect_force_native,
--	.ident = "Clevo NL5xRU",
--	.matches = {
--		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
--		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
--		},
--	},
--	{
--	.callback = video_detect_force_native,
--	.ident = "Clevo NL5xRU",
--	.matches = {
--		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
- 		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
- 		},
+--- a/tools/testing/selftests/bpf/test_align.c
++++ b/tools/testing/selftests/bpf/test_align.c
+@@ -475,10 +475,10 @@ static struct bpf_align_test tests[] = {
+ 			 */
+ 			{7, "R5_w=inv(id=0,smin_value=-9223372036854775806,smax_value=9223372036854775806,umin_value=2,umax_value=18446744073709551614,var_off=(0x2; 0xfffffffffffffffc)"},
+ 			/* Checked s>=0 */
+-			{9, "R5=inv(id=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
++			{9, "R5=inv(id=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc)"},
+ 			/* packet pointer + nonnegative (4n+2) */
+-			{11, "R6_w=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
+-			{13, "R4_w=pkt(id=1,off=4,r=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
++			{11, "R6_w=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc)"},
++			{13, "R4_w=pkt(id=1,off=4,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc)"},
+ 			/* NET_IP_ALIGN + (4n+2) == (4n), alignment is fine.
+ 			 * We checked the bounds, but it might have been able
+ 			 * to overflow if the packet pointer started in the
+@@ -486,7 +486,7 @@ static struct bpf_align_test tests[] = {
+ 			 * So we did not get a 'range' on R6, and the access
+ 			 * attempt will fail.
+ 			 */
+-			{15, "R6_w=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
++			{15, "R6_w=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc)"},
+ 		}
  	},
-@@ -464,23 +447,6 @@ static const struct dmi_system_id video_
- 	.callback = video_detect_force_native,
- 	.ident = "Clevo NL5xNU",
- 	.matches = {
--		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
--		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
--		},
--	},
--	{
--	.callback = video_detect_force_native,
--	.ident = "Clevo NL5xNU",
--	.matches = {
--		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
--		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
--		},
--	},
--	{
--	.callback = video_detect_force_native,
--	.ident = "Clevo NL5xNU",
--	.matches = {
--		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
- 		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
- 		},
- 	},
+ 	{
 
 

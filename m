@@ -2,129 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65F258DA24
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F92C58DA28
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243823AbiHIOQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 10:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S244193AbiHIORA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 10:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiHIOQh (ORCPT
+        with ESMTP id S241106AbiHIOQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 10:16:37 -0400
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB746453;
-        Tue,  9 Aug 2022 07:16:37 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id b12so6567081ils.9;
-        Tue, 09 Aug 2022 07:16:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Q9mXyBIsDcHFkxvhhPAewKIvUVNC7xu4zQ9cHub7pU8=;
-        b=L+Q0xSno4l3YN7yCMKBA9ezYbfeRxMhcAL/zOwqBID+fz4/6w+PCUMTYvngTQOHkm/
-         SZb7S1R2MQox/aICzMwzHtiYtG7F/lpkyZwgkbvzXXIszvTWhYYwh5d/MER6faI2o8Wb
-         odmg2Ln8O/98BMYd9xxVTRm3XGJIpYCjoEwEnlRPsMzTwCZRtHO8YC5npybnIQUD03+L
-         F4PjsgfcNLevkQIY01EHjwqnsoSbh2RDRhappV0oQhawRO9LuG5UsHR1nAXPiRuVMHxM
-         mK+88zrwn36rOuvwZHxH4XEZavhqnz/Frf7fkaLJnlEhFt+PdWqGo+XIJyTHg3rQbUUL
-         x40Q==
-X-Gm-Message-State: ACgBeo3uaLP4Wacg+T2YV8HZRZQsi474IplvcWgMUvzGjmc93WDGSTBm
-        lpnOynW+YRa0QRTkLLiAOQ==
-X-Google-Smtp-Source: AA6agR5sKNiD1jY7asRAYAJjA4Ioov1LBgXDA+f5syLv9nnxp52HOBVCeed/e86Hnn99NJMdjRx1Dw==
-X-Received: by 2002:a92:c247:0:b0:2df:2e4d:5930 with SMTP id k7-20020a92c247000000b002df2e4d5930mr10661115ilo.229.1660054596321;
-        Tue, 09 Aug 2022 07:16:36 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b16-20020a05660214d000b00684a7617f14sm1144598iow.10.2022.08.09.07.16.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 07:16:35 -0700 (PDT)
-Received: (nullmailer pid 1749632 invoked by uid 1000);
-        Tue, 09 Aug 2022 14:16:32 -0000
-Date:   Tue, 9 Aug 2022 08:16:32 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org
-Subject: Re: [PATCH 1/3] dt-bindings: timer: sifive,clint: add legacy riscv
- compatible
-Message-ID: <20220809141632.GB1706120-robh@kernel.org>
-References: <20220805162844.1554247-1-mail@conchuod.ie>
- <20220805162844.1554247-2-mail@conchuod.ie>
+        Tue, 9 Aug 2022 10:16:59 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB25D65C4;
+        Tue,  9 Aug 2022 07:16:57 -0700 (PDT)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2FS53Ggzz67FSP;
+        Tue,  9 Aug 2022 22:14:13 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Tue, 9 Aug 2022 16:16:55 +0200
+Received: from [10.195.245.222] (10.195.245.222) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 9 Aug 2022 15:16:53 +0100
+Message-ID: <16f03f81-a8c7-bacf-c74c-67231f7f7202@huawei.com>
+Date:   Tue, 9 Aug 2022 15:16:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220805162844.1554247-2-mail@conchuod.ie>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+From:   John Garry <john.garry@huawei.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        kernel test robot <oliver.sang@intel.com>
+CC:     Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Linux Memory Management List" <linux-mm@kvack.org>,
+        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
+        <ying.huang@intel.com>, <feng.tang@intel.com>,
+        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
+References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+ <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+In-Reply-To: <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.195.245.222]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 05:28:43PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On 09/08/2022 10:58, John Garry wrote:
+>>>
+>>> commit: 0568e6122574dcc1aded2979cd0245038efe22b6 ("ata: libata-scsi: 
+>>> cap ata_device->max_sectors according to shost->max_sectors")
+>>> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
+>>>
+>>> in testcase: stress-ng
+>>> on test machine: 96 threads 2 sockets Ice Lake with 256G memory
+>>> with following parameters:
+>>>
+>>>     nr_threads: 10%
+>>>     disk: 1HDD
+>>>     testtime: 60s
+>>>     fs: f2fs
+>>>     class: filesystem
+>>>     test: copy-file
+>>>     cpufreq_governor: performance
+>>>     ucode: 0xb000280
+>>
+>> Without knowing what the device adapter is, hard to say where the 
+>> problem is. I
+>> suspect that with the patch applied, we may be ending up with a small 
+>> default
+>> max_sectors value, causing overhead due to more commands than necessary.
+>>
+>> Will check what I see with my test rig.
 > 
-> While "real" hardware might not use the compatible string "riscv,clint0"
-> it is present in the driver & QEMU uses it for automatically generated
-> virt machine dtbs. To avoid dt-validate problems with QEMU produced
-> dtbs, such as the following, add it to the binding.
-> 
-> riscv-virt.dtb: clint@2000000: compatible:0: 'sifive,clint0' is not one of ['sifive,fu540-c000-clint', 'starfive,jh7100-clint', 'canaan,k210-clint']
-> 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Link: https://lore.kernel.org/linux-riscv/20220803170552.GA2250266-robh@kernel.org/
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/timer/sifive,clint.yaml           | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/sifive,clint.yaml b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> index e64f46339079..9fcf20942582 100644
-> --- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> +++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> @@ -22,12 +22,18 @@ description:
->  
->  properties:
->    compatible:
-> -    items:
-> -      - enum:
-> -          - sifive,fu540-c000-clint
-> -          - starfive,jh7100-clint
-> -          - canaan,k210-clint
-> -      - const: sifive,clint0
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - sifive,fu540-c000-clint
-> +              - starfive,jh7100-clint
-> +              - canaan,k210-clint
-> +          - const: sifive,clint0
-> +      - items:
-> +          - const: sifive,clint0
-> +          - const: riscv,clint0
-> +        deprecated: true
-> +        description: For legacy systems & the qemu virt machine only
+> As far as I can see, this patch should not make a difference unless the 
+> ATA shost driver is setting the max_sectors value unnecessarily low.
 
-I would drop 'legacy systems'.
+For __ATA_BASE_SHT, we don't set max_sectors. As such, we default 
+shost->max_sectors = SCSI_DEFAULT_MAX_SECTORS (=1024) in 
+scsi_host_alloc(). I assume no shost dma mapping limit applied.
 
->  
->      description:
->        Should be "<vendor>,<chip>-clint" and "sifive,clint<version>".
-> -- 
-> 2.37.1
-> 
-> 
+Then - for example - we could select dev->max_sectors = 
+ATA_MAX_SECTORS_LBA48 (=65535) in ata_dev_configure().
+
+So with commit 0568e6122574 we would have final max sectors = 1024, as 
+opposed to 65535 previously. I guess that the problem is something like 
+this.
+
+If so, it seems that we would need to apply the shost dma mapping limit 
+separately in ata_scsi_dev_config() and not use shost->max_sectors.
+
+thanks,
+John
+

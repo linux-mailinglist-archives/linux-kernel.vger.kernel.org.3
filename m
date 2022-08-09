@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CF458E0CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988D258E0D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245425AbiHIUOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 16:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
+        id S1343666AbiHIUO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 16:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235032AbiHIUOp (ORCPT
+        with ESMTP id S245695AbiHIUOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 16:14:45 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ECE1F2FE
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 13:14:44 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id q30so15469892wra.11
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:14:44 -0700 (PDT)
+        Tue, 9 Aug 2022 16:14:53 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A8825EA0
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 13:14:51 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id v3so15586918wrp.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:14:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sifive.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=6Qonm6iaHiCG37E9Vy+iyvt+Lcl9E0+zQmTyp2y5GN8=;
-        b=MA/SLCzGbcsdtjX0pFpdjQSE9cMe4j2H3ERl3C2t4PacMtVR90dl1kamzZQEmUtS8d
-         nYLjkj669ey764cGjq7aU2h7vm27uhO/cQmglBcIsFmyitGXIidZkhM77jScmlThXvpp
-         ELCQDGOfzPnf5Vs3Cymmg7kq1H/eAr+K3X/zzGKw7WDejZ/vkUeJizniuGRwfMzk+RR6
-         zEGXVkV6ZbZOKmLlgsfa5Nj+GElHb+uk3SIxu/kQSPCxqwcxuCwJOKvCXs16yppGn1Vj
-         OSVk4YiNEkMjcFUpicon95mSOJIzgMXNjdeknuTslak7AHEzrlvmwKDpmR7E+fSg5ufP
-         g+QA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=n+sIRfD+RQiRGeYS26jphMxCdbHEnhlhpCnFs913kcs=;
+        b=jejZm+LsOkP/sKHcTEjTV6a/YYsp2p6PJWvV5Wq5e8AsJrGoqYxITRS6VyHhbYmoJM
+         hz3dmUTvecCc+8BvqDnixZPoalS7dbYY5PMNY+/s85jL232ek1hkXHYI1OD5gzRwOV6k
+         nlBEF2Gs8w1ocpv5PHneyEd6jUo47n/RFaR13fe5PGUkP23vB2QHFlpqLcpMtJqxujMF
+         vfvY2a5JjxDykh1Wn/uI3hDCqNVys2WFTCDMTyXDTQLYOe4LiP+SYg/7YPfwdBLfYmXG
+         giw3vBtwH9PmT61uF1ns7I+qhVCoRDczkpafU2m9cP6VaRONGMV3TLZI1ltQQGFyojJz
+         UVTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=6Qonm6iaHiCG37E9Vy+iyvt+Lcl9E0+zQmTyp2y5GN8=;
-        b=rs0cNiuriohuPOovxmAh5HqbOYR0pPakmOFL0RFEvsjuwJNDQcUTVRjJxDRPTqNpL2
-         FpR2j/oKFQqkP5ageUQSbIDUqhagwRGyqIfW9nGaR3ehiNhSOx9W1EAq2ClwtuL7oFHC
-         C6/rQyrAWPAmgOUh6Q8R2HPOtQLHJgM3NpO5bAoExfeiUaSPwnearTxmBRRaeBfAOqlt
-         /Rulr/OYomgVDKgwMLub/78CcbF0dCiHQOzO8AxGfXQuVFOe3TEd8NXwX4yV4FdAX83U
-         ruitPMKk6GGxHs+KDeavjDmz6zjih5pNuOOJZgWCDI2rSl8LJkgU6Ft3krGp+OMxDlH2
-         mLgQ==
-X-Gm-Message-State: ACgBeo2nowuRY3mYxswYbVIjRR8Xcoch3l9i2sil1jVvmyu+09J6EZYw
-        Vda/AXL3MTmOlpxJajWcwet8cVzftMiXdg==
-X-Google-Smtp-Source: AA6agR6S8ASd/btWcHQaYoP+no/BZLMyuwD9cCluX0U4Jf6RkxELiN64K4xWSUPO04XqbcZj4GNelw==
-X-Received: by 2002:adf:f30e:0:b0:21f:afbb:db23 with SMTP id i14-20020adff30e000000b0021fafbbdb23mr15241313wro.490.1660076082904;
-        Tue, 09 Aug 2022 13:14:42 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=n+sIRfD+RQiRGeYS26jphMxCdbHEnhlhpCnFs913kcs=;
+        b=dHBH5S1lDK4hS8Bn91fdD4IoZQt65nK+7u3vgOMAi2SGGYVKkslDywP3Fn2X/CmuTx
+         T/eNTbuH41qAeA4zyKR28RTMxMn4MXWkovyXFpKPjnmswSIRPZJwRSFLKn+mNYRh12ic
+         11VQE2OdBBpJb/yrEr704867WBTTCE7hHXpRavw1XptAB9hJ3RMyGhBiAH3Mj4VrQHUw
+         U0603l3JkUxlflSFYPWqcaM9K1soHAH/oA00ZK6Sr1ZGui8RqYiadTKX7LuyClwJ29Vp
+         7bCp6b3YKk5ipnbilX6PLN9rs1APsbzCOXQrSbicXyH5/U+EdiojJ8i3mn3yJ2kXE67j
+         DmpA==
+X-Gm-Message-State: ACgBeo0WfjPPykZeNpgn3V2c89YB+iQ/gpowlLEEAIWKBnpxZWBm8FjP
+        LHw31AFp35kRmZwHsnUoln0DfA==
+X-Google-Smtp-Source: AA6agR6Q0kQEIw5VavO/Vm78ynSFGIF8hJpL/Byv5pZN1uWpXtoptmzd9VDOfD5ycVuA3Pjge+IeXQ==
+X-Received: by 2002:a5d:6608:0:b0:220:625e:f4e1 with SMTP id n8-20020a5d6608000000b00220625ef4e1mr16069047wru.252.1660076090308;
+        Tue, 09 Aug 2022 13:14:50 -0700 (PDT)
 Received: from debian.office.codethink.co.uk ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
-        by smtp.gmail.com with ESMTPSA id q15-20020a7bce8f000000b003a53e6c5425sm24041wmj.8.2022.08.09.13.14.35
+        by smtp.gmail.com with ESMTPSA id q15-20020a7bce8f000000b003a53e6c5425sm24041wmj.8.2022.08.09.13.14.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 13:14:42 -0700 (PDT)
+        Tue, 09 Aug 2022 13:14:49 -0700 (PDT)
 From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
 To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Pratyush Yadav <pratyush@kernel.org>,
@@ -60,10 +60,12 @@ Cc:     greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
         ben.dooks@sifive.com, linux-mtd@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Subject: [PATCH v2 0/3] Add support for Quad Input Page Program to is25wp256
-Date:   Tue,  9 Aug 2022 21:14:25 +0100
-Message-Id: <20220809201428.118523-1-sudip.mukherjee@sifive.com>
+Subject: [PATCH v2 1/3] mtd: spi-nor: issi: is25wp256: Init flash based on SFDP
+Date:   Tue,  9 Aug 2022 21:14:26 +0100
+Message-Id: <20220809201428.118523-2-sudip.mukherjee@sifive.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220809201428.118523-1-sudip.mukherjee@sifive.com>
+References: <20220809201428.118523-1-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,22 +78,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series enables SFDP support for is25wp256. And also adds
-Quad Input Page Program capability as its not discoverable from SFDP.
+The datasheet of is25wp256 says it supports SFDP. Get rid of the static
+initialization of the flash parameters and init them when parsing SFDP.
 
-Changes in v2:
-Enable SFDP instead of using no-sfdp-flags.
+Testing showed the flash using SPINOR_OP_READ_1_1_4_4B 0x6c,
+SPINOR_OP_PP_4B 0x12 and SPINOR_OP_BE_4K_4B 0x21 before enabling SFDP.
+After this patch, it parses the SFDP information and still uses the
+same opcodes.
 
-Sudip Mukherjee (3):
-  mtd: spi-nor: issi: is25wp256: Init flash based on SFDP
-  mtd: spi-nor: add SFDP fixups for Quad Page Program
-  mtd: spi-nor: issi: is25wp256: Enable Quad Input Page Program
+Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+---
+ drivers/mtd/spi-nor/issi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/mtd/spi-nor/core.c | 9 +++++++++
- drivers/mtd/spi-nor/core.h | 2 ++
- drivers/mtd/spi-nor/issi.c | 4 ++--
- 3 files changed, 13 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
+index 89a66a19d754..8b48459b5054 100644
+--- a/drivers/mtd/spi-nor/issi.c
++++ b/drivers/mtd/spi-nor/issi.c
+@@ -71,7 +71,7 @@ static const struct flash_info issi_nor_parts[] = {
+ 	{ "is25wp128",  INFO(0x9d7018, 0, 64 * 1024, 256)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
+ 	{ "is25wp256", INFO(0x9d7019, 0, 64 * 1024, 512)
+-		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
++		PARSE_SFDP
+ 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
+ 		.fixups = &is25lp256_fixups },
+ 
 -- 
 2.30.2
 

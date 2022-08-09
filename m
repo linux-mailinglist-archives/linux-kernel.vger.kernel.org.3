@@ -2,162 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5815B58D665
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F10558D663
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240742AbiHIJXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 05:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
+        id S240543AbiHIJXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 05:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234639AbiHIJXh (ORCPT
+        with ESMTP id S234639AbiHIJXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 05:23:37 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CBAB48E;
-        Tue,  9 Aug 2022 02:23:33 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id i24so8228202qkg.13;
-        Tue, 09 Aug 2022 02:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=f+fdEIR1AEiTFiMAXgcgg4D5Xs19jgAX17houym3UV4=;
-        b=JK9r/P8zKiHlaVfCRdaWXmexAL4vdmpL7PrlLEtZiwxGGppGxVVO6Hukb5qigsqc6A
-         gddP03pAB5VCIqBGkzqQBut7W6Ng5qWqcsEaGzL5CKC3LSF7BEaa3xTwY3wCSmVnpSVd
-         6smtV5Wd8xmb2trZBRe/82gKTbS3/lYsYhiwWjSzFL2WKilDTsDN6IhQq/n8uD4p2szx
-         urPtqK+argJj5tWti1qs20ZbWmBbaGZ3EmsbDD7fk0/0KTwaNmQ5YPIDkOhPw4byTcJ1
-         EsmJNUH8/yDl2StB+qzJbjbQ6HUfKJvD983CdziZ5xnWqjz3AnMaDZb65ZQe+mXFQEPj
-         TpnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=f+fdEIR1AEiTFiMAXgcgg4D5Xs19jgAX17houym3UV4=;
-        b=tUH9m3HGgco3jRvJWDu3bLIVGuTTsDHTlF3xJEz1CmmUWkSsUNezfWLb8ctMiZQ3Dp
-         CdtZnfsEcnnBUdtgH4ig1xIp2t4QVBBj9abACUu6RttSUoExoguisk7JVu4EskbtaP3q
-         iS22/G0WPomJrodS5t62dSVCiREvsOLzNIIUv3Swq+dSLp5QHHnjnn66v91Pum0X2pwC
-         iLNR9Ekj9zUYGhHrmRr+ExOPgRrdM/TAux972rsyG3tvZLoRluvkSh9Gz2DaJeQbFZbp
-         2QF4lS6NF5Z8WZhD7zISfUqPrUAeVp/+35t8MSEi+/n+gyQSGvyXLwU4muRRr/Gbmrsn
-         9vRw==
-X-Gm-Message-State: ACgBeo14exC7fBVHEJsoUpyGnMDnKZG7BnAWzDp3Brs2nCi6kR8etYAT
-        fqGNH9tB66iXluiH2guMGMR46CfR0dkqwe75wwY=
-X-Google-Smtp-Source: AA6agR7u2vIoLyFHu+Fwj6xhzyZ9kJaHV+/fIU8nRNkSYf3YSOl3Q/USv6mQgiMQnEk2V8iPpPm9hGfpqIqMGtzmtDU=
-X-Received: by 2002:a05:620a:2809:b0:6b6:5908:316e with SMTP id
- f9-20020a05620a280900b006b65908316emr17276480qkp.734.1660037012162; Tue, 09
- Aug 2022 02:23:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220809025054.1626339-1-luke@ljones.dev> <20220809025054.1626339-3-luke@ljones.dev>
-In-Reply-To: <20220809025054.1626339-3-luke@ljones.dev>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 9 Aug 2022 11:22:55 +0200
-Message-ID: <CAHp75VdrWMD7A2PJ-nPa0aLYZPqmgC7+pZ2SMDMtGWjHrx=xxA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] asus-wmi: Implement TUF laptop keyboard LED modes
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 9 Aug 2022 05:23:16 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6293B48E
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 02:23:15 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 3B2611E80D95;
+        Tue,  9 Aug 2022 17:21:30 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id f-ePpt-1Iq8Y; Tue,  9 Aug 2022 17:21:27 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: chuanjian@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 7F9431E80D70;
+        Tue,  9 Aug 2022 17:21:27 +0800 (CST)
+From:   Dong Chuanjian <chuanjian@nfschina.com>
+To:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com
+Cc:     linux-kernel@vger.kernel.org, kernel@nfschina.com,
+        Dong Chuanjian <chuanjian@nfschina.com>
+Subject: [PATCH] drivers/md/dm-kcopyd.c: remove unnecessary (void*) conversions
+Date:   Tue,  9 Aug 2022 17:23:10 +0800
+Message-Id: <20220809092310.5603-1-chuanjian@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 4:51 AM Luke D. Jones <luke@ljones.dev> wrote:
->
-> Adds support for changing the laptop keyboard LED modes. These
-> are visible effects such as static, rainbow, pulsing, colour cycles.
->
-> These sysfs attributes are added to asus-nb-wmi:
-> - keyboard_rgb_save
-> - keyboard_rgb_mode
-> - keyboard_rgb_speed
+remove unnecessary void* type casting
 
-...
+Signed-off-by: Dong Chuanjian <chuanjian@nfschina.com>
 
-> +What:          /sys/devices/platform/<platform>/keyboard_rgb_speed
-> +Date:          Aug 2022
-> +KernelVersion: 6.1
-> +Contact:       "Luke Jones" <luke@ljones.dev>
-> +Description:
-> +               Set the speed of the selected RGB effect, the speed will not apply
-> +               until the keyboard_rgb_save attribute is set (write-only):
-> +                       * 0 - slow
-> +                       * 1 - medium
-> +                       * 2 - fast
-
-> \ No newline at end of file
-
-^^^
-
-...
-
-> +       u8 save;
-> +       int err;
-
-> +
-> +       struct asus_wmi *asus = dev_get_drvdata(device);
-> +       struct led_classdev *cdev = &asus->keyboard_rgb_led.dev.led_cdev;
-
-No blank line in the definition block and try to keep "the longest
-line first", a.k.a. reversed xmas tree ordering.
-
-...
-
-> +       u8 mode;
-> +
-> +       struct asus_wmi *asus = dev_get_drvdata(device);
-
-Ditto.
-
-I would really recommend you spending some time to read the existing
-code (better recent one) and look for the common patterns.
-
-...
-
-> +       /* These are the known usable modes across all TUF/ROG */
-> +       if (mode >= 12 || mode == 10)
-
-The second condition was different in previous versions. Or am I
-confused by another patch series?
-
-> +         asus->keyboard_rgb_led.mode = 10;
-> +       else
-> +         asus->keyboard_rgb_led.mode = mode;
-
-...
-
-> +
-> +
-
-Single blank line is enough.
-
-...
-
-> -               struct mc_subled *mc_led_info = asus->keyboard_rgb_mode.subled_info;
-> -               struct led_classdev_mc *mc_cdev = &asus->keyboard_rgb_mode.dev;
-> +               struct mc_subled *mc_led_info = asus->keyboard_rgb_led.subled_info;
-> +               struct led_classdev_mc *mc_cdev = &asus->keyboard_rgb_led.dev;
-
-Not sure why this change happened...
-
-> -               asus->keyboard_rgb_mode.save = 1;
-> -               asus->keyboard_rgb_mode.mode = 0;
-> -               asus->keyboard_rgb_mode.speed = 0xeb;
-> +               asus->keyboard_rgb_led.save = 1;
-> +               asus->keyboard_rgb_led.mode = 0;
-> +               asus->keyboard_rgb_led.speed = 0xeb;
-
-...and this.
-Is it some kind of renaming? Can you split it to another patch if it
-was initially like that?
-
+diff --git a/drivers/md/dm-kcopyd.c b/drivers/md/dm-kcopyd.c
+index 4d3bbbea2e9a..65ed3e574c7e 100644
+--- a/drivers/md/dm-kcopyd.c
++++ b/drivers/md/dm-kcopyd.c
+@@ -513,7 +513,7 @@ static int run_complete_job(struct kcopyd_job *job)
+ 
+ static void complete_io(unsigned long error, void *context)
+ {
+-	struct kcopyd_job *job = (struct kcopyd_job *) context;
++	struct kcopyd_job *job = context;
+ 	struct dm_kcopyd_client *kc = job->kc;
+ 
+ 	io_job_finish(kc->throttle);
+@@ -689,7 +689,7 @@ static void segment_complete(int read_err, unsigned long write_err,
+ 	/* FIXME: tidy this function */
+ 	sector_t progress = 0;
+ 	sector_t count = 0;
+-	struct kcopyd_job *sub_job = (struct kcopyd_job *) context;
++	struct kcopyd_job *sub_job = context;
+ 	struct kcopyd_job *job = sub_job->master_job;
+ 	struct dm_kcopyd_client *kc = job->kc;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.18.2
+

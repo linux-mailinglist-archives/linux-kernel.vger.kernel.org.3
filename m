@@ -2,68 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FFC58E092
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 146A258E08D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245445AbiHIUDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 16:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S235769AbiHIUC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 16:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346132AbiHIUAy (ORCPT
+        with ESMTP id S1346298AbiHIUBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 16:00:54 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C769CF9;
-        Tue,  9 Aug 2022 13:00:51 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id CA12218849F2;
-        Tue,  9 Aug 2022 20:00:49 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id B35F725032B7;
-        Tue,  9 Aug 2022 20:00:49 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id A6770A1A0047; Tue,  9 Aug 2022 20:00:49 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Tue, 9 Aug 2022 16:01:09 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F06CF9
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 13:01:08 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id n13-20020a056e02140d00b002dfa5464967so7842726ilo.19
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:01:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=lUD5K1OaKXZ+uIyIJbpNGwhrosahtoeyYFURN2v4TZk=;
+        b=c8KL63IyP812iYPFxiimwSdkLs/+/5eWnhn3TKjXPVLo5GwtnfC/I99uxZ3iOLfOyk
+         LGbY9qflYuIibEvE36/yaVaLHzkV9OIKr954K2O5jwLzstTAG73IsZj8c+6cZkd49oUV
+         KRAmxgZd3HTtJMsdktwblaulc4MmowV4eJL34RYWAETIt7F2OKmJdnhUvsxvR0M+wXbG
+         ccV2KYcgOVd35vEG8jhWr2nd9x7c4FPbvuvKj6MQ7YqmNXVAb5QqcPF4vV61BtJzOvqA
+         wVi5L7f7VvrJ73ei33xwQrD+reTp14f3t7fKTrlNjps4w6SHmbQKHhh+JcwjIujMu1uu
+         25tw==
+X-Gm-Message-State: ACgBeo30Glz+a0ALs0+BecCm7e/rfnA9cn7srgtyycKoWtpnPzeeSsxE
+        CFJmkffiIuCJ3RkeVo78JJo77dIjW517dxBKXdE+ARFxze62
+X-Google-Smtp-Source: AA6agR6n58/o7pKgAaqATtwzUJsoBbzrcET1Z/GWo1Rby+nPb4jgIIXcO7lcmAk6ESpnFU5dkYO4p96EPmp30/dWFS9jw2nOlhTg
 MIME-Version: 1.0
-Date:   Tue, 09 Aug 2022 22:00:49 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <YvIm+OvXvxbH6POv@shredder>
-References: <20220708084904.33otb6x256huddps@skbuf>
- <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
- <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <79683d9cf122e22b66b5da3bbbb0ee1f@kapio-technology.com>
- <YvIm+OvXvxbH6POv@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <6c6fe135ce7b5b118289dc370135b0d3@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a5d:9b99:0:b0:680:360:8703 with SMTP id
+ r25-20020a5d9b99000000b0068003608703mr9559963iom.72.1660075268055; Tue, 09
+ Aug 2022 13:01:08 -0700 (PDT)
+Date:   Tue, 09 Aug 2022 13:01:08 -0700
+In-Reply-To: <20220809111035.2393-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a7290705e5d46441@google.com>
+Subject: Re: [syzbot] possible deadlock in ext4_bmap
+From:   syzbot <syzbot+9543479984ae9e576000@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,86 +55,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-09 11:20, Ido Schimmel wrote:
-> On Mon, Aug 01, 2022 at 05:33:49PM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-07-13 14:39, Ido Schimmel wrote:
->> 
->> >
->> > What are "Storm Prevention" and "zero-DPV" FDB entries?
->> >
->> 
->> For the zero-DPV entries, I can summarize:
->> 
->> Since a CPU can become saturated from constant SA Miss Violations from 
->> a
->> denied source, source MAC address are masked by loading a zero-DPV
->> (Destination Port Vector) entry in the ATU. As the address now appears 
->> in
->> the database it will not cause more Miss Violations. ANY port trying 
->> to send
->> a frame to this unauthorized address is discarded. Any locked port 
->> trying to
->> use this unauthorized address has its frames discarded too (as the 
->> ports SA
->> bit is not set in the ATU entry).
-> 
-> What happens to unlocked ports that have learning enabled and are 
-> trying
-> to use this address as SMAC? AFAICT, at least in the bridge driver, the
-> locked entry will roam, but will keep the "locked" flag, which is
-> probably not what we want. Let's see if we can agree on these semantics
-> for a "locked" entry:
+Hello,
 
-The next version of this will block forwarding to locked entries in the 
-bridge, so they will behave like the zero-DPV entries.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> 
-> 1. It discards packets with matching DMAC, regardless of ingress port. 
-> I
-> read the document [1] you linked to in a different reply and could not
-> find anything against this approach, so this might be fine or at least
-> not very significant.
-> 
-> Note that this means that "locked" entries need to be notified to 
-> device
-> drivers so that they will install a matching entry in the HW FDB.
+Reported-and-tested-by: syzbot+9543479984ae9e576000@syzkaller.appspotmail.com
 
-Okay, so as V4 does (just without the error noted).
+Tested on:
 
-> 
-> 2. It is not refreshed and has ageing enabled. That is, after initial
-> installation it will be removed by the bridge driver after configured
-> ageing time unless converted to a regular (unlocked) entry.
-> 
-> I assume this allows you to remove the timer implementation from your
-> driver and let the bridge driver notify you about the removal of this
-> entry.
+commit:         ca688bff Add linux-next specific files for 20220808
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=147eb8be080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4c20e006003cdecb
+dashboard link: https://syzkaller.appspot.com/bug?extid=9543479984ae9e576000
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=17ee2476080000
 
-Okay, but only if the scheme is not so that the driver creates the 
-locked entries itself, unless you indicate that the driver notifies the 
-bridge, which then notifies back to the driver and installs the zero-DPV 
-entry? If not I think the current implementation for the mv88e6xxx is 
-fine.
-
-> 
-> 3. With regards to roaming, the entry cannot roam between locked ports
-> (they need to have learning disabled anyway), but can roam to an
-> unlocked port, in which case it becomes a regular entry that can roam
-> and age.
-> 
-> If we agree on these semantics, then I can try to verify that at least
-> Spectrum can support them (it seems mv88e6xxx can).
-
-The consensus here is that at least for the mv88e6xxx, learning should 
-be on and link local learning should be blocked by the userspace setting 
-you pointed to earlier.
-
-> 
-> P.S. Sorry for the delay, I'm busy with other tasks at the moment.
-
-I understand :-)
-
-> 
-> [1] 
-> https://www.cisco.com/c/en/us/td/docs/solutions/Enterprise/Security/TrustSec_1-99/MAB/MAB_Dep_Guide.html#wp392522
+Note: testing is done by a robot and is best-effort only.

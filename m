@@ -2,175 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06E358DFB4
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D24E58DFC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345174AbiHITEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
+        id S1345418AbiHITFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344141AbiHITDV (ORCPT
+        with ESMTP id S1344647AbiHITEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:03:21 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391992BB16
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:38:44 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id v14so3851677qkf.4
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:38:44 -0700 (PDT)
+        Tue, 9 Aug 2022 15:04:16 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6E313D5D
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:41:09 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id b96so16332817edf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=W39UTjuGL/i3nw+dgDx0+fMLYroO0xsXKyyQ9sO3qfs=;
-        b=Fm5fnpQkRBDixj266mJEDjoI5meQ1E60sTmfOsHyY4gHXSPI47WK21mPv188hkdsBc
-         1D4TqzxCqwoLkifQFTRkJW0CYED+uXT5c8xuxNC1L52e+xaIjanzU9IqE0lbAHCb7J2/
-         c4D622uQsla/OWEOaDBGBLVELPWHUKcAbfKsBMFVJzYbc7DdCkDcN30dU/x0nBfoZZqP
-         qOpFVPntPIQ140a5/hXtOFv0p1SE86EJi+UCbpZPFjopffVvfr9bwa1vVrgkZXSCpQqF
-         zy8+xUOGIBZuCbUaq9a9ce80kCe0wK5TguviBzveJ9mxc7tNKCMigHVnDp9JUlUoYPkh
-         sAHA==
+        bh=kVwCZBP8xiCx+3wLLImCHnMmFFTnJkwj0aGJ2jKqccw=;
+        b=DHx27yMkHy1skZqXZ2CMAcU3H+mg0HNfe2zU+1flo3YTkK3PYdBupattYbASdmKGP4
+         onlUm7uo5x58CUDTPSu0jSnI7jo4ZZMSdXxIK1xDJQ9zk0fM5KJrUtY9XVGV0r2ipCGE
+         BmeEPBiTPHYD5cEp/375GgspyWLVT8sZcz/cI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=W39UTjuGL/i3nw+dgDx0+fMLYroO0xsXKyyQ9sO3qfs=;
-        b=FQ710PQHgH5rZd9iVVo0d5srJcyI/yP0qCHYr9rbRAO3V3pfawJmsuH+dgks1hNh0x
-         SfuMD5aRH2cxLx0tXqraX9A2T/JZQc7Ljl6jlrvkv6SRFL6XrZ5ZitFbqtKTVh4j74Wt
-         XiTJ5CVvx+W+X5BK0AOAsailoBvU0AFkOL/WCHBofPGCKx80zhtoOc5EefV/Y6tATRFv
-         yEMmWt7LHhT8F0omkTxGODGgCwWRw6GAPrA2CsGje6RElClr6p06uhOCEnexhuhq/NU1
-         qDtu+q3uVZil7KHEaT2zldYJD46RkwDb+SXjoLEgbjtvbawW0I2yOKhVwzGPWoiwzIFd
-         PcwQ==
-X-Gm-Message-State: ACgBeo0Rn+nELN1uymrASFrMvu6bcIgNLQEGHITn8oL5IjeToS3N1Ash
-        eh9C1bj1vWxIifYrTquNNAAV1+RVHZkXTp8gA651dg==
-X-Google-Smtp-Source: AA6agR7j7J8hfYaZbUCNovVrxp1DMCrCrOlUSxvDOduvi868dcDyOoshl/+dg7eRHqEx1jC61ycVEwqC6RyMjmSPXNM=
-X-Received: by 2002:a05:620a:8:b0:6b9:58ea:be83 with SMTP id
- j8-20020a05620a000800b006b958eabe83mr6879567qki.221.1660070323122; Tue, 09
- Aug 2022 11:38:43 -0700 (PDT)
+        bh=kVwCZBP8xiCx+3wLLImCHnMmFFTnJkwj0aGJ2jKqccw=;
+        b=sVAlqXiuu21/p465q6sQO0RUePCAXzDXwMs+D99qarB2OshS5PNwXrkjLbKqJ6uqA7
+         Hk+1oN9JGW8UPf0SOkE327YYvCW9RrE2fd2PPHNIN7UF1GY8nRmkS6qicyjwuQ7e/6ay
+         7TeASRfWc6j7RlUL5y1q6s/HRRvfuqviai/91CPslPOlWOdufSHj2/fYLhdPIeeWf1Bw
+         f84+ZqizOur7IcEk3+vXn+WXqo+Rdf3lyJHQqJbBr7qc8MSHGumRg4y9ILWOHO75gc1K
+         CgXEguUnRnyhIEcnS8bsVv5/vWNQpB8j0FzR9aTY6iixaA6xXHL5fd6G4z2nk/XLR8a2
+         XjMQ==
+X-Gm-Message-State: ACgBeo3FpHCZ50M4s57g4Q+JN7jt9iP/5kflVau2ik5AwMpjitHxgelk
+        z8063mpwoqM0M/96iXRA5w36YJM+B3WhilefwIg=
+X-Google-Smtp-Source: AA6agR6VLVHMKKCMntAbDhzCK4WlTIdJjuzweABBUPLT0U6GpTAs+vJBjGbLQQeWf0LOuKNaLsNSfg==
+X-Received: by 2002:a05:6402:40c9:b0:43d:cc0d:e9de with SMTP id z9-20020a05640240c900b0043dcc0de9demr23135280edb.319.1660070467451;
+        Tue, 09 Aug 2022 11:41:07 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id kv21-20020a17090778d500b0072b8fbc9be1sm1397499ejc.187.2022.08.09.11.41.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 11:41:07 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id bv3so15253006wrb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:41:06 -0700 (PDT)
+X-Received: by 2002:a5d:638b:0:b0:220:6e1a:8794 with SMTP id
+ p11-20020a5d638b000000b002206e1a8794mr15353489wru.193.1660070466444; Tue, 09
+ Aug 2022 11:41:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220805214821.1058337-1-haoluo@google.com> <20220805214821.1058337-5-haoluo@google.com>
- <CAEf4BzZHf89Ds8nQWFCH00fKs9-9GkJ0d+Hrp-LkMCDUP_td0A@mail.gmail.com>
- <CA+khW7hUVOkHBO3dhRze2_VKZuxD-LuNQdO3nHUkLCYmuuR6eg@mail.gmail.com> <20220809162325.hwgvys5n3rivuz7a@MacBook-Pro-3.local.dhcp.thefacebook.com>
-In-Reply-To: <20220809162325.hwgvys5n3rivuz7a@MacBook-Pro-3.local.dhcp.thefacebook.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 9 Aug 2022 11:38:32 -0700
-Message-ID: <CA+khW7j0kzP+W_Qgsim52J+HeR27XJcyMk73Hq93tsmNzT7q6w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 4/8] bpf: Introduce cgroup iter
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Michal Koutny <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>
+References: <20220808073232.8808-1-david@redhat.com>
+In-Reply-To: <20220808073232.8808-1-david@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 9 Aug 2022 11:40:50 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi81ujYGP0gmyy2kDke_ExL742Lo_hLepGjCa8mS81A7w@mail.gmail.com>
+Message-ID: <CAHk-=wi81ujYGP0gmyy2kDke_ExL742Lo_hLepGjCa8mS81A7w@mail.gmail.com>
+Subject: Re: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove FOLL_COW
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 9:23 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Mon, Aug 8, 2022 at 12:32 AM David Hildenbrand <david@redhat.com> wrote:
 >
-> On Mon, Aug 08, 2022 at 05:56:57PM -0700, Hao Luo wrote:
-> > On Mon, Aug 8, 2022 at 5:19 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Fri, Aug 5, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
-> > > >
-> > > > Cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
-> > > >
-> > > >  - walking a cgroup's descendants in pre-order.
-> > > >  - walking a cgroup's descendants in post-order.
-> > > >  - walking a cgroup's ancestors.
-> > > >  - process only the given cgroup.
-> > > >
-[...]
-> > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > > index 59a217ca2dfd..4d758b2e70d6 100644
-> > > > --- a/include/uapi/linux/bpf.h
-> > > > +++ b/include/uapi/linux/bpf.h
-> > > > @@ -87,10 +87,37 @@ struct bpf_cgroup_storage_key {
-> > > >         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
-> > > >  };
-> > > >
-> > > > +enum bpf_iter_order {
-> > > > +       BPF_ITER_ORDER_DEFAULT = 0,     /* default order. */
-> > >
-> > > why is this default order necessary? It just adds confusion (I had to
-> > > look up source code to know what is default order). I might have
-> > > missed some discussion, so if there is some very good reason, then
-> > > please document this in commit message. But I'd rather not do some
-> > > magical default order instead. We can set 0 to mean invalid and error
-> > > out, or just do SELF as the very first value (and if user forgot to
-> > > specify more fancy mode, they hopefully will quickly discover this in
-> > > their testing).
-> > >
-> >
-> > PRE/POST/UP are tree-specific orders. SELF applies on all iters and
-> > yields only a single object. How does task_iter express a non-self
-> > order? By non-self, I mean something like "I don't care about the
-> > order, just scan _all_ the objects". And this "don't care" order, IMO,
-> > may be the common case. I don't think everyone cares about walking
-> > order for tasks. The DEFAULT is intentionally put at the first value,
-> > so that if users don't care about order, they don't have to specify
-> > this field.
-> >
-> > If that sounds valid, maybe using "UNSPEC" instead of "DEFAULT" is better?
->
-> I agree with Andrii.
-> This:
-> +       if (order == BPF_ITER_ORDER_DEFAULT)
-> +               order = BPF_ITER_DESCENDANTS_PRE;
->
-> looks like an arbitrary choice.
-> imo
-> BPF_ITER_DESCENDANTS_PRE = 0,
-> would have been more obvious. No need to dig into definition of "default".
->
-> UNSPEC = 0
-> is fine too if we want user to always be conscious about the order
-> and the kernel will error if that field is not initialized.
-> That would be my preference, since it will match the rest of uapi/bpf.h
->
+> For example, a write() via /proc/self/mem to a uffd-wp-protected range has
+> to fail instead of silently granting write access and bypassing the
+> userspace fault handler. Note that FOLL_FORCE is not only used for debug
+> access, but also triggered by applications without debug intentions, for
+> example, when pinning pages via RDMA.
 
-Sounds good. In the next version, will use
+So this made me go "Whaa?"
 
-enum bpf_iter_order {
-        BPF_ITER_ORDER_UNSPEC = 0,
-        BPF_ITER_SELF_ONLY,             /* process only a single object. */
-        BPF_ITER_DESCENDANTS_PRE,       /* walk descendants in pre-order. */
-        BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
-        BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
-};
+I didn't even realize that the media drivers and rdma used FOLL_FORCE.
 
-and explicitly list the values acceptable by cgroup_iter, error out if
-UNSPEC is detected.
+That's just completely bogus.
 
-Also, following Andrii's comments, will change BPF_ITER_SELF to
-BPF_ITER_SELF_ONLY, which does seem a little bit explicit in
-comparison.
+Why do they do that?
 
-> I applied the first 3 patches to ease respin.
+It seems to be completely bogus, and seems to have no actual valid
+reason for it. Looking through the history, it goes back to the
+original code submission in 2006, and doesn't have a mention of why.
 
-Thanks! This helps!
+I think the original reason was that the code didn't have pinning, so
+it used "do a write" as a pin mechanism - even for reads.
 
-> Thanks!
+IOW, I think the non-ptrace use of FOLL_FORCE should just be removed.
+
+                 Linus

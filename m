@@ -2,60 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C1F58D9EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D78158D989
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244662AbiHINv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 09:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
+        id S243970AbiHINnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 09:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244654AbiHINvw (ORCPT
+        with ESMTP id S231377AbiHINnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 09:51:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6AB63F7
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 06:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660053110; x=1691589110;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aKtPlszLj91DnSLWI6v2grczwttYIvtYJeZsjfBmvyU=;
-  b=D6l1OOveMZEXH83KNP4Y7+yiwsxR3rWFJmu7pYhc3tRwtgaHw4cG3P91
-   1f3UbKm4yJA/vIoFWv1SanCTTmPvx3uw7ik3iqhmt6c4Hb9Z/tbGFtymx
-   7uHuftFQjnr5QtYK2W5CzRyXMxdxNu8KUWXo/9xG456u/QQoj8OEhIg/J
-   CQWQzp0mGAygDkDUmVZbAzmfztyugo3U/ac/5cosuCJqlptfEfM+EAfPx
-   iH6y2xeXQEymIgYFOC3qrm9HTP4aD6kghI81xaPiEzWM2k9TncfJ2SmS1
-   H/0jgHpjxhTpp4TF17NN+uWn5xrtULu8WV8x7agFqHzDes3CxjjoUtu2w
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="270611443"
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="270611443"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 06:51:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="747044259"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Aug 2022 06:51:48 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLPe7-000My1-3D;
-        Tue, 09 Aug 2022 13:51:48 +0000
-Date:   Tue, 9 Aug 2022 21:51:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tal Cohen <talcohen@habana.ai>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Oded Gabbay <ogabbay@kernel.org>
-Subject: [ogabbay:habanalabs-next 24/27]
- drivers/misc/habanalabs/gaudi2/gaudi2.c:3837:5: sparse: sparse: symbol
- 'gaudi2_set_engine_cores' was not declared. Should it be static?
-Message-ID: <202208092119.nTjk3pCL-lkp@intel.com>
+        Tue, 9 Aug 2022 09:43:04 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5753D18B13
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 06:43:02 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M2DhM4j6czjXPs;
+        Tue,  9 Aug 2022 21:39:47 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 9 Aug 2022 21:42:58 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 9 Aug
+ 2022 21:42:57 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <kvmarm@lists.cs.columbia.edu>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <maz@kernel.org>, <james.morse@arm.com>,
+        <alexandru.elisei@arm.com>, <suzuki.poulose@arm.com>,
+        <oliver.upton@linux.dev>
+Subject: [PATCH v2] KVM: arm64: fix compile error because of shift overflow
+Date:   Tue, 9 Aug 2022 21:51:27 +0800
+Message-ID: <20220809135127.480285-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,28 +52,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
-head:   f34913141b3cb6da65860212be46960e97f4d44b
-commit: 464bb4bbd5a316a10895bba40021b84a0cd6258b [24/27] habanalabs/gaudi2: new API to control engine cores running mode
-config: i386-randconfig-s001-20220808 (https://download.01.org/0day-ci/archive/20220809/202208092119.nTjk3pCL-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=464bb4bbd5a316a10895bba40021b84a0cd6258b
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay habanalabs-next
-        git checkout 464bb4bbd5a316a10895bba40021b84a0cd6258b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/misc/
+Using GENMASK() to generate the masks of device type and device id, it makes
+code unambiguous, also it can fix the following fix compile error because of
+shift overflow when using low verison gcc(mine version is 7.5):
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+In function ‘kvm_vm_ioctl_set_device_addr.isra.38’,
+    inlined from ‘kvm_arch_vm_ioctl’ at arch/arm64/kvm/arm.c:1454:10:
+././include/linux/compiler_types.h:354:38: error: call to ‘__compiletime_assert_599’ \
+declared with attribute error: FIELD_GET: mask is not constant
+  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/misc/habanalabs/gaudi2/gaudi2.c:3837:5: sparse: sparse: symbol 'gaudi2_set_engine_cores' was not declared. Should it be static?
+Fixes: 9f968c9266aa ("KVM: arm64: vgic-v2: Add helper for legacy dist/cpuif base address setting")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+v2:
+  Using GENMASK() to generate the masks.
+---
+ arch/arm64/include/uapi/asm/kvm.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+index 3bb134355874..5e7dfaf76ec1 100644
+--- a/arch/arm64/include/uapi/asm/kvm.h
++++ b/arch/arm64/include/uapi/asm/kvm.h
+@@ -75,9 +75,9 @@ struct kvm_regs {
+ 
+ /* KVM_ARM_SET_DEVICE_ADDR ioctl id encoding */
+ #define KVM_ARM_DEVICE_TYPE_SHIFT	0
+-#define KVM_ARM_DEVICE_TYPE_MASK	(0xffff << KVM_ARM_DEVICE_TYPE_SHIFT)
++#define KVM_ARM_DEVICE_TYPE_MASK	GENMASK(15, KVM_ARM_DEVICE_TYPE_SHIFT)
+ #define KVM_ARM_DEVICE_ID_SHIFT		16
+-#define KVM_ARM_DEVICE_ID_MASK		(0xffff << KVM_ARM_DEVICE_ID_SHIFT)
++#define KVM_ARM_DEVICE_ID_MASK		GENMASK(31, KVM_ARM_DEVICE_ID_SHIFT)
+ 
+ /* Supported device IDs */
+ #define KVM_ARM_DEVICE_VGIC_V2		0
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

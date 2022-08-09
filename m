@@ -2,330 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C9958D920
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEF258D923
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243483AbiHINI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 09:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
+        id S243439AbiHINK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 09:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243439AbiHINIy (ORCPT
+        with ESMTP id S237990AbiHINKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 09:08:54 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2082.outbound.protection.outlook.com [40.107.95.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AA5BC17;
-        Tue,  9 Aug 2022 06:08:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dEv6ULOjEBZl7K8aFA4mJQE8T5ikVAjKU8UjxHORTENrSqnbLfwp1p6jR7ShVNR27jFHztC/sVjQ7rL88eQuh444S+l5+yMoa+MHNNOD9GUpv4KyLxVQg4QoHl75oTV50rVSmmjyCkaMxiu9IFqmIGgob8BA20HYd1oHaRz/01qdw9L0C2a9WnpIqVJCc149HhCdTQAQdIdmvDaXi7lQx/BzPdUVMHIg47LVAGrXAAkFdcH9Q6/r6F/tLNI0dmLlsFz4dzpLgMQj7DTtHfnqewegwJWDdU24e8H/qgrFXbt2XcvdoFn3s0G8ElfTULyJdgxZbox19lhzpl24GW33cQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EYI7LsRSCYZ8hjsA+99zwHQLpTXhDWk3ic1Jx94FGiQ=;
- b=LH0o/eS3ZDZ8GhJZJFqtFOcSKQkWumOF41H3cX+fAoVjRYt0xWpgI31tjmYgxLxt0un0Oo78CW8I/gX96oDxs+hvW76RBcSDMuD7VXa+95fQipeY8ZYit//5HPxXR6QXhxxrtTxHQMZTGVV4rIrbLPMHcijwb0M5Yv8Z+XctHm5YShSgEaM6RatF9CnVd6RpwFLFUMc2kpY2EDPU9RLHTWsq00MmMWdWLppvHKnxrCoRyI71fEmcX8gZ8KkSkNW/MDSDLAWsDhGqr4F6ERA0bmZ0Lonn7KRC6M0hRdziOymi55yXDLB4D2FaLr6a3vLiS5xkscbqTDfx4MMPjty7hQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=linaro.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EYI7LsRSCYZ8hjsA+99zwHQLpTXhDWk3ic1Jx94FGiQ=;
- b=eTUacdrnWUbWoLg7hrjOMsCEkgRSBVw5gId19CUlt0zl/qXZOaZDqgHpVo8SltafYkkau6kD0hjKB/G7PwvEPpBlrhfp1JMWJl2bb3ZGuYA3dme8f0xAdJPlEP7ruZiA5pkEAmhBrb7dFMF+bj6kZpfHl/rQWQ2JZ8X5T3nlO4E=
-Received: from BN8PR03CA0021.namprd03.prod.outlook.com (2603:10b6:408:94::34)
- by DM5PR02MB2745.namprd02.prod.outlook.com (2603:10b6:3:10e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Tue, 9 Aug
- 2022 13:08:51 +0000
-Received: from BN1NAM02FT029.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:94:cafe::5c) by BN8PR03CA0021.outlook.office365.com
- (2603:10b6:408:94::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10 via Frontend
- Transport; Tue, 9 Aug 2022 13:08:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT029.mail.protection.outlook.com (10.13.2.143) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5504.14 via Frontend Transport; Tue, 9 Aug 2022 13:08:50 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 9 Aug 2022 06:08:48 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 9 Aug 2022 06:08:48 -0700
-Envelope-to: git@xilinx.com,
- linus.walleij@linaro.org,
- brgl@bgdev.pl,
- robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org,
- srinivas.neeli@amd.com,
- linux-gpio@vger.kernel.org,
- devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- git@amd.com
-Received: from [172.23.66.193] (port=41794 helo=xhdsneeli40u.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1oLOyV-000GuI-V3; Tue, 09 Aug 2022 06:08:48 -0700
-From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
-To:     <shubhrajyoti.datta@xilinx.com>, <srinivas.neeli@xilinx.com>,
-        <michal.simek@xilinx.com>, <linus.walleij@linaro.org>,
-        <brgl@bgdev.pl>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <srinivas.neeli@amd.com>
-CC:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>, <git@amd.com>
-Subject: [PATCH] dt-bindings: gpio: gpio-xilinx: Convert Xilinx axi gpio binding to YAML
-Date:   Tue, 9 Aug 2022 18:38:42 +0530
-Message-ID: <20220809130842.27975-1-srinivas.neeli@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 9 Aug 2022 09:10:52 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9C664D4
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 06:10:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660050650; x=1691586650;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=57XyRoGe+iqcJsX2dk3gnHDLo+yDUu9UuYsBk73he+Q=;
+  b=IgWFOH5Z16Vkgzl7rn9uaYnrAIrKLb3eorArLfLMC9S2Bl8Ovd+BdC3m
+   ujnL683Sa9Gyci1k52FrkSUOu2jN7pis7hBTKhqeVH/J8fW9BlaMMOtKA
+   UPcaZL/F1SFuYNtAYle+1uOHhhdxR/tzIk+REvLvsq9r8KDy75Fbp/ABg
+   o6dV9cQ6gUbtV8ykEVTUtVRzoytT40+46rEcXpviOq4xOhlPT5chI/aG2
+   n+zHXFSDAX55xUTn2EmtDar32v3osTe5aGNb7CPovDfqn6WKXFjbFvUDM
+   476Ey78IZnWL4iyg1n8MWuySC00wccEUZ8ixq7HeXqDFXXtses+EIWiNs
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="292071360"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="292071360"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 06:10:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="604751166"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 09 Aug 2022 06:10:48 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLP0R-000Mwt-19;
+        Tue, 09 Aug 2022 13:10:47 +0000
+Date:   Tue, 9 Aug 2022 21:10:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bean Huo <beanhuo@micron.com>
+Subject: drivers/ufs/host/tc-dwc-g210-pltfrm.c:36:34: warning: unused
+ variable 'tc_dwc_g210_pltfm_match'
+Message-ID: <202208092130.BVmamibT-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c8d95bbd-d2eb-4cef-0d75-08da7a084df4
-X-MS-TrafficTypeDiagnostic: DM5PR02MB2745:EE_
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bjrUzxF89qbDTIIkq4pGeeYnN/N/YKqMB6RyE836Ir2imm1KaCDbiakPmeaEzCWkfExKCRpwdoyl4qmiRPi7ssAVwKWCm3nEDXIhgTdgTImCzV6HDCBpdyKqjMG8G9uLL491sknFaiBk77b+C5Pjz5elhIcK5iMu37vhbYfMJyKyijuTdcaojNj5Omi72xoTYHspZkTZ4jCdrgL3I2/46LDSed/hnix6v+ncXuUNr803prIOvAoDNXmsWAw4Yh2pa7/J2Cphj2scMgCAxHqn5KEkT5H5qQwGv7I3XgxkfUqyJE+prm7zpuQba6dpiPouaMKzE6dhkHYQE1ihyHv89EK9BdnTNeGfa9dbhP2tu76Pl7W7QyL0xwrGGBme69qEg7mKC+Khh4ypGyzK7t1iFLMWGba2XvHjqUifDy9NSvtwfE9dZD8K7xJEvYIU1YlP0maQCn3Q/B7yzzRVa7MfBVWZTp8MbMsc8kk4fK+g1YrhaPH6I+LTrcjXqRlko8odD4Ex1mUUNjXE0sYj3I3wUXfdBaZmyD89RW4E3lBIIRAvR/eCbG6pFzg2ec5CtR44SMScfY84jUSc3apvNcLI5UgDI30w3yIi5J9CJUxWUNUzriznax4yBH+BR5ozSHIlundvLE72lWwwywc7etrZzzgV9HQxlrtbOjeFfGHGFA+GD8ZPGJJqb3Cquxre8ejv1aZFn1w7yzMY3bExH8e+kr8A2PCQuJt8vqmsVi8qeBDUGkEIk8Xrx04yzb9J8RZR78OVb/8pU7hc34ZA/+YRvtxyRgqpsFpkyWX2Iy10qKbdl8ofb9+FKgzfYpsCjXJNx/gP2uOp71QtL6+PzfkZ3mfLFSR75T7l0paw5zx7Igyn2pGTD64DKoiqO88VB0fiwA49yGZvTZaP3ntk+WMz0w==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(346002)(136003)(396003)(40470700004)(46966006)(36840700001)(6666004)(478600001)(966005)(36756003)(7636003)(356005)(82740400003)(83380400001)(2616005)(186003)(47076005)(1076003)(426003)(336012)(54906003)(26005)(110136005)(41300700001)(40480700001)(70586007)(70206006)(7696005)(316002)(82310400005)(8676002)(4326008)(5660300002)(40460700003)(7416002)(36860700001)(44832011)(9786002)(8936002)(2906002)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 13:08:50.9857
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8d95bbd-d2eb-4cef-0d75-08da7a084df4
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT029.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB2745
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Xilinx axi gpio binding documentation to YAML.
+Hi Bart,
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
----
- .../devicetree/bindings/gpio/gpio-xilinx.txt  |  48 ------
- .../bindings/gpio/xlnx,gpio-xilinx.yaml       | 140 ++++++++++++++++++
- 2 files changed, 140 insertions(+), 48 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-xilinx.txt
- create mode 100644 Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
+First bad commit (maybe != root cause):
 
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-xilinx.txt b/Documentation/devicetree/bindings/gpio/gpio-xilinx.txt
-deleted file mode 100644
-index e506f30e1a95..000000000000
---- a/Documentation/devicetree/bindings/gpio/gpio-xilinx.txt
-+++ /dev/null
-@@ -1,48 +0,0 @@
--Xilinx plb/axi GPIO controller
--
--Dual channel GPIO controller with configurable number of pins
--(from 1 to 32 per channel). Every pin can be configured as
--input/output/tristate. Both channels share the same global IRQ but
--local interrupts can be enabled on channel basis.
--
--Required properties:
--- compatible : Should be "xlnx,xps-gpio-1.00.a"
--- reg : Address and length of the register set for the device
--- #gpio-cells : Should be two. The first cell is the pin number and the
--  second cell is used to specify optional parameters (currently unused).
--- gpio-controller : Marks the device node as a GPIO controller.
--
--Optional properties:
--- clocks : Input clock specifier. Refer to common clock bindings.
--- interrupts : Interrupt mapping for GPIO IRQ.
--- xlnx,all-inputs : if n-th bit is setup, GPIO-n is input
--- xlnx,dout-default : if n-th bit is 1, GPIO-n default value is 1
--- xlnx,gpio-width : gpio width
--- xlnx,tri-default : if n-th bit is 1, GPIO-n is in tristate mode
--- xlnx,is-dual : if 1, controller also uses the second channel
--- xlnx,all-inputs-2 : as above but for the second channel
--- xlnx,dout-default-2 : as above but the second channel
--- xlnx,gpio2-width : as above but for the second channel
--- xlnx,tri-default-2 : as above but for the second channel
--
--
--Example:
--gpio: gpio@40000000 {
--	#gpio-cells = <2>;
--	compatible = "xlnx,xps-gpio-1.00.a";
--	clocks = <&clkc25>;
--	gpio-controller ;
--	interrupt-parent = <&microblaze_0_intc>;
--	interrupts = < 6 2 >;
--	reg = < 0x40000000 0x10000 >;
--	xlnx,all-inputs = <0x0>;
--	xlnx,all-inputs-2 = <0x0>;
--	xlnx,dout-default = <0x0>;
--	xlnx,dout-default-2 = <0x0>;
--	xlnx,gpio-width = <0x2>;
--	xlnx,gpio2-width = <0x2>;
--	xlnx,interrupt-present = <0x1>;
--	xlnx,is-dual = <0x1>;
--	xlnx,tri-default = <0xffffffff>;
--	xlnx,tri-default-2 = <0xffffffff>;
--} ;
-diff --git a/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml b/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
-new file mode 100644
-index 000000000000..089e297aa530
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
-@@ -0,0 +1,140 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gpio/xlnx,gpio-xilinx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Xilinx Axi GPIO controller Device Tree Bindings
-+
-+maintainers:
-+  - Neeli Srinivas <srinivas.neeli@amd.com>
-+
-+description:
-+  The AXI GPIO design provides a general purpose input/output interface
-+  to an AXI4-Lite interface. The AXI GPIO can be configured as either
-+  a single or a dual-channel device. The width of each channel is
-+  independently configurable. The channels can be configured to
-+  generate an interrupt when a transition on any of their inputs occurs.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - xlnx,xps-gpio-1.00.a
-+  reg:
-+    maxItems: 1
-+
-+  "#gpio-cells":
-+    const: 2
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  gpio-controller: true
-+
-+  gpio-line-names:
-+    description: strings describing the names of each gpio line
-+    minItems: 1
-+    maxItems: 64
-+
-+  interrupt-controller: true
-+
-+  "#interrupt-cells":
-+    const: 2
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupt-names: true
-+
-+  xlnx,all-inputs:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: This option sets this GPIO channel1 bits in input mode.
-+
-+  xlnx,all-inputs-2:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: This option sets this GPIO channel2 bits in input mode.
-+
-+  xlnx,all-outputs:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: This option sets this GPIO channel1 bits in output mode.
-+
-+  xlnx,all-outputs-2:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: This option sets this GPIO channel2 bits in output mode.
-+
-+  xlnx,dout-default:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: Sets the default value of all the enabled bits of
-+                 channel1. By default, this parameter is set to 0x0.
-+
-+  xlnx,dout-default-2:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: Sets the default value of all the enabled bits of
-+                 channel2. By default, this parameter is set to 0x0.
-+
-+  xlnx,gpio-width:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: The value defines the bit width of the GPIO channel1.
-+                 Its value can be from 1 to 32, and default value is 32.
-+
-+  xlnx,gpio2-width:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: The value defines the bit width of the GPIO channel2.
-+                 Its value can be from 1 to 32, and default value is 32.
-+
-+  xlnx,interrupt-present:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: This parameter enables interrupt control logic
-+                 and interrupt registers in GPIO module. By default it is 0.
-+  xlnx,is-dual:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: This parameter enables a second GPIO channel (GPIO2).
-+
-+  xlnx,tri-default:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: This value configures the input or output mode
-+                 of each bit of GPIO channel1.
-+
-+  xlnx,tri-default-2:
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    description: This value configures the input or output mode
-+                 of each bit of GPIO channel2.
-+
-+required:
-+  - reg
-+  - compatible
-+  - gpio-controller
-+  - "#gpio-cells"
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+        gpio@e000a000 {
-+            #gpio-cells = <2>;
-+            #interrupt-cells = <0x2>;
-+            clocks = <&zynqmp_clk 71>;
-+            compatible = "xlnx,xps-gpio-1.00.a";
-+            gpio-controller;
-+            interrupt-controller;
-+            interrupt-names = "ip2intc_irpt";
-+            interrupt-parent = <&gic>;
-+            interrupts = <0 89 4>;
-+            reg = <0xa0020000 0x10000>;
-+            xlnx,all-inputs = <0x0>;
-+            xlnx,all-inputs-2 = <0x0>;
-+            xlnx,all-outputs = <0x0>;
-+            xlnx,all-outputs-2 = <0x0>;
-+            xlnx,dout-default = <0x0>;
-+            xlnx,dout-default-2 = <0x0>;
-+            xlnx,gpio-width = <0x20>;
-+            xlnx,gpio2-width = <0x20>;
-+            xlnx,interrupt-present = <0x1>;
-+            xlnx,is-dual = <0x1>;
-+            xlnx,tri-default = <0xFFFFFFFF>;
-+            xlnx,tri-default-2 = <0xFFFFFFFF>;
-+        };
-+
-+...
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   eb555cb5b794f4e12a9897f3d46d5a72104cd4a7
+commit: dd11376b9f1b73aca3f8c6eb541486bbb6996f05 scsi: ufs: Split the drivers/scsi/ufs directory
+date:   3 months ago
+config: s390-randconfig-r044-20220808 (https://download.01.org/0day-ci/archive/20220809/202208092130.BVmamibT-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd11376b9f1b73aca3f8c6eb541486bbb6996f05
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dd11376b9f1b73aca3f8c6eb541486bbb6996f05
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/ufs/host/ lib/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/ufs/host/tc-dwc-g210-pltfrm.c:17:
+   In file included from drivers/ufs/host/ufshcd-pltfrm.h:8:
+   In file included from include/ufs/ufshcd.h:17:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/ufs/host/tc-dwc-g210-pltfrm.c:17:
+   In file included from drivers/ufs/host/ufshcd-pltfrm.h:8:
+   In file included from include/ufs/ufshcd.h:17:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/ufs/host/tc-dwc-g210-pltfrm.c:17:
+   In file included from drivers/ufs/host/ufshcd-pltfrm.h:8:
+   In file included from include/ufs/ufshcd.h:17:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/ufs/host/tc-dwc-g210-pltfrm.c:36:34: warning: unused variable 'tc_dwc_g210_pltfm_match' [-Wunused-const-variable]
+   static const struct of_device_id tc_dwc_g210_pltfm_match[] = {
+                                    ^
+   13 warnings generated.
+--
+   In file included from drivers/ufs/host/ufs-hisi.c:13:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/ufs/host/ufs-hisi.c:13:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/ufs/host/ufs-hisi.c:13:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/ufs/host/ufs-hisi.c:561:34: warning: unused variable 'ufs_hisi_of_match' [-Wunused-const-variable]
+   static const struct of_device_id ufs_hisi_of_match[] = {
+                                    ^
+   13 warnings generated.
+
+
+vim +/tc_dwc_g210_pltfm_match +36 drivers/ufs/host/tc-dwc-g210-pltfrm.c
+
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  35  
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11 @36  static const struct of_device_id tc_dwc_g210_pltfm_match[] = {
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  37  	{
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  38  		.compatible = "snps,g210-tc-6.00-20bit",
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  39  		.data = &tc_dwc_g210_20bit_pltfm_hba_vops,
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  40  	},
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  41  	{
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  42  		.compatible = "snps,g210-tc-6.00-40bit",
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  43  		.data = &tc_dwc_g210_40bit_pltfm_hba_vops,
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  44  	},
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  45  	{ },
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  46  };
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  47  MODULE_DEVICE_TABLE(of, tc_dwc_g210_pltfm_match);
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  48  
+
+:::::: The code at line 36 was first introduced by commit
+:::::: fc040a3fc47cad038f774275ea61fe6d5b57d7cc ufs: add TC G210 platform driver
+
+:::::: TO: Joao Pinto <Joao.Pinto@synopsys.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

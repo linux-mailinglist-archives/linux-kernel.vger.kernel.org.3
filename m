@@ -2,154 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4147E58D3C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A37658D3CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237514AbiHIGb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S237631AbiHIGcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 02:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235179AbiHIGby (ORCPT
+        with ESMTP id S235179AbiHIGcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:31:54 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BB71901F;
-        Mon,  8 Aug 2022 23:31:53 -0700 (PDT)
-Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 08C8E3F1;
-        Tue,  9 Aug 2022 08:31:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1660026711;
-        bh=pRkiH090hm/3+AzIhawmn+O3nQNdF8FZ7zjdilQgQvM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dtLhiHZqB//pIENe29MK1W35VjCbvu3uxsuL3XBQSZuqpKHadZIFzS+WTWuRqMXgW
-         hyETYuRo9VROcKajrZYNR46y8/FEhQXZ4aSdgdDF2+ChXQAsfc017U6XC6VtPCdE9O
-         1/HnyNEd4yXRU6hAAGXQbpAIyRrFBmoYMQXbm/To=
-Message-ID: <1a394a4d-1099-400f-2b52-e7a02e379cba@ideasonboard.com>
-Date:   Tue, 9 Aug 2022 09:31:46 +0300
+        Tue, 9 Aug 2022 02:32:07 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFCB1FCFC;
+        Mon,  8 Aug 2022 23:32:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1660026727; x=1691562727;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=VyIoMcZ7RkY7NN4Q1ADLKqmIVyptu2nK6LJES8ahh8w=;
+  b=gyYGtKFuQXWlQt4YO5sx/5YX82H++6ksKq3LJ8lmL6YpWT0O0r/TEo1y
+   HAA/6DwaBNkD891ltmhugbnrsedYk1iHLReF4Yo8Qr6woBIcf8UTyr0AN
+   M2yq35rldyVzSwah4zRnKwuLJ/SCJQLuy2VV0u3nYmBYtfgU2dFNcikDg
+   Q=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Aug 2022 23:32:06 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 23:32:05 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 8 Aug 2022 23:32:05 -0700
+Received: from [10.216.39.97] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 8 Aug 2022
+ 23:31:59 -0700
+Message-ID: <dd446961-c455-d721-cc0a-2aec506b2189@quicinc.com>
+Date:   Tue, 9 Aug 2022 12:01:56 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v3 2/2] drm/tidss: Add support for AM625 DSS
+Subject: Re: [PATCH 5/8] remoteproc: qcom: Add efuse evb selection control
 Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>, Jyri Sarha <jyri.sarha@iki.fi>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Nishanth Menon <nm@ti.com>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Rahul T R <r-ravikumar@ti.com>
-References: <20220627151200.4693-1-a-bhatia1@ti.com>
- <20220627151200.4693-3-a-bhatia1@ti.com>
- <4382b760-418f-4033-97f2-47e082a30232@ideasonboard.com>
- <cb9ada9f-9673-2039-c22b-fa0d3345fe41@ti.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <cb9ada9f-9673-2039-c22b-fa0d3345fe41@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
+References: <1659536480-5176-1-git-send-email-quic_srivasam@quicinc.com>
+ <1659536480-5176-6-git-send-email-quic_srivasam@quicinc.com>
+ <0ed40651-1638-3701-f310-cd50102ae763@linaro.org>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <0ed40651-1638-3701-f310-cd50102ae763@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/08/2022 09:08, Aradhya Bhatia wrote:
-> Hi Tomi,
-> 
-> On 28-Jul-22 17:34, Tomi Valkeinen wrote:
->> On 27/06/2022 18:12, Aradhya Bhatia wrote:
->>> Add support for the DSS IP on TI's new AM625 SoC in the tidss driver.
->>>
->>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
->>> Reviewed-by: Rahul T R <r-ravikumar@ti.com>
->>> ---
->>>   drivers/gpu/drm/tidss/tidss_dispc.c | 56 ++++++++++++++++++++++++++++-
->>>   drivers/gpu/drm/tidss/tidss_dispc.h |  2 ++
->>>   drivers/gpu/drm/tidss/tidss_drv.c   |  1 +
->>>   3 files changed, 58 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c 
->>> b/drivers/gpu/drm/tidss/tidss_dispc.c
->>> index dae47853b728..f084f0688a54 100644
->>> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
->>> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
->>> @@ -272,6 +272,55 @@ const struct dispc_features dispc_j721e_feats = {
->>>       .vid_order = { 1, 3, 0, 2 },
->>>   };
->>> +const struct dispc_features dispc_am625_feats = {
->>> +    .max_pclk_khz = {
->>> +        [DISPC_VP_DPI] = 165000,
->>> +        [DISPC_VP_OLDI] = 165000,
->>> +    },
->>> +
->>> +    .scaling = {
->>> +        .in_width_max_5tap_rgb = 1280,
->>> +        .in_width_max_3tap_rgb = 2560,
->>> +        .in_width_max_5tap_yuv = 2560,
->>> +        .in_width_max_3tap_yuv = 4096,
->>> +        .upscale_limit = 16,
->>> +        .downscale_limit_5tap = 4,
->>> +        .downscale_limit_3tap = 2,
->>> +        /*
->>> +         * The max supported pixel inc value is 255. The value
->>> +         * of pixel inc is calculated like this: 1+(xinc-1)*bpp.
->>> +         * The maximum bpp of all formats supported by the HW
->>> +         * is 8. So the maximum supported xinc value is 32,
->>> +         * because 1+(32-1)*8 < 255 < 1+(33-1)*4.
->>> +         */
->>> +        .xinc_max = 32,
->>> +    },
->>> +
->>> +    .subrev = DISPC_AM625,
->>> +
->>> +    .common = "common",
->>> +    .common_regs = tidss_am65x_common_regs,
->>> +
->>> +    .num_vps = 2,
->>> +    .vp_name = { "vp1", "vp2" },
->>> +    .ovr_name = { "ovr1", "ovr2" },
->>> +    .vpclk_name =  { "vp1", "vp2" },
->>> +    .vp_bus_type = { DISPC_VP_OLDI, DISPC_VP_DPI },
->>
->> This looks correct, but with the two OLDI TXes, I think there will be 
->> some interesting issues.
->>
->> The tidss_kms.c associates a DSS VP and a DT port, but that's no 
->> longer true if you add the ports for both OLDI TXes, as they both use 
->> the same VP. I think fixing that won't affect this patch, though, and 
->> merging this patch will, afaik, enable similar DSS functionality as we 
->> have for AM65x.
->>
->> So, I think these two patches could be merged, or we could wait a bit 
->> until the OLDI situation becomes more clear. Up to you. In any case, 
->> for both patches:
->>
->> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>\
-> 
-> Thank you for the review!
-> 
-> This patch set is required for the dss DT patches to be upstreamed for
-> the AM625-SK, so I would like them to get merged.
-> 
-> Since these were posted in the previous merge window, I will re-send 
-> with your tag.
 
-I'd like to understand better the dual OLDI TX case before merging any 
-AM625 dss changes.
-
-At the moment you have only one port in the DT for the OLDI TX for 
-AM625, right? I don't see how that is supposed to work as there are two 
-OLDI outputs. And if we do add a new port, it perhaps makes sense to 
-have two OLDI TX ports as ports 0 and 1, and the DPI as port 2, which is 
-then different from AM65x.
-
-  Tomi
+On 8/7/2022 1:56 AM, Dmitry Baryshkov wrote:
+Thanks for Your Time Dmitry!!!
+> On 03/08/2022 17:21, Srinivasa Rao Mandadapu wrote:
+>> Add efuse evb selection control and enable it for starting ADSP.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>
+> Is the lpass_efuse region used solely by the ADSP or is it shared with 
+> anybody else (e.g. other sound-related devices)? If the latter is 
+> true, then please use syscon for the lpass_efuse region.
+This region is being used by ADS PIL driver only.
+>
+>> ---
+>>   drivers/remoteproc/qcom_q6v5_adsp.c | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c 
+>> b/drivers/remoteproc/qcom_q6v5_adsp.c
+>> index a9fcb5c..201cc21 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+>> @@ -56,6 +56,7 @@
+>>     #define LPASS_BOOT_CORE_START    BIT(0)
+>>   #define LPASS_BOOT_CMD_START    BIT(0)
+>> +#define LPASS_EFUSE_Q6SS_EVB_SEL 0x0
+>>     struct adsp_pil_data {
+>>       int crash_reason_smem;
+>> @@ -85,6 +86,7 @@ struct qcom_adsp {
+>>       struct clk_bulk_data *clks;
+>>         void __iomem *qdsp6ss_base;
+>> +    void __iomem *lpass_efuse;
+>>         struct reset_control *pdc_sync_reset;
+>>       struct reset_control *restart;
+>> @@ -366,6 +368,9 @@ static int adsp_start(struct rproc *rproc)
+>>       /* Program boot address */
+>>       writel(adsp->mem_phys >> 4, adsp->qdsp6ss_base + RST_EVB_REG);
+>>   +    if (adsp->lpass_efuse)
+>> +        writel(LPASS_EFUSE_Q6SS_EVB_SEL, adsp->lpass_efuse);
+>> +
+>>       /* De-assert QDSP6 stop core. QDSP6 will execute after out of 
+>> reset */
+>>       writel(LPASS_BOOT_CORE_START, adsp->qdsp6ss_base + 
+>> CORE_START_REG);
+>>   @@ -520,6 +525,11 @@ static int adsp_init_mmio(struct qcom_adsp *adsp,
+>>           return PTR_ERR(adsp->qdsp6ss_base);
+>>       }
+>>   +    adsp->lpass_efuse = 
+>> devm_platform_ioremap_resource_byname(pdev, "lpass_efuse");
+>> +    if (IS_ERR(adsp->lpass_efuse)) {
+>> +        adsp->lpass_efuse = NULL;
+>> +        dev_dbg(adsp->dev, "failed to map LPASS efuse registers\n");
+>> +    }
+>>       syscon = of_parse_phandle(pdev->dev.of_node, "qcom,halt-regs", 0);
+>>       if (!syscon) {
+>>           dev_err(&pdev->dev, "failed to parse qcom,halt-regs\n");
+>
+>

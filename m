@@ -2,149 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDD258D648
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB60F58D64E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237897AbiHIJTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 05:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48108 "EHLO
+        id S234855AbiHIJUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 05:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238223AbiHIJTr (ORCPT
+        with ESMTP id S237988AbiHIJUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 05:19:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8311C920;
-        Tue,  9 Aug 2022 02:19:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D544CB81142;
-        Tue,  9 Aug 2022 09:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B69CC433D7;
-        Tue,  9 Aug 2022 09:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660036783;
-        bh=PMJRh8e7OTeWipNklYA2zTpVEwkTtbxLgQSwPCaNZtk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NM1+GjZqg1wZjZaHB+SmPZUK482J8AnSqOgq4oQARPbk7ANjrarejPsYu4wXxkhuF
-         jnBAel3UtjLHBMFIsFIKKITrVQy3gKCwUeq74/LCC+Y8Ryp+q6eEO5lX/3nwj1tW3q
-         R+JnBjTMWUYWrbeqmL8G4NDlBw2wvdByf0M52y5Faqu9qSUqtIU76hG0a/Z62zC7zK
-         feO3EI/LAMrlF98F6yKBogBHmvq+WIfpFXy0oIWAHx543E/o53z3Wvng9JPmk8sdst
-         YcFu8WMjZ1GbuZDVXh5ofirCNsKyDyGfJeVVszdBElSnBrtnnMbVdHcgRLdtbcsnQp
-         Gi7la4irkfrtA==
-Received: by mail-vs1-f51.google.com with SMTP id 66so11277356vse.4;
-        Tue, 09 Aug 2022 02:19:43 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3PERJOf4ttSxOV77lrGSCc85FR+mRHnA4mDBRwmJ4PsaL4DTvC
-        99cSp0Gin+pABSt3N8YmlqP29oFJkLQTlkAsPxw=
-X-Google-Smtp-Source: AA6agR42meX/+NjsOFnbbcXcwzuiceqHqFCKiIpIThdmXaacoYQmvjm7Esmbp23WQf4csYAOhMgD3XZBcgi9kxCdw/s=
-X-Received: by 2002:a67:d487:0:b0:385:1a6b:6f33 with SMTP id
- g7-20020a67d487000000b003851a6b6f33mr9044184vsj.59.1660036782585; Tue, 09 Aug
- 2022 02:19:42 -0700 (PDT)
+        Tue, 9 Aug 2022 05:20:12 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536101A804;
+        Tue,  9 Aug 2022 02:20:09 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 453EF5FD05;
+        Tue,  9 Aug 2022 12:20:06 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1660036806;
+        bh=xMNfpVY1JM1L0r+ir29qY+88IYcz1TPQu1w7NMZ/cc0=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=rRJpMVRIlCOs2vEgC6U9KMsq6VIRPTOzNs8efLV/EJD4RzEP4efVpmm3nnZ7s2D63
+         pLqfvK5TKeHnvs6nS4tCQ2QuP5tS5IFytxgiPgagN/FPeIr4pbdgCkHSTDzwJnwxdB
+         wA30MK78oXgLgeKKHW21j/SJI8JG5RE4d3X/zU2vKk3bS7sw1oALDyL2VolpPHyQ1X
+         EF6PKw2kHzk7TCNWRWO4+XSZT6xTRVfyTwKASLmq4iOWocGwPD7BJTtdCNhZNLWW+O
+         iA35HKM+kuq3OwIIxtvwy7QSfyJuKTNsjvtBGRDCDlB75FZ36G/vcjvzGPcQokhN0h
+         sIv022yaHv/0g==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Tue,  9 Aug 2022 12:20:01 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "Dexuan Cui" <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        "VMware PV-Drivers Reviewers" <pv-drivers@vmware.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v3 0/9] vsock: updates for SO_RCVLOWAT handling
+Thread-Topic: [RFC PATCH v3 0/9] vsock: updates for SO_RCVLOWAT handling
+Thread-Index: AQHYpz+pcvNrW+Wes06KlvYKyF5H+a2ksYuAgAFwEQA=
+Date:   Tue, 9 Aug 2022 09:19:56 +0000
+Message-ID: <4cf2db92-b51c-245e-63ee-db971e84e95e@sberdevices.ru>
+References: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
+ <20220808112239.jwzrp7krsyk6za5s@sgarzare-redhat>
+In-Reply-To: <20220808112239.jwzrp7krsyk6za5s@sgarzare-redhat>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BDB751D0B6FF8A4A95D07F8C9A4E906D@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220809074522.2444672-1-chenhuacai@loongson.cn> <874jylx0ad.wl-maz@kernel.org>
-In-Reply-To: <874jylx0ad.wl-maz@kernel.org>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 9 Aug 2022 17:19:31 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H50HERxjrmfDkSaHAVY7Q_ufpZP-e+qdZWVd=qEuQVXBg@mail.gmail.com>
-Message-ID: <CAAhV-H50HERxjrmfDkSaHAVY7Q_ufpZP-e+qdZWVd=qEuQVXBg@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Don't disable EIOINTC master core
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/09 07:32:00 #20083496
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SCC_BODY_URI_ONLY,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Marc,
-
-On Tue, Aug 9, 2022 at 4:56 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Tue, 09 Aug 2022 08:45:22 +0100,
-> Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > This patch fix a CPU hotplug issue. The EIOINTC master core (the first
-> > core of an EIOINTC node) should not be disabled at runtime, since it has
-> > the responsibility of dispatching I/O interrupts.
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  arch/loongarch/kernel/smp.c            | 9 +++++++++
-> >  drivers/irqchip/irq-loongson-eiointc.c | 5 +++++
-> >  2 files changed, 14 insertions(+)
-> >
-> > diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-> > index 09743103d9b3..54901716f8de 100644
-> > --- a/arch/loongarch/kernel/smp.c
-> > +++ b/arch/loongarch/kernel/smp.c
-> > @@ -242,9 +242,18 @@ void loongson3_smp_finish(void)
-> >
-> >  static bool io_master(int cpu)
-> >  {
-> > +     int i, node, master;
-> > +
-> >       if (cpu == 0)
-> >               return true;
-> >
-> > +     for (i = 1; i < loongson_sysconf.nr_io_pics; i++) {
-> > +             node = eiointc_get_node(i);
-> > +             master = cpu_number_map(node * CORES_PER_EIO_NODE);
-> > +             if (cpu == master)
-> > +                     return true;
-> > +     }
-> > +
-> >       return false;
-> >  }
-> >
-> > diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-> > index 170dbc96c7d3..6c99a2ff95f5 100644
-> > --- a/drivers/irqchip/irq-loongson-eiointc.c
-> > +++ b/drivers/irqchip/irq-loongson-eiointc.c
-> > @@ -56,6 +56,11 @@ static void eiointc_enable(void)
-> >       iocsr_write64(misc, LOONGARCH_IOCSR_MISC_FUNC);
-> >  }
-> >
-> > +int eiointc_get_node(int id)
-> > +{
-> > +     return eiointc_priv[id]->node;
-> > +}
-> > +
-> >  static int cpu_to_eio_node(int cpu)
-> >  {
-> >       return cpu_logical_map(cpu) / CORES_PER_EIO_NODE;
->
->
-> I don't understand why it has to be this complex and make any use of
-> the node number.
->
-> As I understand it, CPU-0 in any EIOINTC block is a master. So all you
-> need to find out is whether the CPU number is a multiple of
-> CORES_PER_EIO_NODE.
-CPU-0 in any EIOINTC block may be a master, but not absolutely be a
-master to dispatch I/O interrupts. If there is no bridge under a
-EIOINTC, then this EIOINTC doesn't handle I/O interrupts, and it can
-be disabled at runtime.
-
-Huacai
->
-> Something like:
->
->         return (cpu_logical_map(cpu) % CORES_PER_EIO_NODE) == 0;
->
-> which doesn't require exporting anything from anywhere?
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+T24gMDguMDguMjAyMiAxNDoyMiwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBIaSBBcnNl
+bml5LA0KPiANCj4gT24gV2VkLCBBdWcgMDMsIDIwMjIgYXQgMDE6NDg6MDZQTSArMDAwMCwgQXJz
+ZW5peSBLcmFzbm92IHdyb3RlOg0KPj4gSGVsbG8sDQo+Pg0KPj4gVGhpcyBwYXRjaHNldCBpbmNs
+dWRlcyBzb21lIHVwZGF0ZXMgZm9yIFNPX1JDVkxPV0FUOg0KPiANCj4gSSBoYXZlIHJldmlld2Vk
+IGFsbCB0aGUgcGF0Y2hlcywgcnVuIHRlc3RzIGFuZCBldmVyeXRoaW5nIHNlZW1zIG9rYXkgOi0p
+DQpUaGFuayBZb3UNCj4gDQo+IEkgbGVmdCBzb21lIG1pbm9yIGNvbW1lbnRzIGFuZCBhc2tlZCBC
+cnlhbiBhbmQgVmlzaG51IHRvIHRha2UgYSBiZXR0ZXIgbG9vayBhdCBWTUNJIHBhdGNoZXMuDQpP
+aywgbGV0J3Mgd2FpdCB0aGVpciByZXBseSBiZWZvcmUgdjQNCj4gDQo+IEluIGdlbmVyYWwgSSBh
+c2sgeW91IHRvIHJldmlzaXQgdGhlIHBhdGNoIGRlc2NyaXB0aW9ucyBhIGJpdCAoZm9yIGV4YW1w
+bGUgYWRkaW5nIGEgc3BhY2UgYWZ0ZXIgcHVuY3R1YXRpb24pLiBUaGUgbmV4dCB2ZXJzaW9uIEkg
+dGhpbmsgY2FuIGJlIHdpdGhvdXQgUkZDLg0KYWNrDQo+IA0KPiBSZW1lbWJlciB0byBzZW5kIGl0
+IHdpdGggdGhlIG5ldC1uZXh0IHRhZy4NCj4gTm90ZTogbmV0LW5leHQgaXMgY2xvc2VkIGZvciBu
+b3cgc2luY2Ugd2UgYXJlIGluIHRoZSBtZXJnZSB3aW5kb3cuDQo+IEl0IHNob3VsZCByZS1vcGVu
+IGluIGEgd2VlayAoeW91IGNhbiBjaGVjayBoZXJlOiBodHRwOi8vdmdlci5rZXJuZWwub3JnL35k
+YXZlbS9uZXQtbmV4dC5odG1sKS4NCj4gDQo+IEknbGwgYmUgb24gdmFjYXRpb24gdGhlIG5leHQg
+MiB3ZWVrcyAoQXVnIDE1IC0gMjgpLCBidXQgSSdsbCB0cnkgdG8gY2hlY2sgb3V0IHlvdXIgcGF0
+Y2hlcyENCk5vIHByb2JsZW0sIHRoYW5rcw0KPiANCj4gVGhhbmtzLA0KPiBTdGVmYW5vDQo+IA0K
+DQo=

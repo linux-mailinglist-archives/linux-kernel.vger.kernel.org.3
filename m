@@ -2,163 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A00F58E05A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745D658E05F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344296AbiHITm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S1344864AbiHITnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345523AbiHITl2 (ORCPT
+        with ESMTP id S1344958AbiHITmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:41:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3B926123;
-        Tue,  9 Aug 2022 12:41:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99681B81722;
-        Tue,  9 Aug 2022 19:41:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B0F9C433C1;
-        Tue,  9 Aug 2022 19:41:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660074084;
-        bh=GHYGwrxzX+i9fEuX4r7SaLl3zG9nc0dhpl+lCqTUIKQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S2/1o8+OywaH2dMTTfAGd+oCnMXOno/Fg4UZfgTohZPG/wHG03XDiDlNa4rgwcGoO
-         GGQSVdqFc4gCM6mVVpQfv9j5DR5vnPNx1pwRSc/gBN1gJevRVEzNtiJdskhNuixRhm
-         +NsubomEGrZT/tYP/9TNUJaRCLS183NjRJTnQjJvDNilE8EXYtX+NIgnNMyazj8cYg
-         raIkuYOqZtFpgFTODF6ElHhZTyWHpzSURhCI5361dj1R7eA6rJsdEEyd9n2LdglZaj
-         JTFUjNiSuXFSqPRvww0VlKKljDc10Qtq3jqkz8VLi9jcEJtG+bnZh9dIBKpzU2FuAN
-         YBpGTUI53kbQA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D7F5F4035A; Tue,  9 Aug 2022 16:41:21 -0300 (-03)
-Date:   Tue, 9 Aug 2022 16:41:21 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v4 00/17]  Compress the pmu_event tables
-Message-ID: <YvK4YUWRktOQBlfr@kernel.org>
-References: <20220804221816.1802790-1-irogers@google.com>
- <YvK4O9U6tjTJqqxX@kernel.org>
+        Tue, 9 Aug 2022 15:42:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF7D2656F;
+        Tue,  9 Aug 2022 12:42:51 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 279JZ8CR010407;
+        Tue, 9 Aug 2022 19:42:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=8GHTxJxSue6pJbphfO1vtqP9e/vY/kGFFepmcQaEPF0=;
+ b=WEb4jQEfYo3CMrJWUVnl4X/IZVXLfgWqK8d5w32XYzvcPdGFIAZeFFbMt2AFi3uqtEqB
+ ToydP7hGovJhQ2ey6yzWm7XbNhlocPoLaf/n8kJoT3Zx217Fw8CQzq2NGIMvWPasPNpU
+ tL8naG3jymFMbTo5Mwy2pdfMHW2uCbI12xyrU16lxOMGAltd6BK4MgqMIl+HOtAm0duP
+ glTuV+h3akIe8xnGX1kJ/pQFUFTwRiU5SVecjqqDZoIpcPN2n3szQpcDm4KpYAMkYQDF
+ EbAvyvtHd563O3I07uoQbxywkiDznUr10GD/IxODwAHlpNA2mekHrbt+qyNxR4Eonnwg YA== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3huwv6r69s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 19:42:21 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 279JZjcE031712;
+        Tue, 9 Aug 2022 19:42:20 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma03dal.us.ibm.com with ESMTP id 3huwvk8190-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 19:42:20 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 279JgJrL34865624
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 9 Aug 2022 19:42:19 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3047CBE051;
+        Tue,  9 Aug 2022 19:42:19 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 248BDBE04F;
+        Tue,  9 Aug 2022 19:42:18 +0000 (GMT)
+Received: from [9.160.17.179] (unknown [9.160.17.179])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue,  9 Aug 2022 19:42:17 +0000 (GMT)
+Message-ID: <59ee8c2f-3d6c-14ed-c9f8-2bbd9377a7da@linux.ibm.com>
+Date:   Tue, 9 Aug 2022 14:42:17 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add IBM OCC bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        joel@jms.id.au
+Cc:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+        devicetree@vger.kernel.org
+References: <20220802194656.240564-1-eajames@linux.ibm.com>
+ <20220802194656.240564-2-eajames@linux.ibm.com>
+ <297ddf1f-8ddc-902c-ff3d-06b9d19c6a7b@linaro.org>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <297ddf1f-8ddc-902c-ff3d-06b9d19c6a7b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: uvO5j0nznAN3zuD0hi5jl8v32rvo6bQD
+X-Proofpoint-ORIG-GUID: uvO5j0nznAN3zuD0hi5jl8v32rvo6bQD
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvK4O9U6tjTJqqxX@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-09_05,2022-08-09_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 adultscore=0 clxscore=1011 priorityscore=1501
+ suspectscore=0 impostorscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208090073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Aug 09, 2022 at 04:40:43PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Thu, Aug 04, 2022 at 03:17:59PM -0700, Ian Rogers escreveu:
-> > jevents.py creates a number of large arrays from the json events. The
-> > arrays contain pointers to strings that need relocating. The
-> > relocations have file size, run time and memory costs. These changes
-> > refactor the pmu_events API so that the storage of the pmu_event
-> > struct isn't exposed. The format is then changed to an offset within a
-> > combined big string, with adjacent pmu_event struct variables being
-> > next to each other in the string separated by \0 - meaning only the
-> > first variable of the struct needs its offset recording.
-> > 
-> > Some related fixes are contained with the patches. The architecture
-> > jevents.py creates tables for can now be set by the JEVENTS_ARCH make
-> > variable, with a new 'all' that generates the events and metrics for
-> > all architectures.
-> > 
-> > An example of the improvement to the file size on x86 is:
-> > no jevents - the same 19,788,464bytes
-> > x86 jevents - ~16.7% file size saving 23,744,288bytes vs 28,502,632bytes
-> > all jevents - ~19.5% file size saving 24,469,056bytes vs 30,379,920bytes
-> > default build options plus NO_LIBBFD=1.
-> 
-> Applied the first four patches, waiting for the review comments to be
 
-Sorry, three.
+On 8/3/22 01:55, Krzysztof Kozlowski wrote:
+> On 02/08/2022 21:46, Eddie James wrote:
+>> These bindings describe the POWER processor On Chip Controller accessed
+>> from a service processor or baseboard management controller (BMC).
+>>
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>> ---
+>>   .../bindings/hwmon/ibm,occ-hmwon.yaml         | 40 +++++++++++++++++++
+>>   1 file changed, 40 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml b/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
+>> new file mode 100644
+>> index 000000000000..8f8c3b8d7129
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
+>> @@ -0,0 +1,40 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/hwmon/ibm,occ-hwmon.yaml#
+> typo here
+>
+> Does not look like you tested the bindings. Please run `make
+> dt_binding_check` (see
+> Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
-> discussed.
-> 
-> - Arnaldo
->  
-> > I originally suggested fixing this problem in:
-> > https://lore.kernel.org/linux-perf-users/CAP-5=fVB8G4bdb9T=FncRTh9oBVKCS=+=eowAO+YSgAhab+Dtg@mail.gmail.com/
-> > 
-> > v4. Fixed an issue with the empty-pmu-events.c spotted by John Garry
-> >     <john.garry@huawei.com>.
-> > v3. Fix an ARM build issue with a missed weak symbol. Perform some
-> >     pytype clean up.
-> > v2. Split the substring folding optimization to its own patch and
-> >     comment tweaks as suggested by Namhyung Kim
-> >     <namhyung@kernel.org>. Recompute the file size savings with the
-> >     latest json events and metrics.
-> > 
-> > Ian Rogers (17):
-> >   perf jevents: Clean up pytype warnings
-> >   perf jevents: Simplify generation of C-string
-> >   perf jevents: Add JEVENTS_ARCH make option
-> >   perf jevent: Add an 'all' architecture argument
-> >   perf jevents: Remove the type/version variables
-> >   perf jevents: Provide path to json file on error
-> >   perf jevents: Sort json files entries
-> >   perf pmu-events: Hide pmu_sys_event_tables
-> >   perf pmu-events: Avoid passing pmu_events_map
-> >   perf pmu-events: Hide pmu_events_map
-> >   perf test: Use full metric resolution
-> >   perf pmu-events: Move test events/metrics to json
-> >   perf pmu-events: Don't assume pmu_event is an array
-> >   perf pmu-events: Hide the pmu_events
-> >   perf metrics: Copy entire pmu_event in find metric
-> >   perf jevents: Compress the pmu_events_table
-> >   perf jevents: Fold strings optimization
-> > 
-> >  tools/perf/arch/arm64/util/pmu.c              |   4 +-
-> >  tools/perf/pmu-events/Build                   |   6 +-
-> >  .../arch/test/test_soc/cpu/metrics.json       |  64 +++
-> >  tools/perf/pmu-events/empty-pmu-events.c      | 204 +++++++-
-> >  tools/perf/pmu-events/jevents.py              | 495 ++++++++++++++----
-> >  tools/perf/pmu-events/pmu-events.h            |  40 +-
-> >  tools/perf/tests/expand-cgroup.c              |  25 +-
-> >  tools/perf/tests/parse-metric.c               |  77 +--
-> >  tools/perf/tests/pmu-events.c                 | 466 +++++++----------
-> >  tools/perf/util/metricgroup.c                 | 275 ++++++----
-> >  tools/perf/util/metricgroup.h                 |   5 +-
-> >  tools/perf/util/pmu.c                         | 139 ++---
-> >  tools/perf/util/pmu.h                         |   8 +-
-> >  tools/perf/util/s390-sample-raw.c             |  50 +-
-> >  14 files changed, 1140 insertions(+), 718 deletions(-)
-> >  create mode 100644 tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json
-> > 
-> > -- 
-> > 2.37.1.559.g78731f0fdb-goog
-> 
-> -- 
-> 
-> - Arnaldo
 
--- 
+I actually did but it didn't catch that somehow. I had to use a somewhat 
+hacked together python/pip on my system so perhaps that's to blame.
 
-- Arnaldo
+
+>
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: IBM On-Chip Controller (OCC) accessed from a service processor
+>> +
+>> +maintainers:
+>> +  - Eddie James <eajames@linux.ibm.com>
+>> +
+>> +description: |
+>> +  This binding describes a POWER processor On-Chip Controller (OCC)
+> s/This binding describes a//
+> But instead describe the hardware. What is the OCC?
+
+
+OK I'll fix that. It's a management engine for system power and thermals.
+
+
+>
+>> +  accessed from a service processor or baseboard management controller
+>> +  (BMC).
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - ibm,p9-occ-hwmon
+>> +      - ibm,p10-occ-hwmon
+>> +
+>> +  ibm,inactive-on-init:
+>> +    description: This property describes whether or not the OCC should
+>> +      be marked as active during device initialization. The alternative
+>> +      is for user space to mark the device active based on higher level
+>> +      communications between the BMC and the host processor.
+> I find the combination property name with this description confusing. It
+> sounds like init of OCC and somehow it should be inactive? I assume if
+> you initialize device, it is active. Or maybe the "init" is of something
+> else? What is more, non-negation is easier to understand, so rather
+> "ibm,active-on-boot" (or something like that).
+
+
+Well, the host processor initializes the OCC during it's boot, but this 
+document is describing a binding to be used by a service processor 
+talking to the OCC. So the OCC may be in any state. The init meant 
+driver init, but I will simply the description and change the property 
+to be more explicit: ibm,no-poll-on-init since that is what is actually 
+happening. Similar to the FSI binding for no-scan-on-init.
+
+
+>
+>> +    type: boolean
+>> +
+>> +required:
+>> +  - compatible
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    occ-hmwon {
+> just "hwmon"
+>
+>> +        compatible = "ibm,p9-occ-hwmon";
+>> +        ibm,inactive-on-init;
+>> +    };
+
+
+Thanks for the review!
+
+Eddie
+
+
+>
+> Best regards,
+> Krzysztof

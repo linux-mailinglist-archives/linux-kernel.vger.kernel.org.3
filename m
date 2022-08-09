@@ -2,216 +2,583 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CD458D720
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A468458D725
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241251AbiHIKGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        id S241418AbiHIKI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233346AbiHIKGV (ORCPT
+        with ESMTP id S233346AbiHIKI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:06:21 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2063.outbound.protection.outlook.com [40.107.21.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23171FCDD;
-        Tue,  9 Aug 2022 03:06:18 -0700 (PDT)
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
- b=H/baZnBq1RUZ2iA6hl3bSbQpThHp+dtu2Z5DBlJc+4cnusMVF6d0YLS5UzC4UWXsOCXlmVwhDOaBTqpi4EV77HxxhfCZp7UbfGEbEqtl+VKote1PbzW9dacbel6piGqShCjQEGt8eHWCBJhy0STaUEwcNye6YxqFfRArL6KfenNZYPdndeFGP8Tj0Kp/uQVfNGlX7Mxq51gHtgQjoagnR2ZWir5km+BgvtySttt4fspzEsA+2nift0IIl7qOP8L1UURItbzQwin+5bAHw/IJkVJSqvGdF/TV8MKIcxpLT6J9tnGHy5FblDAIBHQK3HSlDjSq4dDrN2aJ4IY+vQ2weA==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RjNTAVweO13OxScRgdJg70IWH2aDYptXvDYzkOIWBdw=;
- b=AGfrXAWb72To+pNnDYWZ29id/Q8c1udDuU1LNaTPI745AfYnwnMZyQaBlVTRP8+WreVBjc3nb2UtcBSmooaGYhmAZlSC6loK9VUf7jBeFiBVCy/PJMni0wLnK4rmy0uaQFst/iCyuGbdc8IbVK1UDuKuVpLOhESxb3qzxjLVcEpO6N32iVGdrxbSPWpMW+FUaADIb75XG9/IjXHJxtQZPAeogdP716mc8YwN+7mCvxQp+U58toS2P/mX5I2UlKAq9n/uxMZS0D53WnZ2tntjxqgjMVR8cJitPEhgiDw/ElmYextBkc+jWYh7zR1Puzl4SQGT9jT9nhfeSagKpcL1Fg==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=armh.onmicrosoft.com; arc=pass (0
- oda=1 ltdi=1 spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RjNTAVweO13OxScRgdJg70IWH2aDYptXvDYzkOIWBdw=;
- b=SWVAhWy9/1XusVXRFoUjuBtk0qOKTTZPxHU2Nyh/BmsNP/PGUGvDUvin4UrUiBrzTpHsJGMdlvBZms+BBPCbblqZkrFoESnI8u39Tn4bKsItcx7Vt2zjSOl84lTjMRPcUbnxFJM3xB6J9quFDToo3OqcRGMqGSN3jqWmvaH3Dpg=
-Received: from DB9PR02CA0006.eurprd02.prod.outlook.com (2603:10a6:10:1d9::11)
- by VE1PR08MB5711.eurprd08.prod.outlook.com (2603:10a6:800:1ae::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Tue, 9 Aug
- 2022 10:06:16 +0000
-Received: from DBAEUR03FT059.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:1d9:cafe::b5) by DB9PR02CA0006.outlook.office365.com
- (2603:10a6:10:1d9::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10 via Frontend
- Transport; Tue, 9 Aug 2022 10:06:15 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT059.mail.protection.outlook.com (100.127.142.102) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5504.16 via Frontend Transport; Tue, 9 Aug 2022 10:06:15 +0000
-Received: ("Tessian outbound fa99bf31ee7d:v123"); Tue, 09 Aug 2022 10:06:15 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: fe71d710285b2e18
-X-CR-MTA-TID: 64aa7808
-Received: from dfa6ca16284a.3
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id F63141F2-8D7F-4FA3-BC0D-6D26712F9CDD.1;
-        Tue, 09 Aug 2022 10:06:06 +0000
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id dfa6ca16284a.3
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Tue, 09 Aug 2022 10:06:06 +0000
+        Tue, 9 Aug 2022 06:08:26 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C141FCDD
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:08:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660039704; x=1691575704;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=nUgEsLNt3cEfSfBQwjyF+M8hZD4NfEURHO6IMusb88M=;
+  b=G1pTBI0rf8cAuZPjBGcW/9a7OdSai7nPeqL+pecmITJzRa7vjgIWm443
+   zfpSxY1NygzFnckVVZ0zOFUYMBDs6n3/PIL/YA88w9hGJbzmhAvav0mO4
+   4GUqj1E3UIBfw8Gv3+cW8S2+SHvvrSdeLJS0jascDBGXjWX+oIRaRUhdA
+   4tQAK7l8iq7efbFuJlET6c07ZQYnfP2o1H6dnWvMJ3Y+FiMa2qXzz4K+L
+   OiPFZq6ClELfLxqH83JSOCAkN2dCxdytqhjGFkNDX5wf2zGqrMYNK77jR
+   Xr/gHQEP93v5KOULLQ+gYR5Gw2xU2ErY15D5mxn0oaen8CqCyr+VPwREg
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="291587487"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="291587487"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 03:08:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="604705543"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga002.jf.intel.com with ESMTP; 09 Aug 2022 03:08:24 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Tue, 9 Aug 2022 03:08:24 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Tue, 9 Aug 2022 03:08:20 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Tue, 9 Aug 2022 03:08:20 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Tue, 9 Aug 2022 03:08:20 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A3B4TPpmb5dFgGRbQmeTpoaDI5dtq0a72q1EVtr3SVgE2xXWfWnVvjQ+hugJZ+HqWr4wo3/5zQw0apr0CWVLbKPKdB7AguvH5buYoXA7aZhoDWs1NrVIYTmvU6HRPSLDdsV4uvqGxmQwPkeNpZD3mwZKYN9H+ZyDqhOGd/YApEM0c9JMJuDGjLGYBD3KrEpOT+1jZNyOVd/gKipv9HtVV5Puw86EUlKzoAWVVxPl5Yj2quzosGri38ceTQTZSCHAjGMi/eMKEnvqahNexV2H1iR6tA5B04I1Va89Da6WGzSD/voV11K5VXBQnDnGs4BYVQPpA7osZAJiQ3gmLiKrQg==
+ b=Ilnt5RJO1XKQ7xPZHGWpO1XJlENiACTCkKsxDS1a/CyQXrHBWxUekopXtRq+fbk8+VoI9yhpWZwqeqFgNcRFrTmWQBTdPIGGhpvF55iI7XMtZS1tJsHka0G9AAeqAxGAUwGDbokzkRMyY7FR8A2IASNBRjEtZhnIHfbpuxF8C4dLoC1hl/lQkw/t0qdIv+vj+Oy3qCkXiLFJRGuesK6sD5jx5xlzmJ0upW/2mhrvn15OCZ4dqigbweBl3jPMOWK8bthtI+TV8dPDaTjLXsHL9vZ6KXS+AAofzeNjmwB5VeHC1PfsSsL0tiNiEYRc4yh1pTEygMlNkJRkrNmMJ+s0gQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RjNTAVweO13OxScRgdJg70IWH2aDYptXvDYzkOIWBdw=;
- b=J6om9DppCrl6Ro3nUuNMxynz2+bsqyXzDHGEbM1wa0nJ2mBEC9+2QUNE/Xdr2HyJQSp7+OjMo/exSMduTt0yaFJUacPJEAlczIGzpFElKKTLQpTz763wllLgpF8MXSoQ/VzyrTAmzV2b0Fb2NejZOte0g2oqVdjDNTsX/yvhkKikRWVx+LhZbVfzAV1nNl6vZk8gF0RvAue4a7G6QQGJVggfFHq1fXmDopNg76j1aRSMo406uSFHqZhA98qiC8zcvBsNYlTqmK/JBb1UGdq39h+k06froMKFogpXkMb30dpeSsuFKJKlJ8iX6ApN/KsCj2udKCKWxg0lSFDR5x+TTw==
+ bh=woqRHv7rMWZKBQHc4q5yVzQnqJHxASzHEKI9i7V5k+w=;
+ b=j1YOr13eUgWYweF9aGTjPcN8gpRg7IIL5GVmElr6dEjNmUj+QtjJZ8OS2sVS5ruCWfe563wJnGMTXIledI9aH466wO6SKGV81fQ1BYuTd7hH/l1SC3hEgm762XU1tngooSZWvmA4j8VTS/4qtnkFCLRXFZH1aE2/hUFdvT9haLyuB7Lwwftik0y+saCxZXGgRyjGNLPTeYZY8oBtYDBZABM3AyneqcZxElpV4yC7uygQrVaiLHLoCqlOAfOLpF+L0XjUIb4BR17MJ01f56i7aXNbh9A8BTDNNUAgEBHEhCv4zKDbEKOvHFxbA2Fk0Qy+ro8J1daj9exzpULg5SjkyA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RjNTAVweO13OxScRgdJg70IWH2aDYptXvDYzkOIWBdw=;
- b=SWVAhWy9/1XusVXRFoUjuBtk0qOKTTZPxHU2Nyh/BmsNP/PGUGvDUvin4UrUiBrzTpHsJGMdlvBZms+BBPCbblqZkrFoESnI8u39Tn4bKsItcx7Vt2zjSOl84lTjMRPcUbnxFJM3xB6J9quFDToo3OqcRGMqGSN3jqWmvaH3Dpg=
-Received: from DBBPR08MB4538.eurprd08.prod.outlook.com (2603:10a6:10:d2::15)
- by VI1PR0802MB2336.eurprd08.prod.outlook.com (2603:10a6:800:9c::16) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
+ by BN6PR11MB1393.namprd11.prod.outlook.com (2603:10b6:404:3c::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Tue, 9 Aug
- 2022 10:06:01 +0000
-Received: from DBBPR08MB4538.eurprd08.prod.outlook.com
- ([fe80::9139:c501:db7f:6d6b]) by DBBPR08MB4538.eurprd08.prod.outlook.com
- ([fe80::9139:c501:db7f:6d6b%3]) with mapi id 15.20.5504.021; Tue, 9 Aug 2022
- 10:06:01 +0000
-From:   Justin He <Justin.He@arm.com>
-To:     "Kani, Toshi" <toshi.kani@hpe.com>, Borislav Petkov <bp@alien8.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>
-Subject: =?utf-8?B?5Zue5aSNOiBbUEFUQ0hdIEFDUEk6IEFQRUk6IG1vdmUgZWRhY19pbml0IGFo?=
- =?utf-8?Q?ead_of_ghes_platform_drv_register?=
-Thread-Topic: [PATCH] ACPI: APEI: move edac_init ahead of ghes platform drv
- register
-Thread-Index: AQHYqHOdT73gyPDB9Uq80vSHBXC6162lVXgAgAAFgwCAACJBAIAA37OQ
-Date:   Tue, 9 Aug 2022 10:06:01 +0000
-Message-ID: <DBBPR08MB4538A3F6A2F63B3AC8223FA6F7629@DBBPR08MB4538.eurprd08.prod.outlook.com>
-References: <20220805023200.154634-1-justin.he@arm.com>
- <CAJZ5v0gUbKYaxRcZsYO6eq7vLgKdgfdLdoL_Hzmd6r-JczkVPg@mail.gmail.com>
- <YvFX9vTilqMpsF9u@zn.tnic>
- <PH7PR84MB1838379B8C2DF488DE729A9182639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <PH7PR84MB1838379B8C2DF488DE729A9182639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
-Accept-Language: en-US, zh-CN
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-MS-Office365-Filtering-Correlation-Id: c64db7ac-e5dc-4c88-7ee9-08da79eecc02
-x-ms-traffictypediagnostic: VI1PR0802MB2336:EE_|DBAEUR03FT059:EE_|VE1PR08MB5711:EE_
-x-checkrecipientrouted: true
-nodisclaimer: true
+ 2022 10:08:18 +0000
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::a968:40aa:6163:5c79]) by MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::a968:40aa:6163:5c79%6]) with mapi id 15.20.5504.014; Tue, 9 Aug 2022
+ 10:08:18 +0000
+Date:   Tue, 9 Aug 2022 06:08:13 -0400
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Matthew Auld <matthew.auld@intel.com>,
+        <intel-gfx@lists.freedesktop.org>
+Subject: Re: [Intel-gfx] [PATCH v2 37/39] drm/i915: document struct
+ drm_i915_gem_object
+Message-ID: <YvIyDTLrwxdJHxNt@intel.com>
+References: <cover.1657699522.git.mchehab@kernel.org>
+ <595fc6f7954e07cb8b6ea2e60f6ef2270bd65777.1657699522.git.mchehab@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <595fc6f7954e07cb8b6ea2e60f6ef2270bd65777.1657699522.git.mchehab@kernel.org>
+X-ClientProxiedBy: SJ0PR05CA0069.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::14) To MN0PR11MB6059.namprd11.prod.outlook.com
+ (2603:10b6:208:377::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6bc5e6ac-7a6a-4f96-4194-08da79ef14ec
+X-MS-TrafficTypeDiagnostic: BN6PR11MB1393:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: 0CriUhWH4I54HLi3WrbSSYgww1/BqtYwuRImz3MvTq96g44ixbPY/fnpLJFZN41HRGuLdKjUwzi9OmmF9rVF7u8gULFfah1WVRR3ZQDAjLn0H/FTdYjyeTnL5eBQeL3+9dJW+8w5IL2D00lBUYM5RV+yU9pvvrtFWcjaPNVrXCcuWld89vasu/8WOjqwrowSehWQhVwXH9t4d2sUMygsjtinikIkix0pEY0qQ0In+DPqp/EQZTSYHmV8BlPNLehAabbb15STro6ff5PUgVIhrXjKYD19hY+/mpK7JN4NcHevmfZ8CqjAe7+W74amjonwNu3d5tHqjt6Q0KmhGtf0ttu+/r9tAbul0GpezHzxrb36HYjryeC6DR3qY2y7Y3srT37EWdasq/ADMDuPXWVWtBBLEW0fPOiLKDvAzBwXroOd0Ko+5eEAHecXltWmEmRi2ZHZQZSQ9Yl4Dc2ZzhRBUj9EGDXN5VFmLsQhlF/S1UqtdOR+H/XYTo3bTAYWyPmTIMW8KKQPlEiCgYRRYwGTaF0hEQI+Atr1JbQek9QHFfUH3PxH7unUxkVYB9cKUqrKJNW5nZQmdc8dHStLuQgNG1dprXuuveQSiI87w2LRgTjeGJDCncc7ixBAyo6aJXwio5vUBYocPGYI8EYeRwy+qx1wGAtV5UYCJ4/OHabrneqy61vee4B8p180xXx18KMWKW1FytRZpA3zpW9AdMrpT8eqLFmLEzgpbnpp1CmpG0Qfimn3/TVApPafvc7B19qgBme5xVWJCfxSv27EF9XdcZVNxFKRrY9Tco4aVcWPtUCkBOLxTB4aCeR62ktWvW47
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR08MB4538.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(39860400002)(136003)(396003)(366004)(478600001)(41300700001)(7696005)(6506007)(26005)(9686003)(55016003)(2906002)(7416002)(316002)(224303003)(86362001)(66556008)(33656002)(110136005)(54906003)(71200400001)(53546011)(38070700005)(186003)(66946007)(38100700002)(5660300002)(8936002)(52536014)(76116006)(66476007)(4326008)(66446008)(64756008)(83380400001)(122000001);DIR:OUT;SFP:1101;
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0802MB2336
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT059.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: e438f553-b9d4-479a-c32d-08da79eec359
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4H0C2kDKEu2GbRldlvegPlLxA7mune1ypMxrjSzm/gHCBrvPmy6DFsFnA9mPYUk1t+CAJzCtzsltn7LpVDgm2+YGGlEsif8mcyuzGvfZ0W3gXaFsFkp2+5xZ0rj5KfomRPB40oQ48rD78QwJH9PM1gAUQGy0YOFonghhuTY4qdVHfTVDz5dgKKPah7tNbOBnSFpRuiLDii9Yl2oQBoEPO7ZcwT/Z0yDWysw2OTT0jWjde7XgpeJXI+D0QprGR/ih8Eq5JA3XghV0HX+NaZ2l8lCiha9YUMY2fqDn+XzPZzXeJwYVkibEms2PFH3hRtAss6QnvHd1tFzF5kenzSq+kCvwJEB5aQmtcLSd6XbcB7eG2XIHXRApMIm+UpC0uu1N4Ta1xJ9xxcVRfFAd+sWp44pGrKlZ2TG1EL2z5+WqBSaUFWdJln2YMTWk65oUDKvQUkiG/zmeCc553OCzTPTmv2p3GS3EiEGjNiAiKAW8gxwGQCUU5N0kuyNlPOALhGezZH3LTQRRoF1vSxH9VNJfJKd0qbk4HpwaEUMAC22T+jR2ENQKwNgBEU5T4CnJFQKNlRaP1FJrOBnxGsWffGUSfFQsXfrUj0MeLIXTeIxVeQNhs6Zr8gJHH+lLQfSEmQ1lLBZ2Hldn+w7bJjJqrDVkfC3EqRttgYrcq0DMo0bzv/jCbYO2v+BHwOyFNkiE4nBQnVnn3S6NGQlQs80nMDYabgOzaQEvw2ZPoFup4DbRkkV69cKChnxUEqZTk48XVQ65T4RNgYN6E4BixueII0trEe1ljyrhzRm28iiDgxUpevKVF28u+CUiYIQWexUvGr3m
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(376002)(396003)(346002)(36840700001)(40470700004)(46966006)(55016003)(40480700001)(70206006)(52536014)(2906002)(4326008)(70586007)(33656002)(450100002)(54906003)(110136005)(478600001)(224303003)(316002)(82310400005)(81166007)(53546011)(9686003)(41300700001)(6506007)(26005)(86362001)(7696005)(36860700001)(8936002)(5660300002)(356005)(336012)(82740400003)(186003)(47076005)(83380400001)(40460700003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 10:06:15.8083
+X-Microsoft-Antispam-Message-Info: qR9IGhYbPZjd8Qz92ZCMKoNzL8tKtoVjQqUcfnraUkgfbtu6yifvH/4C25TlBpCY8EmfeNnG94KRyh3zZlZqgun6QPOoy/uohIm3TsNwHRRGp/YzfXLcldMvHHDzJ4j0tf3t1Gm0SI9Ibk2calG7lBVWa+/6o17f2/qZjnS8lxg4MXQq6Izh3htJWn7ciNCVApq65hVsZO5HyFwhIyd6U0X/Z9mF1QvBLVGdLHGUHmwbD5/iZoczPHKn4UKYhxcDh6x0Afkdxx7VaAqvNlaNt/VR4Xk5xWPleTEaERuXdTzPc1oKzvZZhRqK+n57fnpoXPzQPr9VSKx6cUaODTMBfVcrUID/e7RT0UPRpr7Cxoqc10lAttWsmbxpFMlFRaLZVoXPL/puRQrxduKgmuG4oO8j9jONbiZpKmJ3SuD3J7CQsLGLjY/pTy5o/phYgiH2lk3O5rym/w6YSzhqOPhxmbaCuc5zVGGJQpVE3mOzLTDsoO9AUwMItN6dOo9FOQdcd7vT/6tX57zAGJ4XLSB9zQ6XZlitXDd8V0zz2nT6+FITPnkkAP01fa6G4eS1Xfvc6b1RSWxSvYkDTirFv5ne0e71vDXFqK5vOqqVoRn6TJfiSO0DpUQZp1OTQI5spI2ZCKdz7p4BDOj64rVIKV+5rK1VxtyH+e5NQltjun7j5vl6HBNmwesA47DLH6Fke+9Rllmkis4aGEwiVyQ82YyPOSZA54xNAynswVsWMB9QPn+VNzxn6ALf+8mk5wjPZugn6sj5bZA2H9nSxC27Yoxn2uCDeD0qRcjMSKvbq9vCErakcsmBQQ72IwMPKJVqX6A7859VKlqshdPtkucPctYo7w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(376002)(366004)(396003)(346002)(136003)(36756003)(8676002)(66476007)(66556008)(66946007)(4326008)(44832011)(5660300002)(8936002)(30864003)(966005)(6486002)(478600001)(316002)(2906002)(6916009)(54906003)(38100700002)(6666004)(41300700001)(26005)(86362001)(6512007)(6506007)(2616005)(82960400001)(186003)(83380400001)(134885004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ePnAlwh3hz4f/py+5h2zAs9mekKnWVgGDkfSrCUNrx/XiDuU237ieN76GUie?=
+ =?us-ascii?Q?riA51Hz0FeQ4Dv1U/+YB74V5Q7tXTZZOWVuHu9d94YE/D1WMoEvBeoyZKY3o?=
+ =?us-ascii?Q?mNshZmF2gNcosNC35lWZXqVMqfGiPcAbv0WWlMTpgRYMMU5eXiUKchsFzkYC?=
+ =?us-ascii?Q?V+1MBCE87Fz3nQNFd+vasXMXF3FTc1PtGAuOg1rCDPe5cOxBMvOmje+gvUOQ?=
+ =?us-ascii?Q?5RggrrTwPJk1OKEcZj3zqT4Pbe9zb4/VBnqOQEOjOO/Nsp89qO2yc/d20WiC?=
+ =?us-ascii?Q?m0X820xVJ+mTOwUW/NV1QF5nuGjzHYWMtiX4w5KOkfU10RDJPEBBm3kGYX7c?=
+ =?us-ascii?Q?0fo4SX7or6J5Map8uHJT+k0Tiz+WAaACxAxA1wSluSjOsylfgUlglgAcFzb2?=
+ =?us-ascii?Q?ETOV3SpQdmrQky0dORaSnXkGK6F7/krPVqS8gJJ9cJB075AYAtbaXqCBRnx9?=
+ =?us-ascii?Q?RZgI1Vf1XS6vl+SuDzHQnIkXAsaMRA0bAartT/1cxQQLD9xBmIH2ITBvI3YJ?=
+ =?us-ascii?Q?hLEuB39h5FmuKUAz4ntyfUP84jkwQtq+evCj2AWqXaa+vnN/4wdxEzumTq3A?=
+ =?us-ascii?Q?0sKjNpzxQv1RLzJF4rFN3kmZ5rquvtPK9hnLNsyqbBhmo1CqsvvJLKNsumB/?=
+ =?us-ascii?Q?jawC+3VrfbsLWMP9ZsWPehpxmxB8OjSCTwL/vWMivZgmncqu6WXPpQd5bHNH?=
+ =?us-ascii?Q?baCTXPnaFwEUsHOC2Cdo3qkOpiRq8NHyxLyRHDBqLZbKETp0YYdYZ30prvRB?=
+ =?us-ascii?Q?/nQQkOTCTrqAl+JwXBENlPbsdrsyW0CChHwjWWVKEIx7zQhZ30ipG9exkp6y?=
+ =?us-ascii?Q?IPPGQYkrrDqJ4FVhu6nTUhOVAZ0QnH60zjtd+QUGZIiNS5AmIMW8QUVAK0cm?=
+ =?us-ascii?Q?XUHIkKy+IqRTm0nMT64X2Eo/R1iB/XnCUjrpPvUC8OUApWp4nDcTvW5adb7i?=
+ =?us-ascii?Q?0jP684ndEdQK47C67rEDCHhD2/T0G7nV4iZPAXHMiTUBA9/tPqv1Cd46GETB?=
+ =?us-ascii?Q?Hx7th6RPyO4PSyR0VuX4A5O/Rm+CBp7cRkz6hjja/ePnO7wIO/pm15/flgf9?=
+ =?us-ascii?Q?DZahgEu0qQTnNfP76DtvUgsRKp+KGpk1wHKfwTUzbnrWDW8ngQX50a/vLOGq?=
+ =?us-ascii?Q?bICB9Hz9bzybVLAE9cU0ZBnfecegVSUsxn4TyU4xskvQQWFlnN+osdStfBiQ?=
+ =?us-ascii?Q?pj4bXtNet2P62DceM9+rjD6tRCm8KpN8j0H6y5/Vh2j/0p4zUq64ddBjD0SE?=
+ =?us-ascii?Q?+5z22tu6OjtcGgtCwnAqMEB25ybrnT/rCf2jOseMLk/ehSHG1aD5bNEl1v1+?=
+ =?us-ascii?Q?I9ENd8WwRM/KYFO8BJEwpQLgfFlkVob0njsH/fW7g64X6qdv0DpDx6yACPgF?=
+ =?us-ascii?Q?wL0Wekcyy6+x1s8oLqAVTQ7NJNtVSMFXPMJuXjiBA5hzPzC2HIs2kgUUBSDS?=
+ =?us-ascii?Q?PdzovwlPbhLiQmGbDyIcNs+NAQkz438q4oZEZVn/3YmC8LD3NEE6nMI67PaV?=
+ =?us-ascii?Q?u33txYP4y7rYQSOoI2TVH9rMq5EUgXegLzpRMJ+d50QofkK3qLL1iYK1kvSP?=
+ =?us-ascii?Q?RZ4wHCeX44iqTuGdj8px81gPoi6hz2Bl3x5uAVOVmABozx9hVi2DiZXOPaTA?=
+ =?us-ascii?Q?OQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bc5e6ac-7a6a-4f96-4194-08da79ef14ec
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 10:08:18.4487
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c64db7ac-e5dc-4c88-7ee9-08da79eecc02
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT059.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR08MB5711
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3JDkeSN8RkbdOdJV8hBLbjA0uU1fSWGS/TTZeQFLhR8+SqAHGkHE+J/o/mdsjM/NwnpofvjBrsuVB3vcBE7emA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1393
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgS2FuaSwNCg0KPiAtLS0tLemCruS7tuWOn+S7ti0tLS0tDQo+IOWPkeS7tuS6ujogS2FuaSwg
-VG9zaGkgPHRvc2hpLmthbmlAaHBlLmNvbT4NCj4g5Y+R6YCB5pe26Ze0OiBUdWVzZGF5LCBBdWd1
-c3QgOSwgMjAyMiA0OjQwIEFNDQo+IOaUtuS7tuS6ujogQm9yaXNsYXYgUGV0a292IDxicEBhbGll
-bjguZGU+OyBSYWZhZWwgSi4gV3lzb2NraQ0KPiA8cmFmYWVsQGtlcm5lbC5vcmc+DQo+IOaKhOmA
-gTogSnVzdGluIEhlIDxKdXN0aW4uSGVAYXJtLmNvbT47IExlbiBCcm93biA8bGVuYkBrZXJuZWwu
-b3JnPjsgSmFtZXMNCj4gTW9yc2UgPEphbWVzLk1vcnNlQGFybS5jb20+OyBUb255IEx1Y2sgPHRv
-bnkubHVja0BpbnRlbC5jb20+OyBNYXVybw0KPiBDYXJ2YWxobyBDaGVoYWIgPG1jaGVoYWJAa2Vy
-bmVsLm9yZz47IFJvYmVydCBSaWNodGVyIDxycmljQGtlcm5lbC5vcmc+Ow0KPiBTaHVhaSBYdWUg
-PHh1ZXNodWFpQGxpbnV4LmFsaWJhYmEuY29tPjsgSmFya2tvIFNha2tpbmVuDQo+IDxqYXJra29A
-a2VybmVsLm9yZz47IEFDUEkgRGV2ZWwgTWFsaW5nIExpc3QgPGxpbnV4LWFjcGlAdmdlci5rZXJu
-ZWwub3JnPjsNCj4gTGludXggS2VybmVsIE1haWxpbmcgTGlzdCA8bGludXgta2VybmVsQHZnZXIu
-a2VybmVsLm9yZz47IG9wZW4NCj4gbGlzdDpFREFDLUNPUkUgPGxpbnV4LWVkYWNAdmdlci5rZXJu
-ZWwub3JnPg0KPiDkuLvpopg6IFJFOiBbUEFUQ0hdIEFDUEk6IEFQRUk6IG1vdmUgZWRhY19pbml0
-IGFoZWFkIG9mIGdoZXMgcGxhdGZvcm0gZHJ2DQo+IHJlZ2lzdGVyDQo+DQo+IE9uIE1vbmRheSwg
-QXVndXN0IDgsIDIwMjIgMTI6MzggUE0sIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gPiBPbiBN
-b24sIEF1ZyAwOCwgMjAyMiBhdCAwODoxNzo1OFBNICswMjAwLCBSYWZhZWwgSi4gV3lzb2NraSB3
-cm90ZToNCj4gPiA+IFRoaXMgZWZmZWN0aXZlbHkgbWFrZXMgRURBQyBkZXBlbmQgb24gR0hFUyB3
-aGljaCBtYXkgbm90IGJlIGFsd2F5cw0KPiA+ID4gdmFsaWQgQUZBSUNTLg0KPiA+DQo+ID4gWWVz
-LCBhbmQgdGhpcyBoYXMgYmVlbiBnZXR0aW5nIG9uIG15IG5lcnZlcyBzaW5jZSBmb3JldmVyLg0K
-PiA+DQo+ID4gVGhlIEdIRVMgY29kZSB3aGljaCBkb2VzIGNvbGxlY3QgYWxsIHRob3NlIGVycm9y
-cyAqZm9yY2VzKiB0aGUNCj4gPiByZWdpc3RyYXRpb24gb2YgYW4gRURBQyBtb2R1bGUgd2hpY2gg
-ZG9lcyBvbmx5IHRoZSByZXBvcnRpbmcuDQo+ID4NCj4gPiBXaGljaCBjYW5ub3QgYmUgYW55IG1v
-cmUgYmFja3dhcmRzLg0KPiA+DQo+ID4gV2hhdCBzaG91bGQgaGFwcGVuIGlzLCBHSEVTIGluaXRz
-IGFuZCBzdGFydHMgd29ya2luZyBvbiB0aGUgZXJyb3JzLg0KPiA+IFRoZW4sIGF0IHNvbWUgcG9p
-bnQgbGF0ZXIsIGdoZXNfZWRhYyBsb2FkcyBhbmQgc3RhcnRzIHJlcG9ydGluZw0KPiA+IHdoYXRl
-dmVyIGl0IGdldHMuIElmIHRoZXJlJ3Mgbm8gRURBQyBtb2R1bGUsIGl0IGRvZXNuJ3QgcmVwb3J0
-IHRoZW0uDQo+ID4gVGhlIHNhbWUgd2F5IE1DQSB3b3Jrcy4NCj4gPg0KPiA+IFRoYXQncyBpdC4N
-Cj4gPg0KPiA+IEFuZCB0aGVuIGdoZXNfZWRhYyBjYW4gYmUgbWFkZSBhIG5vcm1hbCBtb2R1bGUg
-YWdhaW4gYW5kIHdlIGNhbiBnZXQNCj4gPiByaWQgb2YgdGhpcyBpbnNhbml0eS4NCj4NCj4gVGhl
-IGZvbGxvd2luZyBhcHByb2FjaCBtYXkgYmUgY29uc2lkZXJhYmxlOg0KPiAtIFNlcGFyYXRlIGdo
-ZXNfZWRhY19yZWdpc3RlcigpIGludG8gdHdvIGZ1bmN0aW9ucywgZS5nLiwgZ2hlc19lZGFjX3Jl
-Z2lzdGVyKCkNCj4gYW5kIGdoZXNfZWRhY19pbml0KCkuDQo+IC0gZ2hlc19lZGFjX3JlZ2lzdGVy
-KCkgb25seSB0YWtlcyB0aGUgZmlyc3QgaWYtYmxvY2sgd2l0aCBJU19FTkFCTEVEKCkgJg0KPiBm
-b3JjZV9sb2FkIGNoZWNrLCBhbmQgdGhlbiBjYWxscyBhIG5ldyBmdW5jdGlvbiwNCj4gZWRhY19z
-ZXRfb3duZXIobW9kX25hbWUpLCB3aGljaCBzaW1wbHkgc2V0cyBtb2RfbmFtZSB0bw0KPiBlZGFj
-X21jX293bmVyLiAgVGhpcyBhbGxvd3MgZ2hlc19lZGFjX3JlZ2lzdGVyKCkgdG8gcnVuIGJlZm9y
-ZSBlZGFjX2luaXQoKSwNCj4gYW5kIHNldHMgZWRhY19tY19vd25lciB0byBwcmV2ZW50IGNoaXBz
-ZXQtc3BlY2lmaWMgZWRhYyBkcml2ZXIgdG8gYmUgbG9hZGVkDQo+IGJlZm9yZSBnaGVzX2VkYWMu
-DQo+IC0gZ2hlc19lZGFjX2luaXQoKSBmaXJzdCBjYWxscyBlZGFjX2dldF9vd25lcigpIHRvIG1h
-dGNoIHdpdGggaXRzIG1vZF9uYW1lLg0KPiBJZiBzbywgaXQgcGVyZm9ybXMgdGhlIHJlc3Qgb2Yg
-dGhlIG9yaWdpbmFsIGdoZXNfZWRhY19yZWdpc3RlcigpIHByb2NlZHVyZS4NCj4gVGhpcw0KPiBn
-aGVzX2VkYWNfaW5pdCgpIGlzIGNhbGxlZCBmcm9tIHRoZSBub3JtYWwgbW9kdWxlIGluaXQgcGF0
-aCwgZS5nLiwNCj4gbW9kdWxlX2luaXQoKS4NClRoYW5rcyBmb3IgdGhlIHN1Z2dlc3Rpb24sIG9u
-ZSBnYXAgaXMgdGhhdCB1bmRlciBtb2R1bGVfaW5pdCBwYXRoLCBob3cgY2FuIHdlIHBhc3MNCiB0
-aGUgMm5kIHBhcmFtZXRlciBvZiBnaGVzX2VkYWNfcmVnaXN0ZXIgKHN0cnVjdCBkZXZpY2UgKmRl
-dikgdG8gdGhlIG5ldw0KKiBnaGVzX2VkYWNfaW5pdCgpPw0KDQpJSVVDLCB0aGUgcGFyYW1ldGVy
-IG9mIGFueSBmdW5jdGlvbnMgdW5kZXIgbW9kdWxlX2luaXQoKSBwYXRoIHNob3VsZCBiZSB2b2lk
-Lg0KDQoNCi0tDQpDaGVlcnMsDQpKdXN0aW4gKEppYSBIZSkNCg0KDQpJTVBPUlRBTlQgTk9USUNF
-OiBUaGUgY29udGVudHMgb2YgdGhpcyBlbWFpbCBhbmQgYW55IGF0dGFjaG1lbnRzIGFyZSBjb25m
-aWRlbnRpYWwgYW5kIG1heSBhbHNvIGJlIHByaXZpbGVnZWQuIElmIHlvdSBhcmUgbm90IHRoZSBp
-bnRlbmRlZCByZWNpcGllbnQsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBpbW1lZGlhdGVseSBh
-bmQgZG8gbm90IGRpc2Nsb3NlIHRoZSBjb250ZW50cyB0byBhbnkgb3RoZXIgcGVyc29uLCB1c2Ug
-aXQgZm9yIGFueSBwdXJwb3NlLCBvciBzdG9yZSBvciBjb3B5IHRoZSBpbmZvcm1hdGlvbiBpbiBh
-bnkgbWVkaXVtLiBUaGFuayB5b3UuDQo=
+On Wed, Jul 13, 2022 at 09:12:25AM +0100, Mauro Carvalho Chehab wrote:
+> This is a large struct used to describe gem objects. It is
+> currently partially documented. Finish its documentation, filling
+> the gaps from git logs.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
+> 
+>  .../gpu/drm/i915/gem/i915_gem_object_types.h  | 200 ++++++++++++++----
+>  1 file changed, 158 insertions(+), 42 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+> index ceed0d220ce3..8c09e493590d 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+> @@ -233,6 +233,9 @@ struct i915_gem_object_page_iter {
+>  	struct mutex lock; /* protects this cache */
+>  };
+>  
+> +/**
+> + * struct drm_i915_gem_object - describes an i915 GEM object
+> + */
+>  struct drm_i915_gem_object {
+>  	/*
+>  	 * We might have reason to revisit the below since it wastes
+> @@ -241,12 +244,16 @@ struct drm_i915_gem_object {
+>  	 * when accessing it.
+>  	 */
+>  	union {
+> +		/** @base: GEM base object */
+>  		struct drm_gem_object base;
+> +		/** @__do_not_access: TTM buffer object */
+>  		struct ttm_buffer_object __do_not_access;
+>  	};
+>  
+> +	/** @ops: pointer to GEM object ops */
+>  	const struct drm_i915_gem_object_ops *ops;
+>  
+> +	/** @vma: struct containing VMA list, tree and lock */
+>  	struct {
+>  		/**
+>  		 * @vma.lock: protect the list/tree of vmas
+> @@ -280,10 +287,12 @@ struct drm_i915_gem_object {
+>  	 *
+>  	 * If this object is closed, we need to remove all of its VMA from
+>  	 * the fast lookup index in associated contexts; @lut_list provides
+> -	 * this translation from object to context->handles_vma.
+> +	 * this translation from object to ``context->handles_vma``.
+>  	 */
+>  	struct list_head lut_list;
+> -	spinlock_t lut_lock; /* guards lut_list */
+> +
+> +	/** @lut_lock: guards @lut_list */
+> +	spinlock_t lut_lock;
+>  
+>  	/**
+>  	 * @obj_link: Link into @i915_gem_ww_ctx.obj_list
+> @@ -294,42 +303,88 @@ struct drm_i915_gem_object {
+>  	 */
+>  	struct list_head obj_link;
+>  	/**
+> -	 * @shared_resv_from: The object shares the resv from this vm.
+> +	 * @shares_resv_from: The object shares the resv from this vm.
+>  	 */
+>  	struct i915_address_space *shares_resv_from;
+>  
+>  	union {
+> +		/** @rcu: head used when freeing objects with RCU */
+>  		struct rcu_head rcu;
+> +		/** @freed: list of GEM freed objects */
+>  		struct llist_node freed;
+>  	};
+>  
+>  	/**
+> -	 * Whether the object is currently in the GGTT mmap.
+> +	 * @userfault_count: a value bigger than zero means that the object
+> +	 * was mmapped into userspace.
+> +	 *
+> +	 * Used when the object is currently in the GGTT mmap.
+>  	 */
+>  	unsigned int userfault_count;
+> +	/**
+> +	 * @userfault_link: list of all objects that were
+> +	 * mmapped into userspace.
+> +	 *
+> +	 * Used when the object is currently in the GGTT mmap.
+> +	 */
+>  	struct list_head userfault_link;
+>  
+> +	/** @mmo: struct containing mmo offsets and lock */
+>  	struct {
+> -		spinlock_t lock; /* Protects access to mmo offsets */
+> +		/** @mmo.lock: protects access to @mmo.offsets */
+> +		spinlock_t lock;
+> +		/** @mmo.offsets: rbtree list of mmo offsets */
+>  		struct rb_root offsets;
+>  	} mmo;
+>  
+> +	/* private: used on selftest only */
+>  	I915_SELFTEST_DECLARE(struct list_head st_link);
+> +	/* public: */
+>  
+> +	/**
+> +	 * @flags: object flags. Current flags are:
+> +	 *
+> +	 * %I915_BO_ALLOC_CONTIGUOUS:
+> +	 *	Object requires to be allocated as a contiguous block
+> +	 * %I915_BO_ALLOC_VOLATILE:
+> +	 *	Volatile objects are marked as %DONTNEED while pinned, therefore
+> +	 *	once unpinned the backing store can be discarded.
+> +	 *	This is limited to kernel internal objects.
+> +	 * %I915_BO_ALLOC_CPU_CLEAR:
+> +	 *	Some internal device local-memory objects may have an option
+> +	 *	to CPU clear the pages upon gathering the backing store.
+> +	 *	Note that this might be before the blitter is usable, which
+> +	 *	is the case for some internal GuC objects.
+> +	 * %I915_BO_ALLOC_USER:
+> +	 *	Make sure the object is cleared before any user access.
+> +	 * %I915_BO_ALLOC_PM_VOLATILE:
+> +	 *	Object is allowed to lose its contents on suspend / resume,
+> +	 *	even if pinned
+> +	 * %I915_BO_ALLOC_PM_EARLY:
+> +	 *	Object needs to be restored early using memcpy during resume
+> +	 * %I915_BO_ALLOC_GPU_ONLY:
+> +	 *	Object is likely never accessed by the CPU. This will
+> +	 *	prioritise the BO to be allocated in the non-mappable portion
+> +	 *	of lmem. This is merely a hint, and if dealing with userspace
+> +	 *	objects the CPU fault handler is free to ignore this.
+> +	 * %I915_BO_READONLY:
+> +	 *	User has created object as read-only
+> +	 * %I915_BO_PROTECTED:
+> +	 *	User has created protected. All protected objects and
+> +	 *	contexts will be considered invalid when the PXP session
+> +	 *	is destroyed and all new submissions using them will be
+> +	 *	rejected. All intel contexts within the invalidated gem
+> +	 *	contexts will be marked banned. Userspace can detect that
+> +	 *	an invalidation has occurred via the %RESET_STATS ioctl,
+> +	 *	where we report it the same way as a ban due to a hang.
+> +	 */
+>  	unsigned long flags;
+>  #define I915_BO_ALLOC_CONTIGUOUS  BIT(0)
+>  #define I915_BO_ALLOC_VOLATILE    BIT(1)
+>  #define I915_BO_ALLOC_CPU_CLEAR   BIT(2)
+>  #define I915_BO_ALLOC_USER        BIT(3)
+> -/* Object is allowed to lose its contents on suspend / resume, even if pinned */
+>  #define I915_BO_ALLOC_PM_VOLATILE BIT(4)
+> -/* Object needs to be restored early using memcpy during resume */
+>  #define I915_BO_ALLOC_PM_EARLY    BIT(5)
+> -/*
+> - * Object is likely never accessed by the CPU. This will prioritise the BO to be
+> - * allocated in the non-mappable portion of lmem. This is merely a hint, and if
+> - * dealing with userspace objects the CPU fault handler is free to ignore this.
+> - */
+>  #define I915_BO_ALLOC_GPU_ONLY	  BIT(6)
+>  #define I915_BO_ALLOC_FLAGS (I915_BO_ALLOC_CONTIGUOUS | \
+>  			     I915_BO_ALLOC_VOLATILE | \
+> @@ -343,15 +398,21 @@ struct drm_i915_gem_object {
+>  #define I915_BO_PROTECTED         BIT(9)
+>  #define I915_BO_WAS_BOUND_BIT     10
+>  	/**
+> -	 * @mem_flags - Mutable placement-related flags
+> +	 * @mem_flags: Mutable placement-related flags
+>  	 *
+>  	 * These are flags that indicate specifics of the memory region
+>  	 * the object is currently in. As such they are only stable
+>  	 * either under the object lock or if the object is pinned.
+> +	 * There are two flags:
+> +	 *
+> +	 * %I915_BO_FLAG_STRUCT_PAGE:
+> +	 *	 Object backed by struct pages
+> +	 * %I915_BO_FLAG_IOMEM:
+> +	 *	Object backed by IO memory
+>  	 */
+>  	unsigned int mem_flags;
+> -#define I915_BO_FLAG_STRUCT_PAGE BIT(0) /* Object backed by struct pages */
+> -#define I915_BO_FLAG_IOMEM       BIT(1) /* Object backed by IO memory */
+> +#define I915_BO_FLAG_STRUCT_PAGE BIT(0)
+> +#define I915_BO_FLAG_IOMEM       BIT(1)
+>  	/**
+>  	 * @cache_level: The desired GTT caching level.
+>  	 *
+> @@ -400,7 +461,7 @@ struct drm_i915_gem_object {
+>  	 *
+>  	 * Supported values:
+>  	 *
+> -	 * I915_BO_CACHE_COHERENT_FOR_READ:
+> +	 * %I915_BO_CACHE_COHERENT_FOR_READ:
+>  	 *
+>  	 * On shared LLC platforms, we use this for special scanout surfaces,
+>  	 * where the display engine is not coherent with the CPU cache. As such
+> @@ -423,7 +484,7 @@ struct drm_i915_gem_object {
+>  	 *
+>  	 *	cache_coherent = 0
+>  	 *
+> -	 * I915_BO_CACHE_COHERENT_FOR_WRITE:
+> +	 * %I915_BO_CACHE_COHERENT_FOR_WRITE:
+>  	 *
+>  	 * When writing through the CPU cache, the GPU is still coherent. Note
+>  	 * that this also implies I915_BO_CACHE_COHERENT_FOR_READ.
+> @@ -509,23 +570,29 @@ struct drm_i915_gem_object {
+>  	 */
+>  	u16 write_domain;
+>  
+> +	/** @frontbuffer: pointer to the object's frontbuffer */
+>  	struct intel_frontbuffer __rcu *frontbuffer;
+>  
+> -	/** Current tiling stride for the object, if it's tiled. */
+> +	/**
+> +	 * @tiling_and_stride: current tiling stride for the object,
+> +	 * if it's tiled.
+> +	 */
+>  	unsigned int tiling_and_stride;
+>  #define FENCE_MINIMUM_STRIDE 128 /* See i915_tiling_ok() */
+>  #define TILING_MASK (FENCE_MINIMUM_STRIDE - 1)
+>  #define STRIDE_MASK (~TILING_MASK)
+>  
+> +	/** @mm: struct containing mm-specific fields */
+>  	struct {
+> -		/*
+> -		 * Protects the pages and their use. Do not use directly, but
+> -		 * instead go through the pin/unpin interfaces.
+> +		/**
+> +		 * @mm.pages_pin_count: protects the pages and their use. Do
+> +		 * not use directly, but instead go through the pin/unpin
+> +		 * interfaces.
+>  		 */
+>  		atomic_t pages_pin_count;
+>  
+>  		/**
+> -		 * @shrink_pin: Prevents the pages from being made visible to
+> +		 * @mm.shrink_pin: Prevents the pages from being made visible to
+>  		 * the shrinker, while the shrink_pin is non-zero. Most users
+>  		 * should pretty much never have to care about this, outside of
+>  		 * some special use cases.
+> @@ -536,7 +603,7 @@ struct drm_i915_gem_object {
+>  		 * __i915_gem_object_set_pages(). They will then be removed the
+>  		 * shrinker list once the pages are released.
+>  		 *
+> -		 * The @shrink_pin is incremented by calling
+> +		 * The @mm.shrink_pin is incremented by calling
+>  		 * i915_gem_object_make_unshrinkable(), which will also remove
+>  		 * the object from the shrinker list, if the pin count was zero.
+>  		 *
+> @@ -548,13 +615,13 @@ struct drm_i915_gem_object {
+>  		atomic_t shrink_pin;
+>  
+>  		/**
+> -		 * @ttm_shrinkable: True when the object is using shmem pages
+> +		 * @mm.ttm_shrinkable: True when the object is using shmem pages
+>  		 * underneath. Protected by the object lock.
+>  		 */
+>  		bool ttm_shrinkable;
+>  
+>  		/**
+> -		 * @unknown_state: Indicate that the object is effectively
+> +		 * @mm.unknown_state: Indicate that the object is effectively
+>  		 * borked. This is write-once and set if we somehow encounter a
+>  		 * fatal error when moving/clearing the pages, and we are not
+>  		 * able to fallback to memcpy/memset, like on small-BAR systems.
+> @@ -572,94 +639,143 @@ struct drm_i915_gem_object {
+>  		bool unknown_state;
+>  
+>  		/**
+> -		 * Priority list of potential placements for this object.
+> +		 * @mm.placements: priority list of potential placements for
+> +		 * this object.
+>  		 */
+>  		struct intel_memory_region **placements;
+> +		/**
+> +		 * @mm.n_placements: Size of @mm.placements.
+> +		 */
+>  		int n_placements;
+>  
+>  		/**
+> -		 * Memory region for this object.
+> +		 * @mm.region: memory region for this object.
+>  		 */
+>  		struct intel_memory_region *region;
+>  
+>  		/**
+> -		 * Memory manager resource allocated for this object. Only
+> -		 * needed for the mock region.
+> +		 * @mm.res: Memory manager resource allocated for this object.
+> +		 * Only needed for the mock region.
+>  		 */
+>  		struct ttm_resource *res;
+>  
+>  		/**
+> -		 * Element within memory_region->objects or region->purgeable
+> -		 * if the object is marked as DONTNEED. Access is protected by
+> -		 * region->obj_lock.
+> +		 * @mm.region_link: element within memory_region->objects or
+> +		 * ``region->purgeable`` if the object is marked as %DONTNEED.
+> +		 * Access is protected by ``region->obj_lock``.
+>  		 */
+>  		struct list_head region_link;
+>  
+> +		/** @mm.rsgt: refcounted sg-tables */
+>  		struct i915_refct_sgt *rsgt;
+> +		/** @mm.pages: pages pointer for GGTT entries */
+>  		struct sg_table *pages;
+> +		/**
+> +		 * @mm.mapping: mapped pages of the object into kernel space.
+> +		 * can be %NULL if unmapped.
+> +		 */
+>  		void *mapping;
+>  
+> +		/**
+> +		 * @mm.page_sizes: Page sizes of the pages.
+> +		 */
+>  		struct i915_page_sizes page_sizes;
+>  
+> +		/* private: used on selftest only */
+>  		I915_SELFTEST_DECLARE(unsigned int page_mask);
+> +		/* public: */
+>  
+> +		/** @mm.get_page: */
+>  		struct i915_gem_object_page_iter get_page;
+> +		/** @mm.get_dma_page: */
+>  		struct i915_gem_object_page_iter get_dma_page;
+>  
+>  		/**
+> -		 * Element within i915->mm.shrink_list or i915->mm.purge_list,
+> -		 * locked by i915->mm.obj_lock.
+> +		 * @mm.link: element within ``i915->mm.shrink_list`` or
+> +		 * ``i915->mm.purge_list``, locked by ``i915->mm.obj_lock``.
+>  		 */
+>  		struct list_head link;
+>  
+>  		/**
+> -		 * Advice: are the backing pages purgeable?
+> +		 * @mm.madv: Advice: are the backing pages purgeable?
+>  		 */
+>  		unsigned int madv:2;
+>  
+>  		/**
+> -		 * This is set if the object has been written to since the
+> -		 * pages were last acquired.
+> +		 * @mm.dirty: this is set if the object has been written to
+> +		 * since the pages were last acquired.
+>  		 */
+>  		bool dirty:1;
+>  	} mm;
+>  
+> +	/** @ttm: struct containing TTM specific fields */
+>  	struct {
+> +		/** @ttm.cached_io_rsgt: cached refcounted sg-tables */
+>  		struct i915_refct_sgt *cached_io_rsgt;
+> +		/** @ttm.get_io_page: rbtree iterator to get IO pages */
+>  		struct i915_gem_object_page_iter get_io_page;
+> +		/** @ttm.backup: list of LMEM objects backed up at suspend */
+>  		struct drm_i915_gem_object *backup;
+> +		/** @ttm.created: indicate that object as created with TTM */
+>  		bool created:1;
+>  	} ttm;
+>  
+> -	/*
+> -	 * Record which PXP key instance this object was created against (if
+> -	 * any), so we can use it to determine if the encryption is valid by
+> -	 * comparing against the current key instance.
+> +	/**
+> +	 * @pxp_key_instance: rRecord which PXP key instance this object was
+> +	 * created against (if any), so we can use it to determine if the
+> +	 * encryption is valid by comparing against the current key instance.
+>  	 */
+>  	u32 pxp_key_instance;
+>  
+> -	/** Record of address bit 17 of each page at last unbind. */
+> +	/** @bit_17: Record of address bit 17 of each page at last unbind. */
+>  	unsigned long *bit_17;
+>  
+>  	union {
+>  #ifdef CONFIG_MMU_NOTIFIER
+> +		/**
+> +		 * @userptr: Struct which supports userptr data
+> +		 * Only used when %CONFIG_MMU_NOTIFIER is enabled
+> +		 */
+>  		struct i915_gem_userptr {
+> +			/** @userptr.ptr: pointer to the user-mapped ptr */
+>  			uintptr_t ptr;
+> +			/** @userptr.notifier_seq: */
+>  			unsigned long notifier_seq;
+>  
+> +			/** @userptr.notifier: data used by MMU notifier */
+>  			struct mmu_interval_notifier notifier;
+> +			/** @userptr.pvec: S/G pages used by userptr */
+>  			struct page **pvec;
+> +			/**
+> +			 * @userptr.page_ref: number of page references
+> +			 * incremented when pages are in usage.
+> +			 *
+> +			 */
+>  			int page_ref;
+>  		} userptr;
+>  #endif
+>  
+> +		/**
+> +		 * @stolen: Used to identify an object allocated from
+> +		 * stolen memory.
+> +		 */
+>  		struct drm_mm_node *stolen;
+>  
+> +		/**
+> +		 * @bo_offset: The range start.
+> +		 * Used only by TTM.
+> +		 */
+>  		resource_size_t bo_offset;
+>  
+> +		/** @scratch: physical size of huge gem object */
+>  		unsigned long scratch;
+> +		/** @encode: gen8 PDE encode address */
+>  		u64 encode;
+>  
+> +		/**
+> +		 * @gvt_info: contains a pointer to ``dmabuf_obj->info``
+> +		 * Used only by gvt.
+> +		 */
+>  		void *gvt_info;
+>  	};
+>  };
+> -- 
+> 2.36.1
+> 

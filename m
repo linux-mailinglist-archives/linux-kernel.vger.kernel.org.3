@@ -2,150 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D8058DA71
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A00358DA75
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243670AbiHIOjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 10:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
+        id S243764AbiHIOkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 10:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiHIOjA (ORCPT
+        with ESMTP id S243757AbiHIOke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 10:39:00 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EB419C04;
-        Tue,  9 Aug 2022 07:38:59 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id uj29so22704084ejc.0;
-        Tue, 09 Aug 2022 07:38:59 -0700 (PDT)
+        Tue, 9 Aug 2022 10:40:34 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C13273F
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 07:40:33 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso12379478pjd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 07:40:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FZWzu7y9cZ515G8p3adab/2sdQH4tG+7zriZfn5G1uM=;
-        b=JqvgdF3PLdiGIlyld/3xKQfIV0pyoOxPGZ47eRx/jY2qe0pDbO9E0mRlpjDQvtO5qb
-         ldoUevusjaC85SdjMTKL//GcZsPv2QN7HdKN+k1Rx4egd6YO9AWza7ufYt/Zf9d0NDXJ
-         Uzz7JU2GmVyVJJVQGDkAKzkU28y2B/Ldb8xRhVTHQlohSjHZyoYezjFhPGdq4nKEFkhs
-         gpD6T6KaEpTE3bAik8AWRF3l8UcSUXZ55rSMHNLjH5IjkjYup5G7DJRlw/kN2WAhWRgM
-         vyvrdHd3DfRuID6DIGqadtMt62wATkGbXuxQ8E+RoFlyjjf25clBqeZtZmGaVRWYpdGK
-         RBPQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=OdbOjGUjW12bCfbeWBjGSJ1Nu6Rk3c5Ky+ZI53W01wg=;
+        b=TaXG+ej0jDZE0fRN4noaJtSFB5ltkCHj7OE6Qr0NL5hSpQhtaKSX0RdDRHiXlYQdy7
+         MSEMDDxfpGEWa+w6jBWpVEwFG41oOAiq602dOmmdikaoW+Jsupla/nPEcG2Wug4G8QeI
+         R/6wu3IwfV1cXrxn1hb2o5uHm34Q7XMdvKznNBglR8Vqp2fkXdJwB9/T97p/P5tbfJC2
+         iJC6RTuGl32t6ZBKATAv6goAxQVAAVbtv3vsIH6qp290lpHClC8dvzuVSIkWK6lUJDt0
+         ctBxtIYfoWBW7cm+VQpAFbdsgBentT5METMZgPILhQltDG0Q34WrrfR8jy3B1NmYNvwD
+         EmWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FZWzu7y9cZ515G8p3adab/2sdQH4tG+7zriZfn5G1uM=;
-        b=EClFY7/YT4FMG8xU+hrDV6buc4thFXW5uzakiuYUtScmImeP41i70O0RaGAxxi6Akf
-         axqQPalfl+xOT3MjF3TvNxiELzoNFpIzd7tp2UnuHVam4FQRoJt0PgQMHMkSstoDWMbf
-         t8rWaPE1zOhbBZF+gunGXZ6SLr6K//RggV0G9pgJLnC7DP18Mz81FKm37Zu9ZXkH6JA1
-         LmW1V85S+5r1cRTbfwQLitEP5J985La+3duBCsX1Kd1ZaB6/b/YC+sevbWHH0umzTd7D
-         HKiGwt5M5tXtxjokXmCIaakbSTQyNf7nuw8oLN01OQD/Ez3aOGL6yOsPbhnWoTQ5VOqS
-         ofLg==
-X-Gm-Message-State: ACgBeo2fUhqiwLgCa2Wf/8VOCDTX0K6W5xP6+1RP736UF2KRiVxfjTXp
-        8KcADS61/hVRXrxn1ZtQpLWGADTpQWKB5EKN7A8=
-X-Google-Smtp-Source: AA6agR74zaY6yPM1wjRSufdOHpy3nlQuDeT0UJtBqbtC7ZHI4IpyZUm2vW9DFIC1NZJ9M/OJgl8qHTxHP+Pc+94lwAk=
-X-Received: by 2002:a17:907:e8d:b0:730:a4e8:27ed with SMTP id
- ho13-20020a1709070e8d00b00730a4e827edmr16528349ejc.58.1660055938238; Tue, 09
- Aug 2022 07:38:58 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=OdbOjGUjW12bCfbeWBjGSJ1Nu6Rk3c5Ky+ZI53W01wg=;
+        b=4fSt0azIrWKoBSxWR+xAPkRec4Ae6iTDMHugL+HEO2pMEW6M2xsyG66SEo8Cu55cL8
+         gHpV1YIaWdm+Q2IXzvi9KePC4qKzNFh7t7Bq75JwGo/Kn0DkJSa//QxPJhLTGCWn0Rrp
+         EHwIxvV7Bk7lw4cte7pT0lBNNU0HZkRYEnwq7rf/FcLyCx6/oCmFwiUuV+eQYfnUebbV
+         RhNOd/5AV8S61r2YLAWTnoDNTmQRHJwBh0irgjF0vOu+Fr9NR98On4HZvDvkifYelor5
+         aoh2noLI/CgqO279qx0H9P6UNxP/A2lkx+MFwwsUWem3Ws7i7mf4CoqbObeQg9b/Ih0V
+         3T4A==
+X-Gm-Message-State: ACgBeo34nXAJxnR+vYa1BTLJxqy+fxu0hgU7C1G8l2Y6tIpyi7QW/Ydi
+        /h0tmLEKPPeDCL6VM4AgLpWVVQ==
+X-Google-Smtp-Source: AA6agR5dJBGAgBiZdySMn0shi1wg9/jp8sdMtEe28i2vcg1gxytljbDTOA1J7khCTdbdWwzUz3C3pA==
+X-Received: by 2002:a17:903:22c1:b0:16f:3d1:f5c with SMTP id y1-20020a17090322c100b0016f03d10f5cmr23843077plg.155.1660056032526;
+        Tue, 09 Aug 2022 07:40:32 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id q11-20020a170902dacb00b0016dcfedfe30sm11056894plx.90.2022.08.09.07.40.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 07:40:31 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 14:40:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Coleman Dietsch <dietschc@csp.edu>, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        stable@vger.kernel.org,
+        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com,
+        metikaya <metikaya@amazon.co.uk>
+Subject: Re: [PATCH v3 2/2] KVM: x86/xen: Stop Xen timer before changing IRQ
+Message-ID: <YvJx3Dje4zS/c+H0@google.com>
+References: <20220808190607.323899-2-dietschc@csp.edu>
+ <20220808190607.323899-3-dietschc@csp.edu>
+ <c648744c096588d30771a22efa6d65c31fffd06c.camel@infradead.org>
+ <43e258cc-71ac-bde4-d1f8-9eb9519928d3@redhat.com>
+ <4fc1371b83001b4eed1617c37bec6b9d007e45c2.camel@infradead.org>
+ <YvJqIsQsg+ThMg/C@google.com>
+ <0b5dcab333906f166fcdbc296373cc5e08bec79f.camel@infradead.org>
+ <953d2e99-ed1a-384d-6d3a-0f656a243f82@redhat.com>
 MIME-Version: 1.0
-References: <20220803134821.425334-1-lee@kernel.org> <CAADnVQ+X_B4LC6CtYM1PXPA4BBprWLj5Qip--Eeu32Zti==Ydw@mail.gmail.com>
- <YvIDmku4us2SSBKu@google.com>
-In-Reply-To: <YvIDmku4us2SSBKu@google.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 9 Aug 2022 07:38:46 -0700
-Message-ID: <CAADnVQ+5eq3qQTgHH6nDdVM-n1i4TWkZ35Ou8TDMi3MqGzm63w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] bpf: Drop unprotected find_vpid() in favour of find_get_pid()
-To:     Lee Jones <lee@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <953d2e99-ed1a-384d-6d3a-0f656a243f82@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 11:50 PM Lee Jones <lee@kernel.org> wrote:
->
-> On Thu, 04 Aug 2022, Alexei Starovoitov wrote:
->
-> > On Wed, Aug 3, 2022 at 6:48 AM Lee Jones <lee@kernel.org> wrote:
-> > >
-> > > The documentation for find_pid() clearly states:
-> > >
-> > >   "Must be called with the tasklist_lock or rcu_read_lock() held."
-> > >
-> > > Presently we do neither.
-> > >
-> > > Let's use find_get_pid() which searches for the vpid, then takes a
-> > > reference to it preventing early free, all within the safety of
-> > > rcu_read_lock().  Once we have our reference we can safely make use of
-> > > it up until the point it is put.
-> > >
-> > > Cc: Alexei Starovoitov <ast@kernel.org>
-> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > > Cc: John Fastabend <john.fastabend@gmail.com>
-> > > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > > Cc: Song Liu <song@kernel.org>
-> > > Cc: Yonghong Song <yhs@fb.com>
-> > > Cc: KP Singh <kpsingh@kernel.org>
-> > > Cc: Stanislav Fomichev <sdf@google.com>
-> > > Cc: Hao Luo <haoluo@google.com>
-> > > Cc: Jiri Olsa <jolsa@kernel.org>
-> > > Cc: bpf@vger.kernel.org
-> > > Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
-> > > Signed-off-by: Lee Jones <lee@kernel.org>
-> > > ---
-> > >
-> > > v1 => v2:
-> > >   * Commit log update - no code differences
-> > >
-> > >  kernel/bpf/syscall.c | 5 ++++-
-> > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > > index 83c7136c5788d..c20cff30581c4 100644
-> > > --- a/kernel/bpf/syscall.c
-> > > +++ b/kernel/bpf/syscall.c
-> > > @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
-> > >         const struct perf_event *event;
-> > >         struct task_struct *task;
-> > >         struct file *file;
-> > > +       struct pid *ppid;
-> > >         int err;
-> > >
-> > >         if (CHECK_ATTR(BPF_TASK_FD_QUERY))
-> > > @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
-> > >         if (attr->task_fd_query.flags != 0)
-> > >                 return -EINVAL;
-> > >
-> > > -       task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
-> > > +       ppid = find_get_pid(pid);
-> > > +       task = get_pid_task(ppid, PIDTYPE_PID);
-> > > +       put_pid(ppid);
-> >
-> > rcu_read_lock/unlock around this line
-> > would be a cheaper and faster alternative than pid's
-> > refcount inc/dec.
->
-> This was already discussed here:
->
-> https://lore.kernel.org/all/YtsFT1yFtb7UW2Xu@krava/
+On Tue, Aug 09, 2022, Paolo Bonzini wrote:
+> On 8/9/22 16:16, David Woodhouse wrote:
+> > I find the new version a bit harder to follow, with its init-then-stop-
+> > then-start logic:
+> > 
+> > 	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
+> > 		if (data->u.timer.port &&
+> > 		    data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
+> > 			r = -EINVAL;
+> > 			break;
+> >                  }
+> > 
+> > 		if (!vcpu->arch.xen.timer.function)
+> > 			kvm_xen_init_timer(vcpu);
+> > 
+> > 		/* Stop the timer (if it's running) before changing the vector */
+> > 		kvm_xen_stop_timer(vcpu);
+> > 		vcpu->arch.xen.timer_virq = data->u.timer.port;
+> 
+> 
+> I think this is fine, if anything the kvm_xen_stop_timer() call could be
+> placed in an "else" but I'm leaning towards applying this version of the
+> patch.
 
-Since several people thought about rcu_read_lock instead of your
-approach it means that it's preferred.
-Sooner or later somebody will send a patch to optimize
-refcnt into rcu_read_lock.
-So let's avoid the churn and do it now.
+I wanted to separate the "init" from the "stop+start", e.g. if there were a more
+appropriate place for invoking kvm_xen_init_timer() I would have suggested moving
+the call outside of KVM_XEN_VCPU_ATTR_TYPE_TIMER entirely.

@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529F858DA15
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2F958DA1D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243275AbiHIOHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 10:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
+        id S242093AbiHIONu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 10:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238333AbiHIOHi (ORCPT
+        with ESMTP id S234514AbiHIONq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 10:07:38 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E905112AC0
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 07:07:35 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so12342765pjl.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 07:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=NnEsu78UdgWUFfbUzx2FaqG+fLzRYJgztuHCMcvogJA=;
-        b=oDtJsLEQQYL30wcvIv5F3ooBK0Zf/9c8h4+kW5/jz5Nl67dgnb73eDU7C8tmnt4nYY
-         cCMyJmMxEiHiWPNM5WQB2io2rxq9bgmB+TaseJV90fL2r3xfh5kJ6m5B6y7/BiuHZEc2
-         xde5cBI2o6E657tDSS6U8BOe2jW6sBWiX9XXvh65MlJJUS7AaWOV4KvFfxIIfmZCuNwc
-         oOoe0EJLXJhc0M3MGpwUWJQ1cAhegx+jjeoZ433VUWG15wBgZfP+Bpz4F5TPaAVFcv1G
-         xIwBkATQVJVHWkK6kqQjZYTL5Jpf+PTD6HmUUJaV9clHvHt2RUqA3nIziuDGmoL3H5PH
-         aSCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=NnEsu78UdgWUFfbUzx2FaqG+fLzRYJgztuHCMcvogJA=;
-        b=EGJ1LAMdqUVUdKUJn+5273YRu1Y45X2SiPq9TswVe3ps52NmGOFvTxXd2snrCUx5U+
-         OzvIziqMLY6RF7WPVvoH1IZnCqLH/XiNB4SV1s4zgL4rTB22R19LrVpDzlarfS1LNjEN
-         Gl5yCNd06nXoFP6MDTWNYq+fExYJmRJdiaQjsFdp3HOC9dC2Z0UeCxhAja9yWmqXtADX
-         lhXys/0Zcpsa97q0pjSdbJKNJxVwrfBoHQZAAivxSp+xL9WdYICY9Bx9u8sXWVdobQqf
-         8fIK/VPRc/fwzFYiDZco20pgAWNFzHgCncv5HDROGPKRnwFNVwE7lub+x1TPXJVTHeyY
-         QJ/w==
-X-Gm-Message-State: ACgBeo2XftrYoKMsMJYwLt+xKVC9VESkdhi908SFox0bz6cqUv8KFSj/
-        PeS6OJ3IGtqgrxvwCihQvIFdcA==
-X-Google-Smtp-Source: AA6agR4aiTL+Daci9AK1TqyyNVqT0wIL4ZZnOZ8/yvhfKaMJTNse+c98EGQik7SdrsdREq1iYR++YQ==
-X-Received: by 2002:a17:902:b903:b0:170:9964:b47b with SMTP id bf3-20020a170902b90300b001709964b47bmr12764209plb.83.1660054055288;
-        Tue, 09 Aug 2022 07:07:35 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c14-20020a170902d48e00b0017086b082c1sm8154199plg.173.2022.08.09.07.07.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 07:07:34 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 14:07:30 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Coleman Dietsch <dietschc@csp.edu>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        stable@vger.kernel.org,
-        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
-Subject: Re: [PATCH v3 2/2] KVM: x86/xen: Stop Xen timer before changing IRQ
-Message-ID: <YvJqIsQsg+ThMg/C@google.com>
-References: <20220808190607.323899-2-dietschc@csp.edu>
- <20220808190607.323899-3-dietschc@csp.edu>
- <c648744c096588d30771a22efa6d65c31fffd06c.camel@infradead.org>
- <43e258cc-71ac-bde4-d1f8-9eb9519928d3@redhat.com>
- <4fc1371b83001b4eed1617c37bec6b9d007e45c2.camel@infradead.org>
+        Tue, 9 Aug 2022 10:13:46 -0400
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1DCBC94;
+        Tue,  9 Aug 2022 07:13:39 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id 279EBOTX003402;
+        Tue, 9 Aug 2022 23:11:25 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 279EBOTX003402
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1660054285;
+        bh=SJHKDJS14TC3x4IU/wY7G+K3O9SoESvqIE5ewD6X5pI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=d2+CtcSfXTucxJxlzO9K5fHK2UCbOkz/HleD7HswTKM8GLDEPF+292nrGxPZccOHD
+         9ejIWOSDKQWQJazMmgaYCLDTLQfubiE493C7b/VK6YYEEbcudXC671ngPNLqIwmEYL
+         c6VMNw93VjzFf2PywTpoLQ/o2wN8AIJE4GeHeEZzTN2JSU1BeaXavSc3BdGk4sELik
+         pzWfUB9whpGKP5XLuqhSQGy3PBuMdd5aYGNqXZS8Vk+bHK8zt+elNrFL+5z4ywzczO
+         xf4t7wgIffss6h+3Rt1z5APV8DosOLAaneAZJh6MhnfSQ1/sYZMuEc6qDlsdrlwfTK
+         jk09APM8MrJtQ==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        matoro <matoro_mailinglist_kernel@matoro.tk>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] modpost: fix module versioning when a symbol lacks valid CRC
+Date:   Tue,  9 Aug 2022 23:11:17 +0900
+Message-Id: <20220809141117.641543-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4fc1371b83001b4eed1617c37bec6b9d007e45c2.camel@infradead.org>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022, David Woodhouse wrote:
-> On Tue, 2022-08-09 at 14:59 +0200, Paolo Bonzini wrote:
-> > On 8/9/22 11:22, David Woodhouse wrote:
-> > > On Mon, 2022-08-08 at 14:06 -0500, Coleman Dietsch wrote:
-> > > > Stop Xen timer (if it's running) prior to changing the IRQ vector and
-> > > > potentially (re)starting the timer. Changing the IRQ vector while the
-> > > > timer is still running can result in KVM injecting a garbage event, e.g.
-> > > > vm_xen_inject_timer_irqs() could see a non-zero xen.timer_pending from
-> > > > a previous timer but inject the new xen.timer_virq.
-> > > 
-> > > Hm, wasn't that already addressed in the first patch I saw, which just
-> > > called kvm_xen_stop_timer() unconditionally before (possibly) setting
-> > > it up again?
-> > 
-> > Which patch is that?
-> 
-> The one I acked in
-> https://lore.kernel.org/all/9bad724858b6a06c25ead865b2b3d9dfc216d01c.camel@infradead.org/
+Since commit 7b4537199a4a ("kbuild: link symbol CRCs at final link,
+removing CONFIG_MODULE_REL_CRCS"), module versioning is broken on
+some architectures. Loading a module fails with "disagrees about
+version of symbol module_layout".
 
-It's effectively the same patch.  I had asked Coleman to split it into two separate
-patches: (1) fix the re-initialization of an active timer bug and (2) stop the active
-timer before changing the vector (this patch).
+On such architectures (e.g. ARCH=sparc build with sparc64_defconfig),
+modpost shows a warning, like follows:
+
+  WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation failed, symbol will not be versioned.
+  Is "_mcount" prototyped in <asm/asm-prototypes.h>?
+
+Previously, it was a harmless warning (CRC check was just skipped),
+but now wrong CRCs are used for comparison because invalid CRCs are
+just skipped.
+
+  $ sparc64-linux-gnu-nm -n vmlinux
+    [snip]
+  0000000000c2cea0 r __ksymtab__kstrtol
+  0000000000c2ceb8 r __ksymtab__kstrtoul
+  0000000000c2ced0 r __ksymtab__local_bh_enable
+  0000000000c2cee8 r __ksymtab__mcount
+  0000000000c2cf00 r __ksymtab__printk
+  0000000000c2cf18 r __ksymtab__raw_read_lock
+  0000000000c2cf30 r __ksymtab__raw_read_lock_bh
+    [snip]
+  0000000000c53b34 D __crc__kstrtol
+  0000000000c53b38 D __crc__kstrtoul
+  0000000000c53b3c D __crc__local_bh_enable
+  0000000000c53b40 D __crc__printk
+  0000000000c53b44 D __crc__raw_read_lock
+  0000000000c53b48 D __crc__raw_read_lock_bh
+
+Please notice __crc__mcount is missing here.
+
+When the module subsystem looks up a CRC that comes after, it results
+in reading out a wrong address. For example, when __crc__printk is
+needed, the module subsystem reads 0xc53b44 instead of 0xc53b40.
+
+All CRC entries must be output for correct index accessing. Invalid
+CRCs will be unused, but are needed to keep the one-to-one mapping
+between __ksymtab_* and __crc_*.
+
+The best is to fix all modpost warnings, but several warnings are still
+remaining on less popular architectures.
+
+Fixes: 7b4537199a4a ("kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS")
+Reported-by: matoro <matoro_mailinglist_kernel@matoro.tk>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Tested-by: matoro <matoro_mailinglist_kernel@matoro.tk>
+---
+
+ scripts/mod/modpost.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 8484c0798f28..22dc332eebfa 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -2018,13 +2018,11 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
+ 	/* record CRCs for exported symbols */
+ 	buf_printf(buf, "\n");
+ 	list_for_each_entry(sym, &mod->exported_symbols, list) {
+-		if (!sym->crc_valid) {
++		if (!sym->crc_valid)
+ 			warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
+ 			     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
+ 			     sym->name, mod->name, mod->is_vmlinux ? "" : ".ko",
+ 			     sym->name);
+-			continue;
+-		}
+ 
+ 		buf_printf(buf, "SYMBOL_CRC(%s, 0x%08x, \"%s\");\n",
+ 			   sym->name, sym->crc, sym->is_gpl_only ? "_gpl" : "");
+-- 
+2.34.1
+

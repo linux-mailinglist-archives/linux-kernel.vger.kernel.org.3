@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DBC58DED1
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C9D58DD97
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343991AbiHISYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
+        id S1344382AbiHISB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347248AbiHISWG (ORCPT
+        with ESMTP id S245468AbiHISBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:22:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BE13190F;
-        Tue,  9 Aug 2022 11:08:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16BFCB8198C;
-        Tue,  9 Aug 2022 18:07:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34567C43470;
-        Tue,  9 Aug 2022 18:07:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068437;
-        bh=Du+LfgidnyUZQYmLnNKvCIdplUELRrxtwIDyhwydf1w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zur7zKxtD12ZouyIjmHgS6iqi7LqByyMG7O9tQ1HSLE8j+t7KnrLPM4MgodQjLWdK
-         +fJPbP7MFjCzl2U0U0sEalqEib7W/hwFeq58F/aIKHcMTxCm7NXpC7vNya1+71x8HN
-         2WrdlYway/M+/TFnMdfs7HpCANYyCJI3kwHP5GiE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Collingbourne <pcc@google.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 5.18 19/35] arm64: set UXN on swapper page tables
-Date:   Tue,  9 Aug 2022 20:00:48 +0200
-Message-Id: <20220809175515.739951080@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175515.046484486@linuxfoundation.org>
-References: <20220809175515.046484486@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 9 Aug 2022 14:01:36 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2FF26574
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:00:57 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id k13-20020a056902024d00b0066fa7f50b97so10132066ybs.6
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:00:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=OLEpCC27T32C/7NrBkt44Xp3IZO7vGnlk4eYOP8rEvo=;
+        b=ryFUKd5uBQ2+aNk7sYR9KZZ74RoKc9IpQDLCinEpIuhwQtE4vRxUzUmVSy+0Y2/o5J
+         TxfoLNb2zgM2SZFuDyV0Gvmg6Dwgexrp/ozaojZecEs0UdhV2i9dwqZojJbkyaoIM1W9
+         U/3XYnW7/YJruCZNxSVoUQYNoLisjP8IGY6VxNypLiN/B6io8fFuFZITM2ij6Oic0dLt
+         9i1VIxDwyZ8jhai0uhD82HpDxU1rIRD0redZv1ccFsj0OZ5fFKfVx9nqUToMVFs9r2+s
+         EmcY3IT63/5MTFcw+AX61DUHeb/BSEuT5QaSDYVTIixNcmWLtlZ4ZbMn2roH2L3s7LAt
+         qkeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=OLEpCC27T32C/7NrBkt44Xp3IZO7vGnlk4eYOP8rEvo=;
+        b=DAhJZhZHKXJJ2Injndm11TWKWnM+mjUCGwRSkkBe2YhUTrrTCK7mxJ0v0lYP3e5DGd
+         LWG8lzcoUWx9gfXsk5MhJwasBdsDxdZ6SCALSI0Uazs6G9jHHuejjDGewmGAvSph9kfd
+         sf23nuDrTKGo4uGhAjDJlsjP1vLGuRHhyi6sqi8kxeQCxzV2bVDWv6J7SJEa9WZPm7Hx
+         JnGRtxWo7UesCCHQgbWYkh5loGjXFOkqFQ5o/V3azNfXVqDrpF47HZO3PQnfXpp9GPvu
+         TY5IQoAw9kfJ9iWwMGmIjnanW7RnMVz56er4LPvN/GBiZDSymVkpJLRIvwUbxKZP6iJR
+         wphA==
+X-Gm-Message-State: ACgBeo0JPKzfcNdnxlqLjpPg9oIQxELnMKI6y1xZho7wALckBqm+Ijay
+        bnlmk8cqeG1YOeHCtozg/g/jzLdb+3srC/3ih1c=
+X-Google-Smtp-Source: AA6agR57Z1i4kogUXRKNHuKcHf6sYzxvP+vQ7Oxz1ol7dAF+yL2j38ufc3C70qxHvegDyd/L/1N0tFLaCF5E+uKEajE=
+X-Received: from wmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5ebe])
+ (user=willmcvicker job=sendgmr) by 2002:a0d:ebc9:0:b0:31f:474a:4264 with SMTP
+ id u192-20020a0debc9000000b0031f474a4264mr24550636ywe.269.1660068056405; Tue,
+ 09 Aug 2022 11:00:56 -0700 (PDT)
+Date:   Tue,  9 Aug 2022 18:00:48 +0000
+Message-Id: <20220809180051.1063653-1-willmcvicker@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH v1 0/2] PCI: dwc: Add support for 64-bit MSI target addresses
+From:   Will McVicker <willmcvicker@google.com>
+To:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        "=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?=" <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Will McVicker <willmcvicker@google.com>
+Cc:     kernel-team@android.com, Vidya Sagar <vidyas@nvidia.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Collingbourne <pcc@google.com>
+Hi,
 
-[ This issue was fixed upstream by accident in c3cee924bd85 ("arm64:
-  head: cover entire kernel image in initial ID map") as part of a
-  large refactoring of the arm64 boot flow. This simple fix is therefore
-  preferred for -stable backporting ]
+I have two patches that address a couple of issues I've run into with the
+PCIe DWC host driver:
+  (1) the host driver fails to probe when ZONE_DMA32 is disabled.
+  (2) the host driver will fail to probe if a 32-bit address is not
+      available even on devices that support 64-bit target addresses.
 
-On a system that implements FEAT_EPAN, read/write access to the idmap
-is denied because UXN is not set on the swapper PTEs. As a result,
-idmap_kpti_install_ng_mappings panics the kernel when accessing
-__idmap_kpti_flag. Fix it by setting UXN on these PTEs.
+I have addressed both of these issues with the two patches (details can
+found in each of the patch commit messages). Please take a look and let
+me know your thoughts.
 
-Fixes: 18107f8a2df6 ("arm64: Support execute-only permissions with Enhanced PAN")
-Cc: <stable@vger.kernel.org> # 5.15
-Link: https://linux-review.googlesource.com/id/Ic452fa4b4f74753e54f71e61027e7222a0fae1b1
-Signed-off-by: Peter Collingbourne <pcc@google.com>
-Acked-by: Will Deacon <will@kernel.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Link: https://lore.kernel.org/r/20220719234909.1398992-1-pcc@google.com
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/arm64/include/asm/kernel-pgtable.h |    4 ++--
- arch/arm64/kernel/head.S                |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+With regards to testing, I have verified them on Android with a Pixel 6
+device on the 5.19 + pci-v5.20-changes kernel. My testing included running
+with both ZONE_DMA32 and swiotlb disabled.
 
---- a/arch/arm64/include/asm/kernel-pgtable.h
-+++ b/arch/arm64/include/asm/kernel-pgtable.h
-@@ -103,8 +103,8 @@
- /*
-  * Initial memory map attributes.
-  */
--#define SWAPPER_PTE_FLAGS	(PTE_TYPE_PAGE | PTE_AF | PTE_SHARED)
--#define SWAPPER_PMD_FLAGS	(PMD_TYPE_SECT | PMD_SECT_AF | PMD_SECT_S)
-+#define SWAPPER_PTE_FLAGS	(PTE_TYPE_PAGE | PTE_AF | PTE_SHARED | PTE_UXN)
-+#define SWAPPER_PMD_FLAGS	(PMD_TYPE_SECT | PMD_SECT_AF | PMD_SECT_S | PMD_SECT_UXN)
- 
- #if ARM64_KERNEL_USES_PMD_MAPS
- #define SWAPPER_MM_MMUFLAGS	(PMD_ATTRINDX(MT_NORMAL) | SWAPPER_PMD_FLAGS)
---- a/arch/arm64/kernel/head.S
-+++ b/arch/arm64/kernel/head.S
-@@ -285,7 +285,7 @@ SYM_FUNC_START_LOCAL(__create_page_table
- 	subs	x1, x1, #64
- 	b.ne	1b
- 
--	mov	x7, SWAPPER_MM_MMUFLAGS
-+	mov_q	x7, SWAPPER_MM_MMUFLAGS
- 
- 	/*
- 	 * Create the identity mapping.
+Thanks,
+Will
 
+Will McVicker (2):
+  PCI: dwc: drop dependency on ZONE_DMA32
+  PCI: dwc: add support for 64-bit MSI target address
+
+ .../pci/controller/dwc/pcie-designware-host.c | 42 ++++++++++++-------
+ drivers/pci/controller/dwc/pcie-designware.c  |  9 ++++
+ drivers/pci/controller/dwc/pcie-designware.h  |  6 +++
+ 3 files changed, 41 insertions(+), 16 deletions(-)
+
+-- 
+2.37.1.559.g78731f0fdb-goog
 

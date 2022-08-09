@@ -2,124 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FAA58E2BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E7658E2BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiHIWOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 18:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S230016AbiHIWNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 18:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiHIWNi (ORCPT
+        with ESMTP id S230005AbiHIWMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 18:13:38 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E794186D6
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 15:12:47 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id k26so24609099ejx.5
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 15:12:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=1VsFqqcFXS3n/9+2goZhST4QJC7Ug49yVOYAb2PF94c=;
-        b=g2oKOWygAqs06kX5yZw9/NAo7v0Zm7bWI2z8kj3BN5Dj/ubZ2QDeilkkWtUk2RqnEi
-         hCByUhB0cGj/zaxF286P463nEiuoqSY2NIrqaf4TqFohK7JVfsZncQBKsB+C8/dWd6Ut
-         /p2j7+iJhaHzQ2HabVc05AxIr7TdReAYHEL/s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1VsFqqcFXS3n/9+2goZhST4QJC7Ug49yVOYAb2PF94c=;
-        b=r9Dn8k8+YfJ9B6N7es/86G9zSDIPfRY1uVeTkgh7QKFZzbIvKEY/LUkmSCTZ7heuG4
-         RNAZNBkjx0a3CDps80WScxa4jhsWizEYqh47D1o2e1FXZSZWVf49GVxdcbuaZ8+VzIZY
-         6ikcUYZl20qFPu+Lfr21pYc3Cx30gUfM5GUA1HfhH4hflF/xDvQ4FmFWiybl8z03fJ8r
-         Wjvy/S6dsPOhITt+auvXsHdtPG9i1nhngdbxR4qC4P4N3Kaa/E4scaF8N9quUq8R8rwK
-         pO1vn3M5Xzi0ffpzL3QGrCGl8fif09ml7m8Rzy5mkc9OEK1gplaqyA8yqWxZ/csfLCAe
-         amTw==
-X-Gm-Message-State: ACgBeo1ZgUlfhIXrGbRSqis88hWsEeJsPTyy64OzDpIxmmFEcNpv1VOS
-        jgcWayPdP3pNF6PgCBz9a70SHYYZiDwUN4iHGPE=
-X-Google-Smtp-Source: AA6agR49kQ/9mT6fOc3EnTMBQza3CnfVN2vZpHfpmf10lcp3w5kehCWvoRGRsVumYR9KpDwziy6Ksg==
-X-Received: by 2002:a17:907:d0f:b0:731:5c2:a9a5 with SMTP id gn15-20020a1709070d0f00b0073105c2a9a5mr13638747ejc.413.1660083165528;
-        Tue, 09 Aug 2022 15:12:45 -0700 (PDT)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
-        by smtp.gmail.com with ESMTPSA id f23-20020a17090631d700b00722e8c47cc9sm1573901ejf.181.2022.08.09.15.12.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 15:12:45 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so119551wms.5
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 15:12:45 -0700 (PDT)
-X-Received: by 2002:a05:600c:1d94:b0:3a4:ffd9:bb4a with SMTP id
- p20-20020a05600c1d9400b003a4ffd9bb4amr283826wms.8.1660082801459; Tue, 09 Aug
- 2022 15:06:41 -0700 (PDT)
+        Tue, 9 Aug 2022 18:12:55 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43693275C7;
+        Tue,  9 Aug 2022 15:09:13 -0700 (PDT)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oLXPC-0007Lb-LF; Wed, 10 Aug 2022 00:08:54 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oLXPB-000OdW-V3; Wed, 10 Aug 2022 00:08:53 +0200
+Subject: Re: [PATCH v9 03/10] btf: Handle dynamic pointer parameter in kfuncs
+To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Joanne Koong <joannelkoong@gmail.com>
+References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
+ <20220809134603.1769279-4-roberto.sassu@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <8fe84489-be78-142e-90fe-a76c7d61100d@iogearbox.net>
+Date:   Wed, 10 Aug 2022 00:08:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com>
- <YuflGG60pHiXp2z/@casper.infradead.org> <alpine.LRH.2.02.2208011040190.27101@file01.intranet.prod.int.rdu2.redhat.com>
- <YuyNE5c06WStxQ2z@casper.infradead.org> <alpine.LRH.2.02.2208070732160.30857@file01.intranet.prod.int.rdu2.redhat.com>
- <Yu/RJtoJPhkWXIdP@casper.infradead.org> <alpine.LRH.2.02.2208080928580.8160@file01.intranet.prod.int.rdu2.redhat.com>
- <YvEgZuSdv8XHtkJg@casper.infradead.org> <alpine.LRH.2.02.2208081050330.8160@file01.intranet.prod.int.rdu2.redhat.com>
- <YvEuIg3669UeSwjD@casper.infradead.org> <alpine.LRH.2.02.2208091359220.5899@file01.intranet.prod.int.rdu2.redhat.com>
-In-Reply-To: <alpine.LRH.2.02.2208091359220.5899@file01.intranet.prod.int.rdu2.redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 9 Aug 2022 15:06:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiivNAj+jdXUdo91PQgh__vtE3WCFgufV0yVu7mWAKQWg@mail.gmail.com>
-Message-ID: <CAHk-=wiivNAj+jdXUdo91PQgh__vtE3WCFgufV0yVu7mWAKQWg@mail.gmail.com>
-Subject: Re: [PATCH v6] add barriers to buffer_uptodate and set_buffer_uptodate
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+In-Reply-To: <20220809134603.1769279-4-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26622/Tue Aug  9 09:53:52 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 11:32 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
->
-> Let's have a look at this piece of code in __bread_slow:
->         get_bh(bh);
->         bh->b_end_io = end_buffer_read_sync;
->         submit_bh(REQ_OP_READ, 0, bh);
->         wait_on_buffer(bh);
->         if (buffer_uptodate(bh))
->                 return bh;
-> Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
-> Consequently, if someone calls sb_bread and then reads the buffer data,
-> the read of buffer data may be executed before wait_on_buffer(bh) on
-> architectures with weak memory ordering and it may return invalid data.
->
-> Fix this bug by adding a memory barrier to set_buffer_uptodate and an
-> acquire barrier to buffer_uptodate (in a similar way as
-> folio_test_uptodate and folio_mark_uptodate).
+On 8/9/22 3:45 PM, Roberto Sassu wrote:
+> Allow the bpf_dynptr_kern parameter to be specified in kfuncs. Also, ensure
+> that the dynamic pointer is valid and initialized.
+> 
+> Cc: Joanne Koong <joannelkoong@gmail.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>   include/linux/bpf_verifier.h |  3 +++
+>   kernel/bpf/btf.c             | 17 +++++++++++++++++
+>   kernel/bpf/verifier.c        |  4 ++--
+>   3 files changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 2e3bad8640dc..55876fbdbae2 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -560,6 +560,9 @@ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg_state
+>   			     u32 regno);
+>   int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+>   		   u32 regno, u32 mem_size);
+> +bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+> +			      struct bpf_reg_state *reg,
+> +			      enum bpf_arg_type arg_type);
+>   
+>   /* this lives here instead of in bpf.h because it needs to dereference tgt_prog */
+>   static inline u64 bpf_trampoline_compute_key(const struct bpf_prog *tgt_prog,
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 67dfc728fbf8..17cca396c89f 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -6363,6 +6363,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+>   
+>   			if (is_kfunc) {
+>   				bool arg_mem_size = i + 1 < nargs && is_kfunc_arg_mem_size(btf, &args[i + 1], &regs[regno + 1]);
+> +				bool arg_dynptr = btf_type_is_struct(ref_t) &&
+> +						  !strcmp(ref_tname, "bpf_dynptr_kern");
 
-Ok, I've applied this to my tree.
+For the strcmp(), could we add some BUILD_BUG_ON() if "bpf_dynptr_kern" ever
+gets renamed? I played a bit with the below compile-tested toy example. If we
+rename foo_bar into something else, we then get:
 
-I still feel that we should probably take a long look at having the
-proper "acquire/release" uses everywhere for the buffer / page / folio
-flags, but that wouldn't really work for backporting to stable, so I
-think that's a "future fixes/cleanup" thing.
+   [...]
+   CC      net/core/dev.o
+   In file included from <command-line>:
+   net/core/dev.c: In function ‘net_dev_init’:
+   net/core/dev.c:11376:25: error: invalid application of ‘sizeof’ to incomplete type ‘struct foo_bar’
+   11376 |  ({ BUILD_BUG_ON(sizeof(struct x) < 0); \
+         |                         ^~~~~~
+   [...]
 
-Thanks,
-              Linus
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 716df64fcfa5..a2ed271f7ded 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -11368,16 +11368,30 @@ static struct pernet_operations __net_initdata default_device_ops = {
+   *
+   */
+
++struct foo_bar {
++       int a;
++};
++
++#define stringify_struct(x)                    \
++       ({ BUILD_BUG_ON(sizeof(struct x) < 0);  \
++       __stringify(x); })
++
+  /*
+   *       This is called single threaded during boot, so no need
+   *       to take the rtnl semaphore.
+   */
+  static int __init net_dev_init(void)
+  {
++       const char *ref_tname = "abc";
+         int i, rc = -ENOMEM;
+
+         BUG_ON(!dev_boot_phase);
+
++       printk("%s\n", stringify_struct(foo_bar));
++
++       if (!strcmp(ref_tname, stringify_struct(foo_bar)))
++               goto out;
++
+         if (dev_proc_init())
+                 goto out;
+

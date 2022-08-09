@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399F458D778
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A63258D77C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242429AbiHIKfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S242456AbiHIKfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233518AbiHIKfZ (ORCPT
+        with ESMTP id S242417AbiHIKfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:35:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1A2CE08;
-        Tue,  9 Aug 2022 03:35:23 -0700 (PDT)
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M28XR1LMYz67Zm5;
-        Tue,  9 Aug 2022 18:32:39 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 12:35:20 +0200
-Received: from [10.195.245.222] (10.195.245.222) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 11:35:19 +0100
-Message-ID: <4ddd9051-d61a-3576-4647-42c88a7f49bf@huawei.com>
-Date:   Tue, 9 Aug 2022 11:35:19 +0100
+        Tue, 9 Aug 2022 06:35:30 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC7EB857;
+        Tue,  9 Aug 2022 03:35:28 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id C9A475FD05;
+        Tue,  9 Aug 2022 13:35:25 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1660041325;
+        bh=KJBBN8QxL2pA1a4tnDeW13FPwDII60vaVpI4Hj1uPoM=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=cOpKcMwO44NHoGyXHhW+c2+dgTPfIwguyELi7YRIzMpsM6RsPP7jJfFs9xaKxRzcx
+         mK9JCgnLtfLNYjnjUddKqSP2SfkBUxCVIpfbFgMMDzjsBfLQdb7SeXrpCGrSuDMNdp
+         VgCVtGNUJcP9ygAw0FjMN75hOqcw2qjXGfWJvBGf5t4zIIN5qKtTYNEhHkMKooU6aQ
+         1FDRLbhIsf8rVSKj3Dm0b2FwHQk4YPJaceCniZBkVh9iuDZLrt/06j+k1dh2UoZ3u2
+         WVmRs847yilTUdFos6JPqXL63EeR/3WY8U1gwcFM+Wl6DXMy4dpG1T4h1k9NRBuPWF
+         dC+d3+OuT6q0A==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Tue,  9 Aug 2022 13:35:25 +0300 (MSK)
+From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
+ driver
+Thread-Topic: [PATCH v4 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
+ driver
+Thread-Index: AQHYpzqIoQnaRj7vNkq2cXUUGjAB/62dQgeAgAAYQICABG4VgIAEYneAgAADdACAAAhqgA==
+Date:   Tue, 9 Aug 2022 10:35:19 +0000
+Message-ID: <20220809103519.437rcude7fstxyy4@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220803131132.19630-1-ddrokosov@sberdevices.ru>
+ <20220803131132.19630-3-ddrokosov@sberdevices.ru>
+ <CAHp75VcVuC6yVoB1kycCOfqMa=JfCtbe3WYSK5qndtYcJy3vpg@mail.gmail.com>
+ <20220803191621.tzrmndkygfe7nlpx@CAB-WSD-L081021.sigma.sbrf.ru>
+ <20220806155523.37c3e587@jic23-huawei>
+ <20220809095251.vpp6arac3pkntdlo@CAB-WSD-L081021.sigma.sbrf.ru>
+ <CAHp75Vc9LGX-=Y2smOrKuAgSRrhA0AgGuBE-0=_-q78FpSB6ag@mail.gmail.com>
+In-Reply-To: <CAHp75Vc9LGX-=Y2smOrKuAgSRrhA0AgGuBE-0=_-q78FpSB6ag@mail.gmail.com>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <4A44EE2DD7C669428F74395D26CCE4BE@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3] hisi_lpc: Use acpi_dev_for_each_child()
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
- <5606189.DvuYhMxLoT@kreacher>
- <e9666883-3285-36a6-6278-ace219b88f3c@huawei.com>
- <CAHp75Ve-Cm43HhqqxxfmKTbC_Gkx=0aAcj0jJmA=-Nr-NT1FqQ@mail.gmail.com>
- <CAHp75VdT1YZUQbdHupA2RmucUBSzypcPwKBgSa4=sVQAhC+Vsw@mail.gmail.com>
- <61fbd71b-9c36-345c-7aed-561b81c34259@huawei.com>
- <CAHp75VdxaBG8Sj3j7Wa7BrZOrn1j2eAtJMw0N8z255HwMSohYw@mail.gmail.com>
- <df8c0a5d-e950-1726-5d30-80dcc8b20ff9@huawei.com>
- <CAJZ5v0hv7nm57QrCYX+aX=fVoE0s0BxEpJfz+a8bsPzzSZt7+g@mail.gmail.com>
- <71dfc3cd-c2ae-8096-9280-67e77c21055e@huawei.com>
- <CAHp75VfqJwF4YypH3QE0MRgZAyjEMKche-4czUuiC=aTYoYwig@mail.gmail.com>
- <CAHp75VfpQfBYD-AmVhbxm4tp_1EVv8xqCChYpuuRKOC=P_Y_og@mail.gmail.com>
- <050e5a2f-42b9-f851-ec6e-e2a9d3fdbe1c@huawei.com>
- <CAJZ5v0j++HZJfL2+0uWgDRqVeZPviaZSWyL3Yn7T2Ky=bcRQMQ@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <CAJZ5v0j++HZJfL2+0uWgDRqVeZPviaZSWyL3Yn7T2Ky=bcRQMQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.245.222]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/09 07:32:00 #20083496
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,82 +83,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 14:54, Rafael J. Wysocki wrote:
->> So we could factor out by dividing acpi_create_platform_device() into 2x
->> parts: resource get and then platform dev create. But that does not seem
->> wise as we have 2x parts which don't make sense on their own. Or else
->> pass a fixup callback into acpi_create_platform_device(). Any other
->> ideas if we want to go this way?
-> Personally, I would do the cleanup that can be done without
-> refactoring the library function as the first step, just to reduce the
-> amount of changes made in one go if nothing else.
-> 
-> Next, I'd look at introducing something like
-> 
-> acpi_create_platform_device_ops(struct acpi_device *adev, const struct
-> property_entry *properties, const struct *platform_device_create_ops
-> *ops);
-> 
-> where ops would be a set of callbacks to invoke as a matter of customization.
-> 
-> Then, acpi_create_platform_device() can be defined as a wrapper around
-> the above.
-> .
-JFYI, I'm trying out this change and it is looking quite disruptive. The 
-problems are specifically related to the LPC UART support. Firstly, it 
-looks like we require this patch (which was never applied):
-https://lore.kernel.org/linux-acpi/1524218846-169934-2-git-send-email-john.garry@huawei.com/#t
+On Tue, Aug 09, 2022 at 12:05:12PM +0200, Andy Shevchenko wrote:
+> > > > > > +       indio_dev->modes =3D 0; /* setup buffered mode later */
+> > > > >
+> > > > > Why explicit assignment to 0? Doesn't kzalloc() do it for you?
+> > > >
+> > > > kzalloc() will do it for me, of course. Previously, I initialized m=
+odes to
+> > > > INDIO_DIRECT_MODE to just provide default value for that. Jonathan
+> > > > suggested to replace it with 0.
+> > >
+> > > I did?  I wonder what I was smoking that day.
+> > > Should be set to INDIO_DIRECT_MODE as you had it previously.
+> > >
+> > > (From what I recall it will work either way but we have in the past h=
+ad
+> > > core code that checked this and may do again in the future so drivers=
+ should
+> > > still be setting it to specify they provide sysfs interfaces to direc=
+tly read
+> > > the channels).
+> >
+> > Jonathan, really sorry I referred to you. I'm confused. This comment wa=
+s
+> > from Andy in the v3 discussion:
+> >
+> > https://lore.kernel.org/linux-iio/CAHp75Vc0+ckNnm2tzLMPrjeFRjwoj3zy0C4k=
+oNShFRG3kP8b6w@mail.gmail.com/
+>=20
+> Indeed. I was confused by the comment. My understanding at that time
+> was that the triggered mode is inevitable and hence assigning to
+> something which _will_ be reassigned later makes a little sense. So,
+> does it mean that triggered mode is optional and might not be set? In
+> such a case the comment is misleading.
 
-Secondly this code in the hisi lpc driver causes an issue:
+Actually, this comment was introduced in the early MSA311 driver
+versions, when I have made buffer setup only if HW irq is enabled. In
+the newest versions buffer is setup unconditionally, because buffer mode
+can be used based on hrtimer software trigger.
 
-static int hisi_lpc_acpi_add_child(struct acpi_device *child, void *data)
-{
-	const char *hid = acpi_device_hid(child);
-	struct device *hostdev = data;
-	const struct hisi_lpc_acpi_cell *cell;
-	struct platform_device *pdev;
-	const struct resource *res;
-	bool found = false;
-	int num_res;
-	int ret;
+Jonathan, why we shouldn't delete INDIO_DIRECT_MODE initialization if
+after couple of lines we always setup buffer mode?
 
-	ret = hisi_lpc_acpi_set_io_res(child, hostdev, &res, &num_res);
-	if (ret) {
-		dev_warn(hostdev, "set resource fail (%d)\n", ret);
-		return ret;
-	}
-
-	cell = (struct hisi_lpc_acpi_cell []){
-...
-		/* 8250-compatible uart */
-		{
-			.hid = "HISI1031",
-			.name = "serial8250",
-			.pdata = (struct plat_serial8250_port []) {
-				{
-***					.iobase = res->start,
-					.uartclk = 1843200,
-					.iotype = UPIO_PORT,
-					.flags = UPF_BOOT_AUTOCONF,
-				},
-				{}
-			},
-			.pdata_size = 2 *
-				sizeof(struct plat_serial8250_port),
-		},
-		{}
-	};
-...
-
-	pdev = platform_device_alloc(cell->name, PLATFORM_DEVID_AUTO);
-
-At ***, above, we need to set the platform data plat_serial8250_port 
-iobase at the translated address, but this can only be done after we 
-read and translate the resources, which is now all done in the acpi 
-platform code - so we have an ordering problem.
-
-Anyway, I'll try to get it working and then send out the patches. We may 
-decide it's just not worth it.
-
-Thanks,
-John
+--=20
+Thank you,
+Dmitry=

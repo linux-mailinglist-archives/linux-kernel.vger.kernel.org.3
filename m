@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A71D58D358
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D37F58D35F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235217AbiHIFri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 01:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S235317AbiHIFvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 01:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiHIFrf (ORCPT
+        with ESMTP id S232199AbiHIFvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 01:47:35 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A351BEAD;
-        Mon,  8 Aug 2022 22:47:33 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 7D7D32050A;
-        Tue,  9 Aug 2022 07:47:30 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id pBNKI6Ghzl_T; Tue,  9 Aug 2022 07:47:29 +0200 (CEST)
-Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id A26712008D;
-        Tue,  9 Aug 2022 07:47:29 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout1.secunet.com (Postfix) with ESMTP id 977FB80004A;
-        Tue,  9 Aug 2022 07:47:29 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 07:47:29 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 9 Aug
- 2022 07:47:29 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id BC732318053D; Tue,  9 Aug 2022 07:47:28 +0200 (CEST)
-Date:   Tue, 9 Aug 2022 07:47:28 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-CC:     Abhishek Shah <abhishek.shah@columbia.edu>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <linux-kernel@vger.kernel.org>,
-        Gabriel Ryan <gabe@cs.columbia.edu>,
-        Fan Du <fan.du@windriver.com>,
-        Steffen Klassert <klassert@kernel.org>
-Subject: Re: [PATCH] af_key: Do not call xfrm_probe_algs in parallel
-Message-ID: <20220809054728.GX2950045@gauss3.secunet.de>
-References: <CAEHB24-9hXY+TgQKxJB4bE9a9dFD9C+Lan+ShBwpvwaHVAGMFg@mail.gmail.com>
- <YtoWqEkKzvimzWS5@gondor.apana.org.au>
- <CAEHB249ygptvp9wpynMF7zZ2Kcet0+bwLVuVg5UReZHOU1+8HA@mail.gmail.com>
- <YuNGR/5U5pSo6YM3@gondor.apana.org.au>
- <YuuZgsdmJK8roKLD@gondor.apana.org.au>
+        Tue, 9 Aug 2022 01:51:46 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3A71CFFD;
+        Mon,  8 Aug 2022 22:51:45 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id o3so10457909ple.5;
+        Mon, 08 Aug 2022 22:51:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=6+90d46uiEhYWpTZ4JssbCjk1xBnS3JkA1y/kZ0bVWw=;
+        b=bfP/ImI2J+5rAiBzFI8KDYOb9WbKL9uFA4ACFO+YBu++lDAwQ7piT9/TCP+ikCW2J3
+         w3V55Z6MSXGoB2q10bNqJKD8Z9PNqcrDT/PeTksDB6ZfiQdSsNVVPUv4BdWHk0IdShFW
+         pbTkcpR8C3aGXKYVVq5QtxathyM+Gyosbi8tNz0GUI6SUGm0UUu3A4Snj18Dgd1liC1j
+         /3T/hXc0dkziMSAjnHhTyCbsVNtTq7P5VjOkcTZwCCy/0jCOlAjChq5Gse3kZ3myuLKe
+         KArwCjG9b8ZWR/NQPf+P/9lEr9k289mS/T2TyTI95rCTrIhh5EGiEU3m6oY0FM51Elvz
+         3exA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=6+90d46uiEhYWpTZ4JssbCjk1xBnS3JkA1y/kZ0bVWw=;
+        b=CnPkiGwZnkPM+VmeM7tHUgBVQqxWyzCbWRN3gH6Q9+lDaxqMFwZ9lXG1mrAAjtr8Fq
+         j3P0Vj8Gr05UK9Ycx4ZnmCoPuQ00rmXjLmXich2QRwWDt/8aUhbSp1wr7o5ajjQ37TEk
+         9aW0jj5yOQFpbUA7/5d5mW5Bu6b4gPeU8B2HzdyZlQ+w3or8RXZWVTkyh+UYvRkVIs6X
+         tNsFVuQCGMlak7DLKY4UbX3uPxL6t+Gux4VvNln1Pqz/zj5uAVLF+yAsdn4INuk12e4y
+         qpgOCk9qeEZG+cjqGusijJQftgfKAN9ata53vlUlomenvcYy2poZOWuBxbtao/GyaMIF
+         AtJw==
+X-Gm-Message-State: ACgBeo0jIjg6gsa2dcRnXII2mDwAoLeVO2jEmYSwNsU/ixyqhH7kCZoY
+        EV5SVrcN70KgFg07UpkExUY=
+X-Google-Smtp-Source: AA6agR4A6xz13ikfOViVla/8SfquY+8mgZWRsVLqHHQ3uCXtrXuS1kQWmX17BWvvdrNdzo2aVecGXA==
+X-Received: by 2002:a17:90b:1645:b0:1f5:67f:ff84 with SMTP id il5-20020a17090b164500b001f5067fff84mr23537039pjb.86.1660024304937;
+        Mon, 08 Aug 2022 22:51:44 -0700 (PDT)
+Received: from aa.zhaoxin.com ([180.169.121.82])
+        by smtp.gmail.com with ESMTPSA id p8-20020a170902e74800b0016b865ea2ddsm9901184plf.85.2022.08.08.22.51.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 22:51:44 -0700 (PDT)
+From:   Liam Ni <zhiguangni01@gmail.com>
+To:     seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhiguangni01@gmail.com
+Subject: [PATCH] KVM:make cpuid_entry2_find more efficient
+Date:   Tue,  9 Aug 2022 13:51:38 +0800
+Message-Id: <20220809055138.101470-1-zhiguangni01@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YuuZgsdmJK8roKLD@gondor.apana.org.au>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 06:03:46PM +0800, Herbert Xu wrote:
-> When namespace support was added to xfrm/afkey, it caused the
-> previously single-threaded call to xfrm_probe_algs to become
-> multi-threaded.  This is buggy and needs to be fixed with a mutex.
-> 
-> Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
-> Fixes: 283bc9f35bbb ("xfrm: Namespacify xfrm state/policy locks")
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Compared with the way of obtaining the pointer by
+fetching the value of the array and then fetching the pointer,
+the way of obtaining the pointer by the pointer offset is more efficient.
 
-Applied, thanks a lot Herbert!
+Signed-off-by: Liam Ni <zhiguangni01@gmail.com>
+---
+ arch/x86/kvm/cpuid.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index de6d44e07e34..3bf82a891564 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -75,7 +75,7 @@ static inline struct kvm_cpuid_entry2 *cpuid_entry2_find(
+ 	int i;
+ 
+ 	for (i = 0; i < nent; i++) {
+-		e = &entries[i];
++		e = entries + i;
+ 
+ 		if (e->function == function &&
+ 		    (!(e->flags & KVM_CPUID_FLAG_SIGNIFCANT_INDEX) || e->index == index))
+-- 
+2.25.1
+

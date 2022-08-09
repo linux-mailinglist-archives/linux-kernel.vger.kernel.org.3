@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934DA58D773
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608F858D776
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242301AbiHIKc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
+        id S242391AbiHIKeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234253AbiHIKc4 (ORCPT
+        with ESMTP id S234253AbiHIKeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:32:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB48422BDD
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:32:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660041174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4/nlumMUczp73apm8CZRUgaBYhutP5eXhEt6NxdNHlY=;
-        b=icA3l7YjBWVy0ssWifm2zAYtQ+x02fQQ1V4zugS/b1uXbySu5Jageq3ZvRxsxjV/6OqNAR
-        bqG6szr8u1XKll1lsmNbRDQxcOqzcnrAtnl4ie8CdphNozLgGisGulPi/dq6GMFeWy2uEr
-        x52gke4d58gA0zDrhKz91S4yi7vHaZk=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-sLCn95UxOg-dur1QbHaIfA-1; Tue, 09 Aug 2022 06:32:53 -0400
-X-MC-Unique: sLCn95UxOg-dur1QbHaIfA-1
-Received: by mail-ed1-f71.google.com with SMTP id w17-20020a056402269100b0043da2189b71so6906389edd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 03:32:53 -0700 (PDT)
+        Tue, 9 Aug 2022 06:34:03 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC522316F
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:34:01 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 186-20020a1c02c3000000b003a34ac64bdfso6469081wmc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 03:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DQRRlVUhziUMpmzTtyj/FjxWnL2Ta3UOCCMy0rVxtPo=;
+        b=hIe85Ye8U0fpIgLGMyqDJw0sLOJ0iRRkFLAHnJXEHUY106Gcz0hFC4cU2pbLzAa7aP
+         XMrYEze9DfYlOICkai5vEXdJVK6oUJG6LlK61EgCJmvm4+FatxTpueasi+MprmrjwUca
+         boi6pWHAnY7TvTnj6vlQv2+IpQ3b68lXwZobRhNxadSYGTCW4+/7oBMwIXhC28ItViMB
+         8NT/znXui4fC0mctyMq395of3BdAr7dMM+X5H9v9vy5tGZHxLMjS+TLeFCKqNlrQHhHZ
+         F/TnydJR3YHohlIARSUL877cQdkAQyDdoooOAuRKSNpPjx/Zstmz7a8s9yYs6BBMGnNr
+         4chw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=4/nlumMUczp73apm8CZRUgaBYhutP5eXhEt6NxdNHlY=;
-        b=6SPFTpbycg84clSy/6Lsni+NUGI2yMJwMiN09vfPiAXAH0xmm2B0hB9SHn/N88B/oN
-         TfS4y0CwzGMYjcYIWQ7u7nMVOhoNCimoYoE8SgRu4FbCfth3HeEl3a29dBsRHTKt2zw4
-         JgGvOd00xzv5ahLcrMtbp9F7/PObDs6JxwQjGTtx/w2IBO0zoP3jZ+oYRWeahC/zsDrp
-         e/4hfabWUPSOLgwPBbiuAkCSB/fenpxKdXjNa+XtaqccVM+6aor50zVGU8JkUWH5U8JT
-         10XEm9mbw1yGWNePOb4es4IV6O5umlXxR4vD04rHqofCC+3ndn8qyB148vw889f5ag4u
-         XM6A==
-X-Gm-Message-State: ACgBeo37/8A7/becrhZcRxcTJwfZUpCYCAnEySJkvOADDVQSaoBWXqyQ
-        mRxalBbk0SQLlGMHFeSuyfLB10dBSUlEm4HGEEv5aFoDu6fzdqmNwlswyERfGDcEK00qwyTdBu6
-        NvkilV3BuR/P3HnfoCf/3U0jR
-X-Received: by 2002:a05:6402:278c:b0:43d:cd35:db25 with SMTP id b12-20020a056402278c00b0043dcd35db25mr21160267ede.44.1660041172534;
-        Tue, 09 Aug 2022 03:32:52 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7kHfqy2K3ZZ0VU1/IEtq20+vgUMc90FDejB9zNFwNsrjyA2JfUM7Qy1rx71dvSPaxNUXUPVA==
-X-Received: by 2002:a05:6402:278c:b0:43d:cd35:db25 with SMTP id b12-20020a056402278c00b0043dcd35db25mr21160248ede.44.1660041172290;
-        Tue, 09 Aug 2022 03:32:52 -0700 (PDT)
-Received: from redhat.com ([2.52.152.113])
-        by smtp.gmail.com with ESMTPSA id n6-20020aa7c786000000b0043a554818afsm5801531eds.42.2022.08.09.03.32.49
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DQRRlVUhziUMpmzTtyj/FjxWnL2Ta3UOCCMy0rVxtPo=;
+        b=H7fEsbeCbLsM0q01RXp2ozsvot33FlJwDIrUTV1v9Hd0ewVvHWjWjKZRsd+DpkEfq/
+         XrW4NRC/jyvjOr2y7w3DBC5n76Eikk44FhQoMVz82w67PvYF3Q1nPSBAHyXlzspGgpeB
+         ZhBvq0ijkc4MAVI72cAM8C7B1oYxq6BNQgiVrfxFLc5l+o/I2OzqwNPificlhLdmNMh9
+         undETCjNIVbSk6Y3nruyFjc1N3rEJqwnTZPsQxmWVFfVDwTW2ErnsozQMAEOvbP1DmVL
+         tawq83KWTC2p9374JyNDj2FJpro+crDlGDsto7bDu9kRtyyISXOAdYk0jZe7piJbpVDv
+         KZlw==
+X-Gm-Message-State: ACgBeo2U8QblEkPkXLO1X6MmE+T4YfHl1y3OIH+fskirZh7+jWDh6ASv
+        /e/99UQxsWHmlXNXHlWPvEeArwXLWkYA9w==
+X-Google-Smtp-Source: AA6agR7TCPhH3qG1wN2U9szW1/m0SMOjYHQp5Yh8MIRWhgqYyLEubveA/vIHJQl9qfruXgoqkj4zOg==
+X-Received: by 2002:a05:600c:2b87:b0:3a5:237a:baa with SMTP id j7-20020a05600c2b8700b003a5237a0baamr10872953wmc.66.1660041240334;
+        Tue, 09 Aug 2022 03:34:00 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id j10-20020a05600c190a00b003a32251c3f9sm24569253wmq.5.2022.08.09.03.33.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 03:32:51 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 06:32:47 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        David Hildenbrand <david@redhat.com>,
-        Wei Liu <wei.liu@kernel.org>, Nadav Amit <namit@vmware.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v1 1/2] Enable balloon drivers to report inflated memory
-Message-ID: <20220809063111-mutt-send-email-mst@kernel.org>
-References: <7bfac48d-2e50-641b-6523-662ea4df0240@virtuozzo.com>
- <20220809094933.2203087-1-alexander.atanasov@virtuozzo.com>
+        Tue, 09 Aug 2022 03:33:59 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 11:33:58 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, lkp@intel.com,
+        kbuild-all@lists.01.org, Daniel Borkmann <daniel@iogearbox.net>,
+        catalin.marinas@arm.com, will@kernel.org
+Subject: Re: [PATCH bpf] bpf, arm64: Fix bpf trampoline instruction endianness
+Message-ID: <YvI4FqZ91e2+0sBA@myrica>
+References: <20220808040735.1232002-1-xukuohai@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220809094933.2203087-1-alexander.atanasov@virtuozzo.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220808040735.1232002-1-xukuohai@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,124 +71,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 12:49:32PM +0300, Alexander Atanasov wrote:
-> Display reported in /proc/meminfo as:
+[+ arm64 maintainers]
+
+On Mon, Aug 08, 2022 at 12:07:35AM -0400, Xu Kuohai wrote:
+> The sparse tool complains as follows:
 > 
-> Inflated(total) or Inflated(free)
+> arch/arm64/net/bpf_jit_comp.c:1684:16:
+> 	warning: incorrect type in assignment (different base types)
+> arch/arm64/net/bpf_jit_comp.c:1684:16:
+> 	expected unsigned int [usertype] *branch
+> arch/arm64/net/bpf_jit_comp.c:1684:16:
+> 	got restricted __le32 [usertype] *
+> arch/arm64/net/bpf_jit_comp.c:1700:52:
+> 	error: subtraction of different types can't work (different base
+> 	types)
+> arch/arm64/net/bpf_jit_comp.c:1734:29:
+> 	warning: incorrect type in assignment (different base types)
+> arch/arm64/net/bpf_jit_comp.c:1734:29:
+> 	expected unsigned int [usertype] *
+> arch/arm64/net/bpf_jit_comp.c:1734:29:
+> 	got restricted __le32 [usertype] *
+> arch/arm64/net/bpf_jit_comp.c:1918:52:
+> 	error: subtraction of different types can't work (different base
+> 	types)
 > 
-> depending on the driver.
+> This is because the variable branch in function invoke_bpf_prog and the
+> variable branches in function prepare_trampoline are defined as type
+> u32 *, which conflicts with ctx->image's type __le32 *, so sparse complains
+> when assignment or arithmetic operation are performed on these two
+> variables and ctx->image.
 > 
-> Drivers use the sign bit to indicate where they do account
-> the inflated memory.
+> Since arm64 instructions are always little-endian, change the type of
+> these two variables to __le32 * and call cpu_to_le32 to convert
+> instruction to little-endian before writing it to memory.
 > 
-> Amount of inflated memory can be used by:
->  - as a hint for the oom a killer
->  - user space software that monitors memory pressure
-> 
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Wei Liu <wei.liu@kernel.org>
-> Cc: Nadav Amit <namit@vmware.com>
-> 
-> Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: efc9909fdce0 ("bpf, arm64: Add bpf trampoline for arm64")
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+
 > ---
->  Documentation/filesystems/proc.rst |  5 +++++
->  fs/proc/meminfo.c                  | 11 +++++++++++
->  include/linux/mm.h                 |  4 ++++
->  mm/page_alloc.c                    |  4 ++++
->  4 files changed, 24 insertions(+)
+>  arch/arm64/net/bpf_jit_comp.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> index 1bc91fb8c321..064b5b3d5bd8 100644
-> --- a/Documentation/filesystems/proc.rst
-> +++ b/Documentation/filesystems/proc.rst
-> @@ -986,6 +986,7 @@ Example output. You may not have all of these fields.
->      VmallocUsed:       40444 kB
->      VmallocChunk:          0 kB
->      Percpu:            29312 kB
-> +    Inflated(total):  2097152 kB
->      HardwareCorrupted:     0 kB
->      AnonHugePages:   4149248 kB
->      ShmemHugePages:        0 kB
-> @@ -1133,6 +1134,10 @@ VmallocChunk
->  Percpu
->                Memory allocated to the percpu allocator used to back percpu
->                allocations. This stat excludes the cost of metadata.
-> +Inflated(total) or Inflated(free)
-> +               Amount of memory that is inflated by the balloon driver.
-> +               Due to differences among balloon drivers inflated memory
-> +               is either subtracted from TotalRam or from MemFree.
->  HardwareCorrupted
->                The amount of RAM/memory in KB, the kernel identifies as
->                corrupted.
-> diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
-> index 6e89f0e2fd20..ebbe52ccbb93 100644
-> --- a/fs/proc/meminfo.c
-> +++ b/fs/proc/meminfo.c
-> @@ -38,6 +38,9 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
->  	unsigned long pages[NR_LRU_LISTS];
->  	unsigned long sreclaimable, sunreclaim;
->  	int lru;
-> +#ifdef CONFIG_MEMORY_BALLOON
-> +	long inflated_kb;
-> +#endif
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index 7ca8779ae34f..29dc55da2476 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -1643,7 +1643,7 @@ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+>  			    int args_off, int retval_off, int run_ctx_off,
+>  			    bool save_ret)
+>  {
+> -	u32 *branch;
+> +	__le32 *branch;
+>  	u64 enter_prog;
+>  	u64 exit_prog;
+>  	struct bpf_prog *p = l->link.prog;
+> @@ -1698,7 +1698,7 @@ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
 >  
->  	si_meminfo(&i);
->  	si_swapinfo(&i);
-> @@ -153,6 +156,14 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
->  		    global_zone_page_state(NR_FREE_CMA_PAGES));
->  #endif
+>  	if (ctx->image) {
+>  		int offset = &ctx->image[ctx->idx] - branch;
+> -		*branch = A64_CBZ(1, A64_R(0), offset);
+> +		*branch = cpu_to_le32(A64_CBZ(1, A64_R(0), offset));
+>  	}
 >  
-> +#ifdef CONFIG_MEMORY_BALLOON
-> +	inflated_kb = atomic_long_read(&mem_balloon_inflated_kb);
-> +	if (inflated_kb >= 0)
-> +		seq_printf(m,  "Inflated(total): %8ld kB\n", inflated_kb);
-> +	else
-> +		seq_printf(m,  "Inflated(free): %8ld kB\n", -inflated_kb);
-> +#endif
-> +
->  	hugetlb_report_meminfo(m);
+>  	/* arg1: prog */
+> @@ -1713,7 +1713,7 @@ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
 >  
->  	arch_report_meminfo(m);
-
-
-This seems too baroque for my taste.
-Why not just have two counters for the two pruposes?
-And is there any value in having this atomic?
-We want a consistent value but just READ_ONCE seems sufficient ...
-
-
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 7898e29bcfb5..b190811dc16e 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2582,6 +2582,10 @@ extern int watermark_boost_factor;
->  extern int watermark_scale_factor;
->  extern bool arch_has_descending_max_zone_pfns(void);
+>  static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+>  			       int args_off, int retval_off, int run_ctx_off,
+> -			       u32 **branches)
+> +			       __le32 **branches)
+>  {
+>  	int i;
 >  
-> +#ifdef CONFIG_MEMORY_BALLOON
-> +extern atomic_long_t mem_balloon_inflated_kb;
-> +#endif
-> +
->  /* nommu.c */
->  extern atomic_long_t mmap_pages_allocated;
->  extern int nommu_shrink_inode_mappings(struct inode *, size_t, size_t);
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index b0bcab50f0a3..12359179a3a2 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -194,6 +194,10 @@ EXPORT_SYMBOL(init_on_alloc);
->  DEFINE_STATIC_KEY_MAYBE(CONFIG_INIT_ON_FREE_DEFAULT_ON, init_on_free);
->  EXPORT_SYMBOL(init_on_free);
+> @@ -1784,7 +1784,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>  	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+>  	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+>  	bool save_ret;
+> -	u32 **branches = NULL;
+> +	__le32 **branches = NULL;
 >  
-> +#ifdef CONFIG_MEMORY_BALLOON
-> +atomic_long_t mem_balloon_inflated_kb = ATOMIC_LONG_INIT(0);
-> +#endif
-> +
->  static bool _init_on_alloc_enabled_early __read_mostly
->  				= IS_ENABLED(CONFIG_INIT_ON_ALLOC_DEFAULT_ON);
->  static int __init early_init_on_alloc(char *buf)
+>  	/* trampoline stack layout:
+>  	 *                  [ parent ip         ]
+> @@ -1892,7 +1892,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>  				flags & BPF_TRAMP_F_RET_FENTRY_RET);
+>  
+>  	if (fmod_ret->nr_links) {
+> -		branches = kcalloc(fmod_ret->nr_links, sizeof(u32 *),
+> +		branches = kcalloc(fmod_ret->nr_links, sizeof(__le32 *),
+>  				   GFP_KERNEL);
+>  		if (!branches)
+>  			return -ENOMEM;
+> @@ -1916,7 +1916,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>  	/* update the branches saved in invoke_bpf_mod_ret with cbnz */
+>  	for (i = 0; i < fmod_ret->nr_links && ctx->image != NULL; i++) {
+>  		int offset = &ctx->image[ctx->idx] - branches[i];
+> -		*branches[i] = A64_CBNZ(1, A64_R(10), offset);
+> +		*branches[i] = cpu_to_le32(A64_CBNZ(1, A64_R(10), offset));
+>  	}
+>  
+>  	for (i = 0; i < fexit->nr_links; i++)
 > -- 
-> 2.31.1
+> 2.30.2
 > 
-> 
-

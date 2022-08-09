@@ -2,83 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0165E58E0F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E24F58E103
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344990AbiHIUVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 16:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
+        id S1343631AbiHIUYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 16:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345388AbiHIUUo (ORCPT
+        with ESMTP id S232905AbiHIUX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 16:20:44 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E900427B1C;
-        Tue,  9 Aug 2022 13:20:41 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id t15so7156850ilm.7;
-        Tue, 09 Aug 2022 13:20:41 -0700 (PDT)
+        Tue, 9 Aug 2022 16:23:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FEF726576
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 13:23:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660076633;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ks5e3vG8/bg6ecSj9dekO7KiLf2ruNOcJnb5Pq8KV1g=;
+        b=G7i6KRDVmDhDlvLYDV+YmRKbcSSN366qhLou1T/9Hw758g12LesiFTUMshWQxdHWuEGaCK
+        EdRW5Sm5thzb6VCz4crHiytCBiPFjPU//em5XWRXbbYfgEVGfZXWbgM4ZoZ22DxS8a0ULL
+        Wxz6nXwn9mzEgizgfywrhGh6OjIPyFw=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-18-1gSF9p7UP1S6VV3EC6hkng-1; Tue, 09 Aug 2022 16:23:52 -0400
+X-MC-Unique: 1gSF9p7UP1S6VV3EC6hkng-1
+Received: by mail-wm1-f69.google.com with SMTP id r10-20020a1c440a000000b003a538a648a9so3587641wma.5
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:23:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=i8fLGMiVtuza7jt0uHgJRZ2ISnpXL3HFiXjjuGSh5DI=;
-        b=udvQLNXIdqjyyVeasMAVXxYM+m8BBoo46nhRSP+/K3WScowvh25LOzQWMJ5vv3AXmM
-         jXxY1cDU0n8yjH4dM5PF1mWhGeWsOk7e7ZaIs13IX+GYoUwUa1lX4ZE8keV6jiPhNvBz
-         5sRqNVT6N9iSrOW9ZKDGWTzNLEuRvh5PTdJ7EwCKi8qtnB/t0YjrHIZ9UXByPy2n+/dw
-         aFDQ/+/JSFob/yZDma5vEdiSClkH6mErU4FyuxTtmvgOEdYBgJN3Ng4b5tchoD42bOcU
-         ar+aKFAMIGLQwayrI/nY3GigjGSRP2NWqe6tHpyBt3GF7Q9F9Wn7svTrnOIg19KV7XF2
-         IYxQ==
-X-Gm-Message-State: ACgBeo3Rm7pPIBuCnsMS81YQy5/TNipZPPK2ee98qQAcXiIud0P51Zii
-        0ZpceU7+ztwy6Lv+HSsi1g==
-X-Google-Smtp-Source: AA6agR77Fjf8hjr8S8p/hEDdFDs8WlVvIGS5ALi31059dRoIxCAB8E+e02SA/ATgkv5OqsLL3MA3Zw==
-X-Received: by 2002:a92:c501:0:b0:2de:69e6:4143 with SMTP id r1-20020a92c501000000b002de69e64143mr11738240ilg.262.1660076441170;
-        Tue, 09 Aug 2022 13:20:41 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id h5-20020a92c265000000b002dd0ba40abdsm1413532ild.18.2022.08.09.13.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 13:20:40 -0700 (PDT)
-Received: (nullmailer pid 2327658 invoked by uid 1000);
-        Tue, 09 Aug 2022 20:20:38 -0000
-Date:   Tue, 9 Aug 2022 14:20:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Julian Braha <julianbraha@gmail.com>
-Cc:     devicetree@vger.kernel.org, daniel@ffwll.ch,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        sam@ravnborg.org, thierry.reding@gmail.com, robh+dt@kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: panel-simple-dsi: add Tianma
- TL057FVXP01
-Message-ID: <20220809202038.GA2327602-robh@kernel.org>
-References: <20220808213726.883003-1-julianbraha@gmail.com>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=ks5e3vG8/bg6ecSj9dekO7KiLf2ruNOcJnb5Pq8KV1g=;
+        b=B9dXvWeYBbeXIxDFAnviABcSSB8dY4hkpXQ+rU3W8MkmZzFH8HTCm24OwcegHYwSie
+         HIUJDnPlRowVO+OQZ9W27Pd5Ia2/M3pz4UqrAlCzCywL2N6uq1nbXzUrdpcs2pHNS5o2
+         Ca6aDO3DRxDG9pgf9A6oljMsXYcz436OEP6ACAURuY5VwoloCG4PPioGQQSQBP22OTll
+         fIK5kHlBYKK8NT+BNVdKfQLnwOnvXOHrL+dj+O4seJwpKJbTQBrawVVQb/hxJBWX44mw
+         9XXzV738tyKOH+u4oLcJevuzpVZfrEiwQXioD/hqCikuCMJtWsPIIJtcxOFXxOejBCJ0
+         J/Aw==
+X-Gm-Message-State: ACgBeo1EwIFPhzshjrYmi2FPPtGqaSb4fnp4DCd86gG83hSuTueWx0SJ
+        lmWxcLR1ifURbXRWl99jTBHFmhantjlClMooST+ciojRwytge3NwIZX2HHyoBh6ewjA5dDtKTO7
+        OACbCMrk96dhoJB3bMHXWWhaU
+X-Received: by 2002:a7b:c003:0:b0:39c:5642:e415 with SMTP id c3-20020a7bc003000000b0039c5642e415mr103187wmb.111.1660076630662;
+        Tue, 09 Aug 2022 13:23:50 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5MME3AJynexSREakjc/wtM1ePCr1r4osXSZ1oZmWn8F0r7gEvOHDAhoGVLa2hTVXuiIT2gIQ==
+X-Received: by 2002:a7b:c003:0:b0:39c:5642:e415 with SMTP id c3-20020a7bc003000000b0039c5642e415mr103178wmb.111.1660076630387;
+        Tue, 09 Aug 2022 13:23:50 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:3700:aed2:a0f8:c270:7f30? (p200300cbc7053700aed2a0f8c2707f30.dip0.t-ipconnect.de. [2003:cb:c705:3700:aed2:a0f8:c270:7f30])
+        by smtp.gmail.com with ESMTPSA id q11-20020a5d658b000000b0021e4bc9edbfsm11591467wru.112.2022.08.09.13.23.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 13:23:50 -0700 (PDT)
+Message-ID: <915e2f40-b94a-cef4-7aa7-a402e93dae68@redhat.com>
+Date:   Tue, 9 Aug 2022 22:23:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220808213726.883003-1-julianbraha@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove
+ FOLL_COW
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220808073232.8808-1-david@redhat.com>
+ <CAHk-=wgsDOz5MfYYS9mE7PvFn4kLhTFdBwXvN6HCEsw1kvJnRQ@mail.gmail.com>
+ <91e18a2f-c93d-00b8-7c1b-6d8493c3b2d5@redhat.com>
+ <CAHk-=whg0ddey-LqFAPfZJDXHMjaHJNojAV3q17yvjc6W8QRvQ@mail.gmail.com>
+ <CAHk-=wgYAy5ho0Wqx+eri_+a5apYU1Th826UScE7rZRiyhPcGA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHk-=wgYAy5ho0Wqx+eri_+a5apYU1Th826UScE7rZRiyhPcGA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 08 Aug 2022 17:37:25 -0400, Julian Braha wrote:
-> Adds the bindings for the Tianma TL057FVXP01 DSI panel,
-> found on the Motorola Moto G6.
+On 09.08.22 22:20, Linus Torvalds wrote:
+> On Tue, Aug 9, 2022 at 1:14 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+>>
+>> But as there are two bits, I'm sure somebody ends up touching one and
+>> not the other.
 > 
-> Signed-off-by: Julian Braha <julianbraha@gmail.com>
-> ---
-> v3:
-> Fixed kconfig dependencies.
+> Ugh. The nommu code certainly does odd things here. That just looks wrong.
 > 
-> v2:
-> Fixed accidental whitespace deletion.
-> ---
->  .../devicetree/bindings/display/panel/panel-simple-dsi.yaml     | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+> And the hugetlb code does something horrible too, but never *sets* it,
+> so it looks like some odd subset of VM_SHARED.
 
-Acked-by: Rob Herring <robh@kernel.org>
+mm/mmap.c:do_mmap() contains the magic bit
+
+switch (flags & MAP_TYPE) {
+case MAP_SHARED:
+...
+case MAP_SHARED_VALIDATE:
+...
+vm_flags |= VM_SHARED | VM_MAYSHARE;
+if (!(file->f_mode & FMODE_WRITE))
+	vm_flags &= ~(VM_MAYWRITE | VM_SHARED);
+fallthrough;
+
+
+VM_SHARED semantics are confusing.
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

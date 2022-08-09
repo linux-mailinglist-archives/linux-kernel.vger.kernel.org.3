@@ -2,120 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4C558D8E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925F058D8F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243212AbiHIMtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 08:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
+        id S243242AbiHIMwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 08:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243189AbiHIMta (ORCPT
+        with ESMTP id S243189AbiHIMwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 08:49:30 -0400
+        Tue, 9 Aug 2022 08:52:21 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 211DE18B30
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 05:49:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1585C12D28
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 05:52:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660049367;
+        s=mimecast20190719; t=1660049539;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DGno/ZdHYbEjsqGvji74q/f8gYnG55Z5eZDKoCFKyts=;
-        b=fifQhwO7j2bYA9ZyA4dmH3V3dj1o8RzMSKwRLr+6igESceX/Qq3+PhkPPO+3co5srkkQwl
-        yiVMKOPIv0NRsehTJ5xlYJf4/9i0ZbfiJQu5xtBk8Y3Z9iFts2W3nK5JS164Gm3ts7kROt
-        NR0q5wwI1HeVUa4IGy440NLA+P/+/90=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=rN2wh+nxvchYpu9hQV2LMnguLQFknovVkUYSriHC3N4=;
+        b=HU7ixmFA2mebYw7myBdXKitTUCT/i1ykFuUvgN+phs8FcjZr47CxT67YslMl/BdMwisdce
+        COlGB2fPBe1ayEHTQDaOekGeEqcDTIskKCJDO+QiXdcbrttk72muV3HWxURVgInKTXP8kz
+        3gYtJq+VOz3E4X8Kn3tzYmJknFRlA34=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-574-oGdSHFRDNP6EayCAy5UucQ-1; Tue, 09 Aug 2022 08:49:26 -0400
-X-MC-Unique: oGdSHFRDNP6EayCAy5UucQ-1
-Received: by mail-ej1-f69.google.com with SMTP id hr32-20020a1709073fa000b00730a39f36ddso3352855ejc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 05:49:25 -0700 (PDT)
+ us-mta-600-gnTNjytmMN6-PfyVA-8aqQ-1; Tue, 09 Aug 2022 08:52:17 -0400
+X-MC-Unique: gnTNjytmMN6-PfyVA-8aqQ-1
+Received: by mail-wm1-f69.google.com with SMTP id u12-20020a05600c034c00b003a5124600c5so2283254wmd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 05:52:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=DGno/ZdHYbEjsqGvji74q/f8gYnG55Z5eZDKoCFKyts=;
-        b=UXxokzzSuu2xL+S06c8K9XCXzGk182bHCVdlp5gIemzGzqPXE7ff98bP8nz3G6MEfv
-         eGS5r7V5TJ20ZUJtq8/CiGlVAD0QJ1GrAnLNbl0GEcMlpq1G1Mt+ToGarPC82UKg/6Op
-         Z9HlqHsTWtuYlOH4KNtpMsBuA2C2DE4WLOQQIEUwnT80z6Hg6AU6vni1mrM5ualivEVz
-         e2nX2nMCq/vcVqrJrEmS/iDJXECM5mJeS9oy9txI24h09IsxA2yR1d6MJYNjUsZl30zk
-         6vhQNLfn62pHWNM3bEFvRmn2fDbl4XypquBK19E+B53IdDkYp8h+xTa4z5Js32CXcQWG
-         tDtw==
-X-Gm-Message-State: ACgBeo10aVbTzxkAzTR/G9qkdGCrI9Ok89eyFzxYlEqZn/pmWKMvP9Ng
-        6E6LycMvaumlXmOlIBin5Hm7xbGjYJ7vkzCedM1jU0CrCj6EdnqJ6dLjPPKbGnYTWxUXg5Et3e4
-        XXhaeMdtMpoPhq4aVDucBkRnk
-X-Received: by 2002:a17:907:97c2:b0:731:5679:2cd3 with SMTP id js2-20020a17090797c200b0073156792cd3mr7315417ejc.746.1660049364914;
-        Tue, 09 Aug 2022 05:49:24 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7++bwrLoebRKl9hvHXUyGipQjUI6Y3jnzAeFiV80QEya367K0SYCYHRxMMXXq59qg+HFZm/w==
-X-Received: by 2002:a17:907:97c2:b0:731:5679:2cd3 with SMTP id js2-20020a17090797c200b0073156792cd3mr7315402ejc.746.1660049364712;
-        Tue, 09 Aug 2022 05:49:24 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id b9-20020a170906708900b00730a18a8b68sm1094610ejk.130.2022.08.09.05.49.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 05:49:24 -0700 (PDT)
-Message-ID: <331dc774-c662-9475-1175-725cb2382bb2@redhat.com>
-Date:   Tue, 9 Aug 2022 14:49:23 +0200
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=rN2wh+nxvchYpu9hQV2LMnguLQFknovVkUYSriHC3N4=;
+        b=FWsH1rHulppjX8Fe5bxX374p04klhj35tv0Td6nEJprY9nRHapURKlpKBkanFO8bOh
+         Aqjy6HSMKtGiKzxNDNeC1AbcbXA4FC6bzWt9vcmUsq7oQMisTQZnYQjs9RXLvjCjcmiX
+         YzSB7rcW1Ea1KSbYAIQKppytMwvC17KsWkf30Y/oKTkpwqfciEjfn00RR0BWZvn8ZUuW
+         savrZLZvpjkAg4o623VOt5nZBCd0pJGOnPAqBt3T35N+6M56FwKllj6A7/0stkPvpIT5
+         gS2ObeNR3yLsEpYqZ0dPhgINWEDNljtGcEMY/qock/96036TA8kIFCbZokdACihqgD5/
+         sDAg==
+X-Gm-Message-State: ACgBeo3IjznnNFwWKReclMb2QZyPxk6Uo0qfkxBc8QbI/17Oc8192ISH
+        ygq+KGxzmXZcIcrS5p/6z4NBWW5Axg0u/5C0NponOzAvggVumBPySX8pvS1Ge1NLX6n6VFwCxXH
+        BwtTdo/JFToZsZkLs9AqOxKICSIyPzxQ9+bKfFRXZZ+cxXoE+4YdD3agUZSkpg2yHOjdWW3SwjU
+        mA
+X-Received: by 2002:a05:600c:4f95:b0:3a3:4612:6884 with SMTP id n21-20020a05600c4f9500b003a346126884mr20920895wmq.39.1660049535837;
+        Tue, 09 Aug 2022 05:52:15 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7ihYNMk3wUnk1Vjz3SciAXplfGwbOx1Fhv5ZIEp5DgY1Xxn8KAvJ/8UDHh4rGZ5kHX1j1UGg==
+X-Received: by 2002:a05:600c:4f95:b0:3a3:4612:6884 with SMTP id n21-20020a05600c4f9500b003a346126884mr20920870wmq.39.1660049535620;
+        Tue, 09 Aug 2022 05:52:15 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id 6-20020a1c1906000000b003a511e92abcsm17149747wmz.34.2022.08.09.05.52.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 05:52:14 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Tariq Toukan <ttoukan.linux@gmail.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next V4 1/3] sched/topology: Add NUMA-based CPUs
+ spread API
+In-Reply-To: <12fd25f9-96fb-d0e0-14ec-3f08c01a5a4b@gmail.com>
+References: <20220728191203.4055-1-tariqt@nvidia.com>
+ <20220728191203.4055-2-tariqt@nvidia.com>
+ <xhsmhedxvdikz.mognet@vschneid.remote.csb>
+ <df8b684d-ede6-7412-423d-51d57365e065@gmail.com>
+ <xhsmh35e5d9b4.mognet@vschneid.remote.csb>
+ <12fd25f9-96fb-d0e0-14ec-3f08c01a5a4b@gmail.com>
+Date:   Tue, 09 Aug 2022 13:52:13 +0100
+Message-ID: <xhsmhzggdbmv6.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Yan Zhao <yan.y.zhao@intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Ben Gardon <bgardon@google.com>
-References: <20220805230513.148869-1-seanjc@google.com>
- <20220805230513.148869-6-seanjc@google.com>
- <YvHT0dA0BGgCQ8L+@yzhao56-desk.sh.intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v3 5/8] KVM: x86/mmu: Set disallowed_nx_huge_page in TDP
- MMU before setting SPTE
-In-Reply-To: <YvHT0dA0BGgCQ8L+@yzhao56-desk.sh.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 05:26, Yan Zhao wrote:
-> hi Sean,
-> 
-> I understand this smp_rmb() is intended to prevent the reading of
-> p->nx_huge_page_disallowed from happening before it's set to true in
-> kvm_tdp_mmu_map(). Is this understanding right?
-> 
-> If it's true, then do we also need the smp_rmb() for read of sp->gfn in
-> handle_removed_pt()? (or maybe for other fields in sp in other places?)
+On 09/08/22 13:18, Tariq Toukan wrote:
+> On 8/9/2022 1:02 PM, Valentin Schneider wrote:
+>>
+>> Are there cases where we can't figure this out in advance? From what I grok
+>> out of the two callsites you patched, all vectors will be used unless some
+>> error happens, so compressing the CPUs in a single cpumask seemed
+>> sufficient.
+>>
+>
+> All vectors will be initialized to support the maximum number of traffic
+> rings. However, the actual number of traffic rings can be controlled and
+> set to a lower number N_actual < N. In this case, we'll be using only
+> N_actual instances and we want them to be the first/closest.
 
-No, in that case the barrier is provided by rcu_dereference().  In fact, 
-I am not sure the barriers are needed in this patch either (but the 
-comments are :)):
+Ok, that makes sense, thank you.
 
-- the write barrier is certainly not needed because it is implicit in 
-tdp_mmu_set_spte_atomic's cmpxchg64
+In that case I wonder if we'd want a public-facing iterator for
+sched_domains_numa_masks[%i][node], rather than copy a portion of
+it. Something like the below (naming and implementation haven't been
+thought about too much).
 
-- the read barrier _should_ also be provided by rcu_dereference(pt), but 
-I'm not 100% sure about that. The reasoning is that you have
+  const struct cpumask *sched_numa_level_mask(int node, int level)
+  {
+          struct cpumask ***masks = rcu_dereference(sched_domains_numa_masks);
 
-(1)	iter->old spte = READ_ONCE(*rcu_dereference(iter->sptep));
-	...
-(2)	tdp_ptep_t pt = spte_to_child_pt(old_spte, level);
-(3)	struct kvm_mmu_page *sp = sptep_to_sp(rcu_dereference(pt));
-	...
-(4)	if (sp->nx_huge_page_disallowed) {
+          if (node >= nr_node_ids || level >= sched_domains_numa_levels)
+                  return NULL;
 
-and (4) is definitely ordered after (1) thanks to the READ_ONCE hidden 
-within (3) and the data dependency from old_spte to sp.
+          if (!masks)
+                  return NULL;
 
-Paolo
+          return masks[level][node];
+  }
+  EXPORT_SYMBOL_GPL(sched_numa_level_mask);
+
+  #define for_each_numa_level_mask(node, lvl, mask)	    \
+          for (mask = sched_numa_level_mask(node, lvl); mask;	\
+               mask = sched_numa_level_mask(node, ++lvl))
+
+  void foo(int node, int cpus[], int ncpus)
+  {
+          const struct cpumask *mask;
+          int lvl = 0;
+          int i = 0;
+          int cpu;
+
+          rcu_read_lock();
+          for_each_numa_level_mask(node, lvl, mask) {
+                  for_each_cpu(cpu, mask) {
+                          cpus[i] = cpu;
+                          if (++i == ncpus)
+                                  goto done;
+                  }
+          }
+  done:
+          rcu_read_unlock();
+  }
 

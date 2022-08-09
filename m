@@ -2,124 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE5758D54A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A47C458D559
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235586AbiHIIX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
+        id S234429AbiHII26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiHIIXz (ORCPT
+        with ESMTP id S231545AbiHII24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:23:55 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A82A1BB
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:23:55 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id ay12so3130927wmb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 01:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=BJWOeYOWaGtuSWpgn3DJStQNfUCfS0wNXe43q2ava3Q=;
-        b=kJKNpygG1OIUcxR8O/QC0aXceRvoaiUrQDf/YJPW1+loD+a0IkdIlMs8b9Orla/OeG
-         /5I09F70ijl3gKR6mzqD/HIF2Ud+kDHfm4xyYXWtAgE40eOX87k+oXaErctxr96V15d9
-         kARohaRpAG9aPmFv2qlLrkZzReKnQJiZRdlgpcBaK+cajdIoa6dLnnUhosxkp03DuyIB
-         4y6ZQlSTiEwyYeLYIu6zyKuZ1s4lltpgS2Wst0R2a8xiXt7U68jgwjDABgTXOhyuz4Dr
-         2To729dHM+lGa5GVzUiaUS4Z/0cK2Ut+ROUcRFZEMF0AQAb1l6q5MQ0zuvSJIGnTkdgP
-         azpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=BJWOeYOWaGtuSWpgn3DJStQNfUCfS0wNXe43q2ava3Q=;
-        b=Q4I5NpR6HRnW8ltAPCNvNyGkkK2b37N6VYvyIUyDm652PXPOpBxe/Q32YVCIFK27jN
-         Uak9wU1lTdE5SNIk1lQ8G1T3iA3weStB25wcI/EIKb2iRcfuRZ0Osk8BCFYXikSahcTR
-         XIGUeZxYpnprGptRNGX2wrcW6PK+/exRk5PuyvYmPmulQtJZ82JTix9JsVATZykX1SBx
-         5Eu1zgsWxiJAaeWu08+waVs54LWmOgUwleAIRG6fo/KL4IcFe7l0a7NR0CQG8mfTfRY0
-         QnnvygPAkdzE5n9I4FBnv16E9qnnVspMBOCzOIqNXBjn7SVZhhJDhgNCERWes5MHuOOU
-         0MGw==
-X-Gm-Message-State: ACgBeo3rSJ2Mzb8I0A2xSWCB281XyXjai6N+WCB8Y74d8SCjWNkhAKyK
-        xkVbkT5ah0DLHbl2hNkzlR0BSA==
-X-Google-Smtp-Source: AA6agR65Ka6kB6xgrHkvANuCCrRtr8CpPBbbo6EzKPhAu8eK4TDBf2PjFBheWdyREneQgnGGbFqlRA==
-X-Received: by 2002:a1c:ed05:0:b0:3a2:ebae:c5e7 with SMTP id l5-20020a1ced05000000b003a2ebaec5e7mr14589715wmh.78.1660033433553;
-        Tue, 09 Aug 2022 01:23:53 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q3-20020a056000136300b0021b956da1dcsm12886669wrz.113.2022.08.09.01.23.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 01:23:52 -0700 (PDT)
-Message-ID: <27c03303-9ee5-d9df-b7f2-016491fce9e5@linaro.org>
-Date:   Tue, 9 Aug 2022 10:23:50 +0200
+        Tue, 9 Aug 2022 04:28:56 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5000C656D
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:28:55 -0700 (PDT)
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M25kW1FNvz687vm;
+        Tue,  9 Aug 2022 16:26:11 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 9 Aug 2022 10:28:52 +0200
+Received: from [10.195.245.222] (10.195.245.222) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 9 Aug 2022 09:28:51 +0100
+Message-ID: <f0c0d56e-5cbc-4337-6339-778883393b1c@huawei.com>
+Date:   Tue, 9 Aug 2022 09:28:51 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 00/33] New thermal OF code
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, daniel.lezcano@linexp.org
-Cc:     abailon@baylibre.com, anarsoul@gmail.com, baolin.wang7@gmail.com,
-        bjorn.andersson@linaro.org, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, digetx@gmail.com,
-        f.fainelli@gmail.com, glaroque@baylibre.com,
-        hayashi.kunihiko@socionext.com, heiko@sntech.de, j-keerthy@ti.com,
-        jonathanh@nvidia.com, khilman@baylibre.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, matthias.bgg@gmail.com,
-        mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
-        miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
-        rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220808094216.928018-1-michael@walle.cc>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220808094216.928018-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: soundwire qcom slimbus dependency (was Re: [PATCH 0/2] arm64
+ defconfig: Get faddr2line working)
+From:   John Garry <john.garry@huawei.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Jonathan Marek <jonathan@marek.ca>
+CC:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Olof Johansson <olof@lixom.net>, "SoC Team" <soc@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+ <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
+ <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
+ <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
+ <b39bf8c4-c702-8f49-12aa-d3ac05889b80@huawei.com>
+ <CAK8P3a0w+_MLOjJAKMENe6MYvBcXWXSir47Hz34WbtdEeAmaBw@mail.gmail.com>
+ <4d010f40-6c4c-32c7-2772-1bbfa02c03b7@linaro.org>
+ <CAK8P3a38uGGGLA4b2bi=v8cV6-dH5yEcvBYcwr5ChzkwMTX9_Q@mail.gmail.com>
+ <966a62da-52b6-1789-13d6-5fe06b62c7fe@marek.ca>
+ <CAK8P3a2HGYJZvcXM+9fROys5A6c40zFWD2qATT4xssSJf6hRfQ@mail.gmail.com>
+ <dba4385e-87ef-01ee-af59-6daade4a9a24@huawei.com>
+In-Reply-To: <dba4385e-87ef-01ee-af59-6daade4a9a24@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Originating-IP: [10.195.245.222]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/08/2022 11:42, Michael Walle wrote:
-
-[ ... ]
-
-> On my second board
-> (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts). I get the
-> following error:
+On 04/08/2022 11:35, John Garry wrote:
+>>>>           ctrl->cols_index = sdw_find_col_index(data->default_cols);
+>>>> -#if IS_REACHABLE(CONFIG_SLIMBUS)
+>>>> -       if (dev->parent->bus == &slimbus_bus) {
+>>>> -#else
+>>>> -       if (false) {
+>>>> -#endif
+>>>> +       if (IS_ENABLED(CONFIG_SLIMBUS) && dev->parent->bus == 
+>>>> &slimbus_bus) {
+>>>>                   ctrl->reg_read = qcom_swrm_ahb_reg_read;
+>>>>                   ctrl->reg_write = qcom_swrm_ahb_reg_write;
+>>>>                   ctrl->regmap = dev_get_regmap(dev->parent, NULL);
+>>>>
+>>>
+>>> This relies on the compiler optimizing out the reference to slimbus_bus,
+>>> which doesn't exist in the CONFIG_SLIMBUS=n case (not tested, but I
+>>> think this means an O0 build will fail?).
+>>
+>> That is correct: We rely on this everywhere in the kernel, which is why
+>> it is impossible to build kernels with -O0.
+>>
 > 
-> [    6.292819] thermal_sys: Unable to find thermal zones description
-> [    6.298872] thermal_sys: Failed to find thermal zone for hwmon id=0
-> [    6.305375] lan966x-hwmon e2010180.hwmon: error -EINVAL: failed to register hwmon device
-> [    6.313508] lan966x-hwmon: probe of e2010180.hwmon failed with error -22
-> 
-> Again, is there seems to be something missing in the device tree. For this
-> board a device tree change should be easily doable, as it is still in
-> development.
+> Was there any patch sent to fix/improve this? I could not see any. Or 
+> any plan to do so?
 
-Logically with the fixes I've send these errors should have gone. Just a 
-pr_info should appear "... not attached to any thermal zone".
+Since I got no response, I'll assume 'no'. So I'll look to do this when 
+I get a chance.
 
-If I'm correct, without or with the changes (new thermal OF code + 
-fixes), the hwmon message is the same and the hwmon thermal zone is not 
-created. So no regression hopefully.
-
-Is it possible to check that?
-
-[ ... ]
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Thanks,
+John

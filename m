@@ -2,171 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945EF58DD26
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50F958DD29
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245293AbiHIR0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 13:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S245327AbiHIR1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 13:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245187AbiHIR0h (ORCPT
+        with ESMTP id S245379AbiHIR1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:26:37 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E42B1FCF2
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 10:26:35 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id v5so6657635wmj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 10:26:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=c1LX0kRW2rGw625YIyZsUXEnFx6QgDKnPaeP6gRj2t0=;
-        b=Q9ZD0xRyxDV8Asm+Lai68lIYb1xUxMY+JzfZItQUgIhIv8zMi6BX11LCWSYGCh+VqJ
-         0LHinifMfDC/EZYeeWTT6Hp1SNSeOVCrCQ+kRy9koGe/s5+1k/uJia7mLC3qNETe6p3n
-         mnrRKYWkb3cD6MTO/9r/eZpHZTEPBLrntYiR3zZAWj84KeJr/A4BsEiukyNwdYZkDXbG
-         kAtkzfCdOILaE0Sqcl/hq3LRqCoMPZBXrgxVQ/gFdk2MlzXFxevIoogruGxICwEv5uFc
-         P8ZHUquR02+uGcZVyuf6YGIFZ22gV4dwGpohLZRsix6s8b+KstWdvRJ5pmBZc0BqFr7c
-         pS3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=c1LX0kRW2rGw625YIyZsUXEnFx6QgDKnPaeP6gRj2t0=;
-        b=FlirqT5I/IX9iz1ChQ7mosc6wVr6e120s5AY1qf+C4exydDIMBdq9rcgAF9EDyzVpR
-         iG3+BOoxITDWCdP3LCI7U79IGelR3ltwWMlFGt58XV7TJKEPxKHKjdxSeoyHj0KclI4h
-         blfo8sNVDo3xyoD3lf/6o0VC1E2apsNjOJ0dJCmZ7atdr3dwvDi9jyqYwuEHq/MY1e+o
-         YZMy1phPBOeTurSd8+LO/cFpnqr92hf4Sg1tl8TU4V6Gl9ZRbJ82fglY3POs4fTI8+K5
-         l4d2I882qjWKKsqjrk/nRbSnVcXRBqvgJY1rwUfR5mnEEPdr1QyOtgi6wVAlMI9Aa1Eb
-         kx5Q==
-X-Gm-Message-State: ACgBeo281XpdHdIKiMCG4y0mRCwoguwo/klAsztf/cb78cQxFFA8iwQC
-        o93VMWH5BjIGnhHbaq4VVmcbCw==
-X-Google-Smtp-Source: AA6agR6l9qTHMbyBrtdyXwd2EANDfAnSOxG6iuXb+2WiDhpeY4rlrV5Gz0cjWgVG0fQXXJgx3GbZsQ==
-X-Received: by 2002:a05:600c:5120:b0:3a3:2ae4:fb20 with SMTP id o32-20020a05600c512000b003a32ae4fb20mr16132398wms.81.1660065994066;
-        Tue, 09 Aug 2022 10:26:34 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id d2-20020a5d6dc2000000b002235eb9d200sm3725017wrz.10.2022.08.09.10.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 10:26:33 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 18:26:31 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>, linux-kernel@vger.kernel.org,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH 13/28] mfd: sec: Remove #ifdef guards for PM related
- functions
-Message-ID: <YvKYxxrOO04bAskw@google.com>
-References: <20220807145247.46107-1-paul@crapouillou.net>
- <20220807145247.46107-14-paul@crapouillou.net>
- <a625a1b4-6ecd-79d9-3d13-f42fd5b8275c@linaro.org>
- <YvJ+YPAynhFKj5DR@google.com>
- <21b84f49-67af-6217-a662-f890db5525a8@linaro.org>
+        Tue, 9 Aug 2022 13:27:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209FC255B7
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 10:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660066032; x=1691602032;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KbAmLrsPAMJeQZW4HtFLatkKOlP4VKEmMGPsMkdfRG0=;
+  b=E0g2NFYjDuYKdXw45KLwoyNcJvgSEwBg0FZCDV2E/7EAo5mPtpjBx+YK
+   s61cFe3GkqgDOBtth2FO1+Lnk7R0zTl0av3oE8ldjV/ztMmgfEpXY+lQm
+   fMTQ90ivSVTnJqTOLe26Q+0bJ9TIFpwjtYTEs2nLFJ160I24BTHa2cTuX
+   Lq0lzr752/qi4b18u1sgkJGWVeEyxpgfHD3r3g7sjsW9+0ccg23uc6dvo
+   08cNFrCh3KJA4l0tozL9sMA6ZyTLc6VlUNbNniac0gU+LGvO5AW/lRilo
+   OFY7ylsx3mmFy/fo9GMI8kGnzdrOuZuKrshCKQw2q7y3cEmOXEOXxDCqs
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="316829624"
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="316829624"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 10:26:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="580886074"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 09 Aug 2022 10:26:53 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLT0H-000N6b-0P;
+        Tue, 09 Aug 2022 17:26:53 +0000
+Date:   Wed, 10 Aug 2022 01:26:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: drivers/remoteproc/imx_dsp_rproc.c:602:49: sparse: sparse: incorrect
+ type in argument 2 (different address spaces)
+Message-ID: <202208100114.eOo1r59A-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <21b84f49-67af-6217-a662-f890db5525a8@linaro.org>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 Aug 2022, Krzysztof Kozlowski wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   eb555cb5b794f4e12a9897f3d46d5a72104cd4a7
+commit: ec0e5549f3586d2cb99a05edd006d722ebad912c remoteproc: imx_dsp_rproc: Add remoteproc driver for DSP on i.MX
+date:   10 months ago
+config: arm64-randconfig-s041-20220808 (https://download.01.org/0day-ci/archive/20220810/202208100114.eOo1r59A-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ec0e5549f3586d2cb99a05edd006d722ebad912c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ec0e5549f3586d2cb99a05edd006d722ebad912c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
 
-> On 09/08/2022 18:33, Lee Jones wrote:
-> > On Mon, 08 Aug 2022, Krzysztof Kozlowski wrote:
-> > 
-> >> On 07/08/2022 17:52, Paul Cercueil wrote:
-> >>> Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
-> >>> to handle the .suspend/.resume callbacks.
-> >>>
-> >>> These macros allow the suspend and resume functions to be automatically
-> >>> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
-> >>> to use #ifdef guards.
-> >>>
-> >>> The advantage is then that these functions are now always compiled
-> >>> independently of any Kconfig option, and thanks to that bugs and
-> >>> regressions are easier to catch.
-> >>>
-> >>> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> >>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> >>
-> >> The address does not work. Please don't add it to commit log.
-> >>
-> >>> Cc: linux-samsung-soc@vger.kernel.org
-> >>
-> >> This is also not really needed in commit log... it's just a mailing list...
-> >>
-> >> I actually never understood why people want to add to commit log, so to
-> >> something which will last 10 years, Cc-ing other folks, instead of
-> >> adding such tags after '---'. Imagine 10 years from now:
-> >>
-> >> 1. What's the point to be cced on this patch after 10 years instead of
-> >> using maintainers file (the one in 10 years)? Why Cc-ing me in 10 years?
-> >> If I am a maintainer of this driver in that time, I will be C-ced based
-> >> on maintainers file. If I am not a maintainer in 10 years, why the heck
-> >> cc-ing me based on some 10-year old commit? Just because I was a
-> >> maintainer once, like 10 years ago?
-> > 
-> > Why would that happen?
-> > 
-> > These tags are only used during initial submission.
-> 
-> No, the tags are used in any other resends, backports etc while
-> traveling through different trees. I think only stable-backports do not
-> use them, but all other gfp+git-send will follow the tags.
-> 
-> > 
-> >> 2. Or why cc-ing such people when backporting to stable?
-> > 
-> > That doesn't happen either.
-> 
-> Indeed, stable does not use these Cc.
-> 
-> >> It's quite a lot of unnecessary emails which many of us won't actually
-> >> handle later...
-> >>
-> >> I sincerely admit I was once also adding such Cc-tags. But that time my
-> >> employer was counting lines-of-patch (including commit log)... crazy, right?
-> > 
-> > Nothing wrong with adding these tags IMHO.  It's what they're for.
-> > 
-> > I use them when I'm maintaining a large amount of out-of-tree, but
-> > to-be-upstreamed patches over several versions.  Re-applying the
-> > recipients list can become pretty labour-some after several
-> > iterations.
-> 
-> You can do it still while keeping the tags after ---. Only patch-related
-> workflows strip such tags. If you cherry-pick, rebase, merge, you always
-> get the content of ---.
-> 
-> The same as typical changelog (not cover letter but one in the patch) -
-> you keep it after --- and it does not disappear.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'll have to try this next time.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/remoteproc/imx_dsp_rproc.c:602:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *va @@     got void [noderef] __iomem *[assigned] cpu_addr @@
+   drivers/remoteproc/imx_dsp_rproc.c:602:49: sparse:     expected void *va
+   drivers/remoteproc/imx_dsp_rproc.c:602:49: sparse:     got void [noderef] __iomem *[assigned] cpu_addr
+   drivers/remoteproc/imx_dsp_rproc.c:638:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *va @@     got void [noderef] __iomem *[assigned] cpu_addr @@
+   drivers/remoteproc/imx_dsp_rproc.c:638:49: sparse:     expected void *va
+   drivers/remoteproc/imx_dsp_rproc.c:638:49: sparse:     got void [noderef] __iomem *[assigned] cpu_addr
 
-> > Adding them under the '---' doesn't work when the purpose of them is
-> > to keep the recipients list in Git history.
-> 
-> This I understand, what I did not understand (and you did not explain)
-> is what would be the purpose to keep them in Git history. What is the
-> point to have them in commit log of 10 year old commit?
+vim +602 drivers/remoteproc/imx_dsp_rproc.c
 
-Here is a documented use for the tags:
-
- "If a person has had the opportunity to comment on a patch, but has not
-  provided such comments, you may optionally add a ``Cc:`` tag to the patch."
-
-Thus, when a recipient replies with a *-by tag, I strip out the
-corresponding Cc: line.
-
-Obviously this does not apply to mailing lists.
+   563	
+   564	/**
+   565	 * imx_dsp_rproc_add_carveout() - request mailbox channels
+   566	 * @priv: private data pointer
+   567	 *
+   568	 * This function registers specified memory entry in @rproc carveouts list
+   569	 * The carveouts can help to mapping the memory address for DSP.
+   570	 */
+   571	static int imx_dsp_rproc_add_carveout(struct imx_dsp_rproc *priv)
+   572	{
+   573		const struct imx_dsp_rproc_dcfg *dsp_dcfg = priv->dsp_dcfg;
+   574		const struct imx_rproc_dcfg *dcfg = dsp_dcfg->dcfg;
+   575		struct rproc *rproc = priv->rproc;
+   576		struct device *dev = rproc->dev.parent;
+   577		struct device_node *np = dev->of_node;
+   578		struct of_phandle_iterator it;
+   579		struct rproc_mem_entry *mem;
+   580		struct reserved_mem *rmem;
+   581		void __iomem *cpu_addr;
+   582		int a;
+   583		u64 da;
+   584	
+   585		/* Remap required addresses */
+   586		for (a = 0; a < dcfg->att_size; a++) {
+   587			const struct imx_rproc_att *att = &dcfg->att[a];
+   588	
+   589			if (!(att->flags & ATT_OWN))
+   590				continue;
+   591	
+   592			if (imx_dsp_rproc_sys_to_da(priv, att->sa, att->size, &da))
+   593				return -EINVAL;
+   594	
+   595			cpu_addr = devm_ioremap_wc(dev, att->sa, att->size);
+   596			if (!cpu_addr) {
+   597				dev_err(dev, "failed to map memory %p\n", &att->sa);
+   598				return -ENOMEM;
+   599			}
+   600	
+   601			/* Register memory region */
+ > 602			mem = rproc_mem_entry_init(dev, cpu_addr, (dma_addr_t)att->sa,
+   603						   att->size, da, NULL, NULL, "dsp_mem");
+   604	
+   605			if (mem)
+   606				rproc_coredump_add_segment(rproc, da, att->size);
+   607			else
+   608				return -ENOMEM;
+   609	
+   610			rproc_add_carveout(rproc, mem);
+   611		}
+   612	
+   613		of_phandle_iterator_init(&it, np, "memory-region", NULL, 0);
+   614		while (of_phandle_iterator_next(&it) == 0) {
+   615			/*
+   616			 * Ignore the first memory region which will be used vdev buffer.
+   617			 * No need to do extra handlings, rproc_add_virtio_dev will handle it.
+   618			 */
+   619			if (!strcmp(it.node->name, "vdev0buffer"))
+   620				continue;
+   621	
+   622			rmem = of_reserved_mem_lookup(it.node);
+   623			if (!rmem) {
+   624				dev_err(dev, "unable to acquire memory-region\n");
+   625				return -EINVAL;
+   626			}
+   627	
+   628			if (imx_dsp_rproc_sys_to_da(priv, rmem->base, rmem->size, &da))
+   629				return -EINVAL;
+   630	
+   631			cpu_addr = devm_ioremap_wc(dev, rmem->base, rmem->size);
+   632			if (!cpu_addr) {
+   633				dev_err(dev, "failed to map memory %p\n", &rmem->base);
+   634				return -ENOMEM;
+   635			}
+   636	
+   637			/* Register memory region */
+   638			mem = rproc_mem_entry_init(dev, cpu_addr, (dma_addr_t)rmem->base,
+   639						   rmem->size, da, NULL, NULL, it.node->name);
+   640	
+   641			if (mem)
+   642				rproc_coredump_add_segment(rproc, da, rmem->size);
+   643			else
+   644				return -ENOMEM;
+   645	
+   646			rproc_add_carveout(rproc, mem);
+   647		}
+   648	
+   649		return 0;
+   650	}
+   651	
 
 -- 
-DEPRECATED: Please use lee@kernel.org
+0-DAY CI Kernel Test Service
+https://01.org/lkp

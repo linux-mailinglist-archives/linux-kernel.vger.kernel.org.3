@@ -2,149 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B1458DFDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA4158DFD4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245223AbiHITIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
+        id S245407AbiHITI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345102AbiHITFR (ORCPT
+        with ESMTP id S1345864AbiHITGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:05:17 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE9414D24
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:43:40 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oLUCR-0005YX-Q3; Tue, 09 Aug 2022 20:43:31 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oLUCQ-0000nP-Ee; Tue, 09 Aug 2022 20:43:30 +0200
-Date:   Tue, 9 Aug 2022 20:43:30 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/3] media: hantro: Add support for RK356x JPEG encoder
-Message-ID: <20220809184330.GA4380@pengutronix.de>
-References: <20220427224438.335327-1-frattaroli.nicolas@gmail.com>
- <20220427224438.335327-3-frattaroli.nicolas@gmail.com>
- <20220809124508.GL14307@pengutronix.de>
+        Tue, 9 Aug 2022 15:06:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C6B82AC50
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660070737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8IbhLYjobqT2aTBvz3U46stbRUAh6ZahUb2ByDCNf0A=;
+        b=TNum+KWLYec3Di+h32/Isu0qH5SxlmanT4GbdNIxh3jmBA884JDTCtS5w9vjNYDwMHMmMI
+        uoO28ARsiR+cLEhQcRJi/M6dfkWixFbMQPwPEOxGstNyrd4sl3+uBS8BqdAvdjKBkr6up2
+        isY4LCfCaxaIvJuUKfg0dbRd9g0HP+M=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-206-w2xqpGlCNeyiGP6-xucRZg-1; Tue, 09 Aug 2022 14:45:36 -0400
+X-MC-Unique: w2xqpGlCNeyiGP6-xucRZg-1
+Received: by mail-wm1-f70.google.com with SMTP id j36-20020a05600c1c2400b003a540d88677so2805607wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:45:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=8IbhLYjobqT2aTBvz3U46stbRUAh6ZahUb2ByDCNf0A=;
+        b=ri4c6f6gaAkj5rbo9/Q3fb75eUQl6DoZ3ejfB4LK73Kl/w+v5UDpS5gJmcGW50ikMY
+         walzKB8QsQ8a/SeR6uuIi/9NahTpghBMrEgL6CwWV8pY7h7AovyOTTJN5Z2+s/UitfVS
+         LJKT5aJdqMNxg4oexsqr+SzuZzIH1JPXzLRzMFlKlQYZbH3DDKtbTk01hSqb1lwowoyk
+         F+qskESPpyGGbU+xMtWQfJzwXbMXuEVBAGZSVkl47r0Y/6GuddMZ6+ThUdE+oIbay3lV
+         cJiu39a6k575TALV7MKm2F/gMP6M2G4FCNhanVWLW+UsX8k1fA+P3CzRWYNcjUv0GnGL
+         vsAQ==
+X-Gm-Message-State: ACgBeo0vYmfBAvrbZKoVBZJWonK+2WW556SPUiUgdJgMYRYGCoMtuHXo
+        L2LdEktMd5vHVXXHeins9CL1bz4V0cjGNcMqzJsMvfI/8Uja5jzHKXbkzjtNZk8JXgPwutr9n3u
+        yMGOO0+fql90nh1/uDsn3B7J3
+X-Received: by 2002:a05:6000:1b88:b0:21f:eae8:d695 with SMTP id r8-20020a0560001b8800b0021feae8d695mr15071127wru.26.1660070735052;
+        Tue, 09 Aug 2022 11:45:35 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR69MLCunWf5SVWzymZ3UNdd8BL3fDtH5qkRFmVvHOW7S1grl/vbJS0Sb54Gqln+3VynlhGkbA==
+X-Received: by 2002:a05:6000:1b88:b0:21f:eae8:d695 with SMTP id r8-20020a0560001b8800b0021feae8d695mr15071118wru.26.1660070734738;
+        Tue, 09 Aug 2022 11:45:34 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:3700:aed2:a0f8:c270:7f30? (p200300cbc7053700aed2a0f8c2707f30.dip0.t-ipconnect.de. [2003:cb:c705:3700:aed2:a0f8:c270:7f30])
+        by smtp.gmail.com with ESMTPSA id i2-20020a05600c14c200b003a53ec3d847sm7225855wmh.29.2022.08.09.11.45.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 11:45:34 -0700 (PDT)
+Message-ID: <1a48d71d-41ee-bf39-80d2-0102f4fe9ccb@redhat.com>
+Date:   Tue, 9 Aug 2022 20:45:33 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="azLHFNyN32YCQGCU"
-Content-Disposition: inline
-In-Reply-To: <20220809124508.GL14307@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220808073232.8808-1-david@redhat.com>
+ <CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove
+ FOLL_COW
+In-Reply-To: <CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---azLHFNyN32YCQGCU
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Aug 09, 2022 at 02:45:08PM +0200, Michael Grzeschik wrote:
->On Thu, Apr 28, 2022 at 12:44:37AM +0200, Nicolas Frattaroli wrote:
->>The RK3566 and RK3568 SoCs come with a small Hantro instance which
->>is solely dedicated to encoding JPEG. This patch adds the necessary
->>structs to the Hantro driver to allow it to function.
+On 09.08.22 20:27, Linus Torvalds wrote:
+> I'm still reading through this, but
+> 
+>  STOP DOING THIS
+> 
+> On Mon, Aug 8, 2022 at 12:32 AM David Hildenbrand <david@redhat.com> wrote:
 >>
->>Tested with the following GStreamer command:
->>
->>gst-launch-1.0 videotestsrc ! v4l2jpegenc ! matroskamux ! \
->>              filesink location=3Dfoo.mkv
->
->I just tried this pipeline on v5.19. The filesize generated is increasing =
-and
->data is generated. However the content seems to be unusable.
->
->When playing foo.mkv with e.g. vlc the following errors, that no JPEG data=
- was found
->in the images, is generated:
->
->
->[mjpeg @ 0x7f2f08c1f780] No JPEG data found in image
->[mjpeg @ 0x7f2f08c1f780] No JPEG data found in image
->[mjpeg @ 0x7f2f08c1f780] No JPEG data found in image
->...
->
->
->The same with gstreamer:
->
->gst-launch-1.0 filesrc location=3Dfoo.mkv ! decodebin ! glimagesink
->../ext/jpeg/gstjpegdec.c(1418): gst_jpeg_dec_handle_frame (): /GstPipeline=
-:pipeline0/GstDecodeBin:decodebin0/GstJpegDec:jpegdec0:
->Decode error #53: Not a JPEG file: starts with 0x00 0x00
->..
->
->
->Do you have an idea why that is? Did you test the pipeline with an earlier
->kernelversion and validated the generated content of foo.mkv?
+>> +       VM_BUG_ON(!is_cow_mapping(vma->vm_flags));
+> 
+> Using BUG_ON() for debugging is simply not ok.
+> 
+> And saying "but it's just a VM_BUG_ON()" does not change *anything*.
+> At least Fedora enables that unconditionally for normal people, it is
+> not some kind of "only VM people do this".
+> 
+> Really. BUG_ON() IS NOT FOR DEBUGGING.
 
-After further debugging, I found out that my latest port of the bootlin
-patches to support h264 encoding broke the hantro driver somehow.
+I totally agree with BUG_ON ... but if I get talked to in all-caps on a
+Thursday evening and feel like I just touched the forbidden fruit, I
+have to ask for details about VM_BUG_ON nowadays.
 
-https://git.pengutronix.de/cgit/mgr/linux/log/?h=3Dv5.19/topic/rk3568-vepu-=
-h264-stateless-bootlin
+VM_BUG_ON is only active with CONFIG_DEBUG_VM. ... which indicated some
+kind of debugging at least to me. I *know* that Fedora enables it and I
+*know* that this will make Fedora crash.
 
-The good news about that is; it is possible that the same issue
-was the cause that I thought the h264 encoding is not supported on
-the VEPU121. So the support is still unknown
+I know why Fedora enables this debug option, but it somewhat destorys
+the whole purpose of VM_BUG_ON kind of nowadays?
 
-I will come back to that.
+For this case, this condition will never trigger and I consider it much
+more a hint to the reader that we can rest assured that this condition
+holds. And on production systems, it will get optimized out.
 
-Regards,
-Michael
+Should we forbid any new usage of VM_BUG_ON just like we mostly do with
+BUG_ON?
 
+> 
+> Stop it. Now.
+> 
+> If you have a condition that must not happen, you either write that
+> condition into the code, or - if you are convinced it cannot happen -
+> you make it a WARN_ON_ONCE() so that people can report it to you.
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+I can just turn that into a WARN_ON_ONCE() or even a VM_WARN_ON_ONCE().
 
---azLHFNyN32YCQGCU
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Thanks,
 
------BEGIN PGP SIGNATURE-----
+David / dhildenb
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmLyqs8ACgkQC+njFXoe
-LGQItRAAj/Maz6S+qvjgj2qxwTHOXNKpxXLuukYWID55zyIjCBhMX0TmPsGTIQQD
-bkD2FB31dykYjtx5JepDztiDPoTFe1JH8FFrnOR/d1rNl40oZRVefBBMxgcS3niF
-PZXOD0tQ3Z3jyXOVD9AUPUJWsJl0w5ROBJjtkgCpF0KfH+29S90xPe3ktFZaU6bY
-KScHe3dLKEKNEHs/6tjgI3VphHabmxcFj3iucSm88jio8GLx67uWN6rKjKkZxHz8
-f5yw6Ta96yVUL3G0mPrlMVL4SlI7jnEinbGL5lYHXO5sfKej4nZfLEIbtVxXTHP2
-TfHup6Ws6dFAoYUcKTGwvzblbtH5Y/6Nk8LyCud/NZT3DBEr9MZRbjizlC/QGeAY
-yjryjYiCJMxi0f7IkhCGYupBRKb7eofugJAymiaMKHrGRctRSXUfj0twHxrBzMz6
-fYVWhYqSmjrZjsRIqg1q0GUu24kG1UtCnvqnkhSJIvSGYpIXmKeeKkDaEVhD0V6r
-wP2VX0dJfbf5Jp9zpNynVY0YacOngis5muLKTnbBeATXEH1Inv+ShzoaiHRrk1t8
-FQ6IFRv8HiR+zZFy4y3vWDo4m1xzoRR03Jmhf/CYBASPIHhQk3oU3ArqtEEigkA9
-OO2fTaFTnrFipkOSgysdGAl9/KXpuwXFdmiwoXmWlzj1ZEsFlGI=
-=BxJZ
------END PGP SIGNATURE-----
-
---azLHFNyN32YCQGCU--

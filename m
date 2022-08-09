@@ -2,153 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BB058D504
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA1D58D507
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235551AbiHIH5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 03:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S237666AbiHIH5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 03:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiHIH5I (ORCPT
+        with ESMTP id S229986AbiHIH5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 03:57:08 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F19318B30
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 00:57:06 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id z25so15963355lfr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 00:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3IBr6p2z3wSW6g3+vDFQa8eI3JKD+eigRgAZZ154fsc=;
-        b=OsfPSzU8rvxsPXrV05RL3FkpVd82/zImhAUX6Xd4ggg3JlaegSPktLRpkogqwhoqvB
-         KdN9OAHcSE1SNKv8vkQyZnUcdls+vVJykmXw3I/J2ZEzABCWRqiienx8+3lUG5TDnc+u
-         5mHoB9n2sP0xwFLxgWH5g5p/9hd7Q0KOhVA5XWpubH7ViWjmTS2jxPr7TYlVtP9dJ6Qm
-         Z8zFmZB7ppkLhWO5eQPrjnGF2IbarOMpZWJhQ5fy0iUooqfQ5ktZ7/7nWtmbflhkRzEU
-         93I0kCPZW3QBm899M8Qs2RDN6rTBzYuz3fdripUToWlh2tL4DHwgA5deKvGPtHcCpt4X
-         0KlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3IBr6p2z3wSW6g3+vDFQa8eI3JKD+eigRgAZZ154fsc=;
-        b=llEj2wCMvceWbL76nGcxuJVERPBsEP3svxnj0v6dcIe7P42RdBhS8UVrknQZOloewo
-         Oeg3Fxfp6248/TV2+Xxs7ntUJ3V4zrGtwKOie+uoWp6BG6123ahN9LQDYpHk/mhdWAv9
-         Ed3nXIQKv8i+lq2q0iwtE863egKBj3ZaaVTUEebuiDhNPmxlt7NOmTZInbplfnEqvEip
-         r1lo9dDLeHUCodfmS0c7NGqpdmyopPHfWCd6tCWYeGy806KMZgaSizyC5b2rWcqZTBlA
-         FFEEW9pOuXZNFIngTKjYcuLk6gWifABV3njFjikyJh8++KFQwaeeKyOICLtLL04iUHaw
-         QYug==
-X-Gm-Message-State: ACgBeo0U3gwHTW3cRZCLPqExBBQonlAdOne/5w6D9Ll/zrIu8xfT/DeL
-        zLAGo3/BmhboHZJ+3MKnTnrz7A==
-X-Google-Smtp-Source: AA6agR7I4GC9gHyXaVBjnSy1QUZJeskVQusM1MXa129ukwJ1m30ncwS4hoSZ1IPtwQO0MFCwEATc0w==
-X-Received: by 2002:ac2:43d4:0:b0:48a:f6bf:1185 with SMTP id u20-20020ac243d4000000b0048af6bf1185mr7731172lfl.197.1660031824540;
-        Tue, 09 Aug 2022 00:57:04 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id e15-20020a05651236cf00b0048a85bd4429sm1672101lfs.126.2022.08.09.00.57.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 00:57:04 -0700 (PDT)
-Message-ID: <0765cae5-1d07-cbaa-83bf-5553f3f8b242@linaro.org>
-Date:   Tue, 9 Aug 2022 10:57:03 +0300
+        Tue, 9 Aug 2022 03:57:34 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB5E19C0E;
+        Tue,  9 Aug 2022 00:57:26 -0700 (PDT)
+X-UUID: 1b1511c3ee49429ab64c95a65540d1c4-20220809
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=YEqeMCYw5b9KhVve378Sy7vFdIoCHC0mooehECOFz+c=;
+        b=A24y999r4HwEf8W4bvAilQLzK9Bz+hEcI7xPs75wo4/q4LWsWDw6b+koMSjGH8mn5NzZWXJoA63mn7Cq2A5JyU6pQHKXCFLYa4GXan3KMogxUu3/uEeCi6Skg6byN8EvbGMjHq/aLZ7r+sRbjfJwUHeiKwlfh456GNY2UNcECRQ=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:e8128ceb-de8f-47d7-a83f-56fd90e1e226,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:45
+X-CID-INFO: VERSION:1.1.9,REQID:e8128ceb-de8f-47d7-a83f-56fd90e1e226,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ha
+        m,ACTION:release,TS:45
+X-CID-META: VersionHash:3d8acc9,CLOUDID:551f289c-da39-4e3b-a854-56c7d2111b46,C
+        OID:72bf0a90d54e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
+X-UUID: 1b1511c3ee49429ab64c95a65540d1c4-20220809
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 652269249; Tue, 09 Aug 2022 15:57:19 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 9 Aug 2022 15:57:18 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 9 Aug 2022 15:57:18 +0800
+Message-ID: <6f067d36efffab65490348704bb892252cc400ef.camel@mediatek.com>
+Subject: Re: [PATCH v16 3/8] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "mripard@kernel.org" <mripard@kernel.org>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "airlied@linux.ie" <airlied@linux.ie>
+CC:     "msp@baylibre.com" <msp@baylibre.com>,
+        "granquet@baylibre.com" <granquet@baylibre.com>,
+        Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?= 
+        <jitao.shi@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        LiangXu Xu =?UTF-8?Q?=28=E5=BE=90=E4=BA=AE=29?= 
+        <LiangXu.Xu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 9 Aug 2022 15:57:18 +0800
+In-Reply-To: <d9eb673132f643e39caeb422309bf4315f0c136e.camel@mediatek.com>
+References: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
+         <20220805101459.3386-4-rex-bc.chen@mediatek.com>
+         <d9eb673132f643e39caeb422309bf4315f0c136e.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] dt-bindings: spi: stm32: Add st,dual-flash property
- in st,stm32-qspi.yaml
-Content-Language: en-US
-To:     Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        christophe.kerello@foss.st.com, devicetree@vger.kernel.org
-References: <20220808074051.44736-1-patrice.chotard@foss.st.com>
- <20220808074051.44736-2-patrice.chotard@foss.st.com>
- <9ad4b4a8-988e-f185-f80c-6f15f341ce8c@linaro.org>
- <79fd7e19-ceef-14fb-5a83-603740735f8f@foss.st.com>
- <38c3977a-0196-1832-ff94-317064cbc439@linaro.org>
- <b15184d6-c9e7-d042-621b-ef4ccd3c87ba@linaro.org>
- <a4310e1d-4eb3-0081-3cd2-8fd060a28bda@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a4310e1d-4eb3-0081-3cd2-8fd060a28bda@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/08/2022 10:52, Patrice CHOTARD wrote:
-> Hi Krzystof
+On Mon, 2022-08-08 at 13:46 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
 > 
-> On 8/9/22 07:29, Krzysztof Kozlowski wrote:
->> On 09/08/2022 07:18, Krzysztof Kozlowski wrote:
->>> On 08/08/2022 19:08, Patrice CHOTARD wrote:
->>>> Hi Krzystof
->>>>
->>>> On 8/8/22 11:01, Krzysztof Kozlowski wrote:
->>>>> On 08/08/2022 10:40, patrice.chotard@foss.st.com wrote:
->>>>>> From: Patrice Chotard <patrice.chotard@foss.st.com>
->>>>>>
->>>>>> Add new property st,dual-flash which allows to use the QSPI interface as a
->>>>>> communication channel using up to 8 qspi line.
->>>>>> This mode can only be used if cs-gpios property is defined.
->>>>>>
->>>>>> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
->>>>>> ---
->>>>>>  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml | 8 ++++++++
->>>>>>  1 file changed, 8 insertions(+)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
->>>>>> index 6ec6f556182f..5e4f9109799e 100644
->>>>>> --- a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
->>>>>> @@ -46,6 +46,14 @@ properties:
->>>>>>        - const: tx
->>>>>>        - const: rx
->>>>>>  
->>>>>> +  st,dual-flash:
->>>>>> +    type: boolean
->>>>>> +    description:
->>>>>> +      Allows to use 8 data lines in case cs-gpios property is defined.
->>>>>
->>>>> It's named dual-flash, but what if you want to use QSPI to connect for
->>>>> example to FPGA?
->>>>>
->>>>> Also how is this related to parallel-memories property?
->>>>
->>>> I called it "dual-flash" simply because it enable the dual flash feature of the QSPI block (bit CR_DFM : Dual Flash Mode)
->>>> which allows to use the 8 lines simultaneously of our dual QSPI block.
->>>
->>> And how is it related to existing parallel-memories property?
->>
->> Maybe I was not specific enough, so let me rephrase - we have already
->> parallel-memories property. How this one is different (to justify the
->> new property)? Is just one memory connected in your case to QSPI over 8
->> data lines?
+> On Fri, 2022-08-05 at 18:14 +0800, Bo-Chen Chen wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > This patch adds a embedded displayport driver for the MediaTek
+> > mt8195
+> > SoC.
+> > 
+> > It supports the MT8195, the embedded DisplayPort units. It offers
+> > DisplayPort 1.4 with up to 4 lanes.
+> > 
+> > The driver creates a child device for the phy. The child device
+> > will
+> > never exist without the parent being active. As they are sharing a
+> > register range, the parent passes a regmap pointer to the child so
+> > that
+> > both can work with the same register range. The phy driver sets
+> > device
+> > data that is read by the parent to get the phy device that can be
+> > used
+> > to control the phy properties.
+> > 
+> > This driver is based on an initial version by
+> > Jitao shi <jitao.shi@mediatek.com>
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > Tested-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
 > 
-> Our QSPI block is a dual Quad-SPI memory interface, it can managed 2 QSPI flashes independently.
-> There is a specific mode, dual flash mode, where the 2 QSPI flashes can be accessed simultaneously 
-> using 8 data lines. In this case, both throughput and capacity are two fold with this mode.
+> [snip]
 > 
-> To illustrate, you can have a look at STM32MP157 reference manual (chapter 27.3.1 figure 172) available here:
-> https://www.st.com/resource/en/reference_manual/rm0436-stm32mp157-advanced-armbased-32bit-mpus-stmicroelectronics.pdf 
+> > +
+> > +static irqreturn_t mtk_dp_hpd_event(int hpd, void *dev)
+> > +{
+> > +	struct mtk_dp *mtk_dp = dev;
+> > +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
+> > +	u32 irq_status;
+> > +
+> > +	irq_status = mtk_dp_read(mtk_dp, MTK_DP_TOP_IRQ_STATUS);
+> > +
+> > +	if (!(irq_status & RGS_IRQ_STATUS_TRANSMITTER))
+> > +		return IRQ_HANDLED;
 > 
-> As you mentioned above, the goal is to connect a FPGA to this 8 lines bus.
+> If one of MTK_DP_HPD_INTERRUPT, MTK_DP_HPD_CONNECT,
+> MTK_DP_HPD_DISCONNECT exist, does it imply RGS_IRQ_STATUS_TRANSMITTER
+> exist? If so, I think this checking is redundant because we could
+> directly check MTK_DP_HPD_INTERRUPT, MTK_DP_HPD_CONNECT,
+> MTK_DP_HPD_DISCONNECT.
 > 
-> Hope it clarifies enough ;-)
 
-Only partially. Based on the explanation above, it looks like you want
-to use existing parallel-memories property. Please use that one, instead
-of adding a new property for the same feature.
+Hello CK,
 
-Best regards,
-Krzysztof
+After checking with Jitao, we can remove this check and use
+mtk_dp_swirq_get_clear|mtk_dp_hwirq_get_clear directly.
+
+> > +
+> > +	irq_status = mtk_dp_swirq_get_clear(mtk_dp) |
+> > +		     mtk_dp_hwirq_get_clear(mtk_dp);
+> > +
+> > +	if (!irq_status)
+> > +		return IRQ_HANDLED;
+> > +
+> > +	if (irq_status & MTK_DP_HPD_INTERRUPT)
+> > +		train_info->hpd_inerrupt = true;
+> 
+> train_info->hpd_inerrupt is useless, so drop it.
+> 
+> > +
+> > +	if (!(irq_status & MTK_DP_HPD_CONNECT ||
+> > +	      irq_status & MTK_DP_HPD_DISCONNECT))
+> > +		return IRQ_WAKE_THREAD;
+> 
+> this could be changed to
+> 
+> if (irq_status == MTK_DP_HPD_INTERRUPT)
+> 	return IRQ_WAKE_THREAD;
+> 
+> But I find one problem. If irq_status == MTK_DP_HPD_INTERRUPT |
+> MTK_DP_HPD_CONNECT, the thread would not be waked up. Is this what
+> you
+> want?
+> 
+> Regards,
+> CK
+> 
+
+It is possible we will encounter (irq_status & MTK_DP_HPD_CONNECT) &&
+(irq_status & MTK_DP_HPD_INTERRUPT)
+
+So I will modify like this:
+
+if (!(irq_status & MTK_DP_HPD_CONNECT ||
+      irq_status & MTK_DP_HPD_DISCONNECT))
+	return IRQ_WAKE_THREAD;
+
+xxxxxx
+
+if (irq_status & MTK_DP_HPD_INTERRUPT &&
+    irq_status & MTK_DP_HPD_CONNECT)
+	return IRQ_WAKE_THREAD;
+
+return IRQ_HANDLED;
+
+BRs,
+Bo-Chen
+> > +
+> > +	if (!!(mtk_dp_read(mtk_dp, MTK_DP_TRANS_P0_3414) &
+> > +	       HPD_DB_DP_TRANS_P0_MASK))
+> > +		train_info->cable_plugged_in = true;
+> > +	else
+> > +		train_info->cable_plugged_in = false;
+> > +
+> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> > +			   DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> > +			   DP_PWR_STATE_MASK);
+> > +
+> > +	return IRQ_HANDLED;
+> > +}
+> > +
+> 
+> 
+

@@ -2,103 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C9D58DD97
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3476558DE82
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344382AbiHISB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S1343788AbiHISTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245468AbiHISBg (ORCPT
+        with ESMTP id S1346120AbiHISQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:01:36 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2FF26574
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:00:57 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id k13-20020a056902024d00b0066fa7f50b97so10132066ybs.6
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:00:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=OLEpCC27T32C/7NrBkt44Xp3IZO7vGnlk4eYOP8rEvo=;
-        b=ryFUKd5uBQ2+aNk7sYR9KZZ74RoKc9IpQDLCinEpIuhwQtE4vRxUzUmVSy+0Y2/o5J
-         TxfoLNb2zgM2SZFuDyV0Gvmg6Dwgexrp/ozaojZecEs0UdhV2i9dwqZojJbkyaoIM1W9
-         U/3XYnW7/YJruCZNxSVoUQYNoLisjP8IGY6VxNypLiN/B6io8fFuFZITM2ij6Oic0dLt
-         9i1VIxDwyZ8jhai0uhD82HpDxU1rIRD0redZv1ccFsj0OZ5fFKfVx9nqUToMVFs9r2+s
-         EmcY3IT63/5MTFcw+AX61DUHeb/BSEuT5QaSDYVTIixNcmWLtlZ4ZbMn2roH2L3s7LAt
-         qkeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=OLEpCC27T32C/7NrBkt44Xp3IZO7vGnlk4eYOP8rEvo=;
-        b=DAhJZhZHKXJJ2Injndm11TWKWnM+mjUCGwRSkkBe2YhUTrrTCK7mxJ0v0lYP3e5DGd
-         LWG8lzcoUWx9gfXsk5MhJwasBdsDxdZ6SCALSI0Uazs6G9jHHuejjDGewmGAvSph9kfd
-         sf23nuDrTKGo4uGhAjDJlsjP1vLGuRHhyi6sqi8kxeQCxzV2bVDWv6J7SJEa9WZPm7Hx
-         JnGRtxWo7UesCCHQgbWYkh5loGjXFOkqFQ5o/V3azNfXVqDrpF47HZO3PQnfXpp9GPvu
-         TY5IQoAw9kfJ9iWwMGmIjnanW7RnMVz56er4LPvN/GBiZDSymVkpJLRIvwUbxKZP6iJR
-         wphA==
-X-Gm-Message-State: ACgBeo0JPKzfcNdnxlqLjpPg9oIQxELnMKI6y1xZho7wALckBqm+Ijay
-        bnlmk8cqeG1YOeHCtozg/g/jzLdb+3srC/3ih1c=
-X-Google-Smtp-Source: AA6agR57Z1i4kogUXRKNHuKcHf6sYzxvP+vQ7Oxz1ol7dAF+yL2j38ufc3C70qxHvegDyd/L/1N0tFLaCF5E+uKEajE=
-X-Received: from wmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5ebe])
- (user=willmcvicker job=sendgmr) by 2002:a0d:ebc9:0:b0:31f:474a:4264 with SMTP
- id u192-20020a0debc9000000b0031f474a4264mr24550636ywe.269.1660068056405; Tue,
- 09 Aug 2022 11:00:56 -0700 (PDT)
-Date:   Tue,  9 Aug 2022 18:00:48 +0000
-Message-Id: <20220809180051.1063653-1-willmcvicker@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v1 0/2] PCI: dwc: Add support for 64-bit MSI target addresses
-From:   Will McVicker <willmcvicker@google.com>
-To:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        "=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?=" <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Will McVicker <willmcvicker@google.com>
-Cc:     kernel-team@android.com, Vidya Sagar <vidyas@nvidia.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        Tue, 9 Aug 2022 14:16:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330B62CDD6;
+        Tue,  9 Aug 2022 11:06:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9DEDB817C1;
+        Tue,  9 Aug 2022 18:05:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BE5BC43141;
+        Tue,  9 Aug 2022 18:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660068350;
+        bh=0s73BRoLaSOv0OzHQBdDMZTsDnFCgDoruPYp75fOpuA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ech6WY5+8w2zkmQhfuxWQXT8MtF4sVx0ZbvCmpQbJisDJ6KTlaCHPb8dwDaWTXoEt
+         cMszq4DDg/7SC+f15rzhmt7sbJ3T04UjSIjn9luNaUiGg5jmnJI5g824CGTDuNZmG9
+         2q5noUTeLQ2zvjiAC+Ku5wsnPEKFSWjb0G0IOkUI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Hilda Wu <hildawu@realtek.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Subject: [PATCH 5.15 23/30] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x04CA:0x4007
+Date:   Tue,  9 Aug 2022 20:00:48 +0200
+Message-Id: <20220809175515.155455810@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
+References: <20220809175514.276643253@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Hilda Wu <hildawu@realtek.com>
 
-I have two patches that address a couple of issues I've run into with the
-PCIe DWC host driver:
-  (1) the host driver fails to probe when ZONE_DMA32 is disabled.
-  (2) the host driver will fail to probe if a 32-bit address is not
-      available even on devices that support 64-bit target addresses.
+commit c379c96cc221767af9688a5d4758a78eea30883a upstream.
 
-I have addressed both of these issues with the two patches (details can
-found in each of the patch commit messages). Please take a look and let
-me know your thoughts.
+Add the support ID(0x04CA, 0x4007) to usb_device_id table for
+Realtek RTL8852C.
 
-With regards to testing, I have verified them on Android with a Pixel 6
-device on the 5.19 + pci-v5.20-changes kernel. My testing included running
-with both ZONE_DMA32 and swiotlb disabled.
+The device info from /sys/kernel/debug/usb/devices as below.
 
-Thanks,
-Will
+T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
+D:  Ver= 1.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=04ca ProdID=4007 Rev= 0.00
+S:  Manufacturer=Realtek
+S:  Product=Bluetooth Radio
+S:  SerialNumber=00e04c000001
+C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
 
-Will McVicker (2):
-  PCI: dwc: drop dependency on ZONE_DMA32
-  PCI: dwc: add support for 64-bit MSI target address
+Signed-off-by: Hilda Wu <hildawu@realtek.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/bluetooth/btusb.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
- .../pci/controller/dwc/pcie-designware-host.c | 42 ++++++++++++-------
- drivers/pci/controller/dwc/pcie-designware.c  |  9 ++++
- drivers/pci/controller/dwc/pcie-designware.h  |  6 +++
- 3 files changed, 41 insertions(+), 16 deletions(-)
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -420,6 +420,10 @@ static const struct usb_device_id blackl
+ 	{ USB_DEVICE(0x04ca, 0x4006), .driver_info = BTUSB_REALTEK |
+ 						     BTUSB_WIDEBAND_SPEECH },
+ 
++	/* Realtek 8852CE Bluetooth devices */
++	{ USB_DEVICE(0x04ca, 0x4007), .driver_info = BTUSB_REALTEK |
++						     BTUSB_WIDEBAND_SPEECH },
++
+ 	/* Realtek Bluetooth devices */
+ 	{ USB_VENDOR_AND_INTERFACE_INFO(0x0bda, 0xe0, 0x01, 0x01),
+ 	  .driver_info = BTUSB_REALTEK },
 
--- 
-2.37.1.559.g78731f0fdb-goog
 

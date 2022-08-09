@@ -2,105 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499A458D3E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEFE58D3DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238606AbiHIGgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
+        id S237883AbiHIGfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 02:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238427AbiHIGfs (ORCPT
+        with ESMTP id S237733AbiHIGfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:35:48 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB02205D1;
-        Mon,  8 Aug 2022 23:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1660026942; x=1691562942;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=4wMwSe7QmPLeAfnAg9r5jQIIozAKquymAAMILjnSp4o=;
-  b=w25jjKcpsFSsN+5Jl1wpwewNmAu9L6p91iEv0ygYP3fkzasd9XoqPWcQ
-   NqsfGaFkYqfM6IlzKyK7fHG3gbgQIMHWDwzGE8VSaeHed38S26VUvBhLc
-   fTbU0OAw5Dkrr7uUa9umHnxXXc3czJqRP0OnYLtBDXaZu22Rz05flZQuP
-   0=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 08 Aug 2022 23:35:41 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 23:35:41 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 8 Aug 2022 23:35:41 -0700
-Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 8 Aug 2022 23:35:37 -0700
-From:   Satya Priya <quic_c_skakit@quicinc.com>
-To:     Rob Herring <robh@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_tdas@quicinc.com>, <quic_c_skakit@quicinc.com>
-Subject: [PATCH V4 3/3] arm64: dts: qcom: sc7280: Update lpasscore node
-Date:   Tue, 9 Aug 2022 12:05:09 +0530
-Message-ID: <1660026909-7365-4-git-send-email-quic_c_skakit@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1660026909-7365-1-git-send-email-quic_c_skakit@quicinc.com>
-References: <1660026909-7365-1-git-send-email-quic_c_skakit@quicinc.com>
+        Tue, 9 Aug 2022 02:35:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC88E13E2F
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 23:35:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660026930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q2eAM1/hYw4jzhc9gj4LD1tO4qXa+Z9mYKQuildX4rA=;
+        b=Mtyz6qgQRy7qBrFIFqwim3Jrntp0K5Imga7sH7pBgDHUeBsaF7k5xvUmnm1O7ONCqE8dx3
+        5V43jroPoN2sa/JeWcYRumXv/SsHGuoKWQ1bMw79joy1r6DTVj5ktwJz6saOMzcy1hUhSU
+        duCXGJ4wxtBto3BJtYLdYf4E7CDMmkA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-4bi-5j_ePrmKV_eqokFj0A-1; Tue, 09 Aug 2022 02:35:19 -0400
+X-MC-Unique: 4bi-5j_ePrmKV_eqokFj0A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC68F3C0E20D;
+        Tue,  9 Aug 2022 06:35:18 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.193.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CA20318EB5;
+        Tue,  9 Aug 2022 06:35:15 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, maz@kernel.org, oliver.upton@linux.dev,
+        andrew.jones@linux.dev, seanjc@google.com,
+        mathieu.desnoyers@efficios.com, yihyu@redhat.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH 2/2] KVM: selftests: Use getcpu() instead of
+ sched_getcpu() in rseq_test
+References: <20220809060627.115847-1-gshan@redhat.com>
+        <20220809060627.115847-3-gshan@redhat.com>
+Date:   Tue, 09 Aug 2022 08:35:14 +0200
+In-Reply-To: <20220809060627.115847-3-gshan@redhat.com> (Gavin Shan's message
+        of "Tue, 9 Aug 2022 14:06:27 +0800")
+Message-ID: <87y1vxncv1.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To maintain consistency with other lpass nodes(lpass_audiocc,
-lpass_aon and lpass_hm), update lpasscore to lpass_core.
+* Gavin Shan:
 
-Fixes: 9499240d15f2 ("arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio clock controllers")
-Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
----
-Changes since v3:
- - This is newly added in v4, inorder to update the lpasscore node in a
-   separate patch.
+> sched_getcpu() is glibc dependent and it can simply return the CPU
+> ID from the registered rseq information, as Florian Weimer pointed.
+> In this case, it's pointless to compare the return value from
+> sched_getcpu() and that fetched from the registered rseq information.
+>
+> Fix the issue by replacing sched_getcpu() with getcpu(), as Florian
+> suggested. The comments are modified accordingly.
 
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Note that getcpu was added in glibc 2.29, so perhaps you need to perform
+a direct system call?
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 634f15e..c641f0b 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2192,13 +2192,13 @@
- 			reg = <0 0x03380000 0 0x30000>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>,
- 			       <&rpmhcc RPMH_CXO_CLK_A>,
--			       <&lpasscore LPASS_CORE_CC_CORE_CLK>;
-+			       <&lpass_core LPASS_CORE_CC_CORE_CLK>;
- 			clock-names = "bi_tcxo", "bi_tcxo_ao", "iface";
- 			#clock-cells = <1>;
- 			#power-domain-cells = <1>;
- 		};
- 
--		lpasscore: clock-controller@3900000 {
-+		lpass_core: clock-controller@3900000 {
- 			compatible = "qcom,sc7280-lpasscorecc";
- 			reg = <0 0x03900000 0 0x50000>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>;
--- 
-2.7.4
+Thanks,
+Florian
 

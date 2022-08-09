@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BC458F67F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7222858F67E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233986AbiHKDyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 23:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
+        id S233970AbiHKDyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 23:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbiHKDym (ORCPT
+        with ESMTP id S233878AbiHKDym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 Aug 2022 23:54:42 -0400
 Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9D283BD0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 20:54:37 -0700 (PDT)
-X-UUID: 328f09c9b7304a3a8d9a50012db37c3f-20220809
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F07A83BDD
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 20:54:38 -0700 (PDT)
+X-UUID: b54becb6e30d460f9203479f7d63bee7-20220809
 X-Spam-Fingerprint: 0
 X-GW-Reason: 11109
 X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMeS6uumcgOimgeWuoeaguA==
@@ -26,12 +26,12 @@ X-Content-Feature: ica/max.line-size 104
         dict/notice 2
         dict/operate 1
         meta/cnt.alert 1
-X-UUID: 328f09c9b7304a3a8d9a50012db37c3f-20220809
+X-UUID: b54becb6e30d460f9203479f7d63bee7-20220809
 X-User: oushixiong@kylinos.cn
 Received: from localhost.localdomain [(116.128.244.169)] by mailgw
         (envelope-from <oushixiong@kylinos.cn>)
         (Generic MTA)
-        with ESMTP id 20370262; Tue, 09 Aug 2022 19:44:41 +0800
+        with ESMTP id 57318634; Tue, 09 Aug 2022 19:52:43 +0800
 From:   oushixiong <oushixiong@kylinos.cn>
 To:     Dave Airlie <airlied@redhat.com>
 Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
@@ -40,8 +40,8 @@ Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         oushixiong <oushixiong@kylinos.cn>
 Subject: [PATCH] drm/ast: radeon amdgpu for ast add prime
-Date:   Tue,  9 Aug 2022 19:44:39 +0800
-Message-Id: <20220809114439.2063863-1-oushixiong@kylinos.cn>
+Date:   Tue,  9 Aug 2022 19:52:39 +0800
+Message-Id: <20220809115239.2072299-1-oushixiong@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit

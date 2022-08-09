@@ -2,87 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C19D58DCDB
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE77058DCE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236813AbiHIRLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 13:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S245262AbiHIROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 13:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234920AbiHIRK6 (ORCPT
+        with ESMTP id S245231AbiHIROG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:10:58 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C7424084;
-        Tue,  9 Aug 2022 10:10:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=+KPJVKlTwuYIORvuCVRCrV6LokfH4QqszDshfU9K54Q=; b=X5z6LKKr7QwM8LZY6AXoIYPfDF
-        0C1yUFTluKmCni7s0pYmN595Khet/lFEm8MTLi/Z0ao95MTQQ2FvmnKIZL8a4Chp8seLiQ59txKKU
-        vYRH6dFU0aj1Z+Yx7wauBQH7OlbbpbPb646BTO3Sy24FMtjr28mKXgpMM8y5VCBGVvV0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oLSki-00CrYV-Om; Tue, 09 Aug 2022 19:10:48 +0200
-Date:   Tue, 9 Aug 2022 19:10:48 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ravi Gunasekaran <r-gunasekaran@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-omap@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
-        vigneshr@ti.com
-Subject: Re: [EXTERNAL] Re: [RESEND PATCH] net: ethernet: ti: davinci_mdio:
- Add workaround for errata i2329
-Message-ID: <YvKVGJiC9W6nR67f@lunn.ch>
-References: <20220808111229.11951-1-r-gunasekaran@ti.com>
- <YvFubdCiU7J8Ufi4@lunn.ch>
- <27860709-db8f-49be-fec7-a76496bfb948@ti.com>
+        Tue, 9 Aug 2022 13:14:06 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297BD24F0A;
+        Tue,  9 Aug 2022 10:14:06 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 1640F3200954;
+        Tue,  9 Aug 2022 13:14:05 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 09 Aug 2022 13:14:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1660065244; x=1660151644; bh=NtaGi1m6fH6ewaaVqBbonzc3l
+        RMbE0c81K+W27LNgbE=; b=hWKHsPkXIfi8yy+sp748vdOwXCp0qGRcpEMBbvwXq
+        zwgZH3vrw1gENagx9PGK+HmKi8O8tYd/O6cH8QHq27jt+ZXu5MWbGnCuf+L3/JyF
+        eLFzs9/rfZGbd11QclP4QX83pFYEbVSemv/AaDtxv0yWi2+7QgP/JB6CjTNql/lH
+        MoYgF4NSQNdjwVGrWuHFQVXf2QS8y9jACOjuQsAlj0Qd9d6ZwVInajpsT5gTdDPE
+        3/72pSNonem8sqoAXBkzEbu5zjFJ2c1cPzSSPeJYeQPXI8h2jr3uDSFyYXfpVN0q
+        FuL9RrqTnQaC5ypIGFRYrPILcH5PKc+LpDEBMwmlJGE0Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660065244; x=1660151644; bh=NtaGi1m6fH6ewaaVqBbonzc3lRMbE0c81K+
+        W27LNgbE=; b=aD46INOSuhkWgNGcsTBIBBThFkJYWLIhBDkFsCv8X43JHDBokic
+        gaTR1WWUygCKhweNfjIIXVsYDERn4IUTKS42Z5bvBTqwONS8LThlvvSwUYtqJjZ0
+        J6aQvwu14gPaM8hh+XrPWYtViZyDUc5X2RYsTYBIXMKUK+bwcft0cLd1la0x8g2B
+        NXpDlT9ZuMtGpYXXUpxxZMHLgUlIiMHJOUZ0sC5Znpqh6GB0Y1wzRsRBmddVddzJ
+        ivkX8YbKM9t4bUlkDI613ZPKBh+ziaW6Gf2b0P/EpYmG1PPjFcCgxJ1Jx0fbLuLc
+        996wLl3zMJHcMWvEqu6kVnwfdoLr2K9Weog==
+X-ME-Sender: <xms:3JXyYoKc0xFSCelhox0hewqhTwRkq2G2rKORwTUUlHrFToXtrrOpFQ>
+    <xme:3JXyYoKLhAFmrSXkrVBSH9dczeltqGCCaP36luq759DYH4CP1EuiSUPjvuCVw4vVU
+    sKSyKLxNCswNvhppA>
+X-ME-Received: <xmr:3JXyYouK_gmsku0mHDoHVIaXOvrAlXRfJKbJeTWsCq3--PX8Q6eokM0_nLgzNFPTp9g8N8nBXUc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddgudduudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
+    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvgefgtefgleehhfeufe
+    ekuddvgfeuvdfhgeeljeduudfffffgteeuudeiieekjeenucevlhhushhtvghrufhiiigv
+    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:3JXyYlZL4XhmuOr4_S6yT6okm3UM6KTMGJztar_JIeGI5c11L8nffA>
+    <xmx:3JXyYvYbKCXbf9pIoht0YVoJBaRvKBhh6ijQaKBEd1l1yBVK560lMw>
+    <xmx:3JXyYhCI4XZK8cmFSQ_4S3k6Nuzuz0auSCDX3Dv1BV2tikfQqc26jw>
+    <xmx:3JXyYqy8vHTt793jr5ASlwkNV1dB5GRZJv2E_utIDmDdGEuJKH5uDw>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 9 Aug 2022 13:14:03 -0400 (EDT)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] bpf/selftests: Small vmtest.sh fixes
+Date:   Tue,  9 Aug 2022 11:11:08 -0600
+Message-Id: <cover.1660064925.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27860709-db8f-49be-fec7-a76496bfb948@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Thanks for reviewing the patch. Since mdiobb_{read,write}() are exported, I
-> can invoke these in my mdio read/write implementation. I will rework and
-> send the v2 patch
+Two small quality of life fixes for vmtest.sh:
 
-What you should do is fill a struct mdiobb_ops and pass it to
-alloc_mdio_bitbang(). It looks like you can provide:
+* Don't require root for `-h`
+* Fix unset variable errors for failed option parsing
 
-struct mdiobb_ops {
-	struct module *owner;
+Daniel Xu (2):
+  selftests/bpf: Fix vmtest.sh -h to not require root
+  selftests/bpf: Fix vmtest.sh getopts optstring
 
-	/* Set the Management Data Clock high if level is one,
-	 * low if level is zero.
-	 */
-	void (*set_mdc)(struct mdiobb_ctrl *ctrl, int level);
+ tools/testing/selftests/bpf/vmtest.sh | 34 +++++++++++++--------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-	/* Configure the Management Data I/O pin as an input if
-	 * "output" is zero, or an output if "output" is one.
-	 */
-	void (*set_mdio_dir)(struct mdiobb_ctrl *ctrl, int output);
+-- 
+2.37.1
 
-	/* Set the Management Data I/O pin high if value is one,
-	 * low if "value" is zero.  This may only be called
-	 * when the MDIO pin is configured as an output.
-	 */
-	void (*set_mdio_data)(struct mdiobb_ctrl *ctrl, int value);
-
-	/* Retrieve the state Management Data I/O pin. */
-	int (*get_mdio_data)(struct mdiobb_ctrl *ctrl);
-};
-
-Look at ravb_mdio_init() for an example, and there are a few others.
-
-     Andrew

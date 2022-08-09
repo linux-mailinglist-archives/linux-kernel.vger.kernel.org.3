@@ -2,156 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF4C58D1B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8D358D1BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235784AbiHIBZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 21:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
+        id S231963AbiHIB1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 21:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiHIBZT (ORCPT
+        with ESMTP id S230347AbiHIB1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 21:25:19 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3328CB3B;
-        Mon,  8 Aug 2022 18:25:15 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 94CB1845A5;
-        Tue,  9 Aug 2022 03:25:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1660008311;
-        bh=goK8Xyy9CXnnnf5aAlKG6fKJPnCIUrulzRORKlgOilg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OJyY+JZVJF8GVtbbz92GXnTeWynqEa2Gfb6K0/BOUVjuV/WpEnqWXxNIrw4CcX1bZ
-         3LypYW6m/ynPf82BIJfOSZr4TP+oAbw4yCc2i40BUx34a5LJhKswMymFLhwdfg1LW+
-         QFwR549mlYbg5BcDir8gmDt6x1ycjgchvmxFUIo2ygDFOdhj8bH2a3fUOqFmG2Np4e
-         8XY5utnnYKQkltJjJYNFFQiTf+/tHsT239xyKvp26bRwgSZXCK//R5qmu4RyszmrTJ
-         3J2oIVr+hhVkJnf64RfBAdhy7rEHXdNjtrSBFp0mLarDL6570BzGik6nefc6udnZed
-         yjOaHTC4lvbwg==
-Message-ID: <aa288917-9841-aab8-0a6a-764b775d8c02@denx.de>
-Date:   Tue, 9 Aug 2022 03:25:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 2/4] dt-bindings: display: add new bus-format property
- for panel-dpi
-Content-Language: en-US
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     max.krummenacher@toradex.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mon, 8 Aug 2022 21:27:16 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868D712AFF;
+        Mon,  8 Aug 2022 18:27:08 -0700 (PDT)
+X-UUID: 27e598429d0541afa06531cf86b97cd3-20220809
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=mfplZHXj79DnlaJB5yFqH6RkA8orBckNoJNlMVuwnjQ=;
+        b=YXxD/RLyOqFTRphVVPPVt+FW+z0PvWhikqAnQLnTfypUmHm4P/V1UZbF+tzeNmxBhrQZq4zz2putGmxsYShnYkIrIVc7ZnlPnTWTdnpf3IYHeqfgE2B4Vd+LXFesifr7IFYb/Eir6OgU8lLJ4O7qAA8ABVdnI+QX5wSOQmXBwf4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:a5849bc3-2871-4064-9959-d6390f1d71ff,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:126c43ae-9535-44a6-aa9b-7f62b79b6ff6,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 27e598429d0541afa06531cf86b97cd3-20220809
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1292698929; Tue, 09 Aug 2022 09:27:01 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 9 Aug 2022 09:27:00 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 9 Aug 2022 09:26:59 +0800
+Message-ID: <13b0813576f57add0d2eacb519eedec73fcf1920.camel@mediatek.com>
+Subject: Re: [PATCH] PCI: mvebu: Dispose INTx irqs prior to removing INTx
+ domain
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     Pali =?ISO-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
         Rob Herring <robh@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220628181838.2031-1-max.oss.09@gmail.com>
- <20220628181838.2031-3-max.oss.09@gmail.com>
- <7e30f558-d42e-9751-7729-f0422f3926fa@denx.de>
- <CAEHkU3WJ75W0RAtSKECNHmr-KLmZyziPz_t80wFNubxvGvD21g@mail.gmail.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <CAEHkU3WJ75W0RAtSKECNHmr-KLmZyziPz_t80wFNubxvGvD21g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Hajo Noerenberg <hajo-linux-bugzilla@noerenberg.de>
+CC:     <linux-pci@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Tue, 9 Aug 2022 09:26:59 +0800
+In-Reply-To: <20220710001421.lqwprzgn5jrblqcu@pali>
+References: <20220709161858.15031-1-pali@kernel.org>
+         <20220710001421.lqwprzgn5jrblqcu@pali>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/8/22 15:56, Max Krummenacher wrote:
-> Hi Marek
+Hi Pali,
 
-Hello Max,
-
-[...]
-
->>> +        properties:
->>> +          bus-format:
->>> +            $ref: /schemas/types.yaml#/definitions/uint32
->>> +            minimum: 0x1001
->>> +            maximum: 0x1fff
->>> +            description: |
->>> +              Describes how the display panel is connected to the display interface.
->>> +              Valid values are defined in <dt-bindings/display/dt-media-bus-format.h>.
->>> +              The mapping between the color/significance of the panel lines to the
->>> +              parallel data lines are defined in:
->>> +              https://www.kernel.org/doc/html/v5.17/userspace-api/media/v4l/subdev-formats.html#packed-rgb-formats
->>
->> I am not sure whether I should re-open this discussion, but I still
->> wonder, wouldn't it be better to describe the DPI bus color channel
->> ordering (RGB, BGR, ...), width of each color channel in bits, pixel
->> format (RGB, YUV, ...) instead of using specific constants for the
->> entire format ?
+On Sun, 2022-07-10 at 02:14 +0200, Pali Rohár wrote:
+> On Saturday 09 July 2022 18:18:58 Pali Rohár wrote:
+> > Documentation for irq_domain_remove() says that all mapping within
+> > the
+> > domain must be disposed prior to domain remove.
+> > 
+> > Currently INTx irqs are not disposed in pci-mvebu.c device unbind
+> > callback
+> > which cause that kernel crashes after unloading driver and trying
+> > to read
+> > /sys/kernel/debug/irq/irqs/<num> or /proc/interrupts.
+> > 
+> > Fixes: ec075262648f ("PCI: mvebu: Implement support for legacy INTx
+> > interrupts")
+> > Reported-by: Hajo Noerenberg <hajo-linux-bugzilla@noerenberg.de>
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
 > 
->>From a system view it would be hard to define that structure which
-> will catch any and all future requirements. Assume that there will be
-> 3D panels and they will need an additional depth field.
-
-You can very much say you have panels which require Y/U/V color channels 
-instead of R/G/B , and then just add more color channels as needed. But 
-that -- color channel, their order, offset, bit width, can be described 
-rather easily, something like:
-
-color-channel-names = "R", "G", "B";
-color-channel-width = <8 8 8>;
-color-channel-shift = <16 8 0>;
-
-> Or in
-> in addition to RGB data there will be a fourth color component. Or
-> whatever the panel manufacturers might come up with...
-> Or consider the Tegra 30 example I brought up in this thread. Tegras can
-> output RGB666 for 18bit panels, and then use the next 8 bits to extend
-> to 24bit (Maybe RGB666RGB222 ?).
-
-I think there are two options here:
-
-1) Look at 'data-lanes' property on DSI ? Both the DSI host and DSI
-    device define the 'data-lanes' property per endpoint and they might
-    not be the same.
-
-But with DPI, the better option might be:
-
-2) Implement something like LVDS codec, some sort of transparent DPI
-    bridge driver which can be defined in DT and represent the "glue"
-    wiring adapter between the mismatched DPI source and sink formats.
-
-> https://lore.kernel.org/all/71ef1b35301330d0bbb64844247b6c4c2237ad1c.camel@gmail.com/
-> If such requirements pop up the enumeration can be extended with a new
-> value without changing the binding in any way, with a structured
-> approach this will require changed bindings, maybe even with issues
-> in backward compatibility.
-
-If we have 2) which would describe how the DPI wires were connected, 
-like "channel R got shifted by two bits, bottom two bits got replicated, 
-etc.", then maybe we can avoid introducing new non-standard formats 
-altogether ?
-
->>From an implementation perspective for Linux the busformat in code is
-> currently an enumeration. So one would have to take the device tree
-> structured busformat and run it through a potentially complicated
-> function to get to the Linux busformat enumeration value. The final
-> consumer has no advantage over what is there today.
+> Just to note, Hajo Noerenberg observed this issue during testing and
+> debugging other unrelated issue in bugzilla [1] and triggered this
+> crash
+> just by calling: rmmod pci_mvebu && modprobe pci-mvebu && cat
+> /proc/interrupts
 > 
-> IMHO a change away from one enumeration value to a structured approach
-> creates some drawbacks without any obvious advantages.
-> 
-> Comments, other views on that?
+> I suppose that other pci controller drivers with unbind / rmmod
+> support
+> would suffer from same issues.
 
-See above.
+FYI, we found the same issue after unloading the PCIe controller
+driver, if this is the proper way to dispose the INTx irqs, I'll send a
+similar patch for MediaTek's PCIe controller driver.
+
+Thanks.
+

@@ -2,197 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603C558DFBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06E358DFB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345495AbiHITE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
+        id S1345174AbiHITEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344971AbiHITDT (ORCPT
+        with ESMTP id S1344141AbiHITDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:03:19 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4424F2BB12
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:38:35 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id B6DBC308D38;
-        Tue,  9 Aug 2022 20:38:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1660070313;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8XCAlQh340Gv2GXIfBR/MCf+ZNSS5XsT3mS3hrXItgo=;
-        b=KO37h82ctwaPkHgAPj0X3iSVtxwg5nu/Xh3FNBu5FFallbWjizQcSIhho/J/igKVUb6cIl
-        Q9GE7JqVhHkyqeqPzgdkhfkOC1XE6cI1Bn1eulnJKYDixM0soL/gsXxWAyM4jDqKgcpr0t
-        KXeLin3le3A3SWKoOZWBaprCiaUtuLTmklhFd4YDs88HfU/kEAPAbMftUC9CcBgj5r5i+n
-        J+ftGYvl/VQxscGFIbay2VJVPYX4h0DrO2PnIRJpDUYxFr9utuhR77doup97kze99thOPT
-        CQ/LqsMW8n2K7l42pelpSAKenJjQPYNL4mOTRIgrFqXRdYcGVg6jBG1C/iqxFw==
-Message-ID: <9f8e0340a7e70f03a5629247384a9b282af8de18.camel@svanheule.net>
-Subject: Re: [PATCH v5 4/5] lib/test: introduce cpumask KUnit test suite
-From:   Sander Vanheule <sander@svanheule.net>
-To:     =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Gow <davidgow@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>
-Date:   Tue, 09 Aug 2022 20:38:31 +0200
-In-Reply-To: <b6b20883-3fe7-9a5d-ab55-b5a61cef996c@riseup.net>
-References: <cover.1659077534.git.sander@svanheule.net>
-         <85217b5de6d62257313ad7fde3e1969421acad75.1659077534.git.sander@svanheule.net>
-         <b6b20883-3fe7-9a5d-ab55-b5a61cef996c@riseup.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Tue, 9 Aug 2022 15:03:21 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391992BB16
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:38:44 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id v14so3851677qkf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=W39UTjuGL/i3nw+dgDx0+fMLYroO0xsXKyyQ9sO3qfs=;
+        b=Fm5fnpQkRBDixj266mJEDjoI5meQ1E60sTmfOsHyY4gHXSPI47WK21mPv188hkdsBc
+         1D4TqzxCqwoLkifQFTRkJW0CYED+uXT5c8xuxNC1L52e+xaIjanzU9IqE0lbAHCb7J2/
+         c4D622uQsla/OWEOaDBGBLVELPWHUKcAbfKsBMFVJzYbc7DdCkDcN30dU/x0nBfoZZqP
+         qOpFVPntPIQ140a5/hXtOFv0p1SE86EJi+UCbpZPFjopffVvfr9bwa1vVrgkZXSCpQqF
+         zy8+xUOGIBZuCbUaq9a9ce80kCe0wK5TguviBzveJ9mxc7tNKCMigHVnDp9JUlUoYPkh
+         sAHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=W39UTjuGL/i3nw+dgDx0+fMLYroO0xsXKyyQ9sO3qfs=;
+        b=FQ710PQHgH5rZd9iVVo0d5srJcyI/yP0qCHYr9rbRAO3V3pfawJmsuH+dgks1hNh0x
+         SfuMD5aRH2cxLx0tXqraX9A2T/JZQc7Ljl6jlrvkv6SRFL6XrZ5ZitFbqtKTVh4j74Wt
+         XiTJ5CVvx+W+X5BK0AOAsailoBvU0AFkOL/WCHBofPGCKx80zhtoOc5EefV/Y6tATRFv
+         yEMmWt7LHhT8F0omkTxGODGgCwWRw6GAPrA2CsGje6RElClr6p06uhOCEnexhuhq/NU1
+         qDtu+q3uVZil7KHEaT2zldYJD46RkwDb+SXjoLEgbjtvbawW0I2yOKhVwzGPWoiwzIFd
+         PcwQ==
+X-Gm-Message-State: ACgBeo0Rn+nELN1uymrASFrMvu6bcIgNLQEGHITn8oL5IjeToS3N1Ash
+        eh9C1bj1vWxIifYrTquNNAAV1+RVHZkXTp8gA651dg==
+X-Google-Smtp-Source: AA6agR7j7J8hfYaZbUCNovVrxp1DMCrCrOlUSxvDOduvi868dcDyOoshl/+dg7eRHqEx1jC61ycVEwqC6RyMjmSPXNM=
+X-Received: by 2002:a05:620a:8:b0:6b9:58ea:be83 with SMTP id
+ j8-20020a05620a000800b006b958eabe83mr6879567qki.221.1660070323122; Tue, 09
+ Aug 2022 11:38:43 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220805214821.1058337-1-haoluo@google.com> <20220805214821.1058337-5-haoluo@google.com>
+ <CAEf4BzZHf89Ds8nQWFCH00fKs9-9GkJ0d+Hrp-LkMCDUP_td0A@mail.gmail.com>
+ <CA+khW7hUVOkHBO3dhRze2_VKZuxD-LuNQdO3nHUkLCYmuuR6eg@mail.gmail.com> <20220809162325.hwgvys5n3rivuz7a@MacBook-Pro-3.local.dhcp.thefacebook.com>
+In-Reply-To: <20220809162325.hwgvys5n3rivuz7a@MacBook-Pro-3.local.dhcp.thefacebook.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 9 Aug 2022 11:38:32 -0700
+Message-ID: <CA+khW7j0kzP+W_Qgsim52J+HeR27XJcyMk73Hq93tsmNzT7q6w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 4/8] bpf: Introduce cgroup iter
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ma=C3=ADra,
+On Tue, Aug 9, 2022 at 9:23 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Aug 08, 2022 at 05:56:57PM -0700, Hao Luo wrote:
+> > On Mon, Aug 8, 2022 at 5:19 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Fri, Aug 5, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
+> > > >
+> > > > Cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+> > > >
+> > > >  - walking a cgroup's descendants in pre-order.
+> > > >  - walking a cgroup's descendants in post-order.
+> > > >  - walking a cgroup's ancestors.
+> > > >  - process only the given cgroup.
+> > > >
+[...]
+> > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > > index 59a217ca2dfd..4d758b2e70d6 100644
+> > > > --- a/include/uapi/linux/bpf.h
+> > > > +++ b/include/uapi/linux/bpf.h
+> > > > @@ -87,10 +87,37 @@ struct bpf_cgroup_storage_key {
+> > > >         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
+> > > >  };
+> > > >
+> > > > +enum bpf_iter_order {
+> > > > +       BPF_ITER_ORDER_DEFAULT = 0,     /* default order. */
+> > >
+> > > why is this default order necessary? It just adds confusion (I had to
+> > > look up source code to know what is default order). I might have
+> > > missed some discussion, so if there is some very good reason, then
+> > > please document this in commit message. But I'd rather not do some
+> > > magical default order instead. We can set 0 to mean invalid and error
+> > > out, or just do SELF as the very first value (and if user forgot to
+> > > specify more fancy mode, they hopefully will quickly discover this in
+> > > their testing).
+> > >
+> >
+> > PRE/POST/UP are tree-specific orders. SELF applies on all iters and
+> > yields only a single object. How does task_iter express a non-self
+> > order? By non-self, I mean something like "I don't care about the
+> > order, just scan _all_ the objects". And this "don't care" order, IMO,
+> > may be the common case. I don't think everyone cares about walking
+> > order for tasks. The DEFAULT is intentionally put at the first value,
+> > so that if users don't care about order, they don't have to specify
+> > this field.
+> >
+> > If that sounds valid, maybe using "UNSPEC" instead of "DEFAULT" is better?
+>
+> I agree with Andrii.
+> This:
+> +       if (order == BPF_ITER_ORDER_DEFAULT)
+> +               order = BPF_ITER_DESCENDANTS_PRE;
+>
+> looks like an arbitrary choice.
+> imo
+> BPF_ITER_DESCENDANTS_PRE = 0,
+> would have been more obvious. No need to dig into definition of "default".
+>
+> UNSPEC = 0
+> is fine too if we want user to always be conscious about the order
+> and the kernel will error if that field is not initialized.
+> That would be my preference, since it will match the rest of uapi/bpf.h
+>
 
-On Sun, 2022-07-31 at 12:23 -0300, Ma=C3=ADra Canal wrote:
-> Hi Sander
->=20
-> On 7/29/22 04:01, Sander Vanheule wrote:
-> > Add a basic suite of tests for cpumask, providing some tests for empty =
-and
-> > completely filled cpumasks.
-> >=20
-> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Suggested-by: Yury Norov <yury.norov@gmail.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Marco Elver <elver@google.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Valentin Schneider <vschneid@redhat.com>
-> > Cc: Brendan Higgins <brendanhiggins@google.com>
-> > Cc: David Gow <davidgow@google.com>
-> > Cc: Ma=C3=ADra Canal <mairacanal@riseup.net>
-> > ---
-> > Changes since v4:
-> > - Belated addition of Yury's Suggested-by:
-> > - Follow KUnit style more closely
-> > - Drop full check on cpu_possible_mask
-> > - Update last check on cpu_possible_mask
-> > - Log masks when starting test
-> > - Update commit message=20
-> > =C2=A0=20
-> > Changes since v3:
-> > - Test for_each_cpu*() over empty mask and cpu_possible_mask
-> > - Add Andy's Reviewed-by
-> > - Use num_{online,present,possible}_cpus() for builtin masks
-> > - Guard against CPU hotplugging during test for dynamic builtin CPU mas=
-ks
-> > =C2=A0
-> > Changes since v2:
-> > - Rework for_each_* test macros, as suggested by Yury
-> >=20
-> > Changes since v1:
-> > - New patch
-> >=20
-> > =C2=A0lib/Kconfig.debug=C2=A0 |=C2=A0 12 ++++
-> > =C2=A0lib/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 =
-+
-> > =C2=A0lib/cpumask_test.c | 147 ++++++++++++++++++++++++++++++++++++++++=
-+++++
-> > =C2=A03 files changed, 160 insertions(+)
-> > =C2=A0create mode 100644 lib/cpumask_test.c
-> >=20
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 2e24db4bff19..e85e74646178 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -2021,6 +2021,18 @@ config LKDTM
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Documentation on how to=
- use the module can be found in
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Documentation/fault-inj=
-ection/provoke-crashes.rst
-> > =C2=A0
-> > +config CPUMASK_KUNIT_TEST
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tristate "KUnit test for cpu=
-mask" if !KUNIT_ALL_TESTS
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends on KUNIT
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default KUNIT_ALL_TESTS
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0help
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Enable to turn on cpu=
-mask tests, running at boot or module load
-> > time.
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 For more information =
-on KUnit and unit tests in general, please
-> > refer
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 to the KUnit document=
-ation in Documentation/dev-tools/kunit/.
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 If unsure, say N.
-> > +
-> > =C2=A0config TEST_LIST_SORT
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tristate "Linked list s=
-orting test" if !KUNIT_ALL_TESTS
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends on KUNIT
-> > diff --git a/lib/Makefile b/lib/Makefile
-> > index bcc7e8ea0cde..9f9db1376538 100644
-> > --- a/lib/Makefile
-> > +++ b/lib/Makefile
-> > @@ -59,6 +59,7 @@ obj-$(CONFIG_TEST_BPF) +=3D test_bpf.o
-> > =C2=A0obj-$(CONFIG_TEST_FIRMWARE) +=3D test_firmware.o
-> > =C2=A0obj-$(CONFIG_TEST_BITOPS) +=3D test_bitops.o
-> > =C2=A0CFLAGS_test_bitops.o +=3D -Werror
-> > +obj-$(CONFIG_CPUMASK_KUNIT_TEST) +=3D cpumask_test.o
-> > =C2=A0obj-$(CONFIG_TEST_SYSCTL) +=3D test_sysctl.o
-> > =C2=A0obj-$(CONFIG_TEST_SIPHASH) +=3D test_siphash.o
-> > =C2=A0obj-$(CONFIG_HASH_KUNIT_TEST) +=3D test_hash.o
-> > diff --git a/lib/cpumask_test.c b/lib/cpumask_test.c
-> > new file mode 100644
-> > index 000000000000..0f8059a5e93b
-> > --- /dev/null
-> > +++ b/lib/cpumask_test.c
->=20
-> In order to make the tests at lib/ with more compliant naming, it would
-> make more sense to name it test_cpumask.c.
->=20
-> Thank you for the respin to the series! All tests are passing now.
->=20
-> Tested-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+Sounds good. In the next version, will use
 
-I have posted some follow-up patches for the cpumask test suite:
-https://lore.kernel.org/lkml/cover.1660068429.git.sander@svanheule.net/
+enum bpf_iter_order {
+        BPF_ITER_ORDER_UNSPEC = 0,
+        BPF_ITER_SELF_ONLY,             /* process only a single object. */
+        BPF_ITER_DESCENDANTS_PRE,       /* walk descendants in pre-order. */
+        BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
+        BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
+};
 
-As you will see, I have not included your Tested-by: there.  The changes we=
-re
-split, so I didn't want to just add your tag to the individual patches.  Ma=
-y I
-ask you to re-test the new patches on top of current master, so you can pro=
-vide
-your Tested-by: where relevant?
+and explicitly list the values acceptable by cgroup_iter, error out if
+UNSPEC is detected.
 
-Thanks,
-Sander
+Also, following Andrii's comments, will change BPF_ITER_SELF to
+BPF_ITER_SELF_ONLY, which does seem a little bit explicit in
+comparison.
+
+> I applied the first 3 patches to ease respin.
+
+Thanks! This helps!
+
+> Thanks!

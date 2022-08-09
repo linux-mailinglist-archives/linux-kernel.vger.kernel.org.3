@@ -2,116 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD0A58D85C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378A758D85F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242786AbiHILqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 07:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        id S242107AbiHILrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 07:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242804AbiHILqO (ORCPT
+        with ESMTP id S235611AbiHILrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 07:46:14 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEED7248FE
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:46:12 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id w15so12736617ljw.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 04:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=QsmUqL/K7yU3SMzZ0FTopGj6zj1tOvzFKhz171z4vRY=;
-        b=QTHzvwv/41mQMSEBfjxOTjKs8N4fwJGEfzsaCC0mt/Ihiv3I3PcDjCpAmjDTbs/uxF
-         EIn0/mCBPJTSgtJ9ICMCNob8aGvq6IUlcNqhH5EbJliIytnq1AY+nL9nr1QZ+Bedc31v
-         NlDQf0q31jKIfztN03g1jZxVeAiLIsLNxqJxg3HK2vkS6i8TNHvqGap0+MOHhxL5bRwK
-         13POO0aAlCuOhu8p7ZTlPoPj/K8v40sLuvINWM6DyDlHldBkLUU92pHrWgjTV7x9B7C/
-         J8pjg0kDs46WT1AwPDzQYQrBguHsRBBZZDkbpzvoZS7cyVx+PkUZxkUU5ernSavqaQ4u
-         x6vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=QsmUqL/K7yU3SMzZ0FTopGj6zj1tOvzFKhz171z4vRY=;
-        b=fahTaGj/NsNKpDIbqS/iZMXmp2RexcmnwXItowjux9A+MoyKUY7ca2engDt1hz+zTC
-         eEOY34Uef5u7XR1Db+ZE6y9iljjdrC5w1rUBjgHp1js9IG0PGGk6z9uDjyCUlkjeMrYW
-         hnv+R3N3MH2WMFsMSH5q5iO7l6Kip+9DWFH2VgdvAzmY1EHr4eDN9zeEE2O90+zODiwm
-         hBYdnQ/2yQThUnI3DFvoE+VG53ZVw883J0nLbcLDOk7X6VxziYJlAzyLowBGbwpx2Aym
-         Oi+LMwiWgjb6s3JPFNgKiy2YBEmKuME00gUymhSzto2ifKPBbORVHURfgFzb0U452DVz
-         COrQ==
-X-Gm-Message-State: ACgBeo0saTpp1h07xH9Ff4MXbFFUDkOFUh5PJv+sneFC4tWLyitvULYP
-        LPyepepMHT2dQImkOPtCL9vv9NN0vCGz8JxymCS3xA==
-X-Google-Smtp-Source: AA6agR64z/0ZB46ZAz00rHuh7z2Dk81PNldSaQZLPyWTwsm2PmcCZAGxyQg2VQnsxR5Tdof9+9x2LT0E/6IFrcwwqFk=
-X-Received: by 2002:a2e:a4d6:0:b0:25e:439e:39d0 with SMTP id
- p22-20020a2ea4d6000000b0025e439e39d0mr7029084ljm.169.1660045571001; Tue, 09
- Aug 2022 04:46:11 -0700 (PDT)
+        Tue, 9 Aug 2022 07:47:07 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782E318E13;
+        Tue,  9 Aug 2022 04:47:03 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 19D0D1BF208;
+        Tue,  9 Aug 2022 11:47:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1660045622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sn5WOfQFWegJOVWU8kZPNtFmDgMIcjaPuOZlWUexaf4=;
+        b=U1MrIO5TAKMmM1emp4U1n/4d+GT4nN4sm6seFBMkb5zUniu9xq4U+Ndmt3/LJj687hixUK
+        ufP9MusDQibxL82X6nTKiC90HVBxVhxKoYqd82AcaWj3WQG2LzxvKA9EiwiL/LEw0B0U9m
+        eYKcBxbMFK9ZI4TeRtiAs0RbFLAV8CWIeXeNHbzs011u/YPJrGsc8Owa3uxcSSZLarJDIZ
+        GoQOwhWbJq/MTrB15kmZBPjwlBDhFCC8qOx4ihM9mqXOYk4xQvdL1Lhm6S+ISA4D8fFHd1
+        paNtRhJi4Z4QEXSuulQ8N8ywpfmOazCE5TAUaZVuvc2zmf7qexYEuAKmtGJ7+A==
+Date:   Tue, 9 Aug 2022 13:47:00 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     a.zummo@towertech.it, zengjx95@gmail.com
+Cc:     linuszeng@tencent.com, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH v2] rtc: rtc-spear: set range max
+Message-ID: <166004560453.856732.1541589494706195860.b4-ty@bootlin.com>
+References: <20220728100101.1906801-1-zengjx95@gmail.com>
 MIME-Version: 1.0
-References: <20220808181555.10333-1-semen.protsenko@linaro.org>
-In-Reply-To: <20220808181555.10333-1-semen.protsenko@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 9 Aug 2022 14:45:59 +0300
-Message-ID: <CAPLW+4nFzxa6gH_uxRuypWFS3WzrENS5Wz5j32L6q53T7eZG_Q@mail.gmail.com>
-Subject: Re: [PATCH 0/7] clk: samsung: exynos850: Add CMUs needed for SysMMU
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728100101.1906801-1-zengjx95@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 8 Aug 2022 at 21:15, Sam Protsenko <semen.protsenko@linaro.org> wrote:
->
-> This patch series implements some missing Exynos850 clock domains. Right
-> now those are mainly required for SysMMU clocks, although of course
-> there is a lot of other clocks generated by those CMUs.
->
-> Exynos850 has next SysMMU instances:
->   - SYSMMU_AUD
->   - SYSMMU_DPU
->   - SYSMMU_IS0
->   - SYSMMU_IS1
->   - SYSMMU_MFCMSCL
->
-> As CMU_DPU is already implemented, that leaves CMU_AUD, CMU_IS and
-> CMU_MFCMSCL to be implemented, which is done in this series:
->   - CMU_AUD: audio clocks
->   - CMU_IS: camera clocks (Image Signal Processing)
->   - CMU_MFCMSCL: multi-format codec and scaler clocks
->
-> Sam Protsenko (7):
->   dt-bindings: clock: Add bindings for Exynos850 CMU_AUD
->   dt-bindings: clock: Add bindings for Exynos850 CMU_IS
->   dt-bindings: clock: Add bindings for Exynos850 CMU_MFCMSCL
->   clk: samsung: exynos850: Style fixes
->   clk: samsung: exynos850: Implement CMU_AUD domain
->   clk: samsung: exynos850: Implement CMU_IS domain
->   clk: samsung: exynos850: Implement CMU_MFCMSCL domain
->
->  .../clock/samsung,exynos850-clock.yaml        |  69 ++
->  drivers/clk/samsung/clk-exynos850.c           | 682 +++++++++++++++++-
->  include/dt-bindings/clock/exynos850.h         | 136 +++-
->  3 files changed, 883 insertions(+), 4 deletions(-)
->
-> --
-> 2.30.2
->
+On Thu, 28 Jul 2022 18:01:01 +0800, Zeng Jingxiang wrote:
+> From: Zeng Jingxiang <linuszeng@tencent.com>
+> 
+> In the commit f395e1d3b28d7c2c67b73bd467c4fb79523e1c65
+> ("rtc: spear: set range"), the value of
+> RTC_TIMESTAMP_END_9999 was incorrectly set to range_min.
+> 390	config->rtc->range_min = RTC_TIMESTAMP_BEGIN_0000;
+> 391	config->rtc->range_max = RTC_TIMESTAMP_END_9999;
+> 
+> [...]
 
-This patch series is superseded by v2 here: [1].
+Applied, thanks!
 
-[1] https://lkml.org/lkml/2022/8/9/328
+[1/1] rtc: rtc-spear: set range max
+      commit: 03c4cd6f89e074a51e289eb9129ac646f0f2bd29
+
+Best regards,
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

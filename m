@@ -2,169 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45E958DC6C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EF758DC6E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245006AbiHIQsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S244907AbiHIQti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244667AbiHIQsQ (ORCPT
+        with ESMTP id S243303AbiHIQte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:48:16 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E528622B1C;
-        Tue,  9 Aug 2022 09:48:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660063695; x=1691599695;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=u8cyW2Hmpz0IJ7FaPyT0aFd0QCXNWrP+9Wt7ociOwPg=;
-  b=VrOEiTibsigCUL/WlRXovabc5XSmVyVUtyDS8qaoV30fQsfmecuNap0v
-   xiJZApCr33h0Bw0yBG4ELbmzAdSOXZX3WLlLWSL+aCYutUlRShe6lWOQT
-   0H3MeKJWNjSa0lBRieGDXWGH+3smbfqRO+6oIrH3HO3NlzGIPKOBikxRq
-   cpsbZCqi8mXyYup+2GxIha/RFtxjiieQBSZCxT/rtzzWUAyxnnrxANDQE
-   qAadodwCdXrLA+DK/dlHkJyPxKX1Cy0oEJhiFnDN1/CZS3Cb5AbM/AOaK
-   axRGP+YEr73SwTWt9G3sXNznt+CqvjaoPhZGg/VQUilci2ED3PkZYZJbX
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="290885785"
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="290885785"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 09:48:15 -0700
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="664509363"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.48.82])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 09:48:13 -0700
-Message-ID: <3992b293-a72d-aeeb-e6df-9f56db812e74@intel.com>
-Date:   Tue, 9 Aug 2022 19:48:07 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 23/35] perf tools: Add reallocarray_as_needed()
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220711093218.10967-1-adrian.hunter@intel.com>
- <20220711093218.10967-24-adrian.hunter@intel.com>
- <CAP-5=fWOcK75gc6VicZUu_KPJHVteHES4+rjFMJWyuT09AC56g@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAP-5=fWOcK75gc6VicZUu_KPJHVteHES4+rjFMJWyuT09AC56g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Tue, 9 Aug 2022 12:49:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236D422528
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:49:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF40DB81630
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7762FC433D6;
+        Tue,  9 Aug 2022 16:49:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660063771;
+        bh=vmvrp06z/9E5ewruB9hgQbojabCvvAtIPWajE3UadeQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t6I4JlIFvjmcpGC/JHRBo44PJ98DBijbD1LNg2Lxhc2dEh+ewO/2gHhfRBpY+mwef
+         Ezn2QdoavHmJ2ClgL6pTJdVpyCemhpD0Uhjgsap7HhuXj1ufnvvBA5ruxmRNIiA5Cn
+         axNCCEHzXR5h1rF/Cx76nvVV1TwuONnumgYLjOY8FIe3pBFjapwsaobMq8k8SM1/Eq
+         m0vrO0qAATlK62IFwTuguL114cVlr5jN0IeiI/uIQxBNydTgVxvDMJqyxNVJmFdgdv
+         MjjVHNC/Vx45kE/2mHI81wEjCJHcOW1jtDsF39ltDyxK7ugW1NRPBaYNPF3OA2Tcuq
+         kaPWRPYTOxqXw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oLSQ5-001xDr-6g;
+        Tue, 09 Aug 2022 17:49:29 +0100
+Date:   Tue, 09 Aug 2022 17:49:28 +0100
+Message-ID: <87v8r1uztz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Evgenii Stepanov <eugenis@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mte: Follow arm64.nomte override in MMU setup.
+In-Reply-To: <CAFKCwrjVaOdrGktxVHLCDPyJSRjZ0B3FHTGsb3PXMULL=dw9rA@mail.gmail.com>
+References: <20220805214734.1937451-1-eugenis@google.com>
+        <875yj1x0k0.wl-maz@kernel.org>
+        <CAFKCwrjVaOdrGktxVHLCDPyJSRjZ0B3FHTGsb3PXMULL=dw9rA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: eugenis@google.com, catalin.marinas@arm.com, will@kernel.org, pcc@google.com, vincenzo.frascino@arm.com, andreyknvl@gmail.com, broonie@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/22 03:55, Ian Rogers wrote:
-> On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>
->> Add helper reallocarray_as_needed() to reallocate an array to a larger
->> size and initialize the extra entries to an arbitrary value.
->>
->> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
->> ---
->>  tools/perf/util/util.c | 33 +++++++++++++++++++++++++++++++++
->>  tools/perf/util/util.h | 15 +++++++++++++++
->>  2 files changed, 48 insertions(+)
->>
->> diff --git a/tools/perf/util/util.c b/tools/perf/util/util.c
->> index 9b02edf9311d..391c1e928bd7 100644
->> --- a/tools/perf/util/util.c
->> +++ b/tools/perf/util/util.c
->> @@ -18,6 +18,7 @@
->>  #include <linux/kernel.h>
->>  #include <linux/log2.h>
->>  #include <linux/time64.h>
->> +#include <linux/overflow.h>
->>  #include <unistd.h>
->>  #include "cap.h"
->>  #include "strlist.h"
->> @@ -500,3 +501,35 @@ char *filename_with_chroot(int pid, const char *filename)
->>
->>         return new_name;
->>  }
->> +
->> +/*
->> + * Reallocate an array *arr of size *arr_sz so that it is big enough to contain
->> + * x elements of size msz, initializing new entries to *init_val or zero if
->> + * init_val is NULL
->> + */
->> +int do_realloc_array_as_needed(void **arr, size_t *arr_sz, size_t x, size_t msz, const void *init_val)
+On Tue, 09 Aug 2022 17:41:28 +0100,
+Evgenii Stepanov <eugenis@google.com> wrote:
 > 
-> This feels a little like a 1-dimensional xyarray, could we make a
-> similar abstraction to avoid passing all these values around?
-
-xyarray does not realloc which is the only thing that is needed in
-this case. C isn't C++, so adding an abstraction would be clunky.
-
+> On Tue, Aug 9, 2022 at 1:50 AM Marc Zyngier <maz@kernel.org> wrote:
+> > How comes such memory is being used? How comes it is in the linear
+> > map?
+> >
+> > arm64.nomte is affecting the use of MTE feature on the platform. It
+> > doesn't guard the use of a MTE carve-out, and doesn't allow it to be
+> > used in any shape or form.
+> >
+> > To use this memory, you should remove the MTE configuration
+> > altogether, as you cannot infer what the CPU is doing with it.
 > 
-> Thanks,
-> Ian
-> 
->> +{
->> +       size_t new_sz = *arr_sz;
->> +       void *new_arr;
->> +       size_t i;
->> +
->> +       if (!new_sz)
->> +               new_sz = msz >= 64 ? 1 : roundup(64, msz); /* Start with at least 64 bytes */
->> +       while (x >= new_sz) {
->> +               if (check_mul_overflow(new_sz, (size_t)2, &new_sz))
->> +                       return -ENOMEM;
->> +       }
->> +       if (new_sz == *arr_sz)
->> +               return 0;
->> +       new_arr = calloc(new_sz, msz);
->> +       if (!new_arr)
->> +               return -ENOMEM;
->> +       memcpy(new_arr, *arr, *arr_sz * msz);
->> +       if (init_val) {
->> +               for (i = *arr_sz; i < new_sz; i++)
->> +                       memcpy(new_arr + (i * msz), init_val, msz);
->> +       }
->> +       *arr = new_arr;
->> +       *arr_sz = new_sz;
->> +       return 0;
->> +}
->> diff --git a/tools/perf/util/util.h b/tools/perf/util/util.h
->> index 0f78f1e7782d..c1f2d423a9ec 100644
->> --- a/tools/perf/util/util.h
->> +++ b/tools/perf/util/util.h
->> @@ -79,4 +79,19 @@ struct perf_debuginfod {
->>  void perf_debuginfod_setup(struct perf_debuginfod *di);
->>
->>  char *filename_with_chroot(int pid, const char *filename);
->> +
->> +int do_realloc_array_as_needed(void **arr, size_t *arr_sz, size_t x,
->> +                              size_t msz, const void *init_val);
->> +
->> +#define realloc_array_as_needed(a, n, x, v) ({                 \
->> +       typeof(x) __x = (x);                                    \
->> +       __x >= (n) ?                                            \
->> +               do_realloc_array_as_needed((void **)&(a),       \
->> +                                          &(n),                \
->> +                                          __x,                 \
->> +                                          sizeof(*(a)),        \
->> +                                          (const void *)(v)) : \
->> +               0;                                              \
->> +       })
->> +
->>  #endif /* GIT_COMPAT_UTIL_H */
->> --
->> 2.25.1
->>
+> This can be used to enable MTE in TZ but not in the NS memory.
 
+In which case what is the tag memory doing in the linear map?
+Shouldn't it be marked as reserved, not mapped, and in general
+completely ignored by the NS OS?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

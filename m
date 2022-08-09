@@ -2,64 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C7658D379
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FE758D298
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 06:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbiHIGAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S233586AbiHIEGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 00:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiHIGAc (ORCPT
+        with ESMTP id S231277AbiHIEGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:00:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC49110A;
-        Mon,  8 Aug 2022 23:00:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 9 Aug 2022 00:06:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EFC6BC18
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 21:06:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660017974;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZjK0GuZ2alM35iqhgJkEaVdZNKEdFOR/rEWuzOn8N5o=;
+        b=IRm72Q3otQ10mZtg+MYqO93C/GgeNSO8iu8VIKaSr6KUJfBWPloTdVUXrGp0RfmwRCT5Ml
+        JcuRBGuZwV98LqREb/AonzrW79VV4ORRB4lLms+k2xypKPjW2R7LYeuPM96xbTJpGDQKnN
+        akgV23TXCFV7IYiyLxIa7LhrQ7qH2sk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-449-HpMhBOelPCOEFVO_l6NS2w-1; Tue, 09 Aug 2022 00:06:11 -0400
+X-MC-Unique: HpMhBOelPCOEFVO_l6NS2w-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C338611CC;
-        Tue,  9 Aug 2022 06:00:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E3BC433D6;
-        Tue,  9 Aug 2022 06:00:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660024829;
-        bh=ifiUPYbblJzn2/JbG65kiuriPNytr8++13jKGGc5K7M=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=E5nUuuVBonoYap4YAIzOJOoZc/UVjqNI1mSg/rlN+uRGuJkmYdbscQ8WLlerMtkrW
-         fGe8GmfHl+5Kk41Rrp6iGL/cLOrwPFFNGT51YqrXKyOVL/MfobK/5/CKVJ4udtd9oI
-         RUjiqSeA9/L+i3XkV6olsezwo/kgdg6ZVrNQMdvZgq7WRJqURzVFiRF/1xi+xkeaAO
-         Lzvu8MP0bAh8mMYjMl2hsBNzKWMln6GVDLEQpfpzE8pfpEqmwuA0PGa5ptYYBQmq3h
-         vgixr6gtB9bl2mzudPfbpmtSi07TQzNfes33uSfjwm5wSeuSHitFHgQI4GUj0Um75X
-         PEmdej2XWZ2vw==
-Content-Type: text/plain; charset="utf-8"
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 46DF080391B;
+        Tue,  9 Aug 2022 04:06:10 +0000 (UTC)
+Received: from gshan.redhat.com (vpn2-54-20.bne.redhat.com [10.64.54.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D19482166B26;
+        Tue,  9 Aug 2022 04:06:05 +0000 (UTC)
+From:   Gavin Shan <gshan@redhat.com>
+To:     kvmarm@lists.cs.columbia.edu
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com, maz@kernel.org,
+        oliver.upton@linux.dev, andrew.jones@linux.dev, seanjc@google.com,
+        mathieu.desnoyers@efficios.com, fweimer@redhat.com,
+        yihyu@redhat.com, shan.gavin@gmail.com
+Subject: [PATCH 0/2] kvm/selftests: Two rseq_test fixes
+Date:   Tue,  9 Aug 2022 14:06:25 +0800
+Message-Id: <20220809060627.115847-1-gshan@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [-next] wifi: qtnfmac: remove braces around single statement
- blocks
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220802045305.235684-1-mailmesebin00@gmail.com>
-References: <20220802045305.235684-1-mailmesebin00@gmail.com>
-To:     Sebin Sebastian <mailmesebin00@gmail.com>
-Cc:     unlisted-recipients:; (no To-header on input)
-        mailmesebin00@gmail.com, Igor Mitsyanko <imitsyanko@quantenna.com>,
-        Sergey Matyukevich <geomatsi@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Illegal-Object: Syntax error in Cc: address found on vger.kernel.org:
-        Cc:     unlisted-recipients:; (no To-header on input)mailmesebin00@gmail.com
-                                                                     ^-missing end of address
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <166002482507.8958.9992440618598993380.kvalo@kernel.org>
-Date:   Tue,  9 Aug 2022 06:00:26 +0000 (UTC)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,20 +61,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sebin Sebastian <mailmesebin00@gmail.com> wrote:
+There are two issues in current rseq_test implementation and the
+series intends to fix them:
 
-> Remove braces around single statement blocks in order to improve
-> readability. Also, an extra blank line was removed. Both warnings are
-> reported by checkpatch.pl
-> 
-> Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
+- From glibc-2.35, rseq information is registered by TLS. It means
+  rseq_test is unable to register its own rseq information. PATCH[01]
+  fixes the issue by reuse TLS's rseq information if needed.
 
-Patch applied to wireless-next.git, thanks.
+- sched_getcpu() relies on glibc's implementation and it can simply
+  returns the CPU ID cached in the rseq information. In this case,
+  it's pointless to compare the return value from sched_getcpu()
+  and that fetched from rseq information. PATCH[02] fixes the issue
+  by replacing sched_getcpu() with getcpu().
 
-6b013c3d47be wifi: qtnfmac: remove braces around single statement blocks
+Gavin Shan (2):
+  KVM: selftests: Make rseq compatible with glibc-2.35
+  KVM: selftests: Use getcpu() instead of sched_getcpu() in rseq_test
+
+ tools/testing/selftests/kvm/rseq_test.c | 62 ++++++++++++++++++-------
+ 1 file changed, 44 insertions(+), 18 deletions(-)
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220802045305.235684-1-mailmesebin00@gmail.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.23.0
 

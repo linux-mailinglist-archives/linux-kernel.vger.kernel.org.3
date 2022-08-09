@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BA158D92C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985C658D933
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243678AbiHINOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 09:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
+        id S243714AbiHINOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 09:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239452AbiHINOD (ORCPT
+        with ESMTP id S239452AbiHINOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 09:14:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E6B167EE;
-        Tue,  9 Aug 2022 06:14:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38839B8118F;
-        Tue,  9 Aug 2022 13:14:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDFCFC433B5;
-        Tue,  9 Aug 2022 13:13:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660050840;
-        bh=ggMaGF1n3P9YOw7cYW+PdU4XaojPEBQoi4FO74/VIcc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bnT9a04/mVDQyNPIffdI/KyT0Wh1ABab9t7d0No5CVKbPG22Ej7B7n1X7moOITUE9
-         aSWiJK5mSI0Qmw76+4wa0N1Qw/VLtHO2L9KpGeoyh2vSkWCe2XazpC3jo846nJ+gKn
-         pWmXI4NyLB3JZnXgrfeEe9NXi9UCk7ItHIRibEbiWZsUeCNSEVMN/Az3ncW+Hqvyt8
-         uViSk8bp+FQU46q3eOZzaGcbpEDY+bf5+0UI0DgD1DgEBTkCldXfUSmXegfEAsAn/i
-         n25NxgVUtlTwCZX0bFJGoJD2eoRVKqbr+Hdb+YeEXDnOLji5s+ea9lv5e29iIbwWqO
-         aI/MIsUSDAPfQ==
-Received: by pali.im (Postfix)
-        id 87A97C1F; Tue,  9 Aug 2022 15:13:57 +0200 (CEST)
-Date:   Tue, 9 Aug 2022 15:13:57 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: marvell: Update Armada 37xx platform
- bindings
-Message-ID: <20220809131357.u3dfsy3gu3iamiv7@pali>
-References: <20220713200123.22612-1-pali@kernel.org>
- <20220808202352.iimhb2q6yawi35y6@pali>
- <20a349c9-a479-ad5b-fe33-4758a773972e@linaro.org>
+        Tue, 9 Aug 2022 09:14:20 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82E519298
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 06:14:18 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id q1-20020a05600c040100b003a52db97fffso3966827wmb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 06:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=YbYq10AH7DFyPthSKrztZodwwushB5t/2Y6IpnigFO4=;
+        b=Z7YPedDXnLSgBPd9OMsLK57MpNaQ+Vcno0m+BuDTk72qpO7Aul44JeaGBXTzylLRf6
+         nLlLx0AAopKc9yoMFkj+Q54hadriFobDH/c4+X0sfC9AHuazANM0RuLRgl7aIbp7cuqZ
+         GuqgXlEc4WGquTmSK1cBzJuaCX2BX2TNLtrn0hY9FZo6tj0eSfsrMRlv0hloKxBdqAxe
+         HzL7oWPVQvc9jYePBqrd3jAmn1hhsql6nZA98xDcQZHIrlEoh2Q1hNjtZQezpUCmpo7M
+         blu04r+nOiSHk4MsGO4DyfiRnWD0AV/92wFDYDkXqtnn2T/ooJhtO/5AZzhil2k4tdEF
+         DqKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=YbYq10AH7DFyPthSKrztZodwwushB5t/2Y6IpnigFO4=;
+        b=oB7dxldUlVtItrn0j3E9xk6ft0WCN89V5JOrXyJSlbk32VQJNVKkoMNePwTyC59n8P
+         ODnc4Gx11wHUzGJb4aU7BZYFZibgy65HG+KpGXImNrjMy3HCT98wB6ab7CMR0lhsdWDe
+         coJ9Ba9H4lKzhQ7zbh1/gGHWwwRIR4XWhsmhEfT+mTnscCNn3UeXodyzl7SBAEunGCM/
+         j5EV8o1j5VXZZ+7jtFG3qDvkF+HHmM+RERRxhLyWcAfBWuZPDYFlr6S3sDHDj/dMPG9H
+         CkI2bcu5KuXLs99Xrf2KTMpdqIuhYur+eCu7DxSg4z+zIj0hHJbJRmZ6g47kRE5ercJz
+         TeMw==
+X-Gm-Message-State: ACgBeo0JtmseVQQ4LGsftcRd+80Hq0JabTDEcq2O3jfyl6/W0sOydl9x
+        2KmnF4rTKqm4LXYDgsscXXYpUA==
+X-Google-Smtp-Source: AA6agR4/lo60i+WLJVLsgEtDWzhjrmVdxnP64JGuV05zhH+S6LHtffAoI85nP9uDE8F/o6OlDzl8sg==
+X-Received: by 2002:a7b:c848:0:b0:3a5:41f6:4d37 with SMTP id c8-20020a7bc848000000b003a541f64d37mr5721352wml.23.1660050857317;
+        Tue, 09 Aug 2022 06:14:17 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id n2-20020a05600c4f8200b003a1980d55c4sm22561795wmq.47.2022.08.09.06.14.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 06:14:16 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 14:14:14 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v7 06/13] dt-bindings: mfd: Add MediaTek MT6370
+Message-ID: <YvJdpq0MWNPQZw5c@google.com>
+References: <20220805070610.3516-1-peterwu.pub@gmail.com>
+ <20220805070610.3516-7-peterwu.pub@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20a349c9-a479-ad5b-fe33-4758a773972e@linaro.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220805070610.3516-7-peterwu.pub@gmail.com>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 09 August 2022 08:58:50 Krzysztof Kozlowski wrote:
-> On 08/08/2022 23:23, Pali Rohár wrote:
-> > PING?
-> > 
-> > On Wednesday 13 July 2022 22:01:23 Pali Rohár wrote:
-> >> Distinguish between Armada 3700 family, Armada 3710 SoC and Armada 3720 SoC.
-> >> Armada 3720 DB is name of the board with Armada 3720 SoC, so correctly
-> >> indicate SoC in example.
-> >>
-> >> Signed-off-by: Pali Rohár <pali@kernel.org>
-> >> ---
-> >>  .../devicetree/bindings/arm/marvell/armada-37xx.txt        | 7 ++++++-
-> >>  1 file changed, 6 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
-> >> index f6d6642d81c0..d2ca008de266 100644
-> >> --- a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
-> >> +++ b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
-> >> @@ -4,6 +4,11 @@ Marvell Armada 37xx Platforms Device Tree Bindings
-> >>  Boards using a SoC of the Marvell Armada 37xx family must carry the
-> >>  following root node property:
-> >>  
-> >> + - compatible: must contain "marvell,armada3700"
-> >> +
-> >> +In addition, boards using the Marvell Armada 3710 SoC shall have the
-> >> +following property before the previous one:
-> >> +
+On Fri, 05 Aug 2022, ChiaEn Wu wrote:
+
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> The change is an ABI break, which looks reasonable, but still platform
-> maintainer should comment on it. Especially on the aspect why the
-> marvell,armada3710 fallback was chosen at the first place.
+> Add MediaTek MT6370 binding documentation.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  .../devicetree/bindings/mfd/mediatek,mt6370.yaml   | 280 +++++++++++++++++++++
+>  include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  |  18 ++
+>  2 files changed, 298 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+>  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
 
-I do not think this is ABI break but rather incorrect documentation and
-bug in some board dts files.
+Applied, thanks.
 
-> Unfortunately none of Marvel folks were CCed here, so you will need to
-> resend it. Otherwise no one will apply it, regardless of our ack.
-
-Done.
+-- 
+DEPRECATED: Please use lee@kernel.org

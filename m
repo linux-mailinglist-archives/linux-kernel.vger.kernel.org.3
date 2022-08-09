@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 485F958E196
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C221D58E19E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiHIVNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 17:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
+        id S229609AbiHIVOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 17:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiHIVN3 (ORCPT
+        with ESMTP id S229584AbiHIVOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 17:13:29 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E072861118
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:13:25 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-10cf9f5b500so15533024fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 14:13:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=lfraBYkcJOxafcZr1OmRW24wdCOHIUvf+ujVZLDt03M=;
-        b=HmROjyprZIi+mKQNF24pr1uBVg0iKnr7qX0h/O5UXJYdc/2hd84TlvZfr7rUNrHA/z
-         KGUcL060kK89XCV5m/bK/UWEnLrQVqLZMmzHFCGCPPnX50Z212X9S9Zo3G7kNHxw0qgG
-         fvXOJ1KzUBXZkfGaN7GKewWvAhFpzr3Y8vytYOeIsanT9tled9t1jmURO0M69oUXjWpC
-         sqIwAU6yIN17zArdVnVZDe0o/BLbgZ3jxfEwm0apcoh7c0RyLPbB2Zs33w2lVL7wbCf6
-         vYJdQJG/TUlaggtukkkWpRr/Tpn+En9HzkL9yaZPK1/Q/a1RlLb4KgAX+vLTng46fdvi
-         UYsQ==
-X-Gm-Message-State: ACgBeo1CO9lSxA82xtbzry9Fddq0s2AMwpWoxMecepMVRw8nbZMLHZfI
-        8wqvTwbvb9YUNfgI+2icnSWl2s6P21WMVDfMODI=
-X-Google-Smtp-Source: AA6agR7z1vICJC12h0HtAW/YDghUslW80Kj4FbZzeW9nGlj0fY48uND8UW6uWArI6rAeKUBC8J2bDo9qcjzkTAW/3mA=
-X-Received: by 2002:a05:6870:5b84:b0:10c:d1fa:2f52 with SMTP id
- em4-20020a0568705b8400b0010cd1fa2f52mr178967oab.92.1660079605147; Tue, 09 Aug
- 2022 14:13:25 -0700 (PDT)
+        Tue, 9 Aug 2022 17:14:24 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCE961B12
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:14:22 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660079660;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iHxEgVmEh6JR00sxeNhAi+8y/A6SXxBI7puVDuB6aJ8=;
+        b=ak0yiCbdsTBynHZdeYORQKegIa2UyIGI6OUCB3TgNQKPV9Ho42GSJLH3vuzu6/4dAW9cMd
+        s6bVFeZZ+y33hTAGFv9Lvp4aAVf1uC88Ykrj99TP40bppD3C9Ip8gfWdxrz+299BacacYl
+        pQti81UurRaXYUnnvKs4Rf+FQDyq0mc/Ip9v901xTjokpF0jrX+6wSm8IdNyaYyHgWOB9k
+        nFOsnhHy+lK3rWIGhzmGAgopj6g+/E80fGnDBO68iMVESezy5PW5u/xftqfRq8dTV3iqSq
+        Esxk1vuJf2IC39v/hvkRmU25L9c4OBhqVxkyk+VvwknrM/pd+Fx9x1UySMnDmw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660079660;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iHxEgVmEh6JR00sxeNhAi+8y/A6SXxBI7puVDuB6aJ8=;
+        b=9aFCsYAtz0ZZLUdgN4XFNZQaNXmv6L6JEYVFHkP49xTswpUXVQvtba2CAkxREXoq2+rPy2
+        VDS8ujDJOTlS1/AQ==
+To:     Borislav Petkov <bp@alien8.de>, Ira Weiny <ira.weiny@intel.com>
+Cc:     Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 2/5] entry: Add calls for save/restore auxiliary
+ pt_regs
+In-Reply-To: <YvKsS3QuOu4JVzZU@zn.tnic>
+References: <20220805173009.3128098-1-ira.weiny@intel.com>
+ <20220805173009.3128098-3-ira.weiny@intel.com> <YvJNe2rzXfcogFFX@zn.tnic>
+ <YvKpi/CVHko50PNQ@iweiny-desk3> <YvKsS3QuOu4JVzZU@zn.tnic>
+Date:   Tue, 09 Aug 2022 23:14:19 +0200
+Message-ID: <87lerxqfv8.ffs@tglx>
 MIME-Version: 1.0
-References: <20220808175956.592707-1-namhyung@kernel.org> <7b1c463c-c912-ba08-bac4-99d45e45f7e1@redhat.com>
-In-Reply-To: <7b1c463c-c912-ba08-bac4-99d45e45f7e1@redhat.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 9 Aug 2022 14:13:14 -0700
-Message-ID: <CAM9d7ciPHi27JwcCbCWAkHnFBn-6PRbpRjBJ1U=cfDN-UcthjA@mail.gmail.com>
-Subject: Re: [PATCH] locking: Add __lockfunc to slow path functions
-To:     Waiman Long <longman@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,72 +60,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, Aug 9, 2022 at 8:05 AM Waiman Long <longman@redhat.com> wrote:
+On Tue, Aug 09 2022 at 20:49, Borislav Petkov wrote:
+> On Tue, Aug 09, 2022 at 11:38:03AM -0700, Ira Weiny wrote:
+>> Thomas did a lot of work to make the entry code generic. So I was
+>> keeping that work consistent. This also helps to ensure I did not miss
+>> any places.
 >
-> On 8/8/22 13:59, Namhyung Kim wrote:
-> > So that we can skip the functions in the perf lock contention and other
-> > places like /proc/PID/wchan.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >   kernel/locking/qrwlock.c   | 4 ++--
-> >   kernel/locking/qspinlock.c | 2 +-
-> >   2 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
-> > index 2e1600906c9f..d2ef312a8611 100644
-> > --- a/kernel/locking/qrwlock.c
-> > +++ b/kernel/locking/qrwlock.c
-> > @@ -18,7 +18,7 @@
-> >    * queued_read_lock_slowpath - acquire read lock of a queued rwlock
-> >    * @lock: Pointer to queued rwlock structure
-> >    */
-> > -void queued_read_lock_slowpath(struct qrwlock *lock)
-> > +void __lockfunc queued_read_lock_slowpath(struct qrwlock *lock)
-> >   {
-> >       /*
-> >        * Readers come here when they cannot get the lock without waiting
-> > @@ -63,7 +63,7 @@ EXPORT_SYMBOL(queued_read_lock_slowpath);
-> >    * queued_write_lock_slowpath - acquire write lock of a queued rwlock
-> >    * @lock : Pointer to queued rwlock structure
-> >    */
-> > -void queued_write_lock_slowpath(struct qrwlock *lock)
-> > +void __lockfunc queued_write_lock_slowpath(struct qrwlock *lock)
-> >   {
-> >       int cnts;
-> >
-> > diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-> > index 65a9a10caa6f..2b23378775fe 100644
-> > --- a/kernel/locking/qspinlock.c
-> > +++ b/kernel/locking/qspinlock.c
-> > @@ -313,7 +313,7 @@ static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
-> >    * contended             :    (*,x,y) +--> (*,0,0) ---> (*,0,1) -'  :
-> >    *   queue               :         ^--'                             :
-> >    */
-> > -void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
-> > +void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
-> >   {
-> >       struct mcs_spinlock *prev, *next, *node;
-> >       u32 old, tail;
->
->
-> For completeness, I think you should also add it to the
-> __pv_queued_spin_unlock() and __pv_queued_spin_unlock_slowpath()
-> function in kernel/locking/qspinlock_paravirt.h. Perhaps even the
-> assembly code in arch/x86/include/asm/qspinlock_paravirt.h.
+> How about you worry about the other arches when you actually cross that
+> bridge?
 
-Thanks for your comment.  I'm not sure about the asm part, will this be enough?
+Ira is right. If we want it for everything, then the generic code is the
+right place.
 
---- a/arch/x86/include/asm/qspinlock_paravirt.h
-+++ b/arch/x86/include/asm/qspinlock_paravirt.h
-@@ -36,7 +36,7 @@ PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath);
-  *   rsi = lockval           (second argument)
-  *   rdx = internal variable (set to 0)
-  */
--asm    (".pushsection .text;"
-+asm    (".pushsection .spinlock.text;"
-        ".globl " PV_UNLOCK ";"
-        ".type " PV_UNLOCK ", @function;"
-        ".align 4,0x90;"
+>> I don't believe this is correct because instrumentation is not enabled
+>> here.
+>
+> Why do you have to run
+>
+> 	arch_save_aux_pt_regs()
+>
+> with instrumentation enabled?
+>
+> Patch 5 does
+>
+> +       struct pt_regs_auxiliary *aux_pt_regs = &to_extended_pt_regs(regs)->aux;
+> +
+> +       aux_pt_regs->cpu = raw_smp_processor_id();
+>
+> only?
+>
+> Why does that need to run with instrumentation enabled?
+
+There is no reason and actually _if_ we go there then this _has_ to
+happen _before_ instrumentation comes into play as instrumentation might
+want to have access to extended pt_regs. Not necessarily the cpu number,
+but the other things which need to go there for a real reason.
+
+Thanks,
+
+        tglx
+
+

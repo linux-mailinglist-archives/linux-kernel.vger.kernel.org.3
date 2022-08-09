@@ -2,216 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828FB58D787
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F1A58D78E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242603AbiHIKkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
+        id S234943AbiHIKlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbiHIKkK (ORCPT
+        with ESMTP id S242671AbiHIKlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:40:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBE41C130;
-        Tue,  9 Aug 2022 03:40:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB84E60EC4;
-        Tue,  9 Aug 2022 10:40:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 038C3C433D6;
-        Tue,  9 Aug 2022 10:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660041608;
-        bh=NS6k3uL1NjcupValfKgOqJ9BkGsUQFmuAaFk6pzVKTA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=pQo9a4N76ZxxgI8CH7jy9Ll8eG9GdQTCIyJtClJL93ccSsOqeGMPlTEs8BYzEfaRZ
-         UEgfKbKx5UY4bqyj23p0/l8669UqvtIIuPiwxyYHCWwcJxnOOjrJ+YgNMv4i6UaxFJ
-         YmCAsM6FKuhW2zDPdbrUIkP6gC2AgWN59lGizjyHZW3I7p+w3Gbx72OYmcUMIFBHym
-         hLukE8fMXuio16QsnsZWEnLN/RNEj5ilbIEB7mf3hpKiVn56wnjqSlwbBYBgkn1LOf
-         AXA9OoWCndsHcph7zlCcdofh3WrhD5lpyWAPLTfpwXr+O7nmYohqNITrJHlMEdXsC0
-         NEcA7Ukn2IdLA==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Seth Forshee <sforshee@kernel.org>
-Subject: [GIT PULL] setgid inheritance for v5.20/v6.0
-Date:   Tue,  9 Aug 2022 12:39:57 +0200
-Message-Id: <20220809103957.1851931-1-brauner@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 9 Aug 2022 06:41:45 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F3F240B0;
+        Tue,  9 Aug 2022 03:41:42 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4M28kq4Mkpz9sj9;
+        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id bwunTC9zQdnT; Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4M28kq3KFwz9sTf;
+        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 618598B778;
+        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id OgfyrO3Jg3AT; Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.234.255])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1C0FF8B763;
+        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 279AfUiP098284
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 9 Aug 2022 12:41:30 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 279AfSLO098283;
+        Tue, 9 Aug 2022 12:41:28 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM),
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
+        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
+Subject: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+Date:   Tue,  9 Aug 2022 12:40:38 +0200
+Message-Id: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1660041632; l=4893; s=20211009; h=from:subject:message-id; bh=ejR9oy9Pzrb8cgNZizsVlepvN45Ei2h0wt6+agIKtnw=; b=iINNvBE7QtjOKvB5PfN++erBtPsIhPMmqt/Z3lpvNjlBik2I3AaHxITPd0hsvJrpISp2eGMVSXs7 k8V7YsxYANQW8OT/GDp2OZUhMBB4TXFze5pWuYa7YMXL3wOm+uOE
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+At the time being, the default maximum number of GPIOs is set to 512
+and can only get customised via an architecture specific
+CONFIG_ARCH_NR_GPIO.
 
-/* Summary */
-This contains the work to move setgid stripping out of individual filesystems
-and into the VFS itself. (I think you might've been Cced on this briefly a few
-weeks ago.)
+The maximum number of GPIOs might be dependent on the number of
+interface boards and is somewhat independent of architecture.
 
-Creating files that have both the S_IXGRP and S_ISGID bit raised in directories
-that themselves have the S_ISGID bit set requires additional privileges to
-avoid security issues.
+Allow the user to select that maximum number outside of any
+architecture configuration. To enable that, re-define a
+core CONFIG_ARCH_NR_GPIO for architectures which don't already
+define one. Guard it with a new hidden CONFIG_ARCH_HAS_NR_GPIO.
 
-When a filesystem creates a new inode it needs to take care that the caller is
-either in the group of the newly created inode or they have CAP_FSETID in their
-current user namespace and are privileged over the parent directory of the new
-inode. If any of these two conditions is true then the S_ISGID bit can be
-raised for an S_IXGRP file and if not it needs to be stripped.
+Only two architectures will need CONFIG_ARCH_HAS_NR_GPIO: x86 and arm.
 
-However, there are several key issues with the current implementation:
+On arm, do like x86 and set 512 as the default instead of 0, that
+allows simplifying the logic in asm-generic/gpio.h
 
-* S_ISGID stripping logic is entangled with umask stripping.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ Documentation/driver-api/gpio/legacy.rst |  2 +-
+ arch/arm/Kconfig                         |  3 ++-
+ arch/arm/include/asm/gpio.h              |  1 -
+ arch/x86/Kconfig                         |  1 +
+ drivers/gpio/Kconfig                     | 14 ++++++++++++++
+ include/asm-generic/gpio.h               |  6 ------
+ 6 files changed, 18 insertions(+), 9 deletions(-)
 
-  For example, if the umask removes the S_IXGRP bit from the file about to be
-  created then the S_ISGID bit will be kept.
+diff --git a/Documentation/driver-api/gpio/legacy.rst b/Documentation/driver-api/gpio/legacy.rst
+index 9b12eeb89170..566b06a584cf 100644
+--- a/Documentation/driver-api/gpio/legacy.rst
++++ b/Documentation/driver-api/gpio/legacy.rst
+@@ -558,7 +558,7 @@ Platform Support
+ To force-enable this framework, a platform's Kconfig will "select" GPIOLIB,
+ else it is up to the user to configure support for GPIO.
+ 
+-It may also provide a custom value for ARCH_NR_GPIOS, so that it better
++It may also provide a custom value for CONFIG_ARCH_NR_GPIO, so that it better
+ reflects the number of GPIOs in actual use on that platform, without
+ wasting static table space.  (It should count both built-in/SoC GPIOs and
+ also ones on GPIO expanders.
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 53e6a1da9af5..e55b6560fe4f 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -14,6 +14,7 @@ config ARM
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
++	select ARCH_HAS_NR_GPIO
+ 	select ARCH_HAS_PTE_SPECIAL if ARM_LPAE
+ 	select ARCH_HAS_PHYS_TO_DMA
+ 	select ARCH_HAS_SETUP_DMA_OPS
+@@ -1243,7 +1244,7 @@ config ARCH_NR_GPIO
+ 	default 352 if ARCH_VT8500
+ 	default 288 if ARCH_ROCKCHIP
+ 	default 264 if MACH_H4700
+-	default 0
++	default 512
+ 	help
+ 	  Maximum number of GPIOs in the system.
+ 
+diff --git a/arch/arm/include/asm/gpio.h b/arch/arm/include/asm/gpio.h
+index f3bb8a2bf788..4ebbb58f06ea 100644
+--- a/arch/arm/include/asm/gpio.h
++++ b/arch/arm/include/asm/gpio.h
+@@ -2,7 +2,6 @@
+ #ifndef _ARCH_ARM_GPIO_H
+ #define _ARCH_ARM_GPIO_H
+ 
+-/* Note: this may rely upon the value of ARCH_NR_GPIOS set in mach/gpio.h */
+ #include <asm-generic/gpio.h>
+ 
+ /* The trivial gpiolib dispatchers */
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f9920f1341c8..a8c956abc21e 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -82,6 +82,7 @@ config X86
+ 	select ARCH_HAS_MEM_ENCRYPT
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
++	select ARCH_HAS_NR_GPIO
+ 	select ARCH_HAS_PMEM_API		if X86_64
+ 	select ARCH_HAS_PTE_DEVMAP		if X86_64
+ 	select ARCH_HAS_PTE_SPECIAL
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 0642f579196f..250b50ed44e1 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -11,6 +11,9 @@ config ARCH_HAVE_CUSTOM_GPIO_H
+ 	  overriding the default implementations.  New uses of this are
+ 	  strongly discouraged.
+ 
++config ARCH_HAS_NR_GPIO
++	bool
++
+ menuconfig GPIOLIB
+ 	bool "GPIO Support"
+ 	help
+@@ -22,6 +25,17 @@ menuconfig GPIOLIB
+ 
+ if GPIOLIB
+ 
++config ARCH_NR_GPIO
++	int "Maximum number of GPIOs" if EXPERT
++	depends on !ARCH_HAS_NR_GPIO
++	default 512
++	help
++	  This allows the user to select the maximum number of GPIOs the
++	  kernel must support. When the architecture defines a number
++	  through CONFIG_ARCH_NR_GPIO, that value is taken and the user
++	  cannot change it. Otherwise it defaults to 512 and the user
++	  can change it when CONFIG_EXPERT is set.
++
+ config GPIOLIB_FASTPATH_LIMIT
+ 	int "Maximum number of GPIOs for fast path"
+ 	range 32 512
+diff --git a/include/asm-generic/gpio.h b/include/asm-generic/gpio.h
+index aea9aee1f3e9..ee090f534ab8 100644
+--- a/include/asm-generic/gpio.h
++++ b/include/asm-generic/gpio.h
+@@ -24,13 +24,7 @@
+  * actually an estimate of a board-specific value.
+  */
+ 
+-#ifndef ARCH_NR_GPIOS
+-#if defined(CONFIG_ARCH_NR_GPIO) && CONFIG_ARCH_NR_GPIO > 0
+ #define ARCH_NR_GPIOS CONFIG_ARCH_NR_GPIO
+-#else
+-#define ARCH_NR_GPIOS		512
+-#endif
+-#endif
+ 
+ /*
+  * "valid" GPIO numbers are nonnegative and may be passed to
+-- 
+2.37.1
 
-  The inode_init_owner() helper is responsible for S_ISGID stripping and is
-  called before posix_acl_create(). So we can end up with two different
-  orderings:
-
-  1. FS without POSIX ACL support
-     First strip umask then strip S_ISGID in inode_init_owner().
-
-     In other words, if a filesystem doesn't support or enable POSIX ACLs then
-     umask stripping is done directly in the vfs before calling into the
-     filesystem:
-
-  2. FS with POSIX ACL support
-     First strip S_ISGID in inode_init_owner() then strip umask in
-     posix_acl_create().
-
-     In other words, if the filesystem does support POSIX ACLs then unmask
-     stripping may be done in the filesystem itself when calling
-     posix_acl_create().
-
-  Note that technically filesystems are free to impose their own ordering
-  between posix_acl_create() and inode_init_owner() meaning that there's
-  additional ordering issues that influence S_ISGID inheritance.
-
-  (Note that the commit message of commit 1639a49ccdce ("fs: move S_ISGID
-   stripping into the vfs_*() helpers") gets the ordering between
-   inode_init_owner() and posix_acl_create() the wrong way around. I realized
-   this too late.)
-
-* Filesystems that don't rely on inode_init_owner() don't get S_ISGID
-  stripping logic.
-
-  While that may be intentional (e.g. network filesystems might just
-  defer setgid stripping to a server) it is often just a security issue.
-
-  Note that mandating the use of inode_init_owner() was proposed as an
-  alternative solution but that wouldn't fix the ordering issues and there are
-  examples such as afs where the use of inode_init_owner() isn't possible. In
-  any case, we should also try the cleaner and generalized solution first
-  before resorting to this approach.
-
-* We still have S_ISGID inheritance bugs years after the initial round of
-  S_ISGID inheritance fixes:
-  e014f37db1a2 ("xfs: use setattr_copy to set vfs inode attributes")
-  01ea173e103e ("xfs: fix up non-directory creation in SGID directories")
-  fd84bfdddd16 ("ceph: fix up non-directory creation in SGID directories")
-
-All of us led us to conclude that the current state is too messy. While we
-won't be able to make it completely clean as posix_acl_create() is still a
-filesystem specific call we can improve the S_SIGD stripping situation quite a
-bit by hoisting it out of inode_init_owner() and into the respective vfs
-creation operations.
-
-The obvious advantage is that we don't need to rely on individual filesystems
-getting S_ISGID stripping right and instead can standardize the ordering
-between S_ISGID and umask stripping directly in the VFS.
-
-A few short implementation notes:
-* The stripping logic needs to happen in vfs_*() helpers for the sake of
-  stacking filesystems such as overlayfs that rely on these helpers taking care
-  of S_ISGID stripping.
-* Security hooks have never seen the mode as it is ultimately seen by the
-  filesystem because of the ordering issue we mentioned. Nothing is changed for
-  them. We simply continue to strip the umask before passing the mode down to
-  the security hooks.
-* The following filesystems use inode_init_owner() and thus relied on
-   S_ISGID stripping: spufs, 9p, bfs, btrfs, ext2, ext4, f2fs, hfsplus,
-   hugetlbfs, jfs, minix, nilfs2, ntfs3, ocfs2, omfs, overlayfs, ramfs,
-   reiserfs, sysv, ubifs, udf, ufs, xfs, zonefs, bpf, tmpfs. We've audited all
-   callchains as best as we could. More details can be found in the commit
-   message to 1639a49ccdce ("fs: move S_ISGID stripping into the vfs_*() helpers").
-
-Finally a note on __regression potential__. I want to be very clear and open
-that this carries a non-zero regression risk which is also why I defered the
-pull request for this until this week because I was out to get married last
-week and wouldn't have been around to deal with potential fallout:
-
-  The patch will have an effect on ext2 when the EXT2_MOUNT_GRPID mount option
-  is used, on ext4 when the EXT4_MOUNT_GRPID mount option is used, and on xfs
-  when the XFS_FEAT_GRPID mount option is used.
-
-  When any of these filesystems are mounted with their respective GRPID option
-  then newly created files inherit the parent directory's group
-  unconditionally. In these cases none of the filesystems call
-  inode_init_owner() and thus they did never strip the S_ISGID bit for newly
-  created files.
-
-  Moving this logic into the VFS means that they now get the S_ISGID bit
-  stripped. This is a potential user visible change. If this leads to
-  regressions we will either need to figure out a better way or we need to
-  revert. However, given the various setgid bugs that we found just in the last
-  two years this is a regression risk we should take.
-
-Associated with this change is a new set of fstests and LTP tests that are
-currently reviewed and waiting for this series to be upstreamed.
-
-/* Testing */
-All patches are based on v5.19-rc7 and have been sitting in linux-next. No
-build failures or warnings were observed and fstests and selftests have seen no
-regressions. The series has existed for at least two kernel releases and
-multiple eyes on it.
-
-/* Conflicts */
-At the time of creating this PR no merge conflicts were reported from
-linux-next and no merge conflicts showed up doing a test-merge with current
-mainline.
-
-The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d28:
-
-  Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
-
-are available in the Git repository at:
-
-  git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/fs.setgid.v6.0
-
-for you to fetch changes up to 5fadbd992996e9dda7ebcb62f5352866057bd619:
-
-  ceph: rely on vfs for setgid stripping (2022-07-21 11:34:16 +0200)
-
-Please consider pulling these changes from the signed fs.setgid.v6.0 tag.
-
-Thanks!
-Christian
-
-----------------------------------------------------------------
-fs.setgid.v6.0
-
-----------------------------------------------------------------
-Yang Xu (4):
-      fs: add mode_strip_sgid() helper
-      fs: Add missing umask strip in vfs_tmpfile
-      fs: move S_ISGID stripping into the vfs_*() helpers
-      ceph: rely on vfs for setgid stripping
-
- fs/ceph/file.c     |  4 ---
- fs/inode.c         | 34 ++++++++++++++++++++---
- fs/namei.c         | 80 ++++++++++++++++++++++++++++++++++++++++++++++--------
- fs/ocfs2/namei.c   |  1 +
- include/linux/fs.h |  2 ++
- 5 files changed, 102 insertions(+), 19 deletions(-)

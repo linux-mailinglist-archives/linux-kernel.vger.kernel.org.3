@@ -2,150 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563B258D34E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF7458D351
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234986AbiHIFnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 01:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42668 "EHLO
+        id S235068AbiHIFoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 01:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232887AbiHIFnm (ORCPT
+        with ESMTP id S233704AbiHIFoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 01:43:42 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432F41837E
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 22:43:42 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2794KPiw022113;
-        Tue, 9 Aug 2022 05:43:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=5ML01rEQdxKrXfhJZ3nSqAy731kwFucqNO6kjqIfVZc=;
- b=QtE0xM6P9bPH/BfKV/eebyM8/8hOlRmdXyJD4N/apHHBdMTtBt2p2rMg9BeyzdZr2KSs
- RwOWJgjee6rXKF+z0oj9RH8Hk9/RmHeUtzObTH21EMG1/JVLQamR+krYS7io9krM4+fU
- KGqssYumQxWlqMaA8VOQ+s3BaG/85mxJZhyuKkeWEFaMrsVmKKYpTcxH4op0mvURmJHy
- JaBZo2Mlp9u/ufd3OwxXBVtGUPisewPp1dgWoYfe5k6gM+IWVY65Kpu0YIdrbpEvxbGu
- 4OrnnUId3nofGeUAgVU47OGa0y3R6X4iXSUc9Yy9ug2ZqnZa11fgig4j4kq15LqYIuGY yQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hugfhj2df-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Aug 2022 05:43:24 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2795UDNZ002492;
-        Tue, 9 Aug 2022 05:43:24 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hugfhj2ch-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Aug 2022 05:43:23 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2795awwE029647;
-        Tue, 9 Aug 2022 05:43:22 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3hsfx8u12x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Aug 2022 05:43:21 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2795hJ5p31457606
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 9 Aug 2022 05:43:19 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B5A42AE04D;
-        Tue,  9 Aug 2022 05:43:19 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5729DAE045;
-        Tue,  9 Aug 2022 05:43:16 +0000 (GMT)
-Received: from [9.109.205.170] (unknown [9.109.205.170])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  9 Aug 2022 05:43:16 +0000 (GMT)
-Message-ID: <51770b88-fbf1-52e7-6d40-666e1fcfb0f2@linux.ibm.com>
-Date:   Tue, 9 Aug 2022 11:13:15 +0530
+        Tue, 9 Aug 2022 01:44:20 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9E21F2DB
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 22:44:18 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id y23so11905997ljh.12
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 22:44:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FI4To5jHqN39miuQQ5GtcgN7QV66DDmgPD6y4XMVAQo=;
+        b=euJ2qWDssIx9t21bUsosyWW2rBWJfg1GZDgAuP3pH2TugwNXbTPZnC6kEzfPX8cpNG
+         3faVNP+EbRsgKelYIJSiK77ASPCFxEfvPdz7VJjYEPiJjJTjLc3aySFOjQ8R7A68hjTF
+         2bZUdSX48Y7QTGXi2a9Yw3AMCAKvYe8zfZJ03tb2UOopBlidLObIs1c4QAi9yhxMmQkO
+         Q+8qsAdc/G8QXntNLSqphuVp4XZjg91VZgSn0+mP9kKfgMkE9CyJDLG4JwQkSL/6bY/C
+         czaI9v4zznSy0QeM9ajDbBagnhgVvx6gAtbEdqf6zyS1dbyKH0wiSQKQDbp+fsKzFYoM
+         2IgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FI4To5jHqN39miuQQ5GtcgN7QV66DDmgPD6y4XMVAQo=;
+        b=XZ7dIhiz/rJ8+rh/xS5aK/sjqA5j9B1IyDm9nFPI9UVgjZK4IFLR3gZ/iW+TpwjJX1
+         PBuPtO1ieFHVE+G9j8/I+Iaqb15TzW6jBr49qgdnB+ptX1h5+SEMOGtFtKIYQqAQL6L5
+         mmnfyZMm7dk0JK5fScH13IZ/aL6toWnv4G3uxkWzYaiwbduWxJnVoCTncFHbXpieHDNZ
+         L9khW2bOXFiS7RIZs3kSRjDTP2xCLIKqsooF2NS97POxREts4UPhhzZEHDodeWoifBHn
+         zVgfSc9dRDlygE7ckEVZBBc0/qZpV3QkYgE3k+lUURV+QodxCloADVjMbgEw+qcKKKPD
+         Rbxw==
+X-Gm-Message-State: ACgBeo2D4iM4vYK+dSrDwYaRts52PmwFBJhtTdROJUeYNHrNBHujVITx
+        2lyljWT3EuifOP1vdiu2Yh5/yA==
+X-Google-Smtp-Source: AA6agR4wDGK9Bd2zYgQEapxkPv3dwBhu40WO1DHuINBqElReoxpFMuyYkVUCq7NHklvH00Roa6cUPw==
+X-Received: by 2002:a2e:9884:0:b0:25e:4b41:75da with SMTP id b4-20020a2e9884000000b0025e4b4175damr6505032ljj.339.1660023857070;
+        Mon, 08 Aug 2022 22:44:17 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id d10-20020a196b0a000000b0048b003c4bf7sm1631645lfa.169.2022.08.08.22.44.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 22:44:16 -0700 (PDT)
+Message-ID: <c97e7080-9d93-ae09-9bb2-106539f9b1ae@linaro.org>
+Date:   Tue, 9 Aug 2022 08:44:15 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH v13 9/9] lib/nodemask: Optimize node_random for nodemask
- with single NUMA node
+Subject: Re: [RFC PATCH 1/6] dt-bindings: crypto: ti,sa2ul: add pka subdevice
 Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-References: <20220808062601.836025-1-aneesh.kumar@linux.ibm.com>
- <20220808062601.836025-10-aneesh.kumar@linux.ibm.com>
- <87fsi6glcd.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <87fsi6glcd.fsf@yhuang6-desk2.ccr.corp.intel.com>
+To:     Daniel Parks <danielrparks@ti.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <cover.1659985696.git.danielrparks@ti.com>
+ <42d04e9ec43d10f978cee1dd974bbfdccf121d85.1659985696.git.danielrparks@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <42d04e9ec43d10f978cee1dd974bbfdccf121d85.1659985696.git.danielrparks@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -Ly7tQrQtziRCvobwpwhL1cxPA9bNukI
-X-Proofpoint-ORIG-GUID: QgdNn5Itlc-TUmkNblQoePq00WiWf8e2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-08_14,2022-08-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- priorityscore=1501 clxscore=1015 impostorscore=0 malwarescore=0
- suspectscore=0 spamscore=0 bulkscore=0 phishscore=0 lowpriorityscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208090023
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 8:43 AM, Huang, Ying wrote:
-> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+On 08/08/2022 22:12, Daniel Parks wrote:
+> The PKA (aka eip29t2) is a subdevice of the SA2UL on k3.
 > 
->> The most common case for certain node_random usage (demotion nodemask) is with
->> nodemask weight 1. We can avoid calling get_random_init() in that case and
->> always return the only node set in the nodemask.
+> Signed-off-by: Daniel Parks <danielrparks@ti.com>
+> ---
+>  Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> I think that this patch can sit between [5/9] and [6/9], just after it
-> is used.
-> 
->> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
->> ---
->>  lib/nodemask.c | 15 ++++++++++++---
->>  1 file changed, 12 insertions(+), 3 deletions(-)
->>
->> diff --git a/lib/nodemask.c b/lib/nodemask.c
->> index e22647f5181b..c91a6b0404a5 100644
->> --- a/lib/nodemask.c
->> +++ b/lib/nodemask.c
->> @@ -20,12 +20,21 @@ EXPORT_SYMBOL(__next_node_in);
->>   */
->>  int node_random(const nodemask_t *maskp)
->>  {
->> -	int w, bit = NUMA_NO_NODE;
->> +	int w, bit;
->>  
->>  	w = nodes_weight(*maskp);
->> -	if (w)
->> +	switch (w) {
->> +	case 0:
->> +		bit = NUMA_NO_NODE;
->> +		break;
->> +	case 1:
->> +		bit = __first_node(maskp);
-> 
-> Per my understanding, first_node() is the formal API and we should use
-> that?  Just like we use nodes_weight() instead of __nodes_weight().
-> 
+> diff --git a/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml b/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml
+> index 02f47c2e7998..e4adb8192608 100644
+> --- a/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml
+> +++ b/Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml
+> @@ -64,8 +64,14 @@ patternProperties:
+>      type: object
+>      description:
+>        Child RNG node for SA2UL
+>  
+> +patternProperties:
+> +  "^pka@[a-f0-9]+$":
+> +    type: object
+> +    description:
+> +      Child PKA node for SA2UL
 
-updated.
+If PKA is from "Public Key Accelerator", could you include here full
+name of the abbreviation?
 
--aneesh
+Anyway you need here reference to schema for your node or describe the
+contents.
+
+Best regards,
+Krzysztof

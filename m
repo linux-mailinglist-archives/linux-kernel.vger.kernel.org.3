@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2011258D23E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 05:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24CF058D240
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 05:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiHIDJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 23:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S232433AbiHIDLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 23:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiHIDJO (ORCPT
+        with ESMTP id S229600AbiHIDLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 23:09:14 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB1EFD35
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 20:09:12 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so9590282pjm.3
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 20:09:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=synaptics-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=4qMyf3ra1p/hv8IQNzr/gSMHDdqMJMfflxKZSaqC/T4=;
-        b=Crrcq45G+srLavji4sh1eYPTWcASC1Tfg5+Nhj5vrz1nNLV7YlHI4gN4lB5Zk2l80U
-         hfi2f27rWux73TPMTZmWYuYr03TjKKnWO6JXSnKivmeMvGgUUpykODmIBavtHS2sgjHg
-         eC8Dhp3QVx0ip/sNMZQxC5Svtmfv0nXXQdvz1sGQO6qizF/LJi50AU+F4e4LqPTeDsWd
-         4XNAz+55kuQnL/IF/GyZuwe8Mujj/1RicTuHwAevuJO5bKzEWsChCBYD6mJMIxeDwZAN
-         isEnhcDzPcVwhioraSmcjfzKEyQlPVLY/w4v7Y/7vNFET67+0K8+68BKPshMw/J1OSLy
-         tA8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=4qMyf3ra1p/hv8IQNzr/gSMHDdqMJMfflxKZSaqC/T4=;
-        b=J1OCNn3b9VXKGs3s/s3jwPwrFxYB15ZolAqoYsZrnynTQrgJIWHUU7DBLcI6rg41UD
-         TIgt4SGN56MAClockop+QRkD52z/D6E/i+KIAU9VNFJV3XCosbJmSikNTDLSLZ4G1W16
-         /RTRNugO8yAZndLYJosdrEp6mc7mYinQ2iewPIhu6Qo2yD5iTl0Z8y3oA/7z7i1Oj3yN
-         2/3deSeiw5XFiHvc08h/nS6dInmggh2JzaSceiyqhKKmJ/bT3gTSDEFNVYqP9xHIIffL
-         x08P2LxGpiS7duFsZNZ5JOaqvvM763jXHoIRKSTCdKZl0ZURVBNfylMSzBt2FacDg8gk
-         2hCg==
-X-Gm-Message-State: ACgBeo3hKcP8PRrt2GWOud/RJwUajPRcJwy1i52y/2I1heF14C/NL/g2
-        ffx+J/KFFZGyETAeSrDr7PrJLjP9GpFw+RNrYLM=
-X-Google-Smtp-Source: AA6agR6Q4rMI5yIM9lNvFcRsrZ8SX+O6hCjni4vYKBKs7Pzi39297xr8p/lDYmta+9NlR9j1IKa9yg==
-X-Received: by 2002:a17:902:f283:b0:16f:c46:dc1f with SMTP id k3-20020a170902f28300b0016f0c46dc1fmr20973734plc.162.1660014552382;
-        Mon, 08 Aug 2022 20:09:12 -0700 (PDT)
-Received: from localhost.localdomain ([63.222.17.38])
-        by smtp.gmail.com with ESMTPSA id g17-20020aa79f11000000b0052d3899f8c3sm9424608pfr.36.2022.08.08.20.09.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Aug 2022 20:09:11 -0700 (PDT)
-From:   margeyang <marge.yang@synaptics.corp-partner.google.com>
-To:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hdegoede@redhat.com,
-        benjamin.tissoires@redhat.com
-Cc:     marge.yang@tw.synaptics.com, derek.cheng@tw.synaptics.com,
-        vincent.huang@tw.synaptics.com,
-        Marge Yang <marge.yang@synaptics.corp-partner.google.com>
-Subject: [PATCH V2] HID: HID-rmi - ignore to rmi_hid_read_block after system resumes.
-Date:   Tue,  9 Aug 2022 11:09:04 +0800
-Message-Id: <1660014544-1009-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 8 Aug 2022 23:11:03 -0400
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D3010B8;
+        Mon,  8 Aug 2022 20:10:59 -0700 (PDT)
+Received: from mxde.zte.com.cn (unknown [10.35.8.64])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4M1ykn71Ryz1DwT;
+        Tue,  9 Aug 2022 11:10:57 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4M1ykW2zBgzCFQtR;
+        Tue,  9 Aug 2022 11:10:43 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4M1ykR4p84z9tyDD;
+        Tue,  9 Aug 2022 11:10:39 +0800 (CST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.82])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4M1ykM4ps2z4xVnQ;
+        Tue,  9 Aug 2022 11:10:35 +0800 (CST)
+Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
+        by mse-fl2.zte.com.cn with SMTP id 2793AGKQ021717;
+        Tue, 9 Aug 2022 11:10:16 +0800 (GMT-8)
+        (envelope-from wang.yi59@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Tue, 9 Aug 2022 11:10:16 +0800 (CST)
+Date:   Tue, 9 Aug 2022 11:10:16 +0800 (CST)
+X-Zmail-TransId: 2b0462f1d01874bde6e5
+X-Mailer: Zmail v1.0
+Message-ID: <202208091110164796108@zte.com.cn>
+In-Reply-To: <20220727100107.3062-1-wang.yi59@zte.com.cn>
+References: 20220727100107.3062-1-wang.yi59@zte.com.cn
+Mime-Version: 1.0
+From:   <wang.yi59@zte.com.cn>
+To:     <trond.myklebust@hammerspace.com>, <anna@kernel.org>,
+        <linux-nfs@vger.kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>, <xue.zhihong@zte.com.cn>,
+        <wang.liang82@zte.com.cn>, <zhang.xianwei8@zte.com.cn>,
+        <wang.yi59@zte.com.cn>
+Subject: =?UTF-8?B?UmU6W1BBVENIXSBORlN2NC4xOiBSRUNMQUlNX0NPTVBMRVRFIG11c3QgaGFuZGxlIEVBQ0NFUw==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2793AGKQ021717
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 62F1D040.000 by FangMail milter!
+X-FangMail-Envelope: 1660014658/4M1ykn71Ryz1DwT/62F1D040.000/10.35.8.64/[10.35.8.64]/mxde.zte.com.cn/<wang.yi59@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 62F1D040.000/4M1ykn71Ryz1DwT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marge Yang <marge.yang@synaptics.corp-partner.google.com>
+Gentle ping :)
 
-The interrupt GPIO will be pulled down once
-after RMI driver reads this command(Report ID:0x0A).
-It will cause "Dark resume test fail" for chromebook device.
-Hence, TP driver will ignore rmi_hid_read_block function once
-after system resumes.
-
-Signed-off-by: Marge Yang<marge.yang@synaptics.corp-partner.google.com>
----
- drivers/hid/hid-rmi.c | 14 ++++++++++++--
- include/linux/rmi.h   |  2 ++
- 2 files changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hid/hid-rmi.c b/drivers/hid/hid-rmi.c
-index 311eee599ce9..b08b74b0c140 100644
---- a/drivers/hid/hid-rmi.c
-+++ b/drivers/hid/hid-rmi.c
-@@ -203,7 +203,13 @@ static int rmi_hid_read_block(struct rmi_transport_dev *xport, u16 addr,
- 		if (ret < 0)
- 			goto exit;
- 	}
--
-+	if ((!!xport) && (xport->ignoreonce == 1)) {
-+		dev_err(&hdev->dev,
-+			"ignoreonce (%d)\n",
-+			xport->ignoreonce);
-+		xport->ignoreonce = 0;
-+		goto exit;
-+	}
- 	for (retries = 5; retries > 0; retries--) {
- 		data->writeReport[0] = RMI_READ_ADDR_REPORT_ID;
- 		data->writeReport[1] = 0; /* old 1 byte read count */
-@@ -468,8 +474,12 @@ static int rmi_post_resume(struct hid_device *hdev)
- 	ret = hid_hw_open(hdev);
- 	if (ret)
- 		return ret;
--
-+	// Avoid to read rmi_hid_read_block once after system resumes.
-+	// The interrupt will be pulled down
-+	// after RMI Read command(Report ID:0x0A).
-+	data->xport.ignoreonce = 1;
- 	ret = rmi_reset_attn_mode(hdev);
-+	data->xport.ignoreonce = 0;
- 	if (ret)
- 		goto out;
- 
-diff --git a/include/linux/rmi.h b/include/linux/rmi.h
-index ab7eea01ab42..24f63ad00970 100644
---- a/include/linux/rmi.h
-+++ b/include/linux/rmi.h
-@@ -270,6 +270,8 @@ struct rmi_transport_dev {
- 	struct rmi_device_platform_data pdata;
- 
- 	struct input_dev *input;
-+
-+	int ignoreonce;
- };
- 
- /**
--- 
-2.22.0.windows.1
-
+> From: Zhang Xianwei <zhang.xianwei8@zte.com.cn>
+>
+> A client should be able to handle getting an EACCES error while doing
+> a mount operation to reclaim state due to NFS4CLNT_RECLAIM_REBOOT
+> being set. If the server returns RPC_AUTH_BADCRED because authentication
+> failed when we execute "exportfs -au", then RECLAIM_COMPLETE will go a
+> wrong way. After mount succeeds, all OPEN call will fail due to an
+> NFS4ERR_GRACE error being returned. This patch is to fix it by resending
+> a RPC request.
+>
+> Signed-off-by: Zhang Xianwei <zhang.xianwei8@zte.com.cn>
+> Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+> ---
+> fs/nfs/nfs4proc.c | 3 +++
+> 1 file changed, 3 insertions(+)
+>
+> diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
+> index bb0e84a46d61..b51b83506011 100644
+> --- a/fs/nfs/nfs4proc.c
+> +++ b/fs/nfs/nfs4proc.c
+> @@ -9477,6 +9477,9 @@ static int nfs41_reclaim_complete_handle_errors(struct rpc_task *task, struct nf
+> rpc_delay(task, NFS4_POLL_RETRY_MAX);
+> fallthrough;
+> case -NFS4ERR_RETRY_UNCACHED_REP:
+> + case -EACCES:
+> + dprintk("%s: failed to reclaim complete error %d for server %s, retrying\n",
+> + __func__, task->tk_status, clp->cl_hostname);
+> return -EAGAIN;
+> case -NFS4ERR_BADSESSION:
+> case -NFS4ERR_DEADSESSION:

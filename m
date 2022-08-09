@@ -2,158 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1BF58DC90
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A86C58DC93
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245129AbiHIQzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        id S245154AbiHIQ4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243307AbiHIQzE (ORCPT
+        with ESMTP id S245147AbiHIQzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:55:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A083522B17;
-        Tue,  9 Aug 2022 09:55:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 9 Aug 2022 12:55:54 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080F7219C;
+        Tue,  9 Aug 2022 09:55:52 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9800329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9800:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28D58B81658;
-        Tue,  9 Aug 2022 16:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C91DC433C1;
-        Tue,  9 Aug 2022 16:55:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660064100;
-        bh=K8o8qgPrj5J9A6+GrMQpiR8pTGn1sY02He1mKx0vTq0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jTE0oYw3+67b/0pE6Q41QON9uh/4DdFmcAh9hJFZg3bMY9/1Kl1xs0LFPJQr+3N8b
-         +gIQzRv3kpEAnXPAAdSLldfDCRa/+1QhAeNhUoQpcZLzIhfEGBmVL5BMxbmzXDPZQf
-         M8ip9LZjsDdy6ctxu3aQJ6k/4528n7KDv1LEqijhySaVGHZ0rfIRwl1j8p/HUvXZPC
-         /E4vdgoZmfCFaVP1DV1ud0izZgkUbzDvzzt12eYtn3N/N265upkq2E5hi3GJ4c/iq8
-         J23vH4L3LZEbnN0fPWVDvsMdx6Ae95pEZHxPirBzvzPLwUFeZy/D/KxWuklsuxmVuu
-         ALjVGxmDAJWWA==
-Date:   Tue, 9 Aug 2022 19:54:57 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, corbet@lwn.net,
-        dhowells@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        shuah@kernel.org, bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark
- a function to be sleepable
-Message-ID: <YvKRYRjJdXbAWL6Y@kernel.org>
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
- <20220809134603.1769279-2-roberto.sassu@huawei.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 846E71EC04DA;
+        Tue,  9 Aug 2022 18:55:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660064147;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=i7kJIpddtAemUYbgwpjR+4WVlcQgX2AjGxouk8jTwJY=;
+        b=blu9wbGO3QfuTP67zh1c5NXyUm2UZXKneyuQAV4DlBW+3FkBSt5IQS+Wsj9rXAky4XiOeq
+        PddJJlBMbTiPpLXr3YFUe18BbIi8o3W2ISdjJoFT1eyE/B449QmkPRcoLI2WIAsad/DRrv
+        igZVfxy8u8RHoHuNCxklMtQTvkICyCA=
+Date:   Tue, 9 Aug 2022 18:55:43 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+Subject: Re: [PATCH Part2 v6 09/49] x86/fault: Add support to handle the RMP
+ fault for user address
+Message-ID: <YvKRjxgipxLSNCLe@zn.tnic>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220809134603.1769279-2-roberto.sassu@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 03:45:54PM +0200, Roberto Sassu wrote:
-> From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+On Mon, Jun 20, 2022 at 11:03:43PM +0000, Ashish Kalra wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
 > 
-> From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> 
-> This allows to declare a kfunc as sleepable and prevents its use in
-> a non sleepable program.
+> When SEV-SNP is enabled globally, a write from the host goes through the
 
-Nit: "Declare a kfunc as sleepable and prevent its use in a
-non-sleepable program."
+globally?
 
-It's missing the part *how* the patch accomplishes its goals.
+Can SNP be even enabled any other way?
 
-> 
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Signed-off-by: Hao Luo <haoluo@google.com>
-> ---
->  Documentation/bpf/kfuncs.rst | 6 ++++++
->  include/linux/btf.h          | 1 +
->  kernel/bpf/btf.c             | 9 +++++++++
->  3 files changed, 16 insertions(+)
-> 
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index c0b7dae6dbf5..c8b21de1c772 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -146,6 +146,12 @@ that operate (change some property, perform some operation) on an object that
->  was obtained using an acquire kfunc. Such kfuncs need an unchanged pointer to
->  ensure the integrity of the operation being performed on the expected object.
->  
-> +2.4.6 KF_SLEEPABLE flag
-> +-----------------------
-> +
-> +The KF_SLEEPABLE flag is used for kfuncs that may sleep. Such kfuncs can only
-> +be called by sleepable BPF programs (BPF_F_SLEEPABLE).
-> +
->  2.5 Registering the kfuncs
->  --------------------------
->  
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index cdb376d53238..976cbdd2981f 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
-> @@ -49,6 +49,7 @@
->   * for this case.
->   */
->  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer arguments */
-> +#define KF_SLEEPABLE   (1 << 5) /* kfunc may sleep */
->  
->  struct btf;
->  struct btf_member;
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 7e64447659f3..d3e4c86b8fcd 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -6175,6 +6175,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->  {
->  	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
->  	bool rel = false, kptr_get = false, trusted_arg = false;
-> +	bool sleepable = false;
->  	struct bpf_verifier_log *log = &env->log;
->  	u32 i, nargs, ref_id, ref_obj_id = 0;
->  	bool is_kfunc = btf_is_kernel(btf);
-> @@ -6212,6 +6213,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->  		rel = kfunc_flags & KF_RELEASE;
->  		kptr_get = kfunc_flags & KF_KPTR_GET;
->  		trusted_arg = kfunc_flags & KF_TRUSTED_ARGS;
-> +		sleepable = kfunc_flags & KF_SLEEPABLE;
->  	}
->  
->  	/* check that BTF function arguments match actual types that the
-> @@ -6419,6 +6421,13 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->  			func_name);
->  		return -EINVAL;
->  	}
-> +
-> +	if (sleepable && !env->prog->aux->sleepable) {
-> +		bpf_log(log, "kernel function %s is sleepable but the program is not\n",
-> +			func_name);
-> +		return -EINVAL;
-> +	}
-> +
->  	/* returns argument register number > 0 in case of reference release kfunc */
->  	return rel ? ref_regno : 0;
+I see the APM talks about it being enabled globally, I guess this means
+the RMP represents *all* system memory?
+
+> @@ -1209,6 +1210,60 @@ do_kern_addr_fault(struct pt_regs *regs, unsigned long hw_error_code,
 >  }
-> -- 
-> 2.25.1
-> 
+>  NOKPROBE_SYMBOL(do_kern_addr_fault);
+>  
+> +static inline size_t pages_per_hpage(int level)
+> +{
+> +	return page_level_size(level) / PAGE_SIZE;
+> +}
+> +
+> +/*
+> + * Return 1 if the caller need to retry, 0 if it the address need to be split
+> + * in order to resolve the fault.
+> + */
 
-BR, Jarkko
+Magic numbers.
+
+Pls do instead:
+
+enum rmp_pf_ret {
+	RMP_PF_SPLIT	= 0,
+	RMP_PF_RETRY	= 1,
+};
+
+and use those instead.
+
+> +static int handle_user_rmp_page_fault(struct pt_regs *regs, unsigned long error_code,
+> +				      unsigned long address)
+> +{
+> +	int rmp_level, level;
+> +	pte_t *pte;
+> +	u64 pfn;
+> +
+> +	pte = lookup_address_in_mm(current->mm, address, &level);
+> +
+> +	/*
+> +	 * It can happen if there was a race between an unmap event and
+> +	 * the RMP fault delivery.
+> +	 */
+
+You need to elaborate more here: a RMP fault can happen and then the
+page can get unmapped? What is the exact scenario here?
+
+> +	if (!pte || !pte_present(*pte))
+> +		return 1;
+> +
+> +	pfn = pte_pfn(*pte);
+> +
+> +	/* If its large page then calculte the fault pfn */
+> +	if (level > PG_LEVEL_4K) {
+> +		unsigned long mask;
+> +
+> +		mask = pages_per_hpage(level) - pages_per_hpage(level - 1);
+> +		pfn |= (address >> PAGE_SHIFT) & mask;
+
+Oh boy, this is unnecessarily complicated. Isn't this
+
+	pfn |= pud_index(address);
+
+or
+	pfn |= pmd_index(address);
+
+depending on the level?
+
+I think it is but it needs more explaining.
+
+In any case, those are two static masks exactly and they don't need to
+be computed for each #PF.
+
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 7274f2b52bca..c2187ffcbb8e 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -4945,6 +4945,15 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+>  	return 0;
+>  }
+>  
+> +static int handle_split_page_fault(struct vm_fault *vmf)
+> +{
+> +	if (!IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
+> +		return VM_FAULT_SIGBUS;
+
+Yah, this looks weird: generic code implies that page splitting after a
+#PF makes sense only when SEV is present and none otherwise.
+
+Why?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

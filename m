@@ -2,89 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C81C58DFDC
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D476858DFD3
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345313AbiHITHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
+        id S1345559AbiHITHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348266AbiHITGg (ORCPT
+        with ESMTP id S1348377AbiHITGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:06:36 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F9226130
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:49:53 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9800329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9800:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B3C051EC0554;
-        Tue,  9 Aug 2022 20:49:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660070987;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=HAWeFjEr6a86qg5T2PUHfhtUCjZcdPiI5JbTaTzEVlQ=;
-        b=h5xJ6rCbwZJLqfKKmiXghsOccehJCw/2uaI1NHjuiTBzpNtlQnTqiHGGIhX9tMH6EoCPeo
-        st9B+gkeKhN6dioHjHWgcA08VZ9Vwh3y+ZOj7UZGuupa43FF/pL8+SIT4cxcP8jFfqp9xQ
-        70eStUxzMWeyA7L7nxEHJZPHMtAQ06I=
-Date:   Tue, 9 Aug 2022 20:49:47 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Rik van Riel <riel@surriel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 2/5] entry: Add calls for save/restore auxiliary
- pt_regs
-Message-ID: <YvKsS3QuOu4JVzZU@zn.tnic>
-References: <20220805173009.3128098-1-ira.weiny@intel.com>
- <20220805173009.3128098-3-ira.weiny@intel.com>
- <YvJNe2rzXfcogFFX@zn.tnic>
- <YvKpi/CVHko50PNQ@iweiny-desk3>
+        Tue, 9 Aug 2022 15:06:48 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6684286E3
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:52:01 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id F0ABB68AA6; Tue,  9 Aug 2022 20:51:57 +0200 (CEST)
+Date:   Tue, 9 Aug 2022 20:51:57 +0200
+From:   "hch@lst.de" <hch@lst.de>
+To:     "Hellstrom, Thomas" <thomas.hellstrom@intel.com>
+Cc:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        "bob.beckett@collabora.com" <bob.beckett@collabora.com>,
+        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
+        "airlied@linux.ie" <airlied@linux.ie>, "hch@lst.de" <hch@lst.de>,
+        "Ursulin, Tvrtko" <tvrtko.ursulin@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        "Auld, Matthew" <matthew.auld@intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
+Subject: Re: [PATCH v5] drm/i915: stop using swiotlb
+Message-ID: <20220809185157.GA15307@lst.de>
+References: <20220726153935.2272777-1-bob.beckett@collabora.com> <1160a7c31084ab2259088e4bfe88b41ad61c2bcc.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YvKpi/CVHko50PNQ@iweiny-desk3>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1160a7c31084ab2259088e4bfe88b41ad61c2bcc.camel@intel.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 11:38:03AM -0700, Ira Weiny wrote:
-> Thomas did a lot of work to make the entry code generic. So I was
-> keeping that work consistent. This also helps to ensure I did not miss
-> any places.
+On Mon, Aug 08, 2022 at 03:48:02PM +0000, Hellstrom, Thomas wrote:
+> This whole thing looks a bit strange to me since with SWIOTLB actually
+> used for i915, the driver should malfunction anyway as it doesn't do
+> any dma_sync_sg_for_cpu() or dma_sync_sg_for_device(),
 
-How about you worry about the other arches when you actually cross that
-bridge?
+Yeah, I can't actually see any syncs in i915.
 
-> I don't believe this is correct because instrumentation is not enabled
-> here.
+> and the driver
+> assumes all coherent dma. Is that SWIOTLB=force kernel option still
+> available?
 
-Why do you have to run
+Yes, although it is (and always has been) lower case swiotlb for the
+option.
 
-	arch_save_aux_pt_regs()
+> Also, correct me if I'm wrong, but the original driver segment size
+> appears to mean "the largest contiguous area that can be handled either
+> by the device or the dma mapping layer" rather than the total space
+> available for dma mappings? Not completely sure what
+> dma_max_mapping_size() is returning, though?
 
-with instrumentation enabled?
-
-Patch 5 does
-
-+       struct pt_regs_auxiliary *aux_pt_regs = &to_extended_pt_regs(regs)->aux;
-+
-+       aux_pt_regs->cpu = raw_smp_processor_id();
-
-only?
-
-Why does that need to run with instrumentation enabled?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+dma_max_mapping_size is sort of both.  It is is the largest contigous
+size, but we really should not go above that to avoid starvation.

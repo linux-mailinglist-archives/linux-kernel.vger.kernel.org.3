@@ -2,100 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1AC58D3F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA84B58D3F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238148AbiHIGl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S238367AbiHIGmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 02:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiHIGlz (ORCPT
+        with ESMTP id S237760AbiHIGmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:41:55 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3DC201AC;
-        Mon,  8 Aug 2022 23:41:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 9 Aug 2022 02:42:35 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411F9201AC;
+        Mon,  8 Aug 2022 23:42:33 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aecbd.dynamic.kabel-deutschland.de [95.90.236.189])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M23Q51vQhz4x1J;
-        Tue,  9 Aug 2022 16:41:49 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1660027309;
-        bh=t7xPe4mFK0bZ6Qo96hN1grLRamjl9/fDy4qsW9o1yao=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fEbx9fu5mU8mWYGSWVZ5+wtKaxv+E9YaCe1bRVLFHGRUXJhYWtWcwJrhk3CbrykJP
-         TEQrShx2I6T8+g0npT8t9qDKmdmeyQlJr154kSxgYCKK8JniNX95FS5949rUHF8FZY
-         2hPqrGWTw+HdjVFREU7egoRgdoJJLH5WaatNPs6ioJQLnhpG4yORiSs0f9XAnO4LFW
-         Y486lKak2wAa6j8U4FDCjtZx45VQ7e2fhbocCJyjeulvX1zGzHv7fpS3dJLX7/4M+u
-         H8nABk1lnFNM9OoKcoBbNl0pbBnHgni0OwlvrM91bPG0OZeE8zRNBNV3MIwsygOwg7
-         f8ENTCNn++M3g==
-Date:   Tue, 9 Aug 2022 16:41:47 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Ben Gardon <bgardon@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the kvm tree
-Message-ID: <20220809164147.131f87d0@canb.auug.org.au>
-In-Reply-To: <20220627181937.3be67263@canb.auug.org.au>
-References: <20220627181937.3be67263@canb.auug.org.au>
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D747D61EA192A;
+        Tue,  9 Aug 2022 08:42:29 +0200 (CEST)
+Message-ID: <6d1576c9-f105-2aff-4497-2c2e7bed2f3b@molgen.mpg.de>
+Date:   Tue, 9 Aug 2022 08:42:29 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/I9PiRdCK0D2PIzWbH9QXuTA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Referencing non-public datasheets in commit messages (was: [PATCH v12
+ 3/3] EDAC: nuvoton: Add NPCM memory controller driver)
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     medadyoung@gmail.com, KWLIU@nuvoton.com, tony.luck@intel.com,
+        rric@kernel.org, benjaminfair@google.com,
+        linux-edac@vger.kernel.org, KFTING@nuvoton.com,
+        avifishman70@gmail.com, venture@google.com,
+        openbmc@lists.ozlabs.org, JJLIU0@nuvoton.com, ctcchien@nuvoton.com,
+        tali.perry1@gmail.com, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, james.morse@arm.com, YSCHU@nuvoton.com,
+        mchehab@kernel.org, linux-kernel@vger.kernel.org,
+        tmaimon77@gmail.com
+References: <20220610084340.2268-1-ctcchien@nuvoton.com>
+ <20220610084340.2268-4-ctcchien@nuvoton.com> <YrDIimW0gW1j03WG@zn.tnic>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <YrDIimW0gW1j03WG@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/I9PiRdCK0D2PIzWbH9QXuTA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Dear Borislav,
 
-Hi all,
 
-On Mon, 27 Jun 2022 18:19:37 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the kvm tree, today's linux-next build (htmldocs) produced
-> this warning:
->=20
-> Documentation/virt/kvm/api.rst:8210: WARNING: Title underline too short.
->=20
-> 8.38 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
-> ---------------------------
-> Documentation/virt/kvm/api.rst:8217: WARNING: Unexpected indentation.
->=20
-> Introduced by commit
->=20
->   084cc29f8bbb ("KVM: x86/MMU: Allow NX huge pages to be disabled on a pe=
-r-vm basis")
+Am 20.06.22 um 21:20 schrieb Borislav Petkov:
+> On Fri, Jun 10, 2022 at 04:43:40PM +0800, medadyoung@gmail.com wrote:
 
-I am still seeing these warnings.  That commit is now in Linus' tree :-(
+[…]
 
---=20
-Cheers,
-Stephen Rothwell
+>> Datasheet:
+>>      Cadence DDR Controller Register Reference Manual For DDR4 Memories
+>>      Chapter 2: Detailed Register Map
+> 
+> If that datasheet is not public, no need to mention it here. At least a
+> quick web search cannot find something relevant.
 
---Sig_/I9PiRdCK0D2PIzWbH9QXuTA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Maybe it could be denoted, that is not public (and also the version), 
+but even mentioning non-public datasheets is useful, as they could be 
+made public in the future, and allows everyone to contact people with 
+access to these datasheets to take a look into the specific datasheet.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLyAasACgkQAVBC80lX
-0GxzEAf8DP+uDFaAE+MwTdQRewbg4DOgLjJ6S87Udp7ChDA/l/VwhJcm8XSgZv84
-on5HcTl70X6U8/8+yeU9EIn6tDNXOhM4cn9gRe/WgLkZ0ziOQ+WhOl7cny1NIqNO
-MqmRU37tLuWwJLLprRjsL8T4ylnvonwpR0xPDo2WVksahg218nG6C2/IU5J0v1yn
-1e/703shgbXHfkxBzEo11BUWPU0ALlKaVrdq9Sj34kU9NPBddA4xmrLuRX42D2QT
-pj4bf4C5eRaMTVrbMOl8tZjSNtcReOuHCnWsmyTKvxANkCzZsg/QEvL0d8spq4Ug
-kYwBn0VucKHXqvbu/7zKjXRM4LLg4Q==
-=C1gV
------END PGP SIGNATURE-----
+Kind regards,
 
---Sig_/I9PiRdCK0D2PIzWbH9QXuTA--
+Paul

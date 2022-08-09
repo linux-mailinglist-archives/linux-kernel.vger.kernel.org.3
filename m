@@ -2,47 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C399158D3EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7022C58D404
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbiHIGkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S232791AbiHIGuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 02:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiHIGkP (ORCPT
+        with ESMTP id S229600AbiHIGuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:40:15 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A94227
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 23:40:12 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M23Jr5dkKzlVj2;
-        Tue,  9 Aug 2022 14:37:16 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 14:40:08 +0800
-Received: from huawei.com (10.175.101.6) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 9 Aug
- 2022 14:40:07 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <anton@tuxera.com>
-CC:     <linux-ntfs-dev@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>, <chenxiaosong2@huawei.com>,
-        <akpm@linux-foundation.org>
-Subject: [PATCH] ntfs: fix BUG_ON in ntfs_lookup_inode_by_name()
-Date:   Tue, 9 Aug 2022 14:47:30 +0800
-Message-ID: <20220809064730.2316892-1-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 9 Aug 2022 02:50:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3E61F2C4;
+        Mon,  8 Aug 2022 23:50:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 425A261218;
+        Tue,  9 Aug 2022 06:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70ECEC433C1;
+        Tue,  9 Aug 2022 06:50:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660027809;
+        bh=ynJyKQ66METpJqPUjWfrzqF4JjlT26+ei9p1vjSEDTI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iIr5JmbCbVbcJ6eGv8iS/D+qITb4OE5u3y5124+JdEU0NdfQMGYYx93fRc8U9dEw7
+         vKPsO0mHX7pWGitYMqbgeHi1IaWXkc1J4I4zpMUJYZg1T8IWq4QJbmiJwylmIY5RUY
+         frxbvpxxZzliB8m1wrr7FffbnjhnfWlCrhOtQKgyN+rfWRYrF8HNJ6CH5eWbo0iLVd
+         kfSJoS4jPAdy4GMv/0OXlUZQNF+Eedk1DOagWNqqtObYNqFUf+5KwyS1x7cd7jJmUC
+         JrLHhd5GZDka1CbOUaMbgFDrjsVkN3ML+OWDyEXqwUDeAQIKSKGdP/H9wKc/ej/+wa
+         N7WFOY/dS2+lw==
+Date:   Tue, 9 Aug 2022 07:50:02 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v2 1/1] bpf: Drop unprotected find_vpid() in favour of
+ find_get_pid()
+Message-ID: <YvIDmku4us2SSBKu@google.com>
+References: <20220803134821.425334-1-lee@kernel.org>
+ <CAADnVQ+X_B4LC6CtYM1PXPA4BBprWLj5Qip--Eeu32Zti==Ydw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQ+X_B4LC6CtYM1PXPA4BBprWLj5Qip--Eeu32Zti==Ydw@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,75 +66,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reported BUG_ON as follows:
+On Thu, 04 Aug 2022, Alexei Starovoitov wrote:
 
-------------[ cut here ]------------
-kernel BUG at fs/ntfs/dir.c:86!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-CPU: 3 PID: 758 Comm: a.out Not tainted 5.19.0-next-20220808 #5
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-RIP: 0010:ntfs_lookup_inode_by_name+0xd11/0x2d10
-Code: ff e9 b9 01 00 00 e8 1e fe d6 fe 48 8b 7d 98 49 8d 5d 07 e8 91 85 29 ff 48 c7 45 98 00 00 00 00 e9 5a fb ff ff e8 ff fd d6 fe <0f> 0b e8 f8 fd d6 fe 0f 0b e8 f1 fd d6 fe 48 8b b5 50 ff ff ff 4c
-RSP: 0018:ffff888079607978 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000008000 RCX: 0000000000000000
-RDX: ffff88807cf10000 RSI: ffffffff82a4a081 RDI: 0000000000000003
-RBP: ffff888079607a70 R08: 0000000000000001 R09: ffff88807a6d01d7
-R10: ffffed100f4da03a R11: 0000000000000000 R12: ffff88800f0fb110
-R13: ffff88800f0ee000 R14: ffff88800f0fb000 R15: 0000000000000001
-FS:  00007f33b63c7540(0000) GS:ffff888108580000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f33b635c090 CR3: 000000000f39e005 CR4: 0000000000770ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- <TASK>
- load_system_files+0x1f7f/0x3620
- ntfs_fill_super+0xa01/0x1be0
- mount_bdev+0x36a/0x440
- ntfs_mount+0x3a/0x50
- legacy_get_tree+0xfb/0x210
- vfs_get_tree+0x8f/0x2f0
- do_new_mount+0x30a/0x760
- path_mount+0x4de/0x1880
- __x64_sys_mount+0x2b3/0x340
- do_syscall_64+0x38/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f33b62ff9ea
-Code: 48 8b 0d a9 f4 0b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 76 f4 0b 00 f7 d8 64 89 01 48
-RSP: 002b:00007ffd0c471aa8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f33b62ff9ea
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd0c471be0
-RBP: 00007ffd0c471c60 R08: 00007ffd0c471ae0 R09: 00007ffd0c471c24
-R10: 0000000000000000 R11: 0000000000000202 R12: 000055bac5afc160
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
+> On Wed, Aug 3, 2022 at 6:48 AM Lee Jones <lee@kernel.org> wrote:
+> >
+> > The documentation for find_pid() clearly states:
+> >
+> >   "Must be called with the tasklist_lock or rcu_read_lock() held."
+> >
+> > Presently we do neither.
+> >
+> > Let's use find_get_pid() which searches for the vpid, then takes a
+> > reference to it preventing early free, all within the safety of
+> > rcu_read_lock().  Once we have our reference we can safely make use of
+> > it up until the point it is put.
+> >
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > Cc: John Fastabend <john.fastabend@gmail.com>
+> > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > Cc: Song Liu <song@kernel.org>
+> > Cc: Yonghong Song <yhs@fb.com>
+> > Cc: KP Singh <kpsingh@kernel.org>
+> > Cc: Stanislav Fomichev <sdf@google.com>
+> > Cc: Hao Luo <haoluo@google.com>
+> > Cc: Jiri Olsa <jolsa@kernel.org>
+> > Cc: bpf@vger.kernel.org
+> > Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+> > Signed-off-by: Lee Jones <lee@kernel.org>
+> > ---
+> >
+> > v1 => v2:
+> >   * Commit log update - no code differences
+> >
+> >  kernel/bpf/syscall.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index 83c7136c5788d..c20cff30581c4 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+> >         const struct perf_event *event;
+> >         struct task_struct *task;
+> >         struct file *file;
+> > +       struct pid *ppid;
+> >         int err;
+> >
+> >         if (CHECK_ATTR(BPF_TASK_FD_QUERY))
+> > @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+> >         if (attr->task_fd_query.flags != 0)
+> >                 return -EINVAL;
+> >
+> > -       task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
+> > +       ppid = find_get_pid(pid);
+> > +       task = get_pid_task(ppid, PIDTYPE_PID);
+> > +       put_pid(ppid);
+> 
+> rcu_read_lock/unlock around this line
+> would be a cheaper and faster alternative than pid's
+> refcount inc/dec.
 
-Fix this by adding sanity check on extended system files' directory inode
-to ensure that it is directory, just like ntfs_extend_init() when mounting
-ntfs3.
+This was already discussed here:
 
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
----
- fs/ntfs/super.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+https://lore.kernel.org/all/YtsFT1yFtb7UW2Xu@krava/
 
-diff --git a/fs/ntfs/super.c b/fs/ntfs/super.c
-index 5ae8de09b271..001f4e053c85 100644
---- a/fs/ntfs/super.c
-+++ b/fs/ntfs/super.c
-@@ -2092,7 +2092,8 @@ static bool load_system_files(ntfs_volume *vol)
- 	// TODO: Initialize security.
- 	/* Get the extended system files' directory inode. */
- 	vol->extend_ino = ntfs_iget(sb, FILE_Extend);
--	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino)) {
-+	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino) ||
-+	    !S_ISDIR(vol->extend_ino->i_mode)) {
- 		if (!IS_ERR(vol->extend_ino))
- 			iput(vol->extend_ino);
- 		ntfs_error(sb, "Failed to load $Extend.");
 -- 
-2.31.1
-
+Lee Jones [李琼斯]

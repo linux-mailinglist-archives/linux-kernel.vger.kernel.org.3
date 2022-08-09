@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91ECD58D77F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9586358D785
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242564AbiHIKfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
+        id S242580AbiHIKji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242476AbiHIKfh (ORCPT
+        with ESMTP id S232471AbiHIKjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:35:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E82121827
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660041331;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YeZmWlJ57t/EqWJ2923+U6CuKUM3PGmeDKKJtSlBlkw=;
-        b=M6KMel1DlIENY7/QnWM2fhj7SE2Qkh3bXhzJ3L2p+6SfhrhIUjdW6j200gfUZ+2nCLDuEH
-        30+vDe4AabZGbsjSpiU6Pu9yrKFsB83+p44R2a90jH1D6N2gCg0t59+dN5q0WLB6lFM+it
-        Wicdrd4Y/93R1Mpy0q3E24f3Twz3ZOk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-gL_V-U-1PGWUpjD-M0vfFg-1; Tue, 09 Aug 2022 06:35:30 -0400
-X-MC-Unique: gL_V-U-1PGWUpjD-M0vfFg-1
-Received: by mail-wm1-f70.google.com with SMTP id i6-20020a1c3b06000000b003a537064611so904299wma.4
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 03:35:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=YeZmWlJ57t/EqWJ2923+U6CuKUM3PGmeDKKJtSlBlkw=;
-        b=haojQH2YWCnTnSVCMl8N85pppeHZvea9etw08AXrT/bQJEM20gnjnXMbpgX3XszNxf
-         aMVXnDugec1b3rx4ogRYWEsELO+r1F61yDcXV2rkH1gFHEpFodfoA9zRI4TGWDl7IDlz
-         rQTd/LauKTXl+1SM4HOzg81zaKhvX49vsdZhGPESDMkzCIZczJt5FY1nMS/LlVei2ekx
-         gQWcl/0iJorcQWlAkjTuSJaYoy6U5CCcvVenfOm62wcsRzD4UnmAM3JN15gVnkLFSS8l
-         OrHfWplzbZW0Q4tdkVagd5FTXE/5DxS3dgX7zI3xr71GxUb+yNUEJtImSkxTItC8jO5A
-         uo/w==
-X-Gm-Message-State: ACgBeo3yihPo8fYjtoXU/egjA/KszYMfGFqo0LNpPv+BAQP7cuKNWOx4
-        u2bWB6fAxB1unnUkfHa4RR+8Ypir2w24YVCylYoetMZuGsF4C7CZYuxjGhiahoyw/kLaF8DeNdg
-        RDB0se4u/fLJ8qkVzwrvUhcEz
-X-Received: by 2002:adf:f346:0:b0:21f:13ec:cacf with SMTP id e6-20020adff346000000b0021f13eccacfmr13580125wrp.525.1660041329265;
-        Tue, 09 Aug 2022 03:35:29 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5yD3fjmdk8FR8LY7ZeN/oQbXPL4+j7fn+/YDf5jFwCIuY7SkUglVYGH0jzof0I4LcXb2HSWQ==
-X-Received: by 2002:adf:f346:0:b0:21f:13ec:cacf with SMTP id e6-20020adff346000000b0021f13eccacfmr13580110wrp.525.1660041329068;
-        Tue, 09 Aug 2022 03:35:29 -0700 (PDT)
-Received: from redhat.com ([2.52.152.113])
-        by smtp.gmail.com with ESMTPSA id az25-20020a05600c601900b003a35516ccc3sm16299278wmb.26.2022.08.09.03.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 03:35:28 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 06:35:25 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, kernel@openvz.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] Create debugfs file with virtio balloon usage
- information
-Message-ID: <20220809063414-mutt-send-email-mst@kernel.org>
-References: <20220705083638.29669-1-alexander.atanasov@virtuozzo.com>
- <20220705045912-mutt-send-email-mst@kernel.org>
- <f6b46a29-0f65-9081-5228-a1028fea2bef@virtuozzo.com>
+        Tue, 9 Aug 2022 06:39:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FE51C130;
+        Tue,  9 Aug 2022 03:39:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67789B81065;
+        Tue,  9 Aug 2022 10:39:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B220C433D7;
+        Tue,  9 Aug 2022 10:39:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660041568;
+        bh=BRCiwnRrrEj+6rsHKi7i9FY2FVq0CuJ6TVmIwaj4nKc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RIWMRw/pUkE5FT2ixI8auoI2/R3naj/TqPtCeMvEbgyo2wDaTPQgqjCsD8L2FL3Us
+         jhz0o7Kuq6muGWeG9gOPCFbkWm2NgIAg7EV/lZttYHpp/bqu9Kkj6xM4951YhdAHvY
+         G7jL0rXBKelePdSsReSJf61tbvXtyW83z5fl2flimjYTGFh2213DrEZ0Tzrua1NUe+
+         mDQN0zb76QOOd4wKLQtk13lm9K1uaDDb6uD6gwgIW4IApzuVUQfoghFQRlxKSJqSEl
+         kZZl16vVs6h2YNeI0VLsFSEVhJEhQyADbNwGL5AjDXuDH//G66Ykytw1WZYz4lziI1
+         Xes4YAaktZ6vg==
+Received: by mail-vs1-f49.google.com with SMTP id 66so11438754vse.4;
+        Tue, 09 Aug 2022 03:39:28 -0700 (PDT)
+X-Gm-Message-State: ACgBeo19tfNJ0hZ2BhY0Bl+n/bTT59kcFvlWIwIWDjvSHOtCISqBrTpC
+        Pt5dZZYxV6rKxNA+YPpPA1LrzwPN9P4pYTw4G10=
+X-Google-Smtp-Source: AA6agR4wnbjusAhLZE7GHxSqIj6E44MSRxZCmQYgbMJfjWdg+7AxhfqWOko9JWnnMUrahCErmoGrgS7TO8/iDYxezR8=
+X-Received: by 2002:a67:fb82:0:b0:388:6cf6:2d17 with SMTP id
+ n2-20020a67fb82000000b003886cf62d17mr9519484vsr.84.1660041567056; Tue, 09 Aug
+ 2022 03:39:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f6b46a29-0f65-9081-5228-a1028fea2bef@virtuozzo.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220809074522.2444672-1-chenhuacai@loongson.cn>
+ <874jylx0ad.wl-maz@kernel.org> <CAAhV-H50HERxjrmfDkSaHAVY7Q_ufpZP-e+qdZWVd=qEuQVXBg@mail.gmail.com>
+ <871qtpwwem.wl-maz@kernel.org>
+In-Reply-To: <871qtpwwem.wl-maz@kernel.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 9 Aug 2022 18:39:15 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4ZCmenrPvzLCaZZn57NoiGpQfVGpXg42DE2JevF4Tf9w@mail.gmail.com>
+Message-ID: <CAAhV-H4ZCmenrPvzLCaZZn57NoiGpQfVGpXg42DE2JevF4Tf9w@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Don't disable EIOINTC master core
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,31 +69,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 12:01:58PM +0300, Alexander Atanasov wrote:
-> > > diff --git a/include/uapi/linux/virtio_balloon.h b/include/uapi/linux/virtio_balloon.h
-> > > index ddaa45e723c4..f3ff7c4e5884 100644
-> > > --- a/include/uapi/linux/virtio_balloon.h
-> > > +++ b/include/uapi/linux/virtio_balloon.h
-> > > @@ -40,6 +40,7 @@
-> > >   /* Size of a PFN in the balloon interface. */
-> > >   #define VIRTIO_BALLOON_PFN_SHIFT 12
-> > > +#define VIRTIO_BALLOON_PAGE_SIZE (1<<VIRTIO_BALLOON_PFN_SHIFT)
-> > >   #define VIRTIO_BALLOON_CMD_ID_STOP	0
-> > >   #define VIRTIO_BALLOON_CMD_ID_DONE	1
-> > Did you run checkpatch on this?
-> 
-> 
-> Sure, i did:
-> 
-> scripts/checkpatch.pl
-> ../outgoing/v4-0001-Create-debugfs-file-with-virtio-balloon-usage-inf.patch
-> total: 0 errors, 0 warnings, 108 lines checked
-> 
-> ../outgoing/v4-0001-Create-debugfs-file-with-virtio-balloon-usage-inf.patch
-> has no obvious style problems and is ready for submission.
+Hi, Marc,
 
-Weird. There should be spaces around << I think.
+On Tue, Aug 9, 2022 at 6:20 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Tue, 09 Aug 2022 10:19:31 +0100,
+> Huacai Chen <chenhuacai@kernel.org> wrote:
+> >
+> > Hi, Marc,
+> >
+> > On Tue, Aug 9, 2022 at 4:56 PM Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > On Tue, 09 Aug 2022 08:45:22 +0100,
+> > > Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > >
+> > > > This patch fix a CPU hotplug issue. The EIOINTC master core (the first
+> > > > core of an EIOINTC node) should not be disabled at runtime, since it has
+> > > > the responsibility of dispatching I/O interrupts.
+> > > >
+> > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > > ---
+> > > >  arch/loongarch/kernel/smp.c            | 9 +++++++++
+> > > >  drivers/irqchip/irq-loongson-eiointc.c | 5 +++++
+> > > >  2 files changed, 14 insertions(+)
+> > > >
+> > > > diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> > > > index 09743103d9b3..54901716f8de 100644
+> > > > --- a/arch/loongarch/kernel/smp.c
+> > > > +++ b/arch/loongarch/kernel/smp.c
+> > > > @@ -242,9 +242,18 @@ void loongson3_smp_finish(void)
+> > > >
+> > > >  static bool io_master(int cpu)
+> > > >  {
+> > > > +     int i, node, master;
+> > > > +
+> > > >       if (cpu == 0)
+> > > >               return true;
+> > > >
+> > > > +     for (i = 1; i < loongson_sysconf.nr_io_pics; i++) {
+> > > > +             node = eiointc_get_node(i);
+> > > > +             master = cpu_number_map(node * CORES_PER_EIO_NODE);
+> > > > +             if (cpu == master)
+> > > > +                     return true;
+> > > > +     }
+> > > > +
+> > > >       return false;
+> > > >  }
+> > > >
+> > > > diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> > > > index 170dbc96c7d3..6c99a2ff95f5 100644
+> > > > --- a/drivers/irqchip/irq-loongson-eiointc.c
+> > > > +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> > > > @@ -56,6 +56,11 @@ static void eiointc_enable(void)
+> > > >       iocsr_write64(misc, LOONGARCH_IOCSR_MISC_FUNC);
+> > > >  }
+> > > >
+> > > > +int eiointc_get_node(int id)
+> > > > +{
+> > > > +     return eiointc_priv[id]->node;
+> > > > +}
+> > > > +
+> > > >  static int cpu_to_eio_node(int cpu)
+> > > >  {
+> > > >       return cpu_logical_map(cpu) / CORES_PER_EIO_NODE;
+> > >
+> > >
+> > > I don't understand why it has to be this complex and make any use of
+> > > the node number.
+> > >
+> > > As I understand it, CPU-0 in any EIOINTC block is a master. So all you
+> > > need to find out is whether the CPU number is a multiple of
+> > > CORES_PER_EIO_NODE.
+> > CPU-0 in any EIOINTC block may be a master, but not absolutely be a
+> > master to dispatch I/O interrupts. If there is no bridge under a
+> > EIOINTC, then this EIOINTC doesn't handle I/O interrupts, and it can
+> > be disabled at runtime.
+>
+> But that's not what your code is checking, is it? You're only
+> reporting the node number, irrespective of whether there is anything
+> behind the EIOINTC.
+The return value of eiointc_get_node() means "this eio-node has a
+downstream bridge, so the master core of this eio-node cannot be
+disabled". :)
 
--- 
-MST
-
+Huacai
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

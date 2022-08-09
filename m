@@ -2,73 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEE458D1A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFCD58D1A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244799AbiHIBDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 21:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S236078AbiHIBM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 21:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbiHIBDN (ORCPT
+        with ESMTP id S232876AbiHIBMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 21:03:13 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCDD1CB32
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 18:03:12 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id s5-20020a056e02216500b002dde8b02f62so7668914ilv.15
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 18:03:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=GNZ/WEEcU/yigVdW+3TGwb/mwTJDxOKNs/b3Za4ZRoA=;
-        b=6qLM53rVboIBA/U1sN0Mgc3rmfdLuQ0cUov0m3b/GiTnIS54EfqgBuFTDLCcraJKcq
-         7i4Rm8qtj5WkY6FyCu6NtOjndw4yrJvGqWpe/16D3Rtjvn8fONhsf4CWKQiNbcGNzh+w
-         QZN61vVgMpFM7eVnyAly/YNsoRz0XMzj3l5TB7gkftoj0bQmxQJyexO9cqaJ8vaVwNcn
-         G+sq5w0nUVM0gDOOuDalerZitOrHpoMCHZNHeosCI6jLY+MoUV9Zu7jbIjair+cKwnZg
-         SZ2JGPYnsZpQDcewoIoZ/cJTd1ooKPbRU+WSJShSCoeeqYI0yM5N0ccLxKqy2/OoOnOJ
-         IboA==
-X-Gm-Message-State: ACgBeo2N+d4o52LDcwflCS+tWtkjoS+8BxMHMYVAH/d1QP9sYtWHrpFI
-        RSLTfUq9gFH4mKkKGk1jZvEQbvyI3rORHtEhoMY9l7Ya8pZ/
-X-Google-Smtp-Source: AA6agR6lGbKCkVCen8Pq3kkuCbC5xZX2EPvMb7eVfPMPn6uzv8lo6hvhu7Y45JT6EF5zqg7q5d51CW4/YS7lsfDIhtjjf7enXY9G
+        Mon, 8 Aug 2022 21:12:54 -0400
+Received: from mail-m11885.qiye.163.com (mail-m11885.qiye.163.com [115.236.118.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246B913FBC;
+        Mon,  8 Aug 2022 18:12:48 -0700 (PDT)
+Received: from [192.168.111.100] (unknown [58.22.7.114])
+        by mail-m11885.qiye.163.com (Hmail) with ESMTPA id A41224C0488;
+        Tue,  9 Aug 2022 09:12:46 +0800 (CST)
+Message-ID: <717f4fb6-9523-6358-eb10-94fc08a1e1b2@rock-chips.com>
+Date:   Tue, 9 Aug 2022 09:12:45 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:3cc:b0:678:eb57:5eb with SMTP id
- g12-20020a05660203cc00b00678eb5705ebmr7999553iov.125.1660006992163; Mon, 08
- Aug 2022 18:03:12 -0700 (PDT)
-Date:   Mon, 08 Aug 2022 18:03:12 -0700
-In-Reply-To: <20220808133219.2248-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000017bd2d05e5c47f10@google.com>
-Subject: Re: [syzbot] possible deadlock in ext4_xattr_get
-From:   syzbot <syzbot+62120febbd1ee3c3c860@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [PATCH] drm/gem: Fix GEM handle release errors
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Andy Yan <andy.yan@rock-chips.com>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-media@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
+References: <20220802113316.18340-1-jeffy.chen@rock-chips.com>
+ <61e6fd7e-fde7-19ae-0e31-0ad8013d0e48@amd.com>
+From:   Chen Jeffy <jeffy.chen@rock-chips.com>
+In-Reply-To: <61e6fd7e-fde7-19ae-0e31-0ad8013d0e48@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVlCTEoaVkgdTRhDTRkdSBkdTVUTARMWGhIXJB
+        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktITkhVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pwg6Nhw*AT0xLy8ICh4fKj9I
+        NRMwCwFVSlVKTU1LS0tMTk1MTk5JVTMWGhIXVREeHR0CVRgTHhU7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFMQ0pONwY+
+X-HM-Tid: 0a8280294ef12eb9kusna41224c0488
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Christian,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Sorry, i've sent a v2 before, please check that.
 
-Reported-and-tested-by: syzbot+62120febbd1ee3c3c860@syzkaller.appspotmail.com
+On 8/9 星期二 2:05, Christian König wrote:
+> 
+> 
+> Am 02.08.22 um 13:33 schrieb Jeffy Chen:
+>> Currently we are assuming a one to one mapping between dmabuf and handle
+>> when releasing GEM handles.
+>>
+>> But that is not always true, since we would create extra handles for the
+>> GEM obj in cases like gem_open() and getfb{,2}().
+>>
+>> A similar issue was reported at:
+>> https://lore.kernel.org/all/20211105083308.392156-1-jay.xu@rock-chips.com/
+>>
+>> Another problem is that the drm_gem_remove_prime_handles() now only
+>> remove handle to the exported dmabuf (gem_obj->dma_buf), so the imported
+>> ones would leak:
+>> WARNING: CPU: 2 PID: 236 at drivers/gpu/drm/drm_prime.c:228 
+>> drm_prime_destroy_file_private+0x18/0x24
+>>
+>> Let's fix these by using handle to find the exact map to remove.
+>>
+>> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+>> ---
+>>
+>>   drivers/gpu/drm/drm_gem.c      | 17 +----------------
+>>   drivers/gpu/drm/drm_internal.h |  4 ++--
+>>   drivers/gpu/drm/drm_prime.c    | 16 ++++++++++------
+>>   3 files changed, 13 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+>> index eb0c2d041f13..ed39da383570 100644
+>> --- a/drivers/gpu/drm/drm_gem.c
+>> +++ b/drivers/gpu/drm/drm_gem.c
+>> @@ -168,21 +168,6 @@ void drm_gem_private_object_init(struct 
+>> drm_device *dev,
+>>   }
+>>   EXPORT_SYMBOL(drm_gem_private_object_init);
+>> -static void
+>> -drm_gem_remove_prime_handles(struct drm_gem_object *obj, struct 
+>> drm_file *filp)
+>> -{
+>> -    /*
+>> -     * Note: obj->dma_buf can't disappear as long as we still hold a
+>> -     * handle reference in obj->handle_count.
+>> -     */
+>> -    mutex_lock(&filp->prime.lock);
+>> -    if (obj->dma_buf) {
+>> -        drm_prime_remove_buf_handle_locked(&filp->prime,
+>> -                           obj->dma_buf);
+>> -    }
+>> -    mutex_unlock(&filp->prime.lock);
+>> -}
+>> -
+>>   /**
+>>    * drm_gem_object_handle_free - release resources bound to userspace 
+>> handles
+>>    * @obj: GEM object to clean up.
+>> @@ -253,7 +238,7 @@ drm_gem_object_release_handle(int id, void *ptr, 
+>> void *data)
+>>       if (obj->funcs->close)
+>>           obj->funcs->close(obj, file_priv);
+>> -    drm_gem_remove_prime_handles(obj, file_priv);
+>> +    drm_prime_remove_buf_handle(&file_priv->prime, id);
+>>       drm_vma_node_revoke(&obj->vma_node, file_priv);
+>>       drm_gem_object_handle_put_unlocked(obj);
+>> diff --git a/drivers/gpu/drm/drm_internal.h 
+>> b/drivers/gpu/drm/drm_internal.h
+>> index 1fbbc19f1ac0..7bb98e6a446d 100644
+>> --- a/drivers/gpu/drm/drm_internal.h
+>> +++ b/drivers/gpu/drm/drm_internal.h
+>> @@ -74,8 +74,8 @@ int drm_prime_fd_to_handle_ioctl(struct drm_device 
+>> *dev, void *data,
+>>   void drm_prime_init_file_private(struct drm_prime_file_private 
+>> *prime_fpriv);
+>>   void drm_prime_destroy_file_private(struct drm_prime_file_private 
+>> *prime_fpriv);
+>> -void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private 
+>> *prime_fpriv,
+>> -                    struct dma_buf *dma_buf);
+>> +void drm_prime_remove_buf_handle(struct drm_prime_file_private 
+>> *prime_fpriv,
+>> +                 uint32_t handle);
+>>   /* drm_drv.c */
+>>   struct drm_minor *drm_minor_acquire(unsigned int minor_id);
+>> diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+>> index e3f09f18110c..c28518ab62d0 100644
+>> --- a/drivers/gpu/drm/drm_prime.c
+>> +++ b/drivers/gpu/drm/drm_prime.c
+>> @@ -190,29 +190,33 @@ static int drm_prime_lookup_buf_handle(struct 
+>> drm_prime_file_private *prime_fpri
+>>       return -ENOENT;
+>>   }
+>> -void drm_prime_remove_buf_handle_locked(struct drm_prime_file_private 
+>> *prime_fpriv,
+>> -                    struct dma_buf *dma_buf)
+>> +void drm_prime_remove_buf_handle(struct drm_prime_file_private 
+>> *prime_fpriv,
+>> +                 uint32_t handle)
+>>   {
+>>       struct rb_node *rb;
+>> +    mutex_lock(&prime_fpriv->lock);
+>> +
+>>       rb = prime_fpriv->dmabufs.rb_node;
+>>       while (rb) {
+>>           struct drm_prime_member *member;
+>>           member = rb_entry(rb, struct drm_prime_member, dmabuf_rb);
+>> -        if (member->dma_buf == dma_buf) {
+>> +        if (member->handle == handle) {
+>>               rb_erase(&member->handle_rb, &prime_fpriv->handles);
+>>               rb_erase(&member->dmabuf_rb, &prime_fpriv->dmabufs);
+>> -            dma_buf_put(dma_buf);
+>> +            dma_buf_put(member->dma_buf);
+>>               kfree(member);
+>> -            return;
+>> -        } else if (member->dma_buf < dma_buf) {
+>> +            break;
+>> +        } else if (member->handle < handle) {
+> 
+> Just to make it clear once more. That change here is completely broken.
+> 
+> The rb is indexed by the dma_buf object, not the handle.
+> 
+> Regards,
+> Christian.
+> 
+>>               rb = rb->rb_right;
+>>           } else {
+>>               rb = rb->rb_left;
+>>           }
+>>       }
+>> +
+>> +    mutex_unlock(&prime_fpriv->lock);
+>>   }
+>>   void drm_prime_init_file_private(struct drm_prime_file_private 
+>> *prime_fpriv)
+> 
+> 
 
-Tested on:
-
-commit:         cb71b93c Add linux-next specific files for 20220628
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=12afd10e080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=62120febbd1ee3c3c860
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=104ed896080000
-
-Note: testing is done by a robot and is best-effort only.

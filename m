@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6703258D220
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 04:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A94358D222
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 04:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbiHICvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 22:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
+        id S232153AbiHICvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 22:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbiHICvg (ORCPT
+        with ESMTP id S232085AbiHICvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 22:51:36 -0400
+        Mon, 8 Aug 2022 22:51:38 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC141EAE0;
-        Mon,  8 Aug 2022 19:51:22 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1CE745C0130;
-        Mon,  8 Aug 2022 22:51:22 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48671EAF9;
+        Mon,  8 Aug 2022 19:51:25 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id EDBE35C0076;
+        Mon,  8 Aug 2022 22:51:24 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 08 Aug 2022 22:51:22 -0400
+  by compute5.internal (MEProxy); Mon, 08 Aug 2022 22:51:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660013482; x=1660099882; bh=p6
-        022WMN/oVY4nyX42sR1Bs+V2EDgtJ2eDDOx0oRuX0=; b=IzNGScerdfPuztAoj/
-        rTuUmSY/bxa3qGS599PEx4vqnr8/CCAYreOe5pVMZLIQ5S73eI0F7wnfRx6evP8r
-        1y/MlLIZoK4JatpVvBI54Lj2rI7ZmjC8dbD1MlzJWESTRuMdGkb+RQlqQ9glD4Ip
-        NgPJOdeTDRATNQHN4lB+NVW8ndti814JROLzV3oPb965O0M9sKJT8MA4XpB3TM7N
-        I1Zx3CtSDJ3z/tk310OQkBBh2pE26ZRnAZdn5oUtKV8q9xE/1Ji2POUoTOzFKsSc
-        OPDT3XwQw1LbtE92nivxQxEPzRgd4FvFLTpbXva0u7d3/uxtAiYjB64gw8cEbgoj
-        xEww==
+        :subject:subject:to:to; s=fm2; t=1660013484; x=1660099884; bh=o+
+        juuYOh1Fprq4WVZMezN2y7MDe2vSHHS0tkW1i/SsI=; b=DeJeUR2xouHH5t3HAY
+        wBtQ+ORckWq0BoUeDmuJ+KP+Y+h/2xRO46pgVa1Xq2tl+f0u2yMMt0l4Df99WHRc
+        qH6zfaPugaQXtZi+GfGCW7oE/EYBTZ8DMNLJLG23YErgYpcWwgXahhg5C8nw0znW
+        DS6fDJxr+ZcEwTaP7ptqzsa/8kmco+u0Ss8zf60Mdr7QYcrdjuD4m7aU4f4Ltskh
+        GilCZt5LWIQ65luV7WWrB1TrGYnP6kCAM+1rfnZMdaU44vBX0kheNvBTob375Lr3
+        iK8utWSD2IxzSbKAMEpFK1915nLtbYkDTFUTLEfubVNhZQ3xKWBq75hUO0w4zb0q
+        w2Ow==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660013482; x=1660099882; bh=p6022WMN/oVY4
-        nyX42sR1Bs+V2EDgtJ2eDDOx0oRuX0=; b=Go2mbV9o08pjJEeBL4GZUk36KEi1r
-        ckae8nenacQtfEWiz59Dogg4HUDh0qpJQvQNVUpD6Oo+yGe5IJPW1Ao5vXyu3Ouj
-        S5A9Y7i2Tw9CxYzsM5BOe6WktCecpb3lCxVEdXomT9Wy17RZdIWi6xqYkHJo29X1
-        83pFB3eSrfq+62qh184UIQAAc76ExeJFyZkfoiThv6nLpye0VPN4jPNU/fJruzSm
-        gp/26upefYgZj5ohYG62AnJSQVtMIRTeOy7Pe4B+0faAIq9RfaYSnE5exBomPWTP
-        D8MoMXfBFD9YBN9a7f0/8SiumivDITS3C4elnOLiNJeIMIQR5xYY7nN3g==
-X-ME-Sender: <xms:qcvxYpOVqC-ASHH-6Xhg-aP57wzPmE1E3-jNggdQ03hadNbCcD89lQ>
-    <xme:qcvxYr_do2Zm0xAG-ZySZUQU4mlnuxjObVbOeu1nqBk39Kc_xRQv5vElZuO1vbE6D
-    ohxDrXlGFOM-WtBgVw>
-X-ME-Received: <xmr:qcvxYoRcc_IvHPcen0uHI-HC0aWAnMbPzvw3i2yVP05doCpOiyb_G6IUBSw_>
+        :x-sasl-enc; s=fm1; t=1660013484; x=1660099884; bh=o+juuYOh1Fprq
+        4WVZMezN2y7MDe2vSHHS0tkW1i/SsI=; b=G7f3UNErF2NXbef1wR8kvqlz0SuoM
+        mJVDAXebGcAo65ns1IQIPU3G8nk4TywNAcTxJrNvdjvfrW3vh65I4HY0WLDG+KTR
+        7iJcH8XLbNbRZpiC1mKQqzmr9nQZkK98uhIlOi8PeMf4nMtVGhmv/gwuDRnbpXge
+        LTC8sIJK3sxmKrb+AUUEo8VryHOH7fBEINpL37XxFb8TPF1VaCkH46KkDKL1LJU1
+        JBXjfP0R5o8mLhVXzdWLucdl0Vn7SaIkhCjbjxpF1byc8nAdsI1oUgyYJU/5ewTp
+        sYYYeGLxGNjRZRcT5df9KE7Gs//DcBKq+xbGqzufnmhw9Cj0/MPjzJ0sw==
+X-ME-Sender: <xms:rMvxYhOd7ljHy5B7-lG6Sbma33ruMKW1QqPyHEaaf95aYtMAKnWncA>
+    <xme:rMvxYj8PMs4gagYXq253xlT22RDicv3hhSxSmAXrcP07tX5tbYLHpfPJKK1dMUjqz
+    9lz7g8gEz83-w4dHiQ>
+X-ME-Received: <xmr:rMvxYgRwd2yxvIpYnlE2QwxCs8uPNptQ9HmXiBc9oJnK63IGypl4y9tGDBxY>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefledgieehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
     jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgeptden
+    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgepvden
     ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:qcvxYlto0OatyAjxbWJq13O9wzQbErhS_hpuR4G2iDJb63VhG2IXyg>
-    <xmx:qcvxYhf1pd70SFCo68cCpYwOEgPD168L6AsHRpPmkJP-RG6rsPbpuQ>
-    <xmx:qcvxYh2h9kqncAqRn0UbSHANb0YoNyKkf20Z2wzND6AXakCGTSx-uA>
-    <xmx:qsvxYo5kIhhOMt3zyPVNiVIaAWSWsiM35N3FxVaH9oVHdAY8Mn8KbA>
+X-ME-Proxy: <xmx:rMvxYtu1EX6OAJsXWtMxn9tQhqzqqDc_4TvF35DyeZ2ioeTmjE-tXg>
+    <xmx:rMvxYpf0FGM7ttDplTT6g3X2cOy2KemEDFyP7tWMPtbkp0fwsCwJsQ>
+    <xmx:rMvxYp1qxvFdGswwCBjz5ZwN9pN34SQq_xgZKrlEGv9R8REyFZlt7A>
+    <xmx:rMvxYg4gwgY87hyqEnB6fvsMx3opBDvfjfRLNAJLZyrCsLU2n0u_2w>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 8 Aug 2022 22:51:19 -0400 (EDT)
+ 8 Aug 2022 22:51:22 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     hdegoede@redhat.com
 Cc:     andy.shevchenko@gmail.com, pobrn@protonmail.com, pavel@ucw.cz,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH v3 5/6] asus-wmi: Convert all attr-show to use sysfs_emit
-Date:   Tue,  9 Aug 2022 14:50:53 +1200
-Message-Id: <20220809025054.1626339-6-luke@ljones.dev>
+Subject: [PATCH v3 6/6] asus-wmi: Support the hardware GPU MUX on some laptops
+Date:   Tue,  9 Aug 2022 14:50:54 +1200
+Message-Id: <20220809025054.1626339-7-luke@ljones.dev>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220809025054.1626339-1-luke@ljones.dev>
 References: <20220809025054.1626339-1-luke@ljones.dev>
@@ -84,81 +84,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This changes all *_show attributes in asus-wmi.c to use sysfs_emit()
-instead of the older method of writing to the output buffer manually.
+Support the hardware GPU MUX switch available on some models. This
+switch can toggle the MUX between:
+
+- 0, Dedicated mode
+- 1, Optimus mode
+
+Optimus mode is the regular iGPU + dGPU available, while dedicated
+mode switches the system to have only the dGPU available.
 
 Signed-off-by: Luke D. Jones <luke@ljones.dev>
 ---
- drivers/platform/x86/asus-wmi.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ .../ABI/testing/sysfs-platform-asus-wmi       |  9 ++
+ drivers/platform/x86/asus-wmi.c               | 91 +++++++++++++++++++
+ include/linux/platform_data/x86/asus-wmi.h    |  3 +
+ 3 files changed, 103 insertions(+)
 
+diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+index 541dbfbbbb26..d483bc3cb2e6 100644
+--- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
++++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+@@ -67,6 +67,15 @@ Description:
+ 			* 0 - Disable,
+ 			* 1 - Enable,
+ 
++What:		/sys/devices/platform/<platform>/gpu_mux_mode
++Date:		Aug 2022
++KernelVersion:	6.0
++Contact:	"Luke Jones" <luke@ljones.dev>
++Description:
++		Switch the GPU used by the hardware MUX:
++			* 0 - Dedicated GPU,
++			* 1 - Optimus mode,
++
+ What:		/sys/devices/platform/<platform>/panel_od
+ Date:		Aug 2022
+ KernelVersion:	5.17
 diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 719223804c0e..78f1f3af1b12 100644
+index 78f1f3af1b12..c5fa21370481 100644
 --- a/drivers/platform/x86/asus-wmi.c
 +++ b/drivers/platform/x86/asus-wmi.c
-@@ -942,7 +942,7 @@ static ssize_t charge_control_end_threshold_show(struct device *device,
- 						 struct device_attribute *attr,
- 						 char *buf)
- {
--	return sprintf(buf, "%d\n", charge_end_threshold);
-+	return sysfs_emit(buf, "%d\n", charge_end_threshold);
- }
+@@ -246,6 +246,9 @@ struct asus_wmi {
+ 	bool dgpu_disable_available;
+ 	bool dgpu_disable;
  
- static DEVICE_ATTR_RW(charge_control_end_threshold);
-@@ -2032,7 +2032,7 @@ static ssize_t pwm1_show(struct device *dev,
- 		value = -1;
- 	}
++	bool gpu_mux_mode_available;
++	bool gpu_mux_mode;
++
+ 	bool keyboard_rgb_state_available;
+ 	bool keyboard_rgb_mode_available;
+ 	struct keyboard_rgb_led keyboard_rgb_led;
+@@ -750,6 +753,86 @@ static ssize_t egpu_enable_store(struct device *dev,
  
--	return sprintf(buf, "%d\n", value);
-+	return sysfs_emit(buf, "%d\n", value);
- }
+ static DEVICE_ATTR_RW(egpu_enable);
  
- static ssize_t pwm1_store(struct device *dev,
-@@ -2092,7 +2092,7 @@ static ssize_t fan1_input_show(struct device *dev,
- 		return -ENXIO;
- 	}
- 
--	return sprintf(buf, "%d\n", value < 0 ? -1 : value*100);
-+	return sysfs_emit(buf, "%d\n", value < 0 ? -1 : value * 100);
- }
- 
- static ssize_t pwm1_enable_show(struct device *dev,
-@@ -2110,7 +2110,7 @@ static ssize_t pwm1_enable_show(struct device *dev,
- 	 * in practice on X532FL at least (the bit is always 0) and there's
- 	 * also nothing in the DSDT to indicate that this behaviour exists.
- 	 */
--	return sprintf(buf, "%d\n", asus->fan_pwm_mode);
-+	return sysfs_emit(buf, "%d\n", asus->fan_pwm_mode);
- }
- 
- static ssize_t pwm1_enable_store(struct device *dev,
-@@ -2178,7 +2178,7 @@ static ssize_t fan1_label_show(struct device *dev,
- 					  struct device_attribute *attr,
- 					  char *buf)
- {
--	return sprintf(buf, "%s\n", ASUS_FAN_DESC);
-+	return sysfs_emit(buf, "%s\n", ASUS_FAN_DESC);
- }
- 
- static ssize_t asus_hwmon_temp1(struct device *dev,
-@@ -2371,7 +2371,7 @@ static ssize_t fan_boost_mode_show(struct device *dev,
- {
- 	struct asus_wmi *asus = dev_get_drvdata(dev);
- 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", asus->fan_boost_mode);
-+	return sysfs_emit(buf, "%d\n", asus->fan_boost_mode);
- }
- 
- static ssize_t fan_boost_mode_store(struct device *dev,
-@@ -2924,7 +2924,7 @@ static ssize_t throttle_thermal_policy_show(struct device *dev,
- 	struct asus_wmi *asus = dev_get_drvdata(dev);
- 	u8 mode = asus->throttle_thermal_policy_mode;
- 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", mode);
++/* gpu mux switch *************************************************************/
++static int gpu_mux_mode_check_present(struct asus_wmi *asus)
++{
++	u32 result;
++	int err;
++
++	asus->gpu_mux_mode_available = false;
++
++	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_GPU_MUX, &result);
++	if (err) {
++		if (err == -ENODEV)
++			return 0;
++		return err;
++	}
++
++	if (result & ASUS_WMI_DSTS_PRESENCE_BIT) {
++		asus->gpu_mux_mode_available = true;
++		asus->gpu_mux_mode = result & ASUS_WMI_DSTS_STATUS_BIT;
++	}
++
++	return 0;
++}
++
++static int gpu_mux_mode_write(struct asus_wmi *asus)
++{
++	u32 retval;
++	u8 value;
++	int err;
++
++	/* Don't rely on type conversion */
++	value = asus->gpu_mux_mode ? 1 : 0;
++
++	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_GPU_MUX, value, &retval);
++	if (err) {
++		pr_warn("Failed to set dGPU-only mode: %d\n", err);
++		return err;
++	}
++
++	if (retval > 1) {
++		pr_warn("Failed to set dGPU-only mode (retval): 0x%x\n", retval);
++		return -EIO;
++	}
++
++	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "gpu_mux_mode");
++
++	return 0;
++}
++
++static ssize_t gpu_mux_mode_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct asus_wmi *asus = dev_get_drvdata(dev);
++	u8 mode = asus->gpu_mux_mode;
++
 +	return sysfs_emit(buf, "%d\n", mode);
- }
++}
++
++static ssize_t gpu_mux_mode_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	bool optimus;
++	int result;
++
++	struct asus_wmi *asus = dev_get_drvdata(dev);
++
++	result = kstrtobool(buf, &optimus);
++	if (result)
++		return result;
++
++	asus->gpu_mux_mode = optimus;
++
++	result = gpu_mux_mode_write(asus);
++	if (result)
++		return result;
++
++	return count;
++}
++static DEVICE_ATTR_RW(gpu_mux_mode);
++
+ /* TUF Laptop Keyboard RGB Modes **********************************************/
+ static int keyboard_rgb_check_present(struct asus_wmi *asus)
+ {
+@@ -3496,6 +3579,7 @@ static struct attribute *platform_attributes[] = {
+ 	&dev_attr_touchpad.attr,
+ 	&dev_attr_egpu_enable.attr,
+ 	&dev_attr_dgpu_disable.attr,
++	&dev_attr_gpu_mux_mode.attr,
+ 	&dev_attr_keyboard_rgb_save.attr,
+ 	&dev_attr_keyboard_rgb_mode.attr,
+ 	&dev_attr_keyboard_rgb_speed.attr,
+@@ -3531,6 +3615,8 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
+ 		ok = asus->egpu_enable_available;
+ 	else if (attr == &dev_attr_dgpu_disable.attr)
+ 		ok = asus->dgpu_disable_available;
++	else if (attr == &dev_attr_gpu_mux_mode.attr)
++		ok = asus->gpu_mux_mode_available;
+ 	else if (attr == &dev_attr_keyboard_rgb_save.attr)
+ 		ok = asus->keyboard_rgb_mode_available;
+ 	else if (attr == &dev_attr_keyboard_rgb_mode.attr)
+@@ -3810,6 +3896,10 @@ static int asus_wmi_add(struct platform_device *pdev)
+ 	if (err)
+ 		goto fail_dgpu_disable;
  
- static ssize_t throttle_thermal_policy_store(struct device *dev,
++	err = gpu_mux_mode_check_present(asus);
++	if (err)
++		goto fail_gpu_mux_mode;
++
+ 	err = keyboard_rgb_check_present(asus);
+ 	if (err)
+ 		goto fail_keyboard_rgb_mode;
+@@ -3932,6 +4022,7 @@ static int asus_wmi_add(struct platform_device *pdev)
+ fail_fan_boost_mode:
+ fail_egpu_enable:
+ fail_dgpu_disable:
++fail_gpu_mux_mode:
+ fail_keyboard_rgb_mode:
+ fail_keyboard_rgb_state:
+ fail_platform:
+diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
+index b5c966798ef8..3faeb98f6ea9 100644
+--- a/include/linux/platform_data/x86/asus-wmi.h
++++ b/include/linux/platform_data/x86/asus-wmi.h
+@@ -98,6 +98,9 @@
+ /* dgpu on/off */
+ #define ASUS_WMI_DEVID_DGPU		0x00090020
+ 
++/* gpu mux switch, 0 = dGPU, 1 = Optimus */
++#define ASUS_WMI_DEVID_GPU_MUX	0x00090016
++
+ /* TUF laptop RGB control */
+ #define ASUS_WMI_DEVID_TUF_RGB_MODE	0x00100056
+ /* TUF laptop RGB state control */
 -- 
 2.37.1
 

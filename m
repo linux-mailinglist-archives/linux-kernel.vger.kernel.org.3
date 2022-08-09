@@ -2,224 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953B158DCCD
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3717758DCD6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245322AbiHIRHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 13:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S238747AbiHIRJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 13:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245296AbiHIRHq (ORCPT
+        with ESMTP id S245220AbiHIRJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:07:46 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B83220C7
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 10:07:44 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id z17so15012463wrq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 10:07:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=VJbu0Vi6JsT3Ge0NwSkLjoyGgFVaYGY0641GU+LZJhY=;
-        b=fvzM2GUUaZrmgyVaFSQsiiQM6O8bpQ/PHWn3++zGuNq8x5xtQK6QUVR+M6h/6+eyVl
-         BFh1AMDIrR0975z9iHhMgrOs3gvIryx6m0goQhg4HIxelRl4ejAApEZyZIOCZWZPS+3H
-         mDCMikiOSOjQgNN1pfpNxeG0l0TLzGV/AO4HjsTWeUVbhKLVPT+WNkxahiDHH+ad240E
-         BOfsX+l6T+Ryuijm/PB6KafjYGc37tS4PbGk7elfEA+jENKRYefWU2GdCa80YgS5odqA
-         1okFqqk+BPMfXfqESUGDnOikPzimREsT6/x38FcXY3TMg5pHO+ovKb+hXqYKNs7JLLCS
-         tDVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=VJbu0Vi6JsT3Ge0NwSkLjoyGgFVaYGY0641GU+LZJhY=;
-        b=KNNLKOLBOlSU7elD9OkuNjFRuoDntVRIYGuwd7uDVlzWf6xKKl8HVG1H+AA7V6825S
-         mKqX8OVc/rGqiJLKGdf0hIo2RVBVbLON/jlNalhXWodRJ7UH0aGFmuwvGmqZ3425c7tN
-         CoQY3lawSYbT5cEZDTGNyBMZA+ZrOHClGvgihF9gj/56s+gnMN4nmM0f7gmwI1MtgCTd
-         ohDWu7APELFaycw7yba8tOrYm6OjW5FHS2JoT1tOBy7a8QY+aw25mwbzQKOQlom0+3cQ
-         7d/xtkA7Tf2SVcdDkeB2eRGn39bH/awfHai40e8Ylp4dKg2kW0WwRaWwCwxKNuNIo1Sq
-         +FBA==
-X-Gm-Message-State: ACgBeo1mr0douVrWMqN2tsQ3CL9f5qm6jOkYFCQwxwCySH4WSIeHzZO1
-        Id1WkzNI0YVfIgy56v9fkCc2jB2psgLTtY+UcOP/lvgnqHU=
-X-Google-Smtp-Source: AA6agR6C6pGEJaHlcmIccbzG3l/LXUY9JxyRHbDjX/tgVsupnrZl7Tfk4Mg07ARiaMT3fu1Krv5Y6YtR9iIcV6+0gNU=
-X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
- v13-20020adfe28d000000b0021e4c3bb446mr14597055wri.300.1660064863280; Tue, 09
- Aug 2022 10:07:43 -0700 (PDT)
+        Tue, 9 Aug 2022 13:09:02 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0E423BDF;
+        Tue,  9 Aug 2022 10:09:01 -0700 (PDT)
+Received: from localhost.localdomain (1.general.cascardo.us.vpn [10.172.70.58])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id E41443F100;
+        Tue,  9 Aug 2022 17:08:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1660064940;
+        bh=ze03xbUn78LgfJuUNKBQC8X3WibtV+sxEkKu8Gimsms=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=EhmyyTKZ/QJB9cIsfZFTVMaOrn3p4V6YsWSI4GrzMgFS1hCxx+Fs/wyIKYzYewgYV
+         aDifqbzhUlzANm+/3pVTMtLlC6fWEe9kYWJCj8c1TVNOiH/zu+uXfAeFpXM5P+6x+C
+         xAOAzfIWZMIeVGAHSpYyPPs7LRD8dOKnELXMHE+Nzc9Dur0CW+rDUt0oHVfKtowElX
+         Hzn5d2t58IluQi7KaM0baIgiAyshflezDnUHkP1TJWprlDX0x36eFK3FuDrTrKgzFR
+         UxwjlyEfg3kZeVTr7tTcRdWw/Vt7FBnjzGu+1V9W3D0rXJYpLc3TKT8yJT/DzVUzc8
+         XzHJSw126s7GQ==
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org
+Subject: [PATCH] posix-cpu-timers: Cleanup CPU timers before freeing them during exec
+Date:   Tue,  9 Aug 2022 14:07:51 -0300
+Message-Id: <20220809170751.164716-1-cascardo@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220711093218.10967-1-adrian.hunter@intel.com>
- <20220711093218.10967-6-adrian.hunter@intel.com> <CAP-5=fUChJLqfJ__joVhtKwgjLTtBtMm8M0vt9eaOfLMmck85g@mail.gmail.com>
- <0e415212-b828-34d3-fd1b-ba518149bf89@intel.com>
-In-Reply-To: <0e415212-b828-34d3-fd1b-ba518149bf89@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 9 Aug 2022 10:07:30 -0700
-Message-ID: <CAP-5=fXNWfn_SX6aBHAQ=RPRHwDpnTmV_QpRoHRWX-J06TZ-BA@mail.gmail.com>
-Subject: Re: [PATCH 05/35] perf tools: Factor out evsel__id_hdr_size()
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 4:50 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 19/07/22 20:09, Ian Rogers wrote:
-> > On Mon, Jul 11, 2022 at 2:32 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>
-> >> Factor out evsel__id_hdr_size() so it can be reused.
-> >>
-> >> This is needed by perf inject. When injecting events from a guest perf.data
-> >> file, there is a possibility that the sample ID numbers conflict. To
-> >> re-write an ID sample, the old one needs to be removed first, which means
-> >> determining how big it is with evsel__id_hdr_size() and then subtracting
-> >> that from the event size.
-> >>
-> >> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> >> ---
-> >>  tools/perf/util/evlist.c | 28 +---------------------------
-> >>  tools/perf/util/evsel.c  | 26 ++++++++++++++++++++++++++
-> >>  tools/perf/util/evsel.h  |  2 ++
-> >>  3 files changed, 29 insertions(+), 27 deletions(-)
-> >>
-> >> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> >> index 48af7d379d82..03fbe151b0c4 100644
-> >> --- a/tools/perf/util/evlist.c
-> >> +++ b/tools/perf/util/evlist.c
-> >> @@ -1244,34 +1244,8 @@ bool evlist__valid_read_format(struct evlist *evlist)
-> >>  u16 evlist__id_hdr_size(struct evlist *evlist)
-> >>  {
-> >>         struct evsel *first = evlist__first(evlist);
-> >> -       struct perf_sample *data;
-> >> -       u64 sample_type;
-> >> -       u16 size = 0;
-> >>
-> >> -       if (!first->core.attr.sample_id_all)
-> >> -               goto out;
-> >> -
-> >> -       sample_type = first->core.attr.sample_type;
-> >> -
-> >> -       if (sample_type & PERF_SAMPLE_TID)
-> >> -               size += sizeof(data->tid) * 2;
-> >> -
-> >> -       if (sample_type & PERF_SAMPLE_TIME)
-> >> -               size += sizeof(data->time);
-> >> -
-> >> -       if (sample_type & PERF_SAMPLE_ID)
-> >> -               size += sizeof(data->id);
-> >> -
-> >> -       if (sample_type & PERF_SAMPLE_STREAM_ID)
-> >> -               size += sizeof(data->stream_id);
-> >> -
-> >> -       if (sample_type & PERF_SAMPLE_CPU)
-> >> -               size += sizeof(data->cpu) * 2;
-> >> -
-> >> -       if (sample_type & PERF_SAMPLE_IDENTIFIER)
-> >> -               size += sizeof(data->id);
-> >> -out:
-> >> -       return size;
-> >> +       return first->core.attr.sample_id_all ? evsel__id_hdr_size(first) : 0;
-> >>  }
-> >>
-> >>  bool evlist__valid_sample_id_all(struct evlist *evlist)
-> >> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> >> index a67cc3f2fa74..9a30ccb7b104 100644
-> >> --- a/tools/perf/util/evsel.c
-> >> +++ b/tools/perf/util/evsel.c
-> >> @@ -2724,6 +2724,32 @@ int evsel__parse_sample_timestamp(struct evsel *evsel, union perf_event *event,
-> >>         return 0;
-> >>  }
-> >>
-> >> +u16 evsel__id_hdr_size(struct evsel *evsel)
-> >> +{
-> >> +       u64 sample_type = evsel->core.attr.sample_type;
-> >
-> > As this just uses core, would it be more appropriate to put it in libperf?
->
-> AFAIK we move to libperf only as needed.
+Commit 55e8c8eb2c7b ("posix-cpu-timers: Store a reference to a pid not a
+task") started looking up tasks by PID when deleting a CPU timer.
 
-I don't think there is an expectation yet that libperf is stable - I
-hope not as I need to nuke the CPU map empty function. So, the cost of
-putting something there rather than perf is minimal, and perf can be
-just a consumer of libperf as any other tool - which builds confidence
-the API in libperf is complete. Jiri has posted patches in the past
-migrating parse-events, there's no "need" for that but the point is to
-improve the library API. I think this is the same case and minimal
-cost given only core is being used. Given we're actively migrating
-util APIs to libperf I think it is better to introduce simple APIs
-like this in libperf rather than creating something that someone will
-later have to migrate.
+When a non-leader thread calls execve, it will switch PIDs with the leader
+process. Then, as it calls exit_itimers, posix_cpu_timer_del cannot find
+the task because the timer still points out to the old PID.
 
-> >
-> >> +       u16 size = 0;
-> >
-> > Perhaps size_t or int? u16 seems odd.
->
-> Event header size member is 16-bit
+That means that armed timers won't be disarmed, that is, they won't be
+removed from the timerqueue_list. exit_itimers will still release their
+memory, and when that list is later processed, it leads to a
+use-after-free.
 
-sizeof is generally considered size_t so the code as-is has implicit
-truncation - again I'll stand by it looking odd.
+Clean up the timers from the de-threaded task before freeing them. This
+prevents a reported use-after-free.
 
-Thanks,
-Ian
+Fixes: 55e8c8eb2c7b ("posix-cpu-timers: Store a reference to a pid not a task")
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: <stable@vger.kernel.org>
+---
+ fs/exec.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> >
-> >> +
-> >> +       if (sample_type & PERF_SAMPLE_TID)
-> >> +               size += sizeof(u64);
-> >> +
-> >> +       if (sample_type & PERF_SAMPLE_TIME)
-> >> +               size += sizeof(u64);
-> >> +
-> >> +       if (sample_type & PERF_SAMPLE_ID)
-> >> +               size += sizeof(u64);
-> >> +
-> >> +       if (sample_type & PERF_SAMPLE_STREAM_ID)
-> >> +               size += sizeof(u64);
-> >> +
-> >> +       if (sample_type & PERF_SAMPLE_CPU)
-> >> +               size += sizeof(u64);
-> >> +
-> >> +       if (sample_type & PERF_SAMPLE_IDENTIFIER)
-> >> +               size += sizeof(u64);
-> >> +
-> >> +       return size;
-> >> +}
-> >> +
-> >>  struct tep_format_field *evsel__field(struct evsel *evsel, const char *name)
-> >>  {
-> >>         return tep_find_field(evsel->tp_format, name);
-> >> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> >> index 92bed8e2f7d8..699448f2bc2b 100644
-> >> --- a/tools/perf/util/evsel.h
-> >> +++ b/tools/perf/util/evsel.h
-> >> @@ -381,6 +381,8 @@ int evsel__parse_sample(struct evsel *evsel, union perf_event *event,
-> >>  int evsel__parse_sample_timestamp(struct evsel *evsel, union perf_event *event,
-> >>                                   u64 *timestamp);
-> >>
-> >> +u16 evsel__id_hdr_size(struct evsel *evsel);
-> >> +
-> >
-> > A comment would be nice, I know this is just moving code about but
-> > this is a new function.
-> >
-> > Thanks,
-> > Ian
-> >
-> >>  static inline struct evsel *evsel__next(struct evsel *evsel)
-> >>  {
-> >>         return list_entry(evsel->core.node.next, struct evsel, core.node);
-> >> --
-> >> 2.25.1
-> >>
->
+diff --git a/fs/exec.c b/fs/exec.c
+index 778123259e42..1c6b477dad69 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1301,6 +1301,9 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 	bprm->mm = NULL;
+ 
+ #ifdef CONFIG_POSIX_TIMERS
++	spin_lock_irq(&me->sighand->siglock);
++	posix_cpu_timers_exit(me);
++	spin_unlock_irq(&me->sighand->siglock);
+ 	exit_itimers(me);
+ 	flush_itimer_signals();
+ #endif
+-- 
+2.34.1
+

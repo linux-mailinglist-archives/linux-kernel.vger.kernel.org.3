@@ -2,91 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962E358D59C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E304A58D5A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239358AbiHIIp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S234019AbiHIIq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241114AbiHIIpr (ORCPT
+        with ESMTP id S238906AbiHIIqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:45:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EF860D2
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:45:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05568B80B89
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 08:45:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671D3C433D6;
-        Tue,  9 Aug 2022 08:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660034743;
-        bh=VKIJz/3kseX4NXW5x3L6MqsO9hB4DzRJ2UXkmwU0jLY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k6wrqg9/xFtT/6CURaKkO/Pfga0WpsRzfLdgqihdYhelEtipuK7OAUp+LDHU8GTJV
-         Jn3GdKFC/V31aWSlo9gjwqWlFWJj6njcSRF8XU/8ELupdFlb2wnqyo2Ulg4wlU6h2V
-         4IrqmLWeXHIQutSMd9Zz7NBI4034owXmtBBvzWmQ=
-Date:   Tue, 9 Aug 2022 10:45:42 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Subject: Re: New subsystem for acceleration devices
-Message-ID: <YvIethFMeGyljdVV@kroah.com>
-References: <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
- <YuvctaLwRi+z0Gw4@nvidia.com>
- <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
- <Yuxi1eRHPN36Or+1@nvidia.com>
- <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
- <CAFCwf107tLxHKxkPqSRsOHVVp5s2tDEFOOy2oDZUz_KGmv-rDg@mail.gmail.com>
- <YvCozvgodIY19LSr@kroah.com>
- <YvFOEPdC9r8QBH11@nvidia.com>
- <YvH9X5puer4jpzMX@kroah.com>
- <YvIU/wMdqFA1fYc6@infradead.org>
+        Tue, 9 Aug 2022 04:46:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C9CE21815
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660034775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jaq03+KQYvPWrhdnqM1mj3r1Ie88ciNsACbCUOzVw+0=;
+        b=EpqtKpYqoNUAc8Wh+D7ebYE3TrEjn5mebE6JOjyNHkAOviyHyqYrH1db0AszlMeudRdVXF
+        DgWnH0MbJ/3OOanY4+fylXAcQvn+Ua/GnTfiZRdzK0zCkKMNWXMVu1Ota6QUzLA+5zQlYI
+        x8BIHlL1vEX+FKl3SOENMVdYOCMPwk0=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-484-PT4BwKZpOiyUM_C8HywwgQ-1; Tue, 09 Aug 2022 04:46:14 -0400
+X-MC-Unique: PT4BwKZpOiyUM_C8HywwgQ-1
+Received: by mail-ej1-f71.google.com with SMTP id go15-20020a1709070d8f00b00730ab9dd8c6so3163927ejc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 01:46:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=jaq03+KQYvPWrhdnqM1mj3r1Ie88ciNsACbCUOzVw+0=;
+        b=foWEJ1dMErDnduFuts5xMV09HMXYDAe56fBH/CYjX24rThtXBiz0EL0nxYvR139tqE
+         1Exf8hUGvKNGjN8OeAxJ7CFQF7gw/xulQCdTVjcBp0w8S4UHP1Wrr1z7gHMeFJWSItmk
+         PZJJGxMRfRSnifTCReGjbbtmR9xnkvUSMzjN5W7u9ZlNCIfc04bqlcg1A+NEAbLjUgkH
+         /snV0UbkiiguNNnCVAL8zR65M7bZh4dRzIz90lQUh+CnAcDQtfbIppYczpuyktRZFIg+
+         9NpCBubpYpUhOA1rauRflgp7PsIhLcs0pxgVxXiuobX4RdIKUWAK/pbx1isiX/T6ACJI
+         WMBg==
+X-Gm-Message-State: ACgBeo0cBbdyxwb31cfOHywoVgMWDKCJKY2wgfwPLObq7LTEGbNCj/pP
+        ZoScg4MB89CvZRuSR4obKsUkhEEowF3FiMv98uoynDgACVNEbYGZBPRVXAe7uWD04L+2ivAwEtW
+        KQMP2I4HmoJ7W7IIkIZqnGnDa
+X-Received: by 2002:a17:906:9b83:b0:730:b3ae:343 with SMTP id dd3-20020a1709069b8300b00730b3ae0343mr17022674ejc.670.1660034772845;
+        Tue, 09 Aug 2022 01:46:12 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5KxB7CeMHwSWISG3iCZ0m1EID+v/ZwlOpnEekw9+qvE0R6X982djrb+Kwdr6dAEKJ2OPR60Q==
+X-Received: by 2002:a17:906:9b83:b0:730:b3ae:343 with SMTP id dd3-20020a1709069b8300b00730b3ae0343mr17022663ejc.670.1660034772690;
+        Tue, 09 Aug 2022 01:46:12 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id dm13-20020a05640222cd00b0043cb1a83c9fsm5758408edb.71.2022.08.09.01.46.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 01:46:12 -0700 (PDT)
+Message-ID: <e6370233-eae5-5668-3f07-d1a70eb92690@redhat.com>
+Date:   Tue, 9 Aug 2022 10:46:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvIU/wMdqFA1fYc6@infradead.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 2/2] asus-wmi: Add support for ROG X13 tablet mode
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Luke D. Jones" <luke@ljones.dev>
+Cc:     Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220809033048.1634583-1-luke@ljones.dev>
+ <20220809033048.1634583-3-luke@ljones.dev>
+ <CAHp75VeAMBM+itfAn8hRDykV9rRLGXzck8L2kBgpGkVRsPUm5g@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75VeAMBM+itfAn8hRDykV9rRLGXzck8L2kBgpGkVRsPUm5g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 01:04:15AM -0700, Christoph Hellwig wrote:
-> On Tue, Aug 09, 2022 at 08:23:27AM +0200, Greg Kroah-Hartman wrote:
-> > Based on the number of drivers that I see submitted weekly that try to
-> > restrict their open call to just one user by using atomic variables or
-> > other tricks, I think my interpretation of this stands :)
-> 
-> I think they really want what Jason described most of the time.  They
-> just don't know about the pitfalls of dup yet.
-> 
-> > > This is different from the number of FDs pointing at the struct file.
-> > > Userpsace can open a HW state and point a lot of FDs at it, that is
-> > > userspace's problem. From a kernel view they all share one struct file
-> > > and thus one HW state.
-> > 
-> > Yes, that's fine, if that is what is happening here, I have no
-> > objection.
-> 
-> It would be great if we could actually life that into a common
-> layer (chardev or vfs) given just how common this, and drivers tend
-> to get it wrong, do it suboptimal so often.
+Hi,
 
-No objection from me, I'll gladly take patches to chardev or miscdev to
-support this.
+On 8/9/22 10:40, Andy Shevchenko wrote:
+> On Tue, Aug 9, 2022 at 5:31 AM Luke D. Jones <luke@ljones.dev> wrote:
+>>
+>> Add quirk for ASUS ROG X13 Flow 2-in-1 to enable tablet mode with
+>> lid flip (all screen rotations).
+> 
+> ...
+> 
+>>         { KE_IGNORE, 0xC6, },  /* Ambient Light Sensor notification */
+>>         { KE_KEY, 0xFA, { KEY_PROG2 } },           /* Lid flip action */
+>> +       { KE_KEY, 0xBD, { KEY_PROG2 } }, /* Lid flip action on ROG xflow laptops */
+> 
+> Shouldn't you keep it sorted by value?
 
-greg k-h
+Actually as I mentioned in my review of v1, we don't want this
+addition at all, see:
+
+https://lore.kernel.org/platform-driver-x86/d9d79f9b-f3ab-c07e-9e18-5760ff828487@redhat.com/
+
+Regards,
+
+Hans
+
+
+> 
+> ...
+> 
+>>  #define NOTIFY_KBD_FBM                 0x99
+>>  #define NOTIFY_KBD_TTP                 0xae
+>>  #define NOTIFY_LID_FLIP                        0xfa
+>> +#define NOTIFY_LID_FLIP_ROG            0xbd
+> 
+> Ditto.
+> 
+> ...
+> 
+>> +static void lid_flip_rog_tablet_mode_get_state(struct asus_wmi *asus)
+>> +{
+>> +       int result;
+>> +
+>> +       result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_LID_FLIP_ROG);
+>> +       if (result >= 0) {
+> 
+> You missed the second part of my comment. Please, read carefully _all_
+> reviewer's comments.
+> 
+>> +               input_report_switch(asus->inputdev, SW_TABLET_MODE, result);
+>> +               input_sync(asus->inputdev);
+>> +       }
+>> +}
+> 
+> ...
+> 
+> Overall, it's getting better!
+> 
+

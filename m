@@ -2,118 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EAA58DD04
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 999C958DD0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245147AbiHIRWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 13:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
+        id S244813AbiHIRXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 13:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245085AbiHIRWP (ORCPT
+        with ESMTP id S244390AbiHIRXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:22:15 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B5124093;
-        Tue,  9 Aug 2022 10:22:14 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31f41584236so118814627b3.5;
-        Tue, 09 Aug 2022 10:22:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Y+rfmgrM3WKjt3tFbvF/OiiVhtpO2vIhp7OOayCy0NQ=;
-        b=EQyuEWw4zdOmypVrzhqeziyk4zGmJFA0vqJMRd+wK4MQVAWzrhwSWnqv+X6h3HExom
-         xCQi2baY+11rhW9qw+5WsRtqEqxuJVWRaQDfxPrw05Rn901VoneLpPBSmPHIrQPgQazZ
-         t5JzIRiXKeJI0FDbL79SeXkCKXWUQhsTfOtDCwYH9Lv2JGAnRMJiZyH5VH7iHyUU/L9l
-         j/NllTmkwTRAUktACrGvPtQusz1B4fi3ODpkAk7Ws696Fx0VTxjlHX+kPStrKU7sQe91
-         6l6LXR8cefhB/ZOkpuK8v7nu4arrLBTLQtCBR5K36jvDyc4kgdZHEMUkhcAVolalPJ9V
-         FINQ==
-X-Gm-Message-State: ACgBeo01E3UFkxFhu/93uoV/4S4PCXEtk3uLXtpO5e4FEo50quC30kUW
-        Yyu+uSStF6M/Rpl9/mY4Y0VmQmYJqsp+eBKSInE=
-X-Google-Smtp-Source: AA6agR7EvhuChVGND7jQBRVr6ST13Mv6+IHzyPAcnVAFMynFZUlXnKlPSF6zE+ouqbSkPJOjnLHyImtLXanQtwvymDw=
-X-Received: by 2002:a81:ae0a:0:b0:324:59ab:feec with SMTP id
- m10-20020a81ae0a000000b0032459abfeecmr24920169ywh.7.1660065733506; Tue, 09
- Aug 2022 10:22:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220808211213.1055148-1-sakari.ailus@linux.intel.com>
-In-Reply-To: <20220808211213.1055148-1-sakari.ailus@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 9 Aug 2022 19:22:02 +0200
-Message-ID: <CAJZ5v0jS9M8N_dHMnL2vW9g844_0Z4crzRdQFOgjcPYu4-7uLw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] ACPI: property: Fix error handling in acpi_init_properties()
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Tue, 9 Aug 2022 13:23:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 634F22529D
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 10:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660065795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9sZeH8lKi9bZAh82P0JmF9qMY+wf2U70JuiC0qHkpAk=;
+        b=SrfpTB6IHHqz+WMHz43UKb0vLND6274e7HMrFmeEw0KRbirS+pWGttPGPev3f/ClBX3LDf
+        9iLtVVVBVOhXEe6OkyC3kn/Bc54y9E5W3iebjgeFxL2Ea4OQudqmhtZawVG8ZGiN+IH1oz
+        AymZhxLXG6XwNBcSqTJw0Qu2DBzl2jg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-508-ZM8RAdwANDyd5mygrh_21w-1; Tue, 09 Aug 2022 13:23:12 -0400
+X-MC-Unique: ZM8RAdwANDyd5mygrh_21w-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C4B03C0F374;
+        Tue,  9 Aug 2022 17:23:11 +0000 (UTC)
+Received: from madcap2.tricolour.com (unknown [10.22.48.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 911F018EB5;
+        Tue,  9 Aug 2022 17:23:09 +0000 (UTC)
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Linux-Audit Mailing List <linux-audit@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        kernel test robot <oliver.sang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        linux-fsdevel@vger.kernel.org
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: [PATCH v4 0/4] fanotify: Allow user space to pass back additional audit info
+Date:   Tue,  9 Aug 2022 13:22:51 -0400
+Message-Id: <cover.1659996830.git.rgb@redhat.com>
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 11:12 PM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> buf.pointer, memory for storing _DSD data and nodes, was released if either
-> parsing properties or, as recently added, attaching data node tags failed.
-> Alas, properties were still left pointing to this memory if parsing
-> properties were successful but attaching data node tags failed.
->
-> Fix this by separating error handling for the two, and leaving properties
-> intact if data nodes cannot be tagged for a reason or another.
->
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Fixes: 1d52f10917a7 ("ACPI: property: Tie data nodes to acpi handles")
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
-> Hi Rafael,
->
-> This should fix the immediate problem. It needs to be figured out why data
-> node tagging doesn't work sometimes but that can wait.
+The Fanotify API can be used for access control by requesting permission
+event notification. The user space tooling that uses it may have a
+complicated policy that inherently contains additional context for the
+decision. If this information were available in the audit trail, policy
+writers can close the loop on debugging policy. Also, if this additional
+information were available, it would enable the creation of tools that
+can suggest changes to the policy similar to how audit2allow can help
+refine labeled security.
 
-Applied, but ->
+This patchset defines a new flag (FAN_INFO) and new extensions that
+define additional information which are appended after the response
+structure returned from user space on a permission event.  The appended
+information is organized with headers containing a type and size that
+can be delegated to interested subsystems.  One new information type is
+defined for audit rule number.  
 
->  drivers/acpi/property.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-> index 9711482014a6..201a5a9b2671 100644
-> --- a/drivers/acpi/property.c
-> +++ b/drivers/acpi/property.c
-> @@ -566,13 +566,13 @@ void acpi_init_properties(struct acpi_device *adev)
->                                         &adev->data, acpi_fwnode_handle(adev)))
->                 adev->data.pointer = buf.pointer;
->
-> -       if (!adev->data.pointer ||
-> -           !acpi_tie_nondev_subnodes(&adev->data)) {
-> -               acpi_untie_nondev_subnodes(&adev->data);
-> +       if (!adev->data.pointer) {
->                 acpi_handle_debug(adev->handle, "Invalid _DSD data, skipping\n");
->                 ACPI_FREE(buf.pointer);
-> +       } else {
-> +               if (!acpi_tie_nondev_subnodes(&adev->data))
-> +                       acpi_untie_nondev_subnodes(&adev->data);
->         }
-> -
+A newer kernel will work with an older userspace and an older kernel
+will behave as expected and reject a newer userspace, leaving it up to
+the newer userspace to test appropriately and adapt as necessary.
 
--> dropped this empty line removal which is unrelated to the fix (and
-the empty line is there on purpose).
+The audit function was updated to log the additional information in the
+AUDIT_FANOTIFY record. The following is an example of the new record
+format:
 
->   out:
->         if (acpi_of && !adev->flags.of_compatible_ok)
->                 acpi_handle_info(adev->handle,
-> --
+type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_info=3F
 
-Please note that I will not be able to push things after Thursday this
-week and throughout the next week, so either this goes in on Thursday
-or it will miss 5.20, in which case sorry about that.  We'll see.
+changelog:
+v1:
+- first version by Steve Grubb <sgrubb@redhat.com>
+Link: https://lore.kernel.org/r/2042449.irdbgypaU6@x2
 
-Thanks!
+v2:
+- enhancements suggested by Jan Kara <jack@suse.cz>
+- 1/3 change %d to %u in pr_debug
+- 2/3 change response from __u32 to __u16
+- mod struct fanotify_response and fanotify_perm_event add extra_info_type, extra_info_buf
+- extra_info_buf size max FANOTIFY_MAX_RESPONSE_EXTRA_LEN, add struct fanotify_response_audit_rule
+- extend debug statements
+- remove unneeded macros
+- [internal] change interface to finish_permission_event() and process_access_response()
+- 3/3 update format of extra information
+- [internal] change interface to audit_fanotify()
+- change ctx_type= to fan_type=
+Link: https://lore.kernel.org/r/cover.1651174324.git.rgb@redhat.com
+
+v3:
+- 1/3 switch {,__}audit_fanotify() from uint to u32
+- 2/3 re-add fanotify_get_response switch case FAN_DENY: to avoid unnecessary churn
+- add FAN_EXTRA flag to indicate more info and break with old kernel
+- change response from u16 to u32 to avoid endian issues
+- change extra_info_buf to union
+- move low-cost fd check earlier
+- change FAN_RESPONSE_INFO_AUDIT_NONE to FAN_RESPONSE_INFO_NONE
+- switch to u32 for internal and __u32 for uapi
+Link: https://lore.kernel.org/r/cover.1652724390.git.rgb@redhat.com
+
+v4:
+- scrap FAN_INVALID_RESPONSE_MASK in favour of original to catch invalid response == 0
+- introduce FANOTIFY_RESPONSE_* macros
+- uapi: remove union
+- keep original struct fanotify_response, add fan_info infra starting with audit reason
+- uapi add struct fanotify_response_info_header{type/pad/len} and struct fanotify_response_info_audit_rule{hdr/rule}
+- rename fan_ctx= to fan_info=, FAN_EXTRA to FAN_INFO
+- change event struct from type/buf to len/buf
+- enable multiple info extensions in one message
+- hex encode fan_info in __audit_fanotify()
+- record type FANOTIFY extended to "type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F"                                                                                                                     
+Link: https://lore.kernel.org/r/cover.1659981772.git.rgb@redhat.com
+
+Richard Guy Briggs (4):
+  fanotify: Ensure consistent variable type for response
+  fanotify: define struct members to hold response decision context
+  fanotify,audit: Allow audit to use the full permission event response
+  fanotify,audit: deliver fan_info as a hex-encoded string
+
+ fs/notify/fanotify/fanotify.c      |  13 +++-
+ fs/notify/fanotify/fanotify.h      |   4 +-
+ fs/notify/fanotify/fanotify_user.c | 106 ++++++++++++++++++++++-------
+ include/linux/audit.h              |   9 +--
+ include/linux/fanotify.h           |   5 ++
+ include/uapi/linux/fanotify.h      |  27 +++++++-
+ kernel/auditsc.c                   |  45 +++++++++++-
+ 7 files changed, 174 insertions(+), 35 deletions(-)
+
+-- 
+2.27.0
+

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC65C58DDD9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC9E58DDEC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344815AbiHISGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S1344857AbiHISHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344814AbiHISFv (ORCPT
+        with ESMTP id S1344853AbiHISG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:05:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77404B82;
-        Tue,  9 Aug 2022 11:02:42 -0700 (PDT)
+        Tue, 9 Aug 2022 14:06:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361FB2611B;
+        Tue,  9 Aug 2022 11:03:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 544A661028;
-        Tue,  9 Aug 2022 18:02:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2BAC433B5;
-        Tue,  9 Aug 2022 18:02:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A23F7CE18A6;
+        Tue,  9 Aug 2022 18:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D66E6C433D7;
+        Tue,  9 Aug 2022 18:03:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068161;
-        bh=kAAceLf1VywHIek44vBXTfsB0yb0I7oJ0SqPKKlSA08=;
+        s=korg; t=1660068181;
+        bh=t6omEt3IXRTOqFA+8zsUIm7gKxitv9ZMWRIYZ/i/uR4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Be5lnO9aUThTpkb20Uw2Y5tM/HWR/AmNYAlpa6CK6AABvRIfKP9voqXel2Wj/UXfG
-         Qp72eiYFUrfDkiyo7v/atQD7lrYSHnlFfAgfLujcvneYQTzQH+kA8ZWYWFwZ4I/Wuh
-         kPH5ckMGMcOyVBvPyG/LpQdrg4h5UediGD/LoqgQ=
+        b=bV8b7VwwtcldX63Hw6JKShsr9hbe45zk787KQ4uKeFv0lSIMjGV4//LlCAuq1NSgG
+         NZ9gffEXU3E7COY1c0YApJJgvmq5/YwyABUPNi5bRQ2q0dOwpXvlEOJU3SIx//eI9h
+         yV+dtdb5f722jK7xo0LmTdgaqgGlTVEKiKygTlzM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Werner Sembach <wse@tuxedocomputers.com>,
         Hans de Goede <hdegoede@redhat.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 4.19 28/32] ACPI: video: Force backlight native for some TongFang devices
-Date:   Tue,  9 Aug 2022 20:00:19 +0200
-Message-Id: <20220809175513.969951780@linuxfoundation.org>
+Subject: [PATCH 5.4 02/15] ACPI: video: Force backlight native for some TongFang devices
+Date:   Tue,  9 Aug 2022 20:00:20 +0200
+Message-Id: <20220809175510.391904671@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175513.082573955@linuxfoundation.org>
-References: <20220809175513.082573955@linuxfoundation.org>
+In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
+References: <20220809175510.312431319@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -82,7 +82,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/acpi/video_detect.c
 +++ b/drivers/acpi/video_detect.c
-@@ -431,7 +431,56 @@ static const struct dmi_system_id video_
+@@ -447,7 +447,56 @@ static const struct dmi_system_id video_
  		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
  		},
  	},

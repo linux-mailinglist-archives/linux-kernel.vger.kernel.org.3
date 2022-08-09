@@ -2,106 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950C158D858
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 901C258D853
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242608AbiHILpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 07:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
+        id S238223AbiHILmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 07:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242879AbiHILpr (ORCPT
+        with ESMTP id S230508AbiHILmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 07:45:47 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D5521E13
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:45:46 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id l10so8116114lje.7
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 04:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=zUYPLrsI2jiauKzG2M7v5iOa2wbC7ozeiUu0l4qgI+w=;
-        b=c7tJt01hfgCM3eVG34V8C3/1/MVeYqu2TxvqhJ40kl5/oT81KhKRDS2VoiEwQsfD2R
-         AI1f43V5NjI/YBAdSUOtrA/f5Y216fN1kQVBpUJVbayKCaPJD6MK4UwzNBaOPSZuThV6
-         cARWDyz4l0x4i8Gclnn+5K6cbj7seJloZ4WZmFDkq4z2YXtU3zxtUciloyud003+mTp+
-         Hj49JgIdG6rDLBZCFyunxvl9A2gvkGMyiiIiTo9c3tC/G7e/73w2mT1cniJrFzjWxJMc
-         wjFdYkvQjLdukxsNxQvU6aeOpZkxvo0lFUJGzUOtknBnJhy80CSKehQQH9vpBb3RA7tl
-         ZdBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=zUYPLrsI2jiauKzG2M7v5iOa2wbC7ozeiUu0l4qgI+w=;
-        b=HSB5RjeEzC80vjvPO46Hr13mnkzwJxIyIdN8VdBMu//CkGUNGay7i/ORoPbb1WXxxo
-         zIvJHWfdQfFKi/Baab7MR+Glp6Pfo+uyrbDiGZngWI7JoTFXvvq4PL2MiwmI+IABRQyo
-         LaQfp6JG6kydJj5PoXkRchemU/eeSz/RxHihiG1Jna8r2vHRBNK+gOCJaYEhUxeR7tBo
-         V4sIT4KBe92ysZde1mFoNbxuxOXmPPiSJL5gqigz5h0GPGYygS/t5JHgJ9l/SRgbMu6V
-         CRiFd0X3KnkzF2E00y4sUXo23TxkFB4HbEeOs3ZGWy6+aFOlILzXARH6Ma7ye0oAzFmn
-         xzow==
-X-Gm-Message-State: ACgBeo3tZNZy9yEipZZKYddWmkNoft9S7nsFn94fLBqXwamdsKTiwZgu
-        A6lhF7ggKmNMVeU2k1q1CXm0M2Db5RjUF76Qj3DBtw==
-X-Google-Smtp-Source: AA6agR6xzLjWyUFZQ9pgjFN8td8td7t9e2m7P04bImaQQqG/sXobBxAJTALBV0Pp5hY/l0hahcUvZbFdlCM9pimnrdg=
-X-Received: by 2002:a2e:aaa2:0:b0:25e:5083:eb9a with SMTP id
- bj34-20020a2eaaa2000000b0025e5083eb9amr7078976ljb.283.1660045544571; Tue, 09
- Aug 2022 04:45:44 -0700 (PDT)
+        Tue, 9 Aug 2022 07:42:52 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C879B22B3F;
+        Tue,  9 Aug 2022 04:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660045371; x=1691581371;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=k+q8/MfB6T1wOsTh6u+efttkxB0NTXmq/yeTF+WM02Y=;
+  b=BS8gHBrr8mSU/7/oaXgZFwM0jZ2QfqPh8VfkF7+2HX3k/hHTG0eUi14k
+   VSw9K+gK9JzK5jKOEGcQ8c+7wYpyqvOKWnYdeM/QHqo8ZyWijerft4+HB
+   BFVgxQhaZ+kLgM8gThn2i9yZuLBVJWM9NTc45bDsZZYPCwDglXHCOdXJk
+   XiSWgObzf3ozAcEE+uc/c9A4+279DjY41uw515jXqGwSflR8pSUtHq0vs
+   RtWN8HblbDebpEorFJq8e9fcAY05EwZTcpw2MoCHg34jKKGqKD8x5IxIk
+   3PJjC43I1aITMP114VfOVDe2zlnmjrcKCb6bpa8NLQl6nMfJ8ERbzdzqJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="316743304"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="316743304"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 04:42:51 -0700
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="707796787"
+Received: from labukara-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.214.212])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 04:42:45 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 867B1103886; Tue,  9 Aug 2022 14:45:44 +0300 (+03)
+Date:   Tue, 9 Aug 2022 14:45:44 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv7 14/14] x86/tdx: Add unaccepted memory support
+Message-ID: <20220809114544.q4f7cetqgv2gj5tx@box.shutemov.name>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-15-kirill.shutemov@linux.intel.com>
+ <Yt//ZMrxtTwtKBqu@zn.tnic>
 MIME-Version: 1.0
-References: <20220808201724.27831-1-semen.protsenko@linaro.org>
-In-Reply-To: <20220808201724.27831-1-semen.protsenko@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 9 Aug 2022 14:45:33 +0300
-Message-ID: <CAPLW+4kdgrVyE5jTXPRWCKdr_A+C_EGLLp1AjSe3OfHoX8jEvw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] arm64: dts: exynos850: Add cmu and sysmmu nodes
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yt//ZMrxtTwtKBqu@zn.tnic>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 8 Aug 2022 at 23:17, Sam Protsenko <semen.protsenko@linaro.org> wrote:
->
-> Now that all clock domains needed for SysMMUs are implemented [1]
-> (pending), and the basic SysMMU v7 support is ready as well [2], let's
-> add all related CMU and SysMMU nodes to Exynos850 SoC device tree.
->
-> All those SysMMU instances were tested with "emulated translation"
-> driver [4] on E850-96 board: both the emulated translation and fault
-> handling were verified.
->
-> This patch series depends on [1], so it must be taken into the account
-> when merging it.
->
-> [1] https://lkml.org/lkml/2022/8/8/752
-> [2] https://lkml.org/lkml/2022/7/14/1215
-> [3] https://lkml.org/lkml/2022/7/26/950
-> [4] https://github.com/joe-skb7/linux/tree/e850-96-mainline-iommu
->
-> Sam Protsenko (2):
->   arm64: dts: exynos: Add CMU_AUD, CMU_IS and CMU_MFCMSCL for Exynos850
->   arm64: dts: exynos: Add SysMMU nodes for Exynos850
->
->  arch/arm64/boot/dts/exynos/exynos850.dtsi | 83 +++++++++++++++++++++++
->  1 file changed, 83 insertions(+)
->
-> --
-> 2.30.2
->
+On Tue, Jul 26, 2022 at 04:51:16PM +0200, Borislav Petkov wrote:
+> On Tue, Jun 14, 2022 at 03:02:31PM +0300, Kirill A. Shutemov wrote:
+> > +static bool is_tdx_guest(void)
+> > +{
+> > +	static bool once;
+> > +	static bool is_tdx;
+> > +
+> > +	if (!IS_ENABLED(CONFIG_INTEL_TDX_GUEST))
+> > +		return false;
+> > +
+> > +	if (!once) {
+> > +		u32 eax, sig[3];
+> > +
+> > +		cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax,
+> > +			    &sig[0], &sig[2],  &sig[1]);
+> > +		is_tdx = !memcmp(TDX_IDENT, sig, sizeof(sig));
+> > +		once = true;
+> > +	}
+> > +
+> > +	return is_tdx;
+> > +}
+> 
+> early_tdx_detect() already calls this CPUID function. It assigns
+> function pointers too.
+> 
+> So why can't you assign an accept_memory() function pointer there and
+> get rid of this sprinkled if (tdx) everywhere?
 
-This patch series is superseded by v2 here: [1].
+This code called from EFI stub which runs before decompressor code and
+therefore before early_tdx_detect().
 
-[1] https://lkml.org/lkml/2022/8/9/328
+> > diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
+> > index 918a7606f53c..8518a75e5dd5 100644
+> > --- a/arch/x86/boot/compressed/tdx.c
+> > +++ b/arch/x86/boot/compressed/tdx.c
+> > @@ -3,12 +3,15 @@
+> >  #include "../cpuflags.h"
+> >  #include "../string.h"
+> >  #include "../io.h"
+> > +#include "align.h"
+> >  #include "error.h"
+> > +#include "pgtable_types.h"
+> >  
+> >  #include <vdso/limits.h>
+> >  #include <uapi/asm/vmx.h>
+> >  
+> >  #include <asm/shared/tdx.h>
+> > +#include <asm/page_types.h>
+> >  
+> >  /* Called from __tdx_hypercall() for unrecoverable failure */
+> >  void __tdx_hypercall_failed(void)
+> > @@ -75,3 +78,78 @@ void early_tdx_detect(void)
+> >  	pio_ops.f_outb = tdx_outb;
+> >  	pio_ops.f_outw = tdx_outw;
+> >  }
+> > +
+> > +static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
+> > +				    enum pg_level level)
+> 
+> That's pretty much a copy of the same function in arch/x86/coco/tdx/tdx.c.
+> 
+> Yeah, you need a tdx-shared.c which you include in both places just like
+> it is done with sev-shared.c
+
+Okay, will look into this.
+
+> > +		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
+> > +		if (!accept_size)
+> > +			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
+> > +		if (!accept_size)
+> > +			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
+> > +		if (!accept_size)
+> > +			error("Accepting memory failed\n");
+> > +		start += accept_size;
+> 
+> This series of calls to try_accept_one() appear in at least three
+> places. Please carve them out into a separate function can put it in
+> tdx-shared.c.
+
+Okay.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov

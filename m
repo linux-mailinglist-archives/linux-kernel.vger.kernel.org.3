@@ -2,133 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7354358D473
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC2058D471
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiHIHVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 03:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S230018AbiHIHVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 03:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236313AbiHIHVM (ORCPT
+        with ESMTP id S233614AbiHIHUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 03:21:12 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612E820F76;
-        Tue,  9 Aug 2022 00:21:10 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id b24so1720577qka.5;
-        Tue, 09 Aug 2022 00:21:10 -0700 (PDT)
+        Tue, 9 Aug 2022 03:20:53 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEECBE24
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 00:20:52 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id j15so13326101wrr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 00:20:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Ewp+5qWhXCvBt991DQD6+zymRA8iDfvlDFfMmvB+0a4=;
-        b=cHxXURJ4qdC0PRqfs/Rqyhlqxif/QqExsU0VzM1rJRamsvm7Df7euPEo7UoRPTP6lI
-         Ipi7F0SpeMjoQkBvkaFKygMuF0M95GfMz5wBaA8zLop8Z8ImS+wtsJIv/f7Jx0Z9QFOH
-         vSCB1M+gHv5JEa4XAvQKWRn6zYXJtZFHHOlEVFA/2eADIZIOAZA+ATZv7EzRCeu8BxO8
-         rokyLIJScYwRYY5Xj4lRYksJW7jUppHWtK8Dy4qceb9Q7sUMo6QklzDp2EGxDobEjeam
-         66mpiRDm+ww6mvjZ9svyAdrlYnoi9xwfHitWQcLW+3OC5c9uKZONV6Ix9oIxOoZtPyKS
-         V/8g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nDZGjC3d6RgPiYxCgLnPjqhoXy38nST01tp2NFMdLgY=;
+        b=xN4KUUb5LpDRsXDr3lg6VqfiiGJiAKnuy4OZkG8jx1/2Heekel3ys6nLkYYNoK6MiQ
+         tEBcu5S5opzm2fPc+3FFmoClgEfRYpsvPM2BKrPp6quT426U1LXghDTLf2eSzG8FKRPU
+         7jkicc6XssGkFQRU3KtP4P4Gju3ebDqXaqouM/CCZPp07GXJTXx9b+mC0puznB4+DTqN
+         Ld8RB/cqU2XQ/R78lAQg/0oZRszHYNaJEEtWvc5nF35NISlUXUEmC51qfir5OeO2srFJ
+         m5FXiL/1kSfn+poFKNQHXg1kTunibiDTeqMn9+YsCithA3QLL4lyGOtIs6HdZryQCWP7
+         NccQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Ewp+5qWhXCvBt991DQD6+zymRA8iDfvlDFfMmvB+0a4=;
-        b=t5Nk85pTTfut428eSfENLNB8PmW/GStI/KDYozFydHfobV5OsMfiymFAZvoso0Q/3f
-         jI4xrLkO8UwJKUvan7KhQ3yngakbPr24pEwClw352QZpjhXo3X0FlE2UD1g8zOr1CauC
-         5D9F9rOhCO397WLcSRkYIJ7NLUbVXnMmgnykzP81g/kZkzOMzfqKrCaIrH/W0mP6OGBq
-         bZIM30udo++e3Esm6T/uewdMc+sqjcGzjgpu1/9OdALYnzbkaWU1DgD/DRSD3eI2YvMo
-         bP6XqHWuA0baQRRkDfHckoHZlt4y1k5uWrwYNxH0t152rdyhsgL5ZHZqjDymih313biA
-         2ZYw==
-X-Gm-Message-State: ACgBeo2SvJL8UgE3t5bIM/MWcWEY9MeZGCtcNAGckDMTJBuMWxepPrxZ
-        M5oRjC0LfiqIzr4avL036bBLXYk16vt2RI/61i0OEBJAG10=
-X-Google-Smtp-Source: AA6agR7/I3eg+IvnTyVzC+jl42kegbnx9pI+d5CGTyeVmc3CmVrtuxz57g7sz+HImjVkBfjZUHDpp2hNAiLIWqD8f/s=
-X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
- s13-20020a05620a254d00b006ab84b825ebmr16521415qko.383.1660029669459; Tue, 09
- Aug 2022 00:21:09 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nDZGjC3d6RgPiYxCgLnPjqhoXy38nST01tp2NFMdLgY=;
+        b=RdDdFsur8/nKlVPuUnYPcNXkU9eu80div55oTpxI2XNlFjYfWn0FaF+RB69tzSYb+i
+         H7Q42f9rugDmaD29tzLRSgeOyRF3uLM/iVqlK7f9P1O4qrEBhEedHzi0TVFQq0/cAgML
+         czVEXqpll5cyDAJLs05yFBZREIPQFec8REC9AAwQdMAokBXfxMIUV785pOAyCXxKGwK0
+         Ue9EK70m6+oMU2eHaYWpnAKw//j1z5ju4Dc6uW9P6jJfS4/Hhj69sFhiAxedOF7BIqkr
+         1b3UGUxr+wpPlP/t8hETTZ4FpCF4LKf0rk/6wbMPyUdL0Eqg+emwOXlg5+/TZu/0uSOo
+         7m+w==
+X-Gm-Message-State: ACgBeo1HFj5unqiKmea6Hr0a5FTvw1gkaCNh6qcei94i2xBHYC/RQUxI
+        p8icM5tQp02a3EbdU874ukGBF7fZdFAlhA==
+X-Google-Smtp-Source: AA6agR6QHnlDD3qjHO/gSC+OOdUtehf/UYh9OOQN8/22GLn0m55iV4WWOcGucEL0AAtwWiy4oMW0jw==
+X-Received: by 2002:adf:d1c1:0:b0:220:5ec3:fb62 with SMTP id b1-20020adfd1c1000000b002205ec3fb62mr13237098wrd.69.1660029650688;
+        Tue, 09 Aug 2022 00:20:50 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id n18-20020a05600c501200b003a2d47d3051sm17651203wmr.41.2022.08.09.00.20.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 00:20:50 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 08:20:48 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Joerg Roedel <jroedel@suse.de>,
+        virtualization@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v1 1/1] iommu/virtio: Do not dereference fwnode in struct
+ device
+Message-ID: <YvIK0KMi1yECL9vc@myrica>
+References: <20220801165142.20898-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20220808030420.8633-1-luke@ljones.dev> <20220808030420.8633-3-luke@ljones.dev>
- <CAHp75VcR-strGDhaGE78NjToamK98e8UO-rQhU-Ow81AavU5YA@mail.gmail.com> <KCGBGR.P2V4UO7HLOX11@ljones.dev>
-In-Reply-To: <KCGBGR.P2V4UO7HLOX11@ljones.dev>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 9 Aug 2022 09:20:32 +0200
-Message-ID: <CAHp75VfYhKMuUDpSJ-yDWp7GU8bQh1q9VME8SnUvrwYm8x9=mQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] asus-wmi: Implement TUF laptop keyboard LED modes
-To:     Luke Jones <luke@ljones.dev>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801165142.20898-1-andriy.shevchenko@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 11:43 PM Luke Jones <luke@ljones.dev> wrote:
+On Mon, Aug 01, 2022 at 07:51:42PM +0300, Andy Shevchenko wrote:
+> In order to make the underneath API easier to change in the future,
+> prevent users from dereferencing fwnode from struct device.
+> Instead, use the specific device_match_fwnode() API for that.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-...
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-> >>  +       if (sscanf(buf, "%hhd %hhd %hhd", &save, &mode, &speed) !=
-> >> 3)
-> >>  +               return -EINVAL;
-> >
-> > Same comment as per v1.
->
-> You wrote:
->
->  > Usually we have three separate nodes for that, but they are kinda
->  > hidden in one driver, so I don't care much.
->
-> I think that is the wrong direction to take. Doing so would mean that
-> every write to one of these values has to write-out to device. I don't
-> know how long writes on an i2c device take, but on the USB connected
-> versions they are 1ms, which means that to individually set colour,
-> save, mode, speed (also direction and sometimes a 2nd colour on USB)
-> adds up to 4-6ms - and I don't know what sort of impact that has in the
-> kernel itself, but I do know that users expect there to be fancy
-> effects available on par with Windows (like audio equalizer visuals on
-> the RGB, something that is in progress in asusctl).
-
-This is a good justification, but easy to workaround by using another
-node like "submit" or unifying it with one of the existing nodes
-implicitly (like setting savee will submit all changes at once).
-
-> Using multicolor LED class already breaks away from having a single
-> packet write, but the gain in API scope was worth the compromise.
-> Hopefully we can keep the single set of parameters here?
->
-> Pavel suggested using triggers, I've yet to look at that, but will do
-> so after finalising this.
-
-The thing is you can't "finalize" this and go to another type of ABI,
-because we come with two ABIs - we may not drop the old one once it's
-established (yes, there are exceptions, but it's rare). So, knowing
-that we would drop an ABI we mustn't introduce it in the first place.
-
-> I suppose one alternative would be to store speed and mode as
-> attributes, but not write out until the "save" node is written to?
-
-Yes!
-
-> So
-> this raises the question of: we can't read from device, and speed+mode
-> must be saved in module for use with "save" now, should I then allow
-> showing these values in a _show? On fresh boot they will be incorrect..
-
-Yep, they should be reset either by hardware, or provided somehow
-(device tree?) from the platform knowing what firmware sets and what
-kernel may use if you don't want to change the settings.
-
-> I'm going to go ahead and split those parameters in to individual nodes
-> now anyway - it may help with later work using triggers.
-
-Okay!
-
--- 
-With Best Regards,
-Andy Shevchenko
+> ---
+>  drivers/iommu/virtio-iommu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
+> index 08eeafc9529f..9fe723f55213 100644
+> --- a/drivers/iommu/virtio-iommu.c
+> +++ b/drivers/iommu/virtio-iommu.c
+> @@ -925,7 +925,7 @@ static struct virtio_driver virtio_iommu_drv;
+>  
+>  static int viommu_match_node(struct device *dev, const void *data)
+>  {
+> -	return dev->parent->fwnode == data;
+> +	return device_match_fwnode(dev->parent, data);
+>  }
+>  
+>  static struct viommu_dev *viommu_get_by_fwnode(struct fwnode_handle *fwnode)
+> -- 
+> 2.35.1
+> 

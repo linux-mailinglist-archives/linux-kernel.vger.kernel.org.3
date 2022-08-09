@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F6D58E04B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2887358E053
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242097AbiHITjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S1343897AbiHITkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245229AbiHITij (ORCPT
+        with ESMTP id S243048AbiHITkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:38:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71E825E93;
-        Tue,  9 Aug 2022 12:38:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D6FBB81722;
-        Tue,  9 Aug 2022 19:38:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00F60C433C1;
-        Tue,  9 Aug 2022 19:38:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660073913;
-        bh=pHC8fIPoGxLBJ9/lJmkXqCp6AtiWaVbDFdc2Xj+wo2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lhzxPVf6KoXeLEeZ5kmhU456Qq7Orbo9wqIWq0MYZLG5YB3mgnrmItcxNzj68YIEy
-         HICoW1b9oyolyyqF+pxeQliODs4qgnu0kHgzv4mhMykE3EyVpSfAbJnSbSsOStPLxe
-         YtLMXcOdxeyK6zrBsvYPHiVN1Y3oudSSP7vRcl6kD3A/gD9hpIn07vLIXcCr6QYb1s
-         zl7lussWseBvtGtlavmkl/nVrr5i1xQyv3qLuYxlTC372wg1WdiBAHJ0yXnWebOEOd
-         yUD5AkMmAL68RMIyo+M+21SxMz2gB5eHWCBGDNVhPFaBcRSqIrM+X4rIVWsY2143Hb
-         cFJIOylJoldiQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2F86F4035A; Tue,  9 Aug 2022 16:38:30 -0300 (-03)
-Date:   Tue, 9 Aug 2022 16:38:30 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v4 03/17] perf jevents: Add JEVENTS_ARCH make option
-Message-ID: <YvK3ts/YHXJT+/Vl@kernel.org>
-References: <20220804221816.1802790-1-irogers@google.com>
- <20220804221816.1802790-4-irogers@google.com>
- <b1cc7151-e57c-6ec5-f3f1-361434e0b2ee@huawei.com>
+        Tue, 9 Aug 2022 15:40:04 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DBC255BF
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 12:40:02 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id c16so131442qkk.10
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 12:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WQADmAbbPY4UNq4TbQtJ0wmwYjKdHy+t7oPSx2knkGw=;
+        b=T3xk/rfIHpnSaArGMKToaLTdDcPztKs73hwbF/4oilTSRO/u+Y5EH66x921BEN+iwS
+         n8Efv/cl0XGLh75r3nPSGiSRcCWOIMa4+iO2L2boSNmbA+An9VwgOdQ57BecRqDId3cr
+         93aVbwUsrAk/jVP3NrBx8OlA8Som+xmHbXQmc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WQADmAbbPY4UNq4TbQtJ0wmwYjKdHy+t7oPSx2knkGw=;
+        b=d2C1jOFvKDs0+HRy2jvoF1MGaFFiib+mbZl/eQbdbDCy0EogTGaaw235YseOjhUfgs
+         EKh/YXvIz9DvTdDOIztLsXfSaNlUNTO1liaxNbTwsfU4n5cKFwFdYU7tN3vBxzRflE1w
+         SFdRFEEp2DjEsQTIy12Sp8WshDwzRgvyzotvHwKDAtynyDCMviVQPADoKT868U6VdYIl
+         0PBhpSv9cxsOUn2XLiUqBzDXt0jRMqgPMLFhV4m/Q2COzQY92UcMHr3ULoimzr4gYyBI
+         qSLDhj6E+kmhs/0j1YNhukx3PVWisSt+m0bK47RotYJZOI6qvvvSLh/uqzhJkQ7BweH7
+         ps1Q==
+X-Gm-Message-State: ACgBeo3ROlhky58u4jCd4qrH32A2xHUzoxPKSpOXpx+rXn7aelaLRD8P
+        fff2Nz/VMpypZ56uW7aP69bQnQ==
+X-Google-Smtp-Source: AA6agR7cXDV8AmvlDfc//mvJvsYopYmTCb0ttOe0pPue0GVYpv844ghBL+zy5oP8hZjjn1KCc1w4aQ==
+X-Received: by 2002:a05:620a:c4f:b0:6b8:ea30:2d4a with SMTP id u15-20020a05620a0c4f00b006b8ea302d4amr18690230qki.717.1660074001883;
+        Tue, 09 Aug 2022 12:40:01 -0700 (PDT)
+Received: from trappist.c.googlers.com.com (128.174.85.34.bc.googleusercontent.com. [34.85.174.128])
+        by smtp.gmail.com with ESMTPSA id w19-20020a05620a445300b006b9264191b5sm9562422qkp.32.2022.08.09.12.40.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 12:40:01 -0700 (PDT)
+From:   Sven van Ashbrook <svenva@chromium.org>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Hao Wu <hao.wu@rubrik.com>,
+        Yi Chou <yich@google.com>,
+        Andrey Pronin <apronin@chromium.org>,
+        Sven van Ashbrook <svenva@chromium.org>,
+        James Morris <james.morris@microsoft.com>
+Cc:     stable@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm: fix potential race condition in suspend/resume
+Date:   Tue,  9 Aug 2022 19:39:18 +0000
+Message-Id: <20220809193921.544546-1-svenva@chromium.org>
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1cc7151-e57c-6ec5-f3f1-361434e0b2ee@huawei.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,51 +71,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Aug 05, 2022 at 10:55:50AM +0100, John Garry escreveu:
-> On 04/08/2022 23:18, Ian Rogers wrote:
-> > Allow the architecture built into pmu-events.c to be set on the make
-> > command line with JEVENTS_ARCH.
-> > 
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> 
-> Seems reasonable, so:
-> 
-> Reviewed-by: John Garry <john.garry@huawei.com>
+Concurrent accesses to the tpm chip are prevented by allowing only a
+single thread at a time to obtain a tpm chip reference through
+tpm_try_get_ops(). However, the tpm's suspend function does not use
+this mechanism, so when the tpm api is called by a kthread which
+does not get frozen on suspend (such as the hw_random kthread)
+it's possible that the tpm is used when already in suspend, or
+in use while in the process of suspending.
 
-Thanks, applied.
+This is seen on certain ChromeOS platforms - low-probability warnings
+are generated during suspend. In this case, the tpm attempted to read data
+from a tpm chip on an already-suspended bus.
 
-- Arnaldo
+  i2c_designware i2c_designware.1: Transfer while suspended
 
+Fix:
+1. prevent concurrent execution of tpm accesses and suspend/
+   resume, by letting suspend/resume grab the tpm_mutex.
+2. before commencing a tpm access, check if the tpm chip is already
+   suspended. Fail with -EAGAIN if so.
+
+Tested by running 6000 suspend/resume cycles back-to-back on a
+ChromeOS "brya" device. The intermittent warnings reliably
+disappear after applying this patch. No system issues were observed.
+
+Cc: <stable@vger.kernel.org>
+Fixes: e891db1a18bf ("tpm: turn on TPM on suspend for TPM 1.x")
+Signed-off-by: Sven van Ashbrook <svenva@chromium.org>
+---
+ drivers/char/tpm/tpm-interface.c | 16 ++++++++++++++++
+ include/linux/tpm.h              |  2 ++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 1621ce818705..16ca490fd483 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -82,6 +82,11 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+ 		return -E2BIG;
+ 	}
  
-> I assume that if we run on the wrong arch (than we build for) then it has
-> same effect as if pmu-events is not supported.
-> 
-> > ---
-> >   tools/perf/pmu-events/Build | 6 +++++-
-> >   1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
-> > index 28a9d01b08af..04ef95174660 100644
-> > --- a/tools/perf/pmu-events/Build
-> > +++ b/tools/perf/pmu-events/Build
-> > @@ -7,6 +7,10 @@ JSON_TEST	=  $(shell [ -d $(JDIR_TEST) ] &&			\
-> >   			find $(JDIR_TEST) -name '*.json')
-> >   JEVENTS_PY	=  pmu-events/jevents.py
-> > +ifeq ($(JEVENTS_ARCH),)
-> > +JEVENTS_ARCH=$(SRCARCH)
-> > +endif
-> > +
-> >   #
-> >   # Locate/process JSON files in pmu-events/arch/
-> >   # directory and create tables in pmu-events.c.
-> > @@ -19,5 +23,5 @@ $(OUTPUT)pmu-events/pmu-events.c: pmu-events/empty-pmu-events.c
-> >   else
-> >   $(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS_PY)
-> >   	$(call rule_mkdir)
-> > -	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(SRCARCH) pmu-events/arch $@
-> > +	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) pmu-events/arch $@
-> >   endif
-
++	if (chip->is_suspended) {
++		dev_info(&chip->dev, "blocking transmit while suspended\n");
++		return -EAGAIN;
++	}
++
+ 	rc = chip->ops->send(chip, buf, count);
+ 	if (rc < 0) {
+ 		if (rc != -EPIPE)
+@@ -394,6 +399,8 @@ int tpm_pm_suspend(struct device *dev)
+ 	if (!chip)
+ 		return -ENODEV;
+ 
++	mutex_lock(&chip->tpm_mutex);
++
+ 	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+ 		goto suspended;
+ 
+@@ -411,6 +418,11 @@ int tpm_pm_suspend(struct device *dev)
+ 	}
+ 
+ suspended:
++	if (!rc)
++		chip->is_suspended = true;
++
++	mutex_unlock(&chip->tpm_mutex);
++
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+@@ -426,6 +438,10 @@ int tpm_pm_resume(struct device *dev)
+ 	if (chip == NULL)
+ 		return -ENODEV;
+ 
++	mutex_lock(&chip->tpm_mutex);
++	chip->is_suspended = false;
++	mutex_unlock(&chip->tpm_mutex);
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(tpm_pm_resume);
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index d7c67581929f..0fbc1a43ae80 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -131,6 +131,8 @@ struct tpm_chip {
+ 	int dev_num;		/* /dev/tpm# */
+ 	unsigned long is_open;	/* only one allowed */
+ 
++	bool is_suspended;
++
+ 	char hwrng_name[64];
+ 	struct hwrng hwrng;
+ 
 -- 
+2.37.1.559.g78731f0fdb-goog
 
-- Arnaldo

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C690A58D49C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912F658D49E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239223AbiHIHcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 03:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S239118AbiHIHco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 03:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239000AbiHIHcb (ORCPT
+        with ESMTP id S239056AbiHIHcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 03:32:31 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4821EED4;
-        Tue,  9 Aug 2022 00:32:30 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id f20so15815737lfc.10;
-        Tue, 09 Aug 2022 00:32:30 -0700 (PDT)
+        Tue, 9 Aug 2022 03:32:32 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773BBE003;
+        Tue,  9 Aug 2022 00:32:31 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id bx38so12116655ljb.10;
+        Tue, 09 Aug 2022 00:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KE7Doo8+PSeMnrmOEri8h44PeWIbSZ8XCkY/na8+SzA=;
-        b=RKoQ4gneA2KRJSaw1sRwwm17vkbyM2oLjdPe6pleykMyfMwjEjR6EoW/h13hUAtEay
-         WZQZDDsAMjsqzm5+2MaLeWjpGYbl4hBzWtaO0cUGHkwxFH7ZBdAcbwQf7AwIuKhOx2RD
-         i0H5qDDqx0yrSo4Q4pSXCjExDBDhYsvnQ/5ikOTSAtnnKHuSypGcF6psAmJFHrGJgeUN
-         ZKvmX066e8XT3Mmg78XRoC5NzQZhWu2XcWIhA8evoLEsW0jkEWEREEW0SShfJAFDv6ai
-         V+uIx7938FP4NzxKISUE1vDnO8mmZxf66mU3C5HMX+yTS39a6VIybrDu14PuUfBhhG8E
-         LOmA==
+        bh=ZnlLRiHQsCpOZ8GUpmYe1fQICBNpJYF4yJ5P9XeXI20=;
+        b=MONaGphdMLbgiLFkSjeBJTZ2fYuavDc1hO5Ln/eQm5EpJgrYrOX4hJcOabbierBVk7
+         Y9/IoeVEx8HwjAB7Qfp0IEOQur9m5P24A3FgBORb2SpwzsA/kZBZsUU7Fp8LVF+rn8ad
+         tZBhzF9oNs9ymftwNjHuQFsThCeNOYETqYg5x9wdZ0cyWZIfIjBUTFDy5T760lA5ttfG
+         YasrH3JhSpnUmTHNgh7U18I+y4mmjoOy6I6vUClmBqvjdtmrF7/QZG1kqdhAL/19B/G/
+         2OcA9M5Flw2GFjigyBiAP0ikXIQmKoF70lXfmjXFB15gfmVmyFakxSInmaAjMWb/BVGs
+         LEng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KE7Doo8+PSeMnrmOEri8h44PeWIbSZ8XCkY/na8+SzA=;
-        b=BTVlA8in/EqWdjhjx6RIeFt4aejyO3OSvsARtdMIcKc1I7f16iyY+xNM7kPOynqkg2
-         2wnn4yRY+xkoQEAudI0r2phftjTIMqnHvgxxLN+tFBU5I2X+4xLeEDsNuOtZmMhgnzKL
-         0oLfdG0mqVOJoLO4oF5Jqd4woTnN6aLB4CQJpm5dy85VB+5bJ5EJUBVKcpq20c0dEH5H
-         /Ma8vMVmCdECC2X1mwyJAmUtCZlHG/nm//FNuvHQluWf1xIQVfOK5VhRlILMwp+hDSWA
-         I4ALU9VEp+MFjY0Jv40mPejWOqq3n9319g78aeW+tixQPxBYRQxU3c39SFu1F9qYUhFd
-         +MXA==
-X-Gm-Message-State: ACgBeo3qWhfmJlBCFt26gQLjt5E3t9QyDsKjkyU3MCXhaXnPrWqF53gz
-        KQG/8GAlXwmyIX2c42rOoSRol+hO9SR/4w==
-X-Google-Smtp-Source: AA6agR46o9npt9wZ0dLDI2CWbEDJcbyQu26SxvCraiUyCtbozsaYXGLpxLMXs5Yf3N6kCOJcso+M1Q==
-X-Received: by 2002:a05:6512:e82:b0:48b:23f5:d153 with SMTP id bi2-20020a0565120e8200b0048b23f5d153mr8553992lfb.291.1660030348828;
-        Tue, 09 Aug 2022 00:32:28 -0700 (PDT)
+        bh=ZnlLRiHQsCpOZ8GUpmYe1fQICBNpJYF4yJ5P9XeXI20=;
+        b=wrvCE3zKH3r7fnKYj8Dy8tM+isDpOIa6MCvfXSrggLBkv32dk5RZEvvP2jvE9BmIZ5
+         zAI9cVFeRITyIOYVqZ+gouoQlBUJWWPeb1v5rJLFNvVFKGg8y4U2Vr1eHNf8rKFyslJ8
+         RgUiORCuO7BFyWeN+E2t00UNEdenuX2r0xDtdQTNr5J0NoeQNltVqR1oEGFSKTI70i1l
+         krtDx9uraL6EUnzNEqoAnVeacXv7rq6VX6ns1K1OhhjRhWvuib0djuQ8vva1ZUkb8Dtv
+         55V0E116DepBUTqttATYjJiREtu/Q/OCP1Wr/6WCc3VC9DIjstcoId2btji4RjqrFSML
+         6YQA==
+X-Gm-Message-State: ACgBeo0BJBsrgfd4Nn/Ptx2V15m1wZHK3myeQo/0chaVSrw+Y677a/Pn
+        5xGTLcy5lAEsVj+VkWGPZjM=
+X-Google-Smtp-Source: AA6agR4nCzarSzkMC9IdG5foQgQhVyDMR1qMxsMaEbCzbXZ/i70TBWI/uD/bWyM2Jga2/l++5zu8Iw==
+X-Received: by 2002:a05:651c:543:b0:25f:dbbb:9cd4 with SMTP id q3-20020a05651c054300b0025fdbbb9cd4mr2825936ljp.495.1660030349846;
+        Tue, 09 Aug 2022 00:32:29 -0700 (PDT)
 Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id k15-20020a05651c10af00b0025d620892cdsm1528911ljn.107.2022.08.09.00.32.27
+        by smtp.gmail.com with ESMTPSA id k15-20020a05651c10af00b0025d620892cdsm1528911ljn.107.2022.08.09.00.32.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 00:32:28 -0700 (PDT)
+        Tue, 09 Aug 2022 00:32:29 -0700 (PDT)
 From:   Marcus Folkesson <marcus.folkesson@gmail.com>
 To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Kent Gustavsson <kent@minoris.se>,
@@ -58,9 +58,9 @@ To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/9] iio: adc: mcp3911: correct "microchip,device-addr" property
-Date:   Tue,  9 Aug 2022 09:36:41 +0200
-Message-Id: <20220809073648.167821-3-marcus.folkesson@gmail.com>
+Subject: [PATCH v5 3/9] iio: adc: mcp3911: use correct formula for AD conversion
+Date:   Tue,  9 Aug 2022 09:36:42 +0200
+Message-Id: <20220809073648.167821-4-marcus.folkesson@gmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220809073648.167821-1-marcus.folkesson@gmail.com>
 References: <20220809073648.167821-1-marcus.folkesson@gmail.com>
@@ -76,35 +76,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Go for the right property name that is documented in the bindings.
+The ADC conversion is actually not rail-to-rail but with a factor 1.5.
+Make use of this factor when calculating actual voltage.
 
 Fixes: 3a89b289df5d ("iio: adc: add support for mcp3911")
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
- drivers/iio/adc/mcp3911.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/iio/adc/mcp3911.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
-index f581cefb6719..f8875076ae80 100644
+index f8875076ae80..890af7dca62d 100644
 --- a/drivers/iio/adc/mcp3911.c
 +++ b/drivers/iio/adc/mcp3911.c
-@@ -210,7 +210,14 @@ static int mcp3911_config(struct mcp3911 *adc)
- 	u32 configreg;
- 	int ret;
+@@ -40,8 +40,8 @@
+ #define MCP3911_CHANNEL(x)		(MCP3911_REG_CHANNEL0 + x * 3)
+ #define MCP3911_OFFCAL(x)		(MCP3911_REG_OFFCAL_CH0 + x * 6)
  
--	device_property_read_u32(dev, "device-addr", &adc->dev_addr);
-+	ret = device_property_read_u32(dev, "microchip,device-addr", &adc->dev_addr);
+-/* Internal voltage reference in uV */
+-#define MCP3911_INT_VREF_UV		1200000
++/* Internal voltage reference in mV */
++#define MCP3911_INT_VREF_MV		1200
+ 
+ #define MCP3911_REG_READ(reg, id)	((((reg) << 1) | ((id) << 5) | (1 << 0)) & 0xff)
+ #define MCP3911_REG_WRITE(reg, id)	((((reg) << 1) | ((id) << 5) | (0 << 0)) & 0xff)
+@@ -139,11 +139,18 @@ static int mcp3911_read_raw(struct iio_dev *indio_dev,
+ 
+ 			*val = ret / 1000;
+ 		} else {
+-			*val = MCP3911_INT_VREF_UV;
++			*val = MCP3911_INT_VREF_MV;
+ 		}
+ 
+-		*val2 = 24;
+-		ret = IIO_VAL_FRACTIONAL_LOG2;
++		/*
++		 * For 24bit Conversion
++		 * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
++		 * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
++		 */
 +
-+	/*
-+	 * Fallback to "device-addr" due to historical mismatch between
-+	 * dt-bindings and implementation
-+	 */
-+	if (ret)
-+		device_property_read_u32(dev, "device-addr", &adc->dev_addr);
- 	if (adc->dev_addr > 3) {
- 		dev_err(&adc->spi->dev,
- 			"invalid device address (%i). Must be in range 0-3.\n",
++		/* val2 = (2^23 * 1.5) */
++		*val2 = 12582912;
++		ret = IIO_VAL_FRACTIONAL;
+ 		break;
+ 	}
+ 
 -- 
 2.37.1
 

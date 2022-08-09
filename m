@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912F658D49E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0B558D49B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239118AbiHIHco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 03:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
+        id S239437AbiHIHcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 03:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239056AbiHIHcc (ORCPT
+        with ESMTP id S239069AbiHIHce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 03:32:32 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773BBE003;
-        Tue,  9 Aug 2022 00:32:31 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id bx38so12116655ljb.10;
-        Tue, 09 Aug 2022 00:32:31 -0700 (PDT)
+        Tue, 9 Aug 2022 03:32:34 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6311F63F;
+        Tue,  9 Aug 2022 00:32:32 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id u6so6789895ljk.8;
+        Tue, 09 Aug 2022 00:32:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZnlLRiHQsCpOZ8GUpmYe1fQICBNpJYF4yJ5P9XeXI20=;
-        b=MONaGphdMLbgiLFkSjeBJTZ2fYuavDc1hO5Ln/eQm5EpJgrYrOX4hJcOabbierBVk7
-         Y9/IoeVEx8HwjAB7Qfp0IEOQur9m5P24A3FgBORb2SpwzsA/kZBZsUU7Fp8LVF+rn8ad
-         tZBhzF9oNs9ymftwNjHuQFsThCeNOYETqYg5x9wdZ0cyWZIfIjBUTFDy5T760lA5ttfG
-         YasrH3JhSpnUmTHNgh7U18I+y4mmjoOy6I6vUClmBqvjdtmrF7/QZG1kqdhAL/19B/G/
-         2OcA9M5Flw2GFjigyBiAP0ikXIQmKoF70lXfmjXFB15gfmVmyFakxSInmaAjMWb/BVGs
-         LEng==
+        bh=MmAFyPEWTYXBpGJTGxeKOerbkQVNbVS4fi1FukS6r28=;
+        b=a9mz3qIq8uByvysJppH43ZSQyAN3lHYP5KwLeUAfKSW/KGOIIfT0oYm2RrAFvXUGRE
+         AKuElskMVLxy1Q023Ev3N9GnG7xJ9h1Xxxpcju0gQX0afO0RntR7qBe2btdyw9Oia5ul
+         RB03GdNnJRgnnEypv+GTe6Fr4vvXmIdEZcYNjxXIjve4zq6f8ffV1/JVz9KUzsEwQuM1
+         1YEx0j19ezYdxP+p/LAUSbpcs6pE8ca2t2SyMwBrZjuDx1/YAQCn29AjqkidHJnNFJJK
+         SMVb+FAlwFNx96/EjgOb+O0xphvVxIb4ucSJdmpLd/fuC4rVbpG0rmsDRGXp9Ns0EM2B
+         wZFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZnlLRiHQsCpOZ8GUpmYe1fQICBNpJYF4yJ5P9XeXI20=;
-        b=wrvCE3zKH3r7fnKYj8Dy8tM+isDpOIa6MCvfXSrggLBkv32dk5RZEvvP2jvE9BmIZ5
-         zAI9cVFeRITyIOYVqZ+gouoQlBUJWWPeb1v5rJLFNvVFKGg8y4U2Vr1eHNf8rKFyslJ8
-         RgUiORCuO7BFyWeN+E2t00UNEdenuX2r0xDtdQTNr5J0NoeQNltVqR1oEGFSKTI70i1l
-         krtDx9uraL6EUnzNEqoAnVeacXv7rq6VX6ns1K1OhhjRhWvuib0djuQ8vva1ZUkb8Dtv
-         55V0E116DepBUTqttATYjJiREtu/Q/OCP1Wr/6WCc3VC9DIjstcoId2btji4RjqrFSML
-         6YQA==
-X-Gm-Message-State: ACgBeo0BJBsrgfd4Nn/Ptx2V15m1wZHK3myeQo/0chaVSrw+Y677a/Pn
-        5xGTLcy5lAEsVj+VkWGPZjM=
-X-Google-Smtp-Source: AA6agR4nCzarSzkMC9IdG5foQgQhVyDMR1qMxsMaEbCzbXZ/i70TBWI/uD/bWyM2Jga2/l++5zu8Iw==
-X-Received: by 2002:a05:651c:543:b0:25f:dbbb:9cd4 with SMTP id q3-20020a05651c054300b0025fdbbb9cd4mr2825936ljp.495.1660030349846;
-        Tue, 09 Aug 2022 00:32:29 -0700 (PDT)
+        bh=MmAFyPEWTYXBpGJTGxeKOerbkQVNbVS4fi1FukS6r28=;
+        b=c+AT17pmYE2r7mLMFGnmcneINMlBIqMibWCjpxQIGWk+PUzqSyC1VRnydKsVkQtK8b
+         d7BFVg0KXZZZYCyUTKHN8plwbapquWfSWP/sAM/porF+MmPa0/4iAbDRdNiWqalZjSCn
+         BSfZu5QFfXDqsPMfcEPnvra90h1mXoo4+bvqXDefdklGSLcG9KvFufqY7vqq2IaEBzHG
+         Rx0UJVX6oagpp7drPGcK2wUWzcZBqMyDgAjwN//91lfQUkwX2yXR+19hMRmTwZSrEbTp
+         lIW9rVSGaSY3HM49ZLi0z/nrlS6OQ8LI6cqgLrH4M3vhwkPSY2LqbRVsz6E73/OptVWc
+         wPDA==
+X-Gm-Message-State: ACgBeo3KpxhHvMN96Mp7oVUFPziHu3BigBvK/733OLKe5k3qAeM+jdEr
+        p+aF/l9prRoHOtamlryelG8=
+X-Google-Smtp-Source: AA6agR77YR8aVVE5TvMuJydOWPQWOYZEWzygkDLcLS7VZAL/396FriRzqDNHbeGghdP9uDxh3M0nCQ==
+X-Received: by 2002:a2e:be88:0:b0:25f:e9a8:44b8 with SMTP id a8-20020a2ebe88000000b0025fe9a844b8mr1762235ljr.92.1660030350921;
+        Tue, 09 Aug 2022 00:32:30 -0700 (PDT)
 Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id k15-20020a05651c10af00b0025d620892cdsm1528911ljn.107.2022.08.09.00.32.28
+        by smtp.gmail.com with ESMTPSA id k15-20020a05651c10af00b0025d620892cdsm1528911ljn.107.2022.08.09.00.32.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 00:32:29 -0700 (PDT)
+        Tue, 09 Aug 2022 00:32:30 -0700 (PDT)
 From:   Marcus Folkesson <marcus.folkesson@gmail.com>
 To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Kent Gustavsson <kent@minoris.se>,
@@ -58,9 +58,9 @@ To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/9] iio: adc: mcp3911: use correct formula for AD conversion
-Date:   Tue,  9 Aug 2022 09:36:42 +0200
-Message-Id: <20220809073648.167821-4-marcus.folkesson@gmail.com>
+Subject: [PATCH v5 4/9] iio: adc: mcp3911: use resource-managed version of iio_device_register
+Date:   Tue,  9 Aug 2022 09:36:43 +0200
+Message-Id: <20220809073648.167821-5-marcus.folkesson@gmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220809073648.167821-1-marcus.folkesson@gmail.com>
 References: <20220809073648.167821-1-marcus.folkesson@gmail.com>
@@ -76,53 +76,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ADC conversion is actually not rail-to-rail but with a factor 1.5.
-Make use of this factor when calculating actual voltage.
+Keep using managed resources as much as possible.
 
-Fixes: 3a89b289df5d ("iio: adc: add support for mcp3911")
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
- drivers/iio/adc/mcp3911.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/iio/adc/mcp3911.c | 56 ++++++++++++++++++---------------------
+ 1 file changed, 26 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
-index f8875076ae80..890af7dca62d 100644
+index 890af7dca62d..29d73b847f5f 100644
 --- a/drivers/iio/adc/mcp3911.c
 +++ b/drivers/iio/adc/mcp3911.c
-@@ -40,8 +40,8 @@
- #define MCP3911_CHANNEL(x)		(MCP3911_REG_CHANNEL0 + x * 3)
- #define MCP3911_OFFCAL(x)		(MCP3911_REG_OFFCAL_CH0 + x * 6)
+@@ -258,6 +258,18 @@ static int mcp3911_config(struct mcp3911 *adc)
+ 	return  mcp3911_write(adc, MCP3911_REG_CONFIG, configreg, 2);
+ }
  
--/* Internal voltage reference in uV */
--#define MCP3911_INT_VREF_UV		1200000
-+/* Internal voltage reference in mV */
-+#define MCP3911_INT_VREF_MV		1200
- 
- #define MCP3911_REG_READ(reg, id)	((((reg) << 1) | ((id) << 5) | (1 << 0)) & 0xff)
- #define MCP3911_REG_WRITE(reg, id)	((((reg) << 1) | ((id) << 5) | (0 << 0)) & 0xff)
-@@ -139,11 +139,18 @@ static int mcp3911_read_raw(struct iio_dev *indio_dev,
- 
- 			*val = ret / 1000;
- 		} else {
--			*val = MCP3911_INT_VREF_UV;
-+			*val = MCP3911_INT_VREF_MV;
- 		}
- 
--		*val2 = 24;
--		ret = IIO_VAL_FRACTIONAL_LOG2;
-+		/*
-+		 * For 24bit Conversion
-+		 * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
-+		 * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
-+		 */
++static void mcp3911_cleanup_clock(void *_adc)
++{
++	struct mcp3911 *adc = _adc;
++	clk_disable_unprepare(adc->clki);
++}
 +
-+		/* val2 = (2^23 * 1.5) */
-+		*val2 = 12582912;
-+		ret = IIO_VAL_FRACTIONAL;
- 		break;
++static void mcp3911_cleanup_regulator(void *_adc)
++{
++	struct mcp3911 *adc = _adc;
++	regulator_disable(adc->vref);
++}
++
+ static int mcp3911_probe(struct spi_device *spi)
+ {
+ 	struct iio_dev *indio_dev;
+@@ -286,6 +298,11 @@ static int mcp3911_probe(struct spi_device *spi)
+ 		ret = regulator_enable(adc->vref);
+ 		if (ret)
+ 			return ret;
++
++		ret = devm_add_action_or_reset(&spi->dev,
++				mcp3911_cleanup_regulator, adc);
++		if (ret)
++			return ret;
  	}
  
+ 	adc->clki = devm_clk_get(&adc->spi->dev, NULL);
+@@ -296,21 +313,25 @@ static int mcp3911_probe(struct spi_device *spi)
+ 			dev_err(&adc->spi->dev,
+ 				"failed to get adc clk (%ld)\n",
+ 				PTR_ERR(adc->clki));
+-			ret = PTR_ERR(adc->clki);
+-			goto reg_disable;
++			return PTR_ERR(adc->clki);
+ 		}
+ 	} else {
+ 		ret = clk_prepare_enable(adc->clki);
+ 		if (ret < 0) {
+ 			dev_err(&adc->spi->dev,
+ 				"Failed to enable clki: %d\n", ret);
+-			goto reg_disable;
++			return ret;
+ 		}
++
++		ret = devm_add_action_or_reset(&spi->dev,
++				mcp3911_cleanup_clock, adc);
++		if (ret)
++			return ret;
+ 	}
+ 
+ 	ret = mcp3911_config(adc);
+ 	if (ret)
+-		goto clk_disable;
++		return ret;
+ 
+ 	indio_dev->name = spi_get_device_id(spi)->name;
+ 	indio_dev->modes = INDIO_DIRECT_MODE;
+@@ -322,31 +343,7 @@ static int mcp3911_probe(struct spi_device *spi)
+ 
+ 	mutex_init(&adc->lock);
+ 
+-	ret = iio_device_register(indio_dev);
+-	if (ret)
+-		goto clk_disable;
+-
+-	return ret;
+-
+-clk_disable:
+-	clk_disable_unprepare(adc->clki);
+-reg_disable:
+-	if (adc->vref)
+-		regulator_disable(adc->vref);
+-
+-	return ret;
+-}
+-
+-static void mcp3911_remove(struct spi_device *spi)
+-{
+-	struct iio_dev *indio_dev = spi_get_drvdata(spi);
+-	struct mcp3911 *adc = iio_priv(indio_dev);
+-
+-	iio_device_unregister(indio_dev);
+-
+-	clk_disable_unprepare(adc->clki);
+-	if (adc->vref)
+-		regulator_disable(adc->vref);
++	return devm_iio_device_register(&adc->spi->dev, indio_dev);
+ }
+ 
+ static const struct of_device_id mcp3911_dt_ids[] = {
+@@ -367,7 +364,6 @@ static struct spi_driver mcp3911_driver = {
+ 		.of_match_table = mcp3911_dt_ids,
+ 	},
+ 	.probe = mcp3911_probe,
+-	.remove = mcp3911_remove,
+ 	.id_table = mcp3911_id,
+ };
+ module_spi_driver(mcp3911_driver);
 -- 
 2.37.1
 

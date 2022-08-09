@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8A658D3C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4147E58D3C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237430AbiHIG3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
+        id S237514AbiHIGb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 02:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235179AbiHIG33 (ORCPT
+        with ESMTP id S235179AbiHIGby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:29:29 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B251FCF2
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 23:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660026568; x=1691562568;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vyIFmtqAbHdY0idNmSeJSH07tqTNSFTVNWQhsfMsQAg=;
-  b=iwIGchJxqEkEMq2DoffyTpFgqgX25A+4Wzwvlk8hmNwW+W8ekHk0kHwd
-   OTATltamLo1Lm24vjsqAZ1pzE7WuxXrqMH96ed6JQ4wRbWG2R54FesNid
-   TqhLIwVzGVwZUEuKmB0pVtFlPwRnx8iq+CNaJqUbG/cKa3ZzowbDSnVfZ
-   T9eJuGxjweylR16KK76vtbqInfwgk9dP29ZDdwtOgVbybje3WDS+9arGX
-   vTjNLxpnIgWXUYhchh6ewyVcfWqDjtgTd9FHwE2dB8NrFiD3+lf5MOma8
-   Pb4j5RLwOwiNmuQuByqgkIiS/6UlXMM4xjqd22jCra43N6OJc66uWhvvW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="292005174"
-X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="292005174"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 23:29:28 -0700
-X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="664306799"
-Received: from maurocar-mobl2.ger.corp.intel.com (HELO maurocar-mobl2) ([10.252.48.55])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 23:29:25 -0700
-Date:   Tue, 9 Aug 2022 08:29:22 +0200
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     "Vivi, Rodrigo" <rodrigo.vivi@intel.com>
-Cc:     "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-        "thomas.hellstrom@linux.intel.com" <thomas.hellstrom@linux.intel.com>,
-        "Cheng, Michael" <michael.cheng@intel.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "De Marchi, Lucas" <lucas.demarchi@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "Wilson, Chris P" <chris.p.wilson@intel.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "Auld, Matthew" <matthew.auld@intel.com>
-Subject: Re: [Intel-gfx] [PATCH v3 1/3] drm/i915: pass a pointer for tlb
- seqno at vma_invalidate_tlb()
-Message-ID: <20220809082922.2dbd6c0c@maurocar-mobl2>
-In-Reply-To: <aabd5eff13bde62966ca9ad2a483978e4557c55f.camel@intel.com>
-References: <cover.1659598090.git.mchehab@kernel.org>
-        <f9550e6bacea10131ff40dd8981b69eb9251cdcd.1659598090.git.mchehab@kernel.org>
-        <YvE75o0uOtDGayNK@alfio.lan>
-        <YvFeLbUcC6yiCL5G@intel.com>
-        <YvGXv5td47ky+CnY@alfio.lan>
-        <aabd5eff13bde62966ca9ad2a483978e4557c55f.camel@intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Tue, 9 Aug 2022 02:31:54 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BB71901F;
+        Mon,  8 Aug 2022 23:31:53 -0700 (PDT)
+Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 08C8E3F1;
+        Tue,  9 Aug 2022 08:31:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1660026711;
+        bh=pRkiH090hm/3+AzIhawmn+O3nQNdF8FZ7zjdilQgQvM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dtLhiHZqB//pIENe29MK1W35VjCbvu3uxsuL3XBQSZuqpKHadZIFzS+WTWuRqMXgW
+         hyETYuRo9VROcKajrZYNR46y8/FEhQXZ4aSdgdDF2+ChXQAsfc017U6XC6VtPCdE9O
+         1/HnyNEd4yXRU6hAAGXQbpAIyRrFBmoYMQXbm/To=
+Message-ID: <1a394a4d-1099-400f-2b52-e7a02e379cba@ideasonboard.com>
+Date:   Tue, 9 Aug 2022 09:31:46 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 2/2] drm/tidss: Add support for AM625 DSS
+Content-Language: en-US
+To:     Aradhya Bhatia <a-bhatia1@ti.com>, Jyri Sarha <jyri.sarha@iki.fi>,
+        Rob Herring <robh+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Nishanth Menon <nm@ti.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Rahul T R <r-ravikumar@ti.com>
+References: <20220627151200.4693-1-a-bhatia1@ti.com>
+ <20220627151200.4693-3-a-bhatia1@ti.com>
+ <4382b760-418f-4033-97f2-47e082a30232@ideasonboard.com>
+ <cb9ada9f-9673-2039-c22b-fa0d3345fe41@ti.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <cb9ada9f-9673-2039-c22b-fa0d3345fe41@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,70 +62,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 Aug 2022 00:15:14 +0000
-"Vivi, Rodrigo" <rodrigo.vivi@intel.com> wrote:
-
-> On Tue, 2022-08-09 at 01:09 +0200, Andi Shyti wrote:
-> > Hi Rodrigo,
-> > 
-> > On Mon, Aug 08, 2022 at 03:04:13PM -0400, Rodrigo Vivi wrote:
-> > > On Mon, Aug 08, 2022 at 06:37:58PM +0200, Andi Shyti wrote:
-> > > > Hi Mauro,
-> > > > 
-> > > > On Thu, Aug 04, 2022 at 09:37:22AM +0200, Mauro Carvalho Chehab
-> > > > wrote:
-> > > > > WRITE_ONCE() should happen at the original var, not on a local
-> > > > > copy of it.
-> > > > > 
-> > > > > Fixes: 5d36acb7198b ("drm/i915/gt: Batch TLB invalidations")
-> > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > > > 
-> > > > Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-> > > 
-> > > Thanks and pushed...
-> > 
-> > Thanks!
-> > 
-> > > > 
-> > > > Are you going to send it to the stable mailing list?
-> > > 
-> > > I added cc stable while pushing and the cherry-pick to drm-intel-
-> > > next-fixes
-> > > has the right sha, so I'd assume this would be automagically now.
-> > > But yeap, it would be good if Mauro can follow up whenever this
-> > > gets
-> > > to Linus tree and Greg's script start to pop up the heads-up
-> > > messages.
-> > 
-> > That's what I meant... does Mauro now need to send the e-mail
-> > again for the stable?
-> > 
-> > I thought there was some suspicion towards e-mails pushed without
-> > being first sent to both stable and upstream mailing lists
-> > because they can get lost or forgotten... maybe I'm wrong.
+On 09/08/2022 09:08, Aradhya Bhatia wrote:
+> Hi Tomi,
 > 
-> It doesn't help to send now to stable ml because it can only be merged
-> there after it reaches the Linus' master tree.
-> Right now with the right fixes and cc:stable it should be automatically
-> and he shouldn't worry.
-> But in case he notices that the first patch got in but the second
-> didn't then it is when we send the patch directly to the stable ml.
-
-I sent a heads-up to Greg to warn him about the issue. I'll keep my eyes
-on the -stable automatic e-mails to double-check that they'll both be
-merged altogether.
-
-Thanks!
-Mauro
-
+> On 28-Jul-22 17:34, Tomi Valkeinen wrote:
+>> On 27/06/2022 18:12, Aradhya Bhatia wrote:
+>>> Add support for the DSS IP on TI's new AM625 SoC in the tidss driver.
+>>>
+>>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+>>> Reviewed-by: Rahul T R <r-ravikumar@ti.com>
+>>> ---
+>>>   drivers/gpu/drm/tidss/tidss_dispc.c | 56 ++++++++++++++++++++++++++++-
+>>>   drivers/gpu/drm/tidss/tidss_dispc.h |  2 ++
+>>>   drivers/gpu/drm/tidss/tidss_drv.c   |  1 +
+>>>   3 files changed, 58 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c 
+>>> b/drivers/gpu/drm/tidss/tidss_dispc.c
+>>> index dae47853b728..f084f0688a54 100644
+>>> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
+>>> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
+>>> @@ -272,6 +272,55 @@ const struct dispc_features dispc_j721e_feats = {
+>>>       .vid_order = { 1, 3, 0, 2 },
+>>>   };
+>>> +const struct dispc_features dispc_am625_feats = {
+>>> +    .max_pclk_khz = {
+>>> +        [DISPC_VP_DPI] = 165000,
+>>> +        [DISPC_VP_OLDI] = 165000,
+>>> +    },
+>>> +
+>>> +    .scaling = {
+>>> +        .in_width_max_5tap_rgb = 1280,
+>>> +        .in_width_max_3tap_rgb = 2560,
+>>> +        .in_width_max_5tap_yuv = 2560,
+>>> +        .in_width_max_3tap_yuv = 4096,
+>>> +        .upscale_limit = 16,
+>>> +        .downscale_limit_5tap = 4,
+>>> +        .downscale_limit_3tap = 2,
+>>> +        /*
+>>> +         * The max supported pixel inc value is 255. The value
+>>> +         * of pixel inc is calculated like this: 1+(xinc-1)*bpp.
+>>> +         * The maximum bpp of all formats supported by the HW
+>>> +         * is 8. So the maximum supported xinc value is 32,
+>>> +         * because 1+(32-1)*8 < 255 < 1+(33-1)*4.
+>>> +         */
+>>> +        .xinc_max = 32,
+>>> +    },
+>>> +
+>>> +    .subrev = DISPC_AM625,
+>>> +
+>>> +    .common = "common",
+>>> +    .common_regs = tidss_am65x_common_regs,
+>>> +
+>>> +    .num_vps = 2,
+>>> +    .vp_name = { "vp1", "vp2" },
+>>> +    .ovr_name = { "ovr1", "ovr2" },
+>>> +    .vpclk_name =  { "vp1", "vp2" },
+>>> +    .vp_bus_type = { DISPC_VP_OLDI, DISPC_VP_DPI },
+>>
+>> This looks correct, but with the two OLDI TXes, I think there will be 
+>> some interesting issues.
+>>
+>> The tidss_kms.c associates a DSS VP and a DT port, but that's no 
+>> longer true if you add the ports for both OLDI TXes, as they both use 
+>> the same VP. I think fixing that won't affect this patch, though, and 
+>> merging this patch will, afaik, enable similar DSS functionality as we 
+>> have for AM65x.
+>>
+>> So, I think these two patches could be merged, or we could wait a bit 
+>> until the OLDI situation becomes more clear. Up to you. In any case, 
+>> for both patches:
+>>
+>> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>\
 > 
+> Thank you for the review!
 > 
-> > 
-> > Andi
-> > 
-> > > Thanks,
-> > > Rodrigo.
-> > > 
-> > > > 
-> > > > Andi
+> This patch set is required for the dss DT patches to be upstreamed for
+> the AM625-SK, so I would like them to get merged.
 > 
+> Since these were posted in the previous merge window, I will re-send 
+> with your tag.
+
+I'd like to understand better the dual OLDI TX case before merging any 
+AM625 dss changes.
+
+At the moment you have only one port in the DT for the OLDI TX for 
+AM625, right? I don't see how that is supposed to work as there are two 
+OLDI outputs. And if we do add a new port, it perhaps makes sense to 
+have two OLDI TX ports as ports 0 and 1, and the DPI as port 2, which is 
+then different from AM65x.
+
+  Tomi

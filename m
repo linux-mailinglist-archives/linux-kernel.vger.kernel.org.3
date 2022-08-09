@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24EE58DC23
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656F258DC2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245082AbiHIQeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
+        id S245118AbiHIQfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiHIQeT (ORCPT
+        with ESMTP id S245098AbiHIQfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:34:19 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F027D1E3FD
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:34:18 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10ea9ef5838so14579115fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 09:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc;
-        bh=mrzCWl4wXLDQ9LiMVdz5G5o2linAVEwBqBEugoIDThQ=;
-        b=bivxvKkx0DGxNAfoV4XfuCsR+5ahztvgm9So203muwY2a4BVP3r8bC9wtLs8g13Q7t
-         qV6JzBPQEUE8RKRu9GgUqJvc8yTClkyIq0ThBmZb4SnoCzEgdKhHDPN9qlYjpq7TwN0c
-         Xu0yrRv6qGQ/jztavSYa+eJWPO0QnG0jwGjec=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=mrzCWl4wXLDQ9LiMVdz5G5o2linAVEwBqBEugoIDThQ=;
-        b=XviSfiq1pjzvUsWjJ+osX8DaMnLcweaqvKmHV4bVB0EmT031Ua2mB9BDXP9Riz/2lu
-         LjT+6+bDJPTwihvE/JUBUzWMXnX2m1oc7+z8ienS5sa/aYMkzPIClU+BFKIwdPTm5ZKX
-         e/+A5s152oD8GVQE73Drf8kcU4DnVdmqB5ldaCb+Q0hzMJdSHCW3rhQyroNpr24iJb17
-         3OPOruWD2iL+BAv+7t9X6yf39Z1/eD/MmrtcTX2BQjuzYrjH09dZxz05N7ZrtqUMDOsz
-         vcK6uV6YyQhmGDsTnvCB03NPr7XuIV6IlLNUufq1Cm85L1Q3G6bg/QjfArOCNrk97r5+
-         5KxQ==
-X-Gm-Message-State: ACgBeo20kG+7r1N8Akx/jra+dL7VHgt35K59vnzyJaPx2uOrP3CT0pik
-        dQKX7WUSY3TIExueU/K9MoGdUQsUQXnQcvTjNt8ftQ==
-X-Google-Smtp-Source: AA6agR4U1XJNDLlgR9CxQ7I2mD1g5PVq2QU6uXNOOzNluG3CgW8UxXxij155UMrLOMvKFwE3aqqeK3YEI0VVeY8Lh24=
-X-Received: by 2002:a05:6870:9a17:b0:e9:3d1:f91a with SMTP id
- fo23-20020a0568709a1700b000e903d1f91amr10875285oab.44.1660062858237; Tue, 09
- Aug 2022 09:34:18 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 9 Aug 2022 11:34:17 -0500
+        Tue, 9 Aug 2022 12:35:02 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72411EECB;
+        Tue,  9 Aug 2022 09:34:59 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 9F71B32008FA;
+        Tue,  9 Aug 2022 12:34:56 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Tue, 09 Aug 2022 12:34:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1660062896; x=1660149296; bh=uP5Ush9788ztF3g3kX382p5ir
+        OwRq/RLQO97X222ADo=; b=a9DWCo18RTU15Ywij8R7c8cVdAsimEQ1Q9oLYeTiS
+        rONGNtq+/V+An2EQyYBDBgprn/StuQOJp9MZN6QZgRT1esyu6Er5QHaZMSmhs89I
+        QEbn1hUDODpzqjFfMKcibu6vZy369aScILE3EFzILde7eVCBiUwgQaGs5NOCNjpK
+        lsPOGn/Ei/FOa9+BuyBYJC3msus3YJ+oLedlQL23c6FhN1Ed0Ed7UTvGx+qVpJ1D
+        XyiGuJM4m60g+acWBQ9ffZbAv5tKqb9HJuJWo+VGgK7ME2wvI5DPlE8HnMA5htWt
+        h4J5VEqLCh0nGqO+mwrH8q8aM8I5WzED73WG4HqE3ILsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660062896; x=1660149296; bh=uP5Ush9788ztF3g3kX382p5irOwRq/RLQO9
+        7X222ADo=; b=OJ3imwNTs9+wQk2zKsM2tmK0C1Gk764Sx6Ys5BfgdtN5XSsArcm
+        xTrhSpEKXEUAlFP+LU+0hiV+Duz4p1yZ9usF3JqpnIKjFt4LRU3/rkimpNPd1TVQ
+        BA8n71VYlGwSSzY4w27PMKrVzie3fG3WOyqZnjPRSoFu3tSmfhTIRC0U0Wf+xNkf
+        hgMbcslxIo/khsDQHUQ+1rspT7EaYzBMroyGbxpy1iq5EVIXKvf642lZUzd6kX/X
+        hvAQ/X4GqE9C2XcXqKGGpmkRiBF+ituXjWBM7eCYn4KBGjhY3woHFBbCcnFZ5rO6
+        DZ2Pncf5MJhmAFu5bTVNfIPN3+IjzX4TMAA==
+X-ME-Sender: <xms:r4zyYlVlOrWjMWl4aTkQnatS1nk6y0ksQo-FEHidheSHqgdB3cy2cA>
+    <xme:r4zyYlmfOQnngdFrEDGx3QsCTSihxscjbqQtkv00ZpbNI3os61ab_EdrcgDh6wc4X
+    5bnzv8BTRDt4M7OBg>
+X-ME-Received: <xmr:r4zyYhYnH75t0ooeElxNfnGTmmaYCtN51VXr8iwC3lTWhO9Jx5jIYlPgwGk_uXFpU0CKANtMr8s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddguddtfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhephf
+    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeetueektdeuhfefvefggf
+    evgeffgfekfefhkeekteffheevtddvhedukeehffeltdenucffohhmrghinhepkhgvrhhn
+    vghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:r4zyYoXUjFHVoVRQgQVjRgQLAXB7wuqNTjAtrm2VU8sK8082SArSrg>
+    <xmx:r4zyYvm-xbzFEb_exNROMdP65c1qRWe1t5AeDG6ymNJXgkXI6lKurg>
+    <xmx:r4zyYleiOIZ5_CmpFNnQfey7JdQTzlpZy6-ntFclab5_fXdmURoPLw>
+    <xmx:sIzyYqsuUJdOmQxTFcCw-JobzsLSlBQsj7qIEaWaed1lzoIG87F5BA>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 9 Aug 2022 12:34:54 -0400 (EDT)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, memxor@gmail.com
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/2] Add more bpf_*_ct_lookup() selftests
+Date:   Tue,  9 Aug 2022 10:34:40 -0600
+Message-Id: <cover.1660062725.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-In-Reply-To: <1660026909-7365-2-git-send-email-quic_c_skakit@quicinc.com>
-References: <1660026909-7365-1-git-send-email-quic_c_skakit@quicinc.com> <1660026909-7365-2-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 9 Aug 2022 11:34:17 -0500
-Message-ID: <CAE-0n52t0MPDxGQNEdhNaqOBhUhr8FBew_cuEwmruN12k4f15A@mail.gmail.com>
-Subject: Re: [PATCH V4 1/3] arm64: dts: qcom: sc7280: Cleanup the lpasscc node
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_tdas@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-08-08 23:35:07)
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 13d7f26..71735bb 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -2168,9 +2168,8 @@
->                 lpasscc: lpasscc@3000000 {
->                         compatible = "qcom,sc7280-lpasscc";
->                         reg = <0 0x03000000 0 0x40>,
-> -                             <0 0x03c04000 0 0x4>,
-> -                             <0 0x03389000 0 0x24>;
-> -                       reg-names = "qdsp6ss", "top_cc", "cc";
-> +                                 <0 0x03c04000 0 0x4>;
+This patchset adds more bpf_*_ct_lookup() selftests. The goal is to test
+interaction with netfilter subsystem as well as reading from `struct
+nf_conn`. The first is important when migrating legacy systems towards
+bpf. The latter is important in general to take full advantage of
+connection tracking.
 
-This looks oddly tabbed out? I'd expect it to align with the first reg
-property, so be unchanged.
+I'll follow this patchset up with support for writing to `struct nf_conn`.
 
-> +                       reg-names = "qdsp6ss", "top_cc";
->                         clocks = <&gcc GCC_CFG_NOC_LPASS_CLK>;
->                         clock-names = "iface";
+This change will require two changes to BPF CI kconfig:
+
+* CONFIG_NF_CONNTRACK_MARK=y
+* CONFIG_NETFILTER_XT_CONNMARK=y
+
+I can put up the PR if this patchset looks good.
+
+Past discussion:
+- v1: https://lore.kernel.org/bpf/cover.1659209738.git.dxu@dxuuu.xyz/
+
+Changes since v1:
+- Reword commit message / cover letter to not mention connmark writing
+
+Daniel Xu (2):
+  selftests/bpf: Add existing connection bpf_*_ct_lookup() test
+  selftests/bpf: Add connmark read test
+
+ .../testing/selftests/bpf/prog_tests/bpf_nf.c | 60 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/test_bpf_nf.c | 21 +++++++
+ 2 files changed, 81 insertions(+)
+
+-- 
+2.37.1
+

@@ -2,42 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7B358D4D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA01658D4DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239651AbiHIHpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 03:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
+        id S239224AbiHIHu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 03:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240009AbiHIHpk (ORCPT
+        with ESMTP id S232748AbiHIHu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 03:45:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD16EB481;
-        Tue,  9 Aug 2022 00:45:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 9 Aug 2022 03:50:26 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7737B25FE;
+        Tue,  9 Aug 2022 00:50:25 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98cb329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98cb:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82119B811C0;
-        Tue,  9 Aug 2022 07:45:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B18DBC433D6;
-        Tue,  9 Aug 2022 07:45:33 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuerui Wang <kernel@xen0n.name>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: Don't disable EIOINTC master core
-Date:   Tue,  9 Aug 2022 15:45:22 +0800
-Message-Id: <20220809074522.2444672-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E3531EC01B7;
+        Tue,  9 Aug 2022 09:50:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660031419;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=CKTlBpVle+EMNM4GbiovFuYDC+EYIUhi9bVoDaoM+Hc=;
+        b=AvQLi8gZPjJNC3y51S/pIeAEhLII8w6paYpTN+JUqd9cUaE2N2FI0oHRgYPY6cFtKd2Lmk
+        /dgDyrdHauhZhn1SmxKfipFMlQ7JmgNEwsKsvWzBHMo8/vqDiHeONG/xahO6CpQfZWZhwp
+        uaenCxHLp/HYxjUiIruj9w08iTmswZQ=
+Date:   Tue, 9 Aug 2022 09:50:18 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     medadyoung@gmail.com, KWLIU@nuvoton.com, tony.luck@intel.com,
+        rric@kernel.org, benjaminfair@google.com,
+        linux-edac@vger.kernel.org, KFTING@nuvoton.com,
+        avifishman70@gmail.com, venture@google.com,
+        openbmc@lists.ozlabs.org, JJLIU0@nuvoton.com, ctcchien@nuvoton.com,
+        tali.perry1@gmail.com, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, james.morse@arm.com, YSCHU@nuvoton.com,
+        mchehab@kernel.org, linux-kernel@vger.kernel.org,
+        tmaimon77@gmail.com
+Subject: Re: Referencing non-public datasheets in commit messages (was:
+ [PATCH v12 3/3] EDAC: nuvoton: Add NPCM memory controller driver)
+Message-ID: <YvIRusXsZvdiFRzS@zn.tnic>
+References: <20220610084340.2268-1-ctcchien@nuvoton.com>
+ <20220610084340.2268-4-ctcchien@nuvoton.com>
+ <YrDIimW0gW1j03WG@zn.tnic>
+ <6d1576c9-f105-2aff-4497-2c2e7bed2f3b@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6d1576c9-f105-2aff-4497-2c2e7bed2f3b@molgen.mpg.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,55 +61,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fix a CPU hotplug issue. The EIOINTC master core (the first
-core of an EIOINTC node) should not be disabled at runtime, since it has
-the responsibility of dispatching I/O interrupts.
+On Tue, Aug 09, 2022 at 08:42:29AM +0200, Paul Menzel wrote:
+> Maybe it could be denoted, that is not public (and also the version), but
+> even mentioning non-public datasheets is useful, as they could be made
+> public in the future, and allows everyone to contact people with access to
+> these datasheets to take a look into the specific datasheet.
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/kernel/smp.c            | 9 +++++++++
- drivers/irqchip/irq-loongson-eiointc.c | 5 +++++
- 2 files changed, 14 insertions(+)
+If you're going to contact people to get you certain information, you
+don't need the datasheet - you simply need to ask the question.
 
-diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-index 09743103d9b3..54901716f8de 100644
---- a/arch/loongarch/kernel/smp.c
-+++ b/arch/loongarch/kernel/smp.c
-@@ -242,9 +242,18 @@ void loongson3_smp_finish(void)
- 
- static bool io_master(int cpu)
- {
-+	int i, node, master;
-+
- 	if (cpu == 0)
- 		return true;
- 
-+	for (i = 1; i < loongson_sysconf.nr_io_pics; i++) {
-+		node = eiointc_get_node(i);
-+		master = cpu_number_map(node * CORES_PER_EIO_NODE);
-+		if (cpu == master)
-+			return true;
-+	}
-+
- 	return false;
- }
- 
-diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-index 170dbc96c7d3..6c99a2ff95f5 100644
---- a/drivers/irqchip/irq-loongson-eiointc.c
-+++ b/drivers/irqchip/irq-loongson-eiointc.c
-@@ -56,6 +56,11 @@ static void eiointc_enable(void)
- 	iocsr_write64(misc, LOONGARCH_IOCSR_MISC_FUNC);
- }
- 
-+int eiointc_get_node(int id)
-+{
-+	return eiointc_priv[id]->node;
-+}
-+
- static int cpu_to_eio_node(int cpu)
- {
- 	return cpu_logical_map(cpu) / CORES_PER_EIO_NODE;
+But whatever, if a document is mentioned, the text should state that it
+is not public so that people are aware not to go looking for it. Or, if
+it is public, how to find it.
+
+And no, a company website URL is not a good idea because those change
+pretty frequently in practice. Uploading to our bugzilla and adding the
+link to it is much better.
+
+Thx.
+
 -- 
-2.31.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

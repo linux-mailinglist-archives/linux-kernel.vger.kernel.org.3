@@ -2,85 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C142458E1C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C58658E1C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiHIVZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 17:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S229735AbiHIV2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 17:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiHIVZ2 (ORCPT
+        with ESMTP id S229728AbiHIV2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 17:25:28 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296E545F49
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:25:26 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 14:25:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1660080325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TJ+FDVpBSEzK2EoXIhVyyu6wE3zilcScyC8ojStCxxI=;
-        b=HKMgL2g2MTuLe3kMQ7rhzrqmOSRlArIEpu4G+sQjvFpRJVKvBIYoEuPPFu+SFlekJPp+3r
-        GD3rz8CMtEbJMY8a7jajFAQKq8C+Nximk++6uZre2bbGS3uI67bi4GEj50hdCEFXe5K3h6
-        6LNlP/5GkH7WEx89qwRXtFq/jYh9B80=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Vasily Averin <vvs@openvz.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, kernel@openvz.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Subject: Re: [PATCH 0/3] enable memcg accounting for kernfs objects
-Message-ID: <YvLQsRf7KBezyE+B@P9FQF9L96D.corp.robot.car>
-References: <0414cab3-32d6-c60a-d3c8-96fc72064ba0@openvz.org>
- <YvKZ8zYJFhhFvRxO@slm.duckdns.org>
+        Tue, 9 Aug 2022 17:28:13 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CBE606AC
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:28:12 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id h28so11913555pfq.11
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 14:28:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=JY9D8MD/ihrJJozLZGniZMqDUbj7IISkdDkiVGgSVlA=;
+        b=ZIuHud84ZtXedCzT7Pr+igolJJ5oQC93UOqQ51ntuXWbhbr1e91OANRUalKrZPYtpc
+         f1Ne3tCGqNyPWTQckJdLtCqJraU/AmN3zLYSJIfLFzL3UVMHrTZmP+9yAhK+/oRy7CtA
+         vpsmqhPLXbrCoQ8TfIA/+ttwE0d6C0+EYQysA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=JY9D8MD/ihrJJozLZGniZMqDUbj7IISkdDkiVGgSVlA=;
+        b=B1+KmxhUh+KQY1aOMVXcFojkFDAuLI8m1sZYybWsdwd8WfJHGigsi8N4R34KAFx+yR
+         60WGLq4MeSRv/ei+/DNQ4tgVF/gnI4nsgpH/8zI6R6Kk2rS+MnTqaFRfzwPsBPwsSgDH
+         7qOAkaBDpMQ7fn0MyP3YDBIJGg/SAejWbdwlO9xwus/mfDDaLNhV5Z8B7qh4t4aH/xQe
+         0STPS/QHqbn3c2ZxSBlLy78FsrEb6W710uW8XQ1ib9I04Z17Rh/sE/x3zsxhUA+TZFwP
+         /YXEiEQXBjkNN00htxN+WedTOeRcHDxRz3Bn+wf9Hj2QFsn6OKnUeoRpO90bnhP2YDHZ
+         k0Gg==
+X-Gm-Message-State: ACgBeo3+sNwjZquooZ6uzTxxDmQhewnCARi9lQxPsBfrNPPm0FBOIljl
+        AITkbV52QfICadyxBZ6hQvGiyw==
+X-Google-Smtp-Source: AA6agR5VYybnqM34uLEivFOpfRmCmRQjvS+GViCfNSaPuw3/IoUzIEHGJARl+EBPf4u2ccJlCi8oLQ==
+X-Received: by 2002:a05:6a00:804:b0:52f:43f9:b634 with SMTP id m4-20020a056a00080400b0052f43f9b634mr11293054pfk.62.1660080491539;
+        Tue, 09 Aug 2022 14:28:11 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:22ee:daf1:c9a1:a49])
+        by smtp.gmail.com with ESMTPSA id t4-20020a63eb04000000b003db7de758besm8447923pgh.5.2022.08.09.14.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 14:28:10 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] regulator: core: Fix missing error return from regulator_bulk_get()
+Date:   Tue,  9 Aug 2022 14:27:45 -0700
+Message-Id: <20220809142738.1.I91625242f137c707bb345c51c80c5ecee02eeff3@changeid>
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvKZ8zYJFhhFvRxO@slm.duckdns.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 07:31:31AM -1000, Tejun Heo wrote:
-> (cc'ing Johannes)
-> 
-> Hello,
-> 
-> On Sun, Jul 31, 2022 at 06:37:15PM +0300, Vasily Averin wrote:
-> > 1) creating a new netdevice allocates ~50Kb of memory, where ~10Kb
-> >    was allocated for 80+ kernfs nodes.
-> > 
-> > 2) cgroupv2 mkdir allocates ~60Kb of memory, ~10Kb of them are kernfs
-> >    structures.
-> > 
-> > 3) Shakeel Butt reports that Google has workloads which create 100s
-> >    of subcontainers and they have observed high system overhead
-> >    without memcg accounting of kernfs.
-> 
-> So, I don't have anything against accounting kernfs objects in general but,
-> for cgroups, because cgroups are what determines what gets charged where,
-> I'm not quite sure whether following the usual "charge it to the allocating
-> task's cgroup" is the best way to go about it. I wonder whether it'd be
-> better to attach it to the new cgroup's nearest ancestor with memcg enabled.
+In commit 6eabfc018e8d ("regulator: core: Allow specifying an initial
+load w/ the bulk API") I changed the error handling but had a subtle
+that caused us to always return no error even if there was an
+error. Fix it.
 
-I also like this approach better, however Michal had some arguments against it.
-I don't think there is a huge practical difference, so I'm ok with either
-approach.
+Fixes: 6eabfc018e8d ("regulator: core: Allow specifying an initial load w/ the bulk API")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-Thanks!
+ drivers/regulator/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index 7150b1d0159e..d8373cb04f90 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -4784,10 +4784,10 @@ int regulator_bulk_get(struct device *dev, int num_consumers,
+ 		consumers[i].consumer = regulator_get(dev,
+ 						      consumers[i].supply);
+ 		if (IS_ERR(consumers[i].consumer)) {
+-			consumers[i].consumer = NULL;
+ 			ret = dev_err_probe(dev, PTR_ERR(consumers[i].consumer),
+ 					    "Failed to get supply '%s'",
+ 					    consumers[i].supply);
++			consumers[i].consumer = NULL;
+ 			goto err;
+ 		}
+ 
+-- 
+2.37.1.559.g78731f0fdb-goog
+

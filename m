@@ -2,241 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A21258DBAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E87258DBB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244916AbiHIQNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S243144AbiHIQPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbiHIQN3 (ORCPT
+        with ESMTP id S244345AbiHIQO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:13:29 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CFC19C1E
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:13:28 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id v2so9021063lfi.6
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 09:13:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8j5qXDWifiXWyB9skdF/rlZDC9hZ0mNrZm/vxwLPLtk=;
-        b=BrITtp0om7iKmpB3yvq68x95VaktA8eQT+QZpqZ5S6QN5xMoArZUs6t7OP3t0PTgIP
-         kcZL53ho/sr1PtPTeCkyBvz+X95WRNONVOfuIQQvPj84YbyRXhnB/gTVqOQTwRE50Pgb
-         F23lxPuWcgxVYMdVkO4YAaqEQ8jOqR2mwbRlsLBizU2XQiN3cfERMFtbWAs64ANHcmO5
-         bnSsLkWY7kalSwUko2HmGO7I0qiXOq3jhPpRGTEGQF7JZHyla2xnAViuEvlQ8uquCuyM
-         qnFUScco68QnqIP0yIFxzuTxAMsF8+qQd9niL98/LbKUxO85q3Ck0V2vHi5sTn162Vhe
-         JIvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8j5qXDWifiXWyB9skdF/rlZDC9hZ0mNrZm/vxwLPLtk=;
-        b=XYeawGRkGk5UUTAmBaW+kFsEqDH/6V8Bpbdq31YVyCDC/55WTIm/4UCQp2X9W4FhNZ
-         0ztT6XjgEVnjup2XmoiJJNoYivvE2GL8xVQYqyLL/aJsCNS8n3KkkvN/bXhZsctvhaSD
-         +w8pN9R95RsH8Kuyg6vKcEIaQpQtidsp8zS/lUe63BeTX/9Xof7jhQDErbiB9TwF4N07
-         ZjD112Vy1P52uW1vfiTZNhETpUZWKmlbxwkmpZqL/9BYgce23tiOzuqQYuUy1eJghSo8
-         reol7RdZqIa/ZfHSy6BOlvY24mthX13wz8U01RNyNrQa8i3U31JMUc13e8kozDfzuEyQ
-         KoFg==
-X-Gm-Message-State: ACgBeo1s9Z0MqNvZnq9g8RcYliFakMqamKV96J32zHEcMo7jlGQ8Bqn1
-        qFog2+so+/lTQVVBKLz25OP0q3I2VmthafCUeO418ZERFW1S2Q==
-X-Google-Smtp-Source: AA6agR4/Iq6TdI72U9s9fsSvMjf/6hTTe1uLDoGSAz883Xm6nuBlvnTdD3AUbvBNcl0EC4ihRwuwgMXjDO/RMf8yexo=
-X-Received: by 2002:a05:6512:2314:b0:48c:f43c:3a39 with SMTP id
- o20-20020a056512231400b0048cf43c3a39mr2917106lfu.419.1660061606534; Tue, 09
- Aug 2022 09:13:26 -0700 (PDT)
+        Tue, 9 Aug 2022 12:14:56 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9629520185
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660061695; x=1691597695;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Db+20hz4Jvt9aAulGa5NPWLwUz6HQDnkG0RPi62lamg=;
+  b=Yn6+YVPcKuzN5A8z3vdKUi019s4DwK/xL86LNXIj8D6WnYX3GK0/c8t7
+   TBMP/g2otvU/z9ECUNnYnuNHHTJm7/pr+hubo7gDH0UJvtmkr4JC4QZKw
+   gfc07v+VcofoqM73oyZ7fQ2Hw/oP6w1DpK7Mtc11VYBA00kOFLmoYoXzY
+   oicRkzhHBCcUxBKBFU/xwZBDt8PUwyKp8KcWQst9LHxZ3bPBVJBC5iXL+
+   E0vQHamwhaEdg24xSVmsGrfmtAQnQWpSJOiro+9JJGB7iN3diJZwn0Ujl
+   3o6k5/9hICb7jJxNVCbE6i8PjrbwA82DGbGCjlx0YIN+wtVdw1k7jT9YE
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="291660511"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="291660511"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 09:14:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="637772441"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 09 Aug 2022 09:14:52 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLRsZ-000N3i-1V;
+        Tue, 09 Aug 2022 16:14:51 +0000
+Date:   Wed, 10 Aug 2022 00:14:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     zhangsong <zhangsong34@huawei.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org
+Cc:     kbuild-all@lists.01.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, zhangsong <zhangsong34@huawei.com>
+Subject: Re: [PATCH] sched/fair: Introduce priority load balance to reduce
+ interference from IDLE tasks
+Message-ID: <202208100012.psioE872-lkp@intel.com>
+References: <20220809132945.3710583-1-zhangsong34@huawei.com>
 MIME-Version: 1.0
-References: <20220704081149.16797-1-mike.leach@linaro.org> <20220704081149.16797-10-mike.leach@linaro.org>
- <5e8981b1-1c32-7ef0-0ef9-93799a8c968b@arm.com>
-In-Reply-To: <5e8981b1-1c32-7ef0-0ef9-93799a8c968b@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 9 Aug 2022 17:13:15 +0100
-Message-ID: <CAJ9a7Vi63XxDXtT8KD2-3=n5+de6_ZfD+X=jtPK+puM7f4koNw@mail.gmail.com>
-Subject: Re: [PATCH v2 09/13] perf: cs-etm: Update record event to use new
- Trace ID protocol
-To:     James Clark <james.clark@arm.com>
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        quic_jinlmao@quicinc.com, suzuki.poulose@arm.com,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220809132945.3710583-1-zhangsong34@huawei.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James
+Hi zhangsong,
 
-On Wed, 20 Jul 2022 at 15:41, James Clark <james.clark@arm.com> wrote:
->
->
->
-> On 04/07/2022 09:11, Mike Leach wrote:
-> > Trace IDs are now dynamically allocated.
-> >
-> > Previously used the static association algorithm that is no longer
-> > used. The 'cpu * 2 + seed' was outdated and broken for systems with high
-> > core counts (>46). as it did not scale and was broken for larger
-> > core counts.
-> >
-> > Trace ID is  as unknown in AUXINFO record, and the ID / CPU association
-> > will now be sent in PERF_RECORD_AUX_OUTPUT_HW_ID record.
-> >
-> > Remove legacy Trace ID allocation algorithm.
-> >
-> > Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> > ---
-> >  include/linux/coresight-pmu.h       | 19 +++++++------------
-> >  tools/include/linux/coresight-pmu.h | 19 +++++++------------
->
-> I usually see mentions that these header updates need to be separate commits
-> because they are merged through different trees.
->
-> >  tools/perf/arch/arm/util/cs-etm.c   | 21 ++++++++++++---------
-> >  3 files changed, 26 insertions(+), 33 deletions(-)
-> >
-> > diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
-> > index 4ac5c081af93..9f7ee380266b 100644
-> > --- a/include/linux/coresight-pmu.h
-> > +++ b/include/linux/coresight-pmu.h
-> > @@ -8,7 +8,13 @@
-> >  #define _LINUX_CORESIGHT_PMU_H
-> >
-> >  #define CORESIGHT_ETM_PMU_NAME "cs_etm"
-> > -#define CORESIGHT_ETM_PMU_SEED  0x10
-> > +
-> > +/*
-> > + * Metadata now contains an unused trace ID - IDs are transmitted using a
-> > + * PERF_RECORD_AUX_OUTPUT_HW_ID record.
-> > + * Value architecturally defined as reserved in CoreSight.
-> > + */
-> > +#define CS_UNUSED_TRACE_ID 0x7F
-> >
-> >  /*
-> >   * Below are the definition of bit offsets for perf option, and works as
-> > @@ -32,15 +38,4 @@
-> >  #define ETM4_CFG_BIT_RETSTK  12
-> >  #define ETM4_CFG_BIT_VMID_OPT        15
-> >
-> > -static inline int coresight_get_trace_id(int cpu)
-> > -{
-> > -     /*
-> > -      * A trace ID of value 0 is invalid, so let's start at some
-> > -      * random value that fits in 7 bits and go from there.  Since
-> > -      * the common convention is to have data trace IDs be I(N) + 1,
-> > -      * set instruction trace IDs as a function of the CPU number.
-> > -      */
-> > -     return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
-> > -}
-> > -
-> >  #endif
-> > diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
-> > index 6c2fd6cc5a98..31d007fab3a6 100644
-> > --- a/tools/include/linux/coresight-pmu.h
-> > +++ b/tools/include/linux/coresight-pmu.h
-> > @@ -8,7 +8,13 @@
-> >  #define _LINUX_CORESIGHT_PMU_H
-> >
-> >  #define CORESIGHT_ETM_PMU_NAME "cs_etm"
-> > -#define CORESIGHT_ETM_PMU_SEED  0x10
-> > +
-> > +/*
-> > + * Metadata now contains an unused trace ID - IDs are transmitted using a
-> > + * PERF_RECORD_AUX_OUTPUT_HW_ID record.
-> > + * Value architecturally defined as reserved in CoreSight.
-> > + */
-> > +#define CS_UNUSED_TRACE_ID 0x7F
-> >
->
-> minor nit: this isn't used in the kernel so only needs to be defined on the
-> tools side.
->
+Thank you for the patch! Yet something to improve:
 
-Unfortunately if the two versions of coresight-pmu.h are different,
-the build process for perf throws out a warning. So they have to be
-identical.
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on linus/master v5.19 next-20220809]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks
+url:    https://github.com/intel-lab-lkp/linux/commits/zhangsong/sched-fair-Introduce-priority-load-balance-to-reduce-interference-from-IDLE-tasks/20220809-213204
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 8648f92a66a323ed01903d2cbb248cdbe2f312d9
+config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20220810/202208100012.psioE872-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/20ac252fc4280e5b1a45070d722c7edc0695088b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review zhangsong/sched-fair-Introduce-priority-load-balance-to-reduce-interference-from-IDLE-tasks/20220809-213204
+        git checkout 20ac252fc4280e5b1a45070d722c7edc0695088b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
 
-Mike
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> >  /*
-> >   * Below are the definition of bit offsets for perf option, and works as
-> > @@ -34,15 +40,4 @@
-> >  #define ETM4_CFG_BIT_RETSTK  12
-> >  #define ETM4_CFG_BIT_VMID_OPT        15
-> >
-> > -static inline int coresight_get_trace_id(int cpu)
-> > -{
-> > -     /*
-> > -      * A trace ID of value 0 is invalid, so let's start at some
-> > -      * random value that fits in 7 bits and go from there.  Since
-> > -      * the common convention is to have data trace IDs be I(N) + 1,
-> > -      * set instruction trace IDs as a function of the CPU number.
-> > -      */
-> > -     return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
-> > -}
-> > -
-> >  #endif
-> > diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
-> > index 1b54638d53b0..2d68e6a722ed 100644
-> > --- a/tools/perf/arch/arm/util/cs-etm.c
-> > +++ b/tools/perf/arch/arm/util/cs-etm.c
-> > @@ -421,13 +421,16 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
-> >       evlist__to_front(evlist, cs_etm_evsel);
-> >
-> >       /*
-> > -      * In the case of per-cpu mmaps, we need the CPU on the
-> > -      * AUX event.  We also need the contextID in order to be notified
-> > +      * get the CPU on the sample - need it to associate trace ID in the
-> > +      * AUX_OUTPUT_HW_ID event, and the AUX event for per-cpu mmaps.
-> > +      */
-> > +     evsel__set_sample_bit(cs_etm_evsel, CPU);
-> > +
-> > +     /*
-> > +      * Also the case of per-cpu mmaps, need the contextID in order to be notified
-> >        * when a context switch happened.
-> >        */
-> >       if (!perf_cpu_map__empty(cpus)) {
-> > -             evsel__set_sample_bit(cs_etm_evsel, CPU);
-> > -
-> >               err = cs_etm_set_option(itr, cs_etm_evsel,
-> >                                       BIT(ETM_OPT_CTXTID) | BIT(ETM_OPT_TS));
-> >               if (err)
-> > @@ -633,8 +636,9 @@ static void cs_etm_save_etmv4_header(__u64 data[], struct auxtrace_record *itr,
-> >
-> >       /* Get trace configuration register */
-> >       data[CS_ETMV4_TRCCONFIGR] = cs_etmv4_get_config(itr);
-> > -     /* Get traceID from the framework */
-> > -     data[CS_ETMV4_TRCTRACEIDR] = coresight_get_trace_id(cpu);
-> > +     /* traceID set to unused */
-> > +     data[CS_ETMV4_TRCTRACEIDR] = CS_UNUSED_TRACE_ID;
-> > +
-> >       /* Get read-only information from sysFS */
-> >       data[CS_ETMV4_TRCIDR0] = cs_etm_get_ro(cs_etm_pmu, cpu,
-> >                                              metadata_etmv4_ro[CS_ETMV4_TRCIDR0]);
-> > @@ -681,9 +685,8 @@ static void cs_etm_get_metadata(int cpu, u32 *offset,
-> >               magic = __perf_cs_etmv3_magic;
-> >               /* Get configuration register */
-> >               info->priv[*offset + CS_ETM_ETMCR] = cs_etm_get_config(itr);
-> > -             /* Get traceID from the framework */
-> > -             info->priv[*offset + CS_ETM_ETMTRACEIDR] =
-> > -                                             coresight_get_trace_id(cpu);
-> > +             /* traceID set to unused */
-> > +             info->priv[*offset + CS_ETM_ETMTRACEIDR] = CS_UNUSED_TRACE_ID;
-> >               /* Get read-only information from sysFS */
-> >               info->priv[*offset + CS_ETM_ETMCCER] =
-> >                       cs_etm_get_ro(cs_etm_pmu, cpu,
+All errors (new ones prefixed by >>):
+
+   kernel/sched/fair.c:672:5: warning: no previous prototype for 'sched_update_scaling' [-Wmissing-prototypes]
+     672 | int sched_update_scaling(void)
+         |     ^~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c: In function 'adjust_rq_cfs_tasks':
+>> kernel/sched/fair.c:3045:48: error: 'struct rq' has no member named 'cfs_idle_tasks'
+    3045 |                 (*list_op)(&se->group_node, &rq->cfs_idle_tasks);
+         |                                                ^~
+>> kernel/sched/fair.c:3047:48: error: 'struct rq' has no member named 'cfs_tasks'
+    3047 |                 (*list_op)(&se->group_node, &rq->cfs_tasks);
+         |                                                ^~
+   At top level:
+   kernel/sched/fair.c:3038:1: warning: 'adjust_rq_cfs_tasks' defined but not used [-Wunused-function]
+    3038 | adjust_rq_cfs_tasks(void (*list_op)(struct list_head *, struct list_head *),
+         | ^~~~~~~~~~~~~~~~~~~
 
 
+vim +3045 kernel/sched/fair.c
+
+  3036	
+  3037	static void
+  3038	adjust_rq_cfs_tasks(void (*list_op)(struct list_head *, struct list_head *),
+  3039		struct rq *rq,
+  3040		struct sched_entity *se)
+  3041	{
+  3042		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+  3043	
+  3044		if (task_has_idle_policy(task_of(se)) || tg_is_idle(cfs_rq->tg))
+> 3045			(*list_op)(&se->group_node, &rq->cfs_idle_tasks);
+  3046		else
+> 3047			(*list_op)(&se->group_node, &rq->cfs_tasks);
+  3048	}
+  3049	
 
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+0-DAY CI Kernel Test Service
+https://01.org/lkp

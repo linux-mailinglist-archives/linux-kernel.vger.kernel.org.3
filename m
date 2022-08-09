@@ -2,114 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7464C58D579
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E27858D57D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240784AbiHIIhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
+        id S239109AbiHIIiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiHIIho (ORCPT
+        with ESMTP id S229976AbiHIIiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:37:44 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B44E1EAFE;
-        Tue,  9 Aug 2022 01:37:43 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id e28so176422qts.1;
-        Tue, 09 Aug 2022 01:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5wAmAP/0n2nSTjV3vgB4RzL7PV/UfzJLwel1ipxqIUs=;
-        b=AJAxzwloNzTJT0yDJAkW5/+xoS3P9cRbuADl2sHhOv6yw5X9QI6ZXDr7GD2KmGXmfx
-         jkc3oT4UCArJfztSmx1vRg8FYjMj9hRSrcqtGKHv61JBlfRsxFhXL3IisMBY3wRUU34q
-         226Dl5P5qDwo6FBzgAA/0YPdte8+EifuuP//li9r4XxT9DnsU2E1+USMgvEB3G8cSLY8
-         AWk26bqoh5ra12u28RRoKFpoqaxYuafq0l4gOMHIdIOG2uIyrB3HOFsb62wWMk/QN40b
-         53a0wk3/bR7PQ7IAJYrB/RfnYV2JjpC4D3Jf2mpeVHKCPnxpeDKJC3aw1qlSoaQu7sl9
-         K1AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5wAmAP/0n2nSTjV3vgB4RzL7PV/UfzJLwel1ipxqIUs=;
-        b=U3CjU4DnhrtKbSJgorp3ZNuWNRoZnmsJqCCAAFAX+Meuy1c4T3N7Osn01F470OTrWk
-         aAglWRy4nxB0zXtRfa2uPb/tRPOz6mmsURt5udSsZJL3qul7ShZBzyovvx5JM7RHv2wb
-         XAWbAAua84ZtkdxXXBn7K4a/Vqw00OMEajZFHokEv1gLy28idJaQ7JFl+RcJQEhUlDSh
-         yORDzPB8ZPC+Hmk/qsHzA4B/z6tvPKyeRZ8vT5pFn3l7auFlWbpKXta0XjPa91MWlYre
-         oJn5cPtGuapV6PMozTdykpMhqH87y9nobsb0RTrFZcVtNSDU6tq+jqq5VLJuR0kw99mS
-         R5MQ==
-X-Gm-Message-State: ACgBeo0IiI7AVnj6wA3w3+7MYDY7TVkB6Yaff0N+LnnI8v+F6eaips0o
-        UEdmdDBBE0rVoT8828xobCqG1NY/+MVWZ7DTOAU=
-X-Google-Smtp-Source: AA6agR4xJCQOrsi1GnCSBL5Yt9nYhadTZlmUQYKq0QLFPrQRHzIijhlMSjxHtwf/1GcGLiOGX2PuX8nSYNlnT0ONDbQ=
-X-Received: by 2002:ac8:7fd1:0:b0:31e:e9c0:c071 with SMTP id
- b17-20020ac87fd1000000b0031ee9c0c071mr19362497qtk.481.1660034262645; Tue, 09
- Aug 2022 01:37:42 -0700 (PDT)
+        Tue, 9 Aug 2022 04:38:16 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225F51EAFE;
+        Tue,  9 Aug 2022 01:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660034295; x=1691570295;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uz6Rv3ZWjocJjMhymMHh6vkFnqaEDU/d8bs+q2jM1zk=;
+  b=MlO1e2BmZICiQh4/ShctlqChmmRy8b1gDus09iwTz6D6etFsWynXtIeB
+   FcxUYCFsV0LoRaioKb/xs7qhpD+bcVfofxO10U2CNiET0fU6yY04kvZwM
+   4bougcwyXTTWio3LOBXPfb1tuota15+unGZWyO5njPuRwcnb6m/6Fchnl
+   6L0q9QvEstHG64Qo4fBOp6gBMYzyyT1T+l/65lCAs54H4JSAc/gWErYcC
+   8jR0IrhagpJ4W70ZbKWiHf9q/IsGb39VbIKHniLh20vUtq8m4Klua15dp
+   xI5MPr1dLhGQ3oZdlsJpmfnuBZCcEHjkTt0ClYO7rWy9jSMoq9V9f2c6P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="277721031"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="277721031"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 01:38:14 -0700
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="672808501"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.171.147]) ([10.249.171.147])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 01:38:12 -0700
+Message-ID: <e63b0606-9819-d1db-872a-b1d414d38dcb@linux.intel.com>
+Date:   Tue, 9 Aug 2022 16:38:10 +0800
 MIME-Version: 1.0
-References: <20220809033048.1634583-1-luke@ljones.dev> <20220809033048.1634583-2-luke@ljones.dev>
-In-Reply-To: <20220809033048.1634583-2-luke@ljones.dev>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 9 Aug 2022 10:37:05 +0200
-Message-ID: <CAHp75VdAMTUpWd9d+vq1_4CqyPYyKJy4dYRyDrgVCb5cJtPF5Q@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] asus-wmi: Adjust tablet/lidflip handling to use enum
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH v8 004/103] KVM: VMX: Move out vmx_x86_ops to 'main.c' to
+ wrap VMX and TDX
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>
+References: <cover.1659854790.git.isaku.yamahata@intel.com>
+ <005b92abc8b8ada2896af662d4459323ee6b7e36.1659854790.git.isaku.yamahata@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <005b92abc8b8ada2896af662d4459323ee6b7e36.1659854790.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 5:30 AM Luke D. Jones <luke@ljones.dev> wrote:
+
+On 2022/8/8 6:00, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 >
-> Due to multiple types of tablet/lidflip, the existing code for
-> handling these events is refactored to use an enum for each type.
-
-...
-
->  static int asus_wmi_input_init(struct asus_wmi *asus)
->  {
-> +       struct device *dev;
->         int err, result;
+> KVM accesses Virtual Machine Control Structure (VMCS) with VMX instructions
+> to operate on VM.  TDX defines its data structure and TDX SEAMCALL APIs for
+> VMM to operate on Trust Domain (TD) instead.
 >
-> +       dev = &asus->platform_device->dev;
-> +
+> Trust Domain Virtual Processor State (TDVPS) is the root control structure
+> of a TD VCPU.  It helps the TDX module control the operation of the VCPU,
+> and holds the VCPU state while the VCPU is not running. TDVPS is opaque to
+> software and DMA access, accessible only by using the TDX module interface
+> functions (such as TDH.VP.RD, TDH.VP.WR ,..).  TDVPS includes TD VMCS, and
+> TD VMCS auxiliary structures, such as virtual APIC page, virtualization
+> exception information, etc.  TDVPS is composed of Trust Domain Virtual
+> Processor Root (TDVPR) which is the root page of TDVPS and Trust Domain
+> Virtual Processor eXtension (TDVPX) pages which extend TDVPR to help
+> provide enough physical space for the logical TDVPS structure.
+>
+> Also, we have a new structure, Trust Domain Control Structure (TDCS) is the
+> main control structure of a guest TD, and encrypted (using the guest TD's
+> ephemeral private key).  At a high level, TDCS holds information for
+> controlling TD operation as a whole, execution, EPTP, MSR bitmaps, etc. KVM
+> needs to set it up.  Note that MSR bitmaps are held as part of TDCS (unlike
+> VMX) because they are meant to have the same value for all VCPUs of the
+> same TD.  TDCS is a multi-page logical structure composed of multiple Trust
+> Domain Control Extension (TDCX) physical pages.  Trust Domain Root (TDR) is
+> the root control structure of a guest TD and is encrypted using the TDX
+> global private key. It holds a minimal set of state variables that enable
+> guest TD control even during times when the TD's private key is not known,
+> or when the TD's key management state does not permit access to memory
+> encrypted using the TD's private key.
+>
+> The following shows the relationship between those structures.
+>
+>          TDR--> TDCS                     per-TD
+>           |       \--> TDCX
+>           \
+>            \--> TDVPS                    per-TD VCPU
+>                   \--> TDVPR and TDVPX
+>
+> The existing global struct kvm_x86_ops already defines an interface which
+> fits with TDX.  But kvm_x86_ops is system-wide, not per-VM structure.  To
+> allow VMX to coexist with TDs, the kvm_x86_ops callbacks will have wrappers
+> "if (tdx) tdx_op() else vmx_op()" to switch VMX or TDX at run time.
+>
+> To split the runtime switch, the VMX implementation, and the TDX
+> implementation, add main.c, and move out the vmx_x86_ops hooks in
+> preparation for adding TDX, which can coexist with VMX, i.e. KVM can run
+> both VMs and TDs.  Use 'vt' for the naming scheme as a nod to VT-x and as a
+> concatenation of VmxTdx.
+>
+> The current code looks as follows.
+> In vmx.c
+>    static vmx_op() { ... }
+>    static struct kvm_x86_ops vmx_x86_ops = {
+>          .op = vmx_op,
+>    initialization code
+>
+> The eventually converted code will look like
+> In vmx.c, keep the VMX operations.
+>    vmx_op() { ... }
+>    VMX initialization
+> In tdx.c, define the TDX operations.
+>    tdx_op() { ... }
+>    TDX initialization
+> In x86_ops.h, declare the VMX and TDX operations.
+>    vmx_op();
+>    tdx_op();
+> In main.c, define common wrappers for VMX and VMX.
 
-While the discussed pattern of splitting assignments is a good
-practice, for some cases we don't do it when we rely on the guarantee
-by the callers that some of the stuff won't be problematic. Here the
-device is part of the platform device and can't be NULL, there is no
-point to split definition and assignment (and you may find plenty
-examples in the kernel), so
-
-  struct device *dev = &asus->platform_device->dev;
-
-is better to have as it's guaranteed not to be NULL and since that we
-don't check it in the code anyway.
+LGTM.
+One typo here, VMX and TDX.
 
 
-...
-
->                         input_report_switch(asus->inputdev, SW_TABLET_MODE,
-> -                                           !result);
-> +                                               !result);
-
-Irrelevant change.
-
-...
-
-It also seems you switched to dev_err() here for the pr_err() that
-aren't related to the change, either split that to a separate patch,
-or don't do it right now. I.o.w. use dev_err() only in the lines your
-change touches, otherwise it's irrelevant.
-
--- 
-With Best Regards,
-Andy Shevchenko
+>    static vt_ops() { if (tdx) tdx_ops() else vmx_ops() }
+>    static struct kvm_x86_ops vt_x86_ops = {
+>          .op = vt_op,
+>    initialization to call VMX and TDX initialization
+>
+> Opportunistically, fix the name inconsistency from vmx_create_vcpu() and
+> vmx_free_vcpu() to vmx_vcpu_create() and vxm_vcpu_free().
+>
+> Co-developed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>

@@ -2,79 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0EA58D3B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD38B58D3B9
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237171AbiHIGYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
+        id S237181AbiHIG0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 02:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237119AbiHIGX6 (ORCPT
+        with ESMTP id S229593AbiHIG0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:23:58 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B64E1FCF2
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 23:23:57 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id n4so11423624wrp.10
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 23:23:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=yotL3mJO3oRsefgOEKukS5n6DJlaFZd6MhQAm/UDvHI=;
-        b=KfIvNwN1ilmfDmcBQzIhYyet0Uijw7QbGc5oSzdw7FKaISqdHq0PezMGxDwailSxcy
-         ifLwaq/47CWb49or0IwCpEYI4a3t5xNH6SdapIrNcdxCgOK2wNiPvCo7AK/Q9/yNmyNV
-         ixdhbXCVFPqlcngxLTVlPZpWH8O0LHUKrhp6wkIpk/6M0NVMdw09g+v6yxzCHWW4Pbwj
-         Sn61PJ+nWdWGJ8lkrBDW0XX9hla5F2Qqm/fGD3VkErYWvl1Om0HQxD4NeS/z5B/9zVWX
-         WQHCEsgmipHfk78SNm3SuM51Z25rdoSegfOdwyIiKBtuAVtOBbOt0uklhvol/4iF5JFx
-         KbAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=yotL3mJO3oRsefgOEKukS5n6DJlaFZd6MhQAm/UDvHI=;
-        b=5OJ9xYu30wFQMAp5P1FEp0NND0OaO2MA/FnAtROy1pzv7eH8grkV4pHrit+CJqevKo
-         CbUFhCyX+ayNx5gVwYdBls3YkWptFtA13JBR7PmvmvCsDFmgYrdd2P+IZaQ16mQEsrt0
-         LY6lO6iKn2CAb9eb6LAGZP3UrdtuE0vIGcmCydg8JSs2lU4e08FIGXQ1zcGJJ4Vwu6WL
-         TQxqIk2ZwL8cUjo8PeJBhDue4Ai3Si4LOYU660M4kAO8IsxydLjmR4FJepCwZwDVSOkQ
-         P9oWnC6QewjFWEmL40Dv25WvDAr7SOGcCpsRCxGgpZG0OX67vT9vxo30R7ckTw8f9g35
-         htPg==
-X-Gm-Message-State: ACgBeo1A+LFbuDrWyQ9rJ91lijIhdi8IY6UhMWyQ2sn1eWxjSV28Zem0
-        SlhyImAbH3YTBxsmnm9QOXIYUA==
-X-Google-Smtp-Source: AA6agR5DlKMWvaY6PzdTHOrY+X1rfox5Qx6YPUaBb7mCDuQBwvAjha0SF9PponGLroBeylMwXOwpGQ==
-X-Received: by 2002:a5d:6da6:0:b0:220:78fd:eedb with SMTP id u6-20020a5d6da6000000b0022078fdeedbmr12899656wrs.580.1660026236131;
-        Mon, 08 Aug 2022 23:23:56 -0700 (PDT)
-Received: from [192.168.1.69] (32.31.102.84.rev.sfr.net. [84.102.31.32])
-        by smtp.gmail.com with ESMTPSA id b4-20020adff904000000b0021e9fafa601sm12641999wrr.22.2022.08.08.23.23.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 23:23:55 -0700 (PDT)
-Message-ID: <ee85e515-1265-22d7-109f-5cef94571d76@baylibre.com>
-Date:   Tue, 9 Aug 2022 08:23:53 +0200
+        Tue, 9 Aug 2022 02:26:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE571FCD4
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 23:26:20 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27960KRQ030598;
+        Tue, 9 Aug 2022 06:25:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=0tHR0dUovDdcOcO8mlXS6xxFDZ5pswykHYtMoZ4Vnfw=;
+ b=LU9ZwpMvopkG/pUj2KhQmPuUoBpMhwT7mBcyyBU6J/BMLtqP55PpGG5t9nP6xQv1+8yN
+ G1WKzA609EruqR8IE6vJaWmcYKymDV7LJpmDGoOdvrphVFwwbBWnLhDwdvsRPl83Gdx9
+ jyZszBWDCdI4GWueN1r1D/uo+VFBz/9oqFVO/Jw6SNzlpIgFHMlax6Fgfys+js7K8mDJ
+ 3k09JA2uXNw0gKGbQz0w8gs+a8msSdQcYFwgtSiTRpNEhu0Om6Bg78+llnQg3FdT3JKp
+ c9wmAY9QLLWqqkGZZVzlXtOk6J0uBsHVhWv/nKQG+Tr0GyZEkh1IgqxQlxWpYCqX17Es Gg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3huf275awa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 06:25:50 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2795WHag003055;
+        Tue, 9 Aug 2022 06:25:49 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3huf275avd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 06:25:49 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2796K1O6023372;
+        Tue, 9 Aug 2022 06:25:47 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3hsfx8u33r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 06:25:46 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2796PiJD33292760
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 9 Aug 2022 06:25:44 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1545A4054;
+        Tue,  9 Aug 2022 06:25:44 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 38A09A405C;
+        Tue,  9 Aug 2022 06:25:44 +0000 (GMT)
+Received: from localhost (unknown [9.43.41.164])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  9 Aug 2022 06:25:44 +0000 (GMT)
+Date:   Tue, 09 Aug 2022 11:55:42 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v3 11/25] powerpc/ftrace: Make __ftrace_make_{nop/call}()
+ common to PPC32 and PPC64
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        llvm@lists.linux.dev, nathan@kernel.org, omosnacek@gmail.com
+References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
+        <96f53c237316dab4b1b8c682685266faa92da816.1652074503.git.christophe.leroy@csgroup.eu>
+        <CAKwvOd=VBnx63Gj1vTH-8tR50Zd1r50x+NS8JRc4nXARaC2FcQ@mail.gmail.com>
+In-Reply-To: <CAKwvOd=VBnx63Gj1vTH-8tR50Zd1r50x+NS8JRc4nXARaC2FcQ@mail.gmail.com>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1660026096.me2vg4spl7.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: tDeZcGNCEjgVycAYsJJJ4_SQQs0YTm7S
+X-Proofpoint-GUID: 5ZMZNTNRPJ_g1A2Q4T5F4uxokI98MwyY
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH v3 2/2] iio: time: capture-tiecap: capture driver support
- for ECAP
-Content-Language: en-US
-From:   Julien Panis <jpanis@baylibre.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lars@metafoo.de,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mranostay@ti.com
-References: <20220728175124.468461-1-jpanis@baylibre.com>
- <20220728175124.468461-3-jpanis@baylibre.com>
- <20220731164116.30e91f34@jic23-huawei>
- <11b7436b-5c31-671e-ba77-435fe8e3b767@baylibre.com>
- <98d17617-72b5-6330-d4f5-1bece928ceab@baylibre.com> <YvBZQsiAm6f3yxME@fedora>
- <d47c842b-579d-b119-73f9-e8c95984b30b@baylibre.com> <YvE3m+jLPuLvXXdS@fedora>
- <733242ec-2f17-e843-5e36-2f804c040a9d@baylibre.com>
-In-Reply-To: <733242ec-2f17-e843-5e36-2f804c040a9d@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-09_03,2022-08-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ spamscore=0 phishscore=0 clxscore=1011 bulkscore=0 mlxlogscore=887
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2208090026
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,68 +99,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Nick Desaulniers wrote:
+> Christ...that's not what I meant to send; sorry, mutt is giving me
+> bizarro errors today so I can't insert myself into threads using the
+> usual incantation I have in the past.  What I meant to send was:
+>=20
+> Christophe,
+> Ondrej reported a regression with ftrace when building w/ clang
+> bisected to this commit. Can you PTAL?
+> https://github.com/ClangBuiltLinux/linux/issues/1682
+
+Thanks for the report. That was my doing - I tend to miss the fact that=20
+clang doesn't support -mprofile-kernel. Can you check if the below patch=20
+fixes it for you?
+
+- Naveen
+
+---
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace=
+/ftrace.c
+index cb158c32b50b99..7b85c3b460a3c0 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -393,11 +393,11 @@ int ftrace_make_nop(struct module *mod,
+  */
+ static bool expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
+ {
+-       if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V1))
++       if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
++               return ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP()));
++       else
+                return ppc_inst_equal(op0, ppc_inst(PPC_RAW_BRANCH(8))) &&
+                       ppc_inst_equal(op1, ppc_inst(PPC_INST_LD_TOC));
+-       else
+-               return ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP()));
+ }
+=20
+ static int
+@@ -412,7 +412,7 @@ __ftrace_make_call(struct dyn_ftrace *rec, unsigned lon=
+g addr)
+        if (copy_inst_from_kernel_nofault(op, ip))
+                return -EFAULT;
+=20
+-       if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V1) &&
++       if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
+            copy_inst_from_kernel_nofault(op + 1, ip + 4))
+                return -EFAULT;
+=20
 
 
-On 09/08/2022 08:19, Julien Panis wrote:
->
->
-> On 08/08/2022 18:19, William Breathitt Gray wrote:
->> The Counter subsystem is relatively nascent so the number of existing
->> Counter device drivers to study is unfortunately sparse. If you
->> encounter any trouble along the way as you work on this, please don't
->> hestitate to reach out and I'll be happy to answer any questions you may
->> have. That said, here are some more hints that can help guide you. :-)
->>
->> Although we've been using CAPx to refer to these registers, in the
->> context of sysfs it'll be better to call the attributes "capture1",
->> "capture2", etc.; that will make their use as capture buffers more
->> obvious. Furthermore, despite my previous example, I think it's better
->> to have these exist underneath the CTR hierarchy rather than Mod4
->> because they are captures of the CTR value:
->>
->> * CTR: /sys/bus/counter/devices/counterX/count0/count
->> * CAP1: /sys/bus/counter/devices/counterX/count0/capture1
->> * CAP2: /sys/bus/counter/devices/counterX/count0/capture2
->> * CAP3: /sys/bus/counter/devices/counterX/count0/capture3
->> * CAP4: /sys/bus/counter/devices/counterX/count0/capture4
->>
->> In your device driver, you would define a struct counter_count to
->> represent CTR. In this struct counter_count there is an "ext" member
->> where you provide an array of struct count_comp. Each CAPx will have a
->> corresponding struct count_comp; it'll look something like this::
->>
->>          static struct counter_comp ctr_count_ext[] = {
->>                  COUNTER_COMP_COUNT_U64("capture1", cap1_read, NULL),
->>                  COUNTER_COMP_COUNT_U64("capture2", cap2_read, NULL),
->>                  COUNTER_COMP_COUNT_U64("capture3", cap3_read, NULL),
->>                  COUNTER_COMP_COUNT_U64("capture4", cap4_read, NULL),
->>          };
->>
->> As you already know, counter_push_event() lets you push Counter events
->> in your interrupt handler. I recommend introducing a new event type
->> under enum counter_event_type in the include/uapi/linux/counter.h header
->> file; something like COUNTER_EVENT_CAPTURE should be descriptive enough.
->>
->> The "channel" member of struct counter_watch refers to Counter event
->> channels; The purpose here is to allow us to support concurrent events
->> of the same type (e.g. two COUNTER_EVENT_OVERFLOW but for different
->> Counts). If I understand the TI ECAP device correctly, we'll be getting
->> a COUNTER_EVENT_CAPTURE event whenever a CAPx register is updated with a
->> new capture. It's up to you if you want to group them under the same
->> channel or separate channels for each CAPx; you would just pass the
->> channel in counter_push_event() to indicate which COUNTER_EVENT_CAPTURE
->> event is being handled.
->
-> 2 options, indeed :
-> 1) By grouping them under the same channel, the only thing I'm not a 
-> great fan of is that
-> I will need to use separate functions to read capture registers 
-> (cap1_read/cap2_read/
-> cap3_read/cap4_read), and also to set/get polarity.
-> 2) By using separate channels, code will look more simple but it is 
-> likely to be a little bit
-> confusing for the user.
-> I will probably use option 2.
-
-[ERRATUM] : Sorry, I meant that I will probably use option 1 (not 2), to 
-avoid confusion for the user.

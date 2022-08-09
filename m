@@ -2,95 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9D758D59A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96EA58D59B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237439AbiHIIpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S236554AbiHIIpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbiHIIpP (ORCPT
+        with ESMTP id S233614AbiHIIpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:45:15 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566D127B;
-        Tue,  9 Aug 2022 01:45:11 -0700 (PDT)
-X-UUID: 74151f9dd63743758b3fee8ac54b4786-20220809
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=kFDmMzyEzTYNBwRWu31AZJ5AbILkXUIXqRV/7NlKW30=;
-        b=tXot6WlNqHKyuOwJuIHG4ew6TkosoM9Q+50/xiizMxehC82lv31sj29CqfdpjAurI1lY6u7tJUta4oScN6lPapywCIUYaI4KHomz/XKiWc4xlcOPMd2il7H364VjgWjDmo9yNsepuKLSLY/xg+pS+b/fobzpxOX8FKo13U38Nt0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.9,REQID:3d170f10-b9fe-4dda-8c65-06ebc539b389,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release
-        _Ham,ACTION:release,TS:100
-X-CID-INFO: VERSION:1.1.9,REQID:3d170f10-b9fe-4dda-8c65-06ebc539b389,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS98
-        1B3D,ACTION:quarantine,TS:100
-X-CID-META: VersionHash:3d8acc9,CLOUDID:43eb4fae-9535-44a6-aa9b-7f62b79b6ff6,C
-        OID:84513465f887,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 74151f9dd63743758b3fee8ac54b4786-20220809
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <kewei.xu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 537277632; Tue, 09 Aug 2022 16:45:07 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 9 Aug 2022 16:45:06 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 9 Aug 2022 16:45:05 +0800
-From:   <kewei.xu@mediatek.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
-        <caiyu.chen@mediatek.com>, <kewei.xu@mediatek.com>,
-        <david-yh.chiu@mediatek.com>
-Subject: [PATCH v2 1/1] dt-binding: serial: mediatek,uart: update bingding for MT8188
-Date:   Tue, 9 Aug 2022 16:44:57 +0800
-Message-ID: <20220809084457.31381-1-kewei.xu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Tue, 9 Aug 2022 04:45:39 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3796350
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660034738; x=1691570738;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=Z9+RwjgfJBkrpirf/lbuc83Z7Jh6lUPmK3soFoYeQ3I=;
+  b=mOJBHjwqNvxt1UajKsI+6KGUgqBCO8Zh7VfJ520ye0HNEMnOzRM5YyN/
+   jRzRxNi3sPigflR6HSWDvGJmxbJLCGf6oxRgAJrpx5RgiE+K75jpnR+sj
+   jcAPgMhyLXtslLRTg8iOH3jQELJg0Twh7TWZNuqFImBz+XXIUGWDEUd7T
+   y3QjRf1e3/0begEMazzQ1/yxN2oHHLP04+AIhr9H2VY/09jcHDD3YLyVr
+   kNwnwO+BuKylwvvsgtKjUKFknrFl6+6xIA7+bV/Z3zxAL4xdzD4bnUyMt
+   Bw7KG7G3V9NDOmHU27a1+0WTiEHOwOgznwLJVR18RH9gkOElyvIlVj3tl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="291574936"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="291574936"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 01:45:38 -0700
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="580715048"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 01:45:35 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Nadav Amit <nadav.amit@gmail.com>, Linux MM <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Hugh Dickins <hughd@google.com>,
+        Andi Kleen <andi.kleen@intel.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+Subject: Re: [PATCH v2 2/2] mm: Remember young/dirty bit for page migrations
+References: <20220804203952.53665-1-peterx@redhat.com>
+        <20220804203952.53665-3-peterx@redhat.com>
+        <A84CB6A0-86C8-4CAB-A977-47495D877C31@gmail.com>
+        <Yu1FkCkjJ00+H0sF@xz-m1.local>
+Date:   Tue, 09 Aug 2022 16:45:32 +0800
+In-Reply-To: <Yu1FkCkjJ00+H0sF@xz-m1.local> (Peter Xu's message of "Fri, 5 Aug
+        2022 12:30:08 -0400")
+Message-ID: <8735e5hkk3.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kewei Xu <kewei.xu@mediatek.com>
+Peter Xu <peterx@redhat.com> writes:
 
-Add a DT binding documentation for the MT8188 soc.
+> On Thu, Aug 04, 2022 at 03:40:57PM -0700, Nadav Amit wrote:
+>> On Aug 4, 2022, at 1:39 PM, Peter Xu <peterx@redhat.com> wrote:
+>> > +
+>> > static inline bool is_pfn_swap_entry(swp_entry_t entry);
+>> > 
+>> > /* Clear all flags but only keep swp_entry_t related information */
+>> > @@ -265,6 +285,57 @@ static inline swp_entry_t make_writable_migration_entry(pgoff_t offset)
+>> > 	return swp_entry(SWP_MIGRATION_WRITE, offset);
+>> > }
+>> > 
+>> > +/*
+>> > + * Returns whether the host has large enough swap offset field to support
+>> > + * carrying over pgtable A/D bits for page migrations.  The result is
+>> > + * pretty much arch specific.
+>> > + */
+>> > +static inline bool migration_entry_supports_ad(void)
+>> > +{
+>> > +	/*
+>> > +	 * max_swapfile_size() returns the max supported swp-offset plus 1.
+>> > +	 * We can support the migration A/D bits iff the pfn swap entry has
+>> > +	 * the offset large enough to cover all of them (PFN, A & D bits).
+>> > +	 */
+>> > +#ifdef CONFIG_SWAP
+>> > +	return max_swapfile_size() >= (1UL << SWP_MIG_TOTAL_BITS);
+>> 
+>> This is an actual a function call (unless LTO has some trick). A bit of a
+>> shame it cannot be at least memoized.
+>> 
+>> Or at least mark max_swapfile_size() as __attribute_const__ so it would not
+>> be called twice for make_migration_entry_young() and
+>> make_migration_entry_dirty().
+>
+> I didn't take too much effort on this one since we're on swap path and I
+> assumed that's not a super hot path.  But __attribute_const__ sounds good
+> and easy to get, thanks.
+>
+> Perhaps I should mark it on migration_entry_supports_ad() as a whole?  Note
+> that unfortunately SWP_MIG_TOTAL_BITS may not be a const either (see how
+> that define roots back to MAX_PHYSMEM_BITS, where on x86_64 it needs to
+> check 5-lvl).
 
-Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
----
-v2: Resumbit the patch based on the linux-next branch.
----
- Documentation/devicetree/bindings/serial/mediatek,uart.yaml | 1 +
- 1 file changed, 1 insertion(+)
+I think it's possible to memorize max_swapfile_size() or
+migration_entry_supports_ad().  Although they are not constant, they are
+not changed after initialized.  The challenge is to find a clean way to
+initialize it.
 
-diff --git a/Documentation/devicetree/bindings/serial/mediatek,uart.yaml b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-index 4ff27d6d4d5b..fe098d98af6e 100644
---- a/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-@@ -42,6 +42,7 @@ properties:
-               - mediatek,mt8173-uart
-               - mediatek,mt8183-uart
-               - mediatek,mt8186-uart
-+              - mediatek,mt8188-uart
-               - mediatek,mt8192-uart
-               - mediatek,mt8195-uart
-               - mediatek,mt8516-uart
--- 
-2.18.0
-
+Best Regards,
+Huang, Ying

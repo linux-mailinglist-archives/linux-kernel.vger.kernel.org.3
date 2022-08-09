@@ -2,157 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E0D58D97E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABE458D980
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243702AbiHINjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 09:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S243874AbiHINjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 09:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbiHINjF (ORCPT
+        with ESMTP id S243862AbiHINjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 09:39:05 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2047.outbound.protection.outlook.com [40.107.21.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E37319295;
-        Tue,  9 Aug 2022 06:39:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OmpotJivurqWjU/SgXM6gkCPXBtwXUTsTCxK7LOji8DG7aZMXy43f+pVjMPD/FRaT/IQMRw6+sKPrpRNjZs0+0/bMhVyPe0HMYS0oQYB9tOI4l5IIMaesxOPpxuK6ZSsKYce/Ou4BAGBevBr+bR332HR3lcXhbBHDDalfCnZR9CTjEOb9TJ919EVbE8Nf20ZcgI6NjAFsBaezNtporGaPme6NyJUOngj8AWYonqXOqz7vaplhRyJbKuYX7q5WTRVVeOwQJudwsJZXDEUJBSLOoPTiEIZ0FwW7vmJOwdWu3LwdCBK7357sBoQPX6aPeZjPR+BEqSsz1l+ZPE4GatHyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xsW/73XAUpgJI/4b2pVcUZ62NA9Odlc8GVNM5GvZnz8=;
- b=ljm1uRTNchyqLmbXXa5ajzOQY1gaFVpcU6Zsq8R9GmjB8Y0uTWmotvfLFyl9WjVfDpR68wT4m2H2ApSYAg7NIdK1BipXyV5+Bj4RnGKK6SqcN8yqQaSAao6Dk5diOFS6cd7HqV9jO+1DcRQwRM69qEYfisD8o38M66gDuS4U2WU9cZqUZyyVOC1l2dwP6NhMfnCwYTlH/vmHdCSc0qQ0HyQaZU6+w+6mLEpOrNyZih8mcL0WZYOm3biyDQRXuGDs/BdMHXqUi/nrnTWRYzW/F2Y60IERTLxTB85Bwr+guRsIAFdpUqM22Ob1DjLgbcl1yn8owNe2F3buXbTMcFelLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xsW/73XAUpgJI/4b2pVcUZ62NA9Odlc8GVNM5GvZnz8=;
- b=khbzf13sH7uupXC5YCWZFyULLMcgFx1WFLWjXQ2h0B4gwcBmpC9YiV2M7bGwDHhrfst1Du+929OwOaDXyoIyBcwoY55a1wllpivasbfXMK4ZQs7kSVS7Klp99G26fb9tc2yzP6vXpIZ1Wf3b9fT5ktZzFRXXHPvE18myF9h+X4w=
-Received: from AM6PR04MB6743.eurprd04.prod.outlook.com (2603:10a6:20b:f1::11)
- by PR3PR04MB7419.eurprd04.prod.outlook.com (2603:10a6:102:80::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.21; Tue, 9 Aug
- 2022 13:38:59 +0000
-Received: from AM6PR04MB6743.eurprd04.prod.outlook.com
- ([fe80::a401:5ed6:1bfa:89a9]) by AM6PR04MB6743.eurprd04.prod.outlook.com
- ([fe80::a401:5ed6:1bfa:89a9%5]) with mapi id 15.20.5504.019; Tue, 9 Aug 2022
- 13:38:59 +0000
-From:   Olivier Masse <olivier.masse@nxp.com>
-To:     "brian.starkey@arm.com" <brian.starkey@arm.com>
-CC:     "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "nd@arm.com" <nd@arm.com>,
-        =?iso-8859-15?Q?Cl=E9ment_Faure?= <clement.faure@nxp.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>
-Subject: Re: [EXT] Re: [PATCH 1/3] dma-buf: heaps: add Linaro secure dmabuf
- heap support
-Thread-Topic: [EXT] Re: [PATCH 1/3] dma-buf: heaps: add Linaro secure dmabuf
- heap support
-Thread-Index: AQHYqNLEB1kEEMDN2EiJXHn7b90D762gcg6AgAYmygA=
-Date:   Tue, 9 Aug 2022 13:38:58 +0000
-Message-ID: <86524ed0e12cbb76a8d746447b24f90f0aca55fa.camel@nxp.com>
-References: <20220805135330.970-1-olivier.masse@nxp.com>
-         <20220805135330.970-2-olivier.masse@nxp.com>
-         <20220805154139.2qkqxwklufjpsfdx@000377403353>
-In-Reply-To: <20220805154139.2qkqxwklufjpsfdx@000377403353>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 52c61423-bbd6-4211-cad8-08da7a0c838b
-x-ms-traffictypediagnostic: PR3PR04MB7419:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RfprcbVvfHi7d61+p/i5/qlUFwhlud26kFMGhgYyOKSnQJogf3DiFhrBcBVxYNu56N/yRx+xDB+lWg+sjZ7i/mstqGlhMPApSaXqwnoVI0InY3Zo+Fn4jZam4yIvF//Fa1ATg7CWINwC05M2KhYZEj0pQESfwUJyDEwIcgsmy9jkBjf9vpQB090kJ7ZCKMwfHCXm5bWKvwC8+QrWjP6HrSUJMb/Sr/aEFtsxPWmNjRA6/Ix35B1qXpcR4C1hlI4Roa/ZRqH2+Ct9kqns7gqjlWxW0a/jGgvm8t7+hYTl7d5j53pOi+rfiZY/aZXKOUoeMOI9teczV1nmY27FwImVgh5ENPAHb5H711JLAOeTyHD3Hlitema4lI+kzc7S2bnikJSROPhou7gF0118HEDr5l+TMEM9uV/9ywRGhrXIxH6p+5diIGLVrnH6ZBDgr0FFMKWR62PKp7SYKOna4yLu8fTKPBZu1YV7YtfrwlCm1OsgfLx3pzmUKnFD4QMysf07msqpF7VFnR5UGkDd/DfQBEYiDucBCthtnX4uRtpbrsEF2ZdICeQryBHk50qWUgboLeuyLqZYgeq47TRWpd1cTjJaTJ0I2JwUXyd8iqzDc+iNwAlaES3NpYJ/zkVCEAFIVviEY9T4Mbez6WvT51SrSEFp+iIt7wZl+KlPrxSFke6yrdlUeMZ2Dml1j1fDlm6KI47zPZQ0OZZqhb8HymkPxmsLpje4+DxJhya0zQpM6T6p8UvSYezVGOvTI+yzuC2uRUcpS+L+LyvOsCZUOibCY5LrekBLRikDLi30MboGqDPcA4Ookd0Jq8tDOqIjr+g4
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6743.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(39860400002)(376002)(136003)(346002)(8936002)(66946007)(316002)(4744005)(71200400001)(76116006)(122000001)(4326008)(66446008)(66556008)(8676002)(64756008)(44832011)(66476007)(54906003)(6916009)(36756003)(91956017)(5660300002)(6486002)(478600001)(41300700001)(2906002)(186003)(26005)(6512007)(6506007)(38070700005)(38100700002)(2616005)(86362001)(99106002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-15?Q?mTbtCZlpLpUxtuQPPk454uXcovBOeMck3ZH41opFaBsfvrzrp3lOs83Dw?=
- =?iso-8859-15?Q?cCrxIKNF7sv0wNrKvKpXjAX6KoclKpzP/IsIy6lvVEPB1F7pdjcQniaxt?=
- =?iso-8859-15?Q?WhBjhHoELd3sUyCxGANOAzrRRIJM977vBLYFfEpjZMm4xHGIHflyUo3O0?=
- =?iso-8859-15?Q?JUxFs2BiBqc5I2WlFFWulF9r82cPSk4sgHXNcxAJOzr2qO/eULv1SRrDN?=
- =?iso-8859-15?Q?L7TQTe+a1sIXcp9cQUwxfhru1sPAdxNbhlmOrSSq/+4qiC5nSMZd3kv+X?=
- =?iso-8859-15?Q?Abigdr0zrLgJH0uaTiPJBQb2ZcoEuv+FnoRNM/YoetJQDMy9XLsIH+Yau?=
- =?iso-8859-15?Q?b/L5ReeBYyZeo7PBuQeDgO9i5FUFLLa43/nCkgLci6f9Y23bGDw349y2/?=
- =?iso-8859-15?Q?MAiXGlMS8zTuCjx03HBa6zlEZojnzHQjsWGuKUcmR/LCbu/tUfBk/RnLz?=
- =?iso-8859-15?Q?EPB5O2Oi8D/uuYlK4uyeZUvlFw5/JIWfUaqRmYqAjbMDZPSlD2s9pJopk?=
- =?iso-8859-15?Q?+qTo+5AL2e8x2PS8B2Z3lywmSU61m/yog7U7Nn3efC1fCVsqUnN73+2Mz?=
- =?iso-8859-15?Q?qAhFi1Xmu5e5/Cmi4oOo6rNzUGChdhTeHWYxQ5swfAtr7FmQNaLvJy98R?=
- =?iso-8859-15?Q?/u5DlCOAOXCtfiYghcduj9qxe0HUEPR/gRIWnLZ7VmUS+ueGt/xbiZNQw?=
- =?iso-8859-15?Q?SG/xErFk91095GB+dvWWv7RyXhWm1jf8TLleeJLdPJ3WhoCHyVRWQAgDl?=
- =?iso-8859-15?Q?cVcElyWZX7LC8IDW3SKvperaGx5Pl5IBmImLfMq2/mAsCtSXS3RUTP/ry?=
- =?iso-8859-15?Q?RYQXS+gGmUUZQnJE1fav+uB27/mERqZu6E3BEekm3dOqrqcWj1bsmbwwj?=
- =?iso-8859-15?Q?rxf6sLkvRpFVYk4KzWlLeo3wtY0N1qGdvJyEGTt0j2TmUT7Raz47Ehx6q?=
- =?iso-8859-15?Q?3B3yOylQHPeNN8zwiX/7aRX6wQL+00osLkerJUOvRquj735Ssc0lAp6U5?=
- =?iso-8859-15?Q?3agntM/orqQrc+vu4mLB0dsZJBA1MIqJ4KXup8gjqEH2HuBX6QdkeFNfR?=
- =?iso-8859-15?Q?EIP29MVz2B9qVb/od20HwARO3r6PS51lOjDKOfxM2WILF7zdUthbgAgZl?=
- =?iso-8859-15?Q?+1WloeUyjlmRtuc8hiWsL6S2HXrSWJTIrn7Hf4u8RENX38X9n5vDPRFi8?=
- =?iso-8859-15?Q?clbq8yJ2qht1q/612EYL+8DcT1welRSzKhsxuXVonscqayKBBa47K/Lir?=
- =?iso-8859-15?Q?n1m3zZaood3jJH2pFdZFDhVuErkE8ZVvl0l5cBqIYW9N1awTmr56Wh4US?=
- =?iso-8859-15?Q?j9DwwrYeUwkUdk6wN7of2VEQo/vUEVC+2CBPbFdthHY6kDgSRQ22DsEGr?=
- =?iso-8859-15?Q?OdQsoOzGuer/58u/5xHzzTfn8F0lSVu2XlzqR5ve4qwFWcz4fCvvv6pRv?=
- =?iso-8859-15?Q?oSiHnMZjym+eNxF23HSXIlIsWz2ZhOYr3PesbDgcvzClt9aLXcNNvmy8e?=
- =?iso-8859-15?Q?KabQ4/bZT0tf/C3mTxuqT5KOOAgVQ2PwvTtOsUHInI/UtJBfgsxMeIBiD?=
- =?iso-8859-15?Q?GF0b11vf94damJX4rV30Je0gOPXz3B4S8DMZJKVR41Hp3Xp99hL6cQRMc?=
- =?iso-8859-15?Q?9iLtyjamSaO2yKAcdWwaQD8usO8teNGwcynKBZNrdt4N2gPFhoHSF9R4G?=
- =?iso-8859-15?Q?vuTN?=
-Content-Type: text/plain; charset="iso-8859-15"
-Content-ID: <75FA77FEE6A4EA4FA7E03430296AEECC@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 9 Aug 2022 09:39:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F961A82E;
+        Tue,  9 Aug 2022 06:39:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88D3FB815A2;
+        Tue,  9 Aug 2022 13:39:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D315FC433C1;
+        Tue,  9 Aug 2022 13:39:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660052354;
+        bh=i+tuQMz6/NRl54XQHb1uzeR70pLUacxi3nLipmoLQ9U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q6Rp1BGvqoJO71/hl7HUQcR5WQQgPGnJ5mlYF3Iswc8Ed8pxjCUDLTSZeY7/RrqJs
+         bLuCDHF54x096zedr4f+t/0AuwunAAvmG+4EwAGTG0NOzw00yInBtr/5pFS2mC1ao3
+         MslTXeIDY8RCuWEr7n4v+hy6G6N62SSiw/v+lKRgKhzo7YWZQDfgPGeYERAClMp2/J
+         HIGkPJMkB2UD5JmoAB70s1MqGG8Yeos8vKJiFnoz498DjdPgf8eUwEcvuFg8b2qPDY
+         UjL6JMLTJ3OAK6R40JUwv/U/yz+moeUXzgs8wv/3knZkcyzaxbhBxiFz9pfTp9/tAE
+         /ucwnxGUe73cw==
+Received: by pali.im (Postfix)
+        id 59CFDC1F; Tue,  9 Aug 2022 15:39:11 +0200 (CEST)
+Date:   Tue, 9 Aug 2022 15:39:11 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Hajo Noerenberg <hajo-linux-bugzilla@noerenberg.de>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: mvebu: Dispose INTx irqs prior to removing INTx
+ domain
+Message-ID: <20220809133911.hqi7eyskcq2sojia@pali>
+References: <20220808184418.brjntz26kalathig@pali>
+ <20220809020042.GA1260418@bhelgaas>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6743.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52c61423-bbd6-4211-cad8-08da7a0c838b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Aug 2022 13:38:59.1363
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xGCuLJ0H3rzKi/vNo31iJZbhcmECRyChxlvcpA3J+1WKoL+bOAX6JtSzdhq6caAjZ3H0VyMGFwOKHV0vgxLyXQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7419
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220809020042.GA1260418@bhelgaas>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Brian,
+On Monday 08 August 2022 21:00:42 Bjorn Helgaas wrote:
+> On Mon, Aug 08, 2022 at 08:44:18PM +0200, Pali Rohár wrote:
+> > PING?
+> 
+> We're in the middle of the merge window.  We'll start applying patches
+> for the next release after -rc1 is tagged, which will probably be on
+> August 14.
+> 
+> Then we'll need either a strong argument that this is safe even if
+> drivers for endpoints below fail to dispose of their IRQ info
+> correctly, or an argument that the benefit of making the PCI
+> controller drivers removable outweighs that risk.
+> 
+> I haven't been paying close attention recently, so I may have missed
+> the details here, but my superficial opinion is that removability of
+> PCI controller drivers is primarily useful to developers, not to end
+> users.
 
-> > +
-> > +             rmem->ops =3D &rmem_dma_ops;
-> > +             pr_info("Reserved memory: DMA buf secure pool %s at
-> > %pa, size %ld MiB\n",
-> > +                     secure_data[secure_data_count].name,
-> > +                     &rmem->base, (unsigned long)rmem->size /
-> > SZ_1M);
->=20
-> nit: What if rmem->size < SZ_1M, or not 1M-aligned
->=20
+For developers it is strong need. Hajo needed this patch for debugging
+SATA related issue.
 
-Let's assume that size is 1K-aligned, maybe something like that could
-be better ?
+For end-users in more cases it is also needed because cards, card
+drivers or controller drivers can be buggy and calling rmmod && modprobe
+is the way how to reload PCIe bus with controller without need to reboot
+whole machine. This approach is lot of times suggested by admins and
+also on user forums, because it really helps.
 
-		unsigned long mb =3D rmem->size >> 20;
-		unsigned long kb =3D (rmem->size & (SZ_1M - 1)) >> 10;
+In my opinion, if hotplug capable kernel driver (for what ever reasons)
+leaks resources on unbind procedure, it is an big issue. It basically
+disallow proper next bind procedure; which is required for hotplug
+capable drivers and buses, which PCIe is. memory and interrupts are just
+example of resources which drivers use lot of.
 
-		pr_info("Reserved memory: DMA buf secure pool %s at %pa, size %ld MiB and=
- %ld KiB",
-			secure_data[secure_data_count].name,
-			&rmem->base, mb, kb);
+So I consider a bug if driver does not release resource properly and
+"parent" driver should not expect that something like it is normal.
 
-Cheers,
-Olivier
+This particular patch was tested at least by two people that is really
+fixes resource-free issue with more endpoint drivers.
+
+I think that in this case for pci-mvebu.c it is safe because: At the
+first step of unbind procedure is called unregistraction of PCIe bus
+with all devices bound on it. This ensures that all PCIe endpoint
+drivers are unbind, devices removed and no new driver or device and
+appear. After that there should not be any remaining usage of PCIe
+resources (if there is then whole PCIe hotplug code is broken and we
+have other and bigger issue...). Next pci-mvebu.c manually disposes all
+remaining legacy interrupts (which PCI core code does not because legacy
+interrupts are shared and it does not know if they are used or not).
+This is safe because at these stage there are no PCI drivers bound,
+there is no PCI device for that controller registered. And after that is
+removed IRQ domain (which has finally disposed all interrupts).
+If you see there some logical issue, please let me know.
+
+Note that allowing doing device unbind and disallowing rmmod is useless
+as the whole issue happens during unbind, not during rmmod. So the
+discussion should have been about device unbinding, not rmmoding.
+
+I see very big benefit for both developers and end users to allow doing
+unbind procedure as explained above.
+
+But if you decide that unbind should be disallowed, then doing it
+properly should probably imply to also disallow doing PCIe hog-unplug.
+As unplugging device means to unbind endpoint card drivers. And I think
+hot-plug and hot-unplug is a PCIe feature which could be supported. But
+well, this is decision for you as maintainer.
+
+> Bjorn
+> 
+> > On Saturday 09 July 2022 18:18:58 Pali Rohár wrote:
+> > > Documentation for irq_domain_remove() says that all mapping within the
+> > > domain must be disposed prior to domain remove.
+> > > 
+> > > Currently INTx irqs are not disposed in pci-mvebu.c device unbind callback
+> > > which cause that kernel crashes after unloading driver and trying to read
+> > > /sys/kernel/debug/irq/irqs/<num> or /proc/interrupts.
+> > > 
+> > > Fixes: ec075262648f ("PCI: mvebu: Implement support for legacy INTx interrupts")
+> > > Reported-by: Hajo Noerenberg <hajo-linux-bugzilla@noerenberg.de>
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > ---
+> > > Depends on patch:
+> > > https://lore.kernel.org/linux-pci/20220524122817.7199-1-pali@kernel.org/
+> > > 
+> > > Here is the captured kernel crash which happens without this patch:
+> > > 
+> > > $ cat /sys/kernel/debug/irq/irqs/64
+> > > [  301.571370] 8<--- cut here ---
+> > > [  301.574496] Unable to handle kernel paging request at virtual address 0a00002a
+> > > [  301.581736] [0a00002a] *pgd=00000000
+> > > [  301.585323] Internal error: Oops: 80000005 [#1] SMP ARM
+> > > [  301.590560] Modules linked in:
+> > > [  301.593621] CPU: 1 PID: 4641 Comm: cat Not tainted 5.16.0-rc1+ #192
+> > > [  301.599905] Hardware name: Marvell Armada 380/385 (Device Tree)
+> > > [  301.605836] PC is at 0xa00002a
+> > > [  301.608896] LR is at irq_debug_show+0x210/0x2d4
+> > > [  301.613440] pc : [<0a00002a>]    lr : [<c018ca40>]    psr: 200000b3
+> > > [  301.619721] sp : c797fdd8  ip : 0000000b  fp : 0a00002b
+> > > [  301.624957] r10: c0d9a364  r9 : 00000001  r8 : 00000000
+> > > [  301.630192] r7 : c18fee18  r6 : c0da2a74  r5 : c18fee00  r4 : c66ec050
+> > > [  301.636734] r3 : 00000001  r2 : c18fee18  r1 : 00000000  r0 : c66ec050
+> > > [  301.643275] Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA Thumb  Segment none
+> > > [  301.650689] Control: 10c5387d  Table: 0790c04a  DAC: 00000051
+> > > [  301.656446] Register r0 information: slab seq_file start c66ec050 pointer offset 0
+> > > [  301.664040] Register r1 information: NULL pointer
+> > > [  301.668755] Register r2 information: slab kmalloc-256 start c18fee00 pointer offset 24 size 256
+> > > [  301.677480] Register r3 information: non-paged memory
+> > > [  301.682543] Register r4 information: slab seq_file start c66ec050 pointer offset 0
+> > > [  301.690133] Register r5 information: slab kmalloc-256 start c18fee00 pointer offset 0 size 256
+> > > [  301.698770] Register r6 information: non-slab/vmalloc memory
+> > > [  301.704442] Register r7 information: slab kmalloc-256 start c18fee00 pointer offset 24 size 256
+> > > [  301.713165] Register r8 information: NULL pointer
+> > > [  301.717879] Register r9 information: non-paged memory
+> > > [  301.722941] Register r10 information: non-slab/vmalloc memory
+> > > [  301.728699] Register r11 information: non-paged memory
+> > > [  301.733848] Register r12 information: non-paged memory
+> > > [  301.738997] Process cat (pid: 4641, stack limit = 0xf591166e)
+> > > [  301.744756] Stack: (0xc797fdd8 to 0xc7980000)
+> > > [  301.749123] fdc0:                                                       0000000a 830d3f3e
+> > > [  301.757321] fde0: c1004f48 c0d9a374 c7a9cc10 c66ec050 00000000 c88af900 c797fe80 7ffff000
+> > > [  301.765518] fe00: 00400cc0 c66ec068 00000001 c02c5cb8 00000000 00000000 c66ec078 c797fe68
+> > > [  301.773715] fe20: c1cdf6c0 c7a9cc10 ffffffea c88af900 00000010 00000000 00000000 c88af900
+> > > [  301.781911] fe40: c1004f48 c797ff78 00001000 00004004 c03efcb8 c02c6100 00001000 00000000
+> > > [  301.790108] fe60: bec73e04 00001000 00000000 00000000 00001000 c797fe60 00000001 00000000
+> > > [  301.798304] fe80: c88af900 00000000 00000000 00000000 00000000 00000000 00000000 40040000
+> > > [  301.806501] fea0: 00000000 00000000 c1004f48 830d3f3e c88af900 c02c6018 c1c7a770 bec73e04
+> > > [  301.814697] fec0: 00001000 c797ff78 00000001 c03efd0c 00001000 c88af900 00000000 bec73e04
+> > > [  301.822894] fee0: c1004f48 c797ff78 00000001 c029c728 c887ca20 01100cca 0000004f 0045f000
+> > > [  301.831091] ff00: 00000254 c790c010 c790c010 00000000 00000000 00000000 c5f6117c eeece9b8
+> > > [  301.839288] ff20: 00000000 830d3f3e 00000000 c797ffb0 c79fc000 80000007 0045f5b8 00000254
+> > > [  301.847484] ff40: c79fc040 00000004 c887ca20 830d3f3e 00000000 c1004f48 c88af900 00000000
+> > > [  301.855681] ff60: 00000000 c88af900 bec73e04 00001000 00000000 c029cd68 00000000 00000000
+> > > [  301.863877] ff80: 00000000 830d3f3e 00000000 00000000 01000000 00000003 c0100284 c1b8abc0
+> > > [  301.872074] ffa0: 00000003 c0100060 00000000 00000000 00000003 bec73e04 00001000 00000000
+> > > [  301.880270] ffc0: 00000000 00000000 01000000 00000003 00000003 00000001 00000001 00000000
+> > > [  301.888468] ffe0: bec73d98 bec73d88 b6f81f88 b6f81410 60000010 00000003 00000000 00000000
+> > > [  301.896666] [<c018ca40>] (irq_debug_show) from [<c02c5cb8>] (seq_read_iter+0x1a4/0x504)
+> > > [  301.904700] [<c02c5cb8>] (seq_read_iter) from [<c02c6100>] (seq_read+0xe8/0x12c)
+> > > [  301.912117] [<c02c6100>] (seq_read) from [<c03efd0c>] (full_proxy_read+0x54/0x70)
+> > > [  301.919623] [<c03efd0c>] (full_proxy_read) from [<c029c728>] (vfs_read+0xa0/0x2c8)
+> > > [  301.927214] [<c029c728>] (vfs_read) from [<c029cd68>] (ksys_read+0x58/0xd0)
+> > > [  301.934195] [<c029cd68>] (ksys_read) from [<c0100060>] (ret_fast_syscall+0x0/0x54)
+> > > [  301.941785] Exception stack(0xc797ffa8 to 0xc797fff0)
+> > > [  301.946849] ffa0:                   00000000 00000000 00000003 bec73e04 00001000 00000000
+> > > [  301.955045] ffc0: 00000000 00000000 01000000 00000003 00000003 00000001 00000001 00000000
+> > > [  301.963241] ffe0: bec73d98 bec73d88 b6f81f88 b6f81410
+> > > [  301.968304] Code: bad PC value
+> > > [  301.971365] ---[ end trace fe25fd26d042b605 ]---
+> > > [  301.975992] Kernel panic - not syncing: Fatal exception
+> > > [  301.981229] CPU0: stopping
+> > > [  301.983946] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G      D           5.16.0-rc1+ #192
+> > > [  301.991884] Hardware name: Marvell Armada 380/385 (Device Tree)
+> > > [  301.997817] [<c010e120>] (unwind_backtrace) from [<c010a170>] (show_stack+0x10/0x14)
+> > > [  302.005587] [<c010a170>] (show_stack) from [<c0bbf108>] (dump_stack_lvl+0x40/0x4c)
+> > > [  302.013179] [<c0bbf108>] (dump_stack_lvl) from [<c010c3f8>] (do_handle_IPI+0xf4/0x128)
+> > > [  302.021117] [<c010c3f8>] (do_handle_IPI) from [<c010c444>] (ipi_handler+0x18/0x20)
+> > > [  302.028707] [<c010c444>] (ipi_handler) from [<c0185c5c>] (handle_percpu_devid_irq+0x78/0x124)
+> > > [  302.037256] [<c0185c5c>] (handle_percpu_devid_irq) from [<c017ffb8>] (generic_handle_domain_irq+0x44/0x88)
+> > > [  302.046938] [<c017ffb8>] (generic_handle_domain_irq) from [<c05f051c>] (gic_handle_irq+0x74/0x88)
+> > > [  302.055839] [<c05f051c>] (gic_handle_irq) from [<c0bc7ef8>] (generic_handle_arch_irq+0x34/0x44)
+> > > [  302.064564] [<c0bc7ef8>] (generic_handle_arch_irq) from [<c0100b10>] (__irq_svc+0x50/0x68)
+> > > [  302.072851] Exception stack(0xc1001f00 to 0xc1001f48)
+> > > [  302.077916] 1f00: 000d6830 00000000 00000001 c0116be0 c1004f90 c1004fd4 00000001 00000000
+> > > [  302.086114] 1f20: c1004f48 c0f5d2a8 c1009e80 00000000 00000000 c1001f50 c01076f4 c01076f8
+> > > [  302.094309] 1f40: 60000013 ffffffff
+> > > [  302.097804] [<c0100b10>] (__irq_svc) from [<c01076f8>] (arch_cpu_idle+0x38/0x3c)
+> > > [  302.105223] [<c01076f8>] (arch_cpu_idle) from [<c0bcf3a0>] (default_idle_call+0x1c/0x2c)
+> > > [  302.113338] [<c0bcf3a0>] (default_idle_call) from [<c015db34>] (do_idle+0x1c8/0x218)
+> > > [  302.121106] [<c015db34>] (do_idle) from [<c015de40>] (cpu_startup_entry+0x18/0x20)
+> > > [  302.128697] [<c015de40>] (cpu_startup_entry) from [<c0f00fec>] (start_kernel+0x650/0x694)
+> > > [  302.136901] Rebooting in 3 seconds..
+> > > ---
+> > >  drivers/pci/controller/pci-mvebu.c | 9 ++++++++-
+> > >  1 file changed, 8 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> > > index 31f53a019b8f..951030052358 100644
+> > > --- a/drivers/pci/controller/pci-mvebu.c
+> > > +++ b/drivers/pci/controller/pci-mvebu.c
+> > > @@ -1713,8 +1713,15 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+> > >  		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
+> > >  
+> > >  		/* Remove IRQ domains. */
+> > > -		if (port->intx_irq_domain)
+> > > +		if (port->intx_irq_domain) {
+> > > +			int virq, j;
+> > > +			for (j = 0; j < PCI_NUM_INTX; j++) {
+> > > +				virq = irq_find_mapping(port->intx_irq_domain, j);
+> > > +				if (virq > 0)
+> > > +					irq_dispose_mapping(virq);
+> > > +			}
+> > >  			irq_domain_remove(port->intx_irq_domain);
+> > > +		}
+> > >  
+> > >  		/* Free config space for emulated root bridge. */
+> > >  		pci_bridge_emul_cleanup(&port->bridge);
+> > > -- 
+> > > 2.20.1
+> > > 
+> > 
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

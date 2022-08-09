@@ -2,79 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FE958D17E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0B658D191
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244773AbiHIAxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 20:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
+        id S236892AbiHIA5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 20:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238516AbiHIAxc (ORCPT
+        with ESMTP id S233226AbiHIA5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 20:53:32 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999FC186D2;
-        Mon,  8 Aug 2022 17:53:30 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id e13so13247398edj.12;
-        Mon, 08 Aug 2022 17:53:30 -0700 (PDT)
+        Mon, 8 Aug 2022 20:57:10 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD021BEB0
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 17:57:09 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id f14so7788824qkm.0
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 17:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc;
-        bh=XvyFwW8Ho60oSZew5uOeBihtI9BfP1sOrcezBlDDeak=;
-        b=FHz67+toURTh0Yb7HzDZsHG/8r/QpytqYb81DRGPQ2LKOapSzVsx3mOi+drwD0xM1n
-         lKouoiEbLATMokRYfoIGu7hq0NKsdEmQ+6mSyXoq5z16lkjs1z1K/edLL195z6TkPeL/
-         Y4BAxcClmkrnzTa9GKaJ2AfFOpeowPDaOVsQsXXj0S/XhXMO50kveGTaCXB1sdLlYXFt
-         5+qrxMcEgkYmy7XwpuzBsp/EMIe42FoyMs0OnTS+9vb9AhwwI4ILUVX/O2rB/1wUlhfl
-         Tg67MdR6zN7sXKe3CsRefnMkWhVNTSpb1yibneiIkE8G9KLN4OSFVNfJMOAUvJCtB433
-         ccpQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=CgrmreBLfwTLbsIgALcEwvyCRTeQIS+Q14oyIN4x0GI=;
+        b=bQMhBQzZgEiq7nGvmkQiAsIuWbVFgFj0Bdn3dvgPdKsyRT3/umhMygT1kIHw4oEHoC
+         FV6hkHTEt16NDBALMjSBP+BbGvjPxjNX5QwzN0/NYtl3v9PDetYmIe8bDjyGZUkmca69
+         eo7tHMVCzh2snuTxm91XRtzOdwLZ9lEB1P4najKfi8i6HdAfttdFN8b0x4I4GNTeKk0N
+         JIw9BGDuzas/BcQwFRsmBaU/f6F3cUV8fHuH6Fqha0EnRkiQNvtPdpUshoWTb5ROjElK
+         fY3m2JSvbu4n+xNziJ5CUaOzyBB450BD/B2VXP3xq4I2BVt40PGYJKCSnjoQZ/cTkQg9
+         a19g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=XvyFwW8Ho60oSZew5uOeBihtI9BfP1sOrcezBlDDeak=;
-        b=diriGKsqVzvVucM4x5L8FdySVoXAQxXSgG8nRxbz9bM/dC+MjaO2BDyEtArzw3YtNS
-         Nt518oa/FcYR4La8LdGWAlOSj/09mH9x1D/fWlkqz2vNGwtq4efgewp3f0bf0kR7ZwNY
-         AEaebH0yiZiQuOUyccJyNDxFWePtIp7H4C/ifPAM+NMZ+T5P9KIC1KkIJamYK3xJmDF4
-         n8okrP4VHeZQxOe/2/UgCFW9jc0ehVDiGahLolthaqtdwo0P+Pj6rJAkE4VQ81TH3Q3q
-         qQiCZbhaDcC3Ne7NKdIQ1tZWdOVtnGJEHGTLd1ZPSlcqW6hnTxF0xtF/jziU9Hb0MJ0W
-         8mMw==
-X-Gm-Message-State: ACgBeo0FabPObJs1J6QvO7fTQR/ofp55B2n66g6sMho/HkXf7U7Uqp29
-        /9zm0sHJ1OihWd1qWXn0c6A=
-X-Google-Smtp-Source: AA6agR6zpoOnCSipuQNy365yK44T2T67w/iZRbUIxiPeDhazTpbtt/k1Hg/MPlnC8AgmV2cIgFRStg==
-X-Received: by 2002:a05:6402:40ce:b0:43d:f8a0:9c4f with SMTP id z14-20020a05640240ce00b0043df8a09c4fmr19970504edb.95.1660006409086;
-        Mon, 08 Aug 2022 17:53:29 -0700 (PDT)
-Received: from [10.21.0.9] ([37.120.217.82])
-        by smtp.gmail.com with ESMTPSA id d23-20020a05640208d700b0043a7134b381sm5176218edz.11.2022.08.08.17.53.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 17:53:28 -0700 (PDT)
-Message-ID: <86b63b7b-afda-d7f4-7bfa-175085d5a8ef@gmail.com>
-Date:   Tue, 9 Aug 2022 02:53:26 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=CgrmreBLfwTLbsIgALcEwvyCRTeQIS+Q14oyIN4x0GI=;
+        b=DyLQ1VSCeN7g5CNy73p/tEziYrp2gbKSX0ewmxK8giTG290Nt2b7LnfG/GmRx1oUUS
+         0yU9PSvROlPlstTrF0suLAZp2BtGWuVeT7zlp1kI0WL0hrLEXMmcjgCBH6Tcptc4aP5b
+         5buD3cm8XAwxwjwHbdaU4pScjM9gFzuxArrrTk4DOFNdEUThFw+ZwJSfHBUIxcx9K4GO
+         MFyrzmhTztURiO4DBGhNRsCKUZLw3Q5U3S1uLY90oh9HPZEzMMaEfYHTmb87JAGRddOD
+         4e4e0Y2BGLDHY+TyIbXLuf8AknqGTksMpTRIrkjG6mi8POeYOoXkfmYWKaNruB0l0F6u
+         9VhA==
+X-Gm-Message-State: ACgBeo3RWYRWgrHSyQy312nPQgUdvoPQa7kBOVBxJY6WgKWkKnpW+Orn
+        t1zoCbQr0+V8C9j6jtYGKvyEon94qbhkE6567DeWqw==
+X-Google-Smtp-Source: AA6agR6XZV6UgebJ9mhruN2Ve4JkKgadclgi9ioDEpiDkXxiepgd9YlJjzardVLnFrhomyl73G039mm21Q+ABhf1Qc0=
+X-Received: by 2002:a05:620a:4590:b0:6b5:e884:2d2c with SMTP id
+ bp16-20020a05620a459000b006b5e8842d2cmr15761934qkb.267.1660006628043; Mon, 08
+ Aug 2022 17:57:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-To:     jaschultzms@gmail.com
-Cc:     benjamin.tissoires@redhat.com, biju.das.jz@bp.renesas.com,
-        bjorn.andersson@linaro.org, catalin.marinas@arm.com,
-        corbet@lwn.net, devicetree@vger.kernel.org, dmanti@microsoft.com,
-        dmitry.baryshkov@linaro.org, dmitry.torokhov@gmail.com,
-        geert+renesas@glider.be, jaschultz@microsoft.com, jikos@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcel.ziswiler@toradex.com, robh+dt@kernel.org,
-        shawnguo@kernel.org, vkoul@kernel.org, will@kernel.org
-References: <20220707165902.3184-1-jaschultzMS@gmail.com>
-Subject: Re: [PATCH v5 0/6] Add spi-hid, transport for HID over SPI bus
-Content-Language: en-US
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20220707165902.3184-1-jaschultzMS@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220805214821.1058337-1-haoluo@google.com> <20220805214821.1058337-5-haoluo@google.com>
+ <CAEf4BzZHf89Ds8nQWFCH00fKs9-9GkJ0d+Hrp-LkMCDUP_td0A@mail.gmail.com>
+In-Reply-To: <CAEf4BzZHf89Ds8nQWFCH00fKs9-9GkJ0d+Hrp-LkMCDUP_td0A@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 8 Aug 2022 17:56:57 -0700
+Message-ID: <CA+khW7hUVOkHBO3dhRze2_VKZuxD-LuNQdO3nHUkLCYmuuR6eg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 4/8] bpf: Introduce cgroup iter
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,24 +85,270 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/7/22 09:58, Jarrett Schultz <jaschultzms@gmail.com> wrote:
-> Surface Duo devices use a touch digitizer that communicates to the main
-> SoC via SPI and presents itself as a HID device. This patch's goal is to
-> add the spi-hid transport driver to drivers/hid. The driver follows the
-> publically available HID Over SPI Protocol Specification version 1.0.
+On Mon, Aug 8, 2022 at 5:19 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Fri, Aug 5, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > Cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+> >
+> >  - walking a cgroup's descendants in pre-order.
+> >  - walking a cgroup's descendants in post-order.
+> >  - walking a cgroup's ancestors.
+> >  - process only the given cgroup.
+> >
+> > When attaching cgroup_iter, one can set a cgroup to the iter_link
+> > created from attaching. This cgroup is passed as a file descriptor
+> > or cgroup id and serves as the starting point of the walk. If no
+> > cgroup is specified, the starting point will be the root cgroup v2.
+> >
+> > For walking descendants, one can specify the order: either pre-order or
+> > post-order. For walking ancestors, the walk starts at the specified
+> > cgroup and ends at the root.
+> >
+> > One can also terminate the walk early by returning 1 from the iter
+> > program.
+> >
+> > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> > program is called with cgroup_mutex held.
+> >
+> > Currently only one session is supported, which means, depending on the
+> > volume of data bpf program intends to send to user space, the number
+> > of cgroups that can be walked is limited. For example, given the current
+> > buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> > cgroup, assuming PAGE_SIZE is 4kb, the total number of cgroups that can
+> > be walked is 512. This is a limitation of cgroup_iter. If the output
+> > data is larger than the kernel buffer size, after all data in the
+> > kernel buffer is consumed by user space, the subsequent read() syscall
+> > will signal EOPNOTSUPP. In order to work around, the user may have to
+> > update their program to reduce the volume of data sent to output. For
+> > example, skip some uninteresting cgroups. In future, we may extend
+> > bpf_iter flags to allow customizing buffer size.
+> >
+> > Acked-by: Yonghong Song <yhs@fb.com>
+> > Acked-by: Tejun Heo <tj@kernel.org>
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > ---
+> >  include/linux/bpf.h                           |   8 +
+> >  include/uapi/linux/bpf.h                      |  38 +++
+> >  kernel/bpf/Makefile                           |   3 +
+> >  kernel/bpf/cgroup_iter.c                      | 286 ++++++++++++++++++
+> >  tools/include/uapi/linux/bpf.h                |  38 +++
+> >  .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+> >  6 files changed, 375 insertions(+), 2 deletions(-)
+> >  create mode 100644 kernel/bpf/cgroup_iter.c
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 20c26aed7896..09b5c2167424 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -48,6 +48,7 @@ struct mem_cgroup;
+> >  struct module;
+> >  struct bpf_func_state;
+> >  struct ftrace_ops;
+> > +struct cgroup;
+> >
+> >  extern struct idr btf_idr;
+> >  extern spinlock_t btf_idr_lock;
+> > @@ -1730,7 +1731,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
+> >         int __init bpf_iter_ ## target(args) { return 0; }
+> >
+> >  struct bpf_iter_aux_info {
+> > +       /* for map_elem iter */
+> >         struct bpf_map *map;
+> > +
+> > +       /* for cgroup iter */
+> > +       struct {
+> > +               struct cgroup *start; /* starting cgroup */
+> > +               int order;
+> > +       } cgroup;
+> >  };
+> >
+> >  typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index 59a217ca2dfd..4d758b2e70d6 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -87,10 +87,37 @@ struct bpf_cgroup_storage_key {
+> >         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
+> >  };
+> >
+> > +enum bpf_iter_order {
+> > +       BPF_ITER_ORDER_DEFAULT = 0,     /* default order. */
+>
+> why is this default order necessary? It just adds confusion (I had to
+> look up source code to know what is default order). I might have
+> missed some discussion, so if there is some very good reason, then
+> please document this in commit message. But I'd rather not do some
+> magical default order instead. We can set 0 to mean invalid and error
+> out, or just do SELF as the very first value (and if user forgot to
+> specify more fancy mode, they hopefully will quickly discover this in
+> their testing).
+>
 
-As far as I can tell based on the downstream code you provide in [1],
-your proposed driver (and v1.0 spec) is incompatible with the version
-used on current Surface devices (Surface Duo 1 and 2, Surface Pro X, and
-I assume some AMD/x86 based devices on which you also use spi-hid for the
-digitizer). On those, SPI_HID_SUPPORTED_VERSION is 0x0100 whereas it is
-0x0300 for the driver proposed here, along with at least some protocol
-struct changes.
+PRE/POST/UP are tree-specific orders. SELF applies on all iters and
+yields only a single object. How does task_iter express a non-self
+order? By non-self, I mean something like "I don't care about the
+order, just scan _all_ the objects". And this "don't care" order, IMO,
+may be the common case. I don't think everyone cares about walking
+order for tasks. The DEFAULT is intentionally put at the first value,
+so that if users don't care about order, they don't have to specify
+this field.
 
-Do you have any plans on supporting those devices (i.e. protocol version
-0x0100) at some point?
+If that sounds valid, maybe using "UNSPEC" instead of "DEFAULT" is better?
 
-Regards,
-Max
+> > +       BPF_ITER_SELF,                  /* process only a single object. */
+> > +       BPF_ITER_DESCENDANTS_PRE,       /* walk descendants in pre-order. */
+> > +       BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
+> > +       BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
+> > +};
+> > +
+>
+> This is a somewhat pedantic nit, so feel free to ignore completely,
+> but don't DESCENDANTS_{PRE,POST} and ANCESTORS_UP also include "self"?
+> As it is right now, BPF_ITER_SELF name might be read as implying that
+> DESCENDANTS and ANCESTORS order don't include self. So I don't know,
+> maybe BPF_ITER_SELF_ONLY would be a bit clearer?
+>
 
-[1]: https://github.com/microsoft/surface-duo-oss-kernel.msm-5..4/tree/surfaceduo2/11/2022.108.8/drivers/hid/spi-hid
+No problem with that. I can update it in the next version.
+
+>
+> >  union bpf_iter_link_info {
+> >         struct {
+> >                 __u32   map_fd;
+> >         } map;
+> > +       struct {
+> > +               /* Valid values include:
+> > +                *  - BPF_ITER_ORDER_DEFAULT
+> > +                *  - BPF_ITER_SELF
+> > +                *  - BPF_ITER_DESCENDANTS_PRE
+> > +                *  - BPF_ITER_DESCENDANTS_POST
+> > +                *  - BPF_ITER_ANCESTORS_UP
+> > +                * for cgroup_iter, DEFAULT is equivalent to DESCENDANTS_PRE.
+> > +                */
+> > +               __u32   order;
+> > +
+> > +               /* At most one of cgroup_fd and cgroup_id can be non-zero. If
+> > +                * both are zero, the walk starts from the default cgroup v2
+> > +                * root. For walking v1 hierarchy, one should always explicitly
+> > +                * specify cgroup_fd.
+> > +                */
+> > +               __u32   cgroup_fd;
+> > +               __u64   cgroup_id;
+> > +       } cgroup;
+> >  };
+> >
+> >  /* BPF syscall commands, see bpf(2) man-page for more details. */
+> > @@ -6134,11 +6161,22 @@ struct bpf_link_info {
+> >                 struct {
+> >                         __aligned_u64 target_name; /* in/out: target_name buffer ptr */
+> >                         __u32 target_name_len;     /* in/out: target_name buffer len */
+> > +
+> > +                       /* If the iter specific field is 32 bits, it can be put
+> > +                        * in the first or second union. Otherwise it should be
+> > +                        * put in the second union.
+> > +                        */
+> >                         union {
+> >                                 struct {
+> >                                         __u32 map_id;
+> >                                 } map;
+> >                         };
+> > +                       union {
+> > +                               struct {
+> > +                                       __u64 cgroup_id;
+> > +                                       __u32 order;
+> > +                               } cgroup;
+> > +                       };
+> >                 } iter;
+>
+> But other than above, I like how UAPI looks like, thanks!
+>
+> [...]
+>
+> > + *
+> > + * For walking descendants, cgroup_iter can walk in either pre-order or
+> > + * post-order. For walking ancestors, the iter walks up from a cgroup to
+> > + * the root.
+> > + *
+> > + * The iter program can terminate the walk early by returning 1. Walk
+> > + * continues if prog returns 0.
+> > + *
+> > + * The prog can check (seq->num == 0) to determine whether this is
+> > + * the first element. The prog may also be passed a NULL cgroup,
+> > + * which means the walk has completed and the prog has a chance to
+> > + * do post-processing, such as outputing an epilogue.
+>
+> typo: outputting
+>
+
+Thanks for catching. Will fix.
+
+> > + *
+> > + * Note: the iter_prog is called with cgroup_mutex held.
+> > + *
+> > + * Currently only one session is supported, which means, depending on the
+> > + * volume of data bpf program intends to send to user space, the number
+> > + * of cgroups that can be walked is limited. For example, given the current
+> > + * buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> > + * cgroup, assuming PAGE_SIZE is 4kb, the total number of cgroups that can
+> > + * be walked is 512. This is a limitation of cgroup_iter. If the output data
+> > + * is larger than the kernel buffer size, after all data in the kernel buffer
+> > + * is consumed by user space, the subsequent read() syscall will signal
+> > + * EOPNOTSUPP. In order to work around, the user may have to update their
+> > + * program to reduce the volume of data sent to output. For example, skip
+> > + * some uninteresting cgroups.
+> > + */
+> > +
+>
+> [...]
+>
+> > +
+> > +static void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
+> > +                                       struct seq_file *seq)
+> > +{
+> > +       char *buf;
+> > +
+> > +       buf = kzalloc(PATH_MAX, GFP_KERNEL);
+> > +       if (!buf) {
+> > +               seq_puts(seq, "cgroup_path:\t<unknown>\n");
+> > +               goto show_order;
+> > +       }
+> > +
+> > +       /* If cgroup_path_ns() fails, buf will be an empty string, cgroup_path
+> > +        * will print nothing.
+> > +        *
+> > +        * Path is in the calling process's cgroup namespace.
+> > +        */
+> > +       cgroup_path_ns(aux->cgroup.start, buf, PATH_MAX,
+> > +                      current->nsproxy->cgroup_ns);
+> > +       seq_printf(seq, "cgroup_path:\t%s\n", buf);
+> > +       kfree(buf);
+> > +
+> > +show_order:
+> > +       if (aux->cgroup.order == BPF_ITER_DESCENDANTS_PRE)
+> > +               seq_puts(seq, "order: pre\n");
+> > +       else if (aux->cgroup.order == BPF_ITER_DESCENDANTS_POST)
+> > +               seq_puts(seq, "order: post\n");
+> > +       else if (aux->cgroup.order == BPF_ITER_ANCESTORS_UP)
+> > +               seq_puts(seq, "order: up\n");
+> > +       else /* BPF_ITER_SELF */
+> > +               seq_puts(seq, "order: self\n");
+>
+> should we output "descendants_pre", "descendants_post", "ancestors_up"
+> and "self" to match enum names more uniformly? We had similar
+> discussion when Daniel Mueller was doing some clean up in bpftool and
+> public's opinion was that uniform and consistent mapping between
+> kernel enum and it's string representation is more valuable than
+> shortness of the string.
+>
+
+I feel this is very nit, but can update in the next version. On a
+second thought, I think, specifying "descendants", "ancestors" and
+"self" are probably slightly better. Because doing so, people know
+it's a tree when reading iter link info.
+
+> > +}
+> > +
+>
+> [...]

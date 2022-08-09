@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40CAF58E047
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB6A58E048
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235436AbiHITh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
+        id S237327AbiHITh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235535AbiHIThC (ORCPT
+        with ESMTP id S239078AbiHIThl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:37:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509DF24942;
-        Tue,  9 Aug 2022 12:37:01 -0700 (PDT)
+        Tue, 9 Aug 2022 15:37:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4836B248DB;
+        Tue,  9 Aug 2022 12:37:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E188D61337;
-        Tue,  9 Aug 2022 19:37:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DA59C433C1;
-        Tue,  9 Aug 2022 19:37:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3F83B8188F;
+        Tue,  9 Aug 2022 19:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522BEC433D6;
+        Tue,  9 Aug 2022 19:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660073820;
-        bh=7RU30KM7l0MKvkGXYL/0iZfnQboyY+CyJ42jlnIxKfA=;
+        s=k20201202; t=1660073857;
+        bh=UlHNdfjvJwrgfY/HF8VYrLwVoLslBIlbGovh3PnUzec=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aih3hVnI5FTJlnCknNFmJ1FuAG1eAPO6LY0VkAvF4DLbZ0MniUEuh3a/jwRr7gy4t
-         kQCT2XzSbqTSt9BxZr08qIIoZAmr1KqMuvDSTDP3M8bQ44aGwyfN5L9PoFhBdUff2T
-         TdCi0Ip7WNnr64nlX6qjdiy01AA0fMVdHgnTQEVufIjIXgW3SZuH3AZDAll46iwaXz
-         mTGOwGiwxJspYaKmLyrlmu/uJMCQpzeIoAI5oCoD//yAFvNXVHLqzMmWFmr1PHzsbW
-         sq5nuBHCden8b+mDMcV0akUHcuUhqCm1m7XJNlHmhRHevC7qcMZ06dOThtKaZbHxtY
-         Y7k9btN34vLWg==
+        b=h0+qf+RTT6pmAEGKM22b+Fks0g0MY8EV/fSn50yGF0OyK62g3ei+l3jbllzOs0Mu3
+         Y6aVcr+BRAtlMIs9RUKzTnyBm8xLpM3juhFBTnm33njvegcbRi88yhybioKd8FIy7W
+         imPceEfIwkbuM+67e8ajwUZ2ZnTqwgKhIf+cApjIgiyLwmGMQHxX4JZgtsMQ4Kxmbm
+         Y37wLm75aDeO9blRj9ZlOW/21ICqY0tbkO65Q/7tuIyo3ude4fobGUMF9uHbbWEgRV
+         1c/vh9sa3Xji+XDF9ioOJIvS5a1RxJAQ2aJYIOgeb0kXqyB2MhcxDdZB5MhOACnqKa
+         rk6g+0scHVL5w==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B2D6E4035A; Tue,  9 Aug 2022 16:36:57 -0300 (-03)
-Date:   Tue, 9 Aug 2022 16:36:57 -0300
+        id C6BC94035A; Tue,  9 Aug 2022 16:37:34 -0300 (-03)
+Date:   Tue, 9 Aug 2022 16:37:34 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Ian Rogers <irogers@google.com>
 Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
@@ -55,14 +55,14 @@ Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-perf-users@vger.kernel.org,
         Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v4 01/17] perf jevents: Clean up pytype warnings
-Message-ID: <YvK3WZ5UVrlW1mwe@kernel.org>
+Subject: Re: [PATCH v4 02/17] perf jevents: Simplify generation of C-string
+Message-ID: <YvK3fjexLddUJeYR@kernel.org>
 References: <20220804221816.1802790-1-irogers@google.com>
- <20220804221816.1802790-2-irogers@google.com>
+ <20220804221816.1802790-3-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220804221816.1802790-2-irogers@google.com>
+In-Reply-To: <20220804221816.1802790-3-irogers@google.com>
 X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -74,8 +74,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Aug 04, 2022 at 03:18:00PM -0700, Ian Rogers escreveu:
-> Improve type hints to clean up pytype warnings.
+Em Thu, Aug 04, 2022 at 03:18:01PM -0700, Ian Rogers escreveu:
+> Previous implementation wanted variable order and '(null)' string output
+> to match the C implementation. The '(null)' string output was a
+> quirk/bug and so there is no need to carry it forward.
 
 Thanks, applied.
 
@@ -84,68 +86,43 @@ Thanks, applied.
  
 > Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  tools/perf/pmu-events/jevents.py | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
+>  tools/perf/pmu-events/jevents.py | 14 ++++----------
+>  1 file changed, 4 insertions(+), 10 deletions(-)
 > 
 > diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-> index 83e0dcbeac9a..5b72048d50da 100755
+> index 5b72048d50da..cdfa4e0e7557 100755
 > --- a/tools/perf/pmu-events/jevents.py
 > +++ b/tools/perf/pmu-events/jevents.py
-> @@ -6,8 +6,7 @@ import csv
->  import json
->  import os
->  import sys
-> -from typing import Callable
-> -from typing import Sequence
-> +from typing import (Callable, Optional, Sequence)
+> @@ -203,7 +203,7 @@ class JsonEvent:
+>      """Representation of the event as a C struct initializer."""
 >  
->  # Global command line arguments.
->  _args = None
-> @@ -57,7 +56,7 @@ class JsonEvent:
->                                         '. '), '.').replace('\n', '\\n').replace(
->                                             '\"', '\\"').replace('\r', '\\r')
+>      def attr_string(attr: str, value: str) -> str:
+> -      return '\t.%s = \"%s\",\n' % (attr, value)
+> +      return f'\t.{attr} = \"{value}\",\n'
 >  
-> -    def convert_aggr_mode(aggr_mode: str) -> str:
-> +    def convert_aggr_mode(aggr_mode: str) -> Optional[str]:
->        """Returns the aggr_mode_class enum value associated with the JSON string."""
->        if not aggr_mode:
->          return None
-> @@ -67,7 +66,7 @@ class JsonEvent:
->        }
->        return aggr_mode_to_enum[aggr_mode]
+>      def str_if_present(self, attr: str) -> str:
+>        if not getattr(self, attr):
+> @@ -211,17 +211,11 @@ class JsonEvent:
+>        return attr_string(attr, getattr(self, attr))
 >  
-> -    def lookup_msr(num: str) -> str:
-> +    def lookup_msr(num: str) -> Optional[str]:
->        """Converts the msr number, or first in a list to the appropriate event field."""
->        if not num:
->          return None
-> @@ -79,7 +78,7 @@ class JsonEvent:
->        }
->        return msrmap[int(num.split(',', 1)[0], 0)]
->  
-> -    def real_event(name: str, event: str) -> str:
-> +    def real_event(name: str, event: str) -> Optional[str]:
->        """Convert well known event names to an event string otherwise use the event argument."""
->        fixed = {
->            'inst_retired.any': 'event=0xc0,period=2000003',
-> @@ -95,7 +94,7 @@ class JsonEvent:
->          return fixed[name.lower()]
->        return event
->  
-> -    def unit_to_pmu(unit: str) -> str:
-> +    def unit_to_pmu(unit: str) -> Optional[str]:
->        """Convert a JSON Unit to Linux PMU name."""
->        if not unit:
->          return None
-> @@ -154,7 +153,7 @@ class JsonEvent:
->      if self.metric_expr:
->        self.metric_expr = self.metric_expr.replace('\\', '\\\\')
->      arch_std = jd.get('ArchStdEvent')
-> -    if precise and self.desc and not '(Precise Event)' in self.desc:
-> +    if precise and self.desc and '(Precise Event)' not in self.desc:
->        extra_desc += ' (Must be precise)' if precise == '2' else (' (Precise '
->                                                                   'event)')
->      event = f'config={llx(configcode)}' if configcode is not None else f'event={llx(eventcode)}'
+>      s = '{\n'
+> -    for attr in ['name', 'event']:
+> -      s += str_if_present(self, attr)
+> -    if self.desc is not None:
+> -      s += attr_string('desc', self.desc)
+> -    else:
+> -      s += attr_string('desc', '(null)')
+> -    s += str_if_present(self, 'compat')
+>      s += f'\t.topic = "{topic_local}",\n'
+>      for attr in [
+> -        'long_desc', 'pmu', 'unit', 'perpkg', 'aggr_mode', 'metric_expr',
+> -        'metric_name', 'metric_group', 'deprecated', 'metric_constraint'
+> +        'aggr_mode', 'compat', 'deprecated', 'desc', 'event', 'long_desc',
+> +        'metric_constraint', 'metric_expr', 'metric_group', 'metric_name',
+> +        'name', 'perpkg', 'pmu', 'unit'
+>      ]:
+>        s += str_if_present(self, attr)
+>      s += '},\n'
 > -- 
 > 2.37.1.559.g78731f0fdb-goog
 

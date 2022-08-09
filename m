@@ -2,157 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D1458DFDA
+	by mail.lfdr.de (Postfix) with ESMTP id D528358DFDB
 	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345492AbiHITIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S245693AbiHITIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348391AbiHITGu (ORCPT
+        with ESMTP id S243494AbiHITHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:06:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3787286E7
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660071185;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5MxbEkPFfHnhv9lIG9SKrVYa+3yd5Ii2mgv7KMCMiKA=;
-        b=MwVPwrnkbAFEUC9IAx+zOQqkmwQfCd6a7ltEHWCNbPk67eHZPR1jwf7uDDEwWZB/eJon8s
-        3qycWranGQzYZcaupPw1qLifh2lQ2Osl1GA2nNHQoAenDGtHeci32O0E2GVvoLxtpCRubP
-        AHLKWXkzo5ngpzYg7O9qxK0agRfxhsk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-67-9_fQZhxqMiax6J7_tDvuYw-1; Tue, 09 Aug 2022 14:53:03 -0400
-X-MC-Unique: 9_fQZhxqMiax6J7_tDvuYw-1
-Received: by mail-wr1-f69.google.com with SMTP id n7-20020adfc607000000b0021a37d8f93aso1999192wrg.21
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:53:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=5MxbEkPFfHnhv9lIG9SKrVYa+3yd5Ii2mgv7KMCMiKA=;
-        b=lpbbcE9yWrJmKIuGTtOZ10276m8AGjepsxWffxlddJZtdphskflzEMCxbOBdZotI/6
-         S498q5adoIcaIfaF+oj11e3WS6ZBkv3sRJsTAHJ8STxHVxLJVxJHVEcQAci1SPaBxsQB
-         E0LQtsz12podyzMROx/fXBrWIcZ4X/FE6rMAWsEOb0dhpfPLyohHCLeYwkzAz4tYtGYS
-         yDjiXBw0IQBet4/01ugNYUY8XvGOvV0V/a4u7nfqsPWcxbSTwXl0rIjrUg0SMa1MD2qM
-         PqGSJVjnbn+mguV+N4v+DMmXKrksvY8LIIq3iA/8tX+NGpm+/09oEhjZBCPGffeIaWLk
-         +FOw==
-X-Gm-Message-State: ACgBeo2ZCz+2ITfVfDXhqch9JNv/Fob8aOHzy2sCV84lu0QKL4+aP5ac
-        r/6szM180XhA/u6LV88egCfvWPNiFygq97Fq2N3v0lFeoTYKiF4CWF+CsyAfau7DFA5DHZOQceU
-        SpRXUb05MkJoa4BDJgKqs45Xy
-X-Received: by 2002:a05:6000:15c5:b0:220:727a:24bf with SMTP id y5-20020a05600015c500b00220727a24bfmr15682594wry.621.1660071182504;
-        Tue, 09 Aug 2022 11:53:02 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7B1MwvtmEN6yaB1m5uxgVV9LrfTrVuas1WczTE6dxZ7xo83OW/ncC8YwQvF+UDacFqG6b94g==
-X-Received: by 2002:a05:6000:15c5:b0:220:727a:24bf with SMTP id y5-20020a05600015c500b00220727a24bfmr15682577wry.621.1660071182244;
-        Tue, 09 Aug 2022 11:53:02 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:3700:aed2:a0f8:c270:7f30? (p200300cbc7053700aed2a0f8c2707f30.dip0.t-ipconnect.de. [2003:cb:c705:3700:aed2:a0f8:c270:7f30])
-        by smtp.gmail.com with ESMTPSA id o4-20020a056000010400b0021e501519d3sm14070439wrx.67.2022.08.09.11.53.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 11:53:01 -0700 (PDT)
-Message-ID: <d8765f51-c6f6-1d21-82ba-877515acf17d@redhat.com>
-Date:   Tue, 9 Aug 2022 20:53:01 +0200
+        Tue, 9 Aug 2022 15:07:18 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B82D2B254
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:54:07 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id A225E68AA6; Tue,  9 Aug 2022 20:54:03 +0200 (CEST)
+Date:   Tue, 9 Aug 2022 20:54:03 +0200
+From:   "hch@lst.de" <hch@lst.de>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     "Hellstrom, Thomas" <thomas.hellstrom@intel.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        "bob.beckett@collabora.com" <bob.beckett@collabora.com>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
+        "airlied@linux.ie" <airlied@linux.ie>, "hch@lst.de" <hch@lst.de>,
+        "Ursulin, Tvrtko" <tvrtko.ursulin@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        "Auld, Matthew" <matthew.auld@intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
+Subject: Re: [PATCH v5] drm/i915: stop using swiotlb
+Message-ID: <20220809185403.GB15307@lst.de>
+References: <20220726153935.2272777-1-bob.beckett@collabora.com> <1160a7c31084ab2259088e4bfe88b41ad61c2bcc.camel@intel.com> <db9f787e-c3e4-d353-da57-80cb7a135d86@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove
- FOLL_COW
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>
-References: <20220808073232.8808-1-david@redhat.com>
- <CAHk-=wi81ujYGP0gmyy2kDke_ExL742Lo_hLepGjCa8mS81A7w@mail.gmail.com>
- <YvKsBUuwLNlHwhnE@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YvKsBUuwLNlHwhnE@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <db9f787e-c3e4-d353-da57-80cb7a135d86@linux.intel.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.08.22 20:48, Jason Gunthorpe wrote:
-> On Tue, Aug 09, 2022 at 11:40:50AM -0700, Linus Torvalds wrote:
->> On Mon, Aug 8, 2022 at 12:32 AM David Hildenbrand <david@redhat.com> wrote:
->>>
->>> For example, a write() via /proc/self/mem to a uffd-wp-protected range has
->>> to fail instead of silently granting write access and bypassing the
->>> userspace fault handler. Note that FOLL_FORCE is not only used for debug
->>> access, but also triggered by applications without debug intentions, for
->>> example, when pinning pages via RDMA.
->>
->> So this made me go "Whaa?"
->>
->> I didn't even realize that the media drivers and rdma used FOLL_FORCE.
->>
->> That's just completely bogus.
->>
->> Why do they do that?
->>
->> It seems to be completely bogus, and seems to have no actual valid
->> reason for it. Looking through the history, it goes back to the
->> original code submission in 2006, and doesn't have a mention of why.
-> 
-> It is because of all this madness with COW.
-> 
-> Lets say an app does:
-> 
->  buf = mmap(MAP_PRIVATE)
->  rdma_pin_for_read(buf)
->  buf[0] = 1 
-> 
-> Then the store to buf[0] will COW the page and the pin will become
-> decoherent.
-> 
-> The purpose of the FORCE is to force COW to happen early so this is
-> avoided.
-> 
-> Sadly there are real apps that end up working this way, eg because
-> they are using buffer in .data or something.
-> 
-> I've hoped David's new work on this provided some kind of path to a
-> proper solution, as the need is very similar to all the other places
-> where we need to ensure there is no possiblity of future COW.
-> 
-> So, these usage can be interpreted as a FOLL flag we don't have - some
-> kind of (FOLL_EXCLUSIVE | FOLL_READ) to match the PG_anon_exclusive
-> sort of idea.
+On Tue, Aug 09, 2022 at 12:36:50PM +0100, Tvrtko Ursulin wrote:
+>
+> Digging through git history at least running as Xen dom0 looks to have been 
+> impacted, but commits such as abb0deacb5a6 ("drm/i915: Fallback to single 
+> PAGE_SIZE segments for DMA remapping") are older and suggest problem was 
+> generic. 1625e7e549c5 ("drm/i915: make compact dma scatter lists creation 
+> work with SWIOTLB backend.") as well. So it looks it did work behind 
+> swiotlb despite those missing calls you highlighted.
 
-Thanks Jason for the explanation.
-
-I have patches in the works to no longer use FOLL_FORCE|FOLL_WRITE for
-taking a reliable longerterm R/O pin in a MAP_PRIVATE mapping. The
-patches are mostly done (and comparably simple), I merely deferred
-sending them out because I stumbled over this issue first.
-
-Some ugly corner cases of MAP_SHARED remain, but for most prominent use
-cases, my upcoming patches should allow us to just have longterm R/O
-pins working as expected.
-
--- 
-Thanks,
-
-David / dhildenb
-
+Hmm.  xen-swiotlb bounce buffers as soon as any single mapping that
+straddles a Xen page size boundary.  Could the magic value there
+somehow made all mappings small enough to just avoid bounce buffering
+for Xen by more or less accident?

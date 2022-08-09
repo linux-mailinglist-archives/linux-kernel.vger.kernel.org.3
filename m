@@ -2,115 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A00358DA75
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201FC58DA76
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243764AbiHIOkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 10:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S244000AbiHIOmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 10:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243757AbiHIOke (ORCPT
+        with ESMTP id S233248AbiHIOmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 10:40:34 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C13273F
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 07:40:33 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso12379478pjd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 07:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=OdbOjGUjW12bCfbeWBjGSJ1Nu6Rk3c5Ky+ZI53W01wg=;
-        b=TaXG+ej0jDZE0fRN4noaJtSFB5ltkCHj7OE6Qr0NL5hSpQhtaKSX0RdDRHiXlYQdy7
-         MSEMDDxfpGEWa+w6jBWpVEwFG41oOAiq602dOmmdikaoW+Jsupla/nPEcG2Wug4G8QeI
-         R/6wu3IwfV1cXrxn1hb2o5uHm34Q7XMdvKznNBglR8Vqp2fkXdJwB9/T97p/P5tbfJC2
-         iJC6RTuGl32t6ZBKATAv6goAxQVAAVbtv3vsIH6qp290lpHClC8dvzuVSIkWK6lUJDt0
-         ctBxtIYfoWBW7cm+VQpAFbdsgBentT5METMZgPILhQltDG0Q34WrrfR8jy3B1NmYNvwD
-         EmWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=OdbOjGUjW12bCfbeWBjGSJ1Nu6Rk3c5Ky+ZI53W01wg=;
-        b=4fSt0azIrWKoBSxWR+xAPkRec4Ae6iTDMHugL+HEO2pMEW6M2xsyG66SEo8Cu55cL8
-         gHpV1YIaWdm+Q2IXzvi9KePC4qKzNFh7t7Bq75JwGo/Kn0DkJSa//QxPJhLTGCWn0Rrp
-         EHwIxvV7Bk7lw4cte7pT0lBNNU0HZkRYEnwq7rf/FcLyCx6/oCmFwiUuV+eQYfnUebbV
-         RhNOd/5AV8S61r2YLAWTnoDNTmQRHJwBh0irgjF0vOu+Fr9NR98On4HZvDvkifYelor5
-         aoh2noLI/CgqO279qx0H9P6UNxP/A2lkx+MFwwsUWem3Ws7i7mf4CoqbObeQg9b/Ih0V
-         3T4A==
-X-Gm-Message-State: ACgBeo34nXAJxnR+vYa1BTLJxqy+fxu0hgU7C1G8l2Y6tIpyi7QW/Ydi
-        /h0tmLEKPPeDCL6VM4AgLpWVVQ==
-X-Google-Smtp-Source: AA6agR5dJBGAgBiZdySMn0shi1wg9/jp8sdMtEe28i2vcg1gxytljbDTOA1J7khCTdbdWwzUz3C3pA==
-X-Received: by 2002:a17:903:22c1:b0:16f:3d1:f5c with SMTP id y1-20020a17090322c100b0016f03d10f5cmr23843077plg.155.1660056032526;
-        Tue, 09 Aug 2022 07:40:32 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q11-20020a170902dacb00b0016dcfedfe30sm11056894plx.90.2022.08.09.07.40.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 07:40:31 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 14:40:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Coleman Dietsch <dietschc@csp.edu>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        stable@vger.kernel.org,
-        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com,
-        metikaya <metikaya@amazon.co.uk>
-Subject: Re: [PATCH v3 2/2] KVM: x86/xen: Stop Xen timer before changing IRQ
-Message-ID: <YvJx3Dje4zS/c+H0@google.com>
-References: <20220808190607.323899-2-dietschc@csp.edu>
- <20220808190607.323899-3-dietschc@csp.edu>
- <c648744c096588d30771a22efa6d65c31fffd06c.camel@infradead.org>
- <43e258cc-71ac-bde4-d1f8-9eb9519928d3@redhat.com>
- <4fc1371b83001b4eed1617c37bec6b9d007e45c2.camel@infradead.org>
- <YvJqIsQsg+ThMg/C@google.com>
- <0b5dcab333906f166fcdbc296373cc5e08bec79f.camel@infradead.org>
- <953d2e99-ed1a-384d-6d3a-0f656a243f82@redhat.com>
+        Tue, 9 Aug 2022 10:42:52 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B7D1209D
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 07:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660056171; x=1691592171;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fPcqi12kBbjdY5iJ5EAh3ew1C4SELFqMnMzMrsqC+mI=;
+  b=jSDV8fnhq4TRsMY+DEzTrnlRJDA1Kp52D4qGUPx+54EfuRL3V8Ml2XYy
+   EGRNYHf43ZNMw7/A5DzUopitucjs91Asqv84AWf3dXEXlqeah7EMDuhu9
+   C9ioC5AgT75sh1hrZDYqWKBDPmmuI9Z1MLy7taLv5fjXn1GfM84hivEwI
+   te1o5C4TMSif4jTCdwiCHp3sAJp2jZn9S0ZdhzhaKx162TRowCq5l/WZS
+   XCIN0jv7DqYw4ogLq1CG2S0ZNH5cigmJnrZFwdbErG7sDer+4STtJU/1B
+   64JTfcPS8ZGU7CJScFIaAH/orMe2Id9cqDbHXL3RPqw8xYpjoYpYwB84J
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="290851549"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="290851549"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 07:42:51 -0700
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="747060442"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 07:42:49 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 09 Aug 2022 17:42:47 +0300
+Date:   Tue, 9 Aug 2022 17:42:47 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Brad Campbell <lists2009@fnarfbargle.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Apple Thunderbolt Display chaining
+Message-ID: <YvJyZ51H+YkceKJP@lahna>
+References: <42e81a8e-e393-7a69-7339-a020ebb57935@fnarfbargle.com>
+ <YvDcudE5BRtZAtfM@lahna>
+ <a1db1454-63b6-7c39-bbf6-53e53bbd36e6@fnarfbargle.com>
+ <5474e599-057a-ec0f-b469-560644155907@fnarfbargle.com>
+ <YvEFtPF7SBIwNG/o@lahna>
+ <d234ea9b-9303-6088-0a9b-4de887a77bf4@fnarfbargle.com>
+ <YvI1lQh+C0SJiG73@lahna>
+ <bcebdeb9-4f6a-e931-46f5-b9be899db9a4@fnarfbargle.com>
+ <YvI9Cbin4OKQwZ05@lahna>
+ <86bec398-7a5b-6d4e-bc02-5941fe6c2e73@fnarfbargle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <953d2e99-ed1a-384d-6d3a-0f656a243f82@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <86bec398-7a5b-6d4e-bc02-5941fe6c2e73@fnarfbargle.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022, Paolo Bonzini wrote:
-> On 8/9/22 16:16, David Woodhouse wrote:
-> > I find the new version a bit harder to follow, with its init-then-stop-
-> > then-start logic:
-> > 
-> > 	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
-> > 		if (data->u.timer.port &&
-> > 		    data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
-> > 			r = -EINVAL;
-> > 			break;
-> >                  }
-> > 
-> > 		if (!vcpu->arch.xen.timer.function)
-> > 			kvm_xen_init_timer(vcpu);
-> > 
-> > 		/* Stop the timer (if it's running) before changing the vector */
-> > 		kvm_xen_stop_timer(vcpu);
-> > 		vcpu->arch.xen.timer_virq = data->u.timer.port;
-> 
-> 
-> I think this is fine, if anything the kvm_xen_stop_timer() call could be
-> placed in an "else" but I'm leaning towards applying this version of the
-> patch.
+Hi,
 
-I wanted to separate the "init" from the "stop+start", e.g. if there were a more
-appropriate place for invoking kvm_xen_init_timer() I would have suggested moving
-the call outside of KVM_XEN_VCPU_ATTR_TYPE_TIMER entirely.
+On Tue, Aug 09, 2022 at 07:08:42PM +0800, Brad Campbell wrote:
+> 
+> 
+> On 9/8/22 18:55, Mika Westerberg wrote:
+> > Hi,
+> > 
+> > On Tue, Aug 09, 2022 at 06:40:54PM +0800, Brad Campbell wrote:
+> >> G'day Mika,
+> >>
+> >>
+> >> On 9/8/22 18:23, Mika Westerberg wrote:
+> >>> Hi,
+> >>>
+> >>> On Mon, Aug 08, 2022 at 09:27:24PM +0800, Brad Campbell wrote:
+> >>>> If I don't authorize the PCIe tunnels and just leave the DP enabled it
+> >>>> works fine also.
+> >>>
+> >>> But you say that it fails on boot when the driver discovers the tunnels,
+> >>> right? So there is really nothing to authorize (they should be already
+> >>> "authorized" by the boot firmware).
+> >>>
+> >>> If I understand correctly this is how it reproduces (the simplest):
+> >>>
+> >>>   1. Connect a single Apple TB1 display to the system
+> >>>   2. Boot it up
+> >>>   3. Wait a while and it hangs
+> >>>
+> >>> If this is the case, then the driver certainly is not creating any
+> >>> PCIe tunnels itself unless there is a bug somewhere.
+> >>>
+> >>> An additional question, does it reproduce with either TB1 display
+> >>> connected or just with specific TB1 display?
+> >>>
+> >>
+> >> No, I've not been clear enough, I'm sorry. I've re-read what I've written below and
+> >> I'm still not sure I'm clear enough.
+> >>
+> >> The firmware never sets anything up. 
+> >>
+> >> When I cold boot the machine (from power on), the thunderbolt displays and tunnels
+> >> remain dark until linux initializes the thunderbolt driver the first time. 
+> >>  
+> >> If I compile the thunderbolt driver into the kernel, or let the initramfs load it
+> >> the displays come up, all PCIe tunnels are established and everything works.
+> >>
+> >> When I reboot the machine (reset button or warm boot), the firmware continues to
+> >> do nothing and all the tunnels remain in place. The machine dies when the thunderbolt 
+> >> driver is loaded for a second time.
+> >>
+> >> That might be a reset/warm boot with it compiled in or loaded from iniramfs.
+> >> It may also be me loading it from the command line after booting with it as a
+> >> module and blacklisted.
+> >>
+> >> The problem comes about when the thunderbolt module is loaded while the PCIe tunnels
+> >> are already established.
+> >>
+> >> To reproduce in the easiest manner I compile the thunderbolt driver as a module and
+> >> blacklist it. This prevents it from auto-loading.
+> >>
+> >> I cold boot the machine, let it boot completely then modprobe thunderbolt and authorize
+> >> the tunnels. I then warm boot which lets the kernel detect and init the DP displays
+> >> and detect/configure all the PCIe devices. The thunderbolt driver is not loaded.
+> >>
+> >> The machine comes up, all tunnels are established and all devices work.
+> >>
+> >> If I then modprobe the thunderbolt driver, things break.
+> >>
+> >> This is the hack in my boot script :
+> >>
+> >> # Spark up thunderbolt
+> >> if [ -z "`grep notb /proc/cmdline`" -a -z "`lsusb | grep '05ac:9227'`" ] ; then
+> >> 	modprobe thunderbolt
+> >> 	sleep 1
+> >> 	echo 1 > /sys/bus/thunderbolt/devices/0-3/authorized
+> >> 	echo 1 > /sys/bus/thunderbolt/devices/0-303/authorized
+> >> 	reboot
+> >> fi
+> > 
+> > Thanks for the clarification! How about on macOS side, does it work (I
+> > would expect yes)?
+> > 
+> 
+> Ahh, forgot about the laptop I'm typing this on. Yes, works fine in MacOS.
+
+Right. Okay does it reproduce with these steps?
+
+1. Boot the system up, nothing connected
+2. Plug in a TB1 display (just one)
+3. Authorize the PCIe tunnel
+
+  # echo 1 > /sys/bus/thunderbolt/...
+
+4. Unload the TBT driver
+
+  # rmmod thunderbolt
+
+5. Load it back
+
+  # modprobe thunderbolt dyndbg
+
+This should be pretty much the same as with the reboot case.

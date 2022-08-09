@@ -2,52 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F69B58D78A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BE258D791
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242634AbiHIKle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S241186AbiHIKmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242608AbiHIKlc (ORCPT
+        with ESMTP id S236541AbiHIKmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:41:32 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FCF24099
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:41:31 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id x2-20020a6bfe02000000b00682bffede8fso6006958ioh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 03:41:31 -0700 (PDT)
+        Tue, 9 Aug 2022 06:42:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57D97240A7
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660041761;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2wU77kUCNeTkF1cn8B/etxN35pV2qrtvMIoXHK0vfB8=;
+        b=axmr7EhwAW0qJIYpU4se6ZHDRLdar2G67AloX3hfI14R+NDB1YEVTzRun6F2W+zF01UK78
+        3kItJduQ3VVx3Gfha3ohBOVKPPjITuubaQLzMeNjtl9I/sKD0X3ImwRItCG/OHPLaPnQqJ
+        /Hsr5+/im8mgVe48p1oBmZK2w8AbPSQ=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-368-pw-hIko5OUWrNcQoz9oTiA-1; Tue, 09 Aug 2022 06:42:40 -0400
+X-MC-Unique: pw-hIko5OUWrNcQoz9oTiA-1
+Received: by mail-ej1-f72.google.com with SMTP id ho13-20020a1709070e8d00b00730a655e173so3294987ejc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 03:42:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=tUq98I7aR5JXGl5sCzEIGpj+bZOjTZ1Xlr+6Uy5x0Ls=;
-        b=tIzkzpzIwMLJ5eWcNhC/rndcAoXDob0DDIiIVNNYAfGfh3moNV0yVtIffiTLqNg1L/
-         tCIdwmE0xHTj1Ts41NQewGnmV3Iv8k+ZfUefmY3EE3FU2QAZx6P22gv3WDgN8TtZCz4C
-         lQRCHqxICxdMrXyN9XPFyV0RsA1wkGg6y07GPBEK8p6ylRd8KDaboVR8p4vJtSscvM1V
-         JUz0s4SBu1md+jQRQ0Ee+bZT0G/0q27dgd2lCpnDb96swfG21AYMJ96tRnbVclsJNhvp
-         fpdkZX+7oiuUaHu6+Pgg4+MzjyF6Poj7gV/E+VYmfyaU+KV2CXftq0biUGM6+GhvxRt7
-         S0Ow==
-X-Gm-Message-State: ACgBeo06Q8kxzqDvHZ8ETeZX2LfUYDF0kyu7Cjf/cD+Aai4M9NSsvD69
-        JXDca5E9aOlpWilK51Vd8WG+1tTLYTWSbFql/+JgHKIYHrBX
-X-Google-Smtp-Source: AA6agR43YaEMsUVc0nln447abeqEOnooti4uMdExknLZbeue8Dw4a9H4ecC1NOhlEGgjwc23KyBdSLEYB1ui7NliMkUNc7CZRNSg
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=2wU77kUCNeTkF1cn8B/etxN35pV2qrtvMIoXHK0vfB8=;
+        b=R7j5F04r5Eq7igINjfVIVwXNQKziBb+PQcydlTg1LrGdq7kLOzTv9gOAxvx7VlRqaz
+         +vuvFL9VPIyvvD+6M+kuKU1B2k3Ugh5ZyhkfMCpMqSOrcu9G9I7oZNz3D4u9gOURKv9Q
+         9+8KlaUWT1qNUXIoYUi0Firtnsq0AqYWzw1fvwDT+edwxhtzGu3D/e1+Y6e4qzrTiDd8
+         /YPXxQxeVxjTL+eK5gZtcLMuffmL+xp7iO+i55vHqXTWf1QV9VxnFPhIXlUTKKKFDBE4
+         JsoRRqo5ONwaUu11uU+OrO3G/n9yJo7nq97i6mUCbeCLOrYPbhJH4Oym5HRBIuQCa6Jj
+         noVA==
+X-Gm-Message-State: ACgBeo03qZI1DimWsm5ow8WGAeGNZJbv7SPq/eaeom27QhkGdkxi41RN
+        orqh5rA5ryCf6eLyaMi4CVtAjdFtcwmelrcuSv4U8DH1kcat1pXVWirEJgjUA5aoI5jCoYcEDaf
+        my4t5UM8X6z5OgLGzMP2vlUF9
+X-Received: by 2002:a17:907:1c9d:b0:732:f9da:aa51 with SMTP id nb29-20020a1709071c9d00b00732f9daaa51mr1108826ejc.654.1660041759014;
+        Tue, 09 Aug 2022 03:42:39 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4dwBXMrir1bhZ90knllSNXJ6IriUJkpeut7pGLGEfq3icbGS1zZfCNRRun+zm9ZUcJ60OBXg==
+X-Received: by 2002:a17:907:1c9d:b0:732:f9da:aa51 with SMTP id nb29-20020a1709071c9d00b00732f9daaa51mr1108816ejc.654.1660041758814;
+        Tue, 09 Aug 2022 03:42:38 -0700 (PDT)
+Received: from redhat.com ([2.52.152.113])
+        by smtp.gmail.com with ESMTPSA id p12-20020a1709066a8c00b0072af4af2f46sm998853ejr.74.2022.08.09.03.42.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 03:42:38 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 06:42:34 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, kernel@openvz.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] Unify how inflated memory is accounted in virtio
+ balloon driver
+Message-ID: <20220809063624-mutt-send-email-mst@kernel.org>
+References: <20220726140831.72816-1-alexander.atanasov@virtuozzo.com>
+ <20220726141047.72913-1-alexander.atanasov@virtuozzo.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3015:b0:341:de68:602c with SMTP id
- r21-20020a056638301500b00341de68602cmr10181049jak.10.1660041690986; Tue, 09
- Aug 2022 03:41:30 -0700 (PDT)
-Date:   Tue, 09 Aug 2022 03:41:30 -0700
-In-Reply-To: <000000000000ab752605e5c85e9a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004dbc5305e5cc93a6@google.com>
-Subject: Re: [syzbot] WARNING in blk_mq_release
-From:   syzbot <syzbot+31c9594f6e43b9289b25@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220726141047.72913-1-alexander.atanasov@virtuozzo.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,61 +80,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Tue, Jul 26, 2022 at 02:10:47PM +0000, Alexander Atanasov wrote:
+> Always account inflated memory as used for both cases - with and
+> without deflate on oom. Do not change total ram which can confuse
+> userspace and users.
+> 
+> Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 
-HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1446b746080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
-dashboard link: https://syzkaller.appspot.com/bug?extid=31c9594f6e43b9289b25
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=106b302a080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b1dae1080000
+I only noticed this patch accidentally since it looked like
+part of discussion on an older patch.
+Please do not do this, each version should be its own thread,
+if you want to link to previous discussion provide a
+cover letter and do it there.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+31c9594f6e43b9289b25@syzkaller.appspotmail.com
+> ---
+>  drivers/virtio/virtio_balloon.c | 13 ++-----------
+>  1 file changed, 2 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
+> index 97d3b29cb9f1..fa6ddec45fc4 100644
+> --- a/drivers/virtio/virtio_balloon.c
+> +++ b/drivers/virtio/virtio_balloon.c
+> @@ -244,9 +244,6 @@ static unsigned fill_balloon(struct virtio_balloon *vb, size_t num)
+>  
+>  		set_page_pfns(vb, vb->pfns + vb->num_pfns, page);
+>  		vb->num_pages += VIRTIO_BALLOON_PAGES_PER_PAGE;
+> -		if (!virtio_has_feature(vb->vdev,
+> -					VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+> -			adjust_managed_page_count(page, -1);
+>  		vb->num_pfns += VIRTIO_BALLOON_PAGES_PER_PAGE;
+>  	}
+>  
+> @@ -265,9 +262,6 @@ static void release_pages_balloon(struct virtio_balloon *vb,
+>  	struct page *page, *next;
+>  
+>  	list_for_each_entry_safe(page, next, pages, lru) {
+> -		if (!virtio_has_feature(vb->vdev,
+> -					VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+> -			adjust_managed_page_count(page, 1);
+>  		list_del(&page->lru);
+>  		put_page(page); /* balloon reference */
+>  	}
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 23016 at block/blk-mq.c:3881 blk_mq_release+0xf8/0x3e0 block/blk-mq.c:3881
-Modules linked in:
-CPU: 1 PID: 23016 Comm: syz-executor588 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:blk_mq_release+0xf8/0x3e0 block/blk-mq.c:3881
-Code: fd 4c 8d a3 a8 02 00 00 4c 89 e0 48 c1 e8 03 80 3c 28 00 0f 85 14 02 00 00 48 8b 83 a8 02 00 00 49 39 c4 75 b1 e8 48 e4 96 fd <0f> 0b eb a8 e8 3f e4 96 fd 48 8b 44 24 10 48 05 18 05 00 00 48 89
-RSP: 0018:ffffc900032bfc60 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88807a8e8800 RCX: 0000000000000000
-RDX: ffff88807cd89d80 RSI: ffffffff83e3f578 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: ffff88807a8e8aa8
-R13: ffff88807ab0db40 R14: ffff88807ab0db88 R15: 0000000000000000
-FS:  0000555555af3300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fbf573219f0 CR3: 000000007deea000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- blk_release_queue+0x153/0x270 block/blk-sysfs.c:780
- kobject_cleanup lib/kobject.c:673 [inline]
- kobject_release lib/kobject.c:704 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1c8/0x540 lib/kobject.c:721
- __alloc_disk_node+0x4f7/0x610 block/genhd.c:1388
- __blk_mq_alloc_disk+0x13b/0x1f0 block/blk-mq.c:3961
- loop_add+0x3e2/0xaf0 drivers/block/loop.c:1978
- loop_control_ioctl+0x133/0x620 drivers/block/loop.c:2150
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fbf572f20b9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffca9b31288 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fbf572f20b9
-RDX: 000000000000000c RSI: 0000000000004c80 RDI: 0000000000000003
-RBP: 00007ffca9b312a0 R08: 0000000000000002 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+We adjusted total ram with balloon usage for many years.  I don't think
+we can just drop this accounting using "can confuse userspace" as a
+justification - any userspace that's confused by this has been confused
+since approximately forever.
+
+> @@ -750,12 +744,9 @@ static void report_free_page_func(struct work_struct *work)
+>  static int virtio_balloon_debug_show(struct seq_file *f, void *offset)
+>  {
+>  	struct virtio_balloon *vb = f->private;
+> -	s64 num_pages = vb->num_pages << (VIRTIO_BALLOON_PFN_SHIFT - 10);
+> +	u64 num_pages = vb->num_pages << (VIRTIO_BALLOON_PFN_SHIFT - 10);
+>  
+> -	if (!virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+> -		num_pages = -num_pages;
+> -
+> -	seq_printf(f, "inflated: %lld kB\n", num_pages);
+> +	seq_printf(f, "inflated: %llu kB\n", num_pages);
+>  
+>  	return 0;
+
+I don't much like it when patch 1 adds code only for patch 2 to drop it.
+
+>  }
+> -- 
+> 2.25.1
 

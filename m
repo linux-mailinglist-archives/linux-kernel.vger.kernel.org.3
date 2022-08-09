@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E4458DC7F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6103758DC7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245106AbiHIQwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
+        id S245068AbiHIQw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245070AbiHIQwj (ORCPT
+        with ESMTP id S231377AbiHIQwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:52:39 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB29D2229C
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:52:37 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id o184so4662549oif.13
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 09:52:37 -0700 (PDT)
+        Tue, 9 Aug 2022 12:52:25 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9DB205DC;
+        Tue,  9 Aug 2022 09:52:23 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id qn6so11440575ejc.11;
+        Tue, 09 Aug 2022 09:52:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=U/D22wA89KCZ8FoM5lxlmalnb8zbCkLG8x+Wao6IKHs=;
-        b=gri5en4j1Nf3AVExb/xtD1i/SndOYTeJjQtSC4usRK/O5d48jIap8p682Zeazqp1Pe
-         ipEbBmYcoxs2HYZIFr0omCnqtPLNcjZBirFyZdioPg2ZHJTdjjl3rybGv5A8NN8sEr2D
-         j/46Th9HahRaqHle8jwPoK5mftTBUmii9vmBapkxypM1FxDjqyr8XLKNjh7zeXnt2/do
-         wB/lJlW0htmLpjlsTEnwrlPtWZEKxAXiszhwYqKQSPvWhm0V6psnPZtA7vYtrguTQ8qm
-         P0tnIJh4/g7qzJlNnNSX9XeWQuoDh5KaFvMiDWpq29FKzA3WM7kDA7XCjhYsgnVyiCoB
-         uyiA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b//2P5QQ32/pGyn6aed1lkkzkqr+LSUGlrXbbSDazfc=;
+        b=RGA5z9FT4OHrVAMVkvoHsCzR0eQTkvTeVZfrNbEIPNqbqbaG+Dcq/YMe6cignJqOBY
+         5AG7fH4loTNQbt45XunkZT9tiEkGNrwZM1iM7AkUFOmNdQgBY3wHdWLVm9dLrlXsm7G7
+         ngXHVDPrSNK+AMWs/yXjpjD3fk/lQeU22J3CsnIUjdZNAH2QTGRwDUuKxuI3iM5qUxFc
+         mBlsfHYZfyp2g8Zve3rZS/J0cef/pWktWMrEGm7S66PeDg2JvnOjd7xHj98+6HYdUcf2
+         af9zbL+6ez6Hrh5eAQ6IAyavp+mW3wdd8YQdBdOOV7CoKyQBN7bgMv+uJ9F+qsd17mRy
+         yj+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=U/D22wA89KCZ8FoM5lxlmalnb8zbCkLG8x+Wao6IKHs=;
-        b=szFjOxx0purwShU0nrjxjsafmJYF5KaETn0c/uE8MVCjFUEeL2G3CHXGTZRCcmKxJf
-         ZjjEOU/9FiaR5TYSaKpY7/nGssj7WF1LwNtI0mwiXuisLxcS7lTLyqfiOUo5dAMNgYvM
-         OwlRNhEtNY+arSieOf2JtXIiFeVM3yDIuwY1BU8gh3+P/Gg/u7lnPXeqESGolFL53eGw
-         Mp2qiVS1sgSwEzplcO7ACrvAjau2nzZBGnuxxznnLha5bg2K1gnC2vDJaeP3ZttuY3Se
-         t3j6WzqOilJo7GDovcwWTt3uYLyRU/aFYUxMZ6uqgUU3yaLZ4Dk95DIhR2NcsESmcNsH
-         2iCw==
-X-Gm-Message-State: ACgBeo0/CeZNwZgzJe1tJghig5W6qNEzgNFkcLEMzSbPVMrGQn+n98RY
-        AT2MUNCLBREsd4FlduLW84EZtLKD1Nw5Og5BFI1ELg==
-X-Google-Smtp-Source: AA6agR4EANbHbB06m6UK0Z8LDAx9jyRV3DCFcB8+aJ4dmS8ZHdO7iP7HvmWEfgbIWxIpnUmtw3QmaRRsASv33ufBVR4=
-X-Received: by 2002:a05:6808:16a3:b0:326:a585:95b8 with SMTP id
- bb35-20020a05680816a300b00326a58595b8mr13853758oib.281.1660063957038; Tue, 09
- Aug 2022 09:52:37 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b//2P5QQ32/pGyn6aed1lkkzkqr+LSUGlrXbbSDazfc=;
+        b=X+7henlGnlkixlWHfJHgW7FOWRIevObU5SBVcCIkempKhXc8XyDAopxB0JdOhE5IK9
+         1f2zGjhcFJ6hLyVQIlg3e7a0uHIhfWcQ3z59nbU1xdPTXNX2wrtKa1sCSVPN7Qm8LuIe
+         Il3H9YWNRC5TpVN11cpLgtq9Ftwd69c9VVqAZDVU8STyn96BUycVP2p/y9xUl5lJ0BjC
+         mkk0+t9TWFmgYGMwXVDrgfOSokOe+huJ9DbMWQgOZBUQjvc9U8K1rKlgBI/gkx/ESX7x
+         wCNUz0LI+fnSPQGWrwTMZE2WeUoIDHv+8Z01ovXEVpaxPwugWGEFHg4RlDeXoSU3Fw5p
+         9MQw==
+X-Gm-Message-State: ACgBeo1MYXkXhdnRWdDY9ku9wduZDmihFCj8ElOMCVpB19JpojYk9Da/
+        AcwKSf7N4dvZZcAzhrXdz/tx2EAnaW3HE6TClwIfmet4
+X-Google-Smtp-Source: AA6agR7MYkhah9c4C2KEdtZV7/vFdlFIGyuB0Bsdr+Hvk93tOu+RmtOHoHIuxxiXV2wfOtm3iuNNAml1ExUyKAF706U=
+X-Received: by 2002:a17:907:7da0:b0:730:fe97:f899 with SMTP id
+ oz32-20020a1709077da000b00730fe97f899mr13880237ejc.369.1660063941996; Tue, 09
+ Aug 2022 09:52:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220801151928.270380-1-vipinsh@google.com> <YuhPT2drgqL+osLl@google.com>
- <YuhoJUoPBOu5eMz8@google.com> <YulRZ+uXFOE1y2dj@google.com>
- <YuldSf4T2j4rIrIo@google.com> <4ccbafb5-9157-ec73-c751-ec71164f8688@redhat.com>
- <Yul3A4CmaAHMui2Z@google.com> <cedcced0-b92c-07bd-ef2b-272ae58fdf40@redhat.com>
- <CAHVum0c=s8DH=p8zJcGzYDsfLY_qHEmvD1uF58h5WoUk6ZF8rQ@mail.gmail.com>
-In-Reply-To: <CAHVum0c=s8DH=p8zJcGzYDsfLY_qHEmvD1uF58h5WoUk6ZF8rQ@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
+References: <20220722195406.1304948-2-joannelkoong@gmail.com>
+ <Yt1RXVnI27iLwxr0@xsang-OptiPlex-9020> <CAJnrk1aX6x79AzFPVk1QwU4ivd5AeYwz6Fe2z6HLunBSBA20yg@mail.gmail.com>
+ <cdf30331-483b-a96c-7f6a-336099ebdfe1@intel.com>
+In-Reply-To: <cdf30331-483b-a96c-7f6a-336099ebdfe1@intel.com>
+From:   Joanne Koong <joannelkoong@gmail.com>
 Date:   Tue, 9 Aug 2022 09:52:10 -0700
-Message-ID: <CALzav=ccxkAWk7ddqbJ_qPL2-=bXVZUEpWgwKpJ1oCtc_8w7WQ@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Make page tables for eager page splitting
- NUMA aware
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+Message-ID: <CAJnrk1Y4WOHohQFp_+_OUuAQfKS7BewgmKp4V+MF3EMGTxcR=w@mail.gmail.com>
+Subject: Re: [net] 03d56978dd: BUG:Bad_page_map_in_process
+To:     Yujie Liu <yujie.liu@intel.com>
+Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, dccp@vger.kernel.org,
+        lkp@lists.01.org, Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@davemloft.net>,
+        kernel test robot <oliver.sang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,91 +74,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 4:30 PM Vipin Sharma <vipinsh@google.com> wrote:
-[...]
+On Fri, Aug 5, 2022 at 12:30 AM Yujie Liu <yujie.liu@intel.com> wrote:
 >
-> Here are the two approaches, please provide feedback on which one
-> looks more appropriate before I start spamming your inbox with my
-> patches
+> Hi Joanne,
 >
-> Approach A:
-> Have per numa node cache for page table pages allocation
+> On 7/28/2022 07:41, Joanne Koong wrote:
+> > On Sun, Jul 24, 2022 at 7:05 AM kernel test robot <oliver.sang@intel.com> wrote:
+> >>
+> >>
+> >>
+> >> Greeting,
+> >>
+> >> FYI, we noticed the following commit (built with gcc-11):
+> >>
+> >> commit: 03d56978dd246147e151916e4dc72af7bc24d5c9 ("[PATCH net-next v3 1/3] net: Add a bhash2 table hashed by port + address")
+> >> url: https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/Add-a-second-bind-table-hashed-by-port-address/20220723-035903
+> >> base: https://git.kernel.org/cgit/linux/kernel/git/davem/net-next.git 949d6b405e6160ae44baea39192d67b39cb7eeac
+> >> patch link: https://lore.kernel.org/netdev/20220722195406.1304948-2-joannelkoong@gmail.com
+> >>
+> >> in testcase: boot
+> >>
+> >> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> >>
+> >> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> >>
+> >>
+> >>
+> >> If you fix the issue, kindly add following tag
+> >> Reported-by: kernel test robot <oliver.sang@intel.com>
+> >>
+> >>
+> >> [  103.871133][  T486] BUG: Bad page map in process rsync  pte:ffff92f93b759508 pmd:13fc1e067
+> >> [  103.873143][  T486] addr:00007f9fe52a2000 vm_flags:00000075 anon_vma:0000000000000000 mapping:ffff92f928adcb58 index:1a1
+> >> [  103.875128][  T486] file:libcrypto.so.1.1 fault:filemap_fault mmap:generic_file_mmap read_folio:simple_read_folio
+> >> [  103.877339][  T486] CPU: 0 PID: 486 Comm: rsync Not tainted 5.19.0-rc7-01443-g03d56978dd24 #1
+> >> [  103.879032][  T486] Call Trace:
+> >> [  103.879742][  T486]  <TASK>
+> >> [  103.880329][  T486]  ? simple_write_end+0x140/0x140
+> >> [  103.881338][  T486]  dump_stack_lvl+0x3b/0x53
+> >> [  103.882274][  T486]  ? __filemap_get_folio+0x780/0x780
+> >> [  103.883270][  T486]  print_bad_pte.cold+0x15b/0x1c5
+> >> [  103.884202][  T486]  vm_normal_page+0x65/0x140
+> >> [  103.885062][  T486]  zap_pte_range+0x23b/0x9c0
+> >> [  103.885897][  T486]  unmap_page_range+0x263/0x5c0
+> >> [  103.886846][  T486]  unmap_vmas+0x121/0x200
+> >> [  103.887628][  T486]  exit_mmap+0xb5/0x240
+> >> [  103.888401][  T486]  mmput+0x3b/0x140
+> >> [  103.889134][  T486]  exit_mm+0xff/0x180
+> >> [  103.889877][  T486]  do_exit+0x100/0x400
+> >> [  103.890661][  T486]  do_group_exit+0x3e/0x100
+> >> [  103.891514][  T486]  __x64_sys_exit_group+0x18/0x40
+> >> [  103.892494][  T486]  do_syscall_64+0x5d/0x80
+> >> [  103.893294][  T486]  ? do_user_addr_fault+0x257/0x6c0
+> >> [  103.894238][  T486]  ? lock_release+0x6e/0x100
+> >> [  103.895171][  T486]  ? up_read+0x12/0x40
+> >> [  103.896036][  T486]  ? exc_page_fault+0xb2/0x2c0
+> >> [  103.897021][  T486]  entry_SYSCALL_64_after_hwframe+0x5d/0xc7
+> >> [  103.898243][  T486] RIP: 0033:0x7f9fe5007699
+> >> [  103.899149][  T486] Code: Unable to access opcode bytes at RIP 0x7f9fe500766f.
+> >> [  103.900511][  T486] RSP: 002b:00007fff7e32c3a8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+> >> [  103.902027][  T486] RAX: ffffffffffffffda RBX: 00007f9fe50fc610 RCX: 00007f9fe5007699
+> >> [  103.903477][  T486] RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+> >> [  103.904943][  T486] RBP: 0000000000000000 R08: ffffffffffffff80 R09: 0000000000000001
+> >> [  103.906384][  T486] R10: 000000000000000b R11: 0000000000000246 R12: 00007f9fe50fc610
+> >> [  103.907823][  T486] R13: 0000000000000001 R14: 00007f9fe50fcae8 R15: 0000000000000000
+> >> [  103.909290][  T486]  </TASK>
+> >> [  103.910423][  T486] Disabling lock debugging due to kernel taint
+> >> [  107.503093][  T508] BUG: Bad page map in process rsync  pte:ffff92f93b7fe508 pmd:13aa1c067
+> >> [  107.504948][  T508] addr:00007fced9aa2000 vm_flags:00000075 anon_vma:0000000000000000 mapping:ffff92f92891ab58 index:9a
+> >> [  107.507070][  T508] file:libzstd.so.1.4.8 fault:filemap_fault mmap:generic_file_mmap read_folio:simple_read_folio
+> >> [  107.508825][  T508] CPU: 0 PID: 508 Comm: rsync Tainted: G    B             5.19.0-rc7-01443-g03d56978dd24 #1
+> >> [  107.510762][  T508] Call Trace:
+> >> [  107.511458][  T508]  <TASK>
+> >> [  107.512058][  T508]  ? simple_write_end+0x140/0x140
+> >> [  107.513072][  T508]  dump_stack_lvl+0x3b/0x53
+> >> [  107.513990][  T508]  ? __filemap_get_folio+0x780/0x780
+> >> [  107.519166][  T508]  print_bad_pte.cold+0x15b/0x1c5
+> >> [  107.520032][  T508]  vm_normal_page+0x65/0x140
+> >> [  107.520802][  T508]  zap_pte_range+0x23b/0x9c0
+> >> [  107.521548][  T508]  unmap_page_range+0x263/0x5c0
+> >> [  107.522355][  T508]  unmap_vmas+0x121/0x200
+> >> [  107.523247][  T508]  exit_mmap+0xb5/0x240
+> >> [  107.524107][  T508]  mmput+0x3b/0x140
+> >> [  107.524908][  T508]  exit_mm+0xff/0x180
+> >> [  107.525716][  T508]  do_exit+0x100/0x400
+> >> [  107.526613][  T508]  do_group_exit+0x3e/0x100
+> >> [  107.527541][  T508]  __x64_sys_exit_group+0x18/0x40
+> >> [  107.528450][  T508]  do_syscall_64+0x5d/0x80
+> >> [  107.529368][  T508]  ? up_read+0x12/0x40
+> >> [  107.530228][  T508]  ? do_user_addr_fault+0x257/0x6c0
+> >> [  107.531121][  T508]  ? rcu_read_lock_sched_held+0x5/0x40
+> >> [  107.532046][  T508]  ? exc_page_fault+0xb2/0x2c0
+> >> [  107.532843][  T508]  entry_SYSCALL_64_after_hwframe+0x5d/0xc7
+> >> [  107.533866][  T508] RIP: 0033:0x7fced95ff699
+> >> [  107.534781][  T508] Code: Unable to access opcode bytes at RIP 0x7fced95ff66f.
+> >> [  107.536225][  T508] RSP: 002b:00007fff162474c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+> >> [  107.537871][  T508] RAX: ffffffffffffffda RBX: 00007fced96f4610 RCX: 00007fced95ff699
+> >> [  107.539506][  T508] RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+> >> [  107.541126][  T508] RBP: 0000000000000000 R08: ffffffffffffff80 R09: 0000000000000001
+> >> [  107.542743][  T508] R10: 000000000000000b R11: 0000000000000246 R12: 00007fced96f4610
+> >> [  107.544310][  T508] R13: 0000000000000001 R14: 00007fced96f4ae8 R15: 0000000000000000
+> >> [  107.545881][  T508]  </TASK>
+> >>
+> >>
+> >>
+> >> To reproduce:
+> >>
+> >>          # build kernel
+> >>          cd linux
+> >>          cp config-5.19.0-rc7-01443-g03d56978dd24 .config
+> >>          make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+> >>          make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+> >>          cd <mod-install-dir>
+> >>          find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+> >>
+> >>
+> >>          git clone https://github.com/intel/lkp-tests.git
+> >>          cd lkp-tests
+> >>          bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+> >>
+> >>          # if come across any failure that blocks the test,
+> >>          # please remove ~/.lkp and /lkp dir to run from a clean state.
+> >>
+> > I ran this in a loop ~20 times but I'm not able to repro the crash.
+> > This is a snippet of what I see (and I can also attach or paste the
+> > entire log if that would be helpful):
+> >
+> > I examined more closely the changes between v2 and v3 and I don't see
+> > anything that would lead to this error either (I'm assuming  v2 is
+> > okay because this report wasn't generated for it). Looking at the
+> > stack trace too, I'm not seeing anything that sticks out (eg this
+> > looks like a memory mapping failure and bhash2 didn't modify mapping
+> > or paging code).
 >
-> Instead of having only one mmu_shadow_page_cache per vcpu, we provide
-> multiple caches for each node
+> We chose commit 949d6b405e61 (net: add missing includes and forward
+> declarations under net/) as base, which used to be the head of
+> net-next/master branch then, and apply your v3 patches on top of it.
+> So the test result is a comparison between 949d6b405e61 and v3.
 >
-> either:
-> mmu_shadow_page_cache[MAX_NUMNODES]
-> or
-> mmu_shadow_page_cache->objects[MAX_NUMNODES * KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE]
+> Refer to the bug info:
+>
+> [  103.871133][  T486] BUG: Bad page map in process rsync  pte:ffff92f93b759508 pmd:13fc1e067
+>
+> The BUG happens in rsync, and it reminds me that we have some extra
+> steps when running the test in our infrastructure. We will use some
+> commands such as `wget` and `rsync` to transfer the test result to
+> our server, but these steps are not included when reproducing locally.
+>
+> Then I come up with an idea that maybe the kernel can boot successfully,
+> but the v3 patch may have some impacts on the command involving network
+> operations.
+>
+> Could you please help to apply below hack on the latest version of
+> lkp-tests, and retry to see if can reproduce the crash? It is just
+> a meaningless `wget` command to involve network in local test and align
+> with the steps in our testing environment.
 
-I think the former approach will work better. The objects[] array is
-allocated dynamically during top-up now, so if a vCPU never allocates
-a page table to map memory on a given node, KVM will never have to
-allocate an objects[] array for that node. Whereas with the latter
-approach KVM would have to allocate the entire objects[] array
-up-front.
+I will try to repro this this week. I'll let you know what I find.
 
 >
-> We can decrease KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE to some lower value
-> instead of 40 to control memory consumption.
-
-I'm not sure we are getting any performance benefit from the cache
-size being so high. It doesn't fundamentally change the number of
-times a vCPU thread will have to call __get_free_page(), it just
-batches more of those calls together. Assuming reducing the cache size
-doesn't impact performance, I think it's a good idea to reduce it as
-part of this feature.
-
-KVM needs at most PT64_ROOT_MAX_LEVEL (5) page tables to handle a
-fault. So we could decrease the mmu_shadow_page_cache.objects[]
-capacity to PT64_ROOT_MAX_LEVEL (5) and support up to 8 NUMA nodes
-without increasing memory usage. If a user wants to run a VM on an
-even larger machine, I think it's safe to consume a few extra bytes
-for the vCPU shadow page caches at that point (the machine probably
-has 10s of TiB of RAM).
-
+> diff --git a/lib/upload.sh b/lib/upload.sh
+> index 257b498db..e8801736e 100755
+> --- a/lib/upload.sh
+> +++ b/lib/upload.sh
+> @@ -181,7 +181,8 @@ upload_files()
+>                  fi
+>          else
+>                  # 9pfs, copy directly
+> -               upload_files_copy "$@"
+> +               wget 127.0.0.1
+>                  return
+>          fi
+>   }
 >
-> When a fault happens, use the pfn to find which node the page should
-> belong to and use the corresponding cache to get page table pages.
+> After applying above hack, I've tried to run 20 times on base and v3 patch
+> respectively. All runs of base are good, but there are 8 crash runs of v3.
 >
-> struct *page = kvm_pfn_to_refcounted_page(pfn);
-> int nid;
-> if(page) {
->       nid = page_to_nid(page);
-> } else {
->      nid = numa_node_id();
-> }
+> Reproducing steps:
 >
-> ...
-> tdp_mmu_alloc_sp(nid, vcpu);
-> ...
+>         cd linux
+>         git remote add net-next https://git.kernel.org/cgit/linux/kernel/git/davem/net-next.git
+>         git fetch net-next master
+>         git checkout 949d6b405e61 # checkout to base
+>         git am <v3.patch>
 >
-> static struct kvm_mmu_page *tdp_mmu_alloc_sp(int nid, struct kvm_vcpu *vcpu) {
-> ...
->       sp->spt = kvm_mmu_memory_cache_alloc(nid,
-> &vcpu->arch.mmu_shadow_page_cache);
-> ...
-> }
+>         cp config-5.19.0-rc7-01443-g03d56978dd24 .config # config file is attached
+>         make ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+>         mkdir <mod-install-dir>
+>         make ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+>         cd <mod-install-dir>
+>         find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
 >
+>          git clone https://github.com/intel/lkp-tests.git
+>          cd lkp-tests
+>         # apply the hack mentioned above
+>          bin/lkp qemu -k <bzImage> -m <mod-install-dir>/modules.cgz job-script # job-script is attached in this email
 >
-> Since we are changing cache allocation for page table pages, should we
-> also make similar changes for other caches like mmu_page_header_cache,
-> mmu_gfn_array_cache, and mmu_pte_list_desc_cache? I am not sure how
-> good this idea is.
-
-We don't currently have a reason to make these objects NUMA-aware, so
-I would only recommend it if it somehow makes the code a lot simpler.
-
+> --
+> Best Regards,
+> Yujie
 >
-> Approach B:
-> Ask page from the specific node on fault path with option to fallback
-> to the original cache and default task policy.
->
-> This is what Sean's rough patch looks like.
-
-This would definitely be a simpler approach but could increase the
-amount of time a vCPU thread holds the MMU lock when handling a fault,
-since KVM would start performing GFP_NOWAIT allocations under the
-lock. So my preference would be to try the cache approach first and
-see how complex it turns out to be.
+> >
+> > I don't think this bug report is related to the bhash2 changes. But
+> > please let me know if you disagree.
+> >
+> > Thanks,
+> > Joanne
+> >
+> >>
+> >>
+> >> --
+> >> 0-DAY CI Kernel Test Service
+> >> https://01.org/lkp
+> >>
+> >>

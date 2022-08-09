@@ -2,248 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A341558DE1E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A3358DE67
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344351AbiHISM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
+        id S1343740AbiHISO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345630AbiHISLX (ORCPT
+        with ESMTP id S1345870AbiHISLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:11:23 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A322AC7D
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:04:39 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id d1so9180206qvs.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=AGXlveyh5TLpsrDgf8RwaOkmL4JauFlDvuGk+n+yw40=;
-        b=Bw5aCbEXfvJbtihUxgvA3VyPTiPCtS3n8zgsMDd9uCfu7TNSH5TyVFJLlMCD1+yk8n
-         5e8mcqNs+ATfCB+Nt+MNMvjp6fMpNQMMr+o2g7R0ZsSozhdefGedt8eenTES6RvTlQTp
-         T7++BbXSFQ6spJ9M3g6qez9fv9k2/k4Qh6uDaUtpMQy4PDPOX/WdKMLiTHnryo+o0QYS
-         8oe+svkvRqorNF6hfoSX1xvAFvv4LBG0CvTbTfQnR6UlnIfO2nOwEo0jZ1k5vywST/zi
-         fRpdqir9BRi38kGfnfRyYxEIIWhEv8PbJ9oPfNnirAzmeer8CrR/5YYYRCyiuJTX/pWE
-         irIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=AGXlveyh5TLpsrDgf8RwaOkmL4JauFlDvuGk+n+yw40=;
-        b=kc54WXaYJ9kW4Bhw0X2gsWzj8eOHOvVe7Dg6HLruQCWbub/SO+HX8ch7F1AoQKAJlE
-         TBWR1iFB+fOW6wXynN99r15+CdbU/zqxuWFHsAGkI1lYfS2Srj+ikbffvXJJ7WGmbsV6
-         6VK5qYPytqKsWQtWnu3wR3J+EVFL1w3Xf7+DQA1ccy0vDMvcdnTpVVoY22Et+Zbl7HHU
-         ILsKr+8WmEuoxgxVfzorTG+n+Xc8o4YhA2Xp0fHhLJh0/qTj4RGfNmvPTtCbQEVU9t2m
-         s+qN/HmqbgyiPeDTQOmUSwKb1dkjKbW8jYBQ5NTTwUTxyIV+juAgMY9EvrIc52cTCxCe
-         WwCA==
-X-Gm-Message-State: ACgBeo0GJxFJkCb1lAkVjhV4ArDTLnGCMsrsT7NMSQpRbT9VCyu2BRuk
-        wLxBkx/4SpE1H9AhaZO03ZXUwA==
-X-Google-Smtp-Source: AA6agR6Hz1qYBNR87pLiH9uIpKO/emczZkshOWvGgEmkbFeSNzCHE2/R4I+N+SVf07F3M4mrQaf9og==
-X-Received: by 2002:ad4:5de6:0:b0:47b:2c2c:95a with SMTP id jn6-20020ad45de6000000b0047b2c2c095amr12755282qvb.8.1660068278154;
-        Tue, 09 Aug 2022 11:04:38 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1700:42f0:6600:b19b:cbb5:a678:767c])
-        by smtp.gmail.com with ESMTPSA id u33-20020a05622a19a100b00342e86b3bdasm8905881qtc.12.2022.08.09.11.04.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Aug 2022 11:04:36 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH 2/3] hfs: Replace kmap() with kmap_local_page() in bnode.c
-From:   Viacheslav Dubeyko <slava@dubeyko.com>
-In-Reply-To: <20220809152004.9223-3-fmdefrancesco@gmail.com>
-Date:   Tue, 9 Aug 2022 11:04:34 -0700
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <001D72B9-CB6A-4025-99CA-B3C02E1D5E0A@dubeyko.com>
-References: <20220809152004.9223-1-fmdefrancesco@gmail.com>
- <20220809152004.9223-3-fmdefrancesco@gmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 9 Aug 2022 14:11:53 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B302F2B240;
+        Tue,  9 Aug 2022 11:05:02 -0700 (PDT)
+Date:   Tue, 09 Aug 2022 18:04:53 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660068296;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=81ZQ63nPkM9CSzyuw77Sv89rOSrkq0ThYb9yTC3BSxk=;
+        b=sl2Dy1lZ+sp1HDr/0dReFXU4Ikjyy14z1/zzA0dApXqcGukpDSfqb9mj0H92n06lEtweqD
+        L3YCRvzsuzmnjhLvZkt3yj2z7CjEokPUIXauxiHX73hgCqr1OEGWGjFLuJaTxTLgsNx42L
+        d8Hu5nQqOspJkrB/h4/Eq39n4pJ1OoOTKF68DCma+Na27BEC92NRPLNy+hxy/a3WiGDlJA
+        qALi/fNu6cMAfEmm4kezFhKl+iYbBDasLLsiX1o2sTx0fzs4HHA07UBIv/6JLX+hAPyePw
+        ChKOIAhDjOB3SnDuFkTLm1NAyk/xXa51I0njT14SirNQOd2GtHH8tSZY+yM3hg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660068296;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=81ZQ63nPkM9CSzyuw77Sv89rOSrkq0ThYb9yTC3BSxk=;
+        b=7zFNvZUqBuNY0Wd9G7A/zMP82l1aW5Z9XuEmDwRqSCFB6LzsZZilAm6d3Xy7xucVlktIAu
+        DFmLTmg2xvFIylCg==
+From:   "tip-bot2 for Thadeu Lima de Souza Cascardo" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: timers/urgent] posix-cpu-timers: Cleanup CPU timers before
+ freeing them during exec
+Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Thomas Gleixner <tglx@linutronix.de>, <stable@vger.kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220809170751.164716-1-cascardo@canonical.com>
+References: <20220809170751.164716-1-cascardo@canonical.com>
+MIME-Version: 1.0
+Message-ID: <166006829371.15455.12477315109108649290.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the timers/urgent branch of tip:
 
+Commit-ID:     e362359ace6f87c201531872486ff295df306d13
+Gitweb:        https://git.kernel.org/tip/e362359ace6f87c201531872486ff295df306d13
+Author:        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+AuthorDate:    Tue, 09 Aug 2022 14:07:51 -03:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Tue, 09 Aug 2022 20:02:13 +02:00
 
-> On Aug 9, 2022, at 8:20 AM, Fabio M. De Francesco =
-<fmdefrancesco@gmail.com> wrote:
->=20
-> kmap() is being deprecated in favor of kmap_local_page().
->=20
-> Two main problems with kmap(): (1) It comes with an overhead as =
-mapping
-> space is restricted and protected by a global lock for synchronization =
-and
-> (2) it also requires global TLB invalidation when the kmap=E2=80=99s =
-pool wraps
-> and it might block when the mapping space is fully utilized until a =
-slot
-> becomes available.
->=20
-> With kmap_local_page() the mappings are per thread, CPU local, can =
-take
-> page faults, and can be called from any context (including =
-interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> the tasks can be preempted and, when they are scheduled to run again, =
-the
-> kernel virtual addresses are restored and still valid.
->=20
-> Since its use in bnode.c is safe everywhere, it should be preferred.
->=20
-> Therefore, replace kmap() with kmap_local_page() in bnode.c. Where
-> possible, use the suited standard helpers (memzero_page(), =
-memcpy_page())
-> instead of open coding kmap_local_page() plus memset() or memcpy().
->=20
-> Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
-> HIGHMEM64GB enabled.
->=20
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
+posix-cpu-timers: Cleanup CPU timers before freeing them during exec
 
-Looks good.
+Commit 55e8c8eb2c7b ("posix-cpu-timers: Store a reference to a pid not a
+task") started looking up tasks by PID when deleting a CPU timer.
 
-Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
+When a non-leader thread calls execve, it will switch PIDs with the leader
+process. Then, as it calls exit_itimers, posix_cpu_timer_del cannot find
+the task because the timer still points out to the old PID.
 
-Thanks,
-Slava.
+That means that armed timers won't be disarmed, that is, they won't be
+removed from the timerqueue_list. exit_itimers will still release their
+memory, and when that list is later processed, it leads to a
+use-after-free.
 
+Clean up the timers from the de-threaded task before freeing them. This
+prevents a reported use-after-free.
 
-> fs/hfs/bnode.c | 32 ++++++++++++--------------------
-> 1 file changed, 12 insertions(+), 20 deletions(-)
->=20
-> diff --git a/fs/hfs/bnode.c b/fs/hfs/bnode.c
-> index c83fd0e8404d..2015e42e752a 100644
-> --- a/fs/hfs/bnode.c
-> +++ b/fs/hfs/bnode.c
-> @@ -21,7 +21,6 @@ void hfs_bnode_read(struct hfs_bnode *node, void =
-*buf, int off, int len)
-> 	int pagenum;
-> 	int bytes_read;
-> 	int bytes_to_read;
-> -	void *vaddr;
->=20
-> 	off +=3D node->page_offset;
-> 	pagenum =3D off >> PAGE_SHIFT;
-> @@ -33,9 +32,7 @@ void hfs_bnode_read(struct hfs_bnode *node, void =
-*buf, int off, int len)
-> 		page =3D node->page[pagenum];
-> 		bytes_to_read =3D min_t(int, len - bytes_read, PAGE_SIZE =
-- off);
->=20
-> -		vaddr =3D kmap_atomic(page);
-> -		memcpy(buf + bytes_read, vaddr + off, bytes_to_read);
-> -		kunmap_atomic(vaddr);
-> +		memcpy_from_page(buf + bytes_read, page, off, =
-bytes_to_read);
->=20
-> 		pagenum++;
-> 		off =3D 0; /* page offset only applies to the first page =
-*/
-> @@ -80,8 +77,7 @@ void hfs_bnode_write(struct hfs_bnode *node, void =
-*buf, int off, int len)
-> 	off +=3D node->page_offset;
-> 	page =3D node->page[0];
->=20
-> -	memcpy(kmap(page) + off, buf, len);
-> -	kunmap(page);
-> +	memcpy_to_page(page, off, buf, len);
-> 	set_page_dirty(page);
-> }
->=20
-> @@ -105,8 +101,7 @@ void hfs_bnode_clear(struct hfs_bnode *node, int =
-off, int len)
-> 	off +=3D node->page_offset;
-> 	page =3D node->page[0];
->=20
-> -	memset(kmap(page) + off, 0, len);
-> -	kunmap(page);
-> +	memzero_page(page, off, len);
-> 	set_page_dirty(page);
-> }
->=20
-> @@ -123,9 +118,7 @@ void hfs_bnode_copy(struct hfs_bnode *dst_node, =
-int dst,
-> 	src_page =3D src_node->page[0];
-> 	dst_page =3D dst_node->page[0];
->=20
-> -	memcpy(kmap(dst_page) + dst, kmap(src_page) + src, len);
-> -	kunmap(src_page);
-> -	kunmap(dst_page);
-> +	memcpy_page(dst_page, dst, src_page, src, len);
-> 	set_page_dirty(dst_page);
-> }
->=20
-> @@ -140,9 +133,9 @@ void hfs_bnode_move(struct hfs_bnode *node, int =
-dst, int src, int len)
-> 	src +=3D node->page_offset;
-> 	dst +=3D node->page_offset;
-> 	page =3D node->page[0];
-> -	ptr =3D kmap(page);
-> +	ptr =3D kmap_local_page(page);
-> 	memmove(ptr + dst, ptr + src, len);
-> -	kunmap(page);
-> +	kunmap_local(ptr);
-> 	set_page_dirty(page);
-> }
->=20
-> @@ -346,13 +339,14 @@ struct hfs_bnode *hfs_bnode_find(struct =
-hfs_btree *tree, u32 num)
-> 	if (!test_bit(HFS_BNODE_NEW, &node->flags))
-> 		return node;
->=20
-> -	desc =3D (struct hfs_bnode_desc *)(kmap(node->page[0]) + =
-node->page_offset);
-> +	desc =3D (struct hfs_bnode_desc =
-*)(kmap_local_page(node->page[0]) +
-> +					 node->page_offset);
-> 	node->prev =3D be32_to_cpu(desc->prev);
-> 	node->next =3D be32_to_cpu(desc->next);
-> 	node->num_recs =3D be16_to_cpu(desc->num_recs);
-> 	node->type =3D desc->type;
-> 	node->height =3D desc->height;
-> -	kunmap(node->page[0]);
-> +	kunmap_local(desc);
->=20
-> 	switch (node->type) {
-> 	case HFS_NODE_HEADER:
-> @@ -436,14 +430,12 @@ struct hfs_bnode *hfs_bnode_create(struct =
-hfs_btree *tree, u32 num)
-> 	}
->=20
-> 	pagep =3D node->page;
-> -	memset(kmap(*pagep) + node->page_offset, 0,
-> -	       min((int)PAGE_SIZE, (int)tree->node_size));
-> +	memzero_page(*pagep, node->page_offset,
-> +		     min((int)PAGE_SIZE, (int)tree->node_size));
-> 	set_page_dirty(*pagep);
-> -	kunmap(*pagep);
-> 	for (i =3D 1; i < tree->pages_per_bnode; i++) {
-> -		memset(kmap(*++pagep), 0, PAGE_SIZE);
-> +		memzero_page(*++pagep, 0, PAGE_SIZE);
-> 		set_page_dirty(*pagep);
-> -		kunmap(*pagep);
-> 	}
-> 	clear_bit(HFS_BNODE_NEW, &node->flags);
-> 	wake_up(&node->lock_wq);
-> --=20
-> 2.37.1
->=20
+Fixes: 55e8c8eb2c7b ("posix-cpu-timers: Store a reference to a pid not a task")
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220809170751.164716-1-cascardo@canonical.com
 
+---
+ fs/exec.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 5fd7391..f793221 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1304,6 +1304,9 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 	bprm->mm = NULL;
+ 
+ #ifdef CONFIG_POSIX_TIMERS
++	spin_lock_irq(&me->sighand->siglock);
++	posix_cpu_timers_exit(me);
++	spin_unlock_irq(&me->sighand->siglock);
+ 	exit_itimers(me);
+ 	flush_itimer_signals();
+ #endif

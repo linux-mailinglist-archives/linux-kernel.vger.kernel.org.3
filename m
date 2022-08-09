@@ -2,213 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38A458DB61
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7707A58DB5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244524AbiHIPwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 11:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S243841AbiHIPwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 11:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242268AbiHIPwb (ORCPT
+        with ESMTP id S241959AbiHIPwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 11:52:31 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B0F175A2
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 08:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660060350; x=1691596350;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wqkjv7X49zyKahKBsy/Af1XfeH6iBppELh4Mlt5gIXo=;
-  b=PkyVmkOB1AuOagU7NPOXmIWB4O2vjISwjR2QQRyEiHMUUEQsXr+sgDdc
-   5n3qa0T5l0FzMHZkfA7PIfIIquOd8ldULDDq6ETIMWS7FXFbEqOw5OKvZ
-   wgPaPmDY7OdcUu6Efo6zp1J+8Ds69i2enUmFzKtyU41P35j/9tkJW0zP8
-   3/zxtAmC3mgZq3Bd6As5UDyqlrhGLIJGEjQ9uk1J4cAQ4Jj9PuPW6qc1i
-   bIfV7/6Jj6KmfLsSNXVOWn7NkvztU+7XV2S+zw1yFxfp2AW66grVYQ5xT
-   jxuhYiZyv6b1BbSH+qlUGkRD4qswDPqY8vBtKaZxW2HGms+PIzAjEaJwE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="277804944"
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="277804944"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 08:50:33 -0700
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="664484569"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 08:50:31 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 09 Aug 2022 18:50:28 +0300
-Date:   Tue, 9 Aug 2022 18:50:28 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Brad Campbell <lists2009@fnarfbargle.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Apple Thunderbolt Display chaining
-Message-ID: <YvKCRPtoN6m2rMr2@lahna>
-References: <a1db1454-63b6-7c39-bbf6-53e53bbd36e6@fnarfbargle.com>
- <5474e599-057a-ec0f-b469-560644155907@fnarfbargle.com>
- <YvEFtPF7SBIwNG/o@lahna>
- <d234ea9b-9303-6088-0a9b-4de887a77bf4@fnarfbargle.com>
- <YvI1lQh+C0SJiG73@lahna>
- <bcebdeb9-4f6a-e931-46f5-b9be899db9a4@fnarfbargle.com>
- <YvI9Cbin4OKQwZ05@lahna>
- <86bec398-7a5b-6d4e-bc02-5941fe6c2e73@fnarfbargle.com>
- <YvJyZ51H+YkceKJP@lahna>
- <39268cc6-4e05-b83c-ff73-3056925eeb76@fnarfbargle.com>
+        Tue, 9 Aug 2022 11:52:04 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E721758A
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 08:52:03 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id bq11so17601687lfb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 08:52:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7luNtuPXP34XcP/NCS8jrOTG+DNTpVMVakj9FLoruiQ=;
+        b=fZWqyo0qDtvMLTwKxsTHCN9jYJPz9hlujy4EwQXMgREL112hq3UvmNw0c717YRVyum
+         IQnaeryQNLbVjbAApBuw0A2i77KndMaeNoYZe2xF0yzS54cyfbvGA5G/mHyvcWq3g/wd
+         XfD0VhO7jmAsh0xWa2STilRdONSCDgwFW3/6OM13xnY/yqxdEc6j5nVgQD1n+OhsP/1B
+         qHv1qBcegq3KL3/4ky1u7eQ55DexdvOD+TJbqo7uXBMsezG34KkjZSKA77vziXbd48iN
+         XNmu2lHzveNaHdmUHRkE+nhjqwDvyzXpmaqCYXULBalWCrEBD8mWSQ77EuIZOd+T651s
+         25EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7luNtuPXP34XcP/NCS8jrOTG+DNTpVMVakj9FLoruiQ=;
+        b=sek179FUUL91U8YDDItl1mShbAC9JEChkZvdivQ1fvUxkOLawPk28yIdboszxbEPow
+         8/ONXZRCUHsmxXQrG1rovG1AQadAkKc+FNT+dntVVSNsh3K9Yqf41VjVVqOeD8UGuH13
+         0bOHf7UzCMINbdVkdgIJDK3t4k7wB0fKRo63DrqgcTVkgtpIzDgdKIkFdSc7qc4ebQBQ
+         sNUMMfCKxa83J9oPEfONAlICCnkwMBP+/ATaKC1pxAznRwuimaC+l1x4jaGKiiJqTrD4
+         xn1d3+gUQaod2BPjfhZT5rQP8qmUjI/akoiw+5xdkLVsbLv/z2r8e/RMnul04sZXgsg+
+         bkcQ==
+X-Gm-Message-State: ACgBeo1FckHKBPJWd64CgQup9KkKPaXYnKDWec66zbc6b+N6kkQxmPsH
+        GBflBoBlixg2OrRKpfOIilRhYA==
+X-Google-Smtp-Source: AA6agR7r+SUF5C/1PAK7LvhFkrThl9JElxkvc5b36lhq9wWn37Z8fjNGg483pize6dt2qzvBXREfxw==
+X-Received: by 2002:a05:6512:3483:b0:48b:403:ee89 with SMTP id v3-20020a056512348300b0048b0403ee89mr7822911lfr.468.1660060321951;
+        Tue, 09 Aug 2022 08:52:01 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id c16-20020a05651c015000b0025e6e1c836dsm6706ljd.126.2022.08.09.08.52.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 08:52:00 -0700 (PDT)
+Message-ID: <21b84f49-67af-6217-a662-f890db5525a8@linaro.org>
+Date:   Tue, 9 Aug 2022 18:51:59 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <39268cc6-4e05-b83c-ff73-3056925eeb76@fnarfbargle.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 13/28] mfd: sec: Remove #ifdef guards for PM related
+ functions
+Content-Language: en-US
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>, linux-kernel@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-samsung-soc@vger.kernel.org, Lee Jones <lee@kernel.org>
+References: <20220807145247.46107-1-paul@crapouillou.net>
+ <20220807145247.46107-14-paul@crapouillou.net>
+ <a625a1b4-6ecd-79d9-3d13-f42fd5b8275c@linaro.org>
+ <YvJ+YPAynhFKj5DR@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YvJ+YPAynhFKj5DR@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Aug 09, 2022 at 11:16:27PM +0800, Brad Campbell wrote:
-> If I then reboot and load the driver it fails.
+On 09/08/2022 18:33, Lee Jones wrote:
+> On Mon, 08 Aug 2022, Krzysztof Kozlowski wrote:
 > 
-> The only thing I could think of doing was an lspci -vvv after the boot and module load
-> and an lspci -vvv after a warm reboot and diff them, because there are changes around the
-> thunderbolt bridge devices. I've done a diff -u50 to try and keep as much context as possible.
+>> On 07/08/2022 17:52, Paul Cercueil wrote:
+>>> Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
+>>> to handle the .suspend/.resume callbacks.
+>>>
+>>> These macros allow the suspend and resume functions to be automatically
+>>> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
+>>> to use #ifdef guards.
+>>>
+>>> The advantage is then that these functions are now always compiled
+>>> independently of any Kconfig option, and thanks to that bugs and
+>>> regressions are easier to catch.
+>>>
+>>> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+>>
+>> The address does not work. Please don't add it to commit log.
+>>
+>>> Cc: linux-samsung-soc@vger.kernel.org
+>>
+>> This is also not really needed in commit log... it's just a mailing list...
+>>
+>> I actually never understood why people want to add to commit log, so to
+>> something which will last 10 years, Cc-ing other folks, instead of
+>> adding such tags after '---'. Imagine 10 years from now:
+>>
+>> 1. What's the point to be cced on this patch after 10 years instead of
+>> using maintainers file (the one in 10 years)? Why Cc-ing me in 10 years?
+>> If I am a maintainer of this driver in that time, I will be C-ced based
+>> on maintainers file. If I am not a maintainer in 10 years, why the heck
+>> cc-ing me based on some 10-year old commit? Just because I was a
+>> maintainer once, like 10 years ago?
 > 
-> On the first boot I can unload/reload the thunderbolt module repeatedly and there's no issue
-> but loading it after a reboot locks up. There are no lspci changes on the first boot after the
-> initial module load unless I rescan the PCI bus, but they're minor and it doesn't cause an issue
-> with loading the thunderbolt module.
+> Why would that happen?
 > 
-> The firmware *must* be doing something on reboot I suppose or the PCIe configs wouldn't change.
+> These tags are only used during initial submission.
 
-Okay, let's try a bigger hammer and reset all the ports upon load. That
-should hopefully clear out the "bad state" too. This is completely
-untested but it should trigger reset and then re-initialize the TBT
-links.
+No, the tags are used in any other resends, backports etc while
+traveling through different trees. I think only stable-backports do not
+use them, but all other gfp+git-send will follow the tags.
 
-diff --git a/drivers/thunderbolt/lc.c b/drivers/thunderbolt/lc.c
-index 633970fbe9b0..c419c2568de4 100644
---- a/drivers/thunderbolt/lc.c
-+++ b/drivers/thunderbolt/lc.c
-@@ -6,6 +6,8 @@
-  * Author: Mika Westerberg <mika.westerberg@linux.intel.com>
-  */
- 
-+#include <linux/delay.h>
-+
- #include "tb.h"
- 
- /**
-@@ -327,6 +329,34 @@ void tb_lc_xhci_disconnect(struct tb_port *port)
- 	tb_port_dbg(port, "xHCI disconnected\n");
- }
- 
-+int tb_lc_reset_port(struct tb_port *port)
-+{
-+	struct tb_switch *sw = port->sw;
-+	int cap, ret;
-+	u32 val;
-+
-+	if (sw->generation != 3)
-+		return -EINVAL;
-+
-+	cap = find_port_lc_cap(port);
-+	if (cap < 0)
-+		return cap;
-+
-+	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, cap + TB_LC_PORT_MODE, 1);
-+	if (ret)
-+		return ret;
-+
-+	val |= TB_LC_PORT_MODE_DPR;
-+	ret = tb_sw_write(sw, &val, TB_CFG_SWITCH, cap + TB_LC_PORT_MODE, 1);
-+	if (ret)
-+		return ret;
-+
-+	msleep(20);
-+
-+	val &= ~TB_LC_PORT_MODE_DPR;
-+	return tb_sw_write(sw, &val, TB_CFG_SWITCH, cap + TB_LC_PORT_MODE, 1);
-+}
-+
- static int tb_lc_set_wake_one(struct tb_switch *sw, unsigned int offset,
- 			      unsigned int flags)
- {
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 0ae8a7ec7c9c..21ac3ccf1cf9 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -740,6 +740,11 @@ int tb_port_disable(struct tb_port *port)
- 	return __tb_port_enable(port, false);
- }
- 
-+int tb_port_reset(struct tb_port *port)
-+{
-+	return tb_lc_reset_port(port);
-+}
-+
- /*
-  * tb_init_port() - initialize a port
-  *
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 8030fc544c5e..48a7396994ef 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -1875,6 +1875,7 @@ static int tb_scan_finalize_switch(struct device *dev, void *data)
- static int tb_start(struct tb *tb)
- {
- 	struct tb_cm *tcm = tb_priv(tb);
-+	struct tb_port *p;
- 	int ret;
- 
- 	tb->root_switch = tb_switch_alloc(tb, &tb->dev, 0);
-@@ -1911,6 +1912,12 @@ static int tb_start(struct tb *tb)
- 				false);
- 	/* Enable TMU if it is off */
- 	tb_switch_tmu_enable(tb->root_switch);
-+
-+	tb_switch_for_each_port(tb->root_switch, p) {
-+		if (tb_port_is_null(p))
-+			tb_port_reset(p);
-+	}
-+
- 	/* Full scan to discover devices added before the driver was loaded. */
- 	tb_scan_switch(tb->root_switch);
- 	/* Find out tunnels created by the boot firmware */
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 28bb80d967d6..fe5edefec712 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -1028,6 +1028,7 @@ int tb_port_clear_counter(struct tb_port *port, int counter);
- int tb_port_unlock(struct tb_port *port);
- int tb_port_enable(struct tb_port *port);
- int tb_port_disable(struct tb_port *port);
-+int tb_port_reset(struct tb_port *port);
- int tb_port_alloc_in_hopid(struct tb_port *port, int hopid, int max_hopid);
- void tb_port_release_in_hopid(struct tb_port *port, int hopid);
- int tb_port_alloc_out_hopid(struct tb_port *port, int hopid, int max_hopid);
-@@ -1121,6 +1122,7 @@ bool tb_lc_is_usb_plugged(struct tb_port *port);
- bool tb_lc_is_xhci_connected(struct tb_port *port);
- int tb_lc_xhci_connect(struct tb_port *port);
- void tb_lc_xhci_disconnect(struct tb_port *port);
-+int tb_lc_reset_port(struct tb_port *port);
- int tb_lc_set_wake(struct tb_switch *sw, unsigned int flags);
- int tb_lc_set_sleep(struct tb_switch *sw);
- bool tb_lc_lane_bonding_possible(struct tb_switch *sw);
-diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index f8c1ca3464d9..8fd12bc2d500 100644
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -555,6 +555,9 @@ struct tb_regs_hop {
- #define TB_LC_POWER				0x740
- 
- /* Link controller registers */
-+#define TB_LC_PORT_MODE				0x26
-+#define TB_LC_PORT_MODE_DPR			BIT(6)
-+
- #define TB_LC_CS_42				0x2a
- #define TB_LC_CS_42_USB_PLUGGED			BIT(31)
- 
+> 
+>> 2. Or why cc-ing such people when backporting to stable?
+> 
+> That doesn't happen either.
+
+Indeed, stable does not use these Cc.
+
+> 
+>> It's quite a lot of unnecessary emails which many of us won't actually
+>> handle later...
+>>
+>> I sincerely admit I was once also adding such Cc-tags. But that time my
+>> employer was counting lines-of-patch (including commit log)... crazy, right?
+> 
+> Nothing wrong with adding these tags IMHO.  It's what they're for.
+> 
+> I use them when I'm maintaining a large amount of out-of-tree, but
+> to-be-upstreamed patches over several versions.  Re-applying the
+> recipients list can become pretty labour-some after several
+> iterations.
+
+You can do it still while keeping the tags after ---. Only patch-related
+workflows strip such tags. If you cherry-pick, rebase, merge, you always
+get the content of ---.
+
+The same as typical changelog (not cover letter but one in the patch) -
+you keep it after --- and it does not disappear.
+
+> 
+> Adding them under the '---' doesn't work when the purpose of them is
+> to keep the recipients list in Git history.
+
+This I understand, what I did not understand (and you did not explain)
+is what would be the purpose to keep them in Git history. What is the
+point to have them in commit log of 10 year old commit?
+
+Best regards,
+Krzysztof

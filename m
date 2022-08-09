@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649C558E345
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A181258E349
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiHIWfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 18:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
+        id S230365AbiHIWfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 18:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiHIWe1 (ORCPT
+        with ESMTP id S230238AbiHIWe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 18:34:27 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085516582E
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 15:34:18 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id k17so90838wmr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 15:34:18 -0700 (PDT)
+        Tue, 9 Aug 2022 18:34:28 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED72066100
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 15:34:19 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id l22so15827167wrz.7
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 15:34:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=00nZRcZGH0Ch9kf2FG017OBarf3WrFRyr4+E06yZjt4=;
-        b=XnkN5+Q3VvUS+pWCQjNNkLvFEY3AVMmiqM0/+Gygmfy8PgeXVU6GWZIUNg/dKBhtPd
-         5+kZ7gdPnz6wPRl0M1XZz0fjmt3OCToAtVfcdaP1cHCn0MAEnTXDll9w1kpo3TRzVbeI
-         X9IKuad9nHCXcqdpr5Ja0I6LunimqxdehOV4ctCAqaKJqvfe8zFEt8oXHzbT2FP2SXxO
-         mqsB7VU6VHOuJr6gRNGWBR06d6AO3qjuIWAb/046xR+fcnXLXSSptAH03NtNOVTJLt2h
-         Fj23+q5EiyFucUN5KRG4ZLHUnLIMOc0jqFP/JaSt7jAn8pKuICZOTPAWyiaCY/HxSkUk
-         Z0lg==
+        bh=Ht2C5hmUen8Zs+3SYPbHRSeYgcLBnHmLYbKN5MCrEgA=;
+        b=ReoNsdK6Qf7stNbwqpvMm9Ps3u5XWBgokoaC2yhwkEv62aRu1zmFBrOA1cnNu8SB7I
+         QjLddDNP2g4u9p6ZtPodt5virk5oHHyLDcmgzy14jfEvX3+F/6xCZ8ekLlzGgCRMo2ld
+         XFAztJQYM006MYg5zp/2FsunjL7yoeHmv7+nTX3URAxE8MCR8HTCaSRn/xhXYhOgbZFo
+         GRRKQgNTp7TFCR/ei2DxZOtlzQrXhCSworaV9VMnCceTGk5r84mkHs+kZWr7x0vFp+FG
+         bC3Pa30f+tsH7R3remZY5HczWX0R+oqCsoW0vI2w+Fqo0bSR1CTLMFFAabzrFbdSlsuz
+         kWjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=00nZRcZGH0Ch9kf2FG017OBarf3WrFRyr4+E06yZjt4=;
-        b=ygK/1C3rpzbhv/Snp2ASGdhmyqJoWU0LLBU9p1Cd8pDbmp5T7aDWV5PS117aK6wNnw
-         eFk3QzHKwBBRRcJFiIEQpfSDrCYWml8NMdjhwCQbBbNJh+m33KToG74r9Zk1Mg7Ky0Um
-         TpRzYPN6SnpJYshnxMYciSynVAIn9g15sa3iRusG61dGrIymC69Q5XwEo60qJ6gvtqUU
-         xvhs86h8AHsOnd1OxaRCzXQLZc9f2pJPUrkQv/hEB8II/+RpHEORAiI41WrfLAilG8lo
-         e0LZZ3jOyy/aYXDM8DoIdLuUDhvUnN83va9U0N4uytRafBKfFGxj/GB0K3wKf/XKLXDO
-         DnBA==
-X-Gm-Message-State: ACgBeo0msBgeMIqZcdnuJrtW6LsJmIEnBUPFN51hqEzoGgg3WGZtmPuJ
-        z9+vkr88Qw0zEUHC0QjGVM+pP0GdF6yjeJ72
-X-Google-Smtp-Source: AA6agR74zdFgB6sJJNaJ1SoSy8Qp3kE85uWaEJ5Hnvu92VHKL5yIVbMl+mOvtxMZrSeKHnQNP9jIKg==
-X-Received: by 2002:a05:600c:35d5:b0:3a3:2490:c984 with SMTP id r21-20020a05600c35d500b003a32490c984mr332807wmq.162.1660084458409;
-        Tue, 09 Aug 2022 15:34:18 -0700 (PDT)
+        bh=Ht2C5hmUen8Zs+3SYPbHRSeYgcLBnHmLYbKN5MCrEgA=;
+        b=pmeLSZtjdtcEscgJmKh4WobHuLBlbvjlfJbQ1P3rvt8HcFJmaAwf4RTpmXpDQuYaz9
+         vdkx9f+9IUcOBo0uLtN0egu0Gxdk91g8soNI9Yddd7ETXj5gflI8VwwiaJ9CeMfynJD3
+         bHvQ4ELsbt+RNOqJ3oJCvxq/JYE9XUT3zUh9f2XTePZa5+t095fVPFzKMUnQmF0pBKix
+         rEnpootfoxZyI4aG7JG4vIDkypD/g25L68UT3ZW/ZKqPnM4Dl0WNWSnT4WC4jeFQn+PT
+         I1QM7aTOVUj+z6K0BoDWRhKM7uAN/UP7jebn/N1D9Kk27/pKXvFvu9zwFH5bAKOL1RFK
+         gDmg==
+X-Gm-Message-State: ACgBeo0PUd9SORDXL+dFslXpsx+85jAoKYwzhAZKuIpch8MZqn1ijAj4
+        CXD3CJplEZ5JilMbJyZ8pzLkuQ==
+X-Google-Smtp-Source: AA6agR7iJg2CnEWqKZ9yqi+h9y7+qiLbREP+KF0Qz0+eZXbO1MQ8ibEAp64ra1HPkU1Wop7FsiymEQ==
+X-Received: by 2002:a05:6000:81c:b0:222:ed7f:4445 with SMTP id bt28-20020a056000081c00b00222ed7f4445mr5671154wrb.111.1660084459352;
+        Tue, 09 Aug 2022 15:34:19 -0700 (PDT)
 Received: from linaro.org ([2a00:23c5:6809:2201:a6:74a6:5a0e:f3e2])
-        by smtp.gmail.com with ESMTPSA id e20-20020a05600c4b9400b003a2cf1ba9e2sm311650wmp.6.2022.08.09.15.34.17
+        by smtp.gmail.com with ESMTPSA id e20-20020a05600c4b9400b003a2cf1ba9e2sm311650wmp.6.2022.08.09.15.34.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 15:34:17 -0700 (PDT)
+        Tue, 09 Aug 2022 15:34:18 -0700 (PDT)
 From:   Mike Leach <mike.leach@linaro.org>
 To:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
@@ -54,9 +54,9 @@ Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
         peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
         linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
         quic_jinlmao@quicinc.com, Mike Leach <mike.leach@linaro.org>
-Subject: [PATCH v3 12/13] coresight: events: PERF_RECORD_AUX_OUTPUT_HW_ID used for Trace ID
-Date:   Tue,  9 Aug 2022 23:34:00 +0100
-Message-Id: <20220809223401.24599-13-mike.leach@linaro.org>
+Subject: [PATCH v3 13/13] coresight: trace-id: Add debug & test macros to Trace ID allocation
+Date:   Tue,  9 Aug 2022 23:34:01 +0100
+Message-Id: <20220809223401.24599-14-mike.leach@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220809223401.24599-1-mike.leach@linaro.org>
 References: <20220809223401.24599-1-mike.leach@linaro.org>
@@ -70,78 +70,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the perf_report_aux_output_id() call to output the CoreSight trace ID
-and associated CPU as a PERF_RECORD_AUX_OUTPUT_HW_ID record in the
-perf.data file.
+Adds in a number of pr_debug macros to allow the debugging and test of
+the trace ID allocation system.
 
 Signed-off-by: Mike Leach <mike.leach@linaro.org>
 ---
- drivers/hwtracing/coresight/coresight-etm-perf.c |  7 +++++++
- include/linux/coresight-pmu.h                    | 14 ++++++++++++++
- 2 files changed, 21 insertions(+)
+ .../hwtracing/coresight/coresight-trace-id.c  | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/drivers/hwtracing/coresight/coresight-etm-perf.c b/drivers/hwtracing/coresight/coresight-etm-perf.c
-index 6166f716a6ac..59a2ad95c1dc 100644
---- a/drivers/hwtracing/coresight/coresight-etm-perf.c
-+++ b/drivers/hwtracing/coresight/coresight-etm-perf.c
-@@ -4,6 +4,7 @@
-  * Author: Mathieu Poirier <mathieu.poirier@linaro.org>
-  */
+diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
+index ac9092896dec..24c19ff493a9 100644
+--- a/drivers/hwtracing/coresight/coresight-trace-id.c
++++ b/drivers/hwtracing/coresight/coresight-trace-id.c
+@@ -69,6 +69,30 @@ static void coresight_trace_id_set_pend_rel(int id, struct coresight_trace_id_ma
+ 	set_bit(id, id_map->pend_rel_ids);
+ }
  
-+#include <linux/bitfield.h>
- #include <linux/coresight.h>
- #include <linux/coresight-pmu.h>
- #include <linux/cpumask.h>
-@@ -448,6 +449,7 @@ static void etm_event_start(struct perf_event *event, int flags)
- 	struct perf_output_handle *handle = &ctxt->handle;
- 	struct coresight_device *sink, *csdev = per_cpu(csdev_src, cpu);
- 	struct list_head *path;
-+	u64 hw_id;
- 
- 	if (!csdev)
- 		goto fail;
-@@ -493,6 +495,11 @@ static void etm_event_start(struct perf_event *event, int flags)
- 	if (source_ops(csdev)->enable(csdev, event, CS_MODE_PERF))
- 		goto fail_disable_path;
- 
-+	/* output cpu / trace ID in perf record */
-+	hw_id = FIELD_PREP(CS_AUX_HW_ID_VERSION_MASK, CS_AUX_HW_ID_CURR_VERSION) |
-+		FIELD_PREP(CS_AUX_HW_ID_TRACE_ID_MASK, coresight_trace_id_read_cpu_id(cpu));
-+	perf_report_aux_output_id(event, hw_id);
++/* #define TRACE_ID_DEBUG 1 */
++#ifdef TRACE_ID_DEBUG
++static char page_buf[PAGE_SIZE];
 +
- out:
- 	/* Tell the perf core the event is alive */
- 	event->hw.state = 0;
-diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
-index 99bc3cc6bf2d..9aafafff219a 100644
---- a/include/linux/coresight-pmu.h
-+++ b/include/linux/coresight-pmu.h
-@@ -7,6 +7,8 @@
- #ifndef _LINUX_CORESIGHT_PMU_H
- #define _LINUX_CORESIGHT_PMU_H
- 
-+#include <linux/bits.h>
++static void coresight_trace_id_dump_table(struct coresight_trace_id_map *id_map,
++					  const char *func_name)
++{
++	pr_debug("%s id_map::\n", func_name);
++	bitmap_print_to_pagebuf(0, page_buf, id_map->used_ids, CORESIGHT_TRACE_IDS_MAX);
++	pr_debug("Avial= %s\n", page_buf);
++	bitmap_print_to_pagebuf(0, page_buf, id_map->pend_rel_ids, CORESIGHT_TRACE_IDS_MAX);
++	pr_debug("Pend = %s\n", page_buf);
++}
++#define DUMP_ID_MAP(map)   coresight_trace_id_dump_table(map, __func__)
++#define DUMP_ID_CPU(cpu, id) pr_debug("%s called;  cpu=%d, id=%d\n", __func__, cpu, id)
++#define DUMP_ID(id)   pr_debug("%s called; id=%d\n", __func__, id)
++#define PERF_SESSION(n) pr_debug("%s perf count %d\n", __func__, n)
++#else
++#define DUMP_ID_MAP(map)
++#define DUMP_ID(id)
++#define DUMP_ID_CPU(cpu, id)
++#define PERF_SESSION(n)
++#endif
 +
- #define CORESIGHT_ETM_PMU_NAME "cs_etm"
+ /* release all pending IDs for all current maps & clear CPU associations */
+ static void coresight_trace_id_release_all_pending(void)
+ {
+@@ -88,6 +112,7 @@ static void coresight_trace_id_release_all_pending(void)
+ 		}
+ 	}
+ 	spin_unlock_irqrestore(&id_map_lock, flags);
++	DUMP_ID_MAP(id_map);
+ }
  
- /*
-@@ -44,4 +46,16 @@
- #define ETM4_CFG_BIT_RETSTK	12
- #define ETM4_CFG_BIT_VMID_OPT	15
+ static int coresight_trace_id_map_get_cpu_id(int cpu, struct coresight_trace_id_map *id_map)
+@@ -123,6 +148,8 @@ static int coresight_trace_id_map_get_cpu_id(int cpu, struct coresight_trace_id_
+ get_cpu_id_out:
+ 	spin_unlock_irqrestore(&id_map_lock, flags);
  
-+/*
-+ * Interpretation of the PERF_RECORD_AUX_OUTPUT_HW_ID payload.
-+ * Used to associate a CPU with the CoreSight Trace ID.
-+ * [07:00] - Trace ID - uses 8 bits to make value easy to read in file.
-+ * [59:08] - Unused (SBZ)
-+ * [63:60] - Version
-+ */
-+#define CS_AUX_HW_ID_TRACE_ID_MASK	GENMASK_ULL(7, 0)
-+#define CS_AUX_HW_ID_VERSION_MASK	GENMASK_ULL(63, 60)
++	DUMP_ID_CPU(cpu, id);
++	DUMP_ID_MAP(id_map);
+ 	return id;
+ }
+ 
+@@ -150,6 +177,8 @@ static void coresight_trace_id_map_put_cpu_id(int cpu, struct coresight_trace_id
+ 
+ 	spin_unlock_irqrestore(&id_map_lock, flags);
+ put_cpu_id_out:
++	DUMP_ID_CPU(cpu, id);
++	DUMP_ID_MAP(id_map);
+ }
+ 
+ static int coresight_trace_id_map_get_system_id(struct coresight_trace_id_map *id_map)
+@@ -161,6 +190,8 @@ static int coresight_trace_id_map_get_system_id(struct coresight_trace_id_map *i
+ 	id = coresight_trace_id_alloc_new_id(id_map, 0);
+ 	spin_unlock_irqrestore(&id_map_lock, flags);
+ 
++	DUMP_ID(id);
++	DUMP_ID_MAP(id_map);
+ 	return id;
+ }
+ 
+@@ -171,6 +202,9 @@ static void coresight_trace_id_map_put_system_id(struct coresight_trace_id_map *
+ 	spin_lock_irqsave(&id_map_lock, flags);
+ 	coresight_trace_id_free(id, id_map);
+ 	spin_unlock_irqrestore(&id_map_lock, flags);
 +
-+#define CS_AUX_HW_ID_CURR_VERSION 0
-+
- #endif
++	DUMP_ID(id);
++	DUMP_ID_MAP(id_map);
+ }
+ 
+ /* API functions */
+@@ -207,6 +241,7 @@ EXPORT_SYMBOL_GPL(coresight_trace_id_put_system_id);
+ void coresight_trace_id_perf_start(void)
+ {
+ 	atomic_inc(&perf_cs_etm_session_active);
++	PERF_SESSION(atomic_read(&perf_cs_etm_session_active));
+ }
+ EXPORT_SYMBOL_GPL(coresight_trace_id_perf_start);
+ 
+@@ -214,6 +249,7 @@ void coresight_trace_id_perf_stop(void)
+ {
+ 	if (!atomic_dec_return(&perf_cs_etm_session_active))
+ 		coresight_trace_id_release_all_pending();
++	PERF_SESSION(atomic_read(&perf_cs_etm_session_active));
+ }
+ EXPORT_SYMBOL_GPL(coresight_trace_id_perf_stop);
+ 
 -- 
 2.17.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDD858D148
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D7058D149
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244655AbiHIAQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 20:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S244694AbiHIAQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 20:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiHIAQm (ORCPT
+        with ESMTP id S244658AbiHIAQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 20:16:42 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2067.outbound.protection.outlook.com [40.107.93.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1B95F6B
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 17:16:41 -0700 (PDT)
+        Mon, 8 Aug 2022 20:16:46 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2063.outbound.protection.outlook.com [40.107.102.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6DFA459
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 17:16:45 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DgvXOODnaodcXa7fSvK6i4qIKv52SeP5SSkQz940Hiu+c3GShsiCzwI8qRkDDobaVWddv8r23+nsqsERU5ulKC3Z876GrievNIQYyTwJ/0CK++FxOwrCoL1Nb6nRVU3DZ7oKS723A83kHgJBC3QkKGnidP86iBy097GPcvAq725JzCos2MCkZz2c84VewduCrhPUR08VRnHEkye69An6qwXFAQbEWzjC8WNxbdsCpgBCMov5qNo9D7hBXPkXb/iOWhHv+y4QfQVsooIQPHv0PG9R/LOSPPFuEjn53n+0kYh9Z0qkkiaILF9zTU3WwPwoNuPTyzZpQsjqcD9LJRgf+Q==
+ b=Rh8bX6lYf3b+Cpa0EduRNMkkaX+Cj+N8wowiDuwe9/6kMNJsMxOAPsJTJLHGTiY2G+C4LniiJANayweLoYf0V5WHmDvVgjbQ3Jl2xznRWSdGp/8WSFAavd1v7LBDWojYtZxZXNbaA7m86nSptwPSzkfU149uvjW3e6EEh2lBoJB8l3trT/JqKQxK36UtS08QNj5fCVTCxpR9f1eR8CFEUy8Xf71mFlpsG6iEPCkdLc6jbo7tZ8b6jVVYo/HTRWx5mL2RFAxWHZx4qiHDXVyVwEDp2zwgwPyjKhwwAYJshVNcIRlC5czpeqEXulU13PrXl8zGiYO6KKR90PAqpBiJDg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=76IQdPubhMWITmpzgq+05WjE3ITgDSyIf3LKiC1ibmU=;
- b=GgkV0JfBBb0can474So5I22wprOdOVsiT6C6R2YPdSBEzCBpqx1XEezxtm0hBAxaTYUDlzNeqaqjFdPkN9aHQtArMN5PoNCxG1hApzki2wc5PEHwDmjrma9GL024lGiDkiSL7DsdvCPZgAwdIRP2HW398ybnyO+Vqbq7v//clkIyBxRO/ZwoKK1XjP78AzR5FDl52dpQv/7l0Gkhs+5Ol1gJl4rNWubv6w0ph58NO4qbl2EEhp2ctWayWyDKrIkjgwQDVhSaYcrMN8T9U1URy3f/eZeTFeaVFprGSSC/iV1Z+OwJCuB9Jwb6E9q84lFQ3cTdOAzXWJljP9f0LIirOw==
+ bh=UTwQo9p0DCLnl+bgcvFx7aSteGqz+/r2OVr92otCPdE=;
+ b=FgUrjNMUYnkUuY1DDGi7vzo1fS6t9xWWto1fKxa6gHFrcBSymiMxVaN8VC8k3Rh8zGU32EE+rZ4mU0UXm3ciyESvQnVOI8NAQnpcNYE1FyBKDmbygjyLd0pyRv7Ep7aQLG4oW53DyOr4qsACDKW710RGS/7Qk5PyI7NcyH7puR34XRnrnL6feeMKXqiXdW5pBnOnsJFolyL1wGW+3URcBmhKINwu4KUH2f8kUlCyUFozZZOcCG7DG6Ch/qohUQzD+hMY3iOL0+/ShJtsQ1H6KKzh3MrszWBO2t0WNv4op6uL9xxocRgdzmpdaQmWk79lDccNSTJ1lYejkxlz2I7XCg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=76IQdPubhMWITmpzgq+05WjE3ITgDSyIf3LKiC1ibmU=;
- b=oddEz1HjgwUdfqBZNE3k8a18JfhEtqHBkltvPKMjq5H/Z88p5nn5Sbr9HR9+mN19PtFWLbs3X7WDQJgfkm3p1k7nptlX16j3VePDVp2NTvTrW15F4z0lnioMDwrnWEADh+Sp3HUBxFXnvHILeKa2Tj/ualv1jAb607D9HZsKCXhJmmWikyajjC4aXiBJSorOZNWy4ZGjj3EynTlvZcZ11kLeuA3ywia6/pSmhGVpIm+p+9hJe2inDUcIFF5mwnHx/XcAQ1G3/x2EvZtJcRtKsLlPoSV7g5y0T2qnQ6TJmCFYjw7Ix807HT+W0nnE1ZOVLlRJ/dRJf49J7UazdIx7KQ==
+ bh=UTwQo9p0DCLnl+bgcvFx7aSteGqz+/r2OVr92otCPdE=;
+ b=AI1ALI0lGcXwJJg8jmLxkTsiGL9B1yODBMjmNlV91TloohGhxlc1BRUNcrO9ILcEEgTUp0lPxmEnV5D5Mn5WwmQqz0bc6gNfT6dxbxRWApy1aIPUC0ntgYL2WdL8Klpld6PAE6eeWESBLkNC5KCYzupY5feSYkhy8CkeGrGat8b5aO3EGs3b15VzJWStmOhrHMSZa42QWe7DsiR1ezsQhv02LaxTg++LMl7exvrSR/+as5XsAJch28zQCMArVtWp1Z/eevSItV68z3GUDIu5k2c57Go7i3AMTJssNLqwbAJYsq226Tey92NsbwiaVNE+vX7fXxZShocUjn5Hj3sfBw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
  by DM6PR12MB2780.namprd12.prod.outlook.com (2603:10b6:5:4e::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Tue, 9 Aug
- 2022 00:16:40 +0000
+ 2022 00:16:43 +0000
 Received: from BYAPR12MB3176.namprd12.prod.outlook.com
  ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
  ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5504.020; Tue, 9 Aug 2022
- 00:16:39 +0000
+ 00:16:43 +0000
 From:   Alistair Popple <apopple@nvidia.com>
 To:     linux-mm@kvack.org
 Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
@@ -56,62 +56,64 @@ Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
         Ralph Campbell <rcampbell@nvidia.com>,
         David Hildenbrand <david@redhat.com>,
         Alistair Popple <apopple@nvidia.com>
-Subject: [PATCH v3 1/2] mm/gup.c: Don't pass gup_flags to check_and_migrate_movable_pages()
-Date:   Tue,  9 Aug 2022 10:16:25 +1000
-Message-Id: <487960bf67c7273ff5606c76f73bb51271bc7b90.1660003800.git-series.apopple@nvidia.com>
+Subject: [PATCH v3 2/2] mm/gup.c: Refactor check_and_migrate_movable_pages()
+Date:   Tue,  9 Aug 2022 10:16:26 +1000
+Message-Id: <9e3761292315c9edb14bd812c9c587e792b32aa4.1660003800.git-series.apopple@nvidia.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <487960bf67c7273ff5606c76f73bb51271bc7b90.1660003800.git-series.apopple@nvidia.com>
+References: <487960bf67c7273ff5606c76f73bb51271bc7b90.1660003800.git-series.apopple@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BY5PR17CA0062.namprd17.prod.outlook.com
- (2603:10b6:a03:167::39) To BYAPR12MB3176.namprd12.prod.outlook.com
+X-ClientProxiedBy: BY3PR05CA0022.namprd05.prod.outlook.com
+ (2603:10b6:a03:254::27) To BYAPR12MB3176.namprd12.prod.outlook.com
  (2603:10b6:a03:134::26)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 85ea4dc6-2e62-4e8b-f552-08da799c6e2a
+X-MS-Office365-Filtering-Correlation-Id: 275b261e-0d23-4858-03f5-08da799c7003
 X-MS-TrafficTypeDiagnostic: DM6PR12MB2780:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yoNGYEomSEFLCj6z3M3VSPXtJeyigpW03Fg+Wr9j0WdzBe7idkyd3qnkl/pWfHY0hwaScfFFzTU6xKNfRYDkATa2iarujgAjNQOUBlE33a1bOyYiQFn6ucarlaCB0Uvir0Bduesi8IpmnJkBrnhbbvmSLRjjABUICW+YYBDoA6+Y2py/M2cIWTYExN+LoeDhE7gZNxNQTm4Eh3TXjVEjuYIhcaMdLbqf+xj9X+jXKJuDw8ay1i2EhWQ3A4oyT3PjIsUhIf6RLrkwE2GYG1zlSLYVDEqSVlI1YaTgBUmcSHj8s7zgjfAJ+ryKQ4WTzqfSwr/eLCfI3GXc/VVH4sb+Pb9qcx51+y7DGlW83xk5l8tiFswR/exG/JNteNv/M9VI4pJCdJjrOBkTEMUPnPaQbyIZLSVXxeg+pEaWzq72EyC8YachWKK58Pmto0KNAYllYEYx+8m6VrZEgYMMyCT7GZoerkJmCVTuslxsumZIU/6v19nvBSvk8nMvC82uE3vz4Uv9oj/qua7lKoS+mxf27/oO7uSpLWjXhgsw5p51Z1KCC3Rk7cKOlhV5L6yunLQWIrQv57H1zZTYLEWsxnK7s3e1dkl/aCHW6RL/+BG7LBBqjmO95cCrALpRNyz+bf6iVYHKoXS7v51YMghunDaMlII8gyiR6hsk9yZbhrPuypzpo1tn0pDC90mr5XYABvMGhshRqsCjbStCl6jy2jtXT3IftTECmAShpIzKu+q5Iw7H3TERLzdZjBFDwV72gD31
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(136003)(346002)(366004)(376002)(38100700002)(478600001)(2616005)(86362001)(5660300002)(186003)(6486002)(8936002)(107886003)(8676002)(83380400001)(7416002)(54906003)(4326008)(66556008)(66476007)(6916009)(36756003)(66946007)(316002)(41300700001)(6666004)(2906002)(6506007)(26005)(6512007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: thBjcw7FfftN6inq/yHG2QHKdCdPuPKl5YpeKLwi46hmBbZQC5FqPRtcNmiqYvinEYssD7u7EkyGaQDeAEhvSA4o9m6GQcAGciBESZE78eaQzDY6yddKsIBR5ZVjifrZv/Vz236HG8x7Tkij1AE5b1Atpyx0S1IISaVVeXAMMscr31jTK4MGB7xyDxgyxeLupfbqVuFXDhxRVDuPN1aVKmbqw9GpteWjJ124za7GVRmYExNFKlE1CkEMzMJushsX2avvjzP0VYU4i+SRPHg8VGke/fYnlCtcrTlx5CRcmo6X64RJ8AbCvKjh9iy6K30n9q2GWDHT48BMDCjdNOYWhiTFG4PK4r0cbWXCzQfbd3vokQMvDjt8JjluE3AW81WRU7y8ZCrgvzcqLD3/GvlrzKrGQ0OiyIgnqJCXN0+suA2PmkaJ2Worf8mXuj5fLaYY++FozVhWL6PGqrUPH37GRWb6tPIQiZ0FUxFovK3xhFvUE4zGZAzy8F7Qn9moYcAjjc6PpvXf/+Q2ZLJwSNgWyMI06EoCTFFv3p5E/6T2VxOBErAT+sLT2EvEqTMnp3R3AaxglxT79WSaNt5XumOPHGOCXkd5bR4Xvb4j38eqkuh3Jx8Eby37/9RnklYRUuRn+D0YguZ4Re2XnfeN8AHL4w/EUyeTN8vGXa+wAB8qNm8n6Iz6/qhSOWX856HseyX33gj7ATYDq+QNbP+kcywY3DPZnBkg4vcKpItqs/N6MCM/MjAAW93Q9AW3aogXekdoy/ERh+aDyl5LInl8pA42gOb0pJZphYl9WtCn1JeNagBF7jajrG7t6NSyILre6AUlaFugCCYJRl8zPquJeqJNfw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(136003)(346002)(366004)(376002)(38100700002)(478600001)(2616005)(86362001)(5660300002)(186003)(6486002)(8936002)(107886003)(8676002)(966005)(83380400001)(7416002)(54906003)(4326008)(66556008)(66476007)(6916009)(36756003)(66946007)(316002)(41300700001)(6666004)(2906002)(6506007)(26005)(6512007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bGIAIN0/D7tpdQNLMZiqG2wW6RvuuG/f9f/lJVjZSWbiESI3r5eHYuKyTYXM?=
- =?us-ascii?Q?uSplSNiwIbnkOzXkwmRlo0uS2jBUI4tEj8eoyXLRLRydMfGerB+4JL/kQPJ3?=
- =?us-ascii?Q?0W49p7/ZWcZaLfPPuGRmR7wiXXFE4+YvpfPI2hRwEhB/5TJOkb6ruU2+lttW?=
- =?us-ascii?Q?e0GyYFsSPXoEOF7ZzxbJVQS7ATg4G8QEWk3FeAsveQBYiThfb4LNGGmqsHIH?=
- =?us-ascii?Q?9z/IeGVPNledKSs8kL0EgI+KXnStaUnDP8D7qmH0iit/93NaxJYtNdIkGaf7?=
- =?us-ascii?Q?kpRnqUWmalF5gBBWCerpbI2Jg5wAxJA4oVQDFE19Bblt1Fk4GSE0ND45QG3w?=
- =?us-ascii?Q?HwXUbxcqm3Gnw8QlWorpte1ILQwVQtLfR9F4wCx4zKt44lqrwgo/6+Pcu6Mf?=
- =?us-ascii?Q?ZKAugPiM7zVBJBb0EzCXvN4av5NPXKF9Fd+JyYiP1XDFBKxWTMh6P/J2qn1v?=
- =?us-ascii?Q?lVUNnSotyg4tq3E+tSrnAMrK7jw+F2lSyNCrh1mY9e8jXgWomVVuCuEBAopN?=
- =?us-ascii?Q?bCLl7Kp0yUAHEZNz2xg8Rx40cazgxMsLlDE/03kJC1NnyXoo/xqPt1jEtK1u?=
- =?us-ascii?Q?07UWlpcUgOk+11kPaXdyLUzcSeRDH55akiNqW3x2ScE6fDS/K/kftofx79bJ?=
- =?us-ascii?Q?aTJzw6/TWecJo9y20gDQEzzFNU7BqCV5Si0aAuZicasD7Cg/pLtbmrZl+xcS?=
- =?us-ascii?Q?SzWr5P+S2BE9vQV072CiSov4GfddFr0e/kXZEkSqElw9fHiGG74OsMRBOC3v?=
- =?us-ascii?Q?NT4UAHXgeHof1oeww2mFFdcMShweFDZmwJC8QgS1XfwboD+X+5EPZD+hAKds?=
- =?us-ascii?Q?fh+OX9t/uegQVVzYDCgACSKwmVqxXIELW5IAMIkQo5kTdcMarwaXMWLXfKwf?=
- =?us-ascii?Q?G5NUGXQTkeEUS5hej4LQneeidzN8alCA3LSKWo7kjkjmIeXAKxC8DEYNuysn?=
- =?us-ascii?Q?QYRHYMxsRC5wt493eW68o4Vp93dK2MjdFQLk9JHk5dHiGrXlaYRpTu30fe9M?=
- =?us-ascii?Q?Piz3ub12VuCcZBz62iBnQkMN+z6MIXBZ4KOSu//qgiG8LXnNbtCXVgzVrFqb?=
- =?us-ascii?Q?WkZcvlrr9vmyCuYapVnTJXcTJBweaZXupTuPC9wUafyk5DXgvfeBq111Ttf5?=
- =?us-ascii?Q?qw3JWTG5g9lDLzhT/ZuzCO/fh4cB8v8yqLy+BtBBmrCa8rL9nMKH0PqDUBRy?=
- =?us-ascii?Q?GDu/uGblOzPizAR3KdvXGApR8u2zmOH4TLuD9p9i6QpsOGs8QBX3+X90UqxU?=
- =?us-ascii?Q?u8y8G/aL42HtZD/68X68yHOEKtu9jPPOPhScqIMBph2qxZoENHAiHFvRefbZ?=
- =?us-ascii?Q?WsD8aPjCUOR7fPH972jtrhj1sqNDvh+w4RJC2GuYe9cusgxWxTVguQ80ZjWJ?=
- =?us-ascii?Q?6sLWhUVJgiaLN82LDZVsz3vjcn2aQwx5OZ7Ara/VHBGEuGMnKEbk7YalWNwS?=
- =?us-ascii?Q?Ld9t+kZuD0hjtbRauqSPT5rKT1LM45DX1vkHVSv0/VpBil9NdmJshIBdGrMt?=
- =?us-ascii?Q?CN8IQeEG4HXLofMQJGJfVe2oZlnfQ/EC+ZiLiTZ4z1aFjT8lXBeki1ty4XBL?=
- =?us-ascii?Q?Y9L5ZhoYWa79734NQaEg3vrzSOcKWcBwTcliMThE?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dtYR4k+y/OIhTdnG4Uigq9Kjkgbp/Eik7N7h6+JnEDkwWpuFobzTW8oW/JIg?=
+ =?us-ascii?Q?4E7tUgCUSZ1Yo8d0o+UINeAEMPQWNWhTT5uwa5FIB0nAJ1lLNzoV0XXQKlCj?=
+ =?us-ascii?Q?6n3t0+80BHKE4U4Vvq1QLeMul0CYvTHFFgDw1calxZEpmxs0hOgoOJvVIGT+?=
+ =?us-ascii?Q?+G1IwKnD47Dtn19TRP88pO2vsLmblCbRbiBTbeUClbpx3/s4p0ESr4gX5/Ky?=
+ =?us-ascii?Q?R/GrPJu6q3BbbYXLQBkU9nRh0dKgIwmKdBk7KODrgZHKs4DLJAYULh6QUnMU?=
+ =?us-ascii?Q?PCSDx7d2TPpyweqolfVcGL2aGu58/zmrK2+sqOtAbRK7b88rhEzn2+9BEc+k?=
+ =?us-ascii?Q?l0EzVQSCZgZJ+PoreGEOiSU1jGrUkHfRTz4eJunwL3gCT397ze3XxEoAKwMl?=
+ =?us-ascii?Q?iLDpW9lgruEv8HY3ymbLVkg82escjxrMvYqdtWlwuGkswUvN7U7Pf+Ur/GHa?=
+ =?us-ascii?Q?cpvcj+g1L/JcWZGSbedFXxSe2IftoDpLtoTHGzJV3akVcDNPZKyyyTdt/IXL?=
+ =?us-ascii?Q?l4T0IhZ1XODuMN2erdSDU3XLaZIQclq82bA65vEGmDZricSUiiQoFgzAb9Xi?=
+ =?us-ascii?Q?mCXwSAmjDNh39YPf5lvdnjOu73ODF9I3j/W45SmfH2To0gfW0lNW4+BVrQOZ?=
+ =?us-ascii?Q?StkiDTRvWLtHfhWvRwXR4ZwNcR1pqOVIEgbL6P6agL1qNwOsO0TGNI70Ab3N?=
+ =?us-ascii?Q?QGc/QI9EWh1vnFGua2CNcj+BnKm0/8DkuCW+cV5yuz3mv5iwpEBOGHxDtGqh?=
+ =?us-ascii?Q?0ZVNmclHthcxJAYYUh5yfsRvwMsgWffS63NTi+gwK+yL4/qNuNNoPkCLfkK1?=
+ =?us-ascii?Q?9YmglF4tRzUy8hneNfdKBGwailDauEZmC5bltMwhnhXZK7OPBLMuWwWcBZyn?=
+ =?us-ascii?Q?EOSJ0Jdef8AH5GydgOO69Qf2NVVKGZTWSe6rePeGZc1ddfJSw8E/hz9Xqxps?=
+ =?us-ascii?Q?x52HrNiEgM8edjMiCFCIm+ZZv2Zfdxsmv9h6t38+aU2afhhdS+bJ6HQn9lbE?=
+ =?us-ascii?Q?sUCqbnbmo+VATLbPTnl3Awb6+T4gua/4Qsaw2mUhDasswtLbZNDFbvoXlfVo?=
+ =?us-ascii?Q?hHjqmyLUZK1/aF3T1b8Lg+e9KUKFSOYMK8MSGdBb7azOuMTFYtak7LSiT0dP?=
+ =?us-ascii?Q?gYvhT6VicNvD2unHIdZb631CzKOXbXQawyW8gzG/l9AOwKNm4e1Vx/vNcXXm?=
+ =?us-ascii?Q?IilKZCzMG1tEL+s0u1XZFXr/NQmzhbCXoNGSmBuZcoDqV1lmQkv2JdIvE0k/?=
+ =?us-ascii?Q?TkfIc70SkgaPvSZBq+I0VJOZoG9UyZb9f46xD0bm0P4TbMa1W4JXCWURvXUi?=
+ =?us-ascii?Q?6Gc7bJHeHfZ3FHIRl2wgSdQ2pxenLXM2cgP8V4lRU5seC3Xq6TxAf6f2YQQ0?=
+ =?us-ascii?Q?tLrKVswJK/D0dMXUDpzDev7EFybwXVq1TiFHQVaRVox0EbWYgM0Mb8iQE2cz?=
+ =?us-ascii?Q?oOwkMWM0tsPT0oqVyp1Kst31UFH4w/qn0Z6Qeg49wE46vLeajlKTGEeavUDk?=
+ =?us-ascii?Q?RuqMthVgUOXzxOeB6NTd74QZI4xkykUEW+jvg/EI02S+NGBR2lTIOPpr+CX+?=
+ =?us-ascii?Q?qPhP0/I3bcbSJJG0SUr6h7eoqRJLYF9IQBj6Eq0f?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85ea4dc6-2e62-4e8b-f552-08da799c6e2a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 275b261e-0d23-4858-03f5-08da799c7003
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 00:16:39.8545
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 00:16:42.9168
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8GODe/kY+oMCCoETuiTTVob2rGNF6OJLz5CwTc1c6xzyYr5AK2eOfTgTAz4WfAYjScQyP1zMmhu6N1Vd23EN6w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: IVaxmUh3dhZ8l5X8uNS07rF/GbYCC2HF5mIyz85WTFp5OhhoweKsmFwD7B/7xmJdHQNcWNGF/W9QVzCu2CmR8g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2780
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
@@ -123,94 +125,285 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gup_flags is passed to check_and_migrate_movable_pages() so that it can
-call either put_page() or unpin_user_page() to drop the page reference.
-However check_and_migrate_movable_pages() is only called for
-FOLL_LONGTERM, which implies FOLL_PIN so there is no need to pass
-gup_flags.
+When pinning pages with FOLL_LONGTERM check_and_migrate_movable_pages()
+is called to migrate pages out of zones which should not contain any
+longterm pinned pages.
+
+When migration succeeds all pages will have been unpinned so pinning
+needs to be retried. Migration can also fail, in which case the pages
+will also have been unpinned but the operation should not be retried. If
+all pages are in the correct zone nothing will be unpinned and no retry
+is required.
+
+The logic in check_and_migrate_movable_pages() tracks unnecessary state
+and the return codes for each case are difficult to follow. Refactor the
+code to clean this up. No behaviour change is intended.
 
 Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 
 ---
 
 Changes for v3:
 
- - Move WARN_ON() out of loop
+ - Improved comments (thanks John).
+ - Fix up inconsistent int/long/unsigned long.
+ - Rename (migrate|collect)_unpinnable_pages
+   to (migrate|collect)_longterm_unpinnable_pages() as suggested by David.
+
+Changes for v2:
+
+ - Split into different functions as suggested by John.
+ - Made error handling more conventional as requested by Jason.
+
+Originally posted as "mm/gup.c: Simplify and fix
+check_and_migrate_movable_pages() return codes"[1].
+
+Changes from that version:
+
+ - Restore the original isolation failure behaviour and don't fail the
+   pup. Instead retry indefinitely.
+ - Unpin all pages on retry or failure rather than just failure.
+
+[1] https://lore.kernel.org/linux-mm/814dee5d3aadd38c3370eaaf438ba7eee9bf9d2b.1659399696.git-series.apopple@nvidia.com/
 ---
- mm/gup.c | 23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
+ mm/gup.c | 166 ++++++++++++++++++++++++++++++++------------------------
+ 1 file changed, 97 insertions(+), 69 deletions(-)
 
 diff --git a/mm/gup.c b/mm/gup.c
-index c6d060d..a2baa8b 100644
+index a2baa8b..d7ca706 100644
 --- a/mm/gup.c
 +++ b/mm/gup.c
-@@ -1907,8 +1907,7 @@ struct page *get_dump_page(unsigned long addr)
-  * Return negative error if migration fails.
+@@ -1901,19 +1901,16 @@ struct page *get_dump_page(unsigned long addr)
+ 
+ #ifdef CONFIG_MIGRATION
+ /*
+- * Check whether all pages are pinnable, if so return number of pages.  If some
+- * pages are not pinnable, migrate them, and unpin all pages. Return zero if
+- * pages were migrated, or if some pages were not successfully isolated.
+- * Return negative error if migration fails.
++ * Returns the number of collected pages. Return value is always >= 0.
   */
- static long check_and_migrate_movable_pages(unsigned long nr_pages,
--					    struct page **pages,
--					    unsigned int gup_flags)
-+					    struct page **pages)
+-static long check_and_migrate_movable_pages(unsigned long nr_pages,
+-					    struct page **pages)
++static unsigned long collect_longterm_unpinnable_pages(
++					struct list_head *movable_page_list,
++					unsigned long nr_pages,
++					struct page **pages)
  {
- 	unsigned long isolation_error_count = 0, i;
+-	unsigned long isolation_error_count = 0, i;
++	unsigned long i, collected = 0;
  	struct folio *prev_folio = NULL;
-@@ -1941,10 +1940,8 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
- 			 * Migration will fail if the page is pinned, so convert
- 			 * the pin on the source page to a normal reference.
- 			 */
--			if (gup_flags & FOLL_PIN) {
--				get_page(&folio->page);
--				unpin_user_page(&folio->page);
--			}
-+			get_page(&folio->page);
-+			unpin_user_page(&folio->page);
+-	LIST_HEAD(movable_page_list);
+-	bool drain_allow = true, coherent_pages = false;
+-	int ret = 0;
++	bool drain_allow = true;
  
- 			ret = migrate_device_coherent_page(&folio->page);
- 			if (ret)
-@@ -1998,10 +1995,7 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
- 		if (!pages[i])
+ 	for (i = 0; i < nr_pages; i++) {
+ 		struct folio *folio = page_folio(pages[i]);
+@@ -1922,43 +1919,16 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
  			continue;
+ 		prev_folio = folio;
  
--		if (gup_flags & FOLL_PIN)
--			unpin_user_page(pages[i]);
--		else
--			put_page(pages[i]);
-+		unpin_user_page(pages[i]);
+-		/*
+-		 * Device coherent pages are managed by a driver and should not
+-		 * be pinned indefinitely as it prevents the driver moving the
+-		 * page. So when trying to pin with FOLL_LONGTERM instead try
+-		 * to migrate the page out of device memory.
+-		 */
+-		if (folio_is_device_coherent(folio)) {
+-			/*
+-			 * We always want a new GUP lookup with device coherent
+-			 * pages.
+-			 */
+-			pages[i] = 0;
+-			coherent_pages = true;
+-
+-			/*
+-			 * Migration will fail if the page is pinned, so convert
+-			 * the pin on the source page to a normal reference.
+-			 */
+-			get_page(&folio->page);
+-			unpin_user_page(&folio->page);
++		if (folio_is_longterm_pinnable(folio))
++			continue;
+ 
+-			ret = migrate_device_coherent_page(&folio->page);
+-			if (ret)
+-				goto unpin_pages;
++		collected++;
+ 
++		if (folio_is_device_coherent(folio))
+ 			continue;
+-		}
+ 
+-		if (folio_is_longterm_pinnable(folio))
+-			continue;
+-		/*
+-		 * Try to move out any movable page before pinning the range.
+-		 */
+ 		if (folio_test_hugetlb(folio)) {
+-			if (isolate_hugetlb(&folio->page,
+-						&movable_page_list))
+-				isolation_error_count++;
++			isolate_hugetlb(&folio->page, movable_page_list);
+ 			continue;
+ 		}
+ 
+@@ -1967,59 +1937,117 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+ 			drain_allow = false;
+ 		}
+ 
+-		if (folio_isolate_lru(folio)) {
+-			isolation_error_count++;
++		if (!folio_isolate_lru(folio))
+ 			continue;
+-		}
+-		list_add_tail(&folio->lru, &movable_page_list);
++
++		list_add_tail(&folio->lru, movable_page_list);
+ 		node_stat_mod_folio(folio,
+ 				    NR_ISOLATED_ANON + folio_is_file_lru(folio),
+ 				    folio_nr_pages(folio));
  	}
  
- 	if (!list_empty(&movable_page_list)) {
-@@ -2023,8 +2017,7 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+-	if (!list_empty(&movable_page_list) || isolation_error_count ||
+-	    coherent_pages)
+-		goto unpin_pages;
++	return collected;
++}
+ 
+-	/*
+-	 * If list is empty, and no isolation errors, means that all pages are
+-	 * in the correct zone.
+-	 */
+-	return nr_pages;
++/*
++ * Unpins all pages and migrates device coherent pages and movable_page_list.
++ * Returns zero if all pages were successfully migrated or -errno for failure
++ * (or partial success).
++ */
++static int migrate_longterm_unpinnable_pages(
++					struct list_head *movable_page_list,
++					unsigned long nr_pages,
++					struct page **pages)
++{
++	int ret;
++	unsigned long i;
+ 
+-unpin_pages:
+-	/*
+-	 * pages[i] might be NULL if any device coherent pages were found.
+-	 */
+ 	for (i = 0; i < nr_pages; i++) {
+-		if (!pages[i])
++		struct folio *folio = page_folio(pages[i]);
++
++		if (folio_is_device_coherent(folio)) {
++			/*
++			 * Migration will fail if the page is pinned, so convert
++			 * the pin on the source page to a normal reference.
++			 */
++			pages[i] = NULL;
++			get_page(&folio->page);
++			unpin_user_page(&folio->page);
++
++			if (migrate_device_coherent_page(&folio->page)) {
++				ret = -EBUSY;
++				goto err;
++			}
++
+ 			continue;
++		}
+ 
++		/*
++		 * We can't migrate pages with unexpected references, so drop
++		 * the reference obtained by __get_user_pages_locked().
++		 * Migrating pages have been added to movable_page_list after
++		 * calling folio_isolate_lru() which takes a reference so the
++		 * page won't be freed if it's migrating.
++		 */
+ 		unpin_user_page(pages[i]);
++		pages[i] = NULL;
+ 	}
+ 
+-	if (!list_empty(&movable_page_list)) {
++	if (!list_empty(movable_page_list)) {
+ 		struct migration_target_control mtc = {
+ 			.nid = NUMA_NO_NODE,
+ 			.gfp_mask = GFP_USER | __GFP_NOWARN,
+ 		};
+ 
+-		ret = migrate_pages(&movable_page_list, alloc_migration_target,
+-				    NULL, (unsigned long)&mtc, MIGRATE_SYNC,
+-				    MR_LONGTERM_PIN, NULL);
+-		if (ret > 0) /* number of pages not migrated */
++		if (migrate_pages(movable_page_list, alloc_migration_target,
++				  NULL, (unsigned long)&mtc, MIGRATE_SYNC,
++				  MR_LONGTERM_PIN, NULL)) {
+ 			ret = -ENOMEM;
++			goto err;
++		}
+ 	}
+ 
+-	if (ret && !list_empty(&movable_page_list))
+-		putback_movable_pages(&movable_page_list);
++	putback_movable_pages(movable_page_list);
++
++	return 0;
++
++err:
++	for (i = 0; i < nr_pages; i++)
++		if (pages[i])
++			unpin_user_page(pages[i]);
++	putback_movable_pages(movable_page_list);
++
+ 	return ret;
  }
++
++/*
++ * Check whether all pages are pinnable. If some pages are not pinnable migrate
++ * them and unpin all the pages. Returns -EAGAIN if pages were unpinned or zero
++ * if all pages are pinnable and in the right zone. Other errors indicate
++ * migration failure.
++ */
++static long check_and_migrate_movable_pages(unsigned long nr_pages,
++					    struct page **pages)
++{
++	int ret;
++	unsigned long collected;
++	LIST_HEAD(movable_page_list);
++
++	collected = collect_longterm_unpinnable_pages(&movable_page_list, nr_pages, pages);
++	if (!collected)
++		return 0;
++
++	ret = migrate_longterm_unpinnable_pages(&movable_page_list, nr_pages, pages);
++	if (!ret)
++		return -EAGAIN;
++	else
++		return ret;
++}
  #else
  static long check_and_migrate_movable_pages(unsigned long nr_pages,
--					    struct page **pages,
--					    unsigned int gup_flags)
-+					    struct page **pages)
+ 					    struct page **pages)
  {
- 	return nr_pages;
+-	return nr_pages;
++	return 0;
  }
-@@ -2047,13 +2040,17 @@ static long __gup_longterm_locked(struct mm_struct *mm,
- 	if (!(gup_flags & FOLL_LONGTERM))
- 		return __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
- 					       NULL, gup_flags);
-+	/* check_and_migrate_movable_pages() assumes pages have been pinned. */
-+	if (WARN_ON(!(gup_flags & FOLL_PIN)))
-+		return -EINVAL;
- 	flags = memalloc_pin_save();
- 	do {
- 		rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
- 					     NULL, gup_flags);
- 		if (rc <= 0)
+ #endif /* CONFIG_MIGRATION */
+ 
+@@ -2051,10 +2079,10 @@ static long __gup_longterm_locked(struct mm_struct *mm,
  			break;
--		rc = check_and_migrate_movable_pages(rc, pages, gup_flags);
-+
-+		rc = check_and_migrate_movable_pages(rc, pages);
- 	} while (!rc);
+ 
+ 		rc = check_and_migrate_movable_pages(rc, pages);
+-	} while (!rc);
++	} while (rc == -EAGAIN);
  	memalloc_pin_restore(flags);
  
-
-base-commit: 360614c01f81f48a89d8b13f8fa69c3ae0a1f5c7
+-	return rc;
++	return rc ? rc : nr_pages;
+ }
+ 
+ static bool is_valid_gup_flags(unsigned int gup_flags)
 -- 
 git-series 0.9.1

@@ -2,52 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DC558E043
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CAF58E047
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343697AbiHITeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        id S235436AbiHITh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343769AbiHITeK (ORCPT
+        with ESMTP id S235535AbiHIThC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:34:10 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF9023163
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 12:34:07 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id h203-20020a6bb7d4000000b006804b1617f2so6798083iof.17
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 12:34:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=zzEeAyO5XNdispcrLmThTVHXYAzdUmPo4XOGr5Nx8TA=;
-        b=JcE2dzIVz484IMWO10FwdF4bhEP+A4lA4xJoiPTuhlxdMOtsxstjIlEYF6xQdj7mG5
-         L8bTBvyVUczczAj0XTflN8yiCRvLaxa55vBFADP9lljcyrSdafDYtK6YskEqIXCLEn43
-         8/4wA7MctXT51+WlITNyX8H7oGGZzZ00VmUi2RoTCB8yWFpFYlsKEVIL2B1MkkpWGH/i
-         fUGL9BcpxSGCaAq8evUw6o93KrUZ47OY4aVuje0SnPj8qG5czF3Sj4pn3xSydluNUEhN
-         Bk+4F24v+jy/PUYT7Hah/aDag4FQc8B2yx1ZBEIYmGdECGJROXcMaikyfSypWo2t1kzO
-         nRHQ==
-X-Gm-Message-State: ACgBeo1abWUy5dLruwHXtKGoCrpqh5xNi1BcSYzo58Y6HBNMmc/kBEDF
-        s1qOrNJ91MFdEsIbuKo0yDJMXy9y74E650e9T8ItFeII2hYy
-X-Google-Smtp-Source: AA6agR4d8kKdDF9am7Lfxb8qrTbcYFHzwcZgOfiFH+iPAo6oqJpgGxJ4jRFE/FQ5bUe/C7HASu0ODcGhCNqi4kxssh5C06gdShHe
+        Tue, 9 Aug 2022 15:37:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509DF24942;
+        Tue,  9 Aug 2022 12:37:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E188D61337;
+        Tue,  9 Aug 2022 19:37:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DA59C433C1;
+        Tue,  9 Aug 2022 19:37:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660073820;
+        bh=7RU30KM7l0MKvkGXYL/0iZfnQboyY+CyJ42jlnIxKfA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aih3hVnI5FTJlnCknNFmJ1FuAG1eAPO6LY0VkAvF4DLbZ0MniUEuh3a/jwRr7gy4t
+         kQCT2XzSbqTSt9BxZr08qIIoZAmr1KqMuvDSTDP3M8bQ44aGwyfN5L9PoFhBdUff2T
+         TdCi0Ip7WNnr64nlX6qjdiy01AA0fMVdHgnTQEVufIjIXgW3SZuH3AZDAll46iwaXz
+         mTGOwGiwxJspYaKmLyrlmu/uJMCQpzeIoAI5oCoD//yAFvNXVHLqzMmWFmr1PHzsbW
+         sq5nuBHCden8b+mDMcV0akUHcuUhqCm1m7XJNlHmhRHevC7qcMZ06dOThtKaZbHxtY
+         Y7k9btN34vLWg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B2D6E4035A; Tue,  9 Aug 2022 16:36:57 -0300 (-03)
+Date:   Tue, 9 Aug 2022 16:36:57 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v4 01/17] perf jevents: Clean up pytype warnings
+Message-ID: <YvK3WZ5UVrlW1mwe@kernel.org>
+References: <20220804221816.1802790-1-irogers@google.com>
+ <20220804221816.1802790-2-irogers@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:13d5:b0:67c:9149:fe0f with SMTP id
- o21-20020a05660213d500b0067c9149fe0fmr10500631iov.114.1660073646568; Tue, 09
- Aug 2022 12:34:06 -0700 (PDT)
-Date:   Tue, 09 Aug 2022 12:34:06 -0700
-In-Reply-To: <20220809105321.2309-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000013bb605e5d40423@google.com>
-Subject: Re: [syzbot] possible deadlock in p9_req_put
-From:   syzbot <syzbot+50f7e8d06c3768dd97f3@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220804221816.1802790-2-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,20 +74,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Em Thu, Aug 04, 2022 at 03:18:00PM -0700, Ian Rogers escreveu:
+> Improve type hints to clean up pytype warnings.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Thanks, applied.
 
-Reported-and-tested-by: syzbot+50f7e8d06c3768dd97f3@syzkaller.appspotmail.com
+- Arnaldo
 
-Tested on:
+ 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/pmu-events/jevents.py | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+> index 83e0dcbeac9a..5b72048d50da 100755
+> --- a/tools/perf/pmu-events/jevents.py
+> +++ b/tools/perf/pmu-events/jevents.py
+> @@ -6,8 +6,7 @@ import csv
+>  import json
+>  import os
+>  import sys
+> -from typing import Callable
+> -from typing import Sequence
+> +from typing import (Callable, Optional, Sequence)
+>  
+>  # Global command line arguments.
+>  _args = None
+> @@ -57,7 +56,7 @@ class JsonEvent:
+>                                         '. '), '.').replace('\n', '\\n').replace(
+>                                             '\"', '\\"').replace('\r', '\\r')
+>  
+> -    def convert_aggr_mode(aggr_mode: str) -> str:
+> +    def convert_aggr_mode(aggr_mode: str) -> Optional[str]:
+>        """Returns the aggr_mode_class enum value associated with the JSON string."""
+>        if not aggr_mode:
+>          return None
+> @@ -67,7 +66,7 @@ class JsonEvent:
+>        }
+>        return aggr_mode_to_enum[aggr_mode]
+>  
+> -    def lookup_msr(num: str) -> str:
+> +    def lookup_msr(num: str) -> Optional[str]:
+>        """Converts the msr number, or first in a list to the appropriate event field."""
+>        if not num:
+>          return None
+> @@ -79,7 +78,7 @@ class JsonEvent:
+>        }
+>        return msrmap[int(num.split(',', 1)[0], 0)]
+>  
+> -    def real_event(name: str, event: str) -> str:
+> +    def real_event(name: str, event: str) -> Optional[str]:
+>        """Convert well known event names to an event string otherwise use the event argument."""
+>        fixed = {
+>            'inst_retired.any': 'event=0xc0,period=2000003',
+> @@ -95,7 +94,7 @@ class JsonEvent:
+>          return fixed[name.lower()]
+>        return event
+>  
+> -    def unit_to_pmu(unit: str) -> str:
+> +    def unit_to_pmu(unit: str) -> Optional[str]:
+>        """Convert a JSON Unit to Linux PMU name."""
+>        if not unit:
+>          return None
+> @@ -154,7 +153,7 @@ class JsonEvent:
+>      if self.metric_expr:
+>        self.metric_expr = self.metric_expr.replace('\\', '\\\\')
+>      arch_std = jd.get('ArchStdEvent')
+> -    if precise and self.desc and not '(Precise Event)' in self.desc:
+> +    if precise and self.desc and '(Precise Event)' not in self.desc:
+>        extra_desc += ' (Must be precise)' if precise == '2' else (' (Precise '
+>                                                                   'event)')
+>      event = f'config={llx(configcode)}' if configcode is not None else f'event={llx(eventcode)}'
+> -- 
+> 2.37.1.559.g78731f0fdb-goog
 
-commit:         ca688bff Add linux-next specific files for 20220808
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=147d0be1080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4c20e006003cdecb
-dashboard link: https://syzkaller.appspot.com/bug?extid=50f7e8d06c3768dd97f3
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=142dbea9080000
+-- 
 
-Note: testing is done by a robot and is best-effort only.
+- Arnaldo

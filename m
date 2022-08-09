@@ -2,84 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351D058DA7A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B42758DA7D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244022AbiHIOnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 10:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33032 "EHLO
+        id S244221AbiHIOo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 10:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiHIOnx (ORCPT
+        with ESMTP id S230226AbiHIOoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 10:43:53 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB8D1B7AD
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 07:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7z/JIUVgUhFXekW4Gduj7+h/qYJwWZYYv/506cYfRO4=; b=X6wAY4JSpD1MsTGMIps4uXR5+K
-        fdixl0iqHE7B7Bon+LpUoDec++73sL08sVAJRflcDWBhGUKQa8ssHAXqitz6BesQEJwCGDSJHf2gq
-        /Cmeh9Fsn1lZS49+AAVsTvAtwc6keu7assWYRuztEb4S65hHqOWgvQMKocYlTHlXiiZ1If8VI/rtS
-        kXL9KxSaom4Gy3hdgPu2uZDhq1occseSvi7Vf42G6V7Pymb/IULH77VbXKyfLpw0hNaVMHHx+OXm+
-        +K6zIVjZdNuuSgcmm+TEVkxHzp2rq1X/+XO+HyA3a9s13jDLGdWhuBZGrA7deQQsmZmP/PD7ADVke
-        jBNGfMtA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oLQSL-00FU2x-6I; Tue, 09 Aug 2022 14:43:41 +0000
-Date:   Tue, 9 Aug 2022 15:43:41 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Felix Kuehling <felix.kuehling@amd.com>
-Cc:     Alex Williamson <alex.williamson@redhat.com>, alex.sierra@amd.com,
-        akpm@linux-foundation.org, hch@lst.de, apopple@nvidia.com,
-        david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: re-allow pinning of zero pfns (again)
-Message-ID: <YvJynaZPAJayhgBK@casper.infradead.org>
-References: <166002010021.381133.11357879752637949308.stgit@omen>
- <YvJTi0fAgl/T4WA4@casper.infradead.org>
- <cd25ebd9-52f9-2e66-841e-fc94b3949f7d@amd.com>
+        Tue, 9 Aug 2022 10:44:24 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1514E1BE9A
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 07:44:24 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id f192so10965459pfa.9
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 07:44:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=sQaSKkyDjB+FQ3HzSLhOg2i25ze0crFVErbWzPkt/Zc=;
+        b=TtPlrcxxlmo9ZkUT8y1+7uhoK/yYlArtMOuSYswo0SbRQ/o1/yipPl94rPdlURLWsP
+         2q//srgE5YLXE/xmtbf2rOobJeXNWnA4oa2iHliH7RQ5wI1rvNvgi+SkREBo0nnngEnE
+         4e+PLdfAgWqjeCYc1N0qJyZrJ9xDXVHnCq8W/BVTuJ5+hD7RdZ+oTh28P4WR6ZXIfgLT
+         16NZLP1d5E3Rp3jUPAZccbo3EdEQkPYV08AauJAv5FNtMcFfUUmcowCOs0QbNVZxSkwJ
+         RKh1NVDxSN8lEijoyShLcvsrlUthqosuXDtyzGtuBYJw2DA1bxyYalLy23o2QONPZQn8
+         vrlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=sQaSKkyDjB+FQ3HzSLhOg2i25ze0crFVErbWzPkt/Zc=;
+        b=Bjl7vRUmFSPftFTSZkJCC5eMIfb4A2GY/vg9trEO9AKHnWpjDFrlBEz/P5E3FOZYpn
+         Dn/EFH+KHPQbQVTmdmEM8zPQ5QdDoBy1AwMDdigFzEQq54BLJJhwtO0nmYWvmvFyRDHH
+         Dv4kgK1IGa5Zbs4lZsnxAMBfuYnhETbl/V+tijvNZ6D+R1b3hk10D81XiRLFRbST+cMi
+         2Cj+g+fdaJZ0XTgLJeOgV9pfcmEtyrFcT3VhMXZ/j2zCIL9HnXqiYBRQCH5y85rL6u7w
+         4UGUVjUiuZOGc56dF72lo0d56UULz4w7ZjQg3ruVz3ejfyWgUMR4Zhwx8grd2B5Hwl+X
+         e+HQ==
+X-Gm-Message-State: ACgBeo2llAGodLkZ8/QNjj/Jnzp36ukKBxj/v/MQTjnMuCy1expeYBd2
+        3BndZVFtuWBcwSk2LGxBv4QkVQ==
+X-Google-Smtp-Source: AA6agR7a9nCuq1rJkBxpRBMDI+gJdD7UQJPvNPjQ6amUFvnHsxM4MKFggber94U1O+ZzMgKjahIipw==
+X-Received: by 2002:a05:6a00:1a88:b0:52f:52df:ce1d with SMTP id e8-20020a056a001a8800b0052f52dfce1dmr9515422pfv.13.1660056263396;
+        Tue, 09 Aug 2022 07:44:23 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u8-20020a170903124800b0016f15140e55sm10849480plh.189.2022.08.09.07.44.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 07:44:22 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 14:44:19 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Yan Zhao <yan.y.zhao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 5/8] KVM: x86/mmu: Set disallowed_nx_huge_page in TDP
+ MMU before setting SPTE
+Message-ID: <YvJyw96QZdf6YPAX@google.com>
+References: <20220805230513.148869-1-seanjc@google.com>
+ <20220805230513.148869-6-seanjc@google.com>
+ <YvHT0dA0BGgCQ8L+@yzhao56-desk.sh.intel.com>
+ <331dc774-c662-9475-1175-725cb2382bb2@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cd25ebd9-52f9-2e66-841e-fc94b3949f7d@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <331dc774-c662-9475-1175-725cb2382bb2@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 10:14:12AM -0400, Felix Kuehling wrote:
-> Am 2022-08-09 um 08:31 schrieb Matthew Wilcox:
-> > On Mon, Aug 08, 2022 at 10:42:24PM -0600, Alex Williamson wrote:
-> > > The below referenced commit makes the same error as 1c563432588d ("mm: fix
-> > > is_pinnable_page against a cma page"), re-interpreting the logic to exclude
-> > > pinning of the zero page, which breaks device assignment with vfio.
-> > Perhaps we need to admit we're not as good at boolean logic as we think
-> > we are.
+On Tue, Aug 09, 2022, Paolo Bonzini wrote:
+> On 8/9/22 05:26, Yan Zhao wrote:
+> > hi Sean,
 > > 
-> > 	if (is_device_coherent_page(page))
-> > 		return false;
-> > 	if (is_zone_movable_page(page))
-> > 		return false;
-> > 	return is_zero_pfn(page_to_pfn(page));
+> > I understand this smp_rmb() is intended to prevent the reading of
+> > p->nx_huge_page_disallowed from happening before it's set to true in
+> > kvm_tdp_mmu_map(). Is this understanding right?
 > > 
-> > (or whatever the right logic is ... I just woke up and I'm having
-> > trouble parsing it).
+> > If it's true, then do we also need the smp_rmb() for read of sp->gfn in
+> > handle_removed_pt()? (or maybe for other fields in sp in other places?)
 > 
-> This implies an assumption that zero-page is never device-coherent or
-> moveable, which is probably true, but not part of the original condition. A
-> more formally correct rewrite would be:
-> 
-> 	if (is_zero_pfn(page_to_pfn(page)))
-> 		return true;
-> 	if (is_device_coherent_page(page))
-> 		return false;
-> 	return !is_zone_moveable_page(page);
+> No, in that case the barrier is provided by rcu_dereference().  In fact, I
+> am not sure the barriers are needed in this patch either (but the comments
+> are :)):
 
-It's definitely true that the zero page is never device-coherent, nor
-movable.  Moreover, we want to avoid calling page_to_pfn() if we can.
-So it should be the last condition that we check.
+Yeah, I'm 99% certain the barriers aren't strictly required, but I didn't love the
+idea of depending on other implementation details for the barriers.  Of course I
+completely overlooked the fact that all other sp fields would need the same
+barriers...
+
+> - the write barrier is certainly not needed because it is implicit in
+> tdp_mmu_set_spte_atomic's cmpxchg64
+> 
+> - the read barrier _should_ also be provided by rcu_dereference(pt), but I'm
+> not 100% sure about that. The reasoning is that you have
+> 
+> (1)	iter->old spte = READ_ONCE(*rcu_dereference(iter->sptep));
+> 	...
+> (2)	tdp_ptep_t pt = spte_to_child_pt(old_spte, level);
+> (3)	struct kvm_mmu_page *sp = sptep_to_sp(rcu_dereference(pt));
+> 	...
+> (4)	if (sp->nx_huge_page_disallowed) {
+> 
+> and (4) is definitely ordered after (1) thanks to the READ_ONCE hidden
+> within (3) and the data dependency from old_spte to sp.
+
+Yes, I think that's correct.  Callers must verify the SPTE is present before getting
+the associated child shadow page.  KVM does have instances where a shadow page is
+retrieved from the SPTE _pointer_, but that's the parent shadow page, i.e. isn't
+guarded by the SPTE being present.
+
+	struct kvm_mmu_page *sp = sptep_to_sp(rcu_dereference(iter->sptep));
+
+Something like this is as a separate patch?
+
+diff --git a/arch/x86/kvm/mmu/tdp_iter.h b/arch/x86/kvm/mmu/tdp_iter.h
+index f0af385c56e0..9d982ccf4567 100644
+--- a/arch/x86/kvm/mmu/tdp_iter.h
++++ b/arch/x86/kvm/mmu/tdp_iter.h
+@@ -13,6 +13,12 @@
+  * to be zapped while holding mmu_lock for read, and to allow TLB flushes to be
+  * batched without having to collect the list of zapped SPs.  Flows that can
+  * remove SPs must service pending TLB flushes prior to dropping RCU protection.
++ *
++ * The READ_ONCE() ensures that, if the SPTE points at a child shadow page, all
++ * fields in struct kvm_mmu_page will be read after the caller observes the
++ * present SPTE (KVM must check that the SPTE is present before following the
++ * SPTE's pfn to its associated shadow page).  Pairs with the implicit memory
++ * barrier in tdp_mmu_set_spte_atomic().
+  */
+ static inline u64 kvm_tdp_mmu_read_spte(tdp_ptep_t sptep)
+ {
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index bf2ccf9debca..ca50296e3696 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -645,6 +645,11 @@ static inline int tdp_mmu_set_spte_atomic(struct kvm *kvm,
+        lockdep_assert_held_read(&kvm->mmu_lock);
+
+        /*
++        * The atomic CMPXCHG64 provides an implicit memory barrier and ensures
++        * that, if the SPTE points at a shadow page, all struct kvm_mmu_page
++        * fields are visible to readers before the SPTE is marked present.
++        * Pairs with ordering guarantees provided by kvm_tdp_mmu_read_spte().
++        *
+         * Note, fast_pf_fix_direct_spte() can also modify TDP MMU SPTEs and
+         * does not hold the mmu_lock.
+         */

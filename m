@@ -2,99 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4C858E325
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBD058E32B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbiHIWWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 18:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S230113AbiHIW0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 18:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiHIWWt (ORCPT
+        with ESMTP id S229601AbiHIWZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 18:22:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1ACAA5D0C2
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 15:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660083765;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J5d/3BG2s8vMnjAuoCduflI1NT5l+CFjuPlkuPIekQ4=;
-        b=ZBTqCZhzK/VGqa3plYSRvgkuNKDpgqx55hQ8xP1HWWZagoPkuJjpGvcZFgjAV7EYHgjioN
-        1xs/1DrZ9XQ18sHwjnKSSBW5zkrfLptSEAkcOKMRqF56LvkehpjC9Gdp5AV7Dxdbj8jAl/
-        EKK6EAukwbfmO+eDmGdOPYj7LC+YGaY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-526-LOsvwJlnMFesVAXtERAgrw-1; Tue, 09 Aug 2022 18:22:44 -0400
-X-MC-Unique: LOsvwJlnMFesVAXtERAgrw-1
-Received: by mail-wm1-f72.google.com with SMTP id a17-20020a05600c349100b003a545125f6eso153063wmq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 15:22:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=J5d/3BG2s8vMnjAuoCduflI1NT5l+CFjuPlkuPIekQ4=;
-        b=6Xgrx7vZkmLyTozo4kX+ATBKLBSkqlmnymmfgrTtTPSU6ckFDjJj6VfJmtz8LNhBEF
-         Sf7aiL9IWvRQIFttvyc9ITBKm0qmo9W5ws5ReuFOzJAsSCTv/6MvfPyRLDY2JBsE5zrp
-         lww/wZKF+4DtDKs6LBKFbLq9AHmBc15xuCexfv9rG4xTcU41H6KmG3k4t0uKR6zY+Q2T
-         cjNhil4BNQIn+IBIyjo9CgUCvfARSb8Z5yubYpONkrywrzSKIn2W4TIz6OHmLOoV3+Wg
-         IJYJbnpdu8RnYYpH6ZCH/8c4yfbzNQPJAbysdVjY/w9s5ehCYJy7rJyuCp6pkhePJT5X
-         tL3w==
-X-Gm-Message-State: ACgBeo2knbNyfhzM4VSFSfmdNnROK+RIWHX8Cjwkz6wumC8rra9iyrY0
-        y7jz3hff37gnpM9CjLDuPqODtrRFTGngbe7tx9AGNQZugK0LbOvSkblqmT9fdoHWtqxtRebVjRP
-        RamN0nDeZ6JUn9Uy7t9J9XNS+
-X-Received: by 2002:a7b:c2a9:0:b0:3a4:f2a8:e7e4 with SMTP id c9-20020a7bc2a9000000b003a4f2a8e7e4mr302183wmk.55.1660083762775;
-        Tue, 09 Aug 2022 15:22:42 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4kBbpAEN6yiWnogwaGnmyCFzjP3Rldih06PHvfx/pIR7xi/W68poKipCx4qbM6a5cpTN/uuQ==
-X-Received: by 2002:a7b:c2a9:0:b0:3a4:f2a8:e7e4 with SMTP id c9-20020a7bc2a9000000b003a4f2a8e7e4mr302175wmk.55.1660083762522;
-        Tue, 09 Aug 2022 15:22:42 -0700 (PDT)
-Received: from redhat.com ([2.52.152.113])
-        by smtp.gmail.com with ESMTPSA id 5-20020a05600c028500b003a3278d5cafsm242111wmk.28.2022.08.09.15.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 15:22:41 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 18:22:38 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-bys missing for commits in the vhost tree
-Message-ID: <20220809181520-mutt-send-email-mst@kernel.org>
-References: <20220810080139.71f67609@canb.auug.org.au>
+        Tue, 9 Aug 2022 18:25:43 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D146515FE8;
+        Tue,  9 Aug 2022 15:25:42 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6E3ED5C01C8;
+        Tue,  9 Aug 2022 18:25:40 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 09 Aug 2022 18:25:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660083940; x=
+        1660170340; bh=wUwu7rEramo4VPL2of7nNhGsxyAcdYrNtJ7iJLfolt8=; b=G
+        HGBHv7xnNkOHdzo3v7CYoIT11b7tr1nsuU98hzsl8r1yvod15Q7IRf7+LAFgWQa3
+        C54AiOxBD8mx2++pzV/IMYT0oo0dctUGAl4ByVJ1wgVIGxK1UsfkYgDErCO8HGq2
+        EJx3S2fVcxLj5SW7IH7p7tKvZZtrI028ELnRf3eR/diyrChdcsxw9/aEPdAjvthc
+        p7eEAfG5rSCSeeWcun61Z4yWnIddcbriVPztnm6d04OrYMI57r3LuDioKJHunw60
+        Y9ZaWt+ZnwKV0zC40vhxbqrmyh6Vq+LW0v9+w49TIiTiS2UbiRSVcxUmJjbDlcZY
+        NOpv6DnyQbwmlt8G7aksA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660083940; x=
+        1660170340; bh=wUwu7rEramo4VPL2of7nNhGsxyAcdYrNtJ7iJLfolt8=; b=c
+        1+AbC51ttUtBW2+7r92rjPgjCHB+seZOd3jWWXfP8hGWdntCTYRhiEOZl0SziGXX
+        Q4rqkw90+4idmhbS+X44ScSvszvO6JuztPB39fKYuzuL1LKMvAmnRKLZRhhS+Hqn
+        vlicCeVqyaPur2m4Y9BRM5uISw/bXu8mMzm14/RpHjm6pZIpTPkMDPEBjW03ykmh
+        pB8J6GU++YYsmvJMoFjFTfpGs1AqjwClfLzm5RPlZO61Ek/TuepLj1XYotnBFWR7
+        hKD81YLk0VOfyk1iEyQyjWd4JYa4j9hlfVw5/o7XwHNzX3vfL2vdQyCyp+/XZjpH
+        +wqDfptHqdv2YOpao3azw==
+X-ME-Sender: <xms:5N7yYunBlLNABfMBnsErOdi1ZlevYvvzU9Gd7EQ1mpowtcQ56CDHbQ>
+    <xme:5N7yYl0CUDUTp5HCFip7CKEnyDvy1uS7x7IQCWt3TIThe3_wbbVb_GAG473tbylQR
+    qKoAZSD2z7RW9ppti4>
+X-ME-Received: <xmr:5N7yYsrnTGBuD07IXD-r5gGTPbW3s3iDnr2PRziWvk8H2YYa2JT7BLwN56XR0OUJ9nhFlA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeguddgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpefnuhhk
+    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
+    hnpeekfeffueejveeujeeugeelleehtdegvdeludektddtfffhieefledvudehfeejieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
+    eslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:5N7yYimZGTiOPtKD9Oz23gV2PkDssfJ0xkNCno5gWWHBf6q1TOq-HA>
+    <xmx:5N7yYs3QkN6dshHoDpd_LCigHC1rBWbUJcskUxZ7MjfhGKypVykUJA>
+    <xmx:5N7yYpuxI6MnNcLQjNkZiERcUVa8uMnuD4OpkYMxdWmogGo_Ku3GVA>
+    <xmx:5N7yYqBKxt_mvOlzn0mCLhgvfrXL9rGsev3z3pdlUEe2k0pTZlWWcw>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 9 Aug 2022 18:25:37 -0400 (EDT)
+Message-ID: <43ca98e5a51d30291efc96ef4758ff508ee143a4.camel@ljones.dev>
+Subject: Re: [PATCH v2 3/6] asus-wmi: Implement TUF laptop keyboard power
+ states
+From:   Luke Jones <luke@ljones.dev>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Wed, 10 Aug 2022 10:25:29 +1200
+In-Reply-To: <CAHp75Ve4kFJz-4QqpUYTujQRkOkFZ+w01eHRwZyvQAA+GkNG9A@mail.gmail.com>
+References: <20220808030420.8633-1-luke@ljones.dev>
+         <20220808030420.8633-4-luke@ljones.dev>
+         <CAHp75VdNa8csSF5Je87kOzC3EQ4yetZqpxXFZu1D7C4A6XCTNg@mail.gmail.com>
+         <X5LBGR.15DO7CCYH6ER@ljones.dev>
+         <CAHp75Ve4kFJz-4QqpUYTujQRkOkFZ+w01eHRwZyvQAA+GkNG9A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (by Flathub.org) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220810080139.71f67609@canb.auug.org.au>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 08:01:39AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commits
-> 
->   2d84b3963557 ("ack! tools/virtio: drop phys_addr_t typedef")
->   c6d14c52fba9 ("ack! tools/virtio: drop phys_addr_t typedef")
-> 
-> are missing Signed-off-bys from their author and committer.
-> 
-> Is this new set of commits really ready and destined for the current
-> merge window?
+G'day Andy,
 
-Oh sorry.  They are empty, they just record that I need to add an ack to
-the log of the previous commit. So harmless - I just forgot to squash
-them - I would normally notice as I prepare the pull request.
-Fixed - if you can pick up the new hash I just pushed pls do but
-if not it's okay to test as is, too.
+On Tue, 2022-08-09 at 10:29 +0200, Andy Shevchenko wrote:
+> On Tue, Aug 9, 2022 at 1:27 AM Luke Jones <luke@ljones.dev> wrote:
+>=20
+> ...
+>=20
+> > > > =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (sscanf(buf, "%hhd %=
+hhd %hhd %hhd %hhd", &save,
+> > > > &boot,
+> > > > &awake, &sleep, &keyboard) !=3D 5)
+> > > > =C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
+> > >=20
+> > > Same Q here: wouldn't it be better to put each of the parameters
+> > > to a
+> > > separate sysfs node? Or look at the LED ABI (that what Pavel
+> > > mentioned
+> > > for multi-color patterns) and see if there are already some
+> > > established ways of how to represent necessary information?
+> >=20
+> > Same argument I make for the RGB mode nodes. But here I think it's
+> > probably even more pertinent. The reasons I would like to keep this
+> > as
+> > one node are:
+> >=20
+> > - It's separate to the RGB part
+> > - We can't read the device to set defaults on boot
+>=20
+> Hmm... Maybe it's done via one of the WMI calls?
 
--- 
-MST
+That was my hope, but I'm unable to find one. I'm fairly certain that
+this set of keyboards uses the same controller as the USB connected one
+(the USB one has two versions in circulation also), and I've not been
+able to find any packet data that indicates the USB ones send a
+"supported".
 
+Checking with `fwts wmi -` reveals nothing (all passes).
+
+I've emailed my contact in the ROG engineering team at ASUS to see if
+they can provide any insight.
+
+>=20
+> > - Because of the above, if we set a default and the user wants to
+> > change perhaps "sleep", then we're going to have to write some
+> > incorrect guess data since the write requires all the flags at once
+> > - One way to improve the UX is to add _show, but then this has to
+> > display incorrect data on boot
+> > - We end up with 5 more nodes
+> >=20
+> > The same reasons above apply to the RGB nodes, which right now I'm
+> > of
+> > two minds about. We'll see which way the RGB mode patch goes after
+> > some
+> > daily use.
+>=20
+> I just realized that in previous mail I mentioned Device Tree which
+> is
+> irrelevant here. We can't use it on x86 traditional platforms, so it
+> means that platform should somehow pass the data to the OS one way or
+> another. If there is no way to read back (bad designed interfaces),
+> then we can only reset to whatever user provides.
+>=20
+
+Umm.. Do you mean:
+- load module
+- module sets a default (all on)
+- user or userspace-util sets user preference?
+
+Given that the system daemon I develop (asusd + asusctl) is in very
+wide use, I guess it's not such a big issue to both split these nodes
+out and set a default.. I guess I'll go ahead and keep the expectation
+that the reworked RGB-mode patch sets.
+
+It seems to me that the appropriate way to do the "write-out" for both
+mode and state is to have nodes:
+- keyboard_rgb_mode_apply
+- keyboard_rgb_state_apply
+- Input 0 =3D set (doesn't stick on boot), 1 =3D save
+
+going with the above I should rename existing nodes, especially the
+current *_save node. And this brings me to my next issue: currently
+behaviour for the *_apply is:
+- write 0 applies, but doesn't stick
+- write 1 applies, and sticks on boot
+- reading the *_apply nodes will show 0/1
+- if already "1", you still need to overwrite with "1" to apply.
+
+This doesn't seem appropriate does it?
+Should there be a WO node for *_apply, and another node for *_save
+(which would store/show the setting)? I'm inclined to think so, and
+that this will add quite a bit of clutter (6 nodes for state, 4 for
+mode).
+
+Kind regards,
+Luke.

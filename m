@@ -2,166 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABAB058DC68
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D45E958DC6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244948AbiHIQrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
+        id S245006AbiHIQsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244667AbiHIQrR (ORCPT
+        with ESMTP id S244667AbiHIQsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:47:17 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B82220EB
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:47:14 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id o184so4644216oif.13
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 09:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=OQdzvI48V4v1B4ddrzc07g5SpSnYPX/QwedZe0qu4AI=;
-        b=Ri2tsj0wADEJ/FqtuFe8VA3SlsAf4KnPGgJj+nvCXLKG6B6UbcwkVSpbOgqTUzJfiT
-         QPADWiyW6UkdsfosfSRM21VsttNJKppdOEl3fp32UHIUjR1qD2Qj+PDddciPoTn7PSgy
-         2p/I96SGe3fYfgnj3La44AANjPEePv4B8NV3JfXFvZH5vcgTjFT6fVXrrAejRt36omr1
-         GV2ifLxF4sMqwvPtr1sVjQrobLRJmbowbjxOzhmAxh3ri0RdahOO9XlTVS0dtmxAEoaW
-         WbU6GKuwZ/z4LRxdcL68HvZquRVAfuGOgiix/p4keAnPKg6L68n94sAPxDxu6xuekIFX
-         87iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=OQdzvI48V4v1B4ddrzc07g5SpSnYPX/QwedZe0qu4AI=;
-        b=iNELi6F2Q6I/xSzLMNhWwUUSJXyJFFuVtJFdZJYersBhvir43GFZa3Eaq0fENeEF6a
-         jA9dP4JRuPKZZLjfoHqEtw+uXqzUy0qPnRhSMCwRvvG6IbjF+9+saJN2kRvqyG18w1VW
-         GFoJfMtav/3i1rjB8Uui2RSQUhB3kyLZfWngay6u3z2KBQ50zc4ezH9Gmf9cI1kphvRj
-         WWDQeksKCXAO0j95ZIVfAKwXv+hQiJ8KkS/Yf3IzkCcS2QxRYBknuLCI27QVg+CcMfOI
-         xmiDgLiDLyk2d6RVebeoOJTM4A12VDCZ14jjUBsTOVWUjtjCuHoLHOtE8CbfCZmFIcuh
-         QQwA==
-X-Gm-Message-State: ACgBeo2cMYLtvh7zxx+grtYmRF+HOgQOrO8UvphforuhhkSW0mqvLF/7
-        oOr/ok/FiGGYdhp9kQ8NDYazSztyGqSLA50qx5No
-X-Google-Smtp-Source: AA6agR5poU7RDNGoYk+czRRXpPIMJZYZZhpWQ+gyzpZdCLILfBZzRWgLcpcw12THou5UlUCZUmBy3wKQtISqq+09+k0=
-X-Received: by 2002:a05:6808:2389:b0:33a:cbdb:f37a with SMTP id
- bp9-20020a056808238900b0033acbdbf37amr10590809oib.136.1660063633970; Tue, 09
- Aug 2022 09:47:13 -0700 (PDT)
+        Tue, 9 Aug 2022 12:48:16 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E528622B1C;
+        Tue,  9 Aug 2022 09:48:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660063695; x=1691599695;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=u8cyW2Hmpz0IJ7FaPyT0aFd0QCXNWrP+9Wt7ociOwPg=;
+  b=VrOEiTibsigCUL/WlRXovabc5XSmVyVUtyDS8qaoV30fQsfmecuNap0v
+   xiJZApCr33h0Bw0yBG4ELbmzAdSOXZX3WLlLWSL+aCYutUlRShe6lWOQT
+   0H3MeKJWNjSa0lBRieGDXWGH+3smbfqRO+6oIrH3HO3NlzGIPKOBikxRq
+   cpsbZCqi8mXyYup+2GxIha/RFtxjiieQBSZCxT/rtzzWUAyxnnrxANDQE
+   qAadodwCdXrLA+DK/dlHkJyPxKX1Cy0oEJhiFnDN1/CZS3Cb5AbM/AOaK
+   axRGP+YEr73SwTWt9G3sXNznt+CqvjaoPhZGg/VQUilci2ED3PkZYZJbX
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="290885785"
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="290885785"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 09:48:15 -0700
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="664509363"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.48.82])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 09:48:13 -0700
+Message-ID: <3992b293-a72d-aeeb-e6df-9f56db812e74@intel.com>
+Date:   Tue, 9 Aug 2022 19:48:07 +0300
 MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
- <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
- <877d3ia65v.fsf@email.froward.int.ebiederm.org> <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhTEwD2y9Witj-1z3e2TC-NGjghQ4KT4Dqf3UOLzDcDc3Q@mail.gmail.com> <87czd95rjc.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87czd95rjc.fsf@email.froward.int.ebiederm.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 9 Aug 2022 12:47:03 -0400
-Message-ID: <CAHC9VhQY6H4JxOvSYWk2cpH8E3LYeOkMP_ay+ih+ULKKdeob=Q@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 23/35] perf tools: Add reallocarray_as_needed()
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220711093218.10967-1-adrian.hunter@intel.com>
+ <20220711093218.10967-24-adrian.hunter@intel.com>
+ <CAP-5=fWOcK75gc6VicZUu_KPJHVteHES4+rjFMJWyuT09AC56g@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fWOcK75gc6VicZUu_KPJHVteHES4+rjFMJWyuT09AC56g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 12:08 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Paul Moore <paul@paul-moore.com> writes:
-> > On Mon, Aug 8, 2022 at 3:43 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> >> "Eric W. Biederman" <ebiederm@xmission.com> writes:
-> >> > Paul Moore <paul@paul-moore.com> writes:
-> >> >
-> >> >>> I did provide constructive feedback.  My feedback to his problem
-> >> >>> was to address the real problem of bugs in the kernel.
-> >> >>
-> >> >> We've heard from several people who have use cases which require
-> >> >> adding LSM-level access controls and observability to user namespace
-> >> >> creation.  This is the problem we are trying to solve here; if you do
-> >> >> not like the approach proposed in this patchset please suggest another
-> >> >> implementation that allows LSMs visibility into user namespace
-> >> >> creation.
-> >> >
-> >> > Please stop, ignoring my feedback, not detailing what problem or
-> >> > problems you are actually trying to be solved, and threatening to merge
-> >> > code into files that I maintain that has the express purpose of breaking
-> >> > my users.
-> >> >
-> >> > You just artificially constrained the problems, so that no other
-> >> > solution is acceptable.  On that basis alone I am object to this whole
-> >> > approach to steam roll over me and my code.
-> >>
-> >> If you want an example of what kind of harm it can cause to introduce a
-> >> failure where no failure was before I invite you to look at what
-> >> happened with sendmail when setuid was modified to fail, when changing
-> >> the user of a process would cause RLIMIT_NPROC to be exceeded.
-> >
-> > I think we are all familiar with the sendmail capabilities bug and the
-> > others like it, but using that as an excuse to block additional access
-> > controls seems very weak.  The Linux Kernel is very different from
-> > when the sendmail bug hit (what was that, ~20 years ago?), with
-> > advancements in capabilities and other discretionary controls, as well
-> > as mandatory access controls which have enabled Linux to be certified
-> > through a number of third party security evaluations.
->
-> If you are familiar with scenarios like that then why is there not
-> being due diligence performed to ensure that userspace won't break?
+On 20/07/22 03:55, Ian Rogers wrote:
+> On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> Add helper reallocarray_as_needed() to reallocate an array to a larger
+>> size and initialize the extra entries to an arbitrary value.
+>>
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+>>  tools/perf/util/util.c | 33 +++++++++++++++++++++++++++++++++
+>>  tools/perf/util/util.h | 15 +++++++++++++++
+>>  2 files changed, 48 insertions(+)
+>>
+>> diff --git a/tools/perf/util/util.c b/tools/perf/util/util.c
+>> index 9b02edf9311d..391c1e928bd7 100644
+>> --- a/tools/perf/util/util.c
+>> +++ b/tools/perf/util/util.c
+>> @@ -18,6 +18,7 @@
+>>  #include <linux/kernel.h>
+>>  #include <linux/log2.h>
+>>  #include <linux/time64.h>
+>> +#include <linux/overflow.h>
+>>  #include <unistd.h>
+>>  #include "cap.h"
+>>  #include "strlist.h"
+>> @@ -500,3 +501,35 @@ char *filename_with_chroot(int pid, const char *filename)
+>>
+>>         return new_name;
+>>  }
+>> +
+>> +/*
+>> + * Reallocate an array *arr of size *arr_sz so that it is big enough to contain
+>> + * x elements of size msz, initializing new entries to *init_val or zero if
+>> + * init_val is NULL
+>> + */
+>> +int do_realloc_array_as_needed(void **arr, size_t *arr_sz, size_t x, size_t msz, const void *init_val)
+> 
+> This feels a little like a 1-dimensional xyarray, could we make a
+> similar abstraction to avoid passing all these values around?
 
-What level of due diligence would satisfy you Eric?  This feels very
-much like an unbounded ask that can be used to permanently block any
-effort to add any form of additional access control around user
-namespace creation.  If that isn't the case, and this request is being
-made in good faith, please elaborate on what you believe would be
-sufficient analysis of this patch?
+xyarray does not realloc which is the only thing that is needed in
+this case. C isn't C++, so adding an abstraction would be clunky.
 
-Personally, the fact that the fork()/clone() variants and the
-unshare() syscall all can fail and return error codes to userspace
-seems like a reasonable level of safety.  If userspace is currently
-ignoring the return values of fork/clone/unshare that is a problem
-independent of this patchset.  Even looking at the existing
-create_user_ns() function shows several cases where the user namespace
-code can forcibly error out due to access controls, memory pressure,
-etc.  I also see that additional restrictions were put on user
-namespace creation after it was introduced, e.g. the chroot
-restriction; I'm assuming that didn't break "your" users?  If you can
-describe the analysis you did on that change, perhaps we can do the
-same for this patchset and call it sufficient, yes?
+> 
+> Thanks,
+> Ian
+> 
+>> +{
+>> +       size_t new_sz = *arr_sz;
+>> +       void *new_arr;
+>> +       size_t i;
+>> +
+>> +       if (!new_sz)
+>> +               new_sz = msz >= 64 ? 1 : roundup(64, msz); /* Start with at least 64 bytes */
+>> +       while (x >= new_sz) {
+>> +               if (check_mul_overflow(new_sz, (size_t)2, &new_sz))
+>> +                       return -ENOMEM;
+>> +       }
+>> +       if (new_sz == *arr_sz)
+>> +               return 0;
+>> +       new_arr = calloc(new_sz, msz);
+>> +       if (!new_arr)
+>> +               return -ENOMEM;
+>> +       memcpy(new_arr, *arr, *arr_sz * msz);
+>> +       if (init_val) {
+>> +               for (i = *arr_sz; i < new_sz; i++)
+>> +                       memcpy(new_arr + (i * msz), init_val, msz);
+>> +       }
+>> +       *arr = new_arr;
+>> +       *arr_sz = new_sz;
+>> +       return 0;
+>> +}
+>> diff --git a/tools/perf/util/util.h b/tools/perf/util/util.h
+>> index 0f78f1e7782d..c1f2d423a9ec 100644
+>> --- a/tools/perf/util/util.h
+>> +++ b/tools/perf/util/util.h
+>> @@ -79,4 +79,19 @@ struct perf_debuginfod {
+>>  void perf_debuginfod_setup(struct perf_debuginfod *di);
+>>
+>>  char *filename_with_chroot(int pid, const char *filename);
+>> +
+>> +int do_realloc_array_as_needed(void **arr, size_t *arr_sz, size_t x,
+>> +                              size_t msz, const void *init_val);
+>> +
+>> +#define realloc_array_as_needed(a, n, x, v) ({                 \
+>> +       typeof(x) __x = (x);                                    \
+>> +       __x >= (n) ?                                            \
+>> +               do_realloc_array_as_needed((void **)&(a),       \
+>> +                                          &(n),                \
+>> +                                          __x,                 \
+>> +                                          sizeof(*(a)),        \
+>> +                                          (const void *)(v)) : \
+>> +               0;                                              \
+>> +       })
+>> +
+>>  #endif /* GIT_COMPAT_UTIL_H */
+>> --
+>> 2.25.1
+>>
 
-> >> I am not arguing that what you are proposing is that bad but unexpected
-> >> failures cause real problems, and at a minimum that needs a better
-> >> response than: "There is at least one user that wants a failure here".
-> >
-> > Let me fix that for you: "There are multiple users who want to have
-> > better visibility and access control for user namespace creation."
->
-> Visibility sure.  Design a proper hook for that.  All the proposed hook
-> can do is print an audit message.  It can't allocate or manage any state
-> as there is not the corresponding hook when a user namespace is freed.
-> So the proposed hook is not appropriate for increasing visibility.
-
-Auditing very much increases visibility.  Look at what the BPF LSM can
-do, observability is one of its primary goals.
-
-> Access control.  Not a chance unless it is carefully designed and
-> reviewed.
-
-See the above.  The relevant syscalls already have the risk of
-failure, if userspace is assuming fork/clone/unshare/etc. will never
-fail then that application is broken independent of this discussion.
-
--- 
-paul-moore.com

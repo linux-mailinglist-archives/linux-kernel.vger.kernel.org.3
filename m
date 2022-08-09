@@ -2,91 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7F458DAE0
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E5658DAE3
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244354AbiHIPO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 11:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S244723AbiHIPPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 11:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiHIPO0 (ORCPT
+        with ESMTP id S230178AbiHIPPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 11:14:26 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7889764DE;
-        Tue,  9 Aug 2022 08:14:25 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9800329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9800:329c:23ff:fea6:a903])
+        Tue, 9 Aug 2022 11:15:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BB22DD9;
+        Tue,  9 Aug 2022 08:15:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 968A21EC050F;
-        Tue,  9 Aug 2022 17:14:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660058059;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=+4HOfvI8mVF1+tfbZd5grdz8bB0WUV7y3pbiY6D96l4=;
-        b=GAiuYPtQszC+SezMFQ0/c4DL1Vbmtgto8fOOxmA7JP6/07so846IkZrNJME8/ijneQt68c
-        E7bVud7bhAlOn5Xovl1kC2wuT1ndF8xs/DZN8iQ6o/yIr0ty1Xg7lJEd3Ao0sqvEJsgg6W
-        t0MTHX17qVEMx3i0tgKiDrlcIglIFrI=
-Date:   Tue, 9 Aug 2022 17:14:15 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kani, Toshi" <toshi.kani@hpe.com>
-Cc:     Justin He <Justin.He@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>
-Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQ0hdIEFDUEk=?= =?utf-8?Q?=3A?= APEI:
- move edac_init ahead of ghes platform drv register
-Message-ID: <YvJ5xxsDxC4q3fJB@zn.tnic>
-References: <YvFX9vTilqMpsF9u@zn.tnic>
- <PH7PR84MB1838379B8C2DF488DE729A9182639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YvF4p01WJGGUwIJC@zn.tnic>
- <PH7PR84MB1838492812F5ABAA4BB54D9982639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YvF+J/dfyOEVSbSQ@zn.tnic>
- <PH7PR84MB1838BF4F8B56EF1E24FCF1DC82639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YvIPf/m3hU46S9Ik@zn.tnic>
- <DBBPR08MB4538A5C080B09A96A77CCDA9F7629@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <YvJB5cxSldpigw1g@zn.tnic>
- <PH7PR84MB18380596CA00597E9D5D18DF82629@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2ABE9B815BD;
+        Tue,  9 Aug 2022 15:15:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A06D0C433C1;
+        Tue,  9 Aug 2022 15:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660058128;
+        bh=8MAhwzgDKvXLL9NUx6d1QOtiUnfc6MIStnsocWXT2VI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W+DD2dAK1b6DDCTsNSoPyGT6HFX5nIWvp2F3jAvQiO0eZaqSJEwksndKiTpKaSmea
+         VE47RREejiEbvKAN3ugdGJXZtA4vQjyex7n53vgm+lulBRFIxBQbivb+/gO/hk07vQ
+         oGCW+Ubf8ZMd+RVWCQt3wRZZzI9e2Fs6OWqVa0f+K74PvdnrTx/mDywBJ0sRNo9Of2
+         ObxC6OD5doTjm2Da4dCzzHnZ3k0NcU8jagnCQEcOOgYy9WSNGbkrw+1Bsy87uB2fOT
+         QHFo5Q+BUcSiI7ET8uHXoli4KjZiE5FSJzrtWekdQS69ksJTODOBIanCaCiou4x2Sg
+         fscZvo1Gheepg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 680464035A; Tue,  9 Aug 2022 12:15:25 -0300 (-03)
+Date:   Tue, 9 Aug 2022 12:15:25 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>, quentin@isovalent.com,
+        ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, peterz@infradead.org, mingo@redhat.com,
+        terrelln@fb.com, nathan@kernel.org, ndesaulniers@google.com,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andres Freund <andres@anarazel.de>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
+Message-ID: <YvJ6DbzBNsAgNZS4@kernel.org>
+References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
+ <20220719170555.2576993-4-roberto.sassu@huawei.com>
+ <5f867295-10d2-0085-d1dc-051f56e7136a@iogearbox.net>
+ <YvFW/kBL6YA3Tlnc@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH7PR84MB18380596CA00597E9D5D18DF82629@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YvFW/kBL6YA3Tlnc@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 02:36:33PM +0000, Kani, Toshi wrote:
-> The logic needs to be latched on ghes presence, i.e., the condition is
+Em Mon, Aug 08, 2022 at 03:33:34PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Aug 08, 2022 at 06:14:48PM +0200, Daniel Borkmann escreveu:
+> > Hi Arnaldo,
+> > 
+> > On 7/19/22 7:05 PM, Roberto Sassu wrote:
+> > > Switch to new EVP API for detecting libcrypto, as Fedora 36 returns an
+> > > error when it encounters the deprecated function MD5_Init() and the others.
+> > > The error would be interpreted as missing libcrypto, while in reality it is
+> > > not.
+> > > 
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Given rest of the tooling fixes from Andres Freund went via perf tree and the
+> > below is perf related as well, I presume you'll pick this up, too?
+> 
+> Sure.
+>  
+> >   [0] https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/log/?h=perf/core
 
-If GHES is not enabled, there'll of course be a stub which returns
-false.
+So I fixed up the first one, minor fuzzes, the second I had to fix
+conflicts with the patchset from Andres, ended up as below, will test
+build it then in my container kit.
 
-> Agree that changing all edac drivers to check with GHES is an option.
+- Arnaldo
 
-Not all - all relevant drivers for your - HPE - use case. We don't load
-ghes_edac on anything else. Known-good platforms only, remember?
+commit bea955a0256e20cc18e87087e42f2a903b9a8b84
+Author: Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue Jul 19 19:05:53 2022 +0200
 
-> In this approach, though, they will need to check with foo_preferred()
-> when a new FW interface FOO is introduced.
+    bpftool: Complete libbfd feature detection
+    
+    Commit 6e8ccb4f624a7 ("tools/bpf: properly account for libbfd variations")
+    sets the linking flags depending on which flavor of the libbfd feature was
+    detected.
+    
+    However, the flavors except libbfd cannot be detected, as they are not in
+    the feature list.
+    
+    Complete the list of features to detect by adding libbfd-liberty and
+    libbfd-liberty-z.
+    
+    Committer notes:
+    
+    Adjust conflict with with:
+    
+      1e1613f64cc8a09d ("tools bpftool: Don't display disassembler-four-args feature test")
+      600b7b26c07a070d ("tools bpftool: Fix compilation error with new binutils")
+    
+    Fixes: 6e8ccb4f624a73c5 ("tools/bpf: properly account for libbfd variations")
+    Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+    Cc: Alexei Starovoitov <ast@kernel.org>
+    Cc: Andres Freund <andres@anarazel.de>
+    Cc: Andrii Nakryiko <andrii@kernel.org>
+    Cc: bpf@vger.kernel.org
+    Cc: Daniel Borkmann <daniel@iogearbox.net>
+    Cc: Ingo Molnar <mingo@redhat.com>
+    Cc: John Fastabend <john.fastabend@gmail.com>
+    Cc: KP Singh <kpsingh@kernel.org>
+    Cc: llvm@lists.linux.dev
+    Cc: Martin KaFai Lau <martin.lau@linux.dev>
+    Cc: Nathan Chancellor <nathan@kernel.org>
+    Cc: Nick Desaulniers <ndesaulniers@google.com>
+    Cc: Nick Terrell <terrelln@fb.com>
+    Cc: Peter Zijlstra <peterz@infradead.org>
+    Cc: Quentin Monnet <quentin@isovalent.com>
+    Cc: Song Liu <song@kernel.org>
+    Cc: Stanislav Fomichev <sdf@google.com>
+    Link: https://lore.kernel.org/r/20220719170555.2576993-2-roberto.sassu@huawei.com
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-I'm afraid I don't understand what you mean here.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 04d733e98bffbc08..9cc132277150c534 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -93,9 +93,11 @@ INSTALL ?= install
+ RM ?= rm -f
+ 
+ FEATURE_USER = .bpftool
+-FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled libcap \
++FEATURE_TESTS = libbfd libbfd-liberty libbfd-liberty-z
++	disassembler-four-args disassembler-init-styled libcap \
+ 	clang-bpf-co-re
+-FEATURE_DISPLAY = libbfd libcap clang-bpf-co-re
++FEATURE_DISPLAY = libbfd libbfd-liberty libbfd-liberty-z
++	libcap clang-bpf-co-re
+ 
+ check_feat := 1
+ NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall

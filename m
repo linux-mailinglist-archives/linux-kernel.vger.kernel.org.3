@@ -2,126 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FE458D844
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39E058D854
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242592AbiHILgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 07:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
+        id S241189AbiHILph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 07:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242932AbiHILff (ORCPT
+        with ESMTP id S230508AbiHILpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 07:35:35 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887B3248E1;
-        Tue,  9 Aug 2022 04:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660044934; x=1691580934;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ckfaBQEm61O3oz3fOP7g8FRe9wCmN4sKBCyP+R9DJ+E=;
-  b=SdAp2v7xREHY8hbPaIsG7yYNdTgpNJotWVlSw46NFNyHwkzrbzwd/rwf
-   UnrsPiFH5stjf1MIkRFu4B/bdRaRntj//0CEaIr4otGTDyf3vYbg0kUNE
-   MPFiocPveZcrFhPfEbGrFCe+wro4dNr8gsFvfBZQ5dicGE1hUOb0Ae0D8
-   PbKCs7ipGi7m1vC1RELfj1vZI04SYU3J0PD+VQ6sJ2Qymk5vKJdlJ5AU8
-   IgE1HE/B3YgGEDm4XKgygX0LKYJgQBh9il0bxWBzCvqqQ6G+HLj8sSX0G
-   xx918iS4PK8u2dYUscRnL6MmoNgHg+owPHRsRyDXhV1wQfFmUqo7FSy7S
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="289568213"
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="289568213"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 04:35:34 -0700
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="747008116"
-Received: from labukara-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.214.212])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 04:35:28 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 86500103886; Tue,  9 Aug 2022 14:38:27 +0300 (+03)
-Date:   Tue, 9 Aug 2022 14:38:27 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping
- into unaccepted memory
-Message-ID: <20220809113827.fchtnyzy44z5fuis@box.shutemov.name>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
- <7cec93c5-3db4-409b-8c1e-bc1f10dd68fc@www.fastmail.com>
+        Tue, 9 Aug 2022 07:45:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E28E18B31
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660045532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YrRdlwFzhyL1JgoDWLNI0P7/kC4GOv+tysqYh41vN90=;
+        b=ICp4GNofDMWn7SdwBngqYBVgP4mmy06XJ6zP7FS2Jas25LBJm2C6O7YUa7Lds2Yp6yIsCW
+        EGs0HOMWTgNIVqsczCO4RGGdAGUbfCvSRMNoqvjmpL0TRKAu5ozioHKVi9V1tHzKzdeet7
+        kzR+j5stiIPhxpb+IpoyIjpuXQ2PD/o=
+Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com
+ [209.85.217.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-300-AlZ_RwlOP_-OB1JgLxca5w-1; Tue, 09 Aug 2022 07:45:31 -0400
+X-MC-Unique: AlZ_RwlOP_-OB1JgLxca5w-1
+Received: by mail-vs1-f72.google.com with SMTP id t62-20020a675f41000000b003880bf5661fso2203676vsb.19
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 04:45:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YrRdlwFzhyL1JgoDWLNI0P7/kC4GOv+tysqYh41vN90=;
+        b=OD3oNDV5VmlnRR7k2AJBqGAYlxrzmck5OT6DnOFRtGAoRsgLf5A/kPkGXptR8Z/7wT
+         ilC4Ia7OZcrdbFN0sL0Q7OpfHRXkaZof9FZalc0U6O+vPWxtWP4bp+UrRg/HrzgwtvsU
+         wxbG/hRaiqvNY/ceVK5xku0yamxl2apErdX6U/9Rf80F+z/9eZyOxi+aL5so/ZGOxVWc
+         t4lDfgkQzyrkJiP4N8kjyg5z7AOoAYxqd9hmTo+QaOoHOjoradBA6h7Ap3nub5eutGhi
+         OjPGu0jnYCax7nCfkj9KaedZ3YAYRC5iHFCMJ4Iu+MAYu3U5CFltP5jWSpnPIUz5XS9g
+         QP1g==
+X-Gm-Message-State: ACgBeo3PiU6xu3ypN1T3kcFsSkXX5WAKaT9zfQZWlNwqOAfaVOVo2Jl4
+        XN12G8pSYxXSUryGBgdvTD6clGfHU8X41RusVQYvpvqxejxTQdUFw3Knu1N41Ytr0zZOSnE8vwF
+        QSYpjBW7rSM/LrPVqKGtBWLzLrJwWEI7oBZgkv44q
+X-Received: by 2002:a05:6102:5cb:b0:388:9ab7:5f58 with SMTP id v11-20020a05610205cb00b003889ab75f58mr5724776vsf.68.1660045530353;
+        Tue, 09 Aug 2022 04:45:30 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7ATkZeriMmKJlv9Q/gYEYNsFbbd3PSLoYo/Er47sV5yGli/esQODsILES0uQaO3ilqkvc1/fcF5waK8hyF1xI=
+X-Received: by 2002:a05:6102:5cb:b0:388:9ab7:5f58 with SMTP id
+ v11-20020a05610205cb00b003889ab75f58mr5724765vsf.68.1660045530147; Tue, 09
+ Aug 2022 04:45:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7cec93c5-3db4-409b-8c1e-bc1f10dd68fc@www.fastmail.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220715125013.247085-1-mlombard@redhat.com> <20220808171452.d870753e1494b92ba2142116@linux-foundation.org>
+In-Reply-To: <20220808171452.d870753e1494b92ba2142116@linux-foundation.org>
+From:   Maurizio Lombardi <mlombard@redhat.com>
+Date:   Tue, 9 Aug 2022 13:45:19 +0200
+Message-ID: <CAFL455nMBPMD2KkdnsWrq6x_XjwdRCTsCe0Ohbm9Df7aTfiq_A@mail.gmail.com>
+Subject: Re: [PATCH V3] mm: prevent page_frag_alloc() from corrupting the memory
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        =?UTF-8?B?5oSa5qCR?= <chen45464546@163.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 01:17:13PM -0700, Andy Lutomirski wrote:
-> 
-> 
-> On Tue, Jun 14, 2022, at 5:02 AM, Kirill A. Shutemov wrote:
-> > load_unaligned_zeropad() can lead to unwanted loads across page boundaries.
-> > The unwanted loads are typically harmless. But, they might be made to
-> > totally unrelated or even unmapped memory. load_unaligned_zeropad()
-> > relies on exception fixup (#PF, #GP and now #VE) to recover from these
-> > unwanted loads.
+=C3=BAt 9. 8. 2022 v 2:14 odes=C3=ADlatel Andrew Morton
+<akpm@linux-foundation.org> napsal:
+>
+> On Fri, 15 Jul 2022 14:50:13 +0200 Maurizio Lombardi <mlombard@redhat.com=
+> wrote:
+>
+> > A number of drivers call page_frag_alloc() with a
+> > fragment's size > PAGE_SIZE.
+> > In low memory conditions, __page_frag_cache_refill() may fail the order=
+ 3
+> > cache allocation and fall back to order 0;
+> > In this case, the cache will be smaller than the fragment, causing
+> > memory corruptions.
 > >
-> > But, this approach does not work for unaccepted memory. For TDX, a load
-> > from unaccepted memory will not lead to a recoverable exception within
-> > the guest. The guest will exit to the VMM where the only recourse is to
-> > terminate the guest.
-> 
-> Why is unaccepted memory marked present in the direct map in the first place?
-> 
-> Having kernel code assume that every valid address is followed by
-> several bytes of memory that may be read without side effects other than
-> #PF also seems like a mistake, but I probably won’t win that fight. But
-> sticking guard pages in front of definitely-not-logically present pages
-> seems silly to me.  Let’s just not map it.
+> > Prevent this from happening by checking if the newly allocated cache
+> > is large enough for the fragment; if not, the allocation will fail
+> > and page_frag_alloc() will return NULL.
+>
+> Can we come up with a Fixes: for this?
 
-It would mean no 1G pages in direct mapping for TDX as we accept 2M a
-time.
+I think the bug has been introduced in kernel 3.19-rc1
+Fixes: ffde7328a36d16e626bae8468571858d71cd010b
 
-> (What if MMIO memory is mapped next to regular memory?  Doing random
-> unaligned reads that cross into MMIO seems unwise.)
+>
+> Should this fix be backported into -stable kernels?
 
-MMIO is shared, not unaccpted private. We already handle the situation.
-See 1e7769653b06 ("x86/tdx: Handle load_unaligned_zeropad() page-cross to
-a shared page").
+Yes, IMO this should be backported to -stable
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Thanks,
+Maurizio
+

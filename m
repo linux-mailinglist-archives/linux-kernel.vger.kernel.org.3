@@ -2,106 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E57958E010
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74AE58E00F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345902AbiHITSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S1343513AbiHITSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345645AbiHITPU (ORCPT
+        with ESMTP id S1348469AbiHITQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:15:20 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD0D27CCB;
-        Tue,  9 Aug 2022 12:08:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=CE9ribd82Wfwyf4qIpdyVQVcb49dja2n3iMdmx/FOf8=;
-        t=1660072120; x=1661281720; b=orlBgeBkwMRUzTnxtTciRUQbmcMW6MHm86LHtYuejp9uPbL
-        DiwtSch/R7WEVGoOHWVTElvfA+lfFbVL07XaY2BSVKMbFSL+ItaT76YZZ4f+7Zhn8zHKHbRgxAKfc
-        z6OWvbimmsAtePUSWgfzcT1SIchqCp7P/tILa/YzEJSbxOOpIZtPE+/0jLr6fxDcHbOdSHXg/5MEW
-        eJNVwj9ttTPMxu54ZRTF11uqP2V6fa4E4DAnNZvXSg5Fu8vNi3qJSe6LdFS+z1Xm6/+OG2b9/2SFi
-        xESy6kkAKWoZgAspEEFjsknjBYA5mA2h2LnbSf5UTuaIIvRbWtCMQygm47/3Hvwg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1oLUac-003Ii0-22;
-        Tue, 09 Aug 2022 21:08:30 +0200
-Message-ID: <f366b3d50aa8b713b0a921e4507bae4779a7cd02.camel@sipsolutions.net>
-Subject: Re: [PATCH v2 06/13] um: Improve panic notifiers consistency and
- ordering
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        kexec@lists.infradead.org, linux-um@lists.infradead.org
-Cc:     pmladek@suse.com, bhe@redhat.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Richard Weinberger <richard@nod.at>
-Date:   Tue, 09 Aug 2022 21:08:28 +0200
-In-Reply-To: <15188cf2-a510-2725-0c6e-3c4b264714c5@igalia.com>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
-         <20220719195325.402745-7-gpiccoli@igalia.com>
-         <5bbc4296-4858-d01c-0c76-09d942377ddf@igalia.com>
-         <54cd8c11428db4c419edf2267db00ca10da7a178.camel@sipsolutions.net>
-         <15188cf2-a510-2725-0c6e-3c4b264714c5@igalia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Tue, 9 Aug 2022 15:16:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B01DB1D314
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 12:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660072203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uRqc1okeAHdsmQUrvr7UCGZmXL46y0LkrGmGnuyVW2Y=;
+        b=ErKsFnZOPbljpyZ2bqjIKgbO9t4lngDoT+iNhJC8JsMVn4DwQqs+1g/5ZcIsSCDTPxCnWI
+        OC61yvChtFXSEUQnrGXTMIKzMft/aisK/jqtzA26F8Bib7iy37tIgbvqJ0vwZvD1//HYD/
+        dl4lYlaGsIlV6X3pt855nZOezgEtZ4I=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-641--WjuIR_jNGiVT1QX590i-Q-1; Tue, 09 Aug 2022 15:10:02 -0400
+X-MC-Unique: -WjuIR_jNGiVT1QX590i-Q-1
+Received: by mail-wm1-f72.google.com with SMTP id j36-20020a05600c1c2400b003a540d88677so2832009wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 12:10:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=uRqc1okeAHdsmQUrvr7UCGZmXL46y0LkrGmGnuyVW2Y=;
+        b=XrjYOdC2/hMUbFAJqybV1501bBw1h/tGoF+Zrc3iD8oXmGWavTLz9OLdBYWSeCk572
+         3ot4vC06h7YU+A0uxtToQLjuWfIA5wzMJ0Mvnn9VU6r/C5mwUUmpDQkwHQ2kdCC2J+DP
+         1KVxHQClvheWwAUOZoKV/++gIuXrx6oxkofvTpC3RClUW8TD+aG6Hg/1A/GcdH80Gkst
+         //htlJuZA02obv2AyRgwkvapGPxPXba3KYREgXl3noUkwDNyQbcsbufEyADg2BkWmgMx
+         7MY9Ynkd1wC5M02RVL2wAI3PgoTz/EyTfiaGsSrdps6yTGkNj8Epzn/TO/4ftDqSlD5Y
+         zvfw==
+X-Gm-Message-State: ACgBeo3RAdWcLQWKh4UPRiOF0ROq2f96VaxkC0gnPwf/yx3o+xvbmpqy
+        UKHMvKjZK0T1SiUA7TGOL499MCUko4v1hNezdP273hcTsnHYYctzbqrbVo5Dyvs0V8MrMWqdv0O
+        QhjQ+FyuTWitHH+sz3nTdkRkA
+X-Received: by 2002:adf:e848:0:b0:220:7dc6:135f with SMTP id d8-20020adfe848000000b002207dc6135fmr15173020wrn.24.1660072201162;
+        Tue, 09 Aug 2022 12:10:01 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5+SQNNtefTpJvPGn+VBLgI5xGu/AqwT3DTT0u2MzgOrtbJb/8gsc+bA2KK7SA4FWebAox2Vw==
+X-Received: by 2002:adf:e848:0:b0:220:7dc6:135f with SMTP id d8-20020adfe848000000b002207dc6135fmr15173003wrn.24.1660072200926;
+        Tue, 09 Aug 2022 12:10:00 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:3700:aed2:a0f8:c270:7f30? (p200300cbc7053700aed2a0f8c2707f30.dip0.t-ipconnect.de. [2003:cb:c705:3700:aed2:a0f8:c270:7f30])
+        by smtp.gmail.com with ESMTPSA id bd14-20020a05600c1f0e00b003a5542047afsm2762941wmb.19.2022.08.09.12.10.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 12:10:00 -0700 (PDT)
+Message-ID: <ac2f75aa-da03-66fb-cb35-ec1b9d69281c@redhat.com>
+Date:   Tue, 9 Aug 2022 21:09:59 +0200
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220808073232.8808-1-david@redhat.com>
+ <CAHk-=wiKm3QjM1_XwWNW8P8drW6s0ZeANm7VKy_1c7WH6RSp3g@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove
+ FOLL_COW
+In-Reply-To: <CAHk-=wiKm3QjM1_XwWNW8P8drW6s0ZeANm7VKy_1c7WH6RSp3g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-08-09 at 16:03 -0300, Guilherme G. Piccoli wrote:
-> On 09/08/2022 15:09, Johannes Berg wrote:
-> > [...]
-> > > > V2:
-> > > > - Kept the notifier header to avoid implicit usage - thanks
-> > > > Johannes for the suggestion!
-> > > >=20
-> > > >  arch/um/drivers/mconsole_kern.c | 7 +++----
-> > > >  arch/um/kernel/um_arch.c        | 8 ++++----
-> > > >  2 files changed, 7 insertions(+), 8 deletions(-)
-> > > > [...]
-> > >=20
-> > > Hi Johannes, do you feel this one is good now, after your last review=
-?
-> > > Thanks in advance,
-> > >=20
-> >=20
-> > Yeah, no objections, my previous comment was just a minor almost style
-> > issue anyway.
-> >=20
-> > johannes
->=20
-> Perfect, thank you! Let me take the opportunity to ask you something I'm
-> asking all the maintainers involved here - do you prefer taking the
-> patch through your tree, or to get it landed with the whole series, at
-> once, from some maintainer?
->=20
-Hm. I don't think we'd really care, but so far I was thinking - since
-it's a series - it'd go through some appropriate tree all together. If
-you think it should be applied separately, let us know.
+On 09.08.22 20:48, Linus Torvalds wrote:
+> On Mon, Aug 8, 2022 at 12:32 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> For example, a write() via /proc/self/mem to a uffd-wp-protected range has
+>> to fail instead of silently granting write access and bypassing the
+>> userspace fault handler.
+> 
+> This, btw, just makes me go "uffd-wp is broken garbage" once more.
+> 
+> It also makes me go "if uffd-wp can disallow ptrace writes, then why
+> doesn't regular write protect do it"?
 
-johannes
+I remember that it's not just uffd-wp, it's also ordinary userfaultfd if
+we have no page mapped, because we'd have to drop the mmap lock in order
+to notify user space about the fault and wait for a resolution.
+
+IIUC, we cannot tell what exactly user-space will do as a response to a
+user write fault here (for example, QEMU VM snapshots have to copy page
+content away such that the VM snapshot remains consistent and we won't
+corrupt the snapshot), so we have to back off and fail the GUP. I'd say,
+for ptrace that's even the right thing to do because one might deadlock
+waiting on the user space thread that handles faults ... but that's a
+little off-topic to this fix here. I'm just trying to keep the semantics
+unchanged, as weird as they might be.
+
+
+> 
+> IOW, I don't think the patch is wrong (apart from the VM_BUG_ON's that
+> absolutely must go away), but I get the strong feelign that we instead
+> should try to get rid of FOLL_FORCE entirely.
+
+I can resend v2 soonish, taking care of the VM_BUG_ON as you requested
+if there are no other comments.
+
+> 
+> If some other user action can stop FOLL_FORCE anyway, then why do we
+> support it at all?
+
+My humble opinion is that debugging userfaultfd-managed memory is a
+corner case and that we can hopefully stop using FOLL_FORCE outside of
+debugging context soon.
+
+Having that said, I do enjoy having the uffd and uffd-wp feature
+available in user space (especially in QEMU). I don't always enjoy
+having to handle such corner cases in the kernel.
+
+-- 
+Thanks,
+
+David / dhildenb
+

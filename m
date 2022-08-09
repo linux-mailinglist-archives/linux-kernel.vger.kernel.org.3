@@ -2,211 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F52458DC45
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD0158DC48
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236467AbiHIQk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
+        id S244429AbiHIQlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiHIQkZ (ORCPT
+        with ESMTP id S230272AbiHIQlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:40:25 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E821138;
-        Tue,  9 Aug 2022 09:40:23 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:40688)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oLSHF-003Ve1-S8; Tue, 09 Aug 2022 10:40:21 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:59198 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oLSHE-002Sv9-L4; Tue, 09 Aug 2022 10:40:21 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com
-References: <20220801180146.1157914-1-fred@cloudflare.com>
-        <87les7cq03.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
-        <87wnbia7jh.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
-        <877d3ia65v.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhSKmqn5wxF3BZ67Z+-CV7sZzdnO+JODq48rZJ4WAe8ULA@mail.gmail.com>
-Date:   Tue, 09 Aug 2022 11:40:12 -0500
-In-Reply-To: <CAHC9VhSKmqn5wxF3BZ67Z+-CV7sZzdnO+JODq48rZJ4WAe8ULA@mail.gmail.com>
-        (Paul Moore's message of "Mon, 8 Aug 2022 15:49:48 -0400")
-Message-ID: <87a68d4bgz.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 9 Aug 2022 12:41:14 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DC6B493
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:41:13 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id j8so23181113ejx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 09:41:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc;
+        bh=naNpYkxE68tX1ARbD3iQv+CO+kO6ut9LpVz/MEIjf2U=;
+        b=iX9Se9TiI3Acb0PyhnYkVRNdA7lVQuf4CJDx2D6WpGaKbYqVnU4KX3GTPDDKS7PYVg
+         gZCH6sdLyyngWxfgd5D+yNp6kzG+ewgTuTXqWMqSckX17sr8zonXMCWzvhLjGrjQGv/c
+         ell5/FxG7+4Gqy9X+TsWsq7ykFiSjP9m/Frk8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc;
+        bh=naNpYkxE68tX1ARbD3iQv+CO+kO6ut9LpVz/MEIjf2U=;
+        b=xg6FIsUt2oPA0HCplJfoeh0kqm5dsLKk3+Cl6TvwYNXOcKAqZ1t5xo2DDBEAhN6st0
+         NSfE+foQSpoJC4/f6/FI+Lssjiyft4pmpSt92rhfgGg8flSiYK1KUdGwbMNXgE5fd0Tb
+         jPvXRsDCULJq7ZIx64/ujQkZewWdR4Q8XntTLsLRnhQr9xbr/zyeE3XCnRN96TbLQnlF
+         GLSvjI/9As+nDSCm+g6wn2l6Nb2w+CRk9bh3qJDtqKEYFB9tnA9Xw8iGd3gqzo4S/qtT
+         cNrL57Ie6mLnMthrlFfZKcb9RuV/HVOqZwnUU3Q31bVxwGTYvMFPX4/AeZNVQ74GOeuE
+         WT+Q==
+X-Gm-Message-State: ACgBeo1xVgNzR2orAIkEZB8hmApqP1RN2wBYSpyKggV3Fs8dRzqn86l8
+        Ye1qWraEwUjnUhH6dDpn6VjZfg==
+X-Google-Smtp-Source: AA6agR5JiN6PB/2pP/tfQ4vgKWFUin1cCx29k5oNnI6uFJ+xd5aN1v/0W1ws1t92QMVelRHOPdZjFw==
+X-Received: by 2002:a17:907:3f98:b0:730:cfce:9c0f with SMTP id hr24-20020a1709073f9800b00730cfce9c0fmr18168166ejc.475.1660063272111;
+        Tue, 09 Aug 2022 09:41:12 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id n25-20020a056402515900b0043d1a9f6e4asm6277567edd.9.2022.08.09.09.41.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 09:41:11 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 18:41:09 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas_os@shipmail.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v7 1/2] drm/gem: Properly annotate WW context on
+ drm_gem_lock_reservations() error
+Message-ID: <YvKOJRbTsBk91aPO@phenom.ffwll.local>
+Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas_os@shipmail.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, linux-tegra@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20220630200405.1883897-1-dmitry.osipenko@collabora.com>
+ <20220630200405.1883897-2-dmitry.osipenko@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oLSHE-002Sv9-L4;;;mid=<87a68d4bgz.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18HBy/xVu3Fi4ZlEEXadKSoHy1u0KD36K8=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220630200405.1883897-2-dmitry.osipenko@collabora.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Paul Moore <paul@paul-moore.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 627 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.8 (0.6%), b_tie_ro: 2.6 (0.4%), parse: 1.32
-        (0.2%), extract_message_metadata: 19 (3.0%), get_uri_detail_list: 4.5
-        (0.7%), tests_pri_-1000: 20 (3.3%), tests_pri_-950: 1.49 (0.2%),
-        tests_pri_-900: 1.23 (0.2%), tests_pri_-90: 95 (15.1%), check_bayes:
-        93 (14.8%), b_tokenize: 16 (2.6%), b_tok_get_all: 13 (2.1%),
-        b_comp_prob: 3.8 (0.6%), b_tok_touch_all: 56 (9.0%), b_finish: 0.67
-        (0.1%), tests_pri_0: 471 (75.0%), check_dkim_signature: 0.49 (0.1%),
-        check_dkim_adsp: 5 (0.8%), poll_dns_idle: 0.02 (0.0%), tests_pri_10:
-        2.6 (0.4%), tests_pri_500: 9 (1.4%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul Moore <paul@paul-moore.com> writes:
+On Thu, Jun 30, 2022 at 11:04:04PM +0300, Dmitry Osipenko wrote:
+> Use ww_acquire_fini() in the error code paths. Otherwise lockdep
+> thinks that lock is held when lock's memory is freed after the
+> drm_gem_lock_reservations() error. The ww_acquire_context needs to be
+> annotated as "released", which fixes the noisy "WARNING: held lock freed!"
+> splat of VirtIO-GPU driver with CONFIG_DEBUG_MUTEXES=y and enabled lockdep.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 7edc3e3b975b5 ("drm: Add helpers for locking an array of BO reservations.")
+> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-> On Mon, Aug 8, 2022 at 3:26 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->> Paul Moore <paul@paul-moore.com> writes:
->> >> I did provide constructive feedback.  My feedback to his problem
->> >> was to address the real problem of bugs in the kernel.
->> >
->> > We've heard from several people who have use cases which require
->> > adding LSM-level access controls and observability to user namespace
->> > creation.  This is the problem we are trying to solve here; if you do
->> > not like the approach proposed in this patchset please suggest another
->> > implementation that allows LSMs visibility into user namespace
->> > creation.
->>
->> Please stop, ignoring my feedback, not detailing what problem or
->> problems you are actually trying to be solved, and threatening to merge
->> code into files that I maintain that has the express purpose of breaking
->> my users.
->
-> I've heard you talk about bugs being the only reason why people would
-> want to ever block user namespaces, but I think we've all seen use
-> cases now where it goes beyond that.
+I merged this one to drm-misc-next-fixes. The other one looks like there's
+still opens pending, pls resubmit appropriately (and maybe with some
+analysis in the commit message of how exactly this impacts other drivers).
+-Daniel
 
-I really have not, and I don't appreciate being called a liar.
+> ---
+>  drivers/gpu/drm/drm_gem.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+> index eb0c2d041f13..86d670c71286 100644
+> --- a/drivers/gpu/drm/drm_gem.c
+> +++ b/drivers/gpu/drm/drm_gem.c
+> @@ -1226,7 +1226,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+>  		ret = dma_resv_lock_slow_interruptible(obj->resv,
+>  								 acquire_ctx);
+>  		if (ret) {
+> -			ww_acquire_done(acquire_ctx);
+> +			ww_acquire_fini(acquire_ctx);
+>  			return ret;
+>  		}
+>  	}
+> @@ -1251,7 +1251,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+>  				goto retry;
+>  			}
+>  
+> -			ww_acquire_done(acquire_ctx);
+> +			ww_acquire_fini(acquire_ctx);
+>  			return ret;
+>  		}
+>  	}
+> -- 
+> 2.36.1
+> 
 
-> However, even if it didn't, the
-> need to build high confidence/assurance systems where big chunks of
-> functionality can be disabled based on a security policy is a very
-> real use case, and this patchset would help enable that.
-
-Details please.  What does this look like.  What is the overall plan for
-attack surface reduction in one of these systems.  How does it differ
-from seccomp?
-
-How does this differ from setting /proc/sys/user/max_usernamespaces to 0?
-
-Why is it only the user namespace that needs to be modified to implement
-such a system?
-
-Why is there no discussion of that in the change description.
-
-> I've noticed
-> you like to talk about these hooks being a source of "regressions",
-> but access controls are not regressions Eric, they are tools that
-> system builders, administrators, and users use to secure their
-> systems.
->
-> From my perspective, I believe that addresses your feedback around
-> "fix the bugs" and "this is a regression", which is the only thing
-> I've noted from your responses in this thread and others, but if I'm
-> missing something more technical please let me/us know.
-
-Which is a short way of saying that the using this hook for attack
-surface reduction without a larger plan will be ineffective.  If the
-attack surface is not sufficiently reduced it will not achieve a
-prevention of exploits and the attacks will still happen and be
-successful.
-
-With a change that is designed to prevent exploits not actually doing so
-all that is left is breaking userspace and causing maintenance problems.
-
-Earlier I asked to confirm that was the only reason cloudfare was
-interested in this change.  I have asked that we have an actual
-conversation about what is trying to be achieved.
-
-Instead the conversation has simply been about implementation issues
-and not about if the code will be worth having.  So far in my book the
-code very much does not look worth having.  That is my technical
-judgment and I don't see anyone taking about my arguments or even
-really engaging in them.
-
-Since I keep getting blown off, instead of having my concerns addressed
-I say this code should not go.
-
-
->> You just artificially constrained the problems, so that no other
->> solution is acceptable.
->
-> There is a real need to be able to gain both additional visibility and
-> access control over user namespace creation, please suggest the
-> approach(es) you would find acceptable.
-
-The suggested hook is not at all appropriate for visibility.  Either the
-user namespace needs to have some state that can be set, or there needs
-to be something that is notified when the user namespace goes away.  At
-best the hook can print an audit message.  So the proposed hook is
-really not appropriate to add visibility to the user namespace.
-
-For the record I don't object to adding visibility, I am just pointing
-out the proposed hook is not appropriate to that task.
-
-
-What is the need to have an access control?
-
-Why do you need to fundamentally change the design of user namespaces?
-
-Those are questions I have not seen any answers to.  Without actual
-answers of what the actual problems are I can't have a reasonable
-technical conversation.
-
->> On that basis alone I am object to this whole
->> approach to steam roll over me and my code.
->
-> I saw that choice of wording in your last email and thought it a bit
-> curious, so I did a quick git log dump on kernel/user_namespace.c and
-> I see approximately 31 contributors to that one file.  I've always
-> thought of the open source maintainer role as more of a "steward" and
-> less of an "owner", but that's just my opinion.
-
-As such it is unfortunately my responsibility to say no to badly thought
-out proposals.  Proposals that will negatively affect the people using
-the code I maintain.
-
-
-My apologies if I have not been more elegant right now when I have been
-constantly sick, and tired.  People getting scared of user namespaces
-for no real reason has been an on-going trend for a decade or so.  This
-isn't a new issue, and it irritates me that it is still going on.  I
-have addressed real concerns and fixed code, for many many years.
-
-This round of the people being afraid of user namespaces, I have yet to
-find any real concerns.
-
-So when I express my concerns that this is a pointless exercise and
-people don't address my concern.  I say no.
-
-Eric
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

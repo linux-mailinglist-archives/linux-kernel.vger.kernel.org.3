@@ -2,119 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49AF58D8B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A5058D8B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241199AbiHIMWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 08:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
+        id S241483AbiHIMWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 08:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbiHIMWB (ORCPT
+        with ESMTP id S230380AbiHIMWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 08:22:01 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC04B1F637;
-        Tue,  9 Aug 2022 05:21:56 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 88CEC4290E7;
-        Tue,  9 Aug 2022 08:21:55 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id VA4D7GnKn4e5; Tue,  9 Aug 2022 08:21:55 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id EAB714290E4;
-        Tue,  9 Aug 2022 08:21:54 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com EAB714290E4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1660047715;
-        bh=yaql+OHmxrSRIFF3ySv247yWXrCOS5bC0G5bebaliwY=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=Cn+kTKgqSdyG27J2H72mf4t7c15Au8g0GzhEvNz82ew6t2XB62VW85zMC0MY4dO66
-         bfWxHqgEmSuz2N6fGJxDi2PCxm7zQ5tOxLQrFdbKtfvJgay3+exr5GJPIFoUx4dOUF
-         Hs9bv613auRXhX3OOMEIXadBZwbe49mmmU+Z1TGwpUovxvzTXVkI5AspHT2sRMNDeh
-         O/Ci0Tn7PSSp5/XAVWk+uhuhg8zJC/E+H3BnLIGYP4Z5OxJMvrh79dKHY4pwvmh+FM
-         BPordgJZ9kuWcQ8vRQFX8V6e9EhLgvzLLHWlgKZGhLyvkmnZp93GdAZKn0UfcJdh7x
-         xlWuUUYH2AY0Q==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id GOweDkJi16HZ; Tue,  9 Aug 2022 08:21:54 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id D8B874291F7;
-        Tue,  9 Aug 2022 08:21:54 -0400 (EDT)
-Date:   Tue, 9 Aug 2022 08:21:54 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     Florian Weimer <fweimer@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com, maz@kernel.org,
-        oliver upton <oliver.upton@linux.dev>,
-        andrew jones <andrew.jones@linux.dev>, seanjc@google.com,
-        yihyu@redhat.com, shan gavin <shan.gavin@gmail.com>
-Message-ID: <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
-In-Reply-To: <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com>
-References: <20220809060627.115847-1-gshan@redhat.com> <20220809060627.115847-2-gshan@redhat.com> <8735e6ncxw.fsf@oldenburg.str.redhat.com> <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com> <87o7wtnay6.fsf@oldenburg.str.redhat.com> <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com>
-Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with
- glibc-2.35
+        Tue, 9 Aug 2022 08:22:51 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81081EAE8;
+        Tue,  9 Aug 2022 05:22:49 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id f22so14844920edc.7;
+        Tue, 09 Aug 2022 05:22:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ENuHlbjz1pAGwfnMCHPOCMjJ7lm1GDfyKj1z+dAIomI=;
+        b=LMIaO6KtyGfCMjyVolJLKx6pqbNHzm3nbsNhqOHQndZno2haGHemi3OKK32fd8ySvw
+         xgI+8JOLck1XBBmrsobUtHo8q+Yy6RQKem2rama65pGIowkD9JGg5hjeTSBzjNg8Wj/B
+         HdmJ9PE9f4BtDpOV6+oT7BpKQhoyjSh6tyWfkSG/3QPKHXBRT9jQ9V1sNlzkmTabTQ6J
+         V+NbP+XPgk6LB4GuLotNzXDERUjM0BaxjTyt5nDUg5ZIA0ZaG3PfCxpJINWR0Tq5/HRZ
+         M524vztuqbClD1dkMf4OHIXJDQTbdzqDEltcfto09QtOkUPWJUdWc3eSn0glyWzhzcTp
+         n6ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ENuHlbjz1pAGwfnMCHPOCMjJ7lm1GDfyKj1z+dAIomI=;
+        b=m+VURppoLUIa3ngJI/GP9qQFSXPULrAH7BQJEaONesNsdNfjbWD1igbcenCuI/KEyb
+         3JNEQ1EnKBSwWsJWs1pHMG7ur3ig9QBoyarQMi8RShO0VaoiLTGqc6c8fsRGCW3DExx/
+         8oLGaVvp6UBApX7YAdo7Dpy4evlzTFRTmFJlnNFYUMGv6Wgep92JEl5TzVYsusohl81s
+         vZlHH40BOnL2eYCUb35YQc6oaN2myBJPySU5k6M7/rcbYgsX/NTOnHIPSKjW6aVMOMO0
+         XMPidcK47vLA5B8qhcQqBeGyuj6o+eaL70eim86W9MZIgFH3797+ITTYrBJ/zsLngmn4
+         kKBw==
+X-Gm-Message-State: ACgBeo3fWlJvgqb9fny4B2gvp3fJFON+tg3vah9JPfz81B4i38zWWa6o
+        zWqz95BVr9Ln7lU8rN0JFU4=
+X-Google-Smtp-Source: AA6agR6pH7ES5csxKm46AMTJYImmVr1iiIFX65pwfW8why81zsLtDKWioSrAedC4PXxv1rnvVNUAUg==
+X-Received: by 2002:a05:6402:538a:b0:43a:298e:bc2b with SMTP id ew10-20020a056402538a00b0043a298ebc2bmr21686576edb.125.1660047768338;
+        Tue, 09 Aug 2022 05:22:48 -0700 (PDT)
+Received: from [192.168.178.21] (p57b0bd9f.dip0.t-ipconnect.de. [87.176.189.159])
+        by smtp.gmail.com with ESMTPSA id cn15-20020a0564020caf00b0043ba0cf5dbasm5886236edb.2.2022.08.09.05.22.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 05:22:47 -0700 (PDT)
+Message-ID: <a08c001f-b0e8-4e7c-6d63-16b2a0e7a505@gmail.com>
+Date:   Tue, 9 Aug 2022 14:22:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4304 (zclient/8.8.15_GA_4304)
-Thread-Topic: selftests: Make rseq compatible with glibc-2.35
-Thread-Index: oHLHOFY5Vh2uVE5+gR7UtW52F8t44g==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [Linaro-mm-sig] [PATCH v2 2/5] drm/gem: Take reservation lock for
+ vmap/vunmap operations
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220725151839.31622-1-dmitry.osipenko@collabora.com>
+ <20220725151839.31622-3-dmitry.osipenko@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20220725151839.31622-3-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 25.07.22 um 17:18 schrieb Dmitry Osipenko:
+> The new common dma-buf locking convention will require buffer importers
+> to hold the reservation lock around mapping operations. Make DRM GEM core
+> to take the lock around the vmapping operations and update QXL and i915
+> drivers to use the locked functions for the case where DRM core now holds
+> the lock. This patch prepares DRM core and drivers to transition to the
+> common dma-buf locking convention where vmapping of exported GEMs will
+> be done under the held reservation lock.
+>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
------ Gavin Shan <gshan@redhat.com> wrote:
-> Hi Florian,
-> 
-> On 8/9/22 5:16 PM, Florian Weimer wrote:
-> >>> __builtin_thread_pointer doesn't work on all architectures/GCC
-> >>> versions.
-> >>> Is this a problem for selftests?
-> >>>
-> >>
-> >> It's a problem as the test case is running on all architectures. I think I
-> >> need introduce our own __builtin_thread_pointer() for where it's not
-> >> supported: (1) PowerPC  (2) x86 without GCC 11
-> >>
-> >> Please let me know if I still have missed cases where
-> >> __buitin_thread_pointer() isn't supported?
-> > 
-> > As far as I know, these are the two outliers that also have rseq
-> > support.  The list is a bit longer if we also consider non-rseq
-> > architectures (csky, hppa, ia64, m68k, microblaze, sparc, don't know
-> > about the Linux architectures without glibc support).
-> > 
-> 
-> For kvm/selftests, there are 3 architectures involved actually. So we
-> just need consider 4 cases: aarch64, x86, s390 and other. For other
-> case, we just use __builtin_thread_pointer() to maintain code's
-> integrity, but it's not called at all.
-> 
-> I think kvm/selftest is always relying on glibc if I'm correct.
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
-All those are handled in the rseq selftests and in librseq. Why duplicate all that logic again?
+> ---
+>   drivers/gpu/drm/drm_client.c                 |  4 ++--
+>   drivers/gpu/drm/drm_gem.c                    | 24 ++++++++++++++++++++
+>   drivers/gpu/drm/drm_gem_framebuffer_helper.c |  6 ++---
+>   drivers/gpu/drm/drm_prime.c                  |  4 ++--
+>   drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c   |  2 +-
+>   drivers/gpu/drm/qxl/qxl_object.c             | 17 +++++++-------
+>   drivers/gpu/drm/qxl/qxl_prime.c              |  4 ++--
+>   include/drm/drm_gem.h                        |  3 +++
+>   8 files changed, 46 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
+> index af3b7395bf69..e9a1cd310352 100644
+> --- a/drivers/gpu/drm/drm_client.c
+> +++ b/drivers/gpu/drm/drm_client.c
+> @@ -323,7 +323,7 @@ drm_client_buffer_vmap(struct drm_client_buffer *buffer,
+>   	 * fd_install step out of the driver backend hooks, to make that
+>   	 * final step optional for internal users.
+>   	 */
+> -	ret = drm_gem_vmap(buffer->gem, map);
+> +	ret = drm_gem_vmap_unlocked(buffer->gem, map);
+>   	if (ret)
+>   		return ret;
+>   
+> @@ -345,7 +345,7 @@ void drm_client_buffer_vunmap(struct drm_client_buffer *buffer)
+>   {
+>   	struct iosys_map *map = &buffer->map;
+>   
+> -	drm_gem_vunmap(buffer->gem, map);
+> +	drm_gem_vunmap_unlocked(buffer->gem, map);
+>   }
+>   EXPORT_SYMBOL(drm_client_buffer_vunmap);
+>   
+> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+> index eb0c2d041f13..8b92846112ef 100644
+> --- a/drivers/gpu/drm/drm_gem.c
+> +++ b/drivers/gpu/drm/drm_gem.c
+> @@ -1171,6 +1171,8 @@ int drm_gem_vmap(struct drm_gem_object *obj, struct iosys_map *map)
+>   {
+>   	int ret;
+>   
+> +	dma_resv_assert_held(obj->resv);
+> +
+>   	if (!obj->funcs->vmap)
+>   		return -EOPNOTSUPP;
+>   
+> @@ -1186,6 +1188,8 @@ EXPORT_SYMBOL(drm_gem_vmap);
+>   
+>   void drm_gem_vunmap(struct drm_gem_object *obj, struct iosys_map *map)
+>   {
+> +	dma_resv_assert_held(obj->resv);
+> +
+>   	if (iosys_map_is_null(map))
+>   		return;
+>   
+> @@ -1197,6 +1201,26 @@ void drm_gem_vunmap(struct drm_gem_object *obj, struct iosys_map *map)
+>   }
+>   EXPORT_SYMBOL(drm_gem_vunmap);
+>   
+> +int drm_gem_vmap_unlocked(struct drm_gem_object *obj, struct iosys_map *map)
+> +{
+> +	int ret;
+> +
+> +	dma_resv_lock(obj->resv, NULL);
+> +	ret = drm_gem_vmap(obj, map);
+> +	dma_resv_unlock(obj->resv);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(drm_gem_vmap_unlocked);
+> +
+> +void drm_gem_vunmap_unlocked(struct drm_gem_object *obj, struct iosys_map *map)
+> +{
+> +	dma_resv_lock(obj->resv, NULL);
+> +	drm_gem_vunmap(obj, map);
+> +	dma_resv_unlock(obj->resv);
+> +}
+> +EXPORT_SYMBOL(drm_gem_vunmap_unlocked);
+> +
+>   /**
+>    * drm_gem_lock_reservations - Sets up the ww context and acquires
+>    * the lock on an array of GEM objects.
+> diff --git a/drivers/gpu/drm/drm_gem_framebuffer_helper.c b/drivers/gpu/drm/drm_gem_framebuffer_helper.c
+> index 61339a9cd010..135cd4a96ea9 100644
+> --- a/drivers/gpu/drm/drm_gem_framebuffer_helper.c
+> +++ b/drivers/gpu/drm/drm_gem_framebuffer_helper.c
+> @@ -354,7 +354,7 @@ int drm_gem_fb_vmap(struct drm_framebuffer *fb, struct iosys_map *map,
+>   			ret = -EINVAL;
+>   			goto err_drm_gem_vunmap;
+>   		}
+> -		ret = drm_gem_vmap(obj, &map[i]);
+> +		ret = drm_gem_vmap_unlocked(obj, &map[i]);
+>   		if (ret)
+>   			goto err_drm_gem_vunmap;
+>   	}
+> @@ -376,7 +376,7 @@ int drm_gem_fb_vmap(struct drm_framebuffer *fb, struct iosys_map *map,
+>   		obj = drm_gem_fb_get_obj(fb, i);
+>   		if (!obj)
+>   			continue;
+> -		drm_gem_vunmap(obj, &map[i]);
+> +		drm_gem_vunmap_unlocked(obj, &map[i]);
+>   	}
+>   	return ret;
+>   }
+> @@ -403,7 +403,7 @@ void drm_gem_fb_vunmap(struct drm_framebuffer *fb, struct iosys_map *map)
+>   			continue;
+>   		if (iosys_map_is_null(&map[i]))
+>   			continue;
+> -		drm_gem_vunmap(obj, &map[i]);
+> +		drm_gem_vunmap_unlocked(obj, &map[i]);
+>   	}
+>   }
+>   EXPORT_SYMBOL(drm_gem_fb_vunmap);
+> diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+> index b75ef1756873..1bd234fd21a5 100644
+> --- a/drivers/gpu/drm/drm_prime.c
+> +++ b/drivers/gpu/drm/drm_prime.c
+> @@ -678,7 +678,7 @@ int drm_gem_dmabuf_vmap(struct dma_buf *dma_buf, struct iosys_map *map)
+>   {
+>   	struct drm_gem_object *obj = dma_buf->priv;
+>   
+> -	return drm_gem_vmap(obj, map);
+> +	return drm_gem_vmap_unlocked(obj, map);
+>   }
+>   EXPORT_SYMBOL(drm_gem_dmabuf_vmap);
+>   
+> @@ -694,7 +694,7 @@ void drm_gem_dmabuf_vunmap(struct dma_buf *dma_buf, struct iosys_map *map)
+>   {
+>   	struct drm_gem_object *obj = dma_buf->priv;
+>   
+> -	drm_gem_vunmap(obj, map);
+> +	drm_gem_vunmap_unlocked(obj, map);
+>   }
+>   EXPORT_SYMBOL(drm_gem_dmabuf_vunmap);
+>   
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+> index 5ecea7df98b1..cc54a5b1d6ae 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+> @@ -72,7 +72,7 @@ static int i915_gem_dmabuf_vmap(struct dma_buf *dma_buf,
+>   	struct drm_i915_gem_object *obj = dma_buf_to_obj(dma_buf);
+>   	void *vaddr;
+>   
+> -	vaddr = i915_gem_object_pin_map_unlocked(obj, I915_MAP_WB);
+> +	vaddr = i915_gem_object_pin_map(obj, I915_MAP_WB);
+>   	if (IS_ERR(vaddr))
+>   		return PTR_ERR(vaddr);
+>   
+> diff --git a/drivers/gpu/drm/qxl/qxl_object.c b/drivers/gpu/drm/qxl/qxl_object.c
+> index b42a657e4c2f..a64cd635fbc0 100644
+> --- a/drivers/gpu/drm/qxl/qxl_object.c
+> +++ b/drivers/gpu/drm/qxl/qxl_object.c
+> @@ -168,9 +168,16 @@ int qxl_bo_vmap_locked(struct qxl_bo *bo, struct iosys_map *map)
+>   		bo->map_count++;
+>   		goto out;
+>   	}
+> -	r = ttm_bo_vmap(&bo->tbo, &bo->map);
+> +
+> +	r = __qxl_bo_pin(bo);
+>   	if (r)
+>   		return r;
+> +
+> +	r = ttm_bo_vmap(&bo->tbo, &bo->map);
+> +	if (r) {
+> +		__qxl_bo_unpin(bo);
+> +		return r;
+> +	}
+>   	bo->map_count = 1;
+>   
+>   	/* TODO: Remove kptr in favor of map everywhere. */
+> @@ -192,12 +199,6 @@ int qxl_bo_vmap(struct qxl_bo *bo, struct iosys_map *map)
+>   	if (r)
+>   		return r;
+>   
+> -	r = __qxl_bo_pin(bo);
+> -	if (r) {
+> -		qxl_bo_unreserve(bo);
+> -		return r;
+> -	}
+> -
+>   	r = qxl_bo_vmap_locked(bo, map);
+>   	qxl_bo_unreserve(bo);
+>   	return r;
+> @@ -247,6 +248,7 @@ void qxl_bo_vunmap_locked(struct qxl_bo *bo)
+>   		return;
+>   	bo->kptr = NULL;
+>   	ttm_bo_vunmap(&bo->tbo, &bo->map);
+> +	__qxl_bo_unpin(bo);
+>   }
+>   
+>   int qxl_bo_vunmap(struct qxl_bo *bo)
+> @@ -258,7 +260,6 @@ int qxl_bo_vunmap(struct qxl_bo *bo)
+>   		return r;
+>   
+>   	qxl_bo_vunmap_locked(bo);
+> -	__qxl_bo_unpin(bo);
+>   	qxl_bo_unreserve(bo);
+>   	return 0;
+>   }
+> diff --git a/drivers/gpu/drm/qxl/qxl_prime.c b/drivers/gpu/drm/qxl/qxl_prime.c
+> index 142d01415acb..9169c26357d3 100644
+> --- a/drivers/gpu/drm/qxl/qxl_prime.c
+> +++ b/drivers/gpu/drm/qxl/qxl_prime.c
+> @@ -59,7 +59,7 @@ int qxl_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map)
+>   	struct qxl_bo *bo = gem_to_qxl_bo(obj);
+>   	int ret;
+>   
+> -	ret = qxl_bo_vmap(bo, map);
+> +	ret = qxl_bo_vmap_locked(bo, map);
+>   	if (ret < 0)
+>   		return ret;
+>   
+> @@ -71,5 +71,5 @@ void qxl_gem_prime_vunmap(struct drm_gem_object *obj,
+>   {
+>   	struct qxl_bo *bo = gem_to_qxl_bo(obj);
+>   
+> -	qxl_bo_vunmap(bo);
+> +	qxl_bo_vunmap_locked(bo);
+>   }
+> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+> index 87cffc9efa85..bf3700415229 100644
+> --- a/include/drm/drm_gem.h
+> +++ b/include/drm/drm_gem.h
+> @@ -420,4 +420,7 @@ void drm_gem_unlock_reservations(struct drm_gem_object **objs, int count,
+>   int drm_gem_dumb_map_offset(struct drm_file *file, struct drm_device *dev,
+>   			    u32 handle, u64 *offset);
+>   
+> +int drm_gem_vmap_unlocked(struct drm_gem_object *obj, struct iosys_map *map);
+> +void drm_gem_vunmap_unlocked(struct drm_gem_object *obj, struct iosys_map *map);
+> +
+>   #endif /* __DRM_GEM_H__ */
 
-Thanks,
-
-Mathieu 
-
-> 
-> Thanks,
-> Gavin
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com

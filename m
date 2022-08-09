@@ -2,60 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDF258D7C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E15A58D7CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236261AbiHILD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 07:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
+        id S240428AbiHILFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 07:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiHILD0 (ORCPT
+        with ESMTP id S230178AbiHILFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 07:03:26 -0400
-Received: from ns3.fnarfbargle.com (ns3.fnarfbargle.com [103.4.19.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E741115E
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:03:25 -0700 (PDT)
-Received: from [10.8.0.1] (helo=srv.home)
-        by ns3.fnarfbargle.com with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lists2009@fnarfbargle.com>)
-        id 1oLN18-0004OF-JB; Tue, 09 Aug 2022 21:03:22 +1000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=fnarfbargle.com; s=mail; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wqaaQdZiPnvXjS5kmSznLk7LwW4miaOBU233ObHkdbA=; b=L8gu2OdQtF2ijl2U3HlW12VUVb
-        neVqD7z7ecltnZ+1SLaL8x5/+EPcbcKbth+Kkx5hgFrVVAQzcNIRjeX9D+bYkfzV9l4x2TeRerZup
-        mxP1r+gGUGMrnTkrl05tFcvTygHEo2OYjG9FeEwc6CeGHuuZ/YvWei0Bc6Z/X62F4bQQ=;
-Message-ID: <685b7a6a-d122-b79a-93e7-4227eaa4e4e9@fnarfbargle.com>
-Date:   Tue, 9 Aug 2022 19:03:14 +0800
+        Tue, 9 Aug 2022 07:05:09 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A10C1FCCB;
+        Tue,  9 Aug 2022 04:05:08 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2799xcRU028593;
+        Tue, 9 Aug 2022 11:04:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=oBwBvZSsMZBHlODzJPdCUM/1aMAkHwPlD1L/widFSYM=;
+ b=NJnQ9oOIw76+f8+HDjnrPG/K99bdemZGeB96PP6JQ+zqgLru5UgQSXVveogcsPKNkBr9
+ hMZL/dxsY9z+PRGws0y0bUh1sXY8q7Y4k20RDcJZQs+Q4QbFi4qa2/jRXdUxBeNZGL/B
+ Ti0gCKfP0Cr8s6/TtQzw49HbO4JuwYOXPLHLO2aOEn7NuL1veUDsdRpQgDN/HTucBo1g
+ p5jns6MMb1/99zxKPjy73/E/HkHwfUhIcoUQ5OEmn5/qbNKQOsxY9Ck9H+YBH8f/pcCn
+ R0Dn/wc1958W7xhJAm3tpzyI94lFRSkmgwIaH7BmWUX0CfRrCV0uBltpDbkA8tPvFaOF qA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hudw7gy21-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 11:04:30 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 279B4TCn030507
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 9 Aug 2022 11:04:29 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 9 Aug 2022 04:04:28 -0700
+Received: from [10.216.39.97] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 9 Aug 2022
+ 04:04:23 -0700
+Message-ID: <d9901649-060b-71f5-7b3a-ab0fea91f142@quicinc.com>
+Date:   Tue, 9 Aug 2022 16:34:19 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: Apple Thunderbolt Display chaining
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 7/8] remoteproc: qcom: Add support for memory sandbox
 Content-Language: en-US
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org
-References: <87c1a001-ef79-6390-dfe2-06d2850f6e84@fnarfbargle.com>
- <Yu4Gmkous7asng6h@lahna>
- <42e81a8e-e393-7a69-7339-a020ebb57935@fnarfbargle.com>
- <YvDcudE5BRtZAtfM@lahna>
- <a1db1454-63b6-7c39-bbf6-53e53bbd36e6@fnarfbargle.com>
- <5474e599-057a-ec0f-b469-560644155907@fnarfbargle.com>
- <YvEFtPF7SBIwNG/o@lahna>
- <d234ea9b-9303-6088-0a9b-4de887a77bf4@fnarfbargle.com>
- <YvI1lQh+C0SJiG73@lahna>
- <bcebdeb9-4f6a-e931-46f5-b9be899db9a4@fnarfbargle.com>
- <YvI9Cbin4OKQwZ05@lahna>
-From:   Brad Campbell <lists2009@fnarfbargle.com>
-In-Reply-To: <YvI9Cbin4OKQwZ05@lahna>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
+References: <1659536480-5176-1-git-send-email-quic_srivasam@quicinc.com>
+ <1659536480-5176-8-git-send-email-quic_srivasam@quicinc.com>
+ <9d78a571-8d02-2967-1f29-21ca737a582f@linaro.org>
+ <1f340f3d-83f3-6455-7671-34ef40abe6c4@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <1f340f3d-83f3-6455-7671-34ef40abe6c4@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: E2pb8Cu3XOPQluXqIQK3YMZZ8yR8U_01
+X-Proofpoint-ORIG-GUID: E2pb8Cu3XOPQluXqIQK3YMZZ8yR8U_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-09_03,2022-08-09_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ clxscore=1011 spamscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ bulkscore=0 adultscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2208090048
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,91 +93,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-G'day Mika,
 
-On 9/8/22 18:55, Mika Westerberg wrote:
-> Hi,
-> 
-> On Tue, Aug 09, 2022 at 06:40:54PM +0800, Brad Campbell wrote:
->> G'day Mika,
+On 8/9/2022 1:52 PM, Srinivasa Rao Mandadapu wrote:
+>
+> On 8/7/2022 2:04 AM, Dmitry Baryshkov wrote:
+> Thanks for your time and Valuable inputs Dmitry!!!
+>> On 03/08/2022 17:21, Srinivasa Rao Mandadapu wrote:
+>>> Add memory sandbox support for ADSP based platforms secure booting.
 >>
+>> This repeats commit subject. Please replace it with proper commit 
+>> message text describing what is done and why.
+> Okay. Will update it.
 >>
->> On 9/8/22 18:23, Mika Westerberg wrote:
->>> Hi,
 >>>
->>> On Mon, Aug 08, 2022 at 09:27:24PM +0800, Brad Campbell wrote:
->>>> If I don't authorize the PCIe tunnels and just leave the DP enabled it
->>>> works fine also.
+>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>> ---
+>>>   drivers/remoteproc/qcom_q6v5_adsp.c | 101 
+>>> +++++++++++++++++++++++++++++++++++-
+>>>   1 file changed, 99 insertions(+), 2 deletions(-)
 >>>
->>> But you say that it fails on boot when the driver discovers the tunnels,
->>> right? So there is really nothing to authorize (they should be already
->>> "authorized" by the boot firmware).
->>>
->>> If I understand correctly this is how it reproduces (the simplest):
->>>
->>>   1. Connect a single Apple TB1 display to the system
->>>   2. Boot it up
->>>   3. Wait a while and it hangs
->>>
->>> If this is the case, then the driver certainly is not creating any
->>> PCIe tunnels itself unless there is a bug somewhere.
->>>
->>> An additional question, does it reproduce with either TB1 display
->>> connected or just with specific TB1 display?
->>>
+>>> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c 
+>>> b/drivers/remoteproc/qcom_q6v5_adsp.c
+>>> index 3dbd035..f81da47 100644
+>>> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+>>> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+>>> @@ -9,6 +9,7 @@
+>>>   #include <linux/firmware.h>
+>>>   #include <linux/interrupt.h>
+>>>   #include <linux/io.h>
+>>> +#include <linux/iommu.h>
+>>>   #include <linux/iopoll.h>
+>>>   #include <linux/kernel.h>
+>>>   #include <linux/mfd/syscon.h>
+>>> @@ -48,6 +49,8 @@
+>>>   #define LPASS_PWR_ON_REG        0x10
+>>>   #define LPASS_HALTREQ_REG        0x0
+>>>   +#define SID_MASK_DEFAULT        0xF
+>>> +
+>>>   #define QDSP6SS_XO_CBCR        0x38
+>>>   #define QDSP6SS_CORE_CBCR    0x20
+>>>   #define QDSP6SS_SLEEP_CBCR    0x3c
+>>> @@ -77,7 +80,7 @@ struct adsp_pil_data {
+>>>   struct qcom_adsp {
+>>>       struct device *dev;
+>>>       struct rproc *rproc;
+>>> -
+>>> +    struct iommu_domain *iommu_dom;
+>>>       struct qcom_q6v5 q6v5;
+>>>         struct clk *xo;
+>>> @@ -332,6 +335,91 @@ static int adsp_load(struct rproc *rproc, const 
+>>> struct firmware *fw)
+>>>       return 0;
+>>>   }
+>>>   +static int adsp_map_smmu(struct qcom_adsp *adsp, struct rproc 
+>>> *rproc)
+>>> +{
+>>> +    struct of_phandle_args args;
+>>> +    int ret, rc, i;
+>>> +    long long sid;
+>>> +
+>>> +    unsigned long mem_phys;
+>>> +    unsigned long iova;
+>>> +    const __be32 *prop;
+>>> +    int access_level;
+>>> +    uint32_t len, flag, mem_size;
+>>> +    int offset;
+>>> +    struct fw_rsc_hdr *hdr;
+>>> +    struct fw_rsc_devmem *rsc_fw;
+>>> +
+>>> +    rc = of_parse_phandle_with_fixed_args(adsp->dev->of_node, 
+>>> "iommus", 1, 0, &args);
 >>
->> No, I've not been clear enough, I'm sorry. I've re-read what I've written below and
->> I'm still not sure I'm clear enough.
+>> Please do not add implicit dependency on #iommu-cells value.
+> Okay. Will change it to "of_parse_phandle_with_args()"
 >>
->> The firmware never sets anything up. 
+>>> +    if (rc < 0)
+>>> +        sid = -1;
+>>> +    else
+>>> +        sid = args.args[0] & SID_MASK_DEFAULT;
+>>> +
+>>> +    adsp->iommu_dom = iommu_domain_alloc(&platform_bus_type);
 >>
->> When I cold boot the machine (from power on), the thunderbolt displays and tunnels
->> remain dark until linux initializes the thunderbolt driver the first time. 
->>  
->> If I compile the thunderbolt driver into the kernel, or let the initramfs load it
->> the displays come up, all PCIe tunnels are established and everything works.
+>> please use adsp->dev->bus instead of platform_bus_type here.
+> Okay. will update it.
 >>
->> When I reboot the machine (reset button or warm boot), the firmware continues to
->> do nothing and all the tunnels remain in place. The machine dies when the thunderbolt 
->> driver is loaded for a second time.
+>>> +    if (!adsp->iommu_dom) {
+>>> +        dev_err(adsp->dev, "failed to allocate iommu domain\n");
+>>> +        return -ENOMEM;
+>>> +    }
+>>> +
+>>> +    ret = iommu_attach_device(adsp->iommu_dom, adsp->dev);
+>>> +    if (ret) {
+>>> +        dev_err(adsp->dev, "could not attach device ret = %d\n", ret);
+>>> +        return -EBUSY;
+>>> +    }
+>>> +
+>>> +    /* Add SID configuration for ADSP Firmware to SMMU */
+>>> +    adsp->mem_phys =  adsp->mem_phys | (sid << 32);
+>>> +
+>>> +    ret = iommu_map(adsp->iommu_dom, adsp->mem_phys, adsp->mem_phys,
+>>> +            adsp->mem_size,    IOMMU_READ | IOMMU_WRITE);
+>>> +    if (ret) {
+>>> +        dev_err(adsp->dev, "Unable to map ADSP Physical Memory\n");
+>>> +        return ret;
+>>> +    }
+>>> +
+>>> +    prop = of_get_property(adsp->dev->of_node, "qcom,adsp-memory", 
+>>> &len);
 >>
->> That might be a reset/warm boot with it compiled in or loaded from iniramfs.
->> It may also be me loading it from the command line after booting with it as a
->> module and blacklisted.
+>> Non-documented property. So, this chunk is not acceptable.
+> Okay. Will add it in dt-bindings too.
 >>
->> The problem comes about when the thunderbolt module is loaded while the PCIe tunnels
->> are already established.
+>>> +    if (prop) {
+>>> +        len /= sizeof(__be32);
+>>> +        for (i = 0; i < len; i++) {
+>>> +            iova = be32_to_cpu(prop[i++]);
+>>> +            mem_phys = be32_to_cpu(prop[i++]);
+>>> +            mem_size = be32_to_cpu(prop[i++]);
+>>> +            access_level = be32_to_cpu(prop[i]);
+>>> +
+>>> +            if (access_level)
+>>> +                flag = IOMMU_READ | IOMMU_WRITE;
+>>> +            else
+>>> +                flag = IOMMU_READ;
+>>> +
+>>> +            ret = iommu_map(adsp->iommu_dom, iova, mem_phys, 
+>>> mem_size, flag);
+>>> +            if (ret) {
+>>> +                dev_err(adsp->dev, "failed to map addr = %p 
+>>> mem_size = %x\n",
+>>> +                        &(mem_phys), mem_size);
+>>> +                return ret;
+>>> +            }
+>>> +        }
+>>> +    } else {
+>>> +        if (!rproc->table_ptr)
+>>> +            return 0;
+>>> +
+>>> +        for (i = 0; i < rproc->table_ptr->num; i++) {
+>>> +            offset = rproc->table_ptr->offset[i];
+>>> +            hdr = (void *)rproc->table_ptr + offset;
+>>> +            rsc_fw = (struct fw_rsc_devmem *)hdr + sizeof(*hdr);
+>>> +
+>>> +            ret = iommu_map(rproc->domain, rsc_fw->da, rsc_fw->pa,
+>>> +                        rsc_fw->len, rsc_fw->flags);
 >>
->> To reproduce in the easiest manner I compile the thunderbolt driver as a module and
->> blacklist it. This prevents it from auto-loading.
+>> What about filling an sgtable instead and using it?
+>
+> Here we are just doing IO mapping and allowing ADSP to access the 
+> specified memory.
+>
+> I am not sure,  sg_table applicable here or not as it's not any DMA 
+> activity.
+>
+> Please correct me if my understanding is not enough and It would help 
+> me a lot, if any good example shared.
+>
 >>
->> I cold boot the machine, let it boot completely then modprobe thunderbolt and authorize
->> the tunnels. I then warm boot which lets the kernel detect and init the DP displays
->> and detect/configure all the PCIe devices. The thunderbolt driver is not loaded.
+>>> +            if (ret) {
+>>> +                pr_err("%s; unable to map adsp memory address\n", 
+>>> __func__);
+>>> +                return ret;
+>>> +            }
+>>> +        }
+>>> +    }
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +
+>>>   static int adsp_start(struct rproc *rproc)
+>>>   {
+>>>       struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+>>> @@ -341,7 +429,13 @@ static int adsp_start(struct rproc *rproc)
+>>>       ret = qcom_q6v5_prepare(&adsp->q6v5);
+>>>       if (ret)
+>>>           return ret;
+>>> -
+>>> +    if (!adsp->is_wpss) {
+>>> +        ret = adsp_map_smmu(adsp, rproc);
 >>
->> The machine comes up, all tunnels are established and all devices work.
->>
->> If I then modprobe the thunderbolt driver, things break.
->>
->> This is the hack in my boot script :
->>
->> # Spark up thunderbolt
->> if [ -z "`grep notb /proc/cmdline`" -a -z "`lsusb | grep '05ac:9227'`" ] ; then
->> 	modprobe thunderbolt
->> 	sleep 1
->> 	echo 1 > /sys/bus/thunderbolt/devices/0-3/authorized
->> 	echo 1 > /sys/bus/thunderbolt/devices/0-303/authorized
->> 	reboot
->> fi
-> 
-> Thanks for the clarification! How about on macOS side, does it work (I
-> would expect yes)?
-> 
+>> Is this also applicable to cDSP? To sdm845 adsp?
+>
+> It's applicable to all ADSP SoC variants. I think it's better to add 
+> adsp flag("is_adsp") for
+>
+> distinguishing adsp use cases. Please suggest here.
 
-It did work flawlessly in MacOS, but as the GPU turned up its toes I can't really test it anymore.
+Verified with sdm845 developer, and got to know that, even though it's 
+applicable there too,
 
-The Mac EFI did odd things with the Thunderbolt tunnels, and due to the dying GPU I couldn't
-warm boot it in Linux anyway. Every reboot had to be a power cycle or it'd hang in the EFI.
+Somehow for them it was working without memory sandboxing.
 
-Regards,
-Brad
+Maybe, it was due to SMMU security levels were different.
+
+>
+>>
+>>> +        if (ret) {
+>>> +            dev_err(adsp->dev, "ADSP smmu mapping failed\n");
+>>> +            goto adsp_smmu_unmap;
+>>> +        }
+>>> +    }
+>>>       ret = clk_prepare_enable(adsp->xo);
+>>>       if (ret)
+>>>           goto disable_irqs;
+>>> @@ -402,6 +496,9 @@ static int adsp_start(struct rproc *rproc)
+>>>       clk_disable_unprepare(adsp->xo);
+>>>   disable_irqs:
+>>>       qcom_q6v5_unprepare(&adsp->q6v5);
+>>> +adsp_smmu_unmap:
+>>> +    iommu_unmap(adsp->iommu_dom, adsp->mem_phys, adsp->mem_size);
+>>> +    iommu_domain_free(adsp->iommu_dom);
+>>>         return ret;
+>>>   }
+>>
+>>

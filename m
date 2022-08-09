@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8561358D16F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5022658D176
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236290AbiHIAhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 20:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
+        id S244743AbiHIAsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 20:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiHIAhs (ORCPT
+        with ESMTP id S244457AbiHIAst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 20:37:48 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0960C12AB3;
-        Mon,  8 Aug 2022 17:37:47 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id kb8so19600016ejc.4;
-        Mon, 08 Aug 2022 17:37:46 -0700 (PDT)
+        Mon, 8 Aug 2022 20:48:49 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DC7BA5;
+        Mon,  8 Aug 2022 17:48:48 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso10732277pjl.4;
+        Mon, 08 Aug 2022 17:48:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Yd7WSvA1YADITl6HyqX9HkN3pZEKcYoTmTNbGT8mUIw=;
-        b=pESTpVCkNcDFn9THb8jv3cMk16A+kSBjkWwwZ6Df4YD9jy7YA2m2OgzNeMpFCBHC6s
-         2U/nMxt9+qymQq7uX7+sQ4YmDtGROKfyDTZD1POwujDXOZgxkscAIhEblTPNGnWReiDW
-         B6SpBzlGNQKdyVc6ME6FvaUJvV11qjOxvXSBipplrYtn3Uxyv04/yWhOvif7cZeOM5uN
-         pjiHdQSw2dd+X6K3HxmG49X3lunIkzQ4bOBz0+e9d2HCgqGrDDrMZLBW8yXW+zUk2pWe
-         Zz+Y8utlZtFiTW7PpEdI2u0I6SLzgwYsR+E4SMJVXCIyD511QZYxokSyhtf6FJjiz9R+
-         K5Jw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Kc/KcJ1/Sv1U6ib2VY1BnVwQKDPVKyoIb6rAay5qsDk=;
+        b=GTQhdKq+HAQSElM2peGsEfvfgGlLkW7iKwWMoibdtUVsogjDZ/uf5Rq1i61eZv+8pf
+         McFcn5RG016LhQXNUN4g4C0PHUh/xhADsEQHV8szcP1JPjFNBnfGvsKoTm8nJpd00rM5
+         pLh6/j17DYpRPkmbzhShc2XAuQSgl2HPCymWxY4g58kdYzugjBQ2PWmzU5P1xD0uzjeQ
+         gNuY4/lwfQrU6nEypTYajrAL/Gu4e30BTESa+lBcc5AHR29HPnI29y9u0lXuPE5pinlt
+         bF41znDXlJ/H/oblskhGNhR9UK75YVCQHtw0f/7myHjr8a3wft3FTDmXVdSje1kgOg3n
+         M8Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Yd7WSvA1YADITl6HyqX9HkN3pZEKcYoTmTNbGT8mUIw=;
-        b=evZNz/n3QY/Kgg46jSu3mVEqhIDnz3bGEUC3x34a+hDCqpVIIxON2xCgKNQk3YqnC1
-         LoeB/3nMH9iEpwCKZLVBPaodgYdnqKl6wmZ/jcMTW56b2QjGeQQ3/1XnXE9+CTs7Uoii
-         oMDYhuCxvtiK1dsk6F56UGfi0O/ahDng54gjg0i7ufNiCtcqfXrTK1BrJ5DEIEPRUJTz
-         voD2dEd2G+VX7j0lOXty86qx3owS7+5SEH2DAKoH7ND1yL+V/uSboxzD7K+Fu86b8f89
-         Y5mPypibpY6Y/eMwPcxaa8KKiUedfTUgoTgknU4nnsKLLtnGbjwB9EGyk0xJPGx2pS0h
-         qqqA==
-X-Gm-Message-State: ACgBeo3pkwuH+M7RNojtVR9vu3UFOqjcRneN0pg2jOieW5gtN3Qn3Q2j
-        nbYUUd8Nzxe/g0cFo4psuwMlsyh7P3b6URa12/o=
-X-Google-Smtp-Source: AA6agR4yH+SAMof63qmLkLzR+cSea8kpyU/FFaMFFHznkaAvg0V32KIjXKJrmovk1lWVHjePdDd7t4B9OId7J/Unyq0=
-X-Received: by 2002:a17:907:2d12:b0:731:6a4e:ceb0 with SMTP id
- gs18-20020a1709072d1200b007316a4eceb0mr3979574ejc.115.1660005465499; Mon, 08
- Aug 2022 17:37:45 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Kc/KcJ1/Sv1U6ib2VY1BnVwQKDPVKyoIb6rAay5qsDk=;
+        b=cQ2M0gZeP614KXLRgA49ZJBbYWAu5zUP/VI6ERs0xa+FHcLE8kuPFO4wIZZAYxDxZE
+         xmgjK+m0ev+Ld5CZWmw9gHT55YZ5OZv+/X9MkzSyMl6RrkbzImuaf3F2/JvJQZ10xEat
+         fL0vYrdAltTzw1SrqDMmohpb9cb7CJm1+ZYZfWR4B03HPAGfTH5BnB1NRvC1nIQMMYgW
+         V5SS+6z5pdMoDAo14V+DNvjOKcbTw1EA+QqUs4tlkGMrtTwUgPRIdSu4oCJNqdwSFF4C
+         D69UYT0hhVgXlsfyZYW3cgnWS+/4wCxRfF/22+gGPZsKaHUPU1cPf8jyx4KkuaBX8kmY
+         b6hg==
+X-Gm-Message-State: ACgBeo2GAkp2wsPHDAI+WFB2+5p5pzZQQC/hRk3Ur4UiCiyTLo+sSSR7
+        qp6eKmKi+CpHWFEQ72/UCJk=
+X-Google-Smtp-Source: AA6agR4YkiEr2P0xVTrp4gHmVMHYklRXP4SftIM3aBYOHNueBfvuU0tMM+hZQEqZLRpDR0I19wlv5A==
+X-Received: by 2002:a17:90b:907:b0:1f7:6b77:dcbc with SMTP id bo7-20020a17090b090700b001f76b77dcbcmr3835112pjb.244.1660006127840;
+        Mon, 08 Aug 2022 17:48:47 -0700 (PDT)
+Received: from localhost ([192.55.54.49])
+        by smtp.gmail.com with ESMTPSA id i22-20020a17090a059600b001f516895294sm8651021pji.40.2022.08.08.17.48.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 17:48:47 -0700 (PDT)
+Date:   Mon, 8 Aug 2022 17:48:45 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Kai Huang <kai.huang@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v7 041/102] KVM: VMX: Introduce test mode related to EPT
+ violation VE
+Message-ID: <20220809004845.GC504743@ls.amr.corp.intel.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <cadf3221e3f7b911c810f15cfe300dd5337a966d.1656366338.git.isaku.yamahata@intel.com>
+ <52915310c9118a124da2380daf3d753a818de05e.camel@intel.com>
+ <20220719144936.GX1379820@ls.amr.corp.intel.com>
+ <9945dbf586d8738b7cf0af53bfb760da9eb9e882.camel@intel.com>
+ <20220727233955.GC3669189@ls.amr.corp.intel.com>
+ <af9e3b06ba9e16df4bfd768dfdd78f2e0277cbe5.camel@intel.com>
+ <YuLtj4/pgUZBc6f9@google.com>
 MIME-Version: 1.0
-References: <20220808094623.387348-1-asavkov@redhat.com> <20220808094623.387348-2-asavkov@redhat.com>
- <CAP01T76dELOx8p_iky_Py_VcqDbQtaL-4d=zrFiCbFhMdVEmNA@mail.gmail.com>
- <YvEEXsdo/fCnoEFY@samus.usersys.redhat.com> <CAP01T74kqdAeZbmnVA2uDRiB-8tjuWtdw-q_2V5fL6wQ==rTEA@mail.gmail.com>
-In-Reply-To: <CAP01T74kqdAeZbmnVA2uDRiB-8tjuWtdw-q_2V5fL6wQ==rTEA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 8 Aug 2022 17:37:34 -0700
-Message-ID: <CAEf4BzaGmBZ7aXuX2ty1eB2jddurHyranxPs2cfKkkPB_hoX9A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] bpf: add destructive kfunc flag
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>,
-        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YuLtj4/pgUZBc6f9@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,78 +80,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 6:33 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
->
-> On Mon, 8 Aug 2022 at 14:41, Artem Savkov <asavkov@redhat.com> wrote:
-> >
-> > On Mon, Aug 08, 2022 at 02:14:33PM +0200, Kumar Kartikeya Dwivedi wrote:
-> > > On Mon, 8 Aug 2022 at 11:48, Artem Savkov <asavkov@redhat.com> wrote:
-> > > >
-> > > > Add KF_DESTRUCTIVE flag for destructive functions. Functions with this
-> > > > flag set will require CAP_SYS_BOOT capabilities.
-> > > >
-> > > > Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> > > > ---
-> > > >  include/linux/btf.h   | 1 +
-> > > >  kernel/bpf/verifier.c | 5 +++++
-> > > >  2 files changed, 6 insertions(+)
-> > > >
-> > > > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > > > index cdb376d53238..51a0961c84e3 100644
-> > > > --- a/include/linux/btf.h
-> > > > +++ b/include/linux/btf.h
-> > > > @@ -49,6 +49,7 @@
-> > > >   * for this case.
-> > > >   */
-> > > >  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer arguments */
-> > > > +#define KF_DESTRUCTIVE  (1 << 5) /* kfunc performs destructive actions */
-> > > >
-> > >
-> > > Please also document this flag in Documentation/bpf/kfuncs.rst.
-> >
-> > Ok, will do.
-> >
-> > > And maybe instead of KF_DESTRUCTIVE, it might be more apt to call this
-> > > KF_CAP_SYS_BOOT. While it is true you had a destructive flag for
-> > > programs being loaded earlier, so there was a mapping between the two
-> > > UAPI and kfunc flags, what it has boiled down to is that this flag
-> > > just requires CAP_SYS_BOOT (in addition to other capabilities) during
-> > > load. So that name might express the intent a bit better. We might
-> > > soon have similar flags encoding requirements of other capabilities on
-> > > load.
-> > >
-> > > The flag rename is just a suggestion, up to you.
-> >
-> > This makes sense right now, but if going forward we'll add stricter
-> > signing requirements or other prerequisites we'll either have to rename
-> > the flag back, or add those as separate flags. I guess the decision here
->
-> IMO we should do that when the time comes, for now it should reflect
-> the current state.
+On Thu, Jul 28, 2022 at 08:11:59PM +0000,
+Sean Christopherson <seanjc@google.com> wrote:
 
-But names should be also semantically meaningful, so KF_DESTRUCTIVE
-explains that kfunc can do destructive operations, which is better
-than just declaring that kfunc needs CAP_SYS_BOOT, as the latter is
-current implementation detail which has no bearing on kfunc definition
-itself.
+> On Thu, Jul 28, 2022, Kai Huang wrote:
+> > On Wed, 2022-07-27 at 16:39 -0700, Isaku Yamahata wrote:
+> > > On Wed, Jul 20, 2022 at 05:13:08PM +1200,
+> > > Kai Huang <kai.huang@intel.com> wrote:
+> > > 
+> > > > On Tue, 2022-07-19 at 07:49 -0700, Isaku Yamahata wrote:
+> > > > > On Fri, Jul 08, 2022 at 02:23:43PM +1200,
+> > > > > Kai Huang <kai.huang@intel.com> wrote:
+> > > > > 
+> > > > > > On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
+> > > > > > > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > > > > > > 
+> > > > > > > To support TDX, KVM is enhanced to operate with #VE.  For TDX, KVM programs
+> > > > > > > to inject #VE conditionally and set #VE suppress bit in EPT entry.  For VMX
+> > > > > > > case, #VE isn't used.  If #VE happens for VMX, it's a bug.  To be
+> > > > > > > defensive (test that VMX case isn't broken), introduce option
+> > > > > > > ept_violation_ve_test and when it's set, set error.
+> > > > > > 
+> > > > > > I don't see why we need this patch.  It may be helpful during your test, but why
+> > > > > > do we need this patch for formal submission?
+> > > > > > 
+> > > > > > And for a normal guest, what prevents one vcpu from sending #VE IPI to another
+> > > > > > vcpu?
+> > > > > 
+> > > > > Paolo suggested it as follows.  Maybe it should be kernel config.
+> > > > > (I forgot to add suggested-by. I'll add it)
+> > > > > 
+> > > > > https://lore.kernel.org/lkml/84d56339-4a8a-6ddb-17cb-12074588ba9c@redhat.com/
+> > > > > 
+> > > > > > 
+> > > > 
+> > > > OK.  But can we assume a normal guest won't sending #VE IPI?
+> > > 
+> > > Theoretically nothing prevents that.  I wouldn't way "normal".
+> > > Anyway this is off by default.
+> > 
+> > I don't think whether it is on or off by default matters.
+> 
+> It matters in the sense that the module param is intended purely for testing, i.e.
+> there's zero reason to ever enable it in production.  That changes what is and
+> wasn't isn't a reasonable response to an unexpected #VE.
+> 
+> > If it can happen legitimately in the guest, it doesn't look right to print
+> > out something like below:
+> > 
+> > 	pr_err("VMEXIT due to unexpected #VE.\n");
+> 
+> Agreed.  In this particular case I think the right approach is to treat an
+> unexpected #VE as a fatal KVM bug.  Yes, disabling EPT violation #VEs would likely
+> allow the guest to live, but as above the module param should never be enabled in
+> production.  And if we get a #VE with the module param disabled, then KVM is truly
+> in the weeds and killing the VM is the safe option.
+> 
+> E.g. something like
 
-Unless we anticipate we'll have another "destructive" kfunc not using
-KF_DESTRUCTIVE and instead we'll add some other
-KF_CAP_SYS_WHATEVERELSE?
+Thanks, I finally ended up with the following.
 
-> To me this helper requiring cap_sys_boot is just like how some
-> existing stable helpers are gated behind bpf_capable or
-> perfmon_capable.
-> When it requires that the program calling it be signed, we can revisit this.
->
-> > depends on whether some of non-destructive bpf programs might ever require
-> > CAP_SYS_BOOT capabilities or not.
->
-> These are just internal kernel flags, so refactoring/renaming is not a
-> big deal when it is needed. E.g. we've changed just how kfuncs are
-> registered twice since the support was added not long ago :).
->
-> >
-> > --
-> >  Artem
-> >
+diff --git a/arch/x86/kvm/vmx/vmcs.h b/arch/x86/kvm/vmx/vmcs.h
+index ac290a44a693..9277676057a7 100644
+--- a/arch/x86/kvm/vmx/vmcs.h
++++ b/arch/x86/kvm/vmx/vmcs.h
+@@ -140,6 +140,11 @@ static inline bool is_nm_fault(u32 intr_info)
+ 	return is_exception_n(intr_info, NM_VECTOR);
+ }
+ 
++static inline bool is_ve_fault(u32 intr_info)
++{
++	return is_exception_n(intr_info, VE_VECTOR);
++}
++
+ /* Undocumented: icebp/int1 */
+ static inline bool is_icebp(u32 intr_info)
+ {
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 881db80ceee9..c3e4c0d17b63 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -5047,6 +5047,12 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
+ 	if (is_invalid_opcode(intr_info))
+ 		return handle_ud(vcpu);
+ 
++	/*
++	 * #VE isn't supposed to happen.  Although vcpu can send
++	 */
++	if (KVM_BUG_ON(is_ve_fault(intr_info), vcpu->kvm))
++		return -EIO;
++
+ 	error_code = 0;
+ 	if (intr_info & INTR_INFO_DELIVER_CODE_MASK)
+ 		error_code = vmcs_read32(VM_EXIT_INTR_ERROR_CODE);
+@@ -5167,14 +5173,7 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
+ 		if (handle_guest_split_lock(kvm_rip_read(vcpu)))
+ 			return 1;
+ 		fallthrough;
+-	case VE_VECTOR:
+ 	default:
+-		if (ept_violation_ve_test && ex_no == VE_VECTOR) {
+-			pr_err("VMEXIT due to unexpected #VE.\n");
+-			secondary_exec_controls_clearbit(
+-				vmx, SECONDARY_EXEC_EPT_VIOLATION_VE);
+-			return 1;
+-		}
+ 		kvm_run->exit_reason = KVM_EXIT_EXCEPTION;
+ 		kvm_run->ex.exception = ex_no;
+ 		kvm_run->ex.error_code = error_code;
+
+
+
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

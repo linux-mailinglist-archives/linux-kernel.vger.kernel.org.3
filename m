@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D083558D408
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC6F58D40A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235487AbiHIGv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
+        id S237763AbiHIGvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 02:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiHIGv0 (ORCPT
+        with ESMTP id S235010AbiHIGva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:51:26 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70077.outbound.protection.outlook.com [40.107.7.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F398519C18;
-        Mon,  8 Aug 2022 23:51:24 -0700 (PDT)
+        Tue, 9 Aug 2022 02:51:30 -0400
+Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10041.outbound.protection.outlook.com [40.107.1.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8E5205C9;
+        Mon,  8 Aug 2022 23:51:28 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gVucz5FVWS5it579IPxglEpZAIu0jtR3yEBmFhAhyB9/xfnSLiVRIpBbNvjjk3FAzMDP93PTw3I0S+yONl9w19YU/Y2qFMgNfC5aXemnAfGazT7zOU9ROerfRCYtwhGu+sCNbxBYXj18siwrIkHEp7lSJdLHejsLoqXDS1I2HwaNeXDr2zne4d71tc/d+TbbnWdQU/j167UPAOtKUxW+ZTZpnEvwTBN4gbbVbKX0f0dwnvkQtNwS1K6ys7PDSweYfLwu2+9DsBT6ngAVNRSCxonTcBTQkjXIb8QaTLZ3QfHKZyqQ+KAtbqRa4FBqwDwpk9x8GPM6pmTbix2ylORwAg==
+ b=A3W1GjaJcQ1EZB8SvfxjZlTCsYLVo58NJot5+U/L/v53jCFIzZ8SiIlQe+YdfSapwXq9Le8ZHxJDsVGCdjr77V17yLQFTgHnd3XZK6L78+ZB4xtrmE88yo6YwOui1Jl+Or+lSPU4wbGPQDdndhwRzEeeqxUlnT3nQhOm/ChtenevbPlul2x0mqClsoXZL9OgKCzNXogcUYdAyvQfjHEPIUrqFeWsPAWh82oX2vcxRQa/MdRlpGF2PXZhE8sjMahIQKXbT3lHCVqMT9VPrrS46+Ozu6SxJsIQKCoJxqEdKOV7yXFP2JX4AyMRTDdp3kFvbPHL1UtUO9Gx3lwBjIz70w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nunFY6PB+suxzJNJpqaow7igM+cXdrpCdt8TqkjXzr8=;
- b=PjNv+zFN+WVFYPyX45aYi1gH7zY3BDOsdZNfxzJFexChDBRWruHwxntEnIFSxguCSInH2nAjcxn53SpNdYc9rLfEo60cw17zC0G1WZqYMXjY30IAABIP4xvtGV4PTJl+/t2WmRE3gAepWLknvA4dq7SunNLKhz6yA/TFb1zcAcjjW30DKfTd8AVrAqWfJrIGNMx+lOQ+5dTSgiuQPZEk+REi1UCyR7rsgfr1or9TinWgXg+62NoU5OZ1uVvFyMTf5IUt9QTIAi5xrWvOUShjL0egX6USq+seDcs1TuxncJX18liGUDfsCWo9bJVWEjfc2GnsbujUQsWp5AGF9JGmsA==
+ bh=ILbwKsQESriic4UJzwgOD/LvSf23rx794JCog4tYBBg=;
+ b=LJVFbaaDMgxG65olJdkqKExb68/Qbkk5ebeV2CwzoGZR7UNrmeRBuDMlUVNC5JYIXMm11+Ubr+miUh6OdBurZwdcrIzIo524k4MQJyLnftMhvF8ecx2fTBnnNs5UUI1MhQJBWRea3WimCyvblq+sru+QAV5fhHC23R7Wle+rtmGR36GeNwGk20F7aPKgLQm+yvp6/OzyxTDdk0GS5wn9clTQRqJuJbv/7kZc+0qeJrofxi3awTdvfceYBG+gLBA8sW7XS8+l5jD5cheLHFEYgiZ677uH0wmlVdVA3sZcafeabqiJAIVjm1ZZvXLS3asJaM+uSqjCy7K5PKhv28aoLg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nunFY6PB+suxzJNJpqaow7igM+cXdrpCdt8TqkjXzr8=;
- b=rSBNwWAfXPDYP1okh5ABCBexo5hOnOb/nMm8TYgDVSUCYlbGIm+Y1jYhjMSiY8OD11Qpz+G1AFzKe8uOiEo74qmUsOvDvrrQr/9I/MFhiH2mTM8hx2gIRltXx+v8mGOS9BMEC3+mjIdCGZuRR4x2ZR3izq/lz+PzXf8NId/fMR0=
+ bh=ILbwKsQESriic4UJzwgOD/LvSf23rx794JCog4tYBBg=;
+ b=bx5vAc97GImcx0uS1ykW98toeKQCJWQTuOX7jfCCGFWdTo2zG4citnW4Af5dzs0F9t575XtK7mCN5f87SGruhGJhfftZ5hztO7R6R22j77MLjQ+yekgE63W9gS67eKQ18WXvWhRQRYBTwPneBlCZj8U6ak7vUv2Q9w3TbqpbZPw=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
  by DB6PR0401MB2438.eurprd04.prod.outlook.com (2603:10a6:4:33::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.21; Tue, 9 Aug
- 2022 06:51:22 +0000
+ 2022 06:51:25 +0000
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::5db6:3f08:2e04:33c]) by AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::5db6:3f08:2e04:33c%4]) with mapi id 15.20.5504.017; Tue, 9 Aug 2022
- 06:51:21 +0000
+ 06:51:25 +0000
 From:   Ming Qian <ming.qian@nxp.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
 Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
         kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         xiahong.bao@nxp.com, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 0/4] media: amphion: add support for contiguous format
-Date:   Tue,  9 Aug 2022 14:50:37 +0800
-Message-Id: <cover.1660027440.git.ming.qian@nxp.com>
+Subject: [PATCH v4 1/4] media: add nv12_8l128 and nv12_10be_8l128 video format.
+Date:   Tue,  9 Aug 2022 14:50:38 +0800
+Message-Id: <84842bffb432884a0fd84de96c6e64ee2273e511.1660027440.git.ming.qian@nxp.com>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <cover.1660027440.git.ming.qian@nxp.com>
+References: <cover.1660027440.git.ming.qian@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SI2PR01CA0038.apcprd01.prod.exchangelabs.com
@@ -57,51 +59,51 @@ X-ClientProxiedBy: SI2PR01CA0038.apcprd01.prod.exchangelabs.com
  (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 33876da0-4c41-477e-f1a5-08da79d391a4
+X-MS-Office365-Filtering-Correlation-Id: d209edba-c5fb-40f5-e0de-08da79d39404
 X-MS-TrafficTypeDiagnostic: DB6PR0401MB2438:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kbjkPJ9n+bKFgKwNU9ZlOShn5tYrmd+/Ek2l5cWVj3M9dSTLRiNrn3YlerBFLT2jmJEwLMPt9Oe3esbJj6upl9zN2fQKpr28R93TVdg3/bCUsGfYzbDtshTaXQSPF0v847DWBC5TmZGDZdzDLsnQp/Fz9TAJD2fV/KT+Y3eY8Q3C5AIFoMELFz8FuWNoK3YmdVXHaXly2wihQE6UBKKlywzfmlGLlrRg6tR5WLq0V2cdVmTgwzQGAPvuDw/Mspbi0pBU5tyQr2YKPHpyyu8Obr64nNf9ZDj75XwLcySCJdM8keH4WtdHI8P9aHCR4Gz4m8B848t6OWKlLzbd3hMMMjGkIXNZuHS000XIiwMC1MxkvnjCFZPrApq2SWgpH3J5wx9Ca+jkmU7O6au87UXFlzInkDKoyo+jnU3LXm6VrLqjxMXhK4aX2DGFdSUID32+GzX5VUZ1JJdQN1KgqhTNCENiVZ5glPfJnPYmeOhxbi8hvKcBtItDD/N7PlNvOuqyl/+479wmd3/5TB0Hf/bxjEGIV1uhCSeYtGjvl+RGiU4CJyp58TysJ2YpycImr9O/SBY4sNaeJ6KwkL7aL7qYYa8Khwl+wdlGNkNxGzzboe32XkuW+TWnU+8uZ1YI5wSdqM1ff3TASwH8LOx5hpm/Vd8s28A2AbrkVodMvxZz7cpPmcRhZxJ3zpj3l4mhL3Ci5egWPQ2arCU7an1dxuamzyPEI9bWkRrwuggC81YNFOXj0IMonTZg7UES6+D6nROxGPkzm3GRGTdWYe/KcgbQgk32izhPRgo+naN2vVsW/qSBxofZjuNQImnZ3Q1zYz1K
+X-Microsoft-Antispam-Message-Info: wW8SNu1eOAj7A4vmda7etEqwO7ufCkUKMY8B/0nOzAAZbQSNjaJ9xjFKEXa9VL0Iy3hxTjEU0xS//U/AkBIHFNF4o0R6Gn8HjWqzJTN6Ly1wpzSP2ab5x8Q7LgyCRxStusR/gRUTkWsng9/Qk3dxKjpYbEHLsTkvu0SmOT1/Q+9hHV/pdvC8PFSpPIduO4tAjfNpheXmN5duIcBa9pK7fHyHj+z7LmnLODpucB435fSR0U8CHU9JsX3uc6vgmIjeebP4OFjW5APeDJrrulBiAu/AqPGwfBmcSnLmMlIN7Tr0es+iwljO8R0eEnRAAMvb9ID86FSK9FDaUBe7es1VJf8qmgezgtkc12Sg0LrVX5DYt9sPwZtteFJFwf2rmK9RqMKGNmQvt41/rfqSo8z7W/9799fKcODwpqsBp48au8oT/IAc4nGOMoncVzISQb4tV2oknW/zJ4705hZrd69IWhpzRKlyYEjqKnjIPP91LhuVnB9nqB1FVO2YD32LwrGA0EyordpC0Y3ZdIwC94/eRT6A2cJxTVuMxELhZzLPDn74A5qhXUc7+rCBKcCgzGsZU65mhRxh1N+Cg0gVYsx2NJb8eiN/FrmcIizvS21U4oqTDIfvb6f1LITPcfvv7+KmEjCEJWavkCllNbEzB2qYLjpj99eXwekJu/Ufx8MU0jjAYZRBOIHWDkUkUD5LK8ZmjSSVPt9rzA3Zjj1N5Cybj0ajhKyK8RcwjYILLKSV709NDXErIn07e9gTdJKMYiqAhxMVifitvl8tNSNkUB2y4yR5whjW+cemeGQYsEiTwQyofpPV7w9Yo9AUFC0bLDYj
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(366004)(376002)(136003)(6486002)(478600001)(52116002)(6666004)(6506007)(41300700001)(36756003)(86362001)(2906002)(6512007)(2616005)(186003)(26005)(83380400001)(8936002)(44832011)(316002)(4326008)(8676002)(66556008)(66946007)(66476007)(5660300002)(7416002)(38100700002)(38350700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dVDRsdrX5JrHv15y94vwliUisGLDt+7Rb/kuJEvSM0o9RM+QNeE15Q/cCggq?=
- =?us-ascii?Q?E8VLXXNVqd6hfnwlwr0VS7Xd98DJ8dqyqUERBCHyFA5W3DGNR2M37t+QU3ob?=
- =?us-ascii?Q?HovWw+w4bCybivkP5iPUp6axIQ1GshlritaR1IddTNoChMM3RSY+fBChVq34?=
- =?us-ascii?Q?sVKDHkmqzK0yiHEymD7HZdJhXUNE3TXcK4r6YJZMmfNDNtcisWbqjeoJ3swj?=
- =?us-ascii?Q?4Egy8ig+RPXhyLTyDhtF0mdf9sp55IeZY3rFhbug4cmjAAqOSmdYIHAsfD2R?=
- =?us-ascii?Q?lR9E0Q4qRW89dpqCoHkvSug6yewZdlqLO4/0IjyIcqfJRmGSzozYT6VTtBsX?=
- =?us-ascii?Q?r15PYKWsYHVZey+dNpWCR+6Mhp8GMIxh7dp0+U2GHo0mMeB/pm1fQn2Yqoce?=
- =?us-ascii?Q?jzN/L6A+LXpWGmnQqFb+PGFhXSSaDidG+hgqMt/icVfLgzj0u31XWMYGnCWq?=
- =?us-ascii?Q?5Xa3uwL8cEMljXEd3pzqpbwxLmVd1gFEiht+0G8RcxEa4GJCps7TcDOUvYcm?=
- =?us-ascii?Q?o5ANFQa6DnsYcwangkM5uZAuui4mXvdkq6bnG+SnOjXeBZmH0PfGHTgWivEy?=
- =?us-ascii?Q?2YZOzfzW15XcUVdr7M9zWvY/NvFMQCtt4pXToH1IMNJW0Ypri/a4GLGF2Nxl?=
- =?us-ascii?Q?JlTZsAhel7x8cN/9J7/XeSjD8jVF3rRGsFSyagJQwWTclhjp3MDgvh/OIBYQ?=
- =?us-ascii?Q?imZC/lSUQzPKxrzL1lDb90exKecLzvG+/Pe1LVSRYQjdbDhi78bSWFIoHedT?=
- =?us-ascii?Q?IRCOCSB08HS/gkGVNhJxxfPTK7TsbvDmpG0Afj6ttRPMcOcNdZc1j/hSqWqG?=
- =?us-ascii?Q?2KObWUihzt+0qfwmIknhfayJHvMuT+iDhvs35KblnYLCAdzr3oOnUQcHEo2o?=
- =?us-ascii?Q?4SiwVZhdwrIWvXEGGVMc7nWc5EyFXgWgp27cXyXoMr8BAwkIPA0tD7mGyG6Z?=
- =?us-ascii?Q?rJrOPsV4xXa9J3GSTmWliRV3H6Ay+Kmkhd8x5t0cwXmVEeanGpgIfL7UWcaD?=
- =?us-ascii?Q?i4qTGJirfccyhc8/10W8GaM6r3OoVdMHiQsWaAmcphWa4wlHl8R6IOM3T8Tj?=
- =?us-ascii?Q?VdPvwau+PdTNMY2L33HtzncqWjVbPKvffDkqMv9fzKKILhdJfeXsRYgWQSCT?=
- =?us-ascii?Q?7XDr09RTTaVlD5ltSYlkz5P7LLOVRpIWO2JRnUiXy2q/+ZZunKztOAq2I6xw?=
- =?us-ascii?Q?bl2dr5YYo1ighlSIE44pRWqaIGBHdB5C6pS1l1ZcxKJnxaHHxf0wz3sdzqCg?=
- =?us-ascii?Q?1/5AGlOOYflnI2b+Z8J7wdKUw9n8Oowi21HclcPGhqI/eetVAcETkuid3MSv?=
- =?us-ascii?Q?lRUQdZ0KTBti38z9xwSzA2x/COeyf8L9cgWumDSeBzKzVOKwgIpHlnwePEjE?=
- =?us-ascii?Q?Wu3kDEa/xKFCyNPBRilgrXR6JboNjCtqk1LnniqMkUD4LU0fGrKWBp0BvQ/w?=
- =?us-ascii?Q?UiOpK206oNdRFyg//8cjwtSx1CepiT78+2zrd7nlEaeWIYn2cdroIUZPSZ+O?=
- =?us-ascii?Q?mndxOh9y/2Wkowe5ymDS6ThuGle9wj0uRL76xISYusglxOkaJqLaCgOFA8At?=
- =?us-ascii?Q?X/hSrfg/TNaRwuf7iHqaKAdIMGFPguQbyhqWJxyA?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4Y2j8AEG1S7kG/5jMUlPBbuY8+9x4ree3nUSEoONBSgeI8HYMx5jGF/Z9U3T?=
+ =?us-ascii?Q?uVtLzDCYvvBPS7cLUBWR9n7OS5g5iG/9KWEAgr8wFAh+ZOlDGhmp7bkSrDxu?=
+ =?us-ascii?Q?uxJA6kd4Grp9bZgp3TTdrJMCqsccGPyjLIal6jWBl333+R33IF93Qpw8QfHO?=
+ =?us-ascii?Q?KqlZmMQKLXnuJ4LcNW0exeNeZs3P855hQ0EqF5OoDQ24I+wZc39ABXYnEVLr?=
+ =?us-ascii?Q?5eGNeiNR3OowKHg8mPUB3IQkcX/MtZn0FlQFP4L+9pJXx25hwKJmZrJTKgdP?=
+ =?us-ascii?Q?jUUYHRIYBdG9PGt10OuBw9aw8svM/9Cb9nR/cN3IeJnEc/VqNVo9tDiKzVRV?=
+ =?us-ascii?Q?80XLBxnp2rHv9udmeS5WhdF0pI6HLlqbEEHNrvlw/OyIWA9Vf6Cj5721q4U1?=
+ =?us-ascii?Q?2f9WMvBuiIkjdZvtY43TK9DiuHRun2bGusAodszr7KbXrXa8YQ6vp5LxZwoW?=
+ =?us-ascii?Q?y/H1+WmR4Na6qoanBgpu5547MjPuC8aBNEBOk7ZVW+jt1SaYcUv9I82APpTP?=
+ =?us-ascii?Q?zVwGVb5wJSEKCqoaKg1z6NdImLm8TrXkMo0KMbtYkFyvk9Dx8el+QdFbo0HE?=
+ =?us-ascii?Q?6TpviqSi4hiq+T5ZWE7J39XsOLsdQX8J3P2QM0wXG3419SASVYCS8oSgfb77?=
+ =?us-ascii?Q?FhEEK0ZuyqpCfoTiM1D9DvOezsgfFYi5tTd3ZjBZsL2DdoE0gAcvBk8Kfik6?=
+ =?us-ascii?Q?LvEv1UVWwsNFd7X1VoQkyvu0HcIWNAnzwx1dY7WVuFlLT1FZiSjfg3uUDUUE?=
+ =?us-ascii?Q?AvwNKVL2iVdiZAgySYOFbZ9FVx8cILkZRKjjOQ/epz74Mt46ZQoTrjQ9HdM1?=
+ =?us-ascii?Q?AjfjyzSr74qoT5/bzFFYpQvjiEBvhfFF7MC2zzNJFDz1GuGp/NaxzD3W9f7b?=
+ =?us-ascii?Q?Ykh3wQR5P+mZfpCztaeFkLTB8a0p7907PFS3DnaAMsvu+hiFGhE3qH8sw+yc?=
+ =?us-ascii?Q?5RPuV6887FMEfbRayTRICfZuBkT9rhgriwZcbAwHFFkugWE+6LI5/fJhPjLg?=
+ =?us-ascii?Q?LurN6fEv96cmD8UcSuUCEmVicUkY9UOk25lwDXMhVOCMVU3Ccmu+5iqnv+kL?=
+ =?us-ascii?Q?JhaZWYq8jmjZvuPyk9bDs6oD4C/iA2Y6DjstIAASQI6QK2rrAx+MpsdKxtTp?=
+ =?us-ascii?Q?+DAxMeir1GKtGCnZ0bG4DyYh4rcLnqd4IbzFQdVJo1gArskN5FTqvkM4Ho+g?=
+ =?us-ascii?Q?LvCR+nSeZ0EYO7I1jx1/fm6hzpo4VNer02y8NITF7zH/f/c55dxgojrMk4Z+?=
+ =?us-ascii?Q?aTFRtIQpnDxERJHjC0ni+fuPTc0u4C2QRBXdWxd64fnluLEAmGDGWQaI2TJK?=
+ =?us-ascii?Q?SYwycfhCp4JcLls7qLo9OeZMVnkVzcn9Yp6y783rhRmZJpFtw2/KyDxfjy6R?=
+ =?us-ascii?Q?dEfG2LzM61LVXvkY65RSjop5RT3HGmFiU0UrPgM1LnixJ2MorZNxVpKeLp3J?=
+ =?us-ascii?Q?Aj0ntQW+htN7RGRbchOI3jiN3n2hqENwGWq4ZGSKpV8CTGcBjEwzuJ+C4Adw?=
+ =?us-ascii?Q?I9LOIR+qqsLbYm9wMQkPbZA8Bey7fL8o8zjhvCm3N1EXOR+XVgmDXaLvCo7t?=
+ =?us-ascii?Q?r5N9KtBKTzt09EFNjjCG7Lk15xeciET5ZNmDPmY3?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33876da0-4c41-477e-f1a5-08da79d391a4
+X-MS-Exchange-CrossTenant-Network-Message-Id: d209edba-c5fb-40f5-e0de-08da79d39404
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 06:51:21.6475
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 06:51:25.6160
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lzogVsEcW1FWGe7Sr5iG7+3Yz5L+Sk72dvzVs/7zobQ1cQH7qJd5luSRiYXCyWBeQ2T1NWBYPJiRFqJrxuG6pQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: HdeSs1oNL9DPWnOxbPMuetKLvaDja7lAJ8OJJvqMbiAhUqg/dE4A7teDP2OolPhoo66GeQ+AbRfee/4vOH3pAQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2438
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -113,51 +115,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-amphion vpu support non contiguous planes yuv format,
-but when we make pipeline with other device,
-the device may only support contiguous format,
-for example, amphion encoder support NV12M,
-but the capture device may only support NV12.
-we can't connect them directly.
+add contiguous nv12 tiled format nv12_8l128 and nv12_10be_8l128
 
-So to improve compatibility, driver can add support for contiguous
-format in the same time.
+Signed-off-by: Ming Qian <ming.qian@nxp.com>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+---
+ .../userspace-api/media/v4l/pixfmt-yuv-planar.rst         | 8 ++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c                      | 2 ++
+ include/uapi/linux/videodev2.h                            | 2 ++
+ 3 files changed, 12 insertions(+)
 
-Then encoder can support NV12 and NV12M,
-decoder can support NV12_8L128 and NV12M_8L128.
-
-v4
-- set bytesperline of compressed formats to 0
-
-v3
-- negotiate bytesperline with user
-- zero the reserved of v4l2_format
-
-v2
--- fix an uninitialized array index read error
--- remove an used variable
-
-Ming Qian (4):
-  media: add nv12_8l128 and nv12_10be_8l128 video format.
-  media: amphion: tell and handle contiguous and non contiguous format
-  media: amphion: decoder add support for contiguous planes
-  media: amphion: encoder add support for contiguous planes
-
- .../media/v4l/pixfmt-yuv-planar.rst           |   8 +
- drivers/media/platform/amphion/vdec.c         | 203 ++++++++++--------
- drivers/media/platform/amphion/venc.c         |  41 ++--
- drivers/media/platform/amphion/vpu.h          |   4 +-
- drivers/media/platform/amphion/vpu_dbg.c      |   8 +-
- drivers/media/platform/amphion/vpu_helpers.c  |  48 ++++-
- drivers/media/platform/amphion/vpu_helpers.h  |   2 +
- drivers/media/platform/amphion/vpu_malone.c   |   3 +-
- drivers/media/platform/amphion/vpu_v4l2.c     | 168 +++++++++++----
- drivers/media/platform/amphion/vpu_v4l2.h     |   3 +-
- drivers/media/platform/amphion/vpu_windsor.c  |   8 +-
- drivers/media/v4l2-core/v4l2-ioctl.c          |   2 +
- include/uapi/linux/videodev2.h                |   2 +
- 13 files changed, 335 insertions(+), 165 deletions(-)
-
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+index 10b1feeb0b57..f1d5bb7b806d 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+@@ -273,7 +273,9 @@ of the luma plane.
+ .. _V4L2-PIX-FMT-NV12-16L16:
+ .. _V4L2-PIX-FMT-NV12-32L32:
+ .. _V4L2-PIX-FMT-NV12M-8L128:
++.. _V4L2-PIX-FMT-NV12-8L128:
+ .. _V4L2-PIX-FMT-NV12M-10BE-8L128:
++.. _V4L2-PIX-FMT-NV12-10BE-8L128:
+ .. _V4L2-PIX-FMT-MM21:
+ 
+ Tiled NV12
+@@ -319,6 +321,9 @@ pixels in 2D 8x128 tiles, and stores tiles linearly in memory.
+ The image height must be aligned to a multiple of 128.
+ The layouts of the luma and chroma planes are identical.
+ 
++``V4L2_PIX_FMT_NV12_8L128`` is similar to ``V4L2_PIX_FMT_NV12M_8L128`` but stores
++two planes in one memory.
++
+ ``V4L2_PIX_FMT_NV12M_10BE_8L128`` is similar to ``V4L2_PIX_FMT_NV12M`` but stores
+ 10 bits pixels in 2D 8x128 tiles, and stores tiles linearly in memory.
+ the data is arranged in big endian order.
+@@ -334,6 +339,9 @@ byte 2: Y1(bits 3-0) Y2(bits 9-6)
+ byte 3: Y2(bits 5-0) Y3(bits 9-8)
+ byte 4: Y3(bits 7-0)
+ 
++``V4L2_PIX_FMT_NV12_10BE_8L128`` is similar to ``V4L2_PIX_FMT_NV12M_10BE_8L128`` but stores
++two planes in one memory.
++
+ ``V4L2_PIX_FMT_MM21`` store luma pixel in 16x32 tiles, and chroma pixels
+ in 16x16 tiles. The line stride must be aligned to a multiple of 16 and the
+ image height must be aligned to a multiple of 32. The number of luma and chroma
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index c314025d977e..d973bd2ff750 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1444,7 +1444,9 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_META_FMT_VIVID:       descr = "Vivid Metadata"; break;
+ 	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr = "Rockchip ISP1 3A Parameters"; break;
+ 	case V4L2_META_FMT_RK_ISP1_STAT_3A:	descr = "Rockchip ISP1 3A Statistics"; break;
++	case V4L2_PIX_FMT_NV12_8L128:	descr = "NV12 (8x128 Linear)"; break;
+ 	case V4L2_PIX_FMT_NV12M_8L128:	descr = "NV12M (8x128 Linear)"; break;
++	case V4L2_PIX_FMT_NV12_10BE_8L128:	descr = "10-bit NV12 (8x128 Linear, BE)"; break;
+ 	case V4L2_PIX_FMT_NV12M_10BE_8L128:	descr = "10-bit NV12M (8x128 Linear, BE)"; break;
+ 
+ 	default:
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index cd66e01ed3c3..64f16490dd2b 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -655,6 +655,8 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_NV12_16L16 v4l2_fourcc('H', 'M', '1', '2') /* 12  Y/CbCr 4:2:0 16x16 tiles */
+ #define V4L2_PIX_FMT_NV12_32L32 v4l2_fourcc('S', 'T', '1', '2') /* 12  Y/CbCr 4:2:0 32x32 tiles */
+ #define V4L2_PIX_FMT_P010_4L4 v4l2_fourcc('T', '0', '1', '0') /* 12  Y/CbCr 4:2:0 10-bit 4x4 macroblocks */
++#define V4L2_PIX_FMT_NV12_8L128       v4l2_fourcc('A', 'T', '1', '2') /* Y/CbCr 4:2:0 8x128 tiles */
++#define V4L2_PIX_FMT_NV12_10BE_8L128  v4l2_fourcc_be('A', 'X', '1', '2') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
+ 
+ /* Tiled YUV formats, non contiguous planes */
+ #define V4L2_PIX_FMT_NV12MT  v4l2_fourcc('T', 'M', '1', '2') /* 12  Y/CbCr 4:2:0 64x32 tiles */
 -- 
 2.37.1
 

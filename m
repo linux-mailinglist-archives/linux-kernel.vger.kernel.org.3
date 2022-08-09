@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A6758DDED
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3558658DE9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344962AbiHISHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        id S1343527AbiHIST7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344759AbiHISHE (ORCPT
+        with ESMTP id S1346565AbiHISRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:07:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F4326124;
-        Tue,  9 Aug 2022 11:03:07 -0700 (PDT)
+        Tue, 9 Aug 2022 14:17:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404822E691;
+        Tue,  9 Aug 2022 11:06:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F53C61072;
-        Tue,  9 Aug 2022 18:03:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2EDC433B5;
-        Tue,  9 Aug 2022 18:03:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18CD5B818C9;
+        Tue,  9 Aug 2022 18:06:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67F3DC433D7;
+        Tue,  9 Aug 2022 18:06:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068187;
-        bh=nI9JPa5iH8NkzmrboqJwuGN+X0z3Ve0gacmQwPzJKYs=;
+        s=korg; t=1660068375;
+        bh=Hw4pzzLd0H6uAutoVrmjO0vf0SfnwAPU/bjzRGD23m8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oI4RpRROeKm9JONgwueMr6Bf+AV7YwvCJNHJl8w9yXhU2ugS+duDGxTv72JGLJ3Z6
-         WKnluxUsX7cF5q2JnTeYlM8T6kt5qNGWlvX4Pk6LycID4SaZFo2XaKEL5cs1bsWliV
-         T0egBS8BrQGIT46M5+lg3ERRsxXrnMBgEy3rX82Y=
+        b=EUINnB7pTBUYBOGDmi7LyrU273Qs4WXjemDo5lYfQ6fm5go8qSToulVECC0dRGtsm
+         oqmasT/LJdjcqV5eBkAMtPneM6u/j7CLfDNS9zXGu12F+kAy+ITZZui8t6QjDpAM9H
+         0qomcptbwSDWJer5L81q4go9rLVkzAcnku0nJwd4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 5.4 12/15] media: v4l2-mem2mem: Apply DST_QUEUE_OFF_BASE on MMAP buffers across ioctls
+        stable@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.18 01/35] x86/speculation: Make all RETbleed mitigations 64-bit only
 Date:   Tue,  9 Aug 2022 20:00:30 +0200
-Message-Id: <20220809175510.725441808@linuxfoundation.org>
+Message-Id: <20220809175515.095853601@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
-References: <20220809175510.312431319@linuxfoundation.org>
+In-Reply-To: <20220809175515.046484486@linuxfoundation.org>
+References: <20220809175515.046484486@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,143 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wenst@chromium.org>
+From: Ben Hutchings <ben@decadent.org.uk>
 
-commit 8310ca94075e784bbb06593cd6c068ee6b6e4ca6 upstream.
+commit b648ab487f31bc4c38941bc770ea97fe394304bb upstream.
 
-DST_QUEUE_OFF_BASE is applied to offset/mem_offset on MMAP capture buffers
-only for the VIDIOC_QUERYBUF ioctl, while the userspace fields (including
-offset/mem_offset) are filled in for VIDIOC_{QUERY,PREPARE,Q,DQ}BUF
-ioctls. This leads to differences in the values presented to userspace.
-If userspace attempts to mmap the capture buffer directly using values
-from DQBUF, it will fail.
+The mitigations for RETBleed are currently ineffective on x86_32 since
+entry_32.S does not use the required macros.  However, for an x86_32
+target, the kconfig symbols for them are still enabled by default and
+/sys/devices/system/cpu/vulnerabilities/retbleed will wrongly report
+that mitigations are in place.
 
-Move the code that applies the magic offset into a helper, and call
-that helper from all four ioctl entry points.
+Make all of these symbols depend on X86_64, and only enable RETHUNK by
+default on X86_64.
 
-[hverkuil: drop unnecessary '= 0' in v4l2_m2m_querybuf() for ret]
-
-Fixes: 7f98639def42 ("V4L/DVB: add memory-to-memory device helper framework for videobuf")
-Fixes: 908a0d7c588e ("[media] v4l: mem2mem: port to videobuf2")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-[OP: backport to 5.4: adjusted return logic in v4l2_m2m_qbuf() to match the
-logic in the original commit: call v4l2_m2m_adjust_mem_offset() only if !ret
-and before the v4l2_m2m_try_schedule() call]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Fixes: f43b9876e857 ("x86/retbleed: Add fine grained Kconfig knobs")
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/YtwSR3NNsWp1ohfV@decadent.org.uk
+[bwh: Backported to 5.10/5.15/5.18: adjust context]
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/v4l2-core/v4l2-mem2mem.c |   60 +++++++++++++++++++++++++--------
- 1 file changed, 46 insertions(+), 14 deletions(-)
+ arch/x86/Kconfig |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -460,19 +460,14 @@ int v4l2_m2m_reqbufs(struct file *file,
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_reqbufs);
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2469,7 +2469,7 @@ config RETPOLINE
+ config RETHUNK
+ 	bool "Enable return-thunks"
+ 	depends on RETPOLINE && CC_HAS_RETURN_THUNK
+-	default y
++	default y if X86_64
+ 	help
+ 	  Compile the kernel with the return-thunks compiler option to guard
+ 	  against kernel-to-user data leaks by avoiding return speculation.
+@@ -2478,21 +2478,21 @@ config RETHUNK
  
--int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
--		      struct v4l2_buffer *buf)
-+static void v4l2_m2m_adjust_mem_offset(struct vb2_queue *vq,
-+				       struct v4l2_buffer *buf)
- {
--	struct vb2_queue *vq;
--	int ret = 0;
--	unsigned int i;
--
--	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
--	ret = vb2_querybuf(vq, buf);
--
- 	/* Adjust MMAP memory offsets for the CAPTURE queue */
- 	if (buf->memory == V4L2_MEMORY_MMAP && !V4L2_TYPE_IS_OUTPUT(vq->type)) {
- 		if (V4L2_TYPE_IS_MULTIPLANAR(vq->type)) {
-+			unsigned int i;
-+
- 			for (i = 0; i < buf->length; ++i)
- 				buf->m.planes[i].m.mem_offset
- 					+= DST_QUEUE_OFF_BASE;
-@@ -480,8 +475,23 @@ int v4l2_m2m_querybuf(struct file *file,
- 			buf->m.offset += DST_QUEUE_OFF_BASE;
- 		}
- 	}
-+}
-+
-+int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
-+		      struct v4l2_buffer *buf)
-+{
-+	struct vb2_queue *vq;
-+	int ret;
+ config CPU_UNRET_ENTRY
+ 	bool "Enable UNRET on kernel entry"
+-	depends on CPU_SUP_AMD && RETHUNK
++	depends on CPU_SUP_AMD && RETHUNK && X86_64
+ 	default y
+ 	help
+ 	  Compile the kernel with support for the retbleed=unret mitigation.
  
--	return ret;
-+	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
-+	ret = vb2_querybuf(vq, buf);
-+	if (ret)
-+		return ret;
-+
-+	/* Adjust MMAP memory offsets for the CAPTURE queue */
-+	v4l2_m2m_adjust_mem_offset(vq, buf);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_querybuf);
+ config CPU_IBPB_ENTRY
+ 	bool "Enable IBPB on kernel entry"
+-	depends on CPU_SUP_AMD
++	depends on CPU_SUP_AMD && X86_64
+ 	default y
+ 	help
+ 	  Compile the kernel with support for the retbleed=ibpb mitigation.
  
-@@ -500,10 +510,16 @@ int v4l2_m2m_qbuf(struct file *file, str
- 		return -EPERM;
- 	}
- 	ret = vb2_qbuf(vq, vdev->v4l2_dev->mdev, buf);
--	if (!ret && !(buf->flags & V4L2_BUF_FLAG_IN_REQUEST))
-+	if (ret)
-+		return ret;
-+
-+	/* Adjust MMAP memory offsets for the CAPTURE queue */
-+	v4l2_m2m_adjust_mem_offset(vq, buf);
-+
-+	if (!(buf->flags & V4L2_BUF_FLAG_IN_REQUEST))
- 		v4l2_m2m_try_schedule(m2m_ctx);
- 
--	return ret;
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_qbuf);
- 
-@@ -511,9 +527,17 @@ int v4l2_m2m_dqbuf(struct file *file, st
- 		   struct v4l2_buffer *buf)
- {
- 	struct vb2_queue *vq;
-+	int ret;
- 
- 	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
--	return vb2_dqbuf(vq, buf, file->f_flags & O_NONBLOCK);
-+	ret = vb2_dqbuf(vq, buf, file->f_flags & O_NONBLOCK);
-+	if (ret)
-+		return ret;
-+
-+	/* Adjust MMAP memory offsets for the CAPTURE queue */
-+	v4l2_m2m_adjust_mem_offset(vq, buf);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_dqbuf);
- 
-@@ -522,9 +546,17 @@ int v4l2_m2m_prepare_buf(struct file *fi
- {
- 	struct video_device *vdev = video_devdata(file);
- 	struct vb2_queue *vq;
-+	int ret;
- 
- 	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
--	return vb2_prepare_buf(vq, vdev->v4l2_dev->mdev, buf);
-+	ret = vb2_prepare_buf(vq, vdev->v4l2_dev->mdev, buf);
-+	if (ret)
-+		return ret;
-+
-+	/* Adjust MMAP memory offsets for the CAPTURE queue */
-+	v4l2_m2m_adjust_mem_offset(vq, buf);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_prepare_buf);
- 
+ config CPU_IBRS_ENTRY
+ 	bool "Enable IBRS on kernel entry"
+-	depends on CPU_SUP_INTEL
++	depends on CPU_SUP_INTEL && X86_64
+ 	default y
+ 	help
+ 	  Compile the kernel with support for the spectre_v2=ibrs mitigation.
 
 

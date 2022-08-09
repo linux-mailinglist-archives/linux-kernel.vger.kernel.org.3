@@ -2,225 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F18E58D793
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAF958D795
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239308AbiHIKoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
+        id S233344AbiHIKt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbiHIKoa (ORCPT
+        with ESMTP id S231802AbiHIKty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:44:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EB932409D
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660041868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K0UDauW7jcnLQtitx4t4jJiAK2t9J+LTjI2mmV8bkCg=;
-        b=X2ziIZc3pwKa2xpkiNdZ0I5+ECseg6ca6O31oWr6he9fvz0RIrCdj7pSiUvC8KwVek3Ve5
-        CkgAx8aFxg3Zv3Dj6mTjDpG9NTGsjFiDEEDDsaccPSaia9ITBTSsWrUQFfjk7SBMJBgQ1a
-        6J2Wtm2Xyc4Aa0pWC5yqueFr4om33g0=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-508-ALzBXcu0OJWlUROdZBVZLQ-1; Tue, 09 Aug 2022 06:44:27 -0400
-X-MC-Unique: ALzBXcu0OJWlUROdZBVZLQ-1
-Received: by mail-ed1-f72.google.com with SMTP id b6-20020a056402278600b0043e686058feso7037482ede.10
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 03:44:26 -0700 (PDT)
+        Tue, 9 Aug 2022 06:49:54 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D06120A3
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:49:52 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id bb16so13330458oib.11
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 03:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wc4pc4XjzEcCEnj/rsl5k2xYOk9EdSwkRXBZHUsSZMk=;
+        b=cNv9ey+nvgOoNPDu3fYAV530sBBW3pHAx4VkhkoMEqb4HXlxJJhwrYW2fhuoGEabOq
+         GwEcSrUH8Ssfa8En8W/sqL4jkAziGYFUMu3Yw2lI2ohYSQLlk3XHeKcFDHqsmLfTOUT/
+         MH+Xe1J4clCsuVxQnnKV9K1h8Tkqo9fsIuazgNSZWzSg2dgNzDpGt92vAOxeuWDRKwnA
+         wUyMfb0rBy59VQx2S519n5z1HVIA+2+XlJyLAsM69t+G4iqI5j6o+SEM91l9SNcJEBcG
+         6R70Z2EaXlFGVWFJrhsEKuHagQ8lmBHYM7LgfmSictkfHCyM3CGVM67k7qTcgRDM3qEe
+         eP+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=K0UDauW7jcnLQtitx4t4jJiAK2t9J+LTjI2mmV8bkCg=;
-        b=MhAMPl+WBayMs/qP/iUeSmFJz1MCbU9+0QXFnXaKeUvwCsh5AtB5xp91TKgHk6r/3q
-         aT6CLW8Nia+JxozBsfnpgSlqHoeX4AGMHAz0R2/BGbD14UrkhttvonceUI+XwL9k5BzY
-         68op665Dig8YbN/M53xJCIY8PUGjEpy7QVBz9fGslI6wYXLjqS13tmF4Mq3W3f2IqazZ
-         Cw6bZPZUEqAkSFXoaMS0aXUE3jxAgwF2YrMT2XRuTQa62NYmG8DYzzE3GoSCG3UVtJRh
-         4gjLGdGttijYzPWQqzGyWFfHAG1WjigUGpB9l+F+e1GVkKdpcBWkf06qtbLBSKiBlGuu
-         WsIw==
-X-Gm-Message-State: ACgBeo0yk5DWbc2/rX07lB6CQd4k3q7fbtIsPQsaeyI4bl116mRB2jSv
-        LFcOe7unA5OSdscIFv0Gix/TDrfqH+tOdDs3fJiA2f7ksT6Ofcssjdiayhn0gz9kmKbFxMlmwJQ
-        rtnRdSZDX/kCTuX45s1pnh8Ms
-X-Received: by 2002:a05:6402:15a:b0:431:71b9:86f3 with SMTP id s26-20020a056402015a00b0043171b986f3mr21328926edu.249.1660041865810;
-        Tue, 09 Aug 2022 03:44:25 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4UrYjETSBNDh179gY/Os++gHkuwZKCKYdlFGMoNu727HdgqYnD540bhW1EJZwjeBs/5VRWPw==
-X-Received: by 2002:a05:6402:15a:b0:431:71b9:86f3 with SMTP id s26-20020a056402015a00b0043171b986f3mr21328907edu.249.1660041865601;
-        Tue, 09 Aug 2022 03:44:25 -0700 (PDT)
-Received: from redhat.com ([2.52.152.113])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170906218200b0073156e6cd5csm1000743eju.3.2022.08.09.03.44.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 03:44:25 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 06:44:21 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, kernel@openvz.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] Create debugfs file with virtio balloon usage
- information
-Message-ID: <20220809064252-mutt-send-email-mst@kernel.org>
-References: <55016ed9-7b3c-c4eb-f5f4-02cfce2191e4@redhat.com>
- <20220726140831.72816-1-alexander.atanasov@virtuozzo.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wc4pc4XjzEcCEnj/rsl5k2xYOk9EdSwkRXBZHUsSZMk=;
+        b=DffQGGn/vPm94zu+G9ufj1HFPa0DE4f3px5vUXBldVuvC9jsAMpr48ur4xqXyhltdy
+         KBv74HCEKwzFVAUloDml3MI8xfgRumbHfOmFXxeK5O41D0+AB+9bifAhAgTBKvOCqXqN
+         JNEt/uVuqOuC+yhfoMK9OrgB+zWfoTVvQ6d+ASQb6SkULXzP5aTF7nb6LUE8UKKm4AFY
+         Gm+F59jtJbYurTqs6jtE2hXyIFvkpRoFcvFUN/abkUTAsdoaewG0BPFk/HEZDCaf6FFA
+         QySYeb60BCOlkuWv1rE8TzHIqjtMIkALsGt6bcV3yGcIHq0gb+rpUzga7Cy3UgSF36da
+         +xzg==
+X-Gm-Message-State: ACgBeo0dbU5MhVmOEJ1TE5R/MRKMWmBgMwfkdgTIK49qawYNfLJf8Y9v
+        yX70/YpTOnr3sauab6Nw8KzA1/7WiP/KbwwK
+X-Google-Smtp-Source: AA6agR4PYo3SWTvvtd2qU1lQNNRTyI1XAdbmd19eqOVySGmVsFyA0jsDNS8hDoQ6wKTbK/2nUV0IEA==
+X-Received: by 2002:a17:90b:4b4d:b0:1f5:164f:f7c4 with SMTP id mi13-20020a17090b4b4d00b001f5164ff7c4mr34144617pjb.131.1660042181117;
+        Tue, 09 Aug 2022 03:49:41 -0700 (PDT)
+Received: from C02DV8HUMD6R.bytedance.net ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id b11-20020a62a10b000000b0052def2e20dasm10270377pff.167.2022.08.09.03.49.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Aug 2022 03:49:40 -0700 (PDT)
+From:   Abel Wu <wuyun.abel@bytedance.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Muchun Song <songmuchun@bytedance.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Abel Wu <wuyun.abel@bytedance.com>
+Subject: [PATCH] mm/mempolicy: fix lock contention on mems_allowed
+Date:   Tue,  9 Aug 2022 18:49:27 +0800
+Message-Id: <20220809104927.44366-1-wuyun.abel@bytedance.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726140831.72816-1-alexander.atanasov@virtuozzo.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 02:08:27PM +0000, Alexander Atanasov wrote:
-> Allow the guest to know how much it is ballooned by the host
-> and how that memory is accounted.
-> 
-> It is useful when debugging out of memory conditions,
-> as well for userspace processes that monitor the memory pressure
-> and for nested virtualization.
+The mems_allowed field can be modified by other tasks, so it
+isn't safe to access it with alloc_lock unlocked even in the
+current process context.
 
-Hmm. debugging is ok. monitoring/nested use-cases probably
-call for sysfs/procfs.
+Fixes: 78b132e9bae9 ("mm/mempolicy: remove or narrow the lock on current")
+Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+---
+ mm/mempolicy.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-
-> Depending on the deflate on oom flag memory is accounted in two ways.
-> If the flag is set the inflated pages are accounted as used memory.
-> If the flag is not set the inflated pages are substracted from totalram.
-> To make clear how are inflated pages accounted sign prefix the value.
-> Where negative means substracted from totalram and positive means
-> they are accounted as used.
-> 
-> Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-> ---
->  drivers/virtio/virtio_balloon.c | 59 +++++++++++++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
-> 
-> V2:
->   - fixed coding style
->   - removed pretty print
-> V3:
->   - removed dublicate of features
->   - comment about balooned_pages more clear
->   - convert host pages to balloon pages
-> V4:
->   - added a define for BALLOON_PAGE_SIZE to make things clear
-> V5:
->   - Made the calculatons work properly for both ways of memory accounting
->     with or without deflate_on_oom
->   - dropped comment
-> V6:
->   - reduced the file to minimum
->   - unify accounting
-> 
-> I didn't understand if you agree to change the accounting to be the same
-> so following part 2 is about it.
-> 
-> 
-> diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
-> index f4c34a2a6b8e..97d3b29cb9f1 100644
-> --- a/drivers/virtio/virtio_balloon.c
-> +++ b/drivers/virtio/virtio_balloon.c
-> @@ -10,6 +10,7 @@
->  #include <linux/virtio_balloon.h>
->  #include <linux/swap.h>
->  #include <linux/workqueue.h>
-> +#include <linux/debugfs.h>
->  #include <linux/delay.h>
->  #include <linux/slab.h>
->  #include <linux/module.h>
-> @@ -731,6 +732,59 @@ static void report_free_page_func(struct work_struct *work)
->  	}
->  }
->  
-> +/*
-> + * DEBUGFS Interface
-> + */
-> +#ifdef CONFIG_DEBUG_FS
-> +
-> +/**
-> + * virtio_balloon_debug_show - shows statistics of balloon operations.
-> + * @f: pointer to the &struct seq_file.
-> + * @offset: ignored.
-> + *
-> + * Provides the statistics that can be accessed in virtio-balloon in the debugfs.
-> + *
-> + * Return: zero on success or an error code.
-> + */
-> +
-> +static int virtio_balloon_debug_show(struct seq_file *f, void *offset)
-> +{
-> +	struct virtio_balloon *vb = f->private;
-> +	s64 num_pages = vb->num_pages << (VIRTIO_BALLOON_PFN_SHIFT - 10);
-> +
-> +	if (!virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
-> +		num_pages = -num_pages;
-> +
-> +	seq_printf(f, "inflated: %lld kB\n", num_pages);
-> +
-> +	return 0;
-> +}
-
-Can't we just have two attributes, without hacks like this one?
-
-> +
-> +DEFINE_SHOW_ATTRIBUTE(virtio_balloon_debug);
-> +
-> +static void  virtio_balloon_debugfs_init(struct virtio_balloon *b)
-> +{
-> +	debugfs_create_file("virtio-balloon", 0444, NULL, b,
-> +			    &virtio_balloon_debug_fops);
-> +}
-> +
-> +static void  virtio_balloon_debugfs_exit(struct virtio_balloon *b)
-> +{
-> +	debugfs_remove(debugfs_lookup("virtio-balloon", NULL));
-> +}
-> +
-> +#else
-> +
-> +static inline void virtio_balloon_debugfs_init(struct virtio_balloon *b)
-> +{
-> +}
-> +
-> +static inline void virtio_balloon_debugfs_exit(struct virtio_balloon *b)
-> +{
-> +}
-> +
-> +#endif	/* CONFIG_DEBUG_FS */
-> +
->  #ifdef CONFIG_BALLOON_COMPACTION
->  /*
->   * virtballoon_migratepage - perform the balloon page migration on behalf of
-> @@ -1019,6 +1073,9 @@ static int virtballoon_probe(struct virtio_device *vdev)
->  
->  	if (towards_target(vb))
->  		virtballoon_changed(vdev);
-> +
-> +	virtio_balloon_debugfs_init(vb);
-> +
->  	return 0;
->  
->  out_unregister_oom:
-> @@ -1065,6 +1122,8 @@ static void virtballoon_remove(struct virtio_device *vdev)
->  {
->  	struct virtio_balloon *vb = vdev->priv;
->  
-> +	virtio_balloon_debugfs_exit(vb);
-> +
->  	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_REPORTING))
->  		page_reporting_unregister(&vb->pr_dev_info);
->  	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
-> -- 
-> 2.25.1
-> 
-> 
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index d39b01fd52fe..ae422e44affb 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -855,12 +855,14 @@ static long do_set_mempolicy(unsigned short mode, unsigned short flags,
+ 		goto out;
+ 	}
+ 
++	task_lock(current);
+ 	ret = mpol_set_nodemask(new, nodes, scratch);
+ 	if (ret) {
++		task_unlock(current);
+ 		mpol_put(new);
+ 		goto out;
+ 	}
+-	task_lock(current);
++
+ 	old = current->mempolicy;
+ 	current->mempolicy = new;
+ 	if (new && new->mode == MPOL_INTERLEAVE)
+@@ -1295,7 +1297,9 @@ static long do_mbind(unsigned long start, unsigned long len,
+ 		NODEMASK_SCRATCH(scratch);
+ 		if (scratch) {
+ 			mmap_write_lock(mm);
++			task_lock(current);
+ 			err = mpol_set_nodemask(new, nmask, scratch);
++			task_unlock(current);
+ 			if (err)
+ 				mmap_write_unlock(mm);
+ 		} else
+-- 
+2.31.1
 

@@ -2,138 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA8558D5D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B7F58D5DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241381AbiHII4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S234067AbiHII4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241380AbiHII4T (ORCPT
+        with ESMTP id S241413AbiHII4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:56:19 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF1722516;
-        Tue,  9 Aug 2022 01:56:18 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 247E05C0069;
-        Tue,  9 Aug 2022 04:56:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 09 Aug 2022 04:56:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1660035376; x=1660121776; bh=xpGxjD2A50
-        fdV198hvsG7pRw/iujbctYhUQwuP/l34c=; b=X0G/RfiURd4O9ADNGjzBA7Oapu
-        V9IzUW+34EDzGgT1MQ1BXpfaXN5tZEtbW1fUW/94zPSC+L70YC5kKzjVfdd8bzRo
-        HIOjnYiO0P+mhmvl0V2F8Q5gf8aP+TJY6CGvi4znPhzDCDHdceHf02aMZuuseNdA
-        5Kq/G/bSUetH4RwPiI9Z3T6Q292dzYQkpHTjAZ+Ag+ud1v4SzKZ+WNvJk6t/ZpM2
-        3l+SxtR3AO3FllQRE/Lm2Fj8wPSQB5ujnQ2lm8lHhO5TzrOLZH6AE/pJIZvPrgND
-        B2EHrwKpziZA7ggOteYqusLzvvLV9BhMocYdZBTsn5vZkAsThuubgaj1Y/QA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660035376; x=1660121776; bh=xpGxjD2A50fdV198hvsG7pRw/iuj
-        bctYhUQwuP/l34c=; b=UyGwNjr97EMolB4dTDz2ap5ZwJLiHUcaoQVZXK0AciJv
-        BwSkiu8UxchaL82nP3WwxSLE9lMkDFLlsJbb6WDVoF1pEO0X1Zjwbt2+haR3U9fD
-        uXVuDNCP00hLqO7BynPspfDdpZMWzqD6vRroRCnazou5AoXtEhdeQArTSpEG8ta6
-        5zG8JRtygApyzL9BSpafIS27vaCfdbSJpMZAqMPkxUHnVzn6XsfJYnrX+3YWAgbM
-        +RrgxxSmw5qDHy6oNw/HvDBLR+AY+rTfJDjCPeLH2nw/+A46dJNsMAsRwBgiHFcz
-        8OgXX/nrGQgS5LBNsTDYFmU7DYSL0TQ9A/8TpWSEiA==
-X-ME-Sender: <xms:LyHyYtEjfdv7TlmkligTpGGebMhTKY3a8VHMvmyKOZMQIbpQjiUPOg>
-    <xme:LyHyYiUiGG1u5GYc3ICYFNoPMNgccCiBRrCeeKyCrw41eS9syuN96wsnARkj9nDdy
-    jRlvkI8fAM_hWKCN14>
-X-ME-Received: <xmr:LyHyYvIfcKmnEHcZx8FFmcuq3rv5AYjrkXXXgVqvuGXIJp2HzaPx-DFvDGWCp8XneWUYaw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhuffvvefkjghfofggtgesthdtredtredtvdenucfhrhhomhepnfhukhgv
-    ucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnh
-    epfffgfeelieeitddtteeivdetueejhfejfeejteehvefhgeefueeftdehjeeukeelnecu
-    ffhomhgrihhnpehuihgtrdgvughunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:LyHyYjFybHWcHAvfvYOEg58dlybi-OZkiVS7kRI1VJlgohYoF26Hug>
-    <xmx:LyHyYjVpNG1oirgd9PCRW98K5HC0nEZha8BUjqc5UMyNCV2hct7I_Q>
-    <xmx:LyHyYuMFmQkcDTW3-RUCRyhAeHwv7hI61uSCHth8fzMN9zgq0TV5pw>
-    <xmx:MCHyYuQk2QMupMQY0v5Uw1KeDla5QJYGKnRZOkDF-1wDi1Xwf6ZVOQ>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 9 Aug 2022 04:56:11 -0400 (EDT)
-Date:   Tue, 09 Aug 2022 20:55:58 +1200
-From:   Luke Jones <luke@ljones.dev>
-Subject: Re: [PATCH v3 1/6] asus-wmi: Implement TUF laptop keyboard RGB
- control
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        =?iso-8859-2?q?Barnab=E1s_P=F5cze?= <pobrn@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Message-Id: <AHBCGR.7I4U7CDRZ3J83@ljones.dev>
-In-Reply-To: <CAHp75VfZeuuQjfM+CY4nxrFJQcfpdHVVzyj6GLjeweT3ycSn5A@mail.gmail.com>
-References: <20220809025054.1626339-1-luke@ljones.dev>
-        <20220809025054.1626339-2-luke@ljones.dev>
-        <CAHp75VfZeuuQjfM+CY4nxrFJQcfpdHVVzyj6GLjeweT3ycSn5A@mail.gmail.com>
-X-Mailer: geary/40.0
+        Tue, 9 Aug 2022 04:56:37 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C01B2252C
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:56:36 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id h125-20020a1c2183000000b003a5360f218fso301089wmh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 01:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=E7W+A8RBq7Usp9JU9F1Ru53gxwOjNDrCjAkC1uG7hB8=;
+        b=duOEo4jhZ/rVYKJMgBewxuJ1d2OjLLB769TXL72ui4HlLcAbsyltdnaPxgFHaSeQOp
+         T/4Ixk9KUpJLPo8N3EIVlfU5+6ZM77l4+azpSuREEeHjvMFyRzSrzq/arC3dtssTMSvN
+         2XO1ZSI1YahN+1jmOO/89WFcXRQ0AB5rC6ce8Vqom2h9FBNQ+gAM/BIYErKSr2+MGuAC
+         0gKJyUQT2Vldz713bUkaGWFlzUr9z/Fgy473spa8Lr3BMnOZTXmZhPXKRTtTiybHVCx8
+         K6ypLaCEaHHxN+OHVvNBqmpOpSFDoOLBZEXB4Nhrv4Hb3lkCMB0cPqI57M+64vOBu4D/
+         arIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=E7W+A8RBq7Usp9JU9F1Ru53gxwOjNDrCjAkC1uG7hB8=;
+        b=y2RMMTaKS2b+oWgbSrsekKoaViVgrWWJOCiz7OFcFaPx4nL5lfU5DJigwqTPv/e5vN
+         bEUp6TXn+zm6yH7ebKNMghJvHfiO/ulOB3egQ54wthJNfDDJB8kDUJUSYjm9MpI0DaKW
+         8Lp9nmzx3pANQA9IttgMgYW/OVpXUZEKDH7Q2yPE4WFXdoUrjbKBeu8vzoN+iCjlCD6+
+         5YDcHbE3m9fTboD0P/GW4orbr+ZkXK2HShwnAJslsdgaUOBYDQy+9YtM+K9lEV5/cI1/
+         QdpmgAKcyQPeRenMZvmLZkYcwfc5/v3PbTDJMXDxx0ttjIwC+zPQ2eJ3YweTUcubSN8n
+         Parg==
+X-Gm-Message-State: ACgBeo0TaDTh2MjkIpiKFut2gqdoQKb3vhbY963uQz4WoiTey8wofoDl
+        3U/tM+MAO2RpO1X6QfAl8ieiCA==
+X-Google-Smtp-Source: AA6agR7z1CJ1RF2MrhdQknTLEgot8gRvIjx/js8TvCI9KcAmyLht/K30vPbEOddZTV0NfOKw1c7L1Q==
+X-Received: by 2002:a05:600c:5021:b0:3a5:29a9:99b4 with SMTP id n33-20020a05600c502100b003a529a999b4mr9404360wmr.205.1660035394743;
+        Tue, 09 Aug 2022 01:56:34 -0700 (PDT)
+Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id c5-20020adfe705000000b0021f1522c93bsm15746147wrm.45.2022.08.09.01.56.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 01:56:34 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     michael@walle.cc, dan.carpenter@oracle.com, linux@roeck-us.net,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH v2 1/4] thermal/of: Fix error code in of_thermal_zone_find()
+Date:   Tue,  9 Aug 2022 10:56:26 +0200
+Message-Id: <20220809085629.509116-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-On Tue, Aug 9 2022 at 10:46:33 +0200, Andy Shevchenko 
-<andy.shevchenko@gmail.com> wrote:
-> On Tue, Aug 9, 2022 at 4:51 AM Luke D. Jones <luke@ljones.dev> wrote:
->> 
->>  Adds support for TUF laptop RGB control via the multicolor LED API.
->> 
->>  As this is the bas for adjusting only the RGB values, it sets the
->>  default mode of the keyboard to static since there is no way to read
->>  any existing settings from the device. These defaults overwrite the
->>  booted state of the keyboard when the module is loaded.
-> 
-> ...
-> 
->>  +       err = asus_wmi_evaluate_method3(ASUS_WMI_METHODID_DEVS, 
->> ASUS_WMI_DEVID_TUF_RGB_MODE,
->>  +                               rgb->save | (rgb->mode << 8) | (r 
->> << 16) | (g << 24),
->>  +                               (b) | (rgb->speed << 8),
-> 
-> Too many parentheses.
+Currently, if we cannot find the correct thermal zone then this error
+path returns NULL and it would lead to an Oops in the caller.  Return
+ERR_PTR(-EINVAL) instead.
 
-Uh, yeah. I was unable to find concrete info on this. I at one point 
-experienced an issue where the order of operations *without* 
-parentheses ended up as "x | y << (8 | z) << 16". But now I'm not even 
-sure if I remember that correctly. I see the order here 
-https://www.cs.uic.edu/~i109/Notes/COperatorPrecedenceTable.pdf
+Fixes: 3bd52ac87347 ("thermal/of: Rework the thermal device tree initialization")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/YvDzovkMCQecPDjz@kili
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/thermal_of.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I'll do as said and test it to be certain.
-
-> 
->>  +                               &ret);
->>  +       if (err)
->>  +               dev_err(dev, "Unable to set TUF RGB data?\n");
->>  +
->>  +       return err;
-> 
-> How ret is being used?
-
-Damn.. fixed now.
-
-> 
-> --
-> With Best Regards,
-> Andy Shevchenko
-
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index c2bb5954b21e..368eb58e97cf 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -368,6 +368,7 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
+ 			}
+ 		}
+ 	}
++	tz = ERR_PTR(-EINVAL);
+ out:
+ 	of_node_put(np);
+ 	return tz;
+-- 
+2.34.1
 

@@ -2,90 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB1158E3C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21E458E3C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiHIXai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 19:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
+        id S229586AbiHIXcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 19:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiHIXag (ORCPT
+        with ESMTP id S229441AbiHIXcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 19:30:36 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B5D4B48F
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:30:34 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id z6so11568852lfu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 16:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=iZRwQQqJlrwLCsKGlbObwH22s/7VDIFNBtxo7IR0iGM=;
-        b=phR66Nr/T+MuFGa2vBt/kFwbuJkQC6v36BuX7nbJpfOOFVL6bDB6NzutH535gBOgxG
-         EJ6DsY13KJ/BobITbT+druSIqjWbJpVSOyiP0NSOQh/U+hPf/UaXLGgHxWhakaWZ/6/G
-         O3eqhGdsvnOH6IhZEZeIUSYjAMCJDtRgDDCqfh7oStDhQJMlX4cfV7bnURNaCT4Bqhwx
-         bYDUkyJWvVeB7kxY3xmrSxuVylGEMufLS78IXMI3EAYzewz9sqzVbxukFq54gZD7ZmQ4
-         aZAB95yWTBYeYECyKhTfzZNJ3V1mrIdFyg2L+MEz9Gf0XjH6GP3ETbQ0jwF8fnOQ/vHa
-         qfAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=iZRwQQqJlrwLCsKGlbObwH22s/7VDIFNBtxo7IR0iGM=;
-        b=O7DM4p0qJaWbT8abiHtIj5t2DCQ6tHvdgmSgHKhsxU+w0EemuldH4RM5N7FO0b5elO
-         O81HinP48zFFmgn1uSSkJ6dPxyIHzec98mGEdQAGQOzT+sP5+DReZStASnxh8tU42G2I
-         3w6ytzqJw3+SYccvZSe7D7gy8E/ArP6WP3euo8pafjP3moURYOuS0HabZp6Jq13B4/Es
-         KCZMOXh+TKucQBVtRqooRctCy8U15cVFHcdFLfta1Yh0SBpxK+u+PJs9TmbMAlaiL0Fz
-         mqftgWAfCdnlRGAIYYRlXs/bSbbvcx9nwfnVN1TGIUZyAj4WVJ1WT3h8V2zvgAFLKyDg
-         bzYA==
-X-Gm-Message-State: ACgBeo1vVkU09OygnrHOUS+pPAISBBMz+psTYib/wlXmSTLvH3GsGx8w
-        Ysgrro7S8/bPbcEOWHLPncB+2w==
-X-Google-Smtp-Source: AA6agR4HXcuGe5cAqbmjBRAOeYTzCU2ft9E8H6Qi7D7Mpgg02VczWM5eOi8Ny7jylCnwcxCBE4aPaw==
-X-Received: by 2002:ac2:4832:0:b0:48b:1899:b364 with SMTP id 18-20020ac24832000000b0048b1899b364mr8928921lft.534.1660087832351;
-        Tue, 09 Aug 2022 16:30:32 -0700 (PDT)
-Received: from ?IPv6:2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f? ([2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f])
-        by smtp.gmail.com with ESMTPSA id be36-20020a05651c172400b0025e48907929sm156503ljb.23.2022.08.09.16.30.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 16:30:31 -0700 (PDT)
-Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
-To:     "Dong, Eddie" <eddie.dong@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Liu, Rong L" <rong.l.liu@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        "upstream@semihalf.com" <upstream@semihalf.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Marc Zyngier <maz@kernel.org>
-References: <20220805193919.1470653-1-dmy@semihalf.com>
- <BL0PR11MB30429034B6D59253AF22BCE08A639@BL0PR11MB3042.namprd11.prod.outlook.com>
- <c5d8f537-5695-42f0-88a9-de80e21f5f4c@semihalf.com>
- <BL0PR11MB304213273FA9FAC4EBC70FF88A629@BL0PR11MB3042.namprd11.prod.outlook.com>
-From:   Dmytro Maluka <dmy@semihalf.com>
-Message-ID: <ef9ffbde-445e-f00f-23c1-27e23b6cca4f@semihalf.com>
-Date:   Wed, 10 Aug 2022 01:30:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 9 Aug 2022 19:32:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D065E78207
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:32:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660087927; x=1691623927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GnyjgHSWMN0s1QRaGr/yenGO/uA3yDht7mg4g98kpS4=;
+  b=YjAzeN5uINft2xzwn8sMzcXp8omc3Ct2CBhIdgFDWEJHxyypbnXHejCA
+   9JnOkmjV+AGzpBhofcE6+I0FnEQoP1OdNrYy/Z+LImhXl7lUaXRbBJZqS
+   BfS/qd/zqFJ5vGfpQBBFioFsalXKUTLRNoGfb1fvXqFXF8a/xO/aPhLPa
+   eRfeNiLhAmmWKE8ewtpR+NzDjfq+WqASQNzK/NLWRW5g2YwZ/V3TwV5ie
+   jXHUeAD/0uUgckTqG86Dd3B6mrW9MtEBWNO4s3vKsmDBiT7Z8vp/SkwGH
+   ieBxxQuM0jvHh/hhYR2Okgs9lWelaEJbJVGAzYfLV6gNneR9Wgru0z1DD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="288522281"
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="288522281"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 16:32:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="781038055"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 09 Aug 2022 16:32:03 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLYhe-000NLx-1n;
+        Tue, 09 Aug 2022 23:32:02 +0000
+Date:   Wed, 10 Aug 2022 07:31:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sathvika Vasireddy <sv@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, jpoimboe@redhat.com,
+        peterz@infradead.org, linux-kernel@vger.kernel.org, aik@ozlabs.ru,
+        mpe@ellerman.id.au, mingo@redhat.com, christophe.leroy@csgroup.eu,
+        rostedt@goodmis.org, mbenes@suse.cz, npiggin@gmail.com,
+        chenzhongjin@huawei.com, linux-arm-kernel@lists.infradead.org,
+        naveen.n.rao@linux.vnet.ibm.com, sv@linux.ibm.com
+Subject: Re: [PATCH 06/16] powerpc: Fix objtool unannotated intra-function
+ call warnings on PPC32
+Message-ID: <202208100751.LiiKZjrx-lkp@intel.com>
+References: <20220808114908.240813-7-sv@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <BL0PR11MB304213273FA9FAC4EBC70FF88A629@BL0PR11MB3042.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220808114908.240813-7-sv@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,162 +70,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 10:01 PM, Dong, Eddie wrote:
-> 
-> 
->> -----Original Message-----
->> From: Dmytro Maluka <dmy@semihalf.com>
->> Sent: Tuesday, August 9, 2022 12:24 AM
->> To: Dong, Eddie <eddie.dong@intel.com>; Christopherson,, Sean
->> <seanjc@google.com>; Paolo Bonzini <pbonzini@redhat.com>;
->> kvm@vger.kernel.org
->> Cc: Thomas Gleixner <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>;
->> Borislav Petkov <bp@alien8.de>; Dave Hansen <dave.hansen@linux.intel.com>;
->> x86@kernel.org; H. Peter Anvin <hpa@zytor.com>; linux-
->> kernel@vger.kernel.org; Eric Auger <eric.auger@redhat.com>; Alex
->> Williamson <alex.williamson@redhat.com>; Liu, Rong L <rong.l.liu@intel.com>;
->> Zhenyu Wang <zhenyuw@linux.intel.com>; Tomasz Nowicki
->> <tn@semihalf.com>; Grzegorz Jaszczyk <jaz@semihalf.com>;
->> upstream@semihalf.com; Dmitry Torokhov <dtor@google.com>
->> Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
->>
->> On 8/9/22 1:26 AM, Dong, Eddie wrote:
->>>>
->>>> The existing KVM mechanism for forwarding of level-triggered
->>>> interrupts using resample eventfd doesn't work quite correctly in the
->>>> case of interrupts that are handled in a Linux guest as oneshot
->>>> interrupts (IRQF_ONESHOT). Such an interrupt is acked to the device
->>>> in its threaded irq handler, i.e. later than it is acked to the
->>>> interrupt controller (EOI at the end of hardirq), not earlier. The
->>>> existing KVM code doesn't take that into account, which results in
->>>> erroneous extra interrupts in the guest caused by premature re-assert of an
->> unacknowledged IRQ by the host.
->>>
->>> Interesting...  How it behaviors in native side?
->>
->> In native it behaves correctly, since Linux masks such a oneshot interrupt at the
->> beginning of hardirq, so that the EOI at the end of hardirq doesn't result in its
->> immediate re-assert, and then unmasks it later, after its threaded irq handler
->> completes.
->>
->> In handle_fasteoi_irq():
->>
->> 	if (desc->istate & IRQS_ONESHOT)
->> 		mask_irq(desc);
->>
->> 	handle_irq_event(desc);
->>
->> 	cond_unmask_eoi_irq(desc, chip);
->>
->>
->> and later in unmask_threaded_irq():
->>
->> 	unmask_irq(desc);
->>
->> I also mentioned that in patch #3 description:
->> "Linux keeps such interrupt masked until its threaded handler finishes, to
->> prevent the EOI from re-asserting an unacknowledged interrupt.
-> 
-> That makes sense. Can you include the full story in cover letter too?
+Hi Sathvika,
 
-Ok, I will.
+I love your patch! Yet something to improve:
 
-> 
-> 
->> However, with KVM + vfio (or whatever is listening on the resamplefd) we don't
->> check that the interrupt is still masked in the guest at the moment of EOI.
->> Resamplefd is notified regardless, so vfio prematurely unmasks the host
->> physical IRQ, thus a new (unwanted) physical interrupt is generated in the host
->> and queued for injection to the guest."
->>
-> 
-> Emulation of level triggered IRQ is a pain point ☹
-> I read we need to emulate the "level" of the IRQ pin (connecting from device to IRQchip, i.e. ioapic here).
-> Technically, the guest can change the polarity of vIOAPIC, which will lead to a new  virtual IRQ 
-> even w/o host side interrupt.  
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19 next-20220809]
+[cannot apply to powerpc/next powerpc/topic/ppc-kvm masahiroy-kbuild/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks, interesting point. Do you mean that this behavior (a new vIRQ as
-a result of polarity change) may already happen with the existing KVM code?
+url:    https://github.com/intel-lab-lkp/linux/commits/Sathvika-Vasireddy/objtool-Enable-and-implement-mcount-option-on-powerpc/20220808-200702
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4e23eeebb2e57f5a28b36221aa776b5a1122dde5
+config: powerpc-randconfig-r024-20220808 (https://download.01.org/0day-ci/archive/20220810/202208100751.LiiKZjrx-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/bcefd9c9f24358413a1b210aa591c8758f58b3a9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sathvika-Vasireddy/objtool-Enable-and-implement-mcount-option-on-powerpc/20220808-200702
+        git checkout bcefd9c9f24358413a1b210aa591c8758f58b3a9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
 
-It doesn't seem so to me. AFAICT, KVM completely ignores the vIOAPIC
-polarity bit, in particular it doesn't handle change of the polarity by
-the guest (i.e. doesn't update the virtual IRR register, and so on), so
-it shouldn't result in a new interrupt.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Since commit 100943c54e09 ("kvm: x86: ignore ioapic polarity") there
-seems to be an assumption that KVM interpretes the IRQ level value as
-active (asserted) vs inactive (deasserted) rather than high vs low, i.e.
-the polarity doesn't matter to KVM.
+All errors (new ones prefixed by >>):
 
-So, since both sides (KVM emulating the IOAPIC, and vfio/whatever
-emulating an external interrupt source) seem to operate on a level of
-abstraction of "asserted" vs "de-asserted" interrupt state regardless of
-the polarity, and that seems not a bug but a feature, it seems that we
-don't need to emulate the IRQ level as such. Or am I missing something?
+>> <unknown>:0: error: symbol '__kuep_lock' is already defined
 
-OTOH, I guess this means that the existing KVM's emulation of
-level-triggered interrupts is somewhat limited (a guest may legitimately
-expect an interrupt fired as a result of polarity change, and that case
-is not supported by KVM). But that is rather out of scope of the oneshot
-interrupts issue addressed by this patchset.
-
-> "pending" field of kvm_kernel_irqfd_resampler in patch 3 means more an event rather than an interrupt level.
-> 
-> 
->>>
->>>>
->>>> This patch series fixes this issue (for now on x86 only) by checking
->>>> if the interrupt is unmasked when we receive irq ack (EOI) and, in
->>>> case if it's masked, postponing resamplefd notify until the guest unmasks it.
->>>>
->>>> Patches 1 and 2 extend the existing support for irq mask notifiers in
->>>> KVM, which is a prerequisite needed for KVM irqfd to use mask
->>>> notifiers to know when an interrupt is masked or unmasked.
->>>>
->>>> Patch 3 implements the actual fix: postponing resamplefd notify in
->>>> irqfd until the irq is unmasked.
->>>>
->>>> Patches 4 and 5 just do some optional renaming for consistency, as we
->>>> are now using irq mask notifiers in irqfd along with irq ack notifiers.
->>>>
->>>> Please see individual patches for more details.
->>>>
->>>> v2:
->>>>   - Fixed compilation failure on non-x86: mask_notifier_list moved from
->>>>     x86 "struct kvm_arch" to generic "struct kvm".
->>>>   - kvm_fire_mask_notifiers() also moved from x86 to generic code, even
->>>>     though it is not called on other architectures for now.
->>>>   - Instead of kvm_irq_is_masked() implemented
->>>>     kvm_register_and_fire_irq_mask_notifier() to fix potential race
->>>>     when reading the initial IRQ mask state.
->>>>   - Renamed for clarity:
->>>>       - irqfd_resampler_mask() -> irqfd_resampler_mask_notify()
->>>>       - kvm_irq_has_notifier() -> kvm_irq_has_ack_notifier()
->>>>       - resampler->notifier -> resampler->ack_notifier
->>>>   - Reorganized code in irqfd_resampler_ack() and
->>>>     irqfd_resampler_mask_notify() to make it easier to follow.
->>>>   - Don't follow unwanted "return type on separate line" style for
->>>>     irqfd_resampler_mask_notify().
->>>>
->>>> Dmytro Maluka (5):
->>>>   KVM: x86: Move irq mask notifiers from x86 to generic KVM
->>>>   KVM: x86: Add kvm_register_and_fire_irq_mask_notifier()
->>>>   KVM: irqfd: Postpone resamplefd notify for oneshot interrupts
->>>>   KVM: irqfd: Rename resampler->notifier
->>>>   KVM: Rename kvm_irq_has_notifier()
->>>>
->>>>  arch/x86/include/asm/kvm_host.h |  17 +---
->>>>  arch/x86/kvm/i8259.c            |   6 ++
->>>>  arch/x86/kvm/ioapic.c           |   8 +-
->>>>  arch/x86/kvm/ioapic.h           |   1 +
->>>>  arch/x86/kvm/irq_comm.c         |  74 +++++++++++------
->>>>  arch/x86/kvm/x86.c              |   1 -
->>>>  include/linux/kvm_host.h        |  21 ++++-
->>>>  include/linux/kvm_irqfd.h       |  16 +++-
->>>>  virt/kvm/eventfd.c              | 136 ++++++++++++++++++++++++++++----
->>>>  virt/kvm/kvm_main.c             |   1 +
->>>>  10 files changed, 221 insertions(+), 60 deletions(-)
->>>>
->>>> --
->>>> 2.37.1.559.g78731f0fdb-goog
->>>
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

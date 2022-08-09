@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BA558E06E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3A858E071
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343909AbiHITrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
+        id S1344335AbiHITrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346242AbiHITqi (ORCPT
+        with ESMTP id S1346364AbiHITqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:46:38 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A83EE5;
-        Tue,  9 Aug 2022 12:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Wv8APvVZyD89f/M97jkVbhyYW+XM35Z6FtrwLTeI0Ng=; b=RCcB/LrzBH3G0hd3BiUTq8iPzI
-        bGQkmpy/yNY1FfAOLo/zKygA2n+h0u0OtVZGYVbjBo+bwZ1z3xDOWn4dhHmfbrEnWp4dbjsaGSKn1
-        zTSJmxvK3ubwpNBG0FMa3HgAmDuvL/slxbuZckrJpQwOe7M12cgFM1XCb0J2pm/XgLelpZ4higMt3
-        rxOXk9brZJGlPhQhraSpYMvbt4vN+QHmV+EUpBRhzdFPKXq/rg556ge86qqn3DMn70r+10V+8NU4H
-        jM4uIs9XAqItbSY3VrqxSXYsuN6wNkSDne3kSVbTuPFth3YMErFZHpVCnwcJREvTYoLkrn2tNn5Hz
-        2tbp7dTw==;
-Received: from [187.56.70.103] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oLVB3-003nDC-Fl; Tue, 09 Aug 2022 21:46:09 +0200
-Message-ID: <ea98a267-6159-7ab8-703e-1ef314e1e0d8@igalia.com>
-Date:   Tue, 9 Aug 2022 16:45:38 -0300
+        Tue, 9 Aug 2022 15:46:51 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F17E5;
+        Tue,  9 Aug 2022 12:46:50 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id l9so7116566ilq.1;
+        Tue, 09 Aug 2022 12:46:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=FUZurhOVWbSFlq4M53I1Rb6VAfl1vXlk/stu+pqTW7s=;
+        b=Hylv0q5Hcln4BccHcPu+pqqkrbEO+8XKno3ylKBzTBp2I3SEnO9Z5w4LzrTj+G5/8M
+         bzXhbEs+AXONGx4KTt1iQXHSy/fgi2lkqmWo/bJI5nsGegFsVGB5r18O5Lv9OCNkXhzY
+         mMlc92N6x2+YU2AMBPXZA5xoirrTUUvb8gVnPcegvUggDcM1LjSuNpqyrPb3Qo0fK74X
+         kB1qK0zljSzYbMemR8IYnwigY6sXD1Ve1oqJAaAWjPP1lUYp2CDl7GVknfeUGR4mqv2z
+         BefIiwgPSK3su800o4D5BQSCmN9Fwlexh37Dfv0ywSPfXTvoY5J31t5TlbV5PPNjRQk/
+         YROg==
+X-Gm-Message-State: ACgBeo0NeK3Ff9ZdCCRqdJFlQ4TSC1g9LqveZle5aAGMisu//5S/Etfh
+        fu4UWU0126ncTKrTxkwJ8w==
+X-Google-Smtp-Source: AA6agR6tDsZo27ZLWdYBCuktolWxGN7xvWY3iudAMl4Ek0rvZPqnjNE6AERrQZNVv3UbX1qewNYK1w==
+X-Received: by 2002:a05:6e02:1aa7:b0:2de:b9f1:593f with SMTP id l7-20020a056e021aa700b002deb9f1593fmr10779350ilv.243.1660074409570;
+        Tue, 09 Aug 2022 12:46:49 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id b3-20020a056638388300b00342f67a4789sm3448164jav.164.2022.08.09.12.46.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 12:46:49 -0700 (PDT)
+Received: (nullmailer pid 2272995 invoked by uid 1000);
+        Tue, 09 Aug 2022 19:46:47 -0000
+Date:   Tue, 9 Aug 2022 13:46:47 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        msp@baylibre.com, jitao.shi@mediatek.com, p.zabel@pengutronix.de,
+        tzimmermann@suse.de, matthias.bgg@gmail.com,
+        dri-devel@lists.freedesktop.org, robh+dt@kernel.org,
+        ck.hu@mediatek.com, linux-kernel@vger.kernel.org, deller@gmx.de,
+        wenst@chromium.org, linux-fbdev@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        angelogioacchino.delregno@collabora.com, mripard@kernel.org,
+        granquet@baylibre.com, chunkuang.hu@kernel.org,
+        liangxu.xu@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, daniel@ffwll.ch,
+        airlied@linux.ie
+Subject: Re: [PATCH v16 1/8] dt-bindings: mediatek,dp: Add Display Port
+ binding
+Message-ID: <20220809194647.GA2272961-robh@kernel.org>
+References: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
+ <20220805101459.3386-2-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 06/13] um: Improve panic notifiers consistency and
- ordering
-Content-Language: en-US
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        kexec@lists.infradead.org, linux-um@lists.infradead.org
-Cc:     pmladek@suse.com, bhe@redhat.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Richard Weinberger <richard@nod.at>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-7-gpiccoli@igalia.com>
- <5bbc4296-4858-d01c-0c76-09d942377ddf@igalia.com>
- <54cd8c11428db4c419edf2267db00ca10da7a178.camel@sipsolutions.net>
- <15188cf2-a510-2725-0c6e-3c4b264714c5@igalia.com>
- <f366b3d50aa8b713b0a921e4507bae4779a7cd02.camel@sipsolutions.net>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <f366b3d50aa8b713b0a921e4507bae4779a7cd02.camel@sipsolutions.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805101459.3386-2-rex-bc.chen@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/08/2022 16:08, Johannes Berg wrote:
-> [...]
->> Perfect, thank you! Let me take the opportunity to ask you something I'm
->> asking all the maintainers involved here - do you prefer taking the
->> patch through your tree, or to get it landed with the whole series, at
->> once, from some maintainer?
->>
-> Hm. I don't think we'd really care, but so far I was thinking - since
-> it's a series - it'd go through some appropriate tree all together. If
-> you think it should be applied separately, let us know.
+On Fri, 05 Aug 2022 18:14:52 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
 > 
-> johannes
+> This controller is present on several mediatek hardware. Currently
+> mt8195 and mt8395 have this controller without a functional difference,
+> so only one compatible field is added.
+> 
+> The controller can have two forms, as a normal display port and as an
+> embedded display port.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>  .../display/mediatek/mediatek,dp.yaml         | 116 ++++++++++++++++++
+>  1 file changed, 116 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> 
 
-For me, it would be easier if maintainers pick the patches into their
--next/-fixes trees when they think the patch is good enough, but some
-maintainers complained that prefer the whole series approach (and some
-others are already taking the patches into their trees).
-
-Given that, in case you do have a linux-um tree and feel OK with that, I
-appreciate if you merge it, so I can remove the patch in next iteration.
-If you prefer the whole series approach, OK as well, your call =)
-
-Thanks,
-
-
-Guilherme
+Reviewed-by: Rob Herring <robh@kernel.org>

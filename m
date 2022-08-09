@@ -2,124 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B40A58D754
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FBD58D756
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242226AbiHIKUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
+        id S236273AbiHIKU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235729AbiHIKUV (ORCPT
+        with ESMTP id S242417AbiHIKUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:20:21 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6582BF9;
-        Tue,  9 Aug 2022 03:20:19 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id BEDE55FD05;
-        Tue,  9 Aug 2022 13:20:17 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1660040417;
-        bh=Y3WuWSvZ7wJgo9yPVxROV6Sg+R19MrMXBZIad/qBeA8=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=kUmRLFd/bp4RKyjxGjO9HdaKN8AGjS4J5ZOq5mxKJb2rwUFKw/k0tJO1/Uc0M6hTy
-         RA1ls3Wh/ApBjOBOZvxc601AqPDr11NIhqJ6RZ7k45TK3VsDdONeWCR8GK6pEnCOpg
-         fEEf+2StUR39k+M1+DJrBhpXQCUcthlsAcW4MHk1uLV/HnlJLf6N2Se3yszwo6jetQ
-         eQRe0HpzFRr623MTCZvzjRRIwMsGJ74ptDBHRFwLCKiT/WnTo2o1XcJ+HomhghbZIf
-         zUhXyhBXy0dnsAMyK6F4KVWl7TnLq5YoWz68jQ/sHrNdYc5mHNwNnBy7hMkWg1ptl+
-         GnmgGZr+h3wKA==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Tue,  9 Aug 2022 13:20:15 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-CC:     Jiri Slaby <jirislaby@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "ngupta@vflare.org" <ngupta@vflare.org>, Jan Kara <jack@suse.com>,
-        Ted Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        "Ext4 Developers List" <linux-ext4@vger.kernel.org>,
-        Aleksey Romanov <AVRomanov@sberdevices.ru>
-Subject: Re: ext2/zram issue [was: Linux 5.19]
-Thread-Topic: ext2/zram issue [was: Linux 5.19]
-Thread-Index: AQHYq8XjXFXUH/5kskS0o+jO/1ewV62mBcyAgAAIiQCAAAf6gIAAAkUAgAAQzIA=
-Date:   Tue, 9 Aug 2022 10:20:10 +0000
-Message-ID: <20220809102011.pfhfb4k7tdkqvdai@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
- <702b3187-14bf-b733-263b-20272f53105d@kernel.org>
- <c7c69f77-4ea2-3375-33f3-322a3d35def5@kernel.org>
- <8710b302-9415-458d-f8a2-b78cc3a96e49@kernel.org>
- <YvIeLHuEb9XDSp6N@google.com> <YvIk3SdC7wP3uItR@google.com>
- <YvImxBsHJcpNzC+i@google.com>
-In-Reply-To: <YvImxBsHJcpNzC+i@google.com>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <7B174C30CC06914B82CCEDF3213811B1@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/09 07:32:00 #20083496
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 9 Aug 2022 06:20:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B9BAE4D;
+        Tue,  9 Aug 2022 03:20:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D99760F74;
+        Tue,  9 Aug 2022 10:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF5FCC433C1;
+        Tue,  9 Aug 2022 10:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660040435;
+        bh=dOp1KDIuLoETirE7wJiLMR825TPGmbo2cZbIKOlhKRE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CsIkPOKC4kjYTl/GWLm7qdIZ6FQ7v8nt24VpTDpU0mwFTL15tGCGI1TO6gybUSnQ3
+         aD275hRPI7u1Gek1wUiCEm1ouqL5Dh+L0RKoWGsbnDuFVFSAry3mowHagmdDwvQTqc
+         vRX3E9z81CrRUMWdDc3Ejsb9IWeN714yMlohvwbi8j+Y/Y3muwxQ3rW6F9dY9ly4s7
+         Aouu+WIKJRlt72JkQnmHTFCEv5IIoFGlMcZfXVGZYiPF3UMHmA8xtwUKOks2MP1inH
+         zGND5heSYoDhryIkmEa5xxjP4abw4gvb1oD5XlwUGYluILcz89/nDUs98DQEGC7PDs
+         BIuFtDsCN+qgw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oLMLh-001tEN-FK;
+        Tue, 09 Aug 2022 11:20:33 +0100
+Date:   Tue, 09 Aug 2022 11:20:33 +0100
+Message-ID: <871qtpwwem.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH] LoongArch: Don't disable EIOINTC master core
+In-Reply-To: <CAAhV-H50HERxjrmfDkSaHAVY7Q_ufpZP-e+qdZWVd=qEuQVXBg@mail.gmail.com>
+References: <20220809074522.2444672-1-chenhuacai@loongson.cn>
+        <874jylx0ad.wl-maz@kernel.org>
+        <CAAhV-H50HERxjrmfDkSaHAVY7Q_ufpZP-e+qdZWVd=qEuQVXBg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenhuacai@kernel.org, chenhuacai@loongson.cn, tglx@linutronix.de, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@xen0n.name, lixuefeng@loongson.cn, jiaxun.yang@flygoat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sergey,
+On Tue, 09 Aug 2022 10:19:31 +0100,
+Huacai Chen <chenhuacai@kernel.org> wrote:
+> 
+> Hi, Marc,
+> 
+> On Tue, Aug 9, 2022 at 4:56 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Tue, 09 Aug 2022 08:45:22 +0100,
+> > Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > >
+> > > This patch fix a CPU hotplug issue. The EIOINTC master core (the first
+> > > core of an EIOINTC node) should not be disabled at runtime, since it has
+> > > the responsibility of dispatching I/O interrupts.
+> > >
+> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > ---
+> > >  arch/loongarch/kernel/smp.c            | 9 +++++++++
+> > >  drivers/irqchip/irq-loongson-eiointc.c | 5 +++++
+> > >  2 files changed, 14 insertions(+)
+> > >
+> > > diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> > > index 09743103d9b3..54901716f8de 100644
+> > > --- a/arch/loongarch/kernel/smp.c
+> > > +++ b/arch/loongarch/kernel/smp.c
+> > > @@ -242,9 +242,18 @@ void loongson3_smp_finish(void)
+> > >
+> > >  static bool io_master(int cpu)
+> > >  {
+> > > +     int i, node, master;
+> > > +
+> > >       if (cpu == 0)
+> > >               return true;
+> > >
+> > > +     for (i = 1; i < loongson_sysconf.nr_io_pics; i++) {
+> > > +             node = eiointc_get_node(i);
+> > > +             master = cpu_number_map(node * CORES_PER_EIO_NODE);
+> > > +             if (cpu == master)
+> > > +                     return true;
+> > > +     }
+> > > +
+> > >       return false;
+> > >  }
+> > >
+> > > diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> > > index 170dbc96c7d3..6c99a2ff95f5 100644
+> > > --- a/drivers/irqchip/irq-loongson-eiointc.c
+> > > +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> > > @@ -56,6 +56,11 @@ static void eiointc_enable(void)
+> > >       iocsr_write64(misc, LOONGARCH_IOCSR_MISC_FUNC);
+> > >  }
+> > >
+> > > +int eiointc_get_node(int id)
+> > > +{
+> > > +     return eiointc_priv[id]->node;
+> > > +}
+> > > +
+> > >  static int cpu_to_eio_node(int cpu)
+> > >  {
+> > >       return cpu_logical_map(cpu) / CORES_PER_EIO_NODE;
+> >
+> >
+> > I don't understand why it has to be this complex and make any use of
+> > the node number.
+> >
+> > As I understand it, CPU-0 in any EIOINTC block is a master. So all you
+> > need to find out is whether the CPU number is a multiple of
+> > CORES_PER_EIO_NODE.
+> CPU-0 in any EIOINTC block may be a master, but not absolutely be a
+> master to dispatch I/O interrupts. If there is no bridge under a
+> EIOINTC, then this EIOINTC doesn't handle I/O interrupts, and it can
+> be disabled at runtime.
 
-On Tue, Aug 09, 2022 at 06:20:04PM +0900, Sergey Senozhatsky wrote:
-> On (22/08/09 18:11), Sergey Senozhatsky wrote:
-> > > > > /me needs to confirm.
-> > > >=20
-> > > > With that commit reverted, I see no more I/O errors, only oom-kille=
-r
-> > > > messages (which is OK IMO, provided I write 1G of urandom on a mach=
-ine w/
-> > > > 800M of RAM):
-> > >=20
-> > > Hmm... So handle allocation always succeeds in the slow path? (when w=
-e
-> > > try to allocate it second time)
-> >=20
-> > Yeah I can see how handle re-allocation with direct reclaim can make it=
- more
-> > successful, but in exchange it oom-kills some user-space process, I sup=
-pose.
-> > Is oom-kill really a good alternative though?
->=20
-> We likely will need to revert e7be8d1dd983 given that it has some
-> user visible changes. But, honestly, failing zram write vs oom-kill
-> a user-space is a tough choice.
+But that's not what your code is checking, is it? You're only
+reporting the node number, irrespective of whether there is anything
+behind the EIOINTC.
 
-I think oom-kill is an inevitable escape from low memory situation if we
-don't solve original problem with high memory consumption in the user
-setup. Reclaim-based zram slow path just delays oom if memory eating
-root cause is not resolved.
+	M.
 
-I totally agree with you that all patches which have visible user
-degradations should be reverted, but maybe this is more user setup
-problem, what do you think?
-
-If you make the decision to revert slow path removal patch, I would
-prefer to review the original patch with unneeded code removal again
-if you don't mind:
-https://lore.kernel.org/linux-block/20220422115959.3313-1-avromanov@sberdev=
-ices.ru/
-
---=20
-Thank you,
-Dmitry=
+-- 
+Without deviation from the norm, progress is not possible.

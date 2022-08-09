@@ -2,104 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DC158D79E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D1B58D7B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242710AbiHIKum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
+        id S233502AbiHIKxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235826AbiHIKuh (ORCPT
+        with ESMTP id S242264AbiHIKx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:50:37 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48F555A7;
-        Tue,  9 Aug 2022 03:50:33 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 1171E1C0003; Tue,  9 Aug 2022 12:50:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1660042232;
+        Tue, 9 Aug 2022 06:53:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A8752DCE
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660042407;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l+Hf7cwYZmOHCWYW6DFUKgfT6ABZ0nMhFyBlOZTV3ak=;
-        b=eBBbAb588ByY6uJI+nodeBT2GzrlesNObPpp0S/AIkfvEVO0WlKz63YEma66+Nb5XP8D9Q
-        l1RAIlcrlqjPJiNUgSeVyFCuCgLeloPmEXX6xKU9fQd/Xzu1wRcjHG3dqoLcrSE1nYQEoL
-        3Wb9TPgV6l+xR+tBKnK3hVG8Z27H1vA=
-Date:   Tue, 9 Aug 2022 12:50:31 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     hdegoede@redhat.com, andy.shevchenko@gmail.com,
-        pobrn@protonmail.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/6] asus-wmi: Implement TUF laptop keyboard RGB
- control
-Message-ID: <20220809105031.GA4971@duo.ucw.cz>
-References: <20220809025054.1626339-1-luke@ljones.dev>
- <20220809025054.1626339-2-luke@ljones.dev>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xTyqe2j7rpO6EUBF4khPbbfDOmMZA+TQt5p8dEfCV6c=;
+        b=S/KFxq1fD+HX1WCTDbDbBY6wOYMDgqMNhwfduC4e/54elzY7GM6q4EdCj2Dz25tkzvh/zE
+        tjLq+dyf6ZGHvpipCbNRyGLOY+I/afgoGxAiWU8899xAROln15JMljhIPy0OZbT31lQnPc
+        ef6I7GhrFyQFzRm+q7iR4bNPKjPG/Rw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-652-zuYQ5ramMXawJslZnWPevA-1; Tue, 09 Aug 2022 06:53:19 -0400
+X-MC-Unique: zuYQ5ramMXawJslZnWPevA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F1D5280D223;
+        Tue,  9 Aug 2022 10:53:19 +0000 (UTC)
+Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E77C69459C;
+        Tue,  9 Aug 2022 10:53:18 +0000 (UTC)
+Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
+        id DA7E81C02A9; Tue,  9 Aug 2022 12:53:17 +0200 (CEST)
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Daniel Vacek <dvacek@redhat.com>,
+        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Artem Savkov <asavkov@redhat.com>
+Subject: [PATCH bpf-next v4 0/3] destructive bpf_kfuncs
+Date:   Tue,  9 Aug 2022 12:53:14 +0200
+Message-Id: <20220809105317.436682-1-asavkov@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="dDRMvlgZJXvWKvBx"
-Content-Disposition: inline
-In-Reply-To: <20220809025054.1626339-2-luke@ljones.dev>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+eBPF is often used for kernel debugging, and one of the widely used and
+powerful debugging techniques is post-mortem debugging with a full memory dump.
+Triggering a panic at exactly the right moment allows the user to get such a
+dump and thus a better view at the system's state. Right now the only way to
+do this in BPF is to signal userspace to trigger kexec/panic. This is
+suboptimal as going through userspace requires context changes and adds
+significant delays taking system further away from "the right moment". On a
+single-cpu system the situation is even worse because BPF program won't even be
+able to block the thread of interest.
 
---dDRMvlgZJXvWKvBx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patchset tries to solve this problem by allowing properly marked tracing
+bpf programs to call crash_kexec() kernel function. The only requirement for
+now to run programs calling crash_kexec() or other destructive kfuncs is
+CAP_SYS_BOOT capability. When signature checking for bpf programs is available
+it is possible that stricter rules will be applied to programs utilizing
+destructive kfuncs.
 
-Hi!
+Changes in v4:
+ - Added description for KF_DESTRUCTIVE flag to documentation
 
-> Adds support for TUF laptop RGB control via the multicolor LED API.
->=20
-> As this is the bas for adjusting only the RGB values, it sets the
-> default mode of the keyboard to static since there is no way to read
-> any existing settings from the device. These defaults overwrite the
-> booted state of the keyboard when the module is loaded.
+Changes in v3:
+ - moved kfunc set registration to kernel/bpf/helpers.c
 
-> +	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_MODE)) {
-> +		struct mc_subled *mc_led_info =3D asus->keyboard_rgb_mode.subled_info;
-> +		struct led_classdev_mc *mc_cdev =3D &asus->keyboard_rgb_mode.dev;
-> +		struct device *dev =3D &asus->platform_device->dev;
-> +		u8 led_brightness =3D 255;
-> +
-> +		/*
-> +		 * asus::kbd_backlight still controls a base 3-level backlight and when
-> +		 * it is on 0, the RGB is not visible at all. RGB should be treated as
-> +		 * an additional step.
-> +		 */
+Changes in v2:
+ - BPF_PROG_LOAD flag dropped as it doesn't fully achieve it's aim of
+   preventing accidental execution of destructive bpf programs
+ - selftest moved to the end of patchset
+ - switched to kfunc destructive flag instead of a separate set
 
-Ouch. Lets not do that? If rgb interface is available, hide the 3
-level one, or something.
+Changes from RFC:
+ - sysctl knob dropped
+ - using crash_kexec() instead of panic()
+ - using kfuncs instead of adding a new helper
 
-> +		mc_cdev->led_cdev.name =3D   "asus::multicolour::kbd_backlight";
+Artem Savkov (3):
+  bpf: add destructive kfunc flag
+  bpf: export crash_kexec() as destructive kfunc
+  selftests/bpf: add destructive kfunc test
 
-Make this "rgb:kbd_backlight" or "inputX:rgb:kbd_backligh" and
-document it in Documentation/leds/well-known-leds.txt.
+ Documentation/bpf/kfuncs.rst                  |  9 +++++
+ include/linux/btf.h                           |  1 +
+ kernel/bpf/helpers.c                          | 21 +++++++++++
+ kernel/bpf/verifier.c                         |  5 +++
+ net/bpf/test_run.c                            |  5 +++
+ .../selftests/bpf/prog_tests/kfunc_call.c     | 36 +++++++++++++++++++
+ .../bpf/progs/kfunc_call_destructive.c        | 14 ++++++++
+ 7 files changed, 91 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_destructive.c
 
-Thanks and best regards,
-										Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+-- 
+2.37.1
 
---dDRMvlgZJXvWKvBx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYvI79wAKCRAw5/Bqldv6
-8sdWAJ4rC+HTcJctMx3yKybeVCUyLk+l9gCfdFRsmnQksDv9b7aEeWafABCmqts=
-=/0qH
------END PGP SIGNATURE-----
-
---dDRMvlgZJXvWKvBx--

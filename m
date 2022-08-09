@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA45358DF1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AD158DEF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344210AbiHISdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S1344038AbiHIS2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344146AbiHISad (ORCPT
+        with ESMTP id S1346345AbiHIS0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:30:33 -0400
+        Tue, 9 Aug 2022 14:26:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE4A33E3C;
-        Tue,  9 Aug 2022 11:10:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C4A26AC9;
+        Tue,  9 Aug 2022 11:09:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBC86B818A5;
-        Tue,  9 Aug 2022 18:08:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B851C43470;
-        Tue,  9 Aug 2022 18:08:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1039B819D6;
+        Tue,  9 Aug 2022 18:07:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A4EDC433D6;
+        Tue,  9 Aug 2022 18:07:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068498;
-        bh=7LfGCkVyeoRC8AJERvMQ5FbN5wqrWZU+sE8GTZfe3iA=;
+        s=korg; t=1660068465;
+        bh=e+Sqdz09GdVHe1dlbhbcgQasCVxSYIYnh6jIqbIAANo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mYY0jyTHDZWnXuysAtcWrbzqXSxUjWRwD8yrT3gkKCZrZjBcmZ7C9FsHU5nhClnAQ
-         9JGdx0vTHsxxYpbGN/i12wgwsafTvP485RdYNYV9AeJo96sqIRWpoBJRKAgD5BjE9P
-         wvzerabZ8nDdLmV6p7Ija5OqVNsfH2jj/cf/Z444=
+        b=STYuDiLOv4B42TuwZGsyE94cBqJZEs0ma2qnzrRION+9X/7vJuzyCUfem7ZNAzPrs
+         Fa1+yZMkksUaoW4elSWGRgEaEITt5F1mjUF6W8IrlDgMoOacbtOaWTJzhQvKZ67a7t
+         Siq8ZiWWbFqww8W5q7P5Ao2FBJqBZ50FZ+3ud4/0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sai Teja Aluvala <quic_saluvala@quicinc.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH 5.19 09/21] Bluetooth: hci_qca: Return wakeup for qca_wakeup
-Date:   Tue,  9 Aug 2022 20:01:01 +0200
-Message-Id: <20220809175513.634063761@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Ning Qiang <sohu0106@126.com>,
+        Kees Cook <keescook@chromium.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.18 33/35] macintosh/adb: fix oob read in do_adb_query() function
+Date:   Tue,  9 Aug 2022 20:01:02 +0200
+Message-Id: <20220809175516.328338947@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175513.345597655@linuxfoundation.org>
-References: <20220809175513.345597655@linuxfoundation.org>
+In-Reply-To: <20220809175515.046484486@linuxfoundation.org>
+References: <20220809175515.046484486@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,31 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+From: Ning Qiang <sohu0106@126.com>
 
-commit bde63e9effd3a6ba384707c62abe46c32d22f665 upstream.
+commit fd97e4ad6d3b0c9fce3bca8ea8e6969d9ce7423b upstream.
 
-This fixes the return value of qca_wakeup(), since
-.wakeup work inversely with original .prevent_wake.
+In do_adb_query() function of drivers/macintosh/adb.c, req->data is copied
+form userland. The parameter "req->data[2]" is missing check, the array
+size of adb_handler[] is 16, so adb_handler[req->data[2]].original_address and
+adb_handler[req->data[2]].handler_id will lead to oob read.
 
-Fixes: 4539ca67fe8ed (Bluetooth: Rename driver .prevent_wake to .wakeup)
-Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Ning Qiang <sohu0106@126.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220713153734.2248-1-sohu0106@126.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/bluetooth/hci_qca.c |    2 +-
+ drivers/macintosh/adb.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1588,7 +1588,7 @@ static bool qca_wakeup(struct hci_dev *h
- 	wakeup = device_may_wakeup(hu->serdev->ctrl->dev.parent);
- 	bt_dev_dbg(hu->hdev, "wakeup status : %d", wakeup);
+--- a/drivers/macintosh/adb.c
++++ b/drivers/macintosh/adb.c
+@@ -647,7 +647,7 @@ do_adb_query(struct adb_request *req)
  
--	return !wakeup;
-+	return wakeup;
- }
- 
- static int qca_regulator_init(struct hci_uart *hu)
+ 	switch(req->data[1]) {
+ 	case ADB_QUERY_GETDEVINFO:
+-		if (req->nbytes < 3)
++		if (req->nbytes < 3 || req->data[2] >= 16)
+ 			break;
+ 		mutex_lock(&adb_handler_mutex);
+ 		req->reply[0] = adb_handler[req->data[2]].original_address;
 
 

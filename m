@@ -2,222 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC9F58E3CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD19858E3D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiHIXkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 19:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S229569AbiHIXnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 19:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiHIXkG (ORCPT
+        with ESMTP id S229436AbiHIXnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 19:40:06 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2957FE41
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660088405; x=1691624405;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PTqrAIcpv0GfYknHCGQZmOiAGAIDjc6DcU9d4RdwYY0=;
-  b=TJ2ShycVW2M9IEhSOKUs2SEH5DFv44AzAdHQ50GzIgmv3l/lGa6vkRhy
-   PVoN2vCAndiSmBqP/W4ZttS3wOe0TmqDThFExAx7wpM0DUmdc8hDKEgl8
-   ulwiD2p87ELf8cVRboKSmnkiqehht+0KNBQZPXUsrw+yZjn1C9GW8ZaD9
-   5bBEIAjfAOTqUwpuPPtEb4BYyrdMBzypGqdgY7VVntpOWk+EY/R9gYQAC
-   J923mD+PEr5qv3T0VUUcZr3LpOWZIEqFsfx5EGzT8Kdg/a8VlzW177T1d
-   cIvuTmQTog7nvqeqRTAXZo1Uu2ooSgB1cfxN8dnOnE3szLtK2hx5WrIIu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="277895582"
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="277895582"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 16:40:04 -0700
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="731306637"
-Received: from aihernan-mobl1.amr.corp.intel.com (HELO dsneddon-desk.sneddon.lan) ([10.212.107.39])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 16:40:04 -0700
-From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/apic: Don't disable x2APIC if locked
-Date:   Tue,  9 Aug 2022 16:40:00 -0700
-Message-Id: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 9 Aug 2022 19:43:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7FC078208
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:43:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660088581;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AUpfOTYrSH4dy2eE+ZqJO2+PWrqvVOIkfWOVnHZIzSk=;
+        b=RbT1vxlz16ERTE7ta1aCOqX6Qf75JCYkEMgWObpSnXftBnu2CaniVEnyDwWc/6VIA8GZiZ
+        p8FgMGP/CzRY2lzUpq2MPRdpErLH7zAhELwEM+4uQl7Azc/jgdZPnrMm54IOlGILaAGz36
+        K7Q+Z/iYUQNGfFvrvtj9uEgShNogfPg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-335-iaAickkbOnqP2U-A_qKlTQ-1; Tue, 09 Aug 2022 19:42:58 -0400
+X-MC-Unique: iaAickkbOnqP2U-A_qKlTQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A99208037B5;
+        Tue,  9 Aug 2022 23:42:56 +0000 (UTC)
+Received: from emerald.redhat.com (unknown [10.22.16.176])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6DC11492C3B;
+        Tue,  9 Aug 2022 23:42:54 +0000 (UTC)
+From:   Lyude Paul <lyude@redhat.com>
+To:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
+Cc:     Wayne Lin <Wayne.Lin@amd.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sean Paul <sean@poorly.run>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Roman Li <roman.li@amd.com>, Jude Shih <shenshih@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        Manasi Navare <manasi.d.navare@intel.com>,
+        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Fernando Ramos <greenfoo@u92.eu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sean Paul <seanpaul@chromium.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [RFC v3] drm/display/dp_mst: Add helpers for serializing SST <-> MST transitions
+Date:   Tue,  9 Aug 2022 19:42:38 -0400
+Message-Id: <20220809234252.295372-1-lyude@redhat.com>
+In-Reply-To: <20220808235203.123892-14-lyude@redhat.com>
+References: <20220808235203.123892-14-lyude@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The APIC supports two modes, legacy APIC (or xAPIC), and Extended APIC
-(or x2APIC).  X2APIC mode is mostly compatible with legacy APIC, but
-it disables the memory-mapped APIC interface in favor of one that uses
-MSRs.  The APIC mode is controlled by the EXT bit in the APIC MSR.
+There's another kind of situation where we could potentially race with
+nonblocking modesets and MST, especially if we were to only use the locking
+provided by atomic modesetting:
 
-Introduce support for a new feature that will allow the BIOS to lock
-the APIC in x2APIC mode.  If the APIC is locked in x2APIC mode and the
-kernel tries to disable the APIC or revert to legacy APIC mode a GP
-fault will occur.
+* Display 1 begins as enabled on DP-1 in SST mode
+* Display 1 switches to MST mode, exposes one sink in MST mode
+* Userspace does non-blocking modeset to disable the SST display
+* Userspace does non-blocking modeset to enable the MST display with a
+  different CRTC, but the SST display hasn't been fully taken down yet
+* Execution order between the last two commits isn't guaranteed since they
+  share no drm resources
 
-Introduce support for a new MSR (IA32_XAPIC_DISABLE_STATUS) and handle the
-new locked mode when the LEGACY_XAPIC_DISABLED bit is set.
+We can fix this however, by ensuring that we always pull in the atomic
+topology state whenever a connector capable of driving an MST display
+performs its atomic check - and then tracking CRTC commits happening on the
+SST connector in the MST topology state. So, let's add some simple helpers
+for doing that and hook them up in various drivers.
 
-If the LEGACY_XAPIC_DISABLED is set, prevent the kernel
-from trying to disable it.
+v2:
+* Use intel_dp_mst_source_support() to check for MST support in i915, fixes
+  CI failures
 
-Signed-off-by: Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Cc: Wayne Lin <Wayne.Lin@amd.com>
+Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
+Cc: Jani Nikula <jani.nikula@intel.com>
+Cc: Imre Deak <imre.deak@intel.com>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Sean Paul <sean@poorly.run>
+Acked-by: Jani Nikula <jani.nikula@intel.com>
 ---
- arch/x86/include/asm/cpu.h       |  2 ++
- arch/x86/include/asm/msr-index.h | 13 ++++++++++
- arch/x86/kernel/apic/apic.c      | 44 +++++++++++++++++++++++++++++---
- 3 files changed, 55 insertions(+), 4 deletions(-)
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  7 +++
+ drivers/gpu/drm/display/drm_dp_mst_topology.c | 59 +++++++++++++++++++
+ drivers/gpu/drm/i915/display/intel_dp.c       |  9 +++
+ drivers/gpu/drm/nouveau/dispnv50/disp.c       |  2 +-
+ drivers/gpu/drm/nouveau/dispnv50/disp.h       |  2 +
+ drivers/gpu/drm/nouveau/nouveau_connector.c   | 14 +++++
+ include/drm/display/drm_dp_mst_helper.h       |  2 +
+ 7 files changed, 94 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-index 8cbf623f0ecf..b472ef76826a 100644
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -94,4 +94,6 @@ static inline bool intel_cpu_signatures_match(unsigned int s1, unsigned int p1,
- 	return p1 & p2;
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 1739710003a4..51732bd603a9 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -6318,10 +6318,17 @@ amdgpu_dm_connector_atomic_check(struct drm_connector *conn,
+ 		drm_atomic_get_old_connector_state(state, conn);
+ 	struct drm_crtc *crtc = new_con_state->crtc;
+ 	struct drm_crtc_state *new_crtc_state;
++	struct amdgpu_dm_connector *aconn = to_amdgpu_dm_connector(conn);
+ 	int ret;
+ 
+ 	trace_amdgpu_dm_connector_atomic_check(new_con_state);
+ 
++	if (conn->connector_type == DRM_MODE_CONNECTOR_DisplayPort) {
++		ret = drm_dp_mst_root_conn_atomic_check(new_con_state, &aconn->mst_mgr);
++		if (ret < 0)
++			return ret;
++	}
++
+ 	if (!crtc)
+ 		return 0;
+ 
+diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+index 2f7c43f88d74..97e8f8a83ed4 100644
+--- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
++++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+@@ -4597,6 +4597,65 @@ void drm_dp_mst_atomic_wait_for_dependencies(struct drm_atomic_state *state)
+ }
+ EXPORT_SYMBOL(drm_dp_mst_atomic_wait_for_dependencies);
+ 
++/**
++ * drm_dp_mst_root_conn_atomic_check() - Serialize CRTC commits on MST-capable connectors operating
++ * in SST mode
++ * @new_conn_state: The new connector state of the &drm_connector
++ * @mgr: The MST topology manager for the &drm_connector
++ *
++ * Since MST uses fake &drm_encoder structs, the generic atomic modesetting code isn't able to
++ * serialize non-blocking commits happening on the real DP connector of an MST topology switching
++ * into/away from MST mode - as the CRTC on the real DP connector and the CRTCs on the connector's
++ * MST topology will never share the same &drm_encoder.
++ *
++ * This function takes care of this serialization issue, by checking a root MST connector's atomic
++ * state to determine if it is about to have a modeset - and then pulling in the MST topology state
++ * if so, along with adding any relevant CRTCs to &drm_dp_mst_topology_state.pending_crtc_mask.
++ *
++ * Drivers implementing MST must call this function from the
++ * &drm_connector_helper_funcs.atomic_check hook of any physical DP &drm_connector capable of
++ * driving MST sinks.
++ *
++ * Returns:
++ * 0 on success, negative error code otherwise
++ */
++int drm_dp_mst_root_conn_atomic_check(struct drm_connector_state *new_conn_state,
++				      struct drm_dp_mst_topology_mgr *mgr)
++{
++	struct drm_atomic_state *state = new_conn_state->state;
++	struct drm_connector_state *old_conn_state =
++		drm_atomic_get_old_connector_state(state, new_conn_state->connector);
++	struct drm_crtc_state *crtc_state;
++	struct drm_dp_mst_topology_state *mst_state = NULL;
++
++	if (new_conn_state->crtc) {
++		crtc_state = drm_atomic_get_new_crtc_state(state, new_conn_state->crtc);
++		if (crtc_state && drm_atomic_crtc_needs_modeset(crtc_state)) {
++			mst_state = drm_atomic_get_mst_topology_state(state, mgr);
++			if (IS_ERR(mst_state))
++				return PTR_ERR(mst_state);
++
++			mst_state->pending_crtc_mask |= drm_crtc_mask(new_conn_state->crtc);
++		}
++	}
++
++	if (old_conn_state->crtc) {
++		crtc_state = drm_atomic_get_new_crtc_state(state, old_conn_state->crtc);
++		if (crtc_state && drm_atomic_crtc_needs_modeset(crtc_state)) {
++			if (!mst_state) {
++				mst_state = drm_atomic_get_mst_topology_state(state, mgr);
++				if (IS_ERR(mst_state))
++					return PTR_ERR(mst_state);
++			}
++
++			mst_state->pending_crtc_mask |= drm_crtc_mask(old_conn_state->crtc);
++		}
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL(drm_dp_mst_root_conn_atomic_check);
++
+ /**
+  * drm_dp_mst_update_slots() - updates the slot info depending on the DP ecoding format
+  * @mst_state: mst_state to update
+diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
+index 32292c0be2bd..a4e113253df3 100644
+--- a/drivers/gpu/drm/i915/display/intel_dp.c
++++ b/drivers/gpu/drm/i915/display/intel_dp.c
+@@ -4992,12 +4992,21 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
+ {
+ 	struct drm_i915_private *dev_priv = to_i915(conn->dev);
+ 	struct intel_atomic_state *state = to_intel_atomic_state(_state);
++	struct drm_connector_state *conn_state = drm_atomic_get_new_connector_state(_state, conn);
++	struct intel_connector *intel_conn = to_intel_connector(conn);
++	struct intel_dp *intel_dp = enc_to_intel_dp(intel_conn->encoder);
+ 	int ret;
+ 
+ 	ret = intel_digital_connector_atomic_check(conn, &state->base);
+ 	if (ret)
+ 		return ret;
+ 
++	if (intel_dp_mst_source_support(intel_dp)) {
++		ret = drm_dp_mst_root_conn_atomic_check(conn_state, &intel_dp->mst_mgr);
++		if (ret)
++			return ret;
++	}
++
+ 	/*
+ 	 * We don't enable port sync on BDW due to missing w/as and
+ 	 * due to not having adjusted the modeset sequence appropriately.
+diff --git a/drivers/gpu/drm/nouveau/dispnv50/disp.c b/drivers/gpu/drm/nouveau/dispnv50/disp.c
+index 24807aa9da5f..7e9a0b50bb42 100644
+--- a/drivers/gpu/drm/nouveau/dispnv50/disp.c
++++ b/drivers/gpu/drm/nouveau/dispnv50/disp.c
+@@ -1813,7 +1813,7 @@ nv50_sor_func = {
+ 	.destroy = nv50_sor_destroy,
+ };
+ 
+-static bool nv50_has_mst(struct nouveau_drm *drm)
++bool nv50_has_mst(struct nouveau_drm *drm)
+ {
+ 	struct nvkm_bios *bios = nvxx_bios(&drm->client.device);
+ 	u32 data;
+diff --git a/drivers/gpu/drm/nouveau/dispnv50/disp.h b/drivers/gpu/drm/nouveau/dispnv50/disp.h
+index 38dec11e7dda..9d66c9c726c3 100644
+--- a/drivers/gpu/drm/nouveau/dispnv50/disp.h
++++ b/drivers/gpu/drm/nouveau/dispnv50/disp.h
+@@ -106,6 +106,8 @@ void nv50_dmac_destroy(struct nv50_dmac *);
+  */
+ struct nouveau_encoder *nv50_real_outp(struct drm_encoder *encoder);
+ 
++bool nv50_has_mst(struct nouveau_drm *drm);
++
+ u32 *evo_wait(struct nv50_dmac *, int nr);
+ void evo_kick(u32 *, struct nv50_dmac *);
+ 
+diff --git a/drivers/gpu/drm/nouveau/nouveau_connector.c b/drivers/gpu/drm/nouveau/nouveau_connector.c
+index bdaec3427f14..6c412c1c1221 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_connector.c
++++ b/drivers/gpu/drm/nouveau/nouveau_connector.c
+@@ -1105,11 +1105,25 @@ nouveau_connector_best_encoder(struct drm_connector *connector)
+ 	return NULL;
  }
  
-+extern u64 x86_read_arch_cap_msr(void);
-+
- #endif /* _ASM_X86_CPU_H */
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 6674bdb096f3..1e086b37a307 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -155,6 +155,11 @@
- 						 * Return Stack Buffer Predictions.
- 						 */
- 
-+#define ARCH_CAP_XAPIC_DISABLE		BIT(21)	/*
-+						 * IA32_XAPIC_DISABLE_STATUS MSR
-+						 * supported
-+						 */
-+
- #define MSR_IA32_FLUSH_CMD		0x0000010b
- #define L1D_FLUSH			BIT(0)	/*
- 						 * Writeback and invalidate the
-@@ -1054,4 +1059,12 @@
- #define MSR_IA32_HW_FEEDBACK_PTR        0x17d0
- #define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
- 
-+/* x2APIC locked status */
-+#define MSR_IA32_XAPIC_DISABLE_STATUS	0xBD
-+#define LEGACY_XAPIC_DISABLED		BIT(0) /*
-+						* x2APIC mode is locked and
-+						* disabling x2APIC will cause
-+						* a #GP
-+						*/
-+
- #endif /* _ASM_X86_MSR_INDEX_H */
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index 6d303d1d276c..cb9aab893022 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -61,6 +61,7 @@
- #include <asm/cpu_device_id.h>
- #include <asm/intel-family.h>
- #include <asm/irq_regs.h>
-+#include <asm/cpu.h>
- 
- unsigned int num_processors;
- 
-@@ -1751,11 +1752,26 @@ EXPORT_SYMBOL_GPL(x2apic_mode);
- 
- enum {
- 	X2APIC_OFF,
--	X2APIC_ON,
- 	X2APIC_DISABLED,
-+	/* All states below here have X2APIC enabled */
-+	X2APIC_ON,
-+	X2APIC_ON_LOCKED
- };
- static int x2apic_state;
- 
-+static bool x2apic_hw_locked(void)
++static int
++nouveau_connector_atomic_check(struct drm_connector *connector, struct drm_atomic_state *state)
 +{
-+	u64 ia32_cap;
-+	u64 msr;
++	struct nouveau_connector *nv_conn = nouveau_connector(connector);
++	struct drm_connector_state *conn_state =
++		drm_atomic_get_new_connector_state(state, connector);
 +
-+	ia32_cap = x86_read_arch_cap_msr();
-+	if (ia32_cap & ARCH_CAP_XAPIC_DISABLE) {
-+		rdmsrl(MSR_IA32_XAPIC_DISABLE_STATUS, msr);
-+		return (msr & LEGACY_XAPIC_DISABLED);
-+	}
-+	return false;
++	if (!nv_conn->dp_encoder || !nv50_has_mst(nouveau_drm(connector->dev)))
++		return 0;
++
++	return drm_dp_mst_root_conn_atomic_check(conn_state, &nv_conn->dp_encoder->dp.mstm->mgr);
 +}
 +
- static void __x2apic_disable(void)
- {
- 	u64 msr;
-@@ -1793,6 +1809,10 @@ static int __init setup_nox2apic(char *str)
- 				apicid);
- 			return 0;
- 		}
-+		if (x2apic_hw_locked()) {
-+			pr_warn("APIC locked in x2apic mode, can't disable");
-+			return 0;
-+		}
- 		pr_warn("x2apic already enabled.\n");
- 		__x2apic_disable();
- 	}
-@@ -1807,10 +1827,18 @@ early_param("nox2apic", setup_nox2apic);
- void x2apic_setup(void)
- {
- 	/*
--	 * If x2apic is not in ON state, disable it if already enabled
-+	 * Try to make the AP's APIC state match that of the BSP,  but if the
-+	 * BSP is unlocked and the AP is locked then there is a state mismatch.
-+	 * Warn about the mismatch in case a GP fault occurs due to a locked AP
-+	 * trying to be turned off.
-+	 */
-+	if (x2apic_state != X2APIC_ON_LOCKED && x2apic_hw_locked())
-+		pr_warn("x2apic lock mismatch between BSP and AP.");
-+	/*
-+	 * If x2apic is not in ON or LOCKED state, disable it if already enabled
- 	 * from BIOS.
- 	 */
--	if (x2apic_state != X2APIC_ON) {
-+	if (x2apic_state < X2APIC_ON) {
- 		__x2apic_disable();
- 		return;
- 	}
-@@ -1831,6 +1859,11 @@ static __init void x2apic_disable(void)
- 	if (x2apic_id >= 255)
- 		panic("Cannot disable x2apic, id: %08x\n", x2apic_id);
+ static const struct drm_connector_helper_funcs
+ nouveau_connector_helper_funcs = {
+ 	.get_modes = nouveau_connector_get_modes,
+ 	.mode_valid = nouveau_connector_mode_valid,
+ 	.best_encoder = nouveau_connector_best_encoder,
++	.atomic_check = nouveau_connector_atomic_check,
+ };
  
-+	if (x2apic_hw_locked()) {
-+		pr_warn("Cannot disable locked x2apic, id: %08x\n", x2apic_id);
-+		return;
-+	}
-+
- 	__x2apic_disable();
- 	register_lapic_address(mp_lapic_addr);
- }
-@@ -1889,7 +1922,10 @@ void __init check_x2apic(void)
- 	if (x2apic_enabled()) {
- 		pr_info("x2apic: enabled by BIOS, switching to x2apic ops\n");
- 		x2apic_mode = 1;
--		x2apic_state = X2APIC_ON;
-+		if (x2apic_hw_locked())
-+			x2apic_state = X2APIC_ON_LOCKED;
-+		else
-+			x2apic_state = X2APIC_ON;
- 	} else if (!boot_cpu_has(X86_FEATURE_X2APIC)) {
- 		x2apic_state = X2APIC_DISABLED;
- 	}
+ static const struct drm_connector_funcs
+diff --git a/include/drm/display/drm_dp_mst_helper.h b/include/drm/display/drm_dp_mst_helper.h
+index 0ef7d0e6cf0c..b9c361b242ea 100644
+--- a/include/drm/display/drm_dp_mst_helper.h
++++ b/include/drm/display/drm_dp_mst_helper.h
+@@ -911,6 +911,8 @@ int drm_dp_send_query_stream_enc_status(struct drm_dp_mst_topology_mgr *mgr,
+ 		struct drm_dp_mst_port *port,
+ 		struct drm_dp_query_stream_enc_status_ack_reply *status);
+ int __must_check drm_dp_mst_atomic_check(struct drm_atomic_state *state);
++int __must_check drm_dp_mst_root_conn_atomic_check(struct drm_connector_state *new_conn_state,
++						   struct drm_dp_mst_topology_mgr *mgr);
+ 
+ void drm_dp_mst_get_port_malloc(struct drm_dp_mst_port *port);
+ void drm_dp_mst_put_port_malloc(struct drm_dp_mst_port *port);
 -- 
-2.25.1
+2.37.1
 

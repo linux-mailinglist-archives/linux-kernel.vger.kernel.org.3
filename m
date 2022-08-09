@@ -2,139 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDCF58D8D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2413058D8D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242418AbiHIMlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 08:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S242683AbiHIMlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 08:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiHIMlJ (ORCPT
+        with ESMTP id S242481AbiHIMlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 08:41:09 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C96D110E;
-        Tue,  9 Aug 2022 05:41:08 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id x2so286995ilp.10;
-        Tue, 09 Aug 2022 05:41:08 -0700 (PDT)
+        Tue, 9 Aug 2022 08:41:31 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E62CDEBC
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 05:41:28 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso17501597pjf.5
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 05:41:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=OH2f5g6k9+qbXZFsQ2Ho2erjcjWAHljfg8M1LYTp1+A=;
-        b=i2KuZ9g7/tmr06LMSl8brb+5GUD0ec0/F/f7Qb89WqyrjYSoKisi7F8HrPNpnjvPjU
-         wSWsDyJaCf3hsY2liT26vQ4VtT6ExN3PvaqjRe0BIFP+oJ3qziKtqzpSFvZQ4//oUA2H
-         kPATgvO5FM/hd5IHppHl7AtneqzNSjYbSl3SFG/69u/VOV2apJQ8knFJpbq3HbjB0jfp
-         frHXkHcBwYt4hc6l/tHIPBXQb9xlGJLfilF+fB3fMhXLSdhJigyVUgJbL0VOJWfnhPqr
-         cbwyoUbvyc2sWBL6oYv8S3Pknx+m8SBYW+HcfNpdUx4F92eGolGJQ1t3hHhChbdWJuEd
-         T7hw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WNr40UtTfHF/fzuU8JQrB0PNXLcXxn2MQ4y4InLcGjc=;
+        b=Xx6N+GU9iNYMwuT9/3lSx7jhoAsO+71/iNml5D96YGeHwBzYZ3j4ILPJ44KjqPbZe3
+         YpGuTWn01YdM7o2ebvIdXXnxeasvcrqV5g6NPHfGpE3zxMzdH75dxLbuIGh1RZpw8R6K
+         A33OK2AyhA1yEfQpBhmLaQvI4ASVr/4GmXQVw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=OH2f5g6k9+qbXZFsQ2Ho2erjcjWAHljfg8M1LYTp1+A=;
-        b=hQsNk8jr8ywtBHYN7mDjirgpEUiaFxYdKBpsxszCL+gaJLzMrRHtnnbHqK8w0KBLSc
-         4KJ79DsemFwFKlhLk7xPaWYggfi5lDqoPGSoZRscdwnXof8d59R+zFjQ4oO40oQrzoDM
-         MtE8yAJmwcM8JpxFDuCdF4PjWRzcrtXgcLk31p7zMm9JjMlyah/aUn07A/+8XvkUAUdY
-         Ha9VmgOPmz3jOghU9CLdCDmsQTmxtXGrftORFGnuWoohJ8/7V6FaeF/papPmit/GooNX
-         L4zFZFjosx5H2MezfbAWjdmWJKIaHBA/CT7moN/f5Mct9BTYxHCphc6QSxYTcEZy924i
-         Ixpw==
-X-Gm-Message-State: ACgBeo39UbhV1GL0vvxUpaTpt/kAUeQFg9armsdbmQW6qNlPSCo1GzdC
-        Mjd02OykiMUj/UOORJOW6V+IDz2Z0NK2Y79W5z4=
-X-Google-Smtp-Source: AA6agR5MDCW3WkYaKVwM860AoLF4ea8orT7Y7FpX4CVO7hpJqDmrZvd5hEkHX6/Oy6S8zRwxTZ5ZBQwxHJCxEFRVVKo=
-X-Received: by 2002:a05:6e02:198c:b0:2e0:ac33:d22 with SMTP id
- g12-20020a056e02198c00b002e0ac330d22mr6236746ilf.219.1660048867835; Tue, 09
- Aug 2022 05:41:07 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WNr40UtTfHF/fzuU8JQrB0PNXLcXxn2MQ4y4InLcGjc=;
+        b=VZbdCBBbrw4gUkkmksiA0wsnTL24/gHpMliaeUQpNHHY0UfGhdyxLs2mekv+1CciJ6
+         Zg/7jL7tlFreIQyDzdihtZ/fzbJWSJGSfKYhn7kE9C0nqoiS3+f8xtjqvt4lEnOtYtWq
+         dfC5gcPKafm4jnRm7ZnKaKlfF+nNcPdM0SJix0eB/IE5+kV6MjF7W2OZ4U8usV+gzLBX
+         VRrd9fRt4i8zm2l7MRofaudzVtBLXXlXdlgGe7bmj+we2b7Ub4z4rpb0+iDUm5Avwcgu
+         RIzJm5/Azh5gEOPa6MzjXgGBdZfpCjb1+JlDf/TegHPz+vBGrv8j3PiHh7UyUnvJ7vI1
+         ksvA==
+X-Gm-Message-State: ACgBeo2ZvP7aimujMjQVPKAGj3pXSgdcIqACg4rMy5fzovD2y+IRj1Bv
+        4aPYMy0+ZEvpovgNlkF9Blydkg==
+X-Google-Smtp-Source: AA6agR4KP3+3TPwBOflqXePsVYMZv0/sRTeKgbWH6qJxglrD40OZS+CxcNTbdAS84lMcYYtGG4KzUw==
+X-Received: by 2002:a17:90b:4f49:b0:1f5:c7c:b565 with SMTP id pj9-20020a17090b4f4900b001f50c7cb565mr35356292pjb.32.1660048887790;
+        Tue, 09 Aug 2022 05:41:27 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:8d43:c739:457a:5504])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170902680700b0016dbaf3ff2esm10719392plk.22.2022.08.09.05.41.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 05:41:27 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 21:41:22 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Alexey Romanov <avromanov@sberdevices.ru>,
+        Minchan Kim <minchan@kernel.org>
+Cc:     akpm@linux-foundation.org, ngupta@vflare.org,
+        senozhatsky@chromium.org, linux-block@vger.kernel.org,
+        axboe@chromium.org, kernel@sberdevices.ru,
+        linux-kernel@vger.kernel.org, mnitenko@gmail.com,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: Re: [PATCH v5] zram: remove double compression logic
+Message-ID: <YvJV8rU9bkqiy9iA@google.com>
+References: <20220505094443.11728-1-avromanov@sberdevices.ru>
 MIME-Version: 1.0
-References: <20220809105317.436682-1-asavkov@redhat.com> <20220809105317.436682-2-asavkov@redhat.com>
-In-Reply-To: <20220809105317.436682-2-asavkov@redhat.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Tue, 9 Aug 2022 14:40:30 +0200
-Message-ID: <CAP01T75Qern=-hvYONBMom7T3ycs-bpGxR1n5CdrehJBwrOTuQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/3] bpf: add destructive kfunc flag
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>,
-        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505094443.11728-1-avromanov@sberdevices.ru>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 Aug 2022 at 12:53, Artem Savkov <asavkov@redhat.com> wrote:
->
-> Add KF_DESTRUCTIVE flag for destructive functions. Functions with this
-> flag set will require CAP_SYS_BOOT capabilities.
->
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> ---
->  Documentation/bpf/kfuncs.rst | 9 +++++++++
->  include/linux/btf.h          | 1 +
->  kernel/bpf/verifier.c        | 5 +++++
->  3 files changed, 15 insertions(+)
->
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index c0b7dae6dbf5..2e97e08be7de 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -146,6 +146,15 @@ that operate (change some property, perform some operation) on an object that
->  was obtained using an acquire kfunc. Such kfuncs need an unchanged pointer to
->  ensure the integrity of the operation being performed on the expected object.
->
-> +2.4.5 KF_DESTRUCTIVE flag
+On (22/05/05 12:44), Alexey Romanov wrote:
+> @@ -1975,7 +1954,6 @@ static int zram_add(void)
+>  	if (ZRAM_LOGICAL_BLOCK_SIZE == PAGE_SIZE)
+>  		blk_queue_max_write_zeroes_sectors(zram->disk->queue, UINT_MAX);
+>  
+> -	blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, zram->disk->queue);
 
-This should be 2.4.6.
-
-> +--------------------------
-> +
-> +The KF_DESTRUCTIVE flag is used to indicate functions calling which is
-> +destructive to the system. For example such a call can result in system
-> +rebooting or panicking. Due to this additional restrictions apply to these
-> +calls. At the moment they only require CAP_SYS_BOOT capability, but more can be
-> +added later.
-> +
->  2.5 Registering the kfuncs
->  --------------------------
->
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index cdb376d53238..51a0961c84e3 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
-> @@ -49,6 +49,7 @@
->   * for this case.
->   */
->  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer arguments */
-> +#define KF_DESTRUCTIVE  (1 << 5) /* kfunc performs destructive actions */
->
->  struct btf;
->  struct btf_member;
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 843a966cd02b..163cc0a2dc5a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -7598,6 +7598,11 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->                         func_name);
->                 return -EACCES;
->         }
-> +       if (*kfunc_flags & KF_DESTRUCTIVE && !capable(CAP_SYS_BOOT)) {
-> +               verbose(env, "destructive kfunc calls require CAP_SYS_BOOT capabilities\n");
-> +               return -EACCES;
-> +       }
-> +
->         acq = *kfunc_flags & KF_ACQUIRE;
->
->         /* Check the arguments */
-> --
-> 2.37.1
->
+By the way, why did it remove QUEUE_FLAG_STABLE_WRITES bit?

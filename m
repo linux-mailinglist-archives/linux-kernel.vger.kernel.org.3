@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A3858E2AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E9258E2B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiHIWH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 18:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        id S229925AbiHIWHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 18:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiHIWFb (ORCPT
+        with ESMTP id S229996AbiHIWFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 9 Aug 2022 18:05:31 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D8BF5A7
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 15:05:27 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id l4so15720522wrm.13
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F5012744
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 15:05:28 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id z12so15742502wrs.9
         for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 15:05:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=v9HOYNemLB65v2s3X2Chh/1DsPPvYHZYg0+K/15aDgQ=;
-        b=bFg1GUKpiDV2Wa5Z/VYETOFzVV963xVsUH3QvrLhSGNNWPp/xqMyOGX0Zhl/qKKmxm
-         Ad7Osv2Yqq93VYOQQMjNugMHyQJ1xs+ZaGpl+qsYoyeFEHJX0gGV/noCTwbzy978WuGO
-         lZVYICEtV3/CnRGA0iJjDqUggzqzsx2gp7OyOBwwNf+Bk7wBGi/aiGzmcwavyZ0YAmuZ
-         tMpTgI/zmUYFxNZn9SJh3d9XqXtZc2k/9ZBt8cObjbPdZBF8lvUREOO73qEPf/bNYT2v
-         a6iNxynWotqme7RyFH++cw2Ra0e/e7OmEY/Q7Rv6ssADcG53xF2TE5kxFQtXsrlceanf
-         s3kg==
+        bh=Bvo7EJO01qiFSqaGbT4JiAGDEh8uk0vvz3ltgjeJ4xY=;
+        b=CAWsRL4Ep4kicXkJntoYYRIcd5mxS+P+lyhev3U4OgFFKo31iklfxZ8YBswYrWQo8q
+         r/7/d7aaRZyY0QjEAprQWpzmQvCErYj3/ESOm+yenMF1AmwmopLxHHkZ6bhIjLyvUa2E
+         mx9Pl7YIEkZFIxkeTLe97cmpc7b3Eox4Qnkg8+wrftdtcWob5llvFamt98DJGvzxclFb
+         oz2J0+x/OFDEE+v4CO43Nc2mVzGvqsvpdavHoMM2k8uYEZ93m/gJ6DQRO0FeDcuIhdYf
+         YpI23rxd4CsZqAruWv/kqq8A9BcwWvtDasVKL9qB8dB8X1d9wH+QMPugcEbzRWvPo4tf
+         a5MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=v9HOYNemLB65v2s3X2Chh/1DsPPvYHZYg0+K/15aDgQ=;
-        b=y6LJNZvYoJJ7gygqNGY/frBrboRNGB8hKs3V5VS1pLyI6j9teS9hDYdZsmPLRFNNjO
-         xU5LGZPtyoeNHlwcKy1gDXnY51J6g9yOlCKWl8mmLO672UGz8wElUdKso6EDQ4L/CIux
-         amtCxuERttXvyg9dK7Wjyot8HiLU7SnlKGUbY9pgSuZlyeBf471mKyaY0IBDX7LXahT2
-         tZKUmRYbI2EUp52ID0rQ6WOGi1S9r0/1lPNrPxaGU9OHsvqLDTbuYJS4x13MS+wbBkyv
-         vEENeRy/t8OS5B3+ASBUfBbphqCQMzzRTauu1B+XMlG3qwW7CRELt5DTNYJ/SGTgxXRm
-         102Q==
-X-Gm-Message-State: ACgBeo1Mn5l7zPQ3Ze4CeHFzmOfXfQnL5/bM59bnkRh85V2YvnYwsLGK
-        mnUN3tWNSQKNDk1Ys2nOg/G4Fw==
-X-Google-Smtp-Source: AA6agR5IekVvgBURn6hz3jtsSLj3jSB1ikOgx3VaKNEVj6epeJRQ6Y5gecqcxCHvhKAWmzCetU715g==
-X-Received: by 2002:a05:6000:1ac8:b0:220:6af3:935d with SMTP id i8-20020a0560001ac800b002206af3935dmr15261728wry.549.1660082726323;
-        Tue, 09 Aug 2022 15:05:26 -0700 (PDT)
+        bh=Bvo7EJO01qiFSqaGbT4JiAGDEh8uk0vvz3ltgjeJ4xY=;
+        b=L/vRK8H0KBuy6cIaeDyALfUgTIVw28x805xHSo2YbOxcXQmiXqaGJdBjWXfYREGAr9
+         v8Djb8oawm0crlAHLqOhkyzVZGWfM/DjJWm89FzQWyKdXsQToNQs2UqvD+fJQJpxfp+A
+         WlkkFHzoWHaIwCzTqvDr6yGpIu/lHh9F+s+LFpw/48r9PARQ6boKO3w6zG5gydPgjxut
+         eZTSZtg1Pko5bxKeU+IFKbg8VjsfvoCBeFuWWplSNdD6f/owrOlwFN6cLI99pM/ZDykF
+         vmhbfl1MR1kskwToluKXElL/uXUobx2ZW8RwAZq3FfLBuiycPvdaZnTrdOjKN7oUDlfm
+         6qFw==
+X-Gm-Message-State: ACgBeo1RGyCgW6WubtjHMXbaF05fSK7uy2u+LDpL4+ZLfmeoODnoeZP2
+        mxn/XvErcZY92mPB+gp1bLFsRg==
+X-Google-Smtp-Source: AA6agR73C8FYlygjs2eWSiL4P5CCNWIL9h5r5LJCnL/XSF0M8E+RfGw1MC6lcPFkWKuYH6Yi8UW67A==
+X-Received: by 2002:adf:f94b:0:b0:21e:46fe:bcdb with SMTP id q11-20020adff94b000000b0021e46febcdbmr14731147wrr.143.1660082727580;
+        Tue, 09 Aug 2022 15:05:27 -0700 (PDT)
 Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id m21-20020a05600c3b1500b003a317ee3036sm293583wms.2.2022.08.09.15.05.25
+        by smtp.gmail.com with ESMTPSA id m21-20020a05600c3b1500b003a317ee3036sm293583wms.2.2022.08.09.15.05.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 15:05:25 -0700 (PDT)
+        Tue, 09 Aug 2022 15:05:27 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>, Amit Kucheria <amitk@kernel.org>,
-        linux-omap@vger.kernel.org (open list:TI BANDGAP AND THERMAL DRIVER)
-Subject: [PATCH v2 22/26] thermal/drivers/ti: Remove unused macros ti_thermal_get_trip_value() / ti_thermal_trip_is_valid()
-Date:   Wed, 10 Aug 2022 00:04:32 +0200
-Message-Id: <20220809220436.711020-23-daniel.lezcano@linaro.org>
+        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?q?Peter=20K=C3=A4stle?= <peter@piie.net>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org (open list:ACER ASPIRE ONE
+        TEMPERATURE AND FAN DRIVER)
+Subject: [PATCH v2 23/26] thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
+Date:   Wed, 10 Aug 2022 00:04:33 +0200
+Message-Id: <20220809220436.711020-24-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220809220436.711020-1-daniel.lezcano@linaro.org>
 References: <20220809220436.711020-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -74,44 +76,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The macros:
+The thermal framework gives the possibility to register the trip
+points with the thermal zone. When that is done, no get_trip_* ops are
+needed and they can be removed.
 
-ti_thermal_get_trip_value()
- ti_thermal_trip_is_valid()
-
-are unused. Remove them.
+Convert ops content logic into generic trip points and register them with the
+thermal zone.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+Acked-by: Peter Kästle <peter@piie.net>
 ---
- drivers/thermal/ti-soc-thermal/ti-thermal.h | 15 ---------------
- 1 file changed, 15 deletions(-)
+ drivers/platform/x86/acerhdf.c | 73 ++++++++++++----------------------
+ 1 file changed, 26 insertions(+), 47 deletions(-)
 
-diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal.h b/drivers/thermal/ti-soc-thermal/ti-thermal.h
-index c388ecf31834..4fd2c20182d7 100644
---- a/drivers/thermal/ti-soc-thermal/ti-thermal.h
-+++ b/drivers/thermal/ti-soc-thermal/ti-thermal.h
-@@ -38,21 +38,6 @@
- /* Update rates */
- #define FAST_TEMP_MONITORING_RATE				250
+diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
+index 3463629f8764..a7407aa032ba 100644
+--- a/drivers/platform/x86/acerhdf.c
++++ b/drivers/platform/x86/acerhdf.c
+@@ -46,6 +46,8 @@
+  * measured by the on-die thermal monitor are within 0 <= Tj <= 90. So,
+  * assume 89°C is critical temperature.
+  */
++#define ACERHDF_DEFAULT_TEMP_FANON 60000
++#define ACERHDF_DEFAULT_TEMP_FANOFF 53000
+ #define ACERHDF_TEMP_CRIT 89000
+ #define ACERHDF_FAN_OFF 0
+ #define ACERHDF_FAN_AUTO 1
+@@ -70,8 +72,8 @@ static int kernelmode;
+ #endif
  
--/* helper macros */
--/**
-- * ti_thermal_get_trip_value - returns trip temperature based on index
-- * @i:	trip index
-- */
--#define ti_thermal_get_trip_value(i)					\
--	(OMAP_TRIP_HOT + ((i) * OMAP_TRIP_STEP))
+ static unsigned int interval = 10;
+-static unsigned int fanon = 60000;
+-static unsigned int fanoff = 53000;
++static unsigned int fanon = ACERHDF_DEFAULT_TEMP_FANON;
++static unsigned int fanoff = ACERHDF_DEFAULT_TEMP_FANOFF;
+ static unsigned int verbose;
+ static unsigned int list_supported;
+ static unsigned int fanstate = ACERHDF_FAN_AUTO;
+@@ -137,6 +139,15 @@ struct ctrl_settings {
+ 	int mcmd_enable;
+ };
+ 
++static struct thermal_trip trips[] = {
++	[0] = { .temperature = ACERHDF_DEFAULT_TEMP_FANON,
++		.hysteresis = ACERHDF_DEFAULT_TEMP_FANON - ACERHDF_DEFAULT_TEMP_FANOFF,
++		.type = THERMAL_TRIP_ACTIVE },
++
++	[1] = { .temperature = ACERHDF_TEMP_CRIT,
++		.type = THERMAL_TRIP_CRITICAL }
++};
++
+ static struct ctrl_settings ctrl_cfg __read_mostly;
+ 
+ /* Register addresses and values for different BIOS versions */
+@@ -326,6 +337,15 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
+ 		fanon = ACERHDF_MAX_FANON;
+ 	}
+ 
++	if (fanon < fanoff) {
++		pr_err("fanoff temperature (%d) is above fanon temperature (%d), clamping to %d\n",
++		       fanoff, fanon, fanon);
++		fanoff = fanon;
++	};
++
++	trips[0].temperature = fanon;
++	trips[0].hysteresis  = fanon - fanoff;
++
+ 	if (kernelmode && prev_interval != interval) {
+ 		if (interval > ACERHDF_MAX_INTERVAL) {
+ 			pr_err("interval too high, set to %d\n",
+@@ -424,43 +444,6 @@ static int acerhdf_change_mode(struct thermal_zone_device *thermal,
+ 	return 0;
+ }
+ 
+-static int acerhdf_get_trip_type(struct thermal_zone_device *thermal, int trip,
+-				 enum thermal_trip_type *type)
+-{
+-	if (trip == 0)
+-		*type = THERMAL_TRIP_ACTIVE;
+-	else if (trip == 1)
+-		*type = THERMAL_TRIP_CRITICAL;
+-	else
+-		return -EINVAL;
 -
--/**
-- * ti_thermal_is_valid_trip - check for trip index
-- * @i:	trip index
-- */
--#define ti_thermal_is_valid_trip(trip)				\
--	((trip) >= 0 && (trip) < OMAP_TRIP_NUMBER)
+-	return 0;
+-}
 -
- #ifdef CONFIG_TI_THERMAL
- int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id, char *domain);
- int ti_thermal_remove_sensor(struct ti_bandgap *bgp, int id);
+-static int acerhdf_get_trip_hyst(struct thermal_zone_device *thermal, int trip,
+-				 int *temp)
+-{
+-	if (trip != 0)
+-		return -EINVAL;
+-
+-	*temp = fanon - fanoff;
+-
+-	return 0;
+-}
+-
+-static int acerhdf_get_trip_temp(struct thermal_zone_device *thermal, int trip,
+-				 int *temp)
+-{
+-	if (trip == 0)
+-		*temp = fanon;
+-	else if (trip == 1)
+-		*temp = ACERHDF_TEMP_CRIT;
+-	else
+-		return -EINVAL;
+-
+-	return 0;
+-}
+-
+ static int acerhdf_get_crit_temp(struct thermal_zone_device *thermal,
+ 				 int *temperature)
+ {
+@@ -474,13 +457,9 @@ static struct thermal_zone_device_ops acerhdf_dev_ops = {
+ 	.unbind = acerhdf_unbind,
+ 	.get_temp = acerhdf_get_ec_temp,
+ 	.change_mode = acerhdf_change_mode,
+-	.get_trip_type = acerhdf_get_trip_type,
+-	.get_trip_hyst = acerhdf_get_trip_hyst,
+-	.get_trip_temp = acerhdf_get_trip_temp,
+ 	.get_crit_temp = acerhdf_get_crit_temp,
+ };
+ 
+-
+ /*
+  * cooling device callback functions
+  * get maximal fan cooling state
+@@ -710,10 +689,10 @@ static int __init acerhdf_register_thermal(void)
+ 	if (IS_ERR(cl_dev))
+ 		return -EINVAL;
+ 
+-	thz_dev = thermal_zone_device_register("acerhdf", 2, 0, NULL,
+-					      &acerhdf_dev_ops,
+-					      &acerhdf_zone_params, 0,
+-					      (kernelmode) ? interval*1000 : 0);
++	thz_dev = thermal_zone_device_register_with_trips("acerhdf", trips, ARRAY_SIZE(trips),
++							  0, NULL, &acerhdf_dev_ops,
++							  &acerhdf_zone_params, 0,
++							  (kernelmode) ? interval*1000 : 0);
+ 	if (IS_ERR(thz_dev))
+ 		return -EINVAL;
+ 
 -- 
 2.34.1
 

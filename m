@@ -2,139 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197BF58DC2E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5D458DC29
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245165AbiHIQfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S245102AbiHIQfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245106AbiHIQfE (ORCPT
+        with ESMTP id S245053AbiHIQez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:35:04 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648BB20BD1;
-        Tue,  9 Aug 2022 09:35:03 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 246EE3200918;
-        Tue,  9 Aug 2022 12:35:02 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 09 Aug 2022 12:35:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1660062901; x=1660149301; bh=nL
-        ro8cQBeWjBQVLKe9zdq8YjGojgw6Hz8KTza5GUtTo=; b=Fx8mxLmse48CzD012y
-        Ru/EmnZJwWb8wd5VtWnckZFWzfZUpXaGHj5xHY6uUT22zfbyXYFbU84pwdHWG50l
-        KPM67Dcs+9sAIYWEr5+kwC2RW2G1acbUDhSY4jftAxhoFsR2pzdqsZtyNXqQ/LHK
-        Tnb9RfIqBpUH2wTx3N4w6hqAqnM+7KJHQotwxWKtu1cJOffH6p8SAZfJ6FxgH8In
-        9BkXoiCIuFSGDyBquKXaatKQd4jy29IlwFSRFyNt2+kU4cR3iIaJK3hHPJU3V7SI
-        sWKcMtsEHbSnY/NBoclWXb+HbmrjxBWmEYx/PtAzSaSofd8EyhZSABZpUWpYttbi
-        qZdQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660062901; x=1660149301; bh=nLro8cQBeWjBQ
-        VLKe9zdq8YjGojgw6Hz8KTza5GUtTo=; b=uZETU2Hp+WkSx6Q5CWBJyoB7Jf40Q
-        hMcKPTdx3rqDEuLfULPLXkWqdPRQP7xV3mo9W5ciDkWWaUVI7B7s5Yqq98o9j7fs
-        tPwh718GKdU5Dus8JUxplbldn4DONLOBrbY73hRH52EGb8RRkc8He0HbSSOKbl34
-        lwrw6ZZrfzhGcJU7MCHGA8piDrlgUZcImTYsYxC1/iBSN5YcqreRfoCVB0YIIgrb
-        HPWqbwXrYYeYC6EPwH1nu863vEnayc4Gm0vm6m1JQwMeUN78/dtWu7e14EhvW45m
-        Xwhov4sRYhKNLQtgI4/A6LfPi6ZGRl6D1T0jsCkc6ADyN2CV2gKx3RB6g==
-X-ME-Sender: <xms:tYzyYjL12iOXo_GWyb5Nr0dGkcEHJ83BjYh93iOmKqzUFHi6riu-bw>
-    <xme:tYzyYnJuk6q3YA_97yq1-JTTT21hTdeVfgvEteflp2o8EuMHmHHOKAmeF_BQoShL2
-    4ay51E3FLCvUoqQXA>
-X-ME-Received: <xmr:tYzyYrvKeLrsd4TNDMVeXBAbN_mvc4OQ6YjiD7rAWTKQz7Y4pZQXZwJzXCgRDDjsINM_K8qEuys>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddguddtfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
-    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
-    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduie
-    ekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:tYzyYsa_2T4aGwqiaeo4TqPtDeh3sT9DepcTNahNsbEaZG4QutxthA>
-    <xmx:tYzyYqZPzh9qzjlIxPrP0Lqybxgp2d63n_90vn2PRCALNMs-ZiOMZw>
-    <xmx:tYzyYgCqVciMj4LZV9dPsx2WBVEQy5yWFeTjaiOG8oh8ApqfSZhkIg>
-    <xmx:tYzyYhwGZjDJEY_WuQCnB9NHQi6acUl9fNwpZCb-3EuGW0BhXzhhdg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 9 Aug 2022 12:35:00 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, memxor@gmail.com
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add connmark read test
-Date:   Tue,  9 Aug 2022 10:34:42 -0600
-Message-Id: <6436220efacfa99f343ffc451e3d5dc8b7f31f05.1660062725.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <cover.1660062725.git.dxu@dxuuu.xyz>
-References: <cover.1660062725.git.dxu@dxuuu.xyz>
+        Tue, 9 Aug 2022 12:34:55 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EE820BCD
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:34:54 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10e615a36b0so14607772fac.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 09:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc;
+        bh=6LR5d866oe6PIinAHHUItmicfDWEx4Jz1iksYtzFN5g=;
+        b=Evi/hpBZLqwm0d4VhPxhjrQrCNOjsJcpxTkjJTmb0ttychMFqGRQziKhQC9RbzzZDB
+         M+YLvlTz2Ue1ZF4Lc7qvMYfzhXY+600SSD+Myx7hqkozF7FAP+n6/XNFexcrK+rBw/jg
+         aui7glwMycfA6XXUO/TfRydb5c+7229tbR0hc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
+        bh=6LR5d866oe6PIinAHHUItmicfDWEx4Jz1iksYtzFN5g=;
+        b=ts7vrc9vdhQdbPkouFZ8gAXoOf40xeeN07ho4RZkF5Wz3Nery3y+nAxhdZzTLrkpOT
+         S0q+gaMuiEEe3juNMIBplgg5mLu3SA148U6nmOKxFbr9GhEtEPVqi1FPYsct9BN+ifLH
+         bnPpwUcGrNCLNiBp4I7hkEmQlHALQqi35YYR9KSeXDuRSiHTYAHPQE6gF9i/tzKiBrkJ
+         KFiKqqJg2wX0Y9sOEsxdTBi3UKfUxPR783Bx4XCPkV1LhegacbUuuqdMADtus84xTWIt
+         eCjt7ZCIFbHwt8fOn4y1e4d9CmRRqCRfYiaT/sA6iAYEOg8Ipti1ek57hp2MxmrxFhhw
+         /8pw==
+X-Gm-Message-State: ACgBeo3mGdkzQUlBqzo5HVemq/yVap0HChAuCCTSlFFoCYFnjFjsrYEE
+        SulGJNI6fK3e4kUmj8MqWl7WTqbTPTzuPfnxAlBc0g==
+X-Google-Smtp-Source: AA6agR58hPo6lYtBAKK8AafaLO/foW5eZ1t7LMTpy1FreZHLUbpm/8q7BOV42H1KXun+0aqIgnswlGR0XzFLk0n4pfc=
+X-Received: by 2002:a05:6870:9a17:b0:e9:3d1:f91a with SMTP id
+ fo23-20020a0568709a1700b000e903d1f91amr10876240oab.44.1660062893804; Tue, 09
+ Aug 2022 09:34:53 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 9 Aug 2022 11:34:53 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1660026909-7365-3-git-send-email-quic_c_skakit@quicinc.com>
+References: <1660026909-7365-1-git-send-email-quic_c_skakit@quicinc.com> <1660026909-7365-3-git-send-email-quic_c_skakit@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 9 Aug 2022 11:34:53 -0500
+Message-ID: <CAE-0n50BqexcwfFtFL3ebVfyZ4rqh6HU05anLxt9BD5zYf17uQ@mail.gmail.com>
+Subject: Re: [PATCH V4 2/3] arm64: dts: qcom: sc7280: Update lpassaudio clock
+ controller for resets
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_tdas@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test that the prog can read from the connection mark. This test is nice
-because it ensures progs can interact with netfilter subsystem
-correctly.
+Quoting Satya Priya (2022-08-08 23:35:08)
+> From: Taniya Das <quic_tdas@quicinc.com>
+>
+> The lpass audio supports TX/RX/WSA block resets.
+>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> ---
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/testing/selftests/bpf/prog_tests/bpf_nf.c | 3 ++-
- tools/testing/selftests/bpf/progs/test_bpf_nf.c | 3 +++
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-index 317978cac029..7232f6dcd252 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-@@ -44,7 +44,7 @@ static int connect_to_server(int srv_fd)
- 
- static void test_bpf_nf_ct(int mode)
- {
--	const char *iptables = "iptables -t raw %s PREROUTING -j CT";
-+	const char *iptables = "iptables -t raw %s PREROUTING -j CONNMARK --set-mark 42/0";
- 	int srv_fd = -1, client_fd = -1, srv_client_fd = -1;
- 	struct sockaddr_in peer_addr = {};
- 	struct test_bpf_nf *skel;
-@@ -114,6 +114,7 @@ static void test_bpf_nf_ct(int mode)
- 	/* expected status is IPS_SEEN_REPLY */
- 	ASSERT_EQ(skel->bss->test_status, 2, "Test for ct status update ");
- 	ASSERT_EQ(skel->data->test_exist_lookup, 0, "Test existing connection lookup");
-+	ASSERT_EQ(skel->bss->test_exist_lookup_mark, 43, "Test existing connection lookup ctmark");
- end:
- 	if (srv_client_fd != -1)
- 		close(srv_client_fd);
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 84e0fd479794..2722441850cc 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -28,6 +28,7 @@ __be16 sport = 0;
- __be32 daddr = 0;
- __be16 dport = 0;
- int test_exist_lookup = -ENOENT;
-+u32 test_exist_lookup_mark = 0;
- 
- struct nf_conn;
- 
-@@ -174,6 +175,8 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 		       sizeof(opts_def));
- 	if (ct) {
- 		test_exist_lookup = 0;
-+		if (ct->mark == 42)
-+			test_exist_lookup_mark = 43;
- 		bpf_ct_release(ct);
- 	} else {
- 		test_exist_lookup = opts_def.error;
--- 
-2.37.1
-
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

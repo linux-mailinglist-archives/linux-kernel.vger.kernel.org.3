@@ -2,81 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11DA58D3A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD88D58D3AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236842AbiHIGU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        id S236963AbiHIGXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 02:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236727AbiHIGU0 (ORCPT
+        with ESMTP id S236251AbiHIGXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:20:26 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECDB1EEC1
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 23:20:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=guorui.yu@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VLommuG_1660026017;
-Received: from 30.227.65.6(mailfrom:GuoRui.Yu@linux.alibaba.com fp:SMTPD_---0VLommuG_1660026017)
-          by smtp.aliyun-inc.com;
-          Tue, 09 Aug 2022 14:20:18 +0800
-Message-ID: <a69faebb-11e8-b386-d591-dbd08330b008@linux.alibaba.com>
-Date:   Tue, 9 Aug 2022 14:20:16 +0800
+        Tue, 9 Aug 2022 02:23:21 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 721801FCC8;
+        Mon,  8 Aug 2022 23:23:19 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.48:50634.2011200144
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-10.133.8.199 (unknown [172.18.0.48])
+        by chinatelecom.cn (HERMES) with SMTP id 1F5EF2800B9;
+        Tue,  9 Aug 2022 14:23:09 +0800 (CST)
+X-189-SAVE-TO-SEND: +sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.48])
+        by app0024 with ESMTP id 1e91304342df415f95cdfdc294bf4188 for j.vosburgh@gmail.com;
+        Tue, 09 Aug 2022 14:23:15 CST
+X-Transaction-ID: 1e91304342df415f95cdfdc294bf4188
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.48
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
+To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        razor@blackwall.org, huyd12@chinatelecom.cn,
+        sunshouxin@chinatelecom.cn
+Subject: [PATCH v2] net:bonding:support balance-alb interface with vlan to bridge
+Date:   Mon,  8 Aug 2022 23:21:03 -0700
+Message-Id: <20220809062103.31213-1-sunshouxin@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-To:     dave.hansen@intel.com
-Cc:     ak@linux.intel.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, isaku.yamahata@gmail.com, jun.nakajima@intel.com,
-        kai.huang@intel.com, khalid.elmously@canonical.com,
-        kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org,
-        marcelo.cerri@canonical.com, mingo@redhat.com,
-        philip.cox@canonical.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, tglx@linutronix.de,
-        tim.gardner@canonical.com, tony.luck@intel.com, wander@redhat.com,
-        x86@kernel.org
-References: <7c09d15b-40bc-c6a0-3282-a94e9d9c36be@intel.com>
-Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
-From:   Guorui Yu <GuoRui.Yu@linux.alibaba.com>
-In-Reply-To: <7c09d15b-40bc-c6a0-3282-a94e9d9c36be@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To my opinion, virtio-vsock is a wonderful way to achieve the 
-comunication between the host and the guest under traditional scenario.
+In my test, balance-alb bonding with two slaves eth0 and eth1,
+and then Bond0.150 is created with vlan id attached bond0.
+After adding bond0.150 into one linux bridge, I noted that Bond0,
+bond0.150 and  bridge were assigned to the same MAC as eth0.
+Once bond0.150 receives a packet whose dest IP is bridge's
+and dest MAC is eth1's, the linux bridge will not match
+eth1's MAC entry in FDB, and not handle it as expected.
+The patch fix the issue, and diagram as below:
 
-But from secuirty perspective, virtio-vsock itself may involve too much 
-of components, which may lead to considerable attack surfaces. In order 
-for virtio to work properly, the guest must maintain several vrings 
-placed in shared memory, which in turn depends on swiotlb in current 
-codebase. As this flow is NOT designed for confidential scenario, there 
-are some on-going/existing works on virtio hardening [1] [2] [3].
+eth1(mac:eth1_mac)--bond0(balance-alb,mac:eth0_mac)--eth0(mac:eth0_mac)
+                      |
+                   bond0.150(mac:eth0_mac)
+                      |
+                   bridge(ip:br_ip, mac:eth0_mac)--other port
 
- > Do we *REALLY* need specific driver functionality for this?  For
- > instance, is there no existing virtio device that can send blobs back
- > and forth?
+Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+---
 
-And we may indeed have use cases where virtio is not used at all, such 
-as when we consider Intel-TDX/AMD-SNP protected VMs as a SGX enclave 
-replacement. In such use cases, end users may expect a smaller 
-dependency on the GetQuote interface. It doesn't seem natural that the 
-GetQuote interface cannot be used because virtio-vsock is disabled (via 
-kernel compile options or the upcoming device-filter), since GetQuote 
-doesn't inherently depend on it.
+changelog:
+v1->v2:
+  -declare variabls in reverse xmas tree order
+  -delete {}
+  -add explanation in commit message
+---
+ drivers/net/bonding/bond_alb.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thanks,
-Guorui
+diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+index 007d43e46dcb..60cb9a0225aa 100644
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -653,6 +653,7 @@ static struct slave *rlb_choose_channel(struct sk_buff *skb,
+ static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
+ {
+ 	struct slave *tx_slave = NULL;
++	struct net_device *dev;
+ 	struct arp_pkt *arp;
+ 
+ 	if (!pskb_network_may_pull(skb, sizeof(*arp)))
+@@ -665,6 +666,12 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
+ 	if (!bond_slave_has_mac_rx(bond, arp->mac_src))
+ 		return NULL;
+ 
++	dev = ip_dev_find(dev_net(bond->dev), arp->ip_src);
++	if (dev) {
++		if (netif_is_bridge_master(dev))
++			return NULL;
++	}
++
+ 	if (arp->op_code == htons(ARPOP_REPLY)) {
+ 		/* the arp must be sent on the selected rx channel */
+ 		tx_slave = rlb_choose_channel(skb, bond, arp);
+-- 
+2.27.0
 
-[1] 
-https://lore.kernel.org/lkml/20210603004133.4079390-1-ak@linux.intel.com/
-[2] https://lore.kernel.org/lkml/20211012065227.9953-1-jasowang@redhat.com/
-[3] 
-https://lore.kernel.org/linux-iommu/d2ae0b1d-332b-42a1-87bf-7da2b749cac2@sect.tu-berlin.de/

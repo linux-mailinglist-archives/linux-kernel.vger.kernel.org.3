@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F6758DECD
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6A258DEA0
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343903AbiHISXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
+        id S245697AbiHISUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346913AbiHISVn (ORCPT
+        with ESMTP id S1346576AbiHISRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:21:43 -0400
+        Tue, 9 Aug 2022 14:17:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFFD30F78;
-        Tue,  9 Aug 2022 11:08:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191E927FD2;
+        Tue,  9 Aug 2022 11:06:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 914B9B81977;
-        Tue,  9 Aug 2022 18:07:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D469AC4347C;
-        Tue,  9 Aug 2022 18:07:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3512EB817C2;
+        Tue,  9 Aug 2022 18:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A981C433D7;
+        Tue,  9 Aug 2022 18:06:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068429;
-        bh=cAL7cSlopyAfoe9ePy3AVZXWDpqa/7WVl3RSZd8S3bI=;
+        s=korg; t=1660068373;
+        bh=Taysnb1prxfCv9T/91n/QGNd8Cyr03FyNjTTbZNsz2Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OL6pi+cxDpQiTWaTe9bg+6LAGKo2+1x6BA6L1nu6QJc//8SKMFZ0xRL9XN7v9joOj
-         weuqS1xEgc2m6wA8EnAlYhTIUCS3GYzvM5AK4y+XD94n+cWcArw/JF646YcWdUZSvd
-         BYmPWOIAwt52IhJMaf9sp/n83vNQDm77ll0864eU=
+        b=eKCFs+93KJl+uiowDDnTTyoBW3QeO42ChJl9TEFiByIl8ERVLklMAMFSU4iRkURUD
+         77ekejkgZImv1bXUZ03alQnL7PrEJP6weM4/MJeWgwFq5E1Rxa3H1IPsPAllMVJ8OR
+         K/OoxhMgMpkjOP5JL41Ku+qwIOON5S3XodLokQd4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Klochkov <kdmitry556@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 16/35] tools/kvm_stat: fix display of error when multiple processes are found
-Date:   Tue,  9 Aug 2022 20:00:45 +0200
-Message-Id: <20220809175515.646168498@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: [PATCH 5.15 21/30] dt-bindings: bluetooth: broadcom: Add BCM4349B1 DT binding
+Date:   Tue,  9 Aug 2022 20:00:46 +0200
+Message-Id: <20220809175515.081187045@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175515.046484486@linuxfoundation.org>
-References: <20220809175515.046484486@linuxfoundation.org>
+In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
+References: <20220809175514.276643253@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +57,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Klochkov <kdmitry556@gmail.com>
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-[ Upstream commit 933b5f9f98da29af646b51b36a0753692908ef64 ]
+commit 88b65887aa1b76cd8649a97824fb9904c1d79254 upstream.
 
-Instead of printing an error message, kvm_stat script fails when we
-restrict statistics to a guest by its name and there are multiple guests
-with such name:
+The BCM4349B1, aka CYW/BCM89359, is a WiFi+BT chip and its Bluetooth
+portion can be controlled over serial.
+Extend the binding with its DT compatible.
 
-  # kvm_stat -g my_vm
-  Traceback (most recent call last):
-    File "/usr/bin/kvm_stat", line 1819, in <module>
-      main()
-    File "/usr/bin/kvm_stat", line 1779, in main
-      options = get_options()
-    File "/usr/bin/kvm_stat", line 1718, in get_options
-      options = argparser.parse_args()
-    File "/usr/lib64/python3.10/argparse.py", line 1825, in parse_args
-      args, argv = self.parse_known_args(args, namespace)
-    File "/usr/lib64/python3.10/argparse.py", line 1858, in parse_known_args
-      namespace, args = self._parse_known_args(args, namespace)
-    File "/usr/lib64/python3.10/argparse.py", line 2067, in _parse_known_args
-      start_index = consume_optional(start_index)
-    File "/usr/lib64/python3.10/argparse.py", line 2007, in consume_optional
-      take_action(action, args, option_string)
-    File "/usr/lib64/python3.10/argparse.py", line 1935, in take_action
-      action(self, namespace, argument_values, option_string)
-    File "/usr/bin/kvm_stat", line 1649, in __call__
-      ' to specify the desired pid'.format(" ".join(pids)))
-  TypeError: sequence item 0: expected str instance, int found
-
-To avoid this, it's needed to convert pids int values to strings before
-pass them to join().
-
-Signed-off-by: Dmitry Klochkov <kdmitry556@gmail.com>
-Message-Id: <20220614121141.160689-1-kdmitry556@gmail.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/kvm/kvm_stat/kvm_stat | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/kvm/kvm_stat/kvm_stat b/tools/kvm/kvm_stat/kvm_stat
-index 5a5bd74f55bd..9c366b3a676d 100755
---- a/tools/kvm/kvm_stat/kvm_stat
-+++ b/tools/kvm/kvm_stat/kvm_stat
-@@ -1646,7 +1646,8 @@ Press any other key to refresh statistics immediately.
-                          .format(values))
-             if len(pids) > 1:
-                 sys.exit('Error: Multiple processes found (pids: {}). Use "-p"'
--                         ' to specify the desired pid'.format(" ".join(pids)))
-+                         ' to specify the desired pid'
-+                         .format(" ".join(map(str, pids))))
-             namespace.pid = pids[0]
+--- a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
++++ b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
+@@ -23,6 +23,7 @@ properties:
+       - brcm,bcm4345c5
+       - brcm,bcm43540-bt
+       - brcm,bcm4335a0
++      - brcm,bcm4349-bt
  
-     argparser = argparse.ArgumentParser(description=description_text,
--- 
-2.35.1
-
+   shutdown-gpios:
+     maxItems: 1
 
 

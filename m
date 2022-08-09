@@ -2,229 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0D858DAE4
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E4058DAE8
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244776AbiHIPP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 11:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S244822AbiHIPQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 11:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244779AbiHIPPx (ORCPT
+        with ESMTP id S244796AbiHIPQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 11:15:53 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6182C2DFB
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 08:15:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nty756Dtj0uzrYGQAM8gRwxsyCSZdE4izDro+X8kO0z8bK/Rz9GSZyW/thz09qMl5CS0E28lAyIYzsgubicr+v70Gmd+kRiOH8ZN0nY5GTCV7Zg5LWSpvQ4oO7ZekHANfwooF9utM0+oWDixMKvGkzgg8KpIyLtLiTEXbDfCFhOc+gYpixs997pJI8i6dDR1dahUSy2aDYfP9HDLbuF849ckviAzxzTmzX51h+yEMR6IhVndsaRgUR39TuuNryjVnCuD28Bunuthqq94T4fMSGeO3j7W8hylHdA4lu1DkqcaAMuVlIj+zOyrczNIi/RfFPsutMTG2hra+vSkCqczUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rXMYtzM1H31gYJj1jUfvS6pNEbaxhUUI+M5PX8MAlzM=;
- b=R5ljmB1ZRPu4uacZ55hjEX9kcSQO2fpXUkIKYIEdzBTeebhn7s7mnAWzoR3Jfsno0xHINoi2NVu0hQ6NsgVkJFMNAuxTE+TPNyUR8pAZfcehcfcsyskIwgSSLMBIUwasWruIJZy6+iOeoHG2lI8xKACTRfdP99QYloQ8fzzJ5LaKN807rq7iLY8nUfSyVvhL1SUeSjgoInSWoqHkTGFLYW84vbJyPar7JHPx6t8yeGxd1KVAQbXIk4d59D6YAfY5xbxsxJOd3yY+ZaVSxwQuzom2gyMrij5OtFDLUBu5j9HTHV2AZT3KYe1ZzC9Mioxp8UepsIUPh534vVP1q85r/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rXMYtzM1H31gYJj1jUfvS6pNEbaxhUUI+M5PX8MAlzM=;
- b=ytz8iBp4vQ+3us6WyIZkm3oo1BczSyi7JOi5tqCqWpfC9799Fn0L3uNU9sPzA81RE8IWlRHjFS7pCH07bAxn712bMv5kZ5hLN9CuY/UBo6AaDYcieAwo9MkG4p8JbgLx5GgTok0Ws/oS8NXOB5eqM3ZHtsjlFgsZA/4uO3aBQB8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- DS7PR12MB6024.namprd12.prod.outlook.com (2603:10b6:8:84::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5504.19; Tue, 9 Aug 2022 15:15:48 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::b44e:8a66:63eb:e8ee]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::b44e:8a66:63eb:e8ee%8]) with mapi id 15.20.5525.010; Tue, 9 Aug 2022
- 15:15:48 +0000
-Message-ID: <b6e10f4a-6834-fccb-0cba-0990dda37a76@amd.com>
-Date:   Tue, 9 Aug 2022 11:15:55 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/3] drm/dp_mst: add passthrough_aux to struct
- drm_dp_mst_port
-Content-Language: en-US
-To:     Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        hersenxs.wu@amd.com, Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Claudio Suarez <cssk@net-c.es>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        Roman Li <Roman.Li@amd.com>, Ian Chen <ian.chen@amd.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Imre Deak <imre.deak@intel.com>,
-        David Zhang <dingchen.zhang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20220805211317.176672-1-hamza.mahfooz@amd.com>
- <8db8a726d1aac25b3590497db9cbdcc3fe161227.camel@redhat.com>
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <8db8a726d1aac25b3590497db9cbdcc3fe161227.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR03CA0037.namprd03.prod.outlook.com
- (2603:10b6:208:32d::12) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Tue, 9 Aug 2022 11:16:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631189584;
+        Tue,  9 Aug 2022 08:16:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2FE76123F;
+        Tue,  9 Aug 2022 15:16:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6531FC43470;
+        Tue,  9 Aug 2022 15:16:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660058191;
+        bh=ZZmpyVI8I1kh68ShHGKxQCHeZ2REZdHoKN5fbFNYOdg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PQWHy2SPcL7dgEHL1Yz1o8922DtlC98S4FT1To6tnhTmgJcW5pnZeSvxWsMvFUWKa
+         VFlLzsGD5okxtWhWZb5siF4e2Ntd6x+vJE0TorEosvTe+UeHpdQ9YQA45qfcSZ2H2c
+         cTDUJbkZkMI5h4sDRTr6O6uXvd2ilWcxRdYMEZ6NJOz5qTJlif/xuJXq2QaO6lQZar
+         ZbdWJ9FJz5CK31J+Rg2KsVliQv8GgymIucXTL41ML18mLikYj0rjMW/31IMAq/ptQz
+         eZ5fS/DVJwVPyn0i5P0KOWerdHw9HbdmMREV42U0izpLf5azJdum+K4m8xG67oXNJu
+         DhONLeT3LvBag==
+Received: by mail-ua1-f51.google.com with SMTP id cd25so2286411uab.8;
+        Tue, 09 Aug 2022 08:16:31 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1M1jz9ItpK8Bienao7WwLN2msTv3XUSg0NMyY9WF2JzA4V/8SF
+        HxX5jqpE8fkGhoPbQoDuGrMKgCaUNKhUflcY968=
+X-Google-Smtp-Source: AA6agR5tysY7A38f+hqoTwC2UgCpgcNByDx0vc3dIW3Es6en7Kl3+5Tq4HNOoek5iaHSVWLrX5nhfKrei66pqd5pvrw=
+X-Received: by 2002:ab0:6716:0:b0:38c:cdcd:1556 with SMTP id
+ q22-20020ab06716000000b0038ccdcd1556mr3422553uam.63.1660058190333; Tue, 09
+ Aug 2022 08:16:30 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 71017d50-40c4-4ff1-2bf8-08da7a1a0a14
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6024:EE_
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lzm7yjvWfLjke6Hr06S5V5UdaBB8Ckx7NKPQ67s4vqxuo0+v8ZjbpooOq/H9sTOx2R8gxoLXnP60J+ywDuhbqpfs/3hPTkFVmyeymd/gAL/wnFfHrgFp2uz+4FJbmt6/zRLzCEn/irEMyq8WVFBJcYOxRimsjY1/3mEUZkMOcHjFYsZCSTqaSNOVhdAz3RzDM9ttYaH+cdAok2xupkTDgPgNJay0KpXUUCk3o6BItlX7aHlhuPpM3fHMOlHQZ8XlF0SrObeeG2Pkr2eFQOsbPYwIn3NvASEEhlyg7YFriCVoeR0o7uc6QsZ7JxnYljP3Nu2KA8hrRMcyKcGgJOwGrL2dGXjgLfIA4ysVqaQ+S0UxLPdVnAuhXJj0Ez9k8XLZWWcMLXtOwYWRbinzv+/5Jsu56O9HovPgAQWsewe0F/92O4E3pv4/aj9RMNucEH0jDlj3m1p9nCXClsXhOajxpnL23ASEOVeKaIEQblKeNVb5rXaUAp2YFvjOWm0gJVARs8KySPdfJprbXdlAyN3Hw4K0vcrod8LczdA6vTVhOJ81tF43nY/SBeyWqNYB3f4/FYvwv2v8nXH1NJUJrX7ftC59MV7ErT6s+J6UHYBF89APDaIP6pUQ6wOcHt6fv+wcOSllzquuM56QmYAS1dxRlkG46iM8dtk7dCrLeOMjVmgmoDATStesiqx2/Nd1JUYuJ1NU///z2RA7Jy2M+KE5q52MCDkZKbkEjTy6uPdejpZS5dxrMmszuxHN96URpsbVvxtcyAvWcQNhjn78akOU46hX+zOUO5anPk0fMWT+sSnWWDB0u4xuulXYzoDk/K/hk8AccTp8unj8znuFBFJUcQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(366004)(376002)(136003)(41300700001)(36756003)(31686004)(2616005)(6506007)(6666004)(8676002)(186003)(2906002)(26005)(6512007)(83380400001)(53546011)(44832011)(66476007)(54906003)(38100700002)(6486002)(478600001)(8936002)(316002)(7416002)(5660300002)(66556008)(86362001)(31696002)(4326008)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VVRHZExKRzNsbUxrRGdxbjRNV1Rub0dHc25uTW9GY3k5T0tXWDUzSVZ6MUh0?=
- =?utf-8?B?R25ndlh6S01iZUM1VGNLaW1zdnRSSm1OWk43dnl0Z1R4NWcrTTk2SW85NlA4?=
- =?utf-8?B?dTZFY2VGd05icU50UmxMdUM2U3BkbHNMYmk3ck95dXkycFI3NVBEQWdlSkdj?=
- =?utf-8?B?aHRJWjVsK2o4ZW1DSlpQU01KUEdHaDFERGxNYThSUExjR3RUSTRXVS9OZ0c5?=
- =?utf-8?B?ZlRlMDdJakp0WkZlbjhCbXoyM2QybWp6WDQ4b3NpOUIvWWRJdFBMSnUyQjQz?=
- =?utf-8?B?Zkk0YmhPRVp1cit4cVZhWG1vK2xoTExmVjJIbnk3cURINDNXYU9vQVltbVRB?=
- =?utf-8?B?MUVROUJKQnpoREJGOW9wUlBvK2lOQWVFS3BlRmE2a3AvZm9mdzFoa3Z6Mnoz?=
- =?utf-8?B?d3J4RXlFN1lEbnl2SzBjTll1TG9QdVZKUTlQeStQSWRyNWs0K1A0Qm9lZm9O?=
- =?utf-8?B?cU0zdlRCVjhqNFdPbDM5dys0UXNKYytCN1VGMVVYTmZ0K24rVnZyN3lrYjhZ?=
- =?utf-8?B?TGR5K1BvWXU0OHErY2Z5TFlJQzFYNW1tYmxHVU1HdkUyZ0xYKy96OWdFSXhZ?=
- =?utf-8?B?VDJsZGJIN1dESUovOEZYMUJTTTNuUU9ZRGtYOGtkV2VUSnl0b1Q4QWE2UEJR?=
- =?utf-8?B?NGQxQW85ckFsM1dLOVZ4K1VLYXZjYUZJQzZkRTNDTEdQMW1yQTN1TmN4bCtI?=
- =?utf-8?B?SysvR3BFbTlucWx4dUZ2a2wxb1NwUUt0aWROQ2xCcTNvNG4wS2g5SERPWVlR?=
- =?utf-8?B?Mkh2NE9CZVJwR3lsNjRzem96RFdxNjFqQ3RQS0VodlJ1elJ6YmdwM3AyV0Uw?=
- =?utf-8?B?b2RRTU4zTUl0dnU0bkkrd1dmM2psWmFHWCtsVHBmYUJwd1RBbXhqWkpxUzhX?=
- =?utf-8?B?a3hxWTVvWlRMU3JCSmhOcDFOWmpzSEl6RGptYW5wZWFBTTlnNjhiK0gwZnYz?=
- =?utf-8?B?TTdkZ0kvVGlseW9jbE5ONHovLzcyeWx2cUhhd2hmVURyNEFVWURiRUJzYWRF?=
- =?utf-8?B?eFpObkxOM2RPY0lGWjBzcFZaNlcrdWtDUytVTWFOL1pRVWZIbWRGRlFaSUts?=
- =?utf-8?B?M1dYSmJBZUVIczdMQndmWjcrcGFDTm82UURNaUxqbm1yb0k5V3YzQkhITmQv?=
- =?utf-8?B?OTdEbzNnb0dJZDMxSzhYd2NXaDNXK3RyKzlBUDRVZ1lNMm1YVjZXdU5yOVVn?=
- =?utf-8?B?d1ExSjQzQmVtRDBOR3BqbEVTMlRaMk0xaWNKRUFNd1RjS0lzN3B2bUpQaG1h?=
- =?utf-8?B?ZU5hTno1NW1wWWQxWk1iZGNlRDVsb1NjSy8yWUJZUWRwWkhZN2REK1hNKzVy?=
- =?utf-8?B?KzNOVUpUdlJHdktSNCtFOEFMQzRwVkd5Yk1veW5rY05nK2ZCVU9JTzRLUGh6?=
- =?utf-8?B?TEZYUEplL0tGUm1GbUxQWEd5TXExMG9JOVc1U2RtcGgwS0Faa1NKSEdHakhQ?=
- =?utf-8?B?NDJka05OdlFDWjd6M2VEdDZXQmxwK1dEU2gwZVZsTElVMmxUWGNscTJUOE41?=
- =?utf-8?B?VEdLbE9GdUdMcTdRVE9ON0Y3a3huLzlhTHVoTmFHYjA5R3U1NmM4SG9PUkJx?=
- =?utf-8?B?eXJybU1KWmxJdXBwR1F0eGhzNzRpdU1iYWg2VUliYndiYW44dFZydXNQaFB2?=
- =?utf-8?B?amtWTFExZFhnQlpwUjk4cnQyMXhXWG5DbUQramxCVndOMldpdnhxd3RONmhF?=
- =?utf-8?B?cVpmRGVxTDJ3ZU1VTVpjb3IzcVh5bTROZ0wxbklZN0ZjMEQxUGE5RmplaDV5?=
- =?utf-8?B?cFM3dUc3WmYzb3p0Z3JScE91bmZhOVNtU1h6dDNhSi83UGQvWlZVSHpIbXVu?=
- =?utf-8?B?Smlua0dub0FoWTllSHEvRFowYjNNd1J0Yk5kVjRGM0VmZnJ6Y01qRzh6bXlY?=
- =?utf-8?B?NlBQL0JueGVLeS9pbmJiUHJpL0V2MXVNUnZ4RVNDd04vS1lsc1ZBTlVRdTBC?=
- =?utf-8?B?Z3k1VXVjZ2NMN0tpOXlxcWM2Uml2cVZxM0tNQ1ZzZ1dpYVpOOWFkL25VeHRl?=
- =?utf-8?B?WEVKTm1LZnJpUURzVE9Ha0cyTWoweTEveWI4YjA1SktQUmR4a21nRUNZV1pm?=
- =?utf-8?B?UHNCdlFhak1ZcHdqc3M2WUxhSGl6QjJMYTNKV1V6NXVuR2ZMRXlSdEVZbmV6?=
- =?utf-8?Q?Yclhjt0o2AI2okW3WPEqro4O5?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71017d50-40c4-4ff1-2bf8-08da7a1a0a14
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 15:15:48.5357
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: J0wsoNqAjSi83Y7KEJE6IYPrloBj+DnrI3xXRvQn8y5TIdSd4rTEOBGmE9bBhli7PqU8t7SHLSZqAY/5MRU8rA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6024
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220809074522.2444672-1-chenhuacai@loongson.cn>
+ <874jylx0ad.wl-maz@kernel.org> <CAAhV-H50HERxjrmfDkSaHAVY7Q_ufpZP-e+qdZWVd=qEuQVXBg@mail.gmail.com>
+ <871qtpwwem.wl-maz@kernel.org> <CAAhV-H4ZCmenrPvzLCaZZn57NoiGpQfVGpXg42DE2JevF4Tf9w@mail.gmail.com>
+ <87y1vxvari.wl-maz@kernel.org>
+In-Reply-To: <87y1vxvari.wl-maz@kernel.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 9 Aug 2022 23:16:14 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5teVJTsYx7v68N+DStg-SM8Qvxqi75PXk=VQJyvak0XA@mail.gmail.com>
+Message-ID: <CAAhV-H5teVJTsYx7v68N+DStg-SM8Qvxqi75PXk=VQJyvak0XA@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Don't disable EIOINTC master core
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Lyude,
+Hi, Marc,
 
-On 2022-08-05 17:17, Lyude Paul wrote:
-> lgtm!
-> 
+On Tue, Aug 9, 2022 at 8:53 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Tue, 09 Aug 2022 11:39:15 +0100,
+> Huacai Chen <chenhuacai@kernel.org> wrote:
+> >
+> > Hi, Marc,
+> >
+> > On Tue, Aug 9, 2022 at 6:20 PM Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > On Tue, 09 Aug 2022 10:19:31 +0100,
+> > > Huacai Chen <chenhuacai@kernel.org> wrote:
+> > > >
+> > > > Hi, Marc,
+> > > >
+> > > > On Tue, Aug 9, 2022 at 4:56 PM Marc Zyngier <maz@kernel.org> wrote:
+> > > > >
+> > > > > On Tue, 09 Aug 2022 08:45:22 +0100,
+> > > > > Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > > > >
+> > > > > > This patch fix a CPU hotplug issue. The EIOINTC master core (the first
+> > > > > > core of an EIOINTC node) should not be disabled at runtime, since it has
+> > > > > > the responsibility of dispatching I/O interrupts.
+> > > > > >
+> > > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > > > > ---
+> > > > > >  arch/loongarch/kernel/smp.c            | 9 +++++++++
+> > > > > >  drivers/irqchip/irq-loongson-eiointc.c | 5 +++++
+> > > > > >  2 files changed, 14 insertions(+)
+> > > > > >
+> > > > > > diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> > > > > > index 09743103d9b3..54901716f8de 100644
+> > > > > > --- a/arch/loongarch/kernel/smp.c
+> > > > > > +++ b/arch/loongarch/kernel/smp.c
+> > > > > > @@ -242,9 +242,18 @@ void loongson3_smp_finish(void)
+> > > > > >
+> > > > > >  static bool io_master(int cpu)
+> > > > > >  {
+> > > > > > +     int i, node, master;
+> > > > > > +
+> > > > > >       if (cpu == 0)
+> > > > > >               return true;
+> > > > > >
+> > > > > > +     for (i = 1; i < loongson_sysconf.nr_io_pics; i++) {
+> > > > > > +             node = eiointc_get_node(i);
+> > > > > > +             master = cpu_number_map(node * CORES_PER_EIO_NODE);
+> > > > > > +             if (cpu == master)
+> > > > > > +                     return true;
+> > > > > > +     }
+> > > > > > +
+> > > > > >       return false;
+> > > > > >  }
+> > > > > >
+> > > > > > diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> > > > > > index 170dbc96c7d3..6c99a2ff95f5 100644
+> > > > > > --- a/drivers/irqchip/irq-loongson-eiointc.c
+> > > > > > +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> > > > > > @@ -56,6 +56,11 @@ static void eiointc_enable(void)
+> > > > > >       iocsr_write64(misc, LOONGARCH_IOCSR_MISC_FUNC);
+> > > > > >  }
+> > > > > >
+> > > > > > +int eiointc_get_node(int id)
+> > > > > > +{
+> > > > > > +     return eiointc_priv[id]->node;
+> > > > > > +}
+> > > > > > +
+> > > > > >  static int cpu_to_eio_node(int cpu)
+> > > > > >  {
+> > > > > >       return cpu_logical_map(cpu) / CORES_PER_EIO_NODE;
+> > > > >
+> > > > >
+> > > > > I don't understand why it has to be this complex and make any use of
+> > > > > the node number.
+> > > > >
+> > > > > As I understand it, CPU-0 in any EIOINTC block is a master. So all you
+> > > > > need to find out is whether the CPU number is a multiple of
+> > > > > CORES_PER_EIO_NODE.
+> > > > CPU-0 in any EIOINTC block may be a master, but not absolutely be a
+> > > > master to dispatch I/O interrupts. If there is no bridge under a
+> > > > EIOINTC, then this EIOINTC doesn't handle I/O interrupts, and it can
+> > > > be disabled at runtime.
+> > >
+> > > But that's not what your code is checking, is it? You're only
+> > > reporting the node number, irrespective of whether there is anything
+> > > behind the EIOINTC.
+> > The return value of eiointc_get_node() means "this eio-node has a
+> > downstream bridge, so the master core of this eio-node cannot be
+> > disabled". :)
+>
+> So what is exactly the meaning of this node? All the EIOINTCs do have
+> one (it is coming from ACPI, and taken at face value), so the node
+> really is only a proxy for the CPU numbers that are attached to it,
+> isn't it? Can you have cores without an EIOINTC?
+>
+> Now, if this is relevant to the arch code, I'd rather you keep track
+> of this directly in the arch code, because it looks really odd to peek
+> at an irqchip data structure for something that the core code should
+> have the first place.
+Emm, yes, you are right, this problem seems can be solved by only
+touching the arch code. Thanks.
 
-Any chance you can apply this to drm-misc-next?
-
-> Reviewed-by: Lyude Paul <lyude@redhat.com>
-> 
-> On Fri, 2022-08-05 at 17:13 -0400, Hamza Mahfooz wrote:
->> Currently, there is no way to identify if DSC pass-through can be
->> enabled and what aux DSC pass-through requests ought to be sent to. So,
->> add a variable to struct drm_dp_mst_port that keeps track of the
->> aforementioned information.
->>
->> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
->> ---
->> v2: define DP_DSC_PASSTHROUGH_IS_SUPPORTED
->> ---
->>   drivers/gpu/drm/display/drm_dp_mst_topology.c | 4 +++-
->>   include/drm/display/drm_dp.h                  | 1 +
->>   include/drm/display/drm_dp_mst_helper.h       | 3 +++
->>   3 files changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
->> index 67b3b9697da7..71915afd9892 100644
->> --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
->> +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
->> @@ -5921,8 +5921,10 @@ struct drm_dp_aux *drm_dp_mst_dsc_aux_for_port(struct drm_dp_mst_port *port)
->>   		/* Enpoint decompression with DP-to-DP peer device */
->>   		if ((endpoint_dsc & DP_DSC_DECOMPRESSION_IS_SUPPORTED) &&
->>   		    (endpoint_fec & DP_FEC_CAPABLE) &&
->> -		    (upstream_dsc & 0x2) /* DSC passthrough */)
->> +		    (upstream_dsc & DP_DSC_PASSTHROUGH_IS_SUPPORTED)) {
->> +			port->passthrough_aux = &immediate_upstream_port->aux;
->>   			return &port->aux;
->> +		}
->>   
->>   		/* Virtual DPCD decompression with DP-to-DP peer device */
->>   		return &immediate_upstream_port->aux;
->> diff --git a/include/drm/display/drm_dp.h b/include/drm/display/drm_dp.h
->> index 9e3aff7e68bb..4d0abe4c7ea9 100644
->> --- a/include/drm/display/drm_dp.h
->> +++ b/include/drm/display/drm_dp.h
->> @@ -239,6 +239,7 @@
->>   
->>   #define DP_DSC_SUPPORT                      0x060   /* DP 1.4 */
->>   # define DP_DSC_DECOMPRESSION_IS_SUPPORTED  (1 << 0)
->> +# define DP_DSC_PASSTHROUGH_IS_SUPPORTED    (1 << 1)
->>   
->>   #define DP_DSC_REV                          0x061
->>   # define DP_DSC_MAJOR_MASK                  (0xf << 0)
->> diff --git a/include/drm/display/drm_dp_mst_helper.h b/include/drm/display/drm_dp_mst_helper.h
->> index 10adec068b7f..4a39c95f8afd 100644
->> --- a/include/drm/display/drm_dp_mst_helper.h
->> +++ b/include/drm/display/drm_dp_mst_helper.h
->> @@ -86,6 +86,8 @@ struct drm_dp_vcpi {
->>    * @next: link to next port on this branch device
->>    * @aux: i2c aux transport to talk to device connected to this port, protected
->>    * by &drm_dp_mst_topology_mgr.base.lock.
->> + * @passthrough_aux: parent aux to which DSC pass-through requests should be
->> + * sent, only set if DSC pass-through is possible.
->>    * @parent: branch device parent of this port
->>    * @vcpi: Virtual Channel Payload info for this port.
->>    * @connector: DRM connector this port is connected to. Protected by
->> @@ -140,6 +142,7 @@ struct drm_dp_mst_port {
->>   	 */
->>   	struct drm_dp_mst_branch *mstb;
->>   	struct drm_dp_aux aux; /* i2c bus for this port? */
->> +	struct drm_dp_aux *passthrough_aux;
->>   	struct drm_dp_mst_branch *parent;
->>   
->>   	struct drm_dp_vcpi vcpi;
-> 
-
--- 
-Hamza
-
+Huacai
+>
+> It also strikes me that this patch has *zero* effect, as nothing ever
+> sets loongson_sysconf.nr_io_pics. Try this:
+>
+> diff --git a/arch/loongarch/include/asm/bootinfo.h b/arch/loongarch/include/asm/bootinfo.h
+> index 9b8d49d9e61b..13e5e5e21ffd 100644
+> --- a/arch/loongarch/include/asm/bootinfo.h
+> +++ b/arch/loongarch/include/asm/bootinfo.h
+> @@ -28,7 +28,7 @@ struct loongson_board_info {
+>  struct loongson_system_configuration {
+>         int nr_cpus;
+>         int nr_nodes;
+> -       int nr_io_pics;
+> +//     int nr_io_pics;
+>         int boot_cpu_id;
+>         int cores_per_node;
+>         int cores_per_package;
+>
+> and see that the kernel still compiles.
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

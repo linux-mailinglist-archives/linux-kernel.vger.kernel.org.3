@@ -2,104 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EA758DAA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503EF58DAB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244715AbiHIPBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 11:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
+        id S244735AbiHIPEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 11:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235991AbiHIPBS (ORCPT
+        with ESMTP id S241540AbiHIPDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 11:01:18 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E152F1A382;
-        Tue,  9 Aug 2022 08:01:17 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id z145so9759665iof.9;
-        Tue, 09 Aug 2022 08:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=7Z8Gt1kvQ2qMgFvYLX9L5Os/pwoMppPUG/zH/675HiM=;
-        b=JFvhVPx7UTePPnr+5h1qdd0uExGBu1XIZzljf2CKVBl944uYdakgNuSexevzfQy5xJ
-         pNz9YMZnA30DuJFGQEHP/5+VG8/mRg2MVDcqJDNEBT/JvoOQVNQu76BOBQ/+Fc/7eLuk
-         Utx62Z/6+5qeo2PG8U9Qhz4jMTyvANXy631UFqQpb7ATf0v2YmMmgJc22Su5HUAiKiac
-         2Yf6fIOZlmCqWhBaLDy7QFztAJNpd+QTQPyFDnQMJGUx4UT6YWuobE2sT2V6LqVhblAf
-         djdEHwmyc7jf9U560o0FCAEQ81/OxM67CD3iWQaqR8pYoKGjchIAve2CwolU58DMo9hJ
-         Hggw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=7Z8Gt1kvQ2qMgFvYLX9L5Os/pwoMppPUG/zH/675HiM=;
-        b=tQ7lBBo20UdnQ5NvqxKq/ntImrfznecSfxhmlAQfqpP607TwTQ1r9wHv3b2uCIGpI9
-         VPpixLQCVhuvKCcM8W3e4GSec3VZWQW4HXiydCMWDv5cQwMsr5qbQVjvW+3OEl+fIHPY
-         60HMaeIlUz0D8XDEouaaZxH2whfs0MCNZiPbHQP2W7r2x9dvFmSM+0rp6AzD9lVzqE5A
-         cJG9BwWhAG97aUr7VmX6dUclGtx+5lKBHjaaASWwm7n/ml31ccpXVfcaw3729v9D2h3n
-         zD07KheP7uQNtRtst9h2m7Sr6p8Y6EdcigZ6RVeaG+GzfigEMwh1wBHML+YErwC9g2Vy
-         OrCw==
-X-Gm-Message-State: ACgBeo2BPs4DCC+FDgOlbM8uDwUpwob7xtLO6jG1T2LWGMA5SbJFoQrJ
-        nILPnsMZIV0B8lWx1/mD4oBuVpgzupycQfDN3nw=
-X-Google-Smtp-Source: AA6agR4bp8FvYijrSbc8+bax4hs4cQGMD11ArEow4B4n9Lwp7iHI0dQimsqmJe2io4dmXXYOVXju9V2XDuz49nxUEK4=
-X-Received: by 2002:a05:6638:1353:b0:342:9bfb:7382 with SMTP id
- u19-20020a056638135300b003429bfb7382mr10587461jad.129.1660057277054; Tue, 09
- Aug 2022 08:01:17 -0700 (PDT)
+        Tue, 9 Aug 2022 11:03:31 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6C11A382
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 08:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660057410; x=1691593410;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JTC3IpuAIriy8fVfGALi52hLIe//Sn9i43111djg3FQ=;
+  b=C65WRH4nOHW1TooOccbC5HZ9UnS0SczZotck7xXGXWLXY6G6PbNpAgt+
+   J2c4p/e2xoIR3Zqo1EvO5kJJWNWS33vtrPZum/7d6ZzwOHAxboF+5UjHh
+   w9wZaiNNmpkhiybdn/2lCAmSIkivLZ49CNhaJnqSHunQ9pdiELAam6A0g
+   ez8eTjlwrr6HIP+2G56XpsVOcu3cGV4HOY4EvnV1SX0BAGiYS6GXrNYp3
+   qR6BS65ycDJbX5/hbLFv+0inTRsVcIZqCl3805qQKaccmV/obWW5RqQPr
+   /a2LuRxQ+qohjOTljpJmM0JvDS+4QmustJq52IdsJk65e5J3lBT5LO20S
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="290856951"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="290856951"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 08:02:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="694168703"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Aug 2022 08:02:50 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLQkr-000N0n-1Y;
+        Tue, 09 Aug 2022 15:02:49 +0000
+Date:   Tue, 9 Aug 2022 23:02:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>
+Subject: [steev:sc8280xp-next-20220808-nonworking-gpu 136/153]
+ drivers/soc/qcom/pmic_glink_altmode.c:355:27: error: too many arguments to
+ function 'devm_pmic_glink_register_client'
+Message-ID: <202208092235.yBxIFZdc-lkp@intel.com>
 MIME-Version: 1.0
-References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
-In-Reply-To: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 9 Aug 2022 08:01:04 -0700
-Message-ID: <CAF6AEGusyJAt88A18hFBz-S6An2pVpNoQP0NDk7e0tKw7inAyg@mail.gmail.com>
-Subject: Re: DMA-buf and uncached system memory
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        "Sharma, Shashank" <Shashank.Sharma@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 15, 2021 at 12:58 AM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Hi guys,
->
-> we are currently working an Freesync and direct scan out from system
-> memory on AMD APUs in A+A laptops.
->
-> On problem we stumbled over is that our display hardware needs to scan
-> out from uncached system memory and we currently don't have a way to
-> communicate that through DMA-buf.
->
-> For our specific use case at hand we are going to implement something
-> driver specific, but the question is should we have something more
-> generic for this?
+tree:   https://github.com/steev/linux sc8280xp-next-20220808-nonworking-gpu
+head:   3784291a8ef0733c6dd3b3a45e0ac2b3548e80d9
+commit: 6962dd929e7833423c7533885705d1ac203d54e5 [136/153] soc: qcom: pmic_glink: Introduce altmode support
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220809/202208092235.yBxIFZdc-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/steev/linux/commit/6962dd929e7833423c7533885705d1ac203d54e5
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev sc8280xp-next-20220808-nonworking-gpu
+        git checkout 6962dd929e7833423c7533885705d1ac203d54e5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-I'm a bit late to this party (and sorry, I didn't read the entire
-thread), but it occurs to me that dmabuf mmap_info[1] would also get
-you what you need, ie. display importing dma-buf could check whether
-the exporter is mapping cached or not, and reject the import if
-needed?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-[1] https://patchwork.freedesktop.org/patch/496069/?series=3D106847&rev=3D2
+All errors (new ones prefixed by >>):
 
-> After all the system memory access pattern is a PCIe extension and as
-> such something generic.
->
-> Regards,
-> Christian.
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+   drivers/soc/qcom/pmic_glink_altmode.c: In function 'pmic_glink_altmode_probe':
+>> drivers/soc/qcom/pmic_glink_altmode.c:355:27: error: too many arguments to function 'devm_pmic_glink_register_client'
+     355 |         altmode->client = devm_pmic_glink_register_client(dev,
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/soc/qcom/pmic_glink_altmode.c:19:
+   include/linux/soc/qcom/pmic_glink.h:23:27: note: declared here
+      23 | struct pmic_glink_client *devm_pmic_glink_register_client(struct device *dev,
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/devm_pmic_glink_register_client +355 drivers/soc/qcom/pmic_glink_altmode.c
+
+   273	
+   274	static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
+   275					    const struct auxiliary_device_id *id)
+   276	{
+   277		struct pmic_glink_altmode_port *alt_port;
+   278		struct pmic_glink_altmode *altmode;
+   279		struct typec_altmode_desc mux_desc = {};
+   280		struct fwnode_handle *fwnode;
+   281		struct device *dev = &adev->dev;
+   282		u32 port;
+   283		int ret;
+   284	
+   285		altmode = devm_kzalloc(dev, sizeof(*altmode), GFP_KERNEL);
+   286		if (!altmode)
+   287			return -ENOMEM;
+   288	
+   289		altmode->dev = dev;
+   290	
+   291		init_completion(&altmode->pan_ack);
+   292		mutex_init(&altmode->lock);
+   293	
+   294		device_for_each_child_node(dev, fwnode) {
+   295			ret = fwnode_property_read_u32(fwnode, "reg", &port);
+   296			if (ret < 0) {
+   297				dev_err(dev, "missing reg property of %pOFn\n", fwnode);
+   298				return ret;
+   299			}
+   300	
+   301			if (port >= ARRAY_SIZE(altmode->ports)) {
+   302				dev_warn(dev, "invalid connector number, ignoring\n");
+   303				continue;
+   304			}
+   305	
+   306			if (altmode->ports[port].altmode) {
+   307				dev_err(dev, "multiple connector definition for port %u\n", port);
+   308				return -EINVAL;
+   309			}
+   310	
+   311			alt_port = &altmode->ports[port];
+   312			alt_port->altmode = altmode;
+   313			alt_port->index = port;
+   314			INIT_WORK(&alt_port->work, pmic_glink_altmode_worker);
+   315	
+   316			alt_port->bridge.funcs = &pmic_glink_altmode_bridge_funcs;
+   317			alt_port->bridge.of_node = to_of_node(fwnode);
+   318			alt_port->bridge.ops = DRM_BRIDGE_OP_HPD;
+   319			alt_port->bridge.type = DRM_MODE_CONNECTOR_USB;
+   320	
+   321			ret = devm_drm_bridge_add(dev, &alt_port->bridge);
+   322			if (ret)
+   323				return ret;
+   324			dev_err(dev, "registered bridge for port%d: %pOF\n", port, alt_port->bridge.of_node);
+   325	
+   326			alt_port->dp_alt.svid = USB_TYPEC_DP_SID;
+   327			alt_port->dp_alt.mode = USB_TYPEC_DP_MODE;
+   328			alt_port->dp_alt.active = 1;
+   329	
+   330			mux_desc.svid = USB_TYPEC_DP_SID;
+   331			mux_desc.mode = USB_TYPEC_DP_MODE;
+   332			alt_port->typec_mux = fwnode_typec_mux_get(fwnode, &mux_desc);
+   333			if (IS_ERR(alt_port->typec_mux))
+   334				return dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
+   335						     "failed to acquire mode-switch for port: %d\n",
+   336						     port);
+   337	
+   338			ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_mux,
+   339						       alt_port->typec_mux);
+   340			if (ret)
+   341				return ret;
+   342	
+   343			alt_port->typec_switch = fwnode_typec_switch_get(fwnode);
+   344			if (IS_ERR(alt_port->typec_switch))
+   345				return dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
+   346						     "failed to acquire orientation-switch for port: %d\n",
+   347						     port);
+   348	
+   349			ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_switch,
+   350						       alt_port->typec_switch);
+   351			if (ret)
+   352				return ret;
+   353		}
+   354	
+ > 355		altmode->client = devm_pmic_glink_register_client(dev,
+   356								 PMIC_GLINK_OWNER_USBC_PAN,
+   357								 pmic_glink_altmode_callback,
+   358								 pmic_glink_altmode_pdr_notify,
+   359								 altmode);
+   360		if (IS_ERR(altmode->client))
+   361			return PTR_ERR(altmode->client);
+   362	
+   363		dev_set_drvdata(dev, altmode);
+   364	
+   365		dev_err(dev, "SUCCESS!\n");
+   366	
+   367		return 0;
+   368	}
+   369	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

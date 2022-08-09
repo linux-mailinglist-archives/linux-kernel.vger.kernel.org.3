@@ -2,90 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2788858DCF6
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DEF58DCFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244901AbiHIRTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 13:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
+        id S244977AbiHIRU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 13:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244508AbiHIRTJ (ORCPT
+        with ESMTP id S244508AbiHIRUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:19:09 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F78C237E9
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 10:19:08 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-10e615a36b0so14763328fac.1
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 10:19:08 -0700 (PDT)
+        Tue, 9 Aug 2022 13:20:53 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D121EED4
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 10:20:51 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id j7so15084448wrh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 10:20:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc;
-        bh=F3mQ/S2sqzZ4+KCihi4IINlKul8TP/JpqnlGqe/JBSI=;
-        b=dr8AkFIsrOarfhsiqQCVJ2rkVJD9uSzRm4fRn5TABjqY3A1bX9xdxSLbe+2J7gXd3e
-         OHIOVSv4BNs636N16RoXXA4zYBybDXNqXvV/y0PKF4GgKON0ZxvLM1wPLX8ZeqbC7nSk
-         nvr86ucZfOqIOBeqD6DIl46zifJF1jjrnpqOw=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=sHMkwp3NTmTV/xVMwqTRrDVuL8/D/PiDUhfkbp4j2rc=;
+        b=XtroOFWIeD/FFHW2xP+1bOcSThi+rmn9mJ57T/c3OIXw1gF+5WvaBOcwq5GwjKbJ0P
+         is9NMLJzP/Qo/p6/8iXdSm6+JQPrg73dE0eWaaIW2N/icGvmUlZQK2/H4X4GDDps9UOB
+         0kq14E1slsCe5YfVVjY6uPjOB4GrpTUDlQrwWUgJaDNKxrmKBjkjiR006B6RTVLHx9px
+         iXaTq1doW6zm1vb74VyQuQyCVMvCgMWzarx8FpBaq5t/tExGEd1lCi3R4Y7HwfxAAuP2
+         LJ3ziyTKqhA4Q0ROIZJcq4NReSDGBKi0O8I9c8KvH1wIZQVxtBWJydL+43Hr43sTOkog
+         fgmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=F3mQ/S2sqzZ4+KCihi4IINlKul8TP/JpqnlGqe/JBSI=;
-        b=28b0oUKlXKxzhfdaqJ40Be8hqvELQXrWN6Z2k1Nih5hPTjIyhr5H7KOBMwKX0Lhe2j
-         ET6RB5xCGFeNjRPsL6xetcBGChZH7WORPuKGOR7We0cjALXq5SxePyAYMeUXDSMg3rrq
-         uxcJg4QJV4Tlm7po9XZ3LskZWWywv2/A7GXI9YuGBf7cbwun4iEbsMedSVgz+igmfJk0
-         zLSqcB2HHElwfZOHE2Po3EYnZRGumujqZT3PfKJvGeQHtLoWgx5IAeevm7nVABZ+U8lt
-         knGVYdsdH+XbzvJRQQRfL0I6BRAYdzacRfLL9b/ikeW8Cjqrh+bs4xMUzhR/iNcDXnm7
-         mYnw==
-X-Gm-Message-State: ACgBeo0ErGZYzdvvtoiWjAcRn5GA24RnzgmNej9BSRdp1mvh4c1RUTO/
-        Imtvmv8AUw/FGzJ+r2b7gT1RSMsrKb+faFKEsYQ8PQ==
-X-Google-Smtp-Source: AA6agR6t7xII3eA5jSw3anFzFQR5Hj1055h7MGtwPPp/qxxEWwlt3cmh7elzmmt5eXXzP0Jq6J5t0shhZqzhsk1AgE4=
-X-Received: by 2002:a05:6870:9a17:b0:e9:3d1:f91a with SMTP id
- fo23-20020a0568709a1700b000e903d1f91amr10961672oab.44.1660065547740; Tue, 09
- Aug 2022 10:19:07 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 9 Aug 2022 12:19:07 -0500
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=sHMkwp3NTmTV/xVMwqTRrDVuL8/D/PiDUhfkbp4j2rc=;
+        b=qlPeMF8yDvnnRcQkAOyJ0YXvUAKO3L2gqD1cb1MvB4+GsfkvBIqNTgJQWEC8I6wjcZ
+         x3e+j6aLsuyTzpTtO1LOFLmQzxIJW6MuZOQ8NZWCOC+YYG8GHMmDQ+3r8m66A4KuxwmC
+         xVDsbm+2EhRvsno7md/AJ6jSSQNwBzR/B2WvArVpOfzQRToFw89hb7P/SwL7GCQOzIdQ
+         WHQp/QBSrh4jJI7LcO3k/XpQ7V0aE0gO1hd9HJIIE6/+Je3gxVqvEkhyxP6DWpU3skiU
+         +Wx2JzrL5AKYV+xC11fnWgS3ypNJTtulnNIaw9Bw2N5Cl4JFAkaKPJQE6sMHaaHvxc7w
+         34Hg==
+X-Gm-Message-State: ACgBeo0QElnuY2csb21PCk9s5qkk2r97PoX2APzWItEQFckiMy/KTibw
+        V8pSH4r5rOt6yAMyBhkEsDAGQA==
+X-Google-Smtp-Source: AA6agR7te7yif/yib4C7IySe6UqMjagxvMgnKemsdomvzBKdmWEkXfKrO5pAusHmStkPSJnzDSwiKw==
+X-Received: by 2002:a5d:595f:0:b0:220:619d:da07 with SMTP id e31-20020a5d595f000000b00220619dda07mr14966336wri.10.1660065650358;
+        Tue, 09 Aug 2022 10:20:50 -0700 (PDT)
+Received: from localhost.localdomain (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.googlemail.com with ESMTPSA id b3-20020a05600010c300b002206261cb6esm13915030wrx.66.2022.08.09.10.20.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 10:20:49 -0700 (PDT)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     broonie@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        narmstrong@baylibre.com,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Subject: [PATCH 0/2] spi: amlogic: meson-spicc: Use pinctrl to drive CLK line when idle
+Date:   Tue,  9 Aug 2022 19:20:15 +0200
+Message-Id: <20220809172017.215412-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-In-Reply-To: <1658910477-6494-6-git-send-email-quic_c_skakit@quicinc.com>
-References: <1658910477-6494-1-git-send-email-quic_c_skakit@quicinc.com> <1658910477-6494-6-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 9 Aug 2022 12:19:07 -0500
-Message-ID: <CAE-0n52rTakbo3=GUpJ7VPvDSi1jNiqJjXoHJ5w0HRYGvTHjNw@mail.gmail.com>
-Subject: Re: [PATCH V7 5/5] clk: qcom: lpass: Add support for resets &
- external mclk for SC7280
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <quic_tdas@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Why is linux-clk@vger.kernel.org left off this clk patch series?
+Between SPI transactions, all SPI pins are in HiZ state. When using the SS
+signal from the SPICC controller it's not an issue because when the
+transaction resumes all pins come back to the right state at the same time
+as SS.
 
-Quoting Satya Priya (2022-07-27 01:27:57)
-> From: Taniya Das <quic_tdas@quicinc.com>
->
-> The clock gating control for TX/RX/WSA core bus clocks would be required
-> to be reset(moved from hardware control) from audio core driver. Thus
-> add the support for the reset clocks.
->
-> Update the lpass_aon_cc_main_rcg_clk_src ops to park the RCG at XO after
-> disable as this clock signal is used by hardware to turn ON memories in
-> LPASS. Also add the external mclk to interface external MI2S.
->
-> Fixes: a9dd26639d05 ("clk: qcom: lpass: Add support for LPASS clock controller for SC7280")
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> ---
+The problem is when we use CS as a GPIO. In fact, between the GPIO CS
+state change and SPI pins state change from idle, you can have a missing or
+spurious clock transition.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Set a bias on the clock depending on the clock polarity requested before CS
+goes active, by passing a special "idle-low" and "idle-high" pinctrl state
+and setting the right state at a start of a message.
+
+Amjad Ouled-Ameur (2):
+  spi: dt-bindings: amlogic, meson-gx-spicc: Add pinctrl names for SPI
+    signal states
+  spi: meson-spicc: Use pinctrl to drive CLK line when idle
+
+ .../bindings/spi/amlogic,meson-gx-spicc.yaml  | 15 +++++++
+ arch/arm64/boot/dts/amlogic/meson-gxl.dtsi    | 14 +++++++
+ drivers/spi/spi-meson-spicc.c                 | 39 ++++++++++++++++++-
+ 3 files changed, 67 insertions(+), 1 deletion(-)
+
+-- 
+2.37.1
+

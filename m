@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FAF58DE65
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EFC58DE57
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245688AbiHISOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S1345521AbiHISOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343659AbiHISKV (ORCPT
+        with ESMTP id S1345254AbiHISK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:10:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E337C275DF;
-        Tue,  9 Aug 2022 11:04:09 -0700 (PDT)
+        Tue, 9 Aug 2022 14:10:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2B0275EB;
+        Tue,  9 Aug 2022 11:04:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09C99B817AE;
+        by ams.source.kernel.org (Postfix) with ESMTPS id B95E8B8171C;
+        Tue,  9 Aug 2022 18:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FCDAC4314E;
         Tue,  9 Aug 2022 18:04:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DB33C433D7;
-        Tue,  9 Aug 2022 18:04:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068247;
-        bh=EGw8WIEiQe3+4H6VPJt5IbyUhH5auYyv7OkedTdgaKI=;
+        s=korg; t=1660068250;
+        bh=ZENkNZWm12mLtait5Y7wG4VmunHF0lXznbG1QQXzbK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fP7B2W2OSbIOMC6CIn/Li392OCV/oFqPkJVER0zrcBaBJST6w8C4hi/tx3IKGdE5K
-         87yaoyEViq7bfT+ujbNgQXb9yE9yKB5AmVTW5dgR60AeCglh7zWSH/b9Ed8L3HWk0G
-         2lduNljVQpMX0pcW66VdBcgkwTJjfbVmohvttJIw=
+        b=tDmRQ0k5lWTxke87T4oLwlxlSHT2eXaaY6DLBMu2vkq15t+5XjSoZelm0cvTwujiZ
+         E1fgz1n0lLHmdiGiEuf+2JzOxc05joWKpsZ4XMVKDa5NxObVnqk3erO1mRCvh8jB36
+         JYYoDwun70p/PmavKxIgeHAAsmShXIRqNUFr1IrI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Hilda Wu <hildawu@realtek.com>,
         Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Subject: [PATCH 5.10 18/23] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x0CB8:0xC558
-Date:   Tue,  9 Aug 2022 20:00:36 +0200
-Message-Id: <20220809175513.491416100@linuxfoundation.org>
+Subject: [PATCH 5.10 19/23] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x13D3:0x3587
+Date:   Tue,  9 Aug 2022 20:00:37 +0200
+Message-Id: <20220809175513.520826783@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220809175512.853274191@linuxfoundation.org>
 References: <20220809175512.853274191@linuxfoundation.org>
@@ -56,16 +56,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hilda Wu <hildawu@realtek.com>
 
-commit 5b75ee37ebb73f58468d4cca172434324af203f1 upstream.
+commit 8f0054dd29373cd877db87751c143610561d549d upstream.
 
-Add the support ID(0x0CB8, 0xC558) to usb_device_id table for
+Add the support ID(0x13D3, 0x3587) to usb_device_id table for
 Realtek RTL8852C.
 
 The device info from /sys/kernel/debug/usb/devices as below.
 
 T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
 D:  Ver= 1.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=0cb8 ProdID=c558 Rev= 0.00
+P:  Vendor=13d3 ProdID=3587 Rev= 0.00
 S:  Manufacturer=Realtek
 S:  Product=Bluetooth Radio
 S:  SerialNumber=00e04c000001
@@ -102,11 +102,11 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/bluetooth/btusb.c
 +++ b/drivers/bluetooth/btusb.c
-@@ -404,6 +404,8 @@ static const struct usb_device_id blackl
+@@ -406,6 +406,8 @@ static const struct usb_device_id blackl
  						     BTUSB_WIDEBAND_SPEECH },
- 	{ USB_DEVICE(0x04c5, 0x1675), .driver_info = BTUSB_REALTEK |
+ 	{ USB_DEVICE(0x0cb8, 0xc558), .driver_info = BTUSB_REALTEK |
  						     BTUSB_WIDEBAND_SPEECH },
-+	{ USB_DEVICE(0x0cb8, 0xc558), .driver_info = BTUSB_REALTEK |
++	{ USB_DEVICE(0x13d3, 0x3587), .driver_info = BTUSB_REALTEK |
 +						     BTUSB_WIDEBAND_SPEECH },
  
  	/* Realtek Bluetooth devices */

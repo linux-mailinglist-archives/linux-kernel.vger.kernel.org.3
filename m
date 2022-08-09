@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D710758DC39
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9F458DC3A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245173AbiHIQhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        id S245086AbiHIQhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245186AbiHIQgq (ORCPT
+        with ESMTP id S245134AbiHIQhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:36:46 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5291D7;
-        Tue,  9 Aug 2022 09:36:45 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id n4so13160461wrp.10;
-        Tue, 09 Aug 2022 09:36:45 -0700 (PDT)
+        Tue, 9 Aug 2022 12:37:04 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC182F9
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:37:01 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id j1so14965994wrw.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 09:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=Ok5+N/ROSsdYONZgRo7NN1XD5pWHK7Ij0qh3WOIp4Hk=;
-        b=oKtlwHul5j/zPHGlStukJ7puPsBguip4EroHiSwJj69SbsyIQOpOT70cl5OMzYVAXe
-         I+HxbGGO4NqFB35SbGR5zgsEBBzKNtYkYGEe7q7bJYbZUEPvBQ1UT9KAtBEqtqK/hnaG
-         ShUgVOUKcGhnmAHCL5q2o2p+ertnx/8x7UVBbQP+7aVJ50ykQ/The/m16DuqZ1ALEuEl
-         t4Sr15Ng/WVy/KuWppQsFAa81SPVCdacWM4WxUYABmGAhmE/ren06b63cJElTfdqr+zI
-         mqCtbaYP+kd1Q/vgmINgk3RKqjKqoc+MoIMS8RTP0J+a740hCjtCDt0GtetWe4+1ZhWr
-         TBZw==
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc;
+        bh=X6MoPuBxB5LTaIpwHgwbCSWtaGD5GP/fUf8i2jb34y4=;
+        b=YYFt5Hvk/GA/aYQDThMEhnkFeG40v5eWaqD5RVCuoCI5uK/07t3E5fR6jL4qn7DEYR
+         zViLu6mr7jl7ctZbQDoa9xQZKNKqiA95aqiHa8LJP7h6escYhs0koUmPFts6RhqrXOk/
+         yN+220j0woh5fKuBdr+jklN8ZsiBtUlH7QLuY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=Ok5+N/ROSsdYONZgRo7NN1XD5pWHK7Ij0qh3WOIp4Hk=;
-        b=xHG2x1+Y320tjVjt1q19yUW/32avgNbN2tDxooOZmne0hyHw9BpqKVlx883623gPPs
-         9UgquMwEht0P411ka7LfuW4vZZy4Z+f65U1uWi9Mj+PIw33pMMSB/+R+q3XA5gITO27D
-         nBDYxmxQ8LA0u2NouFZchhadOsMNh7aM2A1TczvAxj6zCqZSaP19Qs3mCe95E4RTJ2hp
-         quAro/RJmIbmRFVX+nO3V6yv6BOu3Y4fNzrrq150Syv+F8lx+juAo5zBrDJkfE9YV3pp
-         whBas2mOPzDyi+vwKVV3Un5yuC0C+8Q4FrFcAJnm/+7iaDhhESinrK6wQsbPL1n/uaDL
-         ctOQ==
-X-Gm-Message-State: ACgBeo0gFZ7QtDZ2+ojgNuqOsLsLnF0DIx17vEZQmUyyTrZjlIkBnXGN
-        gD2qrLyB1OslDVrdlntLNyCbRFsHKrGhSA==
-X-Google-Smtp-Source: AA6agR6/nHRlqGWl2s71vXeZAAz1IiObS2iTo4xTRzVR/0nfk3Jy9qj99Lp4kxI2Gj1WaUJ27p/TBQ==
-X-Received: by 2002:adf:de0f:0:b0:21e:ead4:23f5 with SMTP id b15-20020adfde0f000000b0021eead423f5mr14580915wrm.641.1660063003709;
-        Tue, 09 Aug 2022 09:36:43 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id a7-20020a056000100700b0021f0c0c62d1sm13856980wrx.13.2022.08.09.09.36.42
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=X6MoPuBxB5LTaIpwHgwbCSWtaGD5GP/fUf8i2jb34y4=;
+        b=654PQjE5yKD6ag9dNQeQf6ccLBajTs82kkk0PTx6HkDJ+zBSUnaJnYyBen6D0EEgEO
+         zvHmpQN/eyOn/MVDQUk56Hl2KywUoiv8nuO3dlVefh8vld2QitNv/dqfkCWWDGXOoo9y
+         tJ34KbMlR5U8xFn5I37+OQfuoLrJ8hcLXJeT0ECIHI18pQkLfmPvD38SXuewgzP/U+wH
+         +2VKZ/xiGIS6dT89Pkeqgh5+2jlHWlPzUfK7QLxVF+083uUU1Mv1XibIDhLXykiO+PVK
+         KE47OgxRL544a87K1IaGyBoyvFB7AC5fUHC37Bcqap/yGFBG2BB6psl+jBhXbe8mP9XR
+         H+sg==
+X-Gm-Message-State: ACgBeo2etTEZms0YldPVK/MOpcVXDr0CD0EgsoP6F9t18M/Msvmgd587
+        z2mq/oLsamymAmSGlnpuR7pGxw==
+X-Google-Smtp-Source: AA6agR7rbtu73gmgTkuGQJU/XLaVRYmZEDfYA+1YrhcoZwGgf2aMhYhyzwlzXCnqTQoNUelc9/MxFQ==
+X-Received: by 2002:a05:6000:2ab:b0:223:6167:a213 with SMTP id l11-20020a05600002ab00b002236167a213mr4039906wry.310.1660063019958;
+        Tue, 09 Aug 2022 09:36:59 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id i204-20020a1c3bd5000000b003a536d5aa2esm9884682wma.11.2022.08.09.09.36.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 09:36:43 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH] fs/btrfs: Use atomic_try_cmpxchg in free_extent_buffer
-Date:   Tue,  9 Aug 2022 18:36:33 +0200
-Message-Id: <20220809163633.8255-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 09 Aug 2022 09:36:59 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 18:36:57 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com
+Subject: Re: [PATCH v7 2/2] drm/shmem-helper: Correct doc-comment of
+ drm_gem_shmem_get_sg_table()
+Message-ID: <YvKNKSqVlc0vwDS/@phenom.ffwll.local>
+Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>, Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com
+References: <20220630200058.1883506-1-dmitry.osipenko@collabora.com>
+ <20220630200058.1883506-3-dmitry.osipenko@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630200058.1883506-3-dmitry.osipenko@collabora.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use `atomic_try_cmpxchg(ptr, &old, new)` instead of
-`atomic_cmpxchg(ptr, old, new) == old` in free_extent_buffer. This
-has two benefits:
+On Thu, Jun 30, 2022 at 11:00:58PM +0300, Dmitry Osipenko wrote:
+> drm_gem_shmem_get_sg_table() never returns NULL on error, but a ERR_PTR.
+> Correct the doc comment which says that it returns NULL on error.
+> 
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>  drivers/gpu/drm/drm_gem_shmem_helper.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> index 904fc893c905..0b526657fbea 100644
+> --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
+> +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> @@ -663,7 +663,8 @@ EXPORT_SYMBOL(drm_gem_shmem_print_info);
+>   * drm_gem_shmem_get_pages_sgt() instead.
+>   *
+>   * Returns:
+> - * A pointer to the scatter/gather table of pinned pages or NULL on failure.
+> + * A pointer to the scatter/gather table of pinned pages or an ERR_PTR()-encoded
+> + * error code on failure.
 
-- The x86 cmpxchg instruction returns success in the ZF flag, so this
-  change saves a compare after cmpxchg, as well as a related move
-  instruction in the front of cmpxchg.
+There was a conflict here because another patch adjusted this already, but
+I fixed it up and merged this to drm-misc-next.
 
-- atomic_try_cmpxchg implicitly assigns the *ptr value to &old when
-  cmpxchg fails, enabling further code simplifications.
+Thanks, Daniel
 
-This patch has no functional change.
+>   */
+>  struct sg_table *drm_gem_shmem_get_sg_table(struct drm_gem_shmem_object *shmem)
+>  {
+> @@ -689,7 +690,8 @@ EXPORT_SYMBOL_GPL(drm_gem_shmem_get_sg_table);
+>   * drm_gem_shmem_get_sg_table() should not be directly called by drivers.
+>   *
+>   * Returns:
+> - * A pointer to the scatter/gather table of pinned pages or errno on failure.
+> + * A pointer to the scatter/gather table of pinned pages or an ERR_PTR()-encoded
+> + * error code on failure.
+>   */
+>  struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem)
+>  {
+> -- 
+> 2.36.1
+> 
 
-Cc: Chris Mason <clm@fb.com>
-Cc: Josef Bacik <josef@toxicpanda.com>
-Cc: David Sterba <dsterba@suse.com>
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
----
- fs/btrfs/extent_io.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index bfae67c593c5..15ff196cbd6d 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -6328,18 +6328,16 @@ static int release_extent_buffer(struct extent_buffer *eb)
- void free_extent_buffer(struct extent_buffer *eb)
- {
- 	int refs;
--	int old;
- 	if (!eb)
- 		return;
- 
-+	refs = atomic_read(&eb->refs);
- 	while (1) {
--		refs = atomic_read(&eb->refs);
- 		if ((!test_bit(EXTENT_BUFFER_UNMAPPED, &eb->bflags) && refs <= 3)
- 		    || (test_bit(EXTENT_BUFFER_UNMAPPED, &eb->bflags) &&
- 			refs == 1))
- 			break;
--		old = atomic_cmpxchg(&eb->refs, refs, refs - 1);
--		if (old == refs)
-+		if (atomic_try_cmpxchg(&eb->refs, &refs, refs - 1))
- 			return;
- 	}
- 
 -- 
-2.37.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

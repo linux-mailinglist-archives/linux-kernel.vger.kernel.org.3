@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66BD58E097
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33B058E09D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345860AbiHIUE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 16:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S244377AbiHIUGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 16:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344154AbiHIUEv (ORCPT
+        with ESMTP id S1346396AbiHIUGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 16:04:51 -0400
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393BACF9;
-        Tue,  9 Aug 2022 13:04:51 -0700 (PDT)
-Received: by mail-pj1-f45.google.com with SMTP id gj1so12777087pjb.0;
-        Tue, 09 Aug 2022 13:04:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=bHFnSCpx4s1yF8VGyhgz7QOF0G/eo6MkBMtMb/5y7Kw=;
-        b=E7FMiwb3O8ooXaniJYbylzSC+9kgtUSTuW0xEDXX/lwZlszJeDkEe7T3LTCjs+8QPL
-         lrLjvu7q5fYGW3WDnqeksSjb/h+Iklzk/8+u9eJ50VbSE6n7cLSplCeyUiR6p/1EWgEf
-         JER8bWxEkBTAKpVV1GjZDHpra0lmlGGQf+a5M6bld9btVtZCyz9f3w7inkkRmwbIS77V
-         3qRapLwXTaufaB3WrxhaoDkcnePhIXfZEBY7DDkiZyPqmkQnYG0TXYsETFxuQDx0QMK1
-         f6TMkkyAjjmfT+j2CWo+BAlTFBkIAHf6kQpsFXaXt9aV9BL/bomYPaCyBPAZ6jOXAgey
-         tdCA==
-X-Gm-Message-State: ACgBeo2+LAuKWU2WIDDoXBwneXFBMFivZHaQGDVbd3wbr2hnI5w2dvPu
-        Z7MDGth1r3g7tGZdM0XPpXoLMjTHH/o=
-X-Google-Smtp-Source: AA6agR4UakHoOroAq+rmXZcbVw14rKs+gCvfRNkzhsXuB+C7jxhZoiGGzkFzF563PI2WPYky1xFY5w==
-X-Received: by 2002:a17:90b:3807:b0:1f4:ecf7:5987 with SMTP id mq7-20020a17090b380700b001f4ecf75987mr146310pjb.13.1660075490640;
-        Tue, 09 Aug 2022 13:04:50 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:61e9:2f41:c2d4:73d? ([2620:15c:211:201:61e9:2f41:c2d4:73d])
-        by smtp.gmail.com with ESMTPSA id jn1-20020a170903050100b0016c4fb6e0b2sm4245532plb.55.2022.08.09.13.04.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 13:04:49 -0700 (PDT)
-Message-ID: <70a33138-1981-f639-c371-b1ffb2378a73@acm.org>
-Date:   Tue, 9 Aug 2022 13:04:46 -0700
+        Tue, 9 Aug 2022 16:06:35 -0400
+Received: from galois.linutronix.de (unknown [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C931EAE0
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 13:06:33 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660075577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BBTwmz2rPJKGWSSwRXS8i02OixhR40SD6KCPKUvKk6w=;
+        b=ckejNwe6FrsRxTbgsNJCUykONduBpIZjiQQfSLhxwAXffLAEetoPKttRSd6jAq/c8o+bkB
+        mAe9FjP2sly+3UIusQYt4EBvNkY+ZQdspmHSS0hLjD250yTASIoQ5Cbphguj2iCwkbHgho
+        UjSzWxuCrZpZ9AIIiqiRQoz36bjJtLP1XYLisiLazoibEjUGcrjyHSDMxdOxYEdPJ9fVKL
+        HVY4c655ui4F9/KTmYIgSu1bnHIZk0Qp+GXt8p+edWXO+KY3ptM9uI2LURUR2GHMU0nrnL
+        0Hxn+pbiE3zc+HQqeQlWnXIlEypJXQ6eSWhbHvyfglceXdQoPxHIGzkSO7opMg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660075577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BBTwmz2rPJKGWSSwRXS8i02OixhR40SD6KCPKUvKk6w=;
+        b=SFHyKU9+zBxwEiZ7g/IG8qmcCPxn50vJ0Ydza45N8GGb5LeELXxppZnQ/btRi/h7+wVS9G
+        Ms1IW5noLW7Zs0Cg==
+To:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Rik van Riel <riel@surriel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 5/5] x86/entry: Store CPU info on exception entry
+In-Reply-To: <YvD7FNovYh7UzrAc@zn.tnic>
+References: <20220805173009.3128098-1-ira.weiny@intel.com>
+ <20220805173009.3128098-6-ira.weiny@intel.com>
+ <5d62c1d0-7425-d5bb-ecb5-1dc3b4d7d245@intel.com>
+ <Yu4t0jkpIY4grgxL@gmail.com> <Yu4wON0MRGH7h5Jv@zn.tnic>
+ <Yu+Nwbn4CZUmyD14@gmail.com> <Yu+VV8xFTYRh0D0a@zn.tnic>
+ <YvAaXet3sBg3mRDe@iweiny-desk3> <YvDtfKRyMGenRMU5@gmail.com>
+ <YvD7FNovYh7UzrAc@zn.tnic>
+Date:   Tue, 09 Aug 2022 22:06:16 +0200
+Message-ID: <87o7wtqj0n.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] scsi: aic79xx: make read-only array tok_list static const
-Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Hannes Reinecke <hare@suse.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220809182518.3046935-1-colin.i.king@gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220809182518.3046935-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,30 +63,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 11:25, Colin Ian King wrote:
-> Don't populate the read-only array tok_list on the stack but instead make
-> it static const. Also makes the object code a little smaller.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->   drivers/scsi/aic7xxx/aic79xx_osm.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic79xx_osm.c
-> index 928099163f0f..4ed40e6c5522 100644
-> --- a/drivers/scsi/aic7xxx/aic79xx_osm.c
-> +++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
-> @@ -1044,7 +1044,7 @@ ahd_parse_brace_option(char *opt_name, char *opt_arg, char *end, int depth,
->   	int      instance;
->   	int	 targ;
->   	int	 done;
-> -	char	 tok_list[] = {'.', ',', '{', '}', '\0'};
-> +	static const char tok_list[] = {'.', ',', '{', '}', '\0'};
+On Mon, Aug 08 2022 at 14:01, Borislav Petkov wrote:
+> On Mon, Aug 08, 2022 at 01:03:24PM +0200, Ingo Molnar wrote:
+>> I'd like to hear what Andy Lutomirski thinks about the notion that
+>> "2 instructions don't matter at all" ...
+>> 
+>> Especially since it's now 4 instructions:
+>
+> He wasn't opposed to it when we talked on IRC last week.
+>
+>> ... 4 instructions in the exception path is a non-trivial impact.
+>
+> How do I measure this "impact"?
+>
+> Hell, we recently added retbleed - and IBRS especially on Intel - on
+> the entry path which is whopping 30% perf impact in some cases. And
+> now we're arguing about a handful of insns. I'm sceptical they'll be
+> anything else but "in-the-noise" in any sensible workload.
 
-Has it been considered to write the above code as follows?
+I'm not worried about the 4 instructions per se, but storing the CPU
+number on every exception and interrupt entry just to use it in exactly
+one place, i.e. the user mode #PF handler, does not make any sense at
+all.
 
-static const char tok_list[] = ".,{}";
+Get the CPU number before enabling interrupts and hand it in to the
+bad area variants.
+
+I know that the aux reg code is required for other things, but just for
+this it's complete overkill.
 
 Thanks,
 
-Bart.
+        tglx

@@ -2,193 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0183458D8D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D680858D8DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242870AbiHIMnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 08:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S242922AbiHIMpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 08:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239296AbiHIMnp (ORCPT
+        with ESMTP id S239296AbiHIMpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 08:43:45 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D9318E00
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 05:43:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hOZCGCbtcw+E6ecqBGQ8p5+6CeQ2qMFJX/adoIfJ1xFsqLLQQufvxRJsmkqK6vc9xofRiPy56bD5Cb0SIhgfCtaVaiDu3BZ/VtZTREMCHHdMy44XbSYNOuySQ81gyONrlTCZCbFzCgcEt5PNwmkLplbaV9ISP6iUcIMAxfUi2Imev1ihFnL2VJvTifIGV1zjJAkmOOs2hzDK800aqal+9gMamHYrm0z5/n7wdI1nThmt90rwFIm5ck/QW+WzjKpTtPM6xU0fJONoY8saHlJGB6PEdaUrf4+JLq/j7HzFsDbet9NOMGUi7xw2U9bfHQXcsGJ0OAMfymYF2DJZ49Q4oQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1dUrwIPK/KeGMHlwj0OHqXM3YgXOcCRaBy9NT/Hlro4=;
- b=N2A+POmN5V6CsOQHlnkYN+S4U6wFWU3kMvgAsCVN++ibsLLYnlz27reRIkX+pwJvHxH12TRnPvSMutfgP7wZAT+nF3byOSncuiL3PN51znEJC79r1b2RXOMJU43DBAOWnFKX/cIOl+zFu0gocLlhXb7QxojeInfqx6Q0YxpT+6zrrDnctKUB4JBIvowJs60vPoFRNf5GOU1bgpM8z4Is7IBzznJDXX0hJioc7mgJ8csd/WahH4FSPNDCfbFsDj/3M5t1BXfbI7jWExBWb+rSE3g8AFNBwWOPOwX4G/QXa4JLWvy90VNpXplMq6Za/Vgo83LOtqqtR3qswL+rCG/CqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1dUrwIPK/KeGMHlwj0OHqXM3YgXOcCRaBy9NT/Hlro4=;
- b=MftrVn8H1pnJAf0lfa92O3f4bleznpVGBBMhRsS9OKXLMOlizQRl3Rq/ExUWagD4lNBF1IhRgNEV8R3IgYSn/I1PQ8dQBphs4udUkpvX6WhpZ4hZEOiOyY+mB6AKHVXnoIZzWLrdEzg+w5r/wl3ByCDssHwgcLCm4bU2wwpYiliGu8SSGB+oJt4xdkA7pOt9nKpurU+5IPjWMlpGdeRy6je2WHdmK0hoHxDvbLxd+k5JP83Dz7RubDp3kgJFfkuwZsHRTttPhynHvn6mPnMyC5NEBhB7zkiRbHrIkBOnazkq6yJfch9OT9n8gfd8D3ardVJqAVgbq4xr9ibIiyua4Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BN8PR12MB3347.namprd12.prod.outlook.com (2603:10b6:408:43::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Tue, 9 Aug
- 2022 12:43:42 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::1a7:7daa:9230:1372]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::1a7:7daa:9230:1372%7]) with mapi id 15.20.5504.020; Tue, 9 Aug 2022
- 12:43:42 +0000
-Date:   Tue, 9 Aug 2022 09:43:41 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Oded Gabbay <oded.gabbay@gmail.com>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
+        Tue, 9 Aug 2022 08:45:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1C955B1
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 05:45:19 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oLObf-00054K-Cr; Tue, 09 Aug 2022 14:45:11 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oLObc-0005jR-PX; Tue, 09 Aug 2022 14:45:08 +0200
+Date:   Tue, 9 Aug 2022 14:45:08 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Subject: Re: New subsystem for acceleration devices
-Message-ID: <YvJWfS5h2SeWGAEM@nvidia.com>
-References: <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
- <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com>
- <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
- <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
- <YuvctaLwRi+z0Gw4@nvidia.com>
- <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
- <Yuxi1eRHPN36Or+1@nvidia.com>
- <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
- <YvFL8/g+xbrhLzEr@nvidia.com>
- <CAFCwf12MFVmBOEMw37Cdh4O3n13LosR4yDi007eH9BhF3kRC4w@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFCwf12MFVmBOEMw37Cdh4O3n13LosR4yDi007eH9BhF3kRC4w@mail.gmail.com>
-X-ClientProxiedBy: MN2PR19CA0009.namprd19.prod.outlook.com
- (2603:10b6:208:178::22) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/3] media: hantro: Add support for RK356x JPEG encoder
+Message-ID: <20220809124508.GL14307@pengutronix.de>
+References: <20220427224438.335327-1-frattaroli.nicolas@gmail.com>
+ <20220427224438.335327-3-frattaroli.nicolas@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 444d8bd2-6a25-46ae-1123-08da7a04ca5a
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3347:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: urDp7oZlKAbisy/o1mV9UjnG93j3e3t7UsvNbHDRkYCQK1fftV71G32z4o6PG5XgsiCPPoibjEiakUzNSxDHL3ESuZSzGuVgJJUTLT6SWxo3TlCHH+loAPWPt3mTCMXrmyChk3zAvhTSt1obos/mUxPhAo73fxZyhuAmq3RFjkzFY30Ujk/bWUhXf6T9wamemPIlpYiDVPs8EWdB36a+X+neYxoww7pAt23ol3boX5y++Ar8fZF1jfSYRmJ6o3rg42hVebvwugRsCtDXFADurU8XzGzkdGtiDOdcD+GZvSCaQlpTeEd2kksxegrddUKZPWmP3fo4QKG+xR/ryVZamz0kKofMDW62KZLhkt9uXPFuslFCPrB5KrUwv6pAOpRZwKGapTdfdZ+9dzHhGRBcbJqlLFMO6ROhv/RzNTZIiJU+XTOhJye/tyzTf0BOTlnWdI954oR9gV/TuklKYZkh4OYnKn2+ujHXUXU76IVIbSu9UpUobwo+IJBl3ngt+H5t5geyWR2YNm90DD3+TbCB6zu5/f2nAnmeejAROdykiH6NQv/usmHi6sa/xl+v5jpEL3nxoGjfIKmtH1VwMYNC0nyGQpk8fzYaAglGcOs5otMStjBoRpwMtwQedSpMoHx4EOwT4kRXLhEtKQjxIWrH1vl8/yEwNIAcjLkrB8Dj/gW1dFaxIg9djpvLK7sIjq8ibEdKX0JCuPiUnKMRJ/iUKmKt/ETU1gfAS9FCzCEgZP05RsUGt/l849WOiKxo1sMT
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(396003)(39860400002)(376002)(346002)(38100700002)(316002)(36756003)(83380400001)(54906003)(186003)(6916009)(8676002)(4326008)(6486002)(5660300002)(2906002)(86362001)(6506007)(2616005)(66946007)(8936002)(6512007)(66476007)(26005)(66556008)(478600001)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oEh995q5vhrlT2p4ivEiHSEw/Edbnu1mReJmBQ530pGn/4ysqSHjAOWXIyXL?=
- =?us-ascii?Q?7bumGLv0bD8inBwZe7juAWFMobt9biaJas3L9e41ZRK61igIOa4vCne55+z8?=
- =?us-ascii?Q?c42DTNFAtQdn9TmbleBFdEVOO3qHHmW3BzUW+2HCkA/5GTt5DLYOj9FrW0h0?=
- =?us-ascii?Q?tfxrKBdAnUoKU7AcebFDgz6QU9NJzIzNaXB1Y+LpFBLfC9gCZAxIW1YqKLJA?=
- =?us-ascii?Q?BgC2UejW2o1TZkR6px1jpQI6OJVgs6ID9GX+5Xj43NrA71u26xlHaZH4mVcc?=
- =?us-ascii?Q?NCMMe0VKLfax/mCl/e1Xmx72KuqGIBoczLl4URM3GIKYoxxaP85cVufuO57G?=
- =?us-ascii?Q?ovRp1L15C4elyT93WCWe7llsFeF9SWOlBSEVsbsApv1n2IBOiJU4oGgFrUIy?=
- =?us-ascii?Q?hbm3yj5ssPTUGvnzr8ZA8Oi/5LhJUQJXgPimEb2Em/ZxyZpKIqXAL21k9fW3?=
- =?us-ascii?Q?udwOAvQez+sxc5ZBp65vcinj9PtQiLmxA2jGFyVusFc/Z3RxinMaLNHMTqnr?=
- =?us-ascii?Q?Dhkgo3APPY247KEv2TuRQLky7M7SXLrEtiUgv6HzDmltXUi/o9/6aMr383iz?=
- =?us-ascii?Q?tEPXKG8ry47XUv6PsWdBdCMTzAwpEmNtpi7pMgqvOoVyB9UFR4gXcDq6Qpcm?=
- =?us-ascii?Q?AdNzZaPywm+V5OZPxGuqyjFMvf9HIPt+7YQKwtpPCN0DXe7D7gRN8/Pl+WFC?=
- =?us-ascii?Q?/YXAkl4RW0mSwsmunaWldnwaSuFnGSB88hybVx0Eq02iCIQCDawpcmcp2bmO?=
- =?us-ascii?Q?v7JCmVpu0r8pSPEFNs9AbPLvUaEBWvQwgx1BMHr6pSwrxE7Zvc7E+Sh2wQ51?=
- =?us-ascii?Q?5imf4WDCx/6bAI7u8Xti1MCaEDDNn2bTl0rsu04MEHehGEjwa3Ho1y/epZTU?=
- =?us-ascii?Q?FVbdMjOqzF0t4FT7bUmXbRoK/KMeaLbn0laG8vJ0dwvQEY7vN/c38vJGyXas?=
- =?us-ascii?Q?Nx4RJNAzuegjXdfhOUna0noYoCJdH3wL+plfySWu/WsrUauETS5lvpRgDh3k?=
- =?us-ascii?Q?h3kbu8/6F7d310gbL52QJAoVgMXU5FPMXlPE0HATIusRrl0xq6ZbAF7nvkfv?=
- =?us-ascii?Q?pjoDQHLjVGIAZ8cIbpanU2mjmKeQRX8zfeYsulG7VtXO4pL1a7IGUB0Mu0wJ?=
- =?us-ascii?Q?eDx+0IYmwbjotljgMZkawc/HGuN7kqodJIP08JcR2T4YrFEzs6AJFOwyP3IO?=
- =?us-ascii?Q?KFvCA8XmVQtSl7Vf/U4Jea/02/p5aPY0fnnwPWZ5vD9j08X3QUrVydBsdRgv?=
- =?us-ascii?Q?dPMBZ+Wtk+0mn3/AZ5z1/ek/O4qXt4k74VxtJCxFt9mzo64xKSm8pIFosGBV?=
- =?us-ascii?Q?IldEm9AubkimtyiGfKH86TzMihfcuUbnNs4t2pHXJS8UXOAu6p0u5hLkC/Ly?=
- =?us-ascii?Q?VqtiarcRuTge91QHuaCaLKffof2vznLwNQp3t+NcMunYESr+0rFIYBnP1fpQ?=
- =?us-ascii?Q?JriVnNQ0gRqYxb2Pkmln9JrAiKDrQDJgD25S8Ikjb0OSti9lNwIa51Ey3R91?=
- =?us-ascii?Q?0YbsdU5hwk1WxWFtKidqXYg+br5tD95Jr5rMMpufxjed2auojuFZNPZsWUr1?=
- =?us-ascii?Q?0HiZmRZ01GM8fjXC8g55kyIdLTv22AkdlMRijxfV?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 444d8bd2-6a25-46ae-1123-08da7a04ca5a
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 12:43:42.0641
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m+OR7/zsjcVClj2niiY+UXvk4hSZ3NFFJ3cZEs55uA1LffWAuHzBweVNEVODrVrE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3347
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3VRmKSg17yJg2MZg"
+Content-Disposition: inline
+In-Reply-To: <20220427224438.335327-3-frattaroli.nicolas@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 11:26:11PM +0300, Oded Gabbay wrote:
 
-> So if you want a common uAPI and a common userspace library to use it,
-> you need to expose the same device character files for every device,
-> regardless of the driver. e.g. you need all devices to be called
-> /dev/accelX and not /dev/habanaX or /dev/nvidiaX
+--3VRmKSg17yJg2MZg
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So, this is an interesting idea. One of the things we did in RDMA that
-turned our very well is to have the user side of the kernel/user API
-in a single git repo for all the drivers, including the lowest layer
-of the driver-specific APIs.
+Hi Nicolas,
 
-It gives a reasonable target for a DRM-like test of "you must have a
-userspace". Ie send your userspace and userspace documentation/tests
-before your kernel side can be merged.
+On Thu, Apr 28, 2022 at 12:44:37AM +0200, Nicolas Frattaroli wrote:
+>The RK3566 and RK3568 SoCs come with a small Hantro instance which
+>is solely dedicated to encoding JPEG. This patch adds the necessary
+>structs to the Hantro driver to allow it to function.
+>
+>Tested with the following GStreamer command:
+>
+>gst-launch-1.0 videotestsrc ! v4l2jpegenc ! matroskamux ! \
+>               filesink location=3Dfoo.mkv
 
-Even if it is just a git repo collecting and curating driver-specific
-libraries under the "accel" banner it could be quite a useful
-activity.
+I just tried this pipeline on v5.19. The filesize generated is increasing a=
+nd
+data is generated. However the content seems to be unusable.
 
-But, probably this boils down to things that look like:
+When playing foo.mkv with e.g. vlc the following errors, that no JPEG data =
+was found
+in the images, is generated:
 
-  device = habana_open_device()
-  habana_mooo(device)
 
-  device = nvidia_open_device()
-  nvidia_baaa(device)
+[mjpeg @ 0x7f2f08c1f780] No JPEG data found in image
+[mjpeg @ 0x7f2f08c1f780] No JPEG data found in image
+[mjpeg @ 0x7f2f08c1f780] No JPEG data found in image
+=2E..
 
-> That's what I mean by abstracting all this kernel API from the
-> drivers. Not because it is an API that is hard to use, but because the
-> drivers should *not* use it at all.
-> 
-> I think drm did that pretty well. Their code defines objects for
-> driver, device and minors, with resource manager that will take care
-> of releasing the objects automatically (it is based on devres.c).
 
-We have lots of examples of subsystems doing this - the main thing
-unique about accel is that that there is really no shared uAPI between
-the drivers, and not 'abstraction' provided by the kernel. Maybe that
-is the point..
+The same with gstreamer:
 
-> So actually I do want an ioctl but as you said, not for the main
-> device char, but to an accompanied control device char.
+gst-launch-1.0 filesrc location=3Dfoo.mkv ! decodebin ! glimagesink
+=2E./ext/jpeg/gstjpegdec.c(1418): gst_jpeg_dec_handle_frame (): /GstPipelin=
+e:pipeline0/GstDecodeBin:decodebin0/GstJpegDec:jpegdec0:
+Decode error #53: Not a JPEG file: starts with 0x00 0x00
+=2E.
 
-There is a general problem across all these "thick" devices in the
-kernel to support their RAS & configuration requirements and IMHO we
-don't have a good answer at all.
 
-We've been talking on and off here about having some kind of
-subsystem/methodology specifically for this area - how to monitor,
-configure, service, etc a very complicated off-CPU device. I think
-there would be a lot of interest in this and maybe it shouldn't be
-coupled to this accel idea.
+Do you have an idea why that is? Did you test the pipeline with an earlier
+kernelversion and validated the generated content of foo.mkv?
 
-Eg we already have some established mechinisms - I would expect any
-accel device to be able to introspect and upgrade its flash FW using
-the 'devlink flash' common API.
+Regards,
+Michael
 
-> an application only has access to the information ioctl through this
-> device char (so it can't submit anything, allocate memory, etc.) and
-> can only retrieve metrics which do not leak information about the
-> compute application.
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-This is often being done over a netlink socket as the "second char"
+--3VRmKSg17yJg2MZg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Jason
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmLyVs4ACgkQC+njFXoe
+LGTYuw/+PelCMxyHigxqTvgAD9DPu7gzli42mTGyGTs7HvtGonypuAk0UbV9W9nG
+w7kb/aIrBdUz9X1HBgYcSCtbg5YItDIPou1o3DpvDk68Q/QAETZqmhLRbRgUbf9i
+T6TPfKbVij9gcbWmdQYwoMT+TMxdaBZwEB2QSFfDZA7wXeYmv/IEJoX5NjFNdGHt
+VS20uTP+uCA64ZKW2fVsfbZpF+Auoxs28XIFR++tw5q7QZzBd9seSfzI3sSXra//
+Fj154jUUJxRbzeeoB8XeN9QKNgv5PCXO2pWkJiSviC5BKrI31guO4AwyZWRSSS2n
+jWhMHm6YSDpzAcZvpMO+vn0xsUjmr7KGYGsuMQMSMNZ70/PPshG+wh1CX3xDxFYM
+2NdAzqE7GM8pBCxznhwyPb1VtLiIQedX0tDIuYRJt+0UiQB6Oerwcpd00Nc/H8nP
+LAn3vW1RgS7DiCi10pASHei3jNNsSAvrTly0+TNauHj/Tfy2BNI4gwV1VGtFLMy2
+yIE+nuwC0xcMrLWj1iRBYa9gyINiU6g0hvkQ2PKWX8zdELEqA66AO61s5vlMrWJb
+Le/3i/IAU4PV8fx2j4+pXMTMEoQ6h9SAK7RCITZtWkrZe5qsprWlA4r5JEV4e8EL
+jXvzDcq+aLMqujKzFBsfnpetShHewnXxb1kIq8rqgwgFQbnNBXg=
+=OcIw
+-----END PGP SIGNATURE-----
+
+--3VRmKSg17yJg2MZg--

@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2887358E053
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE8958E04F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343897AbiHITkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
+        id S245292AbiHITkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243048AbiHITkE (ORCPT
+        with ESMTP id S1343707AbiHITjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:40:04 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DBC255BF
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 12:40:02 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id c16so131442qkk.10
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 12:40:02 -0700 (PDT)
+        Tue, 9 Aug 2022 15:39:41 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E1425E83
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 12:39:39 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-10ec41637b3so15218995fac.4
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 12:39:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WQADmAbbPY4UNq4TbQtJ0wmwYjKdHy+t7oPSx2knkGw=;
-        b=T3xk/rfIHpnSaArGMKToaLTdDcPztKs73hwbF/4oilTSRO/u+Y5EH66x921BEN+iwS
-         n8Efv/cl0XGLh75r3nPSGiSRcCWOIMa4+iO2L2boSNmbA+An9VwgOdQ57BecRqDId3cr
-         93aVbwUsrAk/jVP3NrBx8OlA8Som+xmHbXQmc=
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=Y4xtVh6rKLC18LGlTT+3Ax84sybyATKEPgEJphnGXaA=;
+        b=Q9o7SiOteq1Uvizzk/FQD3F00tJ4Y8n9nalK3/F7i4dhCG2b2jxGFLRH65sgKz7svA
+         652UH300EuQC45ZbUKfWBy0QDOgVmZhFVRqUyn9cVeDhVBRpHR2hNP75KOvLQ3xabtBK
+         E030VCSNBOkv5gRya3/FZ+RR+xHR6PUuAQ8hZlxfiOL9qe7P13+YXrv8gkXQ7JatCA1y
+         0QOwL/GSciCBR9Q6xUvWLWFEyNW6sTVGosGtUlaFnHNBqllpb9yqN0y1z6kJ0y93ZPGy
+         xMq+DZpqTqR/uAT6sR6TlsObN1YqPYt/0ijuqx65QDbBkVrwImvJSpI+xhxZY6cYGw0w
+         DOCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WQADmAbbPY4UNq4TbQtJ0wmwYjKdHy+t7oPSx2knkGw=;
-        b=d2C1jOFvKDs0+HRy2jvoF1MGaFFiib+mbZl/eQbdbDCy0EogTGaaw235YseOjhUfgs
-         EKh/YXvIz9DvTdDOIztLsXfSaNlUNTO1liaxNbTwsfU4n5cKFwFdYU7tN3vBxzRflE1w
-         SFdRFEEp2DjEsQTIy12Sp8WshDwzRgvyzotvHwKDAtynyDCMviVQPADoKT868U6VdYIl
-         0PBhpSv9cxsOUn2XLiUqBzDXt0jRMqgPMLFhV4m/Q2COzQY92UcMHr3ULoimzr4gYyBI
-         qSLDhj6E+kmhs/0j1YNhukx3PVWisSt+m0bK47RotYJZOI6qvvvSLh/uqzhJkQ7BweH7
-         ps1Q==
-X-Gm-Message-State: ACgBeo3ROlhky58u4jCd4qrH32A2xHUzoxPKSpOXpx+rXn7aelaLRD8P
-        fff2Nz/VMpypZ56uW7aP69bQnQ==
-X-Google-Smtp-Source: AA6agR7cXDV8AmvlDfc//mvJvsYopYmTCb0ttOe0pPue0GVYpv844ghBL+zy5oP8hZjjn1KCc1w4aQ==
-X-Received: by 2002:a05:620a:c4f:b0:6b8:ea30:2d4a with SMTP id u15-20020a05620a0c4f00b006b8ea302d4amr18690230qki.717.1660074001883;
-        Tue, 09 Aug 2022 12:40:01 -0700 (PDT)
-Received: from trappist.c.googlers.com.com (128.174.85.34.bc.googleusercontent.com. [34.85.174.128])
-        by smtp.gmail.com with ESMTPSA id w19-20020a05620a445300b006b9264191b5sm9562422qkp.32.2022.08.09.12.40.01
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Y4xtVh6rKLC18LGlTT+3Ax84sybyATKEPgEJphnGXaA=;
+        b=KBFJyTQNHOKW4kUHt9ecjPtAsn5/7nzXtHPl7x4gDe5PJvuuEEv2+BHQ7Go+D77LAJ
+         q5OmsjcxAgcrxuyP/tbWKe5Ew3kL30LKGTIwieYG4HUcZjZYlGhPDmkZPycDXXeTE8Ie
+         9D/g395zvDI0oIn4RPSCYclfzQiFiLlH1r5TSHyzk2zO0NYWWnUxseRk+oXcHjH0LubO
+         K0Q6h+SfGIXE55CLeIw/Gmie7swLkHGNcaA3z8VhFekat5we1l4EyApgU4x/c53p4qVa
+         gno/91YJc739pH8KNdkhsP19+PoB3cyeeE6vAvXD9W4zKBDgZza56vBIrpbdU8avjMv/
+         X0aA==
+X-Gm-Message-State: ACgBeo0r1he8z+/qTeNyHsaP10yv874lmsqj7FeIKOQSb8jYTKd+BLEp
+        8BDoM4+WcOMntASMUGuT7wu5mQ==
+X-Google-Smtp-Source: AA6agR6Muw5kLsPzbUDs4YBNgRzRSgmWL1i9N9XkVnNMg6+XbgYMrzTqQtStjRed3wN7adGB4jhWIA==
+X-Received: by 2002:a05:6870:c0ca:b0:10d:cc1e:5c4c with SMTP id e10-20020a056870c0ca00b0010dcc1e5c4cmr40040oad.132.1660073977444;
+        Tue, 09 Aug 2022 12:39:37 -0700 (PDT)
+Received: from baldur ([2600:380:785a:7aa8:200:ff:fe00:0])
+        by smtp.gmail.com with ESMTPSA id c8-20020a056870b28800b000f346e6d786sm3300286oao.54.2022.08.09.12.39.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 12:40:01 -0700 (PDT)
-From:   Sven van Ashbrook <svenva@chromium.org>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Hao Wu <hao.wu@rubrik.com>,
-        Yi Chou <yich@google.com>,
-        Andrey Pronin <apronin@chromium.org>,
-        Sven van Ashbrook <svenva@chromium.org>,
-        James Morris <james.morris@microsoft.com>
-Cc:     stable@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: fix potential race condition in suspend/resume
-Date:   Tue,  9 Aug 2022 19:39:18 +0000
-Message-Id: <20220809193921.544546-1-svenva@chromium.org>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+        Tue, 09 Aug 2022 12:39:36 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 14:39:33 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     agross@kernel.org, konrad.dybcio@somainline.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] thermal/drivers/qcom/spmi-adc-tm5: Remove unnecessary
+ print function dev_err()
+Message-ID: <YvK39TTGdgHV1HSb@baldur>
+References: <20220809034346.128607-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220809034346.128607-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,99 +74,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Concurrent accesses to the tpm chip are prevented by allowing only a
-single thread at a time to obtain a tpm chip reference through
-tpm_try_get_ops(). However, the tpm's suspend function does not use
-this mechanism, so when the tpm api is called by a kthread which
-does not get frozen on suspend (such as the hw_random kthread)
-it's possible that the tpm is used when already in suspend, or
-in use while in the process of suspending.
+On Mon 08 Aug 22:43 CDT 2022, Jiapeng Chong wrote:
 
-This is seen on certain ChromeOS platforms - low-probability warnings
-are generated during suspend. In this case, the tpm attempted to read data
-from a tpm chip on an already-suspended bus.
+> The print function dev_err() is redundant because platform_get_irq()
+> already prints an error.
+> 
+> ./drivers/thermal/qcom/qcom-spmi-adc-tm5.c:1029:2-9: line 1029 is redundant because platform_get_irq() already prints an error.
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=1846
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-  i2c_designware i2c_designware.1: Transfer while suspended
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Fix:
-1. prevent concurrent execution of tpm accesses and suspend/
-   resume, by letting suspend/resume grab the tpm_mutex.
-2. before commencing a tpm access, check if the tpm chip is already
-   suspended. Fail with -EAGAIN if so.
-
-Tested by running 6000 suspend/resume cycles back-to-back on a
-ChromeOS "brya" device. The intermittent warnings reliably
-disappear after applying this patch. No system issues were observed.
-
-Cc: <stable@vger.kernel.org>
-Fixes: e891db1a18bf ("tpm: turn on TPM on suspend for TPM 1.x")
-Signed-off-by: Sven van Ashbrook <svenva@chromium.org>
----
- drivers/char/tpm/tpm-interface.c | 16 ++++++++++++++++
- include/linux/tpm.h              |  2 ++
- 2 files changed, 18 insertions(+)
-
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index 1621ce818705..16ca490fd483 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -82,6 +82,11 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
- 		return -E2BIG;
- 	}
- 
-+	if (chip->is_suspended) {
-+		dev_info(&chip->dev, "blocking transmit while suspended\n");
-+		return -EAGAIN;
-+	}
-+
- 	rc = chip->ops->send(chip, buf, count);
- 	if (rc < 0) {
- 		if (rc != -EPIPE)
-@@ -394,6 +399,8 @@ int tpm_pm_suspend(struct device *dev)
- 	if (!chip)
- 		return -ENODEV;
- 
-+	mutex_lock(&chip->tpm_mutex);
-+
- 	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
- 		goto suspended;
- 
-@@ -411,6 +418,11 @@ int tpm_pm_suspend(struct device *dev)
- 	}
- 
- suspended:
-+	if (!rc)
-+		chip->is_suspended = true;
-+
-+	mutex_unlock(&chip->tpm_mutex);
-+
- 	return rc;
- }
- EXPORT_SYMBOL_GPL(tpm_pm_suspend);
-@@ -426,6 +438,10 @@ int tpm_pm_resume(struct device *dev)
- 	if (chip == NULL)
- 		return -ENODEV;
- 
-+	mutex_lock(&chip->tpm_mutex);
-+	chip->is_suspended = false;
-+	mutex_unlock(&chip->tpm_mutex);
-+
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(tpm_pm_resume);
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index d7c67581929f..0fbc1a43ae80 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -131,6 +131,8 @@ struct tpm_chip {
- 	int dev_num;		/* /dev/tpm# */
- 	unsigned long is_open;	/* only one allowed */
- 
-+	bool is_suspended;
-+
- 	char hwrng_name[64];
- 	struct hwrng hwrng;
- 
--- 
-2.37.1.559.g78731f0fdb-goog
-
+> ---
+>  drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> index add6f40e5e2a..af68adf720cc 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> @@ -1025,10 +1025,8 @@ static int adc_tm5_probe(struct platform_device *pdev)
+>  	adc_tm->base = reg;
+>  
+>  	irq = platform_get_irq(pdev, 0);
+> -	if (irq < 0) {
+> -		dev_err(dev, "get_irq failed: %d\n", irq);
+> +	if (irq < 0)
+>  		return irq;
+> -	}
+>  
+>  	ret = adc_tm5_get_dt_data(adc_tm, node);
+>  	if (ret) {
+> -- 
+> 2.20.1.7.g153144c
+> 

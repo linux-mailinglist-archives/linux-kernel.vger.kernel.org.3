@@ -2,140 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFB958DF9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECB058DFA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbiHITCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
+        id S1345183AbiHITD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348684AbiHITC1 (ORCPT
+        with ESMTP id S1345262AbiHITCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:02:27 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E68C69
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:35:13 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id v14so3843854qkf.4
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=k1Lt5id3T06F1YwJtAYxhzPmLo8QV3Ba3OExNOeJU6M=;
-        b=YyaouVoHToM0Y2Yn9tCzpLug8w/elHQ5S9CvHuxwM7JFh1A9NSPZVNqisplKyNgr1f
-         1RQLmVN9dAO5+PWJHDsk2c28R0BT5xveGRBgra7PIdQ2Hi6Ayc/qC3SsBYHkgIvYKjCz
-         VuXJhaPhwoQG2bk+fioohJaSvThocxZ4nfCAMkeUMATHFU7DLvGjUYDQ2T79LUjjdzZ3
-         WpaxcXbsZ1mZWQCVyABlVNE1B5ECskoB8JsHmjThUg+JbEpyF7ItCOboi1dXuEqHfw5U
-         XPy7EDI1c1BcNo/6diKdRyKr87Txp8mhcIMeHQuHNTMrO/r+v8/XtvyVrewHK936V0Lf
-         ibrA==
+        Tue, 9 Aug 2022 15:02:50 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5FA22BD6;
+        Tue,  9 Aug 2022 11:36:39 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id l24so10272076ion.13;
+        Tue, 09 Aug 2022 11:36:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=k1Lt5id3T06F1YwJtAYxhzPmLo8QV3Ba3OExNOeJU6M=;
-        b=k6HiWCrDcoj/XSclIv/pNsAKk/ecGzCUhKcDQgsSIJdbqtv9CMP6elKKtDVV0Ltogm
-         0Nmn4NxmfNYkA/YQiFfyFzzvCxEoIlTGuR/n3d7NXizD/Ocr1zI4Gsm61mA2AVYAKDUA
-         2kMZCDlJFV3I0Tfzi7oFtlAPOXAHSlTgojjrhSkyjZMVRsYB66srpHsAkWfNvsoEgICB
-         bYsqzehcGu+uuKEO57+nfJlDdl4eIGkHBColUpg6Svwg+lC/4zM4umx2fGiulJyIuI6v
-         iHxq19KUNElV43CNNwPdDjFAQogUCiaMfVuyfQjmg6f0Kdt/0g58dtvJ+dFl4IcjCBLS
-         fKew==
-X-Gm-Message-State: ACgBeo1cz+/Iw86LaMO6qefdf/RigZRkkSgObh4rl3cDid5XjQqu1F59
-        lgTugX98oZY1SCeg7kBLDT4=
-X-Google-Smtp-Source: AA6agR7hZgiA45OYCk65SvAtODzF8TirpzXIIXSSM3gK0fhDuouaG6BemCHZzMmKvXukFg5/qnakhA==
-X-Received: by 2002:a05:620a:bd4:b0:6b9:fdf:1bb5 with SMTP id s20-20020a05620a0bd400b006b90fdf1bb5mr15899033qki.447.1660070112937;
-        Tue, 09 Aug 2022 11:35:12 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id d19-20020a05620a241300b006a6ab259261sm13269247qkn.29.2022.08.09.11.35.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 11:35:11 -0700 (PDT)
-Message-ID: <c5edaa34-6f85-c6a8-84f5-75413dc864ea@gmail.com>
-Date:   Tue, 9 Aug 2022 11:35:08 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=5EdrWPjpBP3VYdnyEWUwLGGLE7oilUX8uvXCZ6ZG7Vg=;
+        b=6RW5BOXGNi3cvgKJQTeeH9nKUXIVJWsOvSFA73IR7h34oX4dOA1qJiM48ZLA64pm4X
+         o90T+vVIlDLnrz1OZhUxyhlypynNN64bU1QlrzWfTBnhgu5uMH1T2VaY03LDrvid0WSh
+         4OOES+ah9aUHJj86K+3VpIH3BobxNUUDezxyjdiKCHG7+qfU8Yf+JOsztt3q6WrJzUvL
+         G0Xv9jWADOxjuPo7H5xTCxWb/nHWON+hN0getMabFRoPLd8kHv/7UAdns+SvXJT4OPTz
+         tzLLN5tJrqtENmOlJ9cAtn4ojp/4wbtapWH86KXml7LWS1+7ydIialM1FpVNuzKOHSSl
+         y9mA==
+X-Gm-Message-State: ACgBeo07gm4EcGOk9L0wmqPX7tToKSgdmruF3MKtb0QcmSpqJLlLj73Q
+        Bn1a8Xwnb9Zv4S97Qx3EUbQwDA8bNg==
+X-Google-Smtp-Source: AA6agR5yPwtVmgqurmOG5Cpbap2+YlmJxk40xTsHVhmWulzBqkcUJkTyNz/+N2CLRsLMSt09UQhcZw==
+X-Received: by 2002:a02:ccb2:0:b0:342:6ec9:491e with SMTP id t18-20020a02ccb2000000b003426ec9491emr10888479jap.241.1660070199149;
+        Tue, 09 Aug 2022 11:36:39 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id i63-20020a6bb842000000b00684384bfcbbsm1399728iof.24.2022.08.09.11.36.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 11:36:38 -0700 (PDT)
+Received: (nullmailer pid 2162023 invoked by uid 1000);
+        Tue, 09 Aug 2022 18:36:36 -0000
+Date:   Tue, 9 Aug 2022 12:36:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/8] dt-bindings: remoteproc: qcom: adsp: Make ADSP
+ pil loader as generic
+Message-ID: <20220809183636.GA2158474-robh@kernel.org>
+References: <1659611751-7928-1-git-send-email-quic_srivasam@quicinc.com>
+ <1659611751-7928-2-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: Invalid pstore_blk use?
-Content-Language: en-US
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     Kees Cook <keescook@chromium.org>,
-        WeiXiong Liao <gmpy.liaowx@gmail.com>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Cc:     Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-References: <e97bc607-a913-dbbd-1965-b60d55d956b8@gmail.com>
-In-Reply-To: <e97bc607-a913-dbbd-1965-b60d55d956b8@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1659611751-7928-2-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees, WeiXiong,
+On Thu, Aug 04, 2022 at 04:45:44PM +0530, Srinivasa Rao Mandadapu wrote:
+> Rename sdm845 adsp pil bindings to generic name, for using same binings
+> file for subsequent SoCs.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> ---
+>  .../bindings/remoteproc/qcom,lpass-adsp-pil.yaml   | 160 +++++++++++++++++++++
+>  .../bindings/remoteproc/qcom,sdm845-adsp-pil.yaml  | 160 ---------------------
+>  2 files changed, 160 insertions(+), 160 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sdm845-adsp-pil.yaml
 
-On 7/14/22 20:49, Florian Fainelli wrote:
-> Hi Kees, WeiXiong,
-> 
-> I am trying to make use of pstore_blk which is BTW exactly what I had 
-> been looking for to store panic/console logs onto an eMMC partition.
-> 
-> Using the 5.10 kernel plus:
-> 
-> 7e2e92e9861b Revert "mark pstore-blk as broken"
-> 01c28bc8f389 pstore/blk: Use the normal block device I/O path
-> 2a7507999638 pstore/blk: remove {un,}register_pstore_blk
-> fef0b337cd25 pstore/zone: cap the maximum device size
-> 
-> or the android13-5.15 (at Merge 5.15.40 into android13-5.15) kernel with 
-> no changes and using:
-> 
-> mount -t pstore pstore /sys/fs/pstore
-> modprobe pstore_blk blkdev=/dev/mmcblk1p9 best_effort=yes
-> 
-> upon triggering a crash with:
-> 
-> echo c > /proc/sysrq-trigger
-> 
-> and rebooting and remounting the pstore filesystem and loading 
-> pstore_blk, I only have:
-> 
-> # ls /sys/fs/pstore/
-> console-pstore_blk-0
-> 
-> which contains the entire console log up to, but excluding the crash. 
-> The kernel does show that pstore_blk was used for all 3 types of kmsg, 
-> pmsg and console:
-> 
-> [   28.649514] pstore_zone: capping size to 128MiB
-> [   28.712894] pstore_zone: registered pstore_blk as backend for 
-> kmsg(Oops) pmsg console
-> [   28.721145] pstore: Using crash dump compression: deflate
-> [   28.906253] printk: console [pstore_blk-1] enabled
-> [   28.911229] pstore: Registered pstore_blk as persistent store backend
-> [   28.917735] pstore_blk: attached pstore_blk:/dev/mmcblk1p9 
-> (134217728) (no dedicated panic_write!)
-> 
-> there is no automatic reboot upon panic, so I just tend to reboot after 
-> 2-3 seconds manually. The kernel is configured with the default 
-> CONFIG_PSTORE_* options.
-> 
-> Is the observed behavior a limitation of the best_effort mode? If so, do 
-> we have any plans to implementing a non-best effort mode for eMMC devices?
+Please use the git-format-patch -M option so I'm not reviewing the whole 
+doc again. You also can (and should) change your git config to default 
+to this.
 
-Any feedback on my email? I did try to get kernel panics to be dumped 
-out to a dedicated /dev/mtdblock* partition for which there ought to be 
-support for mtd->panic_write, but it still did not work any better. Is 
-there something obvious that I am missing which prevents kernel panics 
-from being logged?
-
-Thank you!
--- 
-Florian
+Rob

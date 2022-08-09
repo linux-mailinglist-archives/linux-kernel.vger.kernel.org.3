@@ -2,122 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE7A58DACB
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C4A58DADA
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244887AbiHIPGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 11:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S243208AbiHIPMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 11:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244945AbiHIPFq (ORCPT
+        with ESMTP id S230178AbiHIPMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 11:05:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C02F9B16
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 08:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660057543;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GOrNPfzx0xECymBE6UzgxDM4IxWAjaVnZWiIiwsL06k=;
-        b=PXBhRw7O/opv/k+mEDaU14f6H3OIw5M+1AdAFurKM9+deV2hbkwhC3X1ELOgTiTiZPT1V0
-        lLuJkIObZ2osqikIsbZJ79xk3yKfpKhRsoNmFS9R1pUk3a3TM4H1KyNFHy1WUmWAyiwoRy
-        t0q3sBOCeB5y+OuxGpcrXxhrXjePquc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-283-zDKWRoxlO72Lu82OxM-LPw-1; Tue, 09 Aug 2022 11:05:34 -0400
-X-MC-Unique: zDKWRoxlO72Lu82OxM-LPw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 9 Aug 2022 11:12:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14275C54;
+        Tue,  9 Aug 2022 08:12:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3E1861C0756B;
-        Tue,  9 Aug 2022 15:05:32 +0000 (UTC)
-Received: from [10.22.18.32] (unknown [10.22.18.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EB53940C1288;
-        Tue,  9 Aug 2022 15:05:31 +0000 (UTC)
-Message-ID: <7b1c463c-c912-ba08-bac4-99d45e45f7e1@redhat.com>
-Date:   Tue, 9 Aug 2022 11:05:31 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0BC36122D;
+        Tue,  9 Aug 2022 15:12:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11484C433B5;
+        Tue,  9 Aug 2022 15:12:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660057964;
+        bh=hpr5ncI+B3Zk5lb6IfcPnPBbi/9BzktMcVJlUZHBj4c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QrbA0PBjazR7jAKkBh9YNESdmzoRsWOufqfgetk20DYoQ+uXYGwAgXhpkQiGt7HO0
+         BiM+VP0M8Z9Fg8O7tcw8U4RfOxEqddTZFIwUXT/s9CG2Hdx6fSrCeRfK50GWSor6jK
+         y0AI9Jr4ozCWTNccB6jkbDqsRDw/LiMn2ZxtJTBTKc1e5Yg0iELoWBRK0X2R/NKYQU
+         8fZiW1lOjZFr61cdWct8bzgOVRpLVCy2vdsKfyAb9CPDoP8f8TJpkWAf5sBZKmYMVR
+         l8etJ1i0za2xP3junYVcWkVS7IPbQ8HJccucUq0/qGskB6lzo6s+gOi8veEcaF510A
+         UvjDgCJlT5KZg==
+Received: by mail-vs1-f52.google.com with SMTP id d126so7911021vsd.13;
+        Tue, 09 Aug 2022 08:12:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo39JjvFV1QwJG/+yTkrXsD0Y6FsUmM6yLpeCK8Cn5Av1ojC7qEu
+        Dqe3bQ4KMsolF7u7X5g+lXeb8d742qiijFPWUQ==
+X-Google-Smtp-Source: AA6agR7EW9ojcU7odimGFi3uUkSTkSp9fZBO4oWioSAJV/M+NotpnmIns8Lw20HOIwj/mS+dggjZsX3OEnfgahz/iLc=
+X-Received: by 2002:a67:a246:0:b0:388:7e82:1d80 with SMTP id
+ t6-20020a67a246000000b003887e821d80mr8570961vsh.26.1660057962908; Tue, 09 Aug
+ 2022 08:12:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] locking: Add __lockfunc to slow path functions
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220808175956.592707-1-namhyung@kernel.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220808175956.592707-1-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220728143427.13617-1-Sergey.Semin@baikalelectronics.ru>
+ <20220728143427.13617-13-Sergey.Semin@baikalelectronics.ru>
+ <20220801181311.GA1266390-robh@kernel.org> <20220808160118.m5ka7o7gdhei2yzl@mobilestation>
+In-Reply-To: <20220808160118.m5ka7o7gdhei2yzl@mobilestation>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 9 Aug 2022 09:12:31 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJSYAsotjzvOUy_f7ZRfsSrfZyuEzq7eRwwKk12FBgxYg@mail.gmail.com>
+Message-ID: <CAL_JsqJSYAsotjzvOUy_f7ZRfsSrfZyuEzq7eRwwKk12FBgxYg@mail.gmail.com>
+Subject: Re: [PATCH v4 12/17] dt-bindings: PCI: dwc: Add Baikal-T1 PCIe Root
+ Port bindings
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        PCI <linux-pci@vger.kernel.org>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/8/22 13:59, Namhyung Kim wrote:
-> So that we can skip the functions in the perf lock contention and other
-> places like /proc/PID/wchan.
+On Mon, Aug 8, 2022 at 10:01 AM Serge Semin <fancer.lancer@gmail.com> wrote:
 >
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->   kernel/locking/qrwlock.c   | 4 ++--
->   kernel/locking/qspinlock.c | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+> On Mon, Aug 01, 2022 at 12:13:11PM -0600, Rob Herring wrote:
+> > On Thu, Jul 28, 2022 at 05:34:22PM +0300, Serge Semin wrote:
+> > > Baikal-T1 SoC is equipped with DWC PCIe v4.60a Root Port controller, which
+> > > link can be trained to work on up to Gen.3 speed over up to x4 lanes. The
+> > > controller is supposed to be fed up with four clock sources: DBI
+> > > peripheral clock, AXI application Tx/Rx clocks and external PHY/core
+> > > reference clock generating the 100MHz signal. In addition to that the
+> > > platform provide a way to reset each part of the controller:
+> > > sticky/non-sticky bits, host controller core, PIPE interface, PCS/PHY and
+> > > Hot/Power reset signal. The Root Port controller is equipped with multiple
+> > > IRQ lines like MSI, system AER, PME, HP, Bandwidth change, Link
+> > > equalization request and eDMA ones. The registers space is accessed over
+> > > the DBI interface. There can be no more than four inbound or outbound iATU
+> > > windows configured.
+> > >
+> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > >
+> > > ---
+> > >
+> > > Changelog v2:
+> > > - Rename 'syscon' property to 'baikal,bt1-syscon'.
+> > > - Fix the 'compatible' property definition to being more specific about
+> > >   what strings are supposed to be used. Due to that we had to add the
+> > >   select property to evaluate the schema against the Baikal-T1 PCIe DT
+> > >   nodes only.
+> > > ---
+> > >  .../bindings/pci/baikal,bt1-pcie.yaml         | 154 ++++++++++++++++++
+> > >  1 file changed, 154 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
+> > > new file mode 100644
+> > > index 000000000000..23bd1d0aa5c5
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
+> > > @@ -0,0 +1,154 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/pci/baikal,bt1-pcie.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Baikal-T1 PCIe Root Port Controller
+> > > +
+> > > +maintainers:
+> > > +  - Serge Semin <fancer.lancer@gmail.com>
+> > > +
+> > > +description:
+> > > +  Embedded into Baikal-T1 SoC Root Complex controller. It's based on the
+> > > +  DWC RC PCIe v4.60a IP-core, which is configured to have just a single Root
+> > > +  Port function and is capable of establishing the link up to Gen.3 speed
+> > > +  on x4 lanes. It doesn't have embedded clock and reset control module, so
+> > > +  the proper interface initialization is supposed to be performed by software.
+> > > +
+> > > +select:
+> > > +  properties:
+> > > +    compatible:
+> > > +      contains:
+> > > +        const: baikal,bt1-pcie
+> > > +
+> > > +  required:
+> > > +    - compatible
+> > > +
+> > > +allOf:
+> > > +  - $ref: /schemas/pci/snps,dw-pcie.yaml#
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    items:
+> > > +      - const: baikal,bt1-pcie
+> > > +      - const: snps,dw-pcie-4.60a
+> > > +      - const: snps,dw-pcie
+> >
 >
-> diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
-> index 2e1600906c9f..d2ef312a8611 100644
-> --- a/kernel/locking/qrwlock.c
-> +++ b/kernel/locking/qrwlock.c
-> @@ -18,7 +18,7 @@
->    * queued_read_lock_slowpath - acquire read lock of a queued rwlock
->    * @lock: Pointer to queued rwlock structure
->    */
-> -void queued_read_lock_slowpath(struct qrwlock *lock)
-> +void __lockfunc queued_read_lock_slowpath(struct qrwlock *lock)
->   {
->   	/*
->   	 * Readers come here when they cannot get the lock without waiting
-> @@ -63,7 +63,7 @@ EXPORT_SYMBOL(queued_read_lock_slowpath);
->    * queued_write_lock_slowpath - acquire write lock of a queued rwlock
->    * @lock : Pointer to queued rwlock structure
->    */
-> -void queued_write_lock_slowpath(struct qrwlock *lock)
-> +void __lockfunc queued_write_lock_slowpath(struct qrwlock *lock)
->   {
->   	int cnts;
->   
-> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-> index 65a9a10caa6f..2b23378775fe 100644
-> --- a/kernel/locking/qspinlock.c
-> +++ b/kernel/locking/qspinlock.c
-> @@ -313,7 +313,7 @@ static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
->    * contended             :    (*,x,y) +--> (*,0,0) ---> (*,0,1) -'  :
->    *   queue               :         ^--'                             :
->    */
-> -void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
-> +void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
->   {
->   	struct mcs_spinlock *prev, *next, *node;
->   	u32 old, tail;
+> > Again, these fallbacks simply aren't useful.
+>
+> Ok. I give up. You are the boss. I'll drop them =)
+>
+> >
+> > > +
+> > > +  reg:
+> > > +    description:
+> > > +      DBI, DBI2 and at least 4KB outbound iATU-capable region.
+> >
+>
+> > 'iATU-capable region' means config space? That's not very clear.
+>
+> No 'iATU-capable region' means the region, which can be used as a
+> source address for the iATU engine. In general it can be used for any
+> accesses (IO, MEM, CFG). But the DW PCIe driver will indeed use it for
+> the config-space accesses.
+>
+> IMO the 'config' reg space is kind of virtual. Due to the outbound
+> iATU capability the driver could use any free outbound iATU region it
+> found instead.
 
+It is and in hindsight, we maybe should have described the whole
+address space and let the OS alloc the config space out of it. But
+then again, original OpenFirmware PCI binding reflects what the
+firmware discovered AND how it is configured. So specifying where
+config space is makes sense.
 
-For completeness, I think you should also add it to the 
-__pv_queued_spin_unlock() and __pv_queued_spin_unlock_slowpath() 
-function in kernel/locking/qspinlock_paravirt.h. Perhaps even the 
-assembly code in arch/x86/include/asm/qspinlock_paravirt.h.
+Bottom line is the binding defines putting the config space region in
+'reg', not an iATU region.
 
-Cheers,
-Longman
+> > > +    maxItems: 3
+> > > +
+> > > +  reg-names:
+> > > +    minItems: 3
+> > > +    maxItems: 3
+> > > +    items:
+> > > +      enum: [ dbi, dbi2, config ]
+> >
+>
+> > Define the order. Here, and the rest.
+>
+> Ok. I will, but please answer to my question, I asked you in the
+> previous email thread:
+>
+> Serge Semin wrote:
+> > Rob Herring wrote:
+> > > ...
+> > > Tell me why you need random order.
+> >
+> > Because I don't see a need in constraining the order. If we get to set
+> > the order requirement, then why do we need to have the "*-names"
+> > property at all?
 
+Originally, it was for cases where you have a variable number of
+entries and can't determine what each entry is. IOW, when you have
+optional entries in the middle of required entries. But then everyone
+*loves* -names even when not needed or useful such as 'phy-names =
+"pcie"' (the phy subsys requiring names was part of the problem there,
+but that's been fixed).
+
+> > IMO having "reg" with max/minItems restriction plus generic
+> > description and "reg-names" with possible values enumerated seems very
+> > suitable pattern in this case. Don't you think?
+
+No, I think this is just as concise and defines the order too:
+
+reg-names:
+  items:
+    - const: dbi
+    - const: dbi2
+    - const: config
+
+>
+> In addition to that what about optional names? How would you suggest
+> to handle such case without the non-ordered pattern?
+
+Sorry, I don't follow.
+
+Rob

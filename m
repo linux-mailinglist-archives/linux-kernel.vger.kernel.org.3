@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B516858D5DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399B658D5E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241471AbiHII4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57016 "EHLO
+        id S241767AbiHII4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241327AbiHII4j (ORCPT
+        with ESMTP id S241380AbiHII4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:56:39 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F81A22509
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:56:37 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id n4so11796741wrp.10
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 01:56:37 -0700 (PDT)
+        Tue, 9 Aug 2022 04:56:41 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B9222535
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:56:39 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id z16so13492852wrh.12
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 01:56:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Nioz9jTvIYC3MkuoeeXOKouVDzG9rikhwfoHFhwSrUc=;
-        b=S9TVsuzhOehWyZ5xdtK2r1ilTAigVStRKNqjVuKafJ/sYabydAO5C7D0o57Cso5KsL
-         3i+3b2buufmLBShKTEMSN1Cd5qYkGP9uzuQnwug7XsKGW4eDgFQkcdSmalaqRSGZjzXi
-         r3zNaFGFMCYhOVzImwGkdkhS/7xTlC979GXQzB3E+7J2lnA1YXZ3qWswlzrPoIIMxhgy
-         18fn4x60XS01oFeODecUSRZ84aTaf6CPbtWQ7QeGz0tS0CWoxvpN/GkbKSaL4i9SXxws
-         ZQpM8OaU+ulM0W+EIsAg/g6nXk6Aj0GT2qPW0OXrLKs8b2jJSzhbiUkHNFLrsK2PhVsV
-         uCHg==
+        bh=bXLpXmWL+T2aMJD2mxacKkNa6+tQMtWwj5lWrNrsUB4=;
+        b=DnIqRWDo09RJul5vv+F5yTbZTopzEj3jbl38jNbPUKWwObnJ5P4dZfKlxyXkFB2VJg
+         veF3hn4jAAcE1lSxatgP7Ry6C+N/BauvxaDw9NLeP2Tr+BMEVkFi0r6Xqn8gjFJJnzdk
+         HF2IUKVgo+qzeMV9LFFvcakMb7a2h1orRYKZKQyR654M+M4+RLeQuHGja57/xEKWx0s8
+         Lywbb0ZdnbGTMhPO7sn8k+p0Y3IobsUlz7RRaTy20cXevux0fIoz+OqTWycPVMmzox3k
+         qSoHvxWKYqQ+pzd3QciVR/KzCAydWgG/XcSJItFvHMG6SWdAKYkGo0Snh+FC8pU72kYh
+         hDSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Nioz9jTvIYC3MkuoeeXOKouVDzG9rikhwfoHFhwSrUc=;
-        b=o7wrOzDQ+SoKZh2LAGoYI3p3OErNyD3GcBBNfWeRKFEcebfgr7G/7Rx9fiqCnsbGWP
-         AsJH4NaajD8ZEV9polDYyural62Uy6Qg/tV45vehintyeVGfhavFdqYwmsiukPCyjAMl
-         /cDqA+6ZjhN0E1G/tTqLhKX4AIGARvYDppQRrWul9HZAv/HZy/p4YFUTivBjdypqTc5q
-         z/mjJaUpGyD+C9M/HvZnkN1r3GCDB3aI91LOkO9HclgBS55zy9G0xgCV9F5zTH9gI4+d
-         06Y4EqKT0N/Dd7BD98TlQhBxU5L3ZILiAmO1ZiAndMkl5ubsq/wzt2UMTDERSc+v79OP
-         23Hg==
-X-Gm-Message-State: ACgBeo2rX5wasrdIfegU5d6+dtD3BRrP6JNJ4gDiPyfWhlUzcx37DdVE
-        MMNa42SiexdZ9bh9sSNWRQx76Q==
-X-Google-Smtp-Source: AA6agR7Eeiw5PNfZ+41IJRCAonp78CCNCVne7eY4Y5ynKDBWgjuBMuWBDLcEIrPRmi5qtdEkPldv9A==
-X-Received: by 2002:a5d:4945:0:b0:21e:de03:2d11 with SMTP id r5-20020a5d4945000000b0021ede032d11mr13542950wrs.308.1660035395982;
-        Tue, 09 Aug 2022 01:56:35 -0700 (PDT)
+        bh=bXLpXmWL+T2aMJD2mxacKkNa6+tQMtWwj5lWrNrsUB4=;
+        b=nGFXrRkgEtwZGCiyXuwQAkiwaOSHqMKmfECUixYsG+uECQQonUflC6RxXecJQ5vcix
+         VCMumn7diDZF59U3esu2/tU2Uv5gijo/P1ojwaVdZAcaA15pnoJ0TGftUMGkNfqyNaoE
+         rdFcP4J2bN5MUAo8WYU5yga2JuWnyU4F7rHLqnGf5RnHtGBOXR+BuWyVjzjBJZ/cu/wZ
+         HEWidngQC+cp5UiteRCetEHw4PqcTAeTl32v5RDSjkbXcbtmNyz1Ar7laTLT8vGIUKG/
+         6XVLYZ6uqwj+fI1g/5Xd9QynvC12OOs+lY6VMsuWFmCVI7XMHr+2gvIO/77sg69N7yCP
+         EEOg==
+X-Gm-Message-State: ACgBeo0G0IrLEtOLkjh1x2yZmCAi3uiDfrO6radFOnrYMxY5PyWy2XGH
+        yFgh+VfoYu6VONKcJ8WJuX/b1Q==
+X-Google-Smtp-Source: AA6agR4yrlmW3A2BU6dz6lzflbszCSmZXiu9M69XebLiEQKaMKzbnJhCPb5iMGPYgITbRuulDIDLRg==
+X-Received: by 2002:a05:6000:178c:b0:223:141:8a14 with SMTP id e12-20020a056000178c00b0022301418a14mr4040423wrg.629.1660035397455;
+        Tue, 09 Aug 2022 01:56:37 -0700 (PDT)
 Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id c5-20020adfe705000000b0021f1522c93bsm15746147wrm.45.2022.08.09.01.56.34
+        by smtp.gmail.com with ESMTPSA id c5-20020adfe705000000b0021f1522c93bsm15746147wrm.45.2022.08.09.01.56.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 01:56:35 -0700 (PDT)
+        Tue, 09 Aug 2022 01:56:36 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     michael@walle.cc, dan.carpenter@oracle.com, linux@roeck-us.net,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2 2/4] thermal/of: Return -ENODEV instead of -EINVAL if registration fails
-Date:   Tue,  9 Aug 2022 10:56:27 +0200
-Message-Id: <20220809085629.509116-2-daniel.lezcano@linaro.org>
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS)
+Subject: [PATCH v2 3/4] dt-bindings: thermal: Fix missing required property
+Date:   Tue,  9 Aug 2022 10:56:28 +0200
+Message-Id: <20220809085629.509116-3-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220809085629.509116-1-daniel.lezcano@linaro.org>
 References: <20220809085629.509116-1-daniel.lezcano@linaro.org>
@@ -73,59 +77,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous version of the OF code was returning -ENODEV if no
-thermal zones description was found or if the lookup of the sensor in
-the thermal zones was not found.
+When the thermal zone description was converted to yaml schema, the
+required 'trips' property was forgotten.
 
-The backend drivers are expecting this return value as an information
-about skipping the sensor initialization and considered as normal.
+The initial text bindings was describing:
 
-Fix the return value by replacing -EINVAL by -ENODEV and remove the
-error message as this missing is not considered as an error.
+"
+[ ... ]
 
+* Thermal zone nodes
+
+The thermal zone node is the node containing all the required info
+for describing a thermal zone, including its cooling device bindings. The
+thermal zone node must contain, apart from its own properties, one sub-node
+containing trip nodes and one sub-node containing all the zone cooling maps.
+
+Required properties:
+- polling-delay:        The maximum number of milliseconds to wait between polls
+  Type: unsigned        when checking this thermal zone.
+  Size: one cell
+
+- polling-delay-passive: The maximum number of milliseconds to wait
+  Type: unsigned        between polls when performing passive cooling.
+  Size: one cell
+
+- thermal-sensors:      A list of thermal sensor phandles and sensor specifier
+  Type: list of         used while monitoring the thermal zone.
+  phandles + sensor
+  specifier
+
+- trips:                A sub-node which is a container of only trip point nodes
+  Type: sub-node        required to describe the thermal zone.
+
+Optional property:
+- cooling-maps:         A sub-node which is a container of only cooling device
+  Type: sub-node        map nodes, used to describe the relation between trips
+                        and cooling devices.
+  [ ... ]
+
+"
+
+Now the schema describes:
+
+"
+    [ ... ]
+
+    required:
+      - polling-delay
+      - polling-delay-passive
+      - thermal-sensors
+
+    [ ... ]
+"
+
+Add the missing 'trips' property in the required properties.
+
+Fixed: 1202a442a31fd ("dt-bindings: thermal: Add yaml bindings for thermal zones")
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Tested-by: Michael Walle <michael@walle.cc>
 ---
-  v2:
-   - Change the error message to a debug message
-   - Only show an error if the error is not -ENODEV
----
- drivers/thermal/thermal_of.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/thermal/thermal-zones.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 368eb58e97cf..3effc729be4b 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -328,8 +328,8 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+index 2d34f3ccb257..8d2c6d74b605 100644
+--- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
++++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+@@ -214,6 +214,7 @@ patternProperties:
+       - polling-delay
+       - polling-delay-passive
+       - thermal-sensors
++      - trips
  
- 	np = of_find_node_by_name(NULL, "thermal-zones");
- 	if (!np) {
--		pr_err("Unable to find thermal zones description\n");
--		return ERR_PTR(-EINVAL);
-+		pr_debug("No thermal zones description\n");
-+		return ERR_PTR(-ENODEV);
- 	}
- 
- 	/*
-@@ -368,7 +368,7 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
- 			}
- 		}
- 	}
--	tz = ERR_PTR(-EINVAL);
-+	tz = ERR_PTR(-ENODEV);
- out:
- 	of_node_put(np);
- 	return tz;
-@@ -642,7 +642,8 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
- 
- 	np = of_thermal_zone_find(sensor, id);
- 	if (IS_ERR(np)) {
--		pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
-+		if (PTR_ERR(np) != -ENODEV)
-+			pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
- 		return ERR_CAST(np);
- 	}
+     additionalProperties: false
  
 -- 
 2.34.1

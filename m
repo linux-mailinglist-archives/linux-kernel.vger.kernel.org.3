@@ -2,80 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6E858E085
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F82F58E088
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345370AbiHITzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
+        id S1345439AbiHITz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345329AbiHITzR (ORCPT
+        with ESMTP id S1345376AbiHITzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:55:17 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C699610D9;
-        Tue,  9 Aug 2022 12:55:16 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id h138so10451179iof.12;
-        Tue, 09 Aug 2022 12:55:16 -0700 (PDT)
+        Tue, 9 Aug 2022 15:55:25 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08605F7D;
+        Tue,  9 Aug 2022 12:55:24 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id f30so11358094pfq.4;
+        Tue, 09 Aug 2022 12:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=9MuUym0qseMztmmB08QIe6J0PxQHYo7/9v1WA9Ef9Bg=;
+        b=oC3ymHBJylR7XqQ1/YsoJWKU1vaS4NJ9iVSdgfEdCt9FgymssN/Wxfz4zV0wTqb8ox
+         mHrHVPgBvk1V5bINjpZmmSZ2YVsLiVWbMc0QHAlLbxmlYteVr0eseqlyDpS3+otxKogh
+         8n/4AHVa6kc0D7E4Nj6mrsGdmf7c/OQjhIbyhwrB9YafOwrvn6lCkvFCwEL8hV8uLSwx
+         CYCfs9tOBHKWRpPEnz9suBU2fGtc5Jv3JLCCnD4ANllmc1h1yVvAZQMGRSRKbV9MiSKL
+         SBzlVoS1vtOQUaMUVkuMOTZw/vBbRy4Qj8otjY2kg7ehzaT9sqR+sB2yizTxBQEx4EV1
+         /GyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=NmRiglbyS3f2eZJNSmpjxkkODRr60iCR5V5oFeVX7Yg=;
-        b=TQFQQzcKPqZiLEjNc0OPPJqbD5CVtJnwsI0RKi53eDWPBzOlCWtCJO3nhajQ5ghm/0
-         moaILt/CIfgZz0vAG/DOxdrT1lXSylGXb5MRa0rfkaVRvg966x+WfPgVDXnFhu95uram
-         6NYncUE1MJWO2RBtIqH1KCPVqfzpL1eU3PW6Gwy95Wrj1eHJ1e2UYi4rm+8Qlt/aueUL
-         nrkbJYk8qDk7cBfT9KMmciKjWjRxjOcSkWESeuF69Cv+NiYwecDpaRtcLzbQRnMGfxDn
-         sP9S3GYzwDOLJcXkb+Ma4hVFZ16ynZmdgQIETCQzZebgqeEOWEgvkZbxGc4Ohdf0GyjV
-         FcMA==
-X-Gm-Message-State: ACgBeo3ZQB2QyLm6tQZ5s8FVAkfMitnmAZ0DI6/J1AUeBElvoQN3kMKK
-        xmSMYHf8h+u7Jsq0dhbkdQ==
-X-Google-Smtp-Source: AA6agR6cqChrqIDYR3Ko5vcObSAMv92y6qwdjRLtpx40VfdXKfVMvdj5N5v2nZfgMRstlLkPya01EQ==
-X-Received: by 2002:a05:6638:3801:b0:343:29b3:d459 with SMTP id i1-20020a056638380100b0034329b3d459mr2398142jav.302.1660074916021;
-        Tue, 09 Aug 2022 12:55:16 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id s17-20020a02b151000000b003433b686389sm139055jah.62.2022.08.09.12.55.14
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=9MuUym0qseMztmmB08QIe6J0PxQHYo7/9v1WA9Ef9Bg=;
+        b=BD7RJQzQKU161Hk6Oj4WKXuvoKCjyXXO0VRw1VhI+I1juzWuxbq0Qx7LuVrpbE9QgW
+         w8Rw+8wUIO0n6SbAC+0zjWiWi18ISfa0UG9utRecYIE3NfHhZR2V2R5Scu26ENbmkR1c
+         LV15Xk1L41dNNCg1whFtUIRkVogMdDF5+dk5/vMOe59T2mGKvdrUZhcHdStVC29KNyoA
+         SIwlrWY3A9QtkZY7tXMJ2Vp9V2Pj+Wcn6kiNclT5Q6F05s2CQ8aqFD4qjejeZgdVM6z1
+         9rik1rpnrHB/S63EscrWXF84NLCE/A8Nsmo/I5x68tI3DCFuWTmLzYfsKSsyvXnNWDDZ
+         apyg==
+X-Gm-Message-State: ACgBeo3RfpQEud5If5U4UEiRX4uH3qtyuMZ+/PQb8jiBWyAGcoV7+6ag
+        gyOS8ju9GQnNzFTYLpBYoBk=
+X-Google-Smtp-Source: AA6agR5T2qyURPAUNz3Ik2+ANuXj1MEgX0/CWpXSSiJzOivF1/nX/FJPYo2OmCzEmS1ezPOFCZwC9g==
+X-Received: by 2002:a65:5504:0:b0:41d:271:4929 with SMTP id f4-20020a655504000000b0041d02714929mr17565614pgr.606.1660074923724;
+        Tue, 09 Aug 2022 12:55:23 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:237b])
+        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b0016c4147e48asm11156900plk.219.2022.08.09.12.55.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 12:55:15 -0700 (PDT)
-Received: (nullmailer pid 2286622 invoked by uid 1000);
-        Tue, 09 Aug 2022 19:55:13 -0000
-Date:   Tue, 9 Aug 2022 13:55:13 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-Cc:     ayufan@ayufan.eu, linux-rockchip@lists.infradead.org,
-        martijn@brixit.nl, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, heiko@sntech.de, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, megi@xff.cz
-Subject: Re: [PATCH v2 2/3] dt-bindings: arm: rockchip: Add PinePhone Pro
- bindings
-Message-ID: <20220809195513.GA2286588-robh@kernel.org>
-References: <20220805234411.303055-1-tom@tom-fitzhenry.me.uk>
- <20220805234411.303055-3-tom@tom-fitzhenry.me.uk>
+        Tue, 09 Aug 2022 12:55:23 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 9 Aug 2022 09:55:21 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 2/2] cgroup/cpuset: Keep user set cpus affinity
+Message-ID: <YvK7qVkmzbA12Eut@slm.duckdns.org>
+References: <20220801154124.2011987-1-longman@redhat.com>
+ <20220801154124.2011987-3-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805234411.303055-3-tom@tom-fitzhenry.me.uk>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220801154124.2011987-3-longman@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 06 Aug 2022 09:44:10 +1000, Tom Fitzhenry wrote:
-> Document board compatible names for Pine64 PinePhonePro.
-> 
-> https://wiki.pine64.org/wiki/PinePhone_Pro
-> 
-> Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-> ---
->  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+(cc'ing Linus)
 
-Acked-by: Rob Herring <robh@kernel.org>
+Hello,
+
+On Mon, Aug 01, 2022 at 11:41:24AM -0400, Waiman Long wrote:
+> It was found that any change to the current cpuset hierarchy may reset
+> the cpumask of the tasks in the affected cpusets to the default cpuset
+> value even if those tasks have cpus affinity explicitly set by the users
+> before. That is especially easy to trigger under a cgroup v2 environment
+> where writing "+cpuset" to the root cgroup's cgroup.subtree_control
+> file will reset the cpus affinity of all the processes in the system.
+> 
+> That is problematic in a nohz_full environment where the tasks running
+> in the nohz_full CPUs usually have their cpus affinity explicitly set
+> and will behave incorrectly if cpus affinity changes.
+> 
+> Fix this problem by looking at user_cpus_ptr which will be set if
+> cpus affinity have been explicitly set before and use it to restrcit
+> the given cpumask unless there is no overlap. In that case, it will
+> fallback to the given one.
+> 
+> With that change in place, it was verified that tasks that have its
+> cpus affinity explicitly set will not be affected by changes made to
+> the v2 cgroup.subtree_control files.
+
+The fact that the kernel clobbers user-specified cpus_allowed as cpu
+availability changes always bothered me and it has been causing this sort of
+problems w/ cpu hotplug and cpuset. We've been patching this up partially
+here and there but I think it would be better if we just make the rules
+really simple - ie. allow users to configure whatever cpus_allowed as long
+as that's within cpu_possible_mask and override only the effective
+cpus_allowed if the mask leaves no runnable CPUs, so that we can restore the
+original configured behavior if and when some of the cpus become available
+again.
+
+One obvious problem with changing the behavior is that it may affect /
+confuse users expecting the current behavior however inconsistent it may be,
+but given that we have partially changed how cpus_allowed interacts with
+hotplug in the past and the current behavior can be inconsistent and
+surprising, I don't think this is a bridge we can't cross. What do others
+think?
+
+Thanks.
+
+-- 
+tejun

@@ -2,115 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37F958DB57
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38A458DB61
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239746AbiHIPsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 11:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
+        id S244524AbiHIPwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 11:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234503AbiHIPsW (ORCPT
+        with ESMTP id S242268AbiHIPwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 11:48:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94243115A;
-        Tue,  9 Aug 2022 08:48:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D413B80B7F;
-        Tue,  9 Aug 2022 15:48:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D29C433C1;
-        Tue,  9 Aug 2022 15:48:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660060098;
-        bh=jzxpOtEPbQM8mbY4SedlJQVQXOxJmNcc1pN13oORODs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nV15EUVI7mCkEaWl1Zy+XOTgtawbJNPw/pFkEtXA7gD0PYSYcu7g7YtRf2j+M8A0P
-         hJ87HwNnj1lAXc+6EDt6FAPQx/tEgm91qH3fllxplCnyNwUmhm5/ozh7bJJGUdwG/f
-         MNLDk/pvMAiBrjj3WS2ewvFQTyGV8mAY+Nbaf19Onr6fcZex6Br/Y3N7ZH3/3XL2tR
-         eZt4C0RnEerkG9Ea+2u11W91GJrZ2fe49BkTRRxbXg1Y0A2/7NBXjRpZI6kMaIxbJw
-         O+B/KxQomxz3/hcpgipI/FHtj8Vd9dDok8OZ60dXA3ZUpv2aFb/PMydSQs2A12djpq
-         Pf/r0o8sf3Y0Q==
-Received: by pali.im (Postfix)
-        id E920FC1F; Tue,  9 Aug 2022 17:48:15 +0200 (CEST)
-Date:   Tue, 9 Aug 2022 17:48:15 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: marvell: Update Armada 37xx platform
- bindings
-Message-ID: <20220809154815.ja2mu6ponqxnubsd@pali>
-References: <20220713200123.22612-1-pali@kernel.org>
- <20220808202352.iimhb2q6yawi35y6@pali>
- <20a349c9-a479-ad5b-fe33-4758a773972e@linaro.org>
- <20220809131357.u3dfsy3gu3iamiv7@pali>
- <400b78db-17ac-b9d8-fcf9-3a4dc7821ea8@linaro.org>
+        Tue, 9 Aug 2022 11:52:31 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B0F175A2
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 08:52:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660060350; x=1691596350;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wqkjv7X49zyKahKBsy/Af1XfeH6iBppELh4Mlt5gIXo=;
+  b=PkyVmkOB1AuOagU7NPOXmIWB4O2vjISwjR2QQRyEiHMUUEQsXr+sgDdc
+   5n3qa0T5l0FzMHZkfA7PIfIIquOd8ldULDDq6ETIMWS7FXFbEqOw5OKvZ
+   wgPaPmDY7OdcUu6Efo6zp1J+8Ds69i2enUmFzKtyU41P35j/9tkJW0zP8
+   3/zxtAmC3mgZq3Bd6As5UDyqlrhGLIJGEjQ9uk1J4cAQ4Jj9PuPW6qc1i
+   bIfV7/6Jj6KmfLsSNXVOWn7NkvztU+7XV2S+zw1yFxfp2AW66grVYQ5xT
+   jxuhYiZyv6b1BbSH+qlUGkRD4qswDPqY8vBtKaZxW2HGms+PIzAjEaJwE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="277804944"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="277804944"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 08:50:33 -0700
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="664484569"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 08:50:31 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 09 Aug 2022 18:50:28 +0300
+Date:   Tue, 9 Aug 2022 18:50:28 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Brad Campbell <lists2009@fnarfbargle.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Apple Thunderbolt Display chaining
+Message-ID: <YvKCRPtoN6m2rMr2@lahna>
+References: <a1db1454-63b6-7c39-bbf6-53e53bbd36e6@fnarfbargle.com>
+ <5474e599-057a-ec0f-b469-560644155907@fnarfbargle.com>
+ <YvEFtPF7SBIwNG/o@lahna>
+ <d234ea9b-9303-6088-0a9b-4de887a77bf4@fnarfbargle.com>
+ <YvI1lQh+C0SJiG73@lahna>
+ <bcebdeb9-4f6a-e931-46f5-b9be899db9a4@fnarfbargle.com>
+ <YvI9Cbin4OKQwZ05@lahna>
+ <86bec398-7a5b-6d4e-bc02-5941fe6c2e73@fnarfbargle.com>
+ <YvJyZ51H+YkceKJP@lahna>
+ <39268cc6-4e05-b83c-ff73-3056925eeb76@fnarfbargle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <400b78db-17ac-b9d8-fcf9-3a4dc7821ea8@linaro.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <39268cc6-4e05-b83c-ff73-3056925eeb76@fnarfbargle.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 09 August 2022 18:46:04 Krzysztof Kozlowski wrote:
-> On 09/08/2022 16:13, Pali Rohár wrote:
-> > On Tuesday 09 August 2022 08:58:50 Krzysztof Kozlowski wrote:
-> >> On 08/08/2022 23:23, Pali Rohár wrote:
-> >>> PING?
-> >>>
-> >>> On Wednesday 13 July 2022 22:01:23 Pali Rohár wrote:
-> >>>> Distinguish between Armada 3700 family, Armada 3710 SoC and Armada 3720 SoC.
-> >>>> Armada 3720 DB is name of the board with Armada 3720 SoC, so correctly
-> >>>> indicate SoC in example.
-> >>>>
-> >>>> Signed-off-by: Pali Rohár <pali@kernel.org>
-> >>>> ---
-> >>>>  .../devicetree/bindings/arm/marvell/armada-37xx.txt        | 7 ++++++-
-> >>>>  1 file changed, 6 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
-> >>>> index f6d6642d81c0..d2ca008de266 100644
-> >>>> --- a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
-> >>>> +++ b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
-> >>>> @@ -4,6 +4,11 @@ Marvell Armada 37xx Platforms Device Tree Bindings
-> >>>>  Boards using a SoC of the Marvell Armada 37xx family must carry the
-> >>>>  following root node property:
-> >>>>  
-> >>>> + - compatible: must contain "marvell,armada3700"
-> >>>> +
-> >>>> +In addition, boards using the Marvell Armada 3710 SoC shall have the
-> >>>> +following property before the previous one:
-> >>>> +
-> >>
-> >> The change is an ABI break, which looks reasonable, but still platform
-> >> maintainer should comment on it. Especially on the aspect why the
-> >> marvell,armada3710 fallback was chosen at the first place.
-> > 
-> > I do not think this is ABI break but rather incorrect documentation and
-> > bug in some board dts files.
+Hi,
+
+On Tue, Aug 09, 2022 at 11:16:27PM +0800, Brad Campbell wrote:
+> If I then reboot and load the driver it fails.
 > 
-> This documentation is the ABI, especially if actually implemented in the
-> DTS files, therefore by all definitions of DT ABI this is an ABI break.
-
-Ok.
-
-> What you are saying about "incorrect documentation and bug in some DTS
-> files" is a good reason to break the ABI, but it is still a break.
+> The only thing I could think of doing was an lspci -vvv after the boot and module load
+> and an lspci -vvv after a warm reboot and diff them, because there are changes around the
+> thunderbolt bridge devices. I've done a diff -u50 to try and keep as much context as possible.
 > 
-> Best regards,
-> Krzysztof
+> On the first boot I can unload/reload the thunderbolt module repeatedly and there's no issue
+> but loading it after a reboot locks up. There are no lspci changes on the first boot after the
+> initial module load unless I rescan the PCI bus, but they're minor and it doesn't cause an issue
+> with loading the thunderbolt module.
+> 
+> The firmware *must* be doing something on reboot I suppose or the PCIe configs wouldn't change.
 
-I think it is now clear what we both mean, just we used different
-terminology for the same thing.
+Okay, let's try a bigger hammer and reset all the ports upon load. That
+should hopefully clear out the "bad state" too. This is completely
+untested but it should trigger reset and then re-initialize the TBT
+links.
+
+diff --git a/drivers/thunderbolt/lc.c b/drivers/thunderbolt/lc.c
+index 633970fbe9b0..c419c2568de4 100644
+--- a/drivers/thunderbolt/lc.c
++++ b/drivers/thunderbolt/lc.c
+@@ -6,6 +6,8 @@
+  * Author: Mika Westerberg <mika.westerberg@linux.intel.com>
+  */
+ 
++#include <linux/delay.h>
++
+ #include "tb.h"
+ 
+ /**
+@@ -327,6 +329,34 @@ void tb_lc_xhci_disconnect(struct tb_port *port)
+ 	tb_port_dbg(port, "xHCI disconnected\n");
+ }
+ 
++int tb_lc_reset_port(struct tb_port *port)
++{
++	struct tb_switch *sw = port->sw;
++	int cap, ret;
++	u32 val;
++
++	if (sw->generation != 3)
++		return -EINVAL;
++
++	cap = find_port_lc_cap(port);
++	if (cap < 0)
++		return cap;
++
++	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, cap + TB_LC_PORT_MODE, 1);
++	if (ret)
++		return ret;
++
++	val |= TB_LC_PORT_MODE_DPR;
++	ret = tb_sw_write(sw, &val, TB_CFG_SWITCH, cap + TB_LC_PORT_MODE, 1);
++	if (ret)
++		return ret;
++
++	msleep(20);
++
++	val &= ~TB_LC_PORT_MODE_DPR;
++	return tb_sw_write(sw, &val, TB_CFG_SWITCH, cap + TB_LC_PORT_MODE, 1);
++}
++
+ static int tb_lc_set_wake_one(struct tb_switch *sw, unsigned int offset,
+ 			      unsigned int flags)
+ {
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 0ae8a7ec7c9c..21ac3ccf1cf9 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -740,6 +740,11 @@ int tb_port_disable(struct tb_port *port)
+ 	return __tb_port_enable(port, false);
+ }
+ 
++int tb_port_reset(struct tb_port *port)
++{
++	return tb_lc_reset_port(port);
++}
++
+ /*
+  * tb_init_port() - initialize a port
+  *
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 8030fc544c5e..48a7396994ef 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -1875,6 +1875,7 @@ static int tb_scan_finalize_switch(struct device *dev, void *data)
+ static int tb_start(struct tb *tb)
+ {
+ 	struct tb_cm *tcm = tb_priv(tb);
++	struct tb_port *p;
+ 	int ret;
+ 
+ 	tb->root_switch = tb_switch_alloc(tb, &tb->dev, 0);
+@@ -1911,6 +1912,12 @@ static int tb_start(struct tb *tb)
+ 				false);
+ 	/* Enable TMU if it is off */
+ 	tb_switch_tmu_enable(tb->root_switch);
++
++	tb_switch_for_each_port(tb->root_switch, p) {
++		if (tb_port_is_null(p))
++			tb_port_reset(p);
++	}
++
+ 	/* Full scan to discover devices added before the driver was loaded. */
+ 	tb_scan_switch(tb->root_switch);
+ 	/* Find out tunnels created by the boot firmware */
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 28bb80d967d6..fe5edefec712 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -1028,6 +1028,7 @@ int tb_port_clear_counter(struct tb_port *port, int counter);
+ int tb_port_unlock(struct tb_port *port);
+ int tb_port_enable(struct tb_port *port);
+ int tb_port_disable(struct tb_port *port);
++int tb_port_reset(struct tb_port *port);
+ int tb_port_alloc_in_hopid(struct tb_port *port, int hopid, int max_hopid);
+ void tb_port_release_in_hopid(struct tb_port *port, int hopid);
+ int tb_port_alloc_out_hopid(struct tb_port *port, int hopid, int max_hopid);
+@@ -1121,6 +1122,7 @@ bool tb_lc_is_usb_plugged(struct tb_port *port);
+ bool tb_lc_is_xhci_connected(struct tb_port *port);
+ int tb_lc_xhci_connect(struct tb_port *port);
+ void tb_lc_xhci_disconnect(struct tb_port *port);
++int tb_lc_reset_port(struct tb_port *port);
+ int tb_lc_set_wake(struct tb_switch *sw, unsigned int flags);
+ int tb_lc_set_sleep(struct tb_switch *sw);
+ bool tb_lc_lane_bonding_possible(struct tb_switch *sw);
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index f8c1ca3464d9..8fd12bc2d500 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -555,6 +555,9 @@ struct tb_regs_hop {
+ #define TB_LC_POWER				0x740
+ 
+ /* Link controller registers */
++#define TB_LC_PORT_MODE				0x26
++#define TB_LC_PORT_MODE_DPR			BIT(6)
++
+ #define TB_LC_CS_42				0x2a
+ #define TB_LC_CS_42_USB_PLUGGED			BIT(31)
+ 

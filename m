@@ -2,93 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9520258D1A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEE458D1A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244555AbiHIBCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 21:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S244799AbiHIBDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 21:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbiHIBCl (ORCPT
+        with ESMTP id S232876AbiHIBDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 21:02:41 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BDA4C1CB32
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 18:02:38 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Tue, 9 Aug 2022 09:02:18
- +0800 (GMT+08:00)
-X-Originating-IP: [218.12.17.53]
-Date:   Tue, 9 Aug 2022 09:02:18 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Thomas Gleixner" <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, jstultz@google.com, sboyd@kernel.org,
-        edumazet@google.com
-Subject: Re: [PATCH] timers: fix synchronization rules in comments of
- del_timer_sync
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <877d3irfze.ffs@tglx>
-References: <20220701085535.17018-1-duoming@zju.edu.cn>
- <877d3irfze.ffs@tglx>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Mon, 8 Aug 2022 21:03:13 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCDD1CB32
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 18:03:12 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id s5-20020a056e02216500b002dde8b02f62so7668914ilv.15
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 18:03:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=GNZ/WEEcU/yigVdW+3TGwb/mwTJDxOKNs/b3Za4ZRoA=;
+        b=6qLM53rVboIBA/U1sN0Mgc3rmfdLuQ0cUov0m3b/GiTnIS54EfqgBuFTDLCcraJKcq
+         7i4Rm8qtj5WkY6FyCu6NtOjndw4yrJvGqWpe/16D3Rtjvn8fONhsf4CWKQiNbcGNzh+w
+         QZN61vVgMpFM7eVnyAly/YNsoRz0XMzj3l5TB7gkftoj0bQmxQJyexO9cqaJ8vaVwNcn
+         G+sq5w0nUVM0gDOOuDalerZitOrHpoMCHZNHeosCI6jLY+MoUV9Zu7jbIjair+cKwnZg
+         SZ2JGPYnsZpQDcewoIoZ/cJTd1ooKPbRU+WSJShSCoeeqYI0yM5N0ccLxKqy2/OoOnOJ
+         IboA==
+X-Gm-Message-State: ACgBeo2N+d4o52LDcwflCS+tWtkjoS+8BxMHMYVAH/d1QP9sYtWHrpFI
+        RSLTfUq9gFH4mKkKGk1jZvEQbvyI3rORHtEhoMY9l7Ya8pZ/
+X-Google-Smtp-Source: AA6agR6lGbKCkVCen8Pq3kkuCbC5xZX2EPvMb7eVfPMPn6uzv8lo6hvhu7Y45JT6EF5zqg7q5d51CW4/YS7lsfDIhtjjf7enXY9G
 MIME-Version: 1.0
-Message-ID: <4a6d3b57.7607e.182801fb63f.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgAnYvwbsvFipJmEAg--.37634W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgERAVZdta+N6AABsm
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:3cc:b0:678:eb57:5eb with SMTP id
+ g12-20020a05660203cc00b00678eb5705ebmr7999553iov.125.1660006992163; Mon, 08
+ Aug 2022 18:03:12 -0700 (PDT)
+Date:   Mon, 08 Aug 2022 18:03:12 -0700
+In-Reply-To: <20220808133219.2248-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000017bd2d05e5c47f10@google.com>
+Subject: Re: [syzbot] possible deadlock in ext4_xattr_get
+From:   syzbot <syzbot+62120febbd1ee3c3c860@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBNb24sIDA4IEF1ZyAyMDIyIDE2OjAxOjU3ICswMjAwIFRob21hcyBHbGVpeG5l
-ciB3cm90ZToKCj4gT24gRnJpLCBKdWwgMDEgMjAyMiBhdCAxNjo1NSwgRHVvbWluZyBaaG91IHdy
-b3RlOgo+ID4gLSAqIFN5bmNocm9uaXphdGlvbiBydWxlczogQ2FsbGVycyBtdXN0IHByZXZlbnQg
-cmVzdGFydGluZyBvZiB0aGUgdGltZXIsCj4gPiAtICogb3RoZXJ3aXNlIHRoaXMgZnVuY3Rpb24g
-aXMgbWVhbmluZ2xlc3MuIEl0IG11c3Qgbm90IGJlIGNhbGxlZCBmcm9tCj4gPiAtICogaW50ZXJy
-dXB0IGNvbnRleHRzIHVubGVzcyB0aGUgdGltZXIgaXMgYW4gaXJxc2FmZSBvbmUuIFRoZSBjYWxs
-ZXIgbXVzdAo+ID4gLSAqIG5vdCBob2xkIGxvY2tzIHdoaWNoIHdvdWxkIHByZXZlbnQgY29tcGxl
-dGlvbiBvZiB0aGUgdGltZXIncwo+ID4gLSAqIGhhbmRsZXIuIFRoZSB0aW1lcidzIGhhbmRsZXIg
-bXVzdCBub3QgY2FsbCBhZGRfdGltZXJfb24oKS4gVXBvbiBleGl0IHRoZQo+ID4gLSAqIHRpbWVy
-IGlzIG5vdCBxdWV1ZWQgYW5kIHRoZSBoYW5kbGVyIGlzIG5vdCBydW5uaW5nIG9uIGFueSBDUFUu
-Cj4gPiArICogU3luY2hyb25pemF0aW9uIHJ1bGVzOiBDYWxsZXJzIG11c3QgcHJldmVudCByZXN0
-YXJ0aW5nIG9mIHRoZSB0aW1lciBpbgo+ID4gKyAqIG90aGVyIHBsYWNlcyBleGNlcHQgZm9yIHRo
-ZSB0aW1lcidzIGhhbmRsZXIsIG90aGVyd2lzZSB0aGlzIGZ1bmN0aW9uIGlzCj4gPiArICogbWVh
-bmluZ2xlc3MuIEl0IG11c3Qgbm90IGJlIGNhbGxlZCBmcm9tIGludGVycnVwdCBjb250ZXh0cyB1
-bmxlc3MgdGhlCj4gPiArICogdGltZXIgaXMgYW4gaXJxc2FmZSBvbmUuIFRoZSBjYWxsZXIgbXVz
-dCBub3QgaG9sZCBsb2NrcyB3aGljaCB3b3VsZAo+ID4gKyAqIHByZXZlbnQgY29tcGxldGlvbiBv
-ZiB0aGUgdGltZXIncyBoYW5kbGVyLiBUaGUgdGltZXIncyBoYW5kbGVyIG11c3QKPiA+ICsgKiBu
-b3QgY2FsbCBhZGRfdGltZXJfb24oKS4KPiAKPiBJZiB3ZSBhcmUgbWFraW5nIHRoaXMgY29ycmVj
-dDogV2hhdCdzIHNvIHNwZWNpYWwgYWJvdXQgYWRkX3RpbWVyX29uKCk/CgpUaGUgZGVsX3RpbWVy
-X3N5bmMoKSBjb3VsZCBhbHNvIHN0b3AgYWRkX3RpbWVyX29uKCksIHRoZXJlIGlzIG5vdGhpbmcg
-c3BlY2lhbAphYm91dCBhZGRfdGltZXJfb24oKS4gSSB0aGluayBjaGFuZ2UgdGhlIGFubm90YXRp
-b24gdG8gdGhlIGZvbGxvd2luZyBpcyBiZXR0ZXIuCgpkaWZmIC0tZ2l0IGEva2VybmVsL3RpbWUv
-dGltZXIuYyBiL2tlcm5lbC90aW1lL3RpbWVyLmMKaW5kZXggNzE3ZmNiOWZiMTQuLmRkNjIzMDE4
-ZGJjIDEwMDY0NAotLS0gYS9rZXJuZWwvdGltZS90aW1lci5jCisrKyBiL2tlcm5lbC90aW1lL3Rp
-bWVyLmMKQEAgLTEzNzUsMTEgKzEzNzUsMTEgQEAgc3RhdGljIGlubGluZSB2b2lkIGRlbF90aW1l
-cl93YWl0X3J1bm5pbmcoc3RydWN0IHRpbWVyX2xpc3QgKnRpbWVyKSB7IH0KICAqIENQVXMuCiAg
-KgogICogU3luY2hyb25pemF0aW9uIHJ1bGVzOiBDYWxsZXJzIG11c3QgcHJldmVudCByZXN0YXJ0
-aW5nIG9mIHRoZSB0aW1lciwKLSAqIG90aGVyd2lzZSB0aGlzIGZ1bmN0aW9uIGlzIG1lYW5pbmds
-ZXNzLiBJdCBtdXN0IG5vdCBiZSBjYWxsZWQgZnJvbQotICogaW50ZXJydXB0IGNvbnRleHRzIHVu
-bGVzcyB0aGUgdGltZXIgaXMgYW4gaXJxc2FmZSBvbmUuIFRoZSBjYWxsZXIgbXVzdAotICogbm90
-IGhvbGQgbG9ja3Mgd2hpY2ggd291bGQgcHJldmVudCBjb21wbGV0aW9uIG9mIHRoZSB0aW1lcidz
-Ci0gKiBoYW5kbGVyLiBUaGUgdGltZXIncyBoYW5kbGVyIG11c3Qgbm90IGNhbGwgYWRkX3RpbWVy
-X29uKCkuIFVwb24gZXhpdCB0aGUKLSAqIHRpbWVyIGlzIG5vdCBxdWV1ZWQgYW5kIHRoZSBoYW5k
-bGVyIGlzIG5vdCBydW5uaW5nIG9uIGFueSBDUFUuCisgKiBvdGhlcndpc2UgdGhpcyBmdW5jdGlv
-biBpcyBtZWFuaW5nbGVzcy4gSXQgY291bGQgYWxzbyBzdG9wIHBlcmlvZGljIHRpbWVyLgorICog
-SXQgbXVzdCBub3QgYmUgY2FsbGVkIGZyb20gaW50ZXJydXB0IGNvbnRleHRzIHVubGVzcyB0aGUg
-dGltZXIgaXMgYW4gaXJxc2FmZQorICogb25lLiBUaGUgY2FsbGVyIG11c3Qgbm90IGhvbGQgbG9j
-a3Mgd2hpY2ggd291bGQgcHJldmVudCBjb21wbGV0aW9uIG9mIHRoZQorICogdGltZXIncyBoYW5k
-bGVyLiBVcG9uIGV4aXQgdGhlIHRpbWVyIGlzIG5vdCBxdWV1ZWQgYW5kIHRoZSBoYW5kbGVyIGlz
-IG5vdAorICogcnVubmluZyBvbiBhbnkgQ1BVLgoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3U=
+Hello,
 
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+
+Reported-and-tested-by: syzbot+62120febbd1ee3c3c860@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         cb71b93c Add linux-next specific files for 20220628
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=12afd10e080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
+dashboard link: https://syzkaller.appspot.com/bug?extid=62120febbd1ee3c3c860
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=104ed896080000
+
+Note: testing is done by a robot and is best-effort only.

@@ -2,113 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE9D58D985
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A484458D98E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243945AbiHINlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 09:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S243987AbiHINoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 09:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243891AbiHINlJ (ORCPT
+        with ESMTP id S231377AbiHINoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 09:41:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C125717A8C
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 06:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660052467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6JVEXsrvyIxtqd+XMjC/aUVcu6/6RgSK4DxmHm7rQqM=;
-        b=bx9gNPsOyM5wPHyRQrrlWihNHDbTG04HOpvF56HIOm/TAeSJLxAi/H7ZwBVygcW9UkXrJv
-        hqQdVNkUA6DeWN1Y4EOUDNwE4psoWGKV460G2NiIGKD793Tlj2yQRznV0WCdOILBCBI2kd
-        k2NqxuYwBNV7sNQZsstVV/ieZDeOTBE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-594-lga5l104PYmOVZA0YUR4ug-1; Tue, 09 Aug 2022 09:41:04 -0400
-X-MC-Unique: lga5l104PYmOVZA0YUR4ug-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 457EE185A7B2;
-        Tue,  9 Aug 2022 13:41:04 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7ECB4492C3B;
-        Tue,  9 Aug 2022 13:41:03 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     torvalds@linux-foundation.org
-cc:     dhowells@redhat.com, marc.dionne@auristor.com,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] afs: Fix refcount handling
+        Tue, 9 Aug 2022 09:44:19 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3A118B13;
+        Tue,  9 Aug 2022 06:44:18 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 977AA429DBD;
+        Tue,  9 Aug 2022 09:44:17 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id A2tXyMn9D4L2; Tue,  9 Aug 2022 09:44:17 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 17218429DBC;
+        Tue,  9 Aug 2022 09:44:17 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 17218429DBC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1660052657;
+        bh=s4MwCgSocyslqz8qzo8aK6OHgXabE2tT23dUh+6dXe0=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=WY/02Qm5yS41kNoN/cNg3tLp3INF8QD6x80M50bSMHG0rPvTpcohEzEJ+m9T0Sgh8
+         m63RBvDXINU2u2nkSES8DSygcKfYNJZBCeCdrMLLmGqHWOdrFkpRVl0PBpOIPHWFst
+         S5zitE8F0woj3d8UGX0G9XzsWhMfCoVSednEvGn5QPf6piJoF83OMVE/g+Q+2g94SA
+         x5vJNBJ6yDt//R57FTo3OATfaEfK2wV6lmRTHwL0s/hFHIOOVfcMKhgIfKklGUn1yd
+         GofDXEDGnRNV11dizNmeF10xLouUIm2X1uRyHpFWKfGCmMm/VTaUCK3nv3dqMAXuPF
+         wlRS+WWD8OA4w==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id kq9Zg0-sw3D5; Tue,  9 Aug 2022 09:44:17 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 034A1429DBB;
+        Tue,  9 Aug 2022 09:44:17 -0400 (EDT)
+Date:   Tue, 9 Aug 2022 09:44:16 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Gavin Shan <gshan@redhat.com>, shuah <shuah@kernel.org>
+Cc:     Florian Weimer <fweimer@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, maz <maz@kernel.org>,
+        oliver upton <oliver.upton@linux.dev>,
+        andrew jones <andrew.jones@linux.dev>,
+        Sean Christopherson <seanjc@google.com>, yihyu@redhat.com,
+        shan gavin <shan.gavin@gmail.com>
+Message-ID: <1014177394.115022.1660052656961.JavaMail.zimbra@efficios.com>
+In-Reply-To: <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
+References: <20220809060627.115847-1-gshan@redhat.com> <20220809060627.115847-2-gshan@redhat.com> <8735e6ncxw.fsf@oldenburg.str.redhat.com> <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com> <87o7wtnay6.fsf@oldenburg.str.redhat.com> <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com> <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
+Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with
+ glibc-2.35
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <432489.1660052462.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 09 Aug 2022 14:41:02 +0100
-Message-ID: <432490.1660052462@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF103 (Linux)/8.8.15_GA_4304)
+Thread-Topic: selftests: Make rseq compatible with glibc-2.35
+Thread-Index: oHLHOFY5Vh2uVE5+gR7UtW52F8t44qAjgRJ1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+----- On Aug 9, 2022, at 8:21 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
 
-Could you pull this pair of patches?  The first patch converts afs to use
-refcount_t for its refcounts and the second patch fixes afs_put_call() and
-afs_put_server() to save the values they're going to log in the tracepoint
-before decrementing the refcount.
+> ----- Gavin Shan <gshan@redhat.com> wrote:
+>> Hi Florian,
+>> 
+>> On 8/9/22 5:16 PM, Florian Weimer wrote:
+>> >>> __builtin_thread_pointer doesn't work on all architectures/GCC
+>> >>> versions.
+>> >>> Is this a problem for selftests?
+>> >>>
+>> >>
+>> >> It's a problem as the test case is running on all architectures. I think I
+>> >> need introduce our own __builtin_thread_pointer() for where it's not
+>> >> supported: (1) PowerPC  (2) x86 without GCC 11
+>> >>
+>> >> Please let me know if I still have missed cases where
+>> >> __buitin_thread_pointer() isn't supported?
+>> > 
+>> > As far as I know, these are the two outliers that also have rseq
+>> > support.  The list is a bit longer if we also consider non-rseq
+>> > architectures (csky, hppa, ia64, m68k, microblaze, sparc, don't know
+>> > about the Linux architectures without glibc support).
+>> > 
+>> 
+>> For kvm/selftests, there are 3 architectures involved actually. So we
+>> just need consider 4 cases: aarch64, x86, s390 and other. For other
+>> case, we just use __builtin_thread_pointer() to maintain code's
+>> integrity, but it's not called at all.
+>> 
+>> I think kvm/selftest is always relying on glibc if I'm correct.
+> 
+> All those are handled in the rseq selftests and in librseq. Why duplicate all
+> that logic again?
+
+More to the point, considering that we have all the relevant rseq registration
+code in tools/testing/selftests/rseq/rseq.c already, and the relevant thread
+pointer getter code in tools/testing/selftests/rseq/rseq-*thread-pointer.h,
+is there an easy way to get test applications in tools/testing/selftests/kvm
+and in tools/testing/selftests/rseq to share that common code ?
+
+Keeping duplicated compatibility code is bad for long-term maintainability.
 
 Thanks,
-David
 
-Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
-Tested-by: Marc Dionne <marc.dionne@auristor.com>
----
-The following changes since commit 6e7765cb477a9753670d4351d14de93f1e9dbbd=
-4:
+Mathieu
 
-  Merge tag 'asm-generic-fixes-5.19-2' of git://git.kernel.org/pub/scm/lin=
-ux/kernel/git/arnd/asm-generic (2022-07-27 09:50:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags=
-/afs-fixes-20220802
-
-for you to fetch changes up to 2757a4dc184997c66ef1de32636f73b9f21aac14:
-
-  afs: Fix access after dec in put functions (2022-08-02 18:21:29 +0100)
-
-----------------------------------------------------------------
-AFS fixes
-
-----------------------------------------------------------------
-David Howells (2):
-      afs: Use refcount_t rather than atomic_t
-      afs: Fix access after dec in put functions
-
- fs/afs/cell.c              | 61 ++++++++++++++++++++++-------------------=
------
- fs/afs/cmservice.c         |  4 +--
- fs/afs/internal.h          | 16 ++++++------
- fs/afs/proc.c              |  6 ++---
- fs/afs/rxrpc.c             | 31 ++++++++++++-----------
- fs/afs/server.c            | 46 ++++++++++++++++++++--------------
- fs/afs/vl_list.c           | 19 +++++----------
- fs/afs/volume.c            | 21 ++++++++++------
- include/trace/events/afs.h | 36 +++++++++++++--------------
- 9 files changed, 124 insertions(+), 116 deletions(-)
-
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

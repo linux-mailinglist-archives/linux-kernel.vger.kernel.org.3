@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEECC58DF0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BFF558DF1F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245420AbiHISa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S1344232AbiHISdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344078AbiHIS3I (ORCPT
+        with ESMTP id S245061AbiHIS3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:29:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C11E0DB;
-        Tue,  9 Aug 2022 11:10:15 -0700 (PDT)
+        Tue, 9 Aug 2022 14:29:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC33324BCB;
+        Tue,  9 Aug 2022 11:10:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 563DAB81A28;
-        Tue,  9 Aug 2022 18:08:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2BD6C433D7;
-        Tue,  9 Aug 2022 18:08:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09B51B818C4;
+        Tue,  9 Aug 2022 18:08:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538FCC433B5;
+        Tue,  9 Aug 2022 18:08:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068493;
-        bh=/r/vSlJypZ8OUr7CvbZM/sbsoGVTzCnQS+HjWsLDgjY=;
+        s=korg; t=1660068495;
+        bh=Du+LfgidnyUZQYmLnNKvCIdplUELRrxtwIDyhwydf1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rBfgcNoa3iQFeT7mPOhhuP+QbxJiFw1dHazNTflclnbQZTIwFIQ5T8pzqRBz1JSwv
-         rOisqjkWB3xQ/AVAeVZX1tEpbWy/khL5iz3ZszTrVFe5hUSy/EgJ7ZDKpdv/BNKIN1
-         lLQ9czxz+kFJMnwN/pXXFe0zxvonl/pqUH48FLts=
+        b=ef88kDjgJrH2a+05EzCgCLs+xspHqOc+tLPWPShTpSw2RTRGUtVbm/ND1a9Cbmx+X
+         EJRMeEi4zEmjj1nV+g+wl06rEkKIeFtF3dOT6oAmccZOSJa1/sZkGuXdErFXJ7DWnp
+         uuNyJiqOrIwCYnBFoy9e8l3uvMAX/dwad+/wCdYU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 5.19 07/21] ata: sata_mv: Fixes expected number of resources now IRQs are gone
-Date:   Tue,  9 Aug 2022 20:00:59 +0200
-Message-Id: <20220809175513.573942177@linuxfoundation.org>
+        stable@vger.kernel.org, Peter Collingbourne <pcc@google.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH 5.19 08/21] arm64: set UXN on swapper page tables
+Date:   Tue,  9 Aug 2022 20:01:00 +0200
+Message-Id: <20220809175513.603831926@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220809175513.345597655@linuxfoundation.org>
 References: <20220809175513.345597655@linuxfoundation.org>
@@ -56,38 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Lunn <andrew@lunn.ch>
+From: Peter Collingbourne <pcc@google.com>
 
-commit b3b2bec9646eb1d3f43c85f6d0d2211d6f8af42b upstream.
+[ This issue was fixed upstream by accident in c3cee924bd85 ("arm64:
+  head: cover entire kernel image in initial ID map") as part of a
+  large refactoring of the arm64 boot flow. This simple fix is therefore
+  preferred for -stable backporting ]
 
-The commit a1a2b7125e10 ("of/platform: Drop static setup of IRQ
-resource from DT core") stopped IRQ resources being available as
-platform resources. This broke the sanity check for the expected
-number of resources in the Marvell SATA driver which expected two
-resources, the IO memory and the interrupt.
+On a system that implements FEAT_EPAN, read/write access to the idmap
+is denied because UXN is not set on the swapper PTEs. As a result,
+idmap_kpti_install_ng_mappings panics the kernel when accessing
+__idmap_kpti_flag. Fix it by setting UXN on these PTEs.
 
-Change the sanity check to only expect the IO memory.
-
-Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Fixes: a1a2b7125e10 ("of/platform: Drop static setup of IRQ resource from DT core")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: 18107f8a2df6 ("arm64: Support execute-only permissions with Enhanced PAN")
+Cc: <stable@vger.kernel.org> # 5.15
+Link: https://linux-review.googlesource.com/id/Ic452fa4b4f74753e54f71e61027e7222a0fae1b1
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Acked-by: Will Deacon <will@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Link: https://lore.kernel.org/r/20220719234909.1398992-1-pcc@google.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/sata_mv.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/include/asm/kernel-pgtable.h |    4 ++--
+ arch/arm64/kernel/head.S                |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/ata/sata_mv.c
-+++ b/drivers/ata/sata_mv.c
-@@ -4057,7 +4057,7 @@ static int mv_platform_probe(struct plat
+--- a/arch/arm64/include/asm/kernel-pgtable.h
++++ b/arch/arm64/include/asm/kernel-pgtable.h
+@@ -103,8 +103,8 @@
+ /*
+  * Initial memory map attributes.
+  */
+-#define SWAPPER_PTE_FLAGS	(PTE_TYPE_PAGE | PTE_AF | PTE_SHARED)
+-#define SWAPPER_PMD_FLAGS	(PMD_TYPE_SECT | PMD_SECT_AF | PMD_SECT_S)
++#define SWAPPER_PTE_FLAGS	(PTE_TYPE_PAGE | PTE_AF | PTE_SHARED | PTE_UXN)
++#define SWAPPER_PMD_FLAGS	(PMD_TYPE_SECT | PMD_SECT_AF | PMD_SECT_S | PMD_SECT_UXN)
+ 
+ #if ARM64_KERNEL_USES_PMD_MAPS
+ #define SWAPPER_MM_MMUFLAGS	(PMD_ATTRINDX(MT_NORMAL) | SWAPPER_PMD_FLAGS)
+--- a/arch/arm64/kernel/head.S
++++ b/arch/arm64/kernel/head.S
+@@ -285,7 +285,7 @@ SYM_FUNC_START_LOCAL(__create_page_table
+ 	subs	x1, x1, #64
+ 	b.ne	1b
+ 
+-	mov	x7, SWAPPER_MM_MMUFLAGS
++	mov_q	x7, SWAPPER_MM_MMUFLAGS
+ 
  	/*
- 	 * Simple resource validation ..
- 	 */
--	if (unlikely(pdev->num_resources != 2)) {
-+	if (unlikely(pdev->num_resources != 1)) {
- 		dev_err(&pdev->dev, "invalid number of resources\n");
- 		return -EINVAL;
- 	}
+ 	 * Create the identity mapping.
 
 

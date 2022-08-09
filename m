@@ -2,117 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A20658D38B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEF458D395
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 08:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbiHIGIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 02:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S236391AbiHIGJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 02:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236105AbiHIGIL (ORCPT
+        with ESMTP id S236500AbiHIGJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:08:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EBF175B8
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 23:08:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9254D611CC
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 06:08:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4000C433C1;
-        Tue,  9 Aug 2022 06:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660025289;
-        bh=LqLpwe8o9hPrLZHTBSjxV3vkB+wAIFFMG+7BQFOMnhc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nUh3Wz47ADJSoHUpZwjPU7LC3QCNrtXX4cmMCxCCgUtpd/ffijF7St9fEvmXn/TR4
-         Xgf4bXrIvYSZYxam+PP6WdP2VOol14291/Id7IGfZyE4naGHH2/FWeFAapM5mLHAR0
-         eeKwR/qQ4Lmxfb/rm4fV9K8k10TUPDvWqdL7UWSU6oQjs4lzuz78N3yDid9z48h/Ec
-         rPCRsgKGAitXZUbycae8A/PJd7x4PfvXOAx1bc5T3cQDQqrH1pQFigl0SP3cKMfxCP
-         kwm0+qau8l8srjqJm7OHgh8p2MWP5e40G2f46rbCkUzv6xhdeTlaxsmfroNWgtCyL5
-         HLibvlzK1lJ0w==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1oLIPP-001q80-Lj;
-        Tue, 09 Aug 2022 07:08:07 +0100
+        Tue, 9 Aug 2022 02:09:05 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0141D32B;
+        Mon,  8 Aug 2022 23:09:04 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27968jgW044816;
+        Tue, 9 Aug 2022 01:08:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660025325;
+        bh=wiHB6xD9Q5AdYRvL7AHA6OTJj98bD0Jg2wNMsviboic=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=LCPo+mC7UbTES/O6NyGnVGaKyeZAsQjipQVoTwYjEZcv+OyUBCUnDHOFUe4ho1731
+         wMWHqW3zYZ+jFcORYFtDOVy7XbSW7AxShdnd1Cc4WL94izKplEh5cB+Y7eq/Pdl2oF
+         OjurfNfhoPU1MePqTl45jaCC/dWJ9HruL+l4zd1M=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27968j9U088478
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 9 Aug 2022 01:08:45 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 9
+ Aug 2022 01:08:44 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 9 Aug 2022 01:08:44 -0500
+Received: from [172.24.157.172] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27968exD088222;
+        Tue, 9 Aug 2022 01:08:41 -0500
+Message-ID: <cb9ada9f-9673-2039-c22b-fa0d3345fe41@ti.com>
+Date:   Tue, 9 Aug 2022 11:38:40 +0530
 MIME-Version: 1.0
-Date:   Tue, 09 Aug 2022 07:08:07 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Zenghui Yu <yuzenghui@huawei.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        wanghaibin.wang@huawei.com, Shreyas K K <quic_shrekk@quicinc.com>
-Subject: Re: [PATCH] arm64: Fix match_list for erratum 1286807 on Arm
- Cortex-A76
-In-Reply-To: <20220809043848.969-1-yuzenghui@huawei.com>
-References: <20220809043848.969-1-yuzenghui@huawei.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <bbd76268ca1aa3badd32502cebb5c986@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org, wanghaibin.wang@huawei.com, quic_shrekk@quicinc.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH v3 2/2] drm/tidss: Add support for AM625 DSS
+Content-Language: en-US
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Rob Herring <robh+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Nishanth Menon <nm@ti.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Rahul T R <r-ravikumar@ti.com>
+References: <20220627151200.4693-1-a-bhatia1@ti.com>
+ <20220627151200.4693-3-a-bhatia1@ti.com>
+ <4382b760-418f-4033-97f2-47e082a30232@ideasonboard.com>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <4382b760-418f-4033-97f2-47e082a30232@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-09 05:38, Zenghui Yu wrote:
-> Since commit 51f559d66527 ("arm64: Enable repeat tlbi workaround on 
-> KRYO4XX
-> gold CPUs"), we failed to detect erratum 1286807 on Cortex-A76 because 
-> its
-> entry in arm64_repeat_tlbi_list[] was accidently corrupted by this 
-> commit.
+Hi Tomi,
+
+On 28-Jul-22 17:34, Tomi Valkeinen wrote:
+> On 27/06/2022 18:12, Aradhya Bhatia wrote:
+>> Add support for the DSS IP on TI's new AM625 SoC in the tidss driver.
+>>
+>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+>> Reviewed-by: Rahul T R <r-ravikumar@ti.com>
+>> ---
+>>   drivers/gpu/drm/tidss/tidss_dispc.c | 56 ++++++++++++++++++++++++++++-
+>>   drivers/gpu/drm/tidss/tidss_dispc.h |  2 ++
+>>   drivers/gpu/drm/tidss/tidss_drv.c   |  1 +
+>>   3 files changed, 58 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c 
+>> b/drivers/gpu/drm/tidss/tidss_dispc.c
+>> index dae47853b728..f084f0688a54 100644
+>> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
+>> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
+>> @@ -272,6 +272,55 @@ const struct dispc_features dispc_j721e_feats = {
+>>       .vid_order = { 1, 3, 0, 2 },
+>>   };
+>> +const struct dispc_features dispc_am625_feats = {
+>> +    .max_pclk_khz = {
+>> +        [DISPC_VP_DPI] = 165000,
+>> +        [DISPC_VP_OLDI] = 165000,
+>> +    },
+>> +
+>> +    .scaling = {
+>> +        .in_width_max_5tap_rgb = 1280,
+>> +        .in_width_max_3tap_rgb = 2560,
+>> +        .in_width_max_5tap_yuv = 2560,
+>> +        .in_width_max_3tap_yuv = 4096,
+>> +        .upscale_limit = 16,
+>> +        .downscale_limit_5tap = 4,
+>> +        .downscale_limit_3tap = 2,
+>> +        /*
+>> +         * The max supported pixel inc value is 255. The value
+>> +         * of pixel inc is calculated like this: 1+(xinc-1)*bpp.
+>> +         * The maximum bpp of all formats supported by the HW
+>> +         * is 8. So the maximum supported xinc value is 32,
+>> +         * because 1+(32-1)*8 < 255 < 1+(33-1)*4.
+>> +         */
+>> +        .xinc_max = 32,
+>> +    },
+>> +
+>> +    .subrev = DISPC_AM625,
+>> +
+>> +    .common = "common",
+>> +    .common_regs = tidss_am65x_common_regs,
+>> +
+>> +    .num_vps = 2,
+>> +    .vp_name = { "vp1", "vp2" },
+>> +    .ovr_name = { "ovr1", "ovr2" },
+>> +    .vpclk_name =  { "vp1", "vp2" },
+>> +    .vp_bus_type = { DISPC_VP_OLDI, DISPC_VP_DPI },
 > 
-> Fix this issue by creating a separate entry for Kryo4xx Gold.
+> This looks correct, but with the two OLDI TXes, I think there will be 
+> some interesting issues.
 > 
-> Fixes: 51f559d66527 ("arm64: Enable repeat tlbi workaround on KRYO4XX
-> gold CPUs")
-> Cc: Shreyas K K <quic_shrekk@quicinc.com>
-> Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
-> ---
->  arch/arm64/kernel/cpu_errata.c | 2 ++
->  1 file changed, 2 insertions(+)
+> The tidss_kms.c associates a DSS VP and a DT port, but that's no longer 
+> true if you add the ports for both OLDI TXes, as they both use the same 
+> VP. I think fixing that won't affect this patch, though, and merging 
+> this patch will, afaik, enable similar DSS functionality as we have for 
+> AM65x.
 > 
-> diff --git a/arch/arm64/kernel/cpu_errata.c 
-> b/arch/arm64/kernel/cpu_errata.c
-> index 7e6289e709fc..0f7e9087d900 100644
-> --- a/arch/arm64/kernel/cpu_errata.c
-> +++ b/arch/arm64/kernel/cpu_errata.c
-> @@ -208,6 +208,8 @@ static const struct arm64_cpu_capabilities
-> arm64_repeat_tlbi_list[] = {
->  #ifdef CONFIG_ARM64_ERRATUM_1286807
->  	{
->  		ERRATA_MIDR_RANGE(MIDR_CORTEX_A76, 0, 0, 3, 0),
-> +	},
-> +	{
->  		/* Kryo4xx Gold (rcpe to rfpe) => (r0p0 to r3p0) */
->  		ERRATA_MIDR_RANGE(MIDR_QCOM_KRYO_4XX_GOLD, 0xc, 0xe, 0xf, 0xe),
->  	},
+> So, I think these two patches could be merged, or we could wait a bit 
+> until the OLDI situation becomes more clear. Up to you. In any case, for 
+> both patches:
+> 
+> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>\
 
-Ouch. It isn't the first time we end-up with this sort
-of thing, and I wonder whether we should restructure
-the ERRATA_MIDR_* macros to prevent this sort of
-accidental override...
+Thank you for the review!
 
-Anyway, thanks for spotting it!
+This patch set is required for the dss DT patches to be upstreamed for
+the AM625-SK, so I would like them to get merged.
 
-Cc: stable@vger.kernel.org
-Acked-by: Marc Zyngier <maz@kernel.org>
+Since these were posted in the previous merge window, I will re-send 
+with your tag.
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Regards
+Aradhya

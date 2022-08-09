@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA06F58E1A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBB058E1A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiHIVQb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 9 Aug 2022 17:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
+        id S229663AbiHIVRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 17:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiHIVQV (ORCPT
+        with ESMTP id S229691AbiHIVQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 17:16:21 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F38F24C619
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:16:19 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-15-SVGnQXmVON2x51L-BKgQXQ-1; Tue, 09 Aug 2022 22:16:17 +0100
-X-MC-Unique: SVGnQXmVON2x51L-BKgQXQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Tue, 9 Aug 2022 22:16:15 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Tue, 9 Aug 2022 22:16:15 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jason Gunthorpe' <jgg@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     David Hildenbrand <david@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        "Hugh Dickins" <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Matthew Wilcox" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: RE: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove
- FOLL_COW
-Thread-Topic: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove
- FOLL_COW
-Thread-Index: AQHYrCRe/fPaEDNbYU+8sVbKwVGyX62nEPVw
-Date:   Tue, 9 Aug 2022 21:16:15 +0000
-Message-ID: <09715a42c73a499f9c90cbe3e2714389@AcuMS.aculab.com>
-References: <20220808073232.8808-1-david@redhat.com>
- <CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com>
- <1a48d71d-41ee-bf39-80d2-0102f4fe9ccb@redhat.com>
- <CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com>
- <YvKwhrjnFQJ7trT1@nvidia.com>
-In-Reply-To: <YvKwhrjnFQJ7trT1@nvidia.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 9 Aug 2022 17:16:46 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68194C619
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:16:45 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31f443e276fso124597997b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 14:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=oLnzvgiiApV3VWlzq6jRPE1yUvY8BFpXJK7uuRxPViY=;
+        b=fayvEf5WdJjEIxnfSI2fgWunYKmTvDIRKtCzVSQkNKwFu8iJI+08U9BhoICiNt7cl4
+         COv9Dx86ZsTmY1ghlFRFjOitQNyuyzZdaorSLwfGmQz1IYyEPHSPFNzosVnoGsXxujcG
+         uB4Brcz2j+CfN+vXjtrM/9QS7wD7nd3789kOI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=oLnzvgiiApV3VWlzq6jRPE1yUvY8BFpXJK7uuRxPViY=;
+        b=EN17ccXQNU2uUXHu8XH/FFeJDrIIIl+O6io0KNWtNt/sX+x9hiTlFIB6UD5U/SAgxM
+         A226q4S5gZrklYoAm8JsTA4FY0VPIbdwZL7eNwuXhFFoIZwWPIIv0yC83fZoOenVmS7T
+         9luh6N+DO8to8+NK99SAYeRxrWWvOCNCXJhnBA2I5WxAkh5HF6NZvMkh6wLUKuyiXx8O
+         s6RXRTvimcQ1mO7341MEpk46EOKr4aRva/W1vBQLbu1xfvKaB98srQwv04pmOMJxl+AS
+         qA2nGHLGqlTvbuYegLLjMhUvX/MBUZ3+g2vIp+umPeeh+tKbfo7ZNdZ4o2v9PWEbBrj0
+         HIow==
+X-Gm-Message-State: ACgBeo3HVN0yi3xTO5oDTBqgubQzQwfaaENLdwgVY+8I/DlQJrvxiaxn
+        7o8OUW+8dAUDObwnf+HyM8QG0Wx/18AqiCqxm+sPxA==
+X-Google-Smtp-Source: AA6agR6qo0VuTK0himSt+FUyEOvT/ZelIHR1bqwnVqgzBc/13WFe04zeW+Up8BNE3369loXSWZ3IzSFjH9Qmynp4wuk=
+X-Received: by 2002:a81:5d07:0:b0:329:8fb8:779 with SMTP id
+ r7-20020a815d07000000b003298fb80779mr15696137ywb.77.1660079805095; Tue, 09
+ Aug 2022 14:16:45 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+References: <20220803074955.v6.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
+ <YuoRuP2pxgSQ6c9E@kroah.com> <CAONX=-f8kHWCEEyqUdpn5wsyMZKa4eJSSCLvPDn3R5mQF9FSMA@mail.gmail.com>
+In-Reply-To: <CAONX=-f8kHWCEEyqUdpn5wsyMZKa4eJSSCLvPDn3R5mQF9FSMA@mail.gmail.com>
+From:   Daniil Lunev <dlunev@chromium.org>
+Date:   Wed, 10 Aug 2022 07:16:34 +1000
+Message-ID: <CAONX=-eL02see4m6wK74cX2D6rUXJXtZYSRiNhPQVDsS8kU27g@mail.gmail.com>
+Subject: Re: [PATCH v6] ufs: core: print UFSHCD capabilities in controller's
+ sysfs node
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,43 +73,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Gunthorpe
-> Sent: 09 August 2022 20:08
-> 
-> On Tue, Aug 09, 2022 at 11:59:45AM -0700, Linus Torvalds wrote:
-> 
-> > But as a very good approximation, the rule is "absolutely no new
-> > BUG_ON() calls _ever_". Because I really cannot see a single case
-> > where "proper error handling and WARN_ON_ONCE()" isn't the right
-> > thing.
-> 
-> Parallel to this discussion I've had ones where people more or less
-> say
-> 
->  Since BUG_ON crashes the machine and Linus says that crashing the
->  machine is bad, WARN_ON will also crash the machine if you set the
->  panic_on_warn parameter, so it is also bad, thus we shouldn't use
->  anything.
-> 
-> I've generally maintained that people who set the panic_on_warn *want*
-> these crashes, because that is the entire point of it. So we should
-> use WARN_ON with an error recovery for "can't happen" assertions like
-> these. I think it is what you are saying here.
+Hello,
 
-They don't necessarily want the crashes, it is more the people who
-built the distribution think they want the crashes.
+Are there any more amendments you would want me to make or is it good to go?
 
-I have had issues with a customer system (with our drivers) randomly
-locking up.
-Someone had decided that 'PANIC_ON_OOPS' was a good idea but hadn't
-enabled anything to actually take the dump.
+Thanks,
+Daniil
 
-So instead of a diagnosable problem (and a 'doh' moment) you
-get several weeks of head scratching and a very annoyed user.
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+On Wed, Aug 3, 2022 at 4:34 PM Daniil Lunev <dlunev@chromium.org> wrote:
+>
+> > Why is this information not also in the Documentation/ABI/ entries as
+> > well?
+> How would you want me to word it in there? For each entry? There
+> will be more in the future, would we need to just copy it as a
+> boilerplate? Bart suggested it be added in the code, do you see
+> a good way to mention the same in the doc?
+> Thanks,
+> --Daniil

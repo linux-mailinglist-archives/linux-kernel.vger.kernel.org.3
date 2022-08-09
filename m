@@ -2,87 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D3B58D47F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9D658D480
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237287AbiHIHYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 03:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        id S237363AbiHIHZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 03:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236554AbiHIHYg (ORCPT
+        with ESMTP id S233351AbiHIHZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 03:24:36 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5A120F66
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 00:24:32 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id t1so15830038lft.8
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 00:24:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=tTxM+7+FZK4rcvhtVun0/PJ+nOo+VMVRQjQ1dHG97U0=;
-        b=gDVJfXB4D8sJ6RBnuq1AvXEE5d4tPDGrPdFA+CXJ/lj8Z77S5L25rxif8dSggGlzjs
-         RrYsTkpPnhviTvP6yPRt55PcQClVI9czE5h4RVxiYVgfHeQOvJF998+JDrMNZL3Wdhpi
-         5OGPXURct7ZKChNJhzk94a5MLOffXQ+XeCSSSbHue0+9UDOmZla1ZpgSt7r1m97+wx1k
-         dmTDt/7j+/P3FAuGlKtJRHGAiuGT3Dq2wKRHnF9KDb0Tz3v8GJqAM4pGzn6X5FeIDkGC
-         Ky+ODlwF7cYAPcv/eVSlY2eRQjq5HlAf8Mt1jUMvtZu02vjq0xZ9mjqYjShKAIXEEe41
-         OHvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=tTxM+7+FZK4rcvhtVun0/PJ+nOo+VMVRQjQ1dHG97U0=;
-        b=woBQWrnwOL90Ywnvf/4g8WoQzT3ikiZLtHdRmoWfz4EM2uAEhDG+eAYiH6AGk5at0w
-         gD8p8xu4QTcTTvRA61Nm+QvqgZ/C8MvK7wtj/vsjbxz43uW32/TtBswXEwx09LxcdTYU
-         Rua1v7wuhAPuaeAFK1pJSqYVX/gl3bE40qLAJj4XyebS+l/xIYeeOvaWokLhuMEGg4af
-         cC/rTCtSU3VDEFXUzMDX43d7yDQF8IydvGIqHh+aKRyNJe2Kz3TrCx8YGyaf993dEDrP
-         /5bwVRs0r1IpJGI3PYDkMG9FytbBF8+hXKNjeLinWiX2zb0gVVH055Wisf5fIA7q9drP
-         zs+Q==
-X-Gm-Message-State: ACgBeo3werQQqg7x5VCDGP9C+frmM4v7d6CPNtzKvfUTh0AUwBkZ37Zd
-        r/Glt9OxHuFvXkTxEAL+t1hw6w==
-X-Google-Smtp-Source: AA6agR6qAPyNpgqimh0JJNh6Fu2PX+u4s6pGBtxqx02kqH+0tyIkfb1j2BeEEp7jIRNOT1OCqZKzAA==
-X-Received: by 2002:a05:6512:3b28:b0:48b:2071:e423 with SMTP id f40-20020a0565123b2800b0048b2071e423mr8231558lfv.434.1660029871039;
-        Tue, 09 Aug 2022 00:24:31 -0700 (PDT)
-Received: from ?IPv6:2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f? ([2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f])
-        by smtp.gmail.com with ESMTPSA id v5-20020a197405000000b0048a8b6914d2sm1656517lfe.155.2022.08.09.00.24.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 00:24:30 -0700 (PDT)
-Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
-To:     "Dong, Eddie" <eddie.dong@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Liu, Rong L" <rong.l.liu@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        "upstream@semihalf.com" <upstream@semihalf.com>,
-        Dmitry Torokhov <dtor@google.com>
-References: <20220805193919.1470653-1-dmy@semihalf.com>
- <BL0PR11MB30429034B6D59253AF22BCE08A639@BL0PR11MB3042.namprd11.prod.outlook.com>
-From:   Dmytro Maluka <dmy@semihalf.com>
-Message-ID: <c5d8f537-5695-42f0-88a9-de80e21f5f4c@semihalf.com>
-Date:   Tue, 9 Aug 2022 09:24:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 9 Aug 2022 03:25:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C95110E
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 00:25:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51E92B80EED
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 07:25:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA290C433C1;
+        Tue,  9 Aug 2022 07:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660029922;
+        bh=0LChqBLur/1vL8sdoGSRTnx+IdOJAGSm3zJMhTg8KE4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BY4Ymap+shoQoX56j+8nP+I9i2/rms0IdC8STp9ov5xJheah+wNWG89c517MvdbFj
+         z2bRDbbXprdlxgIVUM2YggYJv7nj0xEH5sP+M/+rWCTBXdHfzVKKYs+egg++QQpTU2
+         0/gPQt/zTXmOCF11aXxCg+VOfcmDLeQr2bAdLq5w2ZavidVmeqHZlffE1NoUvn2Hhv
+         qcPocXoOn4Jtk21xXlnw1RLYs6BRxAP9Po83VywzUIMt1JfgJiqcfulCb37u6JShn5
+         vmSlsciuOh34ggTVyMMFL3mKvn59NgZBIFfMHwhpH0P8VnoL0pz64QDCwnzaPso2Re
+         V0xss4SZRf/Rw==
+Date:   Tue, 9 Aug 2022 10:25:07 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>, Jinyu Tang <tjytimi@163.com>,
+        Liu Xinpeng <liuxp11@chinatelecom.cn>,
+        Ma Wupeng <mawupeng1@huawei.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Rebecca Mckeever <remckee0@gmail.com>,
+        Shaoqin Huang <shaoqin.huang@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] memblock updates for v5.20
+Message-ID: <YvIL0wn1WTDxjFVr@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <BL0PR11MB30429034B6D59253AF22BCE08A639@BL0PR11MB3042.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,101 +58,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 1:26 AM, Dong, Eddie wrote:
->>
->> The existing KVM mechanism for forwarding of level-triggered interrupts using
->> resample eventfd doesn't work quite correctly in the case of interrupts that are
->> handled in a Linux guest as oneshot interrupts (IRQF_ONESHOT). Such an
->> interrupt is acked to the device in its threaded irq handler, i.e. later than it is
->> acked to the interrupt controller (EOI at the end of hardirq), not earlier. The
->> existing KVM code doesn't take that into account, which results in erroneous
->> extra interrupts in the guest caused by premature re-assert of an
->> unacknowledged IRQ by the host.
-> 
-> Interesting...  How it behaviors in native side? 
+Hi Linus,
 
-In native it behaves correctly, since Linux masks such a oneshot
-interrupt at the beginning of hardirq, so that the EOI at the end of
-hardirq doesn't result in its immediate re-assert, and then unmasks it
-later, after its threaded irq handler completes.
+The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
 
-In handle_fasteoi_irq():
+  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
 
-	if (desc->istate & IRQS_ONESHOT)
-		mask_irq(desc);
+are available in the Git repository at:
 
-	handle_irq_event(desc);
+  https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/memblock-v5.20-rc1
 
-	cond_unmask_eoi_irq(desc, chip);
+for you to fetch changes up to 04d9490986d1e04a38db88276115e6b3c9ec3faa:
 
+  memblock test: Modify the obsolete description in README (2022-07-30 11:46:49 +0300)
 
-and later in unmask_threaded_irq():
+----------------------------------------------------------------
+memblock updates for v5.20
 
-	unmask_irq(desc);
+* An optimization in memblock_add_range() to reduce array traversals
+* Improvements to the memblock test suite
 
-I also mentioned that in patch #3 description:
-"Linux keeps such interrupt masked until its threaded handler finishes,
-to prevent the EOI from re-asserting an unacknowledged interrupt.
-However, with KVM + vfio (or whatever is listening on the resamplefd)
-we don't check that the interrupt is still masked in the guest at the
-moment of EOI. Resamplefd is notified regardless, so vfio prematurely
-unmasks the host physical IRQ, thus a new (unwanted) physical interrupt
-is generated in the host and queued for injection to the guest."
+----------------------------------------------------------------
+Jinyu Tang (1):
+      memblock: avoid some repeat when add new range
 
-> 
->>
->> This patch series fixes this issue (for now on x86 only) by checking if the
->> interrupt is unmasked when we receive irq ack (EOI) and, in case if it's masked,
->> postponing resamplefd notify until the guest unmasks it.
->>
->> Patches 1 and 2 extend the existing support for irq mask notifiers in KVM,
->> which is a prerequisite needed for KVM irqfd to use mask notifiers to know
->> when an interrupt is masked or unmasked.
->>
->> Patch 3 implements the actual fix: postponing resamplefd notify in irqfd until
->> the irq is unmasked.
->>
->> Patches 4 and 5 just do some optional renaming for consistency, as we are now
->> using irq mask notifiers in irqfd along with irq ack notifiers.
->>
->> Please see individual patches for more details.
->>
->> v2:
->>   - Fixed compilation failure on non-x86: mask_notifier_list moved from
->>     x86 "struct kvm_arch" to generic "struct kvm".
->>   - kvm_fire_mask_notifiers() also moved from x86 to generic code, even
->>     though it is not called on other architectures for now.
->>   - Instead of kvm_irq_is_masked() implemented
->>     kvm_register_and_fire_irq_mask_notifier() to fix potential race
->>     when reading the initial IRQ mask state.
->>   - Renamed for clarity:
->>       - irqfd_resampler_mask() -> irqfd_resampler_mask_notify()
->>       - kvm_irq_has_notifier() -> kvm_irq_has_ack_notifier()
->>       - resampler->notifier -> resampler->ack_notifier
->>   - Reorganized code in irqfd_resampler_ack() and
->>     irqfd_resampler_mask_notify() to make it easier to follow.
->>   - Don't follow unwanted "return type on separate line" style for
->>     irqfd_resampler_mask_notify().
->>
->> Dmytro Maluka (5):
->>   KVM: x86: Move irq mask notifiers from x86 to generic KVM
->>   KVM: x86: Add kvm_register_and_fire_irq_mask_notifier()
->>   KVM: irqfd: Postpone resamplefd notify for oneshot interrupts
->>   KVM: irqfd: Rename resampler->notifier
->>   KVM: Rename kvm_irq_has_notifier()
->>
->>  arch/x86/include/asm/kvm_host.h |  17 +---
->>  arch/x86/kvm/i8259.c            |   6 ++
->>  arch/x86/kvm/ioapic.c           |   8 +-
->>  arch/x86/kvm/ioapic.h           |   1 +
->>  arch/x86/kvm/irq_comm.c         |  74 +++++++++++------
->>  arch/x86/kvm/x86.c              |   1 -
->>  include/linux/kvm_host.h        |  21 ++++-
->>  include/linux/kvm_irqfd.h       |  16 +++-
->>  virt/kvm/eventfd.c              | 136 ++++++++++++++++++++++++++++----
->>  virt/kvm/kvm_main.c             |   1 +
->>  10 files changed, 221 insertions(+), 60 deletions(-)
->>
->> --
->> 2.37.1.559.g78731f0fdb-goog
-> 
+Liu Xinpeng (1):
+      memblock tests: fix compilation errors
+
+Rebecca Mckeever (5):
+      memblock tests: Makefile: add arguments to control verbosity
+      memblock tests: add verbose output to memblock tests
+      memblock tests: set memblock_debug to enable memblock_dbg() messages
+      memblock tests: remove completed TODO items
+      memblock tests: change build options to run-time options
+
+Shaoqin Huang (1):
+      memblock test: Modify the obsolete description in README
+
+ mm/memblock.c                                    |  11 +
+ tools/testing/memblock/Makefile                  |   3 +-
+ tools/testing/memblock/README                    |  17 +-
+ tools/testing/memblock/TODO                      |  14 +-
+ tools/testing/memblock/internal.h                |  11 +
+ tools/testing/memblock/linux/memory_hotplug.h    |   8 +-
+ tools/testing/memblock/main.c                    |   2 +
+ tools/testing/memblock/scripts/Makefile.include  |  10 +-
+ tools/testing/memblock/tests/alloc_api.c         | 225 ++++++++++-----
+ tools/testing/memblock/tests/alloc_helpers_api.c | 129 ++++++---
+ tools/testing/memblock/tests/alloc_nid_api.c     | 351 +++++++++++++++--------
+ tools/testing/memblock/tests/basic_api.c         | 337 +++++++++++++++-------
+ tools/testing/memblock/tests/common.c            | 118 ++++++++
+ tools/testing/memblock/tests/common.h            |  54 ++++
+ 14 files changed, 920 insertions(+), 370 deletions(-)
+
+-- 
+Sincerely yours,
+Mike.

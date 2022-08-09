@@ -2,81 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAB258D951
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D9D58D95D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243397AbiHINWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 09:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S243591AbiHIN1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 09:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240890AbiHINW1 (ORCPT
+        with ESMTP id S231578AbiHIN1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 09:22:27 -0400
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DEB18B0F
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 06:22:27 -0700 (PDT)
-Received: by mail-pg1-f174.google.com with SMTP id r69so4799744pgr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 06:22:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=B7uQTub1ahljxDOniVaW04DLGF0sT86p8KJIWqRumqI=;
-        b=P/tWjiPKQiglwsFjq0880HKShXoycGYtDqhLWkZsXyZQabazPhqPCa7+uG70R/vRmZ
-         GwW0+VJ2zlsKx1QXCBbW7gnwjj8Micqi9e34GmiJ52OhokHBIqpCgOo23+ONTRtgNiFo
-         uGo6supJCMLufIRx1kfT0jaGtm2V9bjDHUgs08HbLKHK8ZDN9opJXNPE1ZH3rQfpFBYf
-         beCyK7Kb0dMIVogW0vyywqB47+YrEILbTjo3AcSwFqKjWMnvWGr2HJFpKynZRQwWJUYU
-         KsoAgKPx28olgSvB7KETPDeUnl9gI2bV3uxHWIDMZxAqbO3c6/q2/B9k/vKVJNVq80rs
-         CDjQ==
-X-Gm-Message-State: ACgBeo16TRyC8zr43FvW1iv4gkBd+BL/+rQCSGRBe6/YGTUXdz8+ysfq
-        BjmbIvL2bF03OQ0ES554ooZKB0jgj7k=
-X-Google-Smtp-Source: AA6agR4tAnjlYEo90WCcd2wTNnl6yimFsFXXxb3LxkBsGO1YIjs6GCBTnJpAWY6gaM87U16z41e3Kw==
-X-Received: by 2002:a63:1502:0:b0:411:4cc0:3ec1 with SMTP id v2-20020a631502000000b004114cc03ec1mr19498300pgl.91.1660051346506;
-        Tue, 09 Aug 2022 06:22:26 -0700 (PDT)
-Received: from [192.168.3.217] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id t15-20020a170902e84f00b0016d1bee1519sm11020225plg.102.2022.08.09.06.22.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 06:22:25 -0700 (PDT)
-Message-ID: <8f6abe4e-17a0-7f20-1383-a044188e0bc8@acm.org>
-Date:   Tue, 9 Aug 2022 06:22:23 -0700
+        Tue, 9 Aug 2022 09:27:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78FB5DEA3
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 06:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660051650;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QjtptTO8BIFo1xe8OpF/blve76WhiPdfyXUxMj/rAdY=;
+        b=MMqf2RUpJ8aNWRyKAstEgyjyO2EB2uPbkiMNqvgcG9yCD1cUAAfXhtodmaJm9k4jEElmiv
+        Iy3HTbOfpEvhaM15wz6TBgZ8nSze9gLrxoA8YSaG1Hj1q8x+JlkLljYlXE/oxCYxLd9TUt
+        9mw+Fy5OdtmIoCeXwWWY/hH73QIEF0Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-497-sT3UyIsIN9CyC9W9outn-Q-1; Tue, 09 Aug 2022 09:27:27 -0400
+X-MC-Unique: sT3UyIsIN9CyC9W9outn-Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BAF2D8041B5;
+        Tue,  9 Aug 2022 13:27:26 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F20D740CFD0B;
+        Tue,  9 Aug 2022 13:27:25 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     torvalds@linux-foundation.org
+cc:     dhowells@redhat.com, jlayton@kernel.org, linux-cachefs@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [kbuild-all] Re: drivers/md/raid10.c:2647:60: sparse: sparse:
- incorrect type in argument 5 (different base types)
-Content-Language: en-US
-To:     "Chen, Rong A" <rong.a.chen@intel.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-References: <202208061258.jAwlaAXe-lkp@intel.com>
- <dc0dbf3d-d524-7edc-6fbf-0067c75c3d03@acm.org>
- <bd67a6dd-4d43-28f6-e2bb-a283f581a7a9@intel.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <bd67a6dd-4d43-28f6-e2bb-a283f581a7a9@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <431241.1660051645.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 09 Aug 2022 14:27:25 +0100
+Message-ID: <431242.1660051645@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 03:23, Chen, Rong A wrote:
-> Only the warning prefixed by '>>' is related to this commit 4ce4c73f662b:
-> 
->  >> drivers/md/raid10.c:2647:60: sparse: sparse: incorrect type in 
-> argument 5 (different base types) @@     expected restricted blk_opf_t 
-> [usertype] opf @@     got int rw @@
+Hi Linus,
 
-Thanks, I can reproduce this warning. I will send a fix.
+Can you pull these two patches please?  The first fixes a cookie access re=
+f
+leak if a cookie is invalidated a second time before the first invalidatio=
+n
+is actually processed.  The second adds a tracepoint to log cookie look up
+failure.
 
-Best regards,
+Thanks,
+David
 
-Bart.
+Link: https://listman.redhat.com/archives/linux-cachefs/2022-August/007061=
+.html
+Link: https://listman.redhat.com/archives/linux-cachefs/2022-August/007062=
+.html
+---
+The following changes since commit 3d7cb6b04c3f3115719235cc6866b10326de34c=
+d:
+
+  Linux 5.19 (2022-07-31 14:03:01 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags=
+/fscache-fixes-20220809
+
+for you to fetch changes up to 1a1e3aca9d4957e282945cdc2b58e7c560b8e0d2:
+
+  fscache: add tracepoint when failing cookie (2022-08-09 14:13:59 +0100)
+
+----------------------------------------------------------------
+fscache fixes
+
+----------------------------------------------------------------
+Jeff Layton (2):
+      fscache: don't leak cookie access refs if invalidation is in progres=
+s or failed
+      fscache: add tracepoint when failing cookie
+
+ fs/fscache/cookie.c            | 9 +++++++--
+ include/trace/events/fscache.h | 2 ++
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+

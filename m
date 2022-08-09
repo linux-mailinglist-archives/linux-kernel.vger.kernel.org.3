@@ -2,163 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E766E58DA0A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529F858DA15
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241048AbiHIOEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 10:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
+        id S243275AbiHIOHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 10:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiHIOEM (ORCPT
+        with ESMTP id S238333AbiHIOHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 10:04:12 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3074BC37;
-        Tue,  9 Aug 2022 07:04:11 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id z16so14380780wrh.12;
-        Tue, 09 Aug 2022 07:04:11 -0700 (PDT)
+        Tue, 9 Aug 2022 10:07:38 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E905112AC0
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 07:07:35 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so12342765pjl.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 07:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=DDKIcyj9Z0sGFhBonIYv1vMbP6zsZA0f1KiomNe+d78=;
-        b=CJhsWA91H6jWASh85FxrEygMLwuz8qmN2L1vaWzcLg93UW1J5b3gSXC2E0ceH+zCuy
-         BQ6W1OM0Q4vVt5DWLJWl5PutysBGcO1HYqclY+LZH9TeeADU9NhehEx/KCkbm+1+AAKJ
-         3iRxI6p5eroVoxMzjqF8xhHvTY7xSYBZ3P6gnXVhTXqGZ5EMAbw0GSQqxEbVP3vSpAVc
-         PmRA6dAX2zfVSRl5pzO5XOLet/K4wl7l8KX+OjuoYcHqMCZCjsx3hLa3a8b2bEAKP+KJ
-         upC3S34qpg/b3/3H2h7RrAVHxJ7vwotTA1PWgZq5IQGSKYH1FugVJJKYtdZCc1FHEWlB
-         8MXA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=NnEsu78UdgWUFfbUzx2FaqG+fLzRYJgztuHCMcvogJA=;
+        b=oDtJsLEQQYL30wcvIv5F3ooBK0Zf/9c8h4+kW5/jz5Nl67dgnb73eDU7C8tmnt4nYY
+         cCMyJmMxEiHiWPNM5WQB2io2rxq9bgmB+TaseJV90fL2r3xfh5kJ6m5B6y7/BiuHZEc2
+         xde5cBI2o6E657tDSS6U8BOe2jW6sBWiX9XXvh65MlJJUS7AaWOV4KvFfxIIfmZCuNwc
+         oOoe0EJLXJhc0M3MGpwUWJQ1cAhegx+jjeoZ433VUWG15wBgZfP+Bpz4F5TPaAVFcv1G
+         xIwBkATQVJVHWkK6kqQjZYTL5Jpf+PTD6HmUUJaV9clHvHt2RUqA3nIziuDGmoL3H5PH
+         aSCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=DDKIcyj9Z0sGFhBonIYv1vMbP6zsZA0f1KiomNe+d78=;
-        b=vvrz+WvDSXT0i8H8eGvR+9ehH39Jxa+BJmmgsIP6s9gTyXEJMJw/KDjxAFdUjOqntV
-         vrm36nCYPOxK33vZyjWZmK/P0jbYGbXB4Ry6Rto8eTShu28vr2jRUQcVfjJeY6HPetJp
-         nuWBhfgGHrfGlgcY8jUje/EF3eqiW5wGAKaoN2rr+GJcd94iVYtkVaiF5n4CDiCdoA4s
-         sfdfTQbPRWXZyw8FbxnYstbjZ5EskqzWPRFBXYNw2DLkKgDGPOzPp7x5Q5lqpbvgN7Pf
-         x2wysXAkcIfBsyLGBV+pNjMzQGu+CxMdySx2Q1+yMdaWs/YWOlUE6X28QWU+vwIhv0ss
-         CCTQ==
-X-Gm-Message-State: ACgBeo2q+FDvz+uF6eU9i0U8mjKG0asRzSB8dZjw9f6Nb57QCmeUISnT
-        zK87Tf+jM+H3IE+NSjsiwWM=
-X-Google-Smtp-Source: AA6agR58ORGm0OUkPlmNNA2FCN5hW5yDkabypPTKe4GvE5qlmbvzfHxtYgsz/SjlJ7S3yOpSpdejGw==
-X-Received: by 2002:a5d:5903:0:b0:221:9d43:961 with SMTP id v3-20020a5d5903000000b002219d430961mr9892794wrd.385.1660053850399;
-        Tue, 09 Aug 2022 07:04:10 -0700 (PDT)
-Received: from [192.168.0.104] ([77.126.166.31])
-        by smtp.gmail.com with ESMTPSA id c5-20020a5d4f05000000b002205a5de337sm13823218wru.102.2022.08.09.07.04.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 07:04:09 -0700 (PDT)
-Message-ID: <69829c71-d51c-b25f-2d74-5fdd231ed9e4@gmail.com>
-Date:   Tue, 9 Aug 2022 17:04:07 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=NnEsu78UdgWUFfbUzx2FaqG+fLzRYJgztuHCMcvogJA=;
+        b=EGJ1LAMdqUVUdKUJn+5273YRu1Y45X2SiPq9TswVe3ps52NmGOFvTxXd2snrCUx5U+
+         OzvIziqMLY6RF7WPVvoH1IZnCqLH/XiNB4SV1s4zgL4rTB22R19LrVpDzlarfS1LNjEN
+         Gl5yCNd06nXoFP6MDTWNYq+fExYJmRJdiaQjsFdp3HOC9dC2Z0UeCxhAja9yWmqXtADX
+         lhXys/0Zcpsa97q0pjSdbJKNJxVwrfBoHQZAAivxSp+xL9WdYICY9Bx9u8sXWVdobQqf
+         8fIK/VPRc/fwzFYiDZco20pgAWNFzHgCncv5HDROGPKRnwFNVwE7lub+x1TPXJVTHeyY
+         QJ/w==
+X-Gm-Message-State: ACgBeo2XftrYoKMsMJYwLt+xKVC9VESkdhi908SFox0bz6cqUv8KFSj/
+        PeS6OJ3IGtqgrxvwCihQvIFdcA==
+X-Google-Smtp-Source: AA6agR4aiTL+Daci9AK1TqyyNVqT0wIL4ZZnOZ8/yvhfKaMJTNse+c98EGQik7SdrsdREq1iYR++YQ==
+X-Received: by 2002:a17:902:b903:b0:170:9964:b47b with SMTP id bf3-20020a170902b90300b001709964b47bmr12764209plb.83.1660054055288;
+        Tue, 09 Aug 2022 07:07:35 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c14-20020a170902d48e00b0017086b082c1sm8154199plg.173.2022.08.09.07.07.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 07:07:34 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 14:07:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Coleman Dietsch <dietschc@csp.edu>, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        stable@vger.kernel.org,
+        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
+Subject: Re: [PATCH v3 2/2] KVM: x86/xen: Stop Xen timer before changing IRQ
+Message-ID: <YvJqIsQsg+ThMg/C@google.com>
+References: <20220808190607.323899-2-dietschc@csp.edu>
+ <20220808190607.323899-3-dietschc@csp.edu>
+ <c648744c096588d30771a22efa6d65c31fffd06c.camel@infradead.org>
+ <43e258cc-71ac-bde4-d1f8-9eb9519928d3@redhat.com>
+ <4fc1371b83001b4eed1617c37bec6b9d007e45c2.camel@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH net-next V4 1/3] sched/topology: Add NUMA-based CPUs
- spread API
-Content-Language: en-US
-To:     Valentin Schneider <vschneid@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20220728191203.4055-1-tariqt@nvidia.com>
- <20220728191203.4055-2-tariqt@nvidia.com>
- <xhsmhedxvdikz.mognet@vschneid.remote.csb>
- <df8b684d-ede6-7412-423d-51d57365e065@gmail.com>
- <xhsmh35e5d9b4.mognet@vschneid.remote.csb>
- <12fd25f9-96fb-d0e0-14ec-3f08c01a5a4b@gmail.com>
- <xhsmhzggdbmv6.mognet@vschneid.remote.csb>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <xhsmhzggdbmv6.mognet@vschneid.remote.csb>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4fc1371b83001b4eed1617c37bec6b9d007e45c2.camel@infradead.org>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 09, 2022, David Woodhouse wrote:
+> On Tue, 2022-08-09 at 14:59 +0200, Paolo Bonzini wrote:
+> > On 8/9/22 11:22, David Woodhouse wrote:
+> > > On Mon, 2022-08-08 at 14:06 -0500, Coleman Dietsch wrote:
+> > > > Stop Xen timer (if it's running) prior to changing the IRQ vector and
+> > > > potentially (re)starting the timer. Changing the IRQ vector while the
+> > > > timer is still running can result in KVM injecting a garbage event, e.g.
+> > > > vm_xen_inject_timer_irqs() could see a non-zero xen.timer_pending from
+> > > > a previous timer but inject the new xen.timer_virq.
+> > > 
+> > > Hm, wasn't that already addressed in the first patch I saw, which just
+> > > called kvm_xen_stop_timer() unconditionally before (possibly) setting
+> > > it up again?
+> > 
+> > Which patch is that?
+> 
+> The one I acked in
+> https://lore.kernel.org/all/9bad724858b6a06c25ead865b2b3d9dfc216d01c.camel@infradead.org/
 
-
-On 8/9/2022 3:52 PM, Valentin Schneider wrote:
-> On 09/08/22 13:18, Tariq Toukan wrote:
->> On 8/9/2022 1:02 PM, Valentin Schneider wrote:
->>>
->>> Are there cases where we can't figure this out in advance? From what I grok
->>> out of the two callsites you patched, all vectors will be used unless some
->>> error happens, so compressing the CPUs in a single cpumask seemed
->>> sufficient.
->>>
->>
->> All vectors will be initialized to support the maximum number of traffic
->> rings. However, the actual number of traffic rings can be controlled and
->> set to a lower number N_actual < N. In this case, we'll be using only
->> N_actual instances and we want them to be the first/closest.
-> 
-> Ok, that makes sense, thank you.
-> 
-> In that case I wonder if we'd want a public-facing iterator for
-> sched_domains_numa_masks[%i][node], rather than copy a portion of
-> it. Something like the below (naming and implementation haven't been
-> thought about too much).
-> 
->    const struct cpumask *sched_numa_level_mask(int node, int level)
->    {
->            struct cpumask ***masks = rcu_dereference(sched_domains_numa_masks);
-> 
->            if (node >= nr_node_ids || level >= sched_domains_numa_levels)
->                    return NULL;
-> 
->            if (!masks)
->                    return NULL;
-> 
->            return masks[level][node];
->    }
->    EXPORT_SYMBOL_GPL(sched_numa_level_mask);
-> 
-
-The above can be kept static, and expose only the foo() function below, 
-similar to my sched_cpus_set_spread().
-
-LGTM.
-How do you suggest to proceed?
-You want to formalize it? Or should I take it from here?
-
-
->    #define for_each_numa_level_mask(node, lvl, mask)	    \
->            for (mask = sched_numa_level_mask(node, lvl); mask;	\
->                 mask = sched_numa_level_mask(node, ++lvl))
-> 
->    void foo(int node, int cpus[], int ncpus)
->    {
->            const struct cpumask *mask;
->            int lvl = 0;
->            int i = 0;
->            int cpu;
-> 
->            rcu_read_lock();
->            for_each_numa_level_mask(node, lvl, mask) {
->                    for_each_cpu(cpu, mask) {
->                            cpus[i] = cpu;
->                            if (++i == ncpus)
->                                    goto done;
->                    }
->            }
->    done:
->            rcu_read_unlock();
->    }
-> 
+It's effectively the same patch.  I had asked Coleman to split it into two separate
+patches: (1) fix the re-initialization of an active timer bug and (2) stop the active
+timer before changing the vector (this patch).

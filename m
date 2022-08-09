@@ -2,481 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F0458DAB3
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15D558DABD
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 17:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244763AbiHIPEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 11:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
+        id S244772AbiHIPE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 11:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244750AbiHIPDm (ORCPT
+        with ESMTP id S242535AbiHIPE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 11:03:42 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B6C1CB1A
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 08:03:39 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j7so14665866wrh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 08:03:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc;
-        bh=AGiaX9NeWf238gAHp955bAPTnPld9aDNZglcj3xFyvg=;
-        b=N0DBsw+9bafLpDrRj2GG36q40MJzXccy4HV2/c3FQYT5g8aFU4/ylcuIq8upcoQ2go
-         EYuNWkvlA2I/8UAuT5mS4mPgDhx/8m5/Lquo8ACCB4dlcvA9vZSprrRGjtsepFTazfIM
-         zEzXCkYdhm1dcTfVOQXI17SSFaXW4MA4YXP2k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=AGiaX9NeWf238gAHp955bAPTnPld9aDNZglcj3xFyvg=;
-        b=My9cuo78j8tXBAYTo88py9qHwNpa3P566i/nkU9Ls6UOYKD2OJvz/wOHCiRPPDLWz7
-         VZ0qZ2EdcvqW2enMMvoBB6dJmXKZslyRu5Dsay86nRKt8Mqp7ixZfUsar3Y1JzLghYfU
-         xslzicsEK6vYZte0MuTgeHyIanJm/gRCTfO3QBNRAr0LrJOGV6FvCO6TvyYaE4c1nVsa
-         oYB7k22XAYrlpzNaS2mM1YZD+Z07bISJ0ISkpZrmLhNdR1Kg1o6vypAYJLLm3HC3Z8CD
-         phccN3k5fufa3chWjLrJgSr31UCbrjdnuPagroxrvYOcflsTVadwzqNSUSFnZGmKrvvP
-         BtBg==
-X-Gm-Message-State: ACgBeo1xCKpP6sQEU1m71hkox5UOXK00uBArs8w1w+ydW5unySxx4fjX
-        /DDKn3heAtEYDIYLK+R7Tu9LEQ1MPjcFZ4L1
-X-Google-Smtp-Source: AA6agR5C2r+adNw5NtQz1Y5+CKrAVMHNSyZarBrNnKQL6mAcNe1IuSFJBc+uGQqs94/k132aUBYxhw==
-X-Received: by 2002:a05:6000:1188:b0:220:6c20:fbf6 with SMTP id g8-20020a056000118800b002206c20fbf6mr14995297wrx.372.1660057418197;
-        Tue, 09 Aug 2022 08:03:38 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id b2-20020a5d4d82000000b0021f73c66198sm13696056wru.1.2022.08.09.08.03.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 08:03:37 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 17:03:35 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/fb-helper: Remove helpers to change frame buffer
- config
-Message-ID: <YvJ3R2HnTSXDF7lx@phenom.ffwll.local>
-Mail-Followup-To: Helge Deller <deller@gmx.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220629105658.1373770-1-geert@linux-m68k.org>
- <d27c08a3-0f2f-c0f2-143f-482a33a6a4ce@gmx.de>
+        Tue, 9 Aug 2022 11:04:56 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60060.outbound.protection.outlook.com [40.107.6.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989881CB16;
+        Tue,  9 Aug 2022 08:04:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=miSfgTii1EJMpwncZvw2aJuOmEUdLDFFxtq1Nee3B5HtUkpFROcKjeirJnmyfnzdiSxs1gin60Tc0cTRy2RV2c+s68iD0rwJOQ1yFiKeKCQEG2XuqqMkOZZKOQqC4pycK7Bi7D4LU8mpoXEkIKj5BTQe460g5TNjU+rucmbP8eU0Np6pGGJ8ZEPefeTsTWz/5y2iVZdbK3jTCgbrfIBktOsdXjv/5fp9fD9XFk0oAAdK59I3P1hfBSIlwietcyocvPhIJ7tprmaAi+hvWKcuJROq8QwnH6H4MY3xFbygNgfh4vdCteWQoDzKVznY/JpslHpL7SJ5NfOIKm9J/e0HYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3WJasNUV2L2QtCnbD92q4EoewA1BmXKQSJ+uq+be4uo=;
+ b=Crhiu4P5+g4MbdyLVsly0j82pNP0UzwsVpBsTqMjI6ByaM+lgKvbC4yw9P944fbTvHJxNLhkRsVvrS414rTl0915WJIYIctke6G5bQvg4zqRJR+2az0iRPPigwpgqy8l1lZ8rwI5Bx1YclVsV48mxUk4PKFRwT7h+NT30+atHG+HvFF32Oa+QME9QVIQsooUzmSqwx8Cwtrq+QTejvtTG3BWj2WAS4u+guoqw+Pmt7GTxePtydI7HTdu3pfCNXM7GFzohxx1iHj22Rqqu+usBHjOX1Q91jOgzOHxMgsDQbu1kWHzVJ3/Cmk8Covu1KzvFxkScchTuQSaY9AH2/RDSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 194.138.21.76) smtp.rcpttodomain=linaro.org smtp.mailfrom=siemens.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3WJasNUV2L2QtCnbD92q4EoewA1BmXKQSJ+uq+be4uo=;
+ b=K6WNfb9i9PSCJmyD+ZZtHyyQV0trs6MDgpGsqNDSlpViqZ3hH0snflwr70sqPkuG3ejhTituZq5qq/cNRjaUaPy5DsrNFhg/A9U5EjUHcu+qfdTQpj/qGZXALy6Q8BZu6ljVABqTiRmC5fRJsSO000Gl1SlyXWGwUC3cFhKzgf2kogIJA60BHJPK74td+AoQq5qjHWbGGfRp43nc0lZa1/sDHE3f75nE0laI8R1HzasoSC2OcL7FRFv3m/5UCOY3RPyASxpvPERPbbZ1fg0MwWuZN3Yd/ilJwCvZcoeSdUdnk7dL1wu8/+SyIRPOLiMZJir5JZGK1+mv1y+iqmbZbQ==
+Received: from DB8PR09CA0028.eurprd09.prod.outlook.com (2603:10a6:10:a0::41)
+ by DB8PR10MB3909.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:161::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Tue, 9 Aug
+ 2022 15:04:53 +0000
+Received: from DB5EUR01FT026.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:a0:cafe::49) by DB8PR09CA0028.outlook.office365.com
+ (2603:10a6:10:a0::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14 via Frontend
+ Transport; Tue, 9 Aug 2022 15:04:53 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 194.138.21.76)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=siemens.com;
+Received-SPF: Fail (protection.outlook.com: domain of siemens.com does not
+ designate 194.138.21.76 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.76; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.76) by
+ DB5EUR01FT026.mail.protection.outlook.com (10.152.5.2) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5504.14 via Frontend Transport; Tue, 9 Aug 2022 15:04:53 +0000
+Received: from DEMCHDC89XA.ad011.siemens.net (139.25.226.103) by
+ DEMCHDC8VSA.ad011.siemens.net (194.138.21.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.9; Tue, 9 Aug 2022 17:04:52 +0200
+Received: from md1za8fc.ad001.siemens.net (139.25.0.80) by
+ DEMCHDC89XA.ad011.siemens.net (139.25.226.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.9; Tue, 9 Aug 2022 17:04:52 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Pavel Machek <pavel@ucw.cz>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee@kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>
+CC:     Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+        Tasanakorn Phaipool <tasanakorn@gmail.com>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH v2 0/4] add support for another simatic board
+Date:   Tue, 9 Aug 2022 17:04:38 +0200
+Message-ID: <20220809150442.3525-1-henning.schild@siemens.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d27c08a3-0f2f-c0f2-143f-482a33a6a4ce@gmx.de>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [139.25.0.80]
+X-ClientProxiedBy: DEMCHDC89XA.ad011.siemens.net (139.25.226.103) To
+ DEMCHDC89XA.ad011.siemens.net (139.25.226.103)
+X-TM-AS-Product-Ver: SMEX-14.0.0.3080-8.6.1018-26680.007
+X-TM-AS-Result: No-10--9.801800-8.000000
+X-TMASE-MatchedRID: sTEkyVzuJdiY5cvP7IrCct/XEatydg+PIWERHkBDPUm5kFk6DtF9fy+7
+        N1Fn6XdzHWtVZN0asTh42s15z/uIuCWRqpXdALNesgjvvqwSJa6fl1eN3IN3K7dHEv7sR/OwSri
+        C59qdEjIm3tlnC/E6VDDHxnr5pBtw1bNT+YxZ+GBF0kv+vQOmAMK8bCqGv6ntkwgo9duuWhem7E
+        UWk2jS0UpZP1CipW5jJmV7j1WQqoeqLUinaN4ZqjVq4vGUB5lA+JollBGk0D620BbG4zmyXnhcs
+        0GMz0PkWAuSz3ewb23iuX4UcbdWgPXMGxI4gvmggiZ0yHR8kZPbS0m47m6fSgPZZctd3P4BjWP6
+        asaL88XtcZYGmyEIb6PFjJEFr+olwXCBO/GKkVqOhzOa6g8KrWyOGF7AbJ5PW13ZtKWiBT2ONK2
+        tYsaZbAuDLu8isB83bL64S5X6AkI=
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--9.801800-8.000000
+X-TMASE-Version: SMEX-14.0.0.3080-8.6.1018-26680.007
+X-TM-SNTS-SMTP: EA810A98827D0B36A6ECC409DB77399FA9A5B61731BCB687C4BD7C7BBABF1FEF2000:8
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6635c1c9-d115-46b7-e3c0-08da7a1883cd
+X-MS-TrafficTypeDiagnostic: DB8PR10MB3909:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cOs4L463N1Efo+Ngl7KLEusUsEFff6voGOdB9SM/OskV6MIt+eC+QCyz0qZLV8eS3IjxNHBP2kDXEKxAmh09VM/PlPR+qMlfGDa15iMiqxOU+OOdTTd/HSg1zVJtRrl3bPqkOBhsBpmMV6h9dTyrEZdAZZEphhvbeKfqFskAjtkgMGX3EYNY4wm02r2BuZ8/pWM69zPv+LmOzT+zPKT2FWyB92pnRhYKW4cd2VzRwo3IBB1taMqZeAUQpO9Kk8slGB7Wo7j1CJp53CHyMhprFZyvcnVKI1m7PYKIqvjEdD7fRUPyCLyGSF+JvBXhr7WJmLJYn0nBpGirjLQOpa+lTnF5+c9MIO8yVHppKO70FLIqCQjGHCf/ksrIfBQPPuCoIRVTbOwK5GgKJvI4IymJhlTHQ6ZTaaYml+Ccak5JeI/R5aig+XNMkmWusHmhrjeoQjHYeZdpIEhUxrPddkjitNvHUUgk6ClAu+D50yINxkJoCc7RI3WHXAKK5wjaz4XbBNU6GwZ7CQLX47zwqcy0Rxmm90T4WFkbsYsOl37xc/V77sfsqPUsepBsSJIXYiC7ChJ7jOuFg/uZauOBQ/MfgpQ3Eqn7EmtognYa1gkbctjzxvX/74Zu49AN6wZDOhr2e6VX3mNBRaR/HL5IV+NaLAOnBkj7uzOtsEX572lehsR8iT60jOtwzHEP7hqfG01F2l9Sl6edSrzwq3Kncs9ltZxgzjTWKjDea8BLdBE0tg83PGuTk4TrKYb0fi8UyBAXfr2Gm5Iprv42ijEje400pcWYnj3RrhxAockM8yThCQEPSm+Lw9FuHubktRUrDDZODGWzYMnBQWdmzcKtB8X9Hq0hieefw2SBqbR3wregDA+KWPug+ddvuJVoeCuHytRJEvkxV0uCR+cMRxdR6szDPw==
+X-Forefront-Antispam-Report: CIP:194.138.21.76;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(396003)(376002)(346002)(40470700004)(36840700001)(46966006)(83380400001)(47076005)(1076003)(26005)(336012)(40480700001)(186003)(107886003)(8676002)(4326008)(316002)(956004)(70206006)(82740400003)(70586007)(16526019)(2616005)(36756003)(41300700001)(2906002)(478600001)(82960400001)(86362001)(6666004)(40460700003)(81166007)(82310400005)(356005)(921005)(36860700001)(8936002)(44832011)(5660300002)(110136005)(54906003)(7416002)(83996005)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 15:04:53.4833
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6635c1c9-d115-46b7-e3c0-08da7a1883cd
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.76];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT026.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3909
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 08:05:54PM +0200, Helge Deller wrote:
-> On 6/29/22 12:56, Geert Uytterhoeven wrote:
-> > The DRM fbdev emulation layer does not support pushing back
-> > changes to fb_var_screeninfo to KMS.
-> >
-> > However, drm_fb_helper still implements the fb_ops.fb_check_var() and
-> > fb_ops.fb_set_par() callbacks, but the former fails to validate various
-> > parameters passed from userspace.  Hence unsanitized and possible
-> > invaled values are passed up through the fbdev, fbcon, and console
-> > stack, which has become an endless source of security issues reported
-> > against fbdev.
-> >
-> > Fix this by not populating the fb_ops.fb_check_var() and
-> > fb_ops.fb_set_par() callbacks, as there is no point in providing them if
-> > the frame buffer config cannot be changed anyway.  This makes the fbdev
-> > core aware that making changes to the frame buffer config is not
-> > supported, so it will always return the current config.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> 
-> It's unfortunate that DRM currently isn't able to switch resolutions
-> at runtime.
-> 
-> With that in mind I agree with Geert that it's probably better to
-> disable (or drop) that code until DRM can cope with fbdev's
-> interface to switch resolutions.
-> 
-> Furthermore, with the upcoming patches to fbcon (which prevents crashes on
-> invalid userspace input), you will face a kernel WARNING if you call fbset
-> to switch screen resolutions with DRM drivers.
-> 
-> So, from my side (although I'd prefer a better fix for DRM):
-> 
-> Acked-by: Helge Deller <deller@gmx.de>
+changes since v1:
+  - remove unused define
+  - fix bug where (base + 2) was used as second data bit
+  - add macros for "inverted" and "single data bit"
 
-So maybe I'm missing something, but I think this breaks a lot of stuff.
-The issue is that fbdev is only a subordinate owner of the kms device, if
-there's a real drm kms owner around that wins.
+This series first enables a SuperIO GPIO driver to support a chip from
+the vendor Nuvoton, the driver is for Fintek devices but those just are
+very similar. And in watchdog and hwmon subsystems these SuperIO drivers
+also share code and are sometimes called a family.
 
-Which means when you switch back then set_par needs to restore the fbdev
-framebuffer. So that might break some recovery/use-cases.
+In another step the individual banks receive a label to tell them apart,
+a step which potentially changes an interface to legacy users that might
+rely on all banks having the same label, or an exact label. But since a
+later patch wants to use GPIO_LOOKUP unique labels are needed and i
+decided to assign them for all supported chips.
 
-The other thing is that I think this also breaks the scanout offset, and
-people do use that for double-buffering on top of fbdev on top of drm
-drivers. So we can't just nuke it completely.
+In a following patch the Simatic GPIO LED driver is extended to provide
+LEDs in case that SuperIO GPIO driver can be loaded.
 
-For better or worse I think we need to keep playing the whack-a-mole game.
-Or do I miss something here?
--Daniel
+Last but not least the watchdog module of that same SuperIO gets loaded
+on a best effort basis.
 
-> 
-> Helge
-> 
-> > ---
-> > The only remaining DRM driver that implements fb_ops.fb_check_var() is
-> > also broken, as it fails to validate various parameters passed from
-> > userspace.  So vmw_fb_check_var() should either be fixed, or removed.
-> > ---
-> >  drivers/gpu/drm/drm_fb_helper.c            | 180 ++-------------------
-> >  drivers/gpu/drm/i915/display/intel_fbdev.c |  15 --
-> >  drivers/gpu/drm/omapdrm/omap_fbdev.c       |   2 -
-> >  include/drm/drm_fb_helper.h                |  16 --
-> >  4 files changed, 13 insertions(+), 200 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-> > index 2d4cee6a10ffffe7..1041a11c410d7967 100644
-> > --- a/drivers/gpu/drm/drm_fb_helper.c
-> > +++ b/drivers/gpu/drm/drm_fb_helper.c
-> > @@ -228,9 +228,18 @@ int drm_fb_helper_debug_leave(struct fb_info *info)
-> >  }
-> >  EXPORT_SYMBOL(drm_fb_helper_debug_leave);
-> >
-> > -static int
-> > -__drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper,
-> > -					    bool force)
-> > +/**
-> > + * drm_fb_helper_restore_fbdev_mode_unlocked - restore fbdev configuration
-> > + * @fb_helper: driver-allocated fbdev helper, can be NULL
-> > + *
-> > + * This should be called from driver's drm &drm_driver.lastclose callback
-> > + * when implementing an fbcon on top of kms using this helper. This ensures that
-> > + * the user isn't greeted with a black screen when e.g. X dies.
-> > + *
-> > + * RETURNS:
-> > + * Zero if everything went ok, negative error code otherwise.
-> > + */
-> > +int drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper)
-> >  {
-> >  	bool do_delayed;
-> >  	int ret;
-> > @@ -242,16 +251,7 @@ __drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper,
-> >  		return 0;
-> >
-> >  	mutex_lock(&fb_helper->lock);
-> > -	if (force) {
-> > -		/*
-> > -		 * Yes this is the _locked version which expects the master lock
-> > -		 * to be held. But for forced restores we're intentionally
-> > -		 * racing here, see drm_fb_helper_set_par().
-> > -		 */
-> > -		ret = drm_client_modeset_commit_locked(&fb_helper->client);
-> > -	} else {
-> > -		ret = drm_client_modeset_commit(&fb_helper->client);
-> > -	}
-> > +	ret = drm_client_modeset_commit(&fb_helper->client);
-> >
-> >  	do_delayed = fb_helper->delayed_hotplug;
-> >  	if (do_delayed)
-> > @@ -263,22 +263,6 @@ __drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper,
-> >
-> >  	return ret;
-> >  }
-> > -
-> > -/**
-> > - * drm_fb_helper_restore_fbdev_mode_unlocked - restore fbdev configuration
-> > - * @fb_helper: driver-allocated fbdev helper, can be NULL
-> > - *
-> > - * This should be called from driver's drm &drm_driver.lastclose callback
-> > - * when implementing an fbcon on top of kms using this helper. This ensures that
-> > - * the user isn't greeted with a black screen when e.g. X dies.
-> > - *
-> > - * RETURNS:
-> > - * Zero if everything went ok, negative error code otherwise.
-> > - */
-> > -int drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper)
-> > -{
-> > -	return __drm_fb_helper_restore_fbdev_mode_unlocked(fb_helper, false);
-> > -}
-> >  EXPORT_SYMBOL(drm_fb_helper_restore_fbdev_mode_unlocked);
-> >
-> >  #ifdef CONFIG_MAGIC_SYSRQ
-> > @@ -1254,25 +1238,6 @@ int drm_fb_helper_ioctl(struct fb_info *info, unsigned int cmd,
-> >  }
-> >  EXPORT_SYMBOL(drm_fb_helper_ioctl);
-> >
-> > -static bool drm_fb_pixel_format_equal(const struct fb_var_screeninfo *var_1,
-> > -				      const struct fb_var_screeninfo *var_2)
-> > -{
-> > -	return var_1->bits_per_pixel == var_2->bits_per_pixel &&
-> > -	       var_1->grayscale == var_2->grayscale &&
-> > -	       var_1->red.offset == var_2->red.offset &&
-> > -	       var_1->red.length == var_2->red.length &&
-> > -	       var_1->red.msb_right == var_2->red.msb_right &&
-> > -	       var_1->green.offset == var_2->green.offset &&
-> > -	       var_1->green.length == var_2->green.length &&
-> > -	       var_1->green.msb_right == var_2->green.msb_right &&
-> > -	       var_1->blue.offset == var_2->blue.offset &&
-> > -	       var_1->blue.length == var_2->blue.length &&
-> > -	       var_1->blue.msb_right == var_2->blue.msb_right &&
-> > -	       var_1->transp.offset == var_2->transp.offset &&
-> > -	       var_1->transp.length == var_2->transp.length &&
-> > -	       var_1->transp.msb_right == var_2->transp.msb_right;
-> > -}
-> > -
-> >  static void drm_fb_helper_fill_pixel_fmt(struct fb_var_screeninfo *var,
-> >  					 u8 depth)
-> >  {
-> > @@ -1331,123 +1296,6 @@ static void drm_fb_helper_fill_pixel_fmt(struct fb_var_screeninfo *var,
-> >  	}
-> >  }
-> >
-> > -/**
-> > - * drm_fb_helper_check_var - implementation for &fb_ops.fb_check_var
-> > - * @var: screeninfo to check
-> > - * @info: fbdev registered by the helper
-> > - */
-> > -int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
-> > -			    struct fb_info *info)
-> > -{
-> > -	struct drm_fb_helper *fb_helper = info->par;
-> > -	struct drm_framebuffer *fb = fb_helper->fb;
-> > -	struct drm_device *dev = fb_helper->dev;
-> > -
-> > -	if (in_dbg_master())
-> > -		return -EINVAL;
-> > -
-> > -	if (var->pixclock != 0) {
-> > -		drm_dbg_kms(dev, "fbdev emulation doesn't support changing the pixel clock, value of pixclock is ignored\n");
-> > -		var->pixclock = 0;
-> > -	}
-> > -
-> > -	if ((drm_format_info_block_width(fb->format, 0) > 1) ||
-> > -	    (drm_format_info_block_height(fb->format, 0) > 1))
-> > -		return -EINVAL;
-> > -
-> > -	/*
-> > -	 * Changes struct fb_var_screeninfo are currently not pushed back
-> > -	 * to KMS, hence fail if different settings are requested.
-> > -	 */
-> > -	if (var->bits_per_pixel > fb->format->cpp[0] * 8 ||
-> > -	    var->xres > fb->width || var->yres > fb->height ||
-> > -	    var->xres_virtual > fb->width || var->yres_virtual > fb->height) {
-> > -		drm_dbg_kms(dev, "fb requested width/height/bpp can't fit in current fb "
-> > -			  "request %dx%d-%d (virtual %dx%d) > %dx%d-%d\n",
-> > -			  var->xres, var->yres, var->bits_per_pixel,
-> > -			  var->xres_virtual, var->yres_virtual,
-> > -			  fb->width, fb->height, fb->format->cpp[0] * 8);
-> > -		return -EINVAL;
-> > -	}
-> > -
-> > -	/*
-> > -	 * Workaround for SDL 1.2, which is known to be setting all pixel format
-> > -	 * fields values to zero in some cases. We treat this situation as a
-> > -	 * kind of "use some reasonable autodetected values".
-> > -	 */
-> > -	if (!var->red.offset     && !var->green.offset    &&
-> > -	    !var->blue.offset    && !var->transp.offset   &&
-> > -	    !var->red.length     && !var->green.length    &&
-> > -	    !var->blue.length    && !var->transp.length   &&
-> > -	    !var->red.msb_right  && !var->green.msb_right &&
-> > -	    !var->blue.msb_right && !var->transp.msb_right) {
-> > -		drm_fb_helper_fill_pixel_fmt(var, fb->format->depth);
-> > -	}
-> > -
-> > -	/*
-> > -	 * Likewise, bits_per_pixel should be rounded up to a supported value.
-> > -	 */
-> > -	var->bits_per_pixel = fb->format->cpp[0] * 8;
-> > -
-> > -	/*
-> > -	 * drm fbdev emulation doesn't support changing the pixel format at all,
-> > -	 * so reject all pixel format changing requests.
-> > -	 */
-> > -	if (!drm_fb_pixel_format_equal(var, &info->var)) {
-> > -		drm_dbg_kms(dev, "fbdev emulation doesn't support changing the pixel format\n");
-> > -		return -EINVAL;
-> > -	}
-> > -
-> > -	return 0;
-> > -}
-> > -EXPORT_SYMBOL(drm_fb_helper_check_var);
-> > -
-> > -/**
-> > - * drm_fb_helper_set_par - implementation for &fb_ops.fb_set_par
-> > - * @info: fbdev registered by the helper
-> > - *
-> > - * This will let fbcon do the mode init and is called at initialization time by
-> > - * the fbdev core when registering the driver, and later on through the hotplug
-> > - * callback.
-> > - */
-> > -int drm_fb_helper_set_par(struct fb_info *info)
-> > -{
-> > -	struct drm_fb_helper *fb_helper = info->par;
-> > -	struct fb_var_screeninfo *var = &info->var;
-> > -	bool force;
-> > -
-> > -	if (oops_in_progress)
-> > -		return -EBUSY;
-> > -
-> > -	if (var->pixclock != 0) {
-> > -		drm_err(fb_helper->dev, "PIXEL CLOCK SET\n");
-> > -		return -EINVAL;
-> > -	}
-> > -
-> > -	/*
-> > -	 * Normally we want to make sure that a kms master takes precedence over
-> > -	 * fbdev, to avoid fbdev flickering and occasionally stealing the
-> > -	 * display status. But Xorg first sets the vt back to text mode using
-> > -	 * the KDSET IOCTL with KD_TEXT, and only after that drops the master
-> > -	 * status when exiting.
-> > -	 *
-> > -	 * In the past this was caught by drm_fb_helper_lastclose(), but on
-> > -	 * modern systems where logind always keeps a drm fd open to orchestrate
-> > -	 * the vt switching, this doesn't work.
-> > -	 *
-> > -	 * To not break the userspace ABI we have this special case here, which
-> > -	 * is only used for the above case. Everything else uses the normal
-> > -	 * commit function, which ensures that we never steal the display from
-> > -	 * an active drm master.
-> > -	 */
-> > -	force = var->activate & FB_ACTIVATE_KD_TEXT;
-> > -
-> > -	__drm_fb_helper_restore_fbdev_mode_unlocked(fb_helper, force);
-> > -
-> > -	return 0;
-> > -}
-> > -EXPORT_SYMBOL(drm_fb_helper_set_par);
-> > -
-> >  static void pan_set(struct drm_fb_helper *fb_helper, int x, int y)
-> >  {
-> >  	struct drm_mode_set *mode_set;
-> > @@ -2028,8 +1876,6 @@ int drm_fb_helper_hotplug_event(struct drm_fb_helper *fb_helper)
-> >  	drm_setup_crtcs_fb(fb_helper);
-> >  	mutex_unlock(&fb_helper->lock);
-> >
-> > -	drm_fb_helper_set_par(fb_helper->fbdev);
-> > -
-> >  	return 0;
-> >  }
-> >  EXPORT_SYMBOL(drm_fb_helper_hotplug_event);
-> > diff --git a/drivers/gpu/drm/i915/display/intel_fbdev.c b/drivers/gpu/drm/i915/display/intel_fbdev.c
-> > index 221336178991f04f..26dbe9487c79ae1b 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_fbdev.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_fbdev.c
-> > @@ -77,20 +77,6 @@ static void intel_fbdev_invalidate(struct intel_fbdev *ifbdev)
-> >  	intel_frontbuffer_invalidate(to_frontbuffer(ifbdev), ORIGIN_CPU);
-> >  }
-> >
-> > -static int intel_fbdev_set_par(struct fb_info *info)
-> > -{
-> > -	struct drm_fb_helper *fb_helper = info->par;
-> > -	struct intel_fbdev *ifbdev =
-> > -		container_of(fb_helper, struct intel_fbdev, helper);
-> > -	int ret;
-> > -
-> > -	ret = drm_fb_helper_set_par(info);
-> > -	if (ret == 0)
-> > -		intel_fbdev_invalidate(ifbdev);
-> > -
-> > -	return ret;
-> > -}
-> > -
-> >  static int intel_fbdev_blank(int blank, struct fb_info *info)
-> >  {
-> >  	struct drm_fb_helper *fb_helper = info->par;
-> > @@ -123,7 +109,6 @@ static int intel_fbdev_pan_display(struct fb_var_screeninfo *var,
-> >  static const struct fb_ops intelfb_ops = {
-> >  	.owner = THIS_MODULE,
-> >  	DRM_FB_HELPER_DEFAULT_OPS,
-> > -	.fb_set_par = intel_fbdev_set_par,
-> >  	.fb_fillrect = drm_fb_helper_cfb_fillrect,
-> >  	.fb_copyarea = drm_fb_helper_cfb_copyarea,
-> >  	.fb_imageblit = drm_fb_helper_cfb_imageblit,
-> > diff --git a/drivers/gpu/drm/omapdrm/omap_fbdev.c b/drivers/gpu/drm/omapdrm/omap_fbdev.c
-> > index 40706c5aad7b5c9b..2df8875baaca10b6 100644
-> > --- a/drivers/gpu/drm/omapdrm/omap_fbdev.c
-> > +++ b/drivers/gpu/drm/omapdrm/omap_fbdev.c
-> > @@ -74,8 +74,6 @@ static int omap_fbdev_pan_display(struct fb_var_screeninfo *var,
-> >  static const struct fb_ops omap_fb_ops = {
-> >  	.owner = THIS_MODULE,
-> >
-> > -	.fb_check_var	= drm_fb_helper_check_var,
-> > -	.fb_set_par	= drm_fb_helper_set_par,
-> >  	.fb_setcmap	= drm_fb_helper_setcmap,
-> >  	.fb_blank	= drm_fb_helper_blank,
-> >  	.fb_pan_display = omap_fbdev_pan_display,
-> > diff --git a/include/drm/drm_fb_helper.h b/include/drm/drm_fb_helper.h
-> > index 329607ca65c06684..19b40adc156295a1 100644
-> > --- a/include/drm/drm_fb_helper.h
-> > +++ b/include/drm/drm_fb_helper.h
-> > @@ -200,8 +200,6 @@ drm_fb_helper_from_client(struct drm_client_dev *client)
-> >   * functions. To be used in struct fb_ops of drm drivers.
-> >   */
-> >  #define DRM_FB_HELPER_DEFAULT_OPS \
-> > -	.fb_check_var	= drm_fb_helper_check_var, \
-> > -	.fb_set_par	= drm_fb_helper_set_par, \
-> >  	.fb_setcmap	= drm_fb_helper_setcmap, \
-> >  	.fb_blank	= drm_fb_helper_blank, \
-> >  	.fb_pan_display	= drm_fb_helper_pan_display, \
-> > @@ -217,9 +215,6 @@ void drm_fb_helper_fini(struct drm_fb_helper *helper);
-> >  int drm_fb_helper_blank(int blank, struct fb_info *info);
-> >  int drm_fb_helper_pan_display(struct fb_var_screeninfo *var,
-> >  			      struct fb_info *info);
-> > -int drm_fb_helper_set_par(struct fb_info *info);
-> > -int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
-> > -			    struct fb_info *info);
-> >
-> >  int drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper);
-> >
-> > @@ -303,17 +298,6 @@ static inline int drm_fb_helper_pan_display(struct fb_var_screeninfo *var,
-> >  	return 0;
-> >  }
-> >
-> > -static inline int drm_fb_helper_set_par(struct fb_info *info)
-> > -{
-> > -	return 0;
-> > -}
-> > -
-> > -static inline int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
-> > -					  struct fb_info *info)
-> > -{
-> > -	return 0;
-> > -}
-> > -
-> >  static inline int
-> >  drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper)
-> >  {
-> 
+Note similar patches have appreared before as
+  "[PATCH v3 0/1] add device driver for Nuvoton SIO gpio function"
+The main difference here is that i added chip support to an existing
+driver instead of creating a new one. And that i actually propose all
+patches and do not just have the LED patch for Simatic as an example.
+Also note that the patches are based on
+  "[PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper"
+
+Henning Schild (4):
+  gpio-f7188x: Add GPIO support for Nuvoton NCT6116
+  gpio-f7188x: use unique labels for banks/chips
+  leds: simatic-ipc-leds-gpio: add new model 227G
+  platform/x86: simatic-ipc: enable watchdog for 227G
+
+ drivers/gpio/gpio-f7188x.c                    | 192 ++++++++++--------
+ drivers/leds/simple/simatic-ipc-leds-gpio.c   |  42 +++-
+ drivers/platform/x86/simatic-ipc.c            |   7 +-
+ .../platform_data/x86/simatic-ipc-base.h      |   1 +
+ include/linux/platform_data/x86/simatic-ipc.h |   1 +
+ 5 files changed, 157 insertions(+), 86 deletions(-)
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.35.1
+

@@ -2,199 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2F258D452
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D9E58D45C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbiHIHPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 03:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S238759AbiHIHQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 03:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238884AbiHIHPi (ORCPT
+        with ESMTP id S238685AbiHIHQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 03:15:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B52FFA
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 00:15:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B928A336BF;
-        Tue,  9 Aug 2022 07:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1660029335; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 9 Aug 2022 03:16:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6CEC20BF8
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 00:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660029401;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=M//xmn5LutYADQgn/epE+LDRLxNBhunceyOYbX10LMo=;
-        b=Ol5Iyd0mbOYphIFJlKMx4OTlKXgXt5p0YHgtPXABkzEtsSVccJBR0+ZGITnYRRsxA2KCZj
-        sUJXQOYVMoBX3kkla+cw2hsyh0miuFS/V9zLos4oErj8+nqv6JatirXL15GUooB7aG8wl0
-        AXHvGmd57TYuRgHZs6v79WK0wq5ybXw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1660029335;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M//xmn5LutYADQgn/epE+LDRLxNBhunceyOYbX10LMo=;
-        b=eKnwwTBJHEBTC7q4QcXmf2lw8j/MFI6m5eW/0m2HJPzU15BQAXvAfFLHg0xU5f7TDRR5wH
-        JgHueNb5cIGNL2BA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=pFDs6xidhpbw1qYaUFr1MfUDhoMVpVETbRmiPl3tRsM=;
+        b=Khza/dN1QoNhC0Ta2bpD7qkDZuz1OyCI0xm9ynaHUH6d0wtVYh4Msr2s8n9qVjNWkjVZEd
+        UMbKZtyKZdcZ391G92A/oJRB6lT6pz+bN7HAW8xs4uLN4WfnwitlV8D8p2piYXiLTUxXUs
+        DmlzWo53/8c3XrA8MdAtgXuhQKQ0F4I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607-wVvB783QNq-aMoXaZIWmxA-1; Tue, 09 Aug 2022 03:16:38 -0400
+X-MC-Unique: wVvB783QNq-aMoXaZIWmxA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8932913A9D;
-        Tue,  9 Aug 2022 07:15:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Si9zHZcJ8mLpcQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 09 Aug 2022 07:15:35 +0000
-Date:   Tue, 09 Aug 2022 09:15:35 +0200
-Message-ID: <87h72lx4yw.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Takashi Iwai <tiwai@suse.de>, dri-devel@lists.freedesktop.org,
-        Dave Airlie <airlied@redhat.com>, Sean Paul <sean@poorly.run>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] drm/udl: Kill pending URBs at suspend and disconnect
-In-Reply-To: <bebcfa4a-7908-d8ba-3bff-ea7c2ee2d7a9@suse.de>
-References: <20220804075826.27036-1-tiwai@suse.de>
-        <20220804075826.27036-4-tiwai@suse.de>
-        <bebcfa4a-7908-d8ba-3bff-ea7c2ee2d7a9@suse.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 37B753801FE4;
+        Tue,  9 Aug 2022 07:16:38 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.193.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2DC411415125;
+        Tue,  9 Aug 2022 07:16:35 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, maz@kernel.org, oliver.upton@linux.dev,
+        andrew.jones@linux.dev, seanjc@google.com,
+        mathieu.desnoyers@efficios.com, yihyu@redhat.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with glibc-2.35
+References: <20220809060627.115847-1-gshan@redhat.com>
+        <20220809060627.115847-2-gshan@redhat.com>
+        <8735e6ncxw.fsf@oldenburg.str.redhat.com>
+        <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com>
+Date:   Tue, 09 Aug 2022 09:16:33 +0200
+In-Reply-To: <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com> (Gavin Shan's
+        message of "Tue, 9 Aug 2022 18:45:26 +1000")
+Message-ID: <87o7wtnay6.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 Aug 2022 09:13:16 +0200,
-Thomas Zimmermann wrote:
-> 
-> Hi
-> 
-> Am 04.08.22 um 09:58 schrieb Takashi Iwai:
-> > At both suspend and disconnect, we should rather cancel the pending
-> > URBs immediately.  For the suspend case, the display will be turned
-> > off, so it makes no sense to process the rendering.  And for the
-> > disconnect case, the device may be no longer accessible, hence we
-> > shouldn't do any submission.
-> > 
-> > Tested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> > Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> > ---
-> >   drivers/gpu/drm/udl/udl_drv.h     |  2 ++
-> >   drivers/gpu/drm/udl/udl_main.c    | 25 ++++++++++++++++++++++---
-> >   drivers/gpu/drm/udl/udl_modeset.c |  2 ++
-> >   3 files changed, 26 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/udl/udl_drv.h b/drivers/gpu/drm/udl/udl_drv.h
-> > index f01e50c5b7b7..28aaf75d71cf 100644
-> > --- a/drivers/gpu/drm/udl/udl_drv.h
-> > +++ b/drivers/gpu/drm/udl/udl_drv.h
-> > @@ -39,6 +39,7 @@ struct urb_node {
-> >     struct urb_list {
-> >   	struct list_head list;
-> > +	struct list_head in_flight;
-> >   	spinlock_t lock;
-> >   	wait_queue_head_t sleep;
-> >   	int available;
-> > @@ -84,6 +85,7 @@ static inline struct urb *udl_get_urb(struct drm_device *dev)
-> >     int udl_submit_urb(struct drm_device *dev, struct urb *urb,
-> > size_t len);
-> >   int udl_sync_pending_urbs(struct drm_device *dev);
-> > +void udl_kill_pending_urbs(struct drm_device *dev);
-> >   void udl_urb_completion(struct urb *urb);
-> >     int udl_init(struct udl_device *udl);
-> > diff --git a/drivers/gpu/drm/udl/udl_main.c b/drivers/gpu/drm/udl/udl_main.c
-> > index 93615648414b..47204b7eb10e 100644
-> > --- a/drivers/gpu/drm/udl/udl_main.c
-> > +++ b/drivers/gpu/drm/udl/udl_main.c
-> > @@ -135,7 +135,7 @@ void udl_urb_completion(struct urb *urb)
-> >   	urb->transfer_buffer_length = udl->urbs.size; /* reset to actual */
-> >     	spin_lock_irqsave(&udl->urbs.lock, flags);
-> > -	list_add_tail(&unode->entry, &udl->urbs.list);
-> > +	list_move(&unode->entry, &udl->urbs.list);
-> >   	udl->urbs.available++;
-> >   	spin_unlock_irqrestore(&udl->urbs.lock, flags);
-> >   @@ -180,6 +180,7 @@ static int udl_alloc_urb_list(struct
-> > drm_device *dev, int count, size_t size)
-> >   retry:
-> >   	udl->urbs.size = size;
-> >   	INIT_LIST_HEAD(&udl->urbs.list);
-> > +	INIT_LIST_HEAD(&udl->urbs.in_flight);
-> >     	init_waitqueue_head(&udl->urbs.sleep);
-> >   	udl->urbs.count = 0;
-> > @@ -246,7 +247,7 @@ struct urb *udl_get_urb_timeout(struct drm_device *dev, long timeout)
-> >   	}
-> >     	unode = list_first_entry(&udl->urbs.list, struct urb_node,
-> > entry);
-> > -	list_del_init(&unode->entry);
-> > +	list_move(&unode->entry, &udl->urbs.in_flight);
-> >   	udl->urbs.available--;
-> >     unlock:
-> > @@ -279,7 +280,7 @@ int udl_sync_pending_urbs(struct drm_device *dev)
-> >   	spin_lock_irq(&udl->urbs.lock);
-> >   	/* 2 seconds as a sane timeout */
-> >   	if (!wait_event_lock_irq_timeout(udl->urbs.sleep,
-> > -					 udl->urbs.available == udl->urbs.count,
-> > +					 list_empty(&udl->urbs.in_flight),
-> >   					 udl->urbs.lock,
-> >   					 msecs_to_jiffies(2000)))
-> >   		ret = -ETIMEDOUT;
-> > @@ -287,6 +288,23 @@ int udl_sync_pending_urbs(struct drm_device *dev)
-> >   	return ret;
-> >   }
-> >   +/* kill pending URBs */
-> > +void udl_kill_pending_urbs(struct drm_device *dev)
-> > +{
-> > +	struct udl_device *udl = to_udl(dev);
-> > +	struct urb_node *unode;
-> > +
-> > +	spin_lock_irq(&udl->urbs.lock);
-> > +	while (!list_empty(&udl->urbs.in_flight)) {
-> > +		unode = list_first_entry(&udl->urbs.in_flight,
-> > +					 struct urb_node, entry);
-> > +		spin_unlock_irq(&udl->urbs.lock);
-> > +		usb_kill_urb(unode->urb);
-> > +		spin_lock_irq(&udl->urbs.lock);
-> > +	}
-> > +	spin_unlock_irq(&udl->urbs.lock);
-> > +}
-> > +
-> >   int udl_init(struct udl_device *udl)
-> >   {
-> >   	struct drm_device *dev = &udl->drm;
-> > @@ -335,6 +353,7 @@ int udl_drop_usb(struct drm_device *dev)
-> >   {
-> >   	struct udl_device *udl = to_udl(dev);
-> >   +	udl_kill_pending_urbs(dev);
-> >   	udl_free_urb_list(dev);
-> >   	put_device(udl->dmadev);
-> >   	udl->dmadev = NULL;
-> > diff --git a/drivers/gpu/drm/udl/udl_modeset.c b/drivers/gpu/drm/udl/udl_modeset.c
-> > index 50025606b6ad..169110d8fc2e 100644
-> > --- a/drivers/gpu/drm/udl/udl_modeset.c
-> > +++ b/drivers/gpu/drm/udl/udl_modeset.c
-> > @@ -397,6 +397,8 @@ udl_simple_display_pipe_disable(struct drm_simple_display_pipe *pipe)
-> >   	struct urb *urb;
-> >   	char *buf;
-> >   +	udl_kill_pending_urbs(dev);
-> > +
-> 
-> I already reviewed the patchset, but I have another comment. I think
-> we should only kill urbs from within the suspend handler. Same for the
-> call to the URB-sync function in patch 2.
-> 
-> This disable function is part of the regular modeset path. It's
-> probably not appropriate to outright remove pending URBs here. This
-> can lead to failed modesets, which would have succeeded otherwise.
+* Gavin Shan:
 
-Well, the device shall be turned off right after that point, so the
-all pending rendering makes little sense, no?
+>> __builtin_thread_pointer doesn't work on all architectures/GCC
+>> versions.
+>> Is this a problem for selftests?
+>> 
+>
+> It's a problem as the test case is running on all architectures. I think I
+> need introduce our own __builtin_thread_pointer() for where it's not
+> supported: (1) PowerPC  (2) x86 without GCC 11
+>
+> Please let me know if I still have missed cases where
+> __buitin_thread_pointer() isn't supported?
 
+As far as I know, these are the two outliers that also have rseq
+support.  The list is a bit longer if we also consider non-rseq
+architectures (csky, hppa, ia64, m68k, microblaze, sparc, don't know
+about the Linux architectures without glibc support).
 
-Takashi
+Thanks,
+Florian
+

@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27ECA58E0E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8159658E0EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245367AbiHIUTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 16:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
+        id S1344536AbiHIUUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 16:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbiHIUTi (ORCPT
+        with ESMTP id S245607AbiHIUUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 16:19:38 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C7A10AD
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 13:19:38 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso26348pjq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=lgaYMtvXAvEV/Ho11rGuZwK8z8qOmKIv1XQUoKmBom0=;
-        b=Rr49S6enPzOon1+0rfWT1HYdfecyoRKPKQAHApNe5/mYPNbTEp3AT0H4+ofY5+C7Ho
-         T5hkEXr3UH4HTtY0OPvKSezVgZCu3ttWzKZuHmYR2yaB78T2ImqsGq8x6MjKoCJBzb9s
-         LX3QWuNs1hO8UjpPLmOtWMY8WYYGec/QLbi3c=
+        Tue, 9 Aug 2022 16:20:00 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CFC2559F;
+        Tue,  9 Aug 2022 13:19:59 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id cr9so6422204qtb.13;
+        Tue, 09 Aug 2022 13:19:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=lgaYMtvXAvEV/Ho11rGuZwK8z8qOmKIv1XQUoKmBom0=;
-        b=f2IjRV3OQLnYHGjyH72NzhtsrZU2Y//qqaDqJCnyP62gMhvqVKpdFrWOGZHOtodNz+
-         bdg4qsv/BYSyIzIm7eGl+cGgYbUVt1AMxeo7KI5CrrNBhI7uIs6nSmMKt5c8M49tzHcH
-         OTAXi5PX1Nr2ehMq7FvwOdrZ9uhQJZPpDACjen7+GMF8P+wT3QNfW1jbHdJqbNWWU6I/
-         Y5ftjZ3+IGjR7WUa8PHfSCzs1TkJEL8/tx/tzjHQ3IHl41ypzWcYqunNLFSirUtf3AYT
-         mZytqu0fqdnrNpG93JE6dbBTjxEZdH3tpr0LgnqoLNiSn/lZ8yrZFsp97Z/bAnRarxQC
-         nwKA==
-X-Gm-Message-State: ACgBeo2D/OMDD77w22xtcqlroo/Lh4F0Ei+QYHkLqfVhMHWTfrC0Drb5
-        IsG71YB0oMZGBAQTdUeF0K3ek5vBVDvs4w==
-X-Google-Smtp-Source: AA6agR5aHZs4bFslLZr8T2oIVblYnKdXjsyGJfqOmrwxMrTmj7OV3/X39z3FXgK5WZknWol338SBuA==
-X-Received: by 2002:a17:902:7247:b0:16f:8361:ba26 with SMTP id c7-20020a170902724700b0016f8361ba26mr24559334pll.83.1660076377553;
-        Tue, 09 Aug 2022 13:19:37 -0700 (PDT)
-Received: from localhost.localdomain ([183.83.136.224])
-        by smtp.gmail.com with ESMTPSA id kk13-20020a17090b4a0d00b001ef81574355sm12792pjb.12.2022.08.09.13.19.32
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Zskxu9RM9shgea48JfI0eSWUYjVUqMyTAyaPDWwmlU0=;
+        b=DirQGtP7fdYlZSVxrfAt9rAizedg9vnBjhEOGH1I3Wd9kv9d3SvBZ+L1qwCBHzcJfq
+         e31pSNMdr0cmDTfBYMdlgLZds9WJ03orXMcvsFtlJSU9KT2I5zxhuNSyfGnagcl4YZ2T
+         z9XbD4KOFHlcZ5u8oKoXzS/pcV8plSdeqw+mcrhEVn+SgnDHjigoY2VeskkHf6ikvEn1
+         p4/Yha68OtdJKrN8RgTBrzATADqELlgZfyq1idRrHXmG6IVRaKrr9bPSRhIwQ6hR47oU
+         GXo3jKSpD1TsBomcI9IpzBIqOtVZquGEVa/FqQjWxxnccvHwRpOvjLQlAs1+1T1lutql
+         giMg==
+X-Gm-Message-State: ACgBeo0r30uGp2r8KZQJbSD+nZ0ZD2oelTOU1afm2BkTYk4P9shexVAg
+        CCiIoZGFOY2H5Qjee9F48KEeKKilnA==
+X-Google-Smtp-Source: AA6agR7JlRVRwfkkAMUq/uYFIjTvCyOZ3vlkrOzYv/HhQul/99ZRx/tch/zjFCjHPfvagIqDVoDy8w==
+X-Received: by 2002:a05:6638:14d5:b0:33f:8a96:c59c with SMTP id l21-20020a05663814d500b0033f8a96c59cmr11480702jak.254.1660076387557;
+        Tue, 09 Aug 2022 13:19:47 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id a23-20020a5d9ed7000000b00684a65f0c36sm1525213ioe.45.2022.08.09.13.19.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 13:19:37 -0700 (PDT)
-From:   Suniel Mahesh <sunil@amarulasolutions.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kumar Gala <galak@codeaurora.org>,
-        Will Deacon <will@kernel.org>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Jagan Teki <jagan@amarulasolutions.com>, shawn.guo@linaro.org,
-        Maxime Ripard <maxime@cerno.tech>,
-        Mark Rutland <mark.rutland@arm.com>,
+        Tue, 09 Aug 2022 13:19:47 -0700 (PDT)
+Received: (nullmailer pid 2326180 invoked by uid 1000);
+        Tue, 09 Aug 2022 20:19:45 -0000
+Date:   Tue, 9 Aug 2022 14:19:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     David Airlie <airlied@linux.ie>, Lee Jones <lee@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-fbdev@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Pawel Moll <pawel.moll@arm.com>, Da Xue <da@libre.computer>
-Cc:     linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH v2] arm64: defconfig: Enable GPIO SYSCON
-Date:   Wed, 10 Aug 2022 01:49:21 +0530
-Message-Id: <20220809201921.703287-1-sunil@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+        linux-samsung-soc@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 3/3] dt-bindings: display: simple-framebuffer: Drop
+ Bartlomiej Zolnierkiewicz
+Message-ID: <20220809201945.GA2326091-robh@kernel.org>
+References: <20220808101526.46556-1-krzysztof.kozlowski@linaro.org>
+ <20220808101526.46556-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220808101526.46556-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable driver for SYSCON-based GPIOs.
+On Mon, 08 Aug 2022 13:15:26 +0300, Krzysztof Kozlowski wrote:
+> Bartlomiej's Samsung email address is not working since around last
+> year and there was no follow up patch take over of the drivers, so drop
+> the email from maintainers.
+> 
+> Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> I assume that if other change was preferred, there was quite enough of
+> time to send a patch for this. :)
+> ---
+>  .../devicetree/bindings/display/simple-framebuffer.yaml          | 1 -
+>  1 file changed, 1 deletion(-)
+> 
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
----
-Changes for v2:
-- restore existing configs.
-- change subject and commit message to suit the change.
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index d5b2d2dd4904..52623c2b505b 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -549,6 +549,7 @@ CONFIG_GPIO_MPC8XXX=y
- CONFIG_GPIO_MXC=y
- CONFIG_GPIO_PL061=y
- CONFIG_GPIO_RCAR=y
-+CONFIG_GPIO_SYSCON=y
- CONFIG_GPIO_UNIPHIER=y
- CONFIG_GPIO_VISCONTI=y
- CONFIG_GPIO_WCD934X=m
--- 
-2.25.1
-
+Applied, thanks!

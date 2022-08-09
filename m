@@ -2,75 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BE958D33A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9209058D34B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234039AbiHIFf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 01:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S234869AbiHIFk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 01:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiHIFfX (ORCPT
+        with ESMTP id S233673AbiHIFkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 01:35:23 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9125410549
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 22:35:21 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id o2so8242184lfb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 22:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CLBtSz5zowSZP2ptgXBelVuwhiidhEQF9DkU5FwAQ2o=;
-        b=MIpIA6sm7TY729nBdnH4Wjr8uM1YUZ558QURpKR1u4L6EukE1jenbkTuOPMgrdlh7I
-         y64Rd1JDLgrBmydt+dOufa6MsrJ8A0KKSQKIz1ym3JS+Tm72PR+sAbNLdqeh81rVeiV6
-         0oIPXwJyLmtA0jIq5cDmoiQrlGiriLCxmIyTsP5W38yajddj+q316fl2NnVSUZsBCTsb
-         U7onCSrDA3qRVMG91zDQv2bixKEo96W4h94qKqJO+uNe2XsH79owEtjkBd6yaYRpSSNU
-         OStd7KBlAMSexeY3jL0xH4PDeBsLHx9OjWzTB9DW3mO2Rlzpe+wssVNThK9J93hgw/y9
-         qJwA==
+        Tue, 9 Aug 2022 01:40:40 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165C7263E
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 22:40:39 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id d6-20020a056e020be600b002dcc7977592so7900235ilu.17
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 22:40:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CLBtSz5zowSZP2ptgXBelVuwhiidhEQF9DkU5FwAQ2o=;
-        b=fTe1sqUtdkmkawGF0V8cfYNfSqoBGvBWi8cJeci+b8IqGdBuwcM3pvKK1vZSu0mg2B
-         hljwUNt3O4Cb5yk+onWRrh8AtqwswNOrz4IminRwPGKr/uB/IPKupyxf8FnH0G1dyGx3
-         XYgXCGC/oFNmVd4qS6ZMwwqRdBE1O51lJjj1DVtINtn7Vz7KycYHrhu84kUy+duY+iUe
-         cUF/tGbZ8Q897TTo+v0toOGlZ9VReFFgwZbfZtJ5Zje9LA1xE+ngOXjfA9ec/kOkMRxn
-         aSmnnt+6Znnd16d6dI8Aqm4Y7XSvqDm9lHSlt0ENMVTvikMgfo71MosYQpei+W0k/HcJ
-         eCYA==
-X-Gm-Message-State: ACgBeo050tNRKHbwfH+MI5am9MMbO7/eHyk0kp2MMlAB9y3i4OQnyNf3
-        g4uHZ34S3mQa93QonWMEk8Batw==
-X-Google-Smtp-Source: AA6agR5fYMdcvjSWJZrYBeyOmmE7yWtMoqDT5jX7CoahSz6MfG2ZP8zWFR9aonG3W/hDYJLVtWYDBw==
-X-Received: by 2002:a05:6512:2390:b0:48c:ef98:4103 with SMTP id c16-20020a056512239000b0048cef984103mr2172907lfv.265.1660023319961;
-        Mon, 08 Aug 2022 22:35:19 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id e15-20020a05651236cf00b0047255d211b2sm1633301lfs.225.2022.08.08.22.35.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 22:35:19 -0700 (PDT)
-Message-ID: <27f83048-ac75-97eb-c9f0-0829de30e1ad@linaro.org>
-Date:   Tue, 9 Aug 2022 08:35:18 +0300
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=4WRjZBPGOS7PDzHhRHuHLZYa8Vua1VrrZ8WseiQhNsY=;
+        b=EHgXbsGEoYA7osfsRxabBPKdW5tzLUJ8cenag7lAmdLFhYZHTCe04HLGURBpXhjMXm
+         0jA1SujJe3PM58hGo9MHxjsm0/vhkCg8T/j87Cm/cis0ANKCnpk6RznN/PJuPGNwT9I+
+         l3rvr/bQovt88wzcoyZzEg+eNsKZBPYlEyf8P2H5Zgb9w3c/Ogerq242zRM30VGkFxbB
+         weqfjYX6dKE9VUUNho5dj3d9iuTxiWloW8xx3u9sIoVuIAPoWntGSwy4BgYmtozUziAh
+         3WTMEBneZNSCEYKXW0BX2/S4b4L5cTEbz+aibzBt2992iUky6EOtemU6G/X6fhyINoGQ
+         ATSg==
+X-Gm-Message-State: ACgBeo2g8Iyskd66+Fnr4yjg9tI8Q067XXAt68fBjerZQT7+uB36NmSy
+        xcBzysyOtcwB9SvKONwY+zwi49PHOuIguFr1CKn9YjxAPyQe
+X-Google-Smtp-Source: AA6agR5x4kCvBhEzAZyhAbeD611La5eVcvU33tBUXl8U1eAAv4dU0acgp2hwUCX9zm9lDlTYj3dy1PyezpOzZ6JJ36TxnQvag5PK
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/2] ARM: msm8960: Add Samsung Galaxy Express support
-Content-Language: en-US
-To:     Rudraksha Gupta <guptarud@gmail.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, david@ixit.cz,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org
-References: <20220808234723.5184-2-guptarud@gmail.com>
- <20220809000300.6384-1-guptarud@gmail.com>
- <20220809000300.6384-2-guptarud@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220809000300.6384-2-guptarud@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:1bcc:b0:2de:5182:be7 with SMTP id
+ x12-20020a056e021bcc00b002de51820be7mr9478794ilv.265.1660023627840; Mon, 08
+ Aug 2022 22:40:27 -0700 (PDT)
+Date:   Mon, 08 Aug 2022 22:40:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a806e205e5c85e54@google.com>
+Subject: [syzbot] WARNING: CPU: NUM PID: NUM at net/wireless/ibss.c:LINE __cfg80211_ibss_join
+From:   syzbot <syzbot+af9c72450de65fd26129@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,95 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/08/2022 03:03, Rudraksha Gupta wrote:
-> This adds a very basic device tree file for the Samsung Galaxy Express
-> SGH-I437. Currently, the following things work: UART, eMMC, SD Card, and
-> USB.
+Hello,
 
-Use subject prefix matching the subsystem.
+syzbot found the following issue on:
 
-> 
-> Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
-> ---
-> v2:
->  - Group the correct changes together
-> 
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../dts/qcom-msm8960-samsung-expressatt.dts   | 337 ++++++++++++++++++
->  2 files changed, 338 insertions(+)
->  create mode 100644 arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 05d8aef6e5d2..d55f196ad733 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1049,6 +1049,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
->  	qcom-msm8660-surf.dtb \
->  	qcom-msm8916-samsung-serranove.dtb \
->  	qcom-msm8960-cdp.dtb \
-> +	qcom-msm8960-samsung-expressatt.dtb \
->  	qcom-msm8974-lge-nexus5-hammerhead.dtb \
->  	qcom-msm8974-sony-xperia-rhine-amami.dtb \
->  	qcom-msm8974-sony-xperia-rhine-honami.dtb \
-> diff --git a/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts b/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
-> new file mode 100644
-> index 000000000000..cf557f0c9a59
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
-> @@ -0,0 +1,337 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <dt-bindings/input/input.h>
-> +#include "qcom-msm8960.dtsi"
-> +
-> +/ {
-> +	model = "Samsung Galaxy S3 SGH-I437";
-> +	compatible = "samsung,expressatt", "qcom,msm8960";
+HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16dd956a080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
+dashboard link: https://syzkaller.appspot.com/bug?extid=af9c72450de65fd26129
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=126cccbc080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b964b6080000
 
-Undocumented compatible. Run checkpatch.
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
-> +
-> +	aliases {
-> +		serial0 = &gsbi5_serial;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=168a8e61080000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=158a8e61080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=118a8e61080000
 
-These three properties are confusing. Why adding them?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+af9c72450de65fd26129@syzkaller.appspotmail.com
+
+wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 46 at net/wireless/ibss.c:37 __cfg80211_ibss_join
 
 
-> +	};
-> +
-> +	soc {
-> +		gsbi@16400000 {
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Override by alias.
-
-> +			status = "ok";
-
-okay, not ok. Status goes at the end of properties.
-
-
-> +			qcom,mode = <GSBI_PROT_I2C_UART>;
-> +			serial@16440000 {
-> +				status = "ok";
-
-Same comments.
-
-> +			};
-> +		};
-> +
-> +		amba {
-> +			/* eMMC */
-> +			sdcc1: mmc@12400000 {
-
-OK, I'll abandon the review. This file is really not matching anything
-in the upstream. Please start your work from a proper upstreamed, recent
-board.
-
-Best regards,
-Krzysztof
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

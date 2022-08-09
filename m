@@ -2,106 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C731E58D485
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6528758D51A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238115AbiHIH1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 03:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
+        id S236964AbiHIIEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237469AbiHIH1C (ORCPT
+        with ESMTP id S229963AbiHIIE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 03:27:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A365D20F58
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 00:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660030020;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=58ycySmE5DZLA6nFa+M3yTmfckqgxGPNOPL3Wz/hH9I=;
-        b=eWDcQlx/TwE5DuAUj5ipHX3ZRpNsLlbn3aXdscU9mFBiUcL2xeQvKj9o1sr4O9nr3y7z7O
-        fc0p2nQOartzo/BvopfxRM6XdCy6+1znAKH9MScbBZNzCDxzKPdsx9UagQCpEsWKeGgDwU
-        vP6pXzJYZ3wrRLR/U8fhL6hqpMcoDL0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-bNGKTN3lOaC_mqGjTKJ4WA-1; Tue, 09 Aug 2022 03:26:56 -0400
-X-MC-Unique: bNGKTN3lOaC_mqGjTKJ4WA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 16E1A8039A6;
-        Tue,  9 Aug 2022 07:26:56 +0000 (UTC)
-Received: from [10.64.54.189] (vpn2-54-189.bne.redhat.com [10.64.54.189])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id ADF60492C3B;
-        Tue,  9 Aug 2022 07:26:51 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with glibc-2.35
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, maz@kernel.org, oliver.upton@linux.dev,
-        andrew.jones@linux.dev, seanjc@google.com,
-        mathieu.desnoyers@efficios.com, yihyu@redhat.com,
-        shan.gavin@gmail.com
-References: <20220809060627.115847-1-gshan@redhat.com>
- <20220809060627.115847-2-gshan@redhat.com>
- <8735e6ncxw.fsf@oldenburg.str.redhat.com>
- <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com>
- <87o7wtnay6.fsf@oldenburg.str.redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com>
-Date:   Tue, 9 Aug 2022 19:27:44 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Tue, 9 Aug 2022 04:04:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526A8101
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Oa4idRH4opHSvrEGBh8PFBi1NgOPjrOcCMzNY1zf3fI=; b=X3qOEXcTyIvfa0X8utVuAQut8A
+        vp3PtHZDmJyZWtksujPyDFRS793XvV9UCqtI+3cpRpO9iWnwkt+yKf9NUQ8eaaKKdK/DyPbzJhDJm
+        QPA6FA7X80izxyNHOyy28oEvSKQjQwwR20YheOyXrtjFQifQWL39YFrxQw7jTmbMeNFS8N+h1eFHS
+        +slsmD9wXVFlQx1WW0IOi/bzviepqWBw0xILC/A2MPQatuswMELzIsCkkX8qqFP0HikEfmcp3xtgU
+        7h2tE7P0xKX6XNjYn+tGwJ0clp3vhYE8tUop54ZoTld7Rd+qZ/R5SVLrLGv1uRHAxEOYzYojQHMzl
+        nKe4pg1w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oLKDn-002dIs-Tw; Tue, 09 Aug 2022 08:04:15 +0000
+Date:   Tue, 9 Aug 2022 01:04:15 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Subject: Re: New subsystem for acceleration devices
+Message-ID: <YvIU/wMdqFA1fYc6@infradead.org>
+References: <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
+ <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
+ <YuvctaLwRi+z0Gw4@nvidia.com>
+ <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
+ <Yuxi1eRHPN36Or+1@nvidia.com>
+ <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
+ <CAFCwf107tLxHKxkPqSRsOHVVp5s2tDEFOOy2oDZUz_KGmv-rDg@mail.gmail.com>
+ <YvCozvgodIY19LSr@kroah.com>
+ <YvFOEPdC9r8QBH11@nvidia.com>
+ <YvH9X5puer4jpzMX@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <87o7wtnay6.fsf@oldenburg.str.redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvH9X5puer4jpzMX@kroah.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
+On Tue, Aug 09, 2022 at 08:23:27AM +0200, Greg Kroah-Hartman wrote:
+> Based on the number of drivers that I see submitted weekly that try to
+> restrict their open call to just one user by using atomic variables or
+> other tricks, I think my interpretation of this stands :)
 
-On 8/9/22 5:16 PM, Florian Weimer wrote:
->>> __builtin_thread_pointer doesn't work on all architectures/GCC
->>> versions.
->>> Is this a problem for selftests?
->>>
->>
->> It's a problem as the test case is running on all architectures. I think I
->> need introduce our own __builtin_thread_pointer() for where it's not
->> supported: (1) PowerPC  (2) x86 without GCC 11
->>
->> Please let me know if I still have missed cases where
->> __buitin_thread_pointer() isn't supported?
+I think they really want what Jason described most of the time.  They
+just don't know about the pitfalls of dup yet.
+
+> > This is different from the number of FDs pointing at the struct file.
+> > Userpsace can open a HW state and point a lot of FDs at it, that is
+> > userspace's problem. From a kernel view they all share one struct file
+> > and thus one HW state.
 > 
-> As far as I know, these are the two outliers that also have rseq
-> support.  The list is a bit longer if we also consider non-rseq
-> architectures (csky, hppa, ia64, m68k, microblaze, sparc, don't know
-> about the Linux architectures without glibc support).
-> 
+> Yes, that's fine, if that is what is happening here, I have no
+> objection.
 
-For kvm/selftests, there are 3 architectures involved actually. So we
-just need consider 4 cases: aarch64, x86, s390 and other. For other
-case, we just use __builtin_thread_pointer() to maintain code's
-integrity, but it's not called at all.
-
-I think kvm/selftest is always relying on glibc if I'm correct.
-
-Thanks,
-Gavin
-
+It would be great if we could actually life that into a common
+layer (chardev or vfs) given just how common this, and drivers tend
+to get it wrong, do it suboptimal so often.

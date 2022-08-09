@@ -2,143 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F98358E01B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F0558E032
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245470AbiHITV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        id S1344242AbiHIT3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347127AbiHITVp (ORCPT
+        with ESMTP id S1344056AbiHIT2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:21:45 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0C5A8
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 12:21:44 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z22so16356817edd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 12:21:44 -0700 (PDT)
+        Tue, 9 Aug 2022 15:28:55 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A6518384;
+        Tue,  9 Aug 2022 12:28:52 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id f20so18294450lfc.10;
+        Tue, 09 Aug 2022 12:28:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=r+avV5S2drX7G/TFGfNe00g1z/YAKwkOT5Ou5nsHkJY=;
-        b=ZIX4nAvOOGcWp15i8uPfVmKtbEGBXCGgBiIwHpC5nNIUBi7Iq5HzVNS9BhUcgOter0
-         Oz2pZJ2RXavV4TVExYGzNgrX3BkQJjqumwDM/WFjxr12SCHjp9H48+PjlxSz0os95unt
-         CPUV9XF+R7aEo6gt5l06ltaPKhdqQRG3D3AK8=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=UpQrpm/ApIaRZ0s83gslfbMpGpJb7iuWgZQqWYQz1bo=;
+        b=j/wbu5CDa6aI24ATri9dmT+G9srGDf3ToFayz3PQkJXhsOEltEIJC1fGMPe9Gw2OKp
+         exOVVYl6h/VeZjg+V+IfnSNiYudOoIsc6For3s3xtD5h17kHDSmQdk3D4dXYKvnlvT/h
+         iU26xSi3AiOPDPBuzF1rBLDaFZ0leEjzKLx/XopJFBqvs/+wcmTGkekaRZ8rmq8dVb+7
+         XYnGAaAAV5a3UVf3Brzia4mhMAMYFdUSuc4sLOv/g/Fufz4BIZYvKgeMGwsM2chODmK4
+         hUIPWFiLVlpC+S/Az6Msw8U/VZ5QqPeTO3U+RjaolOaG7Ypz9jGirUeu8GNHw1p26OcU
+         2Bwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=r+avV5S2drX7G/TFGfNe00g1z/YAKwkOT5Ou5nsHkJY=;
-        b=gObHtz+v2KCaX4oy7wLlRak/qiURVdtdmeFF4aFk6YIEQjUQKqqsVyv70fnxqmi//E
-         qi55NGtK4A++eFfVpmkNm5qHmTET+cA6VxDeXXajrHwtZO7wJ3P7Yy0O7Y0hd6lpSWwV
-         hT2GNMuJb8c9PeDPattyRxku3TIzuEFrSnNBN42bY0IM6jvPRevRLkONGvqgRNZ/u30c
-         xTsFm4jcYTG6r37s9dsY0gycpiYthYgOi7YEj1AHNRY7YrPW697pJjRQAPJZtHOJTMwt
-         PaMAun1sLZRPpanB2RMGt9SKZ3Jgo45uwATlmoa1DrtBH9SYwB1aEipAkEX9kBewg2d2
-         Aw1A==
-X-Gm-Message-State: ACgBeo06bmqP5LoFYVeoKV2NPX7AhwJrtzH4LZ+/19wEzajGjjkTozBF
-        qurQlqYJCmbV5+ewIGPGXkxcrXeLjj449gkLKqc=
-X-Google-Smtp-Source: AA6agR6Q/yThW7HcOs+nk883UBM8XonBrPLKXjkuuS+Ii54qGbz8SQ0BsCR++UOavcxtSPXOkqP+zA==
-X-Received: by 2002:a05:6402:a47:b0:43d:17a0:fdc9 with SMTP id bt7-20020a0564020a4700b0043d17a0fdc9mr23270631edb.41.1660072903030;
-        Tue, 09 Aug 2022 12:21:43 -0700 (PDT)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id v12-20020aa7dbcc000000b0042de3d661d2sm6482292edt.1.2022.08.09.12.21.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 12:21:37 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id l22so15382023wrz.7
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 12:21:34 -0700 (PDT)
-X-Received: by 2002:a5d:638b:0:b0:220:6e1a:8794 with SMTP id
- p11-20020a5d638b000000b002206e1a8794mr15428277wru.193.1660072893720; Tue, 09
- Aug 2022 12:21:33 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=UpQrpm/ApIaRZ0s83gslfbMpGpJb7iuWgZQqWYQz1bo=;
+        b=MG8PCuatVECMoDB30A/++JxWP1PVMbhjtrwgUJGkskv14gz5J9QDjBI25PWrmgxpdq
+         kBYlzW1XOQpzOC0cOkHKayjxfmec6N2fNeDslu6rEvlOTIv4GuHS00bk/LvaHGZNwsPR
+         a8NZ/xPwj724GxvKRCzYJ40jmxufrlecSxONOHqXP57OxjpsG3Pd4j+/NtG6BP8abmFu
+         g/4Ttvz0Apqo3lAoYAO9kJaE3vDWHp92so2KcCZrAGZDt82Fq29BPj5pqKWEbsu5q5ii
+         PcSUA0xC9WukcpfSkvqs9Ap6xT7zIB5O5Lz3FpGlM3cbHQZM8gbh60JPLGzRsGYUzclq
+         C9Iw==
+X-Gm-Message-State: ACgBeo3aLDKQ4oDVd67ZiZFebMkZGwZ4HQKOKdejFXI3MVYtwBOUKde+
+        YLXp5GRjO64K9M630qvay1nAtnbqXzaHGQ==
+X-Google-Smtp-Source: AA6agR7WvusrH8G8KEzjm+A0NlFvp6eT0993uhqXFqv9uiEDstp67r6aTLJP4MiBT8975b71Vv8RXg==
+X-Received: by 2002:ac2:5324:0:b0:48b:9643:3838 with SMTP id f4-20020ac25324000000b0048b96433838mr6409291lfh.373.1660073330623;
+        Tue, 09 Aug 2022 12:28:50 -0700 (PDT)
+Received: from mobilestation (ip1.ibrae.ac.ru. [91.238.191.1])
+        by smtp.gmail.com with ESMTPSA id n24-20020a05651203f800b00489da512f5asm72305lfq.86.2022.08.09.12.28.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 12:28:48 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 22:28:46 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        PCI <linux-pci@vger.kernel.org>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 12/17] dt-bindings: PCI: dwc: Add Baikal-T1 PCIe Root
+ Port bindings
+Message-ID: <20220809192846.ozixf6kgs242dbvl@mobilestation>
+References: <20220728143427.13617-1-Sergey.Semin@baikalelectronics.ru>
+ <20220728143427.13617-13-Sergey.Semin@baikalelectronics.ru>
+ <20220801181311.GA1266390-robh@kernel.org>
+ <20220808160118.m5ka7o7gdhei2yzl@mobilestation>
+ <CAL_JsqJSYAsotjzvOUy_f7ZRfsSrfZyuEzq7eRwwKk12FBgxYg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220808073232.8808-1-david@redhat.com> <CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com>
- <1a48d71d-41ee-bf39-80d2-0102f4fe9ccb@redhat.com> <CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com>
- <YvKwhrjnFQJ7trT1@nvidia.com>
-In-Reply-To: <YvKwhrjnFQJ7trT1@nvidia.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 9 Aug 2022 12:21:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgF7K2gSSpy=m_=K3Nov4zaceUX9puQf1TjkTJLA2XC_g@mail.gmail.com>
-Message-ID: <CAHk-=wgF7K2gSSpy=m_=K3Nov4zaceUX9puQf1TjkTJLA2XC_g@mail.gmail.com>
-Subject: Re: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove FOLL_COW
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, stable@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqJSYAsotjzvOUy_f7ZRfsSrfZyuEzq7eRwwKk12FBgxYg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 12:09 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
->
->  Since BUG_ON crashes the machine and Linus says that crashing the
->  machine is bad, WARN_ON will also crash the machine if you set the
->  panic_on_warn parameter, so it is also bad, thus we shouldn't use
->  anything.
+On Tue, Aug 09, 2022 at 09:12:31AM -0600, Rob Herring wrote:
+> On Mon, Aug 8, 2022 at 10:01 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+> >
+> > On Mon, Aug 01, 2022 at 12:13:11PM -0600, Rob Herring wrote:
+> > > On Thu, Jul 28, 2022 at 05:34:22PM +0300, Serge Semin wrote:
+> > > > Baikal-T1 SoC is equipped with DWC PCIe v4.60a Root Port controller, which
+> > > > link can be trained to work on up to Gen.3 speed over up to x4 lanes. The
+> > > > controller is supposed to be fed up with four clock sources: DBI
+> > > > peripheral clock, AXI application Tx/Rx clocks and external PHY/core
+> > > > reference clock generating the 100MHz signal. In addition to that the
+> > > > platform provide a way to reset each part of the controller:
+> > > > sticky/non-sticky bits, host controller core, PIPE interface, PCS/PHY and
+> > > > Hot/Power reset signal. The Root Port controller is equipped with multiple
+> > > > IRQ lines like MSI, system AER, PME, HP, Bandwidth change, Link
+> > > > equalization request and eDMA ones. The registers space is accessed over
+> > > > the DBI interface. There can be no more than four inbound or outbound iATU
+> > > > windows configured.
+> > > >
+> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > >
+> > > > ---
+> > > >
+> > > > Changelog v2:
+> > > > - Rename 'syscon' property to 'baikal,bt1-syscon'.
+> > > > - Fix the 'compatible' property definition to being more specific about
+> > > >   what strings are supposed to be used. Due to that we had to add the
+> > > >   select property to evaluate the schema against the Baikal-T1 PCIe DT
+> > > >   nodes only.
+> > > > ---
+> > > >  .../bindings/pci/baikal,bt1-pcie.yaml         | 154 ++++++++++++++++++
+> > > >  1 file changed, 154 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..23bd1d0aa5c5
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
+> > > > @@ -0,0 +1,154 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/pci/baikal,bt1-pcie.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Baikal-T1 PCIe Root Port Controller
+> > > > +
+> > > > +maintainers:
+> > > > +  - Serge Semin <fancer.lancer@gmail.com>
+> > > > +
+> > > > +description:
+> > > > +  Embedded into Baikal-T1 SoC Root Complex controller. It's based on the
+> > > > +  DWC RC PCIe v4.60a IP-core, which is configured to have just a single Root
+> > > > +  Port function and is capable of establishing the link up to Gen.3 speed
+> > > > +  on x4 lanes. It doesn't have embedded clock and reset control module, so
+> > > > +  the proper interface initialization is supposed to be performed by software.
+> > > > +
+> > > > +select:
+> > > > +  properties:
+> > > > +    compatible:
+> > > > +      contains:
+> > > > +        const: baikal,bt1-pcie
+> > > > +
+> > > > +  required:
+> > > > +    - compatible
+> > > > +
+> > > > +allOf:
+> > > > +  - $ref: /schemas/pci/snps,dw-pcie.yaml#
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    items:
+> > > > +      - const: baikal,bt1-pcie
+> > > > +      - const: snps,dw-pcie-4.60a
+> > > > +      - const: snps,dw-pcie
+> > >
+> >
+> > > Again, these fallbacks simply aren't useful.
+> >
+> > Ok. I give up. You are the boss. I'll drop them =)
+> >
+> > >
+> > > > +
+> > > > +  reg:
+> > > > +    description:
+> > > > +      DBI, DBI2 and at least 4KB outbound iATU-capable region.
+> > >
+> >
+> > > 'iATU-capable region' means config space? That's not very clear.
+> >
+> > No 'iATU-capable region' means the region, which can be used as a
+> > source address for the iATU engine. In general it can be used for any
+> > accesses (IO, MEM, CFG). But the DW PCIe driver will indeed use it for
+> > the config-space accesses.
+> >
+> > IMO the 'config' reg space is kind of virtual. Due to the outbound
+> > iATU capability the driver could use any free outbound iATU region it
+> > found instead.
+> 
+> It is and in hindsight, we maybe should have described the whole
+> address space and let the OS alloc the config space out of it. But
+> then again, original OpenFirmware PCI binding reflects what the
+> firmware discovered AND how it is configured. So specifying where
+> config space is makes sense.
+> 
+> Bottom line is the binding defines putting the config space region in
+> 'reg', not an iATU region.
+> 
+> > > > +    maxItems: 3
+> > > > +
+> > > > +  reg-names:
+> > > > +    minItems: 3
+> > > > +    maxItems: 3
+> > > > +    items:
+> > > > +      enum: [ dbi, dbi2, config ]
+> > >
+> >
+> > > Define the order. Here, and the rest.
+> >
+> > Ok. I will, but please answer to my question, I asked you in the
+> > previous email thread:
+> >
+> > Serge Semin wrote:
+> > > Rob Herring wrote:
+> > > > ...
+> > > > Tell me why you need random order.
+> > >
+> > > Because I don't see a need in constraining the order. If we get to set
+> > > the order requirement, then why do we need to have the "*-names"
+> > > property at all?
+> 
+> Originally, it was for cases where you have a variable number of
+> entries and can't determine what each entry is. IOW, when you have
+> optional entries in the middle of required entries. But then everyone
+> *loves* -names even when not needed or useful such as 'phy-names =
+> "pcie"' (the phy subsys requiring names was part of the problem there,
+> but that's been fixed).
+> 
+> > > IMO having "reg" with max/minItems restriction plus generic
+> > > description and "reg-names" with possible values enumerated seems very
+> > > suitable pattern in this case. Don't you think?
+> 
+> No, I think this is just as concise and defines the order too:
+> 
+> reg-names:
+>   items:
+>     - const: dbi
+>     - const: dbi2
+>     - const: config
+> 
+> >
+> > In addition to that what about optional names? How would you suggest
+> > to handle such case without the non-ordered pattern?
+> 
 
-If you set 'panic_on_warn' you get to keep both pieces when something breaks.
+> Sorry, I don't follow.
 
-The thing is, there are people who *do* want to stop immediately when
-something goes wrong in the kernel.
+I meant exactly the case you've described as the main goal of the
+named properties. My worry was that by using the pattern:
 
-Anybody doing large-scale virtualization presumably has all the
-infrastructure to get debug info out of the virtual environment.
+reg-names:
+  items:
+    - const: name
+    - const: another_name
+    - const: one_more_name
 
-And people who run controlled loads in big server machine setups and
-have a MIS department to manage said machines typically also prefer
-for a machine to just crash over continuing.
+you get to fix the names order, which they were invented to get rid
+from. If you get to use that pattern the only optional names could be
+the names at the tail of the array, which isn't always applicable. In
+that case you'd have no choice but to use the pattern suggested by
+me.
 
-So in those situations, a dead machine is still a dead machine, but
-you get the information out, and panic_on_warn is fine, because panic
-and reboot is fine.
+-Sergey
 
-And yes, that's actually a fairly common case. Things like syzkaller
-etc *wants* to abort on the first warning, because that's kind of the
-point.
-
-But while that kind of virtualized automation machinery is very very
-common, and is a big deal, it's by no means the only deal, and the
-most important thing to the point where nothing else matters.
-
-And if you are *not* in a farm, and if you are *not* using
-virtualization, a dead machine is literally a useless brick. Nobody
-has serial lines on individual machines any more. In most cases, the
-hardware literally doesn't even exist any more.
-
-So in that situation, you really cannot afford to take the approach of
-"just kill the machine". If you are on a laptop and are doing power
-management code, you generally cannot do that in a virtual
-environment, and you already have enough problems with suspend and
-resume being hard to debug, without people also going "oh, let's just
-BUG_ON() and kill the machine".
-
-Because the other side of that "we have a lot of machine farms doing
-automated testing" is that those machine farms do not generally find a
-lot of the exciting cases.
-
-Almost every single merge window, I end up having to bisect and report
-an oops or a WARN_ON(), because I actually run on real hardware. And
-said problem was never seen in linux-next.
-
-So we have two very different cases: the "virtual machine with good
-logging where a dead machine is fine" - use 'panic_on_warn'. And the
-actual real hardware with real drivers, running real loads by users.
-
-Both are valid. But the second case means that BUG_ON() is basically
-_never_ valid.
-
-              Linus
+> 
+> Rob

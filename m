@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD19858E3D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CE358E3D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiHIXnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 19:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
+        id S229630AbiHIXrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 19:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiHIXnE (ORCPT
+        with ESMTP id S229605AbiHIXrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 19:43:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7FC078208
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:43:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660088581;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AUpfOTYrSH4dy2eE+ZqJO2+PWrqvVOIkfWOVnHZIzSk=;
-        b=RbT1vxlz16ERTE7ta1aCOqX6Qf75JCYkEMgWObpSnXftBnu2CaniVEnyDwWc/6VIA8GZiZ
-        p8FgMGP/CzRY2lzUpq2MPRdpErLH7zAhELwEM+4uQl7Azc/jgdZPnrMm54IOlGILaAGz36
-        K7Q+Z/iYUQNGfFvrvtj9uEgShNogfPg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-335-iaAickkbOnqP2U-A_qKlTQ-1; Tue, 09 Aug 2022 19:42:58 -0400
-X-MC-Unique: iaAickkbOnqP2U-A_qKlTQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A99208037B5;
-        Tue,  9 Aug 2022 23:42:56 +0000 (UTC)
-Received: from emerald.redhat.com (unknown [10.22.16.176])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6DC11492C3B;
-        Tue,  9 Aug 2022 23:42:54 +0000 (UTC)
-From:   Lyude Paul <lyude@redhat.com>
-To:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
-Cc:     Wayne Lin <Wayne.Lin@amd.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sean Paul <sean@poorly.run>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Roman Li <roman.li@amd.com>, Jude Shih <shenshih@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        Uma Shankar <uma.shankar@intel.com>,
-        Manasi Navare <manasi.d.navare@intel.com>,
-        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Fernando Ramos <greenfoo@u92.eu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sean Paul <seanpaul@chromium.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC v3] drm/display/dp_mst: Add helpers for serializing SST <-> MST transitions
-Date:   Tue,  9 Aug 2022 19:42:38 -0400
-Message-Id: <20220809234252.295372-1-lyude@redhat.com>
-In-Reply-To: <20220808235203.123892-14-lyude@redhat.com>
-References: <20220808235203.123892-14-lyude@redhat.com>
+        Tue, 9 Aug 2022 19:47:03 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2091A7E83C
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:47:02 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a7so24911916ejp.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 16:47:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=3C0nL9povX4hQb5HK7IIK66f7+cBcvjDa1h6azqprzg=;
+        b=RaBuDZpu6zzBIxvgMXoxN51Vk+ZxAdblsbYK9vaYmdwZRXvHp6paWHsWzp/Xkt+nUD
+         VuDn2VWLSueA7FAOECxIm1zF74oHzMCwP+7bkKBP+9pKZgXCHpZYLQIp9PqhQXDs54vQ
+         OjIMhXKpqlAuvVo52Ixl5NrhLGXt/o51CaBcE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3C0nL9povX4hQb5HK7IIK66f7+cBcvjDa1h6azqprzg=;
+        b=PdmGSmLyT1+sKrV2ss9H/6YToG6fhpCn9tE4z2Qkh+2Fr3jCQe23ZjOwLL7twPDPRC
+         tujly4h5GSRT+Wmctlhx31S2UYMK6LqYkU+4sccR+csizJAjkiZO01MK/ut9uqbv250k
+         /hGvoVeg0DpIBpaahpZNN4zndQhpHljnzrmyXYerfyAWj5gcup8mQOrhzhZVbc5MxZok
+         jDpfKSNeGr1zPP2TkkmBJ6/Gf4crlBJoUoXBU9AWwK9MD13hgV3sQz2zk9tgBGz2+ZVR
+         VMRmhAkiT+MzE+lG3BEpevN2/NMlTSIkU8WPKXWk1u1NnlJFOq/OgLULSuFnvnunBXt4
+         odWw==
+X-Gm-Message-State: ACgBeo0WoVGa0RmKFFBgvkrMtrlbXRLCZgITUA/NI0bfM/4NMPD/0Rsc
+        37vNp0r9wqUidurLcAdbVADbA1TFPfzRnQdt
+X-Google-Smtp-Source: AA6agR6zDQszXOHH8xQFSEHUq0353VPpdAdqxKuNnb/OaTJNVyYcbQThFZldeRJ1J3Kk542YCJNrZA==
+X-Received: by 2002:a17:906:8a57:b0:730:8b50:610a with SMTP id gx23-20020a1709068a5700b007308b50610amr18418156ejc.557.1660088820471;
+        Tue, 09 Aug 2022 16:47:00 -0700 (PDT)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906201100b0073100dfa7b0sm1659745ejo.8.2022.08.09.16.46.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 16:46:59 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id p10so15934739wru.8
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 16:46:58 -0700 (PDT)
+X-Received: by 2002:a5d:6da8:0:b0:221:7db8:de0a with SMTP id
+ u8-20020a5d6da8000000b002217db8de0amr11266715wrs.405.1660088818467; Tue, 09
+ Aug 2022 16:46:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220727185012.3255200-1-saravanak@google.com> <YuI6shUi6iJdMSfB@kroah.com>
+In-Reply-To: <YuI6shUi6iJdMSfB@kroah.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 9 Aug 2022 16:46:46 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=W1P=4vzyTYQ+yVC=fH-7i=hjCAk7FV8jcGcGY+xa62pA@mail.gmail.com>
+Message-ID: <CAD=FV=W1P=4vzyTYQ+yVC=fH-7i=hjCAk7FV8jcGcGY+xa62pA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] Bring back driver_deferred_probe_check_state() for now
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        kernel-team@android.com, LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,234 +88,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's another kind of situation where we could potentially race with
-nonblocking modesets and MST, especially if we were to only use the locking
-provided by atomic modesetting:
+Hi,
 
-* Display 1 begins as enabled on DP-1 in SST mode
-* Display 1 switches to MST mode, exposes one sink in MST mode
-* Userspace does non-blocking modeset to disable the SST display
-* Userspace does non-blocking modeset to enable the MST display with a
-  different CRTC, but the SST display hasn't been fully taken down yet
-* Execution order between the last two commits isn't guaranteed since they
-  share no drm resources
+On Thu, Jul 28, 2022 at 12:29 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Jul 27, 2022 at 11:50:08AM -0700, Saravana Kannan wrote:
+> > More fixes/changes are needed before driver_deferred_probe_check_state()
+> > can be deleted. So, bring it back for now.
+> >
+> > Greg,
+> >
+> > Can we get this into 5.19? If not, it might not be worth picking up this
+> > series. I could just do the other/more fixes in time for 5.20.
+>
+> Wow, no, it is _WAY_ too late for 5.19 to make a change like this,
+> sorry.
+>
+> What is so broken that we need to revert these now?  I could do so for
+> 5.20-rc1, and then backport to 5.19.y if that release is really broken,
+> but this feels odd so late in the cycle.
 
-We can fix this however, by ensuring that we always pull in the atomic
-topology state whenever a connector capable of driving an MST display
-performs its atomic check - and then tracking CRTC commits happening on the
-SST connector in the MST topology state. So, let's add some simple helpers
-for doing that and hook them up in various drivers.
+I spent a bunch of time bisecting mainline today on my
+sc7180-trogdor-lazor board. When building the top of Linus's tree
+today the display doesn't come up. I can make it come up by turning
+fw_devlink off (after fixing a regulator bug that I just posted a fix
+for).
 
-v2:
-* Use intel_dp_mst_source_support() to check for MST support in i915, fixes
-  CI failures
+I found that the first bad commit was commit 5a46079a9645 ("PM:
+domains: Delete usage of driver_deferred_probe_check_state()")
 
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Cc: Wayne Lin <Wayne.Lin@amd.com>
-Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
-Cc: Jani Nikula <jani.nikula@intel.com>
-Cc: Imre Deak <imre.deak@intel.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Sean Paul <sean@poorly.run>
-Acked-by: Jani Nikula <jani.nikula@intel.com>
----
- .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  7 +++
- drivers/gpu/drm/display/drm_dp_mst_topology.c | 59 +++++++++++++++++++
- drivers/gpu/drm/i915/display/intel_dp.c       |  9 +++
- drivers/gpu/drm/nouveau/dispnv50/disp.c       |  2 +-
- drivers/gpu/drm/nouveau/dispnv50/disp.h       |  2 +
- drivers/gpu/drm/nouveau/nouveau_connector.c   | 14 +++++
- include/drm/display/drm_dp_mst_helper.h       |  2 +
- 7 files changed, 94 insertions(+), 1 deletion(-)
+...but only when applied to mainline. When I cherry-pick that back to
+v5.19-rc1 (and pick another bugfix needed to boot my board against
+v5.19-rc1) then it works OK. After yet more bisecting, I found that on
+trogdor there's a bad interaction with the commit e511a760 ("arm64:
+dts: qcom: sm7180: remove assigned-clock-rate property for mdp clk").
+That commit is perfectly legit but I guess it somehow changed how
+fw_devlink was interpreting things?
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 1739710003a4..51732bd603a9 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -6318,10 +6318,17 @@ amdgpu_dm_connector_atomic_check(struct drm_connector *conn,
- 		drm_atomic_get_old_connector_state(state, conn);
- 	struct drm_crtc *crtc = new_con_state->crtc;
- 	struct drm_crtc_state *new_crtc_state;
-+	struct amdgpu_dm_connector *aconn = to_amdgpu_dm_connector(conn);
- 	int ret;
- 
- 	trace_amdgpu_dm_connector_atomic_check(new_con_state);
- 
-+	if (conn->connector_type == DRM_MODE_CONNECTOR_DisplayPort) {
-+		ret = drm_dp_mst_root_conn_atomic_check(new_con_state, &aconn->mst_mgr);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	if (!crtc)
- 		return 0;
- 
-diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-index 2f7c43f88d74..97e8f8a83ed4 100644
---- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-+++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-@@ -4597,6 +4597,65 @@ void drm_dp_mst_atomic_wait_for_dependencies(struct drm_atomic_state *state)
- }
- EXPORT_SYMBOL(drm_dp_mst_atomic_wait_for_dependencies);
- 
-+/**
-+ * drm_dp_mst_root_conn_atomic_check() - Serialize CRTC commits on MST-capable connectors operating
-+ * in SST mode
-+ * @new_conn_state: The new connector state of the &drm_connector
-+ * @mgr: The MST topology manager for the &drm_connector
-+ *
-+ * Since MST uses fake &drm_encoder structs, the generic atomic modesetting code isn't able to
-+ * serialize non-blocking commits happening on the real DP connector of an MST topology switching
-+ * into/away from MST mode - as the CRTC on the real DP connector and the CRTCs on the connector's
-+ * MST topology will never share the same &drm_encoder.
-+ *
-+ * This function takes care of this serialization issue, by checking a root MST connector's atomic
-+ * state to determine if it is about to have a modeset - and then pulling in the MST topology state
-+ * if so, along with adding any relevant CRTCs to &drm_dp_mst_topology_state.pending_crtc_mask.
-+ *
-+ * Drivers implementing MST must call this function from the
-+ * &drm_connector_helper_funcs.atomic_check hook of any physical DP &drm_connector capable of
-+ * driving MST sinks.
-+ *
-+ * Returns:
-+ * 0 on success, negative error code otherwise
-+ */
-+int drm_dp_mst_root_conn_atomic_check(struct drm_connector_state *new_conn_state,
-+				      struct drm_dp_mst_topology_mgr *mgr)
-+{
-+	struct drm_atomic_state *state = new_conn_state->state;
-+	struct drm_connector_state *old_conn_state =
-+		drm_atomic_get_old_connector_state(state, new_conn_state->connector);
-+	struct drm_crtc_state *crtc_state;
-+	struct drm_dp_mst_topology_state *mst_state = NULL;
-+
-+	if (new_conn_state->crtc) {
-+		crtc_state = drm_atomic_get_new_crtc_state(state, new_conn_state->crtc);
-+		if (crtc_state && drm_atomic_crtc_needs_modeset(crtc_state)) {
-+			mst_state = drm_atomic_get_mst_topology_state(state, mgr);
-+			if (IS_ERR(mst_state))
-+				return PTR_ERR(mst_state);
-+
-+			mst_state->pending_crtc_mask |= drm_crtc_mask(new_conn_state->crtc);
-+		}
-+	}
-+
-+	if (old_conn_state->crtc) {
-+		crtc_state = drm_atomic_get_new_crtc_state(state, old_conn_state->crtc);
-+		if (crtc_state && drm_atomic_crtc_needs_modeset(crtc_state)) {
-+			if (!mst_state) {
-+				mst_state = drm_atomic_get_mst_topology_state(state, mgr);
-+				if (IS_ERR(mst_state))
-+					return PTR_ERR(mst_state);
-+			}
-+
-+			mst_state->pending_crtc_mask |= drm_crtc_mask(old_conn_state->crtc);
-+		}
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(drm_dp_mst_root_conn_atomic_check);
-+
- /**
-  * drm_dp_mst_update_slots() - updates the slot info depending on the DP ecoding format
-  * @mst_state: mst_state to update
-diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
-index 32292c0be2bd..a4e113253df3 100644
---- a/drivers/gpu/drm/i915/display/intel_dp.c
-+++ b/drivers/gpu/drm/i915/display/intel_dp.c
-@@ -4992,12 +4992,21 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
- {
- 	struct drm_i915_private *dev_priv = to_i915(conn->dev);
- 	struct intel_atomic_state *state = to_intel_atomic_state(_state);
-+	struct drm_connector_state *conn_state = drm_atomic_get_new_connector_state(_state, conn);
-+	struct intel_connector *intel_conn = to_intel_connector(conn);
-+	struct intel_dp *intel_dp = enc_to_intel_dp(intel_conn->encoder);
- 	int ret;
- 
- 	ret = intel_digital_connector_atomic_check(conn, &state->base);
- 	if (ret)
- 		return ret;
- 
-+	if (intel_dp_mst_source_support(intel_dp)) {
-+		ret = drm_dp_mst_root_conn_atomic_check(conn_state, &intel_dp->mst_mgr);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	/*
- 	 * We don't enable port sync on BDW due to missing w/as and
- 	 * due to not having adjusted the modeset sequence appropriately.
-diff --git a/drivers/gpu/drm/nouveau/dispnv50/disp.c b/drivers/gpu/drm/nouveau/dispnv50/disp.c
-index 24807aa9da5f..7e9a0b50bb42 100644
---- a/drivers/gpu/drm/nouveau/dispnv50/disp.c
-+++ b/drivers/gpu/drm/nouveau/dispnv50/disp.c
-@@ -1813,7 +1813,7 @@ nv50_sor_func = {
- 	.destroy = nv50_sor_destroy,
- };
- 
--static bool nv50_has_mst(struct nouveau_drm *drm)
-+bool nv50_has_mst(struct nouveau_drm *drm)
- {
- 	struct nvkm_bios *bios = nvxx_bios(&drm->client.device);
- 	u32 data;
-diff --git a/drivers/gpu/drm/nouveau/dispnv50/disp.h b/drivers/gpu/drm/nouveau/dispnv50/disp.h
-index 38dec11e7dda..9d66c9c726c3 100644
---- a/drivers/gpu/drm/nouveau/dispnv50/disp.h
-+++ b/drivers/gpu/drm/nouveau/dispnv50/disp.h
-@@ -106,6 +106,8 @@ void nv50_dmac_destroy(struct nv50_dmac *);
-  */
- struct nouveau_encoder *nv50_real_outp(struct drm_encoder *encoder);
- 
-+bool nv50_has_mst(struct nouveau_drm *drm);
-+
- u32 *evo_wait(struct nv50_dmac *, int nr);
- void evo_kick(u32 *, struct nv50_dmac *);
- 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_connector.c b/drivers/gpu/drm/nouveau/nouveau_connector.c
-index bdaec3427f14..6c412c1c1221 100644
---- a/drivers/gpu/drm/nouveau/nouveau_connector.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_connector.c
-@@ -1105,11 +1105,25 @@ nouveau_connector_best_encoder(struct drm_connector *connector)
- 	return NULL;
- }
- 
-+static int
-+nouveau_connector_atomic_check(struct drm_connector *connector, struct drm_atomic_state *state)
-+{
-+	struct nouveau_connector *nv_conn = nouveau_connector(connector);
-+	struct drm_connector_state *conn_state =
-+		drm_atomic_get_new_connector_state(state, connector);
-+
-+	if (!nv_conn->dp_encoder || !nv50_has_mst(nouveau_drm(connector->dev)))
-+		return 0;
-+
-+	return drm_dp_mst_root_conn_atomic_check(conn_state, &nv_conn->dp_encoder->dp.mstm->mgr);
-+}
-+
- static const struct drm_connector_helper_funcs
- nouveau_connector_helper_funcs = {
- 	.get_modes = nouveau_connector_get_modes,
- 	.mode_valid = nouveau_connector_mode_valid,
- 	.best_encoder = nouveau_connector_best_encoder,
-+	.atomic_check = nouveau_connector_atomic_check,
- };
- 
- static const struct drm_connector_funcs
-diff --git a/include/drm/display/drm_dp_mst_helper.h b/include/drm/display/drm_dp_mst_helper.h
-index 0ef7d0e6cf0c..b9c361b242ea 100644
---- a/include/drm/display/drm_dp_mst_helper.h
-+++ b/include/drm/display/drm_dp_mst_helper.h
-@@ -911,6 +911,8 @@ int drm_dp_send_query_stream_enc_status(struct drm_dp_mst_topology_mgr *mgr,
- 		struct drm_dp_mst_port *port,
- 		struct drm_dp_query_stream_enc_status_ack_reply *status);
- int __must_check drm_dp_mst_atomic_check(struct drm_atomic_state *state);
-+int __must_check drm_dp_mst_root_conn_atomic_check(struct drm_connector_state *new_conn_state,
-+						   struct drm_dp_mst_topology_mgr *mgr);
- 
- void drm_dp_mst_get_port_malloc(struct drm_dp_mst_port *port);
- void drm_dp_mst_put_port_malloc(struct drm_dp_mst_port *port);
--- 
-2.37.1
+Sure enough, picking this revert series fixes things on Linus's tree.
+Any chance we can still get the revert in for v5.20-rc1? ;-)
 
+
+-Doug
